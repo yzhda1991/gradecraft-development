@@ -86,6 +86,14 @@ class Grade < ActiveRecord::Base
     update_attributes feedback_reviewed: true, feedback_reviewed_at: DateTime.now
   end
 
+  def is_graded?
+    self.status == 'Graded'
+  end
+
+  def in_progress?
+    self.status == 'In Progress'
+  end
+
   def score
     if student.weighted_assignments?
       final_score || ((raw_score * assignment_weight).round if raw_score.present?)  || nil
@@ -108,14 +116,6 @@ class Grade < ActiveRecord::Base
 
   def has_feedback?
     feedback != "" && feedback != nil
-  end
-
-  def is_graded?
-    status == 'Graded'
-  end
-
-  def in_progress?
-    status == 'In Progress'
   end
 
   def is_released?

@@ -109,6 +109,8 @@ GradeCraft::Application.routes.draw do
   end
   resources :unlock_conditions
 
+  put "grades/:id/async_update", to: "grades#async_update"
+
   resources :metrics do
     put :update_order, on: :collection
   end
