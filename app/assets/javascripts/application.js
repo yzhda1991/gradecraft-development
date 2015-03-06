@@ -64,3 +64,4 @@
 //= require background
 //= require d3
 //= require offscreen-nav
+//= requre_tree ./grades
