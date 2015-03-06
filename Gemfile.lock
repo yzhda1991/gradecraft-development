@@ -216,6 +216,8 @@ GEM
     fog-ecloud (0.1.1)
       fog-core
       fog-xml
+      nokogiri (~> 1.5)
+      ruby-hmac
     fog-google (0.0.7)
       fog-core
       fog-json
@@ -645,3 +647,6 @@ DEPENDENCIES
   valid_attribute
   whenever
   wysiwyg-rails
+
+BUNDLED WITH
+   1.10.6

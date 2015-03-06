@@ -64,4 +64,5 @@
 //= require background
 //= require d3
 //= require offscreen-nav
-//= requre_tree ./grades
+//= require_tree ./froala
+//= require_tree ./grades
