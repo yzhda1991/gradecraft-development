@@ -66,3 +66,4 @@
 //= require offscreen-nav
 //= require_tree ./froala
 //= require_tree ./grades
+//= require_tree ./angular-froala
