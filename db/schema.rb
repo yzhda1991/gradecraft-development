@@ -168,16 +168,16 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.boolean  "include_in_timeline",                           default: true
     t.boolean  "include_in_predictor",                          default: true
     t.integer  "position"
-    t.boolean  "include_in_to_do",                              default: true
     t.boolean  "use_rubric",                                    default: true
-    t.string   "student_logged_button_text",        limit: 255
-    t.string   "student_logged_revert_button_text", limit: 255
     t.boolean  "accepts_attachments",                           default: true
     t.boolean  "accepts_text",                                  default: true
     t.boolean  "accepts_links",                                 default: true
     t.boolean  "pass_fail",                                     default: false
     t.boolean  "hide_analytics"
     t.boolean  "visible_when_locked",                           default: true
+    t.boolean  "include_in_to_do",                  default: true
+    t.string   "student_logged_button_text"
+    t.string   "student_logged_revert_button_text"
   end
 
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree
@@ -222,7 +222,6 @@ ActiveRecord::Schema.define(version: 20150821033921) do
   end
 
   create_table "categories", force: :cascade do |t|
-    t.string   "name",        limit: 255
     t.text     "description"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
@@ -669,18 +668,18 @@ ActiveRecord::Schema.define(version: 20150821033921) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
-  create_table "shared_earned_badges", force: :cascade do |t|
+  create_table "shared_earned_badges", force: true do |t|
     t.integer  "course_id"
     t.text     "student_name"
     t.integer  "user_id"
-    t.string   "icon",         limit: 255
-    t.string   "name",         limit: 255
+    t.string   "icon"
+    t.string   "name"
     t.integer  "badge_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "student_academic_histories", force: :cascade do |t|
+  create_table "student_academic_histories", force: true do |t|
     t.integer "student_id"
     t.string  "major",                limit: 255
     t.decimal "gpa"
@@ -712,13 +711,13 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.datetime "updated_at"
   end
 
-  create_table "submission_files_duplicate", id: false, force: :cascade do |t|
-    t.string  "key",        limit: 255
-    t.string  "format",     limit: 255
+  create_table "submission_files_duplicate", id: false, force: true do |t|
+    t.string  "key"
+    t.string  "format"
     t.integer "upload_id"
-    t.string  "full_name",  limit: 255
-    t.string  "last_name",  limit: 255
-    t.string  "first_name", limit: 255
+    t.string  "full_name"
+    t.string  "last_name"
+    t.string  "first_name"
   end
 
   create_table "submissions", force: :cascade do |t|
