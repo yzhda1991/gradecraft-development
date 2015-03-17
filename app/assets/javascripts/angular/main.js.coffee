@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'froala', 'fcsa-number', 'templates'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'froala', 'fcsa-number', 'templates', 'onbeforeunload'])
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
@@ -51,6 +51,53 @@ INTEGER_REGEXP = /^\-?\d+$/
       elm.toggleClass('collapsed')
     )
     return
+
+FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/
+@gradecraft.directive "smartFloat", ->
+  require: "ngModel"
+  link: (scope, elm, attrs, ctrl) ->
+    ctrl.$parsers.unshift (viewValue) ->
+      if FLOAT_REGEXP.test(viewValue)
+        ctrl.$setValidity "float", true
+        parseFloat viewValue.replace(",", ".")
+      else
+        ctrl.$setValidity "float", false
+        `undefined`
+
+    return
+
+@gradecraft.directive "ngMax", ->
+  require: "ngModel"
+  link: (scope, elm, attr, ctrl) ->
+    ctrl.$parsers.unshift (viewValue) ->
+      value = viewValue
+      #alert("value:" + value)
+      max = scope.$eval(attr.ngMax)
+      #alert("max:" + max)
+      if value and value != "" and value > max
+        ctrl.$setValidity "ngMax", false
+        'undefined'
+      else
+        ctrl.$setValidity "ngMax", true
+        value
+
+    return
+
+@gradecraft.directive "ngOnscreen", ->
+  require: "ngModel"
+  link: (scope, elm, attr, ctrl) ->
+    ctrl.$parsers.unshift (viewValue) ->
+      value = viewValue
+      max = scope.$eval(attr.ngMax)
+      if value and value != "" and value > max
+        ctrl.$setValidity "ngMax", false
+        'undefined'
+      else
+        ctrl.$setValidity "ngMax", true
+        value
+
+    return
+
 
 @gradecraft.filter 'list', ['$sce', ($sce)->
   (input)->
