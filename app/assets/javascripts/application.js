@@ -18,6 +18,8 @@
 //= require bootstrap
 //= require jquery.dynatable
 //= require dynatable
+//= require lodash.min
+
 //= require angular
 //= require angular-resource
 //= require angular-animate
