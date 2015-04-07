@@ -25,6 +25,7 @@
 //= require angular-animate
 //= require angular-rails-templates
 //= require_tree ./angular/templates
+//= require angular-ui-router.min
 //= require ng-rails-csrf
 //= require ./angular/main.js
 //= require ./angular/ui/sortable

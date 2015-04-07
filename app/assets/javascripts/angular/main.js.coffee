@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 @gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'froala', 'fcsa-number', 'templates', 'angular-beforeunload'])
+=======
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'froala', 'fcsa-number', 'ui.router'])
+
+@gradecraft.config ($stateProvider, $urlRouterProvider) ->
+  $urlRouterProvider.otherwise '/'
+  $stateProvider.state('grade.standard_edit',
+    controller: 'GradeCtrl'
+  )
+  return
+
+>>>>>>> multiple approaches at accessing the  interface through implementing angular routing, make a basic attempt at angular routing through ngRoute but not providing the necessary functionality, install 3rd-party ui-router library, implmement ui-router, conclude that interrupting onbeforeunload in desired manner isn't actually possible, working on creating false router change state to catch state change
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
