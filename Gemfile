@@ -12,8 +12,13 @@ gem 'active_model_serializers'
 gem 'activerecord-session_store'
 gem 'acts_as_list'
 gem 'addressable'
+<<<<<<< HEAD
 gem 'angularjs-rails', '~> 1.4.2'
 gem 'angular-rails-templates', '~> 0.2.0'
+=======
+# gem 'angularjs-rails', '~> 1.2.14'
+gem 'angularjs-rails', '~> 1.3.15'
+>>>>>>> using every possible event trigger with . and .on and can't get anything to trigger on page unload, reverting to an attempt to use one of the existing angular-beforeunload libraries
 gem 'autonumeric-rails'
 gem 'aws-sdk', '< 2.0'
 gem 's3_direct_upload'
