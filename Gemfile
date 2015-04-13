@@ -12,8 +12,14 @@ gem 'active_model_serializers'
 gem 'activerecord-session_store'
 gem 'acts_as_list'
 gem 'addressable'
+<<<<<<< HEAD
 gem 'angularjs-rails', '~> 1.4.2'
 gem 'angular-rails-templates', '~> 0.2.0'
+=======
+gem 'angularjs-rails', '~> 1.2.14'
+# gem 'angularjs-rails', '~> 1.3.15'
+gem 'angular-rails-templates'
+>>>>>>> install bower in app for javascript and css package management, install angular-debounce library for angular 1.2.xx, configuring debounce utility to trigger grade updates 2 seconds after key-up non-cumulative
 gem 'autonumeric-rails'
 gem 'aws-sdk', '< 2.0'
 gem 's3_direct_upload'
