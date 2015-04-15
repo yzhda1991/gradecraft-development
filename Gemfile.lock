@@ -22,6 +22,7 @@ GIT
 
 GEM
   remote: https://rubygems.org/
+  remote: https://rails-assets.org/
   specs:
     CFPropertyList (2.3.1)
     actionmailer (4.2.3)
@@ -415,6 +416,7 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.2.3)
       sprockets-rails
+    rails-assets-angular (1.3.15)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.6)
@@ -588,9 +590,13 @@ DEPENDENCIES
 =======
 =======
   angular-rails-templates
+<<<<<<< HEAD
 >>>>>>> successfully implement angular routes through ui-router, testing  event handling, get it working but still can't properly catch back-browser and navigate-away behaviors -- reverting to timing out keystrokes
   angularjs-rails (~> 1.3.15)
 >>>>>>> using every possible event trigger with . and .on and can't get anything to trigger on page unload, reverting to an attempt to use one of the existing angular-beforeunload libraries
+=======
+  angularjs-rails (~> 1.2.14)
+>>>>>>> add rails-assets version of angular, remove cached bower install
   autonumeric-rails
   aws-sdk (< 2.0)
   bullet
@@ -641,6 +647,7 @@ DEPENDENCIES
   puma
   quiet_assets
   rails
+  rails-assets-angular (= 1.3.15)!
   rails_autolink
   rails_email_preview (~> 0.2.29)
   rake-hooks
