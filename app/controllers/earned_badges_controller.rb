@@ -90,7 +90,7 @@ class EarnedBadgesController < ApplicationController
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
     user_search_options = {}
     user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
-    @students = current_course.students.includes(:teams).where(user_search_options)
+    @students = current_course.students.where(user_search_options)
     if @badge.can_earn_multiple_times?
       @earned_badges = @students.map do |s|
         @badge.earned_badges.new(:student => s, :badge => @badge)

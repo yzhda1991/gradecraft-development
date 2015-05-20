@@ -36,10 +36,10 @@ class AssignmentsController < ApplicationController
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
       @students = current_course.students_being_graded_by_team(@team)
-      @auditors = current_course.students_auditing.includes(:teams).where(:teams => team_params)
+      @auditors = current_course.students_auditing.includes(:teams).where(:teams => team_params).includes(:submissions)
     else
-      @students = current_course.students_being_graded
-      @auditors = current_course.students_auditing
+      @students = current_course.students_being_graded.includes(:submissions)
+      @auditors = current_course.students_auditing.includes(:submissions)
     end
     if @assignment.rubric.present?
       @rubric = @assignment.fetch_or_create_rubric

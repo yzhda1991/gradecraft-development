@@ -1,5 +1,5 @@
 %br
-- current_course.assignment_types.includes(:assignments).sorted.each do |assignment_type|
+- current_course.assignment_types.includes(:assignments =>[:assignment_type, :assignment_score_levels]).sorted.each do |assignment_type|
   - if assignment_type.has_predictable_assignments?
     %li{:id => "slide-#{assignment_type.id}", :'data-assignment-type-id' => assignment_type.id, :'data-assignment-type-name' => assignment_type.name}
       .slide-panel.assignmentType
@@ -22,7 +22,7 @@
         .collapse-hidden
           .small-12.columns
             .clear
-            - assignments = assignment_type.assignments.includes(:assignment_score_levels, :assignment_type).sorted
+            - assignments = assignment_type.assignments.sorted
             - assignments.each do |assignment|
               - grade_for_assignment = current_student_data.grade_for_assignment(assignment)
               - point_total_for_assignment = current_student_data.point_total_for_assignment(assignment)
