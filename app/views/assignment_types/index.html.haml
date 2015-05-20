@@ -24,7 +24,7 @@
           %th{:style => "min-width: 300px"}
             %span.sr-only Actions
       %tbody
-        - current_course.assignment_types.sorted.each do |assignment_type|
+        - current_course.assignment_types.includes(:assignments => :assignment_type).sorted.each do |assignment_type|
           %tr
             %td= link_to assignment_type.name, assignment_type
             %td= assignment_type.points_predictor_display
@@ -61,7 +61,7 @@
             - if at.student_weightable?
               %th= "#{at.name} Weighted Value"
 
-            
+
       %tbody
         - current_course.students.each do |student|
           %tr
@@ -85,7 +85,7 @@
             %th= "#{at.name} Grade Count"
             %th= "#{at.name} Grades > 0 Count"
 
-            
+
       %tbody
         - current_course.students.each do |student|
           %tr

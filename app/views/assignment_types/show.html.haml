@@ -1,7 +1,7 @@
 .small-12.panel.mainContent
 
   = content_nav_for @assignment_type
-  
+
   .small-12
     %h3.pagetitle#pageCaption= @title
 
@@ -33,7 +33,7 @@
           %th{:scope => "col"}
             %span.sr-only Actions
       %tbody
-        - @assignment_type.assignments.alphabetical.chronological.each do |assignment|
+        - @assignment_type.assignments.includes(:assignment_type).alphabetical.chronological.each do |assignment|
           - if assignment.visible? || (current_user_is_student? && current_student_data.grade_released_for_assignment?(assignment)) || current_user_is_staff?
             %tr
               %td= link_to assignment.name, assignment

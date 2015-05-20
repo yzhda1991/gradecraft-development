@@ -25,7 +25,7 @@
     #predictorPage{ 'data-course-total' => current_course.total_points }
       %br
       %ul.slides.small-12.columns
-        - current_course.assignment_types.sorted.each do |assignment_type|
+        - current_course.assignment_types.includes(:assignments =>[:assignment_score_levels, :assignment_type]).sorted.each do |assignment_type|
           %li{:id => "slide-#{assignment_type.id}", :'data-assignment-type-id' => assignment_type.id, :'data-assignment-type-name' => assignment_type.name}
             .slide-panel.assignmentType
               %h3.collapse
@@ -44,11 +44,11 @@
                           %span.has-tip{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
                             %i.fi-star
                         %span.bold= assignment.name
-                        %span.earned 
+                        %span.earned
                           = points 0
                           = " / #{points assignment.point_total} points"
-                      
-                      .small-12.medium-5.columns.assignmentData{:data => {:assignment => assignment.id, :'possible-points' => assignment.point_total}}  
+
+                      .small-12.medium-5.columns.assignmentData{:data => {:assignment => assignment.id, :'possible-points' => assignment.point_total}}
 
                         - if assignment.fixed?
                           %input{:type => "checkbox", :name => assignment.name, :class => "class-checkbox right", :'data-assignment-type-id' => assignment.assignment_type_id, :value => assignment.point_total }
@@ -61,4 +61,4 @@
                       .clear
         //= render 'students/predictor/badges'
         //= render 'students/predictor/challenges'
-        
+
