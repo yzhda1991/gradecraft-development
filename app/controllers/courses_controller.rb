@@ -120,7 +120,7 @@ class CoursesController < ApplicationController
 
   def timeline_settings
     @course = current_course
-    @assignments = current_course.assignments
+    @assignments = current_course.assignments.includes(:assignment_type)
     @title = "Timeline Settings"
   end
 
@@ -137,7 +137,7 @@ class CoursesController < ApplicationController
 
   def predictor_settings
     @course = current_course
-    @assignments = current_course.assignments
+    @assignments = current_course.assignments.includes(:assignment_type)
     @title = "Predictor Settings"
   end
 
