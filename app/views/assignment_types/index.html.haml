@@ -7,9 +7,9 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => new_assignment_type_path }
+          %a.button{:href => new_assignment_type_path }
             %i.fi-plus
             New #{(term_for :assignment_type).titleize}
     %br
@@ -61,7 +61,7 @@
             - if at.student_weightable?
               %th= "#{at.name} Weighted Value"
 
-            
+
       %tbody
         - current_course.students.each do |student|
           %tr
@@ -85,7 +85,7 @@
             %th= "#{at.name} Grade Count"
             %th= "#{at.name} Grades > 0 Count"
 
-            
+
       %tbody
         - current_course.students.each do |student|
           %tr

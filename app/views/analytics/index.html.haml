@@ -7,17 +7,17 @@
 
   .small-12.medium-7.right.columns.columns-no-padding
     .button-bar.right
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li{class: ("active" if current_page?(analytics_root_path)) }
-          %a{:href => analytics_root_path }
+          %a.button{:href => analytics_root_path }
             %i.fi-torso
             User Analytics
         %li{class: ("active" if current_page?(analytics_students_path)) }
-          %a{:href => analytics_students_path }
+          %a.button{:href => analytics_students_path }
             %i.fi-torsos-all
             Student Analytics
         %li{class: ("active" if current_page?(analytics_staff_path)) }
-          %a{:href => analytics_staff_path }
+          %a.button{:href => analytics_staff_path }
             %i.fi-torso-business
             Staff Analytics
 
