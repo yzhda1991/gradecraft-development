@@ -35,7 +35,7 @@ class AssignmentsController < ApplicationController
     @assignment_grades_by_student_id = current_course_data.assignment_grades(@assignment)
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team).includes(:submissions)
+      @students = current_course.students_being_graded_by_team(@team)
       @auditors = current_course.students_auditing.includes(:teams).where(:teams => team_params).includes(:submissions)
     else
       @students = current_course.students_being_graded.includes(:submissions)
