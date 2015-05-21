@@ -24,6 +24,7 @@ gem "compass-rails"
 gem 'dalli'
 gem 'dotenv-rails'
 gem 'escape_utils'
+gem 'fast_blank'
 gem 'fog'
 gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
