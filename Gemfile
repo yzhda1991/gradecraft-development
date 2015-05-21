@@ -23,6 +23,7 @@ gem 'coffee-rails'
 gem "compass-rails"
 gem 'dalli'
 gem 'dotenv-rails'
+gem 'escape_utils'
 gem 'fog'
 gem 'foundation-rails'
 gem 'foundation-icons-sass-rails'
