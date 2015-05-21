@@ -93,7 +93,7 @@ class BadgesController < ApplicationController
 
   def sort
     params[:"badge"].each_with_index do |id, index|
-      current_course.assignments.update(id, position: index + 1)
+      current_course.badges.update(id, position: index + 1)
     end
     render nothing: true
   end
