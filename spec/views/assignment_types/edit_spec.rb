@@ -2,22 +2,22 @@
 require 'spec_helper'
 include CourseTerms
 
-describe "assignments/edit" do
+describe "assignment_types/edit" do
 
   before(:all) do
     clean_models
     @course = create(:course)
-    @assignment = create(:assignment, course: @course)
+    @assignment_type = create(:assignment_type, course: @course)
   end
 
   before(:each) do
-    assign(:title, "Editing Essay 1")
+    assign(:title, "Editing Attendance")
     view.stub(:current_course).and_return(@course)
   end
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Editing Essay 1", :count => 1
+    assert_select "h3", text: "Editing Attendance", :count => 1
   end
 
   it "renders the breadcrumbs" do

@@ -60,7 +60,7 @@ class GroupsController < ApplicationController
   def edit
     @group = current_course.groups.find(params[:id])
     @assignments = current_course.assignments.group_assignments
-    @title = "Editing #{@group.name} Details"
+    @title = "Editing #{@group.name}"
   end
 
   def update
