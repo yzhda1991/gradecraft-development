@@ -8,17 +8,17 @@
   - if current_user_is_staff?
     .small-12.columns
       .button-bar
-        %ul.button-group.context_menu
+        %ul.button-group.context_menu.radius
           %li
-            %a{:href => new_challenge_path }
+            %a.button{:href => new_challenge_path }
               %i.fi-plus
               New #{(term_for :challenge).titleize}
           %li
-            %a{:href => edit_challenge_path(@challenge) }
+            %a.button{:href => edit_challenge_path(@challenge) }
               %i.fi-pencil
               Edit
           %li
-            %a{:href => mass_edit_challenge_challenge_grades_path(@challenge) }
+            %a.button{:href => mass_edit_challenge_challenge_grades_path(@challenge) }
               %i.fi-results-demographics
               Quick Grade
       %br
@@ -83,7 +83,7 @@
                             = "for #{team.name}"
                       %li
                         %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button', :data => { confirm: 'Are you sure?', method: :delete }}
-                          Delete Grade 
+                          Delete Grade
                           %span.sr-only
                             = "for #{team.name}"
                   - else

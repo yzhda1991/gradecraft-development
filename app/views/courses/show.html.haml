@@ -6,12 +6,11 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => edit_course_path(@course) }
+          %a.button{:href => edit_course_path(@course) }
             %i.fi-pencil
             Edit
-    %br
 
   .small-12.columns
     .panel

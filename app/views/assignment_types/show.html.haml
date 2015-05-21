@@ -7,17 +7,17 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => new_assignment_type_path }
+          %a.button{:href => new_assignment_type_path }
             %i.fi-plus
             New #{(term_for :assignment_type).titleize}
         %li
-          %a{:href => edit_assignment_type_path(@assignment_type) }
+          %a.button{:href => edit_assignment_type_path(@assignment_type) }
             %i.fi-pencil
             Edit
         %li
-          %a{:href => all_grades_assignment_type_path(@assignment_type) }
+          %a.button{:href => all_grades_assignment_type_path(@assignment_type) }
             %i.fi-graph-bar
             Performance
     %br

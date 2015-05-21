@@ -6,17 +6,15 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => new_event_path }
+          %a.button{:href => new_event_path }
             %i.fi-plus
             New Calendar Event
         %li
-          %a{:href => edit_event_path(@event) }
+          %a.button{:href => edit_event_path(@event) }
             %i.fi-pencil
             Edit
-    %br
-    %br
 
   .small-12.columns
 

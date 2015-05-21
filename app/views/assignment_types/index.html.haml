@@ -7,9 +7,9 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => new_assignment_type_path }
+          %a.button{:href => new_assignment_type_path }
             %i.fi-plus
             New #{(term_for :assignment_type).titleize}
     %br

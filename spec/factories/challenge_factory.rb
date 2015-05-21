@@ -1,6 +1,7 @@
 FactoryGirl.define do
   factory :challenge do
-    course
-    name "shoot the moon"
+    association :course
+    name { Faker::Lorem.word }
+    point_total { rand(200) + 100 }
   end
 end

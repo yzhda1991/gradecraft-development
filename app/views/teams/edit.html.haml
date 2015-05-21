@@ -6,12 +6,11 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => team_path(@team) }
+          %a.button{:href => team_path(@team) }
             %i.fi-list-thumbnails
-            See #{term_for :team} 
-    %br
-  
+            See #{term_for :team}
+
   .small-12.columns
     = render 'form'

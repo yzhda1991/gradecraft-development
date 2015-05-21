@@ -1,9 +1,0 @@
-.small-12.panel.mainContent
-  / Tasks navigation
-  = content_nav do
-    %li= link_to "See #{@assignment.try(:name)}", @assignment, :class => "button radius"
-  
-  %h3.pagetitle= @title
-  
-  .small-12.columns
-    = render 'form'

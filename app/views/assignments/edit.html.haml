@@ -6,13 +6,13 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{ :href => new_assignment_path }
+          %a.button{ :href => new_assignment_path }
             %i.fi-plus
             New #{term_for :assignment}
         %li
-          %a{ :href => assignment_path(@assignment) }
+          %a.button{ :href => assignment_path(@assignment) }
             %i.fi-list-thumbnails
             See #{@assignment.name}
     %br

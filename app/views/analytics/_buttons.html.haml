@@ -1,15 +1,15 @@
 .small-12.medium-7.right.columns.columns-no-padding
   .button-bar.right
-    %ul.button-group.context_menu
+    %ul.button-group.context_menu.radius
       %li{class: ("active" if current_page?(analytics_students_path)) }
-        %a{:href => analytics_students_path }
+        %a.button{:href => analytics_students_path }
           %i.fi-torsos-all
           = "#{term_for :student} Analytics"
       %li{class: ("active" if current_page?(analytics_staff_path)) }
-        %a{:href => analytics_staff_path }
+        %a.button{:href => analytics_staff_path }
           %i.fi-torso-business
           = "#{term_for :team_leader} Analytics"
       %li
-        %a{:href => analytics_export_path(format: 'zip')}
+        %a.button{:href => analytics_export_path(format: 'zip')}
           %i.fi-download
           Download Analytics

@@ -6,14 +6,14 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => edit_badge_earned_badge_path(:id => @earned_badge.id) }
+          %a.button{:href => edit_badge_earned_badge_path(:id => @earned_badge.id) }
             %i.fi-pencil
-            Edit 
+            Edit
 
   .small-12.columns
-        
+
     %img{:src => @earned_badge.badge.try(:icon), :alt => @earned_badge.badge.try(:name), :width => "25", :height => "25"}
     %p
       %b= link_to @earned_badge.name, badge_path(@earned_badge.badge)

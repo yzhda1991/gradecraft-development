@@ -1,9 +1,0 @@
-= simple_form_for([@assignment, @task]) do |f|
-  = f.input :name
-  = f.bootsy_area :description
-  = f.input :due_at, :as => :string, :include_blank => true, :start_year => Date.today.year, :input_html => { :class => 'datetimepicker' }
-
-  .button-bar
-    %ul.button-group.radius.right
-      %li= f.button :submit, "#{@task.persisted? ? 'Update' : 'Create'} Task"
-      %li= link_to 'Cancel', taskable_path(@taskable), :class => 'button'
