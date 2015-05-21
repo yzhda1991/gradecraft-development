@@ -340,8 +340,6 @@ GEM
     oink (0.10.1)
       activerecord
       hodel_3000_compliant_logger
-    oj (2.12.8)
-    oj_mimic_json (1.0.1)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
@@ -570,8 +568,6 @@ DEPENDENCIES
   ng-rails-csrf
   nokogiri (= 1.6.0)
   oink
-  oj
-  oj_mimic_json
   omniauth
   omniauth-kerberos
   omniauth-lti
