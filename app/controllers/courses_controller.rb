@@ -1,16 +1,10 @@
 class CoursesController < ApplicationController
 
   before_filter :ensure_staff?, :except => :timeline
-  before_filter :ensure_admin?, :only => [:index]
 
   def index
     @title = "Course Index"
     @courses = Course.all
-
-    respond_to do |format|
-      format.html
-      format.json { render json: @courses }
-    end
   end
 
   def show

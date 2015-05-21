@@ -1,10 +1,10 @@
 class EventsController < ApplicationController
-  
+
   before_filter :ensure_staff?
 
   def index
     @events = current_course.events
-    @title = "#{current_course.name} Calendar Events"
+    @title = "Calendar Events"
   end
 
   def show

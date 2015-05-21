@@ -16,7 +16,6 @@ describe "assignments/settings" do
   end
 
   it "renders successfully" do
-
     render
     assert_select "h3", text: "Assignment", :count => 1
   end

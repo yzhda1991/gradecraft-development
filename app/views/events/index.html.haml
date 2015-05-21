@@ -7,15 +7,12 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => new_event_path }
+          %a.button{:href => new_event_path }
             %i.fi-plus
             New Event
 
-
-    %br
-            
   .columns{:style => "overflow: auto"}
     %table.responsive.nofeatures_default_due_date_dynatable
       %thead

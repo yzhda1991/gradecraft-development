@@ -8,13 +8,13 @@
 
     .small-12.columns
       .button-bar
-        %ul.button-group.context_menu
+        %ul.button-group.context_menu.radius
           %li
-            %a{:href => assignment_type_path(@assignment_type) }
+            %a.button{:href => assignment_type_path(@assignment_type) }
               %i.fi-list-thumbnails
               See #{@assignment_type.name} #{term_for :assignments}
           %li
-            %a{:href => edit_assignment_type_path(@assignment_type)}
+            %a.button{:href => edit_assignment_type_path(@assignment_type)}
               %i.fi-pencil
               Edit #{@assignment_type.name}
 
