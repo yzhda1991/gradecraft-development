@@ -1,9 +1,4 @@
-- if current_user
-  - if current_course
-    = render "info/#{current_user.role(current_course)}_dashboard", :user => @user, :assignments => current_course.assignments
-  - else
-    %p Your account hasn't yet been connected to any courses. Contact us for help!
-- else
+- if ! current_user
   .small-12.medium-8.columns
     %img{:src => "images/gradecraft_logo.png", :width => "300", :alt => "GradeCraft Logo"}
     %p

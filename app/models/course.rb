@@ -132,6 +132,14 @@ class Course < ActiveRecord::Base
     super.presence || 'Player'
   end
 
+  def min_group_size
+    super.presence || 2
+  end
+
+  def max_group_size
+    super.presence || 6
+  end
+
   def has_teams?
     team_setting == true
   end

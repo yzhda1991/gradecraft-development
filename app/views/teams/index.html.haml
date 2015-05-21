@@ -1,5 +1,5 @@
 .small-12.panel.mainContent
-  
+
   = content_nav_for Team
 
   .small-12
@@ -7,12 +7,11 @@
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => new_team_path }
+          %a.button{:href => new_team_path }
             %i.fi-plus
             New #{(term_for :team).titleize}
-    %br
 
   .small-12.columns
     = render "leaderboard"

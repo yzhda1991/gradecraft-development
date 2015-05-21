@@ -1,27 +1,27 @@
 .small-12.panel.mainContent
 
   = content_nav_for @badge
-  
+
   .small-12
     %h3.pagetitle= @title
 
   .small-12.columns
     .button-bar
-      %ul.button-group.context_menu
+      %ul.button-group.context_menu.radius
         %li
-          %a{:href => new_badge_path }
+          %a.button{:href => new_badge_path }
             %i.fi-plus
-            New #{(term_for :badge).titleize} 
+            New #{(term_for :badge).titleize}
         %li
-          %a{:href => edit_badge_path(@badge) }
+          %a.button{:href => edit_badge_path(@badge) }
             %i.fi-pencil
             Edit
         %li
-          %a{:href => new_badge_earned_badge_path(:badge_id => @badge) }
+          %a.button{:href => new_badge_earned_badge_path(:badge_id => @badge) }
             %i.fi-results
             Award
         %li
-          %a{:href => mass_award_badge_path(@badge) }
+          %a.button{:href => mass_award_badge_path(@badge) }
             %i.fi-results-demographics
             Quick Award
 
@@ -45,7 +45,7 @@
         .center
           %b Awarded:
           .label.radius.bold.large=@badge.awarded_count
-          
+
       - if @badge.point_total?
         %hr
         .center
@@ -76,7 +76,7 @@
               %th First Name
               %th Last Name
               %th{ :width => 300} Feedback
-              - if @badge.can_earn_multiple_times  
+              - if @badge.can_earn_multiple_times
                 %th Count
               %th{"data-dynatable-sorts" => "dateStamp"} Date Awarded
               %th{:style => "display: none"} Date Stamp
@@ -90,8 +90,8 @@
                     %div{ :width => 80}= raw badge.feedback
                 - if @badge.can_earn_multiple_times
                   %td= @badge.earned_badge_count_for_student(student)
-                
-                %td  
+
+                %td
                   - @badge.earned_badges.where(:student_id => student.id).each do |badge|
                     %img{:src => @badge.icon, :alt => @badge.name, :width => "20" }
                     %span.has-tip{:title => "Edit this award", :data => {'tooltip' => true} }= link_to "(#{badge.created_at.strftime("%b %d")})", edit_badge_earned_badge_path(@badge, badge.id)
