@@ -38,6 +38,16 @@ $badge_green: #54B141;
 $badge_green_border: #439A31;
 $global-radius: 3px;
 
+$bg-color-sky: #55C3F5;
+$bg-color-mountain-light: #6FA9DD;
+$bg-color-mountain-medium: #1460AE;
+$bg-color-mountain-dark: #1E267F;
+$bg-color-hill-light: #7CC02F;
+$bg-color-hill-medium: #68A127;
+$bg-color-hill-dark: #348C44;
+$bg-color-hill-ex-dark: #274F2E;
+
+
 @mixin transition($property, $duration) {
   -webkit-transition: $property $duration;
   -ms-transition: $property $duration;
@@ -63,6 +73,7 @@ $global-radius: 3px;
 @import 'student_dashboard';
 @import 'timeline';
 @import 'analytics';
+@import 'background';
 @import 'breadcrumbs';
 @import 'navigation';
 @import 'videos';
