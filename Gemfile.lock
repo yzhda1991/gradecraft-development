@@ -153,6 +153,7 @@ GEM
     dotenv-rails (1.0.2)
       dotenv (= 1.0.2)
     erubis (2.7.0)
+    escape_utils (1.1.0)
     excon (0.44.4)
     execjs (2.3.0)
     factory_girl (4.5.0)
@@ -164,6 +165,7 @@ GEM
       i18n (~> 0.5)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
+    fast_blank (0.0.2)
     ffi (1.9.6)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
@@ -338,6 +340,7 @@ GEM
     oink (0.10.1)
       activerecord
       hodel_3000_compliant_logger
+    oj (2.12.8)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
@@ -456,6 +459,15 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    sassc (1.2.0)
+      bundler
+      ffi (~> 1.9.6)
+    sassc-rails (0.1.0)
+      rails (>= 4.0.0)
+      sass
+      sassc (~> 1.2.0)
+      sprockets (> 2.11)
+      tilt
     select2-rails (3.5.9.3)
       thor (~> 0.14)
     selenium-webdriver (2.45.0)
@@ -534,8 +546,10 @@ DEPENDENCIES
   dalli
   database_cleaner (~> 1.0.1)
   dotenv-rails
+  escape_utils
   factory_girl_rails (~> 4.5.0)
   faker (~> 1.4.3)
+  fast_blank
   fog
   foreman
   foundation-icons-sass-rails
@@ -544,17 +558,18 @@ DEPENDENCIES
   haml-rails
   jbuilder
   jquery-rails (~> 2.0)
-  json
   launchy
   letter_opener
   meta_request
   mini_magick
   mongoid (~> 4.0.2)
   moped (= 2.0.4)!
+  multi_json
   newrelic_rpm
   ng-rails-csrf
   nokogiri (= 1.6.0)
   oink
+  oj
   omniauth
   omniauth-kerberos
   omniauth-lti
@@ -580,7 +595,7 @@ DEPENDENCIES
   s3_direct_upload
   sampler
   sanitize
-  sass-rails
+  sassc-rails
   select2-rails
   selenium-webdriver
   simple_form

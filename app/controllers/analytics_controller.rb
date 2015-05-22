@@ -18,7 +18,7 @@ class AnalyticsController < ApplicationController
   def all_events
     data = CourseEvent.data(@granularity, @range, {course_id: current_course.id}, {event_type: "_all"})
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   # Displaying the top 10 and bottom 10 students for quick overview
@@ -51,7 +51,7 @@ class AnalyticsController < ApplicationController
   def role_events
     data = CourseRoleEvent.data(@granularity, @range, {course_id: current_course.id, role_group: params[:role_group]}, {event_type: "_all"})
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def assignment_events
@@ -60,7 +60,7 @@ class AnalyticsController < ApplicationController
 
     data.decorate! { |result| result[:name] = assignments[result.assignment_id] }
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def login_frequencies
@@ -76,7 +76,7 @@ class AnalyticsController < ApplicationController
       end
     end
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def role_login_frequencies
@@ -92,7 +92,7 @@ class AnalyticsController < ApplicationController
       end
     end
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def login_events
@@ -101,7 +101,7 @@ class AnalyticsController < ApplicationController
     # Only graph counts
     data[:lookup_keys] = ['{{t}}.count']
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def login_role_events
@@ -110,40 +110,40 @@ class AnalyticsController < ApplicationController
     # Only graph counts
     data[:lookup_keys] = ['{{t}}.count']
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def all_pageview_events
     data = CoursePageview.data(@granularity, @range, {course_id: current_course.id}, {page: "_all"})
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def all_role_pageview_events
     data = CourseRolePageview.data(@granularity, @range, {course_id: current_course.id, role_group: params[:role_group]}, {page: "_all"})
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def all_user_pageview_events
     user = current_course_data.students.find(params[:user_id])
     data = CourseUserPageview.data(@granularity, @range, {course_id: current_course.id, user_id: user.id}, {page: "_all"})
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def pageview_events
     data = CoursePagePageview.data(@granularity, @range, {course_id: current_course.id})
     data.decorate! { |result| result[:name] = result.page }
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def role_pageview_events
     data = CourseRolePagePageview.data(@granularity, @range, {course_id: current_course.id, role_group: params[:role_group]})
     data.decorate! { |result| result[:name] = result.page }
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def user_pageview_events
@@ -151,7 +151,7 @@ class AnalyticsController < ApplicationController
     data = CourseUserPagePageview.data(@granularity, @range, {course_id: current_course.id, user_id: user.id})
     data.decorate! { |result| result[:name] = result.page }
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def prediction_averages
@@ -164,7 +164,7 @@ class AnalyticsController < ApplicationController
       end
     end
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def assignment_prediction_averages
@@ -176,7 +176,7 @@ class AnalyticsController < ApplicationController
       result[:name] = assignments[result.assignment_id]
     end
 
-    render json: data
+    render json: MultiJson.dump(data)
   end
 
   def export
