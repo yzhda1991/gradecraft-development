@@ -338,6 +338,7 @@ GEM
     oink (0.10.1)
       activerecord
       hodel_3000_compliant_logger
+    oj (2.12.8)
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
@@ -544,17 +545,18 @@ DEPENDENCIES
   haml-rails
   jbuilder
   jquery-rails (~> 2.0)
-  json
   launchy
   letter_opener
   meta_request
   mini_magick
   mongoid (~> 4.0.2)
   moped (= 2.0.4)!
+  multi_json
   newrelic_rpm
   ng-rails-csrf
   nokogiri (= 1.6.0)
   oink
+  oj
   omniauth
   omniauth-kerberos
   omniauth-lti
