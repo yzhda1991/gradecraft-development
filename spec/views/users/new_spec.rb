@@ -2,25 +2,22 @@
 require 'spec_helper'
 include CourseTerms
 
-describe "staff/index" do
+describe "users/new" do
 
   before(:all) do
     clean_models
     @course = create(:course)
-    @user_1 = create(:user)
-    @user_2 = create(:user)
-    @course.users <<[@user_1, @user_2]
-    @users = @course.users
+    @user = User.new
   end
 
   before(:each) do
-    assign(:title, "All Users")
+    assign(:title, "Create a New User")
     view.stub(:current_course).and_return(@course)
   end
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "All Users", :count => 1
+    assert_select "h3", text: "Create a New User", :count => 1
   end
 
   it "renders the breadcrumbs" do
