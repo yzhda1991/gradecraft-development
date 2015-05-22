@@ -63,5 +63,6 @@
 //= require top_ten
 //= require uploads
 //= require course_switch
+//= require background
 
 $(function(){ $(document).foundation(); });

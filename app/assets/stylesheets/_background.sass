@@ -1,0 +1,401 @@
+$background-height: 100px
+
+$default-mountain-size: $background-height
+$default-mountain-peak-size: $background-height * .35
+$default-mountain-spacer-size: $default-mountain-size - $default-mountain-peak-size
+
+$hill-lift-spacer: 40px
+
+$cloud-speed-1: 90s
+$cloud-speed-2: 100s
+$cloud-speed-3: 110s
+$cloud-speed-4: 130s
+$cloud-speed-5: 180s
+
+// Main Content Containers
+//-------------------------
+
+// scroll past the footer to reveal the entire background scene
+.row.panel.footer
+  margin-bottom: $background-height + 200px
+
+// keep the sky pinned to the top
+.back-sky-container
+  width: 100%
+  position: fixed
+  height: $background-height
+  z-index: -1
+  left: 0
+  top: 0
+
+// keep the background pinned to the bottom
+.background-container
+  width: 100%
+  position: fixed
+  height: $background-height
+  z-index: -1
+  left: 0
+  bottom: 0
+  .background-left-wrapper
+    width: 50%
+    height: $background-height
+    float: left
+  .background-right-wrapper
+    margin-left: 50%
+    height: $background-height
+
+// Clouds:
+//-------------------------
+
+.cloud
+  margin-left: -35%
+  position: relative
+  z-index: -1
+  width: 400px
+  height: 100px
+  -webkit-animation: scroll $cloud-speed-4 linear infinite /* Safari 4+ */
+  -moz-animation:    scroll $cloud-speed-4 linear infinite /* Fx 5+ */
+  -o-animation:      scroll $cloud-speed-4 linear infinite /* Opera 12+ */
+  animation:         scroll $cloud-speed-4 linear infinite /* IE 10+, Fx 29+ */
+
+.cloud-2
+  -webkit-animation-delay: 30s
+  -webkit-animation-duration: $cloud-speed-2
+  animation-delay: 30s
+  animation-duration: $cloud-speed-2
+.cloud-3
+  -webkit-animation-delay: 90s
+  -webkit-animation-duration: $cloud-speed-3
+  animation-delay: 90s
+  animation-duration: $cloud-speed-3
+.cloud-4
+  -webkit-animation-delay: 60s
+  -webkit-animation-duration: $cloud-speed-5
+  animation-delay: 60s
+  animation-duration: $cloud-speed-5
+.cloud-4
+  -webkit-animation-delay: 15s
+  -webkit-animation-duration: $cloud-speed-1
+  animation-delay: 15s
+  animation-duration: $cloud-speed-1
+.cloud-bubble
+  position: absolute
+  background-color: white
+  opacity: .3
+
+@mixin cloud-bubble-mixin($size,$left,$top)
+  $main-size: $size * 1px
+  $radius-size: $main-size / 2
+  left:  $left * 1px
+  top: $top * 1px
+  width: $main-size
+  height: $main-size
+  -moz-border-radius: $radius-size
+  -webkit-border-radius: $radius-size
+  border-radius: $radius-size
+
+// small bubbles in the corners
+.cloud-bubble-1
+  @include cloud-bubble-mixin(100,0,10)
+.cloud-bubble-2
+  @include cloud-bubble-mixin(100,300,30)
+.cloud-bubble-3
+  @include cloud-bubble-mixin(100,10,90)
+.cloud-bubble-4
+  @include cloud-bubble-mixin(90,250,120)
+// medium bubbles in middle ring
+.cloud-bubble-5
+  @include cloud-bubble-mixin(150,20,30)
+.cloud-bubble-6
+  @include cloud-bubble-mixin(125,200,30)
+.cloud-bubble-7
+  @include cloud-bubble-mixin(150,50,90)
+.cloud-bubble-8
+  @include cloud-bubble-mixin(130,200,80)
+// large bubbles towards center
+.cloud-bubble-9
+  @include cloud-bubble-mixin(200,60,10)
+.cloud-bubble-10
+  @include cloud-bubble-mixin(200,120,-10)
+.cloud-bubble-11
+  @include cloud-bubble-mixin(200,20,20)
+.cloud-bubble-12
+  @include cloud-bubble-mixin(200,160,50)
+
+// Hills:
+//-------------------------
+
+.hill-fill
+  position: absolute
+  bottom: -100px
+  height: $hill-lift-spacer + 100px
+  width: 100%
+  background-color: $bg-color-hill-ex-dark
+  z-index: -9
+
+.hill
+  border-radius: 50% 50% 0 0
+
+.hill-1
+  margin-top: 50px
+  width: 75%
+  height: 200px
+
+.hill-2
+  margin-top: 20px
+  width: 60%
+  height: 200px
+
+.hill-3
+  margin-top: 30px
+  width: 50%
+  height: 200px
+
+.hill-position-1
+  background-color: $bg-color-hill-light
+  position: absolute
+  top: -13px
+  left: -200px
+  z-index: -1
+
+.hill-position-2
+  background-color: $bg-color-hill-medium
+  position: absolute
+  left: 200px
+  z-index: -2
+
+.hill-position-3
+  background-color: $bg-color-hill-dark
+  position: absolute
+  right: -300px
+  top: -10px
+  z-index: -3
+
+// Mountains:
+//-------------------------
+
+.hidden
+  visibility: hidden
+
+.mountain
+  position: absolute
+  z-index: -10
+  // don't break apart:
+  width: 100%
+  margin-top: -20px
+
+
+.mountain-2
+  margin-left: 10%
+.mountain-3
+  margin-left: 30%
+.mountain-4
+  margin-left: 5%
+.mountain-5
+  margin-left: 15%
+.mountain-6
+  margin-left: 30%
+
+.mountain-left-side
+  width: 0
+  height: 0
+  border-left: $default-mountain-size solid transparent
+  border-bottom: $default-mountain-size solid $bg-color-mountain-medium
+  float: left
+
+.mountain-right-side
+  width: 0
+  height: 0
+  border-right: $default-mountain-size solid transparent
+  border-bottom: $default-mountain-size solid $bg-color-mountain-dark
+  float: left
+
+.mountain-peak
+  position: absolute
+
+.mountain-peak-left-spacer
+  width: $default-mountain-spacer-size
+  height: $default-mountain-spacer-size
+  background-color: transparent
+  float: left
+
+.mountain-peak-right-spacer
+  width: $default-mountain-size
+  height: $default-mountain-size
+  background-color: transparent
+  float: left
+
+.mountain-peak-left-side
+  width: 0
+  height: 0
+  border-right: $default-mountain-peak-size solid $bg-color-mountain-light
+  border-bottom: $default-mountain-peak-size solid transparent
+  border-top: $default-mountain-peak-size solid transparent
+  float: left
+
+.mountain-peak-right-side
+  width: 0
+  height: 0
+  border-left: $default-mountain-peak-size solid $bg-color-mountain-medium
+  border-bottom: $default-mountain-peak-size solid transparent
+  border-top: $default-mountain-peak-size solid transparent
+  float: left
+
+@mixin mountain-size-mixin($size)
+  $main-size: $size * $default-mountain-size
+  $peak-size: $size * 35px
+  $spacer-size: $main-size - $peak-size
+  margin-top: $default-mountain-size - $main-size - $hill-lift-spacer
+  .mountain-left-side
+    border-left-width: $main-size
+    border-bottom-width: $main-size
+  .mountain-right-side
+    border-right-width: $main-size
+    border-bottom-width: $main-size
+  .mountain-peak-left-spacer
+    width: $spacer-size
+    height: $spacer-size
+  .mountain-peak-right-spacer
+    width: $main-size
+    height: $main-size
+  .mountain-peak-left-side
+    border-right-width: $peak-size
+    border-bottom-width: $peak-size
+    border-top-width: $peak-size
+  .mountain-peak-right-side
+    border-left-width: $peak-size
+    border-bottom-width: $peak-size
+    border-top-width: $peak-size
+
+.mountain-size-1
+  @include mountain-size-mixin(1.2)
+.mountain-size-2
+  @include mountain-size-mixin(1.5)
+.mountain-size-3
+  @include mountain-size-mixin(1.8)
+.mountain-size-4
+  @include mountain-size-mixin(2)
+.mountain-size-5
+  @include mountain-size-mixin(2.2)
+
+// Responsive Changes
+//-------------------------
+
+@media (max-width: 979px)
+  .mountain-2
+    visibility: hidden
+  .mountain-5
+    visibility: hidden
+  .hill-1
+    width: 100%
+  .hill-2
+    width: 130%
+  .hill-3
+    width: 120%
+
+
+// Animations
+//-------------------------
+
+//   - Scroll
+@-webkit-keyframes scroll
+  from
+    margin-left: -25%
+  to
+    margin-left: 100%
+
+@keyframes scroll
+  from
+    margin-left: -25%
+  to
+    margin-left: 100%
+
+//   - Popup
+.popup
+  -webkit-animation-name: popup
+  animation-name: popup
+
+  -webkit-animation-duration: 1s
+  animation-duration: 1s
+
+  -webkit-animation-timing-function: ease
+  animation-timing-function: ease
+
+
+@keyframes popup
+  0%
+    transform: translateY(100%)
+
+  50%
+    transform: translateY(-8%)
+
+  65%
+    transform: translateY(4%)
+
+  80%
+    transform: translateY(-4%)
+
+  95%
+    transform: translateY(2%)
+
+  100%
+    transform: translateY(0%)
+
+
+
+@-webkit-keyframes popup
+  0%
+    -webkit-transform: translateY(100%)
+
+  50%
+    -webkit-transform: translateY(-8%)
+
+  65%
+    -webkit-transform: translateY(4%)
+
+  80%
+    -webkit-transform: translateY(-4%)
+
+  95%
+    -webkit-transform: translateY(2%)
+
+  100%
+    -webkit-transform: translateY(0%)
+
+//   - Swellup: Hide the bottom of the mountains during popup
+.swellup
+  -webkit-animation-name: swellup
+  animation-name: swellup
+
+  -webkit-animation-duration: 1s
+  animation-duration: 1s
+
+  -webkit-animation-timing-function: ease
+  animation-timing-function: ease
+
+@keyframes swellup
+  0%
+    transform: translateY(100%)
+  50%
+    transform: translateY(-15%)
+  60%
+    transform: translateY(-20%)
+  80%
+    transform: translateY(-9%)
+  100%
+    transform: translateY(0%)
+
+@-webkit-keyframes swellup
+  0%
+    -webkit-transform: translateY(100%)
+  40%
+    -webkit-transform: translateY(-15%)
+  60%
+    -webkit-transform: translateY(-20%)
+  90%
+    -webkit-transform: translateY(-9%)
+  100%
+    -webkit-transform: translateY(0%)
+
+
+
