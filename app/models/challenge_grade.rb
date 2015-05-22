@@ -1,6 +1,6 @@
 class ChallengeGrade < ActiveRecord::Base
 
-  attr_accessible :name, :course_id, :rank, :score, :challenge_id, :text_feedback, :status, :team_id, :final_score, :status, :team, :challenge
+  attr_accessible :name, :rank, :score, :challenge_id, :text_feedback, :status, :team_id, :final_score, :status, :team, :challenge
 
   belongs_to :course
   belongs_to :challenge
@@ -18,7 +18,7 @@ class ChallengeGrade < ActiveRecord::Base
     super.presence || 0
   end
 
-  def cache_team_score 
+  def cache_team_score
     team.save!
   end
 

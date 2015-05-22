@@ -19,7 +19,7 @@ class EventsController < ApplicationController
 
   def edit
     @event = current_course.events.find(params[:id])
-    @title = "Edit New Calendar Event"
+    @title = "Editing #{@event.name}"
   end
 
   def create

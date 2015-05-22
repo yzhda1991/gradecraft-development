@@ -1,10 +1,9 @@
 .small-12.panel.mainContent
 
+  = content_nav_for @assignment, "New Submission"
+
   %h3.pagetitle
-    - if @assignment.has_groups? && @group.present?
-      = "#{@title} for #{term_for :group} #{@group.name} (#{points @assignment.point_total} points)"
-    - else
-      = "#{@title} (#{points @assignment.point_total} points)"
+    = @title
 
   .small-12.columns
     - if @assignment.accepts_submissions?
