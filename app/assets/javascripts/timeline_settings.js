@@ -22,11 +22,14 @@ $(document).ready(function(){
     // console.log(target_date);
     for(x in timeline_dates) {
       var slide_date = new Date( timeline_dates[x].startDate );
-      // console.log(timeline_dates[x]);
+      console.log(timeline_dates[x]);
       if( slide_date < target_date ) {
         start_index++
-      }
-      else if (start_index > x) {
+        console.log(start_index);
+        console.log(x);
+      };
+
+      if (start_index > (x+1)) {
         start_index = start_index - 1;
       };
     }
