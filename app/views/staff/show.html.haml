@@ -1,14 +1,14 @@
 .small-12.panel.mainContent
 
-  = content_nav_for @user
+  = content_nav_for @staff
 
-  %h3.pagetitle= @user.name
+  %h3.pagetitle= @staff.name
 
   .small-12.columns
-  
+
     %h4 Courses
     %ul
-      - @user.courses.each do |course|
+      - @staff.courses.each do |course|
         %li= link_to course.name, course
 
     %h4 Recently Graded
@@ -21,7 +21,7 @@
           %th Feedback
           %th.button-column
       %tbody
-        - current_course.grades.where(:graded_by => @user).each do |grade|
+        - @grades.each do |grade|
           %tr
             %td= link_to grade.assignment.name, assignment_path(grade.assignment)
             %td= link_to grade.student.name, student_path(grade.student)

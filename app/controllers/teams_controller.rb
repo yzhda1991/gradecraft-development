@@ -10,8 +10,8 @@ class TeamsController < ApplicationController
 
   def show
     @team = current_course.teams.find(params[:id])
-    @challenges = current_course.challenges.chronological.alphabetical
     @students = @team.students
+    @challenges = current_course.challenges.chronological.alphabetical
   end
 
   def new

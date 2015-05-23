@@ -32,7 +32,7 @@
             %th{:style => "display: none"} Badge Count
           %th{:width => "20%"}
       %tbody
-        - @team.students.each do |student|
+        - @students.each do |student|
           - if student.is_student?(current_course)
             %tr
               %td= link_to student.first_name, student_path(student)

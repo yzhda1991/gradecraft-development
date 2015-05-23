@@ -12,7 +12,8 @@ class StaffController < ApplicationController
   end
 
   def show
-    @user = current_course.users.find(params[:id])
+    @staff = current_course.users.find(params[:id])
+    @grades = current_course.grades.where(:graded_by => @staff)
   end
 
 end

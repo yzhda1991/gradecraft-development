@@ -11,7 +11,8 @@ class ChallengeGradesController < ApplicationController
   def show
     @challenge = current_course.challenges.find(params[:challenge_id])
     @challenge_grade = @challenge.challenge_grades.find(params[:id])
-    @title = @challenge_grade.name
+    @team = @challenge_grade.team
+    @title = "#{@team.name}'s #{@challenge_grade.name} Grade"
   end
 
   def new
