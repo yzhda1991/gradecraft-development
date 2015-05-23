@@ -18,13 +18,15 @@ $(document).ready(function(){
     //get the events.json format from https://github.com/VeriteCo/TimelineJS#file-formats
     var timeline_dates = source.timeline.date;
     var start_index = 1;
-    var target_date = new Date(); 
-    console.log(target_date);
+    var target_date = new Date();
     for(x in timeline_dates) {
       var slide_date = new Date( timeline_dates[x].startDate );
-      console.log(timeline_dates[x]);
       if( slide_date < target_date ) {
         start_index++
+      };
+
+      if (start_index > (x+1)) {
+        start_index = start_index - 1;
       };
     }
 
