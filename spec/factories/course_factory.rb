@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :course do
     name { Faker::Internet.domain_word }
     courseno { Faker::Internet.domain_word }
+    semester 'Fall'
 
     factory :course_accepting_groups do
       min_group_size 2

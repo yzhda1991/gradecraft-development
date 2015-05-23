@@ -17,9 +17,10 @@ class EarnedBadgesController < ApplicationController
   end
 
   def show
-    @title = "Awarded #{term_for :badge}"
     @badge = current_course.badges.find(params[:badge_id])
     @earned_badge = @badge.earned_badges.find(params[:id])
+    @student = @earned_badge.student
+    @title = "#{@student.name}'s #{@badge.name} #{term_for :badge}"
   end
 
   def new
