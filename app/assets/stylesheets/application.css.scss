@@ -4,8 +4,7 @@
  *= require jquery.circliful
  *= require animate.min
  *= require select2
- *= require foundation-icons
- *= require bootstrap
+ *= require font-awesome
  *= require jquery.dynatable
 
 /* Branding colors */
@@ -65,8 +64,9 @@ $bg-color-hill-ex-dark: #274F2E;
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
 }
 /* Importing supporting files. If you create a new css file you'll need to add it here.  */
-@import 'foundation_and_overrides';
+
 @import 'datepicker';
+@import 'foundation_and_overrides';
 @import 'sidebars';
 @import 'forms';
 @import 'tables';
