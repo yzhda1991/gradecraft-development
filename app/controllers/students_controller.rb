@@ -104,7 +104,7 @@ class StudentsController < ApplicationController
     students = students.map do |u|
       { :name => [u.first_name, u.last_name].join(' '), :id => u.id }
     end
-    render json: MultiJson.dump(students)
+    render json: students
   end
 
   # Displaying the course grading scheme and professor's grading philosophy
