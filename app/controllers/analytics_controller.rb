@@ -41,11 +41,12 @@ class AnalyticsController < ApplicationController
   # Displaying per assignment summary outcome statistics
   def per_assign
     @assignment_types = current_course.assignment_types.includes(:assignments).sorted
+    @title = "#{term_for :assignment} Analytics"
   end
 
   # Display per team summary scores
-  def team_grade
-    #respond_with @assignments = current_course.assignments.order('name ASC').select {|a| a.grades.released.length > 1}
+  def teams
+    @title = "#{term_for :team} Analytics"
   end
 
   def role_events
