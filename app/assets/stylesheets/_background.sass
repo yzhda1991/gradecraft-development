@@ -125,14 +125,6 @@ $cloud-speed-5: 180s
 // Hills:
 //-------------------------
 
-.hill-fill
-  position: absolute
-  bottom: -100px
-  height: $hill-lift-spacer + 100px
-  width: 100%
-  background-color: $bg-color-hill-ex-dark
-  z-index: -9
-
 .hill
   border-radius: 50% 50% 0 0
 
@@ -241,6 +233,17 @@ $cloud-speed-5: 180s
   border-top: $default-mountain-peak-size solid transparent
   float: left
 
+.mountain-root
+  width: $default-mountain-size
+  height: $default-mountain-size
+  top: $default-mountain-size
+  background-color: $bg-color-mountain-medium
+  position: absolute
+
+.mountain-root.right
+  background-color: $bg-color-mountain-dark
+  left: $default-mountain-size
+
 @mixin mountain-size-mixin($size)
   $main-size: $size * $default-mountain-size
   $peak-size: $size * 35px
@@ -266,6 +269,12 @@ $cloud-speed-5: 180s
     border-left-width: $peak-size
     border-bottom-width: $peak-size
     border-top-width: $peak-size
+  .mountain-root
+    width: $main-size
+    height: $main-size
+    top: $main-size
+  .mountain-root.right
+    left: $main-size
 
 .mountain-size-1
   @include mountain-size-mixin(1.2)
@@ -277,6 +286,7 @@ $cloud-speed-5: 180s
   @include mountain-size-mixin(2)
 .mountain-size-5
   @include mountain-size-mixin(2.2)
+
 
 // Responsive Changes
 //-------------------------
@@ -359,40 +369,5 @@ $cloud-speed-5: 180s
   95%
     -webkit-transform: translateY(2%)
 
-  100%
-    -webkit-transform: translateY(0%)
-
-//   - Swellup: Hide the bottom of the mountains during popup
-.swellup
-  -webkit-animation-name: swellup
-  animation-name: swellup
-
-  -webkit-animation-duration: 1s
-  animation-duration: 1s
-
-  -webkit-animation-timing-function: ease
-  animation-timing-function: ease
-
-@keyframes swellup
-  0%
-    transform: translateY(100%)
-  50%
-    transform: translateY(-15%)
-  60%
-    transform: translateY(-20%)
-  80%
-    transform: translateY(-9%)
-  100%
-    transform: translateY(0%)
-
-@-webkit-keyframes swellup
-  0%
-    -webkit-transform: translateY(100%)
-  40%
-    -webkit-transform: translateY(-15%)
-  60%
-    -webkit-transform: translateY(-20%)
-  90%
-    -webkit-transform: translateY(-9%)
   100%
     -webkit-transform: translateY(0%)
