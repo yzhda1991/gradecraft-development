@@ -1,6 +1,6 @@
 - if current_user_is_student?
   #dashboard-timeline= render "#{current_user.role(current_course)}_dashboard"
-- elsif current_user_is_staff? && @assignments.present?
+- elsif current_user_is_staff? && current_course.assignments.present?
   #dashboard-timeline= render "#{current_user.role(current_course)}_dashboard"
 - elsif current_user_is_staff?
   = render 'course_creation_wizard'
