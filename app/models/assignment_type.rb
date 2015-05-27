@@ -7,7 +7,7 @@ class AssignmentType < ActiveRecord::Base
     :student_weightable, :mass_grade, :score_levels_attributes, :score_level, :mass_grade_type,
     :student_logged_revert_button_text, :student_logged_button_text, :position
 
-  belongs_to :course
+  belongs_to :course, touch: true
   has_many :assignments, -> { order('position ASC') }
   has_many :submissions, :through => :assignments
   has_many :assignment_weights
