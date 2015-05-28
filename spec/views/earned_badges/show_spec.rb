@@ -15,6 +15,7 @@ describe "earned_badges/show" do
 
   before(:each) do
     view.stub(:current_course).and_return(@course)
+    view.stub(:edit_badge_earned_badge_path).and_return("#")
     assign(:title, "#{@student.name}'s #{@badge.name} Badge")
   end
 

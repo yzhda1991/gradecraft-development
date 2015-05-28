@@ -46,13 +46,13 @@ $bg-color-hill-medium: #68A127;
 $bg-color-hill-dark: #348C44;
 $bg-color-hill-ex-dark: #274F2E;
 
-
 @mixin transition($property, $duration) {
   -webkit-transition: $property $duration;
   -ms-transition: $property $duration;
   -o-transition: $property $duration;
   transition: $property $duration;
 }
+
 @mixin linear-gradient($fromColor, $toColor) {
   background-color: $toColor; //* Fallback Color */
   background-image: -webkit-gradient(linear, left top, left bottom, from($fromColor), to($toColor)); /* Saf4+, Chrome */
@@ -84,3 +84,8 @@ $bg-color-hill-ex-dark: #274F2E;
 @import 'homepage';
 @import 'rubrics';
 @import 'collapse';
+
+// override foundation body color
+body {
+  background-color: rgba(0, 0, 0, 0);
+}
