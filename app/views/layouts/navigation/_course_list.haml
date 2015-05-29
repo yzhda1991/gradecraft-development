@@ -3,6 +3,12 @@
 - current_user.courses.alphabetical.each do |c|
   - if c.active?
     %li= link_to "#{c.courseno} #{c.semester.capitalize.first[0]}#{c.year}", change_current_course_path(:course_id => c.id), :method => 'post'
+- if current_user_is_staff?
+  %ul
+    %li
+      %a{:href => new_course_path}
+        Create a New Course
+        %i.fa.fa-angle-double-right
 
 - if current_user.archived_courses.present?
   .past_courses

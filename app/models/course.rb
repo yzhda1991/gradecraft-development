@@ -79,8 +79,8 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
   validates_presence_of :name, :courseno
-  validates_numericality_of :max_group_size, :allow_blank => true, :greater_than_or_equal_to => 1
-  validates_numericality_of :min_group_size, :allow_blank => true, :greater_than_or_equal_to => 1
+  validates_numericality_of :max_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
+  validates_numericality_of :min_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
   validates_numericality_of :total_assignment_weight, :allow_blank => true
   validates_numericality_of :max_assignment_weight, :allow_blank => true
   validates_numericality_of :max_assignment_types_weighted, :allow_blank => true
@@ -130,14 +130,6 @@ class Course < ActiveRecord::Base
 
   def user_term
     super.presence || 'Player'
-  end
-
-  def min_group_size
-    super.presence || 2
-  end
-
-  def max_group_size
-    super.presence || 6
   end
 
   def has_teams?
