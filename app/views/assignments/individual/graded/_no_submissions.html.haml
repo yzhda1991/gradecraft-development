@@ -1,6 +1,6 @@
 .button-bar
   %ul.button-group.radius.right
-    - if grade &&  ( grade.status? || grade.instructor_modified)
+    - if grade &&  grade.instructor_modified?
       %li
         %a{:href => assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
           See Grade
