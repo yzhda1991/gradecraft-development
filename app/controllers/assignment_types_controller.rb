@@ -95,15 +95,13 @@ class AssignmentTypesController < ApplicationController
     @title = "#{@assignment_type.name} Grade Patterns"
 
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-    if @team
+
+    if params[:team_id].present?
       students = current_course.students_being_graded_by_team(@team)
     else
       students = current_course.students_being_graded
     end
-    user_search_options = {}
-    user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
     @students = students
-
   end
 
   #delete the specified assignment type
