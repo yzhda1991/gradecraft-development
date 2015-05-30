@@ -51,7 +51,8 @@ class InfoController < ApplicationController
     @title = "Resubmitted Assignments"
     @resubmissions = current_course.submissions.resubmitted
     @resubmission_count = @resubmissions.count
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+    @teams = current_course.teams
+    @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
   end
 
   def ungraded_submissions
@@ -86,6 +87,7 @@ class InfoController < ApplicationController
   def choices
     @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types
+    @teams = current_course.teams
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
 
     if @team

@@ -3,7 +3,7 @@
     = form_tag assignment_path(@assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
       %label.sr-only{:for => "team_id"}
         Select #{term_for :team} –
-      = select_tag :team_id, options_for_select(current_course.teams.alpha.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{term_for :team} –"
+      = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
 = form_tag edit_status_grades_assignment_path @assignment do
   %table.no_radius.responsive.nofeatures_default_last_name_dynatable

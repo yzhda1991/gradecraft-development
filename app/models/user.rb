@@ -34,6 +34,7 @@ class User < ActiveRecord::Base
       user_ids = CourseMembership.where(course: course, role: "student", auditing: true).pluck(:user_id)
       User.where(id: user_ids)
     end
+
   end
 
   attr_accessor :remember_me, :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team

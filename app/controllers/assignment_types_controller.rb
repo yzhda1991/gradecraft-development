@@ -94,7 +94,8 @@ class AssignmentTypesController < ApplicationController
     @assignment_type = current_course.assignment_types.find(params[:id])
     @title = "#{@assignment_type.name} Grade Patterns"
 
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+    @teams = current_course.teams
+    @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
 
     if params[:team_id].present?
       students = current_course.students_being_graded_by_team(@team)

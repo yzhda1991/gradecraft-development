@@ -6,10 +6,14 @@ class UsersController < ApplicationController
 
   def index
     @title = "All Users"
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-    user_search_options = {}
-    user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
-    @users = current_course.users.includes(:teams, :courses).where(user_search_options)
+    @teams = current_course.teams
+    @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
+    if params[:team_id].present?
+      #TODO: should show TAs as well
+      @users = @team.students
+    else
+      @users = current_course.users
+    end
     respond_to do |format|
       format.html
       format.json { render json: @users }

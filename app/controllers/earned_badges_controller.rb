@@ -77,10 +77,15 @@ class EarnedBadgesController < ApplicationController
   def mass_edit
     @badge = current_course.badges.find(params[:id])
     @title = "Quick Award #{@badge.name}"
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-    user_search_options = {}
-    user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
-    @students = current_course.students.where(user_search_options)
+    @teams = current_course.teams
+
+    if params[:team_id].present?
+      @team = current_course.teams.find_by(id: params[:team_id])
+      @students = current_course.students_being_graded_by_team(@team)
+    else
+      @students = current_course.students
+    end
+
     if @badge.can_earn_multiple_times?
       @earned_badges = @students.map do |s|
         @badge.earned_badges.new(:student => s, :badge => @badge)

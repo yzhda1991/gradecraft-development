@@ -9,29 +9,14 @@ class StudentsController < ApplicationController
   def index
     @title = "#{(current_course.user_term).singularize} Roster"
 
-    if team_filter_active?
-      # fetch user ids for all students in the active team
-      @students = graded_students_in_current_course_for_active_team.each do |s|
-        s.load_team(current_course)
-      end
-      @auditing_students = auditing_students_in_current_course_for_active_team.each do |s|
-        s.load_team(current_course)
-      end
-    else
-      # fetch user ids for all students in the course, regardless of team
-      @students = graded_students_in_current_course.each do |s|
-        s.load_team(current_course)
-      end
-      @auditing_students = auditing_students_in_current_course.each do |s|
-        s.load_team(current_course)
-      end
-    end
+    @teams = current_course.teams
 
-    @student_ids = @students.collect {|s| s[:id] }
-    @auditing_student_ids = @auditing_students.collect {|s| s[:id] }
-    @teams_by_student_id = teams_by_student_id
-    @earned_badges_by_student_id = earned_badges_by_student_id
-    @student_grade_schemes_by_id = course_grade_scheme_by_student_id
+    if params[:team_id].present?
+      @team = current_course.teams.find_by(id: params[:team_id])
+      @students = current_course.students_being_graded_by_team(@team)
+    else
+      @students = current_course.students
+    end
   end
 
   #Course wide leaderboard - excludes auditors from view
@@ -39,8 +24,11 @@ class StudentsController < ApplicationController
     # before_filter :ensure_staff?
     @title = "Leaderboard"
 
+    @teams = current_course.teams
+
     if team_filter_active?
       # fetch user ids for all students in the active team
+      @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
       @students = graded_students_in_current_course_for_active_team.order(leaderboard_sort_order)
     else
       # fetch user ids for all students in the course, regardless of team

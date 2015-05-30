@@ -8,7 +8,9 @@
     / Checking to see if the current course has teams, displaying the team filter if it does
     - if current_course.has_teams?
       = form_tag students_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        = select_tag :team_id, options_for_select(current_course.teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "Select a #{current_course.team_term}"
+        %label
+          .sr-only Select #{term_for :team}
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   .columns{:style => "overflow: auto"}
 
