@@ -77,7 +77,7 @@ class UsersController < ApplicationController
     elsif @user.save && @user.is_staff?(current_course)
       redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully updated!"
     else
-      render :edit
+      redirect_to :edit
     end
   end
 
@@ -87,7 +87,7 @@ class UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to users_url, :notice => "User #{@name} was successfully deleted" }
+      format.html { redirect_to users_url, :notice => "#{@name} was successfully deleted" }
       format.json { head :ok }
     end
 
@@ -130,11 +130,6 @@ class UsersController < ApplicationController
       end
       redirect_to users_path, :notice => "Upload successful"
     end
-  end
-
-  def search
-    q = params[:user][:name]
-    @users = current_course.users.where("name LIKE ?","%#{q}%")
   end
 
   private

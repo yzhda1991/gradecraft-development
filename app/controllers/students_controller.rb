@@ -35,7 +35,6 @@ class StudentsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.csv { send_data @students.csv_for_course(current_course) }
     end
   end
 
@@ -74,15 +73,6 @@ class StudentsController < ApplicationController
       @events = current_course.assignments.timelineable.with_due_date.to_a + current_course.challenges
     else
       @events = current_course.assignments.timelineable.with_due_date.to_a
-    end
-  end
-
-  # Exporting student grades
-  def export
-    @students = current_course.students_being_graded respond_to do |format|
-      format.html
-      format.json { render json: @students.where("first_name like ?", "%#{params[:q]}%") }
-      format.csv { send_data @students.csv_for_course(current_course) }
     end
   end
 

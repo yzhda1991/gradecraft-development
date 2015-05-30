@@ -250,6 +250,34 @@ class Course < ActiveRecord::Base
     course_memberships.where(:role => "professor").first.user if course_memberships.where(:role => "professor").first.present?
   end
 
+  #Export Users and Final Scores for Course
+  def self.csv_summary_data
+    CSV.generate(options) do |csv|
+      csv << ["Email", "First Name", "Last Name", "Score", "Grade", "Earned Badge #", "GradeCraft ID"  ]
+      students.each do |student|
+        csv << [ student.email, student.first_name, student.last_name, student.cached_score_for_course(self), student.grade_level_for_course(course), student.earned_badges.count, student.id  ]
+      end
+    end
+  end
+
+  def self.csv_roster
+    CSV.generate(options) do |csv|
+      csv << ["GradeCraft ID, First Name", "Last Name", "Uniqname", "Score", "Grade", "Feedback", "Team"]
+      students.each do |student|
+        csv << [student.id, student.first_name, student.last_name, student.username, "", "", "", student.team_for_course(self).try(:name) ]
+      end
+    end
+  end
+
+  def self.csv_assignments
+    CSV.generate() do |csv|
+      csv << ["ID", "Name", "Point Total", "Description", "Open At", "Due At", "Accept Until"  ]
+      assignments.each do |assignment|
+        csv << [ assignment.id, assignment.name, assignment.point_total, assignment.description, assignment.open_at, assignment.due_at, assignment.accepts_submissions_until  ]
+      end
+    end
+  end
+
   #final grades - total score + grade earned in course
   def final_grades_for_course(course, options = {})
     CSV.generate(options) do |csv|

@@ -32,7 +32,7 @@
                   %li= cm.course.name
             %td
               - if user.is_student?(current_course)
-                = points user.score_for_course(current_course) if user.respond_to?(:grades)
+                = points user.cached_score_for_course(current_course) if user.respond_to?(:grades)
             %td
               .button-bar
                 %ul.button-group.right.radius
