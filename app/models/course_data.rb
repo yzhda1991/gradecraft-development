@@ -94,10 +94,6 @@ class CourseData < Struct.new(:course)
     course.students_auditing.select { |student| team.student_ids.include? student.id }
   end
 
-  def badges_shared_for_student?(student)
-    badges_shared[student.id]
-  end
-
   def teams_by_high_score
     @teams ||= course.teams.order_by_high_score
   end
@@ -108,16 +104,6 @@ class CourseData < Struct.new(:course)
 
   def point_total_for_challenges
     challenges.pluck('point_total').sum
-  end
-
-  private
-
-  def badges_shared
-    @badges_shared ||= {}.tap do |badges_shared|
-      course.course_memberships.pluck('user_id, shared_badges').each do |student_id, shared_badges|
-        badges_shared[student_id] = shared_badges
-      end
-    end
   end
 
 end

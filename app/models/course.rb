@@ -41,7 +41,7 @@ class Course < ActiveRecord::Base
     :section_leader_term, :group_term, :assignment_weight_type,
     :has_submissions, :teams_visible, :badge_use_scope,
     :weight_term, :predictor_setting, :max_group_size,
-    :min_group_size, :shared_badges, :graph_display, :max_assignment_weight,
+    :min_group_size, :graph_display, :max_assignment_weight,
     :assignments, :default_assignment_weight, :accepts_submissions,
     :tagline, :academic_history_visible, :office, :phone, :class_email,
     :twitter_handle, :twitter_hashtag, :location, :office_hours, :meeting_times,
@@ -162,10 +162,6 @@ class Course < ActiveRecord::Base
 
   def has_groups?
     group_setting == true
-  end
-
-  def shared_badges?
-    shared_badges == true
   end
 
   def formatted_tagline

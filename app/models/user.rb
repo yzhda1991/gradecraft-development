@@ -45,11 +45,10 @@ class User < ActiveRecord::Base
     :avatar_file_name, :first_name, :last_name, :rank, :user_id,
     :display_name, :private_display, :default_course_id, :last_activity_at,
     :last_login_at, :last_logout_at, :team_ids, :courses, :course_ids,
-    :shared_badges, :earned_badges, :earned_badges_attributes,
-    :remember_me_token, :major, :gpa, :current_term_credits, :accumulated_credits,
-    :year_in_school, :state_of_residence, :high_school, :athlete, :act_score, :sat_score,
-    :student_academic_history_attributes, :team_role, :course_memberships_attributes,
-    :character_profile, :team_id, :lti_uid, :course_team_ids
+    :earned_badges, :earned_badges_attributes, :major, :gpa, :current_term_credits,
+    :accumulated_credits,  :year_in_school, :state_of_residence, :high_school, :athlete,
+    :act_score, :sat_score, :student_academic_history_attributes, :team_role,
+    :course_memberships_attributes, :character_profile, :team_id, :lti_uid, :course_team_ids
 
   scope :order_by_high_score, -> { includes(:course_memberships).order 'course_memberships.score DESC' }
   scope :order_by_low_score, -> { includes(:course_memberships).order 'course_memberships.score ASC' }
@@ -247,7 +246,7 @@ class User < ActiveRecord::Base
 
   #Badges - can be taken out?
 
-  def earned_badges_by_badge_id
+  def earned_badges_by_badge
     @earned_badges_by_badge ||= earned_badges.group_by(&:badge_id)
   end
 
@@ -330,11 +329,6 @@ class User < ActiveRecord::Base
   #recalculating the student's score for the course
   def score_for_course(course)
     @score_for_course ||= grades.released.where(course: course).score + earned_badge_score_for_course(course) + (team_for_course(course).try(:challenge_grade_score) || 0)
-  end
-
-  #student setting as to whether or not they wish to share their earned badges for this course
-  def badges_shared(course)
-    course_memberships.any? { |m| m.course_id = course.id and m.shared_badges }
   end
 
   def grade_level_for_course(course)
