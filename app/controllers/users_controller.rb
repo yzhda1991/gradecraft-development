@@ -6,7 +6,6 @@ class UsersController < ApplicationController
 
   def index
     @title = "All Users"
-    # @users =  current_course.users.includes(:courses)
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
     user_search_options = {}
     user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
@@ -17,12 +16,6 @@ class UsersController < ApplicationController
       format.csv { send_data @users.to_csv }
       format.xls { send_data @users.to_csv(col_sep: "\t") }
     end
-  end
-
-  # Admin only view of all users
-  def all
-    @users =  current_course.users
-    @title = "All Users"
   end
 
   def new

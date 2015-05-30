@@ -3,14 +3,6 @@ class User < ActiveRecord::Base
 
   include Canable::Cans
 
-  # users are automatically logged into this course if they have access to multiple
-  # longterm we'd like to build a way for students enrolled in multiple gameful coursres to see
-  # a unified dashboard
-  before_validation :set_default_course
-
-  # all student display pages are ordered by last name except for the leaderboard, and top 10/bottom 10
-  default_scope { order('last_name ASC') }
-
   ROLES = %w(student professor gsi admin)
 
   class << self
@@ -54,6 +46,9 @@ class User < ActiveRecord::Base
     :act_score, :sat_score, :student_academic_history_attributes, :team_role,
     :course_memberships_attributes, :character_profile, :team_id, :lti_uid, :course_team_ids
 
+  # all student display pages are ordered by last name except for the leaderboard, and top 10/bottom 10
+  default_scope { order('last_name ASC') }
+
   scope :order_by_high_score, -> { includes(:course_memberships).order 'course_memberships.score DESC' }
   scope :order_by_low_score, -> { includes(:course_memberships).order 'course_memberships.score ASC' }
 
@@ -64,6 +59,7 @@ class User < ActiveRecord::Base
   has_many :course_users, :through => :courses, :source => 'users'
   accepts_nested_attributes_for :courses
   accepts_nested_attributes_for :course_memberships
+
   belongs_to :default_course, :class_name => 'Course'
 
   has_one :student_academic_history, :foreign_key => :student_id, :dependent => :destroy, :class_name => 'StudentAcademicHistory'
@@ -103,6 +99,11 @@ class User < ActiveRecord::Base
   end
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+
+  # Users are automatically logged into this course if they have access to multiple.
+  # Longterm, we'd like to build a way for students enrolled in multiple gameful coursres to see
+  # a unified dashboard.
+  before_validation :set_default_course
 
   validates :username, :presence => true,
                     :length => { :maximum => 50 }
@@ -204,12 +205,6 @@ class User < ActiveRecord::Base
       .includes(:team_memberships)
   end
 
-  # DEPRECATED - Teams can now have more than one leader. This should be removed
-  # once we have a strategy for cycling through team leaders.
-  def team_leader
-    teams.first.try(:team_leader)
-  end
-
   def team_leaders(course)
     @team_leaders ||= course_team(course).leaders rescue nil
   end
@@ -251,15 +246,15 @@ class User < ActiveRecord::Base
     @cached_score ||= course_memberships.where(:course_id => course).first.score || 0
   end
 
-  #I think this may be a little bit faster - ch
-  def scores_for_course(course)
-     user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck('score')
-     scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
-     return {
-      :scores => scores,
-      :user_score => user_score
-     }
-  end
+  # #I think this may be a little bit faster - ch
+  # def scores_for_course(course)
+  #    user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck('score')
+  #    scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
+  #    return {
+  #     :scores => scores,
+  #     :user_score => user_score
+  #    }
+  # end
 
   #Badges
 

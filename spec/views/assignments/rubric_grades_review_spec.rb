@@ -10,7 +10,7 @@ describe "assignments/rubric_grades_review" do
 
   before(:each) do
     assign(:title, "Assignment")
-    assign(:assignmet, @assignment)
+    assign(:assignment, @assignment)
     view.stub(:current_course).and_return(@course)
     view.stub(:term_for).and_return("Assignment")
   end

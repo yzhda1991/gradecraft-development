@@ -30,16 +30,6 @@ class EarnedBadgesController < ApplicationController
     @students = current_course.students
   end
 
-  # Allows the student to change whether or not they've shared having earned this badge with the class
-  def toggle_shared
-    @earned_badge = current_course.earned_badges.where(:badge_id => params[:badge_id], :student_id => current_student.id).first
-    @earned_badge.shared = !@earned_badge.shared
-    @earned_badge.save
-    render :json => {
-      :shared => @earned_badge.shared
-    }
-  end
-
   def edit
     @title = "Editing Awarded #{term_for :badge}"
     @students = current_course.students
@@ -47,7 +37,6 @@ class EarnedBadgesController < ApplicationController
     @earned_badge = @badge.earned_badges.find(params[:id])
     respond_with @earned_badge
   end
-
 
   def create
     @badge = current_course.badges.find(params[:badge_id])

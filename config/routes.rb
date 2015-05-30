@@ -252,12 +252,9 @@ GradeCraft::Application.routes.draw do
   resources :users do
     collection do
       get :edit_profile
-      get :all
       put :update_profile
-      get :test
       get :import
       post :upload
-      get :analytics
     end
   end
   resources :students do

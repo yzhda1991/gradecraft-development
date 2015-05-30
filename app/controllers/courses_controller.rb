@@ -75,7 +75,7 @@ class CoursesController < ApplicationController
         session[:course_id] = new_course.id
         format.html { redirect_to course_path(@course), notice: "#{@course.name} successfully copied" }
       else
-        format.html { render action: "new" }
+        redirect_to courses_path, alert: "#{@course.name} was not successfully copied"
         format.json { render json: @course.errors, status: :unprocessable_entity }
       end
     end
@@ -107,7 +107,7 @@ class CoursesController < ApplicationController
       if @course.update_attributes(params[:course])
         format.html { redirect_to @course, notice: "Course #{@course.name} successfully updated" }
       else
-        format.html { render action: "edit" }
+        redirect_to edit_course_path
       end
     end
   end
@@ -123,16 +123,14 @@ class CoursesController < ApplicationController
     if @course.update_attributes(params[:course])
       redirect_to dashboard_path
     else
-      @assignments = @course.assignments
-      @title = "Timeline Settings"
-      render :action => "timeline_settings", :course => @course
+      redirect_to timeline_settings_path, :course => @course
     end
   end
 
   def predictor_settings
     @course = current_course
     @assignments = current_course.assignments.includes(:assignment_type)
-    @title = "Predictor Settings"
+    @title = "Grade Predictor Settings"
   end
 
   def predictor_settings_update
@@ -140,9 +138,7 @@ class CoursesController < ApplicationController
     if @course.update_attributes(params[:course])
       respond_with @course
     else
-      @assignments = @course.assignments
-      @title = "Predictor Settings"
-      render :action => "predictor_settings", :course => @course
+      redirect_to predictor_settings_path, :course => @course
     end
   end
 
@@ -192,7 +188,6 @@ class CoursesController < ApplicationController
   # Exporting student grades
   def export_student_grades
     @students = current_course.students_being_graded respond_to do |format|
-      format.html
       format.json { render json: @students.where("first_name like ?", "%#{params[:q]}%") }
       format.csv { send_data @students.csv_for_course(current_course) }
     end

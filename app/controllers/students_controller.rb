@@ -11,18 +11,18 @@ class StudentsController < ApplicationController
 
     if team_filter_active?
       # fetch user ids for all students in the active team
-      @students = graded_students_in_current_course_for_active_team.order(alpha_sort_order).each do |s|
+      @students = graded_students_in_current_course_for_active_team.each do |s|
         s.load_team(current_course)
       end
-      @auditing_students = auditing_students_in_current_course_for_active_team.order(alpha_sort_order).each do |s|
+      @auditing_students = auditing_students_in_current_course_for_active_team.each do |s|
         s.load_team(current_course)
       end
     else
       # fetch user ids for all students in the course, regardless of team
-      @students = graded_students_in_current_course.order(alpha_sort_order).each do |s|
+      @students = graded_students_in_current_course.each do |s|
         s.load_team(current_course)
       end
-      @auditing_students = auditing_students_in_current_course.order(alpha_sort_order).each do |s|
+      @auditing_students = auditing_students_in_current_course.each do |s|
         s.load_team(current_course)
       end
     end
@@ -32,10 +32,6 @@ class StudentsController < ApplicationController
     @teams_by_student_id = teams_by_student_id
     @earned_badges_by_student_id = earned_badges_by_student_id
     @student_grade_schemes_by_id = course_grade_scheme_by_student_id
-
-    respond_to do |format|
-      format.html
-    end
   end
 
   #Course wide leaderboard - excludes auditors from view
@@ -84,7 +80,7 @@ class StudentsController < ApplicationController
     @assignments = current_course.assignments.chronological.alphabetical
     @assignment_types = current_course.assignment_types.sorted
     if current_user_is_staff?
-      @scores_for_current_course = current_student.scores_for_course(current_course)
+      @scores_for_current_course = current_student.cached_score_for_course(current_course)
     end
   end
 
@@ -102,7 +98,7 @@ class StudentsController < ApplicationController
     @grade_scheme_elements = current_course.grade_scheme_elements
     @title = "Your Course Progress"
     if current_user_is_staff?
-      @scores_for_current_course = current_student.scores_for_course(current_course)
+      @scores_for_current_course = current_student.cached_score_for_course(current_course)
     end
   end
 
@@ -226,10 +222,6 @@ class StudentsController < ApplicationController
 
   def leaderboard_sort_order
     "course_memberships.score DESC, users.last_name ASC, users.first_name ASC"
-  end
-
-  def alpha_sort_order
-    "users.last_name ASC, users.first_name ASC"
   end
 
   def fetch_active_team

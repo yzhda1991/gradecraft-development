@@ -25,8 +25,6 @@ class InfoController < ApplicationController
     render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])
   end
 
-
-
   def class_badges
     @title = "Awarded #{term_for :badges}"
   end
@@ -89,8 +87,6 @@ class InfoController < ApplicationController
     @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-    user_search_options = {}
-    user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
 
     if @team
       students = current_course.students_being_graded_by_team(@team)
