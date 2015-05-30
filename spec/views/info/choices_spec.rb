@@ -11,6 +11,11 @@ describe "info/choices" do
     @student_2 = create(:user, course: @course)
     @course.users <<[@user_1, @user_2]
     @students = @course.users
+
+    @assignment_type_1 = create(:assignment_type, course: @course)
+    @assignment_type_2 = create(:assignment_type, course: @course)
+    @course.assignment_types << [@assignment_type_1, @assignment_type_2]
+    @assignment_types = @course.assignment_types
   end
 
   before(:each) do

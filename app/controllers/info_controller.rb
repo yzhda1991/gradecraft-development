@@ -97,7 +97,6 @@ class InfoController < ApplicationController
     end
 
     @students = students
-    @auditing = current_course.students_auditing
   end
 
   # Display all grades in the course in list form
