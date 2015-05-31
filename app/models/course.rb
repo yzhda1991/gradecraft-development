@@ -164,6 +164,14 @@ class Course < ActiveRecord::Base
     group_setting == true
   end
 
+  def min_group_size
+    super.presence || 2
+  end
+
+  def max_group_size
+    super.presence || 6
+  end
+
   def formatted_tagline
     if tagline.present?
       tagline

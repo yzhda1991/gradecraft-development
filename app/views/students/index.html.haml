@@ -16,12 +16,3 @@
 
     / Display the table of course students, their leaderboard display, their team affiation, their score and their grade
     = render 'students_table', :course => current_course, :students => @students
-
-  .clear
-
-  - if @auditing_students.present?
-    / Display the table of auditing students if they're present
-    %h4.subtitle= "Auditing Roster"
-
-    .columns{:style => "overflow: auto"}
-      = render 'students_table', :course => current_course, :students => @auditing_students

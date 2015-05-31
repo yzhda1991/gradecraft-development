@@ -10,7 +10,7 @@ describe "students/index" do
     @student_1 = create(:user)
     @student_2 = create(:user)
     @course.users <<[@student_1, @student_2]
-    @staff = @course.users
+    @students = @course.users
   end
 
   before(:each) do

@@ -8,7 +8,10 @@ describe "challenge_grades/mass_edit" do
     clean_models
     @course = create(:course)
     @challenge = create(:challenge, course: @course)
-    @challenge_grade = create(:challenge_grade, challenge: @challenge)
+    @challenge_grade_1 = create(:challenge_grade, challenge: @challenge)
+    @challenge_grade_2 = create(:challenge_grade, challenge: @challenge)
+    @challenge.challenge_grades << [ @challenge_grade_1, @challenge_grade_2]
+    @challenge_grades = @challenge.challenge_grades
   end
 
   before(:each) do

@@ -9,8 +9,30 @@ describe "analytics/top_10" do
     @course = create(:course)
     @student_1 = create(:user)
     @student_2 = create(:user)
-    @course.users << [@student_1, @student_2]
-    students = @course.users
+    @student_3 = create(:user)
+    @student_4 = create(:user)
+    @student_5 = create(:user)
+    @student_6 = create(:user)
+    @student_7 = create(:user)
+    @student_8 = create(:user)
+    @student_9 = create(:user)
+    @student_10 = create(:user)
+    @course.users << [@student_1, @student_2, @student_3, @student_4, @student_5, @student_6, @student_7, @student_8, @student_9, @student_10]
+    @top_ten_students = @course.users
+
+    @student_11 = create(:user)
+    @student_12 = create(:user)
+    @student_13 = create(:user)
+    @student_14 = create(:user)
+    @student_15 = create(:user)
+    @student_16 = create(:user)
+    @student_17 = create(:user)
+    @student_18 = create(:user)
+    @student_19 = create(:user)
+    @student_20 = create(:user)
+    @course.users << [@student_11, @student_12, @student_13, @student_14, @student_15, @student_16, @student_17, @student_18, @student_19, @student_20]
+    @bottom_ten_students = @course.users
+
   end
 
   before(:each) do

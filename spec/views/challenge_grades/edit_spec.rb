@@ -9,6 +9,10 @@ describe "challenge_grades/edit" do
     @course = create(:course)
     @challenge = create(:challenge, course: @course)
     @challenge_grade = create(:challenge_grade, challenge: @challenge)
+    @team_1 = create(:team, course: @course)
+    @team_2 = create(:team, course: @course)
+    @course.teams << [@team_1, @team_2]
+    @teams = @course.teams
   end
 
   before(:each) do

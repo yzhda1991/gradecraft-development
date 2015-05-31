@@ -8,8 +8,10 @@ describe "earned_badges/mass_edit" do
     clean_models
     @course = create(:course)
     @badge = create(:badge, course: @course)
-    @student = create(:user)
-    @course.users << @student
+    @student_1 = create(:user)
+    @student_2 = create(:user)
+    @course.users << [@student_1, @student_2]
+    @students = @course.users
     @earned_badge = create(:earned_badge, course: @course, badge: @badge, student: @student)
   end
 

@@ -13,11 +13,13 @@ describe "assignment_type_weights/mass_edit" do
     @assignment_types = @course.assignment_types
     @student = create(:user)
     @course.users << [@student]
+
+    @form = AssignmentTypeWeightForm.new(@student, @course)
   end
 
   before(:each) do
-    view.stub(:current_course).and_return(@course)
     view.stub(:current_student).and_return(@student)
+    view.stub(:current_course).and_return(@course)
     assign(:title, "Editing #{@student.name}'s Kapital")
   end
 
@@ -30,8 +32,7 @@ describe "assignment_type_weights/mass_edit" do
     render
     assert_select ".content-nav", :count => 1
     assert_select ".breadcrumbs" do
-      asse
-      rt_select "a", :count => 2
+      assert_select "a", :count => 4
     end
   end
 end

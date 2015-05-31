@@ -8,7 +8,18 @@ describe "challenge_grades/edit_status" do
     clean_models
     @course = create(:course)
     @challenge = create(:challenge, course: @course)
-    @challenge_grade = create(:challenge_grade, challenge: @challenge)
+
+    @team_1 = create(:team, course: @course)
+    @team_2 = create(:team, course: @course)
+
+    @challenge_grade_1 = create(:challenge_grade, challenge: @challenge, team: @team_1)
+    @challenge_grade_2 = create(:challenge_grade, challenge: @challenge, team: @team_2)
+
+    @challenge.challenge_grades << [ @challenge_grade_1, @challenge_grade_2 ]
+    @challenge_grades = @course.challenge_grades
+
+    @course.teams << [ @team_1, @team_2]
+    @teams = @course.teams
   end
 
   before(:each) do

@@ -7,10 +7,10 @@ describe "info/choices" do
   before(:all) do
     clean_models
     @course = create(:course)
-    @student_1 = create(:user, course: @course)
-    @student_2 = create(:user, course: @course)
-    @course.users <<[@user_1, @user_2]
-    @students = @course.users
+    @student_1 = create(:user)
+    @student_2 = create(:user)
+    @course.students <<[@user_1, @user_2]
+    @students = @course.students
 
     @assignment_type_1 = create(:assignment_type, course: @course)
     @assignment_type_2 = create(:assignment_type, course: @course)

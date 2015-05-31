@@ -90,9 +90,9 @@ class UsersController < ApplicationController
 
   end
 
-  # We don't allow students to edit their profile directly - this is a mediated view
+  # We don't allow students to edit their info directly - this is a mediated view
   def edit_profile
-    @title = "Edit My Account"
+    @title = "Edit My Profile"
     @user = current_user
     @course_membership = @user.course_memberships.where(course_id: current_course).first
     @default_course_options = @user.courses

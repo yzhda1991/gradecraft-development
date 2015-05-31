@@ -65,11 +65,8 @@ class StudentsController < ApplicationController
     self.current_student = current_course.students.where(id: params[:id]).first
     @student = current_student
     @student.load_team(current_course)
-    @assignments = current_course.assignments.chronological.alphabetical
+    @assignments = current_course.assignments.sorted
     @assignment_types = current_course.assignment_types.sorted
-    if current_user_is_staff?
-      @scores_for_current_course = current_student.cached_score_for_course(current_course)
-    end
   end
 
   # AJAX endpoint for student name search
@@ -146,6 +143,10 @@ class StudentsController < ApplicationController
     Resque.enqueue(ScoreRecalculator, @student.id, current_course.id)
     flash[:notice]="Your request to recalculate #{@student.name}'s grade is being processed. Check back shortly!"
     redirect_to session[:return_to]
+  end
+
+  def calendar
+    @assignments = current_course.assignments
   end
 
 

@@ -4,30 +4,24 @@ include CourseTerms
 
 describe "students/leaderboard" do
 
-  # before(:all) do
-  #   clean_models
-  #   @course = create(:course)
-  #   @group_1 = create(:group, course: @course)
-  #   @group_2 = create(:group, course: @course)
-  #   @course.groups <<[@group_1, @group_2]
-  #   @groups = @course.groups
-  # end
+  before(:all) do
+    clean_models
+    @course = create(:course)
+    @student_1 = create(:user)
+    @student_2 = create(:user)
+    @student_3 = create(:user)
+    @course.students << [@student_1, @student_2, @student_3]
+    @students = @course.students
+  end
 
-  # before(:each) do
-  #   assign(:title, "Groups")
-  #   view.stub(:current_course).and_return(@course)
-  # end
+  before(:each) do
+    assign(:title, "Leaderboard")
+    view.stub(:current_course).and_return(@course)
+  end
 
-  # it "renders successfully" do
-  #   render
-  #   assert_select "h3", text: "Groups", :count => 1
-  # end
+  it "renders successfully" do
+    render
+    assert_select "h3", text: "Leaderboard", count: 1
+  end
 
-  # it "renders the breadcrumbs" do
-  #   render
-  #   assert_select ".content-nav", :count => 1
-  #   assert_select ".breadcrumbs" do
-  #     assert_select "a", :count => 2
-  #   end
-  # end
 end

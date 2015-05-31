@@ -7,9 +7,16 @@ describe "courses/predictor_settings" do
   before(:all) do
     clean_models
     @course = create(:course)
+    @assignment_type_1 = create(:assignment_type, course: @course)
+    @assignment_type_2 = create(:assignment_type, course: @course)
+    @assignment_1 = create(:assignment, course: @course, assignment_type: @assignment_type_1)
+    @assignment_2 = create(:assignment, course: @course, assignment_type: @assignment_type_2)
+    @course.assignments << [ @assignment_1, @assignment_2]
+    @assignments = @course.assignments
   end
 
   before(:each) do
+    assign(:title, 'Grade Predictor Settings')
     view.stub(:current_course).and_return(@course)
   end
 
