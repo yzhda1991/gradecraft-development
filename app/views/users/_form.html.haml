@@ -1,4 +1,10 @@
 = simple_form_for @user do |f|
+  - if @user.errors.any?
+    .alert-box.alert.radius
+      .italic= "#{pluralize(@user.errors.count, "error")} prohibited this #{term_for :assignment} from being saved:"
+      %ul
+        - @user.errors.full_messages.each do |msg|
+          %li= msg
 
   .panel
     %h4.uppercase= "User Profile"
