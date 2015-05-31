@@ -11,11 +11,15 @@
 
   - if @assignment.release_necessary?
     %th{:scope => "col"} Status
+
   - if @assignment.accepts_submissions?
     %th{:scope => "col"} Submitted?
 
-  %th.center
-  - if @assignment.release_necessary?
-    %th.center{"data-dynatable-no-sort" => "true"}
-      %button.button.select-all.tiny= "Check All"
-      %button.button.select-none.tiny= "Uncheck All"
+  %th.center{"data-dynatable-no-sort" => "true"}
+    - if @assignment.release_necessary? && @assignment.grades.present?
+      %ul.button-group.radius
+        %li
+          %a{:href => "#", :class => "button secondary select-all" } Check All
+
+        %li
+          %a{:href => "#", :class => "button secondary select-none" } Uncheck All
