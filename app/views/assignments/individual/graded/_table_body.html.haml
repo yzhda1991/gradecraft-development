@@ -6,15 +6,15 @@
     %td= link_to student.last_name, student_path(student)
     %td{:data => { :"sort-value" => "#{grade.raw_score}"} }
       - if @assignment.pass_fail
-        = term_for(grade.pass_fail_status) if ( grade.status? || grade.instructor_modified)
+        = term_for(grade.pass_fail_status) if  grade.instructor_modified
       - else
-        = points grade.raw_score if ( grade.status? || grade.instructor_modified)
+        = points grade.raw_score if grade.instructor_modified
 
     // If the student can weight the assignment type
     - if @assignment_type.student_weightable?
       %td
         - if student.weighted_assignments?
-          = points grade.score if ( grade.status? || grade.instructor_modified)
+          = points grade.score if grade.instructor_modified
         - else
           = "(not yet assigned)"
     - if @assignment.release_necessary?

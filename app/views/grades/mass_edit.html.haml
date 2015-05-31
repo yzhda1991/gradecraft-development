@@ -20,12 +20,11 @@
         - if @team.present?
           = hidden_field_tag :team_id, @team.id
 
-
         %table.responsive
           %thead
             %tr
               %th{:style => "text-align: right"}= "#{term_for :student}"
-              %th.center{:align => "center", :scope => "col", "data-dynatable-no-sort" => "true" } 
+              %th.center{:align => "center", :scope => "col", "data-dynatable-no-sort" => "true" }
                 - if @assignment.grade_checkboxes?
                   %span.sr-only Check/Uncheck
                   %button.button.select-all.tiny= "Check All"
@@ -39,6 +38,7 @@
                   = gf.hidden_field :graded_by_id, :value => current_user.id
                   - if !grade.status
                     = gf.hidden_field :status, :value => "Graded"
+                  = gf.hidden_field :instructor_modified, :value => true
                   = gf.hidden_field :student_id
                   = label_tag do
                     // Checking to see if the grade is actually graded before setting the default value to 0
@@ -57,38 +57,6 @@
                       - else
                         = gf.text_field :raw_score, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
               %td{:style => "text-align: left"}= "/ #{points @assignment.point_total}"
-
-          - if @auditors.present?
-            %tr
-              %td.bold AUDITORS
-              %td
-              %td
-            - @auditor_grades.each_with_index do |grade, i|
-              %tr
-                %td{:style => "text-align: right"}= link_to grade.student.name, student_path(grade.student)
-                %td.center
-                  = f.simple_fields_for :grades, grade do |gf|
-                    = gf.hidden_field :graded_by_id, :value => current_user.id
-                    - if !grade.status
-                      = gf.hidden_field :status, :value => "Graded"
-                    = gf.hidden_field :student_id
-                    = label_tag do
-                      // Checking to see if the grade is actually graded before setting the default value to 0
-                      - if @assignment.grade_select? && @assignment.has_levels?
-                        = gf.select :raw_score, options_from_collection_for_select(@assignment_score_levels, :value, :formatted_name, grade.try(:raw_score)), include_blank: true
-                      - elsif @assignment.grade_radio? && @assignment.has_levels?
-                        - @assignment_score_levels.each do |assignment_score_level|
-                          = gf.label :raw_score, assignment_score_level.name, value: assignment_score_level.value
-                          = gf.radio_button :raw_score, assignment_score_level.value, :class => "radio_inline"
-                      - elsif @assignment.grade_checkboxes?
-                        = gf.check_box :raw_score, {}, @assignment.point_total, nil
-                      - else
-                        - if grade.persisted? && (grade.status == "Graded" || grade.status == "Released")
-                          = gf.text_field :raw_score, data: {autonumeric: true, "m-dec" => "0"}
-
-                        - else
-                          = gf.text_field :raw_score, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
-                %td{:style => "text-align: left"}= "/ #{points @assignment.point_total}"
 
         %br
         .button-bar

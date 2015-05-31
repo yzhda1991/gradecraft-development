@@ -8,6 +8,7 @@
 
   = simple_form_for @grade, url: assignment_grade_path(@assignment), method: :patch do |f|
     = hidden_field_tag :student_id, current_student.id
+    = hidden_field_tag :instructor_modified, true
 
     .panel
       .small-12.medium-4.columns
