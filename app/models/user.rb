@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
 
   end
 
-  attr_accessor :remember_me, :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
+  attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
   attr_accessible :username, :email, :password, :password_confirmation,
     :avatar_file_name, :first_name, :last_name, :rank, :user_id,
     :display_name, :private_display, :default_course_id, :last_activity_at,
@@ -104,7 +104,6 @@ class User < ActiveRecord::Base
   # Users are automatically logged into this course if they have access to multiple.
   # Longterm, we'd like to build a way for students enrolled in multiple gameful coursres to see
   # a unified dashboard.
-  before_validation :set_default_course
 
   validates :username, :presence => true,
                     :length => { :maximum => 50 }
@@ -452,6 +451,10 @@ class User < ActiveRecord::Base
       :in_progress => in_progress.point_total + earned_badge_score,
       # :grade_levels => grade_levels
       }
+  end
+
+  def default_course
+    super || courses.first
   end
 
   def assignment_scores_for_course(course)
