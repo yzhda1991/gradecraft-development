@@ -9,7 +9,8 @@
 
       .small-3.columns.text-center.panel
         %label.left.bold Your Avatar
-        %img{:src => @user.avatar_file_name, :width => 200, :height => 200 }
+        - if @user.avatar_file_name.present?
+          %img{:src => @user.avatar_file_name, :width => 200, :height => 200 }
         %p
         .form_label
           = f.file_field :avatar_file_name
