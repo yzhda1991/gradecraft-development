@@ -37,6 +37,7 @@ class GradesController < ApplicationController
     @student = @grade.student
     @submission = @student.submission_for_assignment(@assignment)
     @title = "Editing #{current_student.name}'s Grade for #{@assignment.name}"
+    @badges = current_course.badges
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
       @rubric_grades = serialized_rubric_grades
@@ -84,7 +85,7 @@ class GradesController < ApplicationController
       end
     end
 
-    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
+    if @grade.update_attributes params[:grade][:earned_badges].merge(instructor_modified: true)
       Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
       if session[:return_to].present?
         redirect_to session[:return_to]

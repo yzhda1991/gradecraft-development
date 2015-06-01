@@ -246,16 +246,6 @@ class User < ActiveRecord::Base
     @cached_score ||= course_memberships.where(:course_id => course).first.score || 0
   end
 
-  # #I think this may be a little bit faster - ch
-  # def scores_for_course(course)
-  #    user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck('score')
-  #    scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
-  #    return {
-  #     :scores => scores,
-  #     :user_score => user_score
-  #    }
-  # end
-
   #Badges
 
   def earned_badges_by_badge
@@ -272,6 +262,14 @@ class User < ActiveRecord::Base
 
   def earned_badge_count_for_course(course)
     earned_badges.where(course: course).count
+  end
+
+  def earned_badge_for_badge(badge)
+    earned_badges.where(badge: badge)
+  end
+
+  def earned_badges_for_badge_count(badge)
+    earned_badges.where(badge: badge).count
   end
 
   def earned_badge_score
