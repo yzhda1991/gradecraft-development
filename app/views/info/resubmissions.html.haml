@@ -1,14 +1,17 @@
 .small-12.panel.mainContent
-  %h4.subtitle
+
+  = content_nav_for "Resubmissions"
+
+  %h3.pagetitle
     = @title
     .label.radius.alert= @resubmission_count
 
   - if current_course.has_teams?
-    .small-12.large-4.medium-6.columns.right
+    .small-12.medium-4.columns.right
       = form_tag resubmissions_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        %label 
+        %label
           .sr-only Select #{term_for :team}
-          = select_tag :team_id, options_for_select(current_course.teams.alpha.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{current_course.team_term} –"
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   - @resubmissions.group_by(&:assignment).each do |assignment, resubmissions|
     .columns{:style => "overflow: auto"}
@@ -25,7 +28,7 @@
                 %th{:scope => "col", :width => "15%"}= "#{term_for :team}"
             - elsif assignment.has_groups?
               %th{:scope => "col"} Group
-            %th{:scope => "col", :width => "7%"} Current Score 
+            %th{:scope => "col", :width => "7%"} Current Score
             %th{:scope => "col", :width => "7%"} Graded
             %th{:scope => "col", :width => "7%"} Resubmitted
             %th{:scope => "col", :style => "min-width: 200px" }
@@ -38,7 +41,7 @@
                   - if re.assignment.is_individual?
                     %td= link_to re.student.try(:first_name), student_path(re.student)
                     %td= link_to re.student.try(:last_name), student_path(re.student)
-                    - if current_course.has_teams? 
+                    - if current_course.has_teams?
                       %td
                         - if re.student.present? && re.student.team_for_course(current_course).present?
                           = link_to re.student.team_for_course(current_course).try(:name), re.student.team_for_course(current_course)
@@ -67,7 +70,7 @@
                 - if re.assignment.is_individual?
                   %td= link_to re.student.try(:first_name), student_path(re.student)
                   %td= link_to re.student.try(:last_name), student_path(re.student)
-                  - if current_course.has_teams? 
+                  - if current_course.has_teams?
                     %td
                       - if re.student.present? && re.student.team_for_course(current_course).present?
                         = link_to re.student.team_for_course(current_course).try(:name), re.student.team_for_course(current_course)

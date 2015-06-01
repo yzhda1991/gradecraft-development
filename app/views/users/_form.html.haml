@@ -1,4 +1,10 @@
 = simple_form_for @user do |f|
+  - if @user.errors.any?
+    .alert-box.alert.radius
+      .italic= "#{pluralize(@user.errors.count, "error")} prohibited this #{term_for :assignment} from being saved:"
+      %ul
+        - @user.errors.full_messages.each do |msg|
+          %li= msg
 
   .panel
     %h4.uppercase= "User Profile"
@@ -71,10 +77,6 @@
               %label.checkbox
                 = p.input :auditing
                 .form_label This #{term_for :student}'s grades will be excluded from course analysis
-            .small-12
-              %label.checkbox
-                = p.input :shared_badges, :label => "Sharing #{term_for :badges}"
-                .form_label This #{term_for :student}'s #{term_for :badges} will be displayed on a class leaderboard
             .clear
 
   .button-bar

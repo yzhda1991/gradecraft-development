@@ -1,5 +1,8 @@
 .small-12.panel.mainContent
-  %h3.pagetitle#ungradedTableCaption
+
+  = content_nav_for "Ungraded"
+
+  %h3.pagetitle
     = "Ungraded #{term_for :assignment} Submissions"
     .label.alert.radius= @count_ungraded
 

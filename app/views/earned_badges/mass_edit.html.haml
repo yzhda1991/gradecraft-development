@@ -7,8 +7,9 @@
   - if current_course.has_teams?
     .small-12.medium-4.columns.right
       = form_tag mass_award_badge_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        = hidden_field_tag :badge_id, @badge.id
-        = select_tag :team_id, options_for_select(current_course.teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "Select #{current_course.team_term}"
+        %label.sr-only{:for => "team_id"}
+          Select #{term_for :team}
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   .small-12.columns#massGrade
     = simple_form_for @badge, method: :put, :html => {:class => 'mass-edit-earned-badges' }, :url => mass_award_badge_path(@badge) do |f|
@@ -17,7 +18,7 @@
           %tr
             %th{:style => "text-align: right", :width => "50%"} Name
             %th{:style => "text-align: right", :width => "15%"} Earned
-            %th.center{:align => "center", :scope => "col", "data-dynatable-no-sort" => "true", :width => "25%" } 
+            %th.center{:align => "center", :scope => "col", "data-dynatable-no-sort" => "true", :width => "25%" }
               %span.sr-only Check/Uncheck
               %button.button.select-all.tiny= "Check All"
               %button.button.select-none.tiny= "Uncheck All"

@@ -1,3 +1,0 @@
-module Breadcrumbs
-
-end

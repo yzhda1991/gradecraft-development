@@ -2,8 +2,8 @@
 .small-12.panel.mainContent
 
   = content_nav_for @assignment, "Design Rubric"
-  
-  %h3.pagetitle Design Rubric for "#{@assignment.name}"
+
+  %h3.pagetitle= @title
 
   .small-12.columns
     #rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment.point_total}, #{@metrics}, #{@course_badges})")

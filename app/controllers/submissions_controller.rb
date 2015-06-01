@@ -135,7 +135,6 @@ class SubmissionsController < ApplicationController
           format.html { redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "Your submission for #{@assignment.name} was successfully updated." }
           format.json { render json: @assignment, status: :created, location: @assignment }
           NotificationMailer.updated_submission(@submission.id).deliver
-          #NotificationMailer.revised_submission(@submission.id).deliver
         else
           format.html { redirect_to assignment_submission_path(@assignment, @submission), notice: "#{@assignment.name} was successfully updated." }
         end

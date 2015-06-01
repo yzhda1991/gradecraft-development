@@ -1,20 +1,23 @@
 .small-12.panel.mainContent
 
+  = content_nav_for "Edit My Profile"
+
   %h3.pagetitle= @title
 
-  .small-12.columns   
+  .small-12.columns
     = simple_form_for(@user, method: :put, :url => update_profile_users_path(@user)) do |f|
 
       .small-3.columns.text-center.panel
         %label.left.bold Your Avatar
-        %img{:src => @user.avatar_file_name, :width => 200, :height => 200 }
+        - if @user.avatar_file_name.present?
+          %img{:src => @user.avatar_file_name, :width => 200, :height => 200 }
         %p
         .form_label
           = f.file_field :avatar_file_name
 
-      .small-9.columns.columns-no-padding_right 
-        
-        
+      .small-9.columns.columns-no-padding_right
+
+
         .panel
 
           - if ! @user.kerberos_uid.present?

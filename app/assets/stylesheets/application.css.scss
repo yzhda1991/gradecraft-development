@@ -4,7 +4,7 @@
  *= require jquery.circliful
  *= require animate.min
  *= require select2
- *= require foundation-icons
+ *= require font-awesome
  *= require bootstrap
  *= require jquery.dynatable
 
@@ -47,13 +47,13 @@ $bg-color-hill-medium: #68A127;
 $bg-color-hill-dark: #348C44;
 $bg-color-hill-ex-dark: #274F2E;
 
-
 @mixin transition($property, $duration) {
   -webkit-transition: $property $duration;
   -ms-transition: $property $duration;
   -o-transition: $property $duration;
   transition: $property $duration;
 }
+
 @mixin linear-gradient($fromColor, $toColor) {
   background-color: $toColor; //* Fallback Color */
   background-image: -webkit-gradient(linear, left top, left bottom, from($fromColor), to($toColor)); /* Saf4+, Chrome */
@@ -65,8 +65,9 @@ $bg-color-hill-ex-dark: #274F2E;
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
 }
 /* Importing supporting files. If you create a new css file you'll need to add it here.  */
-@import 'foundation_and_overrides';
+
 @import 'datepicker';
+@import 'foundation_and_overrides';
 @import 'sidebars';
 @import 'forms';
 @import 'tables';
@@ -84,3 +85,8 @@ $bg-color-hill-ex-dark: #274F2E;
 @import 'homepage';
 @import 'rubrics';
 @import 'collapse';
+
+// override foundation body color
+body {
+  background-color: rgba(0, 0, 0, 0);
+}

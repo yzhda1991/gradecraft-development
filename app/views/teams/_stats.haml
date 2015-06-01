@@ -7,7 +7,7 @@
       - if current_course.team_challenges?
         %th Challenge Score
       %th{ "data-dynatable-column" => "students"} #{term_for :students}
-      %th #{term_for :team_leader}
+      %th #{term_for :team_leaders}
       - if current_user_is_staff? && current_course.has_badges?
         %th{ "data-dynatable-column" => "badges"} #{term_for :badges} Earned
       %th{:style => "min-width: 200px"}
@@ -20,8 +20,9 @@
         - if current_course.team_challenges?
           %td= team.challenge_grade_score
         %td= team.member_count
-        %td 
-          = team.team_leader.try(:name)
+        %td
+          - team.leaders.each do |leader|
+            = leader.try(:name)
         - if current_user_is_staff? && current_course.has_badges?
           %td= points team.badge_count
         %td

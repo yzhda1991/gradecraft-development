@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :event do
-    name ""
+    name { Faker::Lorem.word }
     description ""
     open_at ""
     due_at ""

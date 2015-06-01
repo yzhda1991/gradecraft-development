@@ -41,7 +41,7 @@ class Course < ActiveRecord::Base
     :section_leader_term, :group_term, :assignment_weight_type,
     :has_submissions, :teams_visible, :badge_use_scope,
     :weight_term, :predictor_setting, :max_group_size,
-    :min_group_size, :shared_badges, :graph_display, :max_assignment_weight,
+    :min_group_size, :graph_display, :max_assignment_weight,
     :assignments, :default_assignment_weight, :accepts_submissions,
     :tagline, :academic_history_visible, :office, :phone, :class_email,
     :twitter_handle, :twitter_hashtag, :location, :office_hours, :meeting_times,
@@ -79,8 +79,8 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
   validates_presence_of :name, :courseno
-  validates_numericality_of :max_group_size, :allow_blank => true, :greater_than_or_equal_to => 1
-  validates_numericality_of :min_group_size, :allow_blank => true, :greater_than_or_equal_to => 1
+  validates_numericality_of :max_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
+  validates_numericality_of :min_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
   validates_numericality_of :total_assignment_weight, :allow_blank => true
   validates_numericality_of :max_assignment_weight, :allow_blank => true
   validates_numericality_of :max_assignment_types_weighted, :allow_blank => true
@@ -132,14 +132,6 @@ class Course < ActiveRecord::Base
     super.presence || 'Player'
   end
 
-  def min_group_size
-    super.presence || 2
-  end
-
-  def max_group_size
-    super.presence || 6
-  end
-
   def has_teams?
     team_setting == true
   end
@@ -172,8 +164,12 @@ class Course < ActiveRecord::Base
     group_setting == true
   end
 
-  def shared_badges?
-    shared_badges == true
+  def min_group_size
+    super.presence || 2
+  end
+
+  def max_group_size
+    super.presence || 6
   end
 
   def formatted_tagline
@@ -260,6 +256,34 @@ class Course < ActiveRecord::Base
 
   def professor
     course_memberships.where(:role => "professor").first.user if course_memberships.where(:role => "professor").first.present?
+  end
+
+  #Export Users and Final Scores for Course
+  def self.csv_summary_data
+    CSV.generate(options) do |csv|
+      csv << ["Email", "First Name", "Last Name", "Score", "Grade", "Earned Badge #", "GradeCraft ID"  ]
+      students.each do |student|
+        csv << [ student.email, student.first_name, student.last_name, student.cached_score_for_course(self), student.grade_level_for_course(course), student.earned_badges.count, student.id  ]
+      end
+    end
+  end
+
+  def self.csv_roster
+    CSV.generate(options) do |csv|
+      csv << ["GradeCraft ID, First Name", "Last Name", "Uniqname", "Score", "Grade", "Feedback", "Team"]
+      students.each do |student|
+        csv << [student.id, student.first_name, student.last_name, student.username, "", "", "", student.team_for_course(self).try(:name) ]
+      end
+    end
+  end
+
+  def self.csv_assignments
+    CSV.generate() do |csv|
+      csv << ["ID", "Name", "Point Total", "Description", "Open At", "Due At", "Accept Until"  ]
+      assignments.each do |assignment|
+        csv << [ assignment.id, assignment.name, assignment.point_total, assignment.description, assignment.open_at, assignment.due_at, assignment.accepts_submissions_until  ]
+      end
+    end
   end
 
   #final grades - total score + grade earned in course

@@ -12,6 +12,16 @@ $cloud-speed-3: 110s
 $cloud-speed-4: 130s
 $cloud-speed-5: 180s
 
+// z-index for layers
+
+$layer-ground: -50
+$layer-foreground-hill: -50
+$layer-middleground-hill: -60
+$layer-background-hill: -70
+$layer-mountains: -100
+$layer-clouds: -500
+$layer-back-color: -1000
+
 // Main Content Containers
 //-------------------------
 
@@ -19,12 +29,21 @@ $cloud-speed-5: 180s
 .row.panel.footer
   margin-bottom: $background-height + 200px
 
+.back-color-wash
+  background-color: $bg-color-sky
+  z-index: $layer-back-color
+  position: fixed
+  width: 100%
+  height: 100%
+  left: 0
+  top: 0
+
 // keep the sky pinned to the top
 .back-sky-container
   width: 100%
   position: fixed
   height: $background-height
-  z-index: -1
+  z-index: $layer-clouds
   left: 0
   top: 0
 
@@ -33,7 +52,7 @@ $cloud-speed-5: 180s
   width: 100%
   position: fixed
   height: $background-height
-  z-index: -1
+  z-index: $layer-ground
   left: 0
   bottom: 0
   .background-left-wrapper
@@ -50,7 +69,6 @@ $cloud-speed-5: 180s
 .cloud
   margin-left: -35%
   position: relative
-  z-index: -1
   width: 400px
   height: 100px
   -webkit-animation: scroll $cloud-speed-4 linear infinite /* Safari 4+ */
@@ -125,14 +143,6 @@ $cloud-speed-5: 180s
 // Hills:
 //-------------------------
 
-.hill-fill
-  position: absolute
-  bottom: -100px
-  height: $hill-lift-spacer + 100px
-  width: 100%
-  background-color: $bg-color-hill-ex-dark
-  z-index: -9
-
 .hill
   border-radius: 50% 50% 0 0
 
@@ -156,20 +166,20 @@ $cloud-speed-5: 180s
   position: absolute
   top: -13px
   left: -200px
-  z-index: -1
+  z-index: $layer-foreground-hill
 
 .hill-position-2
   background-color: $bg-color-hill-medium
   position: absolute
   left: 200px
-  z-index: -2
+  z-index: $layer-middleground-hill
 
 .hill-position-3
   background-color: $bg-color-hill-dark
   position: absolute
   right: -300px
   top: -10px
-  z-index: -3
+  z-index: $layer-background-hill
 
 // Mountains:
 //-------------------------
@@ -179,7 +189,7 @@ $cloud-speed-5: 180s
 
 .mountain
   position: absolute
-  z-index: -10
+  z-index: $layer-mountains
   // don't break apart:
   width: 100%
   margin-top: -20px
@@ -241,6 +251,17 @@ $cloud-speed-5: 180s
   border-top: $default-mountain-peak-size solid transparent
   float: left
 
+.mountain-root
+  width: $default-mountain-size
+  height: $default-mountain-size
+  top: $default-mountain-size
+  background-color: $bg-color-mountain-medium
+  position: absolute
+
+.mountain-root.right
+  background-color: $bg-color-mountain-dark
+  left: $default-mountain-size
+
 @mixin mountain-size-mixin($size)
   $main-size: $size * $default-mountain-size
   $peak-size: $size * 35px
@@ -266,6 +287,12 @@ $cloud-speed-5: 180s
     border-left-width: $peak-size
     border-bottom-width: $peak-size
     border-top-width: $peak-size
+  .mountain-root
+    width: $main-size
+    height: $main-size
+    top: $main-size
+  .mountain-root.right
+    left: $main-size
 
 .mountain-size-1
   @include mountain-size-mixin(1.2)
@@ -277,6 +304,7 @@ $cloud-speed-5: 180s
   @include mountain-size-mixin(2)
 .mountain-size-5
   @include mountain-size-mixin(2.2)
+
 
 // Responsive Changes
 //-------------------------
@@ -361,41 +389,3 @@ $cloud-speed-5: 180s
 
   100%
     -webkit-transform: translateY(0%)
-
-//   - Swellup: Hide the bottom of the mountains during popup
-.swellup
-  -webkit-animation-name: swellup
-  animation-name: swellup
-
-  -webkit-animation-duration: 1s
-  animation-duration: 1s
-
-  -webkit-animation-timing-function: ease
-  animation-timing-function: ease
-
-@keyframes swellup
-  0%
-    transform: translateY(100%)
-  50%
-    transform: translateY(-15%)
-  60%
-    transform: translateY(-20%)
-  80%
-    transform: translateY(-9%)
-  100%
-    transform: translateY(0%)
-
-@-webkit-keyframes swellup
-  0%
-    -webkit-transform: translateY(100%)
-  40%
-    -webkit-transform: translateY(-15%)
-  60%
-    -webkit-transform: translateY(-20%)
-  90%
-    -webkit-transform: translateY(-9%)
-  100%
-    -webkit-transform: translateY(0%)
-
-
-

@@ -25,7 +25,7 @@ describe "assignments/individual/graded/_table_body" do
   describe "with a graded grade" do
 
     before(:each) do
-      @grade.update(status: "Graded")
+      @grade.update(status: "Graded", instructor_modified: true)
       view.stub(:remove_grades_assignment_path).and_return("#")
     end
 

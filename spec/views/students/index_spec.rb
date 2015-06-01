@@ -2,7 +2,7 @@
 require 'spec_helper'
 include CourseTerms
 
-describe "staff/index" do
+describe "students/index" do
 
   before(:all) do
     clean_models
@@ -10,7 +10,7 @@ describe "staff/index" do
     @student_1 = create(:user)
     @student_2 = create(:user)
     @course.users <<[@student_1, @student_2]
-    @staff = @course.users
+    @students = @course.users
   end
 
   before(:each) do
