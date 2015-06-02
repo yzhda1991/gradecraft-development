@@ -38,7 +38,6 @@ courses << educ_course = Course.create! do |c|
   c.teams_visible = true
   c.group_setting = true
   c.badge_setting = true
-  c.shared_badges = true
   c.badges_value = false
   c.accepts_submissions = true
   c.predictor_setting = true
@@ -99,7 +98,7 @@ courses << polsci_course = Course.create! do |c|
   c.grading_philosophy = "Think of how video games work. This course works along the same logic. There are some things everyone will have to do to make progress. In this course, the readings, reading-related homework, lectures and discussion sections are those things.
 But game play also allows you to choose some activities -- quests, tasks, challenges -- and skip others. You can partly make your own path through a game. So also in this course: the are some assignment types you may choose (because you are good at them, or because you like challenges) and others you can avoid (because your interests are elsewhere). You also have a choice on how you want to weight some of the optional components you choose!
 In games, you start with a score of zero and 'level up' as you play. You might have to try some tasks several times before you get the points, but good games don't ever take your points away. Same here: everything you successfully do earns you more points.
-In games, you sometimes earn 'trophies' or 'badges' or 'power-ups' as you play. They might not have been your primary goal, but you get them because you do something particularly well. In this course, you also can earn power-ups. 
+In games, you sometimes earn 'trophies' or 'badges' or 'power-ups' as you play. They might not have been your primary goal, but you get them because you do something particularly well. In this course, you also can earn power-ups.
 And at the end of the term, your score is your grade."
   c.media_file = "http://upload.wikimedia.org/wikipedia/commons/3/36/Michigan_Wolverines_Block_M.png"
 end
@@ -250,7 +249,7 @@ User.create! do |u|
   u.course_memberships.create! do |cm|
     cm.course = educ_course
     cm.role = "professor"
-  end 
+  end
 end
 puts "Headmistress McGonagall is here...shape up!"
 
@@ -834,7 +833,7 @@ groups << Group.create! do |g|
   g.course = educ_course
   g.name = "Amazing Group"
   g.approved = "Pending"
-  g.assignments << ggd_assignment 
+  g.assignments << ggd_assignment
   g.students << students.sample(4).uniq{|x| x.id}
 end
 
@@ -896,7 +895,7 @@ puts "Second Conventional Essay has been posted!"
 polsci_essay_assignments.each do |at|
   students.each do |student|
     student.assignment_weights.create! do |aw|
-      aw.assignment = at      
+      aw.assignment = at
       aw.assignment_type = assignment_types[:polsci_essays]
       aw.student = student
       aw.weight = 3
@@ -1020,7 +1019,7 @@ assignments << Assignment.create! do |a|
   a.release_necessary = false
   a.grade_scope = "Individual"
 end
-puts "Blog 3 has been posted!" 
+puts "Blog 3 has been posted!"
 
 assignments << Assignment.create! do |a|
   a.course = polsci_course

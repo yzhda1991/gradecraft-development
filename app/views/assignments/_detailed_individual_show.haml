@@ -25,7 +25,7 @@
         %tr
           %td= link_to student.first_name, student_path(student)
           %td= link_to student.last_name, student_path(student)
-          %td{:data => { :"sort-value" => "#{grade.raw_score}"} }= points grade.raw_score if grade.status?
+          %td{:data => { :"sort-value" => "#{grade.raw_score}"} }= points grade.raw_score if grade.instructor_modified?
           - if @assignment.assignment_type.student_weightable?
             %td
               = points grade.score if grade.status?
@@ -35,10 +35,7 @@
           %td= raw grade.feedback if grade.feedback?
           - if @assignment.release_necessary?
             %td
-              - if grade.is_released?
-                = "Released"
-              - elsif grade.is_graded?
-                = "Graded"
+              = grade.status
 
           - if @assignment.accepts_submissions?
             %td
@@ -61,73 +58,6 @@
             %td
               - if grade.is_graded?
                 .center= check_box_tag "grade_ids[]", grade.id
-
-  %p
-
-
-  - if @auditors.present?
-
-    %h4.subtitle Auditing #{term_for :students}
-
-    %table.responsive.nofeatures_default_last_name_dynatable
-      %thead
-        %tr
-          %th First Name
-          %th Last Name
-          %th Raw Score
-          - if @assignment.assignment_type.student_weightable?
-            %th Multiplied Score
-          - if @assignment.has_levels?
-            %th Level
-          - if @assignment.release_necessary?
-            %th Status
-          - if @assignment.accepts_submissions?
-            %th Submission
-          %th
-          - if @assignment.release_necessary?
-            %th.center{"data-dynatable-no-sort" => "true"}
-              %button.button.select-all.tiny= "Check All"
-              %button.button.select-none.tiny= "Uncheck All"
-      %tbody
-        - @auditors.each do |student|
-          - grade = current_course_data.grade_for_student_and_assignment(student, @assignment)
-          %tr
-            %td= link_to student.first_name, student_path(student)
-            %td= link_to student.last_name, student_path(student)
-            %td{:data => { :"sort-value" => "#{grade.raw_score}"} }= points grade.raw_score if grade.status?
-            - if @assignment.assignment_type.student_weightable?
-              %td
-                = points grade.score if grade.status?
-            - if @assignment.has_levels?
-              %td
-                = @assignment.grade_level(grade) if grade.status?
-            - if @assignment.release_necessary?
-              %td
-                - if grade.is_released?
-                  = "Released"
-                - elsif grade.is_graded?
-                  = "Graded"
-            - if @assignment.accepts_submissions?
-              %td
-                - student.submissions.where(:assignment_id => @assignment).each do |submission|
-                  - if submission && grade
-                    = link_to "See Submission", assignment_grade_path(@assignment.id, :student_id => student.id), :class => 'button radius'
-                  - elsif submission
-                    = link_to "See Submission", assignment_grade_path(@assignment.id, :student_id => student.id), :class => 'button radius'
-                  - else
-                    = link_to "Submit", new_assignment_submission_path(@assignment, @submission, :user_id => student.id, :student_type => "User"), :class => 'button radius'
-            %td
-              .button-bar
-                %ul.button-group.right.radius
-                  %li= link_to "Dashboard", student_path(student), :class => 'button'
-                  - if grade.is_graded? || grade.is_released?
-                    %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
-                  - else
-                    %li= link_to 'Grade', edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
-            - if @assignment.release_necessary?
-              %td
-                - if grade.is_graded?
-                  .center= check_box_tag "grade_ids[]", grade.id
 
   - if @assignment.release_necessary? && @assignment.grades.present?
     .right

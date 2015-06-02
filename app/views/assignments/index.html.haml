@@ -21,14 +21,16 @@
         - cache ["v1", assignment_type] do
           .assignment_type{:id => "assignment-type-#{assignment_type.id}" }
             %h3.collapse.medium-8
-              = image_tag "draggable_transparent.png", :width => 10, :style => "margin-top: -6px"
+              .fa.fa-arrows-v
               #{assignment_type.name} – #{points assignment_type.max_value} points
+
             .collapse-hidden
 
               .columns{:style => "overflow: auto"}
                 %table.responsive{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
                   %thead
                     %tr
+                      %th
                       %th{:scope => "col", :width => "20%"} Name
                       %th Due
                       %th{:style => "display: none"} Due Date
@@ -41,8 +43,8 @@
                       - cache ["v1", assignment] do
                         %tr{:id => "assignment-#{assignment.id}"}
                           %td
-                            .draggable
-                              = image_tag "draggable_transparent.png", :width => 10, :style => "margin-top: -2px"
+                            %i.fa.fa-arrows-v
+                          %td
                             = link_to assignment.name, assignment
                           %td= assignment.try(:due_at) || "Ongoing"
                           %td{:style => "display: none"}

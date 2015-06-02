@@ -4,15 +4,12 @@ class RubricsController < ApplicationController
   respond_to :html, :json
 
   def design
-    @assignment = Assignment.find params[:assignment_id]
+    @assignment = current_course.assignments.find params[:assignment_id]
     @rubric = Rubric.find_or_create_by(assignment_id: @assignment.id)
     @metrics = existing_metrics_as_json
     @course_badges = serialized_course_badges
     @course_badge_count = @assignment.course.badges.visible.count
-    respond_with @rubric
-  end
-
-  def edit
+    @title = "Design Rubric for #{@assignment.name}"
     respond_with @rubric
   end
 

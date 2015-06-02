@@ -26,7 +26,6 @@ GradeCraft::Application.routes.draw do
     get :students
     get :top_10
     get :teams
-    get :team_grade
     get :per_assign
     get :all_events
     get :role_events
@@ -253,12 +252,9 @@ GradeCraft::Application.routes.draw do
   resources :users do
     collection do
       get :edit_profile
-      get :all
       put :update_profile
-      get :test
       get :import
       post :upload
-      get :analytics
     end
   end
   resources :students do

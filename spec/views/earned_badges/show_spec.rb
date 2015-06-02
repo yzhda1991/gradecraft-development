@@ -10,11 +10,12 @@ describe "earned_badges/show" do
     @badge = create(:badge, course: @course)
     @student = create(:user)
     @course.users << @student
-    @earned_badge = create(:earned_badge, badge: @badge, student: @student)
+    @earned_badge = create(:earned_badge, badge: @badge, student: @student, course: @course)
   end
 
   before(:each) do
     view.stub(:current_course).and_return(@course)
+    view.stub(:edit_badge_earned_badge_path).and_return("#")
     assign(:title, "#{@student.name}'s #{@badge.name} Badge")
   end
 

@@ -9,33 +9,13 @@ class StudentsController < ApplicationController
   def index
     @title = "#{(current_course.user_term).singularize} Roster"
 
-    if team_filter_active?
-      # fetch user ids for all students in the active team
-      @students = graded_students_in_current_course_for_active_team.order(alpha_sort_order).each do |s|
-        s.load_team(current_course)
-      end
-      @auditing_students = auditing_students_in_current_course_for_active_team.order(alpha_sort_order).each do |s|
-        s.load_team(current_course)
-      end
+    @teams = current_course.teams
+
+    if params[:team_id].present?
+      @team = current_course.teams.find_by(id: params[:team_id])
+      @students = current_course.students_being_graded_by_team(@team)
     else
-      # fetch user ids for all students in the course, regardless of team
-      @students = graded_students_in_current_course.order(alpha_sort_order).each do |s|
-        s.load_team(current_course)
-      end
-      @auditing_students = auditing_students_in_current_course.order(alpha_sort_order).each do |s|
-        s.load_team(current_course)
-      end
-    end
-
-    @student_ids = @students.collect {|s| s[:id] }
-    @auditing_student_ids = @auditing_students.collect {|s| s[:id] }
-    @teams_by_student_id = teams_by_student_id
-    @earned_badges_by_student_id = earned_badges_by_student_id
-    @student_grade_schemes_by_id = course_grade_scheme_by_student_id
-
-    respond_to do |format|
-      format.html
-      format.csv { send_data @students.csv_for_course(current_course) }
+      @students = current_course.students
     end
   end
 
@@ -44,8 +24,11 @@ class StudentsController < ApplicationController
     # before_filter :ensure_staff?
     @title = "Leaderboard"
 
+    @teams = current_course.teams
+
     if team_filter_active?
       # fetch user ids for all students in the active team
+      @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
       @students = graded_students_in_current_course_for_active_team.order(leaderboard_sort_order)
     else
       # fetch user ids for all students in the course, regardless of team
@@ -77,25 +60,13 @@ class StudentsController < ApplicationController
     end
   end
 
-  # Exporting student grades
-  def export
-    @students = current_course.students_being_graded respond_to do |format|
-      format.html
-      format.json { render json: @students.where("first_name like ?", "%#{params[:q]}%") }
-      format.csv { send_data @students.csv_for_course(current_course) }
-    end
-  end
-
   #Displaying student profile to instructors
   def show
     self.current_student = current_course.students.where(id: params[:id]).first
     @student = current_student
     @student.load_team(current_course)
-    @assignments = current_course.assignments.chronological.alphabetical
+    @assignments = current_course.assignments.sorted
     @assignment_types = current_course.assignment_types.sorted
-    if current_user_is_staff?
-      @scores_for_current_course = current_student.scores_for_course(current_course)
-    end
   end
 
   # AJAX endpoint for student name search
@@ -112,7 +83,7 @@ class StudentsController < ApplicationController
     @grade_scheme_elements = current_course.grade_scheme_elements
     @title = "Your Course Progress"
     if current_user_is_staff?
-      @scores_for_current_course = current_student.scores_for_course(current_course)
+      @scores_for_current_course = current_student.cached_score_for_course(current_course)
     end
   end
 
@@ -172,6 +143,10 @@ class StudentsController < ApplicationController
     Resque.enqueue(ScoreRecalculator, @student.id, current_course.id)
     flash[:notice]="Your request to recalculate #{@student.name}'s grade is being processed. Check back shortly!"
     redirect_to session[:return_to]
+  end
+
+  def calendar
+    @assignments = current_course.assignments
   end
 
 
@@ -236,10 +211,6 @@ class StudentsController < ApplicationController
 
   def leaderboard_sort_order
     "course_memberships.score DESC, users.last_name ASC, users.first_name ASC"
-  end
-
-  def alpha_sort_order
-    "users.last_name ASC, users.first_name ASC"
   end
 
   def fetch_active_team

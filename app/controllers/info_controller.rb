@@ -25,8 +25,6 @@ class InfoController < ApplicationController
     render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])
   end
 
-
-
   def class_badges
     @title = "Awarded #{term_for :badges}"
   end
@@ -53,7 +51,8 @@ class InfoController < ApplicationController
     @title = "Resubmitted Assignments"
     @resubmissions = current_course.submissions.resubmitted
     @resubmission_count = @resubmissions.count
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+    @teams = current_course.teams
+    @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
   end
 
   def ungraded_submissions
@@ -88,9 +87,8 @@ class InfoController < ApplicationController
   def choices
     @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types
+    @teams = current_course.teams
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-    user_search_options = {}
-    user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
 
     if @team
       students = current_course.students_being_graded_by_team(@team)
@@ -99,7 +97,6 @@ class InfoController < ApplicationController
     end
 
     @students = students
-    @auditing = current_course.students_auditing
   end
 
   # Display all grades in the course in list form

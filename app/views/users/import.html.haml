@@ -1,3 +1,10 @@
-= form_tag({:action => :upload}, :multipart => true) do
-  = file_field_tag 'file'
-  = submit_tag("Import")
+.small-12.panel.mainContent
+
+  = content_nav_for User, "Import Users"
+
+  %h3.pagetitle Import Users
+
+  .columns
+    = form_tag({:action => :upload}, :multipart => true) do
+      = file_field_tag 'file'
+      = submit_tag("Import")

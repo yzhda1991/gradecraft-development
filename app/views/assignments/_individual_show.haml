@@ -1,24 +1,14 @@
 - if current_course.has_teams? && @assignment.is_individual?
   .small-12.medium-6.large-4.right.columns.form_buttons
     = form_tag assignment_path(@assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-      = hidden_field_tag :assignment_id, @assignment.id
       %label.sr-only{:for => "team_id"}
-        Select Team
-      = select_tag :team_id, options_for_select(current_course.teams.alpha.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{current_course.team_term} –"
+        Select #{term_for :team} –
+      = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
 = form_tag edit_status_grades_assignment_path @assignment do
   %table.no_radius.responsive.nofeatures_default_last_name_dynatable
     %thead= render "assignments/individual/graded/table_head"
     %tbody= render "assignments/individual/graded/table_body"
-
-  - if @auditors.present?
-
-    %h4.subtitle Auditing #{term_for :students}
-
-
-    %table.responsive.nofeatures_default_last_name_dynatable
-      %thead= render "assignments/individual/auditing/table_head"
-      %tbody= render "assignments/individual/auditing/table_body"
 
   - if @assignment.release_necessary? && @assignment.grades.present?
     .small-12.columns

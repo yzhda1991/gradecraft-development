@@ -26,8 +26,8 @@ gem 'dotenv-rails'
 gem 'escape_utils'
 gem 'fast_blank'
 gem 'fog'
+gem 'font-awesome-rails'
 gem 'foundation-rails'
-gem 'foundation-icons-sass-rails'
 gem 'haml'
 gem 'jbuilder'
 gem 'jquery-rails', '~> 2.0'
@@ -61,6 +61,7 @@ gem 'uglifier'
 gem 'whenever'
 gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'wysiwyg-rails'
 
 group :development do
   gem 'haml-rails'

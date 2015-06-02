@@ -2,11 +2,17 @@
   %ul.button-group.radius.right
     - student.submissions.where(:assignment_id => @assignment).each do |submission|
 
-      - if grade.instructor_modified?
+      /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. Icon represents if there are files attached. */
+      %li
+        - if submission.submission_files.present?
+          %i.fi-paperclip.right
         - if submission.resubmitted?
-          %li= link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button alert'
+          = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button alert'
         - else
-          %li= link_to "See Submission", assignment_submission_path(@assignment, submission.id), :class => 'button'
+          = link_to "See Submission", assignment_submission_path(@assignment, submission.id), :class => 'button'
+
+      /* Submission present + an instructor-modified grade - allow the instructor to manage the grade
+      - if grade.instructor_modified?
         %li
           %a{:href => assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
             See Grade
@@ -16,16 +22,21 @@
             Edit Grade
             %span.sr-only for #{student.first_name} #{student.last_name}
         %li= link_to "Delete", remove_grades_assignment_path(:grade_id => grade.id, :assignment_id => @assignment.id), :class => 'button', :method => :post
-      - elsif submission
-        - if submission.submission_files.present?
-          %i.fi-paperclip.right
-          %li= link_to "Grade", edit_assignment_grade_path(@assignment.id, submission.id, :student_id => student.id), :class => 'button'
-          %li= link_to "See Submission", assignment_submission_path(@assignment, submission.id), :class => 'button'
 
-      - if ! student.submissions.where(:assignment_id => @assignment).present?
-        - if grade &&  ( grade.status? || grade.instructor_modified)
-          %li= link_to "See Grade", assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
-          %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
-          %li= link_to "Delete", remove_grades_assignment_path(:grade_id => grade.id, :assignment_id => @assignment.id), :class => 'button', :method => :post
-        - else
-          %li= link_to "Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+        /* Submission present but not yet graded, allow the instructor to grade
+      - else
+        %li
+          %a{:href => assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
+            Grade
+            %span.sr-only for #{student.first_name} #{student.last_name}
+
+    - if ! student.submissions.where(:assignment_id => @assignment).present?
+      /* No submission, but a grade present, allow the instructor to manage the grade */
+      - if grade && grade.instructor_modified?
+        %li= link_to "See Grade", assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+        %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+        %li= link_to "Delete", remove_grades_assignment_path(:grade_id => grade.id, :assignment_id => @assignment.id), :class => 'button', :method => :post
+
+        /* No submission, but allow the instructor to grade anyways */
+      - else
+        %li= link_to "Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
