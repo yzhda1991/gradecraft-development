@@ -1,6 +1,6 @@
 /** Student Dashboard Styles **/
 
-/* Adding the grey enclosure for the prediction */ 
+/* Adding the grey enclosure for the prediction */
 .gradePredictor
   background-color: #eee
   border: 1px solid #eee
@@ -15,24 +15,39 @@
 
 .assignment
   display: block
-  padding: 0.5rem 0rem
+  padding: 0.5rem 0rem 0 0.5rem
   margin-bottom: 1rem
   border: 1px solid #eee
   border-radius: $global-radius
+  float: left
+  width: 19%
+  margin: 3px
+  height: 125px
 
   select
     margin: 0
 
-/* Styling the space where students actually predict their grades */ 
+.assignment-due-at
+  font-style: italic
+  font-size: .75rem
+
+// .switch-label is Foundation dependent, TODO: does this mess up other pass/fail switches?
+.assignment-slider-value, .switch-label
+  text-align: center
+  display: block
+
+/* Styling the space where students actually predict their grades */
 #predictorPage ul.slides, #predictorPage ul.slides li
   list-style-type: none
   margin: 0
   padding: 0
 
-/* Styling the slider widgets */ 
+/* Styling the slider widgets */
 .slider.ui-widget-content
   background: #eeeeee
   border: none
+  width: 80%
+  margin-left: 10%
 
 .ui-widget-header
   background: $secondary-color-2
@@ -69,7 +84,7 @@ img.unearned
 img.earned
   opacity: 1
 
-/* Adjusting the margins on the small headers in the avatar panel */ 
+/* Adjusting the margins on the small headers in the avatar panel */
 .avatar.panel
   h3
     margin: 0
@@ -102,5 +117,23 @@ img.earned
   #numberComplete_canvas
     width: 100% !important
 
-.right.radius.label 
+.right.radius.label
   margin-left: 1rem
+
+/* MEDIA QUERIES */
+
+// small
+@media (max-width: $media-small-max)
+  .assignment
+    width: 100%
+
+// medium
+@media (min-width: $media-small-max) and (max-width: $media-medium-max)
+  .assignment
+    width: 48%
+
+// large
+@media (min-width: $media-medium-max) and (max-width: $media-large-max)
+  .assignment
+    width: 24%
+
