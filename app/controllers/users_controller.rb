@@ -6,23 +6,20 @@ class UsersController < ApplicationController
 
   def index
     @title = "All Users"
-    # @users =  current_course.users.includes(:courses)
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-    user_search_options = {}
-    user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
-    @users = current_course.users.includes(:teams, :courses).where(user_search_options)
+    @teams = current_course.teams
+    @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
+    if params[:team_id].present?
+      #TODO: should show TAs as well
+      @users = @team.students
+    else
+      @users = current_course.users
+    end
     respond_to do |format|
       format.html
       format.json { render json: @users }
       format.csv { send_data @users.to_csv }
       format.xls { send_data @users.to_csv(col_sep: "\t") }
     end
-  end
-
-  # Admin only view of all users
-  def all
-    @users =  current_course.users
-    @title = "All Users"
   end
 
   def new
@@ -77,7 +74,7 @@ class UsersController < ApplicationController
     elsif @user.save && @user.is_staff?(current_course)
       redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully updated!"
     else
-      render :edit
+      redirect_to :edit
     end
   end
 
@@ -87,15 +84,15 @@ class UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to users_url, :notice => "User #{@name} was successfully deleted" }
+      format.html { redirect_to users_url, :notice => "#{@name} was successfully deleted" }
       format.json { head :ok }
     end
 
   end
 
-  # We don't allow students to edit their profile directly - this is a mediated view
+  # We don't allow students to edit their info directly - this is a mediated view
   def edit_profile
-    @title = "Edit My Account"
+    @title = "Edit My Profile"
     @user = current_user
     @course_membership = @user.course_memberships.where(course_id: current_course).first
     @default_course_options = @user.courses
@@ -130,11 +127,6 @@ class UsersController < ApplicationController
       end
       redirect_to users_path, :notice => "Upload successful"
     end
-  end
-
-  def search
-    q = params[:user][:name]
-    @users = current_course.users.where("name LIKE ?","%#{q}%")
   end
 
   private

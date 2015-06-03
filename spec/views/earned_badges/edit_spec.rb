@@ -9,6 +9,7 @@ describe "earned_badges/edit" do
     @course = create(:course)
     @badge = create(:badge, course: @course)
     @student = create(:user)
+    @course.users << @student
     @earned_badge = create(:earned_badge, course: @course, badge: @badge, student: @student)
   end
 

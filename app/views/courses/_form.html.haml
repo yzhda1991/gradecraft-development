@@ -149,7 +149,7 @@
 
       .small-12.large-2.columns
         = f.label :year
-        = f.select :year, (Date.today.year - 3)..(Date.today.year + 2)
+        = f.select :year, (Date.today.year - 3)..(Date.today.year + 2), :selected => "#{Date.today.year}"
 
       .small-12.large-5.columns
         = f.label :point_total, "Maximum Number of Points"
@@ -165,12 +165,10 @@
 
 
     .small-12.large-2.columns
-      = f.label :min_group_size, "Min Group Size"
-      = f.number_field :min_group_size
+      = f.input :min_group_size, as: :numeric, :input_html => { :value => [ @course.min_group_size || 3 ] }
 
     .small-12.large-2.columns
-      = f.label :max_group_size, "Max Group Size"
-      = f.number_field :max_group_size
+      = f.input :max_group_size, as: :numeric, :input_html => {  :value => [ @course.max_group_size || 6 ] }
 
 
     .clear

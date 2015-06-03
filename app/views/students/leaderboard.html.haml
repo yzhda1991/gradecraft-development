@@ -6,11 +6,11 @@
     %h3.pagetitle#tableCaption= @title
 
   - if current_course.has_teams?
-    .small-12.large-4.medium-6.columns.right
-      %label.sr-only{:for => "team_id"}
-        Select Team
+    .small-12.medium-4.columns.right
       = form_tag leaderboard_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        = select_tag :team_id, options_for_select(current_course.teams.alpha.map { |t| [t.name, t.id] }, params[:team_id]), :prompt => "– Select #{current_course.team_term} –"
+        %label
+          .sr-only Select #{term_for :team}
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   .columns{:style => "overflow: auto"}
     %table.responsive
@@ -36,7 +36,7 @@
               %td{"data-title" => "Rank"}= index + 1
               %td{"data-title" => "First Name"}= link_to student.first_name, student_path(student)
               %td{"data-title" => "Last Name"}= link_to student.last_name, student_path(student)
-              %td{"data-title" => "Score"}= points student.cached_score
+              %td{"data-title" => "Score"}= points student.cached_score_for_course(current_course)
               - if current_course.has_teams?
                 - student_team = @teams_by_student_id[student.id]
                 %td#team_for_course{"data-title" => "Team"}

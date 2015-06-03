@@ -37,12 +37,11 @@
               = link_to " (Remove)", remove_uploads_path({ :model => "AssignmentFile", :upload_id => af.id, :redirect => { :controller => "assignments", :id => @assignment.id} } )
 
   - if current_course.has_teams? && @assignment.is_individual?
-    .small-12.right.medium-5.columns
+    .small-12.medium-4.right.columns
       = form_tag detailed_grades_assignment_path(@assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        = hidden_field_tag :assignment_id, @assignment.id
         %label.sr-only{:for => "team_id"}
-          Select Team
-        = select_tag :team_id, options_for_select(current_course.teams.alpha.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "Select #{current_course.team_term}"
+          Select #{term_for :team}
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   .small-12.columns
     - if @assignment.has_groups?

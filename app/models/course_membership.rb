@@ -2,7 +2,7 @@ class CourseMembership < ActiveRecord::Base
   belongs_to :course
   belongs_to :user
 
-  attr_accessible :shared_badges, :auditing, :character_profile, :course_id, :user_id, :role
+  attr_accessible :auditing, :character_profile, :course_id, :user_id, :role
 
   ROLES = %w(student professor gsi admin)
 

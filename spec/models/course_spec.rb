@@ -53,7 +53,6 @@ describe Course do
   it { should respond_to("point_total")}
   it { should respond_to("predictor_setting")}
   it { should respond_to("semester")}
-  it { should respond_to("shared_badges")}
   it { should respond_to("start_date")}
   it { should respond_to("status")}
   it { should respond_to("tagline")}

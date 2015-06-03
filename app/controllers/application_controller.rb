@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   # Getting the course scores to display the box plot results
   def get_course_scores
     if current_user.present? && current_user_is_student?
-      @scores_for_current_course = current_student.scores_for_course(current_course)
+      @scores_for_current_course = current_student.cached_score_for_course(current_course)
     end
   end
 
@@ -111,7 +111,6 @@ class ApplicationController < ActionController::Base
     if current_user && request.format.html?
       User.increment_counter(:page_views, current_user.id)
       Resque.enqueue(EventLogger, 'pageview', course_id: current_course.id, user_id: current_user.id, student_id: current_student.try(:id), user_role: current_user.role(current_course), page: request.original_fullpath, created_at: Time.now)
-      #EventLogger.perform_async('pageview', course_id: current_course.id, user_id: current_user.id, student_id: current_student.try(:id), user_role: current_user.role(current_course), page: request.original_fullpath, created_at: Time.now)
     end
   end
 
@@ -119,7 +118,6 @@ class ApplicationController < ActionController::Base
   def log_course_login_event
     membership = current_user.course_memberships.where(course_id: current_course.id).first
     Resque.enqueue(EventLogger,'login', course_id: current_course.id, user_id: current_user.id, student_id: current_student.try(:id), user_role: current_user.role(current_course), last_login_at: membership.last_login_at.to_i, created_at: Time.now)
-    #EventLogger.perform_async('login', course_id: current_course.id, user_id: current_user.id, student_id: current_student.try(:id), user_role: current_user.role(current_course), last_login_at: membership.last_login_at.to_i, created_at: Time.now)
     membership.update_attribute(:last_login_at, Time.now)
   end
 

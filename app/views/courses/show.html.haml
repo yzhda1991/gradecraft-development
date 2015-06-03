@@ -84,12 +84,6 @@
         %p
           %b Badges will be called:
           = @course.badge_term.pluralize
-        %p
-          %b Social Badges:
-          = @course.shared_badges? ? 'Yes' : 'No'
-        %p
-          %b Badges are valuable:
-          = @course.badges_value? ? 'Yes' : 'No'
 
     .panel
       %h4 SECTIONS
@@ -114,9 +108,6 @@
     .panel
       %h4 GROUPS
       %p
-        %b Students will work in groups:
-        = @course.group_setting? ? 'Yes' : 'No'
-      -if @course.group_setting?
         %p
           %b Groups will be called:
           = @course.group_term.pluralize

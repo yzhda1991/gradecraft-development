@@ -30,16 +30,6 @@ class EarnedBadgesController < ApplicationController
     @students = current_course.students
   end
 
-  # Allows the student to change whether or not they've shared having earned this badge with the class
-  def toggle_shared
-    @earned_badge = current_course.earned_badges.where(:badge_id => params[:badge_id], :student_id => current_student.id).first
-    @earned_badge.shared = !@earned_badge.shared
-    @earned_badge.save
-    render :json => {
-      :shared => @earned_badge.shared
-    }
-  end
-
   def edit
     @title = "Editing Awarded #{term_for :badge}"
     @students = current_course.students
@@ -47,7 +37,6 @@ class EarnedBadgesController < ApplicationController
     @earned_badge = @badge.earned_badges.find(params[:id])
     respond_with @earned_badge
   end
-
 
   def create
     @badge = current_course.badges.find(params[:badge_id])
@@ -88,10 +77,15 @@ class EarnedBadgesController < ApplicationController
   def mass_edit
     @badge = current_course.badges.find(params[:id])
     @title = "Quick Award #{@badge.name}"
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-    user_search_options = {}
-    user_search_options['team_memberships.team_id'] = params[:team_id] if params[:team_id].present?
-    @students = current_course.students.where(user_search_options)
+    @teams = current_course.teams
+
+    if params[:team_id].present?
+      @team = current_course.teams.find_by(id: params[:team_id])
+      @students = current_course.students_being_graded_by_team(@team)
+    else
+      @students = current_course.students
+    end
+
     if @badge.can_earn_multiple_times?
       @earned_badges = @students.map do |s|
         @badge.earned_badges.new(:student => s, :badge => @badge)

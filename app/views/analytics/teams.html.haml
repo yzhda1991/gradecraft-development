@@ -1,11 +1,11 @@
 .small-12.panel.mainContent
 
-  = content_nav_for "Analytics"
+  = content_nav_for "#{term_for :team} Analytics"
 
-  %h3.pagetitle #{term_for :team} Grade Distribution
+  %h3.pagetitle= @title
 
   .small-12.columns
-        
+
     #grade_distro
 
     - if current_course.has_teams?

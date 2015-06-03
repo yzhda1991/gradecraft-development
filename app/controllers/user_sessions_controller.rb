@@ -9,7 +9,7 @@ class UserSessionsController < ApplicationController
 
   def create
     respond_to do |format|
-      if @user = login(params[:user][:email], params[:user][:password], params[:user][:remember_me])
+      if @user = login(params[:user][:email], params[:user][:password])
         User.increment_counter(:visit_count, @user.id)
         log_course_login_event
         format.html { redirect_back_or_to dashboard_path }
@@ -50,7 +50,8 @@ class UserSessionsController < ApplicationController
     end
     auto_login @user
     User.increment_counter(:visit_count, @user.id)
-    respond_with @user, location: dashboard_path
+    log_course_login_event
+    redirect_back_or_to dashboard_path
   end
 
   def destroy
