@@ -10,7 +10,15 @@
 
 /* Branding colors */
 
-$primary-color: #002d62;
+$layout-color-blue-0: #002d62; // darkest
+$layout-color-blue-1: #269ECC;
+$layout-color-blue-2: #6DD6FF;
+$layout-color-blue-3: #AAE7FF;
+$layout-color-blue-4: #C9F0FF;
+
+
+
+$primary-color: $layout-color-blue-0;
 $primary-color-2: #269ECC;
 $primary-color-3: #55a9bc;
 $primary-color-4: #72cdf4;
@@ -37,6 +45,8 @@ $badge_blue: #009BD6;
 $badge_green: #54B141;
 $badge_green_border: #439A31;
 $global-radius: 3px;
+
+$txt-color-inverse: #FFF;
 
 $bg-color-sky: #55C3F5;
 $bg-color-mountain-light: #6FA9DD;

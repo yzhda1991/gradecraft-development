@@ -16,29 +16,53 @@
 .assignment
   display: block
   margin-bottom: 1rem
-  border: 1px solid #eee
-  border-radius: $global-radius
+  border: 1px solid $layout-color-blue-0
+  background-color: $layout-color-blue-4
   float: left
   width: 19%
   margin: 3px
-  height: 125px
+  height: 140px
 
   select
     margin: 0
 
-.assignment-info-bar
-  height: 25px
-  //background-color: black
+.assignment-layout-title
+  background-color: $layout-color-blue-0
+  color: $txt-color-inverse
+  padding-left: 1em
+  height: 30px
 
+.assignment-layout-info
+  height: 25px
+  background-color: $layout-color-blue-2
+  padding: 4px
+
+.assignment-info-required
+  float: left
+  height: 20px
+  width: 30px
+
+.assignment-info-late
+
+.assignment-layout-time
+  height: 20px
+  background-color: $layout-color-blue-3
+  padding: 4px
+
+.assignment-layout-points
+  height: 60px
+
+.assignment-released-points
+  text-align: center
+  padding: 20px 0 10px 0
+
+// Nest inside once Backbone has been Angularized, right now we need the predictor to be a child of the data div
+.assignment-predicted-points-padding
+  height: 15px
 
 .assignment-due-at
   font-style: italic
   font-size: .75rem
-
-// .switch-label is Foundation dependent, TODO: does this mess up other pass/fail switches?
-.assignment-slider-value, .switch-label
-  text-align: center
-  display: block
 
 /* Styling the space where students actually predict their grades */
 #predictorPage ul.slides, #predictorPage ul.slides li
@@ -63,6 +87,21 @@
   top: -5px
   margin-left: -12px
   background: darken($secondary-color-2, 15%)
+
+/* style the pass/fail switch */
+.assignment .pass-fail-grade-toggle
+  float: left
+  margin: 0 20px 0 20px
+
+.assignment .switch label
+  background: white
+  paddin-top: 2px
+.assignment .switch-label
+  font-weight: initial
+
+.assignment-layout-bottom-border
+  height: 4px
+  background-color: $layout-color-blue-0
 
 /* Styling the bar charts on the syllabus page */
 #userBarTotal

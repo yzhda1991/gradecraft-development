@@ -30,56 +30,55 @@
 
             - if assignment.point_total > 0 || assignment.pass_fail?
               .assignment
+                / ASSIGNMENT NAME
+                .assignment-layout-title
+                  - if assignment.name.length > 28
+                    .assignment-name.bold{:title => assignment.name, :data => {'tooltip' => true} }= truncate assignment.name, :length   => 28, :separator => "..."
+                  - else
+                    .assignment-name.bold= assignment.name
 
-                .assignment-info-bar
+                .assignment-layout-info
                   - if assignment.required?
-                    %span.has-tip{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
+                    .assignment-info-required.has-tip{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
                       %i.fa.fa-star.fa-fw
                   - if assignment.past? && assignment.accepts_submissions && ! current_student.submission_for_assignment(assignment).present?
-                    %span.label.alert.radius Late!
-
-
-                / ASSIGNMENT NAME
-                - if assignment.name.length > 28
-                  .assignment-name.bold{:title => assignment.name, :data => {'tooltip' => true} }= truncate assignment.name, :length   => 28, :separator => "..."
-                - else
-                  .assignment-name.bold= assignment.name
-
-                  / RELEASED(GRADED) ASSIGNMENT - FINAL GRADE
-                - if current_student_data.grade_released_for_assignment?(assignment)
-                  - if assignment.pass_fail?
-                    = term_for grade_for_assignment.pass_fail_status
-                  -else
-                    %span.earned= points grade_for_assignment.score
-                    = " / #{points point_total_for_assignment} points"
-                    = hidden_field_tag assignment.name, current_student_data.score_for_assignment(assignment), :'data-assignment-type-id' => assignment.assignment_type_id
-                  / UNRELEASED ASSIGNMENT - POSSIBLE POINTS
-                - else
-                  - if ! assignment.pass_fail?
-                    = "#{points point_total_for_assignment} possible points"
+                    %span.label.alert.radius{:title => "This #{term_for :assignment} is past the due date", :data => {'tooltip' => true} } Late!
 
                 / DUE DATE
-                - if assignment.future?
-                  .assignment-due-at= assignment.due_at
+                .assignment-layout-time
+                  - if assignment.future?
+                    .assignment-due-at= "due: #{assignment.due_at}"
 
-                / PREDICTOR WIDGET - possible points data used to total all points for .gradePredictor
-                .assignmentData{:data => {:assignment => assignment.id, :'possible-points' => point_total_for_assignment}}
-
-                  - if ! current_student_data.grade_released_for_assignment?(assignment)
-                    - if assignment.pass_fail?
-                      - pass_fail_prediction = grade_for_assignment.predicted_score > 0 ? "#{term_for :pass}": "#{term_for :fail}"
-                      .pass-fail-grade-toggle
-                        .switch.small.predictor{:data => {:assignment => assignment.id}}
-                          %input{:type => "checkbox", :name => assignment.name, :value => "#{grade_for_assignment.predicted_score}", :id => "slider-#{assignment.id}", :checked => (pass_fail_prediction == "Pass" ? true: false)}
-                          %label.checkbox{ :for => "slider-#{assignment.id}" }
-                      .switch-label.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
-                        = pass_fail_prediction
-                    - elsif assignment.fixed?
-                      %input{:type => "checkbox", :name => assignment.name, :value => point_total_for_assignment, :class => "class-checkbox right", :'data-assignment-type-id' => assignment.assignment_type_id, :checked => grade_for_assignment.predicted_score > 0 }
-                    - elsif assignment.select?
-                      = select_tag assignment.name, options_from_collection_for_select(assignment.assignment_score_levels,'value','formatted_name', grade_for_assignment.predicted_score), :class => 'point-value right', :id => "total-#{assignment.id}", :include_blank => true
+                .assignment-layout-points
+                  .assignmentData{:data => {:assignment => assignment.id, :'possible-points' => point_total_for_assignment}}
+                    - if current_student_data.grade_released_for_assignment?(assignment)
+                      .assignment-released-points
+                        - if assignment.pass_fail?
+                          = term_for grade_for_assignment.pass_fail_status
+                        -else
+                          %span.earned= points grade_for_assignment.score
+                          = " / #{points point_total_for_assignment} points"
+                          = hidden_field_tag assignment.name, current_student_data.score_for_assignment(assignment), :'data-assignment-type-id' => assignment.assignment_type_id
                     - else
-                      .slider{:id => "slider-#{assignment.id}", :max => point_total_for_assignment , :value => "#{grade_for_assignment.predicted_score}", :'data-scorelevelvals' => "#{assignment.assignment_score_levels.map(&:value)}", :'data-scorelevelnames' => "#{assignment.assignment_score_levels.map(&:name)}", :'data-highlight' => "true"}
-                      %span.assignment-slider-value.pScore= "0 "
-                      %span.score-level-name
-                .clear
+                      .assignment-predicted-points-padding
+                      - if assignment.pass_fail?
+                        - pass_fail_prediction = grade_for_assignment.predicted_score > 0 ? "#{term_for :pass}": "#{term_for :fail}"
+                        .pass-fail-grade-toggle
+                          .switch.small.predictor{:data => {:assignment => assignment.id}}
+                            %input{:type => "checkbox", :name => assignment.name, :value => "#{grade_for_assignment.predicted_score}", :id => "slider-#{assignment.id}", :checked => (pass_fail_prediction == "Pass" ? true: false)}
+                            %label.checkbox{ :for => "slider-#{assignment.id}" }
+                        .switch-label.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
+                          = pass_fail_prediction
+                      - elsif assignment.fixed?
+                        %input{:type => "checkbox", :name => assignment.name, :value => point_total_for_assignment, :class => "class-checkbox right", :'data-assignment-type-id' => assignment.assignment_type_id, :checked => grade_for_assignment.predicted_score > 0 }
+                      - elsif assignment.select?
+                        = select_tag assignment.name, options_from_collection_for_select(assignment.assignment_score_levels,'value','formatted_name', grade_for_assignment.predicted_score), :class => 'point-value right', :id => "total-#{assignment.id}", :include_blank => true
+                      - else
+                        .slider{:id => "slider-#{assignment.id}", :max => point_total_for_assignment , :value => "#{grade_for_assignment.predicted_score}", :'data-scorelevelvals' => "#{assignment.assignment_score_levels.map(&:value)}", :'data-scorelevelnames' => "#{assignment.assignment_score_levels.map(&:name)}", :'data-highlight' => "true"}
+                        %span.assignment-slider-value.pScore= "0"
+                        %span.assignment-score-divider= " / "
+                        %span.assignment-score-possible= points point_total_for_assignment
+                        %span.score-level-name
+                  .clear
+
+                .assignment-layout-bottom-border
