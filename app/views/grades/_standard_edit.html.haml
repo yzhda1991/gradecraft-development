@@ -65,29 +65,30 @@
                   = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", :grade_id => @grade.id, :upload_id => gf.id } )
         .clear
 
-    / - if @badges.present?
-    /   .panel
-    /     %h4.uppercase #{term_for :badges}
-    /     = f.simple_fields_for :student do |sb|
-    /       - @badges.each do |badge|
-    /         .small-12.medium-2.columns.panel.center
-    /           - if @student.earned_badge_for_badge(badge).present?
-    /             - earned_badge = @student.earned_badge_for_badge(badge).first
-    /             %img{:src => badge.try(:icon), :alt => "You've earned the #{badge.try(:name)} badge", :class => "earned", :width => "60", :height => "60"}
-    /               .span= badge.name
-    /             %br.italic= "Earned #{@student.earned_badges_for_badge_count(badge)} time"
-    /             - if badge.can_earn_multiple_times?
-    /               = sb.simple_fields_for :earned_badges, earned_badge do |ebf|
-    /                 = ebf.input :score, :as => :boolean, :label => "Award"
-    /           - else
-    /             - earned_badge ||= @grade.student.earned_badges.new(:badge => badge, :grade => @grade)
-    /             %img{:src => badge.try(:icon), :alt => "#{badge.try(:name)} badge", :class => "unearned", :width => "60", :height => "60"}
-    /             .span= badge.name
-    /             %br.italic Not Yet Earned
-    /             = sb.simple_fields_for :earned_badges, earned_badge do |ebf|
-    /               = ebf.input :score, :as => :boolean, :label => "Award"
-    /               = ebf.input :badge_id, :as => :hidden
-    /               = ebf.input :grade_id, :as => :hidden
+    - if @badges.present?
+      .panel
+        %h4.uppercase #{term_for :badges}
+        - @badges.each_with_index do |badge, i|
+          .small-12.medium-2.columns.panel.center
+            %img{:src => badge.try(:icon), :alt => "You've earned the #{badge.try(:name)} badge", :class => "earned", :width => "60", :height => "60"}
+            .span= badge.name
+            %br.italic= "Earned #{@student.earned_badges_for_badge_count(badge)}x"
+            - if @student.earned_badge_for_badge(badge).present?
+              - earned_badge = @student.earned_badge_for_badge(badge).where(:grade_id => @grade.id)
+              - if badge.can_earn_multiple_times?
+                = f.simple_fields_for :earned_badges, EarnedBadge.new do |ebf|
+                  = ebf.hidden_field :student_id, :value => @student.id
+                  = ebf.hidden_field :badge_id, :value => badge.id
+                  - if earned_badge.present?
+                    = ebf.input :score, as: :boolean, checked_value: badge.point_total, unchecked_value: nil, :label => false, :input_html => { :checked => true }
+                  - else
+                    = ebf.input :score, as: :boolean, checked_value: badge.point_total, unchecked_value: nil, :label => false
+
+            - else
+              = f.simple_fields_for :earned_badges, EarnedBadge.new do |ebf|
+                = ebf.hidden_field :student_id, :value => @student.id
+                = ebf.hidden_field :badge_id, :value => badge.id
+                = ebf.check_box :score, {}, badge.point_total, nil
 
 
     .button-bar
