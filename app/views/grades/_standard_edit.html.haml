@@ -74,7 +74,7 @@
             .span= badge.name
             %br.italic= "Earned #{@student.earned_badges_for_badge_count(badge)}x"
             - if @student.earned_badge_for_badge(badge).present?
-              - earned_badge = @student.earned_badge_for_badge(badge).where(:grade_id => @grade.id)
+              - earned_badge = @student.earned_badge_for_badge(badge).where(:grade_id => @grade.id).first
               - if badge.can_earn_multiple_times?
                 = f.simple_fields_for :earned_badges, EarnedBadge.new do |ebf|
                   = ebf.hidden_field :student_id, :value => @student.id

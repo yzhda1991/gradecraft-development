@@ -15,7 +15,7 @@ class EarnedBadge < ActiveRecord::Base
 
   validates_presence_of :badge, :course, :student
 
-  #validates :badge, :uniqueness => {:scope => :grade}
+  #validates :badge_id, :uniqueness => {:scope => :grade_id}, if: 'grade_id.present?'
 
   #Some badges can only be earned once - we check on award if that's the case
   validate :multiple_allowed

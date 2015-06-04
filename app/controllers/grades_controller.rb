@@ -90,10 +90,10 @@ class GradesController < ApplicationController
       if session[:return_to].present?
         redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
       else
-        redirect_to @assignment, notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
+        redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
       end
     else
-      redirect_to edit_assignment_grade_path(@assignment, @grade), warning: "#{@assignment.name} was not successfully submitted! Please try again."
+      redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
     end
   end
 
