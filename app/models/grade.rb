@@ -5,7 +5,7 @@ class Grade < ActiveRecord::Base
                   :attempted, :course_id, :feedback, :final_score, :grade_file, :grade_file_ids,
                   :grade_files_attributes, :graded_by_id, :group, :group_id, :group_type,
                   :instructor_modified, :pass_fail_status, :point_total, :predicted_score,
-                  :raw_score, :released, :status, :student, :student_id, :submission,
+                  :raw_score, :released, :status, :student, :student_id, :submission, :_destroy,
                   :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes
 
   STATUSES= ["In Progress", "Graded", "Released"]
@@ -26,7 +26,7 @@ class Grade < ActiveRecord::Base
   has_many :earned_badges, :dependent => :destroy
 
   has_many :badges, :through => :earned_badges
-  accepts_nested_attributes_for :earned_badges, :reject_if => proc { |a| a['score'].blank? }
+  accepts_nested_attributes_for :earned_badges, :reject_if => proc { |a| (a['score'].blank?) }, :allow_destroy => true
 
   before_validation :cache_associations
   before_save :cache_score_and_point_total
@@ -181,6 +181,12 @@ class Grade < ActiveRecord::Base
 
       # use 1 for pass, 0 for fail
       self.predicted_score = 1 if self.predicted_score > 1
+    end
+  end
+
+  def duplicate_badge_for_grade
+    if self.earned_badges.where(:badge_id => earned_badge.badge_id).persisted?
+      errors.add("")
     end
   end
 end

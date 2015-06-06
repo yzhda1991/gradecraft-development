@@ -1,5 +1,12 @@
 .small-12.columns
 
+  - if @grade.errors.any?
+    .alert-box.alert.radius
+      .italic= "#{pluralize(@grade.errors.count, "error")} prohibited this grade from being saved:"
+      %ul
+        - @grade.errors.full_messages.each do |msg|
+          %li= msg
+
   - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
     .panel
 
@@ -66,29 +73,7 @@
         .clear
 
     - if @badges.present?
-      .panel
-        %h4.uppercase #{term_for :badges}
-        - @badges.each_with_index do |badge, i|
-          .small-12.medium-2.columns.panel.center
-            %img{:src => badge.try(:icon), :alt => "You've earned the #{badge.try(:name)} badge", :class => "earned", :width => "60", :height => "60"}
-            .span= badge.name
-            %br.italic= "Earned #{@student.earned_badges_for_badge_count(badge)}x"
-            - if @student.earned_badge_for_badge(badge).present?
-              - earned_badge = @student.earned_badge_for_badge(badge).where(:grade_id => @grade.id).first
-              - if badge.can_earn_multiple_times?
-                = f.simple_fields_for :earned_badges, EarnedBadge.new do |ebf|
-                  = ebf.hidden_field :student_id, :value => @student.id
-                  = ebf.hidden_field :badge_id, :value => badge.id
-                  - if earned_badge.present?
-                    = ebf.input :score, as: :boolean, checked_value: badge.point_total, unchecked_value: nil, :label => false, :input_html => { :checked => true }
-                  - else
-                    = ebf.input :score, as: :boolean, checked_value: badge.point_total, unchecked_value: nil, :label => false
-
-            - else
-              = f.simple_fields_for :earned_badges, EarnedBadge.new do |ebf|
-                = ebf.hidden_field :student_id, :value => @student.id
-                = ebf.hidden_field :badge_id, :value => badge.id
-                = ebf.check_box :score, {}, badge.point_total, nil
+      = render 'award_badges_form', f: f
 
 
     .button-bar
