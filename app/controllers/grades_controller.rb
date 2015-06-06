@@ -85,15 +85,24 @@ class GradesController < ApplicationController
       end
     end
 
-    if @grade.update_attributes params[:grade][:earned_badges].merge(instructor_modified: true)
+    # if @grade.earned_badges.present?
+    #   @grade.earned_badges.each do |eb|
+    #     if eb.new_record?
+    #       NotificationMailer.earned_badge_awarded(eb.id).deliver
+    #     end
+    #   end
+    # end
+
+    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
       Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+
       if session[:return_to].present?
-        redirect_to session[:return_to]
+        redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
       else
-        redirect_to @assignment
+        redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
       end
     else
-      redirect_to edit_assignment_grade_path(@assignment, @grade), notice: "#{@assignment.name} was not successfully submitted! Please try again."
+      redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
     end
   end
 
