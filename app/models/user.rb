@@ -246,6 +246,16 @@ class User < ActiveRecord::Base
     @cached_score ||= course_memberships.where(:course_id => course).first.score || 0
   end
 
+  # Powers the grade distribution box plot
+  def scores_for_course(course)
+     user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck('score')
+     scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
+     return {
+      :scores => scores,
+      :user_score => user_score
+     }
+  end
+
   #Badges
 
   def earned_badges_by_badge
