@@ -10,6 +10,10 @@ describe "assignment_types/index" do
     @assignment_type_1 = create(:assignment_type, course: @course)
     @assignment_type_2 = create(:assignment_type, course: @course)
     @course.assignment_types <<[@assignment_type_1, @assignment_type_2]
+    @student = create(:user)
+    @course.students << @student
+    @students = @course.students
+    @assignment_types = @course.assignment_types
   end
 
   before(:each) do

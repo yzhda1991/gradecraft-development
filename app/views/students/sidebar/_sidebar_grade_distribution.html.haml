@@ -3,7 +3,7 @@
   %hr
   %h4.bold= "You've earned #{points current_student.cached_score_for_course(current_course)} points"
   %br
-  #student_grade_distro{'data-scores' => @scores_for_current_course.to_json}
+  #student_grade_distro{'data-scores' => current_student.scores_for_course(current_course).to_json}
   #gradeDistro
   %br
   %h5= "Class Average: #{points current_course.average_course_score} points"

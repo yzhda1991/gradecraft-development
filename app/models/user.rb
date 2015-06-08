@@ -206,7 +206,7 @@ class User < ActiveRecord::Base
   end
 
   def team_leaders(course)
-    @team_leaders ||= course_team(course).leaders rescue nil
+    @team_leaders ||= course_team(course).includes(:leaders) rescue nil
   end
 
   ROLES.each do |role|
@@ -244,6 +244,16 @@ class User < ActiveRecord::Base
   #grabbing the stored score for the current course
   def cached_score_for_course(course)
     @cached_score ||= course_memberships.where(:course_id => course).first.score || 0
+  end
+
+  # Powers the grade distribution box plot
+  def scores_for_course(course)
+     user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck('score')
+     scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
+     return {
+      :scores => scores,
+      :user_score => user_score
+     }
   end
 
   #Badges
