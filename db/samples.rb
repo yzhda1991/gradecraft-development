@@ -750,11 +750,17 @@ assignments << Assignment.create! do |a|
       s.text_comment = "Wingardium Leviosa"
       s.link = "http://www.twitter.com"
     end
-    a.rubric.grades.create! do |g|
-      g.assignment = assignment
-      g.raw_score = assignment.point_total * [0, 1].sample
-      g.status = "Graded"
-      g.instructor_modified = true
+    a.rubric.metrics.each do |metric|
+      metric.rubric_grades.create! do |rg|
+        rg.max_points = metric.max_points
+        rg.points = metric.tiers.first.points
+        rg.tier = metric.tiers.first
+        rg.metric_name = metric.name
+        rg.tier_name = metric.tiers.first.name
+        rg.assignment_id = a.id
+        rg.order = 1
+        rg.student_id = student.id
+      end
     end
   end
 end
