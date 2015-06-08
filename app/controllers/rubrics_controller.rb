@@ -5,7 +5,7 @@ class RubricsController < ApplicationController
 
   def design
     @assignment = current_course.assignments.find params[:assignment_id]
-    @rubric = Rubric.find_or_create_by(assignment_id: @assignment.id)
+    @rubric = @assignment.rubric
     #@metrics = ActiveModel::ArraySerializer.new(rubric_metrics_with_tiers, each_serializer: ExistingMetricSerializer).to_json
     #@course_badges = serialized_course_badges
     @course_badge_count = @assignment.course.badges.visible.count
@@ -34,7 +34,7 @@ class RubricsController < ApplicationController
 
   def existing_metrics
     @assignment = current_course.assignments.find params[:assignment_id]
-    @rubric = Rubric.where(assignment_id: @assignment.id).first_or_create
+    @rubric = @assignment.rubric
     render json:  MultiJson.dump(
                     ActiveModel::ArraySerializer.new(
                       @rubric.metrics.order(:order).includes(:tiers),
