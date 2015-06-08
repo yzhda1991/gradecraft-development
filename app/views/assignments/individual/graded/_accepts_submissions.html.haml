@@ -26,7 +26,7 @@
         /* Submission present but not yet graded, allow the instructor to grade
       - else
         %li
-          %a{:href => assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
+          %a{:href => edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
             Grade
             %span.sr-only for #{student.first_name} #{student.last_name}
 

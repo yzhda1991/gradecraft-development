@@ -63,15 +63,21 @@
                       - grade = grade_for_assignment
                       %span.has-tip{:title => "#{ points grade.score } / #{points grade.point_total} points (Multiplied), #{points grade.raw_score} / #{ points assignment.point_total } points (Raw)", :data => {'tooltip' => true}  }
                         - if grade_released_for_assignment
-                          = "#{ points grade.score } / #{points grade.point_total} points earned"
+                          .bold= "#{ points grade.score } / #{points grade.point_total} points earned"
+                          .italic= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
                         - else
                           .italic.not_bold= "#{points grade.point_total} points possible"
+                          .italic.bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
                     - else
+                      - grade = grade_for_assignment
                       - if grade_released_for_assignment
                         .bold
                           = "#{points current_student_data.score_for_assignment(assignment)} / #{points assignment.point_total} points earned"
+                        .italic= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
                       - else
                         .italic.not_bold= "#{points assignment.point_total} points possible"
+                        .bold.italic= "Your Goal: #{points grade.predicted_score} points" if grade && grade.predicted_score > 0 && current_user_is_student?
+
 
                 %td{:width => "25%"}
                   = "Due: #{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" if assignment.future?

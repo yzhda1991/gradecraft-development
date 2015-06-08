@@ -36,7 +36,7 @@ class GradesController < ApplicationController
     @grade = current_student_data.grade_for_assignment(@assignment)
     @student = @grade.student
     @submission = @student.submission_for_assignment(@assignment)
-    @title = "Editing #{current_student.name}'s Grade for #{@assignment.name}"
+    @title = "Grading #{current_student.name}'s #{@assignment.name}"
     @badges = current_course.badges
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
