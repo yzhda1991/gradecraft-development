@@ -1,4 +1,23 @@
-user_names = ['Ron Weasley','Fred Weasley','Harry Potter','Hermione Granger','Colin Creevey','Seamus Finnigan','Hannah Abbott','Pansy Parkinson','Zacharias Smith','Blaise Zabini', 'Draco Malfoy', 'Dean Thomas', 'Millicent Bulstrode', 'Terry Boot', 'Ernie Macmillan', 'Roland Abberlay', 'Katie Bell', 'Regulus Black', 'Euan Abercrombie', 'Brandon Angel', 'Jada Angela', 'Pete Balsall', 'Allison Barnes', 'Fiona Belmont', 'Kajol Bhatt', 'Sally Birchgrove', 'Stephen Challock', 'Dennis Creevey', 'Lisa Cullen', 'Winky Crocket', 'Fay Dunbar', 'Lily Evans', 'Rosalyn Ewhurst', 'Terrence Fogarty', 'Hamish Frater', 'Vicky Frobisher', 'Godric Gryffindor', 'Ryan Henry', 'David Hamblin', 'Kelly Harborne', 'Thelma Holmes', 'Geoffrey Hooper', 'Carl Hopkins', 'Satoru Lida', 'Nandini Johar', 'Angelina Johnson', 'Lee Jordan']
+user_names = ['Ron Weasley','Fred Weasley','Harry Potter','Hermione Granger','Colin Creevey','Seamus Finnigan','Hannah Abbott',
+  'Pansy Parkinson','Zacharias Smith','Blaise Zabini', 'Draco Malfoy', 'Dean Thomas', 'Millicent Bulstrode', 'Terry Boot', 'Ernie Macmillan',
+  'Roland Abberlay', 'Katie Bell', 'Regulus Black', 'Euan Abercrombie', 'Brandon Angel', 'Jada Angela', 'Pete Balsall', 'Allison Barnes',
+  'Fiona Belmont', 'Kajol Bhatt', 'Sally Birchgrove', 'Stephen Challock', 'Dennis Creevey', 'Lisa Cullen', 'Winky Crocket', 'Fay Dunbar',
+  'Lily Evans', 'Rosalyn Ewhurst', 'Terrence Fogarty', 'Hamish Frater', 'Vicky Frobisher', 'Godric Gryffindor', 'Ryan Henry', 'David Hamblin',
+  'Kelly Harborne', 'Thelma Holmes', 'Geoffrey Hooper', 'Carl Hopkins', 'Satoru Lida', 'Nandini Johar', 'Angelina Johnson', 'Lee Jordan',
+  'Alastor Moody', 'Albus Potter', 'Alice Longbottom', 'Alicia Spinnet', 'Amelia Bones', 'Alecto Carrow', 'Andromeda Tonks', 'Antioc Peverell',
+  'Antonin Dolohov', 'Arabella Figg', 'Argus Filch', 'Arthur Weasley', 'Augusta Longbottom', 'Augustus Rookwood', 'Bartemius Crouch',
+  'Bathilda Batshot', 'Bathsheba Babbling', 'Cadmus Peverell', 'Charity Burbage', 'Cho Chang', 'Cormac MacLaggen', 'Cornelius Fudge',
+  'Cuthbert Binns', 'Dilys Derwent', 'Dirk Cresswell', 'Dudley Dursley', 'Fenrir Greyback', 'Filius Flitwick', 'Fleur Delacour',
+  'Frank Bryce', 'Gabrielle Delacour', 'Garrick Ollivander', 'Gellert Grindelwald', 'Gilderoy Lockhart', 'Ginerva Weasley', 'Gregory Goyle',
+  'Helena Ravenclaw', 'Helga Hufflepuff', 'Hepzibah Smith', 'Horace Slughorn', 'Ignotus Peverell', 'Igor Karakoff', 'Irma Pince',
+  'James Potter', 'Justin Finch-Fletchley', 'Kingsley Shacklebolt', 'Lavender Brown', 'Lily Potter', 'Lucius Malfoy', 'Ludo Bagman',
+  'Marietta Edgecombe', 'Marjorie Dursley', 'Marvolo Gaunt', 'Mary Cattermole', 'Mary Riddle', 'Merope Gaunt', 'Michael Corner',
+  'Molly Weasley', 'Morfin Gaunt', 'Mundungus Fletcher', 'Narcissa Malfoy', 'Newt Scamander', 'Oliver Wood', 'Olympe Maxime', 'Penelope Clearwater',
+  'Peter Pettigrew', 'Petunia Dursley', 'Pius Thicknesse', 'Pomona Sprout', 'Poppy Pomfrey', 'Quirinus Quirrell', 'Rabastan Lestrange',
+  'Reginald Cattermole', 'Remus Lupin', 'Rita Skeeter', 'Rodolphus Lestrange', 'Rolanda Hooch', 'Romilda Vane', 'Rowena Ravenclaw', 'Rubeus Hagrid',
+  'Rufus Scrimgeour', 'Slazar Slytherin', 'Septima Vector', 'Sirius Black', 'Stan Shunpike', 'Sturgis Podmore', 'Susan Bones', 'Sybill Trewlawney',
+  'Ted Tonks', 'Teddy Lupin', 'Theodore Nott', 'Vernon Dursley', 'Viktor Krum', 'Vincent Crabbe', 'Wilhelmina Grubbly-Plank', 'William Weasley',
+  'Xenophilius Lovegood']
 
 educ_team_names = ['Harm & Hammer', 'Abusement Park','Silver Woogidy Woogidy Woogidy Snakes','Carpe Ludus','Eduception','Operation Unthinkable','Team Wang','The Carpal Tunnel Crusaders','Pwn Depot']
 
@@ -38,7 +57,6 @@ courses << educ_course = Course.create! do |c|
   c.teams_visible = true
   c.group_setting = true
   c.badge_setting = true
-  c.badges_value = false
   c.accepts_submissions = true
   c.predictor_setting = true
   c.tagline = "Games good, school bad. Why?"
@@ -75,8 +93,6 @@ courses << polsci_course = Course.create! do |c|
   c.teams_visible = false
   c.group_setting = true
   c.badge_setting = true
-  c.shared_badges = true
-  c.badges_value = true
   c.accepts_submissions = true
   c.predictor_setting = true
   c.academic_history_visible = true
@@ -114,8 +130,6 @@ courses << information_course = Course.create! do |c|
   c.teams_visible = true
   c.group_setting = false
   c.badge_setting = false
-  c.shared_badges = false
-  c.badges_value = false
   c.accepts_submissions = true
   c.predictor_setting = true
   c.academic_history_visible = true
@@ -308,15 +322,19 @@ educ_badges = educ_badge_names.map do |badge_name|
     b.name = badge_name
     b.point_total = 100 * rand(10)
     b.visible = 1
+    b.can_earn_multiple_times = true
   end
 end
 puts "Did someone need motivation? We found these badges in the Room of Requirements..."
 
 educ_badges.each do |badge|
   students.each do |student|
-    student.earned_badges.create! do |eb|
-      eb.badge = badge
-      eb.course = educ_course
+    n = [1, 2, 3, 4, 5].sample
+    if n.even?
+      student.earned_badges.create! do |eb|
+        eb.badge = badge
+        eb.course = educ_course
+      end
     end
   end
 end
@@ -333,9 +351,12 @@ puts "How will you be powering up?"
 
 polsci_badges.each do |badge|
   students.each do |student|
-    student.earned_badges.create! do |eb|
-      eb.badge = badge
-      eb.course = polsci_course
+    n = [1, 2, 3, 4, 5].sample
+    if n.even?
+      student.earned_badges.create! do |eb|
+        eb.badge = badge
+        eb.course = polsci_course
+      end
     end
   end
 end
@@ -640,6 +661,7 @@ grinding_assignments.each do |assignment|
       g.assignment = assignment
       g.raw_score = assignment.point_total * [0, 1].sample
       g.status = "Graded"
+      g.instructor_modified = true
     end
   end
 end
@@ -704,11 +726,41 @@ assignments << Assignment.create! do |a|
   a.open_at = 4.weeks.ago
   a.grade_scope = "Individual"
   a.save
+  Rubric.create! do |rubric|
+    rubric.assignment = a
+    rubric.save
+    1.upto(15).each do |n|
+      rubric.metrics.create! do |metric|
+        metric.name = "Criteria ##{n}"
+        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+        metric.order = n
+        metric.save
+        1.upto(5).each do |m|
+          metric.tiers.create! do |tier|
+            tier.name = "Tier ##{m}"
+            tier.points = metric.max_points - (m * 1000)
+          end
+        end
+      end
+    end
+  end
   students.each do |student|
     submission = student.submissions.create! do |s|
       s.assignment = a
       s.text_comment = "Wingardium Leviosa"
       s.link = "http://www.twitter.com"
+    end
+    a.rubric.metrics.each do |metric|
+      metric.rubric_grades.create! do |rg|
+        rg.max_points = metric.max_points
+        rg.points = metric.tiers.first.points
+        rg.tier = metric.tiers.first
+        rg.metric_name = metric.name
+        rg.tier_name = metric.tiers.first.name
+        rg.assignment_id = a.id
+        rg.order = 1
+        rg.student_id = student.id
+      end
     end
   end
 end
@@ -729,6 +781,7 @@ assignments << Assignment.create! do |a|
       g.assignment = a
       g.raw_score = a.point_total * [0, 1].sample
       g.status = "Graded"
+      g.instructor_modified = true
     end
   end
 end
@@ -749,6 +802,7 @@ assignments << Assignment.create! do |a|
       g.assignment = a
       g.raw_score = a.point_total * [0, 1].sample
       g.status = "In Progress"
+      g.instructor_modified = true
     end
   end
 end
@@ -769,6 +823,7 @@ assignments << Assignment.create! do |a|
       g.assignment = a
       g.raw_score = a.point_total * [0, 1].sample
       g.status = "Graded"
+      g.instructor_modified = true
     end
   end
 end
@@ -873,6 +928,7 @@ polsci_essay_assignments << Assignment.create! do |a|
         g.submission = submission
         g.raw_score = 1000 * [0,1].sample
         g.status = "Graded"
+        g.instructor_modified = true
       end
     end
   end
@@ -1100,6 +1156,13 @@ challenges << Challenge.create! do |c|
   c.visible = true
 end
 puts "Are you willing to brave the Tri-Wizard Tournament?"
+
+students.each do |s|
+  s.courses.each do |c|
+    s.cache_course_score(c.id)
+  end
+end
+puts "Calculating scores..."
 
 LTIProvider.create! do |p|
   p.name = 'Piazza'

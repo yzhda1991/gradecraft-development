@@ -1,0 +1,32 @@
+.panel
+  %h4.uppercase #{term_for :badges}
+  - @badges.each_with_index do |badge, i|
+    .small-12.medium-3.columns.panel.center.badgepanel
+      .small-6.columns
+        %img{:src => badge.try(:icon), :alt => "You've earned the #{badge.try(:name)} badge", :class => "earned"}
+      .small-6.columns
+        .name= badge.name
+        %br.italic= "Earned #{@student.earned_badges_for_badge_count(badge)}x"
+
+        // If they have earned the badge already for this grade, show the checked box
+        - if @student.earned_badge_for_badge(badge).present?
+          // Check to see if they already have the badge for this grade
+          // If so, show a checked box
+          - earned_badge_for_grade = @student.earned_badge_for_badge(badge).where(:grade => @grade).first
+          - if earned_badge_for_grade.present?
+            = f.simple_fields_for :earned_badges, earned_badge_for_grade do |ebf|
+              = ebf.hidden_field :student_id, :value => @student.id
+              = ebf.hidden_field :badge_id, :value => badge.id
+              = ebf.input :score, as: :boolean, checked_value: badge.point_total, :label => false
+              = ebf.hidden_field :_destroy, class: 'destroy'
+              // If they've already earned the badge but not for this grade, check to see if they badge can be awarded multiple times
+          - elsif badge.can_earn_multiple_times?
+            = f.simple_fields_for :earned_badges, EarnedBadge.new do |ebf|
+              = ebf.hidden_field :student_id, :value => @student.id
+              = ebf.hidden_field :badge_id, :value => badge.id
+              = ebf.input :score, as: :boolean, checked_value: badge.point_total, unchecked_value: nil, :label => false
+        - else
+          = f.simple_fields_for :earned_badges, EarnedBadge.new do |ebf|
+            = ebf.hidden_field :student_id, :value => @student.id
+            = ebf.hidden_field :badge_id, :value => badge.id
+            = ebf.check_box :score, {}, badge.point_total, nil
