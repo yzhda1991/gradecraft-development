@@ -5,6 +5,8 @@ class AssignmentTypesController < ApplicationController
   #Display list of assignment types
   def index
     @title = "#{term_for :assignment_types}"
+    @assignment_types = current_course.assignment_types.includes(:assignments => :assignment_type)
+    @students = current_course.students
   end
 
   #See assignment type with all of its included assignments

@@ -12,7 +12,7 @@ class UsersController < ApplicationController
       #TODO: should show TAs as well
       @users = @team.students
     else
-      @users = current_course.users
+      @users = current_course.users.includes(:courses, :teams)
     end
     respond_to do |format|
       format.html

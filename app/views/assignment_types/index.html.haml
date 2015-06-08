@@ -24,7 +24,7 @@
           %th{:style => "min-width: 300px"}
             %span.sr-only Actions
       %tbody
-        - current_course.assignment_types.includes(:assignments => :assignment_type).sorted.each do |assignment_type|
+        - @assignment_types.sorted.each do |assignment_type|
           %tr
             %td= link_to assignment_type.name, assignment_type
             %td= assignment_type.points_predictor_display
@@ -56,18 +56,18 @@
         %tr
           %th First Name
           %th Last Name
-          - current_course.assignment_types.each do |at|
+          - @assignment_types.each do |at|
             %th= "#{at.name} Score"
             - if at.student_weightable?
               %th= "#{at.name} Weighted Value"
 
 
       %tbody
-        - current_course.students.each do |student|
+        - @students.each do |student|
           %tr
             %td= link_to student.first_name, student_path(student)
             %td= link_to student.last_name, student_path(student)
-            - current_course.assignment_types.each do |at|
+            - @assignment_types.each do |at|
               %td= at.score_for_student(student)
               - if at.student_weightable?
                 %td= "[#{ at.raw_score_for_student(student)}]"
@@ -81,16 +81,16 @@
         %tr
           %th First Name
           %th Last Name
-          - current_course.assignment_types.each do |at|
+          - @assignment_types.each do |at|
             %th= "#{at.name} Grade Count"
             %th= "#{at.name} Grades > 0 Count"
 
 
       %tbody
-        - current_course.students.each do |student|
+        - @students.each do |student|
           %tr
             %td= link_to student.first_name, student_path(student)
             %td= link_to student.last_name, student_path(student)
-            - current_course.assignment_types.each do |at|
+            - @assignment_types.each do |at|
               %td= at.grades.where(:student_id => student.id).graded_or_released.count
               %td= "#{at.grades.where(:student_id => student.id).graded_or_released.positive.count }"

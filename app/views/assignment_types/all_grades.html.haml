@@ -56,7 +56,7 @@
             %tr
               %th First Name
               %th Last Name
-              - chronological_assignments = @assignment_type.assignments.includes(:assignment_type).chronological
+              - chronological_assignments = @assignment_type.assignments.chronological
               - for assignment in chronological_assignments.alphabetical
                 - if assignment.point_total > 0
                   %th.sortable{"data-sort" => "int"}= assignment.due_at.strftime("%b %d") if assignment.due_at.present?
