@@ -5,13 +5,15 @@
   $scope.savedMetricCount = 0
   $scope.urlId = parseInt(window.location.pathname.split('/')[2])
 
-  $scope.init = (rubricId, pointTotal, courseBadges)->
+  $scope.init = (rubricId, pointTotal)->
     $scope.rubricId = rubricId
     $scope.pointTotal = parseInt(pointTotal)
-    $scope.addCourseBadges(courseBadges)
 
   MetricsServices.getMetrics($scope.urlId).success (metrics)->
     $scope.addMetrics(metrics)
+
+  MetricsServices.getBadges($scope.urlId).success (courseBadges)->
+    $scope.addCourseBadges(courseBadges)
 
   # distill key/value pairs for metric ids and relative order
   $scope.pointsAssigned = ()->

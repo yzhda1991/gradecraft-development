@@ -1,5 +1,5 @@
 class RubricsController < ApplicationController
-  before_action :find_rubric, except: [:design, :create, :existing_metrics]
+  before_action :find_rubric, except: [:design, :create, :existing_metrics, :course_badges]
 
   respond_to :html, :json
 
@@ -7,7 +7,7 @@ class RubricsController < ApplicationController
     @assignment = current_course.assignments.find params[:assignment_id]
     @rubric = Rubric.find_or_create_by(assignment_id: @assignment.id)
     #@metrics = ActiveModel::ArraySerializer.new(rubric_metrics_with_tiers, each_serializer: ExistingMetricSerializer).to_json
-    @course_badges = serialized_course_badges
+    #@course_badges = serialized_course_badges
     @course_badge_count = @assignment.course.badges.visible.count
     @title = "Design Rubric for #{@assignment.name}"
     respond_with @rubric
@@ -35,18 +35,24 @@ class RubricsController < ApplicationController
   def existing_metrics
     @assignment = current_course.assignments.find params[:assignment_id]
     @rubric = Rubric.find_or_create_by(assignment_id: @assignment.id)
-    render json: MultiJson.dump(ActiveModel::ArraySerializer.new(@rubric.metrics.order(:order).includes(:tiers), each_serializer: ExistingMetricSerializer))
+    render json: MultiJson.dump(
+                  ActiveModel::ArraySerializer.new(
+                    @rubric.metrics.order(:order).includes(:tiers),
+                      each_serializer: ExistingMetricSerializer
+                  )
+                )
+  end
+
+  def course_badges
+    @assignment = current_course.assignments.find params[:assignment_id]
+    render json:  ActiveModel::ArraySerializer.new(find_course_badges, each_serializer: CourseBadgeSerializer).to_json
   end
 
   private
 
-  def serialized_course_badges
-    ActiveModel::ArraySerializer.new(course_badges, each_serializer: CourseBadgeSerializer).to_json
-  end
-
-  def course_badges
-    @course_badges ||= @assignment.course.badges.visible
-  end
+  def find_course_badges
+     @course_badges ||= @assignment.course.badges.visible
+   end
 
   def rubric_metrics_with_tiers
     @rubric.metrics.order(:order).includes(:tiers)
