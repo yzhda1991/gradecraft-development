@@ -34,7 +34,7 @@ class RubricsController < ApplicationController
 
   def existing_metrics
     @assignment = current_course.assignments.find params[:assignment_id]
-    @rubric = Rubric.find_or_create_by(assignment_id: @assignment.id)
+    @rubric = Rubric.where(assignment_id: @assignment.id).first_or_create
     render json: MultiJson.dump(
                   ActiveModel::ArraySerializer.new(
                     @rubric.metrics.order(:order).includes(:tiers),
@@ -45,7 +45,11 @@ class RubricsController < ApplicationController
 
   def course_badges
     @assignment = current_course.assignments.find params[:assignment_id]
-    render json:  ActiveModel::ArraySerializer.new(find_course_badges, each_serializer: CourseBadgeSerializer).to_json
+    render json:
+                    ActiveModel::ArraySerializer.new(
+                      find_course_badges, each_serializer: CourseBadgeSerializer
+                    ).to_json
+
   end
 
   private

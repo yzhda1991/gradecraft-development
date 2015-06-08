@@ -9,11 +9,10 @@
     $scope.rubricId = rubricId
     $scope.pointTotal = parseInt(pointTotal)
 
-  MetricsServices.getMetrics($scope.urlId).success (metrics)->
-    $scope.addMetrics(metrics)
-
   MetricsServices.getBadges($scope.urlId).success (courseBadges)->
     $scope.addCourseBadges(courseBadges)
+    MetricsServices.getMetrics($scope.urlId).success (metrics)->
+      $scope.addMetrics(metrics)
 
   # distill key/value pairs for metric ids and relative order
   $scope.pointsAssigned = ()->
