@@ -383,7 +383,7 @@ class AssignmentsController < ApplicationController
   end
 
   def rubric_metrics_with_tiers
-    @rubric.metrics.order(:order).includes(:tiers)
+    @rubric.metrics.order(:order)
   end
 
 end

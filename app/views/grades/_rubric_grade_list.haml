@@ -23,7 +23,7 @@
             .clear
           .metric-description= metric.wrapped_description(40).html_safe
 
-        - metric.tiers.order("points ASC").each do |tier|
+        - metric.tiers.includes(:tier_badges).order("points ASC").each do |tier|
           %td.tier
             .tier-heading
               .tier-name.uppercase= tier.wrapped_name(25).html_safe
