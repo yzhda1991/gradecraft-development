@@ -6,8 +6,6 @@ class RubricsController < ApplicationController
   def design
     @assignment = current_course.assignments.find params[:assignment_id]
     @rubric = @assignment.rubric
-    #@metrics = ActiveModel::ArraySerializer.new(rubric_metrics_with_tiers, each_serializer: ExistingMetricSerializer).to_json
-    #@course_badges = serialized_course_badges
     @course_badge_count = @assignment.course.badges.visible.count
     @title = "Design Rubric for #{@assignment.name}"
     respond_with @rubric
@@ -63,6 +61,6 @@ class RubricsController < ApplicationController
   end
 
   def find_rubric
-    @rubric = Rubric.find params[:id]
+    @rubric = @assignment.rubric
   end
 end
