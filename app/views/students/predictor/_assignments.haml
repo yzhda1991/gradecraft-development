@@ -33,9 +33,9 @@
                 / ASSIGNMENT NAME
                 .assignment-layout-title
                   - if assignment.name.length > 28
-                    .assignment-name.bold{:title => assignment.name, :data => {'tooltip' => true} }= truncate assignment.name, :length   => 28, :separator => "..."
+                    .assignment-name{:title => assignment.name, :data => {'tooltip' => true} }= truncate assignment.name, :length   => 28, :separator => "..."
                   - else
-                    .assignment-name.bold= assignment.name
+                    .assignment-name= assignment.name
 
                 .assignment-layout-info
                   - if assignment.required?

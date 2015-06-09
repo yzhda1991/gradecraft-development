@@ -58,10 +58,11 @@ $bg-color-hill-dark: #348C44;
 $bg-color-hill-ex-dark: #274F2E;
 
 // Copied from Foundation for now, this can change when we remove Foundation
-$media-small-max:   40em;
-$media-medium-max:  64em;
-$media-large-max:   90em;
-$media-xlarge-max:  120em;
+$media-smal-mobile-max:   40rem; //
+$media-small-max:   40rem; // 640px
+$media-medium-max:  64rem; // 1024px
+$media-large-max:   90rem; // 1440px ~14"
+$media-xlarge-max:  120rem; //
 
 @mixin transition($property, $duration) {
   -webkit-transition: $property $duration;
