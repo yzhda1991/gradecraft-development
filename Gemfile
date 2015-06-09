@@ -69,7 +69,6 @@ group :development do
   gem 'quiet_assets'
   gem 'foreman'
   gem 'letter_opener'
-  gem 'rack-mini-profiler', require: false
   gem 'rubystats'
   gem 'spring'
   gem 'meta_request'
