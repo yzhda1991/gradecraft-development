@@ -54,10 +54,6 @@ class RubricsController < ApplicationController
 
   def find_course_badges
      @course_badges ||= @assignment.course.badges.visible
-   end
-
-  def rubric_metrics_with_tiers
-    @rubric.metrics.order(:order).includes(:tiers)
   end
 
   def find_rubric
