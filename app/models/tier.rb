@@ -1,5 +1,5 @@
 class Tier < ActiveRecord::Base
-  belongs_to :metric
+  belongs_to :metric, :counter_cache => true
   has_many :tier_badges
   has_many :badges, through: :tier_badges
   has_many :rubric_grades
