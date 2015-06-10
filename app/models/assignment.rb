@@ -32,6 +32,8 @@ class Assignment < ActiveRecord::Base
   # Student created submissions to be graded
   has_many :submissions, as: :assignment
 
+  has_many :rubric_grades
+
   has_many :grades, :dependent => :destroy
   accepts_nested_attributes_for :grades, :reject_if => Proc.new { |attrs| attrs[:raw_score].blank? }
 
