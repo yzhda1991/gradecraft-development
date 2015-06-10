@@ -470,12 +470,6 @@ describe AssignmentsController do
         response.should render_template(:rubric_grades_review)
       end
 
-      it "assigns course badges as JSON using CourseBadgeSerializer" do
-        badge = create(:badge, course: @course)
-        get :rubric_grades_review, :id => @assignment.id
-        assigns(:course_badges).should eq(ActiveModel::ArraySerializer.new([badge], each_serializer: CourseBadgeSerializer).to_json)
-      end
-
       it "assigns the rubric as rubric" do
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         get :rubric_grades_review, :id => @assignment.id
