@@ -82,7 +82,7 @@ class Grade < ActiveRecord::Base
 
   def score
     if student.weighted_assignments?
-      final_score || (raw_score * assignment_weight).round
+      final_score || ((raw_score * assignment_weight).round if raw_score.present?)  || nil
     else
       final_score || raw_score
     end
@@ -160,6 +160,7 @@ class Grade < ActiveRecord::Base
   end
 
   def cache_point_total
+    self.score = score
     self.point_total = point_total
   end
 
