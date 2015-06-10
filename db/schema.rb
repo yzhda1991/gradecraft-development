@@ -483,7 +483,7 @@ ActiveRecord::Schema.define(version: 20150610191949) do
   end
 
   create_table "grades", force: :cascade do |t|
-    t.integer  "raw_score",                       default: 0,     null: false
+    t.integer  "raw_score"
     t.integer  "assignment_id"
     t.text     "feedback"
     t.datetime "created_at"
@@ -509,7 +509,7 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score",                 default: 0,     null: false
+    t.integer  "predicted_score"
     t.boolean  "instructor_modified",             default: false
     t.string   "pass_fail_status"
   end
