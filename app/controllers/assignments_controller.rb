@@ -190,20 +190,17 @@ class AssignmentsController < ApplicationController
       @auditors = current_course.students_auditing
     end
 
+    @students.sort_by { |student| [ student.last_name, student.first_name ] }
+
     @rubric = @assignment.fetch_or_create_rubric
-    @metrics = @rubric.metrics
-    @course_badges = serialized_course_badges
+    @metrics = @rubric.metrics.ordered
+    @metrics.each do |m|
+      m.tiers = m.tiers.includes(:tier_badges).order("points ASC")
+    end
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
     @course_student_ids = current_course.students.map(&:id)
 
-
-    @rubric_grades = serialized_rubric_grades
-
-    @viewable_rubric_grades = RubricGrade.where(assignment_id: @assignment.id)
-    @comments_by_metric_id = @viewable_rubric_grades.inject({}) do |memo, rubric_grade|
-      memo.merge(rubric_grade.metric_id => rubric_grade.comments)
-    end
-
+    @viewable_rubric_grades = @assignment.rubric_grades
   end
 
   private
@@ -371,15 +368,11 @@ class AssignmentsController < ApplicationController
   end
 
   def serialized_course_badges
-    ActiveModel::ArraySerializer.new(course_badges, each_serializer: CourseBadgeSerializer).to_json
+    MultiJson.dump(ActiveModel::ArraySerializer.new(course_badges, each_serializer: CourseBadgeSerializer))
   end
 
   def course_badges
     @course_badges ||= @assignment.course.badges.visible
-  end
-
-  def existing_metrics_as_json
-    ActiveModel::ArraySerializer.new(rubric_metrics_with_tiers, each_serializer: ExistingMetricSerializer).to_json
   end
 
   def rubric_metrics_with_tiers
