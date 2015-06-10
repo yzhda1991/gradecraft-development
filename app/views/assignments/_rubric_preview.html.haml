@@ -10,7 +10,7 @@
           .not_bold.italic Point value
 
   %tbody
-    - @metrics.ordered.each do |metric|
+    - @metrics.each do |metric|
       %tr
         %td.metric(style="font-size: 12px !important; width: 20%" )
           .metric-heading
@@ -18,8 +18,7 @@
             .metric-points.italic= "#{points metric.max_points} Points"
             .clear
           .metric-description= metric.wrapped_description(40).html_safe
-
-        - metric.tiers.includes(:tier_badges).order("points ASC").each do |tier|
+        - metric.tiers.each do |tier|
           %td.tier
             .tier-heading
               .tier-name.uppercase= tier.wrapped_name(25).html_safe
