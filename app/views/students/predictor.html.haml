@@ -2,37 +2,57 @@
   = content_nav do
     = render "students/student_profile_tabs"
 
-.small-12.panel.mainContent
+#predictor-main-content
 
-  = render 'students/earned_points_and_level'
+  .predictor-sticky-item-wrapper
+    #predictor-graph-wrapper.predictor-sticky-item
+      #predictor-graph
+        #predictor-graph-bar-earned{:'data-percent' => "24"}
+        #predictor-graph-bar-predicted{:'data-percent' => "50"}
 
-  %h3.pagetitle= "Plan Your Coursework"
+  .predictor-sticky-item-wrapper
+    #predictor-grade-earned.predictor-sticky-item
+      .predictor-info-bar-colum
+        .predictor-title-colum
+          %h4 Earned points:
+        .predictor-points-colum.bold #{points current_student.cached_score_for_course(current_course)}
+      .predictor-info-bar-colum.medium-visible
+        - if current_student.grade_level_for_course(current_course).present?
+          %h5
+            Current Level:
+            %span.bold= current_student.grade_level_for_course(current_course)
 
-  .small-12.columns
-
-    .gradePredictor
-      #predictorWrapper#studentID{ 'data-student-id' => current_student.id }
-        %h4
-          Predicted points:
-          %span#predictor-score-display.bold
-          = "/"
-          %span= "#{ points current_course.total_points } possible points"
-          –
-          Predicted final grade:
+  .predictor-sticky-item-wrapper
+    #predictor-grade-predicted.predictor-sticky-item
+      .predictor-info-bar-colum
+        .predictor-title-colum
+          %h4 Predicted points:
+        #predictor-score-display.predictor-points-colum.bold
+      .predictor-info-bar-colum.medium-visible
+        %h5
+          Predicted level:
           %span.bold#predictor-course-grade{:'data-grade-levels' => "#{@grade_levels_json}"}
 
-      .charts.dashboard-charts
-        .chart-wrapper
-          .chart-inner
-            #prediction
+  .predictor-sticky-item-wrapper
+    #predictor-grade-possible.predictor-sticky-item
+      .predictor-info-bar-colum
+        .predictor-title-colum
+          %h4 Possible points:
+        .predictor-points-colum.bold= "#{ points current_course.total_points }"
 
-      .clear
+  .gradePredictor
+    #predictorWrapper#studentID{ 'data-student-id' => current_student.id }
+    .charts.dashboard-charts
+      .chart-wrapper
+        .chart-inner
+          #prediction
+    .clear
 
-    #predictorPage{ 'data-student-name' => current_student.name, 'data-course-total' => current_course.total_points }
-      %ul.slides.small-12.columns
-        - if current_user_is_staff?
-          = render partial: 'students/predictor/instructor_assignments'
-        - elsif current_user_is_student?
-          = render partial: 'students/predictor/assignments'
-        = render 'students/predictor/badges'
-        //= render 'students/predictor/challenges'
+  #predictorPage{ 'data-student-name' => current_student.name, 'data-course-total' => current_course.total_points }
+    %ul.slides.small-12.colums
+      - if current_user_is_staff?
+        = render partial: 'students/predictor/instructor_assignments'
+      - elsif current_user_is_student?
+        = render partial: 'students/predictor/assignments'
+      = render 'students/predictor/badges'
+      //= render 'students/predictor/challenges'

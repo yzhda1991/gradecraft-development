@@ -17,10 +17,17 @@
           = render 'layouts/top_bar'
 
         - if current_user
-          /   .columns.pageContainer= render 'layouts/student'
-          / .small-12.columns.logged_in_footer
-          /   %br
-          /   = render 'layouts/footer'
+          .outer-wrap{:role => "main"}
+            = render 'layouts/alerts'
+            .show-for-medium-up
+              = content_nav do
+                = render "students/student_profile_tabs"
+            = render 'layouts/content'
+
+          = render "layouts/help/uservoice"
+
+          .logged_in_footer
+            = render 'layouts/footer'
         - else
           = render 'layouts/public'
           .row.panel.footer
@@ -29,4 +36,3 @@
         = render 'layouts/background'
         = render 'layouts/google_analytics'
         = javascript_include_tag "application", 'data-turbolinks-track' => true
-        //= javascript_include_tag 'application_secondary'

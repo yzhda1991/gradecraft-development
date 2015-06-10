@@ -31,7 +31,7 @@ $(".select-none").click(function(e){
 $(".assignmentType").collapse({
   show: function() {
     // The context of 'this' is applied to
-    // the collapsed details in a jQuery wrapper 
+    // the collapsed details in a jQuery wrapper
     this.slideDown(100);
   },
   hide: function() {
@@ -44,7 +44,7 @@ $(".assignmentType").collapse({
 $(".challenge").collapse({
   show: function() {
     // The context of 'this' is applied to
-    // the collapsed details in a jQuery wrapper 
+    // the collapsed details in a jQuery wrapper
     this.slideDown(100);
   },
   hide: function() {
@@ -68,5 +68,3 @@ $("#team_student_ids").select2({
 
 // Initializing highcharts table data, currently used to display team charts
 $('table.highchart').highchartTable();
-
-$(".gradePredictor").sticky({topSpacing:55});

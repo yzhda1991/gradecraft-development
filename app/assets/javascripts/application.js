@@ -54,7 +54,6 @@
 //= require grade_distribution
 //= require jquery.ui.widget
 //= require jquery.circliful.min
-//= require jquery.sticky
 //= require jquery.highchartTable-min
 //= require jquery.collapse
 //= require jquery.collapse_storage

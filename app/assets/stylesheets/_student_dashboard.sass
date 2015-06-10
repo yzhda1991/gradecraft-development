@@ -1,33 +1,155 @@
 /** Student Dashboard Styles **/
 
+#predictor-main-content
+  background-color: #FFF
+  position: relative
+  height: auto !important
+  margin: 0 1% 1% 1%
+  padding-bottom: 1rem
+  border-radius: $global-radius
+  border: none
+  overflow: hidden
+  z-index: 2
+
 /* Adding the grey enclosure for the prediction */
 .gradePredictor
-  background-color: #eee
-  border: 1px solid #eee
-  border-radius: 15px
+  background-color: $color-blue-4
+  border-radius-top: .5rem
   padding: 15px
-  box-shadow: 0px 3px 3px #888888
   z-index: 100
+  visibility: hidden
 
   /* Setting the chart height */
   #prediction
     height: 120px
 
+/* Fixed height wrapper to suppport fixed positionsticky items */
+.predictor-sticky-item-wrapper
+  height: 5rem
+
+.predictor-info-bar-colum
+  width: 49%
+  float: left
+  h4
+    float: left
+    margin-top: 0
+  h5
+    text-align: right
+
+.predictor-title-colum
+  width: 60%
+  display: block
+  float: left
+
+.predictor-points-colum
+  width: 25%
+  text-align: right
+  float: left
+  color: black
+
+.predictor-sticky-item
+  font-size: 1.25rem
+  height: 5rem
+  width: 100%
+  color: $txt-color-inverse
+  background-color: $color-blue-4
+  margin: 1rem 0 1rem 0
+  &.predictor-stuck-item
+    position: fixed
+    z-index: 1
+    height: 2rem
+    border-bottom: 1px solid white
+    transition: all 1s ease
+    & h4
+      float: left
+      font-size: 1rem
+      transition: all 1s ease
+
+#predictor-grade-earned, #predictor-grade-predicted, #predictor-grade-possible
+  padding: 1.5rem 3rem
+  &.predictor-stuck-item
+    padding: .25rem 1rem
+
+$sticky-height-1: 29px
+$sticky-height-2: 61px
+$sticky-height-3: 93px
+$sticky-height-4: 125px
+
+#predictor-graph-wrapper
+  padding: 15px 0 0 5%
+  #predictor-graph
+    height: 50px
+    width: 95%
+    overflow: hidden
+    background-color: $color-yellow-3
+  #predictor-graph-bar-earned
+    height: 50px
+    width: 24%
+    float: left
+    background-color: $color-green-1
+  #predictor-graph-bar-predicted
+    height: 50px
+    width: 50%
+    float: left
+    background-color: $color-blue-1
+  &.predictor-stuck-item
+    border-top: 1px solid white
+    padding-top: 5px
+    top: $sticky-height-1
+    background-color: #333333
+    #predictor-graph
+      height: 20px
+
+#predictor-graph
+  height: 50px
+  width: 95%
+  overflow: hidden
+  background-color: $color-yellow-3
+  #predictor-graph-bar-earned
+    height: 50px
+    width: 24%
+    float: left
+    background-color: $color-green-1
+  #predictor-graph-bar-predicted
+    height: 50px
+    width: 50%
+    float: left
+    background-color: $color-blue-1
+
+#predictor-grade-earned
+  background-color: $color-green-2
+  &.predictor-stuck-item
+    top: $sticky-height-2
+    background-color: $color-green-1
+#predictor-grade-predicted
+  background-color: $color-blue-3
+  &.predictor-stuck-item
+    top: $sticky-height-3
+    background-color: $color-blue-1
+
+#predictor-grade-possible
+  background-color: $color-yellow-3
+  &.predictor-stuck-item
+    top: $sticky-height-4
+    background-color: $color-yellow-3
+
+
 .assignment
   display: block
   margin-bottom: 1rem
-  border: 1px solid $layout-color-blue-0
-  background-color: $layout-color-blue-4
+  border: 1px solid $color-layout-blue-0
+  border-bottom: .25rem solid $color-layout-blue-0
+  background-color: $color-layout-blue-4
   float: left
   width: 19%
   margin: 3px
-  height: 8.5rem
+  height: 8.8rem
 
   select
     margin: 0
 
 .assignment-layout-title
-  background-color: $layout-color-blue-0
+  background-color: $color-layout-blue-0
   color: $txt-color-inverse
   padding-left: .5rem
   height: 2rem
@@ -35,7 +157,7 @@
 
 .assignment-layout-info
   height: 1.5rem
-  background-color: $layout-color-blue-2
+  background-color: $color-layout-blue-2
   padding: .25rem
 
 .assignment-info-required
@@ -47,7 +169,7 @@
 
 .assignment-layout-time
   height: 1.25rem
-  background-color: $layout-color-blue-3
+  background-color: $color-layout-blue-3
   padding: .25rem
 
 .assignment-layout-points
@@ -96,13 +218,9 @@
 
 .assignment .switch label
   background: white
-  paddin-top: 2px
+  padding-top: 2px
 .assignment .switch-label
   font-weight: initial
-
-.assignment-layout-bottom-border
-  height: 4px
-  background-color: $layout-color-blue-0
 
 /* Styling the bar charts on the syllabus page */
 #userBarTotal
@@ -169,6 +287,10 @@ img.earned
 // small
 @media (max-width: $media-small-max)
   .assignment
+    width: 100%
+  .medium-visible
+    visibility: hidden
+  .predictor-info-bar-colum
     width: 100%
 
 // medium
