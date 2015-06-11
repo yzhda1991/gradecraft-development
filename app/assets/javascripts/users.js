@@ -4,8 +4,7 @@
       $.ajax({
         url: $('.search-query').data('autocompleteurl'),
         dataType: "json",
-        success: function(user) {
-          var users = user.students;
+        success: function(users) {
           $('.search-query').omniselect({
             source: users,
             resultsClass: 'typeahead dropdown-menu',
