@@ -11,8 +11,8 @@
 
   MetricsServices.getBadges($scope.urlId).success (courseBadges)->
     $scope.addCourseBadges(courseBadges)
-    MetricsServices.getMetrics($scope.urlId).success (metrics)->
-      $scope.addMetrics(metrics)
+  MetricsServices.getMetrics($scope.urlId).success (metrics)->
+    $scope.addMetrics(metrics)
 
   # distill key/value pairs for metric ids and relative order
   $scope.pointsAssigned = ()->
