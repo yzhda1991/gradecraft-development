@@ -32,11 +32,7 @@ class AssignmentsController < ApplicationController
     @groups = @assignment.groups
 
     # Returns a hash of grades given for the assignment in format of {student_id: grade}
-    if current_user_is_student?
-      @assignment_grades_by_student_id = current_course_data.assignment_grades_student(@assignment)
-    else
-      @assignment_grades_by_student_id = current_course_data.assignment_grades_instructor(@assignment)
-    end
+    @assignment_grades_by_student_id = current_course_data.assignment_grades(@assignment)
     @teams = current_course.teams
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
@@ -48,10 +44,7 @@ class AssignmentsController < ApplicationController
     end
     if @assignment.rubric.present?
       @rubric = @assignment.fetch_or_create_rubric
-      @metrics = @rubric.metrics.includes(:tiers => :tier_badges).ordered
-      @metrics.each do |m|
-        m.tiers = m.tiers.order("points ASC")
-      end
+      @metrics = @rubric.metrics
     end
     @course_badges = serialized_course_badges
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
