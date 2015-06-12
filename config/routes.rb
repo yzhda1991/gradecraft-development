@@ -91,6 +91,8 @@ GradeCraft::Application.routes.draw do
       resources :earned_badges
     end
     resource :rubric do
+      get :existing_metrics
+      get :course_badges
       resources :metrics
       get :design, on: :collection
     end
