@@ -7,6 +7,8 @@ class Tier < ActiveRecord::Base
   validates :points, presence: true, numericality: {greater_than_or_equal_to: 0}
   validates :name, presence: true, length: { maximum: 30 }
 
+  scope :sorted, -> { order('points ASC') }
+
   attr_accessible :name, :description, :points, :metric_id, :durable, :full_credit, :no_credit, :sort_order
 
   include DisplayHelpers
