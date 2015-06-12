@@ -1,11 +1,8 @@
 - @students.each do |student|
-  - student_id = student.id
-  - grade = @assignment_grades_by_student_id[student_id] || Grade.new
-  - grade_id = grade.id
+  - grade = @assignment_grades_by_student_id[student.id] || Grade.new
   - first_name = student.first_name
   - last_name = student.last_name
-  - assignment_id = @assignment.id
-  - instructor_modified = grade.instructor_modified
+  - instructor_modified = grade.instructor_modified?
   %tr
     %td= link_to first_name, student_path(student)
     %td= link_to last_name, student_path(student)
@@ -48,55 +45,55 @@
               /* Submission present + an instructor-modified grade - allow the instructor to manage the grade
               - if instructor_modified
                 %li
-                  %a{:href => assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'}
+                  %a{:href => assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
                     See Grade
                     %span.sr-only for #{first_name} #{last_name}
                 %li
-                  %a{:href => edit_assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'}
+                  %a{:href => edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
                     Edit Grade
                     %span.sr-only for #{first_name} #{last_name}
-                %li= link_to "Delete", remove_grades_assignment_path(:grade_id => grade_id, :assignment_id => assignment_id), :class => 'button', :method => :post
+                %li= link_to "Delete", remove_grades_assignment_path(:grade_id => grade.id, :assignment_id => @assignment.id), :class => 'button', :method => :post
 
                 /* Submission present but not yet graded, allow the instructor to grade
               - else
                 %li
-                  %a{:href => edit_assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'}
+                  %a{:href => edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
                     Grade
                     %span.sr-only for #{first_name} #{last_name}
 
             - if ! student.submissions.where(:assignment_id => @assignment).present?
               /* No submission, but a grade present, allow the instructor to manage the grade */
               - if grade && instructor_modified
-                %li= link_to "See Grade", assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'
-                %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'
-                %li= link_to "Delete", remove_grades_assignment_path(:grade_id => grade_id, :assignment_id => assignment_id), :class => 'button', :method => :post
+                %li= link_to "See Grade", assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+                %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+                %li= link_to "Delete", remove_grades_assignment_path(:grade_id => grade.id, :assignment_id => @assignment.id), :class => 'button', :method => :post
 
                 /* No submission, but allow the instructor to grade anyways */
               - else
-                %li= link_to "Grade", edit_assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'
+                %li= link_to "Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
       - else
         .button-bar
           %ul.button-group.radius.right
             - if grade && instructor_modified
               %li
-                %a{:href => assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'}
+                %a{:href => assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
                   See Grade
                   %span.sr-only for #{first_name} #{last_name}
               %li
-                %a{:href => edit_assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'}
+                %a{:href => edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
                   Edit Grade
                   %span.sr-only for #{first_name} #{last_name}
               %li
-                %a{:href => remove_grades_assignment_path(:grade_id => grade_id, :assignment_id => assignment_id), :class => 'button', :method => :post}
+                %a{:href => remove_grades_assignment_path(:grade_id => grade.id, :assignment_id => @assignment.id), :class => 'button', :method => :post}
                   Delete
                   %span.sr-only for #{first_name} #{last_name}
             - else
               %li
-                %a{:href => edit_assignment_grade_path(@assignment, :student_id => student_id), :class => 'button'}
+                %a{:href => edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'}
                   Grade
                   %span.sr-only #{first_name} #{last_name}
 
     - if @assignment.release_necessary?
       %td
         - if grade.is_graded?
-          .center= check_box_tag "grade_ids[]", grade_id
+          .center= check_box_tag "grade_ids[]", grade.id
