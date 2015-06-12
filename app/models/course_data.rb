@@ -53,7 +53,7 @@ class CourseData < Struct.new(:course)
   end
 
   def grade_for_student_and_assignment(student, assignment)
-    assignment_grades(assignment)[student.id] || student.grades.new(assignment: assignment)
+    assignment_grades_instructor(assignment)[student.id] || student.grades.new(assignment: assignment)
   end
 
   def assignment_grades_student(assignment)
