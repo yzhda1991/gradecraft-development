@@ -45,7 +45,7 @@
                     %a{:href => export_scores_assignment_type_path(assignment_type.id, format: 'csv'), :class => "button"}
                       Download Scores
                   %li
-                    %a{:href => assignment_type_path(assignment_type), :data => { confirm: 'Are you sure?', method: :delete }, :class => "button" }
+                    %a{:href => assignment_type_path(assignment_type), :data => { confirm: 'Are you sure? This will delete all associated assignments and their grades.', method: :delete }, :class => "button" }
                       Delete
 
   %h4.subtitle= "#{term_for :student} Scores"
