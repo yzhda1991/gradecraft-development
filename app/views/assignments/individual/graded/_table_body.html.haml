@@ -23,15 +23,15 @@
       %td= grade.status
 
     - if @assignment.accepts_submissions?
+      - submissions_for_assignment = student.submissions.where(:assignment_id => @assignment)
       %td
-        - if student.submission_for_assignment(@assignment).present?
-          = student.submission_for_assignment(@assignment).updated_at
-
+        - if submissions_for_assignment.present?
+          = submissions_for_assignment[0].updated_at
     %td
       - if @assignment.accepts_submissions?
         .button-bar
           %ul.button-group.radius.right
-            - student.submissions.where(:assignment_id => @assignment).each do |submission|
+            - submissions_for_assignment.each do |submission|
 
               /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. Icon represents if there are files attached. */
               %li
@@ -61,7 +61,7 @@
                     Grade
                     %span.sr-only for #{first_name} #{last_name}
 
-            - if ! student.submissions.where(:assignment_id => @assignment).present?
+            - if ! submissions_for_assignment.present?
               /* No submission, but a grade present, allow the instructor to manage the grade */
               - if grade && instructor_modified
                 %li= link_to "See Grade", assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
