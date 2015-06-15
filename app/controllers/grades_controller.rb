@@ -41,8 +41,8 @@ class GradesController < ApplicationController
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
       @rubric_grades = serialized_rubric_grades
-      @metrics = existing_metrics_as_json if @rubric
-      @course_badges = serialized_course_badges
+      #@metrics = existing_metrics_as_json if @rubric
+      #@course_badges = serialized_course_badges
     end
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
   end
