@@ -1,15 +1,16 @@
-@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Metric', 'CourseBadge', 'RubricGrade', '$http', ($scope, Restangular, Metric, CourseBadge, RubricGrade, $http) ->
+@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Metric', 'CourseBadge', 'RubricGrade','MetricsServices', '$http', ($scope, Restangular, Metric, CourseBadge, RubricGrade, MetricsServices, $http) ->
 
   $scope.metrics = []
   $scope.courseBadges = {}
   $scope.rubricGrades = {} # index in hash with metric_id as key
   $scope.gsiGradeStatuses = ["In Progress", "Graded"]
   $scope.professorGradeStatuses = ["In Progress", "Graded", "Released"]
+  $scope.urlId = parseInt(window.location.pathname.split('/')[2])
 
   $scope.pointsPossible = 0
   $scope.pointsGiven = 0
 
-  $scope.init = (rubricId, metrics, assignmentId, studentId, rubricGrades, gradeStatus, courseBadges, releaseNecessary)->
+  $scope.init = (rubricId, assignmentId, studentId, rubricGrades, gradeStatus, releaseNecessary)->
     $scope.rubricId = rubricId
     $scope.assignmentId = assignmentId
     $scope.studentId = studentId
@@ -24,7 +25,10 @@
       $scope.gradeStatus = "Graded"
 
     $scope.addRubricGrades(rubricGrades)
+
+  MetricsServices.getBadges($scope.urlId).success (courseBadges)->
     $scope.addCourseBadges(courseBadges)
+  MetricsServices.getMetrics($scope.urlId).success (metrics)->
     $scope.addMetrics(metrics)
 
   # distill key/value pairs for metric ids and relative order
