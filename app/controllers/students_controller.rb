@@ -71,20 +71,16 @@ class StudentsController < ApplicationController
 
   # AJAX endpoint for student name search
   def autocomplete_student_name
-    students = current_course.students
-    students = students.map do |u|
+    students = current_course.students.map do |u|
       { :name => [u.first_name, u.last_name].join(' '), :id => u.id }
     end
-    render json: students
+    render json: MultiJson.dump(students)
   end
 
   # Displaying the course grading scheme and professor's grading philosophy
   def course_progress
     @grade_scheme_elements = current_course.grade_scheme_elements
     @title = "Your Course Progress"
-    if current_user_is_staff?
-      @scores_for_current_course = current_student.cached_score_for_course(current_course)
-    end
   end
 
   # TODO

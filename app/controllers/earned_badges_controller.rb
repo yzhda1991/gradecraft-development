@@ -100,6 +100,7 @@ class EarnedBadgesController < ApplicationController
   def mass_update
     @badge = current_course.badges.find(params[:id])
     if @badge.update_attributes(params[:badge])
+      NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver
       respond_with @badge
     else
       redirect_to :mass_edit

@@ -1,13 +1,11 @@
 class RubricsController < ApplicationController
-  before_action :find_rubric, except: [:design, :create]
+  before_action :find_rubric, except: [:design, :create, :existing_metrics, :course_badges]
 
   respond_to :html, :json
 
   def design
     @assignment = current_course.assignments.find params[:assignment_id]
-    @rubric = Rubric.find_or_create_by(assignment_id: @assignment.id)
-    @metrics = existing_metrics_as_json
-    @course_badges = serialized_course_badges
+    @rubric = @assignment.rubric
     @course_badge_count = @assignment.course.badges.visible.count
     @title = "Design Rubric for #{@assignment.name}"
     respond_with @rubric
@@ -32,25 +30,33 @@ class RubricsController < ApplicationController
     respond_with @rubric, status: :not_found
   end
 
-  private
-
-  def existing_metrics_as_json
-    ActiveModel::ArraySerializer.new(rubric_metrics_with_tiers, each_serializer: ExistingMetricSerializer).to_json
-  end
-
-  def serialized_course_badges
-    ActiveModel::ArraySerializer.new(course_badges, each_serializer: CourseBadgeSerializer).to_json
+  def existing_metrics
+    @assignment = current_course.assignments.find params[:assignment_id]
+    @rubric = @assignment.rubric
+    render json:  MultiJson.dump(
+                    ActiveModel::ArraySerializer.new(
+                      @rubric.metrics.order(:order).includes(:tiers),
+                        each_serializer: ExistingMetricSerializer
+                    )
+                  )
   end
 
   def course_badges
-    @course_badges ||= @assignment.course.badges.visible
+    @assignment = current_course.assignments.find params[:assignment_id]
+    render json:  MultiJson.dump(
+                    ActiveModel::ArraySerializer.new(
+                      find_course_badges, each_serializer: CourseBadgeSerializer
+                    )
+                  )
   end
 
-  def rubric_metrics_with_tiers
-    @rubric.metrics.order(:order).includes(:tiers)
+  private
+
+  def find_course_badges
+     @course_badges ||= @assignment.course.badges.visible
   end
 
   def find_rubric
-    @rubric = Rubric.find params[:id]
+    @rubric = @assignment.rubric
   end
 end
