@@ -10,7 +10,7 @@
           .not_bold.italic Point value
 
   %tbody
-    - @metrics.ordered.each do |metric|
+    - @metrics.each do |metric|
       %tr
         %td.metric(style="font-size: 12px !important; width: 20%" )
           .metric-heading
@@ -18,8 +18,7 @@
             .metric-points.italic= "#{points metric.max_points} Points"
             .clear
           .metric-description= metric.wrapped_description(40).html_safe
-
-        - metric.tiers.includes(:tier_badges).order("points ASC").each do |tier|
+        - metric.tiers.sorted.each do |tier|
           %td.tier
             .tier-heading
               .tier-name.uppercase= tier.wrapped_name(25).html_safe
@@ -35,6 +34,6 @@
                   %span.tier-badge-image
                     %img{:src => badge.badge.icon, width: "30px", height: "30px" }
             .clear
-
-        - if metric.tiers.size < @rubric.max_tier_count
-          %td.filler(colspan="#{@rubric.max_tier_count - metric.tiers.size}")
+        - rubric_max_tier_count = @rubric.max_tier_count
+        - if metric.tiers.size < rubric_max_tier_count
+          %td.filler(colspan="#{rubric_max_tier_count - metric.tiers.size}")

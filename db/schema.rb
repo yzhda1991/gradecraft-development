@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519191054) do
+ActiveRecord::Schema.define(version: 20150610191949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -573,6 +573,7 @@ ActiveRecord::Schema.define(version: 20150519191054) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "full_credit_tier_id"
+    t.integer  "tiers_count",                     default: 0
   end
 
   create_table "proposals", force: :cascade do |t|
