@@ -58,9 +58,9 @@ class CourseData < Struct.new(:course)
 
   def assignment_grades(assignment)
     (@assignment_grades ||= {})[assignment.id] ||= {}.tap do |grades|
-      assignment.grades.includes(:student, :assignment => [:course]).each do |grade|
-        grades[grade.student_id] = grade
-      end
+        assignment.grades.each do |grade|
+          grades[grade.student_id] = grade
+        end
     end
   end
 

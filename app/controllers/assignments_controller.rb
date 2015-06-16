@@ -39,12 +39,12 @@ class AssignmentsController < ApplicationController
       @students = current_course.students_being_graded_by_team(@team)
       @auditors = current_course.students_auditing.includes(:teams).where(:teams => team_params).includes(:submissions)
     else
-      @students = current_course.students_being_graded.includes(:submissions)
-      @auditors = current_course.students_auditing.includes(:submissions)
+      @students = current_course.students_being_graded
+      @auditors = current_course.students_auditing
     end
     if @assignment.rubric.present?
       @rubric = @assignment.fetch_or_create_rubric
-      @metrics = @rubric.metrics
+      @metrics = @rubric.metrics.ordered.includes(:tiers => :tier_badges)
     end
     @course_badges = serialized_course_badges
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
