@@ -4,40 +4,43 @@
 
 #predictor-main-content
 
-  .predictor-sticky-item-wrapper
+  .predictor-sticky-graph-wrapper
     #predictor-graph-wrapper.predictor-sticky-item
+      #predictor-graph-min-points 0
       #predictor-graph
         #predictor-graph-bar-earned{:'data-percent' => "24"}
         #predictor-graph-bar-predicted{:'data-percent' => "50"}
+      #predictor-graph-max-points 1,720,000
 
   .predictor-sticky-item-wrapper
     #predictor-grade-earned.predictor-sticky-item
       .predictor-info-bar-colum
+        .predictor-key.grade-earned-key
         .predictor-title-colum
-          %h4 Earned points:
+          Earned points:
         .predictor-points-colum.bold #{points current_student.cached_score_for_course(current_course)}
       .predictor-info-bar-colum.medium-visible
         - if current_student.grade_level_for_course(current_course).present?
-          %h5
-            Current Level:
-            %span.bold= current_student.grade_level_for_course(current_course)
+          Current Level:
+          %span.bold= current_student.grade_level_for_course(current_course)
 
   .predictor-sticky-item-wrapper
     #predictor-grade-predicted.predictor-sticky-item
       .predictor-info-bar-colum
+        .predictor-key.grade-predicted-key
         .predictor-title-colum
-          %h4 Predicted points:
+          Predicted points:
         #predictor-score-display.predictor-points-colum.bold
       .predictor-info-bar-colum.medium-visible
-        %h5
-          Predicted level:
-          %span.bold#predictor-course-grade{:'data-grade-levels' => "#{@grade_levels_json}"}
+        Predicted level:
+        %span.bold#predictor-course-grade{:'data-grade-levels' => "#{@grade_levels_json}"}
 
   .predictor-sticky-item-wrapper
     #predictor-grade-possible.predictor-sticky-item
+      .predictor-key.grade-possible-key
       .predictor-info-bar-colum
         .predictor-title-colum
-          %h4 Possible points:
+          Possible points:
         .predictor-points-colum.bold= "#{ points current_course.total_points }"
 
   .gradePredictor
