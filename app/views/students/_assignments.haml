@@ -35,7 +35,6 @@
             %p= raw assignment_type.predictor_description
 
         .small-12.columns
-
           // Display the assignments for each assignment type in a responsive table, below header.
           %table.responsive
             - assignments = assignment_type.assignments.sorted.includes(:assignment_type)
@@ -148,11 +147,8 @@
                                   %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
 
 - if current_course.team_challenges? && current_course.team_score_average?
-
   .challenge
-
     %h3.collapse #{term_for :challenges} #{ points @student.team.try(:challenge_grade_score) }/#{points current_course_data.point_total_for_challenges}
-
     .small-12.columns
       %table.responsive
         - current_course.challenges.each do |challenge|

@@ -7,8 +7,8 @@ class Assignment < ActiveRecord::Base
     :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level, :score_levels_attributes,
     :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail
 
-  belongs_to :course, touch: true
-  belongs_to :assignment_type, -> { order('order_placement ASC') }
+  belongs_to :course
+  belongs_to :assignment_type, -> { order('order_placement ASC') }, touch: true
 
   mount_uploader :media, AssignmentMediaUploader
   mount_uploader :thumbnail, AssignmentThumbnailUploader
