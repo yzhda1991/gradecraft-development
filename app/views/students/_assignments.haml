@@ -40,73 +40,100 @@
           %table.responsive
             - assignments = assignment_type.assignments.sorted.includes(:assignment_type)
             - assignments.each do |assignment|
-              - grade_released_for_assignment = current_student_data.grade_released_for_assignment?(assignment)
-              - grade_for_assignment = current_student_data.grade_for_assignment(assignment)
-              - group_for_assignment = @student.group_for_assignment(assignment)
-              - student_submission = @student.submission_for_assignment(assignment)
-              - if assignment.visible? || grade_released_for_assignment
-                %tr
-                  %td{:width => "30%"}
-                    - if assignment.required?
-                      %span.has-tip{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
-                        !
-                    %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
+              - cache ["v2", assignment] do
+                - grade_released_for_assignment = current_student_data.grade_released_for_assignment?(assignment)
+                - grade_for_assignment = current_student_data.grade_for_assignment(assignment)
+                - group_for_assignment = @student.group_for_assignment(assignment)
+                - student_submission = @student.submission_for_assignment(assignment)
+                - if assignment.visible? || grade_released_for_assignment
+                  %tr
+                    %td{:width => "30%"}
+                      - if assignment.required?
+                        %span.has-tip{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
+                          !
+                      %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
 
-                  %td{:width => "25%"}
-                    - if assignment.pass_fail?
-                      - if current_student_data.grade_released_for_assignment?(assignment)
-                        .bold
-                          = "#{term_for grade_for_assignment.pass_fail_status}"
+                    %td{:width => "25%"}
+                      - if assignment.pass_fail?
+                        - if current_student_data.grade_released_for_assignment?(assignment)
+                          .bold
+                            = "#{term_for grade_for_assignment.pass_fail_status}"
+                        - else
+                          = "#{term_for :pass}/#{term_for :fail}"
                       - else
-                        = "#{term_for :pass}/#{term_for :fail}"
-                    - else
-                      - if assignment.assignment_type.student_weightable?
-                        - grade = grade_for_assignment
-                        %span.has-tip{:title => "#{ points grade.score } / #{points grade.point_total} points (Multiplied), #{points grade.raw_score} / #{ points assignment.point_total } points (Raw)", :data => {'tooltip' => true}  }
+                        - if assignment.assignment_type.student_weightable?
+                          - grade = grade_for_assignment
+                          %span.has-tip{:title => "#{ points grade.score } / #{points grade.point_total} points (Multiplied), #{points grade.raw_score} / #{ points assignment.point_total } points (Raw)", :data => {'tooltip' => true}  }
+                            - if grade_released_for_assignment
+                              .bold= "#{ points grade.score } / #{points grade.point_total} points earned"
+                              .italic= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
+                            - else
+                              .italic.not_bold= "#{points grade.point_total} points possible"
+                              .italic.bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
+                        - else
+                          - grade = grade_for_assignment
                           - if grade_released_for_assignment
-                            .bold= "#{ points grade.score } / #{points grade.point_total} points earned"
+                            .bold
+                              = "#{points current_student_data.score_for_assignment(assignment)} / #{points assignment.point_total} points earned"
                             .italic= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
                           - else
-                            .italic.not_bold= "#{points grade.point_total} points possible"
-                            .italic.bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
-                      - else
-                        - grade = grade_for_assignment
-                        - if grade_released_for_assignment
-                          .bold
-                            = "#{points current_student_data.score_for_assignment(assignment)} / #{points assignment.point_total} points earned"
-                          .italic= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
-                        - else
-                          .italic.not_bold= "#{points assignment.point_total} points possible"
-                          .bold.italic= "Your Goal: #{points grade.predicted_score} points" if grade && grade.predicted_score > 0 && current_user_is_student?
+                            .italic.not_bold= "#{points assignment.point_total} points possible"
+                            .bold.italic= "Your Goal: #{points grade.predicted_score} points" if grade && grade.predicted_score > 0 && current_user_is_student?
 
 
-                  %td{:width => "25%"}
-                    = "Due: #{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" if assignment.future?
-                  %td
-                    - if assignment.student_logged? && assignment.open? && current_user_is_student?
-                      = simple_form_for current_student_data.grade_for_assignment(assignment), :url => self_log_grades_assignment_path(assignment), :method => :post do |f|
-                        - present = @student.self_reported_done?(assignment)
-                        = hidden_field_tag :present, !present
-                        - if ! @student.self_reported_done?(assignment)
-                          = f.submit (assignment_type.student_logged_button_text), :class => "button #{present ? 'alert' : 'success'} tiny radius"
-                  %td{:width => "20%"}
-                    .button-bar
-                      %ul.button-group.center.radius
-                        - if current_user_is_student?
-                          - if grade_released_for_assignment
-                            %li= link_to "See Results", assignment_path(assignment, :anchor => "fndtn-tabt4"), :class => "button"
-                          - if assignment.has_groups?
-                            - if group_for_assignment.present?
-                              %li= link_to "See Group", group_path(group_for_assignment), :class => "button"
-                              - if assignment.accepts_submissions?
-                                - if group_for_assignment && group_for_assignment.submission_for_assignment(assignment)
-                                  %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
-                                - else
-                                  - if group_for_assignment && group_for_assignment.approved?
-                                    %li= link_to "Submit", new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
+                    %td{:width => "25%"}
+                      = "Due: #{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" if assignment.future?
+                    %td
+                      - if assignment.student_logged? && assignment.open? && current_user_is_student?
+                        = simple_form_for current_student_data.grade_for_assignment(assignment), :url => self_log_grades_assignment_path(assignment), :method => :post do |f|
+                          - present = @student.self_reported_done?(assignment)
+                          = hidden_field_tag :present, !present
+                          - if ! @student.self_reported_done?(assignment)
+                            = f.submit (assignment_type.student_logged_button_text), :class => "button #{present ? 'alert' : 'success'} tiny radius"
+                    %td{:width => "20%"}
+                      .button-bar
+                        %ul.button-group.center.radius
+                          - if current_user_is_student?
+                            - if grade_released_for_assignment
+                              %li= link_to "See Results", assignment_path(assignment, :anchor => "fndtn-tabt4"), :class => "button"
+                            - if assignment.has_groups?
+                              - if group_for_assignment.present?
+                                %li= link_to "See Group", group_path(group_for_assignment), :class => "button"
+                                - if assignment.accepts_submissions?
+                                  - if group_for_assignment && group_for_assignment.submission_for_assignment(assignment)
+                                    %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
+                                  - else
+                                    - if group_for_assignment && group_for_assignment.approved?
+                                      %li= link_to "Submit", new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
+                              - else
+                                %li= link_to "Create a Group", new_group_path, :class => "button"
                             - else
-                              %li= link_to "Create a Group", new_group_path, :class => "button"
-                          - else
+                              - if assignment.accepts_submissions?
+                                - if current_user_is_student?
+                                  - if student_submission.present?
+                                    %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
+                                  - elsif assignment.open?
+                                    %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
+
+                                - else
+                                  - if student_submission.present?
+                                    %li= link_to "See Submission", assignment_submission_path(assignment, student_submission.id), :class => 'button'
+                                  - else assignment.open?
+                                    %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
+
+                          - if current_user_is_staff?
+                            - if assignment.is_individual?
+                              - if grade_released_for_assignment
+                                - grade = grade_for_assignment
+                                %li= link_to "Edit Grade", edit_assignment_grade_path(assignment.id, :student_id => @student.id), :class => 'button'
+                              - else
+                                %li= link_to 'Grade', edit_assignment_grade_path(:assignment_id =>assignment.id, :student_id => @student.id), :class => 'button'
+                            - elsif assignment.has_groups?
+                              - if grade_released_for_assignment
+                                - grade = grade_for_assignment
+                                %li= link_to "Edit Grade", group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
+                              - else
+                                %li= link_to 'Grade', group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
                             - if assignment.accepts_submissions?
                               - if current_user_is_student?
                                 - if student_submission.present?
@@ -120,39 +147,16 @@
                                 - else assignment.open?
                                   %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
 
-                        - if current_user_is_staff?
-                          - if assignment.is_individual?
-                            - if grade_released_for_assignment
-                              - grade = grade_for_assignment
-                              %li= link_to "Edit Grade", edit_assignment_grade_path(assignment.id, :student_id => @student.id), :class => 'button'
-                            - else
-                              %li= link_to 'Grade', edit_assignment_grade_path(:assignment_id =>assignment.id, :student_id => @student.id), :class => 'button'
-                          - elsif assignment.has_groups?
-                            - if grade_released_for_assignment
-                              - grade = grade_for_assignment
-                              %li= link_to "Edit Grade", group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
-                            - else
-                              %li= link_to 'Grade', group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
-                          - if assignment.accepts_submissions?
-                            - if current_user_is_student?
-                              - if student_submission.present?
-                                %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
-                              - elsif assignment.open?
-                                %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
-
-                            - else
-                              - if student_submission.present?
-                                %li= link_to "See Submission", assignment_submission_path(assignment, student_submission.id), :class => 'button'
-                              - else assignment.open?
-                                %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
-
 - if current_course.team_challenges? && current_course.team_score_average?
+
   .challenge
+
     %h3.collapse #{term_for :challenges} #{ points @student.team.try(:challenge_grade_score) }/#{points current_course_data.point_total_for_challenges}
+
     .small-12.columns
       %table.responsive
         - current_course.challenges.each do |challenge|
-          - cache ["v1", challenge] do
+          - cache ["v3", challenge] do
             %tr
               %td{:width => "25%"}= link_to challenge.name, challenge
               - if @student.team
