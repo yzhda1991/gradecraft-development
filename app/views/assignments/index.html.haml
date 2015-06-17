@@ -38,7 +38,7 @@
                   %tbody.sort-assignments
                     - assignments = assignment_type.assignments.includes(:rubric, :assignment_type).sorted
                     - assignments.each do |assignment|
-                      - cache ["v2", assignment] do
+                      - cache ["v1", assignment] do
                         %tr{:id => "assignment-#{assignment.id}"}
                           %td
                             %i.fa.fa-arrows-v

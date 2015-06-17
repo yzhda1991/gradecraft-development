@@ -39,7 +39,7 @@
           %table.responsive
             - assignments = assignment_type.assignments.sorted.includes(:assignment_type)
             - assignments.each do |assignment|
-              - cache ["v2", assignment] do
+              - cache ["v1", assignment] do
                 - grade_released_for_assignment = current_student_data.grade_released_for_assignment?(assignment)
                 - grade_for_assignment = current_student_data.grade_for_assignment(assignment)
                 - group_for_assignment = @student.group_for_assignment(assignment)
@@ -152,26 +152,25 @@
     .small-12.columns
       %table.responsive
         - current_course.challenges.each do |challenge|
-          - cache ["v3", challenge] do
-            %tr
-              %td{:width => "25%"}= link_to challenge.name, challenge
-              - if @student.team
-                %td{:width => "25%"}
-                  - if challenge.challenge_grade_for_team(@student.team).present?
-                    %span.points
-                      %span.earned= points challenge.challenge_grade_for_team(@student.team).try(:score)
-                      %span= "/"
-                      %span
-                        = points challenge.point_total
-                      = "points"
-              - if challenge.future?
-                %td{:width => "25%"}= " • Due: #{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
-              %td
-                - if current_user_is_staff?
-                  %li
-                    %a{:href => edit_challenge_challenge_grade_path(challenge.id, challenge_grade.id, :team_id => @student.team.id), :class => 'button'}
-                      Edit Grade
-                - else
-                  %li
-                    %a{:href => new_challenge_challenge_grade_path(:challenge_id => challenge.id, :team_id => @student.team.id), :class => 'button'}
-                      Grade
+          %tr
+            %td{:width => "25%"}= link_to challenge.name, challenge
+            - if @student.team
+              %td{:width => "25%"}
+                - if challenge.challenge_grade_for_team(@student.team).present?
+                  %span.points
+                    %span.earned= points challenge.challenge_grade_for_team(@student.team).try(:score)
+                    %span= "/"
+                    %span
+                      = points challenge.point_total
+                    = "points"
+            - if challenge.future?
+              %td{:width => "25%"}= " • Due: #{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
+            %td
+              - if current_user_is_staff?
+                %li
+                  %a{:href => edit_challenge_challenge_grade_path(challenge.id, challenge_grade.id, :team_id => @student.team.id), :class => 'button'}
+                    Edit Grade
+              - else
+                %li
+                  %a{:href => new_challenge_challenge_grade_path(:challenge_id => challenge.id, :team_id => @student.team.id), :class => 'button'}
+                    Grade
