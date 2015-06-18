@@ -1,12 +1,17 @@
 @gradecraft.factory 'PredictorService', ['$http', ($http) ->
-    getMetrics = (assignmentId)->
-      $http.get("/assignments/" + assignmentId + "/rubric/existing_metrics.json")
+    getGradeLevels = ()->
+      $http.get("/predictor_grade_levels/")
 
-    getBadges = (assignmentId)->
-      $http.get("/assignments/" + assignmentId + "/rubric/course_badges.json")
+    getAssignmentTypes = (assignmentId)->
+      $http.get("predictor_assignment_types")
+
+    getAssignmentsGrades = (assignmentId)->
+      $http.get("predictor_assignments_grades")
+
 
     return {
-        getMetrics: getMetrics,
-        getBadges: getBadges
+        getGradeLevels: getGradeLevels,
+        getAssignmentTypes: getAssignmentTypes,
+        getAssignmentsGrades: getAssignmentsGrades
     }
 ]

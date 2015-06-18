@@ -21,6 +21,7 @@ gem 'carrierwave'
 gem 'carrierwave_backgrounder'
 gem 'coffee-rails'
 gem "compass-rails"
+gem "d3-rails"
 gem 'dalli'
 gem 'dotenv-rails'
 gem 'escape_utils'

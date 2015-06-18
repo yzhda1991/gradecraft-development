@@ -144,6 +144,8 @@ GEM
       sprockets (< 2.13)
     connection_pool (2.1.2)
     crass (1.0.1)
+    d3-rails (3.5.5)
+      railties (>= 3.1)
     dalli (2.7.2)
     database_cleaner (1.0.1)
     debug_inspector (0.0.2)
@@ -543,6 +545,7 @@ DEPENDENCIES
   carrierwave_backgrounder
   coffee-rails
   compass-rails
+  d3-rails
   dalli
   database_cleaner (~> 1.0.1)
   dotenv-rails
