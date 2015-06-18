@@ -2,7 +2,7 @@ class GradeSchemeElementsController < ApplicationController
 
   #The Grade Scheme Elements define the point thresholds earned at which students earn course wide levels and grades
 
-  before_filter :ensure_staff?
+  before_filter :ensure_staff?, :except => [:student_predictor_data]
 
   def index
     @title = "Grade Scheme"
@@ -22,11 +22,19 @@ class GradeSchemeElementsController < ApplicationController
     respond_to do |format|
       if @course.save
         format.html { redirect_to grade_scheme_elements_path }
-      else 
+      else
         @title = "Edit Grade Scheme"
         @grade_scheme_elements = current_course.grade_scheme_elements
         format.html { render action: "mass_edit" }
       end
     end
+  end
+
+  def student_predictor_data
+    grade_scheme_elements = current_course.grade_scheme_elements
+    grade_levels = grade_scheme_elements.order(:low_range).pluck(:low_range, :letter, :level)
+    render :json => {
+      :grade_levels => grade_levels
+    }
   end
 end

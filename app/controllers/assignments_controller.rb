@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:feed, :show, :index, :guidelines]
+  before_filter :ensure_staff?, :except => [:feed, :show, :index, :guidelines, :student_predictor_data]
 
   respond_to :html, :json
 
@@ -201,6 +201,51 @@ class AssignmentsController < ApplicationController
     @course_student_ids = current_course.students.map(&:id)
 
     @viewable_rubric_grades = @assignment.rubric_grades
+  end
+
+  # current student visible assignment
+  def student_predictor_data
+    @assignments = current_course.assignments.select(
+        :id,
+        :name,
+        :description,
+        :point_total,
+        :due_at,
+        :assignment_type_id,
+        :grade_scope,
+        :required,
+        :accepts_submissions,
+        :student_logged,
+        :release_necessary,
+        :open_at,
+        :visible,
+        :resubmissions_allowed,
+        :accepts_submissions_until,
+        :accepts_resubmissions_until,
+        :media,
+        :thumbnail,
+        :media_credit,
+        :media_caption,
+        :points_predictor_display,
+        :include_in_predictor,
+        :position,
+        :student_logged_button_text,
+        :student_logged_revert_button_text,
+        :use_rubric,
+        :accepts_attachments,
+        :accepts_text,
+        :accepts_links,
+        :pass_fail,
+      )
+    @grades = current_student.grades.where(:course_id => current_course).select(
+        :student_id,
+        :id,
+        :assignment_id,
+        :assignment_type_id,
+        :point_total,
+        :predicted_score,
+        :status
+      )
   end
 
   private

@@ -18,6 +18,7 @@ GradeCraft::Application.routes.draw do
   #13. User Auth
   #14. Uploads
   #15. Events
+  #16. Predictor
 
   #1. Analytics & Charts
   namespace :analytics do
@@ -274,7 +275,6 @@ GradeCraft::Application.routes.draw do
       get :choices
       get :autocomplete_student_name
       get :scores_for_current_course
-      get :predictor_grades
       get :scores_by_team
       get :scores_for_single_assignment
       get :final_grades
@@ -285,14 +285,10 @@ GradeCraft::Application.routes.draw do
   resources :user_sessions
   resources :password_resets
 
-  get 'grade_levels' => 'courses#grade_levels'
-
   get 'calendar' => 'students#calendar'
   get 'timeline' => 'students#timeline'
   get 'badges' => 'students#badges'
   get 'calendar' => 'students#calendar'
-  get 'predictor' => 'students#predictor'
-  get 'predictor_grades' => 'students#predictor_grades'
   get 'syllabus' => 'students#syllabus'
   get 'course_progress' => 'students#course_progress'
   get 'my_badges' => 'students#badges'
@@ -320,4 +316,10 @@ GradeCraft::Application.routes.draw do
 
   #15. Events
   resources :events
+
+  #16. Predictor
+  get 'predictor' => 'students#predictor'
+  get 'predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data'
+  get 'predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
+  get 'predictor_assignments_grades' => 'assignments#student_predictor_data', defaults: {format: :json}
 end

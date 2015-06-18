@@ -1,6 +1,6 @@
 class AssignmentTypesController < ApplicationController
 
-  before_filter :ensure_staff?
+  before_filter :ensure_staff?, :except => [:student_predictor_data]
 
   #Display list of assignment types
   def index
@@ -113,5 +113,21 @@ class AssignmentTypesController < ApplicationController
     @name = "#{@assignment_type.name}"
     @assignment_type.destroy
     redirect_to assignment_types_path, :notice => "#{(term_for :assignment_type).titleize} #{@name} successfully deleted"
+  end
+
+  def student_predictor_data
+    @assignment_types = current_course.assignment_types.select(
+      :course_id,
+      :id,
+      :name,
+      :points_predictor_display,
+      :resubmission,
+      :max_value,
+      :predictor_description,
+      :student_weightable,
+      :include_in_predictor,
+      :is_attendance,
+      :position,
+    )
   end
 end
