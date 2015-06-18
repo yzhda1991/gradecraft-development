@@ -1,4 +1,4 @@
-@gradecraft.factory 'MetricsServices', ['$http', ($http) ->
+@gradecraft.factory 'PredictorService', ['$http', ($http) ->
     getMetrics = (assignmentId)->
       $http.get("/assignments/" + assignmentId + "/rubric/existing_metrics.json")
 

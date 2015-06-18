@@ -274,7 +274,7 @@ GradeCraft::Application.routes.draw do
       get :choices
       get :autocomplete_student_name
       get :scores_for_current_course
-      get :scores_by_assignment
+      get :predictor_grades
       get :scores_by_team
       get :scores_for_single_assignment
       get :final_grades
@@ -285,12 +285,14 @@ GradeCraft::Application.routes.draw do
   resources :user_sessions
   resources :password_resets
 
+  get 'grade_levels' => 'courses#grade_levels'
 
   get 'calendar' => 'students#calendar'
   get 'timeline' => 'students#timeline'
   get 'badges' => 'students#badges'
   get 'calendar' => 'students#calendar'
   get 'predictor' => 'students#predictor'
+  get 'predictor_grades' => 'students#predictor_grades'
   get 'syllabus' => 'students#syllabus'
   get 'course_progress' => 'students#course_progress'
   get 'my_badges' => 'students#badges'

@@ -3,7 +3,7 @@ class StudentsController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus, :autocomplete_student_name]
+  before_filter :ensure_staff?, :except=> [:timeline, :predictor, :predictor_grades, :course_progress, :badges, :teams, :syllabus, :autocomplete_student_name]
 
   #Lists all students in the course, broken out by those being graded and auditors
   def index
@@ -117,7 +117,14 @@ class StudentsController < ApplicationController
     render :layout => 'predictor'
   end
 
-  #TODO: Should be moved to a method
+  # current student scores
+  def predictor_grades
+    # We need grades for all assignments
+    grades = current_student.grades.where(:course_id => current_course)
+    render json: grades, root: :grades
+  end
+
+  #TODO: take this out!
   def scores_by_assignment
     scores = current_course.grades.released.joins(:assignment_type)
                            .group('grades.student_id, assignment_types.name')

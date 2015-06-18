@@ -1,4 +1,4 @@
-@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Metric', 'CourseBadge', 'MetricsServices', '$http', ($scope, Restangular, Metric, CourseBadge, MetricsServices, $http) ->
+@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Metric', 'CourseBadge', 'MetricService', '$http', ($scope, Restangular, Metric, CourseBadge, MetricService, $http) ->
   Restangular.setRequestSuffix('.json')
   $scope.metrics = []
   $scope.courseBadges = {}
@@ -9,9 +9,9 @@
     $scope.rubricId = rubricId
     $scope.pointTotal = parseInt(pointTotal)
 
-  MetricsServices.getBadges($scope.urlId).success (courseBadges)->
+  MetricService.getBadges($scope.urlId).success (courseBadges)->
     $scope.addCourseBadges(courseBadges)
-  MetricsServices.getMetrics($scope.urlId).success (metrics)->
+  MetricService.getMetrics($scope.urlId).success (metrics)->
     $scope.addMetrics(metrics)
 
   # distill key/value pairs for metric ids and relative order

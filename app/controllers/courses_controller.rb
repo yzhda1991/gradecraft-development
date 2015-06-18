@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
 
-  before_filter :ensure_staff?, :except => :timeline
+  before_filter :ensure_staff?, :except => [:timeline, :grade_levels]
 
   def index
     @title = "Course Index"
@@ -167,6 +167,14 @@ class CoursesController < ApplicationController
         render :text => CalendarBuilder.new(:assignments => @assignments).to_ics, :content_type => 'text/calendar'
       end
     end
+  end
+
+  def grade_levels
+    grade_scheme_elements = current_course.grade_scheme_elements
+    grade_levels = grade_scheme_elements.order(:low_range).pluck(:low_range, :letter, :level)
+    render :json => {
+      :grade_levels => grade_levels
+    }
   end
 
   def timeline
