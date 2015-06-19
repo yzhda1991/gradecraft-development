@@ -319,7 +319,7 @@ GradeCraft::Application.routes.draw do
 
   #16. Predictor
   get 'predictor' => 'students#predictor'
-  get 'predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data'
+  get 'predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
   get 'predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
   get 'predictor_assignments_grades' => 'assignments#student_predictor_data', defaults: {format: :json}
 end

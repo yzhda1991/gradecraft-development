@@ -31,10 +31,6 @@ class GradeSchemeElementsController < ApplicationController
   end
 
   def student_predictor_data
-    grade_scheme_elements = current_course.grade_scheme_elements
-    grade_levels = grade_scheme_elements.order(:low_range).pluck(:low_range, :letter, :level)
-    render :json => {
-      :grade_levels => grade_levels
-    }
+    @grade_scheme_elements = current_course.grade_scheme_elements.select(:id, :low_range, :letter, :level)
   end
 end

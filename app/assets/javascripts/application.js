@@ -65,5 +65,6 @@
 //= require uploads
 //= require course_switch
 //= require background
+//= require d3
 
 $(function(){ $(document).foundation(); });

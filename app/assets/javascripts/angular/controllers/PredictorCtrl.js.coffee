@@ -10,8 +10,9 @@
       $scope.addAssignmentsGrades(gradeLevels)
 
   $scope.addGradelevels = (gradeLevels)->
-    angular.forEach(gradeLevels, (gl, index)->
-      console.log(gl);
+    d3.select(".grade-levels ul").selectAll("li").data(gradeLevels).enter().append("li")
+    .text( (gl)->
+      gl.level + " - " + gl.letter + " (" + gl.low_range + ")"
     )
 
   $scope.addAssignmentTypes = (AssignmentTypes)->
