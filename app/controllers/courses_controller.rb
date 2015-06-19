@@ -60,7 +60,7 @@ class CoursesController < ApplicationController
               a.rubric.metrics.each do |metric|
                 new_metric = metric.dup
                 new_metric.rubric_id = new_rubric.id
-                new_metric
+                new_metric.save
                 if metric.tiers.present?
                   metric.tiers.each do |tier|
                     new_tier = tier.dup
