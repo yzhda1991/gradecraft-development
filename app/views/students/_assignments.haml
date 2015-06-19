@@ -7,9 +7,13 @@
     // display the student's points out of the the current point total for assignment.
     - score_for_assignment_type = current_student_data.score_for_assignment_type(assignment_type)
     - if assignment_type.max_value?
-      %h3.collapse #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points assignment_type.max_value}
+      %h3.collapse
+        %a.arrow
+        #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points assignment_type.max_value}
     - else
-      %h3.collapse #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points score_for_assignment_type }
+      %h3.collapse
+        %a.arrow
+        #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points score_for_assignment_type }
     .small-12.columns
 
       // If the course and particular assignment uses weights, display assignment weighting options

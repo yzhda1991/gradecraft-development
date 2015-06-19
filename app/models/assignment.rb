@@ -8,7 +8,7 @@ class Assignment < ActiveRecord::Base
     :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail
 
   belongs_to :course
-  belongs_to :assignment_type, -> { order('order_placement ASC') }
+  belongs_to :assignment_type, -> { order('position ASC') }
 
   mount_uploader :media, AssignmentMediaUploader
   mount_uploader :thumbnail, AssignmentThumbnailUploader
