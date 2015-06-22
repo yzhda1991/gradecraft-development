@@ -13,17 +13,19 @@
             %i.fi-plus
             New #{(term_for :assignment).titleize}
 
+
   .small-12.columns
 
     .assignments
-      %br
       - @assignment_types.each do |assignment_type|
         - cache ["v1", assignment_type] do
           .assignment_type{:id => "assignment-type-#{assignment_type.id}" }
-            %h3.collapse.medium-8
-              .fa.fa-arrows-v
+            %h3.collapse
+              %a.arrow
               #{assignment_type.name} – #{points assignment_type.max_value} points
+
             .collapse-hidden
+
               .columns{:style => "overflow: auto"}
                 %table.responsive{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
                   %thead

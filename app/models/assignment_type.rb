@@ -3,7 +3,7 @@ class AssignmentType < ActiveRecord::Base
 
   attr_accessible :due_date_present, :levels, :max_value, :name,
     :percentage_course, :point_setting, :points_predictor_display,
-    :predictor_description, :resubmission, :universal_point_value, :order_placement,
+    :predictor_description, :resubmission, :universal_point_value,
     :student_weightable, :mass_grade, :score_levels_attributes, :score_level, :mass_grade_type,
     :student_logged_revert_button_text, :student_logged_button_text, :position
 

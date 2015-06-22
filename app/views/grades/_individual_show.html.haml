@@ -17,7 +17,7 @@
           %span You
           %span.bold= "#{ term_for(grade.pass_fail_status) }"
           %span the assignment.
-        - else
+        - elsif grade.score.present?
           %span You earned
           %span.bold= "#{points grade.try(:raw_score) }"
           %span=" out of #{points @assignment.point_total } possible points."

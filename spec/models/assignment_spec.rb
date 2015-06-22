@@ -93,9 +93,9 @@ describe Assignment do
       course.assignments << @assignment
       student = create(:user)
       student.courses << course
-      grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
+      grade = create(:grade, raw_score: 100, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
       submission = create(:submission, grade: grade, student: student, assignment: @assignment)
-      @assignment.gradebook_for_assignment.should eq("First Name,Last Name,Uniqname,Score,Raw Score,Statement,Feedback,Last Updated\n#{student.first_name},#{student.last_name},#{student.username},0,0,\"#{submission.text_comment}\",good jorb!,\"#{grade.updated_at}\"\n")
+      @assignment.gradebook_for_assignment.should eq("First Name,Last Name,Uniqname,Score,Raw Score,Statement,Feedback,Last Updated\n#{student.first_name},#{student.last_name},#{student.username},100,100,\"#{submission.text_comment}\",good jorb!,\"#{grade.updated_at}\"\n")
     end
   end
 

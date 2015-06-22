@@ -1,24 +1,16 @@
 /* Add the sprite to the assignment expand */
-h3.collapse a
-  background: image-url("sprite.png") .5rem .5rem no-repeat
-  padding: .2rem 1.7rem
-  margin: 0.25rem 0rem
-  border-radius: .5rem
-  clear: both
+h3.collapse a.arrow
+  font-size: 1px !important
+  border-style: solid
+  border-width: 7.5px 7.5px 8px 13px
+  border-color: transparent transparent transparent $primary-color-4
+  -webkit-transform:rotate(360deg)
 
-h3.collapse
-  line-height: 1.5
+h3.collapse.open a.arrow
+  border-width: 13.0px 7.5px 0 7.5px
+  border-color: $secondary-color-2 transparent transparent transparent
+  margin-right: 6px
 
 h3.collapse.open a
-  background-position: 8px -55px
+  color: $secondary-color
 
-.collapse-hidden table
-  margin-bottom: 2rem
-
-/* Pre hide sections with JavaScript on */
-h3.collapse+div
-  display: none
-  padding: 0px 0 1rem
-
-h3.collapse.open a, h3.collapse a:active
-  color: $primary-color-3
