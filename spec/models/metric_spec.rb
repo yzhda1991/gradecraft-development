@@ -10,6 +10,7 @@ describe Metric do
       it "should not create tiers" do
         @metric.add_default_tiers = false
         @metric.save
+        pp @metric.tiers
         @metric.tiers.count.should == 0
       end
     end
