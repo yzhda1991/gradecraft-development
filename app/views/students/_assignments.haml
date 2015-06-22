@@ -8,9 +8,13 @@
       // display the student's points out of the the current point total for assignment.
       - score_for_assignment_type = current_student_data.score_for_assignment_type(assignment_type)
       - if assignment_type.max_value?
-        %h3.collapse #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points assignment_type.max_value}
+        %h3.collapse
+          %a.arrow
+          #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points assignment_type.max_value}
       - else
-        %h3.collapse #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points score_for_assignment_type }
+        %h3.collapse
+          %a.arrow
+          #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points score_for_assignment_type }
       .small-12.columns
 
         // If the course and particular assignment uses weights, display assignment weighting options
@@ -35,6 +39,7 @@
             %p= raw assignment_type.predictor_description
 
         .small-12.columns
+
           // Display the assignments for each assignment type in a responsive table, below header.
           %table.responsive
             - assignments = assignment_type.assignments.sorted.includes(:assignment_type)
@@ -147,8 +152,11 @@
                                   %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
 
 - if current_course.team_challenges? && current_course.team_score_average?
+
   .challenge
+
     %h3.collapse #{term_for :challenges} #{ points @student.team.try(:challenge_grade_score) }/#{points current_course_data.point_total_for_challenges}
+
     .small-12.columns
       %table.responsive
         - current_course.challenges.each do |challenge|

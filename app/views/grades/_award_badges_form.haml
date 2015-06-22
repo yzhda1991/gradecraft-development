@@ -12,7 +12,7 @@
         - if @student.earned_badge_for_badge(badge).present?
           // Check to see if they already have the badge for this grade
           // If so, show a checked box
-          - earned_badge_for_grade = @student.earned_badge_for_badge(badge).where(:grade => @grade).first
+          - earned_badge_for_grade = @student.earned_badge_for_badge(badge).where.not(grade_id: nil && (grade_id = @grade.id)).first
           - if earned_badge_for_grade.present?
             = f.simple_fields_for :earned_badges, earned_badge_for_grade do |ebf|
               = ebf.hidden_field :student_id, :value => @student.id

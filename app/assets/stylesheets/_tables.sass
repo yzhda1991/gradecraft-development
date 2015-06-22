@@ -1,66 +1,40 @@
-.table-wrapper
-  clear: both
-
-th
-  text-transform: capitalize
-  padding: .5rem
-
-/* Set the tables to be full width of the page*/
 table
-  width: 100%
-  border-radius: $global-radius
-  border-spacing: 0 !important
+  border-spacing: 0
+  border: 1px solid $light-grey
   clear: both
+  font-size: .9rem
+  padding: .5rem
+  text-align: left
+
+  &.responsive
+    width: 100%
 
   thead
-    tr:first-child th:first-child 
-      border-top-left-radius: $global-radius
+    background-color: $primary-color
+    color: #FFF
 
-    tr:first-child th:last-child 
-      border-top-right-radius: $global-radius
+    th
+      padding: .5rem
+      font-weight: normal
+      text-transform: uppercase
+      font-size: .8rem
 
-    tr
-      background-color: $light-grey
-      color: #FFF !important
-
-  /* Table Header styles */
-
-  th
-    font-weight: normal
-    a
-      color: #000
-
-table.responsive.no_radius
-  border-top: none
-
-  thead
-    tr:first-child th:first-child 
-      border-top-left-radius: 0
-    tr:first-child th:last-child 
-      border-top-right-radius: 0
-
-table#grade-rubric-table
-  border-collapse: collapse
-
-  thead
-    background-color: $primary-color-3 !important
-    
-    td
-      color: #FFF !important
-
-  .metric-name
-    font-weight: bold
-    font-size: 120%
+      a, a.active, a.sorted
+        color: #FFF !important
 
   tbody
-    tr
-      background-color: #FFF
-      vertical-align: top
 
-  td
-    border: 1px solid #999
+    td
+      padding: .5rem
+      border-bottom: 1px solid #eee
 
-/* Styling pattern tables for assignment outcome overview */ 
+    tr:last-child
+      td
+        border-bottom: none
+        padding: .5rem .5rem 0
+
+
+/* Styling pattern tables for assignment outcome overview */
 td.complete, tr.achieved
   background-color: $secondary-color
 

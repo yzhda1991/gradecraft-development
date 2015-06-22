@@ -29,7 +29,7 @@ class Grade < ActiveRecord::Base
   accepts_nested_attributes_for :earned_badges, :reject_if => proc { |a| (a['score'].blank?) }, :allow_destroy => true
 
   before_validation :cache_associations
-  before_save :cache_score_and_point_total
+  before_save :cache_point_total
   before_save :zero_points_for_pass_fail
 
   has_many :grade_files, :dependent => :destroy
@@ -53,7 +53,7 @@ class Grade < ActiveRecord::Base
   scope :positive, -> { where('score > 0')}
 
 
-  validates_numericality_of :raw_score, integer_only: true
+  #validates_numericality_of :raw_score, integer_only: true
 
   def self.score
     pluck('COALESCE(SUM(grades.score), 0)').first
@@ -82,7 +82,7 @@ class Grade < ActiveRecord::Base
 
   def score
     if student.weighted_assignments?
-      final_score || (raw_score * assignment_weight).round
+      final_score || ((raw_score * assignment_weight).round if raw_score.present?)  || nil
     else
       final_score || raw_score
     end
@@ -159,7 +159,7 @@ class Grade < ActiveRecord::Base
     end
   end
 
-  def cache_score_and_point_total
+  def cache_point_total
     self.score = score
     self.point_total = point_total
   end
