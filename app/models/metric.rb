@@ -5,9 +5,10 @@ class Metric < ActiveRecord::Base
   has_many :badges, through: :metric_badges
   has_many :rubric_grades
   belongs_to :full_credit_tier, foreign_key: :full_credit_tier_id, class_name: "Tier"
-  attr_accessible :name, :max_points, :description, :order, :rubric_id, :full_credit_tier_id
+  attr_accessible :name, :max_points, :description, :order, :rubric_id, :full_credit_tier_id, :add_default_tiers
 
-  after_create :generate_default_tiers
+  after_initialize :set_defaults
+  after_create :generate_default_tiers, if: :add_default_tiers
   after_save :update_full_credit
 
   validates :max_points, presence: true
@@ -23,6 +24,10 @@ class Metric < ActiveRecord::Base
   include DisplayHelpers
 
   protected
+
+  def set_defaults
+    self[:add_default_tiers] = true
+  end
 
   def generate_default_tiers
     @full_credit_tier = create_full_credit_tier
