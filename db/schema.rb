@@ -483,7 +483,7 @@ ActiveRecord::Schema.define(version: 20150610191949) do
   end
 
   create_table "grades", force: :cascade do |t|
-    t.integer  "raw_score",                       default: 0,     null: false
+    t.integer  "raw_score"
     t.integer  "assignment_id"
     t.text     "feedback"
     t.datetime "created_at"

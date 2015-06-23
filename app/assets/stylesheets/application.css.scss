@@ -120,7 +120,7 @@ $media-xlarge-max:  120rem; //
 @import 'collapse';
 @import 'badges';
 
-// override foundation body color
+/* override foundation body color */
 body {
   background-color: rgba(0, 0, 0, 0);
 }
