@@ -8,4 +8,3 @@ json.grades @grades do |grade|
   # grade should only be available to students once the status is "Graded"
   json.point_total grade.status == "Graded" ? grade.point_total : nil
 end
-
