@@ -3,7 +3,7 @@ class StudentsController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus, :autocomplete_student_name]
+  before_filter :ensure_staff?, :except=> [:timeline, :old_predictor, :predictor, :course_progress, :badges, :teams, :syllabus, :autocomplete_student_name]
 
   #Lists all students in the course, broken out by those being graded and auditors
   def index
@@ -115,6 +115,13 @@ class StudentsController < ApplicationController
     @grade_scheme_elements = current_course.grade_scheme_elements
     @grade_levels_json = @grade_scheme_elements.order(:low_range).pluck(:low_range, :letter, :level).to_json
     render :layout => 'predictor'
+  end
+
+  # Display the grade predictor
+  def predictor
+    @grade_scheme_elements = current_course.grade_scheme_elements
+    @grade_levels_json = @grade_scheme_elements.order(:low_range).pluck(:low_range, :letter, :level).to_json
+    render :layout => 'old_predictor'
   end
 
   #TODO: take this out!
