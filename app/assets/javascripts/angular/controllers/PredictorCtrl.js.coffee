@@ -3,11 +3,11 @@
   PredictorService.getGradeLevels().success (gradeLevels)->
       $scope.addGradelevels(gradeLevels)
 
-  PredictorService.getAssignmentTypes().success (gradeLevels)->
-      $scope.addAssignmentTypes(gradeLevels)
+  PredictorService.getAssignmentTypes().success (assignmentTypes)->
+      $scope.addAssignmentTypes(assignmentTypes)
 
-  PredictorService.getAssignmentsGrades().success (gradeLevels)->
-      $scope.addAssignmentsGrades(gradeLevels)
+  PredictorService.getAssignmentsGrades().success (assignmentsGrades)->
+      $scope.addAssignmentsGrades(assignmentsGrades)
 
   $scope.addGradelevels = (gradeLevels)->
     d3.select(".grade-levels ul").selectAll("li").data(gradeLevels).enter().append("li")
@@ -15,13 +15,14 @@
       gl.level + " - " + gl.letter + " (" + gl.low_range + ")"
     )
 
-  $scope.addAssignmentTypes = (AssignmentTypes)->
-    angular.forEach(AssignmentTypes, (at, index)->
-      console.log(at);
+  $scope.addAssignmentTypes = (assignmentTypes)->
+    domATS = angular.element( document.querySelector( '#assignment-types' ) )
+    angular.forEach(assignmentTypes, (at, index)->
+      console.log(at)
     )
 
-  $scope.addAssignmentsGrades = (AssignmentsGrades)->
-    angular.forEach(AssignmentsGrades, (ag, index)->
-      console.log(ag);
+  $scope.addAssignmentsGrades = (assignmentsGrades)->
+    angular.forEach(assignmentsGrades, (ag, index)->
+      console.log(ag)
     )
 ]
