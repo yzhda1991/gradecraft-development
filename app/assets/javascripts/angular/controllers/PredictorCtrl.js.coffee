@@ -16,12 +16,13 @@
     )
 
   $scope.addAssignmentTypes = (assignmentTypes)->
+    domATS = angular.element( document.querySelector( '#assignment-types' ) )
     angular.forEach(assignmentTypes, (at, index)->
-      console.log(at);
+      console.log(at)
     )
 
   $scope.addAssignmentsGrades = (assignmentsGrades)->
     angular.forEach(assignmentsGrades, (ag, index)->
-      console.log(ag);
+      console.log(ag)
     )
 ]

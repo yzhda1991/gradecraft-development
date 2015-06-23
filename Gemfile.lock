@@ -74,6 +74,10 @@ GEM
     acts_as_list (0.6.0)
       activerecord (>= 3.0)
     addressable (2.3.7)
+    angular-rails-templates (0.2.0)
+      railties (>= 3.1)
+      sprockets (~> 2)
+      tilt
     angularjs-rails (1.2.26)
     arel (6.0.0)
     autonumeric-rails (1.9.33)
@@ -533,6 +537,7 @@ DEPENDENCIES
   activerecord-session_store
   acts_as_list
   addressable
+  angular-rails-templates (~> 0.2.0)
   angularjs-rails (~> 1.2.14)
   autonumeric-rails
   aws-sdk (< 2.0)
