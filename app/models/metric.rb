@@ -6,9 +6,11 @@ class Metric < ActiveRecord::Base
   has_many :rubric_grades
   belongs_to :full_credit_tier, foreign_key: :full_credit_tier_id, class_name: "Tier"
   attr_accessible :name, :max_points, :description, :order, :rubric_id, :full_credit_tier_id
+  attr_accessor :add_default_tiers
 
-  after_create :generate_default_tiers
-  after_save :update_full_credit
+  after_initialize :set_defaults
+  after_create :generate_default_tiers, if: :add_default_tiers?
+  after_save :update_full_credit, if: :add_default_tiers?
 
   validates :max_points, presence: true
   validates :name, presence: true, length: { maximum: 30 }
@@ -23,6 +25,14 @@ class Metric < ActiveRecord::Base
   include DisplayHelpers
 
   protected
+  
+  def add_default_tiers?
+    self.add_default_tiers === true
+  end
+
+  def set_defaults
+    self.add_default_tiers = true
+  end
 
   def generate_default_tiers
     @full_credit_tier = create_full_credit_tier

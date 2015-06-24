@@ -52,6 +52,33 @@ class CoursesController < ApplicationController
               nasl.save
             end
           end
+          if a.rubric.present?
+            new_rubric = a.rubric.dup
+            new_rubric.assignment_id = na.id
+            new_rubric.save
+            if a.rubric.metrics.present?
+              a.rubric.metrics.each do |metric|
+                new_metric = metric.dup
+                new_metric.rubric_id = new_rubric.id
+                new_metric.add_default_tiers = false
+                new_metric.save
+                if metric.tiers.present?
+                  metric.tiers.each do |tier|
+                    new_tier = tier.dup
+                    new_tier.metric_id = new_metric.id
+                    new_tier.save
+                    if tier.tier_badges.present?
+                      tier.tier_badges.each do |tier_badge|
+                        new_tier_badge = tier_badge.dup
+                        new_tier_badge.tier_id = new_tier.id
+                        new_tier_badge.save
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
         end
       end
     end

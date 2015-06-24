@@ -148,9 +148,9 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.boolean  "include_in_predictor",                          default: true
     t.integer  "position"
     t.boolean  "include_in_to_do",                              default: true
-    t.boolean  "use_rubric",                                    default: true
     t.string   "student_logged_button_text",        limit: 255
     t.string   "student_logged_revert_button_text", limit: 255
+    t.boolean  "use_rubric",                                    default: true
     t.boolean  "accepts_attachments",                           default: true
     t.boolean  "accepts_text",                                  default: true
     t.boolean  "accepts_links",                                 default: true
@@ -390,13 +390,6 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.datetime "updated_at"
   end
 
-  create_table "duplicated_users", id: false, force: :cascade do |t|
-    t.integer "id"
-    t.string  "last_name",   limit: 255
-    t.string  "role",        limit: 255
-    t.integer "submissions", limit: 8
-  end
-
   create_table "earned_badges", force: :cascade do |t|
     t.integer  "badge_id"
     t.integer  "submission_id"
@@ -416,7 +409,7 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.integer  "metric_id"
     t.integer  "tier_id"
     t.integer  "tier_badge_id"
-    t.boolean  "student_visible",             default: true
+    t.boolean  "student_visible",             default: false
   end
 
   create_table "elements", force: :cascade do |t|
@@ -470,6 +463,7 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.integer  "grade_scheme_id"
     t.string   "description",     limit: 255
     t.integer  "high_range"
+    t.integer  "team_id"
     t.integer  "course_id"
   end
 
@@ -509,13 +503,13 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score",                 default: 0,     null: false
+    t.boolean  "released"
+    t.integer  "predicted_score"
     t.boolean  "instructor_modified",             default: false
     t.string   "pass_fail_status"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
-  add_index "grades", ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
   add_index "grades", ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
   add_index "grades", ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
   add_index "grades", ["course_id"], name: "index_grades_on_course_id", using: :btree
@@ -678,15 +672,6 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.datetime "updated_at"
   end
 
-  create_table "submission_files_duplicate", id: false, force: :cascade do |t|
-    t.string  "key",        limit: 255
-    t.string  "format",     limit: 255
-    t.integer "upload_id"
-    t.string  "full_name",  limit: 255
-    t.string  "last_name",  limit: 255
-    t.string  "first_name", limit: 255
-  end
-
   create_table "submissions", force: :cascade do |t|
     t.integer  "assignment_id"
     t.integer  "student_id"
@@ -787,7 +772,7 @@ ActiveRecord::Schema.define(version: 20150610191949) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "username",                        limit: 255,                     null: false
+    t.string   "username",                        limit: 255,                 null: false
     t.string   "email",                           limit: 255
     t.string   "crypted_password",                limit: 255
     t.string   "salt",                            limit: 255
@@ -802,7 +787,6 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.string   "avatar_content_type",             limit: 255
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.string   "role",                            limit: 255, default: "student", null: false
     t.string   "first_name",                      limit: 255
     t.string   "last_name",                       limit: 255
     t.integer  "rank"
@@ -820,6 +804,8 @@ ActiveRecord::Schema.define(version: 20150610191949) do
     t.string   "lti_uid",                         limit: 255
     t.string   "last_login_from_ip_address",      limit: 255
     t.string   "kerberos_uid",                    limit: 255
+    t.hstore   "ui_settings"
+    t.boolean  "collapse_rubric_overview",                    default: false
   end
 
   add_index "users", ["kerberos_uid"], name: "index_users_on_kerberos_uid", using: :btree
