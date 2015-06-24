@@ -10,7 +10,7 @@ class Metric < ActiveRecord::Base
 
   after_initialize :set_defaults
   after_create :generate_default_tiers, if: :add_default_tiers?
-  after_save :update_full_credit
+  after_save :update_full_credit, if: :add_default_tiers?
 
   validates :max_points, presence: true
   validates :name, presence: true, length: { maximum: 30 }
