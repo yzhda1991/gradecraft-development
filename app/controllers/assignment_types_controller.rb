@@ -116,7 +116,9 @@ class AssignmentTypesController < ApplicationController
   end
 
   def student_predictor_data
-    @assignment_types = current_course.assignment_types.select(
+    @assignment_types = current_course.assignment_types
+    .includes(:assignments =>[:assignment_type, :assignment_score_levels])
+    .select(
       :course_id,
       :id,
       :name,

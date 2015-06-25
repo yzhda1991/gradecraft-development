@@ -1,8 +1,5 @@
 %ul{'ng-repeat' => 'assignment_type in assignmentTypes.assignment_types'}
- %li
-  {{assignment_type.name}}
-  / %ul{'ng-repeat' => 'assignment in assignment_type'}
-  /   {{assignment.name}}
-
-
-
+  %li{:id => 'slide-#{{assignment_type.id}}', :'data-assignment-type-id' => '{{assignment_type.id}}', :'data-assignment-type-name' => '{{assignment_type.name}}'}
+    {{assignment_type.name}}
+    %ul{'ng-repeat' => 'assignment in assignment_type.assignments'}
+      {{assignment.name}}
