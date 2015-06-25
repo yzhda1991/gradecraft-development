@@ -1,7 +1,5 @@
 @gradecraft.controller 'PredictorCtrl', ['$scope', '$http', 'PredictorService', ($scope, $http, PredictorService) ->
 
-  $scope.assignmentTypes = [];
-
   PredictorService.getGradeLevels().success (gradeLevels)->
       $scope.addGradelevels(gradeLevels)
 
