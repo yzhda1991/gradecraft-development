@@ -1,5 +1,9 @@
-%ul{'ng-repeat' => 'assignment_type in assignmentTypes.assignment_types'}
-  %li{:id => 'slide-#{{assignment_type.id}}', :'data-assignment-type-id' => '{{assignment_type.id}}', :'data-assignment-type-name' => '{{assignment_type.name}}'}
-    {{assignment_type.name}}
+%br
+  .clear
+  %li{'ng-repeat' => 'assignment_type in assignmentTypes.assignment_types', :id => 'slide-#{{assignment_type.id}}', :'data-assignment-type-id' => '{{assignment_type.id}}', :'data-assignment-type-name' => '{{assignment_type.name}}'}
+    .slide-panel.assignmentType
+      %h3.collapse
+        {{assignment_type.name}}
     %ul{'ng-repeat' => 'assignment in assignment_type.assignments'}
-      {{assignment.name}}
+      %li
+        {{assignment.name}}
