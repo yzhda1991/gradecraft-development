@@ -74,6 +74,10 @@ GEM
     acts_as_list (0.7.2)
       activerecord (>= 3.0)
     addressable (2.3.8)
+    angular-rails-templates (0.2.0)
+      railties (>= 3.1)
+      sprockets (~> 2)
+      tilt
     angularjs-rails (1.2.26)
     arel (6.0.0)
     autonumeric-rails (1.9.37)
@@ -143,6 +147,8 @@ GEM
       sprockets (< 2.13)
     connection_pool (2.2.0)
     crass (1.0.2)
+    d3-rails (3.5.5)
+      railties (>= 3.1)
     dalli (2.7.4)
     database_cleaner (1.0.1)
     debug_inspector (0.0.2)
@@ -542,6 +548,7 @@ DEPENDENCIES
   activerecord-session_store
   acts_as_list
   addressable
+  angular-rails-templates (~> 0.2.0)
   angularjs-rails (~> 1.2.14)
   autonumeric-rails
   aws-sdk (< 2.0)
@@ -554,6 +561,7 @@ DEPENDENCIES
   carrierwave_backgrounder
   coffee-rails
   compass-rails
+  d3-rails
   dalli
   database_cleaner (~> 1.0.1)
   dotenv-rails
