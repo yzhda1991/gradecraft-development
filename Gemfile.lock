@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: https://github.com/wandenberg/moped.git
-  revision: 4807c92f85cd97f4519fe0d6667c12ff9588ff60
+  revision: 470224c0361f21112d1a988982af2702f73d9eb2
   branch: operation_timeout
   specs:
     moped (2.0.4)
@@ -142,7 +142,7 @@ GEM
       compass (~> 1.0.0)
       sass-rails (<= 5.0.1)
       sprockets (< 2.13)
-    connection_pool (2.1.2)
+    connection_pool (2.2.0)
     crass (1.0.1)
     dalli (2.7.2)
     database_cleaner (1.0.1)
@@ -606,3 +606,6 @@ DEPENDENCIES
   valid_attribute
   whenever
   wysiwyg-rails
+
+BUNDLED WITH
+   1.10.4
