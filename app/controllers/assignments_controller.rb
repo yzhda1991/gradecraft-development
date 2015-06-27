@@ -152,7 +152,7 @@ class AssignmentsController < ApplicationController
 
       if @assignment.update_attributes(params[:assignment])
         set_assignment_weights
-        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  #{@assignment.name} successfully updated" }
+        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  <strong>#{@assignment.name }</strong> successfully updated" }
       else
         # TODO: refactor, see submissions_controller
         @title = "Edit #{term_for :assignment}"

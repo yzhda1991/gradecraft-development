@@ -94,6 +94,17 @@ class Assignment < ActiveRecord::Base
     super(options.merge(:only => [ :id, :content, :order, :done ] ))
   end
 
+  def content 
+    content = []
+    if assignment_files.present?
+      assignments_files.each do |af|
+        content << af.url 
+      end 
+      content << description 
+    end
+    return content
+  end
+
   # Used to sum the total number of assignment points in the class
   def self.point_total
     pluck('COALESCE(SUM(assignments.point_total), 0)').first || 0
