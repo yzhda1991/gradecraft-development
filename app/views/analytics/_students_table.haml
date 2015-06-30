@@ -11,20 +11,22 @@
       %th{ :scope => "column", :width => "20%"  } Last Login
   %tbody
     - students.each do |student|
-      %tr
-        %td= link_to student.name, student_path(student)
-        %td= points student.cached_score_for_course(current_course)
+      - cache ["v1", student] do
+        %tr
+          %td= link_to student.name, student_path(student)
+          %td= points student.cached_score_for_course(current_course)
 
-        - if course.has_badges?
-          %td= student.earned_badges.count
+          - if course.has_badges?
+            %td= student.earned_badges.count
 
-        - if course.has_teams?
-          %td
-            - if student.team
-              = link_to student.team.name, student.team
-          %td
-            - if student.team && student.team.leaders.present?
-              %ul
-                - student.team.leaders.each do |leader|
-                  %li= link_to leader.first_name, staff_path(leader)
-        %td= student.try(:last_activity_at) || "(never)"
+          - if course.has_teams?
+            %td
+              - if student.team
+                = link_to student.team.name, student.team
+            %td
+              - if student.team && student.team.leaders.present?
+                %ul
+                  - student.team.leaders.each do |leader|
+                    - cache ["v1", leader] do
+                      %li= link_to leader.first_name, staff_path(leader)
+          %td= student.try(:last_activity_at) || "(never)"
