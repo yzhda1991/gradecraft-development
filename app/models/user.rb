@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :courses
   accepts_nested_attributes_for :course_memberships
 
-  belongs_to :default_course, :class_name => 'Course'
+  belongs_to :default_course, :class_name => 'Course', touch: true
 
   has_one :student_academic_history, :foreign_key => :student_id, :dependent => :destroy, :class_name => 'StudentAcademicHistory'
   accepts_nested_attributes_for :student_academic_history

@@ -328,7 +328,6 @@ describe AssignmentsController do
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         get :show, :id => @assignment.id
         assigns(:rubric).should eq(rubric)
-        assigns(:metrics).should eq(rubric.metrics)
       end
 
       it "assigns course badges as JSON using CourseBadgeSerializer" do

@@ -22,16 +22,17 @@ table
       a, a.active, a.sorted
         color: #FFF !important
 
-  tbody
+  tr
+    border-bottom: 1px solid #eee
+
+  td
+    padding: .5rem
+
+  tr:last-child
+    border-bottom: none
 
     td
-      padding: .5rem
-      border-bottom: 1px solid #eee
-
-    tr:last-child
-      td
-        border-bottom: none
-        padding: .5rem .5rem 0
+      padding: .5rem .5rem 0
 
 
 /* Styling pattern tables for assignment outcome overview */

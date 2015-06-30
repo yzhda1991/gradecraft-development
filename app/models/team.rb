@@ -3,11 +3,11 @@ class Team < ActiveRecord::Base
 
   validates_presence_of :course, :name
 
-  #TODO: remove these callbacks 
+  #TODO: remove these callbacks
   before_save :cache_score
 
   #Teams belong to a single course
-  belongs_to :course
+  belongs_to :course, touch: true
 
   has_many :team_memberships
   has_many :students, :through => :team_memberships, :autosave => true
@@ -67,7 +67,7 @@ class Team < ActiveRecord::Base
 
   def update_ranks
     @teams = current_course.teams
-    rank_index = @teams.pluck(:scores).uniq.sort.index(team.score) 
+    rank_index = @teams.pluck(:scores).uniq.sort.index(team.score)
     @teams.each do |team|
       team.rank = rank_index.index(team.score)
     end
