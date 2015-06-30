@@ -1,28 +1,4 @@
-#predictor-main-content(ng-app="gradecraft" ng-controller="PredictorCtrl")
+.verification{:'data-current-score' => @current_score, :'data-current-grade-level' => @current_grade_level}
 
-  .one
-    Current Points:
-    %span.bold= points current_student.cached_score_for_course(current_course)
-  .two
-    - if current_student.grade_level_for_course(current_course).present?
-      Current Level:
-      %span.bold= current_student.grade_level_for_course(current_course)
-  .three
-    Possible points:
-    %span.bold= points current_course.total_points
-
-  .grade-levels
-    Grade Levels:
-    %ul
-
-  #assigment-types{'ng-include' => true, 'src' => "'predictor_assignment_types.html'"}
-    TODO: iterate through all assignment-types
-    #assignments
-      TODO: enter assignments here, organized by assignment type
-
-  #badges
-    TODO: enter badges here
-
-  #challenges
-    TODO: enter challenges here (not currently functional)
+#predictor-main-content{'ng-app' => 'gradecraft', 'ng-controller' => 'PredictorCtrl', 'ng-include' => true, 'src' => "'ng_predictor_main.html'"}
 
