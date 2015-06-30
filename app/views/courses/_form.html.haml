@@ -71,6 +71,13 @@
           = f.check_box :add_team_score_to_student, {"aria-describedby" => "txtScoreToStudent"}
           .form_label{:id => "txtScoreToStudent"}  Do you want team assignment scores to be added directly into student scores?
 
+      .small-12
+        %label.checkbox{ :for => "hide_analytics" }
+          = f.label :hide_analytics, "Hide Analytics?"
+          = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
+          .form_label{:id => "hideAnalytics"}  Do you want to hide assignment and course analytics from students? 
+
+
       - if current_user_is_admin?
         .small-12
           %label.checkbox{ :for => "status" }
