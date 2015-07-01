@@ -112,8 +112,14 @@ class StudentsController < ApplicationController
 
   # Display the grade predictor
   def predictor
-    @grade_scheme_elements = current_course.grade_scheme_elements
-    @grade_levels_json = @grade_scheme_elements.order(:low_range).pluck(:low_range, :letter, :level).to_json
+    # Use @current_score and @current_grade_level to verify Angular is calculating correctly
+    @current_score = current_student.cached_score_for_course(current_course)
+    if current_student.grade_level_for_course(current_course).present?
+      @current_grade_level = current_student.grade_level_for_course(current_course)
+    else
+      @current_grade_level = "nil"
+    end
+
     render :layout => 'predictor'
   end
 

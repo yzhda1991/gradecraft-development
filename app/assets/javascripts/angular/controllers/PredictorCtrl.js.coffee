@@ -1,4 +1,4 @@
-@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', 'PredictorService', 'AssociateAssignmentsFilter', ($scope, $http, PredictorService, AssociateAssignmentsFilter) ->
+@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', 'PredictorService', ($scope, $http, PredictorService) ->
 
   $scope.assignmentMode = true
 
@@ -12,10 +12,34 @@
       $scope.associatedAssignments()
 
   $scope.addGradelevels = (gradeLevels)->
-    # d3.select(".grade-levels ul").selectAll("li").data(gradeLevels).enter().append("li")
-    # .text( (gl)->
-    #   gl.level + " - " + gl.letter + " (" + gl.low_range + ")"
-    # )
+    total_points = gradeLevels.total_points
+    grade_scheme_elements = gradeLevels.grade_scheme_elements
+    svg = d3.select("#svg-grade-levels")
+    scale = d3.scale.linear().domain([0,total_points]).range([0,100])
+
+    svg.selectAll('circle').data(grade_scheme_elements).enter().append('circle')
+      .attr("cx", (gse)->
+        scale(gse.low_range) + "%")
+      .attr("cy", 20)
+      .attr("r", 5)
+      .on("mouseover", (gse)->
+        d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "visible"))
+      .on("mouseout", (gse)->
+        d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "hidden"))
+
+      #   return tooltip.style("top", (event.pageY-30)+"px").style("left",(event.pageX+10)+"px"))
+      # .on("mouseout", ()->
+      #   return tooltip.style("visibility", "hidden"))
+
+    svg.selectAll('text').data(grade_scheme_elements).enter().append('text')
+      .text( (gse)->
+        gse.level + " - " + gse.letter + " (" + gse.low_range + ")")
+      .attr("x", (gse)->
+        scale(gse.low_range) + "%")
+      .attr("y", 15)
+      .attr("class", (gse)->
+        "grade_scheme-label-" + gse.low_range)
+      .style("visibility", "hidden")
 
   $scope.addAssignmentTypes = (assignmentTypes)->
     $scope.assignmentTypes = assignmentTypes
@@ -29,7 +53,6 @@
       if(assignment.assignment_type_id == assignmentType.id)
         filteredList[assignment.position] = assignment
     )
-    debugger
     return filteredList
 
   $scope.associatedAssignments = ()->
