@@ -13,7 +13,7 @@ describe "assignments/show" do
     assign(:title, @assignment.name)
     assign(:assignment, @assignment)
     view.stub(:current_course).and_return(@course)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
+    view.stub(:current_student).and_return(@student)
   end
 
   describe "as student" do

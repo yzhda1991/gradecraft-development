@@ -13,8 +13,6 @@ describe "grades/_individual_show" do
     @grade = create(:grade, course: course, assignment: @assignment, student: student)
 
     view.stub(:current_student).and_return(student)
-    student_data = StudentData.new(student, course)
-    view.stub(:current_student_data).and_return(student_data)
     view.stub(:current_course).and_return(course)
 
   end

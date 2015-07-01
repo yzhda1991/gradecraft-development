@@ -14,7 +14,6 @@ describe "students/predictor/_assignments" do
     @student.courses << @course
     view.stub(:current_course).and_return(@course)
     view.stub(:current_student).and_return(@student)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
   end
 
   describe "with predictable assignments" do

@@ -13,13 +13,13 @@ describe "students/_assignments" do
     assign(:title, "Assignment Types")
     assign(:assignment_types, @assignment_types)
     view.stub(:current_course).and_return(@course)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
+    view.stub(:current_student).and_return(@student)
     view.stub(:current_course_data).and_return(CourseData.new(@course))
   end
 
   describe "as student" do
     before(:each) do
-      #view.stub(:current_student).and_return(@student)
+      view.stub(:current_student).and_return(@student)
     end
 
     it "does not render instructor menu" do
@@ -52,7 +52,7 @@ describe "students/_assignments" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: @assignment.point_total, status: "Graded")
 
         # To verify we have satisfied the released condition:
-        StudentData.new(@student, @course).grade_released_for_assignment?(@assignment).should be_true
+        @student.grade_released_for_assignment?(@assignment).should be_true
         render
         assert_select "td" do
           assert_select "div", text: "#{ points @grade.score } / #{points @grade.point_total} points earned", count: 1
@@ -75,7 +75,7 @@ describe "students/_assignments" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, pass_fail_status: "Pass", status: "Graded")
 
         # To verify we have satisfied the released condition:
-        StudentData.new(@student, @course).grade_released_for_assignment?(@assignment).should be_true
+        @student.grade_released_for_assignment?(@assignment).should be_true
 
         render
         assert_select "td" do
