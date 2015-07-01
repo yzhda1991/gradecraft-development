@@ -1,13 +1,15 @@
-@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', 'PredictorService', ($scope, $http, PredictorService) ->
+@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', 'PredictorService', 'AssociateAssignmentsFilter', ($scope, $http, PredictorService, AssociateAssignmentsFilter) ->
+
+  $scope.assignmentMode = true
 
   PredictorService.getGradeLevels().success (gradeLevels)->
       $scope.addGradelevels(gradeLevels)
 
-  PredictorService.getAssignmentTypes().success (assignmentTypes)->
-      $scope.addAssignmentTypes(assignmentTypes)
-
   PredictorService.getAssignmentsGrades().success (assignmentsGrades)->
-      $scope.addAssignmentsGrades(assignmentsGrades)
+    $scope.addAssignmentsGrades(assignmentsGrades)
+    PredictorService.getAssignmentTypes().success (assignmentTypes)->
+      $scope.addAssignmentTypes(assignmentTypes)
+      $scope.associatedAssignments()
 
   $scope.addGradelevels = (gradeLevels)->
     # d3.select(".grade-levels ul").selectAll("li").data(gradeLevels).enter().append("li")
@@ -16,15 +18,24 @@
     # )
 
   $scope.addAssignmentTypes = (assignmentTypes)->
-    # domATS = angular.element( document.querySelector( '#assignment-types' ) )
-    # angular.forEach(assignmentTypes, (at, index)->
-    #   console.log(at)
-    # )
     $scope.assignmentTypes = assignmentTypes
 
   $scope.addAssignmentsGrades = (assignmentsGrades)->
-    angular.forEach(assignmentsGrades, (ag, index)->
-      console.log(ag)
+    $scope.assignmentGrades = assignmentsGrades
+
+  $scope.associateAssignments = (assignmentType, assignments) ->
+    filteredList = []
+    angular.forEach(assignments, (assignment) ->
+      if(assignment.assignment_type_id == assignmentType.id)
+        filteredList[assignment.position] = assignment
+    )
+    debugger
+    return filteredList
+
+  $scope.associatedAssignments = ()->
+    associated = []
+    angular.forEach($scope.assignmentTypes, (assignment_type) ->
+      associated.push($scope.associateAssignments(assignment_type, $scope.assignmentGrades))
     )
   return
 ]
