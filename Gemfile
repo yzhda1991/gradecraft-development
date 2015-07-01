@@ -13,11 +13,16 @@ gem 'activerecord-session_store'
 gem 'acts_as_list'
 gem 'addressable'
 <<<<<<< HEAD
+<<<<<<< HEAD
 gem 'angularjs-rails', '~> 1.4.2'
 gem 'angular-rails-templates', '~> 0.2.0'
 =======
 gem 'angularjs-rails', '~> 1.2.14'
 # gem 'angularjs-rails', '~> 1.3.15'
+=======
+# gem 'angularjs-rails', '~> 1.2.14'
+gem 'angularjs-rails', '~> 1.3.15'
+>>>>>>> upgrade to Angular 1.3.15 for debounce methods, get async_update working properly with ng-model-options debounce
 gem 'angular-rails-templates'
 >>>>>>> install bower in app for javascript and css package management, install angular-debounce library for angular 1.2.xx, configuring debounce utility to trigger grade updates 2 seconds after key-up non-cumulative
 gem 'autonumeric-rails'
