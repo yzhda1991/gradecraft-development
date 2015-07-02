@@ -83,13 +83,13 @@ group :development do
   gem 'foreman'
   gem 'letter_opener'
   gem 'rubystats'
-  gem 'spring'
   gem 'meta_request'
   gem "bullet"
 end
 
 group :development, :test do
   gem 'pry'
+  gem 'spring', '~> 1.3.6'
   gem 'byebug'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
