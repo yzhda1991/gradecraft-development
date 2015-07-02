@@ -231,21 +231,28 @@ class AssignmentsController < ApplicationController
         :position,
         :student_logged_button_text,
         :student_logged_revert_button_text,
+        :grades,
         :use_rubric,
         :accepts_attachments,
         :accepts_text,
         :accepts_links,
         :pass_fail,
       )
-    @grades = current_student.grades.where(:course_id => current_course).select(
-        :student_id,
-        :id,
-        :assignment_id,
-        :assignment_type_id,
-        :point_total,
-        :predicted_score,
-        :status
-      )
+    @assignments.each do |a|
+      a.grades = current_student.grades.where(:id => a.id)#.select(
+      #   :student_id,
+      #   :id,
+      #   :assignment_id,
+      #   :assignment_type_id,
+      #   :point_total,
+      #   :predicted_score,
+      #   :status,
+      #   :task_id,
+      #   :course_id,
+      #   :final_score,
+      #   :raw_score
+      # )
+    end
   end
 
   private

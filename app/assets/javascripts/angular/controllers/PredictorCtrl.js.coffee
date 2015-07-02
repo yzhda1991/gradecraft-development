@@ -7,9 +7,10 @@
 
   PredictorService.getAssignmentsGrades().success (assignmentsGrades)->
     $scope.addAssignmentsGrades(assignmentsGrades)
-    PredictorService.getAssignmentTypes().success (assignmentTypes)->
-      $scope.addAssignmentTypes(assignmentTypes)
-      $scope.associatedAssignments()
+
+  # PredictorService.getAssignmentTypes().success (assignmentTypes)->
+  #   $scope.addAssignmentTypes(assignmentTypes)
+  #   $scope.associatedAssignments()
 
   $scope.addGradelevels = (gradeLevels)->
     total_points = gradeLevels.total_points

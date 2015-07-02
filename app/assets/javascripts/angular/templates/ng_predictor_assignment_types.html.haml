@@ -4,6 +4,7 @@
     .slide-panel.assignmentType
       %h3.collapse
         {{assignment_type.name}}
-    %ul{'ng-repeat' => 'assignment in assignmentGrades'}
-      %li
-        {{assignment.name}}
+  %ul{'ng-repeat' => 'assignment in assignmentGrades'}
+    %li
+      {{assignment.name}}
+      {{assignment.grade}}
