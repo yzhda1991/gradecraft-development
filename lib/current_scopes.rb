@@ -1,7 +1,7 @@
 module CurrentScopes
 
   def self.included(base)
-    base.helper_method :current_user, :current_course, :current_student, :current_course_data
+    base.helper_method :current_user, :current_course, :current_student
   end
 
   def current_course
@@ -46,10 +46,6 @@ module CurrentScopes
   def current_role
     return unless current_user && current_course
     @__current_role ||= current_user.course_memberships.where(course: current_course).first.role
-  end
-
-  def current_course_data
-    @__current_course_data ||= CourseData.new(current_course)
   end
 
   def current_student=(student)

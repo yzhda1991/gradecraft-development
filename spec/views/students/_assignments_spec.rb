@@ -14,7 +14,6 @@ describe "students/_assignments" do
     assign(:assignment_types, @assignment_types)
     view.stub(:current_course).and_return(@course)
     view.stub(:current_student).and_return(@student)
-    view.stub(:current_course_data).and_return(CourseData.new(@course))
   end
 
   describe "as student" do

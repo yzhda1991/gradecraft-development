@@ -17,7 +17,6 @@ describe "assignments/detailed_grades" do
     assign(:students, [@student])
     view.stub(:current_course).and_return(@course)
     view.stub(:term_for).and_return("Assignment")
-    view.stub(:current_course_data).and_return(CourseData.new(@course))
   end
 
   it "renders successfully" do

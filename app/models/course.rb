@@ -258,6 +258,10 @@ class Course < ActiveRecord::Base
     course_memberships.where(:role => "professor").first.user if course_memberships.where(:role => "professor").first.present?
   end
 
+  def point_total_for_challenges
+    challenges.pluck('point_total').sum
+  end
+
   #Export Users and Final Scores for Course
   def self.csv_summary_data
     CSV.generate(options) do |csv|

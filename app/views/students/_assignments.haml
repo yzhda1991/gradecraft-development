@@ -153,7 +153,7 @@
 
   .challenge
 
-    %h3.collapse #{term_for :challenges} #{ points @student.team.try(:challenge_grade_score) }/#{points current_course_data.point_total_for_challenges}
+    %h3.collapse #{term_for :challenges} #{ points @student.team.try(:challenge_grade_score) }/#{points current_course.point_total_for_challenges}
 
     .small-12.columns
       %table.responsive
