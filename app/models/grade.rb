@@ -8,6 +8,8 @@ class Grade < ActiveRecord::Base
                   :raw_score, :released, :status, :student, :student_id, :submission, :_destroy,
                   :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes
 
+  attr_accessor :current_student_points
+
   STATUSES= ["In Progress", "Graded", "Released"]
 
   # Note Pass and Fail use term_for in the views
