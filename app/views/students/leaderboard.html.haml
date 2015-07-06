@@ -32,6 +32,7 @@
             %span.sr-only Actions
         %tbody
           - @students.each_with_index do |student, index|
+            - cache ["v1", student] do
             %tr
               %td{"data-title" => "Rank"}= index + 1
               %td{"data-title" => "First Name"}= link_to student.first_name, student_path(student)
