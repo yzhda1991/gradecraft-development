@@ -317,6 +317,8 @@ GradeCraft::Application.routes.draw do
   #15. Events
   resources :events
 
+  get 'gse_mass_edit' => 'grade_scheme_elements#mass_edit', defaults: {format: :json}
+
   #16. Predictor
   get 'predictor' => 'students#predictor'
   # TODO: remove old predictor files once new one is in place

@@ -3,7 +3,7 @@
   $scope.assignmentMode = true
 
   PredictorService.getGradeLevels().success (gradeLevels)->
-    #$scope.addGradelevels(gradeLevels)
+    $scope.addGradelevels(gradeLevels)
 
   PredictorService.getAssignmentTypes().success (assignmentTypes)->
     $scope.addAssignmentTypes(assignmentTypes)
@@ -13,13 +13,13 @@
 
   # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
   $scope.addGradelevels = (gradeLevels)->
-    total_points = gradeLevels.total_points
-    grade_scheme_elements = gradeLevels.grade_scheme_elements
+    totalPoints = gradeLevels.totalPoints
+    grade_scheme_elements = gradeLevels.gradeSchemeElements
     svg = d3.select("#svg-grade-levels")
     width = parseInt(d3.select("#predictor-graphic").style("width")) - 20
     height = parseInt(d3.select("#predictor-graphic").style("height"))
     padding = 10
-    scale = d3.scale.linear().domain([0,total_points]).range([0,width])
+    scale = d3.scale.linear().domain([0,totalPoints]).range([0,width])
     axis = d3.svg.axis().scale(scale).orient("bottom")
     g = svg.selectAll('g').data(grade_scheme_elements).enter().append('g')
             .attr("transform", (gse)->
