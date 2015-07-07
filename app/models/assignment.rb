@@ -126,13 +126,13 @@ class Assignment < ActiveRecord::Base
     joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'").select('assignments.*, COALESCE(assignment_weights.point_total, assignments.point_total) AS student_point_total')
   end
 
-  def assignment_grades
-    (@assignment_grades ||= {})[self.id] ||= {}.tap do |grades|
-        grades.each do |grade|
-          grades[grade.student_id] = grade
-        end
-    end
-  end
+  # def assignment_grades
+  #   (@assignment_grades ||= {})[self.id] ||= {}.tap do |grades|
+  #       grades.each do |grade|
+  #         grades[grade.student_id] = grade
+  #       end
+  #   end
+  # end
 
   # Used for calculating scores in the analytics tab in Assignments# show
   def grades_for_assignment(student)

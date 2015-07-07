@@ -32,7 +32,7 @@ class AssignmentsController < ApplicationController
     @groups = @assignment.groups
 
     # Returns a hash of grades given for the assignment in format of {student_id: grade}
-    @assignment_grades_by_student_id = current_course.assignment_grades(@assignment)
+    @grades = @assignment.grades
     @teams = current_course.teams
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])

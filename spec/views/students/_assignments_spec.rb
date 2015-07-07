@@ -135,7 +135,7 @@ describe "students/_assignments" do
       view.stub(:current_user_is_staff?).and_return(true)
       view.stub(:term_for).and_return("custom_term")
       assign(:students, [@student])
-      assign(:assignment_grades_by_student_id, {@student.id => nil})
+      assign(:grades, {@student.id => nil})
       render
       assert_select "li", text: "Grade", :count => 1
     end
