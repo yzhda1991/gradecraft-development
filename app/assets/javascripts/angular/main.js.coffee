@@ -15,3 +15,13 @@ INTEGER_REGEXP = /^\-?\d+$/
         'undefined'
 
     return
+
+@gradecraft.directive "collapseToggler", ->
+  restrict : 'C',
+  link: (scope, elm, attrs) ->
+    elm.bind('click', ()->
+      console.log("sam i am");
+      elm.siblings().toggleClass('collapsed')
+      #$(this).siblings('collapsable').toggleClass('collapsed')
+    )
+    return

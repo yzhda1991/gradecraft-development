@@ -1,11 +1,7 @@
-%h3 Assignment Types
-%ul
-  %li{'ng-repeat' => 'assignmentType in assignmentTypes'}
-    %div{'class' => '{{assignmentType.name}}'}
-    {{assignmentType.name}}
-
-%h3 Assignments
-%ul
-  %li{'ng-repeat' => 'assignment in assignments'}
-    {{assignment.name}}
-    {{assignment.grade}}
+.assignment-type{'ng-repeat' => 'assignmentType in assignmentTypes'}
+  .predictor-section-title.collapse-toggler
+    %h3 {{assignmentType.name}}
+  .collapsable
+    .predictor-assignment-block{'ng-repeat' => 'assignment in assignments'}
+      {{assignment.name}}
+      {{assignment.grade}}

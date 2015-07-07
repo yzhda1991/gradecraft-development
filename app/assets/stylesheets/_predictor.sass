@@ -11,3 +11,29 @@
     text
       font-family: sans-serif
       font-size: 11px
+
+.collapsable .predictor-assignment-block
+  transition: all .5s ease-out
+  -webkit-transition: all .5s ease-out
+  //-webkit-transition: border 1s ease-in-out
+
+.collapsable.collapsed .predictor-assignment-block
+  overflow: hidden
+  height: 0
+  margin-top: 0
+  margin-bottom: 0
+  border-top: none
+  border-bottom: none
+
+.predictor-assignment-block
+  display: block
+  margin-bottom: 1rem
+  border: 1px solid $color-layout-blue-0
+  border-bottom: .25rem solid $color-layout-blue-0
+  background-color: $color-layout-blue-4
+  float: left
+  width: 19%
+  margin: 3px
+  height: 8.8rem
+  select
+    margin: 0
