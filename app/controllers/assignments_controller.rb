@@ -36,11 +36,9 @@ class AssignmentsController < ApplicationController
     @teams = current_course.teams
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team)
-      @auditors = current_course.students_auditing.includes(:teams).where(:teams => team_params).includes(:submissions)
+      @students = current_course.students_by_team(@team)
     else
-      @students = current_course.students_being_graded
-      @auditors = current_course.students_auditing
+      @students = current_course.students
     end
     if @assignment.rubric.present?
       @rubric = @assignment.fetch_or_create_rubric
@@ -71,12 +69,6 @@ class AssignmentsController < ApplicationController
 
     #used to display an alternate view of the same content
     render :detailed_grades if params[:detailed]
-  end
-
-  # TODO: verify not used and remove
-  def rules
-    @assignment = current_course.assignments.find(params[:id])
-    @title = @assignment.name
   end
 
   def new

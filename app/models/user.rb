@@ -35,6 +35,15 @@ class User < ActiveRecord::Base
       User.where(id: user_ids)
     end
 
+    def students_by_team(course, team=nil)
+      user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
+      if team
+        User.where(id: user_ids).select { |student| team.student_ids.include? student.id }
+      else
+        User.where(id: user_ids)
+      end
+    end
+
   end
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team

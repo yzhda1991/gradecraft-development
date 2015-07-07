@@ -187,9 +187,6 @@ class GradesController < ApplicationController
     EarnedBadge.import(new_earned_tier_badges, :validate => true)
   end
 
-  def existing_earned_badges
-  end
-
   def new_earned_tier_badges
     params[:tier_badges].collect do |tier_badge|
       EarnedBadge.new({
@@ -285,20 +282,16 @@ class GradesController < ApplicationController
 
     if params[:team_id].present?
       @team = current_course.teams.find_by(team_params)
-      @students = current_course.students_being_graded.joins(:teams).where(:teams => team_params)
-      @auditors = current_course.students_auditing.joins(:teams).where(:teams => team_params)
+      @students = current_course.students_by_team.joins(:teams).where(:teams => team_params)
     else
-      @students = current_course.students_being_graded
-      @auditors = current_course.students_auditing
+      @students = current_course.students
     end
 
     @grades = Grade.where(student_id: mass_edit_student_ids, assignment_id: @assignment[:id] ).includes(:student,:assignment)
-    @auditor_grades = Grade.where(student_id: mass_edit_auditor_ids, assignment_id: @assignment[:id] ).includes(:student,:assignment)
 
     create_missing_grades # create grade objects for the student/assignment pair unless present
 
     @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
-    @auditor_grades = @auditor_grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
   end
 
   private
@@ -311,16 +304,8 @@ class GradesController < ApplicationController
       @mass_edit_student_ids ||= @students.pluck(:id)
     end
 
-    def mass_edit_auditor_ids
-      @mass_edit_auditor_ids ||= @auditors.pluck(:id)
-    end
-
     def no_grade_students
       @no_grade_students ||= @students.where(id: mass_edit_student_ids - @grades.pluck(:student_id))
-    end
-
-    def no_grade_auditors
-      @no_grade_auditors ||= @auditors.where(id: mass_edit_auditor_ids - @grades.pluck(:student_id))
     end
 
     def create_missing_student_grades
@@ -329,15 +314,8 @@ class GradesController < ApplicationController
       end
     end
 
-    def create_missing_auditor_grades
-      no_grade_auditors.each do |student|
-        Grade.create(student: student, assignment: @assignment, graded_by_id: current_user)
-      end
-    end
-
     def create_missing_grades
       create_missing_student_grades
-      create_missing_auditor_grades
     end
 
   public

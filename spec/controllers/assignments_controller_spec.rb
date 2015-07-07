@@ -61,19 +61,6 @@ describe AssignmentsController do
           assigns(:students).should eq([@student])
         end
 
-        it "assigns all team students auditing as auditors" do
-          # we verify only auditing students on team assigned as @auditing
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-          @student.course_memberships.first.update(auditing: true)
-          other_student.course_memberships.first.update(auditing: true)
-
-          get :show, {:id => @assignment.id, :team_id => team.id}
-          assigns(:auditors).should eq([@student])
-        end
       end
 
       describe "with no team id in params" do
@@ -88,12 +75,6 @@ describe AssignmentsController do
           get :show, :id => @assignment.id
           assigns(:students).should include(@student)
           assigns(:students).should include(other_student)
-        end
-
-        it "assigns all auditing students as auditors" do
-          @student.course_memberships.first.update(auditing: true)
-          get :show, :id => @assignment.id
-          assigns(:auditors).should eq([@student])
         end
       end
 
@@ -288,19 +269,6 @@ describe AssignmentsController do
           assigns(:students).should eq([@student])
         end
 
-        it "assigns all team students auditing as auditors" do
-          # we verify only auditing students on team assigned as @auditing
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-          @student.course_memberships.first.update(auditing: true)
-          other_student.course_memberships.first.update(auditing: true)
-
-          get :show, {:id => @assignment.id, :team_id => team.id}
-          assigns(:auditors).should eq([@student])
-        end
       end
 
       describe "with no team id in params" do
@@ -317,11 +285,6 @@ describe AssignmentsController do
           assigns(:students).should include(other_student)
         end
 
-        it "assigns all auditing students as auditors" do
-          @student.course_memberships.first.update(auditing: true)
-          get :show, :id => @assignment.id
-          assigns(:auditors).should eq([@student])
-        end
       end
 
       it "assigns the rubric as rubric" do
@@ -517,19 +480,6 @@ describe AssignmentsController do
           assigns(:students).should eq([@student])
         end
 
-        it "assigns all team students auditing as auditors" do
-          # we verify only auditing students on team assigned as @auditing
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-          @student.course_memberships.first.update(auditing: true)
-          other_student.course_memberships.first.update(auditing: true)
-
-          get :rubric_grades_review, {:id => @assignment.id, :team_id => team.id}
-          assigns(:auditors).should eq([@student])
-        end
       end
 
       describe "with no team id in params" do
@@ -544,12 +494,6 @@ describe AssignmentsController do
           get :rubric_grades_review, :id => @assignment.id
           assigns(:students).should include(@student)
           assigns(:students).should include(other_student)
-        end
-
-        it "assigns all auditing students as auditors" do
-          @student.course_memberships.first.update(auditing: true)
-          get :rubric_grades_review, :id => @assignment.id
-          assigns(:auditors).should eq([@student])
         end
       end
     end
