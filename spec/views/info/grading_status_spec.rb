@@ -12,8 +12,7 @@ describe "info/grading_status" do
     @student = create(:user)
     assign(:assignment_types, @assignment_types)
     view.stub(:current_course).and_return(@course)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
-    view.stub(:current_course_data).and_return(CourseData.new(@course))
+    view.stub(:current_student).and_return(@student)
     view.stub(:term_for).and_return("custom_term")
   end
 

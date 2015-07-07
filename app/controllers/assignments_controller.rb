@@ -32,7 +32,7 @@ class AssignmentsController < ApplicationController
     @groups = @assignment.groups
 
     # Returns a hash of grades given for the assignment in format of {student_id: grade}
-    @assignment_grades_by_student_id = current_course_data.assignment_grades(@assignment)
+    @grades = @assignment.grades
     @teams = current_course.teams
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
@@ -152,7 +152,7 @@ class AssignmentsController < ApplicationController
 
       if @assignment.update_attributes(params[:assignment])
         set_assignment_weights
-        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  #{@assignment.name} successfully updated" }
+        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  <strong>#{@assignment.name }</strong> successfully updated" }
       else
         # TODO: refactor, see submissions_controller
         @title = "Edit #{term_for :assignment}"

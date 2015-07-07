@@ -41,10 +41,10 @@ describe AssignmentsController do
         assigns(:groups).should eq([group])
       end
 
-      it "assigns assignment_grades_by_student_id" do
+      it "assigns grades" do
         grade = create(:grade, assignment: @assignment, student: @student)
         get :show, :id => @assignment.id
-        assigns(:assignment_grades_by_student_id).should eq({@student.id => grade})
+        assigns(:grades).should eq(@assignment.grades)
       end
 
       describe "with team id in params" do
@@ -268,10 +268,10 @@ describe AssignmentsController do
         assigns(:groups).should eq([group])
       end
 
-      it "assigns assignment_grades_by_student_id" do
+      it "assigns grades" do
         grade = create(:grade, assignment: @assignment, student: @student)
         get :show, :id => @assignment.id
-        assigns(:assignment_grades_by_student_id).should eq({@student.id => grade})
+        assigns(:grades).should eq(@assignment.grades)
       end
 
       describe "with team id in params" do

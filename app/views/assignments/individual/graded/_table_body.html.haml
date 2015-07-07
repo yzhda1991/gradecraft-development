@@ -1,5 +1,5 @@
 - @students.each do |student|
-  - grade = @assignment_grades_by_student_id[student.id] || Grade.new
+  - grade = @grades[student.id] || Grade.new
   - first_name = student.first_name
   - last_name = student.last_name
   - instructor_modified = grade.instructor_modified?

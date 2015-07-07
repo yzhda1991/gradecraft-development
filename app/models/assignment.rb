@@ -5,7 +5,7 @@ class Assignment < ActiveRecord::Base
     :accepts_submissions_until, :points_predictor_display, :notify_released, :mass_grade_type, :assignment_type_id, :assignment_type,
     :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged,
     :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level, :score_levels_attributes,
-    :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail
+    :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics
 
   belongs_to :course
   belongs_to :assignment_type, -> { order('order_placement ASC') }, touch: true
@@ -94,6 +94,17 @@ class Assignment < ActiveRecord::Base
     super(options.merge(:only => [ :id, :content, :order, :done ] ))
   end
 
+  def content 
+    content = []
+    if assignment_files.present?
+      assignments_files.each do |af|
+        content << af.url 
+      end 
+      content << description 
+    end
+    return content
+  end
+
   # Used to sum the total number of assignment points in the class
   def self.point_total
     pluck('COALESCE(SUM(assignments.point_total), 0)').first || 0
@@ -114,6 +125,14 @@ class Assignment < ActiveRecord::Base
   def self.with_assignment_weights_for_student(student)
     joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'").select('assignments.*, COALESCE(assignment_weights.point_total, assignments.point_total) AS student_point_total')
   end
+
+  # def assignment_grades
+  #   (@assignment_grades ||= {})[self.id] ||= {}.tap do |grades|
+  #       grades.each do |grade|
+  #         grades[grade.student_id] = grade
+  #       end
+  #   end
+  # end
 
   # Used for calculating scores in the analytics tab in Assignments# show
   def grades_for_assignment(student)

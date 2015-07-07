@@ -127,7 +127,7 @@ class AnalyticsController < ApplicationController
   end
 
   def all_user_pageview_events
-    user = current_course_data.students.find(params[:user_id])
+    user = current_course.students.find(params[:user_id])
     data = CourseUserPageview.data(@granularity, @range, {course_id: current_course.id, user_id: user.id}, {page: "_all"})
 
     render json: MultiJson.dump(data)
@@ -148,7 +148,7 @@ class AnalyticsController < ApplicationController
   end
 
   def user_pageview_events
-    user = current_course_data.students.find(params[:user_id])
+    user = current_course.students.find(params[:user_id])
     data = CourseUserPagePageview.data(@granularity, @range, {course_id: current_course.id, user_id: user.id})
     data.decorate! { |result| result[:name] = result.page }
 

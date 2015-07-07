@@ -13,7 +13,6 @@ describe "students/predictor/_challenges" do
     team_membership = create(:team_membership, team: team, student: student)
     view.stub(:current_course).and_return(@course)
     view.stub(:current_student).and_return(student)
-    view.stub(:current_student_data).and_return(StudentData.new(student, @course))
     view.stub(:term_for).and_return("challenges")
   end
 

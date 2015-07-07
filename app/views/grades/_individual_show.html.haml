@@ -1,6 +1,6 @@
 .small-12.columns
   %br
-  - if current_student_data.grade_released_for_assignment?(@assignment).present? || current_user_is_staff?
+  - if current_student.grade_released_for_assignment?(@assignment).present? || current_user_is_staff?
     - if current_user_is_staff?
       %h4.sr-only #{current_student.try(:first_name)}'s Grade
       %p.bold

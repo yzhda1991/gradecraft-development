@@ -33,7 +33,7 @@ class GradesController < ApplicationController
   def edit
     session[:return_to] = request.referer
     redirect_to @assignment and return unless current_student.present?
-    @grade = current_student_data.grade_for_assignment(@assignment)
+    @grade = current_student.grade_for_assignment(@assignment)
     @student = @grade.student
     @submission = @student.submission_for_assignment(@assignment)
     @title = "Grading #{current_student.name}'s #{@assignment.name}"
@@ -77,7 +77,7 @@ class GradesController < ApplicationController
       params[:grade].delete :grade_files_attributes
     end
 
-    @grade = current_student_data.grade_for_assignment(@assignment)
+    @grade = current_student.grade_for_assignment(@assignment)
 
     if @grade_files
       @grade_files.each do |gf|
@@ -233,7 +233,7 @@ class GradesController < ApplicationController
 
   def destroy
     redirect_to @assignment and return unless current_student.present?
-    @grade = current_student_data.grade_for_assignment(@assignment)
+    @grade = current_student.grade_for_assignment(@assignment)
     @grade.destroy
 
     redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name}'s #{@assignment.name} grade was successfully deleted."
@@ -243,7 +243,7 @@ class GradesController < ApplicationController
   def self_log
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.open?
-      @grade = current_student_data.grade_for_assignment(@assignment)
+      @grade = current_student.grade_for_assignment(@assignment)
       @grade.raw_score = params[:present] == 'true' ? @assignment.point_total : 0
       @grade.status = "Graded"
       respond_to do |format|
@@ -262,8 +262,8 @@ class GradesController < ApplicationController
   # Students predicting the score they'll get on an assignent using the grade predictor
   def predict_score
     @assignment = current_course.assignments.find(params[:id])
-    raise "Cannot set predicted score if grade status is 'Graded' or 'Released'" if current_student_data.grade_released_for_assignment?(@assignment)
-    @grade = current_student_data.grade_for_assignment(@assignment)
+    raise "Cannot set predicted score if grade status is 'Graded' or 'Released'" if current_student.grade_released_for_assignment?(@assignment)
+    @grade = current_student.grade_for_assignment(@assignment)
     @grade.predicted_score = params[:predicted_score]
     respond_to do |format|
       format.json do

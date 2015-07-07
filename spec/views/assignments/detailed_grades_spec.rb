@@ -6,22 +6,27 @@ describe "assignments/detailed_grades" do
   before(:all) do
     @course = create(:course)
     @assignment = create(:assignment)
-    @course.assignments <<[@assignment]
+    @course.assignments << [@assignment]
     @student = create(:user)
     @student.courses << @course
   end
 
   before(:each) do
-    assign(:title, "Assignment")
-    assign(:assignmet, @assignment)
+    assign(:assignment, @assignment)
     assign(:students, [@student])
     view.stub(:current_course).and_return(@course)
     view.stub(:term_for).and_return("Assignment")
-    view.stub(:current_course_data).and_return(CourseData.new(@course))
+    assign(:title, "#{@assignment.name} Detailed Grades (#{ points @assignment.point_total} points)")
   end
 
-  it "renders successfully" do
-    render
-    assert_select "h3", text: "Assignment Detailed Grades (#{ points @assignment.point_total } points)", :count => 1
+  describe "as faculty" do
+    it "renders the assignment view" do
+      view.stub(:current_user_is_staff?).and_return(true)
+      view.stub(:term_for).and_return("Assignment")
+      assign(:students, [@student])
+      assign(:grades, {@student.id => nil})
+      render
+      assert_select "h3", :count => 1
+    end
   end
 end
