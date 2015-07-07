@@ -1,7 +1,5 @@
 .assignment-type{'ng-repeat' => 'assignmentType in assignmentTypes'}
-  .predictor-section-title.collapse-toggler
-    %h3 {{assignmentType.name}}
-  .collapsable
-    .predictor-assignment-block{'ng-repeat' => 'assignment in assignments'}
-      {{assignment.name}}
-      {{assignment.grade}}
+  .collapse-toggler
+    .predictor-section-title
+      {{assignmentType.name}}
+  .collapsable{'ng-include' => true, 'src' => "'ng_predictor_assignments.html'"}

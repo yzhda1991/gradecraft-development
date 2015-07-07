@@ -12,10 +12,18 @@
       font-family: sans-serif
       font-size: 11px
 
+.predictor-section-title
+  @include title-type-styling
+  font-size: 1.6875rem
+  color: white
+  background-color: $color-layout-blue-0
+  line-height: 1.4
+  margin-bottom: 0.5rem
+  margin-top: 0.2rem
+  clear: both
+
 .collapsable .predictor-assignment-block
-  transition: all .5s ease-out
-  -webkit-transition: all .5s ease-out
-  //-webkit-transition: border 1s ease-in-out
+  @include transition(all, .5s, ease-out)
 
 .collapsable.collapsed .predictor-assignment-block
   overflow: hidden

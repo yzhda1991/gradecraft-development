@@ -20,8 +20,6 @@ INTEGER_REGEXP = /^\-?\d+$/
   restrict : 'C',
   link: (scope, elm, attrs) ->
     elm.bind('click', ()->
-      console.log("sam i am");
       elm.siblings().toggleClass('collapsed')
-      #$(this).siblings('collapsable').toggleClass('collapsed')
     )
     return
