@@ -5,13 +5,13 @@
     getAssignmentTypes = (assignmentId)->
       $http.get("predictor_assignment_types")
 
-    getAssignmentsGrades = (assignmentId)->
-      $http.get("predictor_assignments_grades")
+    getAssignments = (assignmentId)->
+      $http.get("predictor_assignments")
 
 
     return {
         getGradeLevels: getGradeLevels,
         getAssignmentTypes: getAssignmentTypes,
-        getAssignmentsGrades: getAssignmentsGrades
+        getAssignments: getAssignments
     }
 ]

@@ -3,15 +3,15 @@
   $scope.assignmentMode = true
 
   PredictorService.getGradeLevels().success (gradeLevels)->
-      $scope.addGradelevels(gradeLevels)
+    #$scope.addGradelevels(gradeLevels)
 
-  PredictorService.getAssignmentsGrades().success (assignmentsGrades)->
-    $scope.addAssignmentsGrades(assignmentsGrades)
+  PredictorService.getAssignmentTypes().success (assignmentTypes)->
+    $scope.addAssignmentTypes(assignmentTypes)
 
-  # PredictorService.getAssignmentTypes().success (assignmentTypes)->
-  #   $scope.addAssignmentTypes(assignmentTypes)
-  #   $scope.associatedAssignments()
+  PredictorService.getAssignments().success (assignments)->
+    $scope.addAssignments(assignments)
 
+  # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
   $scope.addGradelevels = (gradeLevels)->
     total_points = gradeLevels.total_points
     grade_scheme_elements = gradeLevels.grade_scheme_elements
@@ -52,25 +52,11 @@
       .attr("transform": "translate(" + padding + "," + (height - 20) + ")")
       .call(axis)
 
-
   $scope.addAssignmentTypes = (assignmentTypes)->
-    $scope.assignmentTypes = assignmentTypes
+    $scope.assignmentTypes = assignmentTypes.assignmentTypes
 
-  $scope.addAssignmentsGrades = (assignmentsGrades)->
-    $scope.assignmentGrades = assignmentsGrades
+  $scope.addAssignments = (assignments)->
+    $scope.assignments = assignments.assignments
 
-  $scope.associateAssignments = (assignmentType, assignments) ->
-    filteredList = []
-    angular.forEach(assignments, (assignment) ->
-      if(assignment.assignment_type_id == assignmentType.id)
-        filteredList[assignment.position] = assignment
-    )
-    return filteredList
-
-  $scope.associatedAssignments = ()->
-    associated = []
-    angular.forEach($scope.assignmentTypes, (assignment_type) ->
-      associated.push($scope.associateAssignments(assignment_type, $scope.assignmentGrades))
-    )
   return
 ]
