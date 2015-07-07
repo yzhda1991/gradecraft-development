@@ -34,6 +34,10 @@ class Course < ActiveRecord::Base
     User.students_auditing(self,team)
   end
 
+  def students_by_team(team)
+    User.students_by_team(self, team)
+  end
+
   attr_accessible :courseno, :name,
     :semester, :year, :badge_setting, :team_setting, :team_term, :user_term,
     :user_id, :course_id, :homepage_message, :group_setting,
