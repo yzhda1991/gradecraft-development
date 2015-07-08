@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'ui.router', 'froala', 'fcsa-number', 'templates', 'fcsa-number','smart-number','lodash'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'ui.router', 'froala', 'fcsa-number', 'templates', 'fcsa-number','smart-number','lodash','helpers'])
 
 @gradecraft.config ($stateProvider, $urlRouterProvider, $locationProvider) ->
 
