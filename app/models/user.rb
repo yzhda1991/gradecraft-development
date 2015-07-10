@@ -489,10 +489,6 @@ class User < ActiveRecord::Base
       .where(student_visible: true)
   end
 
-  def student_visible_earned_badge_ids(course)
-    student_visible_earned_badges(course).collect(&:id)
-  end
-
   # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
   # 2) the student has either not earned at all, but is visible and available, or...
@@ -505,12 +501,12 @@ class User < ActiveRecord::Base
   end
 
   # badges that have not been marked 'visible' by the instructor, and for which
-  # the student has earned a badge, but the badge has yet to be marked 'student_visible'
+  # the student has earned a badge, but the earned badge has yet to be marked 'student_visible'
   def student_invisible_badges(course)
     Badge
       .where(visible: false)
       .where(course_id: course[:id])
-      .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], true)
+      .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
   end
 
   def earn_badges(badges)
