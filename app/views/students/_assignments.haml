@@ -22,16 +22,16 @@
         // weight; else if the student has not yet set a weight, give the option to set weights for the assignment.
         - if assignment_type.student_weightable? && current_course.assignment_weight_open?
           .small-2.right
-            - if @student.weighted_assignments?
-              .label.radius
+            .label.radius.multiplier-setting-open
+              - if @student.weighted_assignments?
                 = "#{current_student.weight_for_assignment_type(assignment_type)} #{(term_for :weights).titleize} Set"
-                = link_to "(Change)", assignment_type_weights_path(:student_id => @student.id), assignment_type: assignment_type, user_id: @student
-            - else
-              = link_to "Set #{(term_for :weights).titleize}", assignment_type_weights_path(:student_id => @student.id), assignment_type: assignment_type, :class => "label tiny primary radius"
+                = link_to "(Change)", assignment_type_weights_path(:student_id => @student.id), assignment_type: assignment_type
+              - else
+                = link_to "Set #{(term_for :weights).titleize}", assignment_type_weights_path(:student_id => @student.id), assignment_type: assignment_type
             %p
         - elsif assignment_type.student_weightable?
           .small-2.right
-            .label.radius= "#{current_student.weight_for_assignment_type(assignment_type)} #{(term_for :weights).titleize}"
+            .label.radius.multiplier-setting-closed= "#{current_student.weight_for_assignment_type(assignment_type)} #{(term_for :weights).titleize}"
             %p
           // Display the description for the assignment type if it exists.
         - if assignment_type.predictor_description?
@@ -66,7 +66,7 @@
                         - else
                           %i.fa.fa-user.fa-fw
                         - if assignment.required?
-                          %span.has-tip{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
+                          %span.has-tip.required{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
                             !
                         %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
 
@@ -98,7 +98,8 @@
                               .italic.bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
 
                       %td{:width => "25%"}
-                        = "Due: #{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" if assignment.future?
+                        - if assignment.future?
+                          %span= "Due: #{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" 
                       %td
                         - if assignment.student_logged? && assignment.open? && current_user_is_student?
                           = simple_form_for current_student.grade_for_assignment(assignment), :url => self_log_grades_assignment_path(assignment), :method => :post do |f|
@@ -120,8 +121,8 @@
                                   - else
                                     - if group_for_assignment && group_for_assignment.approved?
                                       %li= link_to "Submit", new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
-                                - else
-                                  %li= link_to "Create a Group", new_group_path, :class => "button"
+                              - else
+                                %li= link_to "Create a Group", new_group_path, :class => "button"
                             - else
                               - if assignment.accepts_submissions?
                                 - if student_submission.present?
