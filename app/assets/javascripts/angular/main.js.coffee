@@ -13,7 +13,6 @@ INTEGER_REGEXP = /^\-?\d+$/
         # it is invalid, return undefined (no model update)
         ctrl.$setValidity "integer", false
         'undefined'
-
     return
 
 @gradecraft.directive "collapseToggler", ->

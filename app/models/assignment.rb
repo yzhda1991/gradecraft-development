@@ -59,6 +59,11 @@ class Assignment < ActiveRecord::Base
 
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
+  default_scope { order('position ASC')  }
+  #test for before removing:
+  #scope :sorted, -> { order('position ASC') }
+
+
   # Filtering Assignments by Team Work, Group Work, and Individual Work
   scope :individual_assignments, -> { where grade_scope: "Individual" }
   scope :group_assignments, -> { where grade_scope: "Group" }
@@ -76,7 +81,6 @@ class Assignment < ActiveRecord::Base
   scope :chronological, -> { order('due_at ASC') }
   scope :alphabetical, -> { order('name ASC') }
   acts_as_list scope: :assignment_type
-  scope :sorted, -> { order('position ASC') }
 
   # Filtering Assignments by various date properties
   scope :with_due_date, -> { where('assignments.due_at IS NOT NULL') }

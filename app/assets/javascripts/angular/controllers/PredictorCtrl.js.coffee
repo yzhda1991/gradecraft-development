@@ -2,19 +2,68 @@
 
   $scope.assignmentMode = true
 
+  $scope.predictorServices = (()->
+        gradeLevels : false
+        assignmentTypes : false
+        assignments : false
+
+        add : (service)->
+          if service == "gradeLevels"
+            self.gradeLevels = true
+          else if service == "assignmentTypes"
+            self.assignmentTypes = true
+          else if service == "assignments"
+            self.assignments = true
+        complete : ()->
+          if self.gradeLevels && self.assignmentTypes && self.assignments
+            return true
+          else
+            return false
+  )()
+
   PredictorService.getGradeLevels().success (gradeLevels)->
     $scope.addGradelevels(gradeLevels)
-
-  PredictorService.getAssignmentTypes().success (assignmentTypes)->
-    $scope.addAssignmentTypes(assignmentTypes)
+    $scope.renderGradeLevelGraphics()
+    $scope.predictorServices.add("gradeLevels")
+    if $scope.predictorServices.complete()
+      $scope.integration()
 
   PredictorService.getAssignments().success (assignments)->
     $scope.addAssignments(assignments)
+    $scope.predictorServices.add("assignments")
+    PredictorService.getAssignmentTypes().success (assignmentTypes)->
+      $scope.addAssignmentTypes(assignmentTypes)
+      $scope.predictorServices.add("assignmentTypes")
+      if $scope.predictorServices.complete()
+        $scope.integration()
+
+  $scope.addGradelevels = (gradeLevels)->
+    $scope.gradeLevels = gradeLevels
+
+  $scope.addAssignmentTypes = (assignmentTypes)->
+    $scope.assignmentTypes = assignmentTypes.assignment_types
+
+  $scope.addAssignments = (assignments)->
+    $scope.assignments = assignments.assignments
+    $scope.termForAssignment = assignments.term_for_assignment
+
+  $scope.assignmentsForAssignmentType = (assignments,assignmentType)->
+    _.where(assignments, {assignment_type_id: assignmentType})
+
+  $scope.assignmentDueInFuture = (assignment)->
+
+    if assignment.due_at != null && Date.parse(assignment.due_at) >= Date.now()
+      return true
+    else
+      return false
+
+  $scope.integration = ()->
+    console.log("holy schnikes!");
 
   # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
-  $scope.addGradelevels = (gradeLevels)->
-    totalPoints = gradeLevels.totalPoints
-    grade_scheme_elements = gradeLevels.gradeSchemeElements
+  $scope.renderGradeLevelGraphics = ()->
+    totalPoints = $scope.gradeLevels.total_points
+    grade_scheme_elements = $scope.gradeLevels.grade_scheme_elements
     svg = d3.select("#svg-grade-levels")
     width = parseInt(d3.select("#predictor-graphic").style("width")) - 20
     height = parseInt(d3.select("#predictor-graphic").style("height"))
@@ -51,12 +100,6 @@
       .attr("class": "grade-point-axis")
       .attr("transform": "translate(" + padding + "," + (height - 20) + ")")
       .call(axis)
-
-  $scope.addAssignmentTypes = (assignmentTypes)->
-    $scope.assignmentTypes = assignmentTypes.assignmentTypes
-
-  $scope.addAssignments = (assignments)->
-    $scope.assignments = assignments.assignments
 
   return
 ]
