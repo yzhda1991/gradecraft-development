@@ -1,4 +1,4 @@
-@gradecraft.factory 'PredictorService', ['$http', ($http) ->
+@gradecraft.factory 'GradeSchemeElementsService', ['$http', ($http) ->
     getGradeSchemeElements = ()->
       $http.get("/gse_mass_edit/")
 
