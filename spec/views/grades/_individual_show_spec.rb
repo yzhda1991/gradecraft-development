@@ -51,7 +51,7 @@ describe "grades/_individual_show" do
     before(:each) do
       view.stub(:current_user_is_staff).and_return(false)
     end
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end

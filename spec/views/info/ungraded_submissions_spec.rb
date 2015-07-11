@@ -22,7 +22,7 @@ describe "info/ungraded_submissions" do
     @ungraded_submissions = @assignment.submissions
   end
 
-  it "renders" do
+  it "renders successfully" do
     render
     assert_select "h3", text: "Ungraded Assignment Submissions", :count => 1
   end

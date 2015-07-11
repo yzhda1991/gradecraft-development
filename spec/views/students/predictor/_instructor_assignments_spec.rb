@@ -15,7 +15,7 @@ describe "students/predictor/_instructor_assignments" do
     view.stub(:current_student).and_return(student)
   end
 
-  it "renders" do
+  it "renders successfully" do
     render
   end
 end

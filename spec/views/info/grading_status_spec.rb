@@ -23,7 +23,7 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = []
       @in_progress_grades_by_assignment = []
     end
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end
@@ -35,7 +35,7 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = @grades.group_by(&:assignment)
       @in_progress_grades_by_assignment = []
     end
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end
@@ -47,7 +47,7 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = []
       @in_progress_grades_by_assignment = @grades.group_by(&:assignment)
     end
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end

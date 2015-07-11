@@ -17,7 +17,7 @@ describe "students/predictor/_assignments" do
   end
 
   describe "with predictable assignments" do
-    it "renders" do
+    it "renders successfully" do
       @course.assignment_types[0].has_predictable_assignments?.should be_true
       render
     end
