@@ -7,4 +7,7 @@ class AssignmentGroup < ActiveRecord::Base
   
   validates_uniqueness_of :assignment_id, { :scope => :group_id }
 
+  validates_presence_of :assignment_id 
+  validates_presence_of :group
+
 end

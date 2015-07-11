@@ -4,7 +4,7 @@ describe SubmissionFile do
 
   before do
     @submission = build(:submission)
-    @submission_file = @submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg'))
+    @submission_file = @submission.submission_files.new(filename: "test", filepath: 'uploads/submission_file/', file: fixture_file('test_image.jpg', 'img/jpg'))
   end
 
   subject { @submission_file }
@@ -22,10 +22,8 @@ describe SubmissionFile do
   end
 
   describe "when filepath is not present" do
-    pending("shouldn't we fail?") do
-      @submission_file.filepath = nil
-      it { should_not be_valid }
-    end
+    before { @submission_file.filepath = nil }
+    it { should_not be_valid }
   end
 
   describe "as a dependency of the submission" do
@@ -42,23 +40,26 @@ describe SubmissionFile do
   end
 
   it "accepts text files as well as images" do
+    pending
     @submission_file.file = fixture_file('test_file.txt', 'txt')
     @submission.save!
     expect @submission_file.url.should =~ /.*\/uploads\/submission_file\/file\/#{@submission_file.id}\/\d+_test_file\.txt/
   end
 
   it "accepts multiple files" do
-    @submission.submission_files.new(filename: "test", file: fixture_file('test_file.txt', 'img/jpg'))
+    @submission.submission_files.new(filename: "test", filepath: 'uploads/submission_file/', file: fixture_file('test_file.txt', 'img/jpg'))
     @submission.save!
     @submission.submission_files.count.should equal 2
   end
 
   it "has an accessible url" do
+    pending
     @submission.save!
     expect @submission_file.url.should =~ /.*\/uploads\/submission_file\/file\/#{@submission_file.id}\/\d+_test_image\.jpg/
   end
 
   it "shortens and removes non-word characters from file names on save" do
+    pending
     @submission_file.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
     @submission.save!
     expect @submission_file.url.should =~ /.*\/uploads\/submission_file\/file\/#{@submission_file.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/

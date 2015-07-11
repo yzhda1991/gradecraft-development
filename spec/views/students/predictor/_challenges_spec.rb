@@ -17,7 +17,7 @@ describe "students/predictor/_challenges" do
   end
 
   describe "with team challenges" do
-    it "renders" do
+    it "renders successfully" do
       @course.team_challenges?.should be_true
       render
     end

@@ -15,7 +15,7 @@ describe "students/predictor/_badges" do
   end
 
   describe "with valuable badges" do
-    it "renders" do
+    it "renders successfully" do
       @course.valuable_badges?.should be_true
       render
     end
