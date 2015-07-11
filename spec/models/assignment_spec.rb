@@ -104,7 +104,6 @@ describe Assignment do
       @assignment.update(point_total: 3000)
       @assignment.pass_fail = true
       @assignment.save
-      #@assignment.reload
       @assignment.point_total.should eq(0)
     end
   end
