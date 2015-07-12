@@ -350,11 +350,10 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET copy" do
-      it "assigns title and assignments" do
-        pending "copy fails at assignments, change to assignments_path"
-        get :copy, :id => @assignment.id
-        response.should render_template(:copy)
+    describe "POST copy" do
+      it "duplicates an assignment" do
+        post :copy, :id => @assignment.id
+        expect @course.assignments.count.should eq(2)
       end
     end
 
