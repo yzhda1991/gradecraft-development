@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly', 'formlyFoundation'])
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
