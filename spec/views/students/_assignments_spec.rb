@@ -6,20 +6,22 @@ describe "students/_assignments" do
   before(:each) do
     clean_models
     @course = create(:course)
-    @assignment_types = [create(:assignment_type, course: @course, max_value: 1000)]
-    @assignment = create(:assignment, :assignment_type => @assignment_types[0])
+    @assignment_type_1 = create(:assignment_type, course: @course, max_value: 1000)
+    @assignment_type_2 = create(:assignment_type, course: @course, max_value: 1000)
+    @assignment = create(:assignment, :assignment_type => @assignment_type_1)
+    @course.assignment_types << [@assignment_type_1, @assignment_type_2]
+    @assignment_types = @course.assignment_types
     @course.assignments << @assignment
     @student = create(:user)
     assign(:title, "Assignment Types")
     assign(:assignment_types, @assignment_types)
     view.stub(:current_course).and_return(@course)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
-    view.stub(:current_course_data).and_return(CourseData.new(@course))
+    view.stub(:current_student).and_return(@student)
   end
 
   describe "as student" do
     before(:each) do
-      #view.stub(:current_student).and_return(@student)
+      view.stub(:current_student).and_return(@student)
     end
 
     it "does not render instructor menu" do
@@ -52,7 +54,7 @@ describe "students/_assignments" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: @assignment.point_total, status: "Graded")
 
         # To verify we have satisfied the released condition:
-        StudentData.new(@student, @course).grade_released_for_assignment?(@assignment).should be_true
+        @student.grade_released_for_assignment?(@assignment).should be_true
         render
         assert_select "td" do
           assert_select "div", text: "#{ points @grade.score } / #{points @grade.point_total} points earned", count: 1
@@ -75,7 +77,7 @@ describe "students/_assignments" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, pass_fail_status: "Pass", status: "Graded")
 
         # To verify we have satisfied the released condition:
-        StudentData.new(@student, @course).grade_released_for_assignment?(@assignment).should be_true
+        @student.grade_released_for_assignment?(@assignment).should be_true
 
         render
         assert_select "td" do
@@ -84,48 +86,92 @@ describe "students/_assignments" do
       end
     end
 
-    it "renders a weightable assignment types that are open" do
+    it "renders a weightable assignment types that are open if students have not yet made a choice" do
+      @assignment_type_1.update(student_weightable: true)
+      @assignment_type_1.save
+      @course.update(assignment_weight_close_at: nil)
+      @course.save
+      render
+      assert_select 'a', text: 'Set Multipliers', count: 1
+    end
+
+    it "renders a weightable assignment types that are open if students have made a choice" do
       pending
+      @assignment_type_1.update(student_weightable: true)
+      @assignment_type_1.save
+      @course.update(assignment_weight_close_at: nil)
+      @course.save
+      render
+      assert_select 'a', text: '(Change)', count: 1
     end
 
     it "renders a weightable assignment types that are closed" do
       pending
+      @assignment_type_1.update(student_weightable: true)
+      @assignment_type_1.save
+      @course.update(assignment_weight_close_at: 2.days.ago)
+      @course.save
+      render
+      assert_select 'div', class: 'multiplier-setting-closed', count: 1
     end
 
     it "shows the predictor description if it's present" do
-      pending
+      @assignment_type_1.update(predictor_description: 'Tabula Rasa')
+      @assignment_type_1.save
+      render
+      assert_select "p", text: 'Tabula Rasa', count: 1
     end
 
     it "highlights assignments that are required" do
-      pending
+      render
+      @assignment.update(required: true)
+      @assignment.save
+      assert_select "span", class: 'required', count: 1
     end
 
     it "shows the assignment submission if present" do
-      pending
+      @assignment.update(accepts_submissions: true)
+      @submission = create(:submission, course: @course, assignment: @assignment, student: @student)
+      render
+      assert_select "a", text: 'See Submission', count: 1
     end
 
     it "shows the due date if it's in the future" do
-      pending
+      @assignment.update(due_at: 2.days.from_now)
+      render
+      assert_select "span", text: "Due: #{(2.days.from_now).strftime("%A, %b %d, %l:%M%p")}", count: 1
     end
 
     it "shows a button to see more results if the grade is released" do
-      pending
+      create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: 'Released')
+      render
+      assert_select "a", text: "See Results", :count => 1
     end
 
     it "shows a button to see the group if a group exists" do
-      pending
-    end
-
-    it "shows a button to see their submission if one is present" do
-      pending
+      @assignment.update(grade_scope: "Group")
+      @group = create(:group, course: @course)
+      @assignment.groups << @group
+      @group.students << @student
+      render
+      assert_select "a", text: "See Group", :count => 1
     end
 
     it "shows a button to see the group submission if one is present" do
-      pending
+      @assignment.update(accepts_submissions: true)
+      @assignment.update(grade_scope: "Group")
+      @group = create(:group, course: @course)
+      @assignment.groups << @group
+      @group.students << @student
+      @submission = create(:submission, course: @course, assignment: @assignment, group: @group)
+      render
+      assert_select "a", text: "See Submission", :count => 1
     end
 
     it "shows a button to create a group if no group is present" do
-      pending
+      @assignment.update(grade_scope: "Group")
+      render
+      assert_select "a", text: "Create a Group", :count => 1
     end
 
 
@@ -136,21 +182,28 @@ describe "students/_assignments" do
       view.stub(:current_user_is_staff?).and_return(true)
       view.stub(:term_for).and_return("custom_term")
       assign(:students, [@student])
-      assign(:assignment_grades_by_student_id, {@student.id => nil})
+      assign(:grades, {@student.id => nil})
       render
       assert_select "li", text: "Grade", :count => 1
     end
 
-    it "shows a button to grade an assignment if none is present" do
-      pending
-    end
-
     it "shows a button to edit a grade for an assignment if one is present" do
-      pending
+      view.stub(:current_user_is_staff?).and_return(true)
+      view.stub(:term_for).and_return("custom_term")
+      assign(:students, [@student])
+      create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: 'Released')
+      render
+      assert_select "li", text: "Edit Grade", :count => 1
     end
 
     it "shows a button to see their submission if one is present" do
-      pending
+      view.stub(:current_user_is_staff?).and_return(true)
+      view.stub(:term_for).and_return("custom_term")
+      assign(:students, [@student])
+      @assignment.update(accepts_submissions: true)
+      @submission = create(:submission, course: @course, assignment: @assignment, student: @student)
+      render
+      assert_select "a", text: 'See Submission', count: 1
     end
 
   end

@@ -8,7 +8,8 @@ describe "students/teams" do
     clean_models
     @course = create(:course)
     @student = create(:user)
-    @course.students << @student
+    @student.courses << @course
+    @membership = CourseMembership.where(user: @student, course: @course).first.update(score: '100000')
   end
 
   before(:each) do
@@ -17,9 +18,8 @@ describe "students/teams" do
   end
 
   it "renders successfully" do
-    pending
     render
-    assert_select "h4", :count => 1
+    assert_select "h4", :count => 2
   end
 
 end

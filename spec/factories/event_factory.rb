@@ -1,12 +1,6 @@
 FactoryGirl.define do
   factory :event do
     name { Faker::Lorem.word }
-    description ""
-    open_at ""
-    due_at ""
-    media ""
-    thumbnail ""
-    media_credit ""
-    media_caption "MyString"
+    due_at {Faker::Date.forward(23)}
   end
 end

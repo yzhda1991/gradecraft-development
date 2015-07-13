@@ -93,6 +93,14 @@
             %i.fi-checkbox
             = f.check_box :include_in_to_do
             .form_label Can #{term_for :students} see this #{term_for :assignment} in the to do list?
+            
+        - if ! current_course.hide_analytics?
+          .small-12
+            %label.checkbox{ :for => "hide_analytics" }
+              = f.label :hide_analytics, "Hide Analytics?"
+              = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
+              .form_label{:id => "hideAnalytics"}  Do you want to hide assignment analytics from students? 
+
 
       .panel
         %h4.uppercase Timeline

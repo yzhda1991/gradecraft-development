@@ -8,7 +8,8 @@ describe "students/timeline" do
     clean_models
     @course = create(:course)
     @student = create(:user)
-    @course.students << @student
+    @student.courses << @course
+    @membership = CourseMembership.where(user: @student, course: @course).first.update(score: '100000')
   end
 
   before(:each) do
@@ -17,7 +18,6 @@ describe "students/timeline" do
   end
 
   it "renders successfully" do
-    pending
     render
     assert_select "h4", :count => 1
   end

@@ -141,11 +141,6 @@ class StudentsController < ApplicationController
     redirect_to session[:return_to]
   end
 
-  def calendar
-    @assignments = current_course.assignments
-  end
-
-
   protected
 
   def course_grade_scheme_by_student_id

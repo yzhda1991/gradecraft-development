@@ -35,6 +35,15 @@ class User < ActiveRecord::Base
       User.where(id: user_ids)
     end
 
+    def students_by_team(course, team=nil)
+      user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
+      if team
+        User.where(id: user_ids).select { |student| team.student_ids.include? student.id }
+      else
+        User.where(id: user_ids)
+      end
+    end
+
   end
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
@@ -147,9 +156,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Course the user will see on logging in if they have multiple
   def default_course
-    courses.where(id: default_course_id) || courses.first
+    super || courses.first
   end
 
   def name
@@ -205,6 +213,10 @@ class User < ActiveRecord::Base
       .includes(:team_memberships)
   end
 
+  def auditing_course?(course)
+    course.membership_for_student(self).auditing?
+  end
+
   def team_leaders(course)
     @team_leaders ||= course_team(course).includes(:leaders) rescue nil
   end
@@ -226,22 +238,36 @@ class User < ActiveRecord::Base
     is_professor?(course) || is_gsi?(course) || is_admin?(course)
   end
 
+  ### TEAMS
   # Find the team associated with the team membership for a given course id
   def course_team(course)
     team_memberships.joins(:team).where("teams.course_id = ?", course.id).first.team rescue nil
   end
 
-  #Submissions - can be taken out?
-
-  def submissions_by_assignment_id
-    @submissions_by_assignment ||= submissions.group_by(&:assignment_id)
+  def team_for_course(course)
+    @cached_team ||= teams.where(course_id: course).first
   end
 
-  def submission_for_assignment(assignment)
-    submissions_by_assignment_id[assignment.id].try(:first)
+  def load_team(course)
+    @team ||= team_for_course(course)
   end
 
-  #grabbing the stored score for the current course
+  # Space for users to build a narrative around their identity
+  def character_profile(course)
+    course_memberships.where(course: course).try('character_profile')
+  end
+
+  #Import Users
+  def self.csv_header
+    "First Name,Last Name,Email,Username".split(',')
+  end
+
+  def archived_courses
+    courses.where(:status => false)
+  end
+
+
+  ### SCORE
   def cached_score_for_course(course)
     @cached_score ||= course_memberships.where(:course_id => course).first.score || 0
   end
@@ -256,7 +282,163 @@ class User < ActiveRecord::Base
      }
   end
 
-  #Badges
+  ### EARNED LEVELS AND GRADE LETTERS
+
+  def grade_level_for_course(course)
+    @grade_level ||= Course.find(course.id).grade_level_for_score(cached_score_for_course(course))
+  end
+
+  def grade_letter_for_course(course)
+    @grade_letter_for_course ||= course.grade_letter_for_score(cached_score_for_course(course))
+  end
+
+  def next_element_level(course)
+    next_element = nil
+    course.grade_scheme_elements.order_by_low_range.each_with_index do |element, index|
+      if (element.high_range >= cached_score_for_course(course)) && (cached_score_for_course(course) >= element.low_range)
+        next_element = course.grade_scheme_elements[index + 1]
+      end
+      if next_element.nil?
+        if element.low_range > cached_score_for_course(course)
+          next_element = course.grade_scheme_elements.order_by_low_range.first
+        end
+      end
+    end
+    return next_element
+  end
+
+  def points_to_next_level(course)
+    next_element_level(course).low_range - cached_score_for_course(course)
+  end
+
+
+  ### COURSE POINTS AVAILABLE
+
+  def point_total_for_course(course)
+    @point_total_for_course ||= course.assignments.point_total_for_student(self) + earned_badge_score_for_course(course)
+  end
+
+  #TODO: Should take into account students weights 
+  def point_total_for_assignment_type(assignment_type)
+    assignment_type.assignments.map{ |a| a.point_total }.sum
+  end
+
+  ### ASSIGNMENT TYPE SCORES
+  def scores_by_assignment_type
+    grades.group(:assignment_type_id).pluck('assignment_type_id, SUM(score)')
+  end
+
+  def score_for_assignment_type(assignment_type)
+    grades.where(assignment_type: assignment_type).score
+  end
+
+  ### GRADES
+
+  #Checking specifically if there is a released grade for an assignment
+  def grade_released_for_assignment?(assignment)
+    if grade_for_assignment(assignment).present?
+      (grade_for_assignment(assignment).status == "Graded" && !assignment.release_necessary?) || grade_for_assignment(assignment).status == "Released"
+    end
+  end
+
+  def score_for_assignment(assignment)
+    grade_for_assignment(assignment).score || 0
+  end
+
+  #Grabbing the grade for an assignment
+  def grade_for_assignment(assignment)
+    assignment_grades[assignment.id] || grades.new(assignment: assignment)
+  end
+
+  def assignment_grades
+    @assignment_grades ||= {}.tap do |assignment_grades|
+      grades.each do |grade|
+        assignment_grades[grade.assignment_id] = grade
+      end
+    end
+  end
+
+  def released_score_for_assignment_type(assignment_type)
+    grades.released.where(assignment_type: assignment_type).score
+  end
+
+  def assignment_scores_for_course(course)
+    grades.released.where(course: course).score
+  end
+
+  def point_total_for_assignment(assignment)
+    grades.where(:assignment_id => assignment.id).first.try(:point_total) || nil
+  end
+
+  # Powers the worker to recalculate student scores
+  def cache_course_score(course_id)
+    membership = course_memberships.where(course_id: course_id).first
+    unless membership.nil?
+      if membership.course.add_team_score_to_student?
+        membership.update_attribute :score, (grades.released.where(course_id: course_id).score || 0) + (earned_badge_score_for_course(course_id) || 0 ) + ( self.team_for_course(course_id).try(:score) || 0 )
+      else
+        membership.update_attribute :score, (grades.released.where(course_id: course_id).score || 0) + (earned_badge_score_for_course(course_id) || 0 )
+      end
+    end
+  end
+
+  ### PREDICTIONS
+
+  def predictions(course)
+    scores = []
+    course.assignment_types.each do |assignment_type|
+      scores << { data: [grades.released.where(assignment_type: assignment_type).score], name: assignment_type.name }
+    end
+
+
+    _assignments = assignments.where(course: course)
+    in_progress = _assignments.graded_for_student(self)
+    earned_badge_score = earned_badges.where(course: course).score
+    if earned_badge_score > 0
+      scores << { :data => [earned_badge_score], :name => "#{course.badge_term.pluralize}" }
+    end
+
+    return {
+      :student_name => name,
+      :scores => scores,
+      :course_total => course.total_points + earned_badge_score,
+      :in_progress => in_progress.point_total + earned_badge_score,
+      # :grade_levels => grade_levels
+      }
+  end
+
+  ### TEAMS
+  # Find the team associated with the team membership for a given course id
+  def course_team(course)
+    team_memberships.joins(:team).where("teams.course_id = ?", course.id).first.team rescue nil
+  end
+
+  def team_for_course(course)
+    @cached_team ||= teams.where(course_id: course).first
+  end
+
+  def load_team(course)
+    @team ||= team_for_course(course)
+  end
+
+  def team_score(course)
+    teams.where(:course => course).pluck('score').first
+  end
+
+  ### SUBMISSIONS
+  def submissions_by_assignment_id
+    @submissions_by_assignment ||= submissions.group_by(&:assignment_id)
+  end
+
+  def submission_for_assignment(assignment)
+    submissions_by_assignment_id[assignment.id].try(:first)
+  end
+
+  ### BADGES
+
+  def earned_badge?(badge)
+    earned_badges[badge.id].present?
+  end
 
   def earned_badges_by_badge
     @earned_badges_by_badge ||= earned_badges.group_by(&:badge_id)
@@ -307,10 +489,6 @@ class User < ActiveRecord::Base
       .where(student_visible: true)
   end
 
-  def student_visible_earned_badge_ids(course)
-    student_visible_earned_badges(course).collect(&:id)
-  end
-
   # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
   # 2) the student has either not earned at all, but is visible and available, or...
@@ -323,12 +501,12 @@ class User < ActiveRecord::Base
   end
 
   # badges that have not been marked 'visible' by the instructor, and for which
-  # the student has earned a badge, but the badge has yet to be marked 'student_visible'
+  # the student has earned a badge, but the earned badge has yet to be marked 'student_visible'
   def student_invisible_badges(course)
     Badge
       .where(visible: false)
       .where(course_id: course[:id])
-      .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], true)
+      .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
   end
 
   def earn_badges(badges)
@@ -337,55 +515,30 @@ class User < ActiveRecord::Base
     end
   end
 
-  def grade_level_for_course(course)
-    @grade_level ||= Course.find(course.id).grade_level_for_score(cached_score_for_course(course))
-  end
 
-  def grade_letter_for_course(course)
-    @grade_letter_for_course ||= course.grade_letter_for_score(cached_score_for_course(course))
-  end
+  ### WEIGHTS
+  def weight_for_assignment_type(assignment_type)
+    assignment_type_weights[assignment_type.id]
+  end  
 
-  def next_element_level(course)
-    next_element = nil
-    course.grade_scheme_elements.order_by_low_range.each_with_index do |element, index|
-      if (element.high_range >= cached_score_for_course(course)) && (cached_score_for_course(course) >= element.low_range)
-        next_element = course.grade_scheme_elements[index + 1]
-      end
-      if next_element.nil?
-        if element.low_range > cached_score_for_course(course)
-          next_element = course.grade_scheme_elements.order_by_low_range.first
-        end
+  def assignment_type_weights
+    @assignment_type_weights ||= {}.tap do |assignment_type_weights|
+      course.assignment_types.weights_for_student(student).each do |assignment_type_id, weight|
+        assignment_type_weights[assignment_type_id] = weight
       end
     end
-    return next_element
+  end
+  
+  def assignment_weights
+    @assignment_weights ||= {}.tap do |assignment_weights|
+      assignment_weights.each do |weights|
+        assignment_weights[weights.assignment_id] = weights
+      end
+    end
   end
 
-  def points_to_next_level(course)
-    next_element_level(course).low_range - cached_score_for_course(course)
-  end
-
-  def point_total_for_course(course)
-    @point_total_for_course ||= course.assignments.point_total_for_student(self) + earned_badge_score_for_course(course)
-  end
-
-  def point_total_for_assignment_type(assignment_type)
-    assignment_type.assignments.point_total_for_student(self)
-  end
-
-  def scores_by_assignment_type
-    grades.group(:assignment_type_id).pluck('assignment_type_id, SUM(score)')
-  end
-
-  def score_for_assignment_type(assignment_type)
-    grades.where(assignment_type: assignment_type).score
-  end
-
-  def grade_for_assignment(assignment)
-    grades.where(assignment: assignment).first
-  end
-
-  def released_score_for_assignment_type(assignment_type)
-    grades.released.where(assignment_type: assignment_type).score
+  def weight_for_assignment(assignment)
+    assignment_weights[assignment.id]
   end
 
   def weights_for_assignment_type_id(assignment_type)
@@ -407,6 +560,8 @@ class User < ActiveRecord::Base
     assignment_weights.where(course: course).pluck('weight').count
   end
 
+
+  ### GROUPS 
   def groups_by_assignment_id
     @group_by_assignment ||= groups.group_by(&:assignment_id)
   end
@@ -415,80 +570,6 @@ class User < ActiveRecord::Base
     @group_for_assignment ||= assignment_groups.where(assignment: assignment).first.try(:group)
   end
 
-  def team_for_course(course)
-    @cached_team ||= teams.where(course_id: course).first
-  end
-
-  def load_team(course)
-    @team ||= team_for_course(course)
-  end
-
-  #Auditing Course
-
-  def auditing_course?(course)
-    course.membership_for_student(self).auditing?
-  end
-
-  #Import Users
-  def self.csv_header
-    "First Name,Last Name,Email,Username".split(',')
-  end
-
-  def team_score(course)
-    teams.where(:course => course).pluck('score').first
-  end
-
-  def predictions(course)
-    scores = []
-    course.assignment_types.each do |assignment_type|
-      scores << { data: [grades.released.where(assignment_type: assignment_type).score], name: assignment_type.name }
-    end
-
-
-    _assignments = assignments.where(course: course)
-    in_progress = _assignments.graded_for_student(self)
-    earned_badge_score = earned_badges.where(course: course).score
-    if earned_badge_score > 0
-      scores << { :data => [earned_badge_score], :name => "#{course.badge_term.pluralize}" }
-    end
-
-    return {
-      :student_name => name,
-      :scores => scores,
-      :course_total => course.total_points + earned_badge_score,
-      :in_progress => in_progress.point_total + earned_badge_score,
-      # :grade_levels => grade_levels
-      }
-  end
-
-  def default_course
-    super || courses.first
-  end
-
-  def assignment_scores_for_course(course)
-    grades.released.where(course: course).score
-  end
-
-  def archived_courses
-    courses.where(:status => false)
-  end
-
-  # Powers the worker to recalculate student scores
-  def cache_course_score(course_id)
-    membership = course_memberships.where(course_id: course_id).first
-    unless membership.nil?
-      if membership.course.add_team_score_to_student?
-        membership.update_attribute :score, (grades.released.where(course_id: course_id).score || 0) + (earned_badge_score_for_course(course_id) || 0 ) + ( self.team_for_course(course_id).try(:score) || 0 )
-      else
-        membership.update_attribute :score, (grades.released.where(course_id: course_id).score || 0) + (earned_badge_score_for_course(course_id) || 0 )
-      end
-    end
-  end
-
-  # Space for students to build a narrative for their identity
-  def character_profile(course)
-    course_memberships.where(course: course).try('character_profile')
-  end
 
   private
 

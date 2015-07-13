@@ -21,7 +21,10 @@
             %button.button.select-none.tiny= "Uncheck All"
     %tbody
       - @students.each do |student|
-        - grade = current_course_data.grade_for_student_and_assignment(student, @assignment)
+        - grade = @grades[student.id] || Grade.new
+        - first_name = student.first_name
+        - last_name = student.last_name
+        - instructor_modified = grade.instructor_modified?
         %tr
           %td= link_to student.first_name, student_path(student)
           %td= link_to student.last_name, student_path(student)
@@ -50,7 +53,7 @@
             .button-bar
               %ul.button-group.radius.right
                 %li= link_to "Dashboard", student_path(student), :class => 'button'
-                - if grade.is_graded? || grade.is_released?
+                - if grade && grade.instructor_modified?
                   %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
                 - else
                   %li= link_to 'Grade', edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
