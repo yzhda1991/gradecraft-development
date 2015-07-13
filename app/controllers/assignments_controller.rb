@@ -241,21 +241,28 @@ class AssignmentsController < ApplicationController
         :assignment_id,
         :assignment_type_id,
         :id,
-        :point_total,
         :predicted_score,
+        :pass_fail_status,
         :status,
         :student_id,
+        :raw_score,
+        :final_score,
+        :score
       )
 
     @assignments.each do |assignment|
-      assignment.current_student_grade = @grades.where(:assignment_id => assignment.id).first
-    end
+      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
+        if grade.nil?
+          grade = Grade.create(:assignment => assignment, :student => current_student)
+        end
+        assignment.current_student_grade = grade
 
-    @grades.each do |grade|
-      grade.current_student_points = grade.status == "Graded" ? grade.point_total : nil
+        # Only pass through points if they have been released by the professor
+        #TODO: add remaining logic for when a grade is "Graded": current_student_data.grade_released_for_assignment?(assignment)
+        assignment.current_student_grade.graded_pass_fail_status = grade.status == "Graded" ? grade.pass_fail_status : nil
+        assignment.current_student_grade.graded_points = grade.status == "Graded" ? grade.score : nil
+      end
     end
-
-    #@assignments_grades = current_student_data.assignment_grades
   end
 
   private

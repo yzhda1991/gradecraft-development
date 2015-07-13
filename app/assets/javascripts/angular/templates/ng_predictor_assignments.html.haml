@@ -16,3 +16,11 @@
   .predictor-article-date
     .assignment-due-at{'ng-if' => 'assignmentDueInFuture(assignment)'}
       due: {{assignment.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
+
+  .predictor-article-main
+    .assignment-graded{'ng-if' => 'assignment.grade.status == "Graded"'}
+      %div{'ng-if' => 'assignment.pass_fail == false'}
+        {{assignment.grade.score}} / {{assignment.point_total}}
+      %div{'ng-if' => 'assignment.pass_fail == true'}
+        {{termFor(assignment.grade.pass_fail_status)}}
+    .assignment-predicted{'ng-if' => 'assignment.grade.status != "Graded"'}

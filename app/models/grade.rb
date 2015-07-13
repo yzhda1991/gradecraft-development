@@ -8,7 +8,8 @@ class Grade < ActiveRecord::Base
                   :raw_score, :released, :status, :student, :student_id, :submission, :_destroy,
                   :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes
 
-  attr_accessor :current_student_points
+  # grade points available to the predictor from the assignment controller
+  attr_accessor :graded_points, :graded_pass_fail_status
 
   STATUSES= ["In Progress", "Graded", "Released"]
 
