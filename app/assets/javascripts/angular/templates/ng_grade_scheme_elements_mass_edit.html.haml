@@ -1,3 +1,5 @@
 .div{'ng-repeat' => 'gse in gradeSchemeElements.grade_scheme_elements'}
   {{gse.level}}
   {{gse.letter}}
+
+%formly-form{:model => 'vm.model', :fields => 'vm.fields'}
