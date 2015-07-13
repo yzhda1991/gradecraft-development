@@ -17,6 +17,6 @@ describe "assignments/rubric_grades_review" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Assignment Detailed Grades (#{ points @assignment.point_total } points)", :count => 1
+    assert_select "h3", text: "Assignment Review Rubric Grades (#{ points @assignment.point_total } points)", :count => 1
   end
 end

@@ -13,7 +13,7 @@ describe "assignments/show" do
     assign(:title, @assignment.name)
     assign(:assignment, @assignment)
     view.stub(:current_course).and_return(@course)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
+    view.stub(:current_student).and_return(@student)
   end
 
   describe "as student" do
@@ -41,7 +41,7 @@ describe "assignments/show" do
       view.stub(:current_user_is_staff?).and_return(true)
       view.stub(:term_for).and_return("Assignment")
       assign(:students, [@student])
-      assign(:assignment_grades_by_student_id, {@student.id => nil})
+      assign(:grades, {@student.id => nil})
       render
       assert_select "h3", text: "#{@assignment.name} (#{ points @assignment.point_total} points)"
     end
@@ -51,7 +51,7 @@ describe "assignments/show" do
       view.stub(:current_user_is_staff?).and_return(true)
       view.stub(:term_for).and_return("Assignment")
       assign(:students, [@student])
-      assign(:assignment_grades_by_student_id, {@student.id => nil})
+      assign(:grades, {@student.id => nil})
       render
       assert_select "h3", text: "#{@assignment.name} (#{ points @assignment.point_total} points)"
     end

@@ -15,6 +15,9 @@ describe EarnedBadgesController do
       @student = create(:user)
       @student.courses << @course
 
+      @team = create(:team, course: @course)
+      @team.students << @student
+
       login_user(@professor)
       session[:course_id] = @course.id
       allow(EventLogger).to receive(:perform_async).and_return(true)

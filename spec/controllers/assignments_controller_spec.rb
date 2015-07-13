@@ -41,10 +41,10 @@ describe AssignmentsController do
         assigns(:groups).should eq([group])
       end
 
-      it "assigns assignment_grades_by_student_id" do
+      it "assigns grades" do
         grade = create(:grade, assignment: @assignment, student: @student)
         get :show, :id => @assignment.id
-        assigns(:assignment_grades_by_student_id).should eq({@student.id => grade})
+        assigns(:grades).should eq(@assignment.grades)
       end
 
       describe "with team id in params" do
@@ -61,19 +61,6 @@ describe AssignmentsController do
           assigns(:students).should eq([@student])
         end
 
-        it "assigns all team students auditing as auditors" do
-          # we verify only auditing students on team assigned as @auditing
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-          @student.course_memberships.first.update(auditing: true)
-          other_student.course_memberships.first.update(auditing: true)
-
-          get :show, {:id => @assignment.id, :team_id => team.id}
-          assigns(:auditors).should eq([@student])
-        end
       end
 
       describe "with no team id in params" do
@@ -88,12 +75,6 @@ describe AssignmentsController do
           get :show, :id => @assignment.id
           assigns(:students).should include(@student)
           assigns(:students).should include(other_student)
-        end
-
-        it "assigns all auditing students as auditors" do
-          @student.course_memberships.first.update(auditing: true)
-          get :show, :id => @assignment.id
-          assigns(:auditors).should eq([@student])
         end
       end
 
@@ -268,10 +249,10 @@ describe AssignmentsController do
         assigns(:groups).should eq([group])
       end
 
-      it "assigns assignment_grades_by_student_id" do
+      it "assigns grades" do
         grade = create(:grade, assignment: @assignment, student: @student)
         get :show, :id => @assignment.id
-        assigns(:assignment_grades_by_student_id).should eq({@student.id => grade})
+        assigns(:grades).should eq(@assignment.grades)
       end
 
       describe "with team id in params" do
@@ -288,19 +269,6 @@ describe AssignmentsController do
           assigns(:students).should eq([@student])
         end
 
-        it "assigns all team students auditing as auditors" do
-          # we verify only auditing students on team assigned as @auditing
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-          @student.course_memberships.first.update(auditing: true)
-          other_student.course_memberships.first.update(auditing: true)
-
-          get :show, {:id => @assignment.id, :team_id => team.id}
-          assigns(:auditors).should eq([@student])
-        end
       end
 
       describe "with no team id in params" do
@@ -317,11 +285,6 @@ describe AssignmentsController do
           assigns(:students).should include(other_student)
         end
 
-        it "assigns all auditing students as auditors" do
-          @student.course_memberships.first.update(auditing: true)
-          get :show, :id => @assignment.id
-          assigns(:auditors).should eq([@student])
-        end
       end
 
       it "assigns the rubric as rubric" do
@@ -387,11 +350,10 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET copy" do
-      it "assigns title and assignments" do
-        pending "copy fails at assignments, change to assignments_path"
-        get :copy, :id => @assignment.id
-        response.should render_template(:copy)
+    describe "POST copy" do
+      it "duplicates an assignment" do
+        post :copy, :id => @assignment.id
+        expect @course.assignments.count.should eq(2)
       end
     end
 
@@ -472,7 +434,6 @@ describe AssignmentsController do
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         get :rubric_grades_review, :id => @assignment.id
         assigns(:rubric).should eq(rubric)
-        assigns(:metrics).should eq(rubric.metrics)
       end
 
       it "assigns assignment score levels ordered by value" do
@@ -518,19 +479,6 @@ describe AssignmentsController do
           assigns(:students).should eq([@student])
         end
 
-        it "assigns all team students auditing as auditors" do
-          # we verify only auditing students on team assigned as @auditing
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-          @student.course_memberships.first.update(auditing: true)
-          other_student.course_memberships.first.update(auditing: true)
-
-          get :rubric_grades_review, {:id => @assignment.id, :team_id => team.id}
-          assigns(:auditors).should eq([@student])
-        end
       end
 
       describe "with no team id in params" do
@@ -545,12 +493,6 @@ describe AssignmentsController do
           get :rubric_grades_review, :id => @assignment.id
           assigns(:students).should include(@student)
           assigns(:students).should include(other_student)
-        end
-
-        it "assigns all auditing students as auditors" do
-          @student.course_memberships.first.update(auditing: true)
-          get :rubric_grades_review, :id => @assignment.id
-          assigns(:auditors).should eq([@student])
         end
       end
     end

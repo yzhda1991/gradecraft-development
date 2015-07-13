@@ -11,12 +11,11 @@ describe "students/predictor/_badges" do
     student.courses << @course
     view.stub(:current_course).and_return(@course)
     view.stub(:current_student).and_return(student)
-    view.stub(:current_student_data).and_return(StudentData.new(student, @course))
     view.stub(:term_for).and_return("badges")
   end
 
   describe "with valuable badges" do
-    it "renders" do
+    it "renders successfully" do
       @course.valuable_badges?.should be_true
       render
     end

@@ -14,7 +14,7 @@ describe "assignments/individual/graded/_table_body" do
     student.courses << course
     @grade = create(:grade, course: course, assignment: @assignment, student: student)
     @students = [student]
-    @assignment_grades_by_student_id = {student.id => @grade}
+    @grades = {student.id => @grade}
     view.stub(:current_course).and_return(course)
   end
 

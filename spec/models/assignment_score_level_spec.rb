@@ -13,7 +13,6 @@ describe AssignmentScoreLevel do
     expect(AssignmentScoreLevel.new(name: nil)).to have(1).errors_on(:name)
   end
   it "is invalid without an assignment" do
-    pending "make this true in the model"
     expect(AssignmentScoreLevel.new(assignment_id: nil)).to have(1).errors_on(:assignment_id)
   end
   it "is invalid without a value" do

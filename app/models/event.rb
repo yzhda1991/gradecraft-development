@@ -8,4 +8,7 @@ class Event < ActiveRecord::Base
   
   belongs_to :course
 
+  # Check to make sure the event has a name before saving
+  validates_presence_of :name
+
 end

@@ -12,8 +12,6 @@ describe "info/grading_status" do
     @student = create(:user)
     assign(:assignment_types, @assignment_types)
     view.stub(:current_course).and_return(@course)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
-    view.stub(:current_course_data).and_return(CourseData.new(@course))
     view.stub(:term_for).and_return("custom_term")
   end
 
@@ -25,7 +23,7 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = []
       @in_progress_grades_by_assignment = []
     end
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end
@@ -37,7 +35,7 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = @grades.group_by(&:assignment)
       @in_progress_grades_by_assignment = []
     end
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end
@@ -49,7 +47,7 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = []
       @in_progress_grades_by_assignment = @grades.group_by(&:assignment)
     end
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end

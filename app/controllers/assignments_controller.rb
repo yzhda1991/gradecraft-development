@@ -32,15 +32,13 @@ class AssignmentsController < ApplicationController
     @groups = @assignment.groups
 
     # Returns a hash of grades given for the assignment in format of {student_id: grade}
-    @assignment_grades_by_student_id = current_course_data.assignment_grades(@assignment)
+    @grades = @assignment.grades
     @teams = current_course.teams
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team)
-      @auditors = current_course.students_auditing.includes(:teams).where(:teams => team_params).includes(:submissions)
+      @students = current_course.students_by_team(@team)
     else
-      @students = current_course.students_being_graded
-      @auditors = current_course.students_auditing
+      @students = current_course.students
     end
     if @assignment.rubric.present?
       @rubric = @assignment.fetch_or_create_rubric
@@ -73,12 +71,6 @@ class AssignmentsController < ApplicationController
     render :detailed_grades if params[:detailed]
   end
 
-  # TODO: verify not used and remove
-  def rules
-    @assignment = current_course.assignments.find(params[:id])
-    @title = @assignment.name
-  end
-
   def new
     @title = "Create a New #{term_for :assignment}"
     @assignment = current_course.assignments.new
@@ -106,7 +98,7 @@ class AssignmentsController < ApplicationController
     if session[:return_to].present?
       redirect_to session[:return_to]
     else
-      redirect_to assignments #TODO change to assignments_path
+      redirect_to assignments_path 
     end
   end
 
@@ -152,7 +144,7 @@ class AssignmentsController < ApplicationController
 
       if @assignment.update_attributes(params[:assignment])
         set_assignment_weights
-        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  #{@assignment.name} successfully updated" }
+        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  <strong>#{@assignment.name }</strong> successfully updated" }
       else
         # TODO: refactor, see submissions_controller
         @title = "Edit #{term_for :assignment}"

@@ -264,7 +264,6 @@ GradeCraft::Application.routes.draw do
     get :grade_index
     get :timeline
     get :syllabus
-    get :calendar
     get :badges
     get :predictor
     get :course_progress

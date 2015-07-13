@@ -5,20 +5,18 @@ require 'spec_helper'
 describe AssignmentGroup do
 
   it "is valid with assignment and group" do
-    pending
+    @group = create(:group)
     assignment_group = AssignmentGroup.new(
-      assignment_id: "10", group_id: "1")
+      assignment_id: "10", group: @group)
     expect(assignment_group).to be_valid
   end
 
   it "is invalid without assignment" do
-    pending
     expect(AssignmentGroup.new(assignment_id: nil)).to have(1).errors_on(:assignment_id)
   end
 
   it "is invalid without group" do
-    pending
-    expect(AssignmentGroup.new(group_id: nil)).to have(1).errors_on(:group_id)
+    expect(AssignmentGroup.new(group: nil)).to have(1).errors_on(:group)
   end
 
 end

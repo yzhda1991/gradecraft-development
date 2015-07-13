@@ -34,6 +34,10 @@ class Course < ActiveRecord::Base
     User.students_auditing(self,team)
   end
 
+  def students_by_team(team)
+    User.students_by_team(self, team)
+  end
+
   attr_accessible :courseno, :name,
     :semester, :year, :badge_setting, :team_setting, :team_term, :user_term,
     :user_id, :course_id, :homepage_message, :group_setting,
@@ -50,7 +54,7 @@ class Course < ActiveRecord::Base
     :team_challenges, :team_leader_term, :max_assignment_types_weighted,
     :point_total, :in_team_leaderboard, :grade_scheme_elements_attributes,
     :add_team_score_to_student, :status, :assignments_attributes,
-    :start_date, :end_date, :pass_term, :fail_term, :syllabus
+    :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics
 
   with_options :dependent => :destroy do |c|
     c.has_many :assignment_types
@@ -256,6 +260,10 @@ class Course < ActiveRecord::Base
 
   def professor
     course_memberships.where(:role => "professor").first.user if course_memberships.where(:role => "professor").first.present?
+  end
+
+  def point_total_for_challenges
+    challenges.pluck('point_total').sum
   end
 
   #Export Users and Final Scores for Course
