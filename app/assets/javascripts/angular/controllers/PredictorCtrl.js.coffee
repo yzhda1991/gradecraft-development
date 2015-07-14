@@ -46,11 +46,14 @@
   $scope.addAssignments = (assignments)->
     $scope.assignments = assignments.assignments
     $scope.termFor = (term)->
-          switch term.toLowerCase()
-            when "assignment" then return assignments.term_for_assignment
-            when "pass" then return assignments.term_for_pass
-            when "fail" then return assignments.term_for_fail
-            else return ""
+      switch term.toLowerCase()
+        when "assignment" then return assignments.term_for_assignment
+        when "pass" then return assignments.term_for_pass
+        when "fail" then return assignments.term_for_fail
+        else return ""
+    $scope.passFailPrediction = (grade)->
+      prediction = if grade.predicted_score > 0 then $scope.termFor("pass") else $scope.termFor("fail")
+
 
   $scope.assignmentsForAssignmentType = (assignments,assignmentType)->
     _.where(assignments, {assignment_type_id: assignmentType})

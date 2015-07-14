@@ -582,29 +582,3 @@ class User < ActiveRecord::Base
   end
 
 end
-ght_count(course)
-    assignment_weights.where(course: course).pluck('weight').count
-  end
-
-
-  ### GROUPS
-  def groups_by_assignment_id
-    @group_by_assignment ||= groups.group_by(&:assignment_id)
-  end
-
-  def group_for_assignment(assignment)
-    @group_for_assignment ||= assignment_groups.where(assignment: assignment).first.try(:group)
-  end
-
-
-  private
-
-  def set_default_course
-    self.default_course ||= courses.first
-  end
-
-  def cache_last_login
-    self.cached_last_login_at = self.last_login_at
-  end
-
-end
