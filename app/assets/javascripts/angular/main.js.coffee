@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly', 'formlyFoundation'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly'])
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
@@ -23,3 +23,12 @@ INTEGER_REGEXP = /^\-?\d+$/
       elm.siblings().toggleClass('collapsed')
     )
     return
+
+#formly config
+@gradecraft.run((formlyConfig) ->
+  formlyConfig.setType({
+    name: 'input',
+    templateUrl: ''
+    }
+  })
+)

@@ -4,4 +4,8 @@
 %form{:name => 'gse.form'}
   %formly-form{:model => 'gse.model', :fields => 'gse.fields'}
   %button{:type => 'submit'}
-  {{gse}}
+
+  %script(type="text/x-template" id="input.html")
+    %div
+      %input{'ng-model' => 'model[options.key]'}
+      %pre{'ng-repeat' => '(key, val) in this', 'scope.{{key}}' => '{{val | json }}'}
