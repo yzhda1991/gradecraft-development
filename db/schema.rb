@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.boolean  "include_in_timeline",                           default: true
     t.boolean  "include_in_predictor",                          default: true
     t.integer  "position"
+    t.boolean  "include_in_to_do",                              default: true
     t.boolean  "use_rubric",                                    default: true
     t.boolean  "accepts_attachments",                           default: true
     t.boolean  "accepts_text",                                  default: true
@@ -222,6 +223,7 @@ ActiveRecord::Schema.define(version: 20150821033921) do
   end
 
   create_table "categories", force: :cascade do |t|
+    t.string   "name",        limit: 255
     t.text     "description"
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
@@ -390,7 +392,6 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.string   "pass_term",                     limit: 255
     t.string   "fail_term",                     limit: 255
     t.string   "syllabus"
-    t.boolean  "hide_analytics"
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
@@ -524,10 +525,15 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.integer  "predicted_score"
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
+<<<<<<< HEAD
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
+=======
+    t.boolean  "feedback_read"
+    t.datetime "feedback_read_date"
+>>>>>>> refactoring grade controller logic into grade factory
     t.boolean  "is_custom_value",                 default: false
   end
 
@@ -718,6 +724,13 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.string  "full_name"
     t.string  "last_name"
     t.string  "first_name"
+  create_table "submission_files_duplicate", id: false, force: true do |t|
+    t.string  "key",        limit: 255
+    t.string  "format",     limit: 255
+    t.integer "upload_id"
+    t.string  "full_name",  limit: 255
+    t.string  "last_name",  limit: 255
+    t.string  "first_name", limit: 255
   end
 
   create_table "submissions", force: :cascade do |t|
