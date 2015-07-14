@@ -54,6 +54,23 @@
     $scope.passFailPrediction = (grade)->
       prediction = if grade.predicted_score > 0 then $scope.termFor("pass") else $scope.termFor("fail")
 
+  $scope.slider =
+    { 'options': {
+        start: (event, ui)->
+          #
+        stop: (event, ui)->
+          assignment_id = ui.handle.parentElement.dataset.id
+          value = ui.value
+          $scope.updatePredictedScore(assignment_id,value)
+      }
+    }
+
+  $scope.updatePredictedScore = (assignment_id,value)->
+    debugger
+    $http.put('/assignments/' + assignment_id + '/grades/predict_score', predicted_score: value).success(
+    )
+    .error(
+    )
 
   $scope.assignmentsForAssignmentType = (assignments,assignmentType)->
     _.where(assignments, {assignment_type_id: assignmentType})
