@@ -13,7 +13,7 @@
         = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   .columns{:style => "overflow: auto"}
-    %table.responsive
+    %table.responsive.nofeatures_default_rank_dynatable
       %thead
         %tr
           %th{:scope => "col", "data-dynatable-sorts" => "rank"} Rank
@@ -47,13 +47,14 @@
                 %td{"data-title" => "Grade"}
                   - unless @student_grade_schemes_by_id[student.id].nil?
                     = "#{@student_grade_schemes_by_id[student.id][:letter]}"
-                    = "#{@student_grade_schemes_by_id[student.id][:level]}"
+                    = " – #{@student_grade_schemes_by_id[student.id][:level]}"
                 - if current_course.has_badges?
                   %td#earned_badges{"data-title" => "Badges"}
                     - if @earned_badges_by_student_id[student.id]
                       - @earned_badges_by_student_id[student.id].each do |badge|
                         %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
                         //%img.has-tip{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name, :data => {'tooltip' => 'true'}, 'aria-haspopup' => 'true' }
+                    %td{:style => "display: none"}= student.earned_badges_for_course(current_course).count
                 %td{"data-title" => "Options"}
                   .button-bar
                     %ul.button-group.radius.right

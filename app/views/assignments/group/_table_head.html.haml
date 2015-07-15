@@ -1,0 +1,15 @@
+%tr
+  - if @assignment.release_necessary?
+    %th
+  %th= current_course.group_term
+  %th Score
+  - if @assignment.assignment_type.student_weightable?
+    %th Multiplied Scores
+  - if @assignment.has_levels?
+    %th Level
+  %th Badges Earned
+  - if @assignment.release_necessary?
+    %th Status
+  - if @assignment.accepts_submissions?
+    %th Submission
+  %th

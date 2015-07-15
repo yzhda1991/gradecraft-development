@@ -11,7 +11,7 @@
         %h4.subtitle= assignment_type.name
 
         .columns{:style => "overflow: auto"}
-          %table.responsive.nofeatures_dynatable
+          %table.responsive.nopage_dynatable
             %caption.sr-only= assignment_type.name
             %thead
               %tr
@@ -29,8 +29,8 @@
                   %i.fi-info{:title => "The average of all scores above zero", :data => {'tooltip' => true} }
                   %span.sr-only
                     The average of all scores above zero
-                %th # Submissions
-                %th # Grades
+                %th Submissions
+                %th Grades
                 %th{:style => "min-width: 250px"}
             %tbody
               - assignments = assignments_for_type.sorted
