@@ -1,5 +1,5 @@
 - @students.each do |student|
-  - grade = @grades.where(:student_id => student.id).first || Grade.new
+  - grade = @grades[student.id] || Grade.new
   - first_name = student.first_name
   - last_name = student.last_name
   - status = grade.status
