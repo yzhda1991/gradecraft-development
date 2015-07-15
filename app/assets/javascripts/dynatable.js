@@ -225,7 +225,7 @@ $('table.nofeatures_dynatable').dynatable({
         paginate: false,
         search: false,
         recordCount: false, 
-        sort: false
+        sort: true
       },
   readers: {
       dueDate: function(el, record) {
@@ -236,6 +236,12 @@ $('table.nofeatures_dynatable').dynatable({
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       },
       maxValue: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      lowRange: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      highRange: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       }
     }
