@@ -7,7 +7,7 @@ $('table.dynatable').dynatable({
       }
       ,
       score: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+        return Number(el.innerHTML.replace(/,/g,""));
       }
     }
 });
@@ -23,7 +23,7 @@ $('table.nopage_dynatable').dynatable({
       return Number(el.innerHTML) || 0;
     },
     score: function(el, record) {
-      return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      return Number(el.innerHTML.replace(/,/g,""));
     },
     totalScore: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,"")) || 0;
@@ -48,6 +48,27 @@ $('table.nopage_dynatable').dynatable({
     },
     badges: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    min: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    max: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    median: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    ave: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    aveEarned: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    submissions: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    grades: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
     }
   }
 });
@@ -61,10 +82,9 @@ $('table.nosearch_dynatable').dynatable({
   readers: {
       rank: function(el, record) {
         return Number(el.innerHTML) || 0;
-      }
-      ,
+      },
       score: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+        return Number(el.innerHTML.replace(/,/g,""));
       }
     }
 });
@@ -98,6 +118,21 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       },
       maxValue: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      totalBadgeScore: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      badgeCount: function(el, record) {
+        return Number(el.innerHTML.replace()) || 0;
+      },
+      score: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,""));
+      },
+      rawScore: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      multipliedScore: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       }
     }
@@ -140,6 +175,9 @@ $('table.nofeatures_default_score_dynatable').dynatable({
       sorts: { 'score': 1 }
   },
   readers: {
+      score: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,""));
+      },
       dueDate: function(el, record) {
         record.parsedDate = Date.parse(el.innerHTML);
         return el.innerHTML;
@@ -148,6 +186,21 @@ $('table.nofeatures_default_score_dynatable').dynatable({
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       },
       maxValue: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      rank: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      meanStudentScore: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      challengeScore: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      badges: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      students: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       }
     }
@@ -172,7 +225,7 @@ $('table.nofeatures_dynatable').dynatable({
         paginate: false,
         search: false,
         recordCount: false, 
-        sort: false
+        sort: true
       },
   readers: {
       dueDate: function(el, record) {
@@ -183,6 +236,12 @@ $('table.nofeatures_dynatable').dynatable({
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       },
       maxValue: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      lowRange: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      highRange: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       }
     }
@@ -231,7 +290,10 @@ $('table.nofeatures_default_rank_dynatable').dynatable({
       }
       ,
       score: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+        return Number(el.innerHTML.replace(/,/g,""));
+      },
+      badgeCount: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,""));
       }
     }
 });

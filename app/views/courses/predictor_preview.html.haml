@@ -57,7 +57,7 @@
                         - else
                           %span.pScore= "0 "
                           %span.score-level-name
-                          .slider{:id => "slider-#{assignment.id}", :max => assignment.point_total, :value => 0, :'data-scorelevelvals' => "#{assignment.assignment_score_levels.map(&:value)}", :'data-scorelevelnames' => "#{assignment.assignment_score_levels.map(&:name)}", :'data-highlight' => "true"}
+                          .slider{:id => "slider-#{assignment.id}", :max => assignment.point_total, :value => 0, :'data-scorelevelvals' => "#{assignment.assignment_score_levels.map(&:value)}", :'data-scorelevelnames' => "#{assignment.assignment_score_levels.map(&:name)}"}
                       .clear
         //= render 'students/predictor/badges'
         //= render 'students/predictor/challenges'

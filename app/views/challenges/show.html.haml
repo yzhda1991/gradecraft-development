@@ -33,7 +33,7 @@
             = link_to "(Remove)", remove_uploads_path({ :model => "ChallengeFile", :upload_id => cf.id })
 
     = form_tag edit_status_challenge_challenge_grades_path @challenge do
-      %table.responsive.nofeatures_dynatable
+      %table.responsive.nofeatures_default_score_dynatable
         %thead
           %tr
             %th= current_course.team_term

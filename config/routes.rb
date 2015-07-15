@@ -79,7 +79,7 @@ GradeCraft::Application.routes.draw do
         post :email_import
         post :username_import
         post :name_import
-        post :remove
+        get :remove
       end
     end
     resources :submissions do

@@ -2,7 +2,7 @@
 require 'spec_helper'
 include CourseTerms
 
-describe "assignments/individual/graded/_table_body" do
+describe "assignments/individual/_table_body" do
 
   before(:each) do
     clean_models
