@@ -56,27 +56,43 @@
 
   $scope.slider =
     { 'options': {
-        start: (event, ui)->
-          #
+        range: "min",
+
+        #start: (event, ui)->
+
+        slide: (event, ui)->
+          scoreNames = JSON.parse(ui.handle.parentElement.dataset.scoreLevelNames)
+          scoreValues = JSON.parse(ui.handle.parentElement.dataset.scoreLevelValues)
+          if(scoreValues.length > 0)
+            closest = null
+            $.each(scoreValues, ()->
+              if (closest == null || Math.abs(this - ui.value) < Math.abs(closest - ui.value))
+                closest = this
+            )
+            console.log(closest);
+            #$(this).slider("value", closest);
+
         stop: (event, ui)->
           assignment_id = ui.handle.parentElement.dataset.id
           value = ui.value
-          $scope.updatePredictedScore(assignment_id,value)
+          PredictorService.postPredictedScore(assignment_id,value)
       }
     }
 
-  $scope.updatePredictedScore = (assignment_id,value)->
-    debugger
-    $http.put('/assignments/' + assignment_id + '/grades/predict_score', predicted_score: value).success(
-    )
-    .error(
-    )
+  $scope.scoreLevelValues = (assignment)->
+    _.map(assignment.score_levels,(level)->
+        level.value
+      )
+  $scope.scoreLevelNames = (assignment)->
+    _.map(assignment.score_levels,(level)->
+        level.name
+      )
 
+  # Filter the assignments, return just the assignments for the assignment type
   $scope.assignmentsForAssignmentType = (assignments,assignmentType)->
     _.where(assignments, {assignment_type_id: assignmentType})
 
   $scope.assignmentDueInFuture = (assignment)->
-
     if assignment.due_at != null && Date.parse(assignment.due_at) >= Date.now()
       return true
     else

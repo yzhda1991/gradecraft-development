@@ -76,10 +76,11 @@ class Assignment < ActiveRecord::Base
   scope :chronological, -> { order('due_at ASC') }
   scope :alphabetical, -> { order('name ASC') }
   acts_as_list scope: :assignment_type
+
+  # TODO: remove once calls to sorted are taken out (now defaults to sorted)
   scope :sorted, -> { order('position ASC') }
 
-  # TODO: fix `point_total'(~:101) so this will work, see error at /predictor_grade_levels :
-  #default_scope { order('last_name ASC') }
+  #default_scope { order('position ASC') }
 
   # Filtering Assignments by various date properties
   scope :with_due_date, -> { where('assignments.due_at IS NOT NULL') }
@@ -98,13 +99,13 @@ class Assignment < ActiveRecord::Base
     super(options.merge(:only => [ :id, :content, :order, :done ] ))
   end
 
-  def content 
+  def content
     content = []
     if assignment_files.present?
       assignments_files.each do |af|
-        content << af.url 
-      end 
-      content << description 
+        content << af.url
+      end
+      content << description
     end
     return content
   end

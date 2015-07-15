@@ -1,6 +1,7 @@
 /*
  jQuery UI Slider plugin wrapper
  https://github.com/angular-ui/ui-slider
+ alternative? http://www.widecodes.com/0zxWVUejqW/angularjs-and-jquery-mobile-slider-directive.html
 */
 angular.module('ui.slider', []).value('uiSliderConfig',{}).directive('uiSlider', ['uiSliderConfig', '$timeout', function(uiSliderConfig, $timeout) {
     uiSliderConfig = uiSliderConfig || {};

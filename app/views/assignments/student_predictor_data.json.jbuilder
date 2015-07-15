@@ -1,7 +1,7 @@
 json.assignments @assignments do |assignment|
   next unless assignment.point_total > 0 || assignment.pass_fail?
   json.merge! assignment.attributes
-
+  json.score_levels assignment.assignment_score_levels.map {|asl| {name: asl.name, value: asl.value}}
   if assignment.current_student_grade
     assignment.current_student_grade.tap do |grade|
       json.grade do

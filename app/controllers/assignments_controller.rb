@@ -98,7 +98,7 @@ class AssignmentsController < ApplicationController
     if session[:return_to].present?
       redirect_to session[:return_to]
     else
-      redirect_to assignments_path 
+      redirect_to assignments_path
     end
   end
 

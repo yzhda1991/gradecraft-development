@@ -9,9 +9,13 @@
       $http.get("predictor_assignments")
 
 
+    postPredictedScore = (assignment_id,value)->
+      $http.post('/assignments/' + assignment_id + '/grades/predict_score', predicted_score: value)
+
     return {
         getGradeLevels: getGradeLevels,
         getAssignmentTypes: getAssignmentTypes,
-        getAssignments: getAssignments
+        getAssignments: getAssignments,
+        postPredictedScore: postPredictedScore
     }
 ]

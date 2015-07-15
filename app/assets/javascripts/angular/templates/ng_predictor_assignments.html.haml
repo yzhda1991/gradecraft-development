@@ -26,14 +26,9 @@
     .assignment-predicted{'ng-if' => 'assignment.grade.status != "Graded"'}
 
       %div{'ng-if' => 'assignment.pass_fail == false'}
-        predicted: {{assignment.grade.predicted_score}}
         %span.score-level-name
-        .slider{'ui-slider'=>'slider.options','min'=>'0', 'max'=>'{{assignment.point_total}}', 'step'=>'1', 'ng-model'=>'assignment.grade.predicted_score', 'data-id'=>'{{assignment.id}}'}
-
-
-        / .slider{:id => 'slider-{{assignment.id}}', :max => '{{assignment.point_total}}', :value => '{{ssignment.grade.predicted_score}}', :'data-scorelevelvals' => "#{assignment.assignment_score_levels.map(&:value)}", :'data-scorelevelnames' => "#{assignment.assignment_score_levels.map(&:name)}", :'data-highlight' => "true"}
-
-
+        .slider{'ui-slider'=>'slider.options','min'=>'0', 'max'=>'{{assignment.point_total}}', 'step'=>'1', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}', 'score-level-values'=>'{{scoreLevelValues(assignment)}}','score-level-names'=>'{{scoreLevelNames(assignment)}}'}}
+        predicted: {{assignment.grade.predicted_score}}
 
       %div{'ng-if' => 'assignment.pass_fail == true'}
         .switch-label.pass-fail-contingent{:data => {:on => '{{termFor("pass")}}', :off => '{{termFor("fail")}}'}}
