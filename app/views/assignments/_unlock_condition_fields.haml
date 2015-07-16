@@ -24,3 +24,17 @@
   %span.large-6.columns
     = f.hidden_field :_destroy, class: 'destroy'
     = link_to 'Delete Condition', '#', class: 'remove-unlock-condition button radius right'
+.small-12.columns.panel
+  %h5= "Requirement"
+  %span.large-3.columns
+    = f.input :condition_type, :label => "Type", :as => :select
+    = f.input :condition_id, :label => "Condition", :as => :select
+  
+  %span.large-3.columns
+    = f.input :condition_state, :as => :select
+    = f.input :condition_value
+    = f.input :condition_date, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker'}
+    = f.hidden_field :id
+  %span.large-6.columns
+    = f.hidden_field :_destroy, class: 'destroy'
+    = link_to 'Remove Unlock Condition', '#', class: 'remove-unlock-condition button radius right'

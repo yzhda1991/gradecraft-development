@@ -218,7 +218,7 @@
             - else
               = link_to af.filename, af.url, :target => "_blank"
               = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => @assignment.id, :upload_id => af.id } )
-
+              
     .button-bar
       %ul.button-group.radius.right
         %li= f.button :submit, "#{@assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
