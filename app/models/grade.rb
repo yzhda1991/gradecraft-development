@@ -8,22 +8,23 @@ class Grade < ActiveRecord::Base
                   :raw_score, :released, :status, :student, :student_id, :submission, :_destroy,
                   :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes
 
-  attr_accessor :current_student_points
+  # grade points available to the predictor from the assignment controller
+  attr_accessor :graded_points, :graded_pass_fail_status
 
   STATUSES= ["In Progress", "Graded", "Released"]
 
   # Note Pass and Fail use term_for in the views
   PASS_FAIL_STATUS = ["Pass", "Fail"]
 
-  belongs_to :course
+  belongs_to :course, touch: true
   belongs_to :assignment, touch: true
-  belongs_to :assignment_type
+  belongs_to :assignment_type, touch: true
   belongs_to :student, :class_name => 'User', touch: true
   belongs_to :team, touch: true
-  belongs_to :submission # Optional
-  belongs_to :task # Optional
-  belongs_to :group, :polymorphic => true # Optional
-  belongs_to :graded_by, class_name: 'User'
+  belongs_to :submission, touch: true # Optional
+  belongs_to :task, touch: true # Optional
+  belongs_to :group, :polymorphic => true, touch: true # Optional
+  belongs_to :graded_by, class_name: 'User', touch: true
 
   has_many :earned_badges, :dependent => :destroy
 

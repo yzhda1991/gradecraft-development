@@ -13,7 +13,6 @@ describe "students/syllabus" do
     @student.courses << @course
     view.stub(:current_course).and_return(@course)
     view.stub(:current_student).and_return(@student)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
   end
 
   #TODO: once merged, move to assignments_spec
@@ -23,4 +22,5 @@ describe "students/syllabus" do
     render
     assert_select "div.italic.not_bold", text: "#{points @assignment.point_total} points possible", count: 1
   end
+
 end

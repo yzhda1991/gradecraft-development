@@ -8,7 +8,8 @@ describe "students/show" do
     clean_models
     @course = create(:course)
     @student = create(:user)
-    @course.students << @student
+    @student.courses << @course
+    @membership = CourseMembership.where(user: @student, course: @course).first.update(score: '100000')
     @assignment_type_1 = create(:assignment_type, course: @course)
     @assignment_type_2 = create(:assignment_type, course: @course)
     @course.assignment_types << [@assignment_type_1, @assignment_type_2]
@@ -23,21 +24,11 @@ describe "students/show" do
   before(:each) do
     view.stub(:current_course).and_return(@course)
     view.stub(:current_student).and_return(@student)
-    view.stub(:current_student_data).and_return(StudentData.new(@student, @course))
   end
 
   it "renders successfully" do
-    pending
     render
-    assert_select "h4", :count => 1
+    assert_select "h4", text: "You have earned 0 points", :count => 1
   end
 
-  it "renders the breadcrumbs" do
-    pending
-    render
-    assert_select ".content-nav", :count => 1
-    assert_select ".breadcrumbs" do
-      assert_select "a", :count => 3
-    end
-  end
 end

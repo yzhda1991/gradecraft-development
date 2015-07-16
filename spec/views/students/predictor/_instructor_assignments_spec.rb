@@ -13,10 +13,9 @@ describe "students/predictor/_instructor_assignments" do
     student.courses << @course
     view.stub(:current_course).and_return(@course)
     view.stub(:current_student).and_return(student)
-    view.stub(:current_student_data).and_return(StudentData.new(student, @course))
   end
 
-  it "renders" do
+  it "renders successfully" do
     render
   end
 end

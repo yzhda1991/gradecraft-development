@@ -12,7 +12,9 @@ describe "earned_badges/mass_edit" do
     @student_2 = create(:user)
     @course.users << [@student_1, @student_2]
     @students = @course.users
-    @earned_badge = create(:earned_badge, course: @course, badge: @badge, student: @student_1)
+    @earned_badge_1 = create(:earned_badge, course: @course, badge: @badge, student: @student_1)
+    @earned_badge_2 = create(:earned_badge, course: @course, badge: @badge, student: @student_2)
+    @earned_badges = @badge.earned_badges
   end
 
   before(:each) do
@@ -21,13 +23,11 @@ describe "earned_badges/mass_edit" do
   end
 
   it "renders successfully" do
-    pending
     render
     assert_select "h3", text: "Quick Award #{@badge.name}", :count => 1
   end
 
   it "renders the breadcrumbs" do
-    pending
     render
     assert_select ".content-nav", :count => 1
     assert_select ".breadcrumbs" do

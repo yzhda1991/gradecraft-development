@@ -1,3 +1,36 @@
-.predictor-assignment-block{'ng-repeat' => 'assignment in assignments'}
-  {{assignment.name}}
-  {{assignment.grade}}
+%article.predictor-assignment{'ng-repeat' => 'assignment in assignmentsForAssignmentType(assignments,assignmentType.id)'}
+
+  .predictor-article-title{'title' => '{{assignment.name}}'}
+    {{assignment.name | limitTo:28}}
+
+  .predictor-article-icons
+    .icon.predictor-required-icon{'ng-if' => 'assignment.required'}
+      .icon-tooltip
+        This {{termForAssignment}} is required!
+      %i.fa.fa-star.fa-fw
+    .icon.predictor-late-icon{'ng-if' => 'assignment.late'}
+      .icon-tooltip
+        This {{termForAssignment}} is past the due date!
+      %i.fa.fa-exclamation-triangle.fa-fw
+
+  .predictor-article-date
+    .assignment-due-at{'ng-if' => 'assignmentDueInFuture(assignment)'}
+      due: {{assignment.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
+
+  .predictor-article-main
+    .assignment-graded{'ng-if' => 'assignment.grade.status == "Graded"'}
+      %div{'ng-if' => 'assignment.pass_fail == false'}
+        {{assignment.grade.score}} / {{assignment.point_total}}
+      %div{'ng-if' => 'assignment.pass_fail == true'}
+        {{termFor(assignment.grade.pass_fail_status)}}
+    .assignment-predicted{'ng-if' => 'assignment.grade.status != "Graded"'}
+
+      %div{'ng-if' => 'assignment.pass_fail == false'}
+        %span.score-level-name
+        .slider{'ui-slider'=>'slider.options','min'=>'0', 'max'=>'{{assignment.point_total}}', 'step'=>'1', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}', 'score-level-values'=>'{{scoreLevelValues(assignment)}}','score-level-names'=>'{{scoreLevelNames(assignment)}}'}}
+        predicted: {{assignment.grade.predicted_score}}
+
+      %div{'ng-if' => 'assignment.pass_fail == true'}
+        .switch-label.pass-fail-contingent{:data => {:on => '{{termFor("pass")}}', :off => '{{termFor("fail")}}'}}
+          {{passFailPrediction(assignment.grade)}}
+        .pass-fail-grade-toggle

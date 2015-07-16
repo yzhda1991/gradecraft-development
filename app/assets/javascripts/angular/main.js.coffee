@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly'])
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
@@ -13,7 +13,6 @@ INTEGER_REGEXP = /^\-?\d+$/
         # it is invalid, return undefined (no model update)
         ctrl.$setValidity "integer", false
         'undefined'
-
     return
 
 @gradecraft.directive "collapseToggler", ->
@@ -25,10 +24,10 @@ INTEGER_REGEXP = /^\-?\d+$/
     return
 
 #formly config
-@gradecraft.run((formlyConfig) ->
-  formlyConfig.setType({
-    name: 'input',
-    templateUrl: ''
-    }
-  })
-)
+# @gradecraft.run((formlyConfig) ->
+#   formlyConfig.setType({
+#     name: 'input',
+#     templateUrl: ''
+#     }
+#   })
+# )

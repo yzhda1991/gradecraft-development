@@ -13,9 +13,4 @@ describe AssignmentType do
     expect(AssignmentType.new(name: nil)).to have(1).errors_on(:name)
   end
 
-  it "is invalid without a predictor setting" do
-    pending
-    expect(AssignmentType.new(points_predictor_display: nil)).to have(1).errors_on(:points_predictor_display)
-  end
-
 end

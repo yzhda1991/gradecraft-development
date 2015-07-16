@@ -33,7 +33,7 @@ class GradesController < ApplicationController
   def edit
     session[:return_to] = request.referer
     redirect_to @assignment and return unless current_student.present?
-    @grade = current_student_data.grade_for_assignment(@assignment)
+    @grade = current_student.grade_for_assignment(@assignment)
     @student = @grade.student
     @submission = @student.submission_for_assignment(@assignment)
     @title = "Grading #{current_student.name}'s #{@assignment.name}"
@@ -77,7 +77,7 @@ class GradesController < ApplicationController
       params[:grade].delete :grade_files_attributes
     end
 
-    @grade = current_student_data.grade_for_assignment(@assignment)
+    @grade = current_student.grade_for_assignment(@assignment)
 
     if @grade_files
       @grade_files.each do |gf|
@@ -187,9 +187,6 @@ class GradesController < ApplicationController
     EarnedBadge.import(new_earned_tier_badges, :validate => true)
   end
 
-  def existing_earned_badges
-  end
-
   def new_earned_tier_badges
     params[:tier_badges].collect do |tier_badge|
       EarnedBadge.new({
@@ -233,7 +230,7 @@ class GradesController < ApplicationController
 
   def destroy
     redirect_to @assignment and return unless current_student.present?
-    @grade = current_student_data.grade_for_assignment(@assignment)
+    @grade = current_student.grade_for_assignment(@assignment)
     @grade.destroy
 
     redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name}'s #{@assignment.name} grade was successfully deleted."
@@ -243,7 +240,7 @@ class GradesController < ApplicationController
   def self_log
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.open?
-      @grade = current_student_data.grade_for_assignment(@assignment)
+      @grade = current_student.grade_for_assignment(@assignment)
       @grade.raw_score = params[:present] == 'true' ? @assignment.point_total : 0
       @grade.status = "Graded"
       respond_to do |format|
@@ -262,8 +259,8 @@ class GradesController < ApplicationController
   # Students predicting the score they'll get on an assignent using the grade predictor
   def predict_score
     @assignment = current_course.assignments.find(params[:id])
-    raise "Cannot set predicted score if grade status is 'Graded' or 'Released'" if current_student_data.grade_released_for_assignment?(@assignment)
-    @grade = current_student_data.grade_for_assignment(@assignment)
+    raise "Cannot set predicted score if grade status is 'Graded' or 'Released'" if current_student.grade_released_for_assignment?(@assignment)
+    @grade = current_student.grade_for_assignment(@assignment)
     @grade.predicted_score = params[:predicted_score]
     respond_to do |format|
       format.json do
@@ -285,20 +282,16 @@ class GradesController < ApplicationController
 
     if params[:team_id].present?
       @team = current_course.teams.find_by(team_params)
-      @students = current_course.students_being_graded.joins(:teams).where(:teams => team_params)
-      @auditors = current_course.students_auditing.joins(:teams).where(:teams => team_params)
+      @students = current_course.students_by_team.joins(:teams).where(:teams => team_params)
     else
-      @students = current_course.students_being_graded
-      @auditors = current_course.students_auditing
+      @students = current_course.students
     end
 
     @grades = Grade.where(student_id: mass_edit_student_ids, assignment_id: @assignment[:id] ).includes(:student,:assignment)
-    @auditor_grades = Grade.where(student_id: mass_edit_auditor_ids, assignment_id: @assignment[:id] ).includes(:student,:assignment)
 
     create_missing_grades # create grade objects for the student/assignment pair unless present
 
     @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
-    @auditor_grades = @auditor_grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
   end
 
   private
@@ -311,16 +304,8 @@ class GradesController < ApplicationController
       @mass_edit_student_ids ||= @students.pluck(:id)
     end
 
-    def mass_edit_auditor_ids
-      @mass_edit_auditor_ids ||= @auditors.pluck(:id)
-    end
-
     def no_grade_students
       @no_grade_students ||= @students.where(id: mass_edit_student_ids - @grades.pluck(:student_id))
-    end
-
-    def no_grade_auditors
-      @no_grade_auditors ||= @auditors.where(id: mass_edit_auditor_ids - @grades.pluck(:student_id))
     end
 
     def create_missing_student_grades
@@ -329,15 +314,8 @@ class GradesController < ApplicationController
       end
     end
 
-    def create_missing_auditor_grades
-      no_grade_auditors.each do |student|
-        Grade.create(student: student, assignment: @assignment, graded_by_id: current_user)
-      end
-    end
-
     def create_missing_grades
       create_missing_student_grades
-      create_missing_auditor_grades
     end
 
   public

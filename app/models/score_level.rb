@@ -5,6 +5,7 @@ class ScoreLevel < ActiveRecord::Base
 
   validates_presence_of :value, :name
   scope :order_by_value, -> { order 'value DESC' }
+  default_scope { order 'value DESC' }
   #validate :score_level_cannot_exceed_lowest_assignment_point_value
 
 

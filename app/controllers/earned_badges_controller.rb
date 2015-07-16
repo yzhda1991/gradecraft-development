@@ -81,7 +81,7 @@ class EarnedBadgesController < ApplicationController
 
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team)
+      @students = current_course.students_by_team(@team)
     else
       @students = current_course.students
     end

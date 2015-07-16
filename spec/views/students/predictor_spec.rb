@@ -17,7 +17,7 @@ describe "students/predictor" do
       view.stub(:current_user_is_student?).and_return(true)
     end
 
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end
@@ -28,7 +28,7 @@ describe "students/predictor" do
       view.stub(:term_for).and_return("")
     end
 
-    it "renders" do
+    it "renders successfully" do
       render
     end
   end

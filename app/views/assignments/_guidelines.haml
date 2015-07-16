@@ -12,7 +12,7 @@
 
   - if @assignment.student_logged? && @assignment.open? && current_user_is_student?
 
-    = simple_form_for current_student_data.grade_for_assignment(@assignment), :url => self_log_grades_assignment_path(@assignment), :method => :post do |f|
+    = simple_form_for current_student.grade_for_assignment(@assignment), :url => self_log_grades_assignment_path(@assignment), :method => :post do |f|
       - present = current_student.self_reported_done?(@assignment)
       = hidden_field_tag :present, !present
       - if ! current_student.self_reported_done?(@assignment)

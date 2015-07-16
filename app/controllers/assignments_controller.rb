@@ -32,15 +32,13 @@ class AssignmentsController < ApplicationController
     @groups = @assignment.groups
 
     # Returns a hash of grades given for the assignment in format of {student_id: grade}
-    @assignment_grades_by_student_id = current_course_data.assignment_grades(@assignment)
+    @grades = @assignment.grades
     @teams = current_course.teams
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_being_graded_by_team(@team)
-      @auditors = current_course.students_auditing.includes(:teams).where(:teams => team_params).includes(:submissions)
+      @students = current_course.students_by_team(@team)
     else
-      @students = current_course.students_being_graded
-      @auditors = current_course.students_auditing
+      @students = current_course.students
     end
     if @assignment.rubric.present?
       @rubric = @assignment.fetch_or_create_rubric
@@ -73,12 +71,6 @@ class AssignmentsController < ApplicationController
     render :detailed_grades if params[:detailed]
   end
 
-  # TODO: verify not used and remove
-  def rules
-    @assignment = current_course.assignments.find(params[:id])
-    @title = @assignment.name
-  end
-
   def new
     @title = "Create a New #{term_for :assignment}"
     @assignment = current_course.assignments.new
@@ -106,7 +98,7 @@ class AssignmentsController < ApplicationController
     if session[:return_to].present?
       redirect_to session[:return_to]
     else
-      redirect_to assignments #TODO change to assignments_path
+      redirect_to assignments_path
     end
   end
 
@@ -152,7 +144,7 @@ class AssignmentsController < ApplicationController
 
       if @assignment.update_attributes(params[:assignment])
         set_assignment_weights
-        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  #{@assignment.name} successfully updated" }
+        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  <strong>#{@assignment.name }</strong> successfully updated" }
       else
         # TODO: refactor, see submissions_controller
         @title = "Edit #{term_for :assignment}"
@@ -206,56 +198,63 @@ class AssignmentsController < ApplicationController
   # current student visible assignment
   def student_predictor_data
     @assignments = current_course.assignments.select(
-        :id,
-        :name,
-        :description,
-        :point_total,
-        :due_at,
-        :assignment_type_id,
-        :grade_scope,
-        :required,
-        :accepts_submissions,
-        :student_logged,
-        :release_necessary,
-        :open_at,
-        :visible,
-        :resubmissions_allowed,
-        :accepts_submissions_until,
+        :accepts_attachments,
+        :accepts_links,
         :accepts_resubmissions_until,
-        :media,
-        :thumbnail,
-        :media_credit,
-        :media_caption,
-        :points_predictor_display,
+        :accepts_submissions,
+        :accepts_submissions_until,
+        :accepts_text,
+        :assignment_type_id,
+        :description,
+        :due_at,
+        :grade_scope,
+        :id,
         :include_in_predictor,
+        :media,
+        :media_caption,
+        :media_credit,
+        :name,
+        :open_at,
+        :pass_fail,
+        :point_total,
+        :points_predictor_display,
         :position,
+        :release_necessary,
+        :required,
+        :resubmissions_allowed,
+        :student_logged,
         :student_logged_button_text,
         :student_logged_revert_button_text,
+        :thumbnail,
         :use_rubric,
-        :accepts_attachments,
-        :accepts_text,
-        :accepts_links,
-        :pass_fail,
+        :visible,
       )
     @grades = current_student.grades.where(:course_id => current_course).select(
-        :student_id,
-        :id,
         :assignment_id,
         :assignment_type_id,
-        :point_total,
+        :id,
         :predicted_score,
-        :status
+        :pass_fail_status,
+        :status,
+        :student_id,
+        :raw_score,
+        :final_score,
+        :score
       )
 
     @assignments.each do |assignment|
-      assignment.current_student_grade = @grades.where(:assignment_id => assignment.id).first
-    end
+      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
+        if grade.nil?
+          grade = Grade.create(:assignment => assignment, :student => current_student)
+        end
+        assignment.current_student_grade = grade
 
-    @grades.each do |grade|
-      grade.current_student_points = grade.status == "Graded" ? grade.point_total : nil
+        # Only pass through points if they have been released by the professor
+        #TODO: add remaining logic for when a grade is "Graded": current_student_data.grade_released_for_assignment?(assignment)
+        assignment.current_student_grade.graded_pass_fail_status = grade.status == "Graded" ? grade.pass_fail_status : nil
+        assignment.current_student_grade.graded_points = grade.status == "Graded" ? grade.score : nil
+      end
     end
-
-    #@assignments_grades = current_student_data.assignment_grades
   end
 
   private
