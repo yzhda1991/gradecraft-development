@@ -75,14 +75,6 @@ class Grade < ActiveRecord::Base
     group('grades.assignment_type_id').pluck('grades.assignment_type_id, COALESCE(SUM(grades.score), 0)')
   end
 
-  def is_graded?
-    self.status == 'Graded'
-  end
-
-  def in_progress?
-    self.status == 'In Progress'
-  end
-
   def score
     if student.weighted_assignments?
       final_score || ((raw_score * assignment_weight).round if raw_score.present?)  || nil
@@ -107,12 +99,16 @@ class Grade < ActiveRecord::Base
     feedback != "" && feedback != nil
   end
 
-  def is_released?
-    status == 'Released' || (status = 'Graded' && ! assignment.release_necessary)
+  def is_graded?
+    self.status == 'Graded'
   end
 
-  def is_graded_or_released?
-    is_graded? || is_released?
+  def in_progress?
+    self.status == 'In Progress'
+  end
+
+  def is_released?
+    status == 'Released' || (status = 'Graded' && ! assignment.release_necessary)
   end
 
   def status_is_graded_or_released?

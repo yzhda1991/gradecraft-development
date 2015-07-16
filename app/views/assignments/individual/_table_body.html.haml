@@ -1,0 +1,58 @@
+- @students.each do |student|
+  - grade = @grades[student.id] || Grade.new
+  - first_name = student.first_name
+  - last_name = student.last_name
+  - status = grade.status
+  - if grade.present?
+    - instructor_modified = grade.instructor_modified?
+  %tr
+    %td= link_to first_name, student_path(student)
+    %td= link_to last_name, student_path(student)
+    %td
+      - if @assignment.pass_fail
+        = term_for(grade.pass_fail_status) if instructor_modified
+      - else
+        = points grade.raw_score if instructor_modified
+
+    // If the student can weight the assignment type
+    - if grade && @assignment_type.student_weightable?
+      %td
+        - if student.weighted_assignments?
+          = points grade.score if instructor_modified
+        - else
+          = "(not yet assigned)"
+    - if @assignment.release_necessary?
+      %td= status
+
+    - if @assignment.accepts_submissions?
+      - submissions_for_assignment = student.submissions.where(:assignment_id => @assignment)
+      %td
+        - if submissions_for_assignment.present?
+          = submissions_for_assignment[0].updated_at
+    %td
+      .button-bar
+        %ul.button-group.radius.right
+          - if @assignment.accepts_submissions?
+            - submissions_for_assignment.each do |submission|
+
+              /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. Icon represents if there are files attached. */
+              %li
+                - if submission.submission_files.present?
+                  %i.fi-paperclip.right
+                / - if submission.resubmitted?
+                /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button alert'
+                / - else
+                = link_to "See Submission", assignment_submission_path(@assignment, submission.id), :class => 'button'
+
+          - if grade && instructor_modified
+            %li= link_to "See Grade", assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+            %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+            %li= link_to "Delete", remove_grades_assignment_path(:assignment_id => @assignment.id, :grade_id => grade.id), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :post
+
+          - else
+            %li= link_to "Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+
+    - if @assignment.release_necessary?
+      %td
+        - if grade && grade.is_graded?
+          .center= check_box_tag "grade_ids[]", grade.id

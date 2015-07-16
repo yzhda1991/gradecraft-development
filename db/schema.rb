@@ -511,7 +511,7 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score",                 default: 0,     null: false
+    t.integer  "predicted_score"
     t.boolean  "instructor_modified",             default: false
     t.string   "pass_fail_status"
   end

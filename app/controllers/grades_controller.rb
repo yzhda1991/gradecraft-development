@@ -220,7 +220,7 @@ class GradesController < ApplicationController
 
   def remove
     @grade = Grade.find(params[:grade_id])
-    @grade.raw_score = 0
+    @grade.raw_score = nil
     @grade.status = nil
     @grade.feedback = nil
     @grade.instructor_modified = false

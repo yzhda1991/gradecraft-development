@@ -5,7 +5,7 @@
       %th Name
       %th Mean Student Score
       - if current_course.team_challenges?
-        %th Challenge Score
+        %th{ "data-dynatable-column" => "challengeScore"} #{term_for :challenge} Score
       %th{ "data-dynatable-column" => "students"} #{term_for :students}
       %th #{term_for :team_leaders}
       - if current_user_is_staff? && current_course.has_badges?
