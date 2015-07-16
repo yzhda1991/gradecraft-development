@@ -65,8 +65,9 @@
           scoreValues = JSON.parse(ui.handle.parentElement.dataset.scoreLevelValues)
           if(scoreValues.length > 0)
             closest = null
-            $.each(scoreValues, ()->
+            _.each(scoreValues, ()->
               if (closest == null || Math.abs(this - ui.value) < Math.abs(closest - ui.value))
+                debugger
                 closest = this
             )
             console.log(closest);
