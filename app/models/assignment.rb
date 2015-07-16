@@ -32,6 +32,10 @@ class Assignment < ActiveRecord::Base
   # Multipart assignments
   has_many :tasks, :as => :assignment, :dependent => :destroy
 
+  # Unlocks
+  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
+  has_many :unlock_states, :as => :unlockable, :dependent => :destroy
+
   # Student created submissions to be graded
   has_many :submissions, as: :assignment
 

@@ -195,6 +195,20 @@
         %span This will be shown to students on their dashboard, and when they submit their assignment.
 
     .small-12.large-8.columns.panel
+      %h4.uppercase Unlocks
+      .unlock-conditions
+        %p.hint Unlock description here
+        %script(id="unlock-condition-template" type="text/x-template")
+          %fieldset.unlock-condition
+            = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: 'form-inline', child_index: 'child_index' do |ucf|
+              = render 'unlock_condition_fields', f: ucf
+        - @assignment.unlock_conditions.each do |condition|
+          %fieldset.unlock-condition
+            = f.simple_fields_for :unlock_conditions, unlock_condition, class: 'form-inline' do |ucf|
+              = render 'unlock_condition_fields', f: ucf
+      = link_to 'Add an Unlock Condition', '#', class: 'add-unlock-condition button radius'
+
+    .small-12.large-8.columns.panel
       %h4.uppercase Grade Levels
       .assignment-score-levels
         %p.hint Example: You could create three levels to produce a quick grading scheme for just this #{term_for :assignment} - Complete (5000 points), Finalist (7000 points), and Winner (10,000 points). These levels will then show in the quick grade, and when students are setting goals in the grade predictor.

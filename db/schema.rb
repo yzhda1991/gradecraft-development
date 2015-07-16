@@ -156,6 +156,7 @@ ActiveRecord::Schema.define(version: 20150806205557) do
     t.boolean  "accepts_links",                                 default: true
     t.boolean  "pass_fail",                                     default: false
     t.boolean  "hide_analytics"
+    t.boolean  "visible_when_locked",                           default: true
   end
 
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree
@@ -196,20 +197,7 @@ ActiveRecord::Schema.define(version: 20150806205557) do
     t.boolean  "visible",                             default: true
     t.boolean  "can_earn_multiple_times",             default: true
     t.integer  "position"
-  end
-
-  create_table "bootsy_image_galleries", force: :cascade do |t|
-    t.integer  "bootsy_resource_id"
-    t.string   "bootsy_resource_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "bootsy_images", force: :cascade do |t|
-    t.string   "image_file",       limit: 255
-    t.integer  "image_gallery_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.boolean  "visible_when_locked",                 default: true
   end
 
   create_table "categories", force: :cascade do |t|
@@ -514,6 +502,9 @@ ActiveRecord::Schema.define(version: 20150806205557) do
     t.integer  "predicted_score"
     t.boolean  "instructor_modified",             default: false
     t.string   "pass_fail_status"
+    t.boolean  "is_custom_value",                 default: false
+    t.boolean  "feedback_read"
+    t.datetime "feedback_read_date"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
@@ -802,6 +793,24 @@ ActiveRecord::Schema.define(version: 20150806205557) do
     t.boolean  "no_credit"
     t.boolean  "durable"
     t.integer  "sort_order"
+  end
+
+  create_table "unlock_conditions", force: :cascade do |t|
+    t.integer  "unlockable_id"
+    t.string   "unlockable_type"
+    t.integer  "condition_id"
+    t.string   "condition_type"
+    t.string   "condition_state"
+    t.integer  "condition_value"
+    t.datetime "condition_date"
+  end
+
+  create_table "unlock_states", force: :cascade do |t|
+    t.integer "unlockable_id"
+    t.string  "unlockable_type"
+    t.integer "student_id"
+    t.boolean "unlocked"
+    t.boolean "instructor_unlocked"
   end
 
   create_table "users", force: :cascade do |t|
