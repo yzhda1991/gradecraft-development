@@ -23,8 +23,12 @@ class AssignmentType < ActiveRecord::Base
   scope :timelinable, -> { where(:include_in_timeline => true) }
   scope :todoable, -> { where(:include_in_to_do => true) }
   scope :predictable, -> { where(:include_in_predictor => true) }
-  scope :sorted, -> { order 'position' }
   scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignment_types.id = assignment_weights.assignment_type_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
+
+  default_scope { order 'position' }
+  # TODO: remove calls to sorted:
+  scope :sorted, -> { order 'position' }
+
 
   def self.weights_for_student(student)
     group('assignment_types.id').weighted_for_student(student).pluck('assignment_types.id, COALESCE(MAX(assignment_weights.weight), 0)')

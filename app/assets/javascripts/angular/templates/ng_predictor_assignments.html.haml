@@ -6,12 +6,20 @@
   .predictor-article-icons
     .icon.predictor-required-icon{'ng-if' => 'assignment.required'}
       .icon-tooltip
-        This {{termForAssignment}} is required!
+        This {{termFor("assignment")}} is required!
       %i.fa.fa-star.fa-fw
     .icon.predictor-late-icon{'ng-if' => 'assignment.late'}
       .icon-tooltip
-        This {{termForAssignment}} is past the due date!
+        This {{termFor("assignment")}} is past the due date!
       %i.fa.fa-exclamation-triangle.fa-fw
+    .icon.predictor-locked-icon{'ng-if' => '0 == true'}
+      .icon-tooltip
+        This {{termFor("assignment")}} is locked!
+      %i.fa.fa-lock.fa-fw
+    .icon.predictor-unlocked-icon{'ng-if' => '0 == true'}
+      .icon-tooltip
+        This {{termFor("assignment")}} is unlocked
+      %i.fa.fa-unlock-alt.fa-fw
 
   .predictor-article-date
     .assignment-due-at{'ng-if' => 'assignmentDueInFuture(assignment)'}
@@ -27,8 +35,9 @@
 
       %div{'ng-if' => 'assignment.pass_fail == false'}
         %span.score-level-name
-        .slider{'ui-slider'=>'slider.options','min'=>'0', 'max'=>'{{assignment.point_total}}', 'step'=>'1', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}', 'score-level-values'=>'{{scoreLevelValues(assignment)}}','score-level-names'=>'{{scoreLevelNames(assignment)}}'}}
+        .slider{'ui-slider'=>'slider()','min'=>'0', 'max'=>'{{assignment.point_total}}', 'step'=>'1', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}', 'score-level-values'=>'{{scoreLevelValues(assignment)}}','score-level-names'=>'{{scoreLevelNames(assignment)}}'}}
         predicted: {{assignment.grade.predicted_score}}
+        max: {{assignment.point_total}}
 
       %div{'ng-if' => 'assignment.pass_fail == true'}
         .switch-label.pass-fail-contingent{:data => {:on => '{{termFor("pass")}}', :off => '{{termFor("fail")}}'}}

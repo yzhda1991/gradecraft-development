@@ -54,30 +54,42 @@
     $scope.passFailPrediction = (grade)->
       prediction = if grade.predicted_score > 0 then $scope.termFor("pass") else $scope.termFor("fail")
 
-  $scope.slider =
-    { 'options': {
-        range: "min",
+  $scope.slider = ()->
+    {
+      range: "min"
 
-        #start: (event, ui)->
+      #start: (event, ui)->
 
-        slide: (event, ui)->
-          scoreNames = JSON.parse(ui.handle.parentElement.dataset.scoreLevelNames)
-          scoreValues = JSON.parse(ui.handle.parentElement.dataset.scoreLevelValues)
-          if(scoreValues.length > 0)
-            closest = null
-            $.each(scoreValues, ()->
-              if (closest == null || Math.abs(this - ui.value) < Math.abs(closest - ui.value))
-                closest = this
-            )
-            console.log(closest);
-            #$(this).slider("value", closest);
+      slide: (event, ui)->
+        scoreNames = JSON.parse(ui.handle.parentElement.dataset.scoreLevelNames)
+        scoreValues = JSON.parse(ui.handle.parentElement.dataset.scoreLevelValues)
+        if(scoreValues.length > 0)
+          closest = null
+          _.each(scoreValues, (val,i)->
+            if (closest == null || Math.abs(val - ui.value) < Math.abs(closest - ui.value))
+              closest = val
+          )
+          console.log(closest)
+          debugger
+          $(this).slider("value", closest)
 
-        stop: (event, ui)->
-          assignment_id = ui.handle.parentElement.dataset.id
-          value = ui.value
-          PredictorService.postPredictedScore(assignment_id,value)
-      }
+
+      stop: (event, ui)->
+        assignment_id = ui.handle.parentElement.dataset.id
+        value = ui.value
+        PredictorService.postPredictedScore(assignment_id,value)
+
     }
+
+    #,
+    #     min: 2,
+    #     max: 666,
+
+    #     #
+
+
+    #   }
+    # }
 
   $scope.scoreLevelValues = (assignment)->
     _.map(assignment.score_levels,(level)->

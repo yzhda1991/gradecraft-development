@@ -55,6 +55,8 @@ class Grade < ActiveRecord::Base
   scope :instructor_modified, -> { where('instructor_modified = ?', true) }
   scope :positive, -> { where('score > 0')}
 
+  #TODO
+  # default_scope
 
   #validates_numericality_of :raw_score, integer_only: true
 
