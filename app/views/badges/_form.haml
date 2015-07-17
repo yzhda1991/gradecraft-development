@@ -45,6 +45,20 @@
       .clear
 
     .small-12.columns.panel
+      %h4.uppercase Unlocks
+      .unlock-conditions
+        %p.hint Unlock description here
+        %script(id="unlock-condition-template" type="text/x-template")
+          %fieldset.unlock-condition
+            = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: 'form-inline', child_index: 'child_index' do |ucf|
+              = render 'unlock_condition_fields', f: ucf
+        - @badge.unlock_conditions.each do |condition|
+          %fieldset.unlock-condition
+            = f.simple_fields_for :unlock_conditions, condition, class: 'form-inline' do |ucf|
+              = render 'unlock_condition_fields', f: ucf
+      = link_to 'Add a Condition', '#', class: 'add-unlock-condition button radius'
+
+    .small-12.columns.panel
       %h4.uppercase Attachments
       .small-12
         = f.simple_fields_for :badge_files, @badge.badge_files.new do |bf|

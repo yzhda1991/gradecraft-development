@@ -5,7 +5,8 @@ class Assignment < ActiveRecord::Base
     :accepts_submissions_until, :points_predictor_display, :notify_released, :mass_grade_type, :assignment_type_id, :assignment_type,
     :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged,
     :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level, :score_levels_attributes,
-    :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics
+    :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics, 
+    :unlock_conditions, :unlock_conditions_attributes
 
 
   attr_accessor :current_student_grade
@@ -34,6 +35,8 @@ class Assignment < ActiveRecord::Base
 
   # Unlocks
   has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
+  accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
+  
   has_many :unlock_states, :as => :unlockable, :dependent => :destroy
 
   # Student created submissions to be graded

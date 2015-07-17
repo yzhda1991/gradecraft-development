@@ -204,9 +204,9 @@
               = render 'unlock_condition_fields', f: ucf
         - @assignment.unlock_conditions.each do |condition|
           %fieldset.unlock-condition
-            = f.simple_fields_for :unlock_conditions, unlock_condition, class: 'form-inline' do |ucf|
+            = f.simple_fields_for :unlock_conditions, condition, class: 'form-inline' do |ucf|
               = render 'unlock_condition_fields', f: ucf
-      = link_to 'Add an Unlock Condition', '#', class: 'add-unlock-condition button radius'
+      = link_to 'Add a Condition', '#', class: 'add-unlock-condition button radius'
 
     .small-12.large-8.columns.panel
       %h4.uppercase Grade Levels
