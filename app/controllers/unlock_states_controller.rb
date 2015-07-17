@@ -28,5 +28,10 @@ class UnlockStatesController < ApplicationController
     @unlock_state.save
     redirect_to session[:return_to]
   end
+
+  def destroy
+    @unlock_state = current_course.unlock_state.find(params[:id])
+    @unlock_state.destroy
+  end
   
 end

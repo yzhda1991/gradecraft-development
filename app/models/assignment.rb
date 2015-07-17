@@ -36,7 +36,6 @@ class Assignment < ActiveRecord::Base
   # Unlocks
   has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
   has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
-
   accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
   
   has_many :unlock_states, :as => :unlockable, :dependent => :destroy
