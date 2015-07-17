@@ -18,6 +18,10 @@ module GradeCraft
     config.assets.paths << Rails.root.join("app", "assets", "templates")
     # config.assets.paths << Rails.root.join('vendor', 'assets', 'components') ## add bower components
     config.filter_parameters += [:password]
+
+    # use coffeescript files with browserify
+    config.browserify_rails.commandline_options = "-t coffeeify --extension=\".js.coffee\""
+
     config.i18n.enforce_available_locales = true
     config.angular_templates.ignore_prefix  = %w(angular/templates/)
     config.generators do |g|

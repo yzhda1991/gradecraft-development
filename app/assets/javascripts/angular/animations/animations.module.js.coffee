@@ -1,0 +1,1 @@
+angular.module('uiFx', [ 'ngFx' ])

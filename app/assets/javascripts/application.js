@@ -23,8 +23,13 @@
 //= require angular/angular
 //= require angular-resource
 //= require angular-animate
+<<<<<<< HEAD
 //= require angular-rails-templates
 //= require_tree ./angular/templates
+=======
+//= require TweenMax.min
+//= require ngFx.min
+>>>>>>> add interactive grade edit ui plus implement animation library and directives
 //= require angular-ui-router.min
 //= require angular-rails-templates
 //= require ng-rails-csrf

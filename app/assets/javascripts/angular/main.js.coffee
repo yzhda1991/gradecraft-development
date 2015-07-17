@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 @gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'ui.router', 'froala', 'fcsa-number', 'templates', 'fcsa-number','smart-number','lodash','helpers'])
 
 @gradecraft.config ($stateProvider, $urlRouterProvider, $locationProvider) ->
 
 angular.module('lodash', []).constant('_', window._)
+=======
+@gradecraft = angular.module('gradecraft', ['ngFx', 'ngAnimate', 'uiFx', 'restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'froala', 'smart-number', 'helpers'])
+>>>>>>> add interactive grade edit ui plus implement animation library and directives
 
 @gradecraft.directive "modalDialog", ->
   restrict: "E"

@@ -27,6 +27,7 @@ gem 'angular-rails-templates'
 >>>>>>> install bower in app for javascript and css package management, install angular-debounce library for angular 1.2.xx, configuring debounce utility to trigger grade updates 2 seconds after key-up non-cumulative
 gem 'autonumeric-rails'
 gem 'aws-sdk', '< 2.0'
+gem 'browserify-rails'
 gem 's3_direct_upload'
 gem 'canable'
 gem 'carrierwave'

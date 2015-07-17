@@ -52,6 +52,8 @@ $media-xlarge-max:  120rem; //
 @import 'accessibility';
 @import 'alerts';
 @import 'analytics';
+@import 'datepicker';
+@import 'mixins';
 @import 'background';
 @import 'badges';
 @import 'breadcrumbs';
@@ -60,6 +62,7 @@ $media-xlarge-max:  120rem; //
 @import 'collapse';
 @import 'context_menu';
 @import 'forms';
+@import 'grades';
 @import 'grid';
 @import 'homepage';
 @import 'icons';
@@ -72,10 +75,8 @@ $media-xlarge-max:  120rem; //
 @import 'student_dashboard';
 @import 'tables';
 @import 'tabs';
+@import 'timeline';
 @import 'topbar';
 @import 'typography';
 @import 'unlocks';
 @import 'videos';
-@import 'badges';
-@import 'predictor';
-@import 'grades';

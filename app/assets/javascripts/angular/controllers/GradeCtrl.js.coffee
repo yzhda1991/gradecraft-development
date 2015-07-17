@@ -17,7 +17,8 @@
         $scope.assignmentScoreLevels.push scoreLevelPrototype
       )
 
-    $scope.addAssignmentScoreLevels(assignmentScoreLevels)
+    unless assignmentScoreLevels.length == undefined
+      $scope.addAssignmentScoreLevels(assignmentScoreLevels)
 
     $scope.froalaOptions = {
       inlineMode: false,

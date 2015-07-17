@@ -9,3 +9,21 @@ select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
   
 label.disabled
   color: #888 !important
+
+.gradebox
+  border: 1px solid #9FD7E3
+  padding: 16px 24px
+  // background: #bbb
+  margin-bottom: 18px
+  margin-right: 10px
+  @include linear-gradient(#A2EEFF, #7AE1F8)
+  @include rounded-corners(4px)
+  @include opacity(0.9)
+
+  &.inactive
+    @include opacity(0.6)
+    color: #87ADB5
+
+  &.jump-left
+    color: red
+    background: red
