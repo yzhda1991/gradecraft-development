@@ -32,7 +32,7 @@ describe Submission do
 
   it { should be_valid }
 
-  describe "when an source url is invalid" do
+  describe "when a source url is invalid" do
     before { @submission.link = "not a url" }
     it { should_not be_valid }
   end

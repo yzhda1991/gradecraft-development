@@ -5,8 +5,16 @@
     - current_student.unique_student_earned_badges(current_course).each do |badge|
       %li
         - if badge.point_total.present? && badge.point_total > 0
-          %span.has-tip{:title => "#{badge.name}, #{badge.point_total} points", :data => {'tooltip' => true} }
-            %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
+          - if badge.is_unlockable? 
+            - if badge.is_unlocked_for_student?(current_student)
+              %span.has-tip{:title => "<i class='fa fa-unlock' /> #{badge.name}, #{badge.point_total} points", :data => {'tooltip' => true} }
+                %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
+            - else 
+              %span.has-tip{:title => "<i class='fa fa-lock' /> #{badge.name}, #{badge.point_total} points", :data => {'tooltip' => true} }
+                %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
+          - else
+            %span.has-tip{:title => "#{badge.name}, #{badge.point_total} points", :data => {'tooltip' => true} }
+              %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
         - else
           %span.has-tip.tip-top{:title => "#{badge.name}", :data => {'tooltip' => true} }
             %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
