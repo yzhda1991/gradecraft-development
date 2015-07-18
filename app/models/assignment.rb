@@ -190,6 +190,18 @@ class Assignment < ActiveRecord::Base
     !! rubric
   end
 
+  def visible_for_student?(student)
+    if is_unlockable?
+      if visible_when_locked? || is_unlocked_for_student?(student)
+        return true
+      end
+    else
+      if visible?
+        return true
+      end
+    end
+  end
+
   def fetch_or_create_rubric
     return rubric if rubric
     Rubric.create assignment_id: self[:id]

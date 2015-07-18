@@ -139,7 +139,7 @@
 
         .small-12.large-7.columns
           = f.label :name
-          = f.text_field :name\
+          = f.text_field :name
 
         .small-12.large-2.columns
           .switch-label Pass Fail
@@ -197,6 +197,8 @@
     .small-12.large-8.columns.panel
       %h4.uppercase Unlocks
       
+      = f.input :visible_when_locked
+
       .unlock-conditions
         %p.hint Unlock description here
         %script(id="unlock-condition-template" type="text/x-template")

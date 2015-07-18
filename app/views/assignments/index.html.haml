@@ -30,6 +30,7 @@
                   %thead
                     %tr
                       %th
+                      %th
                       %th{:scope => "col", :width => "20%"} Name
                       %th Due
                       %th{:style => "display: none"} Due Date
@@ -43,6 +44,11 @@
                         %tr{:id => "assignment-#{assignment.id}"}
                           %td
                             %i.fa.fa-arrows-v
+                          %td
+                            - if assignment.is_unlockable?
+                              %i.fa.fa-lock
+                            - if assignment.is_a_condition?
+                              %i.fa.fa-key
                           %td
                             = link_to assignment.name, assignment
                           %td= assignment.try(:due_at) || "Ongoing"
