@@ -93,7 +93,6 @@
               %div{ :width => 80}= raw badge.feedback
           - if @badge.can_earn_multiple_times
             %td= @badge.earned_badge_count_for_student(student)
-
           %td
             .button-bar
               - @badge.earned_badges.where(:student_id => student.id).each do |badge|

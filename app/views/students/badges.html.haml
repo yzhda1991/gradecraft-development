@@ -24,7 +24,6 @@
                 %img{ :src => badge.icon, :alt => badge.name, :width => "30" }
                 = earned_badge.created_at
                 %p= raw earned_badge.try(:feedback)
-
               - if @earned_badges_by_badge_id[badge.id].size > 1
                 = "#{@earned_badges_by_badge_id[badge.id].collect(&:score).reduce(:+)} points earned" if badge.point_total?
             - elsif @earned_badges_by_badge_id[badge.id].any?

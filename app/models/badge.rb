@@ -108,7 +108,6 @@ class Badge < ActiveRecord::Base
     UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Badge")
   end
 
-
   #badges per role
   def earned_badges_by_student_id
     @earned_badges_by_student_id ||= earned_badges.group_by { |eb| [eb.student_id] }
