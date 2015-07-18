@@ -516,7 +516,6 @@ ActiveRecord::Schema.define(version: 20150806205557) do
     t.integer  "predicted_score"
     t.boolean  "instructor_modified",             default: false
     t.string   "pass_fail_status"
-    t.boolean  "is_custom_value",                 default: false
     t.boolean  "feedback_read"
     t.datetime "feedback_read_date"
   end

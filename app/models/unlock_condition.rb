@@ -86,5 +86,4 @@ class UnlockCondition < ActiveRecord::Base
 			end
 		end
 	end
-
 end
