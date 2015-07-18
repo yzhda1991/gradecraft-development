@@ -2,7 +2,8 @@ class Badge < ActiveRecord::Base
 
   attr_accessible :name, :description, :icon, :icon_cache, :visible, :can_earn_multiple_times, :value,
   :multiplier, :point_total, :earned_badges, :earned_badges_attributes, :score, :badge_file_ids,
-  :badge_files_attributes, :badge_file, :position, :unlock_conditions, :unlock_conditions_attributes
+  :badge_files_attributes, :badge_file, :position, :unlock_conditions, :unlock_conditions_attributes,
+  :visible_when_locked
 
   # grade points available to the predictor from the assignment controller
   attr_accessor :student_predicted_earned_badge
@@ -48,6 +49,17 @@ class Badge < ActiveRecord::Base
   #indexed badges
   def awarded_count
     earned_badges.count
+  end
+
+  # Checking to see if the badge has unlock conditions
+  def is_unlockable?
+    unlock_conditions.present?
+  end
+
+  def is_unlocked_for_student?(student)
+    if unlock_states.where(:student_id => student.id).present?
+      unlock_states.where(:student_id => student.id).first.is_unlocked?
+    end
   end
 
   #badges per role

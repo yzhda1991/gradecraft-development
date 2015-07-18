@@ -25,6 +25,13 @@
       - @assignment.assignment_files.each do |af|
         %li= link_to af.filename, af.url
 
+  - if @assignment.is_unlockable?
+    %hr
+    %i.fa.fa-lock
+    Unlock Requirements
+    - @assignment.unlock_conditions.each do |uc|
+      = link_to uc.condition.name, uc.condition
+
   - if @assignment.description.present?
     %hr
     %h4.uppercase Guidelines:

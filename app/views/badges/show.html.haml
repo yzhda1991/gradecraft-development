@@ -52,6 +52,13 @@
           ="#{@badge.point_total}"
 
     .small-12.large-8.columns
+      - if @badge.is_unlockable?
+        .panel.small-12
+          %i.fa.fa-lock
+          Unlock Requirements
+          - @badge.unlock_conditions.each do |uc|
+            = link_to uc.condition.name, uc.condition
+
       - if @badge.description?
         %p
           %b Description:
@@ -72,6 +79,8 @@
         %table.responsive.nofeatures_default_last_name_dynatable
           %thead
             %tr
+              - if @badge.is_unlockable?
+                %th
               %th First Name
               %th Last Name
               %th{ :width => 300} Feedback
@@ -82,6 +91,12 @@
           %tbody
             - @students.each do |student|
               %tr
+                - if @badge.is_unlockable?
+                  %td
+                    - if @badge.is_unlocked_for_student?(student)
+                      %i.fa.fa-unlock
+                    - else
+                      %i.fa.fa-lock
                 %td= link_to student.first_name, student_path(student)
                 %td= link_to student.last_name, student_path(student)
                 %td{ :width => 80}

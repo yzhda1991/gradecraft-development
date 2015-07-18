@@ -1,4 +1,6 @@
 %tr
+  - if @assignment.is_unlockable?
+    %th
   %th{:scope => "col"} First Name
   %th{:scope => "col"} Last Name
 

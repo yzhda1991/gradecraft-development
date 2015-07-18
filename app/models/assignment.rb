@@ -6,7 +6,7 @@ class Assignment < ActiveRecord::Base
     :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged,
     :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level, :score_levels_attributes,
     :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics, 
-    :unlock_conditions, :unlock_conditions_attributes
+    :unlock_conditions, :unlock_conditions_attributes, :visible_when_locked
 
 
   attr_accessor :current_student_grade
@@ -207,6 +207,21 @@ class Assignment < ActiveRecord::Base
   # Checking to see if the assignment is a group assignment
   def has_groups?
     grade_scope=="Group"
+  end
+
+  # Checking to see if the assignment has unlock conditions
+  def is_unlockable?
+    unlock_conditions.present?
+  end
+
+  def is_a_condition?
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").present?
+  end
+
+  def is_unlocked_for_student?(student)
+    if unlock_states.where(:student_id => student.id).present?
+      unlock_states.where(:student_id => student.id).first.is_unlocked?
+    end
   end
 
   # If the point value is set at the assignment type level, grab it from there (commonly used for things like Attendance)

@@ -6,6 +6,12 @@
   - if grade.present? && grade.instructor_modified?
     - instructor_modified = true
   %tr
+    - if @assignment.is_unlockable?
+      %td
+        - if @assignment.is_unlocked_for_student?(student)
+          %i.fa.fa-unlock
+        - else
+          %i.fa.fa-lock
     %td= link_to first_name, student_path(student)
     %td= link_to last_name, student_path(student)
     %td

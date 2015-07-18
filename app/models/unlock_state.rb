@@ -6,5 +6,8 @@ class UnlockState < ActiveRecord::Base
 	belongs_to :student
 
 
+	def is_unlocked?
+		unlocked? || instructor_unlocked?
+	end
 
 end

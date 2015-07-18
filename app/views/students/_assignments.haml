@@ -62,12 +62,20 @@
                     %tr
                       %td{:width => "30%"}
                         - if assignment.has_groups?
-                          %i.fa.fa-group.fa-fw
-                        - else
-                          %i.fa.fa-user.fa-fw
+                          %i.fa.fa-group
                         - if assignment.required?
                           %span.has-tip.required{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
                             !
+                        - if assignment.is_unlockable? 
+                          - if assignment.is_unlocked_for_student?(current_student)
+                            %i.fa.fa-unlock
+                          - else
+                            %i.fa.fa-lock
+                          Unlock Requirements
+                          - assignment.unlock_conditions.each do |uc|
+                            = link_to uc.condition.name, uc.condition
+                        - if assignment.is_a_condition?
+                          %i.fa.fa-key
                         %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
 
                       %td{:width => "25%"}
@@ -120,7 +128,7 @@
                                     %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
                                   - else
                                     - if group_for_assignment && group_for_assignment.approved?
-                                      %li= link_to "Submit", new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
+                                      %li= link_to "Submit", new_assignment_submission_path(assignment, :group_id => group_for_assignment), :class => 'button'
                               - else
                                 %li= link_to "Create a Group", new_group_path, :class => "button"
                             - else
