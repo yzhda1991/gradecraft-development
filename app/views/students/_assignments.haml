@@ -43,7 +43,6 @@
               %th Due
               %th
               %th{:style => "width: 200px"}
-
           %tbody
             - assignments = assignment_type.assignments.sorted.includes(:assignment_type)
             - assignments.each do |assignment|
@@ -63,13 +62,13 @@
                             This #{term_for :assignment} is required!
                           !
                       - if assignment.is_unlockable? 
-                          - if assignment.is_unlocked_for_student?(current_student)
-                            %i.fa.fa-unlock
-                          - else
-                            %i.fa.fa-lock
-                          Unlock Requirements
-                          - assignment.unlock_conditions.each do |uc|
-                            %li= "#{condition.name} must be #{condition.condition_state}"
+                        - if assignment.is_unlocked_for_student?(current_student)
+                          %i.fa.fa-unlock
+                        - else
+                          %i.fa.fa-lock
+                        Unlock Requirements
+                        - assignment.unlock_conditions.each do |uc|
+                          %li= "#{condition.name} must be #{condition.condition_state}"
                       - if assignment.is_a_condition?
                         %a
                           %i.fa.fa-key
