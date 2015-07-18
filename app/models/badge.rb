@@ -62,6 +62,19 @@ class Badge < ActiveRecord::Base
     end
   end
 
+  def visible_for_student?(student)
+    if is_unlockable?
+      if visible_when_locked? || is_unlocked_for_student?(student)
+        return true
+      end
+    else
+      if visible?
+        return true
+      end
+    end
+  end
+
+
   #badges per role
   def earned_badges_by_student_id
     @earned_badges_by_student_id ||= earned_badges.group_by { |eb| [eb.student_id] }
