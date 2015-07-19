@@ -200,20 +200,6 @@ ActiveRecord::Schema.define(version: 20150806205557) do
     t.boolean  "visible_when_locked",                 default: true
   end
 
-  create_table "bootsy_image_galleries", force: :cascade do |t|
-    t.integer  "bootsy_resource_id"
-    t.string   "bootsy_resource_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "bootsy_images", force: :cascade do |t|
-    t.string   "image_file",       limit: 255
-    t.integer  "image_gallery_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "categories", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.text     "description"
@@ -516,6 +502,7 @@ ActiveRecord::Schema.define(version: 20150806205557) do
     t.integer  "predicted_score"
     t.boolean  "instructor_modified",             default: false
     t.string   "pass_fail_status"
+    t.boolean  "is_custom_value",                 default: false
     t.boolean  "feedback_read"
     t.datetime "feedback_read_date"
   end
@@ -816,14 +803,18 @@ ActiveRecord::Schema.define(version: 20150806205557) do
     t.string   "condition_state"
     t.integer  "condition_value"
     t.datetime "condition_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "unlock_states", force: :cascade do |t|
-    t.integer "unlockable_id"
-    t.string  "unlockable_type"
-    t.integer "student_id"
-    t.boolean "unlocked"
-    t.boolean "instructor_unlocked"
+    t.integer  "unlockable_id"
+    t.string   "unlockable_type"
+    t.integer  "student_id"
+    t.boolean  "unlocked"
+    t.boolean  "instructor_unlocked"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: :cascade do |t|
