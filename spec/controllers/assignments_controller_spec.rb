@@ -147,20 +147,6 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET feed" do
-      it "returns a calendar event" do
-        assignment_type = create(:assignment_type, course: @course)
-        timestamp = Time.new
-        assignment = create(:assignment, assignment_type: assignment_type, due_at: timestamp)
-        @course.assignments << assignment
-
-        get :feed, :format => :ics
-        assigns(:assignments).should eq([assignment])
-        response.body.should include(assignment.name)
-        response.body.should include(timestamp.strftime("%Y%m%d"))
-      end
-    end
-
     describe "protected routes" do
       [
         :new,
@@ -503,19 +489,7 @@ describe AssignmentsController do
         expect{ get :destroy, :id => @assignment }.to change(Assignment,:count).by(-1)
       end
     end
-
-    describe "GET feed" do
-      it "returns a calendar event" do
-        timestamp = Time.new
-        @assignment.update(due_at: timestamp)
-
-        get :feed, :format => :ics
-        assigns(:assignments).should eq([@assignment])
-        response.body.should include(@assignment.name)
-        response.body.should include(timestamp.strftime("%Y%m%d"))
-      end
-    end
-
+    
     describe "GET email_based_grade_import" do
       context "with CSV format" do
         it "returns sample csv data" do

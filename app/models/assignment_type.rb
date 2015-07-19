@@ -4,20 +4,18 @@ class AssignmentType < ActiveRecord::Base
   attr_accessible :due_date_present, :levels, :max_value, :name,
     :percentage_course, :point_setting, :points_predictor_display,
     :predictor_description, :resubmission, :universal_point_value,
-    :student_weightable, :mass_grade, :score_levels_attributes, :score_level, :mass_grade_type,
-    :student_logged_revert_button_text, :student_logged_button_text, :position
+    :student_weightable, :mass_grade, :score_level, :mass_grade_type,
+    :student_logged_revert_button_text, :student_logged_button_text, 
+    :position
 
   belongs_to :course, touch: true
   has_many :assignments, -> { order('position ASC') }, :dependent => :destroy
   has_many :submissions, :through => :assignments
   has_many :assignment_weights
   has_many :grades
-  has_many :score_levels, -> { order "value" }
-  accepts_nested_attributes_for :score_levels, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? || a['name'].blank? }
 
   validates_presence_of :name
   validate :positive_universal_value, :positive_max_points
-  before_save :ensure_score_levels, :if => :multi_select?
 
   scope :student_weightable, -> { where(:student_weightable => true) }
   scope :timelinable, -> { where(:include_in_timeline => true) }
@@ -161,13 +159,6 @@ class AssignmentType < ActiveRecord::Base
   def positive_max_points
     if max_value? && max_value < 1
       errors.add :base, "Maximum points must be a positive number."
-    end
-  end
-
-  #Checking to make sure there are score levels and warning if not
-  def ensure_score_levels
-    if score_levels.count <= 2
-      errors.add :base, "To use the selected method of quick grading you must create at least 2 score levels."
     end
   end
 end

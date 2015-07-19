@@ -226,16 +226,6 @@ class AssignmentsController < ApplicationController
     redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{@name} successfully deleted"
   end
 
-  # Calendar feed of assignments
-  def feed
-    @assignments = current_course.assignments
-    respond_with @assignments.with_due_date do |format|
-      format.ics do
-        render :text => CalendarBuilder.new(:assignments => @assignments.with_due_date ).to_ics, :content_type => 'text/calendar'
-      end
-    end
-  end
-
   # Export an example for grade imports
   def email_based_grade_import
     @assignment = current_course.assignments.find(params[:id])
