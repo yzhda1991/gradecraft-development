@@ -5,14 +5,19 @@
         fail: ""
     }
     assignments = []
+    assignmentTypes = []
+    gradeLevels = {}
     icons = ["required","late"]
 
     getGradeLevels = ()->
-      $http.get("/predictor_grade_levels/")
+      $http.get("/predictor_grade_levels/").success((data)->
+        angular.copy(data,gradeLevels)
+      )
 
     getAssignmentTypes = (assignmentId)->
-      $http.get("predictor_assignment_types")
-
+      $http.get("predictor_assignment_types").success((data)->
+        angular.copy(data.assignment_types, assignmentTypes)
+      )
     getAssignments = (assignmentId)->
       $http.get("predictor_assignments").success( (data)->
         angular.copy(data.assignments,assignments)
@@ -38,6 +43,8 @@
         getAssignments: getAssignments
         postPredictedScore: postPredictedScore
         assignments: assignments
+        assignmentTypes: assignmentTypes
+        gradeLevels: gradeLevels
         termFor: termFor
         icons: icons
     }
