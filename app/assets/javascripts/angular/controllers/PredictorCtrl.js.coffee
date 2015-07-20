@@ -47,8 +47,8 @@
 
   $scope.levelNameForScore = (assignment)->
     if $scope.hasLevels(assignment)
-      closest = closestScoreLevel(assignment.score_levels,assignment.grade.predicted_score)
-      if inSnapRange(assignment,closest,assignment.grade.predicted_score)
+      closest = $scope.closestScoreLevel(assignment.score_levels,assignment.grade.predicted_score)
+      if $scope.inSnapRange(assignment,closest,assignment.grade.predicted_score)
         return closest.name
     return ""
 

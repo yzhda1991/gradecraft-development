@@ -22,15 +22,17 @@
         %span.score-level-name
         .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}'}}
         %div{'id'=>'assignment-{{assignment.id}}-level',  'ng-if' => 'hasLevels(assignment)'}
-          .name
-            {{levelNameForScore(assignment)}}
           .value
             {{assignment.grade.predicted_score}}
+          .name
+            {{levelNameForScore(assignment)}}
 
         %div{'ng-if' => '! hasLevels(assignment)'}
           predicted: {{assignment.grade.predicted_score}}
 
       %div{'ng-if' => 'assignment.pass_fail == true'}
-        .switch-label.pass-fail-contingent{:data => {:on => '{{termFor("pass")}}', :off => '{{termFor("fail")}}'}}
-          {{passFailPrediction(assignment.grade)}}
-        .pass-fail-grade-toggle
+        .predictor-pass-fail-switch{'assignment'=>'assignment'}
+
+        / .switch-label.pass-fail-contingent{:data => {:on => '{{termFor("pass")}}', :off => '{{termFor("fail")}}'}}
+        /   {{passFailPrediction(assignment.grade)}}
+        / .pass-fail-grade-toggle
