@@ -22,7 +22,14 @@
   line-height: 1.4
   margin-bottom: 0.5rem
   margin-top: 0.2rem
+  padding: 0 .5rem
   clear: both
+
+  .predictor-assigment-type-name
+   float: left
+
+  .predictor-assignment-type-points
+    text-align: right
 
 // ARTICLES
 
@@ -72,11 +79,38 @@ article.predictor-assignment
 
 .predictor-article-date
   height: 1.25rem
-  background-color: $color-layout-blue-3
+  //background-color: $color-layout-blue-3
   padding: .25rem
 
+.predictor-article-main
+  padding-top: 8px
+
+article.predictor-assignment.status-graded
+  background-color: $color-layout-blue-4
+  border: 1px solid $color-layout-blue-1
+  border-bottom: .25rem solid $color-layout-blue-1
+  .predictor-article-title
+    background-color: $color-layout-blue-1
+  .predictor-article-icons
+    background-color: $color-layout-blue-3
+
+.assignment-graded .grade
+  text-align: center
+  font-size: 1.5rem
+  color: $color-layout-blue-0
+
+.assignment-predicted .grade
+  text-align: center
+  font-size: 1.25rem
+  color: $color-layout-blue-0
+  .value
+    font-size: 1rem
+  .name
+    font-size: .85rem
+    margin: -5px
 
 /* Styling the slider widgets */
+
 article.predictor-assignment
   .slider.ui-widget-content
     background: $color-layout-blue-2

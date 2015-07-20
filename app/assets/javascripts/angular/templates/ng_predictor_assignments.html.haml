@@ -1,4 +1,4 @@
-%article.predictor-assignment{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}'}
+%article.predictor-assignment{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}','ng-class'=>'assignmentGradedClass(assignment)'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
     {{assignment.name | limitTo:28}}
@@ -11,28 +11,25 @@
       due: {{assignment.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
 
   .predictor-article-main
-    .assignment-graded{'ng-if' => 'assignment.grade.status == "Graded"'}
-      %div{'ng-if' => 'assignment.pass_fail == false'}
-        {{assignment.grade.score}} / {{assignment.point_total}}
-      %div{'ng-if' => 'assignment.pass_fail == true'}
-        {{termFor(assignment.grade.pass_fail_status)}}
-    .assignment-predicted{'ng-if' => 'assignment.grade.status != "Graded"'}
 
+    .assignment-graded{'ng-if' => 'assignmentGraded(assignment)'}
+      .grade{'ng-if' => 'assignment.pass_fail == false'}
+        {{assignment.grade.score}} / {{assignment.point_total}}
+      .grade{'ng-if' => 'assignment.pass_fail == true'}
+        {{termFor[assignment.grade.pass_fail_status]}}
+
+    .assignment-predicted{'ng-if' => '! assignmentGraded(assignment)'}
       %div{'ng-if' => 'assignment.pass_fail == false'}
-        %span.score-level-name
         .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}'}}
-        %div{'id'=>'assignment-{{assignment.id}}-level',  'ng-if' => 'hasLevels(assignment)'}
+
+        .grade{'ng-if' => '! hasLevels(assignment)'}
+          {{assignment.grade.predicted_score}}
+
+        .grade{'id'=>'assignment-{{assignment.id}}-level',  'ng-if' => 'hasLevels(assignment)'}
           .value
             {{assignment.grade.predicted_score}}
           .name
             {{levelNameForScore(assignment)}}
 
-        %div{'ng-if' => '! hasLevels(assignment)'}
-          predicted: {{assignment.grade.predicted_score}}
-
       %div{'ng-if' => 'assignment.pass_fail == true'}
         .predictor-pass-fail-switch{'assignment'=>'assignment'}
-
-        / .switch-label.pass-fail-contingent{:data => {:on => '{{termFor("pass")}}', :off => '{{termFor("fail")}}'}}
-        /   {{passFailPrediction(assignment.grade)}}
-        / .pass-fail-grade-toggle

@@ -13,6 +13,7 @@
   $scope.assignmentTypes = PredictorService.assignmentTypes
   $scope.gradeLevels = PredictorService.gradeLevels
   $scope.icons = PredictorService.icons
+  $scope.termFor = PredictorService.termFor
 
   $scope.passFailPrediction = (grade)->
     prediction = if grade.predicted_score > 0 then PredictorService.termFor.pass else PredictorService.termFor.fail
@@ -45,6 +46,21 @@
 
     }
 
+  # TODO: update with new is_graded logic!
+  $scope.assignmentGraded = (assignment)->
+    assignment.grade.status == "Graded"
+
+  $scope.assignmentGradedClass = (assignment)->
+    if $scope.assignmentGraded(assignment)
+      return "status-graded"
+    else
+      return "status-ungraded"
+
+  # Assignments with Score Levels: returns true
+  $scope.hasLevels = (assignment)->
+    assignment.score_levels.length > 0
+
+  # Assignments with Score Levels: Returns the Level Name if predicted score in range
   $scope.levelNameForScore = (assignment)->
     if $scope.hasLevels(assignment)
       closest = $scope.closestScoreLevel(assignment.score_levels,assignment.grade.predicted_score)
@@ -52,6 +68,7 @@
         return closest.name
     return ""
 
+  # Assignments with Score Levels: Defines a snap tolerance and returns true if value is within range
   $scope.inSnapRange = (assignment,scoreLevel,value)->
     tolerance = assignment.point_total * 0.05
     if Math.abs(scoreLevel.value - value) <= tolerance
@@ -59,7 +76,7 @@
     else
       return false
 
-
+  # Assignments with Score Levels: returns closest score level
   $scope.closestScoreLevel = (scoreLevels,value)->
     closest = null
     _.each(scoreLevels, (lvl,i)->
@@ -68,21 +85,20 @@
     )
     return scoreLevels[closest]
 
-  $scope.hasLevels = (assignment)->
-    assignment.score_levels.length > 0
-
-  $scope.scoreLevelValues = (assignment)->
-    _.map(assignment.score_levels,(level)->
-        level.value
-      )
-  $scope.scoreLevelNames = (assignment)->
-    _.map(assignment.score_levels,(level)->
-        level.name
-      )
-
   # Filter the assignments, return just the assignments for the assignment type
   $scope.assignmentsForAssignmentType = (assignments,id)->
     _.where(assignments, {assignment_type_id: id})
+
+  $scope.assignmentTypePointTotal = (id)->
+    assignments = $scope.assignmentsForAssignmentType($scope.assignments,id)
+    total = 0
+    _.each(assignments, (assignment)->
+      if assignment.grade.score > 0
+        total += assignment.grade.score
+      else if ! assignment.pass_fail
+        total += assignment.grade.predicted_score
+    )
+    total
 
   $scope.assignmentDueInFuture = (assignment)->
     if assignment.due_at != null && Date.parse(assignment.due_at) >= Date.now()

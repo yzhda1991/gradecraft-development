@@ -24,7 +24,9 @@
         angular.copy({
           assignment: data.term_for_assignment
           pass: data.term_for_pass
+          Pass: data.term_for_pass
           fail: data.term_for_fail
+          Fail: data.term_for_fail
         },termFor)
       )
 
