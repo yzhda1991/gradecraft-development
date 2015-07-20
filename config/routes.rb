@@ -108,8 +108,6 @@ GradeCraft::Application.routes.draw do
   resources :metric_badges
   resources :tier_badges
 
-  resources :score_levels
-
   #3. Assignment Types
   resources :assignment_types do
     member do
@@ -279,6 +277,7 @@ GradeCraft::Application.routes.draw do
       get :final_grades
       get :class_badges
     end
+    resources :student_academic_histories
   end
   resources :staff, only: [:index, :show]
   resources :user_sessions

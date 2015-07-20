@@ -2,5 +2,5 @@
 require 'spec_helper'
 
 describe PagesController do
-
+	describe "GET ping"
 end

@@ -1,4 +1,6 @@
 class RubricGradesController < ApplicationController
+  before_filter :ensure_staff?
+
   before_action :find_rubric_grade, except: [:new, :create]
   after_action :respond_with_rubric_grade
 

@@ -44,7 +44,6 @@ class UsersController < ApplicationController
     end
     @course_membership = @user.course_memberships.where(course_id: current_course).first
     @title = "Editing #{@user.name}"
-    @academic_history = @user.student_academic_history
     @default_course_options = @user.courses
   end
 

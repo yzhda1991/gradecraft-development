@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_filter :ensure_staff?, only: [:index, :review]
+  before_filter :ensure_staff?, only: [:index, :review, :destroy]
 
   def index
     @pending_groups = current_course.groups.pending
