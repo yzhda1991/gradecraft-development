@@ -258,6 +258,7 @@ class Assignment < ActiveRecord::Base
         else
           self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
         end
+        return true 
       else
         return false
       end
