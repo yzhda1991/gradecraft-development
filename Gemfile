@@ -93,6 +93,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'rspec-rails', '~> 2.14.0'
+  gem 'simplecov'
 end
 
 group :tasks do
