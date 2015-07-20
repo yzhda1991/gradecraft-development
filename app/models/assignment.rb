@@ -236,6 +236,23 @@ class Assignment < ActiveRecord::Base
     end
   end
 
+  def check_unlock_status(student)
+    if ! is_unlocked_for_student?(student)
+      goal = unlock_conditions.count
+      count = 0 
+      unlock_conditions.each do |condition|
+        if condition.is_complete?(student)
+          count += 1
+        end 
+      end
+      if goal == count 
+        return true 
+      else
+        return false
+      end
+    end
+  end
+
   # If the point value is set at the assignment type level, grab it from there (commonly used for things like Attendance)
   def point_total
     super || assignment_type.universal_point_value || 0

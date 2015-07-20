@@ -8,4 +8,72 @@ class UnlockCondition < ActiveRecord::Base
 
 	validates_presence_of :unlockable_id, :unlockable_type, :condition_id, :condition_type, :condition_state
 
+	def is_complete?(student)
+		if condition_type == "Badge"
+			badge = student.earned_badge_for_badge(condition_id)
+			badge_count = student.earned_badges_for_badge_count(condition_id)
+			if condition_state? && condition_value? && condition_date?
+				if badge.present? && (badge_count >= condition_value) &&
+					student.earned_badges.where(:badge_id => condition_id).last.created_at < condition_date
+						return true
+				else
+					return false
+				end
+			elsif condition_state? && condition_value?
+				if badge.present? && 
+					badge_count >= condition_value
+					return true
+				else
+					return false
+				end
+			elsif condition_state?
+				if student.earned_badge_for_badge(condition_id).present?
+					return true
+				else
+					return false
+				end
+			end
+		elsif condition_type == "Assignment"
+			if condition_state == "Submitted"
+				submission = student.submission_for_assignment(condition_id)
+				if condition_date?
+					if submission.present? && (submission.updated_at < condition_date)
+						return true 
+					else
+						return false
+					end
+				elsif submission.present?
+					return true
+				else
+					return false
+				end
+			elsif condition_state == "Grade Earned"
+				grade = student.grade_for_assignment_id(condition_id).first
+				if condition_value? && condition_date?
+					if (grade.score > condition_value) && (grade.updated_at < condition_date)
+						return true 
+					else
+						return false
+					end
+				elsif condition_value?
+					if grade.score > condition_value
+						return true
+					else
+						return false
+					end
+				elsif condition_date?
+					if grade.updated_at < condition_date 
+						return true
+					else
+						return false
+					end
+				elsif grade.present?
+						return true
+				else
+					return false 
+				end
+			end
+		end
+	end
+
 end

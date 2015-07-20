@@ -362,6 +362,10 @@ class User < ActiveRecord::Base
     assignment_grades[assignment.id] || grades.new(assignment: assignment)
   end
 
+  def grade_for_assignment_id(assignment_id)
+    grades.where(assignment_id: assignment_id)
+  end
+
   def assignment_grades
     @assignment_grades ||= {}.tap do |assignment_grades|
       grades.each do |grade|
