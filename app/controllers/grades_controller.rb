@@ -265,7 +265,7 @@ class GradesController < ApplicationController
     respond_to do |format|
       format.json do
         if @grade.save
-          render :json => @grade
+          render :json => {id: @grade.id, predicted_score: @grade.predicted_score}
         else
           render :json => { errors:  @grade.errors.full_messages }, :status => 400
         end
