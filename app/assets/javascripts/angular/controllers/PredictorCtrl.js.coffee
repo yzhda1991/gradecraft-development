@@ -1,13 +1,18 @@
-@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', 'PredictorService', ($scope, $http, PredictorService) ->
+@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', '$q', '$filter', 'PredictorService', ($scope, $http, $q, $filter, PredictorService) ->
 
   $scope.assignmentMode = true
 
-  PredictorService.getAssignments()
+  $scope.services = ()->
+    promises = [PredictorService.getGradeLevels(),
+                PredictorService.getAssignments(),
+                PredictorService.getAssignmentTypes()]
+    return $q.all(promises)
 
-  PredictorService.getAssignmentTypes()
 
-  PredictorService.getGradeLevels().success (gradeLevels)->
+  $scope.services().then(()->
     $scope.renderGradeLevelGraphics()
+    console.log("snakeye!");
+  )
 
   $scope.assignments = PredictorService.assignments
   $scope.assignmentTypes = PredictorService.assignmentTypes
@@ -33,11 +38,9 @@
             event.preventDefault()
             event.stopPropagation()
             angular.element(ui.handle.parentElement).slider("value", closest.value)
-            #angular.element("#assignment-" + assignment.id + "-level .name").text(closest.name)
-            angular.element("#assignment-" + assignment.id + "-level .value").text(closest.value)
+            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(assignment.point_total))
           else
-            #angular.element("#assignment-" + assignment.id + "-level .name").text(" ")
-            angular.element("#assignment-" + assignment.id + "-level .value").text(ui.value)
+            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(assignment.point_total))
 
       stop: (event, ui)->
         assignment_id = ui.handle.parentElement.dataset.id

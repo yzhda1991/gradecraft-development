@@ -4,5 +4,5 @@
       .predictor-assigment-type-name
         {{assignmentType.name}}
       .predictor-assignment-type-points
-        Points Total: {{assignmentTypePointTotal(assignmentType.id)}}
+        Points Total: {{assignmentTypePointTotal(assignmentType.id) | number}}
   .collapsable{'ng-include' => true, 'src' => "'ng_predictor_assignments.html'"}
