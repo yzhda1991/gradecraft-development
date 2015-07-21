@@ -45,6 +45,7 @@
       stop: (event, ui)->
         assignment_id = ui.handle.parentElement.dataset.id
         value = ui.value
+        assignment.grade.predicted_score = value
         PredictorService.postPredictedScore(assignment_id,value)
 
     }
