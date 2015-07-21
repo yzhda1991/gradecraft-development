@@ -1,64 +1,22 @@
 @gradecraft.controller 'GradeSchemeElementsCtrl', ['$scope', '$http', 'GradeSchemeElementsService', ($scope, $http, GradeSchemeElementsService) ->
   GradeSchemeElementsService.getGradeSchemeElements().success (response)->
     #$scope.generateInputs(response.grade_scheme_elements)
-    #debugger
 
   gse = @
+  gse.onSubmit = () ->
+    alert(JSON.stringify(gse.model), null, 2)
   #$scope.gse.model = {}
-  $scope.gse.fields = []
-  gse.originalFields = angular.copy(gse.fields);
-  init()
+  # $scope.gse.fields = []
 
   gse.author = {
-    name: 'Joe Zhou',
-    url: 'https://plus.google.com/u/0/111062476999618400219/posts'
-  };
+    # name: 'Joe Zhou',
+    # url: 'https://plus.google.com/u/0/111062476999618400219/posts'
+  }
   gse.exampleTitle = 'Repeating Section';
-  gse.env = {
-    angularVersion: angular.version.full,
-    formlyVersion: formlyVersion
-  };
-
-  init = () ->
-    gse.model = {
-      investments: [
-        {
-          investmentName:'abc',
-          investmentDate:(new Date()).toDateString(),
-          stockIdentifier:'',
-          investmentValue:'',
-          relationshipName:'',
-          complianceApprover:'',
-          requestorComment:''
-        },
-        {
-          investmentName:'haf',
-          investmentDate:(new Date()).toDateString(),
-          stockIdentifier:'',
-          investmentValue:'',
-          relationshipName:'',
-          complianceApprover:'',
-          requestorComment:''
-        }
-      ]
-    };
-
-  gse.fields = [
-    {
-      type: 'repeatSection',
-      key: 'investments',
-      templateOptions: {
-        btnText:'Add another investment',
-        fields: [
-          fieldOne,
-          fieldTwo,
-          fieldThree,
-          fieldFour,
-          fieldFive
-        ]
-      }
-    }
-  ]
+  # gse.env = {
+  #   angularVersion: angular.version.full,
+  #   formlyVersion: formlyVersion
+  # }
 
   fieldOne = {
     className: 'row',
@@ -176,6 +134,49 @@
     ]
   }
 
+  init = () ->
+    gse.fields = [
+      {
+        type: 'repeatSection',
+        key: 'investments',
+        templateOptions: {
+          btnText:'Add another investment',
+          fields: [
+            fieldOne,
+            fieldTwo,
+            fieldThree,
+            fieldFour,
+            fieldFive
+          ]
+        }
+      }
+    ]
+    gse.model = {
+      investments: [
+        {
+          investmentName:'abc',
+          investmentDate:(new Date()).toDateString(),
+          stockIdentifier:'',
+          investmentValue:'',
+          relationshipName:'',
+          complianceApprover:'',
+          requestorComment:''
+        },
+        {
+          investmentName:'haf',
+          investmentDate:(new Date()).toDateString(),
+          stockIdentifier:'',
+          investmentValue:'',
+          relationshipName:'',
+          complianceApprover:'',
+          requestorComment:''
+        }
+      ]
+    }
+    return
+
+  init()
+  gse.originalFields = angular.copy(gse.fields);
 
   # $scope.generateInput = (element) ->
   #   tmp = {}

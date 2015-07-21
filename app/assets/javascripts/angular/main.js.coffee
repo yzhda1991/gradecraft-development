@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly', 'formlyBootstrap'])
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
@@ -26,23 +26,23 @@ INTEGER_REGEXP = /^\-?\d+$/
 #formly config
 @gradecraft.run((formlyConfig) ->
   formlyConfig.setType({
-      name: 'repeatSection',
-      templateUrl: 'repeatSection.html',
-      controller: ($scope) ->
-        $scope.formOptions = {formState: $scope.formState}
-        $scope.addNew = addNew
+    name: 'repeatSection',
+    templateUrl: 'ng_repeatSection.html',
+    controller: ($scope) ->
+      $scope.formOptions = {formState: $scope.formState}
+      $scope.addNew = addNew
 
-        $scope.copyFields = (fields) ->
-          angular.copy(fields)
+      $scope.copyFields = (fields) ->
+        angular.copy(fields)
 
-        addNew = () ->
-          $scope.model[$scope.options.key] = $scope.model[$scope.options.key] || []
-          repeatsection = $scope.model[$scope.options.key]
-          lastSection = repeatsection[repeatsection.length - 1]
-          newsection = {}
-          if (lastSection)
-            newsection = angular.copy(lastSection)
+      addNew = () ->
+        $scope.model[$scope.options.key] = $scope.model[$scope.options.key] || []
+        repeatsection = $scope.model[$scope.options.key]
+        lastSection = repeatsection[repeatsection.length - 1]
+        newsection = {}
+        if (lastSection)
+          newsection = angular.copy(lastSection)
 
-          repeatsection.push(newsection)
+        repeatsection.push(newsection)
   })
 )

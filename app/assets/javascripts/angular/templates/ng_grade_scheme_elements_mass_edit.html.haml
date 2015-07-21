@@ -1,11 +1,10 @@
 / .div{'ng-repeat' => 'gse in gradeSchemeElements.grade_scheme_elements'}
 /   {{gse.level}}
 /   {{gse.letter}}
-%form{:name => 'gse.form'}
-  %formly-form{:model => 'gse.model', :fields => 'gse.fields'}
-  %button{:type => 'submit'}
-
-  %script(type="text/x-template" id="input.html")
-    %div
-      %input{'ng-model' => 'model[options.key]'}
-      %pre{'ng-repeat' => '(key, val) in this', 'scope.{{key}}' => '{{val | json }}'}
+%form{'ng-submit' => 'gse.onSubmit()', :novalidate => 'novalidate'}
+  %formly-form{:model => 'gse.model', 'fields' => 'gse.fields', 'form' => 'gse.form'}
+    %button{:type => 'submit', :class => 'btn btn-primary submit-button'}
+      Submit
+  %h2 Model
+  %pre {{gse.originalFields | json}}
+  %pre {{gse.form | json}}
