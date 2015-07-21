@@ -14,7 +14,7 @@
       <img src="./assets/0.10.0/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2015-07-18T13:57:15-04:00">2015-07-18T13:57:15-04:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2015-07-20T22:10:01-04:00">2015-07-20T22:10:01-04:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -25,7 +25,7 @@
      covered at
      <span class="covered_strength">
        <span class="green">
-         6.83
+         6.8
        </span>
     </span> hits/line)
   </h2>
@@ -477,7 +477,7 @@
         <td>227</td>
         <td>168</td>
         <td>59</td>
-        <td>17.2</td>
+        <td>16.9</td>
       </tr>
       
       <tr>
@@ -517,7 +517,7 @@
         <td>97</td>
         <td>50</td>
         <td>47</td>
-        <td>28.0</td>
+        <td>27.5</td>
       </tr>
       
       <tr>
@@ -607,7 +607,7 @@
         <td>215</td>
         <td>133</td>
         <td>82</td>
-        <td>16.4</td>
+        <td>16.3</td>
       </tr>
       
       <tr>
@@ -647,7 +647,7 @@
         <td>103</td>
         <td>84</td>
         <td>19</td>
-        <td>13.5</td>
+        <td>13.2</td>
       </tr>
       
       <tr>
@@ -827,7 +827,7 @@
         <td>256</td>
         <td>179</td>
         <td>77</td>
-        <td>23.1</td>
+        <td>23.0</td>
       </tr>
       
       <tr>
@@ -1317,7 +1317,7 @@
         <td>12</td>
         <td>12</td>
         <td>0</td>
-        <td>138.3</td>
+        <td>138.6</td>
       </tr>
       
       <tr>
@@ -19676,8 +19676,8 @@
           <code class="ruby">  belongs_to :course</code>
         </li>
       
-        <li class="covered" data-hits="191" data-linenumber="11">
-          <span class="hits">191</span>
+        <li class="covered" data-hits="110" data-linenumber="11">
+          <span class="hits">110</span>
           
           <code class="ruby">  belongs_to :assignment_type, -&gt; { order(&#39;order_placement ASC&#39;) }, touch: true</code>
         </li>
@@ -22934,8 +22934,8 @@
           <code class="ruby">  belongs_to :course, touch: true</code>
         </li>
       
-        <li class="covered" data-hits="167" data-linenumber="11">
-          <span class="hits">167</span>
+        <li class="covered" data-hits="121" data-linenumber="11">
+          <span class="hits">121</span>
           
           <code class="ruby">  has_many :assignments, -&gt; { order(&#39;position ASC&#39;) }, :dependent =&gt; :destroy</code>
         </li>
@@ -26858,8 +26858,8 @@
           <code class="ruby">  def has_teams?</code>
         </li>
       
-        <li class="covered" data-hits="148" data-linenumber="140">
-          <span class="hits">148</span>
+        <li class="covered" data-hits="134" data-linenumber="140">
+          <span class="hits">134</span>
           
           <code class="ruby">    team_setting == true</code>
         </li>
@@ -30884,14 +30884,14 @@
           <code class="ruby">  def cache_student_and_team_scores</code>
         </li>
       
-        <li class="covered" data-hits="20" data-linenumber="130">
-          <span class="hits">20</span>
+        <li class="covered" data-hits="6" data-linenumber="130">
+          <span class="hits">6</span>
           
           <code class="ruby">    self.student.cache_course_score(self.course.id)</code>
         </li>
       
-        <li class="covered" data-hits="20" data-linenumber="131">
-          <span class="hits">20</span>
+        <li class="covered" data-hits="6" data-linenumber="131">
+          <span class="hits">6</span>
           
           <code class="ruby">    if self.course.has_teams? &amp;&amp; self.student.team_for_course(self.course).present?</code>
         </li>
@@ -35600,8 +35600,8 @@
           <code class="ruby">  # all student display pages are ordered by last name except for the leaderboard, and top 10&#47;bottom 10</code>
         </li>
       
-        <li class="covered" data-hits="1343" data-linenumber="60">
-          <span class="hits">1343</span>
+        <li class="covered" data-hits="1275" data-linenumber="60">
+          <span class="hits">1275</span>
           
           <code class="ruby">  default_scope { order(&#39;last_name ASC&#39;) }</code>
         </li>
@@ -36200,8 +36200,8 @@
           <code class="ruby">  def default_course</code>
         </li>
       
-        <li class="covered" data-hits="720" data-linenumber="160">
-          <span class="hits">720</span>
+        <li class="covered" data-hits="792" data-linenumber="160">
+          <span class="hits">792</span>
           
           <code class="ruby">    super || courses.first</code>
         </li>
@@ -37490,14 +37490,14 @@
           <code class="ruby">  def cache_course_score(course_id)</code>
         </li>
       
-        <li class="covered" data-hits="20" data-linenumber="375">
-          <span class="hits">20</span>
+        <li class="covered" data-hits="6" data-linenumber="375">
+          <span class="hits">6</span>
           
           <code class="ruby">    membership = course_memberships.where(course_id: course_id).first</code>
         </li>
       
-        <li class="covered" data-hits="20" data-linenumber="376">
-          <span class="hits">20</span>
+        <li class="covered" data-hits="6" data-linenumber="376">
+          <span class="hits">6</span>
           
           <code class="ruby">    unless membership.nil?</code>
         </li>
@@ -50780,8 +50780,8 @@
           <code class="ruby">  def term_for(key, fallback = nil)</code>
         </li>
       
-        <li class="covered" data-hits="788" data-linenumber="7">
-          <span class="hits">788</span>
+        <li class="covered" data-hits="790" data-linenumber="7">
+          <span class="hits">790</span>
           
           <code class="ruby">    case key.downcase.to_sym</code>
         </li>
@@ -50840,8 +50840,8 @@
           <code class="ruby">    when :students, :weights, :assignments, :assignment_types, :teams, :team_leaders, :badges, :challenges, :groups</code>
         </li>
       
-        <li class="covered" data-hits="162" data-linenumber="17">
-          <span class="hits">162</span>
+        <li class="covered" data-hits="164" data-linenumber="17">
+          <span class="hits">164</span>
           
           <code class="ruby">      term_for(key.to_s.downcase.singularize).pluralize</code>
         </li>
