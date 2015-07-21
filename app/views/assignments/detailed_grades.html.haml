@@ -5,6 +5,9 @@
   %h3.pagetitle= "#{@title} Detailed Grades (#{ points @assignment.point_total } points)"
 
   .small-12.columns
+    = render "buttons"
+
+  .small-12.columns
 
     - if @assignment.open_at?
       .small-12.large-4.columns.panel

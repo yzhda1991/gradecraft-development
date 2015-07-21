@@ -14,14 +14,14 @@
         .small-12
           %label.checkbox
             = f.label :visible, "Visible to students"
-            %i.fi-eye
+            %i.fa.fa-eye
             = f.check_box :visible
             .form_label Can #{term_for :students} see this #{term_for :assignment} in their dashboard?
 
         .small-12
           %label.checkbox
             = f.label :required
-            %i.fi-star
+            %i.fa.fa-exclamation-circle
             = f.check_box :required
             .form_label Are ALL #{term_for :students} expected to complete this #{term_for :assignment} to pass the course?
 
@@ -30,7 +30,7 @@
           .small-12
             .checkbox.assignment_options
               = f.label :accepts_submissions #{term_for :assignment} Submissions
-              %i.fi-paperclip
+              %i.fa.fa-paperclip
               = f.check_box :accepts_submissions
               .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
             %ul.submit.accepts_submission_types
@@ -50,47 +50,47 @@
           .small-12
             .checkbox
               = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions
-              %i.fi-loop
+              %i.fa.fa-repeat
               = f.check_box :resubmissions_allowed
               .form_label Can #{term_for :students} resubmit this #{term_for :assignment}?
 
         .small-12
           .checkbox
             = f.label :student_logged
-            %i.fi-pencil
+            %i.fa.fa-edit
             = f.check_box :student_logged
             .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}?
 
         .small-12
           .checkbox
             = f.label :release_necessary
-            %i.fi-unlock
+            %i.fa.fa-edit
             = f.check_box :release_necessary
             .form_label Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
 
         .small-12
           .checkbox
             = f.label :notify_released, "Notify by email?"
-            %i.fi-mail
+            %i.fa.fa-envelope
             = f.check_box :notify_released
             .form_label Do you want to notify students by email when a grade is awarded? If grade release is necessary, this email will not be sent out until the grade is officially released.
         .small-12
           .checkbox
             = f.label :include_in_timeline, "Timeline"
-            %i.fi-layout
+            %i.fa.fa-calendar-o
             = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
             .form_label{:id => "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :assignment} in the course timeline? Note that #{term_for :assignments} without open or due dates will be excluded automatically.
 
         .small-12
           .checkbox
             = f.label :include_in_predictor, "Predictor"
-            %i.fi-checkbox
+            %i.fa.fa-sliders
             = f.check_box :include_in_predictor
             .form_label Can #{term_for :students} see this #{term_for :assignment} in the grade predictor?
         .small-12
           .checkbox
             = f.label :include_in_to_do, "To Do List"
-            %i.fi-checkbox
+            %i.fa.fa-check
             = f.check_box :include_in_to_do
             .form_label Can #{term_for :students} see this #{term_for :assignment} in the to do list?
             

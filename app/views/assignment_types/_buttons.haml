@@ -1,0 +1,21 @@
+.small-12.columns
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => assignment_types_path}
+          %i.fa.fa-list
+          See All 
+      - if @assignment_type.present?
+        %li
+          %a.button{:href => new_assignment_type_path }
+            %i.fa.fa-plus
+            New #{term_for :assignment_type}
+      - if @assignment_type.present? && @assignment_type.persisted?
+        %li
+          %a.button{:href => assignment_type_path(@assignment_type) }
+            %i.fa.fa-eye
+            See #{@assignment_type.name}
+        %li
+          %a.button{:href => all_grades_assignment_type_path(@assignment_type) }
+            %i.fa.fa-heartbeat
+            #{@assignment_type.name} Performance

@@ -3,6 +3,7 @@
     %ul.button-group.radius
       %li
         %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?student_id=#{@student.id}", :class => 'button'  }
+          %i.fi.fi-edit
           Edit Submission
           %span.sr-only #{@student.try(:first_name)}'s Submission
       %li
@@ -14,6 +15,7 @@
     %ul.button-group.radius
       %li
         %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?group_id=#{@group}", :class => 'button'  }
+          %i.fi.fi-edit
           Edit Submission
           %span.sr-only #{@group.try(:name)}'s Submission
       %li

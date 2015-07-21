@@ -6,19 +6,7 @@
     .small-12
       %h3.pagetitle= @title
 
-    .small-12.columns
-      .button-bar
-        %ul.button-group.context_menu.radius
-          %li
-            %a.button{:href => assignment_type_path(@assignment_type) }
-              %i.fi-list-thumbnails
-              See #{@assignment_type.name} #{term_for :assignments}
-          %li
-            %a.button{:href => edit_assignment_type_path(@assignment_type)}
-              %i.fi-pencil
-              Edit #{@assignment_type.name}
-
-      %br
+    = render "buttons"
 
     .small-12.columns
 
@@ -33,17 +21,15 @@
         %table
           %tr
             %th
-              %i.fi-heart.complete
+              %i.fa.fa-heart.complete
               Full Points
-
             %th
-              %i.fi-cloud.partial
+              %i.fa.fa-heart-o.partial
               Partial Points
             %th
-              %i.fi-skull.absent
+              %i.fa.fa-times.absent
               Zero Points
             %th
-              %i.fi-skull.missing_grade
               No Grade
         .italic
           Numbers reflect streaks - how many times in a row a #{(term_for :student).downcase} has earned the maximum number of points on an #{term_for :assignment}
@@ -75,24 +61,22 @@
                         - i += 1
                         // Displaying td's colored green if the student earned all points possible on the assignment
                         %td
-                          %i.fi-heart.complete
+                          %i.fa.fa-heart.complete
                             = i
 
                       - elsif grade && grade.score == 0
                         // Displaying td's colored red if the student earned no points on the assignment (but HAS a grade)
                         - i = 0
                         %td
-                          %i.fi-skull.absent
+                          %i.fa.fa-times.absent
 
                       - elsif grade && grade.score < assignment.point_total
                         // Displaying td's colored yellow if the student earned some points on the assignment
                         - i = 0
                         %td
-                          %i.fi-cloud.partial
+                          %i.fa.fa-heart-o.partial
 
                       - else
                         // Displaying td's colored white if the studnet has no grade
                         - i = 0
                         %td
-                          - if assignment.past?
-                            %i.fi-skull.missing_grade
