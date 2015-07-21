@@ -62,6 +62,27 @@ class Badge < ActiveRecord::Base
     end
   end
 
+  def check_unlock_status(student)
+    if ! is_unlocked_for_student?(student)
+      goal = unlock_conditions.count
+      count = 0 
+      unlock_conditions.each do |condition|
+        if condition.is_complete?(student)
+          count += 1
+        end 
+      end
+      if goal == count 
+        if unlock_states.where(:student_id => student.id).present?
+          unlock_states.where(:student_id => student.id).first.unlocked = true 
+        else
+          self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
+        end
+      else
+        return false
+      end
+    end
+  end
+
   def visible_for_student?(student)
     if is_unlockable?
       if visible_when_locked? || is_unlocked_for_student?(student)

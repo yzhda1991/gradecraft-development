@@ -18,6 +18,8 @@ class EarnedBadge < ActiveRecord::Base
 
   validates_presence_of :badge, :course, :student
 
+  after_save :check_unlockables
+
   #Some badges can only be earned once - we check on award if that's the case
   validate :multiple_allowed
 
@@ -29,6 +31,20 @@ class EarnedBadge < ActiveRecord::Base
 
   def self.scores_for_students
     group(:student_id).pluck('earned_badges.student_id, COALESCE(SUM(score), 0)')
+  end
+
+  def check_unlockables 
+    if self.badge.is_a_condition?
+      unlock_conditions = UnlockCondition.where(:condition_id => self.badge.id, :condition_type => "Badge").each do |condition|
+        if condition.unlockable_type == "Assignment"
+          unlockable = Assignment.find(condition.unlockable_id)
+          unlockable.check_unlock_status(student)
+        elsif condition.unlockable_type == "Badge"
+          unlockable = Badge.find(condition.unlockable_id)
+          unlockable.check_unlock_status(student)
+        end
+      end
+    end
   end
 
   private

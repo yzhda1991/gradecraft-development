@@ -147,6 +147,20 @@ class Grade < ActiveRecord::Base
     self.score_changed? == true  || self.feedback_changed? == true
   end
 
+  def check_unlockables 
+    if self.assignment.is_a_condition?
+      unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
+        if condition.unlockable_type == "Assignment"
+          unlockable = Assignment.find(condition.unlockable_id)
+          unlockable.check_unlock_status(student)
+        elsif condition.unlockable_type == "Badge"
+          unlockable = Badge.find(condition.unlockable_id)
+          unlockable.check_unlock_status(student)
+        end
+      end
+    end
+  end
+
   private
 
   def clean_html
@@ -193,13 +207,6 @@ class Grade < ActiveRecord::Base
   def duplicate_badge_for_grade
     if self.earned_badges.where(:badge_id => earned_badge.badge_id).persisted?
       errors.add("")
-    end
-  end
-
-  def check_unlockables 
-    if assignment.is_unlockable? 
-      student = User.where(:student_id)
-      assignment.check_unlock_status(student)
     end
   end
 end

@@ -14,6 +14,7 @@ class Submission < ActiveRecord::Base
   belongs_to :course, touch: true
 
   before_save :clean_html, :submit_something
+  after_save :check_unlockables
 
   has_one :grade, :dependent => :destroy
   has_one :assignment_weight, through: :assignment
@@ -94,6 +95,20 @@ class Submission < ActiveRecord::Base
   def has_multiple_components?
     return true if (submission_files.count > 1) || (submission_files.present? && (link.present? || text_comment.present?))
     false
+  end
+
+  def check_unlockables 
+    if self.assignment.is_a_condition?
+      unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
+        if condition.unlockable_type == "Assignment"
+          unlockable = Assignment.find(condition.unlockable_id)
+          unlockable.check_unlock_status(student)
+        elsif condition.unlockable_type == "Badge"
+          unlockable = Badge.find(condition.unlockable_id)
+          unlockable.check_unlock_status(student)
+        end
+      end
+    end
   end
 
   private
