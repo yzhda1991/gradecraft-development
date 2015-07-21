@@ -33,9 +33,9 @@
   %span.large-3.columns
     // Needs to add a conditional upon the choice of assignment or badge
     //If Assignment
-    = f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read"], :label => "State Achieved"
+    //= f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read"], :label => "State Achieved"
     //If Badge
-    //= f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
+    = f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
   %span.large-2.columns
     //If Assignment
     = f.input :condition_value, :label => "Min Points"
