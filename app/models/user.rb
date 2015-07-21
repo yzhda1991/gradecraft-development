@@ -72,8 +72,8 @@ class User < ActiveRecord::Base
 
   belongs_to :default_course, :class_name => 'Course', touch: true
 
-  has_one :student_academic_history, :foreign_key => :student_id, :dependent => :destroy, :class_name => 'StudentAcademicHistory'
-  accepts_nested_attributes_for :student_academic_history
+  has_many :student_academic_histories, :foreign_key => :student_id, :dependent => :destroy
+  accepts_nested_attributes_for :student_academic_histories
 
   has_many :assignments, :through => :grades
 

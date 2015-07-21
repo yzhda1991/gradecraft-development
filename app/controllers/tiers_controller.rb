@@ -1,4 +1,6 @@
 class TiersController < ApplicationController
+  before_filter :ensure_staff?
+
   before_action :find_tier, except: [:new, :create]
 
   respond_to :html, :json

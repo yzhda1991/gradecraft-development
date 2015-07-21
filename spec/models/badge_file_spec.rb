@@ -24,13 +24,6 @@ describe BadgeFile do
     it { should_not be_valid }
   end
 
-  describe "when filepath is not present" do
-    pending("shouldn't we fail?") do
-      @badge_file.filepath = nil
-      it { should_not be_valid }
-    end
-  end
-
   describe "as a dependency of the submission" do
     it "is saved when the parent submission is saved" do
       @badge.save!

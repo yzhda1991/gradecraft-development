@@ -1,4 +1,6 @@
 class TierBadgesController< ApplicationController
+  before_filter :ensure_staff?
+
   before_action :find_tier_badge, only: [:update, :destroy]
 
   respond_to :html, :json
