@@ -3,25 +3,41 @@
     float: right
     margin-left: 6px
 
+select#grade_raw_score, input[type=text]#grade_raw_score
+  @include transition-property("background")
+
 select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
   background: #dedede !important
   color: #555
+  cursor: pointer
+  cursor: hand
   
 label.disabled
   color: #888 !important
 
 .gradebox
   border: 1px solid #9FD7E3
-  padding: 16px 24px
+  padding: 16px 36px
+  font-size: 13px
   margin-bottom: 18px
   margin-right: 10px
   @include linear-gradient(#A2EEFF, #7AE1F8)
   @include rounded-corners(4px)
   @include opacity(0.9)
 
+  // transitions
+  @include transition-property("padding, font-size, opacity, border-color")
+  @include transition-duration(0.8s)
+  @include transition-timing-function(ease)
+
   &.inactive
-    @include opacity(0.6)
+    @include opacity(0.4)
+    border: 1px solid #B9DAE2
     color: #87ADB5
+    padding: 16px 24px
+    font-size: 12px
+    cursor: pointer
+    cursor: hand
 
   &.jump-left
     color: red !important
@@ -29,14 +45,3 @@ label.disabled
     float: left
     transition: all 0.5s linear
     opacity: 0
-
-  &.fade-out
-    padding: 16px 24px
-    font-size: 12px
-    @include transition-property("padding, font-size")
-    @include transition-duration(0.8s)
-    @include transition-timing-function(ease)
-
-  &.fade-out-active
-    padding: 19px 27px
-    font-size: 13px
