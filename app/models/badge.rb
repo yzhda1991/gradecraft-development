@@ -62,6 +62,10 @@ class Badge < ActiveRecord::Base
     end
   end
 
+  def is_a_condition?
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").present?
+  end
+
   def check_unlock_status(student)
     if ! is_unlocked_for_student?(student)
       goal = unlock_conditions.count

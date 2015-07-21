@@ -35,7 +35,8 @@ class UnlockCondition < ActiveRecord::Base
 			end
 		elsif condition_type == "Assignment"
 			if condition_state == "Submitted"
-				submission = student.submission_for_assignment(condition_id)
+				assignment = Assignment.find(condition_id)
+				submission = student.submission_for_assignment(assignment)
 				if condition_date?
 					if submission.present? && (submission.updated_at < condition_date)
 						return true 
