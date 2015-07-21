@@ -1,1 +1,1 @@
-angular.module('uiFx', [ 'ngFx' ])
+angular.module('uiFx', ['ngAnimate'])

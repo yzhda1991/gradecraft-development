@@ -13,7 +13,6 @@ label.disabled
 .gradebox
   border: 1px solid #9FD7E3
   padding: 16px 24px
-  // background: #bbb
   margin-bottom: 18px
   margin-right: 10px
   @include linear-gradient(#A2EEFF, #7AE1F8)
@@ -25,5 +24,19 @@ label.disabled
     color: #87ADB5
 
   &.jump-left
-    color: red
+    color: red !important
+    background: red !important
+    float: left
+    transition: all 0.5s linear
+    opacity: 0
+
+  &.fade-out
+    background: black
+    padding: 16px 24px
+    @include transition-property("background, padding, font-size")
+    @include transition-duration(0.6s)
+    @include transition-timing-function(linear)
+
+  &.fade-out-active
     background: red
+    padding: 24px 32px

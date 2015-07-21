@@ -1,8 +1,8 @@
-angular.module('uiFx').directive 'jumpLeftOnClick', ($animate) ->
+angular.module('uiFx').directive 'fadeOutOnClick', ($animate) ->
   (scope, elem) ->
-    elem.on 'mouseOver', ->
-      $animate.animate(elem, 'jump-left').then ->
-        console.log 'jumped left'
+    elem.on 'click', ->
+      elem.addClass('fade-out-active').then ->
+        console.log 'faded out'
         return
       scope.$apply()
       return
