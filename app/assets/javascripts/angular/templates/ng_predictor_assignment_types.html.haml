@@ -1,8 +1,8 @@
 %section.predictor-assignment-type{'ng-repeat' => 'assignmentType in assignmentTypes'}
   .collapse-toggler.clear
     .predictor-section-title
-      .predictor-assigment-type-name
+      .predictor-section-title-left
         {{assignmentType.name}}
-      .predictor-assignment-type-points
+      .predictor-section-title-right
         Points Total: {{assignmentTypePointTotal(assignmentType.id) | number}}
   .collapsable{'ng-include' => true, 'src' => "'ng_predictor_assignments.html'"}

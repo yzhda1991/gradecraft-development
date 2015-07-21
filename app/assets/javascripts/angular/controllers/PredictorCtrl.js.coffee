@@ -5,18 +5,19 @@
   $scope.services = ()->
     promises = [PredictorService.getGradeLevels(),
                 PredictorService.getAssignments(),
-                PredictorService.getAssignmentTypes()]
+                PredictorService.getAssignmentTypes(),
+                PredictorService.getBadges()]
     return $q.all(promises)
 
 
   $scope.services().then(()->
     $scope.renderGradeLevelGraphics()
-    console.log("snakeye!");
   )
 
   $scope.assignments = PredictorService.assignments
   $scope.assignmentTypes = PredictorService.assignmentTypes
   $scope.gradeLevels = PredictorService.gradeLevels
+  $scope.badges = PredictorService.badges
   $scope.icons = PredictorService.icons
   $scope.termFor = PredictorService.termFor
 
@@ -102,6 +103,13 @@
       else if ! assignment.pass_fail
         total += assignment.grade.predicted_score
     )
+    total
+
+  $scope.badgesPointTotal = ()->
+    total = 0
+    _.each($scope.badges,(badge)->
+      total += badge.predicted_score
+      )
     total
 
   $scope.assignmentDueInFuture = (assignment)->

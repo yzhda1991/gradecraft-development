@@ -109,6 +109,13 @@ class BadgesController < ApplicationController
   end
 
   def student_predictor_data
-    @badges = current_course.badges.select(:id,:description,:point_total,:visible,:can_earn_multiple_times,:position)
+    @badges = current_course.badges.select( :id,
+                                            :name,
+                                            :description,
+                                            :point_total,
+                                            :visible,
+                                            :can_earn_multiple_times,
+                                            :position,
+                                            :icon)
   end
 end

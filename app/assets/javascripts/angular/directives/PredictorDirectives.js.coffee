@@ -18,6 +18,10 @@
           tooltip: 'This ' + assignmentTerm + ' is required!'
           icon: "fa-star"
         }
+        info: {
+          tooltip: scope.assignment.description
+          icon: "fa-info-circle"
+        }
         locked: {
           tooltip: 'This ' + assignmentTerm + ' is locked!'
           icon: "fa-lock"
@@ -35,16 +39,34 @@
   return {
     restrict: 'C'
     scope: {
-      assignment: '='
+      target: '='
+      targetType: '@'
+      onValue: '='
+      offValue: '='
     }
     templateUrl: 'ng_predictor_switch.html'
     link: (scope, el, attr)->
-      scope.passFailSwitchState = (assignment)->
-        state = if assignment.grade.predicted_score == 0 then 'off' else 'on'
-      scope.textForSwitch = (assignment)->
-        if assignment.grade.predicted_score == 0 then PredictorService.termFor["fail"] else PredictorService.termFor["pass"]
-      scope.toggleSwitch = (assignment,event)->
-        assignment.grade.predicted_score = if assignment.grade.predicted_score == 0 then 1 else 0
-        PredictorService.postPredictedScore(assignment.id,assignment.grade.predicted_score)
+      scope.switchState = ()->
+        if @targetType == 'assignment'
+          if @target.grade.predicted_score == @offValue then 'off' else 'on'
+        else if @targetType == 'badge'
+          if @target.predicted_score == @offValue then 'off' else 'on'
+
+      scope.textForSwitch = ()->
+        if @targetType == 'assignment'
+          if @target.pass_fail
+            if @target.grade.predicted_score == @offValue then PredictorService.termFor["fail"] else PredictorService.termFor["pass"]
+          else
+            if @target.grade.predicted_score == @offValue then @offValue else @onValue
+        else if @targetType == 'badge'
+          if @target.predicted_score == @offValue then @offValue else @onValue
+
+      scope.toggleSwitch = ()->
+        if @targetType == 'assignment'
+          @target.grade.predicted_score = if @target.grade.predicted_score == @offValue then @onValue else @offValue
+          PredictorService.postPredictedScore(@target.id,@target.grade.predicted_score)
+        else if @targetType == 'badge'
+          @target.predicted_score = if @target.predicted_score == @offValue then @onValue else @offValue
+          console.log("badge-toggle");
   }
 ]
