@@ -77,7 +77,7 @@ class User < ActiveRecord::Base
 
   has_many :assignments, :through => :grades
 
-  has_many :unlock_states
+  has_many :unlock_states, :foreign_key => :student_id, :dependent => :destroy
 
   has_many :assignment_weights, :foreign_key => :student_id
 

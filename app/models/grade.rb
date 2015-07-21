@@ -34,6 +34,7 @@ class Grade < ActiveRecord::Base
   before_validation :cache_associations
   before_save :cache_point_total
   before_save :zero_points_for_pass_fail
+  after_save :check_unlockables
 
   has_many :grade_files, :dependent => :destroy
   accepts_nested_attributes_for :grade_files
@@ -192,6 +193,13 @@ class Grade < ActiveRecord::Base
   def duplicate_badge_for_grade
     if self.earned_badges.where(:badge_id => earned_badge.badge_id).persisted?
       errors.add("")
+    end
+  end
+
+  def check_unlockables 
+    if assignment.is_unlockable? 
+      student = User.where(:student_id)
+      assignment.check_unlock_status(student)
     end
   end
 end

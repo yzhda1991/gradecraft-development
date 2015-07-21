@@ -246,7 +246,11 @@ class Assignment < ActiveRecord::Base
         end 
       end
       if goal == count 
-        return true 
+        if unlock_states.where(:student_id => student.id).present?
+          unlock_states.where(:student_id => student.id).first.unlocked = true 
+        else
+          self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
+        end
       else
         return false
       end
