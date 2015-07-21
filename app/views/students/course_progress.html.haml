@@ -13,7 +13,7 @@
             %span.meter
               .center.pushdown
                 %span
-                  %i.fi-lock
+                  %i.fa.fa-lock
                 - if element.level.present?
                   %span.has-tip.tip-top{:title=> "#{element.letter}" , :data=> {'tooltip'=> true}}= element.level
                 - else

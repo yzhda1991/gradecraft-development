@@ -5,22 +5,7 @@
   .small-12
     %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_assignment_type_path }
-            %i.fi-plus
-            New #{term_for :assignment_type}
-        %li
-          %a.button{:href => assignment_type_path(@assignment_type) }
-            %i.fi-list-thumbnails
-            See #{@assignment_type.name}
-        %li
-          %a.button{:href => all_grades_assignment_type_path(@assignment_type) }
-            %i.fi-graph-bar
-            #{@assignment_type.name} Performance
-    %br
+  = render "buttons"
 
   / Display Assignment Type form
   .small-12.columns

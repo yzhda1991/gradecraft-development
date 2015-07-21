@@ -5,17 +5,7 @@
   %h3.pagetitle= @title
 
   .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{ :href => new_assignment_path }
-            %i.fi-plus
-            New #{term_for :assignment}
-        %li
-          %a.button{ :href => assignment_path(@assignment) }
-            %i.fi-list-thumbnails
-            See #{@assignment.name}
-    %br
+    = render "buttons"
 
   .small-12.columns
 
