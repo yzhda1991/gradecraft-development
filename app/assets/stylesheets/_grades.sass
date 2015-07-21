@@ -31,12 +31,12 @@ label.disabled
     opacity: 0
 
   &.fade-out
-    background: black
     padding: 16px 24px
-    @include transition-property("background, padding, font-size")
-    @include transition-duration(0.6s)
-    @include transition-timing-function(linear)
+    font-size: 12px
+    @include transition-property("padding, font-size")
+    @include transition-duration(0.8s)
+    @include transition-timing-function(ease)
 
   &.fade-out-active
-    background: red
-    padding: 24px 32px
+    padding: 19px 27px
+    font-size: 13px
