@@ -34,6 +34,7 @@ describe StudentAcademicHistoriesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
+          pending
           (get route, {:id => "1"}).should redirect_to(:root)
         end
       end
