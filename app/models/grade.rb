@@ -209,11 +209,4 @@ class Grade < ActiveRecord::Base
       errors.add("")
     end
   end
-
-  def check_unlockables 
-    if assignment.is_unlockable? 
-      student = User.where(:student_id)
-      assignment.check_unlock_status(student)
-    end
-  end
 end
