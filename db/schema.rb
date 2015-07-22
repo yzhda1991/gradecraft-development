@@ -717,7 +717,7 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.datetime "updated_at"
   end
 
-  create_table "submission_files_duplicate", id: false, force: true do |t|
+  create_table "submission_files_duplicate", id: false, force: :cascade do |t|
     t.string  "key"
     t.string  "format"
     t.integer "upload_id"
@@ -881,9 +881,14 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.string   "lti_uid",                         limit: 255
     t.string   "last_login_from_ip_address",      limit: 255
     t.string   "kerberos_uid",                    limit: 255
+<<<<<<< HEAD
     t.string   "activation_state"
     t.string   "activation_token"
     t.datetime "activation_token_expires_at"
+=======
+    t.hstore   "ui_settings"
+    t.boolean  "collapse_rubric_overview",                    default: false
+>>>>>>> updated schema
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree
