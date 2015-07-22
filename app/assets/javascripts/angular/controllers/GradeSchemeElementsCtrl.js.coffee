@@ -6,35 +6,6 @@
     gse.model.grade_scheme_elements = grade_scheme_elements
     init()
 
-    # gse.model = {
-    #   gradeSchemes: [
-    #     {
-    #       letter:'abc',
-    #       level:'',
-    #       lowRange:'',
-    #       highRange:''
-    #     },
-    #     {
-    #       letter:'abc',
-    #       level:'',
-    #       lowRange:'',
-    #       highRange:''
-    #     }
-    #   ]
-    # }
-
-    # 0: Object
-    # course_id: 1
-    # created_at: "2015-06-08T16:29:05.500-04:00"
-    # description: null
-    # grade_scheme_id: null
-    # high_range: 600000
-    # id: 1
-    # letter: "F"
-    # level: "Rat"
-    # low_range: 0
-    # updated_at: "2015-06-08T16:29:05.500-
-
   gse = @
   gse.onSubmit = () ->
     alert(JSON.stringify(gse.model), null, 2)
@@ -83,7 +54,7 @@
     gse.fields = [
       {
         type: 'gradeScheme',
-        key: 'gradeSchemes',
+        key: 'grade_scheme_elements',
         templateOptions: {
           btnText:'Add another investment',
           fields: [
