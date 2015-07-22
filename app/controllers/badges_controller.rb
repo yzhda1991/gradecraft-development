@@ -117,5 +117,8 @@ class BadgesController < ApplicationController
                                             :can_earn_multiple_times,
                                             :position,
                                             :icon)
+    @badges.each do |badge|
+      badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(current_student)
+    end
   end
-end
+ end
