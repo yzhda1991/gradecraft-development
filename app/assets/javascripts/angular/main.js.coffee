@@ -26,8 +26,8 @@ INTEGER_REGEXP = /^\-?\d+$/
 #formly config
 @gradecraft.run((formlyConfig) ->
   formlyConfig.setType({
-    name: 'repeatSection',
-    templateUrl: 'ng_repeatSection.html',
+    name: 'gradeScheme',
+    templateUrl: 'ng_gradeScheme.html',
     controller: ($scope) ->
       $scope.formOptions = {formState: $scope.formState}
       $scope.addNew = () ->
