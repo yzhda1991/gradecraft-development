@@ -24,9 +24,13 @@
 //= require angular-resource
 //= require angular-animate
 <<<<<<< HEAD
+<<<<<<< HEAD
 //= require angular-rails-templates
 //= require_tree ./angular/templates
 =======
+=======
+//= require moment.min
+>>>>>>> implement dynamic 'time ago' tracking for updated grades through angular
 //= require TweenMax.min
 //= require ngFx.min
 >>>>>>> add interactive grade edit ui plus implement animation library and directives

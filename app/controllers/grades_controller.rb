@@ -115,7 +115,8 @@ class GradesController < ApplicationController
     {
       feedback: params[:feedback],
       instructor_modified: true,
-      status: params[:status]
+      status: params[:status],
+      updated_at: Time.now
     }
   end
 

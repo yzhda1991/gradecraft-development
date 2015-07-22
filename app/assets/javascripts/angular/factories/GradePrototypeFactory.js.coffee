@@ -7,6 +7,7 @@
       @feedback = attrs.feedback
       @is_custom_value = attrs.is_custom_value
       @http = http
+      @updated_at = null
 
     enableCustomValue: ()->
       if this.is_custom_value == false
@@ -38,6 +39,7 @@
       self = this
       @http.put("/grades/#{self.id}/async_update", self).success(
         (data,status)->
+          self.updated_at = new Date()
       )
       .error((err)->
       )
