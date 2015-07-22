@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly', 'formlyBootstrap'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly', 'formlyFoundation'])
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
@@ -30,19 +30,16 @@ INTEGER_REGEXP = /^\-?\d+$/
     templateUrl: 'ng_repeatSection.html',
     controller: ($scope) ->
       $scope.formOptions = {formState: $scope.formState}
-      $scope.addNew = addNew
-
-      $scope.copyFields = (fields) ->
-        angular.copy(fields)
-
-      addNew = () ->
+      $scope.addNew = () ->
         $scope.model[$scope.options.key] = $scope.model[$scope.options.key] || []
         repeatsection = $scope.model[$scope.options.key]
         lastSection = repeatsection[repeatsection.length - 1]
         newsection = {}
         if (lastSection)
           newsection = angular.copy(lastSection)
-
         repeatsection.push(newsection)
+
+      $scope.copyFields = (fields) ->
+        angular.copy(fields)
   })
 )
