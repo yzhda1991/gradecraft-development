@@ -3,7 +3,7 @@
     generateFormModels(response.grade_scheme_elements)
 
   generateFormModels = (grade_scheme_elements) ->
-    gse.model.grade_scheme_elements = grade_scheme_elements
+    gse.model.grade_scheme_elements = grade_scheme_elements.slice().reverse()
     init()
 
   gse = @
@@ -32,7 +32,7 @@
       {
         className: 'small-12 medium-2 columns',
         type: 'input',
-        key: 'lowRange',
+        key: 'low_range',
         templateOptions: {
           label: 'Low Range',
           required: true
@@ -41,14 +41,25 @@
       {
         className: 'small-12 medium-2 columns',
         type: 'input',
-        key: 'highRange',
+        key: 'high_range',
         templateOptions: {
           label: 'High Range',
           required: true
         }
       }
+      # ,
+      # {
+      #   className: 'remove-element button alert radius',
+      #   type: 'button',
+      #   templateOptions: {
+      #     label: 'Remove',
+      #   }
+      # }
     ]
   }
+
+  # %button{:type => 'button', :class => 'remove-element button alert radius', 'ng-click' => 'model[options.key].splice($index, 1)'}
+  #   Remove
 
   init = () ->
     gse.fields = [
@@ -56,7 +67,7 @@
         type: 'gradeScheme',
         key: 'grade_scheme_elements',
         templateOptions: {
-          btnText:'Add another investment',
+          btnText:'Add A Level',
           fields: [
             fieldOne
           ]
