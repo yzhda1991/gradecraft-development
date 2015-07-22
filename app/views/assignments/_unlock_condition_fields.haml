@@ -5,14 +5,14 @@
     = f.input :condition_type, :collection => ["Assignment", "Badge"], :label => "Type"
   %span.large-3.columns
     // Needs to add a conditional upon the choice of assignment or badge
-    //= f.input :condition_id, :collection => current_course.assignments.alphabetical.map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment}"
-    = f.input :condition_id, :collection => current_course.badges.map { |l| [l.name, l.id] }, :include_blank => true, :label => "#{term_for :badge}"
+    = f.input :condition_id, :collection => current_course.assignments.alphabetical.map { |l| [l.name,l.id] }, :include_blank => true, :label => "#{term_for :assignment}"
+    //= f.input :condition_id, :collection => current_course.badges.sorted.map { |l| [l.name, l.id] }, :include_blank => true, :label => "#{term_for :badge}"
   %span.large-3.columns
     // Needs to add a conditional upon the choice of assignment or badge
     //If Assignment
-    //= f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read"], :label => "State Achieved"
+    = f.input :condition_state, :collection => ["Submitted", "Grade Earned", "Feedback Read"], :label => "State Achieved"
     //If Badge
-    = f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
+    //= f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
   %span.large-2.columns
     //If Assignment
     = f.input :condition_value, :label => "Min Points"
