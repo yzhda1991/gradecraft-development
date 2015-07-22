@@ -1,0 +1,24 @@
+%section.predictor-badges
+  .collapse-toggler.clear
+    .predictor-section-title
+      .predictor-section-title-left
+        {{termFor.badges}}
+      .predictor-section-title-right
+        Points Total: {{badgesPointTotal() | number}}
+  .collapsable
+    %article.predictor-assignment{'ng-repeat' => 'badge in badges'}
+
+      .predictor-article-title{'title' => '{{badge.name}}'}
+        {{badge.name | limitTo:26}}
+
+      .predictor-article-icons
+        .predictor-assignment-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'assignment'=>'badge'}
+
+      .predictor-badge-main
+
+        %img.predictor-badge-icon{ :src => '{{badge.icon}}', :alt => '{{badge.name}}' }
+
+        .badge-predicted
+          %div
+            .predictor-pass-fail-switch{'target'=>'badge','target-type'=>'badge','off-value'=>'0','on-value'=>'badge.point_total'}
+

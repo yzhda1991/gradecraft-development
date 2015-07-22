@@ -1,6 +1,6 @@
 class BadgesController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:index]
+  before_filter :ensure_staff?, :except => [:index, :student_predictor_data]
 
   def index
     if current_user_is_student?
@@ -108,4 +108,14 @@ class BadgesController < ApplicationController
     end
   end
 
+  def student_predictor_data
+    @badges = current_course.badges.select( :id,
+                                            :name,
+                                            :description,
+                                            :point_total,
+                                            :visible,
+                                            :can_earn_multiple_times,
+                                            :position,
+                                            :icon)
+  end
 end

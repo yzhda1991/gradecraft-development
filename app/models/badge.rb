@@ -20,8 +20,12 @@ class Badge < ActiveRecord::Base
   validates_presence_of :course, :name
   validates_numericality_of :point_total, :allow_blank => true
 
-  scope :sorted, -> { order('position ASC') }
   scope :visible, -> { where(visible: true) }
+
+  default_scope { order('position ASC') }
+  #TODO: remove calls to sorted, default scope is sorted
+  scope :sorted, -> { order('position ASC') }
+
 
   def self.with_earned_badge_info_for_student(student)
     joins("LEFT JOIN earned_badges on badges.id = earned_badges.id AND earned_badges.student_id = #{Badge.sanitize(student.id)}").select('badges.*, earned_badges.created_at AS earned_at, earned_badges.feedback')

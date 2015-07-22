@@ -22,7 +22,15 @@
   line-height: 1.4
   margin-bottom: 0.5rem
   margin-top: 0.2rem
+  padding: 0 .5rem
   clear: both
+
+  .predictor-section-title-left
+   float: left
+   text-transform: capitalize
+
+  .predictor-section-title-right
+    text-align: right
 
 // ARTICLES
 
@@ -42,11 +50,12 @@ article.predictor-assignment
 .predictor-article-title
   background-color: $color-layout-blue-0
   color: $txt-color-inverse
-  padding-left: .5rem
+  padding: 3px 0 0 .5rem
   height: 2rem
+  font-size: 1.125rem
 
 .predictor-article-icons
-  height: 1.5rem
+  height: 1.25rem
   background-color: $color-layout-blue-2
   padding: .25rem
 
@@ -70,13 +79,50 @@ article.predictor-assignment
   border-radius: 4px
   padding: 4px
 
+.predictor-badge-icon
+  max-width: 80px
+  float: left
+  margin: 1px 0 0 1rem
+
+.badge-predicted
+  width: 50%
+  float: right
+  margin-top: 1.25rem
+
 .predictor-article-date
   height: 1.25rem
-  background-color: $color-layout-blue-3
+  //background-color: $color-layout-blue-3
   padding: .25rem
 
+.predictor-article-main
+  padding-top: 8px
+
+article.predictor-assignment.status-graded
+  background-color: $color-layout-blue-4
+  border: 1px solid $color-layout-blue-1
+  border-bottom: .25rem solid $color-layout-blue-1
+  .predictor-article-title
+    background-color: $color-layout-blue-1
+  .predictor-article-icons
+    background-color: $color-layout-blue-3
+
+.assignment-graded .grade, .pass-fail-prediction
+  text-align: center
+  font-size: 1.5rem
+  color: $color-layout-blue-0
+
+.assignment-predicted .grade
+  text-align: center
+  font-size: 1.25rem
+  color: $color-layout-blue-0
+  .value
+    font-size: 1rem
+  .name
+    font-size: .85rem
+    margin: -5px
 
 /* Styling the slider widgets */
+
 article.predictor-assignment
   .slider.ui-widget-content
     background: $color-layout-blue-2
@@ -97,6 +143,25 @@ article.predictor-assignment
     top: -5px
     margin-left: -12px
     background: $color-layout-blue-0
+
+
+.predictor-pass-fail-switch .switch-socket
+  width: 40px
+  height: 20px
+  position: relative
+  background: $color-layout-blue-2
+  border-radius: 4px
+  margin: auto
+
+.predictor-pass-fail-switch .switch-handle
+  width: 20px
+  height: 20px
+  position: absolute
+  background: $color-layout-blue-0
+  border-radius: 4px
+
+.predictor-pass-fail-switch .switch-handle.on
+  left: 20px
 
 // ANIMATIONS
 

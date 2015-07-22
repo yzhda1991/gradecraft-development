@@ -77,9 +77,9 @@ class Assignment < ActiveRecord::Base
   scope :alphabetical, -> { order('name ASC') }
   acts_as_list scope: :assignment_type
 
-  # TODO: remove once calls to sorted are taken out (now defaults to sorted)
+  # TODO: remove once calls to sorted are taken out
   scope :sorted, -> { order('position ASC') }
-
+  # TODO: add once point_total doesn't break assignment score levels:
   #default_scope { order('position ASC') }
 
   # Filtering Assignments by various date properties

@@ -1,106 +1,122 @@
-@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', 'PredictorService', ($scope, $http, PredictorService) ->
+@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', '$q', '$filter', 'PredictorService', ($scope, $http, $q, $filter, PredictorService) ->
 
   $scope.assignmentMode = true
 
-  $scope.predictorServices = (()->
-        gradeLevels : false
-        assignmentTypes : false
-        assignments : false
+  $scope.services = ()->
+    promises = [PredictorService.getGradeLevels(),
+                PredictorService.getAssignments(),
+                PredictorService.getAssignmentTypes(),
+                PredictorService.getBadges()]
+    return $q.all(promises)
 
-        add : (service)->
-          if service == "gradeLevels"
-            self.gradeLevels = true
-          else if service == "assignmentTypes"
-            self.assignmentTypes = true
-          else if service == "assignments"
-            self.assignments = true
-        complete : ()->
-          if self.gradeLevels && self.assignmentTypes && self.assignments
-            return true
-          else
-            return false
-  )()
 
-  PredictorService.getGradeLevels().success (gradeLevels)->
-    $scope.addGradelevels(gradeLevels)
+  $scope.services().then(()->
     $scope.renderGradeLevelGraphics()
-    $scope.predictorServices.add("gradeLevels")
-    if $scope.predictorServices.complete()
-      $scope.integration()
+  )
 
-  PredictorService.getAssignments().success (assignments)->
-    $scope.addAssignments(assignments)
-    $scope.predictorServices.add("assignments")
-    PredictorService.getAssignmentTypes().success (assignmentTypes)->
-      $scope.addAssignmentTypes(assignmentTypes)
-      $scope.predictorServices.add("assignmentTypes")
-      if $scope.predictorServices.complete()
-        $scope.integration()
+  $scope.assignments = PredictorService.assignments
+  $scope.assignmentTypes = PredictorService.assignmentTypes
+  $scope.gradeLevels = PredictorService.gradeLevels
+  $scope.badges = PredictorService.badges
+  $scope.icons = PredictorService.icons
+  $scope.termFor = PredictorService.termFor
 
-  $scope.addGradelevels = (gradeLevels)->
-    $scope.gradeLevels = gradeLevels
+  $scope.passFailPrediction = (grade)->
+    prediction = if grade.predicted_score > 0 then PredictorService.termFor.pass else PredictorService.termFor.fail
 
-  $scope.addAssignmentTypes = (assignmentTypes)->
-    $scope.assignmentTypes = assignmentTypes.assignment_types
+  $scope.slider = (assignment)->
+    {
+      range: "min"
 
-  $scope.addAssignments = (assignments)->
-    $scope.assignments = assignments.assignments
-    $scope.termFor = (term)->
-      switch term.toLowerCase()
-        when "assignment" then return assignments.term_for_assignment
-        when "pass" then return assignments.term_for_pass
-        when "fail" then return assignments.term_for_fail
-        else return ""
-    $scope.passFailPrediction = (grade)->
-      prediction = if grade.predicted_score > 0 then $scope.termFor("pass") else $scope.termFor("fail")
+      #start: (event, ui)->
 
-  $scope.slider =
-    { 'options': {
-        range: "min",
+      slide: (event, ui)->
+        slider = ui.handle.parentElement
 
-        #start: (event, ui)->
+        if $scope.hasLevels(assignment)
+          closest = $scope.closestScoreLevel(assignment.score_levels,ui.value)
+          if $scope.inSnapRange(assignment,closest,ui.value)
+            event.preventDefault()
+            event.stopPropagation()
+            angular.element(ui.handle.parentElement).slider("value", closest.value)
+            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(assignment.point_total))
+          else
+            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(assignment.point_total))
 
-        slide: (event, ui)->
-          scoreNames = JSON.parse(ui.handle.parentElement.dataset.scoreLevelNames)
-          scoreValues = JSON.parse(ui.handle.parentElement.dataset.scoreLevelValues)
-          if(scoreValues.length > 0)
-            closest = null
-            _.each(scoreValues, ()->
-              if (closest == null || Math.abs(this - ui.value) < Math.abs(closest - ui.value))
-                debugger
-                closest = this
-            )
-            console.log(closest);
-            #$(this).slider("value", closest);
+      stop: (event, ui)->
+        assignment_id = ui.handle.parentElement.dataset.id
+        value = ui.value
+        assignment.grade.predicted_score = value
+        PredictorService.postPredictedScore(assignment_id,value)
 
-        stop: (event, ui)->
-          assignment_id = ui.handle.parentElement.dataset.id
-          value = ui.value
-          PredictorService.postPredictedScore(assignment_id,value)
-      }
     }
 
-  $scope.scoreLevelValues = (assignment)->
-    _.map(assignment.score_levels,(level)->
-        level.value
-      )
-  $scope.scoreLevelNames = (assignment)->
-    _.map(assignment.score_levels,(level)->
-        level.name
-      )
+  # TODO: update with new is_graded logic!
+  $scope.assignmentGraded = (assignment)->
+    assignment.grade.status == "Graded"
+
+  $scope.assignmentGradedClass = (assignment)->
+    if $scope.assignmentGraded(assignment)
+      return "status-graded"
+    else
+      return "status-ungraded"
+
+  # Assignments with Score Levels: returns true
+  $scope.hasLevels = (assignment)->
+    assignment.score_levels.length > 0
+
+  # Assignments with Score Levels: Returns the Level Name if predicted score in range
+  $scope.levelNameForScore = (assignment)->
+    if $scope.hasLevels(assignment)
+      closest = $scope.closestScoreLevel(assignment.score_levels,assignment.grade.predicted_score)
+      if $scope.inSnapRange(assignment,closest,assignment.grade.predicted_score)
+        return closest.name
+    return ""
+
+  # Assignments with Score Levels: Defines a snap tolerance and returns true if value is within range
+  $scope.inSnapRange = (assignment,scoreLevel,value)->
+    tolerance = assignment.point_total * 0.05
+    if Math.abs(scoreLevel.value - value) <= tolerance
+      return true
+    else
+      return false
+
+  # Assignments with Score Levels: returns closest score level
+  $scope.closestScoreLevel = (scoreLevels,value)->
+    closest = null
+    _.each(scoreLevels, (lvl,i)->
+      if (closest == null || Math.abs(lvl.value - value) < Math.abs(scoreLevels[closest].value - value))
+        closest = i
+    )
+    return scoreLevels[closest]
 
   # Filter the assignments, return just the assignments for the assignment type
-  $scope.assignmentsForAssignmentType = (assignments,assignmentType)->
-    _.where(assignments, {assignment_type_id: assignmentType})
+  $scope.assignmentsForAssignmentType = (assignments,id)->
+    _.where(assignments, {assignment_type_id: id})
+
+  $scope.assignmentTypePointTotal = (id)->
+    assignments = $scope.assignmentsForAssignmentType($scope.assignments,id)
+    total = 0
+    _.each(assignments, (assignment)->
+      if assignment.grade.score > 0
+        total += assignment.grade.score
+      else if ! assignment.pass_fail
+        total += assignment.grade.predicted_score
+    )
+    total
+
+  $scope.badgesPointTotal = ()->
+    total = 0
+    _.each($scope.badges,(badge)->
+      total += badge.predicted_score
+      )
+    total
 
   $scope.assignmentDueInFuture = (assignment)->
     if assignment.due_at != null && Date.parse(assignment.due_at) >= Date.now()
       return true
     else
       return false
-
-  $scope.integration = ()->
-    console.log("holy schnikes!");
 
   # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
   $scope.renderGradeLevelGraphics = ()->
