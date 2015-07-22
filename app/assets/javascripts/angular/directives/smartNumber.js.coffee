@@ -198,8 +198,17 @@ NumberModule.directive 'smartNumber',
       originalValue = elem.val() # the original value of the field before keypress
       startPosition = elem[0].selectionStart # beginning of selected range
       endPosition = elem[0].selectionEnd # end of selected range
-      newValue = [originalValue.slice(0, startPosition), originalValue.slice(endPosition)].join('') # insert the new number into the field
+      newValue = [originalValue.slice(0, startPosition), originalValue.slice(endPosition)].join('') # get rid of the selected stuff
       elem.val(newValue) # replace the original value with the new one
+
+    replaceSelectionWithCharacter = (elem, event) ->
+      character = keyCodes[event.which] # which character was entered
+      originalValue = elem.val() # the original value of the field before keypress
+      startPosition = elem[0].selectionStart # beginning of selected range
+      endPosition = elem[0].selectionEnd # end of selected range
+      newValue = [originalValue.slice(0, startPosition), character, originalValue.slice(endPosition)].join('') # insert the new number into the field
+      elem.val(newValue) # replace the original value with the new one
+
 
     makeIsValid = (options) ->
         validations = []
@@ -317,7 +326,7 @@ NumberModule.directive 'smartNumber',
                   elem.val resetCommas(stringAfterCursor) # reformat the number in place
 
                   # set the final cursor position
-                  elem[0].setSelectionRange(1,1) # set the cursor at the beginning of the input field
+                  elem[0].setSelectionRange(0,0) # set the cursor at the beginning of the input field
 
                   # trigger final change event
                   triggerChange(elem)
@@ -327,13 +336,40 @@ NumberModule.directive 'smartNumber',
 
               else
 
+                # number entry
                 if numberCharacterPressed(keycode)
-                  unless maxDigitsReached(elem, 9)
-                    newCursorPosition = findNewCharacterCursorPosition(elem, initialPosition)
-                    insertCharacter(elem, event)
+
+                  ## replacing a selected area with a number character
+                  if elem[0].selectionEnd > elem[0].selectionStart # text is highlighted
+                    
+                    # get the string before the selection and figure out how many commas it has
+                    originalCursorPosition = elem[0].selectionStart
+                    stringBeforeCursor = elem.val().slice(0, originalCursorPosition)
+                    startingCommasBeforeCursor = (stringBeforeCursor.match(/,/g) || []).length
+
+                    # delete the selected stuff and reset the commas
+                    replaceSelectionWithCharacter(elem, event)
                     elem.val resetCommas(elem.val()) # reformat the number in place
-                    elem[0].setSelectionRange(newCursorPosition, newCursorPosition) # set the new cursor position
+
+                    # figure out how many commas were lost
+                    finalStringBeforeCursor = elem.val().slice(0, originalCursorPosition)
+                    endingCommasBeforeCursor = (finalStringBeforeCursor.match(/,/g) || []).length
+                    commaDiff = startingCommasBeforeCursor - endingCommasBeforeCursor
+
+                    # set the final cursor position
+                    finalCursorPosition = originalCursorPosition - commaDiff + 1
+                    elem[0].setSelectionRange(finalCursorPosition, finalCursorPosition) # set the new cursor position
+
+                    # trigger final change event
                     triggerChange(elem)
+
+                  else
+                    unless maxDigitsReached(elem, 9)
+                      newCursorPosition = findNewCharacterCursorPosition(elem, initialPosition)
+                      insertCharacter(elem, event)
+                      elem.val resetCommas(elem.val()) # reformat the number in place
+                      elem[0].setSelectionRange(newCursorPosition, newCursorPosition) # set the new cursor position
+                      triggerChange(elem)
 
                 if isBackspace(event) # backspace is pressed
 

@@ -18,6 +18,13 @@
         this.is_custom_value = false
         this.update()
 
+    enableScoreLevels: (event)->
+      event.preventDefault()
+      event.stopPropagation()
+      if this.is_custom_value == true
+        this.is_custom_value = false
+        this.update()
+
     modelOptions: ()->
       {
         updateOn: 'default blur',
