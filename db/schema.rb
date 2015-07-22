@@ -168,7 +168,6 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.boolean  "include_in_timeline",                           default: true
     t.boolean  "include_in_predictor",                          default: true
     t.integer  "position"
-    t.boolean  "include_in_to_do",                              default: true
     t.boolean  "use_rubric",                                    default: true
     t.boolean  "accepts_attachments",                           default: true
     t.boolean  "accepts_text",                                  default: true
@@ -392,6 +391,7 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.string   "pass_term",                     limit: 255
     t.string   "fail_term",                     limit: 255
     t.string   "syllabus"
+    t.boolean  "hide_analytics"
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
@@ -678,14 +678,14 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.integer  "course_id"
     t.text     "student_name"
     t.integer  "user_id"
-    t.string   "icon"
-    t.string   "name"
+    t.string   "icon",         limit: 255
+    t.string   "name",         limit: 255
     t.integer  "badge_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "student_academic_histories", force: true do |t|
+  create_table "student_academic_histories", force: :cascade do |t|
     t.integer "student_id"
     t.string  "major",                limit: 255
     t.decimal "gpa"
@@ -724,13 +724,6 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.string  "full_name"
     t.string  "last_name"
     t.string  "first_name"
-  create_table "submission_files_duplicate", id: false, force: true do |t|
-    t.string  "key",        limit: 255
-    t.string  "format",     limit: 255
-    t.integer "upload_id"
-    t.string  "full_name",  limit: 255
-    t.string  "last_name",  limit: 255
-    t.string  "first_name", limit: 255
   end
 
   create_table "submissions", force: :cascade do |t|
