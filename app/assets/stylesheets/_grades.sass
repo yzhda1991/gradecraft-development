@@ -15,9 +15,22 @@ select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
 label.disabled
   color: #888 !important
 
-.updated-at
+#updated-at, #updated-at-current
   margin-top: 12px
   font-style: italic
+  float: left
+  padding: 1px 5px
+  border: 1px solid #F2F2F2
+  @include rounded-corners(4px)
+
+#updated-at-current
+  @include transition-property("background, border-color")
+  @include transition-duration(0.6s)
+  @include transition-timing-function(ease)
+
+  &.ng-animate
+    background: #F5FCA1
+    border-color: #E8F08F
 
 .gradebox
   border: 1px solid #9FD7E3
@@ -31,7 +44,7 @@ label.disabled
 
   // transitions
   @include transition-property("padding, font-size, opacity, border-color")
-  @include transition-duration(0.8s)
+  @include transition-duration(0.4s)
   @include transition-timing-function(ease)
 
   &.inactive

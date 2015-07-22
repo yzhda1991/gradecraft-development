@@ -26,6 +26,13 @@
         this.is_custom_value = false
         this.update()
 
+    justUpdated: ()->
+      this.timeSinceUpdate() < 1000
+
+    timeSinceUpdate: ()->
+      self = this
+      Math.abs(new Date() - self.updated_at)
+
     modelOptions: ()->
       {
         updateOn: 'default blur',
