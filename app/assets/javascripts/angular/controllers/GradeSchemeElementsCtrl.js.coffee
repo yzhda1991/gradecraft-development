@@ -1,22 +1,43 @@
 @gradecraft.controller 'GradeSchemeElementsCtrl', ['$scope', '$http', 'GradeSchemeElementsService', ($scope, $http, GradeSchemeElementsService) ->
   GradeSchemeElementsService.getGradeSchemeElements().success (response)->
-    #$scope.generateInputs(response.grade_scheme_elements)
+    generateFormModels(response.grade_scheme_elements)
+
+  generateFormModels = (grade_scheme_elements) ->
+    gse.model.grade_scheme_elements = grade_scheme_elements
+    init()
+
+    # gse.model = {
+    #   gradeSchemes: [
+    #     {
+    #       letter:'abc',
+    #       level:'',
+    #       lowRange:'',
+    #       highRange:''
+    #     },
+    #     {
+    #       letter:'abc',
+    #       level:'',
+    #       lowRange:'',
+    #       highRange:''
+    #     }
+    #   ]
+    # }
+
+    # 0: Object
+    # course_id: 1
+    # created_at: "2015-06-08T16:29:05.500-04:00"
+    # description: null
+    # grade_scheme_id: null
+    # high_range: 600000
+    # id: 1
+    # letter: "F"
+    # level: "Rat"
+    # low_range: 0
+    # updated_at: "2015-06-08T16:29:05.500-
 
   gse = @
   gse.onSubmit = () ->
     alert(JSON.stringify(gse.model), null, 2)
-  #$scope.gse.model = {}
-  # $scope.gse.fields = []
-
-  gse.author = {
-    # name: 'Joe Zhou',
-    # url: 'https://plus.google.com/u/0/111062476999618400219/posts'
-  }
-  gse.exampleTitle = 'Repeating Section';
-  # gse.env = {
-  #   angularVersion: angular.version.full,
-  #   formlyVersion: formlyVersion
-  # }
 
   fieldOne = {
     className: 'row',
@@ -62,7 +83,7 @@
     gse.fields = [
       {
         type: 'gradeScheme',
-        key: 'investments',
+        key: 'gradeSchemes',
         templateOptions: {
           btnText:'Add another investment',
           fields: [
@@ -71,45 +92,8 @@
         }
       }
     ]
-    gse.model = {
-      investments: [
-        {
-          investmentName:'abc',
-          investmentDate:(new Date()).toDateString(),
-          stockIdentifier:'',
-          investmentValue:'',
-          relationshipName:'',
-          complianceApprover:'',
-          requestorComment:''
-        },
-        {
-          investmentName:'haf',
-          investmentDate:(new Date()).toDateString(),
-          stockIdentifier:'',
-          investmentValue:'',
-          relationshipName:'',
-          complianceApprover:'',
-          requestorComment:''
-        }
-      ]
-    }
     return
-
-  init()
   gse.originalFields = angular.copy(gse.fields);
 
-  # $scope.generateInput = (element) ->
-  #   tmp = {}
-  #   tmp.type = 'input'
-  #   tmp.templateOptions = {}
-  #   tmp.key = 'parentType'
-  #   tmp.templateOptions.label = element.letter
-  #   tmp
-
-  # $scope.generateInputs = (elements) ->
-  #   fields = []
-  #   angular.forEach elements, (element, index)->
-  #     fields.push $scope.generateInput(element)
-  #   $scope.gse.fields = fields
   return
 ]
