@@ -37,13 +37,14 @@ class GradesController < ApplicationController
     session[:return_to] = request.referer
     @student = current_student
     redirect_to @assignment and return unless current_student.present?
-    @grade = Grade.where(student_id: current_student[:id], assignment_id: @assignment[:id]).first
+    @grade = Grade.where(student_id: @student[:id], assignment_id: @assignment[:id]).first
     # @grade = current_student_data.grade_for_assignment(@assignment)
     create_student_assignment_grade unless @grade
     @serialized_grade = GradeSerializer.new(@grade).to_json
     @submission = @student.submission_for_assignment(@assignment)
     @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
     @badges = current_course.badges
+    @serialized_badges = fetch_serialized_badges
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
       @rubric_grades = serialized_rubric_grades
@@ -58,6 +59,10 @@ class GradesController < ApplicationController
 
   def empty_score_levels_hash
     {assignment_score_levels: []}.to_json
+  end
+
+  def fetch_serialized_badges
+    ActiveModel::ArraySerializer.new(@badges, each_serializer: CourseBadgeSerializer).to_json
   end
 
   def fetch_serialized_assignment_score_levels

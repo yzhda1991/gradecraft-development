@@ -1,9 +1,11 @@
-@gradecraft.factory 'CourseBadge', ->
+@gradecraft.factory 'CourseBadge', ['EarnedBadgePrototype', (EarnedBadgePrototype) ->
   class CourseBadge
-	  constructor: (attrs={}) ->
+    constructor: (attrs={}) ->
 	  	@id = attrs.id
 	  	@name = attrs.name
 	  	@description = attrs.description
 	  	@point_total = attrs.point_total
 	  	@icon = attrs.icon
 	  	@multiple = attrs.multiple
+
+  ]

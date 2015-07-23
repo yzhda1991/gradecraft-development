@@ -1,6 +1,6 @@
-@gradecraft.controller 'GradeCtrl', ['$rootScope', '$scope', 'GradePrototype', 'AssignmentScoreLevelPrototype', '$window', '$http', ($rootScope, $scope, GradePrototype, AssignmentScoreLevelPrototype, $window, $http) -> 
+@gradecraft.controller 'GradeCtrl', ['$rootScope', '$scope', 'GradePrototype', 'AssignmentScoreLevelPrototype', '$window', '$http', 'BadgePrototype', ($rootScope, $scope, GradePrototype, AssignmentScoreLevelPrototype, $window, $http, BadgePrototype) -> 
 
-  $scope.init = (grade, assignmentScoreLevels)->
+  $scope.init = (grade, assignmentScoreLevels, badges)->
     $scope.header = "waffles" 
     gradeParams = grade["grade"]
     $scope.grade = new GradePrototype(gradeParams, $http)
@@ -9,6 +9,14 @@
     $scope.rawScoreUpdating = false
     $scope.hasChanges = false
     $scope.gradeStatuses = ["In Progress", "Graded", "Released"]
+
+    $scope.badges = []
+    $scope.addBadges = (badges)->
+      angular.forEach(badges, (badge, index)->
+        badgePrototype = new BadgePrototype(badge)
+        badgePrototype.addEarnedBadges()
+        $scope.badges.push badgePrototype
+      )
 
     $scope.assignmentScoreLevels = []
     $scope.addAssignmentScoreLevels = (assignmentScoreLevels)->
@@ -19,6 +27,9 @@
 
     unless assignmentScoreLevels.length == undefined
       $scope.addAssignmentScoreLevels(assignmentScoreLevels)
+
+    unless badges.length == undefined
+      $scope.addBadges(badges)
 
     $scope.froalaOptions = {
       inlineMode: false,
