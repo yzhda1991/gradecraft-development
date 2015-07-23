@@ -6,6 +6,10 @@
 @gradecraft = angular.module('gradecraft', ['angularMoment', 'ngAnimate', 'uiFx', '720kb.tooltips', 'restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'froala', 'smart-number', 'helpers'])
 >>>>>>> implement dynamic 'time ago' tracking for updated grades through angular
 
+@gradecraft.config(['$compileProvider', ($compileProvider)->
+  $compileProvider.debugInfoEnabled(false)
+])
+
 @gradecraft.directive "modalDialog", ->
   restrict: "E"
   scope:

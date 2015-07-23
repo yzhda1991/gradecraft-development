@@ -41,12 +41,8 @@
 //= require ./angular/ui/sortable
 //= require ./angular/vendor/restangular.min
 //= require_tree ./angular
-<<<<<<< HEAD
-=======
 //= require_tree ../templates
 
-//= require bootstrap-datetimepicker
->>>>>>> successfully implement angular routes through ui-router, testing  event handling, get it working but still can't properly catch back-browser and navigate-away behaviors -- reverting to timing out keystrokes
 //= require gradecraft
 //= require preload_store
 //= require users

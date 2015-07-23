@@ -16,8 +16,10 @@ module GradeCraft
     config.assets.precompile += %w(.svg .eot .otf .woff .ttf)
     config.assets.paths << Rails.root.join("app", "assets", "fonts")
     config.assets.paths << Rails.root.join("app", "assets", "templates")
-    # config.assets.paths << Rails.root.join('vendor', 'assets', 'components') ## add bower components
     config.filter_parameters += [:password]
+
+    # deprecated javascript management config
+    # config.assets.paths << Rails.root.join('vendor', 'assets', 'components') ## add bower components
 
     # use coffeescript files with browserify
     config.browserify_rails.commandline_options = "-t coffeeify --extension=\".js.coffee\""
