@@ -526,7 +526,7 @@ class User < ActiveRecord::Base
     Badge
       .where(visible: false)
       .where(course_id: course[:id])
-      .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
+      .where("id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
   end
 
   def earn_badges(badges)
