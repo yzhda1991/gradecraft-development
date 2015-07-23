@@ -138,7 +138,7 @@ describe User do
 
   context "student_visible_earned_badges" do
     it "should know which badges a student has earned" do
-      @earned_badges = create_list(:earned_badge, 3, course: @course, student: @student)
+      @earned_badges = create_list(:earned_badge, 3, course: @course, student: @student, student_visible: true)
       expect(@student.student_visible_earned_badges(@course)).to eq(@earned_badges)
     end
 
@@ -157,7 +157,7 @@ describe User do
 
   context "unique_student_earned_badges" do
     before(:each) do
-      @earned_badges = create_list(:earned_badge, 3, course: @course, student: @student)
+      @earned_badges = create_list(:earned_badge, 3, course: @course, student: @student, student_visible: true)
       @sorted_badges = @student.earned_badges.collect(&:badge).sort_by(&:id).flatten
       @badges_unearned = create_list(:badge, 2, course: @course)
     end
@@ -190,10 +190,8 @@ describe User do
   context "student_invisible_badges" do
     it "should return invisible badges for which the student has earned a badge" do
       @invisible_badges = create_list(:badge, 2, course: @course, visible: false)
-      @invisible_badges
       @student.earn_badges(@invisible_badges)
       @badges_earned_by_id = @student.student_invisible_badges(@course)
-      @badges_earned_by_id
       expect(@badges_earned_by_id).to eq(@invisible_badges)
     end
 
