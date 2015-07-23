@@ -1,3 +1,19 @@
+
+
+@mixin  predictor-small-text
+  font-size: .75rem
+
+// font-size: 11px
+// font-size: 1.6875rem
+// font-size: 1.5rem
+// font-size: 1.25rem
+// font-size: 1rem
+// font-size: 1.125rem
+// font-size: .85rem
+
+.predictor-date
+  @include predictor-small-text
+
 #grade-levels
 
 #predictor-graphic
@@ -87,7 +103,6 @@ article.predictor-assignment
 .badge-predicted
   width: 50%
   float: right
-  margin-top: 1.25rem
 
 .predictor-article-date
   height: 1.25rem
@@ -106,7 +121,7 @@ article.predictor-assignment.status-graded
   .predictor-article-icons
     background-color: $color-layout-blue-3
 
-.assignment-graded .grade, .pass-fail-prediction
+.assignment-graded .grade, .pass-fail-prediction, .badge-complete .value
   text-align: center
   font-size: 1.5rem
   color: $color-layout-blue-0
@@ -121,7 +136,7 @@ article.predictor-assignment.status-graded
     font-size: .85rem
     margin: -5px
 
-/* Styling the slider widgets */
+/* Slider Widget */
 
 article.predictor-assignment
   .slider.ui-widget-content
@@ -144,8 +159,9 @@ article.predictor-assignment
     margin-left: -12px
     background: $color-layout-blue-0
 
+/* Binary Switch */
 
-.predictor-pass-fail-switch .switch-socket
+.predictor-binary-switch .switch-socket
   width: 40px
   height: 20px
   position: relative
@@ -153,15 +169,53 @@ article.predictor-assignment
   border-radius: 4px
   margin: auto
 
-.predictor-pass-fail-switch .switch-handle
+.predictor-binary-switch .switch-handle
   width: 20px
   height: 20px
   position: absolute
   background: $color-layout-blue-0
   border-radius: 4px
 
-.predictor-pass-fail-switch .switch-handle.on
-  left: 20px
+.predictor-binary-switch .switch-socket.on
+  background: $color-layout-blue-1
+  .switch-handle
+    left: 20px
+
+/* Counter widget */
+
+.switch-socket
+  width: 20px
+  height: 40px
+  position: relative
+  background: $color-layout-blue-2
+  border-radius: 4px
+  margin: auto
+
+.switch-up-button
+  width: 0
+  height: 0
+  border-left: 10px solid transparent
+  border-right: 10px solid transparent
+  border-bottom: 18px solid $color-layout-blue-0
+  position: absolute
+
+.switch-down-button
+  width: 0
+  height: 0
+  top: 21px
+  position: absolute
+  border-left: 10px solid transparent
+  border-right: 10px solid transparent
+  border-top: 18px solid $color-layout-blue-0
+  position: absolute
+
+.switch-down-button.disabled
+  border-top: 18px solid $color-layout-blue-1
+
+.time-earned-prediction
+
+.badge-total-prediction
+
 
 // ANIMATIONS
 

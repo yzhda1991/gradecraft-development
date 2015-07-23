@@ -48,18 +48,11 @@
         value = ui.value
         assignment.grade.predicted_score = value
         PredictorService.postPredictedScore(assignment_id,value)
-
     }
 
   # TODO: update with new is_graded logic!
   $scope.assignmentGraded = (assignment)->
     assignment.grade.status == "Graded"
-
-  $scope.assignmentGradedClass = (assignment)->
-    if $scope.assignmentGraded(assignment)
-      return "status-graded"
-    else
-      return "status-ungraded"
 
   # Assignments with Score Levels: returns true
   $scope.hasLevels = (assignment)->
@@ -108,9 +101,15 @@
   $scope.badgesPointTotal = ()->
     total = 0
     _.each($scope.badges,(badge)->
-      total += badge.predicted_score
+        total += badge.prediction.times_earned * badge.point_total
       )
     total
+
+  $scope.badgeCompleted = (badge)->
+    if (badge.point_total == badge.total_earned_points && ! badge.can_earn_multiple_times)
+      return true
+    else
+      return false
 
   $scope.assignmentDueInFuture = (assignment)->
     if assignment.due_at != null && Date.parse(assignment.due_at) >= Date.now()

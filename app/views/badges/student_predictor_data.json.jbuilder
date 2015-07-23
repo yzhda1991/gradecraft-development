@@ -11,7 +11,14 @@ json.badges @badges do |badge|
   badge.student_predicted_earned_badge.tap do |prediction|
     json.prediction do
       json.id prediction.id
-      json.times_earned prediction.times_earned
+
+      # We persist the student's last prediction, but the predictor will start the student's
+      # predicted earning count at no less that the number of badges she already earned.
+      if prediction.times_earned < badge.earned_badge_count_for_student(current_student)
+        json.times_earned badge.earned_badge_count_for_student(current_student)
+      else
+        json.times_earned prediction.times_earned
+      end
     end
   end
 end

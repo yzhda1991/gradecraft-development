@@ -131,6 +131,7 @@ GradeCraft::Application.routes.draw do
 
   #5. Badges
   resources :badges do
+    post :predict_times_earned
     resources :tasks
     resources :earned_badges do
       post :toggle_shared

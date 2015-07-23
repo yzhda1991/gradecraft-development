@@ -1,13 +1,13 @@
-%article.predictor-assignment{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}','ng-class'=>'assignmentGradedClass(assignment)'}
+%article.predictor-assignment{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}','ng-class'=>'{"status-graded" : assignmentGraded(assignment)}'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
-    {{assignment.name | limitTo:26}}
+    {{assignment.name | limitTo:22}}
 
   .predictor-article-icons
     .predictor-assignment-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'assignment'=>'assignment'}
 
   .predictor-article-date
-    .assignment-due-at{'ng-if' => 'assignmentDueInFuture(assignment)'}
+    .predictor-date{'ng-if' => 'assignmentDueInFuture(assignment)'}
       due: {{assignment.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
 
   .predictor-article-main
@@ -32,4 +32,4 @@
             {{levelNameForScore(assignment)}}
 
       %div{'ng-if' => 'assignment.pass_fail == true'}
-        .predictor-pass-fail-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'1'}
+        .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'1'}

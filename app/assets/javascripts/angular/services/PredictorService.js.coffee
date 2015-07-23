@@ -38,8 +38,18 @@
           termFor.badges = data.term_for_badges
         )
 
-    postPredictedScore = (assignment_id,value)->
+    postPredictedGrade = (assignment_id,value)->
       $http.post('/assignments/' + assignment_id + '/grades/predict_score', predicted_score: value).success(
+        (data)->
+          console.log(data);
+        ).error(
+        (data)->
+          console.log(data);
+        )
+
+    postPredictedBadge = (badge_id,value)->
+
+      $http.post('/badges/' + badge_id + '/predict_times_earned', times_earned: value).success(
         (data)->
           console.log(data);
         ).error(
@@ -52,7 +62,8 @@
         getAssignmentTypes: getAssignmentTypes
         getAssignments: getAssignments
         getBadges: getBadges
-        postPredictedScore: postPredictedScore
+        postPredictedGrade: postPredictedGrade
+        postPredictedBadge: postPredictedBadge
         assignments: assignments
         assignmentTypes: assignmentTypes
         gradeLevels: gradeLevels
