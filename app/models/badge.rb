@@ -135,5 +135,4 @@ class Badge < ActiveRecord::Base
   def earned_badge_total_points(student)
     earned_badges.where(:student_id => student, :student_visible => true).pluck('score').sum
   end
-
 end

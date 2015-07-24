@@ -6,7 +6,6 @@ class GradesController < ApplicationController
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
 
-
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
     if current_user_is_student?
@@ -62,7 +61,7 @@ class GradesController < ApplicationController
   end
 
   def fetch_serialized_badges
-    ActiveModel::ArraySerializer.new(@badges, root: {student_id: @student[:id]}, each_serializer: CourseBadgeSerializer).to_json
+    ActiveModel::ArraySerializer.new(@badges, each_serializer: CourseBadgeSerializer).to_json(student_id: @student[:id])
   end
 
   def fetch_serialized_assignment_score_levels
