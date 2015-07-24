@@ -43,7 +43,7 @@ class GradesController < ApplicationController
     @submission = @student.submission_for_assignment(@assignment)
     @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
     @badges = current_course.badges
-    @serialized_badges = jbuild_badges_json
+    @serialized_badges = jbuilder_badges_template.to_json
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
       @rubric_grades = serialized_rubric_grades
@@ -64,7 +64,7 @@ class GradesController < ApplicationController
     ActiveModel::ArraySerializer.new(@badges, each_serializer: CourseBadgeSerializer).to_json(student_id: @student[:id])
   end
 
-  def jbuild_badges_json
+  def jbuilder_badges_template
     JbuilderTemplate.encode(view_context) do |json|
       json.array! @badges do |badge|
         json.(badge, :id, :name, :description, :point_total)
