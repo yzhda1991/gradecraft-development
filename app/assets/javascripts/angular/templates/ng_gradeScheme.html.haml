@@ -2,8 +2,8 @@
   %div{'class' => '{{hideRepeat}}'}
     %div{'class' => 'repeatsection', 'ng-repeat' => 'element in model[options.key]', 'ng-init' => 'fields = copyFields(to.fields)'}
       %formly-form{'fields' => 'fields', 'model' => 'element', 'bind-name' => "'formly_ng_repeat' + index + $parent.$index"}
-      %button{:type => 'button', :class => 'remove-element button alert radius', 'ng-click' => 'model[options.key].splice($index, 1)'}
-        Remove
+      {{element}}
+      / %button{:type => 'button', :class => 'remove-element button alert radius', 'ng-click' => 'model[options.key].splice($index, 1)'} Remove
   %p{:class => 'AddNewButton'}
-    %button{:type => 'button', :class => 'btn btn-primary', 'ng-click' => 'addNew()'}
+    %button{:type => 'button', :class => 'button left', 'ng-click' => 'addNew()'}
       {{to.btnText}}

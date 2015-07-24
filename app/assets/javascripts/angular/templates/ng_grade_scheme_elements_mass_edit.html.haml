@@ -3,7 +3,7 @@
 /   {{gse.letter}}
 %form{'ng-submit' => 'gse.onSubmit()', :novalidate => 'novalidate'}
   %formly-form{:model => 'gse.model', 'fields' => 'gse.fields', 'form' => 'gse.form'}
-    %button{:type => 'submit', :class => 'button alert radius'}
+    %button{:type => 'submit', :class => 'button radius right'}
       Submit
   %h2 Model
   %pre {{gse.originalFields | json}}

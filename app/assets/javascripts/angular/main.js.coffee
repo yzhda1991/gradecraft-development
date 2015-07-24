@@ -24,13 +24,19 @@ INTEGER_REGEXP = /^\-?\d+$/
     return
 
 #formly config
-@gradecraft.run((formlyConfig) ->
-  formlyConfig.setType({
+
+@gradecraft.constant('appApiCheck', apiCheck({
+  output: {prefix: 'gradecraftApp'}
+}))
+
+@gradecraft.run((formlyConfig, appApiCheck) ->
+  formlyConfig.setType([{
     name: 'gradeScheme',
     templateUrl: 'ng_gradeScheme.html',
     controller: ($scope) ->
       $scope.formOptions = {formState: $scope.formState}
       $scope.addNew = () ->
+        debugger
         $scope.model[$scope.options.key] = $scope.model[$scope.options.key] || []
         repeatsection = $scope.model[$scope.options.key]
         lastSection = repeatsection[repeatsection.length - 1]
@@ -41,5 +47,38 @@ INTEGER_REGEXP = /^\-?\d+$/
 
       $scope.copyFields = (fields) ->
         angular.copy(fields)
-  })
+  },
+  {
+    # / %button{:type => 'button', :class => 'remove-element button alert radius', 'ng-click' => 'model[options.key].splice($index, 1)'} Remove
+    name: 'button',
+    template: '<div><button type="button" ng-click="onClick($event)">{{to.text}}</button></div>',
+    defaultOptions: {
+      templateOptions: {
+        btnType: 'default',
+        type: 'button'
+      },
+      data: {
+        skipNgModelAttrsManipulator: true
+      }
+    },
+    controller: ($scope) ->
+      $scope.onClick = ($event) ->
+        debugger
+        $scope.model[$scope.options.key] = $scope.model[$scope.options.key] || []
+        $scope.model[$scope.options.key].splice($scope.options.key, 1)
+        # if (angular.isString($scope.to.onClick))
+        #   return $scope.$eval($scope.to.onClick, {$event: $event})
+        # else
+        #   return $scope.to.onClick($event)
+
+    apiCheck: {
+      templateOptions: appApiCheck.shape({
+        onClick: appApiCheck.oneOfType([appApiCheck.string, appApiCheck.func]),
+        type: appApiCheck.string.optional,
+        btnType: appApiCheck.string.optional,
+        text: appApiCheck.string
+      })
+    },
+    apiCheckInstance: appApiCheck
+  }])
 )
