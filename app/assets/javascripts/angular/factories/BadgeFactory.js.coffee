@@ -12,12 +12,13 @@
       @formatted_value = null
       @assignment_id = attrs.assignment_id
       @student_earned_badges_serial = attrs.student_earned_badges
-      @earnedBadges = []
+      this.earnedBadges = []
 
     addEarnedBadges: ()->
+      self = this
       angular.forEach(@student_earned_badges_serial, (earnedBadgeParams, index)->
         earnedBadge = new EarnedBadge(earnedBadgeParams)
-        @earnedBadges.push earnedBadge
+        self.earnedBadges.push earnedBadge
       )
 
 ]
