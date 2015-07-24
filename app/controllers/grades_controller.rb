@@ -62,7 +62,7 @@ class GradesController < ApplicationController
   end
 
   def fetch_serialized_badges
-    ActiveModel::ArraySerializer.new(@badges, each_serializer: CourseBadgeSerializer).to_json
+    ActiveModel::ArraySerializer.new(@badges, root: {student_id: @student[:id]}, each_serializer: CourseBadgeSerializer).to_json
   end
 
   def fetch_serialized_assignment_score_levels
