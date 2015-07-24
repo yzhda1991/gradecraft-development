@@ -1,20 +1,9 @@
+$predictor-font-size-1 : 1.5rem
+$predictor-font-size-2 : 1.25rem
+$predictor-font-size-3 : 1rem
+$predictor-font-size-4 : .85rem
 
-
-@mixin  predictor-small-text
-  font-size: .75rem
-
-// font-size: 11px
-// font-size: 1.6875rem
-// font-size: 1.5rem
-// font-size: 1.25rem
-// font-size: 1rem
-// font-size: 1.125rem
-// font-size: .85rem
-
-.predictor-date
-  @include predictor-small-text
-
-#grade-levels
+// SVG
 
 #predictor-graphic
   margin: 10px 0 0 5%
@@ -26,13 +15,13 @@
       shape-rendering: scripEdges;
     text
       font-family: sans-serif
-      font-size: 11px
+      font-size: $predictor-font-size-4
 
 // SECTIONS
 
 .predictor-section-title
   @include title-type-styling
-  font-size: 1.6875rem
+  font-size: $predictor-font-size-1
   color: white
   background-color: $color-layout-blue-0
   line-height: 1.4
@@ -52,7 +41,7 @@
 
 article.predictor-assignment
   display: block
-  margin-bottom: 1rem
+  margin-bottom: $predictor-font-size-3
   border: 1px solid $color-layout-blue-0
   border-bottom: .25rem solid $color-layout-blue-0
   background-color: $color-layout-blue-5
@@ -68,10 +57,10 @@ article.predictor-assignment
   color: $txt-color-inverse
   padding: 3px 0 0 .5rem
   height: 2rem
-  font-size: 1.125rem
+  font-size: $predictor-font-size-3
 
 .predictor-article-icons
-  height: 1.25rem
+  height: $predictor-font-size-2
   background-color: $color-layout-blue-2
   padding: .25rem
 
@@ -85,7 +74,7 @@ article.predictor-assignment
 
 .icon:hover .icon-tooltip
   position: absolute
-  top: 1rem
+  top: $predictor-font-size-3
   width: 10rem
   text-align: center
   color: $color-layout-blue-4
@@ -98,16 +87,16 @@ article.predictor-assignment
 .predictor-badge-icon
   max-width: 80px
   float: left
-  margin: 1px 0 0 1rem
+  margin: 1px 0 0 $predictor-font-size-3
 
 .badge-predicted
   width: 50%
   float: right
 
 .predictor-article-date
-  height: 1.25rem
-  //background-color: $color-layout-blue-3
+  height: $predictor-font-size-2
   padding: .25rem
+  font-size: $predictor-font-size-4
 
 .predictor-article-main
   padding-top: 8px
@@ -123,17 +112,17 @@ article.predictor-assignment.status-graded
 
 .assignment-graded .grade, .pass-fail-prediction, .badge-complete .value
   text-align: center
-  font-size: 1.5rem
+  font-size: $predictor-font-size-1
   color: $color-layout-blue-0
 
 .assignment-predicted .grade
   text-align: center
-  font-size: 1.25rem
+  font-size: $predictor-font-size-2
   color: $color-layout-blue-0
   .value
-    font-size: 1rem
+    font-size: $predictor-font-size-3
   .name
-    font-size: .85rem
+    font-size: $predictor-font-size-4
     margin: -5px
 
 /* Slider Widget */

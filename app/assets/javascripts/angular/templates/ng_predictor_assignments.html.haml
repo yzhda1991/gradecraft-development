@@ -1,7 +1,7 @@
 %article.predictor-assignment{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}','ng-class'=>'{"status-graded" : assignmentGraded(assignment)}'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
-    {{assignment.name | limitTo:22}}
+    {{assignment.name | limitTo:26}}
 
   .predictor-article-icons
     .predictor-assignment-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'assignment'=>'assignment'}

@@ -9,7 +9,7 @@
     %article.predictor-assignment{'ng-repeat' => 'badge in badges'}
 
       .predictor-article-title{'title' => '{{badge.name}}'}
-        {{badge.name | limitTo:22}}
+        {{badge.name | limitTo:26}}
 
       .predictor-article-icons
         .predictor-assignment-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'assignment'=>'badge'}
