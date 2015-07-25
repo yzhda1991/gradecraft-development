@@ -78,7 +78,6 @@
                             - assignment.unlock_keys.each do |key|
                               %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
                       %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
-
                     %td
                       - if assignment.pass_fail?
                         - if current_student.grade_released_for_assignment?(assignment)
