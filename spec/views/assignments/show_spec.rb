@@ -41,7 +41,7 @@ describe "assignments/show" do
       view.stub(:current_user_is_staff?).and_return(true)
       view.stub(:term_for).and_return("Assignment")
       assign(:students, [@student])
-      assign(:grades, {@student.id => nil})
+      assign(:grades, @student.grades)
       render
       assert_select "h3", text: "#{@assignment.name} (#{ points @assignment.point_total} points)"
     end
@@ -51,7 +51,7 @@ describe "assignments/show" do
       view.stub(:current_user_is_staff?).and_return(true)
       view.stub(:term_for).and_return("Assignment")
       assign(:students, [@student])
-      assign(:grades, {@student.id => nil})
+      assign(:grades, @student.grades)
       render
       assert_select "h3", text: "#{@assignment.name} (#{ points @assignment.point_total} points)"
     end
