@@ -95,8 +95,17 @@ class AssignmentType < ActiveRecord::Base
     super.presence || assignments.map{ |a| a.point_total }.sum
   end
 
-  def score_for_student(student)
-    student.grades.released.where(:assignment_type => self).pluck('score').sum
+  def visible_score_for_student(student)
+    score = student.grades.released.where(:assignment_type => self).pluck('score').sum
+    if max_value?
+      if score < max_value
+        return score 
+      else
+        return max_value
+      end
+    else
+      return score
+    end
   end
 
   def raw_score_for_student(student)

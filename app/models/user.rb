@@ -372,22 +372,36 @@ class User < ActiveRecord::Base
 
   # Powers the worker to recalculate student scores
   def cache_course_score(course_id)
+    course = Course.find(course_id)
     membership = course_memberships.where(course_id: course_id).first
     unless membership.nil?
       if membership.course.add_team_score_to_student?
-        membership.update_attribute :score, (grades.released.where(course_id: course_id).score || 0) + (earned_badge_score_for_course(course_id) || 0 ) + ( self.team_for_course(course_id).try(:score) || 0 )
+        membership.update_attribute :score, (
+          total_score = 0
+          course.assignment_types.each do |assignment_type|
+            total_score += assignment_type.visible_score_for_student(self)
+          end 
+          total_score += earned_badge_score_for_course(course_id) 
+          total_score += self.team_for_course(course_id).try(:score)
+        )
       else
-        membership.update_attribute :score, (grades.released.where(course_id: course_id).score || 0) + (earned_badge_score_for_course(course_id) || 0 )
+        membership.update_attribute :score, (
+          total_score = 0
+          course.assignment_types.each do |assignment_type|
+            total_score += assignment_type.visible_score_for_student(self)
+          end 
+          total_score += earned_badge_score_for_course(course_id) 
+        )
       end
     end
   end
 
-  ### PREDICTIONS
+  ### Scoreboard chart on the bottom of the student dashboard
 
-  def predictions(course)
+  def total_scores_for_chart(course)
     scores = []
     course.assignment_types.each do |assignment_type|
-      scores << { data: [grades.released.where(assignment_type: assignment_type).score], name: assignment_type.name }
+      scores << { data: [assignment_type.visible_score_for_student(self)], name: assignment_type.name }
     end
 
 
