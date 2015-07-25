@@ -115,13 +115,13 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
         return el.innerHTML;
       },
       points: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+        return Number(el.innerHTML.replace(/,/g,""));
       },
       maxValue: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+        return Number(el.innerHTML.replace(/,/g,""));
       },
       totalBadgeScore: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+        return Number(el.innerHTML.replace(/,/g,""));
       },
       badgeCount: function(el, record) {
         return Number(el.innerHTML.replace()) || 0;
@@ -130,7 +130,7 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
         return Number(el.innerHTML.replace(/,/g,""));
       },
       rawScore: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+        return Number(el.innerHTML.replace(/,/g,""));
       },
       multipliedScore: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
