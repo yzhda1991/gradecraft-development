@@ -41,7 +41,7 @@ class Grade < ActiveRecord::Base
   delegate :name, :description, :due_at, :assignment_type, :to => :assignment
 
   before_save :clean_html
-  after_destroy :cache_student_and_team_scores
+  after_destroy :save_student_and_team_scores
 
   scope :completion, -> { where(order: "assignments.due_at ASC", :joins => :assignment) }
   scope :graded, -> { where('status = ?', 'Graded') }
@@ -51,9 +51,6 @@ class Grade < ActiveRecord::Base
   scope :not_released, -> { joins(:assignment).where("status = 'Graded' AND assignments.release_necessary")}
   scope :instructor_modified, -> { where('instructor_modified = ?', true) }
   scope :positive, -> { where('score > 0')}
-
-
-  #validates_numericality_of :raw_score, integer_only: true
 
   def self.score
     pluck('COALESCE(SUM(grades.score), 0)').first
@@ -130,7 +127,7 @@ class Grade < ActiveRecord::Base
     student_id == user.id
   end
 
-  def cache_student_and_team_scores
+  def save_student_and_team_scores
     self.student.cache_course_score(self.course.id)
     if self.course.has_teams? && self.student.team_for_course(self.course).present?
       self.student.team_for_course(self.course).cache_score
