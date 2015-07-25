@@ -32,13 +32,6 @@ class Team < ActiveRecord::Base
   scope :order_by_average_high_score, -> { order 'average_points DESC'}
   scope :alpha, -> { order 'teams.name ASC'}
 
-  # DEPRECATED -- Assume Teams can have more than one leader. This should be removed
-  # once we verify all uses are removed and new methods for cycling through team leaders
-  # are in place.
-  def team_leader
-    leaders.first
-  end
-
   #Sorting team's students by their score, currently only used for in team leaderboards
   def sorted_students
     students.sort_by{ |student| - student.cached_score_for_course(course) }
