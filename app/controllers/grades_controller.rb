@@ -86,7 +86,7 @@ class GradesController < ApplicationController
     end
 
     if @grade.update_attributes params[:grade].merge(instructor_modified: true)
-      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_student_visible?
 
       if session[:return_to].present?
         redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
@@ -117,7 +117,7 @@ class GradesController < ApplicationController
     delete_existing_earned_badges_for_metrics # if earned_badges_exist? # destroy earned_badges where assignment_id and student_id match
     create_earned_tier_badges if params[:tier_badges]# create_earned_tier_badges
 
-    Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+    Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_student_visible?
 
     respond_to do |format|
       format.json { render nothing: true }
@@ -199,7 +199,7 @@ class GradesController < ApplicationController
         metric_id: tier_badge[:metric_id],
         score: tier_badge[:point_total],
         tier_badge_id: tier_badge[:id],
-        student_visible: @grade.is_released?
+        student_visible: @grade.is_student_visible?
       })
     end
   end
