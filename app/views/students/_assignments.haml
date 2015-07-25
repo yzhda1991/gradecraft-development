@@ -67,15 +67,25 @@
                           %span.has-tip.required{:title => "This #{term_for :assignment} is required!", :data => {'tooltip' => true} }
                             !
                         - if assignment.is_unlockable? 
-                          - if assignment.is_unlocked_for_student?(current_student)
-                            %i.fa.fa-unlock
-                          - else
-                            %i.fa.fa-lock
-                          Unlock Requirements
-                          - assignment.unlock_conditions.each do |uc|
-                            = link_to uc.condition.name, uc.condition
+                          %a
+                            - if assignment.is_unlocked_for_student?(current_student)
+                              %i.fa.fa-unlock
+                            - else
+                              %i.fa.fa-lock
+                          .display_on_hover.unlock_keys
+                            %h6 Unlock Requirements
+                            %ul
+                              - assignment.unlock_conditions.each do |condition|
+                                %li= "#{condition.name} must be #{condition.condition_state}"
                         - if assignment.is_a_condition?
-                          %i.fa.fa-key
+                          %a
+                            %i.fa.fa-key
+                          .display_on_hover.unlock_keys
+                            %h6 Unlock Keys
+                            .italic.small Completing this #{term_for :assignment} unlocks
+                            %ul
+                              - assignment.unlock_conditions.each do |condition|
+                                %li= condition.unlockable.name
                         %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
 
                       %td{:width => "25%"}

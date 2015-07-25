@@ -8,6 +8,16 @@ class UnlockCondition < ActiveRecord::Base
 
 	validates_presence_of :unlockable_id, :unlockable_type, :condition_id, :condition_type, :condition_state
 
+	def name 
+		if condition_type == "Badge"
+			badge = Badge.find(condition_id)
+			return badge.name 
+		elsif condition_type == "Assignment"
+			assignment = Assignment.find(condition_id)
+			return assignment.name
+		end
+	end
+
 	def is_complete?(student)
 		if condition_type == "Badge"
 			badge = student.earned_badge_for_badge(condition_id)

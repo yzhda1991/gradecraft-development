@@ -46,7 +46,13 @@
                             %i.fa.fa-arrows-v
                           %td
                             - if assignment.is_unlockable?
-                              %i.fa.fa-lock
+                              %a
+                                %i.fa.fa-lock
+                              .display_on_hover.unlock_keys
+                                %h6 Unlock Requirements
+                                %ul
+                                  - assignment.unlock_conditions.each do |condition|
+                                    %li= "#{condition.name} must be #{condition.condition_state}"
                             - if assignment.is_a_condition?
                               %i.fa.fa-key
                           %td

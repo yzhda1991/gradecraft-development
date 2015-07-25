@@ -71,6 +71,30 @@ form .tabs-content .content
 .draggable
   display: inline
 
+a:hover + .display_on_hover
+  display: block
+
+.unlock_keys
+  position: absolute
+  display: none
+  padding: 0.5rem
+  width: 250px
+  background-color: $primary-color-5
+  color: #FFF
+  border-radius: $global-radius
+  z-index: 10
+
+  h6 
+    color: #FFF
+    font-weight: bold
+
+  ul
+    margin-bottom: 0
+
+  li 
+    font-size: .8rem
+    color: #FFF
+
 @media (min-width: 1072px)
   .panel .row
     margin-bottom: 1rem
