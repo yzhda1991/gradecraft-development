@@ -517,47 +517,59 @@ class User < ActiveRecord::Base
 
 
   ### WEIGHTS
-  def weight_for_assignment_type(assignment_type)
-    assignment_type_weights[assignment_type.id]
-  end  
-
-  def assignment_type_weights
+  def assignment_type_weights(course)
     @assignment_type_weights ||= {}.tap do |assignment_type_weights|
-      course.assignment_types.weights_for_student(student).each do |assignment_type_id, weight|
+      course.assignment_types.weights_for_student(self).each do |assignment_type_id, weight|
         assignment_type_weights[assignment_type_id] = weight
       end
     end
   end
   
-  def assignment_weights
-    @assignment_weights ||= {}.tap do |assignment_weights|
-      assignment_weights.each do |weights|
-        assignment_weights[weights.assignment_id] = weights
-      end
+  #Returns the student's assigned weight for a specific assignment
+  def weight_for_assignment(assignment)
+    assignment_weights.where(:assignment => assignment).first.weight
+  end
+
+  # Returns the student's assigned weight for an assignment type category
+  def weight_for_assignment_type(assignment_type)
+    assignment_weights.where(assignment_type: assignment_type).first.try(:weight) || 0
+  end
+
+  def weight_spent?(course)
+    total = 0
+    course.assignment_types.each do |at|
+      total += weight_for_assignment_type(at)
+    end
+    if total == course.total_assignment_weight
+      return true
+    else
+      false
     end
   end
 
-  def weight_for_assignment(assignment)
-    assignment_weights[assignment.id]
-  end
-
-  def weights_for_assignment_type_id(assignment_type)
-    assignment_weights.where(assignment_type: assignment_type).weight
+  def total_weight_spent(course)
+    total = 0
+    course.assignment_types.each do |at|
+      total += weight_for_assignment_type(at)
+    end
+    return total
   end
 
   def weighted_assignments?
-    @weighted_assignments_present ||= assignment_weights.count > 0
+    assignment_weights.count > 0
+  end
+
+  #Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count, 
+  #and not the assignment type count. Because students make the choice at the AT level rather than the A level, 
+  #this can be confusing.
+  def weight_count(course)
+    assignment_weights.where(course: course).pluck('weight').count
   end
 
   #Used to allow students to self-log a grade, currently only a boolean (complete or not)
   #TODO Should allow them to use a select list or slider to determine their grade from a range of options
   def self_reported_done?(assignment)
     (grade_for_assignment(assignment).try(:score) ) && (grade_for_assignment(assignment).try(:score)== grade_for_assignment(assignment).try(:point_total))
-  end
-
-  #Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count, and not the assignment type count. Because students make the choice at the AT level rather than the A level, this can be confusing.
-  def weight_count(course)
-    assignment_weights.where(course: course).pluck('weight').count
   end
 
 
