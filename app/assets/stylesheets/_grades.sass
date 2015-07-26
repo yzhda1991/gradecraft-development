@@ -64,17 +64,54 @@ label.disabled
     opacity: 0
 
 .grade-badge
+
   &.hexagon
+    @include transition-property("background, opacity")
+    @include transition-duration(0.6s)
+    @include transition-timing-function(ease)
+
     position: relative
     width: 150px
     height: 86.60px
     float: left
-    z-index: 1200
-    background-color: #64C7CC
+    z-index: 2400
+    // background-color: #64C7CC
+    background-color: #1E267F
     margin: 55.30px 40px 
     box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
     border-left: solid 1px #43b6bb
     border-right: solid 1px #43b6bb
+
+    &.unearned
+      background: #555
+      @include opacity(0.6)
+
+    &.unearned:hover
+      background: #5A7E80
+      @include opacity(0.8)
+
+    .gauge
+      width: 170px
+      height: 10px
+      position: relative 
+      background: #777
+      text-align: center
+      font-size: 16px !important
+      margin-left: -10px
+      z-index: 2400
+      @include four-color-horizontal-gradient(#93EC2F,#7CC02F,#68A127,#348C44)
+
+      .bar-cover
+        position: absolute
+        height: 10px
+        z-index: 2400
+        background: #aaa
+        margin-left: 10%
+        width: 90%
+
+    &.unearned .gauge
+      display: none
+
     &:before, &:after
       content: ""
       position: absolute
@@ -87,14 +124,17 @@ label.disabled
       background-color: inherit
       left: 20.9670px
       box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
+
     &:before
       top: -53.0330px
       border-top: solid 1.4142px #43b6bb
       border-right: solid 1.4142px #43b6bb
+
     &:after
       bottom: -53.0330px
       border-bottom: solid 1.4142px #43b6bb
       border-left: solid 1.4142px #43b6bb
+
     span
       display: block
       position: absolute
@@ -139,6 +179,7 @@ label.disabled
     position: relative
     z-index: 20
     bottom: 7
+    @include opacity(0.8)
     &:before, &:after
       content: ''
       position: absolute
@@ -215,3 +256,6 @@ label.disabled
     border-radius: 50%
     background: red
 
+    &.unearned
+      background: #999
+      display: none
