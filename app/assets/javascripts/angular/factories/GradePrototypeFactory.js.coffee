@@ -6,6 +6,7 @@
       @raw_score = attrs.raw_score
       @feedback = attrs.feedback
       @is_custom_value = attrs.is_custom_value
+      @student_id = attrs.student_id
       @http = http
       @updated_at = null
 
@@ -32,7 +33,7 @@
     timeSinceUpdate: ()->
       self = this
       Math.abs(new Date() - self.updated_at)
-
+ 
     modelOptions: ()->
       {
         updateOn: 'default blur',

@@ -21,4 +21,26 @@
         self.earnedBadges.push earnedBadge
       )
 
+    earnBadgeUrl: (grade)->
+      "/grades/" + grade.id + "/earn_badge"
+
+    earnForStudent: (studentId, grade)->
+      self = this
+ 
+      $http.post(earnBadgeUrl(grade), self.earnedBadgePostParams(grade)).success(
+        (data, status)->
+          self.id = data.existing_metric_badge.id
+      )
+      .error((err)->
+        alert("create failed!")
+        return false
+      )
+ 
+      earnedBadgePostParams: (grade)->
+        badge_id: this.badge.id,
+        student_id:attrs.student_id,
+        badge_id: attrs.score,
+        student_visible: attrs.student_visible,
+        grade_id: grade.id,
+        assignment_id: grade.assignmentId
 ]
