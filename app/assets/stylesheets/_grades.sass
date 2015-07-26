@@ -64,11 +64,12 @@ label.disabled
     opacity: 0
 
 .grade-badge
-
   &.hexagon
     @include transition-property("background, opacity")
-    @include transition-duration(0.6s)
+    @include transition-duration(0.25s)
     @include transition-timing-function(ease)
+    cursor: pointer
+    cursor: hand
 
     position: relative
     width: 150px
@@ -126,14 +127,26 @@ label.disabled
       border-bottom: solid 1.4142px #43b6bb
       border-left: solid 1.4142px #43b6bb
 
-    &.unearned, &.unearned:before, &.unearned:after
-      background: #555
+    &.unearned 
       @include opacity(0.6)
+      background-color: #555
+
+    &.unearned:before, &.unearned:after
+      background-color: #555
+
+    &:hover
+      background-color: #41566B
+      @include opacity(0.5)
+
+      &:before, &:after
+        background-color: #3F6B98
+
 
     &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
-      background: #42688E
+      background-color: #42688E
+      @include opacity(0.88)
+      box-shadow: 0 0 20px #F6C621
 
-      @include opacity(0.8)
 
     span
       display: block
@@ -266,9 +279,31 @@ label.disabled
     img.star
       position: relative
       z-index: 2700
+  &.unearned
+    .gold-stars
+      @include opacity(0.6)
+
 
   .badges-earned
     @include ribbon
+    text-shadow: 0px -1px 0px #0E3C6A
+
+
+  &.unearned
+    .badges-earned
+      background-color: #999999
+      background-repeat: repeat-x
+      background-image: -khtml-gradient(linear, left top, left bottom, from(#666666), to(#999999))
+      background-image: -moz-linear-gradient(top, #666666, #999999)
+      background-image: -ms-linear-gradient(top, #666666, #999999)
+      background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #666666), color-stop(100%, #999999))
+      background-image: -webkit-linear-gradient(top, #666666, #999999)
+      background-image: -o-linear-gradient(top, #666666, #999999)
+      background-image: linear-gradient(top, #666666, #999999)
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#999999', GradientType=0)
+      &:after
+        border-color: #999999 #999999 transparent #999999
+
 
   .earned-total
     display: inline
