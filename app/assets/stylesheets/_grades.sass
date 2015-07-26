@@ -75,20 +75,11 @@ label.disabled
     height: 86.60px
     float: left
     z-index: 2400
-    // background-color: #64C7CC
-    background-color: #1E267F
+    background-color: #3277BE
     margin: 55.30px 40px 
     box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
-    border-left: solid 1px #43b6bb
-    border-right: solid 1px #43b6bb
-
-    &.unearned
-      background: #555
-      @include opacity(0.6)
-
-    &.unearned:hover
-      background: #5A7E80
-      @include opacity(0.8)
+    border-left: solid 1px #0C58A7
+    border-right: solid 1px #0C58A7
 
     .gauge
       width: 170px
@@ -121,7 +112,7 @@ label.disabled
       -webkit-transform: scaleY(0.5774) rotate(-45deg)
       -ms-transform: scaleY(0.5774) rotate(-45deg)
       transform: scaleY(0.5774) rotate(-45deg)
-      background-color: inherit
+      background-color: #3277BE
       left: 20.9670px
       box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
 
@@ -134,6 +125,15 @@ label.disabled
       bottom: -53.0330px
       border-bottom: solid 1.4142px #43b6bb
       border-left: solid 1.4142px #43b6bb
+
+    &.unearned, &.unearned:before, &.unearned:after
+      background: #555
+      @include opacity(0.6)
+
+    &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
+      background: #42688E
+
+      @include opacity(0.8)
 
     span
       display: block
@@ -237,25 +237,31 @@ label.disabled
     z-index: 2200
     width: 100%
 
-  .earned-count
+  .earned-box
     position: absolute
     top: 0
-    right: 0
+    right: 4px
     font-weight: bold
     color: white
     text-align: center
     width: 100%
     font-size: 0.9rem
-    margin-top: -15px
+    margin-top: -12px
     z-index: 2200
 
-    width: 22px
-    height: 22px
-    -moz-border-radius: 50%
-    -webkit-border-radius: 50%
-    border-radius: 50%
-    background: red
+    -webkit-transform: scaleY(0.5774) rotate(-45deg)
+    -ms-transform: scaleY(0.5774) rotate(-45deg)
+    transform: scaleY(0.5774) rotate(-45deg)
+
+    width: 26px
+    height: 26px
+    background: #114B87
 
     &.unearned
       background: #999
       display: none
+
+    .earned-count
+      -webkit-transform:  rotate(45deg)
+      -ms-transform: rotate(45deg)
+      transform: rotate(45deg)
