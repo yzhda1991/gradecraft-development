@@ -104,8 +104,7 @@ GradeCraft::Application.routes.draw do
 
   resources :tiers
   resources :graded_metrics
-
-  resources :metric_badges
+  
   resources :tier_badges
 
   #3. Assignment Types

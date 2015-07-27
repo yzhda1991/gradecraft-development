@@ -12,6 +12,7 @@ class TeamsController < ApplicationController
     @team = current_course.teams.find(params[:id])
     @students = @team.students
     @challenges = current_course.challenges.chronological.alphabetical
+    @title = @team.name
   end
 
   def new

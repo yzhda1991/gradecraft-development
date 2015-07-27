@@ -25,7 +25,7 @@
               - tier.tier_badges.each_with_index do |badge, index|
                 - if index < 2
                   %span.tier-badge-image
-                    %img{:src => badge.badge.icon, :class => "metric_badge" }
+                    %img{:src => badge.badge.icon, :class => "tier_badge" }
         - rubric_max_tier_count = @rubric.max_tier_count
         - if metric.tiers.size < rubric_max_tier_count
           %td.filler(colspan="#{rubric_max_tier_count - metric.tiers.size}")
