@@ -113,8 +113,8 @@ class GradesController < ApplicationController
   end
 
   def earn_student_badge
-    EarnedBadge.create params[:earned_badge]
-    render nothing: true
+    @earned_badge = EarnedBadge.create params[:earned_badge]
+    render json: @earned_badge
   end
 
   private

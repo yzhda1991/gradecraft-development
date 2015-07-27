@@ -5,3 +5,4 @@
       @student_id = attrs.student_id
       @badge_id = attrs.score
       @student_visible = attrs.student_visible
+      @grade_id = attrs.grade_id

@@ -6,6 +6,7 @@
     $scope.grade = new GradePrototype(gradeParams, $http)
 
     gradeId = gradeParams.id
+    $scope.gradeId = gradeId
     $scope.rawScoreUpdating = false
     $scope.hasChanges = false
     $scope.gradeStatuses = ["In Progress", "Graded", "Released"]
@@ -13,7 +14,7 @@
     $scope.badges = []
     $scope.addBadges = (badges)->
       angular.forEach(badges, (badge, index)->
-        badgePrototype = new BadgePrototype(badge)
+        badgePrototype = new BadgePrototype(badge, $scope.gradeId)
         badgePrototype.addEarnedBadges()
         $scope.badges.push badgePrototype
       )
@@ -32,11 +33,9 @@
       $scope.addBadges(badges)
 
     $scope.earnBadgeForStudent = (badge)->
-      alert(badge.id)
-      alert(badge.studentVisible)
       $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
         (data, status)->
-          alert "badge earned!"
+          badge.earnBadge(data["earned_badge"])
       )
       .error((err)->
         alert("create failed!")

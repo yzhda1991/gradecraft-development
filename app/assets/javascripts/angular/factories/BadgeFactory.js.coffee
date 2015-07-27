@@ -1,7 +1,7 @@
 @gradecraft.factory 'BadgePrototype', ['EarnedBadge', (EarnedBadge)->
   class BadgePrototype
 
-    constructor: (attrs) ->
+    constructor: (attrs, gradeId) ->
       @id = attrs.id
       @name = attrs.name
       @description = attrs.name
@@ -10,14 +10,23 @@
       @icon = attrs.icon
       @value = attrs.value
       @formatted_value = null
+      @grade_id = gradeId
       @assignment_id = attrs.assignment_id
       @student_earned_badges_serial = attrs.student_earned_badges
-      this.earnedBadges = []
+      this.otherEarnedBadges = []
+      this.earnedBadgesForGrade = []
+
+    earnBadge: (params)->
+      self = this
+      earnedBadge = new EarnedBadge(params)
+      if earnedBadge.grade_id == self.grade_id
+        self.earnedBadgesForGrade.push earnedBadge
+      else
+        self.otherEarnedBadges.push earnedBadge
 
     addEarnedBadges: ()->
       self = this
       angular.forEach(@student_earned_badges_serial, (earnedBadgeParams, index)->
-        earnedBadge = new EarnedBadge(earnedBadgeParams)
-        self.earnedBadges.push earnedBadge
+        self.earnBadge(earnedBadgeParams)
       )
 ]
