@@ -4,20 +4,73 @@ require 'spec_helper'
 describe AnalyticsController do
 
 	context "as a professor" do 
+        before do
+          @course = create(:course_accepting_groups)
+          @professor = create(:user)
+          @professor.courses << @course
+          @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+          @assignment_type = create(:assignment_type, course: @course)
+          @assignment = create(:assignment, assignment_type: @assignment_type)
+          @course.assignments << @assignment
+          @student = create(:user)
+          @student.courses << @course
+          @students = []
+          @students << @student
 
-		describe "GET index"
+          login_user(@professor)
+          session[:course_id] = @course.id
+          allow(EventLogger).to receive(:perform_async).and_return(true)
+        end
 
-		describe "GET students"
+		describe "GET index" do
+          it "returns analytics page for the current course" do
+            get :index
+            assigns(:title).should eq("User Analytics")
+            response.should render_template(:index)
+          end
+        end
 
-		describe "GET staff"
+		describe "GET students" do
+          it "returns the student analytics page for the current course" do
+            get :students
+            assigns(:title).should eq("Player Analytics")
+            response.should render_template(:students)
+          end
+        end
+
+		describe "GET staff" do
+          it "returns the staff analytics page for the current course" do
+            get :staff
+            assigns(:title).should eq("team leader Analytics")
+            response.should render_template(:staff)
+          end
+        end
 
 		describe "GET all_events"
 
-		describe "GET top_10"
+		describe "GET top_10" do
+          it "returns the Top 10/Bottom 10 page for the current course" do
+            get :top_10
+            assigns(:title).should eq("Top 10/Bottom 10")
+            response.should render_template(:top_10)
+          end
+        end
 
-		describe "GET per_assign"
+		describe "GET per_assign" do
+          it "returns the Assignment Analytics page for the current course" do
+            get :per_assign
+            assigns(:title).should eq("assignment Analytics")
+            response.should render_template(:per_assign)
+          end
+        end
 
-		describe "GET teams"
+		describe "GET teams" do
+          it "returns the Team Analytics page for the current course" do
+            get :teams
+            assigns(:title).should eq("team Analytics")
+            response.should render_template(:teams)
+          end
+        end
 
 		describe "GET role_events"
 
