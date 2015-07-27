@@ -18,7 +18,7 @@
 
     deleteEarnedStudentBadge: ()->
       earnedBadge = this.earnedBadgesForGrade[0]
-      if earnedBadge.deleteFromServer(badge)
+      if earnedBadge.deleteFromServer(this)
         this.earnedBadgesForGrade = []
 
     earnBadge: (params)->

@@ -117,7 +117,49 @@ class GradesController < ApplicationController
     render json: @earned_badge
   end
 
+  def delete_earned_badge
+    if all_earned_badge_ids_present?
+      destroy_earned_badge_with_duplicates
+    else
+      destroy_single_earned_badge
+    end
+  end
+
   private
+
+  def destroy_earned_badge_with_duplicates
+    if EarnedBadge.where(duplicate_earned_badges_params).destroy_all
+      delete_earned_badge_success
+    else
+      delete_earned_badge_failure
+    end
+  end
+
+  def destroy_single_earned_badge
+    if EarnedBadge.where(id: params[:id]).destroy_all
+      delete_earned_badge_success
+    else
+      delete_earned_badge_failure
+    end
+  end
+
+  def duplicate_earned_badges_params
+    [:grade_id, :student_id, :badge_id].inject({}) do |memo, param|
+      memo.merge(param.to_sym => params[param])
+    end
+  end
+
+  def delete_earned_badge_success
+    render json: {message: "Earned badge successfully deleted"}, status: 200
+  end
+
+  def delete_earned_badge_failure
+    render json: {message: "Earned badge failed to delete"}, status: 417
+  end
+
+  def all_earned_badge_ids_present?
+    params[:grade_id] and params[:student_id] and params[:badge_id]
+  end
 
   def async_update_params
     if params[:save_type] == "feedback"

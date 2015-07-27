@@ -9,7 +9,7 @@
       @grade_id = attrs.grade_id
 
     deleteFromServer: (badge)->
-      $http.delete('/earned_badges', this.deleteParams())
+      $http.delete("/grade/" + this.grade_id + "/student/" + this.student_id + "/badge/" + this.badge_id + "/earned_badge/" + this.id)
         .success(
           (data, status)->
             return true
