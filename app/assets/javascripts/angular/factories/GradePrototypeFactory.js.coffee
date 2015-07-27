@@ -1,4 +1,4 @@
-@gradecraft.factory 'GradePrototype', ->
+@gradecraft.factory 'GradePrototype', ['$http', ($http)->
   class GradePrototype
     constructor: (attrs={}, http)->
       @id = attrs.id
@@ -7,6 +7,7 @@
       @feedback = attrs.feedback
       @is_custom_value = attrs.is_custom_value
       @student_id = attrs.student_id
+      @assignment_id = attrs.assignment_id
       @http = http
       @updated_at = null
 
@@ -43,6 +44,7 @@
         }
       }
 
+    # updating grade properties
     update: ()->
       self = this
       @http.put("/grades/#{self.id}/async_update", self).success(
@@ -61,3 +63,4 @@
         is_custom_value: this.is_custom_value
       }
 
+]

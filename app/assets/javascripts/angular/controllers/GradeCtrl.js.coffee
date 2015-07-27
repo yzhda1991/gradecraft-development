@@ -31,6 +31,26 @@
     unless badges.length == undefined
       $scope.addBadges(badges)
 
+    $scope.earnBadgeForStudent = (badge)->
+      alert(badge.id)
+      alert(badge.studentVisible)
+      $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
+        (data, status)->
+          alert "badge earned!"
+      )
+      .error((err)->
+        alert("create failed!")
+        return false
+      )
+ 
+    $scope.earnedBadgePostParams = (badge)->
+      earned_badge:
+        student_id: $scope.grade.student_id
+        badge_id: badge.id,
+        grade_id: $scope.grade.id,
+        assignment_id: $scope.grade.assignment_id
+        score: badge.point_total
+
     $scope.froalaOptions = {
       inlineMode: false,
       minHeight: 100,

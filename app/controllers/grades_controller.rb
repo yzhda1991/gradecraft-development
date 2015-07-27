@@ -112,6 +112,11 @@ class GradesController < ApplicationController
     render nothing: true
   end
 
+  def earn_student_badge
+    EarnedBadge.create params[:earned_badge]
+    render nothing: true
+  end
+
   private
 
   def async_update_params

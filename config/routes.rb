@@ -111,7 +111,7 @@ GradeCraft::Application.routes.draw do
 
   # pure grade routes
   put "grades/:id/async_update", to: "grades#async_update"
-  post "grades/:id/earn_badge", to: "grades#earn_badge"
+  post "grades/earn_student_badge", to: "grades#earn_student_badge"
 
   resources :metrics do
     put :update_order, on: :collection
