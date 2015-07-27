@@ -10,6 +10,7 @@ describe "badges/index" do
     @badge_1 = create(:badge, course: @course, point_total: 1000)
     @badge_2 = create(:badge, course: @course, point_total: 0)
     @course.badges <<[@badge_1, @badge_2]
+    @badges = @course.badges
   end
 
   before(:each) do
