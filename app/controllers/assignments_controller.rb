@@ -226,7 +226,7 @@ class AssignmentsController < ApplicationController
     redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{@name} successfully deleted"
   end
 
-  # Export an example for grade imports
+  # Export .csv file example for grade imports
   def email_based_grade_import
     @assignment = current_course.assignments.find(params[:id])
     respond_to do |format|

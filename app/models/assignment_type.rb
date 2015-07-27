@@ -150,7 +150,7 @@ class AssignmentType < ActiveRecord::Base
         student_data << student.username
         student_data << student.team_for_course(course).try(:name)
         course.assignment_types.sort_by { |assignment_type| assignment_type.position }.each do |a|
-          student_data << a.score_for_student(student)
+          student_data << a.visible_score_for_student(student)
         end
         csv << student_data
       end

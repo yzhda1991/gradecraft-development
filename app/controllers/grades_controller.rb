@@ -6,6 +6,9 @@ class GradesController < ApplicationController
 
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
+    if current_user_is_student?
+      redirect_to @assignment
+    end
     if @assignment.rubric.present? && @assignment.is_individual?
       @rubric = @assignment.rubric
       @metrics = @rubric.metrics
@@ -17,9 +20,6 @@ class GradesController < ApplicationController
       end
     end
 
-    if current_user_is_student?
-      redirect_to @assignment
-    end
     if @assignment.has_groups?
       @group = current_course.groups.find(params[:group_id])
       @title = "#{@group.name}'s Grade for #{ @assignment.name }"

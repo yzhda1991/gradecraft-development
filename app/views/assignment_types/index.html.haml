@@ -61,7 +61,7 @@
             %td= link_to student.first_name, student_path(student)
             %td= link_to student.last_name, student_path(student)
             - @assignment_types.each do |at|
-              %td= at.score_for_student(student)
+              %td= at.visible_score_for_student(student)
               - if at.student_weightable?
                 %td= "[#{ at.raw_score_for_student(student)}]"
                 %span.sr-only= at.name

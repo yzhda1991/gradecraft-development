@@ -73,12 +73,12 @@ GradeCraft::Application.routes.draw do
       scope 'grades', as: :grades, controller: :grades do
         post :edit_status
         put :update_status
-        post :self_log
-        post :predict_score
         get :import
         post :email_import
         post :username_import
         post :name_import
+        post :self_log
+        post :predict_score
         get :remove
       end
     end

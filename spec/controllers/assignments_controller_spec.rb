@@ -220,7 +220,7 @@ describe AssignmentsController do
 
     describe "GET show" do
 
-      it "returns the assignment show page" do
+      it "returns the assignment show page"do
         get :show, :id => @assignment.id
         assigns(:assignment).should eq(@assignment)
         assigns(:assignment_type).should eq(@assignment.assignment_type)
@@ -382,7 +382,7 @@ describe AssignmentsController do
     end
 
     describe "GET sort" do
-      it "sorts the assignemts by params" do
+      it "sorts the assignments by params" do
         @second_assignment = create(:assignment, assignment_type: @assignment_type)
         @course.assignments << @second_assignment
         params = [@second_assignment.id, @assignment.id]
