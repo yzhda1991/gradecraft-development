@@ -32,6 +32,12 @@
     unless badges.length == undefined
       $scope.addBadges(badges)
 
+    $scope.toggleEarnedBadge = (badge)->
+      if badge.earnedBadgesForGrade.length == 0
+        $scope.earnBadgeForStudent(badge)
+      else
+        badge.deleteEarnedStudentBadge()
+
     $scope.earnBadgeForStudent = (badge)->
       $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
         (data, status)->

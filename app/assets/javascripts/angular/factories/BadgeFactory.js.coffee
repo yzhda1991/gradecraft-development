@@ -16,6 +16,11 @@
       this.otherEarnedBadges = []
       this.earnedBadgesForGrade = []
 
+    deleteEarnedStudentBadge: ()->
+      earnedBadge = this.earnedBadgesForGrade[0]
+      if earnedBadge.deleteFromServer(badge)
+        this.earnedBadgesForGrade = []
+
     earnBadge: (params)->
       self = this
       earnedBadge = new EarnedBadge(params)
