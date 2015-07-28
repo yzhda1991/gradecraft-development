@@ -15,6 +15,12 @@ select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
 label.disabled
   color: #888 !important
 
+.animalbox
+  width: 100px
+  height: 200px
+  background: yellow
+  border: 1px solid #999
+
 #updated-at, #updated-at-current
   margin-top: 12px
   font-style: italic
@@ -31,6 +37,13 @@ label.disabled
   &.ng-animate
     background: #F5FCA1
     border-color: #E8F08F
+
+#badges-available
+  margin-top: 20px
+
+#awarded
+  @include linear-gradient(#C4EAFB,#E9F8FF)
+  height: 100%
 
 .gradebox
   border: 1px solid #9FD7E3
@@ -65,9 +78,9 @@ label.disabled
 
 .grade-badge
   &.hexagon
-    @include transition-property("background, opacity")
-    @include transition-duration(0.25s)
-    @include transition-timing-function(ease)
+    // @include transition-property("background, opacity")
+    // @include transition-duration(0.25s)
+    // @include transition-timing-function(linear)
     cursor: pointer
     cursor: hand
 
@@ -136,7 +149,7 @@ label.disabled
 
     &:hover
       background-color: #41566B
-      @include opacity(0.5)
+      @include opacity(0.7)
 
       &:before, &:after
         background-color: #3F6B98

@@ -10,8 +10,20 @@
     $scope.rawScoreUpdating = false
     $scope.hasChanges = false
     $scope.gradeStatuses = ["In Progress", "Graded", "Released"]
+    
+    $scope.cats = [
+      {name: "rogercat"},
+      {name: "stevencat"},
+      {name: "hermancat"}
+    ]
+    $scope.dogs = [
+      {name: "craigdog"},
+      {name: "waffledog"},
+      {name: "fidodog"}
+    ]
 
     $scope.badges = []
+    $scope.badgesEarned = []
     $scope.addBadges = (badges)->
       angular.forEach(badges, (badge, index)->
         badgePrototype = new BadgePrototype(badge, $scope.gradeId)

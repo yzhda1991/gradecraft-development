@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'uiFx', '720kb.tooltips', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'ui.router', 'froala', 'fcsa-number', 'templates', 'fcsa-number','smart-number','lodash','helpers'])
+@gradecraft = angular.module('gradecraft', ['angularMoment', 'restangular', 'ngDragDrop', 'ngDraggable', 'ui.slider', 'uiFx', '720kb.tooltips', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'ui.router', 'froala', 'fcsa-number', 'templates', 'fcsa-number','smart-number','lodash','helpers'])
 
 @gradecraft.config ($stateProvider, $urlRouterProvider, $locationProvider) ->
-=======
-@gradecraft = angular.module('gradecraft', ['angularMoment', 'ngAnimate', 'uiFx', '720kb.tooltips', 'restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'froala', 'smart-number', 'helpers'])
->>>>>>> implement dynamic 'time ago' tracking for updated grades through angular
 
 @gradecraft.config(['$compileProvider', ($compileProvider)->
   $compileProvider.debugInfoEnabled(false)
