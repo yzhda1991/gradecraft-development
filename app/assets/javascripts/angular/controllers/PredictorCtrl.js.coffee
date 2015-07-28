@@ -1,5 +1,5 @@
 @gradecraft.controller 'PredictorCtrl', ['$scope', '$http', '$q', '$filter', 'PredictorService', ($scope, $http, $q, $filter, PredictorService) ->
-
+  # this.id = 'predictorCtrl'
   $scope.assignmentMode = true
 
   $scope.services = ()->
@@ -12,6 +12,7 @@
 
   $scope.services().then(()->
     $scope.renderGradeLevelGraphics()
+    $scope.renderPointsGraphics()
   )
 
   $scope.assignments = PredictorService.assignments
@@ -47,7 +48,7 @@
         assignment_id = ui.handle.parentElement.dataset.id
         value = ui.value
         assignment.grade.predicted_score = value
-        PredictorService.postPredictedScore(assignment_id,value)
+        PredictorService.postPredictedGrade(assignment_id,value)
     }
 
   # TODO: update with new is_graded logic!
@@ -87,8 +88,7 @@
   $scope.assignmentsForAssignmentType = (assignments,id)->
     _.where(assignments, {assignment_type_id: id})
 
-  $scope.assignmentTypePointTotal = (id)->
-    assignments = $scope.assignmentsForAssignmentType($scope.assignments,id)
+  $scope.assignmentsPointTotal = (assignments)->
     total = 0
     _.each(assignments, (assignment)->
       if assignment.grade.score > 0
@@ -98,10 +98,31 @@
     )
     total
 
+  $scope.assignmentTypePointTotal = (id)->
+    assignments = $scope.assignmentsForAssignmentType($scope.assignments,id)
+    $scope.assignmentsPointTotal(assignments)
+
   $scope.badgesPointTotal = ()->
     total = 0
     _.each($scope.badges,(badge)->
         total += badge.prediction.times_earned * badge.point_total
+      )
+    total
+
+  $scope.allPointsPredicted = ()->
+    total = 0
+    total += $scope.assignmentsPointTotal($scope.assignments)
+    total += $scope.badgesPointTotal()
+    total
+
+  $scope.allPointsEarned = ()->
+    total = 0
+    _.each($scope.assignments, (assignment)->
+      if assignment.grade.score > 0
+        total += assignment.grade.score
+      )
+    _.each($scope.badges,(badge)->
+        total += badge.total_earned_points
       )
     total
 
@@ -117,15 +138,28 @@
     else
       return false
 
-  # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
-  $scope.renderGradeLevelGraphics = ()->
+
+  $scope.GraphicsStats = ()->
     totalPoints = $scope.gradeLevels.total_points
-    grade_scheme_elements = $scope.gradeLevels.grade_scheme_elements
-    svg = d3.select("#svg-grade-levels")
     width = parseInt(d3.select("#predictor-graphic").style("width")) - 20
     height = parseInt(d3.select("#predictor-graphic").style("height"))
-    padding = 10
-    scale = d3.scale.linear().domain([0,totalPoints]).range([0,width])
+    stats = {
+      width: width
+      height: height
+      padding: 10
+      # Maximum possible points for the course
+      totalPoints: totalPoints
+      #scale for placing elements along the x axis
+      scale: d3.scale.linear().domain([0,totalPoints]).range([0,width])
+    }
+
+  # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
+  $scope.renderGradeLevelGraphics = ()->
+    grade_scheme_elements = $scope.gradeLevels.grade_scheme_elements
+    svg = d3.select("#svg-grade-levels")
+    stats = $scope.GraphicsStats()
+    padding = stats.padding
+    scale = stats.scale
     axis = d3.svg.axis().scale(scale).orient("bottom")
     g = svg.selectAll('g').data(grade_scheme_elements).enter().append('g')
             .attr("transform", (gse)->
@@ -155,8 +189,30 @@
       .attr("fill", "#FFFFFF")
     d3.select("svg").append("g")
       .attr("class": "grade-point-axis")
-      .attr("transform": "translate(" + padding + "," + (height - 20) + ")")
+      .attr("transform": "translate(" + padding + "," + (stats.height - 20) + ")")
       .call(axis)
+
+  $scope.renderPointsGraphics = ()->
+    svg = d3.select("#svg-points")
+    stats = $scope.GraphicsStats()
+    data = [
+      {
+        points: $scope.allPointsPredicted()
+        class: "svg-graph-points-predicted"
+      },
+      {
+        points: $scope.allPointsEarned()
+        class: "svg-graph-points-earned"
+      }]
+    pointsEarned = $scope.allPointsEarned()
+    svg.selectAll('rect').data(data).enter().append('rect')
+      .attr("x", 0)
+      .attr("y", 40)
+      .attr("width", (p)->
+        stats.scale(p.points))
+      .attr("height", 20)
+      .attr("class", (p)->
+        p.class)
 
   return
 ]

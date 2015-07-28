@@ -1,4 +1,4 @@
-%article.predictor-assignment{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}','ng-class'=>'{"status-graded" : assignmentGraded(assignment)}'}
+%article.predictor-assignment{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : assignmentGraded(assignment)}'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
     {{assignment.name | limitTo:26}}

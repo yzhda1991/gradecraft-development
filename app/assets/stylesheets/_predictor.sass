@@ -16,6 +16,10 @@ $predictor-font-size-4 : .85rem
     text
       font-family: sans-serif
       font-size: $predictor-font-size-4
+  .svg-graph-points-predicted
+    fill: $color-layout-blue-0
+  .svg-graph-points-predicted
+    fill: $color-layout-blue-1
 
 // SECTIONS
 
@@ -46,7 +50,7 @@ article.predictor-assignment
   border-bottom: .25rem solid $color-layout-blue-0
   background-color: $color-layout-blue-5
   float: left
-  width: 19%
+  //width: 19%
   margin: 3px
   height: 8.8rem
   select
@@ -170,41 +174,43 @@ article.predictor-assignment
   .switch-handle
     left: 20px
 
-/* Counter widget */
+/* Counter widget for Badges */
 
-.switch-socket
-  width: 20px
-  height: 40px
-  position: relative
-  background: $color-layout-blue-2
-  border-radius: 4px
-  margin: auto
-
-.switch-up-button
-  width: 0
-  height: 0
-  border-left: 10px solid transparent
-  border-right: 10px solid transparent
-  border-bottom: 18px solid $color-layout-blue-0
-  position: absolute
-
-.switch-down-button
-  width: 0
-  height: 0
-  top: 21px
-  position: absolute
-  border-left: 10px solid transparent
-  border-right: 10px solid transparent
-  border-top: 18px solid $color-layout-blue-0
-  position: absolute
-
-.switch-down-button.disabled
-  border-top: 18px solid $color-layout-blue-1
-
-.time-earned-prediction
-
-.badge-total-prediction
-
+.predictor-counter-switch
+  .switch-wrapper
+    float: left
+    width: 50%
+  .switch-socket
+    width: 20px
+    height: 40px
+    position: relative
+    background: $color-layout-blue-2
+    border-radius: 4px
+    margin: auto
+  .switch-up-button
+    width: 0
+    height: 0
+    border-left: 10px solid transparent
+    border-right: 10px solid transparent
+    border-bottom: 18px solid $color-layout-blue-0
+    position: absolute
+  .switch-down-button
+    width: 0
+    height: 0
+    top: 21px
+    position: absolute
+    border-left: 10px solid transparent
+    border-right: 10px solid transparent
+    border-top: 18px solid $color-layout-blue-0
+    position: absolute
+  .switch-down-button.disabled
+    border-top: 18px solid $color-layout-blue-1
+  .time-earned-prediction
+    font-size: $predictor-font-size-2
+  .badge-total-prediction
+    font-size: $predictor-font-size-1
+    clear: both
+    text-align: center
 
 // ANIMATIONS
 
@@ -219,4 +225,29 @@ article.predictor-assignment
   border-top: none
   border-bottom: none
 
-// RESPONSIVE DESIGN
+/* MEDIA QUERIES */
+
+// small
+@media (max-width: $media-small-max)
+  article.predictor-assignment
+    width: 100%
+
+// medium
+@media (min-width: $media-small-max) and (max-width: $media-medium-max)
+  article.predictor-assignment
+    width: 32%
+
+// large
+@media (min-width: $media-medium-max) and (max-width: $media-large-max)
+  article.predictor-assignment
+    width: 19%
+
+// x-large
+// @media (min-width: $media-large-max) and (max-width: $media-xlarge-max)
+//   article.predictor-assignment
+//     width: 14%
+
+
+$media-small-max:   40rem; // 640px
+$media-medium-max:  64rem; // 1024px
+$media-large-max:   90rem; // 1440px ~14"
