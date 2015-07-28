@@ -34,7 +34,7 @@ describe GradesController do
     end
 
 		describe "GET edit" do
-      it "shows the grade display" do
+      it "shows the grade edit form" do
         get :edit, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
   			GradesController.stub(:current_student).and_return(@student)
       	assigns(:assignment).should eq(@assignment)

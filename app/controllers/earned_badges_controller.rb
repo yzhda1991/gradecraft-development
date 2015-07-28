@@ -5,7 +5,6 @@ class EarnedBadgesController < ApplicationController
   before_filter :ensure_staff?
 
   def index
-    @title = "Awarded #{term_for :badges}"
     @badge = current_course.badges.find(params[:badge_id])
     redirect_to badge_path(@badge)
   end
@@ -25,9 +24,9 @@ class EarnedBadgesController < ApplicationController
   end
 
   def edit
-    @title = "Editing Awarded #{term_for :badge}"
     @students = current_course.students
     @badge = current_course.badges.find(params[:badge_id])
+    @title = "Editing Awarded #{@badge.name}"
     @earned_badge = @badge.earned_badges.find(params[:id])
     respond_with @earned_badge
   end
