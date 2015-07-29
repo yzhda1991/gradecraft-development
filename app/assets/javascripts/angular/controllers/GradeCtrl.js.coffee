@@ -43,6 +43,7 @@
       $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
         (data, status)->
           badge.earnBadge(data["earned_badge"])
+          $timeout(badge.setAwarded, 300)
       )
       .error((err)->
         alert("create failed!")

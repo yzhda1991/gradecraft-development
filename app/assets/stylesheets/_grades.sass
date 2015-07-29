@@ -31,7 +31,7 @@ label.disabled
 
 #updated-at-current
   @include transition-property("background, border-color")
-  @include transition-duration(0.6s)
+  @include transition-duration(0.3s)
   @include transition-timing-function(ease)
 
   &.ng-animate
@@ -163,8 +163,12 @@ label.disabled
     &.available.earned
       display: none !important
 
+      &.post_faded
+
+
     &.awarded.unearned
       display: none !important
+      &.post_faded
 
     span
       display: block

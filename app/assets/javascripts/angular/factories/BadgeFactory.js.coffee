@@ -1,4 +1,4 @@
-@gradecraft.factory 'BadgePrototype', ['EarnedBadge', (EarnedBadge)->
+@gradecraft.factory 'BadgePrototype', ['EarnedBadge', '$timeout', (EarnedBadge, $timeout)->
   class BadgePrototype
 
     constructor: (attrs, gradeId) ->
@@ -15,11 +15,14 @@
       @student_earned_badges_serial = attrs.student_earned_badges
       this.otherEarnedBadges = []
       this.earnedBadgesForGrade = []
+      this.addEarnedBadges()
+      @awarded = this.earnedBadgesForGrade.length > 0 ? true : false
 
     deleteEarnedStudentBadge: ()->
       earnedBadge = this.earnedBadgesForGrade[0]
       if earnedBadge.deleteFromServer(this)
         this.earnedBadgesForGrade = []
+        $timeout(this.setAvailable, 300)
 
     earnBadge: (params)->
       self = this
@@ -34,4 +37,10 @@
       angular.forEach(@student_earned_badges_serial, (earnedBadgeParams, index)->
         self.earnBadge(earnedBadgeParams)
       )
+
+    setAwarded: ()->
+      this.awarded = true
+
+    setAvailable: ()->
+      this.awarded = false
 ]
