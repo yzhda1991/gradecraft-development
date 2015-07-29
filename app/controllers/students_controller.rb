@@ -3,7 +3,7 @@ class StudentsController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus, :autocomplete_student_name]
+  before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus ]
 
   #Lists all students in the course, broken out by those being graded and auditors
   def index

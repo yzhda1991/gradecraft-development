@@ -36,10 +36,6 @@ describe RubricsController do
       pending
     end
 
-		describe "GET show" do  
-      pending
-    end
-
 		describe "GET update" do  
       pending
     end

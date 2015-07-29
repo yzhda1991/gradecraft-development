@@ -9,9 +9,6 @@ class TiersController < ApplicationController
     @tier = Tier.new params[:tier]
   end
 
-  def edit
-  end
-
   def create
     @tier = Tier.create params[:tier]
     respond_with @tier, layout: false
@@ -21,10 +18,7 @@ class TiersController < ApplicationController
     @tier.destroy
     respond_with @tier, layout: false
   end
-
-  def show
-  end
-
+  
   def update
     @tier.update_attributes params[:tier]
     respond_with @tier, layout: false

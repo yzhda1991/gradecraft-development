@@ -24,12 +24,12 @@ describe AnalyticsController do
     end
 
 		describe "GET index" do
-          it "returns analytics page for the current course" do
-            get :index
-            assigns(:title).should eq("User Analytics")
-            response.should render_template(:index)
-          end
-        end
+      it "returns analytics page for the current course" do
+        get :index
+        assigns(:title).should eq("User Analytics")
+        response.should render_template(:index)
+      end
+    end
 
 		describe "GET students" do
           it "returns the student analytics page for the current course" do

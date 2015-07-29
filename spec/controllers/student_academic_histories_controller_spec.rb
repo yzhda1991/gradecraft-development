@@ -3,6 +3,8 @@ require 'spec_helper'
 
 describe StudentAcademicHistoriesController do
 
+  #not yet built
+
 	context "as a professor" do 
     
     before do
@@ -62,7 +64,6 @@ describe StudentAcademicHistoriesController do
         :create
       ].each do |route|
           it "#{route} redirects to root" do
-      			pending
             (get route).should redirect_to(:root)
           end
         end
@@ -76,7 +77,6 @@ describe StudentAcademicHistoriesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          pending
           (get route, {:id => "1"}).should redirect_to(:root)
         end
       end

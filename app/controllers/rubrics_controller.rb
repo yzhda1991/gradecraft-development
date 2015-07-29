@@ -23,10 +23,6 @@ class RubricsController < ApplicationController
     respond_with @rubric
   end
 
-  def show
-    respond_with @rubric
-  end
-
   def update
     @rubric.update_attributes params[:rubric]
     respond_with @rubric, status: :not_found

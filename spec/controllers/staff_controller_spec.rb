@@ -25,11 +25,20 @@ describe StaffController do
     end
     
 		describe "GET index" do  
-      pending
+      it "returns all staff for the current course" do
+        get :index
+        assigns(:title).should eq("Staff Index")
+        assigns(:staff).should eq([@professor])
+        response.should render_template(:index)
+      end
     end
 
 		describe "GET show" do  
-      pending
+      it "displays a single staff member's page" do
+        get :show, :id => @professor.id
+        assigns(:staff).should eq(@professor)
+        response.should render_template(:show)
+      end
     end
     
 	end

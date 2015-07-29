@@ -275,11 +275,12 @@ GradeCraft::Application.routes.draw do
       get :final_grades
       get :class_badges
     end
-    resources :student_academic_histories
   end
   resources :staff, only: [:index, :show]
   resources :user_sessions
   resources :password_resets
+
+  resources :student_academic_histories
 
 
   get 'calendar' => 'students#calendar'

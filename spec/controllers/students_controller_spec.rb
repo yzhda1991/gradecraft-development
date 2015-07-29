@@ -10,9 +10,6 @@ describe StudentsController do
       @professor = create(:user)
       @professor.courses << @course
       @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
       @student = create(:user)
       @student.courses << @course
       @team = create(:team, course: @course)
@@ -25,7 +22,20 @@ describe StudentsController do
     end
 
 		describe "GET index" do  
-      pending
+      it "returns the students for the current course" do
+        get :index
+        assigns(:title).should eq("Player Roster")
+        assigns(:students).should eq([@student])
+        response.should render_template(:index)
+      end
+    end
+
+    describe "GET show" do 
+      it "shows the student page" do
+        get :show, {:id => @student.id}
+        assigns(:student).should eq(@student)
+        response.should render_template(:show)
+      end
     end
 
 		describe "GET leaderboard" do  
@@ -124,11 +134,12 @@ describe StudentsController do
 
     describe "protected routes requiring id in params" do
       [
+        :show,
         :grade_index,
         :recalculate
       ].each do |route|
         it "#{route} redirects to root" do
-        	pending
+          pending
           (get route, {:id => "10"}).should redirect_to(:root)
         end
       end

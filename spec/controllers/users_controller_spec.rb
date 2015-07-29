@@ -17,6 +17,7 @@ describe UsersController do
       @team = create(:team, course: @course)
       @team.students << @student
       @teams = @course.teams
+      @users = @course.users
 
       login_user(@professor)
       session[:course_id] = @course.id
@@ -24,7 +25,12 @@ describe UsersController do
     end
 
 		describe "GET index" do  
-      pending
+      it "returns the users for the current course" do
+        get :index
+        assigns(:title).should eq("All Users")
+        assigns(:users).should eq(@users)
+        response.should render_template(:index)
+      end
     end
     
 		describe "GET new" do  

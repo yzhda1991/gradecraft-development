@@ -28,19 +28,11 @@ describe RubricGradesController do
       pending
     end
 
-		describe "GET edit" do  
-      pending
-    end
-
 		describe "GET create" do  
       pending
     end
 
 		describe "GET destroy" do  
-      pending
-    end
-
-		describe "GET show" do  
       pending
     end
 

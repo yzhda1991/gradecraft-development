@@ -1,5 +1,5 @@
 class Task < ActiveRecord::Base
-  attr_accessible :assignment, :assignment_id, :assignment_type, :name, :description, :due_at
+  attr_accessible :assignment, :assignment_id, :assignment_type, :name, :description, :due_at, :course_id
 
   belongs_to :assignment
   belongs_to :course

@@ -10,9 +10,6 @@ class TierBadgesController< ApplicationController
     respond_with @tier, layout: false
   end
 
-  def edit
-  end
-
   def create
     @tier_badge = TierBadge.create params[:tier_badge]
     respond_with @tier_badge, layout: false, serializer: ExistingTierBadgeSerializer
@@ -21,9 +18,6 @@ class TierBadgesController< ApplicationController
   def destroy
     @tier_badge.destroy
     respond_with @tier_badge, layout: false
-  end
-
-  def show
   end
 
   def update

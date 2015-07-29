@@ -28,15 +28,7 @@ describe TierBadgesController do
       pending
     end
     
-		describe "GET edit" do  
-      pending
-    end
-    
 		describe "GET create" do  
-      pending
-    end
-    
-		describe "GET show" do  
       pending
     end
     
@@ -66,12 +58,11 @@ describe TierBadgesController do
 
     describe "protected routes requiring id in params" do
       [
-        :edit,
-        :show,
         :update,
         :update_order
       ].each do |route|
         it "#{route} redirects to root" do
+          pending
           (get route, {:id => "10"}).should redirect_to(:root)
         end
       end

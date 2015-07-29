@@ -10,14 +10,15 @@ describe SubmissionsController do
       @professor = create(:user)
       @professor.courses << @course
       @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
+      @assignment_type = create(:assignment_type, course: @course)
+      @assignment = create(:assignment, course: @course, assignment_type: @assignment_type)
       @student = create(:user)
       @student.courses << @course
       @team = create(:team, course: @course)
       @team.students << @student
       @teams = @course.teams
+
+      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: @assignment_type, student_id: @student.id, course_id: @course.id)
 
       login_user(@professor)
       session[:course_id] = @course.id
@@ -25,22 +26,35 @@ describe SubmissionsController do
     end
     
 		describe "GET index" do  
-      pending
+      it "redirects the submissions index to the assignment page" do
+        get :index, :assignment_id => @assignment.id
+        response.should redirect_to(assignment_path(@assignment))
+      end
+    end
+
+    describe "GET show" do 
+      it "returns the submission show page" do
+        get :show, {:id => @submission.id, :assignment_id => @assignment.id}
+        assigns(:title).should eq("#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)")
+        assigns(:submission).should eq(@submission)
+        response.should render_template(:show)
+      end
     end
     
 		describe "GET new" do  
       pending
     end
-    
-		describe "GET edit" do  
-      pending
+
+    describe "GET edit" do
+      it "display the edit form" do
+        get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
+        assigns(:title).should eq("Editing #{@submission.student.name}'s Submission")
+        assigns(:submission).should eq(@submission)
+        response.should render_template(:edit)
+      end
     end
     
 		describe "GET create" do  
-      pending
-    end
-    
-		describe "GET show" do  
       pending
     end
     

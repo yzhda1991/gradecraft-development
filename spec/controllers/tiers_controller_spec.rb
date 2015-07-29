@@ -28,15 +28,7 @@ describe TiersController do
       pending
     end
 
-		describe "GET edit" do  
-      pending
-    end
-    
 		describe "GET create" do  
-      pending
-    end
-    
-		describe "GET show" do  
       pending
     end
     
@@ -66,8 +58,6 @@ describe TiersController do
 
     describe "protected routes requiring id in params" do
       [
-        :edit,
-        :show,
         :update,
         :destroy
       ].each do |route|
