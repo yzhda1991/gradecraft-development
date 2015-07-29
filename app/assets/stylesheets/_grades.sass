@@ -43,7 +43,7 @@ label.disabled
 
 #awarded
   @include linear-gradient(#C4EAFB,#E9F8FF)
-  height: 100%
+  min-height: 300px
 
 .gradebox
   border: 1px solid #9FD7E3
@@ -78,9 +78,9 @@ label.disabled
 
 .grade-badge
   &.hexagon
-    // @include transition-property("background, opacity")
-    // @include transition-duration(0.25s)
-    // @include transition-timing-function(linear)
+    @include transition-property("background, opacity")
+    @include transition-duration(0.25s)
+    @include transition-timing-function(linear)
     cursor: pointer
     cursor: hand
 
@@ -160,6 +160,11 @@ label.disabled
       @include opacity(0.88)
       box-shadow: 0 0 20px #F6C621
 
+    &.available.earned
+      display: none !important
+
+    &.awarded.unearned
+      display: none !important
 
     span
       display: block
