@@ -68,8 +68,6 @@
         else if @targetType == 'badge'
           @target.prediction.times_earned = if @target.prediction.times_earned == 0 then 1 else 0
           PredictorService.postPredictedBadge(@target.id,@target.prediction.times_earned)
-        debugger
-        scope.renderPointsGraphics()
   }
 ]
 

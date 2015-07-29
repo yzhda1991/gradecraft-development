@@ -12,7 +12,6 @@
 
   $scope.services().then(()->
     $scope.renderGradeLevelGraphics()
-    $scope.renderPointsGraphics()
   )
 
   $scope.assignments = PredictorService.assignments
@@ -192,27 +191,13 @@
       .attr("transform": "translate(" + padding + "," + (stats.height - 20) + ")")
       .call(axis)
 
-  $scope.renderPointsGraphics = ()->
-    svg = d3.select("#svg-points")
-    stats = $scope.GraphicsStats()
-    data = [
-      {
-        points: $scope.allPointsPredicted()
-        id: "svg-graph-points-predicted"
-      },
-      {
-        points: $scope.allPointsEarned()
-        id: "svg-graph-points-earned"
-      }]
-    pointsEarned = $scope.allPointsEarned()
-    svg.selectAll('rect').data(data).enter().append('rect')
-      .attr("x", 0)
-      .attr("y", 40)
-      .attr("width", (p)->
-        stats.scale(p.points))
-      .attr("height", 20)
-      .attr("id", (p)->
-        p.id)
+  $scope.svgEarnedBarWidth = ()->
+    width = $scope.GraphicsStats().scale($scope.allPointsEarned())
+    width = width || 0
+
+  $scope.svgPredictedBarWidth = ()->
+    width = $scope.GraphicsStats().scale($scope.allPointsPredicted())
+    width = width || 0
 
   return
 ]

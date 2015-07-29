@@ -1,4 +1,11 @@
 %svg{"id" => "predictor-graphic", "width" => "90%", "height" => 100}
   %g{"id" => "svg-grade-levels"}
   %g{"id" => "svg-points"}
+    %rect#svg-graph-points-predicted{"x"=>"0", "y"=>"40", "ng-attr-width"=>"{{svgPredictedBarWidth()}}", "height"=>"20"}
+    %rect#svg-graph-points-earned{"x"=>"0", "y"=>"40", "ng-attr-width"=>"{{svgEarnedBarWidth()}}", "height"=>"20"}
   %g{"id" => "svg-grade-level-text"}
+
+
+
+
+
