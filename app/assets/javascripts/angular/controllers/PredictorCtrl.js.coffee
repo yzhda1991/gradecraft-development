@@ -198,11 +198,11 @@
     data = [
       {
         points: $scope.allPointsPredicted()
-        class: "svg-graph-points-predicted"
+        id: "svg-graph-points-predicted"
       },
       {
         points: $scope.allPointsEarned()
-        class: "svg-graph-points-earned"
+        id: "svg-graph-points-earned"
       }]
     pointsEarned = $scope.allPointsEarned()
     svg.selectAll('rect').data(data).enter().append('rect')
@@ -211,8 +211,8 @@
       .attr("width", (p)->
         stats.scale(p.points))
       .attr("height", 20)
-      .attr("class", (p)->
-        p.class)
+      .attr("id", (p)->
+        p.id)
 
   return
 ]
