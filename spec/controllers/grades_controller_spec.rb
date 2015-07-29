@@ -56,33 +56,61 @@ describe GradesController do
 
     end
 
-		describe "POST submit_rubric"
+		describe "POST submit_rubric" do  
+      pending
+    end
 
-		describe "GET remove"
+		describe "GET remove" do  
+      pending
+    end
 
-		describe "GET destroy"
+		describe "GET destroy" do  
+      pending
+    end
 
-		describe "GET self_log"
+		describe "GET self_log" do  
+      pending
+    end
 
-		describe "POST predict_score"
+		describe "POST predict_score" do  
+      pending
+    end
 
-		describe "GET mass_edit"
+		describe "GET mass_edit" do  
+      pending
+    end
 
-		describe "POST mass_update"
+		describe "POST mass_update" do  
+      pending
+    end
 
-		describe "GET group_edit"
+		describe "GET group_edit" do  
+      pending
+    end
 
-		describe "POST group_update"
+		describe "POST group_update" do  
+      pending
+    end
 
-		describe "GET edit_status"
+		describe "GET edit_status" do  
+      pending
+    end
 
-		describe "POST update_status"
+		describe "POST update_status" do  
+      pending
+    end
 
-		describe "GET import"
+		describe "GET import" do  
+      pending
+    end
 
-		describe "GET username_import"
+		describe "GET username_import" do  
+      pending
+    end
 
-		describe "GET email_import"
+		describe "GET email_import" do  
+      pending
+    end
 
 	end
 

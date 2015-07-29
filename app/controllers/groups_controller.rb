@@ -10,10 +10,11 @@ class GroupsController < ApplicationController
   end
 
   def show
+    @group = current_course.groups.find(params[:id])
+    #TODO only show a group to students if they're in it
     if current_user_is_student?
       @user = current_user
     end
-    @group = current_course.groups.find(params[:id])
     @title = "#{@group.name}"
     @assignments = current_course.assignments.group_assignments
   end
@@ -83,7 +84,12 @@ class GroupsController < ApplicationController
 
   def destroy
     @group = current_course.groups.find(params[:id])
+    @name = @group.name
     @group.destroy
-    respond_with @group
+
+    respond_to do |format|
+      format.html { redirect_to groups_path, notice: "#{@name} #{term_for :group} successfully deleted" }
+      format.json { head :ok }
+    end
   end
 end

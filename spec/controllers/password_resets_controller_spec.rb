@@ -3,10 +3,16 @@ require 'spec_helper'
 
 describe PasswordResetsController do
 
-	describe "GET create"
+	describe "GET create" do  
+    pending
+  end
 
-	describe "GET edit"
+	describe "GET edit" do  
+    pending
+  end
 
-	describe "POST update"
+	describe "POST update" do  
+    pending
+  end
 	
 end

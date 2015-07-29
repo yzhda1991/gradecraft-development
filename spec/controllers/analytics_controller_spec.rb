@@ -4,23 +4,24 @@ require 'spec_helper'
 describe AnalyticsController do
 
 	context "as a professor" do 
-        before do
-          @course = create(:course_accepting_groups)
-          @professor = create(:user)
-          @professor.courses << @course
-          @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-          @assignment_type = create(:assignment_type, course: @course)
-          @assignment = create(:assignment, assignment_type: @assignment_type)
-          @course.assignments << @assignment
-          @student = create(:user)
-          @student.courses << @course
-          @students = []
-          @students << @student
+    
+    before do
+      @course = create(:course_accepting_groups)
+      @professor = create(:user)
+      @professor.courses << @course
+      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+      @assignment_type = create(:assignment_type, course: @course)
+      @assignment = create(:assignment, assignment_type: @assignment_type)
+      @course.assignments << @assignment
+      @student = create(:user)
+      @student.courses << @course
+      @students = []
+      @students << @student
 
-          login_user(@professor)
-          session[:course_id] = @course.id
-          allow(EventLogger).to receive(:perform_async).and_return(true)
-        end
+      login_user(@professor)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
 
 		describe "GET index" do
           it "returns analytics page for the current course" do
@@ -72,35 +73,65 @@ describe AnalyticsController do
           end
         end
 
-		describe "GET role_events"
+		describe "GET role_events" do  
+      pending
+    end
 
-		describe "GET assignment_events"
+		describe "GET assignment_events" do  
+      pending
+    end
 
-		describe "GET login_frequencies"
+		describe "GET login_frequencies" do  
+      pending
+    end
 
-		describe "GET role_login_frequencies"
+		describe "GET role_login_frequencies" do  
+      pending
+    end
 
-		describe "GET login_events"
+		describe "GET login_events" do  
+      pending
+    end
 
-		describe "GET login_role_events"
+		describe "GET login_role_events" do  
+      pending
+    end
 
-		describe "GET all_pageview_events"
+		describe "GET all_pageview_events" do  
+      pending
+    end
 
-		describe "GET all_role_pageview_events"
+		describe "GET all_role_pageview_events" do  
+      pending
+    end
 
-		describe "GET all_user_pageview_events"
+		describe "GET all_user_pageview_events" do  
+      pending
+    end
 
-		describe "GET pageview_events"
+		describe "GET pageview_events" do  
+      pending
+    end
 
-		describe "GET role_pageview_events"
+		describe "GET role_pageview_events" do  
+      pending
+    end
 
-		describe "GET user_pageview_events"
+		describe "GET user_pageview_events" do  
+      pending
+    end
 
-		describe "GET prediction_averages"
+		describe "GET prediction_averages" do  
+      pending
+    end
 
-		describe "GET assignment_prediction_averages"
+		describe "GET assignment_prediction_averages" do  
+      pending
+    end
 
-		describe "GET export"
+		describe "GET export" do  
+      pending
+    end
 
 	end
 

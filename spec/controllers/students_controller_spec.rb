@@ -4,27 +4,118 @@ require 'spec_helper'
 describe StudentsController do
 
 	context "as a professor" do 
-		describe "GET index"
-		describe "GET leaderboard"
-		describe "GET syllabus"
-		describe "GET timeline"
-		describe "GET autocomplete_student_name"
-		describe "GET course_progress"
-		describe "GET badges"
-		describe "GET predictor" 
-		describe "GET scores_by_assignment" 
-		describe "GET grade_index"  
-		describe "GET recalculate" 
+    
+    before do
+      @course = create(:course)
+      @professor = create(:user)
+      @professor.courses << @course
+      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+      @challenge = create(:challenge, course: @course)
+      @course.challenges << @challenge
+      @challenges = @course.challenges
+      @student = create(:user)
+      @student.courses << @course
+      @team = create(:team, course: @course)
+      @team.students << @student
+      @teams = @course.teams
+
+      login_user(@professor)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
+
+		describe "GET index" do  
+      pending
+    end
+
+		describe "GET leaderboard" do  
+      pending
+    end
+
+		describe "GET syllabus" do  
+      pending
+    end
+
+		describe "GET timeline" do  
+      pending
+    end
+
+		describe "GET autocomplete_student_name" do  
+      pending
+    end
+
+		describe "GET course_progress" do  
+      pending
+    end
+
+		describe "GET badges" do  
+      pending
+    end
+
+		describe "GET predictor" do  
+      pending
+    end
+
+		describe "GET scores_by_assignment" do  
+      pending
+    end
+
+		describe "GET grade_index" do  
+      pending
+    end
+
+		describe "GET recalculate" do  
+      pending
+    end
+
 	end
 
 	context "as a student" do 
-		describe "GET syllabus" 
-		describe "GET timeline" 
-		describe "GET course_progress"
-		describe "GET badges"
-		describe "GET predictor"
-		describe "GET scores_by_assignment"
-		describe "GET course_progress"
+    
+    before do
+      @course = create(:course)
+      @challenge = create(:challenge, course: @course)
+      @course.challenges << @challenge
+      @challenges = @course.challenges
+      @student = create(:user)
+      @student.courses << @course
+      @team = create(:team, course: @course)
+      @team.students << @student
+      @teams = @course.teams
+      @challenge_grade = create(:challenge_grade, team: @team, challenge: @challenge)
+
+      login_user(@student)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
+
+		describe "GET syllabus" do  
+      pending
+    end
+
+		describe "GET timeline" do  
+      pending
+    end
+
+		describe "GET course_progress" do  
+      pending
+    end
+
+		describe "GET badges" do  
+      pending
+    end
+
+		describe "GET predictor" do  
+      pending
+    end
+
+		describe "GET scores_by_assignment" do  
+      pending
+    end
+    
+		describe "GET course_progress" do  
+      pending
+    end
 
 		describe "protected routes" do
       [

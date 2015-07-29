@@ -3,9 +3,8 @@ class ChallengeGradesController < ApplicationController
   before_filter :ensure_staff?, :except => [:show]
 
   def index
-    @title = "View All #{term_for :challenge} Grades"
     @challenge = current_course.challenges.find(params[:challenge_id])
-    @challenge_grades = current_course.challenge_grades
+    redirect_to @challenge
   end
 
   def show

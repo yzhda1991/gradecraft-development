@@ -5,33 +5,122 @@ describe ChallengeGradesController do
 
 	context "as professor" do 
 
-		describe "GET index"
+    before do
+      @course = create(:course)
+      @professor = create(:user)
+      @professor.courses << @course
+      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+      @challenge = create(:challenge, course: @course)
+      @course.challenges << @challenge
+      @challenges = @course.challenges
+      @student = create(:user)
+      @student.courses << @course
+      @team = create(:team, course: @course)
+      @team.students << @student
+      @teams = @course.teams
+      @challenge_grade = create(:challenge_grade, team: @team, challenge: @challenge)
 
-		describe "GET show"
+      login_user(@professor)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
 
-		describe "GET new"
+		describe "GET index" do 
+      it "redirects the user to the challenge" do
+        get :index, :challenge_id => @challenge
+        assigns(:challenge).should eq(@challenge)
+        response.should redirect_to(@challenge)
+      end
+    end
 
-		describe "GET edit"
+		describe "GET show" do 
+      it "shows the challenge grade" do
+        get :show, {:id => @challenge_grade, :challenge_id => @challenge}
+        assigns(:challenge).should eq(@challenge)
+        assigns(:challenge_grade).should eq(@challenge_grade)
+        assigns(:team).should eq(@team)
+        response.should render_template(:show)
+      end
+    end
 
-		describe "GET mass_edit"
+		describe "GET new" do  
+      it "shows the new challenge grade form" do
+        get :new, {:challenge_id => @challenge, :team_id => @team}
+        assigns(:challenge).should eq(@challenge)
+        assigns(:team).should eq(@team)
+        assigns(:teams).should eq([@team])
+        response.should render_template(:new)
+      end
+    end
 
-		describe "POST create"
+		describe "GET edit" do  
+      it "shows the edit challenge grade form" do
+        get :edit, {:id => @challenge_grade, :challenge_id => @challenge}
+        assigns(:challenge).should eq(@challenge)
+        assigns(:challenge_grade).should eq(@challenge_grade)
+        assigns(:teams).should eq([@team])
+        response.should render_template(:edit)
+      end
+    end
 
-		describe "POST update"
+		describe "GET mass_edit" do  
+      pending
+    end
 
-		describe "POST mass_update"
+		describe "POST create" do  
+      pending
+    end
 
-		describe "GET edit_status"
+		describe "POST update" do  
+      pending
+    end
 
-		describe "POST update_status"
+		describe "POST mass_update" do  
+      pending
+    end
 
-		describe "GET destroy"
+		describe "GET edit_status" do 
+      pending
+    end
+
+		describe "POST update_status" do  
+      pending
+    end
+
+		describe "GET destroy" do 
+      pending
+    end
 
 	end
 
 	context "as student" do 
 
-		describe "GET show"
+    before do
+      @course = create(:course)
+      @challenge = create(:challenge, course: @course)
+      @course.challenges << @challenge
+      @challenges = @course.challenges
+      @student = create(:user)
+      @student.courses << @course
+      @team = create(:team, course: @course)
+      @team.students << @student
+      @teams = @course.teams
+      @challenge_grade = create(:challenge_grade, team: @team, challenge: @challenge)
+
+      login_user(@student)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
+
+		describe "GET show" do 
+      it "shows the challenge grade" do
+        get :show, {:id => @challenge_grade, :challenge_id => @challenge}
+        assigns(:challenge).should eq(@challenge)
+        assigns(:challenge_grade).should eq(@challenge_grade)
+        assigns(:team).should eq(@team)
+        response.should render_template(:show)
+      end
+    end
 
 		describe "protected routes" do
 			
