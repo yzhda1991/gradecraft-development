@@ -163,18 +163,12 @@ label.disabled
     &.available.earned
       @include opacity(0)
 
-      &.post_faded
-
-      &.hidethatshit
-        display: none !important
-
     &.awarded.unearned
       @include opacity(0)
 
-      &.post_faded
-
-        &.hidethatshit
-          display: none !important
+    &.available, &.awarded
+      &.hide-after-fade
+        display: none !important
 
     span
       display: block
