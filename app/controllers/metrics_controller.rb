@@ -16,6 +16,7 @@ class MetricsController < ApplicationController
   end
 
   def destroy
+    @rubric = @metric.rubric
     @metric.destroy
     respond_with @metric, layout: false
   end

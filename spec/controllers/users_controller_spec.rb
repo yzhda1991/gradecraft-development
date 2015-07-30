@@ -33,12 +33,22 @@ describe UsersController do
       end
     end
     
-		describe "GET new" do  
-      pending
-    end
-    
-		describe "GET edit" do  
-      pending
+    describe "GET new" do
+      it "assigns the name" do
+        get :new 
+        assigns(:title).should eq("Create a New User")
+        assigns(:user).should be_a_new(User)
+        response.should render_template(:new)
+      end
+    end	
+
+    describe "GET edit" do
+      it "renders the edit user form" do
+        get :edit, :id => @student.id
+        assigns(:title).should eq("Editing #{@student.name}")
+        assigns(:user).should eq(@student)
+        response.should render_template(:edit)
+      end
     end
     
 		describe "GET create" do  
@@ -49,9 +59,12 @@ describe UsersController do
       pending
     end
     
-		describe "GET destroy" do  
-      pending
+    describe "GET destroy" do
+      it "destroys the user" do
+        expect{ get :destroy, {:id => @student } }.to change(User,:count).by(-1)
+      end
     end
+    
     
 		describe "GET edit_profile" do  
       pending

@@ -41,8 +41,13 @@ describe SubmissionsController do
       end
     end
     
-		describe "GET new" do  
-      pending
+    describe "GET new" do
+      it "assigns title and assignment relation" do
+        get :new, assignment_id: @assignment.id
+        assigns(:title).should eq("Submit #{@assignment.name} (#{@assignment.point_total} points)")
+        assigns(:submission).should be_a_new(Submission)
+        response.should render_template(:new)
+      end
     end
 
     describe "GET edit" do
@@ -62,8 +67,10 @@ describe SubmissionsController do
       pending
     end
     
-		describe "GET destroy" do  
-      pending
+    describe "GET destroy" do
+      it "destroys the submission" do
+        expect{ get :destroy, {:id => @submission, :assignment_id => @assignment.id } }.to change(Submission,:count).by(-1)
+      end
     end
     
 	end

@@ -32,46 +32,48 @@ describe AnalyticsController do
     end
 
 		describe "GET students" do
-          it "returns the student analytics page for the current course" do
-            get :students
-            assigns(:title).should eq("Player Analytics")
-            response.should render_template(:students)
-          end
-        end
+      it "returns the student analytics page for the current course" do
+        get :students
+        assigns(:title).should eq("Player Analytics")
+        response.should render_template(:students)
+      end
+    end
 
 		describe "GET staff" do
-          it "returns the staff analytics page for the current course" do
-            get :staff
-            assigns(:title).should eq("team leader Analytics")
-            response.should render_template(:staff)
-          end
-        end
+      it "returns the staff analytics page for the current course" do
+        get :staff
+        assigns(:title).should eq("team leader Analytics")
+        response.should render_template(:staff)
+      end
+    end
 
-		describe "GET all_events"
+		describe "GET all_events" do 
+      pending
+    end
 
 		describe "GET top_10" do
-          it "returns the Top 10/Bottom 10 page for the current course" do
-            get :top_10
-            assigns(:title).should eq("Top 10/Bottom 10")
-            response.should render_template(:top_10)
-          end
-        end
+      it "returns the Top 10/Bottom 10 page for the current course" do
+        get :top_10
+        assigns(:title).should eq("Top 10/Bottom 10")
+        response.should render_template(:top_10)
+      end
+    end
 
 		describe "GET per_assign" do
-          it "returns the Assignment Analytics page for the current course" do
-            get :per_assign
-            assigns(:title).should eq("assignment Analytics")
-            response.should render_template(:per_assign)
-          end
-        end
+      it "returns the Assignment Analytics page for the current course" do
+        get :per_assign
+        assigns(:title).should eq("assignment Analytics")
+        response.should render_template(:per_assign)
+      end
+    end
 
 		describe "GET teams" do
-          it "returns the Team Analytics page for the current course" do
-            get :teams
-            assigns(:title).should eq("team Analytics")
-            response.should render_template(:teams)
-          end
-        end
+      it "returns the Team Analytics page for the current course" do
+        get :teams
+        assigns(:title).should eq("team Analytics")
+        response.should render_template(:teams)
+      end
+    end
 
 		describe "GET role_events" do  
       pending

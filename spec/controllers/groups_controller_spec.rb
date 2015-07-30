@@ -101,8 +101,6 @@ describe GroupsController do
 
 	context "as student" do
 
-		pending
-
 		before do
       @course = create(:course_accepting_groups)
       @professor = create(:user)

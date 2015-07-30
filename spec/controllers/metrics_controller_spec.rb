@@ -32,8 +32,11 @@ describe MetricsController do
       pending
     end
 
-		describe "GET destroy" do  
-      pending
+    describe "GET destroy" do
+      it "destroys the metric" do
+        pending
+        expect{ get :destroy, :id => @metric }.to change(Metric,:count).by(-1)
+      end
     end
 
 		describe "GET update" do  

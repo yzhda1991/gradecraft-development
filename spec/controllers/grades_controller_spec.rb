@@ -64,8 +64,11 @@ describe GradesController do
       pending
     end
 
-		describe "GET destroy" do  
-      pending
+		describe "GET destroy" do
+      it "destroys the grade" do
+      	pending
+        expect{ get :destroy, {:id => @grade, :assignment_id => @assignment.id } }.to change(Grade,:count).by(-1)
+      end
     end
 
 		describe "GET self_log" do  

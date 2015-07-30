@@ -10,22 +10,23 @@ describe RubricsController do
       @professor = create(:user)
       @professor.courses << @course
       @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
-      @student = create(:user)
-      @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
+      @assignment = create(:assignment)
+      @course.assignments << @assignment
+      @rubric = create(:rubric, assignment: @assignment)
 
       login_user(@professor)
       session[:course_id] = @course.id
       allow(EventLogger).to receive(:perform_async).and_return(true)
     end
 
-		describe "GET design" do  
-      pending
+    describe "GET design" do 
+      it "shows the design form" do
+        pending
+        get :design,{ assignment: @assignment, rubric: @rubric}
+        assigns(:title).should eq("Create a New assignment Type")
+        assigns(:assignment_type).should be_a_new(AssignmentType)
+        response.should render_template(:design)
+      end
     end
 
 		describe "GET create" do  

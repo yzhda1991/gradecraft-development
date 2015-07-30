@@ -98,11 +98,12 @@ class ChallengeGradesController < ApplicationController
   end
 
   def destroy
-    @challenge_grades = current_course.challenge_grades.find(params[:id])
-    @challenge_grades.destroy
+    @challenge_grade = current_course.challenge_grades.find(params[:id])
+    @challenge = current_course.challenges.find(@challenge_grade.challenge_id)
+    @challenge_grade.destroy
 
     respond_to do |format|
-      format.html { redirect_to challenge_path(@challenge_grades.challenge) }
+      format.html { redirect_to challenge_path(@challenge) }
       format.json { head :ok }
     end
   end

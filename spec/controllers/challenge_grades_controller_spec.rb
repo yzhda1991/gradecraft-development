@@ -87,8 +87,10 @@ describe ChallengeGradesController do
       pending
     end
 
-		describe "GET destroy" do 
-      pending
+		describe "GET destroy" do
+      it "destroys the challenge grade" do
+        expect{ get :destroy, {:id => @challenge_grade, :challenge_id => @challenge.id } }.to change(ChallengeGrade,:count).by(-1)
+      end
     end
 
 	end

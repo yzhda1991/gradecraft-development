@@ -14,7 +14,8 @@ describe TasksController do
       @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
       @assignment_type = create(:assignment_type, course: @course)
       @assignment = create(:assignment, course: @course, assignment_type: @assignment_type)
-      @task = create(:task, assignment: @assignment)
+      @task = create(:task)
+      @assignment.tasks << @task
       @student = create(:user)
       @student.courses << @course
       @team = create(:team, course: @course)
@@ -42,8 +43,8 @@ describe TasksController do
     end
     
 		describe "GET edit" do
-      pending
       it "display the edit form" do
+        pending
         get :edit, {:id => @task.id, :assignment_id => @assignment.id}
         assigns(:title).should eq("Editing #{@assignment.name} Task")
         assigns(:task).should eq(@task)

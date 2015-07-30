@@ -10,14 +10,10 @@ describe ProposalsController do
       @professor = create(:user)
       @professor.courses << @course
       @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
       @student = create(:user)
       @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
+      
+      @assignment = create(:assignment)
 
       login_user(@professor)
       session[:course_id] = @course.id
@@ -32,8 +28,11 @@ describe ProposalsController do
       pending
     end
 
-		describe "GET destroy" do  
+    describe "GET destroy" do
       pending
+      it "destroys the proposal" do
+        expect{ get :destroy, :id => @proposal }.to change(Proposal,:count).by(-1)
+      end
     end
 
 	end

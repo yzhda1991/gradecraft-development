@@ -14,7 +14,7 @@ class SubmissionsController < ApplicationController
   def new
     session[:return_to] = request.referer
     @assignment = current_course.assignments.find(params[:assignment_id])
-    @title = "Submit #{@assignment.name} (#{points @assignment.point_total} points)"
+    @title = "Submit #{@assignment.name} (#{@assignment.point_total} points)"
     if current_user_is_staff?
       if @assignment.has_groups?
         @group = current_course.groups.find(params[:group_id])
