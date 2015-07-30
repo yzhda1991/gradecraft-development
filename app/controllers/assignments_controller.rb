@@ -235,6 +235,7 @@ class AssignmentsController < ApplicationController
         :id,
         :predicted_score,
         :pass_fail_status,
+        :point_total,
         :status,
         :student_id,
         :raw_score,

@@ -39,9 +39,9 @@
             event.preventDefault()
             event.stopPropagation()
             angular.element(ui.handle.parentElement).slider("value", closest.value)
-            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(assignment.point_total))
+            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(assignment.grade.point_total))
           else
-            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(assignment.point_total))
+            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(assignment.grade.point_total))
 
       stop: (event, ui)->
         assignment_id = ui.handle.parentElement.dataset.id
@@ -68,7 +68,7 @@
 
   # Assignments with Score Levels: Defines a snap tolerance and returns true if value is within range
   $scope.inSnapRange = (assignment,scoreLevel,value)->
-    tolerance = assignment.point_total * 0.05
+    tolerance = assignment.grade.point_total * 0.05
     if Math.abs(scoreLevel.value - value) <= tolerance
       return true
     else

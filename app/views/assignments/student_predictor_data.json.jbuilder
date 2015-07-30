@@ -9,6 +9,7 @@ json.assignments @assignments do |assignment|
       json.grade do
         json.id grade.id
         json.status grade.status
+        json.point_total grade.point_total
         json.predicted_score grade.predicted_score
         json.score grade.graded_points
         json.pass_fail_status grade.graded_pass_fail_status

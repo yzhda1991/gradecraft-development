@@ -14,20 +14,20 @@
 
     .assignment-graded{'ng-if' => 'assignmentGraded(assignment)'}
       .grade{'ng-if' => 'assignment.pass_fail == false'}
-        {{assignment.grade.score | number}} / {{assignment.point_total | number}}
+        {{assignment.grade.score | number}} / {{assignment.grade.point_total | number}}
       .grade{'ng-if' => 'assignment.pass_fail == true'}
         {{termFor[assignment.grade.pass_fail_status]}}
 
     .assignment-predicted{'ng-if' => '! assignmentGraded(assignment)'}
       %div{'ng-if' => 'assignment.pass_fail == false'}
-        .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}'}}
+        .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.grade.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}'}}
 
         .grade{'ng-if' => '! hasLevels(assignment)'}
-          {{assignment.grade.predicted_score | number}} / {{assignment.point_total | number}}
+          {{assignment.grade.predicted_score | number}} / {{assignment.grade.point_total | number}}
 
         .grade{'id'=>'assignment-{{assignment.id}}-level',  'ng-if' => 'hasLevels(assignment)'}
           .value
-            {{assignment.grade.predicted_score | number}} / {{assignment.point_total | number}}
+            {{assignment.grade.predicted_score | number}} / {{assignment.grade.point_total | number}}
           .name
             {{levelNameForScore(assignment)}}
 
