@@ -79,7 +79,7 @@ label.disabled
 .grade-badge
   &.hexagon
     @include transition-property("background, opacity")
-    @include transition-duration(0.25s)
+    @include transition-duration(0.6s)
     @include transition-timing-function(linear)
     cursor: pointer
     cursor: hand
@@ -167,8 +167,11 @@ label.disabled
       @include opacity(0)
 
     &.available, &.awarded
-      &.hide-after-fade
+      &.hide-after-fade, &.temp-hide
         display: none !important
+
+    &.available.unearned, &.awarded.earned
+      display: block
 
     span
       display: block
