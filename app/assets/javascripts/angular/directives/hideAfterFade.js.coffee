@@ -1,6 +1,6 @@
-Permafade = angular.module('hideAfterFade', [])
+HideAfterFade= angular.module('hideAfterFade', [])
 
-Permafade.directive 'hideAfterFade', ['$timeout', ($timeout)->
+HideAfterFade.directive 'hideAfterFade', ['$timeout', ($timeout)->
 
   hideElement = (elem)->
     elem.addClass("hide-after-fade")
@@ -27,7 +27,7 @@ Permafade.directive 'hideAfterFade', ['$timeout', ($timeout)->
             elem.addClass("temp-hide")
 
         elem.on "click", ()->
-          `$timeout(function() {hideElement(elem)}, 600);`
+          `$timeout(function() {hideElement(elem)}, 1000);`
 
         scope.$watch (->
           elem.attr 'class'
@@ -38,14 +38,16 @@ Permafade.directive 'hideAfterFade', ['$timeout', ($timeout)->
             isAvailable = allClasses.indexOf("available") > -1
             isAwarded= allClasses.indexOf("awarded") > -1
             isEarned= allClasses.indexOf("earned") > -1
+            isEarnedAdd= allClasses.indexOf("earned-add") > -1
             isUnearned= allClasses.indexOf("unearned") > -1
+            isUnearnedAdd= allClasses.indexOf("unearned-add") > -1
             isHidden= allClasses.indexOf("hide-after-fade") > -1
 
-            if isAwarded and isEarned
+            if isAwarded and isEarnedAdd
               elem.removeClass("hide-after-fade")
               elem.removeClass("temp-hide")
 
-            if isAvailable and isUnearned
+            if isAvailable and isUnearnedAdd
               elem.removeClass("hide-after-fade")
               elem.removeClass("temp-hide")
 

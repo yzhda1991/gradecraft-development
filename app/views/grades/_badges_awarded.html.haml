@@ -1,6 +1,7 @@
 %h4.uppercase #{term_for :badges} Awarded
 - if @badges.present?
-  .grade-badge.hexagon.awarded(ng-repeat="badge in badges" ng-class="{unearned: badge.earnedBadgesForGrade.length <= 0, earned: badge.earnedBadgesForGrade.length > 0}" ng-click="badge.deleteEarnedStudentBadge()" hide-after-fade)
+  .grade-badge.hexagon.awarded(title="{{badge.point_total}} Points: {{badge.description}}" ng-repeat="badge in badges" ng-class="{unearned: badge.earnedBadgesForGrade.length <= 0, earned: badge.earnedBadgesForGrade.length > 0}" ng-click="badge.deleteEarnedStudentBadge()" hide-after-fade)
+
     %img(src="{{badge.icon}}" alt="You've earned the {{badge.name}} badge" class="earned")
 
     .ribbon

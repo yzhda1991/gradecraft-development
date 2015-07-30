@@ -80,7 +80,7 @@ label.disabled
   &.hexagon
     @include transition-property("background, opacity")
     @include transition-duration(0.6s)
-    @include transition-timing-function(linear)
+    @include transition-timing-function(ease)
     cursor: pointer
     cursor: hand
 
@@ -94,28 +94,6 @@ label.disabled
     box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
     border-left: solid 1px #0C58A7
     border-right: solid 1px #0C58A7
-
-    .gauge
-      width: 170px
-      height: 10px
-      position: relative 
-      background: #777
-      text-align: center
-      font-size: 16px !important
-      margin-left: -10px
-      z-index: 2400
-      @include four-color-horizontal-gradient(#93EC2F,#7CC02F,#68A127,#348C44)
-
-      .bar-cover
-        position: absolute
-        height: 10px
-        z-index: 2400
-        background: #aaa
-        margin-left: 10%
-        width: 90%
-
-    &.unearned .gauge
-      display: none
 
     &:before, &:after
       content: ""
@@ -171,7 +149,28 @@ label.disabled
         display: none !important
 
     &.available.unearned, &.awarded.earned
-      display: block
+
+    &.available.unearned-add-active
+      transition:1s linear all
+      box-shadow: 0 0 20px #F6C621
+      opacity:0.92
+
+    &.awarded.earned-add-active
+      transition:1s linear all
+      box-shadow: 0 0 20px #F6C621
+      opacity:0.64
+
+    &.fade-in-available
+      @include opacity(0.8)
+      @include transition-property("opacity")
+      @include transition-duration(2s)
+      @include transition-timing-function(ease)
+
+    &.fade-in-awarded
+      @include opacity(1)
+      @include transition-property("opacity")
+      @include transition-duration(2s)
+      @include transition-timing-function(ease)
 
     span
       display: block
