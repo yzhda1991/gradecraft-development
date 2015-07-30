@@ -161,14 +161,20 @@ label.disabled
       box-shadow: 0 0 20px #F6C621
 
     &.available.earned
-      display: none !important
+      @include opacity(0)
 
       &.post_faded
 
+      &.hidethatshit
+        display: none !important
 
     &.awarded.unearned
-      display: none !important
+      @include opacity(0)
+
       &.post_faded
+
+        &.hidethatshit
+          display: none !important
 
     span
       display: block
@@ -301,10 +307,10 @@ label.disabled
     img.star
       position: relative
       z-index: 2700
+
   &.unearned
     .gold-stars
       @include opacity(0.6)
-
 
   .badges-earned
     @include ribbon

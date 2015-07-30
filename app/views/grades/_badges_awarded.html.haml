@@ -1,0 +1,14 @@
+%h4.uppercase #{term_for :badges} Awarded
+- if @badges.present?
+  .grade-badge.hexagon.awarded(ng-repeat="badge in badges" ng-class="{unearned: badge.earnedBadgesForGrade.length <= 0, earned: badge.earnedBadgesForGrade.length > 0}" ng-click="toggleEarnedBadge(badge)")
+    %img(src="{{badge.icon}}" alt="You've earned the {{badge.name}} badge" class="earned")
+
+    .ribbon
+      .ribbon-stitches-top
+      %strong.ribbon-content
+        %h1 {{badge.name}}
+      .ribbon-stitches-bottom
+    .ribbon-ends
+    .gold-stars
+      %img.star(src="/assets/golden-star.png")
+      .badges-earned.blue {{badge.earnedBadgesForGrade.length + badge.otherEarnedBadges.length}}

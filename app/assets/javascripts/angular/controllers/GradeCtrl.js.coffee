@@ -1,4 +1,4 @@
-@gradecraft.controller 'GradeCtrl', ['$rootScope', '$scope', 'GradePrototype', 'AssignmentScoreLevelPrototype', '$window', '$http', 'BadgePrototype', ($rootScope, $scope, GradePrototype, AssignmentScoreLevelPrototype, $window, $http, BadgePrototype) -> 
+@gradecraft.controller 'GradeCtrl', ['$timeout', '$rootScope', '$scope', 'GradePrototype', 'AssignmentScoreLevelPrototype', '$window', '$http', 'BadgePrototype', ($timeout, $rootScope, $scope, GradePrototype, AssignmentScoreLevelPrototype, $window, $http, BadgePrototype) -> 
 
   $scope.init = (grade, assignmentScoreLevels, badges)->
     $scope.header = "waffles" 
@@ -16,7 +16,6 @@
     $scope.addBadges = (badges)->
       angular.forEach(badges, (badge, index)->
         badgePrototype = new BadgePrototype(badge, $scope.gradeId)
-        badgePrototype.addEarnedBadges()
         $scope.badges.push badgePrototype
       )
 
@@ -43,7 +42,6 @@
       $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
         (data, status)->
           badge.earnBadge(data["earned_badge"])
-          $timeout(badge.setAwarded, 300)
       )
       .error((err)->
         alert("create failed!")
