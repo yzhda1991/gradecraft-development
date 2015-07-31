@@ -16,7 +16,8 @@ class ProposalsController < ApplicationController
 
   def destroy
     @proposal = Proposal.find(params[:id])
+    @group = @proposal.group
     @proposal.destroy
-    respond_with(@proposal)
+    respond_with(@group)
   end
 end

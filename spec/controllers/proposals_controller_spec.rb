@@ -14,6 +14,8 @@ describe ProposalsController do
       @student.courses << @course
       
       @assignment = create(:assignment)
+      @group = create(:group)
+      @proposal = create(:proposal)
 
       login_user(@professor)
       session[:course_id] = @course.id
@@ -29,9 +31,8 @@ describe ProposalsController do
     end
 
     describe "GET destroy" do
-      pending
       it "destroys the proposal" do
-        expect{ get :destroy, :id => @proposal }.to change(Proposal,:count).by(-1)
+        expect{ delete :destroy, :group_id => @group.id, :id => @proposal.id }.to change(Proposal,:count).by(-1)
       end
     end
 
