@@ -25,7 +25,11 @@ describe AssignmentTypeWeightsController do
     end
 
 		describe "GET mass_edit" do  
-      pending
+      it "assigns params" do
+        get :mass_edit, :student_id => @student.id
+        assigns(:title).should eq("Editing #{@student.name}'s multipliers")
+        response.should render_template(:mass_edit)
+      end
     end
 
 		describe "POST mass_update" do  
@@ -46,7 +50,11 @@ describe AssignmentTypeWeightsController do
     end
 
 		describe "GET mass_edit" do  
-      pending
+      it "assigns params" do
+        get :mass_edit, :student_id => @student.id
+        assigns(:title).should eq("Editing My multiplier Choices")
+        response.should render_template(:mass_edit)
+      end
     end
 
 		describe "POST mass_update" do  

@@ -14,6 +14,13 @@ describe GradesController do
       @course.assignments << @assignment
       @student = create(:user, first_name: "First Name", last_name: 'Last Name')
       @student.courses << @course
+      @second_student = create(:user)
+      @second_student.courses << @course
+      @third_student = create(:user)
+      @third_student.courses << @course
+      @group = create(:group)
+      @assignment.groups << @group 
+      @group.students << [@student, @second_student, @third_student] 
 
 			@grade = create(:grade)
 			@assignment.grades << @grade
@@ -80,7 +87,11 @@ describe GradesController do
     end
 
 		describe "GET mass_edit" do  
-      pending
+      it "assigns params" do
+        get :mass_edit, :id => @assignment.id
+        assigns(:title).should eq("Quick Grade #{@assignment.name}")
+        response.should render_template(:mass_edit)
+      end
     end
 
 		describe "POST mass_update" do  
@@ -88,7 +99,11 @@ describe GradesController do
     end
 
 		describe "GET group_edit" do  
-      pending
+      it "assigns params" do
+      	get :group_edit, { :id => @assignment.id, :group_id => @group.id}
+        assigns(:title).should eq("Grading #{@group.name}'s #{@assignment.name}")
+        response.should render_template(:group_edit)
+      end
     end
 
 		describe "POST group_update" do  
@@ -96,7 +111,11 @@ describe GradesController do
     end
 
 		describe "GET edit_status" do  
-      pending
+      it "displays the edit status page" do
+        get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id}
+        assigns(:title).should eq("#{@assignment.name} Grade Statuses")
+  			response.should render_template(:edit_status)
+      end
     end
 
 		describe "POST update_status" do  
@@ -104,7 +123,11 @@ describe GradesController do
     end
 
 		describe "GET import" do  
-      pending
+      it "displays the import page" do
+      	get :import, { :id => @assignment.id}
+      	assigns(:title).should eq("Import Grades for #{@assignment.name}")
+      	response.should render_template(:import)
+      end
     end
 
 		describe "GET username_import" do  
@@ -184,8 +207,7 @@ describe GradesController do
 
 	    describe "GET remove" do
 	      it "redirects to root path" do
-	      	pending
-	        get :remove, {:assignment_id => @assignment.id, :grade_id => @grade.id}
+	        get :remove, { :id => @assignment.id, :grade_id => @grade.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
@@ -199,8 +221,7 @@ describe GradesController do
 
 	    describe "GET mass_edit" do
 	      it "redirects to root path" do
-	      	pending
-	        get mass_grade_assignment_path(:id => @assignment.id)
+	        get :mass_edit, { :id => @assignment.id }
 	        response.should redirect_to(:root)
 	      end
 	    end
@@ -208,63 +229,56 @@ describe GradesController do
 	    describe "GET mass_update" do
 	      it "redirects to root path" do
 	      	pending
-	        get :mass_update, {:grade_id => @grade.id, :assignment_id => @assignment.id}
+	        get :mass_edit, { :assignment_id => @assignment.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
 
 	    describe "GET group_edit" do
 	      it "redirects to root path" do
-	      	pending
-	        get :group_edit, { :assignment_id => @assignment.id, :group_id => @group.id}
+	        get :group_edit, { :id => @assignment.id, :group_id => @group.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
 
 	    describe "GET group_update" do
 	      it "redirects to root path" do
-	      	pending
-	        get :group_update, {:grade_id => @grade.id, :assignment_id => @assignment.id}
+	        post :group_update, { :id => @assignment.id, :group_id => @group.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
 
-	    describe "POST edit_status" do
+	    describe "GET edit_status" do
 	      it "redirects to root path" do
-	      	pending
-	        post :edit_status, {:assignment_id => @assignment.id}
+	        get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
 
-	    describe "GET update_status" do
+	    describe "POST update_status" do
 	      it "redirects to root path" do
-	      	pending
-	        get :update_status, {:grade_id => @grade.id, :assignment_id => @assignment.id}
+	        post :update_status, {:grade_ids => @grade.id, :id => @assignment.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
 
 	    describe "GET import" do
 	      it "redirects to root path" do
-	      	pending
-	        get :import, { :assignment_id => @assignment.id}
+	      	get :import, { :id => @assignment.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
 
 	    describe "GET username_import" do
 	      it "redirects to root path" do
-	      	pending
-	        post :username_import, {:grade_id => @grade.id, :assignment_id => @assignment.id}
+	      	get :username_import, { :id => @assignment.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
 
 	    describe "GET email_import" do
 	      it "redirects to root path" do
-	      	pending
-	        post :email_import, {:grade_id => @grade.id, :assignment_id => @assignment.id}
+	        post :email_import, { :id => @assignment.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end

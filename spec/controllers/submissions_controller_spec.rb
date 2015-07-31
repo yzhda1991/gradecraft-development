@@ -81,18 +81,31 @@ describe SubmissionsController do
       @course = create(:course)
       @student = create(:user)
       @student.courses << @course
+      @assignment = create(:assignment, course: @course)
+
+      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: @assignment_type, student_id: @student.id, course_id: @course.id)
+
 
       login_user(@student)
       session[:course_id] = @course.id
       allow(EventLogger).to receive(:perform_async).and_return(true)
     end
-
-		describe "GET new" do  
-      pending
+		
+    describe "GET new" do
+      it "assigns a new submission as @submission" do
+        get :new, :assignment_id => @assignment.id
+        assigns(:submission).should be_a_new(Submission)
+        response.should render_template(:new)
+      end
     end
      
 		describe "GET edit" do  
-      pending
+      it "shows the edit submission form" do
+        get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
+        assigns(:title).should eq("Editing My Submission for #{@assignment.name}")
+        assigns(:submission).should eq(@submission)
+        response.should render_template(:edit)
+      end
     end
      
 		describe "GET create" do  
@@ -100,7 +113,12 @@ describe SubmissionsController do
     end
     
 		describe "GET show" do  
-      pending
+      it "shows the submission" do
+        get :show, {:id => @submission.id, :assignment_id => @assignment.id}
+        assigns(:title).should eq("My Submission for #{@assignment.name}")
+        assigns(:submission).should eq(@submission)
+        response.should render_template(:show)
+      end
     end
     
 		describe "GET update" do  
@@ -110,15 +128,24 @@ describe SubmissionsController do
 
 		describe "protected routes" do
       [
-        :index,
-        :destroy
+        :index
       ].each do |route|
           it "#{route} redirects to root" do
-          	pending
-            (get route).should redirect_to(:root)
+            (get route, {:assignment_id => "10"}).should redirect_to(:root)
           end
         end
     end
+
+    describe "protected routes requiring id in params" do
+      [
+        :destroy
+      ].each do |route|
+        it "#{route} redirects to root" do
+          (get route, {:assignment_id => 1, :id => "1"}).should redirect_to(:root)
+        end
+      end
+    end
+
 
 	end
 end

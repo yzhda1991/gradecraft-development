@@ -64,7 +64,11 @@ describe ChallengeGradesController do
     end
 
 		describe "GET mass_edit" do  
-      pending
+      it "assigns params" do
+        get :mass_edit, :challenge_id => @challenge.id
+        assigns(:title).should eq("Quick Grade #{@challenge.name}")
+        response.should render_template(:mass_edit)
+      end
     end
 
 		describe "POST create" do  
@@ -80,7 +84,11 @@ describe ChallengeGradesController do
     end
 
 		describe "GET edit_status" do 
-      pending
+      it "displays the edit_status page" do 
+        get :edit_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ]}
+        assigns(:title).should eq("#{@challenge.name} Grade Statuses")
+        response.should render_template(:edit_status)
+      end
     end
 
 		describe "POST update_status" do  
@@ -133,8 +141,7 @@ describe ChallengeGradesController do
 
       ].each do |route|
           it "#{route} redirects to root" do
-      			pending
-            (get route).should redirect_to(:root)
+            (get route, {:challenge_id => 2 }).should redirect_to(:root)
           end
         end
     end
@@ -152,8 +159,7 @@ describe ChallengeGradesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-      		pending
-          (get route, {:id => "1"}).should redirect_to(:root)
+          (get route, {:challenge_id => 2, :id => "1"}).should redirect_to(:root)
         end
       end
     end

@@ -49,7 +49,6 @@ describe StaffController do
         :index
       ].each do |route|
           it "#{route} redirects to root" do
-      			pending
             (get route).should redirect_to(:root)
           end
         end

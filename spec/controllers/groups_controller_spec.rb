@@ -132,7 +132,16 @@ describe GroupsController do
     end
 
 		describe "POST create" do
-      pending
+      it "creates the group with valid attributes"  do
+        pending
+        params = { name: "name" }
+        post :create, :group => params
+        expect{ post :create, :group => params }.to change(Group,:count).by(1)
+      end
+
+      it "redirects to new from with invalid attributes" do
+        expect{ post :create, group: attributes_for(:group, name: nil) }.to_not change(Group,:count)
+      end
 		end
 
 		describe "GET edit" do
@@ -145,7 +154,13 @@ describe GroupsController do
     end
 
 		describe "POST update" do 
-      pending
+      it "updates the group" do
+        params = { name: "new name" }
+        post :update, id: @group.id, :group => params
+        @group.reload
+        response.should redirect_to(group_path(@group))
+        @group.name.should eq("new name")
+      end
 		end
 
 		describe "GET show" do 

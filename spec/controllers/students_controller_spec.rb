@@ -20,6 +20,12 @@ describe StudentsController do
       @grade = create(:grade, assignment: @assignment, student: @student)
       @student.grades << @grade
       @grades = @student.grades
+      @badge = create(:badge)
+      @second_badge = create(:badge)
+      @course.badges << [@badge, @second_badge]
+      @earned_badge = create(:earned_badge, student_visible: true)
+      @student.earned_badges << @earned_badge
+      @earned_badges = @student.earned_badges
 
       login_user(@professor)
       session[:course_id] = @course.id
@@ -80,11 +86,11 @@ describe StudentsController do
       end
     end
 
-		describe "GET badges" do  
-      pending
+		describe "GET badges" do
       it "shows the student facing badge page" do
-        get :badges, :id => 10
-        assigns(:title).should eq("Badges")
+        pending
+        get :badges, :id => @student.id
+        assigns(:title).should eq("badges")
         response.should render_template(:badges)
       end
     end
@@ -105,7 +111,8 @@ describe StudentsController do
 
 		describe "GET grade_index" do  
       it "shows the grade index page" do
-        get :grade_index, :student_id => 10
+        get :grade_index, :student_id => @student.id
+        StudentsController.stub(:current_student).and_return(@student)
         response.should render_template(:grade_index)
       end
     end
@@ -183,12 +190,20 @@ describe StudentsController do
 
     describe "protected routes requiring id in params" do
       [
-        :show,
         :grade_index,
         :recalculate
       ].each do |route|
         it "#{route} redirects to root" do
-          pending
+          (get route, {:student_id => "10"}).should redirect_to(:root)
+        end
+      end
+    end
+
+    describe "protected routes requiring id in params" do
+      [
+        :show
+      ].each do |route|
+        it "#{route} redirects to root" do
           (get route, {:id => "10"}).should redirect_to(:root)
         end
       end

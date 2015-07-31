@@ -56,14 +56,12 @@ describe RubricsController do
         :design,
         :create, 
         :destroy,
-        :show,
         :update,
         :existing_metrics,
         :course_badges
       ].each do |route|
           it "#{route} redirects to root" do
-      			pending
-            (get route).should redirect_to(:root)
+            (get route, {:assignment_id => 1, :id => "1"}).should redirect_to(:root)
           end
         end
     end
