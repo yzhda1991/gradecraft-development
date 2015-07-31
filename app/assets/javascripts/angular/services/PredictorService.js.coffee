@@ -4,11 +4,13 @@
         pass: ""
         fail: ""
         badges: ""
+        challenges: ""
     }
     gradeLevels = {}
     assignments = []
     assignmentTypes = []
     badges = []
+    challenges = []
     icons = ["required","late","info"]
 
     getGradeLevels = ()->
@@ -38,8 +40,23 @@
           termFor.badges = data.term_for_badges
         )
 
+    getChallenges = ()->
+      $http.get('predictor_challenges').success( (data)->
+          angular.copy(data.challenges,challenges)
+          termFor.challenges = data.term_for_challenges
+        )
+
     postPredictedGrade = (assignment_id,value)->
       $http.post('/assignments/' + assignment_id + '/grades/predict_score', predicted_score: value).success(
+        (data)->
+          console.log(data);
+        ).error(
+        (data)->
+          console.log(data);
+        )
+
+    postPredictedChallenge = (challenge_id,value)->
+      $http.post('/challenges/' + challenge_id + '/predict_points', points_earned: value).success(
         (data)->
           console.log(data);
         ).error(
@@ -62,12 +79,15 @@
         getAssignmentTypes: getAssignmentTypes
         getAssignments: getAssignments
         getBadges: getBadges
+        getChallenges: getChallenges
         postPredictedGrade: postPredictedGrade
         postPredictedBadge: postPredictedBadge
+        postPredictedChallenge: postPredictedChallenge
         assignments: assignments
         assignmentTypes: assignmentTypes
         gradeLevels: gradeLevels
         badges: badges
+        challenges: challenges
         termFor: termFor
         icons: icons
     }

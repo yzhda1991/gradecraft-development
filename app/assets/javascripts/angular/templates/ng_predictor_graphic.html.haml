@@ -1,11 +1,16 @@
-%svg{"id" => "predictor-graphic", "width" => "90%", "height" => 100}
+%svg{"id" => "predictor-graphic", "width" => "90%", "height" => 120}
   %g{"id" => "svg-grade-levels"}
   %g{"id" => "svg-points"}
-    %rect#svg-graph-points-predicted{"x"=>"0", "y"=>"40", "ng-attr-width"=>"{{svgPredictedBarWidth()}}", "height"=>"20"}
-    %rect#svg-graph-points-earned{"x"=>"0", "y"=>"40", "ng-attr-width"=>"{{svgEarnedBarWidth()}}", "height"=>"20"}
+    %rect#svg-graph-points-predicted{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgPredictedBarWidth()}}", "height"=>"20"}
+    %rect#svg-graph-points-earned{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgEarnedBarWidth()}}", "height"=>"20"}
   %g{"id" => "svg-grade-level-text"}
-
-
+  %g{"id" => "svg-key"}
+    %rect#svg-graph-points-earned{"x"=>"10", "y"=>"100", "width"=>"20", "height"=>"20"}
+    %text{"x"=>"32", "y"=>"116", "font-family"=>"Verdana"}
+      Total Earned: {{allPointsEarned()}}
+    %rect#svg-graph-points-predicted{"x"=>"210", "y"=>"100", "width"=>"20", "height"=>"20"}
+    %text{"x"=>"232", "y"=>"116", "font-family"=>"Verdana"}
+      Total Predicted: {{allPointsPredicted()}}
 
 
 

@@ -44,7 +44,7 @@ $predictor-font-size-4 : .85rem
 
 // ARTICLES
 
-article.predictor-assignment
+article.predictor-article
   display: block
   margin-bottom: $predictor-font-size-3
   border: 1px solid $color-layout-blue-0
@@ -106,7 +106,7 @@ article.predictor-assignment
 .predictor-article-main
   padding-top: 8px
 
-article.predictor-assignment.status-graded
+article.predictor-article.status-graded
   background-color: $color-layout-blue-4
   border: 1px solid $color-layout-blue-1
   border-bottom: .25rem solid $color-layout-blue-1
@@ -115,12 +115,12 @@ article.predictor-assignment.status-graded
   .predictor-article-icons
     background-color: $color-layout-blue-3
 
-.assignment-graded .grade, .pass-fail-prediction, .badge-complete .value
+.article-graded .grade, .pass-fail-prediction, .badge-complete .value
   text-align: center
   font-size: $predictor-font-size-1
   color: $color-layout-blue-0
 
-.assignment-predicted .grade
+.article-predicted .grade
   text-align: center
   font-size: $predictor-font-size-2
   color: $color-layout-blue-0
@@ -132,7 +132,7 @@ article.predictor-assignment.status-graded
 
 /* Slider Widget */
 
-article.predictor-assignment
+article.predictor-article
   .slider.ui-widget-content
     background: $color-layout-blue-2
     border: none
@@ -180,7 +180,8 @@ article.predictor-assignment
 .predictor-counter-switch
   .switch-wrapper
     float: left
-    width: 50%
+    width: 25%
+    padding-top: 6px
   .switch-socket
     width: 20px
     height: 40px
@@ -208,6 +209,7 @@ article.predictor-assignment
     border-top: 18px solid $color-layout-blue-1
   .time-earned-prediction
     font-size: $predictor-font-size-2
+    padding: 10px 0 0 4px
   .badge-total-prediction
     font-size: $predictor-font-size-1
     clear: both
@@ -215,10 +217,10 @@ article.predictor-assignment
 
 // ANIMATIONS
 
-.collapsable .predictor-assignment
+.collapsable .predictor-article
   @include transition(all, .5s, ease-out)
 
-.collapsable.collapsed .predictor-assignment
+.collapsable.collapsed .predictor-article
   overflow: hidden
   height: 0
   margin-top: 0
@@ -230,22 +232,22 @@ article.predictor-assignment
 
 // small
 @media (max-width: $media-small-max)
-  article.predictor-assignment
+  article.predictor-article
     width: 100%
 
 // medium
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
-  article.predictor-assignment
+  article.predictor-article
     width: 32%
 
 // large
 @media (min-width: $media-medium-max) and (max-width: $media-large-max)
-  article.predictor-assignment
+  article.predictor-article
     width: 19%
 
 // x-large
 // @media (min-width: $media-large-max) and (max-width: $media-xlarge-max)
-//   article.predictor-assignment
+//   article.predictor-article
 //     width: 14%
 
 

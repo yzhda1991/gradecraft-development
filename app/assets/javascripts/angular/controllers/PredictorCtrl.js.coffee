@@ -6,7 +6,8 @@
     promises = [PredictorService.getGradeLevels(),
                 PredictorService.getAssignments(),
                 PredictorService.getAssignmentTypes(),
-                PredictorService.getBadges()]
+                PredictorService.getBadges(),
+                PredictorService.getChallenges()]
     return $q.all(promises)
 
 
@@ -18,13 +19,14 @@
   $scope.assignmentTypes = PredictorService.assignmentTypes
   $scope.gradeLevels = PredictorService.gradeLevels
   $scope.badges = PredictorService.badges
+  $scope.challenges = PredictorService.challenges
   $scope.icons = PredictorService.icons
   $scope.termFor = PredictorService.termFor
 
   $scope.passFailPrediction = (grade)->
     prediction = if grade.predicted_score > 0 then PredictorService.termFor.pass else PredictorService.termFor.fail
 
-  $scope.slider = (assignment)->
+  $scope.slider = (article)->
     {
       range: "min"
 
@@ -32,22 +34,32 @@
 
       slide: (event, ui)->
         slider = ui.handle.parentElement
-
-        if $scope.hasLevels(assignment)
-          closest = $scope.closestScoreLevel(assignment.score_levels,ui.value)
-          if $scope.inSnapRange(assignment,closest,ui.value)
+        articleType = ui.handle.parentElement.dataset.articleType
+        if $scope.hasLevels(article)
+          closest = $scope.closestScoreLevel(article.score_levels,ui.value)
+          if $scope.inSnapRange(article,closest,ui.value)
             event.preventDefault()
             event.stopPropagation()
             angular.element(ui.handle.parentElement).slider("value", closest.value)
-            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(assignment.grade.point_total))
+            if articleType == 'assignment'
+              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.grade.point_total))
+            else
+              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
           else
-            angular.element("#assignment-" + assignment.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(assignment.grade.point_total))
-
+            if articleType == 'assignment'
+              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.grade.point_total))
+            else
+              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
       stop: (event, ui)->
-        assignment_id = ui.handle.parentElement.dataset.id
+        articleType = ui.handle.parentElement.dataset.articleType
+        article_id = ui.handle.parentElement.dataset.id
         value = ui.value
-        assignment.grade.predicted_score = value
-        PredictorService.postPredictedGrade(assignment_id,value)
+        if articleType == 'assignment'
+          article.grade.predicted_score = value
+          PredictorService.postPredictedGrade(article_id,value)
+        else
+          article.prediction.points_earned = value
+          PredictorService.postPredictedChallenge(article_id,value)
     }
 
   # TODO: update with new is_graded logic!
@@ -59,10 +71,18 @@
     assignment.score_levels.length > 0
 
   # Assignments with Score Levels: Returns the Level Name if predicted score in range
-  $scope.levelNameForScore = (assignment)->
+  $scope.levelNameForAssignmentScore = (assignment)->
     if $scope.hasLevels(assignment)
       closest = $scope.closestScoreLevel(assignment.score_levels,assignment.grade.predicted_score)
       if $scope.inSnapRange(assignment,closest,assignment.grade.predicted_score)
+        return closest.name
+    return ""
+
+  # Assignments with Score Levels: Returns the Level Name if predicted score in range
+  $scope.levelNameForChallengeScore = (challenge)->
+    if $scope.hasLevels(challenge)
+      closest = $scope.closestScoreLevel(challenge.score_levels,challenge.prediction.points_earned)
+      if $scope.inSnapRange(challenge,closest,challenge.prediction.points_earned)
         return closest.name
     return ""
 
@@ -108,10 +128,21 @@
       )
     total
 
+  $scope.challengesPointTotal = ()->
+    total = 0
+    _.each($scope.challenges, (challenge)->
+        if challenge.grade.score > 0
+          total += challenge.grade.score
+        else
+          total += challenge.prediction.points_earned
+      )
+    total
+
   $scope.allPointsPredicted = ()->
     total = 0
     total += $scope.assignmentsPointTotal($scope.assignments)
     total += $scope.badgesPointTotal()
+    total += $scope.challengesPointTotal()
     total
 
   $scope.allPointsEarned = ()->
@@ -131,7 +162,7 @@
     else
       return false
 
-  $scope.assignmentDueInFuture = (assignment)->
+  $scope.dueInFuture = (assignment)->
     if assignment.due_at != null && Date.parse(assignment.due_at) >= Date.now()
       return true
     else
@@ -175,7 +206,7 @@
               "grade_scheme-label-" + gse.low_range)
             .style("visibility", "hidden")
             .attr("transform", (gse)->
-              "translate(" + scale(gse.low_range) + padding + "," + 50 + ")")
+              "translate(" + scale(gse.low_range) + padding + "," + 5 + ")")
     txt.append("rect")
       .attr("width", 150)
       .attr("height", 20)
@@ -188,7 +219,7 @@
       .attr("fill", "#FFFFFF")
     d3.select("svg").append("g")
       .attr("class": "grade-point-axis")
-      .attr("transform": "translate(" + padding + "," + (stats.height - 20) + ")")
+      .attr("transform": "translate(" + padding + "," + (stats.height - 55) + ")")
       .call(axis)
 
   $scope.svgEarnedBarWidth = ()->
