@@ -59,9 +59,20 @@ describe SubmissionsController do
       end
     end
     
-		describe "GET create" do  
+    describe "POST create" do
       pending
+      it "creates the submission with valid attributes"  do
+        params = attributes_for(:submission)
+        params[:student_id] = @student.id
+        params[:assignment_id] = @assignment.id
+        expect{ post :create, :assignment_id => @assignment.id, :submission => params }.to change(Submission,:count).by(1)
+      end
+
+      it "doesn't create submissions with invalid attributes" do
+        expect{ post :create, :assignment_id => @assignment.id, submission: attributes_for(:submission, assignment_id: @assignment.id, student_id: nil) }.to_not change(Submission,:count)
+      end
     end
+
     
 		describe "GET update" do  
       pending
@@ -108,8 +119,18 @@ describe SubmissionsController do
       end
     end
      
-		describe "GET create" do  
-      pending
+		describe "POST create" do
+      it "creates the submission with valid attributes"  do
+        pending
+        params = attributes_for(:submission)
+        params[:student_id] = @student.id
+        params[:assignment_id] = @assignment.id
+        expect{ post :create, :assignment_id => @assignment.id, :submission => params }.to change(Submission,:count).by(1)
+      end
+
+      it "doesn't create submissions with invalid attributes" do
+        expect{ post :create, :assignment_id => @assignment.id, submission: attributes_for(:submission, assignment_id: @assignment.id, student_id: nil) }.to_not change(Submission,:count)
+      end
     end
     
 		describe "GET show" do  

@@ -19,9 +19,9 @@ describe ProposalsController do
       session[:course_id] = @course.id
       allow(EventLogger).to receive(:perform_async).and_return(true)
     end
-		
-		describe "GET create" do  
-      pending
+
+    describe "POST create" do
+
     end
 
 		describe "POST update" do  

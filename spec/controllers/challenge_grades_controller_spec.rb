@@ -71,8 +71,17 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "POST create" do  
-      pending
+    describe "POST create" do 
+      it "creates the challenge grade with valid attributes"  do
+        params = attributes_for(:challenge_grade)
+        params[:challenge_id] = @challenge.id
+        params[:team_id] = @team.id
+        expect{ post :create, :challenge_id => @challenge.id, :challenge_grade => params }.to change(ChallengeGrade,:count).by(1)
+      end
+
+      it "redirects to new form with invalid attributes" do
+        expect{ post :create, :challenge_id => @challenge.id, challenge_grade: attributes_for(:challenge_grade, team_id: nil) }.to_not change(ChallengeGrade,:count)
+      end
     end
 
 		describe "POST update" do  

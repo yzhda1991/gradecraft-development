@@ -66,13 +66,14 @@ describe EarnedBadgesController do
     describe "POST create" do
       it "creates the earned badge with valid attributes"  do
         pending
-        params = { :id => @earned_badge.id }
+        params = attributes_for(:earned_badge)
+        params[:student] = @student.id
+        params[:badge_id] = @badge.id
         expect{ post :create, :badge_id => @badge.id, :earned_badge => params }.to change(EarnedBadge,:count).by(1)
       end
 
       it "doesn't create earned badges with invalid attributes" do
-        pending
-        expect{ post :create, earned_badge: attributes_for(:earned_badge, badge_id: @badge.id, student_id: nil) }.to_not change(EarnedBadge,:count)
+        expect{ post :create, :badge_id => @badge.id, earned_badge: attributes_for(:earned_badge, badge_id: @badge.id, student_id: nil) }.to_not change(EarnedBadge,:count)
       end
     end
 
