@@ -190,7 +190,7 @@ class User < ActiveRecord::Base
 
   def self.graded_students_in_course(course_id)
     User
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, course_memberships.score as cached_score")
+      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score")
       .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
       .where("course_memberships.course_id = ?", course_id)
       .where("course_memberships.auditing = ?", false)
