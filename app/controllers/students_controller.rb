@@ -3,7 +3,7 @@ class StudentsController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus, :autocomplete_student_name]
+  before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus ]
 
   #Lists all students in the course, broken out by those being graded and auditors
   def index
@@ -129,7 +129,6 @@ class StudentsController < ApplicationController
 
   #All Admins to see all of one student's grades at once, proof for duplicates
   def grade_index
-    self.current_student = current_course.students.where(id: params[:id]).first
     @grades = current_student.grades.where(:course_id => current_course)
   end
 
@@ -138,7 +137,7 @@ class StudentsController < ApplicationController
     @student = current_course.students.find_by(id: params[:student_id])
     Resque.enqueue(ScoreRecalculator, @student.id, current_course.id)
     flash[:notice]="Your request to recalculate #{@student.name}'s grade is being processed. Check back shortly!"
-    redirect_to session[:return_to]
+    redirect_to session[:return_to] || student_path(@student)
   end
 
   protected

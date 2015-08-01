@@ -106,4 +106,36 @@ describe EventsController do
 
   end
 
+
+  context "as student" do 
+
+    describe "protected routes" do
+      [
+        :index,
+        :new,
+        :create
+
+      ].each do |route|
+          it "#{route} redirects to root" do
+            (get route).should redirect_to(:root)
+          end
+        end
+    end
+
+
+    describe "protected routes requiring id in params" do
+      [
+        :edit,
+        :show,
+        :update,
+        :destroy
+      ].each do |route|
+        it "#{route} redirects to root" do
+          (get route, {:id => "1"}).should redirect_to(:root)
+        end
+      end
+    end
+
+  end
+
 end

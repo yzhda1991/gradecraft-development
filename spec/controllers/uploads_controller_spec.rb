@@ -4,10 +4,41 @@ require 'spec_helper'
 describe UploadsController do
 
 	context "as a professor" do 
-		describe "GET remove"
+		
+    before do
+      @course = create(:course)
+      @professor = create(:user)
+      @professor.courses << @course
+      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+      @student = create(:user)
+      @student.courses << @course
+
+      login_user(@professor)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
+
+		describe "GET remove" do 
+      pending
+    end
+
 	end
 
 	context "as a student" do
-		describe "GET remove"
+
+    before do
+      @course = create(:course)
+      @student = create(:user)
+      @student.courses << @course
+
+      login_user(@student)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
+		
+    describe "GET remove" do 
+      pending
+    end
+
 	end
 end

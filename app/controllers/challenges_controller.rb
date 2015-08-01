@@ -66,7 +66,7 @@ class ChallengesController < ApplicationController
 
     respond_to do |format|
       if @challenge.update_attributes(params[:challenge])
-        format.html { redirect_to @challenge, notice: "Challenge #{@challenge.name} successfully updated" }
+        format.html { redirect_to challenges_path, notice: "Challenge #{@challenge.name} successfully updated" }
         format.json { head :ok }
       else
         # TODO: refactor, see submissions_controller

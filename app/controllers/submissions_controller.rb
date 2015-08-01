@@ -14,7 +14,7 @@ class SubmissionsController < ApplicationController
   def new
     session[:return_to] = request.referer
     @assignment = current_course.assignments.find(params[:assignment_id])
-    @title = "Submit #{@assignment.name} (#{points @assignment.point_total} points)"
+    @title = "Submit #{@assignment.name} (#{@assignment.point_total} points)"
     if current_user_is_staff?
       if @assignment.has_groups?
         @group = current_course.groups.find(params[:group_id])
@@ -72,26 +72,22 @@ class SubmissionsController < ApplicationController
       end
     end
 
-    respond_to do |format|
-      if @submission.save
-        if current_user_is_student?
-          format.html { redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "#{@assignment.name} was successfully submitted." }
-          format.json { render json: @assignment, status: :created, location: @assignment }
-        else
-          format.html { redirect_to session.delete(:return_to), notice: "#{@assignment.name} was successfully submitted." }
-        end
-        if @assignment.is_individual? && current_user_is_student?
-          user = { name: "#{@submission.student.first_name}", email: "#{@submission.student.email}" }
-          submission = { name: "#{@submission.assignment.name}", time: "#{@submission.created_at}" }
-          course = { courseno: "#{current_course.courseno}",  }
-          NotificationMailer.successful_submission(@submission.id).deliver
-        end
-      elsif @submission.errors[:link].any?
-        format.html { redirect_to new_assignment_submission_path(@assignment, @submission), notice: "Please provide a valid link for #{@assignment.name} submissions." }
+    if @submission.save
+      if current_user_is_student?
+        redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "#{@assignment.name} was successfully submitted."
       else
-        format.html { redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} was not successfully submitted! Please try again." }
-        format.json { render json: @assignment.errors, status: :unprocessable_entity }
+        redirect_to (session.delete(:return_to) || assignment_path(@assignment)), notice: "#{@assignment.name} was successfully submitted."
       end
+      if @assignment.is_individual? && current_user_is_student?
+        user = { name: "#{@submission.student.first_name}", email: "#{@submission.student.email}" }
+        submission = { name: "#{@submission.assignment.name}", time: "#{@submission.created_at}" }
+        course = { courseno: "#{current_course.courseno}",  }
+        NotificationMailer.successful_submission(@submission.id).deliver
+      end
+    elsif @submission.errors[:link].any?
+      redirect_to new_assignment_submission_path(@assignment, @submission), notice: "Please provide a valid link for #{@assignment.name} submissions."
+    else
+      redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} was not successfully submitted! Please try again."
     end
   end
 

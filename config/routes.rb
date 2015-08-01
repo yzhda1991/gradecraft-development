@@ -73,12 +73,12 @@ GradeCraft::Application.routes.draw do
       scope 'grades', as: :grades, controller: :grades do
         post :edit_status
         put :update_status
-        post :self_log
-        post :predict_score
         get :import
         post :email_import
         post :username_import
         post :name_import
+        post :self_log
+        post :predict_score
         get :remove
       end
     end
@@ -104,8 +104,7 @@ GradeCraft::Application.routes.draw do
 
   resources :tiers
   resources :graded_metrics
-
-  resources :metric_badges
+  
   resources :tier_badges
 
   #3. Assignment Types
@@ -130,7 +129,6 @@ GradeCraft::Application.routes.draw do
   resources :badges do
     resources :tasks
     resources :earned_badges do
-      post :toggle_shared
       collection do
         get :chart
       end
@@ -277,11 +275,12 @@ GradeCraft::Application.routes.draw do
       get :final_grades
       get :class_badges
     end
-    resources :student_academic_histories
   end
   resources :staff, only: [:index, :show]
   resources :user_sessions
   resources :password_resets
+
+  resources :student_academic_histories
 
 
   get 'calendar' => 'students#calendar'

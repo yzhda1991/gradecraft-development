@@ -5,33 +5,147 @@ describe ChallengeGradesController do
 
 	context "as professor" do 
 
-		describe "GET index"
+    before do
+      @course = create(:course)
+      @professor = create(:user)
+      @professor.courses << @course
+      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+      @challenge = create(:challenge, course: @course)
+      @course.challenges << @challenge
+      @challenges = @course.challenges
+      @student = create(:user)
+      @student.courses << @course
+      @team = create(:team, course: @course)
+      @team.students << @student
+      @teams = @course.teams
+      @challenge_grade = create(:challenge_grade, team: @team, challenge: @challenge)
 
-		describe "GET show"
+      login_user(@professor)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
 
-		describe "GET new"
+		describe "GET index" do 
+      it "redirects the user to the challenge" do
+        get :index, :challenge_id => @challenge
+        assigns(:challenge).should eq(@challenge)
+        response.should redirect_to(@challenge)
+      end
+    end
 
-		describe "GET edit"
+		describe "GET show" do 
+      it "shows the challenge grade" do
+        get :show, {:id => @challenge_grade, :challenge_id => @challenge}
+        assigns(:challenge).should eq(@challenge)
+        assigns(:challenge_grade).should eq(@challenge_grade)
+        assigns(:team).should eq(@team)
+        response.should render_template(:show)
+      end
+    end
 
-		describe "GET mass_edit"
+		describe "GET new" do  
+      it "shows the new challenge grade form" do
+        get :new, {:challenge_id => @challenge, :team_id => @team}
+        assigns(:challenge).should eq(@challenge)
+        assigns(:team).should eq(@team)
+        assigns(:teams).should eq([@team])
+        response.should render_template(:new)
+      end
+    end
 
-		describe "POST create"
+		describe "GET edit" do  
+      it "shows the edit challenge grade form" do
+        get :edit, {:id => @challenge_grade, :challenge_id => @challenge}
+        assigns(:challenge).should eq(@challenge)
+        assigns(:challenge_grade).should eq(@challenge_grade)
+        assigns(:teams).should eq([@team])
+        response.should render_template(:edit)
+      end
+    end
 
-		describe "POST update"
+    describe "POST create" do 
+      it "creates the challenge grade with valid attributes"  do
+        params = attributes_for(:challenge_grade)
+        params[:challenge_id] = @challenge.id
+        params[:team_id] = @team.id
+        expect{ post :create, :challenge_id => @challenge.id, :challenge_grade => params }.to change(ChallengeGrade,:count).by(1)
+      end
 
-		describe "POST mass_update"
+      it "redirects to new form with invalid attributes" do
+        expect{ post :create, :challenge_id => @challenge.id, challenge_grade: attributes_for(:challenge_grade, team_id: nil) }.to_not change(ChallengeGrade,:count)
+      end
+    end
 
-		describe "GET edit_status"
+		describe "POST update" do  
+      it "updates the challenge grade" do
+        params = { score: 100000 }
+        post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
+        @challenge_grade.reload
+        response.should redirect_to(challenge_path(@challenge))
+        @challenge_grade.score.should eq(100000)
+      end
+    end
 
-		describe "POST update_status"
+    describe "GET mass_edit" do  
+      it "assigns params" do
+        get :mass_edit, :challenge_id => @challenge.id
+        assigns(:title).should eq("Quick Grade #{@challenge.name}")
+        response.should render_template(:mass_edit)
+      end
+    end
 
-		describe "GET destroy"
+		describe "POST mass_update" do  
+      pending
+    end
+
+		describe "GET edit_status" do 
+      it "displays the edit_status page" do 
+        get :edit_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ]}
+        assigns(:title).should eq("#{@challenge.name} Grade Statuses")
+        response.should render_template(:edit_status)
+      end
+    end
+
+		describe "POST update_status" do  
+      pending
+    end
+
+		describe "GET destroy" do
+      it "destroys the challenge grade" do
+        expect{ get :destroy, {:id => @challenge_grade, :challenge_id => @challenge.id } }.to change(ChallengeGrade,:count).by(-1)
+      end
+    end
 
 	end
 
 	context "as student" do 
 
-		describe "GET show"
+    before do
+      @course = create(:course)
+      @challenge = create(:challenge, course: @course)
+      @course.challenges << @challenge
+      @challenges = @course.challenges
+      @student = create(:user)
+      @student.courses << @course
+      @team = create(:team, course: @course)
+      @team.students << @student
+      @teams = @course.teams
+      @challenge_grade = create(:challenge_grade, team: @team, challenge: @challenge)
+
+      login_user(@student)
+      session[:course_id] = @course.id
+      allow(EventLogger).to receive(:perform_async).and_return(true)
+    end
+
+		describe "GET show" do 
+      it "shows the challenge grade" do
+        get :show, {:id => @challenge_grade, :challenge_id => @challenge}
+        assigns(:challenge).should eq(@challenge)
+        assigns(:challenge_grade).should eq(@challenge_grade)
+        assigns(:team).should eq(@team)
+        response.should render_template(:show)
+      end
+    end
 
 		describe "protected routes" do
 			
@@ -42,8 +156,7 @@ describe ChallengeGradesController do
 
       ].each do |route|
           it "#{route} redirects to root" do
-      			pending
-            (get route).should redirect_to(:root)
+            (get route, {:challenge_id => 2 }).should redirect_to(:root)
           end
         end
     end
@@ -61,8 +174,7 @@ describe ChallengeGradesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-      		pending
-          (get route, {:id => "1"}).should redirect_to(:root)
+          (get route, {:challenge_id => 2, :id => "1"}).should redirect_to(:root)
         end
       end
     end

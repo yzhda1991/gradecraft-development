@@ -8,18 +8,12 @@ class RubricGradesController < ApplicationController
     @rubric_grade = RubricGrade.new params[:rubric_grade]
   end
 
-  def edit
-  end
-
   def create
     @rubric_grade = RubricGrade.create params[:rubric_grade]
   end
 
   def destroy
     @rubric_grade.destroy
-  end
-
-  def show
   end
 
   def update

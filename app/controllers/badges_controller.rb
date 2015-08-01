@@ -1,12 +1,10 @@
 class BadgesController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:index]
+  before_filter :ensure_staff?
 
   def index
-    if current_user_is_student?
-      redirect_to my_badges_path
-    end
     @title = "#{term_for :badges}"
+    @badges = current_course.badges
   end
 
   def show
@@ -79,7 +77,7 @@ class BadgesController < ApplicationController
     respond_to do |format|
 
       if @badge.update_attributes(params[:badge])
-        format.html { redirect_to @badge, notice: "#{@badge.name} #{term_for :badge} successfully updated" }
+        format.html { redirect_to badges_path, notice: "#{@badge.name} #{term_for :badge} successfully updated" }
         format.json { head :ok }
       else
         # TODO: refactor, see submissions_controller

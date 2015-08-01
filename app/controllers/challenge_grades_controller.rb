@@ -3,9 +3,8 @@ class ChallengeGradesController < ApplicationController
   before_filter :ensure_staff?, :except => [:show]
 
   def index
-    @title = "View All #{term_for :challenge} Grades"
     @challenge = current_course.challenges.find(params[:challenge_id])
-    @challenge_grades = current_course.challenge_grades
+    redirect_to @challenge
   end
 
   def show
@@ -99,11 +98,12 @@ class ChallengeGradesController < ApplicationController
   end
 
   def destroy
-    @challenge_grades = current_course.challenge_grades.find(params[:id])
-    @challenge_grades.destroy
+    @challenge_grade = current_course.challenge_grades.find(params[:id])
+    @challenge = current_course.challenges.find(@challenge_grade.challenge_id)
+    @challenge_grade.destroy
 
     respond_to do |format|
-      format.html { redirect_to challenge_path(@challenge_grades.challenge) }
+      format.html { redirect_to challenge_path(@challenge) }
       format.json { head :ok }
     end
   end

@@ -61,7 +61,7 @@ class AssignmentTypesController < ApplicationController
         format.json { render json: @assignment_type.errors }
       else
         if @assignment_type.save
-          format.html { redirect_to assignments_path, notice: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" }
+          format.html { redirect_to assignment_types_path, notice: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" }
         else
           format.html { render action: "new" }
           format.json { render json: @assignment_type.errors }

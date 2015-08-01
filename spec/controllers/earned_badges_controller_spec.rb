@@ -4,13 +4,9 @@ describe EarnedBadgesController do
 
   context "as a professor" do
     before do
-      @course = create(:course_accepting_groups)
+      @course = create(:course)
       @badge = create(:badge)
       @course.badges << @badge
-
-      @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
 
       @student = create(:user)
       @student.courses << @course
@@ -18,12 +14,78 @@ describe EarnedBadgesController do
       @team = create(:team, course: @course)
       @team.students << @student
 
+      @earned_badge = create(:earned_badge, badge: @badge, student: @student)
+
+      @professor = create(:user)
+      @professor.courses << @course
+      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+
+
       login_user(@professor)
       session[:course_id] = @course.id
       allow(EventLogger).to receive(:perform_async).and_return(true)
     end
 
     let(:valid_session) { { "current_course" => @course} }
+
+    
+    describe "GET index" do 
+      it "redirects to the badge for the earned badge" do
+        get :index, :badge_id => @badge.id
+        response.should redirect_to(badge_path(@badge))
+      end
+    end
+
+    describe "GET show" do 
+      it "returns the earned badge show page" do
+        get :show, { :id => @earned_badge.id, :badge_id => @badge.id }
+        assigns(:title).should eq("#{@student.name}'s #{@badge.name} badge")
+        assigns(:earned_badge).should eq(@earned_badge)
+        response.should render_template(:show)
+      end
+    end
+
+    describe "GET new" do 
+      it "display the create form" do
+        get :new, :badge_id => @badge.id
+        assigns(:title).should eq("Award #{@badge.name}")
+        assigns(:earned_badge).should be_a_new(EarnedBadge)
+        response.should render_template(:new)
+      end
+    end
+
+    describe "GET edit" do
+      it "display the edit form" do
+        get :edit, {:id => @earned_badge.id, :badge_id => @badge.id}
+        assigns(:title).should eq("Editing Awarded #{@badge.name}")
+        assigns(:earned_badge).should eq(@earned_badge)
+        response.should render_template(:edit)
+      end
+    end
+
+    describe "POST create" do
+      it "creates the earned badge with valid attributes"  do
+        pending
+        params = attributes_for(:earned_badge)
+        params[:student] = @student.id
+        params[:badge_id] = @badge.id
+        expect{ post :create, :badge_id => @badge.id, :earned_badge => params }.to change(EarnedBadge,:count).by(1)
+      end
+
+      it "doesn't create earned badges with invalid attributes" do
+        expect{ post :create, :badge_id => @badge.id, earned_badge: attributes_for(:earned_badge, badge_id: @badge.id, student_id: nil) }.to_not change(EarnedBadge,:count)
+      end
+    end
+
+    describe "POST update" do
+      it "updates the earned badge" do
+        params = { feedback: "more feedback" }
+        post :update, { id: @earned_badge.id, :badge_id => @badge.id, :earned_badge => params }
+        @earned_badge.reload
+        @earned_badge.feedback.should eq("more feedback")
+        response.should redirect_to(badge_path(@badge))
+      end
+    end
 
     describe "GET mass_edit" do
       it "assigns params" do
@@ -35,7 +97,34 @@ describe EarnedBadgesController do
       end
 
       describe "with teams" do
-        pending
+        it "assigns team and students for team" do
+          # we verify only students on team assigned as @students
+          other_student = create(:user)
+          other_student.courses << @course
+
+          team = create(:team, course: @course)
+          team.students << @student
+
+          get :mass_edit, {:id => @badge.id, :team_id => team.id}
+          assigns(:team).should eq(team)
+          assigns(:students).should eq([@student])
+        end
+      end
+
+      describe "with no team id in params" do
+        it "assigns all students if no team supplied" do
+          # we verify non-team members also assigned as @students
+          other_student = create(:user)
+          other_student.courses << @course
+
+          team = create(:team, course: @course)
+          team.students << @student
+
+          get :mass_edit, :id => @badge.id
+          assigns(:students).should include(@student)
+          assigns(:students).should include(other_student)
+        end
+
       end
 
       describe "when badges can be earned multiple times" do
@@ -56,5 +145,44 @@ describe EarnedBadgesController do
         end
       end
     end
+
+
+    describe "GET destroy" do
+      it "destroys the earned badge" do
+        expect{ get :destroy, { :id => @earned_badge, :badge_id => @badge.id } }.to change(EarnedBadge,:count).by(-1)
+      end
+    end
+  end
+
+
+  context "as student" do 
+
+    describe "protected routes" do
+      [
+        :index,
+        :new,
+        :create
+
+      ].each do |route|
+          it "#{route} redirects to root" do
+            (get route, {:badge_id => 1}).should redirect_to(:root)
+          end
+        end
+    end
+
+
+    describe "protected routes requiring id in params" do
+      [
+        :edit,
+        :show,
+        :update,
+        :destroy
+      ].each do |route|
+        it "#{route} redirects to root" do
+          (get route, {:badge_id => 1, :id => "1"}).should redirect_to(:root)
+        end
+      end
+    end
+
   end
 end
