@@ -67,7 +67,12 @@ describe UsersController do
     
     
 		describe "GET edit_profile" do  
-      pending
+      it "renders the edit profile user form" do
+        get :edit_profile
+        assigns(:title).should eq("Edit My Profile")
+        assigns(:user).should eq(@professor)
+        response.should render_template(:edit_profile)
+      end
     end
     
 		describe "GET update_profile" do  
@@ -97,7 +102,12 @@ describe UsersController do
     end
 
 		describe "GET edit_profile" do  
-      pending
+      it "renders the edit profile user form" do
+        get :edit_profile
+        assigns(:title).should eq("Edit My Profile")
+        assigns(:user).should eq(@student)
+        response.should render_template(:edit_profile)
+      end
     end
     
 		describe "GET update_profile" do  

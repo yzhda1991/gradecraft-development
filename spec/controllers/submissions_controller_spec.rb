@@ -18,7 +18,7 @@ describe SubmissionsController do
       @team.students << @student
       @teams = @course.teams
 
-      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: @assignment_type, student_id: @student.id, course_id: @course.id)
+      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
 
       login_user(@professor)
       session[:course_id] = @course.id
@@ -60,22 +60,23 @@ describe SubmissionsController do
     end
     
     describe "POST create" do
-      pending
       it "creates the submission with valid attributes"  do
         params = attributes_for(:submission)
-        params[:student_id] = @student.id
         params[:assignment_id] = @assignment.id
         expect{ post :create, :assignment_id => @assignment.id, :submission => params }.to change(Submission,:count).by(1)
       end
-
-      it "doesn't create submissions with invalid attributes" do
-        expect{ post :create, :assignment_id => @assignment.id, submission: attributes_for(:submission, assignment_id: @assignment.id, student_id: nil) }.to_not change(Submission,:count)
-      end
     end
 
-    
-		describe "GET update" do  
-      pending
+		describe "POST update" do
+      it "updates the submission successfully"  do
+        params = attributes_for(:submission)
+        params[:assignment_id] = @assignment.id
+        params[:text_comment] = "Ausgezeichnet"
+        post :update, :assignment_id => @assignment.id, :id => @submission, :submission => params
+        @submission.reload
+        response.should redirect_to(assignment_submission_path(@assignment, @submission))
+        @submission.text_comment.should eq("Ausgezeichnet")
+      end
     end
     
     describe "GET destroy" do
@@ -94,7 +95,7 @@ describe SubmissionsController do
       @student.courses << @course
       @assignment = create(:assignment, course: @course)
 
-      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: @assignment_type, student_id: @student.id, course_id: @course.id)
+      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
 
 
       login_user(@student)
@@ -119,17 +120,13 @@ describe SubmissionsController do
       end
     end
      
-		describe "POST create" do
+    describe "POST create" do
       it "creates the submission with valid attributes"  do
         pending
         params = attributes_for(:submission)
-        params[:student_id] = @student.id
         params[:assignment_id] = @assignment.id
+        SubmissionsController.stub(:student).and_return(@student)
         expect{ post :create, :assignment_id => @assignment.id, :submission => params }.to change(Submission,:count).by(1)
-      end
-
-      it "doesn't create submissions with invalid attributes" do
-        expect{ post :create, :assignment_id => @assignment.id, submission: attributes_for(:submission, assignment_id: @assignment.id, student_id: nil) }.to_not change(Submission,:count)
       end
     end
     
@@ -143,7 +140,15 @@ describe SubmissionsController do
     end
     
 		describe "GET update" do  
-      pending
+      it "updates the submission successfully"  do
+        params = attributes_for(:submission)
+        params[:assignment_id] = @assignment.id
+        params[:text_comment] = "Ausgezeichnet"
+        post :update, :assignment_id => @assignment.id, :id => @submission, :submission => params
+        @submission.reload
+        response.should redirect_to(assignment_path(@assignment, :anchor => "fndtn-tabt3"))
+        @submission.text_comment.should eq("Ausgezeichnet")
+      end
     end
     
 

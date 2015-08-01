@@ -138,8 +138,7 @@ describe EarnedBadgesController do
 
       ].each do |route|
           it "#{route} redirects to root" do
-            pending
-            (get route).should redirect_to(:root)
+            (get route, {:badge_id => 1}).should redirect_to(:root)
           end
         end
     end

@@ -33,6 +33,7 @@ class Submission < ActiveRecord::Base
   validates_uniqueness_of :task, :scope => :student, :allow_nil => true
   validates_uniqueness_of :assignment_id, { :scope => :student_id }
   validates :link, :format => URI::regexp(%w(http https)) , :allow_blank => true
+  validates :assignment, presence: true
 
   #Canable permissions#
   def updatable_by?(user)
