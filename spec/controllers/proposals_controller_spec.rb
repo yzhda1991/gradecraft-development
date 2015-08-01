@@ -45,6 +45,10 @@ describe ProposalsController do
       @student = create(:user)
       @student.courses << @course
       
+      @assignment = create(:assignment)
+      @group = create(:group)
+      @proposal = create(:proposal)
+      
       login_user(@student)
       session[:course_id] = @course.id
       allow(EventLogger).to receive(:perform_async).and_return(true)
@@ -59,7 +63,9 @@ describe ProposalsController do
     end
 
 		describe "GET destroy" do  
-      pending
+      it "destroys the proposal" do
+        expect{ delete :destroy, :group_id => @group.id, :id => @proposal.id }.to change(Proposal,:count).by(-1)
+      end
     end
 
 	end

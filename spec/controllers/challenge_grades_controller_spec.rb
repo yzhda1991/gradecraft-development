@@ -63,14 +63,6 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "GET mass_edit" do  
-      it "assigns params" do
-        get :mass_edit, :challenge_id => @challenge.id
-        assigns(:title).should eq("Quick Grade #{@challenge.name}")
-        response.should render_template(:mass_edit)
-      end
-    end
-
     describe "POST create" do 
       it "creates the challenge grade with valid attributes"  do
         params = attributes_for(:challenge_grade)
@@ -85,7 +77,21 @@ describe ChallengeGradesController do
     end
 
 		describe "POST update" do  
-      pending
+      it "updates the challenge grade" do
+        params = { score: 100000 }
+        post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
+        @challenge_grade.reload
+        response.should redirect_to(challenge_path(@challenge))
+        @challenge_grade.score.should eq(100000)
+      end
+    end
+
+    describe "GET mass_edit" do  
+      it "assigns params" do
+        get :mass_edit, :challenge_id => @challenge.id
+        assigns(:title).should eq("Quick Grade #{@challenge.name}")
+        response.should render_template(:mass_edit)
+      end
     end
 
 		describe "POST mass_update" do  

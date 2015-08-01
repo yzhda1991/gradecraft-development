@@ -45,10 +45,6 @@ describe TasksController do
 		describe "GET edit" do
       it "display the edit form" do
         pending
-        get :edit, {:id => @task.id, :assignment_id => @assignment.id}
-        assigns(:title).should eq("Editing #{@assignment.name} Task")
-        assigns(:task).should eq(@task)
-        response.should render_template(:edit)
       end
     end
     
@@ -74,8 +70,7 @@ describe TasksController do
         :create
       ].each do |route|
           it "#{route} redirects to root" do
-            pending
-            (get route).should redirect_to(:root)
+            (get route, {:assignment_id => 1}).should redirect_to(:root)
           end
         end
     end
@@ -88,8 +83,7 @@ describe TasksController do
         :edit
       ].each do |route|
         it "#{route} redirects to root" do
-          pending
-          (get route, {:id => "10"}).should redirect_to(:root)
+          (get route, {:assignment_id => 1, :id => "10"}).should redirect_to(:root)
         end
       end
     end

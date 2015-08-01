@@ -1,6 +1,8 @@
 #spec/controllers/analytics_events_controller_spec.rb
 require 'spec_helper'
 
+#TODO: Need to add https://github.com/leshill/resque_spec
+
 describe AnalyticsEventsController do
 	context "as a professor" do 
 

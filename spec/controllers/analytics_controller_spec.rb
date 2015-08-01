@@ -47,10 +47,6 @@ describe AnalyticsController do
       end
     end
 
-		describe "GET all_events" do 
-      pending
-    end
-
 		describe "GET top_10" do
       it "returns the Top 10/Bottom 10 page for the current course" do
         get :top_10
@@ -73,6 +69,10 @@ describe AnalyticsController do
         assigns(:title).should eq("team Analytics")
         response.should render_template(:teams)
       end
+    end
+
+    describe "GET all_events" do 
+      pending
     end
 
 		describe "GET role_events" do  

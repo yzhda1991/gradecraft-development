@@ -10,14 +10,8 @@ describe UploadsController do
       @professor = create(:user)
       @professor.courses << @course
       @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
       @student = create(:user)
       @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
 
       login_user(@professor)
       session[:course_id] = @course.id

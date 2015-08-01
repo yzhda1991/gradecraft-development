@@ -76,11 +76,20 @@ describe UsersController do
     end
     
 		describe "GET update_profile" do  
-      pending
+      it "successfully updates the users profile" do
+        params = { display_name: "gandalf" }
+        post :update_profile, id: @professor.id, :user => params
+        @professor.reload
+        response.should redirect_to(dashboard_path)
+        @professor.display_name.should eq("gandalf")
+      end
     end
     
 		describe "GET import" do  
-      pending
+      it "renders the import page" do
+        get :import
+        response.should render_template(:import)
+      end
     end
     
 		describe "GET upload" do  
@@ -111,7 +120,13 @@ describe UsersController do
     end
     
 		describe "GET update_profile" do  
-      pending
+      it "successfully updates the users profile" do
+        params = { display_name: "frodo" }
+        post :update_profile, id: @student.id, :user => params
+        @student.reload
+        response.should redirect_to(dashboard_path)
+        @student.display_name.should eq("frodo")
+      end
     end
     
 

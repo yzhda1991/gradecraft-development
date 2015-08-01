@@ -97,7 +97,34 @@ describe EarnedBadgesController do
       end
 
       describe "with teams" do
-        pending
+        it "assigns team and students for team" do
+          # we verify only students on team assigned as @students
+          other_student = create(:user)
+          other_student.courses << @course
+
+          team = create(:team, course: @course)
+          team.students << @student
+
+          get :mass_edit, {:id => @badge.id, :team_id => team.id}
+          assigns(:team).should eq(team)
+          assigns(:students).should eq([@student])
+        end
+      end
+
+      describe "with no team id in params" do
+        it "assigns all students if no team supplied" do
+          # we verify non-team members also assigned as @students
+          other_student = create(:user)
+          other_student.courses << @course
+
+          team = create(:team, course: @course)
+          team.students << @student
+
+          get :mass_edit, :id => @badge.id
+          assigns(:students).should include(@student)
+          assigns(:students).should include(other_student)
+        end
+
       end
 
       describe "when badges can be earned multiple times" do

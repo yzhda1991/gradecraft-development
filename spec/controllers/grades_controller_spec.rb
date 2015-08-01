@@ -228,8 +228,7 @@ describe GradesController do
 
 	    describe "GET mass_update" do
 	      it "redirects to root path" do
-	      	pending
-	        get :mass_edit, { :assignment_id => @assignment.id}
+	        post :mass_update, { :id => @assignment.id}
 	  			response.should redirect_to(:root)
 	      end
 	    end
