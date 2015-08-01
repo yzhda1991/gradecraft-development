@@ -1,24 +1,24 @@
 .breadcrumbs
   padding: 0
   margin-left: 1rem
-  margin-bottom: 1rem
+  margin-bottom: 0.5rem
   overflow: hidden
   border-radius: 5px
 
   a
     text-decoration: none
+    text-transform: uppercase
     outline: none
     display: block
     float: left
     line-height: 28px
-    margin-right: .4rem
+    margin-right: .5rem
     color: white
     /*need more margin on the left of links to accomodate the numbers*/
-    padding: 0 .5rem 0 1rem
-    background: #666
-    background: linear-gradient($secondary-color-2, $secondary-color-2)
+    padding: 0rem .5rem 0 1rem
+    background: $secondary-color-2
     position: relative
-    text-indent: 18px
+    text-indent: 10px
 
   /*since the first link does not have a triangle before it we can reduce the left padding to make it look consistent with other links*/
   a:first-child
@@ -30,17 +30,15 @@
 
   a:last-child
     border-radius: 0 5px 5px 0 /*this was to prevent glitches on hover*/
-    padding-right: 20px
+    padding-right: 1rem
 
   /*hover/active styles*/
   a.active, a:hover
-    background: #333
     color: #FFF
-    background: linear-gradient($primary-color-2, $primary-color-2)
+    background: $primary-color-2
 
   a.active:after, a:hover:after
-    background: #333
-    background: linear-gradient(135deg, $primary-color-2, $primary-color-2)
+    background: $primary-color-2
 
 
   /*adding the arrows for the breadcrumbs using rotated pseudo elements*/
@@ -48,20 +46,14 @@
     content: ''
     position: absolute
     top: 0
-    right: -18px /*half of square's length*/
-    /*same dimension as the line-height of .breadcrumb a */
+    right: -18px 
     width: 36px
     height: 28px
     transform: scale(0.707) rotate(45deg)
     -webkit-transform: scale(0.707) rotate(45deg)
     -ms-transform: scale(0.707) rotate(45deg)
-    /*we need to prevent the arrows from getting buried under the next link*/
     z-index: 2
-    /*background same as links but the gradient will be rotated to compensate with the transform applied*/
-    background: #666
-    background: linear-gradient(135deg, $secondary-color-2, $secondary-color-2)
-    /*stylish arrow design using box shadow*/
-    /*box-shadow: 2px -2px 0 2px rgba(0, 0, 0, 0.2), 3px -3px 0 2px rgba(255, 255, 255, 1)*/
+    background: $secondary-color-2
     /*
       5px - for rounded arrows and
       50px - to prevent hover glitches on the border created using shadows*/
@@ -71,8 +63,7 @@
   a:before
     content: ''
     position: absolute
-    top: 0
-    left: -30px /*half of square's length*/
+    left: -19px /*half of square's length*/
     /*same dimension as the line-height of .breadcrumb a */
     width: 36px
     height: 28px
@@ -82,13 +73,12 @@
     /*we need to prevent the arrows from getting buried under the next link*/
     z-index: 1
     /*background same as links but the gradient will be rotated to compensate with the transform applied*/
-    background: #666
-    background: linear-gradient(45deg, #FFF, #FFF)
+    background: #FFF
     /*stylish arrow design using box shadow*/
     /*
       5px - for rounded arrows and
       50px - to prevent hover glitches on the border created using shadows*/
-    border-radius: 0 150px 0 5px
+    border-radius: 0 150px 0 10px
 
   /*we dont need an arrow after the last link*/
   a:last-child:after
