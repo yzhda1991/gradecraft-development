@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe CourseMembershipsController do
 
-	context "as professor" do 
+	context "as professor" do
 
     before do
       @course = create(:course)
@@ -22,22 +22,22 @@ describe CourseMembershipsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
   end
 
-  context "as a student" do 
+  context "as a student" do
 
     before do
       @course = create(:course)
       @student = create(:user)
       @student.courses << @course
-      
+
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
-    
+
   end
-  
+
 end

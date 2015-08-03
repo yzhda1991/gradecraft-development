@@ -3,8 +3,12 @@ require 'spec_helper'
 
 describe GroupsController do
 
-	context "as professor" do 
-		
+  before do
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
+
+	context "as professor" do
+
 		before do
       @course = create(:course_accepting_groups)
       @professor = create(:user)
@@ -21,10 +25,9 @@ describe GroupsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
     end
 
-		describe "GET index" do 
+		describe "GET index" do
       it "returns groups for the current course" do
         get :index
         assigns(:title).should eq("Groups")
@@ -33,7 +36,7 @@ describe GroupsController do
       end
     end
 
-		describe "GET show" do 
+		describe "GET show" do
       it "displays the specified group" do
         get :show, :id => @group.id
         assigns(:title).should eq(@group.name)
@@ -88,7 +91,7 @@ describe GroupsController do
       end
     end
 
-		describe "GET review" do  
+		describe "GET review" do
       it "allows the instructor to review the specified group" do
         get :review, :id => @group.id
         assigns(:title).should eq("Reviewing #{@group.name}")
@@ -153,7 +156,7 @@ describe GroupsController do
       end
     end
 
-		describe "POST update" do 
+		describe "POST update" do
       it "updates the group" do
         params = { name: "new name" }
         post :update, id: @group.id, :group => params
@@ -163,7 +166,7 @@ describe GroupsController do
       end
 		end
 
-		describe "GET show" do 
+		describe "GET show" do
       it "displays the specified group" do
         get :show, :id => @group.id
         assigns(:title).should eq(@group.name)

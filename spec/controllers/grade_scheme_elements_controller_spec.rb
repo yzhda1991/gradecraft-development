@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe GradeSchemeElementsController do
 
-	context "as professor" do 
-		
+	context "as professor" do
+
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -16,12 +16,12 @@ describe GradeSchemeElementsController do
       login_user(@professor)
 
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
       it "assigns all grade scheme elements as @grade_scheme_elements" do
-        allow(EventLogger).to receive(:perform_async).and_return(true)
+        allow(Resque).to receive(:enqueue).and_return(true)
         get :index
         assigns(:grade_scheme_elements).should eq([@grade_scheme_element])
       end
@@ -44,7 +44,7 @@ describe GradeSchemeElementsController do
 
 	end
 
-	context "as student" do 
+	context "as student" do
 
 		describe "protected routes" do
       [

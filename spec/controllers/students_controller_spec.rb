@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe StudentsController do
 
-	context "as a professor" do 
-    
+	context "as a professor" do
+
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -29,10 +29,10 @@ describe StudentsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do  
+		describe "GET index" do
       it "returns the students for the current course" do
         get :index
         assigns(:title).should eq("Player Roster")
@@ -41,7 +41,7 @@ describe StudentsController do
       end
     end
 
-    describe "GET show" do 
+    describe "GET show" do
       it "shows the student page" do
         get :show, {:id => @student.id}
         assigns(:student).should eq(@student)
@@ -49,7 +49,7 @@ describe StudentsController do
       end
     end
 
-		describe "GET leaderboard" do  
+		describe "GET leaderboard" do
       it "shows the class leaderboard" do
         get :leaderboard
         assigns(:title).should eq("Leaderboard")
@@ -57,28 +57,28 @@ describe StudentsController do
       end
     end
 
-		describe "GET syllabus" do  
+		describe "GET syllabus" do
       it "shows the class syllabus" do
         get :syllabus, :id => 10
         response.should render_template(:syllabus)
       end
     end
 
-		describe "GET timeline" do  
+		describe "GET timeline" do
       it "shows the course timeline" do
         get :timeline, :id => 10
         response.should render_template(:timeline)
       end
     end
 
-		describe "GET autocomplete_student_name" do  
+		describe "GET autocomplete_student_name" do
       it "provides a list of all students and their ids" do
         get :autocomplete_student_name, :id => 10
         (expect(response.status).to eq(200))
       end
     end
 
-		describe "GET course_progress" do  
+		describe "GET course_progress" do
       it "shows the course progress" do
         get :course_progress, :id => 10
         assigns(:title).should eq("Your Course Progress")
@@ -95,21 +95,21 @@ describe StudentsController do
       end
     end
 
-		describe "GET predictor" do  
+		describe "GET predictor" do
       it "shows the grade predictor page" do
         get :predictor, :id => 10
         response.should render_template(:predictor)
       end
     end
 
-		describe "GET scores_by_assignment" do  
+		describe "GET scores_by_assignment" do
       it "provides a list of all assignments and their scores" do
         get :scores_by_assignment
         (expect(response.status).to eq(200))
       end
     end
 
-		describe "GET grade_index" do  
+		describe "GET grade_index" do
       it "shows the grade index page" do
         get :grade_index, :student_id => @student.id
         StudentsController.stub(:current_student).and_return(@student)
@@ -117,7 +117,7 @@ describe StudentsController do
       end
     end
 
-		describe "GET recalculate" do  
+		describe "GET recalculate" do
       it "triggers the recalculation of a student's grade" do
         get :recalculate, { :student_id => @student.id }
         response.should redirect_to(student_path(@student))
@@ -126,8 +126,8 @@ describe StudentsController do
 
 	end
 
-	context "as a student" do 
-    
+	context "as a student" do
+
     before do
       @course = create(:course)
       @student = create(:user)
@@ -135,24 +135,24 @@ describe StudentsController do
 
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET syllabus" do  
+		describe "GET syllabus" do
       it "shows the class syllabus" do
         get :syllabus
         response.should render_template(:syllabus)
       end
     end
 
-		describe "GET timeline" do  
+		describe "GET timeline" do
       it "shows the course timeline" do
         get :timeline, :id => 10
         response.should redirect_to(dashboard_path)
       end
     end
 
-		describe "GET course_progress" do  
+		describe "GET course_progress" do
       it "shows the course progress" do
         get :course_progress, :id => 10
         assigns(:title).should eq("Your Course Progress")
@@ -160,7 +160,7 @@ describe StudentsController do
       end
     end
 
-		describe "GET badges" do  
+		describe "GET badges" do
       it "shows the student facing badge page" do
         get :badges
         assigns(:title).should eq("badges")
@@ -168,7 +168,7 @@ describe StudentsController do
       end
     end
 
-		describe "GET predictor" do  
+		describe "GET predictor" do
       it "shows the grade predictor page" do
         get :predictor, :id => 10
         response.should render_template(:predictor)

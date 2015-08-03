@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe BadgesController do
-	context "as professor" do 
+	context "as professor" do
     before do
       @course = create(:course_accepting_groups)
       @professor = create(:user)
@@ -14,10 +14,10 @@ describe BadgesController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do 
+		describe "GET index" do
       it "returns badges for the current course" do
         get :index
         assigns(:title).should eq("badges")
@@ -26,7 +26,7 @@ describe BadgesController do
       end
     end
 
-		describe "GET show" do 
+		describe "GET show" do
       it "returns badges for the current course" do
         get :show, :id => @badge.id
         assigns(:title).should eq(@badge.name)
@@ -111,10 +111,10 @@ describe BadgesController do
 
 	end
 
-	context "as student" do 
+	context "as student" do
 
 		describe "protected routes" do
-      [ 
+      [
         :index,
         :new,
         :create,

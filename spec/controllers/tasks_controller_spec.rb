@@ -5,8 +5,8 @@ describe TasksController do
 
   #not yet built
 
-	context "as a professor" do 
-    
+	context "as a professor" do
+
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -24,42 +24,42 @@ describe TasksController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-    describe "GET index" do  
+    describe "GET index" do
       it "redirects the tasks index to the assignment page" do
         get :index, :assignment_id => @assignment.id
         response.should redirect_to(assignment_path(@assignment))
       end
     end
-    
-    describe "GET show" do  
+
+    describe "GET show" do
       pending
     end
-    
-		describe "GET new" do  
+
+		describe "GET new" do
       pending
     end
-    
+
 		describe "GET edit" do
       it "display the edit form" do
         pending
       end
     end
-    
-		describe "GET create" do  
+
+		describe "GET create" do
       pending
     end
 
-		describe "GET update" do  
+		describe "GET update" do
       pending
     end
-    
-		describe "GET destroy" do  
+
+		describe "GET destroy" do
       pending
     end
-    
+
 	end
 
 	context "as a student" do
@@ -75,7 +75,7 @@ describe TasksController do
         end
     end
 
-    describe "protected routes with ids in the url" do 
+    describe "protected routes with ids in the url" do
       [
         :show,
         :update,

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe GradesController do
-	
-	context "as professor" do 
+
+	context "as professor" do
 
 		before do
       @course = create(:course_accepting_groups)
@@ -19,17 +19,17 @@ describe GradesController do
       @third_student = create(:user)
       @third_student.courses << @course
       @group = create(:group)
-      @assignment.groups << @group 
-      @group.students << [@student, @second_student, @third_student] 
+      @assignment.groups << @group
+      @group.students << [@student, @second_student, @third_student]
 
 			@grade = create(:grade)
 			@assignment.grades << @grade
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
-		
+
 		describe "GET show" do
       it "shows the grade" do
         get :show, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
@@ -50,7 +50,7 @@ describe GradesController do
       end
     end
 
-		describe "POST update" do 
+		describe "POST update" do
 
 			it "updates the grade" do
 				pending
@@ -63,11 +63,11 @@ describe GradesController do
 
     end
 
-		describe "POST submit_rubric" do  
+		describe "POST submit_rubric" do
       pending
     end
 
-		describe "GET remove" do  
+		describe "GET remove" do
       pending
     end
 
@@ -78,15 +78,15 @@ describe GradesController do
       end
     end
 
-		describe "GET self_log" do  
+		describe "GET self_log" do
       pending
     end
 
-		describe "POST predict_score" do  
+		describe "POST predict_score" do
       pending
     end
 
-		describe "GET mass_edit" do  
+		describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, :id => @assignment.id
         assigns(:title).should eq("Quick Grade #{@assignment.name}")
@@ -94,11 +94,11 @@ describe GradesController do
       end
     end
 
-		describe "POST mass_update" do  
+		describe "POST mass_update" do
       pending
     end
 
-		describe "GET group_edit" do  
+		describe "GET group_edit" do
       it "assigns params" do
       	get :group_edit, { :id => @assignment.id, :group_id => @group.id}
         assigns(:title).should eq("Grading #{@group.name}'s #{@assignment.name}")
@@ -106,11 +106,11 @@ describe GradesController do
       end
     end
 
-		describe "POST group_update" do  
+		describe "POST group_update" do
       pending
     end
 
-		describe "GET edit_status" do  
+		describe "GET edit_status" do
       it "displays the edit status page" do
         get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id}
         assigns(:title).should eq("#{@assignment.name} Grade Statuses")
@@ -118,11 +118,11 @@ describe GradesController do
       end
     end
 
-		describe "POST update_status" do  
+		describe "POST update_status" do
       pending
     end
 
-		describe "GET import" do  
+		describe "GET import" do
       it "displays the import page" do
       	get :import, { :id => @assignment.id}
       	assigns(:title).should eq("Import Grades for #{@assignment.name}")
@@ -130,17 +130,17 @@ describe GradesController do
       end
     end
 
-		describe "GET username_import" do  
+		describe "GET username_import" do
       pending
     end
 
-		describe "GET email_import" do  
+		describe "GET email_import" do
       pending
     end
 
 	end
 
-	context "as student" do 
+	context "as student" do
 
 		before do
       @course = create(:course)
@@ -148,7 +148,7 @@ describe GradesController do
       @student.courses << @course
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
       @assignment_type = create(:assignment_type, course: @course)
       @assignment = create(:assignment)
       @course.assignments << @assignment
@@ -183,7 +183,7 @@ describe GradesController do
 
 
 		describe "protected routes" do
-			
+
 			describe "GET edit" do
 	      it "redirects to root path" do
 	        get :edit, {:grade_id => @grade.id, :assignment_id => @assignment.id}

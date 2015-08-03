@@ -14,12 +14,12 @@ describe EventsController do
       login_user(@professor)
 
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
       it "assigns all events as @events" do
-        allow(EventLogger).to receive(:perform_async).and_return(true)
+        allow(Resque).to receive(:enqueue).and_return(true)
         get :index
         assigns(:events).should eq([@event])
       end
@@ -107,7 +107,7 @@ describe EventsController do
   end
 
 
-  context "as student" do 
+  context "as student" do
 
     describe "protected routes" do
       [

@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe TeamsController do
 
-	context "as a professor" do 
+	context "as a professor" do
 
     before do
       @course = create(:course)
@@ -18,10 +18,10 @@ describe TeamsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-    describe "GET index" do 
+    describe "GET index" do
       it "returns all teams for the current course" do
         get :index
         assigns(:title).should eq("teams")
@@ -30,7 +30,7 @@ describe TeamsController do
       end
     end
 
-    describe "GET show" do 
+    describe "GET show" do
       it "returns the team show page" do
         get :show, :id => @team.id
         assigns(:title).should eq(@team.name)
@@ -39,7 +39,7 @@ describe TeamsController do
       end
     end
 
-    describe "GET new" do 
+    describe "GET new" do
       it "assigns a name" do
         get :new
         assigns(:title).should eq("Create a New team")
@@ -57,7 +57,7 @@ describe TeamsController do
       end
     end
 
-    describe "POST create" do 
+    describe "POST create" do
       it "creates the team with valid attributes"  do
         params = attributes_for(:team)
         params[:id] = @team

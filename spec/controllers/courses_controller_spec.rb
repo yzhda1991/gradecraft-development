@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe CoursesController do
 
-	context "as professor" do 
+	context "as professor" do
 
     before do
       @course = create(:course)
@@ -16,10 +16,10 @@ describe CoursesController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do 
+		describe "GET index" do
       it "returns all courses" do
         get :index
         assigns(:title).should eq("Course Index")
@@ -28,7 +28,7 @@ describe CoursesController do
       end
     end
 
-		describe "GET show" do 
+		describe "GET show" do
       it "returns the course show page" do
         get :show, :id => @course.id
         assigns(:title).should eq("Course Settings")
@@ -37,7 +37,7 @@ describe CoursesController do
       end
     end
 
-		describe "GET new" do 
+		describe "GET new" do
       it "assigns title" do
         get :new
         assigns(:title).should eq("Create a New Course")
@@ -55,7 +55,7 @@ describe CoursesController do
       end
     end
 
-		describe "POST create" do 
+		describe "POST create" do
       it "creates the course with valid attributes"  do
         params = attributes_for(:course)
         params[:id] = @course
@@ -103,7 +103,7 @@ describe CoursesController do
 
 	end
 
-	context "as student" do 
+	context "as student" do
 
 		describe "protected routes" do
       [

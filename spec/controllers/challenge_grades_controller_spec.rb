@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe ChallengeGradesController do
 
-	context "as professor" do 
+	context "as professor" do
 
     before do
       @course = create(:course)
@@ -22,10 +22,10 @@ describe ChallengeGradesController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do 
+		describe "GET index" do
       it "redirects the user to the challenge" do
         get :index, :challenge_id => @challenge
         assigns(:challenge).should eq(@challenge)
@@ -33,7 +33,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "GET show" do 
+		describe "GET show" do
       it "shows the challenge grade" do
         get :show, {:id => @challenge_grade, :challenge_id => @challenge}
         assigns(:challenge).should eq(@challenge)
@@ -43,7 +43,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "GET new" do  
+		describe "GET new" do
       it "shows the new challenge grade form" do
         get :new, {:challenge_id => @challenge, :team_id => @team}
         assigns(:challenge).should eq(@challenge)
@@ -53,7 +53,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "GET edit" do  
+		describe "GET edit" do
       it "shows the edit challenge grade form" do
         get :edit, {:id => @challenge_grade, :challenge_id => @challenge}
         assigns(:challenge).should eq(@challenge)
@@ -63,7 +63,7 @@ describe ChallengeGradesController do
       end
     end
 
-    describe "POST create" do 
+    describe "POST create" do
       it "creates the challenge grade with valid attributes"  do
         params = attributes_for(:challenge_grade)
         params[:challenge_id] = @challenge.id
@@ -76,7 +76,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "POST update" do  
+		describe "POST update" do
       it "updates the challenge grade" do
         params = { score: 100000 }
         post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
@@ -86,7 +86,7 @@ describe ChallengeGradesController do
       end
     end
 
-    describe "GET mass_edit" do  
+    describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, :challenge_id => @challenge.id
         assigns(:title).should eq("Quick Grade #{@challenge.name}")
@@ -94,19 +94,19 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "POST mass_update" do  
+		describe "POST mass_update" do
       pending
     end
 
-		describe "GET edit_status" do 
-      it "displays the edit_status page" do 
+		describe "GET edit_status" do
+      it "displays the edit_status page" do
         get :edit_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ]}
         assigns(:title).should eq("#{@challenge.name} Grade Statuses")
         response.should render_template(:edit_status)
       end
     end
 
-		describe "POST update_status" do  
+		describe "POST update_status" do
       pending
     end
 
@@ -118,7 +118,7 @@ describe ChallengeGradesController do
 
 	end
 
-	context "as student" do 
+	context "as student" do
 
     before do
       @course = create(:course)
@@ -134,10 +134,10 @@ describe ChallengeGradesController do
 
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET show" do 
+		describe "GET show" do
       it "shows the challenge grade" do
         get :show, {:id => @challenge_grade, :challenge_id => @challenge}
         assigns(:challenge).should eq(@challenge)
@@ -148,7 +148,7 @@ describe ChallengeGradesController do
     end
 
 		describe "protected routes" do
-			
+
       [
         :index,
         :new,

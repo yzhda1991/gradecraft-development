@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe UserSessionsController do
-  
+
   before do
     @course = create(:course)
     @professor = create(:user)
@@ -19,27 +19,27 @@ describe UserSessionsController do
 
     login_user(@professor)
     session[:course_id] = @course.id
-    allow(EventLogger).to receive(:perform_async).and_return(true)
+    allow(Resque).to receive(:enqueue).and_return(true)
   end
 
-	describe "GET new" do  
+	describe "GET new" do
     pending
   end
-  
-	describe "GET create" do  
+
+	describe "GET create" do
     pending
   end
-  
-	describe "GET lti_create" do  
+
+	describe "GET lti_create" do
     pending
   end
-  
-	describe "GET kerberos_create" do  
+
+	describe "GET kerberos_create" do
     pending
   end
-  
-	describe "GET destroy" do  
+
+	describe "GET destroy" do
     pending
   end
-  
+
 end

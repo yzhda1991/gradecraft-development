@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe UploadsController do
 
-	context "as a professor" do 
-		
+	context "as a professor" do
+
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -15,10 +15,10 @@ describe UploadsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET remove" do 
+		describe "GET remove" do
       pending
     end
 
@@ -33,10 +33,10 @@ describe UploadsController do
 
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
-		
-    describe "GET remove" do 
+
+    describe "GET remove" do
       pending
     end
 

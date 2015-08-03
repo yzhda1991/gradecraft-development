@@ -16,7 +16,7 @@ describe AssignmentsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
@@ -311,7 +311,7 @@ describe AssignmentsController do
         expect{ get :destroy, :id => @assignment }.to change(Assignment,:count).by(-1)
       end
     end
-    
+
     describe "GET email_based_grade_import" do
       context "with CSV format" do
         it "returns sample csv data" do
@@ -351,7 +351,7 @@ describe AssignmentsController do
       end
     end
   end
-  
+
   context "as a student" do
     before do
       @course = create(:course_accepting_groups)
@@ -359,7 +359,7 @@ describe AssignmentsController do
       @student.courses << @course
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do

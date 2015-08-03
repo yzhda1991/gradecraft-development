@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe RubricsController do
 
-	context "as a professor" do 
-    
+	context "as a professor" do
+
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -16,10 +16,10 @@ describe RubricsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-    describe "GET design" do 
+    describe "GET design" do
       it "shows the design form" do
         pending
         get :design,{ assignment: @assignment, rubric: @rubric}
@@ -29,32 +29,32 @@ describe RubricsController do
       end
     end
 
-		describe "GET create" do  
+		describe "GET create" do
       pending
     end
 
-		describe "GET destroy" do  
+		describe "GET destroy" do
       pending
     end
 
-		describe "GET update" do  
+		describe "GET update" do
       pending
     end
 
-		describe "GET existing_metrics" do  
+		describe "GET existing_metrics" do
       pending
     end
 
-		describe "GET course_badges" do  
+		describe "GET course_badges" do
       pending
     end
 	end
 
-	context "as a student" do 
+	context "as a student" do
 		describe "protected routes" do
       [
         :design,
-        :create, 
+        :create,
         :destroy,
         :update,
         :existing_metrics,

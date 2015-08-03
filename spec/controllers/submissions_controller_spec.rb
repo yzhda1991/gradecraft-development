@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe SubmissionsController do
 
-	context "as a professor" do 
+	context "as a professor" do
 
     before do
       @course = create(:course)
@@ -22,17 +22,17 @@ describe SubmissionsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
-    
-		describe "GET index" do  
+
+		describe "GET index" do
       it "redirects the submissions index to the assignment page" do
         get :index, :assignment_id => @assignment.id
         response.should redirect_to(assignment_path(@assignment))
       end
     end
 
-    describe "GET show" do 
+    describe "GET show" do
       it "returns the submission show page" do
         get :show, {:id => @submission.id, :assignment_id => @assignment.id}
         assigns(:title).should eq("#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)")
@@ -40,7 +40,7 @@ describe SubmissionsController do
         response.should render_template(:show)
       end
     end
-    
+
     describe "GET new" do
       it "assigns title and assignment relation" do
         get :new, assignment_id: @assignment.id
@@ -58,7 +58,7 @@ describe SubmissionsController do
         response.should render_template(:edit)
       end
     end
-    
+
     describe "POST create" do
       it "creates the submission with valid attributes"  do
         params = attributes_for(:submission)
@@ -78,16 +78,16 @@ describe SubmissionsController do
         @submission.text_comment.should eq("Ausgezeichnet")
       end
     end
-    
+
     describe "GET destroy" do
       it "destroys the submission" do
         expect{ get :destroy, {:id => @submission, :assignment_id => @assignment.id } }.to change(Submission,:count).by(-1)
       end
     end
-    
+
 	end
 
-	context "as a student" do 
+	context "as a student" do
 
     before do
       @course = create(:course)
@@ -100,9 +100,9 @@ describe SubmissionsController do
 
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
-		
+
     describe "GET new" do
       it "assigns a new submission as @submission" do
         get :new, :assignment_id => @assignment.id
@@ -110,8 +110,8 @@ describe SubmissionsController do
         response.should render_template(:new)
       end
     end
-     
-		describe "GET edit" do  
+
+		describe "GET edit" do
       it "shows the edit submission form" do
         get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
         assigns(:title).should eq("Editing My Submission for #{@assignment.name}")
@@ -119,7 +119,7 @@ describe SubmissionsController do
         response.should render_template(:edit)
       end
     end
-     
+
     describe "POST create" do
       it "creates the submission with valid attributes"  do
         pending
@@ -129,8 +129,8 @@ describe SubmissionsController do
         expect{ post :create, :assignment_id => @assignment.id, :submission => params }.to change(Submission,:count).by(1)
       end
     end
-    
-		describe "GET show" do  
+
+		describe "GET show" do
       it "shows the submission" do
         get :show, {:id => @submission.id, :assignment_id => @assignment.id}
         assigns(:title).should eq("My Submission for #{@assignment.name}")
@@ -138,8 +138,8 @@ describe SubmissionsController do
         response.should render_template(:show)
       end
     end
-    
-		describe "GET update" do  
+
+		describe "GET update" do
       it "updates the submission successfully"  do
         params = attributes_for(:submission)
         params[:assignment_id] = @assignment.id
@@ -150,7 +150,7 @@ describe SubmissionsController do
         @submission.text_comment.should eq("Ausgezeichnet")
       end
     end
-    
+
 
 		describe "protected routes" do
       [

@@ -5,8 +5,8 @@ describe StudentAcademicHistoriesController do
 
   #not yet built
 
-	context "as a professor" do 
-    
+	context "as a professor" do
+
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -23,40 +23,40 @@ describe StudentAcademicHistoriesController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do  
+		describe "GET index" do
       pending
     end
 
-		describe "GET show" do  
+		describe "GET show" do
       pending
     end
 
-		describe "GET new" do  
+		describe "GET new" do
       pending
     end
 
-		describe "GET create" do  
+		describe "GET create" do
       pending
     end
 
-		describe "GET edit" do  
+		describe "GET edit" do
       pending
     end
 
-		describe "GET update" do  
+		describe "GET update" do
       pending
     end
 
-		describe "GET destroy" do  
+		describe "GET destroy" do
       pending
     end
-    
+
 	end
 
-	context "as a student" do 
+	context "as a student" do
 		describe "protected routes" do
       [
         :index,

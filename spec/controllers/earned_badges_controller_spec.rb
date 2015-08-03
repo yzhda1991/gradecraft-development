@@ -23,20 +23,20 @@ describe EarnedBadgesController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     let(:valid_session) { { "current_course" => @course} }
 
-    
-    describe "GET index" do 
+
+    describe "GET index" do
       it "redirects to the badge for the earned badge" do
         get :index, :badge_id => @badge.id
         response.should redirect_to(badge_path(@badge))
       end
     end
 
-    describe "GET show" do 
+    describe "GET show" do
       it "returns the earned badge show page" do
         get :show, { :id => @earned_badge.id, :badge_id => @badge.id }
         assigns(:title).should eq("#{@student.name}'s #{@badge.name} badge")
@@ -45,7 +45,7 @@ describe EarnedBadgesController do
       end
     end
 
-    describe "GET new" do 
+    describe "GET new" do
       it "display the create form" do
         get :new, :badge_id => @badge.id
         assigns(:title).should eq("Award #{@badge.name}")
@@ -155,7 +155,7 @@ describe EarnedBadgesController do
   end
 
 
-  context "as student" do 
+  context "as student" do
 
     describe "protected routes" do
       [

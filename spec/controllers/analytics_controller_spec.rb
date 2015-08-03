@@ -3,8 +3,8 @@ require 'spec_helper'
 
 describe AnalyticsController do
 
-	context "as a professor" do 
-    
+	context "as a professor" do
+
     before do
       @course = create(:course_accepting_groups)
       @professor = create(:user)
@@ -20,7 +20,7 @@ describe AnalyticsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
 		describe "GET index" do
@@ -71,80 +71,80 @@ describe AnalyticsController do
       end
     end
 
-    describe "GET all_events" do 
+    describe "GET all_events" do
       pending
     end
 
-		describe "GET role_events" do  
+		describe "GET role_events" do
       pending
     end
 
-		describe "GET assignment_events" do  
+		describe "GET assignment_events" do
       pending
     end
 
-		describe "GET login_frequencies" do  
+		describe "GET login_frequencies" do
       pending
     end
 
-		describe "GET role_login_frequencies" do  
+		describe "GET role_login_frequencies" do
       pending
     end
 
-		describe "GET login_events" do  
+		describe "GET login_events" do
       pending
     end
 
-		describe "GET login_role_events" do  
+		describe "GET login_role_events" do
       pending
     end
 
-		describe "GET all_pageview_events" do  
+		describe "GET all_pageview_events" do
       pending
     end
 
-		describe "GET all_role_pageview_events" do  
+		describe "GET all_role_pageview_events" do
       pending
     end
 
-		describe "GET all_user_pageview_events" do  
+		describe "GET all_user_pageview_events" do
       pending
     end
 
-		describe "GET pageview_events" do  
+		describe "GET pageview_events" do
       pending
     end
 
-		describe "GET role_pageview_events" do  
+		describe "GET role_pageview_events" do
       pending
     end
 
-		describe "GET user_pageview_events" do  
+		describe "GET user_pageview_events" do
       pending
     end
 
-		describe "GET prediction_averages" do  
+		describe "GET prediction_averages" do
       pending
     end
 
-		describe "GET assignment_prediction_averages" do  
+		describe "GET assignment_prediction_averages" do
       pending
     end
 
-		describe "GET export" do  
+		describe "GET export" do
       pending
     end
 
 	end
 
-	context "as a student" do 
+	context "as a student" do
 
 	   describe "protected routes" do
           [
             :index,
             :students,
             :staff,
-            :all_events, 
+            :all_events,
             :top_10,
             :per_assign,
             :teams,
@@ -155,7 +155,7 @@ describe AnalyticsController do
             :login_events,
             :login_role_events,
             :all_pageview_events,
-            :all_role_pageview_events, 
+            :all_role_pageview_events,
             :all_user_pageview_events,
             :pageview_events,
             :role_pageview_events,

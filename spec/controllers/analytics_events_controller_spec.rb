@@ -4,7 +4,7 @@ require 'spec_helper'
 #TODO: Need to add https://github.com/leshill/resque_spec
 
 describe AnalyticsEventsController do
-	context "as a professor" do 
+	context "as a professor" do
 
     before do
       @course = create(:course)
@@ -22,20 +22,20 @@ describe AnalyticsEventsController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "POST predictor_event" do  
+		describe "POST predictor_event" do
       pending
     end
 
-		describe "POST tab_select_event" do  
+		describe "POST tab_select_event" do
       pending
     end
 
 	end
 
-	context "as a student" do 
+	context "as a student" do
 
     before do
       @course = create(:course)
@@ -44,14 +44,14 @@ describe AnalyticsEventsController do
 
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-	  describe "POST predictor_event" do  
+	  describe "POST predictor_event" do
       pending
     end
 
-		describe "POST tab_select_event" do  
+		describe "POST tab_select_event" do
       pending
     end
 

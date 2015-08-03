@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe ChallengesController do
 
-	context "as professor" do 
+	context "as professor" do
 
     before do
       @course = create(:course)
@@ -21,10 +21,10 @@ describe ChallengesController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do 
+		describe "GET index" do
       it "returns challenges for the current course" do
         get :index
         assigns(:title).should eq("team Challenges")
@@ -33,7 +33,7 @@ describe ChallengesController do
       end
     end
 
-		describe "GET show" do 
+		describe "GET show" do
       it "returns the challenge show page" do
         get :show, :id => @challenge.id
         assigns(:title).should eq(@challenge.name)
@@ -42,7 +42,7 @@ describe ChallengesController do
       end
     end
 
-		describe "GET new" do 
+		describe "GET new" do
       it "assigns title and challenge" do
         get :new
         assigns(:title).should eq("Create a New team Challenge")
@@ -60,7 +60,7 @@ describe ChallengesController do
       end
     end
 
-		describe "POST create" do 
+		describe "POST create" do
       it "creates the challenge with valid attributes"  do
         params = attributes_for(:challenge)
         params[:challenge_id] = @challenge
@@ -106,7 +106,7 @@ describe ChallengesController do
 
 	end
 
-	context "as student" do 
+	context "as student" do
 
 		describe "protected routes" do
       [

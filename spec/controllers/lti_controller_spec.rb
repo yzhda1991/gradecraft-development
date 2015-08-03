@@ -21,16 +21,16 @@ describe LTIController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET launch"  do  
+		describe "GET launch"  do
       pending
     end
 	end
 
 	context "as a student" do
-		describe "GET launch"  do  
+		describe "GET launch"  do
       pending
     end
 	end

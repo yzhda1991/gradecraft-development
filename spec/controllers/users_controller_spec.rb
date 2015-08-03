@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe UsersController do
 
-	context "as a professor" do 
-    
+	context "as a professor" do
+
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -21,10 +21,10 @@ describe UsersController do
 
       login_user(@professor)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do  
+		describe "GET index" do
       it "returns the users for the current course" do
         get :index
         assigns(:title).should eq("All Users")
@@ -32,15 +32,15 @@ describe UsersController do
         response.should render_template(:index)
       end
     end
-    
+
     describe "GET new" do
       it "assigns the name" do
-        get :new 
+        get :new
         assigns(:title).should eq("Create a New User")
         assigns(:user).should be_a_new(User)
         response.should render_template(:new)
       end
-    end	
+    end
 
     describe "GET edit" do
       it "renders the edit user form" do
@@ -50,23 +50,23 @@ describe UsersController do
         response.should render_template(:edit)
       end
     end
-    
-		describe "GET create" do  
+
+		describe "GET create" do
       pending
     end
-    
-		describe "GET update" do  
+
+		describe "GET update" do
       pending
     end
-    
+
     describe "GET destroy" do
       it "destroys the user" do
         expect{ get :destroy, {:id => @student } }.to change(User,:count).by(-1)
       end
     end
-    
-    
-		describe "GET edit_profile" do  
+
+
+		describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
         assigns(:title).should eq("Edit My Profile")
@@ -74,8 +74,8 @@ describe UsersController do
         response.should render_template(:edit_profile)
       end
     end
-    
-		describe "GET update_profile" do  
+
+		describe "GET update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "gandalf" }
         post :update_profile, id: @professor.id, :user => params
@@ -84,21 +84,21 @@ describe UsersController do
         @professor.display_name.should eq("gandalf")
       end
     end
-    
-		describe "GET import" do  
+
+		describe "GET import" do
       it "renders the import page" do
         get :import
         response.should render_template(:import)
       end
     end
-    
-		describe "GET upload" do  
+
+		describe "GET upload" do
       pending
     end
-    
+
 	end
 
-	context "as a student" do 
+	context "as a student" do
 
     before do
       @course = create(:course)
@@ -107,10 +107,10 @@ describe UsersController do
 
       login_user(@student)
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET edit_profile" do  
+		describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
         assigns(:title).should eq("Edit My Profile")
@@ -118,8 +118,8 @@ describe UsersController do
         response.should render_template(:edit_profile)
       end
     end
-    
-		describe "GET update_profile" do  
+
+		describe "GET update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "frodo" }
         post :update_profile, id: @student.id, :user => params
@@ -128,7 +128,7 @@ describe UsersController do
         @student.display_name.should eq("frodo")
       end
     end
-    
+
 
 		describe "protected routes" do
       [
