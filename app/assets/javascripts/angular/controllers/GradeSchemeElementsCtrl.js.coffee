@@ -47,18 +47,17 @@
           required: true
         }
       }
-      ,{
-        type: 'button',
-        className: "remove-element button alert radius .small-12 medium-2 columns",
-        templateOptions: {
-          text: 'Remove',
-          onClick: ($event) ->
-            alert('foo!')
-        }
-      }
+      # ,{
+      #   type: 'button',
+      #   className: "remove-element button alert radius .small-12 medium-2 columns",
+      #   templateOptions: {
+      #     text: 'Remove',
+      #     onClick: ($event) ->
+      #       alert('foo!')
+      #   }
+      # }
     ]
   }
-      # / %button{:type => 'button', :class => 'remove-element button alert radius', 'ng-click' => 'model[options.key].splice($index, 1)'} Remove
 
   init = () ->
     gse.fields = [
