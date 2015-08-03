@@ -6,7 +6,15 @@
   border-radius: $global-radius
   background-color: #FFF
   margin-right: .75rem
+.side-nav
+  margin: 0
+  padding: 1rem
 
+.staff_subnav
+  min-width: 230px
+  margin: 0
+  padding: 0
+  background-color: #FFF
   /* Subheadings */
   h5
     font-size: .9rem
@@ -16,8 +24,6 @@
 
   ul
     margin: 0
-    padding: 0
-
   /* Spacing out the list items*/
   li
     text-transform: capitalize
@@ -28,8 +34,6 @@
     a
       display: block !important
       color: $primary-color
-      padding: 0.15rem 
-      text-decoration: none
 
     a:hover, a:focus
       background-color: $primary-color
@@ -182,17 +186,3 @@ ul.off-canvas-list
       margin-bottom: .25rem
       img
         width: 100%
-
-/* Styles the hover state on the box plot on the student dashboard */
-.jqstooltip
-  box-sizing: content-box
-  height: auto !important
-  width: auto !important
-
-/* Makes the box plot responsive */
-#student_grade_distro canvas, .grades_per_assign canvas, .circliful
-  width: 100% !important
-  margin: 1rem 0
-
-  .button
-    border-radius: $global-radius
