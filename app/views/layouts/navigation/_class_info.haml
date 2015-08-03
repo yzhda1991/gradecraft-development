@@ -1,55 +1,56 @@
-%li.has-dropdown.hide-for-small
-  %a Class Info
-  %ul.dropdown.classInfo
+%li
+  %a{:href => "#"} 
+    %i.fa.fa-flash
+    Professor #{ current_course.professor.try(:name) }
+- if current_course.office.present?
+  %li
+    %a{:href => "#"}
+      %i.fa.fa-book
+      ="Office: #{current_course.office}"
+- if current_course.office_hours.present?
+  %li
+    %a{:href => "#"}
+      %i.fa.fa-clock-o
+      Office Hours:
+      = auto_link(current_course.office_hours)
+- if current_user_is_student? && current_student.team_leaders(current_course).present?
+  - current_student.team_leaders(current_course).each do |team_leader|
     %li
-      %i.fa.fa-flash
-      Professor #{ current_course.professor.try(:name) }
-    - if current_user_is_student? && current_student.team_leaders(current_course).present?
-      - current_student.team_leaders(current_course).each do |team_leader|
-        %li
-          %i.fa.fa-flag
-          = "#{current_course.team_leader_term} #{team_leader.first_name}"
-    - if current_user_is_student? && current_user.team_for_course(current_course).present?
-      %li
-        %i.fa.fa-trophy
-        = "#{(term_for :team).titleize} #{current_user.team_for_course(current_course).name}"
-    - if current_course.syllabus.present?
-      %a{:href => current_course.syllabus_url }
-        %li
-          %i.fa.fa-pdf-o
-          Course Syllabus
-    - if current_course.phone.present?
-      %li
-        %i.fa.fa-phone
-        Phone Number: #{current_course.phone }
-    - if current_course.class_email.present?
-      %a{:href => "mailto:#{current_course.class_email}"}
-        %li
-          %i.fa.fa-envelope
-          Class Email: #{current_course.class_email}
-    - if current_course.twitter_handle.present?
-      %a{:href => "http://www.twitter.com/##{current_course.twitter_handle}"}
-        %li
-          %i.fa.fa-twitter
-          Twitter Handle:
-          = current_course.twitter_handle
-    - if current_course.twitter_hashtag.present?
-      %a{:href => "http://www.twitter.com/##{current_course.twitter_hashtag}"}
-        %li
-          ="# Hashtag: ##{current_course.twitter_hashtag}"
-    - if current_course.meeting_times.present?
-      %li
-        %i.fa.fa-bank
-        Classes Meet:
-        = current_course.meeting_times
-        = current_course.location
-    - if current_course.office.present?
-      %li
-        %i.fa.fa-book
-        Professor's Office:
-        = current_course.office
-    - if current_course.office_hours.present?
-      %li
-        %i.fa.fa-clock-o
-        Office Hours:
-        = auto_link(current_course.office_hours)
+      %a{:href => "#"}
+        %i.fa.fa-flag
+        = "#{current_course.team_leader_term} #{team_leader.first_name}"
+- if current_user_is_student? && current_user.team_for_course(current_course).present?
+  %li
+    %a{:href => "#"}
+      %i.fa.fa-trophy
+      = "#{(term_for :team).titleize} #{current_user.team_for_course(current_course).name}"
+- if current_course.syllabus.present?
+  %li
+    %a{:href => current_course.syllabus_url }
+      %i.fa.fa-pdf-o
+      Course Syllabus
+- if current_course.phone.present?
+  %li{:href => "#"}
+    %a
+      %i.fa.fa-phone
+      #{current_course.phone }
+- if current_course.class_email.present?
+  %li
+    %a{:href => "mailto:#{current_course.class_email}"}
+      %i.fa.fa-envelope
+      #{current_course.class_email}
+- if current_course.twitter_handle.present?
+  %li
+    %a{:href => "http://www.twitter.com/##{current_course.twitter_handle}"}
+      %i.fa.fa-twitter
+      = "@#{current_course.twitter_handle}"
+- if current_course.twitter_hashtag.present?
+  %li
+    %a{:href => "http://www.twitter.com/##{current_course.twitter_hashtag}"}
+      ="##{current_course.twitter_hashtag}"
+- if current_course.meeting_times.present?
+  %li
+    %a{:href => "#"}
+      %i.fa.fa-bank
+      = current_course.meeting_times
+      = current_course.location

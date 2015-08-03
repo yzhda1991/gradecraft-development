@@ -1445,7 +1445,6 @@ $tabs-navigation-padding: rem-calc(6);
 // $include-accessibility-classes: true;
 
 @import 'foundation/components/grid';
-@import 'foundation/components/top-bar';
 @import 'foundation/components/offcanvas';
 @import 'foundation/components/side-nav';
 @import 'foundation/components/button-groups';
@@ -1465,6 +1464,7 @@ $tabs-navigation-padding: rem-calc(6);
 @import 'foundation/components/alert-boxes';
 @import 'foundation/components/progress-bars';
 /*@import 'foundation/components/accordion';
+@import 'foundation/components/top-bar';
 @import 'foundation/components/breadcrumbs';
 @import 'foundation/components/clearing';
 @import 'foundation/components/flex-video';

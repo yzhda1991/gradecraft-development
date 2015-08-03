@@ -68,5 +68,6 @@
 //= require course_switch
 //= require background
 //= require d3
+//= require offscreen-nav
 
 $(function(){ $(document).foundation(); });

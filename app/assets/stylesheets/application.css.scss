@@ -41,28 +41,24 @@ $media-xlarge-max:  120rem; //
 
 @import 'color';
 @import 'datepicker';
-@import 'foundation_and_overrides';
-@import 'sidebars';
-@import 'forms';
-@import 'tables';
-@import 'student_dashboard';
-@import 'timeline';
 @import 'analytics';
 @import 'background';
-@import 'breadcrumbs';
-@import 'navigation';
-@import 'videos';
-@import 'bootsy';
-@import 'layout';
-@import 'buttons_and_icons';
-@import 'typography';
-@import 'homepage';
-@import 'rubrics';
-@import 'collapse';
 @import 'badges';
+@import 'breadcrumbs';
+@import 'bootsy';
+@import 'buttons_and_icons';
+@import 'datepicker';
+@import 'collapse';
+@import 'forms';
+@import 'homepage';
+@import 'layout';
 @import 'predictor';
-
-/* override foundation body color */
-body {
-  background-color: rgba(0, 0, 0, 0);
-}
+@import 'rubrics';
+@import 'sidebars';
+@import 'student_dashboard';
+@import 'tables';
+@import 'tabs';
+@import 'timeline';
+@import 'topbar';
+@import 'typography';
+@import 'videos';
