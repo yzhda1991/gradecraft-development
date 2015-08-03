@@ -57,7 +57,6 @@
     params: ()->
       {
         id: self.id,
-        status: self.status,
         raw_score: this.raw_score,
         feedback: this.feedback,
         is_custom_value: this.is_custom_value

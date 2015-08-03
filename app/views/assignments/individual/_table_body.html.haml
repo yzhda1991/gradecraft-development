@@ -18,8 +18,7 @@
       - if @assignment.pass_fail
         = term_for(grade.pass_fail_status) if instructor_modified == true
       - else
-        - if instructor_modified == true
-          = points grade.raw_score
+        = grade.raw_score if instructor_modified
 
     %td
       %span

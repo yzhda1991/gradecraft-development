@@ -29,8 +29,8 @@
   #       badge_id: this.badge.id
   #
 
-@gradecraft.factory 'MetricBadgePrototype', ->
-  class MetricBadgePrototype
+@gradecraft.factory 'MetricBadge', ->
+  class MetricBadge
     constructor: (metric, badge, attrs={}) ->
       @metric = metric
       @badge = badge
