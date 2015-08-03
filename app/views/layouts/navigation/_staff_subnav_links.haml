@@ -16,16 +16,14 @@
     = link_to raw('<i class="fa fa-list-ol fa-fw"></i> Leaderboard'), leaderboard_path
   %li
     = link_to raw('<i class="fa fa-flag-checkered fa-fw"></i> Grading Status'), grading_status_path
-
-    %ul
-      %li
-        %a{:href => resubmissions_path}
-          %i.fa.fa-history.fa-fw
-          = "Resubmissions"
-      %li
-        %a{:href => ungraded_submissions_path}
-          %i.fa.fa-exclamation-triangle.fa-fw
-          = "Ungraded Submissions"
+  %li
+    %a{:href => resubmissions_path}
+      %i.fa.fa-history.fa-fw
+      = "Resubmissions"
+  %li
+    %a{:href => ungraded_submissions_path}
+      %i.fa.fa-exclamation-triangle.fa-fw
+      = "Ungraded Submissions"
 
 
   - if current_course.student_weighted?

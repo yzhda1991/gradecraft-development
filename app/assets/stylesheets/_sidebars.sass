@@ -1,43 +1,44 @@
 /** Staff Sidebar **/
+.side-nav
+  margin: 0
+  padding: 1rem
+
 .staff_subnav
+  min-width: 230px
+  margin: 0
+  padding: 0
   background-color: #FFF
-  padding: 0.2rem 0.75rem 0.75rem
-  display: table-cell
-  border-radius: $global-radius
 
   /* Subheadings */
   h5
-    font-size: 1rem
+    font-size: .9rem
     font-weight: bold
-    text-transform: uppercase
+    font-family: "Century Schoolbook", serif
+    margin: 0 0 0.25rem
+
+  ul
+    margin: 0
 
   /* Spacing out the list items*/
   li
     text-transform: capitalize
     margin: 0
+    list-style-type: none
     white-space: nowrap
-    display: block
-    padding: 2px 0
 
     a
-      padding: 0.25rem !important
-      display: block
+      display: block !important
+      color: $primary-color
+      padding: 0.5rem 0 
+      text-decoration: none
 
-    a:hover
-      background-color: #FFF !important
-      border-radius: $global-radius
-      color: $secondary-color-2 !important
-
-    li
-      list-style-type: none
-      margin-left: -10px
-
-      a
-        padding: 0
+    a:hover, a:focus
+      background-color: $primary-color
+      color: #FFF
 
   li.has-form
     padding: 0 !important
-    margin: 0 0 0.5rem
+    margin: 0
 
     .button.alert
       text-transform: uppercase
@@ -95,7 +96,7 @@ ul.off-canvas-list
   text-transform: uppercase
   margin-top: 0
   margin-bottom: 0
-
+  
 .has-form input
   border-top-left-radius: $global-radius
   border-bottom-left-radius: $global-radius
@@ -125,9 +126,6 @@ ul.off-canvas-list
 .side-nav li a:not(.button)
   display: inline !important
   padding: 0
-
-ul.off-canvas-list li a
-  color: black
 
 /* Styles the hover state on the box plot on the student dashboard */
 .jqstooltip
