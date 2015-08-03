@@ -1,0 +1,41 @@
+%section.predictor-challenges
+  .collapse-toggler.clear
+    .predictor-section-title
+      .predictor-section-title-left
+        {{termFor.challenges}}
+      .predictor-section-title-right
+        Points Total: {{challengesPointTotal() | number}}
+  .collapsable
+    %article.predictor-article{'ng-repeat' => 'challenge in challenges'}
+
+      .predictor-article-title{'title' => '{{challenge.name}}'}
+        {{challenge.name | limitTo:26}}
+
+      .predictor-article-icons
+        .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'challenge'=>'challenge'}
+
+      .predictor-article-date
+        .predictor-date{'ng-if' => 'dueInFuture(challenge)'}
+          due: {{challenge.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
+
+      .predictor-article-main
+
+        {{challenges.prediction.points_earned}}
+
+        .article-graded{'ng-if' => 'articleGraded(challenge)'}
+          .grade
+            {{challenge.grade.score | number}} / {{challenge.grade.point_total | number}}
+
+
+        .article-predicted{'ng-if' => '! articleGraded(challenge)'}
+          %div
+            .slider{'ui-slider'=>'slider(challenge)','min'=>'0', 'max'=>'{{challenge.grade.point_total}}', 'ng-model'=>'challenge.prediction.points_earned', 'data'=>{'id'=>'{{challenge.id}}','article-type'=>'challenge'}}
+
+            .grade{'ng-if' => '! hasLevels(challenge)'}
+              {{challenge.prediction.points_earned | number}} / {{challenge.grade.point_total | number}}
+
+            .grade{'id'=>'challenge-{{challenge.id}}-level',  'ng-if' => 'hasLevels(challenge)'}
+              .value
+                {{challenge.prediction.points_earned | number}} / {{challenge.grade.point_total | number}}
+              .name
+                {{levelNameForChallengeScore(challenge)}}

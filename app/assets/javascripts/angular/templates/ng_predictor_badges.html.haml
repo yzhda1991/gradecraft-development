@@ -6,19 +6,26 @@
       .predictor-section-title-right
         Points Total: {{badgesPointTotal() | number}}
   .collapsable
-    %article.predictor-assignment{'ng-repeat' => 'badge in badges'}
+    %article.predictor-article{'ng-repeat' => 'badge in badges'}
 
       .predictor-article-title{'title' => '{{badge.name}}'}
         {{badge.name | limitTo:26}}
 
       .predictor-article-icons
-        .predictor-assignment-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'assignment'=>'badge'}
+        .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'badge'}
 
       .predictor-badge-main
 
         %img.predictor-badge-icon{ :src => '{{badge.icon}}', :alt => '{{badge.name}}' }
 
-        .badge-predicted
-          %div
-            .predictor-pass-fail-switch{'target'=>'badge','target-type'=>'badge','off-value'=>'0','on-value'=>'badge.point_total'}
+
+        .badge-complete{'ng-if'=>'badgeCompleted(badge)'}
+          .value
+            {{badge.total_earned_points}}
+
+        .badge-predicted{'ng-if'=>'!badgeCompleted(badge)'}
+
+          .predictor-binary-switch{'ng-if'=>'!badge.can_earn_multiple_times','target'=>'badge','target-type'=>'badge','off-value'=>'0','on-value'=>'badge.point_total'}
+
+          .predictor-counter-switch{'ng-if'=>'badge.can_earn_multiple_times', 'target'=>'badge'}
 

@@ -131,6 +131,7 @@ GradeCraft::Application.routes.draw do
 
   #5. Badges
   resources :badges do
+    post :predict_times_earned
     resources :tasks
     resources :earned_badges do
       post :toggle_shared
@@ -149,6 +150,7 @@ GradeCraft::Application.routes.draw do
 
   #6. Challenges
   resources :challenges do
+    post :predict_points
     resources :challenge_grades do
       collection do
         post :edit_status
@@ -320,11 +322,9 @@ GradeCraft::Application.routes.draw do
 
   #16. Predictor
   get 'predictor' => 'students#predictor'
-  # TODO: remove old predictor files once new one is in place
-  get 'old_predictor' => 'students#old_predictor'
-
   get 'predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
   get 'predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
   get 'predictor_assignments' => 'assignments#student_predictor_data', defaults: {format: :json}
   get 'predictor_badges' => 'badges#student_predictor_data', defaults: {format: :json}
+  get 'predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
 end

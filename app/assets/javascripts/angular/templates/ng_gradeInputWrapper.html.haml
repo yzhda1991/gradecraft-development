@@ -1,0 +1,41 @@
+%p
+  %formly-transclude
+%div{'ng-if' => 'options.data.apiCheck.failed'}
+  %span{'style' => 'color:red'}
+    %code
+      :preserve
+        validatieOptions
+      for this field failed!
+  %p
+    %strong Message
+    %span.text-muted
+      (logged to the console)
+    %pre
+      {{options.data.apiCheck.message}}
+%div{'ng-if' => '!options.data.apiCheck.failed'}
+  %span{'style' => 'color:green'}
+    %code
+      for this field passed!
+
+
+
+
+
+
+
+
+
+
+      / <p>
+      /   <formly-transclude></formly-transclude>
+      / </p>
+      / <div ng-if="options.data.apiCheck.failed">
+      /   <span style="color:red"><code>validateOptions</code> for this field failed!</span>
+      /   <p>
+      /     <strong>Message</strong> <span class="text-muted">(logged to the console)</span>
+      /     <pre>{{options.data.apiCheck.message}}</pre>
+      /   </p>
+      / </div>
+      / <div ng-if="!options.data.apiCheck.failed">
+      /   <span style="color:green"><code>validateOptions</code> for this field passed!</span>
+      / </div>

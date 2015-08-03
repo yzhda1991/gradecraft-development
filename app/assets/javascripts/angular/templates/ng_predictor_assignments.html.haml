@@ -1,4 +1,4 @@
-%article.predictor-assignment{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}','ng-class'=>'assignmentGradedClass(assignment)'}
+%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : assignmentGraded(assignment)}'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
     {{assignment.name | limitTo:26}}
@@ -7,29 +7,32 @@
     .predictor-assignment-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'assignment'=>'assignment'}
 
   .predictor-article-date
-    .assignment-due-at{'ng-if' => 'assignmentDueInFuture(assignment)'}
+    .predictor-date{'ng-if' => 'dueInFuture(assignment)'}
       due: {{assignment.due_at | date:"MM/dd/yyyy 'at' h:mma"}}
 
   .predictor-article-main
 
-    .assignment-graded{'ng-if' => 'assignmentGraded(assignment)'}
+    .article-graded{'ng-if' => 'assignmentGraded(assignment)'}
       .grade{'ng-if' => 'assignment.pass_fail == false'}
-        {{assignment.grade.score | number}} / {{assignment.point_total | number}}
+        {{assignment.grade.score | number}} / {{assignment.grade.point_total | number}}
       .grade{'ng-if' => 'assignment.pass_fail == true'}
         {{termFor[assignment.grade.pass_fail_status]}}
 
-    .assignment-predicted{'ng-if' => '! assignmentGraded(assignment)'}
-      %div{'ng-if' => 'assignment.pass_fail == false'}
-        .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}'}}
+    .article-predicted{'ng-if' => '! assignmentGraded(assignment)'}
+      %div{'ng-if' => 'assignment.pass_fail == false && assignment.fixed == false'}
+        .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.grade.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}','article-type'=>'assignment'}}
 
         .grade{'ng-if' => '! hasLevels(assignment)'}
-          {{assignment.grade.predicted_score | number}} / {{assignment.point_total | number}}
+          {{assignment.grade.predicted_score | number}} / {{assignment.grade.point_total | number}}
 
         .grade{'id'=>'assignment-{{assignment.id}}-level',  'ng-if' => 'hasLevels(assignment)'}
           .value
-            {{assignment.grade.predicted_score | number}} / {{assignment.point_total | number}}
+            {{assignment.grade.predicted_score | number}} / {{assignment.grade.point_total | number}}
           .name
-            {{levelNameForScore(assignment)}}
+            {{levelNameForAssignmentScore(assignment)}}
 
       %div{'ng-if' => 'assignment.pass_fail == true'}
-        .predictor-pass-fail-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'1'}
+        .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'1'}
+
+      %div{'ng-if' => 'assignment.fixed == true'}
+        .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'assignment.grade.point_total'}

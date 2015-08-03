@@ -88,7 +88,8 @@ class User < ActiveRecord::Base
   has_many :earned_badges, :foreign_key => :student_id, :dependent => :destroy
   accepts_nested_attributes_for :earned_badges, :reject_if => proc { |attributes| attributes['earned'] != '1' }
   has_many :badges, :through => :earned_badges
-  has_many :predicted_earned_badges
+  has_many :predicted_earned_badges, :dependent => :destroy
+  has_many :predicted_earned_challenges, :dependent => :destroy
 
   has_many :group_memberships, :foreign_key => :student_id, :dependent => :destroy
   has_many :groups, :through => :group_memberships

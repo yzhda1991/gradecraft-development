@@ -1,6 +1,9 @@
 class BadgesController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:index, :student_predictor_data]
+  before_filter :ensure_staff?, :except => [:index, :student_predictor_data, :predict_times_earned]
+  before_filter :ensure_student?, only: [:predict_times_earned]
+
+
 
   def index
     if current_user_is_student?
@@ -105,6 +108,21 @@ class BadgesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to badges_path, notice: "#{@name} #{term_for :badge} successfully deleted" }
       format.json { head :ok }
+    end
+  end
+
+  def predict_times_earned
+    @badge = current_course.badges.find(params[:badge_id])
+    @badgePrediction = PredictedEarnedBadge.where(student: current_student, badge: @badge).first
+    @badgePrediction.times_earned = params[:times_earned]
+    respond_to do |format|
+      format.json do
+        if @badgePrediction.save
+          render :json => {id: @badge.id, times_earned: @badgePrediction.times_earned}
+        else
+          render :json => { errors:  @badgePrediction.errors.full_messages }, :status => 400
+        end
+      end
     end
   end
 

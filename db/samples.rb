@@ -322,18 +322,24 @@ educ_badges = educ_badge_names.map do |badge_name|
     b.name = badge_name
     b.point_total = 100 * rand(10)
     b.visible = 1
-    b.can_earn_multiple_times = true
+    b.can_earn_multiple_times = [true,false].sample
   end
 end
 puts "Did someone need motivation? We found these badges in the Room of Requirements..."
 
 educ_badges.each do |badge|
+  times_earned = 1
+  if badge.can_earn_multiple_times
+    times_earned = [1,1,2,3].sample
+  end
   students.each do |student|
     n = [1, 2, 3, 4, 5].sample
     if n.even?
-      student.earned_badges.create! do |eb|
-        eb.badge = badge
-        eb.course = educ_course
+      times_earned.times do
+        student.earned_badges.create! do |eb|
+          eb.badge = badge
+          eb.course = educ_course
+        end
       end
     end
   end
