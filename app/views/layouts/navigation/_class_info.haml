@@ -1,5 +1,6 @@
 %li
   %a{:href => "#"} 
+<<<<<<< HEAD
     %i.fa.fa-flash.fa-fw
     Professor #{ current_course.professor.try(:name) }
 - if current_course.office.present?
@@ -49,6 +50,11 @@
     %a{:href => "http://www.twitter.com/##{current_course.twitter_hashtag}"}
       %i.fa.fa-slack.fa-fw
       ="#{current_course.twitter_hashtag}"
+- if current_course.meeting_times.present?
+  %li
+    %a{:href => "#"}
+      %i.fa.fa-bank.fa-fw
+      ="##{current_course.twitter_hashtag}"
 - if current_course.meeting_times.present?
   %li
     %a{:href => "#"}
