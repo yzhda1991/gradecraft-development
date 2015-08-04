@@ -38,6 +38,25 @@
       else
         badge.deleteEarnedStudentBadge()
 
+    $scope.removeAllEarnedBadges = (event)->
+      event.preventDefault()
+      event.stopPropagation()
+
+      $http.delete("/grade/#{$scope.grade.id}/earned_badges").success(
+        (data, status)->
+          angular.forEach($scope.badges, (badge) ->
+            badge.handleDestroyAll()
+          )
+
+          awardedBadges = document.getElementsByClassName("grade-badge awarded")
+          `$timeout(function() { angular.element(awardedBadges).addClass("hide-after-fade")}, 1000)`
+
+      )
+      .error((err)->
+        alert("delete failed!")
+        return false
+      )
+
     $scope.earnBadgeForStudent = (badge)->
       $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
         (data, status)->

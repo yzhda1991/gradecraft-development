@@ -18,11 +18,16 @@
       this.addEarnedBadges()
       @awarded = this.earnedBadgesForGrade.length > 0 ? true : false
 
+    handleDestroyAll: ()->
+      this.earnedBadgesForGrade = []
+      $timeout(this.setAvailable, 300)
+
     deleteEarnedStudentBadge: ()->
       earnedBadge = this.earnedBadgesForGrade[0]
       if earnedBadge.deleteFromServer(this)
         this.earnedBadgesForGrade = []
         $timeout(this.setAvailable, 300)
+        $timeout(this.hideAfterFadeOnDestroy, 1000)
 
     earnBadge: (params)->
       self = this

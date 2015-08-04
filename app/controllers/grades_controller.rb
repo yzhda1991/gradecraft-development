@@ -117,6 +117,14 @@ class GradesController < ApplicationController
     render json: @earned_badge
   end
 
+  def delete_all_earned_badges
+    if EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
+      destroy_earned_badge_with_duplicates
+    else
+      destroy_single_earned_badge
+    end
+  end
+
   def delete_earned_badge
     if all_earned_badge_ids_present?
       destroy_earned_badge_with_duplicates
@@ -192,32 +200,55 @@ class GradesController < ApplicationController
   # create a new grade if none exists, and otherwise update the existing grade
   def update
     redirect_to @assignment and return unless current_student.present?
+    extract_file_attributes_from_grade_params
+    @grade = current_student.grade_for_assignment(@assignment)
 
+    if @grade_files
+      add_grade_files_to_grade
+    end
+
+    sanitize_grade_params
+
+    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
+      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+      update_success_redirect
+    else
+      update_failure_redirect
+    end
+  end
+
+  private
+
+  def sanitize_grade_params
+    params[:grade][:raw_score] = params[:grade][:raw_score].gsub(/\D/,"").to_i rescue nil
+  end
+
+  def update_failure_redirect
+    redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
+  end
+
+  def update_success_redirect
+    if session[:return_to].present?
+      redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
+    else
+      redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
+    end
+  end
+
+  def add_grade_files_to_grade
+    @grade_files.each do |gf|
+      @grade.grade_files.new(file: gf, filename: gf.original_filename[0..49])
+    end
+  end
+
+  def extract_file_attributes_from_grade_params
     if params[:grade][:grade_files_attributes].present?
       @grade_files = params[:grade][:grade_files_attributes]["0"]["file"]
       params[:grade].delete :grade_files_attributes
     end
+  end 
 
-    @grade = current_student.grade_for_assignment(@assignment)
-
-    if @grade_files
-      @grade_files.each do |gf|
-        @grade.grade_files.new(file: gf, filename: gf.original_filename[0..49])
-      end
-    end
-
-    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
-      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_student_visible?
-
-      if session[:return_to].present?
-        redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-      else
-        redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-      end
-    else
-      redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
-    end
-  end
+  public
 
   def submit_rubric
     if @submission = Submission.where(current_assignment_and_student_ids).first
