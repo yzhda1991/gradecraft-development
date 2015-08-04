@@ -1,6 +1,6 @@
 %h4.uppercase#awarded-header
   #{term_for :badges} Awarded
-  %button#remove-badges(ng-click="removeAllEarnedBadges($event)") Remove All
+  %button#remove-badges(ng-click="removeAllEarnedBadges($event)" ng-show="badgesAwarded()") Remove All
 
 - if @badges.present?
 

@@ -26,6 +26,20 @@
         $scope.assignmentScoreLevels.push scoreLevelPrototype
       )
 
+    $scope.badgesAvailable = ()->
+      earnedBadgeCount = 0
+      angular.forEach($scope.badges, (badge)->
+        earnedBadgeCount += 1 unless badge.earnedBadgesForGrade.length == 0
+      )
+      earnedBadgeCount != $scope.badges.length
+
+    $scope.badgesAwarded = ()->
+      earnedBadgeCount = 0
+      angular.forEach($scope.badges, (badge)->
+        earnedBadgeCount += 1 unless badge.earnedBadgesForGrade.length == 0
+      )
+      earnedBadgeCount != 0
+
     unless assignmentScoreLevels.length == undefined
       $scope.addAssignmentScoreLevels(assignmentScoreLevels)
 
@@ -55,7 +69,6 @@
           angular.forEach(data["grades"], (earnedBadge)->
             unearnedBadges[earnedBadge.badge_id].earnBadge(earnedBadge)
           )
-
           availableBadges = document.getElementsByClassName("grade-badge available")
           `$timeout(function() { angular.element(availableBadges).addClass("hide-after-fade")}, 1000)`
       )
@@ -64,20 +77,18 @@
         return false
       )
 
-
     $scope.removeAllEarnedBadges = (event)->
       event.preventDefault()
       event.stopPropagation()
+      angular.element(event.currentTarget).addClass("ng-hide")
 
       $http.delete("/grade/#{$scope.grade.id}/earned_badges").success(
         (data, status)->
           angular.forEach($scope.badges, (badge) ->
             badge.handleDestroyAll()
           )
-
           awardedBadges = document.getElementsByClassName("grade-badge awarded")
           `$timeout(function() { angular.element(awardedBadges).addClass("hide-after-fade")}, 1000)`
-
       )
       .error((err)->
         alert("delete failed!")

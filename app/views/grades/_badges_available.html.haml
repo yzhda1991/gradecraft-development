@@ -1,7 +1,7 @@
 - if @badges.present?
   %h4.uppercase#badges-available
     #{term_for :badges} Available
-    %button#add-badges(ng-click="addRemainingEarnedBadges($event)") Add All
+    %button#add-badges(ng-click="addRemainingEarnedBadges($event)" ng-show="badgesAvailable()") Add All
 
   .grade-badge.hexagon.available(title="{{badge.point_total}} Points: {{badge.description}}" ng-repeat="badge in badges" ng-class="{unearned: badge.earnedBadgesForGrade.length <= 0, earned: badge.earnedBadgesForGrade.length > 0}" ng-click="earnBadgeForStudent(badge)" hide-after-fade)
 
