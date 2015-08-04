@@ -117,6 +117,11 @@ class GradesController < ApplicationController
     render json: @earned_badge
   end
 
+  def earn_student_badges
+    @earned_badges = EarnedBadge.create params[:earned_badges]
+    render json: @earned_badges
+  end
+
   def delete_all_earned_badges
     if EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
       destroy_earned_badge_with_duplicates

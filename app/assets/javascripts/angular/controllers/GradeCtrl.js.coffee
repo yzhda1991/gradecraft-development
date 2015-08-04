@@ -38,6 +38,33 @@
       else
         badge.deleteEarnedStudentBadge()
 
+    $scope.addRemainingEarnedBadges = (event)->
+      event.preventDefault()
+      event.stopPropagation()
+
+      unearnedBadges = {}
+      unearnedBadgesPostParams = []
+      angular.forEach($scope.badges, (badge)->
+        if badge.unearned()
+          unearnedBadges[badge.id] = badge
+          unearnedBadgesPostParams.push $scope.earnManyBadgesPostParams(badge)
+      )
+
+      $http.post("/grade/#{$scope.grade.id}/earn_student_badges.json", {earned_badges: unearnedBadgesPostParams}).success(
+        (data, status)->
+          angular.forEach(data["grades"], (earnedBadge)->
+            unearnedBadges[earnedBadge.badge_id].earnBadge(earnedBadge)
+          )
+
+          availableBadges = document.getElementsByClassName("grade-badge available")
+          `$timeout(function() { angular.element(availableBadges).addClass("hide-after-fade")}, 1000)`
+      )
+      .error((err)->
+        alert("delete failed!")
+        return false
+      )
+
+
     $scope.removeAllEarnedBadges = (event)->
       event.preventDefault()
       event.stopPropagation()
@@ -74,6 +101,14 @@
         grade_id: $scope.grade.id,
         assignment_id: $scope.grade.assignment_id
         score: badge.point_total
+
+    $scope.earnManyBadgesPostParams = (badge)->
+      student_id: $scope.grade.student_id
+      badge_id: badge.id,
+      grade_id: $scope.grade.id,
+      assignment_id: $scope.grade.assignment_id
+      score: badge.point_total
+
 
     $scope.froalaOptions = {
       inlineMode: false,

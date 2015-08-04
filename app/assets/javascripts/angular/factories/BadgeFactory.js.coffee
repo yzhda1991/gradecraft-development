@@ -43,6 +43,9 @@
         self.earnBadge(earnedBadgeParams)
       )
 
+    unearned: ()->
+      this.earnedBadgesForGrade.length == 0
+
     setAwarded: ()->
       this.awarded = true
 
