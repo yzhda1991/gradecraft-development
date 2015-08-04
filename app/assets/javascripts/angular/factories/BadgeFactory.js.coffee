@@ -17,17 +17,21 @@
       this.earnedBadgesForGrade = []
       this.addEarnedBadges()
       @awarded = this.earnedBadgesForGrade.length > 0 ? true : false
+      @frozen = false
 
     handleDestroyAll: ()->
       this.earnedBadgesForGrade = []
       $timeout(this.setAvailable, 300)
 
     deleteEarnedStudentBadge: ()->
-      earnedBadge = this.earnedBadgesForGrade[0]
-      if earnedBadge.deleteFromServer(this)
-        this.earnedBadgesForGrade = []
-        $timeout(this.setAvailable, 300)
-        $timeout(this.hideAfterFadeOnDestroy, 1000)
+      unless this.frozen
+        this.freeze() # prevent user from continuing to click and submit the deleted item
+        earnedBadge = this.earnedBadgesForGrade[0]
+        if earnedBadge.deleteFromServer(this)
+          this.earnedBadgesForGrade = []
+          $timeout(this.setAvailable, 300)
+          $timeout(this.hideAfterFadeOnDestroy, 1000)
+          $timeout(this.unfreeze, 1000)
 
     earnBadge: (params)->
       self = this
@@ -36,6 +40,7 @@
         self.earnedBadgesForGrade.push earnedBadge
       else
         self.otherEarnedBadges.push earnedBadge
+      $timeout(this.unfreeze, 1000)
 
     addEarnedBadges: ()->
       self = this
@@ -51,4 +56,11 @@
 
     setAvailable: ()->
       this.awarded = false
+
+    unfreeze: ()->
+      this.frozen = false
+
+    freeze: ()->
+      this.frozen = true
+
 ]

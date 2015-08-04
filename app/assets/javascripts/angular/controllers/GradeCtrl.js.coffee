@@ -85,14 +85,18 @@
       )
 
     $scope.earnBadgeForStudent = (badge)->
-      $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
-        (data, status)->
-          badge.earnBadge(data["earned_badge"])
-      )
-      .error((err)->
-        alert("create failed!")
-        return false
-      )
+      unless badge.frozen
+        badge.freeze()
+
+        $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
+          (data, status)->
+            badge.earnBadge(data["earned_badge"])
+        
+        )
+        .error((err)->
+          alert("create failed!")
+          return false
+        )
  
     $scope.earnedBadgePostParams = (badge)->
       earned_badge:
