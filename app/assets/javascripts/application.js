@@ -24,6 +24,8 @@
 //= require angular
 //= require angular-resource
 //= require angular-animate
+//= require angular-rails-templates
+//= require_tree ./angular/templates
 //= require ng-rails-csrf
 //= require ./angular/main.js
 //= require ./angular/ui/sortable
@@ -54,7 +56,6 @@
 //= require grade_distribution
 //= require jquery.ui.widget
 //= require jquery.circliful.min
-//= require jquery.sticky
 //= require jquery.highchartTable-min
 //= require jquery.collapse
 //= require jquery.collapse_storage
@@ -66,5 +67,6 @@
 //= require uploads
 //= require course_switch
 //= require background
+//= require d3
 
 $(function(){ $(document).foundation(); });

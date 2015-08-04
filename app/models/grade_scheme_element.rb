@@ -6,7 +6,8 @@ class GradeSchemeElement < ActiveRecord::Base
   validates_presence_of :low_range, :high_range
   validates_numericality_of :high_range, greater_than: Proc.new { |e| e.low_range.to_i }
 
-  scope :order_by_low_range, -> { order 'low_range ASC' }
+  default_scope { order 'low_range ASC' }
+
   scope :order_by_high_range, -> { order 'high_range DESC' }
 
   # Getting the name of the Grade Scheme Element - the Level if it's present, the Letter if not
@@ -18,11 +19,11 @@ class GradeSchemeElement < ActiveRecord::Base
     end
   end
 
-  # Checking to see if the grade elements overlap 
+  # Checking to see if the grade elements overlap
   def overlap?(element)
     element.low_range <= high_range && element.high_range >= low_range
   end
-  
+
   #Calculating the range that covers this element
   def range
     high_range.to_f - low_range.to_f

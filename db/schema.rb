@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150630165115) do
+ActiveRecord::Schema.define(version: 20150730192800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,11 +146,11 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.string   "mass_grade_type",                   limit: 255
     t.boolean  "include_in_timeline",                           default: true
     t.boolean  "include_in_predictor",                          default: true
-    t.integer  "position"
     t.boolean  "include_in_to_do",                              default: true
-    t.boolean  "use_rubric",                                    default: true
+    t.integer  "position"
     t.string   "student_logged_button_text",        limit: 255
     t.string   "student_logged_revert_button_text", limit: 255
+    t.boolean  "use_rubric",                                    default: true
     t.boolean  "accepts_attachments",                           default: true
     t.boolean  "accepts_text",                                  default: true
     t.boolean  "accepts_links",                                 default: true
@@ -195,6 +195,7 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.datetime "updated_at"
     t.boolean  "visible",                             default: true
     t.boolean  "can_earn_multiple_times",             default: true
+    t.text     "email_description"
     t.integer  "position"
   end
 
@@ -377,6 +378,7 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.integer  "point_total"
     t.boolean  "in_team_leaderboard"
     t.boolean  "add_team_score_to_student",                                         default: false
+    t.boolean  "badge_emails",                                                      default: false
     t.datetime "start_date"
     t.datetime "end_date"
     t.string   "pass_term",                     limit: 255
@@ -390,13 +392,6 @@ ActiveRecord::Schema.define(version: 20150630165115) do
   create_table "dashboards", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "duplicated_users", id: false, force: :cascade do |t|
-    t.integer "id"
-    t.string  "last_name",   limit: 255
-    t.string  "role",        limit: 255
-    t.integer "submissions", limit: 8
   end
 
   create_table "earned_badges", force: :cascade do |t|
@@ -472,6 +467,7 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.integer  "grade_scheme_id"
     t.string   "description",     limit: 255
     t.integer  "high_range"
+    t.integer  "team_id"
     t.integer  "course_id"
   end
 
@@ -511,13 +507,13 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score",                 default: 0,     null: false
+    t.boolean  "released"
+    t.integer  "predicted_score"
     t.boolean  "instructor_modified",             default: false
     t.string   "pass_fail_status"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
-  add_index "grades", ["assignment_id", "task_id", "submission_id"], name: "index_grades_on_assignment_id_and_task_id_and_submission_id", unique: true, using: :btree
   add_index "grades", ["assignment_id"], name: "index_grades_on_assignment_id", using: :btree
   add_index "grades", ["assignment_type_id"], name: "index_grades_on_assignment_type_id", using: :btree
   add_index "grades", ["course_id"], name: "index_grades_on_course_id", using: :btree
@@ -576,6 +572,22 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.datetime "updated_at"
     t.integer  "full_credit_tier_id"
     t.integer  "tiers_count",                     default: 0
+  end
+
+  create_table "predicted_earned_badges", force: :cascade do |t|
+    t.integer  "badge_id"
+    t.integer  "student_id"
+    t.integer  "times_earned", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "predicted_earned_challenges", force: :cascade do |t|
+    t.integer  "challenge_id"
+    t.integer  "student_id"
+    t.integer  "points_earned", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "proposals", force: :cascade do |t|
@@ -673,20 +685,11 @@ ActiveRecord::Schema.define(version: 20150630165115) do
   create_table "submission_files", force: :cascade do |t|
     t.string   "filename",        limit: 255,                 null: false
     t.integer  "submission_id",                               null: false
-    t.string   "filepath",        limit: 255
+    t.text     "filepath"
     t.string   "file",            limit: 255
     t.boolean  "file_processing",             default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "submission_files_duplicate", id: false, force: :cascade do |t|
-    t.string  "key",        limit: 255
-    t.string  "format",     limit: 255
-    t.integer "upload_id"
-    t.string  "full_name",  limit: 255
-    t.string  "last_name",  limit: 255
-    t.string  "first_name", limit: 255
   end
 
   create_table "submissions", force: :cascade do |t|
@@ -759,6 +762,7 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.boolean  "teams_leaderboard",               default: false
     t.boolean  "in_team_leaderboard",             default: false
     t.string   "banner",              limit: 255
+    t.string   "badge_email_type",    limit: 255
   end
 
   create_table "themes", force: :cascade do |t|
@@ -789,7 +793,7 @@ ActiveRecord::Schema.define(version: 20150630165115) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "username",                        limit: 255,                     null: false
+    t.string   "username",                        limit: 255,                 null: false
     t.string   "email",                           limit: 255
     t.string   "crypted_password",                limit: 255
     t.string   "salt",                            limit: 255
@@ -804,7 +808,6 @@ ActiveRecord::Schema.define(version: 20150630165115) do
     t.string   "avatar_content_type",             limit: 255
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.string   "role",                            limit: 255, default: "student", null: false
     t.string   "first_name",                      limit: 255
     t.string   "last_name",                       limit: 255
     t.integer  "rank"

@@ -1,49 +1,218 @@
 /** Student Dashboard Styles **/
 
-/* Adding the grey enclosure for the prediction */ 
+#predictor-main-content
+  background-color: #FFF
+  position: relative
+  height: auto !important
+  margin: 0 1% 1% 1%
+  padding-bottom: 1rem
+  border-radius: $global-radius
+  border: none
+  overflow: hidden
+  z-index: 2
+
+/* Adding the grey enclosure for the prediction */
 .gradePredictor
-  background-color: #eee
-  border: 1px solid #eee
-  border-radius: 15px
+  background-color: $color-blue-4
+  border-radius-top: .5rem
   padding: 15px
-  box-shadow: 0px 3px 3px #888888
   z-index: 100
 
   /* Setting the chart height */
   #prediction
     height: 120px
 
-.assignment
-  display: block
-  padding: 0.5rem 0rem
-  margin-bottom: 1rem
-  border: 1px solid #eee
-  border-radius: $global-radius
+/* Fixed height wrapper to suppport fixed position sticky items */
+.predictor-sticky-item-wrapper
+  height: 3rem
 
+.predictor-sticky-graph-wrapper
+  height: 5rem
+
+.predictor-info-bar-colum
+  width: 49%
+  float: left
+
+.predictor-title-colum
+  width: 60%
+  display: block
+  float: left
+
+.predictor-points-colum
+  width: 25%
+  text-align: right
+  float: left
+
+.predictor-sticky-item
+  font-size: 1.25rem
+  width: 100%
+  color: $txt-color-inverse
+  margin: 1rem 0 1rem 0
+  &.predictor-stuck-item
+    position: fixed
+    z-index: 1
+    height: 2rem
+    border-bottom: 1px solid white
+    transition: all 1s ease
+
+#predictor-grade-earned, #predictor-grade-predicted, #predictor-grade-possible
+  color: #000
+  padding: 0 3rem
+  &.predictor-stuck-item
+    padding: .25rem 1rem
+
+.predictor-key
+  width: 20px
+  height: 20px
+  float: left
+  margin-top: 5px
+  &.grade-earned-key
+    background-color: $color-green-1
+  &.grade-predicted-key
+    background-color: $color-blue-1
+  &.grade-possible-key
+    background-color: $color-yellow-3
+
+
+.predictor-stuck-item-item
+  .predictor-key
+    //visibility: hidden
+
+$sticky-height-1: 29px
+$sticky-height-2: 61px
+$sticky-height-3: 93px
+$sticky-height-4: 125px
+
+#predictor-graph-wrapper
+  padding: 15px 0 0 5%
+  #predictor-graph-min-points, #predictor-graph-max-points
+    float: left
+    color: black
+    padding: 10px 5px
+  #predictor-graph
+    height: 50px
+    width: 85%
+    overflow: hidden
+    background-color: $color-yellow-3
+    float: left
+  #predictor-graph-bar-earned
+    height: 50px
+    width: 24%
+    float: left
+    background-color: $color-green-1
+  #predictor-graph-bar-predicted
+    height: 50px
+    width: 50%
+    float: left
+    background-color: $color-blue-1
+  &.predictor-stuck-item
+    border-top: 1px solid white
+    padding-top: 5px
+    top: $sticky-height-1
+    background-color: #333333
+    #predictor-graph
+      height: 20px
+
+#predictor-graph
+  height: 50px
+  width: 95%
+  overflow: hidden
+  background-color: $color-yellow-3
+  #predictor-graph-bar-earned
+    height: 50px
+    width: 24%
+    float: left
+    background-color: $color-green-1
+  #predictor-graph-bar-predicted
+    height: 50px
+    width: 50%
+    float: left
+    background-color: $color-blue-1
+
+#predictor-grade-earned
+  background-color: $color-green-2
+  &.predictor-stuck-item
+    top: $sticky-height-2
+    background-color: $color-green-1
+#predictor-grade-predicted
+  background-color: $color-blue-3
+  &.predictor-stuck-item
+    top: $sticky-height-3
+    background-color: $color-blue-1
+
+#predictor-grade-possible
+  background-color: $color-yellow-3
+  &.predictor-stuck-item
+    top: $sticky-height-4
+    background-color: $color-yellow-3
+
+.assigment
+  display: block
+  margin-bottom: 1rem
+  border: 1px solid $color-layout-blue-0
+  border-bottom: .25rem solid $color-layout-blue-0
+  background-color: $color-layout-blue-4
+  float: left
+  width: 19%
+  margin: 3px
+  height: 8.8rem
   select
     margin: 0
 
-/* Styling the space where students actually predict their grades */ 
+.assignment-layout-title
+  background-color: $color-layout-blue-0
+  color: $txt-color-inverse
+  padding-left: .5rem
+  height: 2rem
+
+.assignment-layout-info
+  height: 1.5rem
+  background-color: $color-layout-blue-2
+  padding: .25rem
+
+.assignment-info-required
+  float: left
+  height: 1.25rem
+  width: 30px
+
+.assignment-info-late
+
+.assignment-layout-time
+  height: 1.25rem
+  background-color: $color-layout-blue-3
+  padding: .25rem
+
+.assignment-layout-points
+  height: 3.75rem
+
+.assignment-released-points
+  text-align: center
+  padding: 20px 0 10px 0
+
+// Nest inside once Backbone has been Angularized, right now we need the predictor to be a child of the data div
+.assignment-predicted-points-padding
+  height: 15px
+
+.assignment-due-at
+  font-style: italic
+  font-size: .75rem
+
+/* Styling the space where students actually predict their grades */
 #predictorPage ul.slides, #predictorPage ul.slides li
   list-style-type: none
   margin: 0
   padding: 0
 
-/* Styling the slider widgets */ 
-.slider.ui-widget-content
-  background: #eeeeee
-  border: none
+/* style the pass/fail switch */
+.assignment .pass-fail-grade-toggle
+  float: left
+  margin: 0 20px 0 20px
 
-.ui-widget-header
-  background: $secondary-color-2
-
-.ui-slider .ui-slider-handle
-  width: 20px
-  height: 20px
-  position: absolute
-  top: -5px
-  margin-left: -12px
-  background: darken($secondary-color-2, 15%)
+.assignment .switch label
+  background: white
+  padding-top: 2px
+.assignment .switch-label
+  font-weight: initial
 
 /* Styling the bar charts on the syllabus page */
 #userBarTotal
@@ -69,7 +238,7 @@ img.unearned
 img.earned
   opacity: 1
 
-/* Adjusting the margins on the small headers in the avatar panel */ 
+/* Adjusting the margins on the small headers in the avatar panel */
 .avatar.panel
   h3
     margin: 0
@@ -102,5 +271,32 @@ img.earned
   #numberComplete_canvas
     width: 100% !important
 
-.right.radius.label 
+.right.radius.label
   margin-left: 1rem
+
+/* MEDIA QUERIES */
+
+// small
+@media (max-width: $media-small-max)
+  .assignment
+    width: 100%
+  .medium-visible
+    visibility: hidden
+  .predictor-info-bar-colum
+    width: 100%
+
+// medium
+@media (min-width: $media-small-max) and (max-width: $media-medium-max)
+  .assignment
+    width: 48%
+
+// large
+@media (min-width: $media-medium-max) and (max-width: $media-large-max)
+  .assignment
+    width: 31%
+
+// x-large
+@media (min-width: $media-large-max) and (max-width: $media-xlarge-max)
+  .assignment
+    width: 24%
+

@@ -10,33 +10,61 @@
 
 /* Branding colors */
 
-$primary-color: #002d62;
-$primary-color-2: #269ECC;
+$color-layout-blue-0: #002d62; // darkest
+$color-layout-blue-1: #2E70BE;//#269ECC;
+$color-layout-blue-2: #6DD6FF;
+$color-layout-blue-3: #AAE7FF;
+$color-layout-blue-4: #C9F0FF;
+$color-layout-blue-5: #E8F8FF; // lightest
+
+$color-blue-1: #269ECC;
+$color-blue-2: #48BDEB;
+$color-blue-3: #8BDEFF;
+$color-blue-4: #E7F8FF;
+
+$color-green-1: #00BD39;
+$color-green-2: #6AC777;
+
+$color-yellow-3: #FFFD73;
+
+$primary-color: $color-layout-blue-0;
+$primary-color-2: $color-layout-blue-1;
+
 $primary-color-3: #55a9bc;
 $primary-color-4: #72cdf4;
 $primary-color-5: #0079c0;
-$secondary-color: #00BD39;
-$secondary-color-2: #6ac777;
-$secondary-color-3: #6ac777;
-$secondary-color-4: #6ac777;
-$secondary-color-5: #6ac777;
+
+$secondary-color: $color-green-1;
+$secondary-color-2: $color-green-2;
+$secondary-color-3: $color-green-2;
+$secondary-color-4: $color-green-2;
+$secondary-color-5: $color-green-2;
+
 $alert-color: #f1592a;
 $alert-color-2: #f7941e;
 $alert-color-3: #fcb040;
 $alert-color-4: #ffcf06;
-$alert-color-5: #FFFD73;
+$alert-color-5: $color-yellow-3;
+
 $light-grey: #CCC;
 $medium-grey: #666;
 $dark-grey: #444444;
+
 $light_green: #EFFFED;
 $dark_green: #54BA3F;
 $inactive_red: #CC0000;
 $dark_red: #B40D0D;
-$badass_blue: #269ECC;
+$badass_blue: $color-blue-1;
 $badge_blue: #009BD6;
 $badge_green: #54B141;
 $badge_green_border: #439A31;
-$global-radius: 3px;
+
+
+$px-3: .1875rem;
+
+$global-radius: $px-3;
+
+$txt-color-inverse: #FFF;
 
 $bg-color-sky: #55C3F5;
 $bg-color-mountain-light: #6FA9DD;
@@ -47,11 +75,17 @@ $bg-color-hill-medium: #68A127;
 $bg-color-hill-dark: #348C44;
 $bg-color-hill-ex-dark: #274F2E;
 
-@mixin transition($property, $duration) {
-  -webkit-transition: $property $duration;
-  -ms-transition: $property $duration;
-  -o-transition: $property $duration;
-  transition: $property $duration;
+// Copied from Foundation for now, this can change when we remove Foundation
+$media-small-max:   40rem; // 640px
+$media-medium-max:  64rem; // 1024px
+$media-large-max:   90rem; // 1440px ~14"
+$media-xlarge-max:  120rem; //
+
+@mixin transition($property, $duration, $easing) {
+  -webkit-transition: $property $duration $easing;
+  -ms-transition: $property $duration $easing;
+  -o-transition: $property $duration $easing;
+  transition: $property $duration $easing;
 }
 
 @mixin linear-gradient($fromColor, $toColor) {
@@ -86,6 +120,7 @@ $bg-color-hill-ex-dark: #274F2E;
 @import 'rubrics';
 @import 'collapse';
 @import 'badges';
+@import 'predictor';
 
 /* override foundation body color */
 body {

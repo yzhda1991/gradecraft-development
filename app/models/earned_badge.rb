@@ -1,6 +1,9 @@
 class EarnedBadge < ActiveRecord::Base
   attr_accessible :score, :feedback, :student, :badge, :student_id, :badge_id, :submission_id,
-    :course_id, :assignment_id, :tier_id, :metric_id, :student_visible, :tier_badge_id, :grade, :_destroy
+    :course_id, :assignment_id, :tier_id, :metric_id, :student_visible, :tier_badge_id, :grade, :_destroy,
+    :predicted_points, :status
+
+  STATUSES= ["Predicted", "Earned"]
 
   belongs_to :course
   belongs_to :badge

@@ -1,6 +1,7 @@
 class BadgesController < ApplicationController
 
-  before_filter :ensure_staff?
+  before_filter :ensure_staff?, :except => [:student_predictor_data, :predict_times_earned]
+  before_filter :ensure_student?, only: [:predict_times_earned]
 
   def index
     @title = "#{term_for :badges}"
@@ -106,4 +107,48 @@ class BadgesController < ApplicationController
     end
   end
 
+  def predict_times_earned
+    @badge = current_course.badges.find(params[:badge_id])
+    @badgePrediction = PredictedEarnedBadge.where(student: current_student, badge: @badge).first
+    @badgePrediction.times_earned = params[:times_earned]
+    respond_to do |format|
+      format.json do
+        if @badgePrediction.save
+          render :json => {id: @badge.id, times_earned: @badgePrediction.times_earned}
+        else
+          render :json => { errors:  @badgePrediction.errors.full_messages }, :status => 400
+        end
+      end
+    end
+  end
+
+  def student_predictor_data
+    @student = current_student
+    @badges = predictor_badge_data
+    @badges.each do |badge|
+      badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(@student)
+    end
+  end
+
+  def staff_predictor_data
+    @student = User.find(params[:id])
+    @badges = predictor_badge_data
+    @badges.each do |badge|
+      badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(@student)
+    end
+    render :student_predictor_data
+  end
+
+  private
+
+  def predictor_badge_data
+    current_course.badges.select( :id,
+                                  :name,
+                                  :description,
+                                  :point_total,
+                                  :visible,
+                                  :can_earn_multiple_times,
+                                  :position,
+                                  :icon)
+  end
 end

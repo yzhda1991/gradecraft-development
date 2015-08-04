@@ -228,6 +228,40 @@ var getScore = function($item) {
 }
 
 $(document).ready(function() {
+
+  $(document).on("scroll", function() {
+
+    var scrollItems = ['#predictor-graph-wrapper','#predictor-grade-earned','#predictor-grade-predicted','#predictor-grade-possible']
+    var scrollTop = $("body").scrollTop()
+
+    if ( scrollTop < 40) {
+      $(scrollItems[0]).removeClass("predictor-stuck-item");
+      $(scrollItems[1]).removeClass("predictor-stuck-item");
+      $(scrollItems[2]).removeClass("predictor-stuck-item");
+      $(scrollItems[3]).removeClass("predictor-stuck-item");
+    } else if (scrollTop >= 40 && scrollTop < 80 ) {
+      $(scrollItems[0]).addClass("predictor-stuck-item");
+      $(scrollItems[1]).removeClass("predictor-stuck-item");
+      $(scrollItems[2]).removeClass("predictor-stuck-item");
+      $(scrollItems[3]).removeClass("predictor-stuck-item");
+    } else if (scrollTop > 80 && scrollTop < 120) {
+      $(scrollItems[0]).addClass("predictor-stuck-item");
+      $(scrollItems[1]).addClass("predictor-stuck-item");
+      $(scrollItems[2]).removeClass("predictor-stuck-item");
+      $(scrollItems[3]).removeClass("predictor-stuck-item");
+    } else if (scrollTop > 120 && scrollTop < 160) {
+      $(scrollItems[0]).addClass("predictor-stuck-item");
+      $(scrollItems[1]).addClass("predictor-stuck-item");
+      $(scrollItems[2]).addClass("predictor-stuck-item");
+      $(scrollItems[3]).removeClass("predictor-stuck-item");
+    } else if (scrollTop > 160) {
+      $(scrollItems[0]).addClass("predictor-stuck-item");
+      $(scrollItems[1]).addClass("predictor-stuck-item");
+      $(scrollItems[2]).addClass("predictor-stuck-item");
+      $(scrollItems[3]).addClass("predictor-stuck-item");
+    }
+  });
+
   var $wrapper = $('#prediction');
   if ($wrapper.length) {
     new PredictorView();

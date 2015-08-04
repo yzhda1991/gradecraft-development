@@ -18,6 +18,7 @@ GradeCraft::Application.routes.draw do
   #13. User Auth
   #14. Uploads
   #15. Events
+  #16. Predictor
 
   #1. Analytics & Charts
   namespace :analytics do
@@ -105,7 +106,7 @@ GradeCraft::Application.routes.draw do
   resources :tiers
   resources :graded_metrics
   resources :metric_badges
-  
+
   resources :tier_badges
 
   #3. Assignment Types
@@ -128,6 +129,7 @@ GradeCraft::Application.routes.draw do
 
   #5. Badges
   resources :badges do
+    post :predict_times_earned
     resources :tasks
     resources :earned_badges do
       collection do
@@ -145,6 +147,7 @@ GradeCraft::Application.routes.draw do
 
   #6. Challenges
   resources :challenges do
+    post :predict_points
     resources :challenge_grades do
       collection do
         post :edit_status
@@ -280,15 +283,12 @@ GradeCraft::Application.routes.draw do
   resources :staff, only: [:index, :show]
   resources :user_sessions
   resources :password_resets
-
   resources :student_academic_histories
-
 
   get 'calendar' => 'students#calendar'
   get 'timeline' => 'students#timeline'
   get 'badges' => 'students#badges'
   get 'calendar' => 'students#calendar'
-  get 'predictor' => 'students#predictor'
   get 'syllabus' => 'students#syllabus'
   get 'course_progress' => 'students#course_progress'
   get 'my_badges' => 'students#badges'
@@ -316,4 +316,19 @@ GradeCraft::Application.routes.draw do
 
   #15. Events
   resources :events
+
+  #16. Predictor, Student View
+  get 'predictor' => 'students#predictor'
+  get 'predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
+  get 'predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
+  get 'predictor_assignments' => 'assignments#student_predictor_data', defaults: {format: :json}
+  get 'predictor_badges' => 'badges#student_predictor_data', defaults: {format: :json}
+  get 'predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
+
+  #16b. Predictor, Instructor View
+  get 'students/:id/predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_assignments' => 'assignments#staff_predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_badges' => 'badges#staff_predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
 end

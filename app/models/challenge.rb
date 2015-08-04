@@ -1,17 +1,21 @@
 class Challenge < ActiveRecord::Base
 
   attr_accessible :name, :description, :icon, :visible, :image_file_name, :occurrence,
-    :value, :multiplier, :point_total, :due_at, :open_at, :accepts_submissions, 
-    :release_necessary, :course, :team, :challenge, :challenge_file_ids, 
-    :challenge_files_attributes, :challenge_file, :challenge_grades_attributes, 
+    :value, :multiplier, :point_total, :due_at, :open_at, :accepts_submissions,
+    :release_necessary, :course, :team, :challenge, :challenge_file_ids,
+    :challenge_files_attributes, :challenge_file, :challenge_grades_attributes,
     :challenge_score_levels_attributes, :challenge_score_level
+
+  # grade points available to the predictor from the assignment controller
+  attr_accessor :student_predicted_earned_challenge, :current_team_grade
 
   belongs_to :course
   has_many :submissions
   has_many :challenge_grades
+  has_many :predicted_earned_challenges, :dependent => :destroy
   has_many :challenge_score_levels
   accepts_nested_attributes_for :challenge_score_levels, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? || a['name'].blank? }
-  
+
   has_many :challenge_files, :dependent => :destroy
   accepts_nested_attributes_for :challenge_files
   accepts_nested_attributes_for :challenge_grades
@@ -50,8 +54,13 @@ class Challenge < ActiveRecord::Base
     due_at != nil && due_at >= Date.today
   end
 
+  # TODO: should be removed
   def graded?
     challenge_grades.present?
+  end
+
+  def find_or_create_predicted_earned_challenge(student)
+    PredictedEarnedChallenge.where(student: student, challenge: self).first || PredictedEarnedChallenge.create(student_id: student.id, challenge_id: self.id)
   end
 
   private
@@ -67,5 +76,4 @@ class Challenge < ActiveRecord::Base
       errors.add :base, 'Point total must be a positive number'
     end
   end
-
 end

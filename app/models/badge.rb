@@ -4,11 +4,15 @@ class Badge < ActiveRecord::Base
   :multiplier, :point_total, :earned_badges, :earned_badges_attributes, :score, :badge_file_ids,
   :badge_files_attributes, :badge_file, :position
 
+  # grade points available to the predictor from the assignment controller
+  attr_accessor :student_predicted_earned_badge
+
   acts_as_list scope: :course
 
   mount_uploader :icon, BadgeIconUploader
 
   has_many :earned_badges, :dependent => :destroy
+  has_many :predicted_earned_badges, :dependent => :destroy
 
   belongs_to :course
 
@@ -20,8 +24,12 @@ class Badge < ActiveRecord::Base
   validates_presence_of :course, :name
   validates_numericality_of :point_total, :allow_blank => true
 
-  scope :sorted, -> { order('position ASC') }
   scope :visible, -> { where(visible: true) }
+
+  default_scope { order('position ASC') }
+  #TODO: remove calls to sorted, default scope is sorted
+  scope :sorted, -> { order('position ASC') }
+
 
   def self.with_earned_badge_info_for_student(student)
     joins("LEFT JOIN earned_badges on badges.id = earned_badges.id AND earned_badges.student_id = #{Badge.sanitize(student.id)}").select('badges.*, earned_badges.created_at AS earned_at, earned_badges.feedback')
@@ -49,13 +57,17 @@ class Badge < ActiveRecord::Base
     earned_badges.where(:student_id => student)
   end
 
-  #Counting how many times a particular student has earned this badge
-  def earned_badge_count_for_student(student)
-     earned_badges.where(:student_id => student).count
+  def find_or_create_predicted_earned_badge(student)
+    PredictedEarnedBadge.where(student: student, badge: self).first || PredictedEarnedBadge.create(student_id: student.id, badge_id: self.id)
   end
 
-  def earned_badge_total_value(student)
-    earned_badges.where(:student_id => student).pluck('score').sum
+  #Counting how many times a particular student has earned this badge
+  def earned_badge_count_for_student(student)
+     earned_badges.where(:student_id => student, :student_visible => true).count
+  end
+
+  def earned_badge_total_points(student)
+    earned_badges.where(:student_id => student, :student_visible => true).pluck('score').sum
   end
 
 end
