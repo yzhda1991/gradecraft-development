@@ -19,4 +19,5 @@
         = f.text_field :email, placeholder: "Email", :autocorrect => "off", :autocapitalize => "off"
         = label_tag :user_password, 'Password', class:'sr-only'
         = f.password_field :password, placeholder: 'Password'
-        .right= f.submit "Log in", class: 'button radius', alt: "Log in"
+        .right
+          = f.submit "Log in", class: 'button radius', alt: "Log in"
