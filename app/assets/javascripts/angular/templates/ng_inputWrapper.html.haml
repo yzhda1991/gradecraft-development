@@ -1,15 +1,11 @@
-%p
-  %formly-transclude
-%div{'ng-if' => 'options.data.apiCheck.failed'}
-  %span{'style' => 'color:red'}
-    %code validatieOptions for this field failed!
-  / %p
-  /   %strong Message
-  /   %span.text-muted
-  /     (logged to the console)
-  /   %pre
-  /     {{options.data.apiCheck.message}}
-%div{'ng-if' => '!options.data.apiCheck.failed'}
-  %span{'style' => 'color:green'}
-    %code
-      for this field passed!
+%formly-transclude
+%div.my-messages{'ng-messages' => 'fc.$error', 'ng-if' => 'options.formControl.$touched'}
+  %div.some-message{'ng-message' => '{{::name}}', 'ng-repeat' => '(name, message) in ::options.validation.messages'}
+    {{message(fc.$viewValue, fc.$modelValue, this)}}
+/ %div{'ng-if' => 'options.data.apiCheck.failed'}
+/   %span{'style' => 'color:red'}
+/     %code validatieOptions for this field failed!
+/ %div{'ng-if' => '!options.data.apiCheck.failed'}
+/   %span{'style' => 'color:green'}
+/     %code
+/       for this field passed!

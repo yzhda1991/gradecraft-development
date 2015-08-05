@@ -24,20 +24,21 @@ INTEGER_REGEXP = /^\-?\d+$/
     return
 
 #formly config
-@gradecraft.constant('apiCheck', apiCheck());
+@gradecraft.constant('gcApiCheck', apiCheck());
 
-@gradecraft.run((formlyConfig, formlyValidationMessages, apiCheck) ->
+@gradecraft.run((formlyConfig, formlyValidationMessages, gcApiCheck) ->
   formlyConfig.extras.ngModelAttrsManipulatorPreferBound = true;
   formlyValidationMessages.addStringMessage('maxlength', 'Your input is WAAAAY too long!');
   formlyValidationMessages.messages.pattern = (viewValue, modelValue, scope) ->
     viewValue + ' is invalid'
   formlyValidationMessages.addTemplateOptionValueMessage('minlength', 'minlength', '', 'is the minimum length', 'Too short')
 
-  # formlyConfig.setWrapper([
-    # {
-      # name: 'inputInvalid',
-      # templateUrl: 'ng_inputWrapper.html'
-    # }
+  formlyConfig.setWrapper(
+    {
+      name: 'inputInvalid',
+      types: ['input', 'validatedInput'],
+      templateUrl: 'ng_inputWrapper.html'
+    }
     # ,
     # {
       # template: [
@@ -56,7 +57,7 @@ INTEGER_REGEXP = /^\-?\d+$/
       #   '</div>'
       # ].join(' ')
     # },
-  # ])
+    )
 
   formlyConfig.setType([
     {
@@ -78,27 +79,15 @@ INTEGER_REGEXP = /^\-?\d+$/
 
         $scope.copyFields = (fields) ->
           angular.copy(fields)
+    },
+    {
+      name: 'validatedInput',
+      extends: 'input',
+      apiCheck: {
+        templateOptions: gcApiCheck.shape({
+          foo: gcApiCheck.string.optional
+        })
+      }
     }
-    # ,
-    # {
-    #   name: 'validatedInput',
-    #   extends: 'input',
-    #   wrapper: ['inputInvalid'],
-    #   validateOptions: (options) ->
-    #     options.data.apiCheck = apiCheck.warn(apiCheck.shape({
-    #       templateOptions: apiCheck.shape({
-    #         label: apiCheck.string,
-    #         placeholder: apiCheck.string.optional,
-    #         required: apiCheck.bool.optional
-    #       }),
-    #       data: apiCheck.shape({
-    #         extraData: apiCheck.object.optional,
-    #         # someProperty: apiCheck.shape.onlyIf('someOtherProperty', apiCheck.number).optional,
-    #         # someOtherProperty: apiCheck.bool.optional
-    #       }).optional
-    #     }), arguments, {
-    #       prefix: 'validatedInput formly type'
-    #     })
-    # }
   ])
 )
