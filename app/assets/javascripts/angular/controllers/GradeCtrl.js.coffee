@@ -46,12 +46,6 @@
     unless badges.length == undefined
       $scope.addBadges(badges)
 
-    $scope.toggleEarnedBadge = (badge)->
-      if badge.earnedBadgesForGrade.length == 0
-        $scope.earnBadgeForStudent(badge)
-      else
-        badge.deleteEarnedStudentBadge()
-
     $scope.addRemainingEarnedBadges = (event)->
       event.preventDefault()
       event.stopPropagation()
@@ -91,21 +85,21 @@
           `$timeout(function() { angular.element(awardedBadges).addClass("hide-after-fade")}, 1000)`
       )
       .error((err)->
-        alert("delete failed!")
+        console.log "delete failed"
         return false
       )
 
     $scope.earnBadgeForStudent = (badge)->
-      unless badge.frozen
-        badge.freeze()
-
+      unless badge.creating
+        badge.setCreating()
         $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
           (data, status)->
             badge.earnBadge(data["earned_badge"])
-        
+            badge.timeoutCreate()
         )
         .error((err)->
-          alert("create failed!")
+          badge.timeoutCreate()
+          console.log "create failed"
           return false
         )
  

@@ -20,6 +20,8 @@ class EarnedBadge < ActiveRecord::Base
 
   after_save :check_unlockables
 
+  #validates :badge_id, :uniqueness => {:scope => :grade_id}
+
   #Some badges can only be earned once - we check on award if that's the case
   validate :multiple_allowed
 
@@ -27,6 +29,18 @@ class EarnedBadge < ActiveRecord::Base
 
   def self.score
     pluck('SUM(score)').first || 0
+  end
+
+  def self.duplicate_grade_badge_pairs
+    EarnedBadge.where("badge_id is not null and grade_id is not null").group(:grade_id,:badge_id).select(:grade_id,:badge_id).having("count(*)>1")
+  end
+
+  def self.delete_duplicate_grade_badge_pairs
+    EarnedBadge.duplicate_grade_badge_pairs.each do |group|
+      all_ids = EarnedBadge.select(:id).where(badge_id: group[:badge_id], grade_id: group[:grade_id]).collect(&:id)
+      all_ids.shift
+      EarnedBadge.destroy_all(id: all_ids)
+    end
   end
 
   def self.scores_for_students

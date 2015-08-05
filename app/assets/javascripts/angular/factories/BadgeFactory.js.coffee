@@ -17,30 +17,30 @@
       this.earnedBadgesForGrade = []
       this.addEarnedBadges()
       @awarded = this.earnedBadgesForGrade.length > 0 ? true : false
-      @frozen = false
+      @creating = false
+      @deleting = false
 
     handleDestroyAll: ()->
       this.earnedBadgesForGrade = []
       $timeout(this.setAvailable, 300)
 
     deleteEarnedStudentBadge: ()->
-      unless this.frozen
-        this.freeze() # prevent user from continuing to click and submit the deleted item
+      unless this.deleting == true
+        this.setDeleting()
         earnedBadge = this.earnedBadgesForGrade[0]
         if earnedBadge.deleteFromServer(this)
           this.earnedBadgesForGrade = []
           $timeout(this.setAvailable, 300)
-          $timeout(this.hideAfterFadeOnDestroy, 1000)
-          $timeout(this.unfreeze, 1000)
 
     earnBadge: (params)->
       self = this
       earnedBadge = new EarnedBadge(params)
       if earnedBadge.grade_id == self.grade_id
+        alert("grade id matches")
         self.earnedBadgesForGrade.push earnedBadge
+        alert(self.earnedBadgesForGrade.length)
       else
         self.otherEarnedBadges.push earnedBadge
-      $timeout(this.unfreeze, 1000)
 
     addEarnedBadges: ()->
       self = this
@@ -51,16 +51,26 @@
     unearned: ()->
       this.earnedBadgesForGrade.length == 0
 
+    timeoutCreate: ()->
+      `$timeout(function() {this.creating = false}, 1000);`
+
     setAwarded: ()->
       this.awarded = true
 
     setAvailable: ()->
       this.awarded = false
+      this.deleting = false
 
-    unfreeze: ()->
-      this.frozen = false
+    setCreating: ()->
+      this.creating = true
 
-    freeze: ()->
-      this.frozen = true
+    createDone: ()->
+      this.creating = false
+
+    setDeleting: ()->
+      this.deleting = true
+
+    deleteDone: ()->
+      this.deleting = false
 
 ]

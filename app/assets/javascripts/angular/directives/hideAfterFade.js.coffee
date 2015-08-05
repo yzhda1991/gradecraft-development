@@ -4,6 +4,7 @@ HideAfterFade.directive 'hideAfterFade', ['$timeout', ($timeout)->
 
   hideElement = (elem)->
     elem.addClass("hide-after-fade")
+    elem.removeAttr("disabled")
 
   {
       restrict: 'A'
@@ -26,8 +27,14 @@ HideAfterFade.directive 'hideAfterFade', ['$timeout', ($timeout)->
           if isAvailable and isEarned
             elem.addClass("temp-hide")
 
-        elem.on "click", ()->
+        elem.on "click", (event)->
+          elem.attr("disabled",'')
           `$timeout(function() {hideElement(elem)}, 1000);`
+
+        scope.$watch (->
+          elem.attr 'disabled'
+        ), (newValue, oldValue) ->
+          # alert("disabled") if newValue != oldValue
 
         scope.$watch (->
           elem.attr 'class'
