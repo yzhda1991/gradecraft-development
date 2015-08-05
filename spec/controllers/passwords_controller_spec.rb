@@ -4,19 +4,38 @@ describe PasswordsController do
   describe "GET new" do
     it "exists" do
       get :new
-      response.should be_success
+      expect(response).to be_success
     end
   end
 
   describe "POST create" do
-    context "with a valid email address" do
-      let(:user) { create :user }
+    let(:user) { create :user }
 
-      it "sends the user an email with password reset instructions" do
-        expect { post :create, email: user.email.upcase }.to \
-          change { ActionMailer::Base.deliveries.count }.by 1
-        expect(response).to be_redirect
-      end
+    it "creates a password reset token for the user" do
+      post :create, email: user.email
+      expect(user.reload.reset_password_token).to_not be_nil
     end
+
+    it "sends the user an email with password reset instructions" do
+      expect { post :create, email: user.email.upcase }.to \
+        change { ActionMailer::Base.deliveries.count }.by 1
+      expect(response).to be_redirect
+    end
+  end
+
+  describe "GET edit" do
+    let(:user) { create :user, reset_password_token: "blah" }
+
+    it "exists" do
+      get :edit, id: user.reset_password_token
+      expect(response).to be_success
+    end
+
+    it "redirects to the root url if the token is not correct" do
+      get :edit, id: "blech"
+      expect(response).to be_redirect
+    end
+
+    xit "redirects to the root url if the token has expired"
   end
 end
