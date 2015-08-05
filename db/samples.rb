@@ -386,14 +386,6 @@ assignment_types[:educ_attendance] = AssignmentType.create! do |at|
 end
 puts "Come to class."
 
-1.upto(5).each do |n|
-  assignment_types[:educ_attendance].score_levels.create do |sl|
-    sl.name = "#{n}0% of class"
-    sl.value = 5000/n
-  end
-end
-puts "Added slider grading levels for EDUC pro-rated attendance"
-
 assignment_types[:polsci_attendance] = AssignmentType.create! do |at|
   at.course = polsci_course
   at.name = "Attendance"
@@ -445,11 +437,6 @@ assignment_types[:reading_reaction] = AssignmentType.create! do |at|
   at.student_weightable = false
 end
 puts "Do your readings."
-
-assignment_types[:reading_reaction].score_levels.create do |sl|
-  sl.name = "You Reacted"
-  sl.value = 2500
-end
 
 assignment_types[:polsci_discussion] = AssignmentType.create! do |at|
   at.course = polsci_course
