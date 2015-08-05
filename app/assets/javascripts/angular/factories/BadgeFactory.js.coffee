@@ -27,9 +27,18 @@
     deleteEarnedStudentBadge: ()->
       unless this.deleting == true
         this.setDeleting()
-        if this.earnedBadge.deleteFromServer(this)
-          this.earnedBadge = null
-          $timeout(this.setAvailable, 300)
+
+        this.earnedBadge.deleteFromServer(this).then ((data) ->
+          if data.forecast == 'good'
+            # delete the earned badge at the badge and make the badge available
+            this.earnedBadge = null
+            $timeout(this.setAvailable, 300)
+          else
+            # indicate that badge was not deleted
+          return
+        ), (error) ->
+          # promise rejected, could log the error with: console.log('error', error);
+          return
 
     earnBadge: (params)->
       self = this

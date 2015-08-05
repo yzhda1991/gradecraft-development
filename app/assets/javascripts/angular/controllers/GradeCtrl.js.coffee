@@ -4,6 +4,7 @@
     $scope.header = "waffles" 
     gradeParams = grade["grade"]
     $scope.grade = new GradePrototype(gradeParams, $http)
+    $scope.debug = true
 
     gradeId = gradeParams.id
     $scope.gradeId = gradeId
