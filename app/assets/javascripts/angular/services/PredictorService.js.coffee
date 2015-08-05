@@ -1,5 +1,6 @@
 @gradecraft.factory 'PredictorService', ['$http', ($http) ->
     termFor = {
+        assignmentType: ""
         assignment: ""
         pass: ""
         fail: ""
@@ -21,6 +22,7 @@
     getAssignmentTypes = (assignmentId)->
       $http.get("predictor_assignment_types").success((data)->
         angular.copy(data.assignment_types, assignmentTypes)
+        termFor.assignmentType = data.term_for_assignment_type
       )
 
     getAssignments = (assignmentId)->

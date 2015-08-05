@@ -1,8 +1,19 @@
 %section.predictor-assignment-type{'ng-repeat' => 'assignmentType in assignmentTypes'}
   .collapse-toggler.clear
-    .predictor-section-title
+    .predictor-section-title{'ng-class'=>'{"status-max-points": assignmentTypeAtMax(assignmentType)}'}
       .predictor-section-title-left
         {{assignmentType.name}}
       .predictor-section-title-right
-        Points Total: {{assignmentTypePointTotal(assignmentType.id) | number}}
+        Points Total: {{assignmentTypePointTotal(assignmentType) | number}}
+
+        %span{'ng-if'=>'assignmentTypeAtMax(assignmentType)'}
+          (+ {{assignmentTypePointExcess(assignmentType)}}
+          .icon
+            .icon-tooltip
+              You've predicted more points than you are allowed to earn for this {{termFor.assignmentType}}!
+            %i.fa.fa-fw.fa-exclamation-circle
+          )
+
+        %span="/ {{assignmentType.max_value | number}}"
+
   .collapsable{'ng-include' => true, 'src' => "'ng_predictor_assignments.html'"}
