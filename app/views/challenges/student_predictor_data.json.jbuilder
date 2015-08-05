@@ -5,6 +5,10 @@ json.challenges @challenges do |challenge|
 
   challenge.student_predicted_earned_challenge.tap do |prediction|
     json.prediction do
+      if current_user.is_staff?(current_course)
+        prediction.points_earned = 0
+      end
+
       json.merge! prediction.attributes
     end
   end

@@ -1,15 +1,11 @@
 class BadgesController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:index, :student_predictor_data, :predict_times_earned]
+  before_filter :ensure_staff?, :except => [:student_predictor_data, :predict_times_earned]
   before_filter :ensure_student?, only: [:predict_times_earned]
 
-
-
   def index
-    if current_user_is_student?
-      redirect_to my_badges_path
-    end
     @title = "#{term_for :badges}"
+    @badges = current_course.badges
   end
 
   def show
@@ -82,7 +78,7 @@ class BadgesController < ApplicationController
     respond_to do |format|
 
       if @badge.update_attributes(params[:badge])
-        format.html { redirect_to @badge, notice: "#{@badge.name} #{term_for :badge} successfully updated" }
+        format.html { redirect_to badges_path, notice: "#{@badge.name} #{term_for :badge} successfully updated" }
         format.json { head :ok }
       else
         # TODO: refactor, see submissions_controller
@@ -127,16 +123,32 @@ class BadgesController < ApplicationController
   end
 
   def student_predictor_data
-    @badges = current_course.badges.select( :id,
-                                            :name,
-                                            :description,
-                                            :point_total,
-                                            :visible,
-                                            :can_earn_multiple_times,
-                                            :position,
-                                            :icon)
+    @student = current_student
+    @badges = predictor_badge_data
     @badges.each do |badge|
-      badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(current_student)
+      badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(@student)
     end
   end
- end
+
+  def staff_predictor_data
+    @student = User.find(params[:id])
+    @badges = predictor_badge_data
+    @badges.each do |badge|
+      badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(@student)
+    end
+    render :student_predictor_data
+  end
+
+  private
+
+  def predictor_badge_data
+    current_course.badges.select( :id,
+                                  :name,
+                                  :description,
+                                  :point_total,
+                                  :visible,
+                                  :can_earn_multiple_times,
+                                  :position,
+                                  :icon)
+  end
+end

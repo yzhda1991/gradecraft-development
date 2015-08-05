@@ -44,7 +44,7 @@ class Grade < ActiveRecord::Base
   delegate :name, :description, :due_at, :assignment_type, :to => :assignment
 
   before_save :clean_html
-  after_destroy :cache_student_and_team_scores
+  after_destroy :save_student_and_team_scores
 
   scope :completion, -> { where(order: "assignments.due_at ASC", :joins => :assignment) }
   scope :graded, -> { where('status = ?', 'Graded') }
@@ -102,15 +102,19 @@ class Grade < ActiveRecord::Base
   end
 
   def is_graded?
-    self.status == 'Graded'
+    status == 'Graded'
   end
 
   def in_progress?
-    self.status == 'In Progress'
+    status == 'In Progress'
   end
 
   def is_released?
-    status == 'Released' || (status = 'Graded' && ! assignment.release_necessary)
+    status == 'Released'
+  end
+
+  def is_student_visible?
+    is_released? || (is_graded? && ! assignment.release_necessary)
   end
 
   def status_is_graded_or_released?
@@ -131,7 +135,7 @@ class Grade < ActiveRecord::Base
     student_id == user.id
   end
 
-  def cache_student_and_team_scores
+  def save_student_and_team_scores
     self.student.cache_course_score(self.course.id)
     if self.course.has_teams? && self.student.team_for_course(self.course).present?
       self.student.team_for_course(self.course).cache_score

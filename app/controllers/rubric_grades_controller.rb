@@ -1,12 +1,11 @@
 class RubricGradesController < ApplicationController
+  before_filter :ensure_staff?
+
   before_action :find_rubric_grade, except: [:new, :create]
   after_action :respond_with_rubric_grade
 
   def new
     @rubric_grade = RubricGrade.new params[:rubric_grade]
-  end
-
-  def edit
   end
 
   def create
@@ -15,9 +14,6 @@ class RubricGradesController < ApplicationController
 
   def destroy
     @rubric_grade.destroy
-  end
-
-  def show
   end
 
   def update

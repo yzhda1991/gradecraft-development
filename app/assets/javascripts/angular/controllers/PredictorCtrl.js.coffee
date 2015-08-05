@@ -62,9 +62,17 @@
           PredictorService.postPredictedChallenge(article_id,value)
     }
 
-  # TODO: update with new is_graded logic!
-  $scope.assignmentGraded = (assignment)->
-    assignment.grade.status == "Graded"
+  $scope.assignmentTypeAtMax = (assignmentType)->
+    if $scope.assignmentTypePointExcess(assignmentType) > 0
+      return true
+    else
+      return false
+
+  $scope.articleGraded = (assignment)->
+    if assignment.grade.score == null
+      return false
+    else
+      return true
 
   # Assignments with Score Levels: returns true
   $scope.hasLevels = (assignment)->
@@ -107,6 +115,7 @@
   $scope.assignmentsForAssignmentType = (assignments,id)->
     _.where(assignments, {assignment_type_id: id})
 
+  # ! does not cap points total to assignment type max_points
   $scope.assignmentsPointTotal = (assignments)->
     total = 0
     _.each(assignments, (assignment)->
@@ -117,9 +126,14 @@
     )
     total
 
-  $scope.assignmentTypePointTotal = (id)->
-    assignments = $scope.assignmentsForAssignmentType($scope.assignments,id)
-    $scope.assignmentsPointTotal(assignments)
+  $scope.assignmentTypePointTotal = (assignmentType)->
+    assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
+    total = $scope.assignmentsPointTotal(assignments)
+    if total > assignmentType.max_value then assignmentType.max_value else total
+
+  $scope.assignmentTypePointExcess = (assignmentType)->
+    assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
+    total = $scope.assignmentsPointTotal(assignments) - assignmentType.max_value
 
   $scope.badgesPointTotal = ()->
     total = 0
@@ -140,7 +154,9 @@
 
   $scope.allPointsPredicted = ()->
     total = 0
-    total += $scope.assignmentsPointTotal($scope.assignments)
+    _.each($scope.assignmentTypes, (assignmentType)->
+        total += $scope.assignmentTypePointTotal(assignmentType)
+      )
     total += $scope.badgesPointTotal()
     total += $scope.challengesPointTotal()
     total

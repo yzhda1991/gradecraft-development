@@ -1,4 +1,6 @@
 class TierBadgesController< ApplicationController
+  before_filter :ensure_staff?
+
   before_action :find_tier_badge, only: [:update, :destroy]
 
   respond_to :html, :json
@@ -6,9 +8,6 @@ class TierBadgesController< ApplicationController
   def new
     @tier = Tier.new params[:tier]
     respond_with @tier, layout: false
-  end
-
-  def edit
   end
 
   def create
@@ -19,9 +18,6 @@ class TierBadgesController< ApplicationController
   def destroy
     @tier_badge.destroy
     respond_with @tier_badge, layout: false
-  end
-
-  def show
   end
 
   def update

@@ -3,7 +3,7 @@ class StudentsController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :ensure_staff?, :except=> [:timeline, :old_predictor, :predictor, :course_progress, :badges, :teams, :syllabus, :autocomplete_student_name]
+  before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus ]
 
   #Lists all students in the course, broken out by those being graded and auditors
   def index
@@ -112,22 +112,7 @@ class StudentsController < ApplicationController
 
   # Display the grade predictor
   def predictor
-    # Use @current_score and @current_grade_level to verify Angular is calculating correctly
-    @current_score = current_student.cached_score_for_course(current_course)
-    if current_student.grade_level_for_course(current_course).present?
-      @current_grade_level = current_student.grade_level_for_course(current_course)
-    else
-      @current_grade_level = "nil"
-    end
-
     render :layout => 'predictor'
-  end
-
-  # Display the grade predictor
-  def old_predictor
-    @grade_scheme_elements = current_course.grade_scheme_elements
-    @grade_levels_json = @grade_scheme_elements.order(:low_range).pluck(:low_range, :letter, :level).to_json
-    render :layout => 'old_predictor'
   end
 
   #TODO: take this out!
@@ -143,7 +128,6 @@ class StudentsController < ApplicationController
 
   #All Admins to see all of one student's grades at once, proof for duplicates
   def grade_index
-    self.current_student = current_course.students.where(id: params[:id]).first
     @grades = current_student.grades.where(:course_id => current_course)
   end
 
@@ -152,7 +136,7 @@ class StudentsController < ApplicationController
     @student = current_course.students.find_by(id: params[:student_id])
     Resque.enqueue(ScoreRecalculator, @student.id, current_course.id)
     flash[:notice]="Your request to recalculate #{@student.name}'s grade is being processed. Check back shortly!"
-    redirect_to session[:return_to]
+    redirect_to session[:return_to] || student_path(@student)
   end
 
   protected

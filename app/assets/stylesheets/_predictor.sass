@@ -22,6 +22,34 @@ $predictor-font-size-4 : .85rem
   #svg-graph-points-predicted
     fill: $color-layout-blue-1
 
+// ICONS AND TOOLTIPS
+
+.icon
+  position: relative
+  display: block
+  float: left
+  width: 20px
+  .icon-tooltip
+    display: none
+
+.icon:hover .icon-tooltip
+  position: absolute
+  top: $predictor-font-size-3
+  width: 10rem
+  text-align: center
+  color: $color-layout-blue-4
+  display:block
+  z-index: 100
+  background-color: $color-layout-blue-0
+  border-radius: 4px
+  padding: 4px
+
+.predictor-badge-icon
+  max-width: 80px
+  float: left
+  margin: 1px 0 0 $predictor-font-size-3
+
+
 // SECTIONS
 
 .predictor-section-title
@@ -41,6 +69,20 @@ $predictor-font-size-4 : .85rem
 
   .predictor-section-title-right
     text-align: right
+    position: relative
+    .icon
+      display: inline
+      float: none
+      margin: 0 -7px
+    .icon .icon-tooltip
+      position: absolute
+      top: 0
+      left: -10rem
+      font-size: $predictor-font-size-3
+      width: 10rem
+
+.predictor-section-title.status-max-points
+  background-color: $color-layout-blue-1
 
 // ARTICLES
 
@@ -68,31 +110,6 @@ article.predictor-article
   height: $predictor-font-size-2
   background-color: $color-layout-blue-2
   padding: .25rem
-
-.icon
-  position: relative
-  display: block
-  float: left
-  width: 20px
-  .icon-tooltip
-    display: none
-
-.icon:hover .icon-tooltip
-  position: absolute
-  top: $predictor-font-size-3
-  width: 10rem
-  text-align: center
-  color: $color-layout-blue-4
-  display:block
-  z-index: 100
-  background-color: $color-layout-blue-0
-  border-radius: 4px
-  padding: 4px
-
-.predictor-badge-icon
-  max-width: 80px
-  float: left
-  margin: 1px 0 0 $predictor-font-size-3
 
 .badge-predicted
   width: 50%

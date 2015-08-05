@@ -197,7 +197,54 @@ class AssignmentsController < ApplicationController
 
   # current student visible assignment
   def student_predictor_data
-    @assignments = current_course.assignments.select(
+    @assignments = predictor_assignments_data
+    @student = current_student
+    @grades = predictor_grades(@student)
+
+    @assignments.each do |assignment|
+      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
+        if grade.nil?
+          grade = Grade.create(:assignment => assignment, :student => @student)
+        end
+        assignment.current_student_grade = grade
+
+        # Only pass through points if they have been released by the professor
+        unless grade.is_student_visible?
+          assignment.current_student_grade.pass_fail_status = nil
+          assignment.current_student_grade.score = nil
+        end
+      end
+    end
+  end
+
+  def staff_predictor_data
+    @assignments = predictor_assignments_data
+    @student = User.find(params[:id])
+    @grades = predictor_grades(@student)
+    @assignments.each do |assignment|
+      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
+        if grade.nil?
+          grade = Grade.create(:assignment => assignment, :student => @student)
+        end
+        assignment.current_student_grade = grade
+
+        # Professors can't see predictions
+        grade.predicted_score = 0
+
+        # Only pass through points if they have been released by the professor
+        unless grade.is_student_visible?
+          assignment.current_student_grade.pass_fail_status = nil
+          assignment.current_student_grade.score = nil
+        end
+      end
+    end
+    render :student_predictor_data
+  end
+
+  private
+
+    def predictor_assignments_data
+      @assignments = current_course.assignments.select(
         :accepts_attachments,
         :accepts_links,
         :accepts_resubmissions_until,
@@ -229,7 +276,10 @@ class AssignmentsController < ApplicationController
         :use_rubric,
         :visible,
       )
-    @grades = current_student.grades.where(:course_id => current_course).select(
+    end
+
+    def predictor_grades(student)
+      @grades = student.grades.where(:course_id => current_course).select(
         :assignment_id,
         :assignment_type_id,
         :id,
@@ -242,23 +292,7 @@ class AssignmentsController < ApplicationController
         :final_score,
         :score
       )
-
-    @assignments.each do |assignment|
-      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
-        if grade.nil?
-          grade = Grade.create(:assignment => assignment, :student => current_student)
-        end
-        assignment.current_student_grade = grade
-
-        # Only pass through points if they have been released by the professor
-        #TODO: add remaining logic for when a grade is "Graded": current_student_data.grade_released_for_assignment?(assignment)
-        assignment.current_student_grade.graded_pass_fail_status = grade.status == "Graded" ? grade.pass_fail_status : nil
-        assignment.current_student_grade.graded_points = grade.status == "Graded" ? grade.score : nil
-      end
     end
-  end
-
-  private
 
     def team_params
       @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
@@ -289,17 +323,7 @@ class AssignmentsController < ApplicationController
     redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{@name} successfully deleted"
   end
 
-  # Calendar feed of assignments
-  def feed
-    @assignments = current_course.assignments
-    respond_with @assignments.with_due_date do |format|
-      format.ics do
-        render :text => CalendarBuilder.new(:assignments => @assignments.with_due_date ).to_ics, :content_type => 'text/calendar'
-      end
-    end
-  end
-
-  # Export an example for grade imports
+  # Export .csv file example for grade imports
   def email_based_grade_import
     @assignment = current_course.assignments.find(params[:id])
     respond_to do |format|

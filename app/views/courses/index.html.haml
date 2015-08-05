@@ -10,7 +10,7 @@
       %ul.button-group.context_menu.radius
         %li
           %a.button{:href => new_course_path }
-            %i.fi-plus
+            %i.fa.fa-plus
             New Course
     %br
 
@@ -24,8 +24,7 @@
           %th{:scope => "col"} Semester
           %th{:scope => "col"} Badges
           %th{:scope => "col"} Total Points
-          - if current_user_is_admin?
-            %th
+          %th
           %th{:scope => "col", :style => "min-width: 200px" }
             %span.sr-only Actions
       %tbody
@@ -38,10 +37,9 @@
               %td= course.semester
               %td
               %td= points course.total_points
-              - if current_user_is_admin?
-                %td
-                  - if course == current_course
-                    = link_to_unless_current "Export Grades for Research", research_gradebook_path, :class=>"data-clearing"
+              %td
+                - if course == current_course
+                  = link_to_unless_current "Export Grades for Research", research_gradebook_path, :class=>"data-clearing"
 
               %td
                 .button-bar

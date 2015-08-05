@@ -8,6 +8,6 @@ class ExistingMetricSerializer < ActiveModel::Serializer
   end
 
   def metric_badges
-    object.metric_badges.order("created_at ASC")
-  end
+		object.metric_badges.order("created_at ASC")
+	end
 end

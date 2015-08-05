@@ -5,22 +5,7 @@
   .small-12
     %h3.pagetitle#pageCaption= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_assignment_type_path }
-            %i.fi-plus
-            New #{(term_for :assignment_type).titleize}
-        %li
-          %a.button{:href => edit_assignment_type_path(@assignment_type) }
-            %i.fi-pencil
-            Edit
-        %li
-          %a.button{:href => all_grades_assignment_type_path(@assignment_type) }
-            %i.fi-graph-bar
-            Performance
-    %br
+  = render "buttons"
 
   .columns
     %table.responsive.nofeatures_dynatable{"aria-describedby" => "tableCaption"}

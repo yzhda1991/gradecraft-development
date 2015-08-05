@@ -54,6 +54,7 @@ class Challenge < ActiveRecord::Base
     due_at != nil && due_at >= Date.today
   end
 
+  # TODO: should be removed
   def graded?
     challenge_grades.present?
   end

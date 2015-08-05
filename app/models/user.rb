@@ -72,8 +72,8 @@ class User < ActiveRecord::Base
 
   belongs_to :default_course, :class_name => 'Course', touch: true
 
-  has_one :student_academic_history, :foreign_key => :student_id, :dependent => :destroy, :class_name => 'StudentAcademicHistory'
-  accepts_nested_attributes_for :student_academic_history
+  has_many :student_academic_histories, :foreign_key => :student_id, :dependent => :destroy
+  accepts_nested_attributes_for :student_academic_histories
 
   has_many :assignments, :through => :grades
 
@@ -88,8 +88,6 @@ class User < ActiveRecord::Base
   has_many :earned_badges, :foreign_key => :student_id, :dependent => :destroy
   accepts_nested_attributes_for :earned_badges, :reject_if => proc { |attributes| attributes['earned'] != '1' }
   has_many :badges, :through => :earned_badges
-  has_many :predicted_earned_badges, :dependent => :destroy
-  has_many :predicted_earned_challenges, :dependent => :destroy
 
   has_many :group_memberships, :foreign_key => :student_id, :dependent => :destroy
   has_many :groups, :through => :group_memberships
@@ -192,7 +190,7 @@ class User < ActiveRecord::Base
 
   def self.graded_students_in_course(course_id)
     User
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, course_memberships.score as cached_score")
+      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score")
       .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
       .where("course_memberships.course_id = ?", course_id)
       .where("course_memberships.auditing = ?", false)
@@ -320,7 +318,7 @@ class User < ActiveRecord::Base
     @point_total_for_course ||= course.assignments.point_total_for_student(self) + earned_badge_score_for_course(course)
   end
 
-  #TODO: Should take into account students weights
+  #TODO: Should take into account students weights 
   def point_total_for_assignment_type(assignment_type)
     assignment_type.assignments.map{ |a| a.point_total }.sum
   end
@@ -374,22 +372,36 @@ class User < ActiveRecord::Base
 
   # Powers the worker to recalculate student scores
   def cache_course_score(course_id)
+    course = Course.find(course_id)
     membership = course_memberships.where(course_id: course_id).first
     unless membership.nil?
       if membership.course.add_team_score_to_student?
-        membership.update_attribute :score, (grades.released.where(course_id: course_id).score || 0) + (earned_badge_score_for_course(course_id) || 0 ) + ( self.team_for_course(course_id).try(:score) || 0 )
+        membership.update_attribute :score, (
+          total_score = 0
+          course.assignment_types.each do |assignment_type|
+            total_score += assignment_type.visible_score_for_student(self)
+          end 
+          total_score += earned_badge_score_for_course(course_id) 
+          total_score += self.team_for_course(course_id).try(:score)
+        )
       else
-        membership.update_attribute :score, (grades.released.where(course_id: course_id).score || 0) + (earned_badge_score_for_course(course_id) || 0 )
+        membership.update_attribute :score, (
+          total_score = 0
+          course.assignment_types.each do |assignment_type|
+            total_score += assignment_type.visible_score_for_student(self)
+          end 
+          total_score += earned_badge_score_for_course(course_id) 
+        )
       end
     end
   end
 
-  ### PREDICTIONS
+  ### Scoreboard chart on the bottom of the student dashboard
 
-  def predictions(course)
+  def total_scores_for_chart(course)
     scores = []
     course.assignment_types.each do |assignment_type|
-      scores << { data: [grades.released.where(assignment_type: assignment_type).score], name: assignment_type.name }
+      scores << { data: [assignment_type.visible_score_for_student(self)], name: assignment_type.name }
     end
 
 
@@ -519,36 +531,53 @@ class User < ActiveRecord::Base
 
 
   ### WEIGHTS
-  def weight_for_assignment_type(assignment_type)
-    assignment_type_weights[assignment_type.id]
-  end
-
-  def assignment_type_weights
+  def assignment_type_weights(course)
     @assignment_type_weights ||= {}.tap do |assignment_type_weights|
-      course.assignment_types.weights_for_student(student).each do |assignment_type_id, weight|
+      course.assignment_types.weights_for_student(self).each do |assignment_type_id, weight|
         assignment_type_weights[assignment_type_id] = weight
       end
     end
   end
+  
+  #Returns the student's assigned weight for a specific assignment
+  def weight_for_assignment(assignment)
+    assignment_weights.where(:assignment => assignment).first.weight
+  end
 
-  def assignment_weights
-    @assignment_weights ||= {}.tap do |assignment_weights|
-      assignment_weights.each do |weights|
-        assignment_weights[weights.assignment_id] = weights
-      end
+  # Returns the student's assigned weight for an assignment type category
+  def weight_for_assignment_type(assignment_type)
+    assignment_weights.where(assignment_type: assignment_type).first.try(:weight) || 0
+  end
+
+  def weight_spent?(course)
+    total = 0
+    course.assignment_types.each do |at|
+      total += weight_for_assignment_type(at)
+    end
+    if total == course.total_assignment_weight
+      return true
+    else
+      false
     end
   end
 
-  def weight_for_assignment(assignment)
-    assignment_weights[assignment.id]
-  end
-
-  def weights_for_assignment_type_id(assignment_type)
-    assignment_weights.where(assignment_type: assignment_type).weight
+  def total_weight_spent(course)
+    total = 0
+    course.assignment_types.each do |at|
+      total += weight_for_assignment_type(at)
+    end
+    return total
   end
 
   def weighted_assignments?
-    @weighted_assignments_present ||= assignment_weights.count > 0
+    assignment_weights.count > 0
+  end
+
+  #Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count, 
+  #and not the assignment type count. Because students make the choice at the AT level rather than the A level, 
+  #this can be confusing.
+  def weight_count(course)
+    assignment_weights.where(course: course).pluck('weight').count
   end
 
   #Used to allow students to self-log a grade, currently only a boolean (complete or not)
@@ -557,13 +586,8 @@ class User < ActiveRecord::Base
     (grade_for_assignment(assignment).try(:score) ) && (grade_for_assignment(assignment).try(:score)== grade_for_assignment(assignment).try(:point_total))
   end
 
-  #Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count, and not the assignment type count. Because students make the choice at the AT level rather than the A level, this can be confusing.
-  def weight_count(course)
-    assignment_weights.where(course: course).pluck('weight').count
-  end
 
-
-  ### GROUPS
+  ### GROUPS 
   def groups_by_assignment_id
     @group_by_assignment ||= groups.group_by(&:assignment_id)
   end

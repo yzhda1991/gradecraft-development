@@ -67,7 +67,7 @@ class ChallengesController < ApplicationController
 
     respond_to do |format|
       if @challenge.update_attributes(params[:challenge])
-        format.html { redirect_to @challenge, notice: "Challenge #{@challenge.name} successfully updated" }
+        format.html { redirect_to challenges_path, notice: "Challenge #{@challenge.name} successfully updated" }
         format.json { head :ok }
       else
         # TODO: refactor, see submissions_controller
@@ -105,13 +105,19 @@ class ChallengesController < ApplicationController
   end
 
   def student_predictor_data
+    if current_user.is_student?(current_course)
+      @student = current_student
+    else
+      @student = User.find(params[:id])
+    end
+
     @challenges = current_course.challenges
 
     @challenges.each do |challenge|
-      challenge.student_predicted_earned_challenge = challenge.find_or_create_predicted_earned_challenge(current_student)
+      challenge.student_predicted_earned_challenge = challenge.find_or_create_predicted_earned_challenge(@student)
     end
 
-    team = current_student.team_for_course(current_course)
+    team = @student.team_for_course(current_course)
 
     @grades = team.challenge_grades.where(:team_id => team)
 
@@ -125,8 +131,9 @@ class ChallengesController < ApplicationController
         challenge.current_team_grade = grade
 
         # Only pass through points if they have been released by the professor
-        #TODO: add remaining logic for when a grade is "Graded": current_student_data.grade_released_for_challenge?(challenge)
-        challenge.current_team_grade.graded_points = grade.status == "Graded" ? grade.score : nil
+        unless grade.is_student_visible?
+          challenge.current_team_grade.score = nil
+        end
       end
     end
   end

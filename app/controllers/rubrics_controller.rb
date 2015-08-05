@@ -1,4 +1,6 @@
 class RubricsController < ApplicationController
+  before_filter :ensure_staff?
+
   before_action :find_rubric, except: [:design, :create, :existing_metrics, :course_badges]
 
   respond_to :html, :json
@@ -18,10 +20,6 @@ class RubricsController < ApplicationController
 
   def destroy
     @rubric.destroy
-    respond_with @rubric
-  end
-
-  def show
     respond_with @rubric
   end
 

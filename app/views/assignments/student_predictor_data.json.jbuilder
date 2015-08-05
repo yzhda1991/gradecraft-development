@@ -9,16 +9,15 @@ json.assignments @assignments do |assignment|
     assignment.current_student_grade.tap do |grade|
       json.grade do
         json.id grade.id
-        json.status grade.status
         json.point_total grade.point_total
         json.predicted_score grade.predicted_score
-        json.score grade.graded_points
-        json.pass_fail_status grade.graded_pass_fail_status
+        json.score grade.score
+        json.pass_fail_status grade.pass_fail_status if assignment.pass_fail
       end
     end
   end
 
-  json.late assignment.past? && assignment.accepts_submissions && ! current_student.submission_for_assignment(assignment).present? ? true : false
+  json.late assignment.past? && assignment.accepts_submissions && ! @student.submission_for_assignment(assignment).present? ? true : false
 end
 
 json.term_for_assignment term_for :assignment

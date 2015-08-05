@@ -1,24 +1,25 @@
 - @students.each do |student|
-  - grade = @grades[student.id] || Grade.new
+  - grade = @grades.where(:student_id => student.id).first || Grade.new
   - first_name = student.first_name
   - last_name = student.last_name
   - status = grade.status
-  - if grade.present?
-    - instructor_modified = grade.instructor_modified?
+  - if grade.present? && grade.instructor_modified?
+    - instructor_modified = true
   %tr
     %td= link_to first_name, student_path(student)
     %td= link_to last_name, student_path(student)
     %td
       - if @assignment.pass_fail
-        = term_for(grade.pass_fail_status) if instructor_modified
+        = term_for(grade.pass_fail_status) if instructor_modified == true
       - else
-        = points grade.raw_score if instructor_modified
+        - if instructor_modified == true
+          = points grade.raw_score
 
     // If the student can weight the assignment type
     - if grade && @assignment_type.student_weightable?
       %td
         - if student.weighted_assignments?
-          = points grade.score if instructor_modified
+          = points grade.score if instructor_modified == true
         - else
           = "(not yet assigned)"
     - if @assignment.release_necessary?
@@ -44,7 +45,7 @@
                 / - else
                 = link_to "See Submission", assignment_submission_path(@assignment, submission.id), :class => 'button'
 
-          - if grade && instructor_modified
+          - if grade && instructor_modified == true
             %li= link_to "See Grade", assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
             %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
             %li= link_to "Delete", remove_grades_assignment_path(:assignment_id => @assignment.id, :grade_id => grade.id), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :post

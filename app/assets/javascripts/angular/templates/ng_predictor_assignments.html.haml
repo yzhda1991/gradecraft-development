@@ -1,4 +1,4 @@
-%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : assignmentGraded(assignment)}'}
+%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : articleGraded(assignment)}'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
     {{assignment.name | limitTo:26}}
@@ -12,13 +12,13 @@
 
   .predictor-article-main
 
-    .article-graded{'ng-if' => 'assignmentGraded(assignment)'}
+    .article-graded{'ng-if' => 'articleGraded(assignment)'}
       .grade{'ng-if' => 'assignment.pass_fail == false'}
         {{assignment.grade.score | number}} / {{assignment.grade.point_total | number}}
       .grade{'ng-if' => 'assignment.pass_fail == true'}
         {{termFor[assignment.grade.pass_fail_status]}}
 
-    .article-predicted{'ng-if' => '! assignmentGraded(assignment)'}
+    .article-predicted{'ng-if' => '! articleGraded(assignment)'}
       %div{'ng-if' => 'assignment.pass_fail == false && assignment.fixed == false'}
         .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.grade.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}','article-type'=>'assignment'}}
 

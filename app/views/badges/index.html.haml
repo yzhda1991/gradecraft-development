@@ -9,7 +9,7 @@
       %ul.button-group.context_menu.radius
         %li
           %a.button{:href => new_badge_path }
-            %i.fi-plus
+            %i.fa.fa-plus
             New #{(term_for :badge).titleize}
     %br
 
@@ -24,7 +24,7 @@
           %th Awarded
           %th{ :style => "min-width: 300px" }
       %tbody.sort-badges
-        - current_course.badges.sorted.each do |badge|
+        - @badges.each do |badge|
           %tr{:id => "badge-#{badge.id}"}
             %td.center
               = image_tag "draggable_transparent.png", :width => "10%", :style => "margin-top: -6px", :class => "draggable"

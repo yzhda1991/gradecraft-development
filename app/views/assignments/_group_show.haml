@@ -40,7 +40,7 @@
               %tr
                 %td= link_to student.name, student_path(student)
                 %td
-                  - if grade.instructor_modified?
+                  - if grade.present? && grade.instructor_modified?
                     = points grade.raw_score
                 - if @assignment.assignment_type.student_weightable?
                   %td= points grade.score if grade

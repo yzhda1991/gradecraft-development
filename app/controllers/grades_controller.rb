@@ -6,6 +6,9 @@ class GradesController < ApplicationController
 
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
+    if current_user_is_student?
+      redirect_to @assignment
+    end
     if @assignment.rubric.present? && @assignment.is_individual?
       @rubric = @assignment.rubric
       @metrics = @rubric.metrics
@@ -17,9 +20,6 @@ class GradesController < ApplicationController
       end
     end
 
-    if current_user_is_student?
-      redirect_to @assignment
-    end
     if @assignment.has_groups?
       @group = current_course.groups.find(params[:group_id])
       @title = "#{@group.name}'s Grade for #{ @assignment.name }"
@@ -86,7 +86,7 @@ class GradesController < ApplicationController
     end
 
     if @grade.update_attributes params[:grade].merge(instructor_modified: true)
-      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_student_visible?
 
       if session[:return_to].present?
         redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
@@ -117,7 +117,7 @@ class GradesController < ApplicationController
     delete_existing_earned_badges_for_metrics # if earned_badges_exist? # destroy earned_badges where assignment_id and student_id match
     create_earned_tier_badges if params[:tier_badges]# create_earned_tier_badges
 
-    Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+    Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_student_visible?
 
     respond_to do |format|
       format.json { render nothing: true }
@@ -199,7 +199,7 @@ class GradesController < ApplicationController
         metric_id: tier_badge[:metric_id],
         score: tier_badge[:point_total],
         tier_badge_id: tier_badge[:id],
-        student_visible: @grade.is_released?
+        student_visible: @grade.is_student_visible?
       })
     end
   end
@@ -259,12 +259,17 @@ class GradesController < ApplicationController
   # Students predicting the score they'll get on an assignent using the grade predictor
   def predict_score
     @assignment = current_course.assignments.find(params[:id])
-    raise "Cannot set predicted score if grade status is 'Graded' or 'Released'" if current_student.grade_released_for_assignment?(@assignment)
-    @grade = current_student.grade_for_assignment(@assignment)
-    @grade.predicted_score = params[:predicted_score]
+    if current_student.grade_released_for_assignment?(@assignment)
+      @grade = nil
+    else
+      @grade = current_student.grade_for_assignment(@assignment)
+      @grade.predicted_score = params[:predicted_score]
+    end
     respond_to do |format|
       format.json do
-        if @grade.save
+        if @grade.nil?
+          render :json => {errors: "You cannot predict this assignment!"}, :status => 400
+        elsif @grade.save
           render :json => {id: @grade.id, predicted_score: @grade.predicted_score}
         else
           render :json => { errors:  @grade.errors.full_messages }, :status => 400

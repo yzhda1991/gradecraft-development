@@ -1,5 +1,5 @@
 class Task < ActiveRecord::Base
-  attr_accessible :assignment, :assignment_id, :assignment_type, :name, :description, :due_at
+  attr_accessible :assignment, :assignment_id, :assignment_type, :name, :description, :due_at, :course_id
 
   belongs_to :assignment
   belongs_to :course
@@ -7,7 +7,7 @@ class Task < ActiveRecord::Base
 
   before_validation :set_course
 
-  validates_presence_of :assignment, :course
+  #validates_presence_of :assignment_id, :course_id
 
   private
 

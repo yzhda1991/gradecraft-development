@@ -4,6 +4,8 @@
 
   %h3.pagetitle= "#{@title} Review Rubric Grades (#{ points @assignment.point_total } points)"
 
+  = render "buttons"
+
   .small-12.columns
 
     - if @assignment.open_at?

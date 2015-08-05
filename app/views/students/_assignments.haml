@@ -6,7 +6,7 @@
 
       // Display the student's points out of assignment total, if there is an assignment max value. Else
       // display the student's points out of the the current point total for assignment.
-      - score_for_assignment_type = current_student.score_for_assignment_type(assignment_type)
+      - score_for_assignment_type = assignment_type.visible_score_for_student(current_student)
       - if assignment_type.max_value?
         %h3.collapse
           %a.arrow

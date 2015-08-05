@@ -59,4 +59,9 @@ class GradeSchemeElementsController < ApplicationController
     @grade_scheme_elements = current_course.grade_scheme_elements.select(:id, :low_range, :letter, :level)
     @total_points = current_course.total_points
   end
+
+  def student_predictor_data
+    @grade_scheme_elements = current_course.grade_scheme_elements.select(:id, :low_range, :letter, :level)
+    @total_points = current_course.total_points
+  end
 end

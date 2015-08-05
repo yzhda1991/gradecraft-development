@@ -3,6 +3,9 @@
   = content_nav_for Assignment, "New #{term_for :assignment}"
 
   %h3.pagetitle= @title
+
+  .small-12.columns
+    = render "buttons"
   
   .small-12.columns
     = render 'form'

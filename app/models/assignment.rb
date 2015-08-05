@@ -133,14 +133,6 @@ class Assignment < ActiveRecord::Base
     joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'").select('assignments.*, COALESCE(assignment_weights.point_total, assignments.point_total) AS student_point_total')
   end
 
-  # def assignment_grades
-  #   (@assignment_grades ||= {})[self.id] ||= {}.tap do |grades|
-  #       grades.each do |grade|
-  #         grades[grade.student_id] = grade
-  #       end
-  #   end
-  # end
-
   # Used for calculating scores in the analytics tab in Assignments# show
   def grades_for_assignment(student)
     user_score = grades.where(:student_id => student.id).first.try(:raw_score)
@@ -172,19 +164,6 @@ class Assignment < ActiveRecord::Base
     grades.graded_or_released.average('grades.raw_score').to_i if grades.graded_or_released.present?
   end
 
-  def has_rubric?
-    !! rubric
-  end
-
-  def fetch_or_create_rubric
-    return rubric if rubric
-    Rubric.create assignment_id: self[:id]
-  end
-
-  def ungraded_submissions
-    submissions.where("id not in (select submission_id from rubric_grades)")
-  end
-
   # Average of above-zero grades for an assignment
   def earned_average
     if grades.graded_or_released.present?
@@ -198,6 +177,19 @@ class Assignment < ActiveRecord::Base
     sorted_grades = grades.graded_or_released.pluck('score').sort
     len = sorted_grades.length
     return (sorted_grades[(len - 1) / 2] + sorted_grades[len / 2]) / 2
+  end
+
+  def has_rubric?
+    !! rubric
+  end
+
+  def fetch_or_create_rubric
+    return rubric if rubric
+    Rubric.create assignment_id: self[:id]
+  end
+
+  def ungraded_submissions
+    submissions.where("id not in (select submission_id from rubric_grades)")
   end
 
   # Checking to see if an assignment is individually graded

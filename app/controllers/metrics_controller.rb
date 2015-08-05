@@ -1,4 +1,6 @@
 class MetricsController < ApplicationController
+  before_filter :ensure_staff?
+
   before_action :find_metric, only: [:update, :destroy]
 
   respond_to :html, :json
@@ -14,6 +16,7 @@ class MetricsController < ApplicationController
   end
 
   def destroy
+    @rubric = @metric.rubric
     @metric.destroy
     respond_with @metric, layout: false
   end

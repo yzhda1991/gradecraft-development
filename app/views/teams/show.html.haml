@@ -1,18 +1,18 @@
 .small-12.panel.mainContent
   = content_nav_for @team
 
-  %h3.pagetitle= @team.name
+  %h3.pagetitle= @title
 
   .small-12.columns
     .button-bar
       %ul.button-group.context_menu.radius
         %li
           %a.button{:href => new_team_path }
-            %i.fi-plus
+            %i.fa.fa-plus
             New #{(term_for :team).titleize}
         %li
           %a.button{:href => edit_team_path(@team) }
-            %i.fi-pencil
+            %i.fa.fa-edit
             Edit #{(term_for :team).titleize}
 
   %h4.subtitle= "#{term_for :student} Roster"

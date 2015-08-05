@@ -10,19 +10,19 @@
       %ul.button-group.context_menu.radius
         %li
           %a.button{:href => new_badge_path }
-            %i.fi-plus
+            %i.fa.fa-plus
             New #{(term_for :badge).titleize}
         %li
           %a.button{:href => edit_badge_path(@badge) }
-            %i.fi-pencil
+            %i.fa.fa-edit
             Edit
         %li
           %a.button{:href => new_badge_earned_badge_path(:badge_id => @badge) }
-            %i.fi-results
+            %i.fa.fa-star
             Award
         %li
           %a.button{:href => mass_award_badge_path(@badge) }
-            %i.fi-results-demographics
+            %i.fa.fa-check
             Quick Award
 
   - if current_course.has_teams?

@@ -14,12 +14,12 @@ describe EventsController do
       login_user(@professor)
 
       session[:course_id] = @course.id
-      allow(EventLogger).to receive(:perform_async).and_return(true)
+      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
       it "assigns all events as @events" do
-        allow(EventLogger).to receive(:perform_async).and_return(true)
+        allow(Resque).to receive(:enqueue).and_return(true)
         get :index
         assigns(:events).should eq([@event])
       end
@@ -101,6 +101,38 @@ describe EventsController do
       it "redirects to the events list" do
         expect{ get :destroy, :id => @event }.to change(Event,:count).by(-1)
         response.should redirect_to(events_url)
+      end
+    end
+
+  end
+
+
+  context "as student" do
+
+    describe "protected routes" do
+      [
+        :index,
+        :new,
+        :create
+
+      ].each do |route|
+          it "#{route} redirects to root" do
+            (get route).should redirect_to(:root)
+          end
+        end
+    end
+
+
+    describe "protected routes requiring id in params" do
+      [
+        :edit,
+        :show,
+        :update,
+        :destroy
+      ].each do |route|
+        it "#{route} redirects to root" do
+          (get route, {:id => "1"}).should redirect_to(:root)
+        end
       end
     end
 
