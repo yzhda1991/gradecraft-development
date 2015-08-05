@@ -20,7 +20,7 @@ describe UserMailer do
     end
 
     it "has the password reset link" do
-      expect(email.body).to match CGI.escapeHTML(edit_password_url("blah"))
+      expect(email.body).to include edit_password_url("blah")
     end
   end
 end
