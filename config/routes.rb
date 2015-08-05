@@ -283,7 +283,7 @@ GradeCraft::Application.routes.draw do
   resources :staff, only: [:index, :show]
   resources :user_sessions
   resources :password_resets
-  resources :passwords, path_names: { new: 'reset' }, only: :new
+  resources :passwords, path_names: { new: 'reset' }, only: [:create, :new]
   resources :student_academic_histories
 
   get 'calendar' => 'students#calendar'
