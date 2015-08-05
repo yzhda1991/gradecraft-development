@@ -24,7 +24,7 @@ describe AssignmentTypesController do
 		describe "GET index" do
       it "returns assignment types for the current course" do
         get :index
-        assigns(:title).should eq("assignment Types")
+        assigns(:title).should eq("assignment types")
         assigns(:assignment_types).should eq([@assignment_type])
         response.should render_template(:index)
       end
@@ -42,7 +42,7 @@ describe AssignmentTypesController do
 		describe "GET new" do
       it "assigns title and assignment types" do
         get :new
-        assigns(:title).should eq("Create a New assignment Type")
+        assigns(:title).should eq("Create a New assignment type")
         assigns(:assignment_type).should be_a_new(AssignmentType)
         response.should render_template(:new)
       end
