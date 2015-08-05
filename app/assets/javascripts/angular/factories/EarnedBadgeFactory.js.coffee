@@ -11,8 +11,8 @@
     deleteFromServer: (badge)->
       $http.delete(this.deletePath()).then ((response) ->
         if typeof response.data == 'object'
-          response.data
           console.log "Successfully deleted Earned Badge"
+          response.data
         else
           # invalid response
           console.log "Failed to delete Earned Badge"

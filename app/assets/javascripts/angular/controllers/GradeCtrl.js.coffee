@@ -53,6 +53,7 @@
 
       unearnedBadges = {}
       unearnedBadgesPostParams = []
+
       angular.forEach($scope.badges, (badge)->
         if badge.unearned()
           badge.setCreating()
@@ -82,10 +83,16 @@
       event.stopPropagation()
       angular.element(event.currentTarget).addClass("ng-hide")
 
+      angular.forEach($scope.badges, (badge)->
+        if badge.earned()
+          badge.setDeleting()
+      )
+
       $http.delete("/grade/#{$scope.grade.id}/earned_badges").success(
         (data, status)->
           angular.forEach($scope.badges, (badge) ->
             badge.handleDestroyAll()
+            badge.doneDeleting()
           )
           availableBadges = document.getElementsByClassName("grade-badge available")
           `$timeout(function() { angular.element(availableBadges).removeClass("hide-after-fade")}, 1000)`
@@ -98,19 +105,22 @@
       )
 
     $scope.earnBadgeForStudent = (badge)->
+      thisBadge = badge
       unless badge.creating
         badge.setCreating()
-        $http.post("/grades/earn_student_badge", $scope.earnedBadgePostParams(badge)).success(
-          (data, status)->
-            badge.earnBadge(data["earned_badge"])
-            badge.timeoutCreate()
-        )
-        .error((err)->
-          badge.timeoutCreate()
-          console.log "create failed"
-          return false
-        )
- 
+        badge.earnBadgeForStudent($scope.earnedBadgePostParams(badge)).then ((response)->
+          if response.earned_badge
+            thisBadge.earnBadge(response.earned_badge)
+            thisBadge.doneCreating()
+          else
+            #indicate that badge was not created
+            thisBadge.doneCreating()
+          return
+        ), (error) ->
+          # promise rejected, could log the error with: console.log('error', error);
+          thisBadge.doneCreating()
+          return
+
     $scope.earnedBadgePostParams = (badge)->
       earned_badge:
         student_id: $scope.grade.student_id

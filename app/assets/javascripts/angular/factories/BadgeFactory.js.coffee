@@ -1,4 +1,4 @@
-@gradecraft.factory 'BadgePrototype', ['EarnedBadge', '$timeout', (EarnedBadge, $timeout)->
+@gradecraft.factory 'BadgePrototype', ['EarnedBadge', '$timeout', '$http', (EarnedBadge, $timeout, $http)->
   class BadgePrototype
 
     constructor: (attrs, gradeId) ->
@@ -25,14 +25,16 @@
       $timeout(this.setAvailable, 300)
 
     deleteEarnedStudentBadge: ()->
+      thisBadge = this
+
       unless this.deleting == true
         this.setDeleting()
 
-        this.earnedBadge.deleteFromServer(this).then ((data) ->
-          if data.forecast == 'good'
+        this.earnedBadge.deleteFromServer(this).then ((deleteResponse) ->
+          if deleteResponse.success
             # delete the earned badge at the badge and make the badge available
-            this.earnedBadge = null
-            $timeout(this.setAvailable, 300)
+            thisBadge.earnedBadge = null
+            `$timeout(function() { thisBadge.setAvailable() }, 1000)`
           else
             # indicate that badge was not deleted
           return
@@ -62,21 +64,44 @@
     prettyEarnedBadge: ()->
       JSON.stringify(this.earnedBadge)
 
+    earnBadgeForStudent: (requestParams)->
+      $http.post("/grades/earn_student_badge", requestParams).then ((response)->
+        if typeof response.data == 'object'
+          console.log "Successfully created Earned Badge"
+          response.data
+        else
+          # invalid response
+          console.log "Failed to create Earned Badge"
+          $q.reject response.data
+      ), (response) ->
+        # something went wrong
+        console.log "Error occurred while trying to create Earned Badge"
+        $q.reject response.data
+
+
     unearned: ()->
-      this.earnedBadge == null
+      ! this.earnedBadge
 
     earned: ()->
       this.earnedBadge
 
     timeoutCreate: ()->
-      `$timeout(function() {this.creating = false}, 1000);`
+      thisBadge = this
+      `$timeout(function() {thisBadge.createDone()}, 1000);`
+
+    doneCreating: ()->
+      this.timeoutCreate()
+
+    doneDeleting: ()->
+      thisBadge = this
+      `$timeout(function() {thisBadge.deleteDone()}, 1000);`
 
     setAwarded: ()->
       this.awarded = true
 
     setAvailable: ()->
-      this.awarded = false
       this.deleting = false
+      this.awarded = false
 
     setCreating: ()->
       this.creating = true

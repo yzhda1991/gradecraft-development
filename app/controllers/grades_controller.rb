@@ -163,11 +163,11 @@ class GradesController < ApplicationController
   end
 
   def delete_earned_badge_success
-    render json: {message: "Earned badge successfully deleted"}, status: 200
+    render json: {message: "Earned badge successfully deleted", success: true}, status: 200
   end
 
   def delete_earned_badge_failure
-    render json: {message: "Earned badge failed to delete"}, status: 417
+    render json: {message: "Earned badge failed to delete", success: false}, status: 417
   end
 
   def all_earned_badge_ids_present?
