@@ -52,8 +52,12 @@ body
         &:hover
           color: $primary-color
 .pageContainer
-  margin-top: 3.25rem
-  
+  margin: 0 .75rem
+  width: calc(100% - 290px)
+  float: left
+  background-color: #FFF
+  border-radius: $global-radius
+
 .tabs-content > .content
   padding: 0
 
@@ -73,7 +77,6 @@ body
 .panel
   border-radius: $global-radius
   padding: 1rem
-  background-color: #FFF
 
 .hidden
   display: none
@@ -95,11 +98,6 @@ form .tabs-content .content
 
 a:hover + .display_on_hover
   display: block
-
-hr.dashed
-  border: 0
-  border-bottom: 1px dashed $secondary-color-4
-  background: #FFF
 
 .unlock_keys
   position: absolute

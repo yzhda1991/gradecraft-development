@@ -99,6 +99,7 @@
 
 /* Navbar Styles */
 .navbar
+  top: 0
   height: 40px
   margin: 0
   padding: 5px 0
@@ -107,7 +108,6 @@
   margin-bottom: .5rem
   width: 100%
   font-family: "Century Schoolbook", serif
-  padding: 0 10px
   
 @media screen and (max-width: 767px)
   .navbar .nav-collapse
@@ -145,7 +145,7 @@
     background: $primary-color
     width: 100%
     z-index: 1000
-    padding: 0 1rem
+    padding: 0
 
 /* Large Screen Styles*/ 
 @media screen and (min-width: 768px)
@@ -162,6 +162,7 @@
     clear: both 
   .the-nav > .nav
     margin: 0
+    padding-left: 0
     line-height: normal
   .the-nav > .nav > li
     display: inline-block
@@ -207,8 +208,7 @@
     padding: 0
     min-width: 180px
     font-size: .8rem
-    background: #eee
-    box-shadow: 0 1px 1px 1px #eee
+    background: lighten($primary-color-4, 20%)
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
     &.class-info
