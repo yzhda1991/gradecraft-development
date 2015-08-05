@@ -11,6 +11,12 @@ describe User do
     @grade = create(:grade, assignment: @assignment, assignment_type: @assignment.assignment_type, course: @course, student: @student)
   end
 
+  describe ".find_by_insensitive_email" do
+    it "should return the user no matter what the case the email address is in" do
+      User.find_by_insensitive_email(@student.email.upcase).should eq @student
+    end
+  end
+
   context "ordering" do
     it "should return users alphabetical by last name" do
       User.destroy_all
