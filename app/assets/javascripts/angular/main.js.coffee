@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates', 'formly', 'formlyFoundation'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngMessages', 'ngAnimate', 'templates', 'formly', 'formlyFoundation'])
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
@@ -24,32 +24,81 @@ INTEGER_REGEXP = /^\-?\d+$/
     return
 
 #formly config
-
 @gradecraft.constant('apiCheck', apiCheck());
 
-@gradecraft.run((formlyConfig, apiCheck) ->
-  formlyConfig.setWrapper({
-    name: 'gradeInputInvalid',
-    templateUrl: 'ng_gradeInputWrapper.html'
-  })
-  formlyConfig.setType({
-    name: 'gradeScheme',
-    templateUrl: 'ng_gradeScheme.html',
-    controller: ($scope) ->
-      $scope.formOptions = {formState: $scope.formState}
-      $scope.addNew = () ->
-        $scope.model[$scope.options.key] = $scope.model[$scope.options.key] || []
-        repeatsection = $scope.model[$scope.options.key]
-        lastSection = repeatsection[repeatsection.length - 1]
-        newsection = {}
-        # if (lastSection)
-        #   newsection = angular.copy(lastSection)
-        repeatsection.push(newsection)
+@gradecraft.run((formlyConfig, formlyValidationMessages, apiCheck) ->
+  formlyConfig.extras.ngModelAttrsManipulatorPreferBound = true;
+  formlyValidationMessages.addStringMessage('maxlength', 'Your input is WAAAAY too long!');
+  formlyValidationMessages.messages.pattern = (viewValue, modelValue, scope) ->
+    viewValue + ' is invalid'
+  formlyValidationMessages.addTemplateOptionValueMessage('minlength', 'minlength', '', 'is the minimum length', 'Too short')
 
-      $scope.remove = (sections, $index) ->
-        sections.splice($index, 1)
+  # formlyConfig.setWrapper([
+    # {
+      # name: 'inputInvalid',
+      # templateUrl: 'ng_inputWrapper.html'
+    # }
+    # ,
+    # {
+      # template: [
+      #   '<div class="formly-template-wrapper form-group"',
+      #   'ng-class="{\'has-error\': options.validation.errorExistsAndShouldBeVisible}">',
+      #   '<label for="{{::id}}">{{options.templateOptions.label}} {{options.templateOptions.required ? \'*\' : \'\'}}</label>',
+      #   '<formly-transclude></formly-transclude>',
+      #   '<div class="validation"',
+      #   'ng-if="options.validation.errorExistsAndShouldBeVisible"',
+      #   'ng-messages="options.formControl.$error">',
+      #   '<div ng-messages-include="validation.html"></div>',
+      #   '<div ng-message="{{::name}}" ng-repeat="(name, message) in ::options.validation.messages">',
+      #   '{{message(options.formControl.$viewValue, options.formControl.$modelValue, this)}}',
+      #   '</div>',
+      #   '</div>',
+      #   '</div>'
+      # ].join(' ')
+    # },
+  # ])
 
-      $scope.copyFields = (fields) ->
-        angular.copy(fields)
-  })
+  formlyConfig.setType([
+    {
+      name: 'gradeScheme',
+      templateUrl: 'ng_gradeScheme.html',
+      controller: ($scope) ->
+        $scope.formOptions = {formState: $scope.formState}
+        $scope.addNew = () ->
+          $scope.model[$scope.options.key] = $scope.model[$scope.options.key] || []
+          repeatsection = $scope.model[$scope.options.key]
+          lastSection = repeatsection[repeatsection.length - 1]
+          newsection = {}
+          # if (lastSection)
+          #   newsection = angular.copy(lastSection)
+          repeatsection.push(newsection)
+
+        $scope.remove = (sections, $index) ->
+          sections.splice($index, 1)
+
+        $scope.copyFields = (fields) ->
+          angular.copy(fields)
+    }
+    # ,
+    # {
+    #   name: 'validatedInput',
+    #   extends: 'input',
+    #   wrapper: ['inputInvalid'],
+    #   validateOptions: (options) ->
+    #     options.data.apiCheck = apiCheck.warn(apiCheck.shape({
+    #       templateOptions: apiCheck.shape({
+    #         label: apiCheck.string,
+    #         placeholder: apiCheck.string.optional,
+    #         required: apiCheck.bool.optional
+    #       }),
+    #       data: apiCheck.shape({
+    #         extraData: apiCheck.object.optional,
+    #         # someProperty: apiCheck.shape.onlyIf('someOtherProperty', apiCheck.number).optional,
+    #         # someOtherProperty: apiCheck.bool.optional
+    #       }).optional
+    #     }), arguments, {
+    #       prefix: 'validatedInput formly type'
+    #     })
+    # }
+  ])
 )

@@ -6,6 +6,9 @@
       $http.put('/grade_scheme_elements/' + id).success(
         (data) ->
           console.log(data)
+      ).error(
+        (error) ->
+          console.log(error)
       )
 
     postGradeSchemeElements = (grade_scheme_elements)->
@@ -26,8 +29,10 @@
           key: 'letter',
           templateOptions: {
             label: 'Letter',
-            pattern: '^(?:AF?|[BC]\+?|[DF]|WF)$'
-          },
+            maxlength: 3,
+            minlength: 2,
+            placeholder: ''
+          }
           # validators: {
             # ipAddress: {
               # expression: (viewValue, modelValue) ->
@@ -36,13 +41,12 @@
               # message: '$viewValue + " is not a valid IP Address"'
             # }
           # },
-          modelOptions: {
-            debounce: {
-              default: 2000,
-              blur: 0
-            },
-            updateOn: "default blur"
-          }
+          # modelOptions: {
+          #   debounce: {
+          #     blur: 0
+          #   },
+          #   updateOn: "blur"
+          # }
         },
         {
           className: 'small-12 medium-2 columns',
@@ -50,14 +54,13 @@
           key: 'level',
           templateOptions: {
             label: 'Level'
-          },
-          modelOptions: {
-            debounce: {
-              default: 2000,
-              blur: 0
-            },
-            updateOn: "default blur"
           }
+          # modelOptions: {
+          #   debounce: {
+          #     blur: 0
+          #   },
+          #   updateOn: "blur"
+          # }
         },
         {
           className: 'small-12 medium-2 columns',
@@ -67,13 +70,12 @@
             label: 'Low Range',
             required: true
           },
-          modelOptions: {
-            debounce: {
-              default: 2000,
-              blur: 0
-            },
-            updateOn: "default blur"
-          },
+          # modelOptions: {
+          #   debounce: {
+          #     blur: 0
+          #   },
+          #   updateOn: "blur"
+          # },
           validation: {
             messages: {
               required: (viewValue, modelValue, scope) ->
@@ -89,13 +91,12 @@
             label: 'High Range',
             required: true
           },
-          modelOptions: {
-            debounce: {
-              default: 2000,
-              blur: 0
-            },
-            updateOn: "default blur"
-          },
+          # modelOptions: {
+          #   debounce: {
+          #     blur: 0
+          #   },
+          #   updateOn: "blur"
+          # },
           validation: {
             messages: {
               required: (viewValue, modelValue, scope) ->

@@ -5,10 +5,11 @@
 
   gse = @
   gse.onSubmit = () ->
-    # debugger
-    # console.log(gse.model)
     # GradeSchemeElementsService.postGradeSchemeElement(11)
     GradeSchemeElementsService.postGradeSchemeElements(gse.model.grade_scheme_elements)
+
+  gse.submitRow = (id) ->
+    GradeSchemeElementsService.postGradeSchemeElement(id)
 
   init = () ->
     gse.fields = [
