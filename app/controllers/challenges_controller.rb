@@ -1,6 +1,7 @@
 class ChallengesController < ApplicationController
 
-  before_filter :ensure_staff?, :except=>[:index, :show]
+  before_filter :ensure_staff?, :except=>[:index, :show, :student_predictor_data, :predict_points]
+  before_filter :ensure_student?, only: [:predict_points]
 
   def index
     @title = "#{term_for :challenges}"
@@ -85,6 +86,55 @@ class ChallengesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to challenges_path, notice: "Challenge #{@name} successfully deleted" }
       format.json { head :ok }
+    end
+  end
+
+  def predict_points
+    @challenge = current_course.challenges.find(params[:challenge_id])
+    @challengePrediction = PredictedEarnedChallenge.where(student: current_student, challenge: @challenge).first
+    @challengePrediction.points_earned = params[:points_earned]
+    respond_to do |format|
+      format.json do
+        if @challengePrediction.save
+          render :json => {id: @challenge.id, points_earned: @challengePrediction.points_earned}
+        else
+          render :json => { errors:  @challengePrediction.errors.full_messages }, :status => 400
+        end
+      end
+    end
+  end
+
+  def student_predictor_data
+    if current_user.is_student?(current_course)
+      @student = current_student
+    else
+      @student = User.find(params[:id])
+    end
+
+    @challenges = current_course.challenges
+
+    @challenges.each do |challenge|
+      challenge.student_predicted_earned_challenge = challenge.find_or_create_predicted_earned_challenge(@student)
+    end
+
+    team = @student.team_for_course(current_course)
+
+    @grades = team.challenge_grades.where(:team_id => team)
+
+    @challenges.each do |challenge|
+      @grades.where(:challenge_id => challenge.id).first.tap do |grade|
+
+        if grade.nil?
+          grade = ChallengeGrade.create(:challenge => challenge, :team => team)
+        end
+
+        challenge.current_team_grade = grade
+
+        # Only pass through points if they have been released by the professor
+        unless grade.is_student_visible?
+          challenge.current_team_grade.score = nil
+        end
+      end
     end
   end
 end

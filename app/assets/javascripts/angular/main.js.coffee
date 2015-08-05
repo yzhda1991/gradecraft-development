@@ -1,4 +1,4 @@
-@gradecraft = angular.module('gradecraft', ['restangular', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate'])
+@gradecraft = angular.module('gradecraft', ['restangular', 'ui.slider', 'ui.sortable', 'ng-rails-csrf', 'ngResource', 'ngAnimate', 'templates'])
 
 INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "integer", ->
@@ -13,5 +13,12 @@ INTEGER_REGEXP = /^\-?\d+$/
         # it is invalid, return undefined (no model update)
         ctrl.$setValidity "integer", false
         'undefined'
+    return
 
+@gradecraft.directive "collapseToggler", ->
+  restrict : 'C',
+  link: (scope, elm, attrs) ->
+    elm.bind('click', ()->
+      elm.siblings().toggleClass('collapsed')
+    )
     return

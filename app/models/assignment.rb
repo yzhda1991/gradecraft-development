@@ -7,6 +7,9 @@ class Assignment < ActiveRecord::Base
     :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level, :score_levels_attributes,
     :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics
 
+
+  attr_accessor :current_student_grade
+
   belongs_to :course
   belongs_to :assignment_type, -> { order('order_placement ASC') }, touch: true
 
@@ -75,7 +78,11 @@ class Assignment < ActiveRecord::Base
   scope :chronological, -> { order('due_at ASC') }
   scope :alphabetical, -> { order('name ASC') }
   acts_as_list scope: :assignment_type
+
+  # TODO: remove once calls to sorted are taken out
   scope :sorted, -> { order('position ASC') }
+  # TODO: add once point_total doesn't break assignment score levels:
+  #default_scope { order('position ASC') }
 
   # Filtering Assignments by various date properties
   scope :with_due_date, -> { where('assignments.due_at IS NOT NULL') }
@@ -94,13 +101,13 @@ class Assignment < ActiveRecord::Base
     super(options.merge(:only => [ :id, :content, :order, :done ] ))
   end
 
-  def content 
+  def content
     content = []
     if assignment_files.present?
       assignments_files.each do |af|
-        content << af.url 
-      end 
-      content << description 
+        content << af.url
+      end
+      content << description
     end
     return content
   end

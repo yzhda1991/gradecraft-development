@@ -112,11 +112,10 @@ class StudentsController < ApplicationController
 
   # Display the grade predictor
   def predictor
-    @grade_scheme_elements = current_course.grade_scheme_elements
-    @grade_levels_json = @grade_scheme_elements.order(:low_range).pluck(:low_range, :letter, :level).to_json
+    render :layout => 'predictor'
   end
 
-  #TODO: Should be moved to a method
+  #TODO: take this out!
   def scores_by_assignment
     scores = current_course.grades.released.joins(:assignment_type)
                            .group('grades.student_id, assignment_types.name')

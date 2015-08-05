@@ -1,0 +1,256 @@
+$predictor-font-size-1 : 1.5rem
+$predictor-font-size-2 : 1.25rem
+$predictor-font-size-3 : 1rem
+$predictor-font-size-4 : .85rem
+
+// SVG
+
+#predictor-graphic
+  margin: 10px 0 0 5%
+  background-color: $color-layout-blue-4
+  .grade-point-axis
+    path, line
+      fill: none
+      stroke: black
+      shape-rendering: scripEdges;
+    text
+      font-family: sans-serif
+      font-size: $predictor-font-size-4
+
+  #svg-graph-points-earned
+    fill: $color-layout-blue-0
+  #svg-graph-points-predicted
+    fill: $color-layout-blue-1
+
+// SECTIONS
+
+.predictor-section-title
+  @include title-type-styling
+  font-size: $predictor-font-size-1
+  color: white
+  background-color: $color-layout-blue-0
+  line-height: 1.4
+  margin-bottom: 0.5rem
+  margin-top: 0.2rem
+  padding: 0 .5rem
+  clear: both
+
+  .predictor-section-title-left
+   float: left
+   text-transform: capitalize
+
+  .predictor-section-title-right
+    text-align: right
+
+// ARTICLES
+
+article.predictor-article
+  display: block
+  margin-bottom: $predictor-font-size-3
+  border: 1px solid $color-layout-blue-0
+  border-bottom: .25rem solid $color-layout-blue-0
+  background-color: $color-layout-blue-5
+  float: left
+  //width: 19%
+  margin: 3px
+  height: 8.8rem
+  select
+    margin: 0
+
+.predictor-article-title
+  background-color: $color-layout-blue-0
+  color: $txt-color-inverse
+  padding: 3px 0 0 .5rem
+  height: 2rem
+  font-size: $predictor-font-size-3
+
+.predictor-article-icons
+  height: $predictor-font-size-2
+  background-color: $color-layout-blue-2
+  padding: .25rem
+
+.icon
+  position: relative
+  display: block
+  float: left
+  width: 20px
+  .icon-tooltip
+    display: none
+
+.icon:hover .icon-tooltip
+  position: absolute
+  top: $predictor-font-size-3
+  width: 10rem
+  text-align: center
+  color: $color-layout-blue-4
+  display:block
+  z-index: 100
+  background-color: $color-layout-blue-0
+  border-radius: 4px
+  padding: 4px
+
+.predictor-badge-icon
+  max-width: 80px
+  float: left
+  margin: 1px 0 0 $predictor-font-size-3
+
+.badge-predicted
+  width: 50%
+  float: right
+
+.predictor-article-date
+  height: $predictor-font-size-2
+  padding: .25rem
+  font-size: $predictor-font-size-4
+
+.predictor-article-main
+  padding-top: 8px
+
+article.predictor-article.status-graded
+  background-color: $color-layout-blue-4
+  border: 1px solid $color-layout-blue-1
+  border-bottom: .25rem solid $color-layout-blue-1
+  .predictor-article-title
+    background-color: $color-layout-blue-1
+  .predictor-article-icons
+    background-color: $color-layout-blue-3
+
+.article-graded .grade, .pass-fail-prediction, .badge-complete .value
+  text-align: center
+  font-size: $predictor-font-size-1
+  color: $color-layout-blue-0
+
+.article-predicted .grade
+  text-align: center
+  font-size: $predictor-font-size-2
+  color: $color-layout-blue-0
+  .value
+    font-size: $predictor-font-size-3
+  .name
+    font-size: $predictor-font-size-4
+    margin: -5px
+
+/* Slider Widget */
+
+article.predictor-article
+  .slider.ui-widget-content
+    background: $color-layout-blue-2
+    border: none
+    width: 80%
+    margin-left: 10%
+
+  .ui-state-default, .ui-widget-content .ui-state-default
+    border: none
+
+  .ui-slider .ui-slider-range
+    background: $color-layout-blue-1
+
+  .ui-slider .ui-slider-handle
+    width: 20px
+    height: 20px
+    position: absolute
+    top: -5px
+    margin-left: -12px
+    background: $color-layout-blue-0
+
+/* Binary Switch */
+
+.predictor-binary-switch .switch-socket
+  width: 40px
+  height: 20px
+  position: relative
+  background: $color-layout-blue-2
+  border-radius: 4px
+  margin: auto
+
+.predictor-binary-switch .switch-handle
+  width: 20px
+  height: 20px
+  position: absolute
+  background: $color-layout-blue-0
+  border-radius: 4px
+
+.predictor-binary-switch .switch-socket.on
+  background: $color-layout-blue-1
+  .switch-handle
+    left: 20px
+
+/* Counter widget for Badges */
+
+.predictor-counter-switch
+  .switch-wrapper
+    float: left
+    width: 25%
+    padding-top: 6px
+  .switch-socket
+    width: 20px
+    height: 40px
+    position: relative
+    background: $color-layout-blue-2
+    border-radius: 4px
+    margin: auto
+  .switch-up-button
+    width: 0
+    height: 0
+    border-left: 10px solid transparent
+    border-right: 10px solid transparent
+    border-bottom: 18px solid $color-layout-blue-0
+    position: absolute
+  .switch-down-button
+    width: 0
+    height: 0
+    top: 21px
+    position: absolute
+    border-left: 10px solid transparent
+    border-right: 10px solid transparent
+    border-top: 18px solid $color-layout-blue-0
+    position: absolute
+  .switch-down-button.disabled
+    border-top: 18px solid $color-layout-blue-1
+  .time-earned-prediction
+    font-size: $predictor-font-size-2
+    padding: 10px 0 0 4px
+  .badge-total-prediction
+    font-size: $predictor-font-size-1
+    clear: both
+    text-align: center
+
+// ANIMATIONS
+
+.collapsable .predictor-article
+  @include transition(all, .5s, ease-out)
+
+.collapsable.collapsed .predictor-article
+  overflow: hidden
+  height: 0
+  margin-top: 0
+  margin-bottom: 0
+  border-top: none
+  border-bottom: none
+
+/* MEDIA QUERIES */
+
+// small
+@media (max-width: $media-small-max)
+  article.predictor-article
+    width: 100%
+
+// medium
+@media (min-width: $media-small-max) and (max-width: $media-medium-max)
+  article.predictor-article
+    width: 32%
+
+// large
+@media (min-width: $media-medium-max) and (max-width: $media-large-max)
+  article.predictor-article
+    width: 19%
+
+// x-large
+// @media (min-width: $media-large-max) and (max-width: $media-xlarge-max)
+//   article.predictor-article
+//     width: 14%
+
+
+$media-small-max:   40rem; // 640px
+$media-medium-max:  64rem; // 1024px
+$media-large-max:   90rem; // 1440px ~14"

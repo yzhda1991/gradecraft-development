@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:feed, :show, :index, :guidelines]
+  before_filter :ensure_staff?, :except => [:feed, :show, :index, :guidelines, :student_predictor_data]
 
   respond_to :html, :json
 
@@ -98,7 +98,7 @@ class AssignmentsController < ApplicationController
     if session[:return_to].present?
       redirect_to session[:return_to]
     else
-      redirect_to assignments_path 
+      redirect_to assignments_path
     end
   end
 
@@ -195,7 +195,104 @@ class AssignmentsController < ApplicationController
     @viewable_rubric_grades = @assignment.rubric_grades
   end
 
+  # current student visible assignment
+  def student_predictor_data
+    @assignments = predictor_assignments_data
+    @student = current_student
+    @grades = predictor_grades(@student)
+
+    @assignments.each do |assignment|
+      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
+        if grade.nil?
+          grade = Grade.create(:assignment => assignment, :student => @student)
+        end
+        assignment.current_student_grade = grade
+
+        # Only pass through points if they have been released by the professor
+        unless grade.is_student_visible?
+          assignment.current_student_grade.pass_fail_status = nil
+          assignment.current_student_grade.score = nil
+        end
+      end
+    end
+  end
+
+  def staff_predictor_data
+    @assignments = predictor_assignments_data
+    @student = User.find(params[:id])
+    @grades = predictor_grades(@student)
+    @assignments.each do |assignment|
+      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
+        if grade.nil?
+          grade = Grade.create(:assignment => assignment, :student => @student)
+        end
+        assignment.current_student_grade = grade
+
+        # Professors can't see predictions
+        grade.predicted_score = 0
+
+        # Only pass through points if they have been released by the professor
+        unless grade.is_student_visible?
+          assignment.current_student_grade.pass_fail_status = nil
+          assignment.current_student_grade.score = nil
+        end
+      end
+    end
+    render :student_predictor_data
+  end
+
   private
+
+    def predictor_assignments_data
+      @assignments = current_course.assignments.select(
+        :accepts_attachments,
+        :accepts_links,
+        :accepts_resubmissions_until,
+        :accepts_submissions,
+        :accepts_submissions_until,
+        :accepts_text,
+        :assignment_type_id,
+        :description,
+        :due_at,
+        :grade_scope,
+        :id,
+        :include_in_predictor,
+        :media,
+        :media_caption,
+        :media_credit,
+        :name,
+        :open_at,
+        :pass_fail,
+        :point_total,
+        :points_predictor_display,
+        :position,
+        :release_necessary,
+        :required,
+        :resubmissions_allowed,
+        :student_logged,
+        :student_logged_button_text,
+        :student_logged_revert_button_text,
+        :thumbnail,
+        :use_rubric,
+        :visible,
+      )
+    end
+
+    def predictor_grades(student)
+      @grades = student.grades.where(:course_id => current_course).select(
+        :assignment_id,
+        :assignment_type_id,
+        :id,
+        :predicted_score,
+        :pass_fail_status,
+        :point_total,
+        :status,
+        :student_id,
+        :raw_score,
+        :final_score,
+        :score
+      )
+    end
 
     def team_params
       @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}

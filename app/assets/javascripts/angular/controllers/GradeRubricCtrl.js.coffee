@@ -1,4 +1,4 @@
-@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Metric', 'CourseBadge', 'RubricGrade','MetricsServices', '$http', ($scope, Restangular, Metric, CourseBadge, RubricGrade, MetricsServices, $http) ->
+@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Metric', 'CourseBadge', 'RubricGrade','MetricService', '$http', ($scope, Restangular, Metric, CourseBadge, RubricGrade, MetricService, $http) ->
 
   $scope.metrics = []
   $scope.courseBadges = {}
@@ -26,9 +26,9 @@
 
     $scope.addRubricGrades(rubricGrades)
 
-  MetricsServices.getBadges($scope.urlId).success (courseBadges)->
+  MetricService.getBadges($scope.urlId).success (courseBadges)->
     $scope.addCourseBadges(courseBadges)
-  MetricsServices.getMetrics($scope.urlId).success (metrics)->
+  MetricService.getMetrics($scope.urlId).success (metrics)->
     $scope.addMetrics(metrics)
 
   # distill key/value pairs for metric ids and relative order

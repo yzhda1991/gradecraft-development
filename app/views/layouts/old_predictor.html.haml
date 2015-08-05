@@ -1,0 +1,38 @@
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    %meta(name="viewport" content="width=device-width, initial-scale=1")
+    %title
+      = "#{@title.titleize} - " if @title
+      = current_course.try(:name) || 'GradeCraft'
+    = stylesheet_link_tag "application", :media => "all", media: "all"
+    = javascript_include_tag "vendor/modernizr"
+    = csrf_meta_tags
+    = yield(:head)
+
+  %body(class="#{body_class}")
+    .off-canvas-wrap{:"data-offcanvas" => true}
+      .inner-wrap
+        .fixed
+          = render 'layouts/top_bar'
+
+        - if current_user
+          .outer-wrap{:role => "main"}
+            = render 'layouts/alerts'
+            .show-for-medium-up
+              = content_nav do
+                = render "students/student_profile_tabs"
+            = render 'layouts/content'
+
+          = render "layouts/help/uservoice"
+
+          .logged_in_footer
+            = render 'layouts/footer'
+        - else
+          = render 'layouts/public'
+          .row.panel.footer
+            .small-12.columns
+              = render 'layouts/footer'
+        = render 'layouts/background'
+        = render 'layouts/google_analytics'
+        = javascript_include_tag "application", 'data-turbolinks-track' => true

@@ -22,4 +22,19 @@ class ChallengeGrade < ActiveRecord::Base
     team.save!
   end
 
+  def is_graded?
+    status == 'Graded'
+  end
+
+  def in_progress?
+    status == 'In Progress'
+  end
+
+  def is_released?
+    status == 'Released'
+  end
+
+  def is_student_visible?
+    is_released? || (is_graded? && ! assignment.release_necessary)
+  end
 end

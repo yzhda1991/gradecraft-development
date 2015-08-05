@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
 
-  before_filter :ensure_staff?, :except => :timeline
+  before_filter :ensure_staff?, :except => [:timeline]
 
   def index
     @title = "Course Index"

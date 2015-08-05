@@ -259,13 +259,18 @@ class GradesController < ApplicationController
   # Students predicting the score they'll get on an assignent using the grade predictor
   def predict_score
     @assignment = current_course.assignments.find(params[:id])
-    raise "Cannot set predicted score if grade status is 'Graded' or 'Released'" if current_student.grade_released_for_assignment?(@assignment)
-    @grade = current_student.grade_for_assignment(@assignment)
-    @grade.predicted_score = params[:predicted_score]
+    if current_student.grade_released_for_assignment?(@assignment)
+      @grade = nil
+    else
+      @grade = current_student.grade_for_assignment(@assignment)
+      @grade.predicted_score = params[:predicted_score]
+    end
     respond_to do |format|
       format.json do
-        if @grade.save
-          render :json => @grade
+        if @grade.nil?
+          render :json => {errors: "You cannot predict this assignment!"}, :status => 400
+        elsif @grade.save
+          render :json => {id: @grade.id, predicted_score: @grade.predicted_score}
         else
           render :json => { errors:  @grade.errors.full_messages }, :status => 400
         end
