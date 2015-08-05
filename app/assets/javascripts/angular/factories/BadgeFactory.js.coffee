@@ -14,31 +14,28 @@
       @assignment_id = attrs.assignment_id
       @student_earned_badges_serial = attrs.student_earned_badges
       this.otherEarnedBadges = []
-      this.earnedBadgesForGrade = []
+      this.earnedBadge = null
       this.addEarnedBadges()
-      @awarded = this.earnedBadgesForGrade.length > 0 ? true : false
+      @awarded = this.earnedBadge ? true : false
       @creating = false
       @deleting = false
 
     handleDestroyAll: ()->
-      this.earnedBadgesForGrade = []
+      this.earnedBadge = null
       $timeout(this.setAvailable, 300)
 
     deleteEarnedStudentBadge: ()->
       unless this.deleting == true
         this.setDeleting()
-        earnedBadge = this.earnedBadgesForGrade[0]
-        if earnedBadge.deleteFromServer(this)
-          this.earnedBadgesForGrade = []
+        if this.earnedBadge.deleteFromServer(this)
+          this.earnedBadge = null
           $timeout(this.setAvailable, 300)
 
     earnBadge: (params)->
       self = this
       earnedBadge = new EarnedBadge(params)
       if earnedBadge.grade_id == self.grade_id
-        alert("grade id matches")
-        self.earnedBadgesForGrade.push earnedBadge
-        alert(self.earnedBadgesForGrade.length)
+        self.earnedBadge = earnedBadge
       else
         self.otherEarnedBadges.push earnedBadge
 
@@ -48,8 +45,16 @@
         self.earnBadge(earnedBadgeParams)
       )
 
+    totalEarnedBadges: ()->
+      totalCount = this.otherEarnedBadges.length
+      totalCount += 1 if this.earnedBadge
+      totalCount
+
     unearned: ()->
-      this.earnedBadgesForGrade.length == 0
+      this.earnedBadge == null
+
+    earned: ()->
+      this.earnedBadge
 
     timeoutCreate: ()->
       `$timeout(function() {this.creating = false}, 1000);`

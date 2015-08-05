@@ -29,14 +29,14 @@
     $scope.badgesAvailable = ()->
       earnedBadgeCount = 0
       angular.forEach($scope.badges, (badge)->
-        earnedBadgeCount += 1 unless badge.earnedBadgesForGrade.length == 0
+        earnedBadgeCount += 1 if badge.earnedBadge
       )
       earnedBadgeCount != $scope.badges.length
 
     $scope.badgesAwarded = ()->
       earnedBadgeCount = 0
       angular.forEach($scope.badges, (badge)->
-        earnedBadgeCount += 1 unless badge.earnedBadgesForGrade.length == 0
+        earnedBadgeCount += 1 if badge.earnedBadge
       )
       earnedBadgeCount != 0
 
@@ -54,17 +54,22 @@
       unearnedBadgesPostParams = []
       angular.forEach($scope.badges, (badge)->
         if badge.unearned()
+          badge.setCreating()
           unearnedBadges[badge.id] = badge
           unearnedBadgesPostParams.push $scope.earnManyBadgesPostParams(badge)
       )
 
-      $http.post("/grade/#{$scope.grade.id}/earn_student_badges.json", {earned_badges: unearnedBadgesPostParams}).success(
+      $http.post("/grade/#{$scope.grade.id}/earn_student_badges", {earned_badges: unearnedBadgesPostParams}).success(
         (data, status)->
           angular.forEach(data["grades"], (earnedBadge)->
-            unearnedBadges[earnedBadge.badge_id].earnBadge(earnedBadge)
+            badge = unearnedBadges[earnedBadge.badge_id]
+            badge.earnBadge(earnedBadge)
+            badge.timeoutCreate()
           )
           availableBadges = document.getElementsByClassName("grade-badge available")
           `$timeout(function() { angular.element(availableBadges).addClass("hide-after-fade")}, 1000)`
+          awardedBadges = document.getElementsByClassName("grade-badge awarded")
+          `$timeout(function() { angular.element(awardedBadges).removeClass("hide-after-fade")}, 1000)`
       )
       .error((err)->
         alert("delete failed!")
@@ -81,6 +86,8 @@
           angular.forEach($scope.badges, (badge) ->
             badge.handleDestroyAll()
           )
+          availableBadges = document.getElementsByClassName("grade-badge available")
+          `$timeout(function() { angular.element(availableBadges).removeClass("hide-after-fade")}, 1000)`
           awardedBadges = document.getElementsByClassName("grade-badge awarded")
           `$timeout(function() { angular.element(awardedBadges).addClass("hide-after-fade")}, 1000)`
       )
