@@ -36,6 +36,10 @@ describe PasswordsController do
       expect(response).to be_redirect
     end
 
-    xit "redirects to the root url if the token has expired"
+    it "redirects to the root url if the token has expired" do
+      user.update_attribute :reset_password_token_expires_at, 1.hour.ago
+      get :edit, id: user.reset_password_token
+      expect(response).to be_redirect
+    end
   end
 end
