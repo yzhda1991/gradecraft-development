@@ -29,18 +29,18 @@
           key: 'letter',
           templateOptions: {
             label: 'Letter',
-            maxlength: 3,
-            minlength: 2,
+            maxlength: 2,
+            minlength: 1,
             placeholder: ''
           }
-          # validators: {
-            # ipAddress: {
-              # expression: (viewValue, modelValue) ->
-              #   value = modelValue || viewValue;
-              #   '/(\d{1,3}\.){3}\d{1,3}/'.test(value)
-              # message: '$viewValue + " is not a valid IP Address"'
-            # }
-          # },
+          validators: {
+            input: {
+              expression: (viewValue, modelValue) ->
+                value = modelValue || viewValue;
+                /^(?:A-?|[BCDEF][+-]?)$/.test(value)
+              message: '$viewValue + " is not a letter grade"'
+            }
+          },
           # modelOptions: {
           #   debounce: {
           #     blur: 0
