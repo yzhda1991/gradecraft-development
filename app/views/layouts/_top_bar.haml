@@ -9,16 +9,16 @@
             %a.no-hover.site-title{:href => dashboard_path}
               - if current_course
                 %span.course.left= "#{current_course.courseno}"
-                %span.course_name.left.show-for-medium-up= "#{current_course.name}"
+                %span.course_name.left= "#{current_course.name}"
                 - if current_course.tagline?
-                  %span.tagline.left.show-for-large-up= current_course.try(:tagline)
+                  %span.tagline.left.hidden-sm= current_course.try(:tagline)
               - else
                 GradeCraft
         %ul.nav.nav-pill.pull-right
           - if current_user
             = render 'layouts/navigation/authenticated_nav'
 
-      %a.btn-navbar-2.btn-navbar-navtoggle.btn-flyout-trigger
+      %a.btn-navbar.btn-navbar-navtoggle.btn-flyout-trigger
         %span.icon-bar.btn-flyout-trigger
         %span.icon-bar.btn-flyout-trigger
         %span.icon-bar.btn-flyout-trigger

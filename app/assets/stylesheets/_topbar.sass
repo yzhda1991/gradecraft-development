@@ -14,6 +14,7 @@
   ul
     list-style-type: none
     margin: 0
+    padding: 0
 
 .layout-right-flyout.isCbFlyNavActive
   visibility: visible
@@ -38,6 +39,7 @@
   -webkit-transform-style: preserve-3d
 
 .layout-left-content
+  top: 0
   z-index: 100
   transition: transform .2s ease-in-out
   -webkit-backface-visibility: hidden
@@ -45,6 +47,7 @@
 .layout-left-content.isCbFlyNavActive
   transform: translate3d(-270px,0,0)
   min-width: 320px
+  position: relative
 
 .nav-flyout-navmask, .nav-flyout-contentmask
   position: absolute
@@ -68,21 +71,12 @@
 .btn-navbar
   position: absolute
   width: 50px
-  height: 40px
+  height: 20px
   padding: 4px 0
   display: block
   z-index: 100
 
-.btn-navbar-2
-  position: absolute
-  width: 50px
-  height: 40px
-  right: 0
-  padding: 4px 0
-  display: block
-  z-index: 100
-
-.btn-navbar .icon-bar, .btn-navbar-2 .icon-bar
+.btn-navbar .icon-bar 
   display: block
   width: 28px
   height: 4px
@@ -90,11 +84,11 @@
   border-radius: $global-radius
   margin: 7px auto 0 auto
 
-.btn-navbar .icon-bar+.icon-bar, .btn-navbar-2 .icon-bar+.icon-bar
+.btn-navbar .icon-bar+.icon-bar
   margin-top: 3px
 
-@media screen and (min-width: 768px)
-  .btn-navbar, .btn-navbar-2
+@media screen and (min-width: $media-small-max)
+  .btn-navbar
     display: none
 
 /* Navbar Styles */
@@ -108,8 +102,8 @@
   margin-bottom: .5rem
   width: 100%
   font-family: "Century Schoolbook", serif
-  
-@media screen and (max-width: 767px)
+
+@media (max-width: $media-small-max)
   .navbar .nav-collapse
     display: none
   ul.subnav
@@ -123,7 +117,7 @@
       &:hover
         background-color: lighten($primary-color, 10%)
         color: #FFF
-    
+
   li.dropdown a.section-title
     display: block
     background-color: $primary-color
@@ -138,7 +132,7 @@
     margin-bottom: 25px
 
 
-@media screen and (min-width: 768px)
+@media screen and (min-width: $media-small-max)
   .navbar
     height: auto
     position: fixed
@@ -148,7 +142,7 @@
     padding: 0
 
 /* Large Screen Styles*/ 
-@media screen and (min-width: 768px)
+@media (min-width: $media-small-max)
   .container
     width: 95%
     margin: 0 auto
@@ -226,20 +220,15 @@
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
 
-/* General Mobile First Styles */ 
+/* Mobile Styles */ 
 
-.hidden-sm
-  display: none  
-@media screen and (min-width: 768px)
-  .visible-sm
+@media (max-width: $media-small-max)
+  .tagline
     display: none
-  .hidden-sm
-    display: inline-block  
 
-.pull-left 
-  float: left
-.pull-right 
-  float: right
+@media (min-width: $media-small-max) and (max-width: $media-medium-max)
+  .tagline
+    display: none
 
 .container
   width: 95%
