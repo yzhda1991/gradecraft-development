@@ -12,6 +12,7 @@ $px-3: .1875rem;
 
 $global-radius: $px-3;
 
+$txt-color-inverse: #FFF;
 
 // Copied from Foundation for now, this can change when we remove Foundation
 $media-small-max:   40rem; // 640px
@@ -36,6 +37,13 @@ $media-xlarge-max:  120rem; //
   background-image:         linear-gradient(top, $fromColor, $toColor);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
 }
+@mixin title-type-styling { 
+  font-family: "Avenir", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}
+
 /* Importing supporting files. If you create a new css file you'll need to add it here.  */
 
 @import 'color';
@@ -63,3 +71,4 @@ $media-xlarge-max:  120rem; //
 @import 'topbar';
 @import 'typography';
 @import 'videos';
+

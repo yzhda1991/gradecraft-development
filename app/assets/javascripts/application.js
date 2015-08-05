@@ -8,8 +8,6 @@
 //= require jquery-ui
 //= require jquery_ujs
 
-//= require foundation
-
 //= require_self
 //= require jquery.omniselect
 //= require autonumeric
@@ -69,5 +67,3 @@
 //= require background
 //= require d3
 //= require offscreen-nav
-
-$(function(){ $(document).foundation(); });
