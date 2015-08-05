@@ -5,7 +5,6 @@
  *= require animate.min
  *= require select2
  *= require font-awesome
- *= require bootstrap
  *= require jquery.dynatable
 */
 
@@ -41,22 +40,23 @@ $media-xlarge-max:  120rem; //
 
 @import 'color';
 @import 'datepicker';
+@import 'alerts';
 @import 'analytics';
 @import 'background';
 @import 'badges';
-@import 'block-grid';
 @import 'breadcrumbs';
-@import 'bootsy';
 @import 'buttons_and_icons';
 @import 'datepicker';
 @import 'collapse';
 @import 'forms';
+@import 'grid';
 @import 'homepage';
 @import 'layout';
 @import 'predictor';
 @import 'rubrics';
 @import 'sidebars';
 @import 'student_dashboard';
+@import 'subnav';
 @import 'tables';
 @import 'tabs';
 @import 'timeline';

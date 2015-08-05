@@ -1,41 +1,31 @@
-
-/* Primary page content */
-.mainContent .info_pages, .logged-in .panel.mainContent
-  background-color: #FFF
+body
+  margin: 0 auto
+  padding: 0
   position: relative
-  height: auto !important
-  margin-right: 0
-  margin-bottom: 1rem
-  padding: 1rem 0
-  border: none
-  overflow: hidden
 
-.pageContainer
-  margin-top: 3.25rem
+.inner-wrap 
+  margin: 3rem .75rem
+  width: 100%
+  position: relative
+
+.mainContainer
+  margin: 0 .75rem
+  width: calc(100% - 290px)
+  float: left
+  background-color: #FFF
+  border-radius: $global-radius
 
 .tabs-content > .content
   padding: 0
-
-.panel.callout
-  background-color: lighten(#666, 50%)
-  border-color: #CCC
 
 /* Allow other things to appear above the timeline */
 .vco-storyjs
   z-index: 0
 
-.columns-no-padding
-  padding: 0
-
-.columns-no-padding_right
-  padding-right: 0
-
-.columns-no-padding_left
-  padding-left: 0
-
 .panel
   border-radius: $global-radius
   overflow: hidden
+  padding: 1rem
 
 .hidden
   display: none
@@ -48,21 +38,6 @@ form .tabs-content .content
   border: 1px solid #eee
   padding: 1rem
 
-.alert-box
-  background-color: $primary-color
-  font-size: 120%
-
-.alert-box.success
-  background-color: darken($color-green-2, 2%)
-  font-size: 120%
-
-.alert-box.alert
-  background-color: darken($alert-color, 2%)
-  font-size: 120%
-
-  ul
-    margin-bottom: 0
-
 .badge-icon
   width: 80%
   max-width: 100px
@@ -72,11 +47,6 @@ form .tabs-content .content
 
 a:hover + .display_on_hover
   display: block
-
-hr.dashed
-  border: 0
-  border-bottom: 1px dashed $secondary-color-4
-  background: #FFF
 
 .unlock_keys
   position: absolute

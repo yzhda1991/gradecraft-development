@@ -1,0 +1,43 @@
+.alert-box 
+  padding: .2rem .5rem
+  background-color: $primary-color-5
+  font-size: .8rem
+  color: #FFF
+  margin-bottom: .5rem
+  &.radius
+    border-radius: $global-radius
+  a.close
+    color: #FFF
+    float: right
+    font-size: 1rem !important
+    font-weight: bold
+    line-height: 1
+    color: #FFF
+    opacity: 0.8
+    filter: alpha(opacity=20)
+
+    &:hover, &:focus
+      color: #000000
+      text-decoration: none
+      cursor: pointer
+      opacity: 0.5
+      filter: alpha(opacity=50)
+  &.alert
+    background-color: $alert-color
+  &.success
+    background-color: $secondary-color-2
+
+.alert-box
+  background-color: $primary-color
+  font-size: 120%
+
+.alert-box.success
+  background-color: darken($color-green-2, 2%)
+  font-size: 120%
+
+.alert-box.alert
+  background-color: darken($alert-color, 2%)
+  font-size: 120%
+
+  ul
+    margin-bottom: 0

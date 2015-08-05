@@ -11,22 +11,19 @@
     = yield(:head)
 
   %body(class="#{body_class}")
+    = render 'layouts/top_bar'
     .inner-wrap
-      = render 'layouts/top_bar'
-
       - if current_user
         - if current_user_is_staff?
-          .columns.pageContainer= render 'layouts/staff'
+          = render 'layouts/staff'
         - else
-          .columns.pageContainer= render 'layouts/student'
-        .small-12.columns.logged_in_footer
-          %br
+          = render 'layouts/student'
+        .logged_in_footer
           = render 'layouts/footer'
       - else
         = render 'layouts/public'
-        .row.panel.footer
-          .small-12.columns
-            = render 'layouts/footer'
+        .footer
+          = render 'layouts/footer'
       = render 'layouts/background'
       = render 'layouts/google_analytics'
       = javascript_include_tag "application", 'data-turbolinks-track' => true

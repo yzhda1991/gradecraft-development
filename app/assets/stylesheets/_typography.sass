@@ -7,10 +7,15 @@
 
 h1, h2, h3, h4, h5
   text-transform: capitalize
+  font-family: "Century Schoolbook", serif
+  margin: 0
+  padding: 0
+  clear: left
 
 body
   font-size: 0.9rem
   line-height: 1.6
+  font-family: "Avenir", Helvetica, sans-serif
 
 .bold
   font-weight: bold !important
@@ -54,6 +59,10 @@ a:hover
 .large
   font-size: 1.5rem
 
+a
+  text-decoration: none
+  color: lighten($primary-color, 10%)
+
 hr
   border-color: $color-grey-1
   border-width: 1px 0 0
@@ -68,7 +77,6 @@ hr
 h3.pagetitle
   text-transform: uppercase
   color: $primary-color
-  padding: .4rem .8rem !important
   float: left
   clear: both
   margin: 0 0 .75rem
@@ -89,8 +97,7 @@ h4.subtitle
   box-shadow: 2px 2px 8px #ccc
 
   .label.alert
-    top: -3px
-    margin-left: 6px
+    margin-left: .25rem
     margin-bottom: 0 !important
 
 h4.subtitle.fail
@@ -140,6 +147,12 @@ h5.section-title
 .uploaded-files
   span.has-tip
     font-weight: normal
+
+/** Icon styling! **/
+i.fa-slack
+  -ms-transform: rotate(19deg)
+  -webkit-transform: rotate(19deg)
+  transform: rotate(19deg)
 
 /* Used for screen reader only items */
 .sr-only

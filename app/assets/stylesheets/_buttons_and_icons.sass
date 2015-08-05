@@ -1,19 +1,37 @@
-.button
-  /*margin-bottom: 0*/
+.button, button
+  border-radius: $global-radius
   text-transform: capitalize
-  border: 0
+  text-decoration: none
   color: #FFF
   padding: .4rem
   font-size: .7rem !important
   cursor: pointer
   background-color: $primary-color-2
-  margin: 0 !important
 
   &:hover
-    @include linear-gradient(#385b83, #264971)
+    background-color: $primary-color
+    color: #FFF
 
   &:active
-    @include linear-gradient(#5daa72, #66cc99)
+    background-color: $secondary-color-3
+
+.button-group 
+  li
+    display: inline
+    margin: 0 -1px
+    list-style-type: none
+    white-space: nowrap
+  .button, button
+    border-radius: 0
+    margin: 0 -1px
+  li:first-of-type .button
+    border-top-left-radius: $global-radius
+    border-bottom-left-radius: $global-radius
+  li:last-of-type .button
+    border-top-right-radius: $global-radius
+    border-bottom-right-radius: $global-radius
 
 ul.button-group
-  font-size: .7rem !important
+  display: inline
+  margin: 0
+  padding: 0

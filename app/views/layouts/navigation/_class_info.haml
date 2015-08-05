@@ -1,56 +1,57 @@
 %li
   %a{:href => "#"} 
-    %i.fa.fa-flash
+    %i.fa.fa-flash.fa-fw
     Professor #{ current_course.professor.try(:name) }
 - if current_course.office.present?
   %li
     %a{:href => "#"}
-      %i.fa.fa-book
+      %i.fa.fa-book.fa-fw
       ="Office: #{current_course.office}"
 - if current_course.office_hours.present?
   %li
     %a{:href => "#"}
-      %i.fa.fa-clock-o
+      %i.fa.fa-clock-o.fa-fw
       Office Hours:
       = auto_link(current_course.office_hours)
 - if current_user_is_student? && current_student.team_leaders(current_course).present?
   - current_student.team_leaders(current_course).each do |team_leader|
     %li
       %a{:href => "#"}
-        %i.fa.fa-flag
+        %i.fa.fa-flag.fa-fw
         = "#{current_course.team_leader_term} #{team_leader.first_name}"
 - if current_user_is_student? && current_user.team_for_course(current_course).present?
   %li
     %a{:href => "#"}
-      %i.fa.fa-trophy
+      %i.fa.fa-trophy.fa-fw
       = "#{(term_for :team).titleize} #{current_user.team_for_course(current_course).name}"
 - if current_course.syllabus.present?
   %li
     %a{:href => current_course.syllabus_url }
-      %i.fa.fa-pdf-o
+      %i.fa.fa-pdf-o.fa-fw
       Course Syllabus
 - if current_course.phone.present?
   %li{:href => "#"}
     %a
-      %i.fa.fa-phone
+      %i.fa.fa-phone.fa-fw
       #{current_course.phone }
 - if current_course.class_email.present?
   %li
     %a{:href => "mailto:#{current_course.class_email}"}
-      %i.fa.fa-envelope
+      %i.fa.fa-envelope.fa-fw
       #{current_course.class_email}
 - if current_course.twitter_handle.present?
   %li
     %a{:href => "http://www.twitter.com/##{current_course.twitter_handle}"}
-      %i.fa.fa-twitter
+      %i.fa.fa-twitter.fa-fw
       = "@#{current_course.twitter_handle}"
 - if current_course.twitter_hashtag.present?
   %li
     %a{:href => "http://www.twitter.com/##{current_course.twitter_hashtag}"}
-      ="##{current_course.twitter_hashtag}"
+      %i.fa.fa-slack.fa-fw
+      ="#{current_course.twitter_hashtag}"
 - if current_course.meeting_times.present?
   %li
     %a{:href => "#"}
-      %i.fa.fa-bank
+      %i.fa.fa-bank.fa-fw
       = current_course.meeting_times
       = current_course.location
