@@ -13,7 +13,7 @@ describe User do
 
   describe ".find_by_insensitive_email" do
     it "should return the user no matter what the case the email address is in" do
-      User.find_by_insensitive_email(@student.email.upcase).should eq @student
+      expect(User.find_by_insensitive_email(@student.email.upcase)).to eq @student
     end
   end
 

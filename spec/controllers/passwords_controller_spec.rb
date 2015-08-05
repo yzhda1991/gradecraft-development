@@ -13,9 +13,9 @@ describe PasswordsController do
       let(:user) { create :user }
 
       it "sends the user an email with password reset instructions" do
-        expect { post :create, email: user.email }.to \
+        expect { post :create, email: user.email.upcase }.to \
           change { ActionMailer::Base.deliveries.count }.by 1
-        response.should be_redirect
+        expect(response).to be_redirect
       end
     end
   end
