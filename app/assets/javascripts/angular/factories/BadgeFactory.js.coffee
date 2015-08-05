@@ -50,6 +50,9 @@
       totalCount += 1 if this.earnedBadge
       totalCount
 
+    prettyEarnedBadge: ()->
+      JSON.stringify(this.earnedBadge)
+
     unearned: ()->
       this.earnedBadge == null
 
