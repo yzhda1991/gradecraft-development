@@ -15,4 +15,11 @@ class PasswordsController < ApplicationController
     @user = User.load_from_reset_password_token(params[:id])
     redirect_to new_password_path, alert: "Invalid or expired password reset token. Please request new password reset instructions." and return unless @user
   end
+
+  def update
+    @token = params[:token]
+    @user = User.load_from_reset_password_token(@token)
+    @user.change_password!(params[:user][:password])
+    render nothing: true
+  end
 end

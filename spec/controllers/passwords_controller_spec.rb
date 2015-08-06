@@ -42,4 +42,23 @@ describe PasswordsController do
       expect(response).to be_redirect
     end
   end
+
+  describe "PUT update" do
+    let(:user) { create :user, reset_password_token: "blah" }
+
+    it "changes the user's password" do
+      put :update, id: user.reset_password_token, token: user.reset_password_token, user: { password: "blah", password_confirmation: "blah" }
+      expect(User.authenticate(user.email, "blah")).to eq user
+    end
+
+    xit "logs the user in"
+
+    context "with non-matching password" do
+      xit "renders the edit template with the error"
+    end
+
+    context "with a blank password" do
+      xit "renders the edit template with the error"
+    end
+  end
 end
