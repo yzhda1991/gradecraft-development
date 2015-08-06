@@ -1,26 +1,24 @@
 @gradecraft.controller 'GradeCtrl', ['$timeout', '$rootScope', '$scope', 'Grade', 'AssignmentScoreLevel', '$window', '$http', 'Badge', 'EventHelper', ($timeout, $rootScope, $scope, Grade, AssignmentScoreLevel, $window, $http, Badge, EventHelper) -> 
 
   # setup the controller scope on initialize
-  $scope.init = (grade, assignmentScoreLevels, badges, assignment)->
+  $scope.init = (initData)->
     # is interactive ui debugging on?
     $scope.debug = true
- 
+
+    alert(JSON.stringify(initData.grade))
+
     # grade stuff
-    $scope.gradeParams = grade["grade"]
-    $scope.grade = new Grade($scope.gradeParams, $http)
+    $scope.grade = new Grade(initData.grade, $http)
 
     # assignment stuff
-    $scope.assignment = assignment
-    alert(assignment)
-    $scope.releaseNecessary = assignment.release_necessary
+    $scope.releaseNecessary = initData.assignment.release_necessary
 
-    $scope.gradeId = $scope.gradeParams.id
     $scope.rawScoreUpdating = false
     $scope.hasChanges = false
     $scope.gradeStatuses = ["In Progress", "Graded", "Released"]
     
     # establish and populate all necessary collections for UI
-    $scope.populateCollections(badges, assignmentScoreLevels)
+    $scope.populateCollections(initData.badges, initData.assignment_score_levels)
 
   # add initial score levels and badges
   $scope.populateCollections = (badges, assignmentScoreLevels)->
@@ -61,7 +59,7 @@
   $scope.addBadges = (badges)->
     # parameters for earned badge creation
     angular.forEach(badges, (badge, index)->
-      badgePrototype = new Badge(badge, $scope.gradeId)
+      badgePrototype = new Badge(badge, $scope.grade.id)
       $scope.badges.push badgePrototype
     )
 
@@ -164,7 +162,7 @@
     buttons: [ "bold", "italic", "underline", "strikeThrough", "subscript", "superscript", "fontFamily", "fontSize", "color", "formatBlock", "blockStyle", "inlineStyle", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent", "selectAll", "createLink", "insertVideo", "table", "undo", "redo", "html", "save", "insertHorizontalRule", "removeFormat" ],
 
     #Set the save URL.
-    saveURL: '/grades/' + $scope.gradeId + '/async_update',
+    saveURL: '/grades/' + $scope.grade.id + '/async_update',
 
     #HTTP request type.
     saveRequestType: 'PUT',

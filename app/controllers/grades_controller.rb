@@ -22,6 +22,12 @@ class GradesController < ApplicationController
       end
     end
 
+    fetch_grades_based_on_group
+  end
+
+  private
+
+  def fetch_grades_based_on_group
     if @assignment.has_groups?
       @group = current_course.groups.find(params[:group_id])
       @title = "#{@group.name}'s Grade for #{ @assignment.name }"
@@ -32,60 +38,61 @@ class GradesController < ApplicationController
     end
   end
 
+  public
+
   def edit
     session[:return_to] = request.referer
+
     @student = current_student
+ 
+    # TODO: what is this needed for?
     redirect_to @assignment and return unless current_student.present?
+
     @grade = Grade.where(student_id: @student[:id], assignment_id: @assignment[:id]).first
-    # @grade = current_student_data.grade_for_assignment(@assignment)
     create_student_assignment_grade unless @grade
-    @serialized_grade = GradeSerializer.new(@grade).to_json
-    @submission = @student.submission_for_assignment(@assignment)
     @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
 
-    @badges = current_course.badges
-    @serialized_badges = jbuilder_badges_template.as_json
+    @submission = @student.submission_for_assignment(@assignment)
 
-    @serialized_assignment = serialized_assignment
+    @badges = current_course.badges
+    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
 
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
       @rubric_grades = serialized_rubric_grades
     end
 
-    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
-    @serialized_score_levels = @assignment_score_levels.empty? ? empty_score_levels_hash : fetch_serialized_assignment_score_levels
+    @serialized_init_data = serialized_init_data
   end
 
   private
 
+  def temp_view_context
+    @temp_view_context ||= ApplicationController.new.view_context
+  end
+
+  def serialized_init_data
+    JbuilderTemplate.new(temp_view_context).encode do |json|
+      json.grade do
+        json.partial! "grades/grade", grade: @grade
+      end
+
+      json.badges do
+        json.partial! "grades/badges", badges: @badges, student_id: @student[:id]
+      end
+
+      json.assignment do
+        json.partial! "grades/assignment", assignment: @assignment
+      end
+
+      json.assignment_score_levels do
+        json.partial! "grades/assignment_score_levels", assignment_score_levels: @assignment_score_levels
+      end
+    end.to_json
+  end
+
   def empty_score_levels_hash
     {assignment_score_levels: []}.to_json
-  end
-
-  def fetch_serialized_badges
-    ActiveModel::ArraySerializer.new(@badges, each_serializer: CourseBadgeSerializer).to_json(student_id: @student[:id])
-  end
-
-  def serialized_assignment
-    Jbuilder.encode do |json|
-      json.partial! "grades/assignment"
-    end
-  end
-
-  def jbuilder_badges_template
-    Jbuilder.encode do |json|
-      json.array! @badges do |badge|
-        json.(badge, :id, :name, :description, :point_total)
-
-        if @student[:id]
-          json.student_earned_badges badge.earned_badges.where(student_id: @student[:id])
-        end
-
-        json.multiple badge.can_earn_multiple_times
-        json.icon badge.icon.url
-      end
-    end
   end
 
   def fetch_serialized_assignment_score_levels

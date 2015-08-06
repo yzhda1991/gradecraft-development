@@ -1,1 +1,1 @@
-json.release_necessary @assignment.release_necessary
+json.release_necessary assignment.release_necessary
