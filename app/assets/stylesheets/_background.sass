@@ -6,11 +6,11 @@ $default-mountain-spacer-size: $default-mountain-size - $default-mountain-peak-s
 
 $hill-lift-spacer: 40px
 
-$cloud-speed-1: 90s
-$cloud-speed-2: 100s
-$cloud-speed-3: 110s
-$cloud-speed-4: 130s
-$cloud-speed-5: 180s
+$cloud-speed-1: 180s
+$cloud-speed-2: 200s
+$cloud-speed-3: 220s
+$cloud-speed-4: 260s
+$cloud-speed-5: 360s
 
 // z-index for layers
 
@@ -67,35 +67,38 @@ $layer-back-color: -1000
 //-------------------------
 
 .cloud
-  margin-left: -35%
   position: relative
   width: 400px
   height: 100px
-  -webkit-animation: scroll $cloud-speed-4 linear 1 /* Safari 4+ */
-  -moz-animation:    scroll $cloud-speed-4 linear 1 /* Fx 5+ */
-  -o-animation:      scroll $cloud-speed-4 linear 1 /* Opera 12+ */
-  animation:         scroll $cloud-speed-4 linear 1 /* IE 10+, Fx 29+ */
+  // -webkit-animation: scroll $cloud-speed-4 linear 1 /* Safari 4+ */
+  // -moz-animation:    scroll $cloud-speed-4 linear 1 /* Fx 5+ */
+  // -o-animation:      scroll $cloud-speed-4 linear 1 /* Opera 12+ */
+  // animation:         scroll $cloud-speed-4 linear 1 /* IE 10+, Fx 29+ */
 
 .cloud-2
-  -webkit-animation-delay: 30s
-  -webkit-animation-duration: $cloud-speed-2
-  animation-delay: 30s
-  animation-duration: $cloud-speed-2
+  margin-left: 10%
+  // -webkit-animation-delay: 30s
+  // -webkit-animation-duration: $cloud-speed-2
+  // animation-delay: 30s
+  // animation-duration: $cloud-speed-2
 .cloud-3
-  -webkit-animation-delay: 90s
-  -webkit-animation-duration: $cloud-speed-3
-  animation-delay: 90s
-  animation-duration: $cloud-speed-3
+  margin-left: 25%
+  // -webkit-animation-delay: 90s
+  // -webkit-animation-duration: $cloud-speed-3
+  // animation-delay: 90s
+  // animation-duration: $cloud-speed-3
 .cloud-4
-  -webkit-animation-delay: 60s
-  -webkit-animation-duration: $cloud-speed-5
-  animation-delay: 60s
-  animation-duration: $cloud-speed-5
+  margin-left: 50%
+  // -webkit-animation-delay: 60s
+  // -webkit-animation-duration: $cloud-speed-5
+  // animation-delay: 60s
+  // animation-duration: $cloud-speed-5
 .cloud-4
-  -webkit-animation-delay: 15s
-  -webkit-animation-duration: $cloud-speed-1
-  animation-delay: 15s
-  animation-duration: $cloud-speed-1
+  margin-left: 75%
+  // -webkit-animation-delay: 15s
+  // -webkit-animation-duration: $cloud-speed-1
+  // animation-delay: 15s
+  // animation-duration: $cloud-speed-1
 .cloud-bubble
   position: absolute
   background-color: white
