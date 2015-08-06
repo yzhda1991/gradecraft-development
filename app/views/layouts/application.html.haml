@@ -18,12 +18,10 @@
           = render 'layouts/staff'
         - else
           = render 'layouts/student'
-        .logged_in_footer
-          = render 'layouts/footer'
       - else
         = render 'layouts/public'
-        .footer
-          = render 'layouts/footer'
+      .footer
+        = render 'layouts/footer'
       = render 'layouts/background'
       = render 'layouts/google_analytics'
       = javascript_include_tag "application", 'data-turbolinks-track' => true

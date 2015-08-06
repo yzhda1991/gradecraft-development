@@ -6,14 +6,12 @@
     %h3.pagetitle= @title
 
   - if current_user_is_staff?
-    .small-12.columns
-      .button-bar
-        %ul.button-group.context_menu.radius
-          %li
-            %a.button{:href => new_challenge_path }
-              %i.fa.fa-plus
-              New #{(term_for :challenge).titleize}
-      %br
+    .context_menu
+      %ul.button-group.radius
+        %li
+          %a.button{:href => new_challenge_path }
+            %i.fa.fa-plus
+            New #{(term_for :challenge).titleize}
 
   .columns{:style => "overflow: auto"}
 

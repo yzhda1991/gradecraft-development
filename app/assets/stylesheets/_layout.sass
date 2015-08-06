@@ -9,11 +9,37 @@ body
   position: relative
 
 .mainContainer
-  margin: 0 .75rem
+  margin: 0 .5rem 3rem 0 
   width: calc(100% - 290px)
   float: left
   background-color: #FFF
   border-radius: $global-radius
+
+.footer
+  color: #FFF
+  margin: 0 auto
+  width: 50%
+  clear: both
+
+  h5
+    font-size: 1.2rem
+
+  .small-12.medium-2.columns
+    margin: 3rem 3rem 0 0
+
+  ul 
+    margin: 0 
+    padding: 0
+
+    li
+      margin: 0 
+      padding: 0
+      list-style-type: none
+      a
+        color: #FFF
+        &:hover
+          color: $primary-color
+
 
 .tabs-content > .content
   padding: 0
@@ -30,8 +56,8 @@ body
 
 .panel
   border-radius: $global-radius
-  overflow: hidden
   padding: 1rem
+  background-color: #FFF
 
 .hidden
   display: none

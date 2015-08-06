@@ -3,7 +3,6 @@
   %ul
     %li= link_to_unless_current "Features", features_path
   .clear
-  %hr.show-for-small-only
 
 .small-12.medium-2.columns
   %h5 Using GradeCraft
@@ -13,7 +12,6 @@
     %li= link_to "Video Tutorials", "https://www.youtube.com/channel/UC5fz1gQxcOF9Rn1Qs_mq06g/videos"
     %li= link_to "Submit a Bug", "http://help.gradecraft.com/"
   .clear
-  %hr.show-for-small-only
 
 .small-12.medium-2.columns
   %h5 About
@@ -23,7 +21,6 @@
     %li= link_to_unless_current "Codebase", "https://github.com/UM-USElab/gradecraft-development"
     %li= link_to_unless_current "Blog", "http://blog.gradecraft.com"
   .clear
-  %hr.show-for-small-only
 
 .small-12.medium-2.columns
   %h5 Talk to Us
@@ -38,5 +35,4 @@
 
 .small-12.center
   %br
-  .uppercase &copy; 2012-14 Regents of the University of Michigan
-  %br
+  .uppercase= "© 2012-#{Date.today.year} Regents of the University of Michigan"
