@@ -51,8 +51,20 @@ describe UsersController do
       end
     end
 
-		describe "GET create" do
-      pending
+    describe "POST create" do
+      it "creates a new user" do
+        post :create, user: { first_name: "Jimmy",
+                              last_name: "Page",
+                              username: "jimmy",
+                              email: "jimmy@example.com" }
+        user = User.last
+        expect(user.email).to eq "jimmy@example.com"
+        expect(user.username).to eq "jimmy"
+        expect(user.first_name).to eq "Jimmy"
+        expect(user.last_name).to eq "Page"
+      end
+
+      xit "generates a random password for a user"
     end
 
 		describe "GET update" do
