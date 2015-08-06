@@ -19,7 +19,11 @@ class PasswordsController < ApplicationController
   def update
     @token = params[:token]
     @user = User.load_from_reset_password_token(@token)
-    @user.change_password!(params[:user][:password])
+
+    if @user.change_password!(params[:user][:password])
+      auto_login @user
+      redirect_to dashboard_path, notice: "Password was successfully updated" and return
+    end
     render nothing: true
   end
 end

@@ -19,7 +19,7 @@ describe PasswordsController do
     it "sends the user an email with password reset instructions" do
       expect { post :create, email: user.email.upcase }.to \
         change { ActionMailer::Base.deliveries.count }.by 1
-      expect(response).to be_redirect
+      expect(response).to redirect_to root_path
     end
   end
 
@@ -31,27 +31,33 @@ describe PasswordsController do
       expect(response).to be_success
     end
 
-    it "redirects to the root url if the token is not correct" do
+    it "redirects to the password reset url if the token is not correct" do
       get :edit, id: "blech"
-      expect(response).to be_redirect
+      expect(response).to redirect_to new_password_path
     end
 
-    it "redirects to the root url if the token has expired" do
+    it "redirects to the password reset url if the token has expired" do
       user.update_attribute :reset_password_token_expires_at, 1.hour.ago
       get :edit, id: user.reset_password_token
-      expect(response).to be_redirect
+      expect(response).to redirect_to new_password_path
     end
   end
 
   describe "PUT update" do
     let(:user) { create :user, reset_password_token: "blah" }
+    before do
+      put :update, id: user.reset_password_token,
+        token: user.reset_password_token,
+        user: { password: "blah", password_confirmation: "blah" }
+    end
 
     it "changes the user's password" do
-      put :update, id: user.reset_password_token, token: user.reset_password_token, user: { password: "blah", password_confirmation: "blah" }
       expect(User.authenticate(user.email, "blah")).to eq user
     end
 
-    xit "logs the user in"
+    it "logs the user in" do
+      expect(response).to redirect_to dashboard_path
+    end
 
     context "with non-matching password" do
       xit "renders the edit template with the error"
