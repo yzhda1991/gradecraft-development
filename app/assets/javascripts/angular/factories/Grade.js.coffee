@@ -1,5 +1,5 @@
-@gradecraft.factory 'GradePrototype', ['$http', ($http)->
-  class GradePrototype
+@gradecraft.factory 'Grade', ['$http', ($http)->
+  class Grade
     constructor: (attrs={}, http)->
       @id = attrs.id
       @status = attrs.status

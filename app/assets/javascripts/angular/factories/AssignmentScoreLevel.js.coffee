@@ -1,5 +1,5 @@
-@gradecraft.factory 'AssignmentScoreLevelPrototype', ['NumberHelper', (NumberHelper)->
-  class AssignmentScoreLevelPrototype
+@gradecraft.factory 'AssignmentScoreLevel', ['NumberHelper', (NumberHelper)->
+  class AssignmentScoreLevel
 
     constructor: (attrs) ->
       @id = attrs.id

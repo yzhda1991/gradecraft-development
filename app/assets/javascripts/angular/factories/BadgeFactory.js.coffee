@@ -1,5 +1,5 @@
-@gradecraft.factory 'BadgePrototype', ['EarnedBadge', '$timeout', '$http', (EarnedBadge, $timeout, $http)->
-  class BadgePrototype
+@gradecraft.factory 'Badge', ['EarnedBadge', '$timeout', '$http', (EarnedBadge, $timeout, $http)->
+  class Badge
 
     constructor: (attrs, gradeId) ->
       @id = attrs.id
