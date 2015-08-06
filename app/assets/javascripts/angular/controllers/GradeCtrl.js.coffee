@@ -5,10 +5,9 @@
     # is interactive ui debugging on?
     $scope.debug = true
 
-    alert(JSON.stringify(initData.grade))
-
     # grade stuff
     $scope.grade = new Grade(initData.grade, $http)
+    $scope.gradeId = initData.grade.id
 
     # assignment stuff
     $scope.releaseNecessary = initData.assignment.release_necessary
@@ -59,7 +58,7 @@
   $scope.addBadges = (badges)->
     # parameters for earned badge creation
     angular.forEach(badges, (badge, index)->
-      badgePrototype = new Badge(badge, $scope.grade.id)
+      badgePrototype = new Badge(badge, $scope.gradeId)
       $scope.badges.push badgePrototype
     )
 
@@ -162,7 +161,7 @@
     buttons: [ "bold", "italic", "underline", "strikeThrough", "subscript", "superscript", "fontFamily", "fontSize", "color", "formatBlock", "blockStyle", "inlineStyle", "align", "insertOrderedList", "insertUnorderedList", "outdent", "indent", "selectAll", "createLink", "insertVideo", "table", "undo", "redo", "html", "save", "insertHorizontalRule", "removeFormat" ],
 
     #Set the save URL.
-    saveURL: '/grades/' + $scope.grade.id + '/async_update',
+    saveURL: '/grades/' + $scope.gradeId + '/async_update',
 
     #HTTP request type.
     saveRequestType: 'PUT',
