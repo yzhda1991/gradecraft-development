@@ -12,47 +12,45 @@
           %a.button{:href => new_course_path }
             %i.fa.fa-plus
             New Course
-    %br
 
-  .columns{:style => "overflow: auto"}
-    %table.responsive.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
-      %thead
-        %tr
-          %th{:scope => "col"} Name
-          %th{:scope => "col"} Course No
-          %th{:scope => "col"} Year
-          %th{:scope => "col"} Semester
-          %th{:scope => "col"} Badges
-          %th{:scope => "col"} Total Points
-          %th
-          %th{:scope => "col", :style => "min-width: 200px" }
-            %span.sr-only Actions
-      %tbody
-        - @courses.each do |course|
-          - cache ["v1", course] do
-            %tr
-              %td= link_to course.name, course
-              %td= course.courseno
-              %td= course.year
-              %td= course.semester
-              %td
-              %td= points course.total_points
-              %td
-                - if course == current_course
-                  = link_to_unless_current "Export Grades for Research", research_gradebook_path, :class=>"data-clearing"
+  %table.responsive.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
+    %thead
+      %tr
+        %th{:scope => "col"} Name
+        %th{:scope => "col"} Course No
+        %th{:scope => "col"} Year
+        %th{:scope => "col"} Semester
+        %th{:scope => "col"} Badges
+        %th{:scope => "col"} Total Points
+        %th
+        %th{:scope => "col", :style => "min-width: 200px" }
+          %span.sr-only Actions
+    %tbody
+      - @courses.each do |course|
+        - cache ["v1", course] do
+          %tr
+            %td= link_to course.name, course
+            %td= course.courseno
+            %td= course.year
+            %td= course.semester
+            %td
+            %td= points course.total_points
+            %td
+              - if course == current_course
+                = link_to_unless_current "Export Grades for Research", research_gradebook_path, :class=>"data-clearing"
 
-              %td
-                .button-bar
-                  %ul.button-group.radius.right
-                    %li
-                      = link_to edit_course_path(course), :class => 'button' do
-                        Edit
-                        %span.sr-only #{course.name}
-                    %li
-                      = link_to course, :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete do
-                        Delete
-                        %span.sr-only #{course.name}
-                    %li
-                      = link_to copy_courses_path(:id => course.id), :class => 'button', :method => :copy do
-                        Copy
-                        %span.sr-only #{course.name}
+            %td
+              .button-bar
+                %ul.button-group.radius.right
+                  %li
+                    = link_to edit_course_path(course), :class => 'button' do
+                      Edit
+                      %span.sr-only #{course.name}
+                  %li
+                    = link_to course, :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete do
+                      Delete
+                      %span.sr-only #{course.name}
+                  %li
+                    = link_to copy_courses_path(:id => course.id), :class => 'button', :method => :copy do
+                      Copy
+                      %span.sr-only #{course.name}

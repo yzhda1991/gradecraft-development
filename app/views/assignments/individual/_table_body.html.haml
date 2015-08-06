@@ -45,7 +45,7 @@
               /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. Icon represents if there are files attached. */
               %li
                 - if submission.submission_files.present?
-                  %i.fi-paperclip.right
+                  %i.fa.fa-paperclip.right
                 / - if submission.resubmitted?
                 /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button alert'
                 / - else

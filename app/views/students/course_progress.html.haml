@@ -5,46 +5,44 @@
 
   = render 'students/earned_points_and_level'
   
-  .small-12.columns
-    - if current_course.grade_scheme_elements.present?
-      - @grade_scheme_elements.order_by_high_range.each do |element|
-        - if current_student.cached_score_for_course(current_course) < element.low_range
-          .progress.radius.bar_magic.transparent
-            %span.meter
-              .center.pushdown
-                %span
-                  %i.fa.fa-lock
-                - if element.level.present?
-                  %span.has-tip.tip-top{:title=> "#{element.letter}" , :data=> {'tooltip'=> true}}= element.level
-                - else
-                  %span= element.letter
-                %span=points element.low_range
-        - elsif current_student.cached_score_for_course(current_course) >= element.high_range
-          .progress.success.radius.bar_magic
-            .meter
-              .center.pushdown
-                - if element.level.present?
-                  %span.has-tip.tip-top{:title=> "#{element.letter}" , :data=> {'tooltip'=> true}}= element.level
-                - else
-                  %span= element.letter
-                %span has already been achieved!
-                %span=points element.low_range
-        - else
-          .center.pushup
-            %span Your rank: 
-            - if element.level.present?
-              %span.has-tip.tip-top{:title=> "#{element.letter}" , :data=> {'tooltip'=> true}}= element.level
-            - else
-              %span= element.letter
-            %span with
-            %span.underline=points current_student.cached_score_for_course(current_course)
-            %span points.
-            %span=points element.points_to_next_level(current_student, current_course)
-            %span= " points to the next level!"
-          .progress.secondary.radius.bar_magic
-            .meter{:style => "width: #{element.progress_percent(current_student, current_course)}%"}
-              .striped
-  .clear
+  - if current_course.grade_scheme_elements.present?
+    - @grade_scheme_elements.order_by_high_range.each do |element|
+      - if current_student.cached_score_for_course(current_course) < element.low_range
+        .progress.radius.bar_magic.transparent
+          %span.meter
+            .center.pushdown
+              %span
+                %i.fa.fa-lock
+              - if element.level.present?
+                %span.has-tip.tip-top{:title=> "#{element.letter}" , :data=> {'tooltip'=> true}}= element.level
+              - else
+                %span= element.letter
+              %span=points element.low_range
+      - elsif current_student.cached_score_for_course(current_course) >= element.high_range
+        .progress.success.radius.bar_magic
+          .meter
+            .center.pushdown
+              - if element.level.present?
+                %span.has-tip.tip-top{:title=> "#{element.letter}" , :data=> {'tooltip'=> true}}= element.level
+              - else
+                %span= element.letter
+              %span has already been achieved!
+              %span=points element.low_range
+      - else
+        .center.pushup
+          %span Your rank: 
+          - if element.level.present?
+            %span.has-tip.tip-top{:title=> "#{element.letter}" , :data=> {'tooltip'=> true}}= element.level
+          - else
+            %span= element.letter
+          %span with
+          %span.underline=points current_student.cached_score_for_course(current_course)
+          %span points.
+          %span=points element.points_to_next_level(current_student, current_course)
+          %span= " points to the next level!"
+        .progress.secondary.radius.bar_magic
+          .meter{:style => "width: #{element.progress_percent(current_student, current_course)}%"}
+            .striped
   
   .small-12.columns
     %p= raw current_course.grading_philosophy

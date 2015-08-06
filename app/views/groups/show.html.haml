@@ -19,21 +19,18 @@
             %a.button{:href => review_groups_path(:id => @group) }
               %i.fa.fa-edit
               Review #{term_for :group}
-      %br
-
-  .small-12.columns
-    %h4
-      - if @group.approved?
-        .label.right.radius.success
-          = "Status: #{@group.approved}"
-      - elsif @group.rejected?
-        .label.right.radius.alert
-          = "Status: #{@group.approved}"
-      - else
-        .label.right.radius
-          %span.has-tip{:title => "This #{term_for :group} must be approved by your instructor before you can proceed", :data => {'tooltip' => true}}
-            %i.fi-flag
-            Status: Pending
+  %h4
+    - if @group.approved?
+      .label.right.radius.success
+        = "Status: #{@group.approved}"
+    - elsif @group.rejected?
+      .label.right.radius.alert
+        = "Status: #{@group.approved}"
+    - else
+      .label.right.radius
+        %span.has-tip{:title => "This #{term_for :group} must be approved by your instructor before you can proceed", :data => {'tooltip' => true}}
+          %i.fa.fa-flag
+          Status: Pending
 
     .small-12.medium-3.columns
       %h4 #{term_for :assignments}:

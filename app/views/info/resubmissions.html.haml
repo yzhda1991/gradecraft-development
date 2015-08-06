@@ -55,7 +55,7 @@
                             %a.button{:href => "#{assignment_submission_path(re.assignment, :id => re.id)}" }
                               = "See Submission"
                               - if re.submission_files.present?
-                                %i.fi-paperclip
+                                %i.fa.fa-paperclip
                           %li= link_to 'Grade', edit_assignment_grade_path(:assignment_id =>assignment.id, :student_id => re.student.try(:id)), :class => "button"
                   - elsif re.assignment.has_groups?
                     %td= link_to re.group.try(:name), group_path(re.group)
@@ -85,7 +85,7 @@
                           %a.button{:href => "#{assignment_submission_path(re.assignment, :id => re.id)}" }
                             = "See Submission"
                             - if re.submission_files.present?
-                              %i.fi-paperclip
+                              %i.fa.fa-paperclip
                         %li= link_to 'Grade', edit_assignment_grade_path(:assignment_id => assignment.id, :student_id => re.student.try(:id)), :class => "button"
                 - elsif re.assignment.has_groups?
                   %td= link_to re.group.try(:name), group_path(re.group)

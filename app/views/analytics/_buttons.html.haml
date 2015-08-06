@@ -1,13 +1,12 @@
-.small-12.medium-7.right.columns.columns-no-padding
-  .button-bar.right
-    %ul.button-group.context_menu.radius
-      %li{class: ("active" if current_page?(analytics_students_path)) }
-        %a.button{:href => analytics_students_path }
-          = "#{term_for :student} Analytics"
-      %li{class: ("active" if current_page?(analytics_staff_path)) }
-        %a.button{:href => analytics_staff_path }
-          = "#{term_for :team_leader} Analytics"
-      %li
-        %a.button{:href => analytics_export_path(format: 'zip')}
-          %i.fa.fa-file-zip-o
-          Download Analytics
+.button-bar
+  %ul.button-group.context_menu.radius
+    %li{class: ("active" if current_page?(analytics_students_path)) }
+      %a.button{:href => analytics_students_path }
+        = "#{term_for :student} Analytics"
+    %li{class: ("active" if current_page?(analytics_staff_path)) }
+      %a.button{:href => analytics_staff_path }
+        = "#{term_for :team_leader} Analytics"
+    %li
+      %a.button{:href => analytics_export_path(format: 'zip')}
+        %i.fa.fa-file-zip-o
+        Download Analytics

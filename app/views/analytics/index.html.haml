@@ -7,7 +7,6 @@
 
   = render 'buttons'
 
-
   %h4.subtitle Interactions
 
   .small-12.columns
@@ -17,8 +16,6 @@
         = analytics_chart_inputs('all-events-chart', 'past_week')
         #all-events-chart.analytics-chart{:data => {:chart => 'timeseries', :url => '/analytics/all_events.json', :title => 'Interactions', :subtitle => '{{granularity}}', :y_axis_label => 'Number of events'}}
         -##events-chart{:data => {:chart => 'timeseries', :url => '/analytics/assignment_events.json', :title => 'Assignment Events', :subtitle => '{{granularity}}', :y_axis_label => 'Number of events'}}
-
-    %hr
 
   %h4.subtitle Pageviews
 
@@ -37,8 +34,6 @@
             %th{:'data-dynatable-column' => 'name'} Page
             %th{:'data-dynatable-column' => 'total'} Pageviews
           %tbody
-
-      %hr
 
   %h4.subtitle Logins
 

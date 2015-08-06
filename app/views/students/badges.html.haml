@@ -8,52 +8,51 @@
 
   %h3.pagetitle= @title
 
-  .small-12.columns
-    //student badges table
-    %table.responsive
-      %thead
+  //student badges table
+  %table.responsive
+    %thead
+      %tr
+        %th.center
+          .sr-only Icon
+        %th Earned
+        %th{ :width => 300} Description
+    %tbody
+      - @badges.each do |badge|
         %tr
-          %th.center
-            .sr-only Icon
-          %th Earned
-          %th{ :width => 300} Description
-      %tbody
-        - @badges.each do |badge|
-          %tr
-            %td.center
-              %img{ :src => badge.icon, :alt => badge.name, :width => "100" }
-              .bold= badge.name
-              = "#{points badge.point_total} points" if badge.point_total?
-            %td
-              -# logic for badges that have actually been earned
-              - if @earned_badges_by_badge_id[badge.id]
-                -# logic for badges that can be earned multiple times
-                - if badge.can_earn_multiple_times
-                  - @earned_badges_by_badge_id[badge.id].each do |earned_badge|
-                    %img{ :src => badge.icon, :alt => badge.name, :width => "30" }
-                    = earned_badge.created_at
-                    %p= raw earned_badge.try(:feedback)
+          %td.center
+            %img{ :src => badge.icon, :alt => badge.name, :width => "100" }
+            .bold= badge.name
+            = "#{points badge.point_total} points" if badge.point_total?
+          %td
+            -# logic for badges that have actually been earned
+            - if @earned_badges_by_badge_id[badge.id]
+              -# logic for badges that can be earned multiple times
+              - if badge.can_earn_multiple_times
+                - @earned_badges_by_badge_id[badge.id].each do |earned_badge|
+                  %img{ :src => badge.icon, :alt => badge.name, :width => "30" }
+                  = earned_badge.created_at
+                  %p= raw earned_badge.try(:feedback)
 
-                  - if @earned_badges_by_badge_id[badge.id].size > 1
-                    = "#{@earned_badges_by_badge_id[badge.id].collect(&:score).reduce(:+)} points earned" if badge.point_total?
-                - elsif @earned_badges_by_badge_id[badge.id].any?
-                  -# logic for badges that can be earned only once
-                  .fa.fa-check
-                  = @earned_badges_by_badge_id[badge.id].first.created_at
-                  %p= raw @earned_badges_by_badge_id[badge.id].first.try(:feedback)
-              %td
-                - if badge.badge_files.present?
-                  %b Attachments:
-                  %ul
-                    - badge.badge_files.each do |bf|
-                      %li
-                        = link_to bf.filename, bf.url
-                - if badge.is_unlockable? 
-                  - if badge.is_unlocked_for_student?(current_student)
-                    %i.fa.fa-unlock
-                  - else
-                    %i.fa.fa-lock
-                  Unlock Requirements
-                  - badge.unlock_conditions.each do |uc|
-                    = link_to uc.condition.name, uc.condition
-                = raw badge.description
+                - if @earned_badges_by_badge_id[badge.id].size > 1
+                  = "#{@earned_badges_by_badge_id[badge.id].collect(&:score).reduce(:+)} points earned" if badge.point_total?
+              - elsif @earned_badges_by_badge_id[badge.id].any?
+                -# logic for badges that can be earned only once
+                .fa.fa-check
+                = @earned_badges_by_badge_id[badge.id].first.created_at
+                %p= raw @earned_badges_by_badge_id[badge.id].first.try(:feedback)
+            %td
+              - if badge.badge_files.present?
+                %b Attachments:
+                %ul
+                  - badge.badge_files.each do |bf|
+                    %li
+                      = link_to bf.filename, bf.url
+              - if badge.is_unlockable? 
+                - if badge.is_unlocked_for_student?(current_student)
+                  %i.fa.fa-unlock
+                - else
+                  %i.fa.fa-lock
+                Unlock Requirements
+                - badge.unlock_conditions.each do |uc|
+                  = link_to uc.condition.name, uc.condition
+              = raw badge.description

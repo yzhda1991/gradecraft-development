@@ -47,7 +47,7 @@
                             %a.button{:href => "#{assignment_submission_path(ug_assignment, :id => ug.id)}" }
                               = "See Submission"
                               - if ug.submission_files.present?
-                                %i.fi-paperclip
+                                %i.fa.fa-paperclip
                           %li= link_to 'Grade', edit_assignment_grade_path(:assignment_id => assignment.id, :student_id => student.try(:id)), :class => "button"
                   - elsif ug_assignment.has_groups?
                     %td= link_to ug_group.try(:name), group_path(ug_group)
