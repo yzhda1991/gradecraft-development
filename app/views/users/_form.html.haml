@@ -26,16 +26,6 @@
       = f.label :display_name
       = f.text_field :display_name
 
-    - if current_user_is_admin?
-      .clear
-
-      .small-12.medium-4.columns
-        = f.label :password
-        = f.password_field :password, :as => :password
-      .small-12.medium-4.columns
-        = f.label :password_confirmation
-        = f.password_field :password_confirmation, :as => :password
-
     .clear
 
   - if current_user_is_admin?
