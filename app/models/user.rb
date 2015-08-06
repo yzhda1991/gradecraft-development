@@ -121,6 +121,8 @@ class User < ActiveRecord::Base
                     :uniqueness => { :case_sensitive => false }
 
   validates :first_name, :last_name, :presence => true
+  validates :password, :confirmation => true
+  validates :password_confirmation, :presence => true, if: :password, on: :update
 
   def self.find_or_create_by_lti_auth_hash(auth_hash)
     criteria = { email: auth_hash['info']['email'] }
@@ -145,6 +147,10 @@ class User < ActiveRecord::Base
 
   def self.find_by_kerberos_auth_hash(auth_hash)
     where(kerberos_uid: auth_hash['uid']).first
+  end
+
+  def self.find_by_insensitive_email(email)
+    where("LOWER(email) = :email", email: email.downcase).first
   end
 
   #Course
@@ -318,7 +324,7 @@ class User < ActiveRecord::Base
     @point_total_for_course ||= course.assignments.point_total_for_student(self) + earned_badge_score_for_course(course)
   end
 
-  #TODO: Should take into account students weights 
+  #TODO: Should take into account students weights
   def point_total_for_assignment_type(assignment_type)
     assignment_type.assignments.map{ |a| a.point_total }.sum
   end
@@ -380,8 +386,8 @@ class User < ActiveRecord::Base
           total_score = 0
           course.assignment_types.each do |assignment_type|
             total_score += assignment_type.visible_score_for_student(self)
-          end 
-          total_score += earned_badge_score_for_course(course_id) 
+          end
+          total_score += earned_badge_score_for_course(course_id)
           total_score += self.team_for_course(course_id).try(:score)
         )
       else
@@ -389,8 +395,8 @@ class User < ActiveRecord::Base
           total_score = 0
           course.assignment_types.each do |assignment_type|
             total_score += assignment_type.visible_score_for_student(self)
-          end 
-          total_score += earned_badge_score_for_course(course_id) 
+          end
+          total_score += earned_badge_score_for_course(course_id)
         )
       end
     end
@@ -538,7 +544,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
+
   #Returns the student's assigned weight for a specific assignment
   def weight_for_assignment(assignment)
     assignment_weights.where(:assignment => assignment).first.weight
@@ -573,8 +579,8 @@ class User < ActiveRecord::Base
     assignment_weights.count > 0
   end
 
-  #Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count, 
-  #and not the assignment type count. Because students make the choice at the AT level rather than the A level, 
+  #Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count,
+  #and not the assignment type count. Because students make the choice at the AT level rather than the A level,
   #this can be confusing.
   def weight_count(course)
     assignment_weights.where(course: course).pluck('weight').count
@@ -587,7 +593,7 @@ class User < ActiveRecord::Base
   end
 
 
-  ### GROUPS 
+  ### GROUPS
   def groups_by_assignment_id
     @group_by_assignment ||= groups.group_by(&:assignment_id)
   end

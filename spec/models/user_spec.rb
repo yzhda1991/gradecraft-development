@@ -11,6 +11,26 @@ describe User do
     @grade = create(:grade, assignment: @assignment, assignment_type: @assignment.assignment_type, course: @course, student: @student)
   end
 
+  describe ".find_by_insensitive_email" do
+    it "should return the user no matter what the case the email address is in" do
+      expect(User.find_by_insensitive_email(@student.email.upcase)).to eq @student
+    end
+  end
+
+  context "validations" do
+    it "requires the password confirmation to match" do
+      user = User.new password: "test", password_confirmation: "blah"
+      expect(user).to_not be_valid
+      expect(user.errors[:password_confirmation]).to include "doesn't match Password"
+    end
+
+    it "requires that there is a password confirmation" do
+      @student.password = "test"
+      expect(@student).to_not be_valid
+      expect(@student.errors[:password_confirmation]).to include "can't be blank"
+    end
+  end
+
   context "ordering" do
     it "should return users alphabetical by last name" do
       User.destroy_all

@@ -1,7 +1,7 @@
 GradeCraft::Application.configure do
   config.action_controller.perform_caching = false
   config.action_dispatch.best_standards_support = :builtin
-  config.action_mailer.default_url_options = { :host => 'gradecraft:3000' }
+  config.action_mailer.default_url_options = { :host => 'localhost:5000' }
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true

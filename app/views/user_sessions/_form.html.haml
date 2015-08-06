@@ -20,3 +20,4 @@
         = label_tag :user_password, 'Password', class:'sr-only'
         = f.password_field :password, placeholder: 'Password'
         .right= f.submit "Log in", class: 'button radius', alt: "Log in"
+        .right= link_to "Forgot password?", new_password_path
