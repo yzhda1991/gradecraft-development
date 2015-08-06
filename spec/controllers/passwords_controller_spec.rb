@@ -45,26 +45,69 @@ describe PasswordsController do
 
   describe "PUT update" do
     let(:user) { create :user, reset_password_token: "blah" }
-    before do
-      put :update, id: user.reset_password_token,
-        token: user.reset_password_token,
-        user: { password: "blah", password_confirmation: "blah" }
+
+    context "with matching passwords" do
+      before do
+        put :update, id: user.reset_password_token,
+          token: user.reset_password_token,
+          user: { password: "blah", password_confirmation: "blah" }
+      end
+
+      it "changes the user's password" do
+        expect(User.authenticate(user.email, "blah")).to eq user
+      end
+
+      it "logs the user in" do
+        expect(response).to redirect_to dashboard_path
+      end
     end
 
-    it "changes the user's password" do
-      expect(User.authenticate(user.email, "blah")).to eq user
-    end
+    context "with a tampered password reset token" do
+      before do
+        put :update, id: user.reset_password_token,
+          token: "tampered",
+          user: { password: "blah", password_confirmation: "blah" }
+      end
 
-    it "logs the user in" do
-      expect(response).to redirect_to dashboard_path
+      it "does not change the user's password" do
+        expect(User.authenticate(user.email, "blah")).to be_nil
+      end
+
+      it "redirects to the password reset url" do
+        expect(response).to redirect_to new_password_path
+      end
     end
 
     context "with non-matching password" do
-      xit "renders the edit template with the error"
+      before do
+        put :update, id: user.reset_password_token,
+          token: user.reset_password_token,
+          user: { password: "blah", password_confirmation: "blech" }
+      end
+
+      it "does not change the user's password" do
+        expect(User.authenticate(user.email, "blah")).to be_nil
+      end
+
+      it "renders the edit template with the error" do
+        expect(response).to render_template :edit
+      end
     end
 
     context "with a blank password" do
-      xit "renders the edit template with the error"
+      before do
+        put :update, id: user.reset_password_token,
+          token: user.reset_password_token,
+          user: { password: "", password_confirmation: "" }
+      end
+
+      it "does not change the user's password" do
+        expect(User.authenticate(user.email, "")).to be_nil
+      end
+
+      it "renders the edit template with the error" do
+        expect(response).to render_template :edit
+      end
     end
   end
 end

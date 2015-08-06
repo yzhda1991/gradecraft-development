@@ -20,10 +20,13 @@ class PasswordsController < ApplicationController
     @token = params[:token]
     @user = User.load_from_reset_password_token(@token)
 
+    redirect_to new_password_path, alert: "Invalid or expired password reset token. Please request new password reset instructions." and return unless @user
+
+    @user.password_confirmation = params[:user][:password_confirmation]
     if @user.change_password!(params[:user][:password])
       auto_login @user
       redirect_to dashboard_path, notice: "Password was successfully updated" and return
     end
-    render nothing: true
+    render :edit, alert: @user.errors.full_messages.first
   end
 end
