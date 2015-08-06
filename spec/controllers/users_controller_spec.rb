@@ -52,19 +52,25 @@ describe UsersController do
     end
 
     describe "POST create" do
-      it "creates a new user" do
+      before(:each) do
         post :create, user: { first_name: "Jimmy",
                               last_name: "Page",
                               username: "jimmy",
                               email: "jimmy@example.com" }
-        user = User.last
+      end
+
+      it "creates a new user" do
+        user = User.unscoped.last
         expect(user.email).to eq "jimmy@example.com"
         expect(user.username).to eq "jimmy"
         expect(user.first_name).to eq "Jimmy"
         expect(user.last_name).to eq "Page"
       end
 
-      xit "generates a random password for a user"
+      it "generates a random password for a user" do
+        user = User.unscoped.last
+        expect(user.crypted_password).to_not be_blank
+      end
     end
 
 		describe "GET update" do
