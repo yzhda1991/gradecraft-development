@@ -2,8 +2,8 @@
   .columns.panel.radius.callout
     %h5 Reset Your Password
     %p Enter a new password and a confirmation below to change your current password
-    = simple_form_for @user, :url => passwords_path(@user) do |f|
-      = f.hidden_field :token, @token
+    = simple_form_for @user, :url => password_path(@token) do |f|
+      = hidden_field_tag :token, @token
       = f.label :password
       = f.password_field :password
       = f.label :password_confirmation
