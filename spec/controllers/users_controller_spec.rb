@@ -58,9 +58,9 @@ describe UsersController do
                               username: "jimmy",
                               email: "jimmy@example.com" }
       end
+      let(:user) { User.unscoped.last }
 
       it "creates a new user" do
-        user = User.unscoped.last
         expect(user.email).to eq "jimmy@example.com"
         expect(user.username).to eq "jimmy"
         expect(user.first_name).to eq "Jimmy"
@@ -68,8 +68,12 @@ describe UsersController do
       end
 
       it "generates a random password for a user" do
-        user = User.unscoped.last
         expect(user.crypted_password).to_not be_blank
+      end
+
+      it "requires the new user to be activated" do
+        expect(user.activation_token).to_not be_blank
+        expect(user.activation_state).to eq "pending"
       end
     end
 
