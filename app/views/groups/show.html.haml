@@ -51,6 +51,18 @@
     - if @group.text_feedback?
       %h4 Instructor Feedback:
       %p= raw @group.try(:text_feedback)
+  %h4
+    - if @group.approved?
+      .label.right.radius.success
+        = "Status: #{@group.approved}"
+    - elsif @group.rejected?
+      .label.right.radius.alert
+        = "Status: #{@group.approved}"
+    - else
+      .label.right.radius
+        %span.has-tip{:title => "This #{term_for :group} must be approved by your instructor before you can proceed", :data => {'tooltip' => true}}
+          %i.fa.fa-flag
+          Status: Pending
 
   .small-12.columns
     - i = 1

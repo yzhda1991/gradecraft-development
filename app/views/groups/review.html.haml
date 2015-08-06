@@ -25,8 +25,6 @@
         - else
           %li= gm.student.name
 
-
-
   .small-12.columns
     - if @group.proposals.present?
       - @group.proposals.order_by_creation_date.each_with_index do |p, index|

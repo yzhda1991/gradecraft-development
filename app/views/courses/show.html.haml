@@ -116,28 +116,3 @@
     %p
       %b Min Group Size:
       = @course.min_group_size
-
-
-.panel
-  %h4 STUDENTS
-  %p.clear
-    %b Students will be called:
-    = @course.user_term.pluralize
-
-.panel
-  %h4 MULTIPLIERS
-  %p.clear
-    %b User's set:
-    = @course.total_assignment_weight
-  %p
-    %b Maximium size:
-    = @course.max_assignment_weight
-  %p
-    %b Multipliers must be set by:
-    = @course.assignment_weight_close_at
-  %p
-    %b Multiplier/weight term:
-    = @course.weight_term
-  %p
-    %b What amount should other (unselected) assignment types be multiplied by?
-    = @course.default_assignment_weight

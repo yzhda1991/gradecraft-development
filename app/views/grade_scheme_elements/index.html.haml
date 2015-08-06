@@ -25,8 +25,6 @@
         %td{:data => { :"sort-value" => "#{element.low_range }" }}= points element.low_range
         %td{:data => { :"sort-value" => "#{element.high_range }" }}= points element.high_range
 
+%p= raw current_course.grading_philosophy
 - if current_course.professor.present?
-  .small-12.columns
-    %p
-    %p= raw current_course.grading_philosophy
-    %h6= "-- Prof. #{current_course.professor.try(:last_name) }"
+  %h6= "-- Prof. #{current_course.professor.try(:last_name) }"
