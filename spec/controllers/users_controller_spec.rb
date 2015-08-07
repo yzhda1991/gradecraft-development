@@ -89,10 +89,6 @@ describe UsersController do
       end
     end
 
-		describe "GET update" do
-      pending
-    end
-
     describe "GET destroy" do
       it "destroys the user" do
         expect{ get :destroy, {:id => @student } }.to change(User,:count).by(-1)
@@ -126,13 +122,9 @@ describe UsersController do
       end
     end
 
-		describe "GET upload" do
-      pending
-    end
+  end
 
-	end
-
-	context "as a student" do
+  context "as a student" do
 
     before do
       @course = create(:course)
@@ -144,7 +136,21 @@ describe UsersController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET edit_profile" do
+    describe "GET activate" do
+      before(:each) { @student.update_attribute :activation_token, "blah" }
+
+      it "exists" do
+        get :activate, id: @student.activation_token
+        expect(response).to be_success
+      end
+
+      it "redirects to the root url if the token is not correct" do
+        get :activate, id: "blech"
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
         assigns(:title).should eq("Edit My Profile")
@@ -153,7 +159,7 @@ describe UsersController do
       end
     end
 
-		describe "GET update_profile" do
+    describe "GET update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "frodo" }
         post :update_profile, id: @student.id, :user => params
@@ -164,7 +170,7 @@ describe UsersController do
     end
 
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :new,
@@ -190,5 +196,5 @@ describe UsersController do
       end
     end
 
-	end
+  end
 end

@@ -1,0 +1,11 @@
+.row
+  .columns.panel.radius.callout
+    %h5 Welcome to GradeCraft
+    %p Enter a password and a confirmation below to complete your account
+    = simple_form_for @user, :url => activate_user_path(@token) do |f|
+      = hidden_field_tag :token, @token
+      = f.label :password
+      = f.password_field :password
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation
+      = f.submit "Activate Your Account", :class => "button tiny radius"
