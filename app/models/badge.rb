@@ -14,7 +14,7 @@ class Badge < ActiveRecord::Base
   has_many :earned_badges, :dependent => :destroy
   has_many :predicted_earned_badges, :dependent => :destroy
 
-  belongs_to :course
+  belongs_to :course, touch: true
 
   accepts_nested_attributes_for :earned_badges, allow_destroy: true, :reject_if => proc { |a| a['score'].blank? }
 
