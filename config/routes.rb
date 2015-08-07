@@ -252,6 +252,7 @@ GradeCraft::Application.routes.draw do
   end
 
   resources :users do
+    get :activate, on: :member
     collection do
       get :edit_profile
       put :update_profile
