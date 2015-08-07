@@ -1,6 +1,6 @@
 class TierBadge < ActiveRecord::Base
-  belongs_to :tier
-  belongs_to :badge
+  belongs_to :tier, touch: true
+  belongs_to :badge, touch: true
 
   attr_accessible :tier_id, :badge_id
 

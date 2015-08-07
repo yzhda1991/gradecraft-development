@@ -1,4 +1,4 @@
-@gradecraft.factory 'Metric', ['$http', 'Restangular', 'Tier', 'MetricBadge', ($http, Restangular, Tier, MetricBadge) ->
+@gradecraft.factory 'Metric', ['$http', 'Restangular', 'Tier', ($http, Restangular, Tier) ->
   class Metric
     constructor: (attrs={}, $scope)->
       @$scope = $scope

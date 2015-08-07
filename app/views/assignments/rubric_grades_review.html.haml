@@ -49,60 +49,66 @@
     -rubric = @assignment.rubric
     - if rubric and rubric.designed?
       - @students.each do |student|
-        .small-12.columns
-          - grade_for_assignment = student.grade_for_assignment(@assignment)
-          - if grade_for_assignment.present? && grade_for_assignment.instructor_modified?
-            %h4.uppercase= student.name
-            .left
-              %h5.bold= "#{grade_for_assignment.score} / #{@assignment.point_total} points "
-            .right= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'tiny radius button'
-            %br
-            %br
-            %table#grade-rubric-table.small-12
-              %thead
-                %tr
-                  %td
-                    %strong Criterion
-                    .not_bold.italic Max points
-                  %td(colspan="#{@assignment.rubric.try(:max_tier_count)}")
-                    .larger
-                      %strong Level
-                      .not_bold.italic Point value
-                  %td{:width => "25%"}
-                    %strong
-                      Comments
-              %tbody
-                - @metrics.each do |metric|
+        - cache ["v1", student] do
+          .small-12.columns
+            - grade_for_assignment = student.grade_for_assignment(@assignment)
+            - if grade_for_assignment.present? && grade_for_assignment.instructor_modified?
+              %h4.uppercase= student.name
+              .left
+                %h5.bold= "#{grade_for_assignment.score} / #{@assignment.point_total} points "
+              .right= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'tiny radius button'
+              %br
+              %br
+              %table#grade-rubric-table.small-12
+                %thead
                   %tr
-                    %td.metric(style="font-size: 12px !important; width: 10%")
-                      .metric-heading
-                        .metric-name.bold= metric.wrapped_name(28).html_safe
-                        .metric-points.italic= "#{points metric.max_points} Points"
-                        .clear
-                      .metric-description= metric.wrapped_description(40).html_safe
+                    %td
+                      %strong Criterion
+                      .not_bold.italic Max points
+                    %td(colspan="#{@assignment.rubric.try(:max_tier_count)}")
+                      .larger
+                        %strong Level
+                        .not_bold.italic Point value
+                    %td{:width => "25%"}
+                      %strong
+                        Comments
+                %tbody
+                  - @metrics.each do |metric|
+                    - cache ["v1", metric] do
+                      %tr
+                        %td.metric(style="font-size: 12px !important; width: 10%")
+                          .metric-heading
+                            .metric-name.bold= metric.wrapped_name(28).html_safe
+                            .metric-points.italic= "#{points metric.max_points} Points"
+                            .clear
+                          .metric-description= metric.wrapped_description(40).html_safe
 
-                    - metric.tiers.each do |tier|
-                      %td.tier
-                        .tier-heading
-                          .tier-name.uppercase= tier.wrapped_name(25).html_safe
-                          .clear
-                          .tier-points.italic= "#{points tier.points} Points"
-                        .clear
-                        .tier-description= tier.description
+                        - metric.tiers.each do |tier|
+                          - cache ["v1", tier] do
+                            %td.tier
+                              .tier-heading
+                                .tier-name.uppercase= tier.wrapped_name(25).html_safe
+                                .clear
+                                .tier-points.italic= "#{points tier.points} Points"
+                              .clear
+                              .tier-description= tier.description
 
-                        .row.badge-row
-                          %br
-                          - tier.tier_badges.each_with_index do |badge, index|
-                            - if index < 2
-                              %span.tier-badge-image
-                                %img{:src => badge.badge.icon, width: "30px", height: "30px" }
-                          %br
-                          %br
-                          - @viewable_rubric_grades.where(student_id: student.id, tier_id: tier.id).each do |rg|
-                            .italic{style: "color: #00BD39; font-size: 110%"} #{student.first_name} earned this level
-                    - if metric.tiers.size < @rubric.max_tier_count
-                      %td.filler(colspan="#{@rubric.max_tier_count - metric.tiers.size}")
-                    %td.comments.italic{style: "font-size: 100%"}
-                      - @viewable_rubric_grades.where(student_id: student.id, metric_id: metric.id).each do |rg|
-                        = rg.comments
-            %hr
+                              .row.badge-row
+                                %br
+                                - tier.tier_badges.each_with_index do |badge, index|
+                                  - cache ["v1", badge] do
+                                    - if index < 2
+                                      %span.tier-badge-image
+                                        %img{:src => badge.badge.icon, width: "30px", height: "30px" }
+                                %br
+                                %br
+                                - @viewable_rubric_grades.where(student_id: student.id, tier_id: tier.id).each do |rg|
+                                  - cache ["v1", rg] do
+                                    .italic{style: "color: #00BD39; font-size: 110%"} #{student.first_name} earned this level
+                        - if metric.tiers.size < @rubric.max_tier_count
+                          %td.filler(colspan="#{@rubric.max_tier_count - metric.tiers.size}")
+                        %td.comments.italic{style: "font-size: 100%"}
+                          - @viewable_rubric_grades.where(student_id: student.id, metric_id: metric.id).each do |rg|
+                            - cache ["v1", rg] do
+                              = rg.comments
+              %hr
