@@ -21,7 +21,7 @@
                   = cgf.text_field :score, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
           %td.right{:style => "text-align: right", :width => "15%"}= " / #{points  @challenge.point_total} points"
 
-    .button-bar
-      %ul.button-group.radius.right
-        %li= f.button :submit, "Submit"
-        %li= link_to 'Cancel', challenges_path, :class => 'button'
+      .button-bar
+        %ul.button-group.radius.right
+          %li= f.button :submit, "Submit"
+          %li= link_to 'Cancel', challenges_path, :class => 'button'

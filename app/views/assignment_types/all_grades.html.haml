@@ -46,7 +46,6 @@
           - i = 0
           - chronological_assignments.each do |assignment|
             - if assignment.point_total > 0
-
               - assignment.grade_for_student(student).tap do |grade|
 
                 - if grade && grade.score == assignment.point_total

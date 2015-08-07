@@ -48,7 +48,7 @@
                 %th= assignment.grade_count
                 %th
                   .button-bar
-                    %ul.button-group
+                    %ul.button-group.radius
                       %li= link_to "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
                       %li
                         %a.button{:href => export_grades_assignment_path(assignment, format: 'csv') }

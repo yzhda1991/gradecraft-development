@@ -13,7 +13,6 @@
 - @resubmissions.group_by(&:assignment).each do |assignment, resubmissions|
   %h5.section-title
     = link_to assignment.name, assignment
-
   %table.responsive.no_radius.nofeatures_default_last_name_dynatable{"aria-describedby" => "ungradedTableCaption"}
     %thead
       %tr
@@ -115,7 +114,7 @@
                     %td= re.updated_at
                     %td
                       .button-bar
-                        %ul.button-group.right.radius
+                        %ul.button-group.radius
                           %li
                             %a.button{:href => "#{assignment_submission_path(re.assignment, :id => re.id)}" }
                               = "See Submission"
@@ -126,7 +125,7 @@
                     %td= link_to re.group.try(:name), group_path(re.group)
                     %td
                       .button-bar
-                        %ul.button-group.right.radius
+                        %ul.button-group.radius
                           %li= link_to re.group.try(:name), group_path(re.group)
                           %li= link_to "See Submission", assignment_submission_path(re.assignment, :group_id => re.group.id), :class => "button"
                     %td= link_to 'Grade', group_grade_assignment_path(re.assignment, :group_id => re.group, :class => "button")
@@ -145,7 +144,7 @@
 
                   %td
                     .button-bar
-                      %ul.button-group.right.radius
+                      %ul.button-group.radius
                         %li
                           %a.button{:href => "#{assignment_submission_path(re.assignment, :id => re.id)}" }
                             = "See Submission"
@@ -156,7 +155,7 @@
                   %td= link_to re.group.try(:name), group_path(re.group)
                   %td
                     .button-bar
-                      %ul.button-group.right.radius
+                      %ul.button-group.radius
                         %li= link_to "See Submission", assignment_grade_path(re.assignment, :group_id => re.group.id), :class => "button"
                         %li= link_to 'Grade', group_grade_assignment_path(re.assignment, :group_id => re.group), :class => "button"
       %p

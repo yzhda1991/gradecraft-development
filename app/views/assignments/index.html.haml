@@ -68,18 +68,3 @@
                       .button-bar
                         %ul.button-group.radius
                           - if ! ( assignment.rubric and assignment.rubric.designed? and assignment.use_rubric? )
-                            %li
-                              %a{:href => mass_grade_assignment_path(assignment), :class => 'button' }
-                                Quick Grade
-                                %span.sr-only=assignment.name
-                          %li
-                            %a{:href => edit_assignment_path(assignment), :class => 'button' }
-                              Edit
-                              %span.sr-only=assignment.name
-                          %li
-                            = link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
-                            %span.sr-only=assignment.name
-                          %li
-                            %a{:href => assignment_path(assignment), :class => "button", :data => { confirm: 'Are you sure?', method: :delete } }
-                              Delete
-                              %span.sr-only=assignment.name
