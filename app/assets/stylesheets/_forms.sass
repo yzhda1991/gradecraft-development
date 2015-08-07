@@ -26,39 +26,14 @@ fieldset
   border: none
   padding: 0
 
-/** Styling to make labels on checkboxes and radio forms align properly**/
-.radio,
-.checkbox
-  display: block
-  margin-bottom: 10px
-
-.radio input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"]
-  float: left
-
-input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-select,
-.checkbox-inline input[type="checkbox"],
-input[type="text"]
-  margin-bottom: 0.5rem
-
-input[type="checkbox"]
-  margin-top: 0.26rem
-
-label.boolean
-  margin-left: 0
-
 select
-  background-color: #FFF !important
-  border-radius: $global-radius
-  margin-right: 0 !important
+  background-color: #FFF 
+  padding: .5rem !important
+  width: 15rem
+  height: 1.5rem
 
 select:hover
-  background-color: $primary-color-3
+  background-color: lighten($primary-color-4, 15%)
 
 .dropdown-menu
   position: absolute
@@ -184,3 +159,6 @@ ul.accepts_submission_types
 .inline-list > li > *
   display: block
   width: 100%
+
+.team-filter
+  float: right
