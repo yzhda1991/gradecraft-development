@@ -23,10 +23,11 @@
         Quick Award
 
   - if current_course.has_teams?
-    = form_tag badge_path(@badge), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-      %label.sr-only{:for => "team_id"}
-        Select #{term_for :team}
-      = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+    .team-filter
+      = form_tag badge_path(@badge), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+        %label.sr-only{:for => "team_id"}
+          Select #{term_for :team}
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   //badge icon, total awarded, and points
   .panel.small-12.medium-2.columns.text-center

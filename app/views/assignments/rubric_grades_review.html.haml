@@ -35,10 +35,11 @@
             = link_to " (Remove)", remove_uploads_path({ :model => "AssignmentFile", :upload_id => assignment_file.id, :redirect => { :controller => "assignments", :id => @assignment.id} } )
 
   - if current_course.has_teams? && @assignment.is_individual?
-    = form_tag rubric_grades_review_assignment_path(@assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-      %label.sr-only{:for => "team_id"}
-        Select #{term_for :team}
-      = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+    .team-filter
+      = form_tag rubric_grades_review_assignment_path(@assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+        %label.sr-only{:for => "team_id"}
+          Select #{term_for :team}
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   -rubric = @assignment.rubric
   - if rubric and rubric.designed?
