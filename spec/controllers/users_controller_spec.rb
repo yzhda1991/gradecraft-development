@@ -150,6 +150,41 @@ describe UsersController do
       end
     end
 
+    describe "POST activated" do
+      before do
+        @student.update_attribute :activation_token, "blah"
+        @student.update_attribute :activation_state, "pending"
+        post :activated, id: @student.activation_token,
+          token: @student.activation_token,
+          user: { password: "blah", password_confirmation: "blah" }
+      end
+
+      context "with matching passwords" do
+        it "activates the user" do
+          expect(@student.reload.activation_state).to eq "active"
+        end
+
+        xit "updates the user's password"
+        xit "logs the user in"
+      end
+
+      context "with a tampered activation token" do
+        xit "does not activate the user"
+        xit "does not update the user's password"
+        xit "redirects to the root url"
+      end
+
+      context "with a non-matching password" do
+        xit "does not activate the user"
+        xit "renders the activate template"
+      end
+
+      context "with a blank password" do
+        xit "does not activate the user"
+        xit "renders the activate template"
+      end
+    end
+
     describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile

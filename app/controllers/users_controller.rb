@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   respond_to :html, :json
 
-  before_filter :ensure_staff?, :except => [:activate, :edit_profile, :update_profile]
+  before_filter :ensure_staff?, :except => [:activate, :activated, :edit_profile, :update_profile]
   before_filter :ensure_admin?, :only => [:all]
 
   def index
@@ -99,6 +99,13 @@ class UsersController < ApplicationController
     @user = User.load_from_activation_token(params[:id])
     @token = params[:id]
     redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
+  end
+
+  def activated
+    @token = params[:token]
+    @user = User.load_from_activation_token(@token)
+    @user.activate!
+    render nothing: true
   end
 
   # We don't allow students to edit their info directly - this is a mediated view
