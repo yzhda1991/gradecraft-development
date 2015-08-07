@@ -42,7 +42,7 @@
                         = link_to team.try(:name), team
                     %td
                       .button-bar
-                        %ul.button-group.right.radius
+                        %ul.button-group.radius
                           %li
                             %a.button{:href => "#{assignment_submission_path(ug_assignment, :id => ug.id)}" }
                               = "See Submission"
@@ -54,6 +54,6 @@
                     %td= ug.updated_at
                     %td
                       .button-bar
-                        %ul.button-group.right.radius
+                        %ul.button-group.radius
                           %li= link_to "See Submission", assignment_grade_path(ug_assignment, :group_id => ug_group.id), :class => "button"
                           %li= link_to 'Grade', group_grade_assignment_path(ug_assignment, :group_id => ug_group), :class => "button"

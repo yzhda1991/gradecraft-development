@@ -4,14 +4,12 @@
 
   %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_badge_path }
-            %i.fa.fa-plus
-            New #{(term_for :badge).titleize}
-
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => new_badge_path }
+          %i.fa.fa-plus
+          New #{(term_for :badge).titleize}
 
   //instructor badge index table
   %table
@@ -20,7 +18,7 @@
         %th.center{:width => "15%" } Icon
         %th{:width => "25%" } Name
         %th Awarded
-        %th{ :style => "min-width: 300px" }
+        %th{ :style => "min-width: 220px" }
     %tbody.sort-badges
       - @badges.each do |badge|
         %tr{:id => "badge-#{badge.id}"}
@@ -35,7 +33,7 @@
           %td= badge.awarded_count
           %td
             .button-bar
-              %ul.button-group.right.radius
+              %ul.button-group.radius
                 %li= link_to "Quick Award", mass_award_badge_path(badge), :class => "button"
                 %li= link_to "Award", new_badge_earned_badge_path(badge), :class => "button"
                 %li

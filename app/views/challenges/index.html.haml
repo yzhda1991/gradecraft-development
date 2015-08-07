@@ -2,8 +2,7 @@
 
   = content_nav_for Challenge
 
-  .small-12
-    %h3.pagetitle= @title
+  %h3.pagetitle= @title
 
   - if current_user_is_staff?
     .context_menu
@@ -24,7 +23,7 @@
         %th Visible
         %th Submissions?
         %th Release necessary
-        %th{ :style => "min-width: 200px" }
+        %th{ :style => "min-width: 180px" }
 
     %tbody
       - @challenges.each do |challenge|
@@ -40,7 +39,7 @@
           %td= challenge.release_necessary? ? 'Yes' : 'No'
           %td
             .button-bar
-              %ul.button-group.radius.right
+              %ul.button-group
                 %li
                   %a.button{:href => mass_edit_challenge_challenge_grades_path(challenge) }
                     Quick Grade

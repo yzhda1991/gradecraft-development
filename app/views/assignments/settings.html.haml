@@ -1,8 +1,7 @@
 .small-12.panel.mainContent
   = content_nav_for Assignment, "#{term_for :assignment} Settings"
 
-  .small-12
-    %h3.pagetitle= @title
+  %h3.pagetitle= @title
 
   .button-bar
     %ul.button-group.context_menu.radius
@@ -68,7 +67,7 @@
             %th{:scope => "col"} Points
 
             %th{:scope => "col"} Dates
-            %th{:scope => "col"}
+            %th{:scope => "col", :style => "min-width: 80px"}
               %span.sr-only Actions
         %tbody
           - assignments.each do |assignment|
@@ -152,9 +151,9 @@
                     = assignment.try(:opens_at) || "Always Open"
                     Accepted Until:
                     = assignment.try(:accept_until) || "Always Accepted"
-              %td{:width => "15%"}
+              %td
                 .button-bar
-                  %ul.button-group.radius.right
+                  %ul.button-group.radius
                     %li
                       %a{:href => edit_assignment_path(assignment),  :class => 'button' }
                         Edit

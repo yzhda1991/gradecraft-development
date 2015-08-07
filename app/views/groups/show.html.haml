@@ -8,17 +8,16 @@
   %h3.pagetitle= @title
 
   - if current_user_is_staff?
-    .small-12.columns
-      .button-bar
-        %ul.button-group.context_menu.radius
-          %li
-            %a.button{:href => new_group_path }
-              %i.fa.fa-plus
-              New #{(term_for :group).titleize}
-          %li
-            %a.button{:href => review_groups_path(:id => @group) }
-              %i.fa.fa-edit
-              Review #{term_for :group}
+    .button-bar
+      %ul.button-group.context_menu.radius
+        %li
+          %a.button{:href => new_group_path }
+            %i.fa.fa-plus
+            New #{(term_for :group).titleize}
+        %li
+          %a.button{:href => review_groups_path(:id => @group) }
+            %i.fa.fa-edit
+            Review #{term_for :group}
   %h4
     - if @group.approved?
       .label.right.radius.success

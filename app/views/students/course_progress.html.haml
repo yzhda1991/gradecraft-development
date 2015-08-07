@@ -44,6 +44,5 @@
           .meter{:style => "width: #{element.progress_percent(current_student, current_course)}%"}
             .striped
   
-  .small-12.columns
-    %p= raw current_course.grading_philosophy
-    %h5.bold= "– Prof. #{current_course.professor.try(:last_name) }"
+  %p= raw current_course.grading_philosophy
+  %h5.bold= "– Prof. #{current_course.professor.try(:last_name) }"

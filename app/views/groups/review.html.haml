@@ -4,13 +4,12 @@
 
   %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => group_path(@group) }
-            %i.fa.fa-eye
-            See #{term_for :group}
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => group_path(@group) }
+          %i.fa.fa-eye
+          See #{term_for :group}
 
   .small-12.columns.columns-no-padding
     .small-12.medium-3.columns

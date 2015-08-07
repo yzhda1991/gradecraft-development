@@ -2,36 +2,31 @@
 
   = content_nav_for @badge
 
-  .small-12
-    %h3.pagetitle= @title
+  %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_badge_path }
-            %i.fa.fa-plus
-            New #{(term_for :badge).titleize}
-        %li
-          %a.button{:href => edit_badge_path(@badge) }
-            %i.fa.fa-edit
-            Edit
-        %li
-          %a.button{:href => new_badge_earned_badge_path(:badge_id => @badge) }
-            %i.fa.fa-star
-            Award
-        %li
-          %a.button{:href => mass_award_badge_path(@badge) }
-            %i.fa.fa-check
-            Quick Award
+  %ul.button-group.context_menu.radius
+    %li
+      %a.button{:href => new_badge_path }
+        %i.fa.fa-plus
+        New #{(term_for :badge).titleize}
+    %li
+      %a.button{:href => edit_badge_path(@badge) }
+        %i.fa.fa-edit
+        Edit
+    %li
+      %a.button{:href => new_badge_earned_badge_path(:badge_id => @badge) }
+        %i.fa.fa-star
+        Award
+    %li
+      %a.button{:href => mass_award_badge_path(@badge) }
+        %i.fa.fa-check
+        Quick Award
 
   - if current_course.has_teams?
-    .clear
-    .small-12.medium-4.right.columns
-      = form_tag badge_path(@badge), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        %label.sr-only{:for => "team_id"}
-          Select #{term_for :team}
-        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+    = form_tag badge_path(@badge), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+      %label.sr-only{:for => "team_id"}
+        Select #{term_for :team}
+      = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   //badge icon, total awarded, and points
   .panel.small-12.medium-2.columns.text-center

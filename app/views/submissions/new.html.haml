@@ -2,9 +2,7 @@
 
   = content_nav_for @assignment, "New Submission"
 
-  %h3.pagetitle
-    = @title
+  %h3.pagetitle= @title
 
-  .small-12.columns
-    - if @assignment.accepts_submissions?
-      = render 'form'
+  - if @assignment.accepts_submissions?
+    = render 'form'

@@ -31,7 +31,7 @@
             %th.center{:scope => "col", "data-dynatable-no-sort" => "true", :width => "15%" }
               %span.sr-only Check/Uncheck
               .button-bar
-                %ul.button-group.right.radius
+                %ul.button-group.radius
                   %li
                     %button.button.select-all.tiny= "Check All"
                   %li
@@ -59,7 +59,7 @@
                 %td= raw g.feedback
                 %td
                   .button-bar
-                    %ul.button-group.right.radius
+                    %ul.button-group.radius
                       %li
                         %a{:href => "#{assignment_grade_path(graded_assignment)}?student_id=#{g.student_id}", :class => "button"}
                           See Grade

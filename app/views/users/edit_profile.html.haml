@@ -16,8 +16,6 @@
           = f.file_field :avatar_file_name
 
       .small-9.columns.columns-no-padding_right
-
-
         .panel
 
           - if ! @user.kerberos_uid.present?
@@ -50,8 +48,6 @@
             = f.simple_fields_for :course_memberships, @course_membership do |p|
               .small-12.large-4.columns
                 = p.input :character_profile, :label => "Character Profile", :hint => "This will be displayed on the #{term_for :team} leaderboard"
-
-          .clear
 
         .button-bar
           %ul.button-group.radius.right

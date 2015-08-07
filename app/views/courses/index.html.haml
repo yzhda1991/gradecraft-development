@@ -2,16 +2,14 @@
 
   = content_nav_for Course
 
-  .small-12s
-    %h3.pagetitle#tableCaption= @title
+  %h3.pagetitle#tableCaption= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_course_path }
-            %i.fa.fa-plus
-            New Course
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => new_course_path }
+          %i.fa.fa-plus
+          New Course
 
   %table.responsive.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
     %thead
@@ -23,7 +21,7 @@
         %th{:scope => "col"} Badges
         %th{:scope => "col"} Total Points
         %th
-        %th{:scope => "col", :style => "min-width: 200px" }
+        %th{:scope => "col", :style => "min-width: 120px" }
           %span.sr-only Actions
     %tbody
       - @courses.each do |course|
@@ -41,7 +39,7 @@
 
             %td
               .button-bar
-                %ul.button-group.radius.right
+                %ul.button-group.radius
                   %li
                     = link_to edit_course_path(course), :class => 'button' do
                       Edit

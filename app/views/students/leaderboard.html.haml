@@ -2,11 +2,10 @@
 
   = content_nav_for "Leaderboard"
 
-  .small-12.medium-6
-    %h3.pagetitle#tableCaption= @title
+  %h3.pagetitle#tableCaption= @title
 
   - if current_course.has_teams?
-    .small-12.medium-4.columns.right
+    .team-filter
       = form_tag leaderboard_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         %label
           .sr-only Select #{term_for :team}
@@ -52,11 +51,10 @@
                   - if @earned_badges_by_student_id[student.id]
                     - @earned_badges_by_student_id[student.id].each do |badge|
                       %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
-                      //%img.has-tip{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name, :data => {'tooltip' => 'true'}, 'aria-haspopup' => 'true' }
                   %td{:style => "display: none"}= student.earned_badges_for_course(current_course).count
               %td{"data-title" => "Options"}
                 .button-bar
-                  %ul.button-group.radius.right
+                  %ul.button-group.radius
                     %li= link_to "Dashboard", student_path(student), :class => "button"
                     %li= mail_to student.email, "Email", :class => "button"
                     %li= link_to "Edit", edit_user_path(student), :class => "button"

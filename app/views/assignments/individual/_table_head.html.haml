@@ -17,10 +17,10 @@
   - if @assignment.accepts_submissions?
     %th{:scope => "col"} Submitted
 
-  %th
+  %th{:style => "min-width: 180px"}
 
   - if @assignment.release_necessary? && @assignment.grades.present?
-    %th.center{"data-dynatable-no-sort" => "true"}  
+    %th{"data-dynatable-no-sort" => "true"}  
       %ul.button-group.radius
         %li
           %a{:href => "#", :class => "button secondary select-all" } Check All

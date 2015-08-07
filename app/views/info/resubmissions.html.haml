@@ -2,12 +2,11 @@
 
   = content_nav_for "Resubmissions"
 
-  %h3.pagetitle
-    = @title
+  %h3.pagetitle= @title
   .label.radius.alert= @resubmission_count
 
   - if current_course.has_teams?
-    .small-12.medium-4.columns.right
+    .team-filter
       = form_tag resubmissions_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         %label
           .sr-only Select #{term_for :team}
@@ -50,7 +49,7 @@
                     %td= re.updated_at
                     %td
                       .button-bar
-                        %ul.button-group.right.radius
+                        %ul.button-group.radius
                           %li
                             %a.button{:href => "#{assignment_submission_path(re.assignment, :id => re.id)}" }
                               = "See Submission"
@@ -61,7 +60,7 @@
                     %td= link_to re.group.try(:name), group_path(re.group)
                     %td
                       .button-bar
-                        %ul.button-group.right.radius
+                        %ul.button-group.radius
                           %li= link_to re.group.try(:name), group_path(re.group)
                           %li= link_to "See Submission", assignment_submission_path(re.assignment, :group_id => re.group.id), :class => "button"
                     %td= link_to 'Grade', group_grade_assignment_path(re.assignment, :group_id => re.group, :class => "button")
@@ -80,7 +79,7 @@
 
                   %td
                     .button-bar
-                      %ul.button-group.right.radius
+                      %ul.button-group.radius
                         %li
                           %a.button{:href => "#{assignment_submission_path(re.assignment, :id => re.id)}" }
                             = "See Submission"
@@ -91,7 +90,7 @@
                   %td= link_to re.group.try(:name), group_path(re.group)
                   %td
                     .button-bar
-                      %ul.button-group.right.radius
+                      %ul.button-group.radius
                         %li= link_to "See Submission", assignment_grade_path(re.assignment, :group_id => re.group.id), :class => "button"
                         %li= link_to 'Grade', group_grade_assignment_path(re.assignment, :group_id => re.group), :class => "button"
       %p

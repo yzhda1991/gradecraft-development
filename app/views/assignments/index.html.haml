@@ -4,8 +4,8 @@
 
   %h3.pagetitle= @title
 
-  .button-bar
-    %ul.button-group.context_menu.radius
+  .context_menu.button-bar
+    %ul.button-group.radius
       %li
         %a.button{:href => new_assignment_path }
           %i.fa.fa-plus
@@ -17,8 +17,9 @@
       - cache ["v1", assignment_type] do
         .assignment_type{:id => "assignment-type-#{assignment_type.id}" }
           %h3.collapse
-            %a.arrow
-            #{assignment_type.name} – #{points assignment_type.max_value} points
+            %a
+              %i.fa.fa-angle-double-right.fa-fw
+            .assignment-name #{assignment_type.name} – #{points assignment_type.max_value} points
 
           .collapse-hidden
             %table.responsive{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
@@ -31,7 +32,7 @@
                   %th{:style => "display: none"} Due Date
                   %th{:scope => "col", :width => "10%"}  Max Value
                   %th Rubric?
-                  %th{ :style => "min-width: 300px" }
+                  %th{ :style => "min-width: 200px" }
               %tbody.sort-assignments
                 - assignments = assignment_type.assignments.includes(:rubric, :assignment_type).sorted
                 - assignments.each do |assignment|
@@ -63,7 +64,7 @@
                       %td= "Yes" if assignment.rubric and assignment.rubric.designed?
                       %td
                         .button-bar
-                          %ul.button-group.right.radius
+                          %ul.button-group.radius
                             - if ! ( assignment.rubric and assignment.rubric.designed? and assignment.use_rubric? )
                               %li
                                 %a{:href => mass_grade_assignment_path(assignment), :class => 'button' }

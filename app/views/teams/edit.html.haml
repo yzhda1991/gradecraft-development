@@ -4,12 +4,11 @@
 
   %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => team_path(@team) }
-            %i.fa.fa-list
-            See #{term_for :team}
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => team_path(@team) }
+          %i.fa.fa-list
+          See #{term_for :team}
 
   = render 'form'

@@ -5,7 +5,7 @@
   %h3.pagetitle= @title
 
   - if @assignment.is_individual?
-    .small-12.columns= render "individual_show"
+    = render "individual_show"
 
   - else
-    .small-12.columns= render "group_show"
+    = render "group_show"

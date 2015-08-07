@@ -38,7 +38,7 @@
           = submissions_for_assignment[0].updated_at
     %td
       .button-bar
-        %ul.button-group.radius.right
+        %ul.button-group.radius
           - if @assignment.accepts_submissions?
             - submissions_for_assignment.each do |submission|
 

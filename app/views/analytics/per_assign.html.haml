@@ -30,7 +30,7 @@
                   The average of all scores above zero
               %th Submissions
               %th Grades
-              %th{:style => "min-width: 250px"}
+              %th{:style => "min-width: 180px"}
           %tbody
             - assignments = assignments_for_type.sorted
             - assignments.each do |assignment|
@@ -48,7 +48,7 @@
                   %th= assignment.grade_count
                   %th
                     .button-bar
-                      %ul.button-group.right.radius
+                      %ul.button-group.radius
                         %li= link_to "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
                         %li
                           %a.button{:href => export_grades_assignment_path(assignment, format: 'csv') }

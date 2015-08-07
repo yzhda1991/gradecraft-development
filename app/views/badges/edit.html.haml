@@ -2,26 +2,21 @@
 
   = content_nav_for @badge, "Edit #{term_for :badge}"
 
-  .small-12
-    %h3.pagetitle= @title
+  %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => badge_path(@badge) }
-            %i.fa.fa-eye
-            See
-        %li
-          %a.button{:href => new_badge_earned_badge_path(:badge_id => @badge) }
-            %i.fa.fa-star
-            Award
-        %li
-          %a.button{:href => mass_award_badge_path(@badge) }
-            %i.fa.fa-check
-            Quick Award
-    %br
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => badge_path(@badge) }
+          %i.fa.fa-eye
+          See
+      %li
+        %a.button{:href => new_badge_earned_badge_path(:badge_id => @badge) }
+          %i.fa.fa-star
+          Award
+      %li
+        %a.button{:href => mass_award_badge_path(@badge) }
+          %i.fa.fa-check
+          Quick Award
 
-  .small-12.columns
-
-    = render 'form'
+  = render 'form'

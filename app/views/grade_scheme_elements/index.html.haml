@@ -4,13 +4,12 @@
 
   %h3.pagetitle#tableCaption= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => mass_edit_grade_scheme_elements_path }
-            %i.fa.fa-edit
-            Edit
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => mass_edit_grade_scheme_elements_path }
+          %i.fa.fa-edit
+          Edit
 
   / Grade Scheme Elements Table Display
   %table.responsive.nofeatures_dynatable{"aria-describedby" => "tableCaption"}

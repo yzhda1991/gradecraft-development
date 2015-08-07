@@ -1,25 +1,23 @@
 .small-12.panel.mainContent
   = content_nav_for @challenge
 
-  .small-12
-    %h3.pagetitle= @title
+  %h3.pagetitle= @title
 
   - if current_user_is_staff?
-    .small-12.columns
-      .button-bar
-        %ul.button-group.context_menu.radius
-          %li
-            %a.button{:href => new_challenge_path }
-              %i.fa.fa-plus
-              New #{(term_for :challenge).titleize}
-          %li
-            %a.button{:href => edit_challenge_path(@challenge) }
-              %i.fa.fa-edit
-              Edit
-          %li
-            %a.button{:href => mass_edit_challenge_challenge_grades_path(@challenge) }
-              %i.fa.fa-check
-              Quick Grade
+    .button-bar
+      %ul.button-group.context_menu.radius
+        %li
+          %a.button{:href => new_challenge_path }
+            %i.fa.fa-plus
+            New #{(term_for :challenge).titleize}
+        %li
+          %a.button{:href => edit_challenge_path(@challenge) }
+            %i.fa.fa-edit
+            Edit
+        %li
+          %a.button{:href => mass_edit_challenge_challenge_grades_path(@challenge) }
+            %i.fa.fa-check
+            Quick Grade
 
   - if @challenge.challenge_files.present?
     %p
@@ -41,7 +39,7 @@
           - if @challenge.release_necessary?
             %th Status
           - if current_user_is_staff?
-            %th
+            %th{:style => "min-width: 220px"}
           - if @challenge.release_necessary?
             %th.center{"data-dynatable-no-sort" => "true" }
               %button.button.select-all.tiny= "Check All"
@@ -67,7 +65,7 @@
             - if current_user_is_staff?
               %td
                 - if challenge_grade
-                  %ul.button-group.right.radius
+                  %ul.button-group.radius
                     %li
                       %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
                         See Grade
@@ -84,11 +82,10 @@
                         %span.sr-only
                           = "for #{team.name}"
                 - else
-                  .right
-                    %a{:href => new_challenge_challenge_grade_path(:challenge_id => @challenge.id, :team_id => team.id), :class => 'button radius'}
-                      Grade
-                      %span.sr-only
-                        = "for #{team.name}"
+                  %a{:href => new_challenge_challenge_grade_path(:challenge_id => @challenge.id, :team_id => team.id), :class => 'button'}
+                    Grade
+                    %span.sr-only
+                      = "for #{team.name}"
             - if @challenge.release_necessary?
               %td
                 - if challenge_grade

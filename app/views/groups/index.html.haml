@@ -2,16 +2,14 @@
 
   = content_nav_for Group
 
-  .small-12
-    %h3.pagetitle= @title
+  %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_group_path }
-            %i.fa.fa-plus
-            New #{term_for :group}
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => new_group_path }
+          %i.fa.fa-plus
+          New #{term_for :group}
 
   - if @pending_groups.present?
 

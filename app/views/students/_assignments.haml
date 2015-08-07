@@ -9,13 +9,14 @@
       - score_for_assignment_type = assignment_type.visible_score_for_student(current_student)
       - if assignment_type.max_value?
         %h3.collapse
-          %a.arrow
+          %a
+            %i.fa.fa-angle-double-right.fa-fw
           #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points assignment_type.max_value}
       - else
         %h3.collapse
-          %a.arrow
+          %a
+            %i.fa.fa-angle-double-right.fa-fw
           #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points score_for_assignment_type }
-      .small-12.columns
 
         // If the course and particular assignment uses weights, display assignment weighting options
         // with appropriate terminology. If a student has already set a weight, give the option to change

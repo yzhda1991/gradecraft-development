@@ -4,7 +4,7 @@
   %h3.pagetitle= @title
 
   - if current_course.has_teams?
-    .small-12.medium-4.columns.right
+    .team-filter
       = form_tag users_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         %label
           .sr-only Select #{term_for :team}
@@ -49,7 +49,7 @@
                 = points user.cached_score_for_course(current_course) if user.respond_to?(:grades)
             %td
               .button-bar
-                %ul.button-group.right.radius
+                %ul.button-group.radius
                   %li
                     = link_to "Dashboard", student_path(user), :class => 'button' if user_is_student
                     = link_to "Dashboard", staff_path(user), :class => 'button' if user_is_staff

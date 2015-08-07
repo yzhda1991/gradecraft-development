@@ -27,7 +27,7 @@
                 %li= link_to leadership.team.try(:name), leadership.team
           %td
             .button-bar
-              %ul.button-group.right.radius
+              %ul.button-group.radius
                 %li= link_to 'Dashboard', staff_path(user), {:class => 'button'}
                 %li= link_to 'Edit', edit_user_path(user), {:class => 'button'}
                 %li= link_to 'Delete', user, :class => 'button', :data => { confirm: 'Are you sure?'}, :method => :delete

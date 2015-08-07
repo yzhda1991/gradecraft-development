@@ -2,16 +2,14 @@
 
   = content_nav_for Team
 
-  .small-12
-    %h3.pagetitle= @title
+  %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_team_path }
-            %i.fa.fa-plus
-            New #{(term_for :team).titleize}
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => new_team_path }
+          %i.fa.fa-plus
+          New #{(term_for :team).titleize}
 
   = render "leaderboard"
   = render "stats"

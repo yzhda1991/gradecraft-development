@@ -3,17 +3,16 @@
 
   %h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_team_path }
-            %i.fa.fa-plus
-            New #{(term_for :team).titleize}
-        %li
-          %a.button{:href => edit_team_path(@team) }
-            %i.fa.fa-edit
-            Edit #{(term_for :team).titleize}
+  .button-bar
+    %ul.button-group.context_menu.radius
+      %li
+        %a.button{:href => new_team_path }
+          %i.fa.fa-plus
+          New #{(term_for :team).titleize}
+      %li
+        %a.button{:href => edit_team_path(@team) }
+          %i.fa.fa-edit
+          Edit #{(term_for :team).titleize}
 
   %h4.subtitle= "#{term_for :student} Roster"
   
@@ -51,7 +50,7 @@
               %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
             %td
               .button-bar
-                %ul.button-group.radius.right
+                %ul.button-group.radius
                   %li= link_to 'Dashboard', student_path(student), :class => 'button'
                   %li= link_to 'Edit', edit_user_path(student), :class => 'button'
 

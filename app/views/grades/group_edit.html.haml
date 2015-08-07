@@ -4,22 +4,20 @@
 
   %h3.pagetitle= @title
 
-  .small-12.columns
-    .bold #{term_for :students}
-    %ul
-      - @group.students.each do |s|
-        %li= link_to s.name, student_path(s)
+  .bold #{term_for :students}
+  %ul
+    - @group.students.each do |s|
+      %li= link_to s.name, student_path(s)
 
-      - if @group.proposals.present?
-        - @group.proposals.last do |prop|
-          = prop.title
+    - if @group.proposals.present?
+      - @group.proposals.last do |prop|
+        = prop.title
 
   .small-12.columns
     = simple_form_for :grade, :url => group_grade_assignment_path(@assignment), :html => { :method => :put} do |f|
       = hidden_field_tag "group_id", @group.id
       = f.hidden_field :graded_by_id, :value => current_user.id
 
-      .clear
       .small-12.large-4.columns
         Score:
         = label_tag do
@@ -27,25 +25,19 @@
             = f.select :raw_score, @assignment_score_levels.map { |l| [l.formatted_name,l.value] }, :selected => @group.students.first.grade_for_assignment(@assignment).try(:raw_score), :include_blank => true
           - else
             = f.text_field :raw_score, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.point_total }", data: {autonumeric: true, "m-dec" => "0"}, :value => @group.students.first.grade_for_assignment(@assignment).try(:raw_score)
-      .clear
+
       .small-12.columns
         = f.bootsy_area :feedback, :value => @group.students.first.grade_for_assignment(@assignment).try(:feedback)
 
-      .clear
-
       .small-12.columns
-        .right
-
-          - if @assignment.release_necessary?
-            - if current_user_is_gsi?
-              = f.input :status, as: :select, :collection => ["In Progress", "Graded"], :selected => @group.students.first.grade_for_assignment(@assignment).try(:status)
-              .form_label Is this grade ready to be reviewed?
-            - else
-              = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @group.students.first.grade_for_assignment(@assignment).try(:status)
+        - if @assignment.release_necessary?
+          - if current_user_is_gsi?
+            = f.input :status, as: :select, :collection => ["In Progress", "Graded"], :selected => @group.students.first.grade_for_assignment(@assignment).try(:status)
+            .form_label Is this grade ready to be reviewed?
           - else
-            = f.hidden_field :status, value: 'Graded'
-
-      %br
+            = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @group.students.first.grade_for_assignment(@assignment).try(:status)
+        - else
+          = f.hidden_field :status, value: 'Graded'
 
       .button-bar
         %ul.button-group.radius.right
