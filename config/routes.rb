@@ -281,7 +281,7 @@ GradeCraft::Application.routes.draw do
   end
   resources :staff, only: [:index, :show]
   resources :user_sessions
-  resources :password_resets
+  resources :passwords, path_names: { new: 'reset' }, except: [:destroy, :index]
   resources :student_academic_histories
 
   get 'calendar' => 'students#calendar'

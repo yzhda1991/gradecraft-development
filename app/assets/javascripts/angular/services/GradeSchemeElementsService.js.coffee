@@ -20,97 +20,9 @@
           console.log(error)
       )
 
-    gradeSchemeConfig = {
-      className: 'row',
-      fieldGroup: [
-        {
-          className: 'small-12 medium-2 columns',
-          type: 'input',
-          key: 'letter',
-          templateOptions: {
-            label: 'Letter',
-            maxlength: 2,
-            minlength: 1,
-            placeholder: ''
-          }
-          validators: {
-            input: {
-              expression: (viewValue, modelValue) ->
-                value = modelValue || viewValue;
-                /^(?:A-?|[BCDEF][+-]?)$/.test(value)
-              message: '$viewValue + " is not a letter grade"'
-            }
-          },
-          # modelOptions: {
-          #   debounce: {
-          #     blur: 0
-          #   },
-          #   updateOn: "blur"
-          # }
-        },
-        {
-          className: 'small-12 medium-2 columns',
-          type: 'input',
-          key: 'level',
-          templateOptions: {
-            label: 'Level'
-          }
-          # modelOptions: {
-          #   debounce: {
-          #     blur: 0
-          #   },
-          #   updateOn: "blur"
-          # }
-        },
-        {
-          className: 'small-12 medium-2 columns',
-          type: 'input',
-          key: 'low_range',
-          templateOptions: {
-            label: 'Low Range',
-            required: true
-          },
-          # modelOptions: {
-          #   debounce: {
-          #     blur: 0
-          #   },
-          #   updateOn: "blur"
-          # },
-          validation: {
-            messages: {
-              required: (viewValue, modelValue, scope) ->
-                scope.to.label + ' is required'
-            }
-          }
-        },
-        {
-          className: 'small-12 medium-2 columns',
-          type: 'input',
-          key: 'high_range',
-          templateOptions: {
-            label: 'High Range',
-            required: true
-          },
-          # modelOptions: {
-          #   debounce: {
-          #     blur: 0
-          #   },
-          #   updateOn: "blur"
-          # },
-          validation: {
-            messages: {
-              required: (viewValue, modelValue, scope) ->
-                scope.to.label + ' is required'
-            }
-          }
-        }
-      ]
-    }
-
     return {
         getGradeSchemeElements: getGradeSchemeElements
         postGradeSchemeElement: postGradeSchemeElement
         postGradeSchemeElements: postGradeSchemeElements
-        gradeSchemeConfig: gradeSchemeConfig
     }
 ]

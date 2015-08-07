@@ -1,0 +1,3 @@
+= form_tag passwords_path, :method => :post, :html => { :class => "forgot form-inline"} do
+  %input{:type => "email", :name => "email", :class => "input", :placeholder => "Email" }
+  %input{:name => "commit", :type => "submit", :value => "Request a Password Reset", :class => "button tiny radius"}

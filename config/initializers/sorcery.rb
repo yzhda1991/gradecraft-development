@@ -151,6 +151,7 @@ Rails.application.config.sorcery.configure do |config|
                                                                                                 # method on your mailer
                                                                                                 # class.
 
+    user.reset_password_expiration_period = 28_800
     # user.reset_password_expiration_period = nil                                               # how many seconds
                                                                                                 # before the reset
                                                                                                 # request expires. nil
