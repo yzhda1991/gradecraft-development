@@ -52,14 +52,18 @@ class UsersController < ApplicationController
     random_password = Sorcery::Model::TemporaryToken.generate_random_token
     @user = User.create(params[:user].merge({password: random_password}))
 
-    if @user.valid? && @user.is_student?(current_course)
-      redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully created!"
-    elsif @user.valid? && @user.is_staff?(current_course)
-      redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully created!"
-    else
-      render :new
+    if @user.valid?
+      UserMailer.activation_needed_email(@user).deliver_now
+      if @user.is_student?(current_course)
+        redirect_to students_path,
+          :notice => "#{term_for :student} #{@user.name} was successfully created!" and return
+      elsif @user.is_staff?(current_course)
+        redirect_to staff_index_path,
+          :notice => "Staff Member #{@user.name} was successfully created!" and return
+      end
     end
     expire_action :action => :index
+    render :new
   end
 
   def update

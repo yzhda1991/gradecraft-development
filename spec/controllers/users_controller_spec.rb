@@ -52,28 +52,40 @@ describe UsersController do
     end
 
     describe "POST create" do
-      before(:each) do
-        post :create, user: { first_name: "Jimmy",
-                              last_name: "Page",
-                              username: "jimmy",
-                              email: "jimmy@example.com" }
-      end
       let(:user) { User.unscoped.last }
 
-      it "creates a new user" do
-        expect(user.email).to eq "jimmy@example.com"
-        expect(user.username).to eq "jimmy"
-        expect(user.first_name).to eq "Jimmy"
-        expect(user.last_name).to eq "Page"
+      context "calling create" do
+        before(:each) do
+          post :create, user: { first_name: "Jimmy",
+                                last_name: "Page",
+                                username: "jimmy",
+                                email: "jimmy@example.com" }
+        end
+
+        it "creates a new user" do
+          expect(user.email).to eq "jimmy@example.com"
+          expect(user.username).to eq "jimmy"
+          expect(user.first_name).to eq "Jimmy"
+          expect(user.last_name).to eq "Page"
+        end
+
+        it "generates a random password for a user" do
+          expect(user.crypted_password).to_not be_blank
+        end
+
+        it "requires the new user to be activated" do
+          expect(user.activation_token).to_not be_blank
+          expect(user.activation_state).to eq "pending"
+        end
       end
 
-      it "generates a random password for a user" do
-        expect(user.crypted_password).to_not be_blank
-      end
-
-      it "requires the new user to be activated" do
-        expect(user.activation_token).to_not be_blank
-        expect(user.activation_state).to eq "pending"
+      it "sends an activation email for the user" do
+        expect {
+          post :create, user: { first_name: "Jimmy",
+                                last_name: "Page",
+                                username: "jimmy",
+                                email: "jimmy@example.com" }
+        }.to change { ActionMailer::Base.deliveries.count }.by 1
       end
     end
 
