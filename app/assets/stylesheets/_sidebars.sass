@@ -69,12 +69,28 @@ ul.off-canvas-list
       background-color: $color-green-2
       color: #FFF
       padding: .5rem .75rem
+  .has-form input
+    display: block
+    border-top-left-radius: $global-radius
+    border-bottom-left-radius: $global-radius
+    width: 76%
+    height: 2rem
+    box-shadow: none
+    appearance: none
+    margin: 0 0 1rem
+    padding: 10px
+    border: solid 1px #dcdcdc
+    transition: box-shadow 0.3s, border 0.3s
+    float: left
+
+    &:focus
+      outline: none
+      border: solid 1px #707070
+      box-shadow: 0 0 5px 1px #969696
 
   .has-form .alert.button
     border-top-left-radius: 0
     border-bottom-left-radius: 0
-    font-size: .9rem !important
-    padding: 1.4rem .5rem
 
   ul ul
     margin-left: 0
