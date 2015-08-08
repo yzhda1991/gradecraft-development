@@ -104,8 +104,10 @@ class UsersController < ApplicationController
   def activated
     @token = params[:token]
     @user = User.load_from_activation_token(@token)
+    @user.update_attributes params[:user]
     @user.activate!
-    render nothing: true
+    auto_login @user
+    redirect_to dashboard_path, notice: "Welcome to GradeCraft!"
   end
 
   # We don't allow students to edit their info directly - this is a mediated view

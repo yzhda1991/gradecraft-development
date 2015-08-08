@@ -164,8 +164,13 @@ describe UsersController do
           expect(@student.reload.activation_state).to eq "active"
         end
 
-        xit "updates the user's password"
-        xit "logs the user in"
+        it "updates the user's password" do
+          expect(User.authenticate(@student.email, "blah")).to eq @student
+        end
+
+        it "logs the user in" do
+          expect(response).to redirect_to dashboard_path
+        end
       end
 
       context "with a tampered activation token" do
