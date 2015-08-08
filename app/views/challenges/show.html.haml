@@ -62,57 +62,33 @@
           - if @challenge.release_necessary?
             %td= challenge_grade.try(:status)
           - if current_user_is_staff?
-            %th{:style => "min-width: 220px"}
-          - if @challenge.release_necessary?
-            %th.center{"data-dynatable-no-sort" => "true" }
-              %button.button.select-all.tiny= "Check All"
-              %button.button.select-none.tiny= "Uncheck"
-      %tbody
-        - @teams.alpha.each do |team|
-          - challenge_grade = @challenge.challenge_grades.find_by team: team
-          %tr
-            %td
-              - if current_user_is_staff?
-                = link_to team.name, team
-              - else
-                = team.name
             %td
               - if challenge_grade
-                = challenge_grade.score
-            - if @challenge.has_levels?
-              %td
-                - if challenge_grade
-                  = @challenge.grade_level(grade)
-            - if @challenge.release_necessary?
-              %td= challenge_grade.try(:status)
-            - if current_user_is_staff?
-              %td
-                - if challenge_grade
-                  %ul.button-group.radius
-                    %li
-                      %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
-                        See Grade
-                        %span.sr-only
-                          = "for #{team.name}"
-                    %li
-                      %a{:href => edit_challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
-                        Edit Grade
-                        %span.sr-only
-                          = "for #{team.name}"
-                    %li
-                      %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button', :data => { confirm: 'Are you sure?', method: :delete }}
-                        Delete Grade
-                        %span.sr-only
-                          = "for #{team.name}"
-                - else
-                  %a{:href => new_challenge_challenge_grade_path(:challenge_id => @challenge.id, :team_id => team.id), :class => 'button'}
-                    Grade
-                    %span.sr-only
-                      = "for #{team.name}"
-            - if @challenge.release_necessary?
-              %td
-                - if challenge_grade
-                  .center= check_box_tag "challenge_grade_ids[]", challenge_grade.id
+                %ul.button-group.radius
+                  %li
+                    %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
+                      See Grade
+                      %span.sr-only
+                        = "for #{team.name}"
+                  %li
+                    %a{:href => edit_challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
+                      Edit Grade
+                      %span.sr-only
+                        = "for #{team.name}"
+                  %li
+                    %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button', :data => { confirm: 'Are you sure?', method: :delete }}
+                      Delete Grade
+                      %span.sr-only
+                        = "for #{team.name}"
+              - else
+                %a{:href => new_challenge_challenge_grade_path(:challenge_id => @challenge.id, :team_id => team.id), :class => 'button'}
+                  Grade
+                  %span.sr-only
+                    = "for #{team.name}"
+          - if @challenge.release_necessary?
+            %td
+              - if challenge_grade
+                .center= check_box_tag "challenge_grade_ids[]", challenge_grade.id
 
   .right
     - if @challenge.release_necessary? && @challenge.challenge_grades.present?

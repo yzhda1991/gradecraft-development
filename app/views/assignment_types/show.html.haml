@@ -49,6 +49,17 @@
                       Delete
                   %li
                     = link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
+                    %span.sr-only=assignment.name
+                %li
+                  %a{:href => edit_assignment_path(assignment), :class => "button"}
+                    Edit
+                    %span.sr-only=assignment.name
+                %li
+                  %a{:href => assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete }, :class => "button" }
+                    Delete
+                %li
+                  = link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
+                  %span.sr-only=assignment.name
           - else
             - if assignment.accepts_submissions? && assignment.has_groups?
               - if current_student.group_for_assignment(assignment)

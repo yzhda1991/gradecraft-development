@@ -128,3 +128,37 @@
                   .icon-tooltip
                     Notify Students on Release
                   %i.fa.fa-envelope.fa-fw
+
+            %td
+              - if assignment.grade_select?
+                %label.sr-only{:for => "score_levels"}
+                  Score Levels
+                = select_tag(:score_levels, options_from_collection_for_select(assignment.score_levels_set, :value, :name))
+              - elsif assignment.grade_radio?
+                - assignment.score_levels_set.each do |asl|
+                  = radio_button_tag(asl.name, asl.value)
+                  %span.not_bold= label_tag(asl.name)
+                  %br
+              - elsif assignment.grade_checkboxes?
+                = check_box_tag 'score', '', false, :disabled => true
+              - else
+                = text_field_tag 'score', '', :disabled => true
+            %td= points assignment.point_total
+            %td
+              %ul
+                %li
+                  Opens:
+                  = assignment.try(:opens_at) || "Always Open"
+                  Accepted Until:
+                  = assignment.try(:accept_until) || "Always Accepted"
+            %td
+              .button-bar
+                %ul.button-group.radius
+                  %li
+                    %a{:href => edit_assignment_path(assignment),  :class => 'button' }
+                      Edit
+                      %span.sr-only= assignment.name
+                  %li
+                    %a{:href => assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button' }
+                      Delete
+                      %span.sr-only= assignment.name

@@ -12,8 +12,6 @@
 %table
   %thead
     %tr
-      %th
-      %th
       %th.center{:width => "15%" } Icon
       %th{:width => "25%" } Name
       %th Awarded
@@ -42,6 +40,8 @@
                   %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
         %td            
           %img.badge-icon{ :src => badge.icon, :alt => badge.name, :width => 40 }
+          = image_tag "draggable_transparent.png", :width => "10%", :style => "margin-top: -6px", :class => "draggable"
+          %img.badge-icon{ :src => badge.icon, :alt => badge.name }
           - if badge.point_total.present? && badge.point_total > 0
             .italic= "#{points badge.point_total} points"
         %td

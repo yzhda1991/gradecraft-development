@@ -9,6 +9,7 @@
         %i.fa.fa-plus
         New #{(term_for :assignment).titleize}
 
+
 .assignments
   - @assignment_types.each do |assignment_type|
     - cache ["v1", assignment_type] do
@@ -53,6 +54,7 @@
                           %ul
                             - assignment.unlock_keys.each do |key|
                               %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+                        %i.fa.fa-key
                     %td
                       = link_to assignment.name, assignment
                     %td= assignment.try(:due_at) || "Ongoing"
@@ -68,3 +70,18 @@
                       .button-bar
                         %ul.button-group.radius
                           - if ! ( assignment.rubric and assignment.rubric.designed? and assignment.use_rubric? )
+                            %li
+                              %a{:href => mass_grade_assignment_path(assignment), :class => 'button' }
+                                Quick Grade
+                                %span.sr-only=assignment.name
+                          %li
+                            %a{:href => edit_assignment_path(assignment), :class => 'button' }
+                              Edit
+                              %span.sr-only=assignment.name
+                          %li
+                            = link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
+                            %span.sr-only=assignment.name
+                          %li
+                            %a{:href => assignment_path(assignment), :class => "button", :data => { confirm: 'Are you sure?', method: :delete } }
+                              Delete
+                              %span.sr-only=assignment.name

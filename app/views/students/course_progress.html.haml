@@ -22,12 +22,6 @@
         %span Your rank: 
         %span= element.level
         %span= element.letter
-        %span with
-        %span.underline=points current_student.cached_score_for_course(current_course)
-        %span points.
-        %span=points element.points_to_next_level(current_student, current_course)
-        %span= " points to the next level!"
-        
 
 %p= raw current_course.grading_philosophy
-%h3= "– Prof. #{current_course.professor.try(:last_name) }"
+%h5.bold= "– Prof. #{current_course.professor.try(:last_name) }"

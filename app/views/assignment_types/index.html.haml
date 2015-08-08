@@ -3,6 +3,7 @@
 %h3.pagetitle#tableCaption= @title
 
 = render "buttons"
+
 %table.responsive.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
   %thead
     %tr
@@ -34,7 +35,7 @@
               %li
                 %a{:href => assignment_type_path(assignment_type), :data => { confirm: 'Are you sure? This will delete all associated assignments and their grades.', method: :delete }, :class => "button" }
                   Delete
-                  
+
 %h4.subtitle= "#{term_for :student} Scores"
 
 %table.responsive.nofeatures_default_name_dynatable

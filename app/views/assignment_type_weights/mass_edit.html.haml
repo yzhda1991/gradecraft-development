@@ -17,6 +17,7 @@
           %li You may work on up to #{ current_course.max_assignment_types_weighted} #{ (term_for :assignment_types).downcase}
         - if current_course.default_assignment_weight
           %li Any #{(term_for :assignment_types).downcase} you do not place #{ ( term_for :weights).titleize } on but have grades for will be multiplied by #{current_course.default_assignment_weight}. For example, this would adjust a 1000 point Essay to be worth #{ (1000 * current_course.default_assignment_weight).to_i } points.
+
         = hidden_field_tag :student_id, current_student.id
         - if @form.errors.has_key?(:base)
           = f.error :base

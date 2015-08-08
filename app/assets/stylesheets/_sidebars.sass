@@ -140,3 +140,55 @@ ul.off-canvas-list
 .side-nav li a:not(.button)
   display: inline !important
   padding: 0
+
+.student-sidebar
+  width: 240px
+  border-top-right-radius: $global-radius
+  border-bottom-right-radius: $global-radius
+  float: left
+  border-left: 1px dashed $primary-color
+
+  .panel
+    border-radius: 0
+    &:first-child
+      border-top-right-radius: $global-radius
+    &:last-child
+      border-bottom-right-radius: $global-radius
+  
+  .todo li
+    list-style-type: none
+
+  .assignment-item 
+    border-bottom: 1px dashed $primary-color
+    padding-bottom: .5rem
+    margin-bottom: .5rem
+
+    &:last-of-type
+      border: none
+      padding-bottom: 0
+      margin-bottom: 0
+
+  ul.block-grid
+    margin: 0.5rem auto !important
+    width: 100%
+    padding: 0
+    li
+      display: inline-block
+      list-style-type: none
+      margin-bottom: .25rem
+      img
+        width: 100%
+
+/* Styles the hover state on the box plot on the student dashboard */
+.jqstooltip
+  box-sizing: content-box
+  height: auto !important
+  width: auto !important
+
+/* Makes the box plot responsive */
+#student_grade_distro canvas, .grades_per_assign canvas, .circliful
+  width: 100% !important
+  margin: 1rem 0
+
+  .button
+    border-radius: $global-radius
