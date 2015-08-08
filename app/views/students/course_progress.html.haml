@@ -1,5 +1,3 @@
-= render 'students/earned_points_and_level'
-
 - if current_course.grade_scheme_elements.present?
   - @grade_scheme_elements.order_by_high_range.each do |element|
     - if current_student.cached_score_for_course(current_course) < element.low_range

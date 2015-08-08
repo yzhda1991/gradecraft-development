@@ -38,11 +38,11 @@
         %table.responsive
           %thead
             %tr
-              %th= "#{term_for :assignment}"
+              %th{:style => "width: 150px"}= "#{term_for :assignment}"
               %th Points
               %th Due
               %th
-              %th
+              %th{:style => "width: 180px"}
 
           %tbody
             - assignments = assignment_type.assignments.sorted.includes(:assignment_type)
@@ -54,7 +54,7 @@
                 - student_submission = @student.submission_for_assignment(assignment)
                 - if assignment.visible_for_student?(current_student) || grade_released_for_assignment
                   %tr
-                    %td{:width => "30%"}
+                    %td
                       - if assignment.has_groups?
                         %i.fa.fa-group
                       - if assignment.required?
@@ -84,7 +84,7 @@
                               %li= condition.unlockable.name
                       %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
 
-                    %td{:width => "25%"}
+                    %td
                       - if assignment.pass_fail?
                         - if current_student.grade_released_for_assignment?(assignment)
                           .bold
@@ -113,9 +113,9 @@
                             .italic.not_bold= "#{points grade.point_total} points possible"
                             .italic.bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
 
-                    %td{:width => "25%"}
+                    %td
                       - if assignment.future?
-                        %span= "Due: #{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" 
+                        %span= "#{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" 
                     %td
                       - if assignment.student_logged? && assignment.open? && current_user_is_student?
                         = simple_form_for current_student.grade_for_assignment(assignment), :url => self_log_grades_assignment_path(assignment), :method => :post do |f|
@@ -123,9 +123,9 @@
                           = hidden_field_tag :present, !present
                           - if ! @student.self_reported_done?(assignment)
                             = f.submit (assignment_type.student_logged_button_text), :class => "button #{present ? 'alert' : 'success'} tiny radius"
-                    %td{:width => "20%"}
+                    %td
                       .button-bar
-                        %ul.button-group.center.radius
+                        %ul.button-group
                           - if grade_released_for_assignment
                             %li= link_to "See Results", assignment_path(assignment, :anchor => "fndtn-tabt4"), :class => "button"
                           - if assignment.has_groups?
@@ -157,37 +157,3 @@
                                 %li= link_to "Edit Grade", group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
                               - else
                                 %li= link_to 'Grade', group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
-
-- if current_course.team_challenges? && current_course.team_score_average?
-  .challenge
-
-    %h3.collapse 
-      %a
-        %i.fa.fa-angle-double-right.fa-fw
-      #{term_for :challenges} #{ points @student.team.try(:challenge_grade_score) }/#{points current_course.point_total_for_challenges}
-
-    .small-12.columns
-      %table.responsive
-        - current_course.challenges.each do |challenge|
-          %tr
-            %td{:width => "25%"}= link_to challenge.name, challenge
-            - if @student.team
-              %td{:width => "25%"}
-                - if challenge.challenge_grade_for_team(@student.team).present?
-                  %span.points
-                    %span.earned= points challenge.challenge_grade_for_team(@student.team).try(:score)
-                    %span= "/"
-                    %span
-                      = points challenge.point_total
-                    = "points"
-            - if challenge.future?
-              %td{:width => "25%"}= " • Due: #{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
-            %td
-              - if current_user_is_staff?
-                %li
-                  %a{:href => edit_challenge_challenge_grade_path(challenge.id, challenge_grade.id, :team_id => @student.team.id), :class => 'button'}
-                    Edit Grade
-              - else
-                %li
-                  %a{:href => new_challenge_challenge_grade_path(:challenge_id => challenge.id, :team_id => @student.team.id), :class => 'button'}
-                    Grade

@@ -1,11 +1,8 @@
-.mainContainer{:role => "main"}
+.mainContainer.student{:role => "main"}
   / Display errors and notifications
   = render 'layouts/alerts'
-  .show-for-medium-up
-    = content_nav do
-      = render "students/student_profile_tabs"
-  .panel.mainContent= render 'layouts/content'
-.student-sidebar
-  = render 'students/student_sidebar'
-
-= render "layouts/help/uservoice"
+  = content_nav do
+    = render "students/student_profile_tabs"
+  .panel.mainContent.student= render 'layouts/content'
+  .student-sidebar
+    = render 'students/student_sidebar'

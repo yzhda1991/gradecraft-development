@@ -10,15 +10,21 @@ body
 
 .mainContainer
   margin: 0 0 3rem 0 
-  width: calc(100% - 290px)
   float: left
   border-radius: $global-radius
 
+  &.staff 
+    width: calc(100% - 270px)
+
+  &.student
+    width: 100%
+
 .mainContent
   background-color: #FFF
+  min-height: 1260px
 
 .student.mainContent
-  width: calc(100% - 275px)
+  width: calc(100% - 310px)
   float: left
 
 .footer

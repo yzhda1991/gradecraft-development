@@ -2,7 +2,7 @@
   / Staff-only sidebar navigation
   = render 'layouts/navigation/staff_subnav'
 
-.mainContainer{:role => "main"}
+.mainContainer.staff{:role => "main"}
   / Display errors and notifications
   = render 'layouts/alerts'
 
@@ -16,5 +16,3 @@
   - if current_student.present?
     .student-sidebar
       = render "students/student_sidebar"
-
-= render 'layouts/help/uservoice'

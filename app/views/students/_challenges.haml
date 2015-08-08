@@ -1,0 +1,33 @@
+- if current_course.team_challenges? && current_course.team_score_average?
+  .challenge
+
+    %h3.collapse 
+      %a
+        %i.fa.fa-angle-double-right.fa-fw
+      #{term_for :challenges} #{ points @student.team.try(:challenge_grade_score) }/#{points current_course.point_total_for_challenges}
+
+    .small-12.columns
+      %table.responsive
+        - current_course.challenges.each do |challenge|
+          %tr
+            %td{:width => "25%"}= link_to challenge.name, challenge
+            - if @student.team
+              %td{:width => "25%"}
+                - if challenge.challenge_grade_for_team(@student.team).present?
+                  %span.points
+                    %span.earned= points challenge.challenge_grade_for_team(@student.team).try(:score)
+                    %span= "/"
+                    %span
+                      = points challenge.point_total
+                    = "points"
+            - if challenge.future?
+              %td{:width => "25%"}= " • Due: #{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
+            %td
+              - if current_user_is_staff?
+                %li
+                  %a{:href => edit_challenge_challenge_grade_path(challenge.id, challenge_grade.id, :team_id => @student.team.id), :class => 'button'}
+                    Edit Grade
+              - else
+                %li
+                  %a{:href => new_challenge_challenge_grade_path(:challenge_id => challenge.id, :team_id => @student.team.id), :class => 'button'}
+                    Grade
