@@ -154,12 +154,15 @@ describe UsersController do
       before do
         @student.update_attribute :activation_token, "blah"
         @student.update_attribute :activation_state, "pending"
-        post :activated, id: @student.activation_token,
-          token: @student.activation_token,
-          user: { password: "blah", password_confirmation: "blah" }
       end
 
       context "with matching passwords" do
+        before do
+          post :activated, id: @student.activation_token,
+            token: @student.activation_token,
+            user: { password: "blah", password_confirmation: "blah" }
+        end
+
         it "activates the user" do
           expect(@student.reload.activation_state).to eq "active"
         end
@@ -174,19 +177,55 @@ describe UsersController do
       end
 
       context "with a tampered activation token" do
-        xit "does not activate the user"
-        xit "does not update the user's password"
-        xit "redirects to the root url"
+        before do
+          post :activated, id: @student.activation_token,
+            token: "tampered",
+            user: { password: "blah", password_confirmation: "blah" }
+        end
+
+        it "does not activate the user" do
+          expect(@student.reload.activation_state).to eq "pending"
+        end
+
+        it "does not update the user's password" do
+          expect(User.authenticate(@student.email, "blah")).to be_nil
+        end
+
+        it "redirects to the root url" do
+          expect(response).to redirect_to root_path
+        end
       end
 
       context "with a non-matching password" do
-        xit "does not activate the user"
-        xit "renders the activate template"
+        before do
+          post :activated, id: @student.activation_token,
+            token: @student.activation_token,
+            user: { password: "blah", password_confirmation: "blech" }
+        end
+
+        it "does not activate the user" do
+          expect(@student.reload.activation_state).to eq "pending"
+        end
+
+        it "renders the activate template" do
+          expect(response).to render_template :activate
+        end
       end
 
       context "with a blank password" do
-        xit "does not activate the user"
-        xit "renders the activate template"
+        before do
+          post :activated, id: @student.activation_token,
+            token: @student.activation_token,
+            user: { password: "", password_confirmation: "" }
+        end
+
+        it "does not activate the user" do
+          expect(@student.reload.activation_state).to eq "pending"
+        end
+
+        it "renders the activate template" do
+          expect(response).to render_template :activate
+        end
       end
     end
 

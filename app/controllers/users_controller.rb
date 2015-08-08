@@ -104,10 +104,15 @@ class UsersController < ApplicationController
   def activated
     @token = params[:token]
     @user = User.load_from_activation_token(@token)
-    @user.update_attributes params[:user]
-    @user.activate!
-    auto_login @user
-    redirect_to dashboard_path, notice: "Welcome to GradeCraft!"
+
+    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
+
+    if @user.update_attributes params[:user]
+      @user.activate!
+      auto_login @user
+      redirect_to dashboard_path, notice: "Welcome to GradeCraft!" and return
+    end
+    render :activate, alert: @user.errors.full_messages.first
   end
 
   # We don't allow students to edit their info directly - this is a mediated view
