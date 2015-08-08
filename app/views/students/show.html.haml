@@ -1,13 +1,5 @@
-= content_nav do
-  = render "students/student_profile_tabs"
+= render 'students/earned_points_and_level'
 
-.small-12.medium-9.panel.columns.mainContent
+= render 'students/assignments'
 
-  = render 'students/earned_points_and_level'
-
-  = render 'students/assignments'
-
-  = render 'students/scoreboard'
-
-.small-12.medium-3.columns.sideBarContainer
-  = render "staff_view_student_sidebar"
+= render 'students/scoreboard'

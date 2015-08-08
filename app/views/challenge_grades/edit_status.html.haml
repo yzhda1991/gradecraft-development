@@ -1,26 +1,24 @@
-.panel.mainContent
+= content_nav_for @challenge, "Edit #{term_for :challenge} Grade Status"
 
-  = content_nav_for @challenge, "Edit #{term_for :challenge} Grade Status"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
-  %table.responsive.nopage_dynatable
-    %thead
-      %tr
-        %th= term_for :team
-        %th Score
-        %th Current Status
-    %tbody
-      - for challenge_grade in @challenge_grades
-        %tr
-          %td= challenge_grade.team.name
-          %td= points challenge_grade.score
-          %td= challenge_grade.status
-
-  = simple_form_for :challenge_grade, :url => update_status_challenge_challenge_grades_path(@challenge), :html => { :method => :put} do |f|
+%table.responsive.nopage_dynatable
+  %thead
+    %tr
+      %th= term_for :team
+      %th Score
+      %th Current Status
+  %tbody
     - for challenge_grade in @challenge_grades
-      = hidden_field_tag "challenge_grade_ids[]", challenge_grade.id
-    .medium-3.right= f.input :status, :label => "Update Status to:", :as => :select, :collection => Grade::STATUSES
-    %hr
-    .right
-      = f.button :submit, "Update Statuses", :class => "button tiny radius"
+      %tr
+        %td= challenge_grade.team.name
+        %td= points challenge_grade.score
+        %td= challenge_grade.status
+
+= simple_form_for :challenge_grade, :url => update_status_challenge_challenge_grades_path(@challenge), :html => { :method => :put} do |f|
+  - for challenge_grade in @challenge_grades
+    = hidden_field_tag "challenge_grade_ids[]", challenge_grade.id
+  .medium-3.right= f.input :status, :label => "Update Status to:", :as => :select, :collection => Grade::STATUSES
+  %hr
+  .right
+    = f.button :submit, "Update Statuses", :class => "button tiny radius"

@@ -1,8 +1,6 @@
-.small-12.panel.mainContent
+= content_nav_for User, "New User"
 
-  = content_nav_for User, "New User"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
-  / Form for creating a new user
-  = render 'form'
+/ Form for creating a new user
+= render 'form'

@@ -1,14 +1,12 @@
-.small-12.panel.mainContent
+= content_nav_for current_course, "Edit Grading Scheme"
+%h3.pagetitle= @title
 
-  = content_nav_for current_course, "Edit Grading Scheme"
-  %h3.pagetitle= @title
+.small-12.columns{'ng-app' => 'gradecraft', 'ng-controller' => 'GradeSchemeElementsCtrl'}
+  .grade-scheme-elements
+    .grade-scheme-element{'ng-repeat' => 'element in grade_scheme_elements', 'ng-include' => "'ng_gradeScheme.html'"}
+    %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit
 
-  .small-12.columns{'ng-app' => 'gradecraft', 'ng-controller' => 'GradeSchemeElementsCtrl'}
-    .grade-scheme-elements
-      .grade-scheme-element{'ng-repeat' => 'element in grade_scheme_elements', 'ng-include' => "'ng_gradeScheme.html'"}
-      %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit
-
-    .button-bar
-      %ul.button-group.radius.right
-        %li= f.button :submit
-        %li= link_to 'Cancel', grade_scheme_elements_path, :class => 'button'
+  .button-bar
+    %ul.button-group.radius.right
+      %li= f.button :submit
+      %li= link_to 'Cancel', grade_scheme_elements_path, :class => 'button'

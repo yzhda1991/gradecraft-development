@@ -1,79 +1,83 @@
-.small-12.panel.mainContent
-  = content_nav_for @team
+= content_nav_for @team
 
-  %h3.pagetitle= @title
+%h3.pagetitle= @title
 
-  .button-bar
-    %ul.button-group.context_menu.radius
-      %li
-        %a.button{:href => new_team_path }
-          %i.fa.fa-plus
-          New #{(term_for :team).titleize}
-      %li
-        %a.button{:href => edit_team_path(@team) }
-          %i.fa.fa-edit
-          Edit #{(term_for :team).titleize}
+.button-bar.context_menu
+  %ul.button-group
+    %li
+      %a.button{:href => new_team_path }
+        %i.fa.fa-plus
+        New #{(term_for :team).titleize}
+    %li
+      %a.button{:href => edit_team_path(@team) }
+        %i.fa.fa-edit
+        Edit #{(term_for :team).titleize}
 
-  %h4.subtitle= "#{term_for :student} Roster"
-  
-  %table.responsive.nofeatures_default_last_name_dynatable
-    %thead
-      %tr
-        %th First Name
-        %th Last Name
-        %th Email
-        - if current_course.team_roles?
-          %th Role
-        %th Score
-        %th Level
-        - if current_course.has_badges?
-          %th{:scope => "col", "data-dynatable-sorts" => "badgeCount", :width => "20%" }= "#{term_for :badges} Earned"
-          %th{:style => "display: none"} Badge Count
-        %th{:width => "20%"}
-    %tbody
-      - @students.each do |student|
-        - if student.is_student?(current_course)
-          %tr
-            %td= link_to student.first_name, student_path(student)
-            %td= link_to student.last_name, student_path(student)
-            %td= mail_to student.email, student.email
-            - if current_course.team_roles?
-              %td= student.team_role
-            %td= student.cached_score_for_course(current_course) if student.respond_to?(:grades)
-            %td
-              = student.grade_letter_for_course(current_course)
-              = student.grade_level_for_course(current_course)
-            - if current_course.has_badges?
-              %td
-                - student.earned_badges_for_course(current_course).each do |badge|
-                  %img.has-tip{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name, :data => {'tooltip' => true}}
-              %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
-            %td
-              .button-bar
-                %ul.button-group.radius
-                  %li= link_to 'Dashboard', student_path(student), :class => 'button'
-                  %li= link_to 'Edit', edit_user_path(student), :class => 'button'
+%h4.subtitle= "#{term_for :student} Roster"
 
-  %h4.subtitle Challenge Grades
-
-  %table.responsive.nofeatures_default_score_dynatable
-    %thead
-      %tr
-        %th Name
-        %th Score
-        %th{:width => "10%"}
-
-    %tbody
-      - @challenges.each do |challenge|
+%table.nofeatures_default_last_name_dynatable
+  %thead
+    %tr
+      %th First Name
+      %th Last Name
+      %th Email
+      - if current_course.team_roles?
+        %th Role
+      %th Score
+      %th Level
+      - if current_course.has_badges?
+        %th{:scope => "col", "data-dynatable-sorts" => "badgeCount", :width => "20%" }= "#{term_for :badges} Earned"
+        %th{:style => "display: none"} Badge Count
+      %th{:width => "20%"}
+  %tbody
+    - @students.each do |student|
+      - if student.is_student?(current_course)
         %tr
+          %td= link_to student.first_name, student_path(student)
+          %td= link_to student.last_name, student_path(student)
+          %td= mail_to student.email, student.email
+          - if current_course.team_roles?
+            %td= student.team_role
+          %td= student.cached_score_for_course(current_course) if student.respond_to?(:grades)
           %td
-            - if challenge.challenge_grades.present?
-              = link_to challenge.name, challenge
-            - else
-              = challenge.name
-          %td= points challenge.challenge_grade_for_team(@team).try(:score)
+            = student.grade_letter_for_course(current_course)
+            = student.grade_level_for_course(current_course)
+          - if current_course.has_badges?
+            %td
+              - student.earned_badges_for_course(current_course).each do |badge|
+                .icon
+                  .icon-tooltip
+                    = badge.try(:name)
+                  %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
+            %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
           %td
-            - if challenge.challenge_grade_for_team(@team).present?
-              = link_to 'Edit Grade', edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => 'button radius'
-            - else
-              = link_to "Grade", new_challenge_challenge_grade_path(:challenge_id => challenge, :team_id => @team.id), :class => 'button radius'
+            .button-bar
+              %ul.button-group
+                %li= link_to 'Dashboard', student_path(student), :class => 'button'
+                %li= link_to 'Edit', edit_user_path(student), :class => 'button'
+
+%h4.subtitle Challenge Grades
+
+%table.nofeatures_default_score_dynatable
+  %thead
+    %tr
+      %th Name
+      %th Score
+      %th{:width => "80px"}
+
+  %tbody
+    - @challenges.each do |challenge|
+      %tr
+        %td
+          - if challenge.challenge_grades.present?
+            = link_to challenge.name, challenge
+          - else
+            = challenge.name
+        %td= points challenge.challenge_grade_for_team(@team).try(:score)
+        %td
+          .button-bar
+            %ul.button-group
+              - if challenge.challenge_grade_for_team(@team).present?
+                = link_to 'Edit Grade', edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => 'button'
+              - else
+                = link_to "Grade", new_challenge_challenge_grade_path(:challenge_id => challenge, :team_id => @team.id), :class => 'button'

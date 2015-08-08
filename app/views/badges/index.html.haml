@@ -1,44 +1,42 @@
-.small-12.panel.mainContent
+= content_nav_for Badge
 
-  = content_nav_for Badge
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+.button-bar.context_menu
+  %ul.button-group
+    %li
+      %a.button{:href => new_badge_path }
+        %i.fa.fa-plus
+        New #{(term_for :badge).titleize}
 
-  .button-bar
-    %ul.button-group.context_menu.radius
-      %li
-        %a.button{:href => new_badge_path }
-          %i.fa.fa-plus
-          New #{(term_for :badge).titleize}
-
-  //instructor badge index table
-  %table
-    %thead
-      %tr
-        %th.center{:width => "15%" } Icon
-        %th{:width => "25%" } Name
-        %th Awarded
-        %th{ :style => "min-width: 220px" }
-    %tbody.sort-badges
-      - @badges.each do |badge|
-        %tr{:id => "badge-#{badge.id}"}
-          %td.center
-            = image_tag "draggable_transparent.png", :width => "10%", :style => "margin-top: -6px", :class => "draggable"
-            %img.badge-icon{ :src => badge.icon, :alt => badge.name }
-            - if badge.point_total.present? && badge.point_total > 0
-              .italic= "#{points badge.point_total} points"
-          %td
-            .subtitle= link_to badge.name, badge_path(badge)
-            = raw badge.description
-          %td= badge.awarded_count
-          %td
-            .button-bar
-              %ul.button-group.radius
-                %li= link_to "Quick Award", mass_award_badge_path(badge), :class => "button"
-                %li= link_to "Award", new_badge_earned_badge_path(badge), :class => "button"
-                %li
-                  %a{:href => edit_badge_path(badge), :class => 'button'}
-                    Edit
-                %li
-                  %a{:href => badge_path(badge),:class => "button" , :data => { confirm: 'Are you sure?',  method: :delete } }
-                    Delete
+//instructor badge index table
+%table
+  %thead
+    %tr
+      %th.center{:width => "15%" } Icon
+      %th{:width => "25%" } Name
+      %th Awarded
+      %th{ :style => "min-width: 220px" }
+  %tbody.sort-badges
+    - @badges.each do |badge|
+      %tr{:id => "badge-#{badge.id}"}
+        %td.center
+          = image_tag "draggable_transparent.png", :width => "10%", :style => "margin-top: -6px", :class => "draggable"
+          %img.badge-icon{ :src => badge.icon, :alt => badge.name }
+          - if badge.point_total.present? && badge.point_total > 0
+            .italic= "#{points badge.point_total} points"
+        %td
+          .subtitle= link_to badge.name, badge_path(badge)
+          = raw badge.description
+        %td= badge.awarded_count
+        %td
+          .button-bar
+            %ul.button-group.radius
+              %li= link_to "Quick Award", mass_award_badge_path(badge), :class => "button"
+              %li= link_to "Award", new_badge_earned_badge_path(badge), :class => "button"
+              %li
+                %a{:href => edit_badge_path(badge), :class => 'button'}
+                  Edit
+              %li
+                %a{:href => badge_path(badge),:class => "button" , :data => { confirm: 'Are you sure?',  method: :delete } }
+                  Delete

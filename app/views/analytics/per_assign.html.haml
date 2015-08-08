@@ -1,55 +1,55 @@
-.small-12.panel.mainContent
+= content_nav_for "#{term_for :assignment} Analytics"
 
-  = content_nav_for "#{term_for :assignment} Analytics"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+- @assignment_types.each do |assignment_type|
+  - cache ["v1", assignment_type] do
+    - assignments_for_type = assignment_type.assignments
+    - if assignments_for_type.select {|a| a.grades.graded_or_released.length > 1}.present?
+      %h4.subtitle= assignment_type.name
 
-  - @assignment_types.each do |assignment_type|
-    - cache ["v1", assignment_type] do
-      - assignments_for_type = assignment_type.assignments
-      - if assignments_for_type.select {|a| a.grades.graded_or_released.length > 1}.present?
-        %h4.subtitle= assignment_type.name
-
-        %table.responsive.nopage_dynatable
-          %caption.sr-only= assignment_type.name
-          %thead
-            %tr
-              %th{"scope" => "col"} Name
-              %th{"scope" => "col"} Min
-              %th{"scope" => "col"} Max
-              %th{"scope" => "col"} Median
-              %th{"scope" => "col"}
-                Ave
-                %i.fa.fa-info-circle{:title => "The average of all grades, including those who earned zero", :data => {'tooltip' => true} }
-                %span.sr-only
+      %table.responsive.nopage_dynatable
+        %caption.sr-only= assignment_type.name
+        %thead
+          %tr
+            %th{"scope" => "col"} Name
+            %th{"scope" => "col"} Min
+            %th{"scope" => "col"} Max
+            %th{"scope" => "col"} Median
+            %th{"scope" => "col"}
+              Ave
+              .icon
+                .icon-tooltip
                   The average of all grades, including those who earned zero
-              %th
-                Avg Earned
-                %i.fa.fa-info-circle{:title => "The average of all scores above zero", :data => {'tooltip' => true} }
-                %span.sr-only
+                %i.fa.fa-info-circle
+            %th
+              Avg Earned
+              .icon
+                .icon-tooltip
                   The average of all scores above zero
-              %th Submissions
-              %th Grades
-              %th{:style => "min-width: 180px"}
-          %tbody
-            - assignments = assignments_for_type.sorted
-            - assignments.each do |assignment|
-              - if assignment.grades.graded_or_released.present?
-                %tr
-                  %td= link_to assignment.name, assignment
-                  %td= assignment.low_score
-                  %td= assignment.high_score
-                  %td= assignment.median
-                  %td= assignment.average
-                  %td= assignment.earned_average
-                  %td
-                    - if assignment.accepts_submissions?
-                      = assignment.submissions.count
-                  %th= assignment.grade_count
-                  %th
-                    .button-bar
-                      %ul.button-group.radius
-                        %li= link_to "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
-                        %li
-                          %a.button{:href => export_grades_assignment_path(assignment, format: 'csv') }
-                            Download Grades
+                %i.fa.fa-info-circle
+            %th Submissions
+            %th Grades
+            %th{:style => "min-width: 180px"}
+        %tbody
+          - assignments = assignments_for_type.sorted
+          - assignments.each do |assignment|
+            - if assignment.grades.graded_or_released.present?
+              %tr
+                %td= link_to assignment.name, assignment
+                %td= assignment.low_score
+                %td= assignment.high_score
+                %td= assignment.median
+                %td= assignment.average
+                %td= assignment.earned_average
+                %td
+                  - if assignment.accepts_submissions?
+                    = assignment.submissions.count
+                %th= assignment.grade_count
+                %th
+                  .button-bar
+                    %ul.button-group
+                      %li= link_to "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
+                      %li
+                        %a.button{:href => export_grades_assignment_path(assignment, format: 'csv') }
+                          Download Grades

@@ -1,15 +1,13 @@
-.small-12.panel.mainContent
+= content_nav_for Team
 
-  = content_nav_for Team
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+.button-bar.context_menu
+  %ul.button-group
+    %li
+      %a.button{:href => new_team_path }
+        %i.fa.fa-plus
+        New #{(term_for :team).titleize}
 
-  .button-bar
-    %ul.button-group.context_menu.radius
-      %li
-        %a.button{:href => new_team_path }
-          %i.fa.fa-plus
-          New #{(term_for :team).titleize}
-
-  = render "leaderboard"
-  = render "stats"
+= render "leaderboard"
+= render "stats"

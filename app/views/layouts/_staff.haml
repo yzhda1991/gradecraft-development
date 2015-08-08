@@ -6,7 +6,15 @@
   / Display errors and notifications
   = render 'layouts/alerts'
 
+  - if current_student.present?
+    = content_nav do
+      = render "students/student_profile_tabs"
+
   / Page content
-  = render 'layouts/content'
+  .panel.mainContent{ :class => (current_student ? 'student' : '') }= render 'layouts/content'
+
+  - if current_student.present?
+    .student-sidebar
+      = render "students/student_sidebar"
 
 = render 'layouts/help/uservoice'

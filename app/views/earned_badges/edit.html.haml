@@ -1,7 +1,5 @@
-.small-12.panel.mainContent
+= content_nav_for @badge, "Edit Awarded #{term_for :badge}"
 
-  = content_nav_for @badge, "Edit Awarded #{term_for :badge}"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
-  = render 'form'
+= render 'form'

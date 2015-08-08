@@ -1,7 +1,5 @@
-.small-12.panel.mainContent
+= content_nav_for @course, "Edit Course"
 
-  = content_nav_for @course, "Edit Course"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-  
-  = render 'form'
+= render 'form'

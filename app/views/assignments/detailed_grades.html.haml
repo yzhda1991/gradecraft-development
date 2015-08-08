@@ -1,47 +1,45 @@
-.small-12.panel.mainContent
+= content_nav_for @assignment, "Detailed Grades"
 
-  = content_nav_for @assignment, "Detailed Grades"
+%h3.pagetitle= "#{@title} Detailed Grades (#{ points @assignment.point_total } points)"
 
-  %h3.pagetitle= "#{@title} Detailed Grades (#{ points @assignment.point_total } points)"
+= render "buttons"
 
-  = render "buttons"
+- if @assignment.open_at?
+  .small-12.large-4.columns.panel
+    .bold Open date:
+    = @assignment.open_at
 
-  - if @assignment.open_at?
-    .small-12.large-4.columns.panel
-      .bold Open date:
-      = @assignment.open_at
+- if @assignment.due_at?
+  .small-12.large-4.columns.panel
+    .bold Due date:
+    = @assignment.due_at
 
-  - if @assignment.due_at?
-    .small-12.large-4.columns.panel
-      .bold Due date:
-      = @assignment.due_at
+- if @assignment.accepts_submissions_until?
+  .small-12.large-4.columns.panel
+    .bold Accept submissions until:
+    = @assignment.accepts_submissions_until
 
-  - if @assignment.accepts_submissions_until?
-    .small-12.large-4.columns.panel
-      .bold Accept submissions until:
-      = @assignment.accepts_submissions_until
-
-  - if @assignment.description?
-    %p= raw @assignment.description
+- if @assignment.description?
+  %p= raw @assignment.description
 
 
-  - if @assignment.assignment_files.present?
-    %p
-      %b Attachments:
-      %ul
-        - @assignment.assignment_files.each do |af|
-          %li
-            = link_to af.filename, af.url
-            = link_to " (Remove)", remove_uploads_path({ :model => "AssignmentFile", :upload_id => af.id, :redirect => { :controller => "assignments", :id => @assignment.id} } )
+- if @assignment.assignment_files.present?
+  %p
+    %b Attachments:
+    %ul
+      - @assignment.assignment_files.each do |af|
+        %li
+          = link_to af.filename, af.url
+          = link_to " (Remove)", remove_uploads_path({ :model => "AssignmentFile", :upload_id => af.id, :redirect => { :controller => "assignments", :id => @assignment.id} } )
 
-  - if current_course.has_teams? && @assignment.is_individual?
-    .team-filter
-      = form_tag detailed_grades_assignment_path(@assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        %label.sr-only{:for => "team_id"}
-          Select #{term_for :team}
-        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+- if current_course.has_teams? && @assignment.is_individual?
+  .team-filter
+    = form_tag detailed_grades_assignment_path(@assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+      %label.sr-only{:for => "team_id"}
+        Select #{term_for :team}
+      = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
-  - if @assignment.has_groups?
-    = render 'group_show'
-  - else
-    = render 'detailed_individual_show'
+- if @assignment.has_groups?
+  = render 'group_show'
+- else
+  = render 'detailed_individual_show'

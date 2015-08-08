@@ -65,8 +65,10 @@
               %li
                 - if ! gf.file_processing
                   = "#{gf.filename}"
-                  %span.has-tip{:title => "Refresh page to confirm upload has completed", :data => {'tooltip' => true}}
-                    = "(upload in progress)"
+                  .icon
+                    .icon-tooltip
+                      Refresh page to confirm upload has completed
+                    %i.fa.fa-spinner= "(upload in progress)"
                 - else
                   = link_to gf.filename, gf.url, :target => "_blank"
                   = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", :grade_id => @grade.id, :upload_id => gf.id } )

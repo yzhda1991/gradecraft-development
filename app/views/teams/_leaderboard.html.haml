@@ -1,18 +1,15 @@
-.small-12.columns
-  %p
-  #leaderboardBarChart
-.small-12.columns
-  %table.highchart.hidden{:data => { "graph-container" => "#leaderboardBarChart", "graph-type" => "column", "graph-legend-disabled" => 1, "graph-xaxis-rotation" => 0, "graph-color-1" => '#303285'} }
-    %thead
-      %tr
-        %th Points
-        %th Team
-    %tbody
-      - current_course.teams.order_by_high_score.each do |team|
-        - cache ["v1", team] do
-          %tr
-            %td= team.name
-            - if current_course.team_challenges?
-              %td.points= team.challenge_grade_score
-            - else
-              %td.points= team.average_points
+#leaderboardBarChart
+%table.highchart.hidden{:data => { "graph-container" => "#leaderboardBarChart", "graph-type" => "column", "graph-legend-disabled" => 1, "graph-xaxis-rotation" => 0, "graph-color-1" => '#303285'} }
+  %thead
+    %tr
+      %th Points
+      %th Team
+  %tbody
+    - current_course.teams.order_by_high_score.each do |team|
+      - cache ["v1", team] do
+        %tr
+          %td= team.name
+          - if current_course.team_challenges?
+            %td.points= team.challenge_grade_score
+          - else
+            %td.points= team.average_points

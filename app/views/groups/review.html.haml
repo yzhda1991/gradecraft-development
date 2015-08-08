@@ -1,58 +1,56 @@
-.small-12.panel.mainContent
+= content_nav_for @group, "Review Group"
 
-  = content_nav_for @group, "Review Group"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+.button-bar.context_menu
+  %ul.button-group
+    %li
+      %a.button{:href => group_path(@group) }
+        %i.fa.fa-eye
+        See #{term_for :group}
 
-  .button-bar
-    %ul.button-group.context_menu.radius
-      %li
-        %a.button{:href => group_path(@group) }
-          %i.fa.fa-eye
-          See #{term_for :group}
-
-  .small-12.columns.columns-no-padding
-    .small-12.medium-3.columns
-      %h4 #{term_for :assignments}:
-      %ul
-        - @group.assignment_groups.each do |ag|
-          %li= link_to ag.assignment.name, ag.assignment
-    .small-12.medium-3.columns
-      %h4
-        Members:
-      %ul
-        - @group.group_memberships.each do |gm|
-          - if current_user_is_staff?
-            %li= link_to gm.student.name, student_path(gm.student)
-          - else
-            %li= gm.student.name
+.small-12.columns.columns-no-padding
+  .small-12.medium-3.columns
+    %h4 #{term_for :assignments}:
+    %ul
+      - @group.assignment_groups.each do |ag|
+        %li= link_to ag.assignment.name, ag.assignment
+  .small-12.medium-3.columns
+    %h4
+      Members:
+    %ul
+      - @group.group_memberships.each do |gm|
+        - if current_user_is_staff?
+          %li= link_to gm.student.name, student_path(gm.student)
+        - else
+          %li= gm.student.name
 
 
 
-    .small-12.columns
-      - if @group.proposals.present?
-        - @group.proposals.order_by_creation_date.each_with_index do |p, index|
-          - if p.proposal.present?
-            .panel.callout
-              %h4.bold= "Proposal ##{index + 1}: #{p.title}"
-              %h6= "Created: #{p.created_at}"
-              %p= p.proposal
+  .small-12.columns
+    - if @group.proposals.present?
+      - @group.proposals.order_by_creation_date.each_with_index do |p, index|
+        - if p.proposal.present?
+          .panel.callout
+            %h4.bold= "Proposal ##{index + 1}: #{p.title}"
+            %h6= "Created: #{p.created_at}"
+            %p= p.proposal
 
 
-      = simple_form_for @group do |f|
-        .panel
-          .small-12.medium-4
-            = f.label :approved, "Status"
-            = f.select :approved, [["Pending"], ["Approved"], ["Rejected"]]
-            .form_label If rejected, this #{term_for :group} will be unable to submit any further work for these assignments
+    = simple_form_for @group do |f|
+      .panel
+        .small-12.medium-4
+          = f.label :approved, "Status"
+          = f.select :approved, [["Pending"], ["Approved"], ["Rejected"]]
+          .form_label If rejected, this #{term_for :group} will be unable to submit any further work for these assignments
 
-          %br
+        %br
 
-          .small-12.textarea
-            = f.bootsy_area :text_feedback
-            .form_label #{(term_for :group).capitalize} Feedback
+        .small-12.textarea
+          = f.bootsy_area :text_feedback
+          .form_label #{(term_for :group).capitalize} Feedback
 
-        .button-bar
-          %ul.button-group.radius.right
-            %li= submit_tag "#{@group.persisted? ? 'Update' : 'Create'} #{ term_for :group } ",  :class => 'button'
-            %li= link_to 'Cancel', groups_path, :class => 'button'
+      .button-bar
+        %ul.button-group.radius.right
+          %li= submit_tag "#{@group.persisted? ? 'Update' : 'Create'} #{ term_for :group } ",  :class => 'button'
+          %li= link_to 'Cancel', groups_path, :class => 'button'

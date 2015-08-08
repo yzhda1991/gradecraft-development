@@ -1,83 +1,81 @@
-.small-12.panel.mainContent
+= content_nav_for Assignment
 
-  = content_nav_for Assignment
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
-  .context_menu.button-bar
-    %ul.button-group.radius
-      %li
-        %a.button{:href => new_assignment_path }
-          %i.fa.fa-plus
-          New #{(term_for :assignment).titleize}
+.context_menu.button-bar
+  %ul.button-group
+    %li
+      %a.button{:href => new_assignment_path }
+        %i.fa.fa-plus
+        New #{(term_for :assignment).titleize}
 
 
-  .assignments
-    - @assignment_types.each do |assignment_type|
-      - cache ["v1", assignment_type] do
-        .assignment_type{:id => "assignment-type-#{assignment_type.id}" }
-          %h3.collapse
-            %a
-              %i.fa.fa-angle-double-right.fa-fw
-            .assignment-name #{assignment_type.name} – #{points assignment_type.max_value} points
+.assignments
+  - @assignment_types.each do |assignment_type|
+    - cache ["v1", assignment_type] do
+      .assignment_type{:id => "assignment-type-#{assignment_type.id}" }
+        %h3.collapse
+          %a
+            %i.fa.fa-angle-double-right.fa-fw
+          .assignment-name #{assignment_type.name} – #{points assignment_type.max_value} points
 
-          .collapse-hidden
-            %table.responsive{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
-              %thead
-                %tr
-                  %th
-                  %th
-                  %th{:scope => "col", :width => "20%"} Name
-                  %th Due
-                  %th{:style => "display: none"} Due Date
-                  %th{:scope => "col", :width => "10%"}  Max Value
-                  %th Rubric?
-                  %th{ :style => "min-width: 200px" }
-              %tbody.sort-assignments
-                - assignments = assignment_type.assignments.includes(:rubric, :assignment_type).sorted
-                - assignments.each do |assignment|
-                  - cache ["v1", assignment] do
-                    %tr{:id => "assignment-#{assignment.id}"}
-                      %td
-                        %i.fa.fa-arrows-v
-                      %td
-                        - if assignment.is_unlockable?
-                          %a
-                            %i.fa.fa-lock
-                          .display_on_hover.unlock_keys
-                            %h6 Unlock Requirements
-                            %ul
-                              - assignment.unlock_conditions.each do |condition|
-                                %li= "#{condition.name} must be #{condition.condition_state}"
-                        - if assignment.is_a_condition?
-                          %i.fa.fa-key
-                      %td
-                        = link_to assignment.name, assignment
-                      %td= assignment.try(:due_at) || "Ongoing"
-                      %td{:style => "display: none"}
-                        - if assignment.due_at.present?
-                          = assignment.try(:due_at).to_formatted_s(:db)
-                      - if assignment.pass_fail?
-                        %td.foobers= "#{term_for :pass}/#{term_for :fail}"
-                      - else
-                        %td.doobers= assignment.point_total
-                      %td= "Yes" if assignment.rubric and assignment.rubric.designed?
-                      %td
-                        .button-bar
-                          %ul.button-group.radius
-                            - if ! ( assignment.rubric and assignment.rubric.designed? and assignment.use_rubric? )
-                              %li
-                                %a{:href => mass_grade_assignment_path(assignment), :class => 'button' }
-                                  Quick Grade
-                                  %span.sr-only=assignment.name
+        .collapse-hidden
+          %table.responsive{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
+            %thead
+              %tr
+                %th
+                %th
+                %th{:scope => "col", :width => "20%"} Name
+                %th Due
+                %th{:style => "display: none"} Due Date
+                %th{:scope => "col", :width => "10%"}  Max Value
+                %th Rubric?
+                %th{ :style => "min-width: 200px" }
+            %tbody.sort-assignments
+              - assignments = assignment_type.assignments.includes(:rubric, :assignment_type).sorted
+              - assignments.each do |assignment|
+                - cache ["v1", assignment] do
+                  %tr{:id => "assignment-#{assignment.id}"}
+                    %td
+                      %i.fa.fa-arrows-v
+                    %td
+                      - if assignment.is_unlockable?
+                        %a
+                          %i.fa.fa-lock
+                        .display_on_hover.unlock_keys
+                          %h6 Unlock Requirements
+                          %ul
+                            - assignment.unlock_conditions.each do |condition|
+                              %li= "#{condition.name} must be #{condition.condition_state}"
+                      - if assignment.is_a_condition?
+                        %i.fa.fa-key
+                    %td
+                      = link_to assignment.name, assignment
+                    %td= assignment.try(:due_at) || "Ongoing"
+                    %td{:style => "display: none"}
+                      - if assignment.due_at.present?
+                        = assignment.try(:due_at).to_formatted_s(:db)
+                    - if assignment.pass_fail?
+                      %td.foobers= "#{term_for :pass}/#{term_for :fail}"
+                    - else
+                      %td.doobers= assignment.point_total
+                    %td= "Yes" if assignment.rubric and assignment.rubric.designed?
+                    %td
+                      .button-bar
+                        %ul.button-group.radius
+                          - if ! ( assignment.rubric and assignment.rubric.designed? and assignment.use_rubric? )
                             %li
-                              %a{:href => edit_assignment_path(assignment), :class => 'button' }
-                                Edit
+                              %a{:href => mass_grade_assignment_path(assignment), :class => 'button' }
+                                Quick Grade
                                 %span.sr-only=assignment.name
-                            %li
-                              = link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
+                          %li
+                            %a{:href => edit_assignment_path(assignment), :class => 'button' }
+                              Edit
                               %span.sr-only=assignment.name
-                            %li
-                              %a{:href => assignment_path(assignment), :class => "button", :data => { confirm: 'Are you sure?', method: :delete } }
-                                Delete
-                                %span.sr-only=assignment.name
+                          %li
+                            = link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
+                            %span.sr-only=assignment.name
+                          %li
+                            %a{:href => assignment_path(assignment), :class => "button", :data => { confirm: 'Are you sure?', method: :delete } }
+                              Delete
+                              %span.sr-only=assignment.name

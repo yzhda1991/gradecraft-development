@@ -1,6 +1,4 @@
-.small-12.panel.mainContent
-
-  - if current_user_is_staff?
-    = render "view_assignment_management"
-  - else
-    = render "view_assignment_grades"
+- if current_user_is_staff?
+  = render "view_assignment_management"
+- else
+  = render "view_assignment_grades"

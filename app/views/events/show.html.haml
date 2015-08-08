@@ -1,40 +1,39 @@
-.small-12.panel.mainContent
-  = content_nav_for @event
+= content_nav_for @event
 
-  %h3.pagetitle= @title
+%h3.pagetitle= @title
 
-  .button-bar
-    %ul.button-group.context_menu.radius
-      %li
-        %a.button{:href => new_event_path }
-          %i.fa.fa-plus
-          New Calendar Event
-      %li
-        %a.button{:href => edit_event_path(@event) }
-          %i.fa.fa-edit
-          Edit
+.button-bar.context_menu
+  %ul.button-group
+    %li
+      %a.button{:href => new_event_path }
+        %i.fa.fa-plus
+        New Calendar Event
+    %li
+      %a.button{:href => edit_event_path(@event) }
+        %i.fa.fa-edit
+        Edit
 
-  %p
-    %b Name:
-    = @event.name
-  %p
-    %b Descripton:
-    = raw @event.description
-  %p
-    %b Open date:
-    = @event.open_at
-  %p
-    %b Close date:
-    = @event.due_at
-  %p
-    %b Media:
-    %img{:src => @event.media }
-  %p
-    %b Thumbnail:
-    %img{:src =>  @event.thumbnail }
-  %p
-    %b Media credit:
-    = @event.media_credit
-  %p
-    %b Media caption:
-    = @event.media_caption
+%p
+  %b Name:
+  = @event.name
+%p
+  %b Descripton:
+  = raw @event.description
+%p
+  %b Open date:
+  = @event.open_at
+%p
+  %b Close date:
+  = @event.due_at
+%p
+  %b Media:
+  %img{:src => @event.media }
+%p
+  %b Thumbnail:
+  %img{:src =>  @event.thumbnail }
+%p
+  %b Media credit:
+  = @event.media_credit
+%p
+  %b Media caption:
+  = @event.media_caption

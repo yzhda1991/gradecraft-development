@@ -1,62 +1,62 @@
-.small-12.panel.mainContent
+- if current_user_is_staff?
+  = content_nav_for @group
+- else
+  = content_nav_for Assignment, "My #{term_for :group}"
 
-  - if current_user_is_staff?
-    = content_nav_for @group
+%h3.pagetitle= @title
+
+- if current_user_is_staff?
+  .button-bar.context_menu
+    %ul.button-group
+      %li
+        %a.button{:href => new_group_path }
+          %i.fa.fa-plus
+          New #{(term_for :group).titleize}
+      %li
+        %a.button{:href => review_groups_path(:id => @group) }
+          %i.fa.fa-edit
+          Review #{term_for :group}
+%h4
+  - if @group.approved?
+    .label.right.radius.success
+      = "Status: #{@group.approved}"
+  - elsif @group.rejected?
+    .label.right.radius.alert
+      = "Status: #{@group.approved}"
   - else
-    = content_nav_for Assignment, "My #{term_for :group}"
+    .label.right.radius
+      .icon
+        .icon-tooltip
+          This #{term_for :group} must be approved by your instructor before you can proceed
+        %i.fa.fa-flag
+        Status: Pending
 
-  %h3.pagetitle= @title
+  .small-12.medium-3.columns
+    %h4 #{term_for :assignments}:
+    %ul
+      - @group.assignment_groups.each do |ag|
+        %li= link_to ag.assignment.name, ag.assignment
 
-  - if current_user_is_staff?
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_group_path }
-            %i.fa.fa-plus
-            New #{(term_for :group).titleize}
-        %li
-          %a.button{:href => review_groups_path(:id => @group) }
-            %i.fa.fa-edit
-            Review #{term_for :group}
-  %h4
-    - if @group.approved?
-      .label.right.radius.success
-        = "Status: #{@group.approved}"
-    - elsif @group.rejected?
-      .label.right.radius.alert
-        = "Status: #{@group.approved}"
-    - else
-      .label.right.radius
-        %span.has-tip{:title => "This #{term_for :group} must be approved by your instructor before you can proceed", :data => {'tooltip' => true}}
-          %i.fa.fa-flag
-          Status: Pending
+  .small-12.medium-3.columns
+    %h4
+      Members:
+    %ul
+      - @group.group_memberships.each do |gm|
+        - if current_user_is_staff?
+          %li= link_to gm.student.name, student_path(gm.student)
+        - else
+          %li= gm.student.name
 
-    .small-12.medium-3.columns
-      %h4 #{term_for :assignments}:
-      %ul
-        - @group.assignment_groups.each do |ag|
-          %li= link_to ag.assignment.name, ag.assignment
+  .small-12.medium-4.columns
+    - if @group.text_feedback?
+      %h4 Instructor Feedback:
+      %p= raw @group.try(:text_feedback)
 
-    .small-12.medium-3.columns
-      %h4
-        Members:
-      %ul
-        - @group.group_memberships.each do |gm|
-          - if current_user_is_staff?
-            %li= link_to gm.student.name, student_path(gm.student)
-          - else
-            %li= gm.student.name
-
-    .small-12.medium-4.columns
-      - if @group.text_feedback?
-        %h4 Instructor Feedback:
-        %p= raw @group.try(:text_feedback)
-
-    .small-12.columns
-      - i = 1
-      - @group.proposals.order_by_creation_date.each do |p|
-        .panel
-          %h4.bold= "Proposal ##{i}: #{p.title}"
-          %h6= "Created: #{p.created_at}"
-          %p= p.proposal
-        - i += 1
+  .small-12.columns
+    - i = 1
+    - @group.proposals.order_by_creation_date.each do |p|
+      .panel
+        %h4.bold= "Proposal ##{i}: #{p.title}"
+        %h6= "Created: #{p.created_at}"
+        %p= p.proposal
+      - i += 1

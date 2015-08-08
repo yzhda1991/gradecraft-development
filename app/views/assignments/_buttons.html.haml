@@ -1,5 +1,5 @@
-.button-bar(ng-app="gradecraft" ng-controller="AssignmentCtrl" ng-init="init(#{@assignment[:id]}, #{@assignment.use_rubric})")
-  %ul.button-group.context_menu.radius
+.button-bar.context_menu(ng-app="gradecraft" ng-controller="AssignmentCtrl" ng-init="init(#{@assignment[:id]}, #{@assignment.use_rubric})")
+  %ul.button-group
     %li
       %a.button{:href => assignments_path }
         %i.fa.fa-list

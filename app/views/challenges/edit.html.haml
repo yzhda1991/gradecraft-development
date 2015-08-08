@@ -1,7 +1,5 @@
-.small-12.panel.mainContent
+= content_nav_for @challenge, "Edit #{term_for :challenge}"
 
-  = content_nav_for @challenge, "Edit #{term_for :challenge}"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
-  = render 'form'
+= render 'form'

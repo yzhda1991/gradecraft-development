@@ -1,11 +1,9 @@
-.small-12.panel.mainContent
+= content_nav_for @assignment, "See Grade"
 
-  = content_nav_for @assignment, "See Grade"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+- if @assignment.is_individual?
+  = render "individual_show"
 
-  - if @assignment.is_individual?
-    = render "individual_show"
-
-  - else
-    = render "group_show"
+- else
+  = render "group_show"

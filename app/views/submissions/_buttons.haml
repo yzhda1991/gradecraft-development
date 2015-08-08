@@ -1,6 +1,6 @@
 - if @assignment.is_individual?
-  .button-bar
-    %ul.button-group.radius
+  .button-bar.context_menu
+    %ul.button-group
       %li
         %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?student_id=#{@student.id}", :class => 'button'  }
           %i.fa.fa-edit
@@ -11,8 +11,8 @@
 
       %li= link_to "Grade", edit_assignment_grade_path(@assignment, @submission, :student_id => @student.id), :class => 'button'
 - elsif @assignment.has_groups?
-  .button-bar
-    %ul.button-group.radius
+  .button-bar.context_menu
+    %ul.button-group
       %li
         %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?group_id=#{@group}", :class => 'button'  }
           %i.fa.fa-edit

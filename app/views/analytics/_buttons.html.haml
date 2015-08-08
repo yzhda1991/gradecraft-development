@@ -1,5 +1,5 @@
-.button-bar
-  %ul.button-group.context_menu.radius
+.button-bar.context_menu
+  %ul.button-group
     %li{class: ("active" if current_page?(analytics_students_path)) }
       %a.button{:href => analytics_students_path }
         = "#{term_for :student} Analytics"

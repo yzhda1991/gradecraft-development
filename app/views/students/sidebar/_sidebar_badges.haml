@@ -7,21 +7,30 @@
         - if badge.point_total.present? && badge.point_total > 0
           - if badge.is_unlockable? 
             - if badge.is_unlocked_for_student?(current_student)
-              %span.has-tip{:title => "<i class='fa fa-unlock' /> #{badge.name}, #{badge.point_total} points", :data => {'tooltip' => true} }
+              .icon
+                .icon-tooltip
+                  %i.fa.fa-unlock= "#{badge.name}, #{badge.point_total} points"
                 %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
             - else 
-              %span.has-tip{:title => "<i class='fa fa-lock' /> #{badge.name}, #{badge.point_total} points", :data => {'tooltip' => true} }
+              .icon
+                .icon-tooltip
+                  %i.fa.fa-lock= "#{badge.name}, #{badge.point_total} points"
                 %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
           - else
-            %span.has-tip{:title => "#{badge.name}, #{badge.point_total} points", :data => {'tooltip' => true} }
+            .icon
+              .icon-tooltip
+                ="#{badge.name}, #{badge.point_total} points"
               %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
         - else
-          %span.has-tip.tip-top{:title => "#{badge.name}", :data => {'tooltip' => true} }
+          .icon
+            .icon-tooltip
+              = "#{badge.name}"
             %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
     - current_student.student_visible_unearned_badges(current_course).each do |badge|
       %li
-        %span.has-tip{:title => "Not yet earned: #{badge.name}", :data => {'tooltip' => true} }
+        .icon
+          .icon-tooltip
+            = "Not yet earned: #{badge.name}"
           %img{:src => badge.try(:icon), :alt => "#{badge.try(:name)}", :class => "unearned"}
-    .clear
     - if current_student.earned_badge_score > 0
-      .italic= "You've earned #{points current_student.earned_badge_score} points through #{(term_for :badges).titleize}."
+      .italic.small= "You've earned #{points current_student.earned_badge_score} points through #{(term_for :badges).titleize}."

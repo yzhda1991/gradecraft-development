@@ -1,15 +1,13 @@
-.small-12
-  %h3.text-center #{term_for :weights}
+.text-center 
+  %h3 #{term_for :weights}
   %hr
-  .small-12
-    - current_course.assignment_types.each do |at|
-      - if at.student_weightable?
-        %div
-          %span.bold= at.name
-          = "- #{current_student.weight_for_assignment_type(at)} #{(term_for :weight).capitalize}"
-    %br
+  - current_course.assignment_types.each do |at|
+    - if at.student_weightable?
+      %div
+        %span.bold= at.name
+        = "- #{current_student.weight_for_assignment_type(at)} #{(term_for :weight).capitalize}"
     - if current_course.assignment_weight_open?
-      .center= link_to "Edit Your Choices", assignment_type_weights_path(:student_id => current_student.id), :class => "button radius alert"
+      = link_to "Edit Your Choices", assignment_type_weights_path(:student_id => current_student.id), :class => "button radius alert"
     %hr
     %h5.text-center.italic Rules of The Game
     %ul.small 

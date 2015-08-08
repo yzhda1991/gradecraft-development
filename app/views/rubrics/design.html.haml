@@ -1,50 +1,46 @@
 = csrf_meta_tag
-.small-12.panel.mainContent
 
-  = content_nav_for @assignment, "Design Rubric"
+= content_nav_for @assignment, "Design Rubric"
 
-  %h3.pagetitle= @title
+%h3.pagetitle= @title
 
-  .small-12.columns
-    #rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment.point_total})")
+#rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment.point_total})")
 
-      .italic Rubric is saved automatically.
+  .italic Rubric is saved automatically.
 
-      #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
-        %h4#points-legend
-          %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsAssigned() | number:0}}
-          \/#{number_with_delimiter(@assignment.point_total)} Points Allocated
-        %h4.notice(ng-show="pointsMissing()") You have {{pointsRemaining()}} point{{pointsRemaining() > 1 ? "s" : ""}} left to assign
-        %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
-        %h4.notice(ng-show="pointsOverage()") You have allocated more points than the assignment total
-
-      .clear
-
-      .splash(ng-cloak) Loading rubric...
-
-      .assignment-return
-        = link_to '&laquo; Return to Assignment'.html_safe, assignment_path(@assignment), class: "return-link"
-      #rubric-column-heading
-        .metric.metric-heading
-          Criteria
-          %button#add-metric(type="button" ng-click="newMetric()") + New Criterion
-        .tier-heading Levels
-      .clear
-
-      #metric-box(ng-cloak)
-
-        .divider.rubric-container(ng-repeat="metric in metrics")
-          .order-label {{$index + 1}}
-          .metric.small-3.columns(name="metricForm" ng-form ng-submit="metric.create()" ng-class="{saved: metric.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
-            = render "rubrics/new_metric"
-          .tier-container
-            .tier-wrapper
-              .tier.small-3.columns(name="tierForm" ng-repeat="tier in metric.tiers" ng-form ng-submit="tier.create()" ng-class="{saved: tier.isSaved(), nocredit: tier.noCredit}")
-                = render "rubrics/new_tier"
-          %button.add-tier(name="newTier" ng-click="metric.addTier()" ng-show="metric.isSaved()")
-            + Level
-          .clear
-
-      %button.radius#new-rubric-metric(type="button" ng-click="newMetric()" ng-hide) + Criterion
+  #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
+    %h4#points-legend
+      %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsAssigned() | number:0}}
+      \/#{number_with_delimiter(@assignment.point_total)} Points Allocated
+    %h4.notice(ng-show="pointsMissing()") You have {{pointsRemaining()}} point{{pointsRemaining() > 1 ? "s" : ""}} left to assign
+    %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
+    %h4.notice(ng-show="pointsOverage()") You have allocated more points than the assignment total
 
   .clear
+
+  .splash(ng-cloak) Loading rubric...
+
+  .assignment-return
+    = link_to '&laquo; Return to Assignment'.html_safe, assignment_path(@assignment), class: "return-link"
+  #rubric-column-heading
+    .metric.metric-heading
+      Criteria
+      %button#add-metric(type="button" ng-click="newMetric()") + New Criterion
+    .tier-heading Levels
+  .clear
+
+  #metric-box(ng-cloak)
+
+    .divider.rubric-container(ng-repeat="metric in metrics")
+      .order-label {{$index + 1}}
+      .metric.small-3.columns(name="metricForm" ng-form ng-submit="metric.create()" ng-class="{saved: metric.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
+        = render "rubrics/new_metric"
+      .tier-container
+        .tier-wrapper
+          .tier.small-3.columns(name="tierForm" ng-repeat="tier in metric.tiers" ng-form ng-submit="tier.create()" ng-class="{saved: tier.isSaved(), nocredit: tier.noCredit}")
+            = render "rubrics/new_tier"
+      %button.add-tier(name="newTier" ng-click="metric.addTier()" ng-show="metric.isSaved()")
+        + Level
+      .clear
+
+  %button.radius#new-rubric-metric(type="button" ng-click="newMetric()" ng-hide) + Criterion
