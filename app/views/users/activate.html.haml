@@ -2,7 +2,7 @@
   .columns.panel.radius.callout
     %h5 Welcome to GradeCraft
     %p Enter a password and a confirmation below to complete your account
-    = simple_form_for @user, :url => activate_user_path(@token) do |f|
+    = simple_form_for @user, :url => activate_user_path(@token), :method => :post do |f|
       = hidden_field_tag :token, @token
       = f.label :password
       = f.password_field :password
