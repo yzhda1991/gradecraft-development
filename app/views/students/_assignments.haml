@@ -106,7 +106,7 @@
                               %li= condition.unlockable.name
                       %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
 
-                    %td{:width => "25%"}
+                    %td
                       - if assignment.pass_fail?
                         - if current_student.grade_released_for_assignment?(assignment)
                           .bold
