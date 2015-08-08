@@ -216,7 +216,7 @@ students = user_names.map do |name|
     u.password = 'uptonogood'
     u.courses << [ educ_course, polsci_course, information_course ]
     u.teams << [ educ_teams.sample, polsci_teams.sample, info_teams.sample ]
-  end
+  end.activate!
 end
 puts "Generated #{students.count} unruly students"
 
@@ -234,7 +234,7 @@ User.create! do |u|
       cm.role = "admin"
     end
   end
-end
+end.activate!
 puts "Albus Dumbledore just apparated into Hogwarts"
 
 # Generate sample professor
@@ -249,7 +249,7 @@ User.create! do |u|
     cm.course = information_course
     cm.role = "professor"
   end
-end
+end.activate!
 puts "Severus Snape has been spotted in Slytherin House"
 
 # Generate sample professor
@@ -264,7 +264,7 @@ User.create! do |u|
     cm.course = educ_course
     cm.role = "professor"
   end
-end
+end.activate!
 puts "Headmistress McGonagall is here...shape up!"
 
 # Generate sample professor
@@ -279,7 +279,7 @@ User.create! do |u|
     cm.course = polsci_course
     cm.role = "professor"
   end
-end
+end.activate!
 puts "Shhhh... he hates being called Nearly Headless Nick!"
 
 # Generate sample GSI
@@ -296,7 +296,7 @@ User.create! do |u|
       cm.role = "gsi"
     end
   end
-end
+end.activate!
 puts "Percy Weasley has arrived on campus, on time as usual"
 
 #Create demo academic history content
