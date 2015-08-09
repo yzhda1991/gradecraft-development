@@ -28,7 +28,7 @@ describe "students/show" do
 
   it "renders successfully" do
     render
-    assert_select "h4", text: "You have earned 0 points", :count => 1
+    assert_select "h3", :count => 1
   end
 
 end

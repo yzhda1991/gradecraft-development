@@ -1,50 +1,33 @@
-- if current_course.grade_scheme_elements.present?
-  - @grade_scheme_elements.order_by_high_range.each do |element|
-    - if current_student.cached_score_for_course(current_course) < element.low_range
-      .progress.radius.bar_magic.transparent
-        %span.meter
-          .center.pushdown
-            %span
-              %i.fa.fa-lock
-            - if element.level.present?
-              .icon
-                .icon-tooltip
-                  ="#{element.letter}"
-                = element.level
-            - else
-              %span= element.letter
-            %span=points element.low_range
-    - elsif current_student.cached_score_for_course(current_course) >= element.high_range
-      .progress.success.radius.bar_magic
-        .meter
-          .center.pushdown
-            - if element.level.present?
-              .icon
-                .icon-tooltip
-                  = "#{element.letter}"
-                  = element.level
-            - else
-              %span= element.letter
-            %span has already been achieved!
-            %span=points element.low_range
-    - else
-      .center.pushup
+%h3.pagetitle= "Course Progress"
+
+- @grade_scheme_elements.each do |element|
+  - if current_student.cached_score_for_course(current_course) < element.low_range
+    .progress.bar_magic.transparent.center
+      .meter
+        %i.fa.fa-lock
+        %span= element.level
+        %span= element.letter
+        %span=points element.low_range
+  - elsif current_student.cached_score_for_course(current_course) >= element.high_range
+    .progress.bar_magic.success.center
+      .meter
+        %i.fa.fa-star
+        %span= element.level
+        %span= element.letter
+        %span has already been achieved!
+        %span=points element.low_range
+  - else
+    .progress.bar_magic.striped.center
+      .meter
         %span Your rank: 
-        - if element.level.present?
-          .icon
-            .icon-tooltip
-              = "#{element.letter}"
-            = element.level
-        - else
-          %span= element.letter
+        %span= element.level
+        %span= element.letter
         %span with
         %span.underline=points current_student.cached_score_for_course(current_course)
         %span points.
         %span=points element.points_to_next_level(current_student, current_course)
         %span= " points to the next level!"
-      .progress.secondary.radius.bar_magic
-        .meter{:style => "width: #{element.progress_percent(current_student, current_course)}%"}
-          .striped
+        
 
 %p= raw current_course.grading_philosophy
-%h5.bold= "– Prof. #{current_course.professor.try(:last_name) }"
+%h3= "– Prof. #{current_course.professor.try(:last_name) }"

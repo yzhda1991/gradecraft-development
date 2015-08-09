@@ -19,7 +19,7 @@ describe "students/teams" do
 
   it "renders successfully" do
     render
-    assert_select "h4", :count => 2
+    assert_select "h3", :count => 1
   end
 
 end
