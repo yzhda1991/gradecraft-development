@@ -91,7 +91,7 @@
                           - else
                             %i.fa.fa-lock
                         .display_on_hover.unlock_keys
-                          %h6 Unlock Requirements
+                          %h3 Unlock Requirements
                           %ul
                             - assignment.unlock_conditions.each do |condition|
                               %li= "#{condition.name} must be #{condition.condition_state}"
@@ -99,11 +99,11 @@
                         %a
                           %i.fa.fa-key
                         .display_on_hover.unlock_keys
-                          %h6 Unlock Keys
-                          .italic.small Completing this #{term_for :assignment} unlocks
+                          %h3 Unlock Keys
+                          .italic.small Complete this #{term_for :assignment} in order to unlock:
                           %ul
-                            - assignment.unlock_conditions.each do |condition|
-                              %li= condition.unlockable.name
+                            - unlockable = assignment.unlockable
+                            %li= "#{unlockable.name}"
                       %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
 
                     %td
