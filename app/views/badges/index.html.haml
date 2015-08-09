@@ -21,8 +21,8 @@
     - @badges.each do |badge|
       %tr{:id => "badge-#{badge.id}"}
         %td.center
-          = image_tag "draggable_transparent.png", :width => "10%", :style => "margin-top: -6px", :class => "draggable"
-          %img.badge-icon{ :src => badge.icon, :alt => badge.name }
+          %i.fa.fa-arrows-v.draggable
+          %img.badge-icon{ :src => badge.icon, :alt => badge.name, :width => 40 }
           - if badge.point_total.present? && badge.point_total > 0
             .italic= "#{points badge.point_total} points"
         %td
