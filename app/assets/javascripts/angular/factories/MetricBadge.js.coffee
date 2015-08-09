@@ -1,6 +1,6 @@
 @gradecraft.factory 'MetricBadge', ->
   # deprecated
-  # class MetricBadge
+  class MetricBadge
   #   constructor: (metric, badge, attrs={}) ->
   #     @metric = metric
   #     @badge = badge
