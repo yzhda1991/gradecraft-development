@@ -20,7 +20,6 @@ describe "students/syllabus" do
 
   it "renders the points possible for the assignment" do
     render
-    assert_select "h3", :text => "assignments", :count => 1
     assert_select "h3", :count => 1
   end
 

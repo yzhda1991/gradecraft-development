@@ -23,7 +23,7 @@ describe "students/course_progress" do
 
   it "renders successfully" do
     render
-    assert_select "h3", :count => 1
+    assert_select "h3", text: "Course Progress", count: 1
   end
 
 end

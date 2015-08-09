@@ -58,6 +58,58 @@
       = link_to 'Add a Condition', '#', class: 'add-unlock-condition button radius'
 
   %section
+
+    %h4 Basic Settings
+
+    .form-item
+      = f.label :name, "Name"
+      = f.text_field :name
+
+    .form-item
+      = f.label :point_total
+      = f.text_field :point_total, data: {autonumeric: true, "m-dec" => "0"}
+
+    .form-item
+      = f.label :file_field, "Icon"
+      = f.file_field :icon
+      %img{:src => @badge.icon, :width => 80 }
+
+    .form-item
+      = f.label :visible
+      = f.check_box :visible
+      .form_label Can #{term_for :students} see this #{term_for :badge}?
+    
+    .form-item
+      = f.label :can_earn_multiple_times,"Multi-award"
+      = f.check_box :can_earn_multiple_times
+      .form_label Can this #{term_for :badge} be given to one #{term_for :student} multiple times through the semester?
+
+  %section
+    %h4 Description
+
+    .textarea
+      = f.text_area :description
+      .form_label Describe what this #{term_for :badge} means, and how it can be earned. Note that if this #{term_for :badge} is marked as visible then this description will also be viewable in the list of #{term_for :badges}.
+
+  %section
+    %h4 Unlocks
+    .form-item
+      = f.input :visible_when_locked
+    
+    .form-item
+      .unlock-conditions
+        %p.hint Unlock description here
+        %script(id="unlock-condition-template" type="text/x-template")
+          %fieldset.unlock-condition
+            = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: 'form-inline', child_index: 'child_index' do |ucf|
+              = render 'unlock_condition_fields', f: ucf
+        - @badge.unlock_conditions.each do |condition|
+          %fieldset.unlock-condition
+            = f.simple_fields_for :unlock_conditions, condition, class: 'form-inline' do |ucf|
+              = render 'unlock_condition_fields', f: ucf
+      = link_to 'Add a Condition', '#', class: 'add-unlock-condition button radius'
+
+  %section
     %h4 Attachments
     .form-item
       = f.simple_fields_for :badge_files, @badge.badge_files.new do |bf|
