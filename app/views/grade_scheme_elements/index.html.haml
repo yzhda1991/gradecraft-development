@@ -18,7 +18,7 @@
       %th{:scope => "col"} Low Range
       %th{:scope => "col"} High Range
   %tbody
-    - @grade_scheme_elements.order_by_high_range.each do |element|
+    - @grade_scheme_elements.each do |element|
       %tr
         %td= element.letter
         %td= element.level

@@ -1,84 +1,82 @@
-.small-12.columns
+- if @grade.errors.any?
+  .alert-box.alert.radius
+    .italic= "#{pluralize(@grade.errors.count, "error")} prohibited this grade from being saved:"
+    %ul
+      - @grade.errors.full_messages.each do |msg|
+        %li= msg
 
-  - if @grade.errors.any?
-    .alert-box.alert.radius
-      .italic= "#{pluralize(@grade.errors.count, "error")} prohibited this grade from being saved:"
-      %ul
-        - @grade.errors.full_messages.each do |msg|
-          %li= msg
+- if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
+  .panel
 
-  - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
-    .panel
+    %h4.uppercase= "#{@student.first_name}'s Submission"
+    = render 'submissions/instructor_data'
 
-      %h4.uppercase= "#{@student.first_name}'s Submission"
-      = render 'submissions/instructor_data'
+= simple_form_for @grade, url: assignment_grade_path(@assignment), method: :patch do |f|
+  = hidden_field_tag :student_id, current_student.id
+  = hidden_field_tag :instructor_modified, true
 
-  = simple_form_for @grade, url: assignment_grade_path(@assignment), method: :patch do |f|
-    = hidden_field_tag :student_id, current_student.id
-    = hidden_field_tag :instructor_modified, true
-
-    .panel
-      .small-12.medium-4.columns
-        - if @assignment.pass_fail?
-          .switch-label.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
-            - if @grade.pass_fail_status
-              = term_for @grade.pass_fail_status
-            - else
-              = term_for :fail
-          .pass-fail-grade-toggle
-            .switch
-              = f.check_box :pass_fail_status, { :checked=> @grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
-              = f.label :pass_fail_status
-        - else
-          = f.label :raw_score, "Raw Score (#{@assignment.point_total} Points Possible)"
-          - if @assignment.has_levels?
-            = f.select :raw_score, @assignment_score_levels.map { |l| [l.formatted_name,l.value] }, :include_blank => true
+  .panel
+    .small-12.medium-4.columns
+      - if @assignment.pass_fail?
+        .switch-label.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
+          - if @grade.pass_fail_status
+            = term_for @grade.pass_fail_status
           - else
-            - if @grade.instructor_modified || @grade.status.present?
-              = f.text_field :raw_score, :default => @assignment.point_total, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.point_total }", data: {autonumeric: true, "m-dec" => "0"}
-            - else
-              = f.text_field :raw_score, :value => nil, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.point_total }", data: {autonumeric: true, "m-dec" => "0"}
+            = term_for :fail
+        .pass-fail-grade-toggle
+          .switch
+            = f.check_box :pass_fail_status, { :checked=> @grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
+            = f.label :pass_fail_status
+      - else
+        = f.label :raw_score, "Raw Score (#{@assignment.point_total} Points Possible)"
+        - if @assignment.has_levels?
+          = f.select :raw_score, @assignment_score_levels.map { |l| [l.formatted_name,l.value] }, :include_blank => true
+        - else
+          - if @grade.instructor_modified || @grade.status.present?
+            = f.text_field :raw_score, :default => @assignment.point_total, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.point_total }", data: {autonumeric: true, "m-dec" => "0"}
+          - else
+            = f.text_field :raw_score, :value => nil, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.point_total }", data: {autonumeric: true, "m-dec" => "0"}
 
-      - if @assignment.release_necessary?
-        .small-12.medium-4.columns
-          = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @grade.status, :include_blank => true
-          .form_label Can the student see this grade?
-      - elsif @grade.status.blank?
-        = f.hidden_field :status, value: 'Graded'
+    - if @assignment.release_necessary?
+      .small-12.medium-4.columns
+        = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @grade.status, :include_blank => true
+        .form_label Can the student see this grade?
+    - elsif @grade.status.blank?
+      = f.hidden_field :status, value: 'Graded'
 
-      .small-12.columns.textarea
-        = f.hidden_field :graded_by_id, :value => current_user.id
-        = f.label :feedback
-        = f.bootsy_area :feedback
+    .small-12.columns.textarea
+      = f.hidden_field :graded_by_id, :value => current_user.id
+      = f.label :feedback
+      = f.bootsy_area :feedback
+    .clear
+
+  .panel
+    .small-12
+      %h4.uppercase Attachments
+      = f.simple_fields_for :grade_files, @grade.grade_files.new do |gf|
+        = gf.file_field :file, :multiple => true
+      - if @grade.grade_files.exists?
+        %h5.bold Uploaded files
+        %ul.uploaded-files
+          - @grade.grade_files.each do |gf|
+            - next if gf.new_record?
+            %li
+              - if ! gf.file_processing
+                = "#{gf.filename}"
+                .icon
+                  .icon-tooltip
+                    Refresh page to confirm upload has completed
+                  %i.fa.fa-spinner= "(upload in progress)"
+              - else
+                = link_to gf.filename, gf.url, :target => "_blank"
+                = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", :grade_id => @grade.id, :upload_id => gf.id } )
       .clear
 
-    .panel
-      .small-12
-        %h4.uppercase Attachments
-        = f.simple_fields_for :grade_files, @grade.grade_files.new do |gf|
-          = gf.file_field :file, :multiple => true
-        - if @grade.grade_files.exists?
-          %h5.bold Uploaded files
-          %ul.uploaded-files
-            - @grade.grade_files.each do |gf|
-              - next if gf.new_record?
-              %li
-                - if ! gf.file_processing
-                  = "#{gf.filename}"
-                  .icon
-                    .icon-tooltip
-                      Refresh page to confirm upload has completed
-                    %i.fa.fa-spinner= "(upload in progress)"
-                - else
-                  = link_to gf.filename, gf.url, :target => "_blank"
-                  = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", :grade_id => @grade.id, :upload_id => gf.id } )
-        .clear
-
-    - if @badges.present?
-      = render 'award_badges_form', f: f
+  - if @badges.present?
+    = render 'award_badges_form', f: f
 
 
-    .button-bar
-      %ul.button-group.radius.right
-        %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", :class => "button"
-        %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'
+  .button-bar
+    %ul.button-group.radius.right
+      %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", :class => "button"
+      %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'
