@@ -90,10 +90,6 @@ GEM
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bootsy (2.1.0)
-      carrierwave (~> 0.10)
-      mini_magick (~> 4.0)
-      remotipart (~> 1.2)
     bson (2.3.0)
     builder (3.2.2)
     bullet (4.14.7)
@@ -274,9 +270,6 @@ GEM
     foreman (0.78.0)
       thor (~> 0.19.1)
     formatador (0.2.5)
-    foundation-rails (5.5.2.1)
-      railties (>= 3.1.0)
-      sass (>= 3.3.0, < 3.5)
     git-version-bump (0.15.1)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -630,3 +623,6 @@ DEPENDENCIES
   valid_attribute
   whenever
   wysiwyg-rails
+
+BUNDLED WITH
+   1.10.6
