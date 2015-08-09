@@ -1,7 +1,6 @@
 = render 'assignment_guidelines'
 
 %hr
-.clear
 
 = simple_form_for([@assignment, @submission]) do |f|
   - if @assignment.has_groups? && current_user_is_student?
@@ -12,29 +11,26 @@
     = f.input :student_id, :input_html => { :value => @student.id }, :as => :hidden
 
   - if @assignment.accepts_attachments
-    .small-12.panel
-      %h4.uppercase Attachments
-      = f.simple_fields_for :submission_files, @submission.submission_files.new do |sf|
-        = sf.file_field :file, :multiple => true
-      - if @submission.submission_files.exists?
-        %h5.bold Uploaded files
-        %ul.uploaded-files
-          - current_student.submission_for_assignment(@assignment).submission_files.each do |sf|
-            %li
-              = link_to sf.filename, sf.url, :target => "_blank"
-              = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
+    %h4.uppercase Attachments
+    = f.simple_fields_for :submission_files, @submission.submission_files.new do |sf|
+      = sf.file_field :file, :multiple => true
+    - if @submission.submission_files.exists?
+      %h5.bold Uploaded files
+      %ul.uploaded-files
+        - current_student.submission_for_assignment(@assignment).submission_files.each do |sf|
+          %li
+            = link_to sf.filename, sf.url, :target => "_blank"
+            = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
 
   - if @assignment.accepts_links
-    .small-12.panel
-      %h4.uppercase Link
-      = f.input :link, :label => false
+    %h4.uppercase Link
+    = f.input :link, :label => false
 
   - if @assignment.accepts_text
-    .small-12.panel
-      %h4.uppercase Content/Statement
-      = f.bootsy_area :text_comment
+    %h4.uppercase Content/Statement
+    = f.bootsy_area :text_comment
 
   .button-bar
-    %ul.button-group.radius.right
+    %ul.button-group.right
       %li= f.button :submit, "#{@submission.persisted? ? 'Update Submission' : "Submit #{term_for :assignment}"}"
       %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'
