@@ -1,18 +1,24 @@
 = simple_form_for([@challenge, @challenge_grade]) do |f|
-  = f.association :team, :collection => @teams
+  %section
+    %h4 Score
+    
+    .form-item= f.association :team, :collection => @teams
 
-  = f.label :score
-  = f.text_field :score, data: {autonumeric: true, "m-dec" => "0"}
-  .form_label out of #{points @challenge.point_total} points
+    .form-item
+      = f.label :score
+      = f.text_field :score, data: {autonumeric: true, "m-dec" => "0"}
+      .form_label out of #{points @challenge.point_total} points
 
-  - if @challenge.release_necessary?
-    = f.label :status
-    = f.select :status, Grade::STATUSES
-    .form_label= "Can the #{term_for :team} see this grade?"
-
-  %h4.uppercase Feedback
-  .textarea
-    = f.bootsy_area :text_feedback
+    .form-item
+      - if @challenge.release_necessary?
+        = f.label :status
+        = f.select :status, Grade::STATUSES
+        .form_label= "Can the #{term_for :team} see this grade?"
+        
+  %section
+    %h4 Feedback
+    .textarea
+      = f.text_area :text_feedback
 
   .button-bar
     %ul.button-group.right

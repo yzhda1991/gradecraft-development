@@ -139,7 +139,7 @@ describe "students/_assignments" do
     it "shows the due date if it's in the future" do
       @assignment.update(due_at: 2.days.from_now)
       render
-      assert_select "span", text: "Due: #{(2.days.from_now).strftime("%A, %b %d, %l:%M%p")}", count: 1
+      assert_select "span", text: "#{(2.days.from_now).strftime("%A, %b %d, %l:%M%p")}", count: 1
     end
 
     it "shows a button to see more results if the grade is released" do

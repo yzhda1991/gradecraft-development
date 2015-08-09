@@ -11,7 +11,6 @@
 //= require_self
 //= require jquery.omniselect
 //= require autonumeric
-//= require bootsy
 //= require jquery.sparkline.min
 //= require s3_direct_upload
 //= require underscore.min

@@ -11,7 +11,7 @@
     = f.input :student_id, :input_html => { :value => @student.id }, :as => :hidden
 
   - if @assignment.accepts_attachments
-    %h4.uppercase Attachments
+    %h4 Attachments
     = f.simple_fields_for :submission_files, @submission.submission_files.new do |sf|
       = sf.file_field :file, :multiple => true
     - if @submission.submission_files.exists?
@@ -28,7 +28,7 @@
 
   - if @assignment.accepts_text
     %h4.uppercase Content/Statement
-    = f.bootsy_area :text_comment
+    = f.text_area :text_comment
 
   .button-bar
     %ul.button-group.right

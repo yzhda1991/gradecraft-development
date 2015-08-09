@@ -47,7 +47,7 @@
     .small-12.columns.textarea
       = f.hidden_field :graded_by_id, :value => current_user.id
       = f.label :feedback
-      = f.bootsy_area :feedback
+      = f.text_area :feedback
     .clear
 
   .panel

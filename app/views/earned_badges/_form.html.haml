@@ -3,12 +3,13 @@
 
   = hidden_field_tag :badge_id, @badge.id
 
-  = select_tag :student, options_from_collection_for_select(current_course.students, "id", "name", @earned_badge.try(:student_id)), :prompt => "Select Student"
+  %section
+    = select_tag :student, options_from_collection_for_select(current_course.students, "id", "name", @earned_badge.try(:student_id)), :prompt => "Select Student"
 
-  .textarea.panel
-    %h4.uppercase #{term_for :badge} Feedback
-    = f.bootsy_area :feedback
-    .form_label Enter a message to the #{term_for :student} regarding their work
+    .textarea.panel
+      %h4 #{term_for :badge} Feedback
+      = f.text_area :feedback
+      .form_label Enter a message to the #{term_for :student} regarding their work
 
   .button-bar
     %ul.button-group.right

@@ -6,202 +6,218 @@
         %li= msg
 
 = simple_form_for(@assignment) do |f|
-  %h4 SETTINGS
+  %section
+    %h4 Basic Info
+    .form-item
+      = f.association :assignment_type, :collection => current_course.assignment_types
 
-  .checkbox
-    %i.fa.fa-eye
-    = f.label :visible, "Visible to students"
-    = f.check_box :visible
-    .form_label Can #{term_for :students} see this #{term_for :assignment} in their dashboard?
+    .form-item
+      = f.label :name
+      = f.text_field :name
 
-  .checkbox
-    %i.fa.fa-exclamation-circle
-    = f.label :required
-    = f.check_box :required
-    .form_label Are ALL #{term_for :students} expected to complete this #{term_for :assignment} to pass the course?
+    .form-item
+      .switch-label Pass Fail
+      .pass-fail-toggle
+        .switch
+          = f.check_box :pass_fail
+          = f.label :pass_fail, "Pass Fail"
+
+    .form-item
+      - if @assignment.pass_fail?
+        .pass-fail-contingent{ :style => "visibility: hidden" }
+          = f.label :point_total, "Total Points Possible"
+          = f.text_field :point_total
+      - else
+        .pass-fail-contingent
+          = f.label :point_total, "Total Points Possible"
+          = f.text_field :point_total
+
+    .form-item
+      = f.input :open_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:open_at) }
+
+    .form-item
+      = f.input :due_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:due_at) }
+
+    .form-item
+      = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:accepts_submissions_until) }, :label => "Accept until"
 
 
-  - if current_course.accepts_submissions?
-    .checkbox.assignment_options
-      %i.fa.fa-paperclip
-      = f.label :accepts_submissions #{term_for :assignment} Submissions
-      = f.check_box :accepts_submissions
-      .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
-    %ul.submit.accepts_submission_types
-      %li.submit
-        .checkbox
-          = f.label :accepts_links
-          = f.check_box :accepts_links
-      %li.submit
-        .checkbox
-          = f.label :accepts_attachments
-          = f.check_box :accepts_attachments
-      %li.submit
-        .checkbox
-          = f.label :accepts_text
-          = f.check_box :accepts_text
+    .form-item
+      = f.label :grade_scope, "Individual or Group?"
+      = f.select :grade_scope, [["Individual"], ["Group"]]
+      .form_label Do students do this individually or as a group?
 
-    .checkbox
-      %i.fa.fa-repeat
-      = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions
-      = f.check_box :resubmissions_allowed
-      .form_label Can #{term_for :students} resubmit this #{term_for :assignment}?
+    .form-item
+      = f.label :mass_grade_type, "Quick Grade Style"
+      = f.select :mass_grade_type, [[],["Checkbox"], ["Select List"], ["Radio Buttons"], ["Text"]]
+      .form_label How should this assignment appear in Quick Grade?
 
-  .checkbox
-    %i.fa.fa-edit
-    = f.label :student_logged
-    = f.check_box :student_logged
-    .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}?
+    .form-item
+      = f.label :points_predictor_display, "Grade Predictor Style"
+      = f.select :points_predictor_display, [[], ["Checkbox", "Fixed"], ["Select List"], ["Slider"], ]
+      .form_label How should this assignment appear in the Grade Predictor?
 
-  .checkbox
-    %i.fa.fa-edit
-    = f.label :release_necessary
-    = f.check_box :release_necessary
-    .form_label Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
+  %section
+    %h4 Assignment Description
+    %label.small-12
+      .sr-only Description
+      = f.text_area :description
+    .form_label
+      %span This will be shown to students on their dashboard, and when they submit their assignment.
 
-  .checkbox
-    %i.fa.fa-envelope
-    = f.label :notify_released, "Notify by email?"
-    = f.check_box :notify_released
-    .form_label Do you want to notify students by email when a grade is awarded? If grade release is necessary, this email will not be sent out until the grade is officially released.
+  %section
+    %h4= "Advanced Settings"
 
-  .checkbox
-    %i.fa.fa-calendar-o
-    = f.label :include_in_timeline, "Timeline"
-    = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
-    .form_label{:id => "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :assignment} in the course timeline? Note that #{term_for :assignments} without open or due dates will be excluded automatically.
+    .form-item
+      = f.label :visible, "Visible to students"
+      = f.check_box :visible
+      .form_label Can #{term_for :students} see this #{term_for :assignment} in their dashboard?
 
-  .checkbox
-    %i.fa.fa-sliders
-    = f.label :include_in_predictor, "Predictor"
-    = f.check_box :include_in_predictor
-    .form_label Can #{term_for :students} see this #{term_for :assignment} in the grade predictor?
+    .form-item
+      = f.label :required
+      = f.check_box :required
+      .form_label Are ALL #{term_for :students} expected to complete this #{term_for :assignment} to pass the course?
 
-  .checkbox
-    %i.fa.fa-check
-    = f.label :include_in_to_do, "To Do List"
-    = f.check_box :include_in_to_do
-    .form_label Can #{term_for :students} see this #{term_for :assignment} in the to do list?
+
+    - if current_course.accepts_submissions?
+      .form-item.assignment_options
+        = f.label :accepts_submissions #{term_for :assignment} Submissions
+        = f.check_box :accepts_submissions
+        .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
       
-  - if ! current_course.hide_analytics?
-    %label.checkbox{ :for => "hide_analytics" }
-      = f.label :hide_analytics, "Hide Analytics?"
-      = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
-      .form_label{:id => "hideAnalytics"}  Do you want to hide assignment analytics from students? 
+      .form-item
+        %ul.submit.accepts_submission_types
+          %li.submit
+            .checkbox
+              = f.label :accepts_links
+              = f.check_box :accepts_links
+          %li.submit
+            .checkbox
+              = f.label :accepts_attachments
+              = f.check_box :accepts_attachments
+          %li.submit
+            .checkbox
+              = f.label :accepts_text
+              = f.check_box :accepts_text
 
-  %h4.uppercase Timeline
+      .form-item
+        = f.label :resubmissions_allowed #{term_for :assignment} Resubmissions
+        = f.check_box :resubmissions_allowed
+        .form_label Can #{term_for :students} resubmit this #{term_for :assignment}?
 
-  = f.label :media, "Image"
-  = f.file_field :media
-  - if @assignment.media?
-    %img{:src => @assignment.media, :width => 40, :alt => "Primary Assignment Image" }
-    = f.check_box :remove_media
-    Remove Image
+    .form-item
+      = f.label :student_logged
+      = f.check_box :student_logged
+      .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}?
 
-  = f.label :thumbnail
-  = f.file_field :thumbnail
-  - if @assignment.thumbnail.present?
-    %img{:src => @assignment.thumbnail, :alt => "Thumbnail Assignment Image", :style => "height: 25px; width: 25px;" }
-    = f.check_box :remove_thumbnail
-    Remove Thumbnail
+    .form-item
+      = f.label :release_necessary
+      = f.check_box :release_necessary
+      .form_label Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
 
-  = f.label :media_credit, "Media Credit"
-  = f.text_field :media_credit
+    .form-item
+      = f.label :notify_released, "Notify by email?"
+      = f.check_box :notify_released
+      .form_label Do you want to notify students by email when a grade is awarded? If grade release is necessary, this email will not be sent out until the grade is officially released.
 
-  = f.label :media_caption, "Caption"
-  = f.text_field :media_caption
+    .form-item
+      = f.label :include_in_timeline, "Timeline"
+      = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
+      .form_label{:id => "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :assignment} in the course timeline? Note that #{term_for :assignments} without open or due dates will be excluded automatically.
 
-  %h4.uppercase Basic Info
-  = f.association :assignment_type, :collection => current_course.assignment_types
+    .form-item
+      = f.label :include_in_predictor, "Predictor"
+      = f.check_box :include_in_predictor
+      .form_label Can #{term_for :students} see this #{term_for :assignment} in the grade predictor?
 
-  = f.label :name
-  = f.text_field :name
+    .form-item
+      = f.label :include_in_to_do, "To Do List"
+      = f.check_box :include_in_to_do
+      .form_label Can #{term_for :students} see this #{term_for :assignment} in the to do list?
+        
+    - if ! current_course.hide_analytics?
+      .form-item
+        = f.label :hide_analytics, "Hide Analytics?"
+        = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
+        .form_label{:id => "hideAnalytics"}  Do you want to hide assignment analytics from students? 
 
-  .switch-label Pass Fail
-  .pass-fail-toggle
-    .switch
-      = f.check_box :pass_fail
-      = f.label :pass_fail, "Pass Fail"
+  %section
+    %h4 Timeline
 
-    - if @assignment.pass_fail?
-      .pass-fail-contingent{ :style => "visibility: hidden" }
-        = f.label :point_total, "Total Points Possible"
-        = f.text_field :point_total
-    - else
-      .pass-fail-contingent
-        = f.label :point_total, "Total Points Possible"
-        = f.text_field :point_total
+    .form-item
+      = f.label :media, "Image"
+      = f.file_field :media
+      - if @assignment.media?
+        %img{:src => @assignment.media, :width => 40, :alt => "Primary Assignment Image" }
+        = f.check_box :remove_media
+        Remove Image
 
-  = f.input :open_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:open_at) }
+    .form-item
+      = f.label :thumbnail
+      = f.file_field :thumbnail
+      - if @assignment.thumbnail.present?
+        %img{:src => @assignment.thumbnail, :alt => "Thumbnail Assignment Image", :style => "height: 25px; width: 25px;" }
+        = f.check_box :remove_thumbnail
+        Remove Thumbnail
 
-  = f.input :due_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:due_at) }
+    .form-item
+      = f.label :media_credit, "Media Credit"
+      = f.text_field :media_credit
 
-  = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:accepts_submissions_until) }, :label => "Accept until"
+    .form-item
+      = f.label :media_caption, "Caption"
+      = f.text_field :media_caption
 
+  %section
+    %h4 Unlocks
+    
+    = f.input :visible_when_locked
 
-  = f.label :grade_scope, "Do students do this individually or as a group?"
-  = f.select :grade_scope, [["Individual"], ["Group"]]
+    .unlock-conditions
+      %p.hint Unlock description here
+      %script(id="unlock-condition-template" type="text/x-template")
+        %fieldset.unlock-condition
+          = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: 'form-inline', child_index: 'child_index' do |ucf|
+            = render 'unlock_condition_fields', f: ucf
+      - @assignment.unlock_conditions.each do |condition|
+        %fieldset.unlock-condition
+          = f.simple_fields_for :unlock_conditions, condition, class: 'form-inline' do |ucf|
+            = render 'unlock_condition_fields', f: ucf
+    = link_to 'Add a Condition', '#', class: 'add-unlock-condition button radius'
 
-  = f.label :mass_grade_type, "How should this assignment appear in Quick Grade?"
-  = f.select :mass_grade_type, [[],["Checkbox"], ["Select List"], ["Radio Buttons"], ["Text"]]
+  %section
+    %h4 Grade Levels
+    .assignment-score-levels
+      %p.hint Example: You could create three levels to produce a quick grading scheme for just this #{term_for :assignment} - Complete (5000 points), Finalist (7000 points), and Winner (10,000 points). These levels will then show in the quick grade, and when students are setting goals in the grade predictor.
+      %script(id="assignment-score-level-template" type="text/x-template")
+        %fieldset.assignment-score-level
+          = f.simple_fields_for :assignment_score_levels, AssignmentScoreLevel.new, class: 'form-inline', child_index: 'child_index' do |slf|
+            = render 'assignment_score_level_fields', f: slf
+      - @assignment.assignment_score_levels.order_by_value.each do |assignment_score_level|
+        %fieldset.assignment-score-level
+          = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: 'form-inline' do |slf|
+            = render 'assignment_score_level_fields', f: slf
+    = link_to 'Add a Level', '#', class: 'add-assignment-score-level button radius'
 
-  = f.label :points_predictor_display, "How should this assignment appear in the Grade Predictor?"
-  = f.select :points_predictor_display, [[], ["Checkbox", "Fixed"], ["Select List"], ["Slider"], ]
-
-  %h4.uppercase Assignment Description
-  %label.small-12
-    .sr-only Description
-    = f.bootsy_area :description
-  .form_label
-    %span This will be shown to students on their dashboard, and when they submit their assignment.
-
-  %h4.uppercase Unlocks
-  
-  = f.input :visible_when_locked
-
-  .unlock-conditions
-    %p.hint Unlock description here
-    %script(id="unlock-condition-template" type="text/x-template")
-      %fieldset.unlock-condition
-        = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: 'form-inline', child_index: 'child_index' do |ucf|
-          = render 'unlock_condition_fields', f: ucf
-    - @assignment.unlock_conditions.each do |condition|
-      %fieldset.unlock-condition
-        = f.simple_fields_for :unlock_conditions, condition, class: 'form-inline' do |ucf|
-          = render 'unlock_condition_fields', f: ucf
-  = link_to 'Add a Condition', '#', class: 'add-unlock-condition button radius'
-
-  %h4.uppercase Grade Levels
-  .assignment-score-levels
-    %p.hint Example: You could create three levels to produce a quick grading scheme for just this #{term_for :assignment} - Complete (5000 points), Finalist (7000 points), and Winner (10,000 points). These levels will then show in the quick grade, and when students are setting goals in the grade predictor.
-    %script(id="assignment-score-level-template" type="text/x-template")
-      %fieldset.assignment-score-level
-        = f.simple_fields_for :assignment_score_levels, AssignmentScoreLevel.new, class: 'form-inline', child_index: 'child_index' do |slf|
-          = render 'assignment_score_level_fields', f: slf
-    - @assignment.assignment_score_levels.order_by_value.each do |assignment_score_level|
-      %fieldset.assignment-score-level
-        = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: 'form-inline' do |slf|
-          = render 'assignment_score_level_fields', f: slf
-  = link_to 'Add a Level', '#', class: 'add-assignment-score-level button radius'
-
-  %h4.uppercase Attachments
-  = f.simple_fields_for :assignment_files, @assignment.assignment_files.new do |af|
-    = af.file_field :file, :multiple => true
-  - if @assignment.assignment_files.exists?
-    %h5.bold Uploaded files
-    %ul.uploaded-files
-      - @assignment.assignment_files.each do |af|
-        - next if af.new_record?
-        %li
-          - if af.file_processing
-            = "#{af.filename}"
-            .icon
-              .icon-tooltip
-                Refresh page to confirm upload has completed
-              %i.fa.fa-spinner.fa-fw= "(upload in progress)"
-          - else
-            = link_to af.filename, af.url, :target => "_blank"
-            = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => @assignment.id, :upload_id => af.id } )
+  %section
+    %h4.uppercase Attachments
+    = f.simple_fields_for :assignment_files, @assignment.assignment_files.new do |af|
+      = af.file_field :file, :multiple => true
+    - if @assignment.assignment_files.exists?
+      %h5.bold Uploaded files
+      %ul.uploaded-files
+        - @assignment.assignment_files.each do |af|
+          - next if af.new_record?
+          %li
+            - if af.file_processing
+              = "#{af.filename}"
+              .icon
+                .icon-tooltip
+                  Refresh page to confirm upload has completed
+                %i.fa.fa-spinner.fa-fw= "(upload in progress)"
+            - else
+              = link_to af.filename, af.url, :target => "_blank"
+              = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => @assignment.id, :upload_id => af.id } )
 
   .button-bar
     %ul.button-group.radius.right

@@ -1,10 +1,10 @@
-.small-12.columns.panel
-  %span.large-3.columns
+.panel
+  .columns
     = f.input :name, :label => "Score Name"
-  %span.large-3.columns
+  .columns
     = f.label :value
     = f.text_field :value
     = f.hidden_field :id
-  %span.large-6.columns
+  .right
     = f.hidden_field :_destroy, class: 'destroy'
     = link_to 'Remove Level', '#', class: 'remove-assignment-score-level button radius right'

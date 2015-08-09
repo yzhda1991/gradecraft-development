@@ -7,48 +7,47 @@
         - @group.errors.full_messages.each do |msg|
           %li= msg
 
-  %h4.uppercase= "#{term_for :group} Name"
-  = f.text_field :name
+  %section
+    .form-item
+      = f.input :name
 
-  %h4.uppercase= "#{term_for :assignments}"
-  = f.association :assignments, :collection => @assignments, :as => :check_boxes, :label => false
-  .form_label{:id => "txtGroupAssignment"} What #{term_for :assignments} will this #{term_for :group} work on together?
+    .form-item
+      = f.association :assignments, :collection => @assignments, :as => :check_boxes, :label => "#{(term_for :assignments).titleize}"
+      .form_label{:id => "txtGroupAssignment"} What #{term_for :assignments} will this #{term_for :group} work on together?
 
-  %h4.uppercase= "#{term_for :students}"
-  - if current_user_is_student? && !@group.persisted?
-    = f.association :students, :collection => @other_students, as: :select, :label => false
-    %span.italic= "You (#{current_student.name }) will be automatically included in this group."
-  - elsif current_user_is_student?
-    = f.association :students, :collection => current_course.students, as: :select, :label => false
-  - if current_user_is_staff?
-    = f.association :students, :collection => current_course.students, as: :select, :label => false
-  %br
-  .form_label{:id => "txtStudentName"} Enter a fellow student's name to add them to this #{term_for :group}. Only one student needs to create the #{term_for :group}, after which all #{term_for :group} members will be able to submit work, see submitted materials, and see instructor grades and feedback.
+    - if current_user_is_student? && !@group.persisted?
+      .form-item
+        = f.association :students, :collection => @other_students, as: :select, :label => "#{term_for :students}"
+        .form_label= "You (#{current_student.name }) will be automatically included in this group."
+    - elsif current_user_is_student?
+      .form-item= f.association :students, :collection => current_course.students, as: :select, :label => false
+    - if current_user_is_staff?
+      .form-item= f.association :students, :collection => current_course.students, as: :select, :label => false
+    .form_label{:id => "txtStudentName"} Enter a fellow student's name to add them to this #{term_for :group}. Only one student needs to create the #{term_for :group}, after which all #{term_for :group} members will be able to submit work, see submitted materials, and see instructor grades and feedback.
 
-  .proposals
-    - if @group.persisted?
-      %script(id="proposal-template" type="text/x-template")
-        %fieldset.proposal.callout.panel
-          = f.simple_fields_for :proposals, Proposal.new, class: 'form-inline', child_index: 'child_index' do |pf|
-            = render 'proposal_fields', f: pf
-      - i = 1
-      - @group.proposals.order_by_creation_date.each do |proposal|
-        %fieldset.proposal.panel
-          %span.columns
-            %h6= "Created: #{proposal.created_at}"
-            %p= proposal.proposal
-            - i += 1
-            = f.hidden_field :id
-    - else
-      = f.simple_fields_for :proposals, Proposal.new, class: 'form-inline', child_index: 'child_index' do |f|
-        %h4 
-          %span.uppercase Proposal
-          %span.italic (Optional)
-        = f.bootsy_area :proposal
-        = f.hidden_field :id
-        .form_label If your #{term_for :group} knows what it will be working on, you can submit that here.
-    - if @group.persisted?
-      = link_to 'Add a Proposal', '#', class: 'add-proposal button radius'
+  %section
+    .proposals
+      - if @group.persisted?
+        %script(id="proposal-template" type="text/x-template")
+          %fieldset.proposal.callout.panel
+            = f.simple_fields_for :proposals, Proposal.new, class: 'form-inline', child_index: 'child_index' do |pf|
+              = render 'proposal_fields', f: pf
+        - i = 1
+        - @group.proposals.order_by_creation_date.each do |proposal|
+          %fieldset.proposal.panel
+            %span.columns
+              %h6= "Created: #{proposal.created_at}"
+              %p= proposal.proposal
+              - i += 1
+              = f.hidden_field :id
+      - else
+        = f.simple_fields_for :proposals, Proposal.new, class: 'form-inline', child_index: 'child_index' do |f|
+          %h4 Proposal
+          = f.text_area :proposal
+          = f.hidden_field :id
+          .form_label If your #{term_for :group} knows what it will be working on, you can submit that here.
+      - if @group.persisted?
+        = link_to 'Add a Proposal', '#', class: 'add-proposal button radius'
 
   .button-bar
     %ul.button-group.right

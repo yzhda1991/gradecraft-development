@@ -25,7 +25,7 @@
           = f.text_field :raw_score, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.point_total }", data: {autonumeric: true, "m-dec" => "0"}, :value => @group.students.first.grade_for_assignment(@assignment).try(:raw_score)
 
     .small-12.columns
-      = f.bootsy_area :feedback, :value => @group.students.first.grade_for_assignment(@assignment).try(:feedback)
+      = f.text_area :feedback, :value => @group.students.first.grade_for_assignment(@assignment).try(:feedback)
 
     .small-12.columns
       - if @assignment.release_necessary?
