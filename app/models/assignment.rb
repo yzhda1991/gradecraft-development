@@ -35,6 +35,7 @@ class Assignment < ActiveRecord::Base
 
   # Unlocks
   has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
+
   accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
   
   has_many :unlock_states, :as => :unlockable, :dependent => :destroy
@@ -228,6 +229,10 @@ class Assignment < ActiveRecord::Base
 
   def is_a_condition?
     UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").present?
+  end
+
+  def unlockable
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").first.unlockable
   end
 
   def is_unlocked_for_student?(student)
