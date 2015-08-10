@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include UsersHelper
+
   respond_to :html, :json
 
   before_filter :ensure_staff?, :except => [:activate, :activated, :edit_profile, :update_profile]
@@ -50,8 +52,7 @@ class UsersController < ApplicationController
 
   def create
     @teams = current_course.teams
-    random_password = Sorcery::Model::TemporaryToken.generate_random_token
-    @user = User.create(params[:user].merge({password: random_password}))
+    @user = User.create(params[:user].merge({password: generate_random_password}))
 
     if @user.valid?
       UserMailer.activation_needed_email(@user).deliver_now
@@ -148,6 +149,7 @@ class UsersController < ApplicationController
           u.last_name = row[1]
           u.username = row[2]
           u.email = row[3]
+          u.password = generate_random_password
         end
       end
       redirect_to users_path, :notice => "Upload successful"

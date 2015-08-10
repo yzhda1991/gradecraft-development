@@ -133,6 +133,7 @@ describe UsersController do
       it "creates the student accounts" do
         user = User.unscoped.last
         expect(user.email).to eq "jimmy@example.com"
+        expect(user.crypted_password).to_not be_blank
       end
     end
 
