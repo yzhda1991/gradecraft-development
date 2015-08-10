@@ -148,8 +148,7 @@ describe UsersController do
             email: "jimmy@example.com", username: "jimmy"
           post :upload, file: file
           expect(response.body).to include "1 Student Not Imported"
-          row_data = CGI::escapeHTML "[\"Jimmy\", \"Page\", \"jimmy\", \"jimmy@example.com\"]"
-          expect(response.body).to include row_data
+          expect(response.body).to include "Jimmy,Page,jimmy,jimmy@example.com"
           expect(response.body).to include "Email has already been taken"
         end
       end

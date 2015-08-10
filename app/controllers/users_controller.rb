@@ -144,7 +144,7 @@ class UsersController < ApplicationController
       require 'csv'
       @successful = []
       @unsuccessful = []
-      CSV.foreach(params[:file].tempfile, headers: false, skip_blanks: true) do |row|
+      CSV.foreach(params[:file].tempfile, headers: true, skip_blanks: true) do |row|
         user = User.create do |u|
           u.first_name = row[0]
           u.last_name = row[1]
