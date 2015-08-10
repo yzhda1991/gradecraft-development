@@ -146,6 +146,14 @@ class UsersController < ApplicationController
       @unsuccessful = []
       CSV.foreach(params[:file].tempfile, headers: true, skip_blanks: true) do |row|
         team = Team.find_by_course_and_name current_course.id, row[4]
+        team ||= Team.create course_id: current_course.id, name: row[4] do |t|
+          unless t.valid?
+            @unsuccessful << \
+              { data: row.to_s, errors: t.errors.full_messages.join(", ") }
+            next
+          end
+        end
+
         user = User.create do |u|
           u.first_name = row[0]
           u.last_name = row[1]
