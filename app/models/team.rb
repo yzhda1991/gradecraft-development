@@ -32,6 +32,11 @@ class Team < ActiveRecord::Base
   scope :order_by_average_high_score, -> { order 'average_points DESC'}
   scope :alpha, -> { order 'teams.name ASC'}
 
+  scope :find_by_course_and_name,
+    -> (course_id, name) { where(course_id: course_id).
+                           where("LOWER(name) = :name", name: name.downcase).
+                           first }
+
   #Sorting team's students by their score, currently only used for in team leaderboards
   def sorted_students
     students.sort_by{ |student| - student.cached_score_for_course(course) }
@@ -83,7 +88,4 @@ class Team < ActiveRecord::Base
       self.score = average_points
     end
   end
-
-  private
-
 end
