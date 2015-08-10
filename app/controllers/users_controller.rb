@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
   respond_to :html, :json
 
-  before_filter :ensure_staff?, :except => [:edit_profile, :update_profile]
+  before_filter :ensure_staff?, :except => [:activate, :activated, :edit_profile, :update_profile]
   before_filter :ensure_admin?, :only => [:all]
+  skip_before_filter :require_login, :only => [:activate, :activated]
 
   def index
     @title = "All Users"
@@ -49,15 +50,21 @@ class UsersController < ApplicationController
 
   def create
     @teams = current_course.teams
-    @user = User.create(params[:user])
-    if @user.save && @user.is_student?(current_course)
-      redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully created!"
-    elsif @user.save && @user.is_staff?(current_course)
-      redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully created!"
-    else
-      render :new
+    random_password = Sorcery::Model::TemporaryToken.generate_random_token
+    @user = User.create(params[:user].merge({password: random_password}))
+
+    if @user.valid?
+      UserMailer.activation_needed_email(@user).deliver_now
+      if @user.is_student?(current_course)
+        redirect_to students_path,
+          :notice => "#{term_for :student} #{@user.name} was successfully created!" and return
+      elsif @user.is_staff?(current_course)
+        redirect_to staff_index_path,
+          :notice => "Staff Member #{@user.name} was successfully created!" and return
+      end
     end
     expire_action :action => :index
+    render :new
   end
 
   def update
@@ -87,6 +94,26 @@ class UsersController < ApplicationController
       format.json { head :ok }
     end
 
+  end
+
+  def activate
+    @user = User.load_from_activation_token(params[:id])
+    @token = params[:id]
+    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
+  end
+
+  def activated
+    @token = params[:token]
+    @user = User.load_from_activation_token(@token)
+
+    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
+
+    if @user.update_attributes params[:user]
+      @user.activate!
+      auto_login @user
+      redirect_to dashboard_path, notice: "Welcome to GradeCraft!" and return
+    end
+    render :activate, alert: @user.errors.full_messages.first
   end
 
   # We don't allow students to edit their info directly - this is a mediated view

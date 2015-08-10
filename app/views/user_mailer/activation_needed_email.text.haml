@@ -1,0 +1,12 @@
+Hello, #{@user.first_name}
+===============================================
+
+Welcome to GradeCraft!
+
+In order to complete your new account, please follow the link below to validate your email address and specify your password.
+
+#{activate_user_url(@user.activation_token).html_safe}
+
+Thanks,
+
+The GradeCraft team

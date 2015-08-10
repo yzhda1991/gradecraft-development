@@ -51,12 +51,42 @@ describe UsersController do
       end
     end
 
-		describe "GET create" do
-      pending
-    end
+    describe "POST create" do
+      let(:user) { User.unscoped.last }
 
-		describe "GET update" do
-      pending
+      context "calling create" do
+        before(:each) do
+          post :create, user: { first_name: "Jimmy",
+                                last_name: "Page",
+                                username: "jimmy",
+                                email: "jimmy@example.com" }
+        end
+
+        it "creates a new user" do
+          expect(user.email).to eq "jimmy@example.com"
+          expect(user.username).to eq "jimmy"
+          expect(user.first_name).to eq "Jimmy"
+          expect(user.last_name).to eq "Page"
+        end
+
+        it "generates a random password for a user" do
+          expect(user.crypted_password).to_not be_blank
+        end
+
+        it "requires the new user to be activated" do
+          expect(user.activation_token).to_not be_blank
+          expect(user.activation_state).to eq "pending"
+        end
+      end
+
+      it "sends an activation email for the user" do
+        expect {
+          post :create, user: { first_name: "Jimmy",
+                                last_name: "Page",
+                                username: "jimmy",
+                                email: "jimmy@example.com" }
+        }.to change { ActionMailer::Base.deliveries.count }.by 1
+      end
     end
 
     describe "GET destroy" do
@@ -92,13 +122,9 @@ describe UsersController do
       end
     end
 
-		describe "GET upload" do
-      pending
-    end
+  end
 
-	end
-
-	context "as a student" do
+  context "as a student" do
 
     before do
       @course = create(:course)
@@ -110,7 +136,100 @@ describe UsersController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET edit_profile" do
+    describe "GET activate" do
+      before(:each) { @student.update_attribute :activation_token, "blah" }
+
+      it "exists" do
+        get :activate, id: @student.activation_token
+        expect(response).to be_success
+      end
+
+      it "redirects to the root url if the token is not correct" do
+        get :activate, id: "blech"
+        expect(response).to redirect_to root_path
+      end
+    end
+
+    describe "POST activated" do
+      before do
+        @student.update_attribute :activation_token, "blah"
+        @student.update_attribute :activation_state, "pending"
+      end
+
+      context "with matching passwords" do
+        before do
+          post :activated, id: @student.activation_token,
+            token: @student.activation_token,
+            user: { password: "blah", password_confirmation: "blah" }
+        end
+
+        it "activates the user" do
+          expect(@student.reload.activation_state).to eq "active"
+        end
+
+        it "updates the user's password" do
+          expect(User.authenticate(@student.email, "blah")).to eq @student
+        end
+
+        it "logs the user in" do
+          expect(response).to redirect_to dashboard_path
+        end
+      end
+
+      context "with a tampered activation token" do
+        before do
+          post :activated, id: @student.activation_token,
+            token: "tampered",
+            user: { password: "blah", password_confirmation: "blah" }
+        end
+
+        it "does not activate the user" do
+          expect(@student.reload.activation_state).to eq "pending"
+        end
+
+        it "does not update the user's password" do
+          expect(User.authenticate(@student.email, "blah")).to be_nil
+        end
+
+        it "redirects to the root url" do
+          expect(response).to redirect_to root_path
+        end
+      end
+
+      context "with a non-matching password" do
+        before do
+          post :activated, id: @student.activation_token,
+            token: @student.activation_token,
+            user: { password: "blah", password_confirmation: "blech" }
+        end
+
+        it "does not activate the user" do
+          expect(@student.reload.activation_state).to eq "pending"
+        end
+
+        it "renders the activate template" do
+          expect(response).to render_template :activate
+        end
+      end
+
+      context "with a blank password" do
+        before do
+          post :activated, id: @student.activation_token,
+            token: @student.activation_token,
+            user: { password: "", password_confirmation: "" }
+        end
+
+        it "does not activate the user" do
+          expect(@student.reload.activation_state).to eq "pending"
+        end
+
+        it "renders the activate template" do
+          expect(response).to render_template :activate
+        end
+      end
+    end
+
+    describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
         assigns(:title).should eq("Edit My Profile")
@@ -119,7 +238,7 @@ describe UsersController do
       end
     end
 
-		describe "GET update_profile" do
+    describe "GET update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "frodo" }
         post :update_profile, id: @student.id, :user => params
@@ -130,7 +249,7 @@ describe UsersController do
     end
 
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :new,
@@ -156,5 +275,5 @@ describe UsersController do
       end
     end
 
-	end
+  end
 end
