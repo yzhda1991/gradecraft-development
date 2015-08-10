@@ -1,35 +1,28 @@
-.row
-  .small-8.columns(style="padding:0")
-    %input(type="text" ng-model="tier.name" placeholder="Level Name" required ng-blur="tier.modify(tierForm)" ng-Maxlength=30 ng-change="tier.change()" maxlength=30)
-  .small-4.columns(style="padding:0")
-    %input(type="number" ng-model="tier.points" placeholder="Points" min=0 ng-blur="tier.modify(tierForm)" ng-change="tier.change()" required)
+%input(type="text" ng-model="tier.name" placeholder="Level Name" required ng-blur="tier.modify(tierForm)" ng-Maxlength=30 ng-change="tier.change()" maxlength=30)
+%input(type="number" ng-model="tier.points" placeholder="Points" min=0 ng-blur="tier.modify(tierForm)" ng-change="tier.change()" required)
 
-.row
-  %input(type="text" ng-model="tier.description" placeholder="Description" value="{{tier.description}}" ng-blur="tier.modify(tierForm)" ng-change="tier.change()")
+%textarea(ng-model="tier.description" placeholder="Description" value="{{tier.description}}" ng-blur="tier.modify(tierForm)" ng-change="tier.change()")
 
 - if @course_badge_count > 0
-  .row.badge-row(ng-click="tier.editBadges()" ng-show="tier.isSaved()")
+  .badge-row(ng-click="tier.editBadges()" ng-show="tier.isSaved()")
     .badge-messages Badges
     .tier-badge-image(ng-repeat="(tierBadgeId, tierBadge) in tier.badges")
       %img(src="{{tierBadge.badge.icon}}" width="35px" height="35px")
 
 .modal-window(ng-show="tier.editingBadges")
-  .row
-    %select(ng-disabled="! tier.isSaved()" ng-change="tier.selectBadge()" ng-model="tier.selectedBadge" ng-options="availableBadge as availableBadge.name for (availableBadgeId, availableBadge) in tier.availableBadges")
-      %option.default(value="" selected disabled ng-show="tier.availableBadges.length > 0") select a badge to add...
-      %option.default(value="" selected disabled ng-show="tier.availableBadges.length == 0") all available badges selected
+  %select(ng-disabled="! tier.isSaved()" ng-change="tier.selectBadge()" ng-model="tier.selectedBadge" ng-options="availableBadge as availableBadge.name for (availableBadgeId, availableBadge) in tier.availableBadges")
+    %option.default(value="" selected disabled ng-show="tier.availableBadges.length > 0") select a badge to add...
+    %option.default(value="" selected disabled ng-show="tier.availableBadges.length == 0") all available badges selected
 
-  .row
-    .tier-badge(ng-repeat="(tierBadgeId, tierBadge) in tier.badges")
-      %img(src="{{tierBadge.badge.icon}}" width="20px" height="20px")
-      {{tierBadge.name}}
-      %button.delete(type="button" ng-click="tier.deleteTierBadge(tierBadge)") X
+  .tier-badge(ng-repeat="(tierBadgeId, tierBadge) in tier.badges")
+    %img(src="{{tierBadge.badge.icon}}" width="20px" height="20px")
+    {{tierBadge.name}}
+    %button.delete(type="button" ng-click="tier.deleteTierBadge(tierBadge)") X
 
   .update-badges
     %button.close-modal(ng-click="tier.closeBadges()") Update Badges
 
-.row
 %button.delete(type="button" ng-click="tier.delete($index)" ng-hide="tier.durable") X
 .messages(ng-show="tier.fullCredit") Full Credit Level
-.messages(ng-show="tier.noCredit") No Credit Level
-.messages(ng-hide="tier.durable") Level
+.messages(ng-show="tier.noCredit") Zero Credit Level
+.messages(ng-hide="tier.durable") Score Level
