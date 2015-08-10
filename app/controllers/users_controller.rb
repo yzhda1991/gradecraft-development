@@ -148,7 +148,6 @@ class UsersController < ApplicationController
           u.last_name = row[1]
           u.username = row[2]
           u.email = row[3]
-          u.role = 'student'
         end
       end
       redirect_to users_path, :notice => "Upload successful"

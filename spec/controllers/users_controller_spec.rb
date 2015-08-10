@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UsersController do
 
-	context "as a professor" do
+  context "as a professor" do
 
     before do
       @course = create(:course)
@@ -24,7 +24,7 @@ describe UsersController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do
+    describe "GET index" do
       it "returns the users for the current course" do
         get :index
         assigns(:title).should eq("All Users")
@@ -95,8 +95,7 @@ describe UsersController do
       end
     end
 
-
-		describe "GET edit_profile" do
+    describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
         assigns(:title).should eq("Edit My Profile")
@@ -105,7 +104,7 @@ describe UsersController do
       end
     end
 
-		describe "GET update_profile" do
+    describe "GET update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "gandalf" }
         post :update_profile, id: @professor.id, :user => params
@@ -115,10 +114,25 @@ describe UsersController do
       end
     end
 
-		describe "GET import" do
+    describe "GET import" do
       it "renders the import page" do
         get :import
         response.should render_template(:import)
+      end
+    end
+
+    describe "POST upload" do
+      let(:file) { fixture_file "users.csv", "text/csv" }
+
+      before(:each) { post :upload, file: file }
+
+      it "redirects to the users index page" do
+        expect(response).to redirect_to users_path
+      end
+
+      it "creates the student accounts" do
+        user = User.unscoped.last
+        expect(user.email).to eq "jimmy@example.com"
       end
     end
 
