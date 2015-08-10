@@ -84,11 +84,11 @@
                     input: {
                       expression: (viewValue, modelValue) ->
                         temp = []
-                        for element, i in gse.model.grade_scheme_elements
-                          if(i > 0 && modelValue == element.low_range)
-                            if(gse.model.grade_scheme_elements[i-1].low_range >= element.high_range)
-                              break
-                              return false
+                        # for element, i in gse.model.grade_scheme_elements
+                        #   if(i > 0 && modelValue == element.low_range)
+                        #     if(gse.model.grade_scheme_elements[i-1].low_range >= element.high_range)
+                        #       break
+                        #       return false
                       message: 'invalid'
                     }
                   }
