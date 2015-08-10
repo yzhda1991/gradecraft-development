@@ -137,12 +137,13 @@ class UsersController < ApplicationController
 
   #import users for class
   def upload
-    require 'csv'
-
     if params[:file].blank?
       flash[:notice] = "File missing"
       redirect_to users_path
     else
+      require 'csv'
+      @successful = []
+      @unsuccessful = []
       CSV.foreach(params[:file].tempfile, headers: false, skip_blanks: true) do |row|
         user = User.create do |u|
           u.first_name = row[0]
@@ -152,9 +153,16 @@ class UsersController < ApplicationController
           u.password = generate_random_password
           u.course_memberships.build(course_id: current_course.id, role: "student")
         end
-        UserMailer.activation_needed_email(user).deliver_now if user.valid?
+
+        if user.valid?
+          UserMailer.activation_needed_email(user).deliver_now
+          @successful << user
+        else
+          @unsuccessful << \
+            { data: row.to_s, errors: user.errors.full_messages.join(", ") }
+        end
       end
-      redirect_to users_path, :notice => "Upload successful"
+      render :import_results
     end
   end
 

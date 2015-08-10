@@ -1,0 +1,37 @@
+.small-12.panel.mainContent
+  = content_nav_for User, "Import Results"
+
+  %h3.pagetitle Import Results
+
+  - unless @unsuccessful.empty?
+    %h4.subtitle
+      = "#{@unsuccessful.count} #{"Student".pluralize(@unsuccessful.count)} Not Imported"
+    .columns
+      %table.responsive
+        %thead
+          %tr
+            %th Data
+            %th Error(s)
+        %tbody
+          - @unsuccessful.each do |row|
+            %tr
+              %td= row[:data]
+              %td= row[:errors]
+
+  %h4.subtitle
+    = "#{@successful.count} #{"Student".pluralize(@successful.count)} Imported Successfully"
+  .columns
+    %table.responsive.nofeatures_default_last_name_dynatable
+      %thead
+        %tr
+          %th First Name
+          %th Last Name
+          %th Username
+          %th Email
+      %tbody
+        - @successful.each do |user|
+          %tr
+            %td= link_to user.first_name, student_path(user)
+            %td= link_to user.last_name, student_path(user)
+            %td= link_to user.username, student_path(user)
+            %td= link_to user.email, student_path(user)

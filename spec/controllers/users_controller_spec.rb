@@ -125,18 +125,32 @@ describe UsersController do
       let(:file) { fixture_file "users.csv", "text/csv" }
 
       context "calling upload" do
-        before(:each) { post :upload, file: file }
-
-        it "redirects to the users index page" do
-          expect(response).to redirect_to users_path
-        end
+        render_views
 
         it "creates the student accounts" do
+          post :upload, file: file
           user = User.unscoped.last
           expect(user.email).to eq "jimmy@example.com"
           expect(user.crypted_password).to_not be_blank
           expect(user.course_memberships.first.course).to eq @course
           expect(user.course_memberships.first.role).to eq "student"
+        end
+
+        it "renders the results from the import" do
+          post :upload, file: file
+          expect(response).to render_template :import_results
+          expect(response.body).to include "1 Student Imported Successfully"
+          expect(response.body).to include "jimmy@example.com"
+        end
+
+        it "renders any errors that have occured" do
+          User.create first_name: "Jimmy", last_name: "Page",
+            email: "jimmy@example.com", username: "jimmy"
+          post :upload, file: file
+          expect(response.body).to include "1 Student Not Imported"
+          row_data = CGI::escapeHTML "[\"Jimmy\", \"Page\", \"jimmy\", \"jimmy@example.com\"]"
+          expect(response.body).to include row_data
+          expect(response.body).to include "Email has already been taken"
         end
       end
 
