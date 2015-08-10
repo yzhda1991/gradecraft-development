@@ -150,6 +150,7 @@ class UsersController < ApplicationController
           u.username = row[2]
           u.email = row[3]
           u.password = generate_random_password
+          u.course_memberships.build(course_id: current_course.id, role: "student")
         end
       end
       redirect_to users_path, :notice => "Upload successful"

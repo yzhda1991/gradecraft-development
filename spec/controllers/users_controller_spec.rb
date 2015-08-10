@@ -134,6 +134,8 @@ describe UsersController do
         user = User.unscoped.last
         expect(user.email).to eq "jimmy@example.com"
         expect(user.crypted_password).to_not be_blank
+        expect(user.course_memberships.first.course).to eq @course
+        expect(user.course_memberships.first.role).to eq "student"
       end
     end
 
