@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   before_filter :ensure_staff?, :except => [:activate, :activated, :edit_profile, :update_profile]
   before_filter :ensure_admin?, :only => [:all]
+  skip_before_filter :require_login, :only => [:activate, :activated]
 
   def index
     @title = "All Users"
