@@ -144,7 +144,7 @@ class UsersController < ApplicationController
       redirect_to users_path
     else
       CSV.foreach(params[:file].tempfile, :headers => false) do |row|
-        User.create! do |u|
+        user = User.create! do |u|
           u.first_name = row[0]
           u.last_name = row[1]
           u.username = row[2]
@@ -152,6 +152,7 @@ class UsersController < ApplicationController
           u.password = generate_random_password
           u.course_memberships.build(course_id: current_course.id, role: "student")
         end
+        UserMailer.activation_needed_email(user).deliver_now
       end
       redirect_to users_path, :notice => "Upload successful"
     end

@@ -124,18 +124,25 @@ describe UsersController do
     describe "POST upload" do
       let(:file) { fixture_file "users.csv", "text/csv" }
 
-      before(:each) { post :upload, file: file }
+      context "calling upload" do
+        before(:each) { post :upload, file: file }
 
-      it "redirects to the users index page" do
-        expect(response).to redirect_to users_path
+        it "redirects to the users index page" do
+          expect(response).to redirect_to users_path
+        end
+
+        it "creates the student accounts" do
+          user = User.unscoped.last
+          expect(user.email).to eq "jimmy@example.com"
+          expect(user.crypted_password).to_not be_blank
+          expect(user.course_memberships.first.course).to eq @course
+          expect(user.course_memberships.first.role).to eq "student"
+        end
       end
 
-      it "creates the student accounts" do
-        user = User.unscoped.last
-        expect(user.email).to eq "jimmy@example.com"
-        expect(user.crypted_password).to_not be_blank
-        expect(user.course_memberships.first.course).to eq @course
-        expect(user.course_memberships.first.role).to eq "student"
+      it "sends activation emails to each student" do
+        expect { post :upload, file: file }.to \
+          change { ActionMailer::Base.deliveries.count }.by 1
       end
     end
 
