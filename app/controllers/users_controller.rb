@@ -145,6 +145,7 @@ class UsersController < ApplicationController
       @successful = []
       @unsuccessful = []
       CSV.foreach(params[:file].tempfile, headers: true, skip_blanks: true) do |row|
+        team = Team.find_by_course_and_name current_course.id, row[4]
         user = User.create do |u|
           u.first_name = row[0]
           u.last_name = row[1]
@@ -155,6 +156,7 @@ class UsersController < ApplicationController
         end
 
         if user.valid?
+          team.students << user
           UserMailer.activation_needed_email(user).deliver_now
           @successful << user
         else

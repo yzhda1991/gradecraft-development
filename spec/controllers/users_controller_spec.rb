@@ -123,6 +123,7 @@ describe UsersController do
 
     describe "POST upload" do
       let(:file) { fixture_file "users.csv", "text/csv" }
+      before { create :team, course: @course, name: "Zeppelin" }
 
       context "calling upload" do
         render_views
@@ -134,6 +135,12 @@ describe UsersController do
           expect(user.crypted_password).to_not be_blank
           expect(user.course_memberships.first.course).to eq @course
           expect(user.course_memberships.first.role).to eq "student"
+        end
+
+        it "adds the student to the team if the team exists" do
+          post :upload, file: file
+          team = Team.unscoped.last
+          expect(team.name).to eq "Zeppelin"
         end
 
         it "renders the results from the import" do
