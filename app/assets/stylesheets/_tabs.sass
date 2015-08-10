@@ -10,20 +10,16 @@
     th:first-child th:first-child, th:first-child th:last-child
       border-top-right-radius: 0
 
-dl.tabs dd > a
-  border-top-right-radius: $global-radius
-  border-top-left-radius:  $global-radius
-  text-transform: capitalize
-  background-color: #eee
-  color: #000
-  margin: 1px
+.ui-widget-content
+  border: 0
+  font-family: Avenir, san-serif
+  
+  .ui-tabs-panel
+    padding: 0
 
-dl.tabs dd > a:hover
-  background-color: $primary-color-5
-  color: #FFF
+    .button-group a
+      color: #FFF
 
-dl.tabs dd.active > a
-  background-color: $light-grey
-
-dl.tabs dd.active > a:hover
-  color: #000
+  .team-filter
+    margin-top: 1rem
+    font-family: Avenir, san-serif
