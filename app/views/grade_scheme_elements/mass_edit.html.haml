@@ -3,8 +3,12 @@
   = content_nav_for current_course, "Edit Grading Scheme"
   %h3.pagetitle= @title
 
-  .small-12.columns{'ng-app' => 'gradecraft', 'ng-controller' => 'GradeSchemeElementsCtrl as gse'}
-    %fieldset.elements.panel{'ng-include' => true, 'src' => "'ng_grade_scheme_elements_mass_edit.html'"}
+  .small-12.columns{'ng-app' => 'gradecraft', 'ng-controller' => 'GradeSchemeElementsCtrl'}
+    .grade-scheme-elements
+      .grade-scheme-element{'ng-repeat' => 'element in grade_scheme_elements', 'ng-include' => "'ng_gradeScheme.html'"}
+      %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit
+      %button{:class => 'button radius right', 'ng-click' => 'gradeService.addNew()'} Add A Level
+    -#%fieldset.elements.panel{'ng-include' => true, 'src' => "'ng_grade_scheme_elements_mass_edit.html'"}
 
 
   /   = simple_form_for @course, method: :put, :url => mass_edit_grade_scheme_elements_path(:course_id => @course) do |f|

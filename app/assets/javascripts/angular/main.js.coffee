@@ -28,7 +28,7 @@ INTEGER_REGEXP = /^\-?\d+$/
 
 @gradecraft.run((formlyConfig, formlyValidationMessages, gcApiCheck) ->
   formlyConfig.extras.ngModelAttrsManipulatorPreferBound = true;
-  formlyValidationMessages.addStringMessage('maxlength', 'Input Too Long');
+  formlyValidationMessages.addStringMessage('maxlength', 'Your input is WAAAAY too long!');
   formlyValidationMessages.messages.pattern = (viewValue, modelValue, scope) ->
     viewValue + ' is invalid'
   formlyValidationMessages.addTemplateOptionValueMessage('minlength', 'minlength', '', 'is the minimum length', 'Too short')

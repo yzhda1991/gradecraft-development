@@ -20,7 +20,7 @@ class GradeSchemeElementsController < ApplicationController
       :letter,
       :high_range,
       :course_id
-    )
+    ).reverse
   end
 
   def mass_update
@@ -28,9 +28,17 @@ class GradeSchemeElementsController < ApplicationController
     @course.update_attributes(:grade_scheme_elements_attributes => params[:grade_scheme_elements_attributes])
     respond_to do |format|
       if @course.save
-        format.json { render json: true }
+        format.json { render json: current_course.grade_scheme_elements.select(
+          :id,
+          :level,
+          :low_range,
+          :letter,
+          :high_range,
+          :course_id
+        ) }
+
       else
-        format.json { render json: false }
+        format.json { render json: false, status: :internal_server_error }
       end
     end
     # @course = current_course
