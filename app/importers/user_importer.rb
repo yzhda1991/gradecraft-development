@@ -39,7 +39,9 @@ class UserImporter
   end
 
   def find_or_create_team(row, course)
-    team = Team.find_by_course_and_name course.id, row[4]
+    name = row[4]
+    team = Team.find_by_course_and_name course.id, name
+    team ||= Team.create course_id: course.id, name: name
   end
 
   def generate_random_password

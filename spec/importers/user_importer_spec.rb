@@ -30,7 +30,14 @@ describe UserImporter do
         expect(team.students.first.email).to eq "jimmy@example.com"
       end
 
-      xit "creates the team and adds the student if the team does not exist"
+      it "creates the team and adds the student if the team does not exist" do
+        Team.unscoped.last.destroy
+        subject.import course
+        team = Team.unscoped.last
+        expect(team.name).to eq "Zeppelin"
+        expect(team.students.first.email).to eq "jimmy@example.com"
+      end
+
       xit "sends the activation email to each student"
     end
   end
