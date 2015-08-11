@@ -70,6 +70,7 @@
 %li= link_to_unless_current raw("<i class='fa fa-book fa-fw'></i> #{term_for :assignment_types}"), assignment_types_path
 %li= link_to_unless_current raw('<i class="fa fa-sliders fa-fw"></i> Predictor Preview'), predictor_preview_course_path(current_course)
 %li= link_to_unless_current raw('<i class="fa fa-level-up fa-fw"></i> Grading Scheme'), grade_scheme_elements_path
+%li= link_to_unless_current raw('<i class="fa fa-bullhorn fa-fw"></i> Announcements'), announcements_path
 %li= link_to_unless_current raw('<i class="fa fa-calendar fa-fw"></i> Calendar Events'), events_path
 
 - if LTIProvider.present?
@@ -78,7 +79,6 @@
   %h5 Tools
   - LTIProvider.all.each do |tool|
     %li= link_to_unless_current raw("<i class='fa fa-external-link-square fa-fw'></i> #{tool.name}"), launch_lti_provider_path(tool)
-
 
 - if current_user_is_admin?
   %hr
