@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UsersController do
 
-	context "as a professor" do
+  context "as a professor" do
 
     before do
       @course = create(:course)
@@ -24,7 +24,7 @@ describe UsersController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do
+    describe "GET index" do
       it "returns the users for the current course" do
         get :index
         assigns(:title).should eq("All Users")
@@ -95,8 +95,7 @@ describe UsersController do
       end
     end
 
-
-		describe "GET edit_profile" do
+    describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
         assigns(:title).should eq("Edit My Profile")
@@ -105,7 +104,7 @@ describe UsersController do
       end
     end
 
-		describe "GET update_profile" do
+    describe "GET update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "gandalf" }
         post :update_profile, id: @professor.id, :user => params
@@ -115,10 +114,42 @@ describe UsersController do
       end
     end
 
-		describe "GET import" do
+    describe "GET import" do
       it "renders the import page" do
         get :import
         response.should render_template(:import)
+      end
+    end
+
+    describe "POST upload" do
+      render_views
+
+      let(:file) { fixture_file "users.csv", "text/csv" }
+      before { create :team, course: @course, name: "Zeppelin" }
+
+      it "renders the results from the import" do
+        post :upload, file: file
+        expect(response).to render_template :import_results
+        expect(response.body).to include "1 Student Imported Successfully"
+        expect(response.body).to include "jimmy@example.com"
+      end
+
+      it "renders any errors that have occured" do
+        User.create first_name: "Jimmy", last_name: "Page",
+          email: "jimmy@example.com", username: "jimmy"
+        post :upload, file: file
+        expect(response.body).to include "1 Student Not Imported"
+        expect(response.body).to include "Jimmy,Page,jimmy,jimmy@example.com"
+        expect(response.body).to include "Email has already been taken"
+      end
+
+      it "renders any errors that occur with the team creation" do
+        Team.unscoped.last.destroy
+        allow_any_instance_of(Team).to receive(:valid?).and_return false
+        allow_any_instance_of(Team).to receive(:errors).and_return double(full_messages: ["The team is not cool"])
+        post :upload, file: file
+        expect(response.body).to include "1 Student Not Imported"
+        expect(response.body).to include "The team is not cool"
       end
     end
 

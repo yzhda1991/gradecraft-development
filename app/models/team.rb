@@ -2,6 +2,7 @@ class Team < ActiveRecord::Base
   attr_accessible :name, :course, :course_id, :student_ids, :score, :students, :leaders, :teams_leaderboard, :in_team_leaderboard, :banner, :leader_ids
 
   validates_presence_of :course, :name
+  validates :name, uniqueness: { case_sensitive: false, scope: :course_id }
 
   #TODO: remove these callbacks
   before_save :cache_score
@@ -31,6 +32,11 @@ class Team < ActiveRecord::Base
   scope :order_by_low_score, -> { order 'teams.score ASC' }
   scope :order_by_average_high_score, -> { order 'average_points DESC'}
   scope :alpha, -> { order 'teams.name ASC'}
+
+  def self.find_by_course_and_name(course_id, name)
+    where(course_id: course_id).
+      where("LOWER(name) = :name", name: name.downcase).first
+  end
 
   #Sorting team's students by their score, currently only used for in team leaderboards
   def sorted_students
@@ -83,7 +89,4 @@ class Team < ActiveRecord::Base
       self.score = average_points
     end
   end
-
-  private
-
 end
