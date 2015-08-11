@@ -14,11 +14,19 @@ class UserImporter
     if file
       CSV.foreach(file, headers: true, skip_blanks: true) do |row|
         team = find_or_create_team row, course
+        if !team.valid?
+          append_unsuccessful row, team.errors.full_messages.join(", ")
+          next
+        end
+
         user = create_user row, course
 
         if user.valid?
           team.students << user
           UserMailer.activation_needed_email(user).deliver_now
+          successful << user
+        else
+          append_unsuccessful row, user.errors.full_messages.join(", ")
         end
       end
     end
@@ -27,6 +35,10 @@ class UserImporter
   end
 
   private
+
+  def append_unsuccessful(row, errors)
+    unsuccessful << { data: row.to_s, errors: errors }
+  end
 
   def create_user(row, course)
     user = User.create do |u|
