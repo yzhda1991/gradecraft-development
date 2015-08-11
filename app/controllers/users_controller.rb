@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  include UsersHelper
+
   respond_to :html, :json
 
   before_filter :ensure_staff?, :except => [:activate, :activated, :edit_profile, :update_profile]
@@ -50,8 +52,7 @@ class UsersController < ApplicationController
 
   def create
     @teams = current_course.teams
-    random_password = Sorcery::Model::TemporaryToken.generate_random_token
-    @user = User.create(params[:user].merge({password: random_password}))
+    @user = User.create(params[:user].merge({password: generate_random_password}))
 
     if @user.valid?
       UserMailer.activation_needed_email(@user).deliver_now
@@ -136,22 +137,12 @@ class UsersController < ApplicationController
 
   #import users for class
   def upload
-    require 'csv'
-
     if params[:file].blank?
       flash[:notice] = "File missing"
       redirect_to users_path
     else
-      CSV.foreach(params[:file].tempfile, :headers => false) do |row|
-        User.create! do |u|
-          u.first_name = row[0]
-          u.last_name = row[1]
-          u.username = row[2]
-          u.email = row[3]
-          u.role = 'student'
-        end
-      end
-      redirect_to users_path, :notice => "Upload successful"
+      @result = StudentImporter.new(params[:file].tempfile).import(current_course)
+      render :import_results
     end
   end
 
