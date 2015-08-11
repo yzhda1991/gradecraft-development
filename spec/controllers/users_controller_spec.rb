@@ -122,65 +122,34 @@ describe UsersController do
     end
 
     describe "POST upload" do
+      render_views
+
       let(:file) { fixture_file "users.csv", "text/csv" }
       before { create :team, course: @course, name: "Zeppelin" }
 
-      it "creates the student accounts" do
+      it "renders the results from the import" do
         post :upload, file: file
-        user = User.unscoped.last
-        expect(user.email).to eq "jimmy@example.com"
-        expect(user.crypted_password).to_not be_blank
-        expect(user.course_memberships.first.course).to eq @course
-        expect(user.course_memberships.first.role).to eq "student"
+        expect(response).to render_template :import_results
+        expect(response.body).to include "1 Student Imported Successfully"
+        expect(response.body).to include "jimmy@example.com"
       end
 
-      it "adds the student to the team if the team exists" do
+      it "renders any errors that have occured" do
+        User.create first_name: "Jimmy", last_name: "Page",
+          email: "jimmy@example.com", username: "jimmy"
         post :upload, file: file
-        team = Team.unscoped.last
-        expect(team.name).to eq "Zeppelin"
-        expect(team.students.map(&:email)).to include "jimmy@example.com"
+        expect(response.body).to include "1 Student Not Imported"
+        expect(response.body).to include "Jimmy,Page,jimmy,jimmy@example.com"
+        expect(response.body).to include "Email has already been taken"
       end
 
-      it "creates the team and adds the student if the team does not exist" do
+      it "renders any errors that occur with the team creation" do
         Team.unscoped.last.destroy
+        allow_any_instance_of(Team).to receive(:valid?).and_return false
+        allow_any_instance_of(Team).to receive(:errors).and_return double(full_messages: ["The team is not cool"])
         post :upload, file: file
-        team = Team.unscoped.last
-        expect(team.name).to eq "Zeppelin"
-        expect(team.students.map(&:email)).to include "jimmy@example.com"
-      end
-
-      it "sends activation emails to each student" do
-        expect { post :upload, file: file }.to \
-          change { ActionMailer::Base.deliveries.count }.by 1
-      end
-
-      context "rendering the results" do
-        render_views
-
-        it "renders the results from the import" do
-          post :upload, file: file
-          expect(response).to render_template :import_results
-          expect(response.body).to include "1 Student Imported Successfully"
-          expect(response.body).to include "jimmy@example.com"
-        end
-
-        it "renders any errors that have occured" do
-          User.create first_name: "Jimmy", last_name: "Page",
-            email: "jimmy@example.com", username: "jimmy"
-          post :upload, file: file
-          expect(response.body).to include "1 Student Not Imported"
-          expect(response.body).to include "Jimmy,Page,jimmy,jimmy@example.com"
-          expect(response.body).to include "Email has already been taken"
-        end
-
-        it "renders any errors that occur with the team creation" do
-          Team.unscoped.last.destroy
-          allow_any_instance_of(Team).to receive(:valid?).and_return false
-          allow_any_instance_of(Team).to receive(:errors).and_return double(full_messages: ["The team is not cool"])
-          post :upload, file: file
-          expect(response.body).to include "1 Student Not Imported"
-          expect(response.body).to include "The team is not cool"
-        end
+        expect(response.body).to include "1 Student Not Imported"
+        expect(response.body).to include "The team is not cool"
       end
     end
 

@@ -141,37 +141,7 @@ class UsersController < ApplicationController
       flash[:notice] = "File missing"
       redirect_to users_path
     else
-      require 'csv'
-      @successful = []
-      @unsuccessful = []
-      CSV.foreach(params[:file].tempfile, headers: true, skip_blanks: true) do |row|
-        team = Team.find_by_course_and_name current_course.id, row[4]
-        team ||= Team.create course_id: current_course.id, name: row[4] do |t|
-          unless t.valid?
-            @unsuccessful << \
-              { data: row.to_s, errors: t.errors.full_messages.join(", ") }
-            next
-          end
-        end
-
-        user = User.create do |u|
-          u.first_name = row[0]
-          u.last_name = row[1]
-          u.username = row[2]
-          u.email = row[3]
-          u.password = generate_random_password
-          u.course_memberships.build(course_id: current_course.id, role: "student")
-        end
-
-        if user.valid?
-          team.students << user
-          UserMailer.activation_needed_email(user).deliver_now
-          @successful << user
-        else
-          @unsuccessful << \
-            { data: row.to_s, errors: user.errors.full_messages.join(", ") }
-        end
-      end
+      @result = StudentImporter.new(params[:file].tempfile).import(current_course)
       render :import_results
     end
   end
