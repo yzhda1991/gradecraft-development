@@ -38,7 +38,10 @@ describe UserImporter do
         expect(team.students.first.email).to eq "jimmy@example.com"
       end
 
-      xit "sends the activation email to each student"
+      it "sends the activation email to each student" do
+        expect { subject.import course }.to \
+          change { ActionMailer::Base.deliveries.count }.by 1
+      end
     end
   end
 end

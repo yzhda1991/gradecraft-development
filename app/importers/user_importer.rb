@@ -18,6 +18,7 @@ class UserImporter
 
         if user.valid?
           team.students << user
+          UserMailer.activation_needed_email(user).deliver_now
         end
       end
     end
