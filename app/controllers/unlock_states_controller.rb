@@ -17,7 +17,11 @@ class UnlockStatesController < ApplicationController
 
   def manually_unlock
     session[:return_to] = request.referer
-    @unlockable = current_course.assignments.find(params[:assignment_id])
+    if params[:assignment_id].present?
+      @unlockable = current_course.assignments.find(params[:assignment_id])
+    elsif params[:badge_id].present?
+      @unlockable = current_course.badges.find(params[:badge_id])
+    end
     @student = current_course.students.find(params[:student_id])
     @unlock_state = @unlockable.find_or_create_unlock_state(@student)
     @unlock_state.instructor_unlocked = true

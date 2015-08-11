@@ -13,6 +13,8 @@
 %table
   %thead
     %tr
+      %th
+      %th
       %th.center{:width => "15%" } Icon
       %th{:width => "25%" } Name
       %th Awarded
@@ -22,6 +24,24 @@
       %tr{:id => "badge-#{badge.id}"}
         %td.center
           %i.fa.fa-arrows-v.draggable
+        %td
+          - if badge.is_unlockable?
+            %a
+              %i.fa.fa-lock
+            .display_on_hover.unlock_keys
+              %h3 Unlock Requirements
+              %ul
+                - badge.unlock_conditions.each do |condition|
+                  %li= "#{condition.name} must be #{condition.condition_state}"
+          - if badge.is_a_condition?
+            %a
+              %i.fa.fa-key
+            .display_on_hover.unlock_keys
+              %h3 Unlock Key
+              %ul
+                - badge.unlock_keys.each do |key|
+                  %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+        %td            
           %img.badge-icon{ :src => badge.icon, :alt => badge.name, :width => 40 }
           - if badge.point_total.present? && badge.point_total > 0
             .italic= "#{points badge.point_total} points"

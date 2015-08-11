@@ -20,7 +20,7 @@ class Badge < ActiveRecord::Base
   # Unlocks
   has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
   accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
-  
+  has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
   has_many :unlock_states, :as => :unlockable, :dependent => :destroy
 
   accepts_nested_attributes_for :earned_badges, allow_destroy: true, :reject_if => proc { |a| a['score'].blank? }
@@ -66,6 +66,10 @@ class Badge < ActiveRecord::Base
     UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").present?
   end
 
+  def unlockable
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").first.unlockable
+  end
+
   def check_unlock_status(student)
     if ! is_unlocked_for_student?(student)
       goal = unlock_conditions.count
@@ -97,6 +101,10 @@ class Badge < ActiveRecord::Base
         return true
       end
     end
+  end
+
+  def find_or_create_unlock_state(student)
+    UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Badge")
   end
 
 
