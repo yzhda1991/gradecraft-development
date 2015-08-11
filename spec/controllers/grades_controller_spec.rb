@@ -42,9 +42,10 @@ describe GradesController do
     describe "GET edit" do
       it "shows the grade edit form" do
         get :edit, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
-        GradesController.stub(:current_student).and_return(@student)
-        assigns(:assignment).should eq(@assignment)
-        assigns(:title).should eq("Grading #{@student.name}'s #{@assignment.name}")
+        #assigns(:title).should eq("Grading #{@student.name}'s #{@assignment.name}")
+  			GradesController.stub(:current_student).and_return(@student)
+      	assigns(:assignment).should eq(@assignment)
+        assigns(:title).should eq("Editing #{@student.name}'s Grade for #{@assignment.name}")
         response.should render_template(:edit)
       end
     end
