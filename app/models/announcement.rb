@@ -9,4 +9,12 @@ class Announcement < ActiveRecord::Base
   def abstract(words=25)
     body.split(/\s+/)[0..words].join(" ").strip
   end
+
+  def deliver!
+    if course
+      course.students.each do |student|
+        AnnouncementMailer.announcement_email(self, student).deliver_now
+      end
+    end
+  end
 end

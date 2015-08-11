@@ -28,4 +28,20 @@ describe Announcement do
       expect(subject.abstract(3)).to eq "I am honored"
     end
   end
+
+  describe "#deliver!" do
+    let(:course) { create :course }
+    let(:student) { create :user }
+    subject { create :announcement, course: course }
+
+    before(:each) do
+      CourseMembership.create! course_id: course.id,
+        user_id: student.id, role: "student"
+    end
+
+    it "sends an email to all the students in the course" do
+      expect { subject.deliver! }.to \
+        change { ActionMailer::Base.deliveries.count }.by 1
+    end
+  end
 end
