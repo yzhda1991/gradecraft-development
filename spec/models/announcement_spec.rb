@@ -9,6 +9,32 @@ describe Announcement do
     end
   end
 
+  describe "validations" do
+    it "requires a title" do
+      announcement = build :announcement, title: ""
+      expect(announcement).to_not be_valid
+      expect(announcement.errors[:title]).to include "can't be blank"
+    end
+
+    it "requires a body" do
+      announcement = build :announcement, body: ""
+      expect(announcement).to_not be_valid
+      expect(announcement.errors[:body]).to include "can't be blank"
+    end
+
+    it "requires a course" do
+      announcement = build :announcement, course_id: nil
+      expect(announcement).to_not be_valid
+      expect(announcement.errors[:course]).to include "can't be blank"
+    end
+
+    it "requires an author" do
+      announcement = build :announcement, author_id: nil
+      expect(announcement).to_not be_valid
+      expect(announcement.errors[:author]).to include "can't be blank"
+    end
+  end
+
   describe "#abstract" do
     let(:body) do <<-BODY
         I am honored to be with you today at your commencement from one of the finest universities in the world. I never graduated from college. Truth be told, this is the closest I've ever gotten to a college graduation. Today I want to tell you three stories from my life. That's it. No big deal. Just three stories.

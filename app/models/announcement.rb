@@ -4,6 +4,11 @@ class Announcement < ActiveRecord::Base
 
   attr_accessible :author_id, :body, :course_id, :title
 
+  validates :author, presence: true
+  validates :body, presence: true
+  validates :course, presence: true
+  validates :title, presence: true
+
   default_scope { order "created_at DESC" }
 
   def abstract(words=25)
