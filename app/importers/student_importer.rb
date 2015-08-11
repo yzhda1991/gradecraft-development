@@ -1,6 +1,6 @@
 require 'csv'
 
-class UserImporter
+class StudentImporter
   attr_reader :successful, :unsuccessful
   attr_accessor :file
 

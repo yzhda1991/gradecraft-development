@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe UserImporter do
+describe StudentImporter do
   describe "#import" do
     it "returns empty results when there is no file" do
-      result = UserImporter.new(nil).import
+      result = StudentImporter.new(nil).import
       expect(result.successful).to be_empty
       expect(result.unsuccessful).to be_empty
     end
@@ -13,7 +13,7 @@ describe UserImporter do
       let(:course) { create :course }
       let(:team) { Team.unscoped.last }
       let(:user) { User.unscoped.last }
-      subject { UserImporter.new(file.tempfile) }
+      subject { StudentImporter.new(file.tempfile) }
       before { create :team, course: course, name: "Zeppelin" }
 
       it "creates the student accounts" do
