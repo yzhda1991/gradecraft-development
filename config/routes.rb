@@ -49,7 +49,7 @@ GradeCraft::Application.routes.draw do
   post 'analytics_events/tab_select_event'
 
   #2. Announcements
-  resources :announcements, only: :index
+  resources :announcements, only: [:index, :new, :show]
 
   #3. Assignments, Submissions, Tasks, Grades
   resources :assignments do

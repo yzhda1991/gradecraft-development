@@ -1,0 +1,17 @@
+%table.responsive.nofeatures_default_score_dynatable.no_radius
+  %thead
+    %tr
+      %th Sent
+      %th Title
+      %th Abstract
+      %th Author
+      %th Read
+  %tbody
+    - @announcements.each do |announcement|
+      - cache ["v1", announcement] do
+        %tr
+          %td= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
+          %td= link_to announcement.title, announcement_path(announcement)
+          %td= announcement.abstract
+          %td= announcement.author.public_name
+          %td

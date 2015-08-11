@@ -1,0 +1,16 @@
+.small-12.panel.mainContent
+  = content_nav_for Announcement
+
+  .small-12
+    %h3.pagetitle Announcements
+
+  .small-12.columns
+    .button-bar
+      %ul.button-group.context_menu.radius
+        %li
+          %a.button{:href => new_announcement_path }
+            %i.fa.fa-plus
+            New Announcement
+
+  .small-12.columns
+    = render "list"
