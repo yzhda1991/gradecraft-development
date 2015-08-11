@@ -54,7 +54,6 @@
                           %ul
                             - assignment.unlock_keys.each do |key|
                               %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
-                        %i.fa.fa-key
                     %td
                       = link_to assignment.name, assignment
                     %td= assignment.try(:due_at) || "Ongoing"
