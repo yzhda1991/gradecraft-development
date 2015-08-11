@@ -74,7 +74,7 @@ class GradesController < ApplicationController
   def serialized_init_data
     JbuilderTemplate.new(temp_view_context).encode do |json|
       json.grade do
-        json.partial! "grades/grade", grade: @grade
+        json.partial! "grades/grade", grade: @grade, assignment: @assignment
       end
 
       json.badges do

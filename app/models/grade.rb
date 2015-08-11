@@ -6,7 +6,9 @@ class Grade < ActiveRecord::Base
                   :grade_files_attributes, :graded_by_id, :group, :group_id, :group_type,
                   :instructor_modified, :pass_fail_status, :point_total, :predicted_score,
                   :raw_score, :released, :status, :student, :student_id, :submission, :_destroy,
-                  :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes, :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at
+                  :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes, 
+                  :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at,
+                  :is_custom_value
 
   # grade points available to the predictor from the assignment controller
   attr_accessor :graded_points, :graded_pass_fail_status
@@ -55,9 +57,6 @@ class Grade < ActiveRecord::Base
   scope :not_released, -> { joins(:assignment).where("status = 'Graded' AND assignments.release_necessary")}
   scope :instructor_modified, -> { where('instructor_modified = ?', true) }
   scope :positive, -> { where('score > 0')}
-
-  #TODO
-  # default_scope
 
   #validates_numericality_of :raw_score, integer_only: true
 

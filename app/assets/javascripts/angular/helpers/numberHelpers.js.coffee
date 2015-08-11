@@ -1,4 +1,3 @@
-
 angular.module('helpers')
   .factory('NumberHelper', ()->
     {

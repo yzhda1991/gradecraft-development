@@ -1,29 +1,32 @@
-@gradecraft.factory 'Grade', ['$http', ($http)->
+@gradecraft.factory 'Grade', ['$http', 'EventHelper', ($http, EventHelper)->
   class Grade
     constructor: (attrs={}, http)->
       @id = attrs.id
       @status = attrs.status
       @raw_score = attrs.raw_score
       @feedback = attrs.feedback
-      @is_custom_value = attrs.is_custom_value
+      @is_custom_value = attrs.is_custom_value || false
       @student_id = attrs.student_id
       @assignment_id = attrs.assignment_id
+      @releaseNecessary = attrs.assignment.release_necessary
+      console.log("Release Necessary: #{@releaseNecessary}")
       @http = http
       @updated_at = null
 
     enableCustomValue: ()->
+      console.log this.is_custom_value
       if this.is_custom_value == false
         this.is_custom_value = true
         this.update()
 
     disableCustomValue: ()->
+      console.log this.is_custom_value
       if this.is_custom_value == true
         this.is_custom_value = false
         this.update()
 
     enableScoreLevels: (event)->
-      event.preventDefault()
-      event.stopPropagation()
+      EventHelper.killEvent(event)
       if this.is_custom_value == true
         this.is_custom_value = false
         this.update()
@@ -46,13 +49,14 @@
 
     # updating grade properties
     update: ()->
-      self = this
-      @http.put("/grades/#{self.id}/async_update", self).success(
-        (data,status)->
-          self.updated_at = new Date()
-      )
-      .error((err)->
-      )
+      if this.releaseNecessary
+        self = this
+        @http.put("/grades/#{self.id}/async_update", self).success(
+          (data,status)->
+            self.updated_at = new Date()
+        )
+        .error((err)->
+        )
 
     params: ()->
       {
