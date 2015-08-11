@@ -1,10 +1,10 @@
 .text-center 
   %h3 Due This Week
   %hr
-  - current_course.assignments.visible.chronological.includes(:assignment_type).each do |assignment|
-    - if assignment.soon? && assignment.include_in_to_do?
+  - current_course.assignments.chronological.includes(:assignment_type).each do |assignment|
+    - if assignment.soon? && assignment.include_in_to_do? && assignment.visible_for_student?(current_student)
       .assignment-item
-        - if assignment.accepts_submissions?
+        - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)
           - if assignment.is_individual?
             .right= render "students/submissions", assignment: assignment
           - else

@@ -239,6 +239,8 @@ class Assignment < ActiveRecord::Base
   def is_unlocked_for_student?(student)
     if unlock_states.where(:student_id => student.id).present?
       unlock_states.where(:student_id => student.id).first.is_unlocked?
+    elsif ! unlock_conditions.present?
+      return true
     end
   end
 
