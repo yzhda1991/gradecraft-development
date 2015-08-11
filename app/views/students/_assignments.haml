@@ -42,7 +42,7 @@
               %th Points
               %th Due
               %th
-              %th{:style => "width: 180px"}
+              %th{:style => "width: 200px"}
 
           %tbody
             - assignments = assignment_type.assignments.sorted.includes(:assignment_type)
@@ -77,11 +77,10 @@
                         %a
                           %i.fa.fa-key
                         .display_on_hover.unlock_keys
-                          %h3 Unlock Keys
-                          .italic Complete this #{term_for :assignment} in order to unlock:
+                          %h3 Unlock Key
                           %ul
-                            - unlockable = assignment.unlockable
-                            %li= "#{unlockable.name}"
+                            - assignment.unlock_keys.each do |key|
+                              %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
                       %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
 
                     %td
@@ -147,6 +146,8 @@
                                 %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
                           - if current_user_is_staff?
                             - grade = grade_for_assignment
+                            - if assignment.is_unlockable? && ! assignment.is_unlocked_for_student?(current_student)
+                              %li= link_to "Unlock", manually_unlock_unlock_state_path(:student_id => current_student.id, :assignment_id => assignment.id), :method => :post, :class => "button"
                             - if assignment.is_individual?
                               - if grade_released_for_assignment    
                                 %li= link_to "Edit Grade", edit_assignment_grade_path(assignment.id, :student_id => @student.id), :class => 'button'

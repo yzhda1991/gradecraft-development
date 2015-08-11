@@ -43,12 +43,18 @@
                         %a
                           %i.fa.fa-lock
                         .display_on_hover.unlock_keys
-                          %h6 Unlock Requirements
+                          %h3 Unlock Requirements
                           %ul
                             - assignment.unlock_conditions.each do |condition|
                               %li= "#{condition.name} must be #{condition.condition_state}"
                       - if assignment.is_a_condition?
-                        %i.fa.fa-key
+                        %a
+                          %i.fa.fa-key
+                        .display_on_hover.unlock_keys
+                          %h3 Unlock Key
+                          %ul
+                            - assignment.unlock_keys.each do |key|
+                              %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
                     %td
                       = link_to assignment.name, assignment
                     %td= assignment.try(:due_at) || "Ongoing"

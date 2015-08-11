@@ -57,6 +57,8 @@
             %li= link_to "Delete", remove_grades_assignment_path(:assignment_id => @assignment.id, :grade_id => grade.id), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :post
 
           - else
+            - if @assignment.is_unlockable? && ! @assignment.is_unlocked_for_student?(student)
+              %li= link_to "Unlock", manually_unlock_unlock_state_path(:student_id => student.id, :assignment_id => @assignment.id), :method => :post, :class => "button"
             %li= link_to "Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
 
     - if @assignment.release_necessary?

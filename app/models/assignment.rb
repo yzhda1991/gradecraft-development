@@ -35,6 +35,7 @@ class Assignment < ActiveRecord::Base
 
   # Unlocks
   has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
+  has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
 
   accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
   
@@ -260,6 +261,10 @@ class Assignment < ActiveRecord::Base
         return false
       end
     end
+  end
+
+  def find_or_create_unlock_state(student)
+    UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Assignment")
   end
 
   # If the point value is set at the assignment type level, grab it from there (commonly used for things like Attendance)

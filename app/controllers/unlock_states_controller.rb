@@ -15,9 +15,14 @@ class UnlockStatesController < ApplicationController
     respond_with @unlock_state
   end
 
-  def destroy
-    @unlock_state = current_course.unlock_state.find(params[:id])
-    @unlock_state.destroy
+  def manually_unlock
+    session[:return_to] = request.referer
+    @unlockable = current_course.assignments.find(params[:assignment_id])
+    @student = current_course.students.find(params[:student_id])
+    @unlock_state = @unlockable.find_or_create_unlock_state(@student)
+    @unlock_state.instructor_unlocked = true
+    @unlock_state.save
+    redirect_to session[:return_to]
   end
   
 end
