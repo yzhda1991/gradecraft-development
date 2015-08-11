@@ -3,24 +3,7 @@
   = content_nav_for current_course, "Edit Grading Scheme"
   %h3.pagetitle= @title
 
-  .small-12.columns
-
-    = simple_form_for @course, method: :put, :url => mass_edit_grade_scheme_elements_path(:course_id => @course) do |f|
-      %script(id="element-template" type="text/x-template")
-        %fieldset.element
-          = f.simple_fields_for :grade_scheme_elements, GradeSchemeElement.new, child_index: 'child_index' do |ef|
-            = render 'element_fields', f: ef
-
-      %fieldset.elements.panel
-        - @grade_scheme_elements.order_by_high_range.each do |element|
-          %fieldset.element
-            %legend.sr-only #{element.letter} #{element.level}
-            = f.simple_fields_for :grade_scheme_elements, element do |ef|
-              = render 'element_fields', f: ef
-
-      = link_to 'Add a Level', '#', class: 'add-element button radius'
-
-      .button-bar
-        %ul.button-group.radius.right
-          %li= f.button :submit
-          %li= link_to 'Cancel', grade_scheme_elements_path, :class => 'button'
+  .small-12.columns{'ng-app' => 'gradecraft', 'ng-controller' => 'GradeSchemeElementsCtrl'}
+    .grade-scheme-elements
+      .grade-scheme-element{'ng-repeat' => 'element in grade_scheme_elements', 'ng-include' => "'ng_gradeScheme.html'"}
+      %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit

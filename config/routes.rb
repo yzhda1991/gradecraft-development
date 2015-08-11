@@ -319,6 +319,8 @@ GradeCraft::Application.routes.draw do
   #15. Events
   resources :events
 
+  get 'gse_mass_edit' => 'grade_scheme_elements#mass_edit', defaults: {format: :json}
+
   #16. Predictor, Student View
   get 'predictor' => 'students#predictor'
   get 'predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}

@@ -1,0 +1,7 @@
+.grade-scheme-row
+  %input{'name' => 'letter', 'ng-model' => 'element.letter'}
+  %input{'name' => 'level', 'ng-model' => 'element.level'}
+  %input{'name' => 'low_range', 'ng-model' => 'element.low_range', 'ng-blur' => 'gradeService.update_scheme($index)'}
+  %input{'name' => 'high_range', 'ng-model' => 'element.high_range', 'disabled' => 'true'}
+  %button{:type => 'button', :class => 'remove-element button alert radius', 'ng-click' => 'gradeService.remove($index)'} Remove
+  %button{:type => 'button', :class => 'add-element button radius', 'ng-click' => 'gradeService.addNew($index)'} Add A Level
