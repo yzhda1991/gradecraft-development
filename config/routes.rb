@@ -275,6 +275,7 @@ GradeCraft::Application.routes.draw do
       get :choices
       get :autocomplete_student_name
       get :scores_for_current_course
+      get :scores_by_assignment
       get :scores_by_team
       get :scores_for_single_assignment
       get :final_grades
