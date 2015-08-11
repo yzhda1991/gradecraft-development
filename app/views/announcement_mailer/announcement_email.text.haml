@@ -1,0 +1,10 @@
+Hello, #{@student.first_name}
+===============================================
+
+#{@announcement.author.public_name} has the following announcement:
+
+#{@announcement.abstract}
+
+To read more, please visit #{announcement_url(@announcement).html_safe}
+
+\-- The GradeCraft team

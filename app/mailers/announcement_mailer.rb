@@ -1,6 +1,9 @@
 class AnnouncementMailer < ActionMailer::Base
   def announcement_email(announcement, student)
-    mail to: student.email,
-       from:  announcement.author.email
+    @announcement = announcement
+    @student = student
+    mail to: @student.email,
+       from: "\"#{@announcement.author.public_name}\" <#{@announcement.author.email}>",
+    subject: @announcement.title
   end
 end
