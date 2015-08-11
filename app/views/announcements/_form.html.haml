@@ -1,0 +1,15 @@
+= simple_form_for(@announcement) do |f|
+  = f.error_notification
+
+  .form-inputs
+    .panel
+      = f.input :title
+      = f.label :body
+      = f.bootsy_area :body
+
+    %hr
+
+  .button-bar
+    %ul.button-group.radius.right
+      %li= f.button :submit, "Send Announcement", :class => "button"
+      %li= link_to 'Cancel', announcements_path, :class => 'button'
