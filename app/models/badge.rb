@@ -107,6 +107,7 @@ class Badge < ActiveRecord::Base
   def find_or_create_unlock_state(student)
     UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Badge")
   end
+  
 
   #badges per role
   def earned_badges_by_student_id
