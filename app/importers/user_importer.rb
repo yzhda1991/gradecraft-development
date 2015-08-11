@@ -13,7 +13,12 @@ class UserImporter
   def import(course=nil)
     if file
       CSV.foreach(file, headers: true, skip_blanks: true) do |row|
+        team = find_or_create_team row, course
         user = create_user row, course
+
+        if user.valid?
+          team.students << user
+        end
       end
     end
 
@@ -31,6 +36,10 @@ class UserImporter
       u.password = generate_random_password
       u.course_memberships.build(course_id: course.id, role: "student") if course
     end
+  end
+
+  def find_or_create_team(row, course)
+    team = Team.find_by_course_and_name course.id, row[4]
   end
 
   def generate_random_password

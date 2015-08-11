@@ -12,6 +12,7 @@ describe UserImporter do
       let(:file) { fixture_file "users.csv", "text/csv" }
       let(:course) { create :course }
       subject { UserImporter.new(file.tempfile) }
+      before { create :team, course: course, name: "Zeppelin" }
 
       it "creates the student accounts" do
         subject.import course
@@ -22,7 +23,13 @@ describe UserImporter do
         expect(user.course_memberships.first.role).to eq "student"
       end
 
-      xit "adds the students to the team if the team exists"
+      it "adds the students to the team if the team exists" do
+        subject.import course
+        team = Team.unscoped.last
+        expect(team.name).to eq "Zeppelin"
+        expect(team.students.first.email).to eq "jimmy@example.com"
+      end
+
       xit "creates the team and adds the student if the team does not exist"
       xit "sends the activation email to each student"
     end
