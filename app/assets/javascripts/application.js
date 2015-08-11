@@ -27,13 +27,9 @@
 //= require angular-rails-templates
 //= require_tree ./angular/templates
 //= require ng-rails-csrf
-//= require ./angular/vendor/api-check
 //= require ./angular/main.js
 //= require ./angular/ui/sortable
 //= require ./angular/vendor/restangular.min
-//= require ./angular/vendor/angular-messages
-//= require ./angular/vendor/formly
-//= require ./angular/vendor/angular-formly-templates-foundation
 //= require_tree ./angular
 //= require gradecraft
 //= require preload_store

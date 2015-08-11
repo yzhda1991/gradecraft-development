@@ -35,32 +35,18 @@ class GradeSchemeElementsController < ApplicationController
           :letter,
           :high_range,
           :course_id
-        ) }
+        ).reverse }
 
       else
         format.json { render json: false, status: :internal_server_error }
       end
     end
-    # @course = current_course
-    # @course.update_attributes(params[:course])
-    # respond_to do |format|
-    #   if @course.save
-    #     format.html { redirect_to grade_scheme_elements_path }
-    #   else
-    #     @title = "Edit Grade Scheme"
-    #     @grade_scheme_elements = current_course.grade_scheme_elements
-    #     format.html { render action: "mass_edit" }
-    #   end
-    # end
   end
 
   def update
     respond_to do |format|
       format.json { render json: true }
     end
-    # @grade_scheme_element = params[:grade_scheme_element]
-    # @grade_scheme_element.update_attributes params[:grade_scheme_element]
-    # respond_with @rubric, status: :not_found
   end
 
   def student_predictor_data
