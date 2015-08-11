@@ -151,7 +151,7 @@
                           - if assignment.has_groups?
                             - if group_for_assignment.present?
                               %li= link_to "See Group", group_path(group_for_assignment), :class => "button"
-                              - if assignment.accepts_submissions?
+                              - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)
                                 - if group_for_assignment && group_for_assignment.submission_for_assignment(assignment)
                                   %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
                                 - else
@@ -160,7 +160,7 @@
                             - else
                               %li= link_to "Create a Group", new_group_path, :class => "button"
                           - else
-                            - if assignment.accepts_submissions?
+                            - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)
                               - if student_submission.present?
                                 %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
                               - else
