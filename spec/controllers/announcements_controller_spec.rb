@@ -48,5 +48,12 @@ describe AnnouncementsController do
         }.to change  { ActionMailer::Base.deliveries.count }.by 1
       end
     end
+
+    context "with an invalid announcement" do
+      it "renders view with the errors" do
+        post :create, announcement: { title: "", body: body }
+        expect(response).to render_template :new
+      end
+    end
   end
 end
