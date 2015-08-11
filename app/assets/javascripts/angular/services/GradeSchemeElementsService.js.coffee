@@ -33,6 +33,7 @@
       $http.put('/grade_scheme_elements/mass_edit', grade_scheme_elements_attributes: elements).success(
         (data) ->
           angular.copy(data.grade_scheme_elements, elements)
+          console.log(data)
       ).error(
         (error) ->
           console.log(error)
