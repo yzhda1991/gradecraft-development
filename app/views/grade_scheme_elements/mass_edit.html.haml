@@ -5,8 +5,3 @@
   .grade-scheme-elements
     .grade-scheme-element{'ng-repeat' => 'element in grade_scheme_elements', 'ng-include' => "'ng_gradeScheme.html'"}
     %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit
-
-  .button-bar
-    %ul.button-group.radius.right
-      %li= f.button :submit
-      %li= link_to 'Cancel', grade_scheme_elements_path, :class => 'button'
