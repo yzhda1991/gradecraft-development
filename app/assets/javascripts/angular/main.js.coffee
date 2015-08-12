@@ -17,7 +17,6 @@
   'templates',
   'smart-number',
   'fcsa-number',
-  'lodash',
   'helpers'
 ])
 

@@ -75,6 +75,7 @@ group :development do
   gem 'rubystats'
   gem 'meta_request'
   gem "bullet"
+  gem 'parallel_tests'
 end
 
 group :development, :test do
@@ -84,17 +85,17 @@ group :development, :test do
   gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
-end
+  gem 'spring-commands-rspec'
 
-group :test do
-  gem 'faker', '~> 1.4.3'
+  # formerly test-only gems, added to development for parallel_tests
   gem 'capybara', '~> 2.1.0'
   gem 'database_cleaner', "~> 1.0.1"
   gem 'launchy'
   gem 'selenium-webdriver'
-  gem 'factory_girl_rails', '~> 4.5.0'
   gem 'rspec-rails', '~> 2.14.0'
   gem 'simplecov'
+  gem 'faker', '~> 1.4.3'
+  gem 'factory_girl_rails', '~> 4.5.0'
 end
 
 group :tasks do
