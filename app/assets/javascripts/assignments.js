@@ -22,6 +22,49 @@
     return false;
   };
 
+  $('.add-unlock-condition').click(checkAssignmentBadgeSelects);
+
+  function checkAssignmentBadgeSelects() {
+    setTimeout(function() {
+      $('.assignment-or-badge:last').change(function(){
+        var val = $(this).find('select').val();
+        var parent = $(this.parentNode.parentNode);
+        if(val === 'Assignment') {
+          if(parent.find('.badges-list').is(':visible')) {
+            toggleForms(parent, "Badges");
+          }
+          toggleForms(parent, "Assignments");
+        } else if(val === 'Badge') {
+          if(parent.find('.assignments-list').is(':visible')) {
+            toggleForms(parent, "Assignments");
+          }
+          toggleForms(parent, "Badges");
+        } else {
+          toggleForms(parent, "Both");
+        }
+      });
+    }, 500);
+
+    function toggleForms(parent, forms) {
+      if(forms === "Assignments") {
+        parent.find('.assignments-list').toggle();
+        parent.find('.assignment-state').toggle();
+        parent.find('.assignment-minpoints').toggle();
+      } else if(forms === "Badges") {
+        parent.find('.badges-list').toggle();
+        parent.find('.badge-state').toggle();
+        parent.find('.badge-earned-count').toggle();
+      } else {
+        parent.find('.badges-list').hide();
+        parent.find('.badge-state').hide();
+        parent.find('.badge-earned-count').hide();
+        parent.find('.assignments-list').hide();
+        parent.find('.assignment-state').hide();
+        parent.find('.assignment-minpoints').hide();
+      }
+    }
+  }
+
   if($('.assignment_options > input').is(':checked')) {
     $('ul > .submit').show();
   } else {

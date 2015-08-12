@@ -83,7 +83,7 @@
         = f.label :accepts_submissions #{term_for :assignment} Submissions
         = f.check_box :accepts_submissions
         .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
-      
+
       .form-item
         %ul.submit.accepts_submission_types
           %li.submit
@@ -133,12 +133,12 @@
       = f.label :include_in_to_do, "To Do List"
       = f.check_box :include_in_to_do
       .form_label Can #{term_for :students} see this #{term_for :assignment} in the to do list?
-        
+
     - if ! current_course.hide_analytics?
       .form-item
         = f.label :hide_analytics, "Hide Analytics?"
         = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
-        .form_label{:id => "hideAnalytics"}  Do you want to hide assignment analytics from students? 
+        .form_label{:id => "hideAnalytics"}  Do you want to hide assignment analytics from students?
 
   %section
     %h4 Timeline
@@ -169,7 +169,7 @@
 
   %section
     %h4 Unlocks
-    
+
     = f.input :visible_when_locked
 
     .unlock-conditions
@@ -217,7 +217,8 @@
             - else
               = link_to af.filename, af.url, :target => "_blank"
               = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => @assignment.id, :upload_id => af.id } )
-  .button-bar
-    %ul.button-group.radius.right
-      %li= f.button :submit, "#{@assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
-      %li= link_to 'Cancel', assignments_path, :class => "button"
+
+    .button-bar
+      %ul.button-group.radius.right
+        %li= f.button :submit, "#{@assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
+        %li= link_to 'Cancel', assignments_path, :class => "button"
