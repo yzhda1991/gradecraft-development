@@ -1,6 +1,9 @@
 GradeCraft::Application.routes.draw do
 
+  mount RailsEmailPreview::Engine, at: 'emails' if Rails.env.development?
+
   require 'admin_constraint'
+
   #1. Analytics & Charts
   #2. Announcements
   #3. Assignments, Submissions, Tasks, Grades
@@ -100,8 +103,8 @@ GradeCraft::Application.routes.draw do
       get :design, on: :collection
     end
   end
-  resources :unlock_states do 
-    member do 
+  resources :unlock_states do
+    member do
       post :manually_unlock
     end
   end
