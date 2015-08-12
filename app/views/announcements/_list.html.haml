@@ -12,6 +12,6 @@
         %tr
           %td= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
           %td= link_to announcement.title, announcement_path(announcement)
-          %td= announcement.abstract
+          %td= announcement.abstract.html_safe
           %td= announcement.author.public_name
           %td
