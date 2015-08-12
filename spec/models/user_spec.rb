@@ -17,6 +17,18 @@ describe User do
     end
   end
 
+  describe "#activated?" do
+    it "is activated when the activation state is active" do
+      user = build :user, activation_state: "active"
+      expect(user).to be_activated
+    end
+
+    it "is not activated when the activation state is pending" do
+      user = build :user, activation_state: "pending"
+      expect(user).to_not be_activated
+    end
+  end
+
   context "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"

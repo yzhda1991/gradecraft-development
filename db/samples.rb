@@ -208,7 +208,7 @@ puts "LARP Day is going to happen. Watch out for the Dungeon Master's sword!"
 students = user_names.map do |name|
   first_name, last_name = name.split(' ')
   username = name.parameterize.sub('-','.')
-  User.create! do |u|
+  user = User.create! do |u|
     u.username = username
     u.first_name = first_name
     u.last_name = last_name
@@ -216,7 +216,9 @@ students = user_names.map do |name|
     u.password = 'uptonogood'
     u.courses << [ educ_course, polsci_course, information_course ]
     u.teams << [ educ_teams.sample, polsci_teams.sample, info_teams.sample ]
-  end.activate!
+  end
+  user.activate!
+  user
 end
 puts "Generated #{students.count} unruly students"
 

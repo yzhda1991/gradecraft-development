@@ -1,4 +1,11 @@
 namespace :users do
+  desc "Activates all existing users"
+  task :activate => :environment do
+    all = User.all
+    all.each(&:activate!)
+    puts "\nSuccessfully activated all #{all.count} #{"user".pluralize(all.count)}."
+  end
+
   namespace :set do
     desc "Set all user passwords to a common one for testing purposes"
     task :master_password => :environment do

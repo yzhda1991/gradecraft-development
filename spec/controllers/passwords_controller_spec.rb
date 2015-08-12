@@ -47,17 +47,25 @@ describe PasswordsController do
     let(:user) { create :user, reset_password_token: "blah" }
 
     context "with matching passwords" do
-      before do
+      it "changes the user's password" do
         put :update, id: user.reset_password_token,
           token: user.reset_password_token,
           user: { password: "blah", password_confirmation: "blah" }
-      end
-
-      it "changes the user's password" do
         expect(User.authenticate(user.email, "blah")).to eq user
       end
 
+      it "activates the user if they are not activated" do
+        user.update_attribute(:activation_state, "pending")
+        put :update, id: user.reset_password_token,
+          token: user.reset_password_token,
+          user: { password: "blah", password_confirmation: "blah" }
+        expect(user.reload).to be_activated
+      end
+
       it "logs the user in" do
+        put :update, id: user.reset_password_token,
+          token: user.reset_password_token,
+          user: { password: "blah", password_confirmation: "blah" }
         expect(response).to redirect_to dashboard_path
       end
     end

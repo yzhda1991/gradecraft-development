@@ -162,6 +162,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def activated?
+    activation_state == "active"
+  end
+
   def default_course
     super || courses.first
   end
