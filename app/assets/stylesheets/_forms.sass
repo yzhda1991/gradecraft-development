@@ -20,10 +20,6 @@ label, input
 label.checkbox input, label.check_boxes input, label.checkbox, label.radio, label.radio input
   clear: both
 
-.score-level .remove-level.button, .remove-element.button, .assignment-score-levels .remove-assignment-score-level.button
-  margin-top: 1.8rem
-  color: #FFF
-
 fieldset
   border: none
   padding: 0
@@ -192,8 +188,25 @@ ul.accepts_submission_types
     margin-top: -1.8rem
     margin-bottom: 1.7rem
 
+.disabled
+  background-color: $lighter-grey
+  border: 0
+
 .ui-datepicker
   margin-top: -2.7rem !important
 
   .ui-datepicker-next, .ui-datepicker-prev
     background-color: $primary-color
+
+.grade-scheme-row
+  background-color: $lighter-grey
+  margin: 1rem 0
+  padding: 1rem
+  border-radius: 25px
+
+  input
+    padding: .5rem
+    width: 5rem
+
+  .disabled 
+    font-size: 1.0rem

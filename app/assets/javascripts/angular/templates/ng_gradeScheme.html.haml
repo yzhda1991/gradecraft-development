@@ -1,7 +1,11 @@
 .grade-scheme-row
+  %span.form_label Grade Letter
   %input{'name' => 'letter', 'ng-model' => 'element.letter'}
+  %span.form_label Level name
   %input{'name' => 'level', 'ng-model' => 'element.level'}
+  %span.form_label Low Point Threshold
   %input{'name' => 'low_range', 'ng-model' => 'element.low_range', 'ng-blur' => 'gradeService.update_scheme($index)'}
-  %input{'name' => 'high_range', 'ng-model' => 'element.high_range', 'disabled' => 'true'}
+  %span.form_label High Point Threshold
+  %input{'name' => 'high_range', 'ng-model' => 'element.high_range', 'disabled' => 'true', :class => "disabled"}
   %button{:type => 'button', :class => 'remove-element button alert radius', 'ng-click' => 'gradeService.remove($index)'} Remove
   %button{:type => 'button', :class => 'add-element button radius', 'ng-click' => 'gradeService.addNew($index)'} Add A Level
