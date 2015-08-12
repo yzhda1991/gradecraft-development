@@ -1,6 +1,7 @@
 GradeCraft::Application.configure do
   config.action_controller.allow_forgery_protection = false
-  config.action_mailer.default_url_options = { :host => 'gradecraft:3000' }
+  config.asset_host = "http://localhost:5000"
+  config.action_mailer.default_url_options = { :host => 'localhost:5000' }
   config.action_controller.perform_caching = false
   config.action_dispatch.show_exceptions = false
   config.action_mailer.delivery_method = :test
