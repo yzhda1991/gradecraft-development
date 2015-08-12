@@ -1,0 +1,31 @@
+.small-12.panel.mainContent
+  = content_nav_for Announcement, @title
+
+  .small-12
+    %h3.pagetitle= @title
+
+  .small-12.columns
+    .button-bar
+      %ul.button-group.context_menu.radius
+        %li
+          %a.button{:href => new_announcement_path }
+            %i.fa.fa-plus
+            New Announcement
+
+  .small-12.columns
+
+    %p
+      %strong Course:
+      = @announcement.course.name
+
+    %p
+      %strong Sent:
+      = @announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
+
+    %p
+      %strong Subject:
+      = @announcement.title
+
+    %hr
+
+    %p= @announcement.body.html_safe

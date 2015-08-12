@@ -2,9 +2,8 @@
   %thead
     %tr
       %th Sent
-      %th Title
+      %th Subject
       %th Author
-      %th Read
   %tbody
     - @announcements.each do |announcement|
       - cache ["v1", announcement] do
@@ -12,4 +11,3 @@
           %td= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
           %td= link_to announcement.title, announcement_path(announcement)
           %td= announcement.author.public_name
-          %td

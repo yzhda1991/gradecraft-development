@@ -4,6 +4,11 @@ class AnnouncementsController < ApplicationController
     @announcements = Announcement.where(course_id: current_course.id)
   end
 
+  def show
+    @announcement = Announcement.find params[:id]
+    @title = @announcement.title
+  end
+
   def new
     @title = "Create a New Announcement"
     @announcement = Announcement.new course_id: current_course.id
