@@ -17,6 +17,8 @@
         %ul.nav.nav-pill.right
           - if current_user
             = render 'layouts/navigation/authenticated_nav'
+          - else
+            = render 'layouts/navigation/login_nav'
 
       %a.btn-navbar.btn-navbar-navtoggle.btn-flyout-trigger
         %span.icon-bar.btn-flyout-trigger
