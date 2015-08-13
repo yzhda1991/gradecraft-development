@@ -16,11 +16,10 @@
       = f.text_field :name
 
     .form-item
-      .switch-label Pass Fail
       .pass-fail-toggle
         .switch
-          = f.check_box :pass_fail
           = f.label :pass_fail, "Pass Fail"
+          = f.check_box :pass_fail
 
         - if @assignment.pass_fail?
           .pass-fail-contingent{ :style => "visibility: hidden" }
@@ -84,19 +83,20 @@
         = f.check_box :accepts_submissions
         .form_label Will you be using GradeCraft to accept submissions for this #{term_for :assignment}?
 
-      .form-item
+        %br
+
         %ul.submit.accepts_submission_types
           %li.submit
             .checkbox
-              = f.label :accepts_links
+              = f.label :accepts_links, :label => "Accept Links"
               = f.check_box :accepts_links
           %li.submit
             .checkbox
-              = f.label :accepts_attachments
+              = f.label :accepts_attachments, :label => "Accept Uploads/Attachments"
               = f.check_box :accepts_attachments
           %li.submit
             .checkbox
-              = f.label :accepts_text
+              = f.label :accepts_text, :label => "Accept raw text"
               = f.check_box :accepts_text
 
       .form-item
@@ -217,8 +217,7 @@
             - else
               = link_to af.filename, af.url, :target => "_blank"
               = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => @assignment.id, :upload_id => af.id } )
-
-    .button-bar
-      %ul.button-group.radius.right
-        %li= f.button :submit, "#{@assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
-        %li= link_to 'Cancel', assignments_path, :class => "button"
+  .button-bar
+    %ul.button-group.radius.right
+      %li= f.button :submit, "#{@assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
+      %li= link_to 'Cancel', assignments_path, :class => "button"
