@@ -724,20 +724,20 @@ assignments << Assignment.create! do |a|
   Rubric.create! do |rubric|
     rubric.assignment = a
     rubric.save
-    1.upto(15).each do |n|
-      rubric.metrics.create! do |metric|
-        metric.name = "Criteria ##{n}"
-        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
-        metric.order = n
-        metric.save
-        1.upto(5).each do |m|
-          metric.tiers.create! do |tier|
-            tier.name = "Tier ##{m}"
-            tier.points = metric.max_points - (m * 1000)
-          end
-        end
-      end
-    end
+    # 1.upto(15).each do |n|
+    #   rubric.metrics.create! do |metric|
+    #     metric.name = "Criteria ##{n}"
+    #     metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+    #     metric.order = n
+    #     metric.save
+    #     1.upto(5).each do |m|
+    #       metric.tiers.create! do |tier|
+    #         tier.name = "Tier ##{m}"
+    #         tier.points = metric.max_points - (m * 1000)
+    #       end
+    #     end
+    #   end
+    # end
   end
   students.each do |student|
     submission = student.submissions.create! do |s|
@@ -745,18 +745,18 @@ assignments << Assignment.create! do |a|
       s.text_comment = "Wingardium Leviosa"
       s.link = "http://www.twitter.com"
     end
-    a.rubric.metrics.each do |metric|
-      metric.rubric_grades.create! do |rg|
-        rg.max_points = metric.max_points
-        rg.points = metric.tiers.first.points
-        rg.tier = metric.tiers.first
-        rg.metric_name = metric.name
-        rg.tier_name = metric.tiers.first.name
-        rg.assignment_id = a.id
-        rg.order = 1
-        rg.student_id = student.id
-      end
-    end
+    # a.rubric.metrics.each do |metric|
+    #   metric.rubric_grades.create! do |rg|
+    #     rg.max_points = metric.max_points
+    #     rg.points = metric.tiers.first.points
+    #     rg.tier = metric.tiers.first
+    #     rg.metric_name = metric.name
+    #     rg.tier_name = metric.tiers.first.name
+    #     rg.assignment_id = a.id
+    #     rg.order = 1
+    #     rg.student_id = student.id
+    #   end
+    # end
   end
 end
 puts "Game Selection Paper has been posted!"
