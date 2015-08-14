@@ -1,8 +1,9 @@
 @gradecraft.factory 'GradeSchemeElementsService', ['$http', ($http) ->
     elements = []
+    deletedIds = []
 
     remove = (index) ->
-      elements.splice(index, 1)
+      deletedIds.push(elements.splice(index, 1)[0].id)
 
     addNew = (index) ->
       elements.splice(index+1, 0, {
@@ -30,7 +31,11 @@
       )
 
     postGradeSchemeElements = ()->
-      $http.put('/grade_scheme_elements/mass_edit', grade_scheme_elements_attributes: elements).success(
+      data = {
+        grade_scheme_elements_attributes: elements
+        deleted_ids: deletedIds
+      }
+      $http.put('/grade_scheme_elements/mass_edit', data).success(
         (data) ->
           angular.copy(data.grade_scheme_elements, elements)
           console.log(data)
