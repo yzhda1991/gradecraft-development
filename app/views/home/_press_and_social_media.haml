@@ -1,10 +1,12 @@
-%section
-	%article.columns
-		%h3 Press
+%section.press
+	%article.news-articles
+		%h1 Press
+		%ul
+			= render 'articles'
 
-	%article.columns
-		%h3 Gameful Pedagogy
+	%article.pedagogy
+		%h1 Gameful Pedagogy
+		%p We're putting together a site that documents what we've found to be the best practices for gameful classrooms. Explore <a href="http://pedagogy.gradecraft.com/home/frequently-asked-questions">pedagogy.gradecraft.com</a> for more!
 
-	%article.columns
-		%h3 Recent Tweets
-		<a class="twitter-timeline" href="https://twitter.com/gradecraft" data-widget-id="631826460190351361">Tweets by @gradecraft</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	%article.twitter
+		<a class="twitter-timeline" height="400" href="https://twitter.com/gradecraft" data-widget-id="631826460190351361">Tweets by @gradecraft</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
