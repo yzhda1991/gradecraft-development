@@ -30,7 +30,7 @@ $layer-back-color: -1000
   margin-bottom: $background-height + 200px
 
 .back-color-wash
-  background-color: $bg-color-sky
+  background-color: $color-alt-blue-3
   z-index: $layer-back-color
   position: fixed
   width: 100%
@@ -165,20 +165,20 @@ $layer-back-color: -1000
   height: 200px
 
 .hill-position-1
-  background-color: $bg-color-hill-light
+  background-color: $color-green-3
   position: absolute
   top: -13px
   left: -200px
   z-index: $layer-foreground-hill
 
 .hill-position-2
-  background-color: $bg-color-hill-medium
+  background-color: $color-green-2
   position: absolute
   left: 200px
   z-index: $layer-middleground-hill
 
 .hill-position-3
-  background-color: $bg-color-hill-dark
+  background-color: $color-green-0
   position: absolute
   right: -300px
   top: -10px
@@ -213,14 +213,14 @@ $layer-back-color: -1000
   width: 0
   height: 0
   border-left: $default-mountain-size solid transparent
-  border-bottom: $default-mountain-size solid $bg-color-mountain-medium
+  border-bottom: $default-mountain-size solid $color-alt-blue-1
   float: left
 
 .mountain-right-side
   width: 0
   height: 0
   border-right: $default-mountain-size solid transparent
-  border-bottom: $default-mountain-size solid $bg-color-mountain-dark
+  border-bottom: $default-mountain-size solid $color-alt-blue-0
   float: left
 
 .mountain-peak
@@ -241,7 +241,7 @@ $layer-back-color: -1000
 .mountain-peak-left-side
   width: 0
   height: 0
-  border-right: $default-mountain-peak-size solid $bg-color-mountain-light
+  border-right: $default-mountain-peak-size solid $color-alt-blue-2
   border-bottom: $default-mountain-peak-size solid transparent
   border-top: $default-mountain-peak-size solid transparent
   float: left
@@ -249,7 +249,7 @@ $layer-back-color: -1000
 .mountain-peak-right-side
   width: 0
   height: 0
-  border-left: $default-mountain-peak-size solid $bg-color-mountain-medium
+  border-left: $default-mountain-peak-size solid $color-alt-blue-1
   border-bottom: $default-mountain-peak-size solid transparent
   border-top: $default-mountain-peak-size solid transparent
   float: left
@@ -258,11 +258,11 @@ $layer-back-color: -1000
   width: $default-mountain-size
   height: $default-mountain-size
   top: $default-mountain-size
-  background-color: $bg-color-mountain-medium
+  background-color: $color-alt-blue-1
   position: absolute
 
 .mountain-root.right
-  background-color: $bg-color-mountain-dark
+  background-color: $color-alt-blue-0
   left: $default-mountain-size
 
 @mixin mountain-size-mixin($size)

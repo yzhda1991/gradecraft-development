@@ -1,6 +1,5 @@
 GradeCraft::Application.routes.draw do
 
-
   require 'admin_constraint'
   mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   #1. Analytics & Charts
@@ -244,6 +243,7 @@ GradeCraft::Application.routes.draw do
 
   get 'home/index'
   get 'dashboard' => 'info#dashboard'
+  get 'color_theme' => 'home#color_theme'
   root :to => "home#index"
 
   #12. Users
