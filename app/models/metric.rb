@@ -39,7 +39,7 @@ class Metric < ActiveRecord::Base
   def generate_default_tiers
     @full_credit_tier = create_full_credit_tier
     create_no_credit_tier
-    #update_attributes full_credit_tier_id: @full_credit_tier[:id]
+    update_attributes full_credit_tier_id: @full_credit_tier[:id]
   end
 
   def update_full_credit
