@@ -6,18 +6,21 @@ class AnnouncementsController < ApplicationController
 
   def show
     @announcement = Announcement.find params[:id]
+    enforce_view_permission(@announcement)
     @title = @announcement.title
   end
 
   def new
     @title = "Create a New Announcement"
     @announcement = Announcement.new course_id: current_course.id
+    enforce_create_permission(@announcement)
   end
 
   def create
     announcement_params = params[:announcement]
       .merge({ course_id: current_course.id, author_id: current_user.id })
     @announcement = Announcement.new announcement_params
+    enforce_create_permission(@announcement)
     if @announcement.save
       @announcement.deliver!
       redirect_to announcements_path, notice: "Announcement created and sent." and return

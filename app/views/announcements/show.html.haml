@@ -7,10 +7,11 @@
   .small-12.columns
     .button-bar
       %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_announcement_path }
-            %i.fa.fa-plus
-            New Announcement
+        - if current_user.can_create?(@announcement)
+          %li
+            %a.button{:href => new_announcement_path }
+              %i.fa.fa-plus
+              New Announcement
 
   .small-12.columns
 

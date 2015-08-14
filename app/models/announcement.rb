@@ -1,4 +1,6 @@
 class Announcement < ActiveRecord::Base
+  include Canable::Ables
+
   belongs_to :author, class_name: "User"
   belongs_to :course
 
@@ -10,6 +12,24 @@ class Announcement < ActiveRecord::Base
   validates :title, presence: true
 
   default_scope { order "created_at DESC" }
+
+  def creatable_by?(user)
+    return true if !course.present?
+    user.is_staff?(course)
+  end
+
+  def destroyable_by?(user)
+    updatable_by? user
+  end
+
+  def updatable_by?(user)
+    author_id == user.id
+  end
+
+  def viewable_by?(user)
+    return true if !course.present?
+    course.users.include? user
+  end
 
   def abstract(words=25)
     body.split(/\s+/)[0..words].join(" ").strip
