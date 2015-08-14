@@ -4,40 +4,41 @@
 
 %h3.pagetitle= @title
 
-#rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment.point_total})")
+.pageContent
+  #rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment.point_total})")
 
-  #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
-    %h4#points-legend
-      %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsAssigned() | number:0}}
-      \/#{number_with_delimiter(@assignment.point_total)} Points Allocated
-    %h4.notice(ng-show="pointsMissing()") You have {{pointsRemaining()}} point{{pointsRemaining() > 1 ? "s" : ""}} left to assign
-    %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
-    %h4.notice(ng-show="pointsOverage()") You have allocated more points than the assignment total
+    #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
+      %h4#points-legend
+        %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsAssigned() | number:0}}
+        \/#{number_with_delimiter(@assignment.point_total)} Points Allocated
+      %h4.notice(ng-show="pointsMissing()") You have {{pointsRemaining()}} point{{pointsRemaining() > 1 ? "s" : ""}} left to assign
+      %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
+      %h4.notice(ng-show="pointsOverage()") You have allocated more points than the assignment total
 
-  .italic
-    = link_to '&laquo; Return to Assignment'.html_safe, assignment_path(@assignment), class: "return-link"
-    –
-    %span Rubric is saved automatically.    
+    .italic
+      = link_to '&laquo; Return to Assignment'.html_safe, assignment_path(@assignment), class: "return-link"
+      –
+      %span Rubric is saved automatically.    
 
-  .splash(ng-cloak) Loading rubric...
+    .splash(ng-cloak) Loading rubric...
 
-  #rubric-column-heading
-    .metric-heading
-      %h4.italic.not_bold Criteria
-    .tier-heading 
-      %h4.italic.not_bold Score Levels
+    #rubric-column-heading
+      .metric-heading
+        %h4.italic.not_bold Criteria
+      .tier-heading 
+        %h4.italic.not_bold Score Levels
 
-  #metric-box(ng-cloak)
+    #metric-box(ng-cloak)
 
-    .rubric-container.divider(ng-repeat="metric in metrics")
-      .order-label {{$index + 1}}
-      .metric(name="metricForm" ng-form ng-submit="metric.create()" ng-class="{saved: metric.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
-        = render "rubrics/new_metric"
-      .tier-container
-        .tier-wrapper
-          .tier(name="tierForm" ng-repeat="tier in metric.tiers" ng-form ng-submit="tier.create()" ng-class="{saved: tier.isSaved(), nocredit: tier.noCredit}")
-            = render "rubrics/new_tier"
-      %button.add-tier(name="newTier" ng-click="metric.addTier()" ng-show="metric.isSaved()")
-        + Level
+      .rubric-container.divider(ng-repeat="metric in metrics")
+        .order-label {{$index + 1}}
+        .metric(name="metricForm" ng-form ng-submit="metric.create()" ng-class="{saved: metric.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
+          = render "rubrics/new_metric"
+        .tier-container
+          .tier-wrapper
+            .tier(name="tierForm" ng-repeat="tier in metric.tiers" ng-form ng-submit="tier.create()" ng-class="{saved: tier.isSaved(), nocredit: tier.noCredit}")
+              = render "rubrics/new_tier"
+        %button.add-tier(name="newTier" ng-click="metric.addTier()" ng-show="metric.isSaved()")
+          + Level
 
-  %button.radius#new-rubric-metric(type="button" ng-click="newMetric()" ng-hide) + Criterion
+    %button.radius#new-rubric-metric(type="button" ng-click="newMetric()" ng-hide) + Criterion

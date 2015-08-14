@@ -9,54 +9,51 @@
         %i.fa.fa-plus
         New #{(term_for :badge).titleize}
 
-%table
-  %thead
-    %tr
-      %th
-      %th
-      %th.center{:width => "15%" } Icon
-      %th{:width => "25%" } Name
-      %th Awarded
-      %th{ :style => "min-width: 220px" }
-  %tbody.sort-badges
-    - @badges.each do |badge|
-      %tr{:id => "badge-#{badge.id}"}
-        %td.center
-          %i.fa.fa-arrows-v.draggable
-        %td
-          - if badge.is_unlockable?
-            %a
-              %i.fa.fa-lock
-            .display_on_hover.unlock_keys
-              %h3 Unlock Requirements
-              %ul
-                - badge.unlock_conditions.each do |condition|
-                  %li= "#{condition.name} must be #{condition.condition_state}"
-          - if badge.is_a_condition?
-            %a
-              %i.fa.fa-key
-            .display_on_hover.unlock_keys
-              %h3 Unlock Key
-              %ul
-                - badge.unlock_keys.each do |key|
-                  %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
-        %td            
-          = image_tag "draggable_transparent.png", :width => "10%", :style => "margin-top: -6px", :class => "draggable"
-          %img.badge-icon{ :src => badge.icon, :alt => badge.name, :width => 40 }
-          - if badge.point_total.present? && badge.point_total > 0
-            .italic= "#{points badge.point_total} points"
-        %td
-          .subtitle= link_to badge.name, badge_path(badge)
-          = raw badge.description
-        %td= badge.awarded_count
-        %td
-          .button-bar
-            %ul.button-group.radius
-              %li= link_to "Quick Award", mass_award_badge_path(badge), :class => "button"
-              %li= link_to "Award", new_badge_earned_badge_path(badge), :class => "button"
-              %li
-                %a{:href => edit_badge_path(badge), :class => 'button'}
-                  Edit
-              %li
-                %a{:href => badge_path(badge),:class => "button" , :data => { confirm: 'Are you sure?',  method: :delete } }
-                  Delete
+.pageContent
+  //instructor badge index table
+  %table
+    %thead
+      %tr
+        %th
+        %th
+        %th.center{:width => "15%" } Icon
+        %th{:width => "25%" } Name
+        %th Awarded
+        %th{ :style => "min-width: 220px" }
+    %tbody.sort-badges
+      - @badges.each do |badge|
+        %tr{:id => "badge-#{badge.id}"}
+          %td.center
+            %i.fa.fa-arrows-v.draggable
+          %td
+            - if badge.is_unlockable?
+              %a
+                %i.fa.fa-lock
+              .display_on_hover.unlock_keys
+                %h3 Unlock Requirements
+                %ul
+                  - badge.unlock_conditions.each do |condition|
+                    %li= "#{condition.name} must be #{condition.condition_state}"
+            - if badge.is_a_condition?
+              %a
+                %i.fa.fa-key
+              .display_on_hover.unlock_keys
+                %h3 Unlock Key
+                %ul
+                  - badge.unlock_keys.each do |key|
+                    %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+          %td            
+            %img.badge-icon{ :src => badge.icon, :alt => badge.name, :width => 40 }
+            - if badge.point_total.present? && badge.point_total > 0
+              .italic= "#{points badge.point_total} points"
+          %td
+            .subtitle= link_to badge.name, badge_path(badge)
+            = raw badge.description
+          %td= badge.awarded_count
+          %td
+            .button-bar
+              %ul.button-group.radius
+                %li= link_to raw("<i class='fa fa-check fa-fw'></i> Quick Award"), mass_award_badge_path(badge), :class => "button"
+                %li= link_to raw("<i class='fa fa-star fa-fw'></i> Award"), new_badge_earned_badge_path(badge), :class => "button"
+                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_badge_path(badge), :class => 'button'
+                %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), badge_path(badge),:class => "button", :data => { confirm: 'Are you sure?',  method: :delete }

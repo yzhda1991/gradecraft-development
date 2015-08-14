@@ -1,32 +1,33 @@
 %h3.pagetitle= "Course Progress"
 
-- @grade_scheme_elements.each do |element|
-  - if current_student.cached_score_for_course(current_course) < element.low_range
-    .progress.bar_magic.transparent.center
-      .meter
-        %i.fa.fa-lock
-        %span= element.level
-        %span= element.letter
-        %span=points element.low_range
-  - elsif current_student.cached_score_for_course(current_course) >= element.high_range
-    .progress.bar_magic.success.center
-      .meter
-        %i.fa.fa-star
-        %span= element.level
-        %span= element.letter
-        %span has already been achieved!
-        %span=points element.low_range
-  - else
-    .progress.bar_magic.striped.center
-      .meter
-        %span Your rank: 
-        %span= element.level
-        %span= element.letter
-        %span with
-        %span.underline=points current_student.cached_score_for_course(current_course)
-        %span points.
-        %span=points element.points_to_next_level(current_student, current_course)
-        %span= " points to the next level!"
-
-%p= raw current_course.grading_philosophy
-%h3= "– Prof. #{current_course.professor.try(:last_name) }"
+.pageContent
+  - @grade_scheme_elements.each do |element|
+    - if current_student.cached_score_for_course(current_course) < element.low_range
+      .progress.bar_magic.transparent.center
+        .meter
+          %i.fa.fa-lock
+          %span= element.level
+          %span= element.letter
+          %span=points element.low_range
+    - elsif current_student.cached_score_for_course(current_course) >= element.high_range
+      .progress.bar_magic.success.center
+        .meter
+          %i.fa.fa-star
+          %span= element.level
+          %span= element.letter
+          %span has already been achieved!
+          %span=points element.low_range
+    - else
+      .progress.bar_magic.striped.center
+        .meter
+          %span Your rank: 
+          %span= element.level
+          %span= element.letter
+          %span with
+          %span.underline=points current_student.cached_score_for_course(current_course)
+          %span points.
+          %span=points element.points_to_next_level(current_student, current_course)
+          %span= " points to the next level!"
+          
+  %p= raw current_course.grading_philosophy
+  %h3= "– Prof. #{current_course.professor.try(:last_name) }"

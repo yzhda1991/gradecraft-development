@@ -46,7 +46,7 @@ select:hover
   margin: 2px 0 0
   font-size: 14px
   list-style: none
-  border: 1px solid $light-grey
+  border: 1px solid $color-grey-3
   border-top-left-radius: 0
   border-top-right-radius: 0
   border-bottom-left-radius: $global-radius
@@ -58,7 +58,7 @@ select:hover
     padding: 0 0.5rem
 
   li a
-    color: $dark-grey !important
+    color: $color-grey-1 !important
 
   li:hover, li.active a, li.active
     background-color: $primary-color
@@ -79,7 +79,7 @@ ul.accepts_submission_types
 .form_label
   font-size: 80%
   line-height: 130%
-  color: $medium-grey
+  color: $color-grey-1
   font-style: italic
   font-weight: normal
   text-transform: none
@@ -97,10 +97,10 @@ ul.accepts_submission_types
   margin-top: 1px
 
 .switch.predictor input:checked + label
-  background: #6ac777
+  background: $secondary-color-4
 
 .switch.predictor label:after
-  background: #3ea64d
+  background: $secondary-color-2
   border-radius: 4px
 
 .pass-fail-contingent.off
@@ -115,7 +115,7 @@ ul.accepts_submission_types
 .textarea .form_label
   background-color: $color-grey-2
   font-style: italic
-  color: #FFF
+  color: $color-grey-1
   padding: 1rem
   margin-top: -.35rem
   margin-bottom: 1rem
@@ -126,7 +126,10 @@ ul.accepts_submission_types
   background-color: $color-grey-2
 
 .img.form_label
-  background-color: $color-grey-3
+  background-color: $color-grey-1
+
+.img.form_label
+  background-color: $color-grey-0
   padding: .5rem
   border-bottom-right-radius: $global-radius
   border-bottom-left-radius: $global-radius
@@ -145,6 +148,7 @@ ul.accepts_submission_types
 
 .team-filter
   float: right
+  margin: 1rem 1rem 0 0
 
 .simple_form section 
   margin-bottom: 1rem
@@ -173,7 +177,7 @@ ul.accepts_submission_types
     padding: .25rem 0 
     font-size: 80%
     line-height: 130%
-    color: #666
+    color: $color-grey-1
     font-style: italic
     font-weight: normal
     text-transform: none
@@ -189,7 +193,7 @@ ul.accepts_submission_types
     margin-bottom: 1.7rem
 
 .disabled
-  background-color: $lighter-grey
+  background-color: $color-grey-3
   border: 0
 
 .ui-datepicker
@@ -199,7 +203,7 @@ ul.accepts_submission_types
     background-color: $primary-color
 
 .grade-scheme-row
-  background-color: $lighter-grey
+  background-color: $color-grey-3
   margin: 1rem 0
   padding: 1rem
   border-radius: 25px

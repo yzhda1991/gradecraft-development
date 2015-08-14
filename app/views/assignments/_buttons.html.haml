@@ -1,9 +1,5 @@
 .button-bar.context_menu(ng-app="gradecraft" ng-controller="AssignmentCtrl" ng-init="init(#{@assignment[:id]}, #{@assignment.use_rubric})")
   %ul.button-group
-    %li
-      %a.button{:href => assignments_path }
-        %i.fa.fa-list
-        = "See All #{term_for :assignments}"
     - if @assignment.persisted?
       %li
         %a.button{:href => edit_assignment_path(@assignment) }

@@ -9,28 +9,20 @@
         %i.fa.fa-plus
         New #{term_for :group}
 
-- if @pending_groups.present?
-  %h3.pagetitle= @title
+.pageContent
+  - if @pending_groups.present?
+    %h4.subtitle= "Pending #{term_for :groups}"
 
-  .button-bar
-    %ul.button-group.context_menu.radius
-      %li
-        %a.button{:href => new_group_path }
-          %i.fa.fa-plus
-          New #{term_for :group}
+    = render 'groups_table', :course => current_course, :groups => @pending_groups
 
-  %h4.subtitle= "Pending #{term_for :groups}"
+  - if @rejected_groups.present?
 
-  = render 'groups_table', :course => current_course, :groups => @pending_groups
+    %h4.subtitle.fail= "Rejected #{term_for :groups}"
 
-- if @rejected_groups.present?
+    = render 'groups_table', :course => current_course, :groups => @rejected_groups
 
-  %h4.subtitle.fail= "Rejected #{term_for :groups}"
+  - if @approved_groups.present?
 
-  = render 'groups_table', :course => current_course, :groups => @rejected_groups
+    %h4.subtitle.success= "Approved #{term_for :groups}"
 
-- if @approved_groups.present?
-
-  %h4.subtitle.success= "Approved #{term_for :groups}"
-
-  = render 'groups_table', :course => current_course, :groups => @approved_groups
+    = render 'groups_table', :course => current_course, :groups => @approved_groups

@@ -2,14 +2,15 @@
 
 %h3.pagetitle= @title
 
-- if current_course.has_teams?
-  .team-filter
-    / Checking to see if the current course has teams, displaying the team filter if it does
-    - if current_course.has_teams?
-      = form_tag students_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        %label
-          .sr-only Select #{term_for :team}
-        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+.pageContent
+  - if current_course.has_teams?
+    .team-filter
+      / Checking to see if the current course has teams, displaying the team filter if it does
+      - if current_course.has_teams?
+        = form_tag students_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+          %label
+            .sr-only Select #{term_for :team}
+          = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
-/ Display the table of course students, their leaderboard display, their team affiation, their score and their grade
-= render 'students_table', :course => current_course, :students => @students
+  / Display the table of course students, their leaderboard display, their team affiation, their score and their grade
+  = render 'students_table', :course => current_course, :students => @students

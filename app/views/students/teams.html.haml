@@ -1,27 +1,23 @@
 %h3.pagetitle= "#{term_for :teams}"
 
-%h4.italic.not_bold
-  - if current_student.team_for_course(current_course).present?
-    Your #{term_for :team}:
-    = current_student.team_for_course(current_course).name
+.pageContent
+  %h4.italic.not_bold
+    - if current_student.team_for_course(current_course).present?
+      Your #{term_for :team}:
+      = current_student.team_for_course(current_course).name
 
-    – Score:
-    - if current_student.team_for_course(current_course).score.present?
-      = points current_student.team_for_course(current_course).score
-    - else
-      0
+      – Score:
+      - if current_student.team_for_course(current_course).score.present?
+        = points current_student.team_for_course(current_course).score
+      - else
+        0
 
-%h4.subtitle= "#{term_for :team} Leaderboard"
-= render "teams/leaderboard"
-
-
-%dl.tabs{:data => {'tab' => true}}
-  %dd.active
-    %a{ "href" => "#tabt1"} #{term_for :team} Leaderboard
-  - if current_student.team_for_course(current_course).present?
-    - if current_course.in_team_leaderboard? || current_student.team_for_course(current_course).in_team_leaderboard?
-      %h4.subtitle= "In-#{term_for :team} Rankings"
-      = render "teams/in_team_rankings"  
-  - if current_course.challenges.present?
-    %h4.subtitle= "#{term_for :challenges }"
-    = render "challenges/student_index"
+    %h4.subtitle= "#{term_for :team} Leaderboard"
+    = render "teams/leaderboard"
+    - if current_student.team_for_course(current_course).present?
+      - if current_course.in_team_leaderboard? || current_student.team_for_course(current_course).in_team_leaderboard?
+        %h4.subtitle= "In-#{term_for :team} Rankings"
+        = render "teams/in_team_rankings"  
+    - if current_course.challenges.present?
+      %h4.subtitle= "#{term_for :challenges }"
+      = render "challenges/student_index"

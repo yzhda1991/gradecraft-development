@@ -9,156 +9,157 @@
         %i.fa.fa-plus
         New #{(term_for :assignment).titleize}
 
-.assignments
-  - @assignments.group_by(&:assignment_type).each do |assignment_type, assignments|
-    %h3= "#{assignment_type.name} – #{points assignment_type.max_value} points"
-    %table{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
-      %thead
-        %tr
-          %th{:scope => "col"} Name
-          %th{:scope => "col"} Description
-          %th{:scope => "col"}
-            %span
-              .icon
-                .icon-tooltip
-                  Visible to Students
-                %i.fa.fa-eye.fa-fw
-          %th{:scope => "col"}
-            .icon
-              .icon-tooltip
-                Required
-              !
-          %th{:scope => "col"}
-            .icon
-              .icon-tooltip
-                Accepts Submissions
-              %i.fa.fa-paperclip.fa-fw
-          %th{:scope => "col"}
-            .icon
-              .icon-tooltip
-                Shown in Timeline
-              %i.fa.fa-calendar.fa-fw
-          %th{:scope => "col"}
-            .icon
-              .icon-tooltip
-                Shown in Predictor
-              %i.fa.fa-sliders.fa-fw
-          %th{:scope => "col"}
-            .icon
-              .icon-tooltip
-                Shown in Due This Week
-              %i.fa.fa-list.fa-fw
-          %th{:scope => "col"}
-            .icon
-              .icon-tooltip
-                Logged By Students
-              %i.fa.fa-pencil.fa-fw
-          %th{:scope => "col"}
-            .icon
-              .icon-tooltip
-                Release Required
-              %i.fa.fa-unlock.fa-fw
-          %th{:scope => "col"}
-            .icon
-              .icon-tooltip
-                Notify Students on Release
-              %i.fa.fa-envelope.fa-fw
-          %th{:scope => "col"} Grade Form Preview
-          %th{:scope => "col"} Points
-
-          %th{:scope => "col"} Dates
-          %th{:scope => "col", :style => "min-width: 80px"}
-            %span.sr-only Actions
-      %tbody
-        - assignments.each do |assignment|
+.pageContent
+  .assignments
+    - @assignments.group_by(&:assignment_type).each do |assignment_type, assignments|
+      %h3= "#{assignment_type.name} – #{points assignment_type.max_value} points"
+      %table{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
+        %thead
           %tr
-            %td= link_to assignment.name, assignment
-            %td= raw assignment.description
-            %td
-              - if assignment.visible?
+            %th{:scope => "col"} Name
+            %th{:scope => "col"} Description
+            %th{:scope => "col"}
+              %span
                 .icon
                   .icon-tooltip
                     Visible to Students
-                  %i.fa.fa-eye
-            %td
-              - if assignment.required?
-                .icon
-                  .icon-tooltip
-                    Required
-                  !
-            %td
-              - if assignment.accepts_submissions?
-                .icon
-                  .icon-tooltip
-                    Accepts Submissions
-                  %i.fa.fa-paperclip
-            %td
-              - if assignment.include_in_timeline?
-                .icon
-                  .icon-tooltip
-                    Shown in Timeline
-                  %i.fa.fa-calendar
-            %td
-              - if assignment.include_in_predictor?
-                .icon
-                  .icon-tooltip
-                    Shown in Predictor
-                  %i.fa.fa-sliders
-            %td
-              - if assignment.assignment_type.include_in_to_do?
-                .icon
-                  .icon-tooltip
-                    Shown in Due This Week
-                  %i.fa.fa-list.fa-fw
-            %td
-              - if assignment.student_logged?
-                .icon
-                  .icon-tooltip
-                    Logged By Students
-                  %i.fa.fa-pencil.fa-fw
-            %td
-              - if assignment.release_necessary?
-                .icon
-                  .icon-tooltip
-                    Release Required
-                  %i.fa.fa-unlock.fa-fw
-            %td
-              - if assignment.notify_released?
-                .icon
-                  .icon-tooltip
-                    Notify Students on Release
-                  %i.fa.fa-envelope.fa-fw
+                  %i.fa.fa-eye.fa-fw
+            %th{:scope => "col"}
+              .icon
+                .icon-tooltip
+                  Required
+                !
+            %th{:scope => "col"}
+              .icon
+                .icon-tooltip
+                  Accepts Submissions
+                %i.fa.fa-paperclip.fa-fw
+            %th{:scope => "col"}
+              .icon
+                .icon-tooltip
+                  Shown in Timeline
+                %i.fa.fa-calendar.fa-fw
+            %th{:scope => "col"}
+              .icon
+                .icon-tooltip
+                  Shown in Predictor
+                %i.fa.fa-sliders.fa-fw
+            %th{:scope => "col"}
+              .icon
+                .icon-tooltip
+                  Shown in Due This Week
+                %i.fa.fa-list.fa-fw
+            %th{:scope => "col"}
+              .icon
+                .icon-tooltip
+                  Logged By Students
+                %i.fa.fa-pencil.fa-fw
+            %th{:scope => "col"}
+              .icon
+                .icon-tooltip
+                  Release Required
+                %i.fa.fa-unlock.fa-fw
+            %th{:scope => "col"}
+              .icon
+                .icon-tooltip
+                  Notify Students on Release
+                %i.fa.fa-envelope.fa-fw
+            %th{:scope => "col"} Grade Form Preview
+            %th{:scope => "col"} Points
 
-            %td
-              - if assignment.grade_select?
-                %label.sr-only{:for => "score_levels"}
-                  Score Levels
-                = select_tag(:score_levels, options_from_collection_for_select(assignment.score_levels_set, :value, :name))
-              - elsif assignment.grade_radio?
-                - assignment.score_levels_set.each do |asl|
-                  = radio_button_tag(asl.name, asl.value)
-                  %span.not_bold= label_tag(asl.name)
-                  %br
-              - elsif assignment.grade_checkboxes?
-                = check_box_tag 'score', '', false, :disabled => true
-              - else
-                = text_field_tag 'score', '', :disabled => true
-            %td= points assignment.point_total
-            %td
-              %ul
-                %li
-                  Opens:
-                  = assignment.try(:opens_at) || "Always Open"
-                  Accepted Until:
-                  = assignment.try(:accept_until) || "Always Accepted"
-            %td
-              .button-bar
-                %ul.button-group.radius
+            %th{:scope => "col"} Dates
+            %th{:scope => "col", :style => "min-width: 80px"}
+              %span.sr-only Actions
+        %tbody
+          - assignments.each do |assignment|
+            %tr
+              %td= link_to assignment.name, assignment
+              %td= raw assignment.description
+              %td
+                - if assignment.visible?
+                  .icon
+                    .icon-tooltip
+                      Visible to Students
+                    %i.fa.fa-eye
+              %td
+                - if assignment.required?
+                  .icon
+                    .icon-tooltip
+                      Required
+                    !
+              %td
+                - if assignment.accepts_submissions?
+                  .icon
+                    .icon-tooltip
+                      Accepts Submissions
+                    %i.fa.fa-paperclip
+              %td
+                - if assignment.include_in_timeline?
+                  .icon
+                    .icon-tooltip
+                      Shown in Timeline
+                    %i.fa.fa-calendar
+              %td
+                - if assignment.include_in_predictor?
+                  .icon
+                    .icon-tooltip
+                      Shown in Predictor
+                    %i.fa.fa-sliders
+              %td
+                - if assignment.assignment_type.include_in_to_do?
+                  .icon
+                    .icon-tooltip
+                      Shown in Due This Week
+                    %i.fa.fa-list.fa-fw
+              %td
+                - if assignment.student_logged?
+                  .icon
+                    .icon-tooltip
+                      Logged By Students
+                    %i.fa.fa-pencil.fa-fw
+              %td
+                - if assignment.release_necessary?
+                  .icon
+                    .icon-tooltip
+                      Release Required
+                    %i.fa.fa-unlock.fa-fw
+              %td
+                - if assignment.notify_released?
+                  .icon
+                    .icon-tooltip
+                      Notify Students on Release
+                    %i.fa.fa-envelope.fa-fw
+
+              %td
+                - if assignment.grade_select?
+                  %label.sr-only{:for => "score_levels"}
+                    Score Levels
+                  = select_tag(:score_levels, options_from_collection_for_select(assignment.score_levels_set, :value, :name))
+                - elsif assignment.grade_radio?
+                  - assignment.score_levels_set.each do |asl|
+                    = radio_button_tag(asl.name, asl.value)
+                    %span.not_bold= label_tag(asl.name)
+                    %br
+                - elsif assignment.grade_checkboxes?
+                  = check_box_tag 'score', '', false, :disabled => true
+                - else
+                  = text_field_tag 'score', '', :disabled => true
+              %td= points assignment.point_total
+              %td
+                %ul
                   %li
-                    %a{:href => edit_assignment_path(assignment),  :class => 'button' }
-                      Edit
-                      %span.sr-only= assignment.name
-                  %li
-                    %a{:href => assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button' }
-                      Delete
-                      %span.sr-only= assignment.name
+                    Opens:
+                    = assignment.try(:opens_at) || "Always Open"
+                    Accepted Until:
+                    = assignment.try(:accept_until) || "Always Accepted"
+              %td
+                .button-bar
+                  %ul.button-group.radius
+                    %li
+                      %a{:href => edit_assignment_path(assignment),  :class => 'button' }
+                        Edit
+                        %span.sr-only= assignment.name
+                    %li
+                      %a{:href => assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button' }
+                        Delete
+                        %span.sr-only= assignment.name

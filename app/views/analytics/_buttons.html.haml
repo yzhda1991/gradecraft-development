@@ -1,12 +1,5 @@
 .button-bar.context_menu
   %ul.button-group
-    %li{class: ("active" if current_page?(analytics_students_path)) }
-      %a.button{:href => analytics_students_path }
-        = "#{term_for :student} Analytics"
-    %li{class: ("active" if current_page?(analytics_staff_path)) }
-      %a.button{:href => analytics_staff_path }
-        = "#{term_for :team_leader} Analytics"
-    %li
-      %a.button{:href => analytics_export_path(format: 'zip')}
-        %i.fa.fa-file-zip-o
-        Download Analytics
+    %li= link_to_unless_current raw("<i class='fa fa-user fa-fw'></i> #{term_for :student} Analytics"), analytics_students_path
+    %li= link_to_unless_current raw("<i class='fa fa-user fa-fw'></i> #{term_for :team_leader} Analytics"), analytics_staff_path
+    %li= link_to  raw("<i class='fa fa-file-zip-o fa-fw'></i> Download Analytics"),  analytics_export_path(format: 'zip')

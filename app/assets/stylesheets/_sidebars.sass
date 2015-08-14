@@ -2,15 +2,15 @@
 .sidebar
   width: 220px
   float: left
-  padding: 1rem
-  border-radius: $global-radius
-  background-color: #FFF
+  padding: 2rem 1rem
+  background-color: $primary-color
+  opacity: .8
 
   /* Subheadings */
   h5
     font-size: .9rem
-    font-weight: bold
-    font-family: "Century Schoolbook", serif
+    font-weight: 100
+    color: $secondary-color-5
     margin: 0 0 0.25rem
 
   ul
@@ -23,11 +23,16 @@
     margin: 0
     list-style-type: none
     white-space: nowrap
+    font-weight: 800
+
+    &:not(a)
+      color: $secondary-color-5
 
     a
       display: block !important
-      color: $primary-color
+      color: #FFF
       padding: 0.15rem 
+      font-weight: normal
       text-decoration: none
 
     a:hover, a:focus

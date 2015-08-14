@@ -8,6 +8,9 @@
  *= require jquery.dynatable
 */
 
+$media-small-max:   40rem; // 640px
+$media-medium-max:  64rem; // 1024px
+$media-large-max:   90rem; // 1440px ~14"
 $px-3: .1875rem;
 
 $global-radius: $px-3;
@@ -47,7 +50,6 @@ $media-xlarge-max:  120rem; //
 /* Importing supporting files. If you create a new css file you'll need to add it here.  */
 
 @import 'color';
-@import 'datepicker';
 @import 'accessibility';
 @import 'alerts';
 @import 'analytics';

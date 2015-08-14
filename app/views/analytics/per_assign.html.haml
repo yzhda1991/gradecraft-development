@@ -2,11 +2,12 @@
 
 %h3.pagetitle= @title
 
-- @assignment_types.each do |assignment_type|
-  - cache ["v1", assignment_type] do
-    - assignments_for_type = assignment_type.assignments
-    - if assignments_for_type.select {|a| a.grades.graded_or_released.length > 1}.present?
-      %h4.subtitle= assignment_type.name
+.pageContent
+  - @assignment_types.each do |assignment_type|
+    - cache ["v1", assignment_type] do
+      - assignments_for_type = assignment_type.assignments
+      - if assignments_for_type.select {|a| a.grades.graded_or_released.length > 1}.present?
+        %h4.subtitle= assignment_type.name
 
       %table.responsive.nopage_dynatable
         %caption.sr-only= assignment_type.name

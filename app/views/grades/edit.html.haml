@@ -2,9 +2,10 @@
 
 %h3.pagetitle= @title
 
-= render 'submissions/assignment_guidelines'
+.pageContent
+  = render 'submissions/assignment_guidelines'
 
-- if @rubric && @rubric.designed? and @assignment.use_rubric
-  = render "rubric_edit"
-- else
-  = render "standard_edit"
+  - if @rubric && @rubric.designed? and @assignment.use_rubric
+    = render "rubric_edit"
+  - else
+    = render "standard_edit"

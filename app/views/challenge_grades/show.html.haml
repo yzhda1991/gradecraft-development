@@ -2,15 +2,16 @@
 
 %h3.pagetitle= @title
 
-%p
-  %b #{(term_for :team).titleize}:
-  = link_to @challenge_grade.team.name, @challenge_grade.team
-%p
-  %b Score:
-  = points @challenge_grade.score
-%p
-  %b Status:
-  = @challenge_grade.status
-%p
-  %b Feedback:
-  %p= raw @challenge_grade.text_feedback
+.pageContent
+  %p
+    %b #{(term_for :team).titleize}:
+    = link_to @challenge_grade.team.name, @challenge_grade.team
+  %p
+    %b Score:
+    = points @challenge_grade.score
+  %p
+    %b Status:
+    = @challenge_grade.status
+  %p
+    %b Feedback:
+    %p= raw @challenge_grade.text_feedback

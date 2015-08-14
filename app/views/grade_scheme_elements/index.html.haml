@@ -9,22 +9,26 @@
         %i.fa.fa-edit
         Edit
 
-/ Grade Scheme Elements Table Display
-%table.responsive.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
-  %thead
-    %tr
-      %th{:scope => "col"} Grade
-      %th{:scope => "col"} Level
-      %th{:scope => "col"} Low Range
-      %th{:scope => "col"} High Range
-  %tbody
-    - @grade_scheme_elements.each do |element|
+.pageContent
+  / Grade Scheme Elements Table Display
+  %table.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
+    %thead
       %tr
-        %td= element.letter
-        %td= element.level
-        %td{:data => { :"sort-value" => "#{element.low_range }" }}= points element.low_range
-        %td{:data => { :"sort-value" => "#{element.high_range }" }}= points element.high_range
+        %th{:scope => "col"} Grade
+        %th{:scope => "col"} Level
+        %th{:scope => "col"} Low Range
+        %th{:scope => "col"} High Range
+    %tbody
+      - @grade_scheme_elements.each do |element|
+        %tr
+          %td= element.letter
+          %td= element.level
+          %td{:data => { :"sort-value" => "#{element.low_range }" }}= points element.low_range
+          %td{:data => { :"sort-value" => "#{element.high_range }" }}= points element.high_range
 
-%p= raw current_course.grading_philosophy
-- if current_course.professor.present?
-  %h6= "-- Prof. #{current_course.professor.try(:last_name) }"
+
+  - if current_course.professor.present?
+    .small-12.columns
+      %p
+      %p= raw current_course.grading_philosophy
+      %h6= "-- Prof. #{current_course.professor.try(:last_name) }"

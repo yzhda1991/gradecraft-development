@@ -2,8 +2,9 @@
 
 %h3.pagetitle= @title
 
-- if @assignment.is_individual?
-  = render "individual_show"
+.pageContent
+  - if @assignment.is_individual?
+    = render "individual_show"
 
-- else
-  = render "group_show"
+  - else
+    = render "group_show"

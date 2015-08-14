@@ -1,7 +1,18 @@
 .context_menu
   clear: both
-  margin-bottom: 1rem
+  background-color: $secondary-color-2
+  height: 1.1rem
+  padding: .3rem 1rem
 
+  .button
+    background-color: $color-green-1
+    border-right: 1px solid $color-green-2
+    border-left: 1px solid $color-green-2
+    border-radius: 0 !important
+    &:hover
+      background-color: darken($color-green-1, 20%)
+
+/* Tabs on the student dashboard */
 .sub-nav
   display: block
   position: relative

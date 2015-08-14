@@ -10,42 +10,44 @@
           %i.fa.fa-plus
           New #{(term_for :challenge).titleize}
 
-%table.responsive.nofeatures_default_due_date_dynatable
-  %thead
-    %tr
-      %th Name
-      %th Description
-      %th Max Value
-      %th{"data-dynatable-sorts" => "dueDate"} Due
-      %th{:style => "display: none"} Due Date
-      %th Visible
-      %th Submissions?
-      %th Release necessary
-      %th{ :style => "min-width: 180px" }
-  %tbody
-    - @challenges.each do |challenge|
+.pageContent
+  %table.nofeatures_default_due_date_dynatable
+    %thead
       %tr
-        %td= link_to challenge.name, challenge
-        %td= raw challenge.description
-        %td= challenge.point_total
-        %td= challenge.due_at
-        %td{:style => "display: none"}
-          = challenge.try(:due_at).to_formatted_s(:db) if challenge.due_at.present?
-        %td= challenge.visible? ? 'Visible' : 'Hidden'
-        %td= challenge.accepts_submissions? ? 'Yes' : 'No'
-        %td= challenge.release_necessary? ? 'Yes' : 'No'
-        %td
-          .button-bar
-            %ul.button-group
-              %li
-                %a.button{:href => mass_edit_challenge_challenge_grades_path(challenge) }
-                  Quick Grade
-                  %span.sr-only= challenge.name
-              %li
-                = link_to edit_challenge_path(challenge), :class => 'button' do
-                  Edit
-                  %span.sr-only=  challenge.name
-              %li
-                = link_to challenge, :class => 'button', :method => :delete, data: { confirm: 'Are you sure?' } do
-                  Delete
-                  %span.sr-only=  challenge.name
+        %th Name
+        %th Description
+        %th Max Value
+        %th{"data-dynatable-sorts" => "dueDate"} Due
+        %th{:style => "display: none"} Due Date
+        %th Visible
+        %th Submissions?
+        %th Release necessary
+        %th{ :style => "min-width: 180px" }
+
+    %tbody
+      - @challenges.each do |challenge|
+        %tr
+          %td= link_to challenge.name, challenge
+          %td= raw challenge.description
+          %td= challenge.point_total
+          %td= challenge.due_at
+          %td{:style => "display: none"}
+            = challenge.try(:due_at).to_formatted_s(:db) if challenge.due_at.present?
+          %td= challenge.visible? ? 'Visible' : 'Hidden'
+          %td= challenge.accepts_submissions? ? 'Yes' : 'No'
+          %td= challenge.release_necessary? ? 'Yes' : 'No'
+          %td
+            .button-bar
+              %ul.button-group
+                %li
+                  %a.button{:href => mass_edit_challenge_challenge_grades_path(challenge) }
+                    Quick Grade
+                    %span.sr-only= challenge.name
+                %li
+                  = link_to edit_challenge_path(challenge), :class => 'button' do
+                    Edit
+                    %span.sr-only=  challenge.name
+                %li
+                  = link_to challenge, :class => 'button', :method => :delete, data: { confirm: 'Are you sure?' } do
+                    Delete
+                    %span.sr-only=  challenge.name

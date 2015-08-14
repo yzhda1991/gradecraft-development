@@ -1,6 +1,6 @@
 - if @badge.errors.any?
   .alert-box.alert.radius
-    .italic= "#{pluralize(@badge.errors.count, "error")} prohibited this #{term_for :badge} from being saved:"
+    .italic= "#{pluralize(@badge.errors.count, "error")} prohibited this #{(term_for :badge).titleize} from being saved:"
     %ul
       - @badge.errors.full_messages.each do |msg|
         %li= msg

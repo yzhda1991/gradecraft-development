@@ -2,35 +2,34 @@
 
 %h3.pagetitle= @title
 
-- if current_course.has_teams?
-  .team-filter
-    = form_tag multiplier_choices_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-      %label
-        .sr-only Select #{term_for :team}
-      = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+.pageContent
+  - if current_course.has_teams?
+    .team-filter
+      = form_tag multiplier_choices_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+        %label
+          .sr-only Select #{term_for :team}
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
-%table.nofeatures_default_last_name_dynatable
-  %thead
-    %tr
-      %th First Name
-      %th Last Name
-      - @assignment_types.each do |assignment_type|
-        - if assignment_type.student_weightable?
-          %th= assignment_type.name
-      %th #{current_course.weight_term.pluralize} Awarded?
-      %th.button-column
-  %tbody
-    - @students.each do |student|
+  %table.nofeatures_default_last_name_dynatable
+    %thead
       %tr
-        %td= link_to student.first_name, student_path(student)
-        %td= link_to student.last_name, student_path(student)
-        - @assignment_types.each do |assignment_type|
-          - if assignment_type.student_weightable?
-            %td= student.weight_for_assignment_type(assignment_type)
-        %td
-          = student.weight_spent?(current_course) ? "Yes" : "No"
-        %td
-          .button-bar
-            %ul.button-group.radius
-              %li= link_to "Dashboard", student_path(student), :class => "button"
-              %li= link_to "Edit #{term_for :weights}", assignment_type_weights_path(:student_id => student.id), :class => "button"
+        %th First Name
+        %th Last Name
+        %th
+        %th
+
+    %tbody
+      - @students.each do |student|
+        %tr
+          %td= link_to student.first_name, student_path(student)
+          %td= link_to student.last_name, student_path(student)
+          - @assignment_types.each do |assignment_type|
+            - if assignment_type.student_weightable?
+              %td= student.weight_for_assignment_type(assignment_type)
+          %td
+            = student.weight_spent?(current_course) ? "Yes" : "No"
+          %td
+            .button-bar
+              %ul.button-group.radius
+                %li= link_to "Dashboard", student_path(student), :class => "button"
+                %li= link_to "Edit #{term_for :weights}", assignment_type_weights_path(:student_id => student.id), :class => "button"
