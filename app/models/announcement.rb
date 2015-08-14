@@ -3,6 +3,7 @@ class Announcement < ActiveRecord::Base
 
   belongs_to :author, class_name: "User"
   belongs_to :course
+  has_many :states, class_name: "AnnouncementState", dependent: :destroy
 
   attr_accessible :author_id, :body, :course_id, :title
 
