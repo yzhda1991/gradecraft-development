@@ -8,4 +8,5 @@
   .columns{'ng-app' => 'gradecraft', 'ng-controller' => 'GradeSchemeElementsCtrl'}
     .grade-scheme-elements
       .grade-scheme-element{'ng-repeat' => 'element in grade_scheme_elements', 'ng-include' => "'ng_gradeScheme.html'"}
-    %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit
+      %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit
+      %button{:class => 'button radius right', 'ng-click' => 'gradeService.addFirst()', 'ng-hide' => 'gradeService.elements.length > 0'} Add Your Highest Grade
