@@ -14,6 +14,14 @@ describe AnnouncementsController do
       login_user(student)
     end
 
+    describe "GET #show" do
+      it "marks the announcement as read by the student" do
+        announcement = create :announcement, course: course
+        get :show, id: announcement.id
+        expect(announcement.read?(student)).to be_true
+      end
+    end
+
     describe "GET #new" do
       it "should not allow a student to try and create an announcement" do
         expect { get :new }.to raise_error Canable::Transgression

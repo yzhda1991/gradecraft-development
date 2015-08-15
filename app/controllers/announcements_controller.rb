@@ -7,6 +7,7 @@ class AnnouncementsController < ApplicationController
   def show
     @announcement = Announcement.find params[:id]
     enforce_view_permission(@announcement)
+    @announcement.mark_as_read! current_user
     @title = @announcement.title
   end
 
