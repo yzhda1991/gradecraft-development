@@ -29,7 +29,7 @@
 %h5 Coursework
 %li= link_to_unless_current raw("<i class='fa fa-bars fa-fw'></i> #{term_for :assignments}"), assignments_path
 - if current_course.has_badges?
-  %li= link_to_unless_current raw("<i class='fa fa-shield fa-fw''></i> #{term_for :badges}"), badges_path
+  %li= link_to_unless_current raw("<i class='fa fa-shield fa-fw'></i> #{term_for :badges}"), badges_path
 - if current_course.team_challenges?
   %li= link_to_unless_current raw("<i class='fa fa-trophy fa-fw'></i> #{term_for :challenges}"), challenges_path
 
@@ -53,7 +53,6 @@
   - if current_course.has_badges?
     %li
       %a{:href => export_earned_badges_path(format: 'csv')} <i class="fa fa-certificate fa-fw"></i> Awarded  #{current_course.badge_term.pluralize}
-
 
 %hr
 

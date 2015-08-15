@@ -1,0 +1,65 @@
+/** Staff Sidebar **/
+.sidebar
+  width: 220px
+  float: left
+  padding: .9rem .75rem 1rem 1.25rem
+  background-color: $primary-color-1
+  opacity: .8
+
+  input[type=text]
+    height: 1.6rem
+    border: 0
+    padding: 5px
+    width: 188px
+    margin-bottom: .25rem
+    border-top-left-radius: $global-radius
+    border-bottom-left-radius: $global-radius
+
+  a.button
+    width: 20px
+    padding: 6px 6px
+    float: right
+    border-top-left-radius: 0
+    border-bottom-left-radius: 0
+
+
+  /* Subheadings */
+  h5
+    font-size: .9rem
+    font-weight: 100
+    color: $primary-color-4
+    margin: 0 0 0 0.25rem
+
+  ul
+    margin: 0
+    padding: 0
+
+  /* Spacing out the list items*/
+  li
+    text-transform: capitalize
+    margin: 0
+    list-style-type: none
+    white-space: nowrap
+    font-weight: 800
+
+    &:not(a)
+      color: $secondary-color-3
+
+    a
+      display: block !important
+      color: #FFF
+      padding: 0.15rem 
+      font-weight: normal
+      text-decoration: none
+
+    a:hover, a:focus
+      background-color: $primary-color-1
+      color: #FFF
+
+  /* Spacing the list divider */
+  hr
+    color: #000 !important
+    margin: .5rem auto
+    border: 0
+    border-bottom: 1px dashed #FFF
+    width: 78%

@@ -55,7 +55,7 @@
                 - student_submission = @student.submission_for_assignment(assignment)
                 - if assignment.visible_for_student?(current_student) || grade_released_for_assignment
                   %tr
-                    %td= render "syllabus/assignment_icons", :assignment => assignment
+                    %td= render "students/syllabus/assignment_icons", :assignment => assignment
                     %td= link_to assignment.name, assignment_path(assignment)
                     %td
                       - if assignment.pass_fail?
