@@ -60,7 +60,9 @@ RSpec.configure do |config|
 
   config.include BackgroundJobs
   config.tty = true
-
+  # in theory pass output to pipe or redirect with ansi color notation
+  # config.tty = true
+  
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
 
