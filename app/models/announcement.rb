@@ -14,6 +14,17 @@ class Announcement < ActiveRecord::Base
 
   default_scope { order "created_at DESC" }
 
+  def self.read_count_for(student, course)
+    AnnouncementState
+      .joins(:announcement)
+      .where(announcements: { course_id: course.id })
+      .where(user_id: student.id).count
+  end
+
+  def self.unread_count_for(student, course)
+    Announcement.where(course_id: course.id).count - read_count_for(student, course)
+  end
+
   def creatable_by?(user)
     return true if !course.present?
     user.is_staff?(course)
@@ -42,5 +53,33 @@ class Announcement < ActiveRecord::Base
         AnnouncementMailer.announcement_email(self, student).deliver_now
       end
     end
+  end
+
+  def mark_as_read!(user)
+    if user.is_student?(course) &&
+       !states.map(&:user_id).include?(user.id)
+      states.create(user_id: user.id)
+    end
+  end
+
+  def mark_as_unread!(user)
+    states.destroy(states.where(user_id: user.id))
+  end
+
+  def read?(user)
+    states.exists?(user_id: user.id)
+  end
+
+  def unread?(user)
+    !read? user
+  end
+
+  def read_count
+    states.count
+  end
+
+  def unread_count
+    return 0 if course.nil?
+    course.students.count - read_count
   end
 end

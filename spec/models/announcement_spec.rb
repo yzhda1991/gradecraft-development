@@ -111,4 +111,126 @@ describe Announcement do
         change { ActionMailer::Base.deliveries.count }.by 1
     end
   end
+
+  describe "#read_count" do
+    it "is the number of students for the course who have not read the announcement" do
+      announcement = create :announcement
+      create :announcement_state, announcement: announcement
+      expect(announcement.read_count).to eq 1
+    end
+  end
+
+  describe "#unread_count" do
+    it "is the number of students for the course who have not read the announcement" do
+      announcement = create :announcement
+      CourseMembership.create  course_id: announcement.course.id,
+        user_id: announcement.author.id, role: "student"
+      expect(announcement.unread_count).to eq 1
+    end
+
+    it "returns zero if there is no course associated with the announcement" do
+      announcement = build :announcement, course: nil
+      expect(announcement.unread_count).to be_zero
+    end
+  end
+
+  describe ".read_count_for" do
+    subject { create :announcement }
+
+    it "returns the number of read announcements for a specific student and course" do
+      CourseMembership.create  course_id: subject.course.id,
+        user_id: subject.author.id, role: "student"
+      create :announcement_state, announcement: subject, user: subject.author
+      expect(Announcement.read_count_for(subject.author, subject.course)).to eq 1
+    end
+  end
+
+  describe ".unread_count_for" do
+    subject { create :announcement }
+
+    it "returns the number of unread announcements for a specific student and course" do
+      CourseMembership.create  course_id: subject.course.id,
+        user_id: subject.author.id, role: "student"
+      expect(Announcement.unread_count_for(subject.author, subject.course)).to eq 1
+    end
+  end
+
+  describe "#mark_as_read!" do
+    let(:user) { create :user }
+    subject { create :announcement }
+
+    it "marks the announcement as read by the specific student" do
+      CourseMembership.create  course_id: subject.course.id,
+        user_id: user.id, role: "student"
+      subject.mark_as_read! user
+      states = AnnouncementState.where(announcement_id: subject.id,
+                                               user_id: user.id,
+                                                  read: true)
+      expect(states.count).to eq 1
+    end
+
+    it "does not mark as read if the user is not a student" do
+      CourseMembership.create  course_id: subject.course.id,
+        user_id: user.id, role: "professor"
+      subject.mark_as_read! user
+      expect(subject.states).to be_empty
+    end
+
+    it "does not mark as read if the user is not part of the course" do
+      new_course = create :course
+      CourseMembership.create  course_id: new_course.id,
+        user_id: user.id, role: "student"
+      subject.mark_as_read! user
+      expect(subject.states).to be_empty
+    end
+
+    it "does not mark as read again if the user already has read it" do
+      CourseMembership.create  course_id: subject.course.id,
+        user_id: user.id, role: "student"
+      2.times { subject.mark_as_read! user }
+      states = AnnouncementState.where(announcement_id: subject.id,
+                                               user_id: user.id,
+                                                  read: true)
+      expect(states.count).to eq 1
+    end
+  end
+
+  describe "#mark_as_unread!" do
+    let(:user) { create :user }
+    subject { create :announcement }
+
+    it "marks the announcement as unread by the specific student" do
+      create :announcement_state, announcement_id: subject.id, user_id: user.id
+      subject.mark_as_unread! user
+      expect(subject.states).to be_empty
+    end
+  end
+
+  describe "#unread?" do
+    let(:user) { create :user }
+    subject { create :announcement }
+
+    it "returns true if the specified student has not read the announcement" do
+      expect(subject.unread?(user)).to be_true
+    end
+
+    it "returns false if the specified student has read the announcement" do
+      create :announcement_state, announcement_id: subject.id, user_id: user.id
+      expect(subject.unread?(user)).to be_false
+    end
+  end
+
+  describe "#read?" do
+    let(:user) { create :user }
+    subject { create :announcement }
+
+    it "returns false if the specified student has not read the announcement" do
+      expect(subject.read?(user)).to be_false
+    end
+
+    it "returns true if the specified student has read the announcement" do
+      create :announcement_state, announcement_id: subject.id, user_id: user.id
+      expect(subject.read?(user)).to be_true
+    end
+  end
 end
