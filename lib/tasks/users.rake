@@ -24,4 +24,16 @@ namespace :users do
       task password.to_sym do ; end
     end
   end
+
+  desc "Set all user passwords to 'waffles' for testing purposes"
+  task :waffleize => :environment do
+    User.update_all crypted_password: "9ba2d402d1dfe11f8c90e0edd10dba2fae2a246a"
+    puts "All users have been waffleized."
+  end
+
+  desc "Activate all users"
+  task :activate_all => :environment do
+    User.update_all  active: true
+    puts "All users have been waffleized."
+  end
 end

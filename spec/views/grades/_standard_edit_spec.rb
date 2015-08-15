@@ -23,7 +23,6 @@ describe "grades/_standard_edit" do
   describe "when an assignment has point values", failing: true do
     it "renders the points possible when incomplete" do
       render
-      puts @rendered
       assert_select "label", text: "Raw Score (#{@assignment.point_total} Points Possible)", count: 1
     end
   end
