@@ -65,6 +65,8 @@ gem 'whenever'
 gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'wysiwyg-rails'
+gem 'zeus-parallel_tests'
+gem 'parallel_tests'
 
 group :development do
   gem 'haml-rails'
@@ -75,7 +77,6 @@ group :development do
   gem 'rubystats'
   gem 'meta_request'
   gem "bullet"
-  gem 'parallel_tests'
 end
 
 group :development, :test do
@@ -86,8 +87,10 @@ group :development, :test do
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
   gem 'spring-commands-rspec'
+end
 
-  # formerly test-only gems, added to development for parallel_tests
+group :test do
+  # added to development for parallel_tests
   gem 'capybara', '~> 2.1.0'
   gem 'database_cleaner', "~> 1.0.1"
   gem 'launchy'

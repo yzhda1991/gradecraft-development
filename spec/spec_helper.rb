@@ -15,6 +15,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+# ActiveRecord::Migration.maintain_test_schema!
 
 # fixture file no longer works, this is a workaround
 # here is an alternative solution that didn't work for me:
@@ -34,7 +35,7 @@ RSpec.configure do |config|
  config.before(:suite) do
     begin
       DatabaseCleaner.start
-      # FactoryGirl.lint
+      FactoryGirl.lint
     ensure
       DatabaseCleaner.clean
     end
