@@ -1,0 +1,24 @@
+- if assignment.has_groups?
+  %i.fa.fa-group.fa-fw
+- if assignment.required?
+  %a
+    %i.fa.fa-exclamation-circle.fa-fw
+  .display_on_hover
+    This #{term_for :assignment} is required!
+
+- if assignment.is_unlockable? 
+  - if assignment.is_unlocked_for_student?(current_student)
+    %i.fa.fa-unlock.fa-fw
+  - else
+    %i.fa.fa-lock.fa-fw
+  Unlock Requirements
+  - assignment.unlock_conditions.each do |uc|
+    %li= "#{condition.name} must be #{condition.condition_state}"
+- if assignment.is_a_condition?
+  %a
+    %i.fa.fa-key.fa-fw
+  .display_on_hover.unlock_keys
+    %h3 Unlock Key
+    %ul
+      - assignment.unlock_keys.each do |key|
+        %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"

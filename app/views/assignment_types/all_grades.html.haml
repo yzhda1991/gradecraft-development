@@ -37,18 +37,15 @@
           %th Last Name
           - chronological_assignments = @assignment_type.assignments.chronological
           - for assignment in chronological_assignments.alphabetical
-            - if assignment.point_total > 0
-              - assignment.grade_for_student(student).tap do |grade|
-              %th.sortable{"data-sort" => "int"}= assignment.due_at.strftime("%b %d") if assignment.due_at.present?
+            %th.sortable{"data-sort" => "int"}= assignment.due_at.strftime("%b %d") if assignment.due_at.present?
       %tbody
         - @students.each do |student|
           %tr
-            %td= link_to student.first_name, student_path(student)
-            %td= link_to student.last_name, student_path(student)
+            %td= link_to student.name, student_path(student)
             - i = 0
-            - chronological_assignments.each do |assignment|
+            - chronological_assignments = @assignment_type.assignments.chronological
+            - for assignment in chronological_assignments.alphabetical
               - if assignment.point_total > 0
-
                 - assignment.grade_for_student(student).tap do |grade|
 
                   - if grade && grade.score == assignment.point_total
@@ -57,20 +54,17 @@
                     %td
                       %i.fa.fa-heart.complete
                         = i
-
                   - elsif grade && grade.score == 0
                     // Displaying td's colored red if the student earned no points on the assignment (but HAS a grade)
                     - i = 0
                     %td
                       %i.fa.fa-times.absent
-
                   - elsif grade && grade.score < assignment.point_total
                     // Displaying td's colored yellow if the student earned some points on the assignment
                     - i = 0
                     %td
                       %i.fa.fa-heart-o.partial
-
                   - else
-                    // Displaying td's colored white if the studnet has no grade
+                    // Displaying td's colored white if the student has no grade
                     - i = 0
                     %td

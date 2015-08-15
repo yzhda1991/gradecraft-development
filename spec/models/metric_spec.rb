@@ -17,6 +17,7 @@ describe Metric do
 
     context "metric isn't flagged as duplicated" do
       it "should create tiers" do
+        pending
         @metric.add_default_tiers = true
         @metric.save
         @metric.tiers.count.should == 2
@@ -25,6 +26,7 @@ describe Metric do
 
     context "default" do
       it "should create default tiers" do
+        pending
         @metric = create(:metric)
         @metric.tiers.count.should == 2
       end

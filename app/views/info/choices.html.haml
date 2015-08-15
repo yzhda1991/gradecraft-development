@@ -15,9 +15,11 @@
       %tr
         %th First Name
         %th Last Name
+        - @assignment_types.each do |assignment_type|
+          - if assignment_type.student_weightable?
+            %th
         %th
         %th
-
     %tbody
       - @students.each do |student|
         %tr

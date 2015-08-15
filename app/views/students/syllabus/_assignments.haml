@@ -38,9 +38,11 @@
         %table.responsive
           %thead
             %tr
+              %th
               %th{:style => "width: 150px"}= "#{term_for :assignment}"
               %th Points
               %th Due
+              %th
               %th
               %th{:style => "width: 200px"}
           %tbody
@@ -53,58 +55,8 @@
                 - student_submission = @student.submission_for_assignment(assignment)
                 - if assignment.visible_for_student?(current_student) || grade_released_for_assignment
                   %tr
-                    %td
-                    %td{:width => "30%"}
-                      - if assignment.has_groups?
-                        %i.fa.fa-group
-                      - if assignment.required?
-                        .icon
-                          .icon-tooltip
-                            This #{term_for :assignment} is required!
-                          !
-                      - if assignment.is_unlockable? 
-                        - if assignment.is_unlocked_for_student?(current_student)
-                          %i.fa.fa-unlock
-                        - else
-                          %i.fa.fa-lock
-                        Unlock Requirements
-                        - assignment.unlock_conditions.each do |uc|
-                          %li= "#{condition.name} must be #{condition.condition_state}"
-                      - if assignment.is_a_condition?
-                        %a
-                          %i.fa.fa-key
-                        .display_on_hover.unlock_keys
-                          %h3 Unlock Key
-                          %ul
-                            - assignment.unlock_keys.each do |key|
-                              %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
-                      %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
-                    %td
-                      - if assignment.pass_fail?
-                        - if current_student.grade_released_for_assignment?(assignment)
-                          .bold
-                            = "#{term_for grade_for_assignment.pass_fail_status}"
-                        - else
-                        %a
-                          - if assignment.is_unlocked_for_student?(current_student)
-                            %i.fa.fa-unlock
-                          - else
-                            %i.fa.fa-lock
-                        .display_on_hover.unlock_keys
-                          %h3 Unlock Requirements
-                          %ul
-                            - assignment.unlock_conditions.each do |condition|
-                              %li= "#{condition.name} must be #{condition.condition_state}"
-                      - if assignment.is_a_condition?
-                        %a
-                          %i.fa.fa-key
-                        .display_on_hover.unlock_keys
-                          %h3 Unlock Key
-                          %ul
-                            - assignment.unlock_keys.each do |key|
-                              %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
-                      %span.assignmentName= link_to assignment.name, assignment_path(assignment, :student_id => @student)
-
+                    %td= render "syllabus/assignment_icons", :assignment => assignment
+                    %td= link_to assignment.name, assignment_path(assignment)
                     %td
                       - if assignment.pass_fail?
                         - if current_student.grade_released_for_assignment?(assignment)
@@ -163,17 +115,8 @@
                             - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)
                               - if student_submission.present?
                                 %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
-                              - else
-                                - if group_for_assignment && group_for_assignment.approved?
-                                  %li= link_to "Submit", new_assignment_submission_path(assignment, :group_id => group_for_assignment), :class => 'button'
-                          - else
-                            %li= link_to "Create a Group", new_group_path, :class => "button"
-                        - else
-                          - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)
-                            - if student_submission.present?
-                              %li= link_to "See Submission", assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
-                            - elsif assignment.open?
-                              %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
+                              - elsif assignment.open?
+                                %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
                         - if current_user_is_staff?
                           - grade = grade_for_assignment
                           - if assignment.is_unlockable? && ! assignment.is_unlocked_for_student?(current_student)
@@ -188,19 +131,3 @@
                               %li= link_to "Edit Grade", group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
                             - else
                               %li= link_to 'Grade', group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
-                              - elsif assignment.open?
-                                %li= link_to "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
-                          - if current_user_is_staff?
-                            - grade = grade_for_assignment
-                            - if assignment.is_unlockable? && ! assignment.is_unlocked_for_student?(current_student)
-                              %li= link_to "Unlock", manually_unlock_unlock_state_path(:student_id => current_student.id, :assignment_id => assignment.id), :method => :post, :class => "button"
-                            - if assignment.is_individual?
-                              - if grade_released_for_assignment    
-                                %li= link_to "Edit Grade", edit_assignment_grade_path(assignment.id, :student_id => @student.id), :class => 'button'
-                              - else
-                                %li= link_to 'Grade', edit_assignment_grade_path(:assignment_id =>assignment.id, :student_id => @student.id), :class => 'button'
-                            - elsif assignment.has_groups?
-                              - if grade_released_for_assignment
-                                %li= link_to "Edit Grade", group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'
-                              - else
-                                %li= link_to 'Grade', group_grade_assignment_path(assignment, :group_id => group_for_assignment), :class => 'button'

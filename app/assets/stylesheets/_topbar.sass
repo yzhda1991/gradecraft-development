@@ -6,7 +6,7 @@
   padding: 0
   z-index: 0  
   transition: visibility 0 linear .2s
-  background-color: $bg-color-mountain-light
+  background-color: $color-blue-3
   transition: visibility 0 linear .2s
   -webkit-perspective: 1000
   -webkit-backface-visibility: hidden
@@ -114,12 +114,12 @@
       padding: 5px 10px
       display: block
       &:hover
-        background-color: lighten($primary-color, 10%)
+        background-color: lighten($primary-color-1, 10%)
         color: #FFF
 
   li.dropdown a.section-title
     display: block
-    background-color: $primary-color
+    background-color: $primary-color-1
     color: #FFF
     padding: 5px 10px
 
@@ -177,14 +177,14 @@
       margin-left: .25rem
     .tagline
       margin-left: .5rem
-      color: $secondary-color-4
+      color: $secondary-color-3
 
   /* Active State */ 
   .the-nav > .nav > li:hover > a
     color: #FFF
-    background-color: darken($primary-color, 5%)
+    background-color: darken($primary-color-1, 5%)
   .the-nav > .nav > li:hover > a.no-hover
-    background-color: $primary-color
+    background-color: $primary-color-1
     color: $primary-color-4
   .the-nav > .nav > li:hover .subnav
     display: block
@@ -213,7 +213,7 @@
     padding: 6px 10px
     transition: all .2s
   .nav > li > .subnav > li:hover a
-    background: $primary-color
+    background: $primary-color-1
     color: white
   .nav > li > .subnav > li:last-of-type a:hover
     border-bottom-left-radius: $global-radius

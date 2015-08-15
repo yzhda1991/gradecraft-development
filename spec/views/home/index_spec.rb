@@ -6,7 +6,7 @@ describe "home/index" do
 
   it "renders successfully" do
     render
-    assert_select ".videowrapper", :count => 1
+    assert_select ".video-promo", :count => 1
   end
 
 end

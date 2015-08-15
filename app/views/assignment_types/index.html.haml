@@ -68,8 +68,6 @@
         %th First Name
         %th Last Name
         - @assignment_types.each do |at|
-          %td= at.grades.where(:student_id => student.id).graded_or_released.count
-          %td= "#{at.grades.where(:student_id => student.id).graded_or_released.positive.count }"
           %th= "#{at.name} Grade Count"
           %th= "#{at.name} Grades > 0 Count"
 

@@ -126,7 +126,7 @@ describe "students/_assignments" do
       render
       @assignment.update(required: true)
       @assignment.save
-      assert_select "span", class: 'required', count: 1
+      assert_select "i", class: 'fa-exclamation-circle', count: 1
     end
 
     it "shows the assignment submission if present" do
