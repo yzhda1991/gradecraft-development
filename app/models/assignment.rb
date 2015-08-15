@@ -275,7 +275,8 @@ class Assignment < ActiveRecord::Base
 
   # Custom point total if the class has weighted assignments
   def point_total_for_student(student, weight = nil)
-    (point_total * weight_for_student(student, weight)).round
+    (point_total * weight_for_student(student, weight)).round rescue 0
+    # rescue methods with a '0' for pass/fail assignments that are also student weightable for some untold reason
   end
 
   # Grabbing a student's set weight for the assignment - returns one if the course doesn't have weights
