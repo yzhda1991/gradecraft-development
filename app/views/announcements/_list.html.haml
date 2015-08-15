@@ -4,7 +4,8 @@
       %th Sent
       %th Subject
       %th Author
-      %th Read
+      - if current_user.is_staff?(current_course)
+        %th Read
   %tbody
     - @announcements.each do |announcement|
       - cache ["v1", announcement] do
@@ -12,4 +13,5 @@
           %td= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
           %td= link_to announcement.title, announcement_path(announcement)
           %td= announcement.author.public_name
-          %td= "#{announcement.read_count} / #{announcement.unread_count}"
+          - if current_user.is_staff?(current_course)
+            %td= "#{announcement.read_count} / #{announcement.course.students.count}"
