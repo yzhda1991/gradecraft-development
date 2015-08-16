@@ -4,7 +4,7 @@ $(document).ready(function() {
     return {
     chart: {
       type: 'bar',
-      backgroundColor:null
+      backgroundColor: null
     },
     colors: [
      '#1A1EB2',
