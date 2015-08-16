@@ -1,5 +1,5 @@
 = form_tag edit_status_grades_assignment_path @assignment do
-  %table.responsive.nofeatures_default_last_name_dynatable
+  %table.nofeatures_default_last_name_dynatable
     %thead
       %tr
         %th First Name
@@ -50,8 +50,8 @@
                 - else
                   = link_to "Submit", new_assignment_submission_path(@assignment, @submission, :user_id => student.id, :student_type => "User"), :class => 'button radius'
           %td
-            .button-bar
-              %ul.button-group.radius
+            .right
+              %ul
                 %li= link_to "Dashboard", student_path(student), :class => 'button'
                 - if grade && grade.instructor_modified?
                   %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'

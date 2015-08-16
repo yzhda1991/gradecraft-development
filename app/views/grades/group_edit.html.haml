@@ -38,7 +38,7 @@
         - else
           = f.hidden_field :status, value: 'Graded'
 
-    .button-bar
-      %ul.button-group.radius.right
+    .submit-buttons
+      %ul
         %li= f.button :submit, @submit_message
         %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'

@@ -49,7 +49,7 @@
       - if @group.persisted?
         = link_to 'Add a Proposal', '#', class: 'add-proposal button radius'
 
-  .button-bar
-    %ul.button-group.right
+  .submit-buttons
+    %ul
       %li= submit_tag "#{@group.persisted? ? 'Update' : 'Create'} #{ term_for :group } ",  :class => 'button'
       %li= link_to 'Cancel', groups_path, :class => 'button'

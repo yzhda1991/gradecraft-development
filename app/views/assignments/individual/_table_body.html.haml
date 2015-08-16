@@ -37,8 +37,8 @@
         - if submissions_for_assignment.present?
           = submissions_for_assignment[0].updated_at
     %td
-      .button-bar
-        %ul.button-group.radius
+      .right
+        %ul
           - if @assignment.accepts_submissions?
             - submissions_for_assignment.each do |submission|
 
@@ -47,7 +47,7 @@
                 - if submission.submission_files.present?
                   %i.fa.fa-paperclip.right
                 / - if submission.resubmitted?
-                /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button alert'
+                /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button'
                 / - else
                 = link_to "See Submission", assignment_submission_path(@assignment, submission.id), :class => 'button'
 

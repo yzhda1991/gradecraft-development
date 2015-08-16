@@ -27,7 +27,7 @@
           %td= event.open_at
           %td= event.due_at
           %td
-            .button-bar
-              %ul.button-group.radius.right
+            .right
+              %ul
                 %li= link_to 'Edit', edit_event_path(event), :class => "button"
                 %li= link_to 'Delete', event, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "button"

@@ -53,8 +53,8 @@
                       %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
                   %td{:style => "display: none"}= student.earned_badges_for_course(current_course).count
               %td{"data-title" => "Options"}
-                .button-bar
-                  %ul.button-group.radius
+                .right
+                  %ul
                     %li= link_to "Dashboard", student_path(student), :class => "button"
                     %li= mail_to student.email, "Email", :class => "button"
                     %li= link_to "Edit", edit_user_path(student), :class => "button"

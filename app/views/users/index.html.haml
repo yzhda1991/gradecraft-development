@@ -19,7 +19,7 @@
         %th Courses
         %th #{term_for :team}
         %th Score
-        %th{:style => "min-width: 200px"}
+        %th{:style => "min-width: 250px"}
     %tbody
       - @users.each do |user|
         - cache ["v1", user] do
@@ -48,10 +48,11 @@
               - if user_is_student
                 = points user.cached_score_for_course(current_course) if user.respond_to?(:grades)
             %td
-              .button-bar
-                %ul.button-group.radius
-                  %li
-                    = link_to "Dashboard", student_path(user), :class => 'button' if user_is_student
-                    = link_to "Dashboard", staff_path(user), :class => 'button' if user_is_staff
+              .right
+                %ul
+                  - if user_is_student
+                    %li= link_to "Dashboard", student_path(user), :class => 'button' if user_is_student
+                  - elsif user_is_staff
+                    %li= link_to "Dashboard", staff_path(user), :class => 'button' if user_is_staff
                   %li= link_to 'Edit', edit_user_path(user), :class => 'button'
                   %li= link_to 'Delete', course_membership, :class => 'button', :data => { confirm: 'This will delete the student from your course - Are you sure?' }, :method => :delete

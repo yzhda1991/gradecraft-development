@@ -77,7 +77,7 @@
                 = p.input :auditing
                 .form_label This #{term_for :student}'s grades will be excluded from course analysis
 
-  .button-bar
-    %ul.button-group.right
+  .submit-buttons
+    %ul
       %li= submit_tag "#{@user.persisted? ? 'Update' : 'Create'} User", :class => "button"
       %li= link_to 'Cancel', users_path, :class => 'button'

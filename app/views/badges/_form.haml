@@ -130,7 +130,7 @@
                 = link_to bf.filename, bf.url, :target => "_blank"
                 = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :badge_id => @badge.id, :upload_id => bf.id } )
 
-  .button-bar
-    %ul.button-group.right
+  .submit-buttons
+    %ul
       %li= submit_tag "#{@badge.persisted? ? 'Update' : 'Create'} #{term_for :badge}", :class => 'button'
       %li= link_to 'Cancel', badges_path, :class => 'button'

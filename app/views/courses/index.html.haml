@@ -36,17 +36,14 @@
               - if course == current_course
                 = link_to_unless_current "Export Grades for Research", research_gradebook_path, :class=>"data-clearing"
             %td
-              .button-bar
-                %ul.button-group.radius
+              .right
+                %ul
                   %li
                     = link_to edit_course_path(course), :class => 'button' do
                       Edit
-                      %span.sr-only #{course.name}
                   %li
                     = link_to course, :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete do
                       Delete
-                      %span.sr-only #{course.name}
                   %li
                     = link_to copy_courses_path(:id => course.id), :class => 'button', :method => :copy do
                       Copy
-                      %span.sr-only #{course.name}

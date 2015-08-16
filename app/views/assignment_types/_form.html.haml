@@ -48,7 +48,7 @@
       = f.text_field :student_logged_revert_button_text, {"aria-describedby" => "txtRevertButtonText"}
       .form_label{:id => "txtRevertButtonText"} If a student unchecks this button, what should it say?
 
-  .button-bar
-    %ul.button-group.radius.right
+  .submit-buttons
+    %ul
       %li= f.button :submit, "#{@assignment_type.persisted? ? 'Update' : 'Create'} #{term_for :assignment_type}"
       %li= link_to 'Cancel', assignment_types_path, :class => "button"

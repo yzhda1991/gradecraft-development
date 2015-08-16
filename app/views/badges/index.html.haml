@@ -51,8 +51,8 @@
             = raw badge.description
           %td= badge.awarded_count
           %td
-            .button-bar
-              %ul.button-group.radius
+            .right
+              %ul
                 %li= link_to raw("<i class='fa fa-check fa-fw'></i> Quick Award"), mass_award_badge_path(badge), :class => "button"
                 %li= link_to raw("<i class='fa fa-star fa-fw'></i> Award"), new_badge_earned_badge_path(badge), :class => "button"
                 %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_badge_path(badge), :class => 'button'

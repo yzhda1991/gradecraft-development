@@ -27,17 +27,14 @@
           - if current_user_is_staff? && current_course.has_badges?
             %td= points team.badge_count
           %td
-            .button-bar
-              %ul.button-group.radius
+            .right
+              %ul
                 %li
                   = link_to team, :class => 'button' do
                     See
-                    %span.sr-only= team.name
                 %li
                   = link_to edit_team_path(team), :class => 'button' do
                     Edit
-                    %span.sr-only= team.name
                 %li
                   = link_to team_path(team), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete do
                     Delete
-                    %span.sr-only= team.name

@@ -6,11 +6,11 @@
       = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
 = form_tag edit_status_grades_assignment_path @assignment do
-  %table.responsive.nofeatures_default_last_name_dynatable
+  %table.nofeatures_default_last_name_dynatable
     %thead= render "assignments/individual/table_head"
     %tbody= render "assignments/individual/table_body"
 
   - if @assignment.release_necessary? && @assignment.grades.present?
     .small-12.columns
       .right.form_buttons
-        = submit_tag "Update Selected Grade Statuses", :class => "button radius"
+        = submit_tag "Update Selected Grade Statuses", :class => "button"

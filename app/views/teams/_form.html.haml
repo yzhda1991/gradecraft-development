@@ -27,7 +27,7 @@
       = f.check_box :in_team_leaderboard
       .form_label= "#{term_for :students} in this #{term_for :team} will be able to see the in-#{term_for :team} rankings, with #{term_for :students}'s listed by their chosen screenname, and accompanying scores"
 
-  .button-bar
-    %ul.button-group.right
+  .submit-buttons
+    %ul
       %li= f.submit "#{@team.persisted? ? 'Update' : 'Create'} #{ term_for :team }", :class => 'button'
       %li= link_to 'Cancel', teams_path, :class => 'button'

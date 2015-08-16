@@ -70,20 +70,10 @@
                         %td.doobers= assignment.point_total
                       %td= "Yes" if assignment.rubric and assignment.rubric.designed?
                       %td
-                        .button-bar
-                          %ul.button-group
+                        .right
+                          %ul
                             - if ! ( assignment.rubric and assignment.rubric.designed? and assignment.use_rubric? )
-                              %li
-                                %a{:href => mass_grade_assignment_path(assignment), :class => 'button' }
-                                  Quick Grade
-                                  %span.sr-only=assignment.name
-                            %li
-                              %a{:href => edit_assignment_path(assignment), :class => 'button' }
-                                Edit
-                                %span.sr-only=assignment.name
-                          %li
-                            = link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
-                            %span.sr-only=assignment.name
-                          %li
-                            %a{:href => assignment_path(assignment), :class => "button", :data => { confirm: 'Are you sure?', method: :delete } }
-                              Delete
+                              %li= link_to "Quick Grade", mass_grade_assignment_path(assignment), :class => 'button'
+                            %li= link_to "Edit", edit_assignment_path(assignment), :class => 'button'
+                            %li= link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
+                            %li= link_to "Delete", assignment_path(assignment), :class => "button", :data => { confirm: 'Are you sure?', method: :delete }

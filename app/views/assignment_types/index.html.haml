@@ -20,23 +20,22 @@
           %td= assignment_type.points_predictor_display
           %td= points assignment_type.max_value
           %td
-            .button-bar
-              %ul.button-group.radius
-                %li
-                  %a{:href => assignment_type_path(assignment_type), :class => 'button'}
-                    See
-                    %span.sr-only= assignment_type.name
+            %ul.right
+              %li
+                %a{:href => assignment_type_path(assignment_type), :class => 'button'}
+                  See
+                  %span.sr-only= assignment_type.name
 
-                %li
-                  %a{:href => edit_assignment_type_path(assignment_type), :class => 'button'}
-                    Edit
-                    %span.sr-only= assignment_type.name
-                %li
-                  %a{:href => export_scores_assignment_type_path(assignment_type.id, format: 'csv'), :class => "button"}
-                    Download Scores
-                %li
-                  %a{:href => assignment_type_path(assignment_type), :data => { confirm: 'Are you sure? This will delete all associated assignments and their grades.', method: :delete }, :class => "button" }
-                    Delete
+              %li
+                %a{:href => edit_assignment_type_path(assignment_type), :class => 'button'}
+                  Edit
+                  %span.sr-only= assignment_type.name
+              %li
+                %a{:href => export_scores_assignment_type_path(assignment_type.id, format: 'csv'), :class => "button"}
+                  Download Scores
+              %li
+                %a{:href => assignment_type_path(assignment_type), :data => { confirm: 'Are you sure? This will delete all associated assignments and their grades.', method: :delete }, :class => "button" }
+                  Delete
 
   %h4.subtitle= "#{term_for :student} Scores"
 
@@ -57,7 +56,7 @@
           - @assignment_types.each do |at|
             %td= at.visible_score_for_student(student)
             - if at.student_weightable?
-              %td= "[#{ at.raw_score_for_student(student)}]"
+              %td= at.raw_score_for_student(student)
               %span.sr-only= at.name
 
   %h4.subtitle= "#{term_for :student} Grade Counts"

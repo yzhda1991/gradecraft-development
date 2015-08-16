@@ -64,28 +64,26 @@
               %td= challenge_grade.try(:status)
             - if current_user_is_staff?
               %td
-                - if challenge_grade
-                  %ul.button-group.radius
-                    %li
-                      %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
-                        See Grade
-                        %span.sr-only
-                          = "for #{team.name}"
-                    %li
-                      %a{:href => edit_challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
-                        Edit Grade
-                        %span.sr-only
-                          = "for #{team.name}"
-                    %li
-                      %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button', :data => { confirm: 'Are you sure?', method: :delete }}
-                        Delete Grade
-                        %span.sr-only
-                          = "for #{team.name}"
-                - else
-                  %a{:href => new_challenge_challenge_grade_path(:challenge_id => @challenge.id, :team_id => team.id), :class => 'button'}
-                    Grade
-                    %span.sr-only
-                      = "for #{team.name}"
+                .right
+                  %ul
+                    - if challenge_grade
+                      %li
+                        %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
+                          See Grade
+                          %span.sr-only
+                            = "for #{team.name}"
+                      %li
+                        %a{:href => edit_challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'}
+                          Edit Grade
+                          %span.sr-only
+                            = "for #{team.name}"
+                      %li
+                        %a{:href => challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button', :data => { confirm: 'Are you sure?', method: :delete }}
+                          Delete Grade
+                    - else
+                      %li
+                        %a{:href => new_challenge_challenge_grade_path(:challenge_id => @challenge.id, :team_id => team.id), :class => 'button'}
+                          Grade
             - if @challenge.release_necessary?
               %td
                 - if challenge_grade

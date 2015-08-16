@@ -10,7 +10,7 @@
       %h4 #{term_for :badge} Feedback
       = f.text_area :feedback
       .form_label Enter a message to the #{term_for :student} regarding their work
-  .button-bar
-    %ul.button-group.right
+  .submit-buttons
+    %ul
       %li= f.button :submit, "#{@earned_badge.persisted? ? 'Update' : 'Award '} #{term_for :badge}"
       %li= link_to 'Cancel', badge_path(@badge), :class => 'button'

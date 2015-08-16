@@ -52,8 +52,8 @@
                     %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
               %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
             %td
-              .button-bar
-                %ul.button-group
+              .right
+                %ul
                   %li= link_to 'Dashboard', student_path(student), :class => 'button'
                   %li= link_to 'Edit', edit_user_path(student), :class => 'button'
 
@@ -76,8 +76,8 @@
               = challenge.name
           %td= points challenge.challenge_grade_for_team(@team).try(:score)
           %td
-            .button-bar
-              %ul.button-group
+            .right
+              %ul
                 - if challenge.challenge_grade_for_team(@team).present?
                   = link_to 'Edit Grade', edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => 'button'
                 - else

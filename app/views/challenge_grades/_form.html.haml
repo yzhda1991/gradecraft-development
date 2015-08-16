@@ -20,7 +20,7 @@
     .textarea
       = f.text_area :text_feedback
 
-  .button-bar
-    %ul.button-group.right
+  .submit-buttons
+    %ul
       %li= f.button :submit, "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}"
       %li= link_to 'Cancel', challenges_path, :class => 'button'

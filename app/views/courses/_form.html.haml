@@ -246,7 +246,7 @@
       = f.text_field :fail_term, {"aria-describedby" => "txtFailTerm"}
       .form_label{:id => "txtFailTerm"} What would you like to call failure for a pass/fail assignment?
 
-  .button-bar
-    %ul.button-group.radius.right
+  .submit-buttons
+    %ul
       %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", :class => "button"
       %li= link_to 'Cancel', courses_path, :class => 'button'

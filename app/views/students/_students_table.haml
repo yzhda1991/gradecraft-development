@@ -37,8 +37,8 @@
               = "-" if student.grade_letter_for_course(current_course).present? && student.grade_level_for_course(current_course).present?
               = student.grade_level_for_course(current_course)
           %td
-            .button-bar
-              %ul.button-group.radius
+            .right
+              %ul
                 %li= link_to "Dashboard", student_path(student), :class => "button"
                 %li= link_to "Edit", edit_user_path(student), :class => "button"
                 %li= link_to 'Delete', student.course_memberships.where(:course_id => current_course.id).first, :class => 'button', :data => { confirm: 'This will delete the student from your course - Are you sure?' }, :method => :delete

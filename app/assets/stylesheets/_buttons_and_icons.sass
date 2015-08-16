@@ -19,21 +19,27 @@
   &:active
     background-color: $secondary-color-3
 
-ul.button-group
-  margin: 0
-  padding: 0
-  li
-    display: inline
-    list-style-type: none
-    white-space: nowrap
-  .button, button
-    border-radius: 0
-  li:first-of-type .button
-    border-top-left-radius: $global-radius
-    border-bottom-left-radius: $global-radius
-  li:last-of-type .button
-    border-top-right-radius: $global-radius
-    border-bottom-right-radius: $global-radius
+.submit-buttons
+  margin-top: 1rem
+  position: relative
+  height: 1rem
+
+  ul
+    float: right
+    margin: 0
+    padding: 0
+    overflow: hidden
+    background-color: $primary-color-2
+    border-radius: $global-radius
+
+    li
+      float: left
+      border-right: 1px solid $color-green-3
+    li:first-child button
+    li:last-child
+      padding: .3rem 0
+      border-right: 0
+      margin-left: -.25rem
 
 thead
   .button
@@ -43,3 +49,27 @@ thead
       left: -6px
     &:hover
       background-color: $primary-color-1 !important
+
+tbody
+  ul
+    margin: 0
+    padding: 0 !important
+    li
+      display: inline
+      list-style-type: none
+      margin: 0
+      padding: 0
+      margin-left: -5px
+      a
+        padding: 0
+        margin: 0 !important
+        color: #FFF !important
+      .button
+        padding: .4rem
+        border-radius: 0
+      &:first-child .button
+        border-top-left-radius: $global-radius
+        border-bottom-left-radius: $global-radius
+      &:last-child .button
+        border-top-right-radius: $global-radius
+        border-bottom-right-radius: $global-radius

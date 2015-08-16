@@ -37,17 +37,14 @@
           %td= challenge.accepts_submissions? ? 'Yes' : 'No'
           %td= challenge.release_necessary? ? 'Yes' : 'No'
           %td
-            .button-bar
-              %ul.button-group
+            .right
+              %ul
                 %li
                   %a.button{:href => mass_edit_challenge_challenge_grades_path(challenge) }
                     Quick Grade
-                    %span.sr-only= challenge.name
                 %li
                   = link_to edit_challenge_path(challenge), :class => 'button' do
                     Edit
-                    %span.sr-only=  challenge.name
                 %li
                   = link_to challenge, :class => 'button', :method => :delete, data: { confirm: 'Are you sure?' } do
                     Delete
-                    %span.sr-only=  challenge.name
