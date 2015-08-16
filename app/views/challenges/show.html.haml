@@ -3,18 +3,18 @@
 %h3.pagetitle= @title
 
 - if current_user_is_staff?
-  .button-bar.context_menu
-    %ul.button-group
+  .context_menu
+    %ul
       %li
-        %a.button{:href => new_challenge_path }
+        %a{:href => new_challenge_path }
           %i.fa.fa-plus
           New #{(term_for :challenge).titleize}
       %li
-        %a.button{:href => edit_challenge_path(@challenge) }
+        %a{:href => edit_challenge_path(@challenge) }
           %i.fa.fa-edit
           Edit
       %li
-        %a.button{:href => mass_edit_challenge_challenge_grades_path(@challenge) }
+        %a{:href => mass_edit_challenge_challenge_grades_path(@challenge) }
           %i.fa.fa-check
           Quick Grade
 

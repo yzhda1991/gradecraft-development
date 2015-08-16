@@ -1,5 +1,5 @@
-.button-bar.context_menu
-  %ul.button-group
+.context_menu
+  %ul
     %li= link_to_unless_current raw("<i class='fa fa-user fa-fw'></i> #{term_for :student} Analytics"), analytics_students_path
     %li= link_to_unless_current raw("<i class='fa fa-user fa-fw'></i> #{term_for :team_leader} Analytics"), analytics_staff_path
     %li= link_to  raw("<i class='fa fa-file-zip-o fa-fw'></i> Download Analytics"),  analytics_export_path(format: 'zip')

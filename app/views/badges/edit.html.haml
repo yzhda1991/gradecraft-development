@@ -2,18 +2,18 @@
 
 %h3.pagetitle= @title
 
-.button-bar.context_menu
-  %ul.button-group
+.context_menu
+  %ul
     %li
-      %a.button{:href => badge_path(@badge) }
+      %a{:href => badge_path(@badge) }
         %i.fa.fa-eye.fa-fw
         See
     %li
-      %a.button{:href => new_badge_earned_badge_path(:badge_id => @badge) }
+      %a{:href => new_badge_earned_badge_path(:badge_id => @badge) }
         %i.fa.fa-star.fa-fw
         Award
     %li
-      %a.button{:href => mass_award_badge_path(@badge) }
+      %a{:href => mass_award_badge_path(@badge) }
         %i.fa.fa-check.fa-fw
         Quick Award
 

@@ -2,14 +2,14 @@
 
 %h3.pagetitle= @title
 
-.button-bar.context_menu
-  %ul.button-group
+.context_menu
+  %ul
     %li
-      %a.button{:href => new_team_path }
+      %a{:href => new_team_path }
         %i.fa.fa-plus
         New #{(term_for :team).titleize}
     %li
-      %a.button{:href => edit_team_path(@team) }
+      %a{:href => edit_team_path(@team) }
         %i.fa.fa-edit
         Edit #{(term_for :team).titleize}
 

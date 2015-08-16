@@ -3,10 +3,10 @@
 %h3.pagetitle= @title
 
 - if current_user_is_staff?
-  .button-bar.context_menu
-    %ul.button-group
+  .context_menu
+    %ul
       %li
-        %a.button{:href => new_challenge_path }
+        %a{:href => new_challenge_path }
           %i.fa.fa-plus
           New #{(term_for :challenge).titleize}
 

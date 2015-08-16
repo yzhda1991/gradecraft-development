@@ -56,6 +56,7 @@ $media-xlarge-max:  120rem; //
 @import 'buttons_and_icons';
 @import 'datepicker';
 @import 'collapse';
+@import 'context_menu';
 @import 'forms';
 @import 'grid';
 @import 'homepage';
@@ -65,8 +66,8 @@ $media-xlarge-max:  120rem; //
 @import 'rubrics';
 @import 'staff_sidebar';
 @import 'student_sidebar';
+@import 'student_subnav';
 @import 'student_dashboard';
-@import 'subnav';
 @import 'tables';
 @import 'tabs';
 @import 'timeline';

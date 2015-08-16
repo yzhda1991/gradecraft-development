@@ -3,12 +3,15 @@
 %h3.pagetitle= @title
 
 .context_menu
-  .button-bar
-    %ul.button-group
-      %li
-        %a.button{:href => new_assignment_path }
-          %i.fa.fa-plus
-          New #{(term_for :assignment).titleize}
+  %ul
+    %li
+      %a{:href => new_assignment_path }
+        %i.fa.fa-plus.fa-fw
+        New #{(term_for :assignment).titleize}
+    %li
+      %a{:href => settings_assignments_path }
+        %i.fa.fa-dashboard.fa-fw
+        Review #{(term_for :assignment).titleize} Settings
 
 .pageContent
   .assignments
@@ -68,7 +71,7 @@
                       %td= "Yes" if assignment.rubric and assignment.rubric.designed?
                       %td
                         .button-bar
-                          %ul.button-group.radius
+                          %ul.button-group
                             - if ! ( assignment.rubric and assignment.rubric.designed? and assignment.use_rubric? )
                               %li
                                 %a{:href => mass_grade_assignment_path(assignment), :class => 'button' }

@@ -2,10 +2,10 @@
 
 %h3.pagetitle= @title
 
-.button-bar.context_menu
-  %ul.button-group
+.context_menu
+  %ul
     %li
-      %a.button{:href => edit_badge_earned_badge_path(:id => @earned_badge.id) }
+      %a{:href => edit_badge_earned_badge_path(:id => @earned_badge.id) }
         %i.fa.fa-edit
         Edit
 

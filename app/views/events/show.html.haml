@@ -2,14 +2,14 @@
 
 %h3.pagetitle= @title
 
-.button-bar.context_menu
-  %ul.button-group
+.context_menu
+  %ul
     %li
-      %a.button{:href => new_event_path }
+      %a{:href => new_event_path }
         %i.fa.fa-plus
         New Calendar Event
     %li
-      %a.button{:href => edit_event_path(@event) }
+      %a{:href => edit_event_path(@event) }
         %i.fa.fa-edit
         Edit
 

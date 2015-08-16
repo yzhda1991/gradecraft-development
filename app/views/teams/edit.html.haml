@@ -2,10 +2,10 @@
 
 %h3.pagetitle= @title
 
-.button-bar.context_menu
-  %ul.button-group
+.context_menu
+  %ul
     %li
-      %a.button{:href => team_path(@team) }
+      %a{:href => team_path(@team) }
         %i.fa.fa-list
         See #{term_for :team}
 

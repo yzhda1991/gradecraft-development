@@ -2,10 +2,10 @@
 
 %h3.pagetitle= @title
 
-.button-bar.context_menu
-  %ul.button-group
+.context_menu
+  %ul
     %li
-      %a.button{:href => new_group_path }
+      %a{:href => new_group_path }
         %i.fa.fa-plus
         New #{term_for :group}
 

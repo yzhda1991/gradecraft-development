@@ -2,10 +2,10 @@
 
 %h3.pagetitle= @title
 
-.button-bar.context_menu
-  %ul.button-group
+.context_menu
+  %ul
     %li
-      %a.button{:href => edit_course_path(@course) }
+      %a{:href => edit_course_path(@course) }
         %i.fa.fa-edit
         Edit
 
