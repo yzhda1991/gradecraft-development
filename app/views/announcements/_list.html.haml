@@ -1,4 +1,4 @@
-%table.responsive.nofeatures.no_radius
+%table.responsive.nofeatures.no_radius.announcements
   %thead
     %tr
       %th Sent
@@ -9,7 +9,7 @@
   %tbody
     - @announcements.each do |announcement|
       - cache ["v1", announcement] do
-        %tr
+        %tr{class: current_user.is_student?(current_course) ? announcement.read?(current_user) ? "read" : "unread" : ""}
           %td= announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
           %td= link_to announcement.title, announcement_path(announcement)
           %td= announcement.author.public_name

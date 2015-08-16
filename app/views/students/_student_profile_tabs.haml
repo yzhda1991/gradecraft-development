@@ -29,6 +29,12 @@
   - if current_course.has_badges?
     %li{class: ("active" if current_page?(my_badges_path)) }
       = link_to_unless_current "#{term_for :badges}", my_badges_path
+  %li{class: ("active" if current_page?(announcements_path)) }
+    = link_to_unless_current announcements_path do
+      Announcements
+      - unread_count = Announcement.unread_count_for current_user, current_course
+      - if unread_count > 0
+        %div.notification-badge.announcement-notification-badge= unread_count
   - if current_course.has_teams? && current_course.teams_visible?
     %li{class: ("active" if current_page?(my_team_path)) }
       = link_to_unless_current "#{term_for :teams}", my_team_path
