@@ -1,15 +1,22 @@
+- if @announcement.errors.any?
+  .alert-box.alert.radius
+    .italic= "#{pluralize(@announcement.errors.count, "error")} prohibited this announcement from being saved:"
+    %ul
+      - @announcement.errors.full_messages.each do |msg|
+        %li= msg
+
 = simple_form_for(@announcement) do |f|
-  = f.error_notification
-
-  .form-inputs
-    .panel
+  %section
+    %h4 Basics
+    .form-item
       = f.input :title
-      = f.label :body
-      = f.bootsy_area :body
 
-    %hr
+  %section
+    %h4 Body
+    .form-item
+      = f.text_area :body
 
-  .button-bar
-    %ul.button-group.radius.right
-      %li= f.button :submit, "Send Announcement", :class => "button"
+  .submit-buttons
+    %ul
+      %li= f.button :submit, "Send Announcement"
       %li= link_to 'Cancel', announcements_path, :class => 'button'

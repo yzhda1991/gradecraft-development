@@ -1,7 +1,6 @@
-.small-12.panel.mainContent
-  = content_nav_for Announcement, @title
+= content_nav_for Announcement, @title
 
-  %h3.pagetitle= @title
+%h3.pagetitle= @title
 
-  .small-12.columns
-    = render "form"
+.pageContent
+  = render "form"

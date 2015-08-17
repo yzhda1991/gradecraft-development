@@ -1,17 +1,12 @@
-.small-12.panel.mainContent
+- if current_user_is_staff?
   = content_nav_for Announcement
 
-  .small-12
-    %h3.pagetitle= @title
+%h3.pagetitle= @title
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        - if current_user.can_create?(Announcement.new(course_id: current_course.id))
-          %li
-            %a.button{:href => new_announcement_path }
-              %i.fa.fa-plus
-              New Announcement
+- if current_user.can_create?(Announcement.new(course_id: current_course.id))
+  .context_menu
+    %ul
+      %li= link_to_unless_current raw('<i class="fa fa-plus fa-fw"></i> New Announcement'), new_announcement_path
 
-  .small-12.columns
-    = render "list"
+.pageContent
+  = render "list"
