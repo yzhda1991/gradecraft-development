@@ -1,33 +1,28 @@
-.small-12.panel.mainContent
+= content_nav_for @challenge, "Quick Grade #{term_for :challenge}"
 
-  = content_nav_for @challenge, "Quick Grade #{term_for :challenge}"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
-  .small-12.columns
-
-    #massGrade
-      = simple_form_for @challenge, method: :put, :url => mass_edit_challenge_path(@challenge) do |f|
-        %table.responsive.dynatable
-          - @challenge_grades.each_with_index do |cg, i|
-            %tr
-              %td{:style => "text-align: right"}
-                = link_to cg.team.name, team_path(cg.team)
-              %td.right{:width => "20%"}
-                = f.simple_fields_for :challenge_grades, cg do |cgf|
-                  = cgf.hidden_field :team_id
-                  - if @challenge.challenge_score_levels.present?
-                    = cgf.select :score, options_from_collection_for_select(@challenge_score_levels, :value, :name, cg.try(:score)), include_blank: true
+.pageContent
+  #massGrade
+    = simple_form_for @challenge, method: :put, :url => mass_edit_challenge_path(@challenge) do |f|
+      %table.responsive.dynatable
+        - @challenge_grades.each_with_index do |cg, i|
+          %tr
+            %td{:style => "text-align: right"}
+              = link_to cg.team.name, team_path(cg.team)
+            %td.right{:width => "20%"}
+              = f.simple_fields_for :challenge_grades, cg do |cgf|
+                = cgf.hidden_field :team_id
+                - if @challenge.challenge_score_levels.present?
+                  = cgf.select :score, options_from_collection_for_select(@challenge_score_levels, :value, :name, cg.try(:score)), include_blank: true
+                - else
+                  - if cg.persisted?
+                    = cgf.text_field :score, data: {autonumeric: true, "m-dec" => "0"}
                   - else
-                    - if cg.persisted?
-                      = cgf.text_field :score, data: {autonumeric: true, "m-dec" => "0"}
-                    - else
-                      = cgf.text_field :score, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
-              %td.right{:style => "text-align: right", :width => "15%"}= " / #{points  @challenge.point_total} points"
-        
-        %br
+                    = cgf.text_field :score, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
+            %td.right{:style => "text-align: right", :width => "15%"}= " / #{points  @challenge.point_total} points"
 
-        .button-bar
-          %ul.button-group.radius.right
-            %li= f.button :submit, "Submit"
-            %li= link_to 'Cancel', challenges_path, :class => 'button'
+      .submit-buttons
+        %ul
+          %li= f.button :submit, "Submit"
+          %li= link_to 'Cancel', challenges_path, :class => 'button'

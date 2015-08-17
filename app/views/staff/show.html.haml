@@ -1,32 +1,29 @@
-.small-12.panel.mainContent
+= content_nav_for @staff
 
-  = content_nav_for @staff
+%h3.pagetitle= @staff.name
 
-  %h3.pagetitle= @staff.name
+.pageContent
+  %h4 Courses
+  %ul
+    - @staff.courses.each do |course|
+      %li= link_to course.name, course
 
-  .small-12.columns
-
-    %h4 Courses
-    %ul
-      - @staff.courses.each do |course|
-        %li= link_to course.name, course
-
-    %h4 Recently Graded
-    %table.responsive.nofeatures_dynatable
-      %thead
+  %h4 Recently Graded
+  %table.nofeatures_dynatable
+    %thead
+      %tr
+        %th Assignment
+        %th Student
+        %th Score
+        %th Feedback
+        %th.button-column
+    %tbody
+      - @grades.each do |grade|
         %tr
-          %th Assignment
-          %th Student
-          %th Score
-          %th Feedback
-          %th.button-column
-      %tbody
-        - @grades.each do |grade|
-          %tr
-            %td= link_to grade.assignment.name, assignment_path(grade.assignment)
-            %td= link_to grade.student.name, student_path(grade.student)
-            %td= points grade.score
-            %td= raw grade.feedback
-            %td
-              = grade.created_at
-              = grade.updated_at if grade.updated_at != grade.created_at
+          %td= link_to grade.assignment.name, assignment_path(grade.assignment)
+          %td= link_to grade.student.name, student_path(grade.student)
+          %td= points grade.score
+          %td= raw grade.feedback
+          %td
+            = grade.created_at
+            = grade.updated_at if grade.updated_at != grade.created_at

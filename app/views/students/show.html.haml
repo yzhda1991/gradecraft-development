@@ -1,13 +1,5 @@
-= content_nav do
-  = render "students/student_profile_tabs"
+%h3.pagetitle= "#{term_for :assignments}"
 
-.small-12.medium-9.panel.columns.mainContent
-
-  = render 'students/earned_points_and_level'
-
-  = render 'students/assignments'
-
-  = render 'students/scoreboard'
-
-.small-12.medium-3.columns.sideBarContainer
-  = render "staff_view_student_sidebar"
+.pageContent
+  = render 'students/syllabus/assignments'
+  = render "students/syllabus/challenges"

@@ -1,82 +1,139 @@
+.video-container, .newsletter-container, .press-container
+  width: 100% !important
+  margin: 0
+  height: 400px
 
-/* Front facing page, not logged in */
-.row.panel.publicContent
-  margin-bottom: 0
-  margin-top: 1.5rem
-  padding-top: 2rem
-  border: none
-  background-color: #FFF
-  min-height: 30rem
-  border-bottom-right-radius: 0
-  border-bottom-left-radius: 0
+.newsletter-container
+  background-color: $primary-color-3
+  opacity: .8
+  padding: 2rem 0
 
-.row.panel.footer
-  border-top-right-radius: 0
-  border-top-left-radius: 0
-  margin-top: 0
-  background-color: $primary-color-5
-  border: none
-  color: #FFF
-  padding-bottom: 0
+  input.button 
+    background-color: $primary-color-1 !important
 
-  h5
-    color: $primary-color-4
-    font-size: 110%
+.video-container
+  padding: 2rem 0 
 
-  a
+.press-container
+  background-color: $primary-color-1
+  opacity: .9
+  color: #000
+  margin: 0
+  padding: 0
+
+section.video-promo, section.newsletter
+  padding: 0 2rem
+
+section.video-promo, section.newsletter, section.press
+  min-width: 700px
+  max-width: 1500px
+  margin: 0 auto
+  height: 400px
+  overflow: hidden
+
+  article
+    width: 33%
     color: #FFF
+    float: left
+    margin: 0
+
+    &.news-articles
+      padding: 1rem 0
+      background-color: $color-blue-00
+      opacity: .8
+      height: 400px
+
+    &.pedagogy
+      background-color: $primary-color-2
+      opacity: .8
+      padding: 1rem 0
+      height: 400px
+
+      p
+        padding: 0 1rem
+
+      a
+        color: $secondary-color-3
+
+    &.twitter
+      float: left
+      background-color: $primary-color-1
+
+    h1
+      padding: 0 1rem
+      color: #FFF
+      font-size: 2.0rem
+
+  h1
+    font-family: Avenir, san-serif
+    font-weight: 100
+    color: $primary-color-1
+    font-size: 2.2rem
 
   ul
     margin: 0
-    padding: 0
+    padding: 0 1rem
 
-  li
-    list-style-type: none
-    font-size: .9rem
+    li
+      list-style-type: none
+      margin: 0 0 .5rem
+      padding: 0
 
-  h6
-    color: #FFF
-    font-size: 90%
+      a
+        color: $primary-color-4
 
-.logged_in_footer, .logged_in_footer a, .logged_in_footer h5, .logged_in_footer h6
-  color: #FFF
+  .columns.two-thirds
+    width: 66%
 
-.logged_in_footer h5
-  font-size: 120%
-  font-weight: bold
+  .columns.text
+    width: 40%
+    margin-top: 2.5rem
+    font-size: 1rem
 
-  /** Login Forms  **/
+  .columns.video
+    margin-top: 1.5rem
+    padding-left: 1rem
+    float: right
+    width: 55% !important
 
-.login_forms
-  background-color: #FFF
-  border: none
+    iframe
+      margin-top: 2rem
+      width: 100%
+      height: 80%
 
-  .content
-    border-top-right-radius: $global-radius
-    padding: 1rem 0
-    border-bottom-right-radius: $global-radius
-    border-bottom-left-radius: $global-radius
+  .columns.login
+    margin-top: 2.5rem
+    margin-left: 2rem
+    width: 30%
+    .ui-widget-content, .ui-widget-header
+      padding: .5rem
+      background-color: $primary-color-1
+      opacity: .9
 
-    input
-      width: 90% !important
-      margin-left: 15px !important
-    button
+    .ui-tabs-nav
+      li
+        border: 0
+
+    form
+      height: 150px
+      width: 100%
       margin: 0
+      padding: .5rem
+      input
+        padding: .5rem
+        width: 95%
+        border: 0
+        margin-bottom: .75rem
+      input:focus
+        background-color: lighten($secondary-color-3, 30%)
+        color: #000
 
-  .tabs-content
-    border: none
-    padding-bottom: 1rem
-    background-color: $color-grey-1
-    border-top-right-radius: $global-radius
-    border-bottom-right-radius: $global-radius
-    border-bottom-left-radius:  $global-radius
+      a 
+        left: -2rem
+        top: .25rem
+        position: relative
+        color: $secondary-color-3
 
-  dl.tabs dd > a
-    margin: 0 !important
-
-  .right
-    margin-right: 1.25rem
-
-@media (max-width: 600px)
-  .row.panel.publicContent
-    padding-top: 1.25rem !important
+      .button
+        position: relative
+        left: -1rem

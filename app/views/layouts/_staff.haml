@@ -1,12 +1,18 @@
-.small-12.medium-3.large-2.columns.staff_subnav.show-for-medium-up
+.sidebar
   / Staff-only sidebar navigation
   = render 'layouts/navigation/staff_subnav'
 
-.small-12.medium-9.large-10.columns.outerContainer{:role => "main"}
+.mainContainer.staff{:role => "main"}
   / Display errors and notifications
   = render 'layouts/alerts'
 
-  / Page content
-  = render 'layouts/content'
+  - if current_student.present?
+    = content_nav do
+      = render "students/student_profile_tabs"
 
-= render 'layouts/help/uservoice'
+  / Page content
+  .panel.mainContent{ :class => (current_student ? 'student' : '') }= render 'layouts/content'
+
+  - if current_student.present?
+    .student-sidebar
+      = render "students/student_sidebar"

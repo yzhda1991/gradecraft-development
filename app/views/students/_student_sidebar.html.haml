@@ -1,12 +1,15 @@
+- if current_user_is_staff?
+  .panel= render 'students/sidebar/sidebar_avatar'
+  
+.panel= render 'students/sidebar/sidebar_earned_points_and_level'
+
 - if current_course.student_weighted?
-  .panel.radius= render 'students/sidebar/sidebar_assignment_weights'
+  .panel= render 'students/sidebar/sidebar_assignment_weights'
 
-.panel.radius.show-for-small-only= render 'students/sidebar/sidebar_course_info'
-
-.panel.radius.todo= render 'students/sidebar/sidebar_to_do_list'
+.panel.todo= render 'students/sidebar/sidebar_to_do_list'
 
 - if ! current_course.hide_analytics?
-  .panel.radius= render 'students/sidebar/sidebar_grade_distribution'
+  .panel= render 'students/sidebar/sidebar_grade_distribution'
 
 - if current_course.has_badges?
-  .panel.radius= render 'students/sidebar/sidebar_badges'
+  .panel= render 'students/sidebar/sidebar_badges'

@@ -1,64 +1,54 @@
-.small-12
-  / Using Simple Form to create an assignment type
-  - if @assignment_type.errors.any? 
-    .alert-box.alert.radius
-      .italic= "#{pluralize(@assignment_type.errors.count, "error")} prohibited this #{(term_for :assignment_type).downcase} from being saved:"
-      %ul
-        - @assignment_type.errors.full_messages.each do |msg|
-          %li= msg
+/ Using Simple Form to create an assignment type
+- if @assignment_type.errors.any? 
+  .alert-box.alert.radius
+    .italic= "#{pluralize(@assignment_type.errors.count, "error")} prohibited this #{(term_for :assignment_type).downcase} from being saved:"
+    %ul
+      - @assignment_type.errors.full_messages.each do |msg|
+        %li= msg
 
-  = simple_form_for(@assignment_type) do |f|
-    / First section should cover the simple stuff we need to know about every assignment type
+= simple_form_for(@assignment_type) do |f|
+  / First section should cover the simple stuff we need to know about every assignment type
 
-    .small-12.columns.panel
-      %h4.uppercase BASIC SETTINGS
+  %section
+    %h4.uppercase Basic Settings
 
-      .small-12.medium-4.columns
-        / Assignment Type name, this will appear as the category heading for both students and staff
-        = f.label :name
-        = f.text_field :name
+    .form-item
+      / Assignment Type name, this will appear as the category heading for both students and staff
+      = f.label :name
+      = f.text_field :name
 
-      .small-12.medium-4.columns
-        / What's the maximum number of points a student may earn in this category? This cap needs to be finished
-        = f.label :max_value, :label => "Maximum Points"
-        = f.text_field :max_value#, data: {autonumeric: true, "m-dec" => "0"}
-        .form_label{:id => "txtMaxPoints"} Is there a cap on how many points students can earn here? (Leave blank if not)
-      
-      .small-12.medium-4.columns
-        %label.checkbox
-          = f.label :student_weightable, "Student Weighted"
-          = f.check_box :student_weightable, {"aria-describedby" => "txtStudentWeighted"}
-          .form_label{:id => "txtStudentWeighted"} Do students decide how much this #{term_for :assignment} type will count towards their grade?
+    .form-item
+      / What's the maximum number of points a student may earn in this category? This cap needs to be finished
+      = f.label :max_value, :label => "Maximum Points"
+      = f.text_field :max_value#, data: {autonumeric: true, "m-dec" => "0"}
+      .form_label{:id => "txtMaxPoints"} Is there a cap on how many points students can earn through this category (Leave blank if not)? If you fill this in, students will not be able to earn more than this amount.
 
+    .form-item
+      = f.label :student_weightable, "Student Weighted"
+      = f.check_box :student_weightable, {"aria-describedby" => "txtStudentWeighted"}
+      .form_label{:id => "txtStudentWeighted"} Do students decide how much this #{term_for :assignment} type will count towards their grade?
 
-      .clear
-
-    .small-12.columns.textarea.panel
-      %h4.uppercase Description
-      %label.small-12
+  %section
+    %h4.uppercase Description
+    .form-item
+      %label
         .sr-only Description
-        = f.bootsy_area :predictor_description, :label => "Description"
+        = f.text_area :predictor_description, :label => "Description"
       .form_label How would you like to describe this #{term_for :assignment} type on the student dashboard? Are there hints that you can give students that will help them understand how to succeed?
 
-      .clear
-    
-    .small-12.columns.medium-8.panel
-      %h4.uppercase Self-Grading
-      .small-12.medium-4.columns
-        = f.label :student_logged_button_text, "Button Text"
-        = f.text_field :student_logged_button_text, {"aria-describedby" => "txtButtonText"}
-        .form_label{:id => "txtButtonText"} If you would like students to be able to log their own grades, what would you like the button that does this to say?
+  %section
+    %h4.uppercase Self-Grading
+    .form-item
+      = f.label :student_logged_button_text, "Button Text"
+      = f.text_field :student_logged_button_text, {"aria-describedby" => "txtButtonText"}
+      .form_label{:id => "txtButtonText"} If you would like students to be able to log their own grades, what would you like the button that does this to say?
 
-      .small-12.medium-4.columns
-        = f.label :student_logged_revert_button_text, "Revert Button Text"
-        = f.text_field :student_logged_revert_button_text, {"aria-describedby" => "txtRevertButtonText"}
-        .form_label{:id => "txtRevertButtonText"} If a student unchecks this button, what should it say?
+    .form-item
+      = f.label :student_logged_revert_button_text, "Revert Button Text"
+      = f.text_field :student_logged_revert_button_text, {"aria-describedby" => "txtRevertButtonText"}
+      .form_label{:id => "txtRevertButtonText"} If a student unchecks this button, what should it say?
 
-      .small-12.medium-4.columns
-
-    .clear
-
-    .button-bar
-      %ul.button-group.radius.right
-        %li= f.button :submit, "#{@assignment_type.persisted? ? 'Update' : 'Create'} #{term_for :assignment_type}"
-        %li= link_to 'Cancel', assignment_types_path, :class => "button"
+  .submit-buttons
+    %ul
+      %li= f.button :submit, "#{@assignment_type.persisted? ? 'Update' : 'Create'} #{term_for :assignment_type}"
+      %li= link_to 'Cancel', assignment_types_path, :class => "button"

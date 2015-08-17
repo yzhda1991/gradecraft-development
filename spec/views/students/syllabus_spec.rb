@@ -20,7 +20,7 @@ describe "students/syllabus" do
 
   it "renders the points possible for the assignment" do
     render
-    assert_select "div.italic.not_bold", text: "#{points @assignment.point_total} points possible", count: 1
+    assert_select ".pagetitle", :count => 1
   end
 
 end

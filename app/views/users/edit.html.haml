@@ -1,9 +1,6 @@
-.small-12.panel.mainContent
+= content_nav_for @user, "Edit User"
 
-  = content_nav_for @user, "Edit User"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
-  .small-12.columns
-    / Form to edit user    
-    = render 'form'
+.pageContent    
+  = render 'form'

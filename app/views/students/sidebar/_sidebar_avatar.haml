@@ -1,0 +1,18 @@
+.text-center
+  %h3= current_student.name
+  %hr
+  - if current_student.avatar_file_name.present?
+    %img.img-rounded{:src => current_student.avatar_file_name, :size => 100} 
+  .italic= "#{current_student.team_for_course(current_course).name}" if current_student.team_for_course(current_course).present?
+  .italic= "Last activity: #{current_student.try(:last_activity_at) || "(never)"} "
+  %br
+  .button-bar
+    %ul.button-group
+      %li
+        %a{:href => edit_user_path(current_student), :class => "button" }
+          Edit
+      %li
+        %a{:href => "mailto:#{current_student.email}", :class => "button" }
+          Email
+      - if current_user_is_admin?
+        %li= link_to "Recalculate Score", student_recalculate_path(:student_id => current_student.id), :class => "button"

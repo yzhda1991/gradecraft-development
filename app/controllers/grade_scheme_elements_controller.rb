@@ -20,7 +20,7 @@ class GradeSchemeElementsController < ApplicationController
       :letter,
       :high_range,
       :course_id
-    ).reverse
+    )
   end
 
   def mass_update
@@ -35,7 +35,7 @@ class GradeSchemeElementsController < ApplicationController
           :letter,
           :high_range,
           :course_id
-        ).reverse }
+        ) }
 
       else
         format.json { render json: false, status: :internal_server_error }

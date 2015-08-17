@@ -1,13 +1,9 @@
-.small-12.panel.mainContent
+= content_nav_for "#{term_for :team} Analytics"
 
-  = content_nav_for "#{term_for :team} Analytics"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+.pageContent
+  #grade_distro
 
-  .small-12.columns
-
-    #grade_distro
-
-    - if current_course.has_teams?
-      #highchart
-      #grades_per_assign{"data-id" => "7"}
+  #highchart
+  #grades_per_assign{"data-id" => "7"}

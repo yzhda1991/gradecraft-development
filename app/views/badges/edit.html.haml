@@ -1,27 +1,21 @@
-.small-12.panel.mainContent
+= content_nav_for @badge, "Edit #{term_for :badge}"
 
-  = content_nav_for @badge, "Edit #{term_for :badge}"
+%h3.pagetitle= @title
 
-  .small-12
-    %h3.pagetitle= @title
+.context_menu
+  %ul
+    %li
+      %a{:href => badge_path(@badge) }
+        %i.fa.fa-eye.fa-fw
+        See
+    %li
+      %a{:href => new_badge_earned_badge_path(:badge_id => @badge) }
+        %i.fa.fa-star.fa-fw
+        Award
+    %li
+      %a{:href => mass_award_badge_path(@badge) }
+        %i.fa.fa-check.fa-fw
+        Quick Award
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => badge_path(@badge) }
-            %i.fa.fa-eye
-            See
-        %li
-          %a.button{:href => new_badge_earned_badge_path(:badge_id => @badge) }
-            %i.fa.fa-star
-            Award
-        %li
-          %a.button{:href => mass_award_badge_path(@badge) }
-            %i.fa.fa-check
-            Quick Award
-    %br
-
-  .small-12.columns
-
-    = render 'form'
+.pageContent
+  = render 'form'

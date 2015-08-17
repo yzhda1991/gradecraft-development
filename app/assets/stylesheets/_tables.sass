@@ -1,16 +1,15 @@
 table
-  border-spacing: 0
-  border: 1px solid $color-grey-1
   clear: both
+  border-spacing: 0
   font-size: .9rem
-  padding: .5rem
   text-align: left
+  width: 100%
 
-  &.responsive
-    width: 100%
+  td
+    border-bottom: 1px solid $color-grey-3
 
   thead
-    background-color: $primary-color
+    background-color: $color-blue-0
     color: #FFF
 
     th
@@ -22,22 +21,12 @@ table
       a, a.active, a.sorted
         color: #FFF !important
 
-  tr
-    border-bottom: 1px solid #eee
-
   td
     padding: .5rem
 
-  tr:last-child
-    border-bottom: none
-
-    td
-      padding: .5rem .5rem 0
-
-
 /* Styling pattern tables for assignment outcome overview */
 td.complete, tr.achieved
-  background-color: $secondary-color
+  background-color: $secondary-color-1
 
 i.complete
   color: red
@@ -52,10 +41,16 @@ td.partial
   background-color: $primary-color-3
 
 i.partial
-  color: $secondary-color
+  color: $secondary-color-3
 
 i.missing_grade
   color: #CCC
+
+.collapse-hidden
+  padding: .5rem 1.5rem
+
+.assignment-type-container
+  padding: 0 1.5rem 1rem
 
 /** Leaderboard Styles **/
 .small-12.columns.team

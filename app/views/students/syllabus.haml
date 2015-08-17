@@ -1,9 +1,5 @@
-.small-12.panel.mainContent
+%h3.pagetitle= "#{term_for :assignments}"
 
-  = render 'students/earned_points_and_level'
-    
-  .small-12.columns#syllabus
-
-    = render "students/assignments"
-
-    = render 'students/scoreboard'
+.pageContent
+  = render "students/syllabus/assignments"
+  = render "students/syllabus/challenges"

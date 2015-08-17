@@ -1,9 +1,4 @@
-.small-12.panel.mainContent
+%h3.pagetitle Course Timeline
 
-  %h3.pagetitle Course Timeline
-
-  .small-12.medium-9.columns.no_padding
-    #time_line{"data-timeline" => render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])}
-
-  .small-12.medium-3.columns
-    = render "staff_view_student_sidebar"
+.pageContent
+  #time_line{"data-timeline" => render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])}

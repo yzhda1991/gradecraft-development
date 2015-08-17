@@ -1,8 +1,6 @@
-.small-12.panel.mainContent
-  
-  = content_nav_for Team, "New #{term_for :team}"
+= content_nav_for Team, "New #{term_for :team}"
 
-  %h3.pagetitle= @title
-  
-  .small-12.columns
-    = render 'form'
+%h3.pagetitle= @title
+
+.pageContent
+  = render 'form'

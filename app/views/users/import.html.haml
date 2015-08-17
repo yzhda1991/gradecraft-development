@@ -1,19 +1,17 @@
-.small-12.panel.mainContent
+= content_nav_for User, "Import Users"
 
-  = content_nav_for User, "Import Users"
+%h3.pagetitle Import Users
 
-  %h3.pagetitle Import Users
+.pageContent
+  %p
+    To import users, upload a .csv file with the following fields. Please note that the first row will be treated as a header row and will not be imported.
+    %ol
+      %li First name
+      %li Last name
+      %li Username
+      %li Email
+      %li Team name
 
-  .columns
-    %p
-      To import users, upload a .csv file with the following fields. Please note that the first row will be treated as a header row and will not be imported.
-      %ol
-        %li First name
-        %li Last name
-        %li Username
-        %li Email
-        %li Team name
-
-    = form_tag({:action => :upload}, :multipart => true) do
-      = file_field_tag 'file'
-      = submit_tag("Import")
+  = form_tag({:action => :upload}, :multipart => true) do
+    = file_field_tag 'file'
+    = submit_tag("Import")

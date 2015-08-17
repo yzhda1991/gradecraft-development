@@ -1,34 +1,33 @@
-.small-12.panel.mainContent
+= content_nav_for "#{@title}"
 
-  = content_nav_for "#{@title}"
+%h3.pagetitle#tableCaption= @title
 
-  %h3.pagetitle#tableCaption= @title
+.context_menu
+  %ul
+    %li
+      %a{:href => mass_edit_grade_scheme_elements_path }
+        %i.fa.fa-edit
+        Edit
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => mass_edit_grade_scheme_elements_path }
-            %i.fa.fa-edit
-            Edit
-
-  .small-12.columns
-    / Grade Scheme Elements Table Display
-    %table.responsive.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
-      %thead
+.pageContent
+  / Grade Scheme Elements Table Display
+  %table.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
+    %thead
+      %tr
+        %th{:scope => "col"} Grade
+        %th{:scope => "col"} Level
+        %th{:scope => "col"} Low Range
+        %th{:scope => "col"} High Range
+    %tbody
+      - @grade_scheme_elements.each do |element|
         %tr
-          %th{:scope => "col"} Grade
-          %th{:scope => "col"} Level
-          %th{:scope => "col"} Low Range
-          %th{:scope => "col"} High Range
-      %tbody
-        - @grade_scheme_elements.order_by_high_range.each do |element|
-          %tr
-            %td= element.letter
-            %td= element.level
-            %td{:data => { :"sort-value" => "#{element.low_range }" }}= points element.low_range
-            %td{:data => { :"sort-value" => "#{element.high_range }" }}= points element.high_range
+          %td= element.letter
+          %td= element.level
+          %td{:data => { :"sort-value" => "#{element.low_range }" }}= points element.low_range
+          %td{:data => { :"sort-value" => "#{element.high_range }" }}= points element.high_range
 
+
+  - if current_course.professor.present?
     .small-12.columns
       %p
       %p= raw current_course.grading_philosophy

@@ -2,7 +2,8 @@ class Badge < ActiveRecord::Base
 
   attr_accessible :name, :description, :icon, :icon_cache, :visible, :can_earn_multiple_times, :value,
   :multiplier, :point_total, :earned_badges, :earned_badges_attributes, :score, :badge_file_ids,
-  :badge_files_attributes, :badge_file, :position
+  :badge_files_attributes, :badge_file, :position, :unlock_conditions, :unlock_conditions_attributes,
+  :visible_when_locked
 
   # grade points available to the predictor from the assignment controller
   attr_accessor :student_predicted_earned_badge
@@ -15,6 +16,13 @@ class Badge < ActiveRecord::Base
   has_many :predicted_earned_badges, :dependent => :destroy
 
   belongs_to :course, touch: true
+
+  # Unlocks
+  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
+  accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
+
+  has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
+  has_many :unlock_states, :as => :unlockable, :dependent => :destroy
 
   accepts_nested_attributes_for :earned_badges, allow_destroy: true, :reject_if => proc { |a| a['score'].blank? }
 
@@ -43,6 +51,63 @@ class Badge < ActiveRecord::Base
   def awarded_count
     earned_badges.count
   end
+
+  # Checking to see if the badge has unlock conditions
+  def is_unlockable?
+    unlock_conditions.present?
+  end
+
+  def is_unlocked_for_student?(student)
+    if unlock_states.where(:student_id => student.id).present?
+      unlock_states.where(:student_id => student.id).first.is_unlocked?
+    end
+  end
+
+  def is_a_condition?
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").present?
+  end
+
+  def unlockable
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").first.unlockable
+  end
+
+  def check_unlock_status(student)
+    if ! is_unlocked_for_student?(student)
+      goal = unlock_conditions.count
+      count = 0 
+      unlock_conditions.each do |condition|
+        if condition.is_complete?(student)
+          count += 1
+        end 
+      end
+      if goal == count 
+        if unlock_states.where(:student_id => student.id).present?
+          unlock_states.where(:student_id => student.id).first.unlocked = true 
+        else
+          self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
+        end
+      else
+        return false
+      end
+    end
+  end
+
+  def visible_for_student?(student)
+    if is_unlockable?
+      if visible_when_locked? || is_unlocked_for_student?(student)
+        return true
+      end
+    else
+      if visible?
+        return true
+      end
+    end
+  end
+
+  def find_or_create_unlock_state(student)
+    UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Badge")
+  end
+  
 
   #badges per role
   def earned_badges_by_student_id

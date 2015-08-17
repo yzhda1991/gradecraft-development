@@ -1,9 +1,11 @@
-.small-12.panel.mainContent
+= content_nav_for current_course, "Edit Grading Scheme"
+%h3.pagetitle= @title
 
-  = content_nav_for current_course, "Edit Grading Scheme"
-  %h3.pagetitle= @title
+.pageContent
+  - if ! current_course.grade_scheme_elements.present?
+    .italic Start by adding your highest level, and work your way down
 
-  .small-12.columns{'ng-app' => 'gradecraft', 'ng-controller' => 'GradeSchemeElementsCtrl'}
+  .columns{'ng-app' => 'gradecraft', 'ng-controller' => 'GradeSchemeElementsCtrl'}
     .grade-scheme-elements
       .grade-scheme-element{'ng-repeat' => 'element in grade_scheme_elements', 'ng-include' => "'ng_gradeScheme.html'"}
-      %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit
+    %button{:type => 'submit', :class => 'button radius right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit

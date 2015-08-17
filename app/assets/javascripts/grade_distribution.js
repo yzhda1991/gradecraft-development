@@ -13,10 +13,10 @@
       sparkOpts.tooltipOffsetY = -80;
       sparkOpts.targetColor = "#FF0000";
       sparkOpts.boxFillColor = '#eee';
-      sparkOpts.lineColor = '#333';
-      sparkOpts.boxLineColor = '#333';
-      sparkOpts.whiskerColor = '#333';
-      sparkOpts.outlierLineColor = '#333';
+      sparkOpts.lineColor = '#FFF';
+      sparkOpts.boxLineColor = '#FFF';
+      sparkOpts.whiskerColor = '#FFF';
+      sparkOpts.outlierLineColor = '#FFF';
       sparkOpts.outlierFillColor = '#F4A425';
       sparkOpts.spotRadius = '10';
       sparkOpts.medianColor = '#0D9AFF';

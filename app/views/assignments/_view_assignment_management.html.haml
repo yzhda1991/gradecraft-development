@@ -1,43 +1,40 @@
 = content_nav_for @assignment
 
-.small-12
-  - if @assignment.pass_fail?
-    %h3.pagetitle= "#{@title} (#{term_for :pass}/#{term_for :fail})"
-  - else
-    %h3.pagetitle= "#{@title} (#{ points @assignment.point_total } points)"
+- if @assignment.pass_fail?
+  %h3.pagetitle= "#{@title} (#{term_for :pass}/#{term_for :fail})"
+- else
+  %h3.pagetitle= "#{@title} (#{ points @assignment.point_total } points)"
 
-.small-12.columns
-  // Button bar at the top of the page
-  = render "buttons"
 
-.small-12.columns
-  %br
-  %dl.tabs{:data => {'tab' => true}}
-    %dd.active
-      %a{ "href" => "#tab"} Grades
-    %dd
-      %a{ "href" => "#tabt2"} Description & Downloads
-    - if @assignment.rubric and @assignment.rubric.designed?
-      %dd
-        %a{ "href" => "#tabt3"} Grading Rubric
+// Button bar at the top of the page
+= render "buttons"
 
-    - if @assignment.grades.present?
-      %dd
-        %a{ :href => "#tabt4"} Class Analytics
+.pageContent
+  #tabs.ui-tabs.ui-widget
+    %ul.ui-tabs-nav{:role => "tablist"}
+      %li
+        %a{ "href" => "#tab"} Grades
+      %li
+        %a{ "href" => "#tabt2"} Description & Downloads
+      - if @assignment.rubric and @assignment.rubric.designed?
+        %li
+          %a{ "href" => "#tabt3"} Grading Rubric
+      - if @assignment.grades.present?
+        %li
+          %a{ :href => "#tabt4"} Class Analytics
 
-.small-12.columns
-  .tabs-content
-    .content#tab.active
-      - if @assignment.has_groups?
-        = render 'assignments/group_show'
-      - else
-        = render 'assignments/individual_show'
-    .content#tabt2
-      = render 'assignments/guidelines'
+    #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
+      .ui-tabs-panel#tab.active{:role => "tabpanel", "aria-hidden" => false }
+        - if @assignment.has_groups?
+          = render 'assignments/group_show'
+        - else
+          = render 'assignments/individual_show'
+      .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
+        = render 'assignments/guidelines'
 
-    - if @assignment.rubric and @assignment.rubric.designed?
-      .content#tabt3
-        %br
-        = render 'assignments/rubric_preview'
-    .content#tabt4
-      = render "grades/instructor_analytics"
+      - if @assignment.rubric and @assignment.rubric.designed?
+        .content#tabt3{:role => "tabpanel", "aria-hidden" => false }
+          %br
+          = render 'assignments/rubric_preview'
+      .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
+        = render "grades/instructor_analytics"

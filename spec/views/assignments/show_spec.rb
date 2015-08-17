@@ -31,7 +31,7 @@ describe "assignments/show" do
       it "renders pass/fail instead of the points possible in the guidelines" do
         @assignment.update(pass_fail: true)
         render
-        assert_select ("div.italic.not_bold"), text: "Pass/Fail Assignment"
+        assert_select ("div.italic"), text: "Pass/Fail Assignment"
       end
     end
   end

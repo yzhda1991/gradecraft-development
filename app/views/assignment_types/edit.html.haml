@@ -1,12 +1,9 @@
-.small-12.panel.mainContent
+= content_nav_for @assignment_type, "Edit #{term_for :assignment_type}"
 
-  = content_nav_for @assignment_type, "Edit #{term_for :assignment_type}"
+%h3.pagetitle= @title
 
-  .small-12
-    %h3.pagetitle= @title
+= render "buttons"
 
-  = render "buttons"
-
+.pageContent
   / Display Assignment Type form
-  .small-12.columns
-    = render 'form'
+  = render 'form'

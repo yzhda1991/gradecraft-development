@@ -1,33 +1,25 @@
-.small-12.panel.mainContent
+= content_nav_for Group
 
-  = content_nav_for Group
+%h3.pagetitle= @title
 
-  .small-12
-    %h3.pagetitle= @title
+.context_menu
+  %ul
+    %li
+      %a{:href => new_group_path }
+        %i.fa.fa-plus
+        New #{term_for :group}
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => new_group_path }
-            %i.fa.fa-plus
-            New #{term_for :group}
-
+.pageContent
   - if @pending_groups.present?
-
     %h4.subtitle= "Pending #{term_for :groups}"
 
     = render 'groups_table', :course => current_course, :groups => @pending_groups
-
-    .clear
 
   - if @rejected_groups.present?
 
     %h4.subtitle.fail= "Rejected #{term_for :groups}"
 
     = render 'groups_table', :course => current_course, :groups => @rejected_groups
-
-    .clear
 
   - if @approved_groups.present?
 

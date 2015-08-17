@@ -1,0 +1,11 @@
+.text-center
+  %h3.subtitle Earned Points
+  %hr
+  #{points current_student.cached_score_for_course(current_course)}
+  %span / #{points current_course.total_points}
+  - if current_student.grade_level_for_course(current_course).present?
+    / Display current level if it is present
+    Current Level:
+    %span.bold= current_student.grade_level_for_course(current_course)
+  #data-predictor{'data-predictor' =>  current_student.total_scores_for_chart(current_course).to_json}
+  .chart#userBarTotal

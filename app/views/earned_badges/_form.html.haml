@@ -2,19 +2,15 @@
   .italic= "You are awarding the #{@badge.name} #{term_for :badge} to..."
 
   = hidden_field_tag :badge_id, @badge.id
-  .small-12.medium-4.columns
 
+  %section
     = select_tag :student, options_from_collection_for_select(current_course.students, "id", "name", @earned_badge.try(:student_id)), :prompt => "Select Student"
 
-    %br
-    %br
-
-  .small-12.columns.textarea.panel
-    %h4.uppercase #{term_for :badge} Feedback
-    = f.bootsy_area :feedback
-    .form_label Enter a message to the #{term_for :student} regarding their work
-
-  .button-bar
-    %ul.button-group.radius.right
+    .textarea.panel
+      %h4 #{term_for :badge} Feedback
+      = f.text_area :feedback
+      .form_label Enter a message to the #{term_for :student} regarding their work
+  .submit-buttons
+    %ul
       %li= f.button :submit, "#{@earned_badge.persisted? ? 'Update' : 'Award '} #{term_for :badge}"
       %li= link_to 'Cancel', badge_path(@badge), :class => 'button'

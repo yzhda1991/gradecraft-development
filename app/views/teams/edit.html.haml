@@ -1,16 +1,13 @@
-.small-12.panel.mainContent
+= content_nav_for @team, "Edit #{term_for :team}"
 
-  = content_nav_for @team, "Edit #{term_for :team}"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+.context_menu
+  %ul
+    %li
+      %a{:href => team_path(@team) }
+        %i.fa.fa-list
+        See #{term_for :team}
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => team_path(@team) }
-            %i.fa.fa-list
-            See #{term_for :team}
-
-  .small-12.columns
-    = render 'form'
+.pageContent
+  = render 'form'

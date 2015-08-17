@@ -1,0 +1,44 @@
+.alert-box 
+  padding: .25rem 1rem !important
+  background-color: $primary-color-5
+  font-size: .8rem
+  color: #FFF
+  opacity: 0.7
+
+  a.close
+    color: #FFF
+    float: right
+    font-size: 1rem !important
+    font-weight: bold
+    line-height: 1
+    color: #FFF
+
+    &:hover, &:focus
+      color: #000000
+      text-decoration: none
+      cursor: pointer
+      opacity: 0.5
+  &.alert
+    background-color: $alert-color
+  &.success
+
+.alert-box
+  background-color: $primary-color-1
+  font-size: 120%
+
+.alert-box.success
+  background-color: darken($color-green-2, 2%)
+  font-size: 120%
+
+.alert-box.alert
+  background-color: darken($alert-color, 2%)
+  font-size: 120%
+
+  ul
+    margin-bottom: 0
+    background-color: $secondary-color-3
+
+.alert-box.alert.radius
+  ul
+    margin: 0 
+  margin-bottom: .75rem

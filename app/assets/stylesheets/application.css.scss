@@ -5,7 +5,6 @@
  *= require animate.min
  *= require select2
  *= require font-awesome
- *= require bootstrap
  *= require jquery.dynatable
 */
 
@@ -13,8 +12,9 @@ $px-3: .1875rem;
 
 $global-radius: $px-3;
 
+$txt-color-inverse: #FFF;
 
-// Copied from Foundation for now, this can change when we remove Foundation
+// Media Query Sizes
 $media-small-max:   40rem; // 640px
 $media-medium-max:  64rem; // 1024px
 $media-large-max:   90rem; // 1440px ~14"
@@ -37,32 +37,41 @@ $media-xlarge-max:  120rem; //
   background-image:         linear-gradient(top, $fromColor, $toColor);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
 }
+@mixin title-type-styling { 
+  font-family: "Avenir", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}
+
 /* Importing supporting files. If you create a new css file you'll need to add it here.  */
 
 @import 'color';
-@import 'datepicker';
-@import 'foundation_and_overrides';
-@import 'sidebars';
-@import 'forms';
-@import 'tables';
-@import 'student_dashboard';
-@import 'timeline';
+@import 'accessibility';
+@import 'alerts';
 @import 'analytics';
 @import 'background';
-@import 'breadcrumbs';
-@import 'navigation';
-@import 'videos';
-@import 'bootsy';
-@import 'layout';
-@import 'buttons_and_icons';
-@import 'typography';
-@import 'homepage';
-@import 'rubrics';
-@import 'collapse';
 @import 'badges';
+@import 'breadcrumbs';
+@import 'buttons_and_icons';
+@import 'datepicker';
+@import 'collapse';
+@import 'context_menu';
+@import 'forms';
+@import 'grid';
+@import 'homepage';
+@import 'icons';
+@import 'layout';
 @import 'predictor';
-
-/* override foundation body color */
-body {
-  background-color: rgba(0, 0, 0, 0);
-}
+@import 'rubrics';
+@import 'staff_sidebar';
+@import 'student_sidebar';
+@import 'student_subnav';
+@import 'student_dashboard';
+@import 'tables';
+@import 'tabs';
+@import 'timeline';
+@import 'topbar';
+@import 'typography';
+@import 'unlocks';
+@import 'videos';

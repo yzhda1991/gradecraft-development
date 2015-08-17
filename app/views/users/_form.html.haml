@@ -5,71 +5,79 @@
       %ul
         - @user.errors.full_messages.each do |msg|
           %li= msg
-
-  .panel
+  %section
     %h4.uppercase= "User Profile"
-    .small-12.medium-4.columns
+    .form-item
       = f.label :first_name
       = f.text_field :first_name
-    .small-12.medium-4.columns
+    .form-item
       = f.label :last_name
       = f.text_field :last_name
-
-    .small-12.medium-4.columns
+    .form-item
       = f.label :username
       = f.text_field :username
-
-    .small-12.medium-4.columns
+    .form-item
       = f.label :email
       = f.text_field :email, :input_html => { :class => "small-12 medium-4 columns"}
-    .small-12.medium-4.columns
+    .form-item
       = f.label :display_name
       = f.text_field :display_name
 
-    .clear
+  %section
+    %h4.uppercase= "User Profile"
+    .form-item
+      = f.label :first_name
+      = f.text_field :first_name
+    .form-item
+      = f.label :last_name
+      = f.text_field :last_name
+    .form-item
+      = f.label :username
+      = f.text_field :username
+    .form-item
+      = f.label :email
+      = f.text_field :email, :input_html => { :class => "small-12 medium-4 columns"}
+    .form-item
+      = f.label :display_name
+      = f.text_field :display_name
 
   - if current_user_is_admin?
-
-    .panel
+    %section
       %h4.uppercase= "Course Settings"
 
-      .small-12.medium-4.columns
+      .form-item
         = f.association :courses, :as => :check_boxes
 
-      .small-12.medium-4.columns
-        .small-12
-          = f.label :default_course_id, "Default Course"
-          - if @user.persisted?
-            = f.select :default_course_id, options_from_collection_for_select(@user.courses, "id", "name", @user.try(:default_course_id))
-          .form_label This course will be automatically loaded when a student logs in to GradeCraft
-      .small-12.medium-4.columns
+      .form-item
+        = f.label :default_course_id, "Default Course"
+        - if @user.persisted?
+          = f.select :default_course_id, options_from_collection_for_select(@user.courses, "id", "name", @user.try(:default_course_id))
+        .form_label This course will be automatically loaded when a student logs in to GradeCraft
 
   - if current_user_is_staff?
-    .panel
+    %section
       %h4.uppercase= "#{current_course.name} Settings"
       - if current_course.has_teams? && @user.is_student?(current_course)
-        .small-12.medium-4.columns
+        .form-item
           = f.input :course_team_ids, :collection => @teams, :as => :select, :label => "Select #{term_for :team}", :selected => @user.team_for_course(current_course).try(:id), :include_blank => true
       = f.simple_fields_for :course_memberships, @course_membership do |p|
         - if current_user_is_admin?
-          .small-12.medium-4.columns
+          .form-item
             = p.label :role, "Select Role"
             = p.select :role, [["Student", "student"],["GSI", "gsi"],["Professor", "professor"],["Admin", "admin"]]
         - elsif current_user_is_professor?
-          .small-12.medium-4.columns
+          .form-item
             = p.label :role, "Select Role"
             = p.select :role, [["Student", "student"],["GSI", "gsi"],["Professor", "professor"]]
-        - if @user.is_student?(current_course)
-          .small-12.medium-4.columns
-            .small-12
+          - if @user.is_student?(current_course)
+            .form-item
               = p.input :character_profile
-            .small-12
+            .form-item
               %label.checkbox
                 = p.input :auditing
                 .form_label This #{term_for :student}'s grades will be excluded from course analysis
-            .clear
 
-  .button-bar
-    %ul.button-group.radius.right
+  .submit-buttons
+    %ul
       %li= submit_tag "#{@user.persisted? ? 'Update' : 'Create'} User", :class => "button"
       %li= link_to 'Cancel', users_path, :class => 'button'

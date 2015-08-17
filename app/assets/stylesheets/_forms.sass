@@ -1,5 +1,7 @@
 .select2-container
   display: block
+  margin-left: 11rem
+  top: -1.8rem
 
 label
   text-transform: capitalize
@@ -18,69 +20,48 @@ label, input
 label.checkbox input, label.check_boxes input, label.checkbox, label.radio, label.radio input
   clear: both
 
-.score-level .remove-level.button, .remove-element.button, .assignment-score-levels .remove-assignment-score-level.button
-  margin-top: 1.8rem
-  color: #FFF
-
 fieldset
   border: none
   padding: 0
 
-/** Styling to make labels on checkboxes and radio forms align properly**/
-.radio,
-.checkbox
-  display: block
-  margin-bottom: 10px
-
-.radio input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"]
-  float: left
-
-input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-select,
-.checkbox-inline input[type="checkbox"],
-input[type="text"]
-  margin-bottom: 0.5rem
-
-input[type="checkbox"]
-  margin-top: 0.26rem
-
-label.boolean
-  margin-left: 0
-
 select
-  background-color: #FFF !important
-  border-radius: $global-radius
-  margin-right: 0 !important
+  background-color: #FFF 
+  padding: .5rem !important
+  width: 15rem
+  height: 1.5rem
 
 select:hover
-  background-color: $primary-color-3
+  background-color: lighten($primary-color-4, 15%)
 
-ul.dropdown-menu
-  background-color: #FFF
-  padding: 2px
-  margin: 0 !important
-  border-radius: $global-radius
+.dropdown-menu
+  position: absolute
+  top: 2.6rem
+  left: 1.3rem
+  z-index: 1000
+  display: none
+  float: left
+  width: 175px
+  padding: 5px
+  background-color: lighten($primary-color-1, 70%)
+  margin: 2px 0 0
+  font-size: 14px
+  list-style: none
+  border: 1px solid $color-grey-3
+  border-top-left-radius: 0
+  border-top-right-radius: 0
+  border-bottom-left-radius: $global-radius
+  border-bottom-right-radius: $global-radius
+  background-clip: padding-box
 
   li
-    padding: .3rem !important
     margin: 0 !important
-    /*    line-height: 3rem !important*/
-    border-radius: $global-radius
-    width: 100% !important
+    padding: 0 0.75rem
 
   li a
-    background-color: #FFF !important
-    color: #333 !important
-    width: 100% !important
+    color: $color-grey-1 !important
 
-  li:hover, li.active a
-    background-color: $primary-color-2 !important
-    border-radius: $global-radius
+  li:hover, li.active a, li.active
+    background-color: $primary-color-1
     color: #fff !important
 
 ul.accepts_submission_types
@@ -98,7 +79,7 @@ ul.accepts_submission_types
 .form_label
   font-size: 80%
   line-height: 130%
-  color: #666
+  color: $color-grey-1
   font-style: italic
   font-weight: normal
   text-transform: none
@@ -116,10 +97,10 @@ ul.accepts_submission_types
   margin-top: 1px
 
 .switch.predictor input:checked + label
-  background: #6ac777
+  background: $secondary-color-3
 
 .switch.predictor label:after
-  background: #3ea64d
+  background: $secondary-color-2
   border-radius: 4px
 
 .pass-fail-contingent.off
@@ -134,7 +115,7 @@ ul.accepts_submission_types
 .textarea .form_label
   background-color: $color-grey-2
   font-style: italic
-  color: #FFF
+  color: $color-grey-1
   padding: 1rem
   margin-top: -.35rem
   margin-bottom: 1rem
@@ -144,11 +125,11 @@ ul.accepts_submission_types
 .textarea ul.wysihtml5-toolbar
   background-color: $color-grey-2
 
-.bootsy_text_area
-  font-weight: normal
+.img.form_label
+  background-color: $color-grey-1
 
 .img.form_label
-  background-color: $color-grey-3
+  background-color: $color-grey-0
   padding: .5rem
   border-bottom-right-radius: $global-radius
   border-bottom-left-radius: $global-radius
@@ -164,3 +145,71 @@ ul.accepts_submission_types
 .inline-list > li > *
   display: block
   width: 100%
+
+.team-filter
+  float: right
+
+.simple_form section 
+  margin-bottom: 1rem
+  padding-bottom: 1rem
+  border: 0
+  border-bottom: 1px dashed $secondary-color-3
+
+  h4
+    margin-bottom: .5rem
+    text-transform: capitalize
+    font-style: italic
+    font-size: 1rem
+    font-weight: 100
+
+  label
+    width: 10rem
+    padding-right: .5rem
+    text-align: right
+
+  input[type=text], input[type=password], input[type=number]
+    padding: .5rem
+    width: 15rem
+
+  .form_label
+    margin-left: 10.75rem
+    padding: .25rem 0 
+    font-size: 80%
+    line-height: 130%
+    color: $color-grey-1
+    font-style: italic
+    font-weight: normal
+    text-transform: none
+
+  .form-item
+    margin-bottom: .5rem
+
+  .checkbox
+    position: relative
+    display: block
+    margin-left: 10.5rem
+    margin-top: -1.8rem
+    margin-bottom: 1.7rem
+
+.disabled
+  background-color: $color-grey-3
+  border: 0
+
+.ui-datepicker
+  margin-top: -2.7rem !important
+
+  .ui-datepicker-next, .ui-datepicker-prev
+    background-color: $primary-color-1
+
+.grade-scheme-row
+  background-color: $color-grey-3
+  margin: 1rem 0
+  padding: 1rem
+  border-radius: 25px
+
+  input
+    padding: .5rem
+    width: 5rem
+
+  .disabled 
+    font-size: 1.0rem

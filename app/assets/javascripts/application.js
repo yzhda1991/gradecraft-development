@@ -8,12 +8,9 @@
 //= require jquery-ui
 //= require jquery_ujs
 
-//= require foundation
-
 //= require_self
 //= require jquery.omniselect
 //= require autonumeric
-//= require bootsy
 //= require jquery.sparkline.min
 //= require s3_direct_upload
 //= require underscore.min
@@ -68,5 +65,4 @@
 //= require course_switch
 //= require background
 //= require d3
-
-$(function(){ $(document).foundation(); });
+//= require offscreen-nav

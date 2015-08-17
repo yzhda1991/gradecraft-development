@@ -1,17 +1,13 @@
-.small-12.panel.mainContent
+= content_nav_for @group, "Edit #{term_for :group}"
 
-  = content_nav_for @group, "Edit #{term_for :group}"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+.context_menu
+  %ul
+    %li
+      %a{:href => group_path(@group) }
+        %i.fa.fa-eye
+        See #{term_for :group}
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => group_path(@group) }
-            %i.fa.fa-eye
-            See #{term_for :group}
-    %br
-
-  .small-12.columns
-    = render 'form'
+.pageContent
+  = render 'form'

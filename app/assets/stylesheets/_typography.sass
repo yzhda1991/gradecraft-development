@@ -1,16 +1,14 @@
-// preparation for removing foundation
-@mixin title-type-styling
-  font-family: "Avenir", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-  font-style: normal;
-  font-weight: normal;
-  text-rendering: optimizeLegibility;
-
 h1, h2, h3, h4, h5
   text-transform: capitalize
+  font-family: Avenir, san-serif
+  margin: 0
+  padding: 0
+  clear: both
 
 body
   font-size: 0.9rem
   line-height: 1.6
+  font-family: "Avenir", Helvetica, sans-serif
 
 .bold
   font-weight: bold !important
@@ -18,23 +16,17 @@ body
 .not_bold
   font-weight: normal !important
 
-a:hover
-  color: $secondary-color
-
 .inverse
   color: #FFF
 
 .underline
   text-decoration: underline
 
+.strikethrough
+  text-decoration: line-through
+
 .center
   text-align: center
-
-.pushdown
-  padding-top: .3rem
-
-.pushup
-  padding-bottom: .2rem
 
 .transparent
   opacity: .8
@@ -54,6 +46,13 @@ a:hover
 .large
   font-size: 1.5rem
 
+a
+  text-decoration: none
+  color: lighten($primary-color-1, 10%)
+
+a:hover
+  color: $secondary-color-1
+
 hr
   border-color: $color-grey-1
   border-width: 1px 0 0
@@ -62,46 +61,41 @@ hr
 .label.alert.round
   margin-right: -1.2rem
   top: -0.6rem
-  background-color: $primary-color
+  background-color: $primary-color-1
 
 /** Page Title **/
 h3.pagetitle
   text-transform: uppercase
-  color: $primary-color
-  padding: .4rem .8rem !important
-  float: left
-  clear: both
-  margin: 0 0 .75rem
-  font-size: 1.7rem
+  color: #FFF
+  padding: .3rem 1rem .2rem
+  font-size: 1.8rem
+  background-color: $primary-color-1
+  line-height: 2.5rem
+  font-weight: 100
+  opacity: .8
+  border-left: 1px solid $primary-color-2
 
 /** Subtitle **/
 h4.subtitle
-  background-color: $primary-color
-  line-height: 1.4
-  color: #FFF
   font-size: 1.3rem
-  float: left
+  line-height: 1.0
+  color: $primary-color-1
   clear: both
   margin: 1rem 0 1rem
-  padding: .6rem .9rem
-  border-top-right-radius: $global-radius
-  border-bottom-right-radius: $global-radius
-  box-shadow: 2px 2px 8px #ccc
 
   .label.alert
-    top: -3px
-    margin-left: 6px
+    margin-left: .25rem
     margin-bottom: 0 !important
 
 h4.subtitle.fail
   background-color: $alert-color
 
 h4.subtitle.success
-  background-color: $secondary-color
+  background-color: $secondary-color-1
 
 h5.section-title
   font-size: 1.3rem
-  background-color: $primary-color
+  background-color: $primary-color-1
   padding: .5rem 1rem
   margin: 1px 2px 0 1px
   z-index: 10 !important
@@ -114,6 +108,9 @@ h5.section-title
     color: #FFF
   a.button
     color: #FFF
+
+.assignment-name 
+  display: inline
 
 .label.radius
   font-size: 70%
@@ -128,7 +125,7 @@ h5.section-title
   background-color: $secondary-color-2
 
 .label.right.radius.fade
-  background-color: lighten($color-grey-1, 15%)
+  background-color: lighten($color-grey-3, 15%)
   color: #000
 
 .label.right.radius.success, .label.right.radius.alert, .label.right.radius
@@ -140,14 +137,3 @@ h5.section-title
 .uploaded-files
   span.has-tip
     font-weight: normal
-
-/* Used for screen reader only items */
-.sr-only
-  position: absolute
-  width: 1px
-  height: 1px
-  padding: 0
-  margin: -1px
-  overflow: hidden
-  clip: rect(0,0,0,0)
-  border: 0

@@ -5,7 +5,8 @@ class Assignment < ActiveRecord::Base
     :accepts_submissions_until, :points_predictor_display, :notify_released, :mass_grade_type, :assignment_type_id, :assignment_type,
     :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged,
     :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level, :score_levels_attributes,
-    :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics
+    :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics, 
+    :unlock_conditions, :unlock_conditions_attributes, :visible_when_locked
 
 
   attr_accessor :current_student_grade
@@ -31,6 +32,14 @@ class Assignment < ActiveRecord::Base
 
   # Multipart assignments
   has_many :tasks, :as => :assignment, :dependent => :destroy
+
+  # Unlocks
+  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
+  has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
+
+  accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
+  
+  has_many :unlock_states, :as => :unlockable, :dependent => :destroy
 
   # Student created submissions to be graded
   has_many :submissions, as: :assignment
@@ -183,6 +192,18 @@ class Assignment < ActiveRecord::Base
     !! rubric
   end
 
+  def visible_for_student?(student)
+    if is_unlockable?
+      if visible_when_locked? || is_unlocked_for_student?(student)
+        return true
+      end
+    else
+      if visible?
+        return true
+      end
+    end
+  end
+
   def fetch_or_create_rubric
     return rubric if rubric
     Rubric.create assignment_id: self[:id]
@@ -200,6 +221,52 @@ class Assignment < ActiveRecord::Base
   # Checking to see if the assignment is a group assignment
   def has_groups?
     grade_scope=="Group"
+  end
+
+  # Checking to see if the assignment has unlock conditions
+  def is_unlockable?
+    unlock_conditions.present?
+  end
+
+  def is_a_condition?
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").present?
+  end
+
+  def unlockable
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").first.unlockable
+  end
+
+  def is_unlocked_for_student?(student)
+    if unlock_states.where(:student_id => student.id).present?
+      unlock_states.where(:student_id => student.id).first.is_unlocked?
+    elsif ! unlock_conditions.present?
+      return true
+    end
+  end
+
+  def check_unlock_status(student)
+    if ! is_unlocked_for_student?(student)
+      goal = unlock_conditions.count
+      count = 0 
+      unlock_conditions.each do |condition|
+        if condition.is_complete?(student)
+          count += 1
+        end 
+      end
+      if goal == count 
+        if unlock_states.where(:student_id => student.id).present?
+          unlock_states.where(:student_id => student.id).first.unlocked = true 
+        else
+          self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
+        end
+      else
+        return false
+      end
+    end
+  end
+
+  def find_or_create_unlock_state(student)
+    UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Assignment")
   end
 
   # If the point value is set at the assignment type level, grab it from there (commonly used for things like Attendance)

@@ -6,30 +6,22 @@
       = "#{@title.titleize} - " if @title
       = current_course.try(:name) || 'GradeCraft'
     = stylesheet_link_tag "application", :media => "all", media: "all"
-    = javascript_include_tag "vendor/modernizr"
     = csrf_meta_tags
     = yield(:head)
 
   %body(class="#{body_class}")
-    .off-canvas-wrap{:"data-offcanvas" => true}
+    = render 'layouts/top_bar'
+    - if current_user
       .inner-wrap
-        .fixed
-          = render 'layouts/top_bar'
-
-        - if current_user
-          - if current_user_is_staff?
-            .columns.pageContainer= render 'layouts/staff'
-          - else
-            .columns.pageContainer= render 'layouts/student'
-          .small-12.columns.logged_in_footer
-            %br
-            = render 'layouts/footer'
+        - if current_user_is_staff?
+          = render 'layouts/staff'
         - else
-          = render 'layouts/public'
-          .row.panel.footer
-            .small-12.columns
-              = render 'layouts/footer'
-        = render 'layouts/background'
-        = render 'layouts/google_analytics'
-        = javascript_include_tag "application", 'data-turbolinks-track' => true
-        //= javascript_include_tag 'application_secondary'
+          = render 'layouts/student'
+    - else
+      = render 'layouts/public'
+    = render "layouts/help/uservoice"
+    .footer
+      = render 'layouts/footer'
+    = render 'layouts/background'
+    = render 'layouts/google_analytics'
+    = javascript_include_tag "application", 'data-turbolinks-track' => true

@@ -1,8 +1,8 @@
-.small-12.panel.mainContent
-  = content_nav_for User, "Import Results"
+= content_nav_for User, "Import Results"
 
-  %h3.pagetitle Import Results
+%h3.pagetitle Import Results
 
+.pageContent
   - unless @result.unsuccessful.empty?
     %h4.subtitle
       = "#{@result.unsuccessful.count} #{"Student".pluralize(@result.unsuccessful.count)} Not Imported"

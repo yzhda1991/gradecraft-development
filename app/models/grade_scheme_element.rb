@@ -6,9 +6,7 @@ class GradeSchemeElement < ActiveRecord::Base
   validates_presence_of :low_range, :high_range
   validates_numericality_of :high_range, greater_than: Proc.new { |e| e.low_range.to_i }
 
-  default_scope { order 'low_range ASC' }
-
-  scope :order_by_high_range, -> { order 'high_range DESC' }
+  default_scope { order 'high_range DESC' }
 
   # Getting the name of the Grade Scheme Element - the Level if it's present, the Letter if not
   def element_name

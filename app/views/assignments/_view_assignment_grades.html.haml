@@ -1,47 +1,45 @@
-.small-12
-  - if @assignment.pass_fail?
-    %h3.pagetitle= "#{@title} (#{term_for :pass}/#{term_for :fail})"
-  - else
-    %h3.pagetitle= "#{@title} (#{ points @assignment.point_total } points)"
+- if @assignment.pass_fail?
+  %h3.pagetitle= "#{@title} (#{term_for :pass}/#{term_for :fail})"
+- else
+  %h3.pagetitle= "#{@title} (#{ points @assignment.point_total } points)"
 
-.small-12.columns
-  %dl.tabs{:data => {'tab' => true}, "data-options" => "deep_linking: true; scroll_to_content: false"  }
-    %dd.active
-      %a{ "href" => "#tabt1"} Description & Downloads
-    - if @assignment.rubric and @assignment.rubric.designed? && ! current_student.grade_released_for_assignment?(@assignment)
-      %dd
-        %a{ "href" => "#tabt2"} Grading Rubric
-    - if @assignment.accepts_submissions? && current_student.submission_for_assignment(@assignment)
-      %dd
-        %a{ :href => "#tabt3"} My Submission
+.pageContent
+  #tabs.ui-tabs.ui-widget
+    %ul.ui-tabs-nav{:role => "tablist"}
+      %li 
+        %a{ "href" => "#tabt1"} Description & Downloads
+      - if @assignment.rubric and @assignment.rubric.designed? && ! current_student.grade_released_for_assignment?(@assignment)
+        %li
+          %a{ "href" => "#tabt2"} Grading Rubric
+      - if @assignment.accepts_submissions? && current_student.submission_for_assignment(@assignment)
+        %li
+          %a{ :href => "#tabt3"} My Submission
 
-    - if current_student.grade_released_for_assignment?(@assignment)
-      %dd
-        %a{ :href => "#tabt4"} My Results
-    - if ! current_course.hide_analytics? && ! @assignment.hide_analytics?
       - if current_student.grade_released_for_assignment?(@assignment)
-        %dd
-          %a{ :href => "#tabt5"} Class Analytics
+        %li
+          %a{ :href => "#tabt4"} My Results
+      - if ! current_course.hide_analytics? && ! @assignment.hide_analytics?
+        - if current_student.grade_released_for_assignment?(@assignment)
+          %li
+            %a{ :href => "#tabt5"} Class Analytics
 
-.small-12.columns
-  .tabs-content
-    .content#tabt1.active
+    #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
       = render 'assignments/guidelines'
 
     - if @assignment.rubric and @assignment.rubric.designed?
-      .content#tabt2
+      .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
         = render 'assignments/rubric_preview'
     - if @assignment.accepts_submissions? && current_student.submission_for_assignment(@assignment)
-      .content#tabt3
+      .ui-tabs-panel#tabt3{:role => "tabpanel", "aria-hidden" => false }
         = render "submissions/student_show"
     - if current_student.grade_released_for_assignment?(@assignment)
-      .content#tabt4
+      .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
         - if @assignment.has_groups?
           = render "grades/group_show"
         - else
           = render "grades/individual_show"
       - if ! current_course.hide_analytics? && ! @assignment.hide_analytics?
-        .content#tabt5
+        .content#tabt5{:role => "tabpanel", "aria-hidden" => false }
           - if @assignment.has_groups?
             = render "grades/group_analytics"
           - else

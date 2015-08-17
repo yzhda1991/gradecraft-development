@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe "students/_assignments" do
+describe "students/syllabus/_assignments" do
 
   before(:each) do
     clean_models
@@ -123,10 +123,10 @@ describe "students/_assignments" do
     end
 
     it "highlights assignments that are required" do
-      render
-      @assignment.update(required: true)
+      @assignment.required = true
       @assignment.save
-      assert_select "span", class: 'required', count: 1
+      render
+      assert_select "i.fa-exclamation-circle", count: 1
     end
 
     it "shows the assignment submission if present" do
@@ -139,7 +139,7 @@ describe "students/_assignments" do
     it "shows the due date if it's in the future" do
       @assignment.update(due_at: 2.days.from_now)
       render
-      assert_select "span", text: "Due: #{(2.days.from_now).strftime("%A, %b %d, %l:%M%p")}", count: 1
+      assert_select "span", text: "#{(2.days.from_now).strftime("%A, %b %d, %l:%M%p")}", count: 1
     end
 
     it "shows a button to see more results if the grade is released" do

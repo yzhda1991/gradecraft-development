@@ -34,6 +34,7 @@ class Grade < ActiveRecord::Base
   before_validation :cache_associations
   before_save :cache_point_total
   before_save :zero_points_for_pass_fail
+  after_save :check_unlockables
 
   has_many :grade_files, :dependent => :destroy
   accepts_nested_attributes_for :grade_files
@@ -144,6 +145,20 @@ class Grade < ActiveRecord::Base
 
   def altered?
     self.score_changed? == true  || self.feedback_changed? == true
+  end
+
+  def check_unlockables 
+    if self.assignment.is_a_condition?
+      unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
+        if condition.unlockable_type == "Assignment"
+          unlockable = Assignment.find(condition.unlockable_id)
+          unlockable.check_unlock_status(student)
+        elsif condition.unlockable_type == "Badge"
+          unlockable = Badge.find(condition.unlockable_id)
+          unlockable.check_unlock_status(student)
+        end
+      end
+    end
   end
 
   private

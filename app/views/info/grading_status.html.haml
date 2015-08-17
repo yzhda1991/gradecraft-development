@@ -1,15 +1,10 @@
-.small-12.panel.mainContent
+= content_nav_for "Grading Status"
 
-  = content_nav_for "Grading Status"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
+.pageContent
   = render 'ungraded_submissions_table', :course => current_course
 
-  .small-12.columns
-
   = render 'unreleased_grades_table', :course => current_course
-
-  .small-12.columns
 
   = render 'in_progress_grades_table', :course => current_course

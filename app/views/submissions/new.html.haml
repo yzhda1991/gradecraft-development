@@ -1,10 +1,7 @@
-.small-12.panel.mainContent
+= content_nav_for @assignment, "New Submission"
 
-  = content_nav_for @assignment, "New Submission"
+%h3.pagetitle= @title
 
-  %h3.pagetitle
-    = @title
-
-  .small-12.columns
-    - if @assignment.accepts_submissions?
-      = render 'form'
+.pageContent
+  - if @assignment.accepts_submissions?
+    = render 'form'

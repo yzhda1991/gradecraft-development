@@ -1,9 +1,8 @@
-.small-12.panel.mainContent
+= content_nav_for @assignment, "See Submission"
 
-  = content_nav_for @assignment, "See Submission"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
+.pageContent
   - if current_user_is_student?
     = render 'submissions/student_show'
   - else

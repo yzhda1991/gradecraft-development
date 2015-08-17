@@ -1,19 +1,18 @@
-.small-12.panel.mainContent
+= content_nav_for @badge, "Quick Award #{term_for :badge}"
 
-  = content_nav_for @badge, "Quick Award #{term_for :badge}"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
+.pageContent
   - if current_course.has_teams?
-    .small-12.medium-4.columns.right
+    .team-filter
       = form_tag mass_award_badge_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         %label.sr-only{:for => "team_id"}
           Select #{term_for :team}
         = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
-  .small-12.columns#massGrade
+  #massGrade
     = simple_form_for @badge, method: :put, :html => {:class => 'mass-edit-earned-badges' }, :url => mass_award_badge_path(@badge) do |f|
-      %table.responsive
+      %table
         %thead
           %tr
             %th{:style => "text-align: right", :width => "50%"} Name
@@ -36,8 +35,6 @@
                 - elsif ! eb.student.earned_badges.where(:badge_id => @badge).present?
                   = ebf.hidden_field :_destroy, class: 'destroy'
                   = ebf.check_box :score, {}, @badge.point_total, nil
-      %br
-
       .button-bar
         %ul.button-group.radius.right
           %li= f.button :submit, "Award", :class => "button"

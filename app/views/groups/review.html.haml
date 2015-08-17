@@ -1,17 +1,15 @@
-.small-12.columns.mainContent
+= content_nav_for @group, "Review Group"
 
-  = content_nav_for @group, "Review Group"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
+.context_menu
+  %ul
+    %li
+      %a{:href => group_path(@group) }
+        %i.fa.fa-eye
+        See #{term_for :group}
 
-  .small-12.columns
-    .button-bar
-      %ul.button-group.context_menu.radius
-        %li
-          %a.button{:href => group_path(@group) }
-            %i.fa.fa-eye
-            See #{term_for :group}
-
+.pageContent
   .small-12.columns.columns-no-padding
     .small-12.medium-3.columns
       %h4 #{term_for :assignments}:
@@ -50,7 +48,7 @@
           %br
 
           .small-12.textarea
-            = f.bootsy_area :text_feedback
+            = f.text_area :text_feedback
             .form_label #{(term_for :group).capitalize} Feedback
 
         .button-bar

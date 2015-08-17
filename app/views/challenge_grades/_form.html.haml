@@ -1,28 +1,26 @@
 = simple_form_for([@challenge, @challenge_grade]) do |f|
-  .small-12.panel
-    .small-12.large-4.columns
-      = f.association :team, :collection => @teams
+  %section
+    %h4 Score
+    
+    .form-item= f.association :team, :collection => @teams
 
-    .small-12.large-4.columns
+    .form-item
       = f.label :score
       = f.text_field :score, data: {autonumeric: true, "m-dec" => "0"}
       .form_label out of #{points @challenge.point_total} points
 
-    .small-12.large-4.columns
+    .form-item
       - if @challenge.release_necessary?
         = f.label :status
         = f.select :status, Grade::STATUSES
         .form_label= "Can the #{term_for :team} see this grade?"
-
-    .clear
-
-  .small-12.columns.panel
-    %h4.uppercase Feedback
+        
+  %section
+    %h4 Feedback
     .textarea
-      = f.bootsy_area :text_feedback
+      = f.text_area :text_feedback
 
-
-  .button-bar
-    %ul.button-group.radius.right
+  .submit-buttons
+    %ul
       %li= f.button :submit, "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}"
       %li= link_to 'Cancel', challenges_path, :class => 'button'

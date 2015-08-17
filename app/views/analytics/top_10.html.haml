@@ -1,15 +1,12 @@
-.small-12.panel.mainContent
+= content_nav_for "Top 10/Bottom 10"
 
-  = content_nav_for "Top 10/Bottom 10"
+%h3.pagetitle= @title
 
-  %h3.pagetitle= @title
-
+.pageContent
   %h4.subtitle Top 10
 
-  .columns
-    = render 'students_table', :course => current_course, :students => @top_ten_students
+  = render 'students_table', :course => current_course, :students => @top_ten_students
 
   %h4.subtitle Bottom 10
 
-  .columns
-    = render 'students_table', :course => current_course, :students => @bottom_ten_students
+  = render 'students_table', :course => current_course, :students => @bottom_ten_students

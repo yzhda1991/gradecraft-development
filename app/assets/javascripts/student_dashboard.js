@@ -1,31 +1,10 @@
 $(document).ready(function() {
 
-  $('.share_badge').on('click', function () {
-    var badge_id = this.getAttribute('data-badge-id'),
-        earned_id = this.getAttribute('data-earned-badge-id')
-    $.ajax({
-      url: '/badges/' + badge_id + '/earned_badges/' + earned_id + '/toggle_shared',
-      method: 'post',
-      data: {
-        earned_badge_id: earned_id
-      },
-      success: function (data) {
-        if (data.shared) {
-          $('#shared_' + badge_id).text("Stop Sharing")
-        } else {
-          $('#shared_' + badge_id).text("Share")
-        }
-        $('#shared_' + badge_id).toggleClass('success warning')
-        $('#shared_' + badge_id).toggleClass('add_badge remove_badge')
-      }
-    })
-  })
-
     function createOptions () {
     return {
     chart: {
       type: 'bar',
-      backgroundColor:null
+      backgroundColor: null
     },
     colors: [
      '#1A1EB2',
@@ -77,16 +56,16 @@ $(document).ready(function() {
       series: {
         stacking: 'normal',
         borderWidth: 0,
-        pointWidth: 40
+        pointWidth: 40,
+        events: {
+          legendItemClick: function () {
+              return false; 
+          }
+        }
       }
     },
     legend: {
-      backgroundColor: null,
-      borderColor:null,
-      reversed: true,
-      itemStyle: {
-        color: '#BBB'
-      }
+      enabled: false
     }
   };
   }
@@ -97,7 +76,7 @@ $(document).ready(function() {
 
       var options = createOptions()
       options.chart.renderTo = 'userBarTotal';
-      options.title = { text: 'Total Points Earned', margin: 30 };
+      options.title = { text: '', margin: 0 };
       options.xAxis.categories = { text: ' ' };
       options.yAxis.max = data.course_total;
       options.yAxis.plotBands = data.grade_levels;

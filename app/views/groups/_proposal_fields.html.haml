@@ -1,12 +1,12 @@
 .small-12.columns.panel
-  %span.large-3.columns
+  .form-item
     = f.label :title, "Title"
     = f.text_field :title
   - if current_user_is_staff?
-    %span.large-3.columns
+    .form-item
       = f.label :approved, "Approved?"
       = f.input :approved, :label => false
-  .small-12.columns.textarea
+  .textarea
     = f.label :proposal
-    = f.bootsy_area :proposal
+    = f.text_area :proposal
     = f.hidden_field :id

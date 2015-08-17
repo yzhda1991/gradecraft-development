@@ -1,40 +1,40 @@
-.button-bar(ng-app="gradecraft" ng-controller="AssignmentCtrl" ng-init="init(#{@assignment[:id]}, #{@assignment.use_rubric})")
-  %ul.button-group.context_menu.radius
+.context_menu(ng-app="gradecraft" ng-controller="AssignmentCtrl" ng-init="init(#{@assignment[:id]}, #{@assignment.use_rubric})")
+  %ul
     %li
-      %a.button{:href => assignments_path }
-        %i.fa.fa-list
-        = "See All #{term_for :assignments}"
+      %a{:href => settings_assignments_path }
+        %i.fa.fa-dashboard.fa-fw
+        Review #{(term_for :assignment).titleize} Settings
     - if @assignment.persisted?
       %li
-        %a.button{:href => edit_assignment_path(@assignment) }
-          %i.fa.fa-edit
+        %a{:href => edit_assignment_path(@assignment) }
+          %i.fa.fa-edit.fa-fw
           Edit
       - if @team.present? && ! ( @assignment.rubric and @assignment.rubric.designed? and @assignment.use_rubric? )
         %li
-          %a.button{:href => mass_grade_assignment_path(@assignment, :team_id => @team) }
-            %i.fa.fa-check
+          %a{:href => mass_grade_assignment_path(@assignment, :team_id => @team) }
+            %i.fa.fa-check.fa-fw
             Quick Grade
       - elsif ! ( @assignment.rubric and @assignment.rubric.designed? and @assignment.use_rubric? )
         %li
-          %a.button{:href => mass_grade_assignment_path(@assignment) }
-            %i.fa.fa-check
+          %a{:href => mass_grade_assignment_path(@assignment) }
+            %i.fa.fa-check.fa-fw
             Quick Grade
       - if @assignment.submissions.present?
         %li
-          %a.button{:href => export_submissions_assignment_path(@assignment, :team_id => @team, format: 'zip') }
-            %i.fa.fa-zip-o
+          %a{:href => export_submissions_assignment_path(@assignment, :team_id => @team, format: 'zip') }
+            %i.fa.fa-zip-o.fa-fw
             Download Submissions
       %li
-        %a.button{:href => import_grades_assignment_path(@assignment) }
-          %i.fa.fa-upload
+        %a{:href => import_grades_assignment_path(@assignment) }
+          %i.fa.fa-upload.fa-fw
           Import Grades
       %li
-        %a.button{:href => export_grades_assignment_path(@assignment, format: 'csv') }
-          %i.fa.fa-download
+        %a{:href => export_grades_assignment_path(@assignment, format: 'csv') }
+          %i.fa.fa-download.fa-fw
           Download Grades
       %li
-        %a.button{:href => design_assignment_rubric_path(@assignment) }
-          %i.fa.fa-sliders
+        %a{:href => design_assignment_rubric_path(@assignment) }
+          %i.fa.fa-sliders.fa-fw
           - if @assignment.rubric and @assignment.rubric.designed?
             Edit Rubric
           - else
@@ -43,17 +43,17 @@
       - if @assignment.rubric and @assignment.rubric.designed?
         - if @assignment.grades.instructor_modified.present?
           %li
-            %a.button{:href => rubric_grades_review_assignment_path(@assignment) }
+            %a{:href => rubric_grades_review_assignment_path(@assignment) }
               Review Grades
         %li.loading(ng-cloak ng-hide="window.angular")
-          %a.button(ng-click="")
-            %i.fa.fa-table
+          %a(ng-click="")
+            %i.fa.fa-table.fa-fw
             Rubrics
         %li.on(ng-cloak ng-show="useRubric")
-          %a.button(ng-click="rubricsOff()")
-            %i.fa.fa-power-off
+          %a(ng-click="rubricsOff()")
+            %i.fa.fa-power-off.fa-fw
             Rubrics On
         %li.off(ng-cloak ng-hide="useRubric")
-          %a.button(ng-click="rubricsOn()")
-            %i.fa.fa-power-off
+          %a(ng-click="rubricsOn()")
+            %i.fa.fa-power-off.fa-fw
             Rubrics Off

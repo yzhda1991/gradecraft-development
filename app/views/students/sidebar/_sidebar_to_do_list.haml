@@ -1,0 +1,18 @@
+.text-center 
+  %h3 Due This Week
+  %hr
+  - current_course.assignments.chronological.includes(:assignment_type).each do |assignment|
+    - if assignment.soon? && assignment.include_in_to_do? && assignment.visible_for_student?(current_student)
+      .assignment-item
+        - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)
+          - if assignment.is_individual?
+            .right= render "students/submissions", assignment: assignment
+          - else
+            .right= render "students/group_submissions", assignment: assignment, group: current_student.group_for_assignment(assignment)
+        - if current_student.submission_for_assignment(assignment).present?
+          .bold.strikethrough= link_to "#{assignment.try(:name)}", assignment
+          .small.uppercase= "#{assignment.assignment_type.name}"
+        - else
+          .bold= link_to assignment.name, assignment_grade_path(assignment, :student_id => current_student)
+          .small.uppercase= "#{assignment.assignment_type.name}"
+          .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"

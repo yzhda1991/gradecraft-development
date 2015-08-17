@@ -77,6 +77,8 @@ class User < ActiveRecord::Base
 
   has_many :assignments, :through => :grades
 
+  has_many :unlock_states, :foreign_key => :student_id, :dependent => :destroy
+
   has_many :assignment_weights, :foreign_key => :student_id
 
   has_many :submissions, :foreign_key => :student_id, :dependent => :destroy
@@ -358,6 +360,10 @@ class User < ActiveRecord::Base
   #Grabbing the grade for an assignment
   def grade_for_assignment(assignment)
     assignment_grades[assignment.id] || grades.new(assignment: assignment)
+  end
+
+  def grade_for_assignment_id(assignment_id)
+    grades.where(assignment_id: assignment_id)
   end
 
   def assignment_grades

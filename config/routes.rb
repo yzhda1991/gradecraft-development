@@ -1,7 +1,6 @@
 GradeCraft::Application.routes.draw do
 
   require 'admin_constraint'
-  mount Bootsy::Engine => '/bootsy', as: 'bootsy'
   #1. Analytics & Charts
   #2. Assignments, Submissions, Tasks, Grades
   #3. Assignment Types
@@ -97,6 +96,12 @@ GradeCraft::Application.routes.draw do
       get :design, on: :collection
     end
   end
+  resources :unlock_states do 
+    member do 
+      post :manually_unlock
+    end
+  end
+  resources :unlock_conditions
 
   resources :metrics do
     put :update_order, on: :collection

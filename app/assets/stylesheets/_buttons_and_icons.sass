@@ -1,19 +1,75 @@
-.button
-  /*margin-bottom: 0*/
+.button, button
+  border-radius: $global-radius
   text-transform: capitalize
-  border: 0
+  text-decoration: none
+  font-family: Avenir, san-serif
   color: #FFF
+  border: none
+  margin: 0
   padding: .4rem
   font-size: .7rem !important
+  line-height: .8rem
   cursor: pointer
   background-color: $primary-color-2
-  margin: 0 !important
 
   &:hover
-    @include linear-gradient(#385b83, #264971)
+    background-color: $primary-color-1
+    color: #FFF
 
   &:active
-    @include linear-gradient(#5daa72, #66cc99)
+    background-color: $secondary-color-3
 
-ul.button-group
-  font-size: .7rem !important
+.submit-buttons
+  margin-top: 1rem
+  position: relative
+  height: 1rem
+
+  ul
+    float: right
+    margin: 0
+    padding: 0
+    overflow: hidden
+    background-color: $primary-color-2
+    border-radius: $global-radius
+
+    li
+      float: left
+      border-right: 1px solid $color-green-3
+    li:first-child button
+    li:last-child
+      padding: .3rem 0
+      border-right: 0
+      margin-left: -.25rem
+
+thead
+  .button
+    border: none
+    background-color: $secondary-color-1 !important
+    .select-none
+      left: -6px
+    &:hover
+      background-color: $primary-color-1 !important
+
+tbody
+  ul
+    margin: 0
+    padding: 0 !important
+    li
+      display: inline
+      list-style-type: none
+      margin: 0
+      padding: 0
+      margin-left: -5px
+      a
+        padding: 0
+        margin: 0 !important
+        color: #FFF !important
+      .button
+        padding: .4rem
+        border-radius: 0
+      &:first-child .button
+        border-top-left-radius: $global-radius
+        border-bottom-left-radius: $global-radius
+      &:last-child .button
+        border-top-right-radius: $global-radius
+        border-bottom-right-radius: $global-radius

@@ -42,19 +42,18 @@
                         = link_to team.try(:name), team
                     %td
                       .button-bar
-                        %ul.button-group.right.radius
+                        %ul.button-group.radius
                           %li
                             %a.button{:href => "#{assignment_submission_path(ug_assignment, :id => ug.id)}" }
                               = "See Submission"
                               - if ug.submission_files.present?
-                                %i.fi-paperclip
+                                %i.fa.fa-paperclip
                           %li= link_to 'Grade', edit_assignment_grade_path(:assignment_id => assignment.id, :student_id => student.try(:id)), :class => "button"
                   - elsif ug_assignment.has_groups?
                     %td= link_to ug_group.try(:name), group_path(ug_group)
                     %td= ug.updated_at
                     %td
                       .button-bar
-                        %ul.button-group.right.radius
+                        %ul.button-group.radius
                           %li= link_to "See Submission", assignment_grade_path(ug_assignment, :group_id => ug_group.id), :class => "button"
                           %li= link_to 'Grade', group_grade_assignment_path(ug_assignment, :group_id => ug_group), :class => "button"
-      %br
