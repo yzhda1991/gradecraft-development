@@ -25,6 +25,9 @@
     update_scheme = (index) ->
       if(index != elements.length-1)
         elements[index+1].high_range = elements[index].low_range-1
+      if(elements[index].low_range > elements[index].high_range)
+        alert('Low Range is Higher Than High Range')
+        elements[index].low_range = ""
 
     getGradeSchemeElements = ()->
       $http.get('/gse_mass_edit/').success((response) ->
