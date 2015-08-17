@@ -19,7 +19,7 @@ describe "students/syllabus/_assignments" do
     view.stub(:current_student).and_return(@student)
   end
 
-  describe "as student", focus: true do
+  describe "as student" do
     before(:each) do
       view.stub(:current_student).and_return(@student)
     end

@@ -14,7 +14,7 @@
           %i.fa.fa-lock
     %td= link_to first_name, student_path(student)
     %td= link_to last_name, student_path(student)
-    %td
+    %td.status-or-score
       - if @assignment.pass_fail
         = term_for(grade.pass_fail_status) if instructor_modified == true
       - else
