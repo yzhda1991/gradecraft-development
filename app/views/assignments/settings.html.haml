@@ -158,8 +158,6 @@
                     %li
                       %a{:href => edit_assignment_path(assignment),  :class => 'button' }
                         Edit
-                        %span.sr-only= assignment.name
                     %li
                       %a{:href => assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button' }
                         Delete
-                        %span.sr-only= assignment.name

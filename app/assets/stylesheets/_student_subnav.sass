@@ -3,10 +3,9 @@
 .sub-nav
   display: block
   position: relative
-  top: 0rem
+  top: 1rem
   margin: 0
   overflow: hidden
-  padding-top: 0
   width: auto
   height: 32px
 
@@ -23,23 +22,19 @@
 
     a
       color: $primary-color-1
-      padding: 1rem
+      padding: .25rem 1rem
 
       &:hover
         color: $secondary-color-1
 
     &.active a
-      background: $primary-color-3
+      background: $primary-color-2
       color: $primary-color-1
 
       &:hover
         background: $primary-color-3
 
       margin-left: 0
-
-      &:first-child:before
-        content: ""
-        margin: 0
 
   /* Individual Tabs */
   .navbar-nav
@@ -56,17 +51,17 @@
       text-transform: capitalize
       a
         padding: 1em !important
-        color: #FFF !important
+        color: #FFF
     li.active
       padding: .5rem .75rem !important
 
     li a:hover, li:hover a
-      color: #FFF !important
+      color: #FFF
 
-/* Setting the active tab and hover styles to be the dark green */
+/* Setting the active tab and hover color */
 .navbar-nav li.active, .sub-nav .navbar-nav li:hover
-  background-color: $primary-color-3
-  color: #eee
+  background-color: $color-yellow-1
+  color: #000 !important
 
 /* Reducing padding and font size for small screens */
 @media (max-width: 1000px)
