@@ -252,6 +252,7 @@ class AssignmentsController < ApplicationController
         :accepts_submissions_until,
         :accepts_text,
         :assignment_type_id,
+        :course_id,
         :description,
         :due_at,
         :grade_scope,
@@ -282,6 +283,7 @@ class AssignmentsController < ApplicationController
       @grades = student.grades.where(:course_id => current_course).select(
         :assignment_id,
         :assignment_type_id,
+        :course_id,
         :id,
         :predicted_score,
         :pass_fail_status,

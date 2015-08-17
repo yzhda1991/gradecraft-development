@@ -6,6 +6,7 @@
     promises = [PredictorService.getGradeLevels(),
                 PredictorService.getAssignments(),
                 PredictorService.getAssignmentTypes(),
+                PredictorService.getAssignmentTypeWeights(),
                 PredictorService.getBadges(),
                 PredictorService.getChallenges()]
     return $q.all(promises)
@@ -19,48 +20,13 @@
   $scope.assignmentTypes = PredictorService.assignmentTypes
   $scope.gradeLevels = PredictorService.gradeLevels
   $scope.badges = PredictorService.badges
+  $scope.weights = PredictorService.weights
   $scope.challenges = PredictorService.challenges
   $scope.icons = PredictorService.icons
   $scope.termFor = PredictorService.termFor
 
   $scope.passFailPrediction = (grade)->
     prediction = if grade.predicted_score > 0 then PredictorService.termFor.pass else PredictorService.termFor.fail
-
-  $scope.slider = (article)->
-    {
-      range: "min"
-
-      #start: (event, ui)->
-
-      slide: (event, ui)->
-        slider = ui.handle.parentElement
-        articleType = ui.handle.parentElement.dataset.articleType
-        if $scope.hasLevels(article)
-          closest = $scope.closestScoreLevel(article.score_levels,ui.value)
-          if $scope.inSnapRange(article,closest,ui.value)
-            event.preventDefault()
-            event.stopPropagation()
-            angular.element(ui.handle.parentElement).slider("value", closest.value)
-            if articleType == 'assignment'
-              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.grade.point_total))
-            else
-              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
-          else
-            if articleType == 'assignment'
-              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.grade.point_total))
-            else
-              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
-      stop: (event, ui)->
-        articleType = ui.handle.parentElement.dataset.articleType
-        article_id = ui.handle.parentElement.dataset.id
-        value = ui.value
-        if articleType == 'assignment'
-          article.grade.predicted_score = value
-          PredictorService.postPredictedGrade(article_id,value)
-        else
-          article.prediction.points_earned = value
-          PredictorService.postPredictedChallenge(article_id,value)
-    }
 
   $scope.assignmentTypeAtMax = (assignmentType)->
     if $scope.assignmentTypePointExcess(assignmentType) > 0
@@ -115,7 +81,7 @@
   $scope.assignmentsForAssignmentType = (assignments,id)->
     _.where(assignments, {assignment_type_id: id})
 
-  # ! does not cap points total to assignment type max_points
+  # Total points predicted for a collection of assignments
   $scope.assignmentsPointTotal = (assignments)->
     total = 0
     _.each(assignments, (assignment)->
@@ -126,15 +92,26 @@
     )
     total
 
-  $scope.assignmentTypePointTotal = (assignmentType)->
+  # Total points predicted for all assignments by assignments type
+  # caps the total points at the assignment type max points
+  # only calculates the weighted total if weighted is passed in as true
+  $scope.assignmentTypePointTotal = (assignmentType, weighted=true)->
     assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
     total = $scope.assignmentsPointTotal(assignments)
-    if total > assignmentType.max_value then assignmentType.max_value else total
+    if assignmentType.student_weightable
+      # ignore max value on weightable assignments, even if not calulating the weights
+      if weighted
+        total = total * assignmentType.student_weight
+    else if assignmentType.max_value
+      total = if total > assignmentType.max_value then assignmentType.max_value else total
+    total
 
+  # Total predicted points above and beyond the assignment type max points
   $scope.assignmentTypePointExcess = (assignmentType)->
     assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
     total = $scope.assignmentsPointTotal(assignments) - assignmentType.max_value
 
+  # Total points predicted for badges
   $scope.badgesPointTotal = ()->
     total = 0
     _.each($scope.badges,(badge)->
@@ -142,6 +119,15 @@
       )
     total
 
+  # Total points possible to earn from challenges
+  $scope.maxChallengePoints = ()->
+    total = 0
+    _.each($scope.challenges, (challenge)->
+      total += challenge.point_total
+      )
+    total
+
+  # Total points predicted for challenges
   $scope.challengesPointTotal = ()->
     total = 0
     _.each($scope.challenges, (challenge)->
@@ -152,6 +138,7 @@
       )
     total
 
+  # Total points predicted for all assignments, badges, and challenges
   $scope.allPointsPredicted = ()->
     total = 0
     _.each($scope.assignmentTypes, (assignmentType)->
@@ -161,6 +148,7 @@
     total += $scope.challengesPointTotal()
     total
 
+  # Total points actually earned to date
   $scope.allPointsEarned = ()->
     total = 0
     _.each($scope.assignments, (assignment)->
@@ -184,6 +172,53 @@
     else
       return false
 
+# UI ELEMENTS
+
+  $scope.slider = (article)->
+    {
+      range: "min"
+
+      #start: (event, ui)->
+
+      slide: (event, ui)->
+        slider = ui.handle.parentElement
+        articleType = ui.handle.parentElement.dataset.articleType
+        if $scope.hasLevels(article)
+          closest = $scope.closestScoreLevel(article.score_levels,ui.value)
+          if $scope.inSnapRange(article,closest,ui.value)
+            event.preventDefault()
+            event.stopPropagation()
+            angular.element(ui.handle.parentElement).slider("value", closest.value)
+            if articleType == 'assignment'
+              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.grade.point_total))
+            else
+              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
+          else
+            if articleType == 'assignment'
+              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.grade.point_total))
+            else
+              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
+      stop: (event, ui)->
+        articleType = ui.handle.parentElement.dataset.articleType
+        article_id = ui.handle.parentElement.dataset.id
+        value = ui.value
+        if articleType == 'assignment'
+          article.grade.predicted_score = value
+          PredictorService.postPredictedGrade(article_id,value)
+        else
+          article.prediction.points_earned = value
+          PredictorService.postPredictedChallenge(article_id,value)
+    }
+
+# WEIGHTS
+
+  $scope.unusedWeightsRange = ()->
+    _.range($scope.weights.unusedWeights())
+
+  $scope.weightsAvailable = ()->
+    $scope.weights.unusedWeights() && $scope.weights.open
+
+# GRAPHICS RENDERING
 
   $scope.GraphicsStats = ()->
     totalPoints = $scope.gradeLevels.total_points

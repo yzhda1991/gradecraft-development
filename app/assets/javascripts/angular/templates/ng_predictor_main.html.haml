@@ -1,6 +1,18 @@
 #grade-levels{'ng-include' => true, 'src' => "'ng_predictor_graphic.html'"}
 
-#assigment-types{'ng-include' => true, 'src' => "'ng_predictor_assignment_types.html'"}
+#predictor-main-header
+  .collapse-all-toggler
+    .collapse-arrow.doubled
+    .collapse-arrow.doubled
+    .predictor-section-title
+      .predictor-section-title-right{{'ng-if'=>'weightsAvailable()'}}
+        .predictor-title-right-span
+          Unused {{termFor.weights}} :
+        .predictor-section-title-weights
+          .coin{{'ng-repeat' => 'coin in unusedWeightsRange()'}}
+
+
+#assignment-types{'ng-include' => true, 'src' => "'ng_predictor_assignment_types.html'"}
 
 #badges{'ng-include'=> true, 'src' => "'ng_predictor_badges.html'"}
 

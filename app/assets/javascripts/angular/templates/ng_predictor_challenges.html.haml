@@ -1,10 +1,13 @@
-%section.predictor-challenges
+%section.predictor-section{'ng-if'=>'challenges.length > 0'}
   .collapse-toggler.clear
+    .collapse-arrow
     .predictor-section-title
       .predictor-section-title-left
         {{termFor.challenges}}
       .predictor-section-title-right
         Points Total: {{challengesPointTotal() | number}}
+        %span="/ {{maxChallengePoints | number}}"
+
   .collapsable
     %article.predictor-article{'ng-repeat' => 'challenge in challenges'}
 

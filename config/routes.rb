@@ -96,8 +96,8 @@ GradeCraft::Application.routes.draw do
       get :design, on: :collection
     end
   end
-  resources :unlock_states do 
-    member do 
+  resources :unlock_states do
+    member do
       post :manually_unlock
     end
   end
@@ -128,6 +128,7 @@ GradeCraft::Application.routes.draw do
   #4. Assignment Type Weights
   get 'assignment_type_weights' => 'assignment_type_weights#mass_edit', as: :assignment_type_weights
   put 'assignment_type_weights' => 'assignment_type_weights#mass_update'
+  post 'assignment_type_weight' => 'assignment_type_weights#update'
 
   resources :assignment_weights
 
@@ -333,6 +334,7 @@ GradeCraft::Application.routes.draw do
   get 'predictor_assignments' => 'assignments#student_predictor_data', defaults: {format: :json}
   get 'predictor_badges' => 'badges#student_predictor_data', defaults: {format: :json}
   get 'predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
+  get 'predictor_weights' => 'assignment_type_weights#student_predictor_data', defaults: {format: :json}
 
   #16b. Predictor, Instructor View
   get 'students/:id/predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
@@ -340,4 +342,6 @@ GradeCraft::Application.routes.draw do
   get 'students/:id/predictor_assignments' => 'assignments#staff_predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_badges' => 'badges#staff_predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_weights' => 'assignment_type_weights#student_predictor_data', defaults: {format: :json}
+
 end

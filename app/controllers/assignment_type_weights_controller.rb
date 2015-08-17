@@ -28,6 +28,46 @@ class AssignmentTypeWeightsController < ApplicationController
     end
   end
 
+  def update
+    assignment_type = current_course.assignment_types.find(params[:id])
+    weight = params[:weight]
+    if assignment_type and weight
+      assignment_type_weight = AssignmentTypeWeight.new(current_student, assignment_type)
+      assignment_type_weight.weight = weight
+    end
+    respond_to do |format|
+      format.json do
+        if assignment_type_weight and assignment_type_weight.save
+          render :json => {assignment_type: assignment_type.id, weight: assignment_type.weight_for_student(current_student)}
+        else
+          render :json => { errors:  "Unable to update assignment type weight" }, :status => 400
+        end
+      end
+    end
+  end
+
+  def student_predictor_data
+    if current_user.is_student?(current_course)
+      @student = current_student
+    else
+      @student = User.find(params[:id])
+    end
+    @assignment_types = current_course.assignment_types
+    .select(
+      :course_id,
+      :id,
+      :name,
+      :points_predictor_display,
+      :resubmission,
+      :max_value,
+      :predictor_description,
+      :student_weightable,
+      :include_in_predictor,
+      :is_attendance,
+      :position,
+    )
+  end
+
   private
 
   def student_params

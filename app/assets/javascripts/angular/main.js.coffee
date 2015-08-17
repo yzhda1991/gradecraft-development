@@ -18,7 +18,21 @@ INTEGER_REGEXP = /^\-?\d+$/
 @gradecraft.directive "collapseToggler", ->
   restrict : 'C',
   link: (scope, elm, attrs) ->
+    elm.bind('click', (event)->
+      if angular.element(event.target).hasClass('collapse-arrow')
+        elm.siblings().toggleClass('collapsed')
+        elm.toggleClass('collapsed')
+    )
+    return
+
+@gradecraft.directive "collapseAllToggler", ->
+  restrict : 'C',
+  link: (scope, elm, attrs) ->
     elm.bind('click', ()->
-      elm.siblings().toggleClass('collapsed')
+      if elm.hasClass('collapsed')
+        angular.element(".collapse-toggler.collapsed .collapse-arrow").click()
+      else
+        angular.element(".collapse-toggler").not(".collapsed").children(".collapse-arrow").click()
+      elm.toggleClass('collapsed')
     )
     return

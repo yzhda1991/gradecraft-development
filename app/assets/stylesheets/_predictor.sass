@@ -3,6 +3,14 @@ $predictor-font-size-2 : 1.25rem
 $predictor-font-size-3 : 1rem
 $predictor-font-size-4 : .85rem
 
+
+#predictor-main-content
+  background-color: #FFF
+  margin: 0 1% 1% 1%
+  padding-bottom: 1rem
+  border-radius: $global-radius
+  overflow: hidden
+
 // SVG
 
 #predictor-graphic
@@ -51,6 +59,27 @@ $predictor-font-size-4 : .85rem
 
 
 // SECTIONS
+#predictor-main-header, .predictor-section
+  height: 33px
+  background-color: $color-blue-0
+  clear: both
+
+.collapse-arrow
+  width: 0
+  height: 0
+  float: left
+  margin: 6px 8px 0 8px
+  border-left: 12px solid transparent
+  border-right: 12px solid transparent
+  border-top: 20px solid $color-blue-3
+  -webkit-backface-visibility: hidden
+
+.collapse-arrow.doubled
+  margin: 6px 1px 0 3px
+
+.collapsed
+  .collapse-arrow
+    transform: rotate(-90deg)
 
 .predictor-section-title
   @include title-type-styling
@@ -61,15 +90,25 @@ $predictor-font-size-4 : .85rem
   margin-bottom: 0.5rem
   margin-top: 0.2rem
   padding: 0 .5rem
-  clear: both
 
   .predictor-section-title-left
-   float: left
-   text-transform: capitalize
+    float: left
+    text-transform: capitalize
 
   .predictor-section-title-right
+    float: right
     text-align: right
     position: relative
+    // don't interfere with collapsable section heads onClick()
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+
+    .predictor-unweighted-point-total, .predictor-weighted-point-total, .predictor-title-right-span
+      float: left
+      &.padded
+        padding: 0 0 0 10px
     .icon
       display: inline
       float: none
@@ -81,10 +120,56 @@ $predictor-font-size-4 : .85rem
       font-size: $predictor-font-size-3
       width: 10rem
 
+    .predictor-section-title-weights
+      padding: 0 0 0 15px
+      float: left
+      .predictor-assignment-type-weights
+        float: left
+      .predictor-add-weight
+        float: left
+      .coins
+        float: left
+        padding: 0 10px 0 10px
+      .coin, .coin-non-interactive, .coin-slot
+        float: left
+        width: 25px
+        height: 25px
+        -moz-border-radius: 14px
+        -webkit-border-radius: 14px
+        border-radius: 14px
+        margin: 2px 0 0 2px
+      .coin, .coin-non-interactive
+        background-color: #F4B425
+        border: 2px solid #B78006
+        @include transition(all, .5s, ease-out)
+      .coin-remove-icon
+        color: #F4B425
+        margin: 0 0 0 -3px
+      .coin:hover
+        background-color: #B78006
+      .coin:hover .coin-remove-icon
+        visibility: visible
+      .coin-slot
+        background-color: $color-blue-0
+        border: 2px solid $color-blue-2
+        @include transition(all, .5s, ease-out)
+      .coin-add-icon
+        color: $color-blue-0
+        margin: 0 0 0 -3px
+        visibility: hidden
+      .coin-slot:hover .coin-add-icon
+        visibility: visible
+      .coin-slot:hover
+        background-color: $color-blue-1
+
+
 .predictor-section-title.status-max-points
   background-color: $color-blue-1
 
 // ARTICLES
+
+.collapsable
+  clear: both
 
 article.predictor-article
   display: block

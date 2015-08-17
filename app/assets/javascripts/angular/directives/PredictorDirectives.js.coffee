@@ -93,3 +93,38 @@
           PredictorService.postPredictedBadge(@target.id,@target.prediction.times_earned)
   }
 ]
+
+@gradecraft.directive 'predictorAssignmentTypeWeights', [ 'PredictorService', (PredictorService)->
+
+  return {
+    restrict: 'C'
+    scope: {
+      target: '='
+    }
+    templateUrl: 'ng_predictor_weights.html'
+    link: (scope, el, attr)->
+      scope.increment = ()->
+        @target.student_weight += 1
+        PredictorService.postAssignmentTypeWeight(@target.id,@target.student_weight)
+      scope.decrement = ()->
+        @target.student_weight -= 1
+        PredictorService.postAssignmentTypeWeight(@target.id,@target.student_weight)
+      scope.unusedWeights = ()->
+        _.range(PredictorService.weights.unusedWeights())
+      scope.usedWeights = ()->
+        _.range(@target.student_weight)
+      scope.weightsAvailable = ()->
+        if @target.student_weight < 1
+          return false if PredictorService.weights.unusedTypes() < 1
+        if PredictorService.weights.max_weights
+          @target.student_weight < PredictorService.weights.max_weights && PredictorService.weights.unusedWeights() > 0
+        else
+          PredictorService.weights.unusedWeights() > 0
+      scope.hasWeights = ()->
+        @target.student_weight > 0
+      scope.weightsOpen = ()->
+        PredictorService.weights.open
+      scope.defaultMultiplier = ()->
+        PredictorService.weights.default_weight
+  }
+]
