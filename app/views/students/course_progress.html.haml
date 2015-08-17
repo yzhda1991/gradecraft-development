@@ -29,5 +29,6 @@
           %span=points element.points_to_next_level(current_student, current_course)
           %span= " points to the next level!"
           
-  %p= raw current_course.grading_philosophy
-  %h3= "– Prof. #{current_course.professor.try(:last_name) }
+  - if current_course.professor.present? && current_course.grading_philosophy.present?
+    %p= raw current_course.grading_philosophy
+    %h3= "– Prof. #{current_course.professor.try(:last_name) }"

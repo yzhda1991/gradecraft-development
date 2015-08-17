@@ -19,7 +19,7 @@
             - else
               = challenge.name
           %td
-            = raw challenge.description
+            %span= raw challenge.description
 
             - if challenge.challenge_files.present?
               %b Attachments:

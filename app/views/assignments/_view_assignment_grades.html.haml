@@ -1,3 +1,5 @@
+= content_nav_for @assignment
+
 - if @assignment.pass_fail?
   %h3.pagetitle= "#{@title} (#{term_for :pass}/#{term_for :fail})"
 - else

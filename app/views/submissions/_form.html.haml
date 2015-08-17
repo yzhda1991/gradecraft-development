@@ -30,7 +30,7 @@
     %h4.uppercase Content/Statement
     = f.text_area :text_comment
 
-  .button-bar
-    %ul.button-group.right
+  .submit-buttons
+    %ul
       %li= f.button :submit, "#{@submission.persisted? ? 'Update Submission' : "Submit #{term_for :assignment}"}"
       %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'

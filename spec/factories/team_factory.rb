@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :team do
     association :course
-    name { Faker::Lorem.word }
+    name { Faker::Team.name }
   end
 end
