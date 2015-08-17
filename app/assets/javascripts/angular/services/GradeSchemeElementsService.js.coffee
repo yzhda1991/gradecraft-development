@@ -23,21 +23,13 @@
       })
 
     update_scheme = (index) ->
-      elements[index+1].high_range = elements[index].low_range-1
+      if(index != elements.length-1)
+        elements[index+1].high_range = elements[index].low_range-1
 
     getGradeSchemeElements = ()->
       $http.get('/gse_mass_edit/').success((response) ->
         angular.copy(response.grade_scheme_elements, elements)
         totalPoints = response.total_points
-      )
-
-    postGradeSchemeElement = (id)->
-      $http.put('/grade_scheme_elements/' + id).success(
-        (data) ->
-          console.log(data)
-      ).error(
-        (error) ->
-          console.log(error)
       )
 
     postGradeSchemeElements = ()->
@@ -56,7 +48,6 @@
 
     return {
         getGradeSchemeElements: getGradeSchemeElements
-        postGradeSchemeElement: postGradeSchemeElement
         postGradeSchemeElements: postGradeSchemeElements
         elements: elements
         remove: remove
