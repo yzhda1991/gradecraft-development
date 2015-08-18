@@ -26,7 +26,8 @@
           %td
             .right
               %ul
-                %li= link_to "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
-                %li= link_to "Edit", edit_assignment_path(assignment), :class => "button"
-                %li= link_to "Delete", assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete }, :class => "button"
-                %li= link_to "Copy", copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
+                %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(assignment), :class => "button"
+                %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(assignment), :class => 'button'
+                %li= link_to raw('<i class="fa fa-copy fa-fw"> </i> Copy'), copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
+                %li= link_to raw('<i class="fa fa-trash fa-fw"> </i> Delete'), assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete }, :class => "button"
+                

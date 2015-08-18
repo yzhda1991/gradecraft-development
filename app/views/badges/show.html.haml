@@ -73,10 +73,11 @@
             %th
           %th First Name
           %th Last Name
-          %th{ :width => 300} Feedback
-          %th Count
-          %th{"data-dynatable-sorts" => "dateStamp"} Date Awarded
-          %th{:style => "display: none"} Date Stamp
+          %th{ :width => 200} Feedback
+          - if @badge.can_earn_multiple_times
+            %th Count
+          %th Date Awarded
+          %th{ :width => 200}
       %tbody
         - @students.each do |student|
           %tr
@@ -95,17 +96,14 @@
               %td= @badge.earned_badge_count_for_student(student)
 
             %td
-              .right
-                - @badge.earned_badges.where(:student_id => student.id).each do |badge|
-                  %ul
-                    %li= link_to raw("<i class='fa fa-star fa-fw'></i> Awarded #{badge.created_at.strftime("%b %d")}"), badge_earned_badge_path(@badge, badge.id), :class => "button"
-                    %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_badge_earned_badge_path(@badge, badge.id), :class => "button"
-                    - if @badge.is_unlockable? && ! @badge.is_unlocked_for_student?(student)
-                      %li= link_to raw("<i class='fa fa-lock fa-fw'></i> Unlock"), manually_unlock_unlock_state_path(:student_id => student.id, :badge_id => @badge.id), :method => :post, :class => "button"
-                    %li
-                      = link_to badge_earned_badge_path(@badge, badge), :class => "button", :method => :delete, :data => { confirm: "Are you sure you want to delete this award?" } do
-                        %i.fa.fa-trash.fa-fw
-                        Delete
-            %td
               - @badge.earned_badges.where(:student_id => student.id).each do |badge|
                 = badge.created_at
+            %td
+              .right
+                %ul
+                  - if @badge.is_unlockable? && ! @badge.is_unlocked_for_student?(student)
+                    %li= link_to raw("<i class='fa fa-lock fa-fw'></i> Unlock"), manually_unlock_unlock_state_path(:student_id => student.id, :badge_id => @badge.id), :method => :post, :class => "button"
+                  - @badge.earned_badges.where(:student_id => student.id).each do |badge|
+                    %li= link_to raw("<i class='fa fa-star fa-fw'></i> Awarded #{badge.created_at.strftime("%b %d")}"), badge_earned_badge_path(@badge, badge.id), :class => "button"
+                    %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_badge_earned_badge_path(@badge, badge.id), :class => "button"
+                    %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), badge_earned_badge_path(@badge, badge), :class => "button", :method => :delete, :data => { confirm: "Are you sure you want to delete this award?" }
