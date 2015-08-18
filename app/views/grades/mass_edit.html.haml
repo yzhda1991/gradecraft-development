@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   - if current_course.has_teams? && @assignment.is_individual?
     .team-filter
       = form_tag mass_grade_assignment_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do

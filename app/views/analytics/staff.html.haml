@@ -5,6 +5,8 @@
 = render 'buttons'
 
 .pageContent
+  = render 'layouts/alerts'
+  
   %h4.subtitle Interactions
   / Event counts
   #role-events-chart.analytics-chart{:data => {:chart => 'timeseries', :url => '/analytics/role_events.json', :url_data => 'role_group=staff', :title => 'Interactions', :subtitle => '{{granularity}}', :y_axis_label => 'Number of events'}}

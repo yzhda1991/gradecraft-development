@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   %h4.subtitle Top 10
 
   = render 'students_table', :course => current_course, :students => @top_ten_students

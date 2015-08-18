@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   = render 'submissions/assignment_guidelines'
 
   - if @rubric && @rubric.designed? and @assignment.use_rubric

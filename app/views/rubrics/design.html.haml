@@ -5,6 +5,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   #rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment.point_total})")
 
     #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")

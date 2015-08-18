@@ -3,5 +3,7 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   - if @assignment.accepts_submissions?
     = render 'form'

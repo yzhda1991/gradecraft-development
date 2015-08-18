@@ -19,6 +19,8 @@
           Quick Grade
 
 .pageContent
+  = render 'layouts/alerts'
+  
   - if @challenge.challenge_files.present?
     %p
       %b Documents:

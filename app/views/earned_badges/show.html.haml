@@ -10,6 +10,8 @@
         Edit
 
 .pageContent
+  = render 'layouts/alerts'
+  
   %img{:src => @earned_badge.badge.try(:icon), :alt => @earned_badge.badge.try(:name), :width => "25", :height => "25"}
   %p
     %b= link_to @earned_badge.name, badge_path(@earned_badge.badge)

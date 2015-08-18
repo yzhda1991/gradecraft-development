@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   - if @assignment.has_groups?
     - if current_user_is_student?
       %h4= "You are editing the assignment submission for Group #{current_student.group_for_assignment(@assignment).name }"

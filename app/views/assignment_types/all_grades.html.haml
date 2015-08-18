@@ -5,6 +5,8 @@
 = render "buttons"
 
 .pageContent
+  = render 'layouts/alerts'
+  
   - if @teams.present?
     .team-filter
       = form_tag all_grades_assignment_type_path(@assignment_type), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do

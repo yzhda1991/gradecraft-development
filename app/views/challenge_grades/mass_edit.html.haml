@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   #massGrade
     = simple_form_for @challenge, method: :put, :url => mass_edit_challenge_path(@challenge) do |f|
       %table.responsive.dynatable

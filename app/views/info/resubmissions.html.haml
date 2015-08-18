@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   .label.radius.alert= @resubmission_count
 
   - if current_course.has_teams?
