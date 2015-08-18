@@ -1,10 +1,10 @@
-.layout-right-flyout
+.layout-right-flyout, .layout-left-flyout
   height: 100%
   position: fixed
   visibility: hidden
-  right: 0
   padding: 0
   z-index: 0  
+  top: 0
   transition: visibility 0 linear .2s
   background-color: $color-blue-3
   transition: visibility 0 linear .2s
@@ -16,12 +16,18 @@
     margin: 0
     padding: 0
 
-.layout-right-flyout.isCbFlyNavActive
+.layout-right-flyout
+  right: 0
+
+.layout-left-flyout
+  left: 0
+
+.layout-right-flyout.isCbFlyNavRightActive, .layout-left-flyout.isCbFlyNavLeftActive
   visibility: visible
   transition: z-index 0 linear .2s
   z-index: 10
 
-.cbFlyNav-wrap
+.cbFlyNavRight-wrap
   display: block
   position: relative
   height: 100%
@@ -34,31 +40,50 @@
     transform: translateY(0)
     transition: transform 0 ease-in-out
 
+.cbFlyNavLeft-wrap
+  display: block
+  position: relative
+  height: 100%
+  overflow: hidden
+  width: 250px
+  -webkit-perspective: 1000
+  -webkit-backface-visibility: hidden
+  -webkit-transform-style: preserve-3d
+  > nav
+    transform: translateY(0)
+    transition: transform 0 ease-in-out
+
 .nav-collapse
   -webkit-transform: translate3d(0,0,0)
   -webkit-transform-style: preserve-3d
 
-.layout-left-content
-  top: 0
+.layout-right-content, .offscreen-sidebar
   z-index: 100
   transition: transform .2s ease-in-out
   -webkit-backface-visibility: hidden
 
-.layout-left-content.isCbFlyNavActive
+.layout-right-content.isCbFlyNavRightActive
+  top: -2rem !important
   transform: translate3d(-270px,0,0)
   position: relative
 
-.nav-flyout-navmask, .nav-flyout-contentmask
+.layout-right-content.isCbFlyNavLeftActive
+  top: -2rem !important
+  transform: translate3d(250px,0,0)
+  position: relative
+
+
+.nav-flyout-navmask, .nav-flyout-contentmask, .nav-flyout-navmask-left, .nav-flyout-contentmask-left
   position: absolute
   top: 0
   bottom: 0
   left: 0
   right: 0
 
-.nav-flyout-contentmask
+.nav-flyout-contentmask, .nav-flyout-contentmask-left
   z-index: 1
 
-.nav-flyout-navmask
+.nav-flyout-navmask, .nav-flyout-navmask-left
   right: 180px
   z-index: 1
 
@@ -67,7 +92,7 @@
 .navbar ul
   list-style-type: none
 
-.btn-navbar
+.btn-navbar-right
   position: absolute
   right: 0
   top: 7px
@@ -79,31 +104,34 @@
   z-index: 1
   color: $secondary-color-2
 
-.btn-navbar .icon-bar 
+.btn-navbar-left
+  position: absolute
+  left: 0
+  top: 7px
+  font-size: 1.1rem
+  width: 35px
+  height: 40px
+  padding: 4px 0 0 10px
   display: block
-  width: 28px
-  height: 4px
-  background-color: $primary-color-3
-  border-radius: $global-radius
-  margin: 7px auto 0 auto
+  z-index: 1
+  color: $secondary-color-2
 
-.btn-navbar .icon-bar+.icon-bar 
-  margin-top: 3px
 
 @media screen and (min-width: $media-small-max)
-  .btn-navbar
+  .btn-navbar-right, .btn-navbar-left
     display: none
 
 /* Navbar Styles */
 .navbar
   position: fixed
-  top: 0
+  top: 0 !important
+  z-index: 1000
   height: 40px
   margin: 0
   padding: 0
-  background: $color-blue-0
+  background: $color-blue-00
   margin-bottom: .5rem
-  width: 100%
+  padding: 0
 
 @media (max-width: $media-small-max)
   .navbar .nav-collapse
@@ -122,7 +150,7 @@
 
   li.dropdown a.section-title
     display: block
-    background-color: $primary-color-1
+    background: $color-blue-00
     color: #FFF
     padding: 5px 10px
 
@@ -134,17 +162,10 @@
     margin-bottom: 25px
 
 
-@media screen and (min-width: $media-small-max)
-  .navbar
-    height: auto
-    position: fixed
-    background: $color-blue-00
-    width: 100%
-    z-index: 1000
-    padding: 0
-
 /* Large Screen Styles*/ 
 @media (min-width: $media-small-max)
+  .navbar 
+    height: auto
   .container
     width: 95%
     margin: 0 auto
@@ -172,7 +193,7 @@
     border-bottom-color: #A7A7A7
   .the-nav > .nav > li a
     display: block
-    padding: 10px
+    padding: 10px 1rem
     color: $primary-color-4
     font-weight: 400
     text-decoration: none
@@ -221,6 +242,13 @@
   .nav > li > .subnav > li:last-of-type a:hover
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
+
+.offscreen-sidebar
+  display: none
+
+.isCbFlyNavLeftActive .offscreen-sidebar 
+  margin-right: 0
+  display: block
 
 /* Mobile Styles */ 
 

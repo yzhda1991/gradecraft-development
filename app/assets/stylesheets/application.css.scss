@@ -6,6 +6,7 @@
  *= require select2
  *= require font-awesome
  *= require jquery.dynatable
+ *= require timeline
 */
 
 $px-3: .1875rem;
@@ -70,7 +71,6 @@ $media-xlarge-max:  120rem; //
 @import 'student_dashboard';
 @import 'tables';
 @import 'tabs';
-@import 'timeline';
 @import 'topbar';
 @import 'typography';
 @import 'unlocks';
