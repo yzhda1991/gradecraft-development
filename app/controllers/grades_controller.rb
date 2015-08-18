@@ -326,7 +326,8 @@ class GradesController < ApplicationController
     if @assignment.update_attributes(params[:assignment])
       grade_ids = []
       @assignment.grades.each do |grade|
-        if grade.graded_or_released?
+        scored_changed = grade.previous_changes[:raw_score].present?
+        if scored_changed && grade.graded_or_released?
           grade_ids << grade.id
         end
       end
