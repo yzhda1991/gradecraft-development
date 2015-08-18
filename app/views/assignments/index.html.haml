@@ -14,6 +14,8 @@
         Review #{(term_for :assignment).titleize} Settings
 
 .pageContent
+  = render 'layouts/alerts'
+  
   .assignments
     - @assignment_types.each do |assignment_type|
       - cache ["v1", assignment_type] do

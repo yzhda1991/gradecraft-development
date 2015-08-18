@@ -10,6 +10,8 @@
         New #{term_for :group}
 
 .pageContent
+  = render 'layouts/alerts'
+  
   - if @pending_groups.present?
     %h4.subtitle= "Pending #{term_for :groups}"
 

@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   - if current_course.has_teams?
     .team-filter
       / Checking to see if the current course has teams, displaying the team filter if it does

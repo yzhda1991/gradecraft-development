@@ -3,6 +3,9 @@
 %h3.pagetitle#tableCaption= @title
 
 .pageContent
+  
+  = render 'layouts/alerts'
+  
   / Gradebook Table
   #gradebook
     %table.nopage_dynatable{"aria-describedby" => "tableCaption"}

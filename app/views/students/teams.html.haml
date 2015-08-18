@@ -1,6 +1,8 @@
 %h3.pagetitle= "#{term_for :teams}"
 
 .pageContent
+  = render 'layouts/alerts'
+  
   %h4.italic.not_bold
     - if current_student.team_for_course(current_course).present?
       Your #{term_for :team}:

@@ -3,6 +3,8 @@
 %h3.pagetitle= @staff.name
 
 .pageContent
+  = render 'layouts/alerts'
+  
   %h4 Courses
   %ul
     - @staff.courses.each do |course|

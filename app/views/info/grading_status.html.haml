@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   = render 'ungraded_submissions_table', :course => current_course
 
   = render 'unreleased_grades_table', :course => current_course

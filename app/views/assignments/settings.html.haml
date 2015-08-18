@@ -10,6 +10,8 @@
         New #{(term_for :assignment).titleize}
 
 .pageContent
+  = render 'layouts/alerts'
+  
   .assignments
     - @assignments.group_by(&:assignment_type).each do |assignment_type, assignments|
       %h3= "#{assignment_type.name} – #{points assignment_type.max_value} points"

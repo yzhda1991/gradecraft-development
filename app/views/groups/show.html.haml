@@ -18,6 +18,8 @@
           Review #{term_for :group}
 
 .pageContent
+  = render 'layouts/alerts'
+  
   %h4
     - if @group.approved?
       .label.right.radius.success

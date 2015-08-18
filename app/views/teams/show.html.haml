@@ -14,6 +14,8 @@
         Edit #{(term_for :team).titleize}
 
 .pageContent
+  = render 'layouts/alerts'
+  
   %h4.subtitle= "#{term_for :student} Roster"
 
   %table.nofeatures_default_last_name_dynatable

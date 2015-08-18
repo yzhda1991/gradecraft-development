@@ -4,6 +4,8 @@
 .label.alert.radius= @count_ungraded
 
 .pageContent
+  = render 'layouts/alerts'
+  
   %table.nofeatures_default_due_date_dynatable{"aria-describedby" => "ungradedTableCaption"}
     %thead
       %tr

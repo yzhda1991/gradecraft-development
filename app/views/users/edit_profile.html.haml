@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   = simple_form_for(@user, method: :put, :url => update_profile_users_path(@user)) do |f|
 
     .small-3.columns.text-center.panel

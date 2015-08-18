@@ -3,8 +3,6 @@
   = render 'layouts/navigation/staff_subnav'
 
 .mainContainer.staff{:role => "main"}
-  / Display errors and notifications
-  = render 'layouts/alerts'
 
   - if current_student.present?
     = content_nav do

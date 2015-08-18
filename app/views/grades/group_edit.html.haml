@@ -3,6 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
+  = render 'layouts/alerts'
+  
   .bold #{term_for :students}
   %ul
     - @group.students.each do |s|
