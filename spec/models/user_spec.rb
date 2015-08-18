@@ -17,6 +17,18 @@ describe User do
     end
   end
 
+  describe ".students_auditing" do
+    let(:student_being_audited) { create(:user) }
+    before do
+      create(:course_membership, course: @course, user: student_being_audited, auditing: true)
+    end
+
+    it "returns all the students that are being audited" do
+      result = User.students_auditing(@course)
+      expect(result.pluck(:id)).to eq [student_being_audited.id]
+    end
+  end
+
   describe ".students_being_graded" do
     let(:student_not_being_graded) { create(:user) }
     before do
