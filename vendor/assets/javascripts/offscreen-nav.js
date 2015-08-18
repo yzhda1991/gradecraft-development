@@ -22,7 +22,7 @@
   $.cbFlyNavLeft.defaults = {
     trigger: '.btn-flyout-left-trigger'
     ,cbNavWrapper: '#left-flyout-nav'
-    ,cbContentWrapper: '.layout-left-content'
+    ,cbContentWrapper: '.layout-right-content'
     ,minWidth: 768
 	};
 
@@ -228,7 +228,7 @@
       this.$trigger = $(this.options.trigger);
       this.$regMenus = this.$el.children( 'ul.nav.nav-pill' );
       this.$newMenus = $(this.$el.clone());
-      this.$contentMask = $('<a class="nav-flyout-contentmask" href="#"></a>');
+      this.$contentMask = $('<a class="nav-flyout-contentmask-left" href="#"></a>');
       this.$navMask = $('<a class="nav-flyout-navmask-left" href="#"></a>');
       this.$openSubnav = "";
     },
