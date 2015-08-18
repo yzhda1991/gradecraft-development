@@ -352,24 +352,16 @@ class User < ActiveRecord::Base
   end
 
   def score_for_assignment(assignment)
-    grade_for_assignment(assignment).score || 0
+    grades.where(:assignment_id => assignment.id).first.score
   end
 
   #Grabbing the grade for an assignment
   def grade_for_assignment(assignment)
-    assignment_grades[assignment.id] || grades.new(assignment: assignment)
+    grades.where(:assignment_id => assignment.id).first || grades.new(assignment: assignment)
   end
 
   def grade_for_assignment_id(assignment_id)
     grades.where(assignment_id: assignment_id)
-  end
-
-  def assignment_grades
-    @assignment_grades ||= {}.tap do |assignment_grades|
-      grades.each do |grade|
-        assignment_grades[grade.assignment_id] = grade
-      end
-    end
   end
 
   def released_score_for_assignment_type(assignment_type)
