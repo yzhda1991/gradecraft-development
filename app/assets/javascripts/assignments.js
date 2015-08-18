@@ -22,6 +22,10 @@
     return false;
   };
 
+  var assignmentSelectors = ['.assignments-list', '.assignment-state', '.assignment-minpoints', '.assignment-condition-state', '.assignment-condition-value'];
+  var badgesSelectors = ['.badges-list', '.badge-state', '.badge-earned-count', '.badges-condition-state', '.badges-condition-value'];
+
+
   $('.add-unlock-condition').click(checkAssignmentBadgeSelects);
 
   function checkAssignmentBadgeSelects() {
@@ -47,20 +51,18 @@
 
     function toggleForms(parent, forms) {
       if(forms === "Assignments") {
-        parent.find('.assignments-list').toggle();
-        parent.find('.assignment-state').toggle();
-        parent.find('.assignment-minpoints').toggle();
+        $.each(assignmentSelectors, function(i, selector){
+          parent.find(selector).toggle();
+        });
       } else if(forms === "Badges") {
-        parent.find('.badges-list').toggle();
-        parent.find('.badge-state').toggle();
-        parent.find('.badge-earned-count').toggle();
+        $.each(badgesSelectors, function(i, selector){
+          parent.find(selector).toggle();
+        });
       } else {
-        parent.find('.badges-list').hide();
-        parent.find('.badge-state').hide();
-        parent.find('.badge-earned-count').hide();
-        parent.find('.assignments-list').hide();
-        parent.find('.assignment-state').hide();
-        parent.find('.assignment-minpoints').hide();
+        var allFields = $.merge(assignmentSelectors, badgesSelectors);
+        $.each(allFields, function(i, selector){
+          parent.find(selector).hide();
+        });
       }
     }
   }
