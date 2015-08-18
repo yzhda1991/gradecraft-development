@@ -27,6 +27,20 @@ describe User do
       result = User.students_auditing(@course)
       expect(result.pluck(:id)).to eq [student_being_audited.id]
     end
+
+    context "with a team" do
+      let(:student_in_team) { create :user }
+      let(:team) { create :team, course: @course }
+      before do
+        create(:course_membership, course: @course, user: student_in_team, auditing: true)
+        team.students << student_in_team
+      end
+
+      it "returns only students in the team that are being audited" do
+        result = User.students_auditing(@course, team)
+        expect(result.pluck(:id)).to eq [student_in_team.id]
+      end
+    end
   end
 
   describe ".students_being_graded" do
