@@ -23,11 +23,11 @@ class User < ActiveRecord::Base
 
     def students_being_graded(course, team=nil)
       user_ids = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:user_id)
+      query = User.where(id: user_ids)
       if team
-        User.where(id: user_ids).select { |student| team.student_ids.include? student.id }
-      else
-        User.where(id: user_ids)
+        query = query.includes(:team_memberships).where(team_memberships: { team_id: team.id, student_id: user_ids })
       end
+      query
     end
 
     def students_auditing(course, team=nil)
