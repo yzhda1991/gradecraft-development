@@ -1,8 +1,11 @@
 #left-flyout-nav.layout-left-flyout
 
-.staff-offscreen-sidebar
+.offscreen-sidebar
   - if current_user_is_staff?
-    = render 'layouts/navigation/staff_subnav_links'
+    = render 'layouts/navigation/staff_subnav'
+  - else
+    = render 'students/student_sidebar'
+
 .layout-right-content
   %header
     .navbar.container

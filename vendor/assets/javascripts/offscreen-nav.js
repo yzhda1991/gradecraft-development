@@ -418,6 +418,6 @@
 }(jQuery, window, document));
 
 $(document).ready(function(){
-  $('.staff-offscreen-sidebar').cbFlyoutLeft();
+  $('.offscreen-sidebar').cbFlyoutLeft();
   $('.the-nav').cbFlyoutRight();
 });
