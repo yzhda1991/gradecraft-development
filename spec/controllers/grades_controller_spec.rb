@@ -69,11 +69,21 @@ describe GradesController do
     end
 
     describe "PUT mass_update" do
+      let(:grades_attributes) do
+        { "0" => { graded_by_id: @professor.id, instructor_modified: true,
+                   student_id: @student.id, raw_score: 1000, status: "Graded", id: @grade.id }}
+      end
+
       it "updates the grades for the specific assignment" do
-        grades = { "0" => { graded_by_id: @professor.id, instructor_modified: true,
-                            student_id: @student.id, raw_score: 1000, id: @grade.id }}
-        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades }
+        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
         expect(@grade.reload.raw_score).to eq 1000
+      end
+
+      it "sends a notification to the student to inform them of a new grade" do
+        run_background_jobs_immediately do
+          expect { put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes } }.to \
+            change { ActionMailer::Base.deliveries.count }.by 1
+        end
       end
     end
 

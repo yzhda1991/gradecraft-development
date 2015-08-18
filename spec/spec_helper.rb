@@ -58,6 +58,7 @@ RSpec.configure do |config|
   config.include Sorcery::TestHelpers::Rails::Controller, type: :controller
   config.include Sorcery::TestHelpers::Rails::Integration, type: :feature
 
+  config.include BackgroundJobs
 
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
