@@ -6,14 +6,20 @@
 		this.$el = $( element );
 		this._init( options );
 	};
- 
   $.cbFlyNav.defaults = {
-    trigger: '.btn-flyout-trigger'
-    ,cbNavWrapper: '#right-flyout-nav'
+    trigger: '.btn-flyout-left-trigger'
+    ,cbNavWrapper: '#left-flyout-nav'
     ,cbContentWrapper: '.layout-left-content'
     ,minWidth: 768
-	};
+  };
   
+  $.cbFlyNav.defaults = {
+    trigger: '.btn-flyout-right-trigger'
+    ,cbNavWrapper: '#right-flyout-nav'
+    ,cbContentWrapper: '.layout-right-content'
+    ,minWidth: 768
+	};
+
   $.cbFlyNav.prototype = {
   
     _init : function( options ) {

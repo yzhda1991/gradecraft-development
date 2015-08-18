@@ -176,7 +176,9 @@ a:hover + .display_on_hover
   .outerContainer
     padding-right: 0
 
-@media (max-width: 400px)
+@media (max-width: $media-small-max)
+  .mainContainer
+    width: 100% !important
   .columns.pageContainer, .columns.outerContainer, .columns.sideBarContainer
     padding-left: 0
     padding-right: 0

@@ -1,8 +1,7 @@
-.layout-right-flyout
+.layout-right-flyout, .layout-left-flyout
   height: 100%
   position: fixed
   visibility: hidden
-  right: 0
   padding: 0
   z-index: 0  
   top: 0
@@ -17,7 +16,13 @@
     margin: 0
     padding: 0
 
-.layout-right-flyout.isCbFlyNavActive
+.layout-right-flyout
+  right: 0
+
+.layout-left-flyout
+  left: 0
+
+.layout-right-flyout.isCbFlyNavActive, .layout-left-flyout.isCbFlyNavActive
   visibility: visible
   transition: z-index 0 linear .2s
   z-index: 10
@@ -39,12 +44,12 @@
   -webkit-transform: translate3d(0,0,0)
   -webkit-transform-style: preserve-3d
 
-.layout-left-content
+.layout-right-content
   z-index: 100
   transition: transform .2s ease-in-out
   -webkit-backface-visibility: hidden
 
-.layout-left-content.isCbFlyNavActive
+.layout-right-content.isCbFlyNavActive
   top: -2rem !important
   transform: translate3d(-270px,0,0)
   position: relative
@@ -68,7 +73,7 @@
 .navbar ul
   list-style-type: none
 
-.btn-navbar
+.btn-navbar-right
   position: absolute
   right: 0
   top: 7px
@@ -80,19 +85,21 @@
   z-index: 1
   color: $secondary-color-2
 
-.btn-navbar .icon-bar 
+.btn-navbar-left
+  position: absolute
+  left: 0
+  top: 7px
+  font-size: 1.1rem
+  width: 35px
+  height: 40px
+  padding: 4px 0 0 10px
   display: block
-  width: 28px
-  height: 4px
-  background-color: $primary-color-3
-  border-radius: $global-radius
-  margin: 7px auto 0 auto
+  z-index: 1
+  color: $secondary-color-2
 
-.btn-navbar .icon-bar+.icon-bar 
-  margin-top: 3px
 
 @media screen and (min-width: $media-small-max)
-  .btn-navbar
+  .btn-navbar-right, .btn-navbar-left
     display: none
 
 /* Navbar Styles */
@@ -215,10 +222,13 @@
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
 
+.layout-left-content 
+  display: none
+
 /* Mobile Styles */ 
 
 @media (max-width: $media-small-max)
-  .tagline
+  .tagline, .sidebar
     display: none
 
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
