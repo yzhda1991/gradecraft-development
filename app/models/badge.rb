@@ -18,7 +18,7 @@ class Badge < ActiveRecord::Base
   belongs_to :course, touch: true
 
   # Unlocks
-  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
+  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy
   accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
 
   has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
@@ -74,15 +74,15 @@ class Badge < ActiveRecord::Base
   def check_unlock_status(student)
     if ! is_unlocked_for_student?(student)
       goal = unlock_conditions.count
-      count = 0 
+      count = 0
       unlock_conditions.each do |condition|
         if condition.is_complete?(student)
           count += 1
-        end 
+        end
       end
-      if goal == count 
+      if goal == count
         if unlock_states.where(:student_id => student.id).present?
-          unlock_states.where(:student_id => student.id).first.unlocked = true 
+          unlock_states.where(:student_id => student.id).first.unlocked = true
         else
           self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
         end
@@ -107,7 +107,7 @@ class Badge < ActiveRecord::Base
   def find_or_create_unlock_state(student)
     UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Badge")
   end
-  
+
 
   #badges per role
   def earned_badges_by_student_id
@@ -123,7 +123,7 @@ class Badge < ActiveRecord::Base
   end
 
   def find_or_create_predicted_earned_badge(student)
-    PredictedEarnedBadge.where(student: student, badge: self).first || PredictedEarnedBadge.create(student_id: student.id, badge_id: self.id)
+    PredictedEarnedBadge.where(student_id: student, badge: self).first || PredictedEarnedBadge.create(student_id: student.id, badge_id: self.id)
   end
 
   #Counting how many times a particular student has earned this badge

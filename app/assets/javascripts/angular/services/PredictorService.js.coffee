@@ -6,26 +6,53 @@
         fail: ""
         badges: ""
         challenges: ""
+        weights: ""
     }
     gradeLevels = {}
     assignments = []
     assignmentTypes = []
+    weights = {
+      unusedWeights: ()->
+        return 0
+    }
     badges = []
     challenges = []
-    icons = ["required","late","info"]
+    icons = ["required", "late", "info"]
+    unusedWeights = null
 
     getGradeLevels = ()->
       $http.get("predictor_grade_levels").success((data)->
         angular.copy(data,gradeLevels)
       )
 
-    getAssignmentTypes = (assignmentId)->
+    getAssignmentTypes = ()->
       $http.get("predictor_assignment_types").success((data)->
         angular.copy(data.assignment_types, assignmentTypes)
         termFor.assignmentType = data.term_for_assignment_type
       )
 
-    getAssignments = (assignmentId)->
+    getAssignmentTypeWeights = ()->
+      $http.get("predictor_weights").success( (data)->
+        angular.copy(data.weights, weights)
+        termFor.weights = data.term_for_weights
+        weights.open = !weights.close_at || Date.parse(weights.close_at) >= Date.now()
+        weights.unusedWeights = ()->
+          used = 0
+          _.each(assignmentTypes,(at)->
+            if at.student_weightable
+              used += at.student_weight
+          )
+          weights.total_weights - used
+        weights.unusedTypes = ()->
+          types = 0
+          _.each(assignmentTypes, (at)->
+            if at.student_weight > 0
+              types += 1
+          )
+          weights.max_types_weighted - types
+        )
+
+    getAssignments = ()->
       $http.get("predictor_assignments").success( (data)->
         angular.copy(data.assignments,assignments)
         termFor.assignment = data.term_for_assignment
@@ -76,17 +103,30 @@
           console.log(data);
         )
 
+    postAssignmentTypeWeight = (assignmentType_id,value)->
+
+      $http.post('/assignment_type_weight', id: assignmentType_id, weight: value).success(
+        (data)->
+          console.log(data);
+        ).error(
+        (data)->
+          console.log(data);
+        )
+
     return {
         getGradeLevels: getGradeLevels
         getAssignmentTypes: getAssignmentTypes
+        getAssignmentTypeWeights: getAssignmentTypeWeights
         getAssignments: getAssignments
         getBadges: getBadges
         getChallenges: getChallenges
         postPredictedGrade: postPredictedGrade
         postPredictedBadge: postPredictedBadge
         postPredictedChallenge: postPredictedChallenge
+        postAssignmentTypeWeight: postAssignmentTypeWeight
         assignments: assignments
         assignmentTypes: assignmentTypes
+        weights: weights
         gradeLevels: gradeLevels
         badges: badges
         challenges: challenges

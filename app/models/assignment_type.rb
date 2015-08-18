@@ -5,7 +5,7 @@ class AssignmentType < ActiveRecord::Base
     :percentage_course, :point_setting, :points_predictor_display,
     :predictor_description, :resubmission, :universal_point_value,
     :student_weightable, :mass_grade, :score_level, :mass_grade_type,
-    :student_logged_revert_button_text, :student_logged_button_text, 
+    :student_logged_revert_button_text, :student_logged_button_text,
     :position
 
   belongs_to :course, touch: true
@@ -103,7 +103,7 @@ class AssignmentType < ActiveRecord::Base
     score = student.grades.released.where(:assignment_type => self).pluck('score').sum
     if max_value?
       if score < max_value
-        return score 
+        return score
       else
         return max_value
       end
@@ -113,7 +113,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def raw_score_for_student(student)
-    student.grades.where(:assignment_type => self).pluck('raw_score').sum
+    student.grades.where(:assignment_type => self).pluck('raw_score').compact.sum
   end
 
   def export_scores

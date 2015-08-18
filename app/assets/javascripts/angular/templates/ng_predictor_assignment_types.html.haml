@@ -1,19 +1,27 @@
-%section.predictor-assignment-type{'ng-repeat' => 'assignmentType in assignmentTypes'}
+%section.predictor-section{'ng-repeat' => 'assignmentType in assignmentTypes'}
   .collapse-toggler.clear
+    .collapse-arrow
     .predictor-section-title{'ng-class'=>'{"status-max-points": assignmentTypeAtMax(assignmentType)}'}
       .predictor-section-title-left
         {{assignmentType.name}}
       .predictor-section-title-right
-        Points Total: {{assignmentTypePointTotal(assignmentType) | number}}
+        .predictor-unweighted-point-total
+          Points Total: {{assignmentTypePointTotal(assignmentType,false) | number}}
 
-        %span{'ng-if'=>'assignmentTypeAtMax(assignmentType)'}
-          (+ {{assignmentTypePointExcess(assignmentType)}}
-          .icon
-            .icon-tooltip
-              You've predicted more points than you are allowed to earn for this {{termFor.assignmentType}}!
-            %i.fa.fa-fw.fa-exclamation-circle
-          )
+          %span{'ng-if'=>'assignmentTypeAtMax(assignmentType)'}
+            (+ {{assignmentTypePointExcess(assignmentType)}}
+            .icon
+              .icon-tooltip
+                You've predicted more points than you are allowed to earn for this {{termFor.assignmentType}}!
+              %i.fa.fa-fw.fa-exclamation-circle
+            )
 
-        %span="/ {{assignmentType.max_value | number}}"
+          %span="/ {{assignmentType.max_value | number}}"
+
+        .predictor-section-title-weights{{'ng-if'=>'assignmentType.student_weightable'}}
+          .predictor-assignment-type-weights{{'target'=>'assignmentType'}}
+          .predictor-weighted-point-total
+            {{assignmentTypePointTotal(assignmentType,true) | number}}
+
 
   .collapsable{'ng-include' => true, 'src' => "'ng_predictor_assignments.html'"}

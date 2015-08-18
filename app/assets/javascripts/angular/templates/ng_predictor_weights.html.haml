@@ -1,0 +1,13 @@
+.predictor-title-right-span X
+.predictor-title-right-span.padded{'ng-if' => '! hasWeights()'} {{defaultMultiplier()}}
+
+.coins{{'ng-if'=>'weightsOpen()'}}
+  .coin{{'ng-click'=>'decrement()', 'ng-repeat' => 'coin in usedWeights()'}}
+    %i.coin-remove-icon.fa.fa-fw.fa-times-circle
+  .coin-slot{{'ng-click'=>'increment()', 'ng-if' => 'weightsAvailable()'}}
+    %i.coin-add-icon.fa.fa-fw.fa-plus-circle
+
+.coins{{'ng-if'=>'!weightsOpen()'}}
+  .coin-non-interactive{{'ng-repeat' => 'coin in usedWeights()'}}
+
+.predictor-title-right-span =

@@ -40,7 +40,6 @@
 //= require grade_scheme_elements
 //= require nested_fields
 //= require student_dashboard
-//= require predictor
 //= require levels_per_assign
 //= require submissions
 //= require submission_file

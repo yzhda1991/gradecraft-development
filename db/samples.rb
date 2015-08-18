@@ -111,6 +111,8 @@ courses << polsci_course = Course.create! do |c|
   c.team_score_average = true
   c.total_assignment_weight = 6
   c.default_assignment_weight = 0.5
+  c.max_assignment_weight = 3
+  c.max_assignment_types_weighted = 3
   c.grading_philosophy = "Think of how video games work. This course works along the same logic. There are some things everyone will have to do to make progress. In this course, the readings, reading-related homework, lectures and discussion sections are those things.
 But game play also allows you to choose some activities -- quests, tasks, challenges -- and skip others. You can partly make your own path through a game. So also in this course: the are some assignment types you may choose (because you are good at them, or because you like challenges) and others you can avoid (because your interests are elsewhere). You also have a choice on how you want to weight some of the optional components you choose!
 In games, you start with a score of zero and 'level up' as you play. You might have to try some tasks several times before you get the points, but good games don't ever take your points away. Same here: everything you successfully do earns you more points.

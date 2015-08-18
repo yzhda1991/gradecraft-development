@@ -116,8 +116,12 @@ class AssignmentTypesController < ApplicationController
   end
 
   def student_predictor_data
+    if current_user.is_student?(current_course)
+      @student = current_student
+    else
+      @student = User.find(params[:id])
+    end
     @assignment_types = current_course.assignment_types
-    .includes(:assignments =>[:assignment_type, :assignment_score_levels])
     .select(
       :course_id,
       :id,
