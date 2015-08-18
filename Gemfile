@@ -59,6 +59,7 @@ gem 'simple_form'
 gem 'sorcery'
 gem 'timelineJS-rails', '~> 1.1.5'
 gem 'uglifier'
+gem 'underscore-rails'
 gem 'whenever'
 gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', :require => nil
