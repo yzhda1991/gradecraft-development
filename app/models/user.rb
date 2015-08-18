@@ -35,13 +35,10 @@ class User < ActiveRecord::Base
       User.where(id: user_ids)
     end
 
-    def students_by_team(course, team=nil)
+    def students_by_team(course, team)
       user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
-      if team
-        User.where(id: user_ids).select { |student| team.student_ids.include? student.id }
-      else
-        User.where(id: user_ids)
-      end
+      User.where(id: user_ids).
+        includes(:team_memberships).where(team_memberships: { team_id: team.id, student_id: user_ids })
     end
 
   end

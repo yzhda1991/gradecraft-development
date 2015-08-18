@@ -55,6 +55,18 @@ describe User do
     end
   end
 
+  describe ".students_by_team" do
+    let(:team) { create :team, course: @course }
+    before do
+      team.students << @student
+    end
+
+    it "returns only students in the team" do
+      result = User.students_by_team(@course, team)
+      expect(result.pluck(:id)).to eq [@student.id]
+    end
+  end
+
   describe "#activated?" do
     it "is activated when the activation state is active" do
       user = build :user, activation_state: "active"
