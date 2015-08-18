@@ -23,25 +23,21 @@ class User < ActiveRecord::Base
 
     def students_being_graded(course, team=nil)
       user_ids = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:user_id)
-      if team
-        User.where(id: user_ids).select { |student| team.student_ids.include? student.id }
-      else
-        User.where(id: user_ids)
-      end
+      query = User.where(id: user_ids)
+      query = query.students_in_team(team.id, user_ids) if team
+      query
     end
 
     def students_auditing(course, team=nil)
       user_ids = CourseMembership.where(course: course, role: "student", auditing: true).pluck(:user_id)
-      User.where(id: user_ids)
+      query = User.where(id: user_ids)
+      query = query.students_in_team(team.id, user_ids) if team
+      query
     end
 
-    def students_by_team(course, team=nil)
+    def students_by_team(course, team)
       user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
-      if team
-        User.where(id: user_ids).select { |student| team.student_ids.include? student.id }
-      else
-        User.where(id: user_ids)
-      end
+      User.where(id: user_ids).students_in_team(team.id, user_ids)
     end
 
   end
@@ -61,6 +57,8 @@ class User < ActiveRecord::Base
 
   scope :order_by_high_score, -> { includes(:course_memberships).order 'course_memberships.score DESC' }
   scope :order_by_low_score, -> { includes(:course_memberships).order 'course_memberships.score ASC' }
+  scope :students_in_team, -> (team_id, student_ids) \
+    { includes(:team_memberships).where(team_memberships: { team_id: team_id, student_id: student_ids }) }
 
   mount_uploader :avatar_file_name, AvatarUploader
 

@@ -286,8 +286,8 @@ class GradesController < ApplicationController
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
 
     if params[:team_id].present?
-      @team = current_course.teams.find_by(team_params)
-      @students = current_course.students_by_team.joins(:teams).where(:teams => team_params)
+      @team = current_course.teams.find_by(id: params[:team_id])
+      @students = current_course.students_by_team(@team)
     else
       @students = current_course.students
     end
@@ -300,10 +300,6 @@ class GradesController < ApplicationController
   end
 
   private
-
-    def team_params
-      @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
-    end
 
     def mass_edit_student_ids
       @mass_edit_student_ids ||= @students.pluck(:id)
