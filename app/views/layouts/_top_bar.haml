@@ -4,7 +4,7 @@
   - if current_user_is_staff?
     = render 'layouts/navigation/staff_subnav'
   - else
-    = render 'students/student_sidebar'
+    .sidebar= render 'students/student_profile_tabs'
 
 .layout-right-content
   %header
