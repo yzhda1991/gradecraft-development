@@ -22,12 +22,12 @@
 .layout-left-flyout
   left: 0
 
-.layout-right-flyout.isCbFlyNavActive, .layout-left-flyout.isCbFlyNavActive
+.layout-right-flyout.isCbFlyNavRightActive, .layout-left-flyout.isCbFlyNavLeftActive
   visibility: visible
   transition: z-index 0 linear .2s
   z-index: 10
 
-.cbFlyNav-wrap
+.cbFlyNavRight-wrap, .cbFlyNavLeft-wrap
   display: block
   position: relative
   height: 100%
@@ -44,17 +44,22 @@
   -webkit-transform: translate3d(0,0,0)
   -webkit-transform-style: preserve-3d
 
-.layout-right-content
+.layout-right-content, .layout-left-content
   z-index: 100
   transition: transform .2s ease-in-out
   -webkit-backface-visibility: hidden
 
-.layout-right-content.isCbFlyNavActive
+.layout-right-content.isCbFlyNavRightActive
   top: -2rem !important
   transform: translate3d(-270px,0,0)
   position: relative
 
-.nav-flyout-navmask, .nav-flyout-contentmask
+.layout-left-content.isCbFlyNavLeftActive
+  top: 0
+  transform: translate3d(0,0,-270px)
+  position: relative
+
+.nav-flyout-navmask, .nav-flyout-contentmask, .nav-flyout-navmask-left
   position: absolute
   top: 0
   bottom: 0
@@ -67,6 +72,10 @@
 .nav-flyout-navmask
   right: 180px
   z-index: 1
+
+.nav-flyout-navmask-left
+  left: 180px
+  z-index: 0
 
 /* Menu Toggle */
 
