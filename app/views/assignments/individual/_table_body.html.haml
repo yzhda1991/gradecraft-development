@@ -43,23 +43,23 @@
             - submissions_for_assignment.each do |submission|
 
               /* Submission present - allow instructor to see it, and identify if it's a new submission or a resubmission. Icon represents if there are files attached. */
-              %li
-                - if submission.submission_files.present?
-                  %i.fa.fa-paperclip.right
-                / - if submission.resubmitted?
-                /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button'
-                / - else
-                = link_to "See Submission", assignment_submission_path(@assignment, submission.id), :class => 'button'
+              %li= link_to "See Submission", assignment_submission_path(@assignment, submission.id), :class => 'button'
+              /- if submission.submission_files.present?
+              /%i.fa.fa-paperclip.right
+              / - if submission.resubmitted?
+              /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button'
+              / - else
+                
 
           - if grade && instructor_modified == true
-            %li= link_to "See Grade", assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
-            %li= link_to "Edit Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
-            %li= link_to "Delete", remove_grades_assignment_path(:assignment_id => @assignment.id, :grade_id => grade.id), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :post
+            %li= link_to raw('<i class="fa fa-eye fa-fw"> </i> See'), assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+            %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+            %li= link_to raw('<i class="fa fa-trash fa-fw"> </i> Delete'), remove_grades_assignment_path(:assignment_id => @assignment.id, :grade_id => grade.id), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :post
 
           - else
             - if @assignment.is_unlockable? && ! @assignment.is_unlocked_for_student?(student)
-              %li= link_to "Unlock", manually_unlock_unlock_state_path(:student_id => student.id, :assignment_id => @assignment.id), :method => :post, :class => "button"
-            %li= link_to "Grade", edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
+              %li= link_to raw('<i class="fa fa-unlock fa-fw"> </i> Unlock'), manually_unlock_unlock_state_path(:student_id => student.id, :assignment_id => @assignment.id), :method => :post, :class => "button"
+            %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Grade'), edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
 
     - if @assignment.release_necessary?
       %td

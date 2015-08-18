@@ -5,20 +5,11 @@
         %i.fa.fa-dashboard.fa-fw
         Review #{(term_for :assignment).titleize} Settings
     - if @assignment.persisted?
-      %li
-        %a{:href => edit_assignment_path(@assignment) }
-          %i.fa.fa-edit.fa-fw
-          Edit
+      %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(@assignment)
       - if @team.present? && ! ( @assignment.rubric and @assignment.rubric.designed? and @assignment.use_rubric? )
-        %li
-          %a{:href => mass_grade_assignment_path(@assignment, :team_id => @team) }
-            %i.fa.fa-check.fa-fw
-            Quick Grade
+        %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(@assignment, :team => @team)
       - elsif ! ( @assignment.rubric and @assignment.rubric.designed? and @assignment.use_rubric? )
-        %li
-          %a{:href => mass_grade_assignment_path(@assignment) }
-            %i.fa.fa-check.fa-fw
-            Quick Grade
+        %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(@assignment)
       - if @assignment.submissions.present?
         %li
           %a{:href => export_submissions_assignment_path(@assignment, :team_id => @team, format: 'zip') }

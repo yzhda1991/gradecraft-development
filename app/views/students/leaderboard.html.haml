@@ -55,6 +55,6 @@
               %td{"data-title" => "Options"}
                 .right
                   %ul
-                    %li= link_to "Dashboard", student_path(student), :class => "button"
-                    %li= mail_to student.email, "Email", :class => "button"
-                    %li= link_to "Edit", edit_user_path(student), :class => "button"
+                    %li= link_to raw('<i class="fa fa-dashboard fa-fw"></i> Dashboard'), student_path(student), :class => "button"
+                    %li= mail_to student.email, raw('<i class="fa fa-envelope fa-fw"></i> Email'), :class => "button"
+                    %li= link_to raw('<i class="fa fa-edit fa-fw"></i> Edit'), edit_user_path(student), :class => "button"

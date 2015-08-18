@@ -68,7 +68,7 @@
             %th{:scope => "col"} Points
 
             %th{:scope => "col"} Dates
-            %th{:scope => "col", :style => "min-width: 80px"}
+            %th{:scope => "col", :style => "min-width: 110px"}
               %span.sr-only Actions
         %tbody
           - assignments.each do |assignment|
@@ -155,9 +155,5 @@
               %td
                 .button-bar
                   %ul.button-group.radius
-                    %li
-                      %a{:href => edit_assignment_path(assignment),  :class => 'button' }
-                        Edit
-                    %li
-                      %a{:href => assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button' }
-                        Delete
+                    %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(assignment), :class => 'button'
+                    %li= link_to raw('<i class="fa fa-trash fa-fw"> </i> Delete'), assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button'
