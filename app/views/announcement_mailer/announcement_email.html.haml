@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>GradeCraft Announcement</title>
+<style type="text/css">
+= GradeCraft::Application.assets["mailer.css"].to_s.html_safe
+</style>
+</head>
+
+<body bgcolor="#f6f6f6">
+
+<!-- body -->
+<table class="body-wrap">
+<tr>
+<td></td>
+<td class="container" bgcolor="#FFFFFF">
+
+<!-- content -->
+<div class="content">
+<table>
+<tr>
+<td>
+<p align="center">
+<a href= "http://gradecraft.com" target="_blank">
+=image_tag "gradecraft_logo.png", width: "207", alt: "", border: "0"
+</a>
+</p>
+<h2 align="center"><strong>#{@announcement.course.name} Announcement</strong></h2>
+<p>
+Hello, #{@student.first_name}
+</p>
+<p>
+<em>#{@announcement.author.public_name} has the following announcement:</em>
+</p>
+============================================================
+<p>
+#{@announcement.abstract.html_safe}
+= precede "..." do
+  = link_to "more", announcement_url(@announcement)
+</p>
+============================================================
+<p align="center">
+To read more, please visit
+= link_to announcement_url(@announcement), announcement_url(@announcement)
+</p>
+<hr />
+</td>
+</tr>
+<tr>
+<td>
+<p align="center">
+<a href="http://facebook.com/gradecraft" alt="GradeCraft on Facebook">
+=image_tag "facebook500.png", alt: "", width: "40"
+</a>
+
+<a href="http://twitter.com/gradecraft" alt="GradeCraft on Twitter">
+=image_tag "twitter.png", alt: "", width: "40"
+</a>
+
+<a href="http://www.youtube.com/playlist?list=PL8pE6w-B6iSUjSjK5cR0yaC1xxvQmLe5m" alt="GradeCraft on YouTube">
+=image_tag "youtube.png", alt: "", width: "40"
+</a>
+</p>
+
+<p style="text-transform:uppercase; font-size: 10px; text-align: center;">
+&copy;2012-#{Date.today.year} Regents of The University of Michigan
+</p>
+<p align="center">
+<strong><a href= "mailto:help@gradecraft.com" style="color:#00BD39; text-decoration:none">help@gradecraft.com</a></strong>
+</p>
+</td></tr>
+</table>
+</div>
+<!-- /content -->
+
+</td>
+<td></td>
+</tr>
+</table>
+<!-- /body -->
+
+<!-- footer -->
+<table class="footer-wrap">
+<tr>
+<td></td>
+<td class="container">
+
+<!-- content -->
+<div class="content">
+<table>
+<tr align="center">
+<td align="center">
+</td>
+</tr>
+</table>
+</div>
+<!-- /content -->
+
+</td>
+<td></td>
+</tr>
+</table>
+<!-- /footer -->
+
+</body>
+</html>

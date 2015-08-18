@@ -1,0 +1,26 @@
+- if current_user_is_staff?
+  = content_nav_for Announcement, @title
+
+%h3.pagetitle= @title
+
+- if current_user.can_create?(@announcement)
+  .context_menu
+    %ul
+      %li= link_to_unless_current raw('<i class="fa fa-plus fa-fw"></i> New Announcement'), new_announcement_path
+
+.pageContent
+  %p
+    %strong Course:
+    = @announcement.course.name
+
+  %p
+    %strong Sent:
+    = @announcement.created_at.strftime("%A, %B %d, %Y, at %l:%M%p")
+
+  %p
+    %strong Subject:
+    = @announcement.title
+
+  %hr
+
+  %p= @announcement.body.html_safe

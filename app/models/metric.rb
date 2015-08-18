@@ -11,7 +11,7 @@ class Metric < ActiveRecord::Base
   attr_accessor :add_default_tiers
 
   after_initialize :set_defaults
-  #after_create :generate_default_tiers, if: :add_default_tiers?
+  after_create :generate_default_tiers, if: :add_default_tiers?
   #after_save :update_full_credit, if: :add_default_tiers?
 
   validates :max_points, presence: true

@@ -1,22 +1,26 @@
 GradeCraft::Application.routes.draw do
 
+  mount RailsEmailPreview::Engine, at: 'emails' if Rails.env.development?
+
   require 'admin_constraint'
+
   #1. Analytics & Charts
-  #2. Assignments, Submissions, Tasks, Grades
-  #3. Assignment Types
-  #4. Assignment Type Weights
-  #5. Badges
-  #6. Challenges
-  #7. Courses
-  #8. Groups
-  #9. Informational Pages
-  #10. Rubrics & Grade Schemes
-  #11. Teams
-  #12. Users
-  #13. User Auth
-  #14. Uploads
-  #15. Events
-  #16. Predictor
+  #2. Announcements
+  #3. Assignments, Submissions, Tasks, Grades
+  #4. Assignment Types
+  #5. Assignment Type Weights
+  #6. Badges
+  #7. Challenges
+  #8. Courses
+  #9. Groups
+  #10. Informational Pages
+  #11. Rubrics & Grade Schemes
+  #12. Teams
+  #13. Users
+  #14. User Auth
+  #15. Uploads
+  #16. Events
+  #17. Predictor
 
   #1. Analytics & Charts
   namespace :analytics do
@@ -47,7 +51,10 @@ GradeCraft::Application.routes.draw do
   post 'analytics_events/predictor_event'
   post 'analytics_events/tab_select_event'
 
-  #2. Assignments, Submissions, Tasks, Grades
+  #2. Announcements
+  resources :announcements, except: [:destroy, :edit, :update]
+
+  #3. Assignments, Submissions, Tasks, Grades
   resources :assignments do
     collection do
       post :sort
@@ -96,8 +103,8 @@ GradeCraft::Application.routes.draw do
       get :design, on: :collection
     end
   end
-  resources :unlock_states do 
-    member do 
+  resources :unlock_states do
+    member do
       post :manually_unlock
     end
   end
@@ -113,7 +120,7 @@ GradeCraft::Application.routes.draw do
 
   resources :tier_badges
 
-  #3. Assignment Types
+  #4. Assignment Types
   resources :assignment_types do
     member do
       get 'all_grades'
@@ -125,13 +132,13 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  #4. Assignment Type Weights
+  #5. Assignment Type Weights
   get 'assignment_type_weights' => 'assignment_type_weights#mass_edit', as: :assignment_type_weights
   put 'assignment_type_weights' => 'assignment_type_weights#mass_update'
 
   resources :assignment_weights
 
-  #5. Badges
+  #6. Badges
   resources :badges do
     post :predict_times_earned
     resources :tasks
@@ -149,7 +156,7 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  #6. Challenges
+  #7. Challenges
   resources :challenges do
     post :predict_points
     resources :challenge_grades do
@@ -169,7 +176,7 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  #7. Courses
+  #8. Courses
   resources :courses do
     collection do
       post 'copy' => 'courses#copy'
@@ -199,7 +206,7 @@ GradeCraft::Application.routes.draw do
   get 'research_gradebook' => 'info#research_gradebook'
   get 'export_earned_badges' => 'courses#export_earned_badges'
 
-  #8. Groups
+  #9. Groups
   resources :groups do
     collection do
       get :review
@@ -208,7 +215,7 @@ GradeCraft::Application.routes.draw do
   end
   resources :group_memberships
 
-  #9. Informational Pages
+  #10. Informational Pages
   namespace :info do
     get :all_grades
     get :choices
@@ -226,7 +233,7 @@ GradeCraft::Application.routes.draw do
   get 'features' => 'pages#features'
   get 'ping' => 'pages#ping'
 
-  #10. Rubrics & Grade Schemes
+  #11. Rubrics & Grade Schemes
   resources :rubrics
 
   #11. Rubrics & Grade Schemes
@@ -238,7 +245,7 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  #11. Teams
+  #12. Teams
   resources :teams do
     collection do
       get :activity
@@ -251,7 +258,7 @@ GradeCraft::Application.routes.draw do
   get 'color_theme' => 'home#color_theme'
   root :to => "home#index"
 
-  #12. Users
+  #13. Users
   %w{students gsis professors admins}.each do |role|
     get "users/#{role}/new" => 'users#new', :as => "new_#{role.singularize}", :role => role.singularize
   end
@@ -301,7 +308,7 @@ GradeCraft::Application.routes.draw do
   get 'my_badges' => 'students#badges'
   get 'my_team' => 'students#teams'
 
-  #13. User Auth
+  #14. User Auth
   post 'auth/kerberos/callback', to: 'user_sessions#kerberos_create', as: :auth_kerberos_callback
   match 'auth/lti/callback', to: 'user_sessions#lti_create', via: [:get, :post]
   get 'auth/failure' => 'pages#auth_failure', as: :auth_failure
@@ -315,18 +322,18 @@ GradeCraft::Application.routes.draw do
 
   # get 'cosign_test' => 'info#cosign_test'
 
-  #14. Uploads
+  #15. Uploads
   resource :uploads do
     get :remove
     get :remove_submission_file
   end
 
-  #15. Events
+  #16. Events
   resources :events
 
-  get 'gse_mass_edit' => 'grade_scheme_elements#mass_edit', defaults: {format: :json}
 
   #16. Predictor, Student View
+  get 'gse_mass_edit' => 'grade_scheme_elements#mass_edit', defaults: {format: :json}
   get 'predictor' => 'students#predictor'
   get 'predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
   get 'predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
@@ -334,7 +341,7 @@ GradeCraft::Application.routes.draw do
   get 'predictor_badges' => 'badges#student_predictor_data', defaults: {format: :json}
   get 'predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
 
-  #16b. Predictor, Instructor View
+  #17b. Predictor, Instructor View
   get 'students/:id/predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_assignments' => 'assignments#staff_predictor_data', defaults: {format: :json}

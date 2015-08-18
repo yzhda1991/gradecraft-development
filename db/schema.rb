@@ -11,11 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150806205557) do
+ActiveRecord::Schema.define(version: 20150814215710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "announcement_states", force: :cascade do |t|
+    t.integer  "announcement_id"
+    t.integer  "user_id"
+    t.boolean  "read",            default: true
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "announcement_states", ["announcement_id"], name: "index_announcement_states_on_announcement_id", using: :btree
+  add_index "announcement_states", ["user_id"], name: "index_announcement_states_on_user_id", using: :btree
+
+  create_table "announcements", force: :cascade do |t|
+    t.string   "title"
+    t.text     "body"
+    t.integer  "author_id"
+    t.integer  "course_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "announcements", ["author_id"], name: "index_announcements_on_author_id", using: :btree
+  add_index "announcements", ["course_id"], name: "index_announcements_on_course_id", using: :btree
 
   create_table "assignment_files", force: :cascade do |t|
     t.string   "filename",        limit: 255
@@ -875,4 +898,8 @@ ActiveRecord::Schema.define(version: 20150806205557) do
   add_index "users", ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
 
+  add_foreign_key "announcement_states", "announcements"
+  add_foreign_key "announcement_states", "users"
+  add_foreign_key "announcements", "courses"
+  add_foreign_key "announcements", "users", column: "author_id"
 end
