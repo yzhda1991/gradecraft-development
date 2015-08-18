@@ -85,6 +85,14 @@ describe GradesController do
             change { ActionMailer::Base.deliveries.count }.by 1
         end
       end
+
+      it "only sends notifications to the students if the grade changed" do
+        @grade.update_attributes({ raw_score: 1000 })
+        run_background_jobs_immediately do
+          expect { put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes } }.to_not \
+            change { ActionMailer::Base.deliveries.count }
+        end
+      end
     end
 
     describe "GET group_edit" do
