@@ -13,7 +13,7 @@
 //= require autonumeric
 //= require jquery.sparkline.min
 //= require s3_direct_upload
-//= require underscore.min
+//= require underscore
 //= require backbone.min
 //= require bootstrap
 //= require jquery.dynatable

@@ -542,6 +542,7 @@ GEM
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    underscore-rails (1.8.3)
     uniform_notifier (1.9.0)
     valid_attribute (2.0.0)
     vegas (0.1.11)
@@ -640,9 +641,7 @@ DEPENDENCIES
   spring
   timelineJS-rails (~> 1.1.5)
   uglifier
+  underscore-rails
   valid_attribute
   whenever
   wysiwyg-rails
-
-BUNDLED WITH
-   1.10.6
