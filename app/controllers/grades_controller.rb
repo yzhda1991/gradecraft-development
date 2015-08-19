@@ -242,8 +242,8 @@ class GradesController < ApplicationController
     if @assignment.open?
       @grade = current_student.grade_for_assignment(@assignment)
       if params[:present] == "true"
-        if params[:raw_score].present?
-          @grade.raw_score = params[:raw_score]
+        if params[:grade].present? && params[:grade][:raw_score].present?
+          @grade.raw_score = params[:grade][:raw_score]
         else
           @grade.raw_score = @assignment.point_total
         end

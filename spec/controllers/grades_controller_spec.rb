@@ -161,7 +161,7 @@ describe GradesController do
 
       context "with assignment levels" do
         it "creates a score for the student at the specified level" do
-          post :self_log, id: @assignment.id, present: "true", raw_score: "10000"
+          post :self_log, id: @assignment.id, present: "true", grade: { raw_score: "10000" }
           grade = @assignment.grades.last
           expect(grade.raw_score).to eq 10000
         end
