@@ -27,6 +27,17 @@ class InfoController < ApplicationController
 
   def class_badges
     @title = "Awarded #{term_for :badges}"
+
+    @teams = current_course.teams
+    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+
+    if @team
+      students = current_course.students_being_graded_by_team(@team)
+    else
+      students = current_course.students_being_graded
+    end
+
+    @students = students
   end
 
   # Displaying all ungraded, graded but unreleased, and in progress assignment submissions in the system
