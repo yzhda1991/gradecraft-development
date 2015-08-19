@@ -68,6 +68,9 @@ class Assignment < ActiveRecord::Base
 
   validates_presence_of :assignment_type_id
 
+  validates :student_logged_button_text, presence: { message: "can't be blank if student logged", if: :student_logged? }
+  validates :student_logged_revert_button_text, presence: { message: "can't be blank if student logged", if: :student_logged? }
+
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
   # Filtering Assignments by Team Work, Group Work, and Individual Work
