@@ -56,8 +56,8 @@
             %td
               .right
                 %ul
-                  %li= link_to 'Dashboard', student_path(student), :class => 'button'
-                  %li= link_to 'Edit', edit_user_path(student), :class => 'button'
+                  %li= link_to raw("<i class='fa fa-dashboard fa-fw'></i> Dashboard"), student_path(student), :class => 'button'
+                  %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_user_path(student), :class => 'button'
 
   %h4.subtitle Challenge Grades
 
@@ -81,6 +81,6 @@
             .right
               %ul
                 - if challenge.challenge_grade_for_team(@team).present?
-                  = link_to 'Edit Grade', edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => 'button'
+                  = link_to raw('<i class="fa fa-edit fa-fw"></i> Edit Grade'), edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => 'button'
                 - else
-                  = link_to "Grade", new_challenge_challenge_grade_path(:challenge_id => challenge, :team_id => @team.id), :class => 'button'
+                  = link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), new_challenge_challenge_grade_path(:challenge_id => challenge, :team_id => @team.id), :class => 'button'

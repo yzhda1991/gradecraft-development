@@ -1,9 +1,9 @@
-%table.responsive.nofeatures_default_score_dynatable.no_radius
+%table.nofeatures_default_score_dynatable
   %thead
     %tr
       %th Rank
       %th Name
-      %th Mean Student Score
+      %th{ "data-dynatable-column" => "score"} Mean Student Score
       - if current_course.team_challenges?
         %th{ "data-dynatable-column" => "challengeScore"} #{term_for :challenge} Score
       %th{ "data-dynatable-column" => "students"} #{term_for :students}
@@ -29,12 +29,6 @@
           %td
             .right
               %ul
-                %li
-                  = link_to team, :class => 'button' do
-                    See
-                %li
-                  = link_to edit_team_path(team), :class => 'button' do
-                    Edit
-                %li
-                  = link_to team_path(team), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete do
-                    Delete
+                %li= link_to raw("<i class='fa fa-dashboard fa-fw'> </i> See"), team, :class => 'button'
+                %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit"), edit_team_path(team), :class => 'button'
+                %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), team_path(team), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete
