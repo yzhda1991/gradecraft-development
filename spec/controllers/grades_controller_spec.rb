@@ -156,7 +156,15 @@ describe GradesController do
       it "creates a maximum score by the student" do
         post :self_log, id: @assignment.id, present: "true"
         grade = @assignment.grades.last
-        expect(grade.reload.raw_score).to eq @assignment.point_total
+        expect(grade.raw_score).to eq @assignment.point_total
+      end
+
+      context "with assignment levels" do
+        it "creates a score for the student at the specified level" do
+          post :self_log, id: @assignment.id, present: "true", raw_score: "10000"
+          grade = @assignment.grades.last
+          expect(grade.raw_score).to eq 10000
+        end
       end
     end
 
