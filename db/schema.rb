@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814215710) do
+ActiveRecord::Schema.define(version: 20150819142043) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,32 +82,30 @@ ActiveRecord::Schema.define(version: 20150814215710) do
   end
 
   create_table "assignment_types", force: :cascade do |t|
-    t.string   "name",                              limit: 255
-    t.string   "point_setting",                     limit: 255
+    t.string   "name",                     limit: 255
+    t.string   "point_setting",            limit: 255
     t.boolean  "levels"
-    t.string   "points_predictor_display",          limit: 255
+    t.string   "points_predictor_display", limit: 255
     t.integer  "resubmission"
     t.integer  "max_value"
     t.integer  "percentage_course"
     t.text     "predictor_description"
-    t.datetime "created_at",                                                   null: false
-    t.datetime "updated_at",                                                   null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.integer  "course_id"
     t.integer  "universal_point_value"
     t.integer  "minimum_score"
-    t.integer  "step_value",                                    default: 1
+    t.integer  "step_value",                           default: 1
     t.integer  "grade_scheme_id"
     t.boolean  "due_date_present"
     t.integer  "order_placement"
     t.boolean  "mass_grade"
-    t.string   "mass_grade_type",                   limit: 255
+    t.string   "mass_grade_type",          limit: 255
     t.boolean  "student_weightable"
-    t.string   "student_logged_button_text",        limit: 255
-    t.string   "student_logged_revert_button_text", limit: 255
-    t.boolean  "notify_released",                               default: true
-    t.boolean  "include_in_timeline",                           default: true
-    t.boolean  "include_in_predictor",                          default: true
-    t.boolean  "include_in_to_do",                              default: true
+    t.boolean  "notify_released",                      default: true
+    t.boolean  "include_in_timeline",                  default: true
+    t.boolean  "include_in_predictor",                 default: true
+    t.boolean  "include_in_to_do",                     default: true
     t.boolean  "is_attendance"
     t.boolean  "has_winners"
     t.integer  "num_winner_levels"

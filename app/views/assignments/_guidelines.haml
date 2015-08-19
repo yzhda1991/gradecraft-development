@@ -12,7 +12,7 @@
     - present = current_student.self_reported_done?(@assignment)
     = hidden_field_tag :present, !present
     - if ! current_student.self_reported_done?(@assignment)
-      = f.submit (@assignment_type.student_logged_button_text), :class => "button #{present ? 'alert' : 'success'} tiny radius"
+      = f.submit (@assignment.student_logged_button_text), :class => "button #{present ? 'alert' : 'success'} tiny radius"
 
 - if @assignment.assignment_files.present?
   %hr
