@@ -444,7 +444,7 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.integer  "metric_id"
     t.integer  "tier_id"
     t.integer  "tier_badge_id"
-    t.boolean  "student_visible",             default: true
+    t.boolean  "student_visible", default: false
   end
 
   add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
