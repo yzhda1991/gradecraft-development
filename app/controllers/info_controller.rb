@@ -49,11 +49,20 @@ class InfoController < ApplicationController
   # Displaying all resubmisisons
   def resubmissions
     @title = "Resubmitted Assignments"
-    @resubmissions = current_course.submissions.resubmitted
-    @resubmission_count = @resubmissions.count
+    resubmissions = current_course.submissions.resubmitted
+    
     @teams = current_course.teams
-    @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
+    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+    if @team
+      @students ||= @team.students.pluck(:id)
+      @resubmissions = resubmissions.where(student_id: @students)
+    else
+      @resubmissions = resubmissions
+    end
+
+    @resubmission_count = @resubmissions.count
   end
+
 
   def ungraded_submissions
     @title = "Ungraded #{term_for :assignment} Submissions"
