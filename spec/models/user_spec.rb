@@ -128,7 +128,7 @@ describe User do
   end
 
   context "earn_badges" do
-    it "should be able to earn badges", failing: true do
+    it "should be able to earn badges" do
       @badges = create_list(:badge, 2, course: @course)
       @student.earn_badges(@badges)
       @badges_earned = @student.earned_badges.collect {|e| e.badge }.sort_by(&:id)
@@ -187,11 +187,17 @@ describe User do
     end
   end
 
-  context "student_invisible_badges" do
+  context "student_invisible_badges", failing: true do
     it "should return invisible badges for which the student has earned a badge" do
       @invisible_badges = create_list(:badge, 2, course: @course, visible: false)
+      pp EarnedBadge.count
       @student.earn_badges(@invisible_badges)
+      pp EarnedBadge.count
+      pp Badge.all
+      pp EarnedBadge.all
       @badges_earned_by_id = @student.student_invisible_badges(@course)
+      @badges_earned_by_id
+      @invisible_badges
       expect(@badges_earned_by_id).to eq(@invisible_badges)
     end
 
