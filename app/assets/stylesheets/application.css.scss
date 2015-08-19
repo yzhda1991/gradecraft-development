@@ -38,7 +38,7 @@ $media-xlarge-max:  120rem; //
   background-image:         linear-gradient(top, $fromColor, $toColor);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
 }
-@mixin title-type-styling { 
+@mixin title-type-styling {
   font-family: "Avenir", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
