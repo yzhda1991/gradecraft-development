@@ -30,7 +30,7 @@
   };
 
   var assignmentSelectors = ['.assignments-list', '.assignment-state', '.assignment-minpoints', '.assignment-condition-state', '.assignment-condition-value'];
-  var badgesSelectors = ['.badges-list', '.badge-state', '.badge-earned-count', '.badges-condition-state', '.badges-condition-value'];
+  var badgeSelectors = ['.badges-list', '.badge-state', '.badge-earned-count', '.badges-condition-state', '.badges-condition-value'];
 
   $('.add-unlock-condition').click(function(){
     setTimeout(function() {
@@ -54,30 +54,30 @@
     var val = $(select).val();
     if(val === 'Assignment') {
       if(parent.find('.badges-list').is(':visible')) {
-        toggleForms(parent, "Badges");
+        toggleForms(parent, "Badge");
       }
-      toggleForms(parent, "Assignments");
+      toggleForms(parent, "Assignment");
     } else if(val === 'Badge') {
       if(parent.find('.assignments-list').is(':visible')) {
         toggleForms(parent, "Assignments");
       }
-      toggleForms(parent, "Badges");
+      toggleForms(parent, "Badge");
     } else {
       toggleForms(parent, "Both");
     }
   }
 
   function toggleForms(parent, forms) {
-    if(forms === "Assignments") {
+    if(forms === "Assignment") {
       $.each(assignmentSelectors, function(i, selector){
         parent.find(selector).toggle();
       });
-    } else if(forms === "Badges") {
-      $.each(badgesSelectors, function(i, selector){
+    } else if(forms === "Badge") {
+      $.each(badgeSelectors, function(i, selector){
         parent.find(selector).toggle();
       });
     } else {
-      var allFields = $.merge(assignmentSelectors, badgesSelectors);
+      var allFields = $.merge(assignmentSelectors, badgeSelectors);
       $.each(allFields, function(i, selector){
         parent.find(selector).hide();
       });
