@@ -33,7 +33,7 @@
           %td
             = student.weight_spent?(current_course) ? "Yes" : "No"
           %td
-            .button-bar
-              %ul.button-group.radius
-                %li= link_to "Dashboard", student_path(student), :class => "button"
-                %li= link_to "Edit #{term_for :weights}", assignment_type_weights_path(:student_id => student.id), :class => "button"
+            .right
+              %ul
+                %li= link_to raw("<i class='fa fa-dashboard fa-fw'></i> Dashboard"), student_path(student), :class => "button"
+                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit #{term_for :weights}"), assignment_type_weights_path(:student_id => student.id), :class => "button"

@@ -9,8 +9,9 @@
 .layout-right-content
   %header
     .navbar.container
-      %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
-        %i.fa.fa-dashboard.fa-fw
+      - if current_user.present?
+        %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
+          %i.fa.fa-dashboard.fa-fw
 
       %nav.the-nav.nav-collapse.clearfix{:role => "navigation"}
         %ul.nav.nav-pill.left
@@ -29,6 +30,7 @@
           - else
             = render 'layouts/navigation/login_nav'
 
-      %a.btn-navbar-right.btn-navbar-navtoggle.btn-flyout-right-trigger
-        %i.fa.fa-user-plus.fa-fw
+      - if current_user.present?
+        %a.btn-navbar-right.btn-navbar-navtoggle.btn-flyout-right-trigger
+          %i.fa.fa-user-plus.fa-fw
 #right-flyout-nav.layout-right-flyout

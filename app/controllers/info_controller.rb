@@ -27,6 +27,17 @@ class InfoController < ApplicationController
 
   def class_badges
     @title = "Awarded #{term_for :badges}"
+
+    @teams = current_course.teams
+    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+
+    if @team
+      students = current_course.students_being_graded_by_team(@team)
+    else
+      students = current_course.students_being_graded
+    end
+
+    @students = students
   end
 
   # Displaying all ungraded, graded but unreleased, and in progress assignment submissions in the system
@@ -49,11 +60,20 @@ class InfoController < ApplicationController
   # Displaying all resubmisisons
   def resubmissions
     @title = "Resubmitted Assignments"
-    @resubmissions = current_course.submissions.resubmitted
-    @resubmission_count = @resubmissions.count
+    resubmissions = current_course.submissions.resubmitted
+    
     @teams = current_course.teams
-    @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
+    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+    if @team
+      @students ||= @team.students.pluck(:id)
+      @resubmissions = resubmissions.where(student_id: @students)
+    else
+      @resubmissions = resubmissions
+    end
+
+    @resubmission_count = @resubmissions.count
   end
+
 
   def ungraded_submissions
     @title = "Ungraded #{term_for :assignment} Submissions"

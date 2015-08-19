@@ -4,6 +4,13 @@
 
 .pageContent
   = render 'layouts/alerts'
+
+  - if current_course.has_teams?
+    .team-filter
+      = form_tag earned_badges_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+        %label
+          .sr-only Select #{term_for :team}
+        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
   
   %table.nofeatures_default_last_name_dynatable
     %caption.sr-only All Awarded Achievements
@@ -16,7 +23,7 @@
         - if current_course.valuable_badges?
           %th{:scope => "col"} Total Badge Score
     %tbody
-      - current_course.students.each do |student|
+      - @students.each do |student|
         %tr
           %td= link_to student.first_name, student_path(student)
           %td= link_to student.last_name, student_path(student)

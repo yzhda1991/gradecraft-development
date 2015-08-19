@@ -39,6 +39,6 @@
           %td
             .right
               %ul
-                %li= link_to "Dashboard", student_path(student), :class => "button"
-                %li= link_to "Edit", edit_user_path(student), :class => "button"
-                %li= link_to 'Delete', student.course_memberships.where(:course_id => current_course.id).first, :class => 'button', :data => { confirm: 'This will delete the student from your course - Are you sure?' }, :method => :delete
+                %li= link_to raw("<i class='fa fa-dashboard fa-fw'> </i> Dashboard"), student_path(student), :class => "button"
+                %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit"), edit_user_path(student), :class => "button"
+                %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), student.course_memberships.where(:course_id => current_course.id).first, :class => 'button', :data => { confirm: 'This will delete the student from your course - Are you sure?' }, :method => :delete
