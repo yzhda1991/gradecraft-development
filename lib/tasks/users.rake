@@ -27,13 +27,15 @@ namespace :users do
 
   desc "Set all user passwords to 'waffles' for testing purposes"
   task :waffleize => :environment do
-    User.update_all crypted_password: "9ba2d402d1dfe11f8c90e0edd10dba2fae2a246a"
+    u = User.where(email: "dumbledore@hogwarts.edu").first
+    u.update_attributes password: "waffles", password_confirmation: "waffles"
+    User.update_all crypted_password: u.crypted_password, salt: u.salt
     puts "All users have been waffleized."
   end
 
   desc "Activate all users"
   task :activate_all => :environment do
-    User.update_all  active: true
-    puts "All users have been waffleized."
+    User.update_all active: true
+    puts "All users have been activated."
   end
 end

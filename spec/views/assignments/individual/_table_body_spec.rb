@@ -22,7 +22,7 @@ describe "assignments/individual/_table_body" do
     render
   end
 
-  describe "with a graded grade", failing: true do
+  describe "with a graded grade" do
     before(:each) do
       @grade.update(status: "Graded", instructor_modified: true)
       view.stub(:remove_grades_assignment_path).and_return("#")
@@ -35,7 +35,7 @@ describe "assignments/individual/_table_body" do
           @grade.stub(:present?) {true}
           @grade.stub(:instructor_modified) {true}
           render
-          assert_select "td.status-or-score", text: "#{points @grade.raw_score}"
+          assert_select "td.status-or-score", text: "#{@grade.raw_score}"
         end
       end
 
@@ -45,7 +45,7 @@ describe "assignments/individual/_table_body" do
           @grade.stub(:present?) {false}
           @grade.stub(:instructor_modified) {true}
           render
-          assert_select "td.status-or-score", text: "#{points @grade.raw_score}"
+          assert_select "td.status-or-score", text: "#{@grade.raw_score}"
         end
       end
 
@@ -55,7 +55,7 @@ describe "assignments/individual/_table_body" do
           @grade.stub(:present?) {true}
           @grade.stub(:instructor_modified) {false}
           render
-          assert_select "td.status-or-score", text: "#{points @grade.raw_score}"
+          assert_select "td.status-or-score", text: "#{@grade.raw_score}"
         end
       end
     end

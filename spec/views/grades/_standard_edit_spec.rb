@@ -12,7 +12,7 @@ describe "grades/_standard_edit" do
     @student = create(:user)
     @student.courses << @course
     @grade = create(:grade, course: @course, assignment: @assignment, student: @student)
-
+    @assignment_score_levels = [] # add this so the view doesn't crash
     view.stub(:current_student).and_return(@student)
     current_user = double()
     current_user.stub(:id) {0}
@@ -20,7 +20,7 @@ describe "grades/_standard_edit" do
     view.stub(:current_course).and_return(@course)
   end
 
-  describe "when an assignment has point values", failing: true do
+  describe "when an assignment has point values" do
     it "renders the points possible when incomplete" do
       render
       assert_select "label", text: "Raw Score (#{@assignment.point_total} Points Possible)", count: 1
