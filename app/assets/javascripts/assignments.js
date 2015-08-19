@@ -1,17 +1,11 @@
 !function($) {
   var $document = $(document), $link, selector;
 
-  $document.ready(function() {
-    $('.conditions').find('.assignment-or-badge').each(function(i, select){
-      checkDropdown(select);
-      checkExistingSelects(select);
-    });
-  });
-
   var init = function() {
     $document = $(document);
     $document.on('click', '.add-assignment-rubric a', addAssignmentRubric);
     $document.on('click', '.remove-assignment-rubric', removeAssignmentRubric);
+    findExistingConditions();
   };
 
   var addAssignmentRubric = function(e) {
@@ -29,8 +23,8 @@
     return false;
   };
 
-  var assignmentSelectors = ['.assignments-list', '.assignment-state', '.assignment-minpoints', '.assignment-condition-state', '.assignment-condition-value'];
-  var badgeSelectors = ['.badges-list', '.badge-state', '.badge-earned-count', '.badges-condition-state', '.badges-condition-value'];
+  var assignmentSelectors = ['.assignments-list', '.assignment-minpoints', '.assignment-condition-state', '.assignment-condition-value', '.condition-done-by'];
+  var badgeSelectors = ['.badges-list', '.badges-condition-state', '.badges-condition-value', '.condition-done-by'];
 
   $('.add-unlock-condition').click(function(){
     setTimeout(function() {
@@ -40,23 +34,29 @@
     }, 500);
   });
 
-  // function checkAssignmentBadgeSelects() {
-  //   setTimeout(function() {
-  //     $('.assignment-or-badge:last').change(function(){
-  //         checkDropdown($(this).find('select'));
-  //     });
-  //   }, 500);
-  // }
+  function findExistingConditions() {
+    var selects = $('.conditions').find('.assignment-or-badge');
+    $.each(selects, function(i, element){
+      var select = $(element).find('select');
+      checkDropdown(select);
+      existingSelectsListener(select);
+    });
+  }
+
+  function existingSelectsListener(select) {
+    $(select).closest('.assignment-or-badge').change(function(){
+      checkDropdown($(this).find('select'));
+    });
+  }
 
   function checkDropdown(select) {
-    //debugger;
-    var parent = $(select.parentNode.parentNode);
+    var parent = $(select).closest('.conditions');
     var val = $(select).val();
     if(val === 'Assignment') {
-      if(parent.find('.badges-list').is(':visible')) {
-        toggleForms(parent, "Badge");
-      }
       toggleForms(parent, "Assignment");
+      $.each(badgeSelectors, function(i, selector){
+        parent.find(selector).hide();
+      });
     } else if(val === 'Badge') {
       if(parent.find('.assignments-list').is(':visible')) {
         toggleForms(parent, "Assignments");
@@ -78,7 +78,8 @@
       });
     } else {
       var allFields = $.merge(assignmentSelectors, badgeSelectors);
-      $.each(allFields, function(i, selector){
+      allFields = $.unique(allFields);
+      $.each(allFields, function(i, selector) {
         parent.find(selector).hide();
       });
     }
