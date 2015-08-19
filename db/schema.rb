@@ -224,20 +224,6 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.boolean  "visible_when_locked",                 default: true
   end
 
-  create_table "bootsy_image_galleries", force: :cascade do |t|
-    t.integer  "bootsy_resource_id"
-    t.string   "bootsy_resource_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "bootsy_images", force: :cascade do |t|
-    t.string   "image_file",       limit: 255
-    t.integer  "image_gallery_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "categories", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.text     "description"
@@ -444,7 +430,7 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.integer  "metric_id"
     t.integer  "tier_id"
     t.integer  "tier_badge_id"
-    t.boolean  "student_visible", default: false
+    t.boolean  "student_visible",             default: true
   end
 
   add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
@@ -688,7 +674,7 @@ ActiveRecord::Schema.define(version: 20150821033921) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
-  create_table "shared_earned_badges", force: true do |t|
+  create_table "shared_earned_badges", force: :cascade do |t|
     t.integer  "course_id"
     t.text     "student_name"
     t.integer  "user_id"
