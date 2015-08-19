@@ -3,9 +3,9 @@ class Assignment < ActiveRecord::Base
   attr_accessible :name, :description, :point_total, :open_at, :due_at, :grade_scope, :visible, :required,
     :accepts_submissions, :accepts_links, :accepts_text, :accepts_attachments, :release_necessary, :media, :thumbnail, :media_credit, :media_caption,
     :accepts_submissions_until, :points_predictor_display, :notify_released, :mass_grade_type, :assignment_type_id, :assignment_type,
-    :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged,
-    :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level, :score_levels_attributes,
-    :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics, 
+    :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged, :student_logged_button_text,
+    :student_logged_revert_button_text, :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level,
+    :score_levels_attributes, :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics,
     :unlock_conditions, :unlock_conditions_attributes, :visible_when_locked
 
 
@@ -34,11 +34,11 @@ class Assignment < ActiveRecord::Base
   has_many :tasks, :as => :assignment, :dependent => :destroy
 
   # Unlocks
-  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy 
+  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy
   has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
 
   accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
-  
+
   has_many :unlock_states, :as => :unlockable, :dependent => :destroy
 
   # Student created submissions to be graded
@@ -247,15 +247,15 @@ class Assignment < ActiveRecord::Base
   def check_unlock_status(student)
     if ! is_unlocked_for_student?(student)
       goal = unlock_conditions.count
-      count = 0 
+      count = 0
       unlock_conditions.each do |condition|
         if condition.is_complete?(student)
           count += 1
-        end 
+        end
       end
-      if goal == count 
+      if goal == count
         if unlock_states.where(:student_id => student.id).present?
-          unlock_states.where(:student_id => student.id).first.unlocked = true 
+          unlock_states.where(:student_id => student.id).first.unlocked = true
         else
           self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
         end
