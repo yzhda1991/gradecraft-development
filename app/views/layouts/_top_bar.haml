@@ -3,7 +3,7 @@
 .offscreen-sidebar
   - if current_user_is_staff?
     = render 'layouts/navigation/staff_subnav'
-  - else
+  - elsif current_user_is_student?
     .sidebar= render 'students/student_profile_tabs'
 
 .layout-right-content
