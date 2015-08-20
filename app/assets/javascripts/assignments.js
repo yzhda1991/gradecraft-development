@@ -23,10 +23,6 @@
     return false;
   };
 
-  
-  var assignmentSelectors = ['#assignments-list'];
-  var badgeSelectors = ['#badges-list'];
-
   $('.add-unlock-condition').click(function(){
     setTimeout(function() {
       $('.assignment-or-badge:last').change(function(){
@@ -52,41 +48,38 @@
 
   function checkDropdown(select) {
     var parent = $(select).closest('.conditions');
+    var assignmentSelector = parent.find('#assignments-list');
+    var badgeSelector = parent.find('#badges-list');
     var val = $(select).val();
     if(val === 'Assignment') {
-      toggleForms(parent, "Assignment");
-      $.each(badgeSelectors, function(i, selector){
-        parent.find(selector).hide();
+      assignmentSelector.show();
+      badgeSelector.hide();
+      assignmentSelector.find('input').each(function(i, input){
+        $(input).prop('disabled', false);
+      });
+      badgeSelector.find('input').each(function(i, input){
+        $(input).prop('disabled', true);
       });
     } else if(val === 'Badge') {
-      if(parent.find('#assignments-list').is(':visible')) {
-        toggleForms(parent, "Assignments");
-      }
-      toggleForms(parent, "Badge");
-    } else {
-      toggleForms(parent, "Both");
-    }
-  }
-
-  function toggleForms(parent, forms) {
-    if(forms === "Assignment") {
-      $.each(assignmentSelectors, function(i, selector){
-        parent.find(selector).toggle();
+      assignmentSelector.hide();
+      badgeSelector.show();
+      badgeSelector.find('input').each(function(i, input){
+        $(input).prop('disabled', false);
       });
-    } else if(forms === "Badge") {
-      $.each(badgeSelectors, function(i, selector){
-        parent.find(selector).toggle();
+      assignmentSelector.find('input').each(function(i, input){
+        $(input).prop('disabled', true);
       });
     } else {
-      var allFields = $.merge(assignmentSelectors, badgeSelectors);
-      allFields = $.unique(allFields);
-      $.each(allFields, function(i, selector) {
-        parent.find(selector).hide();
+      var allFields = [assignmentSelector, badgeSelector];
+      assignmentSelector.hide();
+      badgeSelector.hide();
+      $.each(allFields, function(i, group){
+        group.find('input').each(function(i, input){
+          $(input).prop('disabled', true);
+        });
       });
     }
   }
-
-
 
   $('.assignment_options').change(function(){
     if($(this).is(":checked")) {
