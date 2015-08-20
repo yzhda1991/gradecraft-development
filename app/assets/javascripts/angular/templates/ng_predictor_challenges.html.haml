@@ -6,7 +6,7 @@
         {{termFor.challenges}}
       .predictor-section-title-right
         Points Total: {{challengesPointTotal() | number}}
-        %span="/ {{maxChallengePoints | number}}"
+        %span="/ {{maxChallengePoints() | number}}"
 
   .collapsable
     %article.predictor-article{'ng-repeat' => 'challenge in challenges'}
@@ -15,7 +15,7 @@
         {{challenge.name | limitTo:26}}
 
       .predictor-article-icons
-        .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'challenge'=>'challenge'}
+        .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'target'=>'challenge', 'target_type'=>'challenge'}
 
       .predictor-article-date
         .predictor-date{'ng-if' => 'dueInFuture(challenge)'}

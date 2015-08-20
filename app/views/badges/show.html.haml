@@ -23,7 +23,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   - if current_course.has_teams?
     .team-filter
       = form_tag badge_path(@badge), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
@@ -86,7 +86,7 @@
             - if @badge.is_unlockable?
               %td
                 - if @badge.is_unlocked_for_student?(student)
-                  %i.fa.fa-unlock
+                  %i.fa.fa-unlock-alt
                 - else
                   %i.fa.fa-lock
             %td= link_to student.first_name, student_path(student)

@@ -1,5 +1,4 @@
-.icon.predictor-required-icon{'ng-if' => 'assignment[iconName]'}
-  .icon-tooltip
-    {{iconHtml[iconName].tooltip}}
+.icon.predictor-required-icon{'ng-if' => 'target[iconName]'}
+  .icon-tooltip{'ng-bind-html'=>'iconHtml[iconName].tooltip | list'}
   %i.fa.fa-fw{'class'=>'{{iconHtml[iconName].icon}}'}
 

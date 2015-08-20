@@ -36,3 +36,11 @@ INTEGER_REGEXP = /^\-?\d+$/
       elm.toggleClass('collapsed')
     )
     return
+
+@gradecraft.filter 'list', ['$sce', ($sce)->
+  (input)->
+    if typeof(input) == "string"
+      return $sce.trustAsHtml(input)
+    else if Array.isArray(input)
+      return $sce.trustAsHtml("<ul><li>" + input.join('</li><li>') + "</li></ul>")
+]

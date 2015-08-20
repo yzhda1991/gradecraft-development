@@ -9,7 +9,7 @@
     - if @assignment.is_unlockable?
       %td
         - if @assignment.is_unlocked_for_student?(student)
-          %i.fa.fa-unlock
+          %i.fa.fa-unlock-alt
         - else
           %i.fa.fa-lock
     %td= link_to first_name, student_path(student)
@@ -49,7 +49,7 @@
               / - if submission.resubmitted?
               /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button'
               / - else
-                
+
 
           - if grade && instructor_modified == true
             %li= link_to raw('<i class="fa fa-eye fa-fw"> </i> See'), assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
@@ -58,7 +58,7 @@
 
           - else
             - if @assignment.is_unlockable? && ! @assignment.is_unlocked_for_student?(student)
-              %li= link_to raw('<i class="fa fa-unlock fa-fw"> </i> Unlock'), manually_unlock_unlock_state_path(:student_id => student.id, :assignment_id => @assignment.id), :method => :post, :class => "button"
+              %li= link_to raw('<i class="fa fa-unlock-alt fa-fw"> </i> Unlock'), manually_unlock_unlock_state_path(:student_id => student.id, :assignment_id => @assignment.id), :method => :post, :class => "button"
             %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Grade'), edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
 
     - if @assignment.release_necessary?
