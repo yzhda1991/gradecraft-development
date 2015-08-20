@@ -96,4 +96,11 @@ describe Grade do
       expect(elapsed).to be < 5
     end
   end
+
+  describe "#feedback_reviewed!" do
+    it "marks the grade as reviewed" do
+      @grade.feedback_reviewed!
+      expect(@grade).to be_feedback_reviewed
+    end
+  end
 end
