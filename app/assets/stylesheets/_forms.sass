@@ -196,24 +196,33 @@ ul.accepts_submission_types
     margin-top: -1.8rem
     margin-bottom: 1.7rem
 
-.disabled
-  background-color: $color-grey-3
-  border: 0
-
 .ui-datepicker
   margin-top: -2.7rem !important
   background-color: $primary-color-4
   border: 1px solid #CCC !important
 
 .grade-scheme-row
-  background-color: $color-grey-3
+  background-color: $color-grey-4
   margin: 1rem 0
   padding: 1rem
   border-radius: 25px
 
-  input
-    padding: .5rem
-    width: 5rem
-
   .disabled
     font-size: 1.0rem
+    font-style: italic
+    margin: 0
+    background-color: $color-grey-4
+
+.grade-scheme-elements 
+  .form_label
+    margin-right: .5rem
+  input
+    padding: .5rem
+    border: 0
+    margin-right: 1rem
+    &.letter
+      width: 2rem
+    &.level
+      width: 6rem
+    &.low-range
+      width: 6rem
