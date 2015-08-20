@@ -23,8 +23,8 @@
     return false;
   };
 
-  var assignmentSelectors = ['.assignments-list', '.assignment-minpoints', '.assignment-condition-state', '.assignment-condition-value', '.condition-done-by'];
-  var badgeSelectors = ['.badges-list', '.badges-condition-state', '.badges-condition-value', '.condition-done-by'];
+  var assignmentSelectors = ['.assignments-list', '.assignment-condition-state', '.assignment-condition-value', '.assignment-condition-done-by'];
+  var badgeSelectors = ['.badges-list', '.badges-condition-state', '.badges-condition-value', '.badge-condition-done-by'];
 
   $('.add-unlock-condition').click(function(){
     setTimeout(function() {
