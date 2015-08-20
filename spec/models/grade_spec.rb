@@ -101,6 +101,8 @@ describe Grade do
     it "marks the grade as reviewed" do
       @grade.feedback_reviewed!
       expect(@grade).to be_feedback_reviewed
+      elapsed = ((DateTime.now - @grade.feedback_reviewed_at.to_datetime) * 24 * 60 * 60).to_i
+      expect(elapsed).to be < 5
     end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820212302) do
+ActiveRecord::Schema.define(version: 20150820213210) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -516,8 +516,8 @@ ActiveRecord::Schema.define(version: 20150820212302) do
     t.boolean  "complete"
     t.boolean  "semis"
     t.boolean  "finals"
-    t.string   "type",                limit: 255
-    t.string   "status",              limit: 255
+    t.string   "type",                 limit: 255
+    t.string   "status",               limit: 255
     t.boolean  "attempted"
     t.boolean  "substantial"
     t.integer  "final_score"
@@ -527,7 +527,7 @@ ActiveRecord::Schema.define(version: 20150820212302) do
     t.integer  "student_id"
     t.integer  "task_id"
     t.integer  "group_id"
-    t.string   "group_type",          limit: 255
+    t.string   "group_type",           limit: 255
     t.integer  "score"
     t.integer  "assignment_type_id"
     t.integer  "point_total"
@@ -535,11 +535,12 @@ ActiveRecord::Schema.define(version: 20150820212302) do
     t.integer  "graded_by_id"
     t.integer  "team_id"
     t.integer  "predicted_score"
-    t.boolean  "instructor_modified",             default: false
+    t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
-    t.boolean  "feedback_read",                   default: false
+    t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
-    t.boolean  "feedback_reviewed",               default: false
+    t.boolean  "feedback_reviewed",                default: false
+    t.datetime "feedback_reviewed_at"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
