@@ -24,11 +24,12 @@ fieldset
   border: none
   padding: 0
 
-select
+select, .ui-widget select
   background-color: #FFF 
-  padding: .5rem !important
+  padding: .75rem .5 !important
   width: 15rem
-  height: 1.5rem
+  height: 1.75rem
+  font-family: Avenir, sans-serif
 
 select:hover
   background-color: lighten($primary-color-4, 15%)
@@ -197,9 +198,8 @@ ul.accepts_submission_types
 
 .ui-datepicker
   margin-top: -2.7rem !important
-
-  .ui-datepicker-next, .ui-datepicker-prev
-    background-color: $primary-color-1
+  background-color: $primary-color-4
+  border: 1px solid #CCC !important
 
 .grade-scheme-row
   background-color: $color-grey-3

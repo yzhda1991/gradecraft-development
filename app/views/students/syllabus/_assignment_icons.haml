@@ -12,7 +12,7 @@
   - else
     %i.fa.fa-lock.fa-fw
   Unlock Requirements
-  - assignment.unlock_conditions.each do |uc|
+  - assignment.unlock_conditions.each do |condition|
     %li= "#{condition.name} must be #{condition.condition_state}"
 - if assignment.is_a_condition?
   %a
