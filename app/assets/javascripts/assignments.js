@@ -59,7 +59,7 @@
       });
     } else if(val === 'Badge') {
       if(parent.find('.assignments-list').is(':visible')) {
-        toggleForms(parent, "Assignments");
+        toggleForms(parent, "Assignment");
       }
       toggleForms(parent, "Badge");
     } else {

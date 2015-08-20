@@ -1,5 +1,4 @@
 .conditions
-  = f.hidden_field :id
   = "Requirement"
   %span.large-2.columns
     .assignment-or-badge
@@ -24,7 +23,7 @@
       = f.input :condition_date, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => f.try(:condition_date) }, :label => "Done By"
     .badge-condition-done-by{:style => 'display: none'}
       = f.input :condition_date, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => f.try(:condition_date) }, :label => "Done By"
-    
+
   %span.large-6.columns
     = f.hidden_field :_destroy, class: 'destroy'
     = link_to 'Delete Condition', '#', class: 'remove-unlock-condition button radius right'
