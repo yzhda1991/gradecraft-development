@@ -1,8 +1,8 @@
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
-  before_filter :ensure_staff?, :except => [:self_log, :show, :predict_score]
-  before_filter :ensure_student?, only: [:predict_score]
+  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score]
+  before_filter :ensure_student?, only: [:feedback_read, :predict_score]
 
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
@@ -234,6 +234,13 @@ class GradesController < ApplicationController
     @grade.destroy
 
     redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name}'s #{@assignment.name} grade was successfully deleted."
+  end
+
+  def feedback_read
+    @assignment = current_course.assignments.find params[:id]
+    @grade = @assignment.grades.find params[:grade_id]
+    @grade.feedback_read!
+    redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
   end
 
   # Allows students to self log grades for a particular assignment if the instructor has turned that feature on - currently only used to log attendance
