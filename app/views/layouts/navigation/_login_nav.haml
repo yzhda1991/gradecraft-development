@@ -2,7 +2,6 @@
   %a.section-title{:href => "#", :title => "Log in to GradeCraft"} 
     Login
     %i.fa.fa-caret-down.hidden-sm
-  %ul.subnav
+  %ul.subnav.logged-out
     %li= link_to "Log in with UM", "https://weblogin.umich.edu", :class => "button"
-    %hr
     %li= link_to "Log in via GradeCraft", user_sessions_path, :class => "button"
