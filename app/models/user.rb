@@ -587,9 +587,9 @@ class User < ActiveRecord::Base
   end
 
   #Used to allow students to self-log a grade, currently only a boolean (complete or not)
-  #TODO Should allow them to use a select list or slider to determine their grade from a range of options
   def self_reported_done?(assignment)
-    (grade_for_assignment(assignment).try(:score) ) && (grade_for_assignment(assignment).try(:score)== grade_for_assignment(assignment).try(:point_total))
+    grade = grade_for_assignment(assignment)
+    grade.present? && grade.is_student_visible?
   end
 
 

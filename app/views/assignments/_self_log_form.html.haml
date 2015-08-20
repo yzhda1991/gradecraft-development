@@ -1,0 +1,7 @@
+= simple_form_for current_student.grade_for_assignment(assignment), :url => self_log_grades_assignment_path(assignment), :method => :post do |f|
+  - present = student.self_reported_done?(assignment)
+  = hidden_field_tag :present, !present
+  - if !present
+    - if assignment.has_levels?
+      = f.select :raw_score, assignment.assignment_score_levels.map { |l| [l.formatted_name,l.value] }
+    = f.submit (assignment.student_logged_button_text), :class => "button #{present ? 'alert' : 'success'} tiny radius"

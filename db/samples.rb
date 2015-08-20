@@ -401,8 +401,6 @@ assignment_types[:polsci_attendance] = AssignmentType.create! do |at|
   at.due_date_present = true
   at.order_placement = 1
   at.mass_grade_type = "Checkbox"
-  at.student_logged_button_text = "I'm in class!"
-  at.student_logged_revert_button_text = "I couldn't make it"
 end
 puts "Check yourself in - and be sure to pay attention to the lecture!"
 
@@ -596,6 +594,8 @@ end
     a.release_necessary = false
     a.grade_scope = "Individual"
     a.student_logged = true
+    a.student_logged_button_text = "I'm in class!"
+    a.student_logged_revert_button_text = "I couldn't make it"
     if n < 15
       a.due_at = ((15-n)/2).weeks.ago
     else

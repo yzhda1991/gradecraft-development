@@ -86,16 +86,12 @@
                             .italic.bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
                     %td
                       - if assignment.future?
-                        %span= "#{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}" 
+                        %span= "#{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}"
                       - else
                         %span
                     %td
                       - if assignment.student_logged? && assignment.open? && current_user_is_student?
-                        = simple_form_for current_student.grade_for_assignment(assignment), :url => self_log_grades_assignment_path(assignment), :method => :post do |f|
-                          - present = @student.self_reported_done?(assignment)
-                          = hidden_field_tag :present, !present
-                          - if ! @student.self_reported_done?(assignment)
-                            = f.submit (assignment_type.student_logged_button_text), :class => "button #{present ? 'alert' : 'success'} tiny radius"
+                        = render partial: "assignments/self_log_form", locals: { student: @student, assignment: assignment }
                       - else
                         %span
                     %td
@@ -125,7 +121,7 @@
                           - if assignment.is_unlockable? && ! assignment.is_unlocked_for_student?(current_student)
                             %li= link_to "Unlock", manually_unlock_unlock_state_path(:student_id => current_student.id, :assignment_id => assignment.id), :method => :post, :class => "button"
                           - if assignment.is_individual?
-                            - if grade_released_for_assignment    
+                            - if grade_released_for_assignment
                               %li= link_to "Edit Grade", edit_assignment_grade_path(assignment.id, :student_id => @student.id), :class => 'button'
                             - else
                               %li= link_to 'Grade', edit_assignment_grade_path(:assignment_id =>assignment.id, :student_id => @student.id), :class => 'button'

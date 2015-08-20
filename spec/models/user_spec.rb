@@ -93,6 +93,17 @@ describe User do
     end
   end
 
+  describe "#self_reported_done?" do
+    it "is not self reported if there are no grades" do
+      expect(@student).to_not be_self_reported_done(@assignment)
+    end
+
+    it "is self reported if there is at least one graded grade" do
+      @grade.update_attribute :status, "Graded"
+      expect(@student).to be_self_reported_done(@assignment)
+    end
+  end
+
   context "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"

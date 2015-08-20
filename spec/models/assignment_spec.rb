@@ -59,17 +59,30 @@ describe Assignment do
 
   it { should be_valid }
 
-  #validations
-  it "is valid with a name and assignment type" do
-    expect(build(:assignment)).to be_valid
-  end
+  context "validations" do
+    it "is valid with a name and assignment type" do
+      expect(build(:assignment)).to be_valid
+    end
 
-  it "is invalid without a name" do
-    expect(build(:assignment, name: nil)).to have(1).errors_on(:name)
-  end
+    it "is invalid without a name" do
+      expect(build(:assignment, name: nil)).to have(1).errors_on(:name)
+    end
 
-  it "is invalid without an assignment type" do
-    expect(build(:assignment, assignment_type: nil)).to have(1).errors_on(:assignment_type_id)
+    it "is invalid without an assignment type" do
+      expect(build(:assignment, assignment_type: nil)).to have(1).errors_on(:assignment_type_id)
+    end
+
+    it "requires logged button text if it is student logged" do
+      subject = build :assignment, student_logged: true
+      expect(subject).to_not be_valid
+      expect(subject.errors[:student_logged_button_text]).to include "can't be blank if student logged"
+    end
+
+    it "requires logged revert button text if it is student logged" do
+      subject = build :assignment, student_logged: true
+      expect(subject).to_not be_valid
+      expect(subject.errors[:student_logged_revert_button_text]).to include "can't be blank if student logged"
+    end
   end
 
   it "has optional dates associated with it" do

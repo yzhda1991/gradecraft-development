@@ -241,7 +241,15 @@ class GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.open?
       @grade = current_student.grade_for_assignment(@assignment)
-      @grade.raw_score = params[:present] == 'true' ? @assignment.point_total : 0
+      if params[:present] == "true"
+        if params[:grade].present? && params[:grade][:raw_score].present?
+          @grade.raw_score = params[:grade][:raw_score]
+        else
+          @grade.raw_score = @assignment.point_total
+        end
+      else
+        @grade.raw_score = 0
+      end
       @grade.status = "Graded"
       respond_to do |format|
         if @grade.save

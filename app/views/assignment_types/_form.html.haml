@@ -1,5 +1,5 @@
 / Using Simple Form to create an assignment type
-- if @assignment_type.errors.any? 
+- if @assignment_type.errors.any?
   .alert-box.alert.radius
     .italic= "#{pluralize(@assignment_type.errors.count, "error")} prohibited this #{(term_for :assignment_type).downcase} from being saved:"
     %ul
@@ -35,18 +35,6 @@
         .sr-only Description
         = f.text_area :predictor_description, :label => "Description"
       .form_label How would you like to describe this #{term_for :assignment} type on the student dashboard? Are there hints that you can give students that will help them understand how to succeed?
-
-  %section
-    %h4.uppercase Self-Grading
-    .form-item
-      = f.label :student_logged_button_text, "Button Text"
-      = f.text_field :student_logged_button_text, {"aria-describedby" => "txtButtonText"}
-      .form_label{:id => "txtButtonText"} If you would like students to be able to log their own grades, what would you like the button that does this to say?
-
-    .form-item
-      = f.label :student_logged_revert_button_text, "Revert Button Text"
-      = f.text_field :student_logged_revert_button_text, {"aria-describedby" => "txtRevertButtonText"}
-      .form_label{:id => "txtRevertButtonText"} If a student unchecks this button, what should it say?
 
   .submit-buttons
     %ul
