@@ -87,4 +87,13 @@ describe Grade do
       expect(@grade.point_total).to be 0
     end
   end
+
+  describe "#feedback_read!" do
+    it "marks the grade as read" do
+      @grade.feedback_read!
+      expect(@grade).to be_feedback_read
+      elapsed = ((DateTime.now - @grade.feedback_read_at.to_datetime) * 24 * 60 * 60).to_i
+      expect(elapsed).to be < 5
+    end
+  end
 end
