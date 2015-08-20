@@ -6,8 +6,7 @@ class UnlockCondition < ActiveRecord::Base
 	belongs_to :unlockable, :polymorphic => true
 	belongs_to :condition, :polymorphic => true
 
-	validates_presence_of :unlockable_id
-	#, :unlockable_type, :condition_id, :condition_type, :condition_state
+	validates_presence_of :unlockable_id, :unlockable_type, :condition_id, :condition_type, :condition_state
 
 	def name
 		if condition_type == "Badge"

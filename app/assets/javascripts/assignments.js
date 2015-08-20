@@ -23,8 +23,9 @@
     return false;
   };
 
-  var assignmentSelectors = ['.assignments-list'];
-  var badgeSelectors = ['.badges-list'];
+  
+  var assignmentSelectors = ['#assignments-list'];
+  var badgeSelectors = ['#badges-list'];
 
   $('.add-unlock-condition').click(function(){
     setTimeout(function() {
@@ -58,8 +59,8 @@
         parent.find(selector).hide();
       });
     } else if(val === 'Badge') {
-      if(parent.find('.assignments-list').is(':visible')) {
-        toggleForms(parent, "Assignment");
+      if(parent.find('#assignments-list').is(':visible')) {
+        toggleForms(parent, "Assignments");
       }
       toggleForms(parent, "Badge");
     } else {
@@ -69,11 +70,15 @@
 
   function toggleForms(parent, forms) {
     if(forms === "Assignment") {
-      $("#assignments-list").toggle();
+      $.each(assignmentSelectors, function(i, selector){
+        parent.find(selector).toggle();
+      });
     } else if(forms === "Badge") {
-      $("#badges-list").toggle();
+      $.each(badgeSelectors, function(i, selector){
+        parent.find(selector).toggle();
+      });
     } else {
-      var allFields = $.merge("#assignments-list", "#badges-list");
+      var allFields = $.merge(assignmentSelectors, badgeSelectors);
       allFields = $.unique(allFields);
       $.each(allFields, function(i, selector) {
         parent.find(selector).hide();
@@ -81,11 +86,7 @@
     }
   }
 
-  if($('.assignment_options > input').is(':checked')) {
-    $('ul > .submit').show();
-  } else {
-    $('ul > .submit').hide();
-  }
+
 
   $('.assignment_options').change(function(){
     if($(this).is(":checked")) {
@@ -94,6 +95,7 @@
       $('ul > .submit').toggle();
     }
   });
+
 
   $(init);
 }(jQuery);
