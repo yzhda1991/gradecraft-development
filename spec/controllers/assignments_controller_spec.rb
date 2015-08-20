@@ -305,7 +305,6 @@ describe AssignmentsController do
       end
     end
 
-
     describe "GET destroy" do
       it "destroys the assignment" do
         expect{ get :destroy, :id => @assignment }.to change(Assignment,:count).by(-1)
@@ -369,7 +368,6 @@ describe AssignmentsController do
     end
 
     describe "GET show" do
-
       before do
         assignment_type = create(:assignment_type, course: @course)
         @assignment = create(:assignment)
