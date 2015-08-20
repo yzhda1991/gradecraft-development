@@ -178,9 +178,6 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.boolean  "pass_fail",                                     default: false
     t.boolean  "hide_analytics"
     t.boolean  "visible_when_locked",                           default: true
-    t.boolean  "include_in_to_do",                  default: true
-    t.string   "student_logged_button_text"
-    t.string   "student_logged_revert_button_text"
   end
 
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree
@@ -430,7 +427,7 @@ ActiveRecord::Schema.define(version: 20150821033921) do
     t.integer  "metric_id"
     t.integer  "tier_id"
     t.integer  "tier_badge_id"
-    t.boolean  "student_visible",             default: true
+    t.boolean  "student_visible",             default: false
   end
 
   add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree

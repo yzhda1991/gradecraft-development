@@ -1,4 +1,4 @@
-.small-12.columns(ng-app="gradecraft")
+.grade-container(ng-app="gradecraft")
   = csrf_meta_tag
 
   - if @grade.errors.any?
@@ -22,17 +22,16 @@
       .panel.splash(ng-cloak) Loading grade for #{@student.name}...
 
       .panel(ng-cloak)
-        .small-12.medium-4.columns
-          - if @assignment.pass_fail?
-            .switch-label.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
-              - if @grade.pass_fail_status
-                = term_for @grade.pass_fail_status
-              - else
-                = term_for :fail
-            .pass-fail-grade-toggle
-              .switch
-                = f.check_box :pass_fail_status, { :checked=> @grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
-                = f.label :pass_fail_status
+        - if @assignment.pass_fail?
+          .switch-label.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
+            - if @grade.pass_fail_status
+              = term_for @grade.pass_fail_status
+            - else
+              = term_for :fail
+          .pass-fail-grade-toggle
+            .switch
+              = f.check_box :pass_fail_status, { :checked=> @grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
+              = f.label :pass_fail_status
 
         - if @assignment_score_levels.count > 0 # use this longhand method to save a request
           = render partial: "score_level_grading_fields", locals: {f:f}
@@ -40,7 +39,7 @@
           = render partial: "raw_score_grading_fields", locals: {f:f}
 
         - if @assignment.release_necessary?
-          .small-12.large-4.columns
+          .assignment-status
             = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @grade.status, :include_blank => true
             .form_label Can the student see this grade? (Won't be updated until the grade is submitted.)
 
@@ -53,12 +52,12 @@
         - elsif @grade.status.blank?
           = f.hidden_field :status, value: 'Graded'
 
-        .button-bar
-          %ul.button-group.radius.right
+        .submit-buttons
+          %ul
             %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", :class => "button"
             %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'
 
-        .small-12.columns
+        .text-feedback
           = f.hidden_field :graded_by_id, :value => current_user.id
           = f.label :feedback
           = f.text_area :feedback,
@@ -66,9 +65,8 @@
             "ng-change" => "grade.update()",
             "ng-model" => "grade.feedback",
             "ng-model-options" => "{ debounce: 1000 }"
-        .clear
 
-        .small-12.columns
+        .last-updated
           #updated-at(ng-hide="grade.updated_at")= "Last updated #{time_ago_in_words(@grade.updated_at)} ago"
           #updated-at-current(ng-show="grade.updated_at" ng-class="{just_updated: grade.justUpdated()}")
             %span updated
@@ -77,13 +75,13 @@
       .panel(ng-cloak)
         = render partial: "standard_edit_attachment", locals: {f: f}
 
-      .small-12.columns.panel#awarded(ng-cloak)
+      .panel#awarded(ng-cloak)
         = render partial: "badges_awarded"
 
-      .small-12.columns#available.empty(ng-cloak)
+      #available.empty(ng-cloak)
         = render partial: "badges_available"
 
-      .small-12.columns.panel(ng-if="debug" ng-cloak)
+      .panel(ng-if="debug" ng-cloak)
         .badge-debug(ng-repeat="badge in badges" ng-class="{creating: badge.creating, deleting: badge.deleting}")
           .info
             %h4 {{badge.name}}

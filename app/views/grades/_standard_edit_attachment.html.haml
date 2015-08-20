@@ -1,4 +1,4 @@
-.small-12
+.grade-attachments
   %h4.uppercase Attachments
   = f.simple_fields_for :grade_files, @grade.grade_files.new do |gf|
     = gf.file_field :file, :multiple => true
@@ -15,5 +15,3 @@
           - else
             = link_to gf.filename, gf.url, :target => "_blank"
             = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", :grade_id => @grade.id, :upload_id => gf.id } )
-
-  .clear
