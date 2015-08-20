@@ -395,6 +395,12 @@ describe AssignmentsController do
         assigns(:grades).should eq(@assignment.grades)
       end
 
+      it "marks the grade as reviewed" do
+        grade = create :grade, assignment: @assignment, student: @student, status: "Graded"
+        get :show, :id => @assignment.id
+        expect(grade.reload).to be_feedback_reviewed
+      end
+
       describe "with team id in params" do
         it "assigns team and students for team" do
           # we verify only students on team assigned as @students
