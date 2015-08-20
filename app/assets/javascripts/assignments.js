@@ -23,8 +23,8 @@
     return false;
   };
 
-  var assignmentSelectors = ['.assignments-list', '.assignment-condition-state', '.assignment-condition-value', '.assignment-condition-done-by'];
-  var badgeSelectors = ['.badges-list', '.badges-condition-state', '.badges-condition-value', '.badge-condition-done-by'];
+  var assignmentSelectors = ['.assignments-list'];
+  var badgeSelectors = ['.badges-list'];
 
   $('.add-unlock-condition').click(function(){
     setTimeout(function() {
@@ -69,15 +69,11 @@
 
   function toggleForms(parent, forms) {
     if(forms === "Assignment") {
-      $.each(assignmentSelectors, function(i, selector){
-        parent.find(selector).toggle();
-      });
+      $("#assignments-list").toggle();
     } else if(forms === "Badge") {
-      $.each(badgeSelectors, function(i, selector){
-        parent.find(selector).toggle();
-      });
+      $("#badges-list").toggle();
     } else {
-      var allFields = $.merge(assignmentSelectors, badgeSelectors);
+      var allFields = $.merge("#assignments-list", "#badges-list");
       allFields = $.unique(allFields);
       $.each(allFields, function(i, selector) {
         parent.find(selector).hide();
