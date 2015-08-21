@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820213210) do
+ActiveRecord::Schema.define(version: 20150821033921) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -221,20 +221,6 @@ ActiveRecord::Schema.define(version: 20150820213210) do
     t.boolean  "visible_when_locked",                 default: true
   end
 
-  create_table "bootsy_image_galleries", force: :cascade do |t|
-    t.integer  "bootsy_resource_id"
-    t.string   "bootsy_resource_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "bootsy_images", force: :cascade do |t|
-    t.string   "image_file",       limit: 255
-    t.integer  "image_gallery_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "categories", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.text     "description"
@@ -441,8 +427,10 @@ ActiveRecord::Schema.define(version: 20150820213210) do
     t.integer  "metric_id"
     t.integer  "tier_id"
     t.integer  "tier_badge_id"
-    t.boolean  "student_visible",             default: true
+    t.boolean  "student_visible",             default: false
   end
+
+  add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
 
   create_table "elements", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -537,10 +525,16 @@ ActiveRecord::Schema.define(version: 20150820213210) do
     t.integer  "predicted_score"
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
+<<<<<<< HEAD
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
+=======
+    t.boolean  "feedback_read",                   default: false
+    t.datetime "feedback_read_at"
+    t.boolean  "is_custom_value",                 default: false
+>>>>>>> Student visible false migration
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
