@@ -54,7 +54,7 @@ class GradesController < ApplicationController
 
     @submission = @student.submission_for_assignment(@assignment)
 
-    @badges = current_course.badges
+    @badges = @student.earnable_badges_for_assignment(@assignment)
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
 
     if @assignment.rubric.present?
@@ -130,6 +130,7 @@ class GradesController < ApplicationController
 
   def earn_student_badge
     @earned_badge = EarnedBadge.create params[:earned_badge]
+    logger.info @earned_badge.errors.full_messages
     render json: @earned_badge
   end
 

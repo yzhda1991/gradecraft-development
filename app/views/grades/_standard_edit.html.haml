@@ -77,9 +77,11 @@
 
       .panel#awarded(ng-cloak)
         = render partial: "badges_awarded"
+        .clear-left
 
       #available.empty(ng-cloak)
         = render partial: "badges_available"
+        .clear-left
 
       .panel(ng-if="debug" ng-cloak)
         .badge-debug(ng-repeat="badge in badges" ng-class="{creating: badge.creating, deleting: badge.deleting}")

@@ -23,9 +23,11 @@ HideAfterFade.directive 'hideAfterFade', ['$timeout', ($timeout)->
 
           if isAwarded and isUnearned
             elem.addClass("temp-hide")
+            elem.removeClass("hide-after-fade")
 
           if isAvailable and isEarned
             elem.addClass("temp-hide")
+            elem.removeClass("hide-after-fade")
 
         elem.on "click", (event)->
           elem.attr("disabled",'')
@@ -50,11 +52,13 @@ HideAfterFade.directive 'hideAfterFade', ['$timeout', ($timeout)->
             isUnearnedAdd= allClasses.indexOf("unearned-add") > -1
             isHidden= allClasses.indexOf("hide-after-fade") > -1
 
-            if isAwarded and isEarnedAdd
+            alert(isEarnedAdd)
+
+            if isAwarded and isEarned
               elem.removeClass("hide-after-fade")
               elem.removeClass("temp-hide")
 
-            if isAvailable and isUnearnedAdd
+            if isAvailable and isUnearned
               elem.removeClass("hide-after-fade")
               elem.removeClass("temp-hide")
 

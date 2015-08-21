@@ -511,6 +511,18 @@ class User < ActiveRecord::Base
 
   # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
+  # 2) the student has either not earned at all, or:
+  # 3) the student has earned the badge, but multiple are allowed
+  # 3) the student has earned the badge, multiple are not allowed, but the earned badge is for the current grade
+  def earnable_badges_for_course(course)
+    Badge
+      .where(course_id: course[:id])
+      .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?", self[:id], course[:id], false)
+  end
+
+
+  # this should be all badges that:
+  # 1) exist in the current course, in which the student is enrolled
   # 2) the student has either not earned at all, but is visible and available, or...
   # 3) the student has earned_badge for, but that earned_badge is set to student_visible 'false'
   def student_visible_unearned_badges(course)

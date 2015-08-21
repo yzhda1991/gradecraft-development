@@ -67,6 +67,7 @@
     earnBadgeForStudent: (requestParams)->
       $http.post("/grades/earn_student_badge", requestParams).then ((response)->
         if typeof response.data == 'object'
+          alert(JSON.stringify(response))
           console.log "Successfully created Earned Badge"
           response.data
         else

@@ -3,7 +3,7 @@
   # setup the controller scope on initialize
   $scope.init = (initData)->
     # is interactive ui debugging on?
-    $scope.debug = false
+    $scope.debug = true
 
     # grade stuff
     $scope.grade = new Grade(initData.grade, $http)
@@ -130,6 +130,7 @@
   # earn one badge for a student
   $scope.earnBadgeForStudent = (badge)->
     thisBadge = badge
+
     unless badge.creating
       badge.setCreating()
       badge.earnBadgeForStudent({earned_badge: $scope.earnedBadgePostParams(badge)}).then ((response)->
@@ -146,6 +147,7 @@
         # promise rejected, could log the error with: console.log('error', error);
         thisBadge.doneCreating()
         return
+
 
   # parameters for earned badge creation
   $scope.earnedBadgePostParams = (badge)->
