@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.2.2'
 
+gem 'jbuilder'
 gem 'rails'
 gem "resque", "1.25.2", git: "https://github.com/resque/resque.git", :branch => "1-x-stable"
 gem 'actionpack-action_caching'
@@ -29,7 +30,6 @@ gem 'fast_blank'
 gem 'fog'
 gem 'font-awesome-rails'
 gem 'haml'
-gem 'jbuilder'
 gem 'jquery-rails', '~> 2.0'
 gem 'multi_json'
 gem 'mini_magick'
