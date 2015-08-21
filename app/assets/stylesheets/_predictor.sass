@@ -5,17 +5,33 @@ $predictor-font-size-4 : .85rem
 
 
 #predictor-main-content
-  background-color: #FFF
-  margin: 0 1% 1% 1%
+  background-color: rgba(255,255,255,0.5)
+  // Clear tabs:
+  margin-top: 16px
   padding-bottom: 1rem
   border-radius: $global-radius
   overflow: hidden
 
 // SVG
 
+.graphics-wrap
+  height: 130px
+
+.graphics-screen
+  height: 150px
+  width: 100%
+
+.graphics-screen.sticky-item.stuck
+  background-color: rgba(255,255,255,0.5)
+  z-index: 100
+  position: fixed
+  top: 29px
+
 #predictor-graphic
+  width: 90%
+  height: 120
   margin: 10px 0 0 5%
-  background-color: $color-blue-4
+  background-color: $color-green-5
   .grade-point-axis
     path, line
       fill: none
@@ -24,7 +40,8 @@ $predictor-font-size-4 : .85rem
     text
       font-family: sans-serif
       font-size: $predictor-font-size-4
-
+  #svg-grade-level-text
+    fill: pink
   #svg-graph-points-earned
     fill: $color-blue-0
   #svg-graph-points-predicted
@@ -72,19 +89,27 @@ $predictor-font-size-4 : .85rem
   height: 33px
   background-color: $color-blue-0
   clear: both
+  margin-top: 10px
+  .coin
+    margin-top: -1px
+  .coin:hover
+    background-color: $color-yellow-2
 
 .collapse-arrow
   width: 0
   height: 0
   float: left
-  margin: 6px 8px 0 8px
-  border-left: 12px solid transparent
-  border-right: 12px solid transparent
-  border-top: 20px solid $color-blue-3
+  margin: 10px 8px 0 8px
+  border-left: 8px solid transparent
+  border-right: 8px solid transparent
+  border-top: 13px solid $color-blue-3
   -webkit-backface-visibility: hidden
 
+.double-arrow
+  padding: 3px 0 0 7px
+
 .collapse-arrow.doubled
-  margin: 6px 1px 0 3px
+  margin: 6px 0 0 0
 
 .collapsed
   .collapse-arrow
@@ -97,7 +122,6 @@ $predictor-font-size-4 : .85rem
   background-color: $color-blue-0
   line-height: 1.4
   margin-bottom: 0.5rem
-  margin-top: 0.2rem
   padding: 0 .5rem
 
   .predictor-section-title-left
@@ -148,14 +172,14 @@ $predictor-font-size-4 : .85rem
         border-radius: 14px
         margin: 2px 0 0 2px
       .coin, .coin-non-interactive
-        background-color: #F4B425
-        border: 2px solid #B78006
+        background-color: $color-yellow-1
+        border: 2px solid $color-orange-2
         @include transition(all, .5s, ease-out)
       .coin-remove-icon
-        color: #F4B425
+        color: $color-yellow-1
         margin: 0 0 0 -3px
       .coin:hover
-        background-color: #B78006
+        background-color: $color-orange-2
       .coin:hover .coin-remove-icon
         visibility: visible
       .coin-slot
@@ -384,13 +408,39 @@ article.predictor-article
 @media (max-width: $media-small-max)
   article.predictor-article
     width: 100%
+  .predictor-section-title
+    font-size: $predictor-font-size-2
+  .predictor-section-title .predictor-section-title-right
+    clear: both
+    float: none
+    font-size: $predictor-font-size-3
+  #predictor-main-header, .predictor-section
+    height: 70px
+  .collapsable
+    padding-top: 7px
+  #predictor-graphic
+    width: 100%
+    margin: 10px 0 0 0
 
 // medium
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
   article.predictor-article
     width: 32%
+  .predictor-section-title .predictor-section-title-right
+    clear: both
+    float: none
+  #predictor-main-header, .predictor-section
+    height: 70px
+  .collapsable
+    padding-top: 7px
+  #predictor-graphic
+    width: 98%
+    margin: 10px 0 0 1%
 
 // large
 @media (min-width: $media-medium-max) and (max-width: $media-large-max)
   article.predictor-article
     width: 19%
+  #predictor-graphic
+    width: 90%
+    margin: 10px 0 0 5%
