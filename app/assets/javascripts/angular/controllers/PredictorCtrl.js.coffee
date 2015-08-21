@@ -25,6 +25,17 @@
   $scope.icons = PredictorService.icons
   $scope.termFor = PredictorService.termFor
 
+
+
+  # watch for scroll events and keep track of page scroll offset
+  $scope.yOffset = 0
+  angular.element(window).on('scroll',()->
+    $scope.yOffset = window.pageYOffset
+    $scope.$apply()
+  )
+  $scope.offset = (val)->
+    $scope.yOffset > val
+
   $scope.passFailPrediction = (grade)->
     prediction = if grade.predicted_score > 0 then PredictorService.termFor.pass else PredictorService.termFor.fail
 
@@ -234,6 +245,16 @@
       scale: d3.scale.linear().domain([0,totalPoints]).range([0,width])
     }
 
+  $scope.gradeLevelPosition = (scale,lowRange,width,padding)->
+    position = scale(lowRange)
+    textWidth = angular.element(".grade_scheme-label-" + lowRange)[0].getBBox().width
+    if position < padding
+      return padding
+    else if position + textWidth > width
+      return width - textWidth
+    else
+      return position
+
   # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
   $scope.renderGradeLevelGraphics = ()->
     grade_scheme_elements = $scope.gradeLevels.grade_scheme_elements
@@ -244,30 +265,41 @@
     axis = d3.svg.axis().scale(scale).orient("bottom")
     g = svg.selectAll('g').data(grade_scheme_elements).enter().append('g')
             .attr("transform", (gse)->
-              "translate(" + scale(gse.low_range) + padding + "," + 30 + ")")
+              "translate(" + scale(gse.low_range) + padding + "," + 25 + " )")
             .on("mouseover", (gse)->
-              d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "visible"))
+              d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "visible")
+              d3.select(".grade_scheme-pointer-" + gse.low_range)
+                .attr("transform","scale(3) translate(0,-2)")
+            )
             .on("mouseout", (gse)->
-              d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "hidden"))
+              d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "hidden")
+              d3.select(".grade_scheme-pointer-" + gse.low_range)
+                .attr("transform","scale(2) translate(0,0)")
+            )
     g.append("path")
       .attr("d", "M3,2.492c0,1.392-1.5,4.48-1.5,4.48S0,3.884,0,2.492c0-1.392,0.671-2.52,1.5-2.52S3,1.101,3,2.492z")
+      .attr("class",(gse)-> "grade_scheme-pointer-" + gse.low_range)
+      .attr("transform","scale(2)")
     txt = d3.select("#svg-grade-level-text").selectAll('g').data(grade_scheme_elements).enter()
             .append('g')
             .attr("class", (gse)->
               "grade_scheme-label-" + gse.low_range)
             .style("visibility", "hidden")
-            .attr("transform", (gse)->
-              "translate(" + scale(gse.low_range) + padding + "," + 5 + ")")
-    txt.append("rect")
-      .attr("width", 150)
-      .attr("height", 20)
-      .attr("fill",'black')
     txt.append('text')
       .text( (gse)->
         gse.level + " (" + gse.letter + ")")
       .attr("y","15")
+      .attr("x",padding)
       .attr("font-family","Verdana")
       .attr("fill", "#FFFFFF")
+    txt.insert("rect",":first-child")
+      .attr("width", (gse)->
+          angular.element(".grade_scheme-label-" + gse.low_range)[0].getBBox().width + (padding * 2)
+        )
+      .attr("height", 20)
+      .attr("fill",'black')
+    txt.attr("transform", (gse)->
+      "translate(" + $scope.gradeLevelPosition(scale,gse.low_range,stats.width,padding) + "," + 5 + ")")
     d3.select("svg").append("g")
       .attr("class": "grade-point-axis")
       .attr("transform": "translate(" + padding + "," + (stats.height - 55) + ")")
