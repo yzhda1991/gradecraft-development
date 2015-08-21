@@ -412,7 +412,7 @@ class User < ActiveRecord::Base
 
 
     _assignments = assignments.where(course: course)
-    in_progress = _assignments.graded_for_student(self)
+    in_progress_score = _assignments.graded_for_student(self).sum('point_total')
     earned_badge_score = earned_badges.where(course: course).score
     if earned_badge_score > 0
       scores << { :data => [earned_badge_score], :name => "#{course.badge_term.pluralize}" }
@@ -422,7 +422,7 @@ class User < ActiveRecord::Base
       :student_name => name,
       :scores => scores,
       :course_total => course.total_points + earned_badge_score,
-      :in_progress => in_progress.point_total + earned_badge_score,
+      :in_progress => in_progress_score + earned_badge_score,
       # :grade_levels => grade_levels
       }
   end
