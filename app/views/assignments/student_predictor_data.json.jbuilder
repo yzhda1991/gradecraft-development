@@ -21,6 +21,19 @@ json.assignments @assignments do |assignment|
     end
 
     json.late assignment.past? && assignment.accepts_submissions && ! @student.submission_for_assignment(assignment).present? ? true : false
+    json.locked ! assignment.is_unlocked_for_student?(current_student)
+    json.unlocked assignment.is_unlockable? && assignment.is_unlocked_for_student?(current_student)
+    if assignment.is_unlockable?
+      json.unlock_conditions assignment.unlock_conditions.map{ |condition|
+        "#{condition.name} must be #{condition.condition_state}"
+      }
+    end
+    json.condition assignment.is_a_condition?
+    if assignment.is_a_condition?
+      json.unlock_keys assignment.unlock_keys.map{ |key|
+        "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+      }
+    end
   end
 end
 

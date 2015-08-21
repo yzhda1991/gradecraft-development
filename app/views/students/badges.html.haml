@@ -2,7 +2,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   //student badges table
   %table
     %thead
@@ -43,9 +43,9 @@
                 - badge.badge_files.each do |bf|
                   %li
                     = link_to bf.filename, bf.url
-            - if badge.is_unlockable? 
+            - if badge.is_unlockable?
               - if badge.is_unlocked_for_student?(current_student)
-                %i.fa.fa-unlock
+                %i.fa.fa-unlock-alt
               - else
                 %i.fa.fa-lock
               Unlock Requirements

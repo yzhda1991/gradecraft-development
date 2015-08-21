@@ -17,7 +17,7 @@
     }
     badges = []
     challenges = []
-    icons = ["required", "late", "info"]
+    icons = ["required", "late", "info", "locked", "unlocked", "condition", "group"]
     unusedWeights = null
 
     getGradeLevels = ()->
@@ -67,6 +67,7 @@
       $http.get('predictor_badges').success( (data)->
           angular.copy(data.badges,badges)
           termFor.badges = data.term_for_badges
+          termFor.badge = data.term_for_badge
         )
 
     getChallenges = ()->

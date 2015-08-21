@@ -1,10 +1,10 @@
-%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : articleGraded(assignment)}'}
+%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : articleGraded(assignment), "status-locked" : assignment.locked}'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
     {{assignment.name | limitTo:26}}
 
   .predictor-article-icons
-    .predictor-assignment-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'assignment'=>'assignment'}
+    .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'target'=>'assignment', 'target_type'=>'assignment'}
 
   .predictor-article-date
     .predictor-date{'ng-if' => 'dueInFuture(assignment)'}
@@ -36,3 +36,5 @@
 
       %div{'ng-if' => 'assignment.fixed == true'}
         .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'assignment.grade.point_total'}
+
+

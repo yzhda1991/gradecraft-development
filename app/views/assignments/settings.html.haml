@@ -11,7 +11,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   .assignments
     - @assignments.group_by(&:assignment_type).each do |assignment_type, assignments|
       %h3= "#{assignment_type.name} – #{points assignment_type.max_value} points"
@@ -60,7 +60,7 @@
               .icon
                 .icon-tooltip
                   Release Required
-                %i.fa.fa-unlock.fa-fw
+                %i.fa.fa-unlock-alt.fa-fw
             %th{:scope => "col"}
               .icon
                 .icon-tooltip
@@ -124,7 +124,7 @@
                   .icon
                     .icon-tooltip
                       Release Required
-                    %i.fa.fa-unlock.fa-fw
+                    %i.fa.fa-unlock-alt.fa-fw
               %td
                 - if assignment.notify_released?
                   .icon

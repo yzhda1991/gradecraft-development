@@ -1,34 +1,58 @@
-@gradecraft.directive 'predictorAssignmentIcon', [ 'PredictorService', (PredictorService)->
+@gradecraft.directive 'predictorArticleIcon', [ 'PredictorService', (PredictorService)->
 
   return {
     restrict: 'C'
     scope: {
       iconName: '='
-      assignment: '='
+      target: '='
+      targetType: '@'
     }
     templateUrl: 'ng_predictor_icons.html'
     link: (scope, el, attr)->
-      assignmentTerm = PredictorService.termFor.assignment
+      scope.targetTerm = ()->
+        if @targetType == "assignment"
+          PredictorService.termFor.assignment
+        else if @targetType == "badge"
+          PredictorService.termFor.badge
+        else
+          "item"
+
+      scope.description = ()->
+        if @target.description
+          return @target.description
+        else
+          return ""
+
+      scope.conditions = ()->
+        @target.unlock_conditions
+
+      scope.keys = ()->
+        @target.unlock_keys
+
       scope.iconHtml = {
         late: {
-          tooltip: 'This ' + assignmentTerm + ' is late!'
+          tooltip: 'This ' + scope.targetTerm() + ' is late!'
           icon: "fa-exclamation-triangle"
         }
         required: {
-          tooltip: 'This ' + assignmentTerm + ' is required!'
+          tooltip: 'This ' + scope.targetTerm() + ' is required!'
           icon: "fa-star"
         }
         info: {
-          tooltip: scope.assignment.description
+          tooltip: scope.description()
           icon: "fa-info-circle"
         }
         locked: {
-          tooltip: 'This ' + assignmentTerm + ' is locked!'
+          tooltip: scope.conditions()
           icon: "fa-lock"
         }
         unlocked: {
-          tooltip: 'This ' + assignmentTerm + ' is unlocked!'
+          tooltip: scope.conditions()
           icon: "fa-unlock-alt"
+        }
+        condition: {
+          tooltip: scope.keys()
+          icon: "fa-key"
         }
       }
   }

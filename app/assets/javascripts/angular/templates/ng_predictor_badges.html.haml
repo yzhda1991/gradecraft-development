@@ -8,13 +8,13 @@
         Points Total: {{badgesPointTotal() | number}}
 
   .collapsable
-    %article.predictor-article{'ng-repeat' => 'badge in badges'}
+    %article.predictor-article{'ng-repeat' => 'badge in badges', 'ng-class'=>'{"status-locked" : badge.locked}'}
 
       .predictor-article-title{'title' => '{{badge.name}}'}
         {{badge.name | limitTo:26}}
 
       .predictor-article-icons
-        .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'article'=>'badge'}
+        .predictor-article-icon{'ng-repeat'=>'icon in icons', 'icon-name'=>'icon', 'target'=>'badge', 'target_type'=>'badge'}
 
       .predictor-badge-main
 
