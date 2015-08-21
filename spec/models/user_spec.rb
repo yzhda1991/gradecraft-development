@@ -187,7 +187,78 @@ describe User do
     end
   end
 
-  context "student_invisible_badges", failing: true do
+  context "instructor is grading student's submission", building: true do
+    before(:each) do
+      @student = create(:user)
+      @course = create(:course)
+
+      @current_assignment = create(:assignment, course: @course)
+      @current_grade = create(:grade, assignment: @current_assignment, assignment_type: @current_assignment.assignment_type, course: @course, student: @student)
+      @single_badge = create(:badge, course: @course, can_earn_multiple_times: false)
+      @multi_badge = create(:badge, course: @course, can_earn_multiple_times: true)
+
+      @another_assignment = create(:assignment, course: @course)
+      @another_grade = create(:grade, assignment: @another_assignment, assignment_type: @another_assignment.assignment_type, course: @course, student: @student)
+    end
+
+    it "should not see badges that aren't included in the current course" do
+      @some_other_course = create(:course)
+      @some_other_assignment = create(:assignment, course: @some_other_course)
+      @some_other_grade = create(:grade, assignment: @some_other_assignment, assignment_type: @some_other_assignment.assignment_type, course: @some_other_course, student: @student)
+      @some_other_badge = create(:badge, course: @some_other_course)
+
+      expect(@student.earnable_course_badges_for_grade(@current_grade)).not_to include(@some_other_badge)
+    end
+
+    it "should see badges for the current course" do
+      expect(@student.earnable_course_badges_for_grade(@current_grade)).to include([@single_badge, @multi_badge])
+    end
+
+    it "should show course badges that the student has yet to earn" do
+      EarnedBadge.destroy_all badge_id: @single_badge[:id], student_id: @student[:id], grade_id: @current_grade[:id]
+      expect(@student.earnable_course_badges_for_grade(@current_grade)).to include([@single_badge, @multi_badge])
+    end
+
+    it "should not show badges that the student has earned for other grades, and can't be earned multiple times" do
+      @student.earn_badge(@single_badge, @another_badge) # earn the badge on another grade
+      expect(@student.earnable_course_badges_for_grade(@current_grade)).not_to include(@single_badge)
+    end
+
+    it "should show badges that the student has earned but CAN be earned multiple times" do
+      @student.earn_badge_for_grade(@multi_badge, @current_grade)
+      expect(@student.earnable_course_badges_for_grade(@current_grade)).to include(@multi_badge)
+    end
+
+    it "should show badges that the student has earned for the current grade, even if it can't be earned multiple times" do
+      @student.earn_badge_for_grade(@single_badge, @current_grade)
+      expect(@student.earnable_course_badges_for_grade(@current_grade)).to include(@single_badge)
+    end
+  end
+
+  context "user earns just one badge", building: true do
+    before(:each) do
+      @student = create(:user)
+      @current_course = create(:course)
+      @current_assignment = create(:assignment, course: @current_course)
+      @current_grade = create(:grade, assignment: @current_assignment, assignment_type: @current_assignment.assignment_type, course: @current_course, student: @student)
+      @current_badge = create(:badge, course: @current_course)
+    end
+
+    it "should create a valid earned badge" do
+      expect(@student.earn_badge(@current_badge).class).to eq(EarnedBadge)
+      expect(@student.earn_badge(@current_badge).valid?).to be true
+    end
+
+    it "should not error out when earning one badge" do
+      expect(@student.earn_badge(@current_badge)).not_to raise_error
+    end
+
+    it "should choke on an array of badges" do
+      expect(@student.earn_badge([@current_badge]).class).to raise_error(TypeError)
+    end
+  end
+
+  context "student_invisible_badges" do
     it "should return invisible badges for which the student has earned a badge" do
       @invisible_badges = create_list(:badge, 2, course: @course, visible: false)
       @student.earn_badges(@invisible_badges)
