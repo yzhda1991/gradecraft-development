@@ -21,6 +21,14 @@
         - if instructor_modified == true
           = points grade.raw_score
 
+    %td
+      %span
+      - if grade
+        - if grade.feedback_read?
+          %i.fa.fa-check
+        - elsif grade.feedback_reviewed?
+          %i.fa.fa-eye
+
     // If the student can weight the assignment type
     - if grade && @assignment_type.student_weightable?
       %td
@@ -49,7 +57,7 @@
               / - if submission.resubmitted?
               /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button'
               / - else
-                
+
 
           - if grade && instructor_modified == true
             %li= link_to raw('<i class="fa fa-eye fa-fw"> </i> See'), assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
