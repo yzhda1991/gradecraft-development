@@ -1,20 +1,19 @@
-// Main Content Containers
-//-------------------------
-
-// scroll past the footer to reveal the entire background scene
-.row.panel.footer {
-  margin-bottom: 300px;
+body {
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
 }
+
 .back-color-wash {
   background-color: #48BDEB;
-  z-index: -1000
+  z-index: -1000;
   position: fixed;
   width: 100%;
   height: 100%;
   left: 0;
   top: 0;
 }
-// keep the sky pinned to the top
+
 .back-sky-container {
   width: 100%;
   position: fixed;
@@ -23,7 +22,7 @@
   left: 0;
   top: 0;
 }
-// keep the background pinned to the bottom
+
 .background-container {
   width: 100%;
   position: fixed;
@@ -31,112 +30,158 @@
   z-index: -50;
   left: 0;
   bottom: 0;
-  .background-left-wrapper
-    width: 50%;
-    height: 100px;
-    float: left;
-  .background-right-wrapper
-    margin-left: 50%;
-    height: 100px;
 }
-// Clouds:
-//-------------------------
+
+.background-left-wrapper {
+  width: 50%;
+  height: 100px;
+  float: left;
+}
+
+.background-right-wrapper {
+  margin-left: 50%;
+  height: 100px;
+}
 
 .cloud {
   position: relative;
   width: 400px;
   height: 100px;
-  // -webkit-animation: scroll 260s linear 1 /* Safari 4+ */
-  // -moz-animation:    scroll 260s linear 1 /* Fx 5+ */
-  // -o-animation:      scroll 260s linear 1 /* Opera 12+ */
-  // animation:         scroll 260s linear 1 /* IE 10+, Fx 29+ */
 }
+
 .cloud-2 {
   margin-left: 10%;
-  // -webkit-animation-delay: 30s;
-  // -webkit-animation-duration: 200s;
-  // animation-delay: 30s;
-  // animation-duration: 200s;
 }
 .cloud-3 {
   margin-left: 25%;
-  // -webkit-animation-delay: 90s;
-  // -webkit-animation-duration: 220s;
-  // animation-delay: 90s;
-  // animation-duration: 220s;
 }
 .cloud-4 { 
-  margin-left: 50%
-  // -webkit-animation-delay: 60s;
-  // -webkit-animation-duration: 360s;
-  // animation-delay: 60s;
-  // animation-duration: 360s;
+  margin-left: 50%;
+}
 
 .cloud-4 { 
   margin-left: 75%;
-  // -webkit-animation-delay: 15s;
-  // -webkit-animation-duration: 180s;
-  // animation-delay: 15s;
-  // animation-duration: 180s;
 }
 .cloud-bubble {
   position: absolute;
   background-color: white;
   opacity: .3;
 }
-@mixin cloud-bubble-mixin($size,$left,$top) {
-  $main-size: $size * 1px;
-  $radius-size: $main-size / 2;
-  left:  $left * 1px;
-  top: $top * 1px;
-  width: $main-size;
-  height: $main-size;
-  -moz-border-radius: $radius-size;
-  -webkit-border-radius: $radius-size;
-  border-radius: $radius-size;
-}
-// small bubbles in the corners
+
 .cloud-bubble-1 {
-  @include cloud-bubble-mixin(100,0,10);
-  }
+  left:  100px;
+  top: 10px;
+  width: 100px;
+  height: 100px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+}
+
 .cloud-bubble-2 {
-  @include cloud-bubble-mixin(100,300,30);
-  }
+  left: 100px;
+  top: 30px;
+  width: 100px;
+  height: 100px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+}
+
 .cloud-bubble-3 {
-  @include cloud-bubble-mixin(100,10,90);
+  left:  100px;
+  top: 90px;
+  width: 100px;
+  height: 100px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius:  50px;
+  border-radius: 50px;
 }
+
 .cloud-bubble-4 { 
-  @include cloud-bubble-mixin(90,250,120);
-// medium bubbles in middle ring
+  left:  250px;
+  top: 120px;
+  width: 90px;
+  height: 90px;
+  -moz-border-radius: 45px;
+  -webkit-border-radius: 45px;
+  border-radius: 45px;
 }
+
 .cloud-bubble-5 { 
-  @include cloud-bubble-mixin(150,20,30);
-  }
+  left:  20px;
+  top: 30px;
+  width: 150px;
+  height: 150px;
+  -moz-border-radius: 75px;
+  -webkit-border-radius: 75px;
+  border-radius: 75px;
+}
+
 .cloud-bubble-6 { 
-  @include cloud-bubble-mixin(125,200,30);
+  left:  200px;
+  top: 30px;
+  width: 125px;
+  height: 125px;
+  -moz-border-radius: 62px;
+  -webkit-border-radius: 62px;
+  border-radius: 62px;
 }
 .cloud-bubble-7 {
-  @include cloud-bubble-mixin(150,50,90);
+  left:  50px;
+  top: 90px;
+  width: 150px;
+  height: 150px;
+  -moz-border-radius: 75px;
+  -webkit-border-radius: 75px;
+  border-radius: 75px;
   }
 .cloud-bubble-8 { 
-  @include cloud-bubble-mixin(130,200,80);
-// large bubbles towards center
+  left: 200px;
+  top: 80px;
+  width: 130px;
+  height:130px;
+  -moz-border-radius: 65px;
+  -webkit-border-radius: 65px;
+  border-radius: 65px;
 }
 .cloud-bubble-9 {
-  @include cloud-bubble-mixin(200,60,10);
+  left:  60px;
+  top: 10px;
+  width: 200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
   }
 .cloud-bubble-10 { 
-  @include cloud-bubble-mixin(200,120,-10);
+  left: 120px;
+  top: -10px;
+  width: 200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
   }
 .cloud-bubble-11 {
-  @include cloud-bubble-mixin(200,20,20);
-  }
-.cloud-bubble-12 {
-  @include cloud-bubble-mixin(200,160,50);
+  left:  20px;
+  top: 20px;
+  width: 200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
   }
 
-// Hills:
-//-------------------------
+.cloud-bubble-12 {
+  left:  160px;
+  top: 50px;
+  width:  200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  }
 
 .hill {
   border-radius: 50% 50% 0 0;
@@ -159,27 +204,25 @@
   height: 200px;
 }
 .hill-position-1 {
-  background-color: $color-green-3;
+  background-color: #7CC02F;
   position: absolute;
   top: -13px;
   left: -200px;
   z-index: -50;
 }
 .hill-position-2 {
-  background-color: $color-green-2;
+  background-color: #68A127;
   position: absolute;
   left: 200px;
   z-index: -60;
 }
 .hill-position-3 {
-  background-color: $color-green-0;
+  background-color: #1C7200;
   position: absolute;
   right: -300px;
   top: -10px;
   z-index: -70;
 }
-// Mountains:
-//-------------------------
 
 .hidden {
   visibility: hidden;
@@ -187,7 +230,6 @@
 .mountain {
   position: absolute;
   z-index: -100;
-  // don't break apart:
   width: 100%;
   margin-top: -20px;
 }
@@ -212,7 +254,7 @@
   width: 0;
   height: 0;
   border-left: 100px solid transparent;
-  border-bottom: 100px solid $color-alt-blue-1;
+  border-bottom: 100px solid #1460AE;
   float: left;
   }
 
@@ -220,7 +262,7 @@
   width: 0;
   height: 0;
   border-right: 100px solid transparent;
-  border-bottom: 100px solid $color-alt-blue-0;
+  border-bottom: 100px solid #1E267F;
   float: left;
 }
 .mountain-peak {
@@ -241,7 +283,7 @@
 .mountain-peak-left-side {
   width: 0;
   height: 0;
-  border-right: 35px solid $color-alt-blue-2;
+  border-right: 36px solid #6FA9DD;
   border-bottom: 35px solid transparent;
   border-top: 35px solid transparent;
   float: left;
@@ -250,7 +292,7 @@
 .mountain-peak-right-side {
   width: 0;
   height: 0;
-  border-left: 35px solid $color-alt-blue-1;
+  border-left: 35px solid #1460AE;
   border-bottom: 35px solid transparent;
   border-top: 35px solid transparent;
   float: left;
@@ -259,143 +301,224 @@
   width: 100px;
   height: 100px;
   top: 100px;
-  background-color: $color-alt-blue-1;
+  background-color: #1460AE;
   position: absolute;
 }
 .mountain-root.right {
-  background-color: $color-alt-blue-0;
+  background-color: #1E267F;
   left: 100px;
 }
 
-@mixin mountain-size-mixin($size) {
-  $main-size: $size * 100px;
-  $peak-size: $size * 35px;
-  $spacer-size: $main-size - $peak-size;
-  margin-top: 100px - $main-size - 40px;
-  .mountain-left-side {
-    border-left-width: $main-size;
-    border-bottom-width: $main-size;
-    }
-  .mountain-right-side
-    border-right-width: $main-size;
-    border-bottom-width: $main-size;
-  .mountain-peak-left-spacer
-    width: $spacer-size;
-    height: $spacer-size;
-  .mountain-peak-right-spacer
-    width: $main-size;
-    height: $main-size;
-  .mountain-peak-left-side
-    border-right-width: $peak-size;
-    border-bottom-width: $peak-size;
-    border-top-width: $peak-size;
-  .mountain-peak-right-side
-    border-left-width: $peak-size;
-    border-bottom-width: $peak-size;
-    border-top-width: $peak-size;
-  .mountain-root
-    width: $main-size;
-    height: $main-size;
-    top: $main-size;
-  .mountain-root.right
-    left: $main-size;
-}
 .mountain-size-1 {
-  @include mountain-size-mixin(1.2);
+  margin-top: -60px;
+  
   }
-.mountain-size-2 {
-  @include mountain-size-mixin(1.5);
+.mountain-size-1 .mountain-left-side {
+    border-left-width: 120px;
+    border-bottom-width: 120px;
+    }
+ .mountain-size-1 .mountain-right-side {
+    border-right-width: 120px;
+    border-bottom-width: 120px;
   }
-.mountain-size-3 {
-  @include mountain-size-mixin(1.8);
+.mountain-size-1 .mountain-peak-left-spacer {
+    width: 78px;
+    height: 78px;
+    }
+.mountain-size-1 .mountain-peak-right-spacer {
+    width: 120px;
+    height: 120px;
   }
-.mountain-size-4 {
-  @include mountain-size-mixin(2);
+.mountain-size-1 .mountain-peak-left-side {
+    border-right-width: 42px;
+    border-bottom-width: 42px;
+    border-top-width: 42px;
   }
-.mountain-size-5 {
-  @include mountain-size-mixin(2.2);
+.mountain-size-1 .mountain-peak-right-side {
+    border-left-width: 42px;
+    border-bottom-width: 42px;
+    border-top-width: 42px;
+  }
+.mountain-size-1 .mountain-root {
+    width: 120px;
+    height: 120px;
+    top: 120px;
+  }
+.mountain-size-1 .mountain-root.right {
+    left: 120px;
 }
 
-// Responsive Changes
-//-------------------------
+.mountain-size-2 {
+  margin-top: -140px;
+  }
+.mountain-size-2 .mountain-left-side {
+    border-left-width: 150px;
+    border-bottom-width: 150px;
+    }
+.mountain-size-2 .mountain-right-side {
+    border-right-width: 150px;
+    border-bottom-width:150px;
+  }
+.mountain-size-2 .mountain-peak-left-spacer {
+    width: 98px;
+    height: 98px;
+    }
+.mountain-size-2 .mountain-peak-right-spacer {
+    width: 150px;
+    height: 150px;
+  }
+.mountain-size-2 .mountain-peak-left-side {
+    border-right-width: 52px;
+    border-bottom-width: 52px;
+    border-top-width: 52px;
+  }
+.mountain-size-2 .mountain-peak-right-side {
+    border-left-width: 52px;
+    border-bottom-width: 52px;
+    border-top-width: 52px;
+  }
+.mountain-size-2 .mountain-root {
+    width: 150px;
+    height: 150px;
+    top: 150px;
+  }
+.mountain-size-2 .mountain-root.right {
+    left: 150px;
+    }
+
+.mountain-size-3 {
+  margin-top: -220px;
+  }
+
+.mountain-size-3 .mountain-left-side {
+    border-left-width: 180px;
+    border-bottom-width: 180px;
+    }
+.mountain-size-3 .mountain-right-side {
+    border-right-width: 180px;
+    border-bottom-width: 180px;
+  }
+.mountain-size-3 .mountain-peak-left-spacer {
+    width: 117px;
+    height: 117px;
+    }
+.mountain-size-3 .mountain-peak-right-spacer {
+    width: 180px;
+    height: 180px;
+  }
+.mountain-size-3 .mountain-peak-left-side {
+    border-right-width: 63px;
+    border-bottom-width: 63px;
+    border-top-width: 63px;
+  }
+.mountain-size-3 .mountain-peak-right-side {
+    border-left-width: 63px;
+    border-bottom-width: 63px;
+    border-top-width:63px;
+  }
+.mountain-size-3 .mountain-root {
+    width: 180px;
+    height: 180px;
+    top: 180px;
+  }
+.mountain-size-3 .mountain-root.right {
+    left: 180px;
+  }
+
+
+.mountain-size-4 {
+  margin-top: -140px;
+}
+
+.mountain-size-4 .mountain-left-side {
+    border-left-width: 200px;
+    border-bottom-width: 200px;
+    }
+.mountain-size-4 .mountain-right-side {
+    border-right-width: 200px;
+    border-bottom-width: 200px;
+  }
+.mountain-size-4 .mountain-peak-left-spacer {
+    width: 130px;
+    height: 130px;
+    }
+.mountain-size-4 .mountain-peak-right-spacer {
+    width: 200px;
+    height: 200px;
+  }
+.mountain-size-4 .mountain-peak-left-side {
+    border-right-width: 70px;
+    border-bottom-width: 70px;
+    border-top-width: 70px;
+  }
+.mountain-size-4 .mountain-peak-right-side {
+    border-left-width: 70px;
+    border-bottom-width: 70px;
+    border-top-width:70px;
+  }
+.mountain-size-4 .mountain-root {
+    width: 200px;
+    height: 200px;
+    top: 200px;
+  }
+.mountain-size-4 .mountain-root.right {
+    left: 200px;
+    }
+
+
+.mountain-size-5 {
+  margin-top: -160px;
+}
+.mountain-size-5 .mountain-left-side {
+    border-left-width: 220px;
+    border-bottom-width: 220px;
+    }
+.mountain-size-5 .mountain-right-side {
+    border-right-width: 220px;
+    border-bottom-width: 220px;
+  }
+.mountain-size-5 .mountain-peak-left-spacer {
+    width: 143px;
+    height: 143px;
+    }
+.mountain-size-5 .mountain-peak-right-spacer {
+    width: 220px;
+    height: 220px;
+  }
+.mountain-size-5 .mountain-peak-left-side {
+    border-right-width: 77px;
+    border-bottom-width: 77px;
+    border-top-width: 77px;
+  }
+.mountain-size-5 .mountain-peak-right-side {
+    border-left-width: 77px;
+    border-bottom-width: 77px;
+    border-top-width: 77px;
+  }
+.mountain-size-5 .mountain-root {
+    width: 220px;
+    height: 222px;
+    top: 220px;
+  }
+.mountain-size-5 .mountain-root.right {
+    left: 220px;
+    }
 
 @media (max-width: 979px) {
-  .mountain-2
+  .mountain-2 {
     visibility: hidden;
-  .mountain-5
+  }
+  .mountain-5 {
     visibility: hidden;
-  .hill-1
+  }
+  .hill-1 {
     width: 100%;
-  .hill-2
+  }
+  .hill-2 {
     width: 130%;
-  .hill-3
+  }
+  .hill-3 {
     width: 120%;
+  }
 
 }
-// Animations
-//-------------------------
-
-//   - Scroll
-@-webkit-keyframes scroll
-  from
-    margin-left: -25%;
-  to
-    margin-left: 100%;
-
-@keyframes scroll
-  from
-    margin-left: -25%;
-  to
-    margin-left: 100%;
-
-//   - Popup
-.popup
-  -webkit-animation-name: popup;
-  animation-name: popup;
-
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-
-  -webkit-animation-timing-function: ease;
-  animation-timing-function: ease;
-
-
-@keyframes popup
-  0%
-    transform: translateY(100%)
-
-  50%
-    transform: translateY(-8%)
-
-  65%
-    transform: translateY(4%)
-
-  80%
-    transform: translateY(-4%)
-
-  95%
-    transform: translateY(2%)
-
-  100%
-    transform: translateY(0%)
-
-
-
-@-webkit-keyframes popup
-  0%
-    -webkit-transform: translateY(100%)
-
-  50%
-    -webkit-transform: translateY(-8%)
-
-  65%
-    -webkit-transform: translateY(4%)
-
-  80%
-    -webkit-transform: translateY(-4%)
-
-  95%
-    -webkit-transform: translateY(2%)
-
-  100%
-    -webkit-transform: translateY(0%)
