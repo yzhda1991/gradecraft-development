@@ -1,0 +1,779 @@
+body {
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+}
+
+.message-container {
+  background-color: #FFF;
+  width: 400px;
+  border-radius: 1rem;
+  opacity: .6;
+  font-family: Georgia, serif;
+  padding: 1rem;
+}
+
+.daylight.message-container {
+  margin: 100px 200px;
+}
+.stormy.message-container {
+  margin: 100px 600px;
+}
+
+.night.message-container {
+  margin: 200px 400px;
+}
+
+.message {
+  font-size: 2rem;
+  line-height: 3rem;
+}
+
+.back-to-site {
+  margin: 1rem 0 2rem ;
+}
+
+.back-to-site a {
+  float: right;
+  text-decoration: none;
+  font-weight: bold;
+  color: #1460AE;
+  border-bottom: 1px solid #999;
+}
+.back-to-site a:hover {
+  color: #1E267F;
+}
+ 
+.back-color-wash {
+  background-color: #48BDEB;
+  z-index: -1000;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.stormy-color-wash {
+  background-color: #2E7B99;
+  z-index: -1000;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.night-color-wash {
+  background-color: #00162F;
+  z-index: -1000;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+.back-sky-container {
+  width: 100%;
+  position: fixed;
+  height: 100px;
+  z-index: -500;
+  left: 0;
+  top: 0;
+}
+
+.background-container {
+  width: 100%;
+  position: fixed;
+  height: 100px;
+  z-index: -50;
+  left: 0;
+  bottom: 0;
+}
+
+.background-left-wrapper {
+  width: 50%;
+  height: 100px;
+  float: left;
+}
+
+.background-right-wrapper {
+  margin-left: 50%;
+  height: 100px;
+}
+
+.cloud {
+  position: relative;
+  width: 400px;
+  height: 100px;
+}
+
+.cloud-2 {
+  margin-left: 10%;
+}
+.cloud-3 {
+  margin-left: 25%;
+}
+.cloud-4 { 
+  margin-left: 50%;
+}
+
+.cloud-4 { 
+  margin-left: 75%;
+}
+.cloud-bubble {
+  position: absolute;
+  background-color: white;
+  opacity: .3;
+}
+
+.stormy-cloud-bubble {
+  position: absolute;
+  background-color: #333;
+  opacity: .5;
+}
+
+.star {
+  position: relative;
+  background-color: yellow;
+  opacity: .3;
+  width: 1px;
+  height: 1px;
+  border-radius: 1rem;
+}
+
+.star-1 {
+  left:  10px;
+  top: 200px;
+}
+.star-2 {
+  left:  20px;
+  top: 20px;
+}
+.star-3 {
+  left:  30px;
+  top: 400px;
+}
+.star-4 {
+  left:  40px;
+  top: 80px;
+}
+.star-5 {
+  left:  50px;
+  top: 20px;
+}
+.star-6 {
+  left:  60px;
+  top: 0px;
+}
+.star-7 {
+  left:  70px;
+  top: 100px;
+}
+.star-8 {
+  left:  80px;
+  top: 200px;
+}
+.star-9 {
+  left:  90px;
+  top: 30px;
+}
+.star-10 {
+  left:  100px;
+  top: 40px;
+}
+.star-11 {
+  left:  120px;
+  top: 10px;
+}
+.star-12 {
+  left:  125px;
+  top: 20px;
+}
+.star-13 {
+  left:  140px;
+  top: 400px;
+}
+.star-14 {
+  left:  150px;
+  top: 80px;
+}
+.star-15 {
+  left:  160px;
+  top: 320px;
+}
+.star-16 {
+  left:  170px;
+  top: 220px;
+}
+.star-17 {
+  left:  180px;
+  top: 100px;
+}
+.star-18 {
+  left:  200px;
+  top: 320px;
+}
+.star-19 {
+  left:  300px;
+  top: 240px;
+}
+.star-20 {
+  left:  400px;
+  top: 10px;
+}
+.star-21 {
+  left:  500px;
+  top: 30px;
+}
+.star-22 {
+  left:  600px;
+  top: 80px;
+}
+.star-23 {
+  left:  700px;
+  top: 200px;
+}
+.star-24 {
+  left:  800px;
+  top: 150px;
+}
+.star-25 {
+  left:  700px;
+  top: 50px;
+}
+.star-26 {
+  left:  900px;
+  top: 20px;
+}
+.star-27 {
+  left:  1200px;
+  top: 90px;
+}
+.star-28 {
+  left:  900px;
+  top: 60px;
+}
+.star-29 {
+  left:  10px;
+  top: 90px;
+}
+.star-30 {
+  left:  0px;
+  top: 20px;
+}
+.star-31 {
+  left:  850px;
+  top: 90px;
+}
+.star-32 {
+  left:  780px;
+  top: 150px;
+}
+.star-33 {
+  left: 920px;
+  top: 200px;
+}
+.star-34 {
+  left:  840px;
+  top: 80px;
+}
+.star-35 {
+  left:  1000px;
+  top: 200px;
+}
+.star-36 {
+  left:  870px;
+  top: 300px;
+}
+.star-37 {
+  left: 900px;
+  top: 30px;
+}
+.star-38 {
+  left: 650px;
+  top: 340px;
+}
+.star-39 {
+  left: 620px;
+  top: 190px;
+}
+.star-40 {
+  left: 528px;
+  top: 200px;
+}
+
+.cloud-bubble-1 {
+  left:  100px;
+  top: 10px;
+  width: 100px;
+  height: 100px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+}
+
+.cloud-bubble-2 {
+  left: 100px;
+  top: 30px;
+  width: 100px;
+  height: 100px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  border-radius: 50px;
+}
+
+.cloud-bubble-3 {
+  left:  100px;
+  top: 90px;
+  width: 100px;
+  height: 100px;
+  -moz-border-radius: 50px;
+  -webkit-border-radius:  50px;
+  border-radius: 50px;
+}
+
+.cloud-bubble-4 { 
+  left:  250px;
+  top: 120px;
+  width: 90px;
+  height: 90px;
+  -moz-border-radius: 45px;
+  -webkit-border-radius: 45px;
+  border-radius: 45px;
+}
+
+.cloud-bubble-5 { 
+  left:  20px;
+  top: 30px;
+  width: 150px;
+  height: 150px;
+  -moz-border-radius: 75px;
+  -webkit-border-radius: 75px;
+  border-radius: 75px;
+}
+
+.cloud-bubble-6 { 
+  left:  200px;
+  top: 30px;
+  width: 125px;
+  height: 125px;
+  -moz-border-radius: 62px;
+  -webkit-border-radius: 62px;
+  border-radius: 62px;
+}
+.cloud-bubble-7 {
+  left:  50px;
+  top: 90px;
+  width: 150px;
+  height: 150px;
+  -moz-border-radius: 75px;
+  -webkit-border-radius: 75px;
+  border-radius: 75px;
+  }
+.cloud-bubble-8 { 
+  left: 200px;
+  top: 80px;
+  width: 130px;
+  height:130px;
+  -moz-border-radius: 65px;
+  -webkit-border-radius: 65px;
+  border-radius: 65px;
+}
+.cloud-bubble-9 {
+  left:  60px;
+  top: 10px;
+  width: 200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  }
+.cloud-bubble-10 { 
+  left: 120px;
+  top: -10px;
+  width: 200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  }
+.cloud-bubble-11 {
+  left:  20px;
+  top: 20px;
+  width: 200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  }
+
+.cloud-bubble-12 {
+  left:  160px;
+  top: 50px;
+  width:  200px;
+  height: 200px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+  }
+
+.hill {
+  border-radius: 50% 50% 0 0;
+}
+
+.hill-1 {
+  margin-top: 50px;
+  width: 75%;
+  height: 200px;
+}
+
+.hill-2 {
+  margin-top: 20px;
+  width: 60%;
+  height: 200px;
+}
+.hill-3 {
+  margin-top: 30px;
+  width: 50%;
+  height: 200px;
+}
+.hill-position-1 {
+  background-color: #7CC02F;
+  position: absolute;
+  top: -13px;
+  left: -200px;
+  z-index: -50;
+}
+.hill-position-2 {
+  background-color: #68A127;
+  position: absolute;
+  left: 200px;
+  z-index: -60;
+}
+.hill-position-3 {
+  background-color: #1C7200;
+  position: absolute;
+  right: -300px;
+  top: -10px;
+  z-index: -70;
+}
+
+.night-hill-position-1 {
+  background-color: #081F00;
+  position: absolute;
+  top: -13px;
+  left: -200px;
+  z-index: -50;
+}
+.night-hill-position-2 {
+  background-color: #436919;
+  position: absolute;
+  left: 200px;
+  z-index: -60;
+}
+.night-hill-position-3 {
+  background-color: #071C00;
+  position: absolute;
+  right: -300px;
+  top: -10px;
+  z-index: -70;
+}
+
+
+.mountain {
+  position: absolute;
+  z-index: -100;
+  width: 100%;
+  margin-top: -20px;
+}
+
+.mountain-2 {
+  margin-left: 10%;
+}
+.mountain-3 {
+  margin-left: 30%;
+}
+.mountain-4 {
+  margin-left: 5%;
+  }
+.mountain-5 {
+  margin-left: 15%;
+  }
+.mountain-6 {
+  margin-left: 30%;
+  }
+
+.mountain-left-side {
+  width: 0;
+  height: 0;
+  border-left: 100px solid transparent;
+  border-bottom: 100px solid #1460AE;
+  float: left;
+  }
+
+.mountain-right-side {
+  width: 0;
+  height: 0;
+  border-right: 100px solid transparent;
+  border-bottom: 100px solid #1E267F;
+  float: left;
+}
+.mountain-peak {
+  position: absolute;
+}
+.mountain-peak-left-spacer {
+  width: 65px;
+  height: 65px;
+  background-color: transparent;
+  float: left;
+}
+.mountain-peak-right-spacer {
+  width: 100px;
+  height: 100px;
+  background-color: transparent;
+  float: left;
+}
+.mountain-peak-left-side {
+  width: 0;
+  height: 0;
+  border-right: 36px solid #6FA9DD;
+  border-bottom: 35px solid transparent;
+  border-top: 35px solid transparent;
+  float: left;
+}
+
+.mountain-peak-right-side {
+  width: 0;
+  height: 0;
+  border-left: 35px solid #1460AE;
+  border-bottom: 35px solid transparent;
+  border-top: 35px solid transparent;
+  float: left;
+}
+.mountain-root {
+  width: 100px;
+  height: 100px;
+  top: 100px;
+  background-color: #1460AE;
+  position: absolute;
+}
+.mountain-root.right {
+  background-color: #1E267F;
+  left: 100px;
+}
+
+.mountain-size-1 {
+  margin-top: -60px;
+  
+  }
+.mountain-size-1 .mountain-left-side {
+    border-left-width: 120px;
+    border-bottom-width: 120px;
+    }
+ .mountain-size-1 .mountain-right-side {
+    border-right-width: 120px;
+    border-bottom-width: 120px;
+  }
+.mountain-size-1 .mountain-peak-left-spacer {
+    width: 78px;
+    height: 78px;
+    }
+.mountain-size-1 .mountain-peak-right-spacer {
+    width: 120px;
+    height: 120px;
+  }
+.mountain-size-1 .mountain-peak-left-side {
+    border-right-width: 42px;
+    border-bottom-width: 42px;
+    border-top-width: 42px;
+  }
+.mountain-size-1 .mountain-peak-right-side {
+    border-left-width: 42px;
+    border-bottom-width: 42px;
+    border-top-width: 42px;
+  }
+.mountain-size-1 .mountain-root {
+    width: 120px;
+    height: 120px;
+    top: 120px;
+  }
+.mountain-size-1 .mountain-root.right {
+    left: 120px;
+}
+
+.mountain-size-2 {
+  margin-top: -140px;
+  }
+.mountain-size-2 .mountain-left-side {
+    border-left-width: 150px;
+    border-bottom-width: 150px;
+    }
+.mountain-size-2 .mountain-right-side {
+    border-right-width: 150px;
+    border-bottom-width:150px;
+  }
+.mountain-size-2 .mountain-peak-left-spacer {
+    width: 98px;
+    height: 98px;
+    }
+.mountain-size-2 .mountain-peak-right-spacer {
+    width: 150px;
+    height: 150px;
+  }
+.mountain-size-2 .mountain-peak-left-side {
+    border-right-width: 52px;
+    border-bottom-width: 52px;
+    border-top-width: 52px;
+  }
+.mountain-size-2 .mountain-peak-right-side {
+    border-left-width: 52px;
+    border-bottom-width: 52px;
+    border-top-width: 52px;
+  }
+.mountain-size-2 .mountain-root {
+    width: 150px;
+    height: 150px;
+    top: 150px;
+  }
+.mountain-size-2 .mountain-root.right {
+    left: 150px;
+    }
+
+.mountain-size-3 {
+  margin-top: -220px;
+  }
+
+.mountain-size-3 .mountain-left-side {
+    border-left-width: 180px;
+    border-bottom-width: 180px;
+    }
+.mountain-size-3 .mountain-right-side {
+    border-right-width: 180px;
+    border-bottom-width: 180px;
+  }
+.mountain-size-3 .mountain-peak-left-spacer {
+    width: 117px;
+    height: 117px;
+    }
+.mountain-size-3 .mountain-peak-right-spacer {
+    width: 180px;
+    height: 180px;
+  }
+.mountain-size-3 .mountain-peak-left-side {
+    border-right-width: 63px;
+    border-bottom-width: 63px;
+    border-top-width: 63px;
+  }
+.mountain-size-3 .mountain-peak-right-side {
+    border-left-width: 63px;
+    border-bottom-width: 63px;
+    border-top-width:63px;
+  }
+.mountain-size-3 .mountain-root {
+    width: 180px;
+    height: 180px;
+    top: 180px;
+  }
+.mountain-size-3 .mountain-root.right {
+    left: 180px;
+  }
+
+
+.mountain-size-4 {
+  margin-top: -140px;
+}
+
+.mountain-size-4 .mountain-left-side {
+    border-left-width: 200px;
+    border-bottom-width: 200px;
+    }
+.mountain-size-4 .mountain-right-side {
+    border-right-width: 200px;
+    border-bottom-width: 200px;
+  }
+.mountain-size-4 .mountain-peak-left-spacer {
+    width: 130px;
+    height: 130px;
+    }
+.mountain-size-4 .mountain-peak-right-spacer {
+    width: 200px;
+    height: 200px;
+  }
+.mountain-size-4 .mountain-peak-left-side {
+    border-right-width: 70px;
+    border-bottom-width: 70px;
+    border-top-width: 70px;
+  }
+.mountain-size-4 .mountain-peak-right-side {
+    border-left-width: 70px;
+    border-bottom-width: 70px;
+    border-top-width:70px;
+  }
+.mountain-size-4 .mountain-root {
+    width: 200px;
+    height: 200px;
+    top: 200px;
+  }
+.mountain-size-4 .mountain-root.right {
+    left: 200px;
+    }
+
+
+.mountain-size-5 {
+  margin-top: -160px;
+}
+.mountain-size-5 .mountain-left-side {
+    border-left-width: 220px;
+    border-bottom-width: 220px;
+    }
+.mountain-size-5 .mountain-right-side {
+    border-right-width: 220px;
+    border-bottom-width: 220px;
+  }
+.mountain-size-5 .mountain-peak-left-spacer {
+    width: 143px;
+    height: 143px;
+    }
+.mountain-size-5 .mountain-peak-right-spacer {
+    width: 220px;
+    height: 220px;
+  }
+.mountain-size-5 .mountain-peak-left-side {
+    border-right-width: 77px;
+    border-bottom-width: 77px;
+    border-top-width: 77px;
+  }
+.mountain-size-5 .mountain-peak-right-side {
+    border-left-width: 77px;
+    border-bottom-width: 77px;
+    border-top-width: 77px;
+  }
+.mountain-size-5 .mountain-root {
+    width: 220px;
+    height: 222px;
+    top: 220px;
+  }
+.mountain-size-5 .mountain-root.right {
+    left: 220px;
+    }
+
+@media (max-width: 979px) {
+  .mountain-2 {
+    visibility: hidden;
+  }
+  .mountain-5 {
+    visibility: hidden;
+  }
+  .hill-1 {
+    width: 100%;
+  }
+  .hill-2 {
+    width: 130%;
+  }
+  .hill-3 {
+    width: 120%;
+  }
+
+}
