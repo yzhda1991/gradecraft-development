@@ -94,7 +94,7 @@ class Assignment < ActiveRecord::Base
   # TODO: remove once calls to sorted are taken out
   scope :sorted, -> { order('position ASC') }
   # TODO: add once point_total doesn't break assignment score levels:
-  #default_scope { order('position ASC') }
+  default_scope { order('position ASC') }
 
   # Filtering Assignments by various date properties
   scope :with_due_date, -> { where('assignments.due_at IS NOT NULL') }
@@ -124,25 +124,20 @@ class Assignment < ActiveRecord::Base
     return content
   end
 
-  # Used to sum the total number of assignment points in the class
-  def self.point_total
-    pluck('COALESCE(SUM(assignments.point_total), 0)').first || 0
-  end
-
   def self.assignment_type_point_totals_for_student(student)
-    group('assignments.assignment_type_id').weighted_for_student(student).pluck('assignments.assignment_type_id, COALESCE(SUM(COALESCE(assignment_weights.point_total, assignments.point_total)), 0)')
+    group('assignments.assignment_type_id').weighted_for_student(student).pluck('assignments.assignment_type_id, COALESCE(SUM(COALESCE(assignment_weights.point_total, self.course.total_points)), 0)')
   end
 
   def self.point_totals_for_student(student)
-    weighted_for_student(student).pluck('assignments.id, COALESCE(assignment_weights.point_total, assignments.point_total)')
+    weighted_for_student(student).pluck('assignments.id, COALESCE(assignment_weights.point_total, self.course.total_points)')
   end
 
   def self.point_total_for_student(student)
-    weighted_for_student(student).pluck('SUM(COALESCE(assignment_weights.point_total, assignments.point_total))').first || 0
+    weighted_for_student(student).pluck('SUM(COALESCE(assignment_weights.point_total, self.course.total_points))').first || 0
   end
 
   def self.with_assignment_weights_for_student(student)
-    joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'").select('assignments.*, COALESCE(assignment_weights.point_total, assignments.point_total) AS student_point_total')
+    joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'").select('assignments.*, COALESCE(assignment_weights.point_total, self.course.total_points) AS student_point_total')
   end
 
   # Used for calculating scores in the analytics tab in Assignments# show
