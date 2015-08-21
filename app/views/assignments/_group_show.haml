@@ -21,6 +21,7 @@
             %tr
               %th= current_course.group_term
               %th Score
+              %th Read?
               - if @assignment.assignment_type.student_weightable?
                 %th Multiplied Scores
               - if @assignment.has_levels?
@@ -42,6 +43,12 @@
                 %td
                   - if grade.present? && grade.instructor_modified?
                     = points grade.raw_score
+                %td
+                  - if grade.present?
+                    - if grade.feedback_read?
+                      %i.fa.fa-check
+                    - elsif grade.feedback_reviewed?
+                      %i.fa.fa-eye
                 - if @assignment.assignment_type.student_weightable?
                   %td= points grade.score if grade
                 - if @assignment.has_levels?

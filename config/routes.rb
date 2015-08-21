@@ -85,6 +85,7 @@ GradeCraft::Application.routes.draw do
         post :name_import
         post :self_log
         post :predict_score
+        post :feedback_read
         get :remove
       end
     end

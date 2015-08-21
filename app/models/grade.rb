@@ -6,7 +6,7 @@ class Grade < ActiveRecord::Base
                   :grade_files_attributes, :graded_by_id, :group, :group_id, :group_type,
                   :instructor_modified, :pass_fail_status, :point_total, :predicted_score,
                   :raw_score, :released, :status, :student, :student_id, :submission, :_destroy,
-                  :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes
+                  :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes, :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at
 
   # grade points available to the predictor from the assignment controller
   attr_accessor :graded_points, :graded_pass_fail_status
@@ -78,6 +78,14 @@ class Grade < ActiveRecord::Base
     group('grades.assignment_type_id').pluck('grades.assignment_type_id, COALESCE(SUM(grades.score), 0)')
   end
 
+  def feedback_read!
+    update_attributes feedback_read: true, feedback_read_at: DateTime.now
+  end
+
+  def feedback_reviewed!
+    update_attributes feedback_reviewed: true, feedback_reviewed_at: DateTime.now
+  end
+
   def score
     if student.weighted_assignments?
       final_score || ((raw_score * assignment_weight).round if raw_score.present?)  || nil
@@ -147,7 +155,7 @@ class Grade < ActiveRecord::Base
     self.score_changed? == true  || self.feedback_changed? == true
   end
 
-  def check_unlockables 
+  def check_unlockables
     if self.assignment.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
         if condition.unlockable_type == "Assignment"

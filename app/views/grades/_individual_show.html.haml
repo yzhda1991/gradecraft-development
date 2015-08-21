@@ -38,3 +38,5 @@
   - if @assignment.rubric and @assignment.rubric.designed?
     .rubric-container{:style => "overflow-x:auto"}
       = render 'grades/rubric_grade_results'
+
+  = render partial: "grades/request_feedback", locals: { grade: grade, assignment: @assignment }

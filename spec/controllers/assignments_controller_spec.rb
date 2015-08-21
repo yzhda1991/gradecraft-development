@@ -305,7 +305,6 @@ describe AssignmentsController do
       end
     end
 
-
     describe "GET destroy" do
       it "destroys the assignment" do
         expect{ get :destroy, :id => @assignment }.to change(Assignment,:count).by(-1)
@@ -369,7 +368,6 @@ describe AssignmentsController do
     end
 
     describe "GET show" do
-
       before do
         assignment_type = create(:assignment_type, course: @course)
         @assignment = create(:assignment)
@@ -395,6 +393,12 @@ describe AssignmentsController do
         grade = create(:grade, assignment: @assignment, student: @student)
         get :show, :id => @assignment.id
         assigns(:grades).should eq(@assignment.grades)
+      end
+
+      it "marks the grade as reviewed" do
+        grade = create :grade, assignment: @assignment, student: @student, status: "Graded"
+        get :show, :id => @assignment.id
+        expect(grade.reload).to be_feedback_reviewed
       end
 
       describe "with team id in params" do

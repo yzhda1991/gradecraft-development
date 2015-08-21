@@ -63,6 +63,13 @@ class AssignmentsController < ApplicationController
       if @assignment.has_groups? && current_student.group_for_assignment(@assignment).present?
         @group = current_student.group_for_assignment(@assignment)
       end
+
+      if current_student.grade_released_for_assignment?(@assignment)
+        grade = current_student.grade_for_assignment(@assignment)
+        if grade && !grade.new_record?
+          grade.feedback_reviewed!
+        end
+      end
     else
       @grades_for_assignment = @assignment.all_grades_for_assignment
     end

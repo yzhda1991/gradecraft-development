@@ -152,6 +152,14 @@ describe GradesController do
       end
     end
 
+    describe "POST feedback_read" do
+      it "marks the grade as read by the student" do
+        post :feedback_read, id: @assignment.id, grade_id: @grade.id
+        expect(response).to redirect_to assignment_path(@assignment)
+        expect(@grade.reload).to be_feedback_read
+      end
+    end
+
     describe "POST self_log" do
       it "creates a maximum score by the student" do
         post :self_log, id: @assignment.id, present: "true"

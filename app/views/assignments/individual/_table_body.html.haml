@@ -21,6 +21,14 @@
         - if instructor_modified == true
           = points grade.raw_score
 
+    %td
+      %span
+      - if grade
+        - if grade.feedback_read?
+          %i.fa.fa-check
+        - elsif grade.feedback_reviewed?
+          %i.fa.fa-eye
+
     // If the student can weight the assignment type
     - if grade && @assignment_type.student_weightable?
       %td
