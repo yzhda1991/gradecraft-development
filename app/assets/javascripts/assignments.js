@@ -54,27 +54,27 @@
     if(val === 'Assignment') {
       assignmentSelector.show();
       badgeSelector.hide();
-      assignmentSelector.find('input').each(function(i, input){
-        $(input).prop('disabled', false);
+      assignmentSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', false);
       });
-      badgeSelector.find('input').each(function(i, input){
-        $(input).prop('disabled', true);
+      badgeSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', true);
       });
     } else if(val === 'Badge') {
       assignmentSelector.hide();
       badgeSelector.show();
-      badgeSelector.find('input').each(function(i, input){
-        $(input).prop('disabled', false);
+      badgeSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', false);
       });
-      assignmentSelector.find('input').each(function(i, input){
-        $(input).prop('disabled', true);
+      assignmentSelector.find('select, input').each(function(i, input){
+        $(input).attr('disabled', true);
       });
     } else {
       var allFields = [assignmentSelector, badgeSelector];
       assignmentSelector.hide();
       badgeSelector.hide();
       $.each(allFields, function(i, group){
-        group.find('input').each(function(i, input){
+        group.find('select, input').each(function(i, input){
           $(input).prop('disabled', true);
         });
       });
@@ -88,7 +88,6 @@
       $('ul > .submit').toggle();
     }
   });
-
 
   $(init);
 }(jQuery);
