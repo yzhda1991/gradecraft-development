@@ -73,9 +73,6 @@ class AssignmentsController < ApplicationController
     else
       @grades_for_assignment = @assignment.all_grades_for_assignment
     end
-
-    #used to display an alternate view of the same content
-    render :detailed_grades if params[:detailed]
   end
 
   def new

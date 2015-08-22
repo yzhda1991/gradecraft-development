@@ -1,39 +1,40 @@
-- if current_user_is_staff?
-  - if current_course.use_timeline?
-    %li{class: ("active" if current_page?(student_timeline_path(current_student))) }
-      = link_to_unless_current "Timeline", student_timeline_path(current_student)
-  %li{class: ("active" if current_page?(student_path(current_student))) }
-    = link_to_unless_current "#{term_for :assignments}", student_path(current_student)
-  - if current_course.grade_scheme_elements.present?
-    %li{class: ("active" if current_page?(student_course_progress_path(current_student))) }
-      = link_to_unless_current "Course Progress", student_course_progress_path(current_student)
-  %li{class: ("active" if current_page?(student_predictor_path(current_student))) }
-    = link_to_unless_current "Grade Predictor", student_predictor_path(current_student)
-  - if current_course.has_badges?
-    %li{class: ("active" if current_page?(student_badges_path(current_student))) }
-      = link_to_unless_current "#{term_for :badges}", student_badges_path(current_student)
-  - if current_course.has_teams? && current_course.teams_visible?
-    %li{class: ("active" if current_page?(student_teams_path(current_student))) }
-      = link_to_unless_current "#{term_for :teams}", student_teams_path(current_student)
-- else
-  - if current_course.use_timeline?
-    %li{class: ("active" if current_page?(dashboard_path)) }
-      = link_to_unless_current "Timeline", dashboard_path
-  %li{class: ("active" if current_page?(syllabus_path)) }
-    = link_to_unless_current "#{term_for :assignments}", syllabus_path
-  - if current_course.grade_scheme_elements.present?
-    %li{class: ("active" if current_page?(course_progress_path)) }
-      = link_to_unless_current "Course Progress", course_progress_path
-  %li{class: ("active" if current_page?(predictor_path)) }
-    = link_to_unless_current "Grade Predictor", predictor_path
-  - if current_course.has_badges?
-    %li{class: ("active" if current_page?(my_badges_path)) }
-      = link_to_unless_current "#{term_for :badges}", my_badges_path
-  %li{class: ("active" if current_page?(announcements_path)) }
-    = link_to_unless_current "Announcements", announcements_path
-    - unread_count = Announcement.unread_count_for current_student, current_course
-    - if unread_count > 0
-      %div.notification-badge.announcement-notification-badge= unread_count
-  - if current_course.has_teams? && current_course.teams_visible?
-    %li{class: ("active" if current_page?(my_team_path)) }
-      = link_to_unless_current "#{term_for :teams}", my_team_path
+%ul
+  - if current_user_is_staff?
+    - if current_course.use_timeline?
+      %li{class: ("active" if current_page?(student_timeline_path(current_student))) }
+        = link_to_unless_current "Timeline", student_timeline_path(current_student)
+    %li{class: ("active" if current_page?(student_path(current_student))) }
+      = link_to_unless_current "#{term_for :assignments}", student_path(current_student)
+    - if current_course.grade_scheme_elements.present?
+      %li{class: ("active" if current_page?(student_course_progress_path(current_student))) }
+        = link_to_unless_current "Course Progress", student_course_progress_path(current_student)
+    %li{class: ("active" if current_page?(student_predictor_path(current_student))) }
+      = link_to_unless_current "Grade Predictor", student_predictor_path(current_student)
+    - if current_course.has_badges?
+      %li{class: ("active" if current_page?(student_badges_path(current_student))) }
+        = link_to_unless_current "#{term_for :badges}", student_badges_path(current_student)
+    - if current_course.has_teams? && current_course.teams_visible?
+      %li{class: ("active" if current_page?(student_teams_path(current_student))) }
+        = link_to_unless_current "#{term_for :teams}", student_teams_path(current_student)
+  - else
+    - if current_course.use_timeline?
+      %li{class: ("active" if current_page?(dashboard_path)) }
+        = link_to_unless_current "Timeline", dashboard_path
+    %li{class: ("active" if current_page?(syllabus_path)) }
+      = link_to_unless_current "#{term_for :assignments}", syllabus_path
+    - if current_course.grade_scheme_elements.present?
+      %li{class: ("active" if current_page?(course_progress_path)) }
+        = link_to_unless_current "Course Progress", course_progress_path
+    %li{class: ("active" if current_page?(predictor_path)) }
+      = link_to_unless_current "Grade Predictor", predictor_path
+    - if current_course.has_badges?
+      %li{class: ("active" if current_page?(my_badges_path)) }
+        = link_to_unless_current "#{term_for :badges}", my_badges_path
+    %li{class: ("active" if current_page?(announcements_path)) }
+      = link_to_unless_current "Announcements", announcements_path
+      - unread_count = Announcement.unread_count_for current_student, current_course
+      - if unread_count > 0
+        %div.notification-badge.announcement-notification-badge= unread_count
+    - if current_course.has_teams? && current_course.teams_visible?
+      %li{class: ("active" if current_page?(my_team_path)) }
+        = link_to_unless_current "#{term_for :teams}", my_team_path

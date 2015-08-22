@@ -72,7 +72,6 @@ GradeCraft::Application.routes.draw do
       get 'email_based_grade_import' => 'assignments#email_based_grade_import'
       get 'username_based_grade_import' => 'assignments#username_based_grade_import'
       get 'name_based_grade_import' => 'assignments#name_based_grade_import'
-      get 'detailed_grades' => 'assignments#show', detailed: true
       get 'rubric_grades_review'
       put :update_rubrics
       scope 'grades', as: :grades, controller: :grades do

@@ -7,16 +7,16 @@
     This #{term_for :assignment} is required!
 
 - if assignment.is_unlockable?
-  - if assignment.is_unlocked_for_student?(current_student)
-    %i.fa.fa-unlock-alt.fa-fw
-  - else
-    %i.fa.fa-lock.fa-fw
-  Unlock Requirements
-  - assignment.unlock_conditions.each do |condition|
-    %li= "#{condition.name} must be #{condition.condition_state}"
+  %a
+    %i.fa.fa-lock
+  .display_on_hover.unlock_keys
+    %h3 Unlock Requirements
+    %ul
+      - assignment.unlock_conditions.each do |condition|
+        %li= "#{condition.name} must be #{condition.condition_state}"
 - if assignment.is_a_condition?
   %a
-    %i.fa.fa-key.fa-fw
+    %i.fa.fa-key
   .display_on_hover.unlock_keys
     %h3 Unlock Key
     %ul
