@@ -44,11 +44,6 @@ class AnalyticsController < ApplicationController
     @title = "#{term_for :assignment} Analytics"
   end
 
-  # Display per team summary scores
-  def teams
-    @title = "#{term_for :team} Analytics"
-  end
-
   def role_events
     data = CourseRoleEvent.data(@granularity, @range, {course_id: current_course.id, role_group: params[:role_group]}, {event_type: "_all"})
 

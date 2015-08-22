@@ -28,7 +28,6 @@ GradeCraft::Application.routes.draw do
     get :staff
     get :students
     get :top_10
-    get :teams
     get :per_assign
     get :all_events
     get :role_events
