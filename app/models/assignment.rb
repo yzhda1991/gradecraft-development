@@ -267,10 +267,10 @@ class Assignment < ActiveRecord::Base
     UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Assignment")
   end
 
-  # If the point value is set at the assignment type level, grab it from there (commonly used for things like Attendance)
-  def point_total
-    super || assignment_type.universal_point_value || 0
-  end
+  # # If the point value is set at the assignment type level, grab it from there (commonly used for things like Attendance)
+  # def point_total
+  #   super || assignment_type.universal_point_value || 0
+  # end
 
   # Custom point total if the class has weighted assignments
   def point_total_for_student(student, weight = nil)

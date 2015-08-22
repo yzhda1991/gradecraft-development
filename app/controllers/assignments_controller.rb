@@ -274,6 +274,7 @@ class AssignmentsController < ApplicationController
         :point_total,
         :points_predictor_display,
         :position,
+        :updated_at,
         :release_necessary,
         :required,
         :resubmissions_allowed,
