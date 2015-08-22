@@ -26,8 +26,9 @@
   %section
     %h4 Description
 
-    = f.text_area :description
-    .form_label What do the #{term_for :teams} need to do to succeed?
+    .textarea
+      .form_label What do the #{term_for :teams} need to do to succeed?
+      = f.text_area :description
 
   %section
     %h4 GradeCraft Settings

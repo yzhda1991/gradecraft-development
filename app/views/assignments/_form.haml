@@ -57,12 +57,10 @@
 
   %section
     %h4 Assignment Description
-    %label.small-12
-      .sr-only Description
+    .textarea
+      .form_label This will be shown to students on their dashboard, and when they submit their assignment.
       = f.text_area :description
-    .form_label
-      %span This will be shown to students on their dashboard, and when they submit their assignment.
-
+      
   %section
     %h4= "Advanced Settings"
 

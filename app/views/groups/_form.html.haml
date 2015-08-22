@@ -43,9 +43,11 @@
       - else
         = f.simple_fields_for :proposals, Proposal.new, class: 'form-inline', child_index: 'child_index' do |f|
           %h4 Proposal
-          = f.text_area :proposal
-          = f.hidden_field :id
-          .form_label If your #{term_for :group} knows what it will be working on, you can submit that here.
+          .textarea
+            .form_label If your #{term_for :group} knows what it will be working on, you can submit that here.
+            = f.text_area :proposal
+            = f.hidden_field :id
+         
       - if @group.persisted?
         = link_to 'Add a Proposal', '#', class: 'add-proposal button radius'
 

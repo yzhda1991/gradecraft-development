@@ -10,25 +10,26 @@
   - elsif @assignment.is_individual? && current_user_is_staff?
     = f.input :student_id, :input_html => { :value => @student.id }, :as => :hidden
 
-  - if @assignment.accepts_attachments
-    %h4 Attachments
-    = f.simple_fields_for :submission_files, @submission.submission_files.new do |sf|
-      = sf.file_field :file, :multiple => true
-    - if @submission.submission_files.exists?
-      %h5.bold Uploaded files
-      %ul.uploaded-files
-        - current_student.submission_for_assignment(@assignment).submission_files.each do |sf|
-          %li
-            = link_to sf.filename, sf.url, :target => "_blank"
-            = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
+  %section
+    - if @assignment.accepts_attachments
+      %h4 Attachments
+      = f.simple_fields_for :submission_files, @submission.submission_files.new do |sf|
+        = sf.file_field :file, :multiple => true
+      - if @submission.submission_files.exists?
+        %h5.bold Uploaded files
+        %ul.uploaded-files
+          - current_student.submission_for_assignment(@assignment).submission_files.each do |sf|
+            %li
+              = link_to sf.filename, sf.url, :target => "_blank"
+              = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
 
-  - if @assignment.accepts_links
-    %h4.uppercase Link
-    = f.input :link, :label => false
+    - if @assignment.accepts_links
+      %h4.uppercase Link
+      = f.input :link, :label => false
 
-  - if @assignment.accepts_text
-    %h4.uppercase Content/Statement
-    = f.text_area :text_comment
+    - if @assignment.accepts_text
+      %h4.uppercase Content/Statement
+      = f.text_area :text_comment
 
   .submit-buttons
     %ul
