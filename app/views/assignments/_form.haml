@@ -5,7 +5,7 @@
       - @assignment.errors.full_messages.each do |msg|
         %li= msg
 
-= simple_form_for(@assignment) do |f|
+= simple_form_for(@assignment, :html => { :novalidate => true }) do |f|
   %section
     %h4 Basic Info
     .form-item
