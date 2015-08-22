@@ -35,7 +35,7 @@
             %th Grades
             %th{:style => "min-width: 180px"}
         %tbody
-          - assignments = assignments_for_type.sorted
+          - assignments = assignments_for_type
           - assignments.each do |assignment|
             - if assignment.grades.graded_or_released.present?
               %tr

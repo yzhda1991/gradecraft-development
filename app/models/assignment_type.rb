@@ -23,9 +23,6 @@ class AssignmentType < ActiveRecord::Base
   scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignment_types.id = assignment_weights.assignment_type_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
 
   default_scope { order 'position' }
-  # TODO: remove calls to sorted:
-  scope :sorted, -> { order 'position' }
-
 
   def self.weights_for_student(student)
     group('assignment_types.id').weighted_for_student(student).pluck('assignment_types.id, COALESCE(MAX(assignment_weights.weight), 0)')
@@ -36,30 +33,8 @@ class AssignmentType < ActiveRecord::Base
     assignment_weights.where(student: student).weight
   end
 
-  #These determine how assignment types appears in the predictor
-  def slider?
-    points_predictor_display == "Slider"
-  end
-
-  def fixed?
-    points_predictor_display == "Fixed"
-  end
-
-  def select?
-    points_predictor_display == "Select List"
-  end
-
-  def per_assignment?
-    points_predictor_display == "Set per Assignment"
-  end
-
   def has_predictable_assignments?
     assignments.any?(&:include_in_predictor?)
-  end
-
-  #Checks if the assignment type has associated score levels
-  def has_levels?
-    score_levels.present?
   end
 
   #Powers the To Do list, checks if there are assignments within the next week (soon is a scope in the Assignment model)
@@ -95,7 +70,7 @@ class AssignmentType < ActiveRecord::Base
 
   #Getting the assignment types max value if it's present, else summing all it's assignments to create the total
   def max_value
-    super.presence || assignments.map{ |a| a.point_total }.sum
+    super.presence || assignments.map{ |a| a.point_total || 0 }.sum
   end
 
   def visible_score_for_student(student)

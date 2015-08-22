@@ -91,9 +91,6 @@ class Assignment < ActiveRecord::Base
   scope :alphabetical, -> { order('name ASC') }
   acts_as_list scope: :assignment_type
 
-  # TODO: remove once calls to sorted are taken out
-  scope :sorted, -> { order('position ASC') }
-  # TODO: add once point_total doesn't break assignment score levels:
   default_scope { order('position ASC') }
 
   # Filtering Assignments by various date properties
@@ -122,6 +119,10 @@ class Assignment < ActiveRecord::Base
       content << description
     end
     return content
+  end
+
+  def point_total
+    super.presence || 0
   end
 
   def self.assignment_type_point_totals_for_student(student)

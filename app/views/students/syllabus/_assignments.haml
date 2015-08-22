@@ -45,7 +45,7 @@
               %th
               %th{:style => "width: 200px"}
           %tbody
-            - assignments = assignment_type.assignments.sorted.includes(:assignment_type)
+            - assignments = assignment_type.assignments.includes(:assignment_type)
             - assignments.each do |assignment|
               - cache ["v1", assignment] do
                 - grade_released_for_assignment = current_student.grade_released_for_assignment?(assignment)
