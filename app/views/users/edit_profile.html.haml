@@ -44,7 +44,7 @@
         = f.simple_fields_for :course_memberships, @course_membership do |p|
           = p.input :character_profile, :label => "Character Profile", :hint => "This will be displayed on the #{term_for :team} leaderboard"
 
-  .submit-buttons
-    %ul
-      %li= submit_tag 'Update Settings', :class => 'button'
-      %li= link_to 'Cancel', root_path, :class => 'button'
+    .submit-buttons
+      %ul
+        %li= submit_tag 'Update Settings', :class => 'button'
+        %li= link_to 'Cancel', root_path, :class => 'button'
