@@ -24,4 +24,18 @@ namespace :users do
       task password.to_sym do ; end
     end
   end
+
+  desc "Set all user passwords to 'waffles' for testing purposes"
+  task :waffleize => :environment do
+    u = User.where(email: "dumbledore@hogwarts.edu").first
+    u.update_attributes password: "waffles", password_confirmation: "waffles"
+    User.update_all crypted_password: u.crypted_password, salt: u.salt
+    puts "All users have been waffleized."
+  end
+
+  desc "Activate all users"
+  task :activate_all => :environment do
+    User.update_all active: true
+    puts "All users have been activated."
+  end
 end

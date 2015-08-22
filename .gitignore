@@ -9,8 +9,10 @@ grade-tracker.sublime-project
 grade-tracker.sublime-workspace
 log/*.log
 public/uploads/*
+/spec/support/uploads/*
 tmp/*
 .ruby-gemset
 .ruby-version
 dump.rdb
 coverage/*
+node_modules/*

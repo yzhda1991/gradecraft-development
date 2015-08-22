@@ -4,10 +4,12 @@
  *= require jquery.circliful
  *= require animate.min
  *= require select2
- *= require font-awesome
+ *= require font-awesome 
  *= require jquery.dynatable
  *= require timeline
-*/
+ *= require angular-tooltips.min
+ *= require_tree ./froala
+/* Branding colors */
 
 $px-3: .1875rem;
 
@@ -51,6 +53,8 @@ $media-xlarge-max:  120rem; //
 @import 'accessibility';
 @import 'alerts';
 @import 'analytics';
+@import 'animation';
+@import 'mixins';
 @import 'background';
 @import 'badges';
 @import 'breadcrumbs';
@@ -59,6 +63,9 @@ $media-xlarge-max:  120rem; //
 @import 'collapse';
 @import 'context_menu';
 @import 'forms';
+@import 'predictor';
+@import 'ribbon_mixins';
+@import 'grades';
 @import 'grid';
 @import 'homepage';
 @import 'icons';
@@ -71,6 +78,7 @@ $media-xlarge-max:  120rem; //
 @import 'student_dashboard';
 @import 'tables';
 @import 'tabs';
+@import 'timeline';
 @import 'topbar';
 @import 'typography';
 @import 'unlocks';

@@ -510,6 +510,32 @@ class User < ActiveRecord::Base
   end
 
   # this should be all badges that:
+  # 1) exist in the current course, in which the student is enrolled, AND:
+  # 2) the student has either not earned at all for any grade, or:
+  # 3) the student has earned the badge, but multiple are allowed, or:
+  # 3) the student has earned the badge, multiple are not allowed, but the earned badge is for the current grade
+  def earnable_course_badges_for_grade(grade)
+    Badge
+      .where(course_id: grade[:course_id])
+      .where(final_earnable_course_badges_sql(grade))
+  end
+
+  private
+  def final_earnable_course_badges_sql(grade)
+    earnable_course_badges_sql_conditions(grade).where_values.join(" OR ")
+  end
+
+  public
+  def earnable_course_badges_sql_conditions(grade)
+    Badge
+      .unscoped
+      .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
+      .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
+      .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
+  end
+
+  public
+  # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
   # 2) the student has either not earned at all, but is visible and available, or...
   # 3) the student has earned_badge for, but that earned_badge is set to student_visible 'false'
@@ -526,10 +552,28 @@ class User < ActiveRecord::Base
     Badge
       .where(visible: false)
       .where(course_id: course[:id])
-      .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
+      .where("id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
+  end
+
+  def earn_badge(badge)
+    raise TypeError, "Argument must be a Badge object" unless badge.class == Badge
+    earned_badges.create badge: badge, course: badge.course
+  end
+
+  def earn_badge_for_grade(badge, grade)
+    raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
+    earned_badges.create badge: badge, course: badge.course, grade: grade
+  end
+
+  def earn_badges_for_grade(badges, grade)
+    raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
+    badges.collect do |badge|
+      earned_badges.create badge: badge, course: badge.course, grade: grade
+    end
   end
 
   def earn_badges(badges)
+    raise TypeError, "Argument must be an array of Badge objects" unless badges.class == Array
     badges.each do |badge|
       earned_badges.create badge: badge, course: badge.course
     end

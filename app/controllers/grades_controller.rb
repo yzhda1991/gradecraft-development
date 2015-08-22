@@ -1,8 +1,10 @@
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
-  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score]
+  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
+
+  protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
 
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
@@ -20,6 +22,12 @@ class GradesController < ApplicationController
       end
     end
 
+    fetch_grades_based_on_group
+  end
+
+  private
+
+  def fetch_grades_based_on_group
     if @assignment.has_groups?
       @group = current_course.groups.find(params[:group_id])
       @title = "#{@group.name}'s Grade for #{ @assignment.name }"
@@ -30,24 +38,70 @@ class GradesController < ApplicationController
     end
   end
 
+  public
+
   def edit
     session[:return_to] = request.referer
+
+    @student = current_student
+ 
+    # TODO: what is this needed for?
     redirect_to @assignment and return unless current_student.present?
-    @grade = current_student.grade_for_assignment(@assignment)
-    @student = @grade.student
+
+    @grade = Grade.where(student_id: @student[:id], assignment_id: @assignment[:id]).first
+    create_student_assignment_grade unless @grade
+    @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
+
     @submission = @student.submission_for_assignment(@assignment)
-    @title = "Grading #{current_student.name}'s #{@assignment.name}"
-    @badges = current_course.badges
+
+    @badges = @student.earnable_course_badges_for_grade(@grade)
+    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
+
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
       @rubric_grades = serialized_rubric_grades
-      #@metrics = existing_metrics_as_json if @rubric
-      #@course_badges = serialized_course_badges
     end
-    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
+
+    @serialized_init_data = serialized_init_data
   end
 
   private
+
+  def temp_view_context
+    @temp_view_context ||= ApplicationController.new.view_context
+  end
+
+  def serialized_init_data
+    JbuilderTemplate.new(temp_view_context).encode do |json|
+      json.grade do
+        json.partial! "grades/grade", grade: @grade, assignment: @assignment
+      end
+
+      json.badges do
+        json.partial! "grades/badges", badges: @badges, student_id: @student[:id]
+      end
+
+      json.assignment do
+        json.partial! "grades/assignment", assignment: @assignment
+      end
+
+      json.assignment_score_levels do
+        json.partial! "grades/assignment_score_levels", assignment_score_levels: @assignment_score_levels
+      end
+    end.to_json
+  end
+
+  def empty_score_levels_hash
+    {assignment_score_levels: []}.to_json
+  end
+
+  def fetch_serialized_assignment_score_levels
+    ActiveModel::ArraySerializer.new(@assignment_score_levels, each_serializer: AssignmentScoreLevelSerializer).to_json
+  end
+
+  def create_student_assignment_grade
+    @grade = Grade.create student_id: @student[:id], assignment_id: @assignment[:id], assignment_type_id: @assignment[:assignment_type_id]#, raw_score: 0
+  end
 
   def serialized_rubric_grades
     ActiveModel::ArraySerializer.new(fetch_rubric_grades, each_serializer: ExistingRubricGradesSerializer).to_json
@@ -67,36 +121,156 @@ class GradesController < ApplicationController
 
   public
 
+  def async_update
+    Grade
+      .where(id: params[:id])
+      .update_all(async_update_params)
+    render nothing: true
+  end
+
+  def earn_student_badge
+    @earned_badge = EarnedBadge.create params[:earned_badge]
+    logger.info @earned_badge.errors.full_messages
+    render json: @earned_badge
+  end
+
+  def earn_student_badges
+    @earned_badges = EarnedBadge.create params[:earned_badges]
+    render json: @earned_badges
+  end
+
+  def delete_all_earned_badges
+    if EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
+      destroy_earned_badge_with_duplicates
+    else
+      destroy_single_earned_badge
+    end
+  end
+
+  def delete_earned_badge
+    if all_earned_badge_ids_present?
+      destroy_earned_badge_with_duplicates
+    else
+      destroy_single_earned_badge
+    end
+  end
+
+  private
+
+  def destroy_earned_badge_with_duplicates
+    if EarnedBadge.where(duplicate_earned_badges_params).destroy_all
+      delete_earned_badge_success
+    else
+      delete_earned_badge_failure
+    end
+  end
+
+  def destroy_single_earned_badge
+    if EarnedBadge.where(id: params[:id]).destroy_all
+      delete_earned_badge_success
+    else
+      delete_earned_badge_failure
+    end
+  end
+
+  def duplicate_earned_badges_params
+    [:grade_id, :student_id, :badge_id].inject({}) do |memo, param|
+      memo.merge(param.to_sym => params[param])
+    end
+  end
+
+  def delete_earned_badge_success
+    render json: {message: "Earned badge successfully deleted", success: true}, status: 200
+  end
+
+  def delete_earned_badge_failure
+    render json: {message: "Earned badge failed to delete", success: false}, status: 417
+  end
+
+  def all_earned_badge_ids_present?
+    params[:grade_id] and params[:student_id] and params[:badge_id]
+  end
+
+  def async_update_params
+    if params[:save_type] == "feedback"
+      base_async_params
+    else
+      base_async_params.merge(raw_score: sanitized_raw_score)
+    end
+  end
+
+  def sanitized_raw_score
+    if params[:raw_score].class == String
+      params[:raw_score].gsub(/\D/, '')
+    else
+      params[:raw_score]
+    end
+  end
+
+  def base_async_params
+    {
+      feedback: params[:feedback],
+      instructor_modified: true,
+      status: params[:status],
+      updated_at: Time.now
+    }
+  end
+
+  public
+
   # To avoid duplicate grades, we don't supply a create method. Update will
   # create a new grade if none exists, and otherwise update the existing grade
   def update
     redirect_to @assignment and return unless current_student.present?
+    extract_file_attributes_from_grade_params
+    @grade = current_student.grade_for_assignment(@assignment)
 
+    if @grade_files
+      add_grade_files_to_grade
+    end
+
+    sanitize_grade_params
+
+    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
+      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+      update_success_redirect
+    else
+      update_failure_redirect
+    end
+  end
+
+  private
+
+  def sanitize_grade_params
+    params[:grade][:raw_score] = params[:grade][:raw_score].gsub(/\D/,"").to_i rescue nil
+  end
+
+  def update_failure_redirect
+    redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
+  end
+
+  def update_success_redirect
+    if session[:return_to].present?
+      redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
+    else
+      redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
+    end
+  end
+
+  def add_grade_files_to_grade
+    @grade_files.each do |gf|
+      @grade.grade_files.new(file: gf, filename: gf.original_filename[0..49])
+    end
+  end
+
+  def extract_file_attributes_from_grade_params
     if params[:grade][:grade_files_attributes].present?
       @grade_files = params[:grade][:grade_files_attributes]["0"]["file"]
       params[:grade].delete :grade_files_attributes
     end
+  end 
 
-    @grade = current_student.grade_for_assignment(@assignment)
-
-    if @grade_files
-      @grade_files.each do |gf|
-        @grade.grade_files.new(file: gf, filename: gf.original_filename[0..49])
-      end
-    end
-
-    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
-      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_student_visible?
-
-      if session[:return_to].present?
-        redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-      else
-        redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-      end
-    else
-      redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
-    end
-  end
+  public
 
   def submit_rubric
     if @submission = Submission.where(current_assignment_and_student_ids).first

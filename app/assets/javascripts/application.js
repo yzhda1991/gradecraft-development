@@ -14,20 +14,30 @@
 //= require jquery.sparkline.min
 //= require s3_direct_upload
 //= require underscore
-//= require backbone.min
-//= require bootstrap
 //= require jquery.dynatable
 //= require dynatable
-//= require angular
+//= require lodash.min
+//= require froala_editor.min.js
+
+//= require angular/angular
 //= require angular-resource
 //= require angular-animate
 //= require angular-rails-templates
 //= require_tree ./angular/templates
+//= require angular-dragdrop
+//= require ngDraggable
+//= require moment.min
+//= require TweenMax.min
+//= require ngFx.min
+//= require angular-ui-router.min
+//= require angular-rails-templates
 //= require ng-rails-csrf
 //= require ./angular/main.js
 //= require ./angular/ui/sortable
 //= require ./angular/vendor/restangular.min
 //= require_tree ./angular
+//= require_tree ../templates
+
 //= require gradecraft
 //= require preload_store
 //= require users
@@ -55,7 +65,6 @@
 //= require jquery.collapse
 //= require jquery.collapse_storage
 //= require jquery.collapse_cookie_storage
-//= require utilities
 //= require datetimepicker
 //= require assignment-results-vis
 //= require top_ten
@@ -64,3 +73,6 @@
 //= require background
 //= require d3
 //= require offscreen-nav
+//= require_tree ./froala
+//= require_tree ./angular-froala
+//= require utilities

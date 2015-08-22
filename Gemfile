@@ -64,6 +64,8 @@ gem 'whenever'
 gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'wysiwyg-rails'
+gem 'zeus-parallel_tests'
+gem 'parallel_tests'
 
 group :development do
   gem 'haml-rails'
@@ -72,30 +74,41 @@ group :development do
   gem 'foreman'
   gem 'letter_opener'
   gem 'rubystats'
-  gem 'spring'
   gem 'meta_request'
   gem "bullet"
 end
 
 group :development, :test do
   gem 'pry'
+  gem 'spring', '~> 1.3.6'
   gem 'byebug'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
+  gem 'spring-commands-rspec'
 end
 
 group :test do
-  gem 'faker', '~> 1.4.3'
+  # added to development for parallel_tests
   gem 'capybara', '~> 2.1.0'
   gem 'database_cleaner', "~> 1.0.1"
   gem 'launchy'
   gem 'selenium-webdriver'
-  gem 'factory_girl_rails', '~> 4.5.0'
   gem 'rspec-rails', '~> 2.14.0'
   gem 'simplecov'
+  gem 'faker', '~> 1.4.3'
+  gem 'factory_girl_rails', '~> 4.5.0'
 end
 
 group :tasks do
   gem 'rake-hooks'
+end
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-angular', '1.3.15'
+  gem 'rails-assets-angular-resource', '1.3.15'
+  gem 'rails-assets-lodash', '3.7.0'
+  gem 'rails-assets-jquery', '2.1.4'
+  gem 'rails-assets-angular-dragdrop', '1.0.11'
+  gem 'rails-assets-ngDraggable', '0.1.8'
 end

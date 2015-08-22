@@ -1,0 +1,397 @@
+#custom-value-label
+  img
+    float: right
+    margin-left: 6px
+
+select#grade_raw_score, input[type=text]#grade_raw_score
+  @include transition-property("background")
+
+select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
+  background: #dedede !important
+  color: #555
+  cursor: pointer
+  cursor: hand
+
+.badge-debug
+  display: block
+  padding: 8px 16px
+  margin: 8px
+  border: 1px solid #888
+  float: left
+
+  &.deleting
+    background: red !important
+    color: white !important
+
+    h4
+      color: white !important
+  
+  &.creating
+    background: green !important
+    color: white !important
+
+    h4
+      color: white !important
+
+  &.creating.deleting
+    background: black !important
+
+  .info
+    display: block
+
+    &.earned-badge .pretty-json
+      white-space: pre
+
+
+label.disabled
+  color: #888 !important
+
+.animalbox
+  width: 100px
+  height: 200px
+  background: yellow
+  border: 1px solid #999
+
+#updated-at, #updated-at-current
+  margin-top: 12px
+  font-style: italic
+  float: left
+  padding: 1px 5px
+  border: 1px solid #F2F2F2
+  @include rounded-corners(4px)
+
+#updated-at-current
+  @include transition-property("background, border-color")
+  @include transition-duration(0.3s)
+  @include transition-timing-function(ease)
+
+  &.ng-animate
+    background: #F5FCA1
+    border-color: #E8F08F
+
+#badges-available
+  margin-top: 20px
+
+#available
+  min-height: 300px
+
+  &.empty
+
+#awarded
+  @include linear-gradient(#C4EAFB,#E9F8FF)
+  min-height: 300px
+
+.gradebox
+  border: 1px solid #9FD7E3
+  padding: 16px 36px
+  font-size: 13px
+  margin-bottom: 18px
+  margin-right: 10px
+  @include linear-gradient(#A2EEFF, #7AE1F8)
+  @include rounded-corners(4px)
+  @include opacity(0.9)
+
+  // transitions
+  @include transition-property("padding, font-size, opacity, border-color")
+  @include transition-duration(0.4s)
+  @include transition-timing-function(ease)
+
+  &.inactive
+    @include opacity(0.4)
+    border: 1px solid #B9DAE2
+    color: #87ADB5
+    padding: 16px 24px
+    font-size: 12px
+    cursor: pointer
+    cursor: hand
+
+  &.jump-left
+    color: red !important
+    background: red !important
+    float: left
+    transition: all 0.5s linear
+    opacity: 0
+
+h4#awarded-header
+  padding-top: 2px
+
+button#remove-badges, button#add-badges
+  padding: 4px 8px !important
+  font-weight: bold !important
+  margin-left: 12px
+  position: absolute
+  margin-top: 1.3rem
+  top: 0
+  font-size: .8rem
+  @include rounded-corners(4px)
+  @include opacity(0.7)
+  @include transition-property("background, opacity")
+  @include transition-duration(0.3s)
+  @include transition-timing-function(ease)
+
+  &:hover
+    @include opacity(1)
+    background: #d64b4b - #111
+
+.grade-badge
+  &.hexagon
+    @include transition-property("background, opacity")
+    @include transition-duration(0.6s)
+    @include transition-timing-function(ease)
+    cursor: pointer
+    cursor: hand
+
+    position: relative
+    width: 150px
+    height: 86.60px
+    float: left
+    z-index: 2400
+    background-color: #3277BE
+    margin: 55.30px 40px 
+    box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
+    border-left: solid 1px #0C58A7
+    border-right: solid 1px #0C58A7
+
+    &:before, &:after
+      content: ""
+      position: absolute
+      z-index: 1
+      width: 106.07px
+      height: 106.07px
+      -webkit-transform: scaleY(0.5774) rotate(-45deg)
+      -ms-transform: scaleY(0.5774) rotate(-45deg)
+      transform: scaleY(0.5774) rotate(-45deg)
+      background-color: #3277BE
+      left: 20.9670px
+      box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
+
+    &:before
+      top: -53.0330px
+      border-top: solid 1.4142px #43b6bb
+      border-right: solid 1.4142px #43b6bb
+
+    &:after
+      bottom: -53.0330px
+      border-bottom: solid 1.4142px #43b6bb
+      border-left: solid 1.4142px #43b6bb
+
+    &.unearned 
+      @include opacity(0.6)
+      background-color: #555
+
+    &.unearned:before, &.unearned:after
+      background-color: #555
+
+    &:hover
+      background-color: #41566B
+      @include opacity(0.7)
+
+      &:before, &:after
+        background-color: #3F6B98
+
+
+    &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
+      background-color: #42688E
+      @include opacity(0.88)
+      box-shadow: 0 0 20px #F6C621
+
+    &.available.earned
+      @include opacity(0)
+
+    &.awarded.unearned
+      @include opacity(0)
+
+    &.available, &.awarded
+      &.hide-after-fade, &.temp-hide
+        display: none !important
+
+    &.available.unearned, &.awarded.earned
+
+    &.available.unearned-active
+      transition:1s linear all
+      box-shadow: 0 0 120px #F6C621
+      opacity:0.92
+
+    &.awarded.earned-active
+      transition:1.5s linear all
+      box-shadow: 0 0 150px #FFD017
+      opacity:0.95
+
+    &.fade-in-available
+      @include opacity(0.8)
+      @include transition-property("opacity")
+      @include transition-duration(2s)
+      @include transition-timing-function(ease)
+
+    &.fade-in-awarded
+      @include opacity(1)
+      @include transition-property("opacity")
+      @include transition-duration(2s)
+      @include transition-timing-function(ease)
+
+    span
+      display: block
+      position: absolute
+      top: 0.5773502691896257px
+      left: 0
+      width: 148px
+      height: 85.4478px
+      z-index: 2
+      background: inherit
+
+  .italic
+    font-style: italic
+
+  .ribbon
+    width: 170px
+    position: relative 
+    margin-top: 70px
+    text-align: center
+    font-size: 16px !important
+    z-index: 2400
+    background: #d64b4b
+    margin-left: -10px
+    background: -webkit-gradient(linear, left top, left bottom, from(#d64b4b), to(#ab2c2c))
+    background: -webkit-linear-gradient(top, #d64b4b, #ab2c2c)
+    background: -moz-linear-gradient(top, #d64b4b, #ab2c2c)
+    background: -ms-linear-gradient(top, #d64b4b, #ab2c2c)
+    background: -o-linear-gradient(top, #d64b4b, #ab2c2c)
+    background-image: -ms-linear-gradient(top, #d64b4b 0%, #ab2c2c 100%)
+    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
+    -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
+    box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
+    font-family: 'Helvetica Neue',Helvetica, sans-serif
+    h1
+      font-size: 16px !important
+      margin-top: 50px
+      color: #590000
+      text-shadow: #d65c5c 0 1px 0
+      margin: 0px
+      padding: 8px 10px
+
+  .ribbon-ends
+    position: relative
+    z-index: 20
+    bottom: 7
+    @include opacity(0.8)
+    &:before, &:after
+      content: ''
+      position: absolute
+      display: block
+      bottom: -1em
+      border: 1.5em solid #c23a3a
+      z-index: 1
+    &:before
+      left: -2.5em
+      border-right-width: 1.5em
+      border-left-color: transparent
+      -webkit-box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
+      -moz-box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
+      box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 1px
+    &:after
+      right: -2.5em
+      border-left-width: 1.5em
+      border-right-color: transparent
+      -webkit-box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
+      -moz-box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
+      box-shadow: rgba(0, 0, 0, 0.4) -1px 1px 1px
+
+  .ribbon-stitches-top
+    z-index: 2410
+    margin-top: 2px
+    border-top: 1px dashed rgba(0, 0, 0, 0.2)
+    -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
+    -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
+    box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.5)
+
+  .ribbon-stitches-bottom
+    z-index: 2410
+    margin-bottom: 2px
+    border-top: 1px dashed rgba(0, 0, 0, 0.2)
+    -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3)
+    -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3)
+    box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3)
+
+  img.earned
+    max-height: 6rem
+    margin: 0 auto
+    z-index: 2200
+    position: absolute
+    margin: -2px 0 0 27px
+
+  .badge-name
+    font-weight: bold
+    margin-top: 20px
+    position: absolute
+    font-size: 1rem
+    text-align: center
+    vertical-align: top
+    margin-top: 20px
+    bottom: -30px
+    z-index: 2200
+    width: 100%
+
+  .earned-box
+    position: absolute
+    top: 0
+    right: 4px
+    font-weight: bold
+    color: black
+    text-align: center
+    width: 100%
+    font-size: 0.9rem
+    margin-top: -12px
+    z-index: 2200
+
+    width: 35px
+    height: 35px
+
+    &.unearned
+      background: #999
+      display: none
+
+    .earned-count
+
+  .gold-stars
+    position: absolute
+    top: 0
+    right: -18px
+
+    img.star
+      position: relative
+      z-index: 2700
+
+  &.unearned
+    .gold-stars
+      @include opacity(0.6)
+
+  .badges-earned
+    @include ribbon
+    text-shadow: 0px -1px 0px #0E3C6A
+
+
+  &.unearned
+    .badges-earned
+      background-color: #999999
+      background-repeat: repeat-x
+      background-image: -khtml-gradient(linear, left top, left bottom, from(#666666), to(#999999))
+      background-image: -moz-linear-gradient(top, #666666, #999999)
+      background-image: -ms-linear-gradient(top, #666666, #999999)
+      background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #666666), color-stop(100%, #999999))
+      background-image: -webkit-linear-gradient(top, #666666, #999999)
+      background-image: -o-linear-gradient(top, #666666, #999999)
+      background-image: linear-gradient(top, #666666, #999999)
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#999999', GradientType=0)
+      &:after
+        border-color: #999999 #999999 transparent #999999
+
+
+  .earned-total
+    display: inline
+    position: absolute
+    margin-top: -4px
+    font-size: 1rem
+    font-weight: bold
+
+.clear-left
+  clear: left !important

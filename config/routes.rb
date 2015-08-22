@@ -109,6 +109,14 @@ GradeCraft::Application.routes.draw do
   end
   resources :unlock_conditions
 
+
+  # earned badges grade routes
+  put "grades/:id/async_update", to: "grades#async_update"
+  post "grades/earn_student_badge", to: "grades#earn_student_badge"
+  post "grade/:grade_id/earn_student_badges", to: "grades#earn_student_badges"
+  delete "grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id", to: "grades#delete_earned_badge"
+  delete "grade/:grade_id/earned_badges", to: "grades#delete_all_earned_badges"
+
   resources :metrics do
     put :update_order, on: :collection
   end
