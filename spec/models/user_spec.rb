@@ -187,13 +187,15 @@ describe User do
     end
   end
 
-  context "instructor is grading student's submission", building: true do
+  context "instructor is editing the grade for a student's submission", working: true do
     before(:each) do
-      @student = create(:user)
-      @course = create(:course)
+      # Pulled in for highest-level before(:each)
+      # @course = create(:course)
+      # @student = create(:user)
+      # create(:course_membership, course: @course, user: @student)
+      # @assignment = create(:assignment, course: @course)
+      # @grade = create(:grade, assignment: @assignment, assignment_type: @assignment.assignment_type, course: @course, student: @student)
 
-      @current_assignment = create(:assignment, course: @course)
-      @current_grade = create(:grade, assignment: @current_assignment, assignment_type: @current_assignment.assignment_type, course: @course, student: @student)
       @single_badge = create(:badge, course: @course, can_earn_multiple_times: false)
       @multi_badge = create(:badge, course: @course, can_earn_multiple_times: true)
 
@@ -207,35 +209,45 @@ describe User do
       @some_other_grade = create(:grade, assignment: @some_other_assignment, assignment_type: @some_other_assignment.assignment_type, course: @some_other_course, student: @student)
       @some_other_badge = create(:badge, course: @some_other_course)
 
-      expect(@student.earnable_course_badges_for_grade(@current_grade)).not_to include(@some_other_badge)
+      expect(@student.earnable_course_badges_for_grade(@grade)).not_to include(@some_other_badge)
     end
 
     it "should see badges for the current course" do
-      expect(@student.earnable_course_badges_for_grade(@current_grade)).to include([@single_badge, @multi_badge])
+      EarnedBadge.destroy_all course_id: @course[:id]
+      expect(@student.earnable_course_badges_for_grade(@grade)).to include([@single_badge, @multi_badge])
     end
 
-    it "should show course badges that the student has yet to earn" do
-      EarnedBadge.destroy_all badge_id: @single_badge[:id], student_id: @student[:id], grade_id: @current_grade[:id]
-      expect(@student.earnable_course_badges_for_grade(@current_grade)).to include([@single_badge, @multi_badge])
+    it "should show course badges that the student has yet to earn", broken: true do
+      EarnedBadge.destroy_all course_id: @course[:id]
+      pp EarnedBadge.all
+      pp "Student id: #{@student.id}"
+      pp "Course ID: #{@course.id}"
+      pp "Grade ID: #{@grade.id}"
+      pp "Single Badge ID: #{@single_badge}"
+      pp "Multi Badge ID: #{@multi_badge}"
+      pp @student.earnable_course_badges_for_grade(@grade).to_sql
+      pp @student.earnable_course_badges_for_grade(@grade)
+      pp "Total Badges: #{Badge.all.count}"
+      expect(@student.earnable_course_badges_for_grade(@grade)).to include(@single_badge, @multi_badge)
     end
 
     it "should not show badges that the student has earned for other grades, and can't be earned multiple times" do
-      @student.earn_badge(@single_badge, @another_badge) # earn the badge on another grade
-      expect(@student.earnable_course_badges_for_grade(@current_grade)).not_to include(@single_badge)
+      @student.earn_badge_for_grade(@single_badge, @another_grade) # earn the badge on another grade
+      expect(@student.earnable_course_badges_for_grade(@grade)).not_to include(@single_badge)
     end
 
-    it "should show badges that the student has earned but CAN be earned multiple times" do
-      @student.earn_badge_for_grade(@multi_badge, @current_grade)
-      expect(@student.earnable_course_badges_for_grade(@current_grade)).to include(@multi_badge)
+    it "should show badges that the student has earned but CAN be earned multiple times", broken: true do
+      @student.earn_badge_for_grade(@multi_badge, @grade)
+      expect(@student.earnable_course_badges_for_grade(@grade)).to include(@multi_badge)
     end
 
     it "should show badges that the student has earned for the current grade, even if it can't be earned multiple times" do
-      @student.earn_badge_for_grade(@single_badge, @current_grade)
-      expect(@student.earnable_course_badges_for_grade(@current_grade)).to include(@single_badge)
+      @student.earn_badge_for_grade(@single_badge, @grade)
+      expect(@student.earnable_course_badges_for_grade(@grade)).to include(@single_badge)
     end
   end
 
-  context "user earns just one badge", building: true do
+  context "user earns just one badge", working: true do
     before(:each) do
       @student = create(:user)
       @current_course = create(:course)
@@ -254,7 +266,7 @@ describe User do
     end
 
     it "should choke on an array of badges" do
-      expect(@student.earn_badge([@current_badge]).class).to raise_error(TypeError)
+      expect(@student.earn_badge([@current_badge])).to raise_error(TypeError)
     end
   end
 

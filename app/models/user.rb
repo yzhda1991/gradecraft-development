@@ -510,18 +510,31 @@ class User < ActiveRecord::Base
   end
 
   # this should be all badges that:
-  # 1) exist in the current course, in which the student is enrolled
-  # 2) the student has either not earned at all, or:
-  # 3) the student has earned the badge, but multiple are allowed
+  # 1) exist in the current course, in which the student is enrolled, AND:
+  # 2) the student has either not earned at all for any grade, or:
+  # 3) the student has earned the badge, but multiple are allowed, or:
   # 3) the student has earned the badge, multiple are not allowed, but the earned badge is for the current grade
   def earnable_course_badges_for_grade(grade)
     Badge
       .where(course_id: grade[:course_id])
-      .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?", self[:id], grade[:course_id], false)
-      .where("id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?", self[:id], grade[:course_id], true)
-      .where("id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?", self[:id], grade[:course_id], false)
+      .where(final_earnable_course_badges_sql(grade))
   end
 
+  private
+  def final_earnable_course_badges_sql(grade)
+    earnable_course_badges_sql_conditions(grade).where_values.join(" OR ")
+  end
+
+  public
+  def earnable_course_badges_sql_conditions(grade)
+    Badge
+      .unscoped
+      .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
+      .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
+      .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
+  end
+
+  public
   # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
   # 2) the student has either not earned at all, but is visible and available, or...
