@@ -1,17 +1,16 @@
 %h4.subtitle#unreleasedTableCaption
   = "Unreleased Grades"
-  .label.alert.radius= @count_unreleased
+  %span.label.alert= @count_unreleased
 
 - @unreleased_grades_by_assignment.each do |assignment, grades|
   - cache ["v1", assignment] do
-    .small-12.columns
-      %h5.section-title
-        = link_to assignment.name, assignment
-        .right
-          - if assignment.is_individual?
-            = link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button radius"
-          - else
-            = link_to 'Grade', assignment, :class => "button radius"
+    %h5.section-title
+      = link_to assignment.name, assignment
+      .right
+        - if assignment.is_individual?
+          = link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button"
+        - else
+          = link_to 'Grade', assignment, :class => "button"
 
     = form_tag edit_status_grades_assignment_path assignment do
       %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "unreleasedTableCaption"}
