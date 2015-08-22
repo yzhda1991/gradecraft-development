@@ -149,6 +149,7 @@ class BadgesController < ApplicationController
                                   :visible,
                                   :can_earn_multiple_times,
                                   :position,
+                                  :updated_at,
                                   :icon)
   end
 end

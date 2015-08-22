@@ -111,28 +111,30 @@ class ChallengesController < ApplicationController
       @student = User.find(params[:id])
     end
 
-    @challenges = current_course.challenges
+    if current_course.challenges.present?
+      @challenges = current_course.challenges
 
-    @challenges.each do |challenge|
-      challenge.student_predicted_earned_challenge = challenge.find_or_create_predicted_earned_challenge(@student)
-    end
+      @challenges.each do |challenge|
+        challenge.student_predicted_earned_challenge = challenge.find_or_create_predicted_earned_challenge(@student)
+      end
 
-    team = @student.team_for_course(current_course)
+      team = @student.team_for_course(current_course)
 
-    @grades = team.challenge_grades.where(:team_id => team)
+      @grades = team.challenge_grades.where(:team_id => team)
 
-    @challenges.each do |challenge|
-      @grades.where(:challenge_id => challenge.id).first.tap do |grade|
+      @challenges.each do |challenge|
+        @grades.where(:challenge_id => challenge.id).first.tap do |grade|
 
-        if grade.nil?
-          grade = ChallengeGrade.create(:challenge => challenge, :team => team)
-        end
+          if grade.nil?
+            grade = ChallengeGrade.create(:challenge => challenge, :team => team)
+          end
 
-        challenge.current_team_grade = grade
+          challenge.current_team_grade = grade
 
-        # Only pass through points if they have been released by the professor
-        unless grade.is_student_visible?
-          challenge.current_team_grade.score = nil
+          # Only pass through points if they have been released by the professor
+          unless grade.is_student_visible?
+            challenge.current_team_grade.score = nil
+          end
         end
       end
     end
