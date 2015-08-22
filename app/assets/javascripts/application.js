@@ -14,11 +14,10 @@
 //= require jquery.sparkline.min
 //= require s3_direct_upload
 //= require underscore
-//= require backbone.min
-//= require bootstrap
 //= require jquery.dynatable
 //= require dynatable
 //= require lodash.min
+//= require froala_editor.min.js
 
 //= require angular/angular
 //= require angular-resource
@@ -66,7 +65,6 @@
 //= require jquery.collapse
 //= require jquery.collapse_storage
 //= require jquery.collapse_cookie_storage
-//= require utilities
 //= require datetimepicker
 //= require assignment-results-vis
 //= require top_ten
@@ -77,3 +75,4 @@
 //= require offscreen-nav
 //= require_tree ./froala
 //= require_tree ./angular-froala
+//= require utilities
