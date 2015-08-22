@@ -3,7 +3,7 @@
   # setup the controller scope on initialize
   $scope.init = (initData)->
     # is interactive ui debugging on?
-    $scope.debug = true
+    $scope.debug = false
 
     # grade stuff
     $scope.grade = new Grade(initData.grade, $http)
