@@ -26,13 +26,9 @@
               %th Level
             - if @assignment.release_necessary?
               %th Status
-              %th
-                .button-bar
-                  %ul.button-group.right.radius
-                    %li
-                      %button.button.select-all.tiny= "Check All"
-                    %li
-                      %button.button.select-none.tiny= "Uncheck All"
+              %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
+                %button.button.select-all= "Check"
+                %button.button.select-none= "Uncheck"
         %tbody
           - group.students.each do |student|
             - grade = @assignment.grades.find_by student_id: student

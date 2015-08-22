@@ -4,10 +4,9 @@
 
 - @ungraded_submissions_by_assignment.each do |assignment, submissions|
   - cache ["v1", assignment] do
-    %h5.section-title
+    %h5
       = link_to assignment.name, assignment
-      .right
-        = link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button"
+      %span= link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button"
 
     %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "ungradedTableCaption"}
       %thead

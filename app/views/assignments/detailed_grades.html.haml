@@ -8,17 +8,17 @@
   = render 'layouts/alerts'
   
   - if @assignment.open_at?
-    .small-12.large-4.columns.panel
+    .columns
       .bold Open date:
       = @assignment.open_at
 
   - if @assignment.due_at?
-    .small-12.large-4.columns.panel
+    .columns
       .bold Due date:
       = @assignment.due_at
 
   - if @assignment.accepts_submissions_until?
-    .small-12.large-4.columns.panel
+    .columns
       .bold Accept submissions until:
       = @assignment.accepts_submissions_until
 

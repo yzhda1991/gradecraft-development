@@ -16,9 +16,9 @@
           %th Submission
         %th
         - if @assignment.release_necessary?
-          %th.center{"data-dynatable-no-sort" => "true"}
-            %button.button.select-all.tiny= "Check All"
-            %button.button.select-none.tiny= "Uncheck All"
+          %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
+            %button.button.select-all= "Check"
+            %button.button.select-none= "Uncheck"
     %tbody
       - @students.each do |student|
         - grade = @grades[student.id] || Grade.new

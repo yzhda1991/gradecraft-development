@@ -44,11 +44,17 @@
 thead
   .button
     border: none
-    background-color: $secondary-color-1 !important
-    .select-none
-      left: -6px
+    background-color: $primary-color-2
     &:hover
-      background-color: $primary-color-1 !important
+      background-color: $primary-color-3
+    &.select-all
+      border-top-right-radius: 0
+      border-bottom-right-radius: 0
+    &.select-none
+      border-top-left-radius: 0
+      border-bottom-left-radius: 0
+      margin-left: -5px
+      border-left: 1px solid $primary-color-4
 
 tbody
   ul
