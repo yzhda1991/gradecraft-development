@@ -1,9 +1,9 @@
-%table.responsive.no_radius.dynatable
+%table.no_radius.dynatable
   %thead
     %tr
       %th Assignment
       %th Submissions
-      %th.button-column
+      %th
   %tbody
     - @assignments.each do |assignment|
       - if assignment.accepts_submissions?

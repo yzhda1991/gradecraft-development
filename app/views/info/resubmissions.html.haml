@@ -5,7 +5,7 @@
 .pageContent
   = render 'layouts/alerts'
   
-  .label.radius.alert= @resubmission_count
+  %span.label.alert= @resubmission_count
 
   - if current_course.has_teams?
     .team-filter

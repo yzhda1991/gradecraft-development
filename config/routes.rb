@@ -194,11 +194,10 @@ GradeCraft::Application.routes.draw do
 
   post '/current_course/change' => 'current_courses#change', :as => :change_current_course
   get 'current_course' => 'current_courses#show'
-  get  'class_badges' => 'students#class_badges'
 
   get 'leaderboard' => 'students#leaderboard'
   get 'multiplier_choices' => 'info#choices'
-  get 'earned_badges' => 'info#class_badges'
+  get 'earned_badges' => 'info#awarded_badges'
   get 'grading_status' => 'info#grading_status'
   get 'resubmissions' => 'info#resubmissions'
   get 'ungraded_submissions' => 'info#ungraded_submissions'
@@ -220,7 +219,7 @@ GradeCraft::Application.routes.draw do
   namespace :info do
     get :all_grades
     get :choices
-    get :class_badges
+    get :awarded_badges
     get :dashboard
     get :grading_status
     get :timeline_events
