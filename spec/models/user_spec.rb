@@ -214,20 +214,11 @@ describe User do
 
     it "should see badges for the current course" do
       EarnedBadge.destroy_all course_id: @course[:id]
-      expect(@student.earnable_course_badges_for_grade(@grade)).to include([@single_badge, @multi_badge])
+      expect(@student.earnable_course_badges_for_grade(@grade)).to include(@single_badge, @multi_badge)
     end
 
     it "should show course badges that the student has yet to earn", broken: true do
       EarnedBadge.destroy_all course_id: @course[:id]
-      pp EarnedBadge.all
-      pp "Student id: #{@student.id}"
-      pp "Course ID: #{@course.id}"
-      pp "Grade ID: #{@grade.id}"
-      pp "Single Badge ID: #{@single_badge}"
-      pp "Multi Badge ID: #{@multi_badge}"
-      pp @student.earnable_course_badges_for_grade(@grade).to_sql
-      pp @student.earnable_course_badges_for_grade(@grade)
-      pp "Total Badges: #{Badge.all.count}"
       expect(@student.earnable_course_badges_for_grade(@grade)).to include(@single_badge, @multi_badge)
     end
 
@@ -266,7 +257,7 @@ describe User do
     end
 
     it "should choke on an array of badges" do
-      expect(@student.earn_badge([@current_badge])).to raise_error(TypeError)
+      expect { @student.earn_badge([@current_badge])}.to raise_error(TypeError)
     end
   end
 
