@@ -29,7 +29,7 @@ gem 'fast_blank'
 gem 'fog'
 gem 'font-awesome-rails'
 gem 'haml'
-gem 'jbuilder', :require=>false
+gem 'jbuilder'
 gem 'jquery-rails', '~> 2.0'
 gem 'multi_json'
 gem 'mini_magick'

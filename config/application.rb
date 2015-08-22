@@ -6,7 +6,6 @@ require 'action_mailer/railtie'
 require 'csv'
 require 'sprockets/railtie'
 require 'sanitize'
-require 'jbuilder'
 
 Bundler.require(:default, Rails.env)
 
