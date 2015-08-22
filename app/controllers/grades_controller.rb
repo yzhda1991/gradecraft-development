@@ -54,7 +54,7 @@ class GradesController < ApplicationController
 
     @submission = @student.submission_for_assignment(@assignment)
 
-    @badges = @student.earnable_badges_for_assignment(@assignment)
+    @badges = @student.earnable_course_badges_for_grade(@grade)
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
 
     if @assignment.rubric.present?

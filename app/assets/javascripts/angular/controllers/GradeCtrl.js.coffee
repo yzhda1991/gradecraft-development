@@ -86,7 +86,7 @@
         $scope.hideAvailableShowRewarded()
     )
     .error((err)->
-      alert("delete failed!")
+      console.log "EarnedBadge deletion failed"
       return false
     )
 

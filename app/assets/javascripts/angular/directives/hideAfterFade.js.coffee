@@ -47,12 +47,8 @@ HideAfterFade.directive 'hideAfterFade', ['$timeout', ($timeout)->
             isAvailable = allClasses.indexOf("available") > -1
             isAwarded= allClasses.indexOf("awarded") > -1
             isEarned= allClasses.indexOf("earned") > -1
-            isEarnedAdd= allClasses.indexOf("earned-add") > -1
             isUnearned= allClasses.indexOf("unearned") > -1
-            isUnearnedAdd= allClasses.indexOf("unearned-add") > -1
             isHidden= allClasses.indexOf("hide-after-fade") > -1
-
-            alert(isEarnedAdd)
 
             if isAwarded and isEarned
               elem.removeClass("hide-after-fade")
