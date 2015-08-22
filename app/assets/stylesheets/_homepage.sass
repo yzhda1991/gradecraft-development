@@ -21,10 +21,19 @@
   margin: 0
   padding: 0
 
+section.forgot-password
+  padding: 4rem   
+  background-color: lighten($color-yellow-1, 10%)
+  opacity: .7
+
+  input
+    border: 0
+    padding: .5rem
+
 section.video-promo, section.newsletter
   padding: 0 2rem
 
-section.video-promo, section.newsletter, section.press
+section.video-promo, section.newsletter, section.press, section.forgot-password
   min-width: 700px
   max-width: 1500px
   margin: 0 auto
@@ -102,7 +111,7 @@ section.video-promo, section.newsletter, section.press
       height: 80%
 
   .columns.login
-    margin-top: 2.5rem
+    margin-top: 3.25rem
     margin-left: 2rem
     width: 30%
     .ui-widget-content, .ui-widget-header

@@ -63,14 +63,6 @@ describe AnalyticsController do
       end
     end
 
-		describe "GET teams" do
-      it "returns the Team Analytics page for the current course" do
-        get :teams
-        assigns(:title).should eq("team Analytics")
-        response.should render_template(:teams)
-      end
-    end
-
     describe "GET all_events" do
       pending
     end
@@ -147,7 +139,6 @@ describe AnalyticsController do
             :all_events,
             :top_10,
             :per_assign,
-            :teams,
             :role_events,
             :assignment_events,
             :login_frequencies,

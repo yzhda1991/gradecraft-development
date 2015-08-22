@@ -25,7 +25,7 @@ class InfoController < ApplicationController
     render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])
   end
 
-  def class_badges
+  def awarded_badges
     @title = "Awarded #{term_for :badges}"
 
     @teams = current_course.teams

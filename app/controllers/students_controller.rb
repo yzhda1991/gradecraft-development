@@ -43,8 +43,8 @@ class StudentsController < ApplicationController
 
   #Displaying the list of assignments and team challenges for the semester
   def syllabus
-    @assignment_types = current_course.assignment_types.sorted
-    @assignments = current_course.assignments.sorted
+    @assignment_types = current_course.assignment_types
+    @assignments = current_course.assignments
     @student = current_student
   end
 
@@ -65,8 +65,8 @@ class StudentsController < ApplicationController
     self.current_student = current_course.students.where(id: params[:id]).first
     @student = current_student
     @student.load_team(current_course)
-    @assignments = current_course.assignments.sorted
-    @assignment_types = current_course.assignment_types.sorted
+    @assignments = current_course.assignments
+    @assignment_types = current_course.assignment_types
   end
 
   # AJAX endpoint for student name search

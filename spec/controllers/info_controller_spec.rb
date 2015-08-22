@@ -37,10 +37,10 @@ describe InfoController do
       end
 		end
 
-		describe "GET class_badges" do
-			it "retrieves the class badges page" do
-        get :class_badges
-        response.should render_template(:class_badges)
+		describe "GET awarded_badges" do
+			it "retrieves the awarded badges page" do
+        get :awarded_badges
+        response.should render_template(:awarded_badges)
       end
 		end
 
@@ -136,7 +136,7 @@ describe InfoController do
 
     describe "protected routes" do
       [
-        :class_badges,
+        :awarded_badges,
         :grading_status,
         :resubmissions,
         :ungraded_submissions,

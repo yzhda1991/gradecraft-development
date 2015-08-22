@@ -2,7 +2,7 @@
 require 'spec_helper'
 include CourseTerms
 
-describe "info/class_badges" do
+describe "info/awarded_badges" do
 
   before(:all) do
     clean_models

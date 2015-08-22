@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:feed, :show, :index, :guidelines, :student_predictor_data]
+  before_filter :ensure_staff?, :except => [:show, :index, :guidelines, :student_predictor_data]
 
   respond_to :html, :json
 
@@ -9,7 +9,7 @@ class AssignmentsController < ApplicationController
       redirect_to syllabus_path
     else
       @title = "#{term_for :assignments}"
-      @assignment_types = current_course.assignment_types.includes(:assignments).sorted
+      @assignment_types = current_course.assignment_types.includes(:assignments)
       @assignments = current_course.assignments.includes(:rubric)
 
       respond_to do |format|
@@ -73,9 +73,6 @@ class AssignmentsController < ApplicationController
     else
       @grades_for_assignment = @assignment.all_grades_for_assignment
     end
-
-    #used to display an alternate view of the same content
-    render :detailed_grades if params[:detailed]
   end
 
   def new
@@ -274,6 +271,7 @@ class AssignmentsController < ApplicationController
         :point_total,
         :points_predictor_display,
         :position,
+        :updated_at,
         :release_necessary,
         :required,
         :resubmissions_allowed,

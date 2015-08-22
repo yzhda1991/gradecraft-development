@@ -18,7 +18,7 @@
 
 #predictorPage{ 'data-course-total' => current_course.total_points }
   %ul.slides.small-12.columns
-    - current_course.assignment_types.includes(:assignments =>[:assignment_score_levels, :assignment_type]).sorted.each do |assignment_type|
+    - current_course.assignment_types.includes(:assignments =>[:assignment_score_levels, :assignment_type]).each do |assignment_type|
       %li{:id => "slide-#{assignment_type.id}", :'data-assignment-type-id' => assignment_type.id, :'data-assignment-type-name' => assignment_type.name}
         .slide-panel.assignmentType
           %h3.collapse
@@ -28,7 +28,7 @@
             .right.radius.label.fade
               = "#{points assignment_type.max_value} points possible"
           .small-12
-            - assignments = assignment_type.assignments.sorted
+            - assignments = assignment_type.assignments
             - assignments.each do |assignment|
               .clear
               - if assignment.point_total > 0

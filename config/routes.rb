@@ -28,7 +28,6 @@ GradeCraft::Application.routes.draw do
     get :staff
     get :students
     get :top_10
-    get :teams
     get :per_assign
     get :all_events
     get :role_events
@@ -73,7 +72,6 @@ GradeCraft::Application.routes.draw do
       get 'email_based_grade_import' => 'assignments#email_based_grade_import'
       get 'username_based_grade_import' => 'assignments#username_based_grade_import'
       get 'name_based_grade_import' => 'assignments#name_based_grade_import'
-      get 'detailed_grades' => 'assignments#show', detailed: true
       get 'rubric_grades_review'
       put :update_rubrics
       scope 'grades', as: :grades, controller: :grades do
@@ -195,11 +193,10 @@ GradeCraft::Application.routes.draw do
 
   post '/current_course/change' => 'current_courses#change', :as => :change_current_course
   get 'current_course' => 'current_courses#show'
-  get  'class_badges' => 'students#class_badges'
 
   get 'leaderboard' => 'students#leaderboard'
   get 'multiplier_choices' => 'info#choices'
-  get 'earned_badges' => 'info#class_badges'
+  get 'earned_badges' => 'info#awarded_badges'
   get 'grading_status' => 'info#grading_status'
   get 'resubmissions' => 'info#resubmissions'
   get 'ungraded_submissions' => 'info#ungraded_submissions'
@@ -221,7 +218,7 @@ GradeCraft::Application.routes.draw do
   namespace :info do
     get :all_grades
     get :choices
-    get :class_badges
+    get :awarded_badges
     get :dashboard
     get :grading_status
     get :timeline_events

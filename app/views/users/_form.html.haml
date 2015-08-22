@@ -18,41 +18,23 @@
       = f.text_field :username
     .form-item
       = f.label :email
-      = f.text_field :email, :input_html => { :class => "small-12 medium-4 columns"}
-    .form-item
-      = f.label :display_name
-      = f.text_field :display_name
-
-  %section
-    %h4.uppercase= "User Profile"
-    .form-item
-      = f.label :first_name
-      = f.text_field :first_name
-    .form-item
-      = f.label :last_name
-      = f.text_field :last_name
-    .form-item
-      = f.label :username
-      = f.text_field :username
-    .form-item
-      = f.label :email
-      = f.text_field :email, :input_html => { :class => "small-12 medium-4 columns"}
+      = f.text_field :email
     .form-item
       = f.label :display_name
       = f.text_field :display_name
 
   - if current_user_is_admin?
     %section
-      %h4.uppercase= "Course Settings"
+      %h4.uppercase= "GradeCraft Settings"
 
       .form-item
         = f.association :courses, :as => :check_boxes
 
-      .form-item
-        = f.label :default_course_id, "Default Course"
-        - if @user.persisted?
+      - if @user.persisted?
+        .form-item
+          = f.label :default_course_id, "Default Course"
           = f.select :default_course_id, options_from_collection_for_select(@user.courses, "id", "name", @user.try(:default_course_id))
-        .form_label This course will be automatically loaded when a student logs in to GradeCraft
+          .form_label This course will be automatically loaded when a student logs in to GradeCraft
 
   - if current_user_is_staff?
     %section

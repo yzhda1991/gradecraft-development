@@ -1,7 +1,6 @@
-= content_nav_for "Ungraded"
+= content_nav_for "Ungraded #{term_for :assignment} Submissions"
 
-%h3.pagetitle= @title
-.label.alert.radius= @count_ungraded
+%h3.pagetitle= "#{@count_ungraded} #{@title}"
 
 .pageContent
   = render 'layouts/alerts'

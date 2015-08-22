@@ -70,6 +70,6 @@
             %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Grade'), edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
 
     - if @assignment.release_necessary?
-      %td
+      %td.center
         - if grade && grade.is_graded?
-          .center= check_box_tag "grade_ids[]", grade.id
+          = check_box_tag "grade_ids[]", grade.id

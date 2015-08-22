@@ -16,7 +16,7 @@
         %th{:style => "min-width: 300px"}
           %span.sr-only Actions
     %tbody
-      - @assignment_types.sorted.each do |assignment_type|
+      - @assignment_types.each do |assignment_type|
         %tr
           %td= link_to assignment_type.name, assignment_type
           %td= assignment_type.points_predictor_display

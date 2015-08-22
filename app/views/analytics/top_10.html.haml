@@ -12,3 +12,6 @@
   %h4.subtitle Bottom 10
 
   = render 'students_table', :course => current_course, :students => @bottom_ten_students
+
+  %h4.subtitle #{term_for :team} Overview
+  = render 'teams_table', :course => current_course, :teams => current_course.teams

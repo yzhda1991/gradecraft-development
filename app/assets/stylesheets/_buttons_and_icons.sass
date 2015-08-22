@@ -34,26 +34,39 @@
 
     li
       float: left
+      padding: 0
+      list-style-type: none
       border-right: 1px solid $color-green-3
     li:first-child button
-    li:last-child
-      padding: .45rem 0 .3rem
+      padding: 0
+    li:last-child 
       border-right: 0
       margin-left: 0rem
+      a
+        display: block
+        padding: .4rem .5rem
 
 thead
   .button
     border: none
-    background-color: $secondary-color-1 !important
-    .select-none
-      left: -6px
+    background-color: $primary-color-2
     &:hover
-      background-color: $primary-color-1 !important
+      background-color: $primary-color-3
+    &.select-all
+      border-top-right-radius: 0
+      border-bottom-right-radius: 0
+    &.select-none
+      border-top-left-radius: 0
+      border-bottom-left-radius: 0
+      margin-left: -5px
+      border-left: 1px solid $primary-color-4
 
 tbody
   ul
     margin: 0
     padding: 0 !important
+    list-style-type: none
+    
     li
       display: inline
       list-style-type: none
