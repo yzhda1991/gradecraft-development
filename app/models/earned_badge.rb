@@ -23,7 +23,7 @@ class EarnedBadge < ActiveRecord::Base
   #validates :badge_id, :uniqueness => {:scope => :grade_id}
 
   #Some badges can only be earned once - we check on award if that's the case
-  validate :multiple_allowed
+  #validate :multiple_allowed
 
   delegate :name, :description, :icon, :to => :badge
 

@@ -20,8 +20,9 @@
             %th{:style => "text-align: right", :width => "50%"} Name
             %th{:style => "text-align: right", :width => "15%"} Earned
             %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
-              %button.button.select-all= "Check"
-              %button.button.select-none= "Uncheck"
+              .center
+                %button.button.select-all= "Check"
+                %button.button.select-none= "Uncheck"
         - @earned_badges.each_with_index do |eb, i|
           %tr
             %td{:style => "text-align: right"}= link_to eb.student.name, student_path(eb.student)

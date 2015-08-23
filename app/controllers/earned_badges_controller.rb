@@ -93,10 +93,17 @@ class EarnedBadgesController < ApplicationController
   def mass_update
     @badge = current_course.badges.find(params[:id])
     if @badge.update_attributes(params[:badge])
-      NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver
-      respond_with @badge
+      @count = 0
+      @badge.earned_badges.each do |eb|
+        new_award = eb.previous_changes[:created_at].present?
+        if new_award
+          @count = @count + 1
+          NotificationMailer.earned_badge_awarded(eb.id).deliver
+        end
+      end
+      redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded #{@count} times"
     else
-      redirect_to :mass_edit
+      redirect_to mass_award_badge_path(:id => @badge)
     end
   end
 
