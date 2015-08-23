@@ -489,6 +489,10 @@ class Assignment < ActiveRecord::Base
     Hash[grades.graded_or_released.group_by{ |g| g.score }.map{ |k, v| [k, v.size] }]
   end
 
+  def predicted_count
+    grades.where(:predicted_score)
+  end
+
   # Calculating how many of each score exists
   def earned_score_count
     Hash[grades.graded_or_released.group_by{ |g| g.raw_score }.map{ |k, v| [k, v.size ] }]
