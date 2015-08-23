@@ -14,15 +14,5 @@ module NavHelper
       end
     end
   end
-
-  def mobile_nav(&block)
-    capture_haml do
-      haml_tag :div, class: 'columns hide-for-medium-up' do
-        haml_tag :a, :class => 'radius button tiny small-12 dropdown', :href => "#", :data => { :dropdown => "drop" } do
-          haml_tag :span, "Options"
-        end
-        haml_tag :ul, :id => 'drop', :class => 'f-dropdown', &block if block
-      end
-    end
-  end
+  
 end

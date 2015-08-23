@@ -1,5 +1,5 @@
 - if @announcement.errors.any?
-  .alert-box.alert.radius
+  .alert-box.alert
     .italic= "#{pluralize(@announcement.errors.count, "error")} prohibited this announcement from being saved:"
     %ul
       - @announcement.errors.full_messages.each do |msg|

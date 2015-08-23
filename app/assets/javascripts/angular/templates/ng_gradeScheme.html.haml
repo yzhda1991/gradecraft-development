@@ -8,5 +8,5 @@
   %span.form_label High Point Threshold
   %input.high-range{'name' => 'high_range', 'ng-model' => 'element.high_range', 'disabled' => 'true', :class => "disabled"}
   .right
-    %button{:type => 'button', :class => 'remove-element button alert radius', 'ng-click' => 'gradeService.remove($index)'} Remove <i class="fa fa-times" ></i> 
-  %button{:type => 'button', :class => 'add-element button radius', 'ng-click' => 'gradeService.addNew($index)'} <i class="fa fa-plus" ></i> Add A Level
+    %button{:type => 'button', :class => 'remove-element button alert', 'ng-click' => 'gradeService.remove($index)'} Remove <i class="fa fa-times" ></i> 
+  %button{:type => 'button', :class => 'add-element button', 'ng-click' => 'gradeService.addNew($index)'} <i class="fa fa-plus" ></i> Add A Level

@@ -1,6 +1,6 @@
 / Using Simple Form to create an assignment type
 - if @assignment_type.errors.any?
-  .alert-box.alert.radius
+  .alert-box.alert
     .italic= "#{pluralize(@assignment_type.errors.count, "error")} prohibited this #{(term_for :assignment_type).downcase} from being saved:"
     %ul
       - @assignment_type.errors.full_messages.each do |msg|

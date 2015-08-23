@@ -1,5 +1,5 @@
 - if @assignment.errors.any?
-  .alert-box.alert.radius
+  .alert-box.alert
     .italic= "#{pluralize(@assignment.errors.count, "error")} prohibited this #{term_for :assignment} from being saved:"
     %ul
       - @assignment.errors.full_messages.each do |msg|
@@ -192,7 +192,7 @@
         %fieldset.unlock-condition
           = f.simple_fields_for :unlock_conditions, condition, class: 'form-inline' do |ucf|
             = render 'unlock_condition_fields', f: ucf
-    = link_to 'Add a Condition', '#', class: 'add-unlock-condition button radius'
+    = link_to 'Add a Condition', '#', class: 'add-unlock-condition button'
 
   %section
     %h4 Grade Levels
@@ -206,7 +206,7 @@
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: 'form-inline' do |slf|
             = render 'assignment_score_level_fields', f: slf
-    = link_to 'Add a Level', '#', class: 'add-assignment-score-level button radius'
+    = link_to 'Add a Level', '#', class: 'add-assignment-score-level button'
 
   %section
     %h4.uppercase Attachments

@@ -1,5 +1,5 @@
 - if @course.errors.any?
-  .alert-box.alert.radius
+  .alert-box.alert
     .italic= "#{pluralize(@course.errors.count, "error")} prohibited this course from being saved:"
     %ul
       - @course.errors.full_messages.each do |msg|

@@ -3,10 +3,10 @@
     = flash[:notice].html_safe
     <a href="" class="close">&times;</a>
 - if flash[:error]
-  .alert-box.alert
-  = flash[:error].html_safe
-  <a href="" class="close">&times;</a>
+  .alert-box.error
+    = flash[:error].html_safe
+    <a href="" class="close">&times;</a>
 - if flash[:alert]
-  .alert-box
-  = flash[:alert].html_safe
-  <a href="" class="close">&times;</a>
+  .alert-box.alert
+    = flash[:alert].html_safe
+    <a href="" class="close">&times;</a>

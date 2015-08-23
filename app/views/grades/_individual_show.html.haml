@@ -4,7 +4,7 @@
     %p.bold
       #{current_student.try(:first_name)}'s Grade
       %span
-        %a{:href => "#{edit_assignment_grade_path(@assignment)}?student_id=#{current_student.id}", :class => 'button radius'  }
+        %a{:href => "#{edit_assignment_grade_path(@assignment)}?student_id=#{current_student.id}", :class => 'button'  }
           Edit
           %span.sr-only #{current_student.try(:first_name)}'s Grade
 

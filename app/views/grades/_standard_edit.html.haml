@@ -2,7 +2,7 @@
   = csrf_meta_tag
 
   - if @grade.errors.any?
-    .alert-box.alert.radius
+    .alert-box.alert
       .italic= "#{pluralize(@grade.errors.count, "error")} prohibited this grade from being saved:"
       %ul
         - @grade.errors.full_messages.each do |msg|

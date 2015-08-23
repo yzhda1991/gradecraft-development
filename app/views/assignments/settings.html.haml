@@ -155,7 +155,7 @@
                     Accepted Until:
                     = assignment.try(:accept_until) || "Always Accepted"
               %td
-                .button-bar
-                  %ul.button-group.radius
+                .right
+                  %ul
                     %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(assignment), :class => 'button'
                     %li= link_to raw('<i class="fa fa-trash fa-fw"> </i> Delete'), assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button'
