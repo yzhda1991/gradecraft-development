@@ -490,7 +490,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def predicted_count
-    grades.where(:predicted_score)
+    grades.predicted_to_be_done.count
   end
 
   # Calculating how many of each score exists
