@@ -137,6 +137,11 @@
       .form_label{:id => "txtTeamRoles"} Do students self-declare their role within the section?
 
     .form-item
+      = f.label :character_profiles, "Character Profiles"
+      = f.check_box :character_profiles, {"aria-describedby" => "character_profiles"}
+      .form_label{:id => "character_profiles"} Do students create a profile for their character in the class?
+
+    .form-item
       = f.label :team_score_average, "Section Score = Average User Score"
       = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage"}
       .form_label{:id => "txtScoreAverage"}  Will sections' scores be the average of their students' scores?
