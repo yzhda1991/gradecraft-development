@@ -3,6 +3,9 @@
 .sub-nav
   margin: 1rem 0 0 1rem
   padding: 0
+  display: block
+  position: relative
+  overflow: hidden
   width: auto
 
   ul
@@ -32,7 +35,7 @@
       padding: 0.5rem 0
       text-transform: capitalize
       a
-        padding: 1em !important
+        padding: 1em
         color: #FFF
     li.active
       padding: .5rem .75rem !important
@@ -44,6 +47,15 @@
 .navbar-nav li.active, .sub-nav .navbar-nav li:hover
   background-color: $color-yellow-1
   color: #000 !important
+
+li .announcement-notification-badge
+  position: relative
+  top: -2px
+  margin: 0 
+  left: 5px
+
+li a.notification-right
+  padding: 1rem 0 1rem 1rem !important
 
 /* Reducing padding and font size for small screens */
 @media (max-width: $media-small-max)
