@@ -13,33 +13,11 @@
     margin: 0
     padding: 0
 
-  dt
-    text-transform: uppercase
-
-  dt,
-  dd,
   li
-    color: #FFF
     list-style-type: none
     float: left
     margin-left: rem-calc(16)
     margin-bottom: 0
-
-    a
-      color: $primary-color-1
-      padding: .25rem 1rem
-
-      &:hover
-        color: $secondary-color-1
-
-    &.active a
-      background: $primary-color-2
-      color: $primary-color-1
-
-      &:hover
-        background: $primary-color-3
-
-      margin-left: 0
 
   /* Individual Tabs */
   .navbar-nav
@@ -47,7 +25,6 @@
     li
       font-size: .75rem
       height: 2rem
-      color: #FFF !important
       background-color: $primary-color-1
       border-top-left-radius: $global-radius
       border-top-right-radius: $global-radius
@@ -61,7 +38,7 @@
       padding: .5rem .75rem !important
 
     li a:hover, li:hover a
-      color: #FFF
+      color: #000
 
 /* Setting the active tab and hover color */
 .navbar-nav li.active, .sub-nav .navbar-nav li:hover

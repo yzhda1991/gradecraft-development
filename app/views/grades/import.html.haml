@@ -20,7 +20,7 @@
 
     = form_tag({:action => :email_import}, :multipart => true) do
       = file_field_tag 'file'
-      = submit_tag("Import", :class => "button radius")
+      = submit_tag("Import", :class => "button")
       %br
       %br
       %br
@@ -32,4 +32,4 @@
 
     = form_tag({:action => :username_import}, :multipart => true) do
       = file_field_tag 'file'
-      = submit_tag("Import", :class => "button radius")
+      = submit_tag("Import", :class => "button")

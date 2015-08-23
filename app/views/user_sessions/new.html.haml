@@ -1,8 +1,9 @@
-.row
-  .small-12.medium-6.columns.panel.radius.callout
-    %h5 Forgot Your Password?
+%section.login
+  .password-forgot.columns.half
+    %h2 Forgot Your Password?
     %p Enter the email address associated with your account, and you'll receive a link via email that will allow you to create a new password.
     = render 'passwords/reset_form'
 
-  .small-12.medium-6.columns.panel.radius.login_forms
+  .login-form.columns.login
+    %h2 Login
     = render 'form'

@@ -128,7 +128,11 @@ class UsersController < ApplicationController
   def update_profile
     @user = current_user
     @user.update_attributes(params[:user])
-    redirect_to dashboard_path
+    if @user.save
+      redirect_to dashboard_path, :notice => "Your profile was successfully updated!"
+    else
+      redirect_to edit_profile_users_path(@user), :alert => "I'm sorry, something went wrong. Your profile was not successfully updated."
+    end
   end
 
   def import

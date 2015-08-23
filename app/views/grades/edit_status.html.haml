@@ -21,8 +21,8 @@
   = simple_form_for :grade, :url => update_status_grades_assignment_path(@assignment), :html => { :method => :put} do |f|
     - for grade in @grades
       = hidden_field_tag "grade_ids[]", grade.id
-    .medium-3.right= f.input :status, :label => "Update Status to:", :as => :select, :collection => Grade::STATUSES
-    .button-bar
-      %ul.button-group.radius.right
+    .right= f.input :status, :label => "Update Status to:", :as => :select, :collection => Grade::STATUSES
+    .submit-buttons
+      %ul
         %li= f.button :submit, "Update Statuses"
         %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'
