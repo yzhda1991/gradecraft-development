@@ -69,16 +69,14 @@ label.disabled
     background: #F5FCA1
     border-color: #E8F08F
 
-#badges-available
-  margin-top: 20px
-
 #available
+  padding: 1rem
+  background-color: lighten($secondary-color-3, 40%)
   min-height: 300px
 
-  &.empty
-
 #awarded
-  @include linear-gradient(#C4EAFB,#E9F8FF)
+  background-color: lighten($secondary-color-3, 20%)
+  padding: 1rem
   min-height: 300px
 
 .gradebox
@@ -142,13 +140,13 @@ button#remove-badges, button#add-badges
     cursor: hand
 
     position: relative
-    width: 150px
-    height: 86.60px
+    width: 80px
+    height: 36px
     float: left
-    z-index: 2400
+    z-index: 100
     background-color: #3277BE
-    margin: 55.30px 40px 
-    box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
+    margin: 2rem 3rem 3rem 2rem
+    box-shadow: 0 0 10px rgba(12, 40, 44, 0.55)
     border-left: solid 1px #0C58A7
     border-right: solid 1px #0C58A7
 
@@ -156,17 +154,17 @@ button#remove-badges, button#add-badges
       content: ""
       position: absolute
       z-index: 1
-      width: 106.07px
-      height: 106.07px
+      width: 59px
+      height: 59px
       -webkit-transform: scaleY(0.5774) rotate(-45deg)
       -ms-transform: scaleY(0.5774) rotate(-45deg)
       transform: scaleY(0.5774) rotate(-45deg)
       background-color: #3277BE
-      left: 20.9670px
-      box-shadow: 0 0 20px rgba(12, 100, 104, 0.55)
+      left: 10.75px
+      box-shadow: 0 0 20px rgba(12, 50, 54, 0.55)
 
     &:before
-      top: -53.0330px
+      top: -29.76px
       border-top: solid 1.4142px #43b6bb
       border-right: solid 1.4142px #43b6bb
 
@@ -234,23 +232,20 @@ button#remove-badges, button#add-badges
       position: absolute
       top: 0.5773502691896257px
       left: 0
-      width: 148px
-      height: 85.4478px
+      width: 90px
+      height: 55.4478px
       z-index: 2
       background: inherit
 
-  .italic
-    font-style: italic
-
   .ribbon
-    width: 170px
+    width: 100px
     position: relative 
-    margin-top: 70px
-    text-align: center
-    font-size: 16px !important
-    z-index: 2400
-    background: #d64b4b
+    margin-top: 38px
     margin-left: -10px
+    text-align: center
+    font-size: 12px !important
+    z-index: 100
+    background: $color-red-1
     background: -webkit-gradient(linear, left top, left bottom, from(#d64b4b), to(#ab2c2c))
     background: -webkit-linear-gradient(top, #d64b4b, #ab2c2c)
     background: -moz-linear-gradient(top, #d64b4b, #ab2c2c)
@@ -262,12 +257,12 @@ button#remove-badges, button#add-badges
     box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
     font-family: 'Helvetica Neue',Helvetica, sans-serif
     h1
-      font-size: 16px !important
+      font-size: 14px !important
       margin-top: 50px
       color: #590000
       text-shadow: #d65c5c 0 1px 0
       margin: 0px
-      padding: 8px 10px
+      padding: 2px 10px
 
   .ribbon-ends
     position: relative
@@ -279,7 +274,7 @@ button#remove-badges, button#add-badges
       position: absolute
       display: block
       bottom: -1em
-      border: 1.5em solid #c23a3a
+      border: 1em solid #c23a3a
       z-index: 1
     &:before
       left: -2.5em
@@ -298,7 +293,7 @@ button#remove-badges, button#add-badges
 
   .ribbon-stitches-top
     z-index: 2410
-    margin-top: 2px
+    margin-top: -2px
     border-top: 1px dashed rgba(0, 0, 0, 0.2)
     -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
     -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
@@ -313,11 +308,11 @@ button#remove-badges, button#add-badges
     box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3)
 
   img.earned
-    max-height: 6rem
+    max-height: 5rem
     margin: 0 auto
-    z-index: 2200
+    z-index: 80
     position: absolute
-    margin: -2px 0 0 27px
+    margin: -14px 0 0 2px
 
   .badge-name
     font-weight: bold
@@ -350,11 +345,9 @@ button#remove-badges, button#add-badges
       background: #999
       display: none
 
-    .earned-count
-
   .gold-stars
     position: absolute
-    top: 0
+    top: -10px
     right: -18px
 
     img.star
