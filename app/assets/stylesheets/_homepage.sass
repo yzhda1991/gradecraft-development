@@ -1,3 +1,12 @@
+section.features
+  position: relative
+  min-width: 700px
+  max-width: 1500px
+  margin: 0 auto
+  padding: 4rem   
+  background-color: #FFF 
+  opacity: .6
+  
 .video-container, .newsletter-container, .press-container
   width: 100% !important
   margin: 0
@@ -21,7 +30,7 @@
   margin: 0
   padding: 0
 
-section.forgot-password
+section.forgot-password, section.login
   padding: 4rem   
   background-color: lighten($color-yellow-1, 10%)
   opacity: .7
@@ -33,7 +42,7 @@ section.forgot-password
 section.video-promo, section.newsletter
   padding: 0 2rem
 
-section.video-promo, section.newsletter, section.press, section.forgot-password
+section.video-promo, section.newsletter, section.press, section.forgot-password, section.login
   min-width: 700px
   max-width: 1500px
   margin: 0 auto
@@ -94,9 +103,11 @@ section.video-promo, section.newsletter, section.press, section.forgot-password
   .columns.two-thirds
     width: 66%
 
+  .columns.half
+    width: 48%
+
   .columns.text
     width: 40%
-    margin-top: 2.5rem
     font-size: 1rem
 
   .columns.video
@@ -111,9 +122,10 @@ section.video-promo, section.newsletter, section.press, section.forgot-password
       height: 80%
 
   .columns.login
-    margin-top: 3.25rem
     margin-left: 2rem
+    padding-left: 2rem
     width: 30%
+    border-left: 1px solid darken($color-yellow-1, 20%)
     .ui-widget-content, .ui-widget-header
       padding: .5rem
       background: $primary-color-1 !important
