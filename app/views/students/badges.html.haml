@@ -44,11 +44,19 @@
                   %li
                     = link_to bf.filename, bf.url
             - if badge.is_unlockable?
-              - if badge.is_unlocked_for_student?(current_student)
-                %i.fa.fa-unlock-alt
-              - else
+              %a
                 %i.fa.fa-lock
-              Unlock Requirements
-              - badge.unlock_conditions.each do |uc|
-                = link_to uc.condition.name, uc.condition
+              .display_on_hover.unlock_keys
+                %h3 Unlock Requirements
+                %ul
+                  - badge.unlock_conditions.each do |condition|
+                    %li= "#{condition.name} must be #{condition.condition_state}"
+            - if badge.is_a_condition?
+              %a
+                %i.fa.fa-key
+              .display_on_hover.unlock_keys
+                %h3 Unlock Key
+                %ul
+                  - badge.unlock_keys.each do |key|
+                    %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
             %span= raw badge.description

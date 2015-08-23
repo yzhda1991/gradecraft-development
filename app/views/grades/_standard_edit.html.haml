@@ -9,90 +9,94 @@
           %li= msg
 
   - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
-    .panel
+    %section
 
       %h4.uppercase= "#{@student.first_name}'s Submission"
       = render 'submissions/instructor_data'
 
-  = simple_form_for @grade, url: assignment_grade_path(@assignment), method: :patch do |f|
-    = hidden_field_tag :student_id, current_student.id
-    = hidden_field_tag :instructor_modified, true
+  %section
+    = simple_form_for @grade, url: assignment_grade_path(@assignment), method: :patch do |f|
+      = hidden_field_tag :student_id, current_student.id
+      = hidden_field_tag :instructor_modified, true
 
-    #grade(ng-controller="GradeCtrl" ng-init="init(#{@serialized_init_data})")
-      .panel.splash(ng-cloak) Loading grade for #{@student.name}...
+      #grade(ng-controller="GradeCtrl" ng-init="init(#{@serialized_init_data})")
+        .panel.splash(ng-cloak) Loading grade for #{@student.name}...
 
-      .panel(ng-cloak)
-        - if @assignment.pass_fail?
-          .switch-label.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
-            - if @grade.pass_fail_status
-              = term_for @grade.pass_fail_status
-            - else
-              = term_for :fail
-          .pass-fail-grade-toggle
-            .switch
-              = f.check_box :pass_fail_status, { :checked=> @grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
-              = f.label :pass_fail_status
+        .panel(ng-cloak)
+          - if @assignment.pass_fail?
+            .switch-label.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
+              - if @grade.pass_fail_status
+                = term_for @grade.pass_fail_status
+              - else
+                = term_for :fail
+            .pass-fail-grade-toggle
+              .switch
+                = f.check_box :pass_fail_status, { :checked=> @grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
+                = f.label :pass_fail_status
 
-        - if @assignment_score_levels.count > 0 # use this longhand method to save a request
-          = render partial: "score_level_grading_fields", locals: {f:f}
-        - else
-          = render partial: "raw_score_grading_fields", locals: {f:f}
+          - if @assignment_score_levels.count > 0 # use this longhand method to save a request
+            = render partial: "grades/standard_edit/score_level_grading_fields", locals: {f:f}
+          - else
+            = render partial: "grades/standard_edit/raw_score_grading_fields", locals: {f:f}
 
-        - if @assignment.release_necessary?
-          .assignment-status
-            = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @grade.status, :include_blank => true
-            .form_label Can the student see this grade? (Won't be updated until the grade is submitted.)
+          - if @assignment.release_necessary?
+            .assignment-status
+              = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @grade.status, :include_blank => true
+              .form_label Can the student see this grade? (Won't be updated until the grade is submitted.)
 
-            -# angular code for status update
-            -# .input.select.optional.grade_status
-              %label.select.optional(for="grade_status") Status
-              %select.select.optional(name="grade[status]" id="grade_status")
-                %option(value="{{grade_status}}" ng-repeat="grade_status in gradeStatuses" ng-selected="grade_status == grade.status") {{grade_status}}
+              -# angular code for status update
+              -# .input.select.optional.grade_status
+                %label.select.optional(for="grade_status") Status
+                %select.select.optional(name="grade[status]" id="grade_status")
+                  %option(value="{{grade_status}}" ng-repeat="grade_status in gradeStatuses" ng-selected="grade_status == grade.status") {{grade_status}}
 
-        - elsif @grade.status.blank?
-          = f.hidden_field :status, value: 'Graded'
+          - elsif @grade.status.blank?
+            = f.hidden_field :status, value: 'Graded'
 
-        .submit-buttons
-          %ul
-            %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", :class => "button"
-            %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'
+          %section(ng-cloak)
+            = render partial: "grades/standard_edit/standard_edit_attachment", locals: {f: f}
 
-        .text-feedback
-          = f.hidden_field :graded_by_id, :value => current_user.id
-          = f.label :feedback
-          = f.text_area :feedback,
-            "froala" => "froalaOptions",
-            "ng-change" => "grade.update()",
-            "ng-model" => "grade.feedback",
-            "ng-model-options" => "{ debounce: 1000 }"
+          .text-feedback
+            = f.hidden_field :graded_by_id, :value => current_user.id
+            = f.label :feedback
+            = f.text_area :feedback,
+              "froala" => "froalaOptions",
+              "ng-change" => "grade.update()",
+              "ng-model" => "grade.feedback",
+              "ng-model-options" => "{ debounce: 1000 }"
 
-        .last-updated
-          #updated-at(ng-hide="grade.updated_at")= "Last updated #{time_ago_in_words(@grade.updated_at)} ago"
-          #updated-at-current(ng-show="grade.updated_at" ng-class="{just_updated: grade.justUpdated()}")
-            %span updated
-            %span(am-time-ago="grade.updated_at")
+          %span.last-updated
+            #updated-at(ng-hide="grade.updated_at")= "Last updated #{time_ago_in_words(@grade.updated_at)} ago"
+            #updated-at-current(ng-show="grade.updated_at" ng-class="{just_updated: grade.justUpdated()}")
+              %span updated
+              %span(am-time-ago="grade.updated_at")
 
-      .panel(ng-cloak)
-        = render partial: "standard_edit_attachment", locals: {f: f}
+          .submit-buttons
+            %ul
+              %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", :class => "button"
+              %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'
 
-      .panel#awarded(ng-cloak)
-        = render partial: "badges_awarded"
-        .clear-left
+        %section
 
-      #available.empty(ng-cloak)
-        = render partial: "badges_available"
-        .clear-left
+        %section
+          #awarded(ng-cloak)
+            = render partial: "grades/standard_edit/badges_awarded"
+            .clear-left
 
-      .panel(ng-if="debug" ng-cloak)
-        .badge-debug(ng-repeat="badge in badges" ng-class="{creating: badge.creating, deleting: badge.deleting}")
-          .info
-            %h4 {{badge.name}}
-          .info
-            %b Creating:
-            {{badge.creating}}
-          .info
-            %b Deleting:
-            {{badge.deleting}}
-          .info.earned-badge
-            %b EarnedBadge:
-            .pretty-json {{badge.earnedBadge | json}}
+          #available.empty(ng-cloak)
+            = render partial: "grades/standard_edit/badges_available"
+            .clear-left
+
+        .panel(ng-if="debug" ng-cloak)
+          .badge-debug(ng-repeat="badge in badges" ng-class="{creating: badge.creating, deleting: badge.deleting}")
+            .info
+              %h4 {{badge.name}}
+            .info
+              %b Creating:
+              {{badge.creating}}
+            .info
+              %b Deleting:
+              {{badge.deleting}}
+            .info.earned-badge
+              %b EarnedBadge:
+              .pretty-json {{badge.earnedBadge | json}}

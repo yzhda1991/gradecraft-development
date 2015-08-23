@@ -24,7 +24,7 @@
         %th Visible
         %th Submissions?
         %th Release necessary
-        %th{ :style => "min-width: 180px" }
+        %th{ :style => "min-width: 220px" }
 
     %tbody
       - @challenges.each do |challenge|
@@ -41,12 +41,6 @@
           %td
             .right
               %ul
-                %li
-                  %a.button{:href => mass_edit_challenge_challenge_grades_path(challenge) }
-                    Quick Grade
-                %li
-                  = link_to edit_challenge_path(challenge), :class => 'button' do
-                    Edit
-                %li
-                  = link_to challenge, :class => 'button', :method => :delete, data: { confirm: 'Are you sure?' } do
-                    Delete
+                %li= link_to raw("<i class='fa fa-check fa-fw'></i> Quick Grade"), mass_edit_challenge_challenge_grades_path(challenge), :class => 'button'
+                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_challenge_path(challenge), :class => 'button'
+                %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), challenge, :class => 'button', :method => :delete, data: { confirm: 'Are you sure?' }
