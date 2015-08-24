@@ -11,6 +11,10 @@
     margin-bottom: .5rem
     width: 11.75rem
     border: 0
+    padding: .5rem
+
+  textarea
+    padding: .5rem
 
 .splash, #rubric-grader-splash
   display: none
@@ -35,23 +39,23 @@
   top: 1.6rem
   right: 28px
   z-index: 800
-  padding: 12px 14px
-  height: 60px
+  padding: 1.5rem 1rem .5rem
+  height: 70px
   border-bottom-left-radius: $global-radius
   border-bottom-right-radius: $global-radius
-  background: darken($color-blue-2, 10%)
+  background: darken($color-blue-0, 0)
 
   h4#points-legend, h4.points-legend
-    font-size: 22px
+    font-size: 24px
     font-style: italic
     color: $primary-color-5
 
     .points-assigned
       margin-right: -4px
       font-weight: bold
-      color: $alert-color
+      color: $color-yellow-1
     .points-missing
-      color: lighten($secondary-color-3, 30%)
+      color: lighten($color-yellow-1, 30%)
     .points-satisfied
       color: $secondary-color-3
     .points-overage
@@ -61,7 +65,7 @@ h4.notice
   font-size: 14px
   font-style: italic
   font-weight: normal
-  color: lighten($secondary-color-3, 30%)
+  color: $color-yellow-1
   text-transform: none
 
 #rubric-column-heading
@@ -85,27 +89,24 @@ h4.notice
   .metric, .tier
     padding: 2rem .5rem .5rem
     margin-right: 10px
-    height: 210px
+    height: 240px
     position: relative
     float: left
     width: 190px
 
 .tier-container
-  height: 250px !important
-  width: 700px
-  overflow-x: scroll
-  overflow-y: hidden
-  float: left
+  height: 280px !important
+  width: 10000px
 
   .tier
     float: left
     display: inline
 
 .metric
-  background: #eee
+  background: $color-grey-3
 
   &.saved
-    background: $primary-color-3
+    background: $primary-color-2
 
   input.points
     z-index: 500
@@ -155,13 +156,13 @@ button.delete
     background: $color-red-1
 
 .tier
-  background: #eee
+  background: $color-grey-3
 
   &.nocredit
     width: 180px
 
   &.saved
-    background: lighten($primary-color-3, 35%)
+    background: lighten($secondary-color-2, 10%)
 
   .badge-messages
     clear: right
@@ -170,11 +171,11 @@ button.delete
     color: #333
 
   .badge-row
-    margin-top: -5px
     overflow: hidden
+    padding: 5px
     height: 60px
     &:hover
-      background: $secondary-color-3
+      background: lighten($secondary-color-3, 20%)
       cursor: pointer
       cursor: hand
 
@@ -189,7 +190,7 @@ button.delete
   select
     color: #333
     font-size: 13px
-    padding: -4px 2px
+    padding: 2rem
 
     &[disabled]
       color: #999
@@ -221,14 +222,14 @@ button.delete
 .tier-badge, .tier-badge-image
   font-size: 12px
   color: white
-  padding: 1px 0 0px 4px
+  padding: 0 0 0 4px
   margin-bottom: 2px
   position: relative
 
 .modal-window
   .tier-badge
-    margin-top: .5rem
-    background: $primary-color-5
+    margin: .5rem
+    background: $primary-color-2
     clear: both
 
 .tier-badge-image
@@ -237,10 +238,9 @@ button.delete
   border: none
 
 .add-tier
-  position: relative
-  float: right
-  bottom: 20px
-  right: 0
+  position: absolute
+  margin-top: -20px
+  right: 70px
 
 #rubric .rubric-container
   margin: 1rem 0
@@ -250,24 +250,26 @@ button.delete
   cursor: move
   border-left: 2px solid #999
   width: 100%
-  height: 250px !important
+  overflow-y: scroll
+  s
+  height: 280px !important
 
   .order-label
     display: block
-    float: right
+    float: left
     right: 0
     background: $primary-color-1
     padding: .5rem
     color: white
-    margin-top: -10px
-    margin-right: -36px
+    margin-top: 0
+    margin-right: 0px
 
 .modal-window
   /* A centered div above the overlay with a box shadow. */
-  z-index: 5000
+  z-index: 1000
   position: absolute
-  width: 240px
-  padding: 1rem
+  width: 200px
+  padding: 1rem !important
 
   /* Center the dialog */
   top: 50%
@@ -279,8 +281,12 @@ button.delete
   background-color: $primary-color-4
   box-shadow: 4px 4px 80px #000
 
+  select 
+    width: 200px
+
 .update-badges
   width: 100%
   margin: .75rem auto 0
   text-align: center
   padding: 0
+  border-radius: $global-radius

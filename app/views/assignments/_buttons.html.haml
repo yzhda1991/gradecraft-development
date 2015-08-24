@@ -36,15 +36,11 @@
           %li
             %a{:href => rubric_grades_review_assignment_path(@assignment) }
               Review Grades
-        %li.loading(ng-cloak ng-hide="window.angular")
-          %a(ng-click="")
-            %i.fa.fa-table.fa-fw
-            Rubrics
         %li.on(ng-cloak ng-show="useRubric")
           %a(ng-click="rubricsOff()")
             %i.fa.fa-power-off.fa-fw
-            Rubrics On
+            Rubric is On
         %li.off(ng-cloak ng-hide="useRubric")
           %a(ng-click="rubricsOn()")
             %i.fa.fa-power-off.fa-fw
-            Rubrics Off
+            Rubric is Off
