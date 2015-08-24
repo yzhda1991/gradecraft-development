@@ -36,6 +36,7 @@
         angular.copy(data.weights, weights)
         termFor.weights = data.term_for_weights
         weights.open = !weights.close_at || Date.parse(weights.close_at) >= Date.now()
+        weights.update = data.update_weights
         weights.unusedWeights = ()->
           used = 0
           _.each(assignmentTypes,(at)->
@@ -105,14 +106,14 @@
         )
 
     postAssignmentTypeWeight = (assignmentType_id,value)->
-
-      $http.post('/assignment_type_weight', id: assignmentType_id, weight: value).success(
-        (data)->
-          console.log(data);
-        ).error(
-        (data)->
-          console.log(data);
-        )
+      if weights.update
+        $http.post('/assignment_type_weight', id: assignmentType_id, weight: value).success(
+          (data)->
+            console.log(data);
+          ).error(
+          (data)->
+            console.log(data);
+          )
 
     return {
         getGradeLevels: getGradeLevels
