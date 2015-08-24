@@ -33,7 +33,7 @@
     .form-item
       .textarea
         .form_label How would you like to describe this #{term_for :assignment} type on the student dashboard? Are there hints that you can give students that will help them understand how to succeed?
-        = f.text_area :predictor_description, :label => "Description"
+        = f.text_area :predictor_description, :label => "Description", :class => "froala"
       
   .submit-buttons
     %ul

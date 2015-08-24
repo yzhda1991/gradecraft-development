@@ -10,7 +10,7 @@
     .textarea
       %h4 #{term_for :badge} Feedback
       .form_label Enter a message to the #{term_for :student} regarding their work
-      = f.text_area :feedback
+      = f.text_area :feedback, :class => "froala"
 
   .submit-buttons
     %ul

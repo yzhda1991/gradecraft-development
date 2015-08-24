@@ -45,7 +45,7 @@
           %h4 Proposal
           .textarea
             .form_label If your #{term_for :group} knows what it will be working on, you can submit that here.
-            = f.text_area :proposal
+            = f.text_area :proposal, :class => "froala"
             = f.hidden_field :id
          
       - if @group.persisted?
