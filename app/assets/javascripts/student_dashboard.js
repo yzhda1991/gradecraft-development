@@ -7,20 +7,20 @@ $(document).ready(function() {
       backgroundColor: null
     },
     colors: [
-     '#1A1EB2',
-     '#303285',
-     '#6dd8f0',
-     '#080B74',
-     '#00BD39',
-     '#238D43',
-     '#007B25',
-     '#37DE6A',
-     '#64DE89',
-     '#FFCC00',
-     '#BFBD30',
-     '#A6A400',
-     '#FFFD40',
-     '#FFFD73'
+     '#48BDEB',
+     '#8BDEFF',
+     '#E7F8FF',
+     '#1C7200',
+     '#68A127',
+     '#7CC02F',
+     '#EFFFED',
+     '#F1592A',
+     '#F7941E',
+     '#FCB040',
+     '#FFCF06',
+     '#FFFD73',
+     '#1E267F',
+     '#1460AE'
   ],
 
     credits: {
@@ -44,6 +44,11 @@ $(document).ready(function() {
       min: 0,
       title: {
         text: ' '
+      },
+      labels: {
+        style: {
+          color: "#FFF"
+        }
       }
     },
     tooltip: {

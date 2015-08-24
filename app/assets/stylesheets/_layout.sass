@@ -8,6 +8,9 @@ body
   width: 100%
   position: relative
 
+.outer-wrap
+  padding: 0.1rem 0 
+
 .mainContainer
   margin: 0
   float: left
@@ -96,9 +99,8 @@ body
         &:hover
           color: $primary-color-1
 
-
-.tabs-content > .content
-  padding: 0
+.tab-container
+  padding: 1rem
 
 /* Allow other things to appear above the timeline */
 .vco-storyjs
@@ -123,6 +125,15 @@ form .tabs-content .content
   min-height: 400px
   border: 1px solid $color-grey-5
   padding: 1rem
+
+hr.dotted
+  border-color: #FFF
+  border: 0
+  border-bottom: 1px dashed $secondary-color-3
+
+hr.light-grey
+  border-color: $color-grey-3
+  border: 1px
 
 .draggable
   display: inline

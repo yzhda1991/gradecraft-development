@@ -39,4 +39,7 @@
           %br
           = render 'assignments/rubric_preview'
       .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
-        = render "grades/instructor_analytics"
+        - if @assignment.has_groups?
+          = render "grades/group_analytics"
+        - else
+          = render "grades/instructor_analytics"
