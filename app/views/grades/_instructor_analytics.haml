@@ -4,7 +4,7 @@
     %li
       %span.small_uppercase No. of Positive Predictions: 
       = points @assignment.predicted_count
-    - if @grades_for_assignment.count > 1 
+    - if @grades_for_assignment.present? && @grades_for_assignment.count > 1
       %li
         %span.small_uppercase Average Score:
         = points @assignment.average
@@ -15,7 +15,7 @@
         %span.small_uppercase High Score: 
         = points @assignment.high_score
 
-  - if @grades_for_assignment.count > 1 
+  - if @grades_for_assignment.present? && @grades_for_assignment.count > 1 
     %h4.bold Grade Distribution
     .grades_per_assign{ "data-scores" => @grades_for_assignment.to_json, :style => "width: 200px" }
 
