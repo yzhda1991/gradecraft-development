@@ -7,6 +7,10 @@ section.features
   background-color: #FFF 
   opacity: .6
   
+.homepage .login
+  margin: 3rem 1rem
+  width: 100%
+
 .video-container, .newsletter-container, .press-container
   width: 100% !important
   margin: 0
@@ -20,8 +24,8 @@ section.features
   input.button 
     background-color: $primary-color-1 !important
 
-.video-container
-  padding: 2rem 0 
+.video-promo, .newsletter
+  padding: 2rem
 
 .press-container
   background-color: $primary-color-1
@@ -38,9 +42,6 @@ section.forgot-password, section.login
   input
     border: 0
     padding: .5rem
-
-section.video-promo, section.newsletter
-  padding: 0 2rem
 
 section.video-promo, section.newsletter, section.press, section.forgot-password, section.login
   min-width: 700px
@@ -83,10 +84,13 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
       font-size: 2.0rem
 
   h1
+    margin-top: 1rem
+    margin-bottom: 0
+    padding-bottom: 0
     font-family: Avenir, san-serif
     font-weight: 100
     color: $primary-color-1
-    font-size: 2.2rem
+    font-size: 2rem
 
   ul
     margin: 0
@@ -100,38 +104,44 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
       a
         color: $primary-color-4
 
-  .columns.two-thirds
+  .two-thirds
     width: 66%
 
-  .columns.half
+  .half
     width: 48%
 
-  .columns.text
+  .one-third
+    width: 33%
+
+  .text
     width: 40%
     font-size: 1rem
 
+    h1
+      margin-top: 1.5rem
+      color: $color-green-1
+
+    p
+      margin: 0
+
   .columns.video
-    margin-top: 1.5rem
     padding-left: 1rem
     float: right
     width: 55% !important
 
     iframe
-      margin-top: 2rem
+      margin-top: 1.5rem
       width: 100%
       height: 80%
 
-  .columns.login
-    margin-left: 2rem
-    padding-left: 2rem
-    width: 30%
-    border-left: 1px solid darken($color-yellow-1, 20%)
+  .login
     .ui-widget-content, .ui-widget-header
-      padding: .5rem
-      background: $primary-color-1 !important
+      background: lighten($color-blue-0, 10%) !important
       opacity: .9
 
     .ui-tabs-nav
+      background: lighten($primary-color-1, 60%) !important
+      border-bottom: 10px solid lighten($color-blue-0, 10%)
       li
         border: 0
 
@@ -139,7 +149,7 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
       height: 150px
       width: 100%
       margin: 0
-      padding: .5rem
+      padding: .75rem
       input
         padding: .5rem
         width: 95%
