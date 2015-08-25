@@ -177,7 +177,7 @@ $predictor-font-size-4 : .85rem
         @include transition(all, .5s, ease-out)
       .coin-remove-icon
         color: $color-yellow-1
-        margin: 0 0 0 -3px
+        margin: 1px 0 0 -3px
       .coin:hover
         background-color: $color-orange-2
       .coin:hover .coin-remove-icon
@@ -188,7 +188,7 @@ $predictor-font-size-4 : .85rem
         @include transition(all, .5s, ease-out)
       .coin-add-icon
         color: $color-blue-0
-        margin: 0 0 0 -3px
+        margin: 1px 0 0 -3px
         visibility: hidden
       .coin-slot:hover .coin-add-icon
         visibility: visible
@@ -211,9 +211,10 @@ article.predictor-article
   border-bottom: .25rem solid $color-blue-0
   background-color: $color-blue-5
   float: left
-  //width: 19%
   margin: 3px
   height: 8.8rem
+  //default width, changes with screensize
+  width: 19%
   select
     margin: 0
 
@@ -444,3 +445,12 @@ article.predictor-article
   #predictor-graphic
     width: 90%
     margin: 10px 0 0 5%
+
+// x-large
+@media (min-width: $media-large-max)
+  article.predictor-article
+    width: 16%
+  #predictor-graphic
+    width: 90%
+    margin: 10px 0 0 5%
+

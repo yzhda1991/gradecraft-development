@@ -1,5 +1,7 @@
 class AssignmentTypeWeightsController < ApplicationController
 
+  before_filter :ensure_student?, only: [:update]
+
   # Students set their assignment type weights all at once
   def mass_edit
     if current_user_is_staff?
@@ -49,8 +51,10 @@ class AssignmentTypeWeightsController < ApplicationController
   def student_predictor_data
     if current_user.is_student?(current_course)
       @student = current_student
+      @update_weights = true
     else
       @student = User.find(params[:id])
+      @update_weights = false
     end
     @assignment_types = current_course.assignment_types
     .select(

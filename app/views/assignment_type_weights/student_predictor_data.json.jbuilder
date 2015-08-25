@@ -14,4 +14,6 @@ json.weights do
   json.default_weight current_course.default_assignment_weight
 end
 
+json.update_weights @update_weights
+
 json.term_for_weights term_for :weights
