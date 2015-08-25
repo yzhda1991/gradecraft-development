@@ -78,6 +78,8 @@ describe EarnedBadgesController do
     end
 
     describe "POST mass_earn", working: true do
+      subject { post :mass_earn, {id: @badge[:id], student_ids: @student_ids} }
+
       before(:each) do
         @course = create(:course)
         @badge = create(:badge, course_id: @course[:id])
@@ -95,11 +97,11 @@ describe EarnedBadgesController do
         end
 
         it "redirects to the badge page" do
-          expect(response).to redirect_to(badge_path(@badge))
+          expect(subject).to redirect_to(badge_url(@badge))
         end
 
-        after(:each) do
-          post :mass_earn, {id: @badge[:id], student_ids: @student_ids}
+        it "redirects back to the edit page" do
+          expect(subject).to redirect_to(mass_award_badge_url(id: @badge))
         end
       end
     end
@@ -116,10 +118,13 @@ describe EarnedBadgesController do
         end
 
         @controller = EarnedBadgesController.new
-        @controller.instance_variable_set(:@valid_earned_badges, @earned_badges)
       end
 
       context "earned badges exist" do
+        before(:each) do
+          @controller.instance_variable_set(:@valid_earned_badges, @earned_badges)
+        end
+
         it "should send a notification" do
           mail_responder = double("earned badge mail responder!!")
           mail_responder.stub(:deliver_now)
@@ -140,7 +145,9 @@ describe EarnedBadgesController do
       end
 
       context "no earned badges" do
-        it "should not send any badges" do
+        it "should not send any notifications" do
+          @controller.instance_variable_set(:@valid_earned_badges, [])
+          expect(NotificationMailer).not_to receive(:earned_badge_awarded)
         end
       end
     end
