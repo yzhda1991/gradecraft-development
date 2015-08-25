@@ -19,6 +19,20 @@ class Course < ActiveRecord::Base
     instructors_of_record.map(&:id)
   end
 
+  def instructors_of_record_ids=(value)
+    excluded = course_memberships.reject { |membership| value.include? membership.user_id }
+    excluded.each do |remove|
+      remove.instructor_of_record = false
+      remove.save
+    end
+
+    current = course_memberships.select { |membership| value.include? membership.user_id }
+    current.each do |current|
+      current.instructor_of_record = true
+      current.save
+    end
+  end
+
   # Staff returns all professors and GSI for the course.
   # Note that this is different from is_staff? which currently
   # includes Admin users
@@ -62,7 +76,8 @@ class Course < ActiveRecord::Base
     :team_challenges, :team_leader_term, :max_assignment_types_weighted,
     :point_total, :in_team_leaderboard, :grade_scheme_elements_attributes,
     :add_team_score_to_student, :status, :assignments_attributes, :character_profiles,
-    :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics
+    :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics,
+    :instructors_of_record_ids
 
   with_options :dependent => :destroy do |c|
     c.has_many :assignment_types
