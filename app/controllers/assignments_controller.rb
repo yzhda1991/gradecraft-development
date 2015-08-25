@@ -297,6 +297,7 @@ class AssignmentsController < ApplicationController
         :student_id,
         :raw_score,
         :final_score,
+        :updated_at,
         :score
       )
     end
