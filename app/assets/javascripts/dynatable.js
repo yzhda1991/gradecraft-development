@@ -7,7 +7,11 @@ $('table.dynatable').dynatable({
       }
       ,
       score: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,""));
+        if($.trim(el.innerHTML) == '') {
+          return el.innerHTML;
+        } else {
+          return Number(el.innerHTML.replace(/,/g,""));
+        }
       }
     }
 });
@@ -23,7 +27,11 @@ $('table.nopage_dynatable').dynatable({
       return Number(el.innerHTML) || 0;
     },
     score: function(el, record) {
-      return Number(el.innerHTML.replace(/,/g,""));
+      if($.trim(el.innerHTML) == '') {
+        return el.innerHTML;
+      } else {
+        return Number(el.innerHTML.replace(/,/g,""));
+      }
     },
     totalScore: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,"")) || 0;
@@ -76,7 +84,7 @@ $('table.nopage_dynatable').dynatable({
 $('table.nosearch_dynatable').dynatable({
 
   features: {
-        search: false, 
+        search: false,
         sort: true
       },
   readers: {
@@ -84,7 +92,11 @@ $('table.nosearch_dynatable').dynatable({
         return Number(el.innerHTML) || 0;
       },
       score: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,""));
+        if($.trim(el.innerHTML) == '') {
+          return el.innerHTML;
+        } else {
+          return Number(el.innerHTML.replace(/,/g,""));
+        }
       }
     }
 });
@@ -93,7 +105,7 @@ $('table.nopage_orsearch_dynatable').dynatable({
 
   features: {
         search: false,
-        paginate: false, 
+        paginate: false,
         sort: true
       }
 });
@@ -103,7 +115,7 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
   features: {
         paginate: false,
         search: false,
-        recordCount: false, 
+        recordCount: false,
         sort: true
       },
   dataset: {
@@ -127,7 +139,11 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
         return Number(el.innerHTML.replace()) || 0;
       },
       score: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,""));
+        if($.trim(el.innerHTML) == '') {
+          return el.innerHTML;
+        } else {
+          return Number(el.innerHTML.replace(/,/g,""));
+        }
       },
       rawScore: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,""));
@@ -143,7 +159,7 @@ $('table.nofeatures_default_name_dynatable').dynatable({
   features: {
         paginate: false,
         search: false,
-        recordCount: false, 
+        recordCount: false,
         sort: true
       },
   dataset: {
@@ -168,7 +184,7 @@ $('table.nofeatures_default_score_dynatable').dynatable({
   features: {
         paginate: false,
         search: false,
-        recordCount: false, 
+        recordCount: false,
         sort: true
       },
   dataset: {
@@ -176,7 +192,11 @@ $('table.nofeatures_default_score_dynatable').dynatable({
   },
   readers: {
       score: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,""));
+        if($.trim(el.innerHTML) == '') {
+          return el.innerHTML;
+        } else {
+          return Number(el.innerHTML.replace(/,/g,""));
+        }
       },
       dueDate: function(el, record) {
         record.parsedDate = Date.parse(el.innerHTML);
@@ -211,7 +231,7 @@ $('table.nofeatures_default_desc_score_dynatable').dynatable({
   features: {
         paginate: false,
         search: false,
-        recordCount: false, 
+        recordCount: false,
         sort: true
       },
   dataset: {
@@ -224,7 +244,7 @@ $('table.nofeatures_dynatable').dynatable({
   features: {
         paginate: false,
         search: false,
-        recordCount: false, 
+        recordCount: false,
         sort: true
       },
   readers: {
@@ -253,7 +273,7 @@ $('table.nofeatures_default_due_date_dynatable').dynatable({
   features: {
         paginate: false,
         search: false,
-        recordCount: false, 
+        recordCount: false,
         sort: true
       },
   dataset: {
@@ -274,11 +294,11 @@ $('table.nofeatures_default_due_date_dynatable').dynatable({
 });
 
 $('table.nofeatures_default_rank_dynatable').dynatable({
-  
+
   features: {
         paginate: false,
         search: false,
-        recordCount: false, 
+        recordCount: false,
         sort: true
       },
   dataset: {
@@ -287,10 +307,13 @@ $('table.nofeatures_default_rank_dynatable').dynatable({
   readers: {
       rank: function(el, record) {
         return Number(el.innerHTML) || 0;
-      }
-      ,
+      },
       score: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,""));
+        if($.trim(el.innerHTML) == '') {
+          return el.innerHTML;
+        } else {
+          return Number(el.innerHTML.replace(/,/g,""));
+        }
       },
       badgeCount: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,""));
@@ -299,7 +322,7 @@ $('table.nofeatures_default_rank_dynatable').dynatable({
 });
 
 $('table.paginate_default_last_name_dynatable').dynatable({
-  
+
  features: {
         sort: true
       },
