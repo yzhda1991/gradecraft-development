@@ -287,10 +287,6 @@ class Course < ActiveRecord::Base
     students_being_graded.count
   end
 
-  def professor
-    course_memberships.where(:role => "professor").first.user if course_memberships.where(:role => "professor").first.present?
-  end
-
   def point_total_for_challenges
     challenges.pluck('point_total').sum
   end
