@@ -60,8 +60,8 @@ $("#team_student_ids").select2({
   allowClear: true
 });
 
-// Select2 Search forms for course creation
-$("#course_instructors_of_record_ids").select2({
+// Select2 Search forms for anything that has a data-behavior of multi-select
+$(document).find("[data-behavior~=multi-select]").select2({
   allowClear: true
 });
 
