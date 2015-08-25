@@ -20,16 +20,22 @@ class Course < ActiveRecord::Base
   end
 
   def instructors_of_record_ids=(value)
-    excluded = course_memberships.reject { |membership| value.include? membership.user_id }
-    excluded.each do |remove|
-      remove.instructor_of_record = false
-      remove.save
+    user_ids = value.map(&:to_i)
+
+    # Remove instructors of record that are not in the array of ids
+    course_memberships.select do |membership|
+      membership.instructor_of_record && !user_ids.include?(membership.user_id)
+    end.each do |membership|
+      membership.instructor_of_record = false
+      membership.save
     end
 
-    current = course_memberships.select { |membership| value.include? membership.user_id }
-    current.each do |current|
-      current.instructor_of_record = true
-      current.save
+    # Add instructors of record that are in the array of ids
+    course_memberships.select do |membership|
+      !membership.instructor_of_record && user_ids.include?(membership.user_id)
+    end.each do |membership|
+      membership.instructor_of_record = true
+      membership.save
     end
   end
 
