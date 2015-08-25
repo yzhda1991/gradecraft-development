@@ -60,5 +60,10 @@ $("#team_student_ids").select2({
   allowClear: true
 });
 
+// Select2 Search forms for course creation
+$("#course_instructors_of_record_ids").select2({
+  allowClear: true
+});
+
 // Initializing highcharts table data, currently used to display team charts
 $('table.highchart').highchartTable();

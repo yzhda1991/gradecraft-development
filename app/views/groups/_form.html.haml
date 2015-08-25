@@ -1,6 +1,6 @@
 = simple_form_for @group do |f|
 
-  - if @group.errors.any? 
+  - if @group.errors.any?
     .alert-box.alert
       .italic= "#{pluralize(@group.errors.count, "error")} prohibited this group from being saved:"
       %ul
@@ -47,7 +47,7 @@
             .form_label If your #{term_for :group} knows what it will be working on, you can submit that here.
             = f.text_area :proposal, :class => "froala"
             = f.hidden_field :id
-         
+
       - if @group.persisted?
         = link_to 'Add a Proposal', '#', class: 'add-proposal button'
 
