@@ -21,4 +21,4 @@
         %td
           - if team.leaders.present?
             - team.leaders.each do |team_leader|
-              = link_to team.team_leader.try(:name), team.team_leader
+              = link_to team_leader.try(:name), team_leader
