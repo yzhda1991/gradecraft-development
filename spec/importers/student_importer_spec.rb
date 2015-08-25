@@ -37,6 +37,12 @@ describe StudentImporter do
         expect(team.students.first.email).to eq "jimmy@example.com"
       end
 
+      it "does not add the student to the team if a team is not specified" do
+        subject.import course
+        user = User.unscoped.first
+        expect(team.students).to_not include user
+      end
+
       it "sends the activation email to each student" do
         expect { subject.import course }.to \
           change { ActionMailer::Base.deliveries.count }.by 2
