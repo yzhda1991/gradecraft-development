@@ -14,7 +14,7 @@ class StudentImporter
     if file
       CSV.foreach(file, headers: true, skip_blanks: true) do |row|
         team = find_or_create_team row, course
-        if !team.valid?
+        if team && !team.valid?
           append_unsuccessful row, team.errors.full_messages.join(", ")
           next
         end
@@ -22,7 +22,7 @@ class StudentImporter
         user = create_user row, course
 
         if user.valid?
-          team.students << user
+          team.students << user if team
           UserMailer.activation_needed_email(user).deliver_now
           successful << user
         else
@@ -53,6 +53,7 @@ class StudentImporter
 
   def find_or_create_team(row, course)
     name = row[4]
+    return if name.blank?
     team = Team.find_by_course_and_name course.id, name
     team ||= Team.create course_id: course.id, name: name
   end
