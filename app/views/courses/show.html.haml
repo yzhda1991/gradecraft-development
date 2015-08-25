@@ -11,7 +11,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   .panel
     %h4 THE BASICS
     %p.clear
@@ -76,7 +76,6 @@
       %b Meeting Time:
       = @course.meeting_times
 
-
   .panel
     %h4 BADGES
     %p.clear
@@ -106,6 +105,11 @@
         %b Section Leaders will be called:
         = @course.team_leader_term
 
+  .panel
+    %h4 PROFESSORS
+    %p.clear
+      - @course.instructors_of_record.each do |user|
+        %p= user.name
 
   .panel
     %h4 GROUPS

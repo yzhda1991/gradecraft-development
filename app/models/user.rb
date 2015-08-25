@@ -40,6 +40,12 @@ class User < ActiveRecord::Base
       User.where(id: user_ids).students_in_team(team.id, user_ids)
     end
 
+    def instructors_of_record(course)
+      user_ids = CourseMembership
+        .where(course: course, instructor_of_record: true)
+        .pluck(:user_id)
+      User.where(id: user_ids)
+    end
   end
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team

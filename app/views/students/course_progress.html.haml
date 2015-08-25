@@ -2,7 +2,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   - @grade_scheme_elements.each do |element|
     - if current_student.cached_score_for_course(current_course) < element.low_range
       .progress.bar_magic.transparent.center
@@ -22,7 +22,7 @@
     - else
       .progress.bar_magic.striped.center
         .meter
-          %span Your rank: 
+          %span Your rank:
           %span= element.level
           %span= element.letter
           %span with
@@ -30,7 +30,5 @@
           %span points.
           %span=points element.points_to_next_level(current_student, current_course)
           %span= " points to the next level!"
-          
-  - if current_course.professor.present? && current_course.grading_philosophy.present?
-    %p= raw current_course.grading_philosophy
-    %h3= "– Prof. #{current_course.professor.try(:last_name) }"
+
+  = render partial: "courses/grading_philosophy", locals: { course: current_course }

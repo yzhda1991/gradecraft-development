@@ -11,6 +11,34 @@ class Course < ActiveRecord::Base
     end
   end
 
+  def instructors_of_record
+    User.instructors_of_record(self)
+  end
+
+  def instructors_of_record_ids
+    instructors_of_record.map(&:id)
+  end
+
+  def instructors_of_record_ids=(value)
+    user_ids = value.map(&:to_i)
+
+    # Remove instructors of record that are not in the array of ids
+    course_memberships.select do |membership|
+      membership.instructor_of_record && !user_ids.include?(membership.user_id)
+    end.each do |membership|
+      membership.instructor_of_record = false
+      membership.save
+    end
+
+    # Add instructors of record that are in the array of ids
+    course_memberships.select do |membership|
+      !membership.instructor_of_record && user_ids.include?(membership.user_id)
+    end.each do |membership|
+      membership.instructor_of_record = true
+      membership.save
+    end
+  end
+
   # Staff returns all professors and GSI for the course.
   # Note that this is different from is_staff? which currently
   # includes Admin users
@@ -54,7 +82,8 @@ class Course < ActiveRecord::Base
     :team_challenges, :team_leader_term, :max_assignment_types_weighted,
     :point_total, :in_team_leaderboard, :grade_scheme_elements_attributes,
     :add_team_score_to_student, :status, :assignments_attributes, :character_profiles,
-    :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics
+    :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics,
+    :instructors_of_record_ids
 
   with_options :dependent => :destroy do |c|
     c.has_many :assignment_types
@@ -256,10 +285,6 @@ class Course < ActiveRecord::Base
 
   def graded_student_count
     students_being_graded.count
-  end
-
-  def professor
-    course_memberships.where(:role => "professor").first.user if course_memberships.where(:role => "professor").first.present?
   end
 
   def point_total_for_challenges

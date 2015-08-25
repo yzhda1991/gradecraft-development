@@ -15,7 +15,7 @@ class NotificationMailer < ActionMailer::Base
       format.text
     end
   end
-  
+
   def grade_export(course,user,csv_data)
     @user = user
     @course = course
@@ -40,7 +40,7 @@ class NotificationMailer < ActionMailer::Base
     @user = @submission.student
     @course = @submission.course
     @assignment = @submission.assignment
-    mail(:to => @user.email, 
+    mail(:to => @user.email,
       :subject => "#{@course.courseno} - #{@assignment.name} Submitted") do |format|
       format.text
       format.html
@@ -52,31 +52,31 @@ class NotificationMailer < ActionMailer::Base
     @user = @submission.student
     @course = @submission.course
     @assignment = @submission.assignment
-    mail(:to => @user.email, 
+    mail(:to => @user.email,
       :subject => "#{@course.courseno} - #{@assignment.name} Submission Updated") do |format|
       format.text
       format.html
     end
   end
 
-  def new_submission(submission_id)
+  def new_submission(submission_id, professor)
     @submission = Submission.find submission_id
     @user = @submission.student
     @course = @submission.course
     @assignment = @submission.assignment
-    @professor = @course.professor
+    @professor = professor
     mail(:to => @professor.email, :subject => "#{@course[:courseno]} - New Submission to Grade") do |format|
       format.text
       format.html
     end
   end
 
-  def revised_submission(submission_id)
+  def revised_submission(submission_id, professor)
     @submission = Submission.find submission_id
     @user = @submission.student
     @course = @submission.course
     @assignment = @submission.assignment
-    @professor = @course.professor
+    @professor = professor
     mail(:to => @professor.email, :subject => "#{@course[:courseno]} - Updated Submission to Grade") do |format|
       format.text
       format.html
@@ -88,17 +88,17 @@ class NotificationMailer < ActionMailer::Base
     @user = @grade.student
     @course = @grade.course
     @assignment = @grade.assignment
-    mail(:to => @user.email, 
+    mail(:to => @user.email,
       :subject => "#{@course.courseno} - #{@assignment.name} Graded") do |format|
       format.text
       format.html
     end
   end
 
-  def group_created(group_id)
+  def group_created(group_id, professor)
     @group = Group.find group_id
     @course = @group.course
-    @professor = @group.course.professor
+    @professor = professor
     mail(:to => @professor.email, :subject => "#{@course.courseno} - New Group to Review") do |format|
       format.text
       format.html
@@ -135,7 +135,7 @@ class NotificationMailer < ActionMailer::Base
     @earned_badge = EarnedBadge.find earned_badge_id
     @user = @earned_badge.student
     @course = @earned_badge.course
-    mail(:to => @user.email, 
+    mail(:to => @user.email,
       :subject => "#{@course.courseno} - You've earned a new #{@course.badge_term}!") do |format|
       format.text
       format.html

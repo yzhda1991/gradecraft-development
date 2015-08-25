@@ -11,7 +11,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   / Grade Scheme Elements Table Display
   %table.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
     %thead
@@ -28,8 +28,4 @@
           %td{:data => { :"sort-value" => "#{element.low_range }" }}= points element.low_range
           %td{:data => { :"sort-value" => "#{element.high_range }" }}= points element.high_range
 
-  - if current_course.professor.present?
-    .small-12
-      %p
-      %p= raw current_course.grading_philosophy
-      %h6= "-- Prof. #{current_course.professor.try(:last_name) }"
+  = render partial: "courses/grading_philosophy", locals: { course: current_course }

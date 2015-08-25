@@ -44,7 +44,9 @@ class GroupsController < ApplicationController
     end
     respond_to do |format|
       if @group.save
-        #NotificationMailer.group_created(@group.id).deliver
+        #current_course.instructors_of_record.each do |professor|
+          #NotificationMailer.group_created(@group.id, professor).deliver
+        #end
         #NotificationMailer.group_notify(@group.id).deliver
         format.html { respond_with @group }
       else

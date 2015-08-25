@@ -90,4 +90,25 @@ describe Course do
     @course.pass_term.should eq("Pass")
     @course.fail_term.should eq("Fail")
   end
+
+  describe "#instructors_of_record" do
+    it "returns all the staff who are instructors of record for the course" do
+      membership = create :staff_course_membership, course: subject, instructor_of_record: true
+      expect(subject.instructors_of_record).to eq [membership.user]
+    end
+  end
+
+  describe "#instructors_of_record_ids=" do
+    it "adds the instructors of record if they were not there before" do
+      membership = create :staff_course_membership, course: subject
+      subject.instructors_of_record_ids = [membership.user_id]
+      expect(subject.instructors_of_record).to eq [membership.user]
+    end
+
+    it "removes the instructors of record that are not present" do
+      membership = create :staff_course_membership, course: subject, instructor_of_record: true
+      subject.instructors_of_record_ids = []
+      expect(subject.instructors_of_record).to be_empty
+    end
+  end
 end

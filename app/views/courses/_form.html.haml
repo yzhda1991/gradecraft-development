@@ -81,7 +81,7 @@
     .form-item
       = f.label :meeting_times, "Class Meeting Times"
       = f.text_field :meeting_times
-      
+
     .form-item
       = f.label :syllabus
       = f.file_field :syllabus
@@ -93,6 +93,15 @@
       = f.file_field :media_file
       = f.input :media_credit
       = f.input :media_caption
+
+  - unless @course.new_record?
+    %section
+      %h4.uppercase Professors
+      .form-item
+        = f.label :professors
+        = f.input :instructors_of_record_ids, collection: f.object.staff,
+          label: false, wrapper: false, input_html: { multiple: true, data: { behavior: "multi-select" } }
+        .form_label Enter a professor's name to add them to this course
 
   %section
     %h4.uppercase GradeCraft Settings
@@ -154,7 +163,7 @@
     .form-item
       = f.label :hide_analytics, "Hide Analytics?"
       = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
-      .form_label{:id => "hideAnalytics"}  Do you want to hide assignment and course analytics from students? 
+      .form_label{:id => "hideAnalytics"}  Do you want to hide assignment and course analytics from students?
 
 
     - if current_user_is_admin?
