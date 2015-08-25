@@ -1,8 +1,10 @@
 json.weights do
   assignment_types_weightable = []
   @assignment_types.each do |assignment_type|
-    if assignment_type.student_weightable?
-      assignment_types_weightable << assignment_type.id
+    json.cache! ['v1', assignment_type] do
+      if assignment_type.student_weightable?
+        assignment_types_weightable << assignment_type.id
+      end
     end
   end
   json.assignment_types_weightable assignment_types_weightable

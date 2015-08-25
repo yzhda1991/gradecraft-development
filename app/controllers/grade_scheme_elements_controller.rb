@@ -20,7 +20,8 @@ class GradeSchemeElementsController < ApplicationController
       :low_range,
       :letter,
       :high_range,
-      :course_id
+      :course_id,
+      :updated_at
     )
   end
 
@@ -43,7 +44,8 @@ class GradeSchemeElementsController < ApplicationController
           :low_range,
           :letter,
           :high_range,
-          :course_id
+          :course_id,
+          :updated_at
         ) }
 
       else
