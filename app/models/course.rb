@@ -11,6 +11,10 @@ class Course < ActiveRecord::Base
     end
   end
 
+  def instructors_of_record
+    User.instructors_of_record(self)
+  end
+
   # Staff returns all professors and GSI for the course.
   # Note that this is different from is_staff? which currently
   # includes Admin users

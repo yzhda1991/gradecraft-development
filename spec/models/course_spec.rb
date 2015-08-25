@@ -90,4 +90,11 @@ describe Course do
     @course.pass_term.should eq("Pass")
     @course.fail_term.should eq("Fail")
   end
+
+  describe "#instructors_of_record" do
+    it "returns all the staff who are instructors of record for the course" do
+      membership = create :staff_course_membership, course: subject, instructor_of_record: true
+      expect(subject.instructors_of_record).to eq [membership.user]
+    end
+  end
 end
