@@ -23,20 +23,16 @@
               .center
                 %button.button.select-all= "Check"
                 %button.button.select-none= "Uncheck"
-        - @earned_badges.each_with_index do |eb, i|
+        - @earned_badges.each do |earned_badge|
           %tr
-            %td{:style => "text-align: right"}= link_to eb.student.name, student_path(eb.student)
+            %td{:style => "text-align: right"}= link_to earned_badge.student.name, student_path(earned_badge.student)
             %td{:style => "text-align: right"}
-              - eb.student.earned_badges.where(:badge_id => @badge).each do |eb|
-                %img{:src => eb.badge.try(:icon), :alt => eb.badge.try(:name), :width => "25", :height => "25"}
+              - earned_badge.student.earned_badges.where(:badge_id => @badge).each do |earned_badge|
+                %img{:src => earned_badge.badge.try(:icon), :alt => earned_badge.badge.try(:name), :width => "25", :height => "25"}
             %td.center
-              = f.simple_fields_for :earned_badges, eb do |ebf|
-                = ebf.hidden_field :student_id
-                - if @badge.can_earn_multiple_times?
-                  = ebf.check_box :score, {}, @badge.point_total, nil
-                - elsif ! eb.student.earned_badges.where(:badge_id => @badge).present?
-                  = ebf.hidden_field :_destroy, class: 'destroy'
-                  = ebf.check_box :score, {}, @badge.point_total, nil
+              - if @badge.can_earn_multiple_times? || ! earned_badge.student.earned_badges.where(:badge_id => @badge).present?
+                %input(type="checkbox" name="student_ids[]" value="#{earned_badge[:student_id]}")
+
       .submit-buttons
         %ul
           %li= f.button :submit, "Award", :class => "button"

@@ -77,6 +77,12 @@ describe EarnedBadgesController do
       end
     end
 
+    describe "PUT mass_update" do
+      it "finds the badge" do
+         
+      end
+    end
+
     describe "POST update" do
       it "updates the earned badge" do
         params = { feedback: "more feedback" }
