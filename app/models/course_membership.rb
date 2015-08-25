@@ -27,10 +27,13 @@ class CourseMembership < ActiveRecord::Base
       case extra['roles'].downcase
       when /instructor/
         self.update_attribute(:role, 'professor')
+        self.update_attribute(:instructor_of_record, true)
       when /teachingassistant/
         self.update_attribute(:role, 'gsi')
+        self.update_attribute(:instructor_of_record, true)
       else
         self.update_attribute(:role, 'student')
+        self.update_attribute(:instructor_of_record, false)
       end
     end
   end
