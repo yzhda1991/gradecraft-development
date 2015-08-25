@@ -104,13 +104,12 @@ describe UsersController do
       end
     end
 
-    describe "GET update_profile" do
+    describe "POST update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "gandalf" }
         post :update_profile, id: @professor.id, :user => params
-        @professor.reload
         response.should redirect_to(dashboard_path)
-        @professor.display_name.should eq("gandalf")
+        @professor.reload.display_name.should eq("gandalf")
       end
     end
 
@@ -269,13 +268,19 @@ describe UsersController do
       end
     end
 
-    describe "GET update_profile" do
+    describe "POST update_profile" do
       it "successfully updates the users profile" do
-        params = { display_name: "frodo" }
+        params = { display_name: "frodo", password: "", password_confirmation: "" }
         post :update_profile, id: @student.id, :user => params
-        @student.reload
-        response.should redirect_to(dashboard_path)
-        @student.display_name.should eq("frodo")
+        expect(response).to redirect_to(dashboard_path)
+        expect(@student.reload.display_name).to eq("frodo")
+      end
+
+      it "successfully updates the user's password" do
+        params = { password: "test", password_confirmation: "test" }
+        post :update_profile, id: @student.id, :user => params
+        expect(response).to redirect_to(dashboard_path)
+        expect(User.authenticate(@student.email, "test")).to eq @student
       end
     end
 
