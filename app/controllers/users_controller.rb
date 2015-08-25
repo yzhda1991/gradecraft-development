@@ -75,6 +75,7 @@ class UsersController < ApplicationController
     if @user.is_student?(current_course)
       @user.teams.set_for_course(current_course.id, params[:user][:course_team_ids])
     end
+
     @user.update_attributes(params[:user])
     if @user.save && @user.is_student?(current_course)
       redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully updated!"
@@ -127,8 +128,13 @@ class UsersController < ApplicationController
 
   def update_profile
     @user = current_user
-    @user.update_attributes(params[:user])
-    if @user.save
+
+    if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
+      params[:user].delete(:password)
+      params[:user].delete(:password_confirmation)
+    end
+
+    if @user.update_attributes(params[:user])
       redirect_to dashboard_path, :notice => "Your profile was successfully updated!"
     else
       redirect_to edit_profile_users_path(@user), :alert => "I'm sorry, something went wrong. Your profile was not successfully updated."
