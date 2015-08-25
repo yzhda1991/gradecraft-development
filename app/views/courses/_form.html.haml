@@ -94,13 +94,14 @@
       = f.input :media_credit
       = f.input :media_caption
 
-  %section
-    %h4.uppercase Professors
-    .form-item
-      = f.label :professors
-      = f.input :instructors_of_record_ids, collection: f.object.staff,
-        label: false, wrapper: false, input_html: { multiple: true }
-      .form_label Enter a professor's name to add them to this course
+  - unless @course.new_record?
+    %section
+      %h4.uppercase Professors
+      .form-item
+        = f.label :professors
+        = f.input :instructors_of_record_ids, collection: f.object.staff,
+          label: false, wrapper: false, input_html: { multiple: true }
+        .form_label Enter a professor's name to add them to this course
 
   %section
     %h4.uppercase GradeCraft Settings
