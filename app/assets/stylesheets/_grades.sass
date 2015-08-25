@@ -80,13 +80,14 @@ label.disabled
   min-height: 300px
 
 .gradebox
-  border: 1px solid #9FD7E3
-  padding: 16px 36px
+  width: 45%
+  float: left
+  border: 1px solid $color-grey-4
+  padding: 1rem
   font-size: 13px
   margin-bottom: 18px
-  margin-right: 10px
-  @include linear-gradient(#A2EEFF, #7AE1F8)
-  @include rounded-corners(4px)
+  background-color: $color-blue-4
+  border-radius: $global-radius
   @include opacity(0.9)
 
   // transitions
@@ -98,7 +99,7 @@ label.disabled
     @include opacity(0.4)
     border: 1px solid #B9DAE2
     color: #87ADB5
-    padding: 16px 24px
+    padding: .4rem
     font-size: 12px
     cursor: pointer
     cursor: hand
@@ -387,3 +388,33 @@ button#remove-badges, button#add-badges
 
 .clear-left
   clear: left !important
+
+#gradebox
+  border: 1px solid $color-grey-4
+  padding: 1rem
+  font-size: 13px
+  border-radius: $global-radius
+  width: 45%
+  float: left
+  background-color: $color-blue-4
+  display: inline
+
+  // transitions
+  @include transition-property("padding, font-size, opacity, border-color")
+  @include transition-duration(0.4s)
+  @include transition-timing-function(ease)
+
+  &.inactive
+    @include opacity(0.4)
+    color: #87ADB5
+    padding: .4rem
+    font-size: 12px
+    cursor: pointer
+    cursor: hand
+
+  &.jump-left
+    color: red !important
+    background: red !important
+    float: left
+    transition: all 0.5s linear
+    opacity: 0
