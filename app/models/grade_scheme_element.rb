@@ -1,7 +1,7 @@
 class GradeSchemeElement < ActiveRecord::Base
-  attr_accessible :letter, :low_range, :high_range, :level, :description, :course_id
+  attr_accessible :letter, :low_range, :high_range, :level, :description, :course_id, :updated_at
 
-  belongs_to :course
+  belongs_to :course, touch: true
 
   validates_presence_of :low_range, :high_range
   validates_numericality_of :high_range, greater_than: Proc.new { |e| e.low_range.to_i }

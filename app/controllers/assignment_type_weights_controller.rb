@@ -69,6 +69,7 @@ class AssignmentTypeWeightsController < ApplicationController
       :include_in_predictor,
       :is_attendance,
       :position,
+      :updated_at
     )
   end
 
