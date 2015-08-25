@@ -42,11 +42,7 @@ class GroupsController < ApplicationController
     else
       @group.approved = "Approved"
     end
-    respond_to do |format|- unless current_course.instructors_of_record.empty?
-    .small-12
-      %p
-      %p= raw current_course.grading_philosophy
-      %h6= "-- #{"Prof".pluralize(current_course.instructors_of_record.count)}. #{current_course.instructors_of_record.map(&:last_name).join(", ") }"
+    respond_to do |format|
       if @group.save
         #current_course.instructors_of_record.each do |professor|
           #NotificationMailer.group_created(@group.id, professor).deliver
