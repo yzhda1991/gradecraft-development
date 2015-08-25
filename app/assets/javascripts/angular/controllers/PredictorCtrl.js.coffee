@@ -169,6 +169,9 @@
     _.each($scope.badges,(badge)->
         total += badge.total_earned_points
       )
+    _.each($scope.challenges,(challenge)->
+        total += challenge.grade.score
+      )
     total
 
   $scope.badgeCompleted = (badge)->
