@@ -1,9 +1,7 @@
 .context_menu
   %ul
     %li= link_to_unless_current raw('<i class="fa fa-list fa-fw"></i> See All'), assignment_types_path
-    - if @assignment_type.present?
-      %li= link_to_unless_current raw("<i class='fa fa-plus fa-fw'></i> New #{term_for :assignment_type}"), new_assignment_type_path
+    %li= link_to_unless_current raw("<i class='fa fa-plus fa-fw'></i> New #{term_for :assignment_type}"), new_assignment_type_path
     - if @assignment_type.present? && @assignment_type.persisted?
       %li= link_to_unless_current raw("<i class='fa fa-eye fa-fw'></i> See #{@assignment_type.name}"), assignment_type_path(@assignment_type)      
       %li= link_to_unless_current raw("<i class='fa fa-heartbeat fa-fw'></i> #{@assignment_type.name} Performance"), all_grades_assignment_type_path(@assignment_type)
-          
