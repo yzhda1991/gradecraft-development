@@ -80,27 +80,34 @@ describe EarnedBadgesController do
     describe "POST mass_earn", working: true do
       subject { post :mass_earn, {id: @badge[:id], student_ids: @student_ids} }
 
-      before(:each) do
+      before do
         @course = create(:course)
         @badge = create(:badge, course_id: @course[:id])
+
+        @professor = create(:user)
+        @professor.courses << @course
+        @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+        login_user(@professor)
+
         @students = create_list(:user, 2)
         @student_ids = @students.collect(&:id)
         controller.stub(:current_course) { @course }
       end
 
       context "earned badges are created" do
-        before(:each) do
+        before do
           @earned_badges = @students.collect do |student|
             create(:earned_badge, student_id: student[:id], badge: @badge)
           end
-          controller.stub(:valid_earned_badges) { @earned_badges }
         end
 
         it "redirects to the badge page" do
-          expect(subject).to redirect_to(badge_url(@badge))
+          controller.stub(:parse_valid_earned_badges) { @earned_badges }
+          expect(subject).to redirect_to(badge_path(@badge))
         end
 
         it "redirects back to the edit page" do
+          controller.stub(:parse_valid_earned_badges) { [] }
           expect(subject).to redirect_to(mass_award_badge_url(id: @badge))
         end
       end
@@ -112,6 +119,11 @@ describe EarnedBadgesController do
         @badge = create(:badge, course_id: @course[:id])
         @students = create_list(:user, 2)
         @student_ids = @students.collect(&:id)
+
+        @professor = create(:user)
+        @professor.courses << @course
+        @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+        login_user(@professor)
 
         @earned_badges = @students.collect do |student|
           create(:earned_badge, student_id: student[:id], badge: @badge)

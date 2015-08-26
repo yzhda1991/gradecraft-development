@@ -95,21 +95,24 @@ class EarnedBadgesController < ApplicationController
   # ATTN
   def mass_earn
     @badge = current_course.badges.find(params[:id])
-    @valid_earned_badges = []
-    params[:student_ids].each do |memo, student_id|
-      earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)
-      if earned_badge.valid?
-        @valid_earned_badges << earned_badge
-      else
-        logger.error earned_badge.errors.full_messages
-      end
-    end
-
+    @valid_earned_badges ||= parse_valid_earned_badges
     send_earned_badge_notifications
     handle_mass_update_redirect
   end
 
   private
+
+  def parse_valid_earned_badges
+    params[:student_ids].inject([]) do |valid_earned_badges, student_id|
+      earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)
+      if earned_badge.valid?
+        valid_earned_badges << earned_badge
+      else
+        logger.error earned_badge.errors.full_messages
+      end
+      valid_earned_badges
+    end
+  end
 
   def send_earned_badge_notifications
     @valid_earned_badges.each do |earned_badge| 
@@ -120,7 +123,7 @@ class EarnedBadgesController < ApplicationController
 
   def handle_mass_update_redirect
     if @valid_earned_badges.any?
-      redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded #{@earned_badges[:valid].count} times"
+      redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded #{@valid_earned_badges.count} times"
     else
       redirect_to mass_award_badge_path(:id => @badge), notice: "No earned badges were sucessfully created."
     end
