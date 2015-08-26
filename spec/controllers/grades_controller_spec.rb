@@ -283,14 +283,7 @@ describe GradesController do
         end
       end
 
-      describe "GET username_import" do
-        it "redirects to root path" do
-          get :username_import, { :id => @assignment.id}
-          response.should redirect_to(:root)
-        end
-      end
-
-      describe "GET email_import" do
+      describe "POST email_import" do
         it "redirects to root path" do
           post :email_import, { :id => @assignment.id}
           response.should redirect_to(:root)
