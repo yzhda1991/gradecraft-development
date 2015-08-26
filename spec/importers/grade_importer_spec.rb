@@ -10,10 +10,18 @@ describe GradeImporter do
     end
 
     context "with a file" do
-      xit "does not create a grade if the student does not exist"
-      xit "creates the grade if it is not there"
-      xit "updates the grade if it is already there"
-      xit "creates a grade for a student by unique name"
+      let(:file) { fixture_file "grades.csv", "text/csv" }
+      subject { GradeImporter.new(file.tempfile) }
+
+      it "does not create a grade if the student does not exist" do
+        expect { subject.import }.to_not change { User.count }
+      end
+
+      context "with a student" do
+        xit "creates the grade if it is not there"
+        xit "updates the grade if it is already there"
+        xit "creates a grade for a student by unique name"
+      end
     end
   end
 end
