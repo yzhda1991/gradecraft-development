@@ -16,11 +16,17 @@ class GradeImporter
         students = course.students
         CSV.foreach(file, headers: true, encoding: 'ISO-8859-1') do |row|
           student = find_student(row, students)
-          if student
-            if has_grade?(row)
-              grade = create_grade row, assignment, student
-            end
+          if student.nil?
+            append_unsuccessful row, "Student not found in course"
+            next
           end
+          if !has_grade?(row)
+            append_unsuccessful row, "Grade not specified"
+            next
+          end
+
+          grade = create_grade row, assignment, student
+          successful << grade
         end
       end
     end
@@ -29,6 +35,10 @@ class GradeImporter
   end
 
   private
+
+  def append_unsuccessful(row, errors)
+    unsuccessful << { data: row.to_s, errors: errors }
+  end
 
   def has_grade?(row)
     row[3].present?
