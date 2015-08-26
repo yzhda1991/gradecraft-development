@@ -468,22 +468,6 @@ class Assignment < ActiveRecord::Base
     end
   end
 
-  def username_based_grade_import(options = {})
-    students = options.fetch(:students, course.students)
-    csv_options = options.fetch(:csv, {})
-    CSV.generate(csv_options) do |csv|
-      csv << ["First Name", "Last Name", "Username", "Score", "Feedback"]
-      students.each do |student|
-        grade = student.grade_for_assignment(self)
-        if grade and (grade.instructor_modified? || grade.graded_or_released?)
-          csv << [student.first_name, student.last_name, student.username, student.grade_for_assignment(self).score, student.grade_for_assignment(self).try(:feedback) ]
-        else
-          csv << [student.first_name, student.last_name, student.username, "", "" ]
-        end
-      end
-    end
-  end
-
   # Calculating how many of each score exists
   def score_count
     Hash[grades.graded_or_released.group_by{ |g| g.score }.map{ |k, v| [k, v.size] }]
