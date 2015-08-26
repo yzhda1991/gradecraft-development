@@ -6,10 +6,9 @@
       %th Team
   %tbody
     - current_course.teams.order_by_high_score.each do |team|
-      - cache ["v1", team] do
-        %tr
-          %td= team.name
-          - if current_course.team_challenges?
-            %td.points= team.challenge_grade_score
-          - else
-            %td.points= team.average_points
+      %tr
+        %td= team.name
+        - if current_course.team_challenges?
+          %td.points= team.challenge_grade_score
+        - else
+          %td.points= team.average_points

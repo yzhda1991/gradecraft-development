@@ -18,29 +18,28 @@
           %span.sr-only Actions
     %tbody
       - @ungraded_submissions.each do |submission|
-        - cache ["v1", submission] do
-          %tr
-            %td= link_to submission.assignment.name, submission.assignment
-            - if submission.assignment.is_individual?
-              %td= link_to submission.student.try(:first_name), student_path(submission.student)
-              %td= link_to submission.student.try(:last_name), student_path(submission.student)
-            - elsif submission.assignment.has_groups?
-              %td= link_to submission.group.try(:name), group_path(submission.group)
-              %td
-            %td= submission.updated_at
-            %td= submission.text_comment
+        %tr
+          %td= link_to submission.assignment.name, submission.assignment
+          - if submission.assignment.is_individual?
+            %td= link_to submission.student.try(:first_name), student_path(submission.student)
+            %td= link_to submission.student.try(:last_name), student_path(submission.student)
+          - elsif submission.assignment.has_groups?
+            %td= link_to submission.group.try(:name), group_path(submission.group)
             %td
-              - if current_course.has_teams? && submission.assignment.is_individual? && submission.student.present? && submission.student.team_for_course(current_course).present?
-                = link_to submission.student.team_for_course(current_course).try(:name), submission.student.team_for_course(current_course)
-            - if submission.assignment.is_individual?
-              %td
-                .right
-                  %ul
-                    %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Submission"),assignment_submission_path(submission.assignment, :id => submission.id), :class => "button"
-                    %li= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), edit_assignment_grade_path(:assignment_id => submission.assignment.id, :student_id => submission.student.try(:id)), :class => "button"
-            - else
-              %td
-                .right
-                  %ul
-                    %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Submission"),assignment_submission_path(submission.assignment, :id => submission.id), :class => "button"
-                    %li= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), group_grade_assignment_path(submission.assignment, :group_id => submission.group), :class => "button"
+          %td= submission.updated_at
+          %td= submission.text_comment
+          %td
+            - if current_course.has_teams? && submission.assignment.is_individual? && submission.student.present? && submission.student.team_for_course(current_course).present?
+              = link_to submission.student.team_for_course(current_course).try(:name), submission.student.team_for_course(current_course)
+          - if submission.assignment.is_individual?
+            %td
+              .right
+                %ul
+                  %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Submission"),assignment_submission_path(submission.assignment, :id => submission.id), :class => "button"
+                  %li= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), edit_assignment_grade_path(:assignment_id => submission.assignment.id, :student_id => submission.student.try(:id)), :class => "button"
+          - else
+            %td
+              .right
+                %ul
+                  %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Submission"),assignment_submission_path(submission.assignment, :id => submission.id), :class => "button"
+                  %li= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), group_grade_assignment_path(submission.assignment, :group_id => submission.group), :class => "button"

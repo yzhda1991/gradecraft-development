@@ -14,31 +14,30 @@
       %th{ :style => "min-width: 200px" }
   %tbody
     - students.each do |student|
-      - cache ["v1", student] do
-        %tr
+      %tr
+        %td
+          - if student.avatar_file_name.present?
+            %img.img-rounded{:src => student.avatar_file_name, :width => 30}
+          = link_to student.first_name, student_path(student)
+        %td= link_to student.last_name, student_path(student)
+        - if current_course.in_team_leaderboard?
           %td
-            - if student.avatar_file_name.present?
-              %img.img-rounded{:src => student.avatar_file_name, :width => 30}
-            = link_to student.first_name, student_path(student)
-          %td= link_to student.last_name, student_path(student)
-          - if current_course.in_team_leaderboard?
-            %td
-              = student.display_name
-          - if current_course.has_teams?
-            %td
-              - if student.team
-                = link_to student.team.name, student.team
-          - if current_course.team_roles?
-            %td= student.try(:team_role)
-          - if student.respond_to?(:grades)
-            %td= current_course.score_for_student(student)
-            %td
-              = student.grade_letter_for_course(current_course)
-              = "-" if student.grade_letter_for_course(current_course).present? && student.grade_level_for_course(current_course).present?
-              = student.grade_level_for_course(current_course)
+            = student.display_name
+        - if current_course.has_teams?
           %td
-            .right
-              %ul
-                %li= link_to raw("<i class='fa fa-dashboard fa-fw'> </i> Dashboard"), student_path(student), :class => "button"
-                %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit"), edit_user_path(student), :class => "button"
-                %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), student.course_memberships.where(:course_id => current_course.id).first, :class => 'button', :data => { confirm: 'This will delete the student from your course - Are you sure?' }, :method => :delete
+            - if student.team
+              = link_to student.team.name, student.team
+        - if current_course.team_roles?
+          %td= student.try(:team_role)
+        - if student.respond_to?(:grades)
+          %td= current_course.score_for_student(student)
+          %td
+            = student.grade_letter_for_course(current_course)
+            = "-" if student.grade_letter_for_course(current_course).present? && student.grade_level_for_course(current_course).present?
+            = student.grade_level_for_course(current_course)
+        %td
+          .right
+            %ul
+              %li= link_to raw("<i class='fa fa-dashboard fa-fw'> </i> Dashboard"), student_path(student), :class => "button"
+              %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit"), edit_user_path(student), :class => "button"
+              %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), student.course_memberships.where(:course_id => current_course.id).first, :class => 'button', :data => { confirm: 'This will delete the student from your course - Are you sure?' }, :method => :delete
