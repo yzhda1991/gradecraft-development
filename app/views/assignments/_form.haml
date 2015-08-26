@@ -23,7 +23,7 @@
 
     .form-item
       - if @assignment.pass_fail?
-        .pass-fail-contingent{ :style => "visibility: hidden" }
+        .pass-fail-contingent.hidden
           = f.label :point_total, "Total Points Possible"
           = f.text_field :point_total
       - else
@@ -60,7 +60,7 @@
     .textarea
       .form_label This will be shown to students on their dashboard, and when they submit their assignment.
       = f.text_area :description, :class => "froala"
-      
+
   %section
     %h4= "Advanced Settings"
 

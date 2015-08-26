@@ -1,14 +1,7 @@
 !function($) {
 
-  // Toggle input field visibility on:
-  // assignments/_form.haml
-
-  $('.pass-fail-toggle label').click(function(){
-    if ($( ".pass-fail-toggle input:checked" ).length > 0) {
-      $('.pass-fail-contingent').css({ "visibility": "visible"});
-    } else {
-      $('.pass-fail-contingent').css({ "visibility": "hidden"});
-    };
+  $('.pass-fail-toggle :checkbox').click(function(){
+    $('.pass-fail-contingent').toggleClass("hidden")
   });
 
 
