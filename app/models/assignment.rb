@@ -454,7 +454,7 @@ class Assignment < ActiveRecord::Base
     end
   end
 
-  def email_based_grade_import(options = {})
+  def grade_import(options = {})
     CSV.generate(options) do |csv|
       csv << ["First Name", "Last Name", "Email", "Score", "Feedback"]
       course.students.each do |student|
