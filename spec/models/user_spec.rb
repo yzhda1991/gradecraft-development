@@ -187,7 +187,7 @@ describe User do
     end
   end
 
-  context "instructor is editing the grade for a student's submission", working: true do
+  context "instructor is editing the grade for a student's submission" do
     before(:each) do
       # Pulled in for highest-level before(:each)
       # @course = create(:course)
@@ -238,7 +238,7 @@ describe User do
     end
   end
 
-  context "user earns just one badge", working: true do
+  context "user earns just one badge" do
     before(:each) do
       @student = create(:user)
       @current_course = create(:course)

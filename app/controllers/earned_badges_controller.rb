@@ -73,39 +73,63 @@ class EarnedBadgesController < ApplicationController
     @teams = current_course.teams
 
     if params[:team_id].present?
-      @team = current_course.teams.find_by(id: params[:team_id])
+      @team = Team.find params[:team_id]
       @students = current_course.students_by_team(@team)
     else
       @students = current_course.students
     end
 
+    # build a new badge automatically if they can be earned at will
     if @badge.can_earn_multiple_times?
-      @earned_badges = @students.map do |s|
-        @badge.earned_badges.new(:student => s, :badge => @badge)
+      @earned_badges = @students.map do |student|
+        @badge.earned_badges.new(:student => student, :badge => @badge)
       end
+    # otherwise build a new one only if it hasn't been earned
     else
-      @earned_badges = @students.map do |s|
-        @badge.earned_badges.where(:student_id => s).first || @badge.earned_badges.new(:student => s, :badge => @badge)
+      @earned_badges = @students.map do |student|
+        @badge.earned_badges.where(:student_id => student).first || @badge.earned_badges.new(:student => student, :badge => @badge)
       end
     end
   end
 
-  def mass_update
+  # ATTN
+  def mass_earn
     @badge = current_course.badges.find(params[:id])
-    if @badge.update_attributes(params[:badge])
-      @count = 0
-      @badge.earned_badges.each do |eb|
-        new_award = eb.previous_changes[:created_at].present?
-        if new_award
-          @count = @count + 1
-          NotificationMailer.earned_badge_awarded(eb.id).deliver
-        end
+    @valid_earned_badges ||= parse_valid_earned_badges
+    send_earned_badge_notifications
+    handle_mass_update_redirect
+  end
+
+  private
+
+  def parse_valid_earned_badges
+    params[:student_ids].inject([]) do |valid_earned_badges, student_id|
+      earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)
+      if earned_badge.valid?
+        valid_earned_badges << earned_badge
+      else
+        logger.error earned_badge.errors.full_messages
       end
-      redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded #{@count} times"
-    else
-      redirect_to mass_award_badge_path(:id => @badge)
+      valid_earned_badges
     end
   end
+
+  def send_earned_badge_notifications
+    @valid_earned_badges.each do |earned_badge| 
+      NotificationMailer.earned_badge_awarded(earned_badge.id).deliver_now
+      logger.info "Sent an earned badge notification for EarnedBadge ##{earned_badge[:id]}"
+    end
+  end
+
+  def handle_mass_update_redirect
+    if @valid_earned_badges.any?
+      redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded #{@valid_earned_badges.count} times"
+    else
+      redirect_to mass_award_badge_path(:id => @badge), notice: "No earned badges were sucessfully created."
+    end
+  end
+
+  public
 
   # Display a chart of all badges earned in the course
   def chart

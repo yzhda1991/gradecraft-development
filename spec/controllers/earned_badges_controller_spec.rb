@@ -77,6 +77,93 @@ describe EarnedBadgesController do
       end
     end
 
+    describe "POST mass_earn", working: true do
+      subject { post :mass_earn, {id: @badge[:id], student_ids: @student_ids} }
+
+      before do
+        @course = create(:course)
+        @badge = create(:badge, course_id: @course[:id])
+
+        @professor = create(:user)
+        @professor.courses << @course
+        @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+        login_user(@professor)
+
+        @students = create_list(:user, 2)
+        @student_ids = @students.collect(&:id)
+        controller.stub(:current_course) { @course }
+      end
+
+      context "earned badges are created" do
+        before do
+          @earned_badges = @students.collect do |student|
+            create(:earned_badge, student_id: student[:id], badge: @badge)
+          end
+        end
+
+        it "redirects to the badge page" do
+          controller.stub(:parse_valid_earned_badges) { @earned_badges }
+          expect(subject).to redirect_to(badge_path(@badge))
+        end
+
+        it "redirects back to the edit page" do
+          controller.stub(:parse_valid_earned_badges) { [] }
+          expect(subject).to redirect_to(mass_award_badge_url(id: @badge))
+        end
+      end
+    end
+
+    describe "send_earned_badge_notifications", working: true do
+      before(:each) do
+        @course = create(:course)
+        @badge = create(:badge, course_id: @course[:id])
+        @students = create_list(:user, 2)
+        @student_ids = @students.collect(&:id)
+
+        @professor = create(:user)
+        @professor.courses << @course
+        @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+        login_user(@professor)
+
+        @earned_badges = @students.collect do |student|
+          create(:earned_badge, student_id: student[:id], badge: @badge)
+        end
+
+        @controller = EarnedBadgesController.new
+      end
+
+      context "earned badges exist" do
+        before(:each) do
+          @controller.instance_variable_set(:@valid_earned_badges, @earned_badges)
+        end
+
+        it "should send a notification" do
+          mail_responder = double("earned badge mail responder!!")
+          mail_responder.stub(:deliver_now)
+          NotificationMailer.stub(:earned_badge_awarded) { mail_responder }
+          @earned_badges.each do |earned_badge|
+            expect(NotificationMailer).to receive(:earned_badge_awarded).with(earned_badge[:id])
+          end
+          controller.instance_eval { send_earned_badge_notifications }
+        end
+
+        it "should record the notification in the environment log" do
+          @earned_badges.each do |earned_badge|
+            earned_badge_notification_message = "Sent an earned badge notification for EarnedBadge ##{earned_badge[:id]}"
+            expect(controller.logger).to receive(:info).with(earned_badge_notification_message)
+          end
+          controller.instance_eval { send_earned_badge_notifications }
+        end
+      end
+
+      context "no earned badges" do
+        it "should not send any notifications" do
+          @controller.instance_variable_set(:@valid_earned_badges, [])
+          expect(NotificationMailer).not_to receive(:earned_badge_awarded)
+        end
+      end
+    end
+
     describe "POST update" do
       it "updates the earned badge" do
         params = { feedback: "more feedback" }
@@ -84,6 +171,11 @@ describe EarnedBadgesController do
         @earned_badge.reload
         @earned_badge.feedback.should eq("more feedback")
         response.should redirect_to(badge_path(@badge))
+      end
+    end
+
+    describe "PUT mass_update" do
+      before(:each) do
       end
     end
 

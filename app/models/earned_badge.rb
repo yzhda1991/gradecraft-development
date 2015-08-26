@@ -23,7 +23,7 @@ class EarnedBadge < ActiveRecord::Base
   #validates :badge_id, :uniqueness => {:scope => :grade_id}
 
   #Some badges can only be earned once - we check on award if that's the case
-  #validate :multiple_allowed
+  validate :multiple_allowed
 
   delegate :name, :description, :icon, :to => :badge
 
@@ -70,7 +70,7 @@ class EarnedBadge < ActiveRecord::Base
 
   def multiple_allowed
     if ! self.badge.can_earn_multiple_times? && self.badge.earned_badge_for_student(self.student)
-      errors.add :weight, " Oops, they've already earned this #{course.badge_term.downcase}."
+      errors.add :weight, " Oops, they've already earned the '#{name}' #{course.badge_term.downcase}."
     end
   end
 

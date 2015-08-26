@@ -120,7 +120,8 @@ class Badge < ActiveRecord::Base
   end
 
   def earned_badges_for_student(student)
-    earned_badges.where(:student_id => student)
+    # ATTN
+    earned_badges.where(:student_id => student[:id])
   end
 
   def find_or_create_predicted_earned_badge(student)
