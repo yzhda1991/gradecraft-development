@@ -352,8 +352,8 @@ GradeCraft::Application.routes.draw do
   #17b. Predictor, Instructor View
   get 'students/:id/predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
-  get 'students/:id/predictor_assignments' => 'assignments#staff_predictor_data', defaults: {format: :json}
-  get 'students/:id/predictor_badges' => 'badges#staff_predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_assignments' => 'assignments#student_predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_badges' => 'badges#student_predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_weights' => 'assignment_type_weights#student_predictor_data', defaults: {format: :json}
 

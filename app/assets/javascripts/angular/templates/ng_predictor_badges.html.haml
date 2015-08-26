@@ -18,8 +18,7 @@
 
       .predictor-badge-main
 
-        %img.predictor-badge-icon{ :src => '{{badge.icon}}', :alt => '{{badge.name}}' }
-
+        %img.predictor-badge-icon{ 'ng-src' => '{{badge.icon}}', :alt => '{{badge.name}}' }
 
         .badge-complete{'ng-if'=>'badgeCompleted(badge)'}
           .value

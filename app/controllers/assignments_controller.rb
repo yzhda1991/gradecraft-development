@@ -201,8 +201,15 @@ class AssignmentsController < ApplicationController
 
   # current student visible assignment
   def student_predictor_data
+    if current_user.is_student?(current_course)
+      @student = current_student
+      @update_assignments = true
+    else
+      @student = User.find(params[:id])
+      @update_assignments = false
+    end
+
     @assignments = predictor_assignments_data
-    @student = current_student
     @grades = predictor_grades(@student)
 
     @assignments.each do |assignment|
@@ -219,30 +226,6 @@ class AssignmentsController < ApplicationController
         end
       end
     end
-  end
-
-  def staff_predictor_data
-    @assignments = predictor_assignments_data
-    @student = User.find(params[:id])
-    @grades = predictor_grades(@student)
-    @assignments.each do |assignment|
-      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
-        if grade.nil?
-          grade = Grade.create(:assignment => assignment, :student => @student)
-        end
-        assignment.current_student_grade = grade
-
-        # Professors can't see predictions
-        grade.predicted_score = 0
-
-        # Only pass through points if they have been released by the professor
-        unless grade.is_student_visible?
-          assignment.current_student_grade.pass_fail_status = nil
-          assignment.current_student_grade.score = nil
-        end
-      end
-    end
-    render :student_predictor_data
   end
 
   private

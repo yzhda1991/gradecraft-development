@@ -43,3 +43,4 @@ end
 
 json.term_for_badges term_for :badges
 json.term_for_badge term_for :badge
+json.update_badges @update_badges
