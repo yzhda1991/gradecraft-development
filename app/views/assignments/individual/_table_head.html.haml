@@ -5,11 +5,13 @@
   %th{:scope => "col"} Last Name
 
   // If 'Score' only if the assignment type is not student_weightable
-  - if not @assignment_type.student_weightable?
+  - if ! @assignment_type.student_weightable? && ! @assignment.pass_fail?
     %th{:scope => "col"} Score
   - elsif @assignment_type.student_weightable?
     %th{:scope => "col"} Raw Score
     %th{:scope => "col"} Multiplied Score
+  - elsif @assignment.pass_fail?
+    %th{:scope => "col"} Grade
 
   %th{:scope => "col"} Read?
 
@@ -22,6 +24,6 @@
   %th{:style => "min-width: 180px"}
 
   - if @assignment.release_necessary? && @assignment.grades.present?
-    %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
+    %th{"data-dynatable-no-sort" => "true", :width => "120px" }
       %button.button.select-all= "Check"
       %button.button.select-none= "Uncheck"
