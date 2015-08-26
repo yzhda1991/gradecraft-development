@@ -18,6 +18,12 @@ require 'yaml'
 ::ActiveRecord::Base.raise_in_transactional_callbacks = true
 ::ActiveRecord::Base.extend CarrierWave::Backgrounder::ORM::ActiveModel
 
+::Sorcery::Controller::Config.submodules = [:user_activation]
+::Sorcery::Controller::Config.user_config do |user|
+  user.activation_mailer_disabled = true
+  user.user_activation_mailer = nil
+end
+
 require './lib/display_helpers'
 require './lib/s3_file'
 Dir['./app/validators/*.rb'].each { |f| require f }
