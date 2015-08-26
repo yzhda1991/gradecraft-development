@@ -59,6 +59,14 @@ describe GradeImporter do
           expect(grade.feedback).to eq "You did great!"
         end
 
+        it "contains an unsuccessful row if the grade is not valid" do
+          allow_any_instance_of(Grade).to receive(:valid?).and_return false
+          allow_any_instance_of(Grade).to receive(:errors).and_return double(full_messages: ["The grade is not cool"])
+          result = subject.import(course, assignment)
+          expect(result.unsuccessful.count).to eq 1
+          expect(result.unsuccessful.first[:errors]).to eq "The grade is not cool"
+        end
+
         xit "creates a grade for a student by unique name"
       end
     end

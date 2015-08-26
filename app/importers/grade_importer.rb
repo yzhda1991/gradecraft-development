@@ -26,7 +26,7 @@ class GradeImporter
           end
 
           grade = assignment.all_grade_statuses_grade_for_student(student)
-          update_grade row, grade if grade
+          grade = update_grade row, grade if grade
           grade ||= create_grade row, assignment, student
 
           if grade.valid?
@@ -68,6 +68,7 @@ class GradeImporter
   def update_grade(row, grade)
     assign_grade row, grade
     grade.save
+    grade
   end
 
   def find_student(row, students)
