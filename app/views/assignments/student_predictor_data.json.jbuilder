@@ -1,6 +1,7 @@
 json.assignments @assignments do |assignment|
   json.cache! ['v1', assignment] do
     next unless assignment.point_total > 0 || assignment.pass_fail?
+    next unless assignment.visible_for_student?(@student)
     json.merge! assignment.attributes
     json.score_levels assignment.assignment_score_levels.map {|asl| {name: asl.name, value: asl.value}}
     json.fixed assignment.fixed?

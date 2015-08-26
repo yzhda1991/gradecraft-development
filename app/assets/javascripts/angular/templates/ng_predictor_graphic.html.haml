@@ -6,13 +6,15 @@
         %rect#svg-graph-points-predicted{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgPredictedBarWidth()}}", "height"=>"20"}
         %rect#svg-graph-points-earned{"x"=>"10", "y"=>"40", "ng-attr-width"=>"{{svgEarnedBarWidth()}}", "height"=>"20"}
       %g{"id" => "svg-grade-level-text"}
-      %g{"id" => "svg-key"}
-        %rect#svg-graph-points-earned{"x"=>"10", "y"=>"90", "width"=>"20", "height"=>"20"}
-        %text{"x"=>"32", "y"=>"106", "font-family"=>"Verdana"}
-          Total Earned: {{allPointsEarned() | number}}
-        %rect#svg-graph-points-predicted{"x"=>"230", "y"=>"90", "width"=>"20", "height"=>"20"}
-        %text{"x"=>"252", "y"=>"106", "font-family"=>"Verdana"}
-          Total Predicted: {{allPointsPredicted() | number}} (left to earn: {{allPointsPredicted() - allPointsEarned() | number}})
+      %g{"id" => "svg-keys"}
+        %g{"id" => "svg-earned-key"}
+          %rect.key
+          %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Verdana"}
+            Total Earned: {{allPointsEarned() | number}}
+        %g{"id" => "svg-predicted-key"}
+          %rect.key
+          %text.description{"x"=>"22", "y"=>"16", "font-family"=>"Verdana"}
+            Total Predicted: {{allPointsPredicted() | number}} (left to earn: {{allPointsPredicted() - allPointsEarned() | number}})
 
 
 
