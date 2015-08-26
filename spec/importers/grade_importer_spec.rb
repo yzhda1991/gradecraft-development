@@ -51,7 +51,14 @@ describe GradeImporter do
           expect(result.successful.last).to eq grade
         end
 
-        xit "updates the grade if it is already there"
+        it "updates the grade if it is already there" do
+          create :grade, assignment: assignment, student: student, raw_score: 1000
+          subject.import(course, assignment)
+          grade = Grade.last
+          expect(grade.raw_score).to eq 4000
+          expect(grade.feedback).to eq "You did great!"
+        end
+
         xit "creates a grade for a student by unique name"
       end
     end

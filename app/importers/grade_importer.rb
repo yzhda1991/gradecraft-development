@@ -25,7 +25,10 @@ class GradeImporter
             next
           end
 
-          grade = create_grade row, assignment, student
+          grade = assignment.all_grade_statuses_grade_for_student(student)
+          update_grade row, grade if grade
+          grade ||= create_grade row, assignment, student
+
           successful << grade
         end
       end
@@ -44,14 +47,23 @@ class GradeImporter
     row[3].present?
   end
 
+  def assign_grade(row, grade)
+    grade.raw_score = row[3].to_i
+    grade.feedback = row[4]
+    grade.status = "Graded" if grade.status.nil?
+    grade.instructor_modified = true
+  end
+
   def create_grade(row, assignment, student)
     assignment.grades.create do |grade|
       grade.student_id = student.id
-      grade.raw_score = row[3].to_i
-      grade.feedback = row[4]
-      grade.status = "Graded"
-      grade.instructor_modified = true
+      assign_grade row, grade
     end
+  end
+
+  def update_grade(row, grade)
+    assign_grade row, grade
+    grade.save
   end
 
   def find_student(row, students)
