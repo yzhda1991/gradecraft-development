@@ -40,12 +40,22 @@ $predictor-font-size-4 : .85rem
     text
       font-family: sans-serif
       font-size: $predictor-font-size-4
-  #svg-grade-level-text
-    fill: pink
   #svg-graph-points-earned
     fill: $color-blue-0
   #svg-graph-points-predicted
     fill: $color-blue-1
+  #svg-earned-key
+    transform: translate(10px,90px)
+    .key
+      fill: $color-blue-0
+      width: 20
+      height: 20
+  #svg-predicted-key
+    transform: translate(230px,90px)
+    .key
+      fill: $color-blue-1
+      width: 20
+      height: 20
 
 // ICONS AND TOOLTIPS
 
@@ -87,29 +97,32 @@ $predictor-font-size-4 : .85rem
 // SECTIONS
 #predictor-main-header, .predictor-section
   height: 33px
-  background-color: $color-blue-0
   clear: both
   margin-top: 10px
-  .coin
-    margin-top: -1px
   .coin:hover
     background-color: $color-yellow-2
+
+#predictor-main-header
+  background-color: $color-blue-1
+  .coin
+    margin-top: 2px
+.predictor-section
+  background-color: $color-blue-0
+  .coin
+    margin-top: -1px
 
 .collapse-arrow
   width: 0
   height: 0
   float: left
-  margin: 10px 8px 0 8px
+  margin: 10px 8px 0 24px
   border-left: 8px solid transparent
   border-right: 8px solid transparent
   border-top: 13px solid $color-blue-3
   -webkit-backface-visibility: hidden
 
-.double-arrow
-  padding: 3px 0 0 7px
-
-.collapse-arrow.doubled
-  margin: 6px 0 0 0
+.collapse-arrow.outdent
+  margin: 9px 7px 0 8px
 
 .collapsed
   .collapse-arrow
@@ -119,7 +132,6 @@ $predictor-font-size-4 : .85rem
   @include title-type-styling
   font-size: $predictor-font-size-1
   color: white
-  background-color: $color-blue-0
   line-height: 1.4
   margin-bottom: 0.5rem
   padding: 0 .5rem
@@ -212,7 +224,7 @@ article.predictor-article
   background-color: $color-blue-5
   float: left
   margin: 3px
-  height: 8.8rem
+  height: 9.5rem
   //default width, changes with screensize
   width: 19%
   select
@@ -287,8 +299,7 @@ article.predictor-article.status-graded
   color: $color-blue-0
 
 .badge-complete .value
-  //TODO: pushing badge icon down
-  //margin: 17px 0
+  padding-top: 30px
 
 .article-predicted .grade
   text-align: center
@@ -407,6 +418,12 @@ article.predictor-article
 
 // small
 @media (max-width: $media-small-max)
+  #predictor-graphic
+    height: 150
+    #svg-predicted-key
+      transform: translate(10px,120px)
+  .collapse-arrow.doubled
+    margin: 35px 0 0 0
   article.predictor-article
     width: 100%
   .predictor-section-title
@@ -415,10 +432,15 @@ article.predictor-article
     clear: both
     float: none
     font-size: $predictor-font-size-3
-  #predictor-main-header, .predictor-section
+  #predictor-main-header
+    height: 70px
+    margin-top: 15px
+    padding-top: 20px
+  .predictor-section
+    margin-top: 3px
     height: 70px
   .collapsable
-    padding-top: 7px
+    padding-top: 23px
   #predictor-graphic
     width: 100%
     margin: 10px 0 0 0
@@ -432,6 +454,8 @@ article.predictor-article
     float: none
   #predictor-main-header, .predictor-section
     height: 70px
+  .predictor-section
+    margin-top: 3px
   .collapsable
     padding-top: 7px
   #predictor-graphic

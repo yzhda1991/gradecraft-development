@@ -122,7 +122,7 @@
     assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
     total = $scope.assignmentsPointTotal(assignments) - assignmentType.max_value
 
-  # Total points predicted for badges
+  # Total points predicted for badges (works with no badges)
   $scope.badgesPointTotal = ()->
     total = 0
     _.each($scope.badges,(badge)->
@@ -173,6 +173,19 @@
         total += challenge.grade.score
       )
     total
+
+  $scope.predictedGradeLevel = ()->
+    allPointsPredicted = $scope.allPointsPredicted()
+    predictedGrade = null
+    _.each($scope.gradeLevels.grade_scheme_elements,(gse)->
+      if allPointsPredicted > gse.low_range
+        if ! predictedGrade || predictedGrade.low_range < gse.low_range
+          predictedGrade = gse
+    )
+    if predictedGrade
+      return predictedGrade.level + " (" + predictedGrade.letter + ")"
+    else
+      return ""
 
   $scope.badgeCompleted = (badge)->
     if (badge.point_total == badge.total_earned_points && ! badge.can_earn_multiple_times)
@@ -268,7 +281,8 @@
     axis = d3.svg.axis().scale(scale).orient("bottom")
     g = svg.selectAll('g').data(grade_scheme_elements).enter().append('g')
             .attr("transform", (gse)->
-              "translate(" + scale(gse.low_range) + padding + "," + 25 + " )")
+              console.log(scale(gse.low_range));
+              "translate(" + (scale(gse.low_range) + padding) + "," + 25 + " )")
             .on("mouseover", (gse)->
               d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "visible")
               d3.select(".grade_scheme-pointer-" + gse.low_range)
@@ -305,7 +319,7 @@
       "translate(" + $scope.gradeLevelPosition(scale,gse.low_range,stats.width,padding) + "," + 5 + ")")
     d3.select("svg").append("g")
       .attr("class": "grade-point-axis")
-      .attr("transform": "translate(" + padding + "," + (stats.height - 55) + ")")
+      .attr("transform": "translate(" + padding + "," + (65) + ")")
       .call(axis)
 
   $scope.svgEarnedBarWidth = ()->

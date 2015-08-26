@@ -25,6 +25,7 @@ class Challenge < ActiveRecord::Base
 
   scope :chronological, -> { order('due_at ASC') }
   scope :alphabetical, -> { order('name ASC') }
+  scope :visible, -> { where visible: TRUE }
 
   def has_levels?
     levels == true

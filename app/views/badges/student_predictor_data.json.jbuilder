@@ -1,7 +1,6 @@
 json.badges @badges do |badge|
   json.cache! ['v1', badge] do
-    #next unless badge.visible
-    #next unless badge.point_total && badge.point_total > 0
+    next unless badge.visible_for_student?(@student)
     json.merge! badge.attributes
     json.icon badge.icon.url
     json.info ! badge.description.blank?

@@ -2,10 +2,10 @@
 
 #predictor-main-header
   .collapse-all-toggler
-    .double-arrow
-      .collapse-arrow.doubled
-      .collapse-arrow.doubled
+    .collapse-arrow.outdent
     .predictor-section-title
+      .predictor-section-title-left
+        Predicted Final Grade: {{predictedGradeLevel()}}
       .predictor-section-title-right{{'ng-if'=>'weightsAvailable()'}}
         .predictor-title-right-span
           Unused {{termFor.weights}} :

@@ -281,6 +281,7 @@ class AssignmentsController < ApplicationController
         :thumbnail,
         :use_rubric,
         :visible,
+        :visible_when_locked
       )
     end
 

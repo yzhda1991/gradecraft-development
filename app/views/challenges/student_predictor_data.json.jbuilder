@@ -1,4 +1,5 @@
 json.challenges @challenges do |challenge|
+  #next unless challenge.visible_for_student?(@student)
   json.merge! challenge.attributes
   json.info ! challenge.description.blank?
   json.score_levels challenge.challenge_score_levels.map {|csl| {name: csl.name, value: csl.value}}

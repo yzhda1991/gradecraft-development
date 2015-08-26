@@ -111,7 +111,8 @@ class ChallengesController < ApplicationController
       @student = User.find(params[:id])
     end
 
-    if current_course.challenges.present?
+    @challenges = []
+    if current_course.challenges.present? && @student.team_for_course(current_course).present?
       @challenges = current_course.challenges
 
       @challenges.each do |challenge|
