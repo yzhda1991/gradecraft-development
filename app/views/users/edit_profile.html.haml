@@ -31,7 +31,7 @@
       - if current_course.team_roles?
         .form-item
           = f.label :team_role, "#{term_for :team} Role"
-          = f.text_field :team_role
+          = f.input :team_role, :input_html => { :maxlength => 255 }, :label => false
           .form_label What will you contribute to your #{term_for :team}?
 
       - if current_course.character_profiles?

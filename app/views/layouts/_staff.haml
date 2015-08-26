@@ -4,13 +4,13 @@
 
 .mainContainer.staff{:role => "main"}
 
-  / - if current_student.present?
-  /   = content_nav do
-  /     = render "students/student_profile_tabs"
+  - if current_student.present?
+    = content_nav do
+      = render "students/student_profile_tabs"
 
   / Page content
-  .panel.mainContent= render 'layouts/content'
+  .panel.mainContent{ :class => (current_student ? 'student' : '') }= render 'layouts/content'
 
-  / - if current_student.present?
-  /   .student-sidebar
-  /     = render "students/student_sidebar"
+  - if current_student.present?
+    .student-sidebar
+      = render "students/student_sidebar"

@@ -6,7 +6,7 @@
 .italic.not_bold= "Opens: #{@assignment.open_at}" if @assignment.open_at?
 .italic.not_bold= "Due: #{@assignment.due_at}" if @assignment.due_at?
 - if @assignment.description.present?
-  %hr
+  %hr.dotted
 
   %h4.uppercase Guidelines:
   - if @assignment.assignment_files.present?
@@ -18,7 +18,7 @@
   %p= raw @assignment.description
 
 - if @assignment.assignment_type.predictor_description.present?
-  %hr
+  %hr.dotted
   %h4.uppercase #{ @assignment.assignment_type.name} Guidelines:
 
   %p= raw @assignment.assignment_type.predictor_description
