@@ -2,7 +2,8 @@
   %h3= current_student.name
   %hr
   - if current_student.avatar_file_name.present?
-    %img.img-rounded{:src => current_student.avatar_file_name, :size => 100} 
+    %img.img-rounded{:src => current_student.avatar_file_name, :width => 150} 
+    %br
   .italic= "#{current_student.team_for_course(current_course).name}" if current_student.team_for_course(current_course).present?
   .italic= "Last activity: #{current_student.try(:last_activity_at) || "(never)"} "
   %ul

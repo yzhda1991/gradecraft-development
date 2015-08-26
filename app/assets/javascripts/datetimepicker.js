@@ -108,7 +108,7 @@
 			addSliderAccess: false,
 			sliderAccessArgs: null,
 			controlType: 'slider',
-			oneLine: false,
+			oneLine: true,
 			defaultValue: null,
 			parse: 'strict',
 			afterInject: null

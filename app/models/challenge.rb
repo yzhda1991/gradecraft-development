@@ -20,6 +20,8 @@ class Challenge < ActiveRecord::Base
   accepts_nested_attributes_for :challenge_files
   accepts_nested_attributes_for :challenge_grades
 
+  scope :visible, -> { where visible: TRUE }
+
   validates_presence_of :course, :name
   validate :positive_points, :open_before_close
 
@@ -58,6 +60,12 @@ class Challenge < ActiveRecord::Base
   # TODO: should be removed
   def graded?
     challenge_grades.present?
+  end
+
+  def visible_for_student?(student)
+    if visible?
+      return true
+    end
   end
 
   def find_or_create_predicted_earned_challenge(student)
