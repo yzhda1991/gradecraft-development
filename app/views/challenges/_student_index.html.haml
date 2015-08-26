@@ -10,30 +10,29 @@
         %th Point total
 
   %tbody
-    - current_course.challenges.includes(:challenge_files, :challenge_grades).each do |challenge|
-      - if challenge.visible?
-        %tr
-          %td
-            - if challenge.graded?
-              = link_to challenge.name, challenge
-            - else
-              = challenge.name
-          %td
-            %span= raw challenge.description
-
-            - if challenge.challenge_files.present?
-              %b Attachments:
-              %ul
-                - challenge.challenge_files.each do |cf|
-                  %li
-                    = link_to cf.filename, cf.url
-
-          %td= challenge.due_at
-          - if current_student.team_for_course(current_course).present?
-            %td
-              %span= points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score) if challenge.graded?
-              %span= "/" if challenge.graded?
-              %span= points challenge.point_total
-
+    - current_course.challenges.visible.includes(:challenge_files, :challenge_grades).each do |challenge|
+      %tr
+        %td
+          - if challenge.graded?
+            = link_to challenge.name, challenge
           - else
-            %td= points challenge.point_total
+            = challenge.name
+        %td
+          %span= raw challenge.description
+
+          - if challenge.challenge_files.present?
+            %b Attachments:
+            %ul
+              - challenge.challenge_files.each do |cf|
+                %li
+                  = link_to cf.filename, cf.url
+
+        %td= challenge.due_at
+        - if current_student.team_for_course(current_course).present?
+          %td
+            %span= points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score) if challenge.graded?
+            %span= "/" if challenge.graded?
+            %span= points challenge.point_total
+
+        - else
+          %td= points challenge.point_total
