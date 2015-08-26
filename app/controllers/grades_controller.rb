@@ -596,7 +596,7 @@ class GradesController < ApplicationController
     @title = "Import Grades for #{@assignment.name}"
   end
 
-  def email_import
+  def upload
     if params[:file].blank?
       flash[:notice] = "File missing"
       redirect_to assignment_path(@assignment)

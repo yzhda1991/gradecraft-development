@@ -76,7 +76,7 @@ GradeCraft::Application.routes.draw do
         post :edit_status
         put :update_status
         get :import
-        post :email_import
+        post :upload
         post :self_log
         post :predict_score
         post :feedback_read
