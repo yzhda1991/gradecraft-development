@@ -119,6 +119,27 @@ describe GradesController do
         response.should render_template(:import)
       end
     end
+
+    describe "POST email_import" do
+      render_views
+
+      let(:file) { fixture_file "grades.csv", "text/csv" }
+
+      it "renders the results from the import" do
+        @student.update_attribute :email, "robert@example.com"
+        @second_student.update_attribute :username, "jimmy"
+
+        post :email_import, id: @assignment.id, file: file
+        expect(response).to render_template :import_results
+        expect(response.body).to include "2 Grades Imported Successfully"
+      end
+
+      it "renders any errors that have occured" do
+        post :email_import, id: @assignment.id, file: file
+        expect(response.body).to include "2 Grades Not Imported"
+        expect(response.body).to include "Student not found in course"
+      end
+    end
   end
 
   context "as student" do
