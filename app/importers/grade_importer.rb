@@ -29,7 +29,11 @@ class GradeImporter
           update_grade row, grade if grade
           grade ||= create_grade row, assignment, student
 
-          successful << grade
+          if grade.valid?
+            successful << grade
+          else
+            append_unsuccessful row, grade.errors.full_messages.join(", ")
+          end
         end
       end
     end
