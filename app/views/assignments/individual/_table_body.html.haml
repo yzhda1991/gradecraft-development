@@ -16,7 +16,10 @@
     %td= link_to last_name, student_path(student)
     %td.status-or-score
       - if @assignment.pass_fail
-        = term_for(grade.pass_fail_status) if instructor_modified == true
+        - if grade.pass_fail_status
+          = term_for(grade.pass_fail_status) if instructor_modified == true
+        - else
+          No Grade
       - else
         = grade.raw_score if instructor_modified
 

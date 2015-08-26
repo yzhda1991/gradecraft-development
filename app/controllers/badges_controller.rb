@@ -123,20 +123,18 @@ class BadgesController < ApplicationController
   end
 
   def student_predictor_data
-    @student = current_student
-    @badges = predictor_badge_data
-    @badges.each do |badge|
-      badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(@student)
+    if current_user.is_student?(current_course)
+      @student = current_student
+      @update_badges = true
+    else
+      @student = User.find(params[:id])
+      @update_badges = false
     end
-  end
 
-  def staff_predictor_data
-    @student = User.find(params[:id])
     @badges = predictor_badge_data
     @badges.each do |badge|
       badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(@student)
     end
-    render :student_predictor_data
   end
 
   private
