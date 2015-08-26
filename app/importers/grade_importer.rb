@@ -72,6 +72,11 @@ class GradeImporter
   end
 
   def find_student(row, students)
-    students.find { |student| student.email.downcase == row[2].downcase }
+    identifier = row[2].downcase
+    if identifier =~ /@/
+      students.find { |student| student.email.downcase == identifier }
+    else
+      students.find { |student| student.username.downcase == identifier }
+    end
   end
 end
