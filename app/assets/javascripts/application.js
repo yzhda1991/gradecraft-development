@@ -76,3 +76,7 @@
 //= require_tree ./froala
 //= require_tree ./angular-froala
 //= require utilities
+
+<script>
+  $.Editable.DEFAULTS.key = '6Ud1QBRVCDLPAZMBQ==';
+</script>
