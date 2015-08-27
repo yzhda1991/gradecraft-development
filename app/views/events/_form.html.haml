@@ -17,6 +17,7 @@
   %section
     %h4 Timeline Settings
     .form-item
+      = f.label :media
       = f.file_field :media
     - if @event.media.present?
       .form-item
@@ -24,6 +25,7 @@
         = f.check_box :remove_media
         Remove Image
     .form-item
+      = f.label :thumbnail
       = f.file_field :thumbnail
     - if @event.thumbnail.present?
       .form-item

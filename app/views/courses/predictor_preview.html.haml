@@ -26,7 +26,7 @@
               %i.fa.fa-angle-double-right.fa-fw
             = assignment_type.name
             .right.radius.label.fade
-              = "#{points assignment_type.max_value} points possible"
+              = "#{points assignment_type.total_points} points possible"
           .small-12
             - assignments = assignment_type.assignments
             - assignments.each do |assignment|

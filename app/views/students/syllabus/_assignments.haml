@@ -4,17 +4,10 @@
 
     // Display the student's points out of assignment total, if there is an assignment max value. Else
     // display the student's points out of the the current point total for assignment.
-    - score_for_assignment_type = assignment_type.visible_score_for_student(current_student)
-    - if assignment_type.max_value?
-      %h3.collapse
-        %a
-          %i.fa.fa-angle-double-right.fa-fw
-        #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points assignment_type.max_value}
-    - else
-      %h3.collapse
-        %a
-          %i.fa.fa-angle-double-right.fa-fw
-        #{assignment_type.try(:name)} • #{ points score_for_assignment_type }/#{points score_for_assignment_type }
+    %h3.collapse
+      %a
+        %i.fa.fa-angle-double-right.fa-fw
+      #{assignment_type.try(:name)} • #{ points assignment_type.visible_score_for_student(current_student) }/#{ points assignment_type.total_points_for_student(current_student) }
 
     .assignment-type-container
       // If the course and particular assignment uses weights, display assignment weighting options

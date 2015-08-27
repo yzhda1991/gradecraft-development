@@ -64,13 +64,29 @@ class AssignmentType < ActiveRecord::Base
     grade_select? || grade_radio?
   end
 
-  def grade_per_assignment?
-    mass_grade_type == "Set per Assignment"
+  # #Getting the assignment types max value if it's present, else summing all it's assignments to create the total
+  def total_points
+    if max_value.present?
+      max_value
+    else
+      assignments.map{ |a| a.point_total || 0 }.sum
+    end
   end
 
-  #Getting the assignment types max value if it's present, else summing all it's assignments to create the total
-  def max_value
-    super.presence || assignments.map{ |a| a.point_total || 0 }.sum
+  def total_points_for_student(student)
+    if max_value.present?
+      max_value
+    else
+      if student_weightable?
+        if assignment_weights.where(:student_id => student).present?
+          (total_points * weight_for_student(student)).to_i
+        else 
+          (total_points * course.default_assignment_weight).to_i
+        end
+      else 
+        total_points
+      end      
+    end
   end
 
   def visible_score_for_student(student)
