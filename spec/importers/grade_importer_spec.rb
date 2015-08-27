@@ -1,5 +1,4 @@
-require 'active_record_spec_helper'
-require './app/importers/grade_importer'
+require 'spec_helper'
 
 describe GradeImporter do
   describe "#import" do
