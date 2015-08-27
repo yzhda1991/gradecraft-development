@@ -53,6 +53,7 @@
             = f.hidden_field :status, value: 'Graded'
 
           .attachments(ng-cloak)
+            .clear
             = render partial: "grades/standard_edit/standard_edit_attachment", locals: {f: f}
 
           .text-feedback
@@ -77,25 +78,26 @@
 
         %section
 
-        %section
-          #awarded(ng-cloak)
-            = render partial: "grades/standard_edit/badges_awarded"
-            .clear-left
+        - if current_course.badges.present?
+          %section
+            #awarded(ng-cloak)
+              = render partial: "grades/standard_edit/badges_awarded"
+              .clear-left
 
-          #available.empty(ng-cloak)
-            = render partial: "grades/standard_edit/badges_available"
-            .clear-left
+            #available.empty(ng-cloak)
+              = render partial: "grades/standard_edit/badges_available"
+              .clear-left
 
-        .panel(ng-if="debug" ng-cloak)
-          .badge-debug(ng-repeat="badge in badges" ng-class="{creating: badge.creating, deleting: badge.deleting}")
-            .info
-              %h4 {{badge.name}}
-            .info
-              %b Creating:
-              {{badge.creating}}
-            .info
-              %b Deleting:
-              {{badge.deleting}}
-            .info.earned-badge
-              %b EarnedBadge:
-              .pretty-json {{badge.earnedBadge | json}}
+          .panel(ng-if="debug" ng-cloak)
+            .badge-debug(ng-repeat="badge in badges" ng-class="{creating: badge.creating, deleting: badge.deleting}")
+              .info
+                %h4 {{badge.name}}
+              .info
+                %b Creating:
+                {{badge.creating}}
+              .info
+                %b Deleting:
+                {{badge.deleting}}
+              .info.earned-badge
+                %b EarnedBadge:
+                .pretty-json {{badge.earnedBadge | json}}
