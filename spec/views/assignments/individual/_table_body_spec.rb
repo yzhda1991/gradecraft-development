@@ -15,7 +15,7 @@ describe "assignments/individual/_table_body" do
     @grade = create(:grade, course: course, assignment: @assignment, student: student)
     @students = [student]
     @grades = student.grades
-    view.stub(:current_course).and_return(course)
+    allow(view).to receive(:current_course).and_return(course)
   end
 
   it "renders successfully" do
@@ -25,15 +25,15 @@ describe "assignments/individual/_table_body" do
   describe "with a graded grade" do
     before(:each) do
       @grade.update(status: "Graded", instructor_modified: true)
-      view.stub(:remove_grades_assignment_path).and_return("#")
+      allow(view).to receive(:remove_grades_assignment_path).and_return("#")
     end
 
     describe "with a score" do
       context "and the grade is present and instructor modified" do 
         it "renders the raw score" do
           @grade.update(raw_score: @assignment.point_total)
-          @grade.stub(:present?) {true}
-          @grade.stub(:instructor_modified) {true}
+          allow(@grade).to receive(:present?) {true}
+          allow(@grade).to receive(:instructor_modified) {true}
           render
           assert_select "td.status-or-score", text: "#{@grade.raw_score}"
         end
@@ -42,8 +42,8 @@ describe "assignments/individual/_table_body" do
       context "and the grade is not present" do
         it "doesn't render the raw score" do
           @grade.update(raw_score: @assignment.point_total)
-          @grade.stub(:present?) {false}
-          @grade.stub(:instructor_modified) {true}
+          allow(@grade).to receive(:present?) {false}
+          allow(@grade).to receive(:instructor_modified) {true}
           render
           assert_select "td.status-or-score", text: "#{@grade.raw_score}"
         end
@@ -52,8 +52,8 @@ describe "assignments/individual/_table_body" do
       context "and the grade is not instructor modified" do
         it "doesn't render the raw score" do
           @grade.update(raw_score: @assignment.point_total)
-          @grade.stub(:present?) {true}
-          @grade.stub(:instructor_modified) {false}
+          allow(@grade).to receive(:present?) {true}
+          allow(@grade).to receive(:instructor_modified) {false}
           render
           assert_select "td.status-or-score", text: "#{@grade.raw_score}"
         end

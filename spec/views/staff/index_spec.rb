@@ -15,7 +15,7 @@ describe "staff/index" do
 
   before(:each) do
     assign(:title, "Staff Index")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

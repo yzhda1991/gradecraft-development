@@ -16,14 +16,14 @@ describe "students/predictor/_assignments" do
     @course.assignments << @assignment
     @student = create(:user)
     @student.courses << @course
-    view.stub(:current_course).and_return(@course)
-    view.stub(:current_student).and_return(@student)
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_student).and_return(@student)
   end
 
   describe "with predictable assignments" do
     it "renders successfully" do
       pending "moved to angular templates"
-      @course.assignment_types[0].has_predictable_assignments?.should be_true
+      expect(@course.assignment_types[0].has_predictable_assignments?).to be_truthy
       render
     end
 

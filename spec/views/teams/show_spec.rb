@@ -20,7 +20,7 @@ describe "teams/show" do
 
   before(:each) do
     assign(:title, "#{@team.name}")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

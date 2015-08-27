@@ -10,7 +10,7 @@ describe "courses/predictor_preview" do
   end
 
   before(:each) do
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

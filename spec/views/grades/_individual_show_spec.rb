@@ -12,14 +12,14 @@ describe "grades/_individual_show" do
     student.courses << course
     @grade = create(:grade, course: course, assignment: @assignment, student: student)
 
-    view.stub(:current_student).and_return(student)
-    view.stub(:current_course).and_return(course)
+    allow(view).to receive(:current_student).and_return(student)
+    allow(view).to receive(:current_course).and_return(course)
 
   end
 
   describe "viewed by staff" do
     before(:each) do
-      view.stub(:current_user_is_staff).and_return(true)
+      allow(view).to receive(:current_user_is_staff).and_return(true)
     end
 
     describe "with a raw score" do
@@ -49,7 +49,7 @@ describe "grades/_individual_show" do
 
   describe "viewed by student" do
     before(:each) do
-      view.stub(:current_user_is_staff).and_return(false)
+      allow(view).to receive(:current_user_is_staff).and_return(false)
     end
     it "renders successfully" do
       render

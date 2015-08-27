@@ -18,8 +18,8 @@ describe "assignment_type_weights/mass_edit" do
   end
 
   before(:each) do
-    view.stub(:current_student).and_return(@student)
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_student).and_return(@student)
+    allow(view).to receive(:current_course).and_return(@course)
     assign(:title, "Editing #{@student.name}'s Kapital")
   end
 

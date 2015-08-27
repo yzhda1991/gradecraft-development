@@ -16,7 +16,7 @@ describe "courses/timeline_settings" do
   end
 
   before(:each) do
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
     assign(:title, "Timeline Settings")
   end
 

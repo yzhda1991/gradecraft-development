@@ -5,7 +5,7 @@ describe TasksController do
 
   #not yet built
 
-	context "as a professor" do
+  context "as a professor" do
 
     before do
       @course = create(:course)
@@ -30,47 +30,21 @@ describe TasksController do
     describe "GET index" do
       it "redirects the tasks index to the assignment page" do
         get :index, :assignment_id => @assignment.id
-        response.should redirect_to(assignment_path(@assignment))
+        expect(response).to redirect_to(assignment_path(@assignment))
       end
     end
 
-    describe "GET show" do
-      pending
-    end
+  end
 
-		describe "GET new" do
-      pending
-    end
-
-		describe "GET edit" do
-      it "display the edit form" do
-        pending
-      end
-    end
-
-		describe "GET create" do
-      pending
-    end
-
-		describe "GET update" do
-      pending
-    end
-
-		describe "GET destroy" do
-      pending
-    end
-
-	end
-
-	context "as a student" do
-		describe "protected routes" do
+  context "as a student" do
+    describe "protected routes" do
       [
         :index,
         :new,
         :create
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route, {:assignment_id => 1}).should redirect_to(:root)
+            expect(get route, {:assignment_id => 1}).to redirect_to(:root)
           end
         end
     end
@@ -83,10 +57,10 @@ describe TasksController do
         :edit
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:assignment_id => 1, :id => "10"}).should redirect_to(:root)
+          expect(get route, {:assignment_id => 1, :id => "10"}).to redirect_to(:root)
         end
       end
     end
 
-	end
+  end
 end

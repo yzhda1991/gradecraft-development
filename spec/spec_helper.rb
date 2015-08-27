@@ -5,7 +5,6 @@ SimpleCov.start
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'capybara/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -41,27 +40,13 @@ RSpec.configure do |config|
     end
   end
 
-  # ## Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
-
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  #config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.include FactoryGirl::Syntax::Methods
 
-  # Authentication with Sorcery
-  # https://github.com/NoamB/sorcery/wiki/Testing-Rails
   config.include Sorcery::TestHelpers::Rails::Controller, type: :controller
   config.include Sorcery::TestHelpers::Rails::Integration, type: :feature
 
   config.include BackgroundJobs
   config.tty = true
-  # in theory pass output to pipe or redirect with ansi color notation
-  # config.tty = true
 
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
@@ -77,6 +62,8 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
 
   config.infer_spec_type_from_file_location!
+
+  config.raise_errors_for_deprecations!
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing

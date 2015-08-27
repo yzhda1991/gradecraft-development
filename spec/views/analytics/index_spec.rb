@@ -11,7 +11,7 @@ describe "analytics/index" do
 
   before(:each) do
     assign(:title, "User Analytics")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

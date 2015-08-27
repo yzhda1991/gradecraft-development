@@ -15,7 +15,7 @@ describe "grade_scheme_elements/mass_edit" do
 
   before(:each) do
     assign(:title, "Edit Grading Scheme")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

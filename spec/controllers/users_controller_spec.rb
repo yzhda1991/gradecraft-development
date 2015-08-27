@@ -27,27 +27,27 @@ describe UsersController do
     describe "GET index" do
       it "returns the users for the current course" do
         get :index
-        assigns(:title).should eq("All Users")
-        assigns(:users).should eq(@users)
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("All Users")
+        expect(assigns(:users)).to eq(@users)
+        expect(response).to render_template(:index)
       end
     end
 
     describe "GET new" do
       it "assigns the name" do
         get :new
-        assigns(:title).should eq("Create a New User")
-        assigns(:user).should be_a_new(User)
-        response.should render_template(:new)
+        expect(assigns(:title)).to eq("Create a New User")
+        expect(assigns(:user)).to be_a_new(User)
+        expect(response).to render_template(:new)
       end
     end
 
     describe "GET edit" do
       it "renders the edit user form" do
         get :edit, :id => @student.id
-        assigns(:title).should eq("Editing #{@student.name}")
-        assigns(:user).should eq(@student)
-        response.should render_template(:edit)
+        expect(assigns(:title)).to eq("Editing #{@student.name}")
+        expect(assigns(:user)).to eq(@student)
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -98,9 +98,9 @@ describe UsersController do
     describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
-        assigns(:title).should eq("Edit My Profile")
-        assigns(:user).should eq(@professor)
-        response.should render_template(:edit_profile)
+        expect(assigns(:title)).to eq("Edit My Profile")
+        expect(assigns(:user)).to eq(@professor)
+        expect(response).to render_template(:edit_profile)
       end
     end
 
@@ -108,15 +108,15 @@ describe UsersController do
       it "successfully updates the users profile" do
         params = { display_name: "gandalf" }
         post :update_profile, id: @professor.id, :user => params
-        response.should redirect_to(dashboard_path)
-        @professor.reload.display_name.should eq("gandalf")
+        expect(response).to redirect_to(dashboard_path)
+        expect(@professor.reload.display_name).to eq("gandalf")
       end
     end
 
     describe "GET import" do
       it "renders the import page" do
         get :import
-        response.should render_template(:import)
+        expect(response).to render_template(:import)
       end
     end
 
@@ -263,9 +263,9 @@ describe UsersController do
     describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
-        assigns(:title).should eq("Edit My Profile")
-        assigns(:user).should eq(@student)
-        response.should render_template(:edit_profile)
+        expect(assigns(:title)).to eq("Edit My Profile")
+        expect(assigns(:user)).to eq(@student)
+        expect(response).to render_template(:edit_profile)
       end
     end
 
@@ -295,7 +295,7 @@ describe UsersController do
         :upload
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -307,7 +307,7 @@ describe UsersController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
     end

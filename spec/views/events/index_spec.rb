@@ -15,7 +15,7 @@ describe "events/index" do
 
   before(:each) do
     assign(:title, "Calendar Events")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

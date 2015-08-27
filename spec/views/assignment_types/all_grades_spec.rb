@@ -16,20 +16,20 @@ describe "assignment_types/all_grades" do
   before(:each) do
     assign(:assignment_type, @assignment_type)  
     assign(:title, "#{@assignment_type.name} Grade Patterns")
-    view.stub(:current_course).and_return(@course)
-    view.stub(:term_for).and_return("Assignment")
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:term_for).and_return("Assignment")
   end
 
   describe "as faculty" do
 
     it "renders successfully" do
-      view.stub(:current_user_is_staff?).and_return(true)
+      allow(view).to receive(:current_user_is_staff?).and_return(true)
       render
       assert_select "h3", :count => 1
     end
 
     it "renders the breadcrumbs" do
-      view.stub(:current_user_is_staff?).and_return(true)
+      allow(view).to receive(:current_user_is_staff?).and_return(true)
       render
       assert_select ".content-nav", :count => 1
       assert_select ".breadcrumbs" do

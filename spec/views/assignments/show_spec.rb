@@ -12,14 +12,14 @@ describe "assignments/show" do
     @student.courses << @course
     assign(:title, @assignment.name)
     assign(:assignment, @assignment)
-    view.stub(:current_course).and_return(@course)
-    view.stub(:current_student).and_return(@student)
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_student).and_return(@student)
   end
 
   describe "as student" do
 
     before(:each) do
-      view.stub(:current_user).and_return(@student)
+      allow(view).to receive(:current_user).and_return(@student)
     end
 
     it "renders the assignment grades" do
@@ -38,8 +38,8 @@ describe "assignments/show" do
 
   describe "as faculty" do
     it "renders the assignment management view" do
-      view.stub(:current_user_is_staff?).and_return(true)
-      view.stub(:term_for).and_return("Assignment")
+      allow(view).to receive(:current_user_is_staff?).and_return(true)
+      allow(view).to receive(:term_for).and_return("Assignment")
       assign(:students, [@student])
       assign(:grades, @student.grades)
       render
@@ -48,8 +48,8 @@ describe "assignments/show" do
 
     it "renders the assignment management view when submissions are on" do
       @assignment.update(accepts_submissions: true)
-      view.stub(:current_user_is_staff?).and_return(true)
-      view.stub(:term_for).and_return("Assignment")
+      allow(view).to receive(:current_user_is_staff?).and_return(true)
+      allow(view).to receive(:term_for).and_return("Assignment")
       assign(:students, [@student])
       assign(:grades, @student.grades)
       render

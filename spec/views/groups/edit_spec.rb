@@ -14,7 +14,7 @@ describe "groups/edit" do
 
   before(:each) do
     assign(:title, "Editing Amazing Group")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

@@ -13,7 +13,7 @@ describe "submissions/new" do
 
   before(:each) do
     assign(:title, "Submit #{@assignment.name} (#{@assignment.point_total})")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

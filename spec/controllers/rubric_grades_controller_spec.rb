@@ -55,7 +55,7 @@ describe RubricGradesController do
       ].each do |route|
           it "#{route} redirects to root" do
       			pending
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end

@@ -64,7 +64,7 @@ describe StudentAcademicHistoriesController do
         :create
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -77,7 +77,7 @@ describe StudentAcademicHistoriesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
     end

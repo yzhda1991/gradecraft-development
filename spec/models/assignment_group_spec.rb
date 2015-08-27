@@ -12,11 +12,15 @@ describe AssignmentGroup do
   end
 
   it "is invalid without assignment" do
-    expect(AssignmentGroup.new(assignment_id: nil)).to have(1).errors_on(:assignment_id)
+    assignment_group = AssignmentGroup.new(assignment_id: nil)
+    expect(assignment_group).to_not be_valid
+    expect(assignment_group.errors[:assignment_id].count).to eq 1
   end
 
   it "is invalid without group" do
-    expect(AssignmentGroup.new(group: nil)).to have(1).errors_on(:group)
+    assignment_group = AssignmentGroup.new(group: nil)
+    expect(assignment_group).to_not be_valid
+    expect(assignment_group.errors[:group].count).to eq 1
   end
 
 end

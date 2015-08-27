@@ -19,7 +19,7 @@ describe "rubrics/design" do
     assign(:title, "Design Rubric for #{@assignment.name}")
     assign(:course_badges, nil)
     assign(:course_badge_count, 0)
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

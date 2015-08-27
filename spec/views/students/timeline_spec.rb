@@ -13,8 +13,8 @@ describe "students/timeline" do
   end
 
   before(:each) do
-    view.stub(:current_course).and_return(@course)
-    view.stub(:current_student).and_return(@student)
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_student).and_return(@student)
   end
 
   it "renders successfully" do

@@ -16,7 +16,7 @@ describe "info/ungraded_submissions" do
 
   before(:each) do
     assign(:title, "Ungraded Assignment Submissions")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
     ungraded_submission_1 = create(:submission, student: @student_1, assignment: @assignment)
     ungraded_submission_2 = create(:submission, student: @student_2, assignment: @assignment)
     @ungraded_submissions = @assignment.submissions

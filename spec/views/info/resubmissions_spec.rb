@@ -26,7 +26,7 @@ describe "info/resubmissions" do
   end
 
   before(:each) do
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
     assign(:title, "Resubmitted Assignments")
     assign(:resubmission_count, 2)
     assign(:score, 100)

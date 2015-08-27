@@ -9,35 +9,37 @@ describe Challenge do
 
   subject { @challenge }
 
-  it { should respond_to("name")}
-  it { should respond_to("description")}
-  it { should respond_to("point_total")}
-  it { should respond_to( "due_at")}
-  it { should respond_to("course_id")}
-  it { should respond_to("points_predictor_display")}
-  it { should respond_to("visible")}
-  it { should respond_to("accepts_submissions")}
-  it { should respond_to("release_necessary")}
-  it { should respond_to("created_at")}
-  it { should respond_to("updated_at")}
-  it { should respond_to("open_at")}
-  it { should respond_to("mass_grade")}
-  it { should respond_to("mass_grade_type")}
-  it { should respond_to("levels")}
-  it { should respond_to("media")}
-  it { should respond_to("thumbnail")}
-  it { should respond_to("media_credit")}
-  it { should respond_to("media_caption")}
+  it { is_expected.to respond_to("name")}
+  it { is_expected.to respond_to("description")}
+  it { is_expected.to respond_to("point_total")}
+  it { is_expected.to respond_to( "due_at")}
+  it { is_expected.to respond_to("course_id")}
+  it { is_expected.to respond_to("points_predictor_display")}
+  it { is_expected.to respond_to("visible")}
+  it { is_expected.to respond_to("accepts_submissions")}
+  it { is_expected.to respond_to("release_necessary")}
+  it { is_expected.to respond_to("created_at")}
+  it { is_expected.to respond_to("updated_at")}
+  it { is_expected.to respond_to("open_at")}
+  it { is_expected.to respond_to("mass_grade")}
+  it { is_expected.to respond_to("mass_grade_type")}
+  it { is_expected.to respond_to("levels")}
+  it { is_expected.to respond_to("media")}
+  it { is_expected.to respond_to("thumbnail")}
+  it { is_expected.to respond_to("media_credit")}
+  it { is_expected.to respond_to("media_caption")}
 
-  it { should be_valid }
+  it { is_expected.to be_valid }
 
   it "is invalid without a name" do
     @challenge.name = nil
-    expect(@challenge).to have(1).errors_on(:name)
+    expect(@challenge).to_not be_valid
+    expect(@challenge.errors[:name].count).to eq 1
   end
 
   it "is invalid without a course" do
     @challenge.course = nil
-    expect(@challenge).to have(1).errors_on(:course)
+    expect(@challenge).to_not be_valid
+    expect(@challenge.errors[:course].count).to eq 1
   end
 end

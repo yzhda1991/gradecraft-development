@@ -15,9 +15,9 @@ describe "submissions/show" do
 
   before(:each) do
     assign(:title, "#{@student.name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
     # stub path called in partial app/views/submissions/_buttons.haml
-    view.stub(:assignment_submission_path).and_return("#")
+    allow(view).to receive(:assignment_submission_path).and_return("#")
   end
 
   it "renders successfully" do

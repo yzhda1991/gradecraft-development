@@ -37,7 +37,7 @@ describe "analytics/top_10" do
 
   before(:each) do
     assign(:title, "Top 10/Bottom 10")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

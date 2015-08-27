@@ -21,28 +21,28 @@ describe EventsController do
       it "assigns all events as @events" do
         allow(Resque).to receive(:enqueue).and_return(true)
         get :index
-        assigns(:events).should eq([@event])
+        expect(assigns(:events)).to eq([@event])
       end
     end
 
     describe "GET show" do
       it "assigns the requested event as @event" do
         get :show, {:id => @event.to_param}
-        assigns(:event).should eq(@event)
+        expect(assigns(:event)).to eq(@event)
       end
     end
 
     describe "GET new" do
       it "assigns a new event as @event" do
         get :new, {}
-        assigns(:event).should be_a_new(Event)
+        expect(assigns(:event)).to be_a_new(Event)
       end
     end
 
     describe "GET edit" do
       it "assigns the requested event as @event" do
         get :edit, {:id => @event.to_param}
-        assigns(:event).should eq(@event)
+        expect(assigns(:event)).to eq(@event)
       end
     end
 
@@ -56,22 +56,22 @@ describe EventsController do
         it "assigns a newly created event as @event" do
           params = attributes_for(:event)
           post :create, :event => params
-          assigns(:event).should be_a(Event)
-          assigns(:event).should be_persisted
+          expect(assigns(:event)).to be_a(Event)
+          expect(assigns(:event)).to be_persisted
         end
 
         it "redirects to the created event" do
           params = attributes_for(:event)
           post :create, :event => params
-          response.should redirect_to(Event.last)
+          expect(response).to redirect_to(Event.last)
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved event as @event" do
-          Event.any_instance.stub(:save).and_return(false)
+          allow_any_instance_of(Event).to receive(:save).and_return(false)
           post :create, {:event => { "name" => nil }}
-          assigns(:event).should be_a_new(Event)
+          expect(assigns(:event)).to be_a_new(Event)
         end
 
         it "should not increase the Event count" do
@@ -86,8 +86,8 @@ describe EventsController do
           params = { name: "new name" }
           post :update, id: @event.id, :event => params
           @event.reload
-          response.should redirect_to(event_path(@event))
-          @event.name.should eq("new name")
+          expect(response).to redirect_to(event_path(@event))
+          expect(@event.name).to eq("new name")
         end
       end
     end
@@ -100,7 +100,7 @@ describe EventsController do
 
       it "redirects to the events list" do
         expect{ get :destroy, :id => @event }.to change(Event,:count).by(-1)
-        response.should redirect_to(events_url)
+        expect(response).to redirect_to(events_url)
       end
     end
 
@@ -117,7 +117,7 @@ describe EventsController do
 
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -131,7 +131,7 @@ describe EventsController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
     end

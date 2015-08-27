@@ -24,36 +24,36 @@ describe AssignmentTypesController do
 		describe "GET index" do
       it "returns assignment types for the current course" do
         get :index
-        assigns(:title).should eq("assignment types")
-        assigns(:assignment_types).should eq([@assignment_type])
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("assignment types")
+        expect(assigns(:assignment_types)).to eq([@assignment_type])
+        expect(response).to render_template(:index)
       end
     end
 
 		describe "GET show" do
       it "returns the assignment type show page" do
         get :show, :id => @assignment_type.id
-        assigns(:title).should eq(@assignment_type.name)
-        assigns(:assignment_type).should eq(@assignment_type)
-        response.should render_template(:show)
+        expect(assigns(:title)).to eq(@assignment_type.name)
+        expect(assigns(:assignment_type)).to eq(@assignment_type)
+        expect(response).to render_template(:show)
       end
     end
 
 		describe "GET new" do
       it "assigns title and assignment types" do
         get :new
-        assigns(:title).should eq("Create a New assignment type")
-        assigns(:assignment_type).should be_a_new(AssignmentType)
-        response.should render_template(:new)
+        expect(assigns(:title)).to eq("Create a New assignment type")
+        expect(assigns(:assignment_type)).to be_a_new(AssignmentType)
+        expect(response).to render_template(:new)
       end
     end
 
     describe "GET edit" do
       it "assigns title and assignment types" do
         get :edit, :id => @assignment_type.id
-        assigns(:title).should eq("Editing #{@assignment_type.name}")
-        assigns(:assignment_type).should eq(@assignment_type)
-        response.should render_template(:edit)
+        expect(assigns(:title)).to eq("Editing #{@assignment_type.name}")
+        expect(assigns(:assignment_type)).to eq(@assignment_type)
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -74,8 +74,8 @@ describe AssignmentTypesController do
         params = { name: "new name" }
         post :update, id: @assignment_type.id, :assignment_type => params
         @assignment_type.reload
-        response.should redirect_to(assignment_types_path)
-        @assignment_type.name.should eq("new name")
+        expect(response).to redirect_to(assignment_types_path)
+        expect(@assignment_type.name).to eq("new name")
       end
     end
 
@@ -88,8 +88,8 @@ describe AssignmentTypesController do
 
         @assignment_type.reload
         @second_assignment_type.reload
-        @assignment_type.position.should eq(2)
-        @second_assignment_type.position.should eq(1)
+        expect(@assignment_type.position).to eq(2)
+        expect(@second_assignment_type.position).to eq(1)
       end
     end
 
@@ -98,7 +98,7 @@ describe AssignmentTypesController do
         it "returns scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
           get :export_scores, :id => @assignment_type, :format => :csv
-          response.body.should include("First Name,Last Name,Username,Raw Score")
+          expect(response.body).to include("First Name,Last Name,Username,Raw Score")
         end
       end
     end
@@ -108,7 +108,7 @@ describe AssignmentTypesController do
         it "returns all scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
           get :export_all_scores, :id => @assignment_type, :format => :csv
-          response.body.should include("First Name,Last Name,Email,Username,Team")
+          expect(response.body).to include("First Name,Last Name,Email,Username,Team")
         end
       end
     end
@@ -116,9 +116,9 @@ describe AssignmentTypesController do
 		describe "GET all_grades" do
       it "displays all grades for an assignment type" do
         get :all_grades, :id => @assignment_type.id
-        assigns(:title).should eq("#{@assignment_type.name} Grade Patterns")
-        assigns(:assignment_type).should eq(@assignment_type)
-        response.should render_template(:all_grades)
+        expect(assigns(:title)).to eq("#{@assignment_type.name} Grade Patterns")
+        expect(assigns(:assignment_type)).to eq(@assignment_type)
+        expect(response).to render_template(:all_grades)
       end
     end
 
@@ -142,7 +142,7 @@ describe AssignmentTypesController do
 
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -158,7 +158,7 @@ describe AssignmentTypesController do
         :all_grades
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
     end

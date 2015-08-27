@@ -123,7 +123,7 @@ describe User do
       User.destroy_all
       student = create(:user, last_name: 'Zed')
       student2 = create(:user, last_name: 'Alpha')
-      User.all.should eq([student2,student])
+      expect(User.all).to eq([student2,student])
     end
   end
 
@@ -253,7 +253,7 @@ describe User do
     end
 
     it "should not error out when earning one badge" do
-      expect(@student.earn_badge(@current_badge)).not_to raise_error
+      expect { @student.earn_badge(@current_badge) }.to_not raise_error
     end
 
     it "should choke on an array of badges" do

@@ -10,14 +10,14 @@ describe UnlockCondition do
 
   subject { @unlock_condition }
 
-  it { should respond_to("unlockable_id")}
-  it { should respond_to("unlockable_type")}
-  it { should respond_to("condition_id")}
-  it { should respond_to("condition_type")}
-  it { should respond_to("condition_state")}
-  it { should respond_to("condition_date")}
+  it { is_expected.to respond_to("unlockable_id")}
+  it { is_expected.to respond_to("unlockable_type")}
+  it { is_expected.to respond_to("condition_id")}
+  it { is_expected.to respond_to("condition_type")}
+  it { is_expected.to respond_to("condition_state")}
+  it { is_expected.to respond_to("condition_date")}
 
-  it { should be_valid }
+  it { is_expected.to be_valid }
 
   describe "when no information is present" do
     before { 
@@ -27,7 +27,7 @@ describe UnlockCondition do
       @unlock_condition.condition_type = nil
       @unlock_condition.condition_state = nil 
     }
-    it { should_not be_valid }
+    it { is_expected.not_to be_valid }
   end
 
   it "can be saved with a state and a value" do
@@ -37,7 +37,7 @@ describe UnlockCondition do
     @unlock_condition.condition_type = "Badge"
     @unlock_condition.condition_state = "Earned"
     @unlock_condition.condition_value = 2
-    expect @unlock_condition.should have(0).errors
+    expect expect(@unlock_condition.errors.size).to eq(0)
   end
 
   it "can be saved with a state, a value, and a date" do
@@ -48,7 +48,7 @@ describe UnlockCondition do
     @unlock_condition.condition_state = "Earned"
     @unlock_condition.condition_value = 2
     @unlock_condition_date = Date.today
-    expect @unlock_condition.should have(0).errors
+    expect expect(@unlock_condition.errors.size).to eq(0)
   end
 
 end

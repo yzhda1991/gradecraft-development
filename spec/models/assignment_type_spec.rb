@@ -10,7 +10,9 @@ describe AssignmentType do
   end
 
   it "is invalid without a name" do
-    expect(AssignmentType.new(name: nil)).to have(1).errors_on(:name)
+    assignment_type = AssignmentType.new(name: nil)
+    expect(assignment_type).to_not be_valid
+    expect(assignment_type.errors[:name].count).to eq 1
   end
 
 end

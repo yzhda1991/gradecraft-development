@@ -24,7 +24,7 @@ describe InfoController do
 			it "retrieves the dashboard" do
 				pending
         get :dashboard
-        response.should render_template(:dashboard)
+        expect(response).to render_template(:dashboard)
       end
 		end
 
@@ -33,35 +33,35 @@ describe InfoController do
 	      @events = []
 	      @events << [@assignment_1, @assignment_2]
         get :timeline_events
-        response.should render_template("info/_timeline")
+        expect(response).to render_template("info/_timeline")
       end
 		end
 
 		describe "GET awarded_badges" do
 			it "retrieves the awarded badges page" do
         get :awarded_badges
-        response.should render_template(:awarded_badges)
+        expect(response).to render_template(:awarded_badges)
       end
 		end
 
 		describe "GET grading_status" do
 			it "retrieves the grading_status page" do
         get :grading_status
-        response.should render_template(:grading_status)
+        expect(response).to render_template(:grading_status)
       end
 		end
 
 		describe "GET resubmissions" do
 			it "retrieves the resubmissions page" do
         get :resubmissions
-        response.should render_template(:resubmissions)
+        expect(response).to render_template(:resubmissions)
       end
 		end
 
 		describe "GET ungraded_submissions" do
 			it "retrieves the ungraded submissions page" do
         get :ungraded_submissions
-        response.should render_template(:ungraded_submissions)
+        expect(response).to render_template(:ungraded_submissions)
       end
 		end
 
@@ -69,7 +69,7 @@ describe InfoController do
 			it "retrieves the gradebook" do
 				pending
         get :gradebook
-        response.should render_template(:gradebook)
+        expect(response).to render_template(:gradebook)
       end
 		end
 
@@ -77,7 +77,7 @@ describe InfoController do
 			it "retrieves the final_grades download" do
 				pending
         get :final_grades
-        response.should render_template(:final_grades)
+        expect(response).to render_template(:final_grades)
       end
 		end
 
@@ -85,15 +85,15 @@ describe InfoController do
 			it "retrieves the research_gradebook" do
 				pending
         get :research_gradebook
-        response.should render_template(:research_gradebook)
+        expect(response).to render_template(:research_gradebook)
       end
 		end
 
 		describe "GET choices" do
 			it "retrieves the choices" do
         get :choices
-        assigns(:title).should eq("Multiplier Choices")
-        response.should render_template(:choices)
+        expect(assigns(:title)).to eq("Multiplier Choices")
+        expect(response).to render_template(:choices)
       end
 		end
 
@@ -101,7 +101,7 @@ describe InfoController do
 			it "retrieves the all grades" do
 				pending
         get :all_grades
-        response.should render_template(:all_grades)
+        expect(response).to render_template(:all_grades)
       end
 		end
 
@@ -123,14 +123,14 @@ describe InfoController do
 			it "retrieves the dashboard" do
 				pending
         get :dashboard
-        response.should render_template(:dashboard)
+        expect(response).to render_template(:dashboard)
       end
 		end
 
 		describe "GET timeline_events" do
 			it "retrieves the timeline events" do
         get :timeline_events
-        response.should render_template('info/_timeline')
+        expect(response).to render_template('info/_timeline')
       end
 		end
 
@@ -147,7 +147,7 @@ describe InfoController do
         :all_grades
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route).should redirect_to(:root)
+          expect(get route).to redirect_to(:root)
         end
       end
     end

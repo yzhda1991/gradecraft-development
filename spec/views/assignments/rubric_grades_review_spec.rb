@@ -11,8 +11,8 @@ describe "assignments/rubric_grades_review" do
   before(:each) do
     assign(:title, "Assignment")
     assign(:assignment, @assignment)
-    view.stub(:current_course).and_return(@course)
-    view.stub(:term_for).and_return("Assignment")
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:term_for).and_return("Assignment")
   end
 
   it "renders successfully" do

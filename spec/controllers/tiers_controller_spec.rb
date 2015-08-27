@@ -50,7 +50,7 @@ describe TiersController do
         :create
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -62,7 +62,7 @@ describe TiersController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "10"}).should redirect_to(:root)
+          expect(get route, {:id => "10"}).to redirect_to(:root)
         end
       end
     end

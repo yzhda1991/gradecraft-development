@@ -11,8 +11,8 @@ describe "assignments/settings" do
   before(:each) do
     assign(:title, "Assignment")
     assign(:assignments, [@assignment])
-    view.stub(:current_course).and_return(@course)
-    view.stub(:term_for).and_return("Assignment")
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:term_for).and_return("Assignment")
   end
 
   it "renders successfully" do
