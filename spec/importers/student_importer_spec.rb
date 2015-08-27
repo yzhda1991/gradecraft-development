@@ -30,6 +30,13 @@ describe StudentImporter do
         expect(team.students.first.email).to eq "jimmy@example.com"
       end
 
+      it "just adds the student to the team if the student already exists" do
+        User.create first_name: "Jimmy", last_name: "Page",
+            email: "jimmy@example.com", username: "jimmy", password: "blah"
+        subject.import course
+        expect(team.students.first.email).to eq "jimmy@example.com"
+      end
+
       it "creates the team and adds the student if the team does not exist" do
         Team.unscoped.last.destroy
         subject.import course
@@ -55,12 +62,13 @@ describe StudentImporter do
       end
 
       it "contains an unsuccessful row if the user is not valid" do
-        User.create first_name: "Jimmy", last_name: "Page",
-            email: "jimmy@example.com", username: "jimmy"
+        user = User.create first_name: "Jimmy", last_name: "Page",
+            email: "jimmy@example.com", username: "jimmy", password: "blah"
+        user.update_attribute :username, ""
         result = subject.import course
         expect(result.successful.count).to eq 1
         expect(result.unsuccessful.count).to eq 1
-        expect(result.unsuccessful.first[:errors]).to eq "Email has already been taken"
+        expect(result.unsuccessful.first[:errors]).to eq "Username can't be blank"
       end
 
       it "contains an unsuccessful row if the team is not valid" do
