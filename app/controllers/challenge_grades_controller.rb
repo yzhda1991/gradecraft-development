@@ -53,15 +53,20 @@ class ChallengeGradesController < ApplicationController
 
   def create
     @challenge = current_course.challenges.find(params[:challenge_id])
-    @challenge_grades = @challenge.challenge_grades.create(params[:challenge_grade])
-
+    @challenge_grade = @challenge.challenge_grades.create(params[:challenge_grade])
     respond_to do |format|
-      if @challenge_grades.save
+      if @challenge_grade.save
+        if current_course.add_team_score_to_student?
+          @team = @challenge_grade.team
+          @team.students.each do |student|
+            Resque.enqueue(ScoreRecalculator, student.id, current_course.id)
+          end
+        end
         format.html { redirect_to @challenge, notice: "#{@challenge.name} #{term_for :challenge} successfully graded" }
-        format.json { render json: @challenge, status: :created, location: @challenge_grades }
+        format.json { render json: @challenge, status: :created, location: @challenge_grade }
       else
         format.html { render action: "new" }
-        format.json { render json: @challenge_grades.errors, status: :unprocessable_entity }
+        format.json { render json: @challenge_grade.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -71,6 +76,13 @@ class ChallengeGradesController < ApplicationController
     @challenge_grade = current_course.challenge_grades.find(params[:id])
     respond_to do |format|
       if @challenge_grade.update_attributes(params[:challenge_grade])
+        scored_changed = @challenge_grade.previous_changes[:score].present?
+        if current_course.add_team_score_to_student? && scored_changed
+          @team = @challenge_grade.team
+          @team.students.each do |student|
+            Resque.enqueue(ScoreRecalculator, student.id, current_course.id)
+          end
+        end
         format.html { redirect_to @challenge, notice: "Grade for #{@challenge.name} #{term_for :challenge} successfully updated" }
         format.json { head :ok }
       else

@@ -55,7 +55,7 @@ describe EarnedBadgesController do
     end
 
     describe "GET edit" do
-      it "display the edit form" do
+      it "displays the edit form" do
         get :edit, {:id => @earned_badge.id, :badge_id => @badge.id}
         assigns(:title).should eq("Editing Awarded #{@badge.name}")
         assigns(:earned_badge).should eq(@earned_badge)
