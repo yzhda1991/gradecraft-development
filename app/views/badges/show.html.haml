@@ -84,7 +84,6 @@
           %th{ :width => 200} Feedback
           - if @badge.can_earn_multiple_times
             %th Count
-          %th Date Awarded
           - if @badge.is_unlockable? 
             %th{ :width => 70}
           %th{ :width => 230}
@@ -104,10 +103,6 @@
                 %div{ :width => 80}= raw badge.feedback
             - if @badge.can_earn_multiple_times
               %td= @badge.earned_badge_count_for_student(student)
-
-            %td
-              - @badge.earned_badges.where(:student_id => student.id).each do |badge|
-                = badge.created_at
             - if @badge.is_unlockable? 
               %td
                 - if ! @badge.is_unlocked_for_student?(student)

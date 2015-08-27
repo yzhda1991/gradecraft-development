@@ -20,7 +20,7 @@
     .form-item
       / What's the maximum number of points a student may earn in this category? This cap needs to be finished
       = f.label :max_value, :label => "Maximum Points"
-      = f.text_field :max_value#, data: {autonumeric: true, "m-dec" => "0"}
+      = f.text_field :max_value, data: {autonumeric: true, "m-dec" => "0"}
       .form_label{:id => "txtMaxPoints"} Is there a cap on how many points students can earn through this category (Leave blank if not)? If you fill this in, students will not be able to earn more than this amount.
 
     .form-item

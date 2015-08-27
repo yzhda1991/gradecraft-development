@@ -37,8 +37,13 @@ class EarnedBadgesController < ApplicationController
     @earned_badge.assign_attributes(params[:earned_badge])
     @earned_badge.badge =  current_course.badges.find_by_id(params[:badge_id])
     @earned_badge.student =  current_course.students.find_by_id(params[:student])
+    @earned_badge.student_visible = true
+
     respond_to do |format|
       if @earned_badge.save
+        if @badge.point_total?
+          Resque.enqueue(ScoreRecalculator, @earned_badge.student_id, current_course.id)
+        end
         NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver
         format.html { redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded to #{@earned_badge.student.name}" }
       else
@@ -53,9 +58,13 @@ class EarnedBadgesController < ApplicationController
     @badges = current_course.badges
     @badge = current_course.badges.find(params[:badge_id])
     @earned_badge = @badge.earned_badges.find(params[:id])
+    @earned_badge.student_visible = true
 
     respond_to do |format|
       if @earned_badge.update_attributes(params[:earned_badge])
+        if @badge.point_total?
+          Resque.enqueue(ScoreRecalculator, @earned_badge.student_id, current_course.id)
+        end
         expire_fragment "earned_badges"
         format.html { redirect_to badge_path(@badge), notice: "#{@earned_badge.student.name}'s #{@badge.name} #{term_for :badge} was successfully updated." }
         format.json { head :ok }
@@ -96,12 +105,15 @@ class EarnedBadgesController < ApplicationController
   def mass_earn
     @badge = current_course.badges.find(params[:id])
     @valid_earned_badges ||= parse_valid_earned_badges
+    make_badges_student_visible
     send_earned_badge_notifications
+    if @badge.point_total?
+      update_student_point_totals
+    end
     handle_mass_update_redirect
   end
 
   private
-
   def parse_valid_earned_badges
     params[:student_ids].inject([]) do |valid_earned_badges, student_id|
       earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)
@@ -111,6 +123,20 @@ class EarnedBadgesController < ApplicationController
         logger.error earned_badge.errors.full_messages
       end
       valid_earned_badges
+    end
+  end
+
+  def make_badges_student_visible
+    @valid_earned_badges.each do |earned_badge|
+      earned_badge.student_visible = true
+      earned_badge.save
+    end
+  end
+
+  def update_student_point_totals
+    @valid_earned_badges.each do |earned_badge|
+      Resque.enqueue(ScoreRecalculator, earned_badge.student.id, current_course.id)
+      logger.info "Updated student scores to include EarnedBadge ##{earned_badge[:id]}"
     end
   end
 

@@ -51,13 +51,16 @@
           .form-item
             = p.label :role, "Select Role"
             = p.select :role, [["Student", "student"],["GSI", "gsi"],["Professor", "professor"]]
-          - if @user.is_student?(current_course)
-            .form-item
-              = p.input :character_profile
-            .form-item
-              %label.checkbox
-                = p.input :auditing
-                .form_label This #{term_for :student}'s grades will be excluded from course analysis
+        - if @user.is_student?(current_course)
+          .form-item
+            = p.input :character_profile, :class => "froala"
+          .form-item
+            = f.label :team_role, "#{term_for :team} Role"
+            = f.input :team_role, :input_html => { :maxlength => 255 }, :label => false
+          .form-item
+            = f.label :auditing
+            = p.check_box :auditing
+            .form_label This #{term_for :student}'s grades will be excluded from course analysis
 
   .submit-buttons
     %ul
