@@ -62,6 +62,10 @@ class GradeSchemeElementsController < ApplicationController
 
   def student_predictor_data
     @grade_scheme_elements = current_course.grade_scheme_elements.select(:id, :low_range, :letter, :level)
-    @total_points = (@grade_scheme_elements.first.low_range * 1.1).to_i
+    if @grade_scheme_elements
+      @total_points = (@grade_scheme_elements.first.low_range * 1.1).to_i
+    else #TODO: we need to warn professors to set their GSI
+      @total_points = current_course.total_points
+    end
   end
 end

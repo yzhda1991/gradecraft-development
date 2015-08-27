@@ -1,5 +1,5 @@
-.predictor-title-right-span X
-.predictor-title-right-span.padded{'ng-if' => '! hasWeights()'} {{defaultMultiplier()}}
+.predictor-title-right-span x
+.predictor-default-weight.predictor-title-right-span.padded{'ng-if' => '! hasWeights()'} {{defaultMultiplier() | number}}
 
 .coins{{'ng-if'=>'weightsOpen()'}}
   .coin{{'ng-click'=>'decrement()', 'ng-repeat' => 'coin in usedWeights()'}}
@@ -10,4 +10,3 @@
 .coins{{'ng-if'=>'!weightsOpen()'}}
   .coin-non-interactive{{'ng-repeat' => 'coin in usedWeights()'}}
 
-.predictor-title-right-span =
