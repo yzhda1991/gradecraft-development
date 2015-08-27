@@ -19,11 +19,11 @@ class StudentImporter
           next
         end
 
-        user = create_user row, course
+        user = find_or_create_user row, course
 
         if user.valid?
           team.students << user if team
-          UserMailer.activation_needed_email(user).deliver_now
+          UserMailer.activation_needed_email(user).deliver_now unless user.activated?
           successful << user
         else
           append_unsuccessful row, user.errors.full_messages.join(", ")
@@ -40,15 +40,20 @@ class StudentImporter
     unsuccessful << { data: row.to_s, errors: errors }
   end
 
-  def create_user(row, course)
-    user = User.create do |u|
+  def find_or_create_user(row, course)
+    email = row[3]
+
+    user = User.find_by_insensitive_email email
+    user ||= User.create do |u|
       u.first_name = row[0]
       u.last_name = row[1]
       u.username = row[2]
       u.email = row[3]
       u.password = generate_random_password
-      u.course_memberships.build(course_id: course.id, role: "student") if course
     end
+
+    user.course_memberships.create(course_id: course.id, role: "student") if course
+    user
   end
 
   def find_or_create_team(row, course)
