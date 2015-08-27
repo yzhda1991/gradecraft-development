@@ -50,8 +50,6 @@ describe Assignment do
   it { should respond_to("resubmissions_allowed")}
   it { should respond_to("role_necessary_for_release")}
   it { should respond_to("student_logged")}
-  it { should respond_to("student_logged_button_text")}
-  it { should respond_to("student_logged_revert_button_text")}
   it { should respond_to("thumbnail")}
   it { should respond_to("updated_at")}
   it { should respond_to("use_rubric")}
@@ -72,17 +70,6 @@ describe Assignment do
       expect(build(:assignment, assignment_type: nil)).to have(1).errors_on(:assignment_type_id)
     end
 
-    it "requires logged button text if it is student logged" do
-      subject = build :assignment, student_logged: true
-      expect(subject).to_not be_valid
-      expect(subject.errors[:student_logged_button_text]).to include "can't be blank if student logged"
-    end
-
-    it "requires logged revert button text if it is student logged" do
-      subject = build :assignment, student_logged: true
-      expect(subject).to_not be_valid
-      expect(subject.errors[:student_logged_revert_button_text]).to include "can't be blank if student logged"
-    end
   end
 
   it "has optional dates associated with it" do
