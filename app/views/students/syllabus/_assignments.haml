@@ -59,7 +59,7 @@
                     - if current_student.grade_released_for_assignment?(assignment)
                       .bold
                         - if grade_for_assignment.pass_fail_status
-                          = term_for(grade.pass_fail_status)
+                          = term_for(grade_for_assignment.pass_fail_status)
                     - else
                       = "#{term_for :pass}/#{term_for :fail}"
                   - else
