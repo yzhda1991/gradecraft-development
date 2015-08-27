@@ -133,22 +133,10 @@
         = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
         .form_label{:id => "hideAnalytics"}  Do you want to hide assignment analytics from students?
 
-  %section
-    %h4.uppercase Self-Grading
     .form-item
       = f.label :student_logged
       = f.check_box :student_logged
       .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}?
-
-    .form-item
-      = f.label :student_logged_button_text, "Button Text"
-      = f.text_field :student_logged_button_text, {"aria-describedby" => "txtButtonText"}
-      .form_label{:id => "txtButtonText"} If you would like students to be able to log their own grades, what would you like the button that does this to say?
-
-    .form-item
-      = f.label :student_logged_revert_button_text, "Revert Button Text"
-      = f.text_field :student_logged_revert_button_text, {"aria-describedby" => "txtRevertButtonText"}
-      .form_label{:id => "txtRevertButtonText"} If a student unchecks this button, what should it say?
 
   %section
     %h4 Timeline

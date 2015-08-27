@@ -3,8 +3,8 @@ class Assignment < ActiveRecord::Base
   attr_accessible :name, :description, :point_total, :open_at, :due_at, :grade_scope, :visible, :required,
     :accepts_submissions, :accepts_links, :accepts_text, :accepts_attachments, :release_necessary, :media, :thumbnail, :media_credit, :media_caption,
     :accepts_submissions_until, :points_predictor_display, :notify_released, :mass_grade_type, :assignment_type_id, :assignment_type,
-    :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged, :student_logged_button_text,
-    :student_logged_revert_button_text, :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level,
+    :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged, 
+    :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level,
     :score_levels_attributes, :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics,
     :unlock_conditions, :unlock_conditions_attributes, :visible_when_locked
 
@@ -67,9 +67,6 @@ class Assignment < ActiveRecord::Base
   validates_presence_of :name
 
   validates_presence_of :assignment_type_id
-
-  validates :student_logged_button_text, presence: { message: "can't be blank if student logged", if: :student_logged? }
-  validates :student_logged_revert_button_text, presence: { message: "can't be blank if student logged", if: :student_logged? }
 
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
