@@ -2247,5 +2247,6 @@
 $('.datetimepicker').datetimepicker({
 	controlType: 'select',
 	oneLine: true,
-	timeFormat: 'h TT:mm'
+	dateFormat: 'MM dd yy -',
+	timeFormat: 'hh:mm tt'
 });
