@@ -1,5 +1,5 @@
 @gradecraft.controller 'PredictorCtrl', ['$scope', '$http', '$q', '$filter', 'PredictorService', ($scope, $http, $q, $filter, PredictorService) ->
-  # this.id = 'predictorCtrl'
+
   $scope.assignmentMode = true
 
   $scope.services = ()->
@@ -24,8 +24,6 @@
   $scope.challenges = PredictorService.challenges
   $scope.icons = PredictorService.icons
   $scope.termFor = PredictorService.termFor
-
-
 
   # watch for scroll events and keep track of page scroll offset
   $scope.yOffset = 0
@@ -112,7 +110,10 @@
     if assignmentType.student_weightable
       # ignore max value on weightable assignments, even if not calulating the weights
       if weighted
-        total = total * assignmentType.student_weight
+        if assignmentType.student_weight > 0
+          total = total * assignmentType.student_weight
+        else
+          total = total * $scope.weights.default_weight
     else if assignmentType.max_value
       total = if total > assignmentType.max_value then assignmentType.max_value else total
     total
