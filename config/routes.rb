@@ -69,18 +69,14 @@ GradeCraft::Application.routes.draw do
       put 'group_grade' => 'grades#group_update'
       get 'export_grades'
       get 'export_submissions'
-      get 'email_based_grade_import' => 'assignments#email_based_grade_import'
-      get 'username_based_grade_import' => 'assignments#username_based_grade_import'
-      get 'name_based_grade_import' => 'assignments#name_based_grade_import'
+      get 'grade_import' => 'assignments#grade_import'
       get 'rubric_grades_review'
       put :update_rubrics
       scope 'grades', as: :grades, controller: :grades do
         post :edit_status
         put :update_status
         get :import
-        post :email_import
-        post :username_import
-        post :name_import
+        post :upload
         post :self_log
         post :predict_score
         post :feedback_read

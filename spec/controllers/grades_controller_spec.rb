@@ -119,6 +119,27 @@ describe GradesController do
         response.should render_template(:import)
       end
     end
+
+    describe "POST upload" do
+      render_views
+
+      let(:file) { fixture_file "grades.csv", "text/csv" }
+
+      it "renders the results from the import" do
+        @student.update_attribute :email, "robert@example.com"
+        @second_student.update_attribute :username, "jimmy"
+
+        post :upload, id: @assignment.id, file: file
+        expect(response).to render_template :import_results
+        expect(response.body).to include "2 Grades Imported Successfully"
+      end
+
+      it "renders any errors that have occured" do
+        post :upload, id: @assignment.id, file: file
+        expect(response.body).to include "2 Grades Not Imported"
+        expect(response.body).to include "Student not found in course"
+      end
+    end
   end
 
   context "as student" do
@@ -262,16 +283,9 @@ describe GradesController do
         end
       end
 
-      describe "GET username_import" do
+      describe "POST upload" do
         it "redirects to root path" do
-          get :username_import, { :id => @assignment.id}
-          response.should redirect_to(:root)
-        end
-      end
-
-      describe "GET email_import" do
-        it "redirects to root path" do
-          post :email_import, { :id => @assignment.id}
+          post :upload, { :id => @assignment.id}
           response.should redirect_to(:root)
         end
       end

@@ -44,7 +44,7 @@ class GradesController < ApplicationController
     session[:return_to] = request.referer
 
     @student = current_student
- 
+
     # TODO: what is this needed for?
     redirect_to @assignment and return unless current_student.present?
 
@@ -268,7 +268,7 @@ class GradesController < ApplicationController
       @grade_files = params[:grade][:grade_files_attributes]["0"]["file"]
       params[:grade].delete :grade_files_attributes
     end
-  end 
+  end
 
   public
 
@@ -596,96 +596,17 @@ class GradesController < ApplicationController
     @title = "Import Grades for #{@assignment.name}"
   end
 
-  #upload based on username
-  def username_import
-    @assignment = current_course.assignments.find(params[:id])
-    @students = current_course.students
-    grade_ids = []
-    require 'csv'
-
+  def upload
     if params[:file].blank?
       flash[:notice] = "File missing"
       redirect_to assignment_path(@assignment)
     else
-      CSV.foreach(params[:file].tempfile, :headers => true, :encoding => 'ISO-8859-1') do |row|
-        @students.each do |student|
-          if student.username.downcase == row[2].downcase && row[3].present?
-            if student.grades.where(:assignment_id => @assignment).present?
-              @assignment.all_grade_statuses_grade_for_student(student).tap do |grade|
-                grade.raw_score = row[3].to_i
-                grade.feedback = row[4]
-                if grade.status == nil
-                  grade.status = "Graded"
-                end
-                grade.instructor_modified = true
-                grade.save!
-                grade_ids << grade.id
-              end
-            else
-              @assignment.grades.create! do |grade|
-                grade.assignment_id = @assignment.id
-                grade.student_id = student.id
-                grade.raw_score = row[3].to_i
-                grade.feedback = row[4]
-                grade.status = "Graded"
-                grade.instructor_modified = true
-                grade.save!
-                grade_ids << grade.id
-              end
-            end
-          end
-        end
-      end
-    Resque.enqueue(MultipleGradeUpdater, grade_ids)
+      @assignment = current_course.assignments.find(params[:id])
+      @students = current_course.students
 
-    redirect_to assignment_path(@assignment), :notice => "Upload successful"
-    end
-  end
-
-  #upload based on "email"
-  def email_import
-    @assignment = current_course.assignments.find(params[:id])
-    @students = current_course.students
-    grade_ids = []
-
-    require 'csv'
-
-    if params[:file].blank?
-      flash[:notice] = "File missing"
-      redirect_to assignment_path(@assignment)
-    else
-      CSV.foreach(params[:file].tempfile, :headers => true, :encoding => 'ISO-8859-1') do |row|
-        @students.each do |student|
-          if student.email.downcase == row[2].downcase && row[3].present?
-            if student.grades.where(:assignment_id => @assignment).present?
-              @assignment.all_grade_statuses_grade_for_student(student).tap do |grade|
-                grade.raw_score = row[3].to_i
-                grade.feedback = row[4]
-                if grade.status == nil
-                  grade.status = "Graded"
-                end
-                grade.instructor_modified = true
-                grade.save!
-                grade_ids << grade.id
-              end
-            else
-              @assignment.grades.create! do |grade|
-                grade.assignment_id = @assignment.id
-                grade.student_id = student.id
-                grade.raw_score = row[3].to_i
-                grade.feedback = row[4]
-                grade.status = "Graded"
-                grade.instructor_modified = true
-                grade.save!
-                grade_ids << grade.id
-              end
-            end
-          end
-        end
-      end
-      Resque.enqueue(MultipleGradeUpdater, grade_ids)
-
-      redirect_to assignment_path(@assignment), :notice => "Upload successful"
+      @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
+      Resque.enqueue(MultipleGradeUpdater, @result.successful.map(&:id))
+      render :import_results
     end
   end
 

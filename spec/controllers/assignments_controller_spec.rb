@@ -311,21 +311,11 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET email_based_grade_import" do
+    describe "GET grade_import" do
       context "with CSV format" do
         it "returns sample csv data" do
-          get :email_based_grade_import, :id => @assignment, :format => :csv
+          get :grade_import, :id => @assignment, :format => :csv
           response.body.should include("First Name,Last Name,Email,Score,Feedback")
-        end
-      end
-    end
-
-    describe "GET username_based_grade_import" do
-      context "with CSV format" do
-        it "returns sample csv data" do
-          grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
-          get :username_based_grade_import, :id => @assignment, :format => :csv
-          response.body.should include("First Name,Last Name,Username,Score,Feedback")
         end
       end
     end
@@ -521,8 +511,7 @@ describe AssignmentsController do
         :update,
         :destroy,
         :export_grades,
-        :email_based_grade_import,
-        :username_based_grade_import,
+        :grade_import,
         :update_rubrics,
         :rubric_grades_review
 

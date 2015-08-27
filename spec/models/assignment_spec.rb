@@ -108,13 +108,13 @@ describe Assignment do
     end
   end
 
-  describe "email based grade import" do
+  describe "grade import" do
     it "returns sample csv data, including ungraded students" do
       course = create(:course)
       course.assignments << @assignment
       student = create(:user)
       student.courses << course
-      @assignment.email_based_grade_import.should eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},\"\",\"\"\n")
+      @assignment.grade_import(course.students).should eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},\"\",\"\"\n")
     end
 
     it "also returns grade fields with instructor modified grade" do
@@ -124,47 +124,7 @@ describe Assignment do
       student.courses << course
       grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
       submission = create(:submission, grade: grade, student: student, assignment: @assignment)
-      @assignment.email_based_grade_import.should eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},#{grade.score},#{grade.feedback}\n")
-    end
-  end
-
-  describe "username based grade import" do
-    it "returns sample csv data, including ungraded students" do
-      course = create(:course)
-      course.assignments << @assignment
-      student = create(:user)
-      student.courses << course
-      @assignment.username_based_grade_import.should eq("First Name,Last Name,Username,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.username},\"\",\"\"\n")
-    end
-
-    it "returns grade fields with instructor modified grade" do
-      course = create(:course)
-      course.assignments << @assignment
-      student = create(:user)
-      student.courses << course
-      grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
-      submission = create(:submission, grade: grade, student: student, assignment: @assignment)
-      @assignment.username_based_grade_import.should eq("First Name,Last Name,Username,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.username},#{grade.score},#{grade.feedback}\n")
-    end
-
-    it "returns students in csv alphabetized by last name" do
-      course = create(:course)
-      course.assignments << @assignment
-      student = create(:user, last_name: 'Zed')
-      student.courses << course
-      student2 = create(:user, last_name: 'Alpha')
-      student2.courses << course
-      @assignment.username_based_grade_import.should match(/Alpha.*\n.*Zed/)
-    end
-
-    it "handles a subset of students when passed in the params" do
-      course = create(:course)
-      course.assignments << @assignment
-      student = create(:user)
-      student.courses << course
-      student2 = create(:user)
-      student2.courses << course
-      @assignment.username_based_grade_import({students: [student]}).should_not match(student2.last_name)
+      @assignment.grade_import(course.students).should eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},#{grade.score},#{grade.feedback}\n")
     end
   end
 end

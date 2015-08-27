@@ -315,22 +315,13 @@ class AssignmentsController < ApplicationController
     redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{@name} successfully deleted"
   end
 
-  # Export .csv file example for grade imports
-  def email_based_grade_import
+  def grade_import
     @assignment = current_course.assignments.find(params[:id])
     respond_to do |format|
-      format.csv { send_data @assignment.email_based_grade_import }
+      format.csv { send_data @assignment.grade_import(current_course.students) }
     end
   end
 
-  def username_based_grade_import
-    @assignment = current_course.assignments.find(params[:id])
-    respond_to do |format|
-      format.csv { send_data @assignment.username_based_grade_import }
-    end
-  end
-
-  # Exporting the grades for a single assignment
   def export_grades
     @assignment = current_course.assignments.find(params[:id])
     respond_to do |format|
@@ -361,7 +352,7 @@ class AssignmentsController < ApplicationController
           error_log = ""
 
           open( "#{export_dir}/_grade_import_template.csv",'w' ) do |f|
-            f.puts @assignment.username_based_grade_import(students: @students)
+            f.puts @assignment.grade_import(@students)
           end
 
           @students.each do |student|
