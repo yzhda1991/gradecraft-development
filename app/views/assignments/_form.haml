@@ -29,7 +29,7 @@
       - else
         .pass-fail-contingent
           = f.label :point_total, "Total Points Possible"
-          = f.text_field :point_total
+          = f.text_field :point_total, :value => nil
 
     .form-item
       = f.input :open_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:open_at) }
