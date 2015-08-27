@@ -334,7 +334,7 @@ class AssignmentsController < ApplicationController
   def grade_import
     @assignment = current_course.assignments.find(params[:id])
     respond_to do |format|
-      format.csv { send_data @assignment.grade_import }
+      format.csv { send_data @assignment.grade_import(current_course.students) }
     end
   end
 
@@ -368,7 +368,7 @@ class AssignmentsController < ApplicationController
           error_log = ""
 
           open( "#{export_dir}/_grade_import_template.csv",'w' ) do |f|
-            f.puts @assignment.grade_import(students: @students)
+            f.puts @assignment.grade_import(@students)
           end
 
           @students.each do |student|

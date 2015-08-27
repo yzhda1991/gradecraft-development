@@ -127,7 +127,7 @@ describe Assignment do
       course.assignments << @assignment
       student = create(:user)
       student.courses << course
-      @assignment.grade_import.should eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},\"\",\"\"\n")
+      @assignment.grade_import(course.students).should eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},\"\",\"\"\n")
     end
 
     it "also returns grade fields with instructor modified grade" do
@@ -137,7 +137,7 @@ describe Assignment do
       student.courses << course
       grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
       submission = create(:submission, grade: grade, student: student, assignment: @assignment)
-      @assignment.grade_import.should eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},#{grade.score},#{grade.feedback}\n")
+      @assignment.grade_import(course.students).should eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},#{grade.score},#{grade.feedback}\n")
     end
   end
 end
