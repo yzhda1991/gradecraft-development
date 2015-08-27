@@ -90,11 +90,11 @@ end
 
 group :test do
   # added to development for parallel_tests
-  gem 'capybara', '~> 2.1.0'
+  gem 'capybara', '~> 2.5.0'
   gem 'database_cleaner', "~> 1.0.1"
   gem 'launchy'
   gem 'selenium-webdriver'
-  gem 'rspec-rails', '~> 2.14.0'
+  gem 'rspec-rails', '~> 3.3.3'
   gem 'simplecov'
   gem 'faker', '~> 1.4.3'
   gem 'factory_girl_rails', '~> 4.5.0'
