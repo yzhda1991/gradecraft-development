@@ -14,7 +14,7 @@
 
   .assignments
     - @assignments.group_by(&:assignment_type).each do |assignment_type, assignments|
-      %h3= "#{assignment_type.name} – #{points assignment_type.max_value} points"
+      %h3= "#{assignment_type.name} – #{points assignment_type.total_points} points"
       %table{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
         %thead
           %tr
