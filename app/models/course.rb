@@ -83,7 +83,7 @@ class Course < ActiveRecord::Base
     :point_total, :in_team_leaderboard, :grade_scheme_elements_attributes,
     :add_team_score_to_student, :status, :assignments_attributes, :character_profiles,
     :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics,
-    :instructors_of_record_ids
+    :instructors_of_record_ids, :lti_uid
 
   with_options :dependent => :destroy do |c|
     c.has_many :assignment_types
