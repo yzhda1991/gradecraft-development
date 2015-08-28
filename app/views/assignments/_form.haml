@@ -52,7 +52,7 @@
 
     .form-item
       = f.label :points_predictor_display, "Grade Predictor Style"
-      = f.select :points_predictor_display, [[], ["Checkbox", "Fixed"], ["Select List"], ["Slider"], ]
+      = f.select :points_predictor_display, [[], ["Checkbox", "Fixed"], ["Slider"], ]
       .form_label How should this assignment appear in the Grade Predictor?
 
   %section
@@ -136,7 +136,7 @@
     .form-item
       = f.label :student_logged
       = f.check_box :student_logged
-      .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}?
+      .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels below, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points. 
 
   %section
     %h4 Timeline
