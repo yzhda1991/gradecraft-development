@@ -18,9 +18,9 @@ class InfoController < ApplicationController
 
   def timeline_events
     if current_course.team_challenges?
-      @events = current_course.assignments.timelineable.to_a + current_course.challenges + current_course.events
+      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.challenges.with_dates.to_a + current_course.events.with_dates.to_a
     else
-      @events = current_course.assignments.timelineable.to_a + current_course.events
+      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.events.with_dates.to_a
     end
     render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])
   end
