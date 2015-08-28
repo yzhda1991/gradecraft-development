@@ -114,14 +114,13 @@
           total = total * assignmentType.student_weight
         else
           total = total * $scope.weights.default_weight
-    else if assignmentType.max_value
-      total = if total > assignmentType.max_value then assignmentType.max_value else total
+    else if assignmentType.point_total
+      total = if total > assignmentType.point_total then assignmentType.point_total else total
     total
 
   # Total predicted points above and beyond the assignment type max points
   $scope.assignmentTypePointExcess = (assignmentType)->
-    assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
-    total = $scope.assignmentsPointTotal(assignments) - assignmentType.max_value
+    $scope.assignmentTypePointTotal(assignmentType, true) - assignmentType.total_points
 
   # Total points predicted for badges (works with no badges)
   $scope.badgesPointTotal = ()->
@@ -263,14 +262,15 @@
     }
 
   $scope.gradeLevelPosition = (scale,lowRange,width,padding)->
+    alignWithTickMark = 8
     position = scale(lowRange)
     textWidth = angular.element(".grade_scheme-label-" + lowRange)[0].getBBox().width
     if position < padding
-      return padding
+      return alignWithTickMark
     else if position + textWidth > width
       return width - textWidth
     else
-      return position
+      return position + alignWithTickMark
 
   # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
   $scope.renderGradeLevelGraphics = ()->
@@ -286,12 +286,14 @@
             .on("mouseover", (gse)->
               d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "visible")
               d3.select(".grade_scheme-pointer-" + gse.low_range)
-                .attr("transform","scale(3) translate(0,-2)")
+                .attr("transform","scale(4) translate(-.5,-3)")
+                .attr("fill", "#68A127")
             )
             .on("mouseout", (gse)->
               d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "hidden")
               d3.select(".grade_scheme-pointer-" + gse.low_range)
                 .attr("transform","scale(2) translate(0,0)")
+                .attr("fill", "black")
             )
     g.append("path")
       .attr("d", "M3,2.492c0,1.392-1.5,4.48-1.5,4.48S0,3.884,0,2.492c0-1.392,0.671-2.52,1.5-2.52S3,1.101,3,2.492z")
@@ -313,10 +315,10 @@
       .attr("width", (gse)->
           angular.element(".grade_scheme-label-" + gse.low_range)[0].getBBox().width + (padding * 2)
         )
-      .attr("height", 20)
-      .attr("fill",'black')
+      .attr("height", 22)
+      .attr("fill","#68A127")
     txt.attr("transform", (gse)->
-      "translate(" + $scope.gradeLevelPosition(scale,gse.low_range,stats.width,padding) + "," + 5 + ")")
+      "translate(" + $scope.gradeLevelPosition(scale,gse.low_range,stats.width,padding) + "," + 0 + ")")
     d3.select("svg").append("g")
       .attr("class": "grade-point-axis")
       .attr("transform": "translate(" + padding + "," + (65) + ")")

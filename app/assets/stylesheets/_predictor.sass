@@ -2,6 +2,7 @@ $predictor-font-size-1 : 1.5rem
 $predictor-font-size-2 : 1.25rem
 $predictor-font-size-3 : 1rem
 $predictor-font-size-4 : .85rem
+$predictor-font-size-5 : .55rem
 
 
 #predictor-main-content
@@ -45,6 +46,7 @@ $predictor-font-size-4 : .85rem
   #svg-graph-points-predicted
     fill: $color-blue-1
   #svg-earned-key
+    -webkit-transform: translate(10px,90px) /* Safari */
     transform: translate(10px,90px)
     .key
       fill: $color-blue-0
@@ -52,6 +54,7 @@ $predictor-font-size-4 : .85rem
       height: 20
   #svg-predicted-key
     transform: translate(230px,90px)
+    -webkit-transform: translate(230px,90px)
     .key
       fill: $color-blue-1
       width: 20
@@ -84,6 +87,9 @@ $predictor-font-size-4 : .85rem
       text-align: left
     li:last-child
       padding-bottom: 0
+  .icon-tooltip.warn
+    background-color: $color-red-2
+    color: $color-grey-5
 
 .icon:hover .icon-tooltip
   display:block
@@ -98,7 +104,7 @@ $predictor-font-size-4 : .85rem
 #predictor-main-header, .predictor-section
   height: 33px
   clear: both
-  margin-top: 10px
+  margin-top: -6px
   .coin:hover
     background-color: $color-yellow-2
 
@@ -127,6 +133,7 @@ $predictor-font-size-4 : .85rem
 .collapsed
   .collapse-arrow
     transform: rotate(-90deg)
+    -webkit-transform: rotate(-90deg)
 
 .predictor-section-title
   @include title-type-styling
@@ -136,11 +143,20 @@ $predictor-font-size-4 : .85rem
   margin-bottom: 0.5rem
   padding: 0 .5rem
 
-  .predictor-section-title-left
+  .predictor-section-title-name
     float: left
     text-transform: capitalize
 
-  .predictor-section-title-right
+  .predictor-section-title-max-points
+    font-size: $predictor-font-size-3
+    background-color: $color-blue-0
+    color: $color-blue-3
+    padding: 4px 5px 0 5px
+    margin: 4px 0 0 10px
+    border-radius: 6px
+    float: left
+
+  .predictor-section-title-predicted-points
     float: right
     text-align: right
     position: relative
@@ -156,21 +172,10 @@ $predictor-font-size-4 : .85rem
         padding: 0 0 0 10px
       &.predictor-default-weight
         font-size: $predictor-font-size-3
-        height: $predictor-font-size-2
         background-color: $color-blue-1
         padding: 2px 5px
         margin: 4px 0 0 10px
         border-radius: 6px
-    .icon
-      display: inline
-      float: none
-      margin: 0 -7px
-    .icon .icon-tooltip
-      position: absolute
-      top: 0
-      left: -10rem
-      font-size: $predictor-font-size-3
-      width: 10rem
 
     .predictor-section-title-weights
       padding: 0 0 0 15px
@@ -214,9 +219,18 @@ $predictor-font-size-4 : .85rem
       .coin-slot:hover
         background-color: $color-blue-1
 
-
-.predictor-section-title.status-max-points
-  background-color: $color-blue-1
+    .predictor-excess-points
+      float: right
+      .icon
+        display: inline
+        float: none
+        margin: 0 -7px
+        .icon-tooltip
+          position: absolute
+          top: 0
+          left: -10rem
+          font-size: $predictor-font-size-3
+          width: 10rem
 
 // ARTICLES
 
@@ -425,44 +439,69 @@ article.predictor-article
 
 // small
 @media (max-width: $media-small-max)
+  .graphics-mobile-spacer
+    height: 50px
   #predictor-graphic
+    width: 100%
     height: 150
+    margin: 10px 0 0 0
+    .grade-point-axis text
+      font-size: $predictor-font-size-5
+    #svg-keys
+      font-size: $predictor-font-size-4
     #svg-predicted-key
       transform: translate(10px,120px)
+      -webkit-transform: translate(10px,120px)
   .collapse-arrow.doubled
     margin: 35px 0 0 0
   article.predictor-article
     width: 100%
   .predictor-section-title
     font-size: $predictor-font-size-2
-  .predictor-section-title .predictor-section-title-right
+    .coins
+      font-size: $predictor-font-size-1
+  .predictor-section-title-name
+    line-height: 1.8
+    .desktop-only
+      display: none
+  .predictor-section-title-max-points, .predictor-section-title-predicted-points.badges
     clear: both
     float: none
-    font-size: $predictor-font-size-3
+  .predictor-section-title-predicted-points
+    line-height: 1.8
+  .predictor-section-title-predicted-points.weightable
+    float: none
+    clear: both
+    background-color: $color-blue-0
+    display: block
+    height: 2.25rem
+    width: 110%
+    padding: 10px 0 0 25px
+    margin-left: -10px
+  .predictor-section-title .predictor-section-title-predicted-points .predictor-excess-points
+    text-align: left
+    float: none
   #predictor-main-header
-    height: 70px
+    height: 80px
     margin-top: 15px
     padding-top: 20px
   .predictor-section
-    margin-top: 3px
+    //margin-top: 3px
     height: 70px
   .collapsable
-    padding-top: 23px
-  #predictor-graphic
-    width: 100%
-    margin: 10px 0 0 0
+    padding-top: 0px
 
 // medium
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
   article.predictor-article
     width: 32%
-  .predictor-section-title .predictor-section-title-right
+  .predictor-section-title-predicted-points
     clear: both
     float: none
   #predictor-main-header, .predictor-section
     height: 70px
   .predictor-section
-    margin-top: 3px
+    //margin-top: 3px
   .collapsable
     padding-top: 7px
   #predictor-graphic
@@ -484,4 +523,7 @@ article.predictor-article
   #predictor-graphic
     width: 90%
     margin: 10px 0 0 5%
+
+
+
 

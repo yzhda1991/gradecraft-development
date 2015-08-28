@@ -2,11 +2,11 @@
   .collapse-toggler.clear
     .collapse-arrow
     .predictor-section-title
-      .predictor-section-title-left
+      .predictor-section-title-name
         {{termFor.challenges}}
-      .predictor-section-title-right
-        Points Total: {{challengesPointTotal() | number}}
-        %span="/ {{maxChallengePoints() | number}}"
+      .predictor-section-title-max-points=" {{maxChallengePoints() | number}} Possible Points"
+      .predictor-section-title-predicted-points
+        {{challengesPointTotal() | number}}
 
   .collapsable
     %article.predictor-article{'ng-repeat' => 'challenge in challenges'}

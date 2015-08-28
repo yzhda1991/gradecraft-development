@@ -2,26 +2,25 @@
   .collapse-toggler.clear
     .collapse-arrow
     .predictor-section-title{'ng-class'=>'{"status-max-points": assignmentTypeAtMax(assignmentType)}'}
-      .predictor-section-title-left
+      .predictor-section-title-name
         {{assignmentType.name}}
-      .predictor-section-title-right
+      .predictor-section-title-max-points=" {{assignmentType.total_points | number}} Possible Points"
+      .predictor-section-title-predicted-points{{'ng-class'=>'{"weightable":assignmentType.student_weightable}'}}
         .predictor-unweighted-point-total
-          Points Total: {{assignmentTypePointTotal(assignmentType,false) | number}}
-
-          %span{'ng-if'=>'assignmentTypeAtMax(assignmentType)'}
-            (+ {{assignmentTypePointExcess(assignmentType)}}
-            .icon
-              .icon-tooltip
-                You've predicted more points than you are allowed to earn for this {{termFor.assignmentType}}!
-              %i.fa.fa-fw.fa-exclamation-circle
-            )
-
-          %span="/ {{assignmentType.max_value | number}}"
+          {{assignmentTypePointTotal(assignmentType,false) | number}}
 
         .predictor-section-title-weights{{'ng-if'=>'assignmentType.student_weightable'}}
           .predictor-assignment-type-weights{{'target'=>'assignmentType'}}
           .predictor-weighted-point-total
             {{assignmentTypePointTotal(assignmentType,true) | number}}
+
+        .predictor-excess-points{'ng-if'=>'assignmentTypeAtMax(assignmentType)'}
+          (-{{assignmentTypePointExcess(assignmentType) | number}}
+          .icon
+            .icon-tooltip.warn
+              You've predicted more points than you are allowed to earn for this {{termFor.assignmentType}}!
+            %i.fa.fa-fw.fa-exclamation-circle
+          )
 
 
   .collapsable{'ng-include' => true, 'src' => "'ng_predictor_assignments.html'"}
