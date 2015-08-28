@@ -196,15 +196,6 @@ class CoursesController < ApplicationController
     end
   end
 
-  def timeline
-    @course = current_course
-    if current_course.team_challenges?
-      @events = @course.assignments.timelineable + @course.challenges
-    else
-      @events = @course.assignments.timelineable
-    end
-  end
-
   def export_earned_badges
     @course = current_course
     respond_to do |format|

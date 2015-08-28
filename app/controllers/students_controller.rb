@@ -56,7 +56,7 @@ class StudentsController < ApplicationController
     if current_course.team_challenges?
       @events = current_course.assignments.timelineable.with_dates.to_a + current_course.challenges.with_dates.to_a + current_course.events.with_dates.to_a
     else
-      @events = current_course.assignments.timelineable.with_dates.to_a
+      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.events.with_dates.to_a
     end
   end
 
