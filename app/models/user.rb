@@ -131,14 +131,22 @@ class User < ActiveRecord::Base
   validates :password_confirmation, :presence => true, if: :password, on: :update
 
   def self.find_or_create_by_lti_auth_hash(auth_hash)
-    criteria = { email: auth_hash['info']['lis_person_contact_email_primary'] }
+    criteria = { email: auth_hash['info']['email'] }
     where(criteria).first || create!(criteria) do |u|
-      u.lti_uid = auth_hash['lis_person_sourcedid']
+      u.lti_uid = auth_hash['uid']
       auth_hash['info'].tap do |info|
-        u.first_name = info['lis_person_name_given']
-        u.last_name = info['lis_person_name_family']
-        u.username = info["lis_person_contact_email_primary.split('@')[0]"]
-        u.kerberos_uid = info["lis_person_contact_email_primary.split('@')[0]"]
+        u.first_name = info['first_name']
+        u.last_name = info['last_name']
+      end
+      auth_hash['extra']['raw_info'].tap do |extra|
+        if extra['tool_consumer_info_product_family_code'] == "sakai"
+          u.username = extra['ext_sakai_eid']
+          u.kerberos_uid = extra['ext_sakai_eid']
+
+        elsif extra['tool_consumer_info_product_family_code'] == "canvas"
+          u.username = extra['custom_canvas_user_login_id']
+          u.kerberos_uid = extra['custom_canvas_user_login_id']
+        end
       end
     end
   end

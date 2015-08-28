@@ -24,7 +24,7 @@ class UserSessionsController < ApplicationController
 
   def lti_create
     @user = User.find_or_create_by_lti_auth_hash(auth_hash)
-    @course = Course.find_by_lti_uid(auth_hash['info']['context_id'])
+    @course = Course.find_by_lti_uid(auth_hash['extra']['raw_info']['context_id'])
     if !@user || !@course
       lti_error_notification
       flash[:alert] = t('sessions.create.error')
