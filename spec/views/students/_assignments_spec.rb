@@ -96,7 +96,7 @@ describe "students/syllabus/_assignments" do
     end
 
     it "renders a weightable assignment types that are open if students have made a choice" do
-      pending
+      skip "implement"
       @assignment_type_1.update(student_weightable: true)
       @assignment_type_1.save
       @course.update(assignment_weight_close_at: nil)
@@ -106,7 +106,7 @@ describe "students/syllabus/_assignments" do
     end
 
     it "renders a weightable assignment types that are closed" do
-      pending
+      skip "implement"
       @assignment_type_1.update(student_weightable: true)
       @assignment_type_1.save
       @course.update(assignment_weight_close_at: 2.days.ago)

@@ -65,7 +65,7 @@ describe EarnedBadgesController do
 
     describe "POST create" do
       it "creates the earned badge with valid attributes"  do
-        pending
+        skip "implement"
         params = attributes_for(:earned_badge)
         params[:student] = @student.id
         params[:badge_id] = @badge.id

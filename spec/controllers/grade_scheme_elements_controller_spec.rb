@@ -1,9 +1,8 @@
-#spec/controllers/grade_scheme_elements_controller_spec.rb
 require 'spec_helper'
 
 describe GradeSchemeElementsController do
 
-	context "as professor" do
+  context "as professor" do
 
     before do
       @course = create(:course)
@@ -36,17 +35,17 @@ describe GradeSchemeElementsController do
 
     describe "GET mass update" do
       it "updates the grade scheme elements" do
-        pending
+        skip "implement"
         post :mass_update, {}
         expect(assigns(:event)).to be_a_new(Event)
       end
     end
 
-	end
+  end
 
-	context "as student" do
+  context "as student" do
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :mass_edit,
@@ -58,5 +57,5 @@ describe GradeSchemeElementsController do
           end
         end
     end
-	end
+  end
 end

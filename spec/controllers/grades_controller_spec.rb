@@ -43,8 +43,8 @@ describe GradesController do
       it "shows the grade edit form" do
         get :edit, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
         #assigns(:title).should eq("Grading #{@student.name}'s #{@assignment.name}")
-  			allow(GradesController).to receive(:current_student).and_return(@student)
-      	expect(assigns(:assignment)).to eq(@assignment)
+        allow(GradesController).to receive(:current_student).and_return(@student)
+        expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:title)).to eq("Editing #{@student.name}'s Grade for #{@assignment.name}")
         expect(response).to render_template(:edit)
       end
@@ -52,7 +52,7 @@ describe GradesController do
 
     describe "POST update" do
       it "updates the grade" do
-        pending
+        skip "implement"
         params = { raw_score: 1000, assignment_id: @assignment.id }
         post :update, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }, :grade => params
         @grade.reload
@@ -168,7 +168,7 @@ describe GradesController do
 
     describe "POST predict_score" do
       it "posts to the predict score path" do
-        pending
+        skip "implement"
         get :predict_score, {:grade_id => @grade.id, :id => @assignment.id, :student_id => @student.id }
         (expect(response.status).to eq(200))
       end

@@ -1,9 +1,8 @@
-#spec/controllers/assignment_type_weights_controller_spec.rb
 require 'spec_helper'
 
 describe AssignmentTypeWeightsController do
 
-	context "as professor" do
+  context "as professor" do
 
     before do
       @course = create(:course)
@@ -24,21 +23,16 @@ describe AssignmentTypeWeightsController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET mass_edit" do
+    describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, :student_id => @student.id
         expect(assigns(:title)).to eq("Editing #{@student.name}'s multipliers")
         expect(response).to render_template(:mass_edit)
       end
     end
+  end
 
-		describe "POST mass_update" do
-      pending
-    end
-
-	end
-
-	context "as student" do
+  context "as student" do
 
     before do
       @course = create(:course)
@@ -49,18 +43,12 @@ describe AssignmentTypeWeightsController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET mass_edit" do
+    describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, :student_id => @student.id
         expect(assigns(:title)).to eq("Editing My multiplier Choices")
         expect(response).to render_template(:mass_edit)
       end
     end
-
-		describe "POST mass_update" do
-      pending
-    end
-
-	end
-
+  end
 end

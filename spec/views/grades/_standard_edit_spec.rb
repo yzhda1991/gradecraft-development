@@ -27,7 +27,7 @@ describe "grades/_standard_edit" do
     end
   end
 
-  describe "when an assignment is pass fail", pending: true do
+  describe "when an assignment is pass fail", skip: true do
     before(:each) do
       @assignment.update(pass_fail: true)
     end

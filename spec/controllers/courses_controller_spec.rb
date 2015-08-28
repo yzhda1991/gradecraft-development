@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe CoursesController do
 
-	context "as professor" do
+  context "as professor" do
 
     before do
       @course = create(:course)
@@ -19,7 +19,7 @@ describe CoursesController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do
+    describe "GET index" do
       it "returns all courses" do
         get :index
         expect(assigns(:title)).to eq("Course Index")
@@ -28,7 +28,7 @@ describe CoursesController do
       end
     end
 
-		describe "GET show" do
+    describe "GET show" do
       it "returns the course show page" do
         get :show, :id => @course.id
         expect(assigns(:title)).to eq("Course Settings")
@@ -37,7 +37,7 @@ describe CoursesController do
       end
     end
 
-		describe "GET new" do
+    describe "GET new" do
       it "assigns title" do
         get :new
         expect(assigns(:title)).to eq("Create a New Course")
@@ -55,7 +55,7 @@ describe CoursesController do
       end
     end
 
-		describe "POST create" do
+    describe "POST create" do
       it "creates the course with valid attributes"  do
         params = attributes_for(:course)
         params[:id] = @course
@@ -63,7 +63,7 @@ describe CoursesController do
       end
 
       it "manages file uploads" do
-      	pending
+        skip "implement"
         Course.delete_all
         params = attributes_for(:course)
         params[:course_id] = @course
@@ -78,7 +78,7 @@ describe CoursesController do
       end
     end
 
-		describe "POST update" do
+    describe "POST update" do
       it "updates the course" do
         params = { name: "new name" }
         post :update, id: @course.id, :course => params
@@ -88,24 +88,24 @@ describe CoursesController do
       end
 
       it "manages file uploads" do
-      	pending
+        skip "implement"
         params = {:course_syllabus_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
         post :update, id: @course.id, :course => params
         expect expect(@course.course_syllabus.count).to eq(1)
       end
     end
 
-		describe "GET destroy" do
+    describe "GET destroy" do
       it "destroys the course" do
         expect{ get :destroy, :id => @course }.to change(Course,:count).by(-1)
       end
     end
 
-	end
+  end
 
-	context "as student" do
+  context "as student" do
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :new,
@@ -131,6 +131,6 @@ describe CoursesController do
       end
     end
 
-	end
+  end
 
 end

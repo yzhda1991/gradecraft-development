@@ -1,10 +1,8 @@
-#spec/controllers/challenge_grades_controller_spec.rb
 require 'spec_helper'
 
 describe ChallengeGradesController do
 
-	context "as professor" do
-
+  context "as professor" do
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -25,7 +23,7 @@ describe ChallengeGradesController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do
+    describe "GET index" do
       it "redirects the user to the challenge" do
         get :index, :challenge_id => @challenge
         expect(assigns(:challenge)).to eq(@challenge)
@@ -33,7 +31,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "GET show" do
+    describe "GET show" do
       it "shows the challenge grade" do
         get :show, {:id => @challenge_grade, :challenge_id => @challenge}
         expect(assigns(:challenge)).to eq(@challenge)
@@ -43,7 +41,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "GET new" do
+    describe "GET new" do
       it "shows the new challenge grade form" do
         get :new, {:challenge_id => @challenge, :team_id => @team}
         expect(assigns(:challenge)).to eq(@challenge)
@@ -53,7 +51,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "GET edit" do
+    describe "GET edit" do
       it "shows the edit challenge grade form" do
         get :edit, {:id => @challenge_grade, :challenge_id => @challenge}
         expect(assigns(:challenge)).to eq(@challenge)
@@ -76,7 +74,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "POST update" do
+    describe "POST update" do
       it "updates the challenge grade" do
         params = { score: 100000 }
         post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
@@ -94,11 +92,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "POST mass_update" do
-      pending
-    end
-
-		describe "GET edit_status" do
+    describe "GET edit_status" do
       it "displays the edit_status page" do
         get :edit_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ]}
         expect(assigns(:title)).to eq("#{@challenge.name} Grade Statuses")
@@ -106,20 +100,14 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "POST update_status" do
-      pending
-    end
-
-		describe "GET destroy" do
+    describe "GET destroy" do
       it "destroys the challenge grade" do
         expect{ get :destroy, {:id => @challenge_grade, :challenge_id => @challenge.id } }.to change(ChallengeGrade,:count).by(-1)
       end
     end
+  end
 
-	end
-
-	context "as student" do
-
+  context "as student" do
     before do
       @course = create(:course)
       @challenge = create(:challenge, course: @course)
@@ -137,7 +125,7 @@ describe ChallengeGradesController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET show" do
+    describe "GET show" do
       it "shows the challenge grade" do
         get :show, {:id => @challenge_grade, :challenge_id => @challenge}
         expect(assigns(:challenge)).to eq(@challenge)
@@ -147,7 +135,7 @@ describe ChallengeGradesController do
       end
     end
 
-		describe "protected routes" do
+    describe "protected routes" do
 
       [
         :index,
@@ -179,5 +167,5 @@ describe ChallengeGradesController do
       end
     end
 
-	end
+  end
 end

@@ -1,9 +1,8 @@
-#spec/controllers/students_controller_spec.rb
 require 'spec_helper'
 
 describe StudentsController do
 
-	context "as a professor" do
+  context "as a professor" do
 
     before do
       @course = create(:course)
@@ -32,7 +31,7 @@ describe StudentsController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do
+    describe "GET index" do
       it "returns the students for the current course" do
         get :index
         expect(assigns(:title)).to eq("Player Roster")
@@ -49,7 +48,7 @@ describe StudentsController do
       end
     end
 
-		describe "GET leaderboard" do
+    describe "GET leaderboard" do
       it "shows the class leaderboard" do
         get :leaderboard
         expect(assigns(:title)).to eq("Leaderboard")
@@ -57,28 +56,28 @@ describe StudentsController do
       end
     end
 
-		describe "GET syllabus" do
+    describe "GET syllabus" do
       it "shows the class syllabus" do
         get :syllabus, :id => 10
         expect(response).to render_template(:syllabus)
       end
     end
 
-		describe "GET timeline" do
+    describe "GET timeline" do
       it "shows the course timeline" do
         get :timeline, :id => 10
         expect(response).to render_template(:timeline)
       end
     end
 
-		describe "GET autocomplete_student_name" do
+    describe "GET autocomplete_student_name" do
       it "provides a list of all students and their ids" do
         get :autocomplete_student_name, :id => 10
         (expect(response.status).to eq(200))
       end
     end
 
-		describe "GET course_progress" do
+    describe "GET course_progress" do
       it "shows the course progress" do
         get :course_progress, :id => 10
         expect(assigns(:title)).to eq("Your Course Progress")
@@ -86,30 +85,30 @@ describe StudentsController do
       end
     end
 
-		describe "GET badges" do
+    describe "GET badges" do
       it "shows the student facing badge page" do
-        pending
+        skip "implement"
         get :badges, :id => @student.id
         expect(assigns(:title)).to eq("badges")
         expect(response).to render_template(:badges)
       end
     end
 
-		describe "GET predictor" do
+    describe "GET predictor" do
       it "shows the grade predictor page" do
         get :predictor, :id => 10
         expect(response).to render_template(:predictor)
       end
     end
 
-		describe "GET scores_by_assignment" do
+    describe "GET scores_by_assignment" do
       it "provides a list of all assignments and their scores" do
         get :scores_by_assignment
         (expect(response.status).to eq(200))
       end
     end
 
-		describe "GET grade_index" do
+    describe "GET grade_index" do
       it "shows the grade index page" do
         get :grade_index, :student_id => @student.id
         allow(StudentsController).to receive(:current_student).and_return(@student)
@@ -117,16 +116,16 @@ describe StudentsController do
       end
     end
 
-		describe "GET recalculate" do
+    describe "GET recalculate" do
       it "triggers the recalculation of a student's grade" do
         get :recalculate, { :student_id => @student.id }
         expect(response).to redirect_to(student_path(@student))
       end
     end
 
-	end
+  end
 
-	context "as a student" do
+  context "as a student" do
 
     before do
       @course = create(:course)
@@ -138,21 +137,21 @@ describe StudentsController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET syllabus" do
+    describe "GET syllabus" do
       it "shows the class syllabus" do
         get :syllabus
         expect(response).to render_template(:syllabus)
       end
     end
 
-		describe "GET timeline" do
+    describe "GET timeline" do
       it "shows the course timeline" do
         get :timeline, :id => 10
         expect(response).to redirect_to(dashboard_path)
       end
     end
 
-		describe "GET course_progress" do
+    describe "GET course_progress" do
       it "shows the course progress" do
         get :course_progress, :id => 10
         expect(assigns(:title)).to eq("Your Course Progress")
@@ -160,7 +159,7 @@ describe StudentsController do
       end
     end
 
-		describe "GET badges" do
+    describe "GET badges" do
       it "shows the student facing badge page" do
         get :badges
         expect(assigns(:title)).to eq("badges")
@@ -168,14 +167,14 @@ describe StudentsController do
       end
     end
 
-		describe "GET predictor" do
+    describe "GET predictor" do
       it "shows the grade predictor page" do
         get :predictor, :id => 10
         expect(response).to render_template(:predictor)
       end
     end
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :leaderboard,
@@ -209,5 +208,5 @@ describe StudentsController do
       end
     end
 
-	end
+  end
 end

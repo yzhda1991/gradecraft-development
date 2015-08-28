@@ -1,9 +1,8 @@
-#spec/controllers/submissions_controller_spec.rb
 require 'spec_helper'
 
 describe SubmissionsController do
 
-	context "as a professor" do
+  context "as a professor" do
 
     before do
       @course = create(:course)
@@ -25,7 +24,7 @@ describe SubmissionsController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do
+    describe "GET index" do
       it "redirects the submissions index to the assignment page" do
         get :index, :assignment_id => @assignment.id
         expect(response).to redirect_to(assignment_path(@assignment))
@@ -67,7 +66,7 @@ describe SubmissionsController do
       end
     end
 
-		describe "POST update" do
+    describe "POST update" do
       it "updates the submission successfully"  do
         params = attributes_for(:submission)
         params[:assignment_id] = @assignment.id
@@ -85,9 +84,9 @@ describe SubmissionsController do
       end
     end
 
-	end
+  end
 
-	context "as a student" do
+  context "as a student" do
 
     before do
       @course = create(:course)
@@ -111,7 +110,7 @@ describe SubmissionsController do
       end
     end
 
-		describe "GET edit" do
+    describe "GET edit" do
       it "shows the edit submission form" do
         get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
         expect(assigns(:title)).to eq("Editing My Submission for #{@assignment.name}")
@@ -122,7 +121,7 @@ describe SubmissionsController do
 
     describe "POST create" do
       it "creates the submission with valid attributes"  do
-        pending
+        skip "implement"
         params = attributes_for(:submission)
         params[:assignment_id] = @assignment.id
         allow(SubmissionsController).to receive(:student).and_return(@student)
@@ -130,7 +129,7 @@ describe SubmissionsController do
       end
     end
 
-		describe "GET show" do
+    describe "GET show" do
       it "shows the submission" do
         get :show, {:id => @submission.id, :assignment_id => @assignment.id}
         expect(assigns(:title)).to eq("My Submission for #{@assignment.name}")
@@ -139,7 +138,7 @@ describe SubmissionsController do
       end
     end
 
-		describe "GET update" do
+    describe "GET update" do
       it "updates the submission successfully"  do
         params = attributes_for(:submission)
         params[:assignment_id] = @assignment.id
@@ -152,7 +151,7 @@ describe SubmissionsController do
     end
 
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index
       ].each do |route|
@@ -171,7 +170,5 @@ describe SubmissionsController do
         end
       end
     end
-
-
-	end
+  end
 end

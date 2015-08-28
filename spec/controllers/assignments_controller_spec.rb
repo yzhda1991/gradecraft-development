@@ -120,7 +120,7 @@ describe AssignmentsController do
       end
 
       it "assigns data for displaying student grading distribution" do
-        pending "need to create a scored grade"
+        skip "need to create a scored grade"
         ungraded_submission = create(:submission, assignment: @assignment)
         student_submission = create(:graded_submission, assignment: @assignment, student: @student)
         @assignment.submissions << [student_submission, ungraded_submission]
@@ -257,7 +257,7 @@ describe AssignmentsController do
       end
 
       it "assigns rubric grades" do
-        pending
+        skip "implement"
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         # TODO: Test for these lines:
         # @rubric_grades = serialized_rubric_grades
@@ -268,7 +268,7 @@ describe AssignmentsController do
       end
 
       it "assigns comments by metric id" do
-        pending
+        skip "implement"
         get :rubric_grades_review, :id => @assignment.id
         expect(assigns(:comments_by_metric_id)).to eq("?")
       end
@@ -447,7 +447,7 @@ describe AssignmentsController do
       end
 
       it "assigns data for displaying student grading distribution" do
-        pending "need to create a scored grade"
+        skip "need to create a scored grade"
         ungraded_submission = create(:submission, assignment: @assignment)
         student_submission = create(:graded_submission, assignment: @assignment, student: @student)
         @assignment.submissions << [student_submission, ungraded_submission]
@@ -467,7 +467,7 @@ describe AssignmentsController do
       end
 
       it "assigns rubric grades" do
-        pending
+        skip "implement"
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         # TODO: Test for this line:
         # @rubric_grades = RubricGrade.joins("left outer join submissions on submissions.id = rubric_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
@@ -476,7 +476,7 @@ describe AssignmentsController do
       end
 
       it "assigns comments by metric id" do
-        pending
+        skip "implement"
         get :show, :id => @assignment.id
         expect(assigns(:comments_by_metric_id)).to eq("?")
       end
