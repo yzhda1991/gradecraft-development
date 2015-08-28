@@ -91,7 +91,7 @@ class Assignment < ActiveRecord::Base
   default_scope { order('position ASC') }
 
   # Filtering Assignments by various date properties
-  scope :with_due_date, -> { where('assignments.due_at IS NOT NULL') }
+  scope :with_dates, -> { where('assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL') }
   scope :without_due_date, ->  { where('assignments.due_at IS NULL') }
   scope :future, -> { with_due_date.where('assignments.due_at >= ?', Time.now) }
   scope :still_accepted, -> { with_due_date.where('assignments.accepts_submissions_until >= ?', Time.now) }
