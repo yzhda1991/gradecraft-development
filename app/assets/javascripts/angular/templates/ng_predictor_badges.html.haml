@@ -2,10 +2,10 @@
   .collapse-toggler.clear
     .collapse-arrow
     .predictor-section-title
-      .predictor-section-title-left
+      .predictor-section-title-name
         {{termFor.badges}}
-      .predictor-section-title-right
-        Points Total: {{badgesPointTotal() | number}}
+      .predictor-section-title-predicted-points.badges
+        {{badgesPointTotal() | number}}
 
   .collapsable
     %article.predictor-article{'ng-repeat' => 'badge in badges', 'ng-class'=>'{"status-locked" : badge.locked}'}

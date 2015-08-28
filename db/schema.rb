@@ -221,20 +221,6 @@ ActiveRecord::Schema.define(version: 20150825152037) do
     t.boolean  "visible_when_locked",                 default: true
   end
 
-  create_table "bootsy_image_galleries", force: :cascade do |t|
-    t.integer  "bootsy_resource_id"
-    t.string   "bootsy_resource_type", limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "bootsy_images", force: :cascade do |t|
-    t.string   "image_file",       limit: 255
-    t.integer  "image_gallery_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "categories", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.text     "description"
@@ -537,10 +523,9 @@ ActiveRecord::Schema.define(version: 20150825152037) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score",                  default: 0,     null: false
+    t.integer  "predicted_score"
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
-    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
     t.boolean  "feedback_reviewed",                default: false
