@@ -20,6 +20,8 @@ class Challenge < ActiveRecord::Base
   accepts_nested_attributes_for :challenge_files
   accepts_nested_attributes_for :challenge_grades
 
+  scope :with_dates, -> { where('challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL') }
+
   scope :visible, -> { where visible: TRUE }
 
   validates_presence_of :course, :name
