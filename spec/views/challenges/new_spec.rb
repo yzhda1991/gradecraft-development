@@ -12,7 +12,7 @@ describe "challenges/new" do
 
   before(:each) do
     assign(:title, "Create New Challenge")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

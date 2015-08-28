@@ -17,8 +17,8 @@ describe CurrentCoursesController do
   describe "POST change" do
   	it "switches the course context" do
 	  	post :change, :course_id => @course_2.id
-	  	response.should redirect_to(root_url)
-	  	session[:course_id].should eq(@course_2.id)
+	  	expect(response).to redirect_to(root_url)
+	  	expect(session[:course_id]).to eq(@course_2.id)
 	  end
 	end
 

@@ -15,38 +15,38 @@ describe Announcement do
     subject { build :announcement, course: course }
 
     it "is viewable by any user associated the course" do
-      expect(user.can_view?(subject)).to be_false
+      expect(user.can_view?(subject)).to be_falsey
       CourseMembership.create user_id: user.id, course_id: course.id, role: "student"
-      expect(user.can_view?(subject)).to be_true
+      expect(user.can_view?(subject)).to be_truthy
     end
 
     it "is creatable by any staff for the course" do
-      expect(user.can_create?(subject)).to be_false
+      expect(user.can_create?(subject)).to be_falsey
       CourseMembership.create user_id: user.id, course_id: course.id, role: "professor"
-      expect(user.can_create?(subject)).to be_true
+      expect(user.can_create?(subject)).to be_truthy
     end
 
     it "is not creatable by a student" do
       CourseMembership.create user_id: user.id, course_id: course.id, role: "student"
-      expect(user.can_create?(subject)).to be_false
+      expect(user.can_create?(subject)).to be_falsey
     end
 
     it "is not creatable by staff in another course" do
       new_course = create :course
       CourseMembership.create user_id: user.id, course_id: new_course.id, role: "professor"
-      expect(user.can_create?(subject)).to be_false
+      expect(user.can_create?(subject)).to be_falsey
     end
 
     it "is updatable by the author" do
-      expect(user.can_update?(subject)).to be_false
+      expect(user.can_update?(subject)).to be_falsey
       subject.update_attribute(:author_id, user.id)
-      expect(user.can_update?(subject)).to be_true
+      expect(user.can_update?(subject)).to be_truthy
     end
 
     it "is destroyable by the author" do
-      expect(user.can_destroy?(subject)).to be_false
+      expect(user.can_destroy?(subject)).to be_falsey
       subject.update_attribute(:author_id, user.id)
-      expect(user.can_destroy?(subject)).to be_true
+      expect(user.can_destroy?(subject)).to be_truthy
     end
   end
 
@@ -211,12 +211,12 @@ describe Announcement do
     subject { create :announcement }
 
     it "returns true if the specified student has not read the announcement" do
-      expect(subject.unread?(user)).to be_true
+      expect(subject.unread?(user)).to be_truthy
     end
 
     it "returns false if the specified student has read the announcement" do
       create :announcement_state, announcement_id: subject.id, user_id: user.id
-      expect(subject.unread?(user)).to be_false
+      expect(subject.unread?(user)).to be_falsey
     end
   end
 
@@ -225,12 +225,12 @@ describe Announcement do
     subject { create :announcement }
 
     it "returns false if the specified student has not read the announcement" do
-      expect(subject.read?(user)).to be_false
+      expect(subject.read?(user)).to be_falsey
     end
 
     it "returns true if the specified student has read the announcement" do
       create :announcement_state, announcement_id: subject.id, user_id: user.id
-      expect(subject.read?(user)).to be_true
+      expect(subject.read?(user)).to be_truthy
     end
   end
 end

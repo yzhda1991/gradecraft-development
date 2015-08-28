@@ -13,11 +13,11 @@ describe "grades/_standard_edit" do
     @student.courses << @course
     @grade = create(:grade, course: @course, assignment: @assignment, student: @student)
     @assignment_score_levels = [] # add this so the view doesn't crash
-    view.stub(:current_student).and_return(@student)
+    allow(view).to receive(:current_student).and_return(@student)
     current_user = double()
-    current_user.stub(:id) {0}
-    view.stub(:current_user).and_return(current_user)
-    view.stub(:current_course).and_return(@course)
+    allow(current_user).to receive(:id) {0}
+    allow(view).to receive(:current_user).and_return(current_user)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   describe "when an assignment has point values" do
@@ -27,7 +27,7 @@ describe "grades/_standard_edit" do
     end
   end
 
-  describe "when an assignment is pass fail", pending: true do
+  describe "when an assignment is pass fail", skip: true do
     before(:each) do
       @assignment.update(pass_fail: true)
     end

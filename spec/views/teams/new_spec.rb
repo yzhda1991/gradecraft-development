@@ -12,7 +12,7 @@ describe "teams/new" do
 
   before(:each) do
     assign(:title, "Create a New Team")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

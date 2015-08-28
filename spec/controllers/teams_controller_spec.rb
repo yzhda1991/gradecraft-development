@@ -24,36 +24,36 @@ describe TeamsController do
     describe "GET index" do
       it "returns all teams for the current course" do
         get :index
-        assigns(:title).should eq("teams")
-        assigns(:teams).should eq(@teams)
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("teams")
+        expect(assigns(:teams)).to eq(@teams)
+        expect(response).to render_template(:index)
       end
     end
 
     describe "GET show" do
       it "returns the team show page" do
         get :show, :id => @team.id
-        assigns(:title).should eq(@team.name)
-        assigns(:team).should eq(@team)
-        response.should render_template(:show)
+        expect(assigns(:title)).to eq(@team.name)
+        expect(assigns(:team)).to eq(@team)
+        expect(response).to render_template(:show)
       end
     end
 
     describe "GET new" do
       it "assigns a name" do
         get :new
-        assigns(:title).should eq("Create a New team")
-        assigns(:team).should be_a_new(Team)
-        response.should render_template(:new)
+        expect(assigns(:title)).to eq("Create a New team")
+        expect(assigns(:team)).to be_a_new(Team)
+        expect(response).to render_template(:new)
       end
     end
 
     describe "GET edit" do
       it "assigns name " do
         get :edit, :id => @team.id
-        assigns(:title).should eq("Editing #{@team.name}")
-        assigns(:team).should eq(@team)
-        response.should render_template(:edit)
+        expect(assigns(:title)).to eq("Editing #{@team.name}")
+        expect(assigns(:team)).to eq(@team)
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -74,8 +74,8 @@ describe TeamsController do
         params = { name: "new name" }
         post :update, id: @team.id, :team => params
         @team.reload
-        response.should redirect_to(team_path(@team))
-        @team.name.should eq("new name")
+        expect(response).to redirect_to(team_path(@team))
+        expect(@team.name).to eq("new name")
       end
     end
 
@@ -95,7 +95,7 @@ describe TeamsController do
         :create
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -109,7 +109,7 @@ describe TeamsController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "10"}).should redirect_to(:root)
+          expect(get route, {:id => "10"}).to redirect_to(:root)
         end
       end
     end

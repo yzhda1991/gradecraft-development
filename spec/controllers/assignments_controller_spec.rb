@@ -22,10 +22,10 @@ describe AssignmentsController do
     describe "GET index" do
       it "returns assignments for the current course" do
         get :index
-        assigns(:title).should eq("assignments")
-        assigns(:assignment_types).should eq([@assignment_type])
-        assigns(:assignments).should eq([@assignment])
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("assignments")
+        expect(assigns(:assignment_types)).to eq([@assignment_type])
+        expect(assigns(:assignments)).to eq([@assignment])
+        expect(response).to render_template(:index)
       end
     end
 
@@ -33,10 +33,10 @@ describe AssignmentsController do
       it "returns title and assignments" do
         get :settings
         # TODO: notice, lib/course_terms.rb downcases the term_for assignments
-        assigns(:title).should eq("Review assignment Settings")
+        expect(assigns(:title)).to eq("Review assignment Settings")
         # TODO: confirm multiple assignments are chronological and alphabetical
-        assigns(:assignments).should eq([@assignment])
-        response.should render_template(:settings)
+        expect(assigns(:assignments)).to eq([@assignment])
+        expect(response).to render_template(:settings)
       end
     end
 
@@ -44,23 +44,23 @@ describe AssignmentsController do
 
       it "returns the assignment show page"do
         get :show, :id => @assignment.id
-        assigns(:assignment).should eq(@assignment)
-        assigns(:assignment_type).should eq(@assignment.assignment_type)
-        assigns(:title).should eq(@assignment.name)
-        response.should render_template(:show)
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
+        expect(assigns(:title)).to eq(@assignment.name)
+        expect(response).to render_template(:show)
       end
 
       it "assigns groups" do
         group = create(:group, course: @course)
         group.assignments << @assignment
         get :show, :id => @assignment.id
-        assigns(:groups).should eq([group])
+        expect(assigns(:groups)).to eq([group])
       end
 
       it "assigns grades" do
         grade = create(:grade, assignment: @assignment, student: @student)
         get :show, :id => @assignment.id
-        assigns(:grades).should eq(@assignment.grades)
+        expect(assigns(:grades)).to eq(@assignment.grades)
       end
 
       describe "with team id in params" do
@@ -73,8 +73,8 @@ describe AssignmentsController do
           team.students << @student
 
           get :show, {:id => @assignment.id, :team_id => team.id}
-          assigns(:team).should eq(team)
-          assigns(:students).should eq([@student])
+          expect(assigns(:team)).to eq(team)
+          expect(assigns(:students)).to eq([@student])
         end
 
       end
@@ -89,8 +89,8 @@ describe AssignmentsController do
           team.students << @student
 
           get :show, :id => @assignment.id
-          assigns(:students).should include(@student)
-          assigns(:students).should include(other_student)
+          expect(assigns(:students)).to include(@student)
+          expect(assigns(:students)).to include(other_student)
         end
 
       end
@@ -98,37 +98,37 @@ describe AssignmentsController do
       it "assigns the rubric as rubric" do
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         get :show, :id => @assignment.id
-        assigns(:rubric).should eq(rubric)
+        expect(assigns(:rubric)).to eq(rubric)
       end
 
       it "assigns course badges as JSON using CourseBadgeSerializer" do
         badge = create(:badge, course: @course)
         get :show, :id => @assignment.id
-        assigns(:course_badges).should eq(ActiveModel::ArraySerializer.new([badge], each_serializer: CourseBadgeSerializer).to_json)
+        expect(assigns(:course_badges)).to eq(ActiveModel::ArraySerializer.new([badge], each_serializer: CourseBadgeSerializer).to_json)
       end
 
       it "assigns assignment score levels ordered by value" do
         assignment_score_level_second = create(:assignment_score_level, assignment: @assignment, value: "1000")
         assignment_score_level_first = create(:assignment_score_level, assignment: @assignment, value: "100")
         get :show, :id => @assignment.id
-        assigns(:assignment_score_levels).should eq([assignment_score_level_first,assignment_score_level_second])
+        expect(assigns(:assignment_score_levels)).to eq([assignment_score_level_first,assignment_score_level_second])
       end
 
       it "assigns student ids" do
         get :show, :id => @assignment.id
-        assigns(:course_student_ids).should eq([@student.id])
+        expect(assigns(:course_student_ids)).to eq([@student.id])
       end
 
       it "assigns data for displaying student grading distribution" do
-        pending "need to create a scored grade"
+        skip "need to create a scored grade"
         ungraded_submission = create(:submission, assignment: @assignment)
         student_submission = create(:graded_submission, assignment: @assignment, student: @student)
         @assignment.submissions << [student_submission, ungraded_submission]
         get :show, :id => @assignment.id
-        assigns(:submissions_count).should eq(2)
-        assigns(:ungraded_submissions_count).should eq(1)
-        assigns(:ungraded_percentage).should eq(1/2)
-        assigns(:graded_count).should eq(1)
+        expect(assigns(:submissions_count)).to eq(2)
+        expect(assigns(:ungraded_submissions_count)).to eq(1)
+        expect(assigns(:ungraded_percentage)).to eq(1/2)
+        expect(assigns(:graded_count)).to eq(1)
       end
 
       # GET show, professor specific:
@@ -136,32 +136,32 @@ describe AssignmentsController do
       it "assigns grades for assignment" do
         grade = create(:grade, student: @student, assignment: @assignment)
         get :show, :id => @assignment.id
-        assigns(:grades_for_assignment).should eq(@assignment.all_grades_for_assignment)
+        expect(assigns(:grades_for_assignment)).to eq(@assignment.all_grades_for_assignment)
       end
     end
 
     describe "GET new" do
       it "assigns title and assignments" do
         get :new
-        assigns(:title).should eq("Create a New assignment")
-        assigns(:assignment).should be_a_new(Assignment)
-        response.should render_template(:new)
+        expect(assigns(:title)).to eq("Create a New assignment")
+        expect(assigns(:assignment)).to be_a_new(Assignment)
+        expect(response).to render_template(:new)
       end
     end
 
     describe "GET edit" do
       it "assigns title and assignments" do
         get :edit, :id => @assignment.id
-        assigns(:title).should eq("Editing #{@assignment.name}")
-        assigns(:assignment).should eq(@assignment)
-        response.should render_template(:edit)
+        expect(assigns(:title)).to eq("Editing #{@assignment.name}")
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(response).to render_template(:edit)
       end
     end
 
     describe "POST copy" do
       it "duplicates an assignment" do
         post :copy, :id => @assignment.id
-        expect @course.assignments.count.should eq(2)
+        expect expect(@course.assignments.count).to eq(2)
       end
     end
 
@@ -179,7 +179,7 @@ describe AssignmentsController do
         params.merge! :assignment_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}
         post :create, :assignment => params
         assignment = Assignment.where(name: params[:name]).last
-        expect assignment.assignment_files.count.should eq(1)
+        expect expect(assignment.assignment_files.count).to eq(1)
       end
 
       it "redirects to new from with invalid attributes" do
@@ -192,14 +192,14 @@ describe AssignmentsController do
         params = { name: "new name" }
         post :update, id: @assignment.id, :assignment => params
         @assignment.reload
-        response.should redirect_to(assignments_path)
-        @assignment.name.should eq("new name")
+        expect(response).to redirect_to(assignments_path)
+        expect(@assignment.name).to eq("new name")
       end
 
       it "manages file uploads" do
         params = {:assignment_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
         post :update, id: @assignment.id, :assignment => params
-        expect @assignment.assignment_files.count.should eq(1)
+        expect expect(@assignment.assignment_files.count).to eq(1)
       end
     end
 
@@ -212,8 +212,8 @@ describe AssignmentsController do
 
         @assignment.reload
         @second_assignment.reload
-        @assignment.position.should eq(2)
-        @second_assignment.position.should eq(1)
+        expect(@assignment.position).to eq(2)
+        expect(@second_assignment.position).to eq(1)
       end
     end
 
@@ -222,7 +222,7 @@ describe AssignmentsController do
         @assignment.update(:use_rubric => false)
         post :update_rubrics, :id => @assignment, :use_rubric => true
         @assignment.reload
-        @assignment.use_rubric.should be_true
+        expect(@assignment.use_rubric).to be_truthy
       end
     end
 
@@ -232,45 +232,45 @@ describe AssignmentsController do
         group.assignments << @assignment
 
         get :rubric_grades_review, :id => @assignment
-        assigns(:title).should eq(@assignment.name)
-        assigns(:assignment).should eq(@assignment)
-        assigns(:groups).should eq([group])
-        response.should render_template(:rubric_grades_review)
+        expect(assigns(:title)).to eq(@assignment.name)
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:groups)).to eq([group])
+        expect(response).to render_template(:rubric_grades_review)
       end
 
       it "assigns the rubric as rubric" do
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         get :rubric_grades_review, :id => @assignment.id
-        assigns(:rubric).should eq(rubric)
+        expect(assigns(:rubric)).to eq(rubric)
       end
 
       it "assigns assignment score levels ordered by value" do
         assignment_score_level_second = create(:assignment_score_level, assignment: @assignment, value: "1000")
         assignment_score_level_first = create(:assignment_score_level, assignment: @assignment, value: "100")
         get :rubric_grades_review, :id => @assignment.id
-        assigns(:assignment_score_levels).should eq([assignment_score_level_first,assignment_score_level_second])
+        expect(assigns(:assignment_score_levels)).to eq([assignment_score_level_first,assignment_score_level_second])
       end
 
       it "assigns student ids" do
         get :rubric_grades_review, :id => @assignment.id
-        assigns(:course_student_ids).should eq([@student.id])
+        expect(assigns(:course_student_ids)).to eq([@student.id])
       end
 
       it "assigns rubric grades" do
-        pending
+        skip "implement"
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         # TODO: Test for these lines:
         # @rubric_grades = serialized_rubric_grades
         # @viewable_rubric_grades = RubricGrade.where(assignment_id: @assignment.id)
         get :rubric_grades_review, :id => @assignment.id
-        assigns(:rubric_grades).should eq("?")
-        assigns(:viewable_rubric_grades).should eq("?")
+        expect(assigns(:rubric_grades)).to eq("?")
+        expect(assigns(:viewable_rubric_grades)).to eq("?")
       end
 
       it "assigns comments by metric id" do
-        pending
+        skip "implement"
         get :rubric_grades_review, :id => @assignment.id
-        assigns(:comments_by_metric_id).should eq("?")
+        expect(assigns(:comments_by_metric_id)).to eq("?")
       end
 
       describe "with team id in params" do
@@ -283,8 +283,8 @@ describe AssignmentsController do
           team.students << @student
 
           get :rubric_grades_review, {:id => @assignment.id, :team_id => team.id}
-          assigns(:team).should eq(team)
-          assigns(:students).should eq([@student])
+          expect(assigns(:team)).to eq(team)
+          expect(assigns(:students)).to eq([@student])
         end
 
       end
@@ -299,8 +299,8 @@ describe AssignmentsController do
           team.students << @student
 
           get :rubric_grades_review, :id => @assignment.id
-          assigns(:students).should include(@student)
-          assigns(:students).should include(other_student)
+          expect(assigns(:students)).to include(@student)
+          expect(assigns(:students)).to include(other_student)
         end
       end
     end
@@ -315,7 +315,7 @@ describe AssignmentsController do
       context "with CSV format" do
         it "returns sample csv data" do
           get :grade_import, :id => @assignment, :format => :csv
-          response.body.should include("First Name,Last Name,Email,Score,Feedback")
+          expect(response.body).to include("First Name,Last Name,Email,Score,Feedback")
         end
       end
     end
@@ -326,7 +326,7 @@ describe AssignmentsController do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
           submission = create(:submission, grade: grade, student: @student, assignment: @assignment)
           get :export_grades, :id => @assignment, :format => :csv
-          response.body.should include("First Name,Last Name,Uniqname,Score,Raw Score,Statement,Feedback")
+          expect(response.body).to include("First Name,Last Name,Uniqname,Score,Raw Score,Statement,Feedback")
         end
       end
     end
@@ -335,7 +335,7 @@ describe AssignmentsController do
       context "with ZIP format" do
         it "returns a zip directory" do
           get :export_submissions, :id => @assignment, :format => :zip
-          response.content_type.should eq("application/zip")
+          expect(response.content_type).to eq("application/zip")
         end
       end
     end
@@ -353,7 +353,7 @@ describe AssignmentsController do
 
     describe "GET index" do
       it "redirects to syllabus path" do
-        (get :index).should redirect_to("/syllabus")
+        expect(get :index).to redirect_to("/syllabus")
       end
     end
 
@@ -366,23 +366,23 @@ describe AssignmentsController do
 
       it "returns the assignment show page" do
         get :show, :id => @assignment.id
-        assigns(:assignment).should eq(@assignment)
-        assigns(:assignment_type).should eq(@assignment.assignment_type)
-        assigns(:title).should eq(@assignment.name)
-        response.should render_template(:show)
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
+        expect(assigns(:title)).to eq(@assignment.name)
+        expect(response).to render_template(:show)
       end
 
       it "assigns groups" do
         group = create(:group, course: @course)
         group.assignments << @assignment
         get :show, :id => @assignment.id
-        assigns(:groups).should eq([group])
+        expect(assigns(:groups)).to eq([group])
       end
 
       it "assigns grades" do
         grade = create(:grade, assignment: @assignment, student: @student)
         get :show, :id => @assignment.id
-        assigns(:grades).should eq(@assignment.grades)
+        expect(assigns(:grades)).to eq(@assignment.grades)
       end
 
       it "marks the grade as reviewed" do
@@ -401,8 +401,8 @@ describe AssignmentsController do
           team.students << @student
 
           get :show, {:id => @assignment.id, :team_id => team.id}
-          assigns(:team).should eq(team)
-          assigns(:students).should eq([@student])
+          expect(assigns(:team)).to eq(team)
+          expect(assigns(:students)).to eq([@student])
         end
 
       end
@@ -417,45 +417,45 @@ describe AssignmentsController do
           team.students << @student
 
           get :show, :id => @assignment.id
-          assigns(:students).should include(@student)
-          assigns(:students).should include(other_student)
+          expect(assigns(:students)).to include(@student)
+          expect(assigns(:students)).to include(other_student)
         end
       end
 
       it "assigns the rubric as rubric" do
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         get :show, :id => @assignment.id
-        assigns(:rubric).should eq(rubric)
+        expect(assigns(:rubric)).to eq(rubric)
       end
 
       it "assigns course badges as JSON using CourseBadgeSerializer" do
         badge = create(:badge, course: @course)
         get :show, :id => @assignment.id
-        assigns(:course_badges).should eq(ActiveModel::ArraySerializer.new([badge], each_serializer: CourseBadgeSerializer).to_json)
+        expect(assigns(:course_badges)).to eq(ActiveModel::ArraySerializer.new([badge], each_serializer: CourseBadgeSerializer).to_json)
       end
 
       it "assigns assignment score levels ordered by value" do
         assignment_score_level_second = create(:assignment_score_level, assignment: @assignment, value: "1000")
         assignment_score_level_first = create(:assignment_score_level, assignment: @assignment, value: "100")
         get :show, :id => @assignment.id
-        assigns(:assignment_score_levels).should eq([assignment_score_level_first,assignment_score_level_second])
+        expect(assigns(:assignment_score_levels)).to eq([assignment_score_level_first,assignment_score_level_second])
       end
 
       it "assigns student ids" do
         get :show, :id => @assignment.id
-        assigns(:course_student_ids).should eq([@student.id])
+        expect(assigns(:course_student_ids)).to eq([@student.id])
       end
 
       it "assigns data for displaying student grading distribution" do
-        pending "need to create a scored grade"
+        skip "need to create a scored grade"
         ungraded_submission = create(:submission, assignment: @assignment)
         student_submission = create(:graded_submission, assignment: @assignment, student: @student)
         @assignment.submissions << [student_submission, ungraded_submission]
         get :show, :id => @assignment.id
-        assigns(:submissions_count).should eq(2)
-        assigns(:ungraded_submissions_count).should eq(1)
-        assigns(:ungraded_percentage).should eq(1/2)
-        assigns(:graded_count).should eq(1)
+        expect(assigns(:submissions_count)).to eq(2)
+        expect(assigns(:ungraded_submissions_count)).to eq(1)
+        expect(assigns(:ungraded_percentage)).to eq(1/2)
+        expect(assigns(:graded_count)).to eq(1)
       end
 
       # GET show, student specific specs:
@@ -463,22 +463,22 @@ describe AssignmentsController do
       it "assigns grades for assignment" do
         grade = create(:grade, student: @student, assignment: @assignment)
         get :show, :id => @assignment.id
-        assigns(:grades_for_assignment).should eq(@assignment.grades_for_assignment(@student))
+        expect(assigns(:grades_for_assignment)).to eq(@assignment.grades_for_assignment(@student))
       end
 
       it "assigns rubric grades" do
-        pending
+        skip "implement"
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         # TODO: Test for this line:
         # @rubric_grades = RubricGrade.joins("left outer join submissions on submissions.id = rubric_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
         get :show, :id => @assignment.id
-        assigns(:rubric_grades).should eq("?")
+        expect(assigns(:rubric_grades)).to eq("?")
       end
 
       it "assigns comments by metric id" do
-        pending
+        skip "implement"
         get :show, :id => @assignment.id
-        assigns(:comments_by_metric_id).should eq("?")
+        expect(assigns(:comments_by_metric_id)).to eq("?")
       end
 
       it "assigns group if student is in a group" do
@@ -487,7 +487,7 @@ describe AssignmentsController do
         group.assignments << @assignment
         group.students << @student
         get :show, :id => @assignment.id
-        assigns(:group).should eq(group)
+        expect(assigns(:group)).to eq(group)
       end
     end
 
@@ -500,7 +500,7 @@ describe AssignmentsController do
 
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route).should redirect_to(:root)
+          expect(get route).to redirect_to(:root)
         end
       end
     end
@@ -517,7 +517,7 @@ describe AssignmentsController do
 
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
     end

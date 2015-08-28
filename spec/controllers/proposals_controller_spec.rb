@@ -1,10 +1,8 @@
-#spec/controllers/proposals_controller_spec.rb
 require 'spec_helper'
 
 describe ProposalsController do
 
-	context "as a professor" do
-
+  context "as a professor" do
     before do
       @course = create(:course)
       @professor = create(:user)
@@ -22,23 +20,15 @@ describe ProposalsController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-    describe "POST create" do
-
-    end
-
-		describe "POST update" do
-      pending
-    end
-
     describe "GET destroy" do
       it "destroys the proposal" do
         expect{ delete :destroy, :group_id => @group.id, :id => @proposal.id }.to change(Proposal,:count).by(-1)
       end
     end
 
-	end
+  end
 
-	context "as a student" do
+  context "as a student" do
 
     before do
       @course = create(:course)
@@ -54,20 +44,12 @@ describe ProposalsController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET create" do
-      pending
-    end
-
-		describe "POST update" do
-      pending
-    end
-
-		describe "GET destroy" do
+    describe "GET destroy" do
       it "destroys the proposal" do
         expect{ delete :destroy, :group_id => @group.id, :id => @proposal.id }.to change(Proposal,:count).by(-1)
       end
     end
 
-	end
+  end
 
 end

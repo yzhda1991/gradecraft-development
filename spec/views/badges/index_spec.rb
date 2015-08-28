@@ -15,7 +15,7 @@ describe "badges/index" do
 
   before(:each) do
     assign(:title, "Badges")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

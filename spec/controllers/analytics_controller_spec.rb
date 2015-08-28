@@ -3,8 +3,7 @@ require 'spec_helper'
 
 describe AnalyticsController do
 
-	context "as a professor" do
-
+  context "as a professor" do
     before do
       @course = create(:course_accepting_groups)
       @professor = create(:user)
@@ -23,115 +22,50 @@ describe AnalyticsController do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do
+    describe "GET index" do
       it "returns analytics page for the current course" do
         get :index
-        assigns(:title).should eq("User Analytics")
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("User Analytics")
+        expect(response).to render_template(:index)
       end
     end
 
-		describe "GET students" do
+    describe "GET students" do
       it "returns the student analytics page for the current course" do
         get :students
-        assigns(:title).should eq("Player Analytics")
-        response.should render_template(:students)
+        expect(assigns(:title)).to eq("Player Analytics")
+        expect(response).to render_template(:students)
       end
     end
 
-		describe "GET staff" do
+    describe "GET staff" do
       it "returns the staff analytics page for the current course" do
         get :staff
-        assigns(:title).should eq("team leader Analytics")
-        response.should render_template(:staff)
+        expect(assigns(:title)).to eq("team leader Analytics")
+        expect(response).to render_template(:staff)
       end
     end
 
-		describe "GET top_10" do
+    describe "GET top_10" do
       it "returns the Top 10/Bottom 10 page for the current course" do
         get :top_10
-        assigns(:title).should eq("Top 10/Bottom 10")
-        response.should render_template(:top_10)
+        expect(assigns(:title)).to eq("Top 10/Bottom 10")
+        expect(response).to render_template(:top_10)
       end
     end
 
-		describe "GET per_assign" do
+    describe "GET per_assign" do
       it "returns the Assignment Analytics page for the current course" do
         get :per_assign
-        assigns(:title).should eq("assignment Analytics")
-        response.should render_template(:per_assign)
+        expect(assigns(:title)).to eq("assignment Analytics")
+        expect(response).to render_template(:per_assign)
       end
     end
+  end
 
-    describe "GET all_events" do
-      pending
-    end
+  context "as a student" do
 
-		describe "GET role_events" do
-      pending
-    end
-
-		describe "GET assignment_events" do
-      pending
-    end
-
-		describe "GET login_frequencies" do
-      pending
-    end
-
-		describe "GET role_login_frequencies" do
-      pending
-    end
-
-		describe "GET login_events" do
-      pending
-    end
-
-		describe "GET login_role_events" do
-      pending
-    end
-
-		describe "GET all_pageview_events" do
-      pending
-    end
-
-		describe "GET all_role_pageview_events" do
-      pending
-    end
-
-		describe "GET all_user_pageview_events" do
-      pending
-    end
-
-		describe "GET pageview_events" do
-      pending
-    end
-
-		describe "GET role_pageview_events" do
-      pending
-    end
-
-		describe "GET user_pageview_events" do
-      pending
-    end
-
-		describe "GET prediction_averages" do
-      pending
-    end
-
-		describe "GET assignment_prediction_averages" do
-      pending
-    end
-
-		describe "GET export" do
-      pending
-    end
-
-	end
-
-	context "as a student" do
-
-	   describe "protected routes" do
+     describe "protected routes" do
           [
             :index,
             :students,
@@ -157,11 +91,11 @@ describe AnalyticsController do
 
           ].each do |route|
               it "#{route} redirects to root" do
-                (get route).should redirect_to(:root)
+                expect(get route).to redirect_to(:root)
               end
             end
         end
 
-	end
+  end
 
 end

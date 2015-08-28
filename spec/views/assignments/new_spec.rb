@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'spec_helper'
 require 'capybara/rspec'
 
@@ -12,8 +11,8 @@ describe "assignments/new" do
   before(:each) do
     assign(:title, "New Assignment")
     assign(:assignment, @assignment)
-    view.stub(:current_course).and_return(@course)
-    view.stub(:term_for).and_return("Assignment")
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:term_for).and_return("Assignment")
   end
 
   it "renders successfully" do
@@ -22,11 +21,8 @@ describe "assignments/new" do
   end
 
   describe "pass-fail options", :type => :feature do
-
     it "hides the points field when pass-fail is activated" do
-      pending
-
-      # TODO: get login to work in order to visit the page
+      skip "get login to work in order to visit page"
       visit(syllabus_path)
       find("pass-fail-toggle").click
       expect(page).to have_selector(".pass-fail-contingent", visible: false)

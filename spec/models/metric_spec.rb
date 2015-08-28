@@ -10,25 +10,22 @@ describe Metric do
       it "should not create tiers" do
         @metric.add_default_tiers = false
         @metric.save
-        pp @metric.tiers
-        @metric.tiers.count.should == 0
+        expect(@metric.tiers.count).to eq(0)
       end
     end
 
     context "metric isn't flagged as duplicated" do
       it "should create tiers" do
-        pending
         @metric.add_default_tiers = true
         @metric.save
-        @metric.tiers.count.should == 2
+        expect(@metric.tiers.count).to eq(2)
       end
     end
 
     context "default" do
       it "should create default tiers" do
-        pending
         @metric = create(:metric)
-        @metric.tiers.count.should == 2
+        expect(@metric.tiers.count).to eq(2)
       end
     end
   end

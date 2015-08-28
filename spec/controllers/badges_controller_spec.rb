@@ -20,36 +20,36 @@ describe BadgesController do
 		describe "GET index" do
       it "returns badges for the current course" do
         get :index
-        assigns(:title).should eq("badges")
-        assigns(:badges).should eq([@badge])
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("badges")
+        expect(assigns(:badges)).to eq([@badge])
+        expect(response).to render_template(:index)
       end
     end
 
 		describe "GET show" do
       it "returns badges for the current course" do
         get :show, :id => @badge.id
-        assigns(:title).should eq(@badge.name)
-        assigns(:badge).should eq(@badge)
-        response.should render_template(:show)
+        expect(assigns(:title)).to eq(@badge.name)
+        expect(assigns(:badge)).to eq(@badge)
+        expect(response).to render_template(:show)
       end
     end
 
 		describe "GET new" do
       it "renders the new badge form" do
         get :new
-        assigns(:title).should eq("Create a New badge")
-        assigns(:badge).should be_a_new(Badge)
-        response.should render_template(:new)
+        expect(assigns(:title)).to eq("Create a New badge")
+        expect(assigns(:badge)).to be_a_new(Badge)
+        expect(response).to render_template(:new)
       end
     end
 
 		describe "GET edit" do
       it "renders the edit badge form" do
         get :edit, :id => @badge.id
-        assigns(:title).should eq("Editing #{@badge.name}")
-        assigns(:badge).should eq(@badge)
-        response.should render_template(:edit)
+        expect(assigns(:title)).to eq("Editing #{@badge.name}")
+        expect(assigns(:badge)).to eq(@badge)
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -65,7 +65,7 @@ describe BadgesController do
         params.merge! :badge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}
         post :create, :badge => params
         badge = Badge.where(name: params[:name]).last
-        expect badge.badge_files.count.should eq(1)
+        expect expect(badge.badge_files.count).to eq(1)
       end
 
       it "redirects to new from with invalid attributes" do
@@ -78,14 +78,14 @@ describe BadgesController do
         params = { name: "new name" }
         post :update, id: @badge.id, :badge => params
         @badge.reload
-        response.should redirect_to(badges_path)
-        @badge.name.should eq("new name")
+        expect(response).to redirect_to(badges_path)
+        expect(@badge.name).to eq("new name")
       end
 
       it "manages file uploads" do
         params = {:badge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
         post :update, id: @badge.id, :badge => params
-        expect @badge.badge_files.count.should eq(1)
+        expect expect(@badge.badge_files.count).to eq(1)
       end
     end
 
@@ -98,8 +98,8 @@ describe BadgesController do
 
         @badge.reload
         @second_badge.reload
-        @badge.position.should eq(2)
-        @second_badge.position.should eq(1)
+        expect(@badge.position).to eq(2)
+        expect(@second_badge.position).to eq(1)
       end
     end
 
@@ -122,7 +122,7 @@ describe BadgesController do
 
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -136,7 +136,7 @@ describe BadgesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
     end

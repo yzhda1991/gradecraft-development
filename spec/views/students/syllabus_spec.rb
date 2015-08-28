@@ -11,8 +11,8 @@ describe "students/syllabus" do
     @course.assignments << @assignment
     @student = create(:user)
     @student.courses << @course
-    view.stub(:current_course).and_return(@course)
-    view.stub(:current_student).and_return(@student)
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_student).and_return(@student)
   end
 
   #TODO: once merged, move to assignments_spec

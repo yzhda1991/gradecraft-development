@@ -15,13 +15,13 @@ describe "students/syllabus/_assignments" do
     @student = create(:user)
     assign(:title, "Assignment Types")
     assign(:assignment_types, @assignment_types)
-    view.stub(:current_course).and_return(@course)
-    view.stub(:current_student).and_return(@student)
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_student).and_return(@student)
   end
 
   describe "as student" do
     before(:each) do
-      view.stub(:current_student).and_return(@student)
+      allow(view).to receive(:current_student).and_return(@student)
     end
 
     it "does not render instructor menu" do
@@ -31,8 +31,8 @@ describe "students/syllabus/_assignments" do
 
     it "renders when assignment is student_logged" do
       @assignment.update(student_logged: true)
-      Assignment.any_instance.stub(:open?).and_return(true)
-      view.stub(:current_user_is_student?).and_return(true)
+      allow_any_instance_of(Assignment).to receive(:open?).and_return(true)
+      allow(view).to receive(:current_user_is_student?).and_return(true)
       render
     end
 
@@ -54,7 +54,7 @@ describe "students/syllabus/_assignments" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: @assignment.point_total, status: "Graded")
 
         # To verify we have satisfied the released condition:
-        @student.grade_released_for_assignment?(@assignment).should be_true
+        expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
         render
         assert_select "td" do
           assert_select "div", text: "#{ points @grade.score } / #{points @grade.point_total} points earned", count: 1
@@ -77,7 +77,7 @@ describe "students/syllabus/_assignments" do
         @grade = create(:grade, course: @course, assignment: @assignment, student: @student, pass_fail_status: "Pass", status: "Graded")
 
         # To verify we have satisfied the released condition:
-        @student.grade_released_for_assignment?(@assignment).should be_true
+        expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
 
         render
         assert_select "td" do
@@ -96,7 +96,7 @@ describe "students/syllabus/_assignments" do
     end
 
     it "renders a weightable assignment types that are open if students have made a choice" do
-      pending
+      skip "implement"
       @assignment_type_1.update(student_weightable: true)
       @assignment_type_1.save
       @course.update(assignment_weight_close_at: nil)
@@ -106,7 +106,7 @@ describe "students/syllabus/_assignments" do
     end
 
     it "renders a weightable assignment types that are closed" do
-      pending
+      skip "implement"
       @assignment_type_1.update(student_weightable: true)
       @assignment_type_1.save
       @course.update(assignment_weight_close_at: 2.days.ago)
@@ -179,8 +179,8 @@ describe "students/syllabus/_assignments" do
 
   describe "as faculty" do
     it "renders the instructor grade managment menu" do
-      view.stub(:current_user_is_staff?).and_return(true)
-      view.stub(:term_for).and_return("custom_term")
+      allow(view).to receive(:current_user_is_staff?).and_return(true)
+      allow(view).to receive(:term_for).and_return("custom_term")
       assign(:students, [@student])
       assign(:grades, {@student.id => nil})
       render
@@ -188,8 +188,8 @@ describe "students/syllabus/_assignments" do
     end
 
     it "shows a button to edit a grade for an assignment if one is present" do
-      view.stub(:current_user_is_staff?).and_return(true)
-      view.stub(:term_for).and_return("custom_term")
+      allow(view).to receive(:current_user_is_staff?).and_return(true)
+      allow(view).to receive(:term_for).and_return("custom_term")
       assign(:students, [@student])
       create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: 'Released')
       render
@@ -197,8 +197,8 @@ describe "students/syllabus/_assignments" do
     end
 
     it "shows a button to see their submission if one is present" do
-      view.stub(:current_user_is_staff?).and_return(true)
-      view.stub(:term_for).and_return("custom_term")
+      allow(view).to receive(:current_user_is_staff?).and_return(true)
+      allow(view).to receive(:term_for).and_return("custom_term")
       assign(:students, [@student])
       @assignment.update(accepts_submissions: true)
       @submission = create(:submission, course: @course, assignment: @assignment, student: @student)

@@ -17,7 +17,7 @@ describe "assignments/index" do
   before(:each) do
     assign(:title, "Assignments")
     assign(:assignment_types, [@assignment_type_1,@assignment_type_2])
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

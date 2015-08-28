@@ -27,36 +27,36 @@ describe ChallengesController do
 		describe "GET index" do
       it "returns challenges for the current course" do
         get :index
-        assigns(:title).should eq("team Challenges")
-        assigns(:challenges).should eq(@challenges)
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("team Challenges")
+        expect(assigns(:challenges)).to eq(@challenges)
+        expect(response).to render_template(:index)
       end
     end
 
 		describe "GET show" do
       it "returns the challenge show page" do
         get :show, :id => @challenge.id
-        assigns(:title).should eq(@challenge.name)
-        assigns(:challenge).should eq(@challenge)
-        response.should render_template(:show)
+        expect(assigns(:title)).to eq(@challenge.name)
+        expect(assigns(:challenge)).to eq(@challenge)
+        expect(response).to render_template(:show)
       end
     end
 
 		describe "GET new" do
       it "assigns title and challenge" do
         get :new
-        assigns(:title).should eq("Create a New team Challenge")
-        assigns(:challenge).should be_a_new(Challenge)
-        response.should render_template(:new)
+        expect(assigns(:title)).to eq("Create a New team Challenge")
+        expect(assigns(:challenge)).to be_a_new(Challenge)
+        expect(response).to render_template(:new)
       end
     end
 
     describe "GET edit" do
       it "edit title" do
         get :edit, :id => @challenge.id
-        assigns(:title).should eq("Editing #{@challenge.name}")
-        assigns(:challenge).should eq(@challenge)
-        response.should render_template(:edit)
+        expect(assigns(:title)).to eq("Editing #{@challenge.name}")
+        expect(assigns(:challenge)).to eq(@challenge)
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -74,7 +74,7 @@ describe ChallengesController do
         params.merge! :challenge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}
         post :create, :challenge => params
         challenge = Challenge.where(name: params[:name]).last
-        expect challenge.challenge_files.count.should eq(1)
+        expect expect(challenge.challenge_files.count).to eq(1)
       end
 
       it "redirects to new from with invalid attributes" do
@@ -87,14 +87,14 @@ describe ChallengesController do
         params = { name: "new name" }
         post :update, id: @challenge.id, :challenge => params
         @challenge.reload
-        response.should redirect_to(challenges_path)
-        @challenge.name.should eq("new name")
+        expect(response).to redirect_to(challenges_path)
+        expect(@challenge.name).to eq("new name")
       end
 
       it "manages file uploads" do
         params = {:challenge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
         post :update, id: @challenge.id, :challenge => params
-        expect @challenge.challenge_files.count.should eq(1)
+        expect expect(@challenge.challenge_files.count).to eq(1)
       end
     end
 
@@ -116,7 +116,7 @@ describe ChallengesController do
 
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -130,7 +130,7 @@ describe ChallengesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
     end

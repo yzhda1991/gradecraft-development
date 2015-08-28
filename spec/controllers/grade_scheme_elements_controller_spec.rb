@@ -1,9 +1,8 @@
-#spec/controllers/grade_scheme_elements_controller_spec.rb
 require 'spec_helper'
 
 describe GradeSchemeElementsController do
 
-	context "as professor" do
+  context "as professor" do
 
     before do
       @course = create(:course)
@@ -23,30 +22,30 @@ describe GradeSchemeElementsController do
       it "assigns all grade scheme elements as @grade_scheme_elements" do
         allow(Resque).to receive(:enqueue).and_return(true)
         get :index
-        assigns(:grade_scheme_elements).should eq([@grade_scheme_element])
+        expect(assigns(:grade_scheme_elements)).to eq([@grade_scheme_element])
       end
     end
 
     describe "GET mass_edit" do
       it "shows the mass edit form" do
         get :mass_edit
-        assigns(:grade_scheme_elements).should eq(@grade_scheme_elements)
+        expect(assigns(:grade_scheme_elements)).to eq(@grade_scheme_elements)
       end
     end
 
     describe "GET mass update" do
       it "updates the grade scheme elements" do
-        pending
+        skip "implement"
         post :mass_update, {}
-        assigns(:event).should be_a_new(Event)
+        expect(assigns(:event)).to be_a_new(Event)
       end
     end
 
-	end
+  end
 
-	context "as student" do
+  context "as student" do
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :mass_edit,
@@ -54,9 +53,9 @@ describe GradeSchemeElementsController do
 
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
-	end
+  end
 end

@@ -12,7 +12,7 @@ describe "assignments/edit" do
 
   before(:each) do
     assign(:title, "Editing Essay 1")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

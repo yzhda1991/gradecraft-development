@@ -32,10 +32,10 @@ describe GradesController do
     describe "GET show" do
       it "shows the grade" do
         get :show, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
-        GradesController.stub(:current_student).and_return(@student)
-        assigns(:assignment).should eq(@assignment)
-        assigns(:title).should eq("#{@student.name}'s Grade for #{@assignment.name}")
-        response.should render_template(:show)
+        allow(GradesController).to receive(:current_student).and_return(@student)
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:title)).to eq("#{@student.name}'s Grade for #{@assignment.name}")
+        expect(response).to render_template(:show)
       end
     end
 
@@ -43,29 +43,29 @@ describe GradesController do
       it "shows the grade edit form" do
         get :edit, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
         #assigns(:title).should eq("Grading #{@student.name}'s #{@assignment.name}")
-  			GradesController.stub(:current_student).and_return(@student)
-      	assigns(:assignment).should eq(@assignment)
-        assigns(:title).should eq("Editing #{@student.name}'s Grade for #{@assignment.name}")
-        response.should render_template(:edit)
+        allow(GradesController).to receive(:current_student).and_return(@student)
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:title)).to eq("Editing #{@student.name}'s Grade for #{@assignment.name}")
+        expect(response).to render_template(:edit)
       end
     end
 
     describe "POST update" do
       it "updates the grade" do
-        pending
+        skip "implement"
         params = { raw_score: 1000, assignment_id: @assignment.id }
         post :update, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }, :grade => params
         @grade.reload
-        response.should redirect_to(assignment_path(@grade.assignment))
-        @grade.score.should eq(1000)
+        expect(response).to redirect_to(assignment_path(@grade.assignment))
+        expect(@grade.score).to eq(1000)
       end
     end
 
     describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, :id => @assignment.id
-        assigns(:title).should eq("Quick Grade #{@assignment.name}")
-        response.should render_template(:mass_edit)
+        expect(assigns(:title)).to eq("Quick Grade #{@assignment.name}")
+        expect(response).to render_template(:mass_edit)
       end
     end
 
@@ -99,24 +99,24 @@ describe GradesController do
     describe "GET group_edit" do
       it "assigns params" do
         get :group_edit, { :id => @assignment.id, :group_id => @group.id}
-        assigns(:title).should eq("Grading #{@group.name}'s #{@assignment.name}")
-        response.should render_template(:group_edit)
+        expect(assigns(:title)).to eq("Grading #{@group.name}'s #{@assignment.name}")
+        expect(response).to render_template(:group_edit)
       end
     end
 
     describe "GET edit_status" do
       it "displays the edit status page" do
         get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id}
-        assigns(:title).should eq("#{@assignment.name} Grade Statuses")
-        response.should render_template(:edit_status)
+        expect(assigns(:title)).to eq("#{@assignment.name} Grade Statuses")
+        expect(response).to render_template(:edit_status)
       end
     end
 
     describe "GET import" do
       it "displays the import page" do
         get :import, { :id => @assignment.id}
-        assigns(:title).should eq("Import Grades for #{@assignment.name}")
-        response.should render_template(:import)
+        expect(assigns(:title)).to eq("Import Grades for #{@assignment.name}")
+        expect(response).to render_template(:import)
       end
     end
 
@@ -168,7 +168,7 @@ describe GradesController do
 
     describe "POST predict_score" do
       it "posts to the predict score path" do
-        pending
+        skip "implement"
         get :predict_score, {:grade_id => @grade.id, :id => @assignment.id, :student_id => @student.id }
         (expect(response.status).to eq(200))
       end
@@ -202,91 +202,91 @@ describe GradesController do
       describe "GET edit" do
         it "redirects to root path" do
           get :edit, {:grade_id => @grade.id, :assignment_id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET update" do
         it "redirects to root path" do
           get :update, {:grade_id => @grade.id, :assignment_id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET submit_rubric" do
         it "redirects to root path" do
           get :submit_rubric, {:grade_id => @grade.id, :assignment_id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET remove" do
         it "redirects to root path" do
           get :remove, { :id => @assignment.id, :grade_id => @grade.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "DELETE destroy" do
         it "redirects to root path" do
           delete :destroy, {:grade_id => @grade.id, :assignment_id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET mass_edit" do
         it "redirects to root path" do
           get :mass_edit, { :id => @assignment.id }
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET mass_update" do
         it "redirects to root path" do
           post :mass_update, { :id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET group_edit" do
         it "redirects to root path" do
           get :group_edit, { :id => @assignment.id, :group_id => @group.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET group_update" do
         it "redirects to root path" do
           post :group_update, { :id => @assignment.id, :group_id => @group.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET edit_status" do
         it "redirects to root path" do
           get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "POST update_status" do
         it "redirects to root path" do
           post :update_status, {:grade_ids => @grade.id, :id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "GET import" do
         it "redirects to root path" do
           get :import, { :id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
 
       describe "POST upload" do
         it "redirects to root path" do
           post :upload, { :id => @assignment.id}
-          response.should redirect_to(:root)
+          expect(response).to redirect_to(:root)
         end
       end
     end

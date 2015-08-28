@@ -15,7 +15,7 @@ describe "earned_badges/edit" do
 
   before(:each) do
     assign(:title, "Editing Awarded Achievement")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

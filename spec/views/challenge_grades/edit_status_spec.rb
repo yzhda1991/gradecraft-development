@@ -24,7 +24,7 @@ describe "challenge_grades/edit_status" do
 
   before(:each) do
     assign(:title, "Editing Challenge Grade")
-    view.stub(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(@course)
   end
 
   it "renders successfully" do

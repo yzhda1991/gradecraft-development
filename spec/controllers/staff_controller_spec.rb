@@ -27,17 +27,17 @@ describe StaffController do
 		describe "GET index" do
       it "returns all staff for the current course" do
         get :index
-        assigns(:title).should eq("Staff Index")
-        assigns(:staff).should eq([@professor])
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("Staff Index")
+        expect(assigns(:staff)).to eq([@professor])
+        expect(response).to render_template(:index)
       end
     end
 
 		describe "GET show" do
       it "displays a single staff member's page" do
         get :show, :id => @professor.id
-        assigns(:staff).should eq(@professor)
-        response.should render_template(:show)
+        expect(assigns(:staff)).to eq(@professor)
+        expect(response).to render_template(:show)
       end
     end
 
@@ -49,7 +49,7 @@ describe StaffController do
         :index
       ].each do |route|
           it "#{route} redirects to root" do
-            (get route).should redirect_to(:root)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -59,7 +59,7 @@ describe StaffController do
         :show
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
     end

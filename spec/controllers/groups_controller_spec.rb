@@ -7,9 +7,9 @@ describe GroupsController do
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
-	context "as professor" do
+  context "as professor" do
 
-		before do
+    before do
       @course = create(:course_accepting_groups)
       @professor = create(:user)
       @professor.courses << @course
@@ -27,45 +27,45 @@ describe GroupsController do
       session[:course_id] = @course.id
     end
 
-		describe "GET index" do
+    describe "GET index" do
       it "returns groups for the current course" do
         get :index
-        assigns(:title).should eq("Groups")
-        assigns(:pending_groups).should eq([@group])
-        response.should render_template(:index)
+        expect(assigns(:title)).to eq("Groups")
+        expect(assigns(:pending_groups)).to eq([@group])
+        expect(response).to render_template(:index)
       end
     end
 
-		describe "GET show" do
+    describe "GET show" do
       it "displays the specified group" do
         get :show, :id => @group.id
-        assigns(:title).should eq(@group.name)
-        assigns(:group).should eq(@group)
-        response.should render_template(:show)
+        expect(assigns(:title)).to eq(@group.name)
+        expect(assigns(:group)).to eq(@group)
+        expect(response).to render_template(:show)
       end
     end
 
-		describe "GET new" do
+    describe "GET new" do
       it "renders the new group form" do
         get :new
-        assigns(:title).should eq("Start a group")
-        assigns(:group).should be_a_new(Group)
-        response.should render_template(:new)
+        expect(assigns(:title)).to eq("Start a group")
+        expect(assigns(:group)).to be_a_new(Group)
+        expect(response).to render_template(:new)
       end
     end
 
-		describe "GET edit" do
+    describe "GET edit" do
       it "renders the edit group form" do
         get :edit, :id => @group.id
-        assigns(:title).should eq("Editing #{@group.name}")
-        assigns(:group).should eq(@group)
-        response.should render_template(:edit)
+        expect(assigns(:title)).to eq("Editing #{@group.name}")
+        expect(assigns(:group)).to eq(@group)
+        expect(response).to render_template(:edit)
       end
     end
 
-		describe "POST create" do
+    describe "POST create" do
       it "creates the group with valid attributes"  do
-      	pending
+        skip "implement"
         params = attributes_for(:group)
         expect{ post :create, :group => params }.to change(Group,:count).by(1)
       end
@@ -75,36 +75,36 @@ describe GroupsController do
       end
     end
 
-		describe "POST update" do
+    describe "POST update" do
       it "updates the group" do
         params = { name: "new name" }
         post :update, id: @group.id, :group => params
         @group.reload
-        response.should redirect_to(group_path(@group))
-        @group.name.should eq("new name")
+        expect(response).to redirect_to(group_path(@group))
+        expect(@group.name).to eq("new name")
       end
     end
 
-		describe "GET destroy" do
+    describe "GET destroy" do
       it "destroys the group" do
         expect{ get :destroy, :id => @group }.to change(Group,:count).by(-1)
       end
     end
 
-		describe "GET review" do
+    describe "GET review" do
       it "allows the instructor to review the specified group" do
         get :review, :id => @group.id
-        assigns(:title).should eq("Reviewing #{@group.name}")
-        assigns(:group).should eq(@group)
-        response.should render_template(:review)
+        expect(assigns(:title)).to eq("Reviewing #{@group.name}")
+        expect(assigns(:group)).to eq(@group)
+        expect(response).to render_template(:review)
       end
-		end
+    end
 
-	end
+  end
 
-	context "as student" do
+  context "as student" do
 
-		before do
+    before do
       @course = create(:course_accepting_groups)
       @professor = create(:user)
       @professor.courses << @course
@@ -124,19 +124,19 @@ describe GroupsController do
       session[:course_id] = @course.id
     end
 
-		describe "GET new" do
+    describe "GET new" do
       it "renders the new group form" do
         get :new
         assigns(:id => @student.id)
-        assigns(:title).should eq("Start a group")
-        assigns(:group).should be_a_new(Group)
-        response.should render_template(:new)
+        expect(assigns(:title)).to eq("Start a group")
+        expect(assigns(:group)).to be_a_new(Group)
+        expect(response).to render_template(:new)
       end
     end
 
-		describe "POST create" do
+    describe "POST create" do
       it "creates the group with valid attributes"  do
-        pending
+        skip "implement"
         params = { name: "name" }
         post :create, :group => params
         expect{ post :create, :group => params }.to change(Group,:count).by(1)
@@ -145,44 +145,44 @@ describe GroupsController do
       it "redirects to new from with invalid attributes" do
         expect{ post :create, group: attributes_for(:group, name: nil) }.to_not change(Group,:count)
       end
-		end
+    end
 
-		describe "GET edit" do
+    describe "GET edit" do
       it "renders the edit group form" do
         get :edit, :id => @group.id
-        assigns(:title).should eq("Editing #{@group.name}")
-        assigns(:group).should eq(@group)
-        response.should render_template(:edit)
+        expect(assigns(:title)).to eq("Editing #{@group.name}")
+        expect(assigns(:group)).to eq(@group)
+        expect(response).to render_template(:edit)
       end
     end
 
-		describe "POST update" do
+    describe "POST update" do
       it "updates the group" do
         params = { name: "new name" }
         post :update, id: @group.id, :group => params
         @group.reload
-        response.should redirect_to(group_path(@group))
-        @group.name.should eq("new name")
-      end
-		end
-
-		describe "GET show" do
-      it "displays the specified group" do
-        get :show, :id => @group.id
-        assigns(:title).should eq(@group.name)
-        assigns(:group).should eq(@group)
-        response.should render_template(:show)
+        expect(response).to redirect_to(group_path(@group))
+        expect(@group.name).to eq("new name")
       end
     end
 
-		describe "protected routes" do
+    describe "GET show" do
+      it "displays the specified group" do
+        get :show, :id => @group.id
+        expect(assigns(:title)).to eq(@group.name)
+        expect(assigns(:group)).to eq(@group)
+        expect(response).to render_template(:show)
+      end
+    end
+
+    describe "protected routes" do
       [
         :index,
         :review
       ].each do |route|
           it "#{route} redirects to root" do
-          	assigns(:id => @student.id)
-            (get route).should redirect_to(:root)
+            assigns(:id => @student.id)
+            expect(get route).to redirect_to(:root)
           end
         end
     end
@@ -192,9 +192,9 @@ describe GroupsController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          (get route, {:id => "1"}).should redirect_to(:root)
+          expect(get route, {:id => "1"}).to redirect_to(:root)
         end
       end
-		end
-	end
+    end
+  end
 end

@@ -18,7 +18,7 @@ describe AnnouncementsController do
       it "marks the announcement as read by the student" do
         announcement = create :announcement, course: course
         get :show, id: announcement.id
-        expect(announcement.read?(student)).to be_true
+        expect(announcement.read?(student)).to be_truthy
       end
     end
 
@@ -56,9 +56,9 @@ describe AnnouncementsController do
     end
 
     describe "POST #create" do
-      context "with a successful announcement" do
-        let(:body) { Faker::Lorem.sentence(3) }
+      let(:body) { Faker::Lorem.sentence(3) }
 
+      context "with a successful announcement" do
         it "creates a new announcement" do
           post :create, announcement: { title: "New Tour", body: body }
           announcement = Announcement.unscoped.last

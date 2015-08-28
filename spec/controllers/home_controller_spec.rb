@@ -23,7 +23,7 @@ describe HomeController do
 		describe "GET index" do
 			it "redirects to the dashboard path" do
         get :index
-        response.should redirect_to(dashboard_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 		end
 
@@ -44,7 +44,7 @@ describe HomeController do
 			it "redirects to the dashboard path" do
 				assigns(:current_user_id => @student.id)
         get :index
-        response.should redirect_to(dashboard_path)
+        expect(response).to redirect_to(dashboard_path)
       end
 		end
 

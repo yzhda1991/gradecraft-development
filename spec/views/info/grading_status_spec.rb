@@ -11,8 +11,8 @@ describe "info/grading_status" do
     @assignment = create(:assignment, :assignment_type => @assignment_types[0])
     @student = create(:user)
     assign(:assignment_types, @assignment_types)
-    view.stub(:current_course).and_return(@course)
-    view.stub(:term_for).and_return("custom_term")
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:term_for).and_return("custom_term")
   end
 
   describe "with ungraded submissions" do
