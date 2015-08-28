@@ -104,7 +104,7 @@
   # Total points predicted for all assignments by assignments type
   # caps the total points at the assignment type max points
   # only calculates the weighted total if weighted is passed in as true
-  $scope.assignmentTypePointTotal = (assignmentType, weighted=true)->
+  $scope.assignmentTypePointTotal = (assignmentType, weighted=true, capped=true)->
     assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
     total = $scope.assignmentsPointTotal(assignments)
     if assignmentType.student_weightable
@@ -114,13 +114,13 @@
           total = total * assignmentType.student_weight
         else
           total = total * $scope.weights.default_weight
-    else if assignmentType.point_total
-      total = if total > assignmentType.point_total then assignmentType.point_total else total
+    if assignmentType.total_points and capped
+      total = if total > assignmentType.total_points then assignmentType.total_points else total
     total
 
   # Total predicted points above and beyond the assignment type max points
   $scope.assignmentTypePointExcess = (assignmentType)->
-    $scope.assignmentTypePointTotal(assignmentType, true) - assignmentType.total_points
+    $scope.assignmentTypePointTotal(assignmentType,true,false) - assignmentType.total_points
 
   # Total points predicted for badges (works with no badges)
   $scope.badgesPointTotal = ()->
