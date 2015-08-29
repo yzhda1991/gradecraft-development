@@ -1,12 +1,12 @@
-%table.nofeatures_default_score_dynatable
+%table.nofeatures_default_rank_dynatable
   %thead
     %tr
       %th Rank
       %th Name
-      %th{ "data-dynatable-column" => "score"} Mean Student Score
+      %th{ "data-dynatable-column" => "averageScore"} Mean Student Score
       - if current_course.team_challenges?
-        %th{ "data-dynatable-column" => "challengeScore"} #{term_for :challenge} Score
-      %th{ "data-dynatable-column" => "students"} #{term_for :students}
+        %th{ "data-dynatable-column" => "score" } #{term_for :challenge} Score
+      %th{ "data-dynatable-column" => "students" } #{term_for :students}
       %th #{term_for :team_leaders}
       - if current_user_is_staff? && current_course.has_badges?
         %th{ "data-dynatable-column" => "badges"} #{term_for :badges} Earned
@@ -18,7 +18,7 @@
         %td= link_to team.name, team
         %td= team.average_points
         - if current_course.team_challenges?
-          %td= team.challenge_grade_score
+          %td= team.score
         %td= team.member_count
         %td
           - team.leaders.each do |leader|
