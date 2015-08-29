@@ -17,7 +17,6 @@ describe Course do
   it { is_expected.to respond_to("badge_set_id")}
   it { is_expected.to respond_to("badge_setting")}
   it { is_expected.to respond_to("badge_term")}
-  it { is_expected.to respond_to("badge_use_scope")}
   it { is_expected.to respond_to("badges_value")}
   it { is_expected.to respond_to("challenge_term")}
   it { is_expected.to respond_to("character_profiles")}
@@ -30,7 +29,6 @@ describe Course do
   it { is_expected.to respond_to("fail_term")}
   it { is_expected.to respond_to("grade_scheme_id")}
   it { is_expected.to respond_to("grading_philosophy")}
-  it { is_expected.to respond_to("graph_display")}
   it { is_expected.to respond_to("group_setting")}
   it { is_expected.to respond_to("group_term")}
   it { is_expected.to respond_to("homepage_message")}

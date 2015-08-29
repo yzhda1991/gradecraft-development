@@ -53,10 +53,10 @@
             = p.select :role, [["Student", "student"],["GSI", "gsi"],["Professor", "professor"]]
         - if @user.is_student?(current_course)
           .form-item
-            = p.input :character_profile, :class => "froala"
-          .form-item
             = f.label :team_role, "#{term_for :team} Role"
             = f.input :team_role, :input_html => { :maxlength => 255 }, :label => false
+          .form-item
+            = p.input :character_profile, :class => "froala"
           .form-item
             = f.label :auditing
             = p.check_box :auditing

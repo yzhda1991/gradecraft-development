@@ -67,21 +67,21 @@ class Course < ActiveRecord::Base
   end
 
   attr_accessible :courseno, :name,
-    :semester, :year, :badge_setting, :team_setting, :team_term, :user_term,
+    :semester, :year, :badge_setting, :team_setting, 
+    :team_term, :user_term, :section_leader_term, :group_term, 
     :user_id, :course_id, :homepage_message, :group_setting,
-    :total_assignment_weight, :assignment_weight_close_at, :team_roles,
-    :section_leader_term, :group_term, :assignment_weight_type,
-    :has_submissions, :teams_visible, :badge_use_scope,
-    :weight_term, :predictor_setting, :max_group_size,
-    :min_group_size, :graph_display, :max_assignment_weight,
-    :assignments, :default_assignment_weight, :accepts_submissions,
+    :character_names, :team_roles, :character_profiles,
+    :total_assignment_weight, :assignment_weight_close_at, 
+    :assignment_weight_type, :has_submissions, :teams_visible,  
+    :weight_term, :max_group_size, :min_group_size, 
+    :max_assignment_weight, :assignments, :default_assignment_weight, :accepts_submissions,
     :tagline, :academic_history_visible, :office, :phone, :class_email,
     :twitter_handle, :twitter_hashtag, :location, :office_hours, :meeting_times,
     :use_timeline, :media_file, :media_credit, :media_caption, :assignment_term,
     :challenge_term, :badge_term, :grading_philosophy, :team_score_average,
     :team_challenges, :team_leader_term, :max_assignment_types_weighted,
     :point_total, :in_team_leaderboard, :grade_scheme_elements_attributes,
-    :add_team_score_to_student, :status, :assignments_attributes, :character_profiles,
+    :add_team_score_to_student, :status, :assignments_attributes, 
     :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics,
     :instructors_of_record_ids, :lti_uid
 
@@ -171,10 +171,6 @@ class Course < ActiveRecord::Base
 
   def has_team_challenges?
     team_challenges == true
-  end
-
-  def graph_display?
-    graph_display == true
   end
 
   def teams_visible?

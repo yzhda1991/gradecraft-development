@@ -142,7 +142,12 @@
       .form_label{:id => "txtInSectionLeaderboard"} Can students see in-section rankings and points (students must opt in to this by adding a screenname to protect their privacy)?
 
     .form-item
-      = f.label :team_roles, "Section Roles"
+      = f.label :character_names, "Character Names"
+      = f.check_box :character_names, {"aria-describedby" => "txtCharacterRoles"}
+      .form_label{:id => "txtCharacterRoles"} Do students create a new name for themselves?
+
+    .form-item
+      = f.label :team_roles, "Character Roles"
       = f.check_box :team_roles, {"aria-describedby" => "txtTeamRoles"}
       .form_label{:id => "txtTeamRoles"} Do students self-declare their role within the section?
 
