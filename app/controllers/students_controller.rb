@@ -67,6 +67,7 @@ class StudentsController < ApplicationController
     @student.load_team(current_course)
     @assignments = current_course.assignments
     @assignment_types = current_course.assignment_types
+    @display_sidebar = true
   end
 
   # AJAX endpoint for student name search
@@ -81,9 +82,14 @@ class StudentsController < ApplicationController
   def course_progress
     @grade_scheme_elements = current_course.grade_scheme_elements
     @title = "Your Course Progress"
+    @display_sidebar = true
   end
 
-  # TODO
+  def teams 
+    @title = "#{term_for :teams}"
+    @display_sidebar = true
+  end
+
   def badges
     @title = "#{term_for :badges}"
 
@@ -93,6 +99,7 @@ class StudentsController < ApplicationController
 
     @badges = @badges.flatten.uniq.sort_by(&:position)
     @earned_badges_by_badge_id ||= earned_badges_by_badge_id
+    @display_sidebar = true
   end
 
   private
@@ -129,6 +136,7 @@ class StudentsController < ApplicationController
   #All Admins to see all of one student's grades at once, proof for duplicates
   def grade_index
     @grades = current_student.grades.where(:course_id => current_course)
+    @display_sidebar = true
   end
 
   def recalculate
