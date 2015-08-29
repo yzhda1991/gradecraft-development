@@ -1,5 +1,10 @@
 .context_menu(ng-app="gradecraft" ng-controller="AssignmentCtrl" ng-init="init(#{@assignment[:id]}, #{@assignment.use_rubric})")
   %ul
+    - if @assignment.persisted?
+      %li
+        %a{:href => new_assignment_path }
+          %i.fa.fa-plus.fa-fw
+          New #{(term_for :assignment).titleize}
     %li
       %a{:href => settings_assignments_path }
         %i.fa.fa-dashboard.fa-fw

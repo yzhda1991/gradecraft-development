@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150825152037) do
+ActiveRecord::Schema.define(version: 20150829181049) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -393,6 +393,7 @@ ActiveRecord::Schema.define(version: 20150825152037) do
     t.string   "fail_term",                     limit: 255
     t.string   "syllabus"
     t.boolean  "hide_analytics"
+    t.string   "character_names"
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
@@ -528,9 +529,9 @@ ActiveRecord::Schema.define(version: 20150825152037) do
     t.string   "pass_fail_status"
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
+    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
-    t.boolean  "is_custom_value",                  default: false
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree

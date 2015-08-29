@@ -19,6 +19,7 @@
         %th{:scope => "col", "data-dynatable-sorts" => "rank"} Rank
         %th{:scope => "col"} First Name
         %th{:scope => "col"} Last Name
+        - if current_course.has_pseudyonyms?
         %th{:scope => "col", "data-dynatable-sorts" => "score"} Score
         - if current_course.has_teams?
           %th{:scope => "col"} #{current_course.team_term}
@@ -45,8 +46,7 @@
                 %td{"data-title" => "Pseudonym"}= student.display_name
             %td{"data-title" => "Grade"}
               - unless @student_grade_schemes_by_id[student.id].nil?
-                = "#{@student_grade_schemes_by_id[student.id][:letter]}"
-                = " – #{@student_grade_schemes_by_id[student.id][:level]}"
+                = "#{@student_grade_schemes_by_id[student.id].name}"
             - if current_course.has_badges?
               %td#earned_badges{"data-title" => "Badges"}
                 - if @earned_badges_by_student_id[student.id]
@@ -56,6 +56,5 @@
             %td{"data-title" => "Options"}
               .right
                 %ul
-                  %li= link_to raw('<i class="fa fa-dashboard fa-fw"></i> Dashboard'), student_path(student), :class => "button"
                   %li= mail_to student.email, raw('<i class="fa fa-envelope fa-fw"></i> Email'), :class => "button"
                   %li= link_to raw('<i class="fa fa-edit fa-fw"></i> Edit'), edit_user_path(student), :class => "button"

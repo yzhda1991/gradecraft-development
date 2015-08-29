@@ -233,10 +233,6 @@ class User < ActiveRecord::Base
     course.membership_for_student(self).auditing?
   end
 
-  def team_leaders(course)
-    @team_leaders ||= course_team(course).includes(:leaders) rescue nil
-  end
-
   ROLES.each do |role|
     define_method("is_#{role}?") do |course|
       self.role(course) == role
@@ -260,8 +256,19 @@ class User < ActiveRecord::Base
     team_memberships.joins(:team).where("teams.course_id = ?", course.id).first.team rescue nil
   end
 
+  # Finding a student's team for a course
   def team_for_course(course)
     @cached_team ||= teams.where(course_id: course).first
+  end
+
+  #Finding all of the team leaders for a single team
+  def team_leaders(course)
+    @team_leaders ||= course_team(course).includes(:leaders) rescue nil
+  end
+
+  #Finding all of a team leader's teams for a single course
+  def team_leaderships_for_course(course)
+    team_leaderships.joins(:team).where("teams.course_id = ?", course.id)
   end
 
   def load_team(course)
@@ -299,6 +306,10 @@ class User < ActiveRecord::Base
   end
 
   ### EARNED LEVELS AND GRADE LETTERS
+
+  def grade_for_course(course)
+    @grade_for_course ||= course.element_for_score(cached_score_for_course(course))
+  end
 
   def grade_level_for_course(course)
     @grade_level ||= Course.find(course.id).grade_level_for_score(cached_score_for_course(course))

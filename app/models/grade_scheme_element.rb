@@ -9,11 +9,15 @@ class GradeSchemeElement < ActiveRecord::Base
   default_scope { order 'high_range DESC' }
 
   # Getting the name of the Grade Scheme Element - the Level if it's present, the Letter if not
-  def element_name
-    if level?
+  def name
+    if level? && letter?
+      "#{letter} / #{level} "
+    elsif level?
       level
-    else
+    elsif letter?
       letter
+    else
+      return nil
     end
   end
 
