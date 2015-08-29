@@ -19,7 +19,7 @@
         %th{:scope => "col", "data-dynatable-sorts" => "rank"} Rank
         %th{:scope => "col"} First Name
         %th{:scope => "col"} Last Name
-        - if current_course.character_names?
+        - if current_course.in_team_leaderboard? || current_course.character_names?
           %th Pseudonyms
         %th{:scope => "col", "data-dynatable-sorts" => "score"} Score
         - if current_course.has_teams?
@@ -28,7 +28,7 @@
         - if current_course.has_badges?
           %th{:scope => "col", "data-dynatable-sorts" => "badgeCount", :style => "min-width: 150px"  } Badges Earned
           %th{:style => "display: none"} Badge Count
-        %th{:scope => "col", "data-dynatable-no-sort" => "true", :style => "min-width: 150px" }
+        %th{:scope => "col", "data-dynatable-no-sort" => "true", :style => "min-width: 120px" }
           %span.sr-only Actions
       %tbody
         - @students.each_with_index do |student, index|
@@ -51,7 +51,7 @@
                 - if @earned_badges_by_student_id[student.id]
                   - @earned_badges_by_student_id[student.id].each do |badge|
                     %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
-                %td{:style => "display: none"}= student.earned_badges_for_course(current_course).count
+              %td{:style => "display: none"}= student.earned_badges_for_course(current_course).count
             %td{"data-title" => "Options"}
               .right
                 %ul
