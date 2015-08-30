@@ -232,7 +232,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def is_predicted_by_student?(student)
-    grades.where(:student => student).first.predicted_score > 0
+    grades.where(:student => student).first.predicted_score > 0 rescue nil
   end
 
   def is_unlocked_for_student?(student)
