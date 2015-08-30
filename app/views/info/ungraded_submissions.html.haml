@@ -27,7 +27,7 @@
             %td= link_to submission.group.try(:name), group_path(submission.group)
             %td
           %td= submission.updated_at
-          %td= submission.text_comment
+          %td= raw submission.text_comment
           %td
             - if current_course.has_teams? && submission.assignment.is_individual? && submission.student.present? && submission.student.team_for_course(current_course).present?
               = link_to submission.student.team_for_course(current_course).try(:name), submission.student.team_for_course(current_course)
