@@ -39,6 +39,21 @@ class Challenge < ActiveRecord::Base
     mass_grade = true
   end
 
+  def content
+    content = ""
+    content << "<a href='/challenges/#{self.id}'>Read More</a>"
+    if description.present?
+      content << description
+    end
+    if challenge_files.present?
+      content << '<ul>'
+      challenge_files.each do |cf|
+        content << "<a href='#{cf.url}'>#{cf.filename}</a>"
+      end
+      content << '</ul>'
+    end
+  end
+
   def challenge_grades_by_team_id
     @challenge_grade_for_team ||= challenge_grades.group_by(&:team_id)
   end

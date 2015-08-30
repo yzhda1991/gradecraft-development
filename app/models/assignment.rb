@@ -111,14 +111,18 @@ class Assignment < ActiveRecord::Base
   end
 
   def content
-    content = []
-    if assignment_files.present?
-      assignments_files.each do |af|
-        content << af.url
-      end
+    content = ""
+    content << "<a href='/assignments/#{self.id}'>Read More</a>"
+    if description.present?
       content << description
     end
-    return content
+    if assignment_files.present?
+      content << '<ul>'
+      assignment_files.each do |af|
+        content << "<a href='#{af.url}'>#{af.filename}</a>"
+      end
+      content << '</ul>'
+    end
   end
 
   def point_total
