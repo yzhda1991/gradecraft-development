@@ -188,7 +188,7 @@ $('table.nofeatures_default_score_dynatable').dynatable({
         sort: true
       },
   dataset: {
-      sorts: { 'score': 1 }
+      sorts: { 'score': -1 }
   },
   readers: {
       score: function(el, record) {

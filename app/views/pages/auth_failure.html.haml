@@ -1,9 +1,11 @@
-%section.login-error
-  %h3.bold Uh Oh! 
-  %h4 We're having some trouble logging you in.
+%section.login
+  .columns.password-forgot.half
+    %h2.bold Ack!
+    %h4 We're having some trouble logging you in.
 
-  %p Are you sure you've created your GradeCraft account? Students <b>must</b> log in through CTools/Canvas before they can access GradeCraft directly. 
+    %p Are you sure you've created your GradeCraft account? Students <b>must</b> log in through CTools/Canvas before they can access GradeCraft directly. 
 
-  %p.bold #{ link_to 'Follow these directions', "http://gradecraft.freshdesk.com/support/home"} to create your GradeCraft account, and #{mail_to 'cholma@umich.edu', 'get in touch'} if that doesn't work.
-  .login_forms
+    %p #{ link_to 'Follow these directions', "http://gradecraft.freshdesk.com/support/home"} to create your GradeCraft account, and #{mail_to 'cholma@umich.edu', 'get in touch'} if that doesn't work.
+  
+  .columns.login-form.login.half
     = render 'user_sessions/form'

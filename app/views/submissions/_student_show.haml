@@ -75,10 +75,10 @@
           %li
             - if sf.file_processing
               = "#{sf.filename}"
-              .icon
-                .icon-tooltip
-                  Refresh page to confirm upload has completed
-                %i.fa.fa-spinner= "(upload in progress)"
+              %a
+                %i.fa.fa-spinner.fa-fw= "(upload in progress)"
+              .display-on-hover.hover-style
+                Refresh page to confirm upload has completed
             - else
               = link_to sf.filename, sf.url, :target => "_blank"
 

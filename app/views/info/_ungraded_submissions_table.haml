@@ -24,11 +24,11 @@
       - submissions.each do |ug|
         - if ug.ungraded?
           - student = ug.student
-          - team = student.team_for_course(course)
           - ug_assignment = ug.assignment
           - ug_group = ug.group
           %tr
             - if ug_assignment.is_individual?
+              - team = student.team_for_course(course)
               %td= link_to student.try(:first_name), student_path(student)
               %td= link_to student.try(:last_name), student_path(student)
               %td= ug.updated_at

@@ -1,4 +1,5 @@
 .icon.predictor-required-icon{'ng-if' => 'target[iconName]'}
-  .icon-tooltip{'ng-bind-html'=>'iconHtml[iconName].tooltip | list'}
-  %i.fa.fa-fw{'class'=>'{{iconHtml[iconName].icon}}'}
-
+  %a
+    %i.fa.fa-fw{'class'=>'{{iconHtml[iconName].icon}}'}
+  .display_on_hover.hover-style
+    %span{'ng-bind-html'=>'iconHtml[iconName].tooltip | list'}

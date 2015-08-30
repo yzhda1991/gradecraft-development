@@ -153,6 +153,7 @@ describe "students/syllabus/_assignments" do
       @group = create(:group, course: @course)
       @assignment.groups << @group
       @group.students << @student
+      allow(view).to receive(:term_for).and_return("Group")
       render
       assert_select "a", text: "See Group", :count => 1
     end
@@ -170,6 +171,7 @@ describe "students/syllabus/_assignments" do
 
     it "shows a button to create a group if no group is present" do
       @assignment.update(grade_scope: "Group")
+      allow(view).to receive(:term_for).and_return("Group")
       render
       assert_select "a", text: "Create a Group", :count => 1
     end

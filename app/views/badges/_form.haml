@@ -15,7 +15,7 @@
       = f.text_field :name
 
     .form-item
-      = f.label :point_total
+      = f.label :point_total, "Points Awarded"
       = f.text_field :point_total, data: {autonumeric: true, "m-dec" => "0"}
 
     .form-item
@@ -70,10 +70,10 @@
             %li
               - if bf.file_processing
                 = "#{bf.filename}"
-                .icon
-                  .icon-tooltip
-                    Refresh page to confirm upload has completed
-                  %i.fa.fa-spinner= "(upload in progress)"
+                %a
+                  %i.fa.fa-spinner.fa-fw= "(upload in progress)"
+                .display-on-hover.hover-style
+                  Refresh page to confirm upload has completed
               - else
                 = link_to bf.filename, bf.url, :target => "_blank"
                 = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :badge_id => @badge.id, :upload_id => bf.id } )

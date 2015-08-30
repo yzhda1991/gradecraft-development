@@ -23,7 +23,7 @@ json.set! :timeline do
         json.endDate event.due_at
       end
       json.headline event.name
-      json.text event.description
+      json.text event.content
       json.set! :asset do
         if event.thumbnail && event.media
           json.thumbnail event.thumbnail_url

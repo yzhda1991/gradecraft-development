@@ -3,7 +3,9 @@ class AssignmentScoreLevel < ActiveRecord::Base
 
   attr_accessible :name, :value, :assignment_id
 
-  validates_presence_of :value, :name, :assignment_id
+  validates_presence_of :value, :name
+
+  validates_associated :assignment
   
   scope :order_by_value, -> { order 'value DESC' }
 

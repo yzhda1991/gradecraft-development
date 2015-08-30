@@ -258,8 +258,14 @@ class User < ActiveRecord::Base
 
   # Finding a student's team for a course
   def team_for_course(course)
-    @cached_team ||= teams.where(course_id: course).first
+    @team ||= teams.where(course_id: course).first
   end
+
+  # Finding a student's character role for a course
+  def character_role_for_course(course)
+    @role ||= course_memberships.where(course_id: course).first.role
+  end
+
 
   #Finding all of the team leaders for a single team
   def team_leaders(course)

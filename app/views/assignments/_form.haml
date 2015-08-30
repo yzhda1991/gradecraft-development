@@ -208,10 +208,10 @@
           %li
             - if af.file_processing
               = "#{af.filename}"
-              .icon
-                .icon-tooltip
-                  Refresh page to confirm upload has completed
+              %a
                 %i.fa.fa-spinner.fa-fw= "(upload in progress)"
+              .display-on-hover.hover-style
+                Refresh page to confirm upload has completed
             - else
               = link_to af.filename, af.url, :target => "_blank"
               = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => @assignment.id, :upload_id => af.id } )

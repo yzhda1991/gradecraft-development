@@ -16,9 +16,8 @@
       %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "unreleasedTableCaption"}
         %thead
           %tr
-            - if assignment.is_individual?
-              %th{:scope => "col", :width => "8%"} First Name
-              %th{:scope => "col", :width => "8%"} Last Name
+            %th{:scope => "col", :width => "8%"} First Name
+            %th{:scope => "col", :width => "8%"} Last Name
             - if assignment.has_groups?
               %th{:scope => "col"}= "#{term_for :groups}"
             - elsif course.has_teams?
@@ -38,12 +37,13 @@
             - first_name = student.try(:first_name)
             - last_name = student.try(:last_name)
             %tr
-              - if graded_assignment.is_individual?
-                %td= link_to first_name, student_path(student)
-                %td= link_to last_name, student_path(student)
+              %td= link_to first_name, student_path(student)
+              %td= link_to last_name, student_path(student)
               - if graded_assignment.has_groups?
-                - group_for_assignment = student.group_for_assignment(graded_assignment)
-                %td= link_to group_for_assignment.try(:name), group_path(:id => group_for_assignment)
+                %td
+                  - group_for_assignment = student.group_for_assignment(graded_assignment)
+                  - if group_for_assignment. present?
+                    = link_to group_for_assignment.try(:name), group_path(:id => group_for_assignment)
               - if course.has_teams? && ! assignment.has_groups?
                 %td
                   = link_to "#{team.try(:name)}", team

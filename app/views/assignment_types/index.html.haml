@@ -12,7 +12,7 @@
       %tr
         %th{:scope => "col"} Name
         %th{:scope => "col"} Predictor Display
-        %th{:scope => "col"} Max value
+        %th{:scope => "col"} Max Points
         %th{:style => "min-width: 300px"}
           %span.sr-only Actions
     %tbody
@@ -47,9 +47,9 @@
         %th First Name
         %th Last Name
         - @assignment_types.each do |at|
-          %th= "#{at.name} Score"
+          %th= "#{at.name} Points"
           - if at.student_weightable?
-            %th= "#{at.name} Weighted Value"
+            %th= "#{at.name} Weighted Points"
     %tbody
       - @students.each do |student|
         %tr

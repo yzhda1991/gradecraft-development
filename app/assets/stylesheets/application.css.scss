@@ -2,9 +2,9 @@
  *= require s3_direct_upload_progress_bars
  *= require jquery-ui.min
  *= require jquery.circliful
+ *= require font-awesome
  *= require animate.min
  *= require select2
- *= require font-awesome 
  *= require jquery.dynatable
  *= require angular-tooltips.min
  *= require_tree ./froala
@@ -78,7 +78,6 @@ $media-xlarge-max:  120rem; //
 @import 'student_dashboard';
 @import 'tables';
 @import 'tabs';
-@import 'timeline';
 @import 'topbar';
 @import 'typography';
 @import 'unlocks';

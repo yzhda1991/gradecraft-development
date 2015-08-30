@@ -1,13 +1,15 @@
 class Assignment < ActiveRecord::Base
 
-  attr_accessible :name, :description, :point_total, :open_at, :due_at, :grade_scope, :visible, :required,
-    :accepts_submissions, :accepts_links, :accepts_text, :accepts_attachments, :release_necessary, :media, :thumbnail, :media_credit, :media_caption,
-    :accepts_submissions_until, :points_predictor_display, :notify_released, :mass_grade_type, :assignment_type_id, :assignment_type,
-    :include_in_timeline, :include_in_predictor, :include_in_to_do, :grades_attributes, :assignment_file_ids, :student_logged, 
-    :assignment_files_attributes, :assignment_file, :assignment_score_levels_attributes, :assignment_score_level,
-    :score_levels_attributes, :remove_media, :remove_thumbnail, :use_rubric, :resubmissions_allowed, :pass_fail, :hide_analytics,
-    :unlock_conditions, :unlock_conditions_attributes, :visible_when_locked
-
+  attr_accessible :name, :assignment_type_id, :assignment_type, :description, :point_total, 
+    :open_at, :due_at, :accepts_submissions_until, :release_necessary, :student_logged, 
+    :accepts_submissions, :accepts_links, :accepts_text, :accepts_attachments, :resubmissions_allowed, 
+    :grade_scope, :visible, :visible_when_locked, :required, :pass_fail, :use_rubric, :hide_analytics,
+    :media, :thumbnail, :media_credit, :media_caption, :remove_media, :remove_thumbnail, 
+    :points_predictor_display, :notify_released, :mass_grade_type,
+    :include_in_timeline, :include_in_predictor, :include_in_to_do, 
+    :grades_attributes, :assignment_file_ids, :assignment_files_attributes, :assignment_file, 
+    :assignment_score_levels_attributes, :assignment_score_level,
+    :unlock_conditions, :unlock_conditions_attributes
 
   attr_accessor :current_student_grade
 
@@ -109,12 +111,17 @@ class Assignment < ActiveRecord::Base
   end
 
   def content
-    content = []
-    if assignment_files.present?
-      assignments_files.each do |af|
-        content << af.url
-      end
+    content = ""
+    content << "<a href='/assignments/#{self.id}'>Read More</a>"
+    if description.present?
       content << description
+    end
+    if assignment_files.present?
+      content << '<ul>'
+      assignment_files.each do |af|
+        content << "<a href='#{af.url}'>#{af.filename}</a>"
+      end
+      content << '</ul>'
     end
     return content
   end
@@ -126,10 +133,6 @@ class Assignment < ActiveRecord::Base
   def self.assignment_type_point_totals_for_student(student)
     group('assignments.assignment_type_id').weighted_for_student(student).pluck('assignments.assignment_type_id, COALESCE(SUM(COALESCE(assignment_weights.point_total, self.course.total_points)), 0)')
   end
-
-  # def self.point_totals_for_student(student)
-  #   weighted_for_student(student).pluck('assignments.id, COALESCE(assignment_weights.point_total, self.course.total_points)')
-  # end
 
   def self.point_total_for_student(student)
     weighted_for_student(student).pluck('SUM(COALESCE(assignment_weights.point_total, self.course.total_points))').first || 0
@@ -233,6 +236,10 @@ class Assignment < ActiveRecord::Base
     UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").first.unlockable
   end
 
+  def is_predicted_by_student?(student)
+    grades.where(:student => student).first.predicted_score > 0 rescue nil
+  end
+
   def is_unlocked_for_student?(student)
     if unlock_states.where(:student_id => student.id).present?
       unlock_states.where(:student_id => student.id).first.is_unlocked?
@@ -265,11 +272,6 @@ class Assignment < ActiveRecord::Base
   def find_or_create_unlock_state(student)
     UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Assignment")
   end
-
-  # # If the point value is set at the assignment type level, grab it from there (commonly used for things like Attendance)
-  # def point_total
-  #   super || assignment_type.universal_point_value || 0
-  # end
 
   # Custom point total if the class has weighted assignments
   def point_total_for_student(student, weight = nil)
