@@ -123,6 +123,7 @@ class Assignment < ActiveRecord::Base
       end
       content << '</ul>'
     end
+    return content
   end
 
   def point_total

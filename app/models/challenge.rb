@@ -52,6 +52,7 @@ class Challenge < ActiveRecord::Base
       end
       content << '</ul>'
     end
+    return content
   end
 
   def challenge_grades_by_team_id
