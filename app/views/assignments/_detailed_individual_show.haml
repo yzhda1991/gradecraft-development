@@ -4,9 +4,9 @@
       %tr
         %th First Name
         %th Last Name
-        %th Raw Score
+        %th Raw Points
         - if @assignment.assignment_type.student_weightable?
-          %th Multiplied Score
+          %th Multiplied Points
         - if @assignment.has_levels?
           %th Level
         %th Feedback

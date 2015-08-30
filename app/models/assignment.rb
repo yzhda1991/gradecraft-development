@@ -129,10 +129,6 @@ class Assignment < ActiveRecord::Base
     group('assignments.assignment_type_id').weighted_for_student(student).pluck('assignments.assignment_type_id, COALESCE(SUM(COALESCE(assignment_weights.point_total, self.course.total_points)), 0)')
   end
 
-  # def self.point_totals_for_student(student)
-  #   weighted_for_student(student).pluck('assignments.id, COALESCE(assignment_weights.point_total, self.course.total_points)')
-  # end
-
   def self.point_total_for_student(student)
     weighted_for_student(student).pluck('SUM(COALESCE(assignment_weights.point_total, self.course.total_points))').first || 0
   end
@@ -271,11 +267,6 @@ class Assignment < ActiveRecord::Base
   def find_or_create_unlock_state(student)
     UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Assignment")
   end
-
-  # # If the point value is set at the assignment type level, grab it from there (commonly used for things like Attendance)
-  # def point_total
-  #   super || assignment_type.universal_point_value || 0
-  # end
 
   # Custom point total if the class has weighted assignments
   def point_total_for_student(student, weight = nil)

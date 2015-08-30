@@ -38,7 +38,7 @@
     %ul
       %li="Awarded: #{@badge.awarded_count}"
       - if @badge.point_total?
-        %li="Point Value: #{@badge.point_total}"
+        %li="Points: #{@badge.point_total}"
       - if @badge.is_unlockable?
         %li 
           %a

@@ -31,11 +31,11 @@
         %thead
           %tr
             %th
-            %th{:style => "width: 150px"}= "#{term_for :assignment}"
+            %th= "#{term_for :assignment}"
             %th Points
             %th Due
             %th
-            %th{:style => "width: 300px"}
+            %th{:width => "300"}
         %tbody
           - assignments = assignment_type.assignments.includes(:assignment_type)
           - assignments.each do |assignment|

@@ -20,16 +20,16 @@
           %th{"scope" => "col"} Median
           %th{"scope" => "col"}
             Ave
-            .icon
-              .icon-tooltip
-                The average of all grades, including those who earned zero
+            %a
               %i.fa.fa-info-circle
+            .display_on_hover.hover-style
+              The average of all grades, including those who earned zero
           %th
             Avg Earned
-            .icon
-              .icon-tooltip
-                The average of all scores above zero
+            %a
               %i.fa.fa-info-circle
+            .display_on_hover.hover-style
+              The average of all scores above zero
           %th Submissions
           %th Grades
           %th{:style => "min-width: 180px"}
