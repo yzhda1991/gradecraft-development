@@ -3,13 +3,13 @@
 - if assignment.required?
   %a
     %i.fa.fa-exclamation-circle.fa-fw
-  .display_on_hover.unlock_keys
+  .display_on_hover.hover-style
     This #{term_for :assignment} is required!
 
 - if assignment.is_unlockable?
   %a
     %i.fa.fa-lock
-  .display_on_hover.unlock_keys
+  .display_on_hover.hover-style
     %h3 Unlock Requirements
     %ul
       - assignment.unlock_conditions.each do |condition|
@@ -17,7 +17,7 @@
 - if assignment.is_a_condition?
   %a
     %i.fa.fa-key
-  .display_on_hover.unlock_keys
+  .display_on_hover.hover-style
     %h3 Unlock Key
     %ul
       - assignment.unlock_keys.each do |key|

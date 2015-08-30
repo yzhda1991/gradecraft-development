@@ -235,6 +235,10 @@ class Assignment < ActiveRecord::Base
     UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").first.unlockable
   end
 
+  def is_predicted_by_student?(student)
+    grades.where(:student => student).first.predicted_score > 0
+  end
+
   def is_unlocked_for_student?(student)
     if unlock_states.where(:student_id => student.id).present?
       unlock_states.where(:student_id => student.id).first.is_unlocked?

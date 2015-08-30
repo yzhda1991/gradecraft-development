@@ -46,7 +46,7 @@
             - if badge.is_unlockable?
               %a
                 %i.fa.fa-lock
-              .display_on_hover.unlock_keys
+              .display_on_hover.hover-style
                 %h3 Unlock Requirements
                 %ul
                   - badge.unlock_conditions.each do |condition|
@@ -54,7 +54,7 @@
             - if badge.is_a_condition?
               %a
                 %i.fa.fa-key
-              .display_on_hover.unlock_keys
+              .display_on_hover.hover-style
                 %h3 Unlock Key
                 %ul
                   - badge.unlock_keys.each do |key|
