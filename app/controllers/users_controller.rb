@@ -137,7 +137,10 @@ class UsersController < ApplicationController
     if @user.update_attributes(params[:user])
       redirect_to dashboard_path, :notice => "Your profile was successfully updated!"
     else
-      redirect_to edit_profile_users_path(@user), :alert => "I'm sorry, something went wrong. Your profile was not successfully updated."
+      @title = "Edit My Profile"
+      @course_membership = @user.course_memberships.where(course_id: current_course).first
+      @default_course_options = @user.courses
+      render :edit_profile
     end
   end
 

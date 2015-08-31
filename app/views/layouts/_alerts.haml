@@ -1,12 +1,13 @@
-- if flash[:notice]
-  .alert-box.success
-    = flash[:notice].html_safe
-    <a href="" class="close">&times;</a>
-- if flash[:error]
-  .alert-box.error
-    = flash[:error].html_safe
-    <a href="" class="close">&times;</a>
-- if flash[:alert]
+- flash.each do |name, message|
+  %div{ class: "alert-box #{name}" }
+    = message.html_safe
+    %a{ href: "#", class: "close" }
+      = "&times;".html_safe
+
+- if !request.get? && local_assigns[:model].present? && !model.valid?
   .alert-box.alert
-    = flash[:alert].html_safe
-    <a href="" class="close">&times;</a>
+    - message_term = local_assigns[:term] ? term : model.class.name.humanize.downcase
+    .italic= "#{pluralize(model.errors.count, "error")} prohibited this #{message_term} from being saved:"
+    %ul
+      - model.errors.full_messages.each do |message|
+        %li= message
