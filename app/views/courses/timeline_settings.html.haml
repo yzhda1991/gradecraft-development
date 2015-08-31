@@ -4,15 +4,10 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   #massGrade
-    - if @course.errors.any? 
-      .alert-box.alert
-        .italic= "#{pluralize(@course.errors.count, "error")} prohibited these settings from being saved:"
-        %ul
-          - @course.errors.full_messages.each do |msg|
-            %li= msg
-            
+    = render partial: 'layouts/alerts', locals: { model: @course, term: "settings" }
+
     = simple_form_for @course, method: :put, :url => timeline_settings_course_path(@course) do |f|
 
       %table

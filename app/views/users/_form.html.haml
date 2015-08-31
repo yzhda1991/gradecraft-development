@@ -1,10 +1,6 @@
 = simple_form_for @user do |f|
-  - if @user.errors.any?
-    .alert-box.alert
-      .italic= "#{pluralize(@user.errors.count, "error")} prohibited this #{term_for :assignment} from being saved:"
-      %ul
-        - @user.errors.full_messages.each do |msg|
-          %li= msg
+  = render partial: 'layouts/alerts', locals: { model: @user, term: term_for(:assignment) }
+
   %section
     %h4.uppercase= "User Profile"
     .form-item

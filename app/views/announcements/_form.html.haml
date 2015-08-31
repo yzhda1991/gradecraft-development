@@ -1,9 +1,4 @@
-- if @announcement.errors.any?
-  .alert-box.alert
-    .italic= "#{pluralize(@announcement.errors.count, "error")} prohibited this announcement from being saved:"
-    %ul
-      - @announcement.errors.full_messages.each do |msg|
-        %li= msg
+= render partial: 'layouts/alerts', locals: { model: @announcement }
 
 = simple_form_for(@announcement) do |f|
   %section

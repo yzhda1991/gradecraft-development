@@ -1,9 +1,4 @@
-- if @assignment.errors.any?
-  .alert-box.alert
-    .italic= "#{pluralize(@assignment.errors.count, "error")} prohibited this #{term_for :assignment} from being saved:"
-    %ul
-      - @assignment.errors.full_messages.each do |msg|
-        %li= msg
+= render partial: 'layouts/alerts', locals: { model: @assignment, term: term_for(:assignment) }
 
 = simple_form_for(@assignment, :html => { :novalidate => true }) do |f|
   %section
@@ -136,7 +131,7 @@
     .form-item
       = f.label :student_logged
       = f.check_box :student_logged
-      .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels below, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points. 
+      .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels below, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points.
 
   %section
     %h4 Timeline

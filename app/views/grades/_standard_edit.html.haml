@@ -1,12 +1,7 @@
 .grade-container(ng-app="gradecraft")
   = csrf_meta_tag
 
-  - if @grade.errors.any?
-    .alert-box.alert
-      .italic= "#{pluralize(@grade.errors.count, "error")} prohibited this grade from being saved:"
-      %ul
-        - @grade.errors.full_messages.each do |msg|
-          %li= msg
+  = render partial: 'layouts/alerts', locals: { model: @grade }
 
   - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
     %section
