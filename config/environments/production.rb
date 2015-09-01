@@ -16,13 +16,10 @@ GradeCraft::Application.configure do
   }
   config.active_support.deprecation = :notify
   config.assets.compile = false
-  config.assets.precompile += %w( vendor/modernizr.js )
   config.assets.compress = true
   config.assets.css_compressor = :sass
   config.assets.digest = true
   config.assets.js_compressor = Uglifier.new(mangle: false) if defined? Uglifier
-  config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
-  config.assets.precompile += %w( .svg .eot .woff .ttf )
   config.cache_classes = true
   config.cache_store = :dalli_store, ENV['MEMCACHED_URL'], { :namespace => 'gradecraft_production', :expires_in => 1.day, :compress => true }
   config.consider_all_requests_local = false
