@@ -6,6 +6,9 @@ class Event < ActiveRecord::Base
   mount_uploader :media, EventMediaUploader
   mount_uploader :thumbnail, EventThumbnailUploader
 
+  validates :media, file_size: { maximum: 2.megabytes.to_i }
+  validates :thumbnail, file_size: { maximum: 2.megabytes.to_i }
+
   belongs_to :course, touch: true
 
   scope :with_dates, -> { where('events.due_at IS NOT NULL OR events.open_at IS NOT NULL') }
@@ -19,5 +22,4 @@ class Event < ActiveRecord::Base
       content << description
     end
   end
-
 end
