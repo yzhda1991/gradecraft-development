@@ -1,7 +1,7 @@
 .grade-container(ng-app="gradecraft")
   = csrf_meta_tag
 
-  = render partial: 'layouts/alerts', locals: { model: @grade }
+  = render partial: 'layouts/alerts', locals: { model: @grade, display_flash: false }
 
   - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
     %section
