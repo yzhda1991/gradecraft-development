@@ -1,11 +1,6 @@
 = simple_form_for @group do |f|
 
-  - if @group.errors.any?
-    .alert-box.alert
-      .italic= "#{pluralize(@group.errors.count, "error")} prohibited this group from being saved:"
-      %ul
-        - @group.errors.full_messages.each do |msg|
-          %li= msg
+  = render partial: 'layouts/alerts', locals: { model: @group }
 
   %section
     .form-item

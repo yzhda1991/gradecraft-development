@@ -1,9 +1,4 @@
-- if @badge.errors.any?
-  .alert-box.alert
-    .italic= "#{pluralize(@badge.errors.count, "error")} prohibited this #{(term_for :badge).titleize} from being saved:"
-    %ul
-      - @badge.errors.full_messages.each do |msg|
-        %li= msg
+= render partial: 'layouts/alerts', locals: { model: @badge, term: term_for(:badge) }
 
 = simple_form_for @badge do |f|
   %section
@@ -27,7 +22,7 @@
       = f.label :visible
       = f.check_box :visible
       .form_label Can #{term_for :students} see this #{term_for :badge}?
-    
+
     .form-item
       = f.label :can_earn_multiple_times,"Multi-award"
       = f.check_box :can_earn_multiple_times
@@ -44,7 +39,7 @@
     %h4 Unlocks
     .form-item
       = f.input :visible_when_locked
-    
+
       .unlock-conditions
         %p.hint Unlock description here
         %script(id="unlock-condition-template" type="text/x-template")

@@ -1,10 +1,4 @@
-/ Using Simple Form to create an assignment type
-- if @assignment_type.errors.any?
-  .alert-box.alert
-    .italic= "#{pluralize(@assignment_type.errors.count, "error")} prohibited this #{(term_for :assignment_type).downcase} from being saved:"
-    %ul
-      - @assignment_type.errors.full_messages.each do |msg|
-        %li= msg
+= render partial: 'layouts/alerts', locals: { model: @assignment_type, term: term_for(:assignment_type) }
 
 = simple_form_for(@assignment_type) do |f|
   / First section should cover the simple stuff we need to know about every assignment type
@@ -34,7 +28,7 @@
       .textarea
         .form_label How would you like to describe this #{term_for :assignment} type on the student dashboard? Are there hints that you can give students that will help them understand how to succeed?
         = f.text_area :predictor_description, :label => "Description", :class => "froala"
-      
+
   .submit-buttons
     %ul
       %li= f.button :submit, "#{@assignment_type.persisted? ? 'Update' : 'Create'} #{term_for :assignment_type}"
