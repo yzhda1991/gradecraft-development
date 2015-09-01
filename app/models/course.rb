@@ -67,13 +67,13 @@ class Course < ActiveRecord::Base
   end
 
   attr_accessible :courseno, :name,
-    :semester, :year, :badge_setting, :team_setting, 
-    :team_term, :user_term, :section_leader_term, :group_term, 
+    :semester, :year, :badge_setting, :team_setting,
+    :team_term, :user_term, :section_leader_term, :group_term,
     :user_id, :course_id, :homepage_message, :group_setting,
     :character_names, :team_roles, :character_profiles,
-    :total_assignment_weight, :assignment_weight_close_at, 
-    :assignment_weight_type, :has_submissions, :teams_visible,  
-    :weight_term, :max_group_size, :min_group_size, 
+    :total_assignment_weight, :assignment_weight_close_at,
+    :assignment_weight_type, :has_submissions, :teams_visible,
+    :weight_term, :max_group_size, :min_group_size,
     :max_assignment_weight, :assignments, :default_assignment_weight, :accepts_submissions,
     :tagline, :academic_history_visible, :office, :phone, :class_email,
     :twitter_handle, :twitter_hashtag, :location, :office_hours, :meeting_times,
@@ -81,7 +81,7 @@ class Course < ActiveRecord::Base
     :challenge_term, :badge_term, :grading_philosophy, :team_score_average,
     :team_challenges, :team_leader_term, :max_assignment_types_weighted,
     :point_total, :in_team_leaderboard, :grade_scheme_elements_attributes,
-    :add_team_score_to_student, :status, :assignments_attributes, 
+    :add_team_score_to_student, :status, :assignments_attributes,
     :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics,
     :instructors_of_record_ids, :lti_uid
 
@@ -121,6 +121,8 @@ class Course < ActiveRecord::Base
   validates_numericality_of :point_total, :allow_blank => true
 
   validates_format_of :twitter_hashtag, :with => /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, :allow_blank => true, :length   => { :within => 3..20 }
+
+  validates :media_file, file_size: { maximum: 2.megabytes.to_i }
   validate :max_more_than_min
 
   scope :alphabetical, -> { order('courseno ASC') }
