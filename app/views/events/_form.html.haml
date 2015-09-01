@@ -1,6 +1,6 @@
-= simple_form_for(@event) do |f|
-  = f.error_notification
+= render partial: "layouts/alerts", locals: { model: @event }
 
+= simple_form_for(@event) do |f|
   %section
     %h4 Basic Settings
     .form-item
@@ -9,11 +9,11 @@
       = f.input :open_at, as: :string, :input_html => { :class => 'datetimepicker', :value => @event.try(:open_at) }, :label => "Start Date"
     .form-item
       = f.input :due_at, as: :string, :input_html => { :class => 'datetimepicker', :value => @event.try(:due_at) }, :label => "End Date"
-  
+
   %section
     %h4 Description
     = f.text_area :description, :class => "froala"
-  
+
   %section
     %h4 Timeline Settings
     .form-item
