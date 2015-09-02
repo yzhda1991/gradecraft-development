@@ -16,14 +16,9 @@
 
   %section
     %h4 Timeline Settings
-    .form-item
-      = f.label :media
-      = f.file_field :media
-    - if @event.media.present?
-      .form-item
-        %img{:src => @event.media, :width => 40, :alt => "Primary Event Image" }
-        = f.check_box :remove_media
-        Remove Image
+
+    = render partial: "layouts/media_image_form_item", locals: { f: f, model: @event }
+
     .form-item
       = f.label :thumbnail
       = f.file_field :thumbnail
@@ -32,10 +27,6 @@
         %img{:src => @event.thumbnail, :width => 40, :alt => "Event Thumbnail Image" }
         = f.check_box :remove_thumbnail
         Remove Thumbnail
-    .form-item
-      = f.input :media_credit, :as => :string
-    .form-item
-      = f.input :media_caption
 
   .submit-buttons
     %ul

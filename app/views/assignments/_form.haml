@@ -136,18 +136,12 @@
     .form-item
       = f.label :student_logged
       = f.check_box :student_logged
-      .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels below, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points. 
+      .form_label Do #{term_for :students} self-report their grade for this #{term_for :assignment}? If you add grade levels below, they'll be able to select their self-assessed score from the list during the open time period. If you don't, they'll be able to select that they did the work and earn full points.
 
   %section
     %h4 Timeline
 
-    .form-item
-      = f.label :media, "Image"
-      = f.file_field :media
-      - if @assignment.media?
-        %img{:src => @assignment.media, :width => 40, :alt => "Primary Assignment Image" }
-        = f.check_box :remove_media
-        Remove Image
+    = render partial: "layouts/media_image_form_item", locals: { f: f, model: @assignment }
 
     .form-item
       = f.label :thumbnail
@@ -156,14 +150,6 @@
         %img{:src => @assignment.thumbnail, :alt => "Thumbnail Assignment Image", :style => "height: 25px; width: 25px;" }
         = f.check_box :remove_thumbnail
         Remove Thumbnail
-
-    .form-item
-      = f.label :media_credit, "Media Credit"
-      = f.text_field :media_credit
-
-    .form-item
-      = f.label :media_caption, "Caption"
-      = f.text_field :media_caption
 
   %section
     %h4 Unlocks

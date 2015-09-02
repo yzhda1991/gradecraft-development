@@ -72,21 +72,7 @@
         = f.check_box :remove_thumbnail
         Remove Thumbnail
 
-    .form-item
-      = f.label :media, "Media Image"
-      = f.file_field :media
-      - if @challenge.media.present? && @challenge.errors[:media].empty?
-        %img{src: @challenge.media, width: 40, alt: "Media Image" }
-        = f.check_box :remove_media
-        Remove Image
-
-    .form-item
-      = f.label :media_credit, "Credit"
-      = f.text_field :media_credit
-
-    .form-item
-      = f.label :media_caption, "Caption"
-      = f.text_field :media_caption
+    = render partial: "layouts/media_image_form_item", locals: { f: f, model: @challenge }
 
   %section
     %h4 Attachments
