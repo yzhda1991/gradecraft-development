@@ -1,12 +1,8 @@
 class Event < ActiveRecord::Base
   include UploadsMedia
+  include UploadsThumbnails
 
-  attr_accessible :course_id, :name, :description, :thumbnail, :open_at,
-  :due_at, :remove_thumbnail
-
-  mount_uploader :thumbnail, ThumbnailUploader
-
-  validates :thumbnail, file_size: { maximum: 2.megabytes.to_i }
+  attr_accessible :course_id, :name, :description, :open_at, :due_at
 
   belongs_to :course, touch: true
 
