@@ -4,7 +4,7 @@ class Event < ActiveRecord::Base
   :due_at, :remove_media, :remove_thumbnail
 
   mount_uploader :media, EventMediaUploader
-  mount_uploader :thumbnail, EventThumbnailUploader
+  mount_uploader :thumbnail, ThumbnailUploader
 
   validates :media, file_size: { maximum: 2.megabytes.to_i }
   validates :thumbnail, file_size: { maximum: 2.megabytes.to_i }

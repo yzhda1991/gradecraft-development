@@ -17,7 +17,7 @@ class Assignment < ActiveRecord::Base
   belongs_to :assignment_type, -> { order('order_placement ASC') }, touch: true
 
   mount_uploader :media, AssignmentMediaUploader
-  mount_uploader :thumbnail, AssignmentThumbnailUploader
+  mount_uploader :thumbnail, ThumbnailUploader
   has_one :rubric
   delegate :mass_grade?, :student_weightable?, :to => :assignment_type
 
