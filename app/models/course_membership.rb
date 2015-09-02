@@ -5,9 +5,7 @@ class CourseMembership < ActiveRecord::Base
   attr_accessible :auditing, :character_profile, :course_id, :instructor_of_record,
     :user_id, :role
 
-  ROLES = %w(student professor gsi admin)
-
-  ROLES.each do |role|
+  Role.all.each do |role|
     scope role.pluralize, ->(course) { where role: role }
     define_method("#{role}?") do
       self.role == role

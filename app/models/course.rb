@@ -4,9 +4,7 @@ class Course < ActiveRecord::Base
   # Note: we are setting the role scopes as instance methods,
   # not class methods, so that they are limited to the users
   # of the current course
-  ROLES = %w(student professor gsi admin)
-
-  ROLES.each do |role|
+  Role.all.each do |role|
     define_method(role.pluralize) do
       User.with_role_in_course(role, self)
     end

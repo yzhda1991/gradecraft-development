@@ -3,8 +3,6 @@ class User < ActiveRecord::Base
 
   include Canable::Cans
 
-  ROLES = %w(student professor gsi admin)
-
   class << self
     def with_role_in_course(role, course)
       if role == "staff"
@@ -15,7 +13,7 @@ class User < ActiveRecord::Base
       User.where(id: user_ids)
     end
 
-    ROLES.each do |role|
+    Role.all.each do |role|
       define_method(role.pluralize) do |course|
         with_role_in_course(role,course)
       end
@@ -225,7 +223,7 @@ class User < ActiveRecord::Base
     course.membership_for_student(self).auditing?
   end
 
-  ROLES.each do |role|
+  Role.all.each do |role|
     define_method("is_#{role}?") do |course|
       self.role(course) == role
     end
