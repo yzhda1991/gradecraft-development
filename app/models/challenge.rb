@@ -1,11 +1,12 @@
 class Challenge < ActiveRecord::Base
+  include UploadsMedia
 
   attr_accessible :name, :description, :icon, :visible, :image_file_name, :occurrence,
     :value, :multiplier, :point_total, :due_at, :open_at, :accepts_submissions,
     :release_necessary, :course, :team, :challenge, :challenge_file_ids,
     :challenge_files_attributes, :challenge_file, :challenge_grades_attributes,
     :challenge_score_levels_attributes, :challenge_score_level,
-    :thumbnail, :remove_thumbnail, :media, :media_credit, :media_caption, :remove_media
+    :thumbnail, :remove_thumbnail
 
   # grade points available to the predictor from the assignment controller
   attr_accessor :student_predicted_earned_challenge, :current_team_grade
@@ -23,7 +24,6 @@ class Challenge < ActiveRecord::Base
   has_many :challenge_files, :dependent => :destroy
   accepts_nested_attributes_for :challenge_files
 
-  mount_uploader :media, ImageUploader
   mount_uploader :thumbnail, ThumbnailUploader
 
   scope :with_dates, -> { where('challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL') }
@@ -34,7 +34,6 @@ class Challenge < ActiveRecord::Base
 
   validates_presence_of :course, :name
   validate :positive_points, :open_before_close
-  validates :media, file_size: { maximum: 2.megabytes.to_i }
   validates :thumbnail, file_size: { maximum: 2.megabytes.to_i }
 
   def has_levels?

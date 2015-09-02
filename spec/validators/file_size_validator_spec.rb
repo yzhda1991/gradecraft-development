@@ -5,7 +5,7 @@ describe FileSizeValidator do
     include ActiveModel::Model
     include ActiveModel::Validations
 
-    attr_accessor :media
+    attr_accessor :id, :media
   end
 
   let(:image) { fixture_file "test_image.jpg", "img/jpg" }

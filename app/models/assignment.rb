@@ -1,10 +1,11 @@
 class Assignment < ActiveRecord::Base
+  include UploadsMedia
 
   attr_accessible :name, :assignment_type_id, :assignment_type, :description, :point_total,
     :open_at, :due_at, :accepts_submissions_until, :release_necessary, :student_logged,
     :accepts_submissions, :accepts_links, :accepts_text, :accepts_attachments, :resubmissions_allowed,
     :grade_scope, :visible, :visible_when_locked, :required, :pass_fail, :use_rubric, :hide_analytics,
-    :media, :thumbnail, :media_credit, :media_caption, :remove_media, :remove_thumbnail,
+    :thumbnail, :remove_thumbnail,
     :points_predictor_display, :notify_released, :mass_grade_type,
     :include_in_timeline, :include_in_predictor, :include_in_to_do,
     :grades_attributes, :assignment_file_ids, :assignment_files_attributes, :assignment_file,
@@ -16,7 +17,6 @@ class Assignment < ActiveRecord::Base
   belongs_to :course
   belongs_to :assignment_type, -> { order('order_placement ASC') }, touch: true
 
-  mount_uploader :media, ImageUploader
   mount_uploader :thumbnail, ThumbnailUploader
   has_one :rubric
   delegate :mass_grade?, :student_weightable?, :to => :assignment_type
@@ -70,7 +70,6 @@ class Assignment < ActiveRecord::Base
 
   validates_presence_of :assignment_type_id
 
-  validates :media, file_size: { maximum: 2.megabytes.to_i }
   validates :thumbnail, file_size: { maximum: 2.megabytes.to_i }
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
