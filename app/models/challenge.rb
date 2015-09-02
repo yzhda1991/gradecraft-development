@@ -4,7 +4,8 @@ class Challenge < ActiveRecord::Base
     :value, :multiplier, :point_total, :due_at, :open_at, :accepts_submissions,
     :release_necessary, :course, :team, :challenge, :challenge_file_ids,
     :challenge_files_attributes, :challenge_file, :challenge_grades_attributes,
-    :challenge_score_levels_attributes, :challenge_score_level
+    :challenge_score_levels_attributes, :challenge_score_level,
+    :thumbnail, :remove_thumbnail, :media, :media_credit, :media_caption, :remove_media
 
   # grade points available to the predictor from the assignment controller
   attr_accessor :student_predicted_earned_challenge, :current_team_grade
@@ -12,24 +13,29 @@ class Challenge < ActiveRecord::Base
   belongs_to :course, touch: true
   has_many :submissions
   has_many :challenge_grades
+  accepts_nested_attributes_for :challenge_grades
+
   has_many :predicted_earned_challenges, :dependent => :destroy
+
   has_many :challenge_score_levels
   accepts_nested_attributes_for :challenge_score_levels, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? || a['name'].blank? }
 
   has_many :challenge_files, :dependent => :destroy
   accepts_nested_attributes_for :challenge_files
-  accepts_nested_attributes_for :challenge_grades
+
+  mount_uploader :media, ImageUploader
+  mount_uploader :thumbnail, ThumbnailUploader
 
   scope :with_dates, -> { where('challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL') }
-
+  scope :visible, -> { where visible: TRUE }
+  scope :chronological, -> { order('due_at ASC') }
+  scope :alphabetical, -> { order('name ASC') }
   scope :visible, -> { where visible: TRUE }
 
   validates_presence_of :course, :name
   validate :positive_points, :open_before_close
-
-  scope :chronological, -> { order('due_at ASC') }
-  scope :alphabetical, -> { order('name ASC') }
-  scope :visible, -> { where visible: TRUE }
+  validates :media, file_size: { maximum: 2.megabytes.to_i }
+  validates :thumbnail, file_size: { maximum: 2.megabytes.to_i }
 
   def has_levels?
     levels == true

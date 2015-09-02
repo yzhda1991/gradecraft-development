@@ -46,7 +46,7 @@
       = f.check_box :release_necessary
       .form_label Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
 
-  
+
   %section
     %h4 Grade Levels
     .challenge-score-levels
@@ -60,6 +60,33 @@
           = f.simple_fields_for :challenge_score_levels, challenge_score_level, class: 'form-inline' do |slf|
             = render 'challenge_score_level_fields', f: slf
     = link_to 'Add a Level', '#', class: 'add-challenge-score-level button radius'
+
+  %section
+    %h4 Timeline
+
+    .form-item
+      = f.label :thumbnail
+      = f.file_field :thumbnail
+      - if @challenge.thumbnail.present? && @challenge.errors[:thumbnail].empty?
+        %img{src: @challenge.thumbnail, alt: "Thumbnail Image", style: "height: 25px; width: 25px;" }
+        = f.check_box :remove_thumbnail
+        Remove Thumbnail
+
+    .form-item
+      = f.label :media, "Media Image"
+      = f.file_field :media
+      - if @challenge.media.present? && @challenge.errors[:media].empty?
+        %img{src: @challenge.media, width: 40, alt: "Media Image" }
+        = f.check_box :remove_media
+        Remove Image
+
+    .form-item
+      = f.label :media_credit, "Credit"
+      = f.text_field :media_credit
+
+    .form-item
+      = f.label :media_caption, "Caption"
+      = f.text_field :media_caption
 
   %section
     %h4 Attachments
