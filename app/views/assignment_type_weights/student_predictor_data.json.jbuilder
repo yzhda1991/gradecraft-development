@@ -8,7 +8,6 @@ json.weights do
     end
   end
   json.assignment_types_weightable assignment_types_weightable
-
   json.total_weights current_course.try(:total_assignment_weight)
   json.close_at current_course.try(:assignment_weight_close_at)
   json.max_weights current_course.max_assignment_weight

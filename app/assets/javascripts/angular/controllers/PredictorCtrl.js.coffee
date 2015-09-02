@@ -86,6 +86,9 @@
     )
     return scoreLevels[closest]
 
+  $scope.hasAssignments = (assignmentType)->
+    $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id).length > 0
+
   # Filter the assignments, return just the assignments for the assignment type
   $scope.assignmentsForAssignmentType = (assignments,id)->
     _.where(assignments, {assignment_type_id: id})
@@ -101,26 +104,35 @@
     )
     total
 
+  $scope.weightedPoints = (points,assignmentType)->
+    if assignmentType.student_weightable
+      if assignmentType.student_weight > 0
+        points = points * assignmentType.student_weight
+      else
+        points = points * $scope.weights.default_weight
+    points
+
+  $scope.assignmentTypeMaxPossiblePoints = (assignmentType)->
+    total = $scope.weightedPoints(assignmentType.total_points,assignmentType)
+
   # Total points predicted for all assignments by assignments type
   # caps the total points at the assignment type max points
   # only calculates the weighted total if weighted is passed in as true
   $scope.assignmentTypePointTotal = (assignmentType, weighted=true, capped=true)->
     assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
     total = $scope.assignmentsPointTotal(assignments)
-    if assignmentType.student_weightable
-      # ignore max value on weightable assignments, even if not calulating the weights
-      if weighted
-        if assignmentType.student_weight > 0
-          total = total * assignmentType.student_weight
-        else
-          total = total * $scope.weights.default_weight
-    if assignmentType.total_points and capped
+    if weighted
+      total = $scope.weightedPoints(total,assignmentType)
+    if assignmentType.is_capped and capped
       total = if total > assignmentType.total_points then assignmentType.total_points else total
     total
 
   # Total predicted points above and beyond the assignment type max points
   $scope.assignmentTypePointExcess = (assignmentType)->
-    $scope.assignmentTypePointTotal(assignmentType,true,false) - assignmentType.total_points
+    if assignmentType.is_capped
+      $scope.assignmentTypePointTotal(assignmentType,true,false) - assignmentType.total_points
+    else
+      0
 
   # Total points predicted for badges (works with no badges)
   $scope.badgesPointTotal = ()->
@@ -305,8 +317,7 @@
               "grade_scheme-label-" + gse.low_range)
             .style("visibility", "hidden")
     txt.append('text')
-      .text( (gse)->
-        gse.level + " (" + gse.letter + ")")
+      .text( (gse)-> gse.name)
       .attr("y","15")
       .attr("x",padding)
       .attr("font-family","Verdana")

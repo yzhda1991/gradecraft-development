@@ -68,6 +68,20 @@ $predictor-font-size-5 : .55rem
   float: left
   width: 20px
 
+.predictor-badge-icon
+  max-width: 80px
+  float: left
+  margin: 1px 0 0 $predictor-font-size-3
+
+.assignment-type-tooltip
+  a
+    color: $color-blue-4
+    i
+      padding-top: 4px
+  .display_on_hover.hover-style
+    right: 0
+    background-color: $color-red-2
+
 // SECTIONS
 #predictor-main-header, .predictor-section
   height: 33px
@@ -326,7 +340,7 @@ article.predictor-article
 
 /* Binary Switch */
 
-.predictor-binary-switch
+.predictor-binary-switch.badge
   margin: 17px 0
 
 .predictor-binary-switch .switch-socket
