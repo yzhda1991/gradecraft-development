@@ -64,14 +64,7 @@
   %section
     %h4 Timeline
 
-    .form-item
-      = f.label :thumbnail
-      = f.file_field :thumbnail
-      - if @challenge.thumbnail.present? && @challenge.errors[:thumbnail].empty?
-        %img{src: @challenge.thumbnail, alt: "Thumbnail Image", style: "height: 25px; width: 25px;" }
-        = f.check_box :remove_thumbnail
-        Remove Thumbnail
-
+    = render partial: "layouts/thumbnail_image_form_item", locals: { f: f, model: @challenge }
     = render partial: "layouts/media_image_form_item", locals: { f: f, model: @challenge }
 
   %section

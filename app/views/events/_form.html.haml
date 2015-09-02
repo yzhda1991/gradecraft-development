@@ -17,16 +17,8 @@
   %section
     %h4 Timeline Settings
 
+    = render partial: "layouts/thumbnail_image_form_item", locals: { f: f, model: @event }
     = render partial: "layouts/media_image_form_item", locals: { f: f, model: @event }
-
-    .form-item
-      = f.label :thumbnail
-      = f.file_field :thumbnail
-    - if @event.thumbnail.present?
-      .form-item
-        %img{:src => @event.thumbnail, :width => 40, :alt => "Event Thumbnail Image" }
-        = f.check_box :remove_thumbnail
-        Remove Thumbnail
 
   .submit-buttons
     %ul
