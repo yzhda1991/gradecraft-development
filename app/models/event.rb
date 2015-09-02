@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   attr_accessible :course_id, :name, :description, :media, :media_credit, :thumbnail, :media_caption, :open_at,
   :due_at, :remove_media, :remove_thumbnail
 
-  mount_uploader :media, EventMediaUploader
+  mount_uploader :media, ImageUploader
   mount_uploader :thumbnail, ThumbnailUploader
 
   validates :media, file_size: { maximum: 2.megabytes.to_i }

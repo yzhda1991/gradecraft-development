@@ -9,7 +9,7 @@ describe FileSizeValidator do
   end
 
   let(:image) { fixture_file "test_image.jpg", "img/jpg" }
-  let(:uploader) { AssignmentMediaUploader.new subject, :media }
+  let(:uploader) { ImageUploader.new subject, :media }
   subject { Foo.new }
   before do
     subject.class.clear_validators!
