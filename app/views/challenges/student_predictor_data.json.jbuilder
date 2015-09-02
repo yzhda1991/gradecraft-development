@@ -14,18 +14,23 @@ json.challenges @challenges do |challenge|
     end
   end
 
-  challenge.challenge_grade_for_team(@student.team_for_course(current_course)).tap do |grade|
-    json.grade do
-      json.id grade.id
-      json.challenge_id grade.challenge_id
-      json.score grade.score
-      json.status grade.status
-      json.team_id grade.team_id
-      json.final_score grade.final_score
-      # work like the assignments structure: assignment.grade.point_total
-      json.point_total challenge.point_total
+  if challenge.current_team_grade
+    challenge.current_team_grade.tap do |grade|
+      json.grade do
+        json.id grade.id
+        json.challenge_id grade.challenge_id
+        json.score grade.score
+        json.status grade.status
+        json.team_id grade.team_id
+        json.final_score grade.final_score
+        # work like the assignments structure: assignment.grade.point_total
+        json.point_total challenge.point_total
+      end
     end
   end
+
+  # challenge.challenge_grade_for_team(@student.team_for_course(current_course)).tap do |grade|
+  # end
 end
 
 json.term_for_challenges term_for :challenges

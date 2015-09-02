@@ -107,8 +107,10 @@ class ChallengesController < ApplicationController
   def student_predictor_data
     if current_user.is_student?(current_course)
       @student = current_student
-    else
+    elsif params[:id]
       @student = User.find(params[:id])
+    else
+      @student = NullStudent.new
     end
 
     @challenges = []
@@ -121,7 +123,7 @@ class ChallengesController < ApplicationController
 
       team = @student.team_for_course(current_course)
 
-      @grades = team.challenge_grades.where(:team_id => team)
+      @grades = team.challenge_grades
 
       @challenges.each do |challenge|
         @grades.where(:challenge_id => challenge.id).first.tap do |grade|
