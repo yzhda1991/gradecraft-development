@@ -40,7 +40,7 @@ describe Course do
   it { is_expected.to respond_to("max_group_size")}
   it { is_expected.to respond_to("media_caption")}
   it { is_expected.to respond_to("media_credit")}
-  it { is_expected.to respond_to("media_file")}
+  it { is_expected.to respond_to("media")}
   it { is_expected.to respond_to("meeting_times")}
   it { is_expected.to respond_to("min_group_size")}
   it { is_expected.to respond_to("name")}

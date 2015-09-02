@@ -61,7 +61,7 @@ courses << educ_course = Course.create! do |c|
   c.predictor_setting = true
   c.tagline = "Games good, school bad. Why?"
   c.academic_history_visible = true
-  c.media_file = "http://www.youtube.com/watch?v=LOiQUo9nUFM&feature=youtu.be"
+  c.media = "http://www.youtube.com/watch?v=LOiQUo9nUFM&feature=youtu.be"
   c.media_credit = "Albus Dumbledore"
   c.media_caption = "The Greatest Wizard Ever Known"
   c.office = "Room 4121 SEB"
@@ -76,7 +76,7 @@ courses << educ_course = Course.create! do |c|
   c.user_term = "Learner"
   c.team_challenges = true
   c.grading_philosophy ="I believe a grading system should put the learner in control of their own destiny, promote autonomy, and reward effort and risk-taking. Whereas most grading systems start you off with 100% and then chips away at that “perfect grade” by averaging in each successive assignment, the grading system in this course starts everyone off at zero, and then gives you multiple ways to progress towards your goals. Different types of assignments are worth differing amounts of points. Some assignments are required of everyone, others are optional. Some assignments can only be done once, others can be repeated for more points. In most cases, the points you earn for an assignment are based on the quality of your work on that assignment. Do poor work, earn fewer points. Do high-quality work, earn more points. You decide what you want your grade to be. Learning in this class should be an active and engaged endeavor."
-  c.media_file = "http://upload.wikimedia.org/wikipedia/commons/3/36/Michigan_Wolverines_Block_M.png"
+  c.media = "http://upload.wikimedia.org/wikipedia/commons/3/36/Michigan_Wolverines_Block_M.png"
 end
 puts "Videogames and Learning has been installed"
 
@@ -96,7 +96,7 @@ courses << polsci_course = Course.create! do |c|
   c.accepts_submissions = true
   c.predictor_setting = true
   c.academic_history_visible = true
-  c.media_file = "http://www.youtube.com/watch?v=LOiQUo9nUFM&feature=youtu.be"
+  c.media = "http://www.youtube.com/watch?v=LOiQUo9nUFM&feature=youtu.be"
   c.media_credit = "Mika LaVaque Manty"
   c.office = "7640 Haven"
   c.phone = "734-644-3674"
@@ -118,7 +118,7 @@ But game play also allows you to choose some activities -- quests, tasks, challe
 In games, you start with a score of zero and 'level up' as you play. You might have to try some tasks several times before you get the points, but good games don't ever take your points away. Same here: everything you successfully do earns you more points.
 In games, you sometimes earn 'trophies' or 'badges' or 'power-ups' as you play. They might not have been your primary goal, but you get them because you do something particularly well. In this course, you also can earn power-ups.
 And at the end of the term, your score is your grade."
-  c.media_file = "http://upload.wikimedia.org/wikipedia/commons/3/36/Michigan_Wolverines_Block_M.png"
+  c.media = "http://upload.wikimedia.org/wikipedia/commons/3/36/Michigan_Wolverines_Block_M.png"
 end
 puts "Introduction to Political Theory has arrived"
 
@@ -135,7 +135,7 @@ courses << information_course = Course.create! do |c|
   c.accepts_submissions = true
   c.predictor_setting = true
   c.academic_history_visible = true
-  c.media_file = "http://www.youtube.com/watch?v=LOiQUo9nUFM&feature=youtu.be"
+  c.media = "http://www.youtube.com/watch?v=LOiQUo9nUFM&feature=youtu.be"
   c.media_credit = "Cliff Lampe"
   c.phone = "777-777-7777"
   c.class_email = "staff-si110@umich.edu"
@@ -148,7 +148,7 @@ courses << information_course = Course.create! do |c|
   c.team_score_average = true
   c.add_team_score_to_student = true
   c.grading_philosophy = "In this course, we accrue 'XP' which are points that you gain to get to different grade levels. If you can gather 950,000 XP, you will receive an A, not to mention the admiration of those around you. Because you’re in charge of figuring out how many XP you need to get the grade you want, there’s not really such a thing as a required assignment in this course. There are opportunities to gain XP, some of which are scheduled. Of course, you’ll need to do several Quests in order to get higher grade levels, and some Quests count for a ton of XP. Each of these quests is managed in GradeCraft, where you can see your progress, as well as check the forecasting tool to see what you need to do on future assignments to get your desired grade level. A quick note on our assessment philosophy. Most Quests will have rubrics attached, which will spell out our expectations. However, just meeting the details of the assignment is by definition average work, which would receive something around the B category. If your goal is to get an A, you will have to go above and beyond on some of these Quests."
-  c.media_file = "http://upload.wikimedia.org/wikipedia/commons/3/36/Michigan_Wolverines_Block_M.png"
+  c.media = "http://upload.wikimedia.org/wikipedia/commons/3/36/Michigan_Wolverines_Block_M.png"
 end
 puts "Introduction to Information Science is in session"
 

@@ -1,4 +1,5 @@
 class Course < ActiveRecord::Base
+  include UploadsMedia
 
   # Note: we are setting the role scopes as instance methods,
   # not class methods, so that they are limited to the users
@@ -77,7 +78,7 @@ class Course < ActiveRecord::Base
     :max_assignment_weight, :assignments, :default_assignment_weight, :accepts_submissions,
     :tagline, :academic_history_visible, :office, :phone, :class_email,
     :twitter_handle, :twitter_hashtag, :location, :office_hours, :meeting_times,
-    :use_timeline, :media_file, :media_credit, :media_caption, :assignment_term,
+    :use_timeline, :assignment_term,
     :challenge_term, :badge_term, :grading_philosophy, :team_score_average,
     :team_challenges, :team_leader_term, :max_assignment_types_weighted,
     :point_total, :in_team_leaderboard, :grade_scheme_elements_attributes,
@@ -106,7 +107,6 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :users
   accepts_nested_attributes_for :assignments
 
-  mount_uploader :media_file, ImageUploader
   mount_uploader :syllabus, CourseSyllabusUploader
 
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
@@ -122,7 +122,6 @@ class Course < ActiveRecord::Base
 
   validates_format_of :twitter_hashtag, :with => /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, :allow_blank => true, :length   => { :within => 3..20 }
 
-  validates :media_file, file_size: { maximum: 2.megabytes.to_i }
   validate :max_more_than_min
 
   scope :alphabetical, -> { order('courseno ASC') }
