@@ -119,7 +119,10 @@ class StudentsController < ApplicationController
 
   # Display the grade predictor
   def predictor
-    render :layout => 'predictor' if current_user_is_student?
+    if current_user_is_student?
+      @fullpage = true
+      render :layout => 'predictor' if current_user_is_student?
+    end
   end
 
   #TODO: take this out!
