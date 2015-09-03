@@ -231,8 +231,11 @@ class AssignmentsController < ApplicationController
     if current_user.is_student?(current_course)
       @student = current_student
       @update_assignments = true
-    else
+    elsif params[:id]
       @student = User.find(params[:id])
+      @update_assignments = false
+    else
+      @student = NullStudent.new(current_course)
       @update_assignments = false
     end
 

@@ -126,8 +126,11 @@ class BadgesController < ApplicationController
     if current_user.is_student?(current_course)
       @student = current_student
       @update_badges = true
-    else
+    elsif params[:id]
       @student = User.find(params[:id])
+      @update_badges = false
+    else
+      @student = NullStudent.new
       @update_badges = false
     end
 

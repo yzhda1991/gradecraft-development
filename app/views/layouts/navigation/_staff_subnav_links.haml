@@ -68,7 +68,7 @@
 %h5 Course Setup
 %li= link_to_unless_current raw('<i class="fa fa-cog fa-fw"></i> Options'), edit_course_path(current_course)
 %li= link_to_unless_current raw("<i class='fa fa-book fa-fw'></i> #{term_for :assignment_types}"), assignment_types_path
-%li= link_to_unless_current raw('<i class="fa fa-sliders fa-fw"></i> Predictor Preview'), predictor_preview_course_path(current_course)
+%li= link_to_unless_current raw('<i class="fa fa-sliders fa-fw"></i> Predictor Preview'), predictor_path
 %li= link_to_unless_current raw('<i class="fa fa-level-up fa-fw"></i> Grading Scheme'), grade_scheme_elements_path
 %li= link_to_unless_current raw('<i class="fa fa-bullhorn fa-fw"></i> Announcements'), announcements_path
 %li= link_to_unless_current raw('<i class="fa fa-calendar fa-fw"></i> Calendar Events'), events_path

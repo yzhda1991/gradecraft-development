@@ -52,9 +52,11 @@ class AssignmentTypeWeightsController < ApplicationController
     if current_user.is_student?(current_course)
       @student = current_student
       @update_weights = true
-    else
+    elsif params[:id]
       @student = User.find(params[:id])
       @update_weights = false
+    else
+      @student = NullStudent.new
     end
     @assignment_types = current_course.assignment_types
     .select(

@@ -14,20 +14,20 @@
 
     .article-graded{'ng-if' => 'articleGraded(assignment)'}
       .grade{'ng-if' => 'assignment.pass_fail == false'}
-        {{assignment.grade.score | number}} / {{assignment.grade.point_total | number}}
+        {{assignment.grade.score | number}} / {{assignment.point_total | number}}
       .grade{'ng-if' => 'assignment.pass_fail == true'}
         {{termFor[assignment.grade.pass_fail_status]}}
 
     .article-predicted{'ng-if' => '! articleGraded(assignment)'}
       %div{'ng-if' => 'assignment.pass_fail == false && assignment.fixed == false'}
-        .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.grade.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}','article-type'=>'assignment'}}
+        .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}','article-type'=>'assignment'}}
 
         .grade{'ng-if' => '! hasLevels(assignment)'}
-          {{assignment.grade.predicted_score | number}} / {{assignment.grade.point_total | number}}
+          {{assignment.grade.predicted_score | number}} / {{assignment.point_total | number}}
 
         .grade{'id'=>'assignment-{{assignment.id}}-level',  'ng-if' => 'hasLevels(assignment)'}
           .value
-            {{assignment.grade.predicted_score | number}} / {{assignment.grade.point_total | number}}
+            {{assignment.grade.predicted_score | number}} / {{assignment.point_total | number}}
           .name
             {{levelNameForAssignmentScore(assignment)}}
 
@@ -35,6 +35,6 @@
         .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'1'}
 
       %div{'ng-if' => 'assignment.fixed == true'}
-        .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'assignment.grade.point_total'}
+        .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'assignment.point_total'}
 
 

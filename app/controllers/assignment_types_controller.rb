@@ -118,8 +118,10 @@ class AssignmentTypesController < ApplicationController
   def student_predictor_data
     if current_user.is_student?(current_course)
       @student = current_student
-    else
+    elsif params[:id]
       @student = User.find(params[:id])
+    else
+      @student = NullStudent.new
     end
     @assignment_types = current_course.assignment_types
     .select(

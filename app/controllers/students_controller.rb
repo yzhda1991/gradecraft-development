@@ -85,7 +85,7 @@ class StudentsController < ApplicationController
     @display_sidebar = true
   end
 
-  def teams 
+  def teams
     @title = "#{term_for :teams}"
     @display_sidebar = true
   end
@@ -119,7 +119,10 @@ class StudentsController < ApplicationController
 
   # Display the grade predictor
   def predictor
-    render :layout => 'predictor'
+    if current_user_is_student?
+      @fullpage = true
+      render :layout => 'predictor' if current_user_is_student?
+    end
   end
 
   #TODO: take this out!
