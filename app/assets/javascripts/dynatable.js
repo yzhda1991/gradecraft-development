@@ -1,23 +1,26 @@
 // Leaderboard Page
 $('table.dynatable').dynatable({
-
   readers: {
-      rank: function(el, record) {
-        return Number(el.innerHTML) || 0;
-      }
-      ,
-      score: function(el, record) {
-        if($.trim(el.innerHTML) == '') {
-          return el.innerHTML;
-        } else {
-          return Number(el.innerHTML.replace(/,/g,""));
-        }
+    rank: function(el, record) {
+      return Number(el.innerHTML) || 0;
+    }
+    ,
+    score: function(el, record) {
+      if($.trim(el.innerHTML) == '') {
+        return el.innerHTML;
+      } else {
+        return Number(el.innerHTML.replace(/,/g,""));
       }
     }
+  },
+  writers: {
+    score: function(record) {
+      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  }
 });
 
 $('table.nopage_dynatable').dynatable({
-
   features: {
         paginate: false,
         sort: true
@@ -78,80 +81,92 @@ $('table.nopage_dynatable').dynatable({
     grades: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,"")) || 0;
     }
+  },
+  writers: {
+    score: function(record) {
+      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
   }
 });
 
 $('table.nosearch_dynatable').dynatable({
-
   features: {
         search: false,
         sort: true
       },
   readers: {
-      rank: function(el, record) {
-        return Number(el.innerHTML) || 0;
-      },
-      score: function(el, record) {
-        if($.trim(el.innerHTML) == '') {
-          return el.innerHTML;
-        } else {
-          return Number(el.innerHTML.replace(/,/g,""));
-        }
+    rank: function(el, record) {
+      return Number(el.innerHTML) || 0;
+    },
+    score: function(el, record) {
+      if($.trim(el.innerHTML) == '') {
+        return el.innerHTML;
+      } else {
+        return Number(el.innerHTML.replace(/,/g,""));
       }
     }
+  },
+  writers: {
+    score: function(record) {
+      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  }
 });
 
 $('table.nopage_orsearch_dynatable').dynatable({
-
   features: {
-        search: false,
-        paginate: false,
-        sort: true
-      }
+    search: false,
+    paginate: false,
+    sort: true
+  }
 });
 
 $('table.nofeatures_default_last_name_dynatable').dynatable({
-
   features: {
-        paginate: false,
-        search: false,
-        recordCount: false,
-        sort: true
-      },
+    paginate: false,
+    search: false,
+    recordCount: false,
+    sort: true
+  },
   dataset: {
-      sorts: { 'lastName': 1 }
+    sorts: { 'lastName': 1 }
   },
   readers: {
-      dueDate: function(el, record) {
-        record.parsedDate = Date.parse(el.innerHTML);
+    dueDate: function(el, record) {
+      record.parsedDate = Date.parse(el.innerHTML);
+      return el.innerHTML;
+    },
+    points: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,""));
+    },
+    maxValue: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,""));
+    },
+    totalBadgeScore: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,""));
+    },
+    badgeCount: function(el, record) {
+      return Number(el.innerHTML.replace()) || 0;
+    },
+    score: function(el, record) {
+      if($.trim(el.innerHTML) == '') {
         return el.innerHTML;
-      },
-      points: function(el, record) {
+      } else {
         return Number(el.innerHTML.replace(/,/g,""));
-      },
-      maxValue: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,""));
-      },
-      totalBadgeScore: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,""));
-      },
-      badgeCount: function(el, record) {
-        return Number(el.innerHTML.replace()) || 0;
-      },
-      score: function(el, record) {
-        if($.trim(el.innerHTML) == '') {
-          return el.innerHTML;
-        } else {
-          return Number(el.innerHTML.replace(/,/g,""));
-        }
-      },
-      rawScore: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,""));
-      },
-      multipliedScore: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
       }
+    },
+    rawScore: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,""));
+    },
+    multipliedScore: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
     }
+  },
+  writers: {
+    score: function(record) {
+      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  }
 });
 
 $('table.nofeatures_default_name_dynatable').dynatable({
@@ -180,7 +195,6 @@ $('table.nofeatures_default_name_dynatable').dynatable({
 });
 
 $('table.nofeatures_default_score_dynatable').dynatable({
-
   features: {
         paginate: false,
         search: false,
@@ -222,6 +236,11 @@ $('table.nofeatures_default_score_dynatable').dynatable({
       },
       students: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      }
+    },
+    writers: {
+      score: function(record) {
+        return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
     }
 });
@@ -269,56 +288,59 @@ $('table.nofeatures_dynatable').dynatable({
 
 
 $('table.nofeatures_default_due_date_dynatable').dynatable({
-
   features: {
-        paginate: false,
-        search: false,
-        recordCount: false,
-        sort: true
-      },
+    paginate: false,
+    search: false,
+    recordCount: false,
+    sort: true
+  },
   dataset: {
-      sorts: { 'dueDate': 1 }
+    sorts: { 'dueDate': 1 }
   },
   readers: {
-      dueDate: function(el, record) {
-        record.parsedDate = Date.parse(el.innerHTML);
-        return el.innerHTML;
-      },
-      points: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
-      },
-      maxValue: function(el, record) {
-        return Number(el.innerHTML.replace(/,/g,"")) || 0;
-      }
+    dueDate: function(el, record) {
+      record.parsedDate = Date.parse(el.innerHTML);
+      return el.innerHTML;
+    },
+    points: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    maxValue: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
     }
+  }
 });
 
 $('table.nofeatures_default_rank_dynatable').dynatable({
-
   features: {
-        paginate: false,
-        search: false,
-        recordCount: false,
-        sort: true
-      },
+    paginate: false,
+    search: false,
+    recordCount: false,
+    sort: true
+  },
   dataset: {
-      sorts: { 'rank': 1 }
+    sorts: { 'rank': 1 }
   },
   readers: {
-      rank: function(el, record) {
-        return Number(el.innerHTML) || 0;
-      },
-      score: function(el, record) {
-        if($.trim(el.innerHTML) == '') {
-          return el.innerHTML;
-        } else {
-          return Number(el.innerHTML.replace(/,/g,""));
-        }
-      },
-      badgeCount: function(el, record) {
+    rank: function(el, record) {
+      return Number(el.innerHTML) || 0;
+    },
+    score: function(el, record) {
+      if($.trim(el.innerHTML) == '') {
+        return el.innerHTML;
+      } else {
         return Number(el.innerHTML.replace(/,/g,""));
       }
+    },
+    badgeCount: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,""));
     }
+  },
+  writers: {
+    score: function(record) {
+      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  }
 });
 
 $('table.paginate_default_last_name_dynatable').dynatable({
