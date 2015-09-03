@@ -1,5 +1,5 @@
 json.challenges @challenges do |challenge|
-  #next unless challenge.visible_for_student?(@student)
+  next unless challenge.visible_for_student?(@student)
   json.merge! challenge.attributes
   json.info ! challenge.description.blank?
   json.score_levels challenge.challenge_score_levels.map {|csl| {name: csl.name, value: csl.value}}
@@ -14,7 +14,7 @@ json.challenges @challenges do |challenge|
     end
   end
 
-  challenge.current_team_grade.tap do |grade|
+  challenge.challenge_grade_for_team(@student.team_for_course(current_course)).tap do |grade|
     json.grade do
       json.id grade.id
       json.challenge_id grade.challenge_id

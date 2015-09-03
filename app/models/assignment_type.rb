@@ -64,6 +64,10 @@ class AssignmentType < ActiveRecord::Base
     grade_select? || grade_radio?
   end
 
+  def is_capped?
+    max_value.present?
+  end
+
   # #Getting the assignment types max value if it's present, else summing all it's assignments to create the total
   def total_points
     if max_value.present?
@@ -80,12 +84,12 @@ class AssignmentType < ActiveRecord::Base
       if student_weightable?
         if assignment_weights.where(:student_id => student).present?
           (total_points * weight_for_student(student)).to_i
-        else 
+        else
           (total_points * course.default_assignment_weight).to_i
         end
-      else 
+      else
         total_points
-      end      
+      end
     end
   end
 
