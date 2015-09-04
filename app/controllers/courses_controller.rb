@@ -98,7 +98,7 @@ class CoursesController < ApplicationController
     end
     respond_to do |format|
       if new_course.save
-        new_course.course_memberships.create(:user_id => current_user.id, :role => current_user.course_memberships.where(:course_id => current_course.id).first.role)
+        new_course.course_memberships.create(:user_id => current_user.id, :role => current_user.role(current_course))
         session[:course_id] = new_course.id
         format.html { redirect_to course_path(@course), notice: "#{@course.name} successfully copied" }
       else
@@ -115,7 +115,7 @@ class CoursesController < ApplicationController
 
     respond_to do |format|
       if @course.save
-        @course.course_memberships.create(:user_id => current_user.id, :role => current_user.course_memberships.where(:course_id => current_course.id).first.role, instructor_of_record: true)
+        @course.course_memberships.create(:user_id => current_user.id, :role => current_user.role(current_course), instructor_of_record: true)
         session[:course_id] = @course.id
         format.html { redirect_to course_path(@course), notice: "Course #{@course.name} successfully created" }
         format.json { render json: @course, status: :created, location: @course }

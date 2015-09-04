@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
   has_many :teams, :through => :team_memberships do
     def set_for_course(course_id, ids)
       other_team_ids = proxy_association.owner.teams.where("course_id != ?", course_id).pluck(:id)
-      if proxy_association.owner.course_memberships.where("course_id = ?", course_id).first.role == "student"
+      if proxy_association.owner.role(Course.find(course_id)) == "student"
         proxy_association.owner.team_ids = other_team_ids | [ids]
       else
         if ids.present?

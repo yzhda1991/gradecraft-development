@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %table.nofeatures_default_last_name_dynatable
     %thead
       %tr
@@ -19,11 +19,11 @@
         %tr
           %td
             - if user.avatar_file_name.present?
-              %img.img-rounded{:src => user.avatar_file_name, :width => 30} 
+              %img.img-rounded{:src => user.avatar_file_name, :width => 30}
           %td
             = link_to user.first_name, staff_path(user)
           %td= link_to user.last_name, staff_path(user)
-          %td= user.course_memberships.where(:course_id => current_course.id).first.role.capitalize
+          %td= user.role(current_course).capitalize
           %td
             - user.team_leaderships_for_course(current_course).each do |leadership|
               %div= link_to leadership.team.try(:name), leadership.team

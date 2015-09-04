@@ -45,7 +45,7 @@ module CurrentScopes
 
   def current_role
     return unless current_user && current_course
-    @__current_role ||= current_user.course_memberships.where(course: current_course).first.role
+    @__current_role ||= current_user.role(current_course)
   end
 
   def current_student=(student)
