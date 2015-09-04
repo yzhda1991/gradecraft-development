@@ -234,8 +234,6 @@ class User < ActiveRecord::Base
     self.course_memberships.where(course: course).first.role
   end
 
-  # TODO redefine staff as professors and gsi only.
-  # We want to create admin with comprehensive access.
   def is_staff?(course)
     is_professor?(course) || is_gsi?(course) || is_admin?(course)
   end
@@ -253,9 +251,8 @@ class User < ActiveRecord::Base
 
   # Finding a student's character role for a course
   def character_role_for_course(course)
-    @role ||= course_memberships.where(course_id: course).first.role
+    @role ||= self.role(course)
   end
-
 
   #Finding all of the team leaders for a single team
   def team_leaders(course)
