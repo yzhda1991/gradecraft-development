@@ -249,11 +249,6 @@ class User < ActiveRecord::Base
     @team ||= teams.where(course_id: course).first
   end
 
-  # Finding a student's character role for a course
-  def character_role_for_course(course)
-    @role ||= self.role(course)
-  end
-
   #Finding all of the team leaders for a single team
   def team_leaders(course)
     @team_leaders ||= course_team(course).includes(:leaders) rescue nil
@@ -273,15 +268,9 @@ class User < ActiveRecord::Base
     course_memberships.where(course: course).try('character_profile')
   end
 
-  #Import Users
-  def self.csv_header
-    "First Name,Last Name,Email,Username".split(',')
-  end
-
   def archived_courses
     courses.where(:status => false)
   end
-
 
   ### SCORE
   def cached_score_for_course(course)
