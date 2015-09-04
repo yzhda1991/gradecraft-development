@@ -230,8 +230,9 @@ class User < ActiveRecord::Base
   end
 
   def role(course)
-    return nil if self.course_memberships.where(course_id: course).empty?
-    self.course_memberships.where(course: course).first.role
+    return "admin" if self.admin?
+    membership = self.course_memberships.where(course_id: course.id).first
+    membership.role if membership
   end
 
   def is_staff?(course)
