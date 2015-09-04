@@ -1,6 +1,8 @@
 class Course < ActiveRecord::Base
   include UploadsMedia
 
+  after_create :create_admin_memberships
+
   # Note: we are setting the role scopes as instance methods,
   # not class methods, so that they are limited to the users
   # of the current course
@@ -431,6 +433,14 @@ class Course < ActiveRecord::Base
   def max_more_than_min
     if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
       errors.add :base, 'Maximum group size must be greater than minimum group size.'
+    end
+  end
+
+  private
+
+  def create_admin_memberships
+    User.where(admin: true).each do |admin|
+      CourseMembership.create course_id: self.id, user_id: admin.id, role: "admin"
     end
   end
 

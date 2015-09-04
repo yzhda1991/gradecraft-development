@@ -232,12 +232,6 @@ User.create! do |u|
   u.email = 'dumbledore@hogwarts.edu'
   u.password = 'fawkes'
   u.save!
-  courses.each do |c|
-    u.course_memberships.create! do |cm|
-      cm.course = c
-      cm.role = "admin"
-    end
-  end
 end.activate!
 puts "Albus Dumbledore just apparated into Hogwarts"
 
