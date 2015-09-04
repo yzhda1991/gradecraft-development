@@ -181,7 +181,7 @@ class AnalyticsController < ApplicationController
         export_dir = Dir.mktmpdir
         export_zip "#{current_course.courseno}_anayltics_export_#{Time.now.strftime('%Y-%m-%d')}", export_dir do
 
-          %w"student professor gsi admin total".each do |role|
+          (Role.all + ["total"]).each do |role|
             role_subdir = File.join(export_dir,role.pluralize)
             id = current_course.id
             events = Analytics::Event.where(:course_id => id)
