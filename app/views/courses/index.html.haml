@@ -11,7 +11,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %table.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
     %thead
       %tr
@@ -27,7 +27,7 @@
     %tbody
       - @courses.each do |course|
         %tr
-          %td= link_to course.name, course
+          %td= link_to course.name, change_current_course_path(course_id: course.id), data: { method: "post" }
           %td= course.courseno
           %td= course.year
           %td= course.semester
@@ -40,6 +40,9 @@
             .right
               %ul
                 %li.button-bar
+                  = link_to course_path(course), :class => 'button' do
+                      See
+                %li
                   = link_to edit_course_path(course), :class => 'button' do
                     Edit
                 %li
