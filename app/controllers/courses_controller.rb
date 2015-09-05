@@ -8,8 +8,8 @@ class CoursesController < ApplicationController
     respond_to do |format|
       format.html { }
       format.json do
-        result = @courses.map { |c| { id: c.id, name: c.name } }
-        render json: MultiJson.dump(result)
+        json = @courses.map { |c| { id: c.id, name: c.name } }
+        render json: MultiJson.dump(json)
       end
     end
   end

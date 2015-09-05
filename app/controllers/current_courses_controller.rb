@@ -1,8 +1,8 @@
 class CurrentCoursesController < ApplicationController
+  skip_before_filter :verify_authenticity_token
+  respond_to :json
 
-  respond_to :json 
-
-  # Switch between enrolled courses 
+  # Switch between enrolled courses
   def change
     if course = current_user.courses.where(:id => params[:course_id]).first
       unless session[:course_id] == course.id
@@ -12,9 +12,4 @@ class CurrentCoursesController < ApplicationController
     end
     redirect_to root_url
   end
-
-  # def show
-  #   respond_with current_course.as_json(only: [:id], methods: [:total_points])
-  # end
-  
 end

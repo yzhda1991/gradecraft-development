@@ -23,7 +23,6 @@
               return item.name.match(new RegExp(query, 'i'));
             }
           }).on('omniselect:select', function(event, id) {
-            $(event.target).val();
             window.location = '/students/' + id;
             return false;
           });
