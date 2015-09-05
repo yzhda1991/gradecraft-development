@@ -5,6 +5,13 @@ class CoursesController < ApplicationController
   def index
     @title = "Course Index"
     @courses = Course.all
+    respond_to do |format|
+      format.html { }
+      format.json do
+        result = @courses.map { |c| { id: c.id, name: c.name } }
+        render json: MultiJson.dump(result)
+      end
+    end
   end
 
   def show
