@@ -1,20 +1,20 @@
 !function(app, $) {
   $(document).ready(function() {
-    if($('.students-search-query').length) {
-      var target = $('.students-search-query');
+    if($('.courses-search-query').length) {
+      var target = $('.courses-search-query');
       $.ajax({
         url: target.data('autocompleteurl'),
         dataType: "json",
-        success: function(users) {
+        success: function(courses) {
           target.omniselect({
-            source: users,
-            resultsClass: 'typeahead dropdown-menu student-result',
+            source: courses,
+            resultsClass: 'typeahead dropdown-menu course-result',
             activeClass: 'active',
-            itemLabel: function(user) {
-              return user.name;
+            itemLabel: function(course) {
+              return course.name;
             },
-            itemId: function(user) {
-              return user.id;
+            itemId: function(course) {
+              return course.id;
             },
             renderItem: function(label) {
               return '<li><a href="#">' + label + '</a></li>';
@@ -24,7 +24,7 @@
             }
           }).on('omniselect:select', function(event, id) {
             $(event.target).val();
-            window.location = '/students/' + id;
+            window.location = '/courses/' + id;
             return false;
           });
         }

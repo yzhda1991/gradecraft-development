@@ -41,6 +41,7 @@
 //= require gradecraft
 //= require preload_store
 //= require users
+//= require courses
 //= require selectToUISlider.jQuery
 //= require analytics
 //= require analytics_dashboard
