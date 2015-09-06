@@ -11,6 +11,28 @@ GIT
       vegas (~> 0.1.2)
 
 GIT
+  remote: https://github.com/venturit/ims-lti.git
+  revision: d801b95b0010e4cc64c1dbcf10fb6c12b3d27c23
+  branch: master
+  specs:
+    ims-lti (1.1.9)
+      builder
+
+GIT
+  remote: https://github.com/venturit/oauth-ruby.git
+  revision: 3eac89919fd54e2ee825b7b37a985d1a82e6fd91
+  branch: master
+  specs:
+    oauth (0.4.7)
+
+GIT
+  remote: https://github.com/venturit/omniauth-lti.git
+  revision: 8ef2d2bceb104fc9207a298e744926793fd0e8ac
+  branch: master
+  specs:
+    omniauth-lti (0.0.2.pre.SANPSHOT)
+
+GIT
   remote: https://github.com/wandenberg/moped.git
   revision: 470224c0361f21112d1a988982af2702f73d9eb2
   branch: operation_timeout
@@ -156,7 +178,6 @@ GEM
       dotenv (= 2.0.2)
       railties (~> 4.0)
     erubis (2.7.0)
-    escape_utils (1.1.0)
     excon (0.45.4)
     execjs (2.5.2)
     factory_girl (4.5.0)
@@ -291,9 +312,6 @@ GEM
       nokogiri (~> 1.6.0)
       ruby_parser (~> 3.5)
     i18n (0.7.0)
-    ims-lti (1.1.8)
-      builder
-      oauth (~> 0.4.5)
     inflecto (0.0.2)
     ipaddress (0.8.0)
     jbuilder (2.3.1)
@@ -343,7 +361,6 @@ GEM
       mini_portile (~> 0.5.0)
     nokogumbo (1.4.1)
       nokogiri
-    oauth (0.4.7)
     oauth2 (1.0.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0)
@@ -360,9 +377,6 @@ GEM
     omniauth-kerberos (0.3.0)
       omniauth-multipassword
       timfel-krb5-auth (~> 0.8)
-    omniauth-lti (0.0.2)
-      ims-lti
-      omniauth
     omniauth-multipassword (0.4.2)
       omniauth (~> 1.0)
     optionable (0.2.0)
@@ -611,7 +625,6 @@ DEPENDENCIES
   dalli
   database_cleaner (~> 1.0.1)
   dotenv-rails
-  escape_utils
   factory_girl_rails (~> 4.5.0)
   faker (~> 1.4.3)
   fast_blank
@@ -620,6 +633,7 @@ DEPENDENCIES
   foreman
   haml
   haml-rails
+  ims-lti!
   jbuilder
   jquery-rails (~> 2.0)
   launchy
@@ -632,11 +646,12 @@ DEPENDENCIES
   newrelic_rpm
   ng-rails-csrf
   nokogiri (= 1.6.0)
+  oauth!
   oink
   oj
   omniauth
   omniauth-kerberos
-  omniauth-lti
+  omniauth-lti!
   pacecar
   parallel_tests
   pg

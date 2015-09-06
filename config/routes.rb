@@ -234,8 +234,7 @@ GradeCraft::Application.routes.draw do
   get 'using_gradecraft' => 'pages#using_gradecraft'
   get 'contact' => 'pages#contact'
   get 'features' => 'pages#features'
-  get 'ping' => 'pages#ping'
-
+  
   #11. Rubrics & Grade Schemes
   resources :rubrics
 
@@ -313,7 +312,7 @@ GradeCraft::Application.routes.draw do
 
   #14. User Auth
   post 'auth/kerberos/callback', to: 'user_sessions#kerberos_create', as: :auth_kerberos_callback
-  match 'auth/lti/callback', to: 'user_sessions#lti_create', via: [:get, :post]
+  post 'auth/lti/callback', to: 'user_sessions#lti_create'
   get 'auth/failure' => 'pages#auth_failure', as: :auth_failure
 
   get 'login' => 'user_sessions#new', :as => :login
