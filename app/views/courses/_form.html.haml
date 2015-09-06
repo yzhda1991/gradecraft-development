@@ -84,11 +84,7 @@
       - if current_course.syllabus.present?
         .italic= link_to "Current Syllabus", current_course.syllabus_url
 
-    .form-item
-      = f.label :media_file
-      = f.file_field :media_file
-      = f.input :media_credit
-      = f.input :media_caption
+    = render partial: "layouts/media_image_form_item", locals: { f: f, model: @course }
 
   - unless @course.new_record?
     %section

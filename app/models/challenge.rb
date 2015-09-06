@@ -1,4 +1,6 @@
 class Challenge < ActiveRecord::Base
+  include UploadsMedia
+  include UploadsThumbnails
 
   attr_accessible :name, :description, :icon, :visible, :image_file_name, :occurrence,
     :value, :multiplier, :point_total, :due_at, :open_at, :accepts_submissions,
@@ -12,24 +14,24 @@ class Challenge < ActiveRecord::Base
   belongs_to :course, touch: true
   has_many :submissions
   has_many :challenge_grades
+  accepts_nested_attributes_for :challenge_grades
+
   has_many :predicted_earned_challenges, :dependent => :destroy
+
   has_many :challenge_score_levels
   accepts_nested_attributes_for :challenge_score_levels, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? || a['name'].blank? }
 
   has_many :challenge_files, :dependent => :destroy
   accepts_nested_attributes_for :challenge_files
-  accepts_nested_attributes_for :challenge_grades
 
   scope :with_dates, -> { where('challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL') }
-
+  scope :visible, -> { where visible: TRUE }
+  scope :chronological, -> { order('due_at ASC') }
+  scope :alphabetical, -> { order('name ASC') }
   scope :visible, -> { where visible: TRUE }
 
   validates_presence_of :course, :name
   validate :positive_points, :open_before_close
-
-  scope :chronological, -> { order('due_at ASC') }
-  scope :alphabetical, -> { order('name ASC') }
-  scope :visible, -> { where visible: TRUE }
 
   def has_levels?
     levels == true

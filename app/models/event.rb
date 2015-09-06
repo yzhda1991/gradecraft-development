@@ -1,10 +1,8 @@
 class Event < ActiveRecord::Base
+  include UploadsMedia
+  include UploadsThumbnails
 
-  attr_accessible :course_id, :name, :description, :media, :media_credit, :thumbnail, :media_caption, :open_at,
-  :due_at, :remove_media, :remove_thumbnail
-
-  mount_uploader :media, EventMediaUploader
-  mount_uploader :thumbnail, EventThumbnailUploader
+  attr_accessible :course_id, :name, :description, :open_at, :due_at
 
   belongs_to :course, touch: true
 
@@ -19,5 +17,4 @@ class Event < ActiveRecord::Base
       content << description
     end
   end
-
 end

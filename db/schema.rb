@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150829215357) do
+ActiveRecord::Schema.define(version: 20150902175707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -368,7 +368,7 @@ ActiveRecord::Schema.define(version: 20150829215357) do
     t.string   "location",                      limit: 255
     t.string   "office_hours",                  limit: 255
     t.text     "meeting_times"
-    t.string   "media_file",                    limit: 255
+    t.string   "media",                         limit: 255
     t.string   "media_credit",                  limit: 255
     t.string   "media_caption",                 limit: 255
     t.string   "badge_term",                    limit: 255

@@ -27,10 +27,11 @@ class EventsController < ApplicationController
   def create
     @event = current_course.events.new(params[:event])
     if @event.save
-      flash[:notice] = 'Event was successfully created.' 
+      flash[:notice] = 'Event was successfully created.'
       respond_with(@event)
     else
-      redirect_to new_event_path
+      @title = "Create a New Calendar Event"
+      render :new
     end
   end
 

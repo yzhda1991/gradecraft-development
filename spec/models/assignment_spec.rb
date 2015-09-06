@@ -73,7 +73,6 @@ describe Assignment do
       expect(assignment).to_not be_valid
       expect(assignment.errors[:assignment_type_id].count).to eq 1
     end
-
   end
 
   describe "gradebook for assignment" do
