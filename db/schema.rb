@@ -467,6 +467,18 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "flagged_users", force: :cascade do |t|
+    t.integer  "course_id"
+    t.integer  "flagger_id"
+    t.integer  "flagged_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "flagged_users", ["course_id"], name: "index_flagged_users_on_course_id", using: :btree
+  add_index "flagged_users", ["flagged_id"], name: "index_flagged_users_on_flagged_id", using: :btree
+  add_index "flagged_users", ["flagger_id"], name: "index_flagged_users_on_flagger_id", using: :btree
+
   create_table "grade_files", force: :cascade do |t|
     t.integer  "grade_id"
     t.string   "filename",        limit: 255
@@ -894,4 +906,7 @@ ActiveRecord::Schema.define(version: 20150907224335) do
   add_foreign_key "announcement_states", "users"
   add_foreign_key "announcements", "courses"
   add_foreign_key "announcements", "users", column: "author_id"
+  add_foreign_key "flagged_users", "courses"
+  add_foreign_key "flagged_users", "users", column: "flagged_id"
+  add_foreign_key "flagged_users", "users", column: "flagger_id"
 end
