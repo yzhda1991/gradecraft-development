@@ -24,7 +24,7 @@ class UserSessionsController < ApplicationController
 
   def lti_create
     @user = User.find_or_create_by_lti_auth_hash(auth_hash)
-    @course = Course.find_by_lti_uid(auth_hash['extra']['raw_info']['context_id'])
+    @course = Course.find_or_create_by_lti_auth_hash(auth_hash)
     if !@user || !@course
       lti_error_notification
       flash[:alert] = t('sessions.create.error')
@@ -67,9 +67,8 @@ class UserSessionsController < ApplicationController
   end
 
   def lti_error_notification
-    info = auth_hash['info']
-    user = { name: "#{info['lis_person_name_given']} #{info['lis_person_name_family']}", email: info['lis_person_contact_email_primary'], lti_uid: auth_hash['context_id'] }
-    course = { name: info['context_label'], lti_uid: info['context_id'] }
+    user = { name: auth_hash['extra']['raw_info']['lis_person_name_full'], email: auth_hash['extra']['raw_info']['lis_person_contact_email_primary'], lti_uid: auth_hash['extra']['raw_info']['context_id'] }
+    course = { name: auth_hash['extra']['raw_info']['context_label'], uid: auth_hash['extra']['raw_info']['context_id'] }
     NotificationMailer.lti_error(user, course).deliver
   end
 

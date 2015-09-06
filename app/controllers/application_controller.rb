@@ -3,8 +3,8 @@ require 'application_responder'
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   #Canable details
-  include Canable::Enforcers
   include Omniauth::Lti::Context
+  include Canable::Enforcers
   include CustomNamedRoutes
   include CurrentScopes
   include CourseTerms
@@ -16,11 +16,10 @@ class ApplicationController < ActionController::Base
 
   respond_to :html
 
-  protect_from_forgery with: :reset_session
+  protect_from_forgery with: :null_session
 
   Rails.env.production? do
     before_filter :check_url
-    force_ssl except: :ping
   end
 
   def check_url

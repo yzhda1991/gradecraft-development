@@ -125,6 +125,15 @@ class Course < ActiveRecord::Base
 
   scope :alphabetical, -> { order('courseno ASC') }
 
+  def self.find_or_create_by_lti_auth_hash(auth_hash)
+    criteria = { lti_uid: auth_hash['extra']['raw_info']['context_id'] }
+    where(criteria).first || create!(criteria) do |c|
+      c.lti_uid = auth_hash['extra']['raw_info']['context_id']
+      c.courseno = auth_hash['extra']['raw_info']['context_label']
+      c.name = auth_hash['extra']['raw_info']['context_title']
+    end
+  end
+
   def assignment_term
     super.presence || 'Assignment'
   end
