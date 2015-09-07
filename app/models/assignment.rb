@@ -111,16 +111,16 @@ class Assignment < ActiveRecord::Base
 
   def content
     content = ""
-    content << "<a href='/assignments/#{self.id}'>Read More</a>"
-    if description.present?
-      content << description
-    end
+    content << "<p><a href='/assignments/#{self.id}'>See the details</a></p>"
     if assignment_files.present?
       content << '<ul>'
       assignment_files.each do |af|
         content << "<a href='#{af.url}'>#{af.filename}</a>"
       end
       content << '</ul>'
+    end
+    if description.present?
+      content << description
     end
     return content
   end

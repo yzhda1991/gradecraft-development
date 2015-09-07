@@ -43,16 +43,16 @@ class Challenge < ActiveRecord::Base
 
   def content
     content = ""
-    content << "<a href='/challenges/#{self.id}'>Read More</a>"
-    if description.present?
-      content << description
-    end
+    content << "<p><a href='/challenges/#{self.id}'>See the details</a></p>"
     if challenge_files.present?
       content << '<ul>'
       challenge_files.each do |cf|
         content << "<a href='#{cf.url}'>#{cf.filename}</a>"
       end
       content << '</ul>'
+    end
+    if description.present?
+      content << description
     end
     return content
   end
