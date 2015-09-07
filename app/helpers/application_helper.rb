@@ -57,12 +57,6 @@ module ApplicationHelper
     target.active_model_serializer.new(target, options).to_json
   end
 
-  def table_link_to(name = nil, options = nil, html_options = nil, &block)
-    html_options ||= {}
-    html_options[:class] = [html_options[:class], 'button'].compact.join(' ')
-    link_to name, options, html_options, &block
-  end
-
   # Commas in numbers!
   def points(value)
     number_with_delimiter(value)
