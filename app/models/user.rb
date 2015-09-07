@@ -49,8 +49,8 @@ class User < ActiveRecord::Base
   end
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
-  attr_accessible :username, :email, :password, :password_confirmation,
-    :avatar_file_name, :first_name, :last_name, :rank, :user_id,
+  attr_accessible :username, :email, :password, :password_confirmation, :activation_state,
+    :avatar_file_name, :first_name, :last_name, :rank, :user_id, :kerberos_uid,
     :display_name, :private_display, :default_course_id, :last_activity_at,
     :last_login_at, :last_logout_at, :team_ids, :courses, :course_ids,
     :earned_badges, :earned_badges_attributes, :major, :gpa, :current_term_credits,
@@ -403,7 +403,7 @@ class User < ActiveRecord::Base
             total_score += assignment_type.visible_score_for_student(self)
           end
           total_score += earned_badge_score_for_course(course_id)
-          total_score += self.team_for_course(course_id).try(:score)
+          total_score += (self.team_for_course(course_id).try(:score) || 0)
         )
       else
         membership.update_attribute :score, (

@@ -40,7 +40,7 @@
           %td= challenge.release_necessary? ? 'Yes' : 'No'
           %td
             .right
-              %ul
+              %ul.button-bar
                 %li= link_to raw("<i class='fa fa-check fa-fw'></i> Quick Grade"), mass_edit_challenge_challenge_grades_path(challenge), :class => 'button'
                 %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_challenge_path(challenge), :class => 'button'
                 %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), challenge, :class => 'button', :method => :delete, data: { confirm: 'Are you sure?' }

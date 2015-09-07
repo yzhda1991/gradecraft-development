@@ -48,7 +48,7 @@
           = submissions_for_assignment[0].updated_at
     %td
       .right
-        %ul
+        %ul.button-bar
           - if @assignment.accepts_submissions?
             - submissions_for_assignment.each do |submission|
 

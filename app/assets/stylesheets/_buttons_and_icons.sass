@@ -11,6 +11,7 @@
   line-height: .8rem
   cursor: pointer
   background-color: $primary-color-2
+  white-space: nowrap
 
   &:hover
     background-color: $primary-color-1
@@ -23,6 +24,7 @@
   margin-top: 1rem
   position: relative
   height: 1rem
+  white-space: nowrap
 
   ul
     float: right
@@ -62,7 +64,7 @@ thead
       border-left: 1px solid $primary-color-4
 
 tbody
-  ul
+  ul.button-bar
     margin: 0
     padding: 0 !important
     list-style-type: none
@@ -96,3 +98,6 @@ tbody
   text-align: center
   float: right
 
+@media (max-width: 1000px)
+  .hide-for-small
+    display: none

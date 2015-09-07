@@ -13,7 +13,7 @@
         %th{:scope => "col"} Name
         %th{:scope => "col"} Predictor Display
         %th{:scope => "col"} Max Points
-        %th{:style => "min-width: 300px"}
+        %th{:scope => "col"} 
           %span.sr-only Actions
     %tbody
       - @assignment_types.each do |assignment_type|
@@ -22,26 +22,29 @@
           %td= assignment_type.points_predictor_display
           %td= points assignment_type.total_points
           %td
-            %ul.right
+            %ul.button-bar.right
               %li
                 %a{:href => assignment_type_path(assignment_type), :class => 'button'}
+                  %i.fa.fa-eye.fa-fw
                   See
                   %span.sr-only= assignment_type.name
 
               %li
                 %a{:href => edit_assignment_type_path(assignment_type), :class => 'button'}
+                  %i.fa.fa-edit.fa-fw
                   Edit
                   %span.sr-only= assignment_type.name
               %li
                 %a{:href => export_scores_assignment_type_path(assignment_type.id, format: 'csv'), :class => "button"}
+                  %i.fa.fa-cloud-download.fa-fw
                   Download Scores
               %li
-                %a{:href => assignment_type_path(assignment_type), :data => { confirm: 'Are you sure? This will delete all associated assignments and their grades.', method: :delete }, :class => "button" }
-                  Delete
+                = link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), assignment_type_path(assignment_type), :data => { confirm: 'Are you sure? This will delete all associated assignments and their grades.', method: :delete }, :class => "button"
+                  
 
   %h4.subtitle= "#{term_for :student} Scores"
 
-  %table.responsive.nofeatures_default_name_dynatable
+  %table.nofeatures_default_name_dynatable
     %thead
       %tr
         %th First Name

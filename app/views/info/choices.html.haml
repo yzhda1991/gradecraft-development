@@ -20,7 +20,7 @@
         - @assignment_types.each do |assignment_type|
           - if assignment_type.student_weightable?
             %th= assignment_type.name
-        %th
+        %th Fully Assigned?
         %th
     %tbody
       - @students.each do |student|
@@ -34,5 +34,5 @@
             = student.weight_spent?(current_course) ? "Yes" : "No"
           %td
             .right
-              %ul
-                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit #{term_for :weights}"), assignment_type_weights_path(:student_id => student.id), :class => "button"
+              %ul.button-bar
+                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> <span class='hide-for-small'>Edit #{term_for :weights}</span>"), assignment_type_weights_path(:student_id => student.id), :class => "button"

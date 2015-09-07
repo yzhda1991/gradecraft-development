@@ -1,4 +1,4 @@
-= content_nav_for Event
+.button-bar= content_nav_for Event
 
 %h3.pagetitle= @title
 
@@ -30,6 +30,6 @@
           %td= event.due_at
           %td
             .right
-              %ul
+              %ul.button-bar
                 %li= link_to 'Edit', edit_event_path(event), :class => "button"
                 %li= link_to 'Delete', event, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "button"

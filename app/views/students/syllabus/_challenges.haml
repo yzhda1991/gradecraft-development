@@ -27,7 +27,7 @@
               %td{:width => "25%"}= "#{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
             %td
               .right
-                %ul
+                %ul.button-bar
                   - if current_user_is_staff?
                     - if challenge.challenge_grade_for_team(current_student.team).present?
                       %li
