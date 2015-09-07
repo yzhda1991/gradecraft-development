@@ -158,6 +158,11 @@
       .form_label{:id => "txtScoreToStudent"}  Do you want team assignment scores to be added directly into student scores?
 
     .form-item
+      = f.label :show_see_details_link_in_timeline, "'See the details' Link"
+      = f.check_box :show_see_details_link_in_timeline, {"aria-describedby" => "seeDetails"}
+      .form_label{:id => "seeDetails"}  Would you like to add a link from each event in the timeline to its own individual page?
+
+    .form-item
       = f.label :hide_analytics, "Hide Analytics?"
       = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
       .form_label{:id => "hideAnalytics"}  Do you want to hide assignment and course analytics from students?

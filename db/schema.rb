@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150902175707) do
+ActiveRecord::Schema.define(version: 20150907224335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -327,73 +327,74 @@ ActiveRecord::Schema.define(version: 20150902175707) do
   add_index "course_memberships", ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
-    t.string   "name",                          limit: 255
-    t.string   "courseno",                      limit: 255
-    t.string   "year",                          limit: 255
-    t.string   "semester",                      limit: 255
+    t.string   "name",                              limit: 255
+    t.string   "courseno",                          limit: 255
+    t.string   "year",                              limit: 255
+    t.string   "semester",                          limit: 255
     t.integer  "grade_scheme_id"
-    t.datetime "created_at",                                                                        null: false
-    t.datetime "updated_at",                                                                        null: false
-    t.boolean  "badge_setting",                                                     default: true
-    t.boolean  "team_setting",                                                      default: false
-    t.string   "user_term",                     limit: 255
-    t.string   "team_term",                     limit: 255
-    t.string   "homepage_message",              limit: 255
-    t.boolean  "status",                                                            default: true
+    t.datetime "created_at",                                                                            null: false
+    t.datetime "updated_at",                                                                            null: false
+    t.boolean  "badge_setting",                                                         default: true
+    t.boolean  "team_setting",                                                          default: false
+    t.string   "user_term",                         limit: 255
+    t.string   "team_term",                         limit: 255
+    t.string   "homepage_message",                  limit: 255
+    t.boolean  "status",                                                                default: true
     t.boolean  "group_setting"
     t.integer  "badge_set_id"
     t.datetime "assignment_weight_close_at"
     t.boolean  "team_roles"
-    t.string   "team_leader_term",              limit: 255
-    t.string   "group_term",                    limit: 255
-    t.string   "assignment_weight_type",        limit: 255
+    t.string   "team_leader_term",                  limit: 255
+    t.string   "group_term",                        limit: 255
+    t.string   "assignment_weight_type",            limit: 255
     t.boolean  "accepts_submissions"
     t.boolean  "teams_visible"
-    t.string   "badge_use_scope",               limit: 255
-    t.string   "weight_term",                   limit: 255
+    t.string   "badge_use_scope",                   limit: 255
+    t.string   "weight_term",                       limit: 255
     t.boolean  "predictor_setting"
     t.boolean  "badges_value"
     t.integer  "max_group_size"
     t.integer  "min_group_size"
     t.boolean  "shared_badges"
     t.boolean  "graph_display"
-    t.decimal  "default_assignment_weight",                 precision: 4, scale: 1, default: 1.0
-    t.string   "tagline",                       limit: 255
+    t.decimal  "default_assignment_weight",                     precision: 4, scale: 1, default: 1.0
+    t.string   "tagline",                           limit: 255
     t.boolean  "academic_history_visible"
-    t.string   "office",                        limit: 255
-    t.string   "phone",                         limit: 255
-    t.string   "class_email",                   limit: 255
-    t.string   "twitter_handle",                limit: 255
-    t.string   "twitter_hashtag",               limit: 255
-    t.string   "location",                      limit: 255
-    t.string   "office_hours",                  limit: 255
+    t.string   "office",                            limit: 255
+    t.string   "phone",                             limit: 255
+    t.string   "class_email",                       limit: 255
+    t.string   "twitter_handle",                    limit: 255
+    t.string   "twitter_hashtag",                   limit: 255
+    t.string   "location",                          limit: 255
+    t.string   "office_hours",                      limit: 255
     t.text     "meeting_times"
-    t.string   "media",                         limit: 255
-    t.string   "media_credit",                  limit: 255
-    t.string   "media_caption",                 limit: 255
-    t.string   "badge_term",                    limit: 255
-    t.string   "assignment_term",               limit: 255
-    t.string   "challenge_term",                limit: 255
+    t.string   "media",                             limit: 255
+    t.string   "media_credit",                      limit: 255
+    t.string   "media_caption",                     limit: 255
+    t.string   "badge_term",                        limit: 255
+    t.string   "assignment_term",                   limit: 255
+    t.string   "challenge_term",                    limit: 255
     t.boolean  "use_timeline"
     t.text     "grading_philosophy"
     t.integer  "total_assignment_weight"
     t.integer  "max_assignment_weight"
     t.boolean  "check_final_grade"
     t.boolean  "character_profiles"
-    t.string   "lti_uid",                       limit: 255
+    t.string   "lti_uid",                           limit: 255
     t.boolean  "team_score_average"
     t.boolean  "team_challenges"
     t.integer  "max_assignment_types_weighted"
     t.integer  "point_total"
     t.boolean  "in_team_leaderboard"
-    t.boolean  "add_team_score_to_student",                                         default: false
+    t.boolean  "add_team_score_to_student",                                             default: false
     t.datetime "start_date"
     t.datetime "end_date"
-    t.string   "pass_term",                     limit: 255
-    t.string   "fail_term",                     limit: 255
+    t.string   "pass_term",                         limit: 255
+    t.string   "fail_term",                         limit: 255
     t.string   "syllabus"
     t.boolean  "hide_analytics"
     t.string   "character_names"
+    t.boolean  "show_see_details_link_in_timeline",                                     default: true
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
@@ -524,7 +525,7 @@ ActiveRecord::Schema.define(version: 20150902175707) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score"
+    t.integer  "predicted_score",                  default: 0,     null: false
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
     t.boolean  "feedback_read",                    default: false

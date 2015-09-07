@@ -78,7 +78,7 @@ class Course < ActiveRecord::Base
     :max_assignment_weight, :assignments, :default_assignment_weight, :accepts_submissions,
     :tagline, :academic_history_visible, :office, :phone, :class_email,
     :twitter_handle, :twitter_hashtag, :location, :office_hours, :meeting_times,
-    :use_timeline, :assignment_term,
+    :use_timeline, :show_see_details_link_in_timeline, :assignment_term,
     :challenge_term, :badge_term, :grading_philosophy, :team_score_average,
     :team_challenges, :team_leader_term, :max_assignment_types_weighted,
     :point_total, :in_team_leaderboard, :grade_scheme_elements_attributes,

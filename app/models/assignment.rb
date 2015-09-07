@@ -111,7 +111,9 @@ class Assignment < ActiveRecord::Base
 
   def content
     content = ""
-    content << "<p><a href='/assignments/#{self.id}'>See the details</a></p>"
+    if course.show_see_details_link_in_timeline?
+      content << "<p><a href='/assignments/#{self.id}'>See the details</a></p>"
+    end
     if assignment_files.present?
       content << '<ul>'
       assignment_files.each do |af|

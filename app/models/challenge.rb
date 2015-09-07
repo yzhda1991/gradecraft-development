@@ -43,7 +43,9 @@ class Challenge < ActiveRecord::Base
 
   def content
     content = ""
-    content << "<p><a href='/challenges/#{self.id}'>See the details</a></p>"
+    if course.show_see_details_link_in_timeline?
+      content << "<p><a href='/challenges/#{self.id}'>See the details</a></p>"
+    end
     if challenge_files.present?
       content << '<ul>'
       challenge_files.each do |cf|
