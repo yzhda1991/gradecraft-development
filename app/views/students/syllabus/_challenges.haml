@@ -14,7 +14,7 @@
             %th Points Earned
             %th Due
             %th
-        - current_course.challenges.each do |challenge|
+        - current_course.challenges.visible.each do |challenge|
           %tr
             %td{:width => "25%"}= link_to challenge.name, challenge
             %td{:width => "25%"}
