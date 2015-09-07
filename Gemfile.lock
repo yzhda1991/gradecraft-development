@@ -629,7 +629,7 @@ DEPENDENCIES
   faker (~> 1.4.3)
   fast_blank
   fog
-  font-awesome-rails (= 4.4.0.0)
+  font-awesome-rails
   foreman
   haml
   haml-rails
