@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/chcholman/timelineJS-rails.git
+  revision: 9948df90f2b345823aa03e8c8ac59b709d274229
+  branch: master
+  specs:
+    timelineJS-rails (1.1.5)
+      jquery-rails
+
+GIT
   remote: https://github.com/resque/resque.git
   revision: 68b43a3a01006abb0aabf0d564967f546ec1e134
   branch: 1-x-stable
@@ -569,8 +577,6 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
-    timelineJS-rails (1.1.5)
-      jquery-rails
     timfel-krb5-auth (0.8.3)
     turbolinks (2.5.3)
       coffee-rails
@@ -690,7 +696,7 @@ DEPENDENCIES
   sorcery
   spring (~> 1.3.6)
   spring-commands-rspec
-  timelineJS-rails
+  timelineJS-rails!
   uglifier
   underscore-rails
   valid_attribute
