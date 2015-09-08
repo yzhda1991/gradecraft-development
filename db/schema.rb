@@ -846,7 +846,7 @@ ActiveRecord::Schema.define(version: 20150907224335) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "username",                        limit: 255,                     null: false
+    t.string   "username",                        limit: 255,                 null: false
     t.string   "email",                           limit: 255
     t.string   "crypted_password",                limit: 255
     t.string   "salt",                            limit: 255
@@ -861,7 +861,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.string   "avatar_content_type",             limit: 255
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
-    t.string   "role",                            limit: 255, default: "student", null: false
     t.string   "first_name",                      limit: 255
     t.string   "last_name",                       limit: 255
     t.integer  "rank"
@@ -882,6 +881,7 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.string   "activation_state"
     t.string   "activation_token"
     t.datetime "activation_token_expires_at"
+    t.boolean  "admin",                                       default: false
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree

@@ -3,8 +3,6 @@ class User < ActiveRecord::Base
 
   include Canable::Cans
 
-  ROLES = %w(student professor gsi admin)
-
   class << self
     def with_role_in_course(role, course)
       if role == "staff"
@@ -15,7 +13,7 @@ class User < ActiveRecord::Base
       User.where(id: user_ids)
     end
 
-    ROLES.each do |role|
+    Role.all.each do |role|
       define_method(role.pluralize) do |course|
         with_role_in_course(role,course)
       end
@@ -104,7 +102,7 @@ class User < ActiveRecord::Base
   has_many :teams, :through => :team_memberships do
     def set_for_course(course_id, ids)
       other_team_ids = proxy_association.owner.teams.where("course_id != ?", course_id).pluck(:id)
-      if proxy_association.owner.course_memberships.where("course_id = ?", course_id).first.role == "student"
+      if proxy_association.owner.role(Course.find(course_id)) == "student"
         proxy_association.owner.team_ids = other_team_ids | [ids]
       else
         if ids.present?
@@ -225,19 +223,18 @@ class User < ActiveRecord::Base
     course.membership_for_student(self).auditing?
   end
 
-  ROLES.each do |role|
+  Role.all.each do |role|
     define_method("is_#{role}?") do |course|
       self.role(course) == role
     end
   end
 
   def role(course)
-    return nil if self.course_memberships.where(course_id: course).empty?
-    self.course_memberships.where(course: course).first.role
+    return "admin" if self.admin?
+    membership = self.course_memberships.where(course_id: course.id).first
+    membership.role if membership
   end
 
-  # TODO redefine staff as professors and gsi only.
-  # We want to create admin with comprehensive access.
   def is_staff?(course)
     is_professor?(course) || is_gsi?(course) || is_admin?(course)
   end
@@ -252,12 +249,6 @@ class User < ActiveRecord::Base
   def team_for_course(course)
     @team ||= teams.where(course_id: course).first
   end
-
-  # Finding a student's character role for a course
-  def character_role_for_course(course)
-    @role ||= course_memberships.where(course_id: course).first.role
-  end
-
 
   #Finding all of the team leaders for a single team
   def team_leaders(course)
@@ -278,15 +269,9 @@ class User < ActiveRecord::Base
     course_memberships.where(course: course).try('character_profile')
   end
 
-  #Import Users
-  def self.csv_header
-    "First Name,Last Name,Email,Username".split(',')
-  end
-
   def archived_courses
     courses.where(:status => false)
   end
-
 
   ### SCORE
   def cached_score_for_course(course)

@@ -17,4 +17,19 @@ namespace :courses do
 
     puts "\nSuccessfully updates all #{all.count} #{"course".pluralize(all.count)}."
   end
+
+  desc "Updates all the administrators in the system to have access to all courses"
+  task :update_admins => :environment do
+    courses = Course.all
+    CourseMembership.where(role: "admin").select(:user_id).uniq.each do |membership|
+      user = User.find membership.user_id
+      user.admin = true
+      user.save
+      courses.each do |course|
+        if !CourseMembership.where(user_id: user.id, role: "admin").exists?
+          CourseMembership.create! course_id: course.id, user_id: user.id, role: "admin"
+        end
+      end
+    end
+  end
 end

@@ -1,13 +1,14 @@
 !function(app, $) {
   $(document).ready(function() {
-    if($('.search-query').length) {
+    if($('.students-search-query').length) {
+      var target = $('.students-search-query');
       $.ajax({
-        url: $('.search-query').data('autocompleteurl'),
+        url: target.data('autocompleteurl'),
         dataType: "json",
         success: function(users) {
-          $('.search-query').omniselect({
+          target.omniselect({
             source: users,
-            resultsClass: 'typeahead dropdown-menu',
+            resultsClass: 'typeahead dropdown-menu student-result',
             activeClass: 'active',
             itemLabel: function(user) {
               return user.name;
@@ -22,7 +23,6 @@
               return item.name.match(new RegExp(query, 'i'));
             }
           }).on('omniselect:select', function(event, id) {
-            $(event.target).val();
             window.location = '/students/' + id;
             return false;
           });

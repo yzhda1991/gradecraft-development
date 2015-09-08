@@ -104,6 +104,22 @@ describe User do
     end
   end
 
+  describe "#role" do
+    it "returns the first role found from the course membership" do
+      expect(@student.role(@course)).to eq "student"
+    end
+
+    it "returns nil if the course membership is not found" do
+      expect(@student.role(Course.new)).to eq nil
+    end
+
+    it "returns admin if the user is an admin" do
+      @student.admin = true
+      @student.save
+      expect(@student.role(@course)).to eq "admin"
+    end
+  end
+
   context "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"

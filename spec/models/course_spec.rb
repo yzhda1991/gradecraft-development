@@ -109,4 +109,10 @@ describe Course do
       expect(subject.instructors_of_record).to be_empty
     end
   end
+
+  it "automatically assigns memberships to admins after the course is created" do
+    admin = create :user, admin: true
+    course = create :course
+    expect(CourseMembership.where(user_id: admin.id, course_id: course.id, role: "admin")).to be_exist
+  end
 end
