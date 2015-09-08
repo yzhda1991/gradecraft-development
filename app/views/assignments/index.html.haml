@@ -24,10 +24,10 @@
             %i.fa.fa-angle-double-right.fa-fw
           .assignment-name #{assignment_type.name} – #{points assignment_type.total_points} points
         .collapse-hidden
-          %table.responsive{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
+          %table{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
             %thead
               %tr
-                %th
+                %th.draggable
                 %th
                 %th{:scope => "col", :width => "20%"} Name
                 %th Due
@@ -39,7 +39,7 @@
               - assignments = assignment_type.assignments.includes(:rubric, :assignment_type)
               - assignments.each do |assignment|
                 %tr{:id => "assignment-#{assignment.id}"}
-                  %td
+                  %td.draggable
                     %i.fa.fa-arrows-v
                   %td
                     - if assignment.is_unlockable?
@@ -58,8 +58,7 @@
                         %ul
                           - assignment.unlock_keys.each do |key|
                             %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
-                  %td
-                    = link_to assignment.name, assignment
+                  %td= link_to assignment.name, assignment
                   %td= assignment.try(:due_at) || "Ongoing"
                   %td{:style => "display: none"}
                     - if assignment.due_at.present?
@@ -71,7 +70,7 @@
                   %td= "Yes" if assignment.rubric and assignment.rubric.designed?
                   %td
                     .right
-                      %ul
+                      %ul.button-bar
                         - if ! ( assignment.rubric and assignment.rubric.designed? and assignment.use_rubric? )
                           %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(assignment), :class => "button"
                         %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(assignment), :class => 'button'

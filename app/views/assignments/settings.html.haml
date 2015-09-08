@@ -19,7 +19,6 @@
         %thead
           %tr
             %th{:scope => "col"} Name
-            %th{:scope => "col"} Description
             %th{:scope => "col"}
               %span
                 %a
@@ -82,7 +81,6 @@
           - assignments.each do |assignment|
             %tr
               %td= link_to assignment.name, assignment
-              %td= raw assignment.description
               %td
                 - if assignment.visible?
                   %a
@@ -166,10 +164,14 @@
                   %li
                     Opens:
                     = assignment.try(:opens_at) || "Always Open"
+                  %li
+                    Due At:
+                    = assignment.try(:due_at) || "No Due Date"
+                  %li
                     Accepted Until:
                     = assignment.try(:accept_until) || "Always Accepted"
               %td
                 .right
-                  %ul
+                  %ul.button-bar
                     %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(assignment), :class => 'button'
                     %li= link_to raw('<i class="fa fa-trash fa-fw"> </i> Delete'), assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button'

@@ -28,11 +28,10 @@ json.set! :timeline do
         if event.thumbnail && event.media
           json.thumbnail event.thumbnail_url
           json.media event.media_url
+        elsif event.media
+          json.media event.media_url
         elsif event.thumbnail
           json.thumbnail event.thumbnail_url
-        elsif event.media
-          json.thumbnail event.media_url
-          json.media event.media_url
         end
         json.credit event.media_credit
         json.caption event.media_caption

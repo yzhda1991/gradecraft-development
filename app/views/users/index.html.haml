@@ -48,7 +48,7 @@
               = points user.cached_score_for_course(current_course) if user.respond_to?(:grades)
           %td
             .right
-              %ul
+              %ul.button-bar
                 - if user_is_student
                   %li= link_to "Dashboard", student_path(user), :class => 'button' if user_is_student
                 - elsif user_is_staff

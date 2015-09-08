@@ -27,7 +27,7 @@
           %td= points team.badge_count
         %td
           .right
-            %ul
+            %ul.button-bar
               %li= link_to raw("<i class='fa fa-dashboard fa-fw'> </i> See"), team, :class => 'button'
               %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit"), edit_team_path(team), :class => 'button'
               %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), team_path(team), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete

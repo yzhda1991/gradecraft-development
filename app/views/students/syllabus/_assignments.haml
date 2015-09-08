@@ -88,7 +88,7 @@
                     %span
                 %td
                   .right
-                    %ul
+                    %ul.button-bar
                       - if grade_released_for_assignment
                         %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Results"), assignment_path(assignment, :anchor => "fndtn-tabt4"), :class => "button"
                       - if assignment.has_groups?

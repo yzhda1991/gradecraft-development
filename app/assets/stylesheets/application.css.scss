@@ -8,7 +8,7 @@
  *= require jquery.dynatable
  *= require angular-tooltips.min
  *= require_tree ./froala
- *= require timeline
+ *= require timelineJS/timeline
 /* Branding colors */
 
 $px-3: .1875rem;
@@ -78,6 +78,7 @@ $media-xlarge-max:  120rem; //
 @import 'student_dashboard';
 @import 'tables';
 @import 'tabs';
+@import 'timeline_overrides';
 @import 'topbar';
 @import 'typography';
 @import 'unlocks';

@@ -29,7 +29,7 @@
               %div= link_to leadership.team.try(:name), leadership.team
           %td
             .right
-              %ul
+              %ul.button-bar
                 %li= link_to raw("<i class='fa fa-dashboard fa-fw'> </i> Dashboard"),  staff_path(user), {:class => 'button'}
                 %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit"),  edit_user_path(user), {:class => 'button'}
                 %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"),  user, :class => 'button', :data => { confirm: 'Are you sure?'}, :method => :delete
