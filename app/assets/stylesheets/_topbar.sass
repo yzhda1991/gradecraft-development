@@ -205,6 +205,11 @@ img.profile-pic
     text-decoration: none
     .course_name 
       margin-left: .25rem
+    .course_semester
+      margin-left: .5rem
+      color: $primary-color-2
+      text-transform: uppercase
+
     .tagline
       margin-left: .5rem
       color: $secondary-color-3
@@ -271,11 +276,11 @@ ul.subnav.logged-out
 /* Mobile Styles */ 
 
 @media (max-width: $media-small-max)
-  .tagline
+  .hidden-sm
     display: none
 
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
-  .tagline
+  .hidden-sm
     display: none
 
 .container
