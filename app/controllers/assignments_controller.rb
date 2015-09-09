@@ -75,7 +75,7 @@ class AssignmentsController < ApplicationController
         @grades_for_assignment = @assignment.all_grades_for_assignment
       end
     else
-      redirect_to assignments_path
+      redirect_to assignments_path, alert: "I'm so sorry, I couldn't find that #{(term_for :assignment)}."
     end
   end
 
