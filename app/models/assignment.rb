@@ -115,9 +115,9 @@ class Assignment < ActiveRecord::Base
       content << "<p><a href='/assignments/#{self.id}'>See the details</a></p>"
     end
     if assignment_files.present?
-      content << '<ul>'
+      content << '<ul class="attachments">'
       assignment_files.each do |af|
-        content << "<a href='#{af.url}'>#{af.filename}</a>"
+        content << "<li class='document'><i class='fa fa-file-o fa-fw'></i><a href='#{af.url}'>#{af.filename}</a></li>"
       end
       content << '</ul>'
     end

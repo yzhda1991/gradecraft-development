@@ -47,9 +47,9 @@ class Challenge < ActiveRecord::Base
       content << "<p><a href='/challenges/#{self.id}'>See the details</a></p>"
     end
     if challenge_files.present?
-      content << '<ul>'
+      content << '<ul class="attachments">'
       challenge_files.each do |cf|
-        content << "<a href='#{cf.url}'>#{cf.filename}</a>"
+        content << "<li class='document'><i class='fa fa-file-o fa-fw'></i><a href='#{cf.url}'>#{cf.filename}</a></li>"
       end
       content << '</ul>'
     end

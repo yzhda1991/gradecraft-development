@@ -1,6 +1,6 @@
 - current_user.courses.alphabetical.each do |c|
   - if c.active?
-    %li= link_to raw("<i class ='fa fa-home fa-fw'></i> #{c.courseno} #{c.semester.capitalize.first[0]}#{c.year}"), change_current_course_path(:course_id => c.id), :method => 'post'
+    %li= link_to raw("<i class ='fa fa-home fa-fw'></i> #{c.courseno} #{c.try(:semester).capitalize.first[0]}#{c.try(:year)}"), change_current_course_path(:course_id => c.id), :method => 'post'
 - if current_user_is_staff?
   %li= link_to raw("Create a New Course <i class='fa fa-angle-double-right fa-fw'></i>"), new_course_path
 
