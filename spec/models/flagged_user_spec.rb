@@ -58,11 +58,13 @@ describe FlaggedUser do
     end
   end
 
-  it "creates a relationship between staff and a student" do
-    FlaggedUser.flag!(course, professor, student.id)
-    result = FlaggedUser.last
-    expect(result.course_id).to eq course.id
-    expect(result.flagger_id).to eq professor.id
-    expect(result.flagged_id).to eq student.id
+  describe ".flag!" do
+    it "creates a relationship between staff and a student" do
+      FlaggedUser.flag!(course, professor, student.id)
+      result = FlaggedUser.last
+      expect(result.course_id).to eq course.id
+      expect(result.flagger_id).to eq professor.id
+      expect(result.flagged_id).to eq student.id
+    end
   end
 end
