@@ -12,7 +12,6 @@ json.assignments @assignments do |assignment|
         json.cache! ['v1', grade] do
           json.grade do
             json.id grade.id
-            json.point_total grade.point_total
             json.predicted_score grade.predicted_score
             json.score grade.score
             json.pass_fail_status grade.pass_fail_status if assignment.pass_fail
@@ -42,3 +41,5 @@ json.term_for_assignment term_for :assignment
 json.term_for_pass current_course.pass_term
 json.term_for_fail current_course.fail_term
 json.update_assignments @update_assignments
+
+json.student current_user.is_student?(current_course)

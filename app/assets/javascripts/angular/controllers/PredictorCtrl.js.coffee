@@ -1,6 +1,7 @@
 @gradecraft.controller 'PredictorCtrl', ['$scope', '$http', '$q', '$filter', 'PredictorService', ($scope, $http, $q, $filter, PredictorService) ->
 
   $scope.assignmentMode = true
+  $scope.loading = true
 
   $scope.services = ()->
     promises = [PredictorService.getGradeLevels(),
@@ -14,6 +15,7 @@
 
   $scope.services().then(()->
     $scope.renderGradeLevelGraphics()
+    $scope.loading = false
   )
 
   $scope.assignments = PredictorService.assignments
@@ -48,6 +50,16 @@
       return false
     else
       return true
+
+  $scope.articleNoPoints = (assignment)->
+    # if (assignment.id == 1)
+    #   debugger
+    if assignment.pass_fail && assignment.grade.pass_fail_status != "Pass"
+      return true
+    else if assignment.grade.score == null || assignment.grade.score == 0
+      return true
+    else
+      return false
 
   # Assignments with Score Levels: returns true
   $scope.hasLevels = (assignment)->

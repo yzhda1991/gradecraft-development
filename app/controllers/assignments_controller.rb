@@ -254,6 +254,11 @@ class AssignmentsController < ApplicationController
           assignment.current_student_grade.pass_fail_status = nil
           assignment.current_student_grade.score = nil
         end
+
+        # don't allow professors to view predictions
+        unless current_user.is_student?(current_course)
+          assignment.current_student_grade.predicted_score = 0
+        end
       end
     end
   end
@@ -306,7 +311,6 @@ class AssignmentsController < ApplicationController
         :id,
         :predicted_score,
         :pass_fail_status,
-        :point_total,
         :status,
         :student_id,
         :raw_score,
