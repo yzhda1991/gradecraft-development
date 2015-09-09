@@ -61,6 +61,7 @@ hr
 .label.alert.round
   margin-right: -1.2rem
   top: -0.6rem
+  text-transform: normal
   background-color: $primary-color-1
 
 /** Page Title **/
@@ -86,12 +87,18 @@ h4.subtitle
   .label.alert
     margin-left: .25rem
     margin-bottom: 0 !important
+    font-weight: normal
 
 h4.subtitle.fail
   color: $alert-color
 
 h4.subtitle.success
   color: $secondary-color-1
+
+h4.assignment_name
+  margin-bottom: .5rem
+  font-size: 1.25rem
+  font-weight: normal
 
 h5.section-title
   font-size: 1.3rem
@@ -104,21 +111,15 @@ h5.section-title
   border-top-right-radius: $global-radius
   border-top-left-radius: $global-radius
 
-  a
+  a, a.button
     color: #FFF
-  a.button
-    color: #FFF
-
-.assignment-name 
-  display: inline
 
 .label
   font-size: 90%
-  text-transform: uppercase
   padding: .25rem
   border-radius: $global-radius
   color: #FFF
-  font-weight: normal
+  font-style: italic
   a
     color: #FFF
 
