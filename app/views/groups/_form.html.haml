@@ -4,7 +4,7 @@
 
   %section
     .form-item
-      = f.input :name
+      = f.input :name, :label => "#{term_for :group} Name"
 
     .form-item
       = f.association :assignments, :collection => @assignments, :as => :check_boxes, :label => "#{(term_for :assignments).titleize}"
@@ -37,9 +37,9 @@
               = f.hidden_field :id
       - else
         = f.simple_fields_for :proposals, Proposal.new, class: 'form-inline', child_index: 'child_index' do |f|
-          %h4 Proposal
+          %h4= "#{term_for :assignment} Proposal"
           .textarea
-            .form_label If your #{term_for :group} knows what it will be working on, you can submit that here.
+            .form_label= "What is your #{term_for :group} planning to do for this #{term_for :assignment}?"
             = f.text_area :proposal, :class => "froala"
             = f.hidden_field :id
 

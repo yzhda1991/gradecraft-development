@@ -132,6 +132,7 @@ class Course < ActiveRecord::Base
       c.lti_uid = auth_hash['extra']['raw_info']['context_id']
       c.courseno = auth_hash['extra']['raw_info']['context_label']
       c.name = auth_hash['extra']['raw_info']['context_title']
+      c.year = Date.today.year
     end
   end
 

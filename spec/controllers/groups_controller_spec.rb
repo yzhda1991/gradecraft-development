@@ -55,7 +55,7 @@ describe GroupsController do
     end
 
     describe "GET edit" do
-      it "renders the edit group form" do
+      it "renders the edit group form" do 
         get :edit, :id => @group.id
         expect(assigns(:title)).to eq("Editing #{@group.name}")
         expect(assigns(:group)).to eq(@group)
@@ -64,7 +64,7 @@ describe GroupsController do
     end
 
     describe "POST create" do
-      it "creates the group with valid attributes"  do
+      it "creates the group with valid attributes" do
         skip "implement"
         params = attributes_for(:group)
         expect{ post :create, :group => params }.to change(Group,:count).by(1)
