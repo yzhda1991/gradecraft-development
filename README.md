@@ -24,7 +24,7 @@
 * Assignment Unlocks
 * Multi-factor leveling system
 
-## Pre-reqs
+## Pre-reqs:
 * Ruby 2.2
 * PostgreSQL
 * MongoDB
