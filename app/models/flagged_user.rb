@@ -4,7 +4,7 @@ class FlaggedUser < ActiveRecord::Base
   belongs_to :flagged, class_name: "User"
 
   validates :course, presence: true
-  validates :flagger, presence: true, course_membership: true
+  validates :flagger, presence: true, course_membership: true, staff_flagger: true
   validates :flagged, presence: true, course_membership: true
 
   def self.flag!(course, flagger, flagged_id)

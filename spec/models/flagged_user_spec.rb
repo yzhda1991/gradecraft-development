@@ -1,4 +1,4 @@
-require "active_record_spec_helper"
+require "spec_helper"
 
 describe FlaggedUser do
   let(:course) { create :course }
@@ -47,7 +47,15 @@ describe FlaggedUser do
       expect(subject.errors[:flagged]).to include "must belong to the course"
     end
 
-    xit "does not allow a student to be flagged by another student"
+    it "does not allow a student to be flagged by another student" do
+      another_student = create :user
+      create :course_membership, course: course, user: another_student, role: "student"
+      subject = FlaggedUser.new course_id: course.id,
+        flagger_id: another_student.id,
+        flagged_id: student.id
+      expect(subject).to_not be_valid
+      expect(subject.errors[:flagger]).to include "must be a staff member"
+    end
   end
 
   it "creates a relationship between staff and a student" do
