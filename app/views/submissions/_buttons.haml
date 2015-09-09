@@ -1,24 +1,24 @@
 - if @assignment.is_individual?
-  .button-bar.context_menu
-    %ul.button-group
+  .context_menu
+    %ul
       %li
-        %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?student_id=#{@student.id}", :class => 'button'  }
+        %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?student_id=#{@student.id}" }
           %i.fa.fa-edit
           Edit Submission
           %span.sr-only #{@student.try(:first_name)}'s Submission
       %li
-        = link_to "Delete Submission", assignment_submission_path(:assignment => @assignment, :submission => @submission ), :class => "button" , :data => { confirm: 'Are you sure?',  method: :delete }
+        = link_to raw("<i class='fa fa-trash fa-fw'></i>Delete Submission"), assignment_submission_path(:assignment => @assignment, :submission => @submission ), :data => { confirm: 'Are you sure?',  method: :delete }
 
-      %li= link_to "Grade", edit_assignment_grade_path(@assignment, @submission, :student_id => @student.id), :class => 'button'
+      %li= link_to raw("<i class='fa fa-check fa-fw'></i>Grade"), edit_assignment_grade_path(@assignment, @submission, :student_id => @student.id)
 - elsif @assignment.has_groups?
-  .button-bar.context_menu
-    %ul.button-group
+  .context_menu
+    %ul
       %li
-        %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?group_id=#{@group}", :class => 'button'  }
+        %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?group_id=#{@group}" }
           %i.fa.fa-edit
           Edit Submission
           %span.sr-only #{@group.try(:name)}'s Submission
       %li
-        = link_to "Delete Submission", assignment_submission_path(:assignment => @assignment, :submission => @submission ), :class => "button" , :data => { confirm: 'Are you sure?',  method: :delete }
+        = link_to "Delete Submission", assignment_submission_path(:assignment => @assignment, :submission => @submission ), :data => { confirm: 'Are you sure?',  method: :delete }
 
-      %li= link_to "Grade", edit_assignment_grade_path(@assignment, @submission, :group_id => @group.id), :class => 'button'
+      %li= link_to "Grade", edit_assignment_grade_path(@assignment, @submission, :group_id => @group.id)

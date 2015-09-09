@@ -94,7 +94,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def visible_score_for_student(student)
-    score = student.grades.released.where(:assignment_type => self).pluck('score').sum
+    score = (student.grades.released.where(:assignment_type => self).pluck('score').sum || 0)
     if max_value?
       if score < max_value
         return score
