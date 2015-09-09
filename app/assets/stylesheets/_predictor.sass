@@ -429,6 +429,13 @@ article.predictor-article
   border-top: none !important
   border-bottom: none !important
 
+
+/* Professor View, fix for svg graphic with sidebar */
+
+#predictor-main-content.with-sidebar #predictor-graphic
+    width: 1000px
+
+
 /* MEDIA QUERIES */
 
 // small
@@ -487,6 +494,8 @@ article.predictor-article
     height: 70px
   .collapsable
     padding-top: 0px
+  #predictor-main-content.with-sidebar #predictor-graphic
+    width: 100%
 
 // medium
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
@@ -504,6 +513,9 @@ article.predictor-article
   #predictor-graphic
     width: 98%
     margin: 10px 0 0 1%
+  #predictor-main-content.with-sidebar #predictor-graphic
+    width: 100%
+
 
 // large
 @media (min-width: $media-medium-max) and (max-width: $media-large-max)
@@ -515,12 +527,17 @@ article.predictor-article
   #predictor-graphic
     width: 90%
     margin: 10px 0 0 5%
+  #predictor-main-content.with-sidebar #predictor-graphic
+    width: 800px
+
 
 // x-large
 @media (min-width: $media-large-max)
   article.predictor-article
     width: 16%
   #predictor-main-content.with-sidebar
+    #predictor-graphic
+      width: 700px
     article.predictor-article
       width: 19%
   #predictor-graphic
