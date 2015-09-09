@@ -219,6 +219,14 @@ class Course < ActiveRecord::Base
     end
   end
 
+  def formatted_short_name
+    if semester.present? && year.present?
+      "#{self.courseno} #{(self.semester).capitalize.first[0]}#{self.year}"
+    else 
+      "#{courseno}"
+    end
+  end
+
   #total number of points 'available' in the course - sometimes set by an instructor as a cap, sometimes just the sum of all assignments
   def total_points
     point_total || assignments.sum('point_total')
