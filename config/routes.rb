@@ -234,7 +234,7 @@ GradeCraft::Application.routes.draw do
   get 'using_gradecraft' => 'pages#using_gradecraft'
   get 'contact' => 'pages#contact'
   get 'features' => 'pages#features'
-  
+
   #11. Rubrics & Grade Schemes
   resources :rubrics
 
@@ -268,6 +268,7 @@ GradeCraft::Application.routes.draw do
   resources :users do
     get :activate, on: :member
     post :activate, on: :member, action: :activated
+    post :flag, on: :member
     collection do
       get :edit_profile
       put :update_profile

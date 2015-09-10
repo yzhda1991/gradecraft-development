@@ -53,7 +53,8 @@
                     %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
               %td{:style => "display: none"}= student.earned_badges_for_course(current_course).count
             %td{"data-title" => "Options"}
-              .right
+              .right{style: "min-width: 160px;"}
                 %ul.button-bar
+                  %li= link_to raw('<i class="fa fa-star fa-fw"></i> Flag'), flag_user_path(student), method: :post, remote: true, class: "button"
                   %li= mail_to student.email, raw('<i class="fa fa-envelope fa-fw"></i> Email'), :class => "button"
                   %li= link_to raw('<i class="fa fa-edit fa-fw"></i> Edit'), edit_user_path(student), :class => "button"
