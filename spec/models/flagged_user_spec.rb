@@ -67,4 +67,26 @@ describe FlaggedUser do
       expect(result.flagged_id).to eq student.id
     end
   end
+
+  describe ".unflag!" do
+    before { FlaggedUser.flag!(course, professor, student.id) }
+
+    it "deletes the relationship between staff and student" do
+      FlaggedUser.unflag!(course, professor, student.id)
+      expect(FlaggedUser.count).to be_zero
+    end
+  end
+
+  describe ".toggle!" do
+    it "creates a relationship between staff and a student if it doesn't exist" do
+      FlaggedUser.toggle!(course, professor, student.id)
+      expect(FlaggedUser.count).to eq 1
+    end
+
+    it "deletes the relationship between staff and student if it does exist" do
+      FlaggedUser.flag!(course, professor, student.id)
+      FlaggedUser.toggle!(course, professor, student.id)
+      expect(FlaggedUser.count).to eq 0
+    end
+  end
 end

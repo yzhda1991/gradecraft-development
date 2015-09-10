@@ -8,6 +8,18 @@ class FlaggedUser < ActiveRecord::Base
   validates :flagged, presence: true, course_membership: true
 
   def self.flag!(course, flagger, flagged_id)
-    self.create course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id
+    create course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id
+  end
+
+  def self.unflag!(course, flagger, flagged_id)
+    where(course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id).destroy_all
+  end
+
+  def self.toggle!(course, flagger, flagged_id)
+    if where(course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id).exists?
+      unflag! course, flagger, flagged_id
+    else
+      flag! course, flagger, flagged_id
+    end
   end
 end
