@@ -1,13 +1,16 @@
-.avatar.text-center
+= div_for current_student, class: "avatar text-center" do
   %h3= current_student.name
   %hr
   - if current_student.avatar_file_name.present?
-    %img.img-rounded{:src => current_student.avatar_file_name, :width => 150} 
+    %img.img-rounded{:src => current_student.avatar_file_name, :width => 150}
     %br
   .italic= "#{current_student.team_for_course(current_course).name}" if current_student.team_for_course(current_course).present?
   .italic= "Last activity: #{current_student.try(:last_activity_at) || "(never)"} "
   %ul
+    - if current_user_is_staff?
+      %li= link_to flagged_user_icon(current_course, current_user, current_student.id), flag_user_path(current_student), method: :post, remote: true, class: "button flagged-user-icon"
     %li= link_to raw('<i class="fa fa-edit fa-fw"></i> Edit'), edit_user_path(current_student), :class => "button"
     %li= link_to raw('<i class="fa fa-envelope fa-fw"></i> Email'), 'mailto:#{current_student.email}"', :class => "button"
-    - if current_user_is_admin?
+  - if current_user_is_admin?
+    %ul
       %li= link_to "Recalculate Score", student_recalculate_path(:student_id => current_student.id), :class => "button"
