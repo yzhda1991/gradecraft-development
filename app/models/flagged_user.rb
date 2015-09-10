@@ -11,12 +11,16 @@ class FlaggedUser < ActiveRecord::Base
     create course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id
   end
 
+  def self.flagged?(course, flagger, flagged_id)
+    where(course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id).exists?
+  end
+
   def self.unflag!(course, flagger, flagged_id)
     where(course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id).destroy_all
   end
 
   def self.toggle!(course, flagger, flagged_id)
-    if where(course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id).exists?
+    if flagged? course, flagger, flagged_id
       unflag! course, flagger, flagged_id
     else
       flag! course, flagger, flagged_id
