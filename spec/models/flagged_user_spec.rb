@@ -88,6 +88,13 @@ describe FlaggedUser do
     end
   end
 
+  describe ".flagged" do
+    it "returns the users who were flagged by a user for a course" do
+      FlaggedUser.flag!(course, professor, student.id)
+      expect(FlaggedUser.flagged(course, professor)).to eq [student]
+    end
+  end
+
   describe ".toggle!" do
     it "creates a relationship between staff and a student if it doesn't exist" do
       FlaggedUser.toggle!(course, professor, student.id)

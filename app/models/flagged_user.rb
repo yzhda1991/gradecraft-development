@@ -19,6 +19,10 @@ class FlaggedUser < ActiveRecord::Base
     where(course_id: course.id, flagger_id: flagger.id, flagged_id: flagged_id).destroy_all
   end
 
+  def self.flagged(course, flagger)
+    where(course_id: course.id, flagger_id: flagger.id).map(&:flagged)
+  end
+
   def self.toggle!(course, flagger, flagged_id)
     if flagged? course, flagger, flagged_id
       unflag! course, flagger, flagged_id
