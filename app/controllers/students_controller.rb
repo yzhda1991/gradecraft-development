@@ -19,6 +19,11 @@ class StudentsController < ApplicationController
     end
   end
 
+  def flagged
+    @title = "Flagged #{(current_course.user_term).pluralize}"
+    @students = FlaggedUser.flagged current_course, current_user
+  end
+
   #Course wide leaderboard - excludes auditors from view
   def leaderboard
     # before_filter :ensure_staff?
