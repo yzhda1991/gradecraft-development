@@ -69,7 +69,7 @@
               %a
                 %i.fa.fa-envelope.fa-fw
               .display_on_hover.hover-style
-                Notify Students on Release
+                Email Students on Release
                 
             %th{:scope => "col"} Grade Form Preview
             %th{:scope => "col"} Points
@@ -116,7 +116,7 @@
                     Shown in Predictor
                     
               %td
-                - if assignment.assignment_type.include_in_to_do?
+                - if assignment.include_in_to_do?
                   %a
                     %i.fa.fa-list.fa-fw
                   .display_on_hover.hover-style
@@ -141,7 +141,7 @@
                   %a
                     %i.fa.fa-envelope.fa-fw
                   .display_on_hover.hover-style
-                    Notify Students on Release
+                    Email Students on Release
                     
 
               %td

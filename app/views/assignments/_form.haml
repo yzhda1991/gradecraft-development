@@ -118,9 +118,9 @@
       .form_label Can #{term_for :students} see this #{term_for :assignment} in the grade predictor?
 
     .form-item
-      = f.label :include_in_to_do, "To Do List"
+      = f.label :include_in_to_do, "Due this Week"
       = f.check_box :include_in_to_do
-      .form_label Can #{term_for :students} see this #{term_for :assignment} in the to do list?
+      .form_label Can #{term_for :students} see this #{term_for :assignment} in the "Due this Week" panel?
 
     - if ! current_course.hide_analytics?
       .form-item
