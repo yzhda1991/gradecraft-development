@@ -42,18 +42,19 @@
             - if current_course.team_roles?
               %td= student.team_role
             %td= student.cached_score_for_course(current_course) if student.respond_to?(:grades)
-            %td= student.grade_for_course(current_course).name
+            %td= student.grade_for_course(current_course).try(:name)
             - if current_course.has_badges?
               %td
                 - student.earned_badges_for_course(current_course).each do |badge|
-                  .icon
-                    .icon-tooltip
-                      = badge.try(:name)
+                  %a
                     %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
+                  .display_on_hover.hover-style
+                    = badge.try(:name)
+                    
               %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
             %td
               .right
-                %ul
+                %ul.button-bar
                   %li= link_to raw("<i class='fa fa-dashboard fa-fw'></i> Dashboard"), student_path(student), :class => 'button'
                   %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_user_path(student), :class => 'button'
 
@@ -77,8 +78,8 @@
           %td= points challenge.challenge_grade_for_team(@team).try(:score)
           %td
             .right
-              %ul
+              %ul.button-bar
                 - if challenge.challenge_grade_for_team(@team).present?
-                  = link_to raw('<i class="fa fa-edit fa-fw"></i> Edit Grade'), edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => 'button'
+                  %li= link_to raw('<i class="fa fa-edit fa-fw"></i> Edit Grade'), edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => 'button'
                 - else
-                  = link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), new_challenge_challenge_grade_path(:challenge_id => challenge, :team_id => @team.id), :class => 'button'
+                  %li= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), new_challenge_challenge_grade_path(:challenge_id => challenge, :team_id => @team.id), :class => 'button'
