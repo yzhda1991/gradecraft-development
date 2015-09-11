@@ -2,6 +2,7 @@
   %thead
     %tr
       %th
+      %th
       %th First Name
       %th Last Name
       - if current_course.in_team_leaderboard? || current_course.character_names?
@@ -16,6 +17,9 @@
   %tbody
     - students.each do |student|
       %tr
+        %td
+          = div_for student do
+            = link_to flagged_user_icon(current_course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "flagged-user-icon"
         %td
           - if student.avatar_file_name.present?
             %img.img-rounded{:src => student.avatar_file_name, :width => 30}
@@ -37,8 +41,7 @@
           - if student.grade_for_course(current_course).present?
             = student.grade_for_course(current_course).name
         %td
-          = div_for student, class: "right" do
+          .right
             %ul.button-bar
-              %li= link_to flagged_user_icon(current_course, current_user, student.id), flag_user_path(student), method: :post, remote: true, class: "button flagged-user-icon"
               %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit"), edit_user_path(student), :class => "button"
               %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), student.course_memberships.where(:course_id => current_course.id).first, :class => 'button', :data => { confirm: 'This will delete the student from your course - Are you sure?' }, :method => :delete
