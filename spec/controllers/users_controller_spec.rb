@@ -95,6 +95,22 @@ describe UsersController do
       end
     end
 
+    describe "POST flag" do
+      it "flags the student by the user if the student is not flagged" do
+        post :flag, id: @student.id, format: :js
+        flagged_user = FlaggedUser.last
+        expect(flagged_user.flagged_id).to eq @student.id
+        expect(flagged_user.flagger_id).to eq @professor.id
+        expect(flagged_user.course_id).to eq @course.id
+      end
+
+      it "unflags the student if the student is already flagged" do
+        FlaggedUser.flag! @course, @professor, @student.id
+        post :flag, id: @student.id, format: :js
+        expect(FlaggedUser.count).to be_zero
+      end
+    end
+
     describe "GET edit_profile" do
       it "renders the edit profile user form" do
         get :edit_profile
@@ -153,7 +169,6 @@ describe UsersController do
         expect(response.body).to include "The team is not cool"
       end
     end
-
   end
 
   context "as a student" do

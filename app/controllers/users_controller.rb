@@ -95,7 +95,6 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url, :notice => "#{@name} was successfully deleted" }
       format.json { head :ok }
     end
-
   end
 
   def activate
@@ -116,6 +115,11 @@ class UsersController < ApplicationController
       redirect_to dashboard_path, notice: "Welcome to GradeCraft!" and return
     end
     render :activate, alert: @user.errors.full_messages.first
+  end
+
+  def flag
+    @user = User.find(params[:id])
+    FlaggedUser.toggle! current_course, current_user, @user.id
   end
 
   # We don't allow students to edit their info directly - this is a mediated view

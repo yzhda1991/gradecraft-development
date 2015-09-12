@@ -16,6 +16,7 @@ describe "students/index" do
   before(:each) do
     assign(:title, "Student Roster")
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_user).and_return(@student_1)
   end
 
   it "renders successfully" do
