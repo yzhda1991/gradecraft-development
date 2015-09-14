@@ -52,8 +52,6 @@
       return true
 
   $scope.articleNoPoints = (assignment)->
-    # if (assignment.id == 1)
-    #   debugger
     if assignment.pass_fail && assignment.grade.pass_fail_status != "Pass"
       return true
     else if assignment.grade.score == null || assignment.grade.score == 0
@@ -98,6 +96,7 @@
     )
     return scoreLevels[closest]
 
+  # Used to avoid rendering an assignment type if it contains no assignments
   $scope.hasAssignments = (assignmentType)->
     $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id).length > 0
 
@@ -116,6 +115,8 @@
     )
     total
 
+  # multiply points by the student's assignment type weight
+  # passes points through for unweighted assignment types
   $scope.weightedPoints = (points,assignmentType)->
     if assignmentType.student_weightable
       if assignmentType.student_weight > 0
@@ -124,8 +125,12 @@
         points = points * $scope.weights.default_weight
     points
 
+  # FIX THIS ONE
   $scope.assignmentTypeMaxPossiblePoints = (assignmentType)->
     total = $scope.weightedPoints(assignmentType.total_points,assignmentType)
+    if assignmentType.is_capped
+      total = if total > assignmentType.total_points then assignmentType.total_points else total
+    total
 
   # Total points predicted for all assignments by assignments type
   # caps the total points at the assignment type max points
