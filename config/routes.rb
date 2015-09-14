@@ -21,6 +21,7 @@ GradeCraft::Application.routes.draw do
   #15. Uploads
   #16. Events
   #17. Predictor
+  #18. Exports
 
   #1. Analytics & Charts
   namespace :analytics do
@@ -72,6 +73,7 @@ GradeCraft::Application.routes.draw do
       get 'criterion_grades_review'
       get 'export_team_submissions'
       get 'submissions_export', defaults: {format: :json}
+      get 'export_team_submissions'
       get 'grade_import' => 'assignments#grade_import'
       get 'rubric_grades_review'
       put :update_rubrics
