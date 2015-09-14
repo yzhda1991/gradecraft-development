@@ -70,6 +70,9 @@ GradeCraft::Application.routes.draw do
       get 'export_submissions'
       get 'download_current_grades' => 'assignments#download_current_grades'
       get 'criterion_grades_review'
+      get 'export_team_submissions'
+      get 'grade_import' => 'assignments#grade_import'
+      get 'rubric_grades_review'
       put :update_rubrics
       scope 'grades', as: :grades, controller: :grades do
         get :edit_status
