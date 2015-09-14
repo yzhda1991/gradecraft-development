@@ -15,11 +15,11 @@
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(@assignment, :team => @team)
       - elsif ! ( @assignment.rubric and @assignment.rubric.designed? and @assignment.use_rubric? )
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(@assignment)
-      - if @assignment.submissions.present?
-        %li
-          %a{:href => export_submissions_assignment_path(@assignment, :team_id => @team, format: 'zip') }
-            %i.fa.fa-zip-o.fa-fw
-            Download Submissions
+      / - if @assignment.submissions.present?
+      /   %li
+      /     %a{:href => export_submissions_assignment_path(@assignment, :team_id => @team, format: 'zip') }
+      /       %i.fa.fa-zip-o.fa-fw
+      /       Download Submissions
       %li
         %a{:href => import_grades_assignment_path(@assignment) }
           %i.fa.fa-upload.fa-fw

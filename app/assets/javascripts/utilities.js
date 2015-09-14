@@ -3,7 +3,10 @@
 
 $( "#tabs" ).tabs();
 
- $('.froala').editable({inlineMode: false, minHeight: 280})
+ $('.froala').editable(
+    {inlineMode: false, 
+      minHeight: 280
+    })
 
 // handle 'select all' buttons, used on release grade forms
 $(".select-all").click(function(e){
