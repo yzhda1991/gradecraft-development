@@ -152,11 +152,21 @@ class Assignment < ActiveRecord::Base
   end
 
   def students_with_submissions
-    User.where("id in (select user_id from submissions where assignment_id = ?)", self.id)
+    User.where("id in (select student_id from submissions where assignment_id = ?)", self.id)
   end
 
   def students_with_submissions_on_team(team)
+    User.where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team[:id])
   end
+
+  private
+  
+    def students_with_submissions_on_team_conditions
+      ["id in (select student_id from submissions where assignment_id = ?)",
+       "id in (select distinct(student_id) from team_memberships where team_id = ?)"]
+    end
+
+  public
 
   # The below four are the Quick Grading Types, can be set at either the assignment or assignment type level
   def grade_checkboxes?

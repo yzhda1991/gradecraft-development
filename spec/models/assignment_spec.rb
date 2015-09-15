@@ -433,33 +433,34 @@ describe Assignment do
   end
 
   describe "finding students with submissions", working: true do
-    before do
+    before(:each) do
       @course = create(:course_accepting_groups)
       @students = []
-      create_professor_for_course(@course)
-      create_assignment_for_course(@course)
-      create_students_for_course(@course, 2)
-      create_submissions_for_students(@students)
+      create_professor_for_course
+      create_assignment_for_course
+      create_students_for_course(2)
+      create_submissions_for_students
+      create_team_and_add_students
     end
 
     context "no team is provided" do
       it "should find all students with submissions for the assignment" do
-        expect(@assignment.students_with_submissions).to eq(@students)
+        expect(@assignment.students_with_submissions.sort_by(&:id)).to eq(@students)
       end
 
       it "should not include students who don't have a submission for the assignment" do
-        create_students_for_course(@course)
-        expect(@assignment.students_with_submissions).not_to include(@students)
+        create_students_for_course
+        expect(@assignment.students_with_submissions.sort_by(&:id)).not_to include(@students)
       end
     end
 
     context "team is provided" do
       it "should find all students with submissions who are on the team" do
-        expect(@assignment.students_with_submissions_on_team(@team)).to eq(@students)
+        expect(@assignment.students_with_submissions_on_team(@team).sort_by(&:id)).to eq(@students)
       end
 
       it "should exclude students with submissions who are not on the team" do
-        expect(@assignment.students_with_submissions).not_to include(@students)
+        expect(@assignment.students_with_submissions.sort_by(&:id)).not_to include(@students)
       end
     end
   end
@@ -845,7 +846,7 @@ describe Assignment do
   end
 
   # helper methods
-  def create_students_for_course(course, total=1)
+  def create_students_for_course(total=1)
     total.times do |n|
       n = @students.size + 1
       self.instance_variable_set("@student#{n}", create(:user))
@@ -855,21 +856,26 @@ describe Assignment do
     end
   end
 
-  def create_submissions_for_students(students)
-    students.each do |student|
+  def create_submissions_for_students
+    @students.each do |student|
       grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
       create(:submission, grade: grade, student: student, assignment: @assignment)
     end
   end
 
-  def create_professor_for_course(course)
+  def create_professor_for_course
     @professor = create(:user)
     CourseMembership.create user_id: @professor[:id], course_id: @course[:id], role: "professor"
   end
 
-  def create_assignment_for_course(course)
-    @assignment_type = create(:assignment_type, course: course)
-    @assignment = create(:assignment, assignment_type: @assignment_type, course: course)
+  def create_assignment_for_course
+    @assignment_type = create(:assignment_type, course: @course)
+    @assignment = create(:assignment, assignment_type: @assignment_type, course: @course)
+  end
+
+  def create_team_and_add_students
+    @team = create(:team, course: @course)
+    @students.each {|student| create(:team_membership, team: @team, student: student) }
   end
 
   describe "#to_json" do
