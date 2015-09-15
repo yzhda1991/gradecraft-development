@@ -509,10 +509,9 @@ describe Assignment do
     context "ordering students by name" do
       before(:each) do
         @course = create(:course_accepting_groups)
-        @students = []
         create_professor_for_course
         create_assignment_for_course
-        create_students_with_names "Stephen Applebaum", "Jeffrey Applebaum", "Herman Merman"
+        @students = create_students_with_names("Stephen Applebaum", "Jeffrey Applebaum", "Herman Merman")
         @alpha_student_order = [@student2, @student1, @student3]
         create_submissions_for_students
         create_team_and_add_students
@@ -917,32 +916,40 @@ describe Assignment do
     1..total.collect do |n|
       # sets instance variables as @student1, @student2 etc.
       n = @students.size + 1
-      self.instance_variable_set("@student#{n}", create(:user))
-      active_student = self.instance_variable_get("@student#{n}")
-      CourseMembership.create user_id: active_student[:id], course_id: @course[:id], role: "student"
-      active_student
+      student = create(:user)
+      self.instance_variable_set("@student#{n}", student)
+      enroll_student_in_active_course(student)
+      student
     end
   end
 
   def create_students_with_names(*student_names)
-    student_names.each do |name|
+    student_names.collect do |name|
       n = @students.size + 1
       self.instance_variable_set("@student#{n}", create(:user, first_name: name.split.first, last_name: name.split.last))
-      active_student = self.instance_variable_get("@student#{n}")
-      CourseMembership.create user_id: active_student[:id], course_id: @course[:id], role: "student"
-      @students << active_student
+      student = self.instance_variable_get("@student#{n}")
+      enroll_student_in_active_course(student)
+      student
     end
   end
 
   def create_teamless_student_with_submission
-    student = create(:user)
-    grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
+    student = create_student_for_course
+    grade = grade_student_for_active_assignment(student)
     create(:submission, grade: grade, student: student, assignment: @assignment)
+  end
+
+  def enroll_student_in_active_course(student)
+    CourseMembership.create user_id: student[:id], course_id: @course[:id], role: "student"
+  end
+
+  def grade_student_for_active_assignment(student)
+    create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
   end
 
   def create_submissions_for_students
     @students.collect do |student|
-      grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
+      grade = grade_student_for_active_assignment(student)
       create(:submission, grade: grade, student: student, assignment: @assignment)
     end
   end
