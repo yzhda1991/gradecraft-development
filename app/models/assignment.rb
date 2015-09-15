@@ -138,6 +138,25 @@ class Assignment < ActiveRecord::Base
     future? && due_at < 7.days.from_now
   end
 
+  # Setting the grade predictor displays
+  def fixed?
+    points_predictor_display == "Fixed"
+  end
+
+  def slider?
+    points_predictor_display == "Slider"
+  end
+
+  def select?
+    points_predictor_display == "Select List"
+  end
+
+  def students_with_submissions
+  end
+
+  def students_with_submissions_on_team(team)
+  end
+
   # The below four are the Quick Grading Types, can be set at either the assignment or assignment type level
   def grade_checkboxes?
     mass_grade_type == "Checkbox"

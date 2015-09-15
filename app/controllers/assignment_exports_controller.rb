@@ -1,15 +1,16 @@
 class AssignmentExportsController < ApplicationController
-  def export_submissions
-    @students ||= students_for_submission_export
+  def submissions
+    @students ||= students_with_submissions
   end
 
-  def export_team_submissions
-    @students_on_team ||=  students_for_team_submission_export
+  def submissions_by_team
+    @students_on_team ||=  students_with_submissions_on_team(params[:team_id])
   end
 
   private
 
     def students_for_submission_export
+      User.where("id in (select user_id from submissions where
     end
 
     def students_for_team_submission_export

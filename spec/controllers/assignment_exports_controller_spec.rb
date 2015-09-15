@@ -1,17 +1,12 @@
-require 'rails_helper'
+require 'spec_helper'
 
 RSpec.describe AssignmentExportsController, type: :controller do
   context "as a professor" do
     before do
       @course = create(:course_accepting_groups)
-      @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @assignment_type = create(:assignment_type, course: @course)
-      @assignment = create(:assignment, assignment_type: @assignment_type)
-      @course.assignments << @assignment
-      @student = create(:user)
-      @student.courses << @course
+      create_professor_for_course(@course)
+      create_assignment_for_course(@course)
+      create_students_for_course(@course, 2)
 
       login_user(@professor)
       session[:course_id] = @course.id
@@ -19,15 +14,6 @@ RSpec.describe AssignmentExportsController, type: :controller do
     end
 
     describe "GET export_submissions", working: true do
-      before do
-        @course = create(:course_accepting_groups)
-        create_professor_for_course(@course)
-        @assignment_type = create(:assignment_type, course: @course)
-        @assignment = create(:assignment, assignment_type: @assignment_type)
-        @course.assignments << @assignment
-        create_students_for_course(@course, 2)
-      end
-
       context "relevant students" do
         it "gets all students for the course" do
         end
@@ -55,8 +41,9 @@ RSpec.describe AssignmentExportsController, type: :controller do
   # helper methods
   def create_students_for_course(course, total)
     total.times do |n|
-      self.instance_variable_set("student#{n}", create(:student))
-      active_student = self.instance_variable_get("student#{n}")
+      n += 1
+      self.instance_variable_set("@student#{n}", create(:user))
+      active_student = self.instance_variable_get("@student#{n}")
       CourseMembership.create user_id: active_student[:id], course_id: @course[:id], role: "student"
     end
   end
@@ -64,5 +51,10 @@ RSpec.describe AssignmentExportsController, type: :controller do
   def create_professor_for_course(course)
     @professor = create(:user)
     CourseMembership.create user_id: @professor[:id], course_id: @course[:id], role: "professor"
+  end
+
+  def create_assignment_for_course(course)
+    @assignment_type = create(:assignment_type, course: course)
+    @assignment = create(:assignment, assignment_type: @assignment_type, course: course)
   end
 end
