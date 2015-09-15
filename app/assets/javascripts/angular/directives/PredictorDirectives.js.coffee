@@ -19,7 +19,10 @@
 
       scope.description = ()->
         if @target.description
-          return @target.description
+          if @target.description.length > 255
+            return @target.description.substring(0,255) + "..."
+          else
+            return @target.description
         else
           return ""
 

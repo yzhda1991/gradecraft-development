@@ -114,7 +114,7 @@ class ChallengesController < ApplicationController
     end
 
     @challenges = []
-    if current_course.challenges.present? && @student.team_for_course(current_course).present?
+    if current_course.challenges.present? && @student.team_for_course(current_course).present? && current_course.add_team_score_to_student
       @challenges = current_course.challenges
 
       @challenges.each do |challenge|
