@@ -432,20 +432,6 @@ describe AssignmentsController do
       end
     end
   end
-
-  # helper methods
-  def create_students_for_course(course, total)
-    total.times do |n|
-      self.instance_variable_set("student#{n}", create(:student))
-      active_student = self.instance_variable_get("student#{n}")
-      CourseMembership.create user_id: active_student[:id], course_id: @course[:id], role: "student"
-    end
-  end
-
-  def create_professor_for_course(course)
-    @professor = create(:user)
-    CourseMembership.create user_id: @professor[:id], course_id: @course[:id], role: "professor"
-  end
 end
 
 
