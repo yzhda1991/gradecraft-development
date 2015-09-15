@@ -10,7 +10,8 @@ class AssignmentExportsController < ApplicationController
   private
 
     def students_for_submission_export
-      User.where("id in (select user_id from submissions where
+      # students with submissions for the assignment in question
+      User.where("id in (select user_id from submissions where assignment_id = ?)", assignment_id)
     end
 
     def students_for_team_submission_export

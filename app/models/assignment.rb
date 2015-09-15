@@ -152,6 +152,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def students_with_submissions
+    User.where("id in (select user_id from submissions where assignment_id = ?)", self.id)
   end
 
   def students_with_submissions_on_team(team)
