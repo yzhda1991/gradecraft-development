@@ -37,7 +37,7 @@
             %th
             %th{:width => "300"}
         %tbody
-          - assignments = assignment_type.assignments.includes(:assignment_type)
+          - assignments = assignment_type.assignments.includes(:assignment_type, :unlock_conditions)
           - assignments.each do |assignment|
             - grade_released_for_assignment = current_student.grade_released_for_assignment?(assignment)
             - grade_for_assignment = current_student.grade_for_assignment(assignment)

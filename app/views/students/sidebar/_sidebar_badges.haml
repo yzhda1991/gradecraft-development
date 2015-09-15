@@ -2,7 +2,7 @@
   %h3= term_for :badges
   %hr
   %ul.block-grid
-    - current_student.unique_student_earned_badges(current_course).each do |badge|
+    - current_student.unique_student_earned_badges(current_course).includes(:unlock_conditions).each do |badge|
       %li
         - if badge.point_total.present? && badge.point_total > 0
           - if badge.is_unlockable?
@@ -26,13 +26,13 @@
             %img{:src => badge.icon, :alt => "You've earned the #{badge.name} badge", :class => "earned"}
           .display_on_hover.hover-style
             = "#{badge.name}"
-            
+
     - current_student.student_visible_unearned_badges(current_course).each do |badge|
       %li
         %a
           %img{:src => badge.try(:icon), :alt => "#{badge.try(:name)}", :class => "unearned"}
         .display_on_hover.hover-style
           = "Not yet earned: #{badge.name}"
-          
+
     - if current_student.earned_badge_score > 0
       .italic.small= "You've earned #{points current_student.earned_badge_score} points through #{(term_for :badges).titleize}."

@@ -48,7 +48,7 @@ class StudentsController < ApplicationController
 
   #Displaying the list of assignments and team challenges for the semester
   def syllabus
-    @assignment_types = current_course.assignment_types
+    @assignment_types = current_course.assignment_types.includes(:assignments)
     @assignments = current_course.assignments
     @student = current_student
   end
