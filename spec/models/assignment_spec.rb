@@ -432,6 +432,33 @@ describe Assignment do
     end
   end
 
+  describe "submissions for students on team" do
+    it "returns submissions for the students on the given team" do
+    end
+
+    it "does not return submissions for students not on the team" do
+    end
+
+    it "should query the database when looking for submissions" do
+    end
+
+    # make sure that the include is working properly to save bandwidth
+    it "should not query the database when looking for submission files" do
+    end
+  end
+
+  describe "student submissions" do
+    it "should return a list of submissions for that assignment" do
+    end
+
+    it "should query the database when looking for submissions" do
+    end
+
+    # make sure that the include is working properly to save bandwidth
+    it "should not query the database when looking for submission files" do
+    end
+  end
+
   describe "finding students with submissions", working: true do
     context "basic finders" do
       before(:each) do

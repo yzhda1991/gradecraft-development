@@ -151,6 +151,32 @@ class Assignment < ActiveRecord::Base
     points_predictor_display == "Select List"
   end
 
+  # helper methods for submissions and students wiht submissions
+  def student_submissions
+    submissions.include(:submission_files)
+  end
+
+  def student_submissions_for_team(team)
+    submissions.where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id]).include(:submission_files)
+  end
+
+  def students_with_submissions
+    User.order_by_name.where("id in (select student_id from submissions where assignment_id = ?)", self.id)
+  end
+
+  def students_with_submissions_on_team(team)
+    User.order_by_name.where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team[:id])
+  end
+
+  private
+  
+    def students_with_submissions_on_team_conditions
+      ["id in (select student_id from submissions where assignment_id = ?)",
+       "id in (select distinct(student_id) from team_memberships where team_id = ?)"]
+    end
+
+  public
+
   def students_with_submissions
     User.order_by_name.where("id in (select student_id from submissions where assignment_id = ?)", self.id)
   end
