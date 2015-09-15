@@ -433,10 +433,23 @@ describe Assignment do
   end
 
   describe "submissions for students on team" do
+    before(:each) do
+      @course = create(:course_accepting_groups)
+      @students = []
+      create_professor_for_course
+      create_assignment_for_course
+      @students | create_students_for_course(2)
+      @submissions = create_submissions_for_students
+      create_team_and_add_students
+    end
+
     it "returns submissions for the students on the given team" do
+      expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).to eq(@submissions)
     end
 
     it "does not return submissions for students not on the team" do
+      @submission = create_teamless_student_with_submission
+      expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).not_to include([@submission])
     end
 
     it "should query the database when looking for submissions" do
@@ -466,7 +479,7 @@ describe Assignment do
         @students = []
         create_professor_for_course
         create_assignment_for_course
-        create_students_for_course(2)
+        @students | create_students_for_course(2)
         create_submissions_for_students
         create_team_and_add_students
       end
@@ -477,7 +490,7 @@ describe Assignment do
         end
 
         it "should not include students who don't have a submission for the assignment" do
-          create_students_for_course
+          @students | create_student_for_course
           expect(@assignment.students_with_submissions.sort_by(&:id)).not_to include(@students)
         end
       end
@@ -896,13 +909,18 @@ describe Assignment do
   end
 
   # helper methods
+  def create_student_for_course
+    create_students_for_course(1)
+  end
+
   def create_students_for_course(total=1)
-    total.times do |n|
+    1..total.collect do |n|
+      # sets instance variables as @student1, @student2 etc.
       n = @students.size + 1
       self.instance_variable_set("@student#{n}", create(:user))
       active_student = self.instance_variable_get("@student#{n}")
       CourseMembership.create user_id: active_student[:id], course_id: @course[:id], role: "student"
-      @students << active_student
+      active_student
     end
   end
 
@@ -916,8 +934,14 @@ describe Assignment do
     end
   end
 
+  def create_teamless_student_with_submission
+    student = create(:user)
+    grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
+    create(:submission, grade: grade, student: student, assignment: @assignment)
+  end
+
   def create_submissions_for_students
-    @students.each do |student|
+    @students.collect do |student|
       grade = create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
       create(:submission, grade: grade, student: student, assignment: @assignment)
     end
