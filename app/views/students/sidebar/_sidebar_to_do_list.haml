@@ -1,7 +1,7 @@
-.text-center 
+.text-center
   %h3 Due This Week
   %hr
-  - current_course.assignments.chronological.includes(:assignment_type).each do |assignment|
+  - current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions).each do |assignment|
     - if assignment.soon? && assignment.include_in_to_do? && assignment.visible_for_student?(current_student)
       .assignment-item
         - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(current_student)

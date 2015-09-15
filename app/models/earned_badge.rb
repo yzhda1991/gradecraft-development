@@ -47,7 +47,7 @@ class EarnedBadge < ActiveRecord::Base
     group(:student_id).pluck('earned_badges.student_id, COALESCE(SUM(score), 0)')
   end
 
-  def check_unlockables 
+  def check_unlockables
     if self.badge.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition_id => self.badge.id, :condition_type => "Badge").each do |condition|
         if condition.unlockable_type == "Assignment"
