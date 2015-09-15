@@ -432,7 +432,7 @@ describe Assignment do
     end
   end
 
-  describe "submissions for students on team" do
+  describe "submissions for students on team", working: true do
     before(:each) do
       @course = create(:course_accepting_groups)
       @students = []
@@ -509,9 +509,10 @@ describe Assignment do
     context "ordering students by name" do
       before(:each) do
         @course = create(:course_accepting_groups)
+        @students = []
         create_professor_for_course
         create_assignment_for_course
-        @students = create_students_with_names("Stephen Applebaum", "Jeffrey Applebaum", "Herman Merman")
+        @students += create_students_with_names("Stephen Applebaum", "Jeffrey Applebaum", "Herman Merman")
         @alpha_student_order = [@student2, @student1, @student3]
         create_submissions_for_students
         create_team_and_add_students
@@ -913,9 +914,9 @@ describe Assignment do
   end
 
   def create_students_for_course(total=1)
-    1..total.collect do |n|
+    (1..total).collect do |student_number|
       # sets instance variables as @student1, @student2 etc.
-      n = @students.size + 1
+      n = student_number + 1 + @students.size
       student = create(:user)
       self.instance_variable_set("@student#{n}", student)
       enroll_student_in_active_course(student)
@@ -924,12 +925,13 @@ describe Assignment do
   end
 
   def create_students_with_names(*student_names)
-    student_names.collect do |name|
-      n = @students.size + 1
-      self.instance_variable_set("@student#{n}", create(:user, first_name: name.split.first, last_name: name.split.last))
-      student = self.instance_variable_get("@student#{n}")
+    User.where(username: student_names.collect {|n| n.sub(/ /,".").downcase }).destroy_all
+    student_names.inject([]) do |memo, name|
+      n = memo.size + 1 + @students.size
+      student = create(:user, first_name: name.split.first, last_name: name.split.last, username: name.sub(/ /,".").downcase)
+      self.instance_variable_set("@student#{n}", student)
       enroll_student_in_active_course(student)
-      student
+      memo << student
     end
   end
 
@@ -950,7 +952,8 @@ describe Assignment do
   def create_submissions_for_students
     @students.collect do |student|
       grade = grade_student_for_active_assignment(student)
-      create(:submission, grade: grade, student: student, assignment: @assignment)
+      submission = create(:submission, grade: grade, student: student, assignment: @assignment)
+      submission
     end
   end
 
