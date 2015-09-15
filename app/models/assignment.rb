@@ -152,11 +152,11 @@ class Assignment < ActiveRecord::Base
   end
 
   def students_with_submissions
-    User.where("id in (select student_id from submissions where assignment_id = ?)", self.id)
+    User.order_by_name.where("id in (select student_id from submissions where assignment_id = ?)", self.id)
   end
 
   def students_with_submissions_on_team(team)
-    User.where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team[:id])
+    User.order_by_name.where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team[:id])
   end
 
   private

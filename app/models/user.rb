@@ -81,7 +81,7 @@ class User < ActiveRecord::Base
   scope :students_in_team, -> (team_id, student_ids) \
     { includes(:team_memberships).where(team_memberships: { team_id: team_id, student_id: student_ids }) }
 
-  scope :order_by_name, -> { order("last_name, first_name") }
+  scope :order_by_name, -> { order("last_name, first_name ASC") }
 
   mount_uploader :avatar_file_name, ImageUploader
 

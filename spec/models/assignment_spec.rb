@@ -433,34 +433,57 @@ describe Assignment do
   end
 
   describe "finding students with submissions", working: true do
-    before(:each) do
-      @course = create(:course_accepting_groups)
-      @students = []
-      create_professor_for_course
-      create_assignment_for_course
-      create_students_for_course(2)
-      create_submissions_for_students
-      create_team_and_add_students
+    context "basic finders" do
+      before(:each) do
+        @course = create(:course_accepting_groups)
+        @students = []
+        create_professor_for_course
+        create_assignment_for_course
+        create_students_for_course(2)
+        create_submissions_for_students
+        create_team_and_add_students
+      end
+
+      context "no team is provided" do
+        it "should find all students with submissions for the assignment" do
+          expect(@assignment.students_with_submissions.sort_by(&:id)).to eq(@students)
+        end
+
+        it "should not include students who don't have a submission for the assignment" do
+          create_students_for_course
+          expect(@assignment.students_with_submissions.sort_by(&:id)).not_to include(@students)
+        end
+      end
+
+      context "team is provided" do
+        it "should find all students with submissions who are on the team" do
+          expect(@assignment.students_with_submissions_on_team(@team).sort_by(&:id)).to eq(@students)
+        end
+
+        it "should exclude students with submissions who are not on the team" do
+          expect(@assignment.students_with_submissions.sort_by(&:id)).not_to include(@students)
+        end
+      end
     end
 
-    context "no team is provided" do
-      it "should find all students with submissions for the assignment" do
-        expect(@assignment.students_with_submissions.sort_by(&:id)).to eq(@students)
+    context "ordering students by name" do
+      before(:each) do
+        @course = create(:course_accepting_groups)
+        @students = []
+        create_professor_for_course
+        create_assignment_for_course
+        create_students_with_names "Stephen Applebaum", "Jeffrey Applebaum", "Herman Merman"
+        @alpha_student_order = [@student2, @student1, @student3]
+        create_submissions_for_students
+        create_team_and_add_students
       end
 
-      it "should not include students who don't have a submission for the assignment" do
-        create_students_for_course
-        expect(@assignment.students_with_submissions.sort_by(&:id)).not_to include(@students)
-      end
-    end
-
-    context "team is provided" do
-      it "should find all students with submissions who are on the team" do
-        expect(@assignment.students_with_submissions_on_team(@team).sort_by(&:id)).to eq(@students)
+      it "should sort by last_name, first_name ascending" do
+        expect(@assignment.students_with_submissions).to eq(@alpha_student_order)
       end
 
-      it "should exclude students with submissions who are not on the team" do
-        expect(@assignment.students_with_submissions.sort_by(&:id)).not_to include(@students)
+      it "should sort by first_name if last_name matches" do
+        expect(@assignment.students_with_submissions_on_team(@team)).to eq(@alpha_student_order)
       end
     end
   end
@@ -850,6 +873,16 @@ describe Assignment do
     total.times do |n|
       n = @students.size + 1
       self.instance_variable_set("@student#{n}", create(:user))
+      active_student = self.instance_variable_get("@student#{n}")
+      CourseMembership.create user_id: active_student[:id], course_id: @course[:id], role: "student"
+      @students << active_student
+    end
+  end
+
+  def create_students_with_names(*student_names)
+    student_names.each do |name|
+      n = @students.size + 1
+      self.instance_variable_set("@student#{n}", create(:user, first_name: name.split.first, last_name: name.split.last))
       active_student = self.instance_variable_get("@student#{n}")
       CourseMembership.create user_id: active_student[:id], course_id: @course[:id], role: "student"
       @students << active_student
