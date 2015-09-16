@@ -351,10 +351,10 @@ GradeCraft::Application.routes.draw do
   get 'students/:id/predictor_weights' => 'assignment_type_weights#predictor_data', defaults: {format: :json}
 
   #18. Exports
-  namespace :assignment_exports do
+  namespace :exports do
     namespace :assignments do
-      get 'submissions' => 'assignment_exports#submissions'
-      get 'submissions_by_team' => 'assignment_exports#submissions_by_team'
+      get '/:assignment_id/submissions' => 'assignment_exports#submissions'
+      get '/:assignment_id/submissions_by_team' => 'assignment_exports#submissions_by_team'
     end
   end
 end
