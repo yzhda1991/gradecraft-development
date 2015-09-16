@@ -38,7 +38,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
         @controller.instance_variable_set("@submissions", @submissions)
       end
 
-      context "grouping students", focus: true do
+      context "grouping students" do
         it "should group students by 'last_name_first_name-id'" do
           @controller.instance_eval { group_submissions_by_student }
         end
