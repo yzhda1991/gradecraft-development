@@ -11,12 +11,22 @@ json.root do |root|
   end
 end
 
-@students.each do |student|
-  name = "#{student.last_name}_#{student.first_name}"
-  json.set! name do
+
+@submissions_by_student.each do |sbs|
+  json.set! sbs[0] do
     json.content_type "directory"
+    sbs[1].each do |submission|
+      json.submission "..."
+    end
   end
 end
+
+# @students.each do |student|
+#   name = "#{student.last_name}_#{student.first_name}"
+#   json.set! name do
+#     json.content_type "directory"
+#   end
+# end
 
 #csv @assignment.grade_import(@students)
 

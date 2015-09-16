@@ -10,6 +10,17 @@ class AssignmentExportsController < ApplicationController
     @submissions ||= @assignment.student_submissions_for_team(@team)
   end
 
+  def export
+    fetch_assignment
+    @submissions ||= @assignment.student_submissions
+    group_submissions_by_student
+  end
+
+  # relevant helper methods on Assignment:
+  #
+  # #students_with_submissions
+  # #students_with_submissions_on_team(team)
+
   private
 
     def group_submissions_by_student
@@ -18,7 +29,7 @@ class AssignmentExportsController < ApplicationController
         "#{student[:last_name]}_#{student[:first_name]}-#{student[:id]}".downcase
       end
     end
-    
+
     def fetch_assignment
       @assignment = Assignment.find params[:assignment_id]
     end
@@ -26,9 +37,9 @@ class AssignmentExportsController < ApplicationController
   public
 
 #   def export_submissions
-# 
+#
 #     @assignment = current_course.assignments.find(params[:id])
-# 
+#
 #     if params[:team_id].present?
 #       team = current_course.teams.find_by(id: params[:team_id])
 #       zip_name = "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}_#{team.name}"
@@ -37,20 +48,20 @@ class AssignmentExportsController < ApplicationController
 #       zip_name = "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}"
 #       @students = current_course.students_being_graded
 #     end
-# 
+#
 #     respond_to do |format|
 #       format.zip do
-# 
+#
 #         export_dir = Dir.mktmpdir
 #         export_zip zip_name, export_dir do
-# 
+#
 #           require 'open-uri'
 #           error_log = ""
-# 
+#
 #           open( "#{export_dir}/_grade_import_template.csv",'w' ) do |f|
 #             f.puts @assignment.grade_import(@students)
 #           end
-# 
+#
 #           @students.each do |student|
 #             if submission = student.submission_for_assignment(@assignment)
 #               if submission.has_multiple_components?
@@ -59,7 +70,7 @@ class AssignmentExportsController < ApplicationController
 #               else
 #                 student_dir = export_dir
 #               end
-# 
+#
 #               if submission.text_comment.present? or submission.link.present?
 #                 open(File.join(student_dir, "#{student.last_name}_#{student.first_name}_#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}_submission_text.txt"),'w' ) do |f|
 #                   f.puts "Submission items from #{student.last_name}, #{student.first_name}\n"
@@ -67,10 +78,10 @@ class AssignmentExportsController < ApplicationController
 #                   f.puts "\nlink: #{submission.link }\n" if submission.link.present?
 #                 end
 #               end
-# 
+#
 #               if submission.submission_files
 #                 submission.submission_files.each_with_index do |submission_file, i|
-# 
+#
 #                   if Rails.env.development?
 #                     FileUtils.cp File.join(Rails.root,'public',submission_file.url), File.join(student_dir, "#{student.last_name}_#{student.first_name}_#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}-#{i + 1}#{File.extname(submission_file.filename)}")
 #                   else
@@ -93,7 +104,7 @@ class AssignmentExportsController < ApplicationController
 #               end
 #             end
 #           end
-# 
+#
 #           if ! error_log.empty?
 #             open( "#{export_dir}/_error_Log.txt",'w' ) do |f|
 #               f.puts "Some errors occurred on download:\n"
