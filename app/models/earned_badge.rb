@@ -5,7 +5,7 @@ class EarnedBadge < ActiveRecord::Base
 
   STATUSES= ["Predicted", "Earned"]
 
-  belongs_to :course
+  belongs_to :course, touch: true
   belongs_to :badge
   belongs_to :student, :class_name => 'User', touch: true
   belongs_to :submission # Optional
