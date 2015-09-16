@@ -10,17 +10,12 @@ class AssignmentExportsController < ApplicationController
     @submissions ||= @assignment.student_submissions_for_team(@team)
   end
 
-  # relevant helper methods on Assignment:
-  #
-  # #students_with_submissions
-  # #students_with_submissions_on_team(team)
-
   private
 
-    def group_submissions_by_id
+    def group_submissions_by_student
       @submissions_by_student ||= @submissions.group_by do |submission|
-        student = submission.student
-        "#{student[:last_name]}_#{student[:first_name]}-#{student[:id]}"
+        student = submission[:student]
+        "#{student[:last_name]}_#{student[:first_name]}-#{student[:id]}".downcase
       end
     end
     
