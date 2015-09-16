@@ -10,6 +10,10 @@ class AssignmentExportsController < ApplicationController
     @students_on_team ||= @assignment.student_submissions_for_team(@team)
   end
 
+  # relevant helper methods on Assignment:
+  # #students_with_submissions
+  # #students_with_submissions_on_team(team)
+
   private
     
     def fetch_assignment
