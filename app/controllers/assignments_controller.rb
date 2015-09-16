@@ -125,6 +125,57 @@ class AssignmentsController < ApplicationController
 
   private
 
+  def predictor_assignments_data
+    @assignments = current_course.assignments.select(
+      :accepts_resubmissions_until,
+      :accepts_submissions,
+      :accepts_submissions_until,
+      :assignment_type_id,
+      :course_id,
+      :description,
+      :due_at,
+      :grade_scope,
+      :id,
+      :include_in_predictor,
+      :name,
+      :open_at,
+      :pass_fail,
+      :point_total,
+      :points_predictor_display,
+      :position,
+      :release_necessary,
+      :required,
+      :resubmissions_allowed,
+      :student_logged,
+      :thumbnail,
+      :use_rubric,
+      :visible,
+      :visible_when_locked
+    )
+  end
+
+  def find_or_create_assignment_rubric
+    @assignment.rubric || Rubric.create(assignment_id: @assignment[:id])
+  end
+
+  def predictor_grades(student)
+    @grades = student.grades.where(:course_id => current_course).select(
+      :assignment_id,
+      :final_score,
+      :id,
+      :predicted_score,
+      :pass_fail_status,
+      :status,
+      :student_id,
+      :raw_score,
+      :score
+    )
+  end
+
+  def team_params
+    @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
+  end
+
   def set_assignment_weights(assignment)
     return unless assignment.student_weightable?
     assignment.weights = current_course.students.map do |student|

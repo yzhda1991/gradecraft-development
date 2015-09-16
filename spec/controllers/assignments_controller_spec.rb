@@ -288,10 +288,40 @@ describe AssignmentsController do
         end
       end
     end
+
+    describe "submissions export", focus: true do
+      before do
+        @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
+      end
+      it "returns json" do
+        get :submissions_export, :id => @assignment, format: :json
+        expect(response.body).to eq("{}")
+      end
+    end
+
+    describe "GET export_submissions" do
+      context "with ZIP format" do
+        it "returns a zip directory" do
+          get :export_submissions, :id => @assignment, :format => :zip
+          expect(response.content_type).to eq("application/zip")
+        end
+      end
+    end
   end
 
   context "as a student" do
-    before(:each) { login_user(@student) }
+    before(:all) do
+      @student = create(:user)
+      CourseMembership.create user: @professor, course: @course, role: "student"
+      @assignment_type = create(:assignment_type, course: @course)
+      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
+      # allow(Resque).to receive(:enqueue).and_return(true)
+    end
+
+    before(:each) do
+      @assignment = create(:assignment, assignment_type: @assignment_type, course: @course)
+      login_user(@student)
+    end
 
     describe "GET index" do
       it "redirects to syllabus path" do
