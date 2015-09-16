@@ -18,7 +18,7 @@ class AssignmentExportsController < ApplicationController
   private
 
     def group_submissions_by_id
-      @submissions_by_student ||= @submissions.group_by |submission|
+      @submissions_by_student ||= @submissions.group_by do |submission|
         student = submission.student
         "#{student[:last_name]}_#{student[:first_name]}-#{student[:id]}"
       end
