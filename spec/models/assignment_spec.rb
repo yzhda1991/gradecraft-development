@@ -432,8 +432,9 @@ describe Assignment do
     end
   end
 
-  describe "submissions for students on team", working: true do
+  describe "fetching student submissions from an assignment", working: true do
     before(:each) do
+      Rails.cache.clear
       @course = create(:course_accepting_groups)
       @students = []
       create_professor_for_course
@@ -441,47 +442,54 @@ describe Assignment do
       @students += create_students_for_course(2)
       @submissions = create_submissions_for_students
       create_team_and_add_students
-      Rails.cache.clear
     end
 
-    it "returns submissions for the students on the given team" do
-      expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).to eq(@submissions)
+    describe "submissions by team" do
+      it "returns submissions for the students on the given team" do
+        expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).to eq(@submissions)
+      end
+
+      it "does not return submissions for students not on the team" do
+        @submission = create_teamless_student_with_submission
+        expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).not_to include([@submission])
+      end
+
+      # TODO: restructure the student_submissions_for_team() method to only make an initial call for everything, then
+      # make no subsequent calls for data
+
+      # make sure that the include is working properly to save bandwidth
+      it "should only make queries for data on the initial call" do
+        # eager load all of the submissions, which should query the database
+        expect { @submission_results = @assignment.student_submissions_for_team(@team) }.to make_database_queries
+
+        # none of additional object interactions should produce queries at this point
+        expect { @submission_results.first.submission_files }.not_to make_database_queries
+
+        # should not have to perform any additional queries to get any other submission file
+        expect { @submission_results.last.submission_files }.not_to make_database_queries
+      end
     end
 
-    it "does not return submissions for students not on the team" do
-      @submission = create_teamless_student_with_submission
-      expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).not_to include([@submission])
-    end
+    describe "student submissions" do
+      it "should return a list of submissions for that assignment" do
+        expect(@assignment.student_submissions.sort_by(&:id)).to eq(@submissions)
+      end
 
-    # TODO: restructure the student_submissions_for_team() method to only make an initial call for everything, then
-    # make no subsequent calls for data
+      # make sure that the include is working properly to save bandwidth
+      it "should not query the database when looking for submission files" do
+        # eager load all of the submissions, which should query the database
+        expect { @submission_results = @assignment.student_submissions }.to make_database_queries
 
-    # make sure that the include is working properly to save bandwidth
-    it "should only make queries for data on the initial call", immediate: true  do
-      # eager load all of the submissions, which should query the database
-      expect { @submission_results = @assignment.student_submissions_for_team(@team) }.to make_database_queries
+        # none of additional object interactions should produce queries at this point
+        expect { @submission_results.first.submission_files }.not_to make_database_queries
 
-      # none of additional object interactions should produce queries at this point
-      expect { @submission_results.first.submission_files }.not_to make_database_queries
-
-      # should not have to perform any additional queries to get any other submission file
-      expect { @submission_results.last.submission_files }.not_to make_database_queries
+        # should not have to perform any additional queries to get any other submission file
+        expect { @submission_results.last.submission_files }.not_to make_database_queries
+      end
     end
   end
 
-  describe "student submissions" do
-    it "should return a list of submissions for that assignment" do
-    end
-
-    it "should query the database when looking for submissions" do
-    end
-
-    # make sure that the include is working properly to save bandwidth
-    it "should not query the database when looking for submission files" do
-    end
-  end
-
-  describe "finding students with submissions" do
+  describe "finding students with submissions", working: true do
     context "basic finders" do
       before(:each) do
         @course = create(:course_accepting_groups)

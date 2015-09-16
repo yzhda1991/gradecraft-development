@@ -154,8 +154,9 @@ class Assignment < ActiveRecord::Base
   # helper methods for submissions and students wiht submissions
   def student_submissions
     Submission
+      .includes(:submission_files)
       .where(assignment_id: self[:id])
-      .preload(:submission_files)
+      .to_a # force array to trigger eager loading call
   end
 
   def student_submissions_for_team(team)
