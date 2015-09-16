@@ -155,6 +155,7 @@ class Assignment < ActiveRecord::Base
   def student_submissions
     Submission
       .includes(:submission_files)
+      .includes(:student)
       .where(assignment_id: self[:id])
       .to_a # force array to trigger eager loading call
   end
@@ -162,6 +163,7 @@ class Assignment < ActiveRecord::Base
   def student_submissions_for_team(team)
     Submission
       .includes(:submission_files)
+      .includes(:student)
       .where(assignment_id: self[:id])
       .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id])
       .to_a # force array to trigger eager loading call

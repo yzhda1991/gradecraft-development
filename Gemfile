@@ -34,7 +34,8 @@ gem 'fog'
 gem 'font-awesome-rails'
 
 # add intelligent app-wide eager loading by default to remove n+1 loading issues
-gem 'goldiloader'
+# TODO: max needs to test this in conjunction with the Bullet gem to ensure
+# gem 'goldiloader'
 
 gem 'haml'
 gem 'ims-lti', git: 'https://github.com/venturit/ims-lti.git', branch: 'master'

@@ -444,7 +444,7 @@ describe Assignment do
       create_team_and_add_students
     end
 
-    describe "submissions by team" do
+    describe "submissions by team", working: true do
       it "returns submissions for the students on the given team" do
         expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).to eq(@submissions)
       end
@@ -467,6 +467,9 @@ describe Assignment do
 
         # should not have to perform any additional queries to get any other submission file
         expect { @submission_results.last.submission_files }.not_to make_database_queries
+
+        # should not have to make additional queries for the associated users
+        expect { @submission_results.first.student }.not_to make_database_queries
       end
     end
 
@@ -485,6 +488,9 @@ describe Assignment do
 
         # should not have to perform any additional queries to get any other submission file
         expect { @submission_results.last.submission_files }.not_to make_database_queries
+
+        # should not have to make additional queries for the associated users
+        expect { @submission_results.first.student }.not_to make_database_queries
       end
     end
   end
