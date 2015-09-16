@@ -163,6 +163,7 @@ class Assignment < ActiveRecord::Base
       .includes(:submission_files)
       .where(assignment_id: self[:id])
       .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id])
+      .to_a # force array to trigger eager loading call
   end
 
   def students_with_submissions

@@ -459,10 +459,7 @@ describe Assignment do
     # make sure that the include is working properly to save bandwidth
     it "should only make queries for data on the initial call", immediate: true  do
       # eager load all of the submissions, which should query the database
-      expect { @submission_results = @assignment.student_submissions_for_team(@team) }.not_to make_database_queries
-
-      # should make an eager-loaded call
-      expect { @submission_results.each }.to make_database_queries
+      expect { @submission_results = @assignment.student_submissions_for_team(@team) }.to make_database_queries
 
       # none of additional object interactions should produce queries at this point
       expect { @submission_results.first.submission_files }.not_to make_database_queries
