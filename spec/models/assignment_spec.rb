@@ -490,7 +490,7 @@ describe Assignment do
         end
 
         it "should not include students who don't have a submission for the assignment" do
-          @students | create_student_for_course
+          @students << create_student_for_course
           expect(@assignment.students_with_submissions.sort_by(&:id)).not_to include(@students)
         end
       end
@@ -506,7 +506,7 @@ describe Assignment do
       end
     end
 
-    context "ordering students by name" do
+    context "ordering students by name", working: true do
       before(:each) do
         @course = create(:course_accepting_groups)
         @students = []
@@ -910,7 +910,9 @@ describe Assignment do
 
   # helper methods
   def create_student_for_course
-    create_students_for_course(1)
+    # return just one user and not a whole array
+    # because arrays are for fools
+    create_students_for_course(1).first
   end
 
   def create_students_for_course(total=1)
@@ -927,10 +929,20 @@ describe Assignment do
   def create_students_with_names(*student_names)
     User.where(username: student_names.collect {|n| n.sub(/ /,".").downcase }).destroy_all
     student_names.inject([]) do |memo, name|
+      # get an index for the @studentSOME# instance varible relative to the object's @students array
+      # @student3, @student4 etc.
       n = memo.size + 1 + @students.size
+
+      # create and name the student
       student = create(:user, first_name: name.split.first, last_name: name.split.last, username: name.sub(/ /,".").downcase)
+
+      # set the instance variable '@studentSOME#'
       self.instance_variable_set("@student#{n}", student)
+
+      # enroll the damn student in the durn course already
       enroll_student_in_active_course(student)
+
+      # add the student to the memo so you can count it and don't have to use a durn tally
       memo << student
     end
   end

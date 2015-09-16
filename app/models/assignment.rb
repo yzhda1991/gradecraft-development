@@ -153,11 +153,11 @@ class Assignment < ActiveRecord::Base
 
   # helper methods for submissions and students wiht submissions
   def student_submissions
-    submissions.include(:submission_files)
+    submissions.includes(:submission_files)
   end
 
   def student_submissions_for_team(team)
-    submissions.where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id]).include(:submission_files)
+    submissions.where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id]).includes(:submission_files)
   end
 
   def students_with_submissions
