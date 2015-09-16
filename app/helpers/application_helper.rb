@@ -61,4 +61,7 @@ module ApplicationHelper
     number_with_delimiter(value)
   end
 
+  def collection_cache_key(category, *args)
+    "#{category}/#{args.join("/")}"
+  end
 end
