@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150916202833) do
+ActiveRecord::Schema.define(version: 20150916210411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,24 +61,6 @@ ActiveRecord::Schema.define(version: 20150916202833) do
     t.integer  "value",                     null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-  end
-
-  create_table "assignment_submissions", force: :cascade do |t|
-    t.integer  "assignment_id"
-    t.integer  "user_id"
-    t.string   "feedback",                limit: 255
-    t.string   "comment",                 limit: 255
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.string   "attachment_file_name",    limit: 255
-    t.string   "attachment_content_type", limit: 255
-    t.integer  "attachment_file_size"
-    t.datetime "attachment_updated_at"
-    t.string   "link",                    limit: 255
-    t.integer  "submittable_id"
-    t.string   "submittable_type",        limit: 255
-    t.text     "text_feedback"
-    t.text     "text_comment"
   end
 
   create_table "assignment_types", force: :cascade do |t|
@@ -448,7 +430,7 @@ ActiveRecord::Schema.define(version: 20150916202833) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score",                  default: 0,     null: false
+    t.integer  "predicted_score"
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
     t.boolean  "feedback_read",                    default: false
