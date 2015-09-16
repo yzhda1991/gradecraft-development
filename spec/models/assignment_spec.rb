@@ -441,6 +441,7 @@ describe Assignment do
       @students += create_students_for_course(2)
       @submissions = create_submissions_for_students
       create_team_and_add_students
+      Rails.cache.clear
     end
 
     it "returns submissions for the students on the given team" do
@@ -452,14 +453,19 @@ describe Assignment do
       expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).not_to include([@submission])
     end
 
-    it "should query the database when looking for submissions" do
-      expect { @assignment.student_submissions_for_team(@team) }.to make_database_queries
-    end
+    # TODO: restructure the student_submissions_for_team() method to only make an initial call for everything, then
+    # make no subsequent calls for data
 
     # make sure that the include is working properly to save bandwidth
-    it "should not query the database when looking for submission files" do
-      @submission_results = @assignment.student_submissions_for_team(@team)
+    it "should only make queries for data on the initial call" do
+      # eager load all of the submissions, which should query the database
+      expect { @submission_results = @assignment.student_submissions_for_team(@team) }.to make_database_queries
+
+      # none of additional object interactions should produce queries at this point
       expect { @submission_results.first.submission_files }.not_to make_database_queries
+
+      # should not have to perform any additional queries to get any other submission file
+      expect { @submission_results.last.submission_files }.not_to make_database_queries
     end
   end
 

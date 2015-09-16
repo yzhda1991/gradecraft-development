@@ -153,19 +153,28 @@ class Assignment < ActiveRecord::Base
 
   # helper methods for submissions and students wiht submissions
   def student_submissions
-    submissions.includes(:submission_files)
+    Submission
+      .where(assignment_id: self[:id])
+      .preload(:submission_files)
   end
 
   def student_submissions_for_team(team)
-    submissions.where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id]).includes(:submission_files)
+    Submission
+      .where(assignment_id: self[:id])
+      .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id])
+      .eager_load(:submission_files)
   end
 
   def students_with_submissions
-    User.order_by_name.where("id in (select student_id from submissions where assignment_id = ?)", self.id)
+    User
+      .order_by_name
+      .where("id in (select student_id from submissions where assignment_id = ?)", self.id)
   end
 
   def students_with_submissions_on_team(team)
-    User.order_by_name.where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team[:id])
+    User
+      .order_by_name
+      .where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team[:id])
   end
 
   private
