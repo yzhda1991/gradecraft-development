@@ -438,7 +438,7 @@ describe Assignment do
       @students = []
       create_professor_for_course
       create_assignment_for_course
-      @students | create_students_for_course(2)
+      @students += create_students_for_course(2)
       @submissions = create_submissions_for_students
       create_team_and_add_students
     end
@@ -453,10 +453,13 @@ describe Assignment do
     end
 
     it "should query the database when looking for submissions" do
+      expect { @assignment.student_submissions_for_team(@team) }.to make_database_queries
     end
 
     # make sure that the include is working properly to save bandwidth
     it "should not query the database when looking for submission files" do
+      @submission_results = @assignment.student_submissions_for_team(@team)
+      expect { @submission_results.first.submission_files }.not_to make_database_queries
     end
   end
 
@@ -472,7 +475,7 @@ describe Assignment do
     end
   end
 
-  describe "finding students with submissions", working: true do
+  describe "finding students with submissions" do
     context "basic finders" do
       before(:each) do
         @course = create(:course_accepting_groups)
@@ -506,7 +509,7 @@ describe Assignment do
       end
     end
 
-    context "ordering students by name", working: true do
+    context "ordering students by name" do
       before(:each) do
         @course = create(:course_accepting_groups)
         @students = []
@@ -964,7 +967,7 @@ describe Assignment do
   def create_submissions_for_students
     @students.collect do |student|
       grade = grade_student_for_active_assignment(student)
-      submission = create(:submission, grade: grade, student: student, assignment: @assignment)
+      submission = create(:submission, grade: grade, student: student, assignment: @assignment, course: @course)
       submission
     end
   end
@@ -981,7 +984,9 @@ describe Assignment do
 
   def create_team_and_add_students
     @team = create(:team, course: @course)
-    @students.each {|student| create(:team_membership, team: @team, student: student) }
+    @students.each do |student|
+      create(:team_membership, team: @team, student: student)
+    end
   end
 
   describe "#to_json" do
