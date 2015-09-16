@@ -7,6 +7,6 @@
     / Display current level if it is present
     Current Level:
     %span.bold= current_student.grade_level_for_course(current_course)
-  - cache collection_cache_key :student_sidebar_total_score, current_course.updated_at, current_student.updated_at, current_student.id do
+  - cache collection_cache_key :student_sidebar_total_score, current_student, current_course do
     #data-predictor{'data-predictor' =>  current_student.total_scores_for_chart(current_course).to_json}
     .chart#userBarTotal

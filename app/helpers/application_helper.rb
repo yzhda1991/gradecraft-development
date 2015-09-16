@@ -62,6 +62,7 @@ module ApplicationHelper
   end
 
   def collection_cache_key(category, *args)
-    "#{category}/#{args.join("/")}"
+    arguments = args.map { |arg| arg.respond_to?(:cache_key) ? arg.cache_key : arg }
+    "#{category}/#{arguments.join("/")}"
   end
 end
