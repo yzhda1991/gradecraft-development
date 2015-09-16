@@ -160,9 +160,9 @@ class Assignment < ActiveRecord::Base
 
   def student_submissions_for_team(team)
     Submission
+      .includes(:submission_files)
       .where(assignment_id: self[:id])
       .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id])
-      .eager_load(:submission_files)
   end
 
   def students_with_submissions
