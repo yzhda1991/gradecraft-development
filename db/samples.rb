@@ -1,23 +1,6 @@
 user_names = ['Ron Weasley','Fred Weasley','Harry Potter','Hermione Granger','Colin Creevey','Seamus Finnigan','Hannah Abbott',
   'Pansy Parkinson','Zacharias Smith','Blaise Zabini', 'Draco Malfoy', 'Dean Thomas', 'Millicent Bulstrode', 'Terry Boot', 'Ernie Macmillan',
-  'Roland Abberlay', 'Katie Bell', 'Regulus Black', 'Euan Abercrombie', 'Brandon Angel', 'Jada Angela', 'Pete Balsall', 'Allison Barnes',
-  'Fiona Belmont', 'Kajol Bhatt', 'Sally Birchgrove', 'Stephen Challock', 'Dennis Creevey', 'Lisa Cullen', 'Winky Crocket', 'Fay Dunbar',
-  'Lily Evans', 'Rosalyn Ewhurst', 'Terrence Fogarty', 'Hamish Frater', 'Vicky Frobisher', 'Godric Gryffindor', 'Ryan Henry', 'David Hamblin',
-  'Kelly Harborne', 'Thelma Holmes', 'Geoffrey Hooper', 'Carl Hopkins', 'Satoru Lida', 'Nandini Johar', 'Angelina Johnson', 'Lee Jordan',
-  'Alastor Moody', 'Albus Potter', 'Alice Longbottom', 'Alicia Spinnet', 'Amelia Bones', 'Alecto Carrow', 'Andromeda Tonks', 'Antioc Peverell',
-  'Antonin Dolohov', 'Arabella Figg', 'Argus Filch', 'Arthur Weasley', 'Augusta Longbottom', 'Augustus Rookwood', 'Bartemius Crouch',
-  'Bathilda Batshot', 'Bathsheba Babbling', 'Cadmus Peverell', 'Charity Burbage', 'Cho Chang', 'Cormac MacLaggen', 'Cornelius Fudge',
-  'Cuthbert Binns', 'Dilys Derwent', 'Dirk Cresswell', 'Dudley Dursley', 'Fenrir Greyback', 'Filius Flitwick', 'Fleur Delacour',
-  'Frank Bryce', 'Gabrielle Delacour', 'Garrick Ollivander', 'Gellert Grindelwald', 'Gilderoy Lockhart', 'Ginerva Weasley', 'Gregory Goyle',
-  'Helena Ravenclaw', 'Helga Hufflepuff', 'Hepzibah Smith', 'Horace Slughorn', 'Ignotus Peverell', 'Igor Karakoff', 'Irma Pince',
-  'James Potter', 'Justin Finch-Fletchley', 'Kingsley Shacklebolt', 'Lavender Brown', 'Lily Potter', 'Lucius Malfoy', 'Ludo Bagman',
-  'Marietta Edgecombe', 'Marjorie Dursley', 'Marvolo Gaunt', 'Mary Cattermole', 'Mary Riddle', 'Merope Gaunt', 'Michael Corner',
-  'Molly Weasley', 'Morfin Gaunt', 'Mundungus Fletcher', 'Narcissa Malfoy', 'Newt Scamander', 'Oliver Wood', 'Olympe Maxime', 'Penelope Clearwater',
-  'Peter Pettigrew', 'Petunia Dursley', 'Pius Thicknesse', 'Pomona Sprout', 'Poppy Pomfrey', 'Quirinus Quirrell', 'Rabastan Lestrange',
-  'Reginald Cattermole', 'Remus Lupin', 'Rita Skeeter', 'Rodolphus Lestrange', 'Rolanda Hooch', 'Romilda Vane', 'Rowena Ravenclaw', 'Rubeus Hagrid',
-  'Rufus Scrimgeour', 'Slazar Slytherin', 'Septima Vector', 'Sirius Black', 'Stan Shunpike', 'Sturgis Podmore', 'Susan Bones', 'Sybill Trewlawney',
-  'Ted Tonks', 'Teddy Lupin', 'Theodore Nott', 'Vernon Dursley', 'Viktor Krum', 'Vincent Crabbe', 'Wilhelmina Grubbly-Plank', 'William Weasley',
-  'Xenophilius Lovegood']
+  'Roland Abberlay', 'Katie Bell', 'Regulus Black', 'Euan Abercrombie', 'Brandon Angel']
 
 educ_team_names = ['Harm & Hammer', 'Abusement Park','Silver Woogidy Woogidy Woogidy Snakes','Carpe Ludus','Eduception','Operation Unthinkable','Team Wang','The Carpal Tunnel Crusaders','Pwn Depot']
 
@@ -42,6 +25,18 @@ polsci_grade_scheme_hash = { [0,6000] => 'F', [6001,9000] => 'D-', [9001,12000] 
 polsci_grade_levels = ['Hammurabi', 'Confucius', 'Socrates', 'Cicero', 'William of Ockham', 'Mozi', 'Xenophon', 'Saint Augustine', 'Plato', 'Diogenes', 'Machiavelli', 'Aeschines', 'Ghazali', 'Martin Luther', 'Aristotle', 'Calvin', 'Maimonides', 'St. Thomas Aquinas', 'Xun Zi', 'Ibn Khaldun', 'Thiruvalluvar', 'Locke']
 
 majors = ['Engineering','American Culture','Anthropology','Asian Studies','Astronomy','Cognitive Science','Creative Writing and Literature','English','German','Informatics','Linguistics','Physics']
+
+# Generate sample admin
+User.create! do |u|
+  u.username = 'albus'
+  u.first_name = 'Albus'
+  u.last_name = 'Dumbledore'
+  u.email = 'dumbledore@hogwarts.edu'
+  u.password = 'fawkes'
+  u.admin = true
+  u.save!
+end.activate!
+puts "Albus Dumbledore just apparated into Hogwarts"
 
 courses = []
 
@@ -224,16 +219,6 @@ students = user_names.map do |name|
 end
 puts "Generated #{students.count} unruly students"
 
-# Generate sample admin
-User.create! do |u|
-  u.username = 'albus'
-  u.first_name = 'Albus'
-  u.last_name = 'Dumbledore'
-  u.email = 'dumbledore@hogwarts.edu'
-  u.password = 'fawkes'
-  u.save!
-end.activate!
-puts "Albus Dumbledore just apparated into Hogwarts"
 
 # Generate sample professor
 User.create! do |u|
