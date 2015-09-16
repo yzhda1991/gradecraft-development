@@ -16,10 +16,11 @@ RSpec.describe AssignmentExportsController, type: :controller do
     describe "GET export_submissions", working: true do
       context "relevant students" do
         it "gets all students for the course" do
-        
+          pending   
         end
 
         it "should equal the size of the class" do
+          pending
         end
       end
     end
@@ -27,12 +28,15 @@ RSpec.describe AssignmentExportsController, type: :controller do
     describe "GET export_team_submissions", working: true do
       context "students on active team" do
         it "gets students on the active team" do
+          pending
         end
 
         it "does not included students from other team" do
+          pending
         end
 
         it "should have as many students as the active team" do
+          pending
         end
       end
     end
