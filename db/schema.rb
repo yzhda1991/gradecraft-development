@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150907224335) do
+ActiveRecord::Schema.define(version: 20150916202833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,19 +192,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.datetime "updated_at"
   end
 
-  create_table "badge_sets", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.integer  "course_id"
-    t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "badge_sets_courses", id: false, force: :cascade do |t|
-    t.integer "course_id"
-    t.integer "badge_set_id"
-  end
-
   create_table "badges", force: :cascade do |t|
     t.string   "name",                    limit: 255
     t.text     "description"
@@ -220,16 +207,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.integer  "position"
     t.boolean  "visible_when_locked",                 default: true
   end
-
-  create_table "categories", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.text     "description"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.integer  "course_id"
-  end
-
-  add_index "categories", ["course_id"], name: "index_categories_on_course_id", using: :btree
 
   create_table "challenge_files", force: :cascade do |t|
     t.string   "filename",        limit: 255
@@ -281,33 +258,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.string   "thumbnail",                limit: 255
     t.string   "media_credit",             limit: 255
     t.string   "media_caption",            limit: 255
-  end
-
-  create_table "course_badge_sets", force: :cascade do |t|
-    t.integer "course_id"
-    t.integer "badge_set_id"
-  end
-
-  create_table "course_categories", id: false, force: :cascade do |t|
-    t.integer "course_id"
-    t.integer "category_id"
-  end
-
-  create_table "course_grade_scheme_elements", force: :cascade do |t|
-    t.string   "name",                   limit: 255
-    t.string   "letter_grade",           limit: 255
-    t.integer  "low_range"
-    t.integer  "high_range"
-    t.integer  "course_grade_scheme_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
-  end
-
-  create_table "course_grade_schemes", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-    t.integer  "course_id"
   end
 
   create_table "course_memberships", force: :cascade do |t|
@@ -399,18 +349,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
 
-  create_table "dashboards", force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "duplicated_users", id: false, force: :cascade do |t|
-    t.integer "id"
-    t.string  "last_name",   limit: 255
-    t.string  "role",        limit: 255
-    t.integer "submissions", limit: 8
-  end
-
   create_table "earned_badges", force: :cascade do |t|
     t.integer  "badge_id"
     t.integer  "submission_id"
@@ -435,14 +373,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
 
   add_index "earned_badges", ["grade_id", "badge_id"], name: "index_earned_badges_on_grade_id_and_badge_id", unique: true, using: :btree
 
-  create_table "elements", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.string   "description", limit: 255
-    t.integer  "badge_id"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-  end
-
   create_table "events", force: :cascade do |t|
     t.string   "name",          limit: 255
     t.text     "description"
@@ -455,16 +385,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "course_id"
-  end
-
-  create_table "faqs", force: :cascade do |t|
-    t.string   "question",   limit: 255
-    t.text     "answer"
-    t.integer  "order"
-    t.string   "category",   limit: 255
-    t.string   "audience",   limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
   end
 
   create_table "flagged_users", force: :cascade do |t|
@@ -501,15 +421,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.integer  "course_id"
   end
 
-  create_table "grade_schemes", force: :cascade do |t|
-    t.integer  "assignment_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "course_id"
-    t.string   "name",          limit: 255
-    t.text     "description"
-  end
-
   create_table "grades", force: :cascade do |t|
     t.integer  "raw_score"
     t.integer  "assignment_id"
@@ -537,14 +448,14 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score"
+    t.integer  "predicted_score",                  default: 0,     null: false
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
+    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
-    t.boolean  "is_custom_value",                  default: false
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
@@ -636,11 +547,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.datetime "updated_at"
   end
 
-  create_table "rubric_categories", force: :cascade do |t|
-    t.integer "rubric_id"
-    t.string  "name",      limit: 255
-  end
-
   create_table "rubric_grades", force: :cascade do |t|
     t.string   "metric_name",        limit: 255
     t.text     "metric_description"
@@ -665,15 +571,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.datetime "updated_at"
   end
 
-  create_table "score_levels", force: :cascade do |t|
-    t.string   "name",               limit: 255
-    t.integer  "value"
-    t.integer  "assignment_type_id"
-    t.integer  "assignment_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-  end
-
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", limit: 255, null: false
     t.text     "data"
@@ -683,17 +580,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
-
-  create_table "shared_earned_badges", force: :cascade do |t|
-    t.integer  "course_id"
-    t.text     "student_name"
-    t.integer  "user_id"
-    t.string   "icon",         limit: 255
-    t.string   "name",         limit: 255
-    t.integer  "badge_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "student_academic_histories", force: :cascade do |t|
     t.integer "student_id"
@@ -709,14 +595,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.integer "sat_score"
   end
 
-  create_table "student_assignment_type_weights", force: :cascade do |t|
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.integer  "student_id"
-    t.integer  "assignment_type_id"
-    t.integer  "weight",             null: false
-  end
-
   create_table "submission_files", force: :cascade do |t|
     t.string   "filename",        limit: 255,                 null: false
     t.integer  "submission_id",                               null: false
@@ -725,15 +603,6 @@ ActiveRecord::Schema.define(version: 20150907224335) do
     t.boolean  "file_processing",             default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "submission_files_duplicate", id: false, force: :cascade do |t|
-    t.string  "key",        limit: 255
-    t.string  "format",     limit: 255
-    t.integer "upload_id"
-    t.string  "full_name",  limit: 255
-    t.string  "last_name",  limit: 255
-    t.string  "first_name", limit: 255
   end
 
   create_table "submissions", force: :cascade do |t|
