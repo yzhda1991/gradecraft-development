@@ -28,9 +28,6 @@ json.challenges @challenges do |challenge|
       end
     end
   end
-
-  # challenge.challenge_grade_for_team(@student.team_for_course(current_course)).tap do |grade|
-  # end
 end
 
 json.term_for_challenges term_for :challenges
