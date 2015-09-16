@@ -2,15 +2,16 @@ class AssignmentExportsController < ApplicationController
   before_filter :fetch_assignment
 
   def submissions
-    @students ||= @assignment.student_submissions
+    @submissions||= @assignment.student_submissions
   end
 
   def submissions_by_team
     @team = Team.find params[:team_id]
-    @students_on_team ||= @assignment.student_submissions_for_team(@team)
+    @submissions_for_team ||= @assignment.student_submissions_for_team(@team)
   end
 
   # relevant helper methods on Assignment:
+  #
   # #students_with_submissions
   # #students_with_submissions_on_team(team)
 
