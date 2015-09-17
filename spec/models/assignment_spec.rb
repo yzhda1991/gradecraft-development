@@ -1,6 +1,8 @@
 require "active_record_spec_helper"
 
 describe Assignment do
+  include AssignmentsToolkit
+
   subject { build(:assignment) }
 
   context "validations" do
