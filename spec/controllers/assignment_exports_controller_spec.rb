@@ -23,17 +23,18 @@ RSpec.describe AssignmentExportsController, type: :controller do
         # create an instance of the controller for testing private methods
         @controller = AssignmentExportsController.new
 
+        @student1 = instance_double("Student", first_name: "Ben", last_name: "Bailey", id: 40).as_null_object
+        @student2 = instance_double("Student", first_name: "Mike", last_name: "McCaffrey", id: 55).as_null_object
+        @student3 = instance_double("Student", first_name: "Dana", last_name: "Dafferty", id: 92).as_null_object
+
         # create some mock submissions with students attached
-        @submission1 = {id: 1, student: 
-          {first_name: "Ben", last_name: "Bailey", id: 40}}
-        @submission2 = {id: 2, student:
-          {first_name: "Mike", last_name: "McCaffrey", id: 55}}
-        @submission3 = {id: 3, student:
-          {first_name: "Dana", last_name: "Dafferty", id: 92}}
-        @submission4 = {id: 4, student:
-          {first_name: "Mike", last_name: "McCaffrey", id: 55}}
+        @submission1 = instance_double("Submission", id: 1, student: @student1).as_null_object
+        @submission2 = instance_double("Submission", id: 2, student: @student2).as_null_object
+        @submission3 = instance_double("Submission", id: 3, student: @student3).as_null_object
+        @submission4 = instance_double("Submission", id: 4, student: @student2).as_null_object
 
         @submissions = [@submission1, @submission2, @submission3, @submission4]
+        pp @submissions
 
         # expectation for #group_submissions_by_student
         @grouped_submission_expectation = {
@@ -55,6 +56,9 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
     context "export requests", working: true do
       before(:each) do
+      end
+
+      describe "before filter behavior" do
         it "should query for the assignment by :assignment_id" do
           expect(Assignment).to receive(:find).with(@assignment[:id])
         end
@@ -68,13 +72,10 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
       describe "GET submissions", working: true do
         before(:each) do
+          get :submissions, { assignment_id: @assignment[:id] }
         end
 
         it "gets student_submissions from the fetched assignment" do
-          get :submissions, { assignment_id: @assignment[:id] }
-          expect(assigns(:assignment)).to eq(@assignment)
-          expect(assigns(:title)).to eq("#{@student.name}'s Grade for #{@assignment.name}")
-          expect(response).to render_template(:show)
         end
 
         it "should restrict access to professors for that class" do

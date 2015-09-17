@@ -1,5 +1,6 @@
 class AssignmentExportsController < ApplicationController
   before_filter :fetch_assignment
+  respond_to :json
 
   def submissions
     @submissions ||= @assignment.student_submissions
