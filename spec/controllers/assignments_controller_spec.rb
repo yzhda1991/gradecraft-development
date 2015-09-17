@@ -289,16 +289,6 @@ describe AssignmentsController do
       end
     end
 
-    describe "submissions export" do
-      before do
-        @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
-      end
-      it "returns json" do
-        get :submissions_export, :id => @assignment, format: :json
-        expect(response.body).to eq("{}")
-      end
-    end
-
     describe "GET export_submissions" do
       context "with ZIP format" do
         it "returns a zip directory" do

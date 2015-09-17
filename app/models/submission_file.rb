@@ -28,4 +28,13 @@ class SubmissionFile < ActiveRecord::Base
       "#{submission.student.last_name} #{submission.student.first_name}"
     end
   end
+
+  def content_type
+    file.content_type
+    # type = file.url.match(/\.(\S+)$/)[1]
+    # case type
+    # when 'jpg','png','gif'
+
+    # end
+  end
 end
