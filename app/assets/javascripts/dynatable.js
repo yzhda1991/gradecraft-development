@@ -189,6 +189,9 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
   writers: {
     score: function(record) {
       return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    totalBadgeScore: function(record) {
+      return record['totalBadgeScore'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
 });
@@ -212,7 +215,7 @@ $('table.nofeatures_default_name_dynatable').dynatable({
       points: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       },
-      maxValue: function(el, record) {
+      maxPoints: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       }
     }
@@ -260,11 +263,17 @@ $('table.nofeatures_default_score_dynatable').dynatable({
       },
       students: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      pointsEarned: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
       }
     },
     writers: {
       score: function(record) {
         return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
+      pointsEarned: function(record) {
+        return record['pointsEarned'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
     }
 });
@@ -306,8 +315,22 @@ $('table.nofeatures_dynatable').dynatable({
       },
       highRange: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      points: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
       }
+    },
+  writers: {
+    points: function(record) {
+      return record['points'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    lowRange: function(record) {
+      return record['lowRange'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    highRange: function(record) {
+      return record['highRange'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+  }
 });
 
 
@@ -331,11 +354,17 @@ $('table.nofeatures_default_due_date_dynatable').dynatable({
     },
     maxPoints: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    pointsEarned: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
     }
   },
   writers: {
     maxPoints: function(record) {
       return record['maxPoints'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    pointsEarned: function(record) {
+      return record['pointsEarned'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
 });

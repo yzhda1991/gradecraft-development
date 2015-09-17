@@ -38,10 +38,10 @@
               = link_to_unless_current "Export Grades for Research", research_gradebook_path, :class=>"data-clearing"
           %td
             .right
-              %ul
-                %li.button-bar
+              %ul.button-bar
+                %li
                   = link_to course_path(course), :class => 'button' do
-                      See
+                    See
                 %li
                   = link_to edit_course_path(course), :class => 'button' do
                     Edit
