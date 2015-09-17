@@ -16,11 +16,6 @@ class AssignmentExportsController < ApplicationController
     group_submissions_by_student
   end
 
-  # relevant helper methods on Assignment:
-  #
-  # #students_with_submissions
-  # #students_with_submissions_on_team(team)
-
   private
 
     def group_submissions_by_student
