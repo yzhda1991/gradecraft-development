@@ -5,7 +5,7 @@ describe "assignments/show" do
 
   before(:each) do
     @course = create(:course)
-    @assignment_type = create(:assignment_type, course: @course, max_value: 1000)
+    @assignment_type = create(:assignment_type, course: @course, max_points: 1000)
     @assignment = create(:assignment, :assignment_type => @assignment_type)
     @course.assignments << @assignment
     @student = create(:user)

@@ -29,8 +29,8 @@
     %h4.uppercase Guidelines:
     %p= raw @assignment.description
 
-  - if @assignment.assignment_type.predictor_description.present?
+  - if @assignment.assignment_type.description.present?
     %hr.dotted
     %h4.uppercase #{ @assignment.assignment_type.name} Guidelines:
 
-    %p= raw @assignment.assignment_type.predictor_description
+    %p= raw @assignment.assignment_type.description

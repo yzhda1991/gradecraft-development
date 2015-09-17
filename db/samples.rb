@@ -357,79 +357,43 @@ assignment_types = {}
 assignment_types[:educ_attendance] = AssignmentType.create! do |at|
   at.course = educ_course
   at.name = "Attendance"
-  at.point_setting = "For All Assignments"
-  at.points_predictor_display = "Slider"
-  at.resubmission = false
-  at.max_value = "120000"
-  at.predictor_description = "We will work to build a learning community in EDUC 222, and I want this to be a great learning experience for all. To do this requires that you commit to the class and participate."
-  at.universal_point_value = "5000"
-  at.due_date_present = true
-  at.order_placement = 1
-  at.mass_grade_type = "Checkbox"
+  at.max_points = "120000"
+  at.description = "We will work to build a learning community in EDUC 222, and I want this to be a great learning experience for all. To do this requires that you commit to the class and participate."
+  at.position = 1
 end
 puts "Come to class."
 
 assignment_types[:polsci_attendance] = AssignmentType.create! do |at|
   at.course = polsci_course
   at.name = "Attendance"
-  at.point_setting = "For All Assignments"
-  at.points_predictor_display = "Checkbox"
-  at.resubmission = false
-  at.predictor_description = "We will work to build a learning community in EDUC 222, and I want this to be a great learning experience for all. To do this requires that you commit to the class and participate."
-  at.universal_point_value = "100"
-  at.due_date_present = true
-  at.order_placement = 1
-  at.mass_grade_type = "Checkbox"
+  at.description = "We will work to build a learning community in EDUC 222, and I want this to be a great learning experience for all. To do this requires that you commit to the class and participate."
+  at.position = 1
 end
 puts "Check yourself in - and be sure to pay attention to the lecture!"
 
 assignment_types[:information_adventures] = AssignmentType.create! do |at|
   at.course = information_course
   at.name = "Adventures"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Set per Assignment"
-  at.resubmission = false
-  at.due_date_present = true
-  at.mass_grade_type = "Set per Assignment"
 end
 
 assignment_types[:information_pick_up_quests] = AssignmentType.create! do |at|
   at.course = information_course
   at.name = "Pick Up Quests"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Set per Assignment"
-  at.resubmission = false
-  at.due_date_present = true
-  at.mass_grade_type = "Set per Assignment"
 end
 
 assignment_types[:reading_reaction] = AssignmentType.create! do |at|
   at.course = educ_course
   at.name = "Reading Reactions"
-  at.universal_point_value = 5000
-  at.point_setting = "For All Assignments"
-  at.points_predictor_display = "Select List"
-  at.resubmission = false
-  at.predictor_description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
-  at.due_date_present = true
-  at.order_placement = 2
-  at.mass_grade = true
-  at.mass_grade_type = "Select List"
-  at.student_weightable = false
+  at.description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
+  at.position = 2
 end
 puts "Do your readings."
 
 assignment_types[:polsci_discussion] = AssignmentType.create! do |at|
   at.course = polsci_course
   at.name = "Discussions"
-  at.universal_point_value = 500
-  at.point_setting = "For All Assignments"
-  at.points_predictor_display = "Checkbox"
-  at.resubmission = false
-  at.predictor_description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
-  at.due_date_present = true
-  at.order_placement = 2
-  at.mass_grade_type = "Select List"
+  at.description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
+  at.position = 2
   at.student_weightable = false
 end
 puts "Participate."
@@ -437,13 +401,7 @@ puts "Participate."
 assignment_types[:polsci_readings] = AssignmentType.create! do |at|
   at.course = polsci_course
   at.name = "Readings"
-  at.universal_point_value = 300
-  at.point_setting = "For All Assignments"
-  at.points_predictor_display = "Checkbox"
-  at.resubmission = false
-  at.predictor_description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
-  at.due_date_present = true
-  at.mass_grade_type = "Select List"
+  at.description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
   at.student_weightable = false
 end
 puts "Read or else."
@@ -451,19 +409,14 @@ puts "Read or else."
 assignment_types[:blogging] = AssignmentType.create! do |at|
   at.course = educ_course
   at.name = "Blogging"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Slider"
-  at.resubmission = false
-  at.max_value = "60000"
-  at.predictor_description = "There will be many issues and topics that we address in this course that spark an interest, an idea, a disagreement, or a connection for you. You will also encounter ideas in your daily life (blogs you read, news reports, etc.) or in your other classes that spark a connection to something you are thinking about in this course. I encourage you to blog these thoughts on Piazza (we will pretend that Piazza is a blogging site for the purposes of this course). These may be analyses, critiques, or reviews of ideas both from and related to the course. Use the blog as a way to expand the range of technology we might consider. Use the blog to challenge ideas. Use the blog to communicate about things you come across in your travels that you think are relevant to the area of teaching and learning with technology.
+  at.max_points = "60000"
+  at.description = "There will be many issues and topics that we address in this course that spark an interest, an idea, a disagreement, or a connection for you. You will also encounter ideas in your daily life (blogs you read, news reports, etc.) or in your other classes that spark a connection to something you are thinking about in this course. I encourage you to blog these thoughts on Piazza (we will pretend that Piazza is a blogging site for the purposes of this course). These may be analyses, critiques, or reviews of ideas both from and related to the course. Use the blog as a way to expand the range of technology we might consider. Use the blog to challenge ideas. Use the blog to communicate about things you come across in your travels that you think are relevant to the area of teaching and learning with technology.
 
 Note that blog posts must be substantial to earn points. What “substantial” means is at the discretion of the professor (he knows it when he sees it). “Hello World” posts or posts that are simply duplications from other sites are not going to earn you any points. Also, see this insightful resource for information about plagiarism and blogging:
 http://www.katehart.net/2012/06/citing-sources-quick-and-graphic-guide.html
 
 You can blog as much as you want, but only one post/week can earn points."
-  at.order_placement = 3
-  at.mass_grade = true
-  at.mass_grade_type = "Radio Buttons"
+  at.position = 3
   at.student_weightable = false
 end
 puts "Blogging is great for filling in missed points in other areas"
@@ -471,19 +424,14 @@ puts "Blogging is great for filling in missed points in other areas"
 assignment_types[:lfpg] = AssignmentType.create! do |at|
   at.course = educ_course
   at.name = "Learning From Playing a Game"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Slider"
-  at.predictor_description = "At Google, all employs were (historically) given 20% of their work time to devote to any project they choose. Often, these projects fold the personal interest or ambitions of the employee into the larger opportunities represented by the context of Google (e.g., high-tech resources and lots of smart folks). In this course, I am requiring that you devote 20% of your time to pursuing a project of interest to you, that benefits you, and that will help you maximize the value of this course for you. You will determine the scope of the project, the requirements of the project, and the final grade for the project. You may work alone or with others. Whether or not there is a “product” is up to you, as is the form of that product. There is only one requirement for this project: You must share or present the project (in some way of your choosing) with your classmates and with me at the final class meeting.
+  at.description = "At Google, all employs were (historically) given 20% of their work time to devote to any project they choose. Often, these projects fold the personal interest or ambitions of the employee into the larger opportunities represented by the context of Google (e.g., high-tech resources and lots of smart folks). In this course, I am requiring that you devote 20% of your time to pursuing a project of interest to you, that benefits you, and that will help you maximize the value of this course for you. You will determine the scope of the project, the requirements of the project, and the final grade for the project. You may work alone or with others. Whether or not there is a “product” is up to you, as is the form of that product. There is only one requirement for this project: You must share or present the project (in some way of your choosing) with your classmates and with me at the final class meeting.
 
 We will make time during class for sharing, design jams, help sessions, etc. as we go along. The point of these sessions will be to inspire each other and yourself by seeing what others are up to. My office hours are also available to you for as much advice and guidance as you want to seek to support your work (sign up at http://bit.ly/16Ws5fm).
 
 At the end of the term, you will tell me how many points out of the 20,000 you have earned.
 
 I look forward to being surprised, elated, and informed by your interests and self-expression."
-  at.resubmission = false
-  at.due_date_present = true
-  at.order_placement = 4
-  at.mass_grade = false
+  at.position = 4
   at.student_weightable = false
 end
 puts "This is the good stuff :)"
@@ -491,11 +439,7 @@ puts "This is the good stuff :)"
 assignment_types[:boss_battle] = AssignmentType.create! do |at|
   at.course = educ_course
   at.name = "Boss Battles"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Set per Assignment"
-  at.resubmission = true
-  at.due_date_present = true
-  at.order_placement = 5
+  at.position = 5
   at.student_weightable = false
 end
 puts "Challenges!"
@@ -505,10 +449,6 @@ weighted_assignments = []
 weighted_assignments << assignment_types[:polsci_essays] = AssignmentType.create! do |at|
   at.course = polsci_course
   at.name = "Conventional Academic Essays"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Set per Assignment"
-  at.resubmission = true
-  at.mass_grade_type = "Radio Buttons"
   at.student_weightable = true
 end
 puts "Essays are one path to success. How much do you like writing?"
@@ -516,10 +456,6 @@ puts "Essays are one path to success. How much do you like writing?"
 weighted_assignments << assignment_types[:polsci_boss] = AssignmentType.create! do |at|
   at.course = polsci_course
   at.name = "Boss Battles"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Set per Assignment"
-  at.resubmission = false
-  at.mass_grade_type = "Radio Buttons"
   at.student_weightable = true
 end
 puts "How good are you under pressure?"
@@ -527,10 +463,6 @@ puts "How good are you under pressure?"
 weighted_assignments << assignment_types[:polsci_group] = AssignmentType.create! do |at|
   at.course = polsci_course
   at.name = "Group Project"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Set per Assignment"
-  at.resubmission = true
-  at.mass_grade_type = "Radio Buttons"
   at.student_weightable = true
 end
 puts "So uh, do you make friends easily?"
@@ -538,10 +470,6 @@ puts "So uh, do you make friends easily?"
 weighted_assignments << assignment_types[:polsci_blogging] = AssignmentType.create! do |at|
   at.course = polsci_course
   at.name = "Blogging"
-  at.point_setting = "By Assignment"
-  at.points_predictor_display = "Set per Assignment"
-  at.resubmission = true
-  at.mass_grade_type = "Radio Buttons"
   at.student_weightable = true
 end
 puts "You ever blogged before?"

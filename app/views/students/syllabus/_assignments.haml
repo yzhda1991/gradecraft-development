@@ -23,8 +23,8 @@
       - elsif assignment_type.student_weightable?
         .label.multiplier-setting-closed= "#{current_student.weight_for_assignment_type(assignment_type)} #{(term_for :weights).titleize}"
         // Display the description for the assignment type if it exists.
-      - if assignment_type.predictor_description?
-        %p.predictor-description= raw assignment_type.predictor_description
+      - if assignment_type.description?
+        %p.description= raw assignment_type.description
 
       // Display the assignments for each assignment type in a responsive table, below header.
       %table

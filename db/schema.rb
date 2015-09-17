@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150916210411) do
+ActiveRecord::Schema.define(version: 20150917005333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,33 +64,13 @@ ActiveRecord::Schema.define(version: 20150916210411) do
   end
 
   create_table "assignment_types", force: :cascade do |t|
-    t.string   "name",                     limit: 255
-    t.string   "point_setting",            limit: 255
-    t.boolean  "levels"
-    t.string   "points_predictor_display", limit: 255
-    t.integer  "resubmission"
-    t.integer  "max_value"
-    t.integer  "percentage_course"
-    t.text     "predictor_description"
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
+    t.string   "name",               limit: 255
+    t.integer  "max_points"
+    t.text     "description"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "course_id"
-    t.integer  "universal_point_value"
-    t.integer  "minimum_score"
-    t.integer  "step_value",                           default: 1
-    t.integer  "grade_scheme_id"
-    t.boolean  "due_date_present"
-    t.integer  "order_placement"
-    t.boolean  "mass_grade"
-    t.string   "mass_grade_type",          limit: 255
     t.boolean  "student_weightable"
-    t.boolean  "notify_released",                      default: true
-    t.boolean  "include_in_timeline",                  default: true
-    t.boolean  "include_in_predictor",                 default: true
-    t.boolean  "include_in_to_do",                     default: true
-    t.boolean  "is_attendance"
-    t.boolean  "has_winners"
-    t.integer  "num_winner_levels"
     t.integer  "position"
   end
 
@@ -435,9 +415,9 @@ ActiveRecord::Schema.define(version: 20150916210411) do
     t.string   "pass_fail_status"
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
-    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
+    t.boolean  "is_custom_value",                  default: false
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree

@@ -7,7 +7,7 @@ describe "info/grading_status" do
     @title = "Unspecified Title"
     @course = create(:course)
     @team = create(:team, course: @course)
-    @assignment_types = [create(:assignment_type, course: @course, max_value: 1000)]
+    @assignment_types = [create(:assignment_type, course: @course, max_points: 1000)]
     @assignment = create(:assignment, :assignment_type => @assignment_types[0])
     @student = create(:user)
     assign(:assignment_types, @assignment_types)

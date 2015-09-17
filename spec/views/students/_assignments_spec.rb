@@ -6,8 +6,8 @@ describe "students/syllabus/_assignments" do
   before(:each) do
     clean_models
     @course = create(:course)
-    @assignment_type_1 = create(:assignment_type, course: @course, max_value: 1000)
-    @assignment_type_2 = create(:assignment_type, course: @course, max_value: 1000)
+    @assignment_type_1 = create(:assignment_type, course: @course, max_points: 1000)
+    @assignment_type_2 = create(:assignment_type, course: @course, max_points: 1000)
     @assignment = create(:assignment, :assignment_type => @assignment_type_1)
     @course.assignment_types << [@assignment_type_1, @assignment_type_2]
     @assignment_types = @course.assignment_types
@@ -115,8 +115,8 @@ describe "students/syllabus/_assignments" do
       assert_select 'div', class: 'multiplier-setting-closed', count: 1
     end
 
-    it "shows the predictor description if it's present" do
-      @assignment_type_1.update(predictor_description: 'Tabula Rasa')
+    it "shows the description if it's present" do
+      @assignment_type_1.update(description: 'Tabula Rasa')
       @assignment_type_1.save
       render
       assert_select "p", text: 'Tabula Rasa', count: 1

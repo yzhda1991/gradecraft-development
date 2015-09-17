@@ -51,11 +51,7 @@ class AssignmentTypesController < ApplicationController
     @assignment_type.update_attributes(params[:assignment_type])
 
     respond_to do |format|
-      if (@assignment_type.universal_point_value.present?) && (@assignment_type.universal_point_value < 1)
-        flash[:error] = 'Point value must be a positive number'
-        format.html { render action: "new" }
-        format.json { render json: @assignment_type.errors }
-      elsif (@assignment_type.max_value?) && (@assignment_type.max_value < 1)
+      if (@assignment_type.max_points?) && (@assignment_type.max_points < 1)
         flash[:error] = 'Maximum points must be a positive number'
         format.html { render action: "new" }
         format.json { render json: @assignment_type.errors }
@@ -128,13 +124,9 @@ class AssignmentTypesController < ApplicationController
       :course_id,
       :id,
       :name,
-      :max_value,
-      :points_predictor_display,
-      :resubmission,
-      :predictor_description,
+      :max_points,
+      :description,
       :student_weightable,
-      :include_in_predictor,
-      :is_attendance,
       :position,
       :updated_at
     )
