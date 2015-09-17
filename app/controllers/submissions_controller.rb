@@ -57,7 +57,7 @@ class SubmissionsController < ApplicationController
 
   def create
     @assignment = current_course.assignments.find(params[:assignment_id])
-    if params[:submission][:submission_files_attributes].present?
+    if params[:submission] && params[:submission][:submission_files_attributes].present?
       @submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
       params[:submission].delete :submission_files_attributes
     end
@@ -109,7 +109,7 @@ class SubmissionsController < ApplicationController
 
   def update
     @assignment = current_course.assignments.find(params[:assignment_id])
-    if params[:submission][:submission_files_attributes].present?
+    if params[:submission] && params[:submission][:submission_files_attributes].present?
       @submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
       params[:submission].delete :submission_files_attributes
     end
