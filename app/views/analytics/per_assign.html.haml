@@ -18,13 +18,13 @@
           %th{"scope" => "col"} Min
           %th{"scope" => "col"} Max
           %th{"scope" => "col"} Median
-          %th{"scope" => "col"}
+          %th{"scope" => "col", 'data-dynatable-column' => 'ave'}
             Ave
             %a
               %i.fa.fa-info-circle
             .display_on_hover.hover-style
               The average of all grades, including those who earned zero
-          %th
+          %th{"scope" => "col", 'data-dynatable-column' => 'aveEarned'}
             Avg Earned
             %a
               %i.fa.fa-info-circle

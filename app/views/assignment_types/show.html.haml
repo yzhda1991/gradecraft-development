@@ -28,7 +28,7 @@
           %td= points assignment.point_total
           %td
             .right
-              %ul
+              %ul.button-bar
                 %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(assignment), :class => "button"
                 %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(assignment), :class => 'button'
                 %li= link_to raw('<i class="fa fa-copy fa-fw"> </i> Copy'), copy_assignments_path(:id => assignment), :class => 'button', :method => :copy
