@@ -26,7 +26,7 @@ class AssignmentExportsController < ApplicationController
     end
 
     def fetch_assignment
-      @assignment = Assignment.find params[:assignment_id]
+      @assignment ||= Assignment.find params[:assignment_id]
     end
 
   public

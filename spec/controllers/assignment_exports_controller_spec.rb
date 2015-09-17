@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe AssignmentExportsController, type: :controller do
 
-  # include rspec helpers for assignments
+  # include rspec helper methods for assignments
   include AssignmentsToolkit
 
   context "as a professor" do
@@ -18,10 +18,12 @@ RSpec.describe AssignmentExportsController, type: :controller do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-    describe "GET export_submissions", working: true do
-      before(:each) do
+    describe "GET export_submissions" do
+      before do
+        # create an instance of the controller for testing private methods
         @controller = AssignmentExportsController.new
 
+        # create some mock submissions with students attached
         @submission1 = {id: 1, student: 
           {first_name: "Ben", last_name: "Bailey", id: 40}}
         @submission2 = {id: 2, student:
@@ -33,6 +35,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
         @submissions = [@submission1, @submission2, @submission3, @submission4]
 
+        # expectation for #group_submissions_by_student
         @grouped_submission_expectation = {
           "bailey_ben-40" => [@submission1],
           "mccaffrey_mike-55" => [@submission2, @submission4],
@@ -44,23 +47,48 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
       context "grouping students" do
         it "should group students by 'last_name_first_name-id'" do
+          # finally expect something to happen
           expect(@controller.instance_eval { group_submissions_by_student }).to eq(@grouped_submission_expectation)
         end
       end
     end
 
-    describe "GET export_team_submissions", working: true do
-      context "students on active team" do
-        it "gets students on the active team" do
-          skip
+    context "export requests", working: true do
+      before(:each) do
+        it "should query for the assignment by :assignment_id" do
+          expect(Assignment).to receive(:find).with(@assignment[:id])
         end
 
-        it "does not included students from other team" do
-          skip
+        it "should return the assignment" do
+          # create an instance of the controller for testing private methods
+          @controller = AssignmentExportsController.new
+          expect(@controller.instance_eval { fetch_assignment }).to eq(@assignment)
+        end
+      end
+
+      describe "GET submissions", working: true do
+        before(:each) do
         end
 
-        it "should have as many students as the active team" do
-          skip
+        it "gets student_submissions from the fetched assignment" do
+          get :submissions, { assignment_id: @assignment[:id] }
+          expect(assigns(:assignment)).to eq(@assignment)
+          expect(assigns(:title)).to eq("#{@student.name}'s Grade for #{@assignment.name}")
+          expect(response).to render_template(:show)
+        end
+
+        it "should restrict access to professors for that class" do
+        end
+      end
+
+      describe "GET submissions_by_team", working: true do
+        before(:each) do
+        end
+
+        it "gets student_submissions from the fetched assignment" do
+        end
+
+        it "should restrict access to professors for that class" do
         end
       end
     end

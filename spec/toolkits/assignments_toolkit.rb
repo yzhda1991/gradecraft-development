@@ -52,6 +52,12 @@ module AssignmentsToolkit
     create(:grade, assignment: @assignment, student: student, feedback: "good jorb!", instructor_modified: true)
   end
 
+  def create_submission_for_student(student)
+    grade = grade_student_for_active_assignment(student)
+    submission = create(:submission, grade: grade, student: student, assignment: @assignment, course: @course)
+    submission
+  end
+
   def create_submissions_for_students
     @students.collect do |student|
       grade = grade_student_for_active_assignment(student)
