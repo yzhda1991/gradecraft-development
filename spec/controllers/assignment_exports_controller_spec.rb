@@ -23,18 +23,17 @@ RSpec.describe AssignmentExportsController, type: :controller do
         # create an instance of the controller for testing private methods
         @controller = AssignmentExportsController.new
 
-        @student1 = instance_double("Student", first_name: "Ben", last_name: "Bailey", id: 40).as_null_object
-        @student2 = instance_double("Student", first_name: "Mike", last_name: "McCaffrey", id: 55).as_null_object
-        @student3 = instance_double("Student", first_name: "Dana", last_name: "Dafferty", id: 92).as_null_object
+        @student1 = {first_name: "Ben", last_name: "Bailey", id: 40}
+        @student2 = {first_name: "Mike", last_name: "McCaffrey", id: 55}
+        @student3 = {first_name: "Dana", last_name: "Dafferty", id: 92}
 
         # create some mock submissions with students attached
-        @submission1 = instance_double("Submission", id: 1, student: @student1).as_null_object
-        @submission2 = instance_double("Submission", id: 2, student: @student2).as_null_object
-        @submission3 = instance_double("Submission", id: 3, student: @student3).as_null_object
-        @submission4 = instance_double("Submission", id: 4, student: @student2).as_null_object
+        @submission1 = {id: 1, student: @student1}
+        @submission2 = {id: 2, student: @student2}
+        @submission3 = {id: 3, student: @student3}
+        @submission4 = {id: 4, student: @student2}
 
         @submissions = [@submission1, @submission2, @submission3, @submission4]
-        pp @submissions
 
         # expectation for #group_submissions_by_student
         @grouped_submission_expectation = {
