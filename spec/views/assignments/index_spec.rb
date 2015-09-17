@@ -7,8 +7,8 @@ describe "assignments/index" do
   before(:all) do
     clean_models
     @course = create(:course)
-    @assignment_type_1 = create(:assignment_type, course: @course, max_value: 1000)
-    @assignment_type_2 = create(:assignment_type, course: @course, max_value: 2000)
+    @assignment_type_1 = create(:assignment_type, course: @course, max_points: 1000)
+    @assignment_type_2 = create(:assignment_type, course: @course, max_points: 2000)
     @assignment_1 = create(:assignment, :assignment_type => @assignment_type_1)
     @assignment_2 = create(:assignment, :assignment_type => @assignment_type_2)
     @course.assignments <<[@assignment_1,@assignment_2]

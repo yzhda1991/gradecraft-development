@@ -6,7 +6,7 @@ describe "students/syllabus" do
   before(:each) do
     clean_models
     @course = create(:course)
-    @assignment_types = [create(:assignment_type, course: @course, max_value: 1000)]
+    @assignment_types = [create(:assignment_type, course: @course, max_points: 1000)]
     @assignment = create(:assignment, :assignment_type => @assignment_types[0])
     @course.assignments << @assignment
     @student = create(:user)

@@ -15,7 +15,7 @@ class Assignment < ActiveRecord::Base
   attr_accessor :current_student_grade
 
   belongs_to :course
-  belongs_to :assignment_type, -> { order('order_placement ASC') }, touch: true
+  belongs_to :assignment_type, -> { order('position ASC') }, touch: true
 
   has_one :rubric
   delegate :mass_grade?, :student_weightable?, :to => :assignment_type

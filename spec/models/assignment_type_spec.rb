@@ -3,9 +3,9 @@
 describe AssignmentType do
 
   #simple validations
-  it "is valid with a name, and a setting for the predictor" do
+  it "is valid with a name" do
     assignment_type = AssignmentType.new(
-      name: "Level 1", points_predictor_display: "Checkbox" )
+      name: "Level 1" )
     expect(assignment_type).to be_valid
   end
 

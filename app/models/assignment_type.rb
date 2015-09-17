@@ -1,11 +1,7 @@
 class AssignmentType < ActiveRecord::Base
   acts_as_list scope: :course
 
-  attr_accessible :due_date_present, :levels, :max_value, :name,
-    :percentage_course, :point_setting, :points_predictor_display,
-    :predictor_description, :resubmission, :universal_point_value,
-    :student_weightable, :mass_grade, :score_level, :mass_grade_type,
-    :position
+  attr_accessible :max_points, :name, :description, :student_weightable, :position
 
   belongs_to :course, touch: true
   has_many :assignments, -> { order('position ASC') }, :dependent => :destroy
@@ -14,12 +10,9 @@ class AssignmentType < ActiveRecord::Base
   has_many :grades
 
   validates_presence_of :name
-  validate :positive_universal_value, :positive_max_points
+  validate :positive_max_points
 
   scope :student_weightable, -> { where(:student_weightable => true) }
-  scope :timelinable, -> { where(:include_in_timeline => true) }
-  scope :todoable, -> { where(:include_in_to_do => true) }
-  scope :predictable, -> { where(:include_in_predictor => true) }
   scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignment_types.id = assignment_weights.assignment_type_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
 
   default_scope { order 'position' }
@@ -42,44 +35,22 @@ class AssignmentType < ActiveRecord::Base
     assignments.any?(&:soon?)
   end
 
-  #Determines how the assignment type is handled in Quick Grade
-  def grade_checkboxes?
-    mass_grade_type == "Checkbox"
-  end
-
-  def grade_select?
-    mass_grade_type == "Select List"
-  end
-
-  def grade_radio?
-    mass_grade_type == "Radio Buttons"
-  end
-
-  def grade_text?
-    mass_grade_type == "Text"
-  end
-
-  # Check to see if the assignment type needs score levels to be present for grading purposes
-  def multi_select?
-    grade_select? || grade_radio?
-  end
-
   def is_capped?
-    max_value.present?
+    max_points.present?
   end
 
   # #Getting the assignment types max value if it's present, else summing all it's assignments to create the total
   def total_points
-    if max_value.present?
-      max_value
+    if max_points.present?
+      max_points
     else
       assignments.map{ |a| a.point_total || 0 }.sum
     end
   end
 
   def total_points_for_student(student)
-    if max_value.present?
-      max_value
+    if max_points.present?
+      max_points
     else
       if student_weightable?
         if assignment_weights.where(:student_id => student).present?
@@ -95,11 +66,11 @@ class AssignmentType < ActiveRecord::Base
 
   def visible_score_for_student(student)
     score = (student.grades.released.where(:assignment_type => self).pluck('score').sum || 0)
-    if max_value?
-      if score < max_value
+    if max_points?
+      if score < max_points
         return score
       else
-        return max_value
+        return max_points
       end
     else
       return score
@@ -157,14 +128,8 @@ class AssignmentType < ActiveRecord::Base
 
   private
 
-  def positive_universal_value
-    if universal_point_value? && universal_point_value < 1
-      errors.add :base, "Point value must be a positive number."
-    end
-  end
-
   def positive_max_points
-    if max_value? && max_value < 1
+    if max_points? && max_points < 1
       errors.add :base, "Maximum points must be a positive number."
     end
   end

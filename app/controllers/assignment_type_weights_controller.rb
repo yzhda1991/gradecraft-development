@@ -63,13 +63,9 @@ class AssignmentTypeWeightsController < ApplicationController
       :course_id,
       :id,
       :name,
-      :points_predictor_display,
-      :resubmission,
-      :max_value,
-      :predictor_description,
+      :max_points,
+      :description,
       :student_weightable,
-      :include_in_predictor,
-      :is_attendance,
       :position,
       :updated_at
     )
