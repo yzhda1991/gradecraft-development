@@ -3,8 +3,8 @@
     - cache ["v1", c] do
       - if c.active?
         %li= link_to raw("<i class ='fa fa-home fa-fw'></i> #{c.formatted_short_name} "), change_current_course_path(:course_id => c.id), :method => 'post'
-    - if current_user_is_staff?
-      %li= link_to raw("Create a New Course <i class='fa fa-angle-double-right fa-fw'></i>"), new_course_path
+- if current_user_is_staff?
+  %li= link_to raw("Create a New Course <i class='fa fa-angle-double-right fa-fw'></i>"), new_course_path
 
 - cache multi_cache_key :current_user_archived_courses, current_user do
   - if current_user.archived_courses.present?
