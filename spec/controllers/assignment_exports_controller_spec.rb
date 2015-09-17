@@ -1,17 +1,18 @@
 require 'spec_helper'
 
-RSpec.describe AssignmentExportsController, type: :controller do
+describe AssignmentExportsController do
 
   # include rspec helper methods for assignments
   include AssignmentsToolkit
 
   context "as a professor" do
-    before do
+    before(:each) do
       @course = create(:course_accepting_groups)
       @students = []
       create_professor_for_course
       create_assignment_for_course
       create_students_for_course(2)
+      create_team_and_add_students
 
       login_user(@professor)
       session[:course_id] = @course.id
@@ -53,28 +54,32 @@ RSpec.describe AssignmentExportsController, type: :controller do
       end
     end
 
-    context "export requests", working: true do
-      before(:each) do
-      end
-
-      describe "before filter behavior" do
+    context "export requests" do
+      describe "before filter" do
         it "should query for the assignment by :assignment_id" do
-          expect(Assignment).to receive(:find).with(@assignment[:id])
+          expect(Assignment).to receive(:find).with(@assignment[:id].to_s).and_return (@assignment)
+          get :submissions, { assignment_id: @assignment[:id], format: "json" }
         end
 
         it "should return the assignment" do
           # create an instance of the controller for testing private methods
           @controller = AssignmentExportsController.new
+          allow(@controller).to receive(:params).and_return ({assignment_id: @assignment[:id]})
           expect(@controller.instance_eval { fetch_assignment }).to eq(@assignment)
         end
       end
 
       describe "GET submissions", working: true do
-        before(:each) do
-          get :submissions, { assignment_id: @assignment[:id] }
+        it "should set the correct assignment" do
+          expect(assigns(:assignment)).to eq(@assignment)
         end
 
-        it "gets student_submissions from the fetched assignment" do
+        it "should set the expected value for submissions" do
+          @submissions_result = double("SubmissionsResult").as_null_object
+          allow(assigns(:assignment)).to receive(:student_submissions).and_return(@submissions_result)
+
+          get :submissions, { assignment_id: @assignment[:id], format: "json" }
+          expect(assigns(:submissions)).to eq(@submissions_result)
         end
 
         it "should restrict access to professors for that class" do
@@ -82,16 +87,29 @@ RSpec.describe AssignmentExportsController, type: :controller do
       end
 
       describe "GET submissions_by_team", working: true do
-        before(:each) do
+        it "should set the correct assignment" do
+          expect(assigns(:assignment)).to eq(@assignment)
         end
 
-        it "gets student_submissions from the fetched assignment" do
+        it "should set the expected value for submissions" do
+          @submissions_result = double("SubmissionsResult").as_null_object
+          allow(assigns(:assignment)).to receive(:student_submissions_by_team).with(@team[:id].to_s).and_return(@submissions_result)
+
+          get_submissions_by_team(@team)
+          expect(assigns(:submissions)).to eq(@submissions_result)
         end
 
         it "should restrict access to professors for that class" do
         end
       end
     end
-  end
 
+    def get_submissions
+      get :submissions, { assignment_id: @assignment[:id], format: "json" }
+    end
+
+    def get_submissions_by_team(team)
+      get :submissions_by_team, { assignment_id: @assignment[:id], team_id: team[:id], format: "json"}
+    end
+  end
 end

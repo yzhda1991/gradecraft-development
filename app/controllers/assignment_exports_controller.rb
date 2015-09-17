@@ -3,12 +3,12 @@ class AssignmentExportsController < ApplicationController
   respond_to :json
 
   def submissions
-    @submissions ||= @assignment.student_submissions
+    @submissions = @assignment.student_submissions
   end
 
   def submissions_by_team
     @team = Team.find params[:team_id]
-    @submissions ||= @assignment.student_submissions_for_team(@team)
+    @submissions = @assignment.student_submissions_for_team(@team)
   end
 
   def export
