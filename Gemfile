@@ -67,6 +67,7 @@ gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'wysiwyg-rails'
 gem 'zeus-parallel_tests'
 gem 'parallel_tests'
+gem 'ruby-saml', '~> 1.0.0'
 
 group :development do
   gem 'haml-rails'
