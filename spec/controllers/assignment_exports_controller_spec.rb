@@ -90,13 +90,13 @@ describe AssignmentExportsController do
           expect(assigns(:assignment)).to eq(@assignment)
         end
 
-        it "should set the expected value for submissions", focus: true do
+        it "should set the expected value for submissions" do
           # add @assignment and @submissions as doubles
           create_doubles_with_ivars("Assignment", "Submissions", "Team")
           stub_assignment_fetcher
 
           allow(Team).to receive(:find).and_return(@team)
-          allow(@assignment).to receive(:student_submissions_for_team).with(900).and_return(@submissions)
+          allow(@assignment).to receive(:student_submissions_for_team).with(@team).and_return(@submissions)
 
           get :submissions_by_team, { assignment_id: 50, team_id: 900, format: "json"}
           expect(assigns(:submissions)).to eq(@submissions)
