@@ -65,17 +65,20 @@ describe AssignmentExportsController do
         end
       end
 
-      describe "GET submissions", working: true do
+      describe "GET submissions" do
         it "should set the correct assignment" do
           expect(assigns(:assignment)).to eq(@assignment)
         end
 
         it "should set the expected value for submissions" do
-          @submissions_result = double("SubmissionsResult").as_null_object
-          allow(assigns(:assignment)).to receive(:student_submissions).and_return(@submissions_result)
+          # add @assignment and @submissions as doubles
+          create_doubles_with_ivars(Assignment, "Submissions")
+          stub_assignment_fetcher
 
-          get :submissions, { assignment_id: @assignment[:id], format: "json" }
-          expect(assigns(:submissions)).to eq(@submissions_result)
+          allow(@assignment).to receive(:student_submissions).and_return(@submissions)
+
+          get :submissions, { assignment_id: 50, format: "json" }
+          expect(assigns(:submissions)).to eq(@submissions)
         end
 
         it "should restrict access to professors for that class" do
@@ -87,12 +90,16 @@ describe AssignmentExportsController do
           expect(assigns(:assignment)).to eq(@assignment)
         end
 
-        it "should set the expected value for submissions" do
-          @submissions_result = double("SubmissionsResult").as_null_object
-          allow(assigns(:assignment)).to receive(:student_submissions_by_team).with(@team[:id].to_s).and_return(@submissions_result)
+        it "should set the expected value for submissions", focus: true do
+          # add @assignment and @submissions as doubles
+          create_doubles_with_ivars("Assignment", "Submissions", "Team")
+          stub_assignment_fetcher
 
-          get_submissions_by_team(@team)
-          expect(assigns(:submissions)).to eq(@submissions_result)
+          allow(Team).to receive(:find).and_return(@team)
+          allow(@assignment).to receive(:student_submissions_for_team).with(900).and_return(@submissions)
+
+          get :submissions_by_team, { assignment_id: 50, team_id: 900, format: "json"}
+          expect(assigns(:submissions)).to eq(@submissions)
         end
 
         it "should restrict access to professors for that class" do
@@ -104,8 +111,8 @@ describe AssignmentExportsController do
       get :submissions, { assignment_id: @assignment[:id], format: "json" }
     end
 
-    def get_submissions_by_team(team)
-      get :submissions_by_team, { assignment_id: @assignment[:id], team_id: team[:id], format: "json"}
+    def stub_assignment_fetcher
+      allow(Assignment).to receive(:find).and_return(@assignment)
     end
   end
 end
