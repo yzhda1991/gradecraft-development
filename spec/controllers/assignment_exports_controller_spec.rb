@@ -1,6 +1,7 @@
 require 'spec_helper'
 
-describe AssignmentExportsController do
+RSpec.describe AssignmentExportsController, type: :controller do
+  render_views
 
   # include rspec helper methods for assignments
   include AssignmentsToolkit
@@ -53,8 +54,8 @@ describe AssignmentExportsController do
     context "export requests" do
       describe "before filter" do
         it "should query for the assignment by :assignment_id" do
+          get_submissions
           expect(Assignment).to receive(:find).with(@assignment[:id].to_s).and_return (@assignment)
-          get :submissions, { assignment_id: @assignment[:id], format: "json" }
         end
 
         it "should return the assignment" do
@@ -67,6 +68,7 @@ describe AssignmentExportsController do
 
       describe "GET submissions" do
         it "should set the correct assignment" do
+          get_submissions
           expect(assigns(:assignment)).to eq(@assignment)
         end
 
@@ -74,20 +76,50 @@ describe AssignmentExportsController do
           # add @assignment and @submissions as doubles
           create_doubles_with_ivars(Assignment, "Submissions")
           stub_assignment_fetcher
-
           allow(@assignment).to receive(:student_submissions).and_return(@submissions)
 
           get :submissions, { assignment_id: 50, format: "json" }
           expect(assigns(:submissions)).to eq(@submissions)
         end
 
-        it "should restrict access to professors for that class" do
+        describe "authorizations", working: true do
+          before(:each) do
+            clear_rails_cache
+            setup_submissions_environment_with_users
+          end
+
+          context "student makes request" do
+            it "should redirect to the homepage" do
+              logout_user # logout professor
+              login_user(@student1) # login student
+              get_submissions
+              expect(response).to redirect_to(root_url)
+            end
+          end
+
+          context "staff makes request" do
+            subject { get_submissions }
+
+            it "should render json" do
+              expect(@json).to eq({})
+            end
+
+            it "should be successful" do
+              expect(response.status).to eq(200) # should be successful
+            end
+          end
         end
       end
 
-      describe "GET submissions_by_team", working: true do
+      describe "GET submissions_by_team" do
         it "should set the correct assignment" do
+          get_submissions_by_team
           expect(assigns(:assignment)).to eq(@assignment)
+        end
+
+        it "should set the correct @team" do
+          get_submissions_by_team
+          expect(assigns(:team)).to eq(@team)
         end
 
         it "should set the expected value for submissions" do
@@ -102,13 +134,26 @@ describe AssignmentExportsController do
           expect(assigns(:submissions)).to eq(@submissions)
         end
 
-        it "should restrict access to professors for that class" do
+        describe "authorizations", working: true do
+          context "student makes request" do
+            it "should raise a not authorized error" do
+            end
+          end
+
+          context "staff makes request" do
+            it "should be successful" do
+            end
+          end
         end
       end
     end
 
     def get_submissions
       get :submissions, { assignment_id: @assignment[:id], format: "json" }
+    end
+
+    def get_submissions_by_team
+      get :submissions_by_team, { assignment_id: @assignment[:id], team_id: @team[:id], format: "json"}
     end
 
     def stub_assignment_fetcher

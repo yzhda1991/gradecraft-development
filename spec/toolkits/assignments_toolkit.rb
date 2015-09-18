@@ -22,7 +22,7 @@ module AssignmentsToolkit
   def create_students_for_course(total=1)
     (1..total).collect do |student_number|
       # sets instance variables as @student1, @student2 etc.
-      n = student_number + 1 + @students.size
+      n = student_number + @students.size
       student = create(:user)
       self.instance_variable_set("@student#{n}", student)
       enroll_student_in_active_course(student)

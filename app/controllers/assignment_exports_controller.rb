@@ -1,4 +1,5 @@
 class AssignmentExportsController < ApplicationController
+  before_filter :ensure_staff?
   before_filter :fetch_assignment
   respond_to :json
 
@@ -28,5 +29,4 @@ class AssignmentExportsController < ApplicationController
     def fetch_assignment
       @assignment = Assignment.find params[:assignment_id]
     end
-
 end
