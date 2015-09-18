@@ -1,4 +1,17 @@
 module AssignmentsToolkit
+  include BaseToolkit
+
+  # setup default submissions environment
+  def setup_submissions_environment_with_users
+    @students = []
+    @course = create(:course_accepting_groups)
+    @professor = create_professor_for_course # also adds professor to course
+    @assignment = create_assignment_for_course # also creates @assignment_type
+    @students += create_students_for_course(2)
+    @submissions = create_submissions_for_students
+    @team = create_team_and_add_students
+  end
+
   # helper methods
   def create_student_for_course
     # return just one user and not a whole array
@@ -67,19 +80,21 @@ module AssignmentsToolkit
   end
 
   def create_professor_for_course
-    @professor = create(:user)
-    CourseMembership.create user_id: @professor[:id], course_id: @course[:id], role: "professor"
+    professor = create(:user)
+    CourseMembership.create user_id: professor[:id], course_id: @course[:id], role: "professor"
+    professor
   end
 
   def create_assignment_for_course
     @assignment_type = create(:assignment_type, course: @course)
-    @assignment = create(:assignment, assignment_type: @assignment_type, course: @course)
+    create(:assignment, assignment_type: @assignment_type, course: @course)
   end
 
   def create_team_and_add_students
-    @team = create(:team, course: @course)
+    team = create(:team, course: @course)
     @students.each do |student|
-      create(:team_membership, team: @team, student: student)
+      create(:team_membership, team: team, student: student)
     end
+    team
   end
 end

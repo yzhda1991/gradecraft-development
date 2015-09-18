@@ -436,14 +436,8 @@ describe Assignment do
 
   describe "fetching student submissions from an assignment", working: true do
     before(:each) do
-      Rails.cache.clear
-      @course = create(:course_accepting_groups)
-      @students = []
-      create_professor_for_course
-      create_assignment_for_course
-      @students += create_students_for_course(2)
-      @submissions = create_submissions_for_students
-      create_team_and_add_students
+      clear_rails_cache
+      setup_submissions_environment_with_users
     end
 
     describe "submissions by team", working: true do
@@ -500,13 +494,7 @@ describe Assignment do
   describe "finding students with submissions", working: true do
     context "basic finders" do
       before(:each) do
-        @course = create(:course_accepting_groups)
-        @students = []
-        create_professor_for_course
-        create_assignment_for_course
-        @students | create_students_for_course(2)
-        create_submissions_for_students
-        create_team_and_add_students
+       setup_submissions_environment_for_users
       end
 
       context "no team is provided" do
@@ -535,12 +523,12 @@ describe Assignment do
       before(:each) do
         @course = create(:course_accepting_groups)
         @students = []
-        create_professor_for_course
-        create_assignment_for_course
+        @professor = create_professor_for_course
+        @assignment = create_assignment_for_course
         @students += create_students_with_names("Stephen Applebaum", "Jeffrey Applebaum", "Herman Merman")
         @alpha_student_order = [@student2, @student1, @student3]
-        create_submissions_for_students
-        create_team_and_add_students
+        @submissions = create_submissions_for_students
+        @team = create_team_and_add_students
       end
 
       it "should sort by last_name, first_name ascending" do

@@ -7,12 +7,8 @@ describe AssignmentExportsController do
 
   context "as a professor" do
     before(:each) do
-      @course = create(:course_accepting_groups)
-      @students = []
-      create_professor_for_course
-      create_assignment_for_course
-      create_students_for_course(2)
-      create_team_and_add_students
+      clear_rails_cache
+      setup_submissions_environment_with_users
 
       login_user(@professor)
       session[:course_id] = @course.id
