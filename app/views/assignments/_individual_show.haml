@@ -11,6 +11,8 @@
     %tbody= render "assignments/individual/table_body"
 
   - if @assignment.release_necessary? && @assignment.grades.present?
-    .small-12.columns
-      .right.form_buttons
-        = submit_tag "Update Selected Grade Statuses", :class => "button"
+    .right
+      %br
+      = submit_tag "Update Selected Grade Statuses", :class => "button"
+
+  .clear
