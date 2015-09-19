@@ -293,3 +293,57 @@ button.delete
   text-align: center
   padding: 0
   border-radius: $global-radius
+
+#grade-rubric-table, #rubric-results-table
+  td.metric.heading
+    background-color: $primary-color-2
+    color: #FFF
+
+  td.tier.heading
+    background-color: $primary-color-3
+
+  .metric
+    background-color: lighten($primary-color-2, 40%)
+
+  .metric-name, .tier-name
+    font-weight: bold
+
+  .metric-points, .tier-points
+    color: $primary-color-1
+    font-size: 80%
+    text-transform: uppercase
+
+  .metric-description, .tier-description
+    font-style: italic
+
+  .tier-level
+    border: 1px solid $color-grey-4
+
+  .tier.selected
+    background-color: lighten($secondary-color-3, 10%)
+
+  .tier-badge-image img
+    height: 35px
+
+  .badge-row:hover
+    background-color: transparent
+    cursor: pointer !important
+
+  td.comments-box
+    background-color: $color-grey-4
+    border: none
+    padding: 0
+
+    textarea
+      margin: 0
+      width: 100%
+      height: 105%
+
+  h4.notice
+    color: $secondary-color-3
+
+#grade-rubric-table.edit
+
+  .tier:hover 
+    background-color: lighten($secondary-color-3, 30%)
+

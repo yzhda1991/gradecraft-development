@@ -60,7 +60,6 @@
               /   = link_to "Resubmitted!", assignment_submission_path(@assignment, submission.id), :class => 'button'
               / - else
 
-
           - if grade && instructor_modified == true
             %li= link_to raw('<i class="fa fa-eye fa-fw"> </i> See'), assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
             %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
@@ -72,6 +71,7 @@
             %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Grade'), edit_assignment_grade_path(@assignment, :student_id => student.id), :class => 'button'
 
     - if @assignment.release_necessary?
-      %td.center
-        - if grade && grade.is_graded?
-          = check_box_tag "grade_ids[]", grade.id
+      %td
+        .center
+          - if grade && grade.is_graded?
+            = check_box_tag "grade_ids[]", grade.id
