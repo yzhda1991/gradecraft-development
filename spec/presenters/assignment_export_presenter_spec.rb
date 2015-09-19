@@ -12,10 +12,21 @@ RSpec.describe AssignmentExportPresenter, type: :presenter do
       set_grouped_submission_expectation
     end
 
-    subject { AssignmentExportPresenter.new({ submissions: @submissions }) }
+    subject do
+      AssignmentExportPresenter.new({ submissions: @submissions }).
+        submissions_grouped_by_student
+    end
 
     it "should reorder the @submissions array by student" do
-      expect(subject.submissions_grouped_by_student).to eq(@grouped_submission_expectation)
+      expect(subject).to eq(@grouped_submission_expectation)
+    end
+
+    it "should use 'last_name_first_name-id' for the hash keys" do
+      expect(subject.keys.first).to eq("bailey_ben-40")
+    end
+
+    it "should return an array of submissions for each student" do
+      expect(subject["mccaffrey_mike-55"]).to eq([@submission2, @submission4])
     end
   end
 
