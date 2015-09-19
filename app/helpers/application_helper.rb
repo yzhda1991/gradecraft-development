@@ -61,4 +61,8 @@ module ApplicationHelper
     number_with_delimiter(value)
   end
 
+  def multi_cache_key(category, *args)
+    arguments = args.map { |arg| arg.respond_to?(:cache_key) ? arg.cache_key : arg }
+    "#{category}/#{arguments.join("/")}"
+  end
 end

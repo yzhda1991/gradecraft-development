@@ -1,4 +1,6 @@
 class AnnouncementsController < ApplicationController
+  include AnnouncementsHelper
+
   def index
     @title = "Announcements"
     @announcements = Announcement.where(course_id: current_course.id)
@@ -8,6 +10,7 @@ class AnnouncementsController < ApplicationController
     @announcement = Announcement.find params[:id]
     enforce_view_permission(@announcement)
     @announcement.mark_as_read! current_user
+    Rails.cache.delete unread_cache_key(current_user, @announcement.course)
     @title = @announcement.title
   end
 

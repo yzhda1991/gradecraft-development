@@ -1,5 +1,5 @@
 GradeCraft::Application.configure do
-  config.action_controller.perform_caching = false
+  config.action_controller.perform_caching = true
   config.action_dispatch.best_standards_support = :builtin
   config.asset_host = "http://localhost:5000"
   config.action_mailer.default_url_options = { :host => 'localhost:5000' }
@@ -10,7 +10,7 @@ GradeCraft::Application.configure do
   config.assets.compress = false
   config.assets.debug = true
   config.cache_classes = false
-  config.cache_store = :null_store
+  config.cache_store = :memory_store
   config.consider_all_requests_local = true
   config.eager_load = false
   config.session_store :cookie_store, key: '_gradecraft_session'
