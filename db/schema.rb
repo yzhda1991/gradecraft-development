@@ -410,14 +410,14 @@ ActiveRecord::Schema.define(version: 20150917005333) do
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score"
+    t.integer  "predicted_score",                  default: 0,     null: false
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
+    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
-    t.boolean  "is_custom_value",                  default: false
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
@@ -542,6 +542,17 @@ ActiveRecord::Schema.define(version: 20150917005333) do
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
+
+  create_table "shared_earned_badges", force: :cascade do |t|
+    t.integer  "course_id"
+    t.text     "student_name"
+    t.integer  "user_id"
+    t.string   "icon",         limit: 255
+    t.string   "name",         limit: 255
+    t.integer  "badge_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "student_academic_histories", force: :cascade do |t|
     t.integer "student_id"
