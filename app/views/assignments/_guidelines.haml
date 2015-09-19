@@ -7,6 +7,8 @@
   .italic= "Opens: #{@assignment.open_at}" if @assignment.open_at?
   .italic= "Due: #{@assignment.due_at}" if @assignment.due_at?
 
+  = render "students/submissions", assignment: @assignment
+
   - if @assignment.student_logged? && @assignment.open? && current_user_is_student?
     = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: @assignment }
 
