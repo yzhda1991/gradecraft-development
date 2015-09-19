@@ -303,9 +303,6 @@ GEM
     git-version-bump (0.15.1)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
-    goldiloader (0.0.9)
-      activerecord (>= 3.2, < 4.3)
-      activesupport (>= 3.2, < 4.3)
     haml (4.0.6)
       tilt
     haml-rails (0.9.0)
@@ -650,7 +647,6 @@ DEPENDENCIES
   fog
   font-awesome-rails
   foreman
-  goldiloader
   haml
   haml-rails
   ims-lti!
