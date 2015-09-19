@@ -715,3 +715,6 @@ DEPENDENCIES
   whenever
   wysiwyg-rails
   zeus-parallel_tests
+
+BUNDLED WITH
+   1.10.4
