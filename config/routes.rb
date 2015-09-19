@@ -321,6 +321,13 @@ GradeCraft::Application.routes.draw do
   get 'logout' => 'user_sessions#destroy', :as => :logout
   get 'reset' => 'user_sessions#new'
 
+  #SAML
+  get 'saml/init'
+  get 'saml/consume'
+  get 'saml/metadata'
+  get 'saml/logout'
+
+
 
   get 'lti/:provider/launch', to: 'lti#launch', :as => :launch_lti_provider
 
