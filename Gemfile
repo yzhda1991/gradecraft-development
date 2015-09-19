@@ -29,6 +29,10 @@ gem 'dalli'
 gem 'db-query-matchers'
 
 gem 'dotenv-rails'
+
+# adds draper Decorator-presenter class
+gem 'draper'
+
 gem 'fast_blank'
 gem 'fog'
 gem 'font-awesome-rails'

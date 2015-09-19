@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe AssignmentExportsController, type: :controller do
-  render_views
 
   # include rspec helper methods for assignments
   include AssignmentsToolkit
@@ -98,6 +97,8 @@ RSpec.describe AssignmentExportsController, type: :controller do
           end
 
           context "staff makes request" do
+            render_views
+            let(:json) { JSON.parse(response.body) }
             subject { get_submissions }
 
             it "should render json" do
