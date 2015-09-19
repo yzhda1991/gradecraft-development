@@ -15,41 +15,6 @@ RSpec.describe AssignmentExportsController, type: :controller do
       allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-    describe "GET export_submissions" do
-      before do
-        # create an instance of the controller for testing private methods
-        @controller = AssignmentExportsController.new
-
-        @student1 = {first_name: "Ben", last_name: "Bailey", id: 40}
-        @student2 = {first_name: "Mike", last_name: "McCaffrey", id: 55}
-        @student3 = {first_name: "Dana", last_name: "Dafferty", id: 92}
-
-        # create some mock submissions with students attached
-        @submission1 = {id: 1, student: @student1}
-        @submission2 = {id: 2, student: @student2}
-        @submission3 = {id: 3, student: @student3}
-        @submission4 = {id: 4, student: @student2}
-
-        @submissions = [@submission1, @submission2, @submission3, @submission4]
-
-        # expectation for #group_submissions_by_student
-        @grouped_submission_expectation = {
-          "bailey_ben-40" => [@submission1],
-          "mccaffrey_mike-55" => [@submission2, @submission4],
-          "dafferty_dana-92" => [@submission3]
-        }
-
-        @controller.instance_variable_set("@submissions", @submissions)
-      end
-
-      context "grouping students" do
-        it "should group students by 'last_name_first_name-id'" do
-          # finally expect something to happen
-          expect(@controller.instance_eval { group_submissions_by_student }).to eq(@grouped_submission_expectation)
-        end
-      end
-    end
-
     context "export requests" do
       describe "before filter" do
         it "should query for the assignment by :assignment_id" do
