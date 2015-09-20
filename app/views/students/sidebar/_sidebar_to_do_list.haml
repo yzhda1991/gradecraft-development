@@ -15,7 +15,7 @@
               %a
                 %i.fa.fa-star.fa-fw.yellow
               .display_on_hover.hover-style
-                You have planned to do this #{term_for :assignment}
+                You have included this #{term_for :assignment} in your grade prediction
             - if current_student.submission_for_assignment(assignment).present?
               %span.bold.strikethrough= link_to "#{assignment.try(:name)}", assignment
               .small.uppercase= "#{assignment.assignment_type.name}"
