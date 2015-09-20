@@ -1,5 +1,5 @@
 .conditions
-  %h4= "Requirement #"
+  %h4= "Requirement"
   .assignment-or-badge
     = f.input :condition_type, :collection => ["Assignment", "Badge"], :label => "Type"
   #assignments-list{:style => "display: none"}
@@ -11,7 +11,8 @@
     = f.input :condition_id, :collection => current_course.badges.map { |l| [l.name, l.id] }, :include_blank => true, :label => "#{term_for :badge}"
     = f.input :condition_state, :collection => ["Earned"], :label => "State Achieved"
     = f.input :condition_value, :label => "Number of Times Earned"
-    = f.text_field :condition_date, as: :string,  :input_html => { :class => 'datetimepicker', :include_blank => true,:value => f.try(:condition_date) }, :label => "Done By"
+    = f.label :condition_date, "Done By"
+    = f.text_field :condition_date, as: :string,  :input_html => { :class => 'datetimepicker', :include_blank => true,:value => f.try(:condition_date) }
   .right
     = f.hidden_field :_destroy, class: 'destroy'
     = link_to 'Delete Condition', '#', class: 'remove-unlock-condition button right'

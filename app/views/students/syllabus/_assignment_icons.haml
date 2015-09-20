@@ -8,7 +8,7 @@
 
 - if assignment.is_unlockable?
   %a
-    %i.fa.fa-lock
+    %i.fa.fa-lock.fa-fw
   .display_on_hover.hover-style
     %h3 Unlock Requirements
     %ul
@@ -16,7 +16,7 @@
         %li= "#{condition.name} must be #{condition.condition_state}"
 - if assignment.is_a_condition?
   %a
-    %i.fa.fa-key
+    %i.fa.fa-key.fa-fw
   .display_on_hover.hover-style
     %h3 Unlock Key
     %ul
