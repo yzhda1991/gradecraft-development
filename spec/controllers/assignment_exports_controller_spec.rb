@@ -74,7 +74,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
             subject { request_get_submissions }
             render_views
 
-            it "should render json", focus: true do
+            it "should render json" do
               request_get_submissions
               expect(JSON.parse(response.body)).to eq(expected_submissions_rendered_json)
             end
@@ -135,10 +135,18 @@ RSpec.describe AssignmentExportsController, type: :controller do
       allow(Assignment).to receive(:find).and_return(@assignment)
     end
 
+    def temp_view_context
+      @temp_view_context ||= ApplicationController.new.view_context
+    end
+
     def expected_submissions_rendered_json
-      {
-         submissions: AssignmentExportPresenter.new({ submissions: @assignment.student_submissions}).submissions_grouped_by_student
-      }
+      JbuilderTemplate.new(temp_view_context).encode do |json|
+        json.partial! "assignment_exports/submissions", presenter: assignment_export_presenter_instance
+      end
+    end
+
+    def assignment_export_presenter_instance
+      AssignmentExportPresenter.new({ submissions: @assignment.student_submissions})
     end
   end
 end
