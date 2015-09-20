@@ -18,7 +18,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
     context "export requests" do
       describe "before filter" do
         it "should query for the assignment by :assignment_id" do
-          get_submissions
+          request_get_submissions
           expect(Assignment).to receive(:find).with(@assignment[:id].to_s).and_return (@assignment)
         end
 
@@ -30,23 +30,32 @@ RSpec.describe AssignmentExportsController, type: :controller do
         end
       end
 
-      describe "GET submissions" do
+      describe "GET submissions", working: true do
         it "should set the correct assignment" do
-          get_submissions
+          request_get_submissions
           expect(assigns(:assignment)).to eq(@assignment)
+        end
+
+        it "should build and set an AssignmentExportPresenter" do
+          request_get_submissions
+          expect(assigns(:presenter).class).to eql(AssignmentExportPresenter)
+        end
+
+        it" should build a new presenter and pass submissions to it", focus: true do
+          request_get_submissions
+          allow(AssignmentExportPresenter).to receive(:new).with(assigns(:assignment).student_submissions)
         end
 
         it "should set the expected value for submissions" do
           # add @assignment and @submissions as doubles
           create_doubles_with_ivars(Assignment, "Submissions")
-          stub_assignment_fetcher
+          allow(Assignment).to receive(:find).and_return(@assignment)
           allow(@assignment).to receive(:student_submissions).and_return(@submissions)
 
           get :submissions, { assignment_id: 50, format: "json" }
-          expect(assigns(:submissions)).to eq(@submissions)
         end
 
-        describe "authorizations", working: true do
+        describe "authorizations" do
           before(:each) do
             clear_rails_cache
             setup_submissions_environment_with_users
@@ -56,18 +65,18 @@ RSpec.describe AssignmentExportsController, type: :controller do
             it "should redirect to the homepage" do
               logout_user # logout professor
               login_user(@student1) # login student
-              get_submissions
+              request_get_submissions
               expect(response).to redirect_to(root_url)
             end
           end
 
           context "staff makes request" do
+            subject { request_get_submissions }
             render_views
-            let(:json) { JSON.parse(response.body) }
-            subject { get_submissions }
 
             it "should render json" do
-              expect(@json).to eq({})
+              request_get_submissions
+              expect(JSON.parse(response.body)).to eq(expected_submissions_rendered_json)
             end
 
             it "should be successful" do
@@ -79,12 +88,12 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
       describe "GET submissions_by_team" do
         it "should set the correct assignment" do
-          get_submissions_by_team
+          request_get_submissions_by_team
           expect(assigns(:assignment)).to eq(@assignment)
         end
 
         it "should set the correct @team" do
-          get_submissions_by_team
+          request_get_submissions_by_team
           expect(assigns(:team)).to eq(@team)
         end
 
@@ -114,16 +123,22 @@ RSpec.describe AssignmentExportsController, type: :controller do
       end
     end
 
-    def get_submissions
+    def request_get_submissions
       get :submissions, { assignment_id: @assignment[:id], format: "json" }
     end
 
-    def get_submissions_by_team
+    def request_get_submissions_by_team
       get :submissions_by_team, { assignment_id: @assignment[:id], team_id: @team[:id], format: "json"}
     end
 
     def stub_assignment_fetcher
       allow(Assignment).to receive(:find).and_return(@assignment)
+    end
+
+    def expected_submissions_rendered_json
+      {
+         submissions: AssignmentExportPresenter.new({ submissions: @assignment.student_submissions}).submissions_grouped_by_student
+      }
     end
   end
 end

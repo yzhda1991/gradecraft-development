@@ -1,1 +1,1 @@
-json.submissions @presenter.submissions_by_student
+json.submissions @presenter.submissions_grouped_by_student

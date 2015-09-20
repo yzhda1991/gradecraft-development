@@ -5,13 +5,13 @@ class AssignmentExportsController < ApplicationController
   respond_to :json
 
   def submissions
-    @presenter = AssignmentExportPresenter.build({
+    @presenter = AssignmentExportPresenter.new({
       submissions: @assignment.student_submissions
     })
   end
 
   def submissions_by_team
-    @presenter = AssignmentExportPresenter.build({
+    @presenter = AssignmentExportPresenter.new({
       submissions: @assignment.student_submissions_for_team(@team)
     })
   end
