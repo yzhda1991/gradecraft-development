@@ -41,7 +41,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
           expect(assigns(:presenter).class).to eql(AssignmentExportPresenter)
         end
 
-        it" should build a new presenter and pass submissions to it", focus: true do
+        it" should build a new presenter and pass submissions to it" do
           request_get_submissions
           allow(AssignmentExportPresenter).to receive(:new).with(assigns(:assignment).student_submissions)
         end
@@ -74,7 +74,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
             subject { request_get_submissions }
             render_views
 
-            it "should render json" do
+            it "should render json", focus: true do
               request_get_submissions
               expect(JSON.parse(response.body)).to eq(expected_submissions_rendered_json)
             end
