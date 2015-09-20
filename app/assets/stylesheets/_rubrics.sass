@@ -48,7 +48,7 @@
   h4#points-legend, h4.points-legend
     font-size: 24px
     font-style: italic
-    color: $primary-color-5
+    color: $color-blue-5
 
     .points-assigned
       margin-right: -4px
@@ -109,7 +109,7 @@ td.tier-td
   background: $color-grey-3
 
   &.saved
-    background: $primary-color-2
+    background: $color-blue-1
 
   input.points
     z-index: 500
@@ -119,8 +119,8 @@ td.tier-td
     background: #F0FBFF
 
   input.ng-valid-required
-    border: 1px solid $primary-color-4
-    background: lighten($primary-color-4, 25%)
+    border: 1px solid $color-blue-4
+    background: lighten($color-blue-4, 25%)
 
   input.ng-invalid
     border: 1px solid #E84846
@@ -165,7 +165,7 @@ button.delete
     width: 180px
 
   &.saved
-    background: lighten($secondary-color-2, 10%)
+    background: lighten($color-green-2, 10%)
 
   .badge-messages
     clear: right
@@ -178,7 +178,7 @@ button.delete
     padding: 5px
     height: 60px
     &:hover
-      background: lighten($secondary-color-3, 20%)
+      background: lighten($color-green-3, 20%)
       cursor: pointer
       cursor: hand
 
@@ -205,8 +205,8 @@ button.delete
     color: #368127
 
   input.ng-valid-required
-    border: 1px solid $primary-color-3
-    background: lighten($primary-color-3, 60%)
+    border: 1px solid $color-blue-3
+    background: lighten($color-blue-3, 60%)
 
     &:disabled
       background: #EBF1EA
@@ -232,7 +232,7 @@ button.delete
 .modal-window
   .tier-badge
     margin: .5rem
-    background: $primary-color-2
+    background: $color-blue-1
     clear: both
 
 .tier-badge-image
@@ -261,7 +261,7 @@ button.delete
     display: block
     float: left
     right: 0
-    background: $primary-color-1
+    background: $color-blue-0
     padding: .5rem
     color: white
     margin-top: 0
@@ -281,7 +281,7 @@ button.delete
   -webkit-transform: translate(-50%, -50%)
   -moz-transform: translate(-50%, -50%)
 
-  background-color: $primary-color-4
+  background-color: $color-blue-4
   box-shadow: 4px 4px 80px #000
 
   select 
@@ -296,31 +296,32 @@ button.delete
 
 #grade-rubric-table, #rubric-results-table
   td.metric.heading
-    background-color: $primary-color-2
+    background-color: $color-blue-1
     color: #FFF
 
   td.tier.heading
-    background-color: $primary-color-3
+    background-color: $color-blue-3
 
   .metric
-    background-color: lighten($primary-color-2, 40%)
+    background-color: lighten($color-blue-1, 40%)
 
   .metric-name, .tier-name
     font-weight: bold
 
   .metric-points, .tier-points
-    color: $primary-color-1
+    color: $color-blue-0
     font-size: 80%
     text-transform: uppercase
 
   .metric-description, .tier-description
     font-style: italic
 
-  .tier-level
+  td.tier-level
+    text-align: top
     border: 1px solid $color-grey-4
 
   .tier.selected
-    background-color: lighten($secondary-color-3, 10%)
+    background-color: lighten($color-green-3, 10%)
 
   .tier-badge-image img
     height: 35px
@@ -329,10 +330,20 @@ button.delete
     background-color: transparent
     cursor: pointer !important
 
+  .badges, .earned_tier, .graded-students
+    display: block
+    padding: .25rem
+
+  .earned_tier
+    background-color: $color-green-5
+
+  .graded-students 
+    background-color: $color-blue-3
+
   td.comments-box
     background-color: $color-grey-4
     border: none
-    padding: 0
+    padding: .25rem
 
     textarea
       margin: 0

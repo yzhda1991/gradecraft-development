@@ -32,7 +32,7 @@
         - else
           = render 'assignments/individual_show'
       .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
-        = render 'assignments/guidelines'
+        = render 'assignments/description_and_downloads'
 
       - if @assignment.rubric and @assignment.rubric.designed?
         .content#tabt3{:role => "tabpanel", "aria-hidden" => false }

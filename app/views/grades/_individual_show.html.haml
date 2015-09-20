@@ -14,7 +14,7 @@
       - if grade.pass_fail_status
         %span You
         %span.bold= "#{ term_for(grade.pass_fail_status) }"
-        %span the assignment.
+        %span= "the #{ term_for :assignment}."
       - elsif grade.score.present?
         %span You earned
         %span.bold= "#{points grade.try(:raw_score) }"
@@ -36,7 +36,8 @@
             = link_to gf.try(:filename), gf.try(:url), :target => "_blank"
 
   - if @assignment.rubric and @assignment.rubric.designed?
-    .rubric-container{:style => "overflow-x:auto"}
-      = render 'grades/rubric_grade_results'
+    .rubric-container= render 'grades/rubric_grade_results'
 
-  = render partial: "grades/request_feedback", locals: { grade: grade, assignment: @assignment }
+  .right
+    %br
+    = render partial: "grades/request_feedback", locals: { grade: grade, assignment: @assignment }

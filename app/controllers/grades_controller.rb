@@ -431,6 +431,7 @@ class GradesController < ApplicationController
       else
         @grade.raw_score = 0
       end
+      @grade.instructor_modified = true
       @grade.status = "Graded"
       respond_to do |format|
         if @grade.save
