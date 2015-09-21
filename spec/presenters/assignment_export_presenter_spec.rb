@@ -31,17 +31,19 @@ RSpec.describe AssignmentExportPresenter, type: :presenter do
   end
 
   def mock_students
-    @student1 = {first_name: "Ben", last_name: "Bailey", id: 40}
-    @student2 = {first_name: "Mike", last_name: "McCaffrey", id: 55}
-    @student3 = {first_name: "Dana", last_name: "Dafferty", id: 92}
+    @student1 = double(:student, first_name: "Ben", last_name: "Bailey", id: 40)
+    @student2 = double(:student, first_name: "Mike", last_name: "McCaffrey", id: 55)
+    @student3 = double(:student, first_name: "Dana", last_name: "Dafferty", id: 92)
   end
 
   def mock_submissions
     # create some mock submissions with students attached
-    @submission1 = {id: 1, student: @student1}
-    @submission2 = {id: 2, student: @student2}
-    @submission3 = {id: 3, student: @student3}
-    @submission4 = {id: 4, student: @student2}
+    @submission1 = double(:submission, id: 1, student: @student1)
+    @submission2 = double(:submission, id: 2, student: @student2) 
+    @submission3 = double(:submission, id: 3, student: @student3)
+    # let's test multiple submissions for the same student,
+    # thus @student2 for @submission4
+    @submission4 = double(:submission, id: 4, student: @student2)
   end
 
   def submissions_by_id
