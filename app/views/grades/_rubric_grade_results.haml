@@ -20,7 +20,7 @@
           .metric-description= metric.wrapped_description(40).html_safe
 
         - metric.tiers.order("points ASC").each do |tier|
-          - if current_user_is_staff? && @viewable_rubric_grades.select {|rubric_grade| rubric_grade.tier_id == tier[:id] }.count > 0 || current_user_is_student? && @rubric_grades.select {|rubric_grade| rubric_grade.tier_id == tier[:id] }.count > 0
+          - if (current_user_is_staff? && @viewable_rubric_grades.select {|rubric_grade| rubric_grade.tier_id == tier[:id] }.count > 0) || (current_user_is_student? && @rubric_grades.select {|rubric_grade| rubric_grade.tier_id == tier[:id] }.count > 0)
             %td.tier.tier-level.selected
               .tier-heading
                 .tier-name= tier.wrapped_name(25).html_safe
