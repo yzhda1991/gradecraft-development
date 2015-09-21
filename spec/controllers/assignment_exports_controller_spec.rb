@@ -16,43 +16,10 @@ RSpec.describe AssignmentExportsController, type: :controller do
     end
 
     context "export requests" do
-      describe "before filter" do
-        it "should query for the assignment by :assignment_id" do
-          request_get_submissions
-          expect(Assignment).to receive(:find).with(@assignment[:id].to_s).and_return (@assignment)
-        end
-
-        it "should return the assignment" do
-          # create an instance of the controller for testing private methods
-          @controller = AssignmentExportsController.new
-          allow(@controller).to receive(:params).and_return ({assignment_id: @assignment[:id]})
-          expect(@controller.instance_eval { fetch_assignment }).to eq(@assignment)
-        end
-      end
-
       describe "GET submissions", working: true do
         it "should set the correct assignment" do
           request_get_submissions
           expect(assigns(:assignment)).to eq(@assignment)
-        end
-
-        it "should build and set an AssignmentExportPresenter" do
-          request_get_submissions
-          expect(assigns(:presenter).class).to eql(AssignmentExportPresenter)
-        end
-
-        it" should build a new presenter and pass submissions to it" do
-          request_get_submissions
-          allow(AssignmentExportPresenter).to receive(:new).with(assigns(:assignment).student_submissions)
-        end
-
-        it "should set the expected value for submissions" do
-          # add @assignment and @submissions as doubles
-          create_doubles_with_ivars(Assignment, "Submissions")
-          allow(Assignment).to receive(:find).and_return(@assignment)
-          allow(@assignment).to receive(:student_submissions).and_return(@submissions)
-
-          get :submissions, { assignment_id: 50, format: "json" }
         end
 
         describe "authorizations" do
@@ -97,56 +64,142 @@ RSpec.describe AssignmentExportsController, type: :controller do
           expect(assigns(:team)).to eq(@team)
         end
 
-        it "should set the expected value for submissions" do
-          # add @assignment and @submissions as doubles
-          create_doubles_with_ivars("Assignment", "Submissions", "Team")
-          stub_assignment_fetcher
 
-          allow(Team).to receive(:find).and_return(@team)
-          allow(@assignment).to receive(:student_submissions_for_team).with(@team).and_return(@submissions)
+        describe "authorizations" do
+          before(:each) do
+            clear_rails_cache
+            setup_submissions_environment_with_users
+          end
 
-          get :submissions_by_team, { assignment_id: 50, team_id: 900, format: "json"}
-          expect(assigns(:submissions)).to eq(@submissions)
-        end
-
-        describe "authorizations", working: true do
           context "student makes request" do
-            it "should raise a not authorized error" do
+            it "should redirect to the homepage" do
+              logout_user # logout professor
+              login_user(@student1) # login student
+              request_get_submissions
+              expect(response).to redirect_to(root_url)
             end
           end
 
           context "staff makes request" do
+            subject { request_get_submissions_by_team }
+            render_views
+
+            it "should render json" do
+              request_get_submissions_by_team
+              expect(JSON.parse(response.body)).to eq(expected_submissions_by_team_rendered_json)
+            end
+
             it "should be successful" do
+              expect(response.status).to eq(200) # should be successful
             end
           end
         end
       end
-    end
 
-    def request_get_submissions
-      get :submissions, { assignment_id: @assignment[:id], format: "json" }
-    end
+      describe "submissions_by_team_presenter" do
+        before(:each) do
+          build_controller_instance_with_params(get_submissions_by_team_params)
+          trigger_filter_methods :fetch_assignment, :fetch_team
+        end
 
-    def request_get_submissions_by_team
-      get :submissions_by_team, { assignment_id: @assignment[:id], team_id: @team[:id], format: "json"}
-    end
+        it "should build an AssignmentExportPresenter" do
+          options = {submissions: @assignment.student_submissions_for_team(@team)}
+          expect(AssignmentExportPresenter).to receive(:build).with(options)
+          @controller.instance_eval { submissions_by_team_presenter }
+        end
 
-    def stub_assignment_fetcher
-      allow(Assignment).to receive(:find).and_return(@assignment)
-    end
+        it "should assign the presenter instance to @presenter" do
+          @controller.instance_eval { submissions_by_team_presenter }
+          expect(@controller.instance_eval { @presenter }).to eq(@controller.instance_eval { submissions_by_team_presenter })
+        end
+      end
 
-    def temp_view_context
-      @temp_view_context ||= ApplicationController.new.view_context
-    end
+      describe "submissions_presenter" do
+        before(:each) do
+          build_controller_instance_with_params(get_submissions_params)
+          trigger_filter_methods :fetch_assignment
+        end
 
-    def expected_submissions_rendered_json
-      JbuilderTemplate.new(temp_view_context).encode do |json|
-        json.partial! "assignment_exports/submissions", presenter: assignment_export_presenter_instance
+        it "should build an AssignmentExportPresenter" do
+          options = {submissions: @assignment.student_submissions}
+          expect(AssignmentExportPresenter).to receive(:build).with(options)
+          @controller.instance_eval { submissions_presenter }
+        end
+
+        it "should assign the presenter instance to @presenter" do
+          @controller.instance_eval { submissions_presenter }
+          expect(@controller.instance_eval { @presenter }).to eq(@controller.instance_eval { submissions_presenter })
+        end
+      end
+
+      describe "fetch_assignment" do
+        it "should return the assignment" do
+          build_controller_instance_with_params(get_submissions_params)
+          expect(@controller.instance_eval { fetch_assignment }).to eq(@assignment)
+        end
+      end
+
+      describe "fetch_team" do
+        it "should return the team" do
+          build_controller_instance_with_params(get_submissions_by_team_params)
+          expect(@controller.instance_eval { fetch_team }).to eq(@team)
+        end
       end
     end
+  end
 
-    def assignment_export_presenter_instance
-      AssignmentExportPresenter.new({ submissions: @assignment.student_submissions})
+  def build_controller_instance_with_params(params)
+    @controller = AssignmentExportsController.new
+    allow(@controller).to receive(:params).and_return(params)
+  end
+
+  def trigger_filter_methods(*filter_methods)
+    filter_methods.each do |filter_method|
+      @controller.instance_eval {  send(filter_method) }
     end
+  end
+
+  def request_get_submissions
+    get :submissions, get_submissions_params
+  end
+
+  def get_submissions_params
+    { assignment_id: @assignment[:id], format: "json" }
+  end
+
+  def request_get_submissions_by_team
+    get :submissions_by_team, get_submissions_by_team_params
+  end
+
+  def get_submissions_by_team_params
+    { assignment_id: @assignment[:id], team_id: @team[:id], format: "json"}
+  end
+
+  def stub_assignment_fetcher
+    allow(Assignment).to receive(:find).and_return(@assignment)
+  end
+
+  def temp_view_context
+    @temp_view_context ||= ApplicationController.new.view_context
+  end
+
+  def expected_submissions_rendered_json
+    JbuilderTemplate.new(temp_view_context).encode do |json|
+      json.partial! "assignment_exports/submissions", presenter: submissions_presenter_instance
+    end
+  end
+
+  def expected_submissions_by_team_rendered_json
+    JbuilderTemplate.new(temp_view_context).encode do |json|
+      json.partial! "assignment_exports/submissions_by_team", presenter: submissions_by_team_presenter_instance
+    end
+  end
+
+  def submissions_by_team_presenter_instance
+    AssignmentExportPresenter.new({ submissions: @assignment.student_submissions_for_team(@team)})
+  end
+
+  def submissions_presenter_instance
+    AssignmentExportPresenter.new({ submissions: @assignment.student_submissions})
   end
 end

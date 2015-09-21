@@ -2,18 +2,15 @@ class AssignmentExportsController < ApplicationController
   before_filter :ensure_staff?
   before_filter :fetch_assignment
   before_filter :fetch_team, only: :submissions_by_team
+
   respond_to :json
 
   def submissions
-    render :submissions, AssignmentExportPresenter.build({
-      submissions: @assignment.student_submissions
-    })
+    render :submissions, submissions_presenter
   end
 
   def submissions_by_team
-    render :submissions_by_team, AssignmentExportPresenter.build({
-      submissions: @assignment.student_submissions_for_team(@team)
-    })
+    render :submissions_by_team, submissions_by_team_presenter
   end
 
   def export
@@ -28,6 +25,18 @@ class AssignmentExportsController < ApplicationController
         student = submission.student
         "#{student[:last_name]}_#{student[:first_name]}-#{student[:id]}".downcase
       end
+    end
+
+    def submissions_by_team_presenter
+      @presenter ||= AssignmentExportPresenter.build({
+        submissions: @assignment.student_submissions_for_team(@team)
+      })
+    end
+
+    def submissions_presenter
+      @presenter ||= AssignmentExportPresenter.build({
+        submissions: @assignment.student_submissions
+      })
     end
 
     def fetch_assignment
