@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:show, :index, :guidelines, :student_predictor_data]
+  before_filter :ensure_staff?, :except => [:show, :index, :description_and_downloads, :student_predictor_data]
 
   respond_to :html, :json
 

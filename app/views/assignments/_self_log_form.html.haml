@@ -6,4 +6,4 @@
       = f.select :raw_score, assignment.assignment_score_levels.map { |l| [l.formatted_name,l.value] }, :prompt => "Select your grade"
     - else
       = f.select :raw_score, [["I have completed this work", assignment.point_total]], :prompt => "Select your grade"
-    = f.submit (assignment.student_logged_button_text), :class => "button #{present ? 'alert' : 'success'}"
+    = f.submit "Submit", :class => "button #{present ? 'alert' : 'success'}"
