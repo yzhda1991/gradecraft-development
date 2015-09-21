@@ -4,57 +4,30 @@
   .color-group
     %h4.group-title Blues
     .color-bar
-      .color-block.color-blue-00
-      .color-block.color-blue-0
-      .color-block.color-blue-1
-      .color-block.color-blue-2
-      .color-block.color-blue-3
-      .color-block.color-blue-4
-      .color-block.color-blue-5
+      != color_block_set("blue", %w[ 00 0 1 2 3 4 5 ])
+
   .clear
 
   .color-group
     %h4.group-title Alternative Blues
     .color-bar
-      .color-block.color-alt-blue-00
-      .color-block.color-alt-blue-0
-      .color-block.color-alt-blue-1
-      .color-block.color-alt-blue-2
-      .color-block.color-alt-blue-3
-      .color-block.color-alt-blue-4
-      .color-block.color-alt-blue-5
+      != color_block_set("alt-blue", %w[ 0 1 2 3 ])
 
   .color-group
     %h4.group-title Greens
     .color-bar
-      .color-block.color-green-00
-      .color-block.color-green-0
-      .color-block.color-green-1
-      .color-block.color-green-2
-      .color-block.color-green-3
-      .color-block.color-green-4
-      .color-block.color-green-5
+      != color_block_set("green", %w[ 0 1 2 3 5 ])
 
   .color-group
-    %h4.group-title Reds
+    %h4.group-title Warm Hues
     .color-bar
-      .color-block.color-red-1
-      .color-block.color-red-2
-      .color-block.color-orange-1
-      .color-block.color-orange-2
-      .color-block.color-orange-3
-      .color-block.color-yellow-1
-      .color-block.color-yellow-2
+      != color_block_set("red", %w[ 1 2 ])
+      != color_block_set("orange", %w[ 1 2 3 ])
+      != color_block_set("yellow", %w[ 1 2 ])
 
   .color-group
     %h4.group-title Gr[ea]ys
     .color-bar
-      .color-block.color-grey-00
-      .color-block.color-grey-0
-      .color-block.color-grey-1
-      .color-block.color-grey-2
-      .color-block.color-grey-3
-      .color-block.color-grey-4
-      .color-block.color-grey-5
+      != color_block_set("grey", %w[ 00 0 1 2 3 4 5 ])
 
   .clear
