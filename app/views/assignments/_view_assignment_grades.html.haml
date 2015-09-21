@@ -31,11 +31,9 @@
       #tab1.active
         = render 'assignments/description_and_downloads'
       - if @assignment.rubric and @assignment.rubric.designed? && ! current_student.grade_released_for_assignment?(@assignment)
-        #tab2
-          = render 'assignments/rubric_preview'
+        #tab2= render 'assignments/rubric_preview'
       - if @assignment.accepts_submissions? && current_student.submission_for_assignment(@assignment)
-        #tab3
-          = render "submissions/student_show"
+        #tab3= render "submissions/student_show"
       - if current_student.grade_released_for_assignment?(@assignment)
         #tab4
           - if @assignment.has_groups?

@@ -2,7 +2,7 @@
 //Initial load of page
 
 $( "#tabs" ).tabs({
-  event: "mouseover"
+  event: 'mouseover'
 });
 
  $('.froala').editable(
