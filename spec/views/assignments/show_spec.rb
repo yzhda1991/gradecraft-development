@@ -2,6 +2,7 @@
 require 'spec_helper'
 
 describe "assignments/show" do
+  let(:presenter) { AssignmentPresenter.new(@assignment) }
 
   before(:each) do
     @course = create(:course)
@@ -10,10 +11,10 @@ describe "assignments/show" do
     @course.assignments << @assignment
     @student = create(:user)
     @student.courses << @course
-    assign(:title, @assignment.name)
     assign(:assignment, @assignment)
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:current_student).and_return(@student)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   describe "as student" do
@@ -32,35 +33,6 @@ describe "assignments/show" do
         @assignment.update(pass_fail: true)
         render
         assert_select ("div.italic"), text: "Pass/Fail Assignment"
-      end
-    end
-  end
-
-  describe "as faculty" do
-    it "renders the assignment management view" do
-      allow(view).to receive(:current_user_is_staff?).and_return(true)
-      allow(view).to receive(:term_for).and_return("Assignment")
-      assign(:students, [@student])
-      assign(:grades, @student.grades)
-      render
-      assert_select "h3", text: "#{@assignment.name} (#{ points @assignment.point_total} points)"
-    end
-
-    it "renders the assignment management view when submissions are on" do
-      @assignment.update(accepts_submissions: true)
-      allow(view).to receive(:current_user_is_staff?).and_return(true)
-      allow(view).to receive(:term_for).and_return("Assignment")
-      assign(:students, [@student])
-      assign(:grades, @student.grades)
-      render
-      assert_select "h3", text: "#{@assignment.name} (#{ points @assignment.point_total} points)"
-    end
-
-    describe "pass fail assignments" do
-      it "renders pass/fail in the points field" do
-        @assignment.update(pass_fail: true)
-        render
-        assert_select "h3", text: "#{@assignment.name} (Pass/Fail)"
       end
     end
   end

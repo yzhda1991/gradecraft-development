@@ -46,7 +46,6 @@ describe AssignmentsController do
         get :show, :id => @assignment.id
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
-        expect(assigns(:title)).to eq(@assignment.name)
         expect(response).to render_template(:show)
       end
 
@@ -391,7 +390,6 @@ describe AssignmentsController do
         get :show, :id => @assignment.id
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
-        expect(assigns(:title)).to eq(@assignment.name)
         expect(response).to render_template(:show)
       end
 
