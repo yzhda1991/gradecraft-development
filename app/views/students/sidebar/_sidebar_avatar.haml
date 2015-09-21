@@ -11,6 +11,6 @@
   .italic= "Last activity: #{current_student.try(:last_activity_at) || "(never)"} "
   %ul
     %li= link_to raw('<i class="fa fa-edit fa-fw"></i> Edit'), edit_user_path(current_student), :class => "button"
-    %li= link_to raw('<i class="fa fa-envelope fa-fw"></i> Email'), 'mailto:#{current_student.email}"', :class => "button"
+    %li= link_to raw('<i class="fa fa-envelope fa-fw"></i> Email'), "mailto:#{current_student.email}", :class => "button"
     - if current_user_is_admin?
       %li= link_to "Recalculate Score", student_recalculate_path(:student_id => current_student.id), :class => "button"
