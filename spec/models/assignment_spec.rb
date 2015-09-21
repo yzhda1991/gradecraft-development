@@ -494,7 +494,7 @@ describe Assignment do
   describe "finding students with submissions", working: true do
     context "basic finders" do
       before(:each) do
-       setup_submissions_environment_for_users
+       setup_submissions_environment_with_users
       end
 
       context "no team is provided" do
