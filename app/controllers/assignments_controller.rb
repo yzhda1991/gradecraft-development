@@ -29,7 +29,6 @@ class AssignmentsController < ApplicationController
     if current_course.assignments.where(:id => params[:id]).present?
       @assignment = current_course.assignments.find(params[:id])
       @assignment_type = @assignment.assignment_type
-      @title = @assignment.name
       @groups = @assignment.groups
 
       # Returns a hash of grades given for the assignment in format of {student_id: grade}
@@ -74,6 +73,8 @@ class AssignmentsController < ApplicationController
       else
         @grades_for_assignment = @assignment.all_grades_for_assignment
       end
+
+      render :show, AssignmentPresenter.build({ assignment: @assignment, view_context: view_context })
     else
       redirect_to assignments_path, alert: "I'm so sorry, I couldn't find that #{(term_for :assignment)}."
     end
