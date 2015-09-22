@@ -9,4 +9,16 @@ describe Showtime::Presenter do
       expect(subject.render_options).to eq({ locals: { presenter: subject } })
     end
   end
+
+  describe ".wrap" do
+    class FooPresenter < described_class; end
+
+    let(:collection) { [1, 2, 3] }
+
+    it "wraps a collection of objects with presenter instances" do
+      result = FooPresenter.wrap(collection, :item)
+      expect(result.map(&:class).uniq).to eq [FooPresenter]
+      expect(result.first.properties[:item]).to eq 1
+    end
+  end
 end
