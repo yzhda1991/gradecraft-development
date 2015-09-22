@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe "assignments/show" do
-  let(:presenter) { AssignmentPresenter.new(@assignment) }
+  let(:presenter) { AssignmentPresenter.new({ assignment: @assignment }) }
 
   before(:each) do
     @course = create(:course)
