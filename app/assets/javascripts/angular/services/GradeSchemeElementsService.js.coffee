@@ -19,21 +19,24 @@
         letter: ''
         level: ''
         low_range: ''
-        high_range: totalPoints
+        high_range: ''
       })
 
     checkLowRange = (value, index) ->
       (value < elements[parseInt(index)].high_range)
 
-    update_scheme = (index) ->
+    update_scheme = (index, newValue) ->
       if(index != elements.length-1)
-        elements[index+1].high_range = elements[index].low_range-1
+        elements[index+1].high_range = newValue-1
 
     getGradeSchemeElements = ()->
       $http.get('/gse_mass_edit/').success((response) ->
         angular.copy(response.grade_scheme_elements, elements)
         totalPoints = response.total_points
       )
+
+    getTotalPoints = ->
+      totalPoints
 
     postGradeSchemeElements = ()->
       data = {
@@ -52,11 +55,12 @@
     return {
         getGradeSchemeElements: getGradeSchemeElements
         postGradeSchemeElements: postGradeSchemeElements
-        elements: elements
         checkLowRange: checkLowRange
-        remove: remove
-        addFirst: addFirst
         update_scheme: update_scheme
+        getTotalPoints: getTotalPoints
+        elements: elements
+        remove: remove
         addNew: addNew
+        addFirst: addFirst
     }
 ]
