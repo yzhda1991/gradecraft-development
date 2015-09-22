@@ -1,5 +1,5 @@
-module Presenter
-  class Base
+module Showtime
+  class Presenter
     def self.build(args={})
       new(args).render_options
     end

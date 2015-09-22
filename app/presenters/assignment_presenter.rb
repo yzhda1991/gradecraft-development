@@ -1,9 +1,8 @@
 require "active_support/inflector"
-require "./lib/presenter"
-require_relative "view_context"
+require "./lib/showtime"
 
-class AssignmentPresenter < Presenter::Base
-  include Presenter::ViewContext
+class AssignmentPresenter < Showtime::Presenter
+  include Showtime::ViewContext
 
   def assignment
     properties[:assignment]

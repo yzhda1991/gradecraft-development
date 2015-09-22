@@ -1,8 +1,8 @@
 require "rspec/core"
-require "./lib/presenter"
+require "./lib/showtime/presenter"
 
-describe Presenter::Base do
-  subject { Presenter::Base.new }
+describe Showtime::Presenter do
+  subject { described_class.new }
 
   describe "#render_options" do
     it "includes a presenter local variable" do
