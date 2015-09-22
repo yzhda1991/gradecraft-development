@@ -19,12 +19,17 @@ saml_settings.idp_cert                       = ENV["IDP_CERT"]
 saml_settings.name_identifier_format         = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
 
 # Security section
-saml_settings.security[:authn_requests_signed] = false
-saml_settings.security[:logout_requests_signed] = false
-saml_settings.security[:logout_responses_signed] = false
-saml_settings.security[:metadata_signed] = false
-saml_settings.security[:digest_method] = XMLSecurity::Document::SHA1
+saml_settings.security[:authn_requests_signed]   = true     # Enable or not signature on AuthNRequest
+saml_settings.security[:logout_requests_signed]  = true     # Enable or not signature on Logout Request
+saml_settings.security[:logout_responses_signed] = true     # Enable or not signature on Logout Response
+saml_settings.security[:metadata_signed]         = true     # Enable or not signature on Metadata
+saml_settings.security[:digest_method]    = XMLSecurity::Document::SHA1
 saml_settings.security[:signature_method] = XMLSecurity::Document::RSA_SHA1
+
+
+
+saml_settings.certificate = ENV["SAML_CERT"]
+saml_settings.private_key = ENV["SAML_PR_KEY"]
 
 SAML_SETTINGS=saml_settings
 
