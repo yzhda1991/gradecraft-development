@@ -1,4 +1,7 @@
-module ColorPaletteHelper 
+# This module is for the color_theme development page only
+# and is not used in Gradecraft
+
+module ColorPaletteHelper
   def color_block_set(color, numbers)
     numbers.collect do |number|
       class_name = "color-#{color}-#{number}"
