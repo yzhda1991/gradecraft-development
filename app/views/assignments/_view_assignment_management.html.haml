@@ -1,9 +1,9 @@
-= content_nav_for @assignment
+= content_nav_for presenter.assignment
 
 %h3.pagetitle= presenter.title
 
 // Button bar at the top of the page
-= render "buttons"
+= render partial: "buttons", locals: { presenter: presenter }
 
 .pageContent
   = render 'layouts/alerts'

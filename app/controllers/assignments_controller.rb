@@ -74,7 +74,8 @@ class AssignmentsController < ApplicationController
         @grades_for_assignment = @assignment.all_grades_for_assignment
       end
 
-      render :show, AssignmentPresenter.build({ assignment: @assignment, view_context: view_context })
+      render :show, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+                                                team_id: params[:team_id], view_context: view_context })
     else
       redirect_to assignments_path, alert: "I'm so sorry, I couldn't find that #{(term_for :assignment)}."
     end
@@ -83,11 +84,13 @@ class AssignmentsController < ApplicationController
   def new
     @title = "Create a New #{term_for :assignment}"
     @assignment = current_course.assignments.new
+    render :new, AssignmentPresenter.build({ assignment: @assignment, course: current_course, view_context: view_context })
   end
 
   def edit
     @assignment = current_course.assignments.find(params[:id])
     @title = "Editing #{@assignment.name}"
+    render :edit, AssignmentPresenter.build({ assignment: @assignment, course: current_course, view_context: view_context })
   end
 
   # Duplicate an assignment - important for super repetitive items like attendance and reading reactions
@@ -229,6 +232,8 @@ class AssignmentsController < ApplicationController
     @course_student_ids = current_course.students.map(&:id)
 
     @viewable_rubric_grades = @assignment.rubric_grades
+    render :rubric_grades_review, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+                                                              team_id: params[:team_id], view_context: view_context })
   end
 
   # current student visible assignment
