@@ -6,7 +6,7 @@
   }
   controller: ($scope) ->
     this.low_range = (modelValue, viewValue) ->
-      if (modelValue < $scope.element.high_range)
+      if (modelValue < $scope.element.high_range || $scope.element.high_range == '')
         GradeSchemeElementsService.update_scheme($scope.index, modelValue)
         true
       else
