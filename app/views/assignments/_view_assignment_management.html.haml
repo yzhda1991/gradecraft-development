@@ -24,7 +24,7 @@
     #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
       .ui-tabs-panel#tab.active{:role => "tabpanel", "aria-hidden" => false }
         - if presenter.group_assignment?
-          = render 'assignments/group_show'
+          = render partial: 'assignments/group_show', locals: { presenter: presenter }
         - else
           = render 'assignments/individual/individual_show'
       .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
