@@ -16,6 +16,10 @@ class AssignmentPresenter < Showtime::Presenter
     properties.has_key?(:team_id) && !team.nil?
   end
 
+  def groups
+    AssignmentGroupPresenter.wrap(assignment.groups, :group)
+  end
+
   def group_assignment?
     assignment.has_groups?
   end

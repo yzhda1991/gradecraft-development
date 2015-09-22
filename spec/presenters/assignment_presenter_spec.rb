@@ -1,5 +1,6 @@
 require "rspec/core"
 require "./app/presenters/assignment_presenter"
+require "./app/presenters/assignment_group_presenter"
 
 describe AssignmentPresenter do
   let(:assignment) { double(:assignment, name: "Crazy Wizardry", pass_fail?: false, point_total: 5000)}
@@ -35,6 +36,15 @@ describe AssignmentPresenter do
       subject.properties[:team_id] = 123
       allow(subject.course).to receive(:teams).and_return double(:relation, find_by: team)
       expect(subject.for_team?).to eq true
+    end
+  end
+
+  describe "#groups" do
+    it "wraps the assignment groups in an AssignmentGroupPresenter" do
+      groups = [double(:group), double(:group)]
+      allow(assignment).to receive(:groups).and_return groups
+      expect(subject.groups.map(&:class).uniq).to eq [AssignmentGroupPresenter]
+      expect(subject.groups.first.group).to eq groups.first
     end
   end
 
