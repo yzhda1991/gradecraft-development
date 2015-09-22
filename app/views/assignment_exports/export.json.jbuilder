@@ -36,19 +36,19 @@ end
 
 ## Example JSON:
 
-# {
-#   root: {
-#     content_type: "",
-#     files: [
-#       { path: "http://gradecraft.com/grades/8/grade_import_template.csv", content_type: "text/csv" }
-#     ]
-#   },
-#   jimmy_page: {
-#     content_type: "directory",
-#     files: [
-#       { path: "https://gradecraft.aws.com/jgashdghf", content_type: "application/pdf" },
-#       { path: "https://gradecraft.aws.com/hdsgfhsdfhdsfdksfk", content_type: "application/pdf" },
-#       { content: "Lorem Ipsum.....", name: "jimmy_page_submission.txt", content_type: "text" }
-#     ]
-#   }
-# }
+{
+  export-directory-name: {
+    files: [
+      { path: "http://gradecraft.com/grades/8/grade_import_template.csv", content_type: "text/csv" }
+    ],
+    directories: [
+      jimmy_page: {
+        files: [
+          { path: "https://gradecraft.aws.com/jgashdghf", content_type: "application/pdf" },
+          { path: "https://gradecraft.aws.com/hdsgfhsdfhdsfdksfk", content_type: "application/pdf" },
+          { content: "Lorem Ipsum.....", filename: "jimmy_page_submission.txt", content_type: "text" }
+        ]
+      }
+    ]
+  }
+}
