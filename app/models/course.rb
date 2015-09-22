@@ -125,6 +125,8 @@ class Course < ActiveRecord::Base
   validate :max_more_than_min
 
   scope :alphabetical, -> { order('courseno ASC') }
+  scope :active, -> { where(status: true) }
+  scope :inactive, -> { where.not(status: true) }
 
   def self.find_or_create_by_lti_auth_hash(auth_hash)
     criteria = { lti_uid: auth_hash['extra']['raw_info']['context_id'] }
@@ -223,7 +225,7 @@ class Course < ActiveRecord::Base
   def formatted_short_name
     if semester.present? && year.present?
       "#{self.courseno} #{(self.semester).capitalize.first[0]}#{self.year}"
-    else 
+    else
       "#{courseno}"
     end
   end

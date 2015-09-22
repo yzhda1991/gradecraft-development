@@ -89,6 +89,24 @@ describe Course do
     expect(@course.fail_term).to eq("Fail")
   end
 
+  describe ".active" do
+    it "returns courses that have a status" do
+      Course.destroy_all
+      active = create :course, status: true
+      inactive = create :course, status: false
+      expect(Course.active.to_a).to eq [active]
+    end
+  end
+
+  describe ".inactive" do
+    it "returns courses that do not have a status" do
+      Course.destroy_all
+      active = create :course, status: true
+      inactive = create :course, status: false
+      expect(Course.inactive.to_a).to eq [inactive]
+    end
+  end
+
   describe "#instructors_of_record" do
     it "returns all the staff who are instructors of record for the course" do
       membership = create :staff_course_membership, course: subject, instructor_of_record: true
