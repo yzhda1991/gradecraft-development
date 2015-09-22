@@ -14,29 +14,29 @@
         %a{ "href" => "#tab"} Grades
       %li
         %a{ "href" => "#tabt2"} Description & Downloads
-      - if @assignment.rubric and @assignment.rubric.designed?
+      - if presenter.rubric_available?
         %li
           %a{ "href" => "#tabt3"} Grading Rubric
-      - if @assignment.grades.present?
+      - if presenter.has_grades?
         %li
           %a{ :href => "#tabt4"} Class Analytics
 
     #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
       .ui-tabs-panel#tab.active{:role => "tabpanel", "aria-hidden" => false }
-        - if @assignment.has_groups?
-          = render 'assignments/group/group_show'
+        - if presenter.group_assignment?
+          = render 'assignments/group_show'
         - else
           = render 'assignments/individual/individual_show'
       .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
         = render 'assignments/description_and_downloads'
 
-      - if @assignment.rubric and @assignment.rubric.designed?
+      - if presenter.rubric_available?
         .content#tabt3{:role => "tabpanel", "aria-hidden" => false }
           %br
           = render 'assignments/rubric_preview'
-      - if @assignment.grades.present?
+      - if presenter.has_grades?
         .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
-          - if @assignment.has_groups?
-            = render "grades/analytics/group_analytics"
+          - if presenter.group_assignment?
+            = render "grades/group_analytics"
           - else
-            = render "grades/analytics/instructor_analytics"
+            = render "grades/instructor_analytics"

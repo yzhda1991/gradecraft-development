@@ -16,6 +16,14 @@ class AssignmentPresenter < Showtime::Presenter
     properties.has_key?(:team_id) && !team.nil?
   end
 
+  def group_assignment?
+    assignment.has_groups?
+  end
+
+  def has_grades?
+    assignment.grades.present?
+  end
+
   def has_reviewable_grades?
     assignment.grades.instructor_modified.present?
   end
