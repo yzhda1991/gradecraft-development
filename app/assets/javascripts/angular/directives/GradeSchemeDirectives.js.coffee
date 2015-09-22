@@ -23,18 +23,12 @@
 @gradecraft.directive 'lowRange', ()->
   require: ['^gradeSchemeRanges', '^ngModel']
   restrict: 'C'
-  controller: () ->
-    this.lowFoo = () ->
-      console.log("here is low foo")
   link: (scope, elm, attrs, ctrls) ->
     ctrls[1].$validators.range = ctrls[0].low_range
 
 @gradecraft.directive 'highRange', ()->
   require: ['^gradeSchemeRanges', '^ngModel']
   restrict: 'C'
-  controller: () ->
-    this.highFoo = () ->
-      console.log("here is low foo")
   link: (scope, elm, attrs, ctrls) ->
    ctrls[1].$validators.range = ctrls[0].high_range
     # create an on change binding
