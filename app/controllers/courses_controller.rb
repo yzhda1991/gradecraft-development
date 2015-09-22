@@ -1,4 +1,5 @@
 class CoursesController < ApplicationController
+  include CoursesHelper
 
   before_filter :ensure_staff?, :except => [:timeline]
 
@@ -124,6 +125,7 @@ class CoursesController < ApplicationController
       if @course.save
         @course.course_memberships.create(:user_id => current_user.id, :role => current_user.role(current_course), instructor_of_record: true)
         session[:course_id] = @course.id
+        bust_course_list_cache current_user
         format.html { redirect_to course_path(@course), notice: "Course #{@course.name} successfully created" }
         format.json { render json: @course, status: :created, location: @course }
       else
@@ -139,6 +141,7 @@ class CoursesController < ApplicationController
 
     respond_to do |format|
       if @course.update_attributes(params[:course])
+        bust_course_list_cache current_user
         format.html { redirect_to @course, notice: "Course #{@course.name} successfully updated" }
       else
         redirect_to edit_course_path
