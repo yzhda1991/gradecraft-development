@@ -46,7 +46,7 @@
       $http.put('/grade_scheme_elements/mass_edit', data).success(
         (data) ->
           angular.copy(data.grade_scheme_elements, elements)
-          console.log(data)
+          window.location.href = '/grade_scheme_elements/'
       ).error(
         (error) ->
           console.log(error)
