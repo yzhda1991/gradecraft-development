@@ -501,15 +501,6 @@ describe AssignmentsController do
         get :show, :id => @assignment.id
         expect(assigns(:comments_by_metric_id)).to eq("?")
       end
-
-      it "assigns group if student is in a group" do
-        @assignment.update(grade_scope: "Group")
-        group = create(:group, course: @course)
-        group.assignments << @assignment
-        group.students << @student
-        get :show, :id => @assignment.id
-        expect(assigns(:group)).to eq(group)
-      end
     end
 
     describe "GET student_predictor_data" do
