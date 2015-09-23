@@ -8,13 +8,11 @@ json.assignments @assignments do |assignment|
 
   if assignment.current_student_grade
     assignment.current_student_grade.tap do |grade|
-      json.cache! ['v1', grade] do
-        json.grade do
-          json.id grade.id
-          json.predicted_score grade.predicted_score
-          json.score grade.score
-          json.pass_fail_status grade.pass_fail_status if assignment.pass_fail
-        end
+      json.grade do
+        json.id grade.id
+        json.predicted_score grade.predicted_score
+        json.score grade.score
+        json.pass_fail_status grade.pass_fail_status if assignment.pass_fail
       end
     end
   end
