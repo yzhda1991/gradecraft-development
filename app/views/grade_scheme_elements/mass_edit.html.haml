@@ -3,7 +3,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   - if ! current_course.grade_scheme_elements.present?
     .italic Start by adding your highest level, and work your way down
 
@@ -11,6 +11,6 @@
     .grade-scheme-elements
       .grade-scheme-element{'ng-repeat' => 'element in grade_scheme_elements', 'ng-include' => "'ng_gradeScheme.html'"}
       %button{:class => 'button right', 'ng-click' => 'gradeService.addFirst()', 'ng-hide' => 'gradeService.elements.length > 0'} Add Your Highest Grade
-    .submit-button 
+    .submit-button
       %button{:type => 'submit', :class => 'button right', 'ng-click' => 'gradeService.postGradeSchemeElements()'} Submit
       %br
