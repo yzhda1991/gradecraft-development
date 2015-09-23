@@ -17,7 +17,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def groups
-    AssignmentGroupPresenter.wrap(assignment.groups, :group)
+    AssignmentGroupPresenter.wrap(assignment.groups, :group, { assignment: assignment })
   end
 
   def group_assignment?
