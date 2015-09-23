@@ -20,6 +20,14 @@ class AssignmentPresenter < Showtime::Presenter
     properties.has_key?(:team_id) && !team.nil?
   end
 
+  def grade_for(student)
+    grades.where(student_id: student.id).first || Grade.new
+  end
+
+  def grades
+    assignment.grades
+  end
+
   def groups
     AssignmentGroupPresenter.wrap(assignment.groups, :group, { assignment: assignment })
   end
@@ -28,16 +36,16 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.has_groups?
   end
 
-  def group_for?(user)
-    user.group_for_assignment(assignment)
+  def group_for?(student)
+    student.group_for_assignment(assignment)
   end
 
   def has_grades?
-    assignment.grades.present?
+    grades.present?
   end
 
   def has_reviewable_grades?
-    assignment.grades.instructor_modified.present?
+    grades.instructor_modified.present?
   end
 
   def has_teams?
@@ -48,12 +56,32 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.is_individual?
   end
 
+  def submission_created_date_for(submissions)
+    submission = submissions.first
+    submission.created_at if submission
+  end
+
+  def submission_updated_date_for(submissions)
+    submission = submissions.first
+    if submission
+      submission.updated_at if submission.updated_at != submission.created_at
+    end
+  end
+
   def new_assignment?
     !assignment.persisted?
   end
 
   def rubric_available?
     assignment.use_rubric? && !assignment.rubric.nil? && assignment.rubric.designed?
+  end
+
+  def students
+    for_team? ? course.students_by_team(team) : course.students
+  end
+
+  def submissions_for(student)
+    student.submissions.where(assignment_id: assignment.id)
   end
 
   def title

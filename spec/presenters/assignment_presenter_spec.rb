@@ -77,9 +77,25 @@ describe AssignmentPresenter do
     end
   end
 
+  describe "#students" do
+    let(:student) { double(:user) }
+
+    it "returns the students that are attached to the course" do
+      allow(course).to receive(:students).and_return [student]
+      expect(subject.students).to eq [student]
+    end
+
+    it "returns the students that are attached to the course for the team if a team is specified" do
+      subject.properties[:team_id] = 123
+      allow(course).to receive(:teams).and_return double(:relation, find_by: team)
+      allow(course).to receive(:students_by_team).and_return [student]
+      expect(subject.students).to eq [student]
+    end
+  end
+
   describe "#team" do
     it "returns the team for the team id from the course" do
-      allow(subject.course).to receive(:teams).and_return double(:relation, find_by: team)
+      allow(course).to receive(:teams).and_return double(:relation, find_by: team)
       expect(subject.team).to eq team
     end
   end
