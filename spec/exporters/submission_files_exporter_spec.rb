@@ -2,20 +2,15 @@ require 'spec_helper'
 
 RSpec.describe SubmissionFilesExporter, type: :exporter do
   let(:stubbed_submission) { @stubbed_submission || submission_double }
-  
-  subject do
-    SubmissionFilesExporter.new(stubbed_submission).instance_eval { directory_files }
+  let(:exporter) do
+    SubmissionFilesExporter.new(stubbed_submission)
   end
-
+  
   # public methods
   describe "directory_files" do
-    before(:each) do
-      stub_text_file_values
-    end
-
-    context "comment or link exist and submission files are present" do
+    context "has comment or link?" do
       it "should return an array of hashes for all submissions and text files in the directory" do
-        expect(subject).to eq(
+        expect(exporter.directory_files).to eq(
           [ serialized_text_file_expectation ] + serialized_submission_files_expectation
         )
       end
@@ -23,20 +18,22 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
 
     context "submission has comment or link but no submission files" do
       it "should return an array with only the serialized text file" do
-        @stubbed_submission = submission_double_with_comment
-        expect(subject).to eq( [ serialized_text_file_expectation ] )
+        @stubbed_submission = submission_double_with_nils(:submission_files)
+        expect(exporter.directory_files).to eq( [ serialized_text_file_expectation ] )
       end
     end
 
     context "submission has submission files but no text comment or link" do
       it "should return an array with only the submission files" do
-        expect(subject).to eq( serialized_submission_files_expectation )
+        @stubbed_submission = submission_double_with_nils(:link, :text_comment)
+        expect(exporter.directory_files).to eq( serialized_submission_files_expectation )
       end
     end
 
     context "submission doesn't have a comment or link, and doesn't have any submission files" do
       it "should return an empty array" do
-        expect(subject).to eq( [] )
+        @stubbed_submission = submission_double_with_nils(:link, :text_comment, :submission_files)
+        expect(exporter.directory_files).to eq( [] )
       end
     end
   end
@@ -78,7 +75,7 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
 
   describe "serialized_text_file" do
     it "should create a hash for each submission file" do
-      stub_text_file_values
+      stub_text_file_values_for(subject)
       expect(subject.instance_eval { serialized_text_file }).to eq(
         serialized_text_file_expectation
       )
@@ -97,9 +94,10 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
 
   private
 
-  def stub_text_file_values
-    allow(subject).to receive(:text_file_content).and_return("some content!!")
-    allow(subject).to receive(:formatted_text_filename).and_return("some filename!!")
+  def stub_text_file_values_for(entity)
+    allow(entity).to receive(:text_file_content).and_return("some content!!")
+    allow(entity).to receive(:formatted_text_filename).and_return("some filename!!")
+    entity
   end
 
   def serialized_text_file_expectation
@@ -122,24 +120,12 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
     )
   end
 
-  def submission_double_with_only_comment
-    double(:submission,
-      link: nil,
-      text_comment: "Greezus!",
-      submission_files: [],
-      student: student_double,
-      assignment: assignment_double
-    )
-  end
-
-  def submission_double_with_only_submission_files
-    double(:submission,
-      link: nil,
-      text_comment: "Greezus!",
-      submission_files: submission_file_doubles,
-      student: student_double,
-      assignment: assignment_double
-    )
+  def submission_double_with_nils(*nil_attrs)
+    this_double = nil_attrs.inject(submission_double) do |memo, nil_attr|
+      allow(memo).to receive(nil_attr).and_return(nil)
+      memo
+    end
+    stub_text_file_values_for(this_double)
   end
 
   def student_double
