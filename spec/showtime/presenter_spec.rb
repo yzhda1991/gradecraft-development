@@ -20,5 +20,10 @@ describe Showtime::Presenter do
       expect(result.map(&:class).uniq).to eq [FooPresenter]
       expect(result.first.properties[:item]).to eq 1
     end
+
+    it "wraps with arguments" do
+      result = FooPresenter.wrap(collection, :item, { foo: :bar })
+      expect(result.first.properties[:foo]).to eq :bar
+    end
   end
 end

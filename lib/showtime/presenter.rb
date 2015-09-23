@@ -16,8 +16,11 @@ module Showtime
       { locals: { presenter: self } }
     end
 
-    def self.wrap(collection, model_name)
-      collection.collect { |item| self.new({ "#{model_name.to_sym}" => item }) }
+    def self.wrap(collection, model_name, args={})
+      collection.collect do |item|
+        arguments = args.merge({ "#{model_name.to_sym}" => item })
+        self.new(arguments)
+      end
     end
 
     private
