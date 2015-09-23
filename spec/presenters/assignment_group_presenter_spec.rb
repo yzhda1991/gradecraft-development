@@ -7,6 +7,23 @@ describe AssignmentGroupPresenter do
   let(:submission) { double(:submission) }
   subject { AssignmentGroupPresenter.new({ assignment: assignment, group: group })}
 
+  describe "#assignment_graded?" do
+    it "has been graded if there is a raw score for any user in the group" do
+      student = double(:user, grade_for_assignment: double(:grade, raw_score: 100))
+      allow(group).to receive(:students).and_return [student]
+      expect(subject.assignment_graded?).to eq true
+    end
+  end
+
+  describe "#grade_for" do
+    it "returns the grade for the specified student" do
+      grade = double(:grade)
+      grades= double(:relation, find_by: grade)
+      allow(assignment).to receive(:grades).and_return grades
+      expect(subject.grade_for(double(:user, id: 123))).to eq grade
+    end
+  end
+
   describe "#has_submission?" do
     it "has a submission if one is returned for the assignment" do
       allow(group).to receive(:submission_for_assignment).and_return submission

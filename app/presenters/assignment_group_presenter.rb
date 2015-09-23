@@ -5,6 +5,18 @@ class AssignmentGroupPresenter < Showtime::Presenter
     properties[:assignment]
   end
 
+  def assignment_graded?
+    !group.students.first.grade_for_assignment(assignment).raw_score.nil?
+  end
+
+  def can_grade?
+    assignment.release_necessary? && assignment.grades.present?
+  end
+
+  def grade_for(student)
+    assignment.grades.find_by(student_id: student.id)
+  end
+
   def group
     properties[:group]
   end

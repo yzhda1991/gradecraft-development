@@ -24,6 +24,10 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.has_groups?
   end
 
+  def group_for?(user)
+    user.group_for_assignment(assignment)
+  end
+
   def has_grades?
     assignment.grades.present?
   end
