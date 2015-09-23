@@ -10,6 +10,7 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
   describe "directory_files" do
     context "has comment or link?" do
       it "should return an array of hashes for all submissions and text files in the directory" do
+        stub_exporter_with_text_file_values
         expect(exporter.directory_files).to eq(
           [ serialized_text_file_expectation ] + serialized_submission_files_expectation
         )
@@ -19,6 +20,7 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
     context "submission has comment or link but no submission files" do
       it "should return an array with only the serialized text file" do
         @stubbed_submission = submission_double_with_nils(:submission_files)
+        stub_exporter_with_text_file_values
         expect(exporter.directory_files).to eq( [ serialized_text_file_expectation ] )
       end
     end
@@ -26,6 +28,7 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
     context "submission has submission files but no text comment or link" do
       it "should return an array with only the submission files" do
         @stubbed_submission = submission_double_with_nils(:link, :text_comment)
+        stub_exporter_with_text_file_values
         expect(exporter.directory_files).to eq( serialized_submission_files_expectation )
       end
     end
@@ -33,6 +36,7 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
     context "submission doesn't have a comment or link, and doesn't have any submission files" do
       it "should return an empty array" do
         @stubbed_submission = submission_double_with_nils(:link, :text_comment, :submission_files)
+        stub_exporter_with_text_file_values
         expect(exporter.directory_files).to eq( [] )
       end
     end
@@ -84,10 +88,13 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
 
   describe "text_file_content" do
     it "should create a string from the title, comment, and link" do
-    allow(subject).to receive(:text_content_title).and_return("a great title")
-    allow(subject).to receive(:submission_link).and_return("some submission link")
+      allow(subject).to receive_messages(
+        text_content_title: "a good title",
+        text_comment: "a great text comment",
+        submission_link: "the best submission link"
+      )
       expect(subject.instance_eval { text_file_content }).to eq(
-        serialized_text_file_expectation
+        "a good title\na great text comment\nthe best submission link"
       )
     end
   end
@@ -102,6 +109,10 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
 
   def serialized_text_file_expectation
     { content: "some content!!", filename: "some filename!!", content_type: "text" }
+  end
+
+  def stub_exporter_with_text_file_values
+    allow(exporter).to receive_messages(text_file_content: "some content!!", formatted_text_filename: "some filename!!")
   end
 
   def serialized_submission_files_expectation
