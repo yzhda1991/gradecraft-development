@@ -4,8 +4,8 @@ require "json"
 module SmartArchiver
   class ImportHash < Hash
     def initialize(attrs={})
+      
     end
-    
   end
 
   class Directory

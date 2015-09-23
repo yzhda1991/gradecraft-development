@@ -29,13 +29,16 @@ class AssignmentExportsController < ApplicationController
 
     def submissions_by_team_presenter
       @presenter ||= AssignmentExportPresenter.build({
-        submissions: @assignment.student_submissions_for_team(@team)
+        submissions: @assignment.student_submissions_for_team(@team),
+        assignment: @assignment,
+        team: @team
       })
     end
 
     def submissions_presenter
       @presenter ||= AssignmentExportPresenter.build({
-        submissions: @assignment.student_submissions
+        submissions: @assignment.student_submissions,
+        assignment: @assignment
       })
     end
 
