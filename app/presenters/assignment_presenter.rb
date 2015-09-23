@@ -76,6 +76,10 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.use_rubric? && !assignment.rubric.nil? && assignment.rubric.designed?
   end
 
+  def student_logged?(student)
+    assignment.student_logged? && assignment.open && user.is_student?(course)
+  end
+
   def students
     for_team? ? course.students_by_team(team) : course.students
   end

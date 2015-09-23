@@ -28,7 +28,7 @@
         - else
           = render partial: 'assignments/individual_show', locals: { presenter: presenter }
       .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
-        = render 'assignments/description_and_downloads'
+        = render partial: 'assignments/description_and_downloads', locals: { presenter: presenter }
 
       - if presenter.rubric_available?
         .content#tabt3{:role => "tabpanel", "aria-hidden" => false }
