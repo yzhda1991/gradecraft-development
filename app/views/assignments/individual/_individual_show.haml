@@ -1,16 +1,16 @@
-- if current_course.has_teams? && @assignment.is_individual?
+- if presenter.has_teams? && presenter.individual_assignment?
   .team-filter
-    = form_tag assignment_path(@assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+    = form_tag assignment_path(presenter.assignment), name: "see_team", onchange: ("javascript: document.see_team.submit();"), method: :get do
       %label.sr-only{:for => "team_id"}
         Select #{term_for :team} –
-      = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+      = select_tag :team_id, options_for_select(presenter.teams.map { |t| [t.name, t.id] }, presenter.team.try(:id)), prompt: "– Select #{(term_for :team).titleize} –"
 
-= form_tag edit_status_grades_assignment_path @assignment do
+= form_tag edit_status_grades_assignment_path presenter.assignment do
   %table.nofeatures_default_last_name_dynatable
     %thead= render "assignments/individual/table_head"
     %tbody= render "assignments/individual/table_body"
 
-  - if @assignment.release_necessary? && @assignment.grades.present?
+  - if presenter.assignment.release_necessary? && presenter.has_grades?
     .right
       %br
       = submit_tag "Update Selected Grade Statuses", :class => "button"

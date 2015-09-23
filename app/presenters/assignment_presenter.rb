@@ -36,6 +36,14 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.grades.instructor_modified.present?
   end
 
+  def has_teams?
+    course.has_teams?
+  end
+
+  def individual_assignment?
+    assignment.is_individual?
+  end
+
   def new_assignment?
     !assignment.persisted?
   end
@@ -55,6 +63,10 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def team
-    @team ||= course.teams.find_by(id: properties[:team_id])
+    @team ||= teams.find_by(id: properties[:team_id])
+  end
+
+  def teams
+    course.teams
   end
 end

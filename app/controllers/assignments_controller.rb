@@ -48,20 +48,11 @@ class AssignmentsController < ApplicationController
       @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
       @course_student_ids = current_course.students.map(&:id)
 
-      # Data for displaying student grading distribution
-      @submissions_count = @assignment.submissions.count
-      @ungraded_submissions_count = @assignment.ungraded_submissions.count
-      @ungraded_percentage = @ungraded_submissions_count / @submissions_count rescue 0
-      @graded_count = @submissions_count - @ungraded_submissions_count
-
       if current_user_is_student?
         @grades_for_assignment = @assignment.grades_for_assignment(current_student)
         @rubric_grades = RubricGrade.joins("left outer join submissions on submissions.id = rubric_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
         @comments_by_metric_id = @rubric_grades.inject({}) do |memo, rubric_grade|
           memo.merge(rubric_grade.metric_id => rubric_grade.comments)
-        end
-        if @assignment.has_groups? && current_student.group_for_assignment(@assignment).present?
-          @group = current_student.group_for_assignment(@assignment)
         end
 
         if current_student.grade_released_for_assignment?(@assignment)
