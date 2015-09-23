@@ -88,18 +88,102 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
 
   describe "text_file_content" do
     it "should create a string from the title, comment, and link" do
-      allow(subject).to receive_messages(
-        text_content_title: "a good title",
-        text_comment: "a great text comment",
-        submission_link: "the best submission link"
-      )
+      stub_text_file_content_values
       expect(subject.instance_eval { text_file_content }).to eq(
         "a good title\na great text comment\nthe best submission link"
       )
     end
   end
 
+  describe "text_content_title" do
+    it "should generate a title with the student name" do
+      expect(subject.instance_eval { text_content_title }).to eq(
+        "Submission items from Haight, Anne\n"
+      )
+    end
+  end
+
+  describe "text_comment" do
+    context "submission has a text comment" do
+      it "should return a string with the text comment" do
+        allow(subject).to receive_message_chain(:submission, :text_comment) { "Hobos everywhere!!" }
+        expect(subject.instance_eval { text_comment }).to eq(
+          "\ntext comment: Hobos everywhere!!\n"
+        )
+      end
+    end
+
+    context "submission has no text comment" do
+      it "should return nil" do
+        allow(subject).to receive_message_chain(:submission, :text_comment) { nil }
+        expect(subject.instance_eval { text_comment }).to be_nil
+      end
+    end
+  end
+
+  describe "submission_link" do
+    context "submission has a link" do
+      it "should return a string with the link" do
+        allow(subject).to receive_message_chain(:submission, :link) { "http://fark.com" }
+        expect(subject.instance_eval { submission_link }).to eq(
+          "\nlink: http://fark.com\n"
+        )
+      end
+    end
+
+    context "submission has no text comment" do
+      it "should return nil" do
+        allow(subject).to receive_message_chain(:submission, :link) { nil }
+        expect(subject.instance_eval { submission_link }).to be_nil
+      end
+    end
+  end
+
+  describe "has_comment_or_link?" do
+    context "submission has a text comment and a link" do
+      it "should be true" do
+        stub_submission_for_has_comment_or_link?(text_comment: true, link: true)
+        expect(subject.instance_eval { has_comment_or_link? }).to be_truthy
+      end
+    end
+
+    context "submission has a text comment but no link" do
+      it "should be true" do
+        stub_submission_for_has_comment_or_link?(text_comment: true, link: false)
+        expect(subject.instance_eval { has_comment_or_link? }).to be_truthy
+      end
+    end
+
+    context "submission has a link but no text comment" do
+      it "should be true" do
+        stub_submission_for_has_comment_or_link?(text_comment: false, link: true)
+        expect(subject.instance_eval { has_comment_or_link? }).to be_truthy
+      end
+    end
+
+    context "submission has neither a text comment nor a link" do
+      it "should be false" do
+        stub_submission_for_has_comment_or_link?(text_comment: false, link: false)
+        expect(subject.instance_eval { has_comment_or_link? }).to be_falsey
+      end
+    end
+  end
+
   private
+
+  def stub_submission_for_has_comment_or_link?(attrs={})
+    attrs.each do |attr, value|
+      allow(subject).to receive_message_chain(:submission, attr, :present?) { value }
+    end
+  end
+
+  def stub_text_file_content_values
+    allow(subject).to receive_messages(
+      text_content_title: "a good title",
+      text_comment: "a great text comment",
+      submission_link: "the best submission link"
+    )
+  end
 
   def stub_text_file_values_for(entity)
     allow(entity).to receive(:text_file_content).and_return("some content!!")
