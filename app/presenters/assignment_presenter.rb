@@ -12,6 +12,10 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.assignment_type
   end
 
+  def completion_rate
+    assignment.completion_rate(course)
+  end
+
   def course
     properties[:course]
   end
@@ -26,6 +30,14 @@ class AssignmentPresenter < Showtime::Presenter
 
   def grades
     assignment.grades
+  end
+
+  def grades_for(student)
+    assignment.grades_for_assignment(student)
+  end
+
+  def grades_available_for?(user)
+    user.is_staff?(course) || (user.is_student?(course) && user.grade_released_for_assignment(assignment).present?)
   end
 
   def groups
@@ -103,6 +115,10 @@ class AssignmentPresenter < Showtime::Presenter
 
   def submissions_for(student)
     student.submissions.where(assignment_id: assignment.id)
+  end
+
+  def submission_rate
+    assignment.submission_rate(course)
   end
 
   def title
