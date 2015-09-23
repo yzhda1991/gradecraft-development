@@ -7,8 +7,8 @@
 
 = form_tag edit_status_grades_assignment_path presenter.assignment do
   %table.nofeatures_default_last_name_dynatable
-    %thead= render "assignments/individual/table_head"
-    %tbody= render "assignments/individual/table_body"
+    %thead= render partial: "assignments/individual/table_head", locals: { presenter: presenter }
+    %tbody= render partial: "assignments/individual/table_body", locals: { presenter: presenter }
 
   - if presenter.assignment.release_necessary? && presenter.has_grades?
     .right

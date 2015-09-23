@@ -8,6 +8,10 @@ class AssignmentPresenter < Showtime::Presenter
     properties[:assignment]
   end
 
+  def assignment_type
+    assignment.assignment_type
+  end
+
   def course
     properties[:course]
   end
