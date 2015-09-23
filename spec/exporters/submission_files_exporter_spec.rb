@@ -169,6 +169,68 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
     end
   end
 
+  describe "initialization" do
+    subject { SubmissionFilesExporter.new(@submission_double || submission_double) }
+
+    before(:each) do
+      @submission_double = submission_double
+    end
+
+    it "should set @files to an empty array" do
+      expect(subject.instance_variable_get("@files")).to eq([])
+    end
+
+    it "should assign the submission argument to @submission" do
+      expect(subject.instance_variable_get("@submission")).to eq(@submission_double)
+    end
+
+    it "should assign the submission's assignment to @assignment" do
+      @assignment_double = assignment_double
+      allow(@submission_double).to receive_messages(assignment: @assignment_double)
+      expect(subject.instance_variable_get("@assignment")).to eq(@assignment_double)
+    end
+
+    it "should assign the submission's student to @student" do
+      @student_double = student_double
+      allow(@submission_double).to receive_messages(student: @student_double)
+      expect(subject.instance_variable_get("@student")).to eq(@student_double)
+    end
+  end
+
+  describe "attr_reader" do
+    describe "files" do
+      it "should return @files" do
+        @files_double = files_double
+        subject.instance_variable_set("@files", @files_double)
+        expect(subject.files).to eq(@files_double)
+      end
+    end
+
+    describe "submission" do
+      it "should return @submission" do
+        @submission_double = submission_double
+        subject.instance_variable_set("@submission", @submission_double)
+        expect(subject.submission).to eq(@submission_double)
+      end
+    end
+
+    describe "assignment" do
+      it "should return @assignment" do
+        @assignment_double = assignment_double
+        subject.instance_variable_set("@assignment", @assignment_double)
+        expect(subject.assignment).to eq(@assignment_double)
+      end
+    end
+
+    describe "student" do
+      it "should read @student" do
+        @student_double = student_double
+        subject.instance_variable_set("@student", @student_double)
+        expect(subject.student).to eq(@student_double)
+      end
+    end
+  end
+
   private
 
   def stub_submission_for_has_comment_or_link?(attrs={})
@@ -228,6 +290,10 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
       first_name: "Anne",
       last_name: "Haight"
     )
+  end
+
+  def files_double
+    double(:files)
   end
 
   def submission_file_doubles

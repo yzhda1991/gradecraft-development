@@ -12,6 +12,8 @@ class SubmissionFilesExporter
     @files
   end
 
+  attr_reader :files, :submission, :student, :assignment
+
   private 
 
   def formatted_text_filename
@@ -57,5 +59,4 @@ class SubmissionFilesExporter
     submission.text_comment.present? or submission.link.present?
   end
 
-  attr_reader :files, :submission, :student, :assignment
 end
