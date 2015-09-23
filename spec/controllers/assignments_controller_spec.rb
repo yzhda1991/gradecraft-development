@@ -45,12 +45,6 @@ describe AssignmentsController do
         get :show, :id => @assignment.id
         expect(response).to render_template(:show)
       end
-
-      it "assigns the rubric as rubric" do
-        rubric = create(:rubric_with_metrics, assignment: @assignment)
-        get :show, :id => @assignment.id
-        expect(assigns(:rubric)).to eq(rubric)
-      end
     end
 
     describe "GET new" do
@@ -167,23 +161,6 @@ describe AssignmentsController do
       it "assigns student ids" do
         get :rubric_grades_review, :id => @assignment.id
         expect(assigns(:course_student_ids)).to eq([@student.id])
-      end
-
-      it "assigns rubric grades" do
-        skip "implement"
-        rubric = create(:rubric_with_metrics, assignment: @assignment)
-        # TODO: Test for these lines:
-        # @rubric_grades = serialized_rubric_grades
-        # @viewable_rubric_grades = RubricGrade.where(assignment_id: @assignment.id)
-        get :rubric_grades_review, :id => @assignment.id
-        expect(assigns(:rubric_grades)).to eq("?")
-        expect(assigns(:viewable_rubric_grades)).to eq("?")
-      end
-
-      it "assigns comments by metric id" do
-        skip "implement"
-        get :rubric_grades_review, :id => @assignment.id
-        expect(assigns(:comments_by_metric_id)).to eq("?")
       end
 
       describe "with team id in params" do
@@ -304,12 +281,6 @@ describe AssignmentsController do
         grade = create :grade, assignment: @assignment, student: @student, status: "Graded"
         get :show, :id => @assignment.id
         expect(grade.reload).to be_feedback_reviewed
-      end
-
-      it "assigns the rubric as rubric" do
-        rubric = create(:rubric_with_metrics, assignment: @assignment)
-        get :show, :id => @assignment.id
-        expect(assigns(:rubric)).to eq(rubric)
       end
     end
 

@@ -28,11 +28,6 @@ class AssignmentsController < ApplicationController
   def show
     @assignment = current_course.assignments.find_by(id: params[:id])
     if @assignment
-      if @assignment.rubric.present?
-        @rubric = @assignment.fetch_or_create_rubric
-        @metrics = @rubric.metrics.ordered.includes(:tiers => :tier_badges)
-      end
-
       if current_user_is_student?
         if current_student.grade_released_for_assignment?(@assignment)
           grade = current_student.grade_for_assignment(@assignment)

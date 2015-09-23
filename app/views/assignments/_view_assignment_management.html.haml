@@ -33,7 +33,7 @@
       - if presenter.rubric_available?
         .content#tabt3{:role => "tabpanel", "aria-hidden" => false }
           %br
-          = render 'assignments/rubric_preview'
+          = render partial: 'assignments/rubric_preview', locals: { presenter: presenter }
       - if presenter.has_grades?
         .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
           - if presenter.group_assignment?

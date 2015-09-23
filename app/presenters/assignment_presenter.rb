@@ -68,12 +68,24 @@ class AssignmentPresenter < Showtime::Presenter
     end
   end
 
+  def metrics
+    rubric.metrics.ordered.includes(:tiers => :tier_badges)
+  end
+
   def new_assignment?
     !assignment.persisted?
   end
 
+  def rubric
+    assignment.fetch_or_create_rubric
+  end
+
   def rubric_available?
     assignment.use_rubric? && !assignment.rubric.nil? && assignment.rubric.designed?
+  end
+
+  def rubric_max_tier_count
+    rubric.max_tier_count
   end
 
   def student_logged?(student)
@@ -82,6 +94,11 @@ class AssignmentPresenter < Showtime::Presenter
 
   def students
     for_team? ? course.students_by_team(team) : course.students
+  end
+
+  def submission_date_for(student)
+    submission = submissions_for(student).first
+    submission.updated_at if submission
   end
 
   def submissions_for(student)
