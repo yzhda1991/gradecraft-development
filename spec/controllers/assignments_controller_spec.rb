@@ -41,101 +41,15 @@ describe AssignmentsController do
     end
 
     describe "GET show" do
-
       it "returns the assignment show page"do
         get :show, :id => @assignment.id
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
         expect(response).to render_template(:show)
-      end
-
-      it "assigns groups" do
-        group = create(:group, course: @course)
-        group.assignments << @assignment
-        get :show, :id => @assignment.id
-        expect(assigns(:groups)).to eq([group])
-      end
-
-      it "assigns grades" do
-        grade = create(:grade, assignment: @assignment, student: @student)
-        get :show, :id => @assignment.id
-        expect(assigns(:grades)).to eq(@assignment.grades)
-      end
-
-      describe "with team id in params" do
-        it "assigns team and students for team" do
-          # we verify only students on team assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-
-          get :show, {:id => @assignment.id, :team_id => team.id}
-          expect(assigns(:team)).to eq(team)
-          expect(assigns(:students)).to eq([@student])
-        end
-
-      end
-
-      describe "with no team id in params" do
-        it "assigns all students if no team supplied" do
-          # we verify non-team members also assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-
-          get :show, :id => @assignment.id
-          expect(assigns(:students)).to include(@student)
-          expect(assigns(:students)).to include(other_student)
-        end
-
       end
 
       it "assigns the rubric as rubric" do
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         get :show, :id => @assignment.id
         expect(assigns(:rubric)).to eq(rubric)
-      end
-
-      it "assigns course badges as JSON using CourseBadgeSerializer" do
-        badge = create(:badge, course: @course)
-        get :show, :id => @assignment.id
-        expect(assigns(:course_badges)).to eq(ActiveModel::ArraySerializer.new([badge], each_serializer: CourseBadgeSerializer).to_json)
-      end
-
-      it "assigns assignment score levels ordered by value" do
-        assignment_score_level_second = create(:assignment_score_level, assignment: @assignment, value: "1000")
-        assignment_score_level_first = create(:assignment_score_level, assignment: @assignment, value: "100")
-        get :show, :id => @assignment.id
-        expect(assigns(:assignment_score_levels)).to eq([assignment_score_level_first,assignment_score_level_second])
-      end
-
-      it "assigns student ids" do
-        get :show, :id => @assignment.id
-        expect(assigns(:course_student_ids)).to eq([@student.id])
-      end
-
-      it "assigns data for displaying student grading distribution" do
-        skip "need to create a scored grade"
-        ungraded_submission = create(:submission, assignment: @assignment)
-        student_submission = create(:graded_submission, assignment: @assignment, student: @student)
-        @assignment.submissions << [student_submission, ungraded_submission]
-        get :show, :id => @assignment.id
-        expect(assigns(:submissions_count)).to eq(2)
-        expect(assigns(:ungraded_submissions_count)).to eq(1)
-        expect(assigns(:ungraded_percentage)).to eq(1/2)
-        expect(assigns(:graded_count)).to eq(1)
-      end
-
-      # GET show, professor specific:
-
-      it "assigns grades for assignment" do
-        grade = create(:grade, student: @student, assignment: @assignment)
-        get :show, :id => @assignment.id
-        expect(assigns(:grades_for_assignment)).to eq(@assignment.all_grades_for_assignment)
       end
     end
 
@@ -386,120 +300,16 @@ describe AssignmentsController do
         @course.assignments << @assignment
       end
 
-      it "returns the assignment show page" do
-        get :show, :id => @assignment.id
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
-        expect(response).to render_template(:show)
-      end
-
-      it "assigns groups" do
-        group = create(:group, course: @course)
-        group.assignments << @assignment
-        get :show, :id => @assignment.id
-        expect(assigns(:groups)).to eq([group])
-      end
-
-      it "assigns grades" do
-        grade = create(:grade, assignment: @assignment, student: @student)
-        get :show, :id => @assignment.id
-        expect(assigns(:grades)).to eq(@assignment.grades)
-      end
-
       it "marks the grade as reviewed" do
         grade = create :grade, assignment: @assignment, student: @student, status: "Graded"
         get :show, :id => @assignment.id
         expect(grade.reload).to be_feedback_reviewed
       end
 
-      describe "with team id in params" do
-        it "assigns team and students for team" do
-          # we verify only students on team assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-
-          get :show, {:id => @assignment.id, :team_id => team.id}
-          expect(assigns(:team)).to eq(team)
-          expect(assigns(:students)).to eq([@student])
-        end
-
-      end
-
-      describe "with no team id in params" do
-        it "assigns all students if no team supplied" do
-          # we verify non-team members also assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-
-          get :show, :id => @assignment.id
-          expect(assigns(:students)).to include(@student)
-          expect(assigns(:students)).to include(other_student)
-        end
-      end
-
       it "assigns the rubric as rubric" do
         rubric = create(:rubric_with_metrics, assignment: @assignment)
         get :show, :id => @assignment.id
         expect(assigns(:rubric)).to eq(rubric)
-      end
-
-      it "assigns course badges as JSON using CourseBadgeSerializer" do
-        badge = create(:badge, course: @course)
-        get :show, :id => @assignment.id
-        expect(assigns(:course_badges)).to eq(ActiveModel::ArraySerializer.new([badge], each_serializer: CourseBadgeSerializer).to_json)
-      end
-
-      it "assigns assignment score levels ordered by value" do
-        assignment_score_level_second = create(:assignment_score_level, assignment: @assignment, value: "1000")
-        assignment_score_level_first = create(:assignment_score_level, assignment: @assignment, value: "100")
-        get :show, :id => @assignment.id
-        expect(assigns(:assignment_score_levels)).to eq([assignment_score_level_first,assignment_score_level_second])
-      end
-
-      it "assigns student ids" do
-        get :show, :id => @assignment.id
-        expect(assigns(:course_student_ids)).to eq([@student.id])
-      end
-
-      it "assigns data for displaying student grading distribution" do
-        skip "need to create a scored grade"
-        ungraded_submission = create(:submission, assignment: @assignment)
-        student_submission = create(:graded_submission, assignment: @assignment, student: @student)
-        @assignment.submissions << [student_submission, ungraded_submission]
-        get :show, :id => @assignment.id
-        expect(assigns(:submissions_count)).to eq(2)
-        expect(assigns(:ungraded_submissions_count)).to eq(1)
-        expect(assigns(:ungraded_percentage)).to eq(1/2)
-        expect(assigns(:graded_count)).to eq(1)
-      end
-
-      # GET show, student specific specs:
-
-      it "assigns grades for assignment" do
-        grade = create(:grade, student: @student, assignment: @assignment)
-        get :show, :id => @assignment.id
-        expect(assigns(:grades_for_assignment)).to eq(@assignment.grades_for_assignment(@student))
-      end
-
-      it "assigns rubric grades" do
-        skip "implement"
-        rubric = create(:rubric_with_metrics, assignment: @assignment)
-        # TODO: Test for this line:
-        # @rubric_grades = RubricGrade.joins("left outer join submissions on submissions.id = rubric_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
-        get :show, :id => @assignment.id
-        expect(assigns(:rubric_grades)).to eq("?")
-      end
-
-      it "assigns comments by metric id" do
-        skip "implement"
-        get :show, :id => @assignment.id
-        expect(assigns(:comments_by_metric_id)).to eq("?")
       end
     end
 
