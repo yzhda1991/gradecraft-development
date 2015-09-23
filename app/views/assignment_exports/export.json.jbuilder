@@ -1,4 +1,4 @@
-json.set! "export directory_name" do
+json.set! @presenter.export_file_name do
   json.files do [{ path: @presenter.csv_file_path, content_type: "text/csv" }]
 
   json.directories do

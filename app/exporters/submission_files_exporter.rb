@@ -58,5 +58,4 @@ class SubmissionFilesExporter
   def has_comment_or_link?
     submission.text_comment.present? or submission.link.present?
   end
-
 end
