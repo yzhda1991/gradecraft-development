@@ -6,7 +6,7 @@ class Grade < ActiveRecord::Base
                   :grade_files_attributes, :graded_by_id, :group, :group_id, :group_type,
                   :instructor_modified, :pass_fail_status, :point_total, :predicted_score,
                   :raw_score, :released, :status, :student, :student_id, :submission, :_destroy,
-                  :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes, 
+                  :submission_id, :task, :task_id, :team_id,  :earned_badges, :earned_badges_attributes,
                   :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at,
                   :is_custom_value
 

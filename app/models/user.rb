@@ -412,7 +412,16 @@ class User < ActiveRecord::Base
 
 
     _assignments = assignments.where(course: course)
-    in_progress_score = _assignments.graded_for_student(self).sum('point_total')
+    # in_progress_score = _assignments.graded_for_student(self).sum('point_total')
+    in_progress_score = _assignments.includes(:grades).inject(0) do |sum, assignment|
+      point_total = 0
+      if assignment.grades.all? {|grade| grade.is_student_visible?}
+        point_total = assignment.point_total
+      end
+      sum + point_total
+    end
+     # where('EXISTS(SELECT 1 FROM grades WHERE assignment_id = assignments.id AND (status = ?) OR
+      # (status = ? AND NOT assignments.release_necessary) AND (assignments.due_at < NOW() OR student_id = ?))', 'Released', 'Graded', student.id) }
     earned_badge_score = earned_badges.where(course: course).score
     if earned_badge_score > 0
       scores << { :data => [earned_badge_score], :name => "#{course.badge_term.pluralize}" }
