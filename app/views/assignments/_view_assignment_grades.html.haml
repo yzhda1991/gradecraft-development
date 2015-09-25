@@ -9,36 +9,36 @@
     %ul.ui-tabs-nav{:role => "tablist"}
       %li
         %a{ "href" => "#tab1"} Description & Downloads
-      - if @assignment.rubric and @assignment.rubric.designed? && ! current_student.grade_released_for_assignment?(@assignment)
+      - if presenter.rubric_available? && presenter.grades_available_for?(current_student)
         %li
           %a{ "href" => "#tab2"} Grading Rubric
-      - if @assignment.accepts_submissions? && current_student.submission_for_assignment(@assignment)
+      - if presenter.has_submission_for?(current_student)
         %li
           %a{ :href => "#tab3"} My Submission
 
-      - if current_student.grade_released_for_assignment?(@assignment)
+      - if presenter.grades_available_for?(current_student)
         %li
           %a{ :href => "#tab4"} My Results
-        - if ! current_course.hide_analytics? && ! @assignment.hide_analytics?
+        - if !presenter.hide_analytics?
           %li
             %a{ :href => "#tab5"} Class Analytics
 
     #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
       #tab1.active
         = render partial: 'assignments/description_and_downloads', locals: { presenter: presenter }
-      - if @assignment.rubric and @assignment.rubric.designed? && ! current_student.grade_released_for_assignment?(@assignment)
-        #tab2= render 'assignments/rubric_preview'
-      - if @assignment.accepts_submissions? && current_student.submission_for_assignment(@assignment)
+      - if presenter.rubric_available? && presenter.grades_available_for?(current_student)
+        #tab2= render partial: 'assignments/rubric_preview', locals: { presenter: presenter }
+      - if presenter.has_submission_for?(current_student)
         #tab3= render "submissions/student_show"
-      - if current_student.grade_released_for_assignment?(@assignment)
+      - if presenter.grades_available_for?(current_student)
         #tab4
-          - if @assignment.has_groups?
+          - if presenter.assignment.has_groups?
             = render "grades/group_show"
           - else
             = render "grades/individual_show"
-        - if ! current_course.hide_analytics? && ! @assignment.hide_analytics?
+        - if !presenter.hide_analytics?
           #tab5
-            - if @assignment.has_groups?
+            - if presenter.assignment.has_groups?
               = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
             - else
               = render partial: "grades/analytics/individual_analytics", locals: { presenter: presenter }

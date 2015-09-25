@@ -48,6 +48,25 @@ describe AssignmentPresenter do
     end
   end
 
+  describe "#hide_analytics?" do
+    it "is not hidden if the course does not hide analytics" do
+      allow(course).to receive(:hide_analytics?).and_return false
+      expect(subject.hide_analytics?).to eq false
+    end
+
+    it "is not hidden if the assignment does not hide analytics" do
+      allow(course).to receive(:hide_analytics?).and_return true
+      allow(assignment).to receive(:hide_analytics?).and_return false
+      expect(subject.hide_analytics?).to eq false
+    end
+
+    it "is hidden if both the assignment and course hide analytics" do
+      allow(course).to receive(:hide_analytics?).and_return true
+      allow(assignment).to receive(:hide_analytics?).and_return true
+      expect(subject.hide_analytics?).to eq true
+    end
+  end
+
   describe "#rubric_available?" do
     let(:rubric) { double(:rubric, designed?: true) }
 

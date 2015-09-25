@@ -60,8 +60,16 @@ class AssignmentPresenter < Showtime::Presenter
     grades.instructor_modified.present?
   end
 
+  def has_submission_for?(user)
+    assignment.accepts_submissions? && !user.submission_for_assignment(assignment).nil?
+  end
+
   def has_teams?
     course.has_teams?
+  end
+
+  def hide_analytics?
+    course.hide_analytics? && assignment.hide_analytics?
   end
 
   def individual_assignment?
@@ -100,7 +108,7 @@ class AssignmentPresenter < Showtime::Presenter
     rubric.max_tier_count
   end
 
-  def student_logged?(student)
+  def student_logged?(user)
     assignment.student_logged? && assignment.open && user.is_student?(course)
   end
 
