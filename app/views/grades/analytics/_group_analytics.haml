@@ -23,4 +23,4 @@
       #numberComplete{:"data-type" => "full", "data-info" => "#{(term_for :groups).titleize} Submitted", "data-percent" => "#{@assignment.submission_rate(current_course)}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{@assignment.submissions.count}", "data-dimension" => "180", "data-fontsize" => "38", "data-border" => "#222222", "data-bordersize" => "2"  }
 
     %h4.bold Percentage Scores Earned
-      .small-12#levels_per_assignment{'data-levels' =>  presenter.assignment.percentage_score_earned.to_json }
+    .small-12#levels_per_assignment{'data-levels' =>  presenter.assignment.percentage_score_earned.to_json }

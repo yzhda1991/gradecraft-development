@@ -37,7 +37,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def grades_available_for?(user)
-    user.is_staff?(course) || (user.is_student?(course) && user.grade_released_for_assignment(assignment).present?)
+    user.is_staff?(course) || (user.is_student?(course) && user.grade_released_for_assignment?(assignment))
   end
 
   def groups

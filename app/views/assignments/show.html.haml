@@ -1,4 +1,4 @@
 - if current_user_is_staff?
   = render partial: "view_assignment_management", locals: { presenter: presenter }
 - else
-  = render "view_assignment_grades"
+  = render partial: "view_assignment_grades", locals: { presenter: presenter }
