@@ -13,7 +13,8 @@
             %th Name
             %th Points Earned
             %th Due
-            %th
+            - if current_user_is_staff?
+              %th
         - current_course.challenges.visible.each do |challenge|
           %tr
             %td{:width => "25%"}= link_to challenge.name, challenge
