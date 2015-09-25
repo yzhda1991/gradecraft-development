@@ -1,5 +1,112 @@
 require "smart_archiver/version"
 require "json"
+require 'fileutils'
+
+## Example JSON:
+# 
+#   { name: "export-directory-name",
+#     files: [
+#       { remote_url: "http://gradecraft.com/grades/8/grade_import_template.csv", content_type: "text/csv" }
+#     ],
+#     directories: [
+#       { name: "page_jimmy-45",
+#         files: [],
+#         directories: [
+#           { name: "submission_2015-04-10--10:30:54",
+#             files: [
+#               { remote_url: "https://gradecraft.aws.com/jgashdghf", content_type: "application/pdf" },
+#               { remote_url: "https://gradecraft.aws.com/hdsgfhsdfhdsfdksfk", content_type: "application/pdf" },
+#               { content: "Lorem Ipsum.....", filename: "jimmy_page_submission.txt", content_type: "text" }
+#             ],
+#             directories: []
+#           }
+#         ]
+#       }
+#     ]
+#   }
+# 
+
+# start at the top level directory
+directory = Directory.new(directory_hash)
+directory.assemble_files # create background processes for getting and building individual files
+directory.create_sub_directories
+
+class SmartArchiver
+  def initialize(options={})
+    @json = options[:json] || {}
+    @archive_name = options[:archive_name] || "untitled_archive"
+  end
+
+  def assemble_recursive
+    Directory.create(@json).rescursive_assemble_on_disk
+  end
+
+  def generate_compressed_archive
+  end
+end
+
+class Directory
+  # { name: String, files: Array of Hashes, directories: Array of Hashes }
+  def initialize(directory_attrs={})
+    @name = directory_attrs[:name] || "untitled_directory"
+    @files = directory_attrs[:files] || []
+    @directories = directory_attrs[:directories] || []
+  end
+
+  def create_files
+    @files.each do |file_attrs|
+      File.new(file_attrs).create_in_directory(self.path)
+    end
+  end
+
+  def create_sub_directories
+    @directories.each do |directory_attrs|
+      Directory.new(directory_attrs).create_in_directory(self.path)
+    end
+  end
+
+  def create_in_directory(path)
+    FileUtils.mkdir(path)
+  end
+
+  def path
+    parent_directories.collect {|d| "/#{d}" }.join
+  end
+
+  def parent_directories
+    # some enumeration of parent directories
+  end
+end
+
+class File
+  # { name: String, files: Array of Hashes, directories: Array of Hashes }
+  def initialize(file_attrs={})
+    @content_type= file_attrs[:content_type] || "untitled_file"
+    @remote_url = file_attrs[:remote_url] || nil
+  end
+
+  def create_in_directory(path)
+    FileUtils.mkdir(path)
+  end
+end
+
+top_level_directory.each do |key, value|
+  directory_name = key
+  FileUtils.mkdir TEMP_FILES_PATH + directory_name
+  directory_contents = value
+
+  if directory_contents["files"]
+    directory_contents["files"].each do |file_hash|
+      sub_directory
+    end
+  end
+
+  if directory_contents["directories"]
+    directory_contents["directories"].each do |sub_directory_hash|
+      sub_directory
+    end
+  end
+end
 
 module SmartArchiver
   module Managers
@@ -69,24 +176,3 @@ module SmartArchiver
   end
 end
 
-## Example JSON:
-# {
-#   export-directory-name: {
-#     files: [
-#       { path: "http://gradecraft.com/grades/8/grade_import_template.csv", content_type: "text/csv" }
-#     ],
-#     directories: [
-#       "page_jimmy-45": {
-#         directories: [
-#           "submission_2015-04-10--10:30:54": {
-#             files: [
-#               { path: "https://gradecraft.aws.com/jgashdghf", content_type: "application/pdf" },
-#               { path: "https://gradecraft.aws.com/hdsgfhsdfhdsfdksfk", content_type: "application/pdf" },
-#               { content: "Lorem Ipsum.....", filename: "jimmy_page_submission.txt", content_type: "text" }
-#             ]
-#           }
-#         ]
-#       }
-#     ]
-#   }
-# }
