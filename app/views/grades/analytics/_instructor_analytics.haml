@@ -2,25 +2,25 @@
   %h4.bold Basic Stats
   %ul
     %li
-      %span.small_uppercase No. of Positive Predictions: 
-      = points @assignment.predicted_count
-    - if @grades_for_assignment.present? && @grades_for_assignment.count > 1
+      %span.small_uppercase No. of Positive Predictions:
+      = points presenter.assignment.predicted_count
+    - if presenter.grades_for(current_user).count > 1
       %li
         %span.small_uppercase Average Score:
-        = points @assignment.average
+        = points presenter.assignment.average
       %li
         %span.small_uppercase Minimum Score:
-        = points @assignment.low_score
+        = points presenter.assignment.low_score
       %li
-        %span.small_uppercase High Score: 
-        = points @assignment.high_score
+        %span.small_uppercase High Score:
+        = points presenter.assignment.high_score
 
-  - if @grades_for_assignment.present? && @grades_for_assignment.count > 1 
+  - if presenter.grades_for(current_user).count > 1
     %h4.bold Grade Distribution
-    .grades_per_assign{ "data-scores" => @grades_for_assignment.to_json, :style => "width: 200px" }
+    .grades_per_assign{ "data-scores" => presenter.grades_for(current_user).to_json, :style => "width: 200px" }
 
     %h4.bold Participants
-    #numberComplete{:"data-type" => "full", "data-info" => "#{term_for :students} Participated", "data-percent" => "#{@assignment.completion_rate(current_course)}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{@assignment.grade_count}", "data-dimension" => "225", "data-fontsize" => "48", "data-border" => "#222222", "data-bordersize" => "2"   }
+    #numberComplete{:"data-type" => "full", "data-info" => "#{term_for :students} Participated", "data-percent" => "#{presenter.completion_rate}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{presenter.assignment.grade_count}", "data-dimension" => "225", "data-fontsize" => "48", "data-border" => "#222222", "data-bordersize" => "2"   }
 
     %h4.bold Percentage Scores Earned
-    #levels_per_assignment{'data-levels' =>  @assignment.percentage_score_earned.to_json }
+    #levels_per_assignment{'data-levels' =>  presenter.assignment.percentage_score_earned.to_json }
