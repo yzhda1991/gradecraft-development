@@ -17,18 +17,20 @@ class Assignment < ActiveRecord::Base
   belongs_to :course, touch: true
   belongs_to :assignment_type, -> { order('position ASC') }, touch: true
 
-  has_one :rubric
+  has_one :rubric, :dependent => :destroy
   delegate :mass_grade?, :student_weightable?, :to => :assignment_type
 
   # For instances where the assignment needs its own unique score levels
-  has_many :assignment_score_levels, -> { order "value" }
+  has_many :assignment_score_levels, -> { order "value" }, :dependent => :destroy
   accepts_nested_attributes_for :assignment_score_levels, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? || a['name'].blank? }
 
   # This is the assignment weighting system (students decide how much assignments will be worth for them)
-  has_many :weights, :class_name => 'AssignmentWeight'
+  has_many :weights, :class_name => 'AssignmentWeight', :dependent => :destroy
+  #Why are there two? -ch
+  has_many :assignment_weights
 
   # Student created groups, can connect to multiple assignments and receive group level or individualized feedback
-  has_many :assignment_groups
+  has_many :assignment_groups, :dependent => :destroy
   has_many :groups, :through => :assignment_groups
 
   # Multipart assignments
@@ -43,9 +45,9 @@ class Assignment < ActiveRecord::Base
   has_many :unlock_states, :as => :unlockable, :dependent => :destroy
 
   # Student created submissions to be graded
-  has_many :submissions, as: :assignment
+  has_many :submissions, as: :assignment, :dependent => :destroy
 
-  has_many :rubric_grades
+  has_many :rubric_grades, :dependent => :destroy
 
   has_many :grades, :dependent => :destroy
   accepts_nested_attributes_for :grades, :reject_if => Proc.new { |attrs| attrs[:raw_score].blank? }
@@ -56,7 +58,6 @@ class Assignment < ActiveRecord::Base
   has_many :assignment_files, :dependent => :destroy
   accepts_nested_attributes_for :assignment_files
 
-  has_many :assignment_weights
 
   # Preventing malicious content from being submitted
   before_save :clean_html

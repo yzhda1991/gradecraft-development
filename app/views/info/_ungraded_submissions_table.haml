@@ -4,21 +4,21 @@
 
 - @ungraded_submissions_by_assignment.each do |assignment, submissions|
   %h4.assignment_name
-    = link_to assignment.try(:name), assignment
-    = link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button"
+    //= link_to assignment.try(:name), assignment
+    //= link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button"
   %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "ungradedTableCaption"}
-    %thead
-      %tr
-        - if assignment.is_individual?
-          %th{:scope => "col", :width => "7%"} First Name
-          %th{:scope => "col", :width => "7%"} Last Name
-          %th Date Submitted
-          - if course.has_teams?
-            %th{:scope => "col", :width => "15%"}= "#{term_for :team}"
-        - elsif assignment.has_groups?
-          %th{:scope => "col"} Group
-        %th{:scope => "col", :style => "min-width: 200px"}
-          %span.sr-only Actions
+    / %thead
+    /   %tr
+    /     - if assignment.is_individual?
+    /       %th{:scope => "col", :width => "7%"} First Name
+    /       %th{:scope => "col", :width => "7%"} Last Name
+    /       %th Date Submitted
+    /       - if course.has_teams?
+    /         %th{:scope => "col", :width => "15%"}= "#{term_for :team}"
+    /     - elsif assignment.has_groups?
+    /       %th{:scope => "col"} Group
+    /     %th{:scope => "col", :style => "min-width: 200px"}
+    /       %span.sr-only Actions
     %tbody
       - submissions.each do |ug|
         - if ug.ungraded?
