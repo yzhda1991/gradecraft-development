@@ -505,9 +505,11 @@ grinding_assignments = []
     a.release_necessary = false
     a.grade_scope = "Individual"
     if n < 15
-      a.due_at = ((15-n)/2).weeks.ago
+      a.open_at = ((15-n)/2).weeks.ago
+      a.due_at = ((15-n)/2).weeks.ago + 0.05
     else
-      a.due_at = ((-15 + n)/2).weeks.from_now
+      a.open_at = ((-15 + n)/2).weeks.from_now
+      a.due_at = ((-15 + n)/2).weeks.from_now + 0.05
     end
   end
 end
