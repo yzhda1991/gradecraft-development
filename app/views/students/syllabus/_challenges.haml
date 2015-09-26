@@ -13,22 +13,25 @@
             %th Name
             %th Points Earned
             %th Due
-            %th
+            - if current_user_is_staff?
+              %th
         - current_course.challenges.visible.each do |challenge|
           %tr
             %td{:width => "25%"}= link_to challenge.name, challenge
             %td{:width => "25%"}
               - if current_student.team_for_course(current_course).present?
-                - if challenge.challenge_grade_for_team(current_student.team).present?
+                - if challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
                   = "#{points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score)} / #{points challenge.point_total} points"
               - else
                 %span.italic= "#{points challenge.point_total} points possible"
-            - if challenge.future?
-              %td{:width => "25%"}= "#{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
-            %td
-              .right
-                %ul.button-bar
-                  - if current_user_is_staff?
+            %td{:width => "25%"}
+              - if challenge.future?
+                = "#{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"
+            
+            - if current_user_is_staff?
+              %td
+                .right
+                  %ul.button-bar
                     - if challenge.challenge_grade_for_team(current_student.team).present?
                       %li
                         %a{:href => edit_challenge_challenge_grade_path(challenge.id, challenge.challenge_grade_for_team(current_student.team), :team_id => current_student.team_for_course(current_course).id), :class => 'button'}
