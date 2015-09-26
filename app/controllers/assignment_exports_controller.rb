@@ -2,6 +2,8 @@ class AssignmentExportsController < ApplicationController
   before_filter :ensure_staff?
   before_filter :fetch_assignment
   before_filter :fetch_team, only: :submissions_by_team
+  before_filter :group_submissions_by_student
+  before_filter :generate_export_csv
 
   respond_to :json
 
@@ -20,6 +22,13 @@ class AssignmentExportsController < ApplicationController
   end
 
   private
+    # needs specs
+    def generate_export_csv
+    open( "#{export_dir}/_grade_import_template.csv",'w' ) do |f|
+      f.puts @assignment.grade_import(@students) # need to pull @students out of @submissions_by_student
+    end
+  end
+
     def group_submissions_by_student
       @submissions_by_student ||= @submissions.group_by do |submission|
         student = submission.student

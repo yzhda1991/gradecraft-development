@@ -1,10 +1,18 @@
 require "smart_archiver/version"
 
+# managers
+require 'mangers/importer'
+require 'mangers/exporter'
+
+# parsers
 require 'parsers/directory'
 require 'parsers/file'
 
+# compressors
+
 require "json"
 require 'fileutils'
+require "open-uri"
 
 # steps:
 # 1) parse everything into an array of objects that represent the hashes
@@ -14,17 +22,25 @@ require 'fileutils'
 # 4) begin compression for the larger directory
 #   -- > return some kind of message saying that compression has started
 
+# usage
+# archiver = SmartArchiver::Archive.new(archive_hash).archive_with_compression
 module SmartArchiver
-  def initialize(options={})
-    @json = options[:json] || {}
-    @archive_name = options[:archive_name] || "untitled_archive"
-    @tmp_dir = Dir.mktmpdir # need to create a tmp directory for everythign to live in
-  end
+  class Archive
+    def initialize(options={})
+      @json = options[:json] || {}
+      @archive_name = options[:archive_name] || "untitled_archive"
+      @tmp_dir = Dir.mktmpdir # need to create a tmp directory for everythign to live in
+    end
 
-  def assemble_recursive
-    Directory.create(@json).rescursive_assemble_on_disk
-  end
+    def assemble_recursive
+      Directory.create(@json).rescursive_assemble_on_disk
+    end
 
-  def generate_compressed_archive
+    def archive_with_compression
+    end
+
+    def archive_without_compression
+      assemble_recursive
+    end
   end
 end
