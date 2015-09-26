@@ -25,6 +25,7 @@ def export_submissions
         error_log = ""
 
         # write the CSV for the export
+        # save the csv refactor until the grade export is working properly
         open( "#{export_dir}/_grade_import_template.csv",'w' ) do |f|
           f.puts @assignment.grade_import(@students)
         end

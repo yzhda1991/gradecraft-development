@@ -377,10 +377,6 @@ class GradesController < ApplicationController
 
   private
 
-  def temp_view_context
-    @temp_view_context ||= ApplicationController.new.view_context
-  end
-
   def serialized_init_data
     JbuilderTemplate.new(temp_view_context).encode do |json|
       json.grade do

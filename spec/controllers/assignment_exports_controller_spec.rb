@@ -49,6 +49,33 @@ RSpec.describe AssignmentExportsController, type: :controller do
             it "should be successful" do
               expect(response.status).to eq(200) # should be successful
             end
+
+            describe "building the archiver" do
+              # should be something like:
+              # archiver = SmartArchiver::Archive.new(archive_hash)
+              # archiver.assemble do |on_complete|
+                # on_complete.archive_with_compression
+              # end
+              it "should build the new archive from the archive hash" do
+                expect(SmartArchiver::Archive).to receive(:new).with(archive_hash)
+              end
+
+              it "should assemble the archive" do
+                archive_double = double(:smart_archiver)
+                allow(SmartArchiver::Archive).to receive_messages(new: archive_double)
+                expect(archive_double).to receive_messages(:assemble)
+              end
+
+              it "should yield the archive after completion" do
+                # need to add a spec for this
+                pending
+              end
+
+              it "should trigger archive_with_compression on the Archiver object" do
+                # need to add this
+                pending
+              end
+            end
           end
         end
       end
@@ -93,6 +120,24 @@ RSpec.describe AssignmentExportsController, type: :controller do
               expect(response.status).to eq(200) # should be successful
             end
           end
+        end
+      end
+
+      describe "submissions_by_student_archive_hash" do
+        it "should create a new jbuilder object" do
+          pending
+        end
+
+        it "should create a new temp view context" do
+          pending
+        end
+
+        it "should encode the template with a parital for students_by_submission" do
+          pending
+        end
+
+        it "should extract and return the json for the jbuilder object" do
+          pending
         end
       end
 

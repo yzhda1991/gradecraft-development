@@ -111,6 +111,11 @@ class ApplicationController < ActionController::Base
     session[:return_to] = request.referer
   end
 
+  # generates a temporary view context for the purposes of injecting into Jbuilder
+  def temp_view_context
+    @temp_view_context ||= ApplicationController.new.view_context
+  end
+
   private
 
   # Canable checks on permission
