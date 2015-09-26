@@ -45,7 +45,7 @@ class Assignment < ActiveRecord::Base
   has_many :unlock_states, :as => :unlockable, :dependent => :destroy
 
   # Student created submissions to be graded
-  has_many :submissions, as: :assignment, :dependent => :destroy
+  has_many :submissions, :dependent => :destroy
 
   has_many :rubric_grades, :dependent => :destroy
 
