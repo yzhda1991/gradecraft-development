@@ -27,13 +27,15 @@ require "open-uri"
 module SmartArchiver
   class Archive
     def initialize(options={})
-      @json = options[:json] || {}
+      @archive_json = options[:archive_json] || {}
       @archive_name = options[:archive_name] || "untitled_archive"
-      @tmp_dir = Dir.mktmpdir # need to create a tmp directory for everythign to live in
+      @tmp_dir_path = Dir.mktmpdir # need to create a tmp directory for everythign to live in
     end
 
     def assemble_recursive
-      Directory.create(@json).rescursive_assemble_on_disk
+      @top_level_directory = Directory.new(@archive_json)
+      @top_level_directory.base_path = @tmp_dir_path
+      @top_level_directory.rescursive_assemble_on_disk
     end
 
     def archive_with_compression
