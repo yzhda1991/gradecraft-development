@@ -176,7 +176,7 @@ first_course_grade_scheme_hash.each do |range,letter|
     e.high_range = range.last
   end
 end
-puts "Installed the EDUC 222 grading scheme. Roar!"
+puts "Installed the Neuron Count grading scheme."
 
 
 third_course_grade_scheme_hash.each do |range,letter|
@@ -198,7 +198,7 @@ second_course_grade_scheme_hash.each do |range,letter|
     e.high_range = range.last
   end
 end
-puts "Installed the Polsci grading scheme. Debate that!"
+puts "Installed the Polsci Theorists grading scheme. Debate that!"
 
 
 first_course_teams = first_course_team_names.map do |team_name|
@@ -213,7 +213,7 @@ second_course_teams = second_course_team_names.map do |team_name|
     t.name = team_name
   end
 end
-puts "PolSci Teams come to life"
+puts "PolSci Discussion sections are in session"
 
 third_course_teams = third_course_team_names.map do |team_name|
   third_course.teams.create! do |t|
