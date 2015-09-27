@@ -12,6 +12,8 @@
     %th{:scope => "col"} Multiplied Score
   - elsif @assignment.pass_fail?
     %th{:scope => "col"} Grade
+  - if @assignment.has_levels?
+    %th Level Earned
 
   %th{:scope => "col"} Read?
 

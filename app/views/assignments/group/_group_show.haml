@@ -1,0 +1,7 @@
+= form_tag edit_status_grades_assignment_path(@assignment) do
+  %table
+    %thead= render "assignments/group/table_head"
+    %tbody= render "assignments/group/table_body"
+    .right
+      - if @assignment.release_necessary? && @assignment.grades.present?
+        = submit_tag "Update Grade Statuses", :class => "button"

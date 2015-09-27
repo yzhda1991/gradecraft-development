@@ -537,12 +537,7 @@ class GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:id])
     @group = @assignment.groups.find(params[:group_id])
     @title = "Grading #{@group.name}'s #{@assignment.name}"
-    @assignment_type = @assignment.assignment_type
     @assignment_score_levels = @assignment.assignment_score_levels
-    @grades = @group.students.map do |student|
-      @assignment.grades.where(:student_id => student).first || @assignment.grades.new(:student => student, :assignment => @assignment, :graded_by_id => current_user, :status => "Graded")
-    end
-    @submit_message = "Submit Grades"
   end
 
   def group_update

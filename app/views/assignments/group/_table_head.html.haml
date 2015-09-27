@@ -1,15 +1,17 @@
 %tr
-  - if @assignment.release_necessary?
-    %th
   %th= current_course.group_term
+  %th First Name
+  %th Last Name
   %th Score
+  %th Read?
   - if @assignment.assignment_type.student_weightable?
     %th Multiplied Scores
   - if @assignment.has_levels?
     %th Level
-  %th Badges Earned
+
+  %th
   - if @assignment.release_necessary?
     %th Status
-  - if @assignment.accepts_submissions?
-    %th Submission
-  %th
+    %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
+      %button.button.select-all= "Check"
+      %button.button.select-none= "Uncheck"
