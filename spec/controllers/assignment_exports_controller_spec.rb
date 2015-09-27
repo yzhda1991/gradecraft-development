@@ -52,17 +52,17 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
             describe "building the archiver" do
               # should be something like:
-              # archiver = SmartArchiver::Archive.new(archive_hash)
+              # archiver = Backstacks::Archive.new(archive_hash)
               # archiver.assemble do |on_complete|
                 # on_complete.archive_with_compression
               # end
               it "should build the new archive from the archive hash" do
-                expect(SmartArchiver::Archive).to receive(:new).with(archive_hash)
+                expect(Backstacks::Archive).to receive(:new).with(archive_hash)
               end
 
               it "should assemble the archive" do
-                archive_double = double(:smart_archiver)
-                allow(SmartArchiver::Archive).to receive_messages(new: archive_double)
+                archive_double = double(:backstacks)
+                allow(Backstacks::Archive).to receive_messages(new: archive_double)
                 expect(archive_double).to receive_messages(:assemble)
               end
 

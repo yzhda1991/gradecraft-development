@@ -1,4 +1,4 @@
-module SmartArchiver
+module Backstacks
   module Parsers
 
     class Directory

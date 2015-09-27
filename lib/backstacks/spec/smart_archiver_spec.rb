@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe SmartArchiver do
+describe Backstacks do
   it 'has a version number' do
-    expect(SmartArchiver::VERSION).not_to be nil
+    expect(Backstacks::VERSION).not_to be nil
   end
 
   it 'does something useful' do

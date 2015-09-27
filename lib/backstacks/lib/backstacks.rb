@@ -1,4 +1,4 @@
-require "smart_archiver/version"
+require "backstacks/version"
 
 # managers
 require 'mangers/importer'
@@ -23,8 +23,8 @@ require "open-uri"
 #   -- > return some kind of message saying that compression has started
 
 # usage
-# archiver = SmartArchiver::Archive.new(archive_hash).archive_with_compression
-module SmartArchiver
+# archiver = Backstacks::Archive.new(archive_hash).archive_with_compression
+module Backstacks
   class Archive
     def initialize(options={})
       @archive_json = options[:archive_json] || {}

@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'smart_archiver/version'
+require 'backstacks/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "smart_archiver"
-  spec.version       = SmartArchiver::VERSION
+  spec.name          = "backstacks"
+  spec.version       = Backstacks::VERSION
   spec.authors       = ["Mike Zazaian"]
   spec.email         = ["mike@zop.io"]
 

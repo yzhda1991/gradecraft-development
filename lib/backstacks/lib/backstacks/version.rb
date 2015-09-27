@@ -1,3 +1,3 @@
-module SmartArchiver
+module Backstacks
   VERSION = "0.0.1"
 end

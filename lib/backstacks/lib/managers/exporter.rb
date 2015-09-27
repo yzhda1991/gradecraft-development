@@ -1,4 +1,4 @@
-module SmartArchiver
+module Backstacks
   module Managers
 
     class Exporter
