@@ -8,9 +8,5 @@ class UnlockState < ActiveRecord::Base
 	def is_unlocked?
 		unlocked? || instructor_unlocked?
 	end
-
-	def is_unlocked?
-		unlocked? || instructor_unlocked?
-	end
   
 end

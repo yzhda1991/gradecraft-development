@@ -23,7 +23,7 @@ class Grade < ActiveRecord::Base
   belongs_to :assignment_type, touch: true
   belongs_to :student, :class_name => 'User', touch: true
   belongs_to :team, touch: true
-  belongs_to :submission, touch: true # Optional
+  belongs_to :submission
   belongs_to :task, touch: true # Optional
   belongs_to :group, :polymorphic => true, touch: true # Optional
   belongs_to :graded_by, class_name: 'User', touch: true

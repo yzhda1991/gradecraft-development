@@ -2,8 +2,8 @@
   padding: .25rem .5rem !important
   background-color: $color-blue-5
   color: #FFF
-  opacity: 0.7
   border-radius: $global-radius
+  margin-bottom: 1rem
 
   a.close
     color: #FFF
@@ -18,28 +18,16 @@
       color: #000000
       text-decoration: none
       cursor: pointer
-      opacity: 0.5
   &.alert
-    background-color: $alert-color
-  &.success, &.notice
-
-.student .alert-box
-  margin: 0 0 1rem
-
-.staff .alert-box
-  margin-bottom: 1rem
+    background-color: $color-orange-1
 
 .alert-box.error
-  background-color: lighten($color-red-1, 10%)
-  font-size: 110%
+  background-color: $color-red-1
 
 .alert-box.success, .alert-box.notice
-  background-color: darken($color-green-2, 2%)
-  font-size: 110%
-
+  background-color: $color-green-1
 .alert-box.alert
-  background-color: darken($alert-color, 2%)
-  font-size: 110%
+  background-color: $color-orange-1
 
   ul
     margin-bottom: 0
