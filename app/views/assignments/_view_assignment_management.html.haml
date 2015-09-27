@@ -28,9 +28,9 @@
     #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
       .ui-tabs-panel#tab.active{:role => "tabpanel", "aria-hidden" => false }
         - if @assignment.has_groups?
-          = render 'assignments/group_show'
+          = render 'assignments/group/group_show'
         - else
-          = render 'assignments/individual_show'
+          = render 'assignments/individual/individual_show'
       .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
         = render 'assignments/description_and_downloads'
 

@@ -1,7 +1,0 @@
-= simple_form_for @assignment do
-  %table.responsive.dynatable
-    %thead= render "assignments/group/table_head" 
-    %tbody= render "assignments/group/table_body" 
-      
-  - if @assignment.release_necessary? && @assignment.grades.present?
-    = submit_tag "Update Grade Statuses", :class => "button"

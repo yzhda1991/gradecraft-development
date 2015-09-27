@@ -22,7 +22,10 @@
           No Grade
       - else
         = grade.raw_score if instructor_modified
-
+    - if @assignment.has_levels?
+      %td
+        - if grade
+          = @assignment.grade_level(grade)
     %td
       %span
       - if grade

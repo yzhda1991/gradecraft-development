@@ -17,13 +17,10 @@
     %h4.bold Grade Distribution
     .grades_per_assign{ "data-scores" => @grades_for_assignment.to_json }
 
-    %br
-    %h4.bold Participants
     - if @assignment.accepts_submissions? && @assignment.submissions.present?
-      #numberComplete{:"data-type" => "full", "data-info" => "#{(term_for :groups).titleize} Submitted", "data-percent" => "#{@assignment.submission_rate(current_course)}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{@assignment.submissions.count}", "data-dimension" => "180", "data-fontsize" => "38", "data-border" => "#222222", "data-bordersize" => "2"  }
-
-    - else
-      #numberComplete{:"data-type" => "full", "data-info" => "#{(term_for :groups).titleize} Participated", "data-percent" => "#{@assignment.completion_rate(current_course)}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{@assignment.grade_count}", "data-dimension" => "180", "data-fontsize" => "38", "data-border" => "#222222", "data-bordersize" => "2"   }
+      %br
+      %h4.bold Participants
+      #numberComplete{:"data-type" => "full", "data-info" => "#{(term_for :groups).titleize} Submitted", "data-percent" => "#{@assignment.group_submission_rate(current_course)}", "data-fgcolor" => "#61a9dc", "data-bgcolor" => "#333333", "data-text" => "#{@assignment.submissions.count}", "data-dimension" => "180", "data-fontsize" => "38", "data-border" => "#222222", "data-bordersize" => "2"  }
 
     %h4.bold Percentage Scores Earned
     - if current_user_is_staff? || ( current_user_is_student? && current_student.grade_released_for_assignment?(@assignment).present?)
