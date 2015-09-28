@@ -42,7 +42,7 @@ courses = []
 
 # Generate baseline course with team challenges that are separate from student scores
 courses << first_course = Course.create! do |c|
-  c.name = "Course with Teams & Badges"
+  c.name = "Course with Teams & Badges with Points"
   c.courseno = "GC101"
   c.year = Date.today.year
   c.semester = "Winter"
@@ -213,14 +213,14 @@ second_course_teams = second_course_team_names.map do |team_name|
     t.name = team_name
   end
 end
-puts "PolSci Discussion sections are in session"
+puts "It does not matter how slowly you go as long as you do not stop.― Confucius"
 
 third_course_teams = third_course_team_names.map do |team_name|
   third_course.teams.create! do |t|
     t.name = team_name
   end
 end
-puts "LARP Day is going to happen. Watch out for the Dungeon Master's sword!"
+puts "Spoon feeding in the long run teaches us nothing but the shape of the spoon.― E.M. Forster"
 
 # Generate sample students
 students = user_names.map do |name|
@@ -238,7 +238,7 @@ students = user_names.map do |name|
   user.activate!
   user
 end
-puts "Generated #{students.count} unruly students"
+puts "Self-education is, I firmly believe, the only kind of education there is.― Isaac Asimov"
 
 
 # Generate sample professor
@@ -254,7 +254,7 @@ User.create! do |u|
     cm.role = "professor"
   end
 end.activate!
-puts "Severus Snape has been spotted in Slytherin House"
+puts "In learning you will teach, and in teaching you will learn.― Phil Collins"
 
 # Generate sample professor
 User.create! do |u|
@@ -269,7 +269,7 @@ User.create! do |u|
     cm.role = "professor"
   end
 end.activate!
-puts "Headmistress McGonagall is here...shape up!"
+puts "I go to school, but I never learn what I want to know.― Calvin & Hobbes"
 
 # Generate sample professor
 User.create! do |u|
@@ -325,7 +325,7 @@ first_course_badges = first_course_badge_names.map do |badge_name|
   first_course.badges.create! do |b|
     b.name = badge_name
     b.point_total = 100 * rand(10)
-    b.visible = 1
+    b.visible = true
     b.can_earn_multiple_times = [true,false].sample
   end
 end
@@ -353,8 +353,8 @@ puts "Earned badges have been awarded"
 second_course_badges = second_course_badge_names.map do |badge_name|
   second_course.badges.create! do |b|
     b.name = badge_name
-    b.point_total = 100 * rand(10)
-    b.visible = 1
+    b.visible = true
+    #need to add unlocks here
   end
 end
 puts "How will you be powering up?"
@@ -375,124 +375,82 @@ puts "Power ups in play... use with caution"
 
 assignment_types = {}
 
-assignment_types[:first_course_attendance] = AssignmentType.create! do |at|
+assignment_types[:first_course_grading] = AssignmentType.create! do |at|
   at.course = first_course
-  at.name = "Attendance"
-  at.description = "Attendance is a special class of assignments, having both a start time and an end time, requiring students to be present/not, and usually being worth fewer points."
+  at.name = "Grading Settings"
+  at.description = "This category should include all of the different ways assignments can be graded."
   at.position = 1
 end
 puts "Come to class."
 
-assignment_types[:second_course_attendance] = AssignmentType.create! do |at|
-  at.course = second_course
-  at.name = "Attendance"
-  at.description = "Attendance is a special class of assignments, having both a start time and an end time, requiring students to be present/not, and usually being worth fewer points."
-  at.position = 1
+assignment_types[:first_course_submissions] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Submission Settings"
+  at.description = "This category includes all of the different ways that assignments can handle submissions."
+  at.position = 2
 end
 puts "Check yourself in - and be sure to pay attention to the lecture!"
 
-assignment_types[:third_course_adventures] = AssignmentType.create! do |at|
-  at.course = third_course
-  at.name = "Adventures"
-end
-
-assignment_types[:third_course_pick_up_quests] = AssignmentType.create! do |at|
-  at.course = third_course
-  at.name = "Pick Up Quests"
-end
-
-assignment_types[:reading_reaction] = AssignmentType.create! do |at|
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = first_course
-  at.name = "Reading Reactions"
-  at.description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
-  at.position = 2
+  at.name = "Predictor Settings"
 end
-puts "Do your readings."
 
-assignment_types[:second_course_discussion] = AssignmentType.create! do |at|
-  at.course = second_course
-  at.name = "Discussions"
-  at.description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
-  at.position = 2
-  at.student_weightable = false
-end
-puts "Participate."
-
-assignment_types[:second_course_readings] = AssignmentType.create! do |at|
-  at.course = second_course
-  at.name = "Readings"
-  at.description = "Each week, you must write a concise summary or analysis of the reading for that week of no more than 200 words! (200 words is roughly equivalent to one-half page, double-spaced.) Your 201st word will suffer a terrible fate... "
-  at.student_weightable = false
-end
-puts "Read or else."
-
-assignment_types[:blogging] = AssignmentType.create! do |at|
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = first_course
-  at.name = "Blogging"
-  at.max_points = "60000"
-  at.description = "There will be many issues and topics that we address in this course that spark an interest, an idea, a disagreement, or a connection for you. You will also encounter ideas in your daily life (blogs you read, news reports, etc.) or in your other classes that spark a connection to something you are thinking about in this course. I encourage you to blog these thoughts on Piazza (we will pretend that Piazza is a blogging site for the purposes of this course). These may be analyses, critiques, or reviews of ideas both from and related to the course. Use the blog as a way to expand the range of technology we might consider. Use the blog to challenge ideas. Use the blog to communicate about things you come across in your travels that you think are relevant to the area of teaching and learning with technology.
-
-Note that blog posts must be substantial to earn points. What “substantial” means is at the discretion of the professor (he knows it when he sees it). “Hello World” posts or posts that are simply duplications from other sites are not going to earn you any points. Also, see this insightful resource for information about plagiarism and blogging:
-http://www.katehart.net/2012/06/citing-sources-quick-and-graphic-guide.html
-
-You can blog as much as you want, but only one post/week can earn points."
-  at.position = 3
-  at.student_weightable = false
+  at.name = "Visibility Settings"
 end
-puts "Blogging is great for filling in missed points in other areas"
 
-assignment_types[:lfpg] = AssignmentType.create! do |at|
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = first_course
-  at.name = "Learning From Playing a Game"
-  at.description = "At Google, all employs were (historically) given 20% of their work time to devote to any project they choose. Often, these projects fold the personal interest or ambitions of the employee into the larger opportunities represented by the context of Google (e.g., high-tech resources and lots of smart folks). In this course, I am requiring that you devote 20% of your time to pursuing a project of interest to you, that benefits you, and that will help you maximize the value of this course for you. You will determine the scope of the project, the requirements of the project, and the final grade for the project. You may work alone or with others. Whether or not there is a “product” is up to you, as is the form of that product. There is only one requirement for this project: You must share or present the project (in some way of your choosing) with your classmates and with me at the final class meeting.
-
-We will make time during class for sharing, design jams, help sessions, etc. as we go along. The point of these sessions will be to inspire each other and yourself by seeing what others are up to. My office hours are also available to you for as much advice and guidance as you want to seek to support your work (sign up at http://bit.ly/16Ws5fm).
-
-At the end of the term, you will tell me how many points out of the 20,000 you have earned.
-
-I look forward to being surprised, elated, and informed by your interests and self-expression."
-  at.position = 4
-  at.student_weightable = false
+  at.max_points = 100000
+  at.name = "Assignment Type with a Capped Point Total"
 end
-puts "This is the good stuff :)"
 
-assignment_types[:boss_battle] = AssignmentType.create! do |at|
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = first_course
-  at.name = "Boss Battles"
-  at.position = 5
-  at.student_weightable = false
+  at.name = "Group Assignment Settings"
 end
-puts "Challenges!"
 
-weighted_assignments = []
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Notification Settings"
+end
 
-weighted_assignments << assignment_types[:second_course_essays] = AssignmentType.create! do |at|
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Analytics Settings"
+end
+
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Unlock Settings"
+end
+
+
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = second_course
-  at.name = "Conventional Academic Essays"
-  at.student_weightable = true
+  at.student_weightable: true
+  at.name = "Group Assignment Settings"
 end
-puts "Essays are one path to success. How much do you like writing?"
 
-weighted_assignments << assignment_types[:second_course_boss] = AssignmentType.create! do |at|
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = second_course
-  at.name = "Boss Battles"
-  at.student_weightable = true
+  at.student_weightable: true
+  at.name = "Notification Settings"
 end
-puts "How good are you under pressure?"
 
-weighted_assignments << assignment_types[:second_course_group] = AssignmentType.create! do |at|
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = second_course
-  at.name = "Group Project"
-  at.student_weightable = true
+  at.student_weightable: true
+  at.name = "Analytics Settings"
 end
-puts "So uh, do you make friends easily?"
 
-weighted_assignments << assignment_types[:second_course_blogging] = AssignmentType.create! do |at|
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = second_course
-  at.name = "Blogging"
-  at.student_weightable = true
+  at.student_weightable: true
+  at.name = "Unlock Settings"
 end
-puts "You ever blogged before?"
 
 grinding_assignments = []
 
@@ -533,7 +491,7 @@ end
   end
 end
 
-1.upto(15).each do |n|
+1.upto(5).each do |n|
   grinding_assignments << assignment_types[:reading_reaction].assignments.create! do |a|
     a.course = first_course
     a.name = "Reading Reaction #{n}"
@@ -548,7 +506,7 @@ end
   end
 end
 
-1.upto(30).each do |n|
+1.upto(5).each do |n|
   grinding_assignments << assignment_types[:second_course_readings].assignments.create! do |a|
     a.course = second_course
     a.name = "Reading #{n}"
