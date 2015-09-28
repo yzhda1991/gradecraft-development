@@ -8,7 +8,7 @@ module CoursesHelper
   end
 
   def bust_course_list_cache(user)
-    #Rails.cache.delete_matched "#{:current_user_current_courses}*"
-    #Rails.cache.delete_matched "#{:current_user_archived_courses}*"
+    expire_fragment current_courses_cache_key(user)
+    expire_fragment archived_courses_cache_key(user)
   end
 end
