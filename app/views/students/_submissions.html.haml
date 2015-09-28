@@ -6,8 +6,14 @@
     - elsif assignment.open?
       %li= link_to raw("<i class='fa fa-upload fa-fw'></i> Submit"), new_assignment_submission_path(assignment, :student_id => current_student), :class => 'button'
   - elsif assignment.has_groups?
-    - if current_student.group_for_assignment(assignment).present?
-      %li= link_to raw("<i class='fa fa-upload fa-fw'></i> Submit"), new_assignment_submission_path(assignment, :group_id => current_student.group_for_assignment(assignment)), :class => 'button'
+    - group = current_student.group_for_assignment(assignment)
+    - if group.present?
+      - submission = group.submission_for_assignment(assignment)
+    - if group.present?
+      - if submission.present?
+        %li= link_to raw("<i class='fa fa-edit fa-fw'></i>Edit Our Submission"), edit_assignment_submission_path(assignment, :id => submission), :class => 'button'
+      - else
+        %li= link_to raw("<i class='fa fa-upload fa-fw'></i> Submit"), new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
     - else
       %li= link_to "Create a Group", new_group_path, :class => 'button'
 
@@ -18,7 +24,13 @@
     - elsif assignment.open?
       %li= link_to raw("<i class='fa fa-upload fa-fw'></i> Submit"), new_assignment_submission_path(assignment, :student_id => current_student), :class => 'button'
   - elsif assignment.has_groups?
-    - if current_student.group_for_assignment(assignment).present?
-      %li= link_to raw("<i class='fa fa-upload fa-fw'></i> Submit"), new_assignment_submission_path(assignment, :group_id => current_student.group_for_assignment(assignment)), :class => 'button'
+    - group = current_student.group_for_assignment(assignment)
+    - if group.present?
+      - submission = group.submission_for_assignment(assignment)
+    - if group.present?
+      - if submission.present?
+        %li= link_to raw("<i class='fa fa-edit fa-fw'></i>Edit Our Submission"), edit_assignment_submission_path(assignment, :id => submission), :class => 'button'
+      - else
+        %li= link_to raw("<i class='fa fa-upload fa-fw'></i> Submit"), new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
     - else
       %li= link_to "Create a Group", new_group_path, :class => 'button'
