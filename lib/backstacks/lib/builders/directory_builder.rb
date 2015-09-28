@@ -3,10 +3,13 @@ module Backstacks
     # { name: String, files: Array of Hashes, directories: Array of Hashes }
     def initialize(directory_attrs={})
       @name_attr = directory_attrs[:name] || "untitled_directory"
-      @file_attrs = directory_attrs[:files] || []
-      @directory_attrs = directory_attrs[:directories] || []
+      @archive_json = directory_attrs[:archive_json] || []
       @base_path = directory_attrs[:base_path] || Rails.root + "/tmp"
     end
+    
+    def archive_json(directories_json)
+    end
+
 
     def set_base_path(path)
       @base_path = path

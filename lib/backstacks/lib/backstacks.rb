@@ -15,40 +15,32 @@ require "open-uri"
 #   -- > return some kind of message saying that compression has started
 
 # usage
-# archiver = Backstacks::Archive.new(archive_hash).archive_with_compression
 
-archive = Backstacks::Archive.new(json: archive_json, name: archive_name)
-archive.objectify_files_and_dirs
-archive.assemble_directories_on_disk
-archive.create_and_queue_file_jobs
+# archive = Backstacks::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
+# archive.assemble_directories_on_disk
+# archive.queue_compressed_archive
 
 module Backstacks
   class Archive
     def initialize(options={})
-      @archive_json = options[:archive_json] || {}
+      @archive_json = options[:archive_json] || []
       @archive_name = options[:archive_name] || "untitled_archive"
-      @tmp_dir_path = Dir.mktmpdir # need to create a tmp directory for everythign to live in
-      @current_directory = @tmp_dir_path
+      @max_cpu_usage = options[:max_cpu_usage] || 0.3
+      @base_path = Dir.mktmpdir # need to create a tmp directory for everythign to live in
       @file_queue = Resque.new
     end
 
-    def objectify_files_and_dirs
-      @archive_objects = ObjectBuilder.new(json: @archive_json).objectify
-    end
-
-    def assemble_directories_on_disk
-      DirectoryBuilder.new(archive_objects: @archive_objects, base_path: @tmp_dir_path).assemble_recursive
-    end
-
-    def populate_files_with_queue
-      @file_builder = FileBuilder.new
+    def build_recursive_on_disk
+      @archive_json.each do |directory_json|
+        Directory.new(
+          directory_hash: directory_json,
+          base_path: @base_path).assemble_recursive,
+          file_queue: @file_queue
+        ).build_recursive
+      end
     end
 
     def archive_with_compression
-    end
-
-    def archive_without_compression
-      assemble_recursive
     end
   end
 end
