@@ -5,7 +5,7 @@ module Backstacks
       @destination_name = attrs[:destination_name]
     end
     
-    def work
+    def perform
       `tar czvf - #{@source_path} | pv -L 1m >#{@destination_name}.tgz`
     end
 

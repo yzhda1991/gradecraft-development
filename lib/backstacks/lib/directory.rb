@@ -3,7 +3,7 @@ module Backstacks
     def initialize(attrs={})
       @directory_hash = attrs[:directory_hash]
       @base_path = attrs[:base_path]
-      @file_queue = attrs[:file_queue]
+      @queue_name = attrs[:queue_name]
       @current_directory = File.expand_path(@base_path, "/#{@directory_hash[:directory_name]}")
     end
 
@@ -13,20 +13,13 @@ module Backstacks
       create_sub_directories
     end
 
-    def create_current_directory
-      FileUtils.mkdir(@current_directory)
-    end
-
-    def directory_exists?(path)
-      Dir.exists?(path)
-    end
-
     def create_files
       # check if the current directory hash has files
       if @directory_hash[:files].present?
         # add file getter jobs for files in the directory
         @directory_hash[:files].each do |file_hash|
-          @file_queue << FileGetter.new(file_hash, @current_directory)
+          @file_getter = FileGetter.new(file_hash, @current_directory, @queue_name)
+          Resque.enqueue(@file_getter)
         end
       end
     end
@@ -42,6 +35,15 @@ module Backstacks
           ).build_recursive
         end
       end
+    end
+
+    protected
+    def create_current_directory
+      FileUtils.mkdir(@current_directory)
+    end
+
+    def directory_exists?(path)
+      Dir.exists?(path)
     end
   end
 end

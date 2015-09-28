@@ -9,15 +9,15 @@ class AssignmentExportsController < ApplicationController
 
   def submissions
     @presenter = submissions_presenter
-    @archive = Backstacks::Archive.new(submissions_by_student_archive_json)
-    @archive.assemble
+    @archive_json submissions_by_student_archive_hash
+    build_archive_and_queue_build_jobs
     respond_with @archive.start_archive_with_compression # should return json { status: 200, message: "Your requested export is being assembled, find it here: http://gc.com/download" }
   end
 
   def submissions_presenter,submissions_by_team
     @presenter = submissions_by_team_presenter
-    @archive = Backstacks::Archive.new(submissions_by_student_team_archive_json)
-    @archive.assemble
+    @archive_json submissions_by_student_archive_hash
+    build_archive_and_queue_build_jobs
     respond_with @archive.start_archive_with_compression # should return json { status: 200, message: "Your requested export is being assembled, find it here: http://gc.com/download" }
   end
 
@@ -28,6 +28,13 @@ class AssignmentExportsController < ApplicationController
   end
 
   private
+
+    def build_archive_and_queue_build_jobs
+      @archive = Backstacks::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
+      @archive.assemble_directories_on_disk # build the directory structure and create file-getting jobs
+      @archive.archive_with_compression # create tar job for directory
+      @archive.clean_tmp_dir_on_complete # create job for removing the tmp directory on completion
+    end
 
     def submissions_by_student_archive_hash
       JbuilderTemplate.new(temp_view_context).encode do |json|

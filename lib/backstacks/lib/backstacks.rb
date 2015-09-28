@@ -3,11 +3,12 @@ require_relative "directory"
 
 require_relative "resque_jobs/archive_builder"
 require_relative "resque_jobs/archive_cleaner"
-require_relative "resque_jobs/file_getter""
+require_relative "resque_jobs/file_getter"
 
 require 'json'
 require 'fileutils'
 require 'open-uri'
+require 'resque'
 
 # steps:
 # 1) parse everything into an array of objects that represent the hashes
@@ -22,6 +23,7 @@ require 'open-uri'
 # archive = Backstacks::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
 # archive.assemble_directories_on_disk
 # compression_job = archive.archive_with_compression
+# if compression_job.finished>
 # archive.remove_tmp_files
 
 module Backstacks
@@ -31,7 +33,7 @@ module Backstacks
       @archive_name = options[:archive_name] || "untitled_archive"
       @max_cpu_usage = options[:max_cpu_usage] || 0.3
       @base_path = Dir.mktmpdir # need to create a tmp directory for everythign to live in
-      @job_queue = Resque.new
+      @queue_name = options[:queue_name] || :backstacks_archive
     end
 
     def build_recursive_on_disk
@@ -39,23 +41,27 @@ module Backstacks
         Directory.new(
           directory_hash: directory_json,
           base_path: @base_path,
-          job_queue: @job_queue
+          queue_name: :backstacks_archive
         ).build_recursive
       end
     end
 
     def archive_with_compression
-      @job_queue << ArchiveBuilder.new(
+      @archive_builder_job = ArchiveBuilder.new(
         source_path: expanded_base_path,
-        destination_name: @archive_name
+        destination_name: @archive_name,
+        queue_name: @queue_name
       )
+      Resque.enqueue(@archive_with_compression)
     end
 
-    def remove_temp_files
-      @job_queue << ArchiveCleaner.new(
+    def clean_tmp_dir_on_complete
+      @archive_cleaner_job = ArchiveCleaner.new(
         source_path: expanded_base_path,
-        destination_name: @archive_name
+        destination_name: @archive_name,
+        queue_name: @queue_name
       )
+      Resque.enqueue(@archive_cleaner_job)
     end
 
     def expanded_base_path

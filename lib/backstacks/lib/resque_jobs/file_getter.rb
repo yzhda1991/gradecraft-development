@@ -1,12 +1,13 @@
 module Backstacks
   class FileGetter
-    def initialize(attrs)
+    def initialize(attrs={}, current_directory, queue_name)
       @path = attrs[:path]
       @content_type = attrs[:content_type]
+      @queue = queue_name
     end
 
-    def work
-      `wget #{@path} #{@current_directory}`
+    def perform 
+      `wget #{@path} #{current_directory}`
     end
   end
 end

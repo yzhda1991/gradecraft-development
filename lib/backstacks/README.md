@@ -71,9 +71,11 @@ end
 
 ```
 # start at the top level directory
-directory = Directory.new(directory_hash)
-directory.assemble_files # create background processes for getting and building individual files
-directory.create_sub_directories
+@archive = Backstacks::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
+@archive.assemble_directories_on_disk # build the directory structure and create file-getting jobs
+@archive.archive_with_compression # create tar job for directory
+@archive.clean_tmp_dir_on_complete # create job for removing the tmp directory on completion
+
 ```
 
 TODO: Write usage instructions here

@@ -5,7 +5,7 @@ module Backstacks
       @destination_name = attrs[:destination_name]
     end
     
-    def work
+    def cleaner
       if final_archive_exists?
         # alias for rm -rf with protections for malicious code
         FileUtils.remove_entry_secure(tmp_archive_path, true) # true denotes force:true
