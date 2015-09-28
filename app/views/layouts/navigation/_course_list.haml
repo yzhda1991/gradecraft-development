@@ -1,11 +1,11 @@
-- cache current_courses_cache_key(current_user) do
+- cache current_courses_cache_key(current_user), skip_digest: true do
   - current_user.courses.active.alphabetical.each do |c|
     - cache ["v1", c] do
       %li= link_to raw("<i class ='fa fa-home fa-fw'></i> #{c.formatted_short_name} "), change_current_course_path(:course_id => c.id), :method => 'post'
 - if current_user_is_staff?
   %li= link_to raw("Create a New Course <i class='fa fa-angle-double-right fa-fw'></i>"), new_course_path
 
-- cache archived_courses_cache_key(current_user) do
+- cache archived_courses_cache_key(current_user), skip_digest: true do
   - if current_user.archived_courses.present?
     %hr.dotted.top-margin
     %h4.past-label Past Courses
