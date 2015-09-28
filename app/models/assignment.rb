@@ -430,7 +430,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def group_submission_rate
-    ((submissions.count / groups.count.to_f) * 100).round(2)
+    ((submissions.count / self.groups.count) * 100).round(2)
   end
 
   # Calculates attendance rate as an integer.
