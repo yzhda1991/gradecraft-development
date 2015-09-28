@@ -48,8 +48,13 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.has_groups?
   end
 
-  def group_for?(student)
+  def group_for(student)
     student.group_for_assignment(assignment)
+  end
+
+  def group_updated?(student)
+    group = group_for(student)
+    group.updated_at != group.created_at
   end
 
   def has_grades?
@@ -121,12 +126,21 @@ class AssignmentPresenter < Showtime::Presenter
     submission.updated_at if submission
   end
 
+  def submission_for_assignment(student)
+    student.submission_for_assignment(assignment)
+  end
+
   def submissions_for(student)
     student.submissions.where(assignment_id: assignment.id)
   end
 
   def submission_rate
     assignment.submission_rate(course)
+  end
+
+  def submission_updated?(student)
+    submission = submission_for_assignment(student)
+    submission.updated_at != submission.created_at
   end
 
   def title
