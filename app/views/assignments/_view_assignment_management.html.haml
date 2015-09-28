@@ -38,8 +38,9 @@
         .content#tabt3{:role => "tabpanel", "aria-hidden" => false }
           %br
           = render 'assignments/rubric_preview'
-      .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
-        - if @assignment.has_groups?
-          = render "grades/group_analytics"
-        - else
-          = render "grades/instructor_analytics"
+      - if @assignment.grades.present?
+        .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
+          - if @assignment.has_groups?
+            = render "grades/analytics/group_analytics"
+          - else
+            = render "grades/analytics/instructor_analytics"

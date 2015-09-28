@@ -43,6 +43,6 @@
         - if ! current_course.hide_analytics? && ! @assignment.hide_analytics?
           #tab5
             - if @assignment.has_groups?
-              = render "grades/group_analytics"
+              = render "grades/analytics/group_analytics"
             - else
-              = render "grades/individual_analytics"
+              = render "grades/analytics/individual_analytics"
