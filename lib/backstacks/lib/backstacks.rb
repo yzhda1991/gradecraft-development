@@ -18,7 +18,8 @@ require "open-uri"
 
 # archive = Backstacks::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
 # archive.assemble_directories_on_disk
-# archive.queue_compressed_archive
+# archive.archive_with_compression
+# archive.remove_tmp_files
 
 module Backstacks
   class Archive
@@ -42,6 +43,13 @@ module Backstacks
 
     def archive_with_compression
       @job_queue << ArchiveBuilder.new(
+        source_path: expanded_base_path,
+        destination_name: @archive_name
+      )
+    end
+
+    def remove_temp_files
+      @job_queue << ArchiveCleaner.new(
         source_path: expanded_base_path,
         destination_name: @archive_name
       )
