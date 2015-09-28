@@ -1,10 +1,13 @@
 require "backstacks/version"
-require "builders/directory_builder"
-require "builders/file_builder"
+require_relative "directory"
 
-require "json"
+require_relative "resque_jobs/archive_builder"
+require_relative "resque_jobs/archive_cleaner"
+require_relative "resque_jobs/file_getter""
+
+require 'json'
 require 'fileutils'
-require "open-uri"
+require 'open-uri'
 
 # steps:
 # 1) parse everything into an array of objects that represent the hashes
@@ -18,7 +21,7 @@ require "open-uri"
 
 # archive = Backstacks::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
 # archive.assemble_directories_on_disk
-# archive.archive_with_compression
+# compression_job = archive.archive_with_compression
 # archive.remove_tmp_files
 
 module Backstacks
