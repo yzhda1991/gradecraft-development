@@ -2,9 +2,6 @@ module Backstacks
   class Directory
     def initialize(attrs={})
       @directory_hash = attrs[:directory_hash]
-      @files_hash = @directory_hash[:files]
-      @sub_directories_hash = @directory_hash[:sub_directories]
-
       @base_path = attrs[:base_path]
       @file_queue = attrs[:file_queue]
       @current_directory = File.expand_path(@base_path, "/#{@directory_hash[:directory_name]}")
@@ -38,7 +35,11 @@ module Backstacks
       # check if the current directory has has sub-directories
       if @directory_hash[:sub_directories].present?
         @directory_hash[:sub_directories].each do |sub_directory_hash|
-          Directory.new(sub_directory_hash).build_recursive
+          Directory.new(
+            directory_hash: sub_directory_hash,
+            base_path: current_directory,
+            file_queue: @file_queue
+          ).build_recursive
         end
       end
     end

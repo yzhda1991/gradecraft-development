@@ -27,20 +27,31 @@ module Backstacks
       @archive_name = options[:archive_name] || "untitled_archive"
       @max_cpu_usage = options[:max_cpu_usage] || 0.3
       @base_path = Dir.mktmpdir # need to create a tmp directory for everythign to live in
-      @file_queue = Resque.new
+      @job_queue = Resque.new
     end
 
     def build_recursive_on_disk
       @archive_json.each do |directory_json|
         Directory.new(
           directory_hash: directory_json,
-          base_path: @base_path).assemble_recursive,
-          file_queue: @file_queue
+          base_path: @base_path,
+          job_queue: @job_queue
         ).build_recursive
       end
     end
 
     def archive_with_compression
+      @job_queue << ArchiveBuilder.new(
+        source_path: expanded_base_path,
+        destination_name: @archive_name
+      )
+    end
+
+    def expanded_base_path
+      File.expand_path(@base_path)
+    end
+
+    def destination_archive_path
     end
   end
 end
