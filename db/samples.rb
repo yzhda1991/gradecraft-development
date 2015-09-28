@@ -206,7 +206,7 @@ first_course_teams = first_course_team_names.map do |team_name|
     t.name = team_name
   end
 end
-puts "“The early bird gets the worm, but the second mouse gets the cheese.” ― Willie Nelson"
+puts "The early bird gets the worm, but the second mouse gets the cheese. ― Willie Nelson"
 
 second_course_teams = second_course_team_names.map do |team_name|
   second_course.teams.create! do |t|
@@ -284,7 +284,6 @@ User.create! do |u|
     cm.role = "professor"
   end
 end.activate!
-puts "Shhhh... he hates being called Nearly Headless Nick!"
 
 # Generate sample GSI
 User.create! do |u|
@@ -301,7 +300,6 @@ User.create! do |u|
     end
   end
 end.activate!
-puts "Percy Weasley has arrived on campus, on time as usual"
 
 #Create demo academic history content
 students.each do |s|
@@ -319,7 +317,6 @@ students.each do |s|
     ah.sat_score = 100 * rand(10)
   end
 end
-puts "And gave students some background"
 
 first_course_badges = first_course_badge_names.map do |badge_name|
   first_course.badges.create! do |b|
@@ -329,7 +326,6 @@ first_course_badges = first_course_badge_names.map do |badge_name|
     b.can_earn_multiple_times = [true,false].sample
   end
 end
-puts "Did someone need motivation? We found these badges in the Room of Requirements..."
 
 first_course_badges.each do |badge|
   times_earned = 1
@@ -348,7 +344,6 @@ first_course_badges.each do |badge|
     end
   end
 end
-puts "Earned badges have been awarded"
 
 second_course_badges = second_course_badge_names.map do |badge_name|
   second_course.badges.create! do |b|
@@ -357,7 +352,6 @@ second_course_badges = second_course_badge_names.map do |badge_name|
     #need to add unlocks here
   end
 end
-puts "How will you be powering up?"
 
 second_course_badges.each do |badge|
   students.each do |student|
@@ -370,7 +364,6 @@ second_course_badges.each do |badge|
     end
   end
 end
-puts "Power ups in play... use with caution"
 
 
 assignment_types = {}
@@ -381,677 +374,50 @@ assignment_types[:first_course_grading] = AssignmentType.create! do |at|
   at.description = "This category should include all of the different ways assignments can be graded."
   at.position = 1
 end
-puts "Come to class."
+puts "Education consists mainly of what we have unlearned.― Mark Twain, Notebook"
 
-assignment_types[:first_course_submissions] = AssignmentType.create! do |at|
-  at.course = first_course
-  at.name = "Submission Settings"
-  at.description = "This category includes all of the different ways that assignments can handle submissions."
-  at.position = 2
-end
-puts "Check yourself in - and be sure to pay attention to the lecture!"
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = first_course
-  at.name = "Predictor Settings"
-end
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = first_course
-  at.name = "Visibility Settings"
+standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Standard Edit + Quick Grade with Text Box"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.open_at = 1.weeks.from_now
+  a.due_at = 1.weeks.from_now + 0.05
 end
 
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = first_course
-  at.max_points = 100000
-  at.name = "Assignment Type with a Capped Point Total"
+standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Standard Edit + Quick Grade with Checkbox"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Checkbox"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
 end
 
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = first_course
-  at.name = "Group Assignment Settings"
-end
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = first_course
-  at.name = "Notification Settings"
-end
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = first_course
-  at.name = "Analytics Settings"
-end
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = first_course
-  at.name = "Unlock Settings"
-end
-
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = second_course
-  at.student_weightable: true
-  at.name = "Group Assignment Settings"
-end
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = second_course
-  at.student_weightable: true
-  at.name = "Notification Settings"
-end
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = second_course
-  at.student_weightable: true
-  at.name = "Analytics Settings"
-end
-
-assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
-  at.course = second_course
-  at.student_weightable: true
-  at.name = "Unlock Settings"
-end
-
-grinding_assignments = []
-
-1.upto(30).each do |n|
-  grinding_assignments << assignment_types[:first_course_attendance].assignments.create! do |a|
-    a.course = first_course
-    a.name = "Class #{n}"
-    a.point_total = 5000
-    a.accepts_submissions = false
-    a.release_necessary = false
-    a.grade_scope = "Individual"
-    if n < 15
-      a.open_at = ((15-n)/2).weeks.ago
-      a.due_at = ((15-n)/2).weeks.ago + 0.05
-    else
-      a.open_at = ((-15 + n)/2).weeks.from_now
-      a.due_at = ((-15 + n)/2).weeks.from_now + 0.05
-    end
-  end
-end
-
-1.upto(30).each do |n|
-  grinding_assignments << assignment_types[:second_course_attendance].assignments.create! do |a|
-    a.course = second_course
-    a.name = "Class #{n}"
-    a.point_total = 100
-    a.accepts_submissions = false
-    a.release_necessary = false
-    a.grade_scope = "Individual"
-    a.student_logged = true
-    if n < 15
-      a.open_at = ((15-n)/2).weeks.ago
-      a.due_at = ((15-n)/2).weeks.ago + 0.05
-    else
-      a.open_at = ((-15 + n)/2).weeks.from_now
-      a.due_at = ((-15 + n)/2).weeks.from_now + 0.05
-    end
-  end
+standard_edit_quick_grade_select_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Standard Edit + Quick Grade with Select"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
 end
 
 1.upto(5).each do |n|
-  grinding_assignments << assignment_types[:reading_reaction].assignments.create! do |a|
-    a.course = first_course
-    a.name = "Reading Reaction #{n}"
-    if n < 15
-      a.due_at = (7-n).weeks.ago
-    else
-      a.due_at = (-7 + n).weeks.from_now
-    end
-    a.accepts_submissions = false
-    a.release_necessary = false
-    a.grade_scope = "Individual"
-  end
-end
-
-1.upto(5).each do |n|
-  grinding_assignments << assignment_types[:second_course_readings].assignments.create! do |a|
-    a.course = second_course
-    a.name = "Reading #{n}"
-    if n < 15
-      a.due_at = ((15-n)/2).weeks.ago
-    else
-      a.due_at = ((-15 + n)/2).weeks.from_now
-    end
-    a.accepts_submissions = false
-    a.release_necessary = false
-    a.grade_scope = "Individual"
-  end
-end
-
-1.upto(15).each do |n|
-  grinding_assignments << assignment_types[:second_course_discussion].assignments.create! do |a|
-    a.course = second_course
-    a.name = "Discussion #{n}"
-    if n < 15
-      a.due_at = (7-n).weeks.ago
-    else
-      a.due_at = (-7 + n).weeks.from_now
-    end
-    a.accepts_submissions = false
-    a.release_necessary = false
-    a.grade_scope = "Individual"
-  end
-end
-
-puts "Attendance and Reading Reaction classes have been posted!"
-
-grinding_assignments.each do |assignment|
-  next unless assignment.due_at.past?
-  students.each do |student|
-    student.grades.create! do |g|
-      g.assignment = assignment
-      g.raw_score = assignment.point_total * [0, 1].sample
-      g.status = "Graded"
-      g.instructor_modified = true
-    end
-  end
-end
-puts "Attendance and Reading Reaction scores have been posted!"
-
-blog_assignments = []
-
-1.upto(15).each do |n|
-  blog_assignments << Assignment.create! do |a|
-    a.course = first_course
-    a.assignment_type = assignment_types[:blogging]
-    a.name = "Blog Post #{n}"
-    a.point_total = 5000
-    a.accepts_submissions = true
-    a.release_necessary = false
-    a.grade_scope = "Individual"
-
-    if n < 7
-      a.due_at = (7-n).weeks.ago
-    else
-      a.due_at = (-7 + n).weeks.from_now
-    end
-  end
-
-  blog_assignments << Assignment.create! do |a|
-    a.course = first_course
-    a.assignment_type = assignment_types[:blogging]
-    a.name = "Blog Comment #{n}"
-    a.point_total = 2000
-    a.accepts_submissions = true
-    a.release_necessary = false
-    a.grade_scope = "Individual"
-
-    if n < 7
-      a.due_at = (7-n).weeks.ago
-    else
-      a.due_at = (-7 + n).weeks.from_now
-    end
-  end
-end
-
-blog_assignments.each do |a|
-  a.tasks.create! do |t|
-    t.name = "Task 1"
-    t.due_at = a.due_at
-    t.accepts_submissions = true
-  end
-end
-
-puts "Blogging assignments have been posted!"
-
-assignments = []
-
-assignments << Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:lfpg]
-  a.name = "Game Selection Paper"
-  a.point_total = 80000
-  a.due_at = 3.weeks.ago
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.open_at = 4.weeks.ago
-  a.grade_scope = "Individual"
-  a.save
-  Rubric.create! do |rubric|
-    rubric.assignment = a
-    rubric.save
-    # 1.upto(15).each do |n|
-    #   rubric.metrics.create! do |metric|
-    #     metric.name = "Criteria ##{n}"
-    #     metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
-    #     metric.order = n
-    #     metric.save
-    #     1.upto(5).each do |m|
-    #       metric.tiers.create! do |tier|
-    #         tier.name = "Tier ##{m}"
-    #         tier.points = metric.max_points - (m * 1000)
-    #       end
-    #     end
-    #   end
-    # end
-  end
-  students.each do |student|
-    submission = student.submissions.create! do |s|
-      s.assignment = a
-      s.text_comment = "Wingardium Leviosa"
-      s.link = "http://www.twitter.com"
-    end
-    # a.rubric.metrics.each do |metric|
-    #   metric.rubric_grades.create! do |rg|
-    #     rg.max_points = metric.max_points
-    #     rg.points = metric.tiers.first.points
-    #     rg.tier = metric.tiers.first
-    #     rg.metric_name = metric.name
-    #     rg.tier_name = metric.tiers.first.name
-    #     rg.assignment_id = a.id
-    #     rg.order = 1
-    #     rg.student_id = student.id
-    #   end
-    # end
-  end
-end
-puts "Game Selection Paper has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:lfpg]
-  a.name = "Game Play Update Paper 1"
-  a.point_total = 120000
-  a.due_at = 1.week.ago
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.open_at = 2.week.ago
-  a.grade_scope = "Individual"
-  students.each do |student|
-    student.grades.create! do |g|
-      g.assignment = a
-      g.raw_score = a.point_total * [0, 1].sample
-      g.status = "Graded"
-      g.instructor_modified = true
-    end
-  end
-end
-puts "Game Play Update Paper 1 has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:lfpg]
-  a.name = "Game Play Update Paper 2"
-  a.point_total = 120000
-  a.due_at = 4.weeks.from_now
-  a.accepts_submissions = true
-  a.release_necessary = false
-  a.open_at = 2.weeks.from_now
-  a.grade_scope = "Individual"
-  students.each do |student|
-    student.grades.create! do |g|
-      g.assignment = a
-      g.raw_score = a.point_total * [0, 1].sample
-      g.status = "In Progress"
-      g.instructor_modified = true
-    end
-  end
-end
-puts "Game Play Update Paper 2 has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:lfpg]
-  a.name = "Game Play Reflection Paper"
-  a.point_total = 160000
-  a.due_at = 5.weeks.from_now
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.open_at = 4.weeks.from_now
-  a.grade_scope = "Individual"
-  students.each do |student|
-    student.grades.create! do |g|
-      g.assignment = a
-      g.raw_score = a.point_total * [0, 1].sample
-      g.status = "Graded"
-      g.instructor_modified = true
-    end
-  end
-end
-puts "Game Play Reflection Paper has been posted!"
-
-ip1_assignment = Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:boss_battle]
-  a.name = "Individual Paper/Project 1"
-  a.point_total = 200000
-  a.due_at = 5.weeks.from_now
-  a.accepts_submissions = true
-  a.release_necessary = false
-  a.open_at = 4.weeks.from_now
-  a.grade_scope = "Individual"
-end
-puts "Individual Project 1 has been posted!"
-
-1.upto(5).each do |n|
-  ip1_assignment.assignment_score_levels.create! do |asl|
+  standard_edit_quick_grade_select_assignment.assignment_score_levels.create! do |asl|
     asl.name = "Assignment Score Level ##{n}"
-    asl.value = 200000/n
+    asl.value = 200000/(6-n)
   end
 end
 
-ip2_assignment = Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:boss_battle]
-  a.name = "Individual Paper/Project 2"
-  a.point_total = 300000
-  a.due_at = 4.weeks.from_now
-  a.accepts_submissions = true
-  a.release_necessary = false
-  a.open_at = 3.weeks.from_now
-  a.grade_scope = "Individual"
-end
-puts "Individual Project 2 has been posted!"
-
-1.upto(8).each do |n|
-  ip2_assignment.assignment_score_levels.create! do |asl|
-    asl.name = "Assignment Score Level ##{n}"
-    asl.value = 300000/(9-n)
-  end
-end
-
-groups = []
-
-ggd_assignment = Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:boss_battle]
-  a.name = "Group Game Design Project"
-  a.point_total = 400000
-  a.due_at = 4.weeks.from_now
-  a.accepts_submissions = true
-  a.release_necessary = false
-  a.open_at = 3.weeks.from_now
-  a.grade_scope = "Group"
-end
-puts "Group Game Design has been posted!"
-
-groups << Group.create! do |g|
-  g.course = first_course
-  g.name = "Amazing Group"
-  g.approved = "Pending"
-  g.assignments << ggd_assignment
-  g.students << students.sample(4).uniq{|x| x.id}
-end
-
-1.upto(4).each do |n|
-  ggd_assignment.assignment_score_levels.create! do |asl|
-    asl.name = "Assignment Score Level ##{n}"
-    asl.value = 400000/n
-  end
-end
-
-second_course_essay_assignments = []
-
-second_course_essay_assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_essays]
-  a.name = "First Essay"
-  a.point_total = 1000
-  a.due_at = 3.weeks.ago
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.open_at = 4.weeks.ago
-  a.grade_scope = "Individual"
-  a.save
-  a.tasks.create! do |t|
-    t.name = "Task 1"
-    t.due_at = rand.weeks.from_now
-    t.accepts_submissions = true
-  end
-  students.each do |student|
-    a.tasks.each do |task|
-      submission = student.submissions.create! do |s|
-        s.task = task
-        s.text_comment = "Wingardium Leviosa"
-        s.link = "http://www.twitter.com"
-      end
-      student.grades.create! do |g|
-        g.submission = submission
-        g.raw_score = 1000 * [0,1].sample
-        g.status = "Graded"
-        g.instructor_modified = true
-      end
-    end
-  end
-end
-puts "First Conventional Essay has been posted!"
-
-second_course_essay_assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_essays]
-  a.name = "Second Essay"
-  a.point_total = 3000
-  a.due_at = 4.weeks.from_now
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.open_at = 3.weeks.from_now
-  a.grade_scope = "Individual"
-end
-puts "Second Conventional Essay has been posted!"
-
-second_course_essay_assignments.each do |at|
-  students.each do |student|
-    student.assignment_weights.create! do |aw|
-      aw.assignment = at
-      aw.assignment_type = assignment_types[:second_course_essays]
-      aw.student = student
-      aw.weight = 3
-    end
-  end
-end
-puts "And we've placed our bets..."
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_boss]
-  a.name = "Boss Battle I"
-  a.point_total = 500
-  a.due_at = 7.weeks.ago
-  a.accepts_submissions = false
-  a.release_necessary = true
-  a.open_at = 8.weeks.ago
-  a.grade_scope = "Individual"
-end
-puts "First Boss Battle has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_boss]
-  a.name = "Boss Battle II"
-  a.point_total = 1000
-  a.due_at = 1.week.ago
-  a.accepts_submissions = false
-  a.release_necessary = true
-  a.grade_scope = "Individual"
-end
-puts "Second Boss Battle has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_boss]
-  a.name = "Boss Battle III"
-  a.point_total = 1500
-  a.due_at = 2.weeks.from_now
-  a.accepts_submissions = false
-  a.release_necessary = true
-  a.grade_scope = "Individual"
-end
-puts "Third Boss Battle has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_boss]
-  a.name = "Boss Battle IV"
-  a.point_total = 1000
-  a.due_at = 4.weeks.from_now
-  a.accepts_submissions = false
-  a.release_necessary = true
-  a.grade_scope = "Individual"
-end
-puts "Fourth Boss Battle has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_group]
-  a.name = "Group Project Proposal"
-  a.point_total = 1000
-  a.due_at = 4.weeks.ago
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.grade_scope = "Group"
-end
-puts "Group Project Proposal has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_group]
-  a.name = "Group Project Progress Report"
-  a.point_total = 1000
-  a.due_at = 1.weeks.ago
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.grade_scope = "Group"
-end
-puts "Group Project Progress Report has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_group]
-  a.name = "Group Project Final Report"
-  a.point_total = 2000
-  a.due_at = 1.weeks.ago
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.grade_scope = "Group"
-end
-puts "Group Project Final Report has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_blogging]
-  a.name = "Blog Post 1"
-  a.point_total = 500
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.grade_scope = "Individual"
-end
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_blogging]
-  a.name = "Blog Post 2"
-  a.point_total = 500
-  a.accepts_submissions = true
-  a.release_necessary = false
-  a.grade_scope = "Individual"
-end
-puts "Blog 2 has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_blogging]
-  a.name = "Blog Post 3"
-  a.point_total = 500
-  a.accepts_submissions = true
-  a.release_necessary = false
-  a.grade_scope = "Individual"
-end
-puts "Blog 3 has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_blogging]
-  a.name = "Blog Post 4"
-  a.point_total = 500
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.grade_scope = "Individual"
-end
-puts "Blog 4 has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_blogging]
-  a.name = "Extra Blog Post (invisible)"
-  a.point_total = 500
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.grade_scope = "Individual"
-  a.visible = false
-end
-puts "Extra Blog post has been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_blogging]
-  a.name = "Blog Comments"
-  a.point_total = 1000
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.grade_scope = "Individual"
-  a.visible = false
-end
-puts "Blog comments have been posted!"
-
-assignments << Assignment.create! do |a|
-  a.course = second_course
-  a.assignment_type = assignment_types[:second_course_blogging]
-  a.name = "Blog Portfolio"
-  a.point_total = 1000
-  a.accepts_submissions = true
-  a.release_necessary = true
-  a.grade_scope = "Individual"
-end
-puts "Blog Portfolio have been posted!"
-
-challenges = []
-
-challenges << Challenge.create! do |c|
-  c.course = first_course
-  c.name = "House Cup"
-  c.point_total = 1000000
-  c.due_at = 3.weeks.from_now
-  c.accepts_submissions = true
-  c.release_necessary = false
-  c.open_at = rand(6).weeks.ago
-  c.visible = true
-  c.save
-  first_course_teams.each do |team|
-    c.challenge_grades.create! do |cg|
-      cg.team = team
-      cg.score = 1000000 * [0,1].sample
-      cg.status = "Graded"
-    end
-  end
-end
-puts "The House Cup Competition begins... "
-
-challenges << Challenge.create! do |c|
-  c.course = first_course
-  c.name = "Tri-Wizard Tournament"
-  c.point_total = 10000000
-  c.due_at = 2.weeks.from_now
-  c.accepts_submissions = true
-  c.release_necessary = false
-  c.open_at = rand(8).weeks.ago
-  c.visible = true
-end
-puts "Are you willing to brave the Tri-Wizard Tournament?"
-
-students.each do |s|
-  s.courses.each do |c|
-    s.cache_course_score(c.id)
-  end
-end
-puts "Calculating scores..."
-
-LTIProvider.create! do |p|
-  p.name = 'Piazza'
-  p.uid = 'piazza'
-  p.launch_url = 'https://piazza.com/connect'
-  p.consumer_key = 'piazza.sandbox'
-  p.consumer_secret = 'test_only_secret'
-end
