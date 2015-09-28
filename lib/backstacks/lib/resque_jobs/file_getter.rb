@@ -1,5 +1,8 @@
 module Backstacks
   class FileGetter
+
+    extend RetryFailedJob
+
     def initialize(attrs={}, current_directory, queue_name)
       @path = attrs[:path]
       @content_type = attrs[:content_type]

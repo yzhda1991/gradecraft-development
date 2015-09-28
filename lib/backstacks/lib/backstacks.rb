@@ -9,6 +9,7 @@ require 'json'
 require 'fileutils'
 require 'open-uri'
 require 'resque'
+require 'resque/errors'
 
 # steps:
 # 1) parse everything into an array of objects that represent the hashes
@@ -31,7 +32,12 @@ module Backstacks
     def initialize(options={})
       @archive_json = options[:archive_json] || []
       @archive_name = options[:archive_name] || "untitled_archive"
-      @max_cpu_usage = options[:max_cpu_usage] || 0.3
+      @archive_type = options[:archive_type] || :zip # :zip or :tar
+
+      # Limit the transfer to a maximum of RATE bytes per second, pulled right from the unix 'pv' utility
+      # A suffix of "k", "m", "g", or "t" can be added to denote kilobytes (*1024), megabytes, and so on.
+      @rate_limit = options[:rate_limit] || "1m" # default to one megabyte
+
       @base_path = Dir.mktmpdir # need to create a tmp directory for everythign to live in
       @queue_name = options[:queue_name] || :backstacks_archive
     end
@@ -50,6 +56,8 @@ module Backstacks
       @archive_builder_job = ArchiveBuilder.new(
         source_path: expanded_base_path,
         destination_name: @archive_name,
+        archive_type: @archive_type,
+        rate_limit: @rate_limit,
         queue_name: @queue_name
       )
       Resque.enqueue(@archive_with_compression)
@@ -69,6 +77,7 @@ module Backstacks
     end
 
     def destination_archive_path
+      # some S3 path
     end
   end
 end
