@@ -1,4 +1,6 @@
-class File
+class FileBuilder
+  # not representative of the file itself, but is responsible for building the actual file
+
   # { name: String, files: Array of Hashes, directories: Array of Hashes }
   def initialize(file_attrs={})
     @content_type= file_attrs[:content_type] || "untitled_file"

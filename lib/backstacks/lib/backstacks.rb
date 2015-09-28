@@ -1,14 +1,6 @@
 require "backstacks/version"
-
-# managers
-require 'mangers/importer'
-require 'mangers/exporter'
-
-# parsers
-require 'parsers/directory'
-require 'parsers/file'
-
-# compressors
+require "builders/directory_builder"
+require "builders/file_builder"
 
 require "json"
 require 'fileutils'
@@ -24,18 +16,32 @@ require "open-uri"
 
 # usage
 # archiver = Backstacks::Archive.new(archive_hash).archive_with_compression
+
+archive = Backstacks::Archive.new(json: archive_json, name: archive_name)
+archive.objectify_files_and_dirs
+archive.assemble_directories_on_disk
+archive.create_and_queue_file_jobs
+
 module Backstacks
   class Archive
     def initialize(options={})
       @archive_json = options[:archive_json] || {}
       @archive_name = options[:archive_name] || "untitled_archive"
       @tmp_dir_path = Dir.mktmpdir # need to create a tmp directory for everythign to live in
+      @current_directory = @tmp_dir_path
+      @file_queue = Resque.new
     end
 
-    def assemble_recursive
-      @top_level_directory = Directory.new(@archive_json)
-      @top_level_directory.base_path = @tmp_dir_path
-      @top_level_directory.rescursive_assemble_on_disk
+    def objectify_files_and_dirs
+      @archive_objects = ObjectBuilder.new(json: @archive_json).objectify
+    end
+
+    def assemble_directories_on_disk
+      DirectoryBuilder.new(archive_objects: @archive_objects, base_path: @tmp_dir_path).assemble_recursive
+    end
+
+    def populate_files_with_queue
+      @file_builder = FileBuilder.new
     end
 
     def archive_with_compression
