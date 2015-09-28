@@ -1,5 +1,5 @@
+- student_submission = current_student.submission_for_assignment(assignment)
 - if current_user_is_student?
-  - student_submission = current_student.submission_for_assignment(assignment)
   - if student_submission.present?
     %li= link_to raw("<i class='fa fa-file-o fa-fw'></i> See Submission"), assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
   - elsif assignment.open?
