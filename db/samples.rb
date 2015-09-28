@@ -36,7 +36,7 @@ User.create! do |u|
   u.admin = true
   u.save!
 end.activate!
-puts "Albus Dumbledore just apparated into Hogwarts"
+puts "Children must be taught how to think, not what to think.― Margaret Mead"
 
 courses = []
 
@@ -115,7 +115,7 @@ puts "Live as if you were to die tomorrow. Learn as if you were to live forever.
 
 # Generate course with leaderboards, and team challenges to get added to student scores
 courses << third_course = Course.create! do |c|
-  c.name = "Course with leaderboards and team challenges"
+  c.name = "Course with Leaderboards and Team Challenges"
   c.courseno = "GC103"
   c.year = Date.today.year
   c.semester = "Fall"
@@ -176,7 +176,7 @@ first_course_grade_scheme_hash.each do |range,letter|
     e.high_range = range.last
   end
 end
-puts "Installed the Neuron Count grading scheme."
+puts "Real learning comes about when the competitive spirit has ceased.― Jiddu Krishnamurti"
 
 
 third_course_grade_scheme_hash.each do |range,letter|
@@ -187,7 +187,7 @@ third_course_grade_scheme_hash.each do |range,letter|
     e.high_range = range.last
   end
 end
-puts "Installed the Information grading scheme. Level up!"
+puts "The world is a book and those who do not travel read only one page.― Augustine of Hippo"
 
 
 second_course_grade_scheme_hash.each do |range,letter|
@@ -198,7 +198,7 @@ second_course_grade_scheme_hash.each do |range,letter|
     e.high_range = range.last
   end
 end
-puts "Installed the Polsci Theorists grading scheme. Debate that!"
+puts "Education is the ability to listen to almost anything without losing your temper or your self-confidence.― Robert Frost"
 
 
 first_course_teams = first_course_team_names.map do |team_name|
@@ -206,7 +206,7 @@ first_course_teams = first_course_team_names.map do |team_name|
     t.name = team_name
   end
 end
-puts "The Team Competition has begun!"
+puts "“The early bird gets the worm, but the second mouse gets the cheese.” ― Willie Nelson"
 
 second_course_teams = second_course_team_names.map do |team_name|
   second_course.teams.create! do |t|
