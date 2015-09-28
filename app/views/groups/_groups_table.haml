@@ -16,7 +16,7 @@
         %td= group.approved
         %td
           - group.assignment_groups.each do |ag|
-            %li= link_to ag.assignment.name, ag.assignment
+            %li= link_to ag.assignment.try(:name), ag.try(:assignment)
         %td
           .right
             %ul.button-bar
