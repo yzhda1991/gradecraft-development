@@ -2,6 +2,7 @@
   - group.students.each do |student|
     %tr
       %td= link_to group.name, group
+      %td= group.approved
       - grade = @assignment.grades.find_by student_id: student
       %td= link_to student.first_name, student_path(student)
       %td= link_to student.last_name, student_path(student)
@@ -23,9 +24,10 @@
       %td
         .right
           %ul.button-bar
+            %li= link_to "Review #{term_for :group}", review_groups_path(:id => group), :class => 'button'
             - group.submission_for_assignment(@assignment).tap do |submission|
               - if submission
-                %li= link_to "See Submission", assignment_grade_path(@assignment.id, :group_id => group.id), :class => 'button'
+                %li= link_to "See Submission", assignment_submission_path(@assignment.id, :id => submission.id), :class => 'button'
               - else
                 %li= link_to "Submit", new_assignment_submission_path(@assignment, @submission, :group_id => group.id), :class => 'button'
             - if group.students.first.grade_for_assignment(@assignment).present? && group.students.first.grade_for_assignment(@assignment).is_graded?

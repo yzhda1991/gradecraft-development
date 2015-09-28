@@ -20,44 +20,44 @@
 .pageContent
   = render 'layouts/alerts'
   
+  - if @group.approved?
+    .alert-box.alert.success
+      %i.fa.fa-check
+      = "Status: #{@group.approved}"
+  - elsif @group.rejected?
+    %i.fa.fa-times-cirlce
+    .alert-box.alert= "Status: #{@group.approved}"
+  - else
+    .alert-box.alert.notice
+      %i.fa.fa-flag
+      %span.bold Status: Pending
+      This #{term_for :group} must be approved by your instructor before you can proceed
+        
+      
+
+  %h4 #{term_for :assignments}:
+  %ul
+    - @group.assignment_groups.each do |ag|
+      %li= link_to ag.assignment.name, ag.assignment
+
   %h4
-    - if @group.approved?
-      .label.right.success
-        = "Status: #{@group.approved}"
-    - elsif @group.rejected?
-      .label.right.alert
-        = "Status: #{@group.approved}"
-    - else
-      .label.right
-        .icon
-          .icon-tooltip
-            This #{term_for :group} must be approved by your instructor before you can proceed
-          %i.fa.fa-flag
-          Status: Pending
+    Members:
+  %ul
+    - @group.group_memberships.each do |gm|
+      - if current_user_is_staff?
+        %li= link_to gm.student.name, student_path(gm.student)
+      - else
+        %li= gm.student.name
 
-    %h4 #{term_for :assignments}:
-    %ul
-      - @group.assignment_groups.each do |ag|
-        %li= link_to ag.assignment.name, ag.assignment
+  - if @group.text_feedback?
+    %h4 Instructor Feedback:
+    %p= raw @group.try(:text_feedback)
 
-    %h4
-      Members:
-    %ul
-      - @group.group_memberships.each do |gm|
-        - if current_user_is_staff?
-          %li= link_to gm.student.name, student_path(gm.student)
-        - else
-          %li= gm.student.name
-
-    - if @group.text_feedback?
-      %h4 Instructor Feedback:
-      %p= raw @group.try(:text_feedback)
-
-    - if @group.proposals.present?
-      - i = 1
-      - @group.proposals.order_by_creation_date.each do |p|
-        .panel
-          %h4.bold= "Proposal ##{i}: #{p.title}"
-          %h6= "Created: #{p.created_at}"
-          %p= p.proposal
-        - i += 1
+  - if @group.proposals.present?
+    - i = 1
+    - @group.proposals.order_by_creation_date.each do |p|
+      .panel
+        %h4.bold= "Proposal ##{i}: #{p.title}"
+        %h6= "Created: #{p.created_at}"
+        %p= p.proposal
+      - i += 1

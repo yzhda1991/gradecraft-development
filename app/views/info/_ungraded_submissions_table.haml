@@ -45,6 +45,6 @@
               %td
                 .right
                   %ul.button-bar
-                    %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Submission"), assignment_grade_path(ug_assignment, :group_id => ug_group.id), :class => "button"
+                    %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Submission"),assignment_submission_path(ug_assignment.id, :id => ug.id), :class => 'button'
                     %li= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), group_grade_assignment_path(ug_assignment, :group_id => ug_group), :class => "button"
   %hr.dotted

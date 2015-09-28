@@ -9,14 +9,14 @@
   %tbody
     - groups.each do |group|
       %tr
-        %td= link_to group.name, group_path(group)
+        %td= link_to group.try(:name), group_path(group)
         %td
           - group.group_memberships.each do |gm|
             %li= link_to gm.student.name, student_path(gm.student)
         %td= group.approved
         %td
           - group.assignment_groups.each do |ag|
-            %li= link_to ag.assignment.name, ag.assignment
+            %li= link_to ag.assignment.try(:name), ag.try(:assignment)
         %td
           .right
             %ul.button-bar
