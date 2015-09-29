@@ -178,7 +178,6 @@ first_course_grade_scheme_hash.each do |range,letter|
 end
 puts "Real learning comes about when the competitive spirit has ceased.― Jiddu Krishnamurti"
 
-
 third_course_grade_scheme_hash.each do |range,letter|
   third_course.grade_scheme_elements.create do |e|
     e.letter = letter
@@ -404,7 +403,7 @@ end
 standard_edit_quick_grade_select_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_grading]
-  a.name = "Standard Edit + Quick Grade with Select"
+  a.name = "Standard Edit with Select/Quick Grade with Select"
   a.point_total = 5000
   a.accepts_submissions = false
   a.release_necessary = false
@@ -421,3 +420,256 @@ end
   end
 end
 
+self_log_boolean_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Single-level Self-Logged Assignment"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+end
+
+self_log_score_level_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Multi-level Self-Logged Assignment"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+end
+
+1.upto(5).each do |n|
+  self_log_score_level_assignment.assignment_score_levels.create! do |asl|
+    asl.name = "Assignment Score Level ##{n}"
+    asl.value = 200000/(6-n)
+  end
+end
+
+standard_edit_release_required = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Standard Edit + Release Required"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.release_necessary = true
+  a.grade_scope = "Individual"
+  a.open_at = 3.weeks.from_now
+  a.due_at = 3.weeks.from_now + 0.05
+end
+
+rubric_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Rubric Graded Assignment"
+  a.point_total = 80000
+  a.due_at = 3.weeks.ago
+  a.accepts_submissions = true
+  a.release_necessary = true
+  a.open_at = 4.weeks.ago
+  a.grade_scope = "Individual"
+  a.save
+  Rubric.create! do |rubric|
+    rubric.assignment = a
+    rubric.save
+    1.upto(15).each do |n|
+      rubric.metrics.create! do |metric|
+        metric.name = "Criteria ##{n}"
+        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+        metric.order = n
+        metric.save
+        1.upto(5).each do |m|
+          metric.tiers.create! do |tier|
+            tier.name = "Tier ##{m}"
+            tier.points = metric.max_points - (m * 1000)
+          end
+        end
+      end
+    end
+  end
+  students.each do |student|
+    submission = student.submissions.create! do |s|
+      s.assignment = a
+      s.text_comment = "Wingardium Leviosa"
+      s.link = "http://www.twitter.com"
+    end
+    a.rubric.metrics.each do |metric|
+      metric.rubric_grades.create! do |rg|
+        rg.max_points = metric.max_points
+        rg.points = metric.tiers.first.points
+        rg.tier = metric.tiers.first
+        rg.metric_name = metric.name
+        rg.tier_name = metric.tiers.first.name
+        rg.assignment_id = a.id
+        rg.order = 1
+        rg.student_id = student.id
+      end
+    end
+  end
+end
+puts "We spend the first year of a child's life teaching it to walk and talk and the rest of its life to shut up and sit down. There's something wrong there.― Neil deGrasse Tyson"
+
+assignment_types[:first_course_submissions] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Submission Settings"
+  at.description = "This category includes all of the different ways that assignments can handle submissions."
+  at.position = 2
+end
+
+no_submissions_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_submissions]
+  a.name = "Assignment Does Not Accept Submissions"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.05
+end
+
+accepts_submissions_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_submissions]
+  a.name = "Assignment Accepts All Types of Submissions"
+  a.point_total = 200000
+  a.accepts_submissions = true
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_link_submissions_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_submissions]
+  a.name = "Assignment Accepts Link Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = true 
+  a.accepts_attachments = false
+  a.accepts_text = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_attachment_submissions_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_submissions]
+  a.name = "Assignment Accepts Attachment Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = false
+  a.accepts_attachments = true
+  a.accepts_text = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_text_submissions_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_submissions]
+  a.name = "Assignment Accepts Text Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = false
+  a.accepts_attachments = false
+  a.accepts_text = true
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Predictor Settings"
+end
+
+predictor_fixed_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment Shows Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+
+predictor_continuous_slider_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment Shows Slider (no levels) in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+
+predictor_slider_with_levels_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment Shows Slider with Levels in Predictor"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+
+1.upto(5).each do |n|
+  predictor_slider_with_levels_assignment.assignment_score_levels.create! do |asl|
+    asl.name = "Assignment Score Level ##{n}"
+    asl.value = 25000/(6-n)
+  end
+end
+
+assignment_types[:first_course_visibility] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Visibility Settings"
+end
+
+invisible_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_visibility]
+  a.name = "I'm an Invisible Assignment"
+  a.point_total = 15000
+  a.visible = false
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 2.week.from_now
+end
+
+visible_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_visibility]
+  a.name = "Hey, I'm a Visible Assignment!"
+  a.point_total = 12500
+  a.visible = true
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 2.week.from_now
+end
