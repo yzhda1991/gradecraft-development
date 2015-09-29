@@ -52,6 +52,9 @@ gem 'rails_autolink'
 gem 'rails_email_preview', '~> 0.2.29'
 gem 'rdiscount'
 
+# retry dsl for resque
+gem 'resque-retry'
+
 # handles deferrence of Resque jobs to a later time
 # ex: Resque.enqueue_in(5.hours, @worker_object)
 gem 'resque-scheduler'

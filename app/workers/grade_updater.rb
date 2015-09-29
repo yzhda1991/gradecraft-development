@@ -1,4 +1,8 @@
 class GradeUpdater
+  extend Resque::Plugins::Retry
+  @retry_limit = 3
+  @retry_delay = 60
+
   @queue= :gradeupdater
 
   def self.perform(grade_id)
@@ -9,9 +13,9 @@ class GradeUpdater
 	    if grade.assignment.notify_released?
 	      NotificationMailer.grade_released(grade.id).deliver
 	    end
-	rescue Exception => e
+    rescue Resque::TermException => e
       puts e.message
       puts e.backtrace.inspect
-	end
+    end
   end
 end
