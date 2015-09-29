@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/leshill/resque_spec.git
+  revision: ed0de7a78df23f483d258cd6d326657b7737ae76
+  specs:
+    resque_spec (0.17.0)
+      resque (>= 1.19.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
+      rspec-mocks (>= 3.0.0)
+
+GIT
   remote: https://github.com/chcholman/timelineJS-rails.git
   revision: 9948df90f2b345823aa03e8c8ac59b709d274229
   branch: master
@@ -699,6 +709,7 @@ DEPENDENCIES
   resque-retry
   resque-scheduler
   resque-throttler
+  resque_spec!
   rollbar
   rspec-rails (~> 3.3.3)
   ruby-saml (~> 1.0.0)
