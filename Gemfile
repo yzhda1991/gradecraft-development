@@ -77,7 +77,6 @@ group :development do
   gem 'foreman'
   gem 'letter_opener'
   gem 'rubystats'
-  gem 'meta_request'
   gem "bullet"
 end
 
