@@ -402,31 +402,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  ### Scoreboard chart on the bottom of the student dashboard
-
-  def total_scores_for_chart(course)
-    scores = []
-    course.assignment_types.each do |assignment_type|
-      scores << { data: [assignment_type.visible_score_for_student(self)], name: assignment_type.name }
-    end
-
-
-    _assignments = assignments.where(course: course)
-    in_progress_score = _assignments.graded_for_student(self).sum('point_total')
-    earned_badge_score = earned_badges.where(course: course).score
-    if earned_badge_score > 0
-      scores << { :data => [earned_badge_score], :name => "#{course.badge_term.pluralize}" }
-    end
-
-    return {
-      :student_name => name,
-      :scores => scores,
-      :course_total => course.total_points + earned_badge_score,
-      :in_progress => in_progress_score + earned_badge_score,
-      # :grade_levels => grade_levels
-      }
-  end
-
   ### TEAMS
   # Find the team associated with the team membership for a given course id
   def course_team(course)

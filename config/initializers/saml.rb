@@ -38,4 +38,3 @@ if ENV["SAML_PR_KEY"].present?
   saml_settings.private_key = saml_pr_key_file.read if saml_pr_key_file.present?
 end
 SAML_SETTINGS=saml_settings
-
