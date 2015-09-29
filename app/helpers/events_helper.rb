@@ -31,7 +31,7 @@ module EventsHelper
     end
 
     def tomorrows_lull_start
-      DateTime.tomorrow.to_time.change lull_start
+      DateTime.tomorrow.to_time.change(LULL_START_PARAMS)
     end
 
     def todays_lull_end
