@@ -38,6 +38,8 @@ module Backstacks
       # A suffix of "k", "m", "g", or "t" can be added to denote kilobytes (*1024), megabytes, and so on.
       @rate_limit = options[:rate_limit] || "1m" # default to one megabyte
 
+      @logger = Rails.logger
+
       @base_path = Dir.mktmpdir # need to create a tmp directory for everythign to live in
       @queue_name = options[:queue_name] || :backstacks_archive
     end
@@ -47,7 +49,8 @@ module Backstacks
         Directory.new(
           directory_hash: directory_json,
           base_path: @base_path,
-          queue_name: :backstacks_archive
+          queue_name: :backstacks_archive,
+          logger: @logger
         ).build_recursive
       end
     end
@@ -58,7 +61,8 @@ module Backstacks
         destination_name: @archive_name,
         archive_type: @archive_type,
         rate_limit: @rate_limit,
-        queue_name: @queue_name
+        queue_name: @queue_name,
+        logger: @logger
       )
       Resque.enqueue(@archive_with_compression)
     end

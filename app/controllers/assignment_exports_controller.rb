@@ -45,24 +45,37 @@ class AssignmentExportsController < ApplicationController
 
     # needs specs
     def generate_export_csv
-      open( "#{export_dir}/_grade_import_template.csv",'w' ) do |f|
+      # there needs to be a good way to determine the difference between data pulled from the remote sources vs. local ones
+      csv_dir = Dir.mktmpdir
+      @csv_file_path = File.expand_path(csv_dir, "/_grade_import_template.csv")
+      open( @csv_file_path,'w' ) do |f|
         f.puts @assignment.grade_import(@students) # need to pull @students out of @submissions_by_student
       end
     end
 
     def submissions_by_team_presenter
-      @presenter ||= AssignmentExportPresenter.build({
-        submissions: @assignment.student_submissions_for_team(@team),
-        assignment: @assignment,
-        team: @team
-      })
+      @presenter ||= AssignmentExportPresenter.build(
+        presenter_base_options.merge(
+          submissions: @assignment.student_submissions_for_team(@team),
+          team: @team
+        )
+      )
     end
 
     def submissions_presenter
-      @presenter ||= AssignmentExportPresenter.build({
-        submissions: @assignment.student_submissions,
-        assignment: @assignment
-      })
+      @presenter ||= AssignmentExportPresenter.build(
+        presenter_base_options.merge(
+          submissions: @assignment.student_submissions,
+        )
+      )
+    end
+
+    def presenter_base_options
+      {
+        assignment: @assignment,
+        csv_file_path: @csv_file_path,
+        export_file_basename: export_file_basename
+      }
     end
 
     def fetch_assignment

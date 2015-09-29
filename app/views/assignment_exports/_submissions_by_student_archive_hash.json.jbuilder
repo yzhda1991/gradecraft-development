@@ -1,5 +1,5 @@
-json.directory_name @presenter.export_file_name
-json.files do [{ path: @presenter.csv_file_path, content_type: "text/csv" }]
+json.directory_name @presenter.export_file_basename
+json.files do [{ path: @presenter.csv_file_path, content_type: "text/csv", source_type: :local }]
 
 json.sub_directories do
   @submissions_by_student.each do |student_with_submissions|
