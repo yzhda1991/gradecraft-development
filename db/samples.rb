@@ -516,6 +516,60 @@ rubric_assignment = Assignment.create! do |a|
 end
 puts "We spend the first year of a child's life teaching it to walk and talk and the rest of its life to shut up and sit down. There's something wrong there.― Neil deGrasse Tyson"
 
+group_grade_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Group Assignment + Standard Edit"
+  a.point_total = 10000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 3.weeks.ago
+end
+
+group_grade_submissions_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Group Assignment + Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 2.weeks.ago
+end
+
+group_grade_rubric_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Group Assignment + Rubric Edit"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 1.week.ago
+  Rubric.create! do |rubric|
+    rubric.assignment = a
+    rubric.save
+    1.upto(15).each do |n|
+      rubric.metrics.create! do |metric|
+        metric.name = "Criteria ##{n}"
+        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+        metric.order = n
+        metric.save
+        1.upto(5).each do |m|
+          metric.tiers.create! do |tier|
+            tier.name = "Tier ##{m}"
+            tier.points = metric.max_points - (m * 1000)
+          end
+        end
+      end
+    end
+  end
+end
+
 assignment_types[:first_course_submissions] = AssignmentType.create! do |at|
   at.course = first_course
   at.name = "Submission Settings"
@@ -658,7 +712,7 @@ invisible_assignment = Assignment.create! do |a|
   a.release_necessary = false
   a.grade_scope = "Individual"
   a.student_logged = false
-  a.due_at = 2.week.from_now
+  a.due_at = 2.weeks.from_now
 end
 
 visible_assignment = Assignment.create! do |a|
@@ -671,5 +725,128 @@ visible_assignment = Assignment.create! do |a|
   a.release_necessary = false
   a.grade_scope = "Individual"
   a.student_logged = false
-  a.due_at = 2.week.from_now
+  a.due_at = 2.weeks.from_now
+end
+
+assignment_types[:first_course_capped] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.max_points = 100000
+  at.name = "Assignment Type with a Capped Point Total"
+end
+
+assignment_with_more_points_than_atype_cap = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_capped]
+  a.name = "Assignment with More Points than the Max Value for the Assignment Type"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 3.weeks.from_now
+end
+
+assignment_types[:first_course_notifications] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Notification Settings"
+end
+
+assignment_sends_email_notes_on_release = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_notifications]
+  a.name = "I send out emails when you release grades"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = true
+  a.notify_released = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_sends_email_notes_immediately = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_notifications]
+  a.name = "I send out email notifications as soon as you grade"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_does_not_send_emails = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_notifications]
+  a.name = "I do not send out email notifications to students"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_types[:first_course_analytics] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Analytics Settings"
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_analytics]
+  a.name = "Indvidual Assignment + Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.hide_analytics = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_analytics]
+  a.name = "Group Assignment + Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = false
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_analytics]
+  a.name = "Indvidual Assignment + Hidden Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.hide_analytics = true
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_analytics]
+  a.name = "Group Assignment + Hidden Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
 end
