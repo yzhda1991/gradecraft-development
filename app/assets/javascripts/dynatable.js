@@ -85,7 +85,7 @@ $('table.nopage_dynatable').dynatable({
   writers: {
     score: function(record) {
       return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }, 
+    },
     min: function(record) {
       return record['min'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
@@ -290,6 +290,73 @@ $('table.nofeatures_default_desc_score_dynatable').dynatable({
       sorts: { 'score': -1 }
   }
 });
+
+$('table.default_assignments_dynatable').dynatable({
+  features: {
+    paginate: false,
+    search: false,
+    recordCount: false,
+    sort: true
+  }
+  ,
+  dataset: {
+    sorts: { 'assignment': 1 }
+  }
+});
+
+// // Our custom sort function
+// function rgbSort(a, b, attr, direction) {
+
+//   // Assuming we've created a separate function
+//   // to get the average RGB value from an image.
+//   // (see source for example above for getAverageRGB function)
+//   var aRgb = getAverageRGB(a.img),
+//       bRgb = getAverageRGB(b.img),
+//       aDec = ( aRgb.r << 16 ) + ( aRgb.g << 8 ) + aRgb.b,
+//       bDec = ( bRgb.r << 16 ) + ( bRgb.g << 8 ) + bRgb.b,
+//       comparison = aDec - bDec;
+
+//   return direction > 0 ? comparison : -comparison;
+// };
+
+// // Wait until images are loaded
+// $(window).load(function() {
+//   $('#sorting-function-example')
+
+//     // Add our custom sort function to dynatable
+//     .bind('dynatable:init', function(e, dynatable) {
+//       dynatable.sorts.functions["rgb"] = rgbSort;
+//     })
+
+//     // Initialize dynatable
+//     .dynatable({
+//       features: {
+//         paginate: false,
+//         search: false,
+//         recordCount: false
+//       },
+//       dataset: {
+//         // When we sort on the color column,
+//         // use our custom sort added above.
+//         sortTypes: {
+//           color: 'rgbSort'
+//         }
+//       },
+//       readers: {
+//         color: function(cell, record) {
+//           var $cell = $(cell);
+
+//           // Store the average RGB image color value
+//           // as a decimal in "dec" attribute.
+//           record['img'] = $cell.find('img').get(0);
+
+//           // Return the HTML of the cell to be stored
+//           // as the "color" attribute.
+//           return $cell.html();
+//         }
+//       }
+//     });
+// })
 
 $('table.nofeatures_dynatable').dynatable({
 
