@@ -12,6 +12,12 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.assignment_type
   end
 
+  def comments_by_metric_id(user)
+    rubric_grades(user).inject({}) do |comments, rubric_grade|
+      comments.merge rubric_grade.metric_id => rubric_grade.comments
+    end
+  end
+
   def completion_rate
     assignment.completion_rate(course)
   end
@@ -109,8 +115,19 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.use_rubric? && !assignment.rubric.nil? && assignment.rubric.designed?
   end
 
+  def rubric_grades(user)
+    RubricGrade.
+      joins("left outer join submissions on submissions.id = rubric_grades.submission_id").
+      where(student_id: user.id).
+      where(assignment_id: assignment.id)
+  end
+
   def rubric_max_tier_count
     rubric.max_tier_count
+  end
+
+  def rubric_tier_earned?(user, tier_id)
+    rubric_grades(user).any? { |rubric_grade| rubric_grade.tier_id == tier_id }
   end
 
   def student_logged?(user)
@@ -159,5 +176,13 @@ class AssignmentPresenter < Showtime::Presenter
 
   def teams
     course.teams
+  end
+
+  def viewable_rubric_grades
+    assignment.rubric_grades
+  end
+
+  def viewable_rubric_tier_earned?(tier_id)
+    viewable_rubric_grades.any? { |rubric_grade| rubric_grade.tier_id == tier_id }
   end
 end

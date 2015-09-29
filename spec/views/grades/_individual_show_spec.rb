@@ -3,18 +3,20 @@ require 'spec_helper'
 
 describe "grades/_individual_show" do
 
+  let(:presenter) { AssignmentPresenter.new({ assignment: @assignment, course: @course }) }
+
   before(:each) do
     clean_models
-    course = create(:course)
+    @course = create(:course)
     @assignment = create(:assignment)
-    course.assignments << @assignment
+    @course.assignments << @assignment
     student = create(:user)
-    student.courses << course
-    @grade = create(:grade, course: course, assignment: @assignment, student: student)
+    student.courses << @course
+    @grade = create(:grade, course: @course, assignment: @assignment, student: student)
 
     allow(view).to receive(:current_student).and_return(student)
-    allow(view).to receive(:current_course).and_return(course)
-
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   describe "viewed by staff" do
@@ -29,19 +31,6 @@ describe "grades/_individual_show" do
         assert_select "p" do
           assert_select "span", text: "You earned", count: 1
           assert_select "span", text: "#{points @assignment.point_total}", count: 1
-        end
-      end
-    end
-
-    describe "with a pass fail grade" do
-      it "renders pass/fail status" do
-        @assignment.update(pass_fail: true)
-        @grade.update(status: "Graded", pass_fail_status: "Pass")
-        render
-        assert_select "p" do
-          assert_select "span", text: "Pass", count: 1
-          # TODO: change to term for assignment?
-          assert_select "span", text: "the assignment.", count: 1
         end
       end
     end

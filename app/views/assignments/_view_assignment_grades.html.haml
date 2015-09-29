@@ -35,7 +35,7 @@
           - if presenter.assignment.has_groups?
             = render partial: "grades/group_show", locals: { presenter: presenter }
           - else
-            = render "grades/individual_show"
+            = render partial: "grades/individual_show", locals: { presenter: presenter }
         - if !presenter.hide_analytics?
           #tab5
             - if presenter.assignment.has_groups?
