@@ -25,7 +25,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def grade_for(student)
-    grades.where(student_id: student.id).first || Grade.new
+    grades.where(student_id: student.id).first || Grade.new(assignment_id: assignment.id)
   end
 
   def grades
