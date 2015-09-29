@@ -16,7 +16,7 @@
         - else
           No Grade
       - else
-        = grade.raw_score if instructor_modified
+        = grade.raw_score if grade.instructor_modified?
     - if presenter.assignment.has_levels?
       %td= presenter.assignment.grade_level(grade) if grade
     %td

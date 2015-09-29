@@ -6,7 +6,8 @@ class AssignmentGroupPresenter < Showtime::Presenter
   end
 
   def assignment_graded?
-    !group.students.first.grade_for_assignment(assignment).raw_score.nil?
+    grade = group.students.first.grade_for_assignment(assignment)
+    !grade.nil? && grade.is_graded?
   end
 
   def can_grade?
@@ -14,7 +15,7 @@ class AssignmentGroupPresenter < Showtime::Presenter
   end
 
   def grade_for(student)
-    assignment.grades.find_by(student_id: student.id)
+    assignment.grades.find_by(student_id: student.id) || assignment.grades.build
   end
 
   def group
@@ -27,6 +28,10 @@ class AssignmentGroupPresenter < Showtime::Presenter
 
   def submission
     @submission ||= group.submission_for_assignment(assignment)
+  end
+
+  def students
+    group.students
   end
 
   def title

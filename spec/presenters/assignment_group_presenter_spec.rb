@@ -8,8 +8,8 @@ describe AssignmentGroupPresenter do
   subject { AssignmentGroupPresenter.new({ assignment: assignment, group: group })}
 
   describe "#assignment_graded?" do
-    it "has been graded if there is a raw score for any user in the group" do
-      student = double(:user, grade_for_assignment: double(:grade, raw_score: 100))
+    it "has been graded if it has been graded for any user in the group" do
+      student = double(:user, grade_for_assignment: double(:grade, is_graded?: true))
       allow(group).to receive(:students).and_return [student]
       expect(subject.assignment_graded?).to eq true
     end

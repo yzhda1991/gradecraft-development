@@ -24,9 +24,9 @@
     #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
       .ui-tabs-panel#tab.active{:role => "tabpanel", "aria-hidden" => false }
         - if presenter.group_assignment?
-          = render partial: 'assignments/group_show', locals: { presenter: presenter }
+          = render partial: 'assignments/group/group_show', locals: { presenter: presenter }
         - else
-          = render partial: 'assignments/individual_show', locals: { presenter: presenter }
+          = render partial: 'assignments/individual/individual_show', locals: { presenter: presenter }
       .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
         = render partial: 'assignments/description_and_downloads', locals: { presenter: presenter }
 
@@ -37,6 +37,6 @@
       - if presenter.has_grades?
         .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
           - if presenter.group_assignment?
-            = render partial: "grades/group_analytics", locals: { presenter: presenter }
+            = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
           - else
-            = render "grades/instructor_analytics", locals: { presenter: presenter }
+            = render partial: "grades/analytics/instructor_analytics", locals: { presenter: presenter }
