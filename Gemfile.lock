@@ -475,6 +475,13 @@ GEM
     request_store (1.2.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    resque-scheduler (4.0.0)
+      mono_logger (~> 1.0)
+      redis (~> 3.0)
+      resque (~> 1.25)
+      rufus-scheduler (~> 3.0)
+    resque-throttler (0.1.5)
+      resque (~> 1.25)
     rollbar (2.1.2)
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
@@ -500,6 +507,7 @@ GEM
       sexp_processor (~> 4.1)
     rubystats (0.2.3)
     rubyzip (1.1.7)
+    rufus-scheduler (3.1.5)
     s3_direct_upload (0.1.7)
       coffee-rails (>= 3.1)
       jquery-fileupload-rails (~> 0.4.1)
@@ -685,6 +693,8 @@ DEPENDENCIES
   rdiscount
   responders
   resque (= 1.25.2)!
+  resque-scheduler
+  resque-throttler
   rollbar
   rspec-rails (~> 3.3.3)
   ruby-saml (~> 1.0.0)

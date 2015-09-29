@@ -51,6 +51,15 @@ gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
 gem 'rails_email_preview', '~> 0.2.29'
 gem 'rdiscount'
+
+# handles deferrence of Resque jobs to a later time
+# ex: Resque.enqueue_in(5.hours, @worker_object)
+gem 'resque-scheduler'
+
+# limits the number of jobs that are run per unit of time on a given queue
+# ex: Resque.rate_limit(:my_queue, :at => 10, :per => 60)
+gem 'resque-throttler', require: "resque/throttler" 
+
 gem 'responders'
 gem 'rollbar'
 gem 'sampler'
