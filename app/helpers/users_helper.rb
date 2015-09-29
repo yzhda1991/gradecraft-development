@@ -15,18 +15,14 @@ module UsersHelper
                   name: assignment_type.name }
     end
 
-    _assignments = user.assignments.where(course: course)
-    in_progress_score = _assignments.graded_for_student(user).sum('point_total')
     earned_badge_score = user.earned_badges.where(course: course).score
     if earned_badge_score > 0
       scores << { :data => [earned_badge_score], :name => "#{course.badge_term.pluralize}" }
     end
 
     return {
-      :student_name => user.name,
       :scores => scores,
-      :course_total => course.total_points + earned_badge_score,
-      :in_progress => in_progress_score + earned_badge_score
+      :course_total => course.total_points + earned_badge_score
       }
   end
 end
