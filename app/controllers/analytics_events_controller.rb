@@ -2,6 +2,8 @@ class AnalyticsEventsController < ApplicationController
   skip_before_filter :increment_page_views
 
   def predictor_event
+    # limit to 500 predictor jobs/ minute
+    Resque.rate_limit(:predictor_event_logger, at: 500, :per => 60)
     Resque.enqueue(EventLogger, 'predictor',
                                 course_id: current_course.id,
                                 user_id: current_user.id,
@@ -16,6 +18,8 @@ class AnalyticsEventsController < ApplicationController
   end
 
   def tab_select_event
+    # limit to 100 pageview jobs/ minute
+    Resque.rate_limit(:pageview_event_logger, at: 100, :per => 60) 
     Resque.enqueue(EventLogger, 'pageview',
                               course_id: current_course.id,
                               user_id: current_user.id,

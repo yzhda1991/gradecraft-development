@@ -9,6 +9,6 @@ class EventLogger
     rescue Exception => e
       puts e.message
       puts e.backtrace.inspect
-	end
+    end
   end
 end
