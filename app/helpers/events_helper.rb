@@ -2,9 +2,6 @@ module EventsHelper
 
   # helpers for performing various tasks relative to the nightly lull
   module Lull
-    LULL_START_PARAMS = {hour: 2, min: 30}
-    LULL_END_PARAMS = {hour: 5, min: 0}
-
     def time_until_next_lull
       next_lull_start - Time.now
     end
@@ -23,23 +20,27 @@ module EventsHelper
     end
 
     def next_lull_start
-      if is_after_todays_lull?
-        tomorrows_lull_start
-      else
-        todays_lull_start
-      end
+      is_after_todays_lull? ? tomorrows_lull_start : todays_lull_start
     end
 
     def tomorrows_lull_start
-      DateTime.tomorrow.to_time.change(LULL_START_PARAMS)
+      Date.tomorrow.to_time.change(lull_start_params)
     end
 
     def todays_lull_end
-      Time.now.change(LULL_END_PARAMS)
+      Time.now.change(lull_end_params)
     end
 
     def todays_lull_start
-      Time.now.change(LULL_START_PARAMS)
+      Time.now.change(lull_start_params)
+    end
+
+    def lull_start_params
+      {hour: 2, min: 30}
+    end
+
+    def lull_end_params
+      {hour: 5, min: 0}
     end
   end
 end
