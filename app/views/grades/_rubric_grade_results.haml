@@ -39,7 +39,7 @@
 
             - if current_user_is_staff? && presenter.viewable_rubric_tier_earned?(tier.id)
               .earned_tier #{current_student.first_name} earned this level
-            - elsif current_user_is_student? && rubric_tier_earned?(current_user, tier.id)
+            - elsif current_user_is_student? && presenter.rubric_tier_earned?(current_user, tier.id)
               .earned_tier I earned this level
 
             - if !presenter.hide_analytics?

@@ -2,7 +2,7 @@
 
 - if presenter.assignment.is_individual?
   - if (presenter.assignment.open? && !presenter.grades_available_for?(current_student)) ||
-       (presenter.assignment.open? && presenter.assignment.resubmissions_allowed?)
+    (presenter.assignment.open? && presenter.assignment.resubmissions_allowed?)
 
     = link_to "Edit My Submission", edit_assignment_submission_path(presenter.assignment, presenter.submission_for_assignment(current_student)), :class => "button"
     .clear
@@ -44,7 +44,7 @@
 - else
   // link to edit the submission
   - if presenter.assignment.open?
-    = link_to "Edit My Submission", edit_assignment_submission_path(presenter.assignment, presenter.group_for(current_student), :class => "button"
+    = link_to "Edit My Submission", edit_assignment_submission_path(presenter.assignment, presenter.group_for(current_student)), :class => "button"
   // Displaying when the assignment was submitted
   .clear
   %p
