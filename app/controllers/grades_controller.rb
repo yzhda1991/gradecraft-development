@@ -23,6 +23,8 @@ class GradesController < ApplicationController
     end
 
     fetch_grades_based_on_group
+    render :show, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+                                              view_context: view_context })
   end
 
   private
