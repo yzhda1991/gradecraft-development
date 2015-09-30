@@ -236,6 +236,7 @@
 
       #start: (event, ui)->
 
+      # TODO: need to debounce to only trigger 500ms after stop
       slide: (event, ui)->
         slider = ui.handle.parentElement
         articleType = ui.handle.parentElement.dataset.articleType
@@ -254,10 +255,14 @@
               angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
             else
               angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
+
+      # TODO: might need to wrap the stop function in a debounce
+      # best approach would be using ng-model-options but ng-model isn't being used here
       stop: (event, ui)->
         articleType = ui.handle.parentElement.dataset.articleType
         article_id = ui.handle.parentElement.dataset.id
         value = ui.value
+
         if articleType == 'assignment'
           article.grade.predicted_score = value
           PredictorService.postPredictedGrade(article_id,value)
