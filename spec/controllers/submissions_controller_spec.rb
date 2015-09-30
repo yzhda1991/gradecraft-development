@@ -129,15 +129,6 @@ describe SubmissionsController do
       end
     end
 
-    describe "GET show" do
-      it "shows the submission" do
-        get :show, {:id => @submission.id, :assignment_id => @assignment.id}
-        expect(assigns(:title)).to eq("My Submission for #{@assignment.name}")
-        expect(assigns(:submission)).to eq(@submission)
-        expect(response).to render_template(:show)
-      end
-    end
-
     describe "GET update" do
       it "updates the submission successfully"  do
         params = attributes_for(:submission)

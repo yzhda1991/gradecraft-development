@@ -9,7 +9,7 @@ class GradesController < ApplicationController
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
     if current_user_is_student?
-      redirect_to @assignment
+      redirect_to @assignment and return
     end
     if @assignment.rubric.present? && @assignment.is_individual?
       @rubric = @assignment.rubric
