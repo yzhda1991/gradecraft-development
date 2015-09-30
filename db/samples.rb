@@ -850,3 +850,105 @@ assignment_analytics_on = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
+
+assignment_types[:first_course_unlocks] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Unlock Settings"
+end
+
+assignment_submission_is_an_unlock = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_unlocks]
+  a.name = "Submitting this Assignment Unlocks Something Else"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_grade_earned_is_an_unlock = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_unlocks]
+  a.name = "Earning a Particular Grade on this Assignment Unlocks Something Else"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_grade_earned_by_date_is_an_unlock = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_unlocks]
+  a.name = "Earning a Particular Grade by a Particular Date Unlocks Something Else"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_feedback_read_is_an_unlock = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_unlocks]
+  a.name = "Reading the Feedback on this Assignment Unlocks Something Else"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_unlocks]
+  a.name = "Reading the Feedback on this Assignment by a Particular Date Unlocks Something Else"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_is_unlockable = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_unlocks]
+  a.name = "I'm the thing you get when you do the other things"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_submission_is_an_unlock.unlock_conditions.create! do |uc|
+  uc.condition = assignment_is_unlockable
+  uc.condition_type = "Assignment"
+  uc.condition_state = "Submitted"
+end
+
+
+assignment_grade_earned_is_an_unlock.unlock_conditions.create! do |uc|
+  uc.condition = assignment_is_unlockable
+  uc.condition_type = "Assignment"
+  uc.condition_state = "Grade Earned"
+end
