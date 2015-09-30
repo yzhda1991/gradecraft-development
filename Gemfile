@@ -57,7 +57,7 @@ gem 'resque-retry'
 
 # handles deferrence of Resque jobs to a later time
 # ex: Resque.enqueue_in(5.hours, @worker_object)
-gem 'resque-scheduler'
+gem 'resque-scheduler', require: "resque/scheduler"
 
 # limits the number of jobs that are run per unit of time on a given queue
 # ex: Resque.rate_limit(:my_queue, :at => 10, :per => 60)

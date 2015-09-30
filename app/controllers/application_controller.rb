@@ -105,13 +105,27 @@ class ApplicationController < ActionController::Base
     raise Canable::Transgression unless can_view?(resource)
   end
 
+  require_relative '../workers/event_loggers/pageview_event_logger'
+  module ResqueManager
+    extend EventsHelper::Lull
+  end
+
+  # TODO: add specs for enqueing
   # Tracking page view counts
   def increment_page_views
     if current_user && request.format.html?
-      Resque.enqueue(EventLogger, 'pageview', course_id: current_course.try(:id), user_id: current_user.id, student_id: current_student.try(:id), user_role: current_user.role(current_course), page: request.original_fullpath, created_at: Time.now)
+      Resque.enqueue_in(ResqueManager.time_until_next_lull, PageviewEventLogger, 'pageview',
+        course_id: current_course.try(:id),
+        user_id: current_user.id,
+        student_id: current_student.try(:id),
+        user_role: current_user.role(current_course),
+        page: request.original_fullpath,
+        created_at: Time.now
+      )
     end
   end
 
+  # NOTE: does this need to be re-activated?
   # Tracking course logins
   def log_course_login_event
     # membership = current_user.course_memberships.where(course_id: current_course.id).first
