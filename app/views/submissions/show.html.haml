@@ -7,8 +7,4 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
-  - if current_user_is_student?
-    = render 'submissions/student_show'
-  - else
-    = render 'submissions/instructor_show'
+  = render 'submissions/instructor_show'
