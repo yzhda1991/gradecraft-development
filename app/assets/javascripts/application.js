@@ -14,6 +14,7 @@
 //= require jquery.sparkline.min
 //= require s3_direct_upload
 //= require underscore
+//= require alpha_num_sort
 //= require jquery.dynatable
 //= require dynatable
 //= require lodash.min
