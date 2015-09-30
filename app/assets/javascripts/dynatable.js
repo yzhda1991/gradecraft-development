@@ -291,72 +291,71 @@ $('table.nofeatures_default_desc_score_dynatable').dynatable({
   }
 });
 
-$('table.default_assignments_dynatable').dynatable({
+function assignmentSort(a, b, attr, direction) {
+  var num = parseInt($(a.assignment).text().split('').pop());
+  var a = Array.prototype.alphanumSort($(a.assignment).text())
+  debugger;
+}
+
+$('table.default_assignments_dynatable').bind('dynatable:init', function(e, dynatable) {
+  dynatable.sorts.functions["alphaNumeric"] = assignmentSort;
+}).dynatable({
   features: {
     paginate: false,
     search: false,
     recordCount: false,
     sort: true
-  }
-  ,
+  },
   dataset: {
-    sorts: { 'assignment': 1 }
+    sortTypes: {
+      assignment: 'alphaNumeric'
+    }
   }
 });
 
-// // Our custom sort function
-// function rgbSort(a, b, attr, direction) {
-
-//   // Assuming we've created a separate function
-//   // to get the average RGB value from an image.
-//   // (see source for example above for getAverageRGB function)
-//   var aRgb = getAverageRGB(a.img),
-//       bRgb = getAverageRGB(b.img),
-//       aDec = ( aRgb.r << 16 ) + ( aRgb.g << 8 ) + aRgb.b,
-//       bDec = ( bRgb.r << 16 ) + ( bRgb.g << 8 ) + bRgb.b,
-//       comparison = aDec - bDec;
-
-//   return direction > 0 ? comparison : -comparison;
-// };
-
-// // Wait until images are loaded
-// $(window).load(function() {
-//   $('#sorting-function-example')
-
-//     // Add our custom sort function to dynatable
-//     .bind('dynatable:init', function(e, dynatable) {
-//       dynatable.sorts.functions["rgb"] = rgbSort;
-//     })
-
-//     // Initialize dynatable
-//     .dynatable({
-//       features: {
-//         paginate: false,
-//         search: false,
-//         recordCount: false
-//       },
-//       dataset: {
-//         // When we sort on the color column,
-//         // use our custom sort added above.
-//         sortTypes: {
-//           color: 'rgbSort'
+// function naturalSorter(as, bs){
+//     var a, b, a1, b1, i= 0, n, L,
+//     rx=/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
+//     if(as=== bs) return 0;
+//     a= as.toLowerCase().match(rx);
+//     b= bs.toLowerCase().match(rx);
+//     L= a.length;
+//     while(i<L){
+//         if(!b[i]) return 1;
+//         a1= a[i],
+//         b1= b[i++];
+//         if(a1!== b1){
+//             n= a1-b1;
+//             if(!isNaN(n)) return n;
+//             return a1>b1? 1:-1;
 //         }
-//       },
-//       readers: {
-//         color: function(cell, record) {
-//           var $cell = $(cell);
+//     }
+//     return b[i]? -1:0;
+// }
 
-//           // Store the average RGB image color value
-//           // as a decimal in "dec" attribute.
-//           record['img'] = $cell.find('img').get(0);
+// $(document).ready(function () {
+//     var selectModel = [];
 
-//           // Return the HTML of the cell to be stored
-//           // as the "color" attribute.
-//           return $cell.html();
-//         }
-//       }
+//     $('select.text12 option').each(function () {
+//         var $this = $(this);
+//         selectModel.push({
+//             value: $this.val(),
+//             text: $this.text()
+//         });
 //     });
-// })
+
+//     selectModel.sort(function (a, b) {
+//         return naturalSorter(a.text, b.text);
+//     });
+
+//     var tempHtml = '';
+
+//     for (var i = 0, ii = selectModel.length; i < ii; i++) {
+//         tempHtml += '<option value="' + selectModel[i].value + '">' + selectModel[i].text + '</option>';
+//     }
+
+//     $('select.text12').html(tempHtml);
+// });
 
 $('table.nofeatures_dynatable').dynatable({
 
