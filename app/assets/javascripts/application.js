@@ -16,6 +16,7 @@
 //= require jquery.dynatable
 //= require dynatable
 //= require lodash.min
+//= require preload_store
 
 //= require angular/angular
 //= require angular-resource
