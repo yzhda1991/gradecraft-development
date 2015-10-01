@@ -16,7 +16,6 @@
 //= require jquery.dynatable
 //= require dynatable
 //= require lodash.min
-//= require preload_store
 
 //= require angular/angular
 //= require angular-resource
@@ -41,6 +40,7 @@
 //= require_tree ./angular-froala
 
 //= require gradecraft 
+//= require preload_store
 //= require users
 //= require courses
 //= require analytics
