@@ -113,16 +113,18 @@ class ApplicationController < ActionController::Base
   # TODO: add specs for enqueing
   # Tracking page view counts
   def increment_page_views
-    if current_user && request.format.html?
-      Resque.enqueue_in(ResqueManager.time_until_next_lull, PageviewEventLogger, 'pageview',
-        course_id: current_course.try(:id),
-        user_id: current_user.id,
-        student_id: current_student.try(:id),
-        user_role: current_user.role(current_course),
-        page: request.original_fullpath,
-        created_at: Time.now
-      )
-    end
+    PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
+  end
+
+  def pageview_logger_attrs
+    {
+      course_id: current_course.try(:id),
+      user_id: current_user.id,
+      student_id: current_student.try(:id),
+      user_role: current_user.role(current_course),
+      page: request.original_fullpath,
+      created_at: Time.now
+    }
   end
 
   # NOTE: does this need to be re-activated?

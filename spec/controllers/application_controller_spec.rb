@@ -29,12 +29,22 @@ RSpec.describe ApplicationController, type: :controller do
         @controller = ApplicationController.new
         stub_controller_for_pageview_logger
         stub_resque_manager
+
+        @controller.instance_eval { increment_page_views }
+      end
+
+      it "should find a job in the pageview queue" do
+        resque_job = Resque.peek(:pageview_event_logger)
+        expect(resque_job).to be_present
+        puts "Job is #{resque_job}"
+      end
+
+      it "should have a pageview logger event in the queue" do
+        expect(PageviewEventLogger).to have_queue_size_of(1)
       end
 
       it "should schedule a pageview event" do
-        @controller.instance_eval { increment_page_views }
-        # expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs_expectation).in(2.hours)
-        expect(PageviewEventLogger).to have_queued('pageview', pageview_logger_attrs_expectation)
+        expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs_expectation).in(2.hours)
       end
     end
   end
