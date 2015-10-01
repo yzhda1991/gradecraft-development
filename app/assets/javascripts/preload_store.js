@@ -1,3 +1,4 @@
+/* necessary to drop and reload sample data */
 !function(app) {
   var data = {};
 
