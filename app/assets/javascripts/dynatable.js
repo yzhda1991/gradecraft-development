@@ -287,14 +287,30 @@ $('table.nofeatures_default_desc_score_dynatable').dynatable({
         sort: true
       },
   dataset: {
-      sorts: { 'score': -1 }
+    sorts: { 'score': -1 }
   }
 });
 
-function assignmentSort(a, b, attr, direction) {
-  var num = parseInt($(a.assignment).text().split('').pop());
-  var a = Array.prototype.alphanumSort($(a.assignment).text())
-  debugger;
+function assignmentSort(as, bs) {
+  var a, b, a1, b1, i= 0, n, L,
+  rx=/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
+  as = $(as.assignment).text();
+  bs = $(bs.assignment).text();
+  if(as=== bs) return 0;
+  a= as.toLowerCase().match(rx);
+  b= bs.toLowerCase().match(rx);
+  L= a.length;
+  while(i<L){
+      if(!b[i]) return 1;
+      a1= a[i],
+      b1= b[i++];
+      if(a1!== b1){
+          n= a1-b1;
+          if(!isNaN(n)) return n;
+          return a1>b1? 1:-1;
+      }
+  }
+  return b[i]? -1:0;
 }
 
 $('table.default_assignments_dynatable').bind('dynatable:init', function(e, dynatable) {
@@ -309,7 +325,8 @@ $('table.default_assignments_dynatable').bind('dynatable:init', function(e, dyna
   dataset: {
     sortTypes: {
       assignment: 'alphaNumeric'
-    }
+    },
+    sorts: { 'assignment': 1 }
   }
 });
 
