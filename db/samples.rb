@@ -859,7 +859,7 @@ end
 assignment_submission_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
-  a.name = "Submitting this Assignment Unlocks Something Else"
+  a.name = "Submitting Another Assignment Unlocks This"
   a.point_total = 180000
   a.accepts_submissions = false
   a.release_necessary = false
@@ -926,10 +926,10 @@ assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
-assignment_is_unlockable = Assignment.create! do |a|
+assignment_unlock_condition = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
-  a.name = "I'm the thing you get when you do the other things"
+  a.name = "I'm the thing you need to do to get other things"
   a.point_total = 180000
   a.accepts_submissions = false
   a.release_necessary = false
@@ -941,14 +941,21 @@ assignment_is_unlockable = Assignment.create! do |a|
 end
 
 assignment_submission_is_an_unlock.unlock_conditions.create! do |uc|
-  uc.condition = assignment_is_unlockable
+  uc.condition = assignment_unlock_condition
   uc.condition_type = "Assignment"
   uc.condition_state = "Submitted"
 end
 
 
 assignment_grade_earned_is_an_unlock.unlock_conditions.create! do |uc|
-  uc.condition = assignment_is_unlockable
+  uc.condition = assignment_unlock_condition
   uc.condition_type = "Assignment"
   uc.condition_state = "Grade Earned"
+end
+
+assignment_grade_earned_by_date_is_an_unlock.unlock_conditions.create! do |uc|
+  uc.condition = assignment_unlock_condition
+  uc.condition_type = "Assignment"
+  uc.condition_state = "Grade Earned"
+  uc.condition_date = 1.week.ago
 end

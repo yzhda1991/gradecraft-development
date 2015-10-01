@@ -30,20 +30,6 @@
       return false;
     });
 
-    $form.on('click', '.add-unlock-condition', function(e) {
-      var $wrapper = $('.unlock-conditions');
-      var template = $('#unlock-condition-template').html().replace(/child_index/g, $wrapper.children('.unlock-condition').length);
-      $wrapper.append(template);
-      return false;
-    });
-
-    $form.on('click', '.remove-unlock-condition', function(e) {
-      var $link = $(this);
-      $link.prev('input.destroy').val(true);
-      $link.closest('fieldset.unlock-condition').hide();
-      return false;
-    });
-
     $form.on('click', '.add-challenge-score-level', function(e) {
       var $wrapper = $('.challenge-score-levels');
       var template = $('#challenge-score-level-template').html().replace(/child_index/g, $wrapper.children('.challenge-score-level').length);
@@ -55,6 +41,20 @@
       var $link = $(this);
       $link.prev('input.destroy').val(true);
       $link.closest('fieldset.challenge-score-level').hide();
+      return false;
+    });
+
+    $form.on('click', '.add-unlock-condition', function(e) {
+      var $wrapper = $('.unlock-conditions');
+      var template = $('#unlock-condition-template').html().replace(/child_index/g, $wrapper.children('.unlock-condition').length);
+      $wrapper.append(template);
+      return false;
+    });
+
+    $form.on('click', '.remove-unlock-condition', function(e) {
+      var $link = $(this);
+      $link.prev('input.destroy').val(true);
+      $link.closest('fieldset.unlock-condition').hide();
       return false;
     });
 

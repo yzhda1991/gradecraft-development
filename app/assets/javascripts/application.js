@@ -6,7 +6,6 @@
 //
 //= require jquery
 //= require jquery-ui
-//= require jquery_ujs
 
 //= require_self
 //= require jquery.omniselect
@@ -17,7 +16,6 @@
 //= require jquery.dynatable
 //= require dynatable
 //= require lodash.min
-//= require froala_editor.min.js
 
 //= require angular/angular
 //= require angular-resource
@@ -36,23 +34,20 @@
 //= require ./angular/ui/sortable
 //= require ./angular/vendor/restangular.min
 //= require_tree ./angular
-//= require_tree ../templates
 
-//= require gradecraft
-//= require preload_store
+//= require froala_editor.min.js
+//= require_tree ./froala
+//= require_tree ./angular-froala
+
+//= require gradecraft 
 //= require users
 //= require courses
-//= require selectToUISlider.jQuery
 //= require analytics
-//= require analytics_dashboard
 //= require assignment_types
 //= require assignments
 //= require pass_fail
-//= require nested_fields
 //= require student_dashboard
 //= require levels_per_assign
-//= require submissions
-//= require submission_file
 //= require timelineJS/embed
 //= require timeline_settings
 //= require earned_badges
@@ -60,7 +55,6 @@
 //= require highcharts
 //= require select2
 //= require grade_distribution
-//= require jquery.ui.widget
 //= require jquery.circliful.min
 //= require jquery.highchartTable-min
 //= require jquery.collapse
@@ -68,12 +62,9 @@
 //= require jquery.collapse_cookie_storage
 //= require datetimepicker
 //= require assignment-results-vis
-//= require top_ten
 //= require uploads
 //= require course_switch
 //= require background
 //= require d3
 //= require offscreen-nav
-//= require_tree ./froala
-//= require_tree ./angular-froala
 //= require utilities
