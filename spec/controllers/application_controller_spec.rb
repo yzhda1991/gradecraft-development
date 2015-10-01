@@ -1,5 +1,7 @@
 #spec/controllers/application_controller_spec.rb
 require 'spec_helper'
+require 'resque-scheduler'
+require 'resque_spec/scheduler'
 
 RSpec.describe ApplicationController, type: :controller do
   describe "#increment_page_views" do
@@ -31,7 +33,8 @@ RSpec.describe ApplicationController, type: :controller do
 
       it "should schedule a pageview event" do
         @controller.instance_eval { increment_page_views }
-        expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs_expectation).in(2.hours)
+        # expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs_expectation).in(2.hours)
+        expect(PageviewEventLogger).to have_queued('pageview', pageview_logger_attrs_expectation)
       end
     end
   end
