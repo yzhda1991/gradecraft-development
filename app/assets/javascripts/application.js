@@ -8,8 +8,6 @@
 //= require jquery-ui
 //= require jquery_ujs
 
-//= require gradecraft
-
 //= require_self
 //= require jquery.omniselect
 //= require autonumeric
@@ -42,6 +40,8 @@
 //= require_tree ./froala
 //= require_tree ./angular-froala
 
+//= require gradecraft
+//= require preload_store
 //= require users
 //= require courses
 //= require analytics
