@@ -113,7 +113,9 @@ class ApplicationController < ActionController::Base
   # TODO: add specs for enqueing
   # Tracking page view counts
   def increment_page_views
-    PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
+    if @current_user and @request.format.html?
+      PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
+    end
   end
 
   def pageview_logger_attrs

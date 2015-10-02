@@ -8,9 +8,15 @@ class PageviewEventLogger < EventLogger
     @attrs = attrs
   end
 
-  def enqueue_in(elapsed_time)
-    if @current_user and @request.format.html?
-      Resque.enqueue_in(elapsed_time, self.class, @attrs)
-    end
+  def enqueue_in(time_until_start)
+    Resque.enqueue_in(time_until_start, self.class, @attrs)
+  end
+
+  def enqueue_at(scheduled_time)
+    Resque.enqueue_in(elapsed_time, self.class, @attrs)
+  end
+
+  def enqueue
+    Resque.enqueue(self.class, @attrs)
   end
 end
