@@ -298,8 +298,6 @@ class AssignmentsController < ApplicationController
         :required,
         :resubmissions_allowed,
         :student_logged,
-        :student_logged_button_text,
-        :student_logged_revert_button_text,
         :thumbnail,
         :use_rubric,
         :visible,

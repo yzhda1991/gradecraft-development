@@ -1,3 +1,5 @@
+/** Course search utility for admin **/
+
 !function(app, $) {
   $(document).ready(function() {
     if($('.courses-search-query').length) {
