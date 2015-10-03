@@ -1121,6 +1121,81 @@ assignment_feedback_read_by_date_is_an_unlock.unlock_conditions.create! do |uc|
 end
 
 
+assignment_types[:first_course_sorting] = AssignmentType.create! do |at|
+  at.course = first_course
+  at.name = "Sorting Settings"
+end
+
+assignment_alphanum_1_condition = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_sorting]
+  a.name = "Class 1"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_2_condition = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_sorting]
+  a.name = "Class 2"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_3_condition = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_sorting]
+  a.name = "Class 12"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_3_condition = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_sorting]
+  a.name = "Class 10"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_4_condition = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_sorting]
+  a.name = "Class 20"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
 challenges = []
 
 challenges << Challenge.create! do |c|
