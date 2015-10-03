@@ -140,6 +140,7 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
 
   .login
     .ui-widget-content, .ui-widget-header
+      font-family: "Avenir", Helvetica, sans-serif !important
       background: $color-blue-0 !important
       opacity: .9
 
@@ -159,15 +160,16 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
         width: 95%
         border: 0
         margin-bottom: .75rem
-      input:focus
-        background-color: $color-green-3
-        color: $color-black
+        color: $color-white !important
+      input:focus, #user_password
+        background-color: $color-green-4
+        color: $color-white !important
 
       a 
         left: -2rem
         top: .25rem
         position: relative
-        color: $color-green-3
+        color: $color-white !important
 
       .button
         position: relative

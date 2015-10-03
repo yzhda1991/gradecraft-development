@@ -9,22 +9,21 @@
 
   ul
     padding: 0
-    margin: 0 0 0 1.35rem
+    margin: 0 0 0 1rem
     position: relative
     li
       list-style-type: none
       margin: 0
-      height: 1.4rem
-      padding: 5px .5rem .5rem
-      margin-left: -5px
+      line-height: 2rem
       text-transform: capitalize
-      display: inline-block
-      font-size: .9rem
+      display: block
+      font-size: .8rem
+      float: left
       border-radius: 0 !important
-      color: $color-black
-      border-right: 1px solid $color-green-3
-      border-left: 1px solid $color-green-3
       & > a 
         color: $color-white
-      &:hover
-        background-color: $color-green-1
+        padding: .5rem
+        border-left: 1px solid $color-green-3
+      & a:hover
+        background-color: $color-green-0
+        padding: .5rem !important

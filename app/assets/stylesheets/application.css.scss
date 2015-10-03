@@ -41,7 +41,7 @@ $media-xlarge-max:  120rem; //
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#{$fromColor}', EndColorStr='#{$toColor}');
 }
 @mixin title-type-styling {
-  font-family: "Avenir", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-family: "Avenir", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   text-rendering: optimizeLegibility;

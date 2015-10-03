@@ -3,6 +3,7 @@
     width: 11.75rem
     border: 0
     height: 65px
+    font-family: "Avenir", "Helvetica", sans-serif !important
 
   input
     height: 2rem
@@ -117,7 +118,6 @@ td.tier-td
     background: $color-red-2
 
   input.ng-valid-required
-    border: 1px solid $color-blue-4
     background: $color-blue-4
 
   input.ng-invalid
@@ -147,7 +147,7 @@ td.tier-td
 
 button.delete
   font-weight: bold
-  background: $color-grey-4
+  background: $color-grey-3
   position: absolute
   right: 0
   top: 0
@@ -163,7 +163,7 @@ button.delete
     width: 180px
 
   &.saved
-    background: $color-green-2
+    background: $color-green-3
 
   .badge-messages
     clear: right
@@ -176,7 +176,7 @@ button.delete
     padding: 5px
     height: 60px
     &:hover
-      background: $color-green-3
+      background: $color-green-1
       cursor: pointer
       cursor: hand
 
@@ -185,7 +185,7 @@ button.delete
 
       .edit-badges
         display: block
-        background: $color-green-2
+        background: $color-green-3
         color: $color-white
 
   select
@@ -203,20 +203,18 @@ button.delete
     color: $color-green-3
 
   input.ng-valid-required
-    border: 1px solid $color-blue-3
-    background: $color-blue-3
+    background: $color-blue-4
 
     &:disabled
       background: $color-grey-6
       color: $color-grey-6
 
   input.ng-pristine.ng-invalid
-    border: 1px solid $color-blue-5
     background: $color-white
 
   input.ng-invalid
-    border: 1px solid $color-red-1
     background: $color-red-1
+    color: $color-white
 
 .tier-badge, .tier-badge-image
   font-size: 12px
