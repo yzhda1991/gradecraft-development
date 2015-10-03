@@ -12,33 +12,31 @@
 
 .ui-widget-content
   border: 0
-  font-family: Avenir, san-serif
   
   .ui-tabs-panel
     padding: 0
 
     .button-group a
-      color: #FFF
+      color: $color-white
 
   .team-filter
     margin-top: 1rem
-    font-family: Avenir, san-serif
 
 .ui-widget-header
   border: 0
 
 .ui-tabs .ui-tabs-nav
-  background: lighten($color-blue-0, 60%) !important
-  border-bottom: 10px solid lighten($color-blue-0, 10%)
+  background: $color-blue-0 !important
+  border-bottom: 10px solid $color-blue-0
 
   li.ui-state-default
-    background: lighten($color-green-2, 30%) !important
+    background: $color-green-2 !important
     border: 0
 
     &:hover
       background: $color-green-2 !important
 
     &.ui-state-active
-      background: lighten($color-blue-0, 10%) !important
+      background: $color-blue-0 !important
       a 
-        color: #FFF !important
+        color: $color-white !important
