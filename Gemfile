@@ -59,9 +59,12 @@ gem 'resque-retry'
 # ex: Resque.enqueue_in(5.hours, @worker_object)
 gem 'resque-scheduler', require: "resque/scheduler"
 
+# slightly more mature rate limiter plugin for resque
+gem 'resque-waiting-room'
+
 # limits the number of jobs that are run per unit of time on a given queue
 # ex: Resque.rate_limit(:my_queue, :at => 10, :per => 60)
-gem 'resque-throttler', require: "resque/throttler" 
+# gem 'resque-throttler', require: "resque/throttler" 
 
 gem 'responders'
 gem 'rollbar'

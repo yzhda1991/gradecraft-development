@@ -493,8 +493,7 @@ GEM
       redis (~> 3.0)
       resque (~> 1.25)
       rufus-scheduler (~> 3.0)
-    resque-throttler (0.1.5)
-      resque (~> 1.25)
+    resque-waiting-room (0.2.3)
     rollbar (2.1.2)
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
@@ -708,7 +707,7 @@ DEPENDENCIES
   resque (= 1.25.2)!
   resque-retry
   resque-scheduler
-  resque-throttler
+  resque-waiting-room
   resque_spec!
   rollbar
   rspec-rails (~> 3.3.3)
