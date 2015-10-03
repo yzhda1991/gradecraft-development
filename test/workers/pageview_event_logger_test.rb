@@ -1,4 +1,3 @@
-require_relative '../test_helper'
 require_relative '../../app/workers/event_loggers/pageview_event_logger'
 
 class PageviewLoggerTest

@@ -7,9 +7,9 @@ class EventLogger
 
   def self.perform(event_type, data={})
     p @start_message
-    @data = data
+    p "data: #{data}"
+    p "event_type: #{event_type}"
     @event = Analytics::Event.create self.event_attrs(event_type, data)
-    notify_event_outcomes
   rescue Resque::TermException => e
     puts e.message
     puts e.backtrace.inspect
@@ -26,6 +26,7 @@ class EventLogger
       p "An error occurred when processing a pageview analytics event."
     end
     p @data
+    @event
   end
 
   # allow sub-classes to inherit class-level instance variables

@@ -13,6 +13,7 @@ namespace :resque do
     require 'resque'
 
     ENV['QUEUE'] = "*"
+    ENV['INTERVAL'] = "1"
   end
 
   task :setup_schedule => :setup do
