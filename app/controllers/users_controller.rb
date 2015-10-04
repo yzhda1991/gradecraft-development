@@ -82,7 +82,7 @@ class UsersController < ApplicationController
     elsif @user.save && @user.is_staff?(current_course)
       redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully updated!"
     else
-      redirect_to :edit
+      render :edit
     end
   end
 
