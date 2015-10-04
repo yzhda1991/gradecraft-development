@@ -1,7 +1,9 @@
 // Matching the main content div to the size of the window
 //Initial load of page
 
-$( "#tabs" ).tabs();
+$( "#tabs" ).tabs({
+  event: "mouseover"
+});
 
  $('.froala').editable(
     {inlineMode: false, 

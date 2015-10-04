@@ -140,15 +140,19 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
 
   .login
     .ui-widget-content, .ui-widget-header
-      font-family: "Avenir", Helvetica, sans-serif !important
-      background: $color-blue-0 !important
+      border: none
+      background: $color-blue-2 !important
       opacity: .9
 
     .ui-tabs-nav
-      background: $color-blue-0 !important
+      background: $color-blue-1 !important
       border-bottom: 10px solid $color-blue-0
       li
         border: 0
+
+      &.ui-state-active
+        background: $color-blue-0 !important
+
 
     form
       height: 150px
@@ -160,9 +164,8 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
         width: 95%
         border: 0
         margin-bottom: .75rem
-        color: $color-white !important
       input:focus
-        background-color: $color-green-4
+        background-color: $color-green-3
         color: $color-white !important
 
       a 

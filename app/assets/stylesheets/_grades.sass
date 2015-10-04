@@ -14,12 +14,12 @@ select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
   cursor: hand
 
 #updated-at, #updated-at-current
-  margin-top: 12px
+  margin-top: .5rem
   font-style: italic
   float: left
-  padding: 1px 5px
+  padding: .25rem .5rem
   border: 1px solid $color-grey-4
-  @include rounded-corners(4px)
+  border-radius: $global-radius
 
 #updated-at-current
   @include transition-property("background, border-color")
@@ -32,25 +32,25 @@ select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
 
 #available, #awarded
   padding: 1rem
-  min-height: 300px
+  min-height: 150px
 
 #awarded 
   background-color: $color-green-4
 
-
 #available
   background-color: $color-grey-4
 
-.gradebox
+/* This is the box that holds the select list */
+#gradebox, .gradebox
+  padding: 1rem
+  border-radius: $global-radius
   width: 45%
   height: 4rem
-  float: left
-  padding: 1rem
   font-size: 1rem
   margin-bottom: 1rem
+  float: left
   background-color: $color-blue-4
-  border-radius: $global-radius
-  @include opacity(0.9)
+  display: inline
 
   // transitions
   @include transition-property("padding, font-size, opacity, border-color")
@@ -65,12 +65,16 @@ select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
     cursor: pointer
     cursor: hand
 
-  &.jump-left
-    color: $color-red-1 !important
-    background: $color-red-1 !important
-    float: left
-    transition: all 0.5s linear
-    opacity: 0
+#gradebox 
+  margin-right: .5rem  
+
+
+/* This is the box that holds the custom entry field */
+.gradebox
+  @include opacity(0.9)
+
+  input
+    border: none
 
 button#remove-badges, button#add-badges
   margin-left: .5rem
@@ -123,15 +127,15 @@ button#remove-badges, button#add-badges
       background-color: #555
 
     &:hover
-      background-color: #41566B
+      background-color: $color-blue-1
       @include opacity(0.7)
 
       &:before, &:after
-        background-color: #3F6B98
+        background-color: $color-blue-1
 
 
     &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
-      background-color: #42688E
+      background-color: $color-blue-1
       @include opacity(0.88)
       box-shadow: 0 0 20px #F6C621
 
@@ -325,33 +329,3 @@ button#remove-badges, button#add-badges
     margin-top: -4px
     font-size: 1rem
     font-weight: bold
-
-#gradebox
-  border: 1px solid $color-grey-4
-  padding: 1rem
-  font-size: 13px
-  border-radius: $global-radius
-  width: 45%
-  float: left
-  background-color: $color-blue-4
-  display: inline
-
-  // transitions
-  @include transition-property("padding, font-size, opacity, border-color")
-  @include transition-duration(0.4s)
-  @include transition-timing-function(ease)
-
-  &.inactive
-    @include opacity(0.4)
-    color: #87ADB5
-    padding: .4rem
-    font-size: 12px
-    cursor: pointer
-    cursor: hand
-
-  &.jump-left
-    color: red !important
-    background: $color-red-1 !important
-    float: left
-    transition: all 0.5s linear
-    opacity: 0
