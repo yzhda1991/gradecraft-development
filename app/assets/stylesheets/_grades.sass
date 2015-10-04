@@ -1,50 +1,17 @@
 #custom-value-label
   img
     float: right
-    margin-left: 6px
+    margin-left: .25rem
 
 select#grade_raw_score, input[type=text]#grade_raw_score
   @include transition-property("background")
 
 select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
-  background: #dedede !important
+  background: $color-grey-4 !important
   color: $color-grey-2
+  border: none 
   cursor: pointer
   cursor: hand
-
-.badge-debug
-  display: block
-  padding: 8px 16px
-  margin: 8px
-  border: 1px solid $color-grey-2
-  float: left
-
-  &.deleting
-    background: $color-red-1 !important
-    color: $color-white !important
-
-    h4
-      color: $color-white !important
-  
-  &.creating
-    background: $color-green-2 !important
-    color: $color-white !important
-
-    h4
-      color: $color-white !important
-
-  &.creating.deleting
-    background: $color-black !important
-
-  .info
-    display: block
-
-    &.earned-badge .pretty-json
-      white-space: pre
-
-
-label.disabled
-  color: $color-grey-3 !important
 
 #updated-at, #updated-at-current
   margin-top: 12px
@@ -65,16 +32,22 @@ label.disabled
 
 #available, #awarded
   padding: 1rem
-  background-color: $color-green-3
   min-height: 300px
+
+#awarded 
+  background-color: $color-green-4
+
+
+#available
+  background-color: $color-grey-4
 
 .gradebox
   width: 45%
+  height: 4rem
   float: left
-  border: 1px solid $color-grey-4
   padding: 1rem
-  font-size: 13px
-  margin-bottom: 18px
+  font-size: 1rem
+  margin-bottom: 1rem
   background-color: $color-blue-4
   border-radius: $global-radius
   @include opacity(0.9)
@@ -86,10 +59,9 @@ label.disabled
 
   &.inactive
     @include opacity(0.4)
-    border: 1px solid #B9DAE2
     color: $color-grey-6
-    padding: .4rem
-    font-size: 12px
+    padding: .5rem
+    font-size: .8rem
     cursor: pointer
     cursor: hand
 
@@ -100,25 +72,14 @@ label.disabled
     transition: all 0.5s linear
     opacity: 0
 
-h4#awarded-header
-  padding-top: 2px
-
 button#remove-badges, button#add-badges
-  font-weight: bold !important
   margin-left: .5rem
   position: relative
   margin-top: 0rem
   top: -.3rem
-  font-size: .8rem
-  @include rounded-corners(4px)
-  @include opacity(0.7)
   @include transition-property("background, opacity")
   @include transition-duration(0.3s)
   @include transition-timing-function(ease)
-
-  &:hover
-    @include opacity(1)
-    background: $color-red-2 - $color-grey-1
 
 .grade-badge
   &.hexagon
@@ -135,8 +96,6 @@ button#remove-badges, button#add-badges
     z-index: 100
     background-color: $color-blue-1
     margin: 2rem 3rem 3rem 2rem
-    border-left: solid 1px #0C58A7
-    border-right: solid 1px #0C58A7
 
     &:before, &:after
       content: ""
@@ -147,19 +106,14 @@ button#remove-badges, button#add-badges
       -webkit-transform: scaleY(0.5774) rotate(-45deg)
       -ms-transform: scaleY(0.5774) rotate(-45deg)
       transform: scaleY(0.5774) rotate(-45deg)
-      background-color: #3277BE
+      background-color: $color-blue-2
       left: 10.75px
-      box-shadow: 0 0 20px rgba(12, 50, 54, 0.55)
 
     &:before
       top: -29.76px
-      border-top: solid 1.4142px #43b6bb
-      border-right: solid 1.4142px #43b6bb
 
     &:after
       bottom: -53.0330px
-      border-bottom: solid 1.4142px #43b6bb
-      border-left: solid 1.4142px #43b6bb
 
     &.unearned 
       @include opacity(0.6)
@@ -365,16 +319,12 @@ button#remove-badges, button#add-badges
       &:after
         border-color: $color-grey-6 $color-grey-6 transparent $color-grey-6
 
-
   .earned-total
     display: inline
     position: absolute
     margin-top: -4px
     font-size: 1rem
     font-weight: bold
-
-.clear-left
-  clear: left !important
 
 #gradebox
   border: 1px solid $color-grey-4
