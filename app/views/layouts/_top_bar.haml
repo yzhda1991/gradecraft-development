@@ -19,10 +19,10 @@
             %a.no-hover.site-title{:href => dashboard_path}
               - if current_course
                 %span.course.left= "#{current_course.courseno} "
-                %span.course_name.left= "#{current_course.name} "
-                %span.course_semester.left.hidden-sm= "#{current_course.try(:semester)} #{current_course.try(:year)}"
+                %span.course_name.left.hidden-med= "#{current_course.name} "
+                %span.course_semester.left.hidden-med.hidden-sm= "#{current_course.try(:semester)} #{current_course.try(:year)}"
                 - if current_course.tagline?
-                  %span.tagline.left.hidden-sm= current_course.try(:tagline)
+                  %span.tagline.left.hidden-med.hidden-sm= current_course.try(:tagline)
               - else
                 GradeCraft
         %ul.nav.nav-pill.right

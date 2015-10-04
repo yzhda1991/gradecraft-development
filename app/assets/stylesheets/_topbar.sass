@@ -125,8 +125,9 @@
 .navbar
   position: fixed
   top: 0 !important
-  z-index: 1000
-  height: 40px
+  z-index: 1000 
+  height: 40px !important
+  display: inline
   margin: 0
   padding: 0
   background: $color-blue-00
@@ -183,6 +184,11 @@ img.profile-pic
     content: ""
     display: table
     clear: both 
+  .the-nav .nav-pill.left
+    height: 40px
+    overflow: hidden
+  .the-nav .nav-pill.right
+    z-index: 100
   .the-nav > .nav
     margin: 0
     padding-left: 0
@@ -280,7 +286,7 @@ ul.subnav.logged-out
     display: none
 
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
-  .hidden-sm
+  .hidden-med
     display: none
 
 .container
