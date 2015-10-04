@@ -1,3 +1,5 @@
+require 'resque/errors'
+
 class EventLogger
   extend Resque::Plugins::Retry
   @queue = :eventlogger
@@ -8,7 +10,7 @@ class EventLogger
   def self.perform(event_type, data={})
     p @start_message
     p "event_type: #{event_type}"
-  	begin
+    begin
       Analytics::Event.create self.event_attrs(event_type, data)
     rescue Exception => e
       puts e.message
