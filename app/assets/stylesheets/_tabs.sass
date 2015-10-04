@@ -10,35 +10,41 @@
     th:first-child th:first-child, th:first-child th:last-child
       border-top-right-radius: 0
 
+.ui-tabs
+  padding: 0 !important
+
 .ui-widget-content
-  border: 0
-  font-family: Avenir, san-serif
+  border: 1px solid $color-grey-4
+  border-radius: $global-radius
+  font-family: "Avenir", Helvetica, sans-serif
   
   .ui-tabs-panel
-    padding: 0
+    padding: .5rem
 
     .button-group a
-      color: #FFF
+      color: $color-white
 
   .team-filter
     margin-top: 1rem
-    font-family: Avenir, san-serif
 
 .ui-widget-header
   border: 0
 
 .ui-tabs .ui-tabs-nav
-  background: lighten($color-blue-0, 60%) !important
-  border-bottom: 10px solid lighten($color-blue-0, 10%)
+  border-radius: $global-radius !important
+  background: $color-blue-1 !important
+  border-bottom: 10px solid $color-blue-0
 
   li.ui-state-default
-    background: lighten($color-green-2, 30%) !important
+    background: $color-green-3 !important
     border: 0
+    a 
+      color: $color-white !important
 
     &:hover
       background: $color-green-2 !important
 
     &.ui-state-active
-      background: lighten($color-blue-0, 10%) !important
+      background: $color-blue-0 !important
       a 
-        color: #FFF !important
+        color: $color-white !important

@@ -89,6 +89,7 @@ class Course < ActiveRecord::Base
   with_options :dependent => :destroy do |c|
     c.has_many :assignment_types
     c.has_many :assignments
+    c.has_many :announcements
     c.has_many :badges
     c.has_many :challenges
     c.has_many :challenge_grades, :through => :challenges

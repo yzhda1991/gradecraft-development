@@ -4,7 +4,7 @@ section.features
   max-width: 1500px
   margin: 0 auto
   padding: 4rem   
-  background-color: #FFF 
+  background-color: $color-white
   opacity: .6
   
 .homepage .login
@@ -30,7 +30,7 @@ section.features
 .press-container
   background-color: $color-blue-0
   opacity: .9
-  color: #000
+  color: $color-black
   margin: 0
   padding: 0
 
@@ -41,7 +41,7 @@ section.features
 
 section.forgot-password, section.login
   padding: 4rem   
-  background-color: lighten($color-yellow-1, 10%)
+  background-color: $color-yellow-1
   opacity: .7
 
   input
@@ -57,7 +57,7 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
 
   article
     width: 33%
-    color: #FFF
+    color: $color-white
     float: left
     margin: 0
 
@@ -85,14 +85,13 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
 
     h1
       padding: 0 1rem
-      color: #FFF
+      color: $color-white
       font-size: 2.0rem
 
   h1
     margin-top: 1rem
     margin-bottom: 0
     padding-bottom: 0
-    font-family: Avenir, san-serif
     font-weight: 100
     color: $color-blue-0
     font-size: 2rem
@@ -141,14 +140,19 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
 
   .login
     .ui-widget-content, .ui-widget-header
-      background: lighten($color-blue-0, 10%) !important
+      border: none
+      background: $color-blue-2 !important
       opacity: .9
 
     .ui-tabs-nav
-      background: lighten($color-blue-0, 60%) !important
-      border-bottom: 10px solid lighten($color-blue-0, 10%)
+      background: $color-blue-1 !important
+      border-bottom: 10px solid $color-blue-0
       li
         border: 0
+
+      &.ui-state-active
+        background: $color-blue-0 !important
+
 
     form
       height: 150px
@@ -161,14 +165,14 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
         border: 0
         margin-bottom: .75rem
       input:focus
-        background-color: lighten($color-green-3, 30%)
-        color: #000
+        background-color: $color-green-3
+        color: $color-white !important
 
       a 
         left: -2rem
         top: .25rem
         position: relative
-        color: $color-green-3
+        color: $color-white !important
 
       .button
         position: relative

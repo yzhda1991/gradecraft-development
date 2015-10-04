@@ -1,64 +1,25 @@
 #custom-value-label
   img
     float: right
-    margin-left: 6px
+    margin-left: .25rem
 
 select#grade_raw_score, input[type=text]#grade_raw_score
   @include transition-property("background")
 
 select#grade_raw_score[disabled], input[type=text]#grade_raw_score[disabled]
-  background: #dedede !important
-  color: #555
+  background: $color-grey-4 !important
+  color: $color-grey-2
+  border: none 
   cursor: pointer
   cursor: hand
 
-.badge-debug
-  display: block
-  padding: 8px 16px
-  margin: 8px
-  border: 1px solid #888
-  float: left
-
-  &.deleting
-    background: red !important
-    color: white !important
-
-    h4
-      color: white !important
-  
-  &.creating
-    background: green !important
-    color: white !important
-
-    h4
-      color: white !important
-
-  &.creating.deleting
-    background: black !important
-
-  .info
-    display: block
-
-    &.earned-badge .pretty-json
-      white-space: pre
-
-
-label.disabled
-  color: #888 !important
-
-.animalbox
-  width: 100px
-  height: 200px
-  background: yellow
-  border: 1px solid #999
-
 #updated-at, #updated-at-current
-  margin-top: 12px
+  margin-top: .5rem
   font-style: italic
   float: left
-  padding: 1px 5px
-  border: 1px solid #F2F2F2
-  @include rounded-corners(4px)
+  padding: .25rem .5rem
+  border: 1px solid $color-grey-4
+  border-radius: $global-radius
 
 #updated-at-current
   @include transition-property("background, border-color")
@@ -66,29 +27,30 @@ label.disabled
   @include transition-timing-function(ease)
 
   &.ng-animate
-    background: #F5FCA1
-    border-color: #E8F08F
+    background: $color-white
+    border-color: $color-grey-4
+
+#available, #awarded
+  padding: 1rem
+  min-height: 150px
+
+#awarded 
+  background-color: $color-green-4
 
 #available
-  padding: 1rem
-  background-color: lighten($color-green-3, 40%)
-  min-height: 300px
+  background-color: $color-grey-4
 
-#awarded
-  background-color: lighten($color-green-3, 20%)
+/* This is the box that holds the select list */
+#gradebox, .gradebox
   padding: 1rem
-  min-height: 300px
-
-.gradebox
-  width: 45%
-  float: left
-  border: 1px solid $color-grey-4
-  padding: 1rem
-  font-size: 13px
-  margin-bottom: 18px
-  background-color: $color-blue-4
   border-radius: $global-radius
-  @include opacity(0.9)
+  width: 45%
+  height: 4rem
+  font-size: 1rem
+  margin-bottom: 1rem
+  float: left
+  background-color: $color-blue-4
+  display: inline
 
   // transitions
   @include transition-property("padding, font-size, opacity, border-color")
@@ -97,39 +59,31 @@ label.disabled
 
   &.inactive
     @include opacity(0.4)
-    border: 1px solid #B9DAE2
-    color: #87ADB5
-    padding: .4rem
-    font-size: 12px
+    color: $color-grey-6
+    padding: .5rem
+    font-size: .8rem
     cursor: pointer
     cursor: hand
 
-  &.jump-left
-    color: red !important
-    background: red !important
-    float: left
-    transition: all 0.5s linear
-    opacity: 0
+#gradebox 
+  margin-right: .5rem  
 
-h4#awarded-header
-  padding-top: 2px
+
+/* This is the box that holds the custom entry field */
+.gradebox
+  @include opacity(0.9)
+
+  input
+    border: none
 
 button#remove-badges, button#add-badges
-  font-weight: bold !important
   margin-left: .5rem
   position: relative
   margin-top: 0rem
   top: -.3rem
-  font-size: .8rem
-  @include rounded-corners(4px)
-  @include opacity(0.7)
   @include transition-property("background, opacity")
   @include transition-duration(0.3s)
   @include transition-timing-function(ease)
-
-  &:hover
-    @include opacity(1)
-    background: #d64b4b - #111
 
 .grade-badge
   &.hexagon
@@ -144,11 +98,8 @@ button#remove-badges, button#add-badges
     height: 36px
     float: left
     z-index: 100
-    background-color: #3277BE
+    background-color: $color-blue-1
     margin: 2rem 3rem 3rem 2rem
-    box-shadow: 0 0 10px rgba(12, 40, 44, 0.55)
-    border-left: solid 1px #0C58A7
-    border-right: solid 1px #0C58A7
 
     &:before, &:after
       content: ""
@@ -159,19 +110,14 @@ button#remove-badges, button#add-badges
       -webkit-transform: scaleY(0.5774) rotate(-45deg)
       -ms-transform: scaleY(0.5774) rotate(-45deg)
       transform: scaleY(0.5774) rotate(-45deg)
-      background-color: #3277BE
+      background-color: $color-blue-2
       left: 10.75px
-      box-shadow: 0 0 20px rgba(12, 50, 54, 0.55)
 
     &:before
       top: -29.76px
-      border-top: solid 1.4142px #43b6bb
-      border-right: solid 1.4142px #43b6bb
 
     &:after
       bottom: -53.0330px
-      border-bottom: solid 1.4142px #43b6bb
-      border-left: solid 1.4142px #43b6bb
 
     &.unearned 
       @include opacity(0.6)
@@ -181,15 +127,15 @@ button#remove-badges, button#add-badges
       background-color: #555
 
     &:hover
-      background-color: #41566B
+      background-color: $color-blue-1
       @include opacity(0.7)
 
       &:before, &:after
-        background-color: #3F6B98
+        background-color: $color-blue-1
 
 
     &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
-      background-color: #42688E
+      background-color: $color-blue-1
       @include opacity(0.88)
       box-shadow: 0 0 20px #F6C621
 
@@ -255,7 +201,6 @@ button#remove-badges, button#add-badges
     -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
     -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
     box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
-    font-family: 'Helvetica Neue',Helvetica, sans-serif
     h1
       font-size: 14px !important
       margin-top: 50px
@@ -331,7 +276,7 @@ button#remove-badges, button#add-badges
     top: 0
     right: 4px
     font-weight: bold
-    color: black
+    color: $color-black
     text-align: center
     width: 100%
     font-size: 0.9rem
@@ -342,7 +287,7 @@ button#remove-badges, button#add-badges
     height: 35px
 
     &.unearned
-      background: #999
+      background: $color-grey-6
       display: none
 
   .gold-stars
@@ -365,19 +310,18 @@ button#remove-badges, button#add-badges
 
   &.unearned
     .badges-earned
-      background-color: #999999
+      background-color: $color-grey-6
       background-repeat: repeat-x
-      background-image: -khtml-gradient(linear, left top, left bottom, from(#666666), to(#999999))
-      background-image: -moz-linear-gradient(top, #666666, #999999)
-      background-image: -ms-linear-gradient(top, #666666, #999999)
-      background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #666666), color-stop(100%, #999999))
-      background-image: -webkit-linear-gradient(top, #666666, #999999)
-      background-image: -o-linear-gradient(top, #666666, #999999)
-      background-image: linear-gradient(top, #666666, #999999)
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#999999', GradientType=0)
+      background-image: -khtml-gradient(linear, left top, left bottom, from($color-grey-2), to($color-grey-6))
+      background-image: -moz-linear-gradient(top, $color-grey-2, $color-grey-6)
+      background-image: -ms-linear-gradient(top, $color-grey-2, $color-grey-6)
+      background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $color-grey-6), color-stop(100%, $color-grey-6))
+      background-image: -webkit-linear-gradient(top, $color-grey-2, $color-grey-6)
+      background-image: -o-linear-gradient(top, $color-grey-2, $color-grey-6)
+      background-image: linear-gradient(top, $color-grey-2, $color-grey-6)
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-grey-2', endColorstr='$color-grey-6', GradientType=0)
       &:after
-        border-color: #999999 #999999 transparent #999999
-
+        border-color: $color-grey-6 $color-grey-6 transparent $color-grey-6
 
   .earned-total
     display: inline
@@ -385,36 +329,3 @@ button#remove-badges, button#add-badges
     margin-top: -4px
     font-size: 1rem
     font-weight: bold
-
-.clear-left
-  clear: left !important
-
-#gradebox
-  border: 1px solid $color-grey-4
-  padding: 1rem
-  font-size: 13px
-  border-radius: $global-radius
-  width: 45%
-  float: left
-  background-color: $color-blue-4
-  display: inline
-
-  // transitions
-  @include transition-property("padding, font-size, opacity, border-color")
-  @include transition-duration(0.4s)
-  @include transition-timing-function(ease)
-
-  &.inactive
-    @include opacity(0.4)
-    color: #87ADB5
-    padding: .4rem
-    font-size: 12px
-    cursor: pointer
-    cursor: hand
-
-  &.jump-left
-    color: red !important
-    background: red !important
-    float: left
-    transition: all 0.5s linear
-    opacity: 0

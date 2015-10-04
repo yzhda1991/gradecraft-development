@@ -1,6 +1,5 @@
 h1, h2, h3, h4, h5
   text-transform: capitalize
-  font-family: Avenir, san-serif
   margin: 0
   padding: 0
   clear: both
@@ -17,7 +16,7 @@ body
   font-weight: normal !important
 
 .inverse
-  color: #FFF
+  color: $color-white
 
 .underline
   text-decoration: underline
@@ -51,7 +50,7 @@ body
 
 a
   text-decoration: none
-  color: lighten($color-blue-0, 10%)
+  color: $color-blue-0
 
 a:hover
   color: $color-green-1
@@ -70,7 +69,7 @@ hr
 /** Page Title **/
 h3.pagetitle
   text-transform: uppercase
-  color: #FFF
+  color: $color-white
   padding: .75rem 1rem .2rem
   font-size: 1.8rem
   background-color: $color-blue-0
@@ -118,16 +117,16 @@ h5.section-title
   border-top-left-radius: $global-radius
 
   a, a.button
-    color: #FFF
+    color: $color-white
 
 .label
   font-size: 90%
   padding: .25rem
   border-radius: $global-radius
-  color: #FFF
+  color: $color-white
   font-style: italic
   a
-    color: #FFF
+    color: $color-white
 
 .tab-container p a
   color: $color-blue-2
@@ -142,8 +141,8 @@ h5.section-title
   background-color: $alert-color
 
 .label.fade
-  background-color: lighten($color-grey-3, 15%)
-  color: #000
+  background-color: $color-grey-3
+  color: $color-black
 
 .uploaded-files
   font-weight: normal

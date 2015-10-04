@@ -125,8 +125,9 @@
 .navbar
   position: fixed
   top: 0 !important
-  z-index: 1000
-  height: 40px
+  z-index: 1000 
+  height: 40px !important
+  display: inline
   margin: 0
   padding: 0
   background: $color-blue-00
@@ -140,24 +141,24 @@
     margin: 0
     padding: 0
     font-size: .9rem
-    background: lighten($color-blue-4, 20%)
+    background: $color-blue-4
     li a
       padding: 5px 10px
       display: block
       &:hover
-        background-color: lighten($color-blue-0, 10%)
-        color: #FFF
+        background-color: $color-blue-0
+        color: $color-white
 
   li.dropdown a.section-title
     display: block
     background: $color-blue-00
-    color: #FFF
+    color: $color-white
     padding: 5px 10px
 
   li a.site-title
     display: block
     line-height: 1.4rem
-    color: #FFF
+    color: $color-white
     padding: 2px 10px
     margin-bottom: 25px
 
@@ -183,6 +184,11 @@ img.profile-pic
     content: ""
     display: table
     clear: both 
+  .the-nav .nav-pill.left
+    height: 40px
+    overflow: hidden
+  .the-nav .nav-pill.right
+    z-index: 100
   .the-nav > .nav
     margin: 0
     padding-left: 0
@@ -195,8 +201,8 @@ img.profile-pic
   .the-nav > .nav > li .caret 
     margin-top: 8px
     margin-left: 2px
-    border-top-color: #A7A7A7
-    border-bottom-color: #A7A7A7
+    border-top-color: $color-grey-6
+    border-bottom-color: $color-grey-6
   .the-nav > .nav > li a
     display: block
     padding: 10px 1rem
@@ -216,8 +222,8 @@ img.profile-pic
 
   /* Active State */ 
   .the-nav > .nav > li:hover > a
-    color: #FFF
-    background-color: darken($color-blue-0, 5%)
+    color: $color-white
+    background-color: $color-blue-0
   .the-nav > .nav > li:hover > a.no-hover
     background-color: $color-blue-00
     color: $color-blue-4
@@ -236,7 +242,7 @@ img.profile-pic
     padding: 0
     min-width: 180px
     font-size: .8rem
-    background: lighten($color-blue-4, 10%)
+    background: $color-blue-4
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
     &.class-info
@@ -244,12 +250,12 @@ img.profile-pic
   .nav > li > .subnav > li
     margin-bottom: 0
   .nav > li > .subnav > li a
-    color: #000
+    color: $color-black
     padding: 6px 10px
     transition: all .2s
   .nav > li > .subnav > li:hover a
     background: $color-blue-0
-    color: white
+    color: $color-white
   .nav > li > .subnav > li:last-of-type a:hover
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
@@ -263,7 +269,7 @@ ul.subnav.logged-out
   li a
     border-radius: 0
     font-size: 1rem !important
-    color: #FFF
+    color: $color-white
     text-transform: none !important
 
 .offscreen-sidebar
@@ -280,7 +286,7 @@ ul.subnav.logged-out
     display: none
 
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
-  .hidden-sm
+  .hidden-med
     display: none
 
 .container
