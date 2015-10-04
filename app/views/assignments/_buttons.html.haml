@@ -5,12 +5,9 @@
         %a{:href => new_assignment_path }
           %i.fa.fa-plus.fa-fw
           New #{(term_for :assignment).titleize}
-    %li
-      %a{:href => settings_assignments_path }
-        %i.fa.fa-dashboard.fa-fw
-        Review #{(term_for :assignment).titleize} Settings
-    - if @assignment.persisted?
       %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(@assignment)
+      - if @assignment.has_groups?
+        %li= link_to raw("<i class='fa fa-users fa-fw'> </i> Create #{term_for :group}"), new_group_path
       - if @team.present? && ! ( @assignment.rubric and @assignment.rubric.designed? and @assignment.use_rubric? )
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(@assignment, :team => @team)
       - elsif ! ( @assignment.rubric and @assignment.rubric.designed? and @assignment.use_rubric? )
