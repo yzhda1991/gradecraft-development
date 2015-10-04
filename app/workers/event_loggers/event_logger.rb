@@ -1,3 +1,4 @@
+require 'resque-retry'
 require 'resque/errors'
 
 class EventLogger
