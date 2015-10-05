@@ -17,6 +17,15 @@
           No Grade
       - else
         = grade.raw_score if grade.instructor_modified?
+
+    // If the student can weight the assignment type
+    - if presenter.assignment_type.student_weightable?
+      %td
+        - if student.weighted_assignments?
+          = points grade.score if grade.instructor_modified?
+        - else
+          = "(not yet assigned)"
+
     - if presenter.assignment.has_levels?
       %td= presenter.assignment.grade_level(grade) if grade
     %td
@@ -26,13 +35,6 @@
       - elsif grade.feedback_reviewed?
         %i.fa.fa-eye
 
-    // If the student can weight the assignment type
-    - if presenter.assignment_type.student_weightable?
-      %td
-        - if student.weighted_assignments?
-          = points grade.score if grade.instructor_modified?
-        - else
-          = "(not yet assigned)"
     - if presenter.assignment.release_necessary?
       %td= grade.status
 
