@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'resque-scheduler'
 require 'resque_spec/scheduler'
 
-class ApplicationControllerContrivance < ApplicationController
+class ApplicationControllerFiltersTest < ApplicationController
   def html_page
     respond_to do |format|
       format.html { render text: "<div>page loaded</div>", response: 200 }
@@ -17,7 +17,7 @@ class ApplicationControllerContrivance < ApplicationController
   end
 end
 
-RSpec.describe ApplicationControllerContrivance, type: :controller do
+RSpec.describe ApplicationControllerFiltersTest, type: :controller do
   describe "#increment_page_views" do
 
     before do
