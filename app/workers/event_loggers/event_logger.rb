@@ -10,6 +10,7 @@ class EventLogger
   @success_message = "Event was successfully created."
   @failure_message = "Event creation wasnot successful."
 
+  # perform block that is ultimately called by Resque
   def self.perform(event_type, data={})
     p @start_message
     event = Analytics::Event.create self.event_attrs(event_type, data)
@@ -26,8 +27,30 @@ class EventLogger
 
   # allow sub-classes to inherit class-level instance variables
   def self.inherited(subclass)
-    ["@retry_limit", "@retry_delay", "@start_message"].each do |ivar|
+    self.instance_variable_names.each do |ivar|
       subclass.instance_variable_set(ivar, instance_variable_get(ivar))
     end
   end
+
+  def self.instance_variable_names
+    self.class_level_instance_variables.collect {|ivar_name, val| "@#{ivar_name}"}
+  end
+
+  def self.class_level_instance_variables
+    {
+      queue: :eventlogger,
+      retry_limit: 3,
+      retry_delay: 60,
+      start_message: "Starting EventLogger",
+      success_message: "Event was successfully created.",
+      failure_message: "Event creation was not successful"
+    }   
+  end
+
+  # need to figure out how to integrate this more cleanly
+  # def self.define_instance_variables
+  #   self.class_level_instance_variables.each do |name, value|
+  #     instance_variable_set("@#{name}", value)
+  #   end
+  # end
 end

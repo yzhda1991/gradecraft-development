@@ -64,4 +64,36 @@ RSpec.describe EventLogger, type: :background_job do
       EventLogger.event_attrs("waffle", created_at: @later)
     end
   end
+
+  describe "subclass inheritance" do
+    it "should pass class-level instance variables to subclasses" do
+      EventLogger.instance_variable_set(:@wallaby_necks, 5)
+      allow(EventLogger).to receive(:instance_variable_names).and_return ["@wallaby_necks"]
+      class WallabyEventLogger < EventLogger; end
+      expect(WallabyEventLogger.instance_variable_get(:@wallaby_necks)).to eq(5)
+    end
+
+    it "should pass some actual values to subclasses" do
+      class PseudoEventLogger < EventLogger; end
+      expect(PseudoEventLogger.instance_variable_get(:@retry_limit)).to eq(3)
+      expect(PseudoEventLogger.instance_variable_get(:@retry_delay)).to eq(60)
+    end
+  end
+
+  describe "self.instance_variable_names" do
+    before do
+      @class_ivars = { ostriches: 50, badgers: 24 }
+      allow(EventLogger).to receive_messages(class_level_instance_variables: @class_ivars)
+    end
+
+    it "should return an array of instance variable names" do
+      expect(EventLogger.instance_variable_names).to include("@ostriches", "@badgers")
+    end
+  end
+
+  describe "self.class_level_instance_variables" do
+    it "should return a hash of ivar-value pairs" do
+      expect(EventLogger.class_level_instance_variables.class).to eq(Hash)
+    end
+  end
 end
