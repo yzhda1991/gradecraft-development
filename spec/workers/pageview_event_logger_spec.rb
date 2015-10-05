@@ -2,44 +2,51 @@ require 'spec_helper'
 
 # PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe PageviewEventLogger, type: :background_job do
-  describe "#enqueue_in" do
-    context "a user is logged in and the request is formatted as html" do
-      before(:each) do
-        ResqueSpec.reset!
+  describe "initialize" do
+    it "should set an @attrs hash" do
+      @some_attrs = { goats: 10, hillbilly_name: "Jake" }
+      @pageview_logger = PageviewEventLogger.new(@some_attrs)
+      expect(@pageview_logger.instance_variable_get(:@attrs)).to eq(@some_attrs)
+    end
+  end
+
+  describe "enqueuing" do
+    before(:each) do
+      ResqueSpec.reset!
+    end
+
+    describe "enqueue without schedule" do
+      extend PageviewEventLoggerToolkit
+
+      it "should find a job in the pageview queue" do
+        @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue
+        resque_job = Resque.peek(:pageview_event_logger)
+        puts "Job is #{resque_job}"
+        expect(resque_job).to be_present
       end
 
-      context "enqueue without schedule" do
-        it "should find a job in the pageview queue" do
-          @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue
-          resque_job = Resque.peek(:pageview_event_logger)
-          puts "Job is #{resque_job}"
-          expect(resque_job).to be_present
-        end
-
-        it "should have a pageview logger event in the queue" do
-          @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue
-          expect(PageviewEventLogger).to have_queue_size_of(1)
-        end
+      it "should have a pageview logger event in the queue" do
+        @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue
+        expect(PageviewEventLogger).to have_queue_size_of(1)
       end
+    end
 
-      context "enqueue with schedule" do
+    describe "enqueue with schedule" do
+      extend PageviewEventLoggerToolkit
+
+      describe"enqueue_in" do
         it "should schedule a pageview event" do
           @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(2.hours)
           expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs).in(2.hours)
         end
       end
-    end
-  end
 
-  def pageview_logger_attrs
-    {
-      course_id: 50,
-      user_id: 70,
-      student_id: 90,
-      user_role: "great role",
-      page: "/a/great/path",
-      created_at: Time.parse("Jan 20 1972")
-    }
+      describe "enqueue_at" do
+        @later = Time.parse "Feb 10 2052"
+        @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_at(@later)
+        expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs).at(@later)
+      end
+    end
+
   end
-  
 end
