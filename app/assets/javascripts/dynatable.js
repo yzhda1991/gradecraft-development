@@ -291,7 +291,13 @@ $('table.nofeatures_default_desc_score_dynatable').dynatable({
   }
 });
 
-function assignmentSort(as, bs) {
+function assignmentSort(as, bs, attr, direction) {
+  //swap if reverse
+  if(direction === -1) {
+    var temp = as;
+    as = bs;
+    bs = temp;
+  }
   var a, b, a1, b1, i= 0, n, L,
   rx=/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
   as = $(as.assignment).text();
