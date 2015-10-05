@@ -7,6 +7,8 @@ class EventLogger
   @retry_limit = 3
   @retry_delay = 60
   @start_message = "Starting EventLogger"
+  @success_message = "Event was successfully created."
+  @failure_message = "Event creation wasnot successful."
 
   def self.perform(event_type, data={})
     p @start_message
@@ -15,11 +17,7 @@ class EventLogger
   end
 
   def self.notify_event_outcome(event)
-    if event.valid?
-      puts "Event was successfully created."
-    else
-      puts "Event creation was not successful"
-    end
+    puts (event.valid? ? @success_message : @failure_message)
   end
 
   def self.event_attrs(event_type, data)
