@@ -148,7 +148,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def submissions_for(student)
-    student.submissions.where(assignment_id: assignment.id)
+    student.submissions.where(assignment_id: assignment.id) || Submission.none
   end
 
   def submission_rate
