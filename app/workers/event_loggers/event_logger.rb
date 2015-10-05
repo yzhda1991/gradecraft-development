@@ -10,12 +10,15 @@ class EventLogger
 
   def self.perform(event_type, data={})
     p @start_message
-    p "event_type: #{event_type}"
-    begin
-      Analytics::Event.create self.event_attrs(event_type, data)
-    rescue Exception => e
-      puts e.message
-      puts e.backtrace.inspect
+    event = Analytics::Event.create self.event_attrs(event_type, data)
+    notify_event_outcome(event)
+  end
+
+  def self.notify_event_outcome(event)
+    if event.valid?
+      puts "Event was successfully created."
+    else
+      puts "Event creation was not successful"
     end
   end
 
