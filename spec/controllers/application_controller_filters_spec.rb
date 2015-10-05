@@ -22,9 +22,9 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
 
     before do
       Rails.application.routes.draw do
-        get '/html_page', to: 'application_controller_contrivance#html_page'
-        get '/json_page', to: 'application_controller_contrivance#json_page'
-        root to: 'application_controller_contrivance#html_page'
+        get '/html_page', to: 'application_controller_filters_test#html_page'
+        get '/json_page', to: 'application_controller_filters_test#json_page'
+        root to: 'application_controller_filters_test#html_page'
       end
     end
 

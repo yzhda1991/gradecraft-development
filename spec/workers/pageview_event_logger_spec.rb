@@ -26,7 +26,7 @@ RSpec.describe PageviewEventLogger, type: :background_job do
         it "should schedule a pageview event" do
           @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(2.hours)
           @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(1)
-          expect(PageviewEventLogger).to have_scheduled(pageview_logger_attrs).in(2.hours)
+          expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs).in(2.hours)
         end
       end
     end
