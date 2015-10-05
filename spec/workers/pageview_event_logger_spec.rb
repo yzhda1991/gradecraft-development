@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+include PageviewEventLoggerToolkit
+
 # PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe PageviewEventLogger, type: :background_job do
   describe "initialize" do
@@ -16,7 +18,6 @@ RSpec.describe PageviewEventLogger, type: :background_job do
     end
 
     describe "enqueue without schedule" do
-      extend PageviewEventLoggerToolkit
 
       it "should find a job in the pageview queue" do
         @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue
@@ -32,7 +33,6 @@ RSpec.describe PageviewEventLogger, type: :background_job do
     end
 
     describe "enqueue with schedule" do
-      extend PageviewEventLoggerToolkit
 
       describe"enqueue_in" do
         it "should schedule a pageview event" do
@@ -42,11 +42,14 @@ RSpec.describe PageviewEventLogger, type: :background_job do
       end
 
       describe "enqueue_at" do
-        @later = Time.parse "Feb 10 2052"
-        @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_at(@later)
-        expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs).at(@later)
+        it "should enqueue the pageview logger to trigger @later" do
+          @later = Time.parse "Feb 10 2052"
+          @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_at(@later)
+          expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs).at(@later)
+        end
       end
     end
 
   end
+
 end

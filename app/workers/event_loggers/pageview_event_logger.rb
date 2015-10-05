@@ -20,7 +20,7 @@ class PageviewEventLogger < EventLogger
   end
 
   def enqueue_at(scheduled_time)
-    Resque.enqueue_in(scheduled_time, self.class, 'pageview', @attrs)
+    Resque.enqueue_at(scheduled_time, self.class, 'pageview', @attrs)
   end
 
   def enqueue
