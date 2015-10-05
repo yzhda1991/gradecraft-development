@@ -1,41 +1,34 @@
 - @groups.each do |group|
-  - group.students.each do |student|
-    %tr
-      %td= link_to group.name, group
-      %td= group.approved
-      - grade = @assignment.grades.find_by student_id: student
-      %td= link_to student.first_name, student_path(student)
-      %td= link_to student.last_name, student_path(student)
+  %tr
+    %td= link_to group.name, group
+    %td
+      - group.group_memberships.each do |gm|
+        %li= link_to gm.student.name, student_path(gm.student)
+    %td= group.approved
+    %td
+      - if group.grades.present? && group.grades.first.instructor_modified?
+        = points group.grades.first.raw_score
+    - if @assignment.assignment_type.student_weightable?
+      %td= points grade.score if grade
+    - if @assignment.has_levels?
       %td
-        - if grade.present? && grade.instructor_modified?
-          = points grade.raw_score
-      %td
-        - if grade.present?
-          - if grade.feedback_read?
-            %i.fa.fa-check
-          - elsif grade.feedback_reviewed?
-            %i.fa.fa-eye
-      - if @assignment.assignment_type.student_weightable?
-        %td= points grade.score if grade
-      - if @assignment.has_levels?
-        %td
-          - if grade
-            = @assignment.grade_level(grade)
-      %td
-        .right
-          %ul.button-bar
-            %li= link_to "Review #{term_for :group}", review_groups_path(:id => group), :class => 'button'
-            - group.submission_for_assignment(@assignment).tap do |submission|
-              - if submission
-                %li= link_to "See Submission", assignment_submission_path(@assignment.id, :id => submission.id), :class => 'button'
-              - else
-                %li= link_to "Submit", new_assignment_submission_path(@assignment, @submission, :group_id => group.id), :class => 'button'
-            - if group.students.first.grade_for_assignment(@assignment).present? && group.students.first.grade_for_assignment(@assignment).is_graded?
-              %li= link_to "Edit #{term_for :group} Grade", group_grade_assignment_path(@assignment, :group_id => group), :class => 'button'
+        - if grade
+          = @assignment.grade_level(grade)
+    %td
+      .right
+        %ul.button-bar
+          %li= link_to "Review #{term_for :group}", review_groups_path(:id => group), :class => 'button'
+          - group.submission_for_assignment(@assignment).tap do |submission|
+            - if submission
+              %li= link_to "See Submission", assignment_submission_path(@assignment.id, :id => submission.id), :class => 'button'
             - else
-              %li= link_to "Grade #{term_for :group}", group_grade_assignment_path(@assignment, :group_id => group), :class => 'button'
-      - if @assignment.release_necessary?
-        %td= grade.try(:status)
-        %td.right
-          - if grade && grade.is_graded?
-            = check_box_tag "grade_ids[]", grade.id
+              %li= link_to "Submit", new_assignment_submission_path(@assignment, @submission, :group_id => group.id), :class => 'button'
+          - if group.students.first.grade_for_assignment(@assignment).present? && group.students.first.grade_for_assignment(@assignment).is_graded?
+            %li= link_to "Edit #{term_for :group} Grade", group_grade_assignment_path(@assignment, :group_id => group), :class => 'button'
+          - else
+            %li= link_to "Grade #{term_for :group}", group_grade_assignment_path(@assignment, :group_id => group), :class => 'button'
+    - if @assignment.release_necessary?
+      %td= grade.try(:status)
+      %td.right
+        - if grade && grade.is_graded?
+          = check_box_tag "grade_ids[]", grade.id

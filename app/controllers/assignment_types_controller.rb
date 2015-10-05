@@ -35,7 +35,7 @@ class AssignmentTypesController < ApplicationController
 
     respond_to do |format|
       if @assignment_type.save
-        format.html { redirect_to @assignment_type, notice: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully created" }
+        format.html { redirect_to @assignment_type, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully created" } }
         format.json { render json: @assignment_type, status: :created, location: @assignment_type }
       else
         format.html { render action: "new" }
@@ -57,7 +57,7 @@ class AssignmentTypesController < ApplicationController
         format.json { render json: @assignment_type.errors }
       else
         if @assignment_type.save
-          format.html { redirect_to assignment_types_path, notice: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" }
+          format.html { redirect_to assignment_types_path, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" } }
         else
           format.html { render action: "new" }
           format.json { render json: @assignment_type.errors }
@@ -108,7 +108,7 @@ class AssignmentTypesController < ApplicationController
     @assignment_type = current_course.assignment_types.find(params[:id])
     @name = "#{@assignment_type.name}"
     @assignment_type.destroy
-    redirect_to assignment_types_path, :notice => "#{(term_for :assignment_type).titleize} #{@name} successfully deleted"
+    redirect_to assignment_types_path, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@name} successfully deleted" }
   end
 
   def student_predictor_data

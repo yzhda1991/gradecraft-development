@@ -15,5 +15,6 @@
       .ribbon-stitches-bottom
     .ribbon-ends
     .gold-stars
-      %img.star(src="/images/golden-star.png")
-      .badges-earned.blue {{badge.totalEarnedBadges()}}
+      %i.fa.fa-star.fa-fw
+      .badges-earned.blue 
+        .earned-count {{badge.totalEarnedBadges()}}
