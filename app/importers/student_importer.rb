@@ -49,7 +49,11 @@ class StudentImporter
       u.last_name = row[1]
       u.username = row[2]
       u.email = row[3]
-      u.password = generate_random_password
+      if row[5].present?
+        u.password = row[5]
+      else
+        u.password = generate_random_password
+      end
     end
 
     user.course_memberships.create(course_id: course.id, role: "student") if course
