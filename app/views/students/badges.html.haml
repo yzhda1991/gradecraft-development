@@ -3,36 +3,39 @@
 .pageContent
   = render 'layouts/alerts'
 
-  //student badges table
-  - if @earned_badges.present?
-    %h4= "Earned #{term_for :badges}" 
-    - @earned_badges.each do |earned_badge|
-      -# logic for badges that have actually been earned
-      - if @earned_badges_by_badge_id[earned_badge.id]
-        .badge-table.hexagon.awarded
-          %img.earned{ :src => earned_badge.icon, :alt => earned_badge.name }
+  .student-badge-display
+    //student badges table
+    - if @earned_badges.present?
+      %h4= "Earned #{term_for :badges}" 
+      - @earned_badges.each do |earned_badge|
+        -# logic for badges that have actually been earned
+        - if @earned_badges_by_badge_id[earned_badge.id]
+          .badge-table.hexagon.awarded
+            %img.earned{ :src => earned_badge.icon, :alt => earned_badge.name }
+
+            .ribbon
+              .ribbon-stitches-top
+              %strong.ribbon-content
+                %h1= earned_badge.name
+              .ribbon-stitches-bottom
+            .ribbon-ends
+            .gold-stars
+              %i.fa.fa-star.fa-fw
+              .badges-earned.blue 
+                .earned-count= @earned_badges_by_badge_id.count
+    - if @unearned_badges.present?
+      %h4= "Possible #{term_for :badges}"
+      - @unearned_badges.each do |unearned_badge|
+        .badge-table.hexagon.available
+          %img.unearned{ :src => unearned_badge.icon, :alt => unearned_badge.name }
 
           .ribbon
             .ribbon-stitches-top
             %strong.ribbon-content
-              %h1= earned_badge.name
+              %h1= unearned_badge.name
             .ribbon-stitches-bottom
           .ribbon-ends
           .gold-stars
             %i.fa.fa-star.fa-fw
-            .badges-earned.blue
-  - if @unearned_badges.present?
-    %h4= "Possible #{term_for :badges}"
-    - @unearned_badges.each do |unearned_badge|
-      .badge-table.hexagon.available
-        %img.unearned{ :src => unearned_badge.icon, :alt => unearned_badge.name }
-
-        .ribbon
-          .ribbon-stitches-top
-          %strong.ribbon-content
-            %h1= unearned_badge.name
-          .ribbon-stitches-bottom
-        .ribbon-ends
-        .gold-stars
-          %i.fa.fa-star.fa-fw
-          .badges-earned.blue
+            .badges-earned.blue 
+              .earned-count 0
