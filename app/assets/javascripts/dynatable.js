@@ -309,9 +309,11 @@ function alfaSort(as, bs, attr, direction) {
 
   if(as === bs) return 0;
 
+  //match
   a= as.toLowerCase().match(regex);
   b= bs.toLowerCase().match(regex);
 
+  //sort
   while(i< a.length){
       if(!b[i]) return 1;
       a1= a[i],
