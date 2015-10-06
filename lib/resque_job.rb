@@ -24,7 +24,6 @@ module ResqueJob
       job = self.class.new(attrs)
       job.setup_work
       job.do_the_work
-      job.cleanup_work
 
       # mention to the logger how things went
       notify_event_outcome(job.was_successful?)
@@ -37,8 +36,7 @@ module ResqueJob
     end
 
     # mock out some empty work callback methods just in case
-    def before_the_work; end
-    def after_the_work; end
+    def setup_work; end
 
     # notifications
     def self.notify_event_outcome(job_successful?)
