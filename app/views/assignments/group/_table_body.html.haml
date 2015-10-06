@@ -1,19 +1,7 @@
 - @groups.each do |group|
   %tr
     %td= link_to group.name, group
-    %td
-      - group.group_memberships.each do |gm|
-        %li= link_to gm.student.name, student_path(gm.student)
     %td= group.approved
-    %td
-      - if group.grades.present? && group.grades.first.instructor_modified?
-        = points group.grades.first.raw_score
-    - if @assignment.assignment_type.student_weightable?
-      %td= points grade.score if grade
-    - if @assignment.has_levels?
-      %td
-        - if grade
-          = @assignment.grade_level(grade)
     %td
       .right
         %ul.button-bar
@@ -27,8 +15,40 @@
             %li= link_to "Edit #{term_for :group} Grade", group_grade_assignment_path(@assignment, :group_id => group), :class => 'button'
           - else
             %li= link_to "Grade #{term_for :group}", group_grade_assignment_path(@assignment, :group_id => group), :class => 'button'
-    - if @assignment.release_necessary?
-      %td= grade.try(:status)
-      %td.right
-        - if grade && grade.is_graded?
-          = check_box_tag "grade_ids[]", grade.id
+    %td
+      %table
+        %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}
+          %tr
+            %th= "#{current_course.user_term}s"
+            %th Score
+            - if @assignment.assignment_type.student_weightable?
+              %th Multiplied Scores
+            - if @assignment.has_levels?
+              %th Level
+
+            %th
+            - if @assignment.release_necessary?
+              %th Status
+              %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
+                %button.button.select-all= "Check"
+                %button.button.select-none= "Uncheck"
+        %tbody
+          - group.students.each do |student|
+            %tr
+              %td= link_to student.name, student_path(student)
+              - grade = student.grade_for_assignment(@assignment)
+              %td 
+                - if grade.present? && grade.instructor_modified?
+                  = points grade.raw_score
+              - if @assignment.assignment_type.student_weightable?
+                %td
+                  - if grade.present?
+                    = points grade.score
+              - if @assignment.has_levels?
+                %td= @assignment.grade_level(grade)
+              
+              - if @assignment.release_necessary?
+                %td= grade.try(:status)
+                %td.right
+                  - if grade && grade.is_graded?
+                    = check_box_tag "grade_ids[]", grade.id

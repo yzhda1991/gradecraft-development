@@ -1,16 +1,5 @@
 %tr
   %th{:width => "20%"} #{term_for :group} Name
-  %th{:style => "min-width: 200px"}= "#{current_course.user_term}s"
   %th Status
-  %th Score
-  - if @assignment.assignment_type.student_weightable?
-    %th Multiplied Scores
-  - if @assignment.has_levels?
-    %th Level
-
+  %th 
   %th
-  - if @assignment.release_necessary?
-    %th Status
-    %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
-      %button.button.select-all= "Check"
-      %button.button.select-none= "Uncheck"
