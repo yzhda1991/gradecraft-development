@@ -15,7 +15,7 @@
 
   - if presenter.grades_available_for?(current_user)
     %h4.bold Grade Distribution
-    .grades_per_assign{ "data-scores" => presenter.grades_for(current_user).to_json }
+    .grades_per_assign{ "data-scores" => presenter.scores_for(current_user).to_json }
 
     - if presenter.assignment.accepts_submissions? && presenter.assignment.submissions.present?
       %br

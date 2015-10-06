@@ -38,10 +38,6 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.grades
   end
 
-  def grades_for(student)
-    assignment.grades_for_assignment(student)
-  end
-
   def grades_available_for?(user)
     user.is_staff?(course) || (user.is_student?(course) && user.grade_released_for_assignment?(assignment))
   end
@@ -128,6 +124,14 @@ class AssignmentPresenter < Showtime::Presenter
 
   def rubric_tier_earned?(user, tier_id)
     rubric_grades(user).any? { |rubric_grade| rubric_grade.tier_id == tier_id }
+  end
+
+  def scores
+    assignment.all_grades_for_assignment
+  end
+
+  def scores_for(student)
+    assignment.grades_for_assignment(student)
   end
 
   def student_logged?(user)
