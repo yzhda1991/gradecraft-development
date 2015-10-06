@@ -55,7 +55,7 @@ class GradeImporter
 
   def assign_grade(row, grade)
     grade.raw_score = grade_column(row)
-    grade.feedback = row[4]
+    grade.feedback = feedback_column(row)
     grade.status = "Graded" if grade.status.nil?
     grade.instructor_modified = true
   end
@@ -67,12 +67,18 @@ class GradeImporter
     end
   end
 
+  def feedback_column(row)
+    row[4]
+  end
+
   def grade_column(row)
     row[3].to_i if row[3]
   end
 
   def update_grade?(row, grade)
-    grade.present? && grade.raw_score != grade_column(row)
+    grade.present? &&
+      (grade.raw_score != grade_column(row) ||
+       grade.feedback != feedback_column(row))
   end
 
   def update_grade(row, grade)

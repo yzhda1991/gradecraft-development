@@ -68,6 +68,13 @@ describe GradeImporter do
           }.to_not change grade, :updated_at
         end
 
+        it "updates the grade if the grade is the same but the feedback is different" do
+          grade = create :grade, assignment: assignment, student: student, raw_score: 4000, feedback: "You need some work"
+          result = subject.import(course, assignment)
+          expect(result.successful.count).to eq 1
+          expect(result.successful.first).to eq grade
+        end
+
         it "contains an unsuccessful row if the grade is not valid" do
           allow_any_instance_of(Grade).to receive(:valid?).and_return false
           allow_any_instance_of(Grade).to receive(:errors).and_return double(full_messages: ["The grade is not cool"])
