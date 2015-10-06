@@ -345,6 +345,7 @@ first_course_badges.each do |badge|
         student.earned_badges.create! do |eb|
           eb.badge = badge
           eb.course = first_course
+          eb.student_visible = true
         end
       end
     end

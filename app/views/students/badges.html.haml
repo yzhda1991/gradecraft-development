@@ -9,7 +9,7 @@
       %h4= "Earned #{term_for :badges}" 
       - @earned_badges.each do |earned_badge|
         -# logic for badges that have actually been earned
-        - if @earned_badges_by_badge_id[earned_badge.id]
+        - if @earned_badges_by_badge_id[earned_badge.badge_id]
           .badge-table.hexagon.awarded
             %img.earned{ :src => earned_badge.icon, :alt => earned_badge.name }
 
@@ -22,7 +22,10 @@
             .gold-stars
               %i.fa.fa-star.fa-fw
               .badges-earned.blue 
-                .earned-count= @earned_badges_by_badge_id.count
+                .earned-count= @earned_badges_by_badge_id[earned_badge.badge_id].count
+          - if earned_badge.badge.point_total?
+          - if @earned_badges_by_badge_id[earned_badge.badge_id].size > 1
+            = "#{@earned_badges_by_badge_id[earned_badge.badge_id].collect(&:score).reduce(:+)} points earned" 
     - if @unearned_badges.present?
       %h4= "Possible #{term_for :badges}"
       - @unearned_badges.each do |unearned_badge|
