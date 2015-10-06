@@ -1,38 +1,42 @@
 require 'csv'
 
 class GradeImporter
-  attr_reader :successful, :unsuccessful
+  attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :file
 
   def initialize(file)
     @file = file
     @successful = []
     @unsuccessful = []
+    @unchanged = []
   end
 
   def import(course=nil, assignment=nil)
     if file
       if course && assignment
         students = course.students
-        CSV.foreach(file, headers: true, encoding: 'ISO-8859-1') do |row|
+        CSV.foreach(file, headers: true) do |csv|
+          row = GradeRow.new csv
+
           student = find_student(row, students)
           if student.nil?
             append_unsuccessful row, "Student not found in course"
             next
           end
-          if !has_grade?(row)
+          if !row.has_grade?
             append_unsuccessful row, "Grade not specified"
             next
           end
 
           grade = assignment.all_grade_statuses_grade_for_student(student)
-          grade = update_grade row, grade if grade
-          grade ||= create_grade row, assignment, student
-
-          if grade.valid?
-            successful << grade
-          else
-            append_unsuccessful row, grade.errors.full_messages.join(", ")
+          if row.update_grade? grade
+            grade = update_grade row, grade
+            report row, grade
+          elsif grade.present?
+            unchanged << grade
+          elsif grade.nil?
+            grade = create_grade row, assignment, student
+            report row, grade
           end
         end
       end
@@ -47,13 +51,9 @@ class GradeImporter
     unsuccessful << { data: row.to_s, errors: errors }
   end
 
-  def has_grade?(row)
-    row[3].present?
-  end
-
   def assign_grade(row, grade)
-    grade.raw_score = row[3].to_i
-    grade.feedback = row[4]
+    grade.raw_score = row.grade
+    grade.feedback = row.feedback
     grade.status = "Graded" if grade.status.nil?
     grade.instructor_modified = true
   end
@@ -72,11 +72,52 @@ class GradeImporter
   end
 
   def find_student(row, students)
-    identifier = row[2].downcase
-    if identifier =~ /@/
-      students.find { |student| student.email.downcase == identifier }
+    message = row.identifier =~ /@/ ? :email : :username
+    students.find do |student|
+      student.public_send(message).downcase == row.identifier
+    end
+  end
+
+  def report(row, grade)
+    if grade.valid?
+      successful << grade
     else
-      students.find { |student| student.username.downcase == identifier }
+      append_unsuccessful row, grade.errors.full_messages.join(", ")
+    end
+  end
+
+  class GradeRow
+    include QuoteHelper
+
+    attr_reader :data
+
+    def identifier
+      remove_smart_quotes(data[2]).downcase if data[2]
+    end
+
+    def feedback
+      remove_smart_quotes data[4]
+    end
+
+    def grade
+      remove_smart_quotes(data[3]).to_i if data[3]
+    end
+
+    def has_grade?
+      grade.present?
+    end
+
+    def update_grade?(grade)
+      grade.present? &&
+        (grade.raw_score != self.grade || grade.feedback != feedback)
+    end
+
+    def initialize(data)
+      @data = data
+    end
+
+    def to_s
+      data.to_s
     end
   end
 end
