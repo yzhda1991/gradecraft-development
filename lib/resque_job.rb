@@ -3,6 +3,7 @@ require 'resque/errors'
 
 module ResqueJob
   class Base
+    # add resque-retry for all jobs
     extend Resque::Plugins::Retry
     
     # defaults
@@ -16,36 +17,66 @@ module ResqueJob
 
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
+      # mention to the logger that something is happening
       p @start_message
-      @outcome = self.start_work(attrs)
-      notify_event_outcome(@outcome)
+
+      # this is where the magic happens
+      job = self.class.new(attrs)
+      job.setup_work
+      job.do_the_work
+      job.cleanup_work
+
+      # mention to the logger how things went
+      notify_event_outcome(job.was_successful?)
     end
 
     # this is where the heavy lifting is done
-    def self.start_work(attrs={})
+    def do_the_work(attrs={})
       puts "Please define a self.start_work() method on the inheritor class to do some work."
       { success: true } # pass this back to @job_succeeded
     end
 
-    def self.notify_event_outcome(outcome)
-      puts (self.job_successful(outcome) ? @success_message : @failure_message)
+    # mock out some empty work callback methods just in case
+    def before_the_work; end
+    def after_the_work; end
+
+    # notifications
+    def self.notify_event_outcome(job_successful?)
+      puts (job_successful? ? @success_message : @failure_message)
     end
 
-    def self.job_successful?(outcome)
-      outcome[:success] == true
+    # DSL improvements and resque-scheduler helpers
+    def initialize(attrs={})
+      @attrs = attrs
     end
 
-    # allow sub-classes to inherit class-level instance variables
+    def enqueue_in(time_until_start)
+      Resque.enqueue_in(time_until_start, self.class, @attrs)
+    end
+
+    def enqueue_at(scheduled_time)
+      Resque.enqueue_at(scheduled_time, self.class, @attrs)
+    end
+
+    def enqueue
+      Resque.enqueue(self.class, @attrs)
+    end
+
+    # Inheritance Behaviors
+   
+    ## allow sub-classes to inherit class-level instance variables
     def self.inherited(subclass)
       self.instance_variable_names.each do |ivar|
         subclass.instance_variable_set(ivar, instance_variable_get(ivar))
       end
     end
 
+    ## get a list of instance variable names for inheritance
     def self.instance_variable_names
       self.class_level_instance_variables.collect {|ivar_name, val| "@#{ivar_name}"}
     end
 
+    ## for building instance variable names, property values not built yet
     def self.class_level_instance_variables
       {
         queue: :main,

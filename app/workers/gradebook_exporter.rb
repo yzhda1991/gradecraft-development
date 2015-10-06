@@ -1,22 +1,42 @@
-class GradebookExporter
-  extend Resque::Plugins::Retry
-  @retry_limit = 3
-  @retry_delay = 60
+class GradebookExporterJob < ResqueJob::Base
+  # defaults
+  @queue = :gradebook_exporter # put all jobs in the 'main' queue
+  @job_type = "GradebookExporterJob" # for use in logging etc.
 
-  @queue= :gradebookexporter
+  def setup_work
+    fetch_user
+    fetch_course
+  end
 
-  def self.perform(user_id, course_id)
-    p "Starting GradebookExporter"
-    begin
-      user = User.find(user_id)
-      course = Course.find(course_id)
-      if course.present? && user.present?
-        csv_data = course.gradebook_for_course(course)
-        NotificationMailer.gradebook_export(course,user,csv_data).deliver
-      end
-    rescue Resque::TermException => e
-      puts e.message
-      puts e.backtrace.inspect
+  # perform() attributes assigned to @attrs in the ResqueJob::Base class
+  def do_the_work
+    if @course.present? and @user.present?
+      fetch_csv_data
+      notify_gradebook_export
     end
+  end
+
+  def cleanup_work
+  end
+
+  def was_sucessful?
+  end
+
+  private
+
+  def fetch_user
+    @user = User.find @attrs[:user_id]
+  end
+
+  def fetch_course
+    @course = Course.find @attrs[:course_id]
+  end
+
+  def fetch_csv_data
+    @csv_data = @course.gradebook_for_course(course)
+  end
+
+  def notify_gradebook_export
+    NotificationMailer.gradebook_export(course,user,csv_data).deliver
   end
 end
