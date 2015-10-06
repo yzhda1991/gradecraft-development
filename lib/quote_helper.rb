@@ -1,5 +1,6 @@
 module QuoteHelper
   def remove_smart_quotes(string)
+    return "" unless string
     regex = Regexp.new smart_quote_characters.join("|")
     string.gsub(regex, "")
   end

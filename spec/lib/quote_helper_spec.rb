@@ -18,5 +18,9 @@ describe QuoteHelper do
       with_smart_quotes = "\u201Cthis is a thing\u201D"
       expect(subject.remove_smart_quotes(with_smart_quotes)).to eq "this is a thing"
     end
+
+    it "handles nil string" do
+      expect(subject.remove_smart_quotes(nil)).to eq ""
+    end
   end
 end
