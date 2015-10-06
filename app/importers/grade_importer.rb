@@ -72,10 +72,9 @@ class GradeImporter
   end
 
   def find_student(row, students)
-    if row.identifier =~ /@/
-      students.find { |student| student.email.downcase == row.identifier }
-    else
-      students.find { |student| student.username.downcase == row.identifier }
+    message = row.identifier =~ /@/ ? :email : :username
+    students.find do |student|
+      student.public_send(message).downcase == row.identifier
     end
   end
 
