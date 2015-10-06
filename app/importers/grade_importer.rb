@@ -15,7 +15,7 @@ class GradeImporter
     if file
       if course && assignment
         students = course.students
-        CSV.foreach(file, headers: true, encoding: 'ISO-8859-1') do |csv|
+        CSV.foreach(file, headers: true) do |csv|
           row = GradeRow.new csv
 
           student = find_student(row, students)
