@@ -87,18 +87,20 @@ class GradeImporter
   end
 
   class GradeRow
+    include QuoteHelper
+
     attr_reader :data
 
     def identifier
-      data[2].downcase if data[2]
+      remove_smart_quotes(data[2]).downcase if data[2]
     end
 
     def feedback
-      data[4]
+      remove_smart_quotes data[4]
     end
 
     def grade
-      data[3].to_i if data[3]
+      remove_smart_quotes(data[3]).to_i if data[3]
     end
 
     def has_grade?
