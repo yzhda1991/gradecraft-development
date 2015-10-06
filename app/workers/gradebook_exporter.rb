@@ -2,9 +2,12 @@ class GradebookExporterJob < ResqueJob::Base
   # defaults
   @queue = :gradebook_exporter # put all jobs in the 'main' queue
   @job_type = "GradebookExporterJob" # for use in logging etc.
+  @performer_class = GradebookExportPerformer
   @success_message = "Gradebook export notification mailer was successfully delivered."
   @failure_message = "Gradebook export notification mailer was not delivered."
+end
 
+class GradebookExportPerformer < ResqueJob::Performer
   def setup_work
     @user = fetch_user
     @course = fetch_course
