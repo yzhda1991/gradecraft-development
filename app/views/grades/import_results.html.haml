@@ -19,6 +19,26 @@
             %td= row[:data]
             %td= row[:errors]
 
+  - unless @result.unchanged.empty?
+    %h4.subtitle
+      = "#{@result.unchanged.count} #{"Grade".pluralize(@result.unchanged.count)} Not Imported (already existed)"
+    %table.responsive.nofeatures_default_last_name_dynatable
+      %thead
+        %tr
+          %th First Name
+          %th Last Name
+          %th Email
+          %th Score
+          %th Feedback
+      %tbody
+        - @result.unchanged.each do |grade|
+          %tr
+            %td= link_to grade.student.first_name, student_path(grade.student)
+            %td= link_to grade.student.last_name, student_path(grade.student)
+            %td= link_to grade.student.email, student_path(grade.student)
+            %td= grade.raw_score
+            %td= grade.feedback
+
   %h4.subtitle
     = "#{@result.successful.count} #{"Grade".pluralize(@result.successful.count)} Imported Successfully"
   %table.responsive.nofeatures_default_last_name_dynatable
