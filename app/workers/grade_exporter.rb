@@ -1,7 +1,7 @@
 # NOTE: this is not the same as the GradebookExporterJob
 class GradeExporterJob < ResqueJob::Base
   # defaults
-  @queue = :gradebook_exporter # put all jobs in the 'main' queue
+  @queue = :grade_exporter # put all jobs in the 'main' queue
   @performer_class = GradeExportPerformer
   @success_message = "Grade export notification mailer was successfully delivered."
   @failure_message = "Grade export notification mailer was not delivered."

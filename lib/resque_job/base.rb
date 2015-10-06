@@ -11,7 +11,6 @@ module ResqueJob
     @performer_class = ResqueJob::Performer
     @retry_limit = 3 # retry only 3 times
     @retry_delay = 60 # retry after 60 seconds
-    @start_message = "Starting #{self.job_type} in queue #{@queue}."
     @success_message = "The job successfully performed its work."
     @failure_message = "The job failed in the course of performing work."
 
@@ -32,6 +31,10 @@ module ResqueJob
     # notifications
     def self.notify_event_outcome(job_successful?)
       puts (job_successful? ? @success_message : @failure_message)
+    end
+
+    def self.start_message
+      @start_message || "Starting #{self.job_type} in queue #{@queue}."
     end
 
     def self.job_type
@@ -58,7 +61,6 @@ module ResqueJob
         queue: :main,
         retry_limit: 3,
         retry_delay: 60,
-        start_message: "Starting #{self.job_type} in queue #{@queue}.",
         success_message: "The job successfully performed its work.",
         failure_message: "The job failed in the course of performing work."
       }   
