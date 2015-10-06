@@ -291,22 +291,28 @@ $('table.nofeatures_default_desc_score_dynatable').dynatable({
   }
 });
 
-function assignmentSort(as, bs, attr, direction) {
+function alfaSort(as, bs, attr, direction) {
   //swap if reverse
   if(direction === -1) {
     var temp = as;
     as = bs;
     bs = temp;
   }
-  var a, b, a1, b1, i= 0, n, L,
-  rx=/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
-  as = $(as.assignment).text();
-  bs = $(bs.assignment).text();
-  if(as=== bs) return 0;
-  a= as.toLowerCase().match(rx);
-  b= bs.toLowerCase().match(rx);
-  L= a.length;
-  while(i<L){
+
+  //extract display text
+  as = $(as[attr.toString()]).text();
+  bs = $(bs[attr.toString()]).text();
+
+  var a, b, a1, b1, i= 0, n,
+
+  regex =/(\.\d+)|(\d+(\.\d+)?)|([^\d.]+)|(\.\D+)|(\.$)/g;
+
+  if(as === bs) return 0;
+
+  a= as.toLowerCase().match(regex);
+  b= bs.toLowerCase().match(regex);
+
+  while(i< a.length){
       if(!b[i]) return 1;
       a1= a[i],
       b1= b[i++];
@@ -320,7 +326,7 @@ function assignmentSort(as, bs, attr, direction) {
 }
 
 $('table.default_assignments_dynatable').bind('dynatable:init', function(e, dynatable) {
-  dynatable.sorts.functions["alphaNumeric"] = assignmentSort;
+  dynatable.sorts.functions["alphaNumeric"] = alfaSort;
 }).dynatable({
   features: {
     paginate: false,
