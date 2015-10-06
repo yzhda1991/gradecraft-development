@@ -19,11 +19,11 @@
             %td= row[:data]
             %td= row[:errors]
 
+  %h4.subtitle
+    = "#{@result.successful.count} #{"Grade".pluralize(@result.successful.count)} Imported Successfully"
+  = render partial: "grades/import_results_table", locals: { grades: @result.successful }
+
   - unless @result.unchanged.empty?
     %h4.subtitle
       = "#{@result.unchanged.count} #{"Grade".pluralize(@result.unchanged.count)} Not Imported (already existed)"
     = render partial: "grades/import_results_table", locals: { grades: @result.unchanged }
-
-  %h4.subtitle
-    = "#{@result.successful.count} #{"Grade".pluralize(@result.successful.count)} Imported Successfully"
-  = render partial: "grades/import_results_table", locals: { grades: @result.successful }
