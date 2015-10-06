@@ -130,8 +130,9 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.all_grades_for_assignment
   end
 
-  def scores_for(student)
-    assignment.grades_for_assignment(student)
+  def scores_for(user)
+    return scores if user.is_staff?(course)
+    assignment.grades_for_assignment(user)
   end
 
   def student_logged?(user)
