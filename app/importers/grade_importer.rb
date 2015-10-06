@@ -15,19 +15,21 @@ class GradeImporter
     if file
       if course && assignment
         students = course.students
-        CSV.foreach(file, headers: true, encoding: 'ISO-8859-1') do |row|
+        CSV.foreach(file, headers: true, encoding: 'ISO-8859-1') do |csv|
+          row = GradeRow.new csv
+
           student = find_student(row, students)
           if student.nil?
             append_unsuccessful row, "Student not found in course"
             next
           end
-          if !has_grade?(row)
+          if !row.has_grade?
             append_unsuccessful row, "Grade not specified"
             next
           end
 
           grade = assignment.all_grade_statuses_grade_for_student(student)
-          if update_grade? row, grade
+          if row.update_grade? grade
             grade = update_grade row, grade
             report row, grade
           elsif grade.present?
@@ -49,13 +51,9 @@ class GradeImporter
     unsuccessful << { data: row.to_s, errors: errors }
   end
 
-  def has_grade?(row)
-    grade_column(row).present?
-  end
-
   def assign_grade(row, grade)
-    grade.raw_score = grade_column(row)
-    grade.feedback = feedback_column(row)
+    grade.raw_score = row.grade
+    grade.feedback = row.feedback
     grade.status = "Graded" if grade.status.nil?
     grade.instructor_modified = true
   end
@@ -67,20 +65,6 @@ class GradeImporter
     end
   end
 
-  def feedback_column(row)
-    row[4]
-  end
-
-  def grade_column(row)
-    row[3].to_i if row[3]
-  end
-
-  def update_grade?(row, grade)
-    grade.present? &&
-      (grade.raw_score != grade_column(row) ||
-       grade.feedback != feedback_column(row))
-  end
-
   def update_grade(row, grade)
     assign_grade row, grade
     grade.save
@@ -88,11 +72,10 @@ class GradeImporter
   end
 
   def find_student(row, students)
-    identifier = row[2].downcase
-    if identifier =~ /@/
-      students.find { |student| student.email.downcase == identifier }
+    if row.identifier =~ /@/
+      students.find { |student| student.email.downcase == row.identifier }
     else
-      students.find { |student| student.username.downcase == identifier }
+      students.find { |student| student.username.downcase == row.identifier }
     end
   end
 
@@ -101,6 +84,39 @@ class GradeImporter
       successful << grade
     else
       append_unsuccessful row, grade.errors.full_messages.join(", ")
+    end
+  end
+
+  class GradeRow
+    attr_reader :data
+
+    def identifier
+      data[2].downcase if data[2]
+    end
+
+    def feedback
+      data[4]
+    end
+
+    def grade
+      data[3].to_i if data[3]
+    end
+
+    def has_grade?
+      grade.present?
+    end
+
+    def update_grade?(grade)
+      grade.present? &&
+        (grade.raw_score != self.grade || grade.feedback != feedback)
+    end
+
+    def initialize(data)
+      @data = data
+    end
+
+    def to_s
+      data.to_s
     end
   end
 end
