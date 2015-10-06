@@ -1,13 +1,14 @@
 require 'csv'
 
 class GradeImporter
-  attr_reader :successful, :unsuccessful
+  attr_reader :successful, :unsuccessful, :unchanged
   attr_accessor :file
 
   def initialize(file)
     @file = file
     @successful = []
     @unsuccessful = []
+    @unchanged = []
   end
 
   def import(course=nil, assignment=nil)
@@ -29,6 +30,8 @@ class GradeImporter
           if update_grade? row, grade
             grade = update_grade row, grade
             report row, grade
+          elsif grade.present?
+            unchanged << grade
           elsif grade.nil?
             grade = create_grade row, assignment, student
             report row, grade
@@ -47,11 +50,11 @@ class GradeImporter
   end
 
   def has_grade?(row)
-    row[3].present?
+    grade_column(row).present?
   end
 
   def assign_grade(row, grade)
-    grade.raw_score = row[3].to_i
+    grade.raw_score = grade_column(row)
     grade.feedback = row[4]
     grade.status = "Graded" if grade.status.nil?
     grade.instructor_modified = true
@@ -64,8 +67,12 @@ class GradeImporter
     end
   end
 
+  def grade_column(row)
+    row[3].to_i if row[3]
+  end
+
   def update_grade?(row, grade)
-    grade.present? && grade.raw_score != row[3].to_i
+    grade.present? && grade.raw_score != grade_column(row)
   end
 
   def update_grade(row, grade)
