@@ -5,28 +5,34 @@
 
   .student-badge-display
     //student badges table
+    -# logic for badges that have actually been earned
     - if @earned_badges.present?
       %h4= "Earned #{term_for :badges}" 
       - @earned_badges.each do |earned_badge|
         -# logic for badges that have actually been earned
         - if @earned_badges_by_badge_id[earned_badge.badge_id]
-          .badge-table.hexagon.awarded
-            %img.earned{ :src => earned_badge.icon, :alt => earned_badge.name }
+          .badge-info
+            .badge-table.hexagon.awarded
+              %img.earned{ :src => earned_badge.icon, :alt => earned_badge.name }
 
-            .ribbon
-              .ribbon-stitches-top
-              %strong.ribbon-content
-                %h1= earned_badge.name
-              .ribbon-stitches-bottom
-            .ribbon-ends
-            .gold-stars
-              %i.fa.fa-star.fa-fw
-              .badges-earned.blue 
-                .earned-count= @earned_badges_by_badge_id[earned_badge.badge_id].count
-          - if earned_badge.badge.point_total?
-          - if @earned_badges_by_badge_id[earned_badge.badge_id].size > 1
-            = "#{@earned_badges_by_badge_id[earned_badge.badge_id].collect(&:score).reduce(:+)} points earned" 
+              .ribbon
+                .ribbon-stitches-top
+                %strong.ribbon-content
+                  %h1= earned_badge.name
+                .ribbon-stitches-bottom
+              .ribbon-ends
+              .gold-stars
+                %i.fa.fa-star.fa-fw
+                .badges-earned.blue 
+                  .earned-count= @earned_badges_by_badge_id[earned_badge.badge_id].count
+              .badge-card
+                - if earned_badge.badge.point_total?
+                  - if @earned_badges_by_badge_id[earned_badge.badge_id].size > 1
+                    .points= "#{@earned_badges_by_badge_id[earned_badge.badge_id].collect(&:score).reduce(:+)} points earned" 
+                = earned_badge.created_at
+                = raw earned_badge.try(:feedback)
     - if @unearned_badges.present?
+      .clear
       %h4= "Possible #{term_for :badges}"
       - @unearned_badges.each do |unearned_badge|
         .badge-table.hexagon.available
