@@ -23,7 +23,7 @@ module ResqueJob
       performer.do_the_work
 
       # mention to the logger how things went
-      performer.outcome_messages
+      performer.logger_messages
     end
 
     def self.start_message
@@ -52,10 +52,9 @@ module ResqueJob
     def self.class_level_instance_variables
       {
         queue: :main,
+        performer_class: ResqueJob::Performer,
         retry_limit: 3,
         retry_delay: 60,
-        success_message: "The job successfully performed its work.",
-        failure_message: "The job failed in the course of performing work."
       }   
     end
 

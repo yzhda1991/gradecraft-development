@@ -48,11 +48,11 @@ class ResqueJob::Performer
     @successes ||= @outcomes.select {|outcome| outcome.success? }
   end
 
-  def complete_success?
+  def outcome_success?
     has_successes and ! has_failures?
   end
 
-  def complete_failure?
+  def outcome_failure?
     has_successes and ! has_failures?
   end
 

@@ -1,8 +1,3 @@
-class GradeUpdaterJob < ResqueJob::Base
-  @queue = :grade_updater
-  @performer_class = GradeUpdatePerformer
-end
-
 class GradeUpdatePerformer < ResqueJob::Performer
   def setup
     @grade_id = @attrs[:grade_id]
@@ -18,23 +13,24 @@ class GradeUpdatePerformer < ResqueJob::Performer
     end
   end
 
-  def results_message
-    if @save_scores_outcome.success?
-      puts "Student and team scores saved successfully for grade ##{@grade_id}"
-    else
-      puts "Student and team scores failed to save for grade ##{@grade_id}"
-    end
-
-    if @notify_grade_outcome
-      if @notify_grade_outcome.success?
-        puts "Successfully sent notification of grade release."
-      else
-        puts "Failed to send grade release notification."
-      end
-    end
+  def logger_messages
+    puts "Student and team scores #{scores_message} for grade ##{@grade_id}"
+    puts notify_grade_message if @notify_grade_outcome
   end
 
   protected
+
+  def scores_message
+    @save_scores_outcome.success? ? "saved succcessfully" : "failed to save"
+  end
+
+  def notify_grade_message
+    if @notify_grade_outcome.success?
+      puts "Successfully sent notification of grade release."
+    else
+      puts "Failed to send grade release notification."
+    end
+  end
 
   def fetch_grade_with_assignment
     Grade.where(id: @grade_id).includes(:assignment).load.first
@@ -43,4 +39,9 @@ class GradeUpdatePerformer < ResqueJob::Performer
   def notify_grade_released
     NotificationMailer.grade_released(@grade.id).deliver
   end
+end
+
+class GradeUpdaterJob < ResqueJob::Base
+  @queue = :grade_updater
+  @performer_class = GradeUpdatePerformer
 end

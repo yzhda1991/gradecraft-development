@@ -1,8 +1,3 @@
-class MultipleGradeUpdaterJob < ResqueJob::Base
-  @queue = :multiple_grade_updater
-  @performer_class = MultipleGradeUpdatePerformer
-end
-
 class MultipleGradeUpdatePerformer < ResqueJob::Performer
   def setup
     @grade_ids = @attrs[:grade_ids]
@@ -20,10 +15,10 @@ class MultipleGradeUpdatePerformer < ResqueJob::Performer
     end
   end
 
-  def outcome_messages
-    if complete_success?
+  def logger_messages
+    if outcome_success?
       puts "All grades saved and notified correctly."
-    elsif complete_failure?
+    elsif outcome_failure?
       puts "All grades and notifications failed."
     else
       puts "Some grades and notifications succeeded but others failed."
@@ -39,4 +34,9 @@ class MultipleGradeUpdatePerformer < ResqueJob::Performer
   def notify_grade_released(grade)
     NotificationMailer.grade_released(grade.id).deliver
   end
+end
+
+class MultipleGradeUpdaterJob < ResqueJob::Base
+  @queue = :multiple_grade_updater
+  @performer_class = MultipleGradeUpdatePerformer
 end

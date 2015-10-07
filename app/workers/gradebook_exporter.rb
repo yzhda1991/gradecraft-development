@@ -1,11 +1,3 @@
-class GradebookExporterJob < ResqueJob::Base
-  # defaults
-  @queue = :gradebook_exporter # put all jobs in the 'main' queue
-  @performer_class = GradebookExportPerformer
-  @success_message = "Gradebook export notification mailer was successfully delivered."
-  @failure_message = "Gradebook export notification mailer was not delivered."
-end
-
 class GradebookExportPerformer < ResqueJob::Performer
   def setup
     @user = fetch_user
@@ -14,11 +6,19 @@ class GradebookExportPerformer < ResqueJob::Performer
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
-    @outcome = Outcome.new do
-      if @course.present? and @user.present?
+    if @course.present? and @user.present?
+      require_success do
         fetch_csv_data
         notify_gradebook_export # the result of this block determines the outcome
       end
+    end
+  end
+
+  def logger_messages # prints_to_logger
+    if outcome_success?
+      puts "Gradebook export notification mailer was successfully delivered."
+    elsif outcome_failure?
+      puts "Gradebook export notification mailer was not delivered."
     end
   end
 
@@ -39,4 +39,9 @@ class GradebookExportPerformer < ResqueJob::Performer
   def notify_gradebook_export
     NotificationMailer.gradebook_export(course,user,csv_data).deliver
   end
+end
+
+class GradebookExporterJob < ResqueJob::Base
+  @queue = :gradebook_exporter 
+  @performer_class = GradebookExportPerformer
 end
