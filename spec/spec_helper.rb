@@ -49,6 +49,7 @@ RSpec.configure do |config|
 
   config.include Sorcery::TestHelpers::Rails::Controller, type: :controller
   config.include Sorcery::TestHelpers::Rails::Integration, type: :feature
+  config.include GradeCraft::Matchers::Integration, type: :feature
 
   config.include BackgroundJobs
   config.tty = true
