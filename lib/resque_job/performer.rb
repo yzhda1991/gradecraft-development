@@ -18,18 +18,6 @@ class ResqueJob::Performer
   # mock out some empty work callback methods just in case
   def setup; end
 
-  def enqueue_in(time_until_start)
-    Resque.enqueue_in(time_until_start, @job_klass, @attrs)
-  end
-
-  def enqueue_at(scheduled_time)
-    Resque.enqueue_at(scheduled_time, @job_klass, @attrs)
-  end
-
-  def enqueue
-    Resque.enqueue(@job_klass, @attrs)
-  end
-
   def logger_messages
     if complete_success?
       puts "Work was performed successfully without errors."

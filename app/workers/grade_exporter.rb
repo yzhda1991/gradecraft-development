@@ -41,7 +41,7 @@ class GradeExportPerformer < ResqueJob::Performer
   end
 end
 
-class GradeExporterJob < ResqueJob::Base
+class GradeExportJob < ResqueJob::Base
   @queue = :grade_exporter
   @performer_class = GradeExportPerformer
 end

@@ -26,6 +26,22 @@ module ResqueJob
       performer.logger_messages
     end
 
+    def initialize(attrs={})
+      @attrs = attrs
+    end
+
+    def enqueue_in(time_until_start)
+      Resque.enqueue_in(time_until_start, self.class, @attrs)
+    end
+
+    def enqueue_at(scheduled_time)
+      Resque.enqueue_at(scheduled_time, self.class, @attrs)
+    end
+
+    def enqueue
+      Resque.enqueue(self.class, @attrs)
+    end
+
     def self.start_message
       @start_message || "Starting #{self.job_type} in queue #{@queue}."
     end
