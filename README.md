@@ -2,6 +2,10 @@
 
 [ ![Codeship Status for UM-USElab/gradecraft-development](https://codeship.com/projects/a7421010-4e8b-0133-aacd-4e8e1c03c7f2/status?branch=master)](https://codeship.com/projects/106957)
 
+[![Test Coverage](https://codeclimate.com/github/UM-USElab/gradecraft-development/badges/coverage.svg)](https://codeclimate.com/github/UM-USElab/gradecraft-development/coverage)
+
+[![Code Climate](https://codeclimate.com/github/UM-USElab/gradecraft-development/badges/gpa.svg)](https://codeclimate.com/github/UM-USElab/gradecraft-development)
+
 ## Current features:
 * Badges
 * Teams (course-long memberships)
