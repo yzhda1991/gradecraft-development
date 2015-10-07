@@ -14,7 +14,7 @@ class GradeExportPerformer < ResqueJob::Performer
     end
   end
 
-  def logger_messages # prints_to_logger
+  def outcome_messages # prints_to_logger
     if outcome_success?
       puts "Grade export notification mailer was successfully delivered."
     elsif outcome_failure?

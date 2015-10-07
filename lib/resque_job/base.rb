@@ -18,12 +18,12 @@ module ResqueJob
       p self.start_message
 
       # this is where the magic happens
-      performer = @performer_class.new(self.class, attrs) # self.class is the job class
+      performer = @performer_class.new(self.object_class, attrs) # self.class is the job class
       performer.setup
       performer.do_the_work
 
       # mention to the logger how things went
-      performer.logger_messages
+      performer.outcome_messages
     end
 
     def initialize(attrs={})
@@ -31,23 +31,27 @@ module ResqueJob
     end
 
     def enqueue_in(time_until_start)
-      Resque.enqueue_in(time_until_start, self.class, @attrs)
+      Resque.enqueue_in(time_until_start, self.object_class, @attrs)
     end
 
     def enqueue_at(scheduled_time)
-      Resque.enqueue_at(scheduled_time, self.class, @attrs)
+      Resque.enqueue_at(scheduled_time, self.object_class, @attrs)
     end
 
     def enqueue
-      Resque.enqueue(self.class, @attrs)
+      Resque.enqueue(self.object_class, @attrs)
     end
 
     def self.start_message
-      @start_message || "Starting #{self.job_type} in queue #{@queue}."
+      @start_message || "Starting #{self.job_type} in queue '#{@queue}'."
+    end
+
+    def self.object_class
+      self.new.class
     end
 
     def self.job_type
-      self.class.to_s
+      self.new.class.name
     end
 
     # Inheritance Behaviors

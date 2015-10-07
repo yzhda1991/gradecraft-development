@@ -18,10 +18,10 @@ class ResqueJob::Performer
   # mock out some empty work callback methods just in case
   def setup; end
 
-  def logger_messages
-    if complete_success?
+  def outcome_messages
+    if outcome_success?
       puts "Work was performed successfully without errors."
-    elsif complete_failure?
+    elsif outcome_failure?
       puts "All of the work on the job failed to complete."
     else
       puts "Some tasks on the job failed but others succeeded."
@@ -37,11 +37,11 @@ class ResqueJob::Performer
   end
 
   def outcome_success?
-    has_successes and ! has_failures?
+    has_successes? and ! has_failures?
   end
 
   def outcome_failure?
-    has_successes and ! has_failures?
+    has_successes? and ! has_failures?
   end
 
   def has_failures?
@@ -53,7 +53,7 @@ class ResqueJob::Performer
   end
 
   def require_success
-    outcome = Outcome.new(yield)
+    outcome = ResqueJob::Outcome.new(yield)
     @outcomes << outcome
     outcome
   end

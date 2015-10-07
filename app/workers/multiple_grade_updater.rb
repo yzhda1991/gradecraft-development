@@ -15,7 +15,7 @@ class MultipleGradeUpdatePerformer < ResqueJob::Performer
     end
   end
 
-  def logger_messages
+  def outcome_messages
     if outcome_success?
       puts "All grades saved and notified correctly."
     elsif outcome_failure?

@@ -18,7 +18,6 @@ RSpec.describe PageviewEventLogger, type: :background_job do
     end
 
     describe "enqueue without schedule" do
-
       it "should find a job in the pageview queue" do
         @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue
         resque_job = Resque.peek(:pageview_event_logger)

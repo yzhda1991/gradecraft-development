@@ -1,4 +1,4 @@
-class ResqueJob::Performer::Outcome
+class ResqueJob::Outcome
   def initialize(result)
     @result = result
   end

@@ -10,7 +10,7 @@ class ScoreRecalculatorPerformer < ResqueJob::Performer
     require_success { @student.cache_course_score(@course_id) }
   end
 
-  def logger_messages # prints_to_logger
+  def outcome_messages # prints_to_logger
     if outcome_success?
       puts "All grades saved and notified correctly."
     elsif outcome_failure?

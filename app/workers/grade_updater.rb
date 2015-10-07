@@ -13,7 +13,7 @@ class GradeUpdatePerformer < ResqueJob::Performer
     end
   end
 
-  def logger_messages
+  def outcome_messages
     puts "Student and team scores #{scores_message} for grade ##{@grade_id}"
     puts notify_grade_message if @notify_grade_outcome
   end
