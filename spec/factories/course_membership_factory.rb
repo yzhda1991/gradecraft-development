@@ -11,8 +11,8 @@ FactoryGirl.define do
       role 'gsi'
     end
 
-    factory :instructor_course_membership do
-      role 'instructor'
+    factory :professor_course_membership do
+      role 'professor'
     end
 
     factory :admin_course_membership do
