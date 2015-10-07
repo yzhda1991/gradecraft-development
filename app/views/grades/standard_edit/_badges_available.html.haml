@@ -5,7 +5,7 @@
 
   .grade-badge.hexagon.available(title="{{badge.point_total}} Points: {{badge.description}}" ng-repeat="badge in badges" ng-class="{unearned: badge.unearned(), earned: badge.earned()}" ng-click="earnBadgeForStudent(badge)" hide-after-fade)
 
-    %img(src="{{badge.icon}}" alt="You've earned the {{badge.name}} badge" class="earned")
+    %img(src="{{badge.icon}}" alt="You've earned the {{badge.name}} badge" class="unearned")
 
     .ribbon
       .ribbon-stitches-top
@@ -15,5 +15,5 @@
     .ribbon-ends
     .gold-stars
       %i.fa.fa-star.fa-fw
+      .earned-count {{badge.earnedBadgesForGrade.length + badge.otherEarnedBadges.length}}
       .badges-earned.blue 
-        .earned-count {{badge.earnedBadgesForGrade.length + badge.otherEarnedBadges.length}}
