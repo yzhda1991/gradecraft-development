@@ -40,3 +40,17 @@
 1. Run `bundle exec rake db:create`
 1. Optional: run `bundle exec rake db:sample`
 1. Run `foreman start`
+
+## Running specs
+
+To run all of the spec examples, you can run the following (this is also the default rake task):
+
+```
+bundle exec rake spec
+```
+
+To run all of the spec examples with code coverage, you can run the following:
+
+```
+bundle exec rake spec:coverage
+```
