@@ -54,3 +54,12 @@ To run all of the spec examples with code coverage, you can run the following:
 ```
 bundle exec rake spec:coverage
 ```
+
+## Contributing
+
+1. Clone the repository `git clone https://github.com/UM-USElab/gradecraft-development`
+1. Create a feature branch `git checkout -b my-awesome-feature`
+1. Code!
+1. Commit your changes (small commits please)
+1. Push your new branch `git push origin my-awesome-feature`
+1. Create a pull request `hub pull-request -b um-uselab:master -h um-uselab:my-awesome-feature`
