@@ -32,8 +32,7 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     end
 
     before(:each) do
-      @performer = double(:perform:w
-      er).as_null_object
+      @performer = double(:performer).as_null_object
       allow(ResqueJob::Performer).to receive_messages(new: @performer)
     end
 
