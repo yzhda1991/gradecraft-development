@@ -18,7 +18,7 @@ module ResqueJob
       p self.start_message
 
       # this is where the magic happens
-      performer = @performer_class.new(self.object_class, attrs) # self.class is the job class
+      performer = @performer_class.new(attrs) # self.class is the job class
       performer.setup
       performer.do_the_work
 

@@ -1,15 +1,14 @@
 class ResqueJob::Performer
   # DSL improvements and resque-scheduler helpers
-  def initialize(job_klass, attrs={})
+  def initialize(attrs={})
     @attrs = attrs
-    @job_klass = job_klass
     @outcomes = []
   end
 
   attr_reader :outcomes
 
   # this is where the heavy lifting is done
-  def do_the_work(attrs={})
+  def do_the_work
     require_success do
       puts "Please define a self.start_work() method on the inheritor class to do some work."
     end
@@ -41,7 +40,7 @@ class ResqueJob::Performer
   end
 
   def outcome_failure?
-    has_successes? and ! has_failures?
+    has_failures? and ! has_successes?
   end
 
   def has_failures?
