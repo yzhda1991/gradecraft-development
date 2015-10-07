@@ -1,18 +1,23 @@
 class ResqueJob::Performer::Outcome
-  def initialize
-    @result = yield
+  def initialize(result)
+    @result = result
   end
 
   attr_reader :result
 
-  def add_success_condition
+  def truthish?
+    @result != false and @result != nil
   end
 
-  def successful?
-    @result == true
-  end
-
-  def failed?
+  def falseish?
     @result == false || @result.nil?
+  end
+
+  def success?
+    truthish?
+  end
+
+  def failure?
+    falseish?
   end
 end

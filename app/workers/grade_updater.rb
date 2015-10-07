@@ -1,17 +1,6 @@
-class GradeUpdater
-  @queue= :gradeupdater
-
-  def self.perform(grade_id)
-  end
-end
-
-# NOTE: this is not the same as the GradebookUpdaterJob
 class GradeUpdaterJob < ResqueJob::Base
-  # defaults
-  @queue = :grade_updater # put all jobs in the 'main' queue
+  @queue = :grade_updater
   @performer_class = GradeUpdatePerformer
-  @success_message = "Grade update notification mailer was successfully delivered."
-  @failure_message = "Grade update notification mailer was not delivered."
 end
 
 class GradeUpdatePerformer < ResqueJob::Performer
@@ -22,10 +11,26 @@ class GradeUpdatePerformer < ResqueJob::Performer
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
-    @outcome.require_success { @grade.save_student_and_team_scores }
+    @save_scores_outcome = require_success { @grade.save_student_and_team_scores }
 
     if @grade.assignment.notify_released?
-      @outcome.require_success { notify_grade_released }
+      @notify_grade_outcome = require_success { notify_grade_released } 
+    end
+  end
+
+  def results_message
+    if @save_scores_outcome.success?
+      puts "Student and team scores saved successfully for grade ##{@grade_id}"
+    else
+      puts "Student and team scores failed to save for grade ##{@grade_id}"
+    end
+
+    if @notify_grade_outcome
+      if @notify_grade_outcome.success?
+        puts "Successfully sent notification of grade release."
+      else
+        puts "Failed to send grade release notification."
+      end
     end
   end
 

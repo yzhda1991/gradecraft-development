@@ -1,23 +1,42 @@
-class MultipleGradeUpdater
-  extend Resque::Plugins::Retry
-  @retry_limit = 3
-  @retry_delay = 60
+class MultipleGradeUpdaterJob < ResqueJob::Base
+  @queue = :multiple_grade_updater
+  @performer_class = MultipleGradeUpdatePerformer
+end
 
-  @queue= :multiplegradeupdater
+class MultipleGradeUpdatePerformer < ResqueJob::Performer
+  def setup
+    @grade_ids = @attrs[:grade_ids]
+    @grades = fetch_grades_with_assignment
+  end
 
-  def self.perform(grade_ids)
-    puts "Starting MultipleGradeUpdater"
-    begin
-      grades = Grade.where(id: grade_ids).includes(:assignment).load
-      grades.each do |grade|
-        grade.save_student_and_team_scores
-          if grade.assignment.notify_released?
-            NotificationMailer.grade_released(grade.id).deliver_now
-          end
-        end
-    rescue Resque::TermException => e
-      puts e.message
-      puts e.backtrace.inspect
+  # perform() attributes assigned to @attrs in the ResqueJob::Base class
+  def do_the_work
+    @grades.each do |grade|
+      require_success { grade.save_student_and_team_scores }
+
+      if grade.assignment.notify_released?
+        require_success { NotificationMailer.grade_released(grade.id).deliver_now }
+      end
     end
+  end
+
+  def outcome_messages
+    if complete_success?
+      puts "All grades saved and notified correctly."
+    elsif complete_failure?
+      puts "All grades and notifications failed."
+    else
+      puts "Some grades and notifications succeeded but others failed."
+    end
+  end
+
+  protected
+
+  def fetch_grades_with_assignment
+    Grade.where(id: grade_ids).includes(:assignment).load
+  end
+
+  def notify_grade_released(grade)
+    NotificationMailer.grade_released(grade.id).deliver
   end
 end
