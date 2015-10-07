@@ -1,12 +1,12 @@
 #tabs.ui-tabs.ui-widget
   %ul.ui-tabs-nav{:role => "tablist"}
-    %li 
+    %li
       %a{ "href" => "#tabkerb" } UM Login
-    %li 
+    %li
       %a{ "href" => "#tabgc"} GradeCraft Login
   #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
     .ui-tabs-panel#tabkerb.active{:role => "tabpanel", "aria-hidden" => false }
-      .kerberos-auth
+      #kerberos-auth
         = form_for User.new, :url => auth_kerberos_callback_path do |f|
           = label_tag :username, 'User name', class:'sr-only'
           = text_field_tag :username, nil, placeholder: 'Uniqname', :autocorrect => "off", :autocapitalize => "off"
@@ -14,7 +14,7 @@
           = password_field_tag :password, nil, placeholder: 'Password'
           .right= f.submit 'Log in', class: 'button', alt: 'Log in'
     .ui-tabs-panel#tabgc.active{:role => "tabpanel", "aria-hidden" => false }
-      .gradegraft-auth
+      #gradecraft-auth
         = form_for User.new, :url => user_sessions_path do |f|
           = label_tag :user_email, 'Email', class:'sr-only'
           = f.text_field :email, placeholder: "Email", :autocorrect => "off", :autocapitalize => "off"
