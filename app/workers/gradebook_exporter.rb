@@ -7,7 +7,7 @@ class GradebookExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     if @course.present? and @user.present?
-      require_success(outcome_messages) do
+      require_success(messages) do
         fetch_csv_data
         notify_gradebook_export # the result of this block determines the outcome
       end
@@ -32,7 +32,7 @@ class GradebookExportPerformer < ResqueJob::Performer
     NotificationMailer.gradebook_export(@course, @user, @csv_data).deliver_now
   end
 
-  def outcome_messages
+  def messages
     { success: "Gradebook export notification mailer was successfully delivered.",
       failure: "Gradebook export notification mailer was not delivered." }
   end
