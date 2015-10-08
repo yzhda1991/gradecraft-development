@@ -103,8 +103,8 @@ courses << second_course = Course.create! do |c|
   c.team_score_average = true
   c.total_assignment_weight = 6
   c.default_assignment_weight = 0.5
-  c.max_assignment_weight = 3
-  c.max_assignment_types_weighted = 3
+  c.max_assignment_weight = 4
+  c.max_assignment_types_weighted = 2
   c.grading_philosophy = "Think of how video games work. This course works along the same logic. There are some things everyone will have to do to make progress. In this course, the readings, reading-related homework, lectures and discussion sections are those things.
 But game play also allows you to choose some activities -- quests, tasks, challenges -- and skip others. You can partly make your own path through a game. So also in this course: the are some assignment types you may choose (because you are good at them, or because you like challenges) and others you can avoid (because your interests are elsewhere). You also have a choice on how you want to weight some of the optional components you choose!
 In games, you start with a score of zero and 'level up' as you play. You might have to try some tasks several times before you get the points, but good games don't ever take your points away. Same here: everything you successfully do earns you more points.
@@ -1228,6 +1228,67 @@ challenges << Challenge.create! do |c|
   c.visible = true
 end
 puts "Are you willing to brave the Tri-Wizard Tournament?"
+
+assignment_types[:second_course_weighting_one] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Weighted Assignment Type #1 Settings"
+  at.student_weightable = true
+end
+
+assignment_weighting_one = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_weighting_one]
+  a.name = "Weighted Assignment Type 1"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_types[:second_course_weighting_two] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Weighted Assignment Type #2 Settings"
+  at.student_weightable = true
+end
+
+assignment_weighting_two = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_weighting_two]
+  a.name = "Weighted Assignment Type 2"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+
+assignment_types[:second_course_weighting_three] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Weighted Assignment Type #3 Settings"
+  at.student_weightable = true
+end
+
+assignment_weighting_three = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_weighting_three]
+  a.name = "Weighted Assignment 3"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
 
 students.each do |s|
   s.courses.each do |c|

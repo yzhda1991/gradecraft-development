@@ -86,35 +86,6 @@ describe "students/syllabus/_assignments" do
       end
     end
 
-    it "renders a weightable assignment types that are open if students have not yet made a choice" do
-      @assignment_type_1.update(student_weightable: true)
-      @assignment_type_1.save
-      @course.update(assignment_weight_close_at: nil)
-      @course.save
-      render
-      assert_select 'a', text: 'Set Multipliers', count: 1
-    end
-
-    it "renders a weightable assignment types that are open if students have made a choice" do
-      skip "implement"
-      @assignment_type_1.update(student_weightable: true)
-      @assignment_type_1.save
-      @course.update(assignment_weight_close_at: nil)
-      @course.save
-      render
-      assert_select 'a', text: '(Change)', count: 1
-    end
-
-    it "renders a weightable assignment types that are closed" do
-      skip "implement"
-      @assignment_type_1.update(student_weightable: true)
-      @assignment_type_1.save
-      @course.update(assignment_weight_close_at: 2.days.ago)
-      @course.save
-      render
-      assert_select 'div', class: 'multiplier-setting-closed', count: 1
-    end
-
     it "shows the description if it's present" do
       @assignment_type_1.update(description: 'Tabula Rasa')
       @assignment_type_1.save
