@@ -95,7 +95,7 @@ class Grade < ActiveRecord::Base
   end
 
   def score
-    if student.weighted_assignments?
+    if assignment_type.student_weightable?
       final_score || ((raw_score * assignment_weight).round if raw_score.present?)  || nil
     else
       final_score || raw_score
