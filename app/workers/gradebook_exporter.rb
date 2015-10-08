@@ -37,7 +37,7 @@ class GradebookExportPerformer < ResqueJob::Performer
   end
 
   def notify_gradebook_export
-    NotificationMailer.gradebook_export(course,user,csv_data).deliver
+    NotificationMailer.gradebook_export(@course, @user, @csv_data).deliver
   end
 end
 
