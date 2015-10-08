@@ -5,19 +5,13 @@ class ResqueJob::Outcome
 
   attr_reader :result
 
-  def truthish?
+  def truthy?
     @result != false and @result != nil
   end
+  alias_method :success?, :truthy?
 
-  def falseish?
+  def falsey?
     @result == false || @result.nil?
   end
-
-  def success?
-    truthish?
-  end
-
-  def failure?
-    falseish?
-  end
+  alias_method :failure?, :falsey?
 end
