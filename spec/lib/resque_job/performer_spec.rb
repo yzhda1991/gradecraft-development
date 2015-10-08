@@ -61,14 +61,14 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
 
       context ":failure message is present" do
         it "should add the :failure message" do
-          expect(@peformer).to receive(:add_message).with ("stuff_sucked")
+          expect(subject).to receive(:add_message).with ("stuff sucked")
           subject.add_outcome_messages(@outcome, @messages)
         end
       end
 
       context ":failure message is not present" do
         it "should not add a failure message" do
-          expect(@peformer).not_to receive(:add_message)
+          expect(subject).not_to receive(:add_message)
           subject.add_outcome_messages(@outcome, success: "stuff sucked")
         end
       end
@@ -79,16 +79,25 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
 
       context ":success message is present" do
         it "should add the :success message" do
-          expect(@peformer).to receive(:add_message).with ("stuff_rocked")
+          expect(subject).to receive(:add_message).with ("stuff rocked")
           subject.add_outcome_messages(@outcome, @messages)
         end
       end
 
       context ":success message is not present" do
         it "should not add a success message" do
-          expect(@peformer).to receive(:add_message).with ("stuff_rocked")
+          expect(subject).not_to receive(:add_message).with ("stuff rocked")
           subject.add_outcome_messages(@outcome, failure: "stuff sucked")
         end
+      end
+    end
+
+    describe "puts_outcome_messages" do
+      it "should put each message" do
+        subject.instance_variable_set(:@outcome_messages, ["bad", "good"])
+        expect(subject).to receive(:puts).with("bad")
+        expect(subject).to receive(:puts).with("good")
+        subject.puts_outcome_messages
       end
     end
   end

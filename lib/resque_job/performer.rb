@@ -22,13 +22,13 @@ class ResqueJob::Performer
     @outcome_messages << message
   end
 
-  private def add_outcome_messages(outcome, messages={})
+  def add_outcome_messages(outcome, messages={})
     add_message(messages[:success]) if messages[:success] and outcome.success?
     add_message(messages[:failure]) if messages[:failure] and outcome.failure?
   end
 
-  def puts_outcome_messages # TODO: add specs
-    @outcome_messages.each {|message| puts message }
+  def puts_outcome_messages
+    @outcome_messages.each {|message| puts message } 
   end
 
   def failures

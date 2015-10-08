@@ -46,7 +46,7 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     end
 
     it "should build a new performer" do
-      expect(ResqueJob::Performer).to receive(:new).with(ResqueJob::Base, @attrs)
+      expect(ResqueJob::Performer).to receive(:new).with(@attrs)
     end
 
     it "should setup the performer" do
@@ -57,8 +57,8 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       expect(@performer).to receive(:do_the_work)
     end
 
-    it "should extract the outcome messages from the performer" do
-      expect(@performer).to receive(:outcome_messages)
+    it "should have the performer do the work" do
+      expect(@performer).to receive(:puts_outcome_messages)
     end
   end
 
