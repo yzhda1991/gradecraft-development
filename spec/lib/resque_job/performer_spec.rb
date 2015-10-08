@@ -34,10 +34,62 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     end
   end
 
-  describe "outcome_messages" do
-    it "should put a message" do
-      expect(subject).to receive(:puts)
-      subject.outcome_messages
+  describe "add_message" do
+    it "should add a message to @outcome_messages" do
+      subject.add_message "a thing"
+      expect(subject.outcome_messages).to eq([ "a thing" ])
+    end
+
+    it "should increase the size of outcome_messages by one" do
+      expect{ subject.add_message("stuff") }.to change{ subject.outcome_messages.size }.by(1)
+    end
+  end
+
+  describe "add_message" do
+    it "should return @outcome_messages" do
+      @outcome_messages = ["snake", "herring"]
+      subject.instance_variable_set(:@outcome_messages, @outcome_messages)
+      expect(subject.outcome_messages).to eq(@outcome_messages)
+    end
+  end
+
+  describe "add_outcome_messages" do
+    before { @messages = { failure: "stuff sucked", success: "stuff rocked" }}
+
+    context "outcome is a failure" do
+      before(:each) { @outcome = ResqueJob::Outcome.new(false) }
+
+      context ":failure message is present" do
+        it "should add the :failure message" do
+          expect(@peformer).to receive(:add_message).with ("stuff_sucked")
+          subject.add_outcome_messages(@outcome, @messages)
+        end
+      end
+
+      context ":failure message is not present" do
+        it "should not add a failure message" do
+          expect(@peformer).not_to receive(:add_message)
+          subject.add_outcome_messages(@outcome, success: "stuff sucked")
+        end
+      end
+    end
+
+    context "outcome is a success" do
+      before(:each) { @outcome = ResqueJob::Outcome.new(true) }
+
+      context ":success message is present" do
+        it "should add the :success message" do
+          expect(@peformer).to receive(:add_message).with ("stuff_rocked")
+          subject.add_outcome_messages(@outcome, @messages)
+        end
+      end
+
+      context ":success message is not present" do
+        it "should not add a success message" do
+          expect(@peformer).to receive(:add_message).with ("stuff_rocked")
+          subject.add_outcome_messages(@outcome, failure: "stuff sucked")
+        end
+      end
     end
   end
 

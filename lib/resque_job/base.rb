@@ -23,7 +23,7 @@ module ResqueJob
       performer.do_the_work
 
       # mention to the logger how things went
-      performer.outcome_messages
+      performer.outcome_messages.each {|message| puts message } # TODO: add specs
     end
 
     def initialize(attrs={})

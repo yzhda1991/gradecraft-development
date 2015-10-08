@@ -72,20 +72,6 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
     end
   end
 
-  describe "outcome_messages" do
-    context "success" do
-      it "should say that the notification was delivered" do
-        @performer.instance_variable_set(:@outcomes, [ ResqueSpec::Outcome.new(true) ])
-        expect(@performer.to_receive(:puts).with 
-      end
-    end
-
-    context "failure" do
-      it "should say that the notification was not delivered" do
-        @performer.instance_variable_set(:@outcomes, [ ResqueSpec::Outcome.new(true) ])
-      end
-    end
-  end
 
   # private methods
   

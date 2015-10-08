@@ -3,9 +3,10 @@ class ResqueJob::Performer
   def initialize(attrs={})
     @attrs = attrs
     @outcomes = []
+    @outcome_messages = []
   end
 
-  attr_reader :outcomes
+  attr_reader :outcomes, :outcome_messages
 
   # this is where the heavy lifting is done
   def do_the_work
@@ -17,14 +18,17 @@ class ResqueJob::Performer
   # mock out some empty work callback methods just in case
   def setup; end
 
-  def outcome_messages
-    if outcome_success?
-      puts "Work was performed successfully without errors."
-    elsif outcome_failure?
-      puts "All of the work on the job failed to complete."
-    else
-      puts "Some tasks on the job failed but others succeeded."
-    end
+  def add_message(message)
+    @outcome_messages << message
+  end
+
+  private def add_outcome_messages(outcome, messages={})
+    add_message(messages[:success]) if messages[:success] and outcome.success?
+    add_message(messages[:failure]) if messages[:failure] and outcome.failure?
+  end
+
+  def puts_outcome_messages # TODO: add specs
+    @outcome_messages.each {|message| puts message }
   end
 
   def failures
@@ -51,8 +55,9 @@ class ResqueJob::Performer
     successes.size > 0
   end
 
-  def require_success
+  def require_success(messages={})
     outcome = ResqueJob::Outcome.new(yield)
+    add_outcome_messages(outcome, messages) unless messages == {} # TODO: todo spec
     @outcomes << outcome
     outcome
   end
