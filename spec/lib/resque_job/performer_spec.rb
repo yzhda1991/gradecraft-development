@@ -291,6 +291,37 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     it "should return the new outcome" do
       expect {|b| @performer.require_success(&b) }.to yield_with_no_args
     end
+
+    context "no value is passed in the block" do
+      it "should create a false outcome" do
+        subject.require_success {}
+        expect(subject.outcomes.first.result).to eq(false)
+      end
+    end
+
+    describe "performer#add_outcome_messages" do
+      it "should pass in an outcome and messages" do
+        @outcome = double(:outcome)
+        @messages = double(:messages)
+        allow(ResqueJob::Outcome).to receive_messages(new: @outcome)
+        expect(subject).to receive(:add_outcome_messages).with(@outcome, @messages)
+        subject.require_success(@messages) {}
+      end
+
+      context "messages are empty" do
+        it "should not add messages to the outcome" do
+          expect(subject).not_to receive(:add_outcome_messages)
+          subject.require_success({}) do; end
+        end
+      end
+
+      context "messages are present" do
+        it "should add messages to the outcome" do
+          expect(subject).to receive(:add_outcome_messages)
+          subject.require_success({success: "great stuff"}) do; end
+        end
+      end
+    end
   end
 
   def setup_success_and_failure

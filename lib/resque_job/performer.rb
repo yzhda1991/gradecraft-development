@@ -56,8 +56,8 @@ class ResqueJob::Performer
   end
 
   def require_success(messages={})
-    outcome = ResqueJob::Outcome.new(yield)
-    add_outcome_messages(outcome, messages) unless messages == {} # TODO: todo spec
+    outcome = ResqueJob::Outcome.new(yield || false)
+    add_outcome_messages(outcome, messages) unless messages == {}
     @outcomes << outcome
     outcome
   end
