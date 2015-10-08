@@ -65,6 +65,9 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
 
           context "block outcome succeeds" do
             it "should add the :succeeds outcome message to @outcome_messages" do
+              allow(subject).to receive_messages(notify_gradebook_export: false)
+              subject.do_the_work
+              expect(subject.outcome_messages.first).to match("was not delivered")
             end
           end
         end
@@ -90,16 +93,26 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
   
   describe "fetch_user" do
    it "should find the user by id" do
+     expect(subject.fetch_user).to eq(user)
    end
   end
 
   describe "fetch_course" do
     it "should find the course by id" do
+     expect(subject.fetch_course).to eq(course)
     end
   end
 
   describe "fetch_csv_data" do
-    it "should find the csv gradebook for the course" do
+    let(:peformer) { GradebookExportPerformer.new(user_id: user[:id], course_id: course[:id]) }
+    subject { performer.fetch_csv_data }
+
+    it "should find the csv gradebook for the course and return it as a huge string" do
+      expect(subject.class).to eq(String)
+    end
+
+    it "should return a string in valid CSV format" do
+      expect(CSV.parse(subject).class).to eq(Array)
     end
   end
 

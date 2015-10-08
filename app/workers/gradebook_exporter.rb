@@ -20,8 +20,10 @@ class GradebookExportPerformer < ResqueJob::Performer
     User.find @attrs[:user_id]
   end
 
-  def fetch_course
-    Course.find @attrs[:course_id]
+  def fetch_course # TODO: add specs for includes
+    Course.find(@attrs[:course_id])
+      .includes(:students)
+      .includes(:assignments)
   end
 
   def fetch_csv_data
