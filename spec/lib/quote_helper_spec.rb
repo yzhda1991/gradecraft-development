@@ -1,4 +1,3 @@
-require "rspec/core"
 require "./lib/quote_helper"
 
 describe QuoteHelper do
