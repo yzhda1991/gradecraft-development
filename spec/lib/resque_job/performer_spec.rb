@@ -15,6 +15,10 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
   end
 
   describe "do_the_work" do
+    after(:each) do
+      subject.do_the_work
+    end
+
     it "should set a contrived require_success condition" do
       expect(subject).to receive(:require_success)
     end
@@ -33,6 +37,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
   describe "outcome_messages" do
     it "should put a message" do
       expect(subject).to receive(:puts)
+      subject.outcome_messages
     end
   end
 
@@ -47,7 +52,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     end
 
     it "should select the outcomes that have failed" do
-      @performer.failures.should == @failed_outcomes
+      expect(@performer.failures).to eq(@failures)
     end
 
     it "should not re-run if @failures already exists" do
@@ -68,7 +73,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     end
 
     it "should select the outcomes that have succeeded" do
-      @performer.successes.should == @successful_outcomes
+      expect(@performer.successes).to eq(@successes)
     end
 
     it "should not re-run if @successes already exists" do
@@ -173,7 +178,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     context "some failures present" do
       it "should be true" do
         @performer.instance_variable_set(:@outcomes, @failures)
-        expect(@performer.outcome_failure?).to be_true
+        expect(@performer.outcome_failure?).to be_truthy
       end
     end
   end
@@ -197,7 +202,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     context "some successes present" do
       it "should be true" do
         @performer.instance_variable_set(:@outcomes, @successes)
-        expect(@performer.outcome_success?).to be_true
+        expect(@performer.outcome_success?).to be_truthy
       end
     end
   end
@@ -217,12 +222,9 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     end
 
     it "should add the new outcome to @outcomes" do
-      @waffle_outcome = ResqueJob::Outcome.new("waffle")
-      @performer.instance_variable_set(:@outcomes, [])
-      allow(ResqueJob::Outcome).to receive(:new).with("waffle") { @waffle_outcome }
-      expect(@performer.instance_variable_get(:@outcomes)).to receive(:<<).with(@waffle_outcome)
-      @performer.require_success { "waffle" }
-      expect(@performer.outcomes).to eq([@waffle_outcome])
+      expect do
+        @performer.require_success { "waffle" }
+      end.to change{ @performer.outcomes.size }.by(1)
     end
 
     it "should return the new outcome" do
@@ -231,8 +233,8 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
   end
 
   def setup_success_and_failure
-    @failed_outcomes = (1..2).collect {ResqueJob::Outcome.new(false) }
-    @successful_outcomes = (1..2).collect {ResqueJob::Outcome.new(true) }
-    @all_outcomes = successful_outcomes + failed_outcomes 
+    @failures= (1..2).collect {ResqueJob::Outcome.new(false) }
+    @successes = (1..2).collect {ResqueJob::Outcome.new(true) }
+    @all_outcomes = @successes + @failures
   end
 end
