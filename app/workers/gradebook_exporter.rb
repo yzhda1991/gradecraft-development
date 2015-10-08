@@ -15,15 +15,12 @@ class GradebookExportPerformer < ResqueJob::Performer
   end
 
   def outcome_messages # prints_to_logger
-    if outcome_success?
-      puts "Gradebook export notification mailer was successfully delivered."
-    elsif outcome_failure?
-      puts "Gradebook export notification mailer was not delivered."
-    end
+    puts success_message if outcome_success?
+    puts failure_message if outcome_failure?
   end
 
   private
-
+  
   def fetch_user
     User.find @attrs[:user_id]
   end
@@ -33,11 +30,19 @@ class GradebookExportPerformer < ResqueJob::Performer
   end
 
   def fetch_csv_data
-    @csv_data = @course.gradebook_for_course(course)
+    @csv_data = @course.gradebook_for_course(@course)
   end
 
   def notify_gradebook_export
-    NotificationMailer.gradebook_export(@course, @user, @csv_data).deliver
+    NotificationMailer.gradebook_export(@course, @user, @csv_data).deliver_now
+  end
+
+  def success_message
+    "Gradebook export notification mailer was successfully delivered."
+  end
+
+  def failure_message
+    "Gradebook export notification mailer was not delivered."
   end
 end
 
