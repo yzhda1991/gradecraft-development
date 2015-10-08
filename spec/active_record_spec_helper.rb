@@ -1,5 +1,7 @@
 require "base_spec_helper"
 require "active_record"
+require "protected_attributes"
+require "yaml"
 
 connection_info = YAML.load_file("config/database.yml")["test"]
 ActiveRecord::Base.establish_connection(connection_info)
