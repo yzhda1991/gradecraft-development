@@ -123,6 +123,13 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
 
     describe "fetch_csv_data" do
       subject { performer.instance_eval{fetch_csv_data} }
+      let(:course_double) { double(:course) }
+
+      it "should call csv_gradebook on the course" do
+        performer.instance_variable_set(:@course, course_double)
+        expect(course_double).to receive(:csv_gradebook)
+        subject
+      end
 
       it "should find the csv gradebook for the course and return it as a huge string" do
         expect(subject.class).to eq(String)
@@ -136,19 +143,19 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
     describe "notify_gradebook_export" do
       subject { performer.instance_eval { notify_gradebook_export } }
       let(:csv_data) { performer.instance_variable_get(:@csv_data) }
-      let(:mock_csv) { double(:csv) }
+      let(:csv_double) { double(:csv) }
       after(:each) { subject }
-      before(:each) { allow(NotificationMailer).to receive(:gradebook_export).and_return(mock_csv) }
+      before(:each) { allow(NotificationMailer).to receive(:gradebook_export).and_return(csv_double) }
 
       it "should create a new gradebook export notifier with @course, @user, and @csv_data" do
         performer.instance_eval { fetch_csv_data }
         expect(NotificationMailer).to receive(:gradebook_export).with(course, user, csv_data)
-        expect(mock_csv).to receive(:deliver_now)
+        expect(csv_double).to receive(:deliver_now)
       end
 
       it "should deliver the mailer" do
-        allow(performer).to receive_messages(gradebook_export:  mock_csv)
-        expect(mock_csv).to receive(:deliver_now)
+        allow(performer).to receive_messages(gradebook_export:  csv_double)
+        expect(csv_double).to receive(:deliver_now)
       end
     end
 

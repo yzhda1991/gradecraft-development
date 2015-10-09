@@ -372,8 +372,6 @@ class Course < ActiveRecord::Base
     end
   end
 
-  private
-
   # todo: add unit tests for this somewhere else
   class Gradebook
     def initialize(course)
@@ -437,8 +435,6 @@ class Course < ActiveRecord::Base
       end
     end
   end
-
-  public again
 
   def research_grades_for_course(course, options = {})
     CSV.generate(options) do |csv|
