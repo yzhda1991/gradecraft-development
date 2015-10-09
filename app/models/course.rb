@@ -347,7 +347,6 @@ class Course < ActiveRecord::Base
     end
   end
 
-  # TODO: refactor for better performance
   #gradebook spreadsheet export for course
   def gradebook_for_course(course)
     CSV.generate do |csv|

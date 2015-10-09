@@ -4,6 +4,7 @@ class ResqueJob::Performer
     @attrs = attrs
     @outcomes = []
     @outcome_messages = []
+    setup
   end
 
   attr_reader :outcomes, :outcome_messages

@@ -49,10 +49,6 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       expect(ResqueJob::Performer).to receive(:new).with(@attrs)
     end
 
-    it "should setup the performer" do
-      expect(@performer).to receive(:setup)
-    end
-
     it "should have the performer do the work" do
       expect(@performer).to receive(:do_the_work)
     end

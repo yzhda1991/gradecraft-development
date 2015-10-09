@@ -20,10 +20,9 @@ class GradebookExportPerformer < ResqueJob::Performer
     User.find @attrs[:user_id]
   end
 
+  # todo: speed this up by condensing the CSV generator into a single query
   def fetch_course # TODO: add specs for includes
-    Course.find(@attrs[:course_id])
-      .includes(:students)
-      .includes(:assignments)
+    Course.find @attrs[:course_id]
   end
 
   def fetch_csv_data
@@ -35,8 +34,10 @@ class GradebookExportPerformer < ResqueJob::Performer
   end
 
   def messages
-    { success: "Gradebook export notification mailer was successfully delivered.",
-      failure: "Gradebook export notification mailer was not delivered." }
+    {
+      success: "Gradebook export notification mailer was successfully delivered.",
+      failure: "Gradebook export notification mailer was not delivered."
+    }
   end
 end
 

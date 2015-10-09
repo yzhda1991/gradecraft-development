@@ -23,6 +23,11 @@ gem 'coffee-rails'
 gem "compass-rails"
 gem "d3-rails"
 gem 'dalli'
+
+# adds expect{something}.to 'make_database_queries' matchers to rspec
+# useful for testing eager/lazy loading
+gem 'db-query-matchers'
+
 gem 'dotenv-rails'
 gem 'fast_blank'
 gem 'fog'

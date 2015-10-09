@@ -19,7 +19,6 @@ module ResqueJob
 
       # this is where the magic happens
       performer = @performer_class.new(attrs) # self.class is the job class
-      performer.setup
       performer.do_the_work
 
       # mention to the logger how things went

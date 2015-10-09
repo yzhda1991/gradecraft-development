@@ -4,6 +4,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
   let(:attrs) { Hash.new(color: "green") }
   subject { ResqueJob::Performer.new(attrs) }
 
+  # todo: add specs for all cases in subclassed conditions
   describe "initialize" do
     it "should set @attrs" do
       expect(subject.instance_variable_get(:@attrs)).to eq(attrs)
@@ -11,6 +12,15 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
 
     it "should set an empty array of @outcomes" do
       expect(subject.instance_variable_get(:@outcomes)).to eq([])
+    end
+
+    it "should set an empty array of @outcome_messages" do
+      expect(subject.instance_variable_get(:@outcome_messages)).to eq([])
+    end
+
+    it "should setup the performer" do
+      expect(subject).to receive(:setup)
+      subject.instance_eval { initialize }
     end
   end
 

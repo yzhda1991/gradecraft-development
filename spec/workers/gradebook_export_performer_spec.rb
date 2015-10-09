@@ -2,11 +2,15 @@ require 'spec_helper'
 
 RSpec.describe GradebookExportPerformer, type: :background_job do
   # public methods
-  
+  let(:course) { create(:course) }
+  let(:user) { create(:user) }
+  let(:attrs) {{ user_id: user[:id], course_id: course[:id] }}
+  let(:performer) { GradebookExportPerformer.new(attrs) }
+  subject { GradebookExportPerformer.new(attrs) }
+
   describe "public methods" do
-    let(:course) { create(:course) }
-    let(:user) { create(:user) }
-    subject { GradebookExportPerformer.new(user_id: user[:id], course_id: course[:id]) }
+    describe "initialize" do
+    end
 
     describe "setup" do
       it "should fetch the user and set it to user" do
@@ -24,10 +28,6 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
 
     describe "do_the_work" do
       context "both course and user present" do
-        before(:each) do
-          subject.setup # fetch course and user
-        end
-
         after(:each) do
           subject.do_the_work
         end
@@ -75,6 +75,10 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
 
       context "either course or user are not present" do
         # omit subject.setup so user and course are nil
+        before(:each) do
+          subject.remove_instance_variable(:@course)
+          subject.remove_instance_variable(:@user)
+        end
 
         it "should not require success" do
           expect(subject).not_to receive(:require_success)
@@ -91,33 +95,69 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
 
   # private methods
   
-  describe "fetch_user" do
-   it "should find the user by id" do
-     expect(subject.fetch_user).to eq(user)
-   end
-  end
+  describe "private methods" do
+    describe "fetch_user" do
+      subject { performer.instance_eval{fetch_user} }
+      it "should fetch the user" do
+        expect(subject).to eq(user)
+      end
 
-  describe "fetch_course" do
-    it "should find the course by id" do
-     expect(subject.fetch_course).to eq(course)
-    end
-  end
-
-  describe "fetch_csv_data" do
-    let(:peformer) { GradebookExportPerformer.new(user_id: user[:id], course_id: course[:id]) }
-    subject { performer.fetch_csv_data }
-
-    it "should find the csv gradebook for the course and return it as a huge string" do
-      expect(subject.class).to eq(String)
+      it "should find the course by id" do
+        expect(User).to receive(:find).with(user[:id]) { course }
+        performer
+      end
     end
 
-    it "should return a string in valid CSV format" do
-      expect(CSV.parse(subject).class).to eq(Array)
-    end
-  end
+    describe "fetch_course" do
+      subject { performer.instance_eval{fetch_course} }
 
-  describe "notify_gradebook_export" do
-    it "should deliver a notification that the gradebook was sent" do
+      it "should fetch the course" do
+       expect(subject).to eq(course)
+      end
+
+      it "should find the course by id" do
+        expect(Course).to receive(:find).with(course[:id]) { course }
+        performer
+      end
+    end
+
+    describe "fetch_csv_data" do
+      subject { performer.instance_eval{fetch_csv_data} }
+
+      it "should find the csv gradebook for the course and return it as a huge string" do
+        expect(subject.class).to eq(String)
+      end
+
+      it "should return a string in valid CSV format" do
+        expect(CSV.parse(subject).class).to eq(Array)
+      end
+    end
+
+    describe "notify_gradebook_export" do
+      let(:csv_data_double) { double(:csv_data) }
+      subject { performer.instance_eval { notify_gradebook_export } }
+      after(:each) { subject }
+
+      it "should create a new gradebook export notifier with @course, @user, and @csv_data" do
+        performer.instance_variable_set(:@csv_data, csv_data_double)
+        expect(NotificationMailer).to receive(:gradebook_export).with(course, user, csv_data_double)
+      end
+
+      it "should deliver the mailer" do
+        allow(performer).to receive_messages(gradebook_export: csv_data_double)
+        expect(csv_data_double).to receive(:deliver_now)
+      end
+    end
+
+    describe "messages" do
+      subject { performer.instance_eval{messages} }
+      it "should have a success message" do
+        expect(subject[:success]).to match('successfully delivered')
+      end
+
+      it "should have a failure message" do
+        expect(subject[:failure]).to match('was not delivered')
+      end
     end
   end
 end
