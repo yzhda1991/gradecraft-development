@@ -95,6 +95,7 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
       subject { performer.instance_eval { require_notify_released_succcess } }
       let(:notify_released_messages) { double(:notify_released_messages) }
       let(:notify_grade_released) { double(:notify_grade_released) }
+      let(:notify_released_result) { double(:notify_released_result) }
       let(:grade) { performer.instance_variable_get(:@grade) }
 
       context "@grade assignment is set to notify on release" do
@@ -111,6 +112,11 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
           allow(performer).to receive(:notify_grade_released) { true }
           expect(performer).to receive(:require_success) { true }
           subject
+        end
+
+        it "should return the result of notify_grade_released" do
+          allow(subject).to receive_messages(notify_grade_released: notify_released_result)
+          expect(subject).to eq(notify_released_result)
         end
 
         it "should change the number of outcomes" do
@@ -132,35 +138,14 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
         before(:each) do
           allow(grade).to receive_message_chain(:assignment, :notify_released?).and_return false
         end
-      end
-    end
 
-    describe "" do
-        it "should mail notification that the grade was released" do
-          expect(subject).to receive(:notify_grade_released)
-        end
-
-        it "should return the result of notify_grade_released" do
-          @released_result = double(:released_result)
-          allow(subject).to receive_messages(notify_grade_released: @released_result)
-          expect(subject).to receive(:require_success).and_return(@released_result)
-        end
-      end
-
-      context "either course or user are not present" do
-        # omit subject.setup so user and course are nil
-        before(:each) do
-          subject.remove_instance_variable(:@course)
-          subject.remove_instance_variable(:@user)
-        end
-
-        it "should not require success" do
+        it "should not trigger the require success" do
           expect(subject).not_to receive(:require_success)
-          subject.do_the_work
+          subject
         end
 
         it "should return nil" do
-          expect(subject.do_the_work).to eq(nil)
+          expect(subject).to eq(nil)
         end
       end
     end
