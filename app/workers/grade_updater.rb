@@ -5,25 +5,28 @@ class GradeUpdatePerformer < ResqueJob::Performer
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
+    require_saved_scores_success
+    require_notify_released_success
+  end
+
+  protected
+
+  def require_saved_scores_success
     require_success(save_scores_messages) do
       @grade.save_student_and_team_scores
     end
+  end
 
+  def require_notify_released_success
     if @grade.assignment.notify_released?
       require_success(notify_released_messages) { notify_grade_released } 
     end
   end
 
-  protected
-
-  def scores_message
-    @save_scores_outcome.success? ? "saved succcessfully" : "failed to save"
-  end
-
   def save_scores_messages
     {
-      "Student and team scores saved successfully for grade ##{@grade.id}"
-      "Student and team scores failed to save for grade ##{@grade.id}"
+      success: "Student and team scores saved successfully for grade ##{@grade.id}",
+      failure: "Student and team scores failed to save for grade ##{@grade.id}"
     }
   end
 
@@ -35,7 +38,7 @@ class GradeUpdatePerformer < ResqueJob::Performer
   end
 
   def fetch_grade_with_assignment
-    Grade.where(id: @grade.id).includes(:assignment).load.first
+    Grade.where(id: @attrs[:grade_id]).includes(:assignment).load.first
   end
 
   def notify_grade_released
