@@ -127,7 +127,7 @@ RSpec.describe GradeExportPerformer, type: :background_job do
 
       it "should call csv_grade on the course" do
         performer.instance_variable_set(:@course, course_double)
-        expect(course_double).to receive(:research_grades_for_course).with(course_double)
+        expect(course_double).to receive(:research_grades_csv)
         subject
       end
 
