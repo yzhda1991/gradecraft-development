@@ -26,7 +26,7 @@ class GradebookExportPerformer < ResqueJob::Performer
   end
 
   def fetch_csv_data
-    @csv_data = @course.gradebook_for_course(@course)
+    @csv_data = @course.csv_gradebook
   end
 
   def notify_gradebook_export

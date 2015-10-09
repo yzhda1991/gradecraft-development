@@ -348,62 +348,97 @@ class Course < ActiveRecord::Base
   end
 
   #gradebook spreadsheet export for course
-  def gradebook_for_course(course)
+  # todo: refactor this, maybe into a Gradebook class
+  def csv_gradebook
     CSV.generate do |csv|
-      assignment_names = []
-      assignment_names << "First Name"
-      assignment_names << "Last Name"
-      assignment_names << "Email"
-      assignment_names << "Username"
-      assignment_names << "Team"
-      course.assignments.sort_by { |assignment| assignment.created_at }.each do |a|
-        assignment_names << a.name
-      end
-      csv << assignment_names
-      course.students.each do |student|
-        student_data = []
-        student_data << student.first_name
-        student_data << student.last_name
-        student_data << student.email
-        student_data << student.username
-        student_data << student.team_for_course(course).try(:name)
-        course.assignments.sort_by { |assignment| assignment.created_at }.each do |a|
-          student_data << a.grade_for_student(student).try(:raw_score)
-        end
-        csv << student_data
+      @gradebook = Course::Gradebook.new(self)
+
+      csv << @gradebook.assignment_columns
+      self.students.each do |student|
+        csv << @gradebook.student_outcomes_for(student)
       end
     end
   end
 
   #gradebook spreadsheet export for course
-  def multiplied_gradebook_for_course(course)
+  def csv_multiplied_gradebook
     CSV.generate do |csv|
-      assignment_names = []
-      assignment_names << "First Name"
-      assignment_names << "Last Name"
-      assignment_names << "Email"
-      assignment_names << "Username"
-      assignment_names << "Team"
-      course.assignments.sort_by { |assignment| assignment.created_at }.each do |a|
-        assignment_names << a.name
-        assignment_names << a.name
-      end
-      csv << assignment_names
-      course.students.each do |student|
-        student_data = []
-        student_data << student.first_name
-        student_data << student.last_name
-        student_data << student.email
-        student_data << student.username
-        student_data << student.team_for_course(course).try(:name)
-        course.assignments.sort_by { |assignment| assignment.created_at }.each do |a|
-          student_data << a.grade_for_student(student).try(:raw_score)
-          student_data << a.grade_for_student(student).try(:score)
-        end
-        csv << student_data
+      @multiplied_gradebook = Course::MultipliedGradebook.new(self)
+
+      csv << @multiplied_gradebook.assignment_columns
+      self.students.each do |student|
+        csv << @multiplied_gradebook.student_outcomes_for(student)
       end
     end
   end
+
+  private
+
+  # todo: add unit tests for this somewhere else
+  class Gradebook
+    def initialize(course)
+      @course = course
+    end
+
+    def base_assignment_columns
+      ["First Name", "Last Name", "Email", "Username", "Team"]
+    end
+
+    def base_column_methods
+      [:first_name, :last_name, :email, :username]
+    end
+
+    def assignments
+      @assignments ||= @course.assignments.sort_by(&:created_at)
+    end
+
+    def assignment_columns
+      base_assignment_columns + assignment_name_columns
+    end
+
+    def assignment_name_columns
+      assignments.collect(&:name)
+    end
+
+    def student_data_for(student)
+      # add the base column names
+      student_data = base_column_methods.inject([]) do |memo, method|
+        memo << student.send(method)
+      end
+      # todo: we need to pre-fetch the course teams for this
+      student_data << student.team_for_course(@course).try(:name) 
+      
+      # add the grades for the necessary assignments, todo: improve the performance here
+      assignments.inject(student_data) do |memo, assignment|
+        memo << assignment.grade_for_student(student).try(:raw_score)
+      end
+    end
+  end
+
+  class MultipliedGradebook < Gradebook
+    def assignment_name_columns
+      assignments.collect do |assignment|
+        [ assignment.name, assignment.name ]
+      end.flatten
+    end
+
+    def student_data_for(student)
+      # add the base column names
+      student_data = base_column_methods.inject([]) do |memo, method|
+        memo << student.send(method)
+      end
+      # todo: we need to pre-fetch the course teams for this
+      student_data << student.team_for_course(@course).try(:name) 
+      
+      # add the grades for the necessary assignments, todo: improve the performance here
+      assignments.inject(student_data) do |memo, assignment|
+        memo << assignment.grade_for_student(student).try(:raw_score)
+        memo << a.grade_for_student(student).try(:score)
+      end
+    end
+  end
+
+  public again
 
   def research_grades_for_course(course, options = {})
     CSV.generate(options) do |csv|
