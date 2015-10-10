@@ -1,17 +1,18 @@
 require 'spec_helper'
 
-RSpec.describe GradeUpdatePerformer, type: :background_job do
-  let(:grade) { create(:grade) }
-  let(:attrs) {{ grade_id: grade[:id] }}
-  let(:performer) { GradeUpdatePerformer.new(attrs) }
+RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
+  let(:grades) { create_list(:grade, 3) }
+  let(:grade_ids) { grades.collect(&:id) }
+  let(:attrs) {{ grade_ids: grade_ids }}
+  let(:performer) { MultipleGradeUpdatePerformer.new(attrs) }
   subject { performer }
 
   describe "public methods" do
     describe "setup" do
       it "should fetch the user and set it to user" do
-        expect(subject).to receive(:fetch_grade_with_assignment).and_return grade
+        expect(subject).to receive(:fetch_grades_with_assignment).and_return grades
         subject.setup
-        expect(subject.instance_variable_get(:@grade)).to eq(grade)
+        expect(subject.instance_variable_get(:@grades)).to eq(grades)
       end
     end
 
@@ -19,92 +20,125 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
       subject { performer.do_the_work }
       after(:each) { subject }
 
-      it "should require that the saved scores method succeeds" do
-        expect(performer).to receive(:require_saved_scores_success)
+      it "should require that the save scores method succeeds" do
+        expect(performer).to receive(:require_save_scores_success).exactly(3).times
       end
 
       it "should require that the notify released method succeeds" do
-        expect(performer).to receive(:require_notify_released_success)
+        expect(performer).to receive(:require_notify_released_success).exactly(3).times
+      end
+
+      it "should call require_save_scores_success() for each grade" do
+        grades.each do |grade|
+          expect(performer).to receive(:require_save_scores_success).with(grade)
+        end
+      end
+
+      it "should call require_notify_released_success() for each grade" do
+        grades.each do |grade|
+          expect(performer).to receive(:require_notify_released_success).with(grade)
+        end
       end
     end
 
     describe "require_saved_scores_success" do
-      let(:saved_scores_messages) { double(:saved_scores_messages) }
-      let(:performer_grade) { performer.instance_variable_get(:@grade) }
-      subject { performer.instance_eval { require_saved_scores_success }}
+      let(:save_scores_messages) { double(:save_scores_messages) }
+      subject do
+        grades.each do |grade|
+          performer.instance_eval { require_save_scores_success(grade) }
+        end
+      end
 
-      it "should require success with notify released messages" do
-        allow(performer).to receive(:saved_scores_messages) { saved_scores_messages }
-        expect(performer).to receive(:require_success).with(saved_scores_messages)
-        performer.do_the_work
+      it "should require success with notify released messages", focus: true do
+        allow(performer).to receive(:save_scores_messages).with(grade) { save_scores_messages }
+        expect(performer).to receive(:require_success).with(save_scores_messages).exactly(grades.size).times
+        subject
       end
 
       context "@grade.save_student_and_team_scores succeeds" do
         before(:each) do
-          allow(performer_grade).to receive_messages(save_student_and_team_scores: true)
+          grades.each do |grade|
+            allow(grade).to receive_messages(save_student_and_team_scores: true)
+          end
         end
 
         it "should return the successful value" do
-          expect(performer).to receive(:require_success) { true }
+          expect(performer).to receive(:require_success) { true }.exactly(grades.size).times
           subject
         end
 
         it "should change the number of outcomes" do
-          expect{ subject }.to change{ performer.outcomes.size }.by(1)
+          expect{ subject }.to change{ performer.outcomes.size }.by(grades.size)
         end
 
         it "should create a successful outcome" do
           subject
-          expect(performer.outcomes.first.success?).to be_truthy
+          grades.each_with_index do |grade,index|
+            expect(performer.outcomes[index].success?).to be_truthy
+          end
         end
 
         it "should use the proper message in the outcome" do
           subject
-          expect(performer.outcome_messages.first).to match(/saved successfully for grade/)
+          grades.each_with_index do |grade,index|
+            expect(performer.outcome_messages[index]).to match(/saved successfully for grade/)
+          end
         end
       end
 
       context "@grade.save_student_and_team_scores fails" do
         before(:each) do
-          allow(@grade).to receive_messages(save_student_and_team_scores: nil)
+          grades.each do |grade|
+            allow(grade).to receive_messages(save_student_and_team_scores: nil)
+          end
         end
 
         it "should return the successful value" do
-          expect(performer).to receive(:require_success) { nil }
+          expect(performer).to receive(:require_success) { nil }.exactly(grades.size).times
           subject
         end
 
         it "should change the number of outcomes" do
-          expect{ subject }.to change{ performer.outcomes.size }.by(1)
+          expect{ subject }.to change{ performer.outcomes.size }.by(grades.size)
         end
 
         it "should create a failed outcome" do
           subject
-          expect(performer.outcomes.first.failure?).to be_truthy
+          grades.each_with_index do |grade,index|
+            expect(performer.outcomes[index].failure?).to be_truthy
+          end
         end
 
         it "should use the correct message in the outcome" do
           subject
-          expect(performer.outcome_messages.first).to match(/scores failed to save/)
+          grades.each_with_index do |grade,index|
+            expect(performer.outcome_messages[index]).to match(/scores failed to save/)
+          end
         end
       end
     end
 
     describe "require_notify_released_success" do
-      subject { performer.instance_eval { require_notify_released_success } }
       let(:notify_released_messages) { double(:notify_released_messages) }
       let(:notify_grade_released) { double(:notify_grade_released) }
       let(:notify_released_result) { double(:notify_released_result) }
       let(:performer_grade) { performer.instance_variable_get(:@grade) }
+      subject do
+        grades.each do |grade|
+          performer.instance_eval { require_notify_released_success(grade) }
+        end
+      end
 
       context "@grade assignment is set to notify on release" do
         before(:each) do
-          allow(performer_grade).to receive_message_chain(:assignment, :notify_released?) { true }
+          grades.each do |grade|
+            allow(grade).to receive_message_chain(:assignment, :notify_released?) { true }
+          end
         end
 
         it "should require success with notify released messages" do
           allow(performer).to receive_messages(notify_released_messages: notify_released_messages)
-          expect(performer).to receive(:require_success).with(notify_released_messages)
+          expect(performer).to receive(:require_success).with(notify_released_messages).exactly(grades.size).times
           subject
         end
 
@@ -115,28 +149,38 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
         end
 
         it "should return the result of notify_grade_released" do
-          allow(subject).to receive_messages(notify_grade_released: notify_released_result)
-          expect(subject).to eq(notify_released_result)
+          allow(performer).to receive_messages(notify_grade_released: notify_released_result)
+          grades.each do |grade|
+            expect do
+              performer.instance_eval { require_notify_released_success(grade) }
+            end.result.to eq(notify_released_result)
+          end
         end
 
         it "should change the number of outcomes" do
-          expect{ subject }.to change{ performer.outcomes.size }.by(1)
+          expect{ subject }.to change{ performer.outcomes.size }.by(grades.size)
         end
 
         it "should create a successful outcome" do
           subject
-          expect(performer.outcomes.first.success?).to be_truthy
+          grades.each_with_index do |grade,index|
+            expect(performer.outcomes[index].success?).to be_truthy
+          end
         end
 
         it "should use the correct message in the outcome" do
           subject
-          expect(performer.outcome_messages.first).to match(/Successfully sent notification/)
+          grades.each_with_index do |grade,index|
+            expect(performer.outcome_messages[index]).to match(/Successfully sent notification/)
+          end
         end
       end
 
       context "@grade assignment is not set to notify on release" do
         before(:each) do
-          allow(performer_grade).to receive_message_chain(:assignment, :notify_released?).and_return false
+          grades.each do |grade|
+            allow(grade).to receive_message_chain(:assignment, :notify_released?).and_return false
+          end
         end
 
         it "should not trigger the require success" do
@@ -145,7 +189,11 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
         end
 
         it "should return nil" do
-          expect(subject).to eq(nil)
+          grades.each do |grade|
+            expect do
+              performer.instance_eval { require_notify_released_success(grade) }
+            end.to eq(nil)
+          end
         end
       end
     end
@@ -153,10 +201,11 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
 
   describe "fetch_grade_with_assignment" do
     subject { performer.instance_eval{ fetch_grade_with_assignment } }
-    let(:include_result) { double(:include_result) }
+    let(:include_result) { double(:include_result).as_null_object }
     let(:fetch_grade) { Grade.find grade.id }
 
     it "should find a grade where the id matches @attrs[:grade_id]" do
+      allow(Grade).to receive(:where) { include_result }
       expect(Grade).to receive(:where).with(id: attrs[:grade_id])
       subject
     end

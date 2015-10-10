@@ -1,3 +1,4 @@
+# TODO: Refactor this to just spawn a bunch of individual GradeUpdatePerformer jobs
 class MultipleGradeUpdatePerformer < ResqueJob::Performer
   def setup
     @grade_ids = @attrs[:grade_ids]
@@ -7,22 +8,22 @@ class MultipleGradeUpdatePerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     @grades.each do |grade|
-      require_saved_scores_success(grade)
+      require_save_scores_success(grade)
       require_notify_released_success(grade)
     end
   end
 
   protected
 
-  def require_saved_scores_success(grade)
-    require_success(save_scores_messages) do
+  def require_save_scores_success(grade)
+    require_success(save_scores_messages(grade)) do
       grade.save_student_and_team_scores
     end
   end
 
   def require_notify_released_success(grade)
     if grade.assignment.notify_released?
-      require_success(notify_released_messages) { notify_grade_released(grade) } 
+      require_success(notify_released_messages(grade)) { notify_grade_released(grade) } 
     end
   end
 
