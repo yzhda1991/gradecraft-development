@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
-  let(:grades) { create_list(:grade, 3) }
+  let(:grades) { create_list(:grade, 2) }
   let(:grade_ids) { grades.collect(&:id) }
   let(:attrs) {{ grade_ids: grade_ids }}
   let(:performer) { MultipleGradeUpdatePerformer.new(attrs) }
@@ -21,11 +21,11 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
       after(:each) { subject }
 
       it "should require that the save scores method succeeds" do
-        expect(performer).to receive(:require_save_scores_success).exactly(3).times
+        expect(performer).to receive(:require_save_scores_success).exactly(grades.size).times
       end
 
       it "should require that the notify released method succeeds" do
-        expect(performer).to receive(:require_notify_released_success).exactly(3).times
+        expect(performer).to receive(:require_notify_released_success).exactly(grades.size).times
       end
 
       it "should call require_save_scores_success() for each grade" do
@@ -50,8 +50,10 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
       end
 
       it "should require success with notify released messages" do
-        allow(performer).to receive(:save_scores_messages).with(grade) { save_scores_messages }
-        expect(performer).to receive(:require_success).with(save_scores_messages).exactly(grades.size).times
+        grades.each do |grade|
+          allow(performer).to receive(:save_scores_messages).with(grade) { save_scores_messages }
+          expect(performer).to receive(:require_success).with(save_scores_messages)
+        end
         subject
       end
 
@@ -144,16 +146,15 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
 
         it "should render the value of notify_grade_released" do
           allow(performer).to receive(:notify_grade_released) { true }
-          expect(performer).to receive(:require_success) { true }
+          expect(performer).to receive(:require_success) { true }.exactly(grades.size).times
           subject
         end
 
         it "should return the result of notify_grade_released" do
           allow(performer).to receive_messages(notify_grade_released: notify_released_result)
           grades.each do |grade|
-            expect do
-              performer.instance_eval { require_notify_released_success(grade) }
-            end.result.to eq(notify_released_result)
+            expect(performer.instance_eval { require_notify_released_success(grade) }.result)
+              .to eq(notify_released_result)
           end
         end
 
@@ -190,9 +191,7 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
 
         it "should return nil" do
           grades.each do |grade|
-            expect do
-              performer.instance_eval { require_notify_released_success(grade) }
-            end.to eq(nil)
+            expect{ performer.instance_eval { require_notify_released_success(grade)}.to eq(nil) }
           end
         end
       end
@@ -205,8 +204,8 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
 
     it "should find a grade where the id matches @attrs[:grade_id]" do
       allow(Grade).to receive(:where) { include_result }
-      expect(Grade).to receive(:where).with(ids: grade_ids)
-      subject
+      expect(Grade).to receive(:where).with(id: grade_ids)
+      performer
     end
 
     it "should include the assignment" do
@@ -242,7 +241,9 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
     end
 
     it "should create a new grade released notifier with the grade id" do
-      expect(NotificationMailer).to receive(:grade_released).with(grade.id).exactly(grades.size).times
+      grades.each do |grade|
+        expect(NotificationMailer).to receive(:grade_released).with(grade.id)
+      end
       subject
     end
 
