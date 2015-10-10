@@ -49,7 +49,7 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
         end
       end
 
-      it "should require success with notify released messages", focus: true do
+      it "should require success with notify released messages" do
         allow(performer).to receive(:save_scores_messages).with(grade) { save_scores_messages }
         expect(performer).to receive(:require_success).with(save_scores_messages).exactly(grades.size).times
         subject
@@ -199,14 +199,13 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
     end
   end
 
-  describe "fetch_grade_with_assignment" do
-    subject { performer.instance_eval{ fetch_grade_with_assignment } }
+  describe "fetch_grades_with_assignment" do
+    subject { performer.instance_eval{ fetch_grades_with_assignment } }
     let(:include_result) { double(:include_result).as_null_object }
-    let(:fetch_grade) { Grade.find grade.id }
 
     it "should find a grade where the id matches @attrs[:grade_id]" do
       allow(Grade).to receive(:where) { include_result }
-      expect(Grade).to receive(:where).with(id: attrs[:grade_id])
+      expect(Grade).to receive(:where).with(ids: grade_ids)
       subject
     end
 
@@ -217,68 +216,109 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
     end
 
     it "should load the first one" do
-      expect(Grade).to receive_message_chain(:where, :includes, :load, :first)
+      expect(Grade).to receive_message_chain(:where, :includes, :load)
       performer
     end
 
     it "should return the actual grade" do
-      expect(subject).to eq(fetch_grade)
+      expect(subject.to_a).to eq(grades)
     end
 
     it "should have included the assignment" do
       subject
-      expect{ grade.assignment }.not_to make_database_queries
+      grades.each do |grade|
+        expect{ grade.assignment }.not_to make_database_queries
+      end
     end
   end
 
   describe "notify_grade_released" do
-    subject { performer.instance_eval { notify_grade_released } }
     let(:mailer_double) { double(:mailer).as_null_object }
     before(:each) { allow(NotificationMailer).to receive(:grade_released).and_return(mailer_double) }
-    after(:each) { subject }
+    subject do
+      grades.each do |grade|
+        performer.instance_eval { notify_grade_released(grade) }
+      end
+    end
 
     it "should create a new grade released notifier with the grade id" do
-      expect(NotificationMailer).to receive(:grade_released).with(grade.id)
+      expect(NotificationMailer).to receive(:grade_released).with(grade.id).exactly(grades.size).times
+      subject
     end
 
     it "should deliver the mailer" do
       allow(performer).to receive_messages(grade_released:  mailer_double)
-      expect(mailer_double).to receive(:deliver_now)
+      expect(mailer_double).to receive(:deliver_now).exactly(grades.size).times
+      subject
     end
   end
 
   # NOTE: DONE
   describe "save_scores_messages" do
-    subject { performer.instance_eval{ save_scores_messages } }
-    let(:performer_grade) { performer.instance_variable_get(:@grade) }
+    subject do
+      grades.collect do |grade|
+        performer.instance_eval{ save_scores_messages(grade) }
+      end
+    end
 
     it "should have a success message" do
-      expect(subject[:success]).to match('saved successfully')
+      subject.each do |messages|
+        expect(messages[:success]).to match('saved successfully')
+      end
     end
 
     it "should have a failure message" do
-      expect(subject[:failure]).to match('failed to save')
+      subject.each do |messages|
+        expect(messages[:failure]).to match('failed to save')
+      end
     end
 
     it "should include the grade id in the success condition" do
-      expect(subject[:success]).to match("for grade ##{performer_grade.id}")
+      grades.each do |grade|
+        messages = performer.instance_eval{ save_scores_messages(grade) }
+        expect(messages[:success]).to match("for grade ##{grade.id}")
+      end
     end
 
     it "should include the grade id in the failure condition" do
-      expect(subject[:failure]).to match("for grade ##{performer_grade.id}")
+      grades.each do |grade|
+        messages = performer.instance_eval{ save_scores_messages(grade) }
+        expect(messages[:failure]).to match("for grade ##{grade.id}")
+      end
     end
   end
 
-  # NOTE: DONE
   describe "notify_released_messages" do
-    subject { performer.instance_eval{ notify_released_messages } }
+    subject do
+      grades.collect do |grade|
+        performer.instance_eval{ notify_released_messages(grade) }
+      end
+    end
 
     it "should have a success message" do
-      expect(subject[:success]).to include('Successfully sent notification')
+      subject.each do |messages|
+        expect(messages[:success]).to match('Successfully sent notification')
+      end
     end
 
     it "should have a failure message" do
-      expect(subject[:failure]).to include('Failed to send')
+      subject.each do |messages|
+        expect(messages[:failure]).to match('Failed to send')
+      end
+    end
+
+    it "should include the grade id in the success condition" do
+      grades.each do |grade|
+        messages = performer.instance_eval{ notify_released_messages(grade) }
+        expect(messages[:success]).to match("of grade ##{grade.id}")
+      end
+    end
+
+    it "should include the grade id in the failure condition" do
+      grades.each do |grade|
+        messages = performer.instance_eval{ notify_released_messages(grade) }
+        expect(messages[:failure]).to match("for grade ##{grade.id}")
+      end
     end
   end
 end

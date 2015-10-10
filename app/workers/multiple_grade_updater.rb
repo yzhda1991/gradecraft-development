@@ -42,7 +42,7 @@ class MultipleGradeUpdatePerformer < ResqueJob::Performer
   end
 
   def fetch_grades_with_assignment
-    Grade.where(id: @attrs[:grade_id]).includes(:assignment).load.first
+    Grade.where(id: @attrs[:grade_id]).includes(:assignment).load
   end
 
   def notify_grade_released(grade)
