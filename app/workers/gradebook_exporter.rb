@@ -9,6 +9,7 @@ class GradebookExportPerformer < ResqueJob::Performer
     if @course.present? and @user.present?
       require_success(messages) do
         fetch_csv_data
+        puts "Fetched CSV data: #'#{sanitized_csv_excerpt}...'" # TODO: add spec
         notify_gradebook_export # the result of this block determines the outcome
       end
     end
@@ -17,12 +18,17 @@ class GradebookExportPerformer < ResqueJob::Performer
   private
   
   def fetch_user
-    User.find @attrs[:user_id]
+    User.find @attrs[:course_id]
   end
 
   # todo: speed this up by condensing the CSV generator into a single query
   def fetch_course # TODO: add specs for includes
     Course.find @attrs[:course_id]
+  end
+
+  # todo spec
+  def sanitized_csv_excerpt
+    fetch_csv_data.gsub("\n","").split(//).last(50).join
   end
 
   def fetch_csv_data

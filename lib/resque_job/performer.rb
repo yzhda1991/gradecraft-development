@@ -1,8 +1,7 @@
 class ResqueJob::Performer
   # DSL improvements and resque-scheduler helpers
   def initialize(attrs={})
-    Rails.logger.info "a performer was created"
-    @attrs = attrs
+    @attrs = attrs.symbolize_keys
     @outcomes = []
     @outcome_messages = []
     @logger = Rails.logger rescue nil
@@ -26,19 +25,31 @@ class ResqueJob::Performer
   end
 
   def add_outcome_messages(outcome, messages={})
-    add_message(messages[:success]) if messages[:success] and outcome.success?
-    add_message(messages[:failure]) if messages[:failure] and outcome.failure?
+    if messages[:success] and outcome.success?
+      add_message(messages[:success]) 
+      outcome.message = messages[:success]
+    end
+
+    if messages[:failure] and outcome.failure?
+      add_message(messages[:failure]) 
+      outcome.message = messages[:failure]
+    end
   end
 
   # todo: add specs
   def log_outcome_messages
-    @outcome_messages.each do |message|
-      if @logger
-        @logger.info message
-      end
+    @outcome_messages.each {|message| puts message }
+  end
+
+  # todo add spec
+  def verbose_outcome_messages
+    @outcomes.each do |outcome|
+      puts "SUCCESS: #{outcome.message}" if outcome.success?
+      puts "FAILURE: #{outcome.message}" if outcome.failure?
     end
   end
 
+  # refactor this to literally be a list of 
   def failures
     @failures ||= @outcomes.select {|outcome| outcome.failure? }
   end

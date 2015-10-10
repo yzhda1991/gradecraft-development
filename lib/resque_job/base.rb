@@ -16,16 +16,23 @@ module ResqueJob
     def self.perform(attrs={})
       # TODO: catch everything with an exception, log the exception message, and then throw another exception
       # mention to the logger that something is happening
-      #self.start_message # this wasn't running because 
-      p "snakes"
-      # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
 
-      # this is where the magic happens
-      performer = @performer_class.new(attrs) # self.class is the job class
-      performer.do_the_work
+      # TODO: need to add specs for the new begin/resque
+      begin
+        puts self.start_message(attrs) # this wasn't running because 
+        # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
+        #
+        # this is where the magic happens
+        @performer = @performer_class.new(attrs) # self.class is the job class
+        @performer.do_the_work
 
-      # mention to the logger how things went
-      performer.log_outcome_messages
+        # mention to the logger how things went
+        @performer.verbose_outcome_messages
+      rescue Exception => e
+        puts "Error in #{@performer_class.to_s}: #{e.message}"
+        # puts e.backtrace.inspect
+        raise ResqueJob::ForcedRetryError
+      end
     end
 
     def initialize(attrs={})

@@ -355,7 +355,7 @@ class Course < ActiveRecord::Base
 
       csv << @gradebook.assignment_columns
       self.students.each do |student|
-        csv << @gradebook.student_outcomes_for(student)
+        csv << @gradebook.student_data_for(student)
       end
     end
   end
@@ -367,7 +367,7 @@ class Course < ActiveRecord::Base
 
       csv << @multiplied_gradebook.assignment_columns
       self.students.each do |student|
-        csv << @multiplied_gradebook.student_outcomes_for(student)
+        csv << @multiplied_gradebook.student_data_for(student)
       end
     end
   end
