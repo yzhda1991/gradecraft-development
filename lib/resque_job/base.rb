@@ -14,15 +14,18 @@ module ResqueJob
 
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
+      # TODO: catch everything with an exception, log the exception message, and then throw another exception
       # mention to the logger that something is happening
-      p self.start_message
+      #self.start_message # this wasn't running because 
+      p "snakes"
+      # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
 
       # this is where the magic happens
       performer = @performer_class.new(attrs) # self.class is the job class
       performer.do_the_work
 
       # mention to the logger how things went
-      performer.puts_outcome_messages
+      performer.log_outcome_messages
     end
 
     def initialize(attrs={})
@@ -41,12 +44,23 @@ module ResqueJob
       Resque.enqueue(self.object_class, @attrs)
     end
 
-    def self.start_message
-      @start_message || "Starting #{self.job_type} in queue '#{@queue}'."
+    # todo: modify specs for this
+    def self.start_message(attrs)
+      @start_message || "Starting #{self.job_type} in queue '#{@queue}' with attributes { #{self.perform_attributes(attrs)} }."
+    end
+
+    def self.perform_attributes(attrs)
+      attrs.collect do |key, value|
+        "#{key}: #{value}"
+      end.join(", ")
     end
 
     def self.object_class
       self.new.class
+    end
+
+    def object_class
+      self.class
     end
 
     def self.job_type
