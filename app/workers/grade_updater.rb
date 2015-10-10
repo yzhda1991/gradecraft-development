@@ -42,7 +42,7 @@ class GradeUpdatePerformer < ResqueJob::Performer
   end
 
   def notify_grade_released
-    NotificationMailer.grade_released(@grade.id).deliver
+    NotificationMailer.grade_released(@grade.id).deliver_now
   end
 end
 
