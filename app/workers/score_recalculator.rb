@@ -7,24 +7,25 @@ class ScoreRecalculatorPerformer < ResqueJob::Performer
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
-    require_success { @student.cache_course_score(@course_id) }
-  end
-
-  def outcome_messages # prints_to_logger
-    if outcome_success?
-      puts "All grades saved and notified correctly."
-    elsif outcome_failure?
-      puts "All grades and notifications failed."
-    end
+    # TODO: write model specs for cache_course_score outcomes
+    require_success(messages) { @student.cache_course_score(@course_id) }
   end
 
   protected
+
+  def messages
+    {
+      success: "Successfully cached student ##{@student.id}'s score for course ##{@course_id}",
+      failure: "Failed to cache student ##{@student.id}'s score for course ##{@course_id}"
+    }
+  end
 
   def fetch_student
     User.find(@student_id)
   end
 end
 
+# TODO: add specs for all of these
 class ScoreRecalculatorJob < ResqueJob::Base
   @queue = :score_recalculator
   @performer_class = ScoreRecalculatorPerformer
