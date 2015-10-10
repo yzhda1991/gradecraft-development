@@ -1,4 +1,4 @@
-class GradeUpdatePerformer < ResqueJob::Performer
+class MultipleGradeUpdatePerformer < ResqueJob::Performer
   def setup
     @grade_ids = @attrs[:grade_ids]
     @grades = fetch_grades_with_assignment
@@ -49,7 +49,7 @@ class GradeUpdatePerformer < ResqueJob::Performer
   end
 end
 
-class GradeUpdaterJob < ResqueJob::Base
+class MultipleGradeUpdaterJob < ResqueJob::Base
   @queue = :grade_updater
-  @performer_class = GradeUpdatePerformer
+  @performer_class = MultipleGradeUpdatePerformer
 end

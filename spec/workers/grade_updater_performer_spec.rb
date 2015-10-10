@@ -20,7 +20,7 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
       after(:each) { subject }
 
       it "should require that the saved scores method succeeds" do
-        expect(performer).to receive(:require_saved_scores_success)
+        expect(performer).to receive(:require_save_scores_success)
       end
 
       it "should require that the notify released method succeeds" do
@@ -29,14 +29,14 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
     end
 
     describe "require_saved_scores_success" do
-      let(:saved_scores_messages) { double(:saved_scores_messages) }
+      let(:save_scores_messages) { double(:save_scores_messages) }
       let(:performer_grade) { performer.instance_variable_get(:@grade) }
-      subject { performer.instance_eval { require_saved_scores_success }}
+      subject { performer.instance_eval { require_save_scores_success }}
 
       it "should require success with notify released messages" do
-        allow(performer).to receive(:saved_scores_messages) { saved_scores_messages }
-        expect(performer).to receive(:require_success).with(saved_scores_messages)
-        performer.do_the_work
+        allow(performer).to receive(:save_scores_messages) { save_scores_messages }
+        expect(performer).to receive(:require_success).with(save_scores_messages)
+        subject
       end
 
       context "@grade.save_student_and_team_scores succeeds" do
@@ -115,8 +115,8 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
         end
 
         it "should return the result of notify_grade_released" do
-          allow(subject).to receive_messages(notify_grade_released: notify_released_result)
-          expect(subject).to eq(notify_released_result)
+          allow(performer).to receive_messages(notify_grade_released: notify_released_result)
+          expect(subject.result).to eq(notify_released_result)
         end
 
         it "should change the number of outcomes" do
@@ -153,10 +153,11 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
 
   describe "fetch_grade_with_assignment" do
     subject { performer.instance_eval{ fetch_grade_with_assignment } }
-    let(:include_result) { double(:include_result) }
+    let(:include_result) { double(:include_result).as_null_object }
     let(:fetch_grade) { Grade.find grade.id }
 
     it "should find a grade where the id matches @attrs[:grade_id]" do
+      allow(Grade).to receive(:where) { include_result }
       expect(Grade).to receive(:where).with(id: attrs[:grade_id])
       subject
     end

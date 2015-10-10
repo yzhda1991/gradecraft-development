@@ -5,13 +5,13 @@ class GradeUpdatePerformer < ResqueJob::Performer
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
-    require_saved_scores_success
+    require_save_scores_success
     require_notify_released_success
   end
 
   protected
 
-  def require_saved_scores_success
+  def require_save_scores_success
     require_success(save_scores_messages) do
       @grade.save_student_and_team_scores
     end
