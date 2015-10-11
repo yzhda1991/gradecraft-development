@@ -1,12 +1,5 @@
-require_relative '../test_helper'
-
-class GradeExporterTest
-
-  def subject
-    lambda { GradeExportJob.new({ user_id: 1, course_id: 3 }) }.call
-  end
-
-  def test
+class EnqueuePerformerTest < ConsoleTest::SimpleConsoleTest
+  def tests
     puts start_message
 
     puts "Running normal enqueues, should happen right now:"
@@ -16,5 +9,3 @@ class GradeExporterTest
     @cycles.times { subject.enqueue_in(10) }
   end
 end
-
-GradebookExporterTest.new.run(3)

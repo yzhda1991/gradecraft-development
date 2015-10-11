@@ -1,6 +1,6 @@
 require_relative '../test_helper'
 
-class GradeExporterTest
+class GradeExportTest
 
   def subject
     lambda { GradeExportJob.new({ user_id: 1, course_id: 3 }) }.call
@@ -17,4 +17,4 @@ class GradeExporterTest
   end
 end
 
-GradebookExporterTest.new.run(3)
+GradeExporterTest.new.run(3)

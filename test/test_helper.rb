@@ -6,3 +6,4 @@ require File.expand_path("../../config/environment", __FILE__)
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 Dir[Rails.root.join("app/workers/**/*.rb")].each { |f| require f }
 Dir[Rails.root.join("app/performers/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join("test/support/**/*.rb")].each { |f| require f }
