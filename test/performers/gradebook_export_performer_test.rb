@@ -1,32 +1,71 @@
 require_relative '../test_helper'
-ENV['TEST_CYCLES'] ||= '3'
-cycles = ENV['TEST_CYCLES']
 
-class GradebookExporterTest
-  def initialize
-    @job = GradebookExporterJob.new(job_attrs)
+module GradebookExporterTest
+  class TestRunner
+    def initialize(attrs={})
+      @tests = []
+      @attrs = attrs
+      @cycles = @attrs[:cycles] || 3
+      @start_message = @attrs[:start_message] || default_start_message
+    end
+    attr_reader :runner, :attrs, :cycles
+    attr_accessor :tests
+
+    def default_start_message
+      "Starting #{cycles} GradebookExporterJob test cycles..."
+    end
+
+    def start
+      @tests.each do |test|
+        puts test.start_message
+        test.cycles.times { test.run }
+      end
+    end
+
+    def add_test(&action_block)
+      console_test = ConsoleTest.new
+      console_test.add_action { action_block } if action_block
+      @tests << console_test
+      console_test
+    end
   end
 
-  def job_attrs
-    { user_id: 1, course_id: 3 }
-  end
+  class ConsoleTest
+    def initialize(attrs)
+      @attrs = attrs
+      @cycles = @attrs[:cycles] || 3
+      @start_message = @attrs[:start_message] || default_start_message
+      @actions = []
+    end
+    attr_reader :cycles, :start_message
 
-  def enqueue
-    @job.enqueue
-  end
+    def subject
+      GradebookExporterJob.new(subject_attrs)
+    end
 
-  def enqueue_in(time)
-    @job.enqueue_in(10)
+    def subject_attrs
+      { user_id: 1, course_id: 3 }
+    end
+
+    def default_start_message
+      "Starting #{cycles} GradebookExporterJob test cycles..."
+    end
+
+    def run 
+      @actions.each do |action|
+        subject.instance_exec { &action }
+        # subject.instance_exec { action.call }
+      end
+    end
   end
 end
 
-Rails.logger.info "Starting #{cycles} GradebookExporterTest cycles..."
-Rails.logger.info "Running normal enqueues, should happen right now:"
-ENV['TEST_CYCLES'].to_i.times do
-  GradebookExporterTest.new.enqueue
-end
+@test_runner = GradebookExporterTest::TestRunner.new
 
-Rails.logger.info "Running delayed enqueue_in calls, should happen in ten seconds:"
-ENV['TEST_CYCLES'].to_i.times do
-  GradebookExporterTest.new.enqueue_in(10)
-end
+@enqueue_test = @test_runner.add_test { enqueue }
+@enqueue_test.start_message = "Running normal enqueues, should happen right now:"
+
+@enqueue_in_test = @test_runner.add_test { enqueue_in(10) }
+@enqueue_in_test.start_message = "Running delayed enqueue_in calls, should happen in ten seconds:"
+
+@test_runner.start
