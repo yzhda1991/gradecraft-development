@@ -101,7 +101,8 @@ class InfoController < ApplicationController
 
   #downloadable grades for course with  export
   def research_gradebook
-    Resque.enqueue(GradeExporter, current_user.id, current_course.id)
+    # @mz TODO: add specs
+    GradeExporterJob.new(user_id: current_user.id, course_id: current_course.id).enqueue
     flash[:notice]="Your request to export grade data from course \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
     redirect_to courses_path
   end

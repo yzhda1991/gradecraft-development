@@ -59,7 +59,8 @@ class ChallengeGradesController < ApplicationController
         if current_course.add_team_score_to_student?
           @team = @challenge_grade.team
           @team.students.each do |student|
-            Resque.enqueue(ScoreRecalculator, student.id, current_course.id)
+            # @mz TODO: add specs
+            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id).enqueue
           end
         end
         format.html { redirect_to @challenge, notice: "#{@challenge.name} #{term_for :challenge} successfully graded" }
@@ -80,7 +81,8 @@ class ChallengeGradesController < ApplicationController
         if current_course.add_team_score_to_student? && scored_changed
           @team = @challenge_grade.team
           @team.students.each do |student|
-            Resque.enqueue(ScoreRecalculator, student.id, current_course.id)
+            # @mz TODO: add specs
+            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id).enqueue
           end
         end
         format.html { redirect_to @challenge, notice: "Grade for #{@challenge.name} #{term_for :challenge} successfully updated" }

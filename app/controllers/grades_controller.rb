@@ -234,7 +234,8 @@ class GradesController < ApplicationController
     sanitize_grade_params
 
     if @grade.update_attributes params[:grade].merge(instructor_modified: true)
-      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+      # @mz TODO: ADD SPECS
+      GradeUpdaterJob.new(grade_id: @grade.id).enqueue if @grade.is_released?
       update_success_redirect
     else
       update_failure_redirect
@@ -293,7 +294,8 @@ class GradesController < ApplicationController
     delete_existing_earned_badges_for_metrics # if earned_badges_exist? # destroy earned_badges where assignment_id and student_id match
     create_earned_tier_badges if params[:tier_badges]# create_earned_tier_badges
 
-    Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_student_visible?
+    # @mz TODO: add specs
+    GradeUpdaterJob.new(grade_id: @grade.id).enqueue if @grade.is_student_visible?
 
     respond_to do |format|
       format.json { render nothing: true }
@@ -437,7 +439,8 @@ class GradesController < ApplicationController
       @grade.status = "Graded"
       respond_to do |format|
         if @grade.save
-          Resque.enqueue(GradeUpdater, [@grade.id])
+          # @mz TODO: add specs
+          GradeUpdaterJob.new(grade_id: @grade.id).enqueue
           format.html { redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!' }
         else
           format.html { redirect_to syllabus_path, notice: "We're sorry, this grade could not be added." }
@@ -523,7 +526,9 @@ class GradesController < ApplicationController
           grade_ids << grade.id
         end
       end
-      Resque.enqueue(MultipleGradeUpdater, grade_ids)
+      # @mz TODO: add specs
+      MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
+
       if !params[:team_id].blank?
         redirect_to assignment_path(@assignment, :team_id => params[:team_id])
       else
@@ -554,7 +559,8 @@ class GradesController < ApplicationController
       grade_ids << grade.id
     end
 
-    Resque.enqueue(MultipleGradeUpdater, grade_ids)
+    # @mz TODO: add specs
+    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
 
     respond_with @assignment
   end
@@ -576,7 +582,9 @@ class GradesController < ApplicationController
       grade.update_attributes!(params[:grade].reject { |k,v| v.blank? })
       grade_ids << grade.id
     end
-    Resque.enqueue(MultipleGradeUpdater, grade_ids)
+
+    # @mz TODO: add specs
+    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
 
     if session[:return_to].present?
       redirect_to session[:return_to]
@@ -603,7 +611,10 @@ class GradesController < ApplicationController
       @students = current_course.students
 
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
-      Resque.enqueue(MultipleGradeUpdater, @result.successful.map(&:id))
+
+      # @mz TODO: add specs
+      MultipleGradeUpdaterJob.new(grade_ids: @result.successful.map(&:id)).enqueue
+
       render :import_results
     end
   end
