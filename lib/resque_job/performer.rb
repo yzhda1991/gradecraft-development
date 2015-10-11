@@ -45,7 +45,10 @@ class ResqueJob::Performer
   def verbose_outcome_messages
     @outcomes.each do |outcome|
       puts "SUCCESS: #{outcome.message}" if outcome.success?
-      puts "FAILURE: #{outcome.message}" if outcome.failure?
+      if outcome.failure?
+        puts "FAILURE: #{outcome.message}" 
+      end
+      puts "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
     end
   end
 

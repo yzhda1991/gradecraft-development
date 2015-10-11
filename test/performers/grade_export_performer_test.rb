@@ -1,20 +1,22 @@
 require_relative '../test_helper'
-
 class GradeExportTest
-
   def subject
-    lambda { GradeExportJob.new({ user_id: 1, course_id: 3 }) }.call
+    lambda { GradeExportJob.new({ user_id: 18, course_id: 3 }) }.call
   end
 
-  def test
-    puts start_message
+  def logger
+    Rails.logger
+  end
+
+  def run(cycles)
+    puts "Starting test for GradeExportJob."
 
     puts "Running normal enqueues, should happen right now:"
-    @cycles.times { subject.enqueue }
+    cycles.times { subject.enqueue }
 
     puts "Running delayed enqueue_in calls, should happen in ten seconds:"
-    @cycles.times { subject.enqueue_in(10) }
+    cycles.times { subject.enqueue_in(10) }
   end
 end
 
-GradeExporterTest.new.run(3)
+GradeExportTest.new.run(3)

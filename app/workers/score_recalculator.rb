@@ -1,6 +1,6 @@
 class ScoreRecalculatorPerformer < ResqueJob::Performer
   def setup
-    @student_id = @attrs[:student_id]
+    @student_id = @attrs[:user_id]
     @course_id = @attrs[:course_id]
     @student = fetch_student
   end
@@ -21,7 +21,7 @@ class ScoreRecalculatorPerformer < ResqueJob::Performer
   end
 
   def fetch_student
-    User.find(@student_id)
+    User.find(@attrs[:user_id])
   end
 end
 

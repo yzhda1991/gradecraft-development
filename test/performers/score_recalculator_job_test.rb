@@ -1,12 +1,11 @@
 require_relative '../test_helper'
-
-class GradebookExporterTest
+class ScoreRecalculatorTest
   def subject
-    lambda { GradebookExporterJob.new({ user_id: 18, course_id: 3 }) }.call
+    lambda { ScoreRecalculatorJob.new({ user_id: 18, course_id: 3 }) }.call
   end
 
-  def run(cycles, rails)
-    puts "Starting test for GradebookExporterJob."
+  def run(cycles)
+    puts "Starting test for #{self.class}."
 
     puts "Running normal enqueues, should happen right now:"
     cycles.times { subject.enqueue }
@@ -16,4 +15,4 @@ class GradebookExporterTest
   end
 end
 
-GradebookExporterTest.new.run(3, Rails)
+ScoreRecalculatorTest.new.run(3)

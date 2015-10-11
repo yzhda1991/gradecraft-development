@@ -17,3 +17,6 @@ module ConsoleTest:: SimpleConsoleTest
     end
   end
 end
+
+# class SomeTest < ConsoleTest::SimpleConsoleTest
+#
