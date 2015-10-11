@@ -2,7 +2,6 @@ module ConsoleTest:: SimpleConsoleTest
   class SimpleConsoleTest
     def initialize(subject_block)
       @subject_block = subject_block
-      test
     end
 
     def subject
