@@ -23,21 +23,21 @@ module GradebookExporterTest
     end
 
     def add_test(&action_block)
-      console_test = ConsoleTest.new
-      console_test.add_action { action_block } if action_block
+      console_test = ConsoleTest.new(@attrs)
+      console_test.actions << action_block if action_block
       @tests << console_test
       console_test
     end
   end
 
   class ConsoleTest
-    def initialize(attrs)
+    def initialize(attrs={})
       @attrs = attrs
       @cycles = @attrs[:cycles] || 3
       @start_message = @attrs[:start_message] || default_start_message
-      @actions = []
+      @actions = [] # this is an array of procs
     end
-    attr_reader :cycles, :start_message
+    attr_accessor :actions, :start_message, :cycles
 
     def subject
       GradebookExporterJob.new(subject_attrs)
@@ -53,8 +53,7 @@ module GradebookExporterTest
 
     def run 
       @actions.each do |action|
-        subject.instance_exec { &action }
-        # subject.instance_exec { action.call }
+        subject.instance_eval &action
       end
     end
   end
