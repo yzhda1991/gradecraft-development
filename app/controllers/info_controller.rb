@@ -86,7 +86,8 @@ class InfoController < ApplicationController
     session[:return_to] = request.referer
 
     # TODO: RESQUE CLEAN-UP: Add controller specs for resque job methods.
-    GradebookExporterJob.new(user_id: current_user.id, course_id: current_course.id).enqueue
+    @gradebook_exporter_job = GradebookExporterJob.new(user_id: current_user.id, course_id: current_course.id)
+    @gradebook_exporter_job.enqueue
 
     flash[:notice]="Your request to export the gradebook for \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
     redirect_to session[:return_to]
