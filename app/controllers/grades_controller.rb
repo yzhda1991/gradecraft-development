@@ -1,7 +1,7 @@
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
-  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
+  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update] # todo: probably need to add submit_rubric here
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
@@ -295,7 +295,10 @@ class GradesController < ApplicationController
     create_earned_tier_badges if params[:tier_badges]# create_earned_tier_badges
 
     # @mz TODO: add specs
-    GradeUpdaterJob.new(grade_id: @grade.id).enqueue if @grade.is_student_visible?
+    if @grade.is_student_visible?
+      @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+      @grade_updater_job.enqueue
+    end
 
     respond_to do |format|
       format.json { render nothing: true }
@@ -439,8 +442,11 @@ class GradesController < ApplicationController
       @grade.status = "Graded"
       respond_to do |format|
         if @grade.save
+
           # @mz TODO: add specs
-          GradeUpdaterJob.new(grade_id: @grade.id).enqueue
+          @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+          @grade_updater_job.enqueue
+
           format.html { redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!' }
         else
           format.html { redirect_to syllabus_path, notice: "We're sorry, this grade could not be added." }
