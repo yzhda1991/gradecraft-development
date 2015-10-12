@@ -235,7 +235,11 @@ class GradesController < ApplicationController
 
     if @grade.update_attributes params[:grade].merge(instructor_modified: true)
       # @mz TODO: ADD SPECS
-      GradeUpdaterJob.new(grade_id: @grade.id).enqueue if @grade.is_released?
+      if @grade.is_released?
+        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        @grade_updater_job.enqueue
+      end
+
       update_success_redirect
     else
       update_failure_redirect
