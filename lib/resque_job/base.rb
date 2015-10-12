@@ -34,6 +34,7 @@ module ResqueJob
         raise ResqueJob::ForcedRetryError
       end
     end
+    attr_reader :attrs # TODO: add spec for this
 
     def initialize(attrs={})
       @attrs = attrs
