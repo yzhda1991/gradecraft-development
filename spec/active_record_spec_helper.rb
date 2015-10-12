@@ -7,6 +7,7 @@ require "factory_girl"
 require "faker"
 require "protected_attributes"
 require "yaml"
+require "./lib/s3_file"
 
 # stub out the process_in_background for carrierwave_backgrounder
 module CarrierWave
@@ -20,6 +21,7 @@ end
 
 Dir["./app/uploaders/*.rb"].each { |f| require f }
 Dir["./app/validators/*.rb"].each { |f| require f }
+Dir["./app/models/concerns/*.rb"].each { |f| require f }
 
 connection_info = YAML.load_file("config/database.yml")["test"]
 ActiveRecord::Base.establish_connection(connection_info)
