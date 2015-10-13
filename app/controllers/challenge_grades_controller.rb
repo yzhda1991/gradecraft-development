@@ -81,12 +81,16 @@ class ChallengeGradesController < ApplicationController
 
         scored_changed = @challenge_grade.previous_changes[:score].present?
         @scored_changed = scored_changed
+        @current_course = current_course
         if current_course.add_team_score_to_student? && scored_changed
           @team = @challenge_grade.team
-          @team.students.each do |student|
-            # @mz TODO: add specs
-            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id).enqueue
+
+          # @mz TODO: add specs for this score_recalculator_block
+          # @mz TODO: figure out how @team.students is supposed to be sorted in the controller
+          @score_recalculator_jobs = @team.students.collect do |student|
+            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
           end
+          @score_recalculator_jobs.each(&:enqueue)
         end
 
         format.html { redirect_to @challenge, notice: "Grade for #{@challenge.name} #{term_for :challenge} successfully updated" }
