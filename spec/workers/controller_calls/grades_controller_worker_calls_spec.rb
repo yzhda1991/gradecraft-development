@@ -11,7 +11,7 @@ RSpec.shared_examples "a successful resque job" do |job_klass|
     expect(job_klass).to have_queued(job_attributes)
   end
 
-  it "builds a new GradebookUpdaterJob" do
+  it "builds a new #{job_klass}" do
     subject
     expect(assigns(job_klass.to_s.underscore.to_sym).class).to eq(job_klass)
   end
@@ -28,7 +28,7 @@ RSpec.shared_examples "a failed resque job" do |job_klass|
     expect(job_klass).not_to have_queued(job_attributes)
   end
 
-  it "shouldn't build a new GradeUpdaterJob" do
+  it "shouldn't build a new #{job_klass}" do
     subject
     expect(assigns(job_klass.to_s.underscore.to_sym)).to eq(nil)
   end
