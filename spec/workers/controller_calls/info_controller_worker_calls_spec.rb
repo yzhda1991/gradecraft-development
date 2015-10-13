@@ -21,12 +21,12 @@ RSpec.describe InfoController, type: :controller, background_job: true do
   describe "#gradebook" do
     subject { get :gradebook }
 
-    it_behaves_like "a_successful_resque_job", GradebookExporterJob
+    it_behaves_like "a successful resque job", GradebookExporterJob
   end
 
   describe "#research_gradebook" do
     subject { get :research_gradebook }
 
-    it_behaves_like "a_successful_resque_job", GradebookExporterJob
+    it_behaves_like "a successful resque job", GradeExportJob
   end
 end
