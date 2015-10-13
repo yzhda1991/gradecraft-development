@@ -1,4 +1,39 @@
 require 'spec_helper'
+require "set"
+
+RSpec.shared_examples "a successful resque job" do |job_klass|
+  it "increases the queue size by one" do
+    expect{ subject }.to change { queue(job_klass).size }.by(1)
+  end
+
+  it "queues the job" do
+    subject
+    expect(job_klass).to have_queued(job_attributes)
+  end
+
+  it "builds a new GradebookUpdaterJob" do
+    subject
+    expect(assigns(job_klass.to_s.underscore.to_sym).class).to eq(job_klass)
+  end
+end
+
+
+RSpec.shared_examples "a failed resque job" do |job_klass|
+  it "doesn't change the queue size" do
+    expect{ subject }.to change { queue(job_klass).size }.by(0)
+  end
+
+  it "doesn't queue the job" do
+    subject
+    expect(job_klass).not_to have_queued(job_attributes)
+  end
+
+  it "shouldn't build a new GradeUpdaterJob" do
+    subject
+    expect(assigns(job_klass.to_s.underscore.to_sym)).to eq(nil)
+  end
+end
+
 
 RSpec.describe GradesController, type: :controller, background_job: true do
   include InQueueHelper
@@ -27,19 +62,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
         allow(student).to receive(:grade_for_assignment).with(assignment) { grade }
       end
 
-      it "increases the queue size by one" do
-        expect{ subject }.to change { queue(GradeUpdaterJob).size }.by(1)
-      end
-
-      it "queues the job" do
-        subject
-        expect(GradeUpdaterJob).to have_queued(job_attributes)
-      end
-
-      it "builds a new GradebookUpdaterJob" do
-        subject
-        expect(assigns(:grade_updater_job).class).to eq(GradeUpdaterJob)
-      end
+      it_behaves_like "a successful resque job", GradeUpdaterJob 
     end
   end
 
@@ -69,37 +92,13 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       context "grade is student visible" do
         before { allow(grade).to receive(:is_student_visible?) { true } }
 
-        it "increases the queue size by one" do
-          expect{ subject }.to change { queue(GradeUpdaterJob).size }.by(1)
-        end
-
-        it "queues the job" do
-          subject
-          expect(GradeUpdaterJob).to have_queued(job_attributes)
-        end
-
-        it "builds a new GradeUpdaterJob" do
-          subject
-          expect(assigns(:grade_updater_job).class).to eq(GradeUpdaterJob)
-        end
+        it_behaves_like "a successful resque job", GradeUpdaterJob 
       end
 
       context "grade is not student visible" do
         before { allow(grade).to receive(:is_student_visible?) { false } }
 
-        it "doesn't change the queue size" do
-          expect{ subject }.to change { queue(GradeUpdaterJob).size }.by(0)
-        end
-
-        it "doesn't queue the job" do
-          subject
-          expect(GradeUpdaterJob).not_to have_queued(job_attributes)
-        end
-
-        it "shouldn't build a new GradeUpdaterJob" do
-          subject
-          expect(assigns(:grade_updater_job)).to eq(nil)
-        end
+        it_behaves_like "a failed resque job", GradeUpdaterJob 
       end
     end
 
@@ -124,56 +123,20 @@ RSpec.describe GradesController, type: :controller, background_job: true do
         context "grade is released" do
           before { allow(grade).to receive(:is_released?) { true } }
 
-          it "increases the queue size by one" do
-            expect{ subject }.to change { queue(GradeUpdaterJob).size }.by(1)
-          end
-
-          it "queues the job" do
-            subject
-            expect(GradeUpdaterJob).to have_queued(job_attributes)
-          end
-
-          it "builds a new GradeUpdaterJob" do
-            subject
-            expect(assigns(:grade_updater_job).class).to eq(GradeUpdaterJob)
-          end
+          it_behaves_like "a successful resque job", GradeUpdaterJob 
         end
 
         context "grade has not been released" do
           before { allow(grade).to receive(:is_released?) { false } }
 
-          it "doesn't change the queue size" do
-            expect{ subject }.to change { queue(GradeUpdaterJob).size }.by(0)
-          end
-
-          it "doesn't queue the job" do
-            subject
-            expect(GradeUpdaterJob).not_to have_queued(job_attributes)
-          end
-
-          it "shouldn't build a new GradeUpdaterJob" do
-            subject
-            expect(assigns(:grade_updater_job)).to eq(nil)
-          end
+          it_behaves_like "a failed resque job", GradeUpdaterJob 
         end
       end
 
       context "grade attributes fail to update" do
         before { allow(grade).to receive(:update_attributes) { false } }
 
-        it "doesn't change the queue size" do
-          expect{ subject }.to change { queue(GradeUpdaterJob).size }.by(0)
-        end
-
-        it "doesn't queue the job" do
-          subject
-          expect(GradeUpdaterJob).not_to have_queued(job_attributes)
-        end
-
-        it "shouldn't build a new GradeUpdaterJob" do
-          subject
-          expect(assigns(:grade_updater_job)).to eq(nil)
-        end
+        it_behaves_like "a failed resque job", GradeUpdaterJob 
       end
     end
 
@@ -196,19 +159,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
         let(:request_attrs) {{ id: assignment.id, assignment: {name: "Some Great Name"}}} 
         before { allow(assignment).to receive_messages(update_attributes: true) }
 
-        it "increases the queue size by one" do
-          expect{ subject }.to change { queue(MultipleGradeUpdaterJob).size }.by(1)
-        end
-
-        it "queues the job" do
-          subject
-          expect(MultipleGradeUpdaterJob).to have_queued(job_attributes)
-        end
-
-        it "builds a new MultipleGradeUpdaterJob" do
-          subject
-          expect(assigns(:multiple_grade_updater_job).class).to eq(MultipleGradeUpdaterJob)
-        end
+        it_behaves_like "a successful resque job", MultipleGradeUpdaterJob 
       end
 
       context "grade attributes fail to update" do
@@ -217,19 +168,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
         let(:request_attrs) {{ id: assignment.id, assignment: {name: nil}}} 
         before { allow(assignment).to receive_messages(update_attributes: false) }
 
-        it "doesn't change the queue size" do
-          expect{ subject }.to change { queue(MultipleGradeUpdaterJob).size }.by(0)
-        end
-
-        it "doesn't queue the job" do
-          subject
-          expect(MultipleGradeUpdaterJob).not_to have_queued(job_attributes)
-        end
-
-        it "shouldn't build a new MultipleGradeUpdaterJob" do
-          subject
-          expect(assigns(:multiple_grade_updater_job)).to eq(nil)
-        end
+        it_behaves_like "a failed resque job", MultipleGradeUpdaterJob 
       end
     end
   end
