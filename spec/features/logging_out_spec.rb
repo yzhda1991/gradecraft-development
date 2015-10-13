@@ -1,6 +1,6 @@
 require "spec_helper"
 
-feature "logging in" do
+feature "logging out" do
   let(:password) { "p@ssword" }
 
   context "as a student" do
