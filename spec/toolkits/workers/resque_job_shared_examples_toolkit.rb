@@ -40,7 +40,6 @@ module ResqueJobSharedExamplesToolkit
     it "queues each job with the correct attributes" do
       subject
 
-      # @mz todo: figure out how these are supposed to be sorted in the controller
       queuelike_attrs = batch_attributes.sort_by{|item| item[:user_id]}.collect do |job_attributes|
         {class: job_klass.to_s, args: [job_attributes]}
       end
