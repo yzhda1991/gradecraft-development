@@ -625,12 +625,15 @@ class GradesController < ApplicationController
       redirect_to assignment_path(@assignment)
     else
       @assignment = current_course.assignments.find(params[:id])
+
+      # todo: check into what this calls is doing. is this being used?
       @students = current_course.students
 
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
 
       # @mz TODO: add specs
-      MultipleGradeUpdaterJob.new(grade_ids: @result.successful.map(&:id)).enqueue
+      @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: @result.successful.map(&:id))
+      @multiple_grade_updater_job.enqueue
 
       render :import_results
     end

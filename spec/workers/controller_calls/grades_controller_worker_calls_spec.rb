@@ -55,24 +55,14 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       let(:request_attrs) {{ id: assignment.id }}
       subject { get :self_log, request_attrs }
 
-      before do
-        enroll_student
-        login_user(student)
-        session[:course_id] = course.id
-        allow(student).to receive(:grade_for_assignment).with(assignment) { grade }
-      end
+      before { enroll_and_login_student }
 
       it_behaves_like "a successful resque job", GradeUpdaterJob 
     end
   end
 
   describe "triggering jobs as a professor" do
-    before do
-      allow(controller).to receive_messages(current_student: student)
-      enroll_professor
-      login_user(professor)
-      session[:course_id] = course.id
-    end
+    before(:each) { enroll_and_login_professor }
 
     describe "#submit_rubric" do
       let(:request_attrs) {{ assignment_id: assignment.id, format: :json }}
@@ -148,7 +138,10 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       let(:grade_ids) { [grade.id, grade2.id] }
       let(:job_attributes) {{grade_ids: grade_ids}} # for GradeUpdaterJob calls
 
+      # duplicate this 
+
       describe "PUT #mass_update" do
+        before { enroll_and_login_professor }
         let(:request_attrs) {{ id: assignment.id, assignment: {} }}
         subject { put :mass_update, request_attrs }
 
@@ -174,32 +167,51 @@ RSpec.describe GradesController, type: :controller, background_job: true do
         end
       end
 
-      describe "POST #upload", focus: true do
+      describe "POST #upload" do
         subject { post :upload, request_attrs }
-
-        context "params[:file] is blank" do
-          let(:request_attrs) {{ id: assignment.id, file: "" }} # pass a blank file to params
-          it_behaves_like "a failed resque job", MultipleGradeUpdaterJob 
-        end
+        before { enroll_and_login_professor }
+        let(:file) { fixture_file "grades.csv", "text/csv" }
+        let(:result_double) { double(:import_result) }
 
         context "params[:file] is present" do
-          let(:request_attrs) {{ id: assignment.id, file: "some_stuff.txt" }} # pass a contrived file
+          # only call the job if a file is present
+          let(:request_attrs) {{
+            id: assignment.id,
+            file: file,
+            assignment_id: assignment.id
+          }} 
 
           before do
+            # establishing state for controller to trigger job
             allow(controller).to receive_message_chain(:current_course, :assignments, :find) { assignment }
             allow(course).to receive(:students) { students }
-            allow(GradeImporter).to receive_message_chain(:new, :import) { grades }
+            allow(professor).to receive(:admin?) { true } # let's call the prof an admin for now
+            # stub away before filters
+            allow(request).to receive_message_chain(:format, :html?) { false } #increment_page_views 
+            allow(controller).to receive_message_chain(:current_student, :present?) { false } #get_course_scores
+            # some more stubs
+            allow(controller).to receive_message_chain(:current_course, :students) { students }
+            allow(GradeImporter).to receive_message_chain(:new, :import) { result_double }
+            allow(result_double).to receive(:successful).and_return(grades)
           end
 
-          context "grade attributes are successfully updated" do
-            it_behaves_like "a successful resque job", MultipleGradeUpdaterJob 
-          end
-
-          context "grade attributes fail to update" do
-            it_behaves_like "a failed resque job", MultipleGradeUpdaterJob 
-          end
+          it_behaves_like "a successful resque job", MultipleGradeUpdaterJob 
         end
       end
     end
+  end
+
+  def enroll_and_login_professor
+    allow(controller).to receive_messages(current_student: student)
+    enroll_professor
+    login_user(professor)
+    session[:course_id] = course.id
+  end
+
+  def enroll_and_login_student
+    allow(controller).to receive_messages(current_student: student)
+    enroll_professor
+    login_user(professor)
+    session[:course_id] = course.id
   end
 end
