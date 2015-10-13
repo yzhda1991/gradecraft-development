@@ -36,6 +36,10 @@ gem 'haml'
 gem 'ims-lti', git: 'https://github.com/venturit/ims-lti.git', branch: 'master'
 gem 'jbuilder'
 gem 'jquery-rails', '~> 2.0'
+
+# interface for connecting to remote logging system Loggly
+gem 'logglier', '~> 0.3.0'
+
 gem 'multi_json'
 gem 'mini_magick'
 gem 'moped', '2.0.4', git: 'https://github.com/wandenberg/moped.git', branch: 'operation_timeout'
@@ -86,7 +90,7 @@ gem 'whenever'
 gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'wysiwyg-rails'
-gem 'zeus-parallel_tests'
+# gem 'zeus-parallel_tests'
 gem 'parallel_tests'
 gem 'ruby-saml', '~> 1.0.0'
 

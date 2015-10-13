@@ -4,7 +4,6 @@ class ResqueJob::Performer
     @attrs = attrs.symbolize_keys
     @outcomes = []
     @outcome_messages = []
-    @logger = Rails.logger rescue nil
     setup
   end
 
@@ -42,13 +41,13 @@ class ResqueJob::Performer
   end
 
   # todo add spec
-  def verbose_outcome_messages
+  def verbose_outcome_messages(logger)
     @outcomes.each do |outcome|
-      puts "SUCCESS: #{outcome.message}" if outcome.success?
+      logger.info "SUCCESS: #{outcome.message}" if outcome.success?
       if outcome.failure?
-        puts "FAILURE: #{outcome.message}" 
+        logger.warn "FAILURE: #{outcome.message}" 
       end
-      puts "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
+      logger.info "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
     end
   end
 

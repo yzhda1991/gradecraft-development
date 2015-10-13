@@ -10,9 +10,11 @@ GradeCraft::Application.configure do
   config.assets.compress = false
   config.assets.debug = true
   config.cache_classes = false
+  #config.logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/rails/", :threaded => true)
   config.cache_store = :memory_store
   config.consider_all_requests_local = true
   config.eager_load = false
+  config.log_level = :debug
   config.session_store :cookie_store, key: '_gradecraft_session'
   config.active_record.mass_assignment_sanitizer = :strict
   config.after_initialize do
