@@ -59,10 +59,10 @@ class ChallengeGradesController < ApplicationController
         @course = current_course
         if current_course.add_team_score_to_student?
           @team = @challenge_grade.team
-          @team.students.each do |student|
-            # @mz TODO: add specs
-            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id).enqueue
+          @score_recalculator_jobs = @team.students.collect do |student|
+            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
           end
+          @score_recalculator_jobs.each(&:enqueue)
         end
         format.html { redirect_to @challenge, notice: "#{@challenge.name} #{term_for :challenge} successfully graded" }
         format.json { render json: @challenge, status: :created, location: @challenge_grade }
@@ -80,8 +80,6 @@ class ChallengeGradesController < ApplicationController
       if @challenge_grade.update_attributes(params[:challenge_grade])
 
         scored_changed = @challenge_grade.previous_changes[:score].present?
-        @scored_changed = scored_changed
-        @current_course = current_course
         if current_course.add_team_score_to_student? && scored_changed
           @team = @challenge_grade.team
 
