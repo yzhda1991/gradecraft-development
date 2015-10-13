@@ -594,14 +594,10 @@ class GradesController < ApplicationController
   def update_status
     @assignment = current_course.assignments.find(params[:id])
     @grades = @assignment.grades.find(params[:grade_ids])
-    grade_ids = []
-    @grades.each do |grade|
-      grade.update_attributes!(params[:grade].reject { |k,v| v.blank? })
-      grade_ids << grade.id
-    end
 
     # @mz TODO: add specs
-    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
+    @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: update_status_grade_ids)
+    @multiple_grade_updater_job.enqueue
 
     if session[:return_to].present?
       redirect_to session[:return_to]
@@ -612,6 +608,17 @@ class GradesController < ApplicationController
     flash[:notice] = "Updated Grades!"
 
   end
+
+  private
+
+  def update_status_grade_ids
+    @grades.inject([]) do |memo, grade|
+      grade.update_attributes!(params[:grade].reject { |k,v| v.blank? })
+      memo << grade.id
+    end
+  end
+
+  public
 
   #upload grades for an assignment
   def import

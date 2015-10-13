@@ -40,7 +40,9 @@ RSpec.describe GradesController, type: :controller, background_job: true do
   let(:course) { create(:course_accepting_groups) }
   let(:assignment) { create(:assignment, course_id: course.id) }
   let(:job_attributes) {{grade_id: grade.id}} # for GradeUpdaterJob calls
-  let(:grade) { create(:grade, course_id: course.id, student_id: student.id) }
+  let(:grade_attributes) {{ course_id: course.id, student_id: student.id, assignment_id: assignment.id }}
+  let(:grade) { create(:grade, grade_attributes) }
+  let(:cache_everything) { course; assignment; grade; student; professor }
 
   let(:student) { create(:user) }
   let(:enroll_student) { CourseMembership.create(user_id: student.id, course_id: course.id, role: "student") }
@@ -51,11 +53,10 @@ RSpec.describe GradesController, type: :controller, background_job: true do
 
   context "triggering jobs as a student" do
     describe "#self_log" do
-      let(:grade) { create(:grade, course_id: course.id, student_id: student.id) }
       let(:request_attrs) {{ id: assignment.id }}
       subject { get :self_log, request_attrs }
-
       before { enroll_and_login_student }
+      before(:each) { cache_everything }
 
       it_behaves_like "a successful resque job", GradeUpdaterJob 
     end
@@ -133,7 +134,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
     describe "actions that use MultipleGradeUpdaterJob" do
       let(:student2) { create(:user) }
       let(:students) { [student, student2] }
-      let(:grade2) { create(:grade, course_id: course.id, student_id: student2.id) }
+      let(:grade2) { create(:grade, grade_attributes.merge(student_id: student2.id)) }
       let(:grades) { [grade, grade2] }
       let(:grade_ids) { [grade.id, grade2.id] }
       let(:job_attributes) {{grade_ids: grade_ids}} # for GradeUpdaterJob calls
@@ -198,6 +199,19 @@ RSpec.describe GradesController, type: :controller, background_job: true do
           it_behaves_like "a successful resque job", MultipleGradeUpdaterJob 
         end
       end
+
+      describe "PUT #update_status" do
+        subject { put :update_status, request_attrs }
+        before { enroll_and_login_professor }
+
+        context "params[:file] is present" do
+          let(:request_attrs) {{ id: assignment.id, grade_ids: grade_ids }}
+          before { allow(controller).to receive_messages(update_status_grade_ids: grade_ids) }
+
+          it_behaves_like "a successful resque job", MultipleGradeUpdaterJob 
+        end
+      end
+
     end
   end
 
