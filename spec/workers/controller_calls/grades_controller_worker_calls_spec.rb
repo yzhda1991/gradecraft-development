@@ -140,35 +140,65 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       end
     end
 
-    describe "#mass_update" do
-      let(:request_attrs) {{ id: assignment.id, assignment: {} }}
+    describe "actions that use MultipleGradeUpdaterJob" do
       let(:student2) { create(:user) }
+      let(:students) { [student, student2] }
       let(:grade2) { create(:grade, course_id: course.id, student_id: student2.id) }
       let(:grades) { [grade, grade2] }
       let(:grade_ids) { [grade.id, grade2.id] }
       let(:job_attributes) {{grade_ids: grade_ids}} # for GradeUpdaterJob calls
 
-      subject { put :mass_update, request_attrs }
+      describe "PUT #mass_update" do
+        let(:request_attrs) {{ id: assignment.id, assignment: {} }}
+        subject { put :mass_update, request_attrs }
 
-      before do
-        allow(course).to receive_message_chain(:assignments, :find) { assignment }
-        allow(controller).to receive(:mass_update_grade_ids) { grade_ids }
+        before do
+          allow(course).to receive_message_chain(:assignments, :find) { assignment }
+          allow(controller).to receive(:mass_update_grade_ids) { grade_ids }
+        end
+
+        context "grade attributes are successfully updated" do
+          let(:request_attrs) {{ id: assignment.id, assignment: {name: "Some Great Name"}}} 
+          before { allow(assignment).to receive_messages(update_attributes: true) }
+
+          it_behaves_like "a successful resque job", MultipleGradeUpdaterJob 
+        end
+
+        context "grade attributes fail to update" do
+          # pass an invalid assignment name to fail the update
+          # todo: FIX this, I have no idea why it won't stub
+          let(:request_attrs) {{ id: assignment.id, assignment: {name: nil}}} 
+          before { allow(assignment).to receive_messages(update_attributes: false) }
+
+          it_behaves_like "a failed resque job", MultipleGradeUpdaterJob 
+        end
       end
 
-      context "grade attributes are successfully updated" do
-        let(:request_attrs) {{ id: assignment.id, assignment: {name: "Some Great Name"}}} 
-        before { allow(assignment).to receive_messages(update_attributes: true) }
+      describe "POST #upload", focus: true do
+        subject { post :upload, request_attrs }
 
-        it_behaves_like "a successful resque job", MultipleGradeUpdaterJob 
-      end
+        context "params[:file] is blank" do
+          let(:request_attrs) {{ id: assignment.id, file: "" }} # pass a blank file to params
+          it_behaves_like "a failed resque job", MultipleGradeUpdaterJob 
+        end
 
-      context "grade attributes fail to update" do
-        # pass an invalid assignment name to fail the update
-        # todo: FIX this, I have no idea why it won't stub
-        let(:request_attrs) {{ id: assignment.id, assignment: {name: nil}}} 
-        before { allow(assignment).to receive_messages(update_attributes: false) }
+        context "params[:file] is present" do
+          let(:request_attrs) {{ id: assignment.id, file: "some_stuff.txt" }} # pass a contrived file
 
-        it_behaves_like "a failed resque job", MultipleGradeUpdaterJob 
+          before do
+            allow(controller).to receive_message_chain(:current_course, :assignments, :find) { assignment }
+            allow(course).to receive(:students) { students }
+            allow(GradeImporter).to receive_message_chain(:new, :import) { grades }
+          end
+
+          context "grade attributes are successfully updated" do
+            it_behaves_like "a successful resque job", MultipleGradeUpdaterJob 
+          end
+
+          context "grade attributes fail to update" do
+            it_behaves_like "a failed resque job", MultipleGradeUpdaterJob 
+          end
+        end
       end
     end
   end
