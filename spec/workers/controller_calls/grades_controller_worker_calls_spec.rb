@@ -104,8 +104,6 @@ RSpec.describe GradesController, type: :controller, background_job: true do
     end
 
     describe "#update" do
-      let(:professor) { create(:user) }
-      let(:enroll_professor) { CourseMembership.create(course_id: course.id, user_id: professor.id, role: "professor") }
       let(:request_attrs) {{ assignment_id: assignment.id, grade: {raw_score: 50} }}
       subject { put :update, request_attrs }
 
@@ -192,12 +190,10 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       before do
         allow(course).to receive_message_chain(:assignments, :find) { assignment }
         allow(controller).to receive(:mass_update_grade_ids) { grade_ids }
-        enroll_professor
-        login_user(professor)
-        session[:course_id] = course.id
       end
 
       context "grade attributes are successfully updated" do
+        let(:request_attrs) {{ id: assignment.id, assignment: {name: "Some Great Name"}}} 
         before { allow(assignment).to receive_messages(update_attributes: true) }
 
         it "increases the queue size by one" do
