@@ -175,4 +175,62 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       end
     end
   end
+
+  describe "#mass_update", focus: true do
+    let(:request_attrs) {{ id: assignment.id, assignment: {} }}
+    let(:student2) { create(:user) }
+    let(:grade2) { create(:grade, course_id: course.id, student_id: student2.id) }
+    let(:grades) { [grade, grade2] }
+    let(:grade_ids) { [grade.id, grade2.id] }
+    let(:job_attributes) {{grade_ids: grade_ids}} # for GradeUpdaterJob calls
+
+    subject { put :mass_update, request_attrs }
+
+    before(:each) do
+      allow(course).to receive_message_chain(:assignments, :find) { assignment }
+      allow(controller).to receive(:mass_update_grade_ids) { grade_ids }
+      enroll_professor
+      login_user(professor)
+      session[:course_id] = course.id
+    end
+
+    context "grade attributes are successfully updated" do
+      before(:each) { allow(assignment).to receive_messages(update_attributes: true) }
+
+      it "increases the queue size by one" do
+        expect{ subject }.to change { queue(MultipleGradeUpdaterJob).size }.by(1)
+      end
+
+      it "queues the job" do
+        subject
+        expect(MultipleGradeUpdaterJob).to have_queued(job_attributes)
+      end
+
+      it "builds a new MultipleGradeUpdaterJob" do
+        subject
+        expect(assigns(:multiple_grade_updater_job).class).to eq(MultipleGradeUpdaterJob)
+      end
+    end
+
+    context "grade attributes fail to update" do
+      # pass an invalid assignment name to fail the update
+      # todo: FIX this, I have no idea why it won't stub
+      let(:request_attrs) {{ id: assignment.id, assignment: {name: nil}}} 
+      before(:each) { allow(assignment).to receive_messages(update_attributes: false) }
+
+      it "doesn't change the queue size" do
+        expect{ subject }.to change { queue(MultipleGradeUpdaterJob).size }.by(0)
+      end
+
+      it "doesn't queue the job" do
+        subject
+        expect(MultipleGradeUpdaterJob).not_to have_queued(job_attributes)
+      end
+
+      it "shouldn't build a new MultipleGradeUpdaterJob" do
+        subject
+        expect(assigns(:multiple_grade_updater_job)).to eq(nil)
+      end
+    end
+  end
 end

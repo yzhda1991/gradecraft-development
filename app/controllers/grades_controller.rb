@@ -529,15 +529,9 @@ class GradesController < ApplicationController
   def mass_update
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.update_attributes(params[:assignment])
-      grade_ids = []
-      @assignment.grades.each do |grade|
-        scored_changed = grade.previous_changes[:raw_score].present?
-        if scored_changed && grade.graded_or_released?
-          grade_ids << grade.id
-        end
-      end
       # @mz TODO: add specs
-      MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
+      @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: mass_update_grade_ids)
+      @multiple_grade_updater_job.enqueue
 
       if !params[:team_id].blank?
         redirect_to assignment_path(@assignment, :team_id => params[:team_id])
@@ -548,6 +542,19 @@ class GradesController < ApplicationController
       redirect_to mass_grade_assignment_path(id: @assignment.id,team_id:params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
     end
   end
+
+  private
+    def mass_update_grade_ids
+      @assignment.grades.inject([]) do |memo, grade|
+        scored_changed = grade.previous_changes[:raw_score].present?
+        if scored_changed && grade.graded_or_released?
+          memo << grade.id
+        end
+        memo
+      end
+    end
+
+  public
 
   # Grading an assignment for a whole group
   def group_edit
