@@ -10,13 +10,14 @@ class GradeUpdaterJob < ResqueJob::Base
 
       # this is where the magic happens
       puts "building a new performer"
-      @performer = @performer_class.new(attrs) # self.class is the job class
-      puts @performer
+      performer = @performer_class.new(attrs) # self.class is the job class
       puts "doing the work"
-      @performer.do_the_work
+      performer.do_the_work
+      puts performer
       puts "done working"
 
-      @outcomes.each do |outcome|
+      
+      performer.outcomes.each do |outcome|
         outcome_messages = []
         outcome_messages << "SUCCESS: #{outcome.message}" if outcome.success?
         outcome_messages << "FAILURE: #{outcome.message}" if outcome.failure?
@@ -24,6 +25,8 @@ class GradeUpdaterJob < ResqueJob::Base
         final_message = outcome_messages.join("\n")
         puts final_message
         @logger.info final_message
+        @logger.info "RESULT TEST: " + "#{outcome.result}"[0..100].split("\n").first
+        @logger.info "SUCCESS TEST: #{outcome.message}" if outcome.success?
       end
 
     rescue Exception => e

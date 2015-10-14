@@ -1,6 +1,8 @@
 class GradeUpdatePerformer < ResqueJob::Performer
   def setup
     @grade = fetch_grade_with_assignment
+    @logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/grade-updater-job-queue", threaded: true, format: :json)
+
   end
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
@@ -8,14 +10,16 @@ class GradeUpdatePerformer < ResqueJob::Performer
     puts "doing work"
     require_save_scores_success
     require_notify_released_success
-
   end
 
   protected
 
   def require_save_scores_success
     require_success(save_scores_messages) do
-      @grade.save_student_and_team_scores
+      something = @grade.save_student_and_team_scores
+      puts something
+      @logger.info "something#{something}"
+      something
     end
   end
 

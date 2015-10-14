@@ -20,17 +20,17 @@ module ResqueJob
 
       # TODO: need to add specs for the new begin/resque
       begin
-        p self.start_message(attrs) # this wasn't running because 
         @logger.info self.start_message(attrs) # this wasn't running because 
+        puts self.start_message(attrs) # this wasn't running because 
         # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
         #
         # this is where the magic happens
-        @performer = @performer_class.new(attrs) # self.class is the job class
-        @performer.do_the_work
+        performer = @performer_class.new(attrs) # self.class is the job class
+        performer.do_the_work
 
         # mention to the logger how things went
-        @performer.log_outcome_messages(@logger) # todo: add specs for logger
-        @performer.verbose_outcome_messages(@logger) # todo: add specs for logger
+        # performer.log_outcome_messages(@logger) # todo: add specs for logger
+        combined_outcome_messages(@logger) # todo: add specs for logger
       rescue Exception => e
         @logger.info "Error in #{@performer_class.to_s}: #{e.message}"
         @logger.info e.backtrace
@@ -42,6 +42,18 @@ module ResqueJob
 
     def initialize(attrs={})
       @attrs = attrs
+    end
+
+    def self.combined_outcome_messages(performer)
+      performer.outcomes.each do |outcome|
+        outcome_messages = []
+        outcome_messages << "SUCCESS: #{outcome.message}" if outcome.success?
+        outcome_messages << "FAILURE: #{outcome.message}" if outcome.failure?
+        outcome_messages << "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
+        final_message = outcome_messages.join(" | ")
+        puts final_message
+        @logger.info final_message
+      end
     end
 
     def enqueue_in(time_until_start)
