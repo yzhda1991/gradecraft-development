@@ -1,3 +1,5 @@
+# require 'syslogger'
+
 GradeCraft::Application.configure do
   config.action_controller.perform_caching = false
   config.action_dispatch.best_standards_support = :builtin
@@ -10,8 +12,6 @@ GradeCraft::Application.configure do
   config.assets.compress = false
   config.assets.debug = true
   config.cache_classes = false
-  # config.logger = RemoteSyslogLogger.new('logs3.papertrailapp.com', 36742, :program => "rails-#{Rails.env}-#{ENV['LOG_NAME']}")
-  #config.logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/rails/", :threaded => true)
   config.cache_store = :memory_store
   config.consider_all_requests_local = true
   config.eager_load = false
@@ -28,3 +28,16 @@ end
 CarrierWave.configure do |config|
   config.storage = :file
 end
+
+
+# Papertrail http configuration
+# config.logger = RemoteSyslogLogger.new('logs3.papertrailapp.com', 36742, :program => "rails-#{Rails.env}-#{ENV['LOG_NAME']}")
+#
+# Loggly http configuration
+#config.logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/rails/", :threaded => true)
+#
+# Loggly TCP/UDP configuration, needs testing
+#
+# config.logger = Syslogger.new("GradeCraft", Syslog::LOG_PID, Syslog::LOG_LOCAL0)
+# config.lograge.enabled = true
+# config.lograge.formatter = Lograge::Formatters::Json.new

@@ -41,13 +41,13 @@ class ResqueJob::Performer
   end
 
   # todo add spec
-  def verbose_outcome_messages(logger)
+  def verbose_outcome_messages(job_logger)
     @outcomes.each do |outcome|
-      logger.info "SUCCESS: #{outcome.message}" if outcome.success?
+      job_logger.info "SUCCESS: #{outcome.message}" if outcome.success?
       if outcome.failure?
-        logger.warn "FAILURE: #{outcome.message}" 
+        job_logger.info "FAILURE: #{outcome.message}" 
       end
-      logger.info "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
+      job_logger.info "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
     end
   end
 

@@ -39,7 +39,11 @@ gem 'jquery-rails', '~> 2.0'
 
 # interface for connecting to remote logging system Loggly
 gem 'logglier', '~> 0.3.0'
-gem 'remote_syslog_logger'
+# connect to papertrail
+# gem 'remote_syslog_logger'
+# connect to Loggly/whatever more easily over UDP/TCP
+# gem 'syslogger', '~> 1.6.0'
+# gem 'lograge','~> 0.3.1'
 
 gem 'multi_json'
 gem 'mini_magick'
