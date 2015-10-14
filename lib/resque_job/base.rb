@@ -11,7 +11,7 @@ module ResqueJob
     @performer_class = ResqueJob::Performer
     @retry_limit = 3 # retry only 3 times
     @retry_delay = 60 # retry after 60 seconds
-    @logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/background-jobs", threaded: true, format: :json)
+    @logger = Gradecraft.loggers
 
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
@@ -30,7 +30,10 @@ module ResqueJob
 
         # mention to the logger how things went
         # performer.log_outcome_messages(@logger) # todo: add specs for logger
-        combined_outcome_messages(@logger) # todo: add specs for logger
+        combined_messages = self.combined_outcome_messages(@logger) # todo: add specs for logger
+        puts combined_messages
+        @logger.info combined_messages
+        # puts performer.outcome_messages.join(", ")
       rescue Exception => e
         @logger.info "Error in #{@performer_class.to_s}: #{e.message}"
         @logger.info e.backtrace
@@ -45,15 +48,13 @@ module ResqueJob
     end
 
     def self.combined_outcome_messages(performer)
-      performer.outcomes.each do |outcome|
+      performer.outcomes.inject([]) do |memo, outcome|
         outcome_messages = []
         outcome_messages << "SUCCESS: #{outcome.message}" if outcome.success?
         outcome_messages << "FAILURE: #{outcome.message}" if outcome.failure?
         outcome_messages << "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
-        final_message = outcome_messages.join(" | ")
-        puts final_message
-        @logger.info final_message
-      end
+        memo << outcome_messages.join(", ")
+      end.join(", ")
     end
 
     def enqueue_in(time_until_start)
