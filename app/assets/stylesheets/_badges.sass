@@ -17,6 +17,13 @@
   width: 80%
   max-width: 100px
 
+.earned-count
+  font-size: .7rem
+  font-weight: normal
+  margin-top: -1.5rem
+  margin-left: 1.1rem
+  color: $color-black
+
 button#remove-badges, button#add-badges
   margin-left: .5rem
   position: relative
@@ -70,14 +77,7 @@ button#remove-badges, button#add-badges
       background-color: #555
 
     &.unearned:before, &.unearned:after
-      background-color: #555
-
-    &:hover
-      background-color: $color-blue-1
-      @include opacity(0.7)
-
-      &:before, &:after
-        background-color: $color-blue-1
+      background-color: $color-grey-3
 
 
     &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
@@ -246,7 +246,6 @@ button#remove-badges, button#add-badges
 
     i.fa-fw
       z-index: 600 !important
-
 
   &.unearned
     .gold-stars

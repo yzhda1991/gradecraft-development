@@ -34,18 +34,19 @@
     - if @unearned_badges.present?
       .clear
       %h4= "Possible #{term_for :badges}"
-      - @unearned_badges.each do |unearned_badge|
-        .badge-table.hexagon.available
-          %img.unearned{ :src => unearned_badge.icon, :alt => unearned_badge.name }
+      - @unearned_badges.each do |badge|
+        .badge-card
+          .badge-table.hexagon.available
+            %img.unearned{ :src => badge.icon, :alt => badge.name }
 
-          .ribbon
-            .ribbon-stitches-top
-            %strong.ribbon-content
-              %h1= unearned_badge.name
-            .ribbon-stitches-bottom
-          .ribbon-ends
-          .gold-stars
-            %i.fa.fa-star.fa-fw
-            .earned-count 0
-            .badges-earned.blue 
+            .ribbon
+              .ribbon-stitches-top
+              %strong.ribbon-content
+                %h1= badge.name
+              .ribbon-stitches-bottom
+            .ribbon-ends
+
+          .badge-details
+            - if badge.point_total?
+              .points= "#{points badge.point_total}" 
               
