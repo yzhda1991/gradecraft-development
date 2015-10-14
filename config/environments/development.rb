@@ -10,6 +10,7 @@ GradeCraft::Application.configure do
   config.assets.compress = false
   config.assets.debug = true
   config.cache_classes = false
+  # config.logger = RemoteSyslogLogger.new('logs3.papertrailapp.com', 36742, :program => "rails-#{Rails.env}-#{ENV['LOG_NAME']}")
   #config.logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/rails/", :threaded => true)
   config.cache_store = :memory_store
   config.consider_all_requests_local = true

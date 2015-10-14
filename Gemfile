@@ -39,6 +39,7 @@ gem 'jquery-rails', '~> 2.0'
 
 # interface for connecting to remote logging system Loggly
 gem 'logglier', '~> 0.3.0'
+gem 'remote_syslog_logger'
 
 gem 'multi_json'
 gem 'mini_magick'
