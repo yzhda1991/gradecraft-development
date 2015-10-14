@@ -41,6 +41,7 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
         end
 
         it "should fetch the csv data" do
+          allow(subject).to receive(:fetch_csv_data).and_return "some,csv,data"
           expect(subject).to receive(:fetch_csv_data)
         end
 

@@ -18,7 +18,7 @@ class GradebookExportPerformer < ResqueJob::Performer
   private
   
   def fetch_user
-    User.find @attrs[:course_id]
+    User.find @attrs[:user_id]
   end
 
   # todo: speed this up by condensing the CSV generator into a single query

@@ -4,7 +4,7 @@ RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
   # public methods
   let(:student) { create(:user) }
   let(:course) { create(:course) }
-  let(:attrs) {{ student_id: student[:id], course_id: course[:id] }}
+  let(:attrs) {{ user_id: student[:id], course_id: course[:id] }}
   let(:performer) { ScoreRecalculatorPerformer.new(attrs) }
   subject { ScoreRecalculatorPerformer.new(attrs) }
 
