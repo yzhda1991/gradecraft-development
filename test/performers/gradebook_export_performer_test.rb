@@ -16,4 +16,4 @@ class GradebookExporterTest
   end
 end
 
-GradebookExporterTest.new.run(3, Rails)
+# GradebookExporterTest.new.run(3)

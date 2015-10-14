@@ -15,4 +15,4 @@ class ScoreRecalculatorTest
   end
 end
 
-ScoreRecalculatorTest.new.run(3)
+# ScoreRecalculatorTest.new.run(3)

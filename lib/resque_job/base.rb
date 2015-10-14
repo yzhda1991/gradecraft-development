@@ -11,7 +11,7 @@ module ResqueJob
     @performer_class = ResqueJob::Performer
     @retry_limit = 3 # retry only 3 times
     @retry_delay = 60 # retry after 60 seconds
-    @logger = Rails.logger
+    @logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/background-jobs", threaded: true, format: :json)
 
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
@@ -20,6 +20,7 @@ module ResqueJob
 
       # TODO: need to add specs for the new begin/resque
       begin
+        p self.start_message(attrs) # this wasn't running because 
         @logger.info self.start_message(attrs) # this wasn't running because 
         # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
         #
@@ -28,9 +29,11 @@ module ResqueJob
         @performer.do_the_work
 
         # mention to the logger how things went
+        @performer.log_outcome_messages(@logger) # todo: add specs for logger
         @performer.verbose_outcome_messages(@logger) # todo: add specs for logger
       rescue Exception => e
         @logger.info "Error in #{@performer_class.to_s}: #{e.message}"
+        @logger.info e.backtrace
         # puts e.backtrace.inspect
         raise ResqueJob::ForcedRetryError
       end

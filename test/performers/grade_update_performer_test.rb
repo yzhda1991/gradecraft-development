@@ -15,4 +15,4 @@ class GradeUpdaterTest
   end
 end
 
-GradeUpdaterTest.new.run(3)
+# GradeUpdaterTest.new.run(3)

@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe GradeUpdatePerformer, type: :background_job do
-  let(:grade) { create(:grade) }
+  let(:assignment) { create(:assignment) }
+  let(:grade) { create(:grade, assignment_id: assignment.id) }
   let(:attrs) {{ grade_id: grade[:id] }}
   let(:performer) { GradeUpdatePerformer.new(attrs) }
   subject { performer }
@@ -96,10 +97,11 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
       let(:notify_grade_released) { double(:notify_grade_released) }
       let(:notify_released_result) { double(:notify_released_result) }
       let(:performer_grade) { performer.instance_variable_get(:@grade) }
+      let(:cache_performer) { performer; performer_grade; }
 
       context "@grade assignment is set to notify on release" do
         before(:each) do
-          allow(performer_grade).to receive_message_chain(:assignment, :notify_released?) { true }
+          allow(performer_grade).to receive(:is_student_visible?) { true }
         end
 
         it "should require success with notify released messages" do

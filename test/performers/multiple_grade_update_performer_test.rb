@@ -15,4 +15,4 @@ class MultipleGradeUpdaterTest
   end
 end
 
-MultipleGradeUpdaterTest.new.run(3)
+# MultipleGradeUpdaterTest.new.run(3)

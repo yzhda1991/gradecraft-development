@@ -5,8 +5,10 @@ class GradeUpdatePerformer < ResqueJob::Performer
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
+    puts "doing work"
     require_save_scores_success
     require_notify_released_success
+
   end
 
   protected
@@ -19,7 +21,7 @@ class GradeUpdatePerformer < ResqueJob::Performer
 
   def require_notify_released_success
     # @mz TODO: chech the #is_student_visible? call with cait
-    if @grade.assignment.is_student_visible?
+    if @grade.is_student_visible?
       require_success(notify_released_messages) { notify_grade_released } 
     end
   end
@@ -40,15 +42,10 @@ class GradeUpdatePerformer < ResqueJob::Performer
 
   def fetch_grade_with_assignment
     Grade.where(id: @attrs[:grade_id]).includes(:assignment).load.first
+    # Grade.find(@attrs[:grade_id])
   end
 
   def notify_grade_released
     NotificationMailer.grade_released(@grade.id).deliver_now
   end
-end
-
-class GradeUpdaterJob < ResqueJob::Base
-  @queue = :grade_updater
-  @performer_class = GradeUpdatePerformer
-  @logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/grade-updater-job-queue", threaded: true, format: :json)
 end

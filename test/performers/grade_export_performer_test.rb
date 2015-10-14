@@ -19,4 +19,4 @@ class GradeExportTest
   end
 end
 
-GradeExportTest.new.run(3)
+# GradeExportTest.new.run(3)
