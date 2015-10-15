@@ -30,19 +30,27 @@ RSpec.describe EventLogger, type: :background_job do
   end
 
   describe "self.notify_event_outcome(event)" do
+    let(:valid_event) { double(Logger, valid?: true ) }
+    let(:invalid_event) { double(Logger, valid?: false ) }
+
+    before do
+      EventLogger.instance_variable_set(:@success_message, "great stuff happened")
+      EventLogger.instance_variable_set(:@failure_message, "bad stuff happened")
+    end
+
     context "the event is valid" do
       it "should output the @success_message" do
-        EventLogger.instance_variable_set(:@success_message, "great stuff happened")
-        expect(EventLogger).to receive(:puts).with("great stuff happened")
-        EventLogger.notify_event_outcome double(:event, valid?: true)
+        allow(Analytics::Event).to receive(:create) { valid_event }
+        expect(EventLogger).to receive(:notify_event_outcome).with(valid_event) { "great stuff happened" }
+        EventLogger.perform "event"
       end
     end
 
     context "the event is not valid" do
       it "should output the @failure_message" do
-        EventLogger.instance_variable_set(:@failure_message, "bad stuff happened")
-        expect(EventLogger).to receive(:puts).with("bad stuff happened")
-        EventLogger.notify_event_outcome double(:event, valid?: false)
+        allow(Analytics::Event).to receive(:create) { invalid_event }
+        expect(EventLogger).to receive(:notify_event_outcome).with(invalid_event) { "bad stuff happened" }
+        EventLogger.perform "event"
       end
     end
   end

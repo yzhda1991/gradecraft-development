@@ -22,7 +22,11 @@ class EventLogger
   end
 
   def self.notify_event_outcome(event)
-    (event.valid? ? @success_message : @failure_message)
+    if event.valid?
+      @success_message
+    else
+      @failure_message
+    end
   end
 
   def self.event_attrs(event_type, data)
