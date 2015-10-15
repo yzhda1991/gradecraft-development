@@ -16,4 +16,8 @@ class ResqueJob::Outcome
     @result == false || @result.nil?
   end
   alias_method :failure?, :falsey?
+
+  def result_excerpt
+    "#{result}"[0..100].split("\n").first rescue "#{result}"
+  end
 end

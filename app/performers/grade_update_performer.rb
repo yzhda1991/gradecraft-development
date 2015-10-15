@@ -5,7 +5,6 @@ class GradeUpdatePerformer < ResqueJob::Performer
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
-    puts "doing work"
     require_save_scores_success
     require_notify_released_success
   end

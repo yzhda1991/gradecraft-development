@@ -12,6 +12,7 @@ module ResqueJob
     @retry_limit = 3 # retry only 3 times
     @retry_delay = 60 # retry after 60 seconds
 
+
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
       # TODO: catch everything with an exception, log the exception message, and then throw another exception
@@ -19,35 +20,33 @@ module ResqueJob
 
       # TODO: need to add specs for the new begin/resque
       begin
+        logger = self.logger
         # build a new background job logger
-        logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/#{@queue}-jobs-#{Rails.env}", threaded: true, format: :json)
         # puts "@peformer_class: #{@performer_class}"
         # puts @logger
-        p this_message = self.start_message(attrs) # this wasn't running because 
+        puts this_message = self.start_message(attrs) # this wasn't running because 
         # @logger.info this_message
-        logger.info self.start_message(attrs) # this wasn't running because 
-        logger.info @performer_class
+        logger.info this_message
         # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
         #
         # this is where the magic happens
         performer = @performer_class.new(attrs) # self.class is the job class
         performer.do_the_work
 
-        logger.info "stuff" 
         # mention to the logger how things went
         # performer.log_outcome_messages(@logger) # todo: add specs for logger
         # combined_outcome_messages(@logger) # todo: add specs for logger
 
         performer.outcomes.each do |outcome|
-          logger.info("SUCCESS: #{outcome.message}") if outcome.success?
-          logger.info("FAILURE: #{outcome.message}") if outcome.failure?
-          logger.info("RESULT: " + "#{outcome.result}"[0..100].split("\n").first)
+          logger.info "SUCCESS: #{outcome.message}" if outcome.success?
+          logger.info "FAILURE: #{outcome.message}" if outcome.failure?
+          logger.info "RESULT: #{outcome.result_excerpt}"
         end
       rescue Exception => e
-        @logger.info "Error in #{@performer_class.to_s}: #{e.message}"
+        logger.info "Error in #{@performer_class.to_s}: #{e.message}"
         puts "Error in #{@performer_class.to_s}: #{e.message}"
         puts e.backgrace.inspect
-        @logger.info e.backtrace
+        logger.info e.backtrace
         # puts e.backtrace.inspect
         raise ResqueJob::ForcedRetryError
       end
@@ -56,6 +55,24 @@ module ResqueJob
 
     def initialize(attrs={})
       @attrs = attrs
+    end
+
+    def self.logger
+      @logger ||= Logglier.new(self.logger_url, format: :json)
+    end
+
+    # these all need to be spec'd out
+    # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
+    def self.logger_url
+      [ self.logger_base_url, ENV['LOGGLY_TOKEN'], "tag", self.queue_tag_name ].join("/")
+    end
+
+    def self.logger_base_url
+      "https://logs-01.loggly.com/inputs"
+    end
+
+    def self.queue_tag_name
+      "#{@queue.to_s.gsub(/_+/,'-')}-jobs-#{Rails.env}"
     end
 
     # def self.combined_outcome_messages(performer)
