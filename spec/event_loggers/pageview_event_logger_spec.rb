@@ -1,6 +1,5 @@
 require 'spec_helper'
 
-
 include PageviewEventLoggerToolkit # pageview_logger_attrs comes from here
 
 # PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
@@ -49,7 +48,5 @@ RSpec.describe PageviewEventLogger, type: :background_job do
         end
       end
     end
-
   end
-
 end

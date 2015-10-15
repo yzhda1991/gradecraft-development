@@ -9,7 +9,7 @@ RSpec.describe EventLogger, type: :background_job do
       allow(EventLogger).to receive(:notify_event_outcome).and_return double(:mongoid_event, valid?: true)
     end
 
-    it "should print the @start_message class instance variable to the log" do
+    it "should print the @start_message class instance variable to the log", focus: true do
       EventLogger.instance_variable_set(:@start_message, "some message")
       allow(Analytics::Event).to receive(:create) { true }
       expect(EventLogger).to receive(:p).with("some message")

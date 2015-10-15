@@ -13,8 +13,6 @@ module GradeCraft
   class Application < Rails::Application
     config.time_zone = 'America/Detroit'
     config.autoload_paths += %W(#{Rails.root}/lib)
-    config.autoload_paths += %W(#{Rails.root}/app/performers)
-    # config.autoload_paths += %W(#{Rails.root}/app/background_jobs)
 
     config.assets.precompile += %w(.svg .eot .otf .woff .ttf)
     config.filter_parameters += [:password]
