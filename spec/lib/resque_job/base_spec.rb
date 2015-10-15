@@ -27,49 +27,68 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
   end
 
   describe "self.perform(attrs={})" do
-    before do
-      @attrs = { hounds: 5, teeth: 9 }
-    end
+    let(:attrs) {{ hounds: 5, teeth: 9 }}
+    let(:performer) { double(:performer).as_null_object }
+    let(:outcome1) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
+    let(:outcome2) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
+    let(:outcomes) { [ outcome1, outcome2 ] }
+    let(:logger) { double(Logger) }
 
     before(:each) do
-      @performer = double(:performer).as_null_object
-      allow(ResqueJob::Performer).to receive_messages(new: @performer)
+      allow(ResqueJob::Performer).to receive_messages(new: performer)
+      allow(ResqueJob::Base).to receive(:logger) { logger }
     end
 
     after(:each) do
-      ResqueJob::Base.perform(@attrs)
+      ResqueJob::Base.perform(attrs)
     end
 
     it "should print a start message" do
       allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
-      expect(ResqueJob::Base).to receive(:p).with("waffles have started")
+      expect(ResqueJob::Base).to receive(:puts).with("waffles have started")
     end
 
     it "should build a new performer" do
-      expect(ResqueJob::Performer).to receive(:new).with(@attrs)
+      expect(ResqueJob::Performer).to receive(:new).with(attrs)
     end
 
     it "should have the performer do the work" do
-      expect(@performer).to receive(:do_the_work)
+      expect(performer).to receive(:do_the_work)
     end
 
     it "should have the performer do the work" do
-      expect(@performer).to receive(:puts_outcome_messages)
+      expect(performer).to receive(:puts_outcome_messages)
+    end
+
+    # @mz todo: finish these
+    describe "logging outcome messages", focus: true do
+      before(:each) do 
+        allow(performer).to receive(:outcomes) { outcomes }
+        allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
+        allow(logger).to receive(:info).with("waffles have started")
+      end
+
+
+      # @mz TODO: break these out into individual examples
+      it "logs the success for each successful outcome" do
+        expect(logger).to receive(:info).with("SUCCESS: #{outcome1.message}").once
+        expect(logger).to receive(:info).with("RESULT: #{outcome1.result_excerpt}").once
+        expect(logger).to receive(:info).with("FAILURE: #{outcome2.message}").once
+        expect(logger).to receive(:info).with("RESULT: #{outcome2.result_excerpt}").once
+      end
     end
   end
 
   describe "instantiation" do
-    before do
-      @attrs = { snakes: 10, steve: true }
-    end
+    let(:attrs) {{ snakes: 10, steve: true }}
 
     it "should build an instance successfully" do
-      expect(ResqueJob::Base.new(@attrs).class).to eq(ResqueJob::Base)
+      expect(ResqueJob::Base.new(attrs).class).to eq(ResqueJob::Base)
     end
 
     it "should pass attributes to the instance" do
-      instance = ResqueJob::Base.new(@attrs)
-      expect(instance.instance_variable_get(:@attrs)).to eq(@attrs)
+      instance = ResqueJob::Base.new(attrs)
+      expect(instance.instance_variable_get(:@attrs)).to eq(attrs)
     end
   end
 
@@ -106,10 +125,12 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
   end
 
   describe "self.start_message" do
+    let(:attrs) {{ snakes: 10, steve: true }}
+
     context "class has a @start_message class-level instance variable" do
       it "should return the @start_message value" do
         ResqueJob::Base.instance_variable_set(:@start_message, "stuff started!!")
-        expect(ResqueJob::Base.start_message).to eq("stuff started!!")
+        expect(ResqueJob::Base.start_message(attrs)).to eq("stuff started!!")
       end
     end
 
@@ -121,8 +142,8 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
 
         ResqueJob::Base.instance_variable_set(:@queue, :snake)
         allow(ResqueJob::Base).to receive_messages(job_type: "terrible job")
-        expected_message = "Starting terrible job in queue 'snake'."
-        expect(ResqueJob::Base.start_message).to eq(expected_message)
+        expected_message = "Starting terrible job in queue 'snake' with attributes { snakes: 10, steve: true }."
+        expect(ResqueJob::Base.start_message(attrs)).to eq(expected_message)
       end
     end
 

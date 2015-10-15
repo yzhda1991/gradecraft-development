@@ -45,10 +45,10 @@ module ResqueJob
       rescue Exception => e
         logger.info "Error in #{@performer_class.to_s}: #{e.message}"
         puts "Error in #{@performer_class.to_s}: #{e.message}"
-        puts e.backgrace.inspect
+        # puts e.backtrace.inspect
         logger.info e.backtrace
         # puts e.backtrace.inspect
-        raise ResqueJob::ForcedRetryError
+        raise ResqueJob::Errors::ForcedRetryError
       end
     end
     attr_reader :attrs # TODO: add spec for this
