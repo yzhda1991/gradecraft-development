@@ -101,15 +101,6 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
         end
       end
     end
-
-    describe "puts_outcome_messages" do
-      it "should put each message" do
-        subject.instance_variable_set(:@outcome_messages, ["bad", "good"])
-        expect(subject).to receive(:puts).with("bad")
-        expect(subject).to receive(:puts).with("good")
-        subject.puts_outcome_messages
-      end
-    end
   end
 
   describe "failures" do
