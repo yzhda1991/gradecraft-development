@@ -1,8 +1,8 @@
 class PageviewEventLogger < EventLogger
   # queue name
   @queue= :pageview_event_logger
-  @retry_limit = 3
-  @retry_delay = 5
+  @retry_limit = 5
+  @retry_delay = 45
   @success_message = "Pageview event was successfully created in mongo."
   @failure_message = "Pageview event failed creation in mongo."
 

@@ -12,17 +12,39 @@ class EventLogger
 
   # perform block that is ultimately called by Resque
   def self.perform(event_type, data={})
+    logger = self.logger
     p @start_message
+    logger.info @start_message
     event = Analytics::Event.create self.event_attrs(event_type, data)
-    notify_event_outcome(event)
+    outcome = notify_event_outcome(event)
+    puts outcome
+    logger.info outcome
   end
 
   def self.notify_event_outcome(event)
-    puts (event.valid? ? @success_message : @failure_message)
+    (event.valid? ? @success_message : @failure_message)
   end
 
   def self.event_attrs(event_type, data)
     { event_type: event_type, created_at: Time.now }.merge data
+  end
+
+  def self.logger
+    @logger ||= Logglier.new(self.logger_url, format: :json)
+  end
+
+  # these all need to be spec'd out
+  # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
+  def self.logger_url
+    [ self.logger_base_url, ENV['LOGGLY_TOKEN'], "tag", self.queue_tag_name ].join("/")
+  end
+
+  def self.logger_base_url
+    "https://logs-01.loggly.com/inputs"
+  end
+
+  def self.queue_tag_name
+    "#{@queue.to_s.gsub(/_+/,'-')}-jobs-#{Rails.env}"
   end
 
   # allow sub-classes to inherit class-level instance variables

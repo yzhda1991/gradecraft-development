@@ -2,8 +2,8 @@ class PredictorEventLogger < EventLogger
   @queue= :predictor_event_logger
   @start_message = "Starting PredictorEventLogger"
 
-  @retry_limit = 3
-  @retry_delay = 5
+  @retry_limit = 5
+  @retry_delay = 45
   @success_message = "Predictor event was successfully created in mongo."
   @failure_message = "Predictor event failed creation in mongo."
 
