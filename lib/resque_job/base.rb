@@ -11,7 +11,6 @@ module ResqueJob
     @performer_class = ResqueJob::Performer
     @retry_limit = 3 # retry only 3 times
     @retry_delay = 60 # retry after 60 seconds
-    @logger = Gradecraft.loggers
 
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
@@ -20,22 +19,34 @@ module ResqueJob
 
       # TODO: need to add specs for the new begin/resque
       begin
-        @logger.info self.start_message(attrs) # this wasn't running because 
-        puts self.start_message(attrs) # this wasn't running because 
+        # build a new background job logger
+        logger = Logglier.new("https://logs-01.loggly.com/inputs/#{ENV['LOGGLY_TOKEN']}/tag/#{@queue}-jobs-#{Rails.env}", threaded: true, format: :json)
+        # puts "@peformer_class: #{@performer_class}"
+        # puts @logger
+        p this_message = self.start_message(attrs) # this wasn't running because 
+        # @logger.info this_message
+        logger.info self.start_message(attrs) # this wasn't running because 
+        logger.info @performer_class
         # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
         #
         # this is where the magic happens
         performer = @performer_class.new(attrs) # self.class is the job class
         performer.do_the_work
 
+        logger.info "stuff" 
         # mention to the logger how things went
         # performer.log_outcome_messages(@logger) # todo: add specs for logger
-        combined_messages = self.combined_outcome_messages(@logger) # todo: add specs for logger
-        puts combined_messages
-        @logger.info combined_messages
-        # puts performer.outcome_messages.join(", ")
+        # combined_outcome_messages(@logger) # todo: add specs for logger
+
+        performer.outcomes.each do |outcome|
+          logger.info("SUCCESS: #{outcome.message}") if outcome.success?
+          logger.info("FAILURE: #{outcome.message}") if outcome.failure?
+          logger.info("RESULT: " + "#{outcome.result}"[0..100].split("\n").first)
+        end
       rescue Exception => e
         @logger.info "Error in #{@performer_class.to_s}: #{e.message}"
+        puts "Error in #{@performer_class.to_s}: #{e.message}"
+        puts e.backgrace.inspect
         @logger.info e.backtrace
         # puts e.backtrace.inspect
         raise ResqueJob::ForcedRetryError
@@ -47,15 +58,17 @@ module ResqueJob
       @attrs = attrs
     end
 
-    def self.combined_outcome_messages(performer)
-      performer.outcomes.inject([]) do |memo, outcome|
-        outcome_messages = []
-        outcome_messages << "SUCCESS: #{outcome.message}" if outcome.success?
-        outcome_messages << "FAILURE: #{outcome.message}" if outcome.failure?
-        outcome_messages << "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
-        memo << outcome_messages.join(", ")
-      end.join(", ")
-    end
+    # def self.combined_outcome_messages(performer)
+    #   performer.outcomes.each do |outcome|
+    #     outcome_messages = []
+    #     outcome_messages << "SUCCESS: #{outcome.message}" if outcome.success?
+    #     outcome_messages << "FAILURE: #{outcome.message}" if outcome.failure?
+    #     outcome_messages << "RESULT: " + "#{outcome.result}"[0..100].split("\n").first
+    #     final_message = outcome_messages.join(" | ")
+    #     puts final_message
+    #     @logger.info final_message
+    #   end
+    # end
 
     def enqueue_in(time_until_start)
       Resque.enqueue_in(time_until_start, self.object_class, @attrs)
@@ -112,7 +125,7 @@ module ResqueJob
         queue: :main,
         performer_class: ResqueJob::Performer,
         retry_limit: 3,
-        retry_delay: 60,
+        retry_delay: 60
       }   
     end
 

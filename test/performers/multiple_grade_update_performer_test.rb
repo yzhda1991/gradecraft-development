@@ -5,7 +5,7 @@ class MultipleGradeUpdaterTest
   end
 
   def run(cycles)
-    puts "Starting test for MultipleGradebookUpdaterJob."
+    puts "Starting test for MultipleGradeUpdaterJob."
 
     puts "Running normal enqueues, should happen right now:"
     cycles.times { subject.enqueue }
