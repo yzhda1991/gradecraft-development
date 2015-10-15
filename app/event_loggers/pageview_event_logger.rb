@@ -1,5 +1,3 @@
-require_relative './event_logger'
-
 class PageviewEventLogger < EventLogger
   # queue name
   @queue= :pageview_event_logger

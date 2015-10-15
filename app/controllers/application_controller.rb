@@ -105,7 +105,7 @@ class ApplicationController < ActionController::Base
     raise Canable::Transgression unless can_view?(resource)
   end
 
-  require_relative '../performers/event_loggers/pageview_event_logger'
+  require_relative '../event_loggers/pageview_event_logger'
   module ResqueManager
     extend EventsHelper::Lull
   end

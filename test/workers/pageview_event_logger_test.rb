@@ -1,4 +1,4 @@
-require_relative '../../app/workers/event_loggers/pageview_event_logger'
+require_relative '../../app/event_loggers/pageview_event_logger'
 
 class PageviewLoggerTest
   def initialize
