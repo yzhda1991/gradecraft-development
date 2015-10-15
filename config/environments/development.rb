@@ -4,9 +4,15 @@ GradeCraft::Application.configure do
   config.action_controller.perform_caching = false
   config.action_dispatch.best_standards_support = :builtin
   config.asset_host = "http://localhost:5000"
-  config.action_mailer.default_url_options = { :host => 'localhost:5000' }
-  config.action_mailer.delivery_method = :letter_opener
+
+  config.action_mailer.default_url_options = { :host => 'localhost:1080' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address => 'localhost',
+    :port => 1025,
+  }
   config.action_mailer.perform_deliveries = true
+
   config.action_mailer.raise_delivery_errors = true
   config.active_support.deprecation = :log
   config.assets.compress = false

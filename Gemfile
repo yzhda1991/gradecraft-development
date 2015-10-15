@@ -107,6 +107,9 @@ group :development do
   gem 'letter_opener'
   gem 'rubystats'
   gem "bullet"
+
+  # setup a simple SMTP server to catch all outgoing mail at smtp://localhost:1025
+  gem "mailcatcher"
 end
 
 group :development, :test do
