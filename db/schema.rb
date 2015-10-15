@@ -161,7 +161,7 @@ ActiveRecord::Schema.define(version: 20151021153100) do
     t.integer  "position"
     t.boolean  "visible_when_locked",                 default: true
   end
-
+ 
   create_table "challenge_files", force: :cascade do |t|
     t.string   "filename",        limit: 255
     t.integer  "challenge_id"
