@@ -32,7 +32,7 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     let(:outcome1) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
     let(:outcome2) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
     let(:outcomes) { [ outcome1, outcome2 ] }
-    let(:logger) { double(Logger) }
+    let(:logger) { double(Logger).as_null_object }
 
     before(:each) do
       allow(ResqueJob::Performer).to receive_messages(new: performer)
@@ -56,12 +56,8 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       expect(performer).to receive(:do_the_work)
     end
 
-    it "should have the performer do the work" do
-      expect(performer).to receive(:puts_outcome_messages)
-    end
-
     # @mz todo: finish these
-    describe "logging outcome messages", focus: true do
+    describe "logging outcome messages" do
       before(:each) do 
         allow(performer).to receive(:outcomes) { outcomes }
         allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
