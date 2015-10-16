@@ -10,7 +10,7 @@ GradeCraft::Application.configure do
     :address => 'mailcatcher',
     :port => 1025,
   }
-  config.action_mailer.perform_deliveries = false # off for the timebeing until the mailcatcher server is running
+  config.action_mailer.perform_deliveries = true
 
   config.active_support.deprecation = :notify
   config.assets.compile = false
