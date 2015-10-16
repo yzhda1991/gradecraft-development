@@ -403,6 +403,36 @@ class User < ActiveRecord::Base
     end
   end
 
+  # @mz TODO: refactor this to hell
+  # Powers the worker to recalculate student scores
+  def improved_cache_course_score(course_id)
+    course = Course.find(course_id)
+    membership = course_memberships.where(course_id: course_id).first
+    total_score = nil
+    unless membership.nil?
+      if membership.course.add_team_score_to_student?
+        membership.update_attribute :score, (
+          total_score = 0
+          course.assignment_types.each do |assignment_type|
+            total_score += assignment_type.visible_score_for_student(self)
+          end
+          total_score += earned_badge_score_for_course(course_id)
+          total_score += (self.team_for_course(course_id).try(:score) || 0)
+        )
+      else
+        membership.update_attribute :score, (
+          total_score = 0
+          course.assignment_types.each do |assignment_type|
+            total_score += assignment_type.visible_score_for_student(self)
+          end
+          total_score += earned_badge_score_for_course(course_id)
+        )
+      end
+    end
+    total_score
+  end
+
+
   ### TEAMS
   # Find the team associated with the team membership for a given course id
   def course_team(course)
