@@ -16,6 +16,9 @@ class ChallengeGrade < ActiveRecord::Base
 
   delegate :name, :description, :due_at, :point_total, :to => :challenge
 
+  #TODO: Need to bring this in and resolve dup challenge grades in production
+  #validates :challenge_id, :uniqueness => {:scope => :team_id}
+
   def score
     super.presence || 0
   end

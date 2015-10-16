@@ -14,6 +14,8 @@
         = f.label :status
         = f.select :status, Grade::STATUSES
         .form_label= "Can the #{term_for :team} see this grade?"
+      - else 
+        = f.input :status, :as => :hidden, :input_html => { :value => "Graded" }
         
   %section
     %h4 Feedback
