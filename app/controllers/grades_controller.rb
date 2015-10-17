@@ -633,7 +633,7 @@ class GradesController < ApplicationController
     else
       @assignment = current_course.assignments.find(params[:id])
 
-      # todo: check into what this calls is doing. is this being used?
+      # @mz todo: check into what this calls is doing. is this being used?
       @students = current_course.students
 
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)

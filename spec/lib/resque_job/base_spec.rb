@@ -148,7 +148,7 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
 
         ResqueJob::Base.instance_variable_set(:@queue, :snake)
         allow(ResqueJob::Base).to receive_messages(job_type: "terrible job")
-        expected_message = "Starting terrible job in queue 'snake' with attributes { snakes: 10, steve: true }."
+        expected_message = "Starting terrible job in queue 'snake' with attributes {:snakes=>10, :steve=>true}."
         expect(ResqueJob::Base.start_message(attrs)).to eq(expected_message)
       end
     end
