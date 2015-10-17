@@ -4,8 +4,6 @@ class PredictorEventLogger < EventLogger
   @success_message = "Predictor event was successfully created in mongo"
   @failure_message = "Predictor event failed creation in mongo"
 
-  # message that posts to the log when being queued
-  @start_message = "Starting Predictor EventLogger"
 
   def initialize(attrs={})
     @attrs = attrs

@@ -246,11 +246,13 @@
             event.preventDefault()
             event.stopPropagation()
             angular.element(ui.handle.parentElement).slider("value", closest.value)
+
             if articleType == 'assignment'
               angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
             else
               angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
           else
+
             if articleType == 'assignment'
               angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
             else
