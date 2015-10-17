@@ -4,7 +4,6 @@ class PredictorEventLogger < EventLogger
   @success_message = "Predictor event was successfully created in mongo"
   @failure_message = "Predictor event failed creation in mongo"
 
-
   def initialize(attrs={})
     @attrs = attrs
   end

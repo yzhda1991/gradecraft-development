@@ -96,6 +96,8 @@ class ChallengesController < ApplicationController
     respond_to do |format|
       format.json do
         if @challengePrediction.save
+          # create a predictor event in mongo to keep track of what happened
+          PredictorEventLogger.new(challenge_predictor_event_attrs).enqueue
           render :json => {id: @challenge.id, points_earned: @challengePrediction.points_earned}
         else
           render :json => { errors:  @challengePrediction.errors.full_messages }, :status => 400
@@ -103,6 +105,23 @@ class ChallengesController < ApplicationController
       end
     end
   end
+
+  private
+
+  def challenge_predictor_event_attrs
+    {
+      course_id: current_course.id,
+      user_id: current_user.id,
+      student_id: current_student.try(:id),
+      user_role: current_user.role(current_course),
+      challenge_id: params[:challenge_id],
+      predicted_points: params[:predicted_score],
+      possible_points: @challenge.point_total,
+      created_at: Time.now
+    }
+  end
+
+  public
 
   def student_predictor_data
     if current_user.is_student?(current_course)

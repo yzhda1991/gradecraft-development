@@ -114,6 +114,8 @@ class BadgesController < ApplicationController
     respond_to do |format|
       format.json do
         if @badgePrediction.save
+          # create a predictor event in mongo to keep track of what happened
+          PredictorEventLogger.new(badge_predictor_event_attrs).enqueue
           render :json => {id: @badge.id, times_earned: @badgePrediction.times_earned}
         else
           render :json => { errors:  @badgePrediction.errors.full_messages }, :status => 400
@@ -121,6 +123,23 @@ class BadgesController < ApplicationController
       end
     end
   end
+
+  private
+
+  def badge_predictor_event_attrs
+    {
+      course_id: current_course.id,
+      user_id: current_user.id,
+      student_id: current_student.try(:id),
+      user_role: current_user.role(current_course),
+      badge_id: params[:badge_id],
+      predicted_earns: params[:times_earned],
+      multiple_earns_possible: @badge.can_earn_multiple_times,
+      created_at: Time.now
+    }
+  end
+
+  public
 
   def student_predictor_data
     if current_user.is_student?(current_course)
