@@ -26,6 +26,8 @@ second_course_grade_levels = ['Hammurabi', 'Confucius', 'Socrates', 'Cicero', 'W
 
 majors = ['Engineering','American Culture','Anthropology','Asian Studies','Astronomy','Cognitive Science','Creative Writing and Literature','English','German','Informatics','Linguistics','Physics']
 
+pseuydonyms = ['Bigby Wolf', 'Snow White', 'Beauty', 'the Beast', 'Trusty John', 'Grimble', 'Bufkin', 'Prince Charming', 'Cinderella', 'Old King Cole','Hobbes', 'Pinocchio', 'Briar Rose', 'Doctor Swineheart', 'Rapunzel', 'Kay', 'Mrs. Sprat', 'Frau Totenkinder', 'Ozma', 'Great Fairy Witch','Maddy', 'Mr. Grandours', 'Mrs. Someone', 'Prospero', 'Mr. Kadabra','Geppetto', 'Morgan le Fay','Rose Red','Boy Blue','Weyland Smith','Reynard the Fox','Brock Blueheart','Peter Piper','Bo Peep','The Adversary','Goldilocks','Bluebeard','Ichabod Crane','Baba Yaga','The Snow Queen','Rodney', 'June', 'Hansel', 'The Nome King', 'Max Piper', 'Mister Dark', 'Fairy Godmother', 'Dorothy Gale', 'Hadeon the Destroyer', 'Prince Brandish']
+
 # Generate sample admin
 User.create! do |u|
   u.username = 'albus'
@@ -121,6 +123,7 @@ courses << third_course = Course.create! do |c|
   c.semester = "Fall"
   c.team_setting = true
   c.teams_visible = true
+  c.in_team_leaderboard = true
   c.group_setting = false
   c.badge_setting = false
   c.accepts_submissions = true
@@ -131,12 +134,16 @@ courses << third_course = Course.create! do |c|
   c.twitter_handle = "si110"
   c.twitter_hashtag = "si101"
   c.assignment_term = "Quest"
+  c.challenge_term = "Ambush"
   c.location = "2245 North Quad"
   c.office_hours = "email me"
   c.meeting_times = "TTh 12:00-1:30"
   c.team_challenges = true
   c.team_score_average = true
   c.add_team_score_to_student = true
+  c.character_names = true
+  c.team_roles = true
+  c.character_profiles = true
   c.grading_philosophy = "In this course, we accrue 'XP' which are points that you gain to get to different grade levels. If you can gather 950,000 XP, you will receive an A, not to mention the admiration of those around you. Because you’re in charge of figuring out how many XP you need to get the grade you want, there’s not really such a thing as a required assignment in this course. There are opportunities to gain XP, some of which are scheduled. Of course, you’ll need to do several Quests in order to get higher grade levels, and some Quests count for a ton of XP. Each of these quests is managed in GradeCraft, where you can see your progress, as well as check the forecasting tool to see what you need to do on future assignments to get your desired grade level. A quick note on our assessment philosophy. Most Quests will have rubrics attached, which will spell out our expectations. However, just meeting the details of the assignment is by definition average work, which would receive something around the B category. If your goal is to get an A, you will have to go above and beyond on some of these Quests."
 end
 puts "I have never let my schooling interfere with my education. ― Mark Twain"
@@ -212,7 +219,7 @@ second_course_teams = second_course_team_names.map do |team_name|
     t.name = team_name
   end
 end
-puts "It does not matter how slowly you go as long as you do not stop.― Confucius"
+puts "The best thing for being sad, replied Merlin, beginning to puff and blow, is to learn something. That's the only thing that never fails. - Merlin via T.H. White"
 
 third_course_teams = third_course_team_names.map do |team_name|
   third_course.teams.create! do |t|
@@ -233,12 +240,12 @@ students = user_names.map do |name|
     u.password = 'uptonogood'
     u.courses << [ first_course, second_course, third_course, fourth_course ]
     u.teams << [ first_course_teams.sample, second_course_teams.sample, third_course_teams.sample ]
+    u.display_name = pseuydonyms.sample
   end
   user.activate!
   user
 end
-puts "Self-education is, I firmly believe, the only kind of education there is.― Isaac Asimov"
-
+puts "We learn from failure, not from success! ― Bram Stoker, Dracula"
 
 # Generate sample professor
 User.create! do |u|
@@ -253,7 +260,6 @@ User.create! do |u|
     cm.role = "professor"
   end
 end.activate!
-puts "In learning you will teach, and in teaching you will learn.― Phil Collins"
 
 # Generate sample professor
 User.create! do |u|
@@ -268,7 +274,6 @@ User.create! do |u|
     cm.role = "professor"
   end
 end.activate!
-puts "I go to school, but I never learn what I want to know.― Calvin & Hobbes"
 
 # Generate sample professor
 User.create! do |u|
@@ -299,6 +304,7 @@ User.create! do |u|
     end
   end
 end.activate!
+puts "In learning you will teach, and in teaching you will learn.― Phil Collins"
 
 #Create demo academic history content
 students.each do |s|
@@ -316,6 +322,7 @@ students.each do |s|
     ah.sat_score = 100 * rand(10)
   end
 end
+puts "I go to school, but I never learn what I want to know.― Calvin & Hobbes"
 
 first_course_badges = first_course_badge_names.map do |badge_name|
   first_course.badges.create! do |b|
@@ -363,7 +370,7 @@ second_course_badges.each do |badge|
     end
   end
 end
-
+puts "Self-education is, I firmly believe, the only kind of education there is.― Isaac Asimov"
 
 assignment_types = {}
 
@@ -373,7 +380,28 @@ assignment_types[:first_course_grading] = AssignmentType.create! do |at|
   at.description = "This category should include all of the different ways assignments can be graded."
   at.position = 1
 end
-puts "Education consists mainly of what we have unlearned.― Mark Twain, Notebook"
+
+assignment_types[:second_course_grading] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Grading Settings"
+  at.description = "This category should include all of the different ways assignments can be graded."
+  at.position = 1
+end
+
+assignment_types[:third_course_grading] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.name = "Grading Settings"
+  at.description = "This category should include all of the different ways assignments can be graded."
+  at.position = 1
+end
+
+assignment_types[:fourth_course_grading] = AssignmentType.create! do |at|
+  at.course = fourth_course
+  at.name = "Grading Settings"
+  at.description = "This category should include all of the different ways assignments can be graded."
+  at.position = 1
+end
+puts "Buffy: Well, I gotta look on the bright side. Maybe I can still get kicked out of school."
 
 standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -386,6 +414,43 @@ standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
   a.open_at = 1.weeks.from_now
   a.due_at = 1.weeks.from_now + 0.05
 end
+
+standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Standard Edit + Quick Grade with Text Box [no grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.open_at = 1.weeks.from_now
+  a.due_at = 1.weeks.from_now + 0.05
+end
+
+standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Standard Edit + Quick Grade with Text Box [no grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.open_at = 1.weeks.from_now
+  a.due_at = 1.weeks.from_now + 0.05
+end
+
+standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Standard Edit + Quick Grade with Text Box [no grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.open_at = 1.weeks.from_now
+  a.due_at = 1.weeks.from_now + 0.05
+end
+puts "Study hard what interests you the most in the most undisciplined, irreverent and original manner possible. ― Richard Feynman"
 
 standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -407,6 +472,67 @@ standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
   end
 end
 
+standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Standard Edit + Quick Grade with Text Box [Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.open_at = 1.weeks.from_now
+  a.due_at = 1.weeks.from_now + 0.05
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+
+standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Standard Edit + Quick Grade with Text Box [Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.open_at = 1.weeks.from_now
+  a.due_at = 1.weeks.from_now + 0.05
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+
+standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Standard Edit + Quick Grade with Text Box [Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.open_at = 1.weeks.from_now
+  a.due_at = 1.weeks.from_now + 0.05
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+puts "We demand rigidly defined areas of doubt and uncertainty! - Douglas Adams"
+
 standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_grading]
@@ -419,6 +545,46 @@ standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
   a.open_at = 2.weeks.ago
   a.due_at = 2.weeks.ago + 0.05
 end
+
+standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Standard Edit + Quick Grade with Checkbox [No Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Checkbox"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+end
+
+standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Standard Edit + Quick Grade with Checkbox [No Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Checkbox"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+end
+
+standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Standard Edit + Quick Grade with Checkbox [No Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Checkbox"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+end
+puts "For me, I am driven by two main philosophies: know more today about the world than I knew yesterday and lessen the suffering of others. You'd be surprised how far that gets you. ― Neil deGrasse Tyson"
 
 standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -441,35 +607,15 @@ standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
   end
 end
 
-standard_edit_quick_grade_select_assignment = Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:first_course_grading]
-  a.name = "Standard Edit with Select/Quick Grade with Select [No Grades]"
-  a.point_total = 200000
+standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Standard Edit + Quick Grade with Checkbox [Grades]"
+  a.point_total = 5000
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Individual"
-  a.mass_grade_type = "Select List"
-  a.open_at = 2.weeks.ago
-  a.due_at = 2.weeks.ago + 0.05
-end
-
-1.upto(5).each do |n|
-  standard_edit_quick_grade_select_assignment.assignment_score_levels.create! do |asl|
-    asl.name = "Assignment Score Level ##{n}"
-    asl.value = 200000/(6-n)
-  end
-end
- 
-standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
-  a.course = first_course
-  a.assignment_type = assignment_types[:first_course_grading]
-  a.name = "Standard Edit with Select/Quick Grade with Select [Grades]"
-  a.point_total = 200000
-  a.accepts_submissions = false
-  a.release_necessary = false
-  a.grade_scope = "Individual"
-  a.mass_grade_type = "Select List"
+  a.mass_grade_type = "Checkbox"
   a.open_at = 2.weeks.ago
   a.due_at = 2.weeks.ago + 0.05
   students.each do |student|
@@ -482,12 +628,239 @@ standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
   end
 end
 
-1.upto(5).each do |n|
-  standard_edit_quick_grade_select_assignment_2.assignment_score_levels.create! do |asl|
-    asl.name = "Assignment Score Level ##{n}"
-    asl.value = 200000/(6-n)
+standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Standard Edit + Quick Grade with Checkbox [Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Checkbox"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
   end
 end
+
+standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Standard Edit + Quick Grade with Checkbox [Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Checkbox"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+puts "I hope you're pleased with yourselves. We could all have been killed - or worse, expelled. Now if you don't mind, I'm going to bed.― J.K. Rowling"
+
+standard_edit_quick_grade_select_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Standard Edit with Select/Quick Grade with Select [No Grades]"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+end
+
+standard_edit_quick_grade_select_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Standard Edit with Select/Quick Grade with Select [No Grades]"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+end
+
+standard_edit_quick_grade_select_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Standard Edit with Select/Quick Grade with Select [No Grades]"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+end
+
+standard_edit_quick_grade_select_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Standard Edit with Select/Quick Grade with Select [No Grades]"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+end
+puts "What a school thinks about its library is a measure of what it feels about education.― Harold Howe"
+ 
+standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Standard Edit with Select/Quick Grade with Select [Grades]"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Standard Edit with Select/Quick Grade with Select [Grades]"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Standard Edit with Select/Quick Grade with Select [Grades]"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Standard Edit with Select/Quick Grade with Select [Grades]"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.mass_grade_type = "Select List"
+  a.open_at = 2.weeks.ago
+  a.due_at = 2.weeks.ago + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+puts "Education consists mainly of what we have unlearned.― Mark Twain, Notebook"
 
 self_log_boolean_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -501,6 +874,45 @@ self_log_boolean_assignment = Assignment.create! do |a|
   a.open_at = DateTime.now
   a.due_at = DateTime.now + 0.05
 end
+
+self_log_boolean_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Single-level Self-Logged Assignment [No Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+end
+self_log_boolean_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Single-level Self-Logged Assignment [No Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+end
+
+self_log_boolean_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Single-level Self-Logged Assignment [No Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+end
+puts "It's not that I feel that school is a good idea gone wrong, but a wrong idea from the word go. It's a nutty notion that we can have a place where nothing but learning happens, cut off from the rest of life.― John Holt"
 
 self_log_boolean_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -523,6 +935,70 @@ self_log_boolean_assignment = Assignment.create! do |a|
   end
 end
 
+self_log_boolean_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Single-level Self-Logged Assignment [Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+
+self_log_boolean_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Single-level Self-Logged Assignment [Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+
+self_log_boolean_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Single-level Self-Logged Assignment [Grades]"
+  a.point_total = 5000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = a.point_total * [0, 1].sample
+      g.instructor_modified = true
+      g.status = "Graded"
+    end
+  end
+end
+puts "School should be the best party in town ― Peter Kline"
+
 self_log_score_level_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_grading]
@@ -534,12 +1010,12 @@ self_log_score_level_assignment = Assignment.create! do |a|
   a.student_logged = true
   a.open_at = DateTime.now
   a.due_at = DateTime.now + 0.05
-end
-
-1.upto(5).each do |n|
-  self_log_score_level_assignment.assignment_score_levels.create! do |asl|
-    asl.name = "Assignment Score Level ##{n}"
-    asl.value = 200000/(6-n)
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
   end
 end
 
@@ -659,6 +1135,7 @@ group_grade_rubric_assignment = Assignment.create! do |a|
     end
   end
 end
+puts "It does not matter how slowly you go as long as you do not stop.― Confucius"
 
 assignment_types[:first_course_submissions] = AssignmentType.create! do |at|
   at.course = first_course
@@ -1200,9 +1677,9 @@ challenges = []
 
 challenges << Challenge.create! do |c|
   c.course = first_course
-  c.name = "House Cup"
+  c.name = "Challenge in the Past"
   c.point_total = 1000000
-  c.due_at = 3.weeks.from_now
+  c.due_at = 2.weeks.ago
   c.accepts_submissions = true
   c.release_necessary = false
   c.visible = true
@@ -1215,11 +1692,10 @@ challenges << Challenge.create! do |c|
     end
   end
 end
-puts "The House Cup Competition begins... "
 
 challenges << Challenge.create! do |c|
   c.course = first_course
-  c.name = "Challenge that accepts submissions"
+  c.name = "Challenge in the future that accepts submissions"
   c.point_total = 10000000
   c.due_at = 2.weeks.from_now
   c.accepts_submissions = true
@@ -1227,7 +1703,82 @@ challenges << Challenge.create! do |c|
   c.open_at = rand(8).weeks.ago
   c.visible = true
 end
-puts "Are you willing to brave the Tri-Wizard Tournament?"
+
+
+challenges << Challenge.create! do |c|
+  c.course = first_course
+  c.name = "Challenge that Requires Release"
+  c.point_total = 10000000
+  c.due_at = 3.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = true
+  c.open_at = rand(8).weeks.ago
+  c.visible = true
+end
+
+challenges << Challenge.create! do |c|
+  c.course = first_course
+  c.name = "Invisible Challenge"
+  c.point_total = 10000000
+  c.due_at = 4.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = false
+  c.open_at = rand(8).weeks.ago
+  c.visible = false
+end
+
+
+challenges << Challenge.create! do |c|
+  c.course = third_course
+  c.name = "Challenge in the Past"
+  c.point_total = 1000000
+  c.due_at = 2.weeks.ago
+  c.accepts_submissions = true
+  c.release_necessary = false
+  c.visible = true
+  c.save
+  third_course_teams.each do |team|
+    c.challenge_grades.create! do |cg|
+      cg.team = team
+      cg.score = 1000000 * [0,1].sample
+      cg.status = "Graded"
+    end
+  end
+end
+
+challenges << Challenge.create! do |c|
+  c.course = third_course
+  c.name = "Challenge in the future that accepts submissions"
+  c.point_total = 10000000
+  c.due_at = 2.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = false
+  c.open_at = rand(8).weeks.ago
+  c.visible = true
+end
+
+
+challenges << Challenge.create! do |c|
+  c.course = third_course
+  c.name = "Challenge that Requires Release"
+  c.point_total = 10000000
+  c.due_at = 3.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = true
+  c.open_at = rand(8).weeks.ago
+  c.visible = true
+end
+
+challenges << Challenge.create! do |c|
+  c.course = third_course
+  c.name = "Invisible Challenge"
+  c.point_total = 10000000
+  c.due_at = 4.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = false
+  c.open_at = rand(8).weeks.ago
+  c.visible = false
+end
 
 assignment_types[:second_course_weighting_one] = AssignmentType.create! do |at|
   at.course = second_course
