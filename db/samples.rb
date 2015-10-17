@@ -26,6 +26,8 @@ second_course_grade_levels = ['Hammurabi', 'Confucius', 'Socrates', 'Cicero', 'W
 
 majors = ['Engineering','American Culture','Anthropology','Asian Studies','Astronomy','Cognitive Science','Creative Writing and Literature','English','German','Informatics','Linguistics','Physics']
 
+pseuydonyms = ['Bigby Wolf', 'Snow White', 'Beauty', 'the Beast', 'Trusty John', 'Grimble', 'Bufkin', 'Prince Charming', 'Cinderella', 'Old King Cole','Hobbes', 'Pinocchio', 'Briar Rose', 'Doctor Swineheart', 'Rapunzel', 'Kay', 'Mrs. Sprat', 'Frau Totenkinder', 'Ozma', 'Great Fairy Witch','Maddy', 'Mr. Grandours', 'Mrs. Someone', 'Prospero', 'Mr. Kadabra','Geppetto', 'Morgan le Fay','Rose Red','Boy Blue','Weyland Smith','Reynard the Fox','Brock Blueheart','Peter Piper','Bo Peep','The Adversary','Goldilocks','Bluebeard','Ichabod Crane','Baba Yaga','The Snow Queen','Rodney', 'June', 'Hansel', 'The Nome King', 'Max Piper', 'Mister Dark', 'Fairy Godmother', 'Dorothy Gale', 'Hadeon the Destroyer', 'Prince Brandish']
+
 # Generate sample admin
 User.create! do |u|
   u.username = 'albus'
@@ -121,6 +123,7 @@ courses << third_course = Course.create! do |c|
   c.semester = "Fall"
   c.team_setting = true
   c.teams_visible = true
+  c.in_team_leaderboard = true
   c.group_setting = false
   c.badge_setting = false
   c.accepts_submissions = true
@@ -131,12 +134,16 @@ courses << third_course = Course.create! do |c|
   c.twitter_handle = "si110"
   c.twitter_hashtag = "si101"
   c.assignment_term = "Quest"
+  c.challenge_term = "Ambush"
   c.location = "2245 North Quad"
   c.office_hours = "email me"
   c.meeting_times = "TTh 12:00-1:30"
   c.team_challenges = true
   c.team_score_average = true
   c.add_team_score_to_student = true
+  c.character_names = true
+  c.team_roles = true
+  c.character_profiles = true
   c.grading_philosophy = "In this course, we accrue 'XP' which are points that you gain to get to different grade levels. If you can gather 950,000 XP, you will receive an A, not to mention the admiration of those around you. Because you’re in charge of figuring out how many XP you need to get the grade you want, there’s not really such a thing as a required assignment in this course. There are opportunities to gain XP, some of which are scheduled. Of course, you’ll need to do several Quests in order to get higher grade levels, and some Quests count for a ton of XP. Each of these quests is managed in GradeCraft, where you can see your progress, as well as check the forecasting tool to see what you need to do on future assignments to get your desired grade level. A quick note on our assessment philosophy. Most Quests will have rubrics attached, which will spell out our expectations. However, just meeting the details of the assignment is by definition average work, which would receive something around the B category. If your goal is to get an A, you will have to go above and beyond on some of these Quests."
 end
 puts "I have never let my schooling interfere with my education. ― Mark Twain"
@@ -233,6 +240,7 @@ students = user_names.map do |name|
     u.password = 'uptonogood'
     u.courses << [ first_course, second_course, third_course, fourth_course ]
     u.teams << [ first_course_teams.sample, second_course_teams.sample, third_course_teams.sample ]
+    u.display_name = pseuydonyms.sample
   end
   user.activate!
   user
@@ -406,6 +414,8 @@ standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
     end
   end
 end
+
+puts "We demand rigidly defined areas of doubt and uncertainty! - Douglas Adams"
 
 standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -1200,9 +1210,9 @@ challenges = []
 
 challenges << Challenge.create! do |c|
   c.course = first_course
-  c.name = "House Cup"
+  c.name = "Challenge in the Past"
   c.point_total = 1000000
-  c.due_at = 3.weeks.from_now
+  c.due_at = 2.weeks.ago
   c.accepts_submissions = true
   c.release_necessary = false
   c.visible = true
@@ -1215,11 +1225,10 @@ challenges << Challenge.create! do |c|
     end
   end
 end
-puts "The House Cup Competition begins... "
 
 challenges << Challenge.create! do |c|
   c.course = first_course
-  c.name = "Challenge that accepts submissions"
+  c.name = "Challenge in the future that accepts submissions"
   c.point_total = 10000000
   c.due_at = 2.weeks.from_now
   c.accepts_submissions = true
@@ -1227,7 +1236,82 @@ challenges << Challenge.create! do |c|
   c.open_at = rand(8).weeks.ago
   c.visible = true
 end
-puts "Are you willing to brave the Tri-Wizard Tournament?"
+
+
+challenges << Challenge.create! do |c|
+  c.course = first_course
+  c.name = "Challenge that Requires Release"
+  c.point_total = 10000000
+  c.due_at = 3.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = true
+  c.open_at = rand(8).weeks.ago
+  c.visible = true
+end
+
+challenges << Challenge.create! do |c|
+  c.course = first_course
+  c.name = "Invisible Challenge"
+  c.point_total = 10000000
+  c.due_at = 4.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = false
+  c.open_at = rand(8).weeks.ago
+  c.visible = false
+end
+
+
+challenges << Challenge.create! do |c|
+  c.course = third_course
+  c.name = "Challenge in the Past"
+  c.point_total = 1000000
+  c.due_at = 2.weeks.ago
+  c.accepts_submissions = true
+  c.release_necessary = false
+  c.visible = true
+  c.save
+  third_course_teams.each do |team|
+    c.challenge_grades.create! do |cg|
+      cg.team = team
+      cg.score = 1000000 * [0,1].sample
+      cg.status = "Graded"
+    end
+  end
+end
+
+challenges << Challenge.create! do |c|
+  c.course = third_course
+  c.name = "Challenge in the future that accepts submissions"
+  c.point_total = 10000000
+  c.due_at = 2.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = false
+  c.open_at = rand(8).weeks.ago
+  c.visible = true
+end
+
+
+challenges << Challenge.create! do |c|
+  c.course = third_course
+  c.name = "Challenge that Requires Release"
+  c.point_total = 10000000
+  c.due_at = 3.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = true
+  c.open_at = rand(8).weeks.ago
+  c.visible = true
+end
+
+challenges << Challenge.create! do |c|
+  c.course = third_course
+  c.name = "Invisible Challenge"
+  c.point_total = 10000000
+  c.due_at = 4.weeks.from_now
+  c.accepts_submissions = true
+  c.release_necessary = false
+  c.open_at = rand(8).weeks.ago
+  c.visible = false
+end
 
 assignment_types[:second_course_weighting_one] = AssignmentType.create! do |at|
   at.course = second_course
