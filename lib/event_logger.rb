@@ -3,9 +3,11 @@ require 'resque/errors'
 
 class EventLogger
   extend Resque::Plugins::Retry
+  extend Resque::Plugins::ExponentialBackoff
+
   @queue = :eventlogger
-  @retry_limit = 3
-  @retry_delay = 60
+  @backoff_strategy = [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800]
+
   @start_message = "Starting EventLogger"
   @success_message = "Event was successfully created."
   @failure_message = "Event creation wasnot successful."
@@ -13,20 +15,28 @@ class EventLogger
   # perform block that is ultimately called by Resque
   def self.perform(event_type, data={})
     logger = self.logger
-    p @start_message
+    puts @start_message
     logger.info @start_message
     event = Analytics::Event.create self.event_attrs(event_type, data)
-    outcome = notify_event_outcome(event)
+    outcome = notify_event_outcome(event, data)
     puts outcome
     logger.info outcome
   end
 
-  def self.notify_event_outcome(event)
+  def self.notify_event_outcome(event, data)
     if event.valid?
-      @success_message
+      self.success_message_with_data(data)
     else
-      @failure_message
+      self.failure_message_with_data(data)
     end
+  end
+
+  def self.success_message_with_data(data)
+    "#{@success_message} with data #{data}"
+  end
+
+  def self.failure_message_with_data(data)
+    "#{@failure_message} with data #{data}"
   end
 
   def self.event_attrs(event_type, data)
@@ -37,6 +47,7 @@ class EventLogger
     @logger ||= Logglier.new(self.logger_url, format: :json)
   end
 
+  # @mz todo: add specs
   # these all need to be spec'd out
   # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
   def self.logger_url
@@ -65,8 +76,7 @@ class EventLogger
   def self.class_level_instance_variables
     {
       queue: :eventlogger,
-      retry_limit: 3,
-      retry_delay: 60,
+       backoff_strategy: [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800],
       start_message: "Starting EventLogger",
       success_message: "Event was successfully created.",
       failure_message: "Event creation was not successful"

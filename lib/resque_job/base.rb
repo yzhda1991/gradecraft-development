@@ -100,13 +100,7 @@ module ResqueJob
 
     # todo: modify specs for this
     def self.start_message(attrs)
-      @start_message || "Starting #{self.job_type} in queue '#{@queue}' with attributes { #{self.perform_attributes(attrs)} }."
-    end
-
-    def self.perform_attributes(attrs)
-      attrs.collect do |key, value|
-        "#{key}: #{value}"
-      end.join(", ")
+      @start_message || "Starting #{self.job_type} in queue '#{@queue}' with attributes #{attrs}."
     end
 
     def self.object_class
