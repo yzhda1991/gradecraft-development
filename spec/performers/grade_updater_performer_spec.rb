@@ -67,7 +67,7 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
 
       context "@grade.cache_student_and_team_scores fails" do
         before(:each) do
-          allow(@grade).to receive_messages(cache_student_and_team_scores: nil)
+          allow(performer_grade).to receive_messages(cache_student_and_team_scores: nil)
         end
 
         it "should return the successful value" do
