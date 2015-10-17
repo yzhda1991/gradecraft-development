@@ -5,13 +5,12 @@ module ResqueJob
   class Base
     # add resque-retry for all jobs
     extend Resque::Plugins::Retry
+    extend Resque::Plugins::ExponentialBackoff
     
     # defaults
     @queue = :main # put all jobs in the 'main' queue
     @performer_class = ResqueJob::Performer
-    @retry_limit = 3 # retry only 3 times
-    @retry_delay = 60 # retry after 60 seconds
-
+    @backoff_strategy = [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800]
 
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
@@ -141,8 +140,7 @@ module ResqueJob
       {
         queue: :main,
         performer_class: ResqueJob::Performer,
-        retry_limit: 3,
-        retry_delay: 60
+        backoff_strategy: [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800]
       }   
     end
 

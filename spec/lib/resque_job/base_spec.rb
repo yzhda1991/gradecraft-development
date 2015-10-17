@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe ResqueJob::Base, type: :vendor_library do
+  let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
   describe "extensions" do
     it "should use resque-retry" do
       expect(ResqueJob::Base).to respond_to(:retry_delay)
@@ -17,13 +18,18 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       expect(ResqueJob::Base.instance_variable_get(:@performer_class)).to eq(ResqueJob::Performer)
     end
 
-    it "should have a default @retry_limit for resque-retry" do
-      expect(ResqueJob::Base.instance_variable_get(:@retry_limit)).to eq(3)
+    it "should not have a default @retry_limit for resque-retry" do
+      expect(ResqueJob::Base.instance_variable_get(:@retry_limit)).to eq(nil)
     end
 
-    it "should have a default @retry_delay for resque-retry" do
-      expect(ResqueJob::Base.instance_variable_get(:@retry_delay)).to eq(60)
+    it "should not have a default @retry_delay for resque-retry" do
+      expect(ResqueJob::Base.instance_variable_get(:@retry_delay)).to eq(nil)
     end
+
+    it "should have a default @backoff_strategy for resque-retry" do
+      expect(ResqueJob::Base.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
+    end
+
   end
 
   describe "self.perform(attrs={})" do
@@ -98,8 +104,12 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
 
     it "should pass some actual values to subclasses" do
       class PseudoResqueJob < ResqueJob::Base; end
-      expect(PseudoResqueJob.instance_variable_get(:@retry_limit)).to eq(3)
-      expect(PseudoResqueJob.instance_variable_get(:@retry_delay)).to eq(60)
+      expect(PseudoResqueJob.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
+    end
+
+    it "inherits the inclusion of Resque::Plugins::ExponentialBackoff" do
+      class PseudoResqueJob < ResqueJob::Base; end
+      expect(PseudoResqueJob.retry_delay_multiplicand_min).to eq(1.0) # default from resque-retry
     end
   end
 
