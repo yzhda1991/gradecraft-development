@@ -9,20 +9,20 @@ feature "logging out" do
 
     before { visit root_path }
 
-    scenario "with a password successfully" do
+    before(:each) do
       LoginPage.new(user).submit({ password: password })
+    end
 
-      expect(current_path).to eq syllabus_path
-      within("header") do
-        expect(page).to have_content user.display_name
+    scenario "successfully" do
+
+      within("#account-info") do
+        click_link "Logout"
       end
+
+      expect(current_path).to eq root_path
+      expect(page).to have_content "You are now logged out."
     end
 
-    scenario "with an invalid email and password combination" do
-      LoginPage.new(user).submit({ password: "blah" })
-      expect(current_path).to eq user_sessions_path
-      expect(page).to have_error_message "Email or Password were invalid, login failed."
-    end
   end
   
 end
