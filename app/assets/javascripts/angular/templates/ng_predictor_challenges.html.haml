@@ -27,7 +27,6 @@
 
         .article-graded{'ng-if' => 'articleGraded(challenge)'}
           .grade
-            score: {{challenge.grade.score}}
             {{challenge.grade.score | number}} / {{challenge.grade.point_total | number}}
 
 

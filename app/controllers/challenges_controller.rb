@@ -157,11 +157,6 @@ class ChallengesController < ApplicationController
           end
 
           challenge.current_team_grade = grade
-
-          # Only pass through points if they have been released by the professor
-          unless grade.is_student_visible?
-            challenge.current_team_grade.score = nil
-          end
         end
       end
     end

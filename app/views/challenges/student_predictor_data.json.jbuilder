@@ -19,7 +19,7 @@ json.challenges @challenges do |challenge|
       json.grade do
         json.id grade.id
         json.challenge_id grade.challenge_id
-        json.score grade.score
+        json.score (grade.is_student_visible? ? grade.score : nil)
         json.status grade.status
         json.team_id grade.team_id
         json.final_score grade.final_score
