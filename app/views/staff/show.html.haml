@@ -18,7 +18,9 @@
         %th Student
         %th Score
         %th Feedback
-        %th.button-column
+        %th Created at
+        %th Last Updated
+        %th
     %tbody
       - @grades.each do |grade|
         %tr
@@ -26,6 +28,9 @@
           %td= link_to grade.student.name, student_path(grade.student)
           %td= points grade.score
           %td= raw grade.feedback
+          %td= grade.created_at
+          %td= grade.updated_at
           %td
-            = grade.created_at
-            = grade.updated_at if grade.updated_at != grade.created_at
+            %ul.button-bar
+              %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_grade_path(grade.assignment, :student_id => grade.student.id), :class => 'button'
+              %li= link_to raw('<i class="fa fa-trash fa-fw"> </i> Delete'), remove_grades_assignment_path(:assignment_id => grade.assignment.id, :grade_id => grade.id), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :post

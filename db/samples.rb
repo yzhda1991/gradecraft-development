@@ -472,6 +472,7 @@ standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
       g.assignment = a
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
+      g.graded_by_id = 27
       g.status = "Graded"
     end
   end
@@ -492,6 +493,7 @@ standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
       g.assignment = a
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
+      g.graded_by_id = 27
       g.status = "Graded"
     end
   end
@@ -512,6 +514,7 @@ standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
       g.assignment = a
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
+      g.graded_by_id= 27
       g.status = "Graded"
     end
   end
@@ -532,6 +535,7 @@ standard_edit_quick_grade_text_assignment = Assignment.create! do |a|
       g.assignment = a
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
+      g.graded_by_id = 27
       g.status = "Graded"
     end
   end
@@ -608,6 +612,7 @@ standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 25
     end
   end
 end
@@ -629,6 +634,7 @@ standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 26
     end
   end
 end
@@ -650,6 +656,7 @@ standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 26
     end
   end
 end
@@ -671,6 +678,7 @@ standard_edit_quick_grade_checkbox_assignment = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 26
     end
   end
 end
@@ -781,6 +789,7 @@ standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 25
     end
   end
 end
@@ -808,6 +817,7 @@ standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 27
     end
   end
 end
@@ -835,6 +845,7 @@ standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 27
     end
   end
 end
@@ -862,6 +873,7 @@ standard_edit_quick_grade_select_assignment_2 = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 27
     end
   end
 end
@@ -937,6 +949,7 @@ self_log_boolean_assignment = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 27
     end
   end
 end
@@ -958,6 +971,7 @@ self_log_boolean_assignment = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 27
     end
   end
 end
@@ -979,6 +993,7 @@ self_log_boolean_assignment = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 27
     end
   end
 end
@@ -1000,6 +1015,7 @@ self_log_boolean_assignment = Assignment.create! do |a|
       g.raw_score = a.point_total * [0, 1].sample
       g.instructor_modified = true
       g.status = "Graded"
+      g.graded_by_id = 27
     end
   end
 end
