@@ -168,9 +168,8 @@ courses << fourth_course = Course.create! do |c|
   c.location = "2245 North Quad"
   c.office_hours = "email me"
   c.meeting_times = "TTh 12:00-1:30"
-  c.team_challenges = true
-  c.team_score_average = true
-  c.add_team_score_to_student = true
+  c.team_challenges = false
+  c.add_team_score_to_student = false
   c.grading_philosophy = "In this course, we accrue 'XP' which are points that you gain to get to different grade levels. If you can gather 950,000 XP, you will receive an A, not to mention the admiration of those around you. Because you’re in charge of figuring out how many XP you need to get the grade you want, there’s not really such a thing as a required assignment in this course. There are opportunities to gain XP, some of which are scheduled. Of course, you’ll need to do several Quests in order to get higher grade levels, and some Quests count for a ton of XP. Each of these quests is managed in GradeCraft, where you can see your progress, as well as check the forecasting tool to see what you need to do on future assignments to get your desired grade level. A quick note on our assessment philosophy. Most Quests will have rubrics attached, which will spell out our expectations. However, just meeting the details of the assignment is by definition average work, which would receive something around the B category. If your goal is to get an A, you will have to go above and beyond on some of these Quests."
 end
 puts "You can never be overdressed or overeducated. ― Oscar Wilde"
@@ -893,6 +892,7 @@ self_log_boolean_assignment = Assignment.create! do |a|
   a.open_at = DateTime.now
   a.due_at = DateTime.now + 0.05
 end
+
 self_log_boolean_assignment = Assignment.create! do |a|
   a.course = third_course
   a.assignment_type = assignment_types[:third_course_grading]
@@ -1025,6 +1025,68 @@ self_log_score_level_assignment = Assignment.create! do |a|
   end
 end
 
+self_log_score_level_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Multi-level Self-Logged Assignment"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+end
+
+self_log_score_level_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Multi-level Self-Logged Assignment"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+end
+
+self_log_score_level_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Multi-level Self-Logged Assignment"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = true
+  a.open_at = DateTime.now
+  a.due_at = DateTime.now + 0.05
+  a.save!
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 200000/(6-n)
+    end
+  end
+end
+
+puts "I didn't give it much thought back then. I just wanted to get all the words straight and collect my A. ― Gayle Forman, Just One Day"
+
 standard_edit_release_required = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_grading]
@@ -1037,9 +1099,146 @@ standard_edit_release_required = Assignment.create! do |a|
   a.due_at = 3.weeks.from_now + 0.05
 end
 
+standard_edit_release_required = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Standard Edit + Release Required"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.release_necessary = true
+  a.grade_scope = "Individual"
+  a.open_at = 3.weeks.from_now
+  a.due_at = 3.weeks.from_now + 0.05
+end
+
+standard_edit_release_required = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Standard Edit + Release Required"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.release_necessary = true
+  a.grade_scope = "Individual"
+  a.open_at = 3.weeks.from_now
+  a.due_at = 3.weeks.from_now + 0.05
+end
+
+standard_edit_release_required = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Standard Edit + Release Required"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.release_necessary = true
+  a.grade_scope = "Individual"
+  a.open_at = 3.weeks.from_now
+  a.due_at = 3.weeks.from_now + 0.05
+end
+puts "But what are schools for if not to make children fall so deeply in love with the world that they really want to learn about it? That is the true business of schools. And if they succeed in it, all other desirable developments follow of themselves. - Marjorie Spock"
+
 rubric_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Rubric Graded Assignment"
+  a.point_total = 80000
+  a.due_at = 3.weeks.ago
+  a.accepts_submissions = true
+  a.release_necessary = true
+  a.open_at = 4.weeks.ago
+  a.grade_scope = "Individual"
+  a.save
+  Rubric.create! do |rubric|
+    rubric.assignment = a
+    rubric.save
+    1.upto(15).each do |n|
+      rubric.metrics.create! do |metric|
+        metric.name = "Criteria ##{n}"
+        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+        metric.order = n
+        metric.save
+        1.upto(5).each do |m|
+          metric.tiers.create! do |tier|
+            tier.name = "Tier ##{m}"
+            tier.points = metric.max_points - (m * 1000)
+          end
+        end
+      end
+    end
+  end
+  students.each do |student|
+    submission = student.submissions.create! do |s|
+      s.assignment = a
+      s.text_comment = "Wingardium Leviosa"
+      s.link = "http://www.twitter.com"
+    end
+    a.rubric.metrics.each do |metric|
+      metric.rubric_grades.create! do |rg|
+        rg.max_points = metric.max_points
+        rg.points = metric.tiers.first.points
+        rg.tier = metric.tiers.first
+        rg.metric_name = metric.name
+        rg.tier_name = metric.tiers.first.name
+        rg.assignment_id = a.id
+        rg.order = 1
+        rg.student_id = student.id
+      end
+    end
+  end
+end
+
+rubric_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Rubric Graded Assignment"
+  a.point_total = 80000
+  a.due_at = 3.weeks.ago
+  a.accepts_submissions = true
+  a.release_necessary = true
+  a.open_at = 4.weeks.ago
+  a.grade_scope = "Individual"
+  a.save
+  Rubric.create! do |rubric|
+    rubric.assignment = a
+    rubric.save
+    1.upto(15).each do |n|
+      rubric.metrics.create! do |metric|
+        metric.name = "Criteria ##{n}"
+        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+        metric.order = n
+        metric.save
+        1.upto(5).each do |m|
+          metric.tiers.create! do |tier|
+            tier.name = "Tier ##{m}"
+            tier.points = metric.max_points - (m * 1000)
+          end
+        end
+      end
+    end
+  end
+  students.each do |student|
+    submission = student.submissions.create! do |s|
+      s.assignment = a
+      s.text_comment = "Wingardium Leviosa"
+      s.link = "http://www.twitter.com"
+    end
+    a.rubric.metrics.each do |metric|
+      metric.rubric_grades.create! do |rg|
+        rg.max_points = metric.max_points
+        rg.points = metric.tiers.first.points
+        rg.tier = metric.tiers.first
+        rg.metric_name = metric.name
+        rg.tier_name = metric.tiers.first.name
+        rg.assignment_id = a.id
+        rg.order = 1
+        rg.student_id = student.id
+      end
+    end
+  end
+end
+
+rubric_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
   a.name = "Rubric Graded Assignment"
   a.point_total = 80000
   a.due_at = 3.weeks.ago
@@ -1100,6 +1299,43 @@ group_grade_assignment = Assignment.create! do |a|
   a.due_at = 3.weeks.ago
 end
 
+group_grade_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Group Assignment + Standard Edit"
+  a.point_total = 10000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 3.weeks.ago
+end
+
+group_grade_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Group Assignment + Standard Edit"
+  a.point_total = 10000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 3.weeks.ago
+end
+
+group_grade_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Group Assignment + Standard Edit"
+  a.point_total = 10000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 3.weeks.ago
+end
+puts "I'm sorry, if you were right, I'd agree with you. - Robin Williams"
+
 group_grade_submissions_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_grading]
@@ -1112,9 +1348,136 @@ group_grade_submissions_assignment = Assignment.create! do |a|
   a.due_at = 2.weeks.ago
 end
 
+group_grade_submissions_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Group Assignment + Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 2.weeks.ago
+end
+
+group_grade_submissions_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Group Assignment + Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 2.weeks.ago
+end
+
+group_grade_submissions_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
+  a.name = "Group Assignment + Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 2.weeks.ago
+end
+puts "Many highly talented, brilliant, creative people think they're not - because the thing they were good at at school wasn't valued, or was actually stigmatized. - Sir Ken Robinson"
+
 group_grade_rubric_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_grading]
+  a.name = "Group Assignment + Rubric Edit"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 1.week.ago
+  Rubric.create! do |rubric|
+    rubric.assignment = a
+    rubric.save
+    1.upto(15).each do |n|
+      rubric.metrics.create! do |metric|
+        metric.name = "Criteria ##{n}"
+        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+        metric.order = n
+        metric.save
+        1.upto(5).each do |m|
+          metric.tiers.create! do |tier|
+            tier.name = "Tier ##{m}"
+            tier.points = metric.max_points - (m * 1000)
+          end
+        end
+      end
+    end
+  end
+end
+
+group_grade_rubric_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_grading]
+  a.name = "Group Assignment + Rubric Edit"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 1.week.ago
+  Rubric.create! do |rubric|
+    rubric.assignment = a
+    rubric.save
+    1.upto(15).each do |n|
+      rubric.metrics.create! do |metric|
+        metric.name = "Criteria ##{n}"
+        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+        metric.order = n
+        metric.save
+        1.upto(5).each do |m|
+          metric.tiers.create! do |tier|
+            tier.name = "Tier ##{m}"
+            tier.points = metric.max_points - (m * 1000)
+          end
+        end
+      end
+    end
+  end
+end
+
+group_grade_rubric_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_grading]
+  a.name = "Group Assignment + Rubric Edit"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Group"
+  a.student_logged = true
+  a.due_at = 1.week.ago
+  Rubric.create! do |rubric|
+    rubric.assignment = a
+    rubric.save
+    1.upto(15).each do |n|
+      rubric.metrics.create! do |metric|
+        metric.name = "Criteria ##{n}"
+        metric.max_points = [10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000].sample
+        metric.order = n
+        metric.save
+        1.upto(5).each do |m|
+          metric.tiers.create! do |tier|
+            tier.name = "Tier ##{m}"
+            tier.points = metric.max_points - (m * 1000)
+          end
+        end
+      end
+    end
+  end
+end
+
+group_grade_rubric_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_grading]
   a.name = "Group Assignment + Rubric Edit"
   a.point_total = 25000
   a.accepts_submissions = false
@@ -1150,6 +1513,28 @@ assignment_types[:first_course_submissions] = AssignmentType.create! do |at|
   at.position = 2
 end
 
+assignment_types[:second_course_submissions] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Submission Settings"
+  at.description = "This category includes all of the different ways that assignments can handle submissions."
+  at.position = 2
+end
+
+assignment_types[:third_course_submissions] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.name = "Submission Settings"
+  at.description = "This category includes all of the different ways that assignments can handle submissions."
+  at.position = 2
+end
+
+assignment_types[:fourth_course_submissions] = AssignmentType.create! do |at|
+  at.course = fourth_course
+  at.name = "Submission Settings"
+  at.description = "This category includes all of the different ways that assignments can handle submissions."
+  at.position = 2
+end
+puts "Creativity is the process of having original ideas that have value. It is a process; it's not random. - Sir Ken Robinson"
+
 no_submissions_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_submissions]
@@ -1162,6 +1547,43 @@ no_submissions_assignment = Assignment.create! do |a|
   a.due_at = DateTime.now + 0.05
 end
 
+no_submissions_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_submissions]
+  a.name = "Assignment Does Not Accept Submissions"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.05
+end
+
+no_submissions_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_submissions]
+  a.name = "Assignment Does Not Accept Submissions"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.05
+end
+
+no_submissions_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_submissions]
+  a.name = "Assignment Does Not Accept Submissions"
+  a.point_total = 200000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.05
+end
+puts "The answer is not to standardize education, but to personalize and customize it to the needs of each child and community. There is no alternative. There never was. –Ken Robinson"
+
 accepts_submissions_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_submissions]
@@ -1173,6 +1595,43 @@ accepts_submissions_assignment = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = DateTime.now + 0.25
 end
+
+accepts_submissions_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_submissions]
+  a.name = "Assignment Accepts All Types of Submissions"
+  a.point_total = 200000
+  a.accepts_submissions = true
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_submissions_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_submissions]
+  a.name = "Assignment Accepts All Types of Submissions"
+  a.point_total = 200000
+  a.accepts_submissions = true
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_submissions_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_submissions]
+  a.name = "Assignment Accepts All Types of Submissions"
+  a.point_total = 200000
+  a.accepts_submissions = true
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+puts "One recipe for one kind of fun: 1) Identify the inherent learnable challenge, 2) Restructure it optimally with clear goals, rules, and feedback, 3) Playtest and iterate – Sebastian Deterding"
 
 accepts_link_submissions_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -1189,6 +1648,52 @@ accepts_link_submissions_assignment = Assignment.create! do |a|
   a.due_at = DateTime.now + 0.25
 end
 
+accepts_link_submissions_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_submissions]
+  a.name = "Assignment Accepts Link Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = true 
+  a.accepts_attachments = false
+  a.accepts_text = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_link_submissions_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_submissions]
+  a.name = "Assignment Accepts Link Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = true 
+  a.accepts_attachments = false
+  a.accepts_text = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_link_submissions_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_submissions]
+  a.name = "Assignment Accepts Link Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = true 
+  a.accepts_attachments = false
+  a.accepts_text = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+puts "Good design is a lot like clear thinking made visual. – Edward Tufte"
+
 accepts_attachment_submissions_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_submissions]
@@ -1203,6 +1708,52 @@ accepts_attachment_submissions_assignment = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = DateTime.now + 0.25
 end
+
+accepts_attachment_submissions_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_submissions]
+  a.name = "Assignment Accepts Attachment Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = false
+  a.accepts_attachments = true
+  a.accepts_text = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_attachment_submissions_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_submissions]
+  a.name = "Assignment Accepts Attachment Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = false
+  a.accepts_attachments = true
+  a.accepts_text = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_attachment_submissions_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_submissions]
+  a.name = "Assignment Accepts Attachment Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = false
+  a.accepts_attachments = true
+  a.accepts_text = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+puts "Design is where science and art break even. – Robin Mathew"
 
 accepts_text_submissions_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -1219,10 +1770,72 @@ accepts_text_submissions_assignment = Assignment.create! do |a|
   a.due_at = DateTime.now + 0.25
 end
 
+accepts_text_submissions_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_submissions]
+  a.name = "Assignment Accepts Text Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = false
+  a.accepts_attachments = false
+  a.accepts_text = true
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_text_submissions_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_submissions]
+  a.name = "Assignment Accepts Text Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = false
+  a.accepts_attachments = false
+  a.accepts_text = true
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+
+accepts_text_submissions_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_submissions]
+  a.name = "Assignment Accepts Text Submissions"
+  a.point_total = 15000
+  a.accepts_submissions = true
+  a.accepts_links = false
+  a.accepts_attachments = false
+  a.accepts_text = true
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = DateTime.now + 0.25
+end
+puts "I think constraints are very important. They're positive, because they allow you to work off something. – Charles Gwathmey"
+
 assignment_types[:first_course_predictor] = AssignmentType.create! do |at|
   at.course = first_course
   at.name = "Predictor Settings"
 end
+
+assignment_types[:second_course_predictor] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Predictor Settings"
+end
+
+assignment_types[:third_course_predictor] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.name = "Predictor Settings"
+end
+
+assignment_types[:fourth_course_predictor] = AssignmentType.create! do |at|
+  at.course = fourth_course
+  at.name = "Predictor Settings"
+end
+puts "Beware of overconfidence; especially in matters of structure. – Cass Gilbert"
 
 predictor_fixed_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -1237,6 +1850,46 @@ predictor_fixed_assignment = Assignment.create! do |a|
   a.due_at = 1.week.from_now
 end
 
+predictor_fixed_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment Shows Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+
+predictor_fixed_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
+  a.name = "Assignment Shows Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+
+predictor_fixed_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment Shows Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+puts "1"
+
 predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_predictor]
@@ -1250,6 +1903,46 @@ predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.due_at = 1.week.from_now
 end
 
+predictor_continuous_slider_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment Shows Slider (no levels) in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+
+predictor_continuous_slider_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
+  a.name = "Assignment Shows Slider (no levels) in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+
+predictor_continuous_slider_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment Shows Slider (no levels) in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+puts "2"
+
 predictor_slider_with_levels_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_predictor]
@@ -1261,19 +1954,96 @@ predictor_slider_with_levels_assignment = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 1.week.from_now
-end
-
-1.upto(5).each do |n|
-  predictor_slider_with_levels_assignment.assignment_score_levels.create! do |asl|
-    asl.name = "Assignment Score Level ##{n}"
-    asl.value = 25000/(6-n)
+  a.save! 
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 25000/(6-n)
+    end
   end
 end
+
+predictor_slider_with_levels_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment Shows Slider with Levels in Predictor"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save! 
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 25000/(6-n)
+    end
+  end
+end
+
+predictor_slider_with_levels_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
+  a.name = "Assignment Shows Slider with Levels in Predictor"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save! 
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 25000/(6-n)
+    end
+  end
+end
+
+predictor_slider_with_levels_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment Shows Slider with Levels in Predictor"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save! 
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 25000/(6-n)
+    end
+  end
+end
+puts "a"
 
 assignment_types[:first_course_visibility] = AssignmentType.create! do |at|
   at.course = first_course
   at.name = "Visibility Settings"
 end
+
+assignment_types[:second_course_visibility] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Visibility Settings"
+end
+
+assignment_types[:third_course_visibility] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.name = "Visibility Settings"
+end
+
+assignment_types[:fourth_course_visibility] = AssignmentType.create! do |at|
+  at.course = fourth_course
+  at.name = "Visibility Settings"
+end
+puts "3"
 
 invisible_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -1301,8 +2071,105 @@ visible_assignment = Assignment.create! do |a|
   a.due_at = 2.weeks.from_now
 end
 
+invisible_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_visibility]
+  a.name = "I'm an Invisible Assignment"
+  a.point_total = 15000
+  a.visible = false
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 2.weeks.from_now
+end
+
+visible_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_visibility]
+  a.name = "Hey, I'm a Visible Assignment!"
+  a.point_total = 12500
+  a.visible = true
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 2.weeks.from_now
+end
+
+invisible_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_visibility]
+  a.name = "I'm an Invisible Assignment"
+  a.point_total = 15000
+  a.visible = false
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 2.weeks.from_now
+end
+
+visible_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_visibility]
+  a.name = "Hey, I'm a Visible Assignment!"
+  a.point_total = 12500
+  a.visible = true
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 2.weeks.from_now
+end
+
+invisible_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_visibility]
+  a.name = "I'm an Invisible Assignment"
+  a.point_total = 15000
+  a.visible = false
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 2.weeks.from_now
+end
+
+visible_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_visibility]
+  a.name = "Hey, I'm a Visible Assignment!"
+  a.point_total = 12500
+  a.visible = true
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 2.weeks.from_now
+end
+puts "4"
+
 assignment_types[:first_course_capped] = AssignmentType.create! do |at|
   at.course = first_course
+  at.max_points = 100000
+  at.name = "Assignment Type with a Capped Point Total"
+end
+
+assignment_types[:second_course_capped] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.max_points = 100000
+  at.name = "Assignment Type with a Capped Point Total"
+end
+
+assignment_types[:third_course_capped] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.max_points = 100000
+  at.name = "Assignment Type with a Capped Point Total"
+end
+
+assignment_types[:fourth_course_capped] = AssignmentType.create! do |at|
+  at.course = fourth_course
   at.max_points = 100000
   at.name = "Assignment Type with a Capped Point Total"
 end
@@ -1319,10 +2186,62 @@ assignment_with_more_points_than_atype_cap = Assignment.create! do |a|
   a.due_at = 3.weeks.from_now
 end
 
+assignment_with_more_points_than_atype_cap = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_capped]
+  a.name = "Assignment with More Points than the Max Value for the Assignment Type"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 3.weeks.from_now
+end
+
+assignment_with_more_points_than_atype_cap = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_capped]
+  a.name = "Assignment with More Points than the Max Value for the Assignment Type"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 3.weeks.from_now
+end
+
+assignment_with_more_points_than_atype_cap = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_capped]
+  a.name = "Assignment with More Points than the Max Value for the Assignment Type"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 3.weeks.from_now
+end
+
 assignment_types[:first_course_notifications] = AssignmentType.create! do |at|
   at.course = first_course
   at.name = "Notification Settings"
 end
+
+assignment_types[:second_course_notifications] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Notification Settings"
+end
+
+assignment_types[:third_course_notifications] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.name = "Notification Settings"
+end
+
+assignment_types[:fourth_course_notifications] = AssignmentType.create! do |at|
+  at.course = fourth_course
+  at.name = "Notification Settings"
+end
+puts "5"
 
 assignment_sends_email_notes_on_release = Assignment.create! do |a|
   a.course = first_course
@@ -1337,6 +2256,46 @@ assignment_sends_email_notes_on_release = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
+assignment_sends_email_notes_on_release = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_notifications]
+  a.name = "I send out emails when you release grades"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = true
+  a.notify_released = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_sends_email_notes_on_release = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_notifications]
+  a.name = "I send out emails when you release grades"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = true
+  a.notify_released = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_sends_email_notes_on_release = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_notifications]
+  a.name = "I send out emails when you release grades"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = true
+  a.notify_released = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "6"
+
 assignment_sends_email_notes_immediately = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_notifications]
@@ -1349,6 +2308,46 @@ assignment_sends_email_notes_immediately = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
+
+assignment_sends_email_notes_immediately = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_notifications]
+  a.name = "I send out email notifications as soon as you grade"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_sends_email_notes_immediately = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_notifications]
+  a.name = "I send out email notifications as soon as you grade"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_sends_email_notes_immediately = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_notifications]
+  a.name = "I send out email notifications as soon as you grade"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "7"
 
 assignment_does_not_send_emails = Assignment.create! do |a|
   a.course = first_course
@@ -1363,10 +2362,66 @@ assignment_does_not_send_emails = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
+assignment_does_not_send_emails = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_notifications]
+  a.name = "I do not send out email notifications to students"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_does_not_send_emails = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_notifications]
+  a.name = "I do not send out email notifications to students"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_does_not_send_emails = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_notifications]
+  a.name = "I do not send out email notifications to students"
+  a.point_total = 150000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "8"
+
 assignment_types[:first_course_analytics] = AssignmentType.create! do |at|
   at.course = first_course
   at.name = "Analytics Settings"
 end
+
+assignment_types[:second_course_analytics] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Analytics Settings"
+end
+
+assignment_types[:third_course_analytics] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.name = "Analytics Settings"
+end
+
+assignment_types[:fourth_course_analytics] = AssignmentType.create! do |at|
+  at.course = fourth_course
+  at.name = "Analytics Settings"
+end
+puts "9"
 
 assignment_analytics_on = Assignment.create! do |a|
   a.course = first_course
@@ -1383,6 +2438,49 @@ assignment_analytics_on = Assignment.create! do |a|
 end
 
 assignment_analytics_on = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_analytics]
+  a.name = "Indvidual Assignment + Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.hide_analytics = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_analytics]
+  a.name = "Indvidual Assignment + Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.hide_analytics = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_analytics]
+  a.name = "Indvidual Assignment + Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.hide_analytics = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "10"
+
+assignment_analytics_on = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_analytics]
   a.name = "Group Assignment + Analytics"
@@ -1395,6 +2493,49 @@ assignment_analytics_on = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_analytics]
+  a.name = "Group Assignment + Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = false
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_analytics]
+  a.name = "Group Assignment + Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = false
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_analytics]
+  a.name = "Group Assignment + Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = false
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "11"
 
 assignment_analytics_on = Assignment.create! do |a|
   a.course = first_course
@@ -1411,6 +2552,49 @@ assignment_analytics_on = Assignment.create! do |a|
 end
 
 assignment_analytics_on = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_analytics]
+  a.name = "Indvidual Assignment + Hidden Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.hide_analytics = true
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_analytics]
+  a.name = "Indvidual Assignment + Hidden Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.hide_analytics = true
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_analytics]
+  a.name = "Indvidual Assignment + Hidden Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.hide_analytics = true
+  a.release_necessary = false
+  a.notify_released = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "12"
+
+assignment_analytics_on = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_analytics]
   a.name = "Group Assignment + Hidden Analytics"
@@ -1424,12 +2608,71 @@ assignment_analytics_on = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_analytics]
+  a.name = "Group Assignment + Hidden Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_analytics]
+  a.name = "Group Assignment + Hidden Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_analytics_on = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_analytics]
+  a.name = "Group Assignment + Hidden Analytics"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Group"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "13"
+
 assignment_types[:first_course_unlocks] = AssignmentType.create! do |at|
   at.course = first_course
   at.name = "Unlock Settings"
 end
 
-assignment_unlock_submission_condition = Assignment.create! do |a|
+assignment_types[:second_course_unlocks] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Unlock Settings"
+end
+
+assignment_types[:third_course_unlocks] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.name = "Unlock Settings"
+end
+
+assignment_types[:fourth_course_unlocks] = AssignmentType.create! do |at|
+  at.course = fourth_course
+  at.name = "Unlock Settings"
+end
+puts "14"
+
+assignment_unlock_submission_condition_1 = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
   a.name = "I'm the thing you need to submit"
@@ -1443,6 +2686,49 @@ assignment_unlock_submission_condition = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
+assignment_unlock_submission_condition_2 = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "I'm the thing you need to submit"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlock_submission_condition_3 = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "I'm the thing you need to submit"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlock_submission_condition_4 = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "I'm the thing you need to submit"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "15"
+
 assignment_submission_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
@@ -1455,15 +2741,76 @@ assignment_submission_is_an_unlock = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlock_submission_condition_1
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Submitted"
+  end
 end
 
-assignment_submission_is_an_unlock.unlock_conditions.create! do |uc|
-  uc.condition = assignment_unlock_submission_condition
-  uc.condition_type = "Assignment"
-  uc.condition_state = "Submitted"
+assignment_submission_is_an_unlock = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "Submitting Another Assignment Unlocks This"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlock_submission_condition_2
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Submitted"
+  end
 end
 
-assignment_unlock_grade_earned_condition = Assignment.create! do |a|
+assignment_submission_is_an_unlock = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "Submitting Another Assignment Unlocks This"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlock_submission_condition_3
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Submitted"
+  end
+end
+
+assignment_submission_is_an_unlock = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "Submitting Another Assignment Unlocks This"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlock_submission_condition_4
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Submitted"
+  end
+end
+puts 'c'
+
+assignment_unlock_grade_earned_condition_1 = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
   a.name = "I'm the thing you need to earn a grade on"
@@ -1477,6 +2824,49 @@ assignment_unlock_grade_earned_condition = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
+assignment_unlock_grade_earned_condition_2 = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "I'm the thing you need to earn a grade on"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlock_grade_earned_condition_3 = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "I'm the thing you need to earn a grade on"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlock_grade_earned_condition_4 = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "I'm the thing you need to earn a grade on"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts 'e'
+
 assignment_grade_earned_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
@@ -1489,15 +2879,76 @@ assignment_grade_earned_is_an_unlock = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlock_grade_earned_condition_1
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Grade Earned"
+  end
 end
 
-assignment_grade_earned_is_an_unlock.unlock_conditions.create! do |uc|
-  uc.condition = assignment_unlock_grade_earned_condition
-  uc.condition_type = "Assignment"
-  uc.condition_state = "Grade Earned"
+assignment_grade_earned_is_an_unlock = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "Earning a Grade on another Assignment Unlocks this one"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlock_grade_earned_condition_2
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Grade Earned"
+  end
 end
 
-assignment_unlockable_grade_earned_by_date_condition = Assignment.create! do |a|
+assignment_grade_earned_is_an_unlock = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "Earning a Grade on another Assignment Unlocks this one"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlock_grade_earned_condition_3
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Grade Earned"
+  end
+end
+
+assignment_grade_earned_is_an_unlock = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "Earning a Grade on another Assignment Unlocks this one"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlock_grade_earned_condition_4
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Grade Earned"
+  end
+end
+puts 'f'
+
+assignment_unlockable_grade_earned_by_date_condition_1 = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
   a.name = "I'm the thing you need to earn a grade on by a date"
@@ -1511,6 +2962,49 @@ assignment_unlockable_grade_earned_by_date_condition = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
+assignment_unlockable_grade_earned_by_date_condition_2 = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "I'm the thing you need to earn a grade on by a date"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlockable_grade_earned_by_date_condition_3 = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "I'm the thing you need to earn a grade on by a date"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlockable_grade_earned_by_date_condition_4 = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "I'm the thing you need to earn a grade on by a date"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts 'f'
+
 assignment_grade_earned_by_date_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
@@ -1523,16 +3017,80 @@ assignment_grade_earned_by_date_is_an_unlock = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_grade_earned_by_date_condition_1
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Grade Earned"
+    uc.condition_date = 1.week.ago
+  end
 end
 
-assignment_grade_earned_by_date_is_an_unlock.unlock_conditions.create! do |uc|
-  uc.condition = assignment_unlockable_grade_earned_by_date_condition
-  uc.condition_type = "Assignment"
-  uc.condition_state = "Grade Earned"
-  uc.condition_date = 1.week.ago
+assignment_grade_earned_by_date_is_an_unlock = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "Earning a Particular Grade by a Particular Date Unlocks This"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_grade_earned_by_date_condition_2
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Grade Earned"
+    uc.condition_date = 1.week.ago
+  end
 end
 
-assignment_unlockable_feedback_read_condition = Assignment.create! do |a|
+assignment_grade_earned_by_date_is_an_unlock = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "Earning a Particular Grade by a Particular Date Unlocks This"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_grade_earned_by_date_condition_3
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Grade Earned"
+    uc.condition_date = 1.week.ago
+  end
+end
+
+assignment_grade_earned_by_date_is_an_unlock = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "Earning a Particular Grade by a Particular Date Unlocks This"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_grade_earned_by_date_condition_4
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Grade Earned"
+    uc.condition_date = 1.week.ago
+  end
+end
+puts 'g'
+
+assignment_unlockable_feedback_read_condition_1 = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
   a.name = "I'm the thing you need to read the feedback on "
@@ -1546,6 +3104,49 @@ assignment_unlockable_feedback_read_condition = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
+assignment_unlockable_feedback_read_condition_2 = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "I'm the thing you need to read the feedback on "
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlockable_feedback_read_condition_3 = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "I'm the thing you need to read the feedback on "
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlockable_feedback_read_condition_4 = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "I'm the thing you need to read the feedback on "
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts ''
+
 assignment_feedback_read_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
@@ -1558,15 +3159,74 @@ assignment_feedback_read_is_an_unlock = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_feedback_read_condition_1
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Feedback Read"
+  end
 end
 
-
-assignment_feedback_read_is_an_unlock.unlock_conditions.create! do |uc|
-  uc.condition = assignment_unlockable_feedback_read_condition
-  uc.condition_type = "Assignment"
-  uc.condition_state = "Feedback Read"
+assignment_feedback_read_is_an_unlock = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "Reading the Feedback on something else unlocks this"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_feedback_read_condition_2
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Feedback Read"
+  end
 end
 
+assignment_feedback_read_is_an_unlock = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "Reading the Feedback on something else unlocks this"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_feedback_read_condition_3
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Feedback Read"
+  end
+end
+
+assignment_feedback_read_is_an_unlock = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "Reading the Feedback on something else unlocks this"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_feedback_read_condition_4
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Feedback Read"
+  end
+end
+puts ''
 
 assignment_unlockable_feedback_read_by_date_condition = Assignment.create! do |a|
   a.course = first_course
@@ -1582,6 +3242,49 @@ assignment_unlockable_feedback_read_by_date_condition = Assignment.create! do |a
   a.due_at = 4.weeks.from_now
 end
 
+assignment_unlockable_feedback_read_by_date_condition = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "I'm the thing you need to read the feedback on by a date"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlockable_feedback_read_by_date_condition = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "I'm the thing you need to read the feedback on by a date"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_unlockable_feedback_read_by_date_condition = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "I'm the thing you need to read the feedback on by a date"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts ''
+
 assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_unlocks]
@@ -1594,20 +3297,99 @@ assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_feedback_read_by_date_condition
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Feedback Read"
+    uc.condition_date = 1.week.ago
+  end
 end
 
-assignment_feedback_read_by_date_is_an_unlock.unlock_conditions.create! do |uc|
-  uc.condition = assignment_unlockable_feedback_read_by_date_condition
-  uc.condition_type = "Assignment"
-  uc.condition_state = "Feedback Read"
-  uc.condition_date = 1.week.ago
+assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_unlocks]
+  a.name = "Reading the Feedback on that other Assignment by a Particular Date Unlocks this"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_feedback_read_by_date_condition
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Feedback Read"
+    uc.condition_date = 1.week.ago
+  end
 end
 
+assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_unlocks]
+  a.name = "Reading the Feedback on that other Assignment by a Particular Date Unlocks this"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_feedback_read_by_date_condition
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Feedback Read"
+    uc.condition_date = 1.week.ago
+  end
+end
+
+assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_unlocks]
+  a.name = "Reading the Feedback on that other Assignment by a Particular Date Unlocks this"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+  a.save!
+  a.unlock_conditions.create! do |uc|
+    uc.condition = assignment_unlockable_feedback_read_by_date_condition
+    uc.condition_type = "Assignment"
+    uc.condition_state = "Feedback Read"
+    uc.condition_date = 1.week.ago
+  end
+end
+puts ''
 
 assignment_types[:first_course_sorting] = AssignmentType.create! do |at|
   at.course = first_course
   at.name = "Sorting Settings"
 end
+
+assignment_types[:second_course_sorting] = AssignmentType.create! do |at|
+  at.course = second_course
+  at.name = "Sorting Settings"
+end
+
+assignment_types[:third_course_sorting] = AssignmentType.create! do |at|
+  at.course = third_course
+  at.name = "Sorting Settings"
+end
+
+assignment_types[:fourth_course_sorting] = AssignmentType.create! do |at|
+  at.course = fourth_course
+  at.name = "Sorting Settings"
+end
+puts "16"
 
 assignment_alphanum_1_condition = Assignment.create! do |a|
   a.course = first_course
@@ -1623,6 +3405,49 @@ assignment_alphanum_1_condition = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
+assignment_alphanum_1_condition = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_sorting]
+  a.name = "Class 1"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_1_condition = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_sorting]
+  a.name = "Class 1"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_1_condition = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_sorting]
+  a.name = "Class 1"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "17"
+
 assignment_alphanum_2_condition = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_sorting]
@@ -1636,6 +3461,49 @@ assignment_alphanum_2_condition = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
+
+assignment_alphanum_2_condition = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_sorting]
+  a.name = "Class 2"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_2_condition = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_sorting]
+  a.name = "Class 2"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_2_condition = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_sorting]
+  a.name = "Class 2"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "18"
 
 assignment_alphanum_3_condition = Assignment.create! do |a|
   a.course = first_course
@@ -1652,6 +3520,49 @@ assignment_alphanum_3_condition = Assignment.create! do |a|
 end
 
 assignment_alphanum_3_condition = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_sorting]
+  a.name = "Class 12"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_3_condition = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_sorting]
+  a.name = "Class 12"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_3_condition = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_sorting]
+  a.name = "Class 12"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "19"
+
+assignment_alphanum_3_condition = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_sorting]
   a.name = "Class 10"
@@ -1664,6 +3575,49 @@ assignment_alphanum_3_condition = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
+
+assignment_alphanum_3_condition = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_sorting]
+  a.name = "Class 10"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_3_condition = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_sorting]
+  a.name = "Class 10"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_3_condition = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_sorting]
+  a.name = "Class 10"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "20"
 
 assignment_alphanum_4_condition = Assignment.create! do |a|
   a.course = first_course
@@ -1678,6 +3632,49 @@ assignment_alphanum_4_condition = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
+
+assignment_alphanum_4_condition = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_sorting]
+  a.name = "Class 20"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_4_condition = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_sorting]
+  a.name = "Class 20"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+
+assignment_alphanum_4_condition = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_sorting]
+  a.name = "Class 20"
+  a.point_total = 180000
+  a.accepts_submissions = false
+  a.release_necessary = false
+  a.notify_released = false
+  a.hide_analytics = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 4.weeks.from_now
+end
+puts "21"
 
 challenges = []
 
