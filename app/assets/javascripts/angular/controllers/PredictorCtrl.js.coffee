@@ -51,6 +51,12 @@
     else
       return true
 
+  $scope.challengeGraded = (challenge)->
+    if challenge.grade.score == null
+      return false
+    else
+      return true
+
   $scope.articleNoPoints = (assignment)->
     if assignment.pass_fail && assignment.grade.pass_fail_status != "Pass"
       return true

@@ -111,11 +111,16 @@ class BadgesController < ApplicationController
     @badge = current_course.badges.find(params[:badge_id])
     @badgePrediction = PredictedEarnedBadge.where(student: current_student, badge: @badge).first
     @badgePrediction.times_earned = params[:times_earned]
+
+    # save the prediction and cache the outcome
+    @prediction_saved = @badgePrediction.save
+
+    # create a predictor event in mongo to keep track of what happened
+    PredictorEventJob.new(data: badge_predictor_event_attrs).enqueue
+
     respond_to do |format|
       format.json do
-        if @badgePrediction.save
-          # create a predictor event in mongo to keep track of what happened
-          PredictorEventLogger.new(badge_predictor_event_attrs).enqueue
+        if @prediction_saved
           render :json => {id: @badge.id, times_earned: @badgePrediction.times_earned}
         else
           render :json => { errors:  @badgePrediction.errors.full_messages }, :status => 400
@@ -128,6 +133,7 @@ class BadgesController < ApplicationController
 
   def badge_predictor_event_attrs
     {
+      prediction_type: "badge",
       course_id: current_course.id,
       user_id: current_user.id,
       student_id: current_student.try(:id),
@@ -135,8 +141,15 @@ class BadgesController < ApplicationController
       badge_id: params[:badge_id],
       predicted_earns: params[:times_earned],
       multiple_earns_possible: @badge.can_earn_multiple_times,
-      created_at: Time.now
+      predicted_points: badge_predicted_points,
+      point_value_per_badge: @badge.point_total,
+      created_at: Time.now,
+      prediction_saved_successfully: @prediction_saved
     }
+  end
+
+  def badge_predicted_points
+    @badge.point_total * params[:times_earned] rescue nil
   end
 
   public

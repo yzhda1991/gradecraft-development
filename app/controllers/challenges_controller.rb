@@ -93,11 +93,14 @@ class ChallengesController < ApplicationController
     @challenge = current_course.challenges.find(params[:challenge_id])
     @challengePrediction = PredictedEarnedChallenge.where(student: current_student, challenge: @challenge).first
     @challengePrediction.points_earned = params[:points_earned]
+    @prediction_saved = @challengePrediction.save
+
+    # create a predictor event in mongo to keep track of what happened
+    PredictorEventJob.new(data: predictor_event_attrs).enqueue
+
     respond_to do |format|
       format.json do
-        if @challengePrediction.save
-          # create a predictor event in mongo to keep track of what happened
-          PredictorEventLogger.new(challenge_predictor_event_attrs).enqueue
+        if @prediction_saved
           render :json => {id: @challenge.id, points_earned: @challengePrediction.points_earned}
         else
           render :json => { errors:  @challengePrediction.errors.full_messages }, :status => 400
@@ -108,8 +111,9 @@ class ChallengesController < ApplicationController
 
   private
 
-  def challenge_predictor_event_attrs
+  def predictor_event_attrs
     {
+      prediction_type: "challenge",
       course_id: current_course.id,
       user_id: current_user.id,
       student_id: current_student.try(:id),
@@ -117,7 +121,8 @@ class ChallengesController < ApplicationController
       challenge_id: params[:challenge_id],
       predicted_points: params[:predicted_score],
       possible_points: @challenge.point_total,
-      created_at: Time.now
+      created_at: Time.now,
+      prediction_saved_successfully: @prediction_saved
     }
   end
 

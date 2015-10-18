@@ -470,15 +470,17 @@ class GradesController < ApplicationController
       @grade = current_student.grade_for_assignment(@assignment)
       @grade.predicted_score = params[:predicted_score]
     end
+     
+    @grade_saved = @grade.nil? ? nil : @grade.save
+
+    # create a predictor event in mongo to keep track of what happened
+    PredictorEventJob.new(data: predictor_event_attrs).enqueue
 
     respond_to do |format|
       format.json do
         if @grade.nil?
           render :json => {errors: "You cannot predict this assignment!"}, :status => 400
-        elsif @grade.save
-          # create a predictor event in mongo to keep track of what happened
-          PredictorEventLogger.new(grade_predictor_event_attrs).enqueue
-
+        elsif @grade_saved
           render :json => {id: @grade.id, predicted_score: @grade.predicted_score}
         else
           render :json => { errors:  @grade.errors.full_messages }, :status => 400
@@ -489,17 +491,23 @@ class GradesController < ApplicationController
 
   private
 
-  def grade_predictor_event_attrs
+  def predictor_event_attrs
     {
+      prediction_type: "grade",
       course_id: current_course.id,
       user_id: current_user.id,
       student_id: current_student.try(:id),
       user_role: current_user.role(current_course),
       assignment_id: params[:id],
       predicted_points: params[:predicted_score],
-      possible_points: @grade.point_total,
-      created_at: Time.now
+      possible_points: grade_possible_points,
+      created_at: Time.now,
+      prediction_saved_successfully: @grade_saved
     }
+  end
+
+  def grade_possible_points
+    @grade.point_total rescue nil
   end
 
   public
