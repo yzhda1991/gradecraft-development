@@ -9,11 +9,11 @@
 
     .ribbon
       .ribbon-stitches-top
-      %strong.ribbon-content
-        %h1 {{badge.name}}
+      .ribbon-content
+        .badge-name {{badge.name}}
       .ribbon-stitches-bottom
     .ribbon-ends
     .gold-stars
       %i.fa.fa-star.fa-fw
-      .earned-count {{badge.earnedBadgesForGrade.length + badge.otherEarnedBadges.length}}
-      .badges-earned.blue 
+        .earned-count {{badge.earnedBadgesForGrade.length + badge.otherEarnedBadges.length}}
+      .badges-earned.blue

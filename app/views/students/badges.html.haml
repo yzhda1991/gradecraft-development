@@ -12,41 +12,45 @@
         -# logic for badges that have actually been earned
         - if @earned_badges_by_badge_id[earned_badge.badge_id]
           .badge-card
-            .badge-table.hexagon.awarded
-              %img.earned{ :src => earned_badge.icon, :alt => earned_badge.name }
+            .card-ribbon
+              .badge-table.hexagon.awarded
+                %img{ :src => earned_badge.icon, :alt => earned_badge.name }
 
-              .ribbon
-                .ribbon-stitches-top
-                %strong.ribbon-content
-                  %h1= earned_badge.name
-                .ribbon-stitches-bottom
-              .ribbon-ends
-              .gold-stars
-                %i.fa.fa-star.fa-fw
-                .earned-count= @earned_badges_by_badge_id[earned_badge.badge_id].count
-                .badges-earned.blue 
-            .badge-details
-              - if earned_badge.badge.point_total?
-                - if @earned_badges_by_badge_id[earned_badge.badge_id].size > 1
-                  .points= "#{points @earned_badges_by_badge_id[earned_badge.badge_id].collect(&:score).reduce(:+)} points earned" 
-              = earned_badge.created_at
-              = raw earned_badge.try(:feedback)
+                .ribbon
+                  .ribbon-stitches-top
+                  .ribbon-content
+                    .badge-name= earned_badge.name
+                  .ribbon-stitches-bottom
+                .ribbon-ends
+                .gold-stars
+                  %i.fa.fa-star.fa-fw
+                    .earned-count= @earned_badges_by_badge_id[earned_badge.badge_id].count
+                  .badges-earned.blue
+              
+              .badge-details
+                - if earned_badge.badge.point_total?
+                  .points= "#{points earned_badge.badge.point_total} points earned" 
+                .date="Awarded: #{earned_badge.created_at.strftime("%A, %b %d, %Y")}"
+                .feedback= raw earned_badge.try(:feedback)
+            
+            
     - if @unearned_badges.present?
       .clear
       %h4= "Possible #{term_for :badges}"
       - @unearned_badges.each do |badge|
-        .badge-card
-          .badge-table.hexagon.available
-            %img.unearned{ :src => badge.icon, :alt => badge.name }
+        .badge-card.available
+          .card-ribbon
+            .badge-table.hexagon
+              %img.unearned{ :src => badge.icon, :alt => badge.name }
 
-            .ribbon
-              .ribbon-stitches-top
-              %strong.ribbon-content
-                %h1= badge.name
-              .ribbon-stitches-bottom
-            .ribbon-ends
+              .ribbon
+                .ribbon-stitches-top
+                .ribbon-content
+                  .badge-name= badge.name
+                .ribbon-stitches-bottom
+              .ribbon-ends
 
-          .badge-details
-            - if badge.point_total?
-              .points= "#{points badge.point_total}" 
-              
+            .badge-details
+              - if badge.point_total?
+                .points= "#{points badge.point_total} points possible" 
+                .feedback= raw badge.try(:description)

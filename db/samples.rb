@@ -328,6 +328,7 @@ first_course_badges = first_course_badge_names.map do |badge_name|
   first_course.badges.create! do |b|
     b.name = badge_name
     b.point_total = 100 * rand(10)
+    b.description = "A taste of glory trueborn, wolf night's watch, cell ever vigilant servant magister ut labore et dolore magna aliqua. Dirk we light the way, he asked too many questions flagon dwarf poison is a woman's weapon. Always pays his debts old bear court let me soar sorcery the last of the dragons. Green dreams holdfast none so wise, spare me your false courtesy no foe may pass the wall."
     b.visible = true
     b.can_earn_multiple_times = [true,false].sample
   end
@@ -335,7 +336,7 @@ end
 
 first_course_badges.each do |badge|
   times_earned = 1
-  if badge.can_earn_multiple_times
+  if badge.can_earn_multiple_times?
     times_earned = [1,1,2,3].sample
   end
   students.each do |student|
@@ -346,6 +347,7 @@ first_course_badges.each do |badge|
           eb.badge = badge
           eb.course = first_course
           eb.student_visible = true
+          eb.feedback = "Now what are the possibilities of warp drive? Cmdr Riker's nervous system has been invaded by an unknown microorganism. The organisms fuse to the nerve, intertwining at the molecular level. That's why the transporter's biofilters couldn't extract it. The vertex waves show a K-complex corresponding to an REM state. The engineering section's critical. Destruction is imminent. Their robes contain ultritium, highly explosive, virtually undetectable by your transporter."
         end
       end
     end
@@ -356,6 +358,7 @@ second_course_badges = second_course_badge_names.map do |badge_name|
   second_course.badges.create! do |b|
     b.name = badge_name
     b.visible = true
+    b.description = "A taste of glory trueborn, wolf night's watch, cell ever vigilant servant magister ut labore et dolore magna aliqua. Dirk we light the way, he asked too many questions flagon dwarf poison is a woman's weapon. Always pays his debts old bear court let me soar sorcery the last of the dragons. Green dreams holdfast none so wise, spare me your false courtesy no foe may pass the wall."
     #need to add unlocks here
   end
 end
@@ -367,6 +370,8 @@ second_course_badges.each do |badge|
       student.earned_badges.create! do |eb|
         eb.badge = badge
         eb.course = second_course
+        eb.student_visible = true
+        eb.feedback = "Now what are the possibilities of warp drive? Cmdr Riker's nervous system has been invaded by an unknown microorganism. The organisms fuse to the nerve, intertwining at the molecular level. That's why the transporter's biofilters couldn't extract it. The vertex waves show a K-complex corresponding to an REM state. The engineering section's critical. Destruction is imminent. Their robes contain ultritium, highly explosive, virtually undetectable by your transporter."
       end
     end
   end

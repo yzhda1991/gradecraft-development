@@ -1,76 +1,89 @@
-/* used on the badge show page */ 
-.badge-image
-  float: left
-  position: relative
-  width: 6.25rem
-  background-color: $color-blue-3
-  padding: 1rem
-  height: 6rem
-
-.badge-details
-  float: left
-  width: 20rem
-  height: 8rem
-  background-color: $color-yellow-1
-
+/* Student sidebar */
 .badge-icon
   width: 80%
   max-width: 100px
 
+/* used on the badge show page for both instructors and students, and grade standard edit form */ 
+.badge-card
+  position: relative
+  height: 7.85rem
+  width: 25rem
+  background-color: $color-green-2
+  border-radius: $global-radius
+  padding: .75rem
+  float: left
+  margin: 0 .5rem .5rem 0
+
+  &.available
+    background-color: $color-blue-2
+
+  .card-ribbon
+    border: 1px dashed $color-white
+    border-radius: $global-radius
+    height: 6.75rem
+    padding: .5rem
+    overflow: hidden
+    color: $color-white
+    font-size: .65rem
+
+    .points
+      text-transform: uppercase
+      font-weight: bold
+
+    .date
+      font-style: italic
+
 .earned-count
   font-size: .7rem
   font-weight: normal
-  margin-top: -1.5rem
-  margin-left: 1.1rem
+  width: 1rem
+  margin-top: -1.35rem
+  margin-left: .8rem
+  text-align: center
   color: $color-black
 
 button#remove-badges, button#add-badges
-  margin-left: .5rem
   position: relative
-  margin-top: 0rem
-  top: -.3rem
+  font-family: Avenir, sans-serif
+  margin-left: .5rem
+  top: -.2rem
   @include transition-property("background, opacity")
   @include transition-duration(0.3s)
   @include transition-timing-function(ease)
 
 .grade-badge, .badge-table
+  float: left
+  position: relative
+
   &.hexagon
     @include transition-property("background, opacity")
     @include transition-duration(0.6s)
     @include transition-timing-function(ease)
     cursor: pointer
     cursor: hand
-
-    position: relative
-    width: 80px
+    width: 83px
     height: 36px
-    float: left
     z-index: 100
-    margin: 2rem 4rem 3rem 2rem
-
-    &.available
-      background-color: $color-blue-1
-
-    &.awarded
-      background-color: $color-green-1
+    margin: 1.75rem 2.3rem 3rem 2rem
+    background-color: $color-blue-0
 
     &:before, &:after
       content: ""
       position: absolute
       z-index: 1
-      width: 59px
+      width: 60px
       height: 59px
       -webkit-transform: scaleY(0.5774) rotate(-45deg)
       -ms-transform: scaleY(0.5774) rotate(-45deg)
       transform: scaleY(0.5774) rotate(-45deg)
-      background-color: $color-blue-2
-      left: 10.75px
+      background-color: $color-alt-blue-1
+      left: 11.25px
 
     &:before
       top: -29.76px
 
     &:after
-      bottom: -53.0330px
+      bottom: -43.0330px
 
     &.unearned 
       @include opacity(0.6)
@@ -128,11 +141,10 @@ button#remove-badges, button#add-badges
 
   .ribbon
     width: 100px
-    position: relative 
-    margin-top: 38px
+    position: absolute
+    margin-top: 30px
     margin-left: -10px
     text-align: center
-    font-size: 12px !important
     z-index: 100
     background: $color-red-1
     background: -webkit-gradient(linear, left top, left bottom, from(#d64b4b), to(#ab2c2c))
@@ -144,25 +156,23 @@ button#remove-badges, button#add-badges
     -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
     -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
     box-shadow: rgba(0, 0, 0, 0.3) 0 1px 1px
-    h1
-      font-size: 14px !important
+    .badge-name
+      font-size: .9rem
       margin-top: 50px
-      color: #590000
+      color: $color-black
       text-shadow: #d65c5c 0 1px 0
       margin: 0px
       padding: 2px 10px
+      font-weight: bold
 
+  /* ends to the red ribbon */
   .ribbon-ends
-    position: relative
-    z-index: 20
-    bottom: 7
-    @include opacity(0.8)
     &:before, &:after
       content: ''
       position: absolute
       display: block
-      bottom: -1em
-      border: 1em solid #c23a3a
+      bottom: -2em
+      border: 1.1em solid #c23a3a
       z-index: 1
     &:before
       left: -2.5em
@@ -181,7 +191,7 @@ button#remove-badges, button#add-badges
 
   .ribbon-stitches-top
     z-index: 2410
-    margin-top: -2px
+    margin-top: 2px
     border-top: 1px dashed rgba(0, 0, 0, 0.2)
     -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
     -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5)
@@ -189,13 +199,14 @@ button#remove-badges, button#add-badges
 
   .ribbon-stitches-bottom
     z-index: 2410
-    margin-bottom: 2px
+    position: absolute
+    margin-top: -5px
     border-top: 1px dashed rgba(0, 0, 0, 0.2)
     -moz-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3)
     -webkit-box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3)
     box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.3)
 
-  img.earned, img.unearned
+  img
     max-height: 5rem
     margin: 0 auto
     z-index: 80
@@ -204,37 +215,6 @@ button#remove-badges, button#add-badges
 
   .available
     opacity: .5
-
-  .badge-name
-    font-weight: bold
-    margin-top: 20px
-    position: absolute
-    font-size: 1rem
-    text-align: center
-    vertical-align: top
-    margin-top: 20px
-    bottom: -30px
-    z-index: 2200
-    width: 100%
-
-  .earned-box
-    position: absolute
-    top: 0
-    right: 4px
-    font-weight: bold
-    color: $color-black
-    text-align: center
-    width: 100%
-    font-size: 0.9rem
-    margin-top: -12px
-    z-index: 2200
-
-    width: 35px
-    height: 35px
-
-    &.unearned
-      background: $color-grey-6
-      display: none
 
   .gold-stars
     position: absolute
@@ -253,25 +233,3 @@ button#remove-badges, button#add-badges
 
   .badges-earned
     @include ribbon
-
-  &.unearned
-    .badges-earned
-      background-color: $color-grey-6
-      background-repeat: repeat-x
-      background-image: -khtml-gradient(linear, left top, left bottom, from($color-grey-2), to($color-grey-6))
-      background-image: -moz-linear-gradient(top, $color-grey-2, $color-grey-6)
-      background-image: -ms-linear-gradient(top, $color-grey-2, $color-grey-6)
-      background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $color-grey-6), color-stop(100%, $color-grey-6))
-      background-image: -webkit-linear-gradient(top, $color-grey-2, $color-grey-6)
-      background-image: -o-linear-gradient(top, $color-grey-2, $color-grey-6)
-      background-image: linear-gradient(top, $color-grey-2, $color-grey-6)
-      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-grey-2', endColorstr='$color-grey-6', GradientType=0)
-      &:after
-        border-color: $color-grey-6 $color-grey-6 transparent $color-grey-6
-
-  .earned-total
-    display: inline
-    position: absolute
-    margin-top: -4px
-    font-size: 1rem
-    font-weight: bold
