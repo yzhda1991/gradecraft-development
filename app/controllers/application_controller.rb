@@ -114,8 +114,7 @@ class ApplicationController < ActionController::Base
   # Tracking page view counts
   def increment_page_views
     if current_user and request.format.html?
-      # PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(time_until_next_lull)
-      PageviewEventLogger.new(pageview_logger_attrs).enqueue # for testing only
+      PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(time_until_next_lull)
     end
   end
 
