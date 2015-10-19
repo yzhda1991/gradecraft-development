@@ -7,8 +7,8 @@ GradeCraft::Application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => 'mailcatcher',
-    :port => 1025,
+    :address => '10.244.1.63',
+    :port => 25,
   }
   config.action_mailer.perform_deliveries = true
 
