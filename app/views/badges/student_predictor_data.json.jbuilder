@@ -9,7 +9,6 @@ json.badges @badges do |badge|
 
   # boolean states for icons
   json.has_info ! badge.description.blank?
-  json.is_a_condition badge.is_a_condition?
 
   json.is_locked ! badge.is_unlocked_for_student?(@student)
 
@@ -18,10 +17,9 @@ json.badges @badges do |badge|
     json.unlock_conditions badge.unlock_conditions.map { |condition| "#{condition.name} must be #{condition.condition_state}" }
   end
 
+  json.is_a_condition badge.is_a_condition?
   if badge.is_a_condition?
-    json.unlock_keys badge.unlock_keys.map { |key|
-      "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
-    }
+    json.unlock_keys badge.unlock_keys.map { |key| "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}" }
   end
 end
 

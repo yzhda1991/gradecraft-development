@@ -78,7 +78,6 @@ describe "assignments/student_predictor_data" do
     end
 
     it "adds has_info to model" do
-      @assignment.update(required: true)
       render
       @json = JSON.parse(response.body)
       expect(@json["assignments"][0]["has_info"]).to be_truthy
