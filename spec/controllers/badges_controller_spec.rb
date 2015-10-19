@@ -140,9 +140,9 @@ describe BadgesController do
         end
 
         it "adds the prediction data to the badge model with prediction equal to earned" do
-          prediction = create(:predicted_earned_badge, badge: @badge, student: @student)
+          prediction = create(:predicted_earned_badge, badge: @badge, student: @student, times_earned: 4)
           get :student_predictor_data, format: :json, :id => @student.id
-          expect(assigns(:badges)[0].student_predicted_earned_badge).to eq(prediction)
+          expect(assigns(:badges)[0].student_predicted_earned_badge).to eq({ id: prediction.id, times_earned: 0 })
         end
       end
     end
@@ -176,7 +176,7 @@ describe BadgesController do
       it "adds the prediction data to the badge model" do
         prediction = create(:predicted_earned_badge, badge: @badge, student: @student)
         get :student_predictor_data, format: :json, :id => @student.id
-        expect(assigns(:badges)[0].student_predicted_earned_badge).to eq(prediction)
+        expect(assigns(:badges)[0].student_predicted_earned_badge).to eq({ id: prediction.id, times_earned: prediction.times_earned })
       end
     end
 

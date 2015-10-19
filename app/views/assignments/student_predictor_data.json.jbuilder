@@ -29,6 +29,8 @@ json.assignments @assignments do |assignment|
     }
   end
 
+  # student's grade info inserted into each assignment
+  # student's prediction info inserted into each grade
   if assignment.current_student_grade
     assignment.current_student_grade.tap do |grade|
       json.grade do
