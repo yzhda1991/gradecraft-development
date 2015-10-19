@@ -9,7 +9,7 @@ json.badges @badges do |badge|
 
   # boolean states for icons
   json.has_info ! badge.description.blank?
-  json.condition badge.is_a_condition?
+  json.is_a_condition badge.is_a_condition?
 
   json.is_locked ! badge.is_unlocked_for_student?(@student)
 
