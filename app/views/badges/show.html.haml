@@ -32,37 +32,44 @@
         = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   //badge icon, total awarded, and points
-  .badge-image
-    %img{:src => @badge.icon, :alt => @badge.name, :width => "100" }
-  .badge-details
-    %ul
-      %li="Awarded: #{@badge.awarded_count}"
-      - if @badge.point_total?
-        %li="Points: #{@badge.point_total}"
-      - if @badge.is_unlockable?
-        %li 
-          %a
-            %i.fa.fa-lock
-            Unlock Requirements
-          .display_on_hover.hover-style
-            %ul
-              - @badge.unlock_conditions.each do |condition|
-                %li= "#{condition.name} must be #{condition.condition_state}"
-      - if @badge.is_a_condition?
-        %li
-          %a
-            %i.fa.fa-key
-            Unlock Keys
-          .display_on_hover.hover-style
-            %ul
-              - @badge.unlock_keys.each do |key|
-                %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+  .badge-card
+    .card-ribbon
+      .badge-table.hexagon.awarded
+        %img.earned{:src => @badge.icon, :alt => @badge.name }
+        .ribbon
+          .ribbon-stitches-top
+          .ribbon-content
+            .badge-name= @badge.name
+          .ribbon-stitches-bottom
+        .ribbon-ends
+        .gold-stars
+          %i.fa.fa-star.fa-fw
+            .earned-count= @badge.earned_badges.count
+          .badges-earned.blue
+      .badge-details
+        - if @badge.point_total?
+          .points="#{@badge.point_total} Points"
+        - if @badge.description?
+          .feedback= @badge.description
+        - if @badge.is_unlockable?
+          %li 
+            %a
+              %i.fa.fa-lock
+              Unlock Requirements
+            .display_on_hover.hover-style
+              %ul
+                - @badge.unlock_conditions.each do |condition|
+                  %li= "#{condition.name} must be #{condition.condition_state}"
+        - if @badge.is_a_condition?
+          %li
+            %a
+              %i.fa.fa-key
+              Unlock Keys
+            .display_on_hover.hover-style
+              %ul
+                - @badge.unlock_keys.each do |key|
+                  %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
 
-  .clear
-  - if @badge.description?
-    %p
-      %b Description:
-      = raw @badge.description
 
   - if @badge.badge_files.present?
     %p
@@ -73,6 +80,8 @@
             = link_to bf.filename, bf.url
             - if current_user_is_staff?
               = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :upload_id => bf.id } )
+  .clear
+  
   - if current_user_is_staff?
     %table.nofeatures_default_last_name_dynatable
       %thead
