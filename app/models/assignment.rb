@@ -241,6 +241,7 @@ class Assignment < ActiveRecord::Base
     grades.where(:student => student).first.predicted_score > 0 rescue nil
   end
 
+  #if there are unlock conditions, they have been met
   def is_unlocked_for_student?(student)
     if unlock_states.where(:student_id => student.id).present?
       unlock_states.where(:student_id => student.id).first.is_unlocked?

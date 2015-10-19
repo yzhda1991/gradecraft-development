@@ -251,18 +251,13 @@ class AssignmentsController < ApplicationController
         if grade.nil?
           grade = Grade.create(:assignment => assignment, :student => @student)
         end
-        assignment.current_student_grade = grade
 
-        # Only pass through points if they have been released by the professor
-        unless grade.is_student_visible?
-          assignment.current_student_grade.pass_fail_status = nil
-          assignment.current_student_grade.score = nil
-        end
-
-        # don't allow professors to view predictions
-        unless current_user.is_student?(current_course)
-          assignment.current_student_grade.predicted_score = 0
-        end
+        assignment.current_student_grade = {
+          id: grade.id,
+          pass_fail_status: grade.is_student_visible? ? grade.pass_fail_status : nil,
+          score: grade.is_student_visible? ? grade.score : nil,
+          predicted_score: current_user.is_student?(current_course) ? grade.predicted_score : 0
+        }
       end
     end
   end
@@ -271,12 +266,9 @@ class AssignmentsController < ApplicationController
 
     def predictor_assignments_data
       @assignments = current_course.assignments.select(
-        :accepts_attachments,
-        :accepts_links,
         :accepts_resubmissions_until,
         :accepts_submissions,
         :accepts_submissions_until,
-        :accepts_text,
         :assignment_type_id,
         :course_id,
         :description,
@@ -284,16 +276,12 @@ class AssignmentsController < ApplicationController
         :grade_scope,
         :id,
         :include_in_predictor,
-        :media,
-        :media_caption,
-        :media_credit,
         :name,
         :open_at,
         :pass_fail,
         :point_total,
         :points_predictor_display,
         :position,
-        :updated_at,
         :release_necessary,
         :required,
         :resubmissions_allowed,
@@ -308,16 +296,13 @@ class AssignmentsController < ApplicationController
     def predictor_grades(student)
       @grades = student.grades.where(:course_id => current_course).select(
         :assignment_id,
-        :assignment_type_id,
-        :course_id,
+        :final_score,
         :id,
         :predicted_score,
         :pass_fail_status,
         :status,
         :student_id,
         :raw_score,
-        :final_score,
-        :updated_at,
         :score
       )
     end

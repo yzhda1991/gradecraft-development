@@ -2,19 +2,24 @@ json.badges @badges do |badge|
   next unless badge.visible_for_student?(@student)
   json.merge! badge.attributes
   json.icon badge.icon.url
-  json.info ! badge.description.blank?
   json.total_earned_points badge.earned_badge_total_points(@student)
   json.earned_badge_count badge.earned_badge_count_for_student(@student)
+
+
+  # boolean states for icons
+  json.has_info ! badge.description.blank?
 
   badge.student_predicted_earned_badge.tap do |prediction|
     json.prediction do
       json.id prediction.id
 
       if current_user.is_staff?(current_course)
+        # after tests pass, change to actual_times_earned
         json.times_earned badge.earned_badge_count_for_student(@student)
       else
         # We persist the student's last prediction, but the predictor will start the student's
         # predicted earning count at no less that the number of badges she already earned.
+        # after tests pass, change to times_earned_including_actual
         if prediction.times_earned < badge.earned_badge_count_for_student(@student)
          json.times_earned badge.earned_badge_count_for_student(@student)
         else

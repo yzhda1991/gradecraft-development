@@ -1,3 +1,11 @@
+# All directives used on the predictor page.
+
+# Article Icon
+# Defines hovertext and font awesome icons for the icon bar in the predictor.
+# Each icon is turned on by by a boolean on the assignment or badge model with the same name.
+# Icons are defined in the predictor service and looped through in the haml:
+# "is_required", "is_late", "has_info", "is_locked", "has_been_unlocked", "is_a_condition", "group"
+
 @gradecraft.directive 'predictorArticleIcon', [ 'PredictorService', (PredictorService)->
 
   return {
@@ -9,6 +17,7 @@
     }
     templateUrl: 'ng_predictor_icons.html'
     link: (scope, el, attr)->
+
       scope.targetTerm = ()->
         if @targetType == "assignment"
           PredictorService.termFor.assignment
@@ -33,27 +42,27 @@
         @target.unlock_keys
 
       scope.iconHtml = {
-        late: {
+        is_late: {
           tooltip: 'This ' + scope.targetTerm() + ' is late!'
           icon: "fa-exclamation-triangle"
         }
-        required: {
+        is_required: {
           tooltip: 'This ' + scope.targetTerm() + ' is required!'
           icon: "fa-star"
         }
-        info: {
+        has_info: {
           tooltip: scope.description()
           icon: "fa-info-circle"
         }
-        locked: {
+        is_locked: {
           tooltip: scope.conditions()
           icon: "fa-lock"
         }
-        unlocked: {
+        is_unlocked: {
           tooltip: scope.conditions()
           icon: "fa-unlock-alt"
         }
-        condition: {
+        is_a_condition: {
           tooltip: scope.keys()
           icon: "fa-key"
         }

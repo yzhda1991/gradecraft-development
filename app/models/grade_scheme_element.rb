@@ -11,7 +11,7 @@ class GradeSchemeElement < ActiveRecord::Base
   # Getting the name of the Grade Scheme Element - the Level if it's present, the Letter if not
   def name
     if level? && letter?
-      "#{letter} / #{level} "
+      "#{letter} / #{level}"
     elsif level?
       level
     elsif letter?
