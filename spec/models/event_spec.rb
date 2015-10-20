@@ -1,5 +1,4 @@
 require "active_record_spec_helper"
-require "./app/models/event"
 
 describe Event do
   subject { build(:event) }

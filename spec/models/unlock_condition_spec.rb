@@ -1,5 +1,4 @@
 require "active_record_spec_helper"
-require "./app/models/unlock_condition"
 
 describe UnlockCondition do
 

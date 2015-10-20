@@ -1,6 +1,8 @@
 require "base_spec_helper"
 require "active_record"
 require "active_support/core_ext"
+require "acts_as_list"
+require "canable"
 require "carrierwave"
 require "carrierwave/orm/activerecord"
 require "factory_girl"
@@ -26,6 +28,7 @@ SorceryStubbing.sorcery_reset [:user_activation], user_activation_mailer: Sorcer
 Dir["./app/uploaders/*.rb"].each { |f| require f }
 Dir["./app/validators/*.rb"].each { |f| require f }
 Dir["./app/models/concerns/*.rb"].each { |f| require f }
+Dir["./app/models/*.rb"].reject{|m| m =~ /metric|tier/ }.each { |f| require f }
 
 connection_info = YAML.load_file("config/database.yml")["test"]
 ActiveRecord::Base.establish_connection(connection_info)
