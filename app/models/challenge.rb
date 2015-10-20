@@ -13,7 +13,7 @@ class Challenge < ActiveRecord::Base
 
   belongs_to :course, touch: true
   has_many :submissions
-  has_many :challenge_grades
+  has_many :challenge_grades, :dependent => :destroy
   accepts_nested_attributes_for :challenge_grades
 
   has_many :predicted_earned_challenges, :dependent => :destroy
