@@ -57,10 +57,10 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
         subject
       end
 
-      context "@grade.save_student_and_team_scores succeeds" do
+      context "@grade.cache_student_and_team_scores succeeds" do
         before(:each) do
           grades.each do |grade|
-            allow(grade).to receive_messages(save_student_and_team_scores: true)
+            allow(grade).to receive_messages(cache_student_and_team_scores: true)
           end
         end
 
@@ -88,10 +88,10 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
         end
       end
 
-      context "@grade.save_student_and_team_scores fails" do
+      context "@grade.cache_student_and_team_scores fails" do
         before(:each) do
           grades.each do |grade|
-            allow(grade).to receive_messages(save_student_and_team_scores: nil)
+            allow(grade).to receive_messages(cache_student_and_team_scores: nil)
           end
         end
 
