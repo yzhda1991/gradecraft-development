@@ -9,7 +9,7 @@
     %ul.ui-tabs-nav{:role => "tablist"}
       %li
         %a{ "href" => "#tab1"} Description & Downloads
-      - if presenter.rubric_available? && presenter.grades_available_for?(current_student)
+      - if presenter.rubric_available? && !presenter.grades_available_for?(current_student)
         %li
           %a{ "href" => "#tab2"} Grading Rubric
       - if presenter.has_submission_for?(current_student)
