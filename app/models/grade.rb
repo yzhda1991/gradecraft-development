@@ -168,7 +168,7 @@ class Grade < ActiveRecord::Base
   # @mz todo: add specs, improve the syntax here
   def cache_team_score
     if course.has_teams? && student.team_for_course(course).present?
-      student.team_for_course(course).cache_score
+      student.team_for_course(course).update_revised_team_score
     else
       nil
     end

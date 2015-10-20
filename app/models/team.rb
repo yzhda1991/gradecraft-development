@@ -88,6 +88,15 @@ class Team < ActiveRecord::Base
     else
       self.score = average_points
     end
-    save
+  end
+
+  def update_revised_team_score
+    update_attributes score: revised_team_score
+  end
+
+  private
+
+  def revised_team_score
+    course.team_challenges ? challenge_grade_score : average_points
   end
 end
