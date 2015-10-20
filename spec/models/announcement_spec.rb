@@ -1,4 +1,6 @@
-require 'spec_helper'
+require "active_record_spec_helper"
+require "action_mailer"
+require "./app/mailers/announcement_mailer"
 
 describe Announcement do
   describe "default scope" do
@@ -107,8 +109,10 @@ describe Announcement do
     end
 
     it "sends an email to all the students in the course" do
-      expect { subject.deliver! }.to \
-        change { ActionMailer::Base.deliveries.count }.by 1
+      delivery = double(:email)
+      expect(delivery).to receive(:deliver_now)
+      expect(AnnouncementMailer).to receive(:announcement_email).with(subject, student).and_return delivery
+      subject.deliver!
     end
   end
 
