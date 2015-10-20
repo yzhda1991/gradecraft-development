@@ -1,35 +1,45 @@
 json.assignments @assignments do |assignment|
   next unless assignment.point_total > 0 || assignment.pass_fail?
   next unless assignment.visible_for_student?(@student)
+  next unless assignment.include_in_predictor?
   json.merge! assignment.attributes
   json.score_levels assignment.assignment_score_levels.map {|asl| {name: asl.name, value: asl.value}}
+
+  # points earned is all or nothing
   json.fixed assignment.fixed?
-  json.info ! assignment.description.blank?
 
-  if assignment.current_student_grade
-    assignment.current_student_grade.tap do |grade|
-      json.grade do
-        json.id grade.id
-        json.predicted_score grade.predicted_score
-        json.score grade.score
-        json.pass_fail_status grade.pass_fail_status if assignment.pass_fail
-      end
-    end
-  end
+  # boolean states for icons
+  json.is_required assignment.required
+  json.has_info ! assignment.description.blank?
+  json.is_late assignment.past? && assignment.accepts_submissions && ! @student.submission_for_assignment(assignment).present? ? true : false
 
-  json.late assignment.past? && assignment.accepts_submissions && ! @student.submission_for_assignment(assignment).present? ? true : false
-  json.locked ! assignment.is_unlocked_for_student?(@student)
-  json.unlocked assignment.is_unlockable? && assignment.is_unlocked_for_student?(@student)
+  json.is_locked ! assignment.is_unlocked_for_student?(@student)
+
+  json.has_been_unlocked assignment.is_unlockable? && assignment.is_unlocked_for_student?(@student)
   if assignment.is_unlockable?
     json.unlock_conditions assignment.unlock_conditions.map{ |condition|
       "#{condition.name} must be #{condition.condition_state}"
     }
   end
-  json.condition assignment.is_a_condition?
+
+  json.is_a_condition assignment.is_a_condition?
   if assignment.is_a_condition?
     json.unlock_keys assignment.unlock_keys.map{ |key|
       "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
     }
+  end
+
+  # student's grade info inserted into each assignment
+  # student's prediction info inserted into each grade
+  if assignment.current_student_grade
+    assignment.current_student_grade.tap do |grade|
+      json.grade do
+        json.id grade[:id]
+        json.predicted_score grade[:predicted_score]
+        json.score grade[:score]
+        json.pass_fail_status grade[:pass_fail_status] if assignment.pass_fail
+      end
+    end
   end
 end
 

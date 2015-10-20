@@ -305,6 +305,29 @@ describe AssignmentsController do
       end
     end
 
+    describe "GET student_predictor_data" do
+      context "with a student id" do
+        it "assigns the assignments with no call to update" do
+          get :student_predictor_data, format: :json, :id => @student.id
+          expect(assigns(:student)).to eq(@student)
+          #expect(assigns(:assignments)[0].attributes.length).to eq(predictor_assignment_attributes.length)
+          predictor_assignment_attributes().each do |attr|
+            expect(assigns(:assignments)[0][attr]).to eq(@assignment[attr])
+          end
+          expect(assigns(:update_assignments)).to be_falsy
+          expect(response).to render_template(:student_predictor_data)
+        end
+      end
+
+      context "with no student" do
+        it "assigns student as null student and no call to update" do
+          get :student_predictor_data, format: :json
+          expect(assigns(:student).class).to eq(NullStudent)
+          expect(assigns(:update_assignments)).to be_falsy
+        end
+      end
+    end
+
     describe "GET destroy" do
       it "destroys the assignment" do
         expect{ get :destroy, :id => @assignment }.to change(Assignment,:count).by(-1)
@@ -491,6 +514,65 @@ describe AssignmentsController do
       end
     end
 
+    describe "GET student_predictor_data" do
+
+      before do
+        assignment_type = create(:assignment_type, course: @course)
+        @assignment = create(:assignment)
+        @course.assignments << @assignment
+        allow(controller).to receive(:current_course).and_return(@course)
+      end
+
+      it "assigns the assignments with the call to update" do
+        get :student_predictor_data, format: :json, :id => @student.id
+        expect(assigns(:student)).to eq(@student)
+        # expect(assigns(:assignments)[0].attributes.length).to eq(predictor_assignment_attributes.length)
+        predictor_assignment_attributes().each do |attr|
+          expect(assigns(:assignments)[0][attr]).to eq(@assignment[attr])
+        end
+        expect(assigns(:update_assignments)).to be_truthy
+        expect(response).to render_template(:student_predictor_data)
+      end
+
+      it "includes the student's grade with score for assignment when released" do
+        @grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id)
+        get :student_predictor_data, format: :json, :id => @student.id
+        [
+          :assignment_id,
+          :final_score,
+          :id,
+          :predicted_score,
+          :pass_fail_status,
+          :status,
+          :student_id,
+          :raw_score,
+          :score
+
+        ].each do |attr|
+           expect(assigns(:grades)[0][attr]).to eq(@grade[attr])
+        end
+        expect(assigns(:assignments)[0].current_student_grade).to eq({ id: @grade.id, pass_fail_status: nil, score: @grade.score, predicted_score: @grade.predicted_score })
+      end
+
+      it "includes student grade with no score if not released" do
+        @grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
+        get :student_predictor_data, format: :json, :id => @student.id
+        expect(assigns(:assignments)[0].current_student_grade[:score]).to eq(nil)
+      end
+
+      it "includes pass/fail status for released pass/fail grades" do
+        @grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
+        get :student_predictor_data, format: :json, :id => @student.id
+        expect(assigns(:assignments)[0].current_student_grade[:pass_fail_status]).to eq("Pass")
+      end
+
+      it "includes student grade with no pass fail status if not released" do
+        @grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
+        get :student_predictor_data, format: :json, :id => @student.id
+        expect(assigns(:assignments)[0].current_student_grade[:pass_fail_status]).to be_nil
+      end
+    end
+
     describe "protected routes" do
       [
         :new,
@@ -523,3 +605,37 @@ describe AssignmentsController do
     end
   end
 end
+
+
+# helper methods:
+
+def predictor_assignment_attributes
+  [
+    :accepts_resubmissions_until,
+    :accepts_submissions,
+    :accepts_submissions_until,
+    :assignment_type_id,
+    :course_id,
+    :description,
+    :due_at,
+    :grade_scope,
+    :id,
+    :include_in_predictor,
+    :name,
+    :open_at,
+    :pass_fail,
+    :point_total,
+    :points_predictor_display,
+    :position,
+    :release_necessary,
+    :required,
+    :resubmissions_allowed,
+    :student_logged,
+    :thumbnail,
+    :use_rubric,
+    :visible,
+    :visible_when_locked
+
+  ]
+end
+

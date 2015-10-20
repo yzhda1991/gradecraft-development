@@ -41,6 +41,16 @@ describe GradeSchemeElementsController do
       end
     end
 
+    describe "GET student predictor data" do
+
+      it "returns grade scheme elements with total points as json" do
+        @grade_scheme_element.update(low_range: 1000)
+        get :student_predictor_data, format: :json
+        expect(assigns(:grade_scheme_elements)).to eq(@grade_scheme_elements)
+        expect(assigns(:total_points)).to eq(1100)
+        expect(response).to render_template(:student_predictor_data)
+      end
+    end
   end
 
   context "as student" do

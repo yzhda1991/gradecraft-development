@@ -123,10 +123,12 @@ class StudentsController < ApplicationController
   public
 
   # Display the grade predictor
+  #   students - style blocks to fill entire page, render layout with no sidebar
+  #   staff - render standard laout with sidebar
   def predictor
     if current_user_is_student?
       @fullpage = true
-      render :layout => 'predictor' if current_user_is_student?
+      render :layout => 'predictor'
     end
   end
 

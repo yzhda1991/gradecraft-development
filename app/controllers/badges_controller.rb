@@ -133,25 +133,32 @@ class BadgesController < ApplicationController
       @student = NullStudent.new
       @update_badges = false
     end
-
     @badges = predictor_badge_data
-    @badges.each do |badge|
-      badge.student_predicted_earned_badge = badge.find_or_create_predicted_earned_badge(@student)
-    end
   end
 
   private
 
   def predictor_badge_data
-    current_course.badges.select( :id,
-                                  :name,
-                                  :description,
-                                  :point_total,
-                                  :visible,
-                                  :visible_when_locked,
-                                  :can_earn_multiple_times,
-                                  :position,
-                                  :updated_at,
-                                  :icon)
+    badges = current_course.badges.select(
+      :id,
+      :name,
+      :description,
+      :point_total,
+      :visible,
+      :visible_when_locked,
+      :can_earn_multiple_times,
+      :position,
+      :updated_at,
+      :icon)
+    badges.each do |badge|
+      prediction = badge.find_or_create_predicted_earned_badge(@student)
+      if current_user.is_student?(current_course)
+        badge.student_predicted_earned_badge = {id: prediction.id, times_earned: prediction.times_earned_including_actual}
+      else
+        badge.student_predicted_earned_badge = {id: prediction.id, times_earned: prediction.actual_times_earned}
+      end
+    end
+    return badges
   end
+
 end

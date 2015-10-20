@@ -2,12 +2,23 @@ class PredictedEarnedBadge < ActiveRecord::Base
 
   attr_accessible :student_id, :badge_id, :times_earned
 
-  # `touch: true` is breaking on create and destroy actions
-  belongs_to :badge#, touch: true
-  belongs_to :student#, touch: true
+  belongs_to :badge
+  belongs_to :student, :class_name => 'User'
 
   def total_predicted_points
-    self.badge.total_points * times_earned
+    self.badge.point_total * times_earned
   end
 
+  def actual_times_earned
+    self.badge.earned_badge_count_for_student(self.student)
+  end
+
+  # Returns the higher number: predicted times earned or actually earned and visible to student
+  def times_earned_including_actual
+    if times_earned < actual_times_earned
+      actual_times_earned
+    else
+      times_earned
+    end
+  end
 end

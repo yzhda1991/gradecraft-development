@@ -128,9 +128,48 @@ describe AssignmentTypesController do
       end
     end
 
+    describe "GET student predictor data" do
+
+      it "returns assignment types as json with current student if id present" do
+        get :student_predictor_data, format: :json, :id => @student.id
+        expect(assigns(:student)).to eq(@student)
+        expect(assigns(:assignment_types)).to eq([@assignment_type])
+        expect(response).to render_template(:student_predictor_data)
+      end
+
+      it "returns assignment types with null student if no id present" do
+        get :student_predictor_data, format: :json
+        expect(assigns(:student).class).to eq(NullStudent)
+        expect(assigns(:assignment_types)).to eq([@assignment_type])
+        expect(response).to render_template(:student_predictor_data)
+      end
+    end
 	end
 
 	context "as student" do
+
+    describe "GET student predictor data" do
+
+      before do
+        @course = create(:course_accepting_groups)
+        @assignment_type = create(:assignment_type, course: @course)
+        @assignment = create(:assignment, assignment_type: @assignment_type)
+        @course.assignments << @assignment
+        @student = create(:user)
+        @student.courses << @course
+
+        login_user(@student)
+        session[:course_id] = @course.id
+        allow(Resque).to receive(:enqueue).and_return(true)
+      end
+
+      it "returns assignment types as json for the current course" do
+        get :student_predictor_data, format: :json
+        expect(assigns(:student)).to eq(@student)
+        expect(assigns(:assignment_types)).to eq([@assignment_type])
+        expect(response).to render_template(:student_predictor_data)
+      end
+    end
 
 		describe "protected routes" do
       [

@@ -60,11 +60,19 @@ class GradeSchemeElementsController < ApplicationController
     end
   end
 
+  # TODO: Here we set the total earnable points as 110% of the low range of the higest earnable grade,
+  # and we default to a (most likely nil value) course.total_points if the professor has not yet created the
+  # grade scheme elements.
+  # We need:
+  # 1. A workflow that allows professors to create a course in a natural progression,
+  #    but does not allow for a course without grade scheme elements
+  # 2. A way to calculate the total points on the course, if it is not set.
+  # 3. Update spec to include all valid scenarios
   def student_predictor_data
     @grade_scheme_elements = current_course.grade_scheme_elements.select(:id, :low_range, :letter, :level)
     if @grade_scheme_elements
       @total_points = (@grade_scheme_elements.first.low_range * 1.1).to_i
-    else #TODO: we need to warn professors to set their GSI
+    else
       @total_points = current_course.total_points
     end
   end
