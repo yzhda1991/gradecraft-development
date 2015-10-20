@@ -135,6 +135,11 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.grades_for_assignment(user)
   end
 
+  def has_scores_for?(user)
+    scores = scores_for(user)
+    !scores.nil? && !scores.empty? && scores.has_key?(:scores) && !scores[:scores].empty?
+  end
+
   def student_logged?(user)
     assignment.student_logged? && assignment.open && user.is_student?(course)
   end

@@ -48,6 +48,35 @@ describe AssignmentPresenter do
     end
   end
 
+  describe "#has_scores_for?" do
+    let(:user) { double(:user) }
+
+    it "does not have scores if the scores are nil" do
+      allow(subject).to receive(:scores_for).and_return nil
+      expect(subject.has_scores_for?(user)).to eq false
+    end
+
+    it "does not have scores if the scores are empty" do
+      allow(subject).to receive(:scores_for).and_return Hash.new
+      expect(subject.has_scores_for?(user)).to eq false
+    end
+
+    it "does not have scores if the scores is not in the right format" do
+      allow(subject).to receive(:scores_for).and_return({ blah: [1, 2] })
+      expect(subject.has_scores_for?(user)).to eq false
+    end
+
+    it "does not have scores if the scores returned are empty" do
+      allow(subject).to receive(:scores_for).and_return({ scores: [] })
+      expect(subject.has_scores_for?(user)).to eq false
+    end
+
+    it "has scores if the scores returned are not empty" do
+      allow(subject).to receive(:scores_for).and_return({ scores: [1,2] })
+      expect(subject.has_scores_for?(user)).to eq true
+    end
+  end
+
   describe "#hide_analytics?" do
     it "is not hidden if the course does not hide analytics" do
       allow(course).to receive(:hide_analytics?).and_return false
