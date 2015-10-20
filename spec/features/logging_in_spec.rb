@@ -24,4 +24,5 @@ feature "logging in" do
       expect(page).to have_error_message "Email or Password were invalid, login failed."
     end
   end
+  
 end
