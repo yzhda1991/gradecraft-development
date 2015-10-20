@@ -25,17 +25,17 @@ end
 
 SorceryStubbing.sorcery_reset [:user_activation], user_activation_mailer: SorceryStubbing::TestUserMailer
 
-Dir["./app/uploaders/*.rb"].each { |f| require f }
-Dir["./app/validators/*.rb"].each { |f| require f }
-Dir["./app/models/concerns/*.rb"].each { |f| require f }
-Dir["./app/models/*.rb"].reject{|m| m =~ /metric|tier/ }.each { |f| require f }
-
 connection_info = YAML.load_file("config/database.yml")["test"]
 ActiveRecord::Base.establish_connection(connection_info)
 
 # supress the warning that is generated from CarrierWave because it uses
 # after_commit/after_save callbacks
 ActiveRecord::Base.raise_in_transactional_callbacks = true
+
+Dir["./app/uploaders/*.rb"].each { |f| require f }
+Dir["./app/validators/*.rb"].each { |f| require f }
+Dir["./app/models/concerns/*.rb"].each { |f| require f }
+Dir["./app/models/*.rb"].reject{|m| m =~ /metric|tier/ }.each { |f| require f }
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
