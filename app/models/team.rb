@@ -88,5 +88,6 @@ class Team < ActiveRecord::Base
     else
       self.score = average_points
     end
+    save
   end
 end

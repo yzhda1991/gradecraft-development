@@ -144,10 +144,6 @@ class Grade < ActiveRecord::Base
     student_id == user.id
   end
 
-  def cache_student_and_team_scores
-    { cached_student_score: cache_student_score, cached_team_score: cache_team_score }
-  end
-
   # @mz todo: port this over to cache_team_and_student_scores once 
   # related methods have tests
   # want to make sure that nothing depends on the output of this method
@@ -156,6 +152,10 @@ class Grade < ActiveRecord::Base
     if self.course.has_teams? && self.student.team_for_course(self.course).present?
       self.student.team_for_course(self.course).cache_score
     end
+  end
+
+  def cache_student_and_team_scores
+    { cached_student_score: cache_student_score, cached_team_score: cache_team_score }
   end
 
   private
@@ -167,8 +167,8 @@ class Grade < ActiveRecord::Base
 
   # @mz todo: add specs, improve the syntax here
   def cache_team_score
-    if self.course.has_teams? && self.student.team_for_course(self.course).present?
-      self.student.team_for_course(self.course).cache_score
+    if course.has_teams? && student.team_for_course(course).present?
+      student.team_for_course(course).cache_score
     else
       nil
     end
