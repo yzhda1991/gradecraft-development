@@ -4,9 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
   - if @assignment.is_individual?
-    = render "individual_show"
-
+    = render partial: "individual_show", locals: { presenter: presenter }
   - else
-    = render "group_show"
+    = render partial: "group_show", locals: { presenter: presenter }

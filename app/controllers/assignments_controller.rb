@@ -26,54 +26,19 @@ class AssignmentsController < ApplicationController
   end
 
   def show
-    if current_course.assignments.where(:id => params[:id]).present?
-      @assignment = current_course.assignments.find(params[:id])
-      @assignment_type = @assignment.assignment_type
-      @title = @assignment.name
-      @groups = @assignment.groups
-
-      # Returns a hash of grades given for the assignment in format of {student_id: grade}
-      @grades = @assignment.grades
-      @teams = current_course.teams
-      if params[:team_id].present?
-        @team = current_course.teams.find_by(id: params[:team_id])
-        @students = current_course.students_by_team(@team)
-      else
-        @students = current_course.students
-      end
-      if @assignment.rubric.present?
-        @rubric = @assignment.fetch_or_create_rubric
-        @metrics = @rubric.metrics.ordered.includes(:tiers => :tier_badges)
-      end
-      @course_badges = serialized_course_badges
-      @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
-      @course_student_ids = current_course.students.map(&:id)
-
-      # Data for displaying student grading distribution
-      @submissions_count = @assignment.submissions.count
-      @ungraded_submissions_count = @assignment.ungraded_submissions.count
-      @ungraded_percentage = @ungraded_submissions_count / @submissions_count rescue 0
-      @graded_count = @submissions_count - @ungraded_submissions_count
-
+    assignment = current_course.assignments.find_by(id: params[:id])
+    if assignment
       if current_user_is_student?
-        @grades_for_assignment = @assignment.grades_for_assignment(current_student)
-        @rubric_grades = RubricGrade.joins("left outer join submissions on submissions.id = rubric_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
-        @comments_by_metric_id = @rubric_grades.inject({}) do |memo, rubric_grade|
-          memo.merge(rubric_grade.metric_id => rubric_grade.comments)
-        end
-        if @assignment.has_groups? && current_student.group_for_assignment(@assignment).present?
-          @group = current_student.group_for_assignment(@assignment)
-        end
-
-        if current_student.grade_released_for_assignment?(@assignment)
-          grade = current_student.grade_for_assignment(@assignment)
+        if current_student.grade_released_for_assignment?(assignment)
+          grade = current_student.grade_for_assignment(assignment)
           if grade && !grade.new_record?
             grade.feedback_reviewed!
           end
         end
-      else
-        @grades_for_assignment = @assignment.all_grades_for_assignment
       end
+
+      render :show, AssignmentPresenter.build({ assignment: assignment, course: current_course,
+                                                team_id: params[:team_id], view_context: view_context })
     else
       redirect_to assignments_path, alert: "I'm so sorry, I couldn't find that #{(term_for :assignment)}."
     end
@@ -82,11 +47,13 @@ class AssignmentsController < ApplicationController
   def new
     @title = "Create a New #{term_for :assignment}"
     @assignment = current_course.assignments.new
+    render :new, AssignmentPresenter.build({ assignment: @assignment, course: current_course, view_context: view_context })
   end
 
   def edit
     @assignment = current_course.assignments.find(params[:id])
     @title = "Editing #{@assignment.name}"
+    render :edit, AssignmentPresenter.build({ assignment: @assignment, course: current_course, view_context: view_context })
   end
 
   # Duplicate an assignment - important for super repetitive items like attendance and reading reactions
@@ -228,6 +195,8 @@ class AssignmentsController < ApplicationController
     @course_student_ids = current_course.students.map(&:id)
 
     @viewable_rubric_grades = @assignment.rubric_grades
+    render :rubric_grades_review, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+                                                              team_id: params[:team_id], view_context: view_context })
   end
 
   # current student visible assignment

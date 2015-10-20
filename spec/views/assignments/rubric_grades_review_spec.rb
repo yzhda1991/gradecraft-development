@@ -3,6 +3,8 @@ require 'spec_helper'
 
 describe "assignments/rubric_grades_review" do
 
+  let(:presenter) { AssignmentPresenter.new({ assignment: @assignment }) }
+
   before(:all) do
     @course = create(:course)
     @assignment = create(:assignment)
@@ -13,6 +15,7 @@ describe "assignments/rubric_grades_review" do
     assign(:assignment, @assignment)
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:term_for).and_return("Assignment")
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   it "renders successfully" do

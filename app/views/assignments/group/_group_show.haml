@@ -1,10 +1,10 @@
-= form_tag edit_status_grades_assignment_path(@assignment) do
-  - if ! @groups.present?
-    No #{term_for :groups} have been created! You can either have #{term_for :students} self-create their #{term_for :groups}, or you can create them manually <a href ="/groups/new">here</a>. 
-  - else 
+= form_tag edit_status_grades_assignment_path(presenter.assignment) do
+  - if ! presenter.groups.present?
+    No #{term_for :groups} have been created! You can either have #{term_for :students} self-create their #{term_for :groups}, or you can create them manually #{link_to "here", new_group_path}.
+  - else
     %table
-      %thead= render "assignments/group/table_head"
-      %tbody= render "assignments/group/table_body"
+      %thead= render partial: "assignments/group/table_head", locals: { presenter: presenter }
+      %tbody= render partial: "assignments/group/table_body", locals: { presenter: presenter }
       .right
-        - if @assignment.release_necessary? && @assignment.grades.present?
+        - if presenter.assignment.release_necessary? && presenter.has_grades?
           = submit_tag "Update Grade Statuses", :class => "button"

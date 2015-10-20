@@ -1311,7 +1311,7 @@ group_grade_assignment = Assignment.create! do |a|
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 3.weeks.ago
 end
 
@@ -1323,7 +1323,7 @@ group_grade_assignment = Assignment.create! do |a|
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 3.weeks.ago
 end
 
@@ -1335,7 +1335,7 @@ group_grade_assignment = Assignment.create! do |a|
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 3.weeks.ago
 end
 
@@ -1347,7 +1347,7 @@ group_grade_assignment = Assignment.create! do |a|
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 3.weeks.ago
 end
 puts "I'm sorry, if you were right, I'd agree with you. - Robin Williams"
@@ -1360,7 +1360,7 @@ group_grade_submissions_assignment = Assignment.create! do |a|
   a.accepts_submissions = true
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 2.weeks.ago
 end
 
@@ -1372,7 +1372,7 @@ group_grade_submissions_assignment = Assignment.create! do |a|
   a.accepts_submissions = true
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 2.weeks.ago
 end
 
@@ -1384,7 +1384,7 @@ group_grade_submissions_assignment = Assignment.create! do |a|
   a.accepts_submissions = true
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 2.weeks.ago
 end
 
@@ -1396,7 +1396,7 @@ group_grade_submissions_assignment = Assignment.create! do |a|
   a.accepts_submissions = true
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 2.weeks.ago
 end
 puts "Many highly talented, brilliant, creative people think they're not - because the thing they were good at at school wasn't valued, or was actually stigmatized. - Sir Ken Robinson"
@@ -1409,7 +1409,7 @@ group_grade_rubric_assignment = Assignment.create! do |a|
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 1.week.ago
   Rubric.create! do |rubric|
     rubric.assignment = a
@@ -1439,7 +1439,7 @@ group_grade_rubric_assignment = Assignment.create! do |a|
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 1.week.ago
   Rubric.create! do |rubric|
     rubric.assignment = a
@@ -1469,7 +1469,7 @@ group_grade_rubric_assignment = Assignment.create! do |a|
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 1.week.ago
   Rubric.create! do |rubric|
     rubric.assignment = a
@@ -1499,7 +1499,7 @@ group_grade_rubric_assignment = Assignment.create! do |a|
   a.accepts_submissions = false
   a.release_necessary = false
   a.grade_scope = "Group"
-  a.student_logged = true
+  a.student_logged = false
   a.due_at = 1.week.ago
   Rubric.create! do |rubric|
     rubric.assignment = a

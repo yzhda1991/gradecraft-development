@@ -4,18 +4,18 @@ include CourseTerms
 
 describe "assignments/individual/_table_body" do
 
+  let(:presenter) { AssignmentPresenter.new({ assignment: @assignment, course: @course }) }
+
   before(:each) do
     clean_models
-    course = create(:course)
-    @assignment_type = create(:assignment_type)
-    @assignment = create(:assignment, assignment_type: @assignment_type)
-    course.assignments << @assignment
+    @course = create(:course)
+    @assignment = create(:assignment, assignment_type: create(:assignment_type))
+    @course.assignments << @assignment
     student = create(:user)
-    student.courses << course
-    @grade = create(:grade, course: course, assignment: @assignment, student: student)
-    @students = [student]
-    @grades = student.grades
-    allow(view).to receive(:current_course).and_return(course)
+    student.courses << @course
+    @grade = create(:grade, course: @course, assignment: @assignment, student: student)
+    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   it "renders successfully" do
@@ -29,7 +29,7 @@ describe "assignments/individual/_table_body" do
     end
 
     describe "with a score" do
-      context "and the grade is present and instructor modified" do 
+      context "and the grade is present and instructor modified" do
         it "renders the raw score" do
           @grade.update(raw_score: @assignment.point_total)
           allow(@grade).to receive(:present?) {true}

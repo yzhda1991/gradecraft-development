@@ -1,39 +1,39 @@
 .tab-container
-  - if @assignment.pass_fail?
+  - if presenter.assignment.pass_fail?
     .italic= "#{term_for :pass}/#{term_for :fail} Assignment"
   - else
-    .italic= "#{points @assignment.point_total} points possible"
+    .italic= "#{points presenter.assignment.point_total} points possible"
 
-  .italic= "Opens: #{@assignment.open_at}" if @assignment.open_at?
-  .italic= "Due: #{@assignment.due_at}" if @assignment.due_at?
+  .italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
+  .italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
-  - if current_student.present? && @assignment.accepts_submissions? 
-    = render "students/submissions", assignment: @assignment
+  - if current_student.present? && presenter.assignment.accepts_submissions?
+    = render "students/submissions", assignment: presenter.assignment
 
-  - if @assignment.student_logged? && @assignment.open? && current_user_is_student?
-    = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: @assignment }
+  - if presenter.student_logged?(current_user)
+    = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: presenter.assignment }
 
-  - if @assignment.assignment_files.present?
+  - if presenter.assignment.assignment_files.present?
     %hr.dotted
     %h4.uppercase Downloads
     %ul
-      - @assignment.assignment_files.each do |af|
+      - presenter.assignment.assignment_files.each do |af|
         %li= link_to af.filename, af.url
 
-  - if @assignment.is_unlockable?
+  - if presenter.assignment.is_unlockable?
     %hr.dotted
     %i.fa.fa-lock
     Unlock Requirements
-    - @assignment.unlock_conditions.each do |uc|
+    - presenter.assignment.unlock_conditions.each do |uc|
       = link_to uc.condition.name, uc.condition
 
-  - if @assignment.description.present?
+  - if presenter.assignment.description.present?
     %hr.dotted
     %h4.uppercase Guidelines:
-    %p= raw @assignment.description
+    %p= raw presenter.assignment.description
 
-  - if @assignment.assignment_type.description.present?
+  - if presenter.assignment.assignment_type.description.present?
     %hr.dotted
-    %h4.uppercase #{ @assignment.assignment_type.name} Guidelines:
+    %h4.uppercase #{ presenter.assignment.assignment_type.name} Guidelines:
 
-    %p= raw @assignment.assignment_type.description
+    %p= raw presenter.assignment.assignment_type.description

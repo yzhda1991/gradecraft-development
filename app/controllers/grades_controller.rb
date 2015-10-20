@@ -9,7 +9,7 @@ class GradesController < ApplicationController
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
     if current_user_is_student?
-      redirect_to @assignment
+      redirect_to @assignment and return
     end
     if @assignment.rubric.present? && @assignment.is_individual?
       @rubric = @assignment.rubric
@@ -23,6 +23,8 @@ class GradesController < ApplicationController
     end
 
     fetch_grades_based_on_group
+    render :show, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+                                              view_context: view_context })
   end
 
   private

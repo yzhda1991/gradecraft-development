@@ -4,14 +4,15 @@
       %td.metric.heading
         Criterion:&nbsp;Max&nbsp;points
 
-      %td.tier.heading(colspan="#{@rubric.max_tier_count}")
+      %td.tier.heading(colspan="#{presenter.rubric.max_tier_count}")
         Level: Points Awarded
       %td.comments.heading(ng-show="tiersSelected().length > 0")
         Comments
 
 
   %tbody
-    - @metrics.ordered.each do |metric|
+    - comments_by_metric_id = presenter.comments_by_metric_id(current_user)
+    - presenter.metrics.ordered.each do |metric|
       %tr
         %td.metric
           .metric-heading
@@ -36,17 +37,17 @@
                     %img{:src => badge.badge.icon, width: "30px", height: "30px" }
               .clear
 
-            - if current_user_is_staff? && @viewable_rubric_grades.select {|rubric_grade| rubric_grade.tier_id == tier[:id] }.count > 0
+            - if current_user_is_staff? && presenter.viewable_rubric_tier_earned?(tier.id)
               .earned_tier #{current_student.first_name} earned this level
-            - elsif current_user_is_student? && @rubric_grades.select {|rubric_grade| rubric_grade.tier_id == tier[:id] }.count > 0
+            - elsif current_user_is_student? && presenter.rubric_tier_earned?(current_user, tier.id)
               .earned_tier I earned this level
 
-            - if ! current_course.hide_analytics? && ! @assignment.hide_analytics?
-              - if tier.rubric_grades.size > 0
+            - if !presenter.hide_analytics?
+              - unless tier.rubric_grades(current_user).empty?
                 .students-padding
-                .graded-students= "#{pluralize(tier.rubric_grades.size, 'student')} earned this level"
-        - if metric.tiers.size < @rubric.max_tier_count
-          %td.filler(colspan="#{@rubric.max_tier_count - metric.tiers.size}")
+                .graded-students= "#{pluralize(tier.rubric_grades(current_user).size, 'student')} earned this level"
+        - if metric.tiers.size < presenter.rubric.max_tier_count
+          %td.filler(colspan="#{presenter.rubric.max_tier_count - metric.tiers.size}")
         %td.tier.tier-comments.comments-box
-          - if @comments_by_metric_id.size > 0
-            = @comments_by_metric_id[metric.id]
+          - unless comments_by_metric_id.empty?
+            = comments_by_metric_id[metric.id]

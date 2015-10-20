@@ -1,53 +1,52 @@
-- @groups.each do |group|
+- presenter.groups.each do |group_presenter|
   %tr
-    %td= link_to group.name, group
-    %td= group.approved
+    %td= link_to group_presenter.group.name, group_presenter.group
+    %td= group_presenter.group.approved
     %td
       .right
         %ul.button-bar
-          %li= link_to "Review #{term_for :group}", review_groups_path(:id => group), :class => 'button'
-          - group.submission_for_assignment(@assignment).tap do |submission|
-            - if submission
-              %li= link_to "See Submission", assignment_submission_path(@assignment.id, :id => submission.id), :class => 'button'
-            - else
-              %li= link_to "Submit", new_assignment_submission_path(@assignment, @submission, :group_id => group.id), :class => 'button'
-          - if group.students.first.grade_for_assignment(@assignment).present? && group.students.first.grade_for_assignment(@assignment).is_graded?
-            %li= link_to "Edit #{term_for :group} Grade", group_grade_assignment_path(@assignment, :group_id => group), :class => 'button'
+          %li= link_to "Review #{term_for :group}", review_groups_path(:id => group_presenter.group), :class => 'button'
+          - if group_presenter.submission
+            %li= link_to "See Submission", assignment_submission_path(group_presenter.assignment, id: group_presenter.submission.id), :class => 'button'
           - else
-            %li= link_to "Grade #{term_for :group}", group_grade_assignment_path(@assignment, :group_id => group), :class => 'button'
+            %li= link_to "Submit", new_assignment_submission_path(group_presenter.assignment, group_presenter.submission, :group_id => group_presenter.group.id), :class => 'button'
+          - if group_presenter.assignment_graded?
+            %li= link_to "Edit #{term_for :group} Grade", group_grade_assignment_path(group_presenter.assignment, :group_id => group_presenter.group), :class => 'button'
+          - else
+            %li= link_to "Grade #{term_for :group}", group_grade_assignment_path(group_presenter.assignment, :group_id => group_presenter.group), :class => 'button'
     %td
       %table
         %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}
           %tr
             %th= "#{current_course.user_term}s"
             %th Score
-            - if @assignment.assignment_type.student_weightable?
+            - if group_presenter.assignment.assignment_type.student_weightable?
               %th Multiplied Scores
-            - if @assignment.has_levels?
+            - if group_presenter.assignment.has_levels?
               %th Level
 
             %th
-            - if @assignment.release_necessary?
+            - if group_presenter.assignment.release_necessary?
               %th Status
-              %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
+              %th{"data-dynatable-no-sort" => "true", :width => "120px" }
                 %button.button.select-all= "Check"
                 %button.button.select-none= "Uncheck"
         %tbody
-          - group.students.each do |student|
+          - group_presenter.students.each do |student|
             %tr
               %td= link_to student.name, student_path(student)
-              - grade = student.grade_for_assignment(@assignment)
-              %td 
+              - grade = group_presenter.grade_for(student)
+              %td
                 - if grade.present? && grade.instructor_modified?
                   = points grade.raw_score
-              - if @assignment.assignment_type.student_weightable?
+              - if group_presenter.assignment.assignment_type.student_weightable?
                 %td
                   - if grade.present?
                     = points grade.score
-              - if @assignment.has_levels?
-                %td= @assignment.grade_level(grade)
-              
-              - if @assignment.release_necessary?
+              - if group_presenter.assignment.has_levels?
+                %td= group_presenter.assignment.grade_level(grade)
+
+              - if group_presenter.assignment.release_necessary?
                 %td= grade.try(:status)
                 %td.right
                   - if grade && grade.is_graded?

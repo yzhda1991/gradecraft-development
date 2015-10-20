@@ -1,6 +1,6 @@
 class SubmissionsController < ApplicationController
 
-  before_filter :ensure_staff?, :only=>[:index, :destroy]
+  before_filter :ensure_staff?, :only=>[:show, :index, :destroy]
 
   include Canable::Enforcers
   helper UploadsHelper
@@ -95,15 +95,11 @@ class SubmissionsController < ApplicationController
     @assignment = current_course.assignments.find(params[:assignment_id])
     @submission = current_course.submissions.find(params[:id])
     @student = @submission.student
-    if current_user_is_student?
-      @title = "My Submission for #{@assignment.name}"
+    if @assignment.is_individual?
+      @title = "#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
     else
-      if @assignment.is_individual?
-        @title = "#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
-      else
-        @group = @submission.group
-        @title = "#{@group.name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
-      end
+      @group = @submission.group
+      @title = "#{@group.name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
     end
   end
 
