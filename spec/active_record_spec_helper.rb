@@ -6,8 +6,10 @@ require "carrierwave/orm/activerecord"
 require "factory_girl"
 require "faker"
 require "protected_attributes"
+require "sorcery"
 require "yaml"
 require "./lib/s3_file"
+require_relative "support/sorcery_stubbing"
 
 # stub out the process_in_background for carrierwave_backgrounder
 module CarrierWave
@@ -18,6 +20,8 @@ end
 class ActiveRecord::Base
   def self.process_in_background(_); end
 end
+
+SorceryStubbing.sorcery_reset [:user_activation], user_activation_mailer: SorceryStubbing::TestUserMailer
 
 Dir["./app/uploaders/*.rb"].each { |f| require f }
 Dir["./app/validators/*.rb"].each { |f| require f }
