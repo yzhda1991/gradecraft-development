@@ -13,6 +13,7 @@ require "protected_attributes"
 require "sanitize"
 require "sorcery"
 require "yaml"
+require "./lib/display_helpers"
 require "./lib/s3_file"
 require_relative "support/sorcery_stubbing"
 require_relative "support/file_helpers"
@@ -46,7 +47,7 @@ ActiveRecord::Base.raise_in_transactional_callbacks = true
 Dir["./app/uploaders/*.rb"].each { |f| require f }
 Dir["./app/validators/*.rb"].each { |f| require f }
 Dir["./app/models/concerns/*.rb"].each { |f| require f }
-Dir["./app/models/*.rb"].reject{|m| m =~ /metric|tier/ }.each { |f| require f }
+Dir["./app/models/*.rb"].each { |f| require f }
 
 CarrierWave.configure do |config|
   config.storage = :file
