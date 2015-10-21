@@ -38,7 +38,7 @@ describe Assignment do
       student.courses << course
       grade = create(:grade, raw_score: 100, assignment: subject, student: student, feedback: "good jorb!", instructor_modified: true)
       submission = create(:submission, grade: grade, student: student, assignment: subject)
-      expect(subject.gradebook_for_assignment).to eq("First Name,Last Name,Uniqname,Score,Raw Score,Statement,Feedback,Last Updated\n#{student.first_name},#{student.last_name},#{student.username},100,100,\"#{submission.text_comment}\",good jorb!,#{grade.updated_at}\n")
+      expect(subject.gradebook_for_assignment(converters: :date_time)).to eq("First Name,Last Name,Uniqname,Score,Raw Score,Statement,Feedback,Last Updated\n#{student.first_name},#{student.last_name},#{student.username},100,100,\"#{submission.text_comment}\",good jorb!,\"#{grade.updated_at}\"\n")
     end
   end
 
