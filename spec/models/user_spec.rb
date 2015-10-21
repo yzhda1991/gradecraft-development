@@ -1,6 +1,4 @@
-# spec/models/user_spec.rb
-
-require 'spec_helper'
+require "active_record_spec_helper"
 
 describe User do
   before(:each) do
