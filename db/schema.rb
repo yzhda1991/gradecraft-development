@@ -97,14 +97,9 @@ ActiveRecord::Schema.define(version: 20150926200505) do
     t.datetime "due_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "level",                             limit: 255
-    t.boolean  "present"
     t.integer  "course_id"
     t.integer  "assignment_type_id"
-    t.integer  "grade_scheme_id"
     t.string   "grade_scope",                       limit: 255, default: "Individual", null: false
-    t.datetime "close_time"
-    t.datetime "open_time"
     t.boolean  "required"
     t.boolean  "accepts_submissions"
     t.boolean  "student_logged"
@@ -132,8 +127,6 @@ ActiveRecord::Schema.define(version: 20150926200505) do
     t.integer  "position"
     t.boolean  "include_in_to_do",                              default: true
     t.boolean  "use_rubric",                                    default: true
-    t.string   "student_logged_button_text",        limit: 255
-    t.string   "student_logged_revert_button_text", limit: 255
     t.boolean  "accepts_attachments",                           default: true
     t.boolean  "accepts_text",                                  default: true
     t.boolean  "accepts_links",                                 default: true
@@ -160,7 +153,6 @@ ActiveRecord::Schema.define(version: 20150926200505) do
     t.integer  "point_total"
     t.integer  "course_id"
     t.integer  "assignment_id"
-    t.integer  "badge_set_id"
     t.string   "icon",                    limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"

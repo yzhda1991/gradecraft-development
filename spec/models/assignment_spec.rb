@@ -18,19 +18,16 @@ describe Assignment do
   it { is_expected.to respond_to("assignment_type_id")}
   it { is_expected.to respond_to("can_earn_multiple_times")}
   it { is_expected.to respond_to("category_id")}
-  it { is_expected.to respond_to("close_time")} #TODO delete and confirm, now "due_at"
   it { is_expected.to respond_to("course_id")}
   it { is_expected.to respond_to("created_at")}
   it { is_expected.to respond_to("description")}
   it { is_expected.to respond_to("due_at")}
-  it { is_expected.to respond_to("grade_scheme_id")}
   it { is_expected.to respond_to("grade_scope")}
   it { is_expected.to respond_to("grading_due_at")}
   it { is_expected.to respond_to("icon")}
   it { is_expected.to respond_to("include_in_predictor")}
   it { is_expected.to respond_to("include_in_timeline")}
   it { is_expected.to respond_to("include_in_to_do")}
-  it { is_expected.to respond_to("level")}
   it { is_expected.to respond_to("mass_grade_type")}
   it { is_expected.to respond_to("max_submissions")}
   it { is_expected.to respond_to("media")}
@@ -39,12 +36,10 @@ describe Assignment do
   it { is_expected.to respond_to("name")}
   it { is_expected.to respond_to("notify_released")}
   it { is_expected.to respond_to("open_at")}
-  it { is_expected.to respond_to("open_time")} #TODO delete and confirm, now "open_at"
   it { is_expected.to respond_to("pass_fail")}
   it { is_expected.to respond_to("point_total")}
   it { is_expected.to respond_to("points_predictor_display")}
   it { is_expected.to respond_to("position")}
-  it { is_expected.to respond_to("present")}
   it { is_expected.to respond_to("release_necessary")}
   it { is_expected.to respond_to("required")}
   it { is_expected.to respond_to("resubmissions_allowed")}
