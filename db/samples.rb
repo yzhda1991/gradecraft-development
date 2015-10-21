@@ -1904,7 +1904,7 @@ predictor_fixed_assignment = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 1.week.from_now
 end
-puts "1"
+puts "The whole educational and professional training system is a very elaborate filter, which just weeds out people who are too independent, and who think for themselves, and who don't know how to be submissive, and so on -- because they're dysfunctional to the institutions. ― Noam Chomsky"
 
 predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -1957,7 +1957,7 @@ predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 1.week.from_now
 end
-puts "2"
+puts "We are students of words: we are shut up in schools, and colleges, and recitation -rooms, for ten or fifteen years, and come out at last with a bag of wind, a memory of words, and do not know a thing. ― Ralph Waldo Emerson"
 
 predictor_slider_with_levels_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -2038,7 +2038,7 @@ predictor_slider_with_levels_assignment = Assignment.create! do |a|
     end
   end
 end
-puts "a"
+puts "What's gotten in the way of education in the United States is a theory of social engineering that says there is ONE RIGHT WAY to proceed with growing up. ― John Taylor Gatto"
 
 assignment_types[:first_course_visibility] = AssignmentType.create! do |at|
   at.course = first_course
@@ -2059,7 +2059,7 @@ assignment_types[:fourth_course_visibility] = AssignmentType.create! do |at|
   at.course = fourth_course
   at.name = "Visibility Settings"
 end
-puts "3"
+puts "A different voice may be particularly effective in disturbing the existing participants into re-examining matters they had come to take for granted. ― Stefan Collini"
 
 invisible_assignment = Assignment.create! do |a|
   a.course = first_course
@@ -2164,7 +2164,7 @@ visible_assignment = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 2.weeks.from_now
 end
-puts "4"
+puts "College: two hundred people reading the same book. An obvious mistake. Two hundred people can read two hundred books. ― John Cage"
 
 assignment_types[:first_course_capped] = AssignmentType.create! do |at|
   at.course = first_course
@@ -2257,7 +2257,7 @@ assignment_types[:fourth_course_notifications] = AssignmentType.create! do |at|
   at.course = fourth_course
   at.name = "Notification Settings"
 end
-puts "5"
+puts "Play is our brain's favorite way of learning. – Diane Ackerman"
 
 assignment_sends_email_notes_on_release = Assignment.create! do |a|
   a.course = first_course
@@ -2310,7 +2310,7 @@ assignment_sends_email_notes_on_release = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "6"
+puts "People tend to forget that play is serious. – David Hockney"
 
 assignment_sends_email_notes_immediately = Assignment.create! do |a|
   a.course = first_course
@@ -2363,7 +2363,7 @@ assignment_sends_email_notes_immediately = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "7"
+puts "Do not keep children to their studies by compulsion but by play. – Plato"
 
 assignment_does_not_send_emails = Assignment.create! do |a|
   a.course = first_course
@@ -2416,7 +2416,7 @@ assignment_does_not_send_emails = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "8"
+puts "You're always you, and that don't change, and you're always changing, and there's nothing you can do about it. ― Neil Gaiman"
 
 assignment_types[:first_course_analytics] = AssignmentType.create! do |at|
   at.course = first_course
@@ -2437,7 +2437,7 @@ assignment_types[:fourth_course_analytics] = AssignmentType.create! do |at|
   at.course = fourth_course
   at.name = "Analytics Settings"
 end
-puts "9"
+puts "People want to forget the impossible. It makes their world safer. ― Neil Gaiman"
 
 assignment_analytics_on = Assignment.create! do |a|
   a.course = first_course
@@ -2494,7 +2494,7 @@ assignment_analytics_on = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "10"
+puts "The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom. ― Isaac Asimov"
 
 assignment_analytics_on = Assignment.create! do |a|
   a.course = first_course
@@ -2551,7 +2551,7 @@ assignment_analytics_on = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "11"
+puts "Of all sad words of tongue or pen, the saddest are these, 'It might have been.' ― John Greenleaf Whittier"
 
 assignment_analytics_on = Assignment.create! do |a|
   a.course = first_course
@@ -2608,7 +2608,7 @@ assignment_analytics_on = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "12"
+puts "People aren't either wicked or noble. They're like chef's salads, with good things and bad things chopped and mixed together in a vinaigrette of confusion and conflict. ― Lemony Snicket"
 
 assignment_analytics_on = Assignment.create! do |a|
   a.course = first_course
@@ -2665,7 +2665,7 @@ assignment_analytics_on = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "13"
+puts "Life can only be understood backwards; but it must be lived forwards. ― Soren Kierkegaard"
 
 assignment_types[:first_course_unlocks] = AssignmentType.create! do |at|
   at.course = first_course
@@ -2686,7 +2686,7 @@ assignment_types[:fourth_course_unlocks] = AssignmentType.create! do |at|
   at.course = fourth_course
   at.name = "Unlock Settings"
 end
-puts "14"
+puts "Life's under no obligation to give us what we expect. ― Margaret Mitchell"
 
 assignment_unlock_submission_condition_1 = Assignment.create! do |a|
   a.course = first_course
@@ -2743,7 +2743,7 @@ assignment_unlock_submission_condition_4 = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "15"
+puts "Now, it is the view of the Ministry that a theoretical knowledge will be more than sufficient to get you through your examination, which, after all, is what school is all about. ― J.K. Rowling"
 
 assignment_submission_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
@@ -2824,7 +2824,7 @@ assignment_submission_is_an_unlock = Assignment.create! do |a|
     uc.condition_state = "Submitted"
   end
 end
-puts 'c'
+puts 'School has become the world religion of a modernized proletariat, and makes futile promises of salvation to the poor of the technological age. ― Ivan Illich'
 
 assignment_unlock_grade_earned_condition_1 = Assignment.create! do |a|
   a.course = first_course
@@ -2881,7 +2881,7 @@ assignment_unlock_grade_earned_condition_4 = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts 'e'
+puts "In all the works on pedagogy that ever I read — and they have been many, big, and heavy — I don't remember that any one has advocated a system of teaching by practical jokes, mostly cruel. That, however, describes the method of our great teacher, Experience. ― Charles Sanders Peirce"
 
 assignment_grade_earned_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
@@ -2962,7 +2962,7 @@ assignment_grade_earned_is_an_unlock = Assignment.create! do |a|
     uc.condition_state = "Grade Earned"
   end
 end
-puts 'f'
+puts "The public has a distorted view of science because children are taught in school that science is a collection of firmly established truths. In fact, science is not a collection of truths. It is a continuing exploration of mysteries. ― Freeman Dyson"
 
 assignment_unlockable_grade_earned_by_date_condition_1 = Assignment.create! do |a|
   a.course = first_course
@@ -3019,7 +3019,7 @@ assignment_unlockable_grade_earned_by_date_condition_4 = Assignment.create! do |
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts 'f'
+puts "The 'polymath' had already died out by the close of the eighteenth century, and in the following century intensive education replaced extensive, so that by the end of it the specialist had evolved. The consequence is that today everyone is a mere technician, even the artist... ― Dietrich Bonhoeffer"
 
 assignment_grade_earned_by_date_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
@@ -3104,7 +3104,7 @@ assignment_grade_earned_by_date_is_an_unlock = Assignment.create! do |a|
     uc.condition_date = 1.week.ago
   end
 end
-puts 'g'
+puts "Placing the burden on the individual to break down doors in finding better education for a child is attractive to conservatives because it reaffirms their faith in individual ambition and autonomy. But to ask an individual to break down doors that we have chained and bolted in advance of his arrival is unfair. ― Jonathan Kozol"
 
 assignment_unlockable_feedback_read_condition_1 = Assignment.create! do |a|
   a.course = first_course
@@ -3161,7 +3161,7 @@ assignment_unlockable_feedback_read_condition_4 = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts ''
+puts "Generally in life, knowledge is acquired to be used. But school learning more often fits Freire's apt metaphor: knowledge is treated like money, to be put away in a bank for the future. ― Seymour Papert"
 
 assignment_feedback_read_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
@@ -3242,7 +3242,7 @@ assignment_feedback_read_is_an_unlock = Assignment.create! do |a|
     uc.condition_state = "Feedback Read"
   end
 end
-puts ''
+puts "To explain something to someone is first of all to show him he cannot understand it by himself. ― Jacques Rancière"
 
 assignment_unlockable_feedback_read_by_date_condition = Assignment.create! do |a|
   a.course = first_course
@@ -3299,7 +3299,7 @@ assignment_unlockable_feedback_read_by_date_condition = Assignment.create! do |a
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts ''
+puts "Grandma calls it the Socratic Method. She considers it the highest pedagogical technique. I call it cornering a person. Instead of just telling you what I want you to know, I ambush you with questions. You try to escape, but you can’t. You can run whichever way you like, but in the end you’ll fall right into my trap. ― Sophia Nikolaidou"
 
 assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
   a.course = first_course
@@ -3384,7 +3384,7 @@ assignment_feedback_read_by_date_is_an_unlock = Assignment.create! do |a|
     uc.condition_date = 1.week.ago
   end
 end
-puts ''
+puts "school people must not fall into the trap of thinking that early preparation for an unjust world requires early exposure to injustice ― Oakes Jeannie"
 
 assignment_types[:first_course_sorting] = AssignmentType.create! do |at|
   at.course = first_course
@@ -3405,7 +3405,7 @@ assignment_types[:fourth_course_sorting] = AssignmentType.create! do |at|
   at.course = fourth_course
   at.name = "Sorting Settings"
 end
-puts "16"
+puts "Every maker of video games knows something that the makers of curriculum don't seem to understand. You'll never see a video game being advertised as being easy. Kids who do not like school will tell you it's not because it's too hard. It's because it's--boring ― Seymour Papert"
 
 assignment_alphanum_1_condition = Assignment.create! do |a|
   a.course = first_course
@@ -3462,7 +3462,7 @@ assignment_alphanum_1_condition = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "17"
+puts "In a classical joke a child stays behind after school to ask a personal question. 'Teacher, what did I learn today?' The surprised teacher asks, 'Why do you ask that?' and the child replies, 'Daddy always asks me and I never know what to say.' ― Seymour Papert"
 
 assignment_alphanum_2_condition = Assignment.create! do |a|
   a.course = first_course
@@ -3519,7 +3519,8 @@ assignment_alphanum_2_condition = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "18"
+puts "Nothing bothers me more than when people criticize my criticism of school by telling me that schools are not just places to learn maths and spelling, they are places where children learn a vaguely defined thing called socialization. I know. I think schools generally do an effective and terribly damaging job of teaching children to be infantile, dependent, intellectually dishonest, passive and disrespectful to their own developmental capacities.” 
+― Seymour Papert"
 
 assignment_alphanum_3_condition = Assignment.create! do |a|
   a.course = first_course
@@ -3576,7 +3577,7 @@ assignment_alphanum_3_condition = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "19"
+puts "School is the advertising agency which makes you believe that you need the society as it is. ― Ivan Illich"
 
 assignment_alphanum_3_condition = Assignment.create! do |a|
   a.course = first_course
@@ -3633,7 +3634,7 @@ assignment_alphanum_3_condition = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "20"
+puts "Most learning is not the result of instruction. It is rather the result of unhampered participation in a meaningful setting. Most people learn best by being 'with it,' yet school makes them identify their personal, cognitive growth with elaborate planning and manipulation. ― Ivan Illich"
 
 assignment_alphanum_4_condition = Assignment.create! do |a|
   a.course = first_course
@@ -3690,7 +3691,7 @@ assignment_alphanum_4_condition = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 4.weeks.from_now
 end
-puts "21"
+puts "Formal learning is like riding a bus: the driver decides where the bus is going; the passengers are along for the ride. Informal learning is like riding a bike: the rider chooses the destination, the speed, and the route.― Jay Cross"
 
 challenges = []
 
@@ -3839,7 +3840,6 @@ assignment_weighting_two = Assignment.create! do |a|
   a.due_at = 4.weeks.from_now
 end
 
-
 assignment_types[:second_course_weighting_three] = AssignmentType.create! do |at|
   at.course = second_course
   at.name = "Weighted Assignment Type #3 Settings"
@@ -3865,4 +3865,4 @@ students.each do |s|
     s.cache_course_score(c.id)
   end
 end
-puts "Calculating scores..."
+puts "Please don't ask me what the score is, I'm not even sure what the game is. - Ashleigh Brilliant"
