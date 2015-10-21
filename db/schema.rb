@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150926200505) do
+ActiveRecord::Schema.define(version: 20151021153100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 20150926200505) do
   add_index "assignment_weights", ["student_id", "assignment_type_id"], name: "index_assignment_weights_on_student_id_and_assignment_type_id", using: :btree
 
   create_table "assignments", force: :cascade do |t|
-    t.string   "name",                              limit: 255
+    t.string   "name",                        limit: 255
     t.text     "description"
     t.integer  "point_total"
     t.datetime "due_at"
@@ -99,40 +99,40 @@ ActiveRecord::Schema.define(version: 20150926200505) do
     t.datetime "updated_at"
     t.integer  "course_id"
     t.integer  "assignment_type_id"
-    t.string   "grade_scope",                       limit: 255, default: "Individual", null: false
+    t.string   "grade_scope",                 limit: 255, default: "Individual", null: false
     t.boolean  "required"
     t.boolean  "accepts_submissions"
     t.boolean  "student_logged"
-    t.boolean  "release_necessary",                             default: false,        null: false
+    t.boolean  "release_necessary",                       default: false,        null: false
     t.datetime "open_at"
-    t.string   "icon",                              limit: 255
+    t.string   "icon",                        limit: 255
     t.boolean  "can_earn_multiple_times"
-    t.boolean  "visible",                                       default: true
+    t.boolean  "visible",                                 default: true
     t.integer  "category_id"
     t.boolean  "resubmissions_allowed"
     t.integer  "max_submissions"
     t.datetime "accepts_submissions_until"
     t.datetime "accepts_resubmissions_until"
     t.datetime "grading_due_at"
-    t.string   "role_necessary_for_release",        limit: 255
-    t.string   "media",                             limit: 255
-    t.string   "thumbnail",                         limit: 255
-    t.string   "media_credit",                      limit: 255
-    t.string   "media_caption",                     limit: 255
-    t.string   "points_predictor_display",          limit: 255
-    t.boolean  "notify_released",                               default: true
-    t.string   "mass_grade_type",                   limit: 255
-    t.boolean  "include_in_timeline",                           default: true
-    t.boolean  "include_in_predictor",                          default: true
+    t.string   "role_necessary_for_release",  limit: 255
+    t.string   "media",                       limit: 255
+    t.string   "thumbnail",                   limit: 255
+    t.string   "media_credit",                limit: 255
+    t.string   "media_caption",               limit: 255
+    t.string   "points_predictor_display",    limit: 255
+    t.boolean  "notify_released",                         default: true
+    t.string   "mass_grade_type",             limit: 255
+    t.boolean  "include_in_timeline",                     default: true
+    t.boolean  "include_in_predictor",                    default: true
     t.integer  "position"
-    t.boolean  "include_in_to_do",                              default: true
-    t.boolean  "use_rubric",                                    default: true
-    t.boolean  "accepts_attachments",                           default: true
-    t.boolean  "accepts_text",                                  default: true
-    t.boolean  "accepts_links",                                 default: true
-    t.boolean  "pass_fail",                                     default: false
+    t.boolean  "include_in_to_do",                        default: true
+    t.boolean  "use_rubric",                              default: true
+    t.boolean  "accepts_attachments",                     default: true
+    t.boolean  "accepts_text",                            default: true
+    t.boolean  "accepts_links",                           default: true
+    t.boolean  "pass_fail",                               default: false
     t.boolean  "hide_analytics"
-    t.boolean  "visible_when_locked",                           default: true
+    t.boolean  "visible_when_locked",                     default: true
   end
 
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree
