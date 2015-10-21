@@ -48,13 +48,6 @@ Dir[Rails.root.join("spec/toolkits/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 # ActiveRecord::Migration.maintain_test_schema!
 
-# fixture file no longer works, this is a workaround
-# here is an alternative solution that didn't work for me:
-# http://stackoverflow.com/questions/9011425/fixture-file-upload-has-file-does-not-exist-error
-def fixture_file(file, filetype='image/jpg')
-  Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'files', file), filetype)
-end
-
 def clean_models
   User.destroy_all
   Course.destroy_all
@@ -63,7 +56,8 @@ def clean_models
 end
 
 RSpec.configure do |config|
- config.before(:suite) do
+  config.include FileHelpers
+  config.before(:suite) do
     begin
       DatabaseCleaner.start
       #FactoryGirl.lint
