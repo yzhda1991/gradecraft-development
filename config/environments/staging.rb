@@ -23,7 +23,7 @@ GradeCraft::Application.configure do
   config.consider_all_requests_local = false
   config.eager_load = true
   config.i18n.fallbacks = true
-  config.log_level = :info
+  config.log_level = :debug
   config.serve_static_files = false
   config.session_store :active_record_store, :expire_after => 60.minutes
 end
