@@ -2,16 +2,26 @@ require "base_spec_helper"
 require "active_record"
 require "active_support/core_ext"
 require "acts_as_list"
+require "aws"
 require "canable"
 require "carrierwave"
 require "carrierwave/orm/activerecord"
 require "factory_girl"
 require "faker"
 require "protected_attributes"
+require "sanitize"
 require "sorcery"
 require "yaml"
 require "./lib/s3_file"
 require_relative "support/sorcery_stubbing"
+require_relative "support/file_helpers"
+
+# stub out Rails.env
+module Rails
+  def self.env
+    ENV["RAILS_ENV"]
+  end
+end
 
 # stub out the process_in_background for carrierwave_backgrounder
 module CarrierWave
@@ -37,7 +47,26 @@ Dir["./app/validators/*.rb"].each { |f| require f }
 Dir["./app/models/concerns/*.rb"].each { |f| require f }
 Dir["./app/models/*.rb"].reject{|m| m =~ /metric|tier/ }.each { |f| require f }
 
+CarrierWave.configure do |config|
+  config.storage = :file
+  config.enable_processing = false
+end
+
+CarrierWave::Uploader::Base.descendants.each do |klass|
+  next if klass.anonymous?
+  klass.class_eval do
+    def cache_dir
+      "./spec/support/uploads/tmp"
+    end
+
+    def store_dir
+      "./spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    end
+  end
+end
+
 RSpec.configure do |config|
+  config.include FileHelpers
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
