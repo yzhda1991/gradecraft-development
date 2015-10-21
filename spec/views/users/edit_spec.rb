@@ -5,7 +5,6 @@ include CourseTerms
 describe "users/edit" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @user = create(:user)
     @course.users << @user

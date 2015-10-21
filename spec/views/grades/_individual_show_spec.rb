@@ -6,7 +6,6 @@ describe "grades/_individual_show" do
   let(:presenter) { AssignmentPresenter.new({ assignment: @assignment, course: @course }) }
 
   before(:each) do
-    clean_models
     @course = create(:course)
     @assignment = create(:assignment)
     @course.assignments << @assignment

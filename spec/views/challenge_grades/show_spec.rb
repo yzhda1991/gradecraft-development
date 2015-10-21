@@ -5,7 +5,6 @@ include CourseTerms
 describe "challenge_grades/show" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @challenge = create(:challenge, course: @course)
     @team = create(:team, course: @course)

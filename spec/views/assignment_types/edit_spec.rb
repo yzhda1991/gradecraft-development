@@ -5,7 +5,6 @@ include CourseTerms
 describe "assignment_types/edit" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @assignment_type = create(:assignment_type, course: @course)
   end

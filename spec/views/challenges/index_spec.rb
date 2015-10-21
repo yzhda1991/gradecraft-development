@@ -5,7 +5,6 @@ include CourseTerms
 describe "challenges/index" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @challenge_1 = create(:challenge, course: @course)
     @challenge_2 = create(:challenge, course: @course)

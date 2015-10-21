@@ -48,20 +48,13 @@ Dir[Rails.root.join("spec/toolkits/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 # ActiveRecord::Migration.maintain_test_schema!
 
-def clean_models
-  User.destroy_all
-  Course.destroy_all
-  AssignmentType.destroy_all
-  Assignment.destroy_all
-end
-
 RSpec.configure do |config|
   config.include FileHelpers
   config.before(:suite) do
     begin
       DatabaseCleaner.start
-      #FactoryGirl.lint
       FactoryGirl.factories.clear
+      #FactoryGirl.lint
       FactoryGirl.find_definitions
     ensure
       DatabaseCleaner.clean

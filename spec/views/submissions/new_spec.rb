@@ -5,7 +5,6 @@ include CourseTerms
 describe "submissions/new" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
     @submission = Submission.new

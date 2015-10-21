@@ -5,7 +5,6 @@ include CourseTerms
 describe "analytics/index" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
   end
 

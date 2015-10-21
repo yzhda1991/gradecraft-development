@@ -5,7 +5,6 @@ include CourseTerms
 describe "badges/index" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @badge_1 = create(:badge, course: @course, point_total: 1000)
     @badge_2 = create(:badge, course: @course, point_total: 0)

@@ -5,7 +5,6 @@ include CourseTerms
 describe "courses/timeline_settings" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
 
     @assignment_1 = create(:assignment, course: @course)

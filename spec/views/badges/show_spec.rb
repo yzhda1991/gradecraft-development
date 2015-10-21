@@ -5,7 +5,6 @@ include CourseTerms
 describe "badges/show" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @badge = create(:badge, course: @course)
   end

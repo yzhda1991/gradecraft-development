@@ -5,7 +5,6 @@ include CourseTerms
 describe "teams/new" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @team = Team.new
   end

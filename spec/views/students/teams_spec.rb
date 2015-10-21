@@ -5,7 +5,6 @@ include CourseTerms
 describe "students/teams" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @student = create(:user)
     @student.courses << @course

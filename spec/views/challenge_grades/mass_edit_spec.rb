@@ -5,7 +5,6 @@ include CourseTerms
 describe "challenge_grades/mass_edit" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @challenge = create(:challenge, course: @course)
     @challenge_grade_1 = create(:challenge_grade, challenge: @challenge)

@@ -5,7 +5,6 @@ include CourseTerms
 describe "users/import" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
   end
 

@@ -5,7 +5,6 @@ include CourseTerms
 describe "students/index" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @student_1 = create(:user)
     @student_2 = create(:user)

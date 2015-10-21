@@ -5,7 +5,6 @@ include CourseTerms
 describe "groups/show" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @group = create(:group, course: @course)
   end

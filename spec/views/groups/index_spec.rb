@@ -5,7 +5,6 @@ include CourseTerms
 describe "groups/index" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @group_1 = create(:group, course: @course)
     @group_2 = create(:group, course: @course)

@@ -5,7 +5,6 @@ include CourseTerms
 describe "events/show" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @event = create(:event, course: @course)
   end

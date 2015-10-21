@@ -5,7 +5,6 @@ include CourseTerms
 describe "staff/show" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @staff = create(:user)
     @course.users << @staff

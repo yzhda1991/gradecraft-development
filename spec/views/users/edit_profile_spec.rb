@@ -5,7 +5,6 @@ include CourseTerms
 describe "users/edit_profile" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @user = create(:user)
   end

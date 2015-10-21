@@ -5,7 +5,6 @@ include CourseTerms
 describe "groups/edit" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
     @group = create(:group, course: @course)

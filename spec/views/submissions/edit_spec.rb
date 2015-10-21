@@ -5,7 +5,6 @@ include CourseTerms
 describe "submissions/edit" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
     @student = create(:user)

@@ -7,10 +7,10 @@ describe "assignments/individual/_table_body" do
   let(:presenter) { AssignmentPresenter.new({ assignment: @assignment, course: @course }) }
 
   before(:each) do
-    clean_models
     @course = create(:course)
-    @assignment = create(:assignment, assignment_type: create(:assignment_type))
-    @course.assignments << @assignment
+    @assignment_type = create(:assignment_type)
+    @assignment = create(:assignment, assignment_type: @assignment_type)
+    course.assignments << @assignment
     student = create(:user)
     student.courses << @course
     @grade = create(:grade, course: @course, assignment: @assignment, student: student)

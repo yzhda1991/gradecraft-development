@@ -5,7 +5,6 @@ include CourseTerms
 describe "events/new" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @event = Event.new
   end

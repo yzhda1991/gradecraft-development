@@ -5,7 +5,6 @@ include CourseTerms
 describe "grades/_standard_edit" do
 
   before(:each) do
-    clean_models
     @course = create(:course)
     @assignment = create(:assignment)
     @course.assignments << @assignment
