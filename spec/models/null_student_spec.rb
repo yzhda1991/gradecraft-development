@@ -1,6 +1,4 @@
-# spec/models/null_student_spec.rb
-
-require 'spec_helper'
+require "active_record_spec_helper"
 
 describe NullStudent do
 
