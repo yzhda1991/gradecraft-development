@@ -40,6 +40,7 @@ module ResqueJob
           logger.info "SUCCESS: #{outcome.message}" if outcome.success?
           logger.info "FAILURE: #{outcome.message}" if outcome.failure?
           logger.info "RESULT: #{outcome.result_excerpt}"
+          # logger.info "ADDITIONAL_MESSAGES: #{outcome.print_additional_messages}" unless outcome.additional_messages.empty?
         end
       rescue Exception => e
         logger.info "Error in #{@performer_class.to_s}: #{e.message}"
