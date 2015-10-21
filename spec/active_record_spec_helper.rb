@@ -19,9 +19,11 @@ require_relative "support/sorcery_stubbing"
 require_relative "support/file_helpers"
 
 # stub out Rails.env
-module Rails
-  def self.env
-    ENV["RAILS_ENV"]
+unless defined?(Rails)
+  module Rails
+    def self.env
+      ENV["RAILS_ENV"]
+    end
   end
 end
 
