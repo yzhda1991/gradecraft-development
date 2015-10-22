@@ -43,20 +43,6 @@ class ResqueJob::Performer
     end
   end
 
-  # todo add spec
-  def verbose_outcome_messages(job_logger)
-    outcomes.each do |outcome|
-      job_logger.info "SUCCESS: #{outcome.message}" if outcome.success?
-      puts "SUCCESS: #{outcome.message}" if outcome.success?
-      if outcome.failure?
-        job_logger.info "FAILURE: #{outcome.message}" 
-        puts "FAILURE: #{outcome.message}" 
-      end
-      job_logger.info("RESULT: " + "#{outcome.result}"[0..100].split("\n").first || "")
-      puts("RESULT: " + "#{outcome.result}"[0..100].split("\n").first || "")
-    end
-  end
-
   # refactor this to literally be a list of 
   def failures
     @failures ||= @outcomes.select {|outcome| outcome.failure? }
@@ -82,8 +68,9 @@ class ResqueJob::Performer
     successes.size > 0
   end
 
-  def require_success(messages={})
-    outcome = ResqueJob::Outcome.new(yield || false)
+  def require_success(messages={}, options={max_result_size: false})
+    result = yield || false
+    outcome = ResqueJob::Outcome.new(result, options)
     add_outcome_messages(outcome, messages) unless messages == {}
     @outcomes << outcome
     outcome

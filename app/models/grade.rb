@@ -181,16 +181,18 @@ class Grade < ActiveRecord::Base
 
   def cached_score_failure_information
     failure_attrs = {}
-    if @team_update_successful
-      failure_attrs.merge! team: @team.attributes 
-    end
+    if course.has_teams? && student.team_for_course(course).present?
+      unless @team_update_successful
+        failure_attrs.merge! team: @team.attributes 
+      end
 
-    if @student_update_successful
-      failure_attrs.merge! student: @student.attributes 
-    end
+      unless @student_update_successful
+        failure_attrs.merge! student: @student.attributes 
+      end
 
-    unless @team_update_successful and @student_update_successful
-      failure_attrs.merge! grade: self.attributes 
+      unless @team_update_successful and @student_update_successful
+        failure_attrs.merge! grade: self.attributes 
+      end
     end
 
     failure_attrs

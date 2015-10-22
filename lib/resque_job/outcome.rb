@@ -1,7 +1,8 @@
 class ResqueJob::Outcome
-  def initialize(result)
+  def initialize(result, options={})
     @result = result
     @message = nil # todo: spec
+    @options = options
     # @additional_messages = []
   end
 
@@ -20,7 +21,11 @@ class ResqueJob::Outcome
 
   def result_excerpt
     # "#{result}"[0..2000].split("\n").first rescue "#{result}"
-    "#{result}"[0..2500] rescue "#{result}"
+    if @options[:max_result_size]
+      "#{result}"[0..@options[:max_result_size].to_i] rescue "#{result}"
+    else
+      "#{result}"
+    end
   end
 
   # def print_additional_messages

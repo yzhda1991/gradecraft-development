@@ -20,7 +20,7 @@ class GradeUpdatePerformer < ResqueJob::Performer
   def require_notify_released_success
     # @mz TODO: chech the #is_student_visible? call with cait
     if @grade.is_student_visible?
-      require_success(notify_released_messages) { notify_grade_released } 
+      require_success(notify_released_messages, max_result_size: 200) { notify_grade_released } 
     end
   end
 

@@ -7,9 +7,11 @@ class GradebookExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     if @course.present? and @user.present?
-      require_success(messages) do
+      require_success(fetch_csv_messages, max_result_size: 250) do
         fetch_csv_data
-        puts "Fetched CSV data: #'#{sanitized_csv_excerpt}...'" # TODO: add spec
+      end
+
+      require_success(notification_messages, max_result_size: 200) do
         notify_gradebook_export # the result of this block determines the outcome
       end
     end
@@ -39,7 +41,14 @@ class GradebookExportPerformer < ResqueJob::Performer
     NotificationMailer.gradebook_export(@course, @user, @csv_data).deliver_now
   end
 
-  def messages
+  def fetch_csv_messages
+    {
+      success: "Successfully fetched CSV gradebook data for course ##{@course.id}.",
+      failure: "Failed to fetch CSV gradebook data for course ##{@course.id}."
+    }
+  end
+
+  def notification_messages
     {
       success: "Gradebook export notification mailer was successfully delivered.",
       failure: "Gradebook export notification mailer was not delivered."
