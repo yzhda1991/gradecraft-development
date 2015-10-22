@@ -1,33 +1,30 @@
 require 'spec_helper'
 
 describe AssignmentTypeWeightsController do
+  before(:all) do
+    @course = create :course,
+                   total_assignment_weight: 6,
+                   assignment_weight_close_at: Time.now,
+                   max_assignment_weight: 2,
+                   max_assignment_types_weighted: 4,
+                   default_assignment_weight: 1
+    @student = create(:user)
+    @student.courses << @course
+    @assignment_type_weightable = create :assignment_type, course: @course,
+      student_weightable: true
+  end
+
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as professor" do
-
     before(:all) do
-      @time = Time.now
-      @course = create(:course,
-                       total_assignment_weight: 6,
-                       assignment_weight_close_at: @time,
-                       max_assignment_weight: 2,
-                       max_assignment_types_weighted: 4,
-                       default_assignment_weight: 1
-        )
-      @assignment_type_weightable = create(:assignment_type, course: @course, student_weightable: true)
-      @assignment_type_not_weightable = create(:assignment_type, course: @course, student_weightable: false)
-
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @student = create(:user)
-      @student.courses << @course
+      CourseMembership.create user: @professor, course: @course, role: "professor"
     end
-
-    before do
-      login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
-    end
+    before(:each) { login_user(@professor) }
 
     describe "GET mass_edit" do
       it "assigns params" do
@@ -38,7 +35,6 @@ describe AssignmentTypeWeightsController do
     end
 
     describe "GET student predictor data" do
-
       it "returns weightable assignment type ids and all course info regarding weighting assignments" do
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignment_types_weightable)).to eq([@assignment_type_weightable.id])
@@ -66,29 +62,13 @@ describe AssignmentTypeWeightsController do
   end
 
   context "as student" do
-
     before(:all) do
-      @time = Time.now
-      @course = create(:course,
-                       total_assignment_weight: 6,
-                       assignment_weight_close_at: @time,
-                       max_assignment_weight: 2,
-                       max_assignment_types_weighted: 4,
-                       default_assignment_weight: 1
-        )
-      @assignment_type_weightable = create(:assignment_type, course: @course, student_weightable: true)
       @assignment_type_not_weightable = create(:assignment_type, course: @course, student_weightable: false)
-      @student = create(:user)
-      @student.courses << @course
     end
-
-    before do
-      allow(Resque).to receive(:enqueue).and_return(true)
+    before(:each) do
       login_user(@student)
-      session[:course_id] = @course.id
       allow(controller).to receive(:current_student).and_return(@student)
     end
-
 
     describe "GET mass_edit" do
       it "assigns params" do
@@ -99,12 +79,13 @@ describe AssignmentTypeWeightsController do
     end
 
     describe "POST update" do
-
       before do
         # Won't work unless there is at least one assignment!
         # TODO: refactor weights on
-        create(:assignment, assignment_type: @assignment_type_weightable, course: @course )
-        create(:assignment, assignment_type: @assignment_type_not_weightable, course: @course )
+        create :assignment, assignment_type: @assignment_type_weightable,
+          course: @course
+        create :assignment, assignment_type: @assignment_type_not_weightable,
+          course: @course
       end
 
       it "updates assignment weights" do
@@ -121,7 +102,6 @@ describe AssignmentTypeWeightsController do
     end
 
     describe "GET student predictor data" do
-
       it "returns weightable assignment types info as json for the current course with a call to update" do
         get :predictor_data, format: :json
         expect(assigns(:student)).to eq(@student)
