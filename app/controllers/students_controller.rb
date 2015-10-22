@@ -24,6 +24,7 @@ class StudentsController < ApplicationController
     @students = FlaggedUser.flagged current_course, current_user
   end
 
+  # @mz todo: 
   #Course wide leaderboard - excludes auditors from view
   def leaderboard
     # before_filter :ensure_staff?
@@ -37,7 +38,12 @@ class StudentsController < ApplicationController
       @students = graded_students_in_current_course_for_active_team.order(leaderboard_sort_order)
     else
       # fetch user ids for all students in the course, regardless of team
-      @students = graded_students_in_current_course.order(leaderboard_sort_order)
+      # @students = graded_students_in_current_course.order(leaderboard_sort_order)
+      @students = current_course
+        .students_being_graded
+        .includes(:team_memberships)
+        .includes(:course_memberships)
+        .order(leaderboard_sort_order)
     end
 
     @student_ids = @students.collect {|s| s[:id] }
