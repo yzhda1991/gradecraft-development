@@ -39,11 +39,17 @@ class StudentsController < ApplicationController
     else
       # fetch user ids for all students in the course, regardless of team
       # @students = graded_students_in_current_course.order(leaderboard_sort_order)
-      @students = current_course
-        .students_being_graded
+      @students = User.graded_students_in_course(current_course.id)
         .includes(:team_memberships)
-        .includes(:course_memberships)
         .order(leaderboard_sort_order)
+
+      # .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score")
+      # .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
+      # .where("course_memberships.course_id = ?", course_id)
+      # .where("course_memberships.auditing = ?", false)
+      # .where("course_memberships.role = ?", "student")
+      # .includes(:course_memberships)
+      # .group("users.id, course_memberships.score")
     end
 
     @student_ids = @students.collect {|s| s[:id] }
