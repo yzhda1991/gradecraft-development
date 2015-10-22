@@ -196,7 +196,7 @@ class StudentsController < ApplicationController
         end
       end
 
-      if student_grade_scheme.nil?
+      if student_grade_scheme.nil? and course_grade_scheme_elements.present?
         if student_score < course_grade_scheme_elements.first.low_range
           student_grade_scheme = GradeSchemeElement.new(level: "Not yet on board")
         elsif student_score > course_grade_scheme_elements.last.high_range
