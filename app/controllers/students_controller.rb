@@ -38,18 +38,9 @@ class StudentsController < ApplicationController
       @students = graded_students_in_current_course_for_active_team.order(leaderboard_sort_order)
     else
       # fetch user ids for all students in the course, regardless of team
-      # @students = graded_students_in_current_course.order(leaderboard_sort_order)
-      @students = User.graded_students_in_course(current_course.id)
-        .includes(:team_memberships)
-        .order(leaderboard_sort_order)
+      # cached_score is coming from custom graded_students_in_course SQL
 
-      # .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score")
-      # .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
-      # .where("course_memberships.course_id = ?", course_id)
-      # .where("course_memberships.auditing = ?", false)
-      # .where("course_memberships.role = ?", "student")
-      # .includes(:course_memberships)
-      # .group("users.id, course_memberships.score")
+      @students = unscoped_students_being_graded_for_course
     end
 
     @student_ids = @students.collect {|s| s[:id] }
@@ -57,6 +48,24 @@ class StudentsController < ApplicationController
     @earned_badges_by_student_id = earned_badges_by_student_id
     @student_grade_schemes_by_id = course_grade_scheme_by_student_id
   end
+
+  private
+
+  def unscoped_students_being_graded_for_course
+    User
+      .unscoped # override the order("last_name ASC") default scope on the User model
+      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score")
+      .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
+      .where("course_memberships.course_id = ?", current_course.id)
+      .where("course_memberships.auditing = ?", false)
+      .where("course_memberships.role = ?", "student")
+      .includes(:course_memberships)
+      .group("users.id, course_memberships.score")
+      .order(leaderboard_sort_order)
+      .includes(:team_memberships)
+  end
+
+  public
 
   #Displaying the list of assignments and team challenges for the semester
   def syllabus
