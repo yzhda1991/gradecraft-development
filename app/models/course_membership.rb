@@ -2,8 +2,7 @@ class CourseMembership < ActiveRecord::Base
   belongs_to :course, touch: true
   belongs_to :user, touch: true
 
-  attr_accessible :auditing, :character_profile, :course_id, :instructor_of_record,
-    :user_id, :role
+  attr_accessible :auditing, :character_profile, :course, :course_id, :instructor_of_record, :user, :user_id, :role
 
   Role.all.each do |role|
     scope role.pluralize, ->(course) { where role: role }
