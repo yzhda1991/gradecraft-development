@@ -157,10 +157,17 @@ class Grade < ActiveRecord::Base
   # @mz todo: add specs
   def cache_student_and_team_scores
     { cached_student_score: cache_student_score,
-      cached_team_score: cache_team_score }.merge(cached_score_failure_information)
+      cached_team_score: cache_team_score,
+      student_id: self.student.try(:id),
+      team_id: cached_student_team.try(:id)
+    }.merge(cached_score_failure_information)
   end
 
   private
+
+  def cached_student_team
+    @team ||= student.team_for_course(course)
+  end
 
   # @mz todo: add specs
   def cache_student_score
@@ -171,7 +178,7 @@ class Grade < ActiveRecord::Base
   # @mz todo: add specs, improve the syntax here
   def cache_team_score
     if course.has_teams? && student.team_for_course(course).present?
-      @team = student.team_for_course(course)
+      @team = cached_student_team
       @team_update_successful = @team.update_revised_team_score
       @team_update_successful ? @team.score : false
     else
