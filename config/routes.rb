@@ -324,7 +324,7 @@ GradeCraft::Application.routes.draw do
 
   #SAML
   get 'saml/init'
-  get 'saml/consume'
+  post 'saml/consume'
   get 'saml/metadata'
   get 'saml/logout'
 
