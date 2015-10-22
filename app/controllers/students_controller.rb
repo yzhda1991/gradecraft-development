@@ -38,7 +38,7 @@ class StudentsController < ApplicationController
       @students = graded_students_in_current_course_for_active_team.order(leaderboard_sort_order)
     else
       # fetch user ids for all students in the course, regardless of team
-      # cached_score is coming from custom graded_students_in_course SQL
+      # cached_score_sql_alias is coming from custom graded_students_in_course SQL
 
       @students = unscoped_students_being_graded_for_course
     end
@@ -54,7 +54,7 @@ class StudentsController < ApplicationController
   def unscoped_students_being_graded_for_course
     User
       .unscoped # override the order("last_name ASC") default scope on the User model
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score")
+      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
       .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
       .where("course_memberships.course_id = ?", current_course.id)
       .where("course_memberships.auditing = ?", false)
@@ -185,7 +185,7 @@ class StudentsController < ApplicationController
 
   def course_grade_scheme_by_student_id
     @students.inject({}) do |memo, student|
-      student_score = student.cached_score
+      student_score = student.cached_score_sql_alias
       student_grade_scheme = nil
       course_grade_scheme_elements.each do |grade_scheme|
         if student_score >= grade_scheme.low_range and student_score <= grade_scheme.high_range

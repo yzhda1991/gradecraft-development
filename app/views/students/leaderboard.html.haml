@@ -42,7 +42,7 @@
             %td{"data-title" => "Last Name"}= link_to student.last_name, student_path(student)
             - if current_course.in_team_leaderboard? || current_course.character_names?
               %td{"data-title" => "Pseudonym"}= student.display_name
-            %td{"data-title" => "Score"}= points student.cached_score
+            %td{"data-title" => "Score"}= points student.cached_score_sql_alias
             - if current_course.has_teams?
               - student_team = @teams_by_student_id[student.id]
               %td#team_for_course{"data-title" => "Team"}
