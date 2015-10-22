@@ -17,7 +17,7 @@ class SamlController < ApplicationController
       unless @user.blank?
         auto_login @user
         User.increment_counter(:visit_count, @user.id)
-        session[:course_id] = @user.default_course_id
+        session[:course_id] = @user.default_course.id
         respond_with @user, location: dashboard_path
       else
         render text: "invite them to gradecraft"
