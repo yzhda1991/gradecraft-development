@@ -1,6 +1,6 @@
 require "spec_helper"
 
-feature "switch course", focus: true do
+feature "switch course" do
   let(:password) { "p@ssword" }
 
   context "as a student" do
