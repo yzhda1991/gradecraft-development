@@ -1853,6 +1853,249 @@ assignment_types[:fourth_course_predictor] = AssignmentType.create! do |at|
 end
 puts "Beware of overconfidence; especially in matters of structure. – Cass Gilbert"
 
+predictor_with_graded_grade_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment is Past with Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = 12000
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+      g.status = "Graded"
+    end
+  end
+end
+
+predictor_with_graded_grade_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment is Past with Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = 12000
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+      g.status = "Graded"
+    end
+  end
+end
+
+predictor_with_graded_grade_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
+  a.name = "Assignment is Past with Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = 12000
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+      g.status = "Graded"
+    end
+  end
+end
+
+predictor_with_graded_grade_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment is Past with Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = 12000
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+      g.status = "Graded"
+    end
+  end
+end
+predictor_past_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment is Past with no Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+end
+
+predictor_past_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment is Past with no Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+end
+
+predictor_past_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
+  a.name = "Assignment is Past with no Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+end
+
+predictor_past_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment is Past with no Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+end
+
+predictor_past_with_unreleased_grade_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment is Past with Unreleased Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = 12000
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+      g.status = "Graded"
+    end
+  end
+end
+
+predictor_past_with_unreleased_grade_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment is Past with Unreleased Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = 12000
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+      g.status = "Graded"
+    end
+  end
+end
+
+predictor_past_with_unreleased_grade_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
+  a.name = "Assignment is Past with Unreleased Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = 12000
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+      g.status = "Graded"
+    end
+  end
+end
+
+predictor_past_with_unreleased_grade_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment is Past with Unreleased Grade"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = true
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.ago
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = 12000
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+      g.status = "Graded"
+    end
+  end
+end
+
 predictor_fixed_assignment = Assignment.create! do |a|
   a.course = first_course
   a.assignment_type = assignment_types[:first_course_predictor]
@@ -1864,6 +2107,42 @@ predictor_fixed_assignment = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 1.week.from_now
+end
+
+predictor_fixed_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment Shows Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+end
+
+predictor_fixed_assignment_predicted = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment Shows Predicted Positive Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+    end
+  end
 end
 
 predictor_fixed_assignment = Assignment.create! do |a|
@@ -1879,6 +2158,29 @@ predictor_fixed_assignment = Assignment.create! do |a|
   a.due_at = 1.week.from_now
 end
 
+predictor_fixed_assignment_predicted = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment Shows Predicted Positive Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+    end
+  end
+end
+
 predictor_fixed_assignment = Assignment.create! do |a|
   a.course = third_course
   a.assignment_type = assignment_types[:third_course_predictor]
@@ -1890,6 +2192,30 @@ predictor_fixed_assignment = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 1.week.from_now
+end
+
+
+predictor_fixed_assignment_predicted = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
+  a.name = "Assignment Shows Predicted Positive Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+    end
+  end
 end
 
 predictor_fixed_assignment = Assignment.create! do |a|
@@ -1904,6 +2230,30 @@ predictor_fixed_assignment = Assignment.create! do |a|
   a.student_logged = false
   a.due_at = 1.week.from_now
 end
+
+predictor_fixed_assignment_predicted = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment Shows Predicted Positive Switch in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Fixed"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 15000
+      g.point_total = 15000
+    end
+  end
+end
+
 puts "The whole educational and professional training system is a very elaborate filter, which just weeds out people who are too independent, and who think for themselves, and who don't know how to be submissive, and so on -- because they're dysfunctional to the institutions. ― Noam Chomsky"
 
 predictor_continuous_slider_assignment = Assignment.create! do |a|
@@ -1919,6 +2269,29 @@ predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.due_at = 1.week.from_now
 end
 
+predictor_continuous_slider_assignment_predicted = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment Shows Slider (no levels) in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 12000
+      g.point_total = 15000
+    end
+  end
+end
+
 predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.course = second_course
   a.assignment_type = assignment_types[:second_course_predictor]
@@ -1930,6 +2303,29 @@ predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 1.week.from_now
+end
+
+predictor_continuous_slider_assignment_predicted = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment Shows Slider (no levels) in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 12000
+      g.point_total = 15000
+    end
+  end
 end
 
 predictor_continuous_slider_assignment = Assignment.create! do |a|
@@ -1945,6 +2341,29 @@ predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.due_at = 1.week.from_now
 end
 
+predictor_continuous_slider_assignment_predicted = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
+  a.name = "Assignment Shows Slider (no levels) in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 12000
+      g.point_total = 15000
+    end
+  end
+end
+
 predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.course = fourth_course
   a.assignment_type = assignment_types[:fourth_course_predictor]
@@ -1956,6 +2375,29 @@ predictor_continuous_slider_assignment = Assignment.create! do |a|
   a.grade_scope = "Individual"
   a.student_logged = false
   a.due_at = 1.week.from_now
+end
+
+predictor_continuous_slider_assignment_predicted = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment Shows Slider (no levels) in Predictor"
+  a.point_total = 15000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 12000
+      g.point_total = 15000
+    end
+  end
 end
 puts "We are students of words: we are shut up in schools, and colleges, and recitation -rooms, for ten or fifteen years, and come out at last with a bag of wind, a memory of words, and do not know a thing. ― Ralph Waldo Emerson"
 
@@ -1980,8 +2422,88 @@ predictor_slider_with_levels_assignment = Assignment.create! do |a|
 end
 
 predictor_slider_with_levels_assignment = Assignment.create! do |a|
+  a.course = first_course
+  a.assignment_type = assignment_types[:first_course_predictor]
+  a.name = "Assignment Shows Slider with Levels in Predictor"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save! 
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 25000/(6-n)
+    end
+  end
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 12500
+      g.point_total = 25000
+    end
+  end
+end
+
+predictor_slider_with_levels_assignment = Assignment.create! do |a|
   a.course = second_course
   a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment Shows Slider with Levels in Predictor"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save! 
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 25000/(6-n)
+    end
+  end
+end
+
+predictor_slider_with_levels_assignment = Assignment.create! do |a|
+  a.course = second_course
+  a.assignment_type = assignment_types[:second_course_predictor]
+  a.name = "Assignment Shows Slider with Levels in Predictor"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save! 
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 25000/(6-n)
+    end
+  end
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 12500
+      g.point_total = 25000
+    end
+  end
+end
+
+predictor_slider_with_levels_assignment = Assignment.create! do |a|
+  a.course = third_course
+  a.assignment_type = assignment_types[:third_course_predictor]
   a.name = "Assignment Shows Slider with Levels in Predictor"
   a.point_total = 25000
   a.accepts_submissions = false
@@ -2017,6 +2539,16 @@ predictor_slider_with_levels_assignment = Assignment.create! do |a|
       asl.value = 25000/(6-n)
     end
   end
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 12500
+      g.point_total = 25000
+    end
+  end
 end
 
 predictor_slider_with_levels_assignment = Assignment.create! do |a|
@@ -2035,6 +2567,36 @@ predictor_slider_with_levels_assignment = Assignment.create! do |a|
     a.assignment_score_levels.create! do |asl|
       asl.name = "Assignment Score Level ##{n}"
       asl.value = 25000/(6-n)
+    end
+  end
+end
+
+predictor_slider_with_levels_assignment = Assignment.create! do |a|
+  a.course = fourth_course
+  a.assignment_type = assignment_types[:fourth_course_predictor]
+  a.name = "Assignment Shows Slider with Levels in Predictor"
+  a.point_total = 25000
+  a.accepts_submissions = false
+  a.points_predictor_display = "Slider"
+  a.release_necessary = false
+  a.grade_scope = "Individual"
+  a.student_logged = false
+  a.due_at = 1.week.from_now
+  a.save! 
+  1.upto(5).each do |n|
+    a.assignment_score_levels.create! do |asl|
+      asl.name = "Assignment Score Level ##{n}"
+      asl.value = 25000/(6-n)
+    end
+  end
+  a.save!
+  students.each do |student|
+    student.grades.create! do |g|
+      g.assignment = a
+      g.raw_score = nil
+      g.instructor_modified = false
+      g.predicted_score = 12500
+      g.point_total = 25000
     end
   end
 end
