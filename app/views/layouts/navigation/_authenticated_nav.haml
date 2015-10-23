@@ -2,13 +2,13 @@
   %a.section-title{:href => "#", :title => "My Courses"} 
     My Courses
     %i.fa.fa-caret-down.hidden-sm
-  %ul.subnav
+  %ul.subnav#course-list
     = render "layouts/navigation/course_list"
 %li.dropdown
   %a.section-title{:href => "#", :title => "Quick information about #{current_course.name}"} 
     Class Info
     %i.fa.fa-caret-down.hidden-sm
-  %ul.subnav.class-info
+  %ul.subnav#course-info
     = render "layouts/navigation/class_info"
 %li.dropdown       
   %a.section-title{:href => "#", :title => "My account management"} 
