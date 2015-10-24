@@ -18,6 +18,11 @@ class ChallengeGrade < ActiveRecord::Base
 
   #TODO: Need to bring this in and resolve dup challenge grades in production
   #validates :challenge_id, :uniqueness => {:scope => :team_id}
+  
+  # @mz todo: add specs
+  def recalculate_team_scores
+    team.recalculate_student_scores
+  end
 
   def score
     super.presence || 0

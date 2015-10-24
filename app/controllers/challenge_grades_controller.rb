@@ -58,6 +58,7 @@ class ChallengeGradesController < ApplicationController
       if @challenge_grade.save
         @course = current_course
         if current_course.add_team_score_to_student?
+          # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
           @team = @challenge_grade.team
           @score_recalculator_jobs = @team.students.collect do |student|
             ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
@@ -81,9 +82,8 @@ class ChallengeGradesController < ApplicationController
 
         scored_changed = @challenge_grade.previous_changes[:score].present?
         if current_course.add_team_score_to_student? && scored_changed
+          # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
           @team = @challenge_grade.team
-
-          # @mz TODO: add specs for this score_recalculator_block
           # @mz TODO: figure out how @team.students is supposed to be sorted in the controller
           @score_recalculator_jobs = @team.students.collect do |student|
             ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
@@ -120,7 +120,9 @@ class ChallengeGradesController < ApplicationController
   def destroy
     @challenge_grade = current_course.challenge_grades.find(params[:id])
     @challenge = current_course.challenges.find(@challenge_grade.challenge_id)
+
     @challenge_grade.destroy
+    @challenge_grade.recalculate_team_scores
 
     respond_to do |format|
       format.html { redirect_to challenge_path(@challenge) }

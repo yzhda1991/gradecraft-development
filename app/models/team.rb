@@ -43,6 +43,18 @@ class Team < ActiveRecord::Base
     students.sort_by{ |student| - student.cached_score_for_course(course) }
   end
 
+  # @mz todo: add specs
+  def recalculate_student_scores
+    student_score_recalculator_jobs.each(&:enqueue)
+  end
+
+  # @mz todo: add specs
+  def student_score_recalculator_jobs
+    @student_score_recalculator_jobs ||= students.collect do |student|
+      ScoreRecalculatorJob.new(user_id: student.id, course_id: course_id)
+    end
+  end
+
   #Tallying how many students are on the team
   def member_count
     students.count
