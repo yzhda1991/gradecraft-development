@@ -3,7 +3,7 @@ class Badge < ActiveRecord::Base
   attr_accessible :name, :description, :icon, :icon_cache, :visible, :can_earn_multiple_times, :value,
   :multiplier, :point_total, :earned_badges, :earned_badges_attributes, :score, :badge_file_ids,
   :badge_files_attributes, :badge_file, :position, :unlock_conditions, :unlock_conditions_attributes,
-  :visible_when_locked, :course_id
+  :visible_when_locked, :course_id, :course
 
   # grade points available to the predictor from the assignment controller
   attr_accessor :prediction
