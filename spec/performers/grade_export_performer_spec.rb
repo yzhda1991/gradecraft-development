@@ -6,11 +6,9 @@ RSpec.describe GradeExportPerformer, type: :background_job do
   let(:user) { create(:user) }
   let(:attrs) {{ user_id: user[:id], course_id: course[:id] }}
   let(:performer) { GradeExportPerformer.new(attrs) }
-  subject { GradeExportPerformer.new(attrs) }
+  subject { performer }
 
   describe "public methods" do
-    describe "initialize" do
-    end
 
     describe "setup" do
       it "should fetch the user and set it to user" do
@@ -33,14 +31,15 @@ RSpec.describe GradeExportPerformer, type: :background_job do
         end
 
         it "should require success" do
-          expect(subject).to receive(:require_success)
+          expect(subject).to receive(:require_success).exactly(2).times
         end
 
         it "should add an outcome to subject.outcomes" do
-          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(1)
+          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(2)
         end
 
         it "should fetch the csv data" do
+          allow(subject).to receive(:fetch_csv_data).and_return "some,csv,data"
           expect(subject).to receive(:fetch_csv_data)
         end
 
@@ -51,23 +50,25 @@ RSpec.describe GradeExportPerformer, type: :background_job do
         it "should return the result of notify_grade_export" do
           @export_result = double(:export_result)
           allow(subject).to receive_messages(notify_grade_export: @export_result)
+          allow(subject).to receive(:fetch_csv_data).and_return "some,csv,data"
           expect(subject).to receive(:require_success).and_return(@export_result)
+          expect(subject).to receive(:require_success).and_return("some,csv,data")
         end
 
         describe "require_success" do
+          context "block outcome succeeds" do
+            it "should add the :success outcome message to @outcome_messages" do
+              allow(subject).to receive_messages(notify_grade_export: true)
+              subject.do_the_work
+              expect(subject.outcome_messages.last).to match("was successfully delivered")
+            end
+          end
+
           context "block outcome fails" do
             it "should add the :failure outcome message to @outcome_messages" do
               allow(subject).to receive_messages(notify_grade_export: false)
               subject.do_the_work
-              expect(subject.outcome_messages.first).to match("was not delivered")
-            end
-          end
-
-          context "block outcome succeeds" do
-            it "should add the :succeeds outcome message to @outcome_messages" do
-              allow(subject).to receive_messages(notify_grade_export: false)
-              subject.do_the_work
-              expect(subject.outcome_messages.first).to match("was not delivered")
+              expect(subject.outcome_messages.last).to match("was not delivered")
             end
           end
         end
@@ -159,10 +160,21 @@ RSpec.describe GradeExportPerformer, type: :background_job do
       end
     end
 
-    describe "messages" do
-      subject { performer.instance_eval{messages} }
+    describe "fetch_csv_messages" do
+      subject { performer.instance_eval{fetch_csv_messages} }
       it "should have a success message" do
-        expect(subject[:success]).to match('successfully delivered')
+        expect(subject[:success]).to match('Successfully fetched')
+      end
+
+      it "should have a failure message" do
+        expect(subject[:failure]).to match('Failed to fetch CSV')
+      end
+    end
+
+    describe "notification_messages" do
+      subject { performer.instance_eval{notification_messages} }
+      it "should have a success message" do
+        expect(subject[:success]).to match('was successfully delivered')
       end
 
       it "should have a failure message" do

@@ -6,11 +6,9 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
   let(:user) { create(:user) }
   let(:attrs) {{ user_id: user[:id], course_id: course[:id] }}
   let(:performer) { GradebookExportPerformer.new(attrs) }
-  subject { GradebookExportPerformer.new(attrs) }
+  subject { performer }
 
   describe "public methods" do
-    describe "initialize" do
-    end
 
     describe "setup" do
       it "should fetch the user and set it to user" do
@@ -60,7 +58,7 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
         describe "require_success" do
           describe "notify_gradebook_export requirement" do
             context "block outcome fails" do
-              it "should add the :failure outcome message to @outcome_messages" do
+              it "should add the :success outcome message to @outcome_messages" do
                 allow(subject).to receive_messages(notify_gradebook_export: true)
                 subject.do_the_work
                 expect(subject.outcome_messages.last).to match("was successfully delivered")
@@ -68,7 +66,7 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
             end
 
             context "block outcome succeeds" do
-              it "should add the :succeeds outcome message to @outcome_messages" do
+              it "should add the :failure outcome message to @outcome_messages" do
                 allow(subject).to receive_messages(notify_gradebook_export: false)
                 subject.do_the_work
                 expect(subject.outcome_messages.last).to match("was not delivered")

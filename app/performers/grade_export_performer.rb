@@ -12,7 +12,7 @@ class GradeExportPerformer < ResqueJob::Performer
       end
 
       require_success(notification_messages, max_result_size: 200) do
-        notify_gradebook_export # the result of this block determines the outcome
+        notify_grade_export # the result of this block determines the outcome
       end
     end
   end
