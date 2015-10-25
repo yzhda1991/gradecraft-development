@@ -35,12 +35,13 @@ module EventsHelper
       Time.now.change(lull_start_params)
     end
 
+    # @mz todo: add timezone support
     def lull_start_params
-      {hour: 2, min: 30}
+      {hour: 6, min: 30} # time in GMT until we can add timezone support
     end
 
     def lull_end_params
-      {hour: 5, min: 0}
+      {hour: 9, min: 0} # time in GMT until we add timezone support
     end
   end
 end
