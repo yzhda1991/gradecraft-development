@@ -1,6 +1,6 @@
 require "spec_helper"
 
-feature "creating a new course", focus: true do
+feature "creating a new course" do
   let(:password) { "p@ssword" }
 
   context "as a professor" do
