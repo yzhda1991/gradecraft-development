@@ -1,26 +1,29 @@
 require 'spec_helper'
 
 describe ChallengeGradesController do
+  before(:all) do
+    @course = create(:course)
+    @student = create(:user)
+    @student.courses << @course
+    @team = create(:team, course: @course)
+    @team.students << @student
+    @challenge = create(:challenge, course: @course)
+  end
+
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as professor" do
-    before do
-      @course = create(:course)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
-      @student = create(:user)
-      @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
-      @challenge_grade = create(:challenge_grade, team: @team, challenge: @challenge)
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+    end
 
+    before(:each) do
+      @challenge_grade = create(:challenge_grade, team: @team, challenge: @challenge)
       login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
@@ -78,9 +81,8 @@ describe ChallengeGradesController do
       it "updates the challenge grade" do
         params = { score: 100000 }
         post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
-        @challenge_grade.reload
         expect(response).to redirect_to(challenge_path(@challenge))
-        expect(@challenge_grade.score).to eq(100000)
+        expect(@challenge_grade.reload.score).to eq(100000)
       end
     end
 
@@ -108,21 +110,9 @@ describe ChallengeGradesController do
   end
 
   context "as student" do
-    before do
-      @course = create(:course)
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
-      @student = create(:user)
-      @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
+    before(:each) do
       @challenge_grade = create(:challenge_grade, team: @team, challenge: @challenge)
-
       login_user(@student)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET show" do
@@ -136,12 +126,10 @@ describe ChallengeGradesController do
     end
 
     describe "protected routes" do
-
       [
         :index,
         :new,
         :create
-
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route, {:challenge_id => 2 }).to redirect_to(:root)
@@ -149,9 +137,7 @@ describe ChallengeGradesController do
         end
     end
 
-
     describe "protected routes requiring id in params" do
-
       [
         :edit,
         :mass_edit,
@@ -166,6 +152,5 @@ describe ChallengeGradesController do
         end
       end
     end
-
   end
 end
