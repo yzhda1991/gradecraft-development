@@ -59,6 +59,9 @@ class Grade < ActiveRecord::Base
   scope :positive, -> { where('score > 0')}
   scope :predicted_to_be_done, -> { where('predicted_score > 0')}
 
+  # @mz todo: add specs
+  scope :student_visible, -> { joins(:assignment).where(student_visible_sql) }
+
   #validates_numericality_of :raw_score, integer_only: true
 
   def self.score
@@ -226,6 +229,10 @@ class Grade < ActiveRecord::Base
   end
 
   private
+
+  def self.student_visible_sql
+    ["status = 'Released' OR (status = 'Graded' AND assignments.release_necessary = ?)", false]
+  end
 
   def clean_html
     self.feedback = Sanitize.clean(feedback, Sanitize::Config::BASIC)

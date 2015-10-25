@@ -116,13 +116,15 @@ class ChallengeGradesController < ApplicationController
     flash[:notice] = "Updated Grades!"
     redirect_to challenge_path(@challenge)
   end
+ 
 
+  # @mz todo: add specs
   def destroy
     @challenge_grade = current_course.challenge_grades.find(params[:id])
     @challenge = current_course.challenges.find(@challenge_grade.challenge_id)
 
     @challenge_grade.destroy
-    @challenge_grade.recalculate_team_scores
+    @challenge_grade.recalculate_student_and_team_scores
 
     respond_to do |format|
       format.html { redirect_to challenge_path(@challenge) }
