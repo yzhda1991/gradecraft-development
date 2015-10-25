@@ -123,7 +123,9 @@ class CoursesController < ApplicationController
 
     respond_to do |format|
       if @course.save
-        @course.course_memberships.create(:user_id => current_user.id, :role => current_user.role(current_course), instructor_of_record: true)
+        if ! current_user_is_admin?
+          @course.course_memberships.create(:user_id => current_user.id, :role => current_user.role(current_course), instructor_of_record: true)
+        end
         session[:course_id] = @course.id
         bust_course_list_cache current_user
         format.html { redirect_to course_path(@course), notice: "Course #{@course.name} successfully created" }
