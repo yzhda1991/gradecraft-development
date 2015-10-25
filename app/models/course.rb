@@ -408,7 +408,9 @@ class Course < ActiveRecord::Base
       
       # add the grades for the necessary assignments, todo: improve the performance here
       assignments.inject(student_data) do |memo, assignment|
-        memo << assignment.grade_for_student(student).try(:raw_score)
+        grade = assignment.grade_for_student(student)
+        memo << grade.try(:raw_score) if grade.is_student_visible?
+        memo
       end
     end
   end
@@ -430,8 +432,12 @@ class Course < ActiveRecord::Base
       
       # add the grades for the necessary assignments, todo: improve the performance here
       assignments.inject(student_data) do |memo, assignment|
-        memo << assignment.grade_for_student(student).try(:raw_score)
-        memo << a.grade_for_student(student).try(:score)
+        grade = assignment.grade_for_student(student)
+        if grade.is_student_visible?
+          memo << grade.try(:raw_score) 
+          memo << grade.try(:score)
+        end
+        memo
       end
     end
   end
