@@ -1,23 +1,18 @@
-#spec/controllers/courses_controller_spec.rb
 require 'spec_helper'
 
 describe CoursesController do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as professor" do
-
-    before do
-      @course = create(:course)
-      @second_course = create(:course)
-      @courses = []
-      @courses << [@course, @second_course]
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-
-      login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
+      CourseMembership.create user: @professor, course: @course, role: "professor"
     end
+    before { login_user(@professor) }
 
     describe "GET index" do
       it "returns all courses" do
@@ -62,17 +57,6 @@ describe CoursesController do
         expect{ post :create, :course => params }.to change(Course,:count).by(1)
       end
 
-      it "manages file uploads" do
-        skip "implement"
-        Course.delete_all
-        params = attributes_for(:course)
-        params[:course_id] = @course
-        params.merge! :course_syllabus_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}
-        post :create, :course => params
-        course = Course.where(name: params[:name]).last
-        expect expect(course.course_syllabus.count).to eq(1)
-      end
-
       it "redirects to new from with invalid attributes" do
         expect{ post :create, course: attributes_for(:course, name: nil) }.to_not change(Course,:count)
       end
@@ -82,16 +66,8 @@ describe CoursesController do
       it "updates the course" do
         params = { name: "new name" }
         post :update, id: @course.id, :course => params
-        @course.reload
         expect(response).to redirect_to(course_path(@course))
-        expect(@course.name).to eq("new name")
-      end
-
-      it "manages file uploads" do
-        skip "implement"
-        params = {:course_syllabus_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
-        post :update, id: @course.id, :course => params
-        expect expect(@course.course_syllabus.count).to eq(1)
+        expect(@course.reload.name).to eq("new name")
       end
     end
 
@@ -100,17 +76,20 @@ describe CoursesController do
         expect{ get :destroy, :id => @course }.to change(Course,:count).by(-1)
       end
     end
-
   end
 
   context "as student" do
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+    before(:each) { login_user(@student) }
 
     describe "protected routes" do
       [
         :index,
         :new,
         :create
-
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)
@@ -130,7 +109,5 @@ describe CoursesController do
         end
       end
     end
-
   end
-
 end
