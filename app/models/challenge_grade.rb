@@ -25,7 +25,9 @@ class ChallengeGrade < ActiveRecord::Base
   # @mz todo: add specs
   def recalculate_student_and_team_scores
     team.cache_score
-    team.recalculate_student_scores
+    if team.course.add_team_score_to_student?
+      team.recalculate_student_scores
+    end
   end
 
   def score
