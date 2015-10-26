@@ -30,10 +30,11 @@ class AssignmentTypeWeightsController < ApplicationController
     end
   end
 
+  # Updates weights from the predictor
   def update
     assignment_type = current_course.assignment_types.find(params[:id])
     weight = params[:weight]
-    if assignment_type and weight
+    if assignment_type and weight and assignment_type.student_weightable?
       assignment_type_weight = AssignmentTypeWeight.new(current_student, assignment_type)
       assignment_type_weight.weight = weight
     end

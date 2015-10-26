@@ -86,6 +86,7 @@ describe AssignmentTypeWeightsController do
       allow(Resque).to receive(:enqueue).and_return(true)
       login_user(@student)
       session[:course_id] = @course.id
+      allow(controller).to receive(:current_student).and_return(@student)
     end
 
 
@@ -94,6 +95,28 @@ describe AssignmentTypeWeightsController do
         get :mass_edit, :student_id => @student.id
         expect(assigns(:title)).to eq("Editing My multiplier Choices")
         expect(response).to render_template(:mass_edit)
+      end
+    end
+
+    describe "POST update" do
+
+      before do
+        # Won't work unless there is at least one assignment!
+        # TODO: refactor weights on
+        create(:assignment, assignment_type: @assignment_type_weightable, course: @course )
+        create(:assignment, assignment_type: @assignment_type_not_weightable, course: @course )
+      end
+
+      it "updates assignment weights" do
+        post :update, :id => @assignment_type_weightable.id, :weight => 2, :format => :json
+        expect(@student.weight_for_assignment_type(@assignment_type_weightable)).to eq(2)
+        expect(JSON.parse(response.body)).to eq({ "assignment_type" => @assignment_type_weightable.id, "weight" => 2 })
+      end
+
+      it "returns error message when assignment type is not weightable" do
+        post :update, :id => @assignment_type_not_weightable.id, :weight => 2, :format => :json
+        expect(@student.weight_for_assignment_type(@assignment_type_not_weightable)).to eq(0)
+        expect(JSON.parse(response.body)).to eq({"errors"=>"Unable to update assignment type weight"})
       end
     end
 

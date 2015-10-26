@@ -3,7 +3,9 @@ require 'spec_helper'
 describe GradesController do
 
   context "as professor" do
-    before do
+
+    before(:all) do
+      clean_models
       @course = create(:course_accepting_groups)
       @professor = create(:user)
       @professor.courses << @course
@@ -23,7 +25,9 @@ describe GradesController do
 
       @grade = create(:grade)
       @assignment.grades << @grade
+    end
 
+    before do
       login_user(@professor)
       session[:course_id] = @course.id
       allow(Resque).to receive(:enqueue).and_return(true)
@@ -70,14 +74,24 @@ describe GradesController do
     end
 
     describe "PUT mass_update" do
+
+      before(:each) do
+        @grade_2 = create(:grade)
+        @assignment.grades << @grade_2
+      end
+
+      after(:each) do
+        @grade_2.destroy
+      end
+
       let(:grades_attributes) do
         { "0" => { graded_by_id: @professor.id, instructor_modified: true,
-                   student_id: @student.id, raw_score: 1000, status: "Graded", id: @grade.id }}
+                   student_id: @student.id, raw_score: 1000, status: "Graded", id: @grade_2.id }}
       end
 
       it "updates the grades for the specific assignment" do
         put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
-        expect(@grade.reload.raw_score).to eq 1000
+        expect(@grade_2.reload.raw_score).to eq 1000
       end
 
       it "sends a notification to the student to inform them of a new grade" do
@@ -89,7 +103,7 @@ describe GradesController do
       end
 
       it "only sends notifications to the students if the grade changed" do
-        @grade.update_attributes({ raw_score: 1000 })
+        @grade_2.update_attributes({ raw_score: 1000 })
         run_background_jobs_immediately do
           expect { put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes } }.to_not \
             change { ActionMailer::Base.deliveries.count }
@@ -144,20 +158,25 @@ describe GradesController do
   end
 
   context "as student" do
-    before do
+    before(:all) do
+      clean_models
       @course = create(:course)
       @student = create(:user)
       @student.courses << @course
-      login_user(@student)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
       @assignment_type = create(:assignment_type, course: @course)
       @assignment = create(:assignment)
       @course.assignments << @assignment
-      @grade = create(:grade)
+      @grade = create(:grade, student: @student)
       @assignment.grades << @grade
       @group = create(:group)
       @assignment.groups << @group
+    end
+
+    before do
+      login_user(@student)
+      session[:course_id] = @course.id
+      allow(Resque).to receive(:enqueue).and_return(true)
+      allow(controller).to receive(:current_student).and_return(@student)
     end
 
     describe "GET show" do
@@ -168,10 +187,12 @@ describe GradesController do
     end
 
     describe "POST predict_score" do
-      it "posts to the predict score path" do
-        skip "implement"
-        get :predict_score, {:grade_id => @grade.id, :id => @assignment.id, :student_id => @student.id }
-        (expect(response.status).to eq(200))
+      it "updates the predicted score for an assignment" do
+        predicted_points = (@assignment.point_total * 0.75).to_i
+        get :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
+        @grade.reload
+        expect(@grade.predicted_score).to eq(predicted_points)
+        expect(JSON.parse(response.body)).to eq({"id" => @assignment.id, "points_earned" => predicted_points})
       end
     end
 
