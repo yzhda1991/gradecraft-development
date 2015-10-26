@@ -10,7 +10,7 @@ class Assignment < ActiveRecord::Base
     :include_in_timeline, :include_in_predictor, :include_in_to_do,
     :grades_attributes, :assignment_file_ids, :assignment_files_attributes, :assignment_file,
     :assignment_score_levels_attributes, :assignment_score_level,
-    :unlock_conditions, :unlock_conditions_attributes
+    :unlock_conditions, :unlock_conditions_attributes, :course
 
   attr_accessor :current_student_grade
 
