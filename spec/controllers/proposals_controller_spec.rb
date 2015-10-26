@@ -1,23 +1,22 @@
 require 'spec_helper'
 
 describe ProposalsController do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as a professor" do
-    before do
-      @course = create(:course)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @student = create(:user)
-      @student.courses << @course
-
-      @assignment = create(:assignment)
+      CourseMembership.create user: @professor, course: @course, role: "professor"
       @group = create(:group)
-      @proposal = create(:proposal)
+    end
 
+    before do
+      @proposal = create(:proposal)
       login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET destroy" do
@@ -25,23 +24,17 @@ describe ProposalsController do
         expect{ delete :destroy, :group_id => @group.id, :id => @proposal.id }.to change(Proposal,:count).by(-1)
       end
     end
-
   end
 
   context "as a student" do
-
-    before do
-      @course = create(:course)
+    before(:all) do
       @student = create(:user)
       @student.courses << @course
-
-      @assignment = create(:assignment)
       @group = create(:group)
+    end
+    before(:each) do
       @proposal = create(:proposal)
-
       login_user(@student)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET destroy" do
@@ -49,7 +42,5 @@ describe ProposalsController do
         expect{ delete :destroy, :group_id => @group.id, :id => @proposal.id }.to change(Proposal,:count).by(-1)
       end
     end
-
   end
-
 end
