@@ -1,30 +1,21 @@
-#spec/controllers/tasks_controller_spec.rb
 require 'spec_helper'
 
 describe TasksController do
-
-  #not yet built
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as a professor" do
-
-    before do
-      @course = create(:course)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @assignment_type = create(:assignment_type, course: @course)
-      @assignment = create(:assignment, course: @course, assignment_type: @assignment_type)
-      @task = create(:task)
-      @assignment.tasks << @task
-      @student = create(:user)
-      @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
-
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @assignment = create(:assignment, course: @course)
+    end
+    before(:each) do
+      @task = create(:task, assignment: @assignment)
       login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
@@ -33,10 +24,15 @@ describe TasksController do
         expect(response).to redirect_to(assignment_path(@assignment))
       end
     end
-
   end
 
   context "as a student" do
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+    before(:each) { login_user(@student) }
+
     describe "protected routes" do
       [
         :index,
@@ -61,6 +57,5 @@ describe TasksController do
         end
       end
     end
-
   end
 end
