@@ -55,6 +55,7 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
 
   context "triggering jobs as a student" do
     describe "PUT #update" do
+      before { allow(controller).to receive(:student_grades_require_update?) { true }}
       subject { put :update, request_attrs }
       let(:request_attrs) {{
         challenge_id: challenge.id,
@@ -68,6 +69,10 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
 
   context "triggering jobs as a student" do
     describe "POST #create" do
+      before do
+        allow(controller).to receive(:challenge_grade_is_student_visible?) { true }
+      end
+
       subject { post :create, request_attrs }
       let(:challenge_grade_attrs) {{
         score: rand(10000000),
