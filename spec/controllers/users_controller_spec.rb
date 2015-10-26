@@ -1,34 +1,26 @@
 require 'spec_helper'
 
 describe UsersController do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as a professor" do
-
-    before do
-      @course = create(:course)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
+      CourseMembership.create user: @professor, course: @course, role: "professor"
       @student = create(:user)
       @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
-      @users = @course.users
-
-      login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
+    before(:each) { login_user(@professor) }
 
     describe "GET index" do
       it "returns the users for the current course" do
         get :index
         expect(assigns(:title)).to eq("All Users")
-        expect(assigns(:users)).to eq(@users)
+        expect(assigns(:users)).to eq(@course.users)
         expect(response).to render_template(:index)
       end
     end
@@ -172,15 +164,10 @@ describe UsersController do
   end
 
   context "as a student" do
-
     before do
-      @course = create(:course)
       @student = create(:user)
       @student.courses << @course
-
       login_user(@student)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET activate" do
@@ -327,6 +314,5 @@ describe UsersController do
         end
       end
     end
-
   end
 end
