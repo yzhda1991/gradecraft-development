@@ -1,31 +1,27 @@
-#spec/controllers/teams_controller_spec.rb
 require 'spec_helper'
 
 describe TeamsController do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
-	context "as a professor" do
-
-    before do
-      @course = create(:course)
+  context "as a professor" do
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @student = create(:user)
-      @student.courses << @course
-      @team = create(:team)
-      @course.teams << @team
-      @teams = @course.teams
-
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+    end
+    before(:each) do
+      @team = create(:team, course: @course)
       login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
       it "returns all teams for the current course" do
         get :index
         expect(assigns(:title)).to eq("teams")
-        expect(assigns(:teams)).to eq(@teams)
+        expect(assigns(:teams)).to eq(@course.reload.teams)
         expect(response).to render_template(:index)
       end
     end
@@ -73,9 +69,8 @@ describe TeamsController do
       it "updates the team" do
         params = { name: "new name" }
         post :update, id: @team.id, :team => params
-        @team.reload
         expect(response).to redirect_to(team_path(@team))
-        expect(@team.name).to eq("new name")
+        expect(@team.reload.name).to eq("new name")
       end
     end
 
@@ -84,11 +79,16 @@ describe TeamsController do
         expect{ get :destroy, :id => @team }.to change(Team,:count).by(-1)
       end
     end
-	end
+  end
 
-	context "as a student" do
+  context "as a student" do
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+    before(:each) { login_user(@student) }
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :new,
@@ -99,7 +99,6 @@ describe TeamsController do
           end
         end
     end
-
 
     describe "protected routes requiring id in params" do
       [
@@ -113,6 +112,5 @@ describe TeamsController do
         end
       end
     end
-
-	end
+  end
 end
