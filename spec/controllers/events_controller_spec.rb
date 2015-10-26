@@ -1,25 +1,26 @@
 require 'spec_helper'
 
 describe EventsController do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as a professor" do
-
-    before do
-      @course = create(:course)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+    end
+
+    before(:each) do
       @event = create(:event)
       @course.events << @event
       login_user(@professor)
-
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
       it "assigns all events as @events" do
-        allow(Resque).to receive(:enqueue).and_return(true)
         get :index
         expect(assigns(:events)).to eq([@event])
       end
@@ -85,15 +86,13 @@ describe EventsController do
         it "updates the requested event" do
           params = { name: "new name" }
           post :update, id: @event.id, :event => params
-          @event.reload
           expect(response).to redirect_to(event_path(@event))
-          expect(@event.name).to eq("new name")
+          expect(@event.reload.name).to eq("new name")
         end
       end
     end
 
     describe "DELETE destroy" do
-
       it "destroys the requested event" do
         expect{ get :destroy, :id => @event }.to change(Event,:count).by(-1)
       end
@@ -103,25 +102,26 @@ describe EventsController do
         expect(response).to redirect_to(events_url)
       end
     end
-
   end
 
-
   context "as student" do
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+    before(:each) { login_user(@student) }
 
     describe "protected routes" do
       [
         :index,
         :new,
         :create
-
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)
           end
         end
     end
-
 
     describe "protected routes requiring id in params" do
       [
@@ -135,7 +135,5 @@ describe EventsController do
         end
       end
     end
-
   end
-
 end
