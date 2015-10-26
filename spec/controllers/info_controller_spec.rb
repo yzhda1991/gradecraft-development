@@ -1,24 +1,18 @@
-#spec/controllers/info_controller_spec.rb
 require 'spec_helper'
 
 describe InfoController do
-
-  before do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
   context "as a professor" do
-
-    before do
-      @course = create(:course)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @assignment_1 = create(:assignment, course: @course)
-      @assignment_2 = create(:assignment, course: @course)
-      login_user(@professor)
-      session[:course_id] = @course.id
+      CourseMembership.create user: @professor, course: @course, role: "professor"
     end
+    before { login_user(@professor) }
 
     describe "GET dashboard" do
       it "retrieves the dashboard" do
@@ -30,8 +24,6 @@ describe InfoController do
 
     describe "GET timeline_events" do
       it "retrieves the timeline events" do
-        @events = []
-        @events << [@assignment_1, @assignment_2]
         get :timeline_events
         expect(response).to render_template("info/_timeline")
       end
@@ -104,20 +96,14 @@ describe InfoController do
         expect(response).to render_template(:all_grades)
       end
     end
-
-
   end
 
   context "as a student" do
-
-    before do
-      @course = create(:course)
+    before(:all) do
       @student = create(:user)
       @student.courses << @course
-
-      login_user(@student)
-      session[:course_id] = @course.id
     end
+    before(:each) { login_user(@student) }
 
     describe "GET dashboard" do
       it "retrieves the dashboard" do
@@ -151,7 +137,5 @@ describe InfoController do
         end
       end
     end
-
   end
-
 end
