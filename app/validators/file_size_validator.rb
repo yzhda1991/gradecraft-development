@@ -21,7 +21,12 @@ class FileSizeValidator < ActiveModel::EachValidator
 
       value ||= [] if key == :maximum
 
-      value_size = value.size
+      begin
+        value_size = value.size
+      rescue
+        next
+      end
+
       next if value_size.send(validity_check, check_value)
 
       errors_options = options.except(*RESERVED_OPTIONS)

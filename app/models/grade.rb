@@ -59,6 +59,9 @@ class Grade < ActiveRecord::Base
   scope :positive, -> { where('score > 0')}
   scope :predicted_to_be_done, -> { where('predicted_score > 0')}
 
+  # @mz todo: add specs
+  scope :student_visible, -> { joins(:assignment).where(student_visible_sql) }
+
   #validates_numericality_of :raw_score, integer_only: true
 
   def self.score
@@ -144,12 +147,68 @@ class Grade < ActiveRecord::Base
     student_id == user.id
   end
 
+  # @mz todo: port this over to cache_team_and_student_scores once 
+  # related methods have tests
+  # want to make sure that nothing depends on the output of this method
   def save_student_and_team_scores
-    self.student.cache_course_score(self.course.id)
+    self.student.improved_cache_course_score(self.course.id)
     if self.course.has_teams? && self.student.team_for_course(self.course).present?
       self.student.team_for_course(self.course).cache_score
     end
   end
+
+  # @mz todo: add specs
+  def cache_student_and_team_scores
+    { cached_student_score: cache_student_score,
+      cached_team_score: cache_team_score,
+      student_id: self.student.try(:id),
+      team_id: cached_student_team.try(:id)
+    }.merge(cached_score_failure_information)
+  end
+
+  private
+
+  def cached_student_team
+    @team ||= student.team_for_course(course)
+  end
+
+  # @mz todo: add specs
+  def cache_student_score
+    @student = self.student
+    @student_update_successful = @student.improved_cache_course_score(self.course.id)
+  end
+
+  # @mz todo: add specs, improve the syntax here
+  def cache_team_score
+    if course.has_teams? && student.team_for_course(course).present?
+      @team = cached_student_team
+      @team_update_successful = @team.update_revised_team_score
+      @team_update_successful ? @team.score : false
+    else
+      nil
+    end
+  end
+
+  def cached_score_failure_information
+    failure_attrs = {}
+    if course.has_teams? && student.team_for_course(course).present?
+      unless @team_update_successful
+        failure_attrs.merge! team: @team.attributes 
+      end
+
+      unless @student_update_successful
+        failure_attrs.merge! student: @student.attributes 
+      end
+
+      unless @team_update_successful and @student_update_successful
+        failure_attrs.merge! grade: self.attributes 
+      end
+    end
+
+    failure_attrs
+  end
+
+  public 
 
   def altered?
     self.score_changed? == true  || self.feedback_changed? == true
@@ -170,6 +229,10 @@ class Grade < ActiveRecord::Base
   end
 
   private
+
+  def self.student_visible_sql
+    ["status = 'Released' OR (status = 'Graded' AND assignments.release_necessary = ?)", false]
+  end
 
   def clean_html
     self.feedback = Sanitize.clean(feedback, Sanitize::Config::BASIC)

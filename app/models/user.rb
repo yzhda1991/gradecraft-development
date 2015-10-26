@@ -185,7 +185,7 @@ class User < ActiveRecord::Base
 
   def self.auditing_students_in_course(course_id)
     User
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, course_memberships.score as cached_score")
+      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, course_memberships.score as cached_score_sql_alias")
       .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
       .where("course_memberships.course_id = ?", course_id)
       .where("course_memberships.auditing = ?", true)
@@ -196,7 +196,7 @@ class User < ActiveRecord::Base
 
   def self.graded_students_in_course(course_id)
     User
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score")
+      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
       .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
       .where("course_memberships.course_id = ?", course_id)
       .where("course_memberships.auditing = ?", false)
@@ -376,6 +376,7 @@ class User < ActiveRecord::Base
     grades.where(:assignment_id => assignment.id).first.try(:point_total) || nil
   end
 
+  # @mz TODO: refactor this to hell
   # Powers the worker to recalculate student scores
   def cache_course_score(course_id)
     course = Course.find(course_id)
@@ -401,6 +402,36 @@ class User < ActiveRecord::Base
       end
     end
   end
+
+  # @mz TODO: refactor this to hell
+  # Powers the worker to recalculate student scores
+  def improved_cache_course_score(course_id)
+    course = Course.find(course_id)
+    membership = course_memberships.where(course_id: course_id).first
+    total_score = nil
+    unless membership.nil?
+      if membership.course.add_team_score_to_student?
+        membership.update_attribute :score, (
+          total_score = 0
+          course.assignment_types.each do |assignment_type|
+            total_score += assignment_type.visible_score_for_student(self)
+          end
+          total_score += earned_badge_score_for_course(course_id)
+          total_score += (self.team_for_course(course_id).try(:score) || 0)
+        )
+      else
+        membership.update_attribute :score, (
+          total_score = 0
+          course.assignment_types.each do |assignment_type|
+            total_score += assignment_type.visible_score_for_student(self)
+          end
+          total_score += earned_badge_score_for_course(course_id)
+        )
+      end
+    end
+    total_score
+  end
+
 
   ### TEAMS
   # Find the team associated with the team membership for a given course id

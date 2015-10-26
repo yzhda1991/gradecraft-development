@@ -93,9 +93,14 @@ class ChallengesController < ApplicationController
     @challenge = current_course.challenges.find(params[:challenge_id])
     @challengePrediction = PredictedEarnedChallenge.where(student: current_student, challenge: @challenge).first
     @challengePrediction.points_earned = params[:points_earned]
+    @prediction_saved = @challengePrediction.save
+
+    # create a predictor event in mongo to keep track of what happened
+    PredictorEventJob.new(data: predictor_event_attrs).enqueue
+
     respond_to do |format|
       format.json do
-        if @challengePrediction.save
+        if @prediction_saved
           render :json => {id: @challenge.id, points_earned: @challengePrediction.points_earned}
         else
           render :json => { errors:  @challengePrediction.errors.full_messages }, :status => 400
@@ -103,6 +108,25 @@ class ChallengesController < ApplicationController
       end
     end
   end
+
+  private
+
+  def predictor_event_attrs
+    {
+      prediction_type: "challenge",
+      course_id: current_course.id,
+      user_id: current_user.id,
+      student_id: current_student.try(:id),
+      user_role: current_user.role(current_course),
+      challenge_id: params[:challenge_id],
+      predicted_points: params[:predicted_score],
+      possible_points: @challenge.point_total,
+      created_at: Time.now,
+      prediction_saved_successfully: @prediction_saved
+    }
+  end
+
+  public
 
   def student_predictor_data
     if current_user.is_student?(current_course)
@@ -133,11 +157,6 @@ class ChallengesController < ApplicationController
           end
 
           challenge.current_team_grade = grade
-
-          # Only pass through points if they have been released by the professor
-          unless grade.is_student_visible?
-            challenge.current_team_grade.score = nil
-          end
         end
       end
     end

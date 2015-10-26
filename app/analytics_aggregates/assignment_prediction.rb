@@ -6,8 +6,8 @@ class AssignmentPrediction
 
   scope_by :assignment_id
 
-  increment_keys "%{granular_key}.total" => lambda{ |event| event.score.to_f / event.possible.to_f },
-                 "%{granular_key}.count" => 1
+  increment_keys "%{granular_key}.count" => 1
+  # "%{granular_key}.total" => lambda{ |event| event.score.to_f / event.possible.to_f },
 
   # assignment_id: 1,
   # all_time: %,

@@ -83,8 +83,12 @@ class InfoController < ApplicationController
 
   #grade index export
   def gradebook
-    session[:return_to] = request.referer
-    Resque.enqueue(GradebookExporter, current_user.id, current_course.id)
+    session[:return_to] = request.referer || root_path
+
+    # TODO: RESQUE CLEAN-UP: Add controller specs for resque job methods.
+    @gradebook_exporter_job = GradebookExporterJob.new(user_id: current_user.id, course_id: current_course.id)
+    @gradebook_exporter_job.enqueue
+
     flash[:notice]="Your request to export the gradebook for \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
     redirect_to session[:return_to]
   end
@@ -98,7 +102,10 @@ class InfoController < ApplicationController
 
   #downloadable grades for course with  export
   def research_gradebook
-    Resque.enqueue(GradeExporter, current_user.id, current_course.id)
+    # @mz TODO: add specs
+    @grade_export_job = GradeExportJob.new(user_id: current_user.id, course_id: current_course.id)
+    @grade_export_job.enqueue
+
     flash[:notice]="Your request to export grade data from course \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
     redirect_to courses_path
   end

@@ -1,4 +1,5 @@
 web: bundle exec puma -p $PORT
 redis: redis-server --port $REDIS_PORT
-bg: bundle exec rake resque:work
+resque_scheduler: bundle exec rake resque:scheduler
+resque_worker: bundle exec rake resque:work
 mongo: bundle exec mongod --dbpath=$MONGO_PATH --rest

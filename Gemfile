@@ -23,6 +23,11 @@ gem 'coffee-rails'
 gem "compass-rails"
 gem "d3-rails"
 gem 'dalli'
+
+# adds expect{something}.to 'make_database_queries' matchers to rspec
+# useful for testing eager/lazy loading
+gem 'db-query-matchers'
+
 gem 'dotenv-rails'
 gem 'fast_blank'
 gem 'fog'
@@ -31,6 +36,15 @@ gem 'haml'
 gem 'ims-lti', git: 'https://github.com/venturit/ims-lti.git', branch: 'master'
 gem 'jbuilder'
 gem 'jquery-rails', '~> 2.0'
+
+# interface for connecting to remote logging system Loggly
+gem 'logglier', '~> 0.3.0'
+# connect to papertrail
+# gem 'remote_syslog_logger'
+# connect to Loggly/whatever more easily over UDP/TCP
+# gem 'syslogger', '~> 1.6.0'
+# gem 'lograge','~> 0.3.1'
+
 gem 'multi_json'
 gem 'mini_magick'
 gem 'moped', '2.0.4', git: 'https://github.com/wandenberg/moped.git', branch: 'operation_timeout'
@@ -51,6 +65,21 @@ gem 'rack-mini-profiler', require: false
 gem 'rails_autolink'
 gem 'rails_email_preview', '~> 0.2.29'
 gem 'rdiscount'
+
+# retry dsl for resque
+gem 'resque-retry'
+
+# handles deferrence of Resque jobs to a later time
+# ex: Resque.enqueue_in(5.hours, @worker_object)
+gem 'resque-scheduler', require: "resque/scheduler"
+
+# slightly more mature rate limiter plugin for resque
+# gem 'resque-waiting-room'
+
+# limits the number of jobs that are run per unit of time on a given queue
+# ex: Resque.rate_limit(:my_queue, :at => 10, :per => 60)
+gem 'resque-throttler', require: "resque/throttler" 
+
 gem 'responders'
 gem 'rollbar'
 gem 'sampler'
@@ -66,7 +95,7 @@ gem 'whenever'
 gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'wysiwyg-rails'
-gem 'zeus-parallel_tests'
+# gem 'zeus-parallel_tests'
 gem 'parallel_tests'
 gem 'ruby-saml', '~> 1.0.0'
 
@@ -78,6 +107,9 @@ group :development do
   gem 'letter_opener'
   gem 'rubystats'
   gem "bullet"
+
+  # setup a simple SMTP server to catch all outgoing mail at smtp://localhost:1025
+  gem "mailcatcher"
 end
 
 group :development, :test do
@@ -101,6 +133,9 @@ group :test do
   gem 'simplecov'
   gem 'faker', '~> 1.4.3'
   gem 'factory_girl_rails', '~> 4.5.0'
+  
+  # add spec helpers for testing Resque objects and resque scheduler
+  gem 'resque_spec', github: 'leshill/resque_spec'
 end
 
 group :tasks do

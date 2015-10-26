@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/leshill/resque_spec.git
+  revision: ed0de7a78df23f483d258cd6d326657b7737ae76
+  specs:
+    resque_spec (0.17.0)
+      resque (>= 1.19.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
+      rspec-mocks (>= 3.0.0)
+
+GIT
   remote: https://github.com/chcholman/timelineJS-rails.git
   revision: 9948df90f2b345823aa03e8c8ac59b709d274229
   branch: master
@@ -177,8 +187,10 @@ GEM
     crass (1.0.2)
     d3-rails (3.5.5)
       railties (>= 3.1)
+    daemons (1.2.3)
     dalli (2.7.4)
     database_cleaner (1.0.1)
+    db-query-matchers (0.4.0)
     debug_inspector (0.0.2)
     diff-lcs (1.2.5)
     docile (1.1.5)
@@ -187,6 +199,7 @@ GEM
       dotenv (= 2.0.2)
       railties (~> 4.0)
     erubis (2.7.0)
+    eventmachine (1.0.5)
     excon (0.45.4)
     execjs (2.5.2)
     factory_girl (4.5.0)
@@ -338,12 +351,22 @@ GEM
       addressable (~> 2.3)
     letter_opener (1.4.1)
       launchy (~> 2.2)
+    logglier (0.3.0)
+      multi_json (~> 1)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     macaddr (1.7.1)
       systemu (~> 2.6.2)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    mailcatcher (0.6.1)
+      activesupport (>= 4.0.0, < 5)
+      eventmachine (~> 1.0.0, <= 1.0.5)
+      mail (~> 2.3)
+      sinatra (~> 1.2)
+      skinny (~> 0.2.3)
+      sqlite3 (~> 1.3)
+      thin (~> 1.5.0)
     method_source (0.8.2)
     mime-types (2.6.1)
     mini_magick (4.2.7)
@@ -475,6 +498,16 @@ GEM
     request_store (1.2.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    resque-retry (1.4.0)
+      resque (~> 1.25)
+      resque-scheduler (~> 4.0)
+    resque-scheduler (4.0.0)
+      mono_logger (~> 1.0)
+      redis (~> 3.0)
+      resque (~> 1.25)
+      rufus-scheduler (~> 3.0)
+    resque-throttler (0.1.5)
+      resque (~> 1.25)
     rollbar (2.1.2)
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
@@ -500,6 +533,7 @@ GEM
       sexp_processor (~> 4.1)
     rubystats (0.2.3)
     rubyzip (1.1.7)
+    rufus-scheduler (3.1.5)
     s3_direct_upload (0.1.7)
       coffee-rails (>= 3.1)
       jquery-fileupload-rails (~> 0.4.1)
@@ -547,6 +581,9 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
+    skinny (0.2.3)
+      eventmachine (~> 1.0.0)
+      thin (~> 1.5.0)
     slim (3.0.6)
       temple (~> 0.7.3)
       tilt (>= 1.3.3, < 2.1)
@@ -573,8 +610,13 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    sqlite3 (1.3.11)
     systemu (2.6.5)
     temple (0.7.6)
+    thin (1.5.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
@@ -601,11 +643,6 @@ GEM
       railties (>= 3.2, < 5.0)
     xpath (2.0.0)
       nokogiri (~> 1.3)
-    zeus (0.15.4)
-      method_source (>= 0.6.7)
-    zeus-parallel_tests (0.3.1)
-      parallel_tests (>= 0.11.3)
-      zeus (>= 0.13.0)
 
 PLATFORMS
   ruby
@@ -634,6 +671,7 @@ DEPENDENCIES
   d3-rails
   dalli
   database_cleaner (~> 1.0.1)
+  db-query-matchers
   dotenv-rails
   factory_girl_rails (~> 4.5.0)
   faker (~> 1.4.3)
@@ -648,6 +686,8 @@ DEPENDENCIES
   jquery-rails (~> 2.0)
   launchy
   letter_opener
+  logglier (~> 0.3.0)
+  mailcatcher
   mini_magick
   mongoid (~> 4.0.2)
   moped (= 2.0.4)!
@@ -685,6 +725,10 @@ DEPENDENCIES
   rdiscount
   responders
   resque (= 1.25.2)!
+  resque-retry
+  resque-scheduler
+  resque-throttler
+  resque_spec!
   rollbar
   rspec-rails (~> 3.3.3)
   ruby-saml (~> 1.0.0)
@@ -707,7 +751,6 @@ DEPENDENCIES
   valid_attribute
   whenever
   wysiwyg-rails
-  zeus-parallel_tests
 
 BUNDLED WITH
    1.10.6

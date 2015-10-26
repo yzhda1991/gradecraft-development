@@ -43,6 +43,18 @@ class Team < ActiveRecord::Base
     students.sort_by{ |student| - student.cached_score_for_course(course) }
   end
 
+  # @mz todo: add specs
+  def recalculate_student_scores
+    student_score_recalculator_jobs.each(&:enqueue)
+  end
+
+  # @mz todo: add specs
+  def student_score_recalculator_jobs
+    @student_score_recalculator_jobs ||= students.collect do |student|
+      ScoreRecalculatorJob.new(user_id: student.id, course_id: course_id)
+    end
+  end
+
   #Tallying how many students are on the team
   def member_count
     students.count
@@ -73,8 +85,10 @@ class Team < ActiveRecord::Base
   end
 
   #Summing all of the points the team has earned across their challenges
+  # @mz todo: add specs
   def challenge_grade_score
-    challenge_grades.sum('score') || 0
+    # use student_visible scope from challenge_grades
+    challenge_grades.student_visible.sum('score') || 0
   end
 
   #Teams rack up points in two ways, which is used is determined by the instructor in the course settings.
@@ -88,5 +102,15 @@ class Team < ActiveRecord::Base
     else
       self.score = average_points
     end
+  end
+
+  def update_revised_team_score
+    update_attributes score: revised_team_score
+  end
+
+  private
+
+  def revised_team_score
+    course.team_challenges ? challenge_grade_score : average_points
   end
 end

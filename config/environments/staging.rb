@@ -4,15 +4,14 @@ GradeCraft::Application.configure do
   config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
   config.asset_host = "https://staging.gradecraft.com"
   config.action_mailer.default_url_options = { :host => 'staging.gradecraft.com' }
+
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :authentication => :plain,
-    :address => 'smtp.mandrillapp.com',
-    :port => 587,
-    :domain => 'staging.gradecraft.com',
-    :user_name => ENV['MANDRILL_USERNAME'],
-    :password => ENV['MANDRILL_PASSWORD']
+    :address => 'gcmailcatcher',
+    :port => 25,
   }
+  config.action_mailer.perform_deliveries = true
+
   config.active_support.deprecation = :notify
   config.assets.compile = false
   config.assets.compress = true
@@ -24,7 +23,7 @@ GradeCraft::Application.configure do
   config.consider_all_requests_local = false
   config.eager_load = true
   config.i18n.fallbacks = true
-  config.log_level = :info
+  config.log_level = :debug
   config.serve_static_files = false
   config.session_store :active_record_store, :expire_after => 60.minutes
 end

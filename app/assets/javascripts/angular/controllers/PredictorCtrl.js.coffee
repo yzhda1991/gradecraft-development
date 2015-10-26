@@ -51,6 +51,12 @@
     else
       return true
 
+  $scope.challengeGraded = (challenge)->
+    if challenge.grade.score == null
+      return false
+    else
+      return true
+
   $scope.articleNoPoints = (assignment)->
     if assignment.pass_fail && assignment.grade.pass_fail_status != "Pass"
       return true
@@ -245,19 +251,23 @@
             event.preventDefault()
             event.stopPropagation()
             angular.element(ui.handle.parentElement).slider("value", closest.value)
+
             if articleType == 'assignment'
               angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
             else
               angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
           else
+
             if articleType == 'assignment'
               angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
             else
               angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
+
       stop: (event, ui)->
         articleType = ui.handle.parentElement.dataset.articleType
         article_id = ui.handle.parentElement.dataset.id
         value = ui.value
+
         if articleType == 'assignment'
           article.grade.predicted_score = value
           PredictorService.postPredictedGrade(article_id,value)

@@ -42,7 +42,8 @@ class EarnedBadgesController < ApplicationController
     respond_to do |format|
       if @earned_badge.save
         if @badge.point_total?
-          Resque.enqueue(ScoreRecalculator, @earned_badge.student_id, current_course.id)
+          # @mz TODO: add specs
+          ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: current_course.id).enqueue
         end
         NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver
         format.html { redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded to #{@earned_badge.student.name}" }
@@ -63,7 +64,8 @@ class EarnedBadgesController < ApplicationController
     respond_to do |format|
       if @earned_badge.update_attributes(params[:earned_badge])
         if @badge.point_total?
-          Resque.enqueue(ScoreRecalculator, @earned_badge.student_id, current_course.id)
+          # @mz TODO: add specs
+          ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: current_course.id).enqueue
         end
         expire_fragment "earned_badges"
         format.html { redirect_to badge_path(@badge), notice: "#{@earned_badge.student.name}'s #{@badge.name} #{term_for :badge} was successfully updated." }
@@ -135,7 +137,8 @@ class EarnedBadgesController < ApplicationController
 
   def update_student_point_totals
     @valid_earned_badges.each do |earned_badge|
-      Resque.enqueue(ScoreRecalculator, earned_badge.student.id, current_course.id)
+      # @mz TODO: add specs
+      ScoreRecalculatorJob.new(user_id: earned_badge.student.id, course_id: current_course.id).enqueue
       logger.info "Updated student scores to include EarnedBadge ##{earned_badge[:id]}"
     end
   end

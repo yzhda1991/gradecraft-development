@@ -26,4 +26,7 @@ describe Team do
       expect(result).to eq team
     end
   end
+
+  describe "challenge_grade_score" do
+  end
 end

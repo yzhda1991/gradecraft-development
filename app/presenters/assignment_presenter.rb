@@ -141,7 +141,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def student_logged?(user)
-    assignment.student_logged? && assignment.open && user.is_student?(course)
+    assignment.student_logged? && assignment.open? && user.is_student?(course)
   end
 
   def students

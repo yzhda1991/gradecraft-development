@@ -1,7 +1,7 @@
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
-  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
+  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update] # todo: probably need to add submit_rubric here
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
@@ -234,7 +234,12 @@ class GradesController < ApplicationController
     sanitize_grade_params
 
     if @grade.update_attributes params[:grade].merge(instructor_modified: true)
-      Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_released?
+      # @mz TODO: ADD SPECS
+      if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
+        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        @grade_updater_job.enqueue
+      end
+
       update_success_redirect
     else
       update_failure_redirect
@@ -293,7 +298,11 @@ class GradesController < ApplicationController
     delete_existing_earned_badges_for_metrics # if earned_badges_exist? # destroy earned_badges where assignment_id and student_id match
     create_earned_tier_badges if params[:tier_badges]# create_earned_tier_badges
 
-    Resque.enqueue(GradeUpdater, [@grade.id]) if @grade.is_student_visible?
+    # @mz TODO: add specs
+    if @grade.is_student_visible?
+      @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+      @grade_updater_job.enqueue
+    end
 
     respond_to do |format|
       format.json { render nothing: true }
@@ -437,7 +446,11 @@ class GradesController < ApplicationController
       @grade.status = "Graded"
       respond_to do |format|
         if @grade.save
-          Resque.enqueue(GradeUpdater, [@grade.id])
+
+          # @mz TODO: add specs
+          @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+          @grade_updater_job.enqueue
+
           format.html { redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!' }
         else
           format.html { redirect_to syllabus_path, notice: "We're sorry, this grade could not be added." }
@@ -457,11 +470,17 @@ class GradesController < ApplicationController
       @grade = current_student.grade_for_assignment(@assignment)
       @grade.predicted_score = params[:predicted_score]
     end
+     
+    @grade_saved = @grade.nil? ? nil : @grade.save
+
+    # create a predictor event in mongo to keep track of what happened
+    PredictorEventJob.new(data: predictor_event_attrs).enqueue
+
     respond_to do |format|
       format.json do
         if @grade.nil?
           render :json => {errors: "You cannot predict this assignment!"}, :status => 400
-        elsif @grade.save
+        elsif @grade_saved
           render :json => {id: @grade.id, predicted_score: @grade.predicted_score}
         else
           render :json => { errors:  @grade.errors.full_messages }, :status => 400
@@ -469,6 +488,29 @@ class GradesController < ApplicationController
       end
     end
   end
+
+  private
+
+  def predictor_event_attrs
+    {
+      prediction_type: "grade",
+      course_id: current_course.id,
+      user_id: current_user.id,
+      student_id: current_student.try(:id),
+      user_role: current_user.role(current_course),
+      assignment_id: params[:id],
+      predicted_points: params[:predicted_score],
+      possible_points: grade_possible_points,
+      created_at: Time.now,
+      prediction_saved_successfully: @grade_saved
+    }
+  end
+
+  def grade_possible_points
+    @grade.point_total rescue nil
+  end
+
+  public
 
   # Quickly grading a single assignment for all students
   def mass_edit
@@ -516,14 +558,10 @@ class GradesController < ApplicationController
   def mass_update
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.update_attributes(params[:assignment])
-      grade_ids = []
-      @assignment.grades.each do |grade|
-        scored_changed = grade.previous_changes[:raw_score].present?
-        if scored_changed && grade.graded_or_released?
-          grade_ids << grade.id
-        end
-      end
-      Resque.enqueue(MultipleGradeUpdater, grade_ids)
+      # @mz TODO: add specs
+      @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: mass_update_grade_ids)
+      @multiple_grade_updater_job.enqueue
+
       if !params[:team_id].blank?
         redirect_to assignment_path(@assignment, :team_id => params[:team_id])
       else
@@ -533,6 +571,19 @@ class GradesController < ApplicationController
       redirect_to mass_grade_assignment_path(id: @assignment.id,team_id:params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
     end
   end
+
+  private
+    def mass_update_grade_ids
+      @assignment.grades.inject([]) do |memo, grade|
+        scored_changed = grade.previous_changes[:raw_score].present?
+        if scored_changed && grade.graded_or_released?
+          memo << grade.id
+        end
+        memo
+      end
+    end
+
+  public
 
   # Grading an assignment for a whole group
   def group_edit
@@ -554,7 +605,8 @@ class GradesController < ApplicationController
       grade_ids << grade.id
     end
 
-    Resque.enqueue(MultipleGradeUpdater, grade_ids)
+    # @mz TODO: add specs
+    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
 
     respond_with @assignment
   end
@@ -571,12 +623,10 @@ class GradesController < ApplicationController
   def update_status
     @assignment = current_course.assignments.find(params[:id])
     @grades = @assignment.grades.find(params[:grade_ids])
-    grade_ids = []
-    @grades.each do |grade|
-      grade.update_attributes!(params[:grade].reject { |k,v| v.blank? })
-      grade_ids << grade.id
-    end
-    Resque.enqueue(MultipleGradeUpdater, grade_ids)
+
+    # @mz TODO: add specs
+    @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: update_status_grade_ids)
+    @multiple_grade_updater_job.enqueue
 
     if session[:return_to].present?
       redirect_to session[:return_to]
@@ -587,6 +637,17 @@ class GradesController < ApplicationController
     flash[:notice] = "Updated Grades!"
 
   end
+
+  private
+
+  def update_status_grade_ids
+    @grades.inject([]) do |memo, grade|
+      grade.update_attributes!(params[:grade].reject { |k,v| v.blank? })
+      memo << grade.id
+    end
+  end
+
+  public
 
   #upload grades for an assignment
   def import
@@ -600,10 +661,16 @@ class GradesController < ApplicationController
       redirect_to assignment_path(@assignment)
     else
       @assignment = current_course.assignments.find(params[:id])
+
+      # @mz todo: check into what this calls is doing. is this being used?
       @students = current_course.students
 
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
-      Resque.enqueue(MultipleGradeUpdater, @result.successful.map(&:id))
+
+      # @mz TODO: add specs
+      @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: @result.successful.map(&:id))
+      @multiple_grade_updater_job.enqueue
+
       render :import_results
     end
   end

@@ -113,8 +113,10 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
   validates_presence_of :name, :courseno
+  # @mz todo: rewrite max_group_size and min_group_size
   validates_numericality_of :max_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
   validates_numericality_of :min_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
+
   validates_numericality_of :total_assignment_weight, :allow_blank => true
   validates_numericality_of :max_assignment_weight, :allow_blank => true
   validates_numericality_of :max_assignment_types_weighted, :allow_blank => true
@@ -348,68 +350,107 @@ class Course < ActiveRecord::Base
   end
 
   #gradebook spreadsheet export for course
-  def gradebook_for_course(course)
+  # todo: refactor this, maybe into a Gradebook class
+  def csv_gradebook
     CSV.generate do |csv|
-      assignment_names = []
-      assignment_names << "First Name"
-      assignment_names << "Last Name"
-      assignment_names << "Email"
-      assignment_names << "Username"
-      assignment_names << "Team"
-      course.assignments.sort_by { |assignment| assignment.created_at }.each do |a|
-        assignment_names << a.name
-      end
-      csv << assignment_names
-      course.students.each do |student|
-        student_data = []
-        student_data << student.first_name
-        student_data << student.last_name
-        student_data << student.email
-        student_data << student.username
-        student_data << student.team_for_course(course).try(:name)
-        course.assignments.sort_by { |assignment| assignment.created_at }.each do |a|
-          student_data << a.grade_for_student(student).try(:raw_score)
-        end
-        csv << student_data
+      @gradebook = Course::Gradebook.new(self)
+
+      csv << @gradebook.assignment_columns
+      self.students.each do |student|
+        csv << @gradebook.student_data_for(student)
       end
     end
   end
 
   #gradebook spreadsheet export for course
-  def multiplied_gradebook_for_course(course)
+  def csv_multiplied_gradebook
     CSV.generate do |csv|
-      assignment_names = []
-      assignment_names << "First Name"
-      assignment_names << "Last Name"
-      assignment_names << "Email"
-      assignment_names << "Username"
-      assignment_names << "Team"
-      course.assignments.sort_by { |assignment| assignment.created_at }.each do |a|
-        assignment_names << a.name
-        assignment_names << a.name
-      end
-      csv << assignment_names
-      course.students.each do |student|
-        student_data = []
-        student_data << student.first_name
-        student_data << student.last_name
-        student_data << student.email
-        student_data << student.username
-        student_data << student.team_for_course(course).try(:name)
-        course.assignments.sort_by { |assignment| assignment.created_at }.each do |a|
-          student_data << a.grade_for_student(student).try(:raw_score)
-          student_data << a.grade_for_student(student).try(:score)
-        end
-        csv << student_data
+      @multiplied_gradebook = Course::MultipliedGradebook.new(self)
+
+      csv << @multiplied_gradebook.assignment_columns
+      self.students.each do |student|
+        csv << @multiplied_gradebook.student_data_for(student)
       end
     end
   end
 
-  def research_grades_for_course(course, options = {})
+  # todo: add unit tests for this somewhere else
+  class Gradebook
+    def initialize(course)
+      @course = course
+    end
+
+    def base_assignment_columns
+      ["First Name", "Last Name", "Email", "Username", "Team"]
+    end
+
+    def base_column_methods
+      [:first_name, :last_name, :email, :username]
+    end
+
+    def assignments
+      @assignments ||= @course.assignments.sort_by(&:created_at)
+    end
+
+    def assignment_columns
+      base_assignment_columns + assignment_name_columns
+    end
+
+    def assignment_name_columns
+      assignments.collect(&:name)
+    end
+
+    def student_data_for(student)
+      # add the base column names
+      student_data = base_column_methods.inject([]) do |memo, method|
+        memo << student.send(method)
+      end
+      # todo: we need to pre-fetch the course teams for this
+      student_data << student.team_for_course(@course).try(:name) 
+      
+      # add the grades for the necessary assignments, todo: improve the performance here
+      assignments.inject(student_data) do |memo, assignment|
+        grade = assignment.grade_for_student(student)
+        memo << grade.try(:raw_score) if grade.is_student_visible?
+        memo
+      end
+    end
+  end
+
+  class MultipliedGradebook < Gradebook
+    def assignment_name_columns
+      assignments.collect do |assignment|
+        [ assignment.name, assignment.name ]
+      end.flatten
+    end
+
+    def student_data_for(student)
+      # add the base column names
+      student_data = base_column_methods.inject([]) do |memo, method|
+        memo << student.send(method)
+      end
+      # todo: we need to pre-fetch the course teams for this
+      student_data << student.team_for_course(@course).try(:name) 
+      
+      # add the grades for the necessary assignments, todo: improve the performance here
+      assignments.inject(student_data) do |memo, assignment|
+        grade = assignment.grade_for_student(student)
+        if grade.is_student_visible?
+          memo << grade.try(:raw_score) 
+          memo << grade.try(:score)
+        end
+        memo
+      end
+    end
+  end
+
+   
+  # todo: needs to be refactored as a CSV exporter
+  def research_grades_csv(options = {})
     CSV.generate(options) do |csv|
       csv << ["Course ID", "Uniqname", "First Name", "Last Name", "GradeCraft ID", "Assignment Name", "Assignment ID", "Assignment Type", "Assignment Type Id", "Score", "Assignment Point Total", "Multiplied Score", "Predicted Score", "Text Feedback", "Submission ID", "Submission Creation Date", "Submission Updated Date", "Graded By", "Created At", "Updated At"]
-      course.grades.each do |grade|
-        csv << [grade.course.id, grade.student.username, grade.student.first_name, grade.student.last_name, grade.student_id, grade.assignment.name, grade.assignment.id, grade.assignment.assignment_type.name, grade.assignment.assignment_type_id, grade.raw_score, grade.point_total, grade.score, grade.predicted_score, grade.feedback, grade.submission_id, grade.submission.try(:created_at), grade.submission.try(:updated_at), grade.graded_by_id, grade.created_at, grade.updated_at]
+      self.grades.each do |grade|
+        csv << [self.id, grade.student.username, grade.student.first_name, grade.student.last_name, grade.student_id, grade.assignment.name, grade.assignment.id, grade.assignment.assignment_type.name, grade.assignment.assignment_type_id, grade.raw_score, grade.point_total, grade.score, grade.predicted_score, grade.feedback, grade.submission_id, grade.submission.try(:created_at), grade.submission.try(:updated_at), grade.graded_by_id, grade.created_at, grade.updated_at]
       end
     end
   end

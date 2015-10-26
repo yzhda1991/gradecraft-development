@@ -7,4 +7,9 @@ module BackgroundJobs
   ensure
     Resque.inline = inline
   end
+
+  def run_resque_inline
+    Resque.inline = true
+    yield
+  end
 end

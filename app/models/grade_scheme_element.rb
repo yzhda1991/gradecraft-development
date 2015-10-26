@@ -41,5 +41,4 @@ class GradeSchemeElement < ActiveRecord::Base
   def progress_percent(student, course)
     ((student.cached_score_for_course(course) - low_range)/(range)) * 100
   end
-
 end

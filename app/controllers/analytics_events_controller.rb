@@ -2,7 +2,8 @@ class AnalyticsEventsController < ApplicationController
   skip_before_filter :increment_page_views
 
   def predictor_event
-    Resque.enqueue(EventLogger, 'predictor',
+    # limited to 5 predictor jobs/second in Resque initializer
+    Resque.enqueue(PredictorEventLogger, 'predictor',
                                 course_id: current_course.id,
                                 user_id: current_user.id,
                                 student_id: current_student.try(:id),
@@ -16,7 +17,8 @@ class AnalyticsEventsController < ApplicationController
   end
 
   def tab_select_event
-    Resque.enqueue(EventLogger, 'pageview',
+    # limited to 2 predictor jobs/second in Resque initializer
+    Resque.enqueue_in(Lull.time_until_next_lull, PageviewEventLogger, 'pageview',
                               course_id: current_course.id,
                               user_id: current_user.id,
                               student_id: current_student.try(:id),
@@ -26,4 +28,9 @@ class AnalyticsEventsController < ApplicationController
                               )
     render :nothing => true, :status => :ok
   end
+
+  protected
+  # add helpers for performing various tasks relative to the nightly lull
+  extend EventsHelper::Lull
+
 end

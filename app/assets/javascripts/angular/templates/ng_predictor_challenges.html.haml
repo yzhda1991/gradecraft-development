@@ -30,7 +30,7 @@
             {{challenge.grade.score | number}} / {{challenge.grade.point_total | number}}
 
 
-        .article-predicted{'ng-if' => '! articleGraded(challenge)'}
+        .article-predicted{'ng-if' => '! challengeGraded(challenge)'}
           %div
             .slider{'ui-slider'=>'slider(challenge)','min'=>'0', 'max'=>'{{challenge.grade.point_total}}', 'ng-model'=>'challenge.prediction.points_earned', 'data'=>{'id'=>'{{challenge.id}}','article-type'=>'challenge'}}
 
