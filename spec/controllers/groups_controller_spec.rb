@@ -1,30 +1,20 @@
-#spec/controllers/groups_controller_spec.rb
 require 'spec_helper'
 
 describe GroupsController do
-
-  before do
+  before(:all) { @course = create(:course_accepting_groups) }
+  before(:each) do
+    session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
   context "as professor" do
-
-    before do
-      @course = create(:course_accepting_groups)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+    end
+    before do
       @group = create(:group, course: @course)
-      @student = create(:user)
-      @second_student = create(:user)
-      @third_student = create(:user)
-      @course.students << [@student, @second_student, @third_student]
-      @group.students << [@student, @second_student, @third_student]
-      @assignment = create(:group_assignment)
-      @assignment.groups << @group
-
       login_user(@professor)
-      session[:course_id] = @course.id
     end
 
     describe "GET index" do
@@ -55,7 +45,7 @@ describe GroupsController do
     end
 
     describe "GET edit" do
-      it "renders the edit group form" do 
+      it "renders the edit group form" do
         get :edit, :id => @group.id
         expect(assigns(:title)).to eq("Editing #{@group.name}")
         expect(assigns(:group)).to eq(@group)
@@ -79,9 +69,8 @@ describe GroupsController do
       it "updates the group" do
         params = { name: "new name" }
         post :update, id: @group.id, :group => params
-        @group.reload
         expect(response).to redirect_to(group_path(@group))
-        expect(@group.name).to eq("new name")
+        expect(@group.reload.name).to eq("new name")
       end
     end
 
@@ -99,29 +88,16 @@ describe GroupsController do
         expect(response).to render_template(:review)
       end
     end
-
   end
 
   context "as student" do
-
-    before do
-      @course = create(:course_accepting_groups)
-      @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @group = create(:group, course: @course)
+    before(:all) do
       @student = create(:user)
-      @second_student = create(:user)
-      @third_student = create(:user)
       @student.courses << @course
-      @second_student.courses << @course
-      @third_student.courses << @course
-      @group.students << [@student, @second_student, @third_student]
-      @assignment = create(:group_assignment)
-      @assignment.groups << @group
-
+    end
+    before do
+      @group = create(:group, course: @course)
       login_user(@student)
-      session[:course_id] = @course.id
     end
 
     describe "GET new" do
