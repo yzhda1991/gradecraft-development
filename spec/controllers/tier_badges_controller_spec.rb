@@ -1,8 +1,19 @@
-#spec/controllers/tier_badges_controller_spec.rb
 require 'spec_helper'
 
 describe TierBadgesController do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
+
   context "as a student" do
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+    before(:each) { login_user(@student) }
+
     describe "protected routes" do
       [
         :new,
