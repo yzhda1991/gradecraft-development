@@ -1,3 +1,5 @@
+ENV["RAILS_ENV"] ||= 'test'
+
 if ENV["COVERAGE"]
   require 'simplecov'
   SimpleCov.start
@@ -29,8 +31,6 @@ if $LOADED_FEATURES.grep(/spec\/spec_helper\.rb/).any?
   end
 end
 
-# This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
@@ -48,15 +48,23 @@ Dir[Rails.root.join("spec/toolkits/**/*.rb")].each { |f| require f }
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 # ActiveRecord::Migration.maintain_test_schema!
 
+FactoryGirl::SyntaxRunner.send(:include, FileHelpers)
+
 RSpec.configure do |config|
   config.include FileHelpers
   config.before(:suite) do
     begin
-      DatabaseCleaner.start
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:truncation)
       FactoryGirl.factories.clear
-      FactoryGirl.lint
-    ensure
-      DatabaseCleaner.clean
+      #FactoryGirl.lint
+      FactoryGirl.find_definitions
+    end
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
     end
   end
 
