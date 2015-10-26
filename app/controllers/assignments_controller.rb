@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:show, :index, :description_and_downloads, :student_predictor_data]
+  before_filter :ensure_staff?, :except => [:show, :index, :description_and_downloads, :predictor_data]
 
   respond_to :html, :json
 
@@ -200,7 +200,7 @@ class AssignmentsController < ApplicationController
   end
 
   # current student visible assignment
-  def student_predictor_data
+  def predictor_data
     if current_user.is_student?(current_course)
       @student = current_student
       @update_assignments = true

@@ -79,6 +79,7 @@
       $http.get('predictor_challenges').success( (data)->
           angular.copy(data.challenges,challenges)
           termFor.challenges = data.term_for_challenges
+          update.challenges = data.update_challenges
         )
 
     postPredictedGrade = (assignment_id,value)->
@@ -92,13 +93,14 @@
           )
 
     postPredictedChallenge = (challenge_id,value)->
-      $http.post('/challenges/' + challenge_id + '/predict_points', points_earned: value).success(
-        (data)->
-          console.log(data);
-        ).error(
-        (data)->
-          console.log(data);
-        )
+      if update.challenges
+        $http.post('/challenges/' + challenge_id + '/predict_points', points_earned: value).success(
+          (data)->
+            console.log(data);
+          ).error(
+          (data)->
+            console.log(data);
+          )
 
     postPredictedBadge = (badge_id,value)->
       if update.badges

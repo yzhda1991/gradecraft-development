@@ -9,7 +9,7 @@ class Challenge < ActiveRecord::Base
     :challenge_score_levels_attributes, :challenge_score_level
 
   # grade points available to the predictor from the assignment controller
-  attr_accessor :student_predicted_earned_challenge, :current_team_grade
+  attr_accessor :prediction, :grade
 
   belongs_to :course, touch: true
   has_many :submissions

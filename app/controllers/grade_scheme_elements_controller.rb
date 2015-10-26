@@ -2,7 +2,7 @@ class GradeSchemeElementsController < ApplicationController
 
   #The Grade Scheme Elements define the point thresholds earned at which students earn course wide levels and grades
 
-  before_filter :ensure_staff?, :except => [:student_predictor_data]
+  before_filter :ensure_staff?, :except => [:predictor_data]
 
   def index
     @title = "Grade Scheme"
@@ -68,9 +68,9 @@ class GradeSchemeElementsController < ApplicationController
   #    but does not allow for a course without grade scheme elements
   # 2. A way to calculate the total points on the course, if it is not set.
   # 3. Update spec to include all valid scenarios
-  def student_predictor_data
+  def predictor_data
     @grade_scheme_elements = current_course.grade_scheme_elements.select(:id, :low_range, :letter, :level)
-    if @grade_scheme_elements
+    if @grade_scheme_elements.present?
       @total_points = (@grade_scheme_elements.first.low_range * 1.1).to_i
     else
       @total_points = current_course.total_points

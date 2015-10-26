@@ -2,7 +2,7 @@
 require 'spec_helper'
 include CourseTerms
 
-describe "grade_scheme_elements/student_predictor_data" do
+describe "grade_scheme_elements/predictor_data" do
 
   before(:all) do
     clean_models
@@ -14,10 +14,6 @@ describe "grade_scheme_elements/student_predictor_data" do
   before(:each) do
     render
     @json = JSON.parse(response.body)
-  end
-
-  it "responds with an array of assignment_types" do
-    # expect(@json["assignment_types"].length).to eq(1)
   end
 
   it "responds with total_points" do

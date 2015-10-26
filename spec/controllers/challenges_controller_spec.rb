@@ -6,7 +6,7 @@ describe ChallengesController do
 	context "as professor" do
 
     before do
-      @course = create(:course)
+      @course = create(:course, add_team_score_to_student: true)
       @professor = create(:user)
       @professor.courses << @course
       @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
@@ -104,9 +104,107 @@ describe ChallengesController do
       end
     end
 
+    describe "GET predictor_data" do
+
+      before do
+        allow(controller).to receive(:current_course).and_return(@course)
+        allow(controller).to receive(:current_user).and_return(@professor)
+      end
+
+      it "adds the prediction data to the challenge model with a zero points prediction" do
+        prediction = create(:predicted_earned_challenge, challenge: @challenge, student: @student)
+        get :predictor_data, format: :json, :id => @student.id
+        expect(assigns(:challenges)[0].prediction).to eq({ id: prediction.id, points_earned: 0 })
+      end
+
+      it "adds visible grades to the challenge data" do
+        grade = create(:graded_challenge_grade, challenge: @challenge, team: @team)
+        get :predictor_data, format: :json, :id => @student.id
+        expect(assigns(:challenges)[0].grade).to eq({ point_total: grade.point_total, score: grade.score, points_earned: grade.score })
+      end
+
+      it "adds grades as nil when not visible to student" do
+        @challenge.update(release_necessary: true)
+        grade = create(:grades_not_released_challenge_grade, challenge: @challenge, team: @team)
+        get :predictor_data, format: :json, :id => @student.id
+        expect(assigns(:challenges)[0].grade).to eq({ point_total: grade.point_total, score: nil, points_earned: nil })
+      end
+
+      context "with a student id" do
+        it "assigns the challenges with no call to update" do
+          get :predictor_data, format: :json, :id => @student.id
+          expect(assigns(:student)).to eq(@student)
+          expect(assigns(:challenges)[0].attributes.length).to eq(predictor_challenge_attributes.length)
+          predictor_challenge_attributes do |attr|
+            expect(assigns(:challenges)[0][attr]).to eq(@challenge[attr])
+          end
+          expect(assigns(:update_challenges)).to be_falsy
+          expect(response).to render_template(:predictor_data)
+        end
+      end
+
+      context "with no student" do
+        it "assigns student as null student and no call to update" do
+          get :predictor_data, format: :json
+          expect(assigns(:student).class).to eq(NullStudent)
+          expect(assigns(:update_challenges)).to be_falsy
+        end
+      end
+    end
 	end
 
 	context "as student" do
+
+    describe "GET predictor_data" do
+
+      before do
+        @course = create(:course, add_team_score_to_student: true)
+        @challenge = create(:challenge, course: @course)
+        @course.challenges << @challenge
+        @challenges = @course.challenges
+        @student = create(:user)
+        @student.courses << @course
+        @team = create(:team, course: @course)
+        @team.students << @student
+        @teams = @course.teams
+
+        login_user(@student)
+        session[:course_id] = @course.id
+        allow(Resque).to receive(:enqueue).and_return(true)
+        allow(controller).to receive(:current_course).and_return(@course)
+        allow(controller).to receive(:current_user).and_return(@student)
+      end
+
+      it "assigns the challenges with call to update" do
+        get :predictor_data, format: :json, :id => @student.id
+        expect(assigns(:student)).to eq(@student)
+        expect(assigns(:challenges)[0].attributes.length).to eq(predictor_challenge_attributes.length)
+        predictor_challenge_attributes do |attr|
+          expect(assigns(:challenges)[0][attr]).to eq(@challenge[attr])
+        end
+        expect(assigns(:update_challenges)).to be_truthy
+        expect(response).to render_template(:predictor_data)
+      end
+
+      it "adds the prediction data to the challenge data" do
+        prediction = create(:predicted_earned_challenge, challenge: @challenge, student: @student)
+        get :predictor_data, format: :json, :id => @student.id
+        expect(assigns(:challenges)[0].prediction).to eq({ id: prediction.id, points_earned: prediction.points_earned })
+      end
+
+      it "adds visible grades to the challenge data" do
+        grade = create(:graded_challenge_grade, challenge: @challenge, team: @team)
+        get :predictor_data, format: :json, :id => @student.id
+        expect(assigns(:challenges)[0].grade).to eq({ point_total: grade.point_total, score: grade.score, points_earned: grade.score })
+      end
+
+      it "adds grades as nil when not visible to student" do
+        @challenge.update(release_necessary: true)
+        grade = create(:grades_not_released_challenge_grade, challenge: @challenge, team: @team)
+        get :predictor_data, format: :json, :id => @student.id
+        expect(assigns(:challenges)[0].grade).to eq({ point_total: grade.point_total, score: nil, points_earned: nil })
+      end
+    end
 
 		describe "protected routes" do
       [
@@ -136,4 +234,16 @@ describe ChallengesController do
     end
 
 	end
+
+# helper methods:
+
+  def predictor_challenge_attributes
+    [
+      :id,
+      :name,
+      :description,
+      :point_total,
+      :visible
+    ]
+  end
 end

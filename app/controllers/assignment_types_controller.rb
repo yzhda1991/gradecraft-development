@@ -1,6 +1,6 @@
 class AssignmentTypesController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:student_predictor_data]
+  before_filter :ensure_staff?, :except => [:predictor_data]
 
   #Display list of assignment types
   def index
@@ -111,7 +111,7 @@ class AssignmentTypesController < ApplicationController
     redirect_to assignment_types_path, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@name} successfully deleted" }
   end
 
-  def student_predictor_data
+  def predictor_data
     if current_user.is_student?(current_course)
       @student = current_student
     elsif params[:id]

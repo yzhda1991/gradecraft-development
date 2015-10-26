@@ -6,7 +6,7 @@ class Badge < ActiveRecord::Base
   :visible_when_locked, :course_id
 
   # grade points available to the predictor from the assignment controller
-  attr_accessor :student_predicted_earned_badge
+  attr_accessor :prediction
 
   acts_as_list scope: :course
 
