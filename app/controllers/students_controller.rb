@@ -128,7 +128,7 @@ class StudentsController < ApplicationController
   def recalculate
     @student = current_course.students.find_by(id: params[:student_id])
 
-    # @mz TODO: add specs
+    # @mz todo: add specs
     ScoreRecalculatorJob.new(user_id: @student.id, course_id: current_course.id).enqueue
 
     flash[:notice]="Your request to recalculate #{@student.name}'s grade is being processed. Check back shortly!"

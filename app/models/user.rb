@@ -295,6 +295,27 @@ class User < ActiveRecord::Base
     next_element_level(course).low_range - cached_score_for_course(course)
   end
 
+  ### COURSE POINTS AVAILABLE
+
+  #TODO: Should take into account students weights
+  def point_total_for_course(course)
+    @point_total_for_course ||= course.assignments.point_total_for_student(self) + earned_badge_score_for_course(course)
+  end
+
+  # @mz todo: Should take into account students weights
+  def point_total_for_assignment_type(assignment_type)
+    assignment_type.assignments.map{ |a| a.point_total }.sum
+  end
+
+  ### ASSIGNMENT TYPE SCORES
+  def scores_by_assignment_type
+    grades.group(:assignment_type_id).pluck('assignment_type_id, SUM(score)')
+  end
+
+  def score_for_assignment_type(assignment_type)
+    grades.where(assignment_type: assignment_type).score
+  end
+
   ### GRADES
 
   #Checking specifically if there is a released grade for an assignment
