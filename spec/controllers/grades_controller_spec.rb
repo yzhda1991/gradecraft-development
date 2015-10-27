@@ -64,7 +64,7 @@ describe GradesController do
     end
 
     describe "PUT mass_update" do
-      before(:each) do
+      before(:all) do
         @grade_2 = create(:grade)
         @assignment.grades << @grade_2
       end
