@@ -68,12 +68,12 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
               it "should yield the archive after completion" do
                 # need to add a spec for this
-                pending
+                skip
               end
 
               it "should trigger archive_with_compression on the Archiver object" do
                 # need to add this
-                pending
+                skip
               end
             end
           end
@@ -125,19 +125,19 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
       describe "submissions_by_student_archive_hash" do
         it "should create a new jbuilder object" do
-          pending
+          skip
         end
 
         it "should create a new temp view context" do
-          pending
+          skip
         end
 
         it "should encode the template with a parital for students_by_submission" do
-          pending
+          skip
         end
 
         it "should extract and return the json for the jbuilder object" do
-          pending
+          skip
         end
       end
 

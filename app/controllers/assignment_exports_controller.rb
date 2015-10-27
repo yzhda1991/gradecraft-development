@@ -2,21 +2,22 @@ class AssignmentExportsController < ApplicationController
   before_filter :ensure_staff?
   before_filter :fetch_assignment
   before_filter :fetch_team, only: :submissions_by_team
-  before_filter :assemble_json_for_archiver
+  # seems like this need to happen somewhere, but not hooked up to anything at the moment
+  # before_filter :assemble_json_for_archiver
   before_filter :generate_export_csv
 
   respond_to :json
 
   def submissions
     @presenter = submissions_presenter
-    @archive_json submissions_by_student_archive_hash
+    @archive_json = submissions_by_student_archive_hash
     build_archive_and_queue_build_jobs
     respond_with @archive.start_archive_with_compression # should return json { status: 200, message: "Your requested export is being assembled, find it here: http://gc.com/download" }
   end
 
-  def submissions_presenter,submissions_by_team
+  def submissions_presenter_submissions_by_team
     @presenter = submissions_by_team_presenter
-    @archive_json submissions_by_student_archive_hash
+    @archive_json = submissions_by_student_archive_hash
     build_archive_and_queue_build_jobs
     respond_with @archive.start_archive_with_compression # should return json { status: 200, message: "Your requested export is being assembled, find it here: http://gc.com/download" }
   end
@@ -38,8 +39,7 @@ class AssignmentExportsController < ApplicationController
 
     def submissions_by_student_archive_hash
       JbuilderTemplate.new(temp_view_context).encode do |json|
-        json.partial! "assignment_exports/submissions_by_student_archive_json",
-          presenter: @presenter
+        json.partial! "assignment_exports/submissions_by_student_archive_json", presenter: @presenter
       end.to_json
     end
 
@@ -76,6 +76,11 @@ class AssignmentExportsController < ApplicationController
         csv_file_path: @csv_file_path,
         export_file_basename: export_file_basename
       }
+    end
+
+    # rough this in for now, need to pull this from the original method
+    def export_file_basename
+      "great_basename"
     end
 
     def fetch_assignment
