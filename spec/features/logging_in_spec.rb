@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_spec_helper"
 
 feature "logging in" do
   let(:password) { "p@ssword" }
@@ -24,5 +24,5 @@ feature "logging in" do
       expect(page).to have_error_message "Email or Password were invalid, login failed."
     end
   end
-  
+
 end

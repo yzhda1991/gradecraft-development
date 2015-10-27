@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "students/predictor/_assignments" do

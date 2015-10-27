@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe AnalyticsController do
   before { allow(Resque).to receive(:enqueue).and_return(true) }

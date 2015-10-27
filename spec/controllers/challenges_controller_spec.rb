@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe ChallengesController do
   before(:all) do

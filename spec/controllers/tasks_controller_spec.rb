@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe TasksController do
   before(:all) { @course = create(:course) }

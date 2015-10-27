@@ -1,5 +1,5 @@
 #spec/controllers/application_controller_spec.rb
-require 'spec_helper'
+require 'rails_spec_helper'
 require 'resque-scheduler'
 require 'resque_spec/scheduler'
 

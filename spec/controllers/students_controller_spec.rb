@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe StudentsController do
   before(:all) do

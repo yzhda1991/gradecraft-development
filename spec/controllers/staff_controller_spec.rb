@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe StaffController do
   before(:all) { @course = create(:course) }

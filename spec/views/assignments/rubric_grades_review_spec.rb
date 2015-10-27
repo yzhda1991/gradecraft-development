@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe "assignments/rubric_grades_review" do
 

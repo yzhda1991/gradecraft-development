@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 RSpec.describe ResqueJob::Outcome,  type: :vendor_library do
   describe "initialize" do

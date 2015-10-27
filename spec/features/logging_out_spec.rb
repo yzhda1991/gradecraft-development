@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_spec_helper"
 
 feature "logging out" do
   let(:password) { "p@ssword" }
@@ -24,5 +24,5 @@ feature "logging out" do
     end
 
   end
-  
+
 end

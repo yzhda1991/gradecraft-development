@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe GroupsController do
   before(:all) { @course = create(:course_accepting_groups) }
