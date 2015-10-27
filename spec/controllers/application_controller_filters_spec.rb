@@ -72,7 +72,7 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
       end
     end
 
-    context "Resque fails to reach Redis and returns a getaddrinfo socket error", focus: true do
+    context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
       before do
         stub_current_user
         allow(PageviewEventLogger).to receive(:new).and_raise("Could not connect to Redis: getaddrinfo socket error.")
