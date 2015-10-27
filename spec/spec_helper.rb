@@ -7,7 +7,7 @@ require 'capybara/rspec'
 require 'resque_spec/scheduler' # allow resque spec to test scheduled jobs
 
 # try to load the mongoid config
-Mongoid.load!(Rails.root.join("/config/mongoid.yml"))
+# Mongoid.load!(Rails.root.join("/config/mongoid.yml"))
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
