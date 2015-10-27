@@ -61,11 +61,32 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
 
       it "should create a new pageview logger" do
         expect(PageviewEventLogger).to receive(:new).with(pageview_logger_attrs_expectation) { @pageview_event_logger }
-        get :html_page
       end
 
       it "should enqueue the new pageview logger in 2 hours" do
         expect(@pageview_event_logger).to receive(:enqueue_in).with(2.hours) { @enqueue_response }
+      end
+
+      after(:each) do
+        get :html_page
+      end
+    end
+
+    context "Resque fails to reach Redis and returns a getaddrinfo socket error", focus: true do
+      before do
+        stub_current_user
+        allow(PageviewEventLogger).to receive(:new).and_raise("Could not connect to Redis: getaddrinfo socket error.")
+      end
+
+      it "performs the pageview event log directly from the controller" do
+        expect(PageviewEventLogger).to receive(:perform).with('pageview', pageview_logger_attrs_expectation)
+      end
+
+      it "adds an additional pageview record to mongo" do
+        expect { get :html_page }.to change{ Analytics::Event.count }.by(1)
+      end
+
+      after(:each) do
         get :html_page
       end
     end
