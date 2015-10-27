@@ -112,20 +112,20 @@ describe ChallengesController do
       it "adds the prediction data to the challenge model with a zero points prediction" do
         prediction = create(:predicted_earned_challenge, challenge: @challenge, student: @student)
         get :predictor_data, format: :json, :id => @student.id
-        expect(assigns(:challenges)[0].prediction).to eq({ id: prediction.id, points_earned: 0 })
+        expect(assigns(:challenges).last.prediction).to eq({ id: prediction.id, points_earned: 0 })
       end
 
       it "adds visible grades to the challenge data" do
         grade = create(:graded_challenge_grade, challenge: @challenge, team: @team)
         get :predictor_data, format: :json, :id => @student.id
-        expect(assigns(:challenges)[0].grade).to eq({ point_total: grade.point_total, score: grade.score, points_earned: grade.score })
+        expect(assigns(:challenges).last.grade).to eq({ point_total: grade.point_total, score: grade.score, points_earned: grade.score })
       end
 
       it "adds grades as nil when not visible to student" do
         @challenge.update(release_necessary: true)
         grade = create(:grades_not_released_challenge_grade, challenge: @challenge, team: @team)
         get :predictor_data, format: :json, :id => @student.id
-        expect(assigns(:challenges)[0].grade).to eq({ point_total: grade.point_total, score: nil, points_earned: nil })
+        expect(assigns(:challenges).last.grade).to eq({ point_total: grade.point_total, score: nil, points_earned: nil })
       end
 
       context "with a student id" do
