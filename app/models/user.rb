@@ -389,7 +389,11 @@ class User < ActiveRecord::Base
             total_score += assignment_type.visible_score_for_student(self)
           end
           total_score += earned_badge_score_for_course(course_id)
-          total_score += (self.team_for_course(course_id).try(:score) || 0)
+          # @mz todo: refactor this mo
+          # don't need to check current_course.add_team_score_to_student? because that's being called above
+          unless current_course.team_score_average
+            total_score += (self.team_for_course(course_id).try(:score) || 0)
+          end
         )
       else
         membership.update_attribute :score, (
@@ -417,7 +421,11 @@ class User < ActiveRecord::Base
             total_score += assignment_type.visible_score_for_student(self)
           end
           total_score += earned_badge_score_for_course(course_id)
-          total_score += (self.team_for_course(course_id).try(:score) || 0)
+
+          # don't need to check current_course.add_team_score_to_student? because that's being called above
+          unless current_course.team_score_average
+            total_score += (self.team_for_course(course_id).try(:score) || 0)
+          end
         )
       else
         membership.update_attribute :score, (
