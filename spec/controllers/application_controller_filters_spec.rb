@@ -72,7 +72,7 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
       end
     end
 
-    context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
+    context "Resque fails to reach Redis and returns a getaddrinfo socket error", focus: true do
       before do
         stub_current_user
         allow(PageviewEventLogger).to receive(:new).and_raise("Could not connect to Redis: getaddrinfo socket error.")
@@ -80,14 +80,11 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
 
       it "performs the pageview event log directly from the controller" do
         expect(PageviewEventLogger).to receive(:perform).with('pageview', pageview_logger_attrs_expectation)
+        get :html_page
       end
 
       it "adds an additional pageview record to mongo" do
         expect { get :html_page }.to change{ Analytics::Event.count }.by(1)
-      end
-
-      after(:each) do
-        get :html_page
       end
     end
 
