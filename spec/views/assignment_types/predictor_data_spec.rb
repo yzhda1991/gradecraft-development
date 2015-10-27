@@ -3,12 +3,10 @@ require 'spec_helper'
 include CourseTerms
 
 describe "assignment_types/predictor_data" do
-
   before(:all) do
-    clean_models
     @course = create(:course, assignment_term: "mission")
-    @assignment_type = create(:assignment_type, course: @course, student_weightable: true, max_points: 1234)
-    @assignment_types = [@assignment_type]
+    assignment_type = create(:assignment_type, course: @course, student_weightable: true, max_points: 1234)
+    @assignment_types = [assignment_type]
     @student = create(:user)
   end
 

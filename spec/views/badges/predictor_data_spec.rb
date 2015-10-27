@@ -3,13 +3,14 @@ require 'spec_helper'
 include CourseTerms
 
 describe "badges/predictor_data" do
+  before(:all) do
+    @course = create(:course, badge_term: "baj")
+    @student = create(:user)
+  end
 
   before(:each) do
-    clean_models
-    @course = create(:course, badge_term: "baj")
     @badge = create(:badge, description: "...")
     @badges = [@badge]
-    @student = create(:user)
     allow(view).to receive(:current_course).and_return(@course)
   end
 
@@ -84,32 +85,32 @@ describe "badges/predictor_data" do
   end
 
   it "includes unlock keys when badge is an unlock condition" do
-    @assignment = create(:assignment)
-    @unlock_key = create(:unlock_condition, unlockable: @assignment, unlockable_type: "Assignment", condition: @badge, condition_type: "Badge")
+    assignment = create(:assignment)
+    unlock_key = create(:unlock_condition, unlockable: assignment, unlockable_type: "Assignment", condition: @badge, condition_type: "Badge")
     render
-    @json = JSON.parse(response.body)
-    expect(@json["badges"][0]["unlock_keys"]).to eq(["#{@assignment.name} is unlocked by #{@unlock_key.condition_state} #{@badge.name}"])
+    json = JSON.parse(response.body)
+    expect(json["badges"][0]["unlock_keys"]).to eq(["#{assignment.name} is unlocked by #{unlock_key.condition_state} #{@badge.name}"])
   end
 
   it "includes unlock conditions when badge is a unlockable" do
-    @assignment = create(:assignment)
-    @unlock_condition = create(:unlock_condition, unlockable: @badge, unlockable_type: "Badge", condition: @assignment, condition_type: "Assignment")
+    assignment = create(:assignment)
+    unlock_condition = create(:unlock_condition, unlockable: @badge, unlockable_type: "Badge", condition: assignment, condition_type: "Assignment")
     render
-    @json = JSON.parse(response.body)
-    expect(@json["badges"][0]["unlock_conditions"]).to eq(["#{@assignment.name} must be #{@unlock_condition.condition_state}"])
+    json = JSON.parse(response.body)
+    expect(json["badges"][0]["unlock_conditions"]).to eq(["#{assignment.name} must be #{unlock_condition.condition_state}"])
   end
 
   it "renders term for badge, badges" do
     render
-    @json = JSON.parse(response.body)
-    expect(@json["term_for_badge"]).to eq("baj")
-    expect(@json["term_for_badges"]).to eq("bajs")
+    json = JSON.parse(response.body)
+    expect(json["term_for_badge"]).to eq("baj")
+    expect(json["term_for_badges"]).to eq("bajs")
   end
 
   it "includes update_badges" do
     @update_badges = true
     render
-    @json = JSON.parse(response.body)
-    expect(@json["update_badges"]).to be_truthy
+    json = JSON.parse(response.body)
+    expect(json["update_badges"]).to be_truthy
   end
 end

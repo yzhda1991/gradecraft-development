@@ -3,14 +3,11 @@ require 'spec_helper'
 include CourseTerms
 
 describe "grade_scheme_elements/predictor_data" do
-
   before(:all) do
-    clean_models
     @grade_scheme_element = create(:grade_scheme_element_high)
     @grade_scheme_elements = [@grade_scheme_element]
     @total_points = 10000
   end
-
   before(:each) do
     render
     @json = JSON.parse(response.body)

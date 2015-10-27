@@ -10,7 +10,7 @@ describe "assignments/individual/_table_body" do
     @course = create(:course)
     @assignment_type = create(:assignment_type)
     @assignment = create(:assignment, assignment_type: @assignment_type)
-    course.assignments << @assignment
+    @course.assignments << @assignment
     student = create(:user)
     student.courses << @course
     @grade = create(:grade, course: @course, assignment: @assignment, student: student)
