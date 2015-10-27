@@ -65,20 +65,21 @@ describe GradesController do
 
     describe "PUT mass_update" do
       before(:all) do
-        @grade_2 = create(:grade)
-        @assignment.grades << @grade_2
+        @grade_2 = create(:grade, assignment: @assignment)
       end
 
       let(:grades_attributes) do
-        { "0" => { graded_by_id: @professor.id, instructor_modified: true,
-                   student_id: @student.id, raw_score: 1000, status: "Graded", id: @grade_2.id }}
+        { "#{@assignment.grades.index(@grade_2)}" =>
+          { graded_by_id: @professor.id, instructor_modified: true,
+            student_id: @grade_2.student_id, raw_score: 1000, status: "Graded",
+            id: @grade_2.id
+          }
+        }
       end
 
       it "updates the grades for the specific assignment" do
-        run_resque_inline do
-          put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
-          expect(@grade_2.reload.raw_score).to eq 1000
-        end
+        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
+        expect(@grade_2.reload.raw_score).to eq 1000
       end
 
       it "sends a notification to the student to inform them of a new grade" do
