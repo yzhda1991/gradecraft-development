@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe AssignmentsController do
-  before(:all) { @course = create(:course) }
+  before(:all) do
+    @course = create(:course)
+    @student = create(:user)
+    @student.courses << @course
+  end
   before(:each) do
     session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
@@ -12,12 +16,10 @@ describe AssignmentsController do
       @professor = create(:user)
       CourseMembership.create user: @professor, course: @course, role: "professor"
       @assignment_type = create(:assignment_type, course: @course)
-      @student = create(:user)
     end
 
     before(:each) do
       @assignment = create(:assignment, assignment_type: @assignment_type, course: @course)
-      @student.courses << @course
       login_user(@professor)
     end
 
@@ -127,8 +129,7 @@ describe AssignmentsController do
       it "assigns true or false to assignment use_rubric" do
         @assignment.update(:use_rubric => false)
         post :update_rubrics, :id => @assignment, :use_rubric => true
-        @assignment.reload
-        expect(@assignment.use_rubric).to be_truthy
+        expect(@assignment.reload.use_rubric).to be_truthy
       end
     end
 
@@ -253,11 +254,7 @@ describe AssignmentsController do
   end
 
   context "as a student" do
-    before do
-      @student = create(:user)
-      @student.courses << @course
-      login_user(@student)
-    end
+    before(:each) { login_user(@student) }
 
     describe "GET index" do
       it "redirects to syllabus path" do
@@ -299,7 +296,7 @@ describe AssignmentsController do
       end
 
       it "includes the student's grade with score for assignment when released" do
-        @grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id)
+        grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id)
         get :predictor_data, format: :json, :id => @student.id
         [
           :assignment_id,
@@ -311,15 +308,14 @@ describe AssignmentsController do
           :student_id,
           :raw_score,
           :score
-
         ].each do |attr|
-           expect(assigns(:grades)[0][attr]).to eq(@grade[attr])
+           expect(assigns(:grades)[0][attr]).to eq(grade[attr])
         end
-        expect(assigns(:assignments)[0].current_student_grade).to eq({ id: @grade.id, pass_fail_status: nil, score: @grade.score, predicted_score: @grade.predicted_score })
+        expect(assigns(:assignments)[0].current_student_grade).to eq({ id: grade.id, pass_fail_status: nil, score: grade.score, predicted_score: grade.predicted_score })
       end
 
       it "includes student grade with no score if not released" do
-        @grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
+        grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignments)[0].current_student_grade[:score]).to eq(nil)
       end
@@ -346,13 +342,13 @@ describe AssignmentsController do
       end
 
       it "includes pass/fail status for released pass/fail grades" do
-        @grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
+        grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignments)[0].current_student_grade[:pass_fail_status]).to eq("Pass")
       end
 
       it "includes student grade with no pass fail status if not released" do
-        @grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
+        grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignments)[0].current_student_grade[:pass_fail_status]).to be_nil
       end
