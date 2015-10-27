@@ -2,7 +2,7 @@
 require 'spec_helper'
 include CourseTerms
 
-describe "badges/student_predictor_data" do
+describe "badges/predictor_data" do
 
   before(:each) do
     clean_models
@@ -46,7 +46,7 @@ describe "badges/student_predictor_data" do
   end
 
   it "adds the student predicted earned badge info to the badge" do
-    allow(@badge).to receive(:student_predicted_earned_badge).and_return({ id: 5, times_earned: 3 })
+    allow(@badge).to receive(:prediction).and_return({ id: 5, times_earned: 3 })
     render
     @json = JSON.parse(response.body)
     expect(@json["badges"][0]["prediction"]).to eq({ "id" => 5, "times_earned" => 3 })

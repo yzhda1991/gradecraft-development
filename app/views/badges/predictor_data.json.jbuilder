@@ -5,7 +5,7 @@ json.badges @badges do |badge|
   json.total_earned_points badge.earned_badge_total_points(@student)
   json.earned_badge_count badge.earned_badge_count_for_student(@student)
 
-  json.prediction badge.student_predicted_earned_badge
+  json.prediction badge.prediction
 
   # boolean states for icons
   json.has_info ! badge.description.blank?

@@ -1,6 +1,6 @@
 class ChallengesController < ApplicationController
 
-  before_filter :ensure_staff?, :except=>[:index, :show, :student_predictor_data, :predict_points]
+  before_filter :ensure_staff?, :except=>[:index, :show, :predictor_data, :predict_points]
   before_filter :ensure_student?, only: [:predict_points]
 
   def index
@@ -128,37 +128,59 @@ class ChallengesController < ApplicationController
 
   public
 
-  def student_predictor_data
+  def predictor_data
     if current_user.is_student?(current_course)
       @student = current_student
+      @update_challenges = true
     elsif params[:id]
       @student = User.find(params[:id])
+      @update_challenges = false
     else
       @student = NullStudent.new
+      @update_challenges = false
     end
+    @challenges = predictor_challenge_data
+  end
 
-    @challenges = []
+  private
+
+  def predictor_challenge_data
+
+    challenges = []
     if current_course.challenges.present? && @student.team_for_course(current_course).present? && current_course.add_team_score_to_student
-      @challenges = current_course.challenges
-
-      @challenges.each do |challenge|
-        challenge.student_predicted_earned_challenge = challenge.find_or_create_predicted_earned_challenge(@student)
-      end
+      challenges = current_course.challenges.select(
+        :id,
+        :name,
+        :visible,
+        :description,
+        :point_total)
 
       team = @student.team_for_course(current_course)
-
       @grades = team.challenge_grades
 
-      @challenges.each do |challenge|
-        @grades.where(:challenge_id => challenge.id).first.tap do |grade|
+      challenges.each do |challenge|
+        prediction = challenge.find_or_create_predicted_earned_challenge(@student)
 
-          if grade.nil?
-            grade = ChallengeGrade.create(:challenge => challenge, :team => team)
-          end
+        if current_user.is_student?(current_course)
+          challenge.prediction = { id: prediction.id, points_earned: prediction.points_earned }
+        else
+          challenge.prediction = { id: prediction.id, points_earned: 0 }
+        end
 
-          challenge.current_team_grade = grade
+        grade = @grades.where(:challenge_id => challenge.id).first
+
+        if grade.present? and grade.is_student_visible?
+          # point_total is presented on the grade model to mirror the assignment.grade.point_total,
+          # which is necessary since assignment.grade.point_total is student specific
+          #
+          # TODO change score to points_earned on the model,
+          #      use points_earned in the front end on challenges and grades
+          challenge.grade = { point_total: challenge.point_total, score: grade.score, points_earned: grade.score }
+        else
+          challenge.grade = { point_total: challenge.point_total, score: nil, points_earned: nil }
         end
       end
     end
+    return challenges
   end
 end

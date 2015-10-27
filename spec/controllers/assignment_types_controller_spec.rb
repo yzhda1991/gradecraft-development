@@ -131,17 +131,17 @@ describe AssignmentTypesController do
     describe "GET student predictor data" do
 
       it "returns assignment types as json with current student if id present" do
-        get :student_predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:student)).to eq(@student)
         expect(assigns(:assignment_types)).to eq([@assignment_type])
-        expect(response).to render_template(:student_predictor_data)
+        expect(response).to render_template(:predictor_data)
       end
 
       it "returns assignment types with null student if no id present" do
-        get :student_predictor_data, format: :json
+        get :predictor_data, format: :json
         expect(assigns(:student).class).to eq(NullStudent)
         expect(assigns(:assignment_types)).to eq([@assignment_type])
-        expect(response).to render_template(:student_predictor_data)
+        expect(response).to render_template(:predictor_data)
       end
     end
 	end
@@ -164,10 +164,10 @@ describe AssignmentTypesController do
       end
 
       it "returns assignment types as json for the current course" do
-        get :student_predictor_data, format: :json
+        get :predictor_data, format: :json
         expect(assigns(:student)).to eq(@student)
         expect(assigns(:assignment_types)).to eq([@assignment_type])
-        expect(response).to render_template(:student_predictor_data)
+        expect(response).to render_template(:predictor_data)
       end
     end
 

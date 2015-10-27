@@ -15,7 +15,7 @@ describe PredictedEarnedBadge do
 
   it { is_expected.to be_valid }
 
-  it "caluculated the total points predicted" do
+  it "caluculates the total points predicted" do
     expect(@predicted_earned_badge.total_predicted_points).to eq(@predicted_earned_badge.times_earned * @predicted_earned_badge.badge.point_total)
   end
 

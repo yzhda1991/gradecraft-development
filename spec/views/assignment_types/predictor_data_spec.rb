@@ -2,7 +2,7 @@
 require 'spec_helper'
 include CourseTerms
 
-describe "assignment_types/student_predictor_data" do
+describe "assignment_types/predictor_data" do
 
   before(:all) do
     clean_models

@@ -45,6 +45,8 @@
     else
       return false
 
+# TODO: score will be changed to points_earned, this should be changed on the JSON data
+# and all queries to grade.score and challenge_grade.score in the predictor
   $scope.articleGraded = (assignment)->
     if assignment.grade.score == null
       return false

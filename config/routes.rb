@@ -346,19 +346,19 @@ GradeCraft::Application.routes.draw do
   #16. Predictor, Student View
   get 'gse_mass_edit' => 'grade_scheme_elements#mass_edit', defaults: {format: :json}
   get 'predictor' => 'students#predictor'
-  get 'predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
-  get 'predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
-  get 'predictor_assignments' => 'assignments#student_predictor_data', defaults: {format: :json}
-  get 'predictor_badges' => 'badges#student_predictor_data', defaults: {format: :json}
-  get 'predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
-  get 'predictor_weights' => 'assignment_type_weights#student_predictor_data', defaults: {format: :json}
+  get 'predictor_grade_levels' => 'grade_scheme_elements#predictor_data', defaults: {format: :json}
+  get 'predictor_assignment_types' => 'assignment_types#predictor_data', defaults: {format: :json}
+  get 'predictor_assignments' => 'assignments#predictor_data', defaults: {format: :json}
+  get 'predictor_badges' => 'badges#predictor_data', defaults: {format: :json}
+  get 'predictor_challenges' => 'challenges#predictor_data', defaults: {format: :json}
+  get 'predictor_weights' => 'assignment_type_weights#predictor_data', defaults: {format: :json}
 
   #17b. Predictor, Instructor View
-  get 'students/:id/predictor_grade_levels' => 'grade_scheme_elements#student_predictor_data', defaults: {format: :json}
-  get 'students/:id/predictor_assignment_types' => 'assignment_types#student_predictor_data', defaults: {format: :json}
-  get 'students/:id/predictor_assignments' => 'assignments#student_predictor_data', defaults: {format: :json}
-  get 'students/:id/predictor_badges' => 'badges#student_predictor_data', defaults: {format: :json}
-  get 'students/:id/predictor_challenges' => 'challenges#student_predictor_data', defaults: {format: :json}
-  get 'students/:id/predictor_weights' => 'assignment_type_weights#student_predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_grade_levels' => 'grade_scheme_elements#predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_assignment_types' => 'assignment_types#predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_assignments' => 'assignments#predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_badges' => 'badges#predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_challenges' => 'challenges#predictor_data', defaults: {format: :json}
+  get 'students/:id/predictor_weights' => 'assignment_type_weights#predictor_data', defaults: {format: :json}
 
 end

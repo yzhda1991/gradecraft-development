@@ -3,7 +3,9 @@ require 'spec_helper'
 
 describe BadgesController do
 	context "as professor" do
-    before do
+
+    before(:all) do
+      clean_models
       @course = create(:course_accepting_groups)
       @professor = create(:user)
       @professor.courses << @course
@@ -11,7 +13,9 @@ describe BadgesController do
       @badge = create(:badge, course: @course)
       @student = create(:user)
       @student.courses << @course
+    end
 
+    before do
       login_user(@professor)
       session[:course_id] = @course.id
       allow(Resque).to receive(:enqueue).and_return(true)
@@ -74,18 +78,27 @@ describe BadgesController do
     end
 
 		describe "POST update" do
+
+      before do
+        @badge_2 = create(:badge, course: @course)
+      end
+
+      after do
+        @badge_2.destroy
+      end
+
       it "updates the badge" do
         params = { name: "new name" }
-        post :update, id: @badge.id, :badge => params
-        @badge.reload
+        post :update, id: @badge_2.id, :badge => params
+        @badge_2.reload
         expect(response).to redirect_to(badges_path)
-        expect(@badge.name).to eq("new name")
+        expect(@badge_2.name).to eq("new name")
       end
 
       it "manages file uploads" do
         params = {:badge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
-        post :update, id: @badge.id, :badge => params
-        expect expect(@badge.badge_files.count).to eq(1)
+        post :update, id: @badge_2.id, :badge => params
+        expect expect(@badge_2.badge_files.count).to eq(1)
       end
     end
 
@@ -104,45 +117,46 @@ describe BadgesController do
     end
 
 		describe "GET destroy" do
+
+      before do
+        @badge_2 = create(:badge, course: @course)
+      end
+
       it "destroys the badge" do
-        expect{ get :destroy, :id => @badge }.to change(Badge,:count).by(-1)
+        expect{ get :destroy, :id => @badge_2 }.to change(Badge,:count).by(-1)
       end
     end
 
-    describe "GET student_predictor_data" do
+    describe "GET predictor_data" do
 
       before do
         allow(controller).to receive(:current_course).and_return(@course)
         allow(controller).to receive(:current_user).and_return(@professor)
       end
 
-      describe "GET student_predictor_data" do
+      it "adds the prediction data to the badge model with prediction no less than earned" do
+        prediction = create(:predicted_earned_badge, badge: @badge, student: @student, times_earned: 4)
+        get :predictor_data, format: :json, :id => @student.id
+        expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, times_earned: 0 })
+      end
 
-        context "with a student id" do
-          it "assigns the assignments with no call to update" do
-            get :student_predictor_data, format: :json, :id => @student.id
-            expect(assigns(:student)).to eq(@student)
-            expect(assigns(:badges)[0].attributes.length).to eq(predictor_badge_attributes.length)
-            predictor_badge_attributes.length do |attr|
-              expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
-            end
-            expect(assigns(:update_badges)).to be_falsy
-            expect(response).to render_template(:student_predictor_data)
+      context "with a student id" do
+        it "assigns the badges with no call to update" do
+          get :predictor_data, format: :json, :id => @student.id
+          expect(assigns(:student)).to eq(@student)
+          predictor_badge_attributes do |attr|
+            expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
           end
+          expect(assigns(:update_badges)).to be_falsy
+          expect(response).to render_template(:predictor_data)
         end
+      end
 
-        context "with no student" do
-          it "assigns student as null student and no call to update" do
-            get :student_predictor_data, format: :json
-            expect(assigns(:student).class).to eq(NullStudent)
-            expect(assigns(:update_assignments)).to be_falsy
-          end
-        end
-
-        it "adds the prediction data to the badge model with prediction equal to earned" do
-          prediction = create(:predicted_earned_badge, badge: @badge, student: @student, times_earned: 4)
-          get :student_predictor_data, format: :json, :id => @student.id
-          expect(assigns(:badges)[0].student_predicted_earned_badge).to eq({ id: prediction.id, times_earned: 0 })
+      context "with no student" do
+        it "assigns student as null student and no call to update" do
+          get :predictor_data, format: :json
+          expect(assigns(:student).class).to eq(NullStudent)
+          expect(assigns(:update_badges)).to be_falsy
         end
       end
     end
@@ -150,33 +164,48 @@ describe BadgesController do
 
 	context "as student" do
 
-    describe "GET student_predictor_data" do
+    describe "accessible routes" do
 
-      before do
+      before(:all) do
+        clean_models
         @course = create(:course)
         @student = create(:user)
         @student.courses << @course
         @badge = create(:badge, course: @course)
+      end
+
+      before do
         login_user(@student)
         allow(controller).to receive(:current_course).and_return(@course)
         allow(controller).to receive(:current_user).and_return(@student)
       end
 
-      it "assigns the student and badges with the call to update" do
-        get :student_predictor_data, format: :json, :id => @student.id
-        expect(assigns(:student)).to eq(@student)
-        expect(assigns(:badges)[0].attributes.length).to eq(predictor_badge_attributes.length)
-        predictor_badge_attributes.length do |attr|
-          expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
+      describe "POST predict_times_earned" do
+        it "updates the predicted times earned for a badge" do
+          create(:predicted_earned_badge, badge: @badge, student: @student)
+          predicted_times_earned = 4
+          post :predict_times_earned, badge_id: @badge.id, times_earned: predicted_times_earned, format: :json
+          expect(PredictedEarnedBadge.where(student: @student, badge: @badge).first.times_earned).to eq(4)
+          expect(JSON.parse(response.body)).to eq({"id" => @badge.id, "times_earned" => predicted_times_earned})
         end
-        expect(assigns(:update_badges)).to be_truthy
-        expect(response).to render_template(:student_predictor_data)
       end
 
-      it "adds the prediction data to the badge model" do
-        prediction = create(:predicted_earned_badge, badge: @badge, student: @student)
-        get :student_predictor_data, format: :json, :id => @student.id
-        expect(assigns(:badges)[0].student_predicted_earned_badge).to eq({ id: prediction.id, times_earned: prediction.times_earned })
+      describe "GET predictor_data" do
+        it "assigns the student and badges with the call to update" do
+          get :predictor_data, format: :json, :id => @student.id
+          expect(assigns(:student)).to eq(@student)
+          predictor_badge_attributes.each do |attr|
+            expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
+          end
+          expect(assigns(:update_badges)).to be_truthy
+          expect(response).to render_template(:predictor_data)
+        end
+
+        it "adds the prediction data to the badge model" do
+          prediction = create(:predicted_earned_badge, badge: @badge, student: @student)
+          get :predictor_data, format: :json, :id => @student.id
+          expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, times_earned: prediction.times_earned })
+        end
       end
     end
 
@@ -221,7 +250,6 @@ describe BadgesController do
       :visible_when_locked,
       :can_earn_multiple_times,
       :position,
-      :updated_at,
       :icon
     ]
   end
