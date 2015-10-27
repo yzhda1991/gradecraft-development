@@ -1,4 +1,4 @@
-require "base_spec_helper"
+require "spec_helper"
 require "active_record"
 require "active_support/core_ext"
 require "acts_as_list"
