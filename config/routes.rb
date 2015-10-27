@@ -232,8 +232,7 @@ GradeCraft::Application.routes.draw do
 
   resources :home
 
-  get 'using_gradecraft' => 'pages#using_gradecraft'
-  get 'contact' => 'pages#contact'
+  get 'um_pilot' => 'pages#um_pilot'
   get 'features' => 'pages#features'
 
   #11. Rubrics & Grade Schemes
@@ -304,17 +303,13 @@ GradeCraft::Application.routes.draw do
   resources :passwords, path_names: { new: 'reset' }, except: [:destroy, :index]
   resources :student_academic_histories
 
-  get 'calendar' => 'students#calendar'
   get 'timeline' => 'students#timeline'
-  get 'badges' => 'students#badges'
-  get 'calendar' => 'students#calendar'
   get 'syllabus' => 'students#syllabus'
   get 'course_progress' => 'students#course_progress'
   get 'my_badges' => 'students#badges'
   get 'my_team' => 'students#teams'
 
   #14. User Auth
-  post 'auth/kerberos/callback', to: 'user_sessions#kerberos_create', as: :auth_kerberos_callback
   post 'auth/lti/callback', to: 'user_sessions#lti_create'
   get 'auth/failure' => 'pages#auth_failure', as: :auth_failure
 
@@ -328,11 +323,7 @@ GradeCraft::Application.routes.draw do
   get 'saml/metadata'
   get 'saml/logout'
 
-
-
   get 'lti/:provider/launch', to: 'lti#launch', :as => :launch_lti_provider
-
-  # get 'cosign_test' => 'info#cosign_test'
 
   #15. Uploads
   resource :uploads do

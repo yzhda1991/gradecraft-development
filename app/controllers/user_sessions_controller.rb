@@ -1,12 +1,13 @@
 class UserSessionsController < ApplicationController
 
   skip_before_filter :require_login, :except => [:index]
-  skip_before_filter :verify_authenticity_token, :only => [:lti_create, :kerberos_create]
+  skip_before_filter :verify_authenticity_token, :only => [:lti_create]
 
   def new
     @user = User.new
   end
 
+  #sorcery login - users have passwords stored in our db
   def create
     respond_to do |format|
       if @user = login(params[:user][:email], params[:user][:password])
@@ -21,6 +22,7 @@ class UserSessionsController < ApplicationController
     end
   end
 
+  #lti login - we do not record users passwords, they login via an outside app
   def lti_create
     @user = User.find_or_create_by_lti_auth_hash(auth_hash)
     @course = Course.find_or_create_by_lti_auth_hash(auth_hash)
@@ -38,20 +40,6 @@ class UserSessionsController < ApplicationController
     auto_login @user
     User.increment_counter(:visit_count, @user.id)
     respond_with @user, location: dashboard_path
-  end
-
-  def kerberos_create
-    @user = User.find_by_kerberos_auth_hash(auth_hash)
-    if !@user
-      kerberos_error_notification
-      flash[:alert] = t('sessions.create.error')
-      redirect_to auth_failure_path and return
-    end
-    auto_login @user
-    User.increment_counter(:visit_count, @user.id)
-    log_course_login_event
-    respond_with @user, location: dashboard_path
-    #redirect_back_or_to dashboard_path
   end
 
   def destroy
