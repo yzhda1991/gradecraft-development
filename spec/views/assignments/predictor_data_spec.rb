@@ -113,6 +113,13 @@ describe "assignments/predictor_data" do
       json = JSON.parse(response.body)
       expect(json["assignments"][0]["is_a_condition"]).to be_truthy
     end
+
+    it "adds is_earned_by_group to model" do
+      allow(@assignment).to receive(:grade_scope).and_return("Group")
+      render
+      @json = JSON.parse(response.body)
+      expect(@json["assignments"][0]["is_earned_by_group"]).to be_truthy
+    end
   end
 
   it "includes unlock keys when assignment is an unlock condition" do

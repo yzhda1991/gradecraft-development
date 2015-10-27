@@ -66,6 +66,10 @@
           tooltip: scope.keys()
           icon: "fa-key"
         }
+        is_earned_by_group: {
+          tooltip: 'This ' + scope.targetTerm() + ' is earned by a group'
+          icon: "fa-cubes"
+        }
       }
   }
 ]
