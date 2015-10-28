@@ -16,7 +16,12 @@ describe CancelsCourseMembership do
       expect(membership.user.reload.grades).to be_empty
     end
 
-    xit "removes the rubric grades for the student"
+    it "removes the rubric grades for the student" do
+      create :rubric_grade, student: membership.user
+      described_class.for_student membership
+      expect(RubricGrade.where(student_id: membership.user.id)).to be_empty
+    end
+
     xit "removes the assignment weights for the student"
     xit "removes the assignment type weights for the student"
     xit "removes the submissions for the student"
