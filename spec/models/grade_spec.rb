@@ -71,6 +71,16 @@ describe Grade do
     end
   end
 
+  describe ".for_course" do
+    it "returns all grades for a specific course" do
+      course = create(:course)
+      course_grade = create(:grade, course: course)
+      another_grade = create(:grade)
+      results = Grade.for_course(course)
+      expect(results).to eq [course_grade]
+    end
+  end
+
   describe ".for_student" do
     it "returns all grades for a specific student" do
       student = create(:user)

@@ -58,6 +58,7 @@ class Grade < ActiveRecord::Base
   scope :instructor_modified, -> { where('instructor_modified = ?', true) }
   scope :positive, -> { where('score > 0')}
   scope :predicted_to_be_done, -> { where('predicted_score > 0')}
+  scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
 
   # @mz todo: add specs
