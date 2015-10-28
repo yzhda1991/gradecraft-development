@@ -448,8 +448,6 @@ class GradesController < ApplicationController
       @grade.status = "Graded"
       respond_to do |format|
         if @grade.save
-          pp @grade.errors.messages
-
           # @mz TODO: add specs
           @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
           @grade_updater_job.enqueue

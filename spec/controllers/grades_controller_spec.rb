@@ -189,40 +189,16 @@ describe GradesController do
     end
 
     describe "POST self_log" do
-      before(:all) do
-        @course = create(:course)
-        @assignment = create(:assignment, course: @course)
-
-        @student = create(:user)
-        @student.courses << @course
-      end
-
-      before(:each) do
-        session[:course_id] = @course.id
-        allow(Resque).to receive(:enqueue).and_return(true)
-      end
-
-      before(:all) do
-        @professor = create(:user)
-        CourseMembership.create user: @professor, course: @course, role: "professor"
-      end
-      before (:each) do
-        @grade = create(:grade)
-        @assignment.grades << @grade
-        login_user(@professor)
-      end
-
-
       it "creates a maximum score by the student" do
         post :self_log, id: @assignment.id, present: "true"
-        grade = @assignment.grades.last
+        grade = @student.grade_for_assignment(@assignment)
         expect(grade.raw_score).to eq @assignment.point_total
       end
 
       context "with assignment levels" do
         it "creates a score for the student at the specified level" do
           post :self_log, id: @assignment.id, present: "true", grade: { raw_score: "10000" }
-          grade = @assignment.grades.last
+          grade = @student.grade_for_assignment(@assignment)
           expect(grade.raw_score).to eq 10000
         end
       end
