@@ -5,6 +5,11 @@ describe CancelsCourseMembership do
   describe ".for_student" do
     let(:membership) { create(:student_course_membership) }
 
+    it "removes the course membership" do
+      described_class.for_student membership
+      expect(CourseMembership.exists?(membership.id)).to eq false
+    end
+
     it "removes the grades for the student" do
       create :grade, student: membership.user, course: membership.course
       described_class.for_student membership
