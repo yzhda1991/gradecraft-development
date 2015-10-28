@@ -214,7 +214,7 @@ describe GradesController do
 
       context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
         before do
-          allow(PredictorEventJob).to receive(:new).and_raise("Could not connect to Redis: getaddrinfo socket error.")
+          allow(PredictorEventJob).to receive_message_chain(:new, :enqueue).and_raise("MOCK FAUX LAME NONERROR: Could not connect to Redis: getaddrinfo socket error.")
           allow(controller).to receive(:predictor_event_attrs) { predictor_event_attrs_expectation }
         end
 
