@@ -97,10 +97,10 @@ class Team < ActiveRecord::Base
   #The second way is that the teams compete in team challenges that earn the team points. At the end of the
   #semester these usually get added back into students' scores - this has not yet been built into GC.
   def cache_score
-    if course.team_challenges?
-      self.score = challenge_grade_score
-    else
+    if course.team_score_average
       self.score = average_points
+    else
+      self.score = challenge_grade_score
     end
   end
 
@@ -111,6 +111,6 @@ class Team < ActiveRecord::Base
   private
 
   def revised_team_score
-    course.team_challenges ? challenge_grade_score : average_points
+    course.team_score_average ? average_points : challenge_grade_score
   end
 end

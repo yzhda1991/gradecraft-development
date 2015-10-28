@@ -29,4 +29,25 @@ describe Team do
 
   describe "challenge_grade_score" do
   end
+
+  describe "revised_team_score" do
+    let(:course) { create :course }
+    let(:team) { create(:team, course: course) }
+
+    context "course is using team average for team score" do
+      it "returns the average points for the team" do
+        allow(course).to receive(:team_score_average) { true }
+        allow(team).to receive(:average_points) { 500 }
+        expect( team.instance_eval { revised_team_score } ).to eq(500)
+      end
+    end
+
+    context "course is using challenge grade total for team score" do
+      it "returns the challenge grade score for the team" do
+        allow(course).to receive(:team_score_average) { false }
+        allow(team).to receive(:challenge_grade_score) { 3000 }
+        expect( team.instance_eval { revised_team_score } ).to eq(3000)
+      end
+    end
+  end
 end

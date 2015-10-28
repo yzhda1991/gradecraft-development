@@ -432,6 +432,7 @@ class GradesController < ApplicationController
   def self_log
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.open?
+
       @grade = current_student.grade_for_assignment(@assignment)
       if params[:present] == "true"
         if params[:grade].present? && params[:grade][:raw_score].present?
@@ -442,11 +443,11 @@ class GradesController < ApplicationController
       else
         @grade.raw_score = 0
       end
+
       @grade.instructor_modified = true
       @grade.status = "Graded"
       respond_to do |format|
         if @grade.save
-
           # @mz TODO: add specs
           @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
           @grade_updater_job.enqueue
