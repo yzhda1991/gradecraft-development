@@ -192,19 +192,19 @@ describe GradesController do
     describe "enqueue_predictor_event_job", focus: true do
       context "Resque connects to redis and enqueues the damn job" do
         before(:each) do
-          stub_current_user
           @predictor_event_job = double(:predictor_event_job)
           @enqueue_response = double(:enqueue_response)
-          allow(@predictor_event_job).to receive_messages(enqueue_in: @enqueue_response)
+          allow(@predictor_event_job).to receive(:enqueue)
           allow(PredictorEventJob).to receive_messages(new: @predictor_event_job)
+          allow(controller).to receive(:predictor_event_attrs) { predictor_event_attrs_expectation }
         end
 
         it "should create a new pageview logger" do
-          expect(PredictorEventJob).to receive(:new).with(predictor_event_attrs_expectation) { @predictor_event_job }
+          expect(PredictorEventJob).to receive(:new).with(data: predictor_event_attrs_expectation)
         end
 
         it "should enqueue the new pageview logger in 2 hours" do
-          expect(@predictor_event_job).to receive(:enqueue_in).with(2.hours) { @enqueue_response }
+          expect(@predictor_event_job).to receive(:enqueue) { @enqueue_response }
         end
 
         after(:each) do
@@ -214,13 +214,13 @@ describe GradesController do
 
       context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
         before do
-          stub_current_user
           allow(PredictorEventJob).to receive(:new).and_raise("Could not connect to Redis: getaddrinfo socket error.")
+          allow(controller).to receive(:predictor_event_attrs) { predictor_event_attrs_expectation }
         end
 
         it "performs the pageview event log directly from the controller" do
           expect(PredictorEventJob).to receive(:perform).with(data: predictor_event_attrs_expectation)
-          get :html_page
+          controller.instance_eval { enqueue_predictor_event_job }
         end
 
         it "adds an additional pageview record to mongo" do
