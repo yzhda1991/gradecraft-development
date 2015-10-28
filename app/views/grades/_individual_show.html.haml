@@ -1,4 +1,4 @@
-- if presenter.grades_available_for?(current_student)
+- if presenter.grades_available_for?(current_student) || current_user_is_staff?
   - if current_user_is_staff?
     %h4.sr-only #{current_student.first_name}'s Grade
     %p.bold
