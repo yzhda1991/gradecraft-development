@@ -18,19 +18,19 @@ describe FlaggedUser do
     end
 
     it "a course is required" do
-      subject.course_id = 123
+      subject.course_id = 123456
       expect(subject).to_not be_valid
       expect(subject.errors[:course]).to include "can't be blank"
     end
 
     it "a flagger is required" do
-      subject.flagger_id = 123
+      subject.flagger_id = 123456
       expect(subject).to_not be_valid
       expect(subject.errors[:flagger]).to include "can't be blank"
     end
 
     it "a flagged user is required" do
-      subject.flagged_id = 123
+      subject.flagged_id = 123456
       expect(subject).to_not be_valid
       expect(subject.errors[:flagged]).to include "can't be blank"
     end
