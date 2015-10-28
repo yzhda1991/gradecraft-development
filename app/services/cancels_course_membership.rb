@@ -5,6 +5,7 @@ class CancelsCourseMembership
       .removes_grades(membership)
       .removes_rubric_grades(membership)
       .removes_assignment_weights(membership)
+      .removes_earned_badges(membership)
   end
 
   private
@@ -16,6 +17,13 @@ class CancelsCourseMembership
 
   def self.removes_assignment_weights(membership)
     AssignmentWeight.for_course(membership.course)
+      .for_student(membership.user)
+      .destroy_all
+    self
+  end
+
+  def self.removes_earned_badges(membership)
+    EarnedBadge.for_course(membership.course)
       .for_student(membership.user)
       .destroy_all
     self

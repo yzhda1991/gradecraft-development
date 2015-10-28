@@ -53,8 +53,13 @@ describe CancelsCourseMembership do
       expect(student.reload.assignment_weights).to eq [another_assignment_weight]
     end
 
-    xit "removes the assignment type weights for the student"
-    xit "removes the earned badges for the student"
+    it "removes the earned badges for the student" do
+      another_earned_badge = create :earned_badge, student: student
+      course_earned_badge = create :earned_badge, student: student, course: course
+      described_class.for_student membership
+      expect(student.reload.earned_badges).to eq [another_earned_badge]
+    end
+
     xit "removes the predicted earned badges for the student"
     xit "removes the predicted earned challenges for the student"
     xit "removes the group memberships for the student"
