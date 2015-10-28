@@ -475,8 +475,7 @@ class GradesController < ApplicationController
 
     @grade_saved = @grade.nil? ? nil : @grade.save
 
-    # create a predictor event in mongo to keep track of what happened
-    PredictorEventJob.new(data: predictor_event_attrs).enqueue
+    enqueue_predictor_event_job
 
     respond_to do |format|
       format.json do
@@ -492,6 +491,19 @@ class GradesController < ApplicationController
   end
 
   private
+
+  def enqueue_predictor_event_job
+    begin
+      # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
+      # create a predictor event in mongo to keep track of what happened
+      PredictorEventJob.new(data: predictor_event_attrs).enqueue
+    rescue
+      # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
+      # or because of some worker stayalive anomaly, then just use the PredictorEventJob.perform method
+      # to persist the record directly to mongo with all of the logging it entails
+      PredictorEventJob.perform(data: predictor_event_attrs)
+    end
+  end
 
   def predictor_event_attrs
     {

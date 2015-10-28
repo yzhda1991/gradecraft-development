@@ -1,6 +1,8 @@
 require 'rails_spec_helper'
 
 describe GradesController do
+  include PredictorEventJobsToolkit
+
   before(:all) do
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
@@ -12,6 +14,7 @@ describe GradesController do
     session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
   end
+
 
   context "as professor" do
     before(:all) do
@@ -171,12 +174,60 @@ describe GradesController do
     end
 
     describe "POST predict_score" do
+      let(:predicted_points) { (@assignment.point_total * 0.75).to_i }
+
       it "updates the predicted score for an assignment" do
-        predicted_points = (@assignment.point_total * 0.75).to_i
         get :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
         @grade.reload
         expect(@grade.predicted_score).to eq(predicted_points)
         expect(JSON.parse(response.body)).to eq({"id" => @assignment.id, "points_earned" => predicted_points})
+      end
+
+      it "enqueues_the_predictor_event_job", focus: true do
+        expect(controller).to receive(:enqueue_predictor_event_job)
+        get :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
+      end
+    end
+
+    describe "enqueue_predictor_event_job", focus: true do
+      context "Resque connects to redis and enqueues the damn job" do
+        before(:each) do
+          stub_current_user
+          @predictor_event_job = double(:predictor_event_job)
+          @enqueue_response = double(:enqueue_response)
+          allow(@predictor_event_job).to receive_messages(enqueue_in: @enqueue_response)
+          allow(PredictorEventJob).to receive_messages(new: @predictor_event_job)
+        end
+
+        it "should create a new pageview logger" do
+          expect(PredictorEventJob).to receive(:new).with(predictor_event_attrs_expectation) { @predictor_event_job }
+        end
+
+        it "should enqueue the new pageview logger in 2 hours" do
+          expect(@predictor_event_job).to receive(:enqueue_in).with(2.hours) { @enqueue_response }
+        end
+
+        after(:each) do
+          controller.instance_eval { enqueue_predictor_event_job }
+        end
+      end
+
+      context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
+        before do
+          stub_current_user
+          allow(PredictorEventJob).to receive(:new).and_raise("Could not connect to Redis: getaddrinfo socket error.")
+        end
+
+        it "performs the pageview event log directly from the controller" do
+          expect(PredictorEventJob).to receive(:perform).with(data: predictor_event_attrs_expectation)
+          get :html_page
+        end
+
+        it "adds an additional pageview record to mongo" do
+          expect { 
+            controller.instance_eval { enqueue_predictor_event_job }
+          }.to change{ Analytics::Event.count }.by(1)
+        end
       end
     end
 
