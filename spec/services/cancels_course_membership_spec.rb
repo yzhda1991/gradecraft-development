@@ -26,13 +26,26 @@ describe CancelsCourseMembership do
       expect(student.reload.submissions).to eq [another_submission]
     end
 
-    xit "removes the rubric grades for the student and course submissions" do
-      create :rubric_grade, student: membership.user
+    it "removes the rubric grades for the student and course submissions" do
+      another_submission = create :submission, student: student
+      course_submission = create :submission, student: student, course: course
+      another_grade = create :rubric_grade, submission: another_submission,
+        student: student
+      course_grade = create :rubric_grade, submission: course_submission,
+        student: student
       described_class.for_student membership
-      expect(RubricGrade.for_student(membership.user)).to be_empty
+      expect(RubricGrade.for_student(membership.user)).to eq [another_grade]
     end
 
-    xit "removes the rubric grades for the student and course assignments"
+    it "removes the rubric grades for the student and course assignments" do
+      course_assignment = create :assignment, course: course
+      another_grade = create :rubric_grade, student: student
+      course_grade = create :rubric_grade, assignment: course_assignment,
+        student: student
+      described_class.for_student membership
+      expect(RubricGrade.for_student(membership.user)).to eq [another_grade]
+    end
+
     xit "removes the assignment weights for the student"
     xit "removes the assignment type weights for the student"
     xit "removes the earned badges for the student"

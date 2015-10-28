@@ -3,7 +3,7 @@ class CancelsCourseMembership
     deletes_membership(membership)
       .removes_submissions(membership)
       .removes_grades(membership)
-      .removes_rubric_grades(membership.user)
+      .removes_rubric_grades(membership)
   end
 
   private
@@ -27,8 +27,10 @@ class CancelsCourseMembership
     self
   end
 
-  def self.removes_rubric_grades(student)
-    RubricGrade.for_student(student).destroy_all
+  def self.removes_rubric_grades(membership)
+    RubricGrade.for_course(membership.course)
+      .for_student(membership.user)
+      .destroy_all
     self
   end
 end
