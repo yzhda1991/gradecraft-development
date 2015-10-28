@@ -70,4 +70,14 @@ describe Grade do
       expect(elapsed).to be < 5
     end
   end
+
+  describe ".for_student" do
+    it "returns all grades for a specific student" do
+      student = create(:user)
+      student_grade = create(:grade, student: student)
+      another_grade = create(:grade)
+      results = Grade.for_student(student)
+      expect(results).to eq [student_grade]
+    end
+  end
 end
