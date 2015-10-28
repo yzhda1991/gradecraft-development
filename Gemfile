@@ -81,7 +81,7 @@ gem 'resque-scheduler', require: "resque/scheduler"
 gem 'resque-throttler', require: "resque/throttler"
 
 gem 'responders'
-gem 'rollbar'
+gem 'rollbar', '~> 2.4.0'
 gem 'sampler'
 gem 'sanitize'
 gem 'sassc-rails'

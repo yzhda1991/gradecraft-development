@@ -115,8 +115,13 @@ class ApplicationController < ActionController::Base
   def increment_page_views
     if current_user and request.format.html?
       begin
+        # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
         PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(time_until_next_lull)
       rescue
+        # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
+        # or because of some worker stayalive anomaly, then just use the PageviewEventLogger.perform method
+        # to persist the record directly to mongo with all of the logging it entails
+        PageviewEventLogger.perform('pageview', pageview_logger_attrs)
       end
     end
   end

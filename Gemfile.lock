@@ -508,7 +508,8 @@ GEM
       rufus-scheduler (~> 3.0)
     resque-throttler (0.1.5)
       resque (~> 1.25)
-    rollbar (2.1.2)
+    rollbar (2.4.0)
+      multi_json
     rspec-core (3.3.2)
       rspec-support (~> 3.3.0)
     rspec-expectations (3.3.1)
@@ -729,7 +730,7 @@ DEPENDENCIES
   resque-scheduler
   resque-throttler
   resque_spec!
-  rollbar
+  rollbar (~> 2.4.0)
   rspec-rails (~> 3.3.3)
   ruby-saml (~> 1.0.0)
   rubystats
