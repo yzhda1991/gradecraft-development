@@ -31,14 +31,14 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
     end
 
     before(:each) do
-      allow(controller).to receive_messages(pageview_logger_attrs: pageview_logger_attrs_expectation)
+      allow(controller).to receive_messages(pageview_logger_attrs: pageview_logger_attrs)
     end
 
     # if current_user && request.format.html?
     context "no user is logged in" do
       it "should not increment the page views" do
         allow(controller).to receive_messages(current_user: nil)
-        expect(PageviewEventLogger).not_to receive(:new).with pageview_logger_attrs_expectation
+        expect(PageviewEventLogger).not_to receive(:new).with pageview_logger_attrs
         get :html_page
       end
     end
@@ -46,7 +46,7 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
     context "the request is not html" do
       it "should not increment the page views" do
         stub_current_user
-        expect(PageviewEventLogger).not_to receive(:new).with pageview_logger_attrs_expectation
+        expect(PageviewEventLogger).not_to receive(:new).with pageview_logger_attrs
         get :json_page, format: "json"
       end
     end
@@ -62,7 +62,7 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
       end
 
       it "should create a new pageview logger" do
-        expect(PageviewEventLogger).to receive(:new).with(pageview_logger_attrs_expectation) { @pageview_event_logger }
+        expect(PageviewEventLogger).to receive(:new).with(pageview_logger_attrs) { @pageview_event_logger }
       end
 
       it "should enqueue the new pageview logger in 2 hours" do
@@ -81,7 +81,7 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
       end
 
       it "performs the pageview event log directly from the controller" do
-        expect(PageviewEventLogger).to receive(:perform).with('pageview', pageview_logger_attrs_expectation)
+        expect(PageviewEventLogger).to receive(:perform).with('pageview', pageview_logger_attrs)
         get :html_page
       end
 

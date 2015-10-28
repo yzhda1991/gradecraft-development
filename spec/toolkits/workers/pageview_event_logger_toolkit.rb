@@ -1,5 +1,5 @@
 module PageviewEventLoggerToolkit
-  def pageview_logger_attrs_expectation
+  def pageview_logger_attrs
     {
       course_id: 50,
       user_id: 70,
