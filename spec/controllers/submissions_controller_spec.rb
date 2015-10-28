@@ -1,27 +1,25 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe SubmissionsController do
+  before(:all) do
+    @course = create(:course)
+    @student = create(:user)
+    @student.courses << @course
+    @assignment = create(:assignment, course: @course)
+  end
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as a professor" do
-
-    before do
-      @course = create(:course)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @assignment_type = create(:assignment_type, course: @course)
-      @assignment = create(:assignment, course: @course, assignment_type: @assignment_type)
-      @student = create(:user)
-      @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
-
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+    end
+    before(:each) do
       @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
-
       login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
@@ -72,9 +70,8 @@ describe SubmissionsController do
         params[:assignment_id] = @assignment.id
         params[:text_comment] = "Ausgezeichnet"
         post :update, :assignment_id => @assignment.id, :id => @submission, :submission => params
-        @submission.reload
         expect(response).to redirect_to(assignment_submission_path(@assignment, @submission))
-        expect(@submission.text_comment).to eq("Ausgezeichnet")
+        expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
       end
     end
 
@@ -83,23 +80,12 @@ describe SubmissionsController do
         expect{ get :destroy, {:id => @submission, :assignment_id => @assignment.id } }.to change(Submission,:count).by(-1)
       end
     end
-
   end
 
   context "as a student" do
-
     before do
-      @course = create(:course)
-      @student = create(:user)
-      @student.courses << @course
-      @assignment = create(:assignment, course: @course)
-
       @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
-
-
       login_user(@student)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET new" do
@@ -135,12 +121,10 @@ describe SubmissionsController do
         params[:assignment_id] = @assignment.id
         params[:text_comment] = "Ausgezeichnet"
         post :update, :assignment_id => @assignment.id, :id => @submission, :submission => params
-        @submission.reload
         expect(response).to redirect_to(assignment_path(@assignment, :anchor => "fndtn-tabt3"))
-        expect(@submission.text_comment).to eq("Ausgezeichnet")
+        expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
       end
     end
-
 
     describe "protected routes" do
       [

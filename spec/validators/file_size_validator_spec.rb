@@ -1,4 +1,5 @@
-require "spec_helper"
+require "action_view"
+require "active_record_spec_helper"
 
 describe FileSizeValidator do
   class Foo
@@ -11,7 +12,9 @@ describe FileSizeValidator do
   let(:image) { fixture_file "test_image.jpg", "img/jpg" }
   let(:uploader) { ImageUploader.new subject, :media }
   subject { Foo.new }
+
   before do
+    I18n.load_path << "./config/locales/en.yml"
     subject.class.clear_validators!
     uploader.store! image
   end

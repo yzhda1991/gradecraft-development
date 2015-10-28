@@ -1,3 +1,5 @@
+require_relative "role"
+
 class Course < ActiveRecord::Base
   include UploadsMedia
 

@@ -1,27 +1,27 @@
-#spec/controllers/assignment_types_controller_spec.rb
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe AssignmentTypesController do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
-	context "as professor" do
-
-    before do
-      @course = create(:course_accepting_groups)
+  context "as professor" do
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @assignment_type = create(:assignment_type, course: @course)
-      @assignment = create(:assignment, assignment_type: @assignment_type)
-      @course.assignments << @assignment
+      CourseMembership.create user: @professor, course: @course, role: "professor"
       @student = create(:user)
       @student.courses << @course
-
-      login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
-		describe "GET index" do
+    before(:each) do
+      @assignment_type = create(:assignment_type, course: @course)
+      @assignment = create(:assignment, assignment_type: @assignment_type, course: @course)
+      login_user(@professor)
+    end
+
+    describe "GET index" do
       it "returns assignment types for the current course" do
         get :index
         expect(assigns(:title)).to eq("assignment types")
@@ -30,7 +30,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "GET show" do
+    describe "GET show" do
       it "returns the assignment type show page" do
         get :show, :id => @assignment_type.id
         expect(assigns(:title)).to eq(@assignment_type.name)
@@ -39,7 +39,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "GET new" do
+    describe "GET new" do
       it "assigns title and assignment types" do
         get :new
         expect(assigns(:title)).to eq("Create a New assignment type")
@@ -57,7 +57,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "POST create" do
+    describe "POST create" do
       it "creates the assignment type with valid attributes"  do
         params = attributes_for(:assignment_type)
         params[:assignment_type_id] = @assignment_type
@@ -69,7 +69,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "POST update" do
+    describe "POST update" do
       it "updates the assignment" do
         params = { name: "new name" }
         post :update, id: @assignment_type.id, :assignment_type => params
@@ -79,7 +79,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "GET sort" do
+    describe "GET sort" do
       it "sorts the assignment types by params" do
         @second_assignment_type = create(:assignment_type, course: @course)
         @course.assignment_types << @second_assignment_type
@@ -93,7 +93,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "GET export_scores" do
+    describe "GET export_scores" do
       context "with CSV format" do
         it "returns scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
@@ -103,7 +103,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "GET export_all_scores" do
+    describe "GET export_all_scores" do
       context "with CSV format" do
         it "returns all scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
@@ -113,7 +113,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "GET all_grades" do
+    describe "GET all_grades" do
       it "displays all grades for an assignment type" do
         get :all_grades, :id => @assignment_type.id
         expect(assigns(:title)).to eq("#{@assignment_type.name} Grade Patterns")
@@ -122,14 +122,13 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "GET destroy" do
+    describe "GET destroy" do
       it "destroys the assignment type" do
         expect{ get :destroy, :id => @assignment_type }.to change(AssignmentType,:count).by(-1)
       end
     end
 
     describe "GET student predictor data" do
-
       it "returns assignment types as json with current student if id present" do
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:student)).to eq(@student)
@@ -144,23 +143,20 @@ describe AssignmentTypesController do
         expect(response).to render_template(:predictor_data)
       end
     end
-	end
+  end
 
-	context "as student" do
+  context "as student" do
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+    before(:each) { login_user(@student) }
 
     describe "GET student predictor data" do
-
       before do
-        @course = create(:course_accepting_groups)
         @assignment_type = create(:assignment_type, course: @course)
-        @assignment = create(:assignment, assignment_type: @assignment_type)
-        @course.assignments << @assignment
-        @student = create(:user)
-        @student.courses << @course
-
-        login_user(@student)
-        session[:course_id] = @course.id
-        allow(Resque).to receive(:enqueue).and_return(true)
+        assignment = create(:assignment, assignment_type: @assignment_type)
+        @course.assignments << assignment
       end
 
       it "returns assignment types as json for the current course" do
@@ -171,7 +167,7 @@ describe AssignmentTypesController do
       end
     end
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :new,
@@ -185,7 +181,6 @@ describe AssignmentTypesController do
           end
         end
     end
-
 
     describe "protected routes requiring id in params" do
       [
@@ -201,7 +196,5 @@ describe AssignmentTypesController do
         end
       end
     end
-
-	end
-
+  end
 end

@@ -145,7 +145,6 @@ class ChallengesController < ApplicationController
   private
 
   def predictor_challenge_data
-
     challenges = []
     if current_course.challenges.present? && @student.team_for_course(current_course).present? && current_course.add_team_score_to_student
       challenges = current_course.challenges.select(

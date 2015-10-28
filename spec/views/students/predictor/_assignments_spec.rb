@@ -1,10 +1,9 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "students/predictor/_assignments" do
 
   before(:each) do
-    clean_models
     @course = create(:course)
     assignment_types = [create(:assignment_type, course: @course)]
     @assignment = create(:assignment, :assignment_type => assignment_types[0])

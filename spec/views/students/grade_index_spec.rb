@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "students/grade_index" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @student = create(:user)
     @course.students << @student

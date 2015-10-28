@@ -1,36 +1,27 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe GradesController do
+  before(:all) do
+    @course = create(:course)
+    @assignment = create(:assignment, course: @course)
+
+    @student = create(:user)
+    @student.courses << @course
+  end
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as professor" do
-
     before(:all) do
-      clean_models
-      @course = create(:course_accepting_groups)
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @assignment_type = create(:assignment_type, course: @course)
-      @assignment = create(:assignment)
-      @course.assignments << @assignment
-      @student = create(:user, first_name: "First Name", last_name: 'Last Name')
-      @student.courses << @course
-      @second_student = create(:user)
-      @second_student.courses << @course
-      @third_student = create(:user)
-      @third_student.courses << @course
-      @group = create(:group)
-      @assignment.groups << @group
-      @group.students << [@student, @second_student, @third_student]
-
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+    end
+    before (:each) do
       @grade = create(:grade)
       @assignment.grades << @grade
-    end
-
-    before do
       login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET show" do
@@ -46,7 +37,6 @@ describe GradesController do
     describe "GET edit" do
       it "shows the grade edit form" do
         get :edit, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
-        #assigns(:title).should eq("Grading #{@student.name}'s #{@assignment.name}")
         allow(GradesController).to receive(:current_student).and_return(@student)
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:title)).to eq("Editing #{@student.name}'s Grade for #{@assignment.name}")
@@ -74,19 +64,17 @@ describe GradesController do
     end
 
     describe "PUT mass_update" do
-
-      before(:each) do
-        @grade_2 = create(:grade)
-        @assignment.grades << @grade_2
-      end
-
-      after(:each) do
-        @grade_2.destroy
+      before(:all) do
+        @grade_2 = create(:grade, assignment: @assignment)
       end
 
       let(:grades_attributes) do
-        { "0" => { graded_by_id: @professor.id, instructor_modified: true,
-                   student_id: @student.id, raw_score: 1000, status: "Graded", id: @grade_2.id }}
+        { "#{@assignment.grades.index(@grade_2)}" =>
+          { graded_by_id: @professor.id, instructor_modified: true,
+            student_id: @grade_2.student_id, raw_score: 1000, status: "Graded",
+            id: @grade_2.id
+          }
+        }
       end
 
       it "updates the grades for the specific assignment" do
@@ -113,8 +101,11 @@ describe GradesController do
 
     describe "GET group_edit" do
       it "assigns params" do
-        get :group_edit, { :id => @assignment.id, :group_id => @group.id}
-        expect(assigns(:title)).to eq("Grading #{@group.name}'s #{@assignment.name}")
+        group = create(:group)
+        @assignment.groups << group
+        group.students << @student
+        get :group_edit, { :id => @assignment.id, :group_id => group.id}
+        expect(assigns(:title)).to eq("Grading #{group.name}'s #{@assignment.name}")
         expect(response).to render_template(:group_edit)
       end
     end
@@ -141,8 +132,9 @@ describe GradesController do
       let(:file) { fixture_file "grades.csv", "text/csv" }
 
       it "renders the results from the import" do
-        @student.update_attribute :email, "robert@example.com"
-        @second_student.update_attribute :username, "jimmy"
+        @student.reload.update_attribute :email, "robert@example.com"
+        second_student = create(:user, username: "jimmy")
+        second_student.courses << @course
 
         post :upload, id: @assignment.id, file: file
         expect(response).to render_template :import_results
@@ -159,18 +151,10 @@ describe GradesController do
 
   context "as student" do
     before(:all) do
-      clean_models
-      @course = create(:course)
-      @student = create(:user)
-      @student.courses << @course
-      @assignment_type = create(:assignment_type, course: @course)
-      @assignment = create(:assignment)
-      @course.assignments << @assignment
       @grade = create(:grade, student: @student)
       @assignment.grades << @grade
-      @group = create(:group)
-      @assignment.groups << @group
     end
+    before (:each) { login_user(@student) }
 
     before do
       login_user(@student)
@@ -221,6 +205,11 @@ describe GradesController do
     end
 
     describe "protected routes" do
+      before(:all) do
+        @group = create(:group)
+        @assignment.groups << @group
+      end
+
       describe "GET edit" do
         it "redirects to root path" do
           get :edit, {:grade_id => @grade.id, :assignment_id => @assignment.id}

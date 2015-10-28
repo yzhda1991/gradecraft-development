@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "challenge_grades/edit_status" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @challenge = create(:challenge, course: @course)
 

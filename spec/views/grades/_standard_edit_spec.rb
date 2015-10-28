@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "grades/_standard_edit" do
 
   before(:each) do
-    clean_models
     @course = create(:course)
     @assignment = create(:assignment)
     @course.assignments << @assignment

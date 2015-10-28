@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
   let(:grades) { create_list(:grade, 2) }

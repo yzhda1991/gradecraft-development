@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "groups/new" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @group = Group.new
   end

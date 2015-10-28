@@ -1,25 +1,18 @@
-#spec/controllers/analytics_controller_spec.rb
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe AnalyticsController do
+  before { allow(Resque).to receive(:enqueue).and_return(true) }
 
   context "as a professor" do
-    before do
-      @course = create(:course_accepting_groups)
+    before(:all) do
+      @course = create(:course)
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @assignment_type = create(:assignment_type, course: @course)
-      @assignment = create(:assignment, assignment_type: @assignment_type)
-      @course.assignments << @assignment
-      @student = create(:user)
-      @student.courses << @course
-      @students = []
-      @students << @student
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+    end
 
-      login_user(@professor)
+    before(:each) do
       session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
+      login_user(@professor)
     end
 
     describe "GET index" do
@@ -64,38 +57,45 @@ describe AnalyticsController do
   end
 
   context "as a student" do
+    before(:all) do
+      @course = create(:course)
+      @student = create(:user)
+      CourseMembership.create user: @student, course: @course, role: "student"
+    end
 
-     describe "protected routes" do
-          [
-            :index,
-            :students,
-            :staff,
-            :all_events,
-            :top_10,
-            :per_assign,
-            :role_events,
-            :assignment_events,
-            :login_frequencies,
-            :role_login_frequencies,
-            :login_events,
-            :login_role_events,
-            :all_pageview_events,
-            :all_role_pageview_events,
-            :all_user_pageview_events,
-            :pageview_events,
-            :role_pageview_events,
-            :user_pageview_events,
-            :prediction_averages,
-            :assignment_prediction_averages,
-            :export
+    before(:each) do
+      session[:course_id] = @course.id
+      login_user(@student)
+    end
 
-          ].each do |route|
-              it "#{route} redirects to root" do
-                expect(get route).to redirect_to(:root)
-              end
-            end
+    describe "protected routes" do
+      [
+        :index,
+        :students,
+        :staff,
+        :all_events,
+        :top_10,
+        :per_assign,
+        :role_events,
+        :assignment_events,
+        :login_frequencies,
+        :role_login_frequencies,
+        :login_events,
+        :login_role_events,
+        :all_pageview_events,
+        :all_role_pageview_events,
+        :all_user_pageview_events,
+        :pageview_events,
+        :role_pageview_events,
+        :user_pageview_events,
+        :prediction_averages,
+        :assignment_prediction_averages,
+        :export
+      ].each do |route|
+        it "#{route} redirects to root" do
+          expect(get route).to redirect_to(:root)
         end
-
+      end
+    end
   end
-
 end

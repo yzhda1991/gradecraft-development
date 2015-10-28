@@ -1,9 +1,9 @@
-require "spec_helper"
+require "active_record_spec_helper"
 
 describe FlaggedUser do
-  let(:course) { create :course }
-  let(:professor) { create :user }
-  let(:student) { create :user }
+  let(:course) { build :course }
+  let(:professor) { build :user }
+  let(:student) { build :user }
 
   before do
     create :course_membership, course: course, user: professor, role: "professor"

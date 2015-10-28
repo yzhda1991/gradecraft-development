@@ -1,35 +1,22 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe StudentsController do
+  before(:all) do
+    @course = create(:course)
+    @student = create(:user)
+    @student.courses << @course
+  end
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as a professor" do
-
-    before do
-      @course = create(:course)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @student = create(:user)
-      @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
-      @assignment = create(:assignment)
-      @course.assignments << @assignment
-      @grade = create(:grade, assignment: @assignment, student: @student)
-      @student.grades << @grade
-      @grades = @student.grades
-      @badge = create(:badge)
-      @second_badge = create(:badge)
-      @course.badges << [@badge, @second_badge]
-      @earned_badge = create(:earned_badge, student_visible: true)
-      @student.earned_badges << @earned_badge
-      @earned_badges = @student.earned_badges
-
-      login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
+      CourseMembership.create user: @professor, course: @course, role: "professor"
     end
+    before(:each) { login_user(@professor) }
 
     describe "GET index" do
       it "returns the students for the current course" do
@@ -122,20 +109,10 @@ describe StudentsController do
         expect(response).to redirect_to(student_path(@student))
       end
     end
-
   end
 
   context "as a student" do
-
-    before do
-      @course = create(:course)
-      @student = create(:user)
-      @student.courses << @course
-
-      login_user(@student)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
-    end
+    before { login_user(@student) }
 
     describe "GET syllabus" do
       it "shows the class syllabus" do
@@ -207,6 +184,5 @@ describe StudentsController do
         end
       end
     end
-
   end
 end

@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe "assignment_types/all_grades" do
 

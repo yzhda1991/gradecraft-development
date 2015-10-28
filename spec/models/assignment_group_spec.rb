@@ -1,6 +1,4 @@
-# spec/models/assignment_group_spec.rb
-
-require 'spec_helper'
+require "active_record_spec_helper"
 
 describe AssignmentGroup do
 

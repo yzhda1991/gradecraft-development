@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 include PageviewEventLoggerToolkit # pageview_logger_attrs comes from here
 

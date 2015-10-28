@@ -1,15 +1,15 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "challenges/predictor_data" do
-
-  before(:each) do
-    clean_models
+  before(:all) do
     @course = create(:course, challenge_term: "tsallenze")
+    @student = create(:user)
+  end
+  before(:each) do
     @challenge = create(:challenge, description: "...")
     @challenges = [@challenge]
-    @student = create(:user)
     allow(view).to receive(:current_course).and_return(@course)
   end
 

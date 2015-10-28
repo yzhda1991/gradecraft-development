@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "analytics/index" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
   end
 

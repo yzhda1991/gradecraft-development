@@ -1,33 +1,27 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe EarnedBadgesController do
+  before(:all) do
+    @course = create(:course)
+    @student = create(:user)
+    @student.courses << @course
+  end
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as a professor" do
-    before do
-      @course = create(:course)
-      @badge = create(:badge)
-      @course.badges << @badge
-
-      @student = create(:user)
-      @student.courses << @course
-
-      @team = create(:team, course: @course)
-      @team.students << @student
-
-      @earned_badge = create(:earned_badge, badge: @badge, student: @student)
-
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-
-
-      login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @badge = create(:badge, course: @course)
     end
 
-    let(:valid_session) { { "current_course" => @course} }
-
+    before(:each) do
+      @earned_badge = create(:earned_badge, badge: @badge, student: @student)
+      login_user(@professor)
+    end
 
     describe "GET index" do
       it "redirects to the badge for the earned badge" do
@@ -39,7 +33,7 @@ describe EarnedBadgesController do
     describe "GET show" do
       it "returns the earned badge show page" do
         get :show, { :id => @earned_badge.id, :badge_id => @badge.id }
-        expect(assigns(:title)).to eq("#{@student.name}'s #{@badge.name} badge")
+        expect(assigns(:title)).to eq("#{@student.reload.name}'s #{@badge.name} badge")
         expect(assigns(:earned_badge)).to eq(@earned_badge)
         expect(response).to render_template(:show)
       end
@@ -78,21 +72,12 @@ describe EarnedBadgesController do
     end
 
     describe "POST mass_earn", working: true do
-      subject { post :mass_earn, {id: @badge[:id], student_ids: @student_ids} }
-
-      before do
-        @course = create(:course)
-        @badge = create(:badge, course_id: @course[:id])
-
-        @professor = create(:user)
-        @professor.courses << @course
-        @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-        login_user(@professor)
-
+      before(:all) do
         @students = create_list(:user, 2)
         @student_ids = @students.collect(&:id)
-        allow(controller).to receive(:current_course) { @course }
       end
+
+      subject { post :mass_earn, {id: @badge[:id], student_ids: @student_ids} }
 
       context "earned badges are created" do
         before do
@@ -114,21 +99,15 @@ describe EarnedBadgesController do
     end
 
     describe "send_earned_badge_notifications", working: true do
-      before(:each) do
-        @course = create(:course)
-        @badge = create(:badge, course_id: @course[:id])
+      before(:all) do
         @students = create_list(:user, 2)
         @student_ids = @students.collect(&:id)
+      end
 
-        @professor = create(:user)
-        @professor.courses << @course
-        @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-        login_user(@professor)
-
+      before(:each) do
         @earned_badges = @students.collect do |student|
-          create(:earned_badge, student_id: student[:id], badge: @badge)
+          create(:earned_badge, student_id: student.id, badge: @badge)
         end
-
         @controller = EarnedBadgesController.new
       end
 
@@ -168,14 +147,8 @@ describe EarnedBadgesController do
       it "updates the earned badge" do
         params = { feedback: "more feedback" }
         post :update, { id: @earned_badge.id, :badge_id => @badge.id, :earned_badge => params }
-        @earned_badge.reload
-        expect(@earned_badge.feedback).to eq("more feedback")
+        expect(@earned_badge.reload.feedback).to eq("more feedback")
         expect(response).to redirect_to(badge_path(@badge))
-      end
-    end
-
-    describe "PUT mass_update" do
-      before(:each) do
       end
     end
 
@@ -209,29 +182,25 @@ describe EarnedBadgesController do
           other_student = create(:user)
           other_student.courses << @course
 
-          team = create(:team, course: @course)
-          team.students << @student
-
           get :mass_edit, :id => @badge.id
           expect(assigns(:students)).to include(@student)
           expect(assigns(:students)).to include(other_student)
         end
-
       end
 
       describe "when badges can be earned multiple times" do
         it "assigns earned badges according to alphabetized students" do
           @student.update(last_name: "Zed")
-          @student2 = create(:user, last_name: "Alpha")
-          @student2.courses << @course
+          student2 = create(:user, last_name: "Alpha")
+          student2.courses << @course
+
           get :mass_edit, :id => @badge.id
           expect(assigns(:earned_badges).count).to eq(2)
-          expect(assigns(:earned_badges)[0].student_id).to eq(@student2.id)
+          expect(assigns(:earned_badges)[0].student_id).to eq(student2.id)
           expect(assigns(:earned_badges)[1].student_id).to eq(@student.id)
         end
       end
     end
-
 
     describe "GET destroy" do
       it "destroys the earned badge" do
@@ -240,22 +209,20 @@ describe EarnedBadgesController do
     end
   end
 
-
   context "as student" do
+    before { login_user(@student) }
 
     describe "protected routes" do
       [
         :index,
         :new,
         :create
-
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route, {:badge_id => 1}).to redirect_to(:root)
           end
         end
     end
-
 
     describe "protected routes requiring id in params" do
       [
@@ -269,6 +236,5 @@ describe EarnedBadgesController do
         end
       end
     end
-
   end
 end

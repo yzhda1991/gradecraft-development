@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "earned_badges/mass_edit" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @badge = create(:badge, course: @course)
     @student_1 = create(:user)

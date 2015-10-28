@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "active_record_spec_helper"
 
 describe CourseMembership do
   context "validations" do

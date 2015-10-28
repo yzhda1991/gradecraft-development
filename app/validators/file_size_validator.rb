@@ -45,6 +45,6 @@ class FileSizeValidator < ActiveModel::EachValidator
 
   class Helper
     include Singleton
-    include ActionView::Helpers::NumberHelper
+    include ActionView::Helpers::NumberHelper if defined? ActionView
   end
 end

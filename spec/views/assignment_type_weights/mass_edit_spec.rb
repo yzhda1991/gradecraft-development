@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "assignment_type_weights/mass_edit" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @assignment_type_1 = create(:assignment_type, course: @course)
     @assignment_type_2 = create(:assignment_type, course: @course)

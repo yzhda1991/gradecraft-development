@@ -7,8 +7,6 @@ class Task < ActiveRecord::Base
 
   before_validation :set_course
 
-  #validates_presence_of :assignment_id, :course_id
-
   private
 
   def set_course

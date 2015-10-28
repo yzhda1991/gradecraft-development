@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "active_record_spec_helper"
 
 describe Team do
   describe "validations" do

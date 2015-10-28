@@ -1,10 +1,9 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe "students/syllabus/_assignments" do
 
   before(:each) do
-    clean_models
     @course = create(:course)
     @assignment_type_1 = create(:assignment_type, course: @course, max_points: 1000)
     @assignment_type_2 = create(:assignment_type, course: @course, max_points: 1000)

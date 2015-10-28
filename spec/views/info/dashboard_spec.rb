@@ -1,15 +1,14 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe "info/dashboard" do
 
   before(:all) do
-    clean_models
     @course = create(:course_accepting_groups)
     @professor = create(:user)
     @professor.courses << @course
     @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-    
+
     @assignment_type = create(:assignment_type, course: @course)
     @assignment = create(:assignment, assignment_type: @assignment_type)
     @course.assignments << @assignment
@@ -31,7 +30,7 @@ describe "info/dashboard" do
     @membership_2 = CourseMembership.where(user: @student_1, course: @course).first.update(role: "student")
 
     @gsi = create(:user)
-    @gsi.courses << @course 
+    @gsi.courses << @course
     @membership_3 = CourseMembership.where(user: @gsi, course: @course).first.update(role: "gsi")
   end
 
@@ -39,7 +38,7 @@ describe "info/dashboard" do
     allow(view).to receive(:current_course).and_return(@course)
   end
 
-  
+
   context "as a professor" do
 
     it "shows the timeline" do

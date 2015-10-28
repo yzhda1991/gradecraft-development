@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "staff/index" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @staff_1 = create(:user)
     @staff_2 = create(:user)

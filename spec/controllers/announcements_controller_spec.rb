@@ -1,24 +1,22 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe AnnouncementsController do
-  let(:course) { create :course }
-
-  before(:each) { session[:course_id] = course.id }
-
   context "as a student" do
-    let(:student) { create :user }
-
+    before(:all) do
+      @course = create :course
+      @student = create :user
+      CourseMembership.create(course: @course, user: @student, role: "student")
+    end
     before(:each) do
-      student.course_memberships << \
-        CourseMembership.new(course_id: course.id, role: "student")
-      login_user(student)
+      session[:course_id] = @course.id
+      login_user(@student)
     end
 
     describe "GET #show" do
       it "marks the announcement as read by the student" do
-        announcement = create :announcement, course: course
+        announcement = create :announcement, course: @course
         get :show, id: announcement.id
-        expect(announcement.read?(student)).to be_truthy
+        expect(announcement.read?(@student)).to be_truthy
       end
     end
 
@@ -37,16 +35,19 @@ describe AnnouncementsController do
   end
 
   context "as a professor" do
-    let(:professor) { create :user }
+    before(:all) do
+      @course = create :course
+      @professor = create :user
+      CourseMembership.create course: @course, user: @professor, role: "professor"
+    end
 
     before(:each) do
-      professor.course_memberships << \
-        CourseMembership.new(course_id: course.id, role: "professor")
-      login_user(professor)
+      login_user(@professor)
+      session[:course_id] = @course.id
     end
 
     describe "GET #index" do
-      let!(:announcement) { create :announcement, course_id: course.id }
+      let!(:announcement) { create :announcement, course_id: @course.id }
       let!(:non_course_announcement) { create :announcement }
 
       it "lists the announcements that are available for that course" do
@@ -64,8 +65,8 @@ describe AnnouncementsController do
           announcement = Announcement.unscoped.last
           expect(announcement.title).to eq "New Tour"
           expect(announcement.body).to eq body
-          expect(announcement.course).to eq course
-          expect(announcement.author).to eq professor
+          expect(announcement.course).to eq @course
+          expect(announcement.author).to eq @professor
         end
 
         it "redirects back to the announcements page" do
@@ -75,7 +76,7 @@ describe AnnouncementsController do
 
         it "sends out the announcement to all the students in the course" do
           student = create :user
-          CourseMembership.create! course_id: course.id,
+          CourseMembership.create! course_id: @course.id,
             user_id: student.id, role: "student"
           expect {
             post :create, announcement: { title: "New Tour", body: body }

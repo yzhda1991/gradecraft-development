@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "assignments/individual/_table_body" do
@@ -7,9 +7,9 @@ describe "assignments/individual/_table_body" do
   let(:presenter) { AssignmentPresenter.new({ assignment: @assignment, course: @course }) }
 
   before(:each) do
-    clean_models
     @course = create(:course)
-    @assignment = create(:assignment, assignment_type: create(:assignment_type))
+    @assignment_type = create(:assignment_type)
+    @assignment = create(:assignment, assignment_type: @assignment_type)
     @course.assignments << @assignment
     student = create(:user)
     student.courses << @course

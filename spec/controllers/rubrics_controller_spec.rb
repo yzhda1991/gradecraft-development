@@ -1,19 +1,22 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe RubricsController do
-	context "as a professor" do
-    before do
-      @course = create(:course)
-      @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @assignment = create(:assignment)
-      @course.assignments << @assignment
-      @rubric = create(:rubric, assignment: @assignment)
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
+  context "as a professor" do
+    before(:all) do
+      @professor = create(:user)
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+      @assignment = create(:assignment, course: @course)
+    end
+
+    before do
+      @rubric = create(:rubric, assignment: @assignment)
       login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET design" do
@@ -25,10 +28,16 @@ describe RubricsController do
         expect(response).to render_template(:design)
       end
     end
-	end
+  end
 
-	context "as a student" do
-		describe "protected routes" do
+  context "as a student" do
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+    before(:each) { login_user(@student) }
+
+    describe "protected routes" do
       [
         :design,
         :create,
@@ -42,6 +51,5 @@ describe RubricsController do
           end
         end
     end
-
-	end
+  end
 end

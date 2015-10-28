@@ -1,27 +1,26 @@
-#spec/controllers/badges_spec.rb
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe BadgesController do
-	context "as professor" do
+  before(:all) do
+    @course = create(:course)
+    @student = create(:user)
+    @student.courses << @course
+    @badge = create(:badge, course: @course)
+  end
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
+  context "as professor" do
     before(:all) do
-      clean_models
-      @course = create(:course_accepting_groups)
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @badge = create(:badge, course: @course)
-      @student = create(:user)
-      @student.courses << @course
+      CourseMembership.create user: @professor, course: @course, role: "professor"
     end
 
-    before do
-      login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
-    end
+    before(:each) { login_user(@professor) }
 
-		describe "GET index" do
+    describe "GET index" do
       it "returns badges for the current course" do
         get :index
         expect(assigns(:title)).to eq("badges")
@@ -30,7 +29,7 @@ describe BadgesController do
       end
     end
 
-		describe "GET show" do
+    describe "GET show" do
       it "returns badges for the current course" do
         get :show, :id => @badge.id
         expect(assigns(:title)).to eq(@badge.name)
@@ -39,7 +38,7 @@ describe BadgesController do
       end
     end
 
-		describe "GET new" do
+    describe "GET new" do
       it "renders the new badge form" do
         get :new
         expect(assigns(:title)).to eq("Create a New badge")
@@ -48,7 +47,7 @@ describe BadgesController do
       end
     end
 
-		describe "GET edit" do
+    describe "GET edit" do
       it "renders the edit badge form" do
         get :edit, :id => @badge.id
         expect(assigns(:title)).to eq("Editing #{@badge.name}")
@@ -57,7 +56,7 @@ describe BadgesController do
       end
     end
 
-		describe "POST create" do
+    describe "POST create" do
       it "creates the badge with valid attributes"  do
         params = attributes_for(:badge)
         expect{ post :create, :badge => params }.to change(Badge,:count).by(1)
@@ -77,22 +76,16 @@ describe BadgesController do
       end
     end
 
-		describe "POST update" do
-
+    describe "POST update" do
       before do
         @badge_2 = create(:badge, course: @course)
-      end
-
-      after do
-        @badge_2.destroy
       end
 
       it "updates the badge" do
         params = { name: "new name" }
         post :update, id: @badge_2.id, :badge => params
-        @badge_2.reload
         expect(response).to redirect_to(badges_path)
-        expect(@badge_2.name).to eq("new name")
+        expect(@badge_2.reload.name).to eq("new name")
       end
 
       it "manages file uploads" do
@@ -102,33 +95,26 @@ describe BadgesController do
       end
     end
 
-		describe "GET sort" do
+    describe "GET sort" do
       it "sorts the badges by params" do
-        @second_badge = create(:badge)
-        @course.badges << @second_badge
-        params = [@second_badge.id, @badge.id]
+        second_badge = create(:badge)
+        @course.badges << second_badge
+        params = [second_badge.id, @badge.id]
         post :sort, :badge => params
 
-        @badge.reload
-        @second_badge.reload
-        expect(@badge.position).to eq(2)
-        expect(@second_badge.position).to eq(1)
+        expect(@badge.reload.position).to eq(2)
+        expect(second_badge.reload.position).to eq(1)
       end
     end
 
-		describe "GET destroy" do
-
-      before do
-        @badge_2 = create(:badge, course: @course)
-      end
-
+    describe "GET destroy" do
       it "destroys the badge" do
-        expect{ get :destroy, :id => @badge_2 }.to change(Badge,:count).by(-1)
+        another_badge = create :badge, course: @course
+        expect{ get :destroy, :id => another_badge }.to change(Badge,:count).by -1
       end
     end
 
     describe "GET predictor_data" do
-
       before do
         allow(controller).to receive(:current_course).and_return(@course)
         allow(controller).to receive(:current_user).and_return(@professor)
@@ -160,26 +146,12 @@ describe BadgesController do
         end
       end
     end
-	end
+  end
 
-	context "as student" do
+  context "as student" do
+    before(:each) { login_user(@student) }
 
-    describe "accessible routes" do
-
-      before(:all) do
-        clean_models
-        @course = create(:course)
-        @student = create(:user)
-        @student.courses << @course
-        @badge = create(:badge, course: @course)
-      end
-
-      before do
-        login_user(@student)
-        allow(controller).to receive(:current_course).and_return(@course)
-        allow(controller).to receive(:current_user).and_return(@student)
-      end
-
+    describe "GET student_predictor_data" do
       describe "POST predict_times_earned" do
         it "updates the predicted times earned for a badge" do
           create(:predicted_earned_badge, badge: @badge, student: @student)
@@ -194,6 +166,7 @@ describe BadgesController do
         it "assigns the student and badges with the call to update" do
           get :predictor_data, format: :json, :id => @student.id
           expect(assigns(:student)).to eq(@student)
+          @badge.reload
           predictor_badge_attributes.each do |attr|
             expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
           end
@@ -209,13 +182,12 @@ describe BadgesController do
       end
     end
 
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index,
         :new,
         :create,
         :sort
-
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)
@@ -236,7 +208,7 @@ describe BadgesController do
         end
       end
     end
-	end
+  end
 
 # helper methods:
 

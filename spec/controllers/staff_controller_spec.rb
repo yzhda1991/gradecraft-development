@@ -1,30 +1,20 @@
-#spec/controllers/staff_controller_spec.rb
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe StaffController do
+  before(:all) { @course = create(:course) }
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
-	context "as a professor" do
-
-    before do
-      @course = create(:course)
+  context "as a professor" do
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
-      @challenge = create(:challenge, course: @course)
-      @course.challenges << @challenge
-      @challenges = @course.challenges
-      @student = create(:user)
-      @student.courses << @course
-      @team = create(:team, course: @course)
-      @team.students << @student
-      @teams = @course.teams
-
-      login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
+      CourseMembership.create user: @professor, course: @course, role: "professor"
     end
+    before { login_user(@professor) }
 
-		describe "GET index" do
+    describe "GET index" do
       it "returns all staff for the current course" do
         get :index
         expect(assigns(:title)).to eq("Staff Index")
@@ -33,18 +23,23 @@ describe StaffController do
       end
     end
 
-		describe "GET show" do
+    describe "GET show" do
       it "displays a single staff member's page" do
         get :show, :id => @professor.id
         expect(assigns(:staff)).to eq(@professor)
         expect(response).to render_template(:show)
       end
     end
+  end
 
-	end
+  context "as a student" do
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+    before(:each) { login_user(@student) }
 
-	context "as a student" do
-		describe "protected routes" do
+    describe "protected routes" do
       [
         :index
       ].each do |route|
@@ -63,6 +58,5 @@ describe StaffController do
         end
       end
     end
-
-	end
+  end
 end

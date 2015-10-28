@@ -1,22 +1,26 @@
-require 'spec_helper'
+require 'rails_spec_helper'
 
 describe AssignmentsController do
+  before(:all) do
+    @course = create(:course)
+    @student = create(:user)
+    @student.courses << @course
+  end
+  before(:each) do
+    session[:course_id] = @course.id
+    allow(Resque).to receive(:enqueue).and_return(true)
+  end
 
   context "as a professor" do
-    before do
-      @course = create(:course_accepting_groups)
+    before(:all) do
       @professor = create(:user)
-      @professor.courses << @course
-      @membership = CourseMembership.where(user: @professor, course: @course).first.update(role: "professor")
+      CourseMembership.create user: @professor, course: @course, role: "professor"
       @assignment_type = create(:assignment_type, course: @course)
-      @assignment = create(:assignment, assignment_type: @assignment_type)
-      @course.assignments << @assignment
-      @student = create(:user)
-      @student.courses << @course
+    end
 
+    before(:each) do
+      @assignment = create(:assignment, assignment_type: @assignment_type, course: @course)
       login_user(@professor)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
     end
 
     describe "GET index" do
@@ -98,9 +102,8 @@ describe AssignmentsController do
       it "updates the assignment" do
         params = { name: "new name" }
         post :update, id: @assignment.id, :assignment => params
-        @assignment.reload
         expect(response).to redirect_to(assignments_path)
-        expect(@assignment.name).to eq("new name")
+        expect(@assignment.reload.name).to eq("new name")
       end
 
       it "manages file uploads" do
@@ -112,15 +115,13 @@ describe AssignmentsController do
 
     describe "GET sort" do
       it "sorts the assignments by params" do
-        @second_assignment = create(:assignment, assignment_type: @assignment_type)
-        @course.assignments << @second_assignment
-        params = [@second_assignment.id, @assignment.id]
+        second_assignment = create(:assignment, assignment_type: @assignment_type)
+        @course.assignments << second_assignment
+        params = [second_assignment.id, @assignment.id]
         post :sort, :assignment => params
 
-        @assignment.reload
-        @second_assignment.reload
-        expect(@assignment.position).to eq(2)
-        expect(@second_assignment.position).to eq(1)
+        expect(@assignment.reload.position).to eq(2)
+        expect(second_assignment.reload.position).to eq(1)
       end
     end
 
@@ -128,8 +129,7 @@ describe AssignmentsController do
       it "assigns true or false to assignment use_rubric" do
         @assignment.update(:use_rubric => false)
         post :update_rubrics, :id => @assignment, :use_rubric => true
-        @assignment.reload
-        expect(@assignment.use_rubric).to be_truthy
+        expect(@assignment.reload.use_rubric).to be_truthy
       end
     end
 
@@ -176,7 +176,6 @@ describe AssignmentsController do
           expect(assigns(:team)).to eq(team)
           expect(assigns(:students)).to eq([@student])
         end
-
       end
 
       describe "with no team id in params" do
@@ -255,14 +254,7 @@ describe AssignmentsController do
   end
 
   context "as a student" do
-    before do
-      @course = create(:course_accepting_groups)
-      @student = create(:user)
-      @student.courses << @course
-      login_user(@student)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
-    end
+    before(:each) { login_user(@student) }
 
     describe "GET index" do
       it "redirects to syllabus path" do
@@ -285,7 +277,6 @@ describe AssignmentsController do
     end
 
     describe "GET predictor_data" do
-
       before do
         assignment_type = create(:assignment_type, course: @course)
         @assignment = create(:assignment)
@@ -305,7 +296,7 @@ describe AssignmentsController do
       end
 
       it "includes the student's grade with score for assignment when released" do
-        @grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id)
+        grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id)
         get :predictor_data, format: :json, :id => @student.id
         [
           :assignment_id,
@@ -317,27 +308,47 @@ describe AssignmentsController do
           :student_id,
           :raw_score,
           :score
-
         ].each do |attr|
-           expect(assigns(:grades)[0][attr]).to eq(@grade[attr])
+           expect(assigns(:grades)[0][attr]).to eq(grade[attr])
         end
-        expect(assigns(:assignments)[0].current_student_grade).to eq({ id: @grade.id, pass_fail_status: nil, score: @grade.score, predicted_score: @grade.predicted_score })
+        expect(assigns(:assignments)[0].current_student_grade).to eq({ id: grade.id, pass_fail_status: nil, score: grade.score, predicted_score: grade.predicted_score })
       end
 
       it "includes student grade with no score if not released" do
-        @grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
+        grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignments)[0].current_student_grade[:score]).to eq(nil)
       end
 
+      it "assigns data for displaying student grading distribution" do
+        skip "need to create a scored grade"
+        ungraded_submission = create(:submission, assignment: @assignment)
+        student_submission = create(:graded_submission, assignment: @assignment, student: @student)
+        @assignment.submissions << [student_submission, ungraded_submission]
+        get :show, :id => @assignment.id
+        expect(assigns(:submissions_count)).to eq(2)
+        expect(assigns(:ungraded_submissions_count)).to eq(1)
+        expect(assigns(:ungraded_percentage)).to eq(1/2)
+        expect(assigns(:graded_count)).to eq(1)
+      end
+
+      it "assigns rubric grades" do
+        skip "implement"
+        rubric = create(:rubric_with_metrics, assignment: @assignment)
+        # TODO: Test for this line:
+        # @rubric_grades = RubricGrade.joins("left outer join submissions on submissions.id = rubric_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
+        get :show, :id => @assignment.id
+        expect(assigns(:rubric_grades)).to eq("?")
+      end
+
       it "includes pass/fail status for released pass/fail grades" do
-        @grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
+        grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignments)[0].current_student_grade[:pass_fail_status]).to eq("Pass")
       end
 
       it "includes student grade with no pass fail status if not released" do
-        @grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
+        grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignments)[0].current_student_grade[:pass_fail_status]).to be_nil
       end
@@ -405,7 +416,6 @@ def predictor_assignment_attributes
     :use_rubric,
     :visible,
     :visible_when_locked
-
   ]
 end
 

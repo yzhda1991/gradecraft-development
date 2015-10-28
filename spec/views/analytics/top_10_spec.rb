@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "analytics/top_10" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @student_1 = create(:user)
     @student_2 = create(:user)

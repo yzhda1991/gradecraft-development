@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "rubrics/design" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
     @rubric = create(:rubric, assignment: @assignment)

@@ -1,11 +1,10 @@
 # encoding: utf-8
-require 'spec_helper'
+require 'rails_spec_helper'
 include CourseTerms
 
 describe "assignment_types/new" do
 
   before(:all) do
-    clean_models
     @course = create(:course)
     @assignment_type = AssignmentType.new
   end
