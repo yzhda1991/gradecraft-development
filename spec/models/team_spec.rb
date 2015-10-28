@@ -30,7 +30,7 @@ describe Team do
   describe "challenge_grade_score" do
   end
 
-  describe "revised_team_score", focus: true do
+  describe "revised_team_score" do
     let(:course) { create :course }
     let(:team) { create(:team, course: course) }
 
