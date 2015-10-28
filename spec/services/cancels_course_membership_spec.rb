@@ -46,7 +46,13 @@ describe CancelsCourseMembership do
       expect(RubricGrade.for_student(membership.user)).to eq [another_grade]
     end
 
-    xit "removes the assignment weights for the student"
+    it "removes the assignment weights for the student" do
+      another_assignment_weight = create :assignment_weight, student: student
+      course_assignment_weight = create :assignment_weight, student: student, course: course
+      described_class.for_student membership
+      expect(student.reload.assignment_weights).to eq [another_assignment_weight]
+    end
+
     xit "removes the assignment type weights for the student"
     xit "removes the earned badges for the student"
     xit "removes the predicted earned badges for the student"

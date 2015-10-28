@@ -17,7 +17,8 @@ class AssignmentWeight < ActiveRecord::Base
   # validate :course_total_assignment_weight_not_exceeded, :course_max_assignment_weight_not_exceeded
 
   scope :except_weight, ->(weight) { where('assignment_weights.id != ?', weight.id) }
-  scope :for_course, ->(course) { where(:assignment_id => course.assignments.pluck(:id)) }
+  scope :for_course, ->(course) { where(course_id: course.id) }
+  scope :for_student, ->(student) { where(student_id: student.id) }
 
   def self.weight
     limit(1).pluck(:weight).first || 0
@@ -48,7 +49,7 @@ class AssignmentWeight < ActiveRecord::Base
   end
 
   def course_max_assignment_weight_not_exceeded
-    if course.max_assignment_weight? 
+    if course.max_assignment_weight?
       if weight > course.max_assignment_weight
         errors.add :base, "Please select a lower #{course.weight_term.downcase} value"
       end

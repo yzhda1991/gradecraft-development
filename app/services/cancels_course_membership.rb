@@ -4,12 +4,20 @@ class CancelsCourseMembership
       .removes_submissions(membership)
       .removes_grades(membership)
       .removes_rubric_grades(membership)
+      .removes_assignment_weights(membership)
   end
 
   private
 
   def self.deletes_membership(membership)
     membership.destroy
+    self
+  end
+
+  def self.removes_assignment_weights(membership)
+    AssignmentWeight.for_course(membership.course)
+      .for_student(membership.user)
+      .destroy_all
     self
   end
 
