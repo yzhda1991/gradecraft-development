@@ -188,7 +188,7 @@ describe GradesController do
       end
     end
 
-    describe "POST self_log", focus: true do
+    describe "POST self_log" do
       before(:all) do
         @course = create(:course)
         @assignment = create(:assignment, course: @course)
