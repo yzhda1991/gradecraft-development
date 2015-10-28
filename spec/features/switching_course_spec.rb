@@ -1,6 +1,6 @@
 require "spec_helper"
 
-feature "switch course" do
+feature "switch course", focus: true do
   let(:password) { "p@ssword" }
 
   context "as a student" do
@@ -10,10 +10,8 @@ feature "switch course" do
     let!(:second_course_membership) { create :student_course_membership, user: user, course: course_2 }
     let(:user) { create :user, password: password }
 
-    before { visit root_path }
-
     before(:each) do
-      LoginPage.new(user).submit({ password: password })
+      login_user("user", "password")
     end
 
     scenario "successfully" do

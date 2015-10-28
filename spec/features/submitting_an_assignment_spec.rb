@@ -1,6 +1,6 @@
 require "spec_helper"
 
-feature "submitting an assignment", focus: true do
+feature "submitting an assignment" do
   let(:password) { "p@ssword" }
 
   context "as a student" do
@@ -11,9 +11,8 @@ feature "submitting an assignment", focus: true do
     let(:assignment_type) {create :assignment_type, course: course, name: "Assignment Type Name"}
     let(:assignment) {create :individual_assignment_with_submissions, assignment_type: assignment_type, course: course}
 
-    before { visit root_path }
-
     before(:each) do
+      visit root_path
       LoginPage.new(user).submit({ password: password })
     end
 
