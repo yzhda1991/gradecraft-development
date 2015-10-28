@@ -22,18 +22,32 @@ describe GradesController do
       CourseMembership.create user: @professor, course: @course, role: "professor"
     end
     before (:each) do
-      @grade = create(:grade)
-      @assignment.grades << @grade
+      @grade = create(:grade, student: @student, assignment: @assignment, course: @course)
       login_user(@professor)
     end
 
+    after(:each) do
+      @grade.delete
+    end
+
     describe "GET show" do
-      it "shows the grade" do
+      it "assigns the assignment and title" do
         get :show, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
         allow(GradesController).to receive(:current_student).and_return(@student)
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:title)).to eq("#{@student.name}'s Grade for #{@assignment.name}")
         expect(response).to render_template(:show)
+      end
+
+      it "assigns the rubric and metrics for individual assignments" do
+        rubric = create(:rubric_with_metrics, assignment: @assignment)
+        metric = rubric.metrics.first
+        tier = rubric.metrics.first.tiers.first
+        rubric_grade = create(:rubric_grade, assignment: @assignment, student: @student, metric: metric, tier: tier)
+        get :show, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
+        expect(assigns(:rubric)).to eq(rubric)
+        expect(assigns(:metrics)).to eq(rubric.metrics)
+        expect(JSON.parse(assigns(:rubric_grades))).to eq([{ "id" => rubric_grade.id, "metric_id" => metric.id, "tier_id" => tier.id, "comments" => nil }])
       end
     end
 
@@ -67,22 +81,19 @@ describe GradesController do
     end
 
     describe "PUT mass_update" do
-      before(:all) do
-        @grade_2 = create(:grade, assignment: @assignment)
-      end
 
       let(:grades_attributes) do
-        { "#{@assignment.grades.index(@grade_2)}" =>
+        { "#{@assignment.grades.index(@grade)}" =>
           { graded_by_id: @professor.id, instructor_modified: true,
-            student_id: @grade_2.student_id, raw_score: 1000, status: "Graded",
-            id: @grade_2.id
+            student_id: @grade.student_id, raw_score: 1000, status: "Graded",
+            id: @grade.id
           }
         }
       end
 
       it "updates the grades for the specific assignment" do
         put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
-        expect(@grade_2.reload.raw_score).to eq 1000
+        expect(@grade.reload.raw_score).to eq 1000
       end
 
       it "sends a notification to the student to inform them of a new grade" do
@@ -94,7 +105,7 @@ describe GradesController do
       end
 
       it "only sends notifications to the students if the grade changed" do
-        @grade_2.update_attributes({ raw_score: 1000 })
+        @grade.update_attributes({ raw_score: 1000 })
         run_background_jobs_immediately do
           expect { put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes } }.to_not \
             change { ActionMailer::Base.deliveries.count }
@@ -153,18 +164,16 @@ describe GradesController do
   end
 
   context "as student" do
-    before(:all) do
-      @grade = create(:grade, student: @student)
-      @assignment.grades << @grade
-    end
-    before (:each) { login_user(@student) }
-
     before do
+      @grade = create(:grade, student: @student, assignment: @assignment, course: @course)
       login_user(@student)
-      session[:course_id] = @course.id
-      allow(Resque).to receive(:enqueue).and_return(true)
       allow(controller).to receive(:current_student).and_return(@student)
     end
+
+    after(:each) do
+      @grade.delete
+    end
+
 
     describe "GET show" do
       it "shows the grade display" do

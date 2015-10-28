@@ -2,7 +2,7 @@ class RubricGrade < ActiveRecord::Base
   belongs_to :submission
   belongs_to :metric
   belongs_to :tier
-  belongs_to :student
+  belongs_to :student, :class_name => 'User'
   belongs_to :assignment
 
   attr_accessible :metric_name, :metric_description, :max_points, :tier_name,
