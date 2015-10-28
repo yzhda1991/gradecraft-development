@@ -60,7 +60,15 @@ describe CancelsCourseMembership do
       expect(student.reload.earned_badges).to eq [another_earned_badge]
     end
 
-    xit "removes the predicted earned badges for the student"
+    it "removes the predicted earned badges for the student" do
+      another_earned_badge = create :predicted_earned_badge, student: student
+      course_earned_badge = create :predicted_earned_badge, student: student,
+        badge: create(:badge, course: course)
+      described_class.for_student membership
+      expect(PredictedEarnedBadge.where(student_id: student.id)).to \
+        eq [another_earned_badge]
+    end
+
     xit "removes the predicted earned challenges for the student"
     xit "removes the group memberships for the student"
     xit "removes the team memberships for the student"
