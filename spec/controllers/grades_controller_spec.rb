@@ -183,13 +183,13 @@ describe GradesController do
         expect(JSON.parse(response.body)).to eq({"id" => @assignment.id, "points_earned" => predicted_points})
       end
 
-      it "enqueues_the_predictor_event_job", focus: true do
+      it "enqueues_the_predictor_event_job" do
         expect(controller).to receive(:enqueue_predictor_event_job)
         get :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
       end
     end
 
-    describe "enqueue_predictor_event_job", focus: true do
+    describe "enqueue_predictor_event_job" do
       context "Resque connects to redis and enqueues the damn job" do
         before(:each) do
           @predictor_event_job = double(:predictor_event_job)
