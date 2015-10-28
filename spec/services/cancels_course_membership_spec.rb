@@ -79,7 +79,15 @@ describe CancelsCourseMembership do
         eq [another_earned_challenge]
     end
 
-    xit "removes the group memberships for the student"
+    it "removes the group memberships for the student" do
+      another_group_membership = create :group_membership, student: student
+      course_group_membership = create :group_membership, student: student,
+        group: create(:group, course: course)
+      described_class.for_student membership
+      expect(GroupMembership.where(student_id: student.id)).to \
+        eq [another_group_membership]
+    end
+
     xit "removes the team memberships for the student"
     xit "removes the announcement states for the student"
     xit "removes the flagged states for the student"
