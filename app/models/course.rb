@@ -416,7 +416,7 @@ class Course < ActiveRecord::Base
         if grade and grade.is_student_visible?
           memo << grade.try(:raw_score) 
         else
-          memo << nil
+          memo << ''
         end
         memo
       end
