@@ -81,7 +81,7 @@ describe AssignmentTypeWeightsController do
     describe "POST update" do
       before do
         # Won't work unless there is at least one assignment!
-        # TODO: refactor weights on
+        # TODO: refactor weights on assignment type not assignments
         create :assignment, assignment_type: @assignment_type_weightable,
           course: @course
         create :assignment, assignment_type: @assignment_type_not_weightable,
@@ -98,6 +98,12 @@ describe AssignmentTypeWeightsController do
         post :update, :id => @assignment_type_not_weightable.id, :weight => 2, :format => :json
         expect(@student.weight_for_assignment_type(@assignment_type_not_weightable)).to eq(0)
         expect(JSON.parse(response.body)).to eq({"errors"=>"Unable to update assignment type weight"})
+      end
+
+      it "updates points for corresponding grades" do
+        grade = create :scored_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
+        post :update, :id => @assignment_type_weightable.id, :weight => 2, :format => :json
+        expect(@assignment_type_weightable.visible_score_for_student(@student)).to eq(2000)
       end
     end
 
