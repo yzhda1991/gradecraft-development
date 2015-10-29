@@ -9,6 +9,7 @@ class CancelsCourseMembership
       .removes_predicted_earned_badges(membership)
       .removes_predicted_earned_challenges(membership)
       .removes_group_memberships(membership)
+      .removes_team_memberships(membership)
   end
 
   private
@@ -69,6 +70,13 @@ class CancelsCourseMembership
 
   def self.removes_rubric_grades(membership)
     RubricGrade.for_course(membership.course)
+      .for_student(membership.user)
+      .destroy_all
+    self
+  end
+
+  def self.removes_team_memberships(membership)
+    TeamMembership.for_course(membership.course)
       .for_student(membership.user)
       .destroy_all
     self
