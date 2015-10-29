@@ -11,8 +11,8 @@ class CourseMembershipsController < ApplicationController
   end
 
   def destroy
-    @course_membership = current_course.course_memberships.find(params[:id])
-    @course_membership.destroy
+    course_membership = current_course.course_memberships.find(params[:id])
+    CancelsCourseMembership.for_student course_membership
 
     respond_to do |format|
       format.html { redirect_to students_path, notice: 'Student was successfully removed from course.' }
