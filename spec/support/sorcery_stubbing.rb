@@ -14,8 +14,5 @@ module SorceryStubbing
       end
     end
   end
-
-  def login_user(user, password)
-    page.driver.post(login_path, { username: user, password: password}) 
-  end
+  
 end
