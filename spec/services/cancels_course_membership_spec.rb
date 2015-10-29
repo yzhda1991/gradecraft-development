@@ -97,7 +97,15 @@ describe CancelsCourseMembership do
         eq [another_team_membership]
     end
 
-    xit "removes the announcement states for the student"
+    it "removes the announcement states for the student" do
+      another_announcement = create :announcement_state, user: student
+      course_announcement = create :announcement_state, user: student,
+        announcement: create(:announcement, course: course)
+      described_class.for_student membership
+      expect(AnnouncementState.where(user_id: student.id)).to \
+        eq [another_announcement]
+    end
+
     xit "removes the flagged states for the student"
   end
 end

@@ -10,12 +10,20 @@ class CancelsCourseMembership
       .removes_predicted_earned_challenges(membership)
       .removes_group_memberships(membership)
       .removes_team_memberships(membership)
+      .removes_announcement_states(membership)
   end
 
   private
 
   def self.deletes_membership(membership)
     membership.destroy
+    self
+  end
+
+  def self.removes_announcement_states(membership)
+    AnnouncementState.for_course(membership.course)
+      .for_user(membership.user)
+      .destroy_all
     self
   end
 
