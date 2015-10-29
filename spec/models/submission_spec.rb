@@ -44,4 +44,24 @@ describe Submission do
     subject.save!
     expect expect(subject.errors.size).to eq(0)
   end
+
+  describe ".for_course" do
+    it "returns all submissions for a specific course" do
+      course = create(:course)
+      course_submission = create(:submission, course: course)
+      another_submission = create(:submission)
+      results = Submission.for_course(course)
+      expect(results).to eq [course_submission]
+    end
+  end
+
+  describe ".for_student" do
+    it "returns all submissions for a specific student" do
+      student = create(:user)
+      student_submission = create(:submission, student: student)
+      another_submission = create(:submission)
+      results = Submission.for_student(student)
+      expect(results).to eq [student_submission]
+    end
+  end
 end

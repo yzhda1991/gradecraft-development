@@ -28,6 +28,8 @@ class Submission < ActiveRecord::Base
   scope :graded, -> { where(:grade) }
   scope :resubmitted, -> { where('EXISTS(SELECT 1 FROM grades WHERE (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (updated_at < submissions.updated_at) AND (status = ? OR status = ?))', "Graded", "Released") }
   scope :date_submitted, -> { order('created_at ASC') }
+  scope :for_course, ->(course) { where(course_id: course.id) }
+  scope :for_student, ->(student) { where(student_id: student.id) }
 
   before_validation :cache_associations
 
@@ -96,7 +98,7 @@ class Submission < ActiveRecord::Base
     false
   end
 
-  def check_unlockables 
+  def check_unlockables
     if self.assignment.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
         if condition.unlockable_type == "Assignment"

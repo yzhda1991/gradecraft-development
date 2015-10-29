@@ -27,6 +27,9 @@ class EarnedBadge < ActiveRecord::Base
 
   delegate :name, :description, :icon, :to => :badge
 
+  scope :for_course, ->(course) { where(course_id: course.id) }
+  scope :for_student, ->(student) { where(student_id: student.id) }
+
   def self.score
     pluck('SUM(score)').first || 0
   end

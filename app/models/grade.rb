@@ -58,6 +58,8 @@ class Grade < ActiveRecord::Base
   scope :instructor_modified, -> { where('instructor_modified = ?', true) }
   scope :positive, -> { where('score > 0')}
   scope :predicted_to_be_done, -> { where('predicted_score > 0')}
+  scope :for_course, ->(course) { where(course_id: course.id) }
+  scope :for_student, ->(student) { where(student_id: student.id) }
 
   # @mz todo: add specs
   scope :student_visible, -> { joins(:assignment).where(student_visible_sql) }
@@ -147,7 +149,7 @@ class Grade < ActiveRecord::Base
     student_id == user.id
   end
 
-  # @mz todo: port this over to cache_team_and_student_scores once 
+  # @mz todo: port this over to cache_team_and_student_scores once
   # related methods have tests
   # want to make sure that nothing depends on the output of this method
   def save_student_and_team_scores
@@ -193,22 +195,22 @@ class Grade < ActiveRecord::Base
     failure_attrs = {}
     if course.has_teams? && student.team_for_course(course).present?
       unless @team_update_successful
-        failure_attrs.merge! team: @team.attributes 
+        failure_attrs.merge! team: @team.attributes
       end
 
       unless @student_update_successful
-        failure_attrs.merge! student: @student.attributes 
+        failure_attrs.merge! student: @student.attributes
       end
 
       unless @team_update_successful and @student_update_successful
-        failure_attrs.merge! grade: self.attributes 
+        failure_attrs.merge! grade: self.attributes
       end
     end
 
     failure_attrs
   end
 
-  public 
+  public
 
   def altered?
     self.score_changed? == true  || self.feedback_changed? == true
