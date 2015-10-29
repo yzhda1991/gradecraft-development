@@ -404,6 +404,8 @@ class GradesController < ApplicationController
     @grade.raw_score = nil
     @grade.status = nil
     @grade.feedback = nil
+    @grade.feedback_read = nil
+    @grade.feedback_read_at = nil
     @grade.instructor_modified = false
     @grade.update_attributes(params[:grade])
 
