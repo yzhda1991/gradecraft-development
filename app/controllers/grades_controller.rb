@@ -406,6 +406,8 @@ class GradesController < ApplicationController
     @grade.feedback = nil
     @grade.instructor_modified = false
     @grade.update_attributes(params[:grade])
+
+    ScoreRecalculatorJob.new(user_id: @grade.student_id, course_id: current_course.id).enqueue
     redirect_to @grade.assignment, notice: "#{ @grade.student.name}'s #{@grade.assignment.name} grade was successfully deleted."
   end
 
