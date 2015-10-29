@@ -106,6 +106,17 @@ describe CancelsCourseMembership do
         eq [another_announcement]
     end
 
-    xit "removes the flagged states for the student"
+    it "removes the flagged states for the student" do
+      another_flagger = create(:professor_course_membership)
+      student.courses << another_flagger.course
+      another_flagged_user = create :flagged_user, flagged: student,
+        flagger: another_flagger.user, course: another_flagger.course
+      flagger = create(:professor_course_membership, course: course)
+      course_flagged_user = create :flagged_user, flagged: student,
+        course: course, flagger: flagger.user
+      described_class.for_student membership
+      expect(FlaggedUser.where(flagged_id: student.id)).to \
+        eq [another_flagged_user]
+    end
   end
 end

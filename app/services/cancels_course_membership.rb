@@ -11,6 +11,7 @@ class CancelsCourseMembership
       .removes_group_memberships(membership)
       .removes_team_memberships(membership)
       .removes_announcement_states(membership)
+      .removes_flagged_users(membership)
   end
 
   private
@@ -37,6 +38,13 @@ class CancelsCourseMembership
   def self.removes_earned_badges(membership)
     EarnedBadge.for_course(membership.course)
       .for_student(membership.user)
+      .destroy_all
+    self
+  end
+
+  def self.removes_flagged_users(membership)
+    FlaggedUser.for_course(membership.course)
+      .for_flagged(membership.user)
       .destroy_all
     self
   end

@@ -3,6 +3,9 @@ class FlaggedUser < ActiveRecord::Base
   belongs_to :flagger, class_name: "User"
   belongs_to :flagged, class_name: "User"
 
+  scope :for_course, ->(course) { where(course_id: course.id) }
+  scope :for_flagged, ->(user) { where(flagged_id: user.id) }
+
   validates :course, presence: true
   validates :flagger, presence: true, course_membership: true, staff_flagger: true
   validates :flagged, presence: true, course_membership: true
