@@ -4,7 +4,7 @@
 %textarea(ng-model="tier.description" placeholder="Description" value="{{tier.description}}" ng-blur="tier.modify(tierForm)" ng-change="tier.change()")
 
 - if @course_badge_count > 0
-  .badge-row(ng-click="tier.editBadges()" ng-show="tier.isSaved()")
+  .badge-row.clickable(ng-click="tier.editBadges()" ng-show="tier.isSaved()")
     .badge-messages Badges
     .tier-badge-image(ng-repeat="(tierBadgeId, tierBadge) in tier.badges")
       %img(src="{{tierBadge.badge.icon}}" width="35px" height="35px")

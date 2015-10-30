@@ -177,8 +177,6 @@ button.delete
     height: 60px
     &:hover
       background: $color-green-1
-      cursor: pointer
-      cursor: hand
 
       .badge-messages
         color: $color-white
@@ -261,6 +259,9 @@ button.delete
     margin-top: 0
     margin-right: 0px
 
+.badge-row.clickable
+  cursor: hand
+
 .modal-window
   /* A centered div above the overlay with a box shadow. */
   z-index: 1000
@@ -289,6 +290,10 @@ button.delete
   border-radius: $global-radius
 
 #grade-rubric-table, #rubric-results-table
+  td 
+    vertical-align: top
+    text-align: left
+
   td.metric.heading
     background-color: $color-blue-1
     color: $color-white
@@ -302,8 +307,10 @@ button.delete
   .metric-name, .tier-name
     font-weight: bold
 
+  .metric-name, .metric-points
+    color: $color-white
+
   .metric-points, .tier-points
-    color: $color-blue-0
     font-size: 80%
     text-transform: uppercase
 
@@ -321,7 +328,6 @@ button.delete
 
   .badge-row:hover
     background-color: transparent
-    cursor: pointer !important
 
   .badges, .earned_tier, .graded-students
     display: block
