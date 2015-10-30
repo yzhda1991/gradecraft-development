@@ -98,6 +98,5 @@ describe SubmissionFile do
     @submission_file.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
     @submission.save!
     expect(@submission_file.url).to match(/.*\/uploads\/submission_file\/file\/#{@submission_file.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
->>>>>>> builds out json endpoint for assignment submissions export
   end
 end

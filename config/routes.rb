@@ -357,8 +357,7 @@ GradeCraft::Application.routes.draw do
   scope "/exports" do
     scope "/assignments" do
       get '/:assignment_id/submissions' => 'assignment_exports#submissions'
-      get '/:assignment_id/teams/:team_id/submissions' => 'assignment_exports#submissions_by_team'
-      get '/:assignment_id/export' => 'assignment_exports#export', defaults: {format: :json}
+      get '/:assignment_id/teams/:team_id/submissions' => 'assignment_exports#submissions_for_team'
     end
   end
 end

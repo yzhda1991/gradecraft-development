@@ -2,36 +2,35 @@ class AssignmentExportsController < ApplicationController
   before_filter :ensure_staff?
   before_filter :fetch_assignment
   before_filter :fetch_team, only: :submissions_by_team
-  # seems like this need to happen somewhere, but not hooked up to anything at the moment
-  # before_filter :assemble_json_for_archiver
   before_filter :generate_export_csv
 
   respond_to :json
 
   def submissions
-    @presenter = submissions_presenter
+    @presenter = params[:team_id] ? submissions_by_team_presenter :  submissions_presenter
     @archive_json = submissions_by_student_archive_hash
-    build_archive_and_queue_build_jobs
     respond_with @archive.start_archive_with_compression # should return json { status: 200, message: "Your requested export is being assembled, find it here: http://gc.com/download" }
   end
 
-  def submissions_presenter_submissions_by_team
-    @presenter = submissions_by_team_presenter
-    @archive_json = submissions_by_student_archive_hash
-    build_archive_and_queue_build_jobs
-    respond_with @archive.start_archive_with_compression # should return json { status: 200, message: "Your requested export is being assembled, find it here: http://gc.com/download" }
+  def export_submissions
+    @students ||= students_for_submission_export
   end
 
-  def export
-    fetch_assignment
-    @submissions ||= @assignment.student_submissions
-    group_submissions_by_student
+  def export_team_submissions
+    @students_on_team ||=  students_for_team_submission_export
   end
 
   private
+    def assignment_export_attributes
+      {
+        assignment_id: params[:assignment_id],
+        team_id: params[:team_id]
+      }
+    end
 
+    # @mz todo: add specs for this nonsense
     def build_archive_and_queue_build_jobs
-      @archive = Backstacks::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
+      @archive = SmartArchiver::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
       @archive.assemble_directories_on_disk # build the directory structure and create file-getting jobs
       @archive.archive_with_compression # create tar job for directory
       @archive.clean_tmp_dir_on_complete # create job for removing the tmp directory on completion
@@ -41,16 +40,6 @@ class AssignmentExportsController < ApplicationController
       JbuilderTemplate.new(temp_view_context).encode do |json|
         json.partial! "assignment_exports/submissions_by_student_archive_json", presenter: @presenter
       end.to_json
-    end
-
-    # needs specs
-    def generate_export_csv
-      # there needs to be a good way to determine the difference between data pulled from the remote sources vs. local ones
-      csv_dir = Dir.mktmpdir
-      @csv_file_path = File.expand_path(csv_dir, "/_grade_import_template.csv")
-      open( @csv_file_path,'w' ) do |f|
-        f.puts @assignment.grade_import(@students) # need to pull @students out of @submissions_by_student
-      end
     end
 
     def submissions_by_team_presenter
@@ -65,13 +54,13 @@ class AssignmentExportsController < ApplicationController
     def submissions_presenter
       @presenter ||= AssignmentExportPresenter.build(
         presenter_base_options.merge(
-          submissions: @assignment.student_submissions,
+          submissions: @assignment.student_submissions
         )
       )
     end
 
     def presenter_base_options
-      {
+      
         assignment: @assignment,
         csv_file_path: @csv_file_path,
         export_file_basename: export_file_basename
