@@ -1,15 +1,12 @@
-module Backstacks
-  class FileGetter
-
-    extend RetryFailedJob
+module SmartArchiver
+  class File
 
     def initialize(attrs={}, current_directory, queue_name)
       @path = attrs[:path]
       @content_type = attrs[:content_type]
-      @queue = queue_name
     end
 
-    def perform 
+    def get
       `wget #{@path} #{current_directory}`
     end
   end

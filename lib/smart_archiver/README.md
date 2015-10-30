@@ -1,6 +1,6 @@
-# Backstacks
+# SmartArchiver
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/backstacks`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/smart_archiver`. To experiment with that code, run `bin/console` for an interactive prompt.
 
 TODO: Delete this and the text above, and describe your gem
 
@@ -9,7 +9,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'backstacks'
+gem 'smart_archiver'
 ```
 
 And then execute:
@@ -18,7 +18,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install backstacks
+    $ gem install smart_archiver
 
 ## Usage
 
@@ -71,7 +71,7 @@ end
 
 ```
 # start at the top level directory
-@archive = Backstacks::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
+@archive = SmartArchiver::Archive.new(json: archive_json, name: archive_name, max_cpu_usage: 0.2)
 @archive.assemble_directories_on_disk # build the directory structure and create file-getting jobs
 @archive.archive_with_compression # create tar job for directory
 @archive.clean_tmp_dir_on_complete # create job for removing the tmp directory on completion
@@ -175,7 +175,7 @@ This is the method that the smart archiver is replacing, any functionality here 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/backstacks. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/smart_archiver. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
 
 
 ## License

@@ -1,20 +1,15 @@
-module Backstacks
-  class ArchiveCleaner
-
-    extend RetryFailedJob
-
+module SmartArchiver
+  class Cleaner
     def initialize(attrs={})
       @source_path = attrs[:source_path]
       @destination_name = attrs[:destination_name]
     end
     
-    def perform
+    def remove_tmp_files!
       if final_archive_exists?
         # alias for rm -rf with protections for malicious code
         FileUtils.remove_entry_secure(tmp_archive_path, true) # true denotes force:true
       end
-    rescue Resque::TermException
-      Resque.enqueue(self)
     end
 
     def final_archive_exists?

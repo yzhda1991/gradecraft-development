@@ -156,6 +156,7 @@ class AssignmentsController < ApplicationController
 
   def export_submissions
     @students ||= students_for_submission_export
+    AssignmentExportJob.new assignment_export_attributes
   end
 
   def export_team_submissions
@@ -163,6 +164,12 @@ class AssignmentsController < ApplicationController
   end
 
   private
+    def assignment_export_attributes
+      {
+        assignment_id: params[:assignment_id],
+        team_id: params[:team_id]
+      }
+    end
 
     def students_for_submission_export
     end
@@ -174,10 +181,7 @@ class AssignmentsController < ApplicationController
 
   def export_submissions
 
-    @assignment = current_course.assignments.find(params[:id])
-
     if params[:team_id].present?
-      team = current_course.teams.find_by(id: params[:team_id])
       zip_name = "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}_#{team.name}"
       @students = current_course.students_being_graded_by_team(team)
     else

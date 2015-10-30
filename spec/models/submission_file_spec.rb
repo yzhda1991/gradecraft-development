@@ -79,7 +79,6 @@ describe SubmissionFile do
   end
 
   it "has an accessible url" do
-<<<<<<< HEAD
     subject.submission.save!
     expect expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{subject.id}\/\d+_test_image\.jpg/)
   end
@@ -88,9 +87,6 @@ describe SubmissionFile do
     subject.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
     subject.submission.save!
     expect expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
-=======
-    @submission.save!
-    expect(@submission_file.url).to match(/.*\/uploads\/submission_file\/file\/#{@submission_file.id}\/\d+_test_image\.jpg/)
   end
 
   it "has a content_type method" do

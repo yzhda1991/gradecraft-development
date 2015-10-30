@@ -1,9 +1,8 @@
-module Backstacks
+module SmartArchiver
   class Directory
     def initialize(attrs={})
       @directory_hash = attrs[:directory_hash]
       @base_path = attrs[:base_path]
-      @queue_name = attrs[:queue_name]
       @current_directory = File.expand_path(@base_path, "/#{@directory_hash[:directory_name]}")
     end
 
@@ -18,8 +17,7 @@ module Backstacks
       if @directory_hash[:files].present?
         # add file getter jobs for files in the directory
         @directory_hash[:files].each do |file_hash|
-          @file_getter = FileGetter.new(file_hash, @current_directory, @queue_name)
-          Resque.enqueue(@file_getter)
+          @file_getter = FileGetter.new(file_hash, @current_directory)
         end
       end
     end
@@ -30,8 +28,7 @@ module Backstacks
         @directory_hash[:sub_directories].each do |sub_directory_hash|
           Directory.new(
             directory_hash: sub_directory_hash,
-            base_path: current_directory,
-            file_queue: @file_queue
+            base_path: current_directory
           ).build_recursive
         end
       end
