@@ -28,18 +28,18 @@ describe "assignments/predictor_data" do
   end
 
   it "includes the current student grade with the assignment" do
-    @assignment.current_student_grade = { id: 1, pass_fail_status: "should not persist", score: 1000, predicted_score: 999 }
+    @assignment.current_student_grade = { id: 1, pass_fail_status: "should not persist", raw_score: 1000, score: 1000, predicted_score: 999 }
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["grade"]).to eq({ "id" => 1, "score" => 1000, "predicted_score" => 999 })
+    expect(json["assignments"][0]["grade"]).to eq({ "id" => 1, "raw_score" => 1000, "score" => 1000, "predicted_score" => 999 })
   end
 
   it "includes the pass fail status with the grade when the assignment is pass fail" do
-    @assignment.current_student_grade = { id: 1, pass_fail_status: "passed", score: 1000, predicted_score: 999 }
+    @assignment.current_student_grade = { id: 1, pass_fail_status: "passed", raw_score: 1000, score: 1000, predicted_score: 999 }
     @assignment.update(pass_fail: true)
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["grade"]).to eq({ "id" => 1, "pass_fail_status" => "passed", "score" => 1000, "predicted_score" => 999 })
+    expect(json["assignments"][0]["grade"]).to eq({ "id" => 1, "pass_fail_status" => "passed", "raw_score" => 1000, "score" => 1000, "predicted_score" => 999 })
   end
 
   it "does not include assignments with no points" do

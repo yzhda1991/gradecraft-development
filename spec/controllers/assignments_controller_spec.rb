@@ -311,13 +311,14 @@ describe AssignmentsController do
         ].each do |attr|
            expect(assigns(:grades)[0][attr]).to eq(grade[attr])
         end
-        expect(assigns(:assignments)[0].current_student_grade).to eq({ id: grade.id, pass_fail_status: nil, score: grade.score, predicted_score: grade.predicted_score })
+        expect(assigns(:assignments)[0].current_student_grade).to eq({ id: grade.id, pass_fail_status: nil, raw_score: grade.raw_score, score: grade.score, predicted_score: grade.predicted_score })
       end
 
       it "includes student grade with no score if not released" do
         grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignments)[0].current_student_grade[:score]).to eq(nil)
+        expect(assigns(:assignments)[0].current_student_grade[:raw_score]).to eq(nil)
       end
 
       it "assigns data for displaying student grading distribution" do

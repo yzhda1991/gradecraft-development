@@ -113,11 +113,12 @@
     _.where(assignments, {assignment_type_id: id})
 
   # Total points predicted for a collection of assignments
+  # Use raw score to keep weighting calculation on assignment type level
   $scope.assignmentsPointTotal = (assignments)->
     total = 0
     _.each(assignments, (assignment)->
-      if assignment.grade.score > 0
-        total += assignment.grade.score
+      if assignment.grade.raw_score > 0
+        total += assignment.grade.raw_score
       else if ! assignment.pass_fail
         total += assignment.grade.predicted_score
     )
@@ -200,8 +201,8 @@
   $scope.allPointsEarned = ()->
     total = 0
     _.each($scope.assignments, (assignment)->
-      if assignment.grade.score > 0
-        total += assignment.grade.score
+      if assignment.grade.raw_score > 0
+        total += assignment.grade.raw_score
       )
     _.each($scope.badges,(badge)->
         total += badge.total_earned_points

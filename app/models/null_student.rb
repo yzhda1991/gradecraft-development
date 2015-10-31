@@ -75,6 +75,10 @@ class NullStudentGrade
     nil
   end
 
+  def raw_score
+    nil
+  end
+
   def final_score
     nil
   end

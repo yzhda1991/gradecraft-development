@@ -50,6 +50,7 @@ describe NullStudent do
       expect(grade.point_total).to eq(555)
       expect(grade.predicted_score).to eq(0)
       expect(grade.score).to eq(nil)
+      expect(grade.raw_score).to eq(nil)
       expect(grade.status).to eq(nil)
       expect(grade.team_id).to eq(0)
       expect(grade.final_score).to eq(nil)

@@ -19,7 +19,8 @@ FactoryGirl.define do
     end
 
     factory :in_progress_grade do
-      score { Faker::Number.number(5) }
+      raw_score { Faker::Number.number(5) }
+      score { raw_score }
       status 'In Progress'
     end
   end

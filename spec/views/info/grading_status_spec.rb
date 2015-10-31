@@ -40,7 +40,7 @@ describe "info/grading_status" do
     end
   end
 
-  describe "with in progress grades" do
+  describe "with in progress grades"  do
     before(:each) do
       @grades = [create(:in_progress_grade, course: @course, assignment: @assignment, student: @student)]
       @ungraded_submissions_by_assignment = []
