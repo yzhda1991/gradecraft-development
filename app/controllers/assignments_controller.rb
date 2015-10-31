@@ -225,6 +225,7 @@ class AssignmentsController < ApplicationController
           id: grade.id,
           pass_fail_status: grade.is_student_visible? ? grade.pass_fail_status : nil,
           score: grade.is_student_visible? ? grade.score : nil,
+          raw_score: grade.is_student_visible? ? grade.raw_score : nil,
           predicted_score: current_user.is_student?(current_course) ? grade.predicted_score : 0
         }
       end

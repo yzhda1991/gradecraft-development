@@ -38,6 +38,7 @@ json.assignments @assignments do |assignment|
         json.id grade[:id]
         json.predicted_score grade[:predicted_score]
         json.score grade[:score]
+        json.raw_score grade[:raw_score]
         json.pass_fail_status grade[:pass_fail_status] if assignment.pass_fail
       end
     end
