@@ -112,14 +112,15 @@
   $scope.assignmentsForAssignmentType = (assignments,id)->
     _.where(assignments, {assignment_type_id: id})
 
-  # Total points predicted for a collection of assignments
-  # Use raw score to keep weighting calculation on assignment type level
-  $scope.assignmentsPointTotal = (assignments)->
+  # Total points earned and predicted for a collection of assignments
+  # If second argument passed is false, only points actually earned without weights are returned
+  $scope.assignmentsPointTotal = (assignments, includePredicted=true)->
     total = 0
     _.each(assignments, (assignment)->
+      # use raw score to keep weighting calculation on assignment type level
       if assignment.grade.raw_score > 0
         total += assignment.grade.raw_score
-      else if ! assignment.pass_fail
+      else if ! assignment.pass_fail && includePredicted
         total += assignment.grade.predicted_score
     )
     total
@@ -144,12 +145,17 @@
   # Total points predicted for all assignments by assignments type
   # caps the total points at the assignment type max points
   # only calculates the weighted total if weighted is passed in as true
-  $scope.assignmentTypePointTotal = (assignmentType, weighted=true, capped=true)->
+  # only calcuates earned points if includePredicted is passed in as false
+  $scope.assignmentTypePointTotal = (assignmentType, includeWeights=true, includeCaps=true, includePredicted=true)->
     assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
-    total = $scope.assignmentsPointTotal(assignments)
-    if weighted
+    if includePredicted
+      total = $scope.assignmentsPointTotal(assignments)
+    else
+      total = $scope.assignmentsPointTotal(assignments, false)
+
+    if includeWeights
       total = $scope.weightedPoints(total,assignmentType)
-    if assignmentType.is_capped and capped
+    if assignmentType.is_capped and includeCaps
       total = if total > assignmentType.total_points then assignmentType.total_points else total
     total
 
@@ -200,9 +206,8 @@
   # Total points actually earned to date
   $scope.allPointsEarned = ()->
     total = 0
-    _.each($scope.assignments, (assignment)->
-      if assignment.grade.raw_score > 0
-        total += assignment.grade.raw_score
+    _.each($scope.assignmentTypes, (assignmentType)->
+        total += $scope.assignmentTypePointTotal(assignmentType,true,true,false)
       )
     _.each($scope.badges,(badge)->
         total += badge.total_earned_points
