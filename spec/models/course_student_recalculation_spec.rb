@@ -10,8 +10,6 @@ describe Course do
   let(:student_membership3) { create :student_course_membership, course: course2 }
 
   describe "recalculate_student_scores" do
-    subject { @course1.recalculate_student_scores }
-
     before do
       CourseMembership.where(course_id: course1.id).destroy_all
       @course1 = course1
@@ -19,24 +17,17 @@ describe Course do
       @student_membership2 = student_membership2
     end
 
+    subject { @course1.recalculate_student_scores }
+
     before(:each) { ResqueSpec.reset! }
     let(:score_recalculator_queue) { queue(ScoreRecalculatorJob) }
     let(:student1_job_attributes) {{ user_id: @student_membership1.user_id, course_id: @course1.id }}
     let(:student2_job_attributes) {{ user_id: @student_membership2.user_id, course_id: @course1.id }}
 
-    context "student ids present" do
-      it "creates a score recalculator job for each student" do
-        expect(ScoreRecalculatorJob).to receive(:new).exactly(2).times
-        subject
-      end
-    end
-
-    context "no student ids present" do
-      it "creates creates no score recalculator jobs" do
-        # stub out a no-students scenario
+    context "no student ids are present" do
+      it "doesn't increase the queue size" do
         allow(@course1).to receive(:ordered_student_ids) { [] }
-        expect(ScoreRecalculatorJob).to receive(:new).exactly(0).times
-        subject
+        expect{ subject }.to change { queue(ScoreRecalculatorJob).size }.by(0)
       end
     end
 
