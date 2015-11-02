@@ -379,14 +379,6 @@ class AssignmentsController < ApplicationController
     @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
   end
 
-  def find_or_create_assignment_rubric
-    @assignment.rubric || Rubric.create(assignment_id: @assignment[:id])
-  end
-
-  def assignment_params
-    params.require(:assignment).permit(:assignment_rubrics_attributes => [:id, :rubric_id, :_destroy])
-  end
-
   def set_assignment_weights
     return unless @assignment.student_weightable?
     @assignment.weights = current_course.students.map do |student|
@@ -395,17 +387,5 @@ class AssignmentsController < ApplicationController
       assignment_weight
     end
     @assignment.save
-  end
-
-  def serialized_course_badges
-    MultiJson.dump(ActiveModel::ArraySerializer.new(course_badges, each_serializer: CourseBadgeSerializer))
-  end
-
-  def course_badges
-    @course_badges ||= @assignment.course.badges.visible
-  end
-
-  def rubric_metrics_with_tiers
-    @rubric.metrics.order(:order)
   end
 end
