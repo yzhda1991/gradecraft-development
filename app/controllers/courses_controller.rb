@@ -124,7 +124,8 @@ class CoursesController < ApplicationController
     respond_to do |format|
       if @course.save
         if ! current_user_is_admin?
-          @course.course_memberships.create(:user_id => current_user.id, :role => current_user.role(current_course), instructor_of_record: true)
+          @course.course_memberships.create(user_id: current_user.id,
+                                            role: current_user.role(current_course))
         end
         session[:course_id] = @course.id
         bust_course_list_cache current_user
