@@ -2,6 +2,7 @@ require "active_record_spec_helper"
 
 describe Course do
   subject { build(:course) }
+  let(:staff_membership) { create :staff_course_membership, course: subject, instructor_of_record: true }
 
   describe "validations" do
     it "requires a name" do
@@ -52,7 +53,7 @@ describe Course do
 
   describe "#instructors_of_record" do
     it "returns all the staff who are instructors of record for the course" do
-      membership = create :staff_course_membership, course: subject, instructor_of_record: true
+      membership = staff_membership
       expect(subject.instructors_of_record).to eq [membership.user]
     end
   end
@@ -65,7 +66,7 @@ describe Course do
     end
 
     it "removes the instructors of record that are not present" do
-      membership = create :staff_course_membership, course: subject, instructor_of_record: true
+      membership = staff_membership
       subject.instructors_of_record_ids = []
       expect(subject.instructors_of_record).to be_empty
     end

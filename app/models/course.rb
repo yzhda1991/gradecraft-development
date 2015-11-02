@@ -313,6 +313,22 @@ class Course < ActiveRecord::Base
     challenges.pluck('point_total').sum
   end
 
+  def recalculate_student_scores
+    ordered_student_ids.each do |student_id|
+      ScoreRecalculatorJob.new(user_id: student_id, course_id: self.id).enqueue
+    end
+  end
+
+  def ordered_student_ids
+    User
+      .unscoped # clear the default scope
+      .joins(:course_memberships)
+      .where("course_memberships.course_id = ? and course_memberships.role = ?", self.id, "student")
+      .select(:id) # only need the ids, please
+      .order("id ASC")
+      .collect(&:id)
+  end
+
   #Export Users and Final Scores for Course
   def self.csv_summary_data
     CSV.generate(options) do |csv|
