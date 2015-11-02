@@ -16,16 +16,15 @@
 
       // @mz #assignment_export
       // THIS IS WHERE THE SUBMISSION EXPORT WILL START
-      - if presenter.assignment.submissions.present?
-        %li
-          - if presenter.team
-            %a{:href => export_submissions_assignment_path(presenter.assignment, :team_id => presenter.team, format: 'zip') }
-              %i.fa.fa-zip-o.fa-fw
-                Download Team Submissions
-          - else
-            %a{:href => export_submissions_assignment_path(presenter.assignment, format: 'zip') }
-              %i.fa.fa-zip-o.fa-fw
-                Download Submissions
+      %li
+        - if presenter.team
+          %a{:href => export_submissions_assignment_path(presenter.assignment, :team_id => presenter.team, format: 'zip') }
+            %i.fa.fa-file-zip-o.fa-fw
+            Download Team Submissions
+        - if ! presenter.team
+          %a{:href => export_submissions_assignment_path(presenter.assignment, format: 'zip') }
+            %i.fa.fa-file-zip-o.fa-fw
+            Download Submissions
 
       %li
         %a{:href => import_grades_assignment_path(presenter.assignment) }
