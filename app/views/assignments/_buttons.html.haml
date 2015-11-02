@@ -3,7 +3,7 @@
     - if !presenter.new_assignment?
       %li
         %a{:href => new_assignment_path }
-          %i.fa.fa-plus.fa-fw
+          .fa.fa-plus.fa-fw
           New #{(term_for :assignment).titleize}
       %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(presenter.assignment)
       %li= link_to raw('<i class="fa fa-copy fa-fw"> </i> Copy'), copy_assignments_path(id: presenter.assignment), method: :copy
@@ -19,25 +19,25 @@
       %li
         - if presenter.team
           %a{:href => export_submissions_assignment_path(presenter.assignment, :team_id => presenter.team, format: 'zip') }
-            %i.fa.fa-file-zip-o.fa-fw
+            .fa.fa-file-zip-o.fa-fw
             Download Team Submissions
         - if ! presenter.team
           %a{:href => export_submissions_assignment_path(presenter.assignment, format: 'zip') }
-            %i.fa.fa-file-zip-o.fa-fw
+            .fa.fa-file-zip-o.fa-fw
             Download Submissions
 
       %li
         %a{:href => import_grades_assignment_path(presenter.assignment) }
-          %i.fa.fa-upload.fa-fw
+          .fa.fa-upload.fa-fw
           Import Grades
       %li
         %a{:href => export_grades_assignment_path(presenter.assignment, format: 'csv') }
-          %i.fa.fa-download.fa-fw
+          .fa.fa-download.fa-fw
           Download Grades
       %li
         %a{:href => design_assignment_rubric_path(presenter.assignment) }
-          %i.fa.fa-sliders.fa-fw
-          - if presenter.rubric_designed?
+          .fa.fa-sliders.fa-fw
+          - if presenter.rubric_available?
             Edit Rubric
           - else
             Create Rubric
@@ -49,9 +49,9 @@
               Review Grades
         %li.on(ng-cloak ng-show="useRubric")
           %a(ng-click="rubricsOff()")
-            %i.fa.fa-power-off.fa-fw
+            .fa.fa-power-off.fa-fw
             Rubric is On
         %li.off(ng-cloak ng-hide="useRubric")
           %a(ng-click="rubricsOn()")
-            %i.fa.fa-power-off.fa-fw
+            .fa.fa-power-off.fa-fw
             Rubric is Off
