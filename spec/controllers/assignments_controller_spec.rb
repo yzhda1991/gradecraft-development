@@ -134,6 +134,11 @@ describe AssignmentsController do
         expect(@assignment.reload.name).to eq("new name")
       end
 
+      it "renders the template again if there are validation errors" do
+        post :update, id: @assignment.id, assignment: { name: "" }
+        expect(response).to render_template(:edit)
+      end
+
       it "manages file uploads" do
         params = {:assignment_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
         post :update, id: @assignment.id, :assignment => params
