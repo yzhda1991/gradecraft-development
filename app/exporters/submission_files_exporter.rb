@@ -16,6 +16,18 @@ class SubmissionFilesExporter
 
   private 
 
+  # master attachment format for the archiver
+  def serialized_submission_files
+    submission.submission_files.collect do |submission_file|
+      { path: submission_file.url, content_type: submission_file.content_type }
+    end
+  end
+
+  # master text file format for the archiver
+  def serialized_text_file
+    { content: text_file_content, filename: formatted_text_filename, content_type: "text" }
+  end
+
   def formatted_text_filename
     base_text_filename.downcase.gsub(/_+/,"_")
   end
@@ -26,16 +38,6 @@ class SubmissionFilesExporter
 
   def assignment_name_snippet
     assignment.name.gsub(/\W+/, "_").slice(0..20)
-  end
-
-  def serialized_submission_files
-    submission.submission_files.collect do |submission_file|
-      { path: submission_file.url, content_type: submission_file.content_type }
-    end
-  end
-
-  def serialized_text_file
-    { content: text_file_content, filename: formatted_text_filename, content_type: "text" }
   end
 
   def text_file_content

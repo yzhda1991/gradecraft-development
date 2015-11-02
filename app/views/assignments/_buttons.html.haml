@@ -18,11 +18,11 @@
       // THIS IS WHERE THE SUBMISSION EXPORT WILL START
       %li
         - if presenter.team
-          %a{:href => export_submissions_assignment_path(presenter.assignment, :team_id => presenter.team, format: 'zip') }
+          %a{:href => assignment_exports_team_submissions_path(presenter.assignment, :team_id => presenter.team, format: 'zip') }
             .fa.fa-file-zip-o.fa-fw
             Download Team Submissions
         - if ! presenter.team
-          %a{:href => export_submissions_assignment_path(presenter.assignment, format: 'zip') }
+          %a{:href => assignment_exports_submissions_path(presenter.assignment, format: 'zip') }
             .fa.fa-file-zip-o.fa-fw
             Download Submissions
 
