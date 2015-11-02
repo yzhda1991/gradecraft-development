@@ -1,7 +1,5 @@
 class AssignmentsController < ApplicationController
-
-  before_filter :ensure_staff?, :except => [:show, :index, :description_and_downloads, :predictor_data]
-
+  before_filter :ensure_staff?, :except => [:show, :index, :predictor_data]
   respond_to :html, :json
 
   def index
