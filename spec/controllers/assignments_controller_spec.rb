@@ -288,6 +288,13 @@ describe AssignmentsController do
           get :export_submissions, :id => @assignment, :format => :zip
           expect(response.content_type).to eq("application/zip")
         end
+
+        it "uses the team name was specified" do
+          team = create(:team, course: @course)
+          team.students << create(:user)
+          get :export_submissions, id: @assignment, team_id: team.id, :format => :zip
+          expect(response.headers["Content-Disposition"]).to eq "attachment; filename=\"#{@assignment.name}_#{team.name}.zip\""
+        end
       end
     end
   end
