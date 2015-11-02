@@ -60,7 +60,7 @@ class AssignmentExportsController < ApplicationController
     end
 
     def presenter_base_options
-      
+     {
         assignment: @assignment,
         csv_file_path: @csv_file_path,
         export_file_basename: export_file_basename
