@@ -390,8 +390,8 @@ class User < ActiveRecord::Base
           end
           total_score += earned_badge_score_for_course(course_id)
           # @mz todo: refactor this mo
-          # don't need to check current_course.add_team_score_to_student? because that's being called above
-          unless current_course.team_score_average
+          # don't need to check .add_team_score_to_student? because that's being called above
+          unless course.team_score_average
             total_score += (self.team_for_course(course_id).try(:score) || 0)
           end
         )
@@ -422,8 +422,8 @@ class User < ActiveRecord::Base
           end
           total_score += earned_badge_score_for_course(course_id)
 
-          # don't need to check current_course.add_team_score_to_student? because that's being called above
-          unless current_course.team_score_average
+          # don't need to check .add_team_score_to_student? because that's being called above
+          unless course.team_score_average
             total_score += (self.team_for_course(course_id).try(:score) || 0)
           end
         )
