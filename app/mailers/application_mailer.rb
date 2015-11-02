@@ -3,9 +3,15 @@ class ApplicationMailer < ActionMailer::Base
   ADMIN_EMAIL = 'admin@gradecraft.com'
   SENDER = "GradeCraft <#{SENDER_EMAIL}>"
   default from: SENDER
-  default template_path: -> (mailer) { "mailers/#{mailer.class.name.underscore}" }
+  default layout: -> (mailer) { mailer_name.gsub(/_mailer/,"") }
+  default template_path: -> (mailer) { "mailers/#{mailer_name}" }
 
-  # private
+  private
+
+  def mailer_name
+    mailer.class.name.underscore
+  end
+
   # def self.user_locale(user)
   #   user.try(:locale) || ENV['DEFAULT_LOCALE'] || :en
   # end
