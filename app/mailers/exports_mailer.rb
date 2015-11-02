@@ -1,5 +1,4 @@
-class ExportsMailer < ActionMailer::Base
-  default from: 'mailer@gradecraft.com'
+class ExportsMailer < ApplicationMailer
 
   def submissions_export_success(user, assignment)
     cache_submission_attrs(user, assignment)

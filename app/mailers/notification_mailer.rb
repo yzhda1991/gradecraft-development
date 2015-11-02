@@ -1,6 +1,4 @@
-class NotificationMailer < ActionMailer::Base
-  default from: 'mailer@gradecraft.com'
-
+class NotificationMailer < ApplicationMailer
   def lti_error(user_info, course_info)
     @user = user_info
     @course = course_info

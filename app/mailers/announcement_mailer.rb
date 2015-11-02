@@ -1,4 +1,4 @@
-class AnnouncementMailer < ActionMailer::Base
+class AnnouncementMailer < ApplicationMailer
   def announcement_email(announcement, student)
     @announcement = announcement
     @student = student
