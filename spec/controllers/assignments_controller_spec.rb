@@ -70,6 +70,12 @@ describe AssignmentsController do
     end
 
     describe "POST copy" do
+      before(:each) do
+        Assignment.delete_all
+        @assignment =
+          create(:assignment, assignment_type: @assignment_type, course: @course)
+      end
+
       it "duplicates an assignment" do
         post :copy, id: @assignment.id
         expect expect(@course.assignments.count).to eq(2)
