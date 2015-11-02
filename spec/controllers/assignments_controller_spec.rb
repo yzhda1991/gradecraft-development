@@ -83,6 +83,25 @@ describe AssignmentsController do
         expect(duplicated.assignment_score_levels.first.name).to eq "Level 1"
         expect(duplicated.assignment_score_levels.first.value).to eq 10_000
       end
+
+      it "duplicates rubrics" do
+        @assignment.create_rubric
+        @assignment.rubric.metrics.create name: "Rubric 1", max_points: 10_000, order: 1
+        @assignment.rubric.metrics.first.tiers.first.tier_badges.create
+        post :copy, id: @assignment.id
+        duplicated = Assignment.last
+        expect(duplicated.rubric).to_not be_nil
+        expect(duplicated.rubric.metrics.first.name).to eq "Rubric 1"
+        expect(duplicated.rubric.metrics.first.tiers.first.name).to eq "Full Credit"
+        expect(duplicated.rubric.metrics.first.tiers.first.tier_badges.count).to \
+          eq 1
+      end
+
+      it "redirects to the referer" do
+        allow(request).to receive(:referer).and_return assignments_path
+        post :copy, id: @assignment.id
+        expect(response).to redirect_to(assignments_path)
+      end
     end
 
     describe "POST create" do
