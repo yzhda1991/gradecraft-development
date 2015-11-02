@@ -74,6 +74,15 @@ describe AssignmentsController do
         post :copy, id: @assignment.id
         expect expect(@course.assignments.count).to eq(2)
       end
+
+      it "duplicates score levels" do
+        @assignment.assignment_score_levels.create(name: "Level 1", value: 10_000)
+        post :copy, id: @assignment.id
+        duplicated = Assignment.last
+        expect(duplicated.id).to_not eq @assignment.id
+        expect(duplicated.assignment_score_levels.first.name).to eq "Level 1"
+        expect(duplicated.assignment_score_levels.first.value).to eq 10_000
+      end
     end
 
     describe "POST create" do
