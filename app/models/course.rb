@@ -323,8 +323,8 @@ class Course < ActiveRecord::Base
     User
       .unscoped # clear the default scope
       .joins(:course_memberships)
-      .where("course_memberships.course_id = ? and course_memberships.role = ?", 1, "student")
-      .select(:id)
+      .where("course_memberships.course_id = ? and course_memberships.role = ?", self.id, "student")
+      .select(:id) # only need the ids, please
       .order("id ASC")
       .collect(&:id)
   end
