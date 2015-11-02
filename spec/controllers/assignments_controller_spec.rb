@@ -71,7 +71,7 @@ describe AssignmentsController do
 
     describe "POST copy" do
       it "duplicates an assignment" do
-        post :copy, :id => @assignment.id
+        post :copy, id: @assignment.id
         expect expect(@course.assignments.count).to eq(2)
       end
     end
@@ -274,6 +274,12 @@ describe AssignmentsController do
         get :show, :id => @assignment.id
         expect(grade.reload).to be_feedback_reviewed
       end
+
+      it "redirects to the assignments path of the assignment does not exist for the current course" do
+        another_assignment = create(:assignment)
+        get :show, id: another_assignment.id
+        expect(response).to redirect_to assignments_path
+      end
     end
 
     describe "GET predictor_data" do
@@ -419,4 +425,3 @@ def predictor_assignment_attributes
     :visible_when_locked
   ]
 end
-
