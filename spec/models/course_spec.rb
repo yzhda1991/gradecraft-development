@@ -85,32 +85,63 @@ describe Course do
   let(:student_membership2) { create :student_course_membership, course: course1 }
   let(:student_membership3) { create :student_course_membership, course: course2 }
 
-
   describe "recalculate_student_scores" do
-    subject { course1.recalculate_student_scores }
+    before do
+      CourseMembership.where(course_id: course1.id).destroy_all
+      @course1 = course1
+      @student_membership1 = student_membership1
+      @student_membership2 = student_membership2
+    end
+
+    before(:each) { ResqueSpec.reset! }
+    subject { @course1.recalculate_student_scores }
+    let(:score_recalculator_queue) { queue(ScoreRecalculatorJob) }
+    let(:student1_job_attributes) {{ user_id: @student_membership1.user_id, course_id: @course1.id }}
+    let(:student2_job_attributes) {{ user_id: @student_membership2.user_id, course_id: @course1.id }}
 
     context "student ids present" do
       it "creates a score recalculator job for each student" do
+        expect(ScoreRecalculatorJob).to receive_message_chain(:new, :enqueue).exactly(2).times
+        subject
       end
     end
 
     context "no student ids present" do
       it "creates creates no score recalculator jobs" do
+        # stub out a no-students scenario
+        allow(@course1).to receive(:ordered_student_ids) { [] }
+        expect(ScoreRecalculatorJob).to receive_message_chain(:new, :enqueue).exactly(0).times
+        subject
       end
+    end
+
+    it "increases the queue size by two" do
+      expect{ subject }.to change { queue(ScoreRecalculatorJob).size }.by(2)
+    end
+
+    it "queues the job with the correct arguments" do
+      subject
+      expect(score_recalculator_queue.first[:args]).to eq([student1_job_attributes])
+      expect(score_recalculator_queue.last[:args]).to eq([student2_job_attributes])
+    end
+
+    it "queues the job in the proper queue" do
+      subject
+      expect(score_recalculator_queue.first[:class]).to eq(ScoreRecalculatorJob.to_s)
+      expect(score_recalculator_queue.last[:class]).to eq(ScoreRecalculatorJob.to_s)
     end
   end
 
-
   describe "ordered_student_ids" do
-    subject { course1.ordered_student_ids }
-
     before do
-      CourseMembership.where(course_id: course1.id).destroy_all
+      @course1 = course1
       @student_membership1 = student_membership1
       @student_membership2 = student_membership2
       @student_membership3 = student_membership3
       @staff_membership = staff_membership
     end
+
+    subject { @course1.ordered_student_ids }
 
     it "should order the ids by users.id ASC" do
       expect(subject).to eq([@student_membership1.user_id, @student_membership2.user_id])
