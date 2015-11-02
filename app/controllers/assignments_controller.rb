@@ -38,7 +38,7 @@ class AssignmentsController < ApplicationController
       render :show, AssignmentPresenter.build({ assignment: assignment, course: current_course,
                                                 team_id: params[:team_id], view_context: view_context })
     else
-      redirect_to assignments_path, alert: "I'm so sorry, I couldn't find that #{(term_for :assignment)}."
+      redirect_to assignments_path, alert: "The #{(term_for :assignment)} could not be found."
     end
   end
 
@@ -377,22 +377,6 @@ class AssignmentsController < ApplicationController
 
   def team_params
     @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
-  end
-
-  def serialized_rubric_grades
-    ActiveModel::ArraySerializer.new(fetch_rubric_grades, each_serializer: ExistingRubricGradesSerializer).to_json
-  end
-
-  def fetch_rubric_grades
-    RubricGrade.where(fetch_rubric_grades_params)
-  end
-
-  def fetch_rubric_grades_params
-    { student_id: params[:student_id], assignment_id: params[:assignment_id], metric_id: existing_metric_ids }
-  end
-
-  def existing_metric_ids
-    rubric_metrics_with_tiers.collect {|metric| metric[:id] }
   end
 
   def find_or_create_assignment_rubric
