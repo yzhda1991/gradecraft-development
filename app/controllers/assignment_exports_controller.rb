@@ -20,9 +20,9 @@ class AssignmentExportsController < ApplicationController
 
   def submissions_response
     if @job_enqueued
-      { status: 200, message: "Your archive is being prepared. You'll receive an email when it's complete." }
+      { status: 200, json: "Your archive is being prepared. You'll receive an email when it's complete." }
     else
-      { status: 400, message: "Your archive failed to build. An administrator has been contacted about the issue." }
+      { status: 400, json: "Your archive failed to build. An administrator has been contacted about the issue." }
     end
   end
 end
