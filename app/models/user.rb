@@ -397,8 +397,6 @@ class User < ActiveRecord::Base
     total_score
   end
 
-  private
-  
   def fetch_course_membership(course_id)
     course_memberships.where(course_id: course_id).first
   end

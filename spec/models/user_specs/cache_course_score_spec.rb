@@ -97,6 +97,15 @@ describe User do
     end
   end
 
+  # private
+  # def fetch_course_membership(course_id)
+  #   course_memberships.where(course_id: course_id).first
+  # end
+
   describe "#fetch_course_membership", focus: true do
+    it "returns the course membership with matching course_id" do
+      course_membership # cache the course membership so we can find it later
+      expect(student.fetch_course_membership(course.id)).to eq(course_membership)
+    end
   end
 end
