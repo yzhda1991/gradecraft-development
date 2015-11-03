@@ -43,9 +43,6 @@ class GradesController < ApplicationController
 
     @student = current_student
 
-    # TODO: what is this needed for?
-    redirect_to @assignment and return unless current_student.present?
-
     @grade = Grade.where(student_id: @student[:id], assignment_id: @assignment[:id]).first
     create_student_assignment_grade unless @grade
     @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
@@ -97,6 +94,7 @@ class GradesController < ApplicationController
     ActiveModel::ArraySerializer.new(@assignment_score_levels, each_serializer: AssignmentScoreLevelSerializer).to_json
   end
 
+  #TODO replace with find_or_create...
   def create_student_assignment_grade
     @grade = Grade.create student_id: @student[:id], assignment_id: @assignment[:id], assignment_type_id: @assignment[:assignment_type_id]#, raw_score: 0
   end
@@ -406,7 +404,7 @@ class GradesController < ApplicationController
     @grade.feedback = nil
     @grade.feedback_read = false
     @grade.feedback_read_at = nil
-    @grade.feedback_reviewed = false 
+    @grade.feedback_reviewed = false
     @grade.feedback_reviewed_at = nil
     @grade.instructor_modified = false
     @grade.update_attributes(params[:grade])

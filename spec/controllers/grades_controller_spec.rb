@@ -6,12 +6,10 @@ describe GradesController do
   before(:all) do
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
-
     @student = create(:user)
     @student.courses << @course
   end
   before(:each) do
-    session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
@@ -21,6 +19,7 @@ describe GradesController do
       @professor = create(:user)
       CourseMembership.create user: @professor, course: @course, role: "professor"
     end
+
     before (:each) do
       @grade = create(:grade, student: @student, assignment: @assignment, course: @course)
       login_user(@professor)
@@ -31,11 +30,33 @@ describe GradesController do
     end
 
     describe "GET show" do
-      it "assigns the assignment and title" do
+
+      context "for a group grade" do
+        it "assigns group, title, and grades for assignment when assignment has groups" do
+          course = create(:course_accepting_groups)
+          group = create(:group, course: course)
+          assignment = group.assignments.first
+          course.assignments << assignment
+          student = create(:user)
+          student.courses << course
+          group.students << student
+          grade = create(:grade, group: group, assignment: assignment, course: course, :student_id => @student.id)
+          allow(controller).to receive(:current_course).and_return(course)
+          get :show, { :id => grade.id, :assignment_id => assignment.id, :student_id => student.id, :group_id => group.id }
+
+          expect(assigns(:assignment)).to eq(assignment)
+          expect(assigns(:group)).to eq(group)
+          expect(assigns(:title)).to eq("#{group.name}'s Grade for #{assignment.name}")
+          expect(assigns(:grades_for_assignment)).to eq(assignment.grades.graded_or_released)
+          expect(response).to render_template(:show)
+        end
+      end
+
+      it "assigns the assignment, title and grades for assignment" do
         get :show, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
-        allow(GradesController).to receive(:current_student).and_return(@student)
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:title)).to eq("#{@student.name}'s Grade for #{@assignment.name}")
+        expect(assigns(:grades_for_assignment)).to eq(@assignment.grades_for_assignment(@student))
         expect(response).to render_template(:show)
       end
 
@@ -52,12 +73,52 @@ describe GradesController do
     end
 
     describe "GET edit" do
-      it "shows the grade edit form" do
-        get :edit, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
-        allow(GradesController).to receive(:current_student).and_return(@student)
+
+      it "creates a grade if none present" do
+        assignment = create(:assignment, course: @course)
+        expect{get :edit, { :assignment_id => assignment.id, :student_id => @student.id }}.to change{Grade.count}.by(1)
+      end
+
+      it "assigns grade parameters and renders edit" do
+        get :edit, { :assignment_id => @assignment.id, :student_id => @student.id }
         expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:student)).to eq(@student)
+        expect(assigns(:grade)).to eq(@grade)
         expect(assigns(:title)).to eq("Editing #{@student.name}'s Grade for #{@assignment.name}")
         expect(response).to render_template(:edit)
+      end
+
+      context "with additional grade items" do
+        it "assigns existing submissions, badges and score levels" do
+          assignment = create(:assignment, course: @course)
+          submission = create(:submission, student: @student, assignment: assignment)
+          badge = create(:badge, course: @course)
+          score_level = create(:assignment_score_level, assignment: assignment)
+
+          get :edit, { :assignment_id => assignment.id, :student_id => @student.id }
+          expect(assigns(:submission)).to eq(submission)
+          expect(assigns(:badges)).to eq([badge])
+          expect(assigns(:assignment_score_levels)).to eq([score_level])
+        end
+      end
+
+      it "assigns json values for angular use" do
+        get :edit, { :assignment_id => @assignment.id, :student_id => @student.id }
+        json = JSON.parse(assigns(:serialized_init_data))
+        expect(json).to have_key("grade")
+        expect(json).to have_key("badges")
+        expect(json).to have_key("assignment")
+        expect(json).to have_key("assignment_score_levels")
+      end
+
+      it "assigns the rubric and rubric grades" do
+        rubric = create(:rubric_with_metrics, assignment: @assignment)
+        metric = rubric.metrics.first
+        tier = rubric.metrics.first.tiers.first
+        rubric_grade = create(:rubric_grade, assignment: @assignment, student: @student, metric: metric, tier: tier)
+        get :show, { :assignment_id => @assignment.id, :student_id => @student.id }
+        expect(assigns(:rubric)).to eq(rubric)
+        expect(JSON.parse(assigns(:rubric_grades))).to eq([{ "id" => rubric_grade.id, "metric_id" => metric.id, "tier_id" => tier.id, "comments" => nil }])
       end
     end
 
@@ -174,9 +235,8 @@ describe GradesController do
       @grade.delete
     end
 
-
     describe "GET show" do
-      it "shows the grade display" do
+      it "redirects to the assignment" do
         get :show, {:grade_id => @grade.id, :assignment_id => @assignment.id}
         expect(response).to redirect_to(assignment_path(@assignment))
       end
@@ -233,7 +293,7 @@ describe GradesController do
         end
 
         it "adds an additional pageview record to mongo" do
-          expect { 
+          expect {
             controller.instance_eval { enqueue_predictor_event_job }
           }.to change{ Analytics::Event.count }.by(1)
         end
@@ -270,94 +330,24 @@ describe GradesController do
         @assignment.groups << @group
       end
 
-      describe "GET edit" do
-        it "redirects to root path" do
-          get :edit, {:grade_id => @grade.id, :assignment_id => @assignment.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET update" do
-        it "redirects to root path" do
-          get :update, {:grade_id => @grade.id, :assignment_id => @assignment.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET submit_rubric" do
-        it "redirects to root path" do
-          get :submit_rubric, {:grade_id => @grade.id, :assignment_id => @assignment.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET remove" do
-        it "redirects to root path" do
-          get :remove, { :id => @assignment.id, :grade_id => @grade.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "DELETE destroy" do
-        it "redirects to root path" do
-          delete :destroy, {:grade_id => @grade.id, :assignment_id => @assignment.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET mass_edit" do
-        it "redirects to root path" do
-          get :mass_edit, { :id => @assignment.id }
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET mass_update" do
-        it "redirects to root path" do
-          post :mass_update, { :id => @assignment.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET group_edit" do
-        it "redirects to root path" do
-          get :group_edit, { :id => @assignment.id, :group_id => @group.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET group_update" do
-        it "redirects to root path" do
-          post :group_update, { :id => @assignment.id, :group_id => @group.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET edit_status" do
-        it "redirects to root path" do
-          get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "POST update_status" do
-        it "redirects to root path" do
-          post :update_status, {:grade_ids => @grade.id, :id => @assignment.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "GET import" do
-        it "redirects to root path" do
-          get :import, { :id => @assignment.id}
-          expect(response).to redirect_to(:root)
-        end
-      end
-
-      describe "POST upload" do
-        it "redirects to root path" do
-          post :upload, { :id => @assignment.id}
-          expect(response).to redirect_to(:root)
+      it "all redirect to root" do
+        [ Proc.new { get :edit, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
+          Proc.new { get :update, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
+          Proc.new { get :edit, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
+          Proc.new { get :update, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
+          Proc.new { get :submit_rubric, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
+          Proc.new { get :remove, { :id => @assignment.id, :grade_id => @grade.id }},
+          Proc.new { delete :destroy, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
+          Proc.new { get :mass_edit, { :id => @assignment.id  }},
+          Proc.new { post :mass_update, { :id => @assignment.id }},
+          Proc.new { get :group_edit, { :id => @assignment.id, :group_id => @group.id }},
+          Proc.new { post :group_update, { :id => @assignment.id, :group_id => @group.id }},
+          Proc.new { get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id }},
+          Proc.new { post :update_status, {:grade_ids => @grade.id, :id => @assignment.id }},
+          Proc.new { get :import, { :id => @assignment.id }},
+          Proc.new { post :upload, { :id => @assignment.id }},
+        ].each do |protected_route|
+          expect(protected_route.call).to redirect_to(:root)
         end
       end
     end
