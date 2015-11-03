@@ -106,9 +106,12 @@ class CoursesController < ApplicationController
     end
     respond_to do |format|
       if new_course.save
-        new_course.course_memberships.create(:user_id => current_user.id, :role => current_user.role(current_course))
+        if ! current_user_is_admin?
+          new_course.course_memberships.create(:user_id => current_user.id, 
+                                                :role => current_user.role(current_course))
+        end
         session[:course_id] = new_course.id
-        format.html { redirect_to course_path(@course), notice: "#{@course.name} successfully copied" }
+        format.html { redirect_to course_path(new_course.id), notice: "#{@course.name} successfully copied" }
       else
         redirect_to courses_path, alert: "#{@course.name} was not successfully copied"
         format.json { render json: @course.errors, status: :unprocessable_entity }
