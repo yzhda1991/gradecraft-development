@@ -379,7 +379,7 @@ class User < ActiveRecord::Base
   # @mz todo: add specs
   # Powers the worker to recalculate student scores
   def cache_course_score(course_id)
-    course_membership = course_memberships.where(course_id: course_id).first
+    course_membership = fetch_course_membership(course_id)
     unless course_membership.nil?
       course_membership.recalculate_and_update_student_score
     end
@@ -388,7 +388,7 @@ class User < ActiveRecord::Base
   # @mz todo: add specs
   # Powers the worker to recalculate student scores
   def improved_cache_course_score(course_id)
-    course_membership = course_memberships.where(course_id: course_id).first
+    course_membership = fetch_course_membership(course_id)
     total_score = 0
     unless course_membership.nil?
       total_score = course_membership.recalculated_student_score
@@ -400,6 +400,7 @@ class User < ActiveRecord::Base
   private
   
   def fetch_course_membership(course_id)
+    course_memberships.where(course_id: course_id).first
   end
 
   public

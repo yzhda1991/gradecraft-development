@@ -291,4 +291,32 @@ describe User do
     end
   end
 
+  describe "#cache_course_score" do
+    context "course membership is present" do
+      it "recalculates and updates the student score" do
+        allow(@student).to 
+        @student.cache_course_score(@course.id)
+      end
+    end
+
+    context "course membership is nil" do
+      it "doesn't recalculate the student score" do
+      end
+    end
+  end
+
+  describe "#improved_cache_course_score" do
+    context "course membership is present" do
+      it "recalculates and updates the student score" do
+      end
+    end
+
+    context "course membership is nil" do
+      it "doesn't recalculate the student score" do
+      end
+    end
+  end
+
+  describe "#fetch_course_membership" do
+  end
 end
