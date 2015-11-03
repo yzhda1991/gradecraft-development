@@ -33,6 +33,71 @@ class CourseMembership < ActiveRecord::Base
     end
   end
 
+  def recalculate_and_update_student_score
+    update_attribute :score, recalculated_student_score
+  end
+
+  def recalculated_student_score
+    assignment_type_totals_for_student +
+    student_earned_badge_score +
+    conditional_student_team_score
+  end
+
+  def recalculation_test
+    non_matching_sets = non_matching_test_score_sets
+    puts "Total score sets: #{recalculation_test_score_sets.count}"
+    puts "Total non-matching score sets: #{non_matching_sets.count}"
+    puts "Listed non-matching sets:"
+    non_matching_sets.each do |nms|
+      puts nms
+    end
+    puts "No non-matching sets. All score recalculations matched the original scores." if non_matching_sets.empty?
+  end
+
+  def recalculation_test_score_sets
+    @recalculation_test_score_sets ||= CourseMembership.all.collect do |cm|
+      { 
+        current_score: cm.score,
+        recalculated_score: cm.recalculated_student_score,
+        course_membership_id: cm.id,
+        student_id: cm.user_id,
+        course_id: cm.course_id
+      }
+    end
+  end
+
+  def non_matching_test_score_sets
+    @non_matching_test_score_sets ||= recalculation_test_score_sets.select do |set|
+      set[:current_score] != set[:recalculated_score]
+    end
+  end
+
+  private
+
+  def assignment_type_totals_for_student
+    course.assignment_types.collect do |assignment_type|
+      assignment_type.visible_score_for_student(user)
+    end.compact.sum || 0 rescue 0
+  end
+
+  def student_earned_badge_score
+    user.earned_badge_score_for_course(course_id) || 0 rescue 0
+  end
+
+  def conditional_student_team_score
+    include_team_score? ? student_team_score : 0
+  end
+
+  def student_team_score
+    user.team_for_course(course_id).try(:score) || 0 rescue 0
+  end
+
+  def include_team_score?
+    course.add_team_score_to_student? and not course.team_score_average
+  end
+
+  public
+
   def staff?
     professor? || gsi? || admin?
   end
