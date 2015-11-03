@@ -8,7 +8,7 @@ describe User do
   let(:grade) { create(:grade, assignment: assignment, course: course, student: student) }
 
 
-  describe "#cache_course_score", focus: true do
+  describe "#cache_course_score" do
     subject { student.cache_course_score(course.id) }
 
     it "fetches the proper course membership" do
@@ -49,7 +49,7 @@ describe User do
     end
   end
 
-  describe "#improved_cache_course_score", focus: true do
+  describe "#improved_cache_course_score" do
     subject { student.improved_cache_course_score(course.id) }
 
     it "fetches the proper course membership" do
@@ -102,7 +102,7 @@ describe User do
   #   course_memberships.where(course_id: course_id).first
   # end
 
-  describe "#fetch_course_membership", focus: true do
+  describe "#fetch_course_membership" do
     it "returns the course membership with matching course_id" do
       course_membership # cache the course membership so we can find it later
       expect(student.fetch_course_membership(course.id)).to eq(course_membership)
