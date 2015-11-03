@@ -376,7 +376,7 @@ class User < ActiveRecord::Base
     grades.where(:assignment_id => assignment.id).first.try(:point_total) || nil
   end
 
-  # @mz TODO: refactor this to hell
+  # @mz todo: add specs
   # Powers the worker to recalculate student scores
   def cache_course_score(course_id)
     course_membership = course_memberships.where(course_id: course_id).first
@@ -385,7 +385,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  # @mz TODO: refactor this to hell
+  # @mz todo: add specs
   # Powers the worker to recalculate student scores
   def improved_cache_course_score(course_id)
     course_membership = course_memberships.where(course_id: course_id).first
