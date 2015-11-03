@@ -379,67 +379,23 @@ class User < ActiveRecord::Base
   # @mz TODO: refactor this to hell
   # Powers the worker to recalculate student scores
   def cache_course_score(course_id)
-    course = Course.find(course_id)
-    membership = course_memberships.where(course_id: course_id).first
-    unless membership.nil?
-      if membership.course.add_team_score_to_student?
-        membership.update_attribute :score, (
-          total_score = 0
-          course.assignment_types.each do |assignment_type|
-            total_score += assignment_type.visible_score_for_student(self)
-          end
-          total_score += earned_badge_score_for_course(course_id)
-          # @mz todo: refactor this mo
-          # don't need to check .add_team_score_to_student? because that's being called above
-          unless course.team_score_average
-            total_score += (self.team_for_course(course_id).try(:score) || 0)
-          end
-        )
-      else
-        membership.update_attribute :score, (
-          total_score = 0
-          course.assignment_types.each do |assignment_type|
-            total_score += assignment_type.visible_score_for_student(self)
-          end
-          total_score += earned_badge_score_for_course(course_id)
-        )
-      end
+    course_membership = course_memberships.where(course_id: course_id).first
+    unless course_membership.nil?
+      course_membership.recalculate_and_update_student_score
     end
   end
 
   # @mz TODO: refactor this to hell
   # Powers the worker to recalculate student scores
   def improved_cache_course_score(course_id)
-    course = Course.find(course_id)
-    membership = course_memberships.where(course_id: course_id).first
-    total_score = nil
-    unless membership.nil?
-      if membership.course.add_team_score_to_student?
-        membership.update_attribute :score, (
-          total_score = 0
-          course.assignment_types.each do |assignment_type|
-            total_score += assignment_type.visible_score_for_student(self)
-          end
-          total_score += earned_badge_score_for_course(course_id)
-
-          # don't need to check .add_team_score_to_student? because that's being called above
-          unless course.team_score_average
-            total_score += (self.team_for_course(course_id).try(:score) || 0)
-          end
-        )
-      else
-        membership.update_attribute :score, (
-          total_score = 0
-          course.assignment_types.each do |assignment_type|
-            total_score += assignment_type.visible_score_for_student(self)
-          end
-          total_score += earned_badge_score_for_course(course_id)
-        )
-      end
+    course_membership = course_memberships.where(course_id: course_id).first
+    total_score = 0
+    unless course_membership.nil?
+      total_score = recalculated_student_score
+      course_membership.update_attribute :score, total_score
     end
     total_score
   end
-
 
   ### TEAMS
   # Find the team associated with the team membership for a given course id
