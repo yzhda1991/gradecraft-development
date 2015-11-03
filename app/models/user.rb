@@ -391,11 +391,18 @@ class User < ActiveRecord::Base
     course_membership = course_memberships.where(course_id: course_id).first
     total_score = 0
     unless course_membership.nil?
-      total_score = recalculated_student_score
+      total_score = course_membership.recalculated_student_score
       course_membership.update_attribute :score, total_score
     end
     total_score
   end
+
+  private
+  
+  def fetch_course_membership(course_id)
+  end
+
+  public
 
   ### TEAMS
   # Find the team associated with the team membership for a given course id
