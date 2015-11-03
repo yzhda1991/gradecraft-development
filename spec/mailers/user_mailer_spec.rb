@@ -4,7 +4,7 @@ describe UserMailer do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:user) { create :user, reset_password_token: "blah" }
 
-  describe ".reset_password_email" do
+  describe "#reset_password_email" do
     before(:each) { UserMailer.reset_password_email(user).deliver_now }
 
     it "is sent from a notifications email" do
@@ -24,7 +24,7 @@ describe UserMailer do
     end
   end
 
-  describe ".activation_needed_email" do
+  describe "#activation_needed_email" do
     let(:user) { create :user }
 
     before(:each) do

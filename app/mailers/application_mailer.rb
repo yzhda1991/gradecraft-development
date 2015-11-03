@@ -4,12 +4,21 @@ class ApplicationMailer < ActionMailer::Base
   SENDER = "GradeCraft <#{SENDER_EMAIL}>"
 
   default from: SENDER
-  default layout: -> (mailer) { mailer_name.gsub(/_mailer/,"") }
-  default template_path: -> (mailer) { "mailers/#{mailer_name}" }
+  default layout: -> (mailer) { template_path(mailer) }
+  default template_path: -> (mailer) { default_layout(mailer) }
 
   private
 
-  def mailer_name
+  # @mz todo: add specs for these
+  def template_path(mailer)
+    mailer_name(mailer).gsub(/_mailer/,"")
+  end
+
+  def default_layout(mailer)
+    "mailers/#{mailer_name(mailer)}"
+  end
+
+  def mailer_name(mailer)
     mailer.class.name.underscore
   end
 

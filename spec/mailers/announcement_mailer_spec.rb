@@ -6,7 +6,7 @@ describe AnnouncementMailer do
   let(:author) { create :user }
   let(:student) { create :user }
 
-  describe ".announcement_email" do
+  describe "#announcement_email" do
     before(:each) do
       AnnouncementMailer.announcement_email(announcement, student).deliver_now
     end
