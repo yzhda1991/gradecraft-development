@@ -236,6 +236,7 @@
     else
       return false
 
+  # TODO: Still show due date if submissions are still accepted
   $scope.dueInFuture = (assignment)->
     if assignment.due_at != null && Date.parse(assignment.due_at) >= Date.now()
       return true
