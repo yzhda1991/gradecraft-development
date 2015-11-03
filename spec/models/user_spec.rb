@@ -290,5 +290,4 @@ describe User do
       expect(@badges_earned_by_id).not_to eq(@visible_badges.sort_by(&:id))
     end
   end
-
 end
