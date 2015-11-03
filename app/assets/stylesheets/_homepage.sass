@@ -6,10 +6,6 @@ section.features
   padding: 4rem   
   background-color: $color-white
   opacity: .6
-  
-.homepage .login
-  margin: 2.5rem 1rem
-  width: 100%
 
 .alert-bkg
   width: 100% !important
@@ -21,7 +17,6 @@ section.features
 .video-container, .newsletter-container, .press-container
   width: 100% !important
   margin: 0
-  height: 400px
 
 .newsletter-container
   background-color: $color-blue-3
@@ -44,10 +39,10 @@ section.features
 .video-container
   background-color: $color-blue-3
   opacity: .9
+  height: 100%
 
 
-section.forgot-password, section.login
-  padding: 4rem   
+section.login
   background-color: $color-yellow-1
   opacity: .7
 
@@ -60,40 +55,6 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
   max-width: 1500px
   margin: 0 auto
   height: 400px
-  overflow: hidden
-
-  article
-    width: 33%
-    color: $color-white
-    float: left
-    margin: 0
-
-    &.news-articles
-      padding: 1rem 0
-      background-color: $color-blue-00
-      opacity: .8
-      height: 400px
-
-    &.pedagogy
-      background-color: $color-blue-1
-      opacity: .8
-      padding: 1rem 0
-      height: 400px
-
-      p
-        padding: 0 1rem
-
-      a
-        color: $color-green-3
-
-    &.twitter
-      float: left
-      background-color: $color-blue-0
-
-    h1
-      padding: 0 1rem
-      color: $color-white
-      font-size: 2.0rem
 
   h1
     margin-top: 1rem
@@ -125,15 +86,12 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
     width: 33%
 
   .text
+    float: left
     width: 40%
-    font-size: 1rem
 
     h1
       margin-top: 1.25rem
       color: $color-yellow-2
-
-    p
-      margin: 0
 
   .columns.video
     padding-left: 1rem
@@ -146,26 +104,10 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
       height: 80%
 
   .login
-    .ui-widget-content, .ui-widget-header
-      border: none
-      background: $color-blue-2 !important
-      opacity: .9
-
-    .ui-tabs-nav
-      background: $color-blue-1 !important
-      border-bottom: 10px solid $color-blue-0
-      li
-        border: 0
-
-      &.ui-state-active
-        background: $color-blue-0 !important
-
-
     form
-      height: 150px
       width: 100%
       margin: 0
-      padding: .75rem
+      padding: 0
       input
         padding: .5rem
         width: 95%
@@ -175,12 +117,44 @@ section.video-promo, section.newsletter, section.press, section.forgot-password,
         background-color: $color-green-3
         color: $color-white !important
 
-      a 
-        left: -2rem
-        top: .25rem
-        position: relative
-        color: $color-white !important
-
       .button
-        position: relative
-        left: -1rem
+        bottom: 1rem
+
+@media (max-width: $media-small-max)
+
+  section.video-promo, section.newsletter, section.press, section.forgot-password, section.login
+    width: 100%
+    font-size: .7rem
+    padding: 1rem
+    height: auto !important
+
+    p 
+      margin: 0 0 .25rem
+
+    .columns
+      width: 100%
+      clear: both
+
+      &.text
+        font-size: .7rem
+        margin: 0
+
+        h1 
+          margin-top: 2rem
+
+      &.video
+        float: none
+        display: block
+        height: auto
+        padding: 0
+        margin: 0
+
+  section.login
+    padding: 4rem 1rem 1rem !important
+    min-width: 95% !important
+    .columns
+      width: 100%
+
+    #gradecraft-auth
+      padding-bottom: 1rem
+      border-bottom: 1px solid $color-white

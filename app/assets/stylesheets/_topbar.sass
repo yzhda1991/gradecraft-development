@@ -116,10 +116,10 @@
   z-index: 1
   color: $color-green-2
 
-
 @media screen and (min-width: $media-small-max)
-  .btn-navbar-right, .btn-navbar-left
+  .btn-navbar-right, .btn-navbar-left, .mobile
     display: none
+
 
 /* Navbar Styles */
 .navbar
@@ -272,6 +272,26 @@ ul.subnav.logged-out
     color: $color-white
     text-transform: none !important
 
+.login-buttons
+  padding-top: .6rem
+  padding-right: .25rem
+
+  .um-login 
+    background-image: image-url('UM.png')
+    padding-left: 2.75rem
+    background-repeat: no-repeat
+    background-color: $color-blue-0
+
+  .gc-login 
+    background-image: image-url('GC.png')
+    padding-left: 2.75rem
+    background-repeat: no-repeat
+    background-color: $color-grey-1
+
+  .button:hover
+    background-color: $color-blue-2
+
+
 .offscreen-sidebar
   display: none
 
@@ -282,12 +302,23 @@ ul.subnav.logged-out
 /* Mobile Styles */ 
 
 @media (max-width: $media-small-max)
+
+  a.site-title
+    color: $color-blue-4
+    line-height: 2.44rem
+    padding: 0 0 0 1rem !important
+
   .hidden-sm
     display: none
+
+  ul.nav.nav-pill.right .login-buttons
+    display: block !important
 
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
   .hidden-med
     display: none
+
+  .logged-out
 
 .container
   width: 95%

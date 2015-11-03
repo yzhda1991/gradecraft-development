@@ -104,7 +104,6 @@ group :development do
   gem 'valid_attribute'
   gem 'quiet_assets'
   gem 'foreman'
-  gem 'letter_opener'
   gem 'rubystats'
   gem "bullet"
 
