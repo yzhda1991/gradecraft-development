@@ -16,4 +16,11 @@ class Rubric < ActiveRecord::Base
   def designed?
     metrics.count > 0
   end
+
+  def copy
+    copy = self.dup
+    copy.save unless self.new_record?
+    copy.metrics << self.metrics.map(&:copy)
+    copy
+  end
 end

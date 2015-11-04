@@ -93,7 +93,7 @@ describe AssignmentsController do
       it "duplicates rubrics" do
         @assignment.create_rubric
         @assignment.rubric.metrics.create name: "Rubric 1", max_points: 10_000, order: 1
-        @assignment.rubric.metrics.first.tiers.first.tier_badges.create
+        @assignment.rubric.metrics.first.tiers.first.badges.create! name: "Blah", course: @course
         post :copy, id: @assignment.id
         duplicated = Assignment.last
         expect(duplicated.rubric).to_not be_nil
@@ -103,10 +103,10 @@ describe AssignmentsController do
           eq 1
       end
 
-      it "redirects to the referer" do
-        allow(request).to receive(:referer).and_return assignments_path
+      it "redirects to the duplicated assignment" do
         post :copy, id: @assignment.id
-        expect(response).to redirect_to(assignments_path)
+        duplicated = Assignment.last
+        expect(response).to redirect_to(assignment_path(duplicated))
       end
     end
 

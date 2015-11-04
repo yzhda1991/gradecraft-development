@@ -56,50 +56,9 @@ class AssignmentsController < ApplicationController
 
   # Duplicate an assignment - important for super repetitive items like attendance and reading reactions
   def copy
-    session[:return_to] = request.referer
-    @assignment = current_course.assignments.find(params[:id])
-    new_assignment = @assignment.dup
-    new_assignment.name.prepend("Copy of ")
-    new_assignment.save
-    if @assignment.assignment_score_levels.present?
-      @assignment.assignment_score_levels.each do |asl|
-        new_asl = asl.dup
-        new_asl.assignment_id = new_assignment.id
-        new_asl.save
-      end
-    end
-    if @assignment.rubric.present?
-      new_rubric = @assignment.rubric.dup
-      new_rubric.assignment_id = new_assignment.id
-      new_rubric.save
-      if @assignment.rubric.metrics.present?
-        @assignment.rubric.metrics.each do |metric|
-          new_metric = metric.dup
-          new_metric.rubric_id = new_rubric.id
-          new_metric.add_default_tiers = false
-          new_metric.save
-          if metric.tiers.present?
-            metric.tiers.each do |tier|
-              new_tier = tier.dup
-              new_tier.metric_id = new_metric.id
-              new_tier.save
-              if tier.tier_badges.present?
-                tier.tier_badges.each do |tier_badge|
-                  new_tier_badge = tier_badge.dup
-                  new_tier_badge.tier_id = new_tier.id
-                  new_tier_badge.save
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    if session[:return_to].present?
-      redirect_to session[:return_to]
-    else
-      redirect_to assignments_path
-    end
+    assignment = current_course.assignments.find(params[:id])
+    duplicated = assignment.copy
+    redirect_to assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
   end
 
   def create
