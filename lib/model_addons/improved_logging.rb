@@ -1,19 +1,36 @@
 module ModelAddons
   module ImprovedLogging
-    def log_error_with_attributes(type=:info, message)
-      Rails.logger.send type, final_output(message)
+    def log_with_attributes(type=:info, message)
+      if valid_logging_types.include? type # a valid logging type is being used
+        Rails.logger.send type, final_log_output(message)
+      else
+        Rails.logger.send :invalid, improper_logging_type_error
+      end
     end
 
     def log_error_with_attributes(message)
       log_with_attributes(:error, message)
     end
 
+    def log_info_with_attributes(message)
+      log_with_attributes(:info, message)
+    end
+
+    def log_warning_with_attributes(message)
+      log_with_attributes(:warn, message)
+    end
+
     protected
+    def valid_logging_types
+      [:debug, :info, :warn, :error, :fatal]
+    end
+
     def final_log_output(message)
-      <<-output
-        #{message} in #{self}.
-        #{self} attributes: #{self.attributes}
-      output
+      "#{message.capitalize} in object #{self}.\n#{self} attributes: #{self.attributes}"
+    end
+
+    def invalid_logging_type_error
+      "Attempted to log with an incorrect type in ModelAddons::
     end
   end
 end
