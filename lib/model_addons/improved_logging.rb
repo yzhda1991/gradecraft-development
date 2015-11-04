@@ -2,9 +2,9 @@ module ModelAddons
   module ImprovedLogging
     def log_with_attributes(type=:info, message)
       if valid_logging_types.include? type # a valid logging type is being used
-        Rails.logger.send type, formatted_log_output(message)
+        logger.send type, formatted_log_output(message)
       else
-        Rails.logger.send :error, invalid_logging_type_message
+        logger.send :error, invalid_logging_type_message
       end
     end
 
