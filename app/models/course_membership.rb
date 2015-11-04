@@ -83,6 +83,7 @@ class CourseMembership < ActiveRecord::Base
         assignment_type.visible_score_for_student(user)
       end.compact.sum || 0
     rescue
+      log_error_with_attributes("CourseMembership#assignment_type_totals_for_student was rescued to 0")
       0
     end
   end
@@ -91,7 +92,7 @@ class CourseMembership < ActiveRecord::Base
     begin
       user.earned_badge_score_for_course(course_id) || 0
     rescue
-      log_with_attributes(:error, "CourseMembership#assignment_type_totals_for_student was rescued to 0")
+      log_error_with_attributes("CourseMembership#student_earned_badge_score was rescued to 0")
       0
     end
   end
@@ -104,6 +105,7 @@ class CourseMembership < ActiveRecord::Base
     begin
       user.team_for_course(course_id).try(:score) || 0
     rescue
+      log_error_with_attributes("CourseMembership#student_team_score was rescued to 0")
       0
     end
   end

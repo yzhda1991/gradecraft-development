@@ -1,4 +1,4 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 
 RSpec.describe CourseMembership do
   let(:course_membership) { build(:student_course_membership, course: course, user: student) }
@@ -66,10 +66,18 @@ RSpec.describe CourseMembership do
     end
 
     context "some error occurs in the collect block" do
-      it "rescues out to zero for posterity's sake" do
+      before(:each) do
         allow(assignment_type1).to receive(:visible_score_for_student).and_raise "a strange error that abandons the other number"
         allow(assignment_type2).to receive(:visible_score_for_student) { 1400 }
+      end
+
+      it "rescues out to zero for posterity's sake" do
         expect(subject).to eq(0)
+      end
+
+      it "logs an error with full object attributes" do
+        expect(course_membership).to receive(:log_error_with_attributes)
+        subject
       end
     end
   end
@@ -103,9 +111,17 @@ RSpec.describe CourseMembership do
     end
 
     context "student's earned badge score for the course raises an error" do
-      it "rescues out to zero" do
+      before(:each) do
         allow(student).to receive(:earned_badge_score_for_course).and_raise "some error"
+      end
+
+      it "rescues out to zero" do
         expect(subject).to eq(0)
+      end
+
+      it "logs an error with full object attributes" do
+        expect(course_membership).to receive(:log_error_with_attributes)
+        subject
       end
     end
 
@@ -128,9 +144,17 @@ RSpec.describe CourseMembership do
     end
 
     context "user#team_for_course raises an error" do
-      it "rescues out to zero" do
+      before(:each) do
         allow(student).to receive(:team_for_course).and_raise "some weird exception"
+      end
+
+      it "rescues out to zero" do
         expect(subject).to eq(0)
+      end
+
+      it "logs an error with full object attributes" do
+        expect(course_membership).to receive(:log_error_with_attributes)
+        subject
       end
     end
 
