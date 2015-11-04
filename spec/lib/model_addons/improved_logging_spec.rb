@@ -19,17 +19,17 @@ RSpec.describe ModelAddons::ImprovedLogging, type: :vendor_library do
   describe "log_with_attributes" do
     context "called with a valid logging type" do
       it "logs a message with the correct type and output" do
-        allow(@waffle).to receive(:formatted_log_output) { "formatted snakes are great" }
-        expect(@waffle.logger).to receive(:send).with(:info, "formatted snakes are great")
-        @waffle.log_with_attributes(:info, "this is being stubbed over")
+        formatted_output = @waffle.instance_eval { formatted_log_output("snakes are great") }
+        expect(@waffle.logger).to receive(:send).with(:info, formatted_output)
+        @waffle.log_with_attributes(:info, "snakes are great")
       end
     end
 
     context "called with an invalid logging type" do
       it "logs an error message" do
-        allow(@waffle).to receive(:invalid_logging_type_message) { "this is not a valid logger type" }
-        expect(@waffle.logger).to receive(:send).with(:error, "this is not a valid logger type")
-        @waffle.log_with_attributes(:invalid_type, "this is being stubbed over")
+        invalid_logger_message = @waffle.instance_eval { invalid_logging_type_message }
+        expect(@waffle.logger).to receive(:send).with(:error, invalid_logger_message)
+        @waffle.log_with_attributes(:invalid_type, "snakes are erroneous")
       end
     end
   end
@@ -63,6 +63,8 @@ RSpec.describe ModelAddons::ImprovedLogging, type: :vendor_library do
 
   describe "formatted_log_output" do
     it "formats the logger message" do
+      expected_message = "Robbers are here!! in object #{@waffle}.\n#{@waffle} attributes: #{@waffle.attributes}"
+      expect(@waffle.instance_eval { formatted_log_output("robbers are here!!") }).to eq(expected_message)
     end
   end
 
