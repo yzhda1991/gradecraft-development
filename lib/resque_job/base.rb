@@ -1,6 +1,7 @@
 require 'resque-retry'
 require 'resque/errors'
 
+# mz todo: move a lot of this logic into an ApplicationJob file in /app/background_jobs
 module ResqueJob
   class Base
     # add resque-retry for all jobs
