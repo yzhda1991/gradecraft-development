@@ -434,9 +434,9 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.integer  "predicted_score",                  default: 0,     null: false
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
-    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
+    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
     t.datetime "graded_at"
@@ -530,6 +530,29 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.integer  "submitted_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "rubric_categories", force: :cascade do |t|
+    t.integer "rubric_id"
+    t.string  "name",      limit: 255
+  end
+
+  create_table "rubric_grades", force: :cascade do |t|
+    t.string   "metric_name",        limit: 255
+    t.text     "metric_description"
+    t.integer  "max_points"
+    t.integer  "order"
+    t.string   "tier_name",          limit: 255
+    t.text     "tier_description"
+    t.integer  "points"
+    t.integer  "submission_id"
+    t.integer  "metric_id"
+    t.integer  "tier_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "assignment_id"
+    t.integer  "student_id"
+    t.text     "comments"
   end
 
   create_table "rubrics", force: :cascade do |t|
