@@ -14,26 +14,27 @@ class Pancake
   end
 
   def failed_method
-    rescue_with "well that failed" do
+    rescue_with_logging "well that failed" do
       raise "this block totally failed error"
     end
   end
 
   def failed_method_no_logging
-    rescue_with "well that failed", log_errors: false do
+    rescue_with_logging "well that failed", log_errors: false do
       raise "this block totally failed error"
     end
   end
 
   def successful_method
-    rescue_with "better than nothing" do
+    rescue_with_logging "better than nothing" do
       "some normal output"
     end
   end
 
-  def contrived_caller_parent
-    caller_method
-  end
+  def caller_parent4; caller_parent3; end
+  def caller_parent3; caller_parent2; end
+  def caller_parent2; caller_parent1; end
+  def caller_parent1; caller_method; end
 end
 
 RSpec.describe ModelAddons::AdvancedRescue, type: :vendor_library do
@@ -83,7 +84,7 @@ RSpec.describe ModelAddons::AdvancedRescue, type: :vendor_library do
 
   describe "#caller_method" do
     it "returns the name of the containing parent method from the model" do
-      expect(@pancake.instance_eval { contrived_caller_parent }).to eq("contrived_caller_parent")
+      expect(@pancake.instance_eval { caller_parent4 }).to eq("caller_parent4")
     end
   end
 end

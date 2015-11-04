@@ -1,6 +1,6 @@
 module ModelAddons
   module AdvancedRescue
-    def rescue_with(returned_value, options={log_errors: true})
+    def rescue_with_logging(returned_value, options={log_errors: true})
       begin
         yield
       rescue
@@ -16,6 +16,7 @@ module ModelAddons
     end
 
     def caller_method
+      # get the method name from wherever rescue_with_logging was called
       caller_locations(4)[0].label
     end
   end

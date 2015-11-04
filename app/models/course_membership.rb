@@ -79,7 +79,7 @@ class CourseMembership < ActiveRecord::Base
   private
 
   def assignment_type_totals_for_student
-    rescue_with 0 do
+    rescue_with_logging 0 do
       course.assignment_types.collect do |assignment_type|
         assignment_type.visible_score_for_student(user)
       end.compact.sum || 0
@@ -87,7 +87,7 @@ class CourseMembership < ActiveRecord::Base
   end
 
   def student_earned_badge_score
-    rescue_with 0 do
+    rescue_with_logging 0 do
       user.earned_badge_score_for_course(course_id) || 0
     end
   end
@@ -97,7 +97,7 @@ class CourseMembership < ActiveRecord::Base
   end
 
   def student_team_score
-    rescue_with 0 do
+    rescue_with_logging 0 do
       user.team_for_course(course_id).try(:score) || 0
     end
   end
