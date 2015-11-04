@@ -70,9 +70,43 @@ describe AssignmentsController do
     end
 
     describe "POST copy" do
+      before(:each) do
+        Assignment.delete_all
+        @assignment =
+          create(:assignment, assignment_type: @assignment_type, course: @course)
+      end
+
       it "duplicates an assignment" do
-        post :copy, :id => @assignment.id
+        post :copy, id: @assignment.id
         expect expect(@course.assignments.count).to eq(2)
+      end
+
+      it "duplicates score levels" do
+        @assignment.assignment_score_levels.create(name: "Level 1", value: 10_000)
+        post :copy, id: @assignment.id
+        duplicated = Assignment.last
+        expect(duplicated.id).to_not eq @assignment.id
+        expect(duplicated.assignment_score_levels.first.name).to eq "Level 1"
+        expect(duplicated.assignment_score_levels.first.value).to eq 10_000
+      end
+
+      it "duplicates rubrics" do
+        @assignment.create_rubric
+        @assignment.rubric.metrics.create name: "Rubric 1", max_points: 10_000, order: 1
+        @assignment.rubric.metrics.first.tiers.first.badges.create! name: "Blah", course: @course
+        post :copy, id: @assignment.id
+        duplicated = Assignment.last
+        expect(duplicated.rubric).to_not be_nil
+        expect(duplicated.rubric.metrics.first.name).to eq "Rubric 1"
+        expect(duplicated.rubric.metrics.first.tiers.first.name).to eq "Full Credit"
+        expect(duplicated.rubric.metrics.first.tiers.first.tier_badges.count).to \
+          eq 1
+      end
+
+      it "redirects to the duplicated assignment" do
+        post :copy, id: @assignment.id
+        duplicated = Assignment.last
+        expect(response).to redirect_to(assignment_path(duplicated))
       end
     end
 
@@ -104,6 +138,11 @@ describe AssignmentsController do
         post :update, id: @assignment.id, :assignment => params
         expect(response).to redirect_to(assignments_path)
         expect(@assignment.reload.name).to eq("new name")
+      end
+
+      it "renders the template again if there are validation errors" do
+        post :update, id: @assignment.id, assignment: { name: "" }
+        expect(response).to render_template(:edit)
       end
 
       it "manages file uploads" do
@@ -249,6 +288,13 @@ describe AssignmentsController do
           get :export_submissions, :id => @assignment, :format => :zip
           expect(response.content_type).to eq("application/zip")
         end
+
+        it "uses the team name was specified" do
+          team = create(:team, course: @course)
+          team.students << create(:user)
+          get :export_submissions, id: @assignment, team_id: team.id, :format => :zip
+          expect(response.headers["Content-Disposition"]).to eq "attachment; filename=\"#{@assignment.name}_#{team.name}.zip\""
+        end
       end
     end
   end
@@ -273,6 +319,12 @@ describe AssignmentsController do
         grade = create :grade, assignment: @assignment, student: @student, status: "Graded"
         get :show, :id => @assignment.id
         expect(grade.reload).to be_feedback_reviewed
+      end
+
+      it "redirects to the assignments path of the assignment does not exist for the current course" do
+        another_assignment = create(:assignment)
+        get :show, id: another_assignment.id
+        expect(response).to redirect_to assignments_path
       end
     end
 
@@ -419,4 +471,3 @@ def predictor_assignment_attributes
     :visible_when_locked
   ]
 end
-

@@ -70,4 +70,38 @@ describe Assignment do
       expect(subject.grade_import(course.students)).to eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},#{grade.score},#{grade.feedback}\n")
     end
   end
+
+  describe "#copy" do
+    let(:assignment) { build :assignment }
+    subject { assignment.copy }
+
+    it "prepends the name with 'Copy of'" do
+      assignment.name = "Table of elements"
+      expect(subject.name).to eq "Copy of Table of elements"
+    end
+
+    it "makes a shallow copy of the fields" do
+      assignment.description = "This is a great assignment"
+      expect(subject.description).to eq "This is a great assignment"
+    end
+
+    it "saves the copy if the assignment is saved" do
+      assignment.save
+      expect(subject).to_not be_new_record
+    end
+
+    it "copies the assignment score levels" do
+      assignment.save
+      assignment.assignment_score_levels.create
+      expect(subject.assignment_score_levels.size).to eq 1
+      expect(subject.assignment_score_levels.map(&:assignment_id)).to eq [subject.id]
+    end
+
+    it "copies the rubric" do
+      assignment.save
+      assignment.build_rubric
+      expect(subject.rubric.assignment_id).to eq subject.id
+      expect(subject.rubric).to_not be_new_record
+    end
+  end
 end

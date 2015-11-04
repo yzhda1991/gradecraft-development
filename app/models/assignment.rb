@@ -105,6 +105,15 @@ class Assignment < ActiveRecord::Base
 
   scope :released, ->(student) { where('EXISTS (SELECT 1 FROM released_grades WHERE ((released_grades.assignment_id = assignments.id) AND (released_grades.student_id = ?)))', student.id) }
 
+  def copy
+    copy = self.dup
+    copy.name.prepend "Copy of "
+    copy.save unless self.new_record?
+    copy.assignment_score_levels << self.assignment_score_levels.map(&:copy)
+    copy.rubric = self.rubric.copy if self.rubric.present?
+    copy
+  end
+
   def to_json(options = {})
     super(options.merge(:only => [ :id, :content, :order, :done ] ))
   end

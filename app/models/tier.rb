@@ -13,4 +13,11 @@ class Tier < ActiveRecord::Base
 
   include DisplayHelpers
 
+  def copy
+    copy = self.dup
+    copy.save unless self.new_record?
+    copy.badges << self.badges.map(&:dup)
+    copy
+  end
+
 end

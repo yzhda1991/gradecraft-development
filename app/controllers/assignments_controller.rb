@@ -1,7 +1,5 @@
 class AssignmentsController < ApplicationController
-
-  before_filter :ensure_staff?, :except => [:show, :index, :description_and_downloads, :predictor_data]
-
+  before_filter :ensure_staff?, :except => [:show, :index, :predictor_data]
   respond_to :html, :json
 
   def index
@@ -40,7 +38,7 @@ class AssignmentsController < ApplicationController
       render :show, AssignmentPresenter.build({ assignment: assignment, course: current_course,
                                                 team_id: params[:team_id], view_context: view_context })
     else
-      redirect_to assignments_path, alert: "I'm so sorry, I couldn't find that #{(term_for :assignment)}."
+      redirect_to assignments_path, alert: "The #{(term_for :assignment)} could not be found."
     end
   end
 
@@ -58,50 +56,9 @@ class AssignmentsController < ApplicationController
 
   # Duplicate an assignment - important for super repetitive items like attendance and reading reactions
   def copy
-    session[:return_to] = request.referer
-    @assignment = current_course.assignments.find(params[:id])
-    new_assignment = @assignment.dup
-    new_assignment.name.prepend("Copy of ")
-    new_assignment.save
-    if @assignment.assignment_score_levels.present?
-      @assignment.assignment_score_levels.each do |asl|
-        new_asl = asl.dup
-        new_asl.assignment_id = new_assignment.id
-        new_asl.save
-      end
-    end
-    if @assignment.rubric.present?
-      new_rubric = @assignment.rubric.dup
-      new_rubric.assignment_id = new_assignment.id
-      new_rubric.save
-      if @assignment.rubric.metrics.present?
-        @assignment.rubric.metrics.each do |metric|
-          new_metric = metric.dup
-          new_metric.rubric_id = new_rubric.id
-          new_metric.add_default_tiers = false
-          new_metric.save
-          if metric.tiers.present?
-            metric.tiers.each do |tier|
-              new_tier = tier.dup
-              new_tier.metric_id = new_metric.id
-              new_tier.save
-              if tier.tier_badges.present?
-                tier.tier_badges.each do |tier_badge|
-                  new_tier_badge = tier_badge.dup
-                  new_tier_badge.tier_id = new_tier.id
-                  new_tier_badge.save
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    if session[:return_to].present?
-      redirect_to session[:return_to]
-    else
-      redirect_to assignments_path
-    end
+    assignment = current_course.assignments.find(params[:id])
+    duplicated = assignment.copy
+    redirect_to assignment_path(duplicated), notice: "#{(term_for :assignment).titleize} #{duplicated.name} successfully created"
   end
 
   def create
@@ -232,73 +189,6 @@ class AssignmentsController < ApplicationController
     end
   end
 
-  private
-
-    def predictor_assignments_data
-      @assignments = current_course.assignments.select(
-        :accepts_resubmissions_until,
-        :accepts_submissions,
-        :accepts_submissions_until,
-        :assignment_type_id,
-        :course_id,
-        :description,
-        :due_at,
-        :grade_scope,
-        :id,
-        :include_in_predictor,
-        :name,
-        :open_at,
-        :pass_fail,
-        :point_total,
-        :points_predictor_display,
-        :position,
-        :release_necessary,
-        :required,
-        :resubmissions_allowed,
-        :student_logged,
-        :thumbnail,
-        :use_rubric,
-        :visible,
-        :visible_when_locked
-      )
-    end
-
-    def predictor_grades(student)
-      @grades = student.grades.where(:course_id => current_course).select(
-        :assignment_id,
-        :final_score,
-        :id,
-        :predicted_score,
-        :pass_fail_status,
-        :status,
-        :student_id,
-        :raw_score,
-        :score
-      )
-    end
-
-    def team_params
-      @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
-    end
-
-    def serialized_rubric_grades
-      ActiveModel::ArraySerializer.new(fetch_rubric_grades, each_serializer: ExistingRubricGradesSerializer).to_json
-    end
-
-    def fetch_rubric_grades
-      RubricGrade.where(fetch_rubric_grades_params)
-    end
-
-    def fetch_rubric_grades_params
-      { student_id: params[:student_id], assignment_id: params[:assignment_id], metric_id: existing_metric_ids }
-    end
-
-    def existing_metric_ids
-      rubric_metrics_with_tiers.collect {|metric| metric[:id] }
-    end
-
-  public
-
   def destroy
     @assignment = current_course.assignments.find(params[:id])
     @name = @assignment.name
@@ -321,7 +211,6 @@ class AssignmentsController < ApplicationController
   end
 
   def export_submissions
-
     @assignment = current_course.assignments.find(params[:id])
 
     if params[:team_id].present?
@@ -402,12 +291,51 @@ class AssignmentsController < ApplicationController
 
   private
 
-  def find_or_create_assignment_rubric
-    @assignment.rubric || Rubric.create(assignment_id: @assignment[:id])
+  def predictor_assignments_data
+    @assignments = current_course.assignments.select(
+      :accepts_resubmissions_until,
+      :accepts_submissions,
+      :accepts_submissions_until,
+      :assignment_type_id,
+      :course_id,
+      :description,
+      :due_at,
+      :grade_scope,
+      :id,
+      :include_in_predictor,
+      :name,
+      :open_at,
+      :pass_fail,
+      :point_total,
+      :points_predictor_display,
+      :position,
+      :release_necessary,
+      :required,
+      :resubmissions_allowed,
+      :student_logged,
+      :thumbnail,
+      :use_rubric,
+      :visible,
+      :visible_when_locked
+    )
   end
 
-  def assignment_params
-    params.require(:assignment).permit(:assignment_rubrics_attributes => [:id, :rubric_id, :_destroy])
+  def predictor_grades(student)
+    @grades = student.grades.where(:course_id => current_course).select(
+      :assignment_id,
+      :final_score,
+      :id,
+      :predicted_score,
+      :pass_fail_status,
+      :status,
+      :student_id,
+      :raw_score,
+      :score
+    )
+  end
+
+  def team_params
+    @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
   end
 
   def set_assignment_weights
@@ -419,17 +347,4 @@ class AssignmentsController < ApplicationController
     end
     @assignment.save
   end
-
-  def serialized_course_badges
-    MultiJson.dump(ActiveModel::ArraySerializer.new(course_badges, each_serializer: CourseBadgeSerializer))
-  end
-
-  def course_badges
-    @course_badges ||= @assignment.course.badges.visible
-  end
-
-  def rubric_metrics_with_tiers
-    @rubric.metrics.order(:order)
-  end
-
 end

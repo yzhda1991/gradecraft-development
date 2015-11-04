@@ -24,6 +24,14 @@ class Metric < ActiveRecord::Base
     description.nil? or description.blank?
   end
 
+  def copy
+    copy = self.dup
+    copy.add_default_tiers = false
+    copy.save unless self.new_record?
+    copy.tiers << self.tiers.map(&:copy)
+    copy
+  end
+
   include DisplayHelpers
 
   protected
