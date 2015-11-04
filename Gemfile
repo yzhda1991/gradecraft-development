@@ -132,6 +132,7 @@ group :test do
   gem 'rspec-rails', '~> 3.3.3'
   # add spec helpers for testing Resque objects and resque scheduler
   gem 'resque_spec', github: 'leshill/resque_spec'
+  gem 'rspec-html-matchers'
   gem 'selenium-webdriver'
   gem 'simplecov'
 end
