@@ -21,11 +21,11 @@ class NotificationMailer < ApplicationMailer
   def gradebook_export(course, user, export_type, csv_data)
     @user = user
     @course = course
-    @export_type = export_type
-    attachments["#{@course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
+    attachments["#{course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
     mail(:to =>  @user.email,
          :bcc=>"admin@gradecraft.com",
-         :subject => "#{@course.name} #{@export_type} is attached") do |format|
+         :template_path => "mailers/notification_mailer",
+         :subject => "#{course.name} grade export is attached") do |format|
       format.text
     end
   end
