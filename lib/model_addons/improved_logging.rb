@@ -26,7 +26,7 @@ module ModelAddons
     end
 
     def formatted_log_output(message)
-      "#{message.capitalize} in object #{self}.\n#{self} attributes: #{self.attributes}"
+      "#{message} in object #{self}.\n#{self} attributes: #{self.attributes}"
     end
 
     def invalid_logging_type_message

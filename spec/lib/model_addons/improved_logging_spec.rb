@@ -63,7 +63,7 @@ RSpec.describe ModelAddons::ImprovedLogging, type: :vendor_library do
 
   describe "formatted_log_output" do
     it "formats the logger message" do
-      expected_message = "Robbers are here!! in object #{@waffle}.\n#{@waffle} attributes: #{@waffle.attributes}"
+      expected_message = "robbers are here!! in object #{@waffle}.\n#{@waffle} attributes: #{@waffle.attributes}"
       expect(@waffle.instance_eval { formatted_log_output("robbers are here!!") }).to eq(expected_message)
     end
   end

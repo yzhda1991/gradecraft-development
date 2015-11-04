@@ -4,6 +4,7 @@ class CourseMembership < ActiveRecord::Base
 
   # adds logging helpers for rescued-out errors
   include ModelAddons::ImprovedLogging
+  include ModelAddons::AdvancedRescue
 
   attr_accessible :auditing, :character_profile, :course, :course_id, :instructor_of_record, :user, :user_id, :role
 
@@ -78,22 +79,16 @@ class CourseMembership < ActiveRecord::Base
   private
 
   def assignment_type_totals_for_student
-    begin
+    rescue_with 0 do
       course.assignment_types.collect do |assignment_type|
         assignment_type.visible_score_for_student(user)
       end.compact.sum || 0
-    rescue
-      log_error_with_attributes("CourseMembership#assignment_type_totals_for_student was rescued to 0")
-      0
     end
   end
 
   def student_earned_badge_score
-    begin
+    rescue_with 0 do
       user.earned_badge_score_for_course(course_id) || 0
-    rescue
-      log_error_with_attributes("CourseMembership#student_earned_badge_score was rescued to 0")
-      0
     end
   end
 
@@ -102,11 +97,8 @@ class CourseMembership < ActiveRecord::Base
   end
 
   def student_team_score
-    begin
+    rescue_with 0 do
       user.team_for_course(course_id).try(:score) || 0
-    rescue
-      log_error_with_attributes("CourseMembership#student_team_score was rescued to 0")
-      0
     end
   end
 
