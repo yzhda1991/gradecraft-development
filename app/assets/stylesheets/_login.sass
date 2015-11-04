@@ -1,0 +1,49 @@
+section.login
+  padding: 3rem 1rem !important
+  width: 100%
+  min-height: 200px
+  background-color: $color-yellow-1
+  opacity: .7
+
+  input
+    border: 0
+    padding: .5rem
+
+  .columns
+    position: relative
+
+  #gradecraft-auth
+    position: relative
+    padding-right: 1rem
+    margin-right: 1rem
+
+    input
+      width: 100%
+
+  #password-forgot
+    background-color: $color-blue-4
+    border-left: 10px solid $color-white
+    padding: 1rem
+    border-radius: $global-radius
+    input.input
+      width: 12rem
+
+@media (max-width: $media-small-max)
+  section.login
+    min-height: 100%
+    padding: 4rem 1rem 1rem !important
+    min-width: 95% !important
+    .columns
+      width: 100%
+
+    .login-form
+      margin-top: 2rem
+
+    #gradecraft-auth
+      padding-top: .5rem
+      padding-bottom: 3rem
+      border-bottom: 1px solid $color-white
+      margin-bottom: 1rem
+
+    #password-forgot
+      width: 84%

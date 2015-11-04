@@ -2,7 +2,9 @@
   .columns.login-form.login.half
     %h2 Login
     = render 'form'
-  .columns.password-forgot.one-third
+  .columns#password-forgot.one-third
     %h2 Forgot Your Password?
-    %p Enter the email address associated with your account, and you'll receive a link via email that will allow you to create a new password.
+    %p Enter the email address associated with your account, and you'll receive a link via email that will allow you to create a new password.*
     = render 'passwords/reset_form'
+
+    .small.italic * This will not work if you use a @umich email address to log in. You must reset your password through the UM system.
