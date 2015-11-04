@@ -2,6 +2,10 @@ class CourseMembership < ActiveRecord::Base
   belongs_to :course, touch: true
   belongs_to :user, touch: true
 
+  # adds logging helpers for rescued-out errors
+  include ModelAddons::ImprovedLogging
+  include ModelAddons::AdvancedRescue
+
   attr_accessible :auditing, :character_profile, :course, :course_id, :instructor_of_record, :user, :user_id, :role
 
   Role.all.each do |role|
@@ -75,13 +79,17 @@ class CourseMembership < ActiveRecord::Base
   private
 
   def assignment_type_totals_for_student
-    course.assignment_types.collect do |assignment_type|
-      assignment_type.visible_score_for_student(user)
-    end.compact.sum || 0 rescue 0
+    rescue_with_logging 0 do
+      course.assignment_types.collect do |assignment_type|
+        assignment_type.visible_score_for_student(user)
+      end.compact.sum || 0
+    end
   end
 
   def student_earned_badge_score
-    user.earned_badge_score_for_course(course_id) || 0 rescue 0
+    rescue_with_logging 0 do
+      user.earned_badge_score_for_course(course_id) || 0
+    end
   end
 
   def conditional_student_team_score
@@ -89,7 +97,9 @@ class CourseMembership < ActiveRecord::Base
   end
 
   def student_team_score
-    user.team_for_course(course_id).try(:score) || 0 rescue 0
+    rescue_with_logging 0 do
+      user.team_for_course(course_id).try(:score) || 0
+    end
   end
 
   def include_team_score?
