@@ -28,12 +28,12 @@ class NotificationMailer < ApplicationMailer
   end
 
   def gradebook_export(course, user, csv_data)
-    @user = user
     @course = course
+    @user = user
     attachments["gradebook_export_#{course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
     mail(to:  @user.email,
          bcc: ADMIN_EMAIL,
-         subject: "Gradebook Export for #{course.name} is attached") do |format|
+         subject: "Gradebook export for #{course.name} is attached") do |format|
       format.text
     end
   end
