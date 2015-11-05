@@ -12,8 +12,7 @@ feature "submitting an assignment" do
     let(:assignment) {create :individual_assignment_with_submissions, assignment_type: assignment_type, course: course}
 
     before(:each) do
-      visit root_path
-      LoginPage.new(user).submit({ password: password })
+      login_as student
     end
 
     scenario "successfully from the assignment page" do
