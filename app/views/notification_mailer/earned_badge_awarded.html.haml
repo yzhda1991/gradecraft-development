@@ -2,13 +2,13 @@
   %a{:href => "http://gradecraft.com", :target => "_blank"}
     %img{:alt => "", :border => "0", :src => "https://www.gradecraft.com/images/gradecraft_logo.png", :width => "207"}/
 %h2{:align => "center"}
-  %strong Congratulations \#{ @user.first_name }!
+  %strong Congratulations #{ @user.first_name }!
 %p{:align => "center"}
-  %img{:src => "\#{@earned_badge.badge.icon}", :width => "150"}/
+  %img{:src => "#{@earned_badge.badge.icon}", :width => "150"}/
 %h3{:align => "center"}
   You've earned the
   %strong= @earned_badge.badge.name
-  \\#{ @course.badge_term }.
+  #{ @course.badge_term }.
 %p{:align => "center"}
   - if @earned_badge.feedback.present?
   %br/

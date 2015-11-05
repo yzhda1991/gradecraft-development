@@ -3,7 +3,7 @@
   %head
     %meta{:content => "width=device-width", :name => "viewport"}/
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title= @page_title
+    %title= @page_title rescue "GradeCraft Files Exported"
     :css
       = GradeCraft::Application.assets["mailer.css"].to_s.html_safe
 

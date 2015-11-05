@@ -2,11 +2,13 @@
   %a{:href => "http://gradecraft.com", :target => "_blank"}
     %img{:alt => "", :border => "0", :src => "https://www.gradecraft.com/images/gradecraft_logo.png", :width => "207"}/
 %h2{:align => "center"}
-  %strong Dear \#{ @user.first_name },
-%h3{:align => "center"} Your requested submissions export for \#{ @assignment.name } was successfully created.
+  %strong Dear #{ @user.first_name },
+
+%h3{:align => "center"} Your requested submissions export for #{ @assignment.name } was successfully created.
+
 %p
 %p{:align => "center"}
-  You can download your completed \#{@archive_format} archive
+  You can download your completed #{@archive_format} archive
   = succeed "." do
-    %a{:href => "\#{ @final_archive_path }"} here
+    %a{:href => "#{ @final_archive_path }"} here
 %hr/
