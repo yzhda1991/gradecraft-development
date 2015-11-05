@@ -1,4 +1,5 @@
 class ExportsMailer < ApplicationMailer
+  layout "mailers/exports_layout"
 
   def submissions_export_success(user, assignment)
     cache_submission_attrs(user, assignment)

@@ -1,4 +1,6 @@
 class NotificationMailer < ApplicationMailer
+  layout "mailers/notification_layout"
+
   def lti_error(user_info, course_info)
     @user = user_info
     @course = course_info

@@ -30,5 +30,9 @@ describe AnnouncementMailer do
     it "has the announcement link" do
       expect(email.body).to include announcement_url(announcement)
     end
+
+    it "has the email html title" do
+      expect(email.body).to include "GradeCraft Announcement"
+    end
   end
 end
