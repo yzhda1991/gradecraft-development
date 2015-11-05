@@ -48,28 +48,28 @@
   .clear
   %p
     %span.smallcaps Submitted:
-    = presenter.group_for(current_student).created_at
+    = presenter.group_submission_for(current_student).created_at
 
     // Late alert if submitted after due date
-    - if presenter.group_for(current_student).late?
+    - if presenter.group_submission_for(current_student).late?
       %span.label.alert Late!
     // Checking to see if the submission was updated - if the update date is different from the creation date, displaying it
-  - if presenter.group_updated?(current_student)
+  - if presenter.group_submission_updated?(current_student)
     %p
       %span.smallcaps Updated:
-      %span= presenter.group_for(current_student).updated_at
+      %span= presenter.group_submission_for(current_student).updated_at
 
   // Displaying the link to the submission if there is one
-  - if presenter.group_for(current_student).link?
+  - if presenter.group_submission_for(current_student).link?
     %p
       %span.smallcaps Link:
-      = link_to presenter.group_for(current_student).link
+      = link_to presenter.group_submission_for(current_student).link
 
-  - if presenter.group_for(current_student).submission_files.present?
+  - if presenter.group_submission_for(current_student).submission_files.present?
     %p
       %span.smallcaps Attachments:
       %ul.uploaded-files
-        - presenter.group_for(current_student).submission_files.each do |sf|
+        - presenter.group_submission_for(current_student).submission_files.each do |sf|
           %li
             - if sf.file_processing
               = "#{sf.filename}"
@@ -80,7 +80,7 @@
             - else
               = link_to sf.filename, sf.url, :target => "_blank"
 
-  - if presenter.group_for(current_student).text_comment?
+  - if presenter.group_submission_for(current_student).text_comment?
     %p
       %span.smallcaps Statement:
-      = raw presenter.group_for(current_student).text_comment
+      = raw presenter.group_submission_for(current_student).text_comment
