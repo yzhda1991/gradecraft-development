@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %p
     To import users, upload a .csv file with the following fields. Please note that the first row will be treated as a header row and will not be imported.
     %ol
@@ -15,6 +15,9 @@
       %li Team name
 
   = form_tag({:action => :upload}, :multipart => true) do
+    %div
+      = check_box_tag 'internal_students'
+      = label_tag 'internal_students', 'Use UM Authentication for the new user accounts'
     = file_field_tag 'file'
     = submit_tag("Import")
 
