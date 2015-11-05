@@ -2,8 +2,8 @@ require 'rails_spec_helper'
 
 describe NotificationMailer do
   let(:email) { ActionMailer::Base.deliveries.last }
-  let(:sender) { "GradeCraft <mailer@gradecraft.com>" }
-  let(:admin_email) { "cholma@umich.edu" }
+  let(:sender) { NotificationMailer::SENDER_EMAIL }
+  let(:admin_email) { NotificationMailer::ADMIN_EMAIL }
 
   describe "#lti_error" do
     let(:user) { create :user, lti_uid: rand(100) }
@@ -27,11 +27,25 @@ describe NotificationMailer do
 
     describe "email body" do
       subject { email.body }
-      it { is_expected.to include user.name }
-      it { is_expected.to include user.email }
-      it { is_expected.to include user.lti_uid }
-      it { is_expected.to include course.name }
-      it { is_expected.to include course.lti_uid }
+      it "includes the user's name" do
+        should include user.name
+      end
+
+      it "includes the user's email" do
+        should include user.email
+      end
+
+      it "includes the user's lti_uid" do
+        should include user.lti_uid
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "includes the course lti_uid" do
+        should include course.lti_uid
+      end
     end
   end
 end
