@@ -1,16 +1,16 @@
 class NotificationMailer < ApplicationMailer
   layout "mailers/notification_layout"
 
-  def lti_error(user_info, course_info)
-    @user = user_info
-    @course = course_info
+  def lti_error(user_data, course_data)
+    @user_data = user_data
+    @course_data = course_data
     mail(to: ADMIN_EMAIL, subject: 'Unknown LTI user/course') do |format|
       format.text
     end
   end
 
-  def kerberos_error(user_info)
-    @user = user_info
+  def kerberos_error(kerberos_uid)
+    @kerberos_uid = kerberos_uid
     mail(to: ADMIN_EMAIL, subject: 'Unknown Kerberos user') do |format|
       format.text
     end

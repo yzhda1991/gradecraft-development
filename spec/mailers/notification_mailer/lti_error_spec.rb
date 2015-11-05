@@ -6,11 +6,11 @@ describe NotificationMailer do
   let(:admin_email) { NotificationMailer::ADMIN_EMAIL }
 
   describe "#lti_error" do
-    let(:user) { create :user, lti_uid: rand(100) }
-    let(:course) { create :course, lti_uid: rand(100) }
+    let(:user_data) { FactoryGirl.attributes_for(:user).merge(lti_uid: rand(100)) }
+    let(:course_data) { FactoryGirl.attributes_for(:course).merge(lti_uid: rand(100)) }
 
     before(:each) do
-      NotificationMailer.lti_error(user, course).deliver_now
+      NotificationMailer.lti_error(user_data, course_data).deliver_now
     end
 
     it "is sent from the author's email" do
@@ -28,23 +28,23 @@ describe NotificationMailer do
     describe "email body" do
       subject { email.body }
       it "includes the user's name" do
-        should include user.name
+        should include user_data[:name]
       end
 
       it "includes the user's email" do
-        should include user.email
+        should include user_data[:email]
       end
 
       it "includes the user's lti_uid" do
-        should include user.lti_uid
+        should include user_data[:lti_uid]
       end
 
       it "includes the course name" do
-        should include course.name
+        should include course_data[:name]
       end
 
       it "includes the course lti_uid" do
-        should include course.lti_uid
+        should include course_data[:lti_uid]
       end
     end
   end

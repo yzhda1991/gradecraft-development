@@ -54,9 +54,27 @@ class UserSessionsController < ApplicationController
   end
 
   def lti_error_notification
-    user = { name: auth_hash['extra']['raw_info']['lis_person_name_full'], email: auth_hash['extra']['raw_info']['lis_person_contact_email_primary'], lti_uid: auth_hash['extra']['raw_info']['context_id'] }
-    course = { name: auth_hash['extra']['raw_info']['context_label'], uid: auth_hash['extra']['raw_info']['context_id'] }
-    NotificationMailer.lti_error(user, course).deliver_now
+    NotificationMailer.lti_error(lti_error_user_data, lti_error_course_data).deliver_now
+  end
+
+  def kerberos_error_notification
+    user = { uid: auth_hash['uid'] }
+    NotificationMailer.kerberos_error(user).deliver_now
+  end
+
+  def lti_error_user_data
+    {
+      name: auth_hash['extra']['raw_info']['lis_person_name_full'],
+      email: auth_hash['extra']['raw_info']['lis_person_contact_email_primary'],
+      lti_uid: auth_hash['extra']['raw_info']['context_id']
+    }
+  end
+
+  def lti_error_course_data
+    {
+      name: auth_hash['extra']['raw_info']['context_label'],
+      lti_uid: auth_hash['extra']['raw_info']['context_id']
+    }
   end
 
   def redirect_back_or(default)
