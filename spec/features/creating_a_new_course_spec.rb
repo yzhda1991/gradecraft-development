@@ -1,4 +1,4 @@
-require "spec_helper"
+require "rails_spec_helper"
 
 feature "creating a new course" do
   let(:password) { "p@ssword" }

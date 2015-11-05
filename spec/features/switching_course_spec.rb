@@ -1,6 +1,6 @@
-require "spec_helper"
+require "rails_spec_helper"
 
-feature "switch course", focus: true do
+feature "switch course" do
 
   context "as a student" do
     let(:course_1) { create :course }
