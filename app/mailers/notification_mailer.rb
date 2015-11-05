@@ -103,19 +103,16 @@ class NotificationMailer < ApplicationMailer
     @professor = professor
     mail(to: @professor.email, subject: "#{@course.courseno} - New Group to Review") do |format|
       format.text
-      format.html
     end
   end
 
   def group_notify(group_id)
     @group = Group.find group_id
     @course = @group.course
-    @group_members = @group.students
-    @group_members.each do |gm|
-      mail(to: gm.email, subject: "#{@course.courseno} - New Group") do |format|
-        @gm = gm
+    @group.students.each do |group_member|
+      mail(to: group_member.email, subject: "#{@course.courseno} - New Group") do |format|
+        @student = group_member
         format.text
-        format.html
       end
     end
   end
@@ -123,12 +120,10 @@ class NotificationMailer < ApplicationMailer
   def group_status_updated(group_id)
     @group = Group.find group_id
     @course = @group.course
-    @group_members = @group.students
-    @group_members.each do |gm|
-      mail(to: gm.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
-        @gm = gm
+    @group.students.each do |group_member|
+      mail(to: group_member.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
+        @student = group_member
         format.text
-        format.html
       end
     end
   end
