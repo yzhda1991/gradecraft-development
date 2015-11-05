@@ -1,6 +1,8 @@
 require 'rails_spec_helper'
 
 describe StudentImporter do
+  before(:all) { User.destroy_all }
+
   describe "#import" do
     it "returns empty results when there is no file" do
       result = StudentImporter.new(nil).import
@@ -45,7 +47,6 @@ describe StudentImporter do
           expect(team.name).to eq "Zeppelin"
           expect(team.students.first.email).to eq "jimmy@example.com"
         end
-
         it "does not add the student to the team if a team is not specified" do
           subject.import course
           user = User.unscoped.first
@@ -107,6 +108,11 @@ describe StudentImporter do
         it "does not store a password for the student" do
           subject.import course
           expect(user.crypted_password).to be_blank
+        end
+
+        it "activates the users" do
+          subject.import course
+          expect(User.all.all?(&:activated?)).to eq true
         end
 
         it "does not send the activation email to each student" do
