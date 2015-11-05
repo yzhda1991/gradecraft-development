@@ -15,6 +15,12 @@ describe User do
     end
   end
 
+  describe ".find_by_insensitive_username" do
+    it "should return the user no matter what the case the username is in" do
+      expect(User.find_by_insensitive_username(@student.username.upcase)).to eq @student
+    end
+  end
+
   describe ".students_auditing" do
     let(:student_being_audited) { create(:user) }
     before do
