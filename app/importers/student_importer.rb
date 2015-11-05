@@ -2,10 +2,11 @@ require 'csv'
 
 class StudentImporter
   attr_reader :successful, :unsuccessful
-  attr_accessor :file
+  attr_accessor :file, :internal_students
 
-  def initialize(file)
+  def initialize(file, internal_students=false)
     @file = file
+    @internal_students = internal_students
     @successful = []
     @unsuccessful = []
   end
