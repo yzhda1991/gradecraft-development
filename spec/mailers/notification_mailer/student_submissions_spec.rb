@@ -22,6 +22,7 @@ RSpec.shared_examples "a complete submission email body" do
   end
 end
 
+# specs for submission notifications that are sent to students
 describe NotificationMailer do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:sender) { NotificationMailer::SENDER_EMAIL }
@@ -54,7 +55,7 @@ describe NotificationMailer do
     describe "text part body" do
       subject { text_part.body }
 
-      it_behaves_like "a complete email body"
+      it_behaves_like "a complete submission email body"
 
       it "doesn't include a template" do
         should_not include "Regents of The University of Michigan"
@@ -64,7 +65,7 @@ describe NotificationMailer do
     describe "html part body" do
       subject { html_part.body }
 
-      it_behaves_like "a complete email body"
+      it_behaves_like "a complete submission email body"
 
       it "should use include a template" do
         should include "Regents of The University of Michigan"

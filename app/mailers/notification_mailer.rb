@@ -65,25 +65,23 @@ class NotificationMailer < ApplicationMailer
 
   def new_submission(submission_id, professor)
     @submission = Submission.find submission_id
-    @user = @submission.student
+    @student = @submission.student
     @course = @submission.course
     @assignment = @submission.assignment
     @professor = professor
-    mail(to: @professor.email, subject: "#{@course[:courseno]} - New Submission to Grade") do |format|
+    mail(to: @professor.email, subject: "#{@course[:courseno]} - #{@assignment.name} - New Submission to Grade") do |format|
       format.text
-      format.html
     end
   end
 
   def revised_submission(submission_id, professor)
     @submission = Submission.find submission_id
-    @user = @submission.student
+    @student = @submission.student
     @course = @submission.course
     @assignment = @submission.assignment
     @professor = professor
-    mail(to: @professor.email, subject: "#{@course[:courseno]} - Updated Submission to Grade") do |format|
+    mail(to: @professor.email, subject: "#{@course[:courseno]} - #{@assignment.name} - Updated Submission to Grade") do |format|
       format.text
-      format.html
     end
   end
 
