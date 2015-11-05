@@ -22,7 +22,7 @@ class MultipleGradeUpdatePerformer < ResqueJob::Performer
   end
 
   def require_notify_released_success(grade)
-    if grade.assignment.notify_released?
+    if grade.assignment.notify_released? and grade.is_student_visible?
       require_success(notify_released_messages(grade), max_result_size: 200) { notify_grade_released(grade) } 
     end
   end
