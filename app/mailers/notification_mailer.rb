@@ -4,7 +4,14 @@ class NotificationMailer < ApplicationMailer
   def lti_error(user_info, course_info)
     @user = user_info
     @course = course_info
-    mail(:to => 'cholma@umich.edu', :subject => 'Unknown LTI user/course') do |format|
+    mail(to: ADMIN_EMAIL, subject: 'Unknown LTI user/course') do |format|
+      format.text
+    end
+  end
+
+  def kerberos_error(user_info)
+    @user = user_info
+    mail(to: ADMIN_EMAIL, subject: 'Unknown Kerberos user') do |format|
       format.text
     end
   end
@@ -13,9 +20,8 @@ class NotificationMailer < ApplicationMailer
     @user = user
     @course = course
     attachments["#{course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
-    mail(:to =>  @user.email,
-         :bcc=>"admin@gradecraft.com",
-         :subject => "#{course.name} grade export is attached") do |format|
+    mail(to: @user.email,
+      bcc:ADMIN_EMAIL, subject: "#{course.name} grade export is attached") do |format|
       format.text
     end
   end
@@ -24,9 +30,9 @@ class NotificationMailer < ApplicationMailer
     @user = user
     @course = course
     attachments["#{course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
-    mail(:to =>  @user.email,
-         :bcc=>"admin@gradecraft.com",
-         :subject => "#{course.name} grade export is attached") do |format|
+    mail(to:  @user.email,
+         bcc: ADMIN_EMAIL,
+         subject: "#{course.name} grade export is attached") do |format|
       format.text
     end
   end
@@ -37,8 +43,8 @@ class NotificationMailer < ApplicationMailer
     @user = @submission.student
     @course = @submission.course
     @assignment = @submission.assignment
-    mail(:to => @user.email,
-      :subject => "#{@course.courseno} - #{@assignment.name} Submitted") do |format|
+    mail(to: @user.email,
+      subject: "#{@course.courseno} - #{@assignment.name} Submitted") do |format|
       format.text
       format.html
     end
@@ -49,8 +55,8 @@ class NotificationMailer < ApplicationMailer
     @user = @submission.student
     @course = @submission.course
     @assignment = @submission.assignment
-    mail(:to => @user.email,
-      :subject => "#{@course.courseno} - #{@assignment.name} Submission Updated") do |format|
+    mail(to: @user.email,
+      subject: "#{@course.courseno} - #{@assignment.name} Submission Updated") do |format|
       format.text
       format.html
     end
@@ -62,7 +68,7 @@ class NotificationMailer < ApplicationMailer
     @course = @submission.course
     @assignment = @submission.assignment
     @professor = professor
-    mail(:to => @professor.email, :subject => "#{@course[:courseno]} - New Submission to Grade") do |format|
+    mail(to: @professor.email, subject: "#{@course[:courseno]} - New Submission to Grade") do |format|
       format.text
       format.html
     end
@@ -74,7 +80,7 @@ class NotificationMailer < ApplicationMailer
     @course = @submission.course
     @assignment = @submission.assignment
     @professor = professor
-    mail(:to => @professor.email, :subject => "#{@course[:courseno]} - Updated Submission to Grade") do |format|
+    mail(to: @professor.email, subject: "#{@course[:courseno]} - Updated Submission to Grade") do |format|
       format.text
       format.html
     end
@@ -85,8 +91,8 @@ class NotificationMailer < ApplicationMailer
     @user = @grade.student
     @course = @grade.course
     @assignment = @grade.assignment
-    mail(:to => @user.email,
-      :subject => "#{@course.courseno} - #{@assignment.name} Graded") do |format|
+    mail(to: @user.email,
+      subject: "#{@course.courseno} - #{@assignment.name} Graded") do |format|
       format.text
       format.html
     end
@@ -96,7 +102,7 @@ class NotificationMailer < ApplicationMailer
     @group = Group.find group_id
     @course = @group.course
     @professor = professor
-    mail(:to => @professor.email, :subject => "#{@course.courseno} - New Group to Review") do |format|
+    mail(to: @professor.email, subject: "#{@course.courseno} - New Group to Review") do |format|
       format.text
       format.html
     end
@@ -107,7 +113,7 @@ class NotificationMailer < ApplicationMailer
     @course = @group.course
     @group_members = @group.students
     @group_members.each do |gm|
-      mail(:to => gm.email, :subject => "#{@course.courseno} - New Group") do |format|
+      mail(to: gm.email, subject: "#{@course.courseno} - New Group") do |format|
         @gm = gm
         format.text
         format.html
@@ -120,7 +126,7 @@ class NotificationMailer < ApplicationMailer
     @course = @group.course
     @group_members = @group.students
     @group_members.each do |gm|
-      mail(:to => gm.email, :subject => "#{@course.courseno} - Group #{@group.approved}") do |format|
+      mail(to: gm.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
         @gm = gm
         format.text
         format.html
@@ -132,8 +138,8 @@ class NotificationMailer < ApplicationMailer
     @earned_badge = EarnedBadge.find earned_badge_id
     @user = @earned_badge.student
     @course = @earned_badge.course
-    mail(:to => @user.email,
-      :subject => "#{@course.courseno} - You've earned a new #{@course.badge_term}!") do |format|
+    mail(to: @user.email,
+      subject: "#{@course.courseno} - You've earned a new #{@course.badge_term}!") do |format|
       format.text
       format.html
     end
