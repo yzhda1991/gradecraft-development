@@ -9,13 +9,13 @@ describe StudentImporter do
     end
 
     context "with a file" do
-      let(:file) { fixture_file "users.csv", "text/csv" }
       let(:course) { create :course }
       let(:team) { Team.unscoped.last }
       let(:user) { User.unscoped.last }
       before { create :team, course: course, name: "Zeppelin" }
 
       context "with GradeCraft students" do
+        let(:file) { fixture_file "users.csv", "text/csv" }
         subject { StudentImporter.new(file.tempfile) }
 
         it "creates the student accounts" do
@@ -84,12 +84,35 @@ describe StudentImporter do
       end
 
       context "with UM students" do
+        let(:file) { fixture_file "internal_users.csv", "text/csv" }
         subject { StudentImporter.new(file.tempfile, true) }
 
-        xit "creates the student accounts with emails specified"
-        xit "creates the student accounts with uniquenames specified"
-        xit "does not store a password for the student"
-        xit "does not send the activation email to each student"
+        it "creates the student accounts with emails specified" do
+          subject.import course
+          expect(user.email).to eq "richard@umich.edu"
+          expect(user.username).to eq "richard"
+          expect(user.course_memberships.first.course).to eq course
+          expect(user.course_memberships.first.role).to eq "student"
+        end
+
+        it "creates the student accounts with unique names specified" do
+          subject.import course
+          user =  User.unscoped.first
+          expect(user.email).to eq "peter@umich.edu"
+          expect(user.username).to eq "peter"
+          expect(user.course_memberships.first.course).to eq course
+          expect(user.course_memberships.first.role).to eq "student"
+        end
+
+        it "does not store a password for the student" do
+          subject.import course
+          expect(user.crypted_password).to be_blank
+        end
+
+        it "does not send the activation email to each student" do
+          expect { subject.import course }.to_not \
+            change { ActionMailer::Base.deliveries.count }
+        end
       end
     end
   end
