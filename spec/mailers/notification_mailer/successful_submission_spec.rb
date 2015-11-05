@@ -1,5 +1,27 @@
 require 'rails_spec_helper'
 
+RSpec.shared_examples "a complete email body" do 
+  it "includes the student's first name" do
+    should include student.first_name
+  end
+
+  it "includes the assignment name" do
+    should include assignment.name
+  end
+
+  it "includes the assignment term for the course" do
+    should include course.assignment_term.pluralize.downcase
+  end
+
+  it "includes the course name" do
+    should include course.name
+  end
+
+  it "includes the submission created_at timestamp" do
+    should include submission.created_at
+  end
+end
+
 describe NotificationMailer do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:sender) { NotificationMailer::SENDER_EMAIL }
@@ -31,25 +53,8 @@ describe NotificationMailer do
 
     describe "text part body" do
       subject { text_part.body }
-      it "includes the student's first name" do
-        should include student.first_name
-      end
 
-      it "includes the assignment name" do
-        should include assignment.name
-      end
-
-      it "includes the assignment term for the course" do
-        should include course.assignment_term.pluralize.downcase
-      end
-
-      it "includes the course name" do
-        should include course.name
-      end
-
-      it "includes the submission created_at timestamp" do
-        should include submission.created_at
-      end
+      it_behaves_like "a complete email body"
 
       it "doesn't include a template" do
         should_not include "Regents of The University of Michigan"
@@ -58,28 +63,14 @@ describe NotificationMailer do
 
     describe "html part body" do
       subject { html_part.body }
-      it "includes the student's first name" do
-        should include student.first_name
-      end
 
-      it "includes the assignment name" do
-        should include assignment.name
-      end
-
-      it "includes the assignment term for the course" do
-        should include course.assignment_term.pluralize.downcase
-      end
-
-      it "includes the course name" do
-        should include course.name
-      end
-
-      it "includes the submission created_at timestamp" do
-        should include submission.created_at
-      end
+      it_behaves_like "a complete email body"
 
       it "should use include a template" do
         should include "Regents of The University of Michigan"
+      end
+
+      it "declares a doctype" do
         should include "DOCTYPE"
       end
     end
