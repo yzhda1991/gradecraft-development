@@ -87,10 +87,10 @@ class NotificationMailer < ApplicationMailer
 
   def grade_released(grade_id)
     @grade = Grade.find grade_id
-    @user = @grade.student
+    @student = @grade.student
     @course = @grade.course
     @assignment = @grade.assignment
-    mail(to: @user.email,
+    mail(to: @student.email,
       subject: "#{@course.courseno} - #{@assignment.name} Graded") do |format|
       format.text
       format.html

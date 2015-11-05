@@ -35,7 +35,6 @@ end
 describe NotificationMailer do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:sender) { NotificationMailer::SENDER_EMAIL }
-  let(:admin_email) { NotificationMailer::ADMIN_EMAIL }
 
   let(:submission) { create(:submission, course: course, student: student, assignment: assignment) }
   let(:student) { create(:user) }

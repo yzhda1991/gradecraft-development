@@ -4,9 +4,9 @@
 %h2{:align => "center"}
   %strong You've got a new grade!
 %h3{:align => "center"}
-  You can now check your
-  %strong #{ @assignment.name }
-  grade.
+  You can now view the grade for your
+  #{ @course.assignment_term.downcase } "#{ @assignment.name }"
+  in #{ @course.name }. 
 %p
 %hr/
 %p{:align => "center"}
