@@ -1,97 +1,137 @@
-section
-  clear: both
-  position: relative
-  min-width: 700px
-  max-width: 1500px
-  margin: 0 auto
-  padding: 2rem   
-  min-height: 400px
-  height: auto
-  background-color: $color-blue-3
+.homepage
+  section
+    clear: both
+    position: relative
+    margin: 0 auto
+    padding: 2rem   
+    min-height: 400px
+    height: auto
+    opacity: .8
+    font-size: 1rem
 
-.alert-bkg
-  width: 100% !important
-  margin: -1rem 0
-  padding: 1rem 0
-  opacity: .8
-  background-color: $color-blue-3
+    &.video-promo
+      padding-top: 3rem
+      background-color: $color-blue-3
 
+    &.press
+      background-color: $color-blue-0
 
-section.video-promo, section.newsletter, section.press, section.forgot-password, section.login
+      .date
+        margin-left: -1rem
+        color: $color-green-4
 
-  h1
-    margin-top: 1rem
-    margin-bottom: 0
-    padding-bottom: 0
-    font-weight: 100
-    color: $color-blue-0
-    font-size: 2rem
+    &.newsletter
+      background-color: $color-blue-2
 
-  ul
-    margin: 0
-    padding: 0 1rem
-
-    li
-      list-style-type: none
-      margin: 0 0 .5rem
-      padding: 0
-
-      a
-        color: $color-blue-4
-
-  .two-thirds
-    width: 66%
-
-  .half
-    width: 48%
-
-  .one-third
-    width: 33%
-
-  .text
-    float: left
-    width: 40%
+      #mc_embed_signup .button
+        background-color: $color-blue-00
+        font-family: Avenir, sans-serif
+        font-weight: normal
 
     h1
-      margin-top: 1.25rem
-      color: $color-yellow-2
+      margin-top: 1rem
+      margin-bottom: 0
+      padding-bottom: 0
+      font-weight: 100
+      color: $color-yellow-1
+      font-size: 2rem
+    
+    .columns  
+      float: left
 
-  .columns.video
-    padding-left: 1rem
-    float: right
-    width: 55% !important
+    ul
+      margin: 0
+      padding: 0 1rem
 
-    iframe
-      margin-top: 1.5rem
-      width: 100%
-      height: 80%
+      li
+        list-style-type: none
+        margin: 0 0 .5rem
+        padding: 0
+
+        a
+          color: $color-blue-4
+
+    .two-thirds
+      width: 66%
+
+    .half
+      width: 48%
+
+    .one-third
+      width: 33%
+
+    .video 
+      margin-top: 2rem
+      padding-left: 1rem
+
+      iframe
+        width: 100%
+        min-height: 320px
+        height: auto
+
+  .alert-bkg
+    width: 100% !important
+    margin: -1rem 0
+    padding: 1rem 0
+    opacity: .8
+    background-color: $color-blue-3
 
 
 @media (max-width: $media-small-max)
 
-  section.video-promo, section.newsletter, section.press, section.forgot-password, section.login
-    width: 100%
-    font-size: .7rem
-    padding: 1rem
-    height: auto
+  .homepage
+    margin-top: 3rem
 
-    p 
-      margin: 0 0 .25rem
-
-    .columns
+    section    
       width: 100%
-      clear: both
+      font-size: .7rem
+      padding: 0rem
+      height: auto
 
-      &.text
-        font-size: .7rem
-        margin: 0
+      &.video-promo
+        padding-top: 0rem !important
+        padding-bottom: 2rem
 
-        h1 
-          margin-top: 2rem
+      &.newsletter
+        padding: 0 0 1rem
 
-      &.video
-        float: none
-        display: block
-        height: auto
-        padding: 0
-        margin: 0
+      h1
+        font-size: 1.6rem
+
+      p 
+        margin: 0 0 .25rem
+
+      .columns
+        width: 100%
+        clear: both
+
+        &.text
+          font-size: .7rem
+          margin: 0
+          padding: 1rem
+
+          h1 
+            margin-top: 2rem
+
+        &.video
+          margin-top: 0
+
+          iframe
+            float: none
+            display: block
+            min-height: 200px
+            width: 90% !important
+            margin: 0
+            padding: 0rem
+
+        &.news-articles
+          padding: 0 1rem
+
+        &.signup
+          padding: 0 1rem
+          h1
+            margin-top: .5rem
+
+        &.twitter iframe
+          width: 100%
+          clear: both
