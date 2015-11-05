@@ -14,5 +14,10 @@ FactoryGirl.define do
     factory :group_assignment do 
     	grade_scope 'Group'
     end
+
+    factory :individual_assignment_with_submissions do 
+      grade_scope 'Individual'
+      accepts_submissions true
+    end
   end
 end

@@ -24,8 +24,7 @@
               = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
 
     - if @assignment.accepts_links
-      %h4.uppercase Link
-      = f.input :link, :label => false
+      = f.input :link 
 
     - if @assignment.accepts_text
       %h4.uppercase Content/Statement
