@@ -17,22 +17,23 @@ class NotificationMailer < ApplicationMailer
   end
 
   def grade_export(course, user, csv_data)
-    @user = user
     @course = course
-    attachments["#{course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
+    @user = user
+    attachments["grade_export_#{course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
     mail(to: @user.email,
-      bcc:ADMIN_EMAIL, subject: "#{course.name} grade export is attached") do |format|
+         bcc:ADMIN_EMAIL,
+         subject: "Grade export for #{course.name} is attached") do |format|
       format.text
     end
   end
 
-  def gradebook_export(course, user, export_type, csv_data)
+  def gradebook_export(course, user, csv_data)
     @user = user
     @course = course
-    attachments["#{course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
+    attachments["gradebook_export_#{course.id}.csv"] = {:mime_type => 'text/csv',:content => csv_data }
     mail(to:  @user.email,
          bcc: ADMIN_EMAIL,
-         subject: "#{course.name} grade export is attached") do |format|
+         subject: "Gradebook Export for #{course.name} is attached") do |format|
       format.text
     end
   end
@@ -44,7 +45,7 @@ class NotificationMailer < ApplicationMailer
     @course = @submission.course
     @assignment = @submission.assignment
     mail(to: @user.email,
-      subject: "#{@course.courseno} - #{@assignment.name} Submitted") do |format|
+         subject: "#{@course.courseno} - #{@assignment.name} Submitted") do |format|
       format.text
       format.html
     end
