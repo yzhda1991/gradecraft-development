@@ -288,6 +288,13 @@ describe AssignmentsController do
 
     describe "GET predictor_data" do
       before do
+        @course = create(:course)
+        @student = create(:user)
+        login_user(@student)
+        @student.courses << @course
+      end
+
+      before do
         assignment_type = create(:assignment_type, course: @course)
         @assignment = create(:assignment)
         @course.assignments << @assignment
