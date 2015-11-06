@@ -4,11 +4,13 @@
 %h2{:align => "center"}
   %strong Dear #{ @professor.first_name },
 
-%h3{:align => "center"} Your requested submissions export for #{ @assignment.name } was successfully created.
-
+%h3{:align => "center"} Your requested export for #{ @course.assignment_term.downcase} "#{ @assignment.name }" was successfully created for course #{ @course.name }.
 %p
 %p{:align => "center"}
-  You can download your completed #{@archive_format} archive
+  You can download your completed #{@archive_data[:format].upcase} archive
   = succeed "." do
-    %a{:href => "#{ @final_archive_path }"} here
+    %a{:href => "#{ @archive_data[:url] }"} here
 %hr/
+
+%p Sincerely,
+%p The GradeCraft Team

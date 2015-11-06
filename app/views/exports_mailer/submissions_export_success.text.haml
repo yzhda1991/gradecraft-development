@@ -2,7 +2,7 @@ Dear #{ @professor.first_name },
 
 Your requested export for #{ @course.assignment_term.downcase} "#{ @assignment.name }" was successfully created for course #{ @course.name }.
 
-You can download your completed #{@archive_data[:format]} archive here: #{ @archive_data[:url] }.
+You can download your completed #{@archive_data[:format].upcase} archive here: #{ @archive_data[:url] }.
 
 Sincerely,
 GradeCraft
