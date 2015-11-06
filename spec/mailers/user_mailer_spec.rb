@@ -48,4 +48,28 @@ describe UserMailer do
       expect(email.body).to include activate_user_url("blah")
     end
   end
+
+  describe ".welcome_email" do
+    let(:user) { create :user }
+
+    before(:each) do
+      UserMailer.welcome_email(user).deliver_now
+    end
+
+    it "is sent from the a notifications email" do
+      expect(email.from).to eq ["mailer@gradecraft.com"]
+    end
+
+    it "is sent to the user's email" do
+      expect(email.to).to eq [user.email]
+    end
+
+    it "has an appropriate subject" do
+      expect(email.subject).to eq "Welcome to GradeCraft!"
+    end
+
+    it "has a link to the dashboard" do
+      expect(email.body).to include dashboard_url
+    end
+  end
 end
