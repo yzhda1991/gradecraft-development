@@ -1,0 +1,19 @@
+%p{:align => "center"}
+  %a{:href => "http://gradecraft.com", :target => "_blank"}
+    %img{:alt => "", :border => "0", :src => "https://www.gradecraft.com/images/gradecraft_logo.png", :width => "207"}/
+%h2{:align => "center"}
+  %strong Dear #{ @professor.first_name },
+
+%h3{:align => "center"}
+  Your requested submissions export of #{ @course.assignment_term.downcase} "#{ @assignment.name }"
+  in course #{ @course.name }
+  was successfully created for #{ @course.team_term.downcase } #{ @team.name }.
+%p
+%p{:align => "center"}
+  You can download your completed #{@archive_data[:format].upcase} archive
+  = succeed "." do
+    %a{:href => "#{ @archive_data[:url] }"} here
+%hr/
+
+%p Sincerely,
+%p The GradeCraft Team

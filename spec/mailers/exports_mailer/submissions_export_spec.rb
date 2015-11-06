@@ -18,6 +18,16 @@ RSpec.shared_examples "a complete submissions export email body" do
   end
 end
 
+RSpec.shared_examples "a team submissions export email" do 
+  it "includes the team term for the course" do
+    should include course.team_term.downcase
+  end
+
+  it "includes the team name" do
+    should include team.name
+  end
+end
+
 RSpec.shared_examples "a submissions export email with archive data" do 
   it "includes the archive format" do
     should include archive_data[:format].upcase
@@ -96,4 +106,61 @@ describe NotificationMailer do
     end
   end
 
+  describe "#team_submissions_export_success" do
+    let(:deliver_email) { ExportsMailer.team_submissions_export_success(professor, assignment, archive_data).deliver_now }
+
+    it_behaves_like "a gradecraft email to a professor"
+
+    it "BCC's to the gradecraft admin" do
+      expect(email.bcc).to eq [admin_email]
+    end
+
+    it "has the correct subject" do
+      expect(email.subject).to eq "Submissions export for #{team.name} is ready"
+    end
+
+    describe "text part body" do
+      subject { text_part.body }
+      it_behaves_like "a complete submissions export email body"
+      it_behaves_like "a team submissions export email"
+      it_behaves_like "a submissions export email with archive data"
+      it_behaves_like "an email text part"
+    end
+
+    describe "html part body" do
+      subject { html_part.body }
+      it_behaves_like "a complete submissions export email body"
+      it_behaves_like "a team submissions export email"
+      it_behaves_like "a submissions export email with archive data"
+      it_behaves_like "an email html part"
+    end
+  end
+
+  describe "#team_submissions_export_failure" do
+    let(:deliver_email) { ExportsMailer.team_submissions_export_failure(professor, assignment, archive_data).deliver_now }
+
+    it_behaves_like "a gradecraft email to a professor"
+
+    it "BCC's to the gradecraft admin" do
+      expect(email.bcc).to eq [admin_email]
+    end
+
+    it "has the correct subject" do
+      expect(email.subject).to eq "Submissions export for #{team.name} failed to build"
+    end
+
+    describe "text part body" do
+      subject { text_part.body }
+      it_behaves_like "a complete submissions export email body"
+      it_behaves_like "a team submissions export email"
+      it_behaves_like "an email text part"
+    end
+
+    describe "html part body" do
+      subject { html_part.body }
+      it_behaves_like "a complete submissions export email body"
+      it_behaves_like "a team submissions export email"
+      it_behaves_like "an email html part"
+    end
+  end
 end
