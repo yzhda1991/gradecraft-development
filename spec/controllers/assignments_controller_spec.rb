@@ -315,15 +315,16 @@ describe AssignmentsController do
         expect(response).to render_template(:predictor_data)
       end
 
-      it "includes the student's grade with score for assignment when released" do
-        @grade = grade
-        get :predictor_data, format: :json, :id => @student.id
-        @assigned_grade_attrs = predictor_grade_attributes_for(assigns(:grades)[0])
-        @grade_attrs = predictor_grade_attributes_for(@grade)
+      describe "student's score for released assignment" do
+        it "includes the student's grade with score for assignment when released" do
+          @grade = grade
+          get :predictor_data, format: :json, :id => @student.id
+          @assigned_grade_attrs = predictor_grade_attributes_for(assigns(:grades)[0])
+          @grade_attrs = predictor_grade_attributes_for(@grade)
 
-        expect(@assigned_grade_attrs).to eq(@grade_attrs)
-
-        expect(assigns(:assignments)[0].current_student_grade).to eq(student_grade_outcome)
+          expect(assigns(:assignments)[0].current_student_grade).to eq(grade_attrs_expectation)
+          expect(@assigned_grade_attrs).to eq(@grade_attrs)
+        end
       end
 
       it "includes student grade with no score if not released" do
