@@ -119,6 +119,12 @@ describe StudentImporter do
           expect { subject.import course }.to_not \
             change { ActionMailer::Base.deliveries.count }
         end
+
+        it "can send a welcome email to each student" do
+          subject = StudentImporter.new(file.tempfile, true, true)
+          expect { subject.import course }.to \
+            change { ActionMailer::Base.deliveries.count }.by 2
+        end
       end
     end
   end

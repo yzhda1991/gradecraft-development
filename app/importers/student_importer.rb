@@ -2,11 +2,12 @@ require 'csv'
 
 class StudentImporter
   attr_reader :successful, :unsuccessful
-  attr_accessor :file, :internal_students
+  attr_accessor :file, :internal_students, :send_welcome
 
-  def initialize(file, internal_students=false)
+  def initialize(file, internal_students=false, send_welcome=false)
     @file = file
     @internal_students = internal_students
+    @send_welcome = send_welcome
     @successful = []
     @unsuccessful = []
   end
@@ -27,6 +28,7 @@ class StudentImporter
         if user.valid?
           team.students << user if team
           UserMailer.activation_needed_email(user).deliver_now unless user.activated?
+          UserMailer.welcome_email(user).deliver_now if user.activated? && send_welcome
           successful << user
         else
           append_unsuccessful row, user.errors.full_messages.join(", ")
