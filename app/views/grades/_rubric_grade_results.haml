@@ -37,9 +37,9 @@
                     %img{:src => badge.badge.icon, width: "30px", height: "30px" }
               .clear
 
-            - if current_user_is_staff? && presenter.viewable_rubric_tier_earned?(tier.id)
+            - if current_user_is_staff? && presenter.viewable_rubric_tier_earned?(current_student.id, tier.id)
               .earned_tier #{current_student.first_name} earned this level
-            - elsif current_user_is_student? && presenter.rubric_tier_earned?(current_user, tier.id)
+            - elsif current_user_is_student? && presenter.rubric_tier_earned?(current_student.id, tier.id)
               .earned_tier I earned this level
 
             - if !presenter.hide_analytics?
