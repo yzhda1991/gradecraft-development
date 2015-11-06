@@ -244,54 +244,9 @@ describe AssignmentsController do
         end
       end
     end
-
-    describe "GET export_submissions", working: true do
-      before do
-        @course = create(:course_accepting_groups)
-        create_professor_for_course(@course)
-        @assignment_type = create(:assignment_type, course: @course)
-        @assignment = create(:assignment, assignment_type: @assignment_type)
-        @course.assignments << @assignment
-        create_students_for_course(@course, 2)
-      end
-
-      context "relevant students" do
-        it "gets all students for the course" do
-          pending
-        end
-
-        it "should equal the size of the class" do
-          pending
-        end
-      end
-    end
-
-    describe "GET export_team_submissions", working: true do
-      context "students on active team" do
-        it "gets students on the active team" do
-          pending
-        end
-
-        it "does not included students from other team" do
-          pending
-        end
-
-        it "should have as many students as the active team" do
-          pending
-        end
-
-        it "uses the team name was specified" do
-          team = create(:team, course: @course)
-          team.students << create(:user)
-          get :export_submissions, id: @assignment, team_id: team.id, :format => :zip
-          expect(response.headers["Content-Disposition"]).to eq "attachment; filename=\"#{@assignment.name}_#{team.name}.zip\""
-        end
-      end
-    end
   end
 
   context "as a student" do
-
     before do
       @course = create(:course_accepting_groups)
       @student = create(:user)
