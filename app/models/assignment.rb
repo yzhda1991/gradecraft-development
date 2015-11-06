@@ -161,11 +161,12 @@ class Assignment < ActiveRecord::Base
   end
 
   def student_submissions_for_team(team)
+    puts team
     Submission
       .includes(:submission_files)
       .includes(:student)
       .where(assignment_id: self[:id])
-      .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team[:id])
+      .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
       .to_a # force array to trigger eager loading call
   end
 
@@ -176,9 +177,10 @@ class Assignment < ActiveRecord::Base
   end
 
   def students_with_submissions_on_team(team)
+    puts team
     User
       .order_by_name
-      .where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team[:id])
+      .where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team.id)
   end
 
   private

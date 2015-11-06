@@ -1,4 +1,4 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 
 describe Assignment do
   include AssignmentsToolkit
@@ -595,6 +595,13 @@ describe Assignment do
     end
   end
 
+  describe "#fixed?" do
+    it "is fixed if the predictor display is fixed" do
+      subject.points_predictor_display = "Fixed"
+      expect(subject).to be_fixed
+    end
+  end
+
   describe "#future?" do
     it "is not for the future if there is no due date" do
       subject.due_at = nil
@@ -816,7 +823,7 @@ describe Assignment do
     end
   end
 
-  describe "#overdue?" do
+  describe "#overdue" do
     it "is not overdue if there is no due date" do
       subject.due_at = nil
       expect(subject).to_not be_overdue
@@ -918,6 +925,21 @@ describe Assignment do
     it "is open if there is a previous open date and a future accept date" do
       subject.accepts_submissions_until = 2.days.from_now
       expect(subject).to be_open
+    end
+
+    it "is opened if there is no open at date set" do
+      subject.open_at = nil
+      expect(subject).to be_opened
+    end
+
+    it "is opened if the open at date is in the past" do
+      subject.open_at = 2.days.ago
+      expect(subject).to be_opened
+    end
+
+    it "is not opened if the assignment opens in the future" do
+      subject.open_at = 2.days.from_now
+      expect(subject).to_not be_opened
     end
   end
 
