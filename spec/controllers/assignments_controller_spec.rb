@@ -306,7 +306,7 @@ describe AssignmentsController do
         expect(response).to render_template(:predictor_data)
       end
 
-      describe "student's score for released assignment", focus: true do
+      describe "student's score for released assignment" do
         let(:grade) { create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id) }
         let(:grade_attrs_expectation) {{ id: grade.id, pass_fail_status: nil, raw_score: grade.raw_score, score: grade.score, predicted_score: grade.predicted_score }}
         let(:assigned_grade_attrs) { predictor_grade_attributes_for(assigns(:grades).first) }
