@@ -192,11 +192,11 @@ class AssignmentPresenter < Showtime::Presenter
     course.teams
   end
 
-  def viewable_rubric_grades
-    assignment.rubric_grades
+  def viewable_rubric_grades(student_id)
+    assignment.rubric_grades.where(student_id: student_id)
   end
 
-  def viewable_rubric_tier_earned?(tier_id)
-    viewable_rubric_grades.any? { |rubric_grade| rubric_grade.tier_id == tier_id }
+  def viewable_rubric_tier_earned?(student_id, tier_id)
+    viewable_rubric_grades(student_id).any? { |rubric_grade| rubric_grade.tier_id == tier_id }
   end
 end
