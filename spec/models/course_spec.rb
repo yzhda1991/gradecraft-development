@@ -16,6 +16,36 @@ describe Course do
       expect(subject).to_not be_valid
       expect(subject.errors[:courseno]).to include "can't be blank"
     end
+
+    it "requires a numeric for max group size" do
+      subject.max_group_size = "a"
+      expect(subject).to_not be_valid
+      expect(subject.errors[:max_group_size]).to include "is not a number"
+    end
+
+    it "allows for a nil max group size" do
+      subject.max_group_size = nil
+      expect(subject).to be_valid
+      expect(subject.errors[:max_group_size]).to be_empty
+    end
+
+    it "requires the max group size to be greater than 0" do
+      subject.max_group_size = 0
+      expect(subject).to_not be_valid
+      expect(subject.errors[:max_group_size]).to include "must be greater than or equal to 1"
+    end
+
+    it "requires a numeric for min group size" do
+      subject.min_group_size = "a"
+      expect(subject).to_not be_valid
+      expect(subject.errors[:min_group_size]).to include "is not a number"
+    end
+
+    it "allows for a nil min group size" do
+      subject.min_group_size = nil
+      expect(subject).to be_valid
+      expect(subject.errors[:min_group_size]).to be_empty
+    end
   end
 
   describe "#students_being_graded" do
