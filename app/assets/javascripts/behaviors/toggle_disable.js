@@ -8,7 +8,6 @@ ToggleDisabled.prototype.toggleRecursive = function(el) {
 
 ToggleDisabled.prototype.toggle = function(el) {
   var $el = $(el);
-  console.log($el);
   var disabled = $el.is("input:disabled");
   if ($el.is(":input")) {
     $el.prop("disabled", !disabled);
