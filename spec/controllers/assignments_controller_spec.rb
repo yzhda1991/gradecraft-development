@@ -294,6 +294,15 @@ describe AssignmentsController do
         allow(controller).to receive(:current_course).and_return(@course)
       end
 
+      let(:grade) { create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id) }
+      let(:grade_attrs_expectation) {{
+        id: grade.id,
+        pass_fail_status: nil,
+        raw_score: grade.raw_score,
+        score: grade.score,
+        predicted_score: grade.predicted_score
+      }}
+
       it "assigns the assignments with the call to update" do
         get :predictor_data, format: :json, :id => @student.id
         expect(assigns(:assignments).current_user).to eq(@student)
@@ -304,6 +313,17 @@ describe AssignmentsController do
         end
         expect(assigns(:assignments).permission_to_update?).to be_truthy
         expect(response).to render_template(:predictor_data)
+      end
+
+      it "includes the student's grade with score for assignment when released" do
+        @grade = grade
+        get :predictor_data, format: :json, :id => @student.id
+        @assigned_grade_attrs = predictor_grade_attributes_for(assigns(:grades)[0])
+        @grade_attrs = predictor_grade_attributes_for(@grade)
+
+        expect(@assigned_grade_attrs).to eq(@grade_attrs)
+
+        expect(assigns(:assignments)[0].current_student_grade).to eq(student_grade_outcome)
       end
 
       it "includes student grade with no score if not released" do
@@ -408,6 +428,27 @@ end
 
 
 # helper methods:
+#
+def predictor_grade_attributes_for(object)
+  predictor_grade_attributes.inject({}) do |memo, attr|
+    memo[attr] = object.send(attr)
+    memo
+  end
+end
+
+def predictor_grade_attributes
+  [
+    :assignment_id,
+    :final_score,
+    :id,
+    :predicted_score,
+    :pass_fail_status,
+    :status,
+    :student_id,
+    :raw_score,
+    :score
+  ]
+end
 
 def predictor_assignment_attributes
   [
