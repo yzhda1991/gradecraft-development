@@ -19,15 +19,15 @@ class ExportsMailer < ApplicationMailer
 
   def team_submissions_export_success(professor, assignment, team, archive_data)
     cache_team_submission_attrs(professor, assignment, team, archive_data)
-    mail(default_attrs.merge(:subject => "Submissions export for team #{@team.name} is ready")) do |format|
+    mail(default_attrs.merge(:subject => "Submissions export for #{@course.team_term.downcase} #{@team.name} is ready")) do |format|
       format.text
       format.html
     end
   end
 
-  def team_submissions_export_failed(professor, assignment, team, archive_data)
+  def team_submissions_export_failure(professor, assignment, team, archive_data)
     cache_team_submission_attrs(professor, assignment, team, archive_data)
-    mail(default_attrs.merge(:subject => "Submissions export for team #{@team.name} failed to build")) do |format|
+    mail(default_attrs.merge(:subject => "Submissions export for #{@course.team_term.downcase} #{@team.name} failed to build")) do |format|
       format.text
       format.html
     end

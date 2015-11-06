@@ -47,7 +47,9 @@ describe NotificationMailer do
 
   let(:professor) { create(:user) }
   let(:assignment) { create(:assignment, course: course) }
-  let(:course) { create(:course, assignment_term: "deception") }
+  let(:course) { create(:course, assignment_term: "deception", team_term: "ascension") }
+  let(:team) { create(:team, course: course) }
+  let(:team_term) { course.team_term.downcase }
   let(:archive_data) {{ format: "zip", url: "http://aws.com/some-archive-hash" }}
 
   before(:each) { deliver_email }
@@ -107,7 +109,7 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_success" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_success(professor, assignment, archive_data).deliver_now }
+    let(:deliver_email) { ExportsMailer.team_submissions_export_success(professor, assignment, team, archive_data).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -116,7 +118,7 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for #{team.name} is ready"
+      expect(email.subject).to eq "Submissions export for #{team_term} #{team.name} is ready"
     end
 
     describe "text part body" do
@@ -137,7 +139,7 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_failure" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_failure(professor, assignment, archive_data).deliver_now }
+    let(:deliver_email) { ExportsMailer.team_submissions_export_failure(professor, assignment, team,  archive_data).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -146,7 +148,7 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for #{team.name} failed to build"
+      expect(email.subject).to eq "Submissions export for #{team_term} #{team.name} failed to build"
     end
 
     describe "text part body" do
