@@ -1,8 +1,8 @@
-Dear #{ @user.first_name },
+Dear #{ @professor.first_name },
 
-Your requested export for assignment "#{ @assignment.name }" was successfully created.
+Your requested export for #{ @course.assignment_term.downcase} "#{ @assignment.name }" was successfully created for course #{ @course.name }.
 
-You can download your completed #{@archive_format} archive here: #{ @final_archive_path }.
+You can download your completed #{@archive_data[:format]} archive here: #{ @archive_data[:url] }.
 
 Sincerely,
 GradeCraft

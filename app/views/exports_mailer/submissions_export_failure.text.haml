@@ -1,8 +1,8 @@
-Dear #{ @user.first_name },
+Dear #{ @professor.first_name },
 
-Your requested export for assignment "#{ @assignment.name }" was successfully created.
+Your requested submissions export for #{ @assignment.name } failed to complete.
 
-You can download your completed #{@archive_format} archive here: #{ @final_archive_path }.
+Our system administrators have been notified of the problem. You may send an email to #{ ADMIN_EMAIL } if you'd like.
 
 Sincerely,
-GradeCraft
+The GradeCraft Team
