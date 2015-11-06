@@ -97,45 +97,47 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
-  def group_created(group_id, professor)
-    @group = Group.find group_id
-    @course = @group.course
-    @professor = professor
-    mail(to: @professor.email, subject: "#{@course.courseno} - New Group to Review") do |format|
-      format.text
-    end
-  end
-
-  def group_notify(group_id)
-    @group = Group.find group_id
-    @course = @group.course
-    @group.students.each do |group_member|
-      mail(to: group_member.email, subject: "#{@course.courseno} - New Group") do |format|
-        @student = group_member
-        format.text
-      end
-    end
-  end
-
-  def group_status_updated(group_id)
-    @group = Group.find group_id
-    @course = @group.course
-    @group.students.each do |group_member|
-      mail(to: group_member.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
-        @student = group_member
-        format.text
-      end
-    end
-  end
 
   def earned_badge_awarded(earned_badge_id)
     @earned_badge = EarnedBadge.find earned_badge_id
-    @user = @earned_badge.student
+    @student = @earned_badge.student
     @course = @earned_badge.course
-    mail(to: @user.email,
+    mail(to: @student.email,
       subject: "#{@course.courseno} - You've earned a new #{@course.badge_term}!") do |format|
       format.text
       format.html
     end
   end
+
+  #  def group_created(group_id, professor)
+  #    @group = Group.find group_id
+  #    @course = @group.course
+  #    @professor = professor
+  #    mail(to: @professor.email, subject: "#{@course.courseno} - New Group to Review") do |format|
+  #      format.text
+  #    end
+  #  end
+
+  # these have been commented out in the group controller
+  # def group_notify(group_id)
+  #   @group = Group.find group_id
+  #   @course = @group.course
+  #   @group.students.each do |group_member|
+  #     mail(to: group_member.email, subject: "#{@course.courseno} - New Group") do |format|
+  #       @student = group_member
+  #       format.text
+  #     end
+  #   end
+  # end
+
+  # def group_status_updated(group_id)
+  #   @group = Group.find group_id
+  #   @course = @group.course
+  #   @group.students.each do |group_member|
+  #     mail(to: group_member.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
+  #       @student = group_member
+  #       format.text
+  #     end
+  #   end
+  # end
 end
