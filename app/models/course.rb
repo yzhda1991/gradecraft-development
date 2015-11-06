@@ -115,7 +115,6 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
   validates_presence_of :name, :courseno
-  # @mz todo: rewrite max_group_size and min_group_size
   validates_numericality_of :max_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
   validates_numericality_of :min_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
 
@@ -424,13 +423,13 @@ class Course < ActiveRecord::Base
         memo << student.send(method)
       end
       # todo: we need to pre-fetch the course teams for this
-      student_data << student.team_for_course(@course).try(:name) 
-      
+      student_data << student.team_for_course(@course).try(:name)
+
       # add the grades for the necessary assignments, todo: improve the performance here
       assignments.inject(student_data) do |memo, assignment|
         grade = assignment.grade_for_student(student)
         if grade and grade.is_student_visible?
-          memo << grade.try(:raw_score) 
+          memo << grade.try(:raw_score)
         else
           memo << ''
         end
@@ -452,13 +451,13 @@ class Course < ActiveRecord::Base
         memo << student.send(method)
       end
       # todo: we need to pre-fetch the course teams for this
-      student_data << student.team_for_course(@course).try(:name) 
-      
+      student_data << student.team_for_course(@course).try(:name)
+
       # add the grades for the necessary assignments, todo: improve the performance here
       assignments.inject(student_data) do |memo, assignment|
         grade = assignment.grade_for_student(student)
         if grade and grade.is_student_visible?
-          memo << grade.try(:raw_score) 
+          memo << grade.try(:raw_score)
           memo << grade.try(:score)
         end
         memo
@@ -466,7 +465,7 @@ class Course < ActiveRecord::Base
     end
   end
 
-   
+
   # todo: needs to be refactored as a CSV exporter
   def research_grades_csv(options = {})
     CSV.generate(options) do |csv|
