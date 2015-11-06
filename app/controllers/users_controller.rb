@@ -159,7 +159,8 @@ class UsersController < ApplicationController
       redirect_to users_path
     else
       @result = StudentImporter.new(params[:file].tempfile,
-                                    params[:internal_students] == "1")
+                                    params[:internal_students] == "1",
+                                    params[:send_welcome] == "1")
         .import(current_course)
       render :import_results
     end
