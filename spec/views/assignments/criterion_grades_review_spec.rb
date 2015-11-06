@@ -7,7 +7,7 @@ describe "assignments/criterion_grades_review" do
 
   before(:all) do
     @course = create(:course)
-    @assignment = create(:assignment, course: @course)
+    @assignment = create(:assignment)
   end
 
   before(:each) do
