@@ -1,10 +1,11 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 
 describe SubmissionFile do
   let(:course) { build(:course) }
   let(:assignment) { build(:assignment) }
   let(:student) { build(:user) }
   let(:submission) { build(:submission, course: course, assignment: assignment, student: student) }
+  let(:submission_file) { submission.submission_files.last }
 
   subject { submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg')) }
 
@@ -90,13 +91,13 @@ describe SubmissionFile do
   end
 
   it "has a content_type method" do
-    @submission.save!
-    expect(@submission_file.content_type).to eq("img/jpg")
+    subject.submission.save!
+    expect(submission_file.content_type).to eq("img/jpg")
   end
 
   it "shortens and removes non-word characters from file names on save" do
-    @submission_file.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
-    @submission.save!
-    expect(@submission_file.url).to match(/.*\/uploads\/submission_file\/file\/#{@submission_file.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
+    submission_file.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
+    submission_file.save!
+    expect(submission_file.url).to match(/.*\/uploads\/submission_file\/file\/#{submission_file.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
   end
 end
