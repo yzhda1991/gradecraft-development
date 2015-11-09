@@ -111,8 +111,8 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.fetch_or_create_rubric
   end
 
-  def rubric_available?
-    assignment.use_rubric? && !assignment.rubric.nil? && assignment.rubric.designed?
+  def rubric_designed?
+    !assignment.rubric.nil? && assignment.rubric.designed?
   end
 
   def rubric_grades(user)
@@ -128,6 +128,10 @@ class AssignmentPresenter < Showtime::Presenter
 
   def rubric_tier_earned?(user, tier_id)
     rubric_grades(user).any? { |rubric_grade| rubric_grade.tier_id == tier_id }
+  end
+
+  def use_rubric?
+    assignment.use_rubric?
   end
 
   def scores
