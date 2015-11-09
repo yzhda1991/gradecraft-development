@@ -75,12 +75,10 @@ describe User do
   end
 
   describe ".students_by_team" do
-    let(:team) { create :team, course: world.course }
-    before do
-      team.students << world.student
-    end
+    let(:team) { world.create_team.team }
 
     it "returns only students in the team" do
+      team.students << world.student
       result = User.students_by_team(world.course, team)
       expect(result.pluck(:id)).to eq [world.student.id]
     end
@@ -150,80 +148,75 @@ describe User do
 
   context "earn_badges" do
     it "should be able to earn badges" do
-      @badges = create_list(:badge, 2, course: world.course)
-      world.student.earn_badges(@badges)
-      @badges_earned = world.student.earned_badges.collect {|e| e.badge }.sort_by(&:id)
-      expect(@badges_earned).to eq(@badges.sort_by(&:id))
+      badges = create_list(:badge, 2, course: world.course)
+      world.student.earn_badges(badges)
+      badges_earned = world.student.earned_badges.collect {|e| e.badge }.sort_by(&:id)
+      expect(badges_earned).to eq(badges.sort_by(&:id))
     end
   end
 
   context "student_visible_earned_badges" do
     it "should know which badges a student has earned" do
-      @earned_badges = create_list(:earned_badge, 3, course: world.course, student: world.student, student_visible: true)
-      expect(world.student.student_visible_earned_badges(world.course)).to eq(@earned_badges)
+      earned_badges = create_list(:earned_badge, 3, course: world.course, student: world.student, student_visible: true)
+      expect(world.student.student_visible_earned_badges(world.course)).to eq(earned_badges)
     end
 
     it "should not select non-visible student badges" do
-      @earned_badges = create_list(:earned_badge, 3, course: world.course, student: world.student, student_visible: false)
+      earned_badges = create_list(:earned_badge, 3, course: world.course, student: world.student, student_visible: false)
       expect(world.student.student_visible_earned_badges(world.course)).to be_empty
     end
 
     it "should not return unearned badges as earned badges" do
-      @unearned_badges = create_list(:badge, 2, course: world.course)
-      @visible_earned_badges = create_list(:earned_badge, 3, course: world.course, student: world.student)
-      @unique_earned_badges = world.student.student_visible_earned_badges(world.course)
-      expect(@unique_earned_badges).not_to include(*@unearned_badges)
+      unearned_badges = create_list(:badge, 2, course: world.course)
+      visible_earned_badges = create_list(:earned_badge, 3, course: world.course, student: world.student)
+      unique_earned_badges = world.student.student_visible_earned_badges(world.course)
+      expect(unique_earned_badges).not_to include(*unearned_badges)
     end
   end
 
   context "unique_student_earned_badges" do
     before(:each) do
-      @earned_badges = create_list(:earned_badge, 3, course: world.course, student: world.student, student_visible: true)
-      @sorted_badges = world.student.earned_badges.collect(&:badge).sort_by(&:id).flatten
-      @badges_unearned = create_list(:badge, 2, course: world.course)
+      create_list(:earned_badge, 3, course: world.course, student: world.student, student_visible: true)
     end
 
     it "should know which badges are unique to those student earned badges" do
-      world.student.unique_student_earned_badges(world.course).each
-      expect(world.student.unique_student_earned_badges(world.course)).to eq(@sorted_badges)
+      sorted_badges = world.student.earned_badges.collect(&:badge).sort_by(&:id).flatten
+      expect(world.student.unique_student_earned_badges(world.course)).to eq(sorted_badges)
     end
 
     it "should not return badges associated with student-unearned badges" do
-      expect(world.student.unique_student_earned_badges(world.course)).not_to include(*@badges_unearned)
+      badges_unearned = create_list(:badge, 2, course: world.course)
+      expect(world.student.unique_student_earned_badges(world.course)).not_to include(*badges_unearned)
     end
   end
 
   context "student_visible_unearned_badges" do
-    before(:each) do
-      @badges = create_list(:badge, 2, course: world.course, visible: true)
-    end
-
     it "should know which badges a student has yet to earn" do
-      expect(world.student.student_visible_unearned_badges(world.course)).to eq(@badges.flatten)
+      badges = create_list(:badge, 2, course: world.course, visible: true)
+      expect(world.student.student_visible_unearned_badges(world.course)).to eq(badges)
     end
 
     it "should not return earned badges as unearned ones" do
-      @earned_badges = create_list(:earned_badge, 2, course: world.course, student: world.student)
-      expect(world.student.student_visible_unearned_badges(world.course)).not_to include(*@earned_badges)
+      earned_badges = create_list(:earned_badge, 2, course: world.course, student: world.student)
+      expect(world.student.student_visible_unearned_badges(world.course)).not_to include(*earned_badges)
     end
   end
 
   context "instructor is editing the grade for a student's submission" do
     before(:each) do
-      @single_badge = create(:badge, course: world.course, can_earn_multiple_times: false)
-      @multi_badge = create(:badge, course: world.course, can_earn_multiple_times: true)
+      @single_badge = world.create_badge(can_earn_multiple_times: false).badge
+      @multi_badge = world.create_badge(can_earn_multiple_times: true).badges.last
 
-      @another_assignment = create(:assignment, course: world.course)
-      @another_grade = create(:grade, assignment: @another_assignment, assignment_type: @another_assignment.assignment_type, course: world.course, student: world.student)
+      another_assignment = world.create_assignment.assignments.last
+      @another_grade = world.create_grade(assignment: another_assignment).grades.last
     end
 
     it "should not see badges that aren't included in the current course" do
-      @some_other_course = create(:course)
-      @some_other_assignment = create(:assignment, course: @some_other_course)
-      @some_other_grade = create(:grade, assignment: @some_other_assignment, assignment_type: @some_other_assignment.assignment_type, course: @some_other_course, student: world.student)
-      @some_other_badge = create(:badge, course: @some_other_course)
-
-      expect(world.student.earnable_course_badges_for_grade(world.grade)).not_to include(@some_other_badge)
+      some_other_course = create(:course)
+      some_other_assignment = create(:assignment, course: some_other_course)
+      some_other_grade = create(:grade, assignment: some_other_assignment, assignment_type: some_other_assignment.assignment_type, course: some_other_course, student: world.student)
+      some_other_badge = create(:badge, course: some_other_course)
+      expect(world.student.earnable_course_badges_for_grade(world.grade)).not_to include(some_other_badge)
     end
 
     it "should see badges for the current course" do
@@ -254,10 +247,11 @@ describe User do
 
   context "user earns just one badge" do
     before(:each) do
-      @current_course = create(:course)
-      @current_assignment = create(:assignment, course: @current_course)
-      @current_grade = create(:grade, assignment: @current_assignment, assignment_type: @current_assignment.assignment_type, course: @current_course, student: world.student)
-      @current_badge = create(:badge, course: @current_course)
+      world
+        .create_course
+        .create_assignment(course: world.courses.last)
+        .create_grade(assignment: world.assignments.last, course: world.courses.last)
+      @current_badge = world.create_badge(course: world.courses.last).badges.last
     end
 
     it "should create a valid earned badge" do
@@ -276,17 +270,17 @@ describe User do
 
   context "student_invisible_badges" do
     it "should return invisible badges for which the student has earned a badge" do
-      @invisible_badges = create_list(:badge, 2, course: world.course, visible: false)
-      world.student.earn_badges(@invisible_badges)
-      @badges_earned_by_id = world.student.student_invisible_badges(world.course)
-      expect(@badges_earned_by_id).to eq(@invisible_badges)
+      invisible_badges = create_list(:badge, 2, course: world.course, visible: false)
+      world.student.earn_badges(invisible_badges)
+      badges_earned_by_id = world.student.student_invisible_badges(world.course)
+      expect(badges_earned_by_id).to eq(invisible_badges)
     end
 
     it "should not return visible badges for which the student has earned a badge" do
-      @visible_badges = create_list(:badge, 2, course: world.course, visible: true)
-      world.student.earn_badges(@visible_badges)
-      @badges_earned_by_id = world.student.student_invisible_badges(world.course).sort_by(&:id)
-      expect(@badges_earned_by_id).not_to eq(@visible_badges.sort_by(&:id))
+      visible_badges = create_list(:badge, 2, course: world.course, visible: true)
+      world.student.earn_badges(visible_badges)
+      badges_earned_by_id = world.student.student_invisible_badges(world.course).sort_by(&:id)
+      expect(badges_earned_by_id).not_to eq(visible_badges.sort_by(&:id))
     end
   end
 end
