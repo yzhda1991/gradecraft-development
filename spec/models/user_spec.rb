@@ -1,5 +1,4 @@
 require "active_record_spec_helper"
-require "./spec/support/world"
 
 describe User do
   let!(:world) do
