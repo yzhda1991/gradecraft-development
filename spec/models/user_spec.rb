@@ -6,11 +6,8 @@ describe User do
     World.create
       .create_course
       .create_student
-  end
-
-  before(:each) do
-    @assignment = create(:assignment, course: world.course)
-    @grade = create(:grade, assignment: @assignment, assignment_type: @assignment.assignment_type, course: world.course, student: world.student)
+      .create_assignment
+      .create_grade
   end
 
   describe ".find_by_insensitive_email" do
@@ -103,12 +100,12 @@ describe User do
 
   describe "#self_reported_done?" do
     it "is not self reported if there are no grades" do
-      expect(world.student).to_not be_self_reported_done(@assignment)
+      expect(world.student).to_not be_self_reported_done(world.assignment)
     end
 
     it "is self reported if there is at least one graded grade" do
-      @grade.update_attribute :status, "Graded"
-      expect(world.student).to be_self_reported_done(@assignment)
+      world.grade.update_attribute :status, "Graded"
+      expect(world.student).to be_self_reported_done(world.assignment)
     end
   end
 
@@ -226,32 +223,32 @@ describe User do
       @some_other_grade = create(:grade, assignment: @some_other_assignment, assignment_type: @some_other_assignment.assignment_type, course: @some_other_course, student: world.student)
       @some_other_badge = create(:badge, course: @some_other_course)
 
-      expect(world.student.earnable_course_badges_for_grade(@grade)).not_to include(@some_other_badge)
+      expect(world.student.earnable_course_badges_for_grade(world.grade)).not_to include(@some_other_badge)
     end
 
     it "should see badges for the current course" do
       EarnedBadge.destroy_all course_id: world.course[:id]
-      expect(world.student.earnable_course_badges_for_grade(@grade)).to include(@single_badge, @multi_badge)
+      expect(world.student.earnable_course_badges_for_grade(world.grade)).to include(@single_badge, @multi_badge)
     end
 
     it "should show course badges that the student has yet to earn", broken: true do
       EarnedBadge.destroy_all course_id: world.course[:id]
-      expect(world.student.earnable_course_badges_for_grade(@grade)).to include(@single_badge, @multi_badge)
+      expect(world.student.earnable_course_badges_for_grade(world.grade)).to include(@single_badge, @multi_badge)
     end
 
     it "should not show badges that the student has earned for other grades, and can't be earned multiple times" do
       world.student.earn_badge_for_grade(@single_badge, @another_grade) # earn the badge on another grade
-      expect(world.student.earnable_course_badges_for_grade(@grade)).not_to include(@single_badge)
+      expect(world.student.earnable_course_badges_for_grade(world.grade)).not_to include(@single_badge)
     end
 
     it "should show badges that the student has earned but CAN be earned multiple times", broken: true do
-      world.student.earn_badge_for_grade(@multi_badge, @grade)
-      expect(world.student.earnable_course_badges_for_grade(@grade)).to include(@multi_badge)
+      world.student.earn_badge_for_grade(@multi_badge, world.grade)
+      expect(world.student.earnable_course_badges_for_grade(world.grade)).to include(@multi_badge)
     end
 
     it "should show badges that the student has earned for the current grade, even if it can't be earned multiple times" do
-      world.student.earn_badge_for_grade(@single_badge, @grade)
-      expect(world.student.earnable_course_badges_for_grade(@grade)).to include(@single_badge)
+      world.student.earn_badge_for_grade(@single_badge, world.grade)
+      expect(world.student.earnable_course_badges_for_grade(world.grade)).to include(@single_badge)
     end
   end
 
