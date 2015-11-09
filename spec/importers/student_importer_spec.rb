@@ -1,6 +1,8 @@
 require 'rails_spec_helper'
 
 describe StudentImporter do
+  before(:all) { User.destroy_all }
+
   describe "#import" do
     it "returns empty results when there is no file" do
       result = StudentImporter.new(nil).import
@@ -9,75 +11,120 @@ describe StudentImporter do
     end
 
     context "with a file" do
-      let(:file) { fixture_file "users.csv", "text/csv" }
       let(:course) { create :course }
       let(:team) { Team.unscoped.last }
       let(:user) { User.unscoped.last }
-      subject { StudentImporter.new(file.tempfile) }
       before { create :team, course: course, name: "Zeppelin" }
 
-      it "creates the student accounts" do
-        subject.import course
-        expect(user.email).to eq "jimmy@example.com"
-        expect(user.crypted_password).to_not be_blank
-        expect(user.course_memberships.first.course).to eq course
-        expect(user.course_memberships.first.role).to eq "student"
+      context "with GradeCraft students" do
+        let(:file) { fixture_file "users.csv", "text/csv" }
+        subject { StudentImporter.new(file.tempfile) }
+
+        it "creates the student accounts" do
+          subject.import course
+          expect(user.email).to eq "jimmy@example.com"
+          expect(user.crypted_password).to_not be_blank
+          expect(user.course_memberships.first.course).to eq course
+          expect(user.course_memberships.first.role).to eq "student"
+        end
+
+        it "adds the students to the team if the team exists" do
+          subject.import course
+          expect(team.name).to eq "Zeppelin"
+          expect(team.students.first.email).to eq "jimmy@example.com"
+        end
+
+        it "just adds the student to the team if the student already exists" do
+          User.create first_name: "Jimmy", last_name: "Page",
+              email: "jimmy@example.com", username: "jimmy", password: "blah"
+          subject.import course
+          expect(team.students.first.email).to eq "jimmy@example.com"
+        end
+
+        it "creates the team and adds the student if the team does not exist" do
+          Team.unscoped.last.destroy
+          subject.import course
+          expect(team.name).to eq "Zeppelin"
+          expect(team.students.first.email).to eq "jimmy@example.com"
+        end
+        it "does not add the student to the team if a team is not specified" do
+          subject.import course
+          user = User.unscoped.first
+          expect(team.students).to_not include user
+        end
+
+        it "sends the activation email to each student" do
+          expect { subject.import course }.to \
+            change { ActionMailer::Base.deliveries.count }.by 2
+        end
+
+        it "contains a successful user if the user and team are valid" do
+          result = subject.import course
+          expect(result.successful.count).to eq 2
+          expect(result.successful.last).to eq user
+        end
+
+        it "contains an unsuccessful row if the user is not valid" do
+          user = User.create first_name: "Jimmy", last_name: "Page",
+              email: "jimmy@example.com", username: "jimmy", password: "blah"
+          user.update_attribute :username, ""
+          result = subject.import course
+          expect(result.successful.count).to eq 1
+          expect(result.unsuccessful.count).to eq 1
+          expect(result.unsuccessful.first[:errors]).to eq "Username can't be blank"
+        end
+
+        it "contains an unsuccessful row if the team is not valid" do
+          allow_any_instance_of(Team).to receive(:valid?).and_return false
+          allow_any_instance_of(Team).to receive(:errors).and_return double(full_messages: ["The team is not cool"])
+          result = subject.import course
+          expect(result.successful.count).to eq 1
+          expect(result.unsuccessful.count).to eq 1
+          expect(result.unsuccessful.first[:errors]).to eq "The team is not cool"
+        end
       end
 
-      it "adds the students to the team if the team exists" do
-        subject.import course
-        expect(team.name).to eq "Zeppelin"
-        expect(team.students.first.email).to eq "jimmy@example.com"
-      end
+      context "with UM students" do
+        let(:file) { fixture_file "internal_users.csv", "text/csv" }
+        subject { StudentImporter.new(file.tempfile, true) }
 
-      it "just adds the student to the team if the student already exists" do
-        User.create first_name: "Jimmy", last_name: "Page",
-            email: "jimmy@example.com", username: "jimmy", password: "blah"
-        subject.import course
-        expect(team.students.first.email).to eq "jimmy@example.com"
-      end
+        it "creates the student accounts with emails specified" do
+          subject.import course
+          expect(user.email).to eq "richard@umich.edu"
+          expect(user.username).to eq "richard"
+          expect(user.course_memberships.first.course).to eq course
+          expect(user.course_memberships.first.role).to eq "student"
+        end
 
-      it "creates the team and adds the student if the team does not exist" do
-        Team.unscoped.last.destroy
-        subject.import course
-        expect(team.name).to eq "Zeppelin"
-        expect(team.students.first.email).to eq "jimmy@example.com"
-      end
+        it "creates the student accounts with unique names specified" do
+          subject.import course
+          user =  User.unscoped.first
+          expect(user.email).to eq "peter@umich.edu"
+          expect(user.username).to eq "peter"
+          expect(user.course_memberships.first.course).to eq course
+          expect(user.course_memberships.first.role).to eq "student"
+        end
 
-      it "does not add the student to the team if a team is not specified" do
-        subject.import course
-        user = User.unscoped.first
-        expect(team.students).to_not include user
-      end
+        it "does not store a password for the student" do
+          subject.import course
+          expect(user.crypted_password).to be_blank
+        end
 
-      it "sends the activation email to each student" do
-        expect { subject.import course }.to \
-          change { ActionMailer::Base.deliveries.count }.by 2
-      end
+        it "activates the users" do
+          subject.import course
+          expect(User.all.all?(&:activated?)).to eq true
+        end
 
-      it "contains a successful user if the user and team are valid" do
-        result = subject.import course
-        expect(result.successful.count).to eq 2
-        expect(result.successful.last).to eq user
-      end
+        it "does not send the activation email to each student" do
+          expect { subject.import course }.to_not \
+            change { ActionMailer::Base.deliveries.count }
+        end
 
-      it "contains an unsuccessful row if the user is not valid" do
-        user = User.create first_name: "Jimmy", last_name: "Page",
-            email: "jimmy@example.com", username: "jimmy", password: "blah"
-        user.update_attribute :username, ""
-        result = subject.import course
-        expect(result.successful.count).to eq 1
-        expect(result.unsuccessful.count).to eq 1
-        expect(result.unsuccessful.first[:errors]).to eq "Username can't be blank"
-      end
-
-      it "contains an unsuccessful row if the team is not valid" do
-        allow_any_instance_of(Team).to receive(:valid?).and_return false
-        allow_any_instance_of(Team).to receive(:errors).and_return double(full_messages: ["The team is not cool"])
-        result = subject.import course
-        expect(result.successful.count).to eq 1
-        expect(result.unsuccessful.count).to eq 1
-        expect(result.unsuccessful.first[:errors]).to eq "The team is not cool"
+        it "can send a welcome email to each student" do
+          subject = StudentImporter.new(file.tempfile, true, true)
+          expect { subject.import course }.to \
+            change { ActionMailer::Base.deliveries.count }.by 2
+        end
       end
     end
   end

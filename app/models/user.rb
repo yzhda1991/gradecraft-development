@@ -149,6 +149,10 @@ class User < ActiveRecord::Base
     where("LOWER(email) = :email", email: email.downcase).first
   end
 
+  def self.find_by_insensitive_username(username)
+    where("LOWER(username) = :username", username: username.downcase).first
+  end
+
   #Course
   def find_scoped_courses(course_id)
     if is_admin? || self.course_ids.include?(course_id)
