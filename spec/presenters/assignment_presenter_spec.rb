@@ -100,28 +100,21 @@ describe AssignmentPresenter do
     let(:rubric) { double(:rubric, designed?: true) }
 
     it "is not available if there is no rubric attached to the assignment" do
-      allow(assignment).to receive(:use_rubric?).and_return true
       allow(assignment).to receive(:rubric).and_return nil
       expect(subject.rubric_available?).to eq false
     end
 
-    it "is not available if the assignment should not use a rubric" do
-      allow(assignment).to receive(:use_rubric?).and_return false
-      allow(assignment).to receive(:rubric).and_return rubric
-      expect(subject.rubric_available?).to eq false
-    end
-
     it "is not available if the rubric was not designed" do
-      allow(assignment).to receive(:use_rubric?).and_return true
       allow(assignment).to receive(:rubric).and_return rubric
       allow(rubric).to receive(:designed?).and_return false
       expect(subject.rubric_available?).to eq false
     end
+  end
 
-    it "is available if the rubric is designed and the assignment should use it" do
-      allow(assignment).to receive(:use_rubric?).and_return true
-      allow(assignment).to receive(:rubric).and_return rubric
-      expect(subject.rubric_available?).to eq true
+  describe "#use_rubric?" do
+    it "is not to be used if the assignment should not use a rubric" do
+      allow(assignment).to receive(:use_rubric?).and_return false
+      expect(subject.rubric_available?).to eq false
     end
   end
 
