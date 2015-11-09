@@ -37,7 +37,7 @@
       %li
         %a{:href => design_assignment_rubric_path(presenter.assignment) }
           .fa.fa-sliders.fa-fw
-          - if presenter.rubric_available?
+          - if presenter.rubric_designed?
             Edit Rubric
           - else
             Create Rubric
