@@ -111,7 +111,7 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.fetch_or_create_rubric
   end
 
-  def rubric_available?
+  def rubric_designed?
     !assignment.rubric.nil? && assignment.rubric.designed?
   end
 
