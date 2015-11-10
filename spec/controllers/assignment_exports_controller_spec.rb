@@ -56,10 +56,56 @@ RSpec.describe AssignmentExportsController, type: :controller do
   end
 
   describe "GET submissions" do
-    let(:submissions_params) {{ assignment_id: 19 }}
+
+  end
+
+  describe "GET submissions" do
+    let(:submissions_params) {{ assignment_id: "19" }}
     let(:submissions_job_attributes) { submissions_params.merge(professor_id: professor.id) }
     let(:make_request) { get :submissions, submissions_params }
 
+    before { login_user(professor) }
+
+    describe "building the job" do
+      it "instantiates a new assignment export job" do
+        make_request
+        expect(assigns(:assignment_export_job).class).to eq(AssignmentExportJob)
+      end
+
+      it "creates a job with the team submissions attributes" do
+        allow(AssignmentExportJob).to receive(:new) { job_double }
+        expect(AssignmentExportJob).to receive(:new).with submissions_job_attributes
+        make_request
+      end
+
+      it "enqueues the job" do
+        allow(AssignmentExportJob).to receive(:new) { job_double }
+        expect(job_double).to receive(:enqueue)
+        make_request
+      end
+    end
+
+    describe "response" do
+      let(:imaginary_response) {{ status: 900, json: "the job is totally sweet and enqueued now" }}
+      before(:each) do
+        allow(controller).to receive(:submissions_response) { imaginary_response }
+        make_request
+      end
+
+      it "renders the submissions response" do
+        expect(response.status).to eq(900)
+      end
+    end
+
+    describe "authorizations" do
+      context"student request" do
+        it "redirects the student to the homepage" do
+          login_user(student)
+          make_request
+          expect(response).to redirect_to(root_path)
+        end
+      end
+    end
   end
 
   describe "submissions_response (protected)" do
