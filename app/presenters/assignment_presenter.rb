@@ -115,10 +115,10 @@ class AssignmentPresenter < Showtime::Presenter
     !assignment.rubric.nil? && assignment.rubric.designed?
   end
 
-  def rubric_grades(user)
+  def rubric_grades(user_id)
     RubricGrade.
       joins("left outer join submissions on submissions.id = rubric_grades.submission_id").
-      where(student_id: user.id).
+      where(student_id: user_id).
       where(assignment_id: assignment.id)
   end
 
@@ -126,8 +126,8 @@ class AssignmentPresenter < Showtime::Presenter
     rubric.max_tier_count
   end
 
-  def rubric_tier_earned?(user, tier_id)
-    rubric_grades(user).any? { |rubric_grade| rubric_grade.tier_id == tier_id }
+  def rubric_tier_earned?(user_id, tier_id)
+    rubric_grades(user_id).any? { |rubric_grade| rubric_grade.tier_id == tier_id }
   end
 
   def use_rubric?
