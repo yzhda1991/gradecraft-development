@@ -10,8 +10,8 @@ module ResqueJobSharedExamplesToolkit
     end
 
     it "builds a new #{job_klass}" do
+      expect(job_klass).to receive(:new).and_call_original
       subject
-      expect(assigns(job_klass.to_s.underscore.to_sym).class).to eq(job_klass)
     end
   end
 

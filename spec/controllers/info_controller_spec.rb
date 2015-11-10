@@ -59,9 +59,22 @@ describe InfoController do
 
     describe "GET gradebook" do
       it "retrieves the gradebook" do
-        skip "implement"
+        expect(GradebookExporterJob).to \
+          receive(:new).with(user_id: @professor.id, course_id: @course.id)
+            .and_call_original
+        expect_any_instance_of(GradebookExporterJob).to receive(:enqueue)
         get :gradebook
-        expect(response).to render_template(:gradebook)
+      end
+
+      it "redirects to the root path if there is no referer" do
+        get :gradebook
+        expect(response).to redirect_to root_path
+      end
+
+      it "redirects to the referer if there is one" do
+        allow(request).to receive(:referer).and_return dashboard_path
+        get :gradebook
+        expect(response).to redirect_to dashboard_path
       end
     end
 
