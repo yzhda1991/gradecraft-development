@@ -1,12 +1,16 @@
 // Matching the main content div to the size of the window
 //Initial load of page
 
+$(".make-lizards").dblclick(function() {
+  $(".fa").toggleClass("fa-hand-lizard-o");
+});
+
 $( "#tabs" ).tabs({
   event: "mouseover"
 });
 
  $('.froala').editable(
-    {inlineMode: false, 
+    {inlineMode: false,
       minHeight: 280
     })
 

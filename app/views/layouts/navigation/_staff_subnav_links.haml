@@ -91,7 +91,7 @@
 - if current_user_is_admin?
   %hr
 
-  %h5 Admin
+  %h5{ class: "make-lizards" } Admin
   %li= link_to_unless_current raw('<i class="fa fa-user-times fa-fw"></i> All Users'), users_path
   %li= link_to_unless_current raw('<i class="fa fa-university fa-fw"></i> Course Index'), courses_path
   %li= link_to_unless_current raw('<i class="fa fa-check-square-o fa-fw"></i> Predictor Settings'), predictor_settings_course_path(current_course)
