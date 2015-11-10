@@ -54,6 +54,9 @@
   %li= link_to_unless_current raw('<i class="fa fa-list-ul fa-fw"></i> Final Grades'), final_grades_path(format: 'csv')
   %li
     %a{:href => gradebook_path(format: 'csv')} <i class="fa fa-table fa-fw"></i> Full Gradebook
+  - if current_course.student_weighted?
+    %li
+      %a{:href => multiplied_gradebook_path(format: 'csv')} <i class="fa fa-table fa-fw"></i> Multiplied Gradebook
   %li
     %a{:href => export_all_scores_assignment_types_path(format: 'csv')} <i class="fa fa-th-large fa-fw"></i> #{term_for :assignment_type } Summaries
 
