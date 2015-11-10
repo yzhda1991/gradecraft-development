@@ -22,7 +22,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
       end
 
       it "returns a pleasant message" do
-        expect(submissions_response[:status]).to match "Your archive is being prepared."
+        expect(submissions_response[:json]).to match "Your archive is being prepared."
       end
     end
 
@@ -34,7 +34,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
       end
 
       it "returns a forboding message" do
-        expect(submissions_response[:status]).to match "Your archive failed to build."
+        expect(submissions_response[:json]).to match "Your archive failed to build."
       end
     end
   end
