@@ -3,7 +3,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
     fetch_assets
   end
 
-  private
+  protected
 
   def fetch_assets
     @assignment = fetch_assignment
@@ -20,15 +20,15 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def fetch_assignment
-    @assignment = Assignment.find params[:assignment_id]
+    @assignment = Assignment.find @attrs[:assignment_id]
   end
 
   def fetch_team
-    @team = Team.find params[:team_id]
+    @team = Team.find @attrs[:team_id]
   end
 
   def fetch_professor
-    @team = User.find params[:professor_id]
+    @team = User.find @attrs[:professor_id]
   end
 
   def generate_export_csv
@@ -42,7 +42,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     if @course.present? and @user.present?
-      require_success(fetch_csv_messages, max_result_size: 250) do
+      require_success(generate_csv_messages, max_result_size: 250) do
         generate_export_csv
       end
     end
@@ -60,8 +60,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def assignment_export_attributes
     {
-      assignment_id: params[:assignment_id],
-      team_id: params[:team_id]
+      assignment_id: @attrs[:assignment_id],
+      team_id: @attrs[:team_id]
     }
   end
 
@@ -107,6 +107,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def deliver_team_archive_complete_mailer
     ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
+  end
+
+  def generate_csv_messages
+    {
+      success: "Successfully generated the csv data on assignment #{@assignment.id} for students: #{@students.collect(&:id)}",
+      failure: "Failed to generate the csv data on assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
+    }
   end
 
   def notification_messages
