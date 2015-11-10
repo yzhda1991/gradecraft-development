@@ -7,7 +7,7 @@
   .badge-row.clickable(ng-click="tier.editBadges()" ng-show="tier.isSaved()")
     .badge-messages Badges
     .tier-badge-image(ng-repeat="(tierBadgeId, tierBadge) in tier.badges")
-      %img(src="{{tierBadge.badge.icon}}" width="35px" height="35px")
+      %img(ng-src="{{tierBadge.badge.icon}}" width="35px" height="35px")
 
 .modal-window(ng-show="tier.editingBadges")
   %select(ng-disabled="! tier.isSaved()" ng-change="tier.selectBadge()" ng-model="tier.selectedBadge" ng-options="availableBadge as availableBadge.name for (availableBadgeId, availableBadge) in tier.availableBadges")
@@ -15,7 +15,7 @@
     %option.default(value="" selected disabled ng-show="tier.availableBadges.length == 0") all available badges selected
 
   .tier-badge(ng-repeat="(tierBadgeId, tierBadge) in tier.badges")
-    %img(src="{{tierBadge.badge.icon}}" width="20px" height="20px")
+    %img(ng-src="{{tierBadge.badge.icon}}" width="20px" height="20px")
     {{tierBadge.name}}
     %button.delete(type="button" ng-click="tier.deleteTierBadge(tierBadge)") X
 
