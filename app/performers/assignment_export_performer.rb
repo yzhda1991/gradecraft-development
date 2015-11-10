@@ -1,18 +1,31 @@
 class AssignmentExportPerformer < ResqueJob::Performer
   def setup
-    @user = fetch_user
-    @course = fetch_course
+    @assignment = fetch_assignment
+    @professor = fetch_professor
+    @team = fetch_team # this may be nil if this is not a team archive
   end
+
+  private
+
+  def fetch_assignment
+    @assignment = Assignment.find params[:assignment_id]
+  end
+
+  def fetch_team
+    @team = Team.find params[:team_id]
+  end
+
+  def fetch_professor
+    @team = User.find params[:professor_id]
+  end
+
+  public
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     if @course.present? and @user.present?
       require_success(fetch_csv_messages, max_result_size: 250) do
         generate_export_csv
-      end
-
-      require_success(notification_messages, max_result_size: 200) do
-        notify_gradebook_export # the result of this block determines the outcome
       end
     end
   end

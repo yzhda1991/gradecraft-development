@@ -32,6 +32,8 @@ def export_submissions
 
         @students.each do |student|
           if submission = student.submission_for_assignment(@assignment)
+
+            # this is true if the submission has multiple files, or a file and either a link or a text comment
             if submission.has_multiple_components?
               student_dir = File.join(export_dir, "#{student.last_name}_#{student.first_name}")
               Dir.mkdir(student_dir) # make the directory for the student within the submission
