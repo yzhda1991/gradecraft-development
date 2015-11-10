@@ -27,7 +27,7 @@ describe GradeImporter do
 
         it "is unsuccessful if the student does not exist" do
           result = subject.import(course, assignment)
-          expect(result.unsuccessful.count).to eq 2
+          expect(result.unsuccessful.count).to eq 3
           expect(result.unsuccessful.first[:errors]).to eq "Student not found in course"
         end
       end
@@ -68,6 +68,15 @@ describe GradeImporter do
           }.to_not change grade, :updated_at
         end
 
+        it "does not update the grade if it is already there and the score is null" do
+          student = create(:user, email: "john@example.com")
+          grade = create :grade, assignment: assignment, student: student, raw_score: 4000
+          create(:student_course_membership, course: course, user: student)
+          result = subject.import(course, assignment)
+          expect(grade.reload.raw_score).to eq 4000
+          expect(result.unsuccessful.last[:errors]).to eq "Grade not specified"
+        end
+
         it "updates the grade if the grade is the same but the feedback is different" do
           grade = create :grade, assignment: assignment, student: student, raw_score: 4000, feedback: "You need some work"
           result = subject.import(course, assignment)
@@ -79,7 +88,7 @@ describe GradeImporter do
           allow_any_instance_of(Grade).to receive(:valid?).and_return false
           allow_any_instance_of(Grade).to receive(:errors).and_return double(full_messages: ["The grade is not cool"])
           result = subject.import(course, assignment)
-          expect(result.unsuccessful.count).to eq 2
+          expect(result.unsuccessful.count).to eq 3
           expect(result.unsuccessful.first[:errors]).to eq "The grade is not cool"
         end
 
