@@ -1,11 +1,23 @@
 class AssignmentExportPerformer < ResqueJob::Performer
   def setup
+    fetch_assets
+  end
+
+  private
+
+  def fetch_assets
     @assignment = fetch_assignment
     @professor = fetch_professor
     @team = fetch_team # this may be nil if this is not a team archive
   end
 
-  private
+  def tmp_dir
+    @tmp_dir ||= Dir.mktmpdir
+  end
+
+  def csv_file_path
+    @csv_file_path ||= File.expand_path(@tmp_dir, "/_grade_import_template.csv")
+  end
 
   def fetch_assignment
     @assignment = Assignment.find params[:assignment_id]
@@ -19,6 +31,12 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @team = User.find params[:professor_id]
   end
 
+  def generate_export_csv
+    open(@csv_file_path, 'w') do |f|
+      f.puts @assignment.grade_import(@students)
+    end
+  end
+  
   public
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
@@ -83,24 +101,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     "great_basename"
   end
 
-  def fetch_assignment
-    @assignment = Assignment.find params[:assignment_id]
-  end
-
-  def fetch_team
-    @team = Team.find params[:team_id]
-  end
-
-  # @mz todo: add specs
-  def generate_export_csv
-    # there needs to be a good way to determine the difference between data pulled from the remote sources vs. local ones
-    csv_dir = Dir.mktmpdir
-    @csv_file_path = File.expand_path(csv_dir, "/_grade_import_template.csv")
-    open( @csv_file_path,'w' ) do |f|
-      f.puts @assignment.grade_import(@students) # need to pull @students out of @submissions_by_student
-    end
-  end
-  
   def deliver_archive_complete_mailer
     ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
   end

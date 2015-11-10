@@ -289,6 +289,63 @@ class Assignment < ActiveRecord::Base
     ((submissions.count / course.graded_student_count.to_f) * 100).round(2)
   end
 
+  def group_submission_rate
+    ((submissions.count / self.groups.count) * 100).round(2)
+  end
+
+  # Calculates attendance rate as an integer.
+   def attendance_rate_int(course)
+    if course.graded_student_count > 0
+     ((positive_grade_count / course.graded_student_count.to_f) * 100).to_i
+    end
+  end
+
+  # Single assignment gradebook
+  def gradebook_for_assignment(options = {})
+    CSV.generate(options) do |csv|
+      csv << ["First Name", "Last Name", "Uniqname", "Score", "Raw Score", "Statement", "Feedback", "Last Updated" ]
+      course.students.each do |student|
+        grade = student.grade_for_assignment(self)
+        if grade and (grade.instructor_modified? || grade.graded_or_released?)
+          csv << [student.first_name, student.last_name, student.username, student.grade_for_assignment(self).score, student.grade_for_assignment(self).raw_score, student.submission_for_assignment(self).try(:text_comment), student.grade_for_assignment(self).try(:feedback), student.grade_for_assignment(self).updated_at ]
+        else
+          csv << [student.first_name, student.last_name, student.username, "", "", student.submission_for_assignment(self).try(:text_comment), "" ]
+        end
+      end
+    end
+  end
+
+  # 
+  def grade_import(students, options = {})
+    CSV.generate(options) do |csv|
+      csv << ["First Name", "Last Name", "Email", "Score", "Feedback"]
+      students.each do |student|
+        grade = student.grade_for_assignment(self)
+        if grade and (grade.instructor_modified? || grade.graded_or_released?)
+          csv << [student.first_name, student.last_name, student.email, student.grade_for_assignment(self).score, student.grade_for_assignment(self).try(:feedback) ]
+        else
+          csv << [student.first_name, student.last_name, student.email, "", "" ]
+        end
+      end
+    end
+  end
+
+  # Calculating how many of each score exists
+  def score_count
+    Hash[grades.graded_or_released.group_by{ |g| g.score }.map{ |k, v| [k, v.size] }]
+  end
+
+  def predicted_count
+    grades.predicted_to_be_done.count
+  end
+
+  # Calculating how many of each score exists
+  def earned_score_count
+    grades.graded_or_released
+      .group_by { |g| g.raw_score }
+      .map { |score, grade| [score, grade.size ] }.to_h
+  end
+
   # Creating an array with the set of scores earned on the assignment, and
   def percentage_score_earned
     { scores: earned_score_count.collect { |s| { data: s[1], name: s[0] }}}

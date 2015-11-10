@@ -1,26 +1,25 @@
 require 'rails_spec_helper'
 
 RSpec.describe AssignmentExportPerformer, type: :background_job do
+  include PerformerToolkit::SharedExamples
+
   # public methods
   let(:professor) { create(:user) }
   let(:assignment) { create(:assignment) }
   let(:team) { create(:team) }
+
+  let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment[:id], team_id: team[:id] }}
+  let(:performer) { AssignmentExportPerformer.new(job_attrs) }
   subject { performer }
 
   describe "public methods" do
 
-    describe "setup" do
-      it "should fetch the user and set it to user" do
-        expect(subject).to receive(:fetch_user).and_return user
-        subject.setup
-        expect(subject.instance_variable_get(:@user)).to eq(user)
-      end
+    describe "fetch_assets" do
+      subject { performer.fetch_assets }
 
-      it "should fetch the course and set it to course" do
-        expect(subject).to receive(:fetch_course).and_return course
-        subject.setup
-        expect(subject.instance_variable_get(:@course)).to eq(course)
-      end
+      it_behaves_like "a fetchable resource", :professor
+      it_behaves_like "a fetchable resource", :team
+      it_behaves_like "a fetchable resource", :assignment
     end
 
     describe "do_the_work" do
