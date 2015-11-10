@@ -1,59 +1,65 @@
 require 'rails_spec_helper'
 
 RSpec.describe AssignmentExportsController, type: :controller do
-  let(:assignment) { build(:assignment) }
-  let(:team) { build(:team) }
-  let(:professor) { build(:user) }
+  let(:professor) { create(:professor_course_membership).user }
+  let(:student) { create(:student_course_membership).user }
   let(:assignment_export_job) { AssignmentExportJob.new request_params.merge(professor_id: current_user.id) }
-
+  let(:job_double) { double(AssignmentExportJob).as_null_object }
 
   describe "GET team_submissions" do
-    let(:request_params) {{ assignment_id: assignment.id, team_id: team.id }}
-    before(:each) { get :team_submissions, request_params }
+    let(:team_submissions_params) {{ assignment_id: "30", team_id: "20" }}
+    let(:team_submissions_job_attributes) { team_submissions_params.merge(professor_id: professor.id) }
+    let(:make_request) { get :team_submissions, team_submissions_params }
 
-    it "creates a job with the team submissions attributes" do
-      expect(AssignmentExportJob).to receive(:new).with team_submissions_attributes
-    end
+    before { login_user(professor) }
 
-    it "enqueues the job" do
-      allow(AssignmentExportJob).to receive(:new) { true }
+    describe "building the job" do
+      it "instantiates a new assignment export job" do
+        make_request
+        expect(assigns(:assignment_export_job).class).to eq(AssignmentExportJob)
+      end
+
+      it "creates a job with the team submissions attributes" do
+        allow(AssignmentExportJob).to receive(:new) { job_double }
+        expect(AssignmentExportJob).to receive(:new).with team_submissions_job_attributes
+        make_request
+      end
+
+      it "enqueues the job" do
+        allow(AssignmentExportJob).to receive(:new) { job_double }
+        expect(job_double).to receive(:enqueue)
+        make_request
+      end
     end
 
     describe "response" do
+      let(:imaginary_response) {{ status: 900, json: "the job is totally sweet and enqueued now" }}
+      before(:each) do
+        allow(controller).to receive(:submissions_response) { imaginary_response }
+        make_request
+      end
+
+      it "renders the submissions response" do
+        expect(response.status).to eq(900)
+      end
     end
 
     describe "authorizations" do
-      context "staff request" do
-        it "processes the request normally" do
-        end
-      end
-
       context"student request" do
         it "redirects the student to the homepage" do
+          login_user(student)
+          make_request
+          expect(response).to redirect_to(root_path)
         end
       end
     end
   end
 
   describe "GET submissions" do
-    let(:request_params) {{ assignment_id: assignment.id }}
-    before(:each) { get :submissions, request_params }
+    let(:submissions_params) {{ assignment_id: 19 }}
+    let(:submissions_job_attributes) { submissions_params.merge(professor_id: professor.id) }
+    let(:make_request) { get :submissions, submissions_params }
 
-    it "creates a job with the submissions attributes" do
-      expect(AssignmentExportJob).to receive(:new).with submissions_attributes
-    end
-
-    describe "authorizations" do
-      context "staff request" do
-        it "processes the request normally" do
-        end
-      end
-
-      context"student request" do
-        it "redirects the student to the homepage" do
-        end
-      end
-    end
   end
 
   describe "submissions_response (protected)" do

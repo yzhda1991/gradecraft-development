@@ -4,19 +4,21 @@ class AssignmentExportsController < ApplicationController
   respond_to :json
 
   def submissions
-    @job_enqueued = AssignmentExportJob.new({
+    @assignment_export_job = AssignmentExportJob.new({
       assignment_id: params[:assignment_id],
       professor_id: current_user.id
-    }).enqueue
+    })
+    @job_enqueued = @assignment_export_job.enqueue
     render submissions_response
   end
 
   def team_submissions
-    @job_enqueued = AssignmentExportJob.new({
+    @assignment_export_job = AssignmentExportJob.new({
       assignment_id: params[:assignment_id],
       professor_id: current_user.id,
       team_id: params[:team_id]
-    }).enqueue
+    })
+    @job_enqueued = @assignment_export_job.enqueue
     render submissions_response
   end
 
