@@ -97,7 +97,7 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
 
 
   # private methods
-  
+
   describe "private methods" do
     describe "fetch_user" do
       subject { performer.instance_eval{fetch_user} }
