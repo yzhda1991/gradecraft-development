@@ -92,7 +92,7 @@ class GradeImporter
     attr_reader :data
 
     def identifier
-      remove_smart_quotes(data[2]).downcase if data[2]
+      remove_smart_quotes(data[2]).downcase if data[2].present?
     end
 
     def feedback
@@ -100,7 +100,7 @@ class GradeImporter
     end
 
     def grade
-      remove_smart_quotes(data[3]).to_i if data[3]
+      remove_smart_quotes(data[3]).to_i if data[3].present?
     end
 
     def has_grade?

@@ -218,7 +218,7 @@ describe GradesController do
 
       it "renders any errors that have occured" do
         post :upload, id: @assignment.id, file: file
-        expect(response.body).to include "2 Grades Not Imported"
+        expect(response.body).to include "3 Grades Not Imported"
         expect(response.body).to include "Student not found in course"
       end
     end
