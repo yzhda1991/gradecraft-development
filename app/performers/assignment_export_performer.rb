@@ -2,7 +2,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   include ModelAddons::ImprovedLogging # log errors with attributes
 
   def setup
-    fetch_assets
+    cache_assets
   end
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
@@ -18,11 +18,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   protected
 
-  def fetch_assets
-    @assignment = fetch_assignment
-    @professor = fetch_professor
-    @team = fetch_team # this may be nil if this is not a team archive
-    @students = fetch_students # need to figure out where this array is supposed to come from? how is it ordered?
+  def cache_assets
+    assignment; course; professor; team; students
   end
 
   def tmp_dir
@@ -33,19 +30,35 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @csv_file_path ||= File.expand_path(@tmp_dir, "/_grade_import_template.csv")
   end
 
-  def fetch_students
-    @students ||= Assignment.find @attrs[:assignment_id]
+  # # entire block handled by submissions and submissions_by_team methods, and by 
+  # if params[:team_id].present?
+  #   team = current_course.teams.find_by(id: params[:team_id])
+  #   zip_name = "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}_#{team.name}"
+  #   @students = current_course.students_being_graded_by_team(team)
+  # else
+  #   zip_name = "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}"
+  #   @students = current_course.students_being_graded
+  # end
+  #
+  def course
+    @course ||= assignment.course
   end
 
-  def fetch_assignment
+  def students
+    if @attrs[:team_id].present?
+      @students ||= course.students_being_graded_by_team(team)
+    end
+  end
+
+  def assignment
     @assignment ||= Assignment.find @attrs[:assignment_id]
   end
 
-  def fetch_team
+  def team
     @team ||= Team.find @attrs[:team_id]
   end
 
-  def fetch_professor
+  def professor
     @professor ||= User.find @attrs[:professor_id]
   end
 
