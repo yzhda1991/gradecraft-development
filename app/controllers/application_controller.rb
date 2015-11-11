@@ -57,6 +57,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def redirect_back_or_default(path=root_path, options={})
+    if request.env["HTTP_REFERER"].present? and
+       request.env["HTTP_REFERER"] != request.env["REQUEST_URI"]
+      redirect_to :back
+    else
+      redirect_to path, options
+    end
+  end
+
   protected
 
   # Core role authentication
