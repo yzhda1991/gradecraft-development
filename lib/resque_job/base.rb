@@ -7,11 +7,15 @@ module ResqueJob
     # add resque-retry for all jobs
     extend Resque::Plugins::Retry
     extend Resque::Plugins::ExponentialBackoff
-    
+
     # defaults
     @queue = :main # put all jobs in the 'main' queue
     @performer_class = ResqueJob::Performer
     @backoff_strategy = [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800]
+
+    class << self
+      attr_reader :performer_class, :queue
+    end
 
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
@@ -24,7 +28,7 @@ module ResqueJob
         # build a new background job logger
         # puts "@peformer_class: #{@performer_class}"
         # puts @logger
-        puts this_message = self.start_message(attrs) # this wasn't running because 
+        puts this_message = self.start_message(attrs) # this wasn't running because
         # @logger.info this_message
         logger.info this_message
         # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
@@ -118,7 +122,7 @@ module ResqueJob
     end
 
     # Inheritance Behaviors
-   
+
     ## allow sub-classes to inherit class-level instance variables
     def self.inherited(subclass)
       self.instance_variable_names.each do |ivar|
@@ -137,7 +141,7 @@ module ResqueJob
         queue: :main,
         performer_class: ResqueJob::Performer,
         backoff_strategy: [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800]
-      }   
+      }
     end
 
     # need to figure out how to integrate this more cleanly
