@@ -6,7 +6,8 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   # public methods
   let(:professor) { create(:user) }
-  let(:assignment) { create(:assignment) }
+  let(:assignment) { create(:assignment, course: course) }
+  let(:course) { create(:course) }
   let(:team) { create(:team) }
 
   let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment[:id], team_id: team[:id] }}
@@ -18,12 +19,15 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   describe "public methods" do
 
     describe "cache_assets", focus: true do
-    subject { performer.instance_eval { fetch_assets }}
+    subject { performer.instance_eval { cache_assets }}
 
       it_behaves_like "a cacheable resource", :professor, User # this is a User object fetched as 'professor'
       it_behaves_like "a cacheable resource", :team
       it_behaves_like "a cacheable resource", :assignment
-      it_behaves_like "a cacheable resource", :students, User # this is a User object fetched as 'student'
+      it_behaves_like "a cacheable resource", :course
+    end
+
+    describe "students" do
     end
 
     describe "do_the_work" do
