@@ -12,12 +12,18 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   let(:performer) { AssignmentExportPerformer.new(job_attrs) }
   subject { performer }
 
+  describe "include ModelAddons::ImprovedLogging", focus: true do
+    it "responds to logging errors with attributes methods" do
+      expect(performer).to respond_to(:log_error_with_attributes)
+    end
+  end
+
   describe "public methods" do
 
-    describe "fetch_assets" do
-      subject { performer.instance_eval { fetch_assets }}
+    describe "fetch_assets", focus: true do
+    subject { performer.instance_eval { fetch_assets }}
 
-      it_behaves_like "a fetchable resource", :professor
+      it_behaves_like "a fetchable resource", :professor, User # this is a User object fetched as 'professor'
       it_behaves_like "a fetchable resource", :team
       it_behaves_like "a fetchable resource", :assignment
     end

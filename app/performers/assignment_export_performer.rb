@@ -1,4 +1,6 @@
 class AssignmentExportPerformer < ResqueJob::Performer
+  include ModelAddons::ImprovedLogging # log errors with attributes
+
   def setup
     fetch_assets
   end
@@ -10,6 +12,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
         generate_export_csv
       end
     else
+      log_error_with_attributes "@assignment.present? or @students.present? failed and both should have been present"
     end
   end
 
@@ -28,6 +31,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def csv_file_path
     @csv_file_path ||= File.expand_path(@tmp_dir, "/_grade_import_template.csv")
+  end
+
+  def fetch_students
+    @students ||= Assignment.find @attrs[:assignment_id]
   end
 
   def fetch_assignment
