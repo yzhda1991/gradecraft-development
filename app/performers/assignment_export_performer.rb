@@ -46,7 +46,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # add specs
   def students
-    if @attrs[:team_id].present?
+    if team
       @students ||= course.students_being_graded_by_team(team)
     else
       @students ||= course.students_being_graded

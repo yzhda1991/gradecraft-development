@@ -10,7 +10,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   let(:course) { create(:course) }
   let(:team) { create(:team) }
 
-  let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment[:id], team_id: team[:id] }}
+  let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id, team_id: team.try(:id) }}
   let(:performer) { AssignmentExportPerformer.new(job_attrs) }
   subject { performer }
 
@@ -27,7 +27,44 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       it_behaves_like "a cacheable resource", :course
     end
 
-    describe "students" do
+    describe "students", focus: true do
+      let(:students_double) { double(:students) }
+      let(:students_ivar) { performer.instance_variable_get(:@students) }
+      subject { performer.instance_eval { students }}
+
+      context "a team is present" do
+        let(:team) { create(:team) }
+
+        before(:each) do
+          allow(course).to receive(:students_being_graded_by_team) { students_double }
+        end
+
+        it "returns the students being graded for that team" do
+          expect(course).to receive(:students_being_graded_by_team).with(team)
+          subject
+        end
+
+        it "caches the students" do
+          subject
+          expect(students_ivar).to eq(students_double)
+        end
+      end
+
+      context "no team is present" do
+        let(:team) { nil }
+
+        before { allow(course).to receive(:students_being_graded) { students_double }}
+
+        it "returns students being graded for the course" do
+          expect(course).to receive(:students_being_graded)
+          subject
+        end
+
+        it "caches the students" do
+          subject
+          expect(students_ivar).to eq(students_double)
+        end
+      end
     end
 
     describe "do_the_work" do
