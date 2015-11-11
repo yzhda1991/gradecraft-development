@@ -120,6 +120,7 @@ group :development, :test do
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
   gem 'spring-commands-rspec'
+  gem 'zeus'
 end
 
 group :test do
