@@ -20,15 +20,15 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def fetch_assignment
-    @assignment = Assignment.find @attrs[:assignment_id]
+    @assignment ||= Assignment.find @attrs[:assignment_id]
   end
 
   def fetch_team
-    @team = Team.find @attrs[:team_id]
+    @team ||= Team.find @attrs[:team_id]
   end
 
   def fetch_professor
-    @team = User.find @attrs[:professor_id]
+    @professor ||= User.find @attrs[:professor_id]
   end
 
   def generate_export_csv

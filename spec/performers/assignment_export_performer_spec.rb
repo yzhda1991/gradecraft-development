@@ -14,8 +14,8 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "public methods" do
 
-    describe "fetch_assets" do
-      subject { performer.fetch_assets }
+    describe "fetch_assets", focus: true do
+      subject { performer.instance_eval { fetch_assets }}
 
       it_behaves_like "a fetchable resource", :professor
       it_behaves_like "a fetchable resource", :team
@@ -74,22 +74,6 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         end
       end
 
-      context "either course or user are not present" do
-        # omit subject.setup so user and course are nil
-        before(:each) do
-          subject.remove_instance_variable(:@course)
-          subject.remove_instance_variable(:@user)
-        end
-
-        it "should not require success" do
-          expect(subject).not_to receive(:require_success)
-          subject.do_the_work
-        end
-
-        it "should return nil" do
-          expect(subject.do_the_work).to eq(nil)
-        end
-      end
     end
   end
 
@@ -141,8 +125,8 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
-    describe "fetch_csv_messages" do
-      subject { performer.instance_eval{fetch_csv_messages} }
+    describe "generate_csv_messages" do
+      subject { performer.instance_eval{ generate_csv_messages } }
       it "should have a success message" do
         expect(subject[:success]).to match('Successfully fetched')
       end
