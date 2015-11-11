@@ -16,4 +16,16 @@ RSpec.describe MultipliedGradebookExportPerformer, type: :background_job do
       subject
     end
   end
+
+  describe "notify_gradebook_export" do
+    let(:csv_data) { performer.instance_variable_get(:@csv_data) }
+    subject { performer.instance_eval { notify_gradebook_export } }
+
+    it "should create a new gradebook export notifier with proper parameters" do
+      expect(NotificationMailer).to receive(:gradebook_export)
+        .with(course, user, "multiplied gradebook export", csv_data)
+        .and_call_original
+      subject
+    end
+  end
 end
