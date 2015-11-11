@@ -17,8 +17,8 @@ class GradebookExportPerformer < ResqueJob::Performer
     end
   end
 
-  private
-  
+  protected
+
   def fetch_user
     User.find @attrs[:user_id]
   end
@@ -28,17 +28,14 @@ class GradebookExportPerformer < ResqueJob::Performer
     Course.find @attrs[:course_id]
   end
 
-  # todo spec
-  def sanitized_csv_excerpt
-    fetch_csv_data.gsub("\n","").split(//).last(50).join
-  end
-
   def fetch_csv_data
     @csv_data = @course.csv_gradebook
   end
 
   def notify_gradebook_export
-    NotificationMailer.gradebook_export(@course, @user, @csv_data).deliver_now
+    NotificationMailer
+      .gradebook_export(@course, @user, "gradebook export", @csv_data)
+      .deliver_now
   end
 
   def fetch_csv_messages

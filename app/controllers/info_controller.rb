@@ -61,7 +61,7 @@ class InfoController < ApplicationController
   def resubmissions
     @title = "Resubmitted Assignments"
     resubmissions = current_course.submissions.resubmitted
-    
+
     @teams = current_course.teams
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
     if @team
@@ -81,16 +81,21 @@ class InfoController < ApplicationController
     @count_ungraded = @ungraded_submissions.count
   end
 
-  #grade index export
   def gradebook
-    session[:return_to] = request.referer || root_path
-
-    # TODO: RESQUE CLEAN-UP: Add controller specs for resque job methods.
-    @gradebook_exporter_job = GradebookExporterJob.new(user_id: current_user.id, course_id: current_course.id)
-    @gradebook_exporter_job.enqueue
+    GradebookExporterJob.new(user_id: current_user.id, course_id: current_course.id).enqueue
 
     flash[:notice]="Your request to export the gradebook for \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
-    redirect_to session[:return_to]
+    redirect_back_or_default
+  end
+
+  def multiplied_gradebook
+    MultipliedGradebookExporterJob
+      .new(user_id: current_user.id, course_id: current_course.id).enqueue
+
+    flash[:notice]="Your request to export the multiplied gradebook \
+                    for \"#{current_course.name}\" is currently being processed. \
+                    We will email you the data shortly."
+    redirect_back_or_default
   end
 
   def final_grades

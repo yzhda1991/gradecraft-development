@@ -30,10 +30,5 @@ RSpec.describe InfoController, type: :controller, background_job: true do
       expect(GradebookExporterJob).to respond_to(:new).with(1).argument
       get :gradebook
     end
-
-    it "creates a new GradebookExporterJob" do
-      get :gradebook
-      expect(assigns(:gradebook_exporter_job).class).to eq(GradebookExporterJob)
-    end
   end
 end

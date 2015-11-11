@@ -59,9 +59,43 @@ describe InfoController do
 
     describe "GET gradebook" do
       it "retrieves the gradebook" do
-        skip "implement"
+        expect(GradebookExporterJob).to \
+          receive(:new).with(user_id: @professor.id, course_id: @course.id)
+            .and_call_original
+        expect_any_instance_of(GradebookExporterJob).to receive(:enqueue)
         get :gradebook
-        expect(response).to render_template(:gradebook)
+      end
+
+      it "redirects to the root path if there is no referer" do
+        get :gradebook
+        expect(response).to redirect_to root_path
+      end
+
+      it "redirects to the referer if there is one" do
+        request.env["HTTP_REFERER"] = dashboard_path
+        get :gradebook
+        expect(response).to redirect_to dashboard_path
+      end
+    end
+
+    describe "GET multipled_gradebook" do
+      it "retrieves the multiplied gradebook" do
+        expect(MultipliedGradebookExporterJob).to \
+          receive(:new).with(user_id: @professor.id, course_id: @course.id)
+            .and_call_original
+        expect_any_instance_of(MultipliedGradebookExporterJob).to receive(:enqueue)
+        get :multiplied_gradebook
+      end
+
+      it "redirects to the root path if there is no referer" do
+        get :multiplied_gradebook
+        expect(response).to redirect_to root_path
+      end
+
+      it "redirects to the referer if there is one" do
+        request.env["HTTP_REFERER"] = dashboard_path
+        get :multiplied_gradebook
+        expect(response).to redirect_to dashboard_path
       end
     end
 
@@ -127,6 +161,7 @@ describe InfoController do
         :resubmissions,
         :ungraded_submissions,
         :gradebook,
+        :multiplied_gradebook,
         :final_grades,
         :research_gradebook,
         :choices,

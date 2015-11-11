@@ -97,7 +97,7 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
 
 
   # private methods
-  
+
   describe "private methods" do
     describe "fetch_user" do
       subject { performer.instance_eval{fetch_user} }
@@ -150,9 +150,10 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
       after(:each) { subject }
       before(:each) { allow(NotificationMailer).to receive(:gradebook_export).and_return(csv_double) }
 
-      it "should create a new gradebook export notifier with @course, @user, and @csv_data" do
+      it "should create a new gradebook export notifier with proper parameters" do
         performer.instance_eval { fetch_csv_data }
-        expect(NotificationMailer).to receive(:gradebook_export).with(course, user, csv_data)
+        expect(NotificationMailer).to receive(:gradebook_export)
+          .with(course, user, "gradebook export", csv_data)
         expect(csv_double).to receive(:deliver_now)
       end
 
