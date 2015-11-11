@@ -2,6 +2,7 @@ require 'rails_spec_helper'
 
 RSpec.describe AssignmentExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
+  include ModelAddons::SharedExamples
 
   # public methods
   let(:professor) { create(:user) }
@@ -12,11 +13,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   let(:performer) { AssignmentExportPerformer.new(job_attrs) }
   subject { performer }
 
-  describe "include ModelAddons::ImprovedLogging", focus: true do
-    it "responds to logging errors with attributes methods" do
-      expect(performer).to respond_to(:log_error_with_attributes)
-    end
-  end
+  it_behaves_like "ModelAddons::ImprovedLogging is included"
 
   describe "public methods" do
 
