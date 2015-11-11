@@ -8,7 +8,7 @@ class ResqueJob::Performer
     setup
   end
 
-  attr_reader :outcomes, :outcome_messages
+  attr_reader :outcomes, :outcome_messages, :logger
 
   # this is where the heavy lifting is done
   def do_the_work
