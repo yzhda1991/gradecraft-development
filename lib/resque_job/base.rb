@@ -34,12 +34,8 @@ module ResqueJob
         # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
         #
         # this is where the magic happens
-        performer = @performer_class.new(attrs) # self.class is the job class
+        performer = @performer_class.new(attrs, logger) # self.class is the job class
         performer.do_the_work
-
-        # mention to the logger how things went
-        # performer.log_outcome_messages(@logger) # @mz todo: add specs for logger
-        # combined_outcome_messages(@logger) # @mz todo: add specs for logger
 
         performer.outcomes.each do |outcome|
           logger.info "SUCCESS: #{outcome.message}" if outcome.success?

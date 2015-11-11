@@ -1,7 +1,8 @@
 class ResqueJob::Performer
   # DSL improvements and resque-scheduler helpers
-  def initialize(attrs={})
+  def initialize(attrs={}, logger=nil)
     @attrs = attrs.symbolize_keys
+    @logger = logger
     @outcomes = []
     @outcome_messages = []
     setup
@@ -32,14 +33,6 @@ class ResqueJob::Performer
     if messages[:failure] and outcome.failure?
       add_message(messages[:failure]) 
       outcome.message = messages[:failure]
-    end
-  end
-
-  # todo: add specs
-  def log_outcome_messages(job_logger)
-    @outcome_messages.each do |message|
-      puts message
-      job_logger.info message
     end
   end
 

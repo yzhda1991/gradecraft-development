@@ -3,12 +3,23 @@ class AssignmentExportPerformer < ResqueJob::Performer
     fetch_assets
   end
 
+  # perform() attributes assigned to @attrs in the ResqueJob::Base class
+  def do_the_work
+    if @assignment.present? and @students.present?
+      require_success(generate_csv_messages, max_result_size: 250) do
+        generate_export_csv
+      end
+    else
+    end
+  end
+
   protected
 
   def fetch_assets
     @assignment = fetch_assignment
     @professor = fetch_professor
     @team = fetch_team # this may be nil if this is not a team archive
+    @students = fetch_students # need to figure out where this array is supposed to come from? how is it ordered?
   end
 
   def tmp_dir
@@ -37,17 +48,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
   
-  public
-
-  # perform() attributes assigned to @attrs in the ResqueJob::Base class
-  def do_the_work
-    if @course.present? and @user.present?
-      require_success(generate_csv_messages, max_result_size: 250) do
-        generate_export_csv
-      end
-    end
-  end
-
   private
 
   def submissions_presenter

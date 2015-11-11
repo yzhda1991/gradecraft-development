@@ -2,7 +2,8 @@ require 'rails_spec_helper'
 
 RSpec.describe ResqueJob::Performer, type: :vendor_library do
   let(:attrs) { Hash.new(color: "green") }
-  subject { ResqueJob::Performer.new(attrs) }
+  let(:performer) { ResqueJob::Performer.new(attrs) }
+  subject { performer }
 
   # todo: add specs for all cases in subclassed conditions
   describe "initialize" do
@@ -21,6 +22,26 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     it "should setup the performer" do
       expect(subject).to receive(:setup)
       subject.instance_eval { initialize }
+    end
+
+    describe "logger" do
+      let(:performer_with_logger) { ResqueJob::Performer.new(attrs, logger) }
+      let(:logger) { Logger.new(STDOUT) }
+
+      context "a logger is passed in on instantiation" do
+        subject { performer_with_logger }
+
+        it "sets the logger to @logger" do
+          expect(performer_with_logger.instance_variable_get(:@logger)).to eq(logger)
+        end
+      end
+
+      context "no logger is passed in" do
+        subject { performer }
+        it "sets @logger to nil" do
+          expect(performer.instance_variable_get(:@logger)).to be_nil
+        end
+      end
     end
   end
 

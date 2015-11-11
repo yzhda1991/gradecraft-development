@@ -14,7 +14,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "public methods" do
 
-    describe "fetch_assets", focus: true do
+    describe "fetch_assets" do
       subject { performer.instance_eval { fetch_assets }}
 
       it_behaves_like "a fetchable resource", :professor
