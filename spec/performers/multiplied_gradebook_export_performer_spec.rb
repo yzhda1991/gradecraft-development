@@ -12,7 +12,7 @@ RSpec.describe MultipliedGradebookExportPerformer, type: :background_job do
 
     it "should call csv_multipled_gradebook on the course" do
       performer.instance_variable_set(:@course, course_double)
-      expect(course_double).to receive(:csv_multipled_gradebook)
+      expect(course_double).to receive(:csv_multiplied_gradebook)
       subject
     end
   end
