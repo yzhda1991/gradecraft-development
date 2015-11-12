@@ -1,11 +1,12 @@
 class ResqueJob::Performer
   # DSL improvements and resque-scheduler helpers
-  def initialize(attrs={}, logger=nil)
+  def initialize(attrs={}, logger=nil, options={skip_setup: false})
     @attrs = attrs.symbolize_keys
     @logger = logger
+    @options = options
     @outcomes = []
     @outcome_messages = []
-    setup
+    setup unless @options[:skip_setup]
   end
 
   attr_reader :outcomes, :outcome_messages, :logger

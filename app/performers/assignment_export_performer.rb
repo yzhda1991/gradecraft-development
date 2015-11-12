@@ -2,7 +2,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   include ModelAddons::ImprovedLogging # log errors with attributes
 
   def setup
-    cache_assets
+    fetch_assets
   end
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
@@ -18,8 +18,16 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   protected
 
-  def cache_assets
-    assignment; course; professor; team; students
+  def fetch_assets
+    @assignment = fetch_assignment
+    @course = fetch_course
+    @professor = fetch_professor
+    @students = fetch_students
+    @team = fetch_team if team_present?
+  end
+
+  def team_present?
+    @team.present?
   end
 
   def tmp_dir
@@ -40,29 +48,30 @@ class AssignmentExportPerformer < ResqueJob::Performer
   #   @students = current_course.students_being_graded
   # end
   #
-  def course
-    @course ||= assignment.course
+  
+  def fetch_course
+    @course ||= @assignment.course
   end
 
   # add specs
-  def students
-    if team
-      @students ||= course.students_being_graded_by_team(team)
+  def fetch_students
+    if team_present?
+      @students = @course.students_being_graded_by_team(@team)
     else
-      @students ||= course.students_being_graded
+      @students = @course.students_being_graded
     end
   end
 
-  def assignment
-    @assignment ||= Assignment.find @attrs[:assignment_id]
+  def fetch_assignment
+    @assignment = Assignment.find @attrs[:assignment_id]
   end
 
-  def team
-    @team ||= Team.find @attrs[:team_id]
+  def fetch_team
+    @team = Team.find @attrs[:team_id]
   end
 
-  def professor
-    @professor ||= User.find @attrs[:professor_id]
+  def fetch_professor
+    @professor = User.find @attrs[:professor_id]
   end
 
   def generate_export_csv
