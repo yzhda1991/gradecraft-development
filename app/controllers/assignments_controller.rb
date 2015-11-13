@@ -204,9 +204,9 @@ class AssignmentsController < ApplicationController
   end
 
   def export_grades
-    @assignment = current_course.assignments.find(params[:id])
+    assignment = current_course.assignments.find(params[:id])
     respond_to do |format|
-      format.csv { send_data @assignment.gradebook_for_assignment }
+      format.csv { send_data AssignmentExporter.new.export assignment, assignment.course.students }
     end
   end
 
