@@ -51,7 +51,20 @@ describe AssignmentExporter do
       expect(csv[2][7]).to eq "#{updated_at}"
     end
 
-    xit "includes students that do not have grades for the assignment"
-    xit "does not include the grade if it has not been graded or released"
+    it "includes students that do not have grades for the assignment" do
+      allow(students[0]).to \
+        receive(:grade_for_assignment).with(assignment)
+          .and_return nil
+      csv = CSV.new(subject.export(assignment, students)).read
+      expect(csv[1][3]).to eq ""
+    end
+
+    it "does not include the grade if it has not been graded or released" do
+      allow(students[0]).to \
+        receive(:grade_for_assignment).with(assignment)
+          .and_return double(:grade, instructor_modified?: false, graded_or_released?: false)
+      csv = CSV.new(subject.export(assignment, students)).read
+      expect(csv[1][3]).to eq ""
+    end
   end
 end
