@@ -34,7 +34,7 @@ describe GradeExporter do
       expect(csv[2][2]).to eq students[1].email
       expect(csv[1][3]).to eq "123"
       expect(csv[2][3]).to eq "456"
-      expect(csv[1][4]).to eq nil
+      expect(csv[1][4]).to eq ""
       expect(csv[2][4]).to eq "Grrrrreat!"
     end
 
@@ -43,7 +43,7 @@ describe GradeExporter do
         receive(:grade_for_assignment).with(assignment)
           .and_return nil
       csv = subject.export(assignment, students).read
-      expect(csv[1][3]).to be_nil
+      expect(csv[1][3]).to eq ""
     end
   end
 end
