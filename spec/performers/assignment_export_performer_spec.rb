@@ -22,7 +22,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "public methods" do
 
-    describe "fetch_assets" do
+    describe "fetch_assets", focus: true do
       subject { performer.instance_eval { fetch_assets }}
 
       describe "assignment submissions export" do

@@ -6,14 +6,29 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
+  # @mz todo: add specs
   def do_the_work
     if @assignment.present? and @students.present?
       require_success(generate_csv_messages, max_result_size: 250) do
         generate_export_csv
       end
     else
-      log_error_with_attributes "@assignment.present? or @students.present? failed and both should have been present"
+      if logger
+        log_error_with_attributes "@assignment.present? or @students.present? failed and both should have been present"
+      end
     end
+  end
+
+  # add this for logging_with_attributes
+  # @mz todo: add specs
+  def attributes
+    { 
+      assignment_id: @assignment.try(:id),
+      course_id: @course.try(:id),
+      professor_id: @professor.try(:id),
+      student_ids: @students.collect(&:id),
+      team_id: @team.try(:id)
+    }
   end
 
   protected
@@ -27,7 +42,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def team_present?
-    @team.present?
+    @attrs[:team_id].present?
   end
 
   def tmp_dir
@@ -50,7 +65,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   #
   
   def fetch_course
-    @course ||= @assignment.course
+    @course = @assignment.course
   end
 
   # add specs

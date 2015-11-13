@@ -1,7 +1,7 @@
 module PerformerToolkit
 
   module SharedExamples
-    RSpec.shared_examples "a fetchable resource" do |resource_name, expected_klass|
+    RSpec.shared_examples "a fetchable resource" do |resource_name, resource_klass|
       let(:expected_klass) { resource_klass || resource_name.to_s.camelize.constantize }
 
       it "fetches the #{resource_name}" do
@@ -14,11 +14,10 @@ module PerformerToolkit
         expect(performer.instance_variable_get(:"@#{resource_name}")).to eq(send(resource_name.to_sym))
       end
 
-      it "fetches an object that actually has the #{expected_klass} class" do
+      it "fetches an object that actually has the correct class" do
         subject
-        expected_klass ||= resource_name.to_s.camelize.constantize
         expect(performer.instance_variable_get(:"@#{resource_name}").class).to eq(expected_klass)
-     end
+      end
     end
 
     RSpec.shared_examples "a collection of fetchable resources" do |resource_name, resource_klass|
