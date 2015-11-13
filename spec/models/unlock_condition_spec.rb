@@ -25,4 +25,9 @@ describe UnlockCondition do
       expect(subject.errors[:condition_state]).to include "can't be blank"
     end
   end
+
+
+  describe "#name" do
+    
+  end
 end
