@@ -51,26 +51,6 @@ describe Assignment do
     end
   end
 
-  describe "grade import" do
-    it "returns sample csv data, including ungraded students" do
-      course = create(:course)
-      course.assignments << subject
-      student = create(:user)
-      student.courses << course
-      expect(subject.grade_import(course.students)).to eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},\"\",\"\"\n")
-    end
-
-    it "also returns grade fields with instructor modified grade" do
-      course = create(:course)
-      course.assignments << subject
-      student = create(:user)
-      student.courses << course
-      grade = create(:grade, assignment: subject, student: student, feedback: "good jorb!", instructor_modified: true)
-      submission = create(:submission, grade: grade, student: student, assignment: subject)
-      expect(subject.grade_import(course.students)).to eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},#{grade.score},#{grade.feedback}\n")
-    end
-  end
-
   describe "#copy" do
     let(:assignment) { build :assignment }
     subject { assignment.copy }
