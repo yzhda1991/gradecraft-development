@@ -27,7 +27,12 @@ describe UnlockCondition do
   end
 
 
-  describe "#name" do
-    
+  describe "#name", focus: true do
+    let(:unlock_condition) { build(:unlock_condition, unlockable: build(:badge), condition: build(:assignment)) }
+
+    it "returns the name of the condition" do
+      expect unlock_condition.name.to eq "#{:badge.name}"
+    end
+
   end
 end
