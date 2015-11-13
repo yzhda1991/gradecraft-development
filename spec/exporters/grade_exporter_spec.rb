@@ -37,5 +37,13 @@ describe GradeExporter do
       expect(csv[1][4]).to eq nil
       expect(csv[2][4]).to eq "Grrrrreat!"
     end
+
+    it "includes students that do not have grades for the assignment" do
+      allow(students[0]).to \
+        receive(:grade_for_assignment).with(assignment)
+          .and_return nil
+      csv = subject.export(assignment, students).read
+      expect(csv[1][3]).to be_nil
+    end
   end
 end

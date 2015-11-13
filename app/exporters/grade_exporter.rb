@@ -4,7 +4,8 @@ class GradeExporter
       csv << headers
       students.each do |student|
         grade = student.grade_for_assignment(assignment)
-        csv << [student.first_name, student.last_name, student.email, grade.score, grade.feedback]
+        csv << [student.first_name, student.last_name,
+                student.email, grade.try(:score), grade.try(:feedback)]
       end
     end
     CSV.new data
