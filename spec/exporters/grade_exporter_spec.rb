@@ -8,12 +8,12 @@ describe GradeExporter do
   describe "#export" do
     it "generates an empty CSV if there is no assignment specified" do
       csv = subject.export(nil, [])
-      expect(csv.read.length).to eq 1 # headers
+      expect(csv).to eq "First Name,Last Name,Email,Score,Feedback\n"
     end
 
     it "generates an empty CSV if there are no students specified" do
       csv = subject.export(assignment, [])
-      expect(csv.read.length).to eq 1 # headers
+      expect(csv).to eq "First Name,Last Name,Email,Score,Feedback\n"
     end
 
     it "generates a CSV with student scores" do
@@ -24,7 +24,7 @@ describe GradeExporter do
         receive(:grade_for_assignment).with(assignment)
           .and_return double(:grade, score: 456, feedback: "Grrrrreat!")
 
-      csv = subject.export(assignment, students).read
+      csv = CSV.new(subject.export(assignment, students)).read
       expect(csv.length).to eq 3
       expect(csv[1][0]).to eq students[0].first_name
       expect(csv[2][0]).to eq students[1].first_name
@@ -42,7 +42,7 @@ describe GradeExporter do
       allow(students[0]).to \
         receive(:grade_for_assignment).with(assignment)
           .and_return nil
-      csv = subject.export(assignment, students).read
+      csv = CSV.new(subject.export(assignment, students)).read
       expect(csv[1][3]).to eq ""
     end
   end

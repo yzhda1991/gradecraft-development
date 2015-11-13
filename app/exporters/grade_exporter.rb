@@ -1,6 +1,6 @@
 class GradeExporter
   def export(assignment, students, options={})
-    data = CSV.generate(options) do |csv|
+    CSV.generate(options) do |csv|
       csv << headers
       students.each do |student|
         grade = student.grade_for_assignment(assignment)
@@ -8,7 +8,6 @@ class GradeExporter
                 student.email, grade.try(:score) || "", grade.try(:feedback) || ""]
       end
     end
-    CSV.new data
   end
 
   private
