@@ -44,10 +44,6 @@ class GroupsController < ApplicationController
     end
     respond_to do |format|
       if @group.save
-        #current_course.instructors_of_record.each do |professor|
-          #NotificationMailer.group_created(@group.id, professor).deliver
-        #end
-        #NotificationMailer.group_notify(@group.id).deliver
         format.html { respond_with @group }
       else
         @title = "Start a #{term_for :group}"
@@ -73,7 +69,6 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       if @group.update_attributes(params[:group])
-        #NotificationMailer.group_status_updated(@group.id).deliver
         format.html { respond_with @group }
       else
         if current_user_is_student?

@@ -45,7 +45,7 @@ class EarnedBadgesController < ApplicationController
           # @mz TODO: add specs
           ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: current_course.id).enqueue
         end
-        NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver
+        NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver_now
         format.html { redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded to #{@earned_badge.student.name}" }
       else
         @title = "Award #{@badge.name}"
@@ -144,7 +144,7 @@ class EarnedBadgesController < ApplicationController
   end
 
   def send_earned_badge_notifications
-    @valid_earned_badges.each do |earned_badge| 
+    @valid_earned_badges.each do |earned_badge|
       NotificationMailer.earned_badge_awarded(earned_badge.id).deliver_now
       logger.info "Sent an earned badge notification for EarnedBadge ##{earned_badge[:id]}"
     end
