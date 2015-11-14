@@ -262,10 +262,10 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET download_sample_grades" do
+    describe "GET download_current_grades" do
       context "with CSV format" do
         it "returns sample csv data" do
-          get :download_sample_grades, :id => @assignment, :format => :csv
+          get :download_current_grades, :id => @assignment, :format => :csv
           expect(response.body).to include("First Name,Last Name,Email,Score,Feedback")
         end
       end
@@ -427,7 +427,7 @@ describe AssignmentsController do
         :update,
         :destroy,
         :export_grades,
-        :download_sample_grades,
+        :download_current_grades,
         :update_rubrics,
         :rubric_grades_review
 
