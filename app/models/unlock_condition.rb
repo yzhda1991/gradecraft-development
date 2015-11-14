@@ -22,21 +22,15 @@ class UnlockCondition < ActiveRecord::Base
         if badge.present? && (badge_count >= condition_value) &&
           student.earned_badges.where(:badge_id => condition_id).last.created_at < condition_date
             return true
-        else
-          return false
         end
       elsif condition_state? && condition_value?
         if badge.present? &&
           badge_count >= condition_value
           return true
-        else
-          return false
         end
       elsif condition_state?
         if student.earned_badge_for_badge(condition_id).present?
           return true
-        else
-          return false
         end
       end
     elsif condition_type == "Assignment"
@@ -46,38 +40,26 @@ class UnlockCondition < ActiveRecord::Base
         if condition_date?
           if submission.present? && (submission.updated_at < condition_date)
             return true
-          else
-            return false
           end
         elsif submission.present?
           return true
-        else
-          return false
         end
       elsif condition_state == "Grade Earned"
         grade = student.grade_for_assignment_id(condition_id).first
         if condition_value? && condition_date?
           if (grade.score > condition_value) && (grade.updated_at < condition_date)
             return true
-          else
-            return false
           end
         elsif condition_value?
           if grade.score > condition_value
             return true
-          else
-            return false
           end
         elsif condition_date?
           if grade.updated_at < condition_date
             return true
-          else
-            return false
           end
         elsif grade.is_student_visible?
             return true
-        else
-          return false
         end
       elsif condition_state == "Feedback Read"
         grade = student.grade_for_assignment_id(condition_id).first
@@ -85,14 +67,10 @@ class UnlockCondition < ActiveRecord::Base
           if condition_date?
             if (grade.feedback_read_at < condition_date)
               return true
-            else
-              return false
             end
           else 
             return true
           end
-        else
-          return false
         end
       end
     end
