@@ -9,14 +9,9 @@ class UnlockCondition < ActiveRecord::Base
   validates_presence_of :condition_id, :condition_type, :condition_state
   validates_associated :unlockable
 
+  # Returning the name of whatever badge or assignment has been identified as the condition
   def name
-    if condition_type == "Badge"
-      badge = Badge.find(condition_id)
-      return badge.name
-    elsif condition_type == "Assignment"
-      assignment = Assignment.find(condition_id)
-      return assignment.name
-    end
+    condition.name
   end
 
   def is_complete?(student)
@@ -79,8 +74,23 @@ class UnlockCondition < ActiveRecord::Base
           else
             return false
           end
-        elsif grade.present?
+        elsif grade.is_student_visible?
             return true
+        else
+          return false
+        end
+      elsif condition_state == "Feedback Read"
+        grade = student.grade_for_assignment_id(condition_id).first
+        if grade.feedback_read?
+          if condition_date?
+            if (grade.feedback_read_at < condition_date)
+              return true
+            else
+              return false
+            end
+          else 
+            return true
+          end
         else
           return false
         end
