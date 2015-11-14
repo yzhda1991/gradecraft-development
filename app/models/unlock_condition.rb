@@ -11,13 +11,7 @@ class UnlockCondition < ActiveRecord::Base
 
   # Returning the name of whatever badge or assignment has been identified as the condition
   def name
-    if condition_type == "Badge"
-      badge = Badge.find(condition_id)
-      return badge.name
-    elsif condition_type == "Assignment"
-      assignment = Assignment.find(condition_id)
-      return assignment.name
-    end
+    condition.name
   end
 
   def is_complete?(student)
