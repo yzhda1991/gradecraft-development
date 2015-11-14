@@ -20,62 +20,98 @@ class UnlockCondition < ActiveRecord::Base
 
   def is_complete?(student)
     if condition_type == "Badge"
-      badge = student.earned_badge_for_badge(condition_id)
-      badge_count = student.earned_badges_for_badge_count(condition_id)
-      if condition_state? && condition_value? && condition_date?
-        if badge.present? && (badge_count >= condition_value) &&
-          student.earned_badges.where(:badge_id => condition_id).last.created_at < condition_date
-            return true
-        end
-      elsif condition_state? && condition_value?
-        if badge.present? &&
-          badge_count >= condition_value
-          return true
-        end
-      elsif condition_state?
-        if student.earned_badge_for_badge(condition_id).present?
-          return true
-        end
-      end
+      check_badge_condition(student)
     elsif condition_type == "Assignment"
-      if condition_state == "Submitted"
-        assignment = Assignment.find(condition_id)
-        submission = student.submission_for_assignment(assignment)
-        if condition_date?
-          if submission.present? && (submission.updated_at < condition_date)
-            return true
-          end
-        elsif submission.present?
+      check_assignment_condition(student)
+    end
+  end
+
+  private 
+
+  def check_badge_condition(student)
+    badge = student.earned_badge_for_badge(condition_id)
+    if badge.present? 
+      if condition_value? && condition_date?
+        check_if_badge_earned_enough_times_by_date(student)
+      elsif condition_value?
+        check_if_badge_earned_enough_times(student)
+      else
+        return true
+      end
+    else
+      return false
+    end
+  end
+
+  def check_if_badge_earned_enough_times(student)
+    badge_count = student.earned_badges_for_badge_count(condition_id)
+    if badge_count >= condition_value
+      return true
+    else
+      return false
+    end
+  end
+
+  def check_if_badge_earned_enough_times_by_date(student)
+    badge_count = student.earned_badges_for_badge_count(condition_id)
+    if badge_count >= condition_value &&
+      (student.earned_badges.where(:badge_id => condition_id).last.created_at < condition_date)
+        return true
+    else
+      return false
+    end
+  end
+
+  def check_assignment_condition(student)
+    if condition_state == "Submitted"
+      check_submission_condition(student)
+    elsif condition_state == "Grade Earned"
+      check_grade_earned_condition(student)
+    elsif condition_state == "Feedback Read"
+      check_feedback_read_condition
+    end
+  end
+
+  def check_submission_condition(student)
+    assignment = Assignment.find(condition_id)
+    submission = student.submission_for_assignment(assignment)
+    if condition_date?
+      if submission.present? && (submission.updated_at < condition_date)
+        return true
+      end
+    elsif submission.present?
+      return true
+    end
+  end
+
+  def check_grade_earned_condition(student)
+    grade = student.grade_for_assignment_id(condition_id).first
+    if condition_value? && condition_date?
+      if (grade.score > condition_value) && (grade.updated_at < condition_date)
+        return true
+      end
+    elsif condition_value?
+      if grade.score > condition_value
+        return true
+      end
+    elsif condition_date?
+      if grade.updated_at < condition_date
+        return true
+      end
+    elsif grade.is_student_visible?
+      return true
+    end
+  end
+
+  def check_feedback_read_condition(student)
+    grade = student.grade_for_assignment_id(condition_id).first
+    if grade.feedback_read?
+      if condition_date?
+        if (grade.feedback_read_at < condition_date)
           return true
         end
-      elsif condition_state == "Grade Earned"
-        grade = student.grade_for_assignment_id(condition_id).first
-        if condition_value? && condition_date?
-          if (grade.score > condition_value) && (grade.updated_at < condition_date)
-            return true
-          end
-        elsif condition_value?
-          if grade.score > condition_value
-            return true
-          end
-        elsif condition_date?
-          if grade.updated_at < condition_date
-            return true
-          end
-        elsif grade.is_student_visible?
-            return true
-        end
-      elsif condition_state == "Feedback Read"
-        grade = student.grade_for_assignment_id(condition_id).first
-        if grade.feedback_read?
-          if condition_date?
-            if (grade.feedback_read_at < condition_date)
-              return true
-            end
-          else 
-            return true
-          end
-        end
+      else 
+        return true
       end
     end
   end
