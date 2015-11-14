@@ -14,6 +14,10 @@ class UnlockCondition < ActiveRecord::Base
     condition.name
   end
 
+  def unlockable_name
+    unlockable.name
+  end
+
   def is_complete?(student)
     if condition_type == "Badge"
       badge = student.earned_badge_for_badge(condition_id)
