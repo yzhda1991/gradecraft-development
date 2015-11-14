@@ -34,35 +34,9 @@ describe NullStudent do
 
     it "handles student.grades.first" do
       student = NullStudent.new
-      expect(student.grades.first.class).to eq(NullStudentGrade)
+      expect(student.grades.first.class).to eq(NullGrade)
     end
   end
-
-  describe "a single NullStudentGrade" do
-    it "handles grade.is_student_visible?" do
-      grade = NullStudentGrade.new
-      expect(grade.is_student_visible?).to eq(true)
-    end
-
-    it "handles methods for student and team grades" do
-      grade = NullStudentGrade.new
-      expect(grade.id).to eq(0)
-      expect(grade.point_total).to eq(555)
-      expect(grade.predicted_score).to eq(0)
-      expect(grade.score).to eq(nil)
-      expect(grade.raw_score).to eq(nil)
-      expect(grade.status).to eq(nil)
-      expect(grade.team_id).to eq(0)
-      expect(grade.final_score).to eq(nil)
-      expect(grade.pass_fail_status).to eq(nil)
-    end
-
-    it "handles assignment of predicted_score" do
-      grade = NullStudentGrade.new
-      expect(grade.predicted_score = 100).to eq(100)
-    end
-  end
-
 
   describe "NullStudentTeam and it's grades" do
     it "returns true for team for course present?" do
