@@ -22,7 +22,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "public methods" do
 
-    describe "fetch_assets", focus: true do
+    describe "fetch_assets" do
       subject { performer.instance_eval { fetch_assets }}
 
       describe "assignment submissions export" do
@@ -37,7 +37,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
-    describe "fetch_students" do
+    describe "fetch_students", focus: true do
       let(:students_double) { double(:students) }
 
       context "a team is present" do
@@ -46,7 +46,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
         before(:each) do
           allow(performer_with_team).to receive(:team_present?) { true }
-          performer.instance_variable_set(:@course, course)
+          performer_with_team.instance_variable_set(:@course, course)
           allow(course).to receive(:students_being_graded_by_team) { students_double }
         end
 
@@ -55,7 +55,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           subject
         end
 
-        it "fetchs the students" do
+        it "fetches the students" do
           subject
           expect(students_ivar).to eq(students_double)
         end
@@ -84,34 +84,22 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
 
     describe "do_the_work" do
-      context "both course and user present" do
+      context "both assignment and students are present" do
         after(:each) do
           subject.do_the_work
         end
 
         it "should require success" do
-          expect(subject).to receive(:require_success).exactly(2).times
+          expect(subject).to receive(:require_success).exactly(1).times
         end
 
         it "should add outcomes to subject.outcomes" do
-          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(2)
+          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(1)
         end
 
         it "should fetch the csv data" do
           allow(subject).to receive(:generate_export_csv).and_return "some,csv,data"
           expect(subject).to receive(:generate_export_csv)
-        end
-
-        it "should mail notification that the gradebook was exported" do
-          expect(subject).to receive(:notify_gradebook_export)
-        end
-
-        it "should return the result of notify_gradebook_export" do
-          @export_result = double(:export_result)
-          allow(subject).to receive_messages(notify_gradebook_export: @export_result)
-          allow(subject).to receive(:fetch_csv_data).and_return "some,csv,data"
-          expect(subject).to receive(:require_success).and_return(@export_result)
-          expect(subject).to receive(:require_success).and_return("some,csv,data")
         end
 
         describe "require_success" do
@@ -149,7 +137,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
 
       it "should have a failure message" do
-        expect(subject[:failure]).to match('Failed to generate CSV')
+        expect(subject[:failure]).to match('Failed to generate the csv')
       end
     end
   end
