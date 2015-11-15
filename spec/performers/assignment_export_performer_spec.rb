@@ -5,10 +5,14 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   include ModelAddons::SharedExamples
 
   # public methods
-  let(:professor) { create(:user) }
-  let(:assignment) { create(:assignment, course: course) }
-  let(:course) { create(:course) }
-  let(:team) { create(:team) }
+  let(:course) { @course ||= create(:course) }
+  let(:professor_course_membership) { @professor_course_membership ||= create(:professor_course_membership, course: course) }
+  let(:professor) { @professor ||= professor_course_membership.user }
+  let(:assignment) { @assignment ||= create(:assignment, course: course) }
+  let(:team) { @team ||= create(:team) }
+  let(:student_course_membership1) { @student_course_membership1 ||= create(:student_course_membership, course: course) }
+  let(:student_course_membership2) { @student_course_membership2 ||= create(:student_course_membership, course: course) }
+  let(:students) { @students ||= [ student_course_membership1.user, student_course_membership2.user ] }
 
   let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id }}
   let(:job_attrs_with_team) { job_attrs.merge(team_id: team.try(:id)) }
@@ -37,9 +41,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
-    describe "fetch_students", focus: true do
-      let(:students_double) { double(:students) }
-
+    describe "fetch_students" do
       context "a team is present" do
         let(:students_ivar) { performer_with_team.instance_variable_get(:@students) }
         subject { performer_with_team.instance_eval { fetch_students }}
@@ -47,7 +49,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         before(:each) do
           allow(performer_with_team).to receive(:team_present?) { true }
           performer_with_team.instance_variable_set(:@course, course)
-          allow(course).to receive(:students_being_graded_by_team) { students_double }
+          allow(course).to receive(:students_being_graded_by_team) { students}
         end
 
         it "returns the students being graded for that team" do
@@ -57,7 +59,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
         it "fetches the students" do
           subject
-          expect(students_ivar).to eq(students_double)
+          expect(students_ivar).to eq(students)
         end
       end
 
@@ -68,7 +70,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         before(:each) do
           allow(performer).to receive(:team_present?) { false }
           performer.instance_variable_set(:@course, course)
-          allow(course).to receive(:students_being_graded) { students_double }
+          allow(course).to receive(:students_being_graded) { students }
         end
 
         it "returns students being graded for the course" do
@@ -78,16 +80,19 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
         it "fetches the students" do
           subject
-          expect(students_ivar).to eq(students_double)
+          expect(students_ivar).to eq(students)
         end
       end
     end
 
     describe "do_the_work" do
-      context "both assignment and students are present" do
-        after(:each) do
-          subject.do_the_work
+      context "both assignment and students are present", focus: true do
+        before(:each) do
+          subject.instance_variable_set(:@assignment, assignment)
+          subject.instance_variable_set(:@students, students)
         end
+
+        after(:each) { subject.do_the_work }
 
         it "should require success" do
           expect(subject).to receive(:require_success).exactly(1).times
@@ -123,6 +128,8 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         end
       end
 
+      context "either assignment or students are not present" do
+      end
     end
   end
 

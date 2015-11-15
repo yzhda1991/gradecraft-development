@@ -50,7 +50,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def csv_file_path
-    @csv_file_path ||= File.expand_path(@tmp_dir, "/_grade_import_template.csv")
+    @csv_file_path ||= File.expand_path(tmp_dir, "/_grade_import_template.csv")
   end
 
   # # entire block handled by submissions and submissions_by_team methods, and by 
@@ -90,7 +90,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def generate_export_csv
-    open(@csv_file_path, 'w') do |f|
+    open(csv_file_path, 'w') do |f|
       f.puts @assignment.grade_import(@students)
     end
   end
@@ -138,7 +138,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def presenter_base_options
    {
       assignment: @assignment,
-      csv_file_path: @csv_file_path,
+      csv_file_path: csv_file_path,
       export_file_basename: export_file_basename
     }
   end
@@ -156,6 +156,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
     ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
   end
 
+  # @mz todo: add specs
   def generate_csv_messages
     {
       success: "Successfully generated the csv data on assignment #{@assignment.id} for students: #{@students.collect(&:id)}",
