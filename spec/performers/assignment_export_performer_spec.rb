@@ -106,26 +106,6 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           allow(subject).to receive(:generate_export_csv).and_return "some,csv,data"
           expect(subject).to receive(:generate_export_csv)
         end
-
-        describe "require_success" do
-          describe "notify_gradebook_export requirement" do
-            context "block outcome fails" do
-              it "should add the :success outcome message to @outcome_messages" do
-                allow(subject).to receive_messages(notify_gradebook_export: true)
-                subject.do_the_work
-                expect(subject.outcome_messages.last).to match("was successfully delivered")
-              end
-            end
-
-            context "block outcome succeeds" do
-              it "should add the :failure outcome message to @outcome_messages" do
-                allow(subject).to receive_messages(notify_gradebook_export: false)
-                subject.do_the_work
-                expect(subject.outcome_messages.last).to match("was not delivered")
-              end
-            end
-          end
-        end
       end
 
       context "either assignment or students are not present" do
