@@ -7,9 +7,9 @@
     %h4.assignment_name
       = link_to assignment.name, assignment
       - if assignment.is_individual?
-        = link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button"
+        = link_to raw("<i class='fa fa-check fa-fw'></i> Quick Grade"), mass_grade_assignment_path(assignment), :class => "button"
       - else
-        = link_to 'Grade', assignment, :class => "button"
+        = link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), assignment, :class => "button"
 
     = form_tag edit_status_grades_assignment_path assignment do
       %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "unreleasedTableCaption"}
@@ -25,9 +25,13 @@
             %th{:scope => "col"} Feedback
             %th{:scope => "col", "data-dynatable-no-sort" => "true", :style => "min-width: 200px"}
               %span.sr-only Actions
-            %th{"data-dynatable-no-sort" => "true", :width => "120px" }
-              %button.button.select-all= "Check"
-              %button.button.select-none= "Uncheck"
+            %th{"data-dynatable-no-sort" => "true", :width => "140px" }
+              %button.button.select-all
+                %i.hide-for-small.fa.fa-check-square.fa-fw
+                = "Check"
+              %button.button.select-none
+                %i.hide-for-small.fa.fa-square.fa-fw
+                = "Uncheck"
         %tbody
           - grades.each do |g|
             - graded_assignment = g.assignment
@@ -54,11 +58,12 @@
                   %ul.button-bar
                     %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Grade"), assignment_grade_path(g.assignment, :student_id => g.student_id), :class => "button"
                     %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_assignment_grade_path(:assignment_id => assignment.id, :student_id => student.try(:id)), :class => "button"
-              %td.center
-                %label
-                  = check_box_tag "grade_ids[]", g.id
-                  .sr-only
-                    Check/Uncheck #{first_name} #{last_name}
+              %td
+                .center
+                  %label
+                    = check_box_tag "grade_ids[]", g.id
+                    .sr-only
+                      Check/Uncheck #{first_name} #{last_name}
 
       .submit-buttons
         .right
