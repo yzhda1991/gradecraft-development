@@ -50,7 +50,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def csv_file_path
-    @csv_file_path ||= File.expand_path(tmp_dir, "/_grade_import_template.csv")
+    @csv_file_path ||= File.expand_path("_grade_import_template.csv", tmp_dir)
   end
 
   # # entire block handled by submissions and submissions_by_team methods, and by 
