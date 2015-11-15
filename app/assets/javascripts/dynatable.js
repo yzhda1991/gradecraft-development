@@ -244,19 +244,6 @@ $('table.nofeatures_default_score_dynatable').dynatable({
     }
 });
 
-$('table.nofeatures_default_desc_score_dynatable').dynatable({
-
-  features: {
-        paginate: false,
-        search: false,
-        recordCount: false,
-        sort: true
-      },
-  dataset: {
-    sorts: { 'score': -1 }
-  }
-});
-
 function alfaSort(as, bs, attr, direction) {
   //swap if reverse
   if(direction === -1) {
@@ -403,19 +390,11 @@ $('table.nofeatures_default_rank_dynatable').dynatable({
       return Number(el.innerHTML) || 0;
     },
     score: function(el, record) {
-      if($.trim(el.innerHTML) == '') {
-        return el.innerHTML;
-      } else {
-        return Number(el.innerHTML.replace(/,/g,""));
-      }
+      record.numericScore = Number(el.innerHTML.replace(/,/g,""));
+      return el.innerHTML;
     },
     badgeCount: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,""));
-    }
-  },
-  writers: {
-    score: function(record) {
-      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
 });
