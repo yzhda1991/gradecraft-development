@@ -109,16 +109,8 @@ $('table.nosearch_dynatable').dynatable({
       return Number(el.innerHTML) || 0;
     },
     score: function(el, record) {
-      if($.trim(el.innerHTML) == '') {
-        return el.innerHTML;
-      } else {
-        return Number(el.innerHTML.replace(/,/g,""));
-      }
-    }
-  },
-  writers: {
-    score: function(record) {
-      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      record.numericScore = Number(el.innerHTML.replace(/,/g,""));
+      return el.innerHTML;
     }
   }
 });
