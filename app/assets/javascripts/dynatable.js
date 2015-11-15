@@ -173,11 +173,8 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
       return Number(el.innerHTML.replace()) || 0;
     },
     score: function(el, record) {
-      if($.trim(el.innerHTML) == '') {
-        return el.innerHTML;
-      } else {
-        return Number(el.innerHTML.replace(/,/g,""));
-      }
+      record.numericScore = Number(el.innerHTML.replace(/,/g,""));
+      return el.innerHTML;
     },
     rawScore: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,""));
@@ -187,9 +184,6 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
     }
   },
   writers: {
-    score: function(record) {
-      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
     totalBadgeScore: function(record) {
       return record['totalBadgeScore'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }

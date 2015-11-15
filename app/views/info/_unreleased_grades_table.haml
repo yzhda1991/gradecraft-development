@@ -21,11 +21,11 @@
               %th{:scope => "col"}= "#{term_for :groups}"
             - elsif course.has_teams?
               %th{:scope => "col", :width => "15%"}= "#{term_for :team}"
-            %th{:scope => "col", "data-dynatable-column" => "score", :width => "8%"} Score
+            %th{:scope => "col", "data-dynatable-column" => "score", "data-dynatable-sorts" => "numericScore", :width => "8%"} Score
             %th{:scope => "col"} Feedback
             %th{:scope => "col", "data-dynatable-no-sort" => "true", :style => "min-width: 200px"}
               %span.sr-only Actions
-            %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
+            %th{"data-dynatable-no-sort" => "true", :width => "120px" }
               %button.button.select-all= "Check"
               %button.button.select-none= "Uncheck"
         %tbody

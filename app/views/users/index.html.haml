@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   - if current_course.has_teams?
     .team-filter
       = form_tag users_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
@@ -20,7 +20,7 @@
         %th Role
         %th Courses
         %th #{term_for :team}
-        %th Score
+        %th{ "data-dynatable-sorts" => "numericScore" } Score
         %th{:style => "min-width: 250px"}
     %tbody
       - @users.each do |user|
