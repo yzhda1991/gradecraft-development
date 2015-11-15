@@ -86,13 +86,12 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
 
     describe "do_the_work" do
-      context "both assignment and students are present", focus: true do
-        before(:each) do
-          subject.instance_variable_set(:@assignment, assignment)
-          subject.instance_variable_set(:@students, students)
-        end
+      after(:each) { subject.do_the_work }
 
-        after(:each) { subject.do_the_work }
+      context "work resources are present" do
+        before do
+          allow(subject).to receive(:work_resources_present?) { true }
+        end
 
         it "should require success" do
           expect(subject).to receive(:require_success).exactly(1).times
@@ -108,7 +107,25 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         end
       end
 
-      context "either assignment or students are not present" do
+      context "work resources are not present" do
+        before do
+          allow(subject).to receive(:work_resources_present?) { false }
+        end
+
+        after(:each) { subject.do_the_work }
+
+        it "should not require success" do
+          expect(subject).not_to receive(:require_success)
+        end
+
+        it "should not add outcomes to subject.outcomes" do
+          expect { subject.do_the_work }.not_to change { subject.outcomes.size }
+        end
+
+        it "should not fetch the csv data" do
+          allow(subject).to receive(:generate_export_csv).and_return "some,csv,data"
+          expect(subject).not_to receive(:generate_export_csv)
+        end
       end
     end
   end

@@ -8,7 +8,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   # @mz todo: add specs
   def do_the_work
-    if @assignment.present? and @students.present?
+    if work_resources_present?
       require_success(generate_csv_messages, max_result_size: 250) do
         generate_export_csv
       end
@@ -32,6 +32,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   protected
+
+  # @mz todo: add specs
+  def work_resources_present?
+    @assignment.present? and @students.present?
+  end
 
   def fetch_assets
     @assignment = fetch_assignment
