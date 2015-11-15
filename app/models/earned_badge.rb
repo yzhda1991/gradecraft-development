@@ -29,6 +29,7 @@ class EarnedBadge < ActiveRecord::Base
 
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
+  scope :student_visible, -> { where(student_visible: true) }
 
   def self.score
     pluck('SUM(score)').first || 0
