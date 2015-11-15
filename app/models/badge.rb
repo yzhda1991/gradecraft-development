@@ -105,10 +105,14 @@ class Badge < ActiveRecord::Base
     if is_unlockable?
       if visible_when_locked? || is_unlocked_for_student?(student)
         return true
+      else 
+        return false
       end
     else
       if visible?
         return true
+      else 
+        return false
       end
     end
   end

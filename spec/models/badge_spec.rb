@@ -174,7 +174,47 @@ describe Badge do
   end
 
   describe "#visible_for_student?(student)" do 
+    it "returns true if the badge is visible" do 
+      badge = create(:badge)
+      student = create(:user)
+      expect(badge.visible_for_student?(student)).to eq(true)
+    end
 
+    it "returns false if the badge is invisible" do 
+      badge = create(:badge, visible: false)
+      student = create(:user)
+      expect(badge.visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the badge is invisible but has been earned by the student" do 
+      badge = create(:badge)
+      student = create(:user)
+      earned_badge = create(:earned_badge, student: student, badge: badge)
+      expect(badge.visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns true if the badge is locked but visible" do 
+      badge = create(:badge, visible_when_locked: true)
+      student = create(:user)
+      unlock_condition = create(:unlock_condition, unlockable: badge)
+      expect(badge.visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the badge is invisible when locked" do 
+      badge = create(:badge, visible_when_locked: false)
+      student = create(:user)
+      unlock_condition = create(:unlock_condition, unlockable: badge)
+      expect(badge.visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the badge is invisible when locked and the student has met the conditions" do 
+      badge = create(:badge, visible_when_locked: false)
+      student = create(:user)
+      assignment = create(:assignment)
+      submission = create(:submission, assignment: assignment, student: student)
+      unlock_condition = create(:unlock_condition, unlockable: badge, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted")
+      expect(badge.visible_for_student?(student)).to eq(false)
+    end
   end
 
   describe "#find_or_create_unlock_state(student)" do 
