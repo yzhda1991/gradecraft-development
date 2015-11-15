@@ -22,7 +22,7 @@
         %th{:scope => "col"} Badges
         %th{:scope => "col"} Total Points
         %th
-        %th{:scope => "col", :style => "min-width: 120px" }
+        %th{:scope => "col", :style => "min-width: 250px" }
           %span.sr-only Actions
     %tbody
       - @courses.each do |course|
@@ -39,15 +39,7 @@
           %td
             .right
               %ul.button-bar
-                %li
-                  = link_to course_path(course), :class => 'button' do
-                    See
-                %li
-                  = link_to edit_course_path(course), :class => 'button' do
-                    Edit
-                %li
-                  = link_to course, :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete do
-                    Delete
-                %li
-                  = link_to copy_courses_path(:id => course.id), :class => 'button', :method => :copy do
-                    Copy
+                %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See"), course_path(course), :class => 'button'                    
+                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_course_path(course), :class => 'button'
+                %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), course, :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete
+                %li= link_to raw("<i class='fa fa-copy fa-fw'></i> Copy"), copy_courses_path(:id => course.id), :class => 'button', :method => :copy
