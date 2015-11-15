@@ -6,7 +6,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
-  # @mz todo: add specs
   def do_the_work
     if work_resources_present?
       require_success(generate_csv_messages, max_result_size: 250) do
@@ -20,7 +19,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   # add this for logging_with_attributes
-  # @mz todo: add specs
   def attributes
     { 
       assignment_id: @assignment.try(:id),
@@ -72,7 +70,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @course = @assignment.course
   end
 
-  # add specs
   def fetch_students
     if team_present?
       @students = @course.students_being_graded_by_team(@team)
@@ -160,7 +157,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
   end
 
-  # @mz todo: add specs
   def generate_csv_messages
     {
       success: "Successfully generated the csv data on assignment #{@assignment.id} for students: #{@students.collect(&:id)}",

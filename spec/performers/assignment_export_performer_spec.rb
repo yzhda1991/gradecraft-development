@@ -190,13 +190,23 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   
   describe "private methods" do
     describe "generate_csv_messages" do
-      subject { performer.instance_eval{ generate_csv_messages } }
-      it "should have a success message" do
-        expect(subject[:success]).to match('Successfully generated')
+      let(:messages) { performer.instance_eval{ generate_csv_messages } }
+      before(:each) { performer.instance_variable_set(:@students, students) }
+
+      describe "success" do
+        subject { messages[:success] }
+
+        it { should match('Successfully generated') }
+        it { should include("assignment #{assignment.id}") }
+        it { should include("for students: #{students.collect(&:id)}") }
       end
 
-      it "should have a failure message" do
-        expect(subject[:failure]).to match('Failed to generate the csv')
+      describe "failure" do
+        subject { messages[:failure] }
+
+        it { should match('Failed to generate the csv') }
+        it { should include("assignment #{assignment.id}") }
+        it { should include("for students: #{students.collect(&:id)}") }
       end
     end
   end
