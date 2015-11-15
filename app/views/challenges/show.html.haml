@@ -57,7 +57,7 @@
                 = team.name
             %td
               - if challenge_grade
-                = challenge_grade.score
+                = points challenge_grade.score
             - if @challenge.has_levels?
               %td
                 - if challenge_grade

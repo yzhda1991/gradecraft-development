@@ -39,7 +39,7 @@ describe AssignmentsController do
         # TODO: notice, lib/course_terms.rb downcases the term_for assignments
         expect(assigns(:title)).to eq("Review assignment Settings")
         # TODO: confirm multiple assignments are chronological and alphabetical
-        expect(assigns(:assignments)).to eq([@assignment])
+        expect(assigns(:assignment_types)).to eq([@assignment_type])
         expect(response).to render_template(:settings)
       end
     end

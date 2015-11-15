@@ -265,4 +265,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", :class => "button"
-      %li= link_to 'Cancel', courses_path, :class => 'button'
+      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), courses_path, :class => 'button'

@@ -19,10 +19,14 @@
           %tr
             %th{:style => "text-align: right", :width => "50%"} Name
             %th{:style => "text-align: right", :width => "15%"} Earned
-            %th{"data-dynatable-no-sort" => "true", :width => "120px" }  
+            %th{"data-dynatable-no-sort" => "true", :width => "140px" }
               .center
-                %button.button.select-all= "Check"
-                %button.button.select-none= "Uncheck"
+                %button.button.select-all
+                  %i.hide-for-small.fa.fa-check-square.fa-fw
+                  = "Check"
+                %button.button.select-none
+                  %i.hide-for-small.fa.fa-square.fa-fw
+                  = "Uncheck"
         - @earned_badges.each do |earned_badge|
           %tr
             %td{:style => "text-align: right"}= link_to earned_badge.student.name, student_path(earned_badge.student)
@@ -36,4 +40,4 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Award", :class => "button"
-          %li= link_to 'Cancel', badges_path, :class => "button"
+          %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), badges_path, :class => "button"

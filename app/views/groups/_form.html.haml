@@ -49,4 +49,4 @@
   .submit-buttons
     %ul
       %li= submit_tag "#{@group.persisted? ? 'Update' : 'Create'} #{ term_for :group } ",  :class => 'button'
-      %li= link_to 'Cancel', groups_path, :class => 'button'
+      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), groups_path, :class => 'button'
