@@ -78,11 +78,12 @@ class Badge < ActiveRecord::Base
       unlock_state = unlock_states.where(:student_id => student.id).first
       if unlock_state.present?
         unlock_state.unlocked = true
+        unlock_state.save
       else
         self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
       end
-    else
-      return false
+    else 
+      self.unlock_states.create(:student_id => student.id, :unlocked => false, :unlockable_id => self.id, :unlockable_type => "Assignment")
     end
   end
 

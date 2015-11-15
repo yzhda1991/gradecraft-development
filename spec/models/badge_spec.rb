@@ -148,6 +148,29 @@ describe Badge do
 
   describe "#check_unlock_status(student)" do 
 
+    it "updates the unlock status to true if conditions are met" do
+      locked_badge = create(:badge)
+      student = create(:user)
+      assignment = create(:assignment)
+      submission = create(:submission, assignment: assignment, student: student)
+      unlock_condition = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
+      locked_badge.check_unlock_status(student)
+      unlock_state = locked_badge.unlock_states.where(student: student).first
+      expect(unlock_state.unlocked).to eq(true)
+    end
+
+    it "does not update the unlock status to true if conditions are not met" do
+      locked_badge = create(:badge)
+      student = create(:user)
+      assignment = create(:assignment)
+      assignment_2 = create(:assignment)
+      submission = create(:submission, assignment: assignment, student: student)
+      unlock_condition = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
+      unlock_condition_2 = create(:unlock_condition, condition_id: assignment_2.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: locked_badge.id, unlockable_type: "Badge")
+      locked_badge.check_unlock_status(student)
+      unlock_state = locked_badge.unlock_states.where(student: student).first
+      expect(unlock_state.unlocked).to eq(false)
+    end
   end
 
   describe "#visible_for_student?(student)" do 
