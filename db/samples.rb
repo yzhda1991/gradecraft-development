@@ -78,7 +78,7 @@ puts "Children must be taught how to think, not what to think.― Margaret Mead"
     :team_roles => false,
     :team_score_average => false,
     :team_setting => false,
-    :team_term => false,
+    :team_term => nil,
     :teams_visible => false,
     :total_assignment_weight => 0,
     :twitter_handle => nil,

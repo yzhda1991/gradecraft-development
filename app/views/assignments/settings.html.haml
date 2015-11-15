@@ -13,7 +13,7 @@
   = render 'layouts/alerts'
 
   .assignments
-    - @assignments.group_by(&:assignment_type).each do |assignment_type, assignments|
+    - @assignment_types.each do |assignment_type|
       %h3= "#{assignment_type.try(:name)} – #{points assignment_type.total_points} points"
       %table{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
         %thead
@@ -78,6 +78,7 @@
             %th{:scope => "col", :style => "min-width: 110px"}
               %span.sr-only Actions
         %tbody
+          - assignments = assignment_type.assignments
           - assignments.each do |assignment|
             %tr
               %td= link_to assignment.name, assignment

@@ -27,4 +27,4 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Submit"
-          %li= link_to 'Cancel', challenges_path, :class => 'button'
+          %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), challenges_path, :class => 'button'

@@ -61,4 +61,4 @@
   .submit-buttons
     %ul
       %li= submit_tag "#{@user.persisted? ? 'Update' : 'Create'} User", :class => "button"
-      %li= link_to 'Cancel', users_path, :class => 'button'
+      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), users_path, :class => 'button'

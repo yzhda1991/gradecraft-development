@@ -69,7 +69,7 @@
           .submit-buttons
             %ul
               %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", :class => "button"
-              %li= link_to 'Cancel', assignment_path(@assignment), :class => 'button'
+              %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(@assignment), :class => 'button'
 
         %section
 

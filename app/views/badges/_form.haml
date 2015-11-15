@@ -76,4 +76,4 @@
   .submit-buttons
     %ul
       %li= submit_tag "#{@badge.persisted? ? 'Update' : 'Create'} #{term_for :badge}", :class => 'button'
-      %li= link_to 'Cancel', badges_path, :class => 'button'
+      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), badges_path, :class => 'button'

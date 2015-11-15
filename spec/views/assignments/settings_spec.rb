@@ -5,18 +5,18 @@ describe "assignments/settings" do
 
   before(:all) do
     @course = create(:course)
-    @assignment = create(:assignment)
+    @assignment_types = create(:assignment_type)
   end
 
   before(:each) do
-    assign(:title, "Assignment")
-    assign(:assignments, [@assignment])
+    assign(:title, "Assignment Settings")
+    assign(:assignment_types, [@assignment_types])
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:term_for).and_return("Assignment")
   end
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Assignment", :count => 1
+    assert_select "h3", text: "Assignment Settings", :count => 1
   end
 end

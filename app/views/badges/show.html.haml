@@ -50,7 +50,7 @@
         - if @badge.point_total?
           .points="#{@badge.point_total} Points"
         - if @badge.description?
-          .feedback= @badge.description
+          .feedback= raw @badge.description
         - if @badge.is_unlockable?
           %li 
             %a
