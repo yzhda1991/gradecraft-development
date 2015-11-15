@@ -61,25 +61,33 @@ class Badge < ActiveRecord::Base
   # Checks to see if a badge is available for a student to earn, specifically used to style a badge
   # as red/not in the predictor
   def is_unlocked_for_student?(student)
-    if unlock_states.where(:student_id => student.id).present?
-      unlock_states.where(:student_id => student.id).first.is_unlocked?
+    unlock_state = unlock_states.where(:student_id => student.id).first
+    if unlock_state.present? && unlock_state.is_unlocked?
+      return true
     elsif ! unlock_conditions.present?
       return true
+    else
+      return false
     end
   end
 
   def check_unlock_status(student)
-    goal = unlock_conditions.count
-    count = count_unlock_conditions_met(student)
-    if goal == count
-      if unlock_states.where(:student_id => student.id).present?
-        unlock_states.where(:student_id => student.id).first.unlocked = true
+    goal = count_unlock_conditions_to_meet
+    earned = count_unlock_conditions_met(student)
+    if goal == earned
+      unlock_state = unlock_states.where(:student_id => student.id).first
+      if unlock_state.present?
+        unlock_state.unlocked = true
       else
         self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
       end
     else
       return false
     end
+  end
+
+  def count_unlock_conditions_to_meet
+    goal = unlock_conditions.count
   end
 
   def count_unlock_conditions_met(student)
