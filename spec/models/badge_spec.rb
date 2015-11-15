@@ -218,11 +218,15 @@ describe Badge do
   end
 
   describe "#find_or_create_unlock_state(student)" do 
-
+    it "should find or create an unlock state for a student" do 
+      skip "implement"
+    end
   end
 
   describe "#earned_badges_by_student_id" do 
-
+    it "should return all of the earned badges for a badge, grouped by their unique student ids" do 
+      skip "implement"
+    end
   end
 
   describe "#earned_badge_for_student(student)" do 
@@ -235,7 +239,9 @@ describe Badge do
   end
 
   describe "#find_or_create_predicted_earned_badge(student)" do 
-
+    it "should find or create a predicted earned badge for a student" do 
+      skip "implement"
+    end
   end
 
   describe "#earned_badge_count_for_student(student)" do 
