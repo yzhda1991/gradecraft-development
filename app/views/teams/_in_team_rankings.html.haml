@@ -11,7 +11,7 @@
           %th Character Profile
         - if current_course.team_roles?
           %th Role
-        %th Score
+        %th{ "data-dynatable-sorts" => "numericScore" } Score
     %tbody
       - current_student.team_for_course(current_course).students.each do |student|
         - if student.display_name?

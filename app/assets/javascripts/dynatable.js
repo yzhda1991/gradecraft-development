@@ -205,11 +205,8 @@ $('table.nofeatures_default_score_dynatable').dynatable({
   },
   readers: {
       score: function(el, record) {
-        if($.trim(el.innerHTML) == '') {
-          return el.innerHTML;
-        } else {
-          return Number(el.innerHTML.replace(/,/g,""));
-        }
+        record.numericScore = Number(el.innerHTML.replace(/,/g,""));
+        return el.innerHTML;
       },
       dueDate: function(el, record) {
         record.parsedDate = Date.parse(el.innerHTML);
@@ -241,9 +238,6 @@ $('table.nofeatures_default_score_dynatable').dynatable({
       }
     },
     writers: {
-      score: function(record) {
-        return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      },
       pointsEarned: function(record) {
         return record['pointsEarned'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
