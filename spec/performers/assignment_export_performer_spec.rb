@@ -134,27 +134,31 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   # private methods
   
   describe "work_resources_present?" do
-    let(:assignment_present) { subject.instance_variable_set(:@assignment, true) }
-    let(:assignment_not_present) { subject.instance_variable_set(:@assignment, false) }
+    let(:assignment_present) { performer.instance_variable_set(:@assignment, true) }
+    let(:assignment_not_present) { performer.instance_variable_set(:@assignment, false) }
+    let(:students_present) { performer.instance_variable_set(:@students, true) }
+    let(:students_not_present) { performer.instance_variable_set(:@students, false) }
 
-    subject { subject.instance_eval { work_resources_present? }}
+    subject { performer.instance_eval { work_resources_present? }}
 
     context "both @assignment and @students are present" do
       before { assignment_present; students_present }
-      it "returns true" do
-      end
+      it { should be_truthy }
     end
 
     context "@assignment is present but @students are not" do
       before { assignment_present; students_not_present }
+      it { should be_falsey }
     end
 
     context "@students is present but @assignment is not" do
       before { students_present; assignment_not_present }
+      it { should be_falsey }
     end
 
     context "neither @students nor @assignment are present" do
       before { students_not_present; assignment_not_present }
+      it { should be_falsey }
     end
   end
   
