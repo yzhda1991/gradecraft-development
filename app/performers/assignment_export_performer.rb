@@ -33,7 +33,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   protected
 
-  # @mz todo: add specs
   def work_resources_present?
     @assignment.present? and @students.present?
   end

@@ -130,6 +130,32 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
+  # def attributes
+  #   { 
+  #     assignment_id: @assignment.try(:id),
+  #     course_id: @course.try(:id),
+  #     professor_id: @professor.try(:id),
+  #     student_ids: @students.collect(&:id),
+  #     team_id: @team.try(:id)
+  #   }
+  # end
+  describe "attributes" do
+    let(:default_attributes) {{ assignment_id: assignment.id, course_id: course.id, professor_id: professor.id, student_ids: students.collect(&:id) }}
+    before(:each) { performer.instance_variable_set(:@students, students) }
+
+    context "team is not present" do
+      it "doesn't have a team_id" do
+        expect(performer.attributes).to eq(default_attributes.merge(team_id: nil))
+      end
+    end
+
+    context "team is present" do
+      let(:performer) { performer_with_team }
+      it "has a team_id" do
+        expect(performer.attributes).to eq(default_attributes.merge(team_id: team.id))
+      end
+    end
+  end
 
   # private methods
   
