@@ -47,5 +47,116 @@ describe Badge do
       expect(subject.awarded_count).to eq(2)
     end
   end
-  
+
+  describe "#is_a_condition?" do 
+    it "returns true if the badge is an unlock condition" do 
+      badge = create(:badge)
+      unlock_condition = create(:unlock_condition, condition_id: badge.id, condition_type: "Badge", condition_state: "Earned")
+      expect(badge.is_a_condition?).to eq(true)
+    end
+
+    it "returns false if the badge is an unlockable" do 
+      badge = create(:badge)
+      second_badge = create(:badge)
+      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: badge.id, unlockable_type: "Badge")
+      expect(badge.is_a_condition?).to eq(false)
+    end
+  end
+
+  describe "#is_unlockable?" do 
+    it "returns true if the badge is an unlockable" do 
+      badge = create(:badge)
+      second_badge = create(:badge)
+      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: badge.id, unlockable_type: "Badge")
+      expect(badge.is_unlockable?).to eq(true)
+    end
+
+    it "returns false if the badge is a condition" do 
+      badge = create(:badge)
+      second_badge = create(:badge)
+      unlock_condition = create(:unlock_condition, condition_id: badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: second_badge.id, unlockable_type: "Badge")
+      expect(badge.is_unlockable?).to eq(false)
+    end
+  end
+
+  describe "#unlockable" do 
+    it "returns the unlockable object from a condition" do 
+      badge = create(:badge)
+      second_badge = create(:badge)
+      unlock_condition = create(:unlock_condition, condition_id: second_badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: badge.id, unlockable_type: "Badge")
+      expect(second_badge.unlockable).to eq(badge)
+    end
+  end
+
+  describe "#is_unlocked_for_student?(student)" do 
+
+  end
+
+  describe "#count_unlock_conditions_met(student)" do 
+    it "tallies the number of unlock conditions a student has successfully completed" do
+      student = create(:user)
+      assignment = create(:assignment)
+      submission = create(:submission, assignment: assignment, student: student)
+      badge = create(:badge)
+      earned_badge = create(:earned_badge, badge: badge, student: student)
+      unearned_badge = create(:badge)
+      unlock_condition = create(:unlock_condition, condition_id: badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: unearned_badge.id, unlockable_type: "Badge")
+      unlock_condition_2 = create(:unlock_condition, condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: unearned_badge.id, unlockable_type: "Badge")
+      expect(unearned_badge.count_unlock_conditions_met(student)).to eq(2)
+    end
+  end
+
+  describe "#check_unlock_status(student)" do 
+
+  end
+
+  describe "#visible_for_student?(student)" do 
+
+  end
+
+  describe "#find_or_create_unlock_state(student)" do 
+
+  end
+
+  describe "#earned_badges_by_student_id" do 
+
+  end
+
+  describe "#earned_badge_for_student(student)" do 
+    it "returns the first earned badge for a student for a particular badge" do 
+      student = create(:user)
+      badge = create(:badge, point_total: 1000)
+      earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
+      expect(badge.earned_badge_for_student(student)).to eq(earned_badge)
+    end
+  end
+
+  describe "#find_or_create_predicted_earned_badge(student)" do 
+
+  end
+
+  describe "#earned_badge_count_for_student(student)" do 
+    it "sums up the number of times a student has earned a specific badge" do 
+      student = create(:user)
+      badge = create(:badge, point_total: 1000)
+      second_badge = create(:badge, point_total: 200)
+      earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
+      second_earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
+      third_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
+      expect(badge.earned_badge_count_for_student(student)).to eq(2)
+    end
+  end
+
+  describe "#earned_badge_total_points(student)" do 
+    it "sums up the total points earned for a specific badge" do 
+      student = create(:user)
+      badge = create(:badge, point_total: 1000)
+      second_badge = create(:badge, point_total: 200)
+      earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
+      second_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
+      third_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
+      expect(badge.earned_badge_total_points(student)).to eq(1000)
+    end
+  end
+
 end

@@ -50,6 +50,14 @@ class Badge < ActiveRecord::Base
     unlock_conditions.present?
   end
 
+  def is_a_condition?
+    unlock_keys.present?
+  end
+
+  def unlockable
+    UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").first.unlockable
+  end
+
   # Checks to see if a badge is available for a student to earn, specifically used to style a badge
   # as red/not in the predictor
   def is_unlocked_for_student?(student)
@@ -60,33 +68,28 @@ class Badge < ActiveRecord::Base
     end
   end
 
-  def is_a_condition?
-    UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").present?
-  end
-
-  def unlockable
-    UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").first.unlockable
-  end
-
   def check_unlock_status(student)
-    if ! is_unlocked_for_student?(student)
-      goal = unlock_conditions.count
-      count = 0
-      unlock_conditions.each do |condition|
-        if condition.is_complete?(student)
-          count += 1
-        end
-      end
-      if goal == count
-        if unlock_states.where(:student_id => student.id).present?
-          unlock_states.where(:student_id => student.id).first.unlocked = true
-        else
-          self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
-        end
+    goal = unlock_conditions.count
+    count = count_unlock_conditions_met(student)
+    if goal == count
+      if unlock_states.where(:student_id => student.id).present?
+        unlock_states.where(:student_id => student.id).first.unlocked = true
       else
-        return false
+        self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
+      end
+    else
+      return false
+    end
+  end
+
+  def count_unlock_conditions_met(student)
+    count = 0
+    unlock_conditions.each do |condition|
+      if condition.is_complete?(student)
+        count += 1
       end
     end
+    return count
   end
 
   def visible_for_student?(student)
@@ -105,7 +108,6 @@ class Badge < ActiveRecord::Base
     UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Badge")
   end
 
-
   #badges per role
   def earned_badges_by_student_id
     @earned_badges_by_student_id ||= earned_badges.group_by { |eb| [eb.student_id] }
@@ -113,11 +115,6 @@ class Badge < ActiveRecord::Base
 
   def earned_badge_for_student(student)
     earned_badges_by_student_id[[student.id]].try(:first)
-  end
-
-  def earned_badges_for_student(student)
-    # ATTN
-    earned_badges.where(:student_id => student[:id])
   end
 
   def find_or_create_predicted_earned_badge(student)
