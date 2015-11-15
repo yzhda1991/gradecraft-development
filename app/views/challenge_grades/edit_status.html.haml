@@ -4,12 +4,12 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %table.nopage_dynatable
     %thead
       %tr
         %th= term_for :team
-        %th Score
+        %th{ "data-dynatable-sorts" => "numericScore" } Score
         %th Current Status
     %tbody
       - for challenge_grade in @challenge_grades

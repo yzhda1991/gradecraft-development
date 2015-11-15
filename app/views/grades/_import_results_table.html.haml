@@ -4,7 +4,7 @@
       %th First Name
       %th Last Name
       %th Email
-      %th Score
+      %th{ "data-dynatable-sorts" => "rawScore" } Score
       %th Feedback
   %tbody
     - grades.each do |grade|

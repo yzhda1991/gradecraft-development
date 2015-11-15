@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %span.label.alert= "You have #{@resubmission_count} resubmissions to grade"
 
   - if current_course.has_teams?
@@ -28,7 +28,7 @@
               %th{:scope => "col", :width => "15%"}= "#{term_for :team}"
           - elsif assignment.has_groups?
             %th{:scope => "col"} Group
-          %th{:scope => "col", :width => "7%"} Current Score
+          %th{:scope => "col", :width => "7%", "data-dynatable-sorts" => "numericScore"} Current Score
           %th{:scope => "col", :width => "7%"} Graded
           %th{:scope => "col", :width => "7%"} Resubmitted
           %th{:scope => "col", :style => "min-width: 300px" }

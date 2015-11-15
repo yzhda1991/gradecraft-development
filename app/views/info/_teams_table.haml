@@ -3,7 +3,7 @@
     %tr
       %th= course.team_term
       - if ! current_course.team_score_average
-        %th Score
+        %th{ "data-dynatable-sorts" => "numericScore" } Score
       %th Average #{course.user_term} Grade
       %th= course.team_leader_term
   %tbody

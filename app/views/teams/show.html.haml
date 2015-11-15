@@ -15,7 +15,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %h4.subtitle= "#{term_for :student} Roster"
 
   %table.nofeatures_default_last_name_dynatable
@@ -26,7 +26,7 @@
         %th Email
         - if current_course.team_roles?
           %th Role
-        %th Score
+        %th{ "data-dynatable-sorts" => "numericScore" } Score
         %th Level
         - if current_course.has_badges?
           %th{:scope => "col", "data-dynatable-sorts" => "badgeCount", :width => "20%" }= "#{term_for :badges} Earned"
@@ -50,7 +50,7 @@
                     %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
                   .display_on_hover.hover-style
                     = badge.try(:name)
-                    
+
               %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
             %td
               .right
@@ -58,13 +58,13 @@
                   %li= link_to raw("<i class='fa fa-dashboard fa-fw'></i> Dashboard"), student_path(student), :class => 'button'
                   %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_user_path(student), :class => 'button'
 
-  %h4.subtitle #{term_for :challenge } Grades 
+  %h4.subtitle #{term_for :challenge } Grades
 
   %table.nofeatures_default_score_dynatable
     %thead
       %tr
         %th Name
-        %th Score
+        %th{ "data-dynatable-sorts" => "numericScore" } Score
         %th{:width => "80px"}
 
     %tbody

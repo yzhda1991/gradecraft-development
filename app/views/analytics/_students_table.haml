@@ -2,7 +2,7 @@
   %thead
     %tr
       %th{ :scope => "column", :width => "20%" }= course.user_term
-      %th{ :scope => "column", :width => "10%"} Score
+      %th{ :scope => "column", :width => "10%", "data-dynatable-sorts" => "numericScore"} Score
       - if course.has_badges?
         %th{ :scope => "column", :width => "5%" } Badges
       - if course.has_teams?

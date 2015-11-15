@@ -20,7 +20,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   - if @challenge.challenge_files.present?
     %p
       %b Documents:
@@ -35,7 +35,7 @@
       %thead
         %tr
           %th= current_course.team_term
-          %th Score
+          %th{ "data-dynatable-sorts" => "numericScore" } Score
           - if @challenge.has_levels?
             %th Level
           - if @challenge.release_necessary?

@@ -2,7 +2,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %table.dynatable
     %thead
       %tr
@@ -11,7 +11,7 @@
         %th Task
         %th Submission
         %th Raw Score
-        %th Score
+        %th{ "data-dynatable-sorts" => "numericScore" } Score
         %th Predicted Score
         %th Feedback
         %th Status
