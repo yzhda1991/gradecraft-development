@@ -47,10 +47,12 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @attrs[:team_id].present?
   end
 
+  # @mz todo: add specs
   def tmp_dir
     @tmp_dir ||= Dir.mktmpdir
   end
 
+  # @mz todo: add specs
   def csv_file_path
     @csv_file_path ||= File.expand_path("_grade_import_template.csv", tmp_dir)
   end
@@ -90,6 +92,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @professor = User.find @attrs[:professor_id]
   end
 
+  # @mz todo: add specs
   def generate_export_csv
     open(csv_file_path, 'w') do |f|
       f.puts @assignment.grade_import(@students)

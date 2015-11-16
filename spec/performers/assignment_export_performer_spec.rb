@@ -130,22 +130,19 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
-  # def attributes
-  #   { 
-  #     assignment_id: @assignment.try(:id),
-  #     course_id: @course.try(:id),
-  #     professor_id: @professor.try(:id),
-  #     student_ids: @students.collect(&:id),
-  #     team_id: @team.try(:id)
-  #   }
-  # end
   describe "attributes" do
-    let(:default_attributes) {{ assignment_id: assignment.id, course_id: course.id, professor_id: professor.id, student_ids: students.collect(&:id) }}
+    let(:default_attributes) {{
+      assignment_id: assignment.id,
+      course_id: course.id,
+      professor_id: professor.id,
+      student_ids: students.collect(&:id),
+      team_id: nil
+    }}
     before(:each) { performer.instance_variable_set(:@students, students) }
 
     context "team is not present" do
       it "doesn't have a team_id" do
-        expect(performer.attributes).to eq(default_attributes.merge(team_id: nil))
+        expect(performer.attributes).to eq(default_attributes)
       end
     end
 
@@ -158,6 +155,18 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   end
 
   # private methods
+  
+  describe "tmp_dir", focus: true do
+    subject { performer.instance_eval { tmp_dir }}
+    it "builds a temporary directory" do
+      expect(subject).to match(/\/tmp\/[\w\d-]+/) # match the tmp dir hash
+    end
+
+    it "caches the temporary directory" do
+      original_tmp_dir = subject
+      expect(subject).to eq(original_tmp_dir)
+    end
+  end
   
   describe "work_resources_present?" do
     let(:assignment_present) { performer.instance_variable_set(:@assignment, true) }
