@@ -161,7 +161,6 @@ class Assignment < ActiveRecord::Base
   end
 
   def student_submissions_for_team(team)
-    puts team
     Submission
       .includes(:submission_files)
       .includes(:student)

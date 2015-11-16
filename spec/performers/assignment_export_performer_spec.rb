@@ -13,6 +13,9 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   let(:student_course_membership1) { @student_course_membership1 ||= create(:student_course_membership, course: course) }
   let(:student_course_membership2) { @student_course_membership2 ||= create(:student_course_membership, course: course) }
   let(:students) { @students ||= [ student_course_membership1.user, student_course_membership2.user ] }
+  let(:submission1) { create(:submission, assignment: assignment, student: student_course_membership1.user) }
+  let(:submission2) { create(:submission, assignment: assignment, student: student_course_membership2.user) }
+  let(:submissions) { [ submission1, submission2 ] }
 
   let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id }}
   let(:job_attrs_with_team) { job_attrs.merge(team_id: team.try(:id)) }
@@ -81,6 +84,52 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         it "fetches the students" do
           subject
           expect(students_ivar).to eq(students)
+        end
+      end
+    end
+
+    describe "fetch_submissions", inspect: true do
+      context "a team is present" do
+        let(:submissions_ivar) { performer_with_team.instance_variable_get(:@submissions) }
+        subject { performer_with_team.instance_eval { fetch_submissions }}
+
+        before(:each) do
+          allow(performer_with_team).to receive(:team_present?) { true }
+          performer_with_team.instance_variable_set(:@assignment, assignment)
+          performer_with_team.instance_variable_set(:@team, team)
+          allow(assignment).to receive(:student_submissions_for_team) { submissions }
+        end
+
+        it "returns the submissions being graded for that team" do
+          expect(assignment).to receive(:student_submissions_for_team).with(team)
+          subject
+        end
+
+        it "fetches the submissions" do
+          subject
+          expect(submissions_ivar).to eq(submissions)
+        end
+      end
+
+      context "no team is present" do
+        let(:submissions_ivar) { performer.instance_variable_get(:@submissions) }
+        subject { performer.instance_eval { fetch_submissions }}
+
+        before(:each) do
+          allow(performer).to receive(:team_present?) { false }
+          performer.instance_variable_set(:@assignment, assignment)
+          performer.instance_variable_set(:@team, team)
+          allow(assignment).to receive(:student_submissions) { submissions }
+        end
+
+        it "returns submissions being graded for the assignment" do
+          expect(assignment).to receive(:student_submissions)
+          subject
+        end
+
+        it "fetches the submissions" do
+          subject
+          expect(submissions_ivar).to eq(submissions)
         end
       end
     end

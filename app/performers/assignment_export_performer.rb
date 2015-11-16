@@ -44,8 +44,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @course = fetch_course
     @professor = fetch_professor
     @students = fetch_students
-    @submissions = fetch_submissions
     @team = fetch_team if team_present?
+    @submissions = fetch_submissions
   end
 
   def team_present?
@@ -107,9 +107,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def fetch_submissions
     if team_present?
-      @submissions ||= @assignment.student_submissions_for_team(@team)
+      @submissions = @assignment.student_submissions_for_team(@team)
     else
-      @submissions ||= @assignment.student_submissions
+      @submissions = @assignment.student_submissions
     end
   end
   
