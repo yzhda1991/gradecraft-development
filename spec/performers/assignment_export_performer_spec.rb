@@ -373,5 +373,27 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         it { should include("for students: #{students.collect(&:id)}") }
       end
     end
+
+    describe "csv_export_messages", inspect: true do
+      let(:messages) { performer.instance_eval{ csv_export_messages } }
+      before(:each) { performer.instance_variable_set(:@students, students) }
+
+      describe "success" do
+        subject { messages[:success] }
+
+        it { should match('Successfully saved the CSV file') }
+        it { should include("assignment #{assignment.id}") }
+        it { should include("for students: #{students.collect(&:id)}") }
+      end
+
+      describe "failure" do
+        subject { messages[:failure] }
+
+        it { should match('Failed to save the CSV file') }
+        it { should include("assignment #{assignment.id}") }
+        it { should include("for students: #{students.collect(&:id)}") }
+      end
+    end
+
   end
 end

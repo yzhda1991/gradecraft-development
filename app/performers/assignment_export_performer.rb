@@ -11,9 +11,14 @@ class AssignmentExportPerformer < ResqueJob::Performer
       require_success(generate_csv_messages, max_result_size: 250) do
         generate_export_csv
       end
+
+      # @mz todo: add specs
+      require_success(csv_export_messages) do
+        export_csv_successful?
+      end
     else
       if logger
-        log_error_with_attributes "@assignment.present? or @students.present? failed and both should have been present"
+        log_error_with_attributes "@assignment.present? or @students.present? failed and both should have been present, could not do_the_work"
       end
     end
   end
@@ -174,6 +179,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
     {
       success: "Successfully generated the csv data on assignment #{@assignment.id} for students: #{@students.collect(&:id)}",
       failure: "Failed to generate the csv data on assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
+    }
+  end
+
+  def csv_export_messages
+    {
+      success: "Successfully saved the CSV file on disk for assignment #{@assignment.id} for students: #{@students.collect(&:id)}",
+      failure: "Failed to save the CSV file on disk for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
     }
   end
 
