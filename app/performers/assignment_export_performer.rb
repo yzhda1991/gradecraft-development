@@ -59,14 +59,31 @@ class AssignmentExportPerformer < ResqueJob::Performer
   # # entire block handled by submissions and submissions_by_team methods, and by 
   # if params[:team_id].present?
   #   team = current_course.teams.find_by(id: params[:team_id])
-  #   zip_name = "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}_#{team.name}"
   #   @students = current_course.students_being_graded_by_team(team)
   # else
-  #   zip_name = "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}"
   #   @students = current_course.students_being_graded
   # end
   #
-  
+
+  # @mz todo: add specs
+  def archive_basename
+    if team_present?
+      "#{formatted_assignment_name}_#{formatted_team_name}"
+    else
+      formatted_assignment_name
+    end
+  end
+
+  # @mz todo: add specs
+  def formatted_assignment_name
+    "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}"
+  end
+
+  # @mz todo: add specs
+  def formatted_team_name
+    "#{@team.name.gsub(/\W+/, "_").downcase[0..20]}"
+  end
+
   def fetch_course
     @course = @assignment.course
   end
