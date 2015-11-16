@@ -10,7 +10,7 @@
   $scope.pointsPossible = 0
   $scope.pointsGiven = 0
 
-  $scope.init = (rubricId, assignmentId, studentId, rubricGrades, gradeStatus, releaseNecessary)->
+  $scope.init = (rubricId, assignmentId, studentId, rubricGrades, gradeStatus, releaseNecessary, returnURL)->
     $scope.rubricId = rubricId
     $scope.assignmentId = assignmentId
     $scope.studentId = studentId
@@ -23,6 +23,8 @@
     $scope.releaseNecessary = releaseNecessary
     if not $scope.releaseNecessary
       $scope.gradeStatus = "Graded"
+
+    $scope.returnURL = returnURL
 
     $scope.addRubricGrades(rubricGrades)
 
@@ -193,7 +195,7 @@
     if confirm "Are you sure you want to submit the grade for this assignment?"
       # alert(self.gradedRubricParams().tier_badges.length)
       $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", self.gradedRubricParams()).success(
-        window.location = "/assignments/#{$scope.assignmentId}"
+        window.location = $scope.returnURL
       )
       .error(
       )

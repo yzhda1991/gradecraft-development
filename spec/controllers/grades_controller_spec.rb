@@ -113,6 +113,7 @@ describe GradesController do
       end
 
       it "if rubric present, assigns the rubric and rubric grades" do
+        allow(request).to receive(:referer).and_return('http://gradecraft.com/assignments/123')
         assignment = create(:assignment, course: @course)
         rubric = create(:rubric_with_metrics, assignment: assignment)
         metric = rubric.metrics.first
@@ -121,6 +122,7 @@ describe GradesController do
         get :edit, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
         expect(JSON.parse(assigns(:rubric_grades))).to eq([{ "id" => rubric_grade.id, "metric_id" => metric.id, "tier_id" => tier.id, "comments" => nil }])
+        expect(assigns(:return_path)).to eq('/assignments/123')
       end
     end
 
@@ -132,6 +134,44 @@ describe GradesController do
         @grade.reload
         expect(response).to redirect_to(assignment_path(@grade.assignment))
         expect(@grade.score).to eq(1000)
+      end
+    end
+
+    describe "PUT submit_rubric"do
+
+      before(:each) do
+        # @rubric_assignment = create(:assignment, course: @course)
+        # @rubric = create(:rubric_with_metrics, assignment: @rubric_assignment)
+        # @metric = @rubric.metrics.first
+        # @tier = @rubric.metrics.first.tiers.first
+        # @rubric_grade = create(:rubric_grade, assignment: @rubric_assignment, student: @student, metric: @metric, tier: @tier)
+      end
+
+      it "updates the submission grading status" do
+      end
+
+      it "assigns the grade" do
+
+      end
+
+      it "deletes all preexisting rubric grades" do
+
+      end
+
+      it "creates the rubric grades" do
+
+      end
+
+      it "deletes existing earned badges" do
+
+      end
+
+      it "adds earned tier badges" do
+
+      end
+
+      it "renders nothing when request format is JSON" do
+
       end
     end
 

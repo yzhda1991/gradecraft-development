@@ -6,6 +6,7 @@ class GradesController < ApplicationController
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
 
+  # GET /assignments/:assignment_id/grade?student_id=:id
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
     if current_user_is_student?
@@ -38,9 +39,9 @@ class GradesController < ApplicationController
 
   public
 
+  # GET /assignments/:assignment_id/grade/edit?student_id=:id
   def edit
     session[:return_to] = request.referer
-
     @student = current_student
 
     @grade = Grade.where(student_id: @student[:id], assignment_id: @assignment[:id]).first
@@ -55,6 +56,8 @@ class GradesController < ApplicationController
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
       @rubric_grades = serialized_rubric_grades
+      # This is a patch for the Angular GradeRubricCtrl
+      @return_path = URI(request.referer).path
     end
 
     @serialized_init_data = serialized_init_data
@@ -265,7 +268,9 @@ class GradesController < ApplicationController
 
   public
 
+  # PUT /assignments/:assignment_id/grade/submit_rubric
   def submit_rubric
+
     if @submission = Submission.where(current_assignment_and_student_ids).first
       @submission.update_attributes(graded: true)
     end
