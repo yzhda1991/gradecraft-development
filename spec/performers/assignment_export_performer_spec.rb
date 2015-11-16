@@ -156,6 +156,23 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   # private and protected methods
   
+  describe "formatted archive_fragment", focus: true do
+    it "downcases everything" do
+      expect(performer.instance_eval { formatted_archive_fragment("THISISSUPERCAPPY") }).to \
+        eq("thisissupercappy")
+    end
+
+    it "substitutes consecutive non-word characters with underscores" do
+      expect(performer.instance_eval { formatted_archive_fragment("whoa\\ gEORG  !!! IS ...dead") }).to \
+        eq("whoa_georg_is_dead")
+    end
+
+    it "truncates the final string to twenty characters" do
+      expect(performer.instance_eval { formatted_archive_fragment("abcdefghijklmnopqrstuvwxyz") }).to \
+        eq("abcdefghijklmnopqrst")  
+    end
+  end
+
   describe "team_present?" do
     context "team_id was included in the initialized performer attributes" do
       subject { performer.instance_eval { team_present? }}

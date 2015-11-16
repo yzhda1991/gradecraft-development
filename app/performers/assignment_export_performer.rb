@@ -76,12 +76,16 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # @mz todo: add specs
   def formatted_assignment_name
-    "#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}"
+    formatted_archive_fragment(@assignment.name)
+  end
+
+  def formatted_team_name
+    formatted_archive_fragment(@team.name)
   end
 
   # @mz todo: add specs
-  def formatted_team_name
-    "#{@team.name.gsub(/\W+/, "_").downcase[0..20]}"
+  def formatted_archive_fragment(fragment)
+    "#{fragment.gsub(/\W+/, "_").downcase[0..19]}"
   end
 
   def fetch_course
