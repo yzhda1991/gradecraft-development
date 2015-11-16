@@ -86,7 +86,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
-    describe "fetch_submissions", inspect: true do
+    describe "fetch_submissions" do
       context "a team is present" do
         let(:submissions_ivar) { performer_with_team.instance_variable_get(:@submissions) }
         subject { performer_with_team.instance_eval { fetch_submissions }}

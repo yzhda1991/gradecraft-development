@@ -48,6 +48,15 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @submissions = fetch_submissions
   end
 
+  # @mz todo: add specs
+  def fileized_assignment_name
+    @assignment.assignment_name
+      .downcase
+      .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
+      .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
+      .gsub(/\s+/, '_') # replace spaces with underscores
+  end
+
   def team_present?
     @attrs[:team_id].present?
   end
