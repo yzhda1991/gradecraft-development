@@ -155,6 +155,22 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   end
 
   # private and protected methods
+  
+
+  describe "generate_export_csv", inspect: true do
+    subject { performer.instance_eval { generate_export_csv }}
+    let(:csv_path) { performer.instance_eval { csv_file_path }}
+
+    before(:each) do
+      performer.instance_variable_set(:@assignment, assignment)
+      allow(assignment).to receive(:grade_import) { CSV.generate {|csv| csv << ["dogs", "are", "nice"]} }
+    end
+
+    it "saves the result of assignment#grade_import" do
+      subject
+      expect(CSV.read(csv_path).first).to eq(["dogs", "are", "nice"])
+    end
+  end
 
   describe "archive_basename" do
     subject { performer.instance_eval { archive_basename }}
