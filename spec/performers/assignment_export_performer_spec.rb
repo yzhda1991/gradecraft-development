@@ -156,7 +156,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   # private methods
   
-  describe "csv_file_path", focus: true do
+  describe "csv_file_path" do
     subject { performer.instance_eval { csv_file_path }}
     it "uses the grade import template" do
       expect(subject).to match(/grade_import_template\.csv$/)
