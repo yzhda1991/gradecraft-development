@@ -155,8 +155,29 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   end
 
   # private and protected methods
+
+  describe "archive_basename", inspect: true do
+  end
   
-  describe "formatted archive_fragment", focus: true do
+  describe "formatted_assignment_name" do
+    subject { performer.instance_eval { formatted_assignment_name }}
+
+    it "passes the assignment name into the formatter" do
+      expect(performer).to receive(:formatted_archive_fragment).with(assignment.name)
+      subject
+    end
+  end
+  
+  describe "formatted_team_name" do
+    subject { performer_with_team.instance_eval { formatted_team_name }}
+
+    it "passes the team name into the formatter" do
+      expect(performer_with_team).to receive(:formatted_archive_fragment).with(team.name)
+      subject
+    end
+  end
+
+  describe "formatted_archive_fragment" do
     it "downcases everything" do
       expect(performer.instance_eval { formatted_archive_fragment("THISISSUPERCAPPY") }).to \
         eq("thisissupercappy")
