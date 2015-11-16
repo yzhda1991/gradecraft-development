@@ -399,5 +399,42 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
+    describe "submissions_by_student" do
+
+      # mock_students
+      let(:student1) { double(:student, first_name: "Ben", last_name: "Bailey", id: 40) }
+      let(:student2) { double(:student, first_name: "Mike", last_name: "McCaffrey", id: 55) }
+      let(:student3) { double(:student, first_name: "Dana", last_name: "Dafferty", id: 92) }
+
+      let(:submission1) { double(:submission, id: 1, student: student1) }
+      let(:submission2) { double(:submission, id: 2, student: student2) }
+      let(:submission3) { double(:submission, id: 3, student: student3) }
+      let(:submission4) { double(:submission, id: 4, student: student2) } # note that this uses student 2
+
+      let(:grouped_submission_expectation) {{
+        "bailey_ben-40" => [submission1],
+        "mccaffrey_mike-55" => [submission2, submission4],
+        "dafferty_dana-92" => [submission3]
+      }}
+
+      let(:submissions_by_id) { [submission1, submission2, submission3, submission4].sort_by(&:id) }
+
+      subject do
+        performer.instance_eval { submissions_grouped_by_student }
+      end
+
+      it "should reorder the @submissions array by student" do
+        expect(subject).to eq(grouped_submission_expectation)
+      end
+
+      it "should use 'last_name_first_name-id' for the hash keys" do
+        expect(subject.keys.first).to eq("bailey_ben-40")
+      end
+
+      it "should return an array of submissions for each student" do
+        expect(subject["mccaffrey_mike-55"]).to eq([submission2, submission4])
+      end
+    end
+
   end
 end

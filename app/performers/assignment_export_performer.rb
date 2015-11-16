@@ -40,10 +40,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def fetch_assets
-    @assignment = fetch_assignment
+    @assignment = fetch_assignment # this should pull in submissions as well
     @course = fetch_course
     @professor = fetch_professor
     @students = fetch_students
+    @submissions = fetch_submissions
     @team = fetch_team if team_present?
   end
 
@@ -64,6 +65,19 @@ class AssignmentExportPerformer < ResqueJob::Performer
       "#{formatted_assignment_name}_#{formatted_team_name}"
     else
       formatted_assignment_name
+    end
+  end
+
+  # @mz todo: add specs
+  def export_file_basename
+    @export_file_basename ||= "#{fileized_assignment_name}_export_#{Time.now.strftime("%Y-%m-%d")}"
+  end
+
+  # @mz todo: add specs
+  def submissions_grouped_by_student
+    @submissions_grouped_by_student ||= submissions.group_by do |submission|
+      student = submission.student
+      "#{student.last_name}_#{student.first_name}-#{student.id}".downcase
     end
   end
 
@@ -91,6 +105,14 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
+  def fetch_submissions
+    if team_present?
+      @submissions ||= @assignment.student_submissions_for_team(@team)
+    else
+      @submissions ||= @assignment.student_submissions
+    end
+  end
+  
   def fetch_assignment
     @assignment = Assignment.find @attrs[:assignment_id]
   end
@@ -112,23 +134,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def export_csv_successful?
     @export_csv_successful ||= File.exist?(csv_file_path)
   end
-  
+
   private
 
-  def submissions_presenter
-    @presenter ||= AssignmentExportPresenter.build(
-      presenter_base_options.merge(
-        submissions: @assignment.student_submissions
-      )
-    )
-  end
-
-  def assignment_export_attributes
-    {
-      assignment_id: @attrs[:assignment_id],
-      team_id: @attrs[:team_id]
-    }
-  end
 
   def submissions_by_student_archive_hash
     JbuilderTemplate.new(temp_view_context).encode do |json|
@@ -136,40 +144,26 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end.to_json
   end
 
-  def submissions_by_team_presenter
-    @presenter ||= AssignmentExportPresenter.build(
-      presenter_base_options.merge(
-        submissions: @assignment.student_submissions_for_team(@team),
-        team: @team
-      )
-    )
-  end
-
   def submissions_presenter
-    @presenter ||= AssignmentExportPresenter.build(
-      presenter_base_options.merge(
-        submissions: @assignment.student_submissions
-      )
-    )
+    @presenter ||= AssignmentExportPresenter.build(presenter_options)
   end
 
-  def presenter_base_options
+  def presenter_options
    {
       assignment: @assignment,
       csv_file_path: csv_file_path,
-      export_file_basename: export_file_basename
+      export_file_basename: export_file_basename,
+      submissions: submissions,
+      team: @team
     }
   end
 
-  # rough this in for now, need to pull this from the original method
-  def export_file_basename
-    "great_basename"
-  end
-
+  # @mz todo: add specs, add require_success block
   def deliver_archive_complete_mailer
     ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
   end
 
+  # @mz todo: add specs, add require_success block
   def deliver_team_archive_complete_mailer
     ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
   end
@@ -188,6 +182,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
     }
   end
 
+  # @mz todo: add specs, add require_success block
   def notification_messages
     {
       success: "Assignment export notification mailer was successfully delivered.",
