@@ -93,17 +93,21 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           allow(subject).to receive(:work_resources_present?) { true }
         end
 
-        it "should require success" do
-          expect(subject).to receive(:require_success).exactly(1).times
+        it "requires success" do
+          expect(subject).to receive(:require_success).exactly(2).times
         end
 
-        it "should add outcomes to subject.outcomes" do
-          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(1)
+        it "adds outcomes to subject.outcomes" do
+          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(2)
         end
 
-        it "should fetch the csv data" do
+        it "fetches the csv data" do
           allow(subject).to receive(:generate_export_csv).and_return "some,csv,data"
           expect(subject).to receive(:generate_export_csv)
+        end
+
+        it "checks whether the exported csv was successfully saved on disk" do
+          expect(subject).to receive(:export_csv_successful?)
         end
       end
 
@@ -114,15 +118,15 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
         after(:each) { subject.do_the_work }
 
-        it "should not require success" do
+        it "doesn't require success" do
           expect(subject).not_to receive(:require_success)
         end
 
-        it "should not add outcomes to subject.outcomes" do
+        it "doesn't add outcomes to subject.outcomes" do
           expect { subject.do_the_work }.not_to change { subject.outcomes.size }
         end
 
-        it "should not fetch the csv data" do
+        it "doesn't fetch the csv data" do
           allow(subject).to receive(:generate_export_csv).and_return "some,csv,data"
           expect(subject).not_to receive(:generate_export_csv)
         end
@@ -374,7 +378,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
-    describe "csv_export_messages", inspect: true do
+    describe "csv_export_messages" do
       let(:messages) { performer.instance_eval{ csv_export_messages } }
       before(:each) { performer.instance_variable_set(:@students, students) }
 
