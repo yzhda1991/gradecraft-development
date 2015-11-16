@@ -13,7 +13,9 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   let(:student_course_membership1) { @student_course_membership1 ||= create(:student_course_membership, course: course) }
   let(:student_course_membership2) { @student_course_membership2 ||= create(:student_course_membership, course: course) }
   let(:students) { @students ||= [ student_course_membership1.user, student_course_membership2.user ] }
-  let(:submissions) { [ double(:submission1), double(:submission2)] }
+  let(:submission1) { create(:submission, assignment: assignment, student: student_course_membership1.user) }
+  let(:submission2) { create(:submission, assignment: assignment, student: student_course_membership2.user) }
+  let(:submissions) { [ submission1, submission2 ] }
 
   let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id }}
   let(:job_attrs_with_team) { job_attrs.merge(team_id: team.try(:id)) }
