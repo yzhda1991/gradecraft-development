@@ -31,10 +31,6 @@ class EarnedBadge < ActiveRecord::Base
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :student_visible, -> { where(student_visible: true) }
 
-  def self.score
-    pluck('SUM(score)').first || 0
-  end
-
   def self.duplicate_grade_badge_pairs
     EarnedBadge.where("badge_id is not null and grade_id is not null").group(:grade_id,:badge_id).select(:grade_id,:badge_id).having("count(*)>1")
   end
@@ -47,20 +43,11 @@ class EarnedBadge < ActiveRecord::Base
     end
   end
 
-  def self.scores_for_students
-    group(:student_id).pluck('earned_badges.student_id, COALESCE(SUM(score), 0)')
-  end
-
   def check_unlockables
     if self.badge.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition_id => self.badge.id, :condition_type => "Badge").each do |condition|
-        if condition.unlockable_type == "Assignment"
-          unlockable = Assignment.find(condition.unlockable_id)
-          unlockable.check_unlock_status(student)
-        elsif condition.unlockable_type == "Badge"
-          unlockable = Badge.find(condition.unlockable_id)
-          unlockable.check_unlock_status(student)
-        end
+        unlockable = condition.unlockable
+        unlockable.check_unlock_status(student)
       end
     end
   end
