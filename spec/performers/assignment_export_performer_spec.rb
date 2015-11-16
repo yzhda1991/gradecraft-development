@@ -156,7 +156,24 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   # private methods
   
-  describe "tmp_dir", focus: true do
+  describe "csv_file_path", focus: true do
+    subject { performer.instance_eval { csv_file_path }}
+    it "uses the grade import template" do
+      expect(subject).to match(/grade_import_template\.csv$/)
+    end
+
+    it "expands the path off of tmp_dir" do
+      allow(performer).to receive(:tmp_dir) { "/some/weird/path/" }
+      expect(subject).to match(/^\/some\/weird\/path\//)
+    end
+
+    it "caches the file path" do
+      cached_call = subject
+      expect(subject).to eq(cached_call)
+    end
+  end
+  
+  describe "tmp_dir" do
     subject { performer.instance_eval { tmp_dir }}
     it "builds a temporary directory" do
       expect(subject).to match(/\/tmp\/[\w\d-]+/) # match the tmp dir hash
