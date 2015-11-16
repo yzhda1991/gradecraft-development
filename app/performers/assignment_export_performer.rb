@@ -12,7 +12,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
         generate_export_csv
       end
 
-      # @mz todo: add specs
       require_success(csv_export_messages) do
         export_csv_successful?
       end

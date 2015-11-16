@@ -161,7 +161,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   # private and protected methods
   
 
-  describe "generate_export_csv", inspect: true do
+  describe "generate_export_csv" do
     subject { performer.instance_eval { generate_export_csv }}
     let(:csv_path) { performer.instance_eval { csv_file_path }}
 
