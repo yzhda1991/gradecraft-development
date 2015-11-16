@@ -89,7 +89,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # @mz todo: add specs
   def submissions_grouped_by_student
-    @submissions_grouped_by_student ||= submissions.group_by do |submission|
+    @submissions_grouped_by_student ||= @submissions.group_by do |submission|
       student = submission.student
       "#{student.last_name}_#{student.first_name}-#{student.id}".downcase
     end
