@@ -154,7 +154,19 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
-  # private methods
+  # private and protected methods
+  
+  describe "team_present?" do
+    context "team_id was included in the initialized performer attributes" do
+      subject { performer.instance_eval { team_present? }}
+      it { should be_falsey }
+    end
+
+    context "team_id was not included in the initialized performer attributes" do
+      subject { performer_with_team.instance_eval { team_present? }}
+      it { should be_truthy }
+    end
+  end
   
   describe "csv_file_path" do
     subject { performer.instance_eval { csv_file_path }}

@@ -43,16 +43,15 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @team = fetch_team if team_present?
   end
 
+  # @mz todo: add specs
   def team_present?
     @attrs[:team_id].present?
   end
 
-  # @mz todo: add specs
   def tmp_dir
     @tmp_dir ||= Dir.mktmpdir
   end
 
-  # @mz todo: add specs
   def csv_file_path
     @csv_file_path ||= File.expand_path("_grade_import_template.csv", tmp_dir)
   end
