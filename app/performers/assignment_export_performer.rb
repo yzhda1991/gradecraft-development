@@ -99,11 +99,14 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @professor = User.find @attrs[:professor_id]
   end
 
-  # @mz todo: add specs
   def generate_export_csv
     open(csv_file_path, 'w') do |f|
       f.puts @assignment.grade_import(@students)
     end
+  end
+
+  def export_csv_successful?
+    @export_csv_successful ||= File.exist?(csv_file_path)
   end
   
   private

@@ -240,6 +240,59 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       it { should be_truthy }
     end
   end
+
+  describe "export_csv_successful?" do
+    subject { performer.instance_eval { export_csv_successful? }}
+    let(:tmp_dir) { Dir.mktmpdir }
+    let(:test_file_path) { File.expand_path("csv_test.txt", tmp_dir) }
+
+    context "the csv was successfully created" do
+      before do
+        File.open(test_file_path, 'w') {|f| f.write("test file") }
+        allow(performer).to receive(:csv_file_path) { test_file_path }
+      end
+
+      it "returns true" do
+        expect(subject).to be_truthy
+      end
+
+      it "sets an @export_csv_successful ivar" do
+        subject
+        expect(performer.instance_variable_get(:@export_csv_successful)).to be_truthy
+      end
+
+      it "caches the value" do
+        subject # call it once to cache it
+        expect(File).to_not receive(:exist?).with("csv_test.txt")
+        subject # shouldn't check again after caching
+      end
+
+      after do
+        File.delete(test_file_path) if File.exist?(test_file_path)
+      end
+    end
+
+    context "the csv was not created" do
+      let(:false_file_path) { File.expand_path("false_test.txt", tmp_dir) }
+
+      before do
+        allow(performer).to receive(:csv_file_path) { "false_test.txt" }
+      end
+
+      it "returns false" do
+        expect(subject).to be_falsey
+      end
+
+      it "doesn't cache the value" do
+        expect(performer.instance_variable_get(:@export_csv_successful)).to eq(nil)
+      end
+
+      after do
+        File.delete(false_file_path) if File.exist?(false_file_path)
+      end
+    end
+
+  end
   
   describe "csv_file_path" do
     subject { performer.instance_eval { csv_file_path }}
