@@ -61,11 +61,12 @@ describe GradesController do
       end
 
       it "assigns the rubric and metrics for individual assignments" do
-        rubric = create(:rubric_with_metrics, assignment: @assignment)
+        assignment = create(:assignment, course: @course)
+        rubric = create(:rubric_with_metrics, assignment: assignment)
         metric = rubric.metrics.first
         tier = rubric.metrics.first.tiers.first
-        rubric_grade = create(:rubric_grade, assignment: @assignment, student: @student, metric: metric, tier: tier)
-        get :show, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
+        rubric_grade = create(:rubric_grade, assignment: assignment, student: @student, metric: metric, tier: tier)
+        get :show, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
         expect(assigns(:metrics)).to eq(rubric.metrics)
         expect(JSON.parse(assigns(:rubric_grades))).to eq([{ "id" => rubric_grade.id, "metric_id" => metric.id, "tier_id" => tier.id, "comments" => nil }])
@@ -111,12 +112,13 @@ describe GradesController do
         expect(json).to have_key("assignment_score_levels")
       end
 
-      it "assigns the rubric and rubric grades" do
-        rubric = create(:rubric_with_metrics, assignment: @assignment)
+      it "if rubric present, assigns the rubric and rubric grades" do
+        assignment = create(:assignment, course: @course)
+        rubric = create(:rubric_with_metrics, assignment: assignment)
         metric = rubric.metrics.first
         tier = rubric.metrics.first.tiers.first
-        rubric_grade = create(:rubric_grade, assignment: @assignment, student: @student, metric: metric, tier: tier)
-        get :show, { :assignment_id => @assignment.id, :student_id => @student.id }
+        rubric_grade = create(:rubric_grade, assignment: assignment, student: @student, metric: metric, tier: tier)
+        get :edit, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
         expect(JSON.parse(assigns(:rubric_grades))).to eq([{ "id" => rubric_grade.id, "metric_id" => metric.id, "tier_id" => tier.id, "comments" => nil }])
       end

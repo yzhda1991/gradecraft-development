@@ -86,14 +86,6 @@ class GradesController < ApplicationController
     end.to_json
   end
 
-  def empty_score_levels_hash
-    {assignment_score_levels: []}.to_json
-  end
-
-  def fetch_serialized_assignment_score_levels
-    ActiveModel::ArraySerializer.new(@assignment_score_levels, each_serializer: AssignmentScoreLevelSerializer).to_json
-  end
-
   #TODO replace with find_or_create...
   def create_student_assignment_grade
     @grade = Grade.create student_id: @student[:id], assignment_id: @assignment[:id], assignment_type_id: @assignment[:assignment_type_id]#, raw_score: 0
