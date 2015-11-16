@@ -45,7 +45,7 @@ class EarnedBadge < ActiveRecord::Base
 
   def check_unlockables
     if self.badge.is_a_condition?
-      unlock_conditions = UnlockCondition.where(:condition_id => self.badge.id, :condition_type => "Badge").each do |condition|
+      unlock_conditions = UnlockCondition.where(:condition => self.badge).each do |condition|
         unlockable = condition.unlockable
         unlockable.check_unlock_status(student)
       end
