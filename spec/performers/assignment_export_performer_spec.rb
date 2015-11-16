@@ -156,7 +156,26 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   # private and protected methods
 
-  describe "archive_basename", inspect: true do
+  describe "archive_basename" do
+    subject { performer.instance_eval { archive_basename }}
+    before(:each) do
+      allow(performer).to receive(:formatted_assignment_name) { "blog_entry_5" }
+      allow(performer).to receive(:formatted_team_name) { "the_walloping_wildebeest" }
+    end
+
+    context "team_present? is true" do
+      before { allow(performer).to receive(:team_present?) { true }}
+      it "combines the formatted assignment and team names" do
+        expect(subject).to eq("blog_entry_5_the_walloping_wildebeest")
+      end
+    end
+
+    context "team_present? is false" do
+      before { allow(performer).to receive(:team_present?) { false }}
+      it "returns only the formatted assignment name" do
+        expect(subject).to eq("blog_entry_5")
+      end
+    end
   end
   
   describe "formatted_assignment_name" do

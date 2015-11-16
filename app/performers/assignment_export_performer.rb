@@ -74,7 +74,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def formatted_assignment_name
     formatted_archive_fragment(@assignment.name)
   end
@@ -83,7 +82,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     formatted_archive_fragment(@team.name)
   end
 
-  # @mz todo: add specs
   def formatted_archive_fragment(fragment)
     "#{fragment.gsub(/\W+/, "_").downcase[0..19]}"
   end
