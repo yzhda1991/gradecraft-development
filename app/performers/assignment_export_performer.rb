@@ -48,15 +48,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @submissions = fetch_submissions
   end
 
-  # @mz todo: add specs
-  def fileized_assignment_name
-    @assignment.assignment_name
-      .downcase
-      .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
-      .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
-      .gsub(/\s+/, '_') # replace spaces with underscores
-  end
-
   def team_present?
     @attrs[:team_id].present?
   end
@@ -75,6 +66,20 @@ class AssignmentExportPerformer < ResqueJob::Performer
     else
       formatted_assignment_name
     end
+  end
+
+  # @mz todo: add specs
+  def fileized_assignment_name
+    @assignment.name
+      .downcase
+      .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
+      .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
+      .gsub(/\s+/, '_') # replace spaces with underscores
+  end
+
+  # @mz todo: add specs
+  def sorted_student_directory_keys
+    submissions_grouped_by_student.keys.sort
   end
 
   # @mz todo: add specs
@@ -157,12 +162,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @presenter ||= AssignmentExportPresenter.build(presenter_options)
   end
 
+  # @mz todo: add specs
   def presenter_options
    {
       assignment: @assignment,
       csv_file_path: csv_file_path,
       export_file_basename: export_file_basename,
-      submissions: submissions,
+      submissions: @submissions,
       team: @team
     }
   end
