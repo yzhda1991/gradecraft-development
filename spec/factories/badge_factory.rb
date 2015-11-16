@@ -5,6 +5,6 @@ FactoryGirl.define do
     point_total { rand(200) + 100 }
     visible { true }
     icon { 'badge.png' }
-    can_earn_multiple_times false
+    can_earn_multiple_times true
   end
 end

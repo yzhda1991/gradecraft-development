@@ -55,4 +55,8 @@ describe EarnedBadge do
       expect(badge.earned_badge_count_for_student(student)).to eq(1)
     end
   end
+
+  describe "#check_unlockables" do 
+    skip "implement"
+  end
 end
