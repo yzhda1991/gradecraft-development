@@ -30,10 +30,7 @@ describe EarnedBadge do
     end
   end
 
-  describe "#multiple_allowed", focus: true do 
-    # if ! self.badge.can_earn_multiple_times? && self.badge.earned_badge_for_student(self.student)
-    #   errors.add :weight, " Oops, they've already earned the '#{name}' #{course.badge_term.downcase}."
-    # end
+  describe "#multiple_allowed" do 
     it "allows a student to earn a badge if they haven't earned it yet" do 
       badge = create(:badge)
       student = create(:user)
@@ -53,8 +50,8 @@ describe EarnedBadge do
     it "prevents a student from earning a badge if multiple_times not allowed" do 
       badge = create(:badge, can_earn_multiple_times: false)
       student = create(:user)
-      earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
-      earned_badge_2 = create(:earned_badge, badge: badge, student: student, student_visible: true)
+      EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
+      EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
       expect(badge.earned_badge_count_for_student(student)).to eq(1)
     end
   end
