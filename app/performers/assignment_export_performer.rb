@@ -43,7 +43,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @team = fetch_team if team_present?
   end
 
-  # @mz todo: add specs
   def team_present?
     @attrs[:team_id].present?
   end
@@ -56,16 +55,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @csv_file_path ||= File.expand_path("_grade_import_template.csv", tmp_dir)
   end
 
-  # # entire block handled by submissions and submissions_by_team methods, and by 
-  # if params[:team_id].present?
-  #   team = current_course.teams.find_by(id: params[:team_id])
-  #   @students = current_course.students_being_graded_by_team(team)
-  # else
-  #   @students = current_course.students_being_graded
-  # end
-  #
-
-  # @mz todo: add specs
   def archive_basename
     if team_present?
       "#{formatted_assignment_name}_#{formatted_team_name}"
