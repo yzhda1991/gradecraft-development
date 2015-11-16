@@ -6,7 +6,7 @@ $(".make-lizards").dblclick(function() {
 });
 
 $( "#tabs" ).tabs({
-  event: "mouseover"
+  event: "click"
 });
 
  $('.froala').editable(

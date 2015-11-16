@@ -1,5 +1,5 @@
 .pageContent
-  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment[:id]}, #{params[:student_id]}, #{@rubric_grades}, \"#{@grade.status if @grade}\", #{@assignment.release_necessary?})")
+  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment[:id]}, #{params[:student_id]}, #{@rubric_grades}, \"#{@grade.status if @grade}\", #{@assignment.release_necessary?}, '#{@return_path}')")
     .row
       #rubric-heading.columns
         %h3.text-right
