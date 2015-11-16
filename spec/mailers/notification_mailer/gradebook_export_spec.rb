@@ -10,9 +10,10 @@ describe NotificationMailer do
     let(:professor) { create(:user) }
     let(:course) { create(:course) }
     let(:csv_data) { "stuff,that,is,separated" }
+    let(:export_type) { "gradebook export" }
 
     before(:each) do
-      NotificationMailer.gradebook_export(course, professor, csv_data).deliver_now
+      NotificationMailer.gradebook_export(course, professor, export_type, csv_data).deliver_now
     end
 
     it "is sent from gradecraft's default mailer email" do
@@ -24,7 +25,7 @@ describe NotificationMailer do
     end
 
     it "has an appropriate subject" do
-      expect(email.subject).to eq "Gradebook export for #{course.name} is attached"
+      expect(email.subject).to eq "Gradebook export for #{course.name} #{export_type} is attached"
     end
 
     it "BCC's the email to the gradecraft admin" do
