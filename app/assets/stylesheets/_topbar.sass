@@ -116,10 +116,10 @@
   z-index: 1
   color: $color-green-2
 
-
 @media screen and (min-width: $media-small-max)
-  .btn-navbar-right, .btn-navbar-left
+  .btn-navbar-right, .btn-navbar-left, .mobile
     display: none
+
 
 /* Navbar Styles */
 .navbar
@@ -128,15 +128,10 @@
   z-index: 1000 
   height: 40px !important
   display: inline
-  margin: 0
-  padding: 0
   background: $color-blue-00
-  margin-bottom: .5rem
-  padding: 0
 
 @media (max-width: $media-small-max)
-  .navbar .nav-collapse
-    display: none
+
   ul.subnav
     margin: 0
     padding: 0
@@ -155,19 +150,14 @@
     color: $color-white
     padding: 5px 10px
 
-  li a.site-title
-    display: block
-    line-height: 1.4rem
-    color: $color-white
-    padding: 2px 10px
-    margin-bottom: 25px
-
 img.profile-pic
   position: relative
   left: -5px
   margin: 0 0 -5px -5px 
   padding: 0
 
+a.site-title
+  color: $color-blue-3
 
 /* Large Screen Styles*/ 
 @media (min-width: $media-small-max)
@@ -272,6 +262,25 @@ ul.subnav.logged-out
     color: $color-white
     text-transform: none !important
 
+.login-buttons
+  padding-top: .6rem
+  padding-right: .25rem
+
+  .um-login 
+    background-image: image-url('UM.png')
+    padding-left: 2.75rem
+    background-repeat: no-repeat
+    background-color: $color-blue-0
+
+  .gc-login 
+    background-image: image-url('GC.png')
+    padding-left: 2.75rem
+    background-repeat: no-repeat
+    background-color: $color-grey-1
+
+  .button:hover
+    background-color: $color-blue-2
+
 .offscreen-sidebar
   display: none
 
@@ -282,8 +291,39 @@ ul.subnav.logged-out
 /* Mobile Styles */ 
 
 @media (max-width: $media-small-max)
+
+  .navbar .nav-collapse
+    display: none
+
+  .navbar .nav-collapse .logged-in a.site-title
+    display: block
+    line-height: .75rem
+
+  .navbar
+    height: auto !important
+
+  .navbar .mobile-nav
+    line-height: 1
+    padding-top: 0
+
+    .nav.nav-pill
+      width: 100% !important
+      text-align: center
+
+    .site-title
+      padding: 0
+      margin-left: -6rem
+
+    .login-buttons
+      padding-top: 0 !important
+
   .hidden-sm
     display: none
+
+@media (min-width: $media-small-max)
+  .hidden-med-and-up
+    display: none
+
 
 @media (min-width: $media-small-max) and (max-width: $media-medium-max)
   .hidden-med

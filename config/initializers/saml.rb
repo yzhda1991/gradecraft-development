@@ -16,10 +16,9 @@ if ENV["IDP_CERT"].present?
   idp_cert_file = File.open(ENV["IDP_CERT"], "rb")
   saml_settings.idp_cert = idp_cert_file.read if idp_cert_file.present?
 end
-# or saml_settings.idp_cert_fingerprint           = "3B:05:BE:0A:EC:84:CC:D4:75:97:B3:A2:22:AC:56:21:44:EF:59:E6"
-#saml_settings.idp_cert_fingerprint_algorithm = XMLSecurity::Document::SHA1
 
-saml_settings.name_identifier_format         = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress"
+
+saml_settings.name_identifier_format         = "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"
 
 # Security section
 saml_settings.security[:authn_requests_signed]   = true     # Enable or not signature on AuthNRequest

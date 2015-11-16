@@ -7,7 +7,7 @@ feature "logging in" do
     let!(:course_membership) { create :student_course_membership, user: user }
     let(:user) { create :user, password: password }
 
-    before { visit root_path }
+    before { visit new_user_session_path }
 
     scenario "with a password successfully" do
       LoginPage.new(user).submit({ password: password })

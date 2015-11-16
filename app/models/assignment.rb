@@ -75,7 +75,6 @@ class Assignment < ActiveRecord::Base
   # Filtering Assignments by Team Work, Group Work, and Individual Work
   scope :individual_assignments, -> { where grade_scope: "Individual" }
   scope :group_assignments, -> { where grade_scope: "Group" }
-  scope :team_assignments, -> { where grade_scope: "Team" }
 
   # Filtering Assignments by where in the interface they are displayed
   scope :timelineable, -> { where(:include_in_timeline => true) }
