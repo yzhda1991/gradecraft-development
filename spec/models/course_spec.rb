@@ -53,6 +53,7 @@ describe Course do
       course = create(:course)
       staff_1 = create(:user, last_name: 'Zeto')
       staff_2 = create(:user, last_name: 'Able')
+      staff_3 = create(:user, last_name: 'Able')
       course_membership = create(:course_membership, user: staff_1, role: "gsi", course: course)
       course_membership = create(:course_membership, user: staff_2, role: "gsi", course: course)
       expect(course.staff).to eq([staff_2,staff_1])
@@ -66,6 +67,20 @@ describe Course do
       student2 = create(:user, last_name: 'Alpha')
       student2.courses << subject
       expect(subject.students_being_graded).to eq([student2,student])
+    end
+  end
+
+  describe "#students_being_graded_by_team(team)"do
+    it "returns an alphabetical list of students being graded for a specific team" do
+      student = create(:user, last_name: 'Zed')
+      student.courses << subject
+      student2 = create(:user, last_name: 'Alpha')
+      student2.courses << subject
+      student3 = create(:user, last_name: 'Mr. Green')
+      student3.courses << subject
+      team = create(:team, course: subject)
+      team.students << [ student, student2] 
+      expect(subject.students_being_graded_by_team(team)).to eq([student2,student])
     end
   end
 
