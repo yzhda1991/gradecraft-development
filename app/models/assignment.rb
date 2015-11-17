@@ -97,7 +97,6 @@ class Assignment < ActiveRecord::Base
   scope :with_due_date, -> { where('assignments.due_at IS NOT NULL') }
   scope :without_due_date, ->  { where('assignments.due_at IS NULL') }
   scope :future, -> { with_due_date.where('assignments.due_at >= ?', Time.now) }
-  scope :still_accepted, -> { with_due_date.where('assignments.accepts_submissions_until >= ?', Time.now) }
   scope :past, -> { with_due_date.where('assignments.due_at < ?', Time.now) }
 
   # Assignments and Grading
@@ -330,11 +329,6 @@ class Assignment < ActiveRecord::Base
   # Checking to see if an assignment's due date is in the future
   def future?
     due_at != nil && due_at >= Time.now
-  end
-
-  # Checking to see if an assignment is still accepted - there's often a grey space between due and no longer accepted
-  def still_accepted?
-    (accepts_submissions_until.present? && accepts_submissions_until >= Time.now) || (accepts_submissions_until == nil)
   end
 
   # Checking to see if the assignment has submissions that don't have grades
