@@ -84,6 +84,45 @@ describe Course do
     end
   end
 
+  describe "#students_auditing" do
+    it "returns an alphabetical list of students auditing a course" do
+      student = create(:user, last_name: 'Zed')
+      student2 = create(:user, last_name: 'Alpha')
+      student3 = create(:user)
+      course_membership = create(:auditing_membership, user: student, course: subject)
+      course_membership = create(:auditing_membership, user: student2, course: subject)
+      expect(subject.students_auditing).to eq([student2,student])
+    end
+  end
+
+  describe "#students_auditing_by_team(team)" do
+    it "returns an alphabetical list of students auditing a course on a specific team" do
+      student = create(:user, last_name: 'Zed')
+      course_membership = create(:auditing_membership, user: student, course: subject)
+      student2 = create(:user, last_name: 'Alpha')
+      student2.courses << subject
+      student3 = create(:user, last_name: 'Mr. Green')
+      course_membership_2 = create(:auditing_membership, user: student3, course: subject)
+      team = create(:team, course: subject)
+      team.students << [ student, student2] 
+      expect(subject.students_auditing_by_team(team)).to eq([student])
+    end
+  end
+
+  describe "#students_by_team(team)" do 
+    it "returns an alphabetical list of all students in a team" do
+      student = create(:user, last_name: 'Zed')
+      course_membership = create(:auditing_membership, user: student, course: subject)
+      student2 = create(:user, last_name: 'Alpha')
+      student2.courses << subject
+      student3 = create(:user, last_name: 'Mr. Green')
+      course_membership_2 = create(:auditing_membership, user: student3, course: subject)
+      team = create(:team, course: subject)
+      team.students << [ student, student2] 
+      expect(subject.students_by_team(team)).to eq([student2, student])
+    end
+  end
+
   it "returns Pass and Fail as defaults for pass_term and fail_term" do
     expect(subject.pass_term).to eq("Pass")
     expect(subject.fail_term).to eq("Fail")

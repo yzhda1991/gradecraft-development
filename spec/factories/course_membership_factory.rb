@@ -19,5 +19,9 @@ FactoryGirl.define do
       role 'admin'
     end
 
+    factory :auditing_membership do 
+      auditing true
+    end
+
   end
 end
