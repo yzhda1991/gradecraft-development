@@ -15,6 +15,20 @@ class AssignmentExportPerformer < ResqueJob::Performer
       require_success(csv_export_messages) do
         export_csv_successful?
       end
+
+      # actually build the export from the json
+      # require_sucess(build_export_messages) do
+      #  build_export_from_json
+      # end
+      
+      # check to make sure that everything that's supposed to be there is actually there
+      # require_sucess(check_export_messages) do
+      #  check_export_from_json
+      # end
+
+      # require_sucess(start_archive_messages) do
+      #  start_archive_process
+      # end
     else
       if logger
         log_error_with_attributes "@assignment.present? or @students.present? failed and both should have been present, could not do_the_work"
@@ -159,9 +173,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def start_archive_process
     case @archive_type
     when :zip
-      `zip -r - #{tmp_dir} | pv -L #{@rate_limit} > #{@destination_name}.zip`
+      `zip -r - #{tmp_dir} | pv -L #{@rate_limit} > #{expanded_archive_base_path}.zip`
     when :tar
-      `tar czvf - #{tmp_dir} | pv -L #{@rate_limit} > #{@destination_name}.tgz`
+      `tar czvf - #{tmp_dir} | pv -L #{@rate_limit} > #{expanded_archive_base_path}.tgz`
     end
   end
 
