@@ -424,6 +424,28 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       original_tmp_dir = subject
       expect(subject).to eq(original_tmp_dir)
     end
+
+    it "sets the directory path to @tmp_dir" do
+      subject
+      expect(performer.instance_variable_get(:@tmp_dir)).to eq(subject)
+    end
+  end
+
+  describe "archive_tmp_dir" do
+    subject { performer.instance_eval { archive_tmp_dir }}
+    it "builds a temporary directory for the archive" do
+      expect(subject).to match(/\/tmp\/[\w\d-]+/) # match the tmp dir hash
+    end
+
+    it "caches the temporary directory" do
+      original_tmp_dir = subject
+      expect(subject).to eq(original_tmp_dir)
+    end
+
+    it "sets the directory path to @archive_tmp_dir" do
+      subject
+      expect(performer.instance_variable_get(:@archive_tmp_dir)).to eq(subject)
+    end
   end
   
   describe "work_resources_present?" do

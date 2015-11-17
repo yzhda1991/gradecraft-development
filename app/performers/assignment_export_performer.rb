@@ -161,7 +161,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   # @mz todo: add specs
   # create a separate tmp dir for storing the final generated archive
   def archive_tmp_dir
-    @archive_tmp_dir ||= Dir.mkdtmpdir
+    @archive_tmp_dir ||= Dir.mktmpdir
   end
 
   # @mz todo: expand the path from the archive tmp dir
