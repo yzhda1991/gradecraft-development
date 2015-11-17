@@ -81,7 +81,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     submissions_grouped_by_student.keys.sort
   end
 
-  # @mz todo: add specs
   def export_file_basename
     @export_file_basename ||= "#{fileized_assignment_name}_export_#{Time.now.strftime("%Y-%m-%d")}"
   end

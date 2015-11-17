@@ -217,8 +217,36 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       allow(performer).to receive(:submissions_grouped_by_student) { contrived_student_submissions_hash }
     end
 
-    it "sorts the keys alphabetically", inspect: true do
+    it "sorts the keys alphabetically" do
       expect(performer.instance_eval { sorted_student_directory_keys }).to eq(expected_keys_result)
+    end
+  end
+
+  describe "export_file_basename", inspect: true do
+    subject { performer.instance_eval { export_file_basename }}
+
+    before(:each) do
+      allow(performer).to receive(:fileized_assignment_name) { "some_great_assignment" }
+      allow(Time).to receive(:now) { Date.parse("Jan 20 1995") }
+    end
+
+    it "includes the fileized_assignment_name" do
+      expect(subject).to match(/^some_great_assignment/)
+    end
+
+    it "is appended with a YYYY-MM-DD formatted timestamp" do
+      expect(subject).to match(/1995-01-20$/)
+    end
+
+    it "caches the filename" do
+      subject
+      expect(performer).not_to receive(:fileized_assignment_name)
+      subject
+    end
+
+    it "sets the filename to an @export_file_basename" do
+      subject
+      expect(performer.instance_variable_get(:@export_file_basename)).to eq("some_great_assignment_export_1995-01-20")
     end
   end
 
