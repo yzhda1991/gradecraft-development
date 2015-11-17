@@ -447,6 +447,29 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       expect(performer.instance_variable_get(:@archive_tmp_dir)).to eq(subject)
     end
   end
+
+  describe "expanded_archive_base_path", inspect: true do
+    subject { performer.instance_eval { expanded_archive_base_path }}
+    before do
+      allow(performer).to receive(:export_file_basename) { "the_best_filename" }
+      allow(performer).to receive(:archive_tmp_dir) { "/archive/tmp/dir" }
+    end
+
+    it "expands the export file basename from the archive tmp dir path" do
+      expect(subject).to eq("/archive/tmp/dir/the_best_filename")
+    end
+
+    it "caches the basename" do
+      subject
+      expect(performer).not_to receive(:export_file_basename)
+      subject
+    end
+
+    it "sets the expanded path to @expanded_archive_base_path" do
+      subject
+      expect(performer.instance_variable_get(:@expanded_archive_base_path)).to eq(subject)
+    end
+  end
   
   describe "work_resources_present?" do
     let(:assignment_present) { performer.instance_variable_set(:@assignment, true) }

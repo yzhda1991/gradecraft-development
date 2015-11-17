@@ -158,13 +158,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @export_csv_successful ||= File.exist?(csv_file_path)
   end
 
-  # @mz todo: add specs
   # create a separate tmp dir for storing the final generated archive
   def archive_tmp_dir
     @archive_tmp_dir ||= Dir.mktmpdir
   end
 
-  # @mz todo: expand the path from the archive tmp dir
   def expanded_archive_base_path
     @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
   end
