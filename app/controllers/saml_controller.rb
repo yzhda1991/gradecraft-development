@@ -20,7 +20,7 @@ class SamlController < ApplicationController
         session[:course_id] = @user.default_course.id
         respond_with @user, location: dashboard_path
       else
-        render text: "invite them to gradecraft"
+        redirect_to um_pilot_path
       end
     else
        redirect_to root_url, :notice => "authentication error"
