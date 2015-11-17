@@ -60,29 +60,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @csv_file_path ||= File.expand_path("_grade_import_template.csv", tmp_dir)
   end
 
-  def archive_basename
-    if team_present?
-      "#{formatted_assignment_name}_#{formatted_team_name}"
-    else
-      formatted_assignment_name
-    end
-  end
-
   # @mz todo: add specs
   def fileized_assignment_name
     @assignment.name
-      .downcase
-      .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
-      .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
-      .gsub(/\s+/, '_') # replace spaces with underscores
   end
 
   def sorted_student_directory_keys
     submissions_grouped_by_student.keys.sort
-  end
-
-  def export_file_basename
-    @export_file_basename ||= "#{fileized_assignment_name}_export_#{Time.now.strftime("%Y-%m-%d")}"
   end
 
   def submissions_grouped_by_student
@@ -91,16 +75,34 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
+  # methods for building and formatting the archive filename
+  def export_file_basename
+    @export_file_basename ||= "#{archive_basename}_export_#{Time.now.strftime("%Y-%m-%d")}"
+  end
+
+  def archive_basename
+    if team_present?
+      "#{formatted_assignment_name}_#{formatted_team_name}"
+    else
+      formatted_assignment_name
+    end
+  end
+
   def formatted_assignment_name
-    formatted_archive_fragment(@assignment.name)
+    formatted_filename_fragment(@assignment.name)
   end
 
   def formatted_team_name
-    formatted_archive_fragment(@team.name)
+    formatted_filename_fragment(@team.name)
   end
 
-  def formatted_archive_fragment(fragment)
-    "#{fragment.gsub(/\W+/, "_").downcase[0..19]}"
+  def formatted_filename_fragment(fragment)
+    fragment
+      .downcase
+      # .gsub(/\W+/, "_")
+      .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
+      .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
+      .gsub(/\s+/, '_') # replace spaces with underscores
   end
 
   def fetch_course
