@@ -94,10 +94,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def formatted_filename_fragment(fragment)
     fragment
       .downcase
-      # .gsub(/\W+/, "_")
       .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
       .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
       .gsub(/\s+/, '_') # replace spaces with underscores
+      # .gsub(/\W+/, "_")
   end
 
   def fetch_course
