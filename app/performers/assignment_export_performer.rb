@@ -144,8 +144,28 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @export_csv_successful ||= File.exist?(csv_file_path)
   end
 
-  private
+  # @mz todo: add specs
+  # create a separate tmp dir for storing the final generated archive
+  def archive_tmp_dir
+    @archive_tmp_dir ||= Dir.mkdtmpdir
+  end
 
+  # @mz todo: expand the path from the archive tmp dir
+  def expanded_archive_base_path
+    @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
+  end
+
+  # @mz todo: add specs
+  def start_archive_process
+    case @archive_type
+    when :zip
+      `zip -r - #{tmp_dir} | pv -L #{@rate_limit} > #{@destination_name}.zip`
+    when :tar
+      `tar czvf - #{tmp_dir} | pv -L #{@rate_limit} > #{@destination_name}.tgz`
+    end
+  end
+
+  private
 
   def submissions_by_student_archive_hash
     JbuilderTemplate.new(temp_view_context).encode do |json|
