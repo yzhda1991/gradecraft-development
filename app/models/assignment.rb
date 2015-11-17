@@ -255,24 +255,24 @@ class Assignment < ActiveRecord::Base
   end
 
   def check_unlock_status(student)
-    if ! is_unlocked_for_student?(student)
-      goal = unlock_conditions.count
-      count = 0
-      unlock_conditions.each do |condition|
-        if condition.is_complete?(student)
-          count += 1
-        end
-      end
-      if goal == count
-        if unlock_states.where(:student_id => student.id).present?
-          unlock_states.where(:student_id => student.id).first.unlocked = true
-        else
-          self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
-        end
-      else
-        return false
-      end
+    if unlock_condition_count_to_meet == unlock_condition_count_met_for(student)
+      unlock_state = self.unlock_states.where(student_id: student.id).first ||
+        self.unlock_states.build(student_id: student.id, unlockable_id: self.id,
+                                 unlockable_type: self.class)
+      unlock_state.unlocked = true
+      unlock_state.save
+      unlock_state
     end
+  end
+
+  def unlock_condition_count_to_meet
+    self.unlock_conditions.count
+  end
+
+  def unlock_condition_count_met_for(student)
+    self.unlock_conditions
+      .select { |condition| condition.is_complete?(student) }
+      .size
   end
 
   def find_or_create_unlock_state(student)
