@@ -48,6 +48,17 @@ describe Course do
     end
   end
 
+  describe "#staff" do 
+    it "returns an alphabetical list of the staff in the course" do 
+      course = create(:course)
+      staff_1 = create(:user, last_name: 'Zeto')
+      staff_2 = create(:user, last_name: 'Able')
+      course_membership = create(:course_membership, user: staff_1, role: "gsi", course: course)
+      course_membership = create(:course_membership, user: staff_2, role: "gsi", course: course)
+      expect(course.staff).to eq([staff_2,staff_1])
+    end
+  end
+
   describe "#students_being_graded" do
     it "returns an alphabetical list of students being graded" do
       student = create(:user, last_name: 'Zed')
