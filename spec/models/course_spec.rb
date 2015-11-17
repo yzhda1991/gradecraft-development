@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe Course do
+describe Course, focus: true do
   subject { build(:course) }
   let(:staff_membership) { create :staff_course_membership, course: subject, instructor_of_record: true }
 
@@ -172,4 +172,115 @@ describe Course do
     course = create :course
     expect(CourseMembership.where(user_id: admin.id, course_id: course.id, role: "admin")).to be_exist
   end
+
+  describe "#assignment_term" do 
+    it "returns the set assignment_term if present" do 
+      subject.assignment_term = 'Quest'  
+      expect(subject.assignment_term).to eq("Quest")
+    end
+
+    it "returns Assignment if no assignment_term is present" do 
+      expect(subject.assignment_term).to eq("Assignment")
+    end
+  end
+
+  describe "#badge_term" do 
+    it "returns the set badge_term if present" do 
+      subject.badge_term = 'Achievement'  
+      expect(subject.badge_term).to eq("Achievement")
+    end
+
+    it "returns Badge if no badge_term is present" do 
+      expect(subject.badge_term).to eq("Badge")
+    end
+  end
+
+  describe "#challenge_term" do 
+    it "returns the set challenge_term if present" do 
+      subject.challenge_term = 'Boss Battle'  
+      expect(subject.challenge_term).to eq("Boss Battle")
+    end
+
+    it "returns Challenge if no challenge_term is present" do 
+      expect(subject.challenge_term).to eq("Challenge")
+    end
+  end
+
+  describe "#fail_term" do 
+    it "returns the set fail_term if present" do 
+      subject.fail_term = 'Miss'  
+      expect(subject.fail_term).to eq("Miss")
+    end
+
+    it "returns Fail if no fail_term is present" do 
+      expect(subject.fail_term).to eq("Fail")
+    end
+  end
+
+  describe "#group_term" do 
+    it "returns the set group_term if present" do 
+      subject.group_term = 'Flange'  
+      expect(subject.group_term).to eq("Flange")
+    end
+
+    it "returns Group if no group_term is present" do 
+      expect(subject.group_term).to eq("Group")
+    end
+  end
+
+  describe "#pass_term" do 
+    it "returns the set pass_term if present" do  
+      subject.pass_term = 'Win'  
+      expect(subject.pass_term).to eq("Win")
+    end
+
+    it "returns Pass if no pass_term is present" do 
+      expect(subject.pass_term).to eq("Pass")
+    end
+  end
+
+  describe "#team_term" do 
+    it "returns the set team_term if present" do 
+      subject.team_term = 'Horde'  
+      expect(subject.team_term).to eq("Horde")
+    end
+
+    it "returns Team if no team_term is present" do 
+      expect(subject.team_term).to eq("Team")
+    end
+  end
+
+  describe "#team_leader_term" do 
+    it "returns the set team_leader_term if present" do 
+      subject.team_leader_term = 'Captain'  
+      expect(subject.team_leader_term).to eq("Captain")
+    end
+
+    it "returns Team Leader if no team_leader_term is present" do 
+      expect(subject.team_leader_term).to eq("Team Leader")
+    end
+  end
+
+  describe "#weight_term" do 
+    it "returns the set weight_term if present" do 
+      subject.weight_term = 'Kapital'  
+      expect(subject.weight_term).to eq("Kapital")
+    end
+
+    it "returns Weight if no weight_term is present" do 
+      expect(subject.weight_term).to eq("Multiplier")
+    end
+  end
+
+  describe "#user_term" do 
+    it "returns the set user_term if present" do 
+      subject.user_term = 'User'  
+      expect(subject.user_term).to eq("User")
+    end
+
+    it "returns User if no user_term is present" do 
+      expect(subject.user_term).to eq("Player")
+    end
+  end
+
 end
