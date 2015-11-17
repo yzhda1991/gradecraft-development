@@ -489,9 +489,9 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
 
     describe "submissions_by_student" do
-      let(:student1) { double(:user, first_name: "Ben", last_name: "Bailey", id: 40) }
-      let(:student2) { double(:user, first_name: "Mike", last_name: "McCaffrey", id: 55) }
-      let(:student3) { double(:user, first_name: "Dana", last_name: "Dafferty", id: 92) }
+      let(:student1) { create(:user, first_name: "Ben", last_name: "Bailey", id: 40) }
+      let(:student2) { create(:user, first_name: "Mike", last_name: "McCaffrey", id: 55) }
+      let(:student3) { create(:user, first_name: "Dana", last_name: "Dafferty", id: 92) }
 
       let(:submission1) { double(:submission, id: 1, student: student1) }
       let(:submission2) { double(:submission, id: 2, student: student2) }

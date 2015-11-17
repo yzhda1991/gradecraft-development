@@ -87,7 +87,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def submissions_grouped_by_student
     @submissions_grouped_by_student ||= @submissions.group_by do |submission|
-      formatted_student_key(submission.student)
       submission.student.formatted_key_name
     end
   end

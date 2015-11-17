@@ -62,7 +62,6 @@ describe User do
     end
   end
 
-
   describe ".students_auditing" do
     let(:student_being_audited) { create(:user) }
     before do
