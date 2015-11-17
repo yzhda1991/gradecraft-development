@@ -55,10 +55,10 @@ describe User do
   end
 
   describe "#formatted_key_name", inspect: true do
-    let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", id: 40) }
+    let(:user) { create(:user, first_name: "Ben", last_name: "Bailey") }
 
     it "formats the student info into a usable key" do
-      expect(user.formatted_key_name).to eq("bailey_ben-40")
+      expect(user.formatted_key_name).to eq("bailey_ben-#{user.id}")
     end
   end
 
