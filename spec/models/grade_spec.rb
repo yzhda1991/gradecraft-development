@@ -20,7 +20,7 @@ describe Grade do
     end
 
     it "is invalid without a course" do
-      subject.course = nil
+      subject.assignment.course = nil
       expect(subject).to_not be_valid
       expect(subject.errors[:course]).to include "can't be blank"
     end
@@ -88,6 +88,24 @@ describe Grade do
       another_grade = create(:grade)
       results = Grade.for_student(student)
       expect(results).to eq [student_grade]
+    end
+  end
+
+  describe ".find_or_create" do
+
+    it "finds and existing grade for assignment and student" do
+      student = create(:user)
+      assignment = create(:assignment)
+      grade = create(:grade, student: student, assignment: assignment)
+      results = Grade.find_or_create(assignment,student)
+      expect(results).to eq grade
+    end
+
+    it "creates a grade for assignment and student if none exists" do
+      student = create(:user)
+      course = create(:course)
+      assignment = create(:assignment, course: course)
+      expect{Grade.find_or_create(assignment,student)}.to change{ Grade.count }.by(1)
     end
   end
 end

@@ -44,7 +44,7 @@ class Grade < ActiveRecord::Base
   validates_presence_of :assignment, :assignment_type, :course, :student
   validates :assignment_id, :uniqueness => {:scope => :student_id}
 
-  delegate :name, :description, :due_at, :assignment_type, :to => :assignment
+  delegate :name, :description, :due_at, :assignment_type, :course, :to => :assignment
 
   before_save :clean_html
   after_destroy :save_student_and_team_scores
@@ -81,6 +81,10 @@ class Grade < ActiveRecord::Base
 
   def self.assignment_type_scores
     group('grades.assignment_type_id').pluck('grades.assignment_type_id, COALESCE(SUM(grades.score), 0)')
+  end
+
+  def self.find_or_create(assignment,student)
+    Grade.where(student_id: student.id, assignment_id: assignment.id).first || Grade.create(student_id: student.id, assignment_id: assignment.id)
   end
 
   def feedback_read!
