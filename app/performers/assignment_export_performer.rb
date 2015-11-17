@@ -85,16 +85,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @export_file_basename ||= "#{fileized_assignment_name}_export_#{Time.now.strftime("%Y-%m-%d")}"
   end
 
-  # @mz todo: add specs
   def submissions_grouped_by_student
     @submissions_grouped_by_student ||= @submissions.group_by do |submission|
       formatted_student_key(submission.student)
+      submission.student.formatted_key_name
     end
-  end
-
-  # @mz todo: add specs
-  def formatted_student_key(student)
-    "#{student.last_name}_#{student.first_name}-#{student.id}".downcase
   end
 
   def formatted_assignment_name
