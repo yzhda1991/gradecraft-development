@@ -222,7 +222,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
-  describe "export_file_basename", inspect: true do
+  describe "export_file_basename" do
     subject { performer.instance_eval { export_file_basename }}
 
     before(:each) do
@@ -488,17 +488,17 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
-    describe "submissions_by_student" do
+    describe "submissions_by_student", inspect: true do
 
       # mock_students
-      let(:student1) { double(:student, first_name: "Ben", last_name: "Bailey", id: 40) }
-      let(:student2) { double(:student, first_name: "Mike", last_name: "McCaffrey", id: 55) }
-      let(:student3) { double(:student, first_name: "Dana", last_name: "Dafferty", id: 92) }
+      let(:student1) { create(:user, first_name: "Ben", last_name: "Bailey", id: 40) }
+      let(:student2) { create(:user, first_name: "Mike", last_name: "McCaffrey", id: 55) }
+      let(:student3) { create(:user, first_name: "Dana", last_name: "Dafferty", id: 92) }
 
-      let(:submission1) { double(:submission, id: 1, student: student1) }
-      let(:submission2) { double(:submission, id: 2, student: student2) }
-      let(:submission3) { double(:submission, id: 3, student: student3) }
-      let(:submission4) { double(:submission, id: 4, student: student2) } # note that this uses student 2
+      let(:submission1) { create(:submission, id: 1, student: student1) }
+      let(:submission2) { create(:submission, id: 2, student: student2) }
+      let(:submission3) { create(:submission, id: 3, student: student3) }
+      let(:submission4) { create(:submission, id: 4, student: student2) } # note that this uses student 2
 
       let(:grouped_submission_expectation) {{
         "bailey_ben-40" => [submission1],
