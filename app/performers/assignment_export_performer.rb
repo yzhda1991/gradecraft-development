@@ -60,11 +60,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @csv_file_path ||= File.expand_path("_grade_import_template.csv", tmp_dir)
   end
 
-  # @mz todo: add specs
-  def fileized_assignment_name
-    @assignment.name
-  end
-
   def sorted_student_directory_keys
     submissions_grouped_by_student.keys.sort
   end
