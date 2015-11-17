@@ -97,7 +97,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
       .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
       .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
       .gsub(/\s+/, '_') # replace spaces with underscores
-      # .gsub(/\W+/, "_")
+      .gsub(/^_+/, '') # remove leading underscores
+      .gsub(/_+$/, '') # remove trailing underscores
+      .slice(0..24) # take only 25 characters
   end
 
   def fetch_course

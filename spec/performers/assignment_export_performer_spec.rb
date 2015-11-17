@@ -305,7 +305,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
-  describe "formatted_filename_fragment", inspect: true do
+  describe "formatted_filename_fragment" do
     it "downcases everything" do
       expect(performer.instance_eval { formatted_filename_fragment("THISISSUPERCAPPY") }).to \
         eq("thisissupercappy")
@@ -316,10 +316,20 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         eq("whoa_georg_is_dead")
     end
 
-    # it "truncates the final string to twenty characters" do
-    #   expect(performer.instance_eval { formatted_archive_fragment("abcdefghijklmnopqrstuvwxyz") }).to \
-    #     eq("abcdefghijklmnopqrst")  
-    # end
+    it "removes leading underscores" do
+      expect(performer.instance_eval { formatted_filename_fragment("____________garrett_rules") }).to \
+        eq("garrett_rules")  
+    end
+
+    it "removes trailing underscores" do
+      expect(performer.instance_eval { formatted_filename_fragment("garrett_sucks__________") }).to \
+        eq("garrett_sucks")  
+    end
+
+    it "truncates the final string to twenty five characters" do
+      expect(performer.instance_eval { formatted_filename_fragment("abcdefghijklmnopqrstuvwxyz") }).to \
+        eq("abcdefghijklmnopqrstuvwxy")  
+    end
   end
 
   describe "team_present?" do
