@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :assignment do
     name { Faker::Lorem.word }
     association :assignment_type
+    association :course
     description { Faker::Lorem.sentence }
     point_total { Faker::Number.number(5) }
     visible true

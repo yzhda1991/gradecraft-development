@@ -44,8 +44,7 @@ class GradesController < ApplicationController
     session[:return_to] = request.referer
     @student = current_student
 
-    @grade = Grade.where(student_id: @student[:id], assignment_id: @assignment[:id]).first
-    create_student_assignment_grade unless @grade
+    @grade = Grade.find_or_create(@assignment,@student)
     @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
 
     @submission = @student.submission_for_assignment(@assignment)
@@ -87,11 +86,6 @@ class GradesController < ApplicationController
         json.partial! "grades/assignment_score_levels", assignment_score_levels: @assignment_score_levels
       end
     end.to_json
-  end
-
-  #TODO replace with find_or_create...
-  def create_student_assignment_grade
-    @grade = Grade.create student_id: @student[:id], assignment_id: @assignment[:id], assignment_type_id: @assignment[:assignment_type_id]#, raw_score: 0
   end
 
   def serialized_rubric_grades
