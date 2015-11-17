@@ -57,9 +57,10 @@ describe NotificationMailer do
 
   let(:professor) { create(:user) }
   let(:assignment) { create(:assignment, course: course) }
-  let(:course) { create(:course, assignment_term: "deception", team_term: "ascension") }
+  let(:course) { create(:course, assignment_term: "DECEPTION", team_term: "ASCENSION") }
   let(:team) { create(:team, course: course) }
   let(:team_term) { course.team_term.downcase }
+  let(:assignment_term) { course.assignment_term.downcase }
   let(:archive_data) {{ format: "zip", url: "http://aws.com/some-archive-hash" }}
 
   before(:each) { deliver_email }
@@ -74,7 +75,7 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for assignment #{assignment.name} is being created"
+      expect(email.subject).to eq "Submissions export for #{ assignment_term } #{assignment.name} is being created"
     end
 
     describe "text part body" do
@@ -102,7 +103,7 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for assignment #{assignment.name} is ready"
+      expect(email.subject).to eq "Submissions export for #{ assignment_term } #{assignment.name} is ready"
     end
 
     describe "text part body" do
@@ -130,7 +131,7 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for assignment #{assignment.name} failed to build"
+      expect(email.subject).to eq "Submissions export for #{ assignment_term } #{assignment.name} failed to build"
     end
 
     describe "text part body" do

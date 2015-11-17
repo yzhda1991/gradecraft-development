@@ -3,7 +3,7 @@ class ExportsMailer < ApplicationMailer
 
   def submissions_export_started(professor, assignment, archive_data)
     cache_submission_attrs(professor, assignment, archive_data)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@assignment.name} is being created")) do |format|
+    mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} is being created")) do |format|
       format.text
       format.html
     end
@@ -11,7 +11,7 @@ class ExportsMailer < ApplicationMailer
 
   def submissions_export_success(professor, assignment, archive_data)
     cache_submission_attrs(professor, assignment, archive_data)
-    mail(default_attrs.merge(:subject => "Submissions export for assignment #{@assignment.name} is ready")) do |format|
+    mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} is ready")) do |format|
       format.text
       format.html
     end
@@ -19,7 +19,7 @@ class ExportsMailer < ApplicationMailer
 
   def submissions_export_failure(professor, assignment, archive_data)
     cache_submission_attrs(professor, assignment, archive_data)
-    mail(default_attrs.merge(:subject => "Submissions export for assignment #{@assignment.name} failed to build")) do |format|
+    mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} failed to build")) do |format|
       format.text
       format.html
     end
