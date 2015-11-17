@@ -30,6 +30,24 @@ describe Assignment do
     end
   end
 
+  describe "#is_unlocked_for_student?" do
+    let(:student) { create :user }
+
+    it "is unlocked when there are no unlock conditions present" do
+      expect(subject.is_unlocked_for_student?(student)).to eq true
+    end
+
+    it "is not unlocked when the unlock state for the student is not present" do
+      subject.unlock_conditions.build
+      expect(subject.is_unlocked_for_student?(student)).to eq false
+    end
+
+    it "is unlocked when the unlock state for the student is unlocked" do
+      subject.unlock_states.build(student_id: student.id, unlocked: true)
+      expect(subject.is_unlocked_for_student?(student)).to eq true
+    end
+  end
+
   describe "#copy" do
     let(:assignment) { build :assignment }
     subject { assignment.copy }
