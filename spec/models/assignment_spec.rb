@@ -63,4 +63,109 @@ describe Assignment do
       expect(subject.rubric).to_not be_new_record
     end
   end
+
+  describe "#opened?" do
+    it "is opened if there is no open at date set" do
+      subject.open_at = nil
+      expect(subject).to be_opened
+    end
+
+    it "is opened if the open at date is in the past" do
+      subject.open_at = 2.days.ago
+      expect(subject).to be_opened
+    end
+
+    it "is not opened if the assignment opens in the future" do
+      subject.open_at = 2.days.from_now
+      expect(subject).to_not be_opened
+    end
+  end
+
+  describe "#overdue" do
+    it "is not overdue if there is no due date" do
+      subject.due_at= nil
+      expect(subject).to_not be_overdue
+    end
+
+    it "is not overdue if the due date is in the future" do
+      subject.due_at= 2.days.from_now
+      expect(subject).to_not be_overdue
+    end
+
+    it "is overdue if the due date has past" do
+      subject.due_at= 2.days.ago
+      expect(subject).to be_overdue
+    end
+  end
+
+  describe "#accepting_submissions?" do
+    it "is accepting submissions if no acceptance date was set" do
+      subject.accepts_submissions_until = nil
+      expect(subject).to be_accepting_submissions
+    end
+
+    it "is accepting submissions if the acceptance date is in the future" do
+      subject.accepts_submissions_until = 2.days.from_now
+      expect(subject).to be_accepting_submissions
+    end
+
+    it "is not accepting submissions if the acceptance date was in the past" do
+      subject.accepts_submissions_until = 2.days.ago
+      expect(subject).to_not be_accepting_submissions
+    end
+  end
+
+  describe "#open?" do
+    before do
+      subject.open_at = 4.days.ago
+      subject.due_at = 2.days.ago
+      subject.accepts_submissions_until = 2.days.ago
+    end
+
+    it "is open if there is no open date and there is no due date" do
+      subject.open_at = nil
+      subject.due_at = nil
+      expect(subject).to be_open
+    end
+
+    it "is open if the open date has passed but there is no due date" do
+      subject.due_at = nil
+      expect(subject).to be_open
+    end
+
+    it "is open if there is no open date but there is a future due date" do
+      subject.open_at = nil
+      subject.due_at = 2.days.from_now
+      expect(subject).to be_open
+    end
+
+    it "is open if there is no open date, the due date has passed and it does not have an accept date" do
+      subject.open_at = nil
+      subject.accepts_submissions_until = nil
+      expect(subject).to be_open
+    end
+
+    it "is open if there is no open date, the due date has passed and it has a future accept date" do
+      subject.open_at = nil
+      subject.accepts_submissions_until = 2.days.from_now
+      expect(subject).to be_open
+    end
+
+    it "is open if there is a previous open date, a future due date and it does not have an accept date" do
+      subject.open_at = nil
+      subject.due_at = 2.days.from_now
+      subject.accepts_submissions_until = nil
+      expect(subject).to be_open
+    end
+
+    it "is open if there is a previous open date, a previous due date and it does not have an accept date" do
+      subject.accepts_submissions_until = nil
+      expect(subject).to be_open
+    end
+
+    it "is open if there is a previous open date and a future accept date" do
+      subject.accepts_submissions_until = 2.days.from_now
+      expect(subject).to be_open
+    end
+  end
 end
