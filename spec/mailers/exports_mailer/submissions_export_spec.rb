@@ -38,6 +38,16 @@ RSpec.shared_examples "a submissions export email with archive data" do
   end
 end
 
+RSpec.shared_examples "a submissions export email without archive data" do 
+  it "includes the archive format" do
+    should include archive_data[:format].upcase
+  end
+
+  it "doesn't include the archive url" do
+    should_not include archive_data[:url]
+  end
+end
+
 # specs for submission notifications that are sent to students
 describe NotificationMailer do
   extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
@@ -70,14 +80,14 @@ describe NotificationMailer do
     describe "text part body" do
       subject { text_part.body }
       it_behaves_like "a complete submissions export email body"
-      it_behaves_like "a submissions export email with archive data"
+      it_behaves_like "a submissions export email without archive data"
       it_behaves_like "an email text part"
     end
 
     describe "html part body" do
       subject { html_part.body }
       it_behaves_like "a complete submissions export email body"
-      it_behaves_like "a submissions export email with archive data"
+      it_behaves_like "a submissions export email without archive data"
       it_behaves_like "an email html part"
     end
   end
@@ -153,7 +163,7 @@ describe NotificationMailer do
       subject { text_part.body }
       it_behaves_like "a complete submissions export email body"
       it_behaves_like "a team submissions export email"
-      it_behaves_like "a submissions export email with archive data"
+      it_behaves_like "a submissions export email without archive data"
       it_behaves_like "an email text part"
     end
 
@@ -161,7 +171,7 @@ describe NotificationMailer do
       subject { html_part.body }
       it_behaves_like "a complete submissions export email body"
       it_behaves_like "a team submissions export email"
-      it_behaves_like "a submissions export email with archive data"
+      it_behaves_like "a submissions export email without archive data"
       it_behaves_like "an email html part"
     end
   end
