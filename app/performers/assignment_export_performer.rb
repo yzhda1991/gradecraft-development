@@ -77,7 +77,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
       .gsub(/\s+/, '_') # replace spaces with underscores
   end
 
-  # @mz todo: add specs
   def sorted_student_directory_keys
     submissions_grouped_by_student.keys.sort
   end

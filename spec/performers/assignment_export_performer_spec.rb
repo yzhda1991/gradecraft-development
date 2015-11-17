@@ -209,6 +209,18 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   # private and protected methods
   
+  describe "sorted_student_directory_keys" do
+    let(:contrived_student_submissions_hash) {{ "dave_hoggworthy_40"=>"", "carla_makeshift_10"=>"", "bordwell_hamhock_25"=>"" }}
+    let(:expected_keys_result) { %w[ bordwell_hamhock_25  carla_makeshift_10  dave_hoggworthy_40 ] }
+
+    before do
+      allow(performer).to receive(:submissions_grouped_by_student) { contrived_student_submissions_hash }
+    end
+
+    it "sorts the keys alphabetically", inspect: true do
+      expect(performer.instance_eval { sorted_student_directory_keys }).to eq(expected_keys_result)
+    end
+  end
 
   describe "generate_export_csv" do
     subject { performer.instance_eval { generate_export_csv }}
