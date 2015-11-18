@@ -26,10 +26,6 @@ class AssignmentType < ActiveRecord::Base
     assignment_weights.where(student: student).weight
   end
 
-  def has_predictable_assignments?
-    assignments.any?(&:include_in_predictor?)
-  end
-
   def is_capped?
     max_points.present?
   end
