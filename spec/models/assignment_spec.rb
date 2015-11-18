@@ -52,10 +52,11 @@ describe Assignment do
     let(:student) { create :user }
     before { subject.save }
 
-    it "returns nil if the goal of unlockables does not meet the number of unlocks" do
+    it "returns a new unlock state if the goal of unlockables does not meet the number of unlocks" do
       subject.unlock_conditions.create! condition_id: subject.id,
         condition_type: subject.class, condition_state: "Blah"
-      expect(subject.check_unlock_status(student)).to be_nil
+      expect(subject.check_unlock_status(student)).to be_an_instance_of UnlockState
+      expect(subject.unlock_states.last).to_not be_unlocked
     end
 
     context "when the number of conditions are met" do
@@ -69,7 +70,7 @@ describe Assignment do
         expect(state.reload).to be_unlocked
       end
 
-      it "returns the newly created unlock state if it did not exist" do
+      it "returns a new unlock state if it did not exist" do
         condition = subject.unlock_conditions.create condition_id: subject.id,
           condition_type: subject.class, condition_state: "Blah"
         allow(condition).to receive(:is_complete?).with(student).and_return true

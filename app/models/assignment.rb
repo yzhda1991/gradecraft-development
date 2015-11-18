@@ -214,17 +214,6 @@ class Assignment < ActiveRecord::Base
     grades.where(:student => student).first.predicted_score > 0 rescue nil
   end
 
-  def check_unlock_status(student)
-    if unlock_condition_count_to_meet == unlock_condition_count_met_for(student)
-      unlock_state = self.unlock_states.where(student_id: student.id).first ||
-        self.unlock_states.build(student_id: student.id, unlockable_id: self.id,
-                                 unlockable_type: self.class)
-      unlock_state.unlocked = true
-      unlock_state.save
-      unlock_state
-    end
-  end
-
   # Custom point total if the class has weighted assignments
   def point_total_for_student(student, weight = nil)
     (point_total * weight_for_student(student, weight)).round rescue 0

@@ -13,6 +13,17 @@ module UnlockableCondition
       reject_if: proc { |uc| uc.condition_type.blank? || uc.condition_id.blank? }
   end
 
+  def check_unlock_status(student)
+    unlocked = unlock_condition_count_to_meet == unlock_condition_count_met_for(student)
+    unlock_state = unlock_states.where(student_id: student.id).first if unlocked
+    unlock_state ||= unlock_states.build(student_id: student.id,
+                                         unlockable_id: self.id,
+                                         unlockable_type: self.class)
+    unlock_state.unlocked = unlocked
+    unlock_state.save
+    unlock_state
+  end
+
   def find_or_create_unlock_state(student)
     UnlockState.where(student: student, unlockable: self).first ||
       UnlockState.create(student_id: student.id, unlockable_id: self.id,
@@ -53,6 +64,4 @@ module UnlockableCondition
      (visible_when_locked? || is_unlocked_for_student?(student))) ||
     (!is_unlockable? && visible?)
   end
-
-  # check_unlock_status - difference between Badge and Assignment if the goal does not meet the count
 end

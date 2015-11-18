@@ -39,20 +39,6 @@ class Badge < ActiveRecord::Base
     earned_badges.student_visible.count
   end
 
-  def check_unlock_status(student)
-    if unlock_condition_count_to_meet == unlock_condition_count_met_for(student)
-      unlock_state = unlock_states.where(:student_id => student.id).first
-      if unlock_state.present?
-        unlock_state.unlocked = true
-        unlock_state.save
-      else
-        self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
-      end
-    else
-      self.unlock_states.create(:student_id => student.id, :unlocked => false, :unlockable_id => self.id, :unlockable_type => "Assignment")
-    end
-  end
-
   #badges per role
   def earned_badges_by_student_id
     @earned_badges_by_student_id ||= earned_badges.group_by { |eb| [eb.student_id] }
