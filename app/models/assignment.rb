@@ -59,6 +59,7 @@ class Assignment < ActiveRecord::Base
   before_save :zero_points_for_pass_fail
 
   # Check to make sure the assignment has a name before saving
+  validates :course_id, presence: true
   validates_presence_of :name
   validates_presence_of :assignment_type_id
   validate :open_before_close, :submissions_after_due, :submissions_after_open

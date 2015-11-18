@@ -19,6 +19,12 @@ describe Assignment do
       expect(subject).to_not be_valid
       expect(subject.errors[:assignment_type_id]).to include "can't be blank"
     end
+
+    it "is invalid without a course" do
+      subject.course_id = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:course_id]).to include "can't be blank"
+    end
   end
 
   describe "pass-fail assignments" do
