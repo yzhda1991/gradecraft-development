@@ -23,20 +23,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
         create_student_directories
       end
 
-      # generate the json required for building the archive
-      # require_success(generate_export_json_messages) do
-      #   generate_export_json
-      # end
-
-      # actually build the export from the json
-      # require_sucess(build_export_messages) do
-      #   build_export_from_json
-      # end
-      
-      # check to make sure that everything that's supposed to be there is actually there
-      # require_sucess(check_export_messages) do
-      #  check_export_from_json
-      # end
+      require_success(check_student_directory_messages) do
+        student_directories_created_successfully?
+      end
 
       # require_sucess(start_archive_messages) do
       #  start_archive_process
@@ -189,8 +178,23 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
+  # @mz todo: add specs
+  def student_directories_created_successfully?
+    missing_student_directories.empty?
+  end
+
+  def missing_student_directories
+    @students.inject([]) do |memo, student|
+      memo << student.formatted_key_name unless Dir.exist?(student_directory_path(student))
+      memo
+    end
+  end
+
   def create_student_directories
-    @students.each {|student| Dir.mkdir student_directory_path(student) }
+    @students.each do |student|
+      dir_path = student_directory_path(student)
+      Dir.mkdir(dir_path) unless Dir.exist?(dir_path)
+    end
   end
 
   def student_directory_path(student)
@@ -244,6 +248,14 @@ class AssignmentExportPerformer < ResqueJob::Performer
       failure: "Failed to create the student directories"
     })
   end
+
+  def check_student_directory_messages
+    expand_messages ({
+      success: "Successfully created the student directories",
+      failure: "Failed to create student directories"
+    })
+  end
+
 
   def message_suffix
     "for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"

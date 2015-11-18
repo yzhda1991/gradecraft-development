@@ -617,6 +617,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   describe "student directories" do
     let(:tmp_dir_path) { "/tmp/123-456-abc-xyz" }
     let(:student_doubles) { [ student_double1, student_double2 ] }
+    let(:stub_student_doubles) { performer.instance_variable_set(:@students, student_doubles) }
     let(:student_double1) { double(:student, formatted_key_name: "stevens_anna-10") }
     let(:student_double2) { double(:student, formatted_key_name: "rogers_tina-20") }
     let(:student_dir_path1) { "#{tmp_dir_path}/stevens_anna-10" }
@@ -632,11 +633,28 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       allow(performer).to receive(:tmp_dir) { tmp_dir_path }
     end
 
+    describe "missing_student_directories" do
+      subject { performer.instance_eval { missing_student_directories }}
+      before(:each) { stub_student_doubles }
+
+      context "student directories are missing" do
+        it "returns the names of the missing directories relative to the tmp_dir" do
+          expect(subject).to eq(["stevens_anna-10", "rogers_tina-20"])
+        end
+      end
+
+      context "student directories have been created" do
+        it "returns an empty array" do
+          performer.instance_eval { create_student_directories }
+          expect(subject).to be_empty
+        end
+        after { remove_student_dirs }
+      end
+    end
+
     describe "create_student_directories" do
       subject { performer.instance_eval { create_student_directories }}
-      before(:each) do
-        performer.instance_variable_set(:@students, student_doubles)
-      end
+      before(:each) { stub_student_doubles }
 
       it "calls Dir.mkdir once for each student in @students" do
         expect(Dir).to receive(:mkdir).exactly(2).times
