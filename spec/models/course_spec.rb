@@ -416,10 +416,11 @@ describe Course do
     end
 
     it "sums up the available points in the assignments if there's no point total set" do 
-      subject.point_total = nil
-      assignment = create(:assignment, course: subject, point_total: 101)
-      assignment_2 = create(:assignment, course: subject, point_total: 1000)
-      expect(subject.total_points).to eq(1101)
+      course = create(:course)
+      course.point_total = nil
+      assignment = create(:assignment, course_id: course.id, point_total: 101)
+      assignment_2 = create(:assignment, course_id: course.id, point_total: 1000)
+      expect(course.total_points).to eq(1101)
     end
   end
 
@@ -543,18 +544,39 @@ describe Course do
   end
 
   describe "#minimum_course_score" do 
-    skip "implement"
-    #CourseMembership.where(:course => self, :auditing => false, :role => "student").minimum('score')
+    it "returns the lowest student score in the course" do 
+      student = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student, score: 100)
+      student_2 = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student_2, score: 2000)
+      student_3 = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student_3, score: 2990)
+      expect(subject.minimum_course_score).to eq(100)
+    end
   end
 
   describe "#maximum_course_score" do  
-    skip "implement"
-    #CourseMembership.where(:course => self, :auditing => false, :role => "student").maximum('score')
+    it "returns the highest student score in the course" do 
+      student = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student, score: 100)
+      student_2 = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student_2, score: 2000)
+      student_3 = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student_3, score: 2990)
+      expect(subject.maximum_course_score).to eq(2990)
+    end
   end
 
   describe "#average_course_score" do  
-    skip "implement"
-    #CourseMembership.where(:course => self, :auditing => false, :role => "student").average('score').to_i
+    it "returns the average student score in the course" do 
+      student = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student, score: 100)
+      student_2 = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student_2, score: 2000)
+      student_3 = create(:user)
+      course_membership = create(:student_course_membership, course: subject, user: student_3, score: 2990)
+      expect(subject.average_course_score).to eq(1696)
+    end
   end
 
   describe "#student_count" do  
