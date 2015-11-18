@@ -474,23 +474,35 @@ describe Course do
   end
 
   describe "#grade_level_for_score(score)" do  
-    skip "implement"
-    #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).pluck('level').first
+    it "returns the grade level that matches the score" do 
+      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      expect(subject.grade_level_for_score(9990)).to eq("Awful")
+    end
   end
 
   describe "#grade_letter_for_score(score)" do  
-    skip "implement"
-    #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).pluck('letter').first
+    it "returns the grade letter that matches the score" do 
+      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      expect(subject.grade_letter_for_score(9990)).to eq("F")
+    end
   end
 
   describe "#element_for_score(score)" do  
-    skip "implement"
-    #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).first
+    it "returns the level that matches the score" do 
+      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      expect(subject.element_for_score(10000)).to eq(high_grade_scheme_element)
+    end
   end
 
   describe "#membership_for_student(student)" do 
-    skip "implement" 
-    #course_memberships.detect { |m| m.user_id == student.id }
+    it "returns the membership relationship for a student" do 
+      student = create(:user)
+      course_membership = create(:course_membership, user: student, course: subject)
+      expect(subject.membership_for_student(student)).to eq(course_membership) 
+    end
   end
 
   describe "#assignment_weight_for_student(student)" do  
