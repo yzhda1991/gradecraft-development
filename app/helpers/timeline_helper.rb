@@ -6,31 +6,13 @@ module TimelineHelper
 
   def assignment_timeline_content(assignment)
     content = detail_link_timeline_content(assignment) || ""
-    if assignment.assignment_files.present?
-      files_content = content_tag(:ul, class: "attachments") do
-        assignment.assignment_files.collect do |af|
-          link_content = content_tag(:i, nil, class: "fa fa-file-o fa-fw")
-          link_content.concat content_tag(:a, af.filename, href: af.url)
-          concat content_tag(:li, link_content, class: "document")
-        end
-      end
-      content.concat files_content
-    end
+    content.concat file_attachment_timeline_content(assignment.assignment_files) || ""
     content.concat assignment.description
   end
 
   def challenge_timeline_content(challenge)
     content = detail_link_timeline_content(challenge) || ""
-    if challenge.challenge_files.present?
-      files_content = content_tag(:ul, class: "attachments") do
-        challenge.challenge_files.collect do |cf|
-          link_content = content_tag(:i, nil, class: "fa fa-file-o fa-fw")
-          link_content.concat content_tag(:a, cf.filename, href: cf.url)
-          concat content_tag(:li, link_content, class: "document")
-        end
-      end
-      content.concat files_content
-    end
+    content.concat file_attachment_timeline_content(challenge.challenge_files) || ""
     content.concat challenge.description
   end
 
@@ -44,6 +26,18 @@ module TimelineHelper
     if model.course.show_see_details_link_in_timeline?
       content_tag(:p) do
         content_tag(:a, "See the details", href: "#{url_for(model)}/#{model.id}")
+      end
+    end
+  end
+
+  def file_attachment_timeline_content(files)
+    if files.present?
+      content_tag(:ul, class: "attachments") do
+        files.collect do |f|
+          link_content = content_tag(:i, nil, class: "fa fa-file-o fa-fw")
+          link_content.concat content_tag(:a, f.filename, href: f.url)
+          concat content_tag(:li, link_content, class: "document")
+        end
       end
     end
   end
