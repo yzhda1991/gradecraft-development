@@ -283,4 +283,353 @@ describe Course, focus: true do
     end
   end
 
+  describe "#has_teams?" do 
+    it "does not have teams by default" do 
+      expect(subject.has_teams?).to eq(false)
+    end
+
+    it "has teams if they're turned on" do 
+      subject.team_setting = true
+      expect(subject.has_teams?).to eq(true)
+    end    
+  end
+
+  describe "#has_team_challenges?" do 
+    it "does not have team challenges by default" do 
+      expect(subject.has_team_challenges?).to eq(false)
+    end
+
+    it "has team challenges if they're turned on" do 
+      subject.team_challenges = true
+      expect(subject.has_team_challenges?).to eq(true)
+    end
+  end
+
+  describe "#teams_visible?" do 
+    it "does not have team visible by default" do 
+      expect(subject.teams_visible?).to eq(false)
+    end
+
+    it "has team visible if it's turned on" do 
+      subject.teams_visible = true
+      expect(subject.teams_visible?).to eq(true)
+    end
+  end
+
+  describe "#in_team_leaderboard?" do 
+    it "does not have in-team leaderboards turned on by default" do 
+      expect(subject.in_team_leaderboard?).to eq(false)
+    end
+
+    it "has in-team leaderboards if they're turned on" do 
+      subject.in_team_leaderboard = true
+      expect(subject.in_team_leaderboard?).to eq(true)
+    end
+  end
+
+  describe "#has_badges?" do 
+    it "does not have badges turned on by default" do 
+      expect(subject.has_badges?).to eq(false)
+    end
+
+    it "has badges if they're turned on" do 
+      subject.badge_setting = true
+      expect(subject.has_badges?).to eq(true)
+    end
+  end
+
+  describe "#valuable_badges?" do 
+    it "does not have badge with points by default" do 
+      expect(subject.valuable_badges?).to eq(false)
+    end
+
+    it "registers as having valuable has badges with points if they exist" do 
+      badge = create(:badge, point_total: 1000, course: subject)
+      expect(subject.valuable_badges?).to eq(true)
+    end
+  end
+
+  describe "#has_groups?" do 
+    it "does not have badges turned on by default" do 
+      expect(subject.has_groups?).to eq(false)
+    end
+
+    it "has badges if they're turned on" do 
+      subject.group_setting = true
+      expect(subject.has_groups?).to eq(true)
+    end
+
+  end
+
+  describe "#min_group_size" do 
+    it "sets the default min group size at 2" do 
+      expect(subject.min_group_size).to eq(2)
+    end
+
+    it "accepts the instructor's setting here if it exists" do 
+      subject.min_group_size = 3
+      expect(subject.min_group_size).to eq(3)
+    end
+  end
+
+  describe "#max_group_size" do 
+    it "sets the default max group size at 6" do 
+      expect(subject.max_group_size).to eq(6)
+    end
+
+    it "accepts the instructor's setting here if it exists" do 
+      subject.max_group_size = 8
+      expect(subject.max_group_size).to eq(8)
+    end
+  end
+
+  describe "#formatted_tagline" do 
+    it "returns an empty string if no tagline is present" do 
+      expect(subject.tagline).to eq(nil)
+    end
+
+    it "returns a tagline if present" do 
+      subject.tagline = "Good night, Westley. Good work. Sleep well. I'll most likely kill you in the morning."
+      expect(subject.tagline).to eq("Good night, Westley. Good work. Sleep well. I'll most likely kill you in the morning.")
+    end
+    
+  end
+
+  describe "#formatted_short_name" do 
+    it "uses the course number if that's all that's present" do 
+      expect(subject.formatted_short_name).to eq(subject.courseno)
+    end
+
+    it "creates a formatted short name that includes the course number, semester, and year if they're present" do 
+      subject.semester = "Fall"
+      subject.year = "2015"
+
+      expect(subject.formatted_short_name).to eq("#{subject.courseno} #{(subject.semester).capitalize.first[0]}#{subject.year}")
+    end
+
+  end
+
+  describe "#total_points" do 
+    it "returns the total points available if they're set by the instructor" do 
+      subject.point_total = 100000
+      expect(subject.total_points).to eq(subject.point_total)
+    end
+
+    it "sums up the available points in the assignments if there's no point total set" do 
+      subject.point_total = nil
+      assignment = create(:assignment, course: subject, point_total: 101)
+      assignment_2 = create(:assignment, course: subject, point_total: 1000)
+      expect(subject.total_points).to eq(1101)
+    end
+  end
+
+  describe "#student_weighted?" do 
+    it "returns false if no weights are set" do 
+      subject.total_assignment_weight = nil
+      expect(subject.student_weighted?).to eq(false)
+    end
+
+    it "returns true if weights have been set by the instructor" do 
+      subject.total_assignment_weight = 5
+      expect(subject.student_weighted?).to eq(true)
+    end
+  end
+
+  describe "#assignment_weight_open?" do 
+    it "returns false if the assignment_weight_close_at_date is past" do 
+      subject.assignment_weight_close_at = Date.today - 1
+      expect(subject.assignment_weight_open?).to eq(false)
+    end
+
+    it "returns true if there is no close at date" do 
+      expect(subject.assignment_weight_open?).to eq(true)
+    end
+
+    it "returns true if the close date is in the future" do 
+      subject.assignment_weight_close_at = Date.today + 1
+      expect(subject.assignment_weight_open?).to eq(true)
+    end
+  end
+
+  describe "#team_roles?" do 
+    #team_roles == true
+  end
+
+  describe "#has_submissions?" do 
+    #accepts_submissions == true
+  end
+
+  describe "#grade_level_for_score(score)" do 
+    #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).pluck('level').first
+  end
+
+  describe "#grade_letter_for_score(score)" do 
+    #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).pluck('letter').first
+  end
+
+  describe "#element_for_score(score)" do 
+    #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).first
+  end
+
+  describe "#membership_for_student(student)" do 
+    #course_memberships.detect { |m| m.user_id == student.id }
+  end
+
+  describe "#assignment_weight_for_student(student)" do 
+    #student.assignment_weights('weight').sum
+  end
+
+  describe "#assignment_weight_spent_for_student(student)" do 
+    #assignment_weight_for_student(student) >= total_assignment_weight.to_i
+  end
+
+  describe "#score_for_student(student)" do 
+    #course_memberships.where(:user_id => student).first.score
+  end
+
+  describe "#minimum_course_score" do
+    #CourseMembership.where(:course => self, :auditing => false, :role => "student").minimum('score')
+  end
+
+  describe "#maximum_course_score" do 
+    #CourseMembership.where(:course => self, :auditing => false, :role => "student").maximum('score')
+  end
+
+  describe "#average_course_score" do 
+    #CourseMembership.where(:course => self, :auditing => false, :role => "student").average('score').to_i
+  end
+
+  describe "#student_count" do 
+    #students.count
+  end
+
+  describe "#graded_student_count" do 
+    #students_being_graded.count
+  end
+
+  describe "#point_total_for_challenges" do 
+    #challenges.pluck('point_total').sum
+  end
+
+  describe "#recalculate_student_scores" do 
+    # ordered_student_ids.each do |student_id|
+    #   ScoreRecalculatorJob.new(user_id: student_id, course_id: self.id).enqueue
+    # end
+  end
+
+  describe "#ordered_student_ids" do 
+    # User
+    #   .unscoped # clear the default scope
+    #   .joins(:course_memberships)
+    #   .where("course_memberships.course_id = ? and course_memberships.role = ?", self.id, "student")
+    #   .select(:id) # only need the ids, please
+    #   .order("id ASC")
+    #   .collect(&:id)
+  end
+
+  describe "#self.csv_summary_data" do 
+    # CSV.generate(options) do |csv|
+    #   csv << ["Email", "First Name", "Last Name", "Score", "Grade", "Earned Badge #", "GradeCraft ID"  ]
+    #   students.each do |student|
+    #     csv << [ student.email, student.first_name, student.last_name, student.cached_score_for_course(self), student.grade_level_for_course(course), student.earned_badges.count, student.id  ]
+    #   end
+    # end
+  end
+
+  describe "#self.csv_roster" do 
+    # CSV.generate(options) do |csv|
+    #   csv << ["GradeCraft ID, First Name", "Last Name", "Uniqname", "Score", "Grade", "Feedback", "Team"]
+    #   students.each do |student|
+    #     csv << [student.id, student.first_name, student.last_name, student.username, "", "", "", student.team_for_course(self).try(:name) ]
+    #   end
+    # end
+  end
+
+  describe "#self.csv_assignments" do 
+    # CSV.generate() do |csv|
+    #   csv << ["ID", "Name", "Point Total", "Description", "Open At", "Due At", "Accept Until"  ]
+    #   assignments.each do |assignment|
+    #     csv << [ assignment.id, assignment.name, assignment.point_total, assignment.description, assignment.open_at, assignment.due_at, assignment.accepts_submissions_until  ]
+    #   end
+    # end
+  end
+
+  describe "#final_grades_for_course(course, options = {})" do 
+    # CSV.generate(options) do |csv|
+    #   csv << ["First Name", "Last Name", "Email", "Score", "Grade" ]
+    #   course.students.each do |student|
+    #     csv << [student.first_name, student.last_name, student.email, student.cached_score_for_course(course), student.grade_letter_for_course(course)]
+    #   end
+    # end
+  end
+
+  describe "#csv_gradebook" do 
+    # CSV.generate do |csv|
+    #   @gradebook = Course::Gradebook.new(self)
+
+    #   csv << @gradebook.assignment_columns
+    #   self.students.each do |student|
+    #     csv << @gradebook.student_data_for(student)
+    #   end
+    # end
+  end
+
+  describe "#csv_multiplied_gradebook" do 
+    # CSV.generate do |csv|
+    #   @multiplied_gradebook = Course::MultipliedGradebook.new(self)
+
+    #   csv << @multiplied_gradebook.assignment_columns
+    #   self.students.each do |student|
+    #     csv << @multiplied_gradebook.student_data_for(student)
+    #   end
+    # end
+  end
+
+  describe "#research_grades_csv(options = {})" do 
+    # CSV.generate(options) do |csv|
+    #   csv << ["Course ID", "Uniqname", "First Name", "Last Name", "GradeCraft ID", "Assignment Name", "Assignment ID", "Assignment Type", "Assignment Type Id", "Score", "Assignment Point Total", "Multiplied Score", "Predicted Score", "Text Feedback", "Submission ID", "Submission Creation Date", "Submission Updated Date", "Graded By", "Created At", "Updated At"]
+    #   self.grades.each do |grade|
+    #     csv << [self.id, grade.student.username, grade.student.first_name, grade.student.last_name, grade.student_id, grade.assignment.name, grade.assignment.id, grade.assignment.assignment_type.name, grade.assignment.assignment_type_id, grade.raw_score, grade.point_total, grade.score, grade.predicted_score, grade.feedback, grade.submission_id, grade.submission.try(:created_at), grade.submission.try(:updated_at), grade.graded_by_id, grade.created_at, grade.updated_at]
+    #   end
+    # end
+  end
+
+  describe "#earned_badges_for_course" do 
+    # CSV.generate do |csv|
+    #   csv << ["First Name", "Last Name", "Uniqname", "Email", "Badge ID", "Badge Name", "Feedback", "Awarded Date" ]
+    #   earned_badges.each do |earned_badge|
+    #     csv << [
+    #       earned_badge.student.first_name,
+    #       earned_badge.student.last_name,
+    #       earned_badge.student.username,
+    #       earned_badge.student.email,
+    #       earned_badge.badge.id,
+    #       earned_badge.badge.name,
+    #       earned_badge.feedback,
+    #       earned_badge.created_at
+    #     ]
+    #   end
+    # end
+  end
+
+  describe "#course_badge_count" do 
+   #badges.count
+  end
+
+  describe "#awarded_course_badge_count" do 
+    #earned_badges.count
+  end
+
+  describe "#max_more_than_min" do 
+    # if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
+    #   errors.add :base, 'Maximum group size must be greater than minimum group size.'
+    # end
+  end
+
+  describe "#create_admin_memberships" do 
+    # User.where(admin: true).each do |admin|
+    #   CourseMembership.create course_id: self.id, user_id: admin.id, role: "admin"
+    # end
+  end
+
 end
