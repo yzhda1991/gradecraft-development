@@ -10,11 +10,4 @@ class Event < ActiveRecord::Base
 
   # Check to make sure the event has a name before saving
   validates_presence_of :name
-
-  def content
-    content = ""
-    if description.present?
-      content << description
-    end
-  end
 end

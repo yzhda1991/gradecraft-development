@@ -21,4 +21,11 @@ module TimelineHelper
     end
     content.concat assignment.description
   end
+
+  def challenge_timeline_content(challenge)
+  end
+
+  def event_timeline_content(event)
+    event.description
+  end
 end
