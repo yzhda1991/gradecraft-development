@@ -506,18 +506,40 @@ describe Course do
   end
 
   describe "#assignment_weight_for_student(student)" do  
-    skip "implement"
-    #student.assignment_weights('weight').sum
+    it "sums the assignment weights the student has spent" do
+      student = create(:user)
+      student.courses << subject
+      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      assignment_weight_2 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      expect(subject.assignment_weight_for_student(student)).to eq(4)
+    end
   end
 
   describe "#assignment_weight_spent_for_student(student)" do  
-    skip "implement"
-    #assignment_weight_for_student(student) >= total_assignment_weight.to_i
+    it "returns false if the student has not yet spent enough weights" do 
+      subject.total_assignment_weight = 4
+      student = create(:user)
+      student.courses << subject
+      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      expect(subject.assignment_weight_spent_for_student(student)).to eq(false)
+    end
+
+    it "returns true if the student has spent enough weights" do 
+      subject.total_assignment_weight = 4
+      student = create(:user)
+      student.courses << subject
+      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      assignment_weight_2 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      expect(subject.assignment_weight_spent_for_student(student)).to eq(true)
+    end
   end
 
   describe "#score_for_student(student)" do  
-    skip "implement"
-    #course_memberships.where(:user_id => student).first.score
+    it "returns a student's score for a specific course" do 
+      student = create(:user)
+      course_membership = create(:student_course_membership, score: 101, user: student, course: subject)
+      expect(subject.score_for_student(student)).to eq(101)
+    end
   end
 
   describe "#minimum_course_score" do 
