@@ -195,7 +195,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def create_student_directories
     @students.each do |student|
       dir_path = student_directory_path(student)
-      Dir.mkdir(dir_path) unless Dir.exist?(dir_path)
+      Dir.mkdir(dir_path) # unless Dir.exist?(dir_path)
     end
   end
 
