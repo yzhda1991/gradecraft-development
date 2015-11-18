@@ -2,6 +2,7 @@ require 'rails_spec_helper'
 
 RSpec.describe AssignmentExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
+  include Toolkits::Performers::AssignmentExport
   include ModelAddons::SharedExamples
 
   # public methods
@@ -500,49 +501,55 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
   
-  describe "private methods" do
+  describe "logging message helpers" do
+    before { performer.instance_variable_set(:@students, students) }
+
     describe "generate_csv_messages" do
-      let(:messages) { performer.instance_eval{ generate_csv_messages } }
-      before(:each) { performer.instance_variable_set(:@students, students) }
+      subject { performer.instance_eval{ generate_csv_messages } }
 
-      describe "success" do
-        subject { messages[:success] }
+      it_behaves_like "an expandable messages hash"
+      it_behaves_like "it has a success message", "Successfully generated"
+      it_behaves_like "it has a failure message", "Failed to generate the csv"
+    end
 
-        it { should match('Successfully generated') }
-        it { should include("assignment #{assignment.id}") }
-        it { should include("for students: #{students.collect(&:id)}") }
-      end
+    describe "generate_csv_messages" do
+      subject { performer.instance_eval{ generate_export_json_messages } }
 
-      describe "failure" do
-        subject { messages[:failure] }
-
-        it { should match('Failed to generate the csv') }
-        it { should include("assignment #{assignment.id}") }
-        it { should include("for students: #{students.collect(&:id)}") }
-      end
+      it_behaves_like "an expandable messages hash"
+      it_behaves_like "it has a success message", "Successfully generated the export JSON"
+      it_behaves_like "it has a failure message", "Failed to generate the export JSON"
     end
 
     describe "csv_export_messages" do
-      let(:messages) { performer.instance_eval{ csv_export_messages } }
-      before(:each) { performer.instance_variable_set(:@students, students) }
+      subject { performer.instance_eval{ csv_export_messages } }
+
+      it_behaves_like "an expandable messages hash"
+      it_behaves_like "it has a success message", "Successfully saved the CSV file"
+      it_behaves_like "it has a failure message", "Failed to save the CSV file"
+    end
+
+    describe "expand_messages" do
+      let(:output) { performer.instance_eval{ expand_messages(success: "great", failure: "bad") } }
 
       describe "success" do
-        subject { messages[:success] }
+        subject { output[:success] }
 
-        it { should match('Successfully saved the CSV file') }
+        it { should include("great") }
         it { should include("assignment #{assignment.id}") }
         it { should include("for students: #{students.collect(&:id)}") }
       end
 
       describe "failure" do
-        subject { messages[:failure] }
+        subject { output[:failure] }
 
-        it { should match('Failed to save the CSV file') }
+        it { should include("bad") }
         it { should include("assignment #{assignment.id}") }
         it { should include("for students: #{students.collect(&:id)}") }
       end
     end
+  end
 
+  describe "private methods" do
     describe "submissions_by_student" do
       let(:student1) { create(:user, first_name: "Ben", last_name: "Bailey") }
       let(:student2) { create(:user, first_name: "Mike", last_name: "McCaffrey") }

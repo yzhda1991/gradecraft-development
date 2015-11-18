@@ -8,17 +8,24 @@ class AssignmentExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     if work_resources_present?
+      # generate the csv overview for the assignment or team
       require_success(generate_csv_messages, max_result_size: 250) do
         generate_export_csv
       end
 
+      # check whether the csv export was successful
       require_success(csv_export_messages) do
         export_csv_successful?
       end
 
+      # generate the json required for building the archive
+      # require_success(generate_export_json_messages) do
+      #   generate_export_json
+      # end
+
       # actually build the export from the json
       # require_sucess(build_export_messages) do
-      #  build_export_from_json
+      #   build_export_from_json
       # end
       
       # check to make sure that everything that's supposed to be there is actually there
@@ -210,25 +217,33 @@ class AssignmentExportPerformer < ResqueJob::Performer
     ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
   end
 
-  def generate_csv_messages
+  # @mz todo: modify specs
+  def expand_messages(messages={})
     {
-      success: "Successfully generated the csv data on assignment #{@assignment.id} for students: #{@students.collect(&:id)}",
-      failure: "Failed to generate the csv data on assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
+      success: "Successfully #{messages[:success]} for assignment #{@assignment.id} for students: #{@students.collect(&:id)}",
+      failure: "Failed to #{messages[:failure]} for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
     }
+  end
+
+  def generate_export_json_messages
+    expand_messages ({
+      success: "generated the export JSON",
+      failure: "generate the export JSON"
+    })
+  end
+
+  def generate_csv_messages
+    expand_messages({
+      success: "generated the csv data",
+      failure: "generate the csv data"
+    })
   end
 
   def csv_export_messages
-    {
-      success: "Successfully saved the CSV file on disk for assignment #{@assignment.id} for students: #{@students.collect(&:id)}",
-      failure: "Failed to save the CSV file on disk for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
-    }
+    expand_messages ({
+      success: "saved the CSV file on disk",
+      failure: "save the CSV file on disk"
+    })
   end
 
-  # @mz todo: add specs, add require_success block
-  def notification_messages
-    {
-      success: "Assignment export notification mailer was successfully delivered.",
-      failure: "Assignment export notification mailer was not delivered."
-    }
-  end
 end
