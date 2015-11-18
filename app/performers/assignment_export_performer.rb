@@ -220,30 +220,33 @@ class AssignmentExportPerformer < ResqueJob::Performer
   # @mz todo: modify specs
   def expand_messages(messages={})
     {
-      success: "Successfully #{messages[:success]} for assignment #{@assignment.id} for students: #{@students.collect(&:id)}",
-      failure: "Failed to #{messages[:failure]} for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
+      success: [ messages[:success], message_suffix ].join(" "),
+      failure: [ messages[:failure], message_suffix ].join(" ")
     }
   end
 
   def generate_export_json_messages
     expand_messages ({
-      success: "generated the export JSON",
-      failure: "generate the export JSON"
+      success: "Successfully generated the export JSON",
+      failure: "Failed to generate the export JSON"
     })
   end
 
   def generate_csv_messages
     expand_messages({
-      success: "generated the csv data",
-      failure: "generate the csv data"
+      success: "Successfully generated the csv data",
+      failure: "Failed to generate the csv data"
     })
   end
 
   def csv_export_messages
     expand_messages ({
-      success: "saved the CSV file on disk",
-      failure: "save the CSV file on disk"
+      success: "Successfully saved the CSV file on disk",
+      failure: "Failed to save the CSV file on disk"
     })
   end
 
+  def message_suffix
+    "for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
+  end
 end

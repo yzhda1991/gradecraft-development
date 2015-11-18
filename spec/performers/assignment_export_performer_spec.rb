@@ -528,8 +528,20 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       it_behaves_like "it has a failure message", "Failed to save the CSV file"
     end
 
-    describe "expand_messages" do
+    describe "expand_messages", inspect: true do
       let(:output) { performer.instance_eval{ expand_messages(success: "great", failure: "bad") } }
+
+      describe "joins the messages with the suffix" do
+        before(:each) { allow(performer).to receive(:message_suffix) { "end of transmission" }}
+
+        it "builds the success message" do
+          expect(output[:success]).to eq("great end of transmission")
+        end
+
+        it "builds the failure message" do
+          expect(output[:failure]).to eq("bad end of transmission")
+        end
+      end
 
       describe "success" do
         subject { output[:success] }
@@ -546,6 +558,14 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         it { should include("assignment #{assignment.id}") }
         it { should include("for students: #{students.collect(&:id)}") }
       end
+    end
+
+    describe "message_suffix" do
+      subject { performer.instance_eval{ message_suffix }}
+
+      it { should include("assignment #{assignment.id}") }
+      it { should include("for students: #{students.collect(&:id)}") }
+
     end
   end
 
