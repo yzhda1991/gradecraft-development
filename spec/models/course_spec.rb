@@ -452,72 +452,89 @@ describe Course, focus: true do
   end
 
   describe "#team_roles?" do 
+    skip "implement"
     #team_roles == true
   end
 
-  describe "#has_submissions?" do 
+  describe "#has_submissions?" do  
+    skip "implement"
     #accepts_submissions == true
   end
 
-  describe "#grade_level_for_score(score)" do 
+  describe "#grade_level_for_score(score)" do  
+    skip "implement"
     #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).pluck('level').first
   end
 
-  describe "#grade_letter_for_score(score)" do 
+  describe "#grade_letter_for_score(score)" do  
+    skip "implement"
     #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).pluck('letter').first
   end
 
-  describe "#element_for_score(score)" do 
+  describe "#element_for_score(score)" do  
+    skip "implement"
     #grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).first
   end
 
   describe "#membership_for_student(student)" do 
+    skip "implement" 
     #course_memberships.detect { |m| m.user_id == student.id }
   end
 
-  describe "#assignment_weight_for_student(student)" do 
+  describe "#assignment_weight_for_student(student)" do  
+    skip "implement"
     #student.assignment_weights('weight').sum
   end
 
-  describe "#assignment_weight_spent_for_student(student)" do 
+  describe "#assignment_weight_spent_for_student(student)" do  
+    skip "implement"
     #assignment_weight_for_student(student) >= total_assignment_weight.to_i
   end
 
-  describe "#score_for_student(student)" do 
+  describe "#score_for_student(student)" do  
+    skip "implement"
     #course_memberships.where(:user_id => student).first.score
   end
 
-  describe "#minimum_course_score" do
+  describe "#minimum_course_score" do 
+    skip "implement"
     #CourseMembership.where(:course => self, :auditing => false, :role => "student").minimum('score')
   end
 
-  describe "#maximum_course_score" do 
+  describe "#maximum_course_score" do  
+    skip "implement"
     #CourseMembership.where(:course => self, :auditing => false, :role => "student").maximum('score')
   end
 
-  describe "#average_course_score" do 
+  describe "#average_course_score" do  
+    skip "implement"
     #CourseMembership.where(:course => self, :auditing => false, :role => "student").average('score').to_i
   end
 
-  describe "#student_count" do 
+  describe "#student_count" do  
+    skip "implement"
     #students.count
   end
 
-  describe "#graded_student_count" do 
+  describe "#graded_student_count" do  
+    skip "implement"
     #students_being_graded.count
   end
 
-  describe "#point_total_for_challenges" do 
+  describe "#point_total_for_challenges" do  
+    skip "implement"
     #challenges.pluck('point_total').sum
   end
 
   describe "#recalculate_student_scores" do 
+    skip "implement" 
     # ordered_student_ids.each do |student_id|
     #   ScoreRecalculatorJob.new(user_id: student_id, course_id: self.id).enqueue
     # end
   end
 
-  describe "#ordered_student_ids" do 
+  describe "#ordered_student_ids" do  
+    skip "implement"
     # User
     #   .unscoped # clear the default scope
     #   .joins(:course_memberships)
@@ -527,7 +544,8 @@ describe Course, focus: true do
     #   .collect(&:id)
   end
 
-  describe "#self.csv_summary_data" do 
+  describe "#self.csv_summary_data" do  
+    skip "implement"
     # CSV.generate(options) do |csv|
     #   csv << ["Email", "First Name", "Last Name", "Score", "Grade", "Earned Badge #", "GradeCraft ID"  ]
     #   students.each do |student|
@@ -536,7 +554,8 @@ describe Course, focus: true do
     # end
   end
 
-  describe "#self.csv_roster" do 
+  describe "#self.csv_roster" do  
+    skip "implement"
     # CSV.generate(options) do |csv|
     #   csv << ["GradeCraft ID, First Name", "Last Name", "Uniqname", "Score", "Grade", "Feedback", "Team"]
     #   students.each do |student|
@@ -545,7 +564,8 @@ describe Course, focus: true do
     # end
   end
 
-  describe "#self.csv_assignments" do 
+  describe "#self.csv_assignments" do  
+    skip "implement"
     # CSV.generate() do |csv|
     #   csv << ["ID", "Name", "Point Total", "Description", "Open At", "Due At", "Accept Until"  ]
     #   assignments.each do |assignment|
@@ -554,7 +574,8 @@ describe Course, focus: true do
     # end
   end
 
-  describe "#final_grades_for_course(course, options = {})" do 
+  describe "#final_grades_for_course(course, options = {})" do  
+    skip "implement"
     # CSV.generate(options) do |csv|
     #   csv << ["First Name", "Last Name", "Email", "Score", "Grade" ]
     #   course.students.each do |student|
@@ -563,7 +584,8 @@ describe Course, focus: true do
     # end
   end
 
-  describe "#csv_gradebook" do 
+  describe "#csv_gradebook" do  
+    skip "implement"
     # CSV.generate do |csv|
     #   @gradebook = Course::Gradebook.new(self)
 
@@ -574,7 +596,8 @@ describe Course, focus: true do
     # end
   end
 
-  describe "#csv_multiplied_gradebook" do 
+  describe "#csv_multiplied_gradebook" do  
+    skip "implement"
     # CSV.generate do |csv|
     #   @multiplied_gradebook = Course::MultipliedGradebook.new(self)
 
@@ -585,7 +608,8 @@ describe Course, focus: true do
     # end
   end
 
-  describe "#research_grades_csv(options = {})" do 
+  describe "#research_grades_csv(options = {})" do  
+    skip "implement"
     # CSV.generate(options) do |csv|
     #   csv << ["Course ID", "Uniqname", "First Name", "Last Name", "GradeCraft ID", "Assignment Name", "Assignment ID", "Assignment Type", "Assignment Type Id", "Score", "Assignment Point Total", "Multiplied Score", "Predicted Score", "Text Feedback", "Submission ID", "Submission Creation Date", "Submission Updated Date", "Graded By", "Created At", "Updated At"]
     #   self.grades.each do |grade|
@@ -594,7 +618,8 @@ describe Course, focus: true do
     # end
   end
 
-  describe "#earned_badges_for_course" do 
+  describe "#earned_badges_for_course" do  
+    skip "implement"
     # CSV.generate do |csv|
     #   csv << ["First Name", "Last Name", "Uniqname", "Email", "Badge ID", "Badge Name", "Feedback", "Awarded Date" ]
     #   earned_badges.each do |earned_badge|
@@ -613,20 +638,36 @@ describe Course, focus: true do
   end
 
   describe "#course_badge_count" do 
-   #badges.count
+    it "tallies the number of badges in a course" do
+      badge = create(:badge, course: subject)
+      badge1 = create(:badge, course: subject)
+      badge2 = create(:badge, course: subject)
+      badge3 = create(:badge, course: subject)
+      expect(subject.course_badge_count).to eq(4)
+    end
   end
 
   describe "#awarded_course_badge_count" do 
-    #earned_badges.count
+    it "tallies the number of earned badges in a course" do 
+      badge = create(:badge, course: subject)
+      student = create(:user)
+      earned_badge = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
+      earned_badge_2 = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
+      earned_badge_3 = create(:earned_badge, badge: badge, student: student, course: subject, student_visible: true)
+      expect(subject.awarded_course_badge_count).to eq(3)
+    end
   end
 
-  describe "#max_more_than_min" do 
-    # if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
-    #   errors.add :base, 'Maximum group size must be greater than minimum group size.'
-    # end
+  describe "#max_more_than_min" do  
+    it "errors out if the max group size is smaller than the minimum" do 
+      subject.max_group_size = 2
+      subject.min_group_size = 5
+      expect !subject.valid?  
+    end
   end
 
-  describe "#create_admin_memberships" do 
+  describe "#create_admin_memberships" do  
+    skip "implement"
     # User.where(admin: true).each do |admin|
     #   CourseMembership.create course_id: self.id, user_id: admin.id, role: "admin"
     # end
