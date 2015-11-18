@@ -656,6 +656,24 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
+    describe "student_directories_created_successfully?", inspect: true do
+      subject { performer.instance_eval { student_directories_created_successfully? }}
+
+      context "missing_student_directories is empty" do
+        it "returns true" do
+          allow(performer).to receive(:missing_student_directories) { [] }
+          expect(subject).to be_truthy
+        end
+      end
+
+      context "missing_student_directories are present" do
+        it "returns false" do
+          allow(performer).to receive(:missing_student_directories) { ["stevens_anna-10", "rogers_tina-20"] }
+          expect(subject).to be_falsey
+        end
+      end
+    end
+
     describe "create_student_directories" do
       subject { performer.instance_eval { create_student_directories }}
       before(:each) { stub_student_doubles }

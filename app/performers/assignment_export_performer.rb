@@ -178,7 +178,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def student_directories_created_successfully?
     missing_student_directories.empty?
   end
