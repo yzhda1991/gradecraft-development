@@ -14,6 +14,8 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   let(:student_course_membership1) { @student_course_membership1 ||= create(:student_course_membership, course: course) }
   let(:student_course_membership2) { @student_course_membership2 ||= create(:student_course_membership, course: course) }
   let(:students) { @students ||= [ student_course_membership1.user, student_course_membership2.user ] }
+  let(:student1) { student_course_membership1.user }
+  let(:student2) { student_course_membership2.user }
   let(:submission1) { create(:submission, assignment: assignment, student: student_course_membership1.user) }
   let(:submission2) { create(:submission, assignment: assignment, student: student_course_membership2.user) }
   let(:submissions) { [ submission1, submission2 ] }
@@ -449,7 +451,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
-  describe "expanded_archive_base_path", inspect: true do
+  describe "expanded_archive_base_path" do
     subject { performer.instance_eval { expanded_archive_base_path }}
     before do
       allow(performer).to receive(:export_file_basename) { "the_best_filename" }
@@ -528,7 +530,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       it_behaves_like "it has a failure message", "Failed to save the CSV file"
     end
 
-    describe "expand_messages", inspect: true do
+    describe "expand_messages" do
       let(:output) { performer.instance_eval{ expand_messages(success: "great", failure: "bad") } }
 
       describe "joins the messages with the suffix" do
@@ -569,45 +571,65 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
-  describe "private methods" do
-    describe "submissions_by_student" do
-      let(:student1) { create(:user, first_name: "Ben", last_name: "Bailey") }
-      let(:student2) { create(:user, first_name: "Mike", last_name: "McCaffrey") }
-      let(:student3) { create(:user, first_name: "Dana", last_name: "Dafferty") }
+  describe "submissions_by_student" do
+    let(:student1) { create(:user, first_name: "Ben", last_name: "Bailey") }
+    let(:student2) { create(:user, first_name: "Mike", last_name: "McCaffrey") }
+    let(:student3) { create(:user, first_name: "Dana", last_name: "Dafferty") }
 
-      let(:submission1) { double(:submission, id: 1, student: student1) }
-      let(:submission2) { double(:submission, id: 2, student: student2) }
-      let(:submission3) { double(:submission, id: 3, student: student3) }
-      let(:submission4) { double(:submission, id: 4, student: student2) } # note that this uses student 2
+    let(:submission1) { double(:submission, id: 1, student: student1) }
+    let(:submission2) { double(:submission, id: 2, student: student2) }
+    let(:submission3) { double(:submission, id: 3, student: student3) }
+    let(:submission4) { double(:submission, id: 4, student: student2) } # note that this uses student 2
 
-      let(:grouped_submission_expectation) {{
-        "bailey_ben-#{student1.id}" => [submission1],
-        "mccaffrey_mike-#{student2.id}" => [submission2, submission4],
-        "dafferty_dana-#{student3.id}" => [submission3]
-      }}
+    let(:grouped_submission_expectation) {{
+      "bailey_ben-#{student1.id}" => [submission1],
+      "mccaffrey_mike-#{student2.id}" => [submission2, submission4],
+      "dafferty_dana-#{student3.id}" => [submission3]
+    }}
 
-      let(:submissions_by_id) { [submission1, submission2, submission3, submission4].sort_by(&:id) }
+    let(:submissions_by_id) { [submission1, submission2, submission3, submission4].sort_by(&:id) }
 
-      before(:each) do
-        performer.instance_variable_set(:@submissions, submissions_by_id)
-      end
-
-      subject do
-        performer.instance_eval { submissions_grouped_by_student }
-      end
-
-      it "should reorder the @submissions array by student" do
-        expect(subject).to eq(grouped_submission_expectation)
-      end
-
-      it "should use 'last_name_first_name-id' for the hash keys" do
-        expect(subject.keys.first).to eq("bailey_ben-#{student1.id}")
-      end
-
-      it "should return an array of submissions for each student" do
-        expect(subject["mccaffrey_mike-#{student2.id}"]).to eq([submission2, submission4])
-      end
+    before(:each) do
+      performer.instance_variable_set(:@submissions, submissions_by_id)
     end
 
+    subject do
+      performer.instance_eval { submissions_grouped_by_student }
+    end
+
+    it "should reorder the @submissions array by student" do
+      expect(subject).to eq(grouped_submission_expectation)
+    end
+
+    it "should use 'last_name_first_name-id' for the hash keys" do
+      expect(subject.keys.first).to eq("bailey_ben-#{student1.id}")
+    end
+
+    it "should return an array of submissions for each student" do
+      expect(subject["mccaffrey_mike-#{student2.id}"]).to eq([submission2, submission4])
+    end
+  end
+
+  describe "student directories" do
+    describe "create_student_directories" do
+    end
+
+    describe "student_directory_path", inspect: true do
+      subject { performer.instance_eval { student_directory_path( @some_student ) }}
+      let(:tmp_dir_path) { "/tmp/123-456-abc-xyz" }
+      before do
+        performer.instance_variable_set(:@some_student, student1)
+        allow(performer).to receive(:tmp_dir) { tmp_dir_path }
+      end
+
+      it "returns the correct directory path" do
+        expect(subject).to eq("#{tmp_dir_path}/#{student1.formatted_key_name}")
+      end
+
+      it "expands the path relative to the tmp_dir" do
+        expect(File).to receive(:expand_path).with(student1.formatted_key_name, tmp_dir_path)
+        subject
+      end
+    end
   end
 end

@@ -2,7 +2,7 @@ json.directory_name @presenter.export_file_basename
 json.files do [{ path: @presenter.csv_file_path, content_type: "text/csv", source_type: :local }]
 
 json.sub_directories do
-  @submissions_by_student.each do |student_with_submissions|
+  @presenter.submissions_by_student.each do |student_with_submissions|
     json.directory_name student_with_submissions.first do # this is the "page_jimmy-45" key
     json.directories do
       student_with_submissions.last.each do |submission| # an array of submissions for the student

@@ -41,6 +41,7 @@ def export_submissions
               student_dir = export_dir # set the current export directory to the new student directory
             end
 
+            # this is the block that determines whether or not a file needs to be built with the text link etc
             if submission.text_comment.present? or submission.link.present? # write the text file for the submission into the student export directory
               open(File.join(student_dir, "#{student.last_name}_#{student.first_name}_#{@assignment.name.gsub(/\W+/, "_").downcase[0..20]}_submission_text.txt"),'w' ) do |f|
                 f.puts "Submission items from #{student.last_name}, #{student.first_name}\n"

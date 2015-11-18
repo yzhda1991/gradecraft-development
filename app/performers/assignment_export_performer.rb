@@ -18,6 +18,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
         export_csv_successful?
       end
 
+      # generate student directoris
+      require_success(create_student_directory_messages) do
+        create_student_directories
+      end
+
       # generate the json required for building the archive
       # require_success(generate_export_json_messages) do
       #   generate_export_json
@@ -184,37 +189,26 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  private
-
-  def submissions_by_student_archive_hash
-    JbuilderTemplate.new(temp_view_context).encode do |json|
-      json.partial! "assignment_exports/submissions_by_student_archive_json", presenter: @presenter
-    end.to_json
-  end
-
-  def submissions_presenter
-    @presenter ||= AssignmentExportPresenter.build(presenter_options)
+  # @mz todo: add specs
+  def create_student_directories
+    @students.each {|student| Dir.mkdir student_directory_path(student) }
   end
 
   # @mz todo: add specs
-  def presenter_options
-   {
-      assignment: @assignment,
-      csv_file_path: csv_file_path,
-      export_file_basename: export_file_basename,
-      submissions: @submissions,
-      team: @team
-    }
+  def student_directory_path(student)
+    File.expand_path(student.formatted_key_name, tmp_dir)
   end
+
+  private
 
   # @mz todo: add specs, add require_success block
   def deliver_archive_complete_mailer
-    ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
+    ExportsMailer.submissions_archive_complete(@course, @professor, @csv_data).deliver_now
   end
 
   # @mz todo: add specs, add require_success block
   def deliver_team_archive_complete_mailer
-    ExportsMailer.submissions_archive_complete(@course, @user, @csv_data).deliver_now
+    ExportsMailer.team_submissions_archive_complete(@course, @professor, @csv_data).deliver_now
   end
 
   # @mz todo: modify specs
@@ -243,6 +237,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
     expand_messages ({
       success: "Successfully saved the CSV file on disk",
       failure: "Failed to save the CSV file on disk"
+    })
+  end
+
+  def create_student_directory_messages
+    expand_messages ({
+      success: "Successfully created the student directories",
+      failure: "Failed to create the student directories"
     })
   end
 
