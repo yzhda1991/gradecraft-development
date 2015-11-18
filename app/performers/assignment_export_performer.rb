@@ -189,12 +189,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def create_student_directories
     @students.each {|student| Dir.mkdir student_directory_path(student) }
   end
 
-  # @mz todo: add specs
   def student_directory_path(student)
     File.expand_path(student.formatted_key_name, tmp_dir)
   end

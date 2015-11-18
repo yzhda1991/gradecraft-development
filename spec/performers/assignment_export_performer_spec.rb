@@ -615,15 +615,53 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   end
 
   describe "student directories" do
-    describe "create_student_directories" do
+    let(:tmp_dir_path) { "/tmp/123-456-abc-xyz" }
+    let(:student_doubles) { [ student_double1, student_double2 ] }
+    let(:student_double1) { double(:student, formatted_key_name: "stevens_anna-10") }
+    let(:student_double2) { double(:student, formatted_key_name: "rogers_tina-20") }
+    let(:student_dir_path1) { "#{tmp_dir_path}/stevens_anna-10" }
+    let(:student_dir_path2) { "#{tmp_dir_path}/rogers_tina-20" }
+    let(:student_dir_paths) { [ student_dir_path1, student_dir_path2 ] }
+    let(:remove_student_dirs) do
+      [ student_dir_path1, student_dir_path2 ].each do |dir_path|
+        Dir.rmdir(dir_path) if Dir.exist?(dir_path)
+      end
     end
 
-    describe "student_directory_path", inspect: true do
+    before(:each) do
+      allow(performer).to receive(:tmp_dir) { tmp_dir_path }
+    end
+
+    describe "create_student_directories" do
+      subject { performer.instance_eval { create_student_directories }}
+      before(:each) do
+        performer.instance_variable_set(:@students, student_doubles)
+      end
+
+      it "calls Dir.mkdir once for each student in @students" do
+        expect(Dir).to receive(:mkdir).exactly(2).times
+        subject
+      end
+
+      it "creates the directories for each student" do
+        student_dir_paths.each {|dir_path| expect(Dir).to receive(:mkdir).with(dir_path) }
+        subject
+      end
+
+      it "actually creates the directories on disk for each student" do
+        subject
+        student_dir_paths.each {|dir_path| expect(Dir.exist?(dir_path)).to be_truthy }
+      end
+
+      after(:each) do
+        remove_student_dirs
+      end
+    end
+
+    describe "student_directory_path" do
       subject { performer.instance_eval { student_directory_path( @some_student ) }}
-      let(:tmp_dir_path) { "/tmp/123-456-abc-xyz" }
       before do
         performer.instance_variable_set(:@some_student, student1)
-        allow(performer).to receive(:tmp_dir) { tmp_dir_path }
       end
 
       it "returns the correct directory path" do
