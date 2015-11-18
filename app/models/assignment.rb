@@ -108,24 +108,6 @@ class Assignment < ActiveRecord::Base
     super(options.merge(:only => [ :id, :content, :order, :done ] ))
   end
 
-  def content
-    content = ""
-    if course.show_see_details_link_in_timeline?
-      content << "<p><a href='/assignments/#{self.id}'>See the details</a></p>"
-    end
-    if assignment_files.present?
-      content << '<ul class="attachments">'
-      assignment_files.each do |af|
-        content << "<li class='document'><i class='fa fa-file-o fa-fw'></i><a href='#{af.url}'>#{af.filename}</a></li>"
-      end
-      content << '</ul>'
-    end
-    if description.present?
-      content << description
-    end
-    return content
-  end
-
   def point_total
     super.presence || 0
   end
