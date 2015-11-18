@@ -612,115 +612,48 @@ describe Course do
     end
   end
 
-  describe "#recalculate_student_scores" do 
-    skip "implement" 
-    # ordered_student_ids.each do |student_id|
-    #   ScoreRecalculatorJob.new(user_id: student_id, course_id: self.id).enqueue
-    # end
-  end
-
   describe "#ordered_student_ids" do  
-    skip "implement"
-    # User
-    #   .unscoped # clear the default scope
-    #   .joins(:course_memberships)
-    #   .where("course_memberships.course_id = ? and course_memberships.role = ?", self.id, "student")
-    #   .select(:id) # only need the ids, please
-    #   .order("id ASC")
-    #   .collect(&:id)
+    it "returns an ordered array of student ids" do 
+      student_2 = create(:user)
+      student_2.courses << subject
+      student_1 = create(:user)
+      student_1.courses << subject
+      student_3 = create(:user)
+      student_3.courses << subject
+      expect(subject.ordered_student_ids).to eq([student_2.id, student_1.id, student_3.id])
+    end
   end
 
   describe "#self.csv_summary_data" do  
     skip "implement"
-    # CSV.generate(options) do |csv|
-    #   csv << ["Email", "First Name", "Last Name", "Score", "Grade", "Earned Badge #", "GradeCraft ID"  ]
-    #   students.each do |student|
-    #     csv << [ student.email, student.first_name, student.last_name, student.cached_score_for_course(self), student.grade_level_for_course(course), student.earned_badges.count, student.id  ]
-    #   end
-    # end
   end
 
   describe "#self.csv_roster" do  
     skip "implement"
-    # CSV.generate(options) do |csv|
-    #   csv << ["GradeCraft ID, First Name", "Last Name", "Uniqname", "Score", "Grade", "Feedback", "Team"]
-    #   students.each do |student|
-    #     csv << [student.id, student.first_name, student.last_name, student.username, "", "", "", student.team_for_course(self).try(:name) ]
-    #   end
-    # end
   end
 
   describe "#self.csv_assignments" do  
     skip "implement"
-    # CSV.generate() do |csv|
-    #   csv << ["ID", "Name", "Point Total", "Description", "Open At", "Due At", "Accept Until"  ]
-    #   assignments.each do |assignment|
-    #     csv << [ assignment.id, assignment.name, assignment.point_total, assignment.description, assignment.open_at, assignment.due_at, assignment.accepts_submissions_until  ]
-    #   end
-    # end
   end
 
   describe "#final_grades_for_course(course, options = {})" do  
     skip "implement"
-    # CSV.generate(options) do |csv|
-    #   csv << ["First Name", "Last Name", "Email", "Score", "Grade" ]
-    #   course.students.each do |student|
-    #     csv << [student.first_name, student.last_name, student.email, student.cached_score_for_course(course), student.grade_letter_for_course(course)]
-    #   end
-    # end
   end
 
   describe "#csv_gradebook" do  
     skip "implement"
-    # CSV.generate do |csv|
-    #   @gradebook = Course::Gradebook.new(self)
-
-    #   csv << @gradebook.assignment_columns
-    #   self.students.each do |student|
-    #     csv << @gradebook.student_data_for(student)
-    #   end
-    # end
   end
 
   describe "#csv_multiplied_gradebook" do  
     skip "implement"
-    # CSV.generate do |csv|
-    #   @multiplied_gradebook = Course::MultipliedGradebook.new(self)
-
-    #   csv << @multiplied_gradebook.assignment_columns
-    #   self.students.each do |student|
-    #     csv << @multiplied_gradebook.student_data_for(student)
-    #   end
-    # end
   end
 
   describe "#research_grades_csv(options = {})" do  
     skip "implement"
-    # CSV.generate(options) do |csv|
-    #   csv << ["Course ID", "Uniqname", "First Name", "Last Name", "GradeCraft ID", "Assignment Name", "Assignment ID", "Assignment Type", "Assignment Type Id", "Score", "Assignment Point Total", "Multiplied Score", "Predicted Score", "Text Feedback", "Submission ID", "Submission Creation Date", "Submission Updated Date", "Graded By", "Created At", "Updated At"]
-    #   self.grades.each do |grade|
-    #     csv << [self.id, grade.student.username, grade.student.first_name, grade.student.last_name, grade.student_id, grade.assignment.name, grade.assignment.id, grade.assignment.assignment_type.name, grade.assignment.assignment_type_id, grade.raw_score, grade.point_total, grade.score, grade.predicted_score, grade.feedback, grade.submission_id, grade.submission.try(:created_at), grade.submission.try(:updated_at), grade.graded_by_id, grade.created_at, grade.updated_at]
-    #   end
-    # end
   end
 
   describe "#earned_badges_for_course" do  
     skip "implement"
-    # CSV.generate do |csv|
-    #   csv << ["First Name", "Last Name", "Uniqname", "Email", "Badge ID", "Badge Name", "Feedback", "Awarded Date" ]
-    #   earned_badges.each do |earned_badge|
-    #     csv << [
-    #       earned_badge.student.first_name,
-    #       earned_badge.student.last_name,
-    #       earned_badge.student.username,
-    #       earned_badge.student.email,
-    #       earned_badge.badge.id,
-    #       earned_badge.badge.name,
-    #       earned_badge.feedback,
-    #       earned_badge.created_at
-    #     ]
-    #   end
-    # end
   end
 
   describe "#course_badge_count" do 
