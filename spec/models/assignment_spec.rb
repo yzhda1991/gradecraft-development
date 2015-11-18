@@ -19,6 +19,12 @@ describe Assignment do
       expect(subject).to_not be_valid
       expect(subject.errors[:assignment_type_id]).to include "can't be blank"
     end
+
+    it "is invalid without a course" do
+      subject.course_id = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:course_id]).to include "can't be blank"
+    end
   end
 
   describe "pass-fail assignments" do
@@ -27,6 +33,83 @@ describe Assignment do
       subject.pass_fail = true
       subject.save
       expect(subject.point_total).to eq(0)
+    end
+  end
+
+  describe "#is_unlocked_for_student?" do
+    let(:student) { create :user }
+
+    it "is unlocked when there are no unlock conditions present" do
+      expect(subject.is_unlocked_for_student?(student)).to eq true
+    end
+
+    it "is not unlocked when the unlock state for the student is not present" do
+      subject.unlock_conditions.build
+      expect(subject.is_unlocked_for_student?(student)).to eq false
+    end
+
+    it "is unlocked when the unlock state for the student is unlocked" do
+      subject.unlock_states.build(student_id: student.id, unlocked: true)
+      expect(subject.is_unlocked_for_student?(student)).to eq true
+    end
+  end
+
+  describe "#check_unlock_status" do
+    let(:student) { create :user }
+    before { subject.save }
+
+    it "returns a new unlock state if the goal of unlockables does not meet the number of unlocks" do
+      subject.unlock_conditions.create! condition_id: subject.id,
+        condition_type: subject.class, condition_state: "Blah"
+      expect(subject.check_unlock_status(student)).to be_an_instance_of UnlockState
+      expect(subject.unlock_states.last).to_not be_unlocked
+    end
+
+    context "when the number of conditions are met" do
+      it "returns the updated unlock state when it is found" do
+        condition = subject.unlock_conditions.create condition_id: subject.id,
+          condition_type: subject.class, condition_state: "Blah"
+        allow(condition).to receive(:is_complete?).with(student).and_return true
+        state = subject.unlock_states.create(student_id: student.id,
+                                             unlocked: false)
+        expect(subject.check_unlock_status(student)).to eq state
+        expect(state.reload).to be_unlocked
+      end
+
+      it "returns a new unlock state if it did not exist" do
+        condition = subject.unlock_conditions.create condition_id: subject.id,
+          condition_type: subject.class, condition_state: "Blah"
+        allow(condition).to receive(:is_complete?).with(student).and_return true
+        expect(subject.check_unlock_status(student)).to eq \
+          subject.unlock_states.last
+        expect(subject.unlock_states.last.student).to eq student
+        expect(subject.unlock_states.last).to be_unlocked
+        expect(subject.unlock_states.last.unlockable_id).to eq subject.id
+      end
+    end
+  end
+
+  describe "#unlock_condition_count_met_for" do
+    let(:student) { create :user }
+    before { subject.save }
+
+    it "returns zero if there are no unlock conditions" do
+      expect(subject.unlock_condition_count_met_for(student)).to be_zero
+    end
+
+    it "returns zero if none of the conditions were met for the student" do
+      condition = subject.unlock_conditions.create condition_id: subject.id,
+          condition_type: subject.class, condition_state: "Blah"
+      expect(subject.unlock_condition_count_met_for(student)).to be_zero
+    end
+
+    it "returns the number of conditions that were complete for the student" do
+      met_condition = subject.unlock_conditions.create condition_id: subject.id,
+          condition_type: subject.class, condition_state: "Blah"
+      allow(met_condition).to receive(:is_complete?).with(student).and_return true
+      condition = subject.unlock_conditions.create condition_id: subject.id,
+          condition_type: subject.class, condition_state: "Blah"
+      expect(subject.unlock_condition_count_met_for(student)).to eq 1
     end
   end
 

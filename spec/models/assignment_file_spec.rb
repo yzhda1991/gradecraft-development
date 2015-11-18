@@ -1,7 +1,7 @@
 require "active_record_spec_helper"
 
 describe AssignmentFile do
-  let(:assignment) { build(:assignment, course: build(:course)) }
+  let(:assignment) { build(:assignment, course: create(:course)) }
 
   subject { assignment.assignment_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg')) }
 

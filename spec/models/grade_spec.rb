@@ -21,6 +21,7 @@ describe Grade do
 
     it "is invalid without a course" do
       subject.assignment.course = nil
+      subject.course = nil
       expect(subject).to_not be_valid
       expect(subject.errors[:course]).to include "can't be blank"
     end
