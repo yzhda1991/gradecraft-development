@@ -1,9 +1,10 @@
 class Badge < ActiveRecord::Base
+  include UnlockableCondition
 
-  attr_accessible :name, :description, :icon, :icon_cache, :visible, :can_earn_multiple_times, :value,
-  :multiplier, :point_total, :earned_badges, :earned_badges_attributes, :score, :badge_file_ids,
-  :badge_files_attributes, :badge_file, :position, :unlock_conditions, :unlock_conditions_attributes,
-  :visible_when_locked, :course_id, :course
+  attr_accessible :name, :description, :icon, :icon_cache, :visible,
+    :can_earn_multiple_times, :value, :multiplier, :point_total, :earned_badges,
+    :earned_badges_attributes, :score, :badge_file_ids, :badge_files_attributes,
+    :badge_file, :position, :visible_when_locked, :course_id, :course
 
   # grade points available to the predictor from the assignment controller
   attr_accessor :prediction
@@ -16,13 +17,6 @@ class Badge < ActiveRecord::Base
   has_many :predicted_earned_badges, :dependent => :destroy
 
   belongs_to :course, touch: true
-
-  # Unlocks
-  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy
-  accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
-
-  has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
-  has_many :unlock_states, :as => :unlockable, :dependent => :destroy
 
   accepts_nested_attributes_for :earned_badges, allow_destroy: true, :reject_if => proc { |a| a['score'].blank? }
 
@@ -54,10 +48,6 @@ class Badge < ActiveRecord::Base
     unlock_keys.present?
   end
 
-  def unlockable
-    UnlockCondition.where(:condition_id => self.id, :condition_type => "Badge").first.unlockable
-  end
-
   # Checks to see if a badge is available for a student to earn, specifically used to style a badge
   # as red/not in the predictor
   def is_unlocked_for_student?(student)
@@ -82,7 +72,7 @@ class Badge < ActiveRecord::Base
       else
         self.unlock_states.create(:student_id => student.id, :unlocked => true, :unlockable_id => self.id, :unlockable_type => "Assignment")
       end
-    else 
+    else
       self.unlock_states.create(:student_id => student.id, :unlocked => false, :unlockable_id => self.id, :unlockable_type => "Assignment")
     end
   end
@@ -105,13 +95,13 @@ class Badge < ActiveRecord::Base
     if is_unlockable?
       if visible_when_locked? || is_unlocked_for_student?(student)
         return true
-      else 
+      else
         return false
       end
     else
       if visible?
         return true
-      else 
+      else
         return false
       end
     end

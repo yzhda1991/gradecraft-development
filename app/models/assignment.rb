@@ -1,16 +1,18 @@
 class Assignment < ActiveRecord::Base
   include UploadsMedia
   include UploadsThumbnails
+  include UnlockableCondition
 
-  attr_accessible :name, :assignment_type_id, :assignment_type, :description, :point_total,
-    :open_at, :due_at, :accepts_submissions_until, :release_necessary, :student_logged,
-    :accepts_submissions, :accepts_links, :accepts_text, :accepts_attachments, :resubmissions_allowed,
-    :grade_scope, :visible, :visible_when_locked, :required, :pass_fail, :use_rubric, :hide_analytics,
-    :points_predictor_display, :notify_released, :mass_grade_type,
-    :include_in_timeline, :include_in_predictor, :include_in_to_do,
-    :grades_attributes, :assignment_file_ids, :assignment_files_attributes, :assignment_file,
-    :assignment_score_levels_attributes, :assignment_score_level,
-    :unlock_conditions, :unlock_conditions_attributes, :course
+  attr_accessible :name, :assignment_type_id, :assignment_type, :description,
+    :point_total, :open_at, :due_at, :accepts_submissions_until,
+    :release_necessary, :student_logged, :accepts_submissions, :accepts_links,
+    :accepts_text, :accepts_attachments, :resubmissions_allowed, :grade_scope,
+    :visible, :visible_when_locked, :required, :pass_fail, :use_rubric,
+    :hide_analytics, :points_predictor_display, :notify_released,
+    :mass_grade_type, :include_in_timeline, :include_in_predictor,
+    :include_in_to_do, :grades_attributes, :assignment_file_ids,
+    :assignment_files_attributes, :assignment_file,
+    :assignment_score_levels_attributes, :assignment_score_level, :course
 
   attr_accessor :current_student_grade
 
@@ -36,14 +38,6 @@ class Assignment < ActiveRecord::Base
   # Multipart assignments
   has_many :tasks, :as => :assignment, :dependent => :destroy
 
-  # Unlocks
-  has_many :unlock_conditions, :as => :unlockable, :dependent => :destroy
-  has_many :unlock_keys, :class_name => 'UnlockCondition', :foreign_key => :condition_id, :dependent => :destroy
-
-  accepts_nested_attributes_for :unlock_conditions, allow_destroy: true, :reject_if => proc { |a| a['condition_type'].blank? || a['condition_id'].blank? }
-
-  has_many :unlock_states, :as => :unlockable, :dependent => :destroy
-
   # Student created submissions to be graded
   has_many :submissions, :dependent => :destroy
 
@@ -58,7 +52,6 @@ class Assignment < ActiveRecord::Base
   has_many :assignment_files, :dependent => :destroy
   accepts_nested_attributes_for :assignment_files
 
-
   # Preventing malicious content from being submitted
   before_save :clean_html
 
@@ -67,9 +60,7 @@ class Assignment < ActiveRecord::Base
 
   # Check to make sure the assignment has a name before saving
   validates_presence_of :name
-
   validates_presence_of :assignment_type_id
-
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
   # Filtering Assignments by Team Work, Group Work, and Individual Work
@@ -238,10 +229,6 @@ class Assignment < ActiveRecord::Base
 
   def is_a_condition?
     UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").present?
-  end
-
-  def unlockable
-    UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").first.unlockable
   end
 
   def is_predicted_by_student?(student)
