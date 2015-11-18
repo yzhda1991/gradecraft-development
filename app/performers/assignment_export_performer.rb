@@ -18,11 +18,12 @@ class AssignmentExportPerformer < ResqueJob::Performer
         export_csv_successful?
       end
 
-      # generate student directoris
+      # generate student directories
       require_success(create_student_directory_messages) do
         create_student_directories
       end
 
+      # check whether the student directories were all created successfully
       require_success(check_student_directory_messages) do
         student_directories_created_successfully?
       end
@@ -178,6 +179,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
+  ## creating student directories
+  
   def student_directories_created_successfully?
     missing_student_directories.empty?
   end
