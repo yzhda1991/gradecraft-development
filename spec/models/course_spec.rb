@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe Course, focus: true do
+describe Course do
   subject { build(:course) }
   let(:staff_membership) { create :staff_course_membership, course: subject, instructor_of_record: true }
 
@@ -452,13 +452,25 @@ describe Course, focus: true do
   end
 
   describe "#team_roles?" do 
-    skip "implement"
-    #team_roles == true
+    it "turns team roles for students in their profile settings to true if the instructor turns them on" do 
+      subject.team_roles = true
+      expect(subject.team_roles?).to eq(true)
+    end
+    it "returns false for team roles if the instructor has not turned them on" do 
+      subject.team_roles = false
+      expect(subject.team_roles?).to eq(false)
+    end
   end
 
-  describe "#has_submissions?" do  
-    skip "implement"
-    #accepts_submissions == true
+  describe "#has_submissions?" do
+    it "returns true if the instructor has turned submissions on" do 
+      subject.accepts_submissions = true
+      expect(subject.has_submissions?).to eq(true)
+    end
+    it "returns false for submissions if the instructor has not turned them on" do 
+      subject.accepts_submissions = false
+      expect(subject.has_submissions?).to eq(false)
+    end
   end
 
   describe "#grade_level_for_score(score)" do  
@@ -512,18 +524,36 @@ describe Course, focus: true do
   end
 
   describe "#student_count" do  
-    skip "implement"
-    #students.count
+    it "counts the number of students in a course" do 
+      student = create(:user)
+      student.courses << subject
+      student2 = create(:user)
+      student2.courses << subject
+      student3 = create(:user)
+      student3.courses << subject
+      student4 = create(:user)
+      expect(subject.students.count).to eq(3)
+    end
   end
 
   describe "#graded_student_count" do  
-    skip "implement"
-    #students_being_graded.count
+    it "returns the number of student who are being graded in the course" do 
+      student = create(:user, last_name: 'Zed')
+      student2 = create(:user, last_name: 'Alpha')
+      student3 = create(:user)
+      student3.courses << subject
+      course_membership = create(:auditing_membership, user: student, course: subject)
+      course_membership = create(:auditing_membership, user: student2, course: subject)
+      expect(subject.graded_student_count).to eq(1)
+    end
   end
 
   describe "#point_total_for_challenges" do  
-    skip "implement"
-    #challenges.pluck('point_total').sum
+    it "sums up the total number of points in the challenges" do 
+      challenge = create(:challenge, course: subject, point_total: 101)
+      challenge_2 = create(:challenge, course: subject, point_total: 1000)
+      expect(subject.point_total_for_challenges).to eq(1101)
+    end
   end
 
   describe "#recalculate_student_scores" do 
@@ -667,10 +697,12 @@ describe Course, focus: true do
   end
 
   describe "#create_admin_memberships" do  
-    skip "implement"
-    # User.where(admin: true).each do |admin|
-    #   CourseMembership.create course_id: self.id, user_id: admin.id, role: "admin"
-    # end
+    it "creates admin memberships for all courses automatically on creation of new courses" do 
+      admin = create(:user, admin: true)
+      course = create(:course)
+      new_course = create(:course)
+      expect(admin.course_memberships.count).to eq(2)
+    end
   end
 
 end
