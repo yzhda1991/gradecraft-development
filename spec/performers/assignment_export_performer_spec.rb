@@ -146,11 +146,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         end
 
         it "requires success" do
-          expect(subject).to receive(:require_success).exactly(2).times
+          expect(subject).to receive(:require_success).exactly(3).times
         end
 
         it "adds outcomes to subject.outcomes" do
-          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(2)
+          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(3)
         end
 
         it "fetches the csv data" do
@@ -160,6 +160,10 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
         it "checks whether the exported csv was successfully saved on disk" do
           expect(subject).to receive(:export_csv_successful?)
+        end
+
+        it "creates directories for each student" do
+          expect(subject).to receive(:create_student_directories)
         end
       end
 
