@@ -39,32 +39,8 @@ class Badge < ActiveRecord::Base
     earned_badges.student_visible.count
   end
 
-  # Checking to see if the badge has unlock conditions
-  def is_unlockable?
-    unlock_conditions.present?
-  end
-
-  def is_a_condition?
-    unlock_keys.present?
-  end
-
-  # Checks to see if a badge is available for a student to earn, specifically used to style a badge
-  # as red/not in the predictor
-  def is_unlocked_for_student?(student)
-    unlock_state = unlock_states.where(:student_id => student.id).first
-    if unlock_state.present? && unlock_state.is_unlocked?
-      return true
-    elsif ! unlock_conditions.present?
-      return true
-    else
-      return false
-    end
-  end
-
   def check_unlock_status(student)
-    goal = count_unlock_conditions_to_meet
-    earned = count_unlock_conditions_met(student)
-    if goal == earned
+    if unlock_condition_count_to_meet == unlock_condition_count_met_for(student)
       unlock_state = unlock_states.where(:student_id => student.id).first
       if unlock_state.present?
         unlock_state.unlocked = true
@@ -75,40 +51,6 @@ class Badge < ActiveRecord::Base
     else
       self.unlock_states.create(:student_id => student.id, :unlocked => false, :unlockable_id => self.id, :unlockable_type => "Assignment")
     end
-  end
-
-  def count_unlock_conditions_to_meet
-    goal = unlock_conditions.count
-  end
-
-  def count_unlock_conditions_met(student)
-    count = 0
-    unlock_conditions.each do |condition|
-      if condition.is_complete?(student)
-        count += 1
-      end
-    end
-    return count
-  end
-
-  def visible_for_student?(student)
-    if is_unlockable?
-      if visible_when_locked? || is_unlocked_for_student?(student)
-        return true
-      else
-        return false
-      end
-    else
-      if visible?
-        return true
-      else
-        return false
-      end
-    end
-  end
-
-  def find_or_create_unlock_state(student)
-    UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Badge")
   end
 
   #badges per role

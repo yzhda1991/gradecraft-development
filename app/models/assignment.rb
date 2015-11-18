@@ -191,18 +191,6 @@ class Assignment < ActiveRecord::Base
     !! rubric
   end
 
-  def visible_for_student?(student)
-    if is_unlockable?
-      if visible_when_locked? || is_unlocked_for_student?(student)
-        return true
-      end
-    else
-      if visible?
-        return true
-      end
-    end
-  end
-
   def fetch_or_create_rubric
     return rubric if rubric
     Rubric.create assignment_id: self[:id]
@@ -222,23 +210,8 @@ class Assignment < ActiveRecord::Base
     grade_scope=="Group"
   end
 
-  # Checking to see if the assignment has unlock conditions
-  def is_unlockable?
-    unlock_conditions.present?
-  end
-
-  def is_a_condition?
-    UnlockCondition.where(:condition_id => self.id, :condition_type => "Assignment").present?
-  end
-
   def is_predicted_by_student?(student)
     grades.where(:student => student).first.predicted_score > 0 rescue nil
-  end
-
-  def is_unlocked_for_student?(student)
-    return true unless unlock_conditions.present?
-    unlock_state = unlock_states.where(student_id: student.id).first
-    unlock_state.present? && unlock_state.is_unlocked?
   end
 
   def check_unlock_status(student)
@@ -250,20 +223,6 @@ class Assignment < ActiveRecord::Base
       unlock_state.save
       unlock_state
     end
-  end
-
-  def unlock_condition_count_to_meet
-    self.unlock_conditions.count
-  end
-
-  def unlock_condition_count_met_for(student)
-    self.unlock_conditions
-      .select { |condition| condition.is_complete?(student) }
-      .size
-  end
-
-  def find_or_create_unlock_state(student)
-    UnlockState.where(student: student, unlockable: self).first || UnlockState.create(student_id: student.id, unlockable_id: self.id, unlockable_type: "Assignment")
   end
 
   # Custom point total if the class has weighted assignments
