@@ -142,6 +142,20 @@ describe Assignment do
     end
   end
 
+  describe "#completion_rate" do
+    let(:course) { double(:course, graded_student_count: 10) }
+    before { allow(subject).to receive(:grade_count).and_return 8 }
+
+    it "calculates the number of grades divided by the number of students in the course" do
+      expect(subject.completion_rate(course)).to eq 80
+    end
+
+    it "handles if there are no graded students" do
+      allow(course).to receive(:graded_student_count).and_return 0
+      expect(subject.completion_rate(course)).to be_zero
+    end
+  end
+
   describe "#copy" do
     let(:assignment) { build :assignment }
     subject { assignment.copy }

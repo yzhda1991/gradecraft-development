@@ -276,6 +276,7 @@ class Assignment < ActiveRecord::Base
 
   # Calculating attendance rate, which tallies number of people who have positive grades for attendance divided by the total number of students in the class
   def completion_rate(course)
+    return 0 if course.graded_student_count.zero?
    ((grade_count / course.graded_student_count.to_f) * 100).round(2)
   end
 
