@@ -19,17 +19,15 @@ class Assignment < ActiveRecord::Base
   belongs_to :course, touch: true
   belongs_to :assignment_type, -> { order('position ASC') }, touch: true
 
-  has_one :rubric, :dependent => :destroy
-  delegate :mass_grade?, :student_weightable?, :to => :assignment_type
+  has_one :rubric, dependent: :destroy
 
   # For instances where the assignment needs its own unique score levels
   has_many :assignment_score_levels, -> { order "value" }, :dependent => :destroy
-  accepts_nested_attributes_for :assignment_score_levels, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? || a['name'].blank? }
+  accepts_nested_attributes_for :assignment_score_levels, allow_destroy: true,
+    reject_if: proc { |a| a['value'].blank? || a['name'].blank? }
 
   # This is the assignment weighting system (students decide how much assignments will be worth for them)
-  has_many :weights, :class_name => 'AssignmentWeight', :dependent => :destroy
-  #Why are there two? -ch
-  has_many :assignment_weights
+  has_many :weights, class_name: "AssignmentWeight", dependent: :destroy
 
   # Student created groups, can connect to multiple assignments and receive group level or individualized feedback
   has_many :assignment_groups, :dependent => :destroy
@@ -44,16 +42,15 @@ class Assignment < ActiveRecord::Base
   has_many :rubric_grades, :dependent => :destroy
 
   has_many :grades, :dependent => :destroy
-  accepts_nested_attributes_for :grades, :reject_if => Proc.new { |attrs| attrs[:raw_score].blank? }
-
-  has_many :users, :through => :grades
+  accepts_nested_attributes_for :grades,
+    reject_if: proc { |attrs| attrs[:raw_score].blank? }
 
   # Instructor uploaded resource files
-  has_many :assignment_files, :dependent => :destroy
+  has_many :assignment_files, dependent: :destroy
   accepts_nested_attributes_for :assignment_files
 
   # Preventing malicious content from being submitted
-  before_save :clean_html
+  before_save :sanitize_description
 
   # Strip points from pass/fail assignments
   before_save :zero_points_for_pass_fail
@@ -64,36 +61,25 @@ class Assignment < ActiveRecord::Base
   validates_presence_of :assignment_type_id
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
-  # Filtering Assignments by Team Work, Group Work, and Individual Work
-  scope :individual_assignments, -> { where grade_scope: "Individual" }
   scope :group_assignments, -> { where grade_scope: "Group" }
 
   # Filtering Assignments by where in the interface they are displayed
   scope :timelineable, -> { where(:include_in_timeline => true) }
-  scope :predictable, -> { where(:include_in_predictor => true) }
-  scope :todoable, -> { where(:include_in_to_do => true) }
-
-  # Invisible Assignments are displayed on the instructor side, but not students (until they have a grade for them)
-  scope :visible, -> { where visible: TRUE }
 
   # Sorting assignments by different properties
   scope :chronological, -> { order('due_at ASC') }
   scope :alphabetical, -> { order('name ASC') }
   acts_as_list scope: :assignment_type
 
-  default_scope { order('position ASC') }
-
   # Filtering Assignments by various date properties
   scope :with_dates, -> { where('assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL') }
-  scope :with_due_date, -> { where('assignments.due_at IS NOT NULL') }
-  scope :without_due_date, ->  { where('assignments.due_at IS NULL') }
-  scope :future, -> { with_due_date.where('assignments.due_at >= ?', Time.now) }
-  scope :past, -> { with_due_date.where('assignments.due_at < ?', Time.now) }
 
   # Assignments and Grading
   scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
 
-  scope :released, ->(student) { where('EXISTS (SELECT 1 FROM released_grades WHERE ((released_grades.assignment_id = assignments.id) AND (released_grades.student_id = ?)))', student.id) }
+  default_scope { order('position ASC') }
+
+  delegate :student_weightable?, to: :assignment_type
 
   def copy
     copy = self.dup
@@ -112,16 +98,8 @@ class Assignment < ActiveRecord::Base
     super.presence || 0
   end
 
-  def self.assignment_type_point_totals_for_student(student)
-    group('assignments.assignment_type_id').weighted_for_student(student).pluck('assignments.assignment_type_id, COALESCE(SUM(COALESCE(assignment_weights.point_total, self.course.total_points)), 0)')
-  end
-
   def self.point_total_for_student(student)
     weighted_for_student(student).pluck('SUM(COALESCE(assignment_weights.point_total, self.course.total_points))').first || 0
-  end
-
-  def self.with_assignment_weights_for_student(student)
-    joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'").select('assignments.*, COALESCE(assignment_weights.point_total, self.course.total_points) AS student_point_total')
   end
 
   # Used for calculating scores in the analytics tab in Assignments# show
@@ -179,10 +157,6 @@ class Assignment < ActiveRecord::Base
     Rubric.create assignment_id: self[:id]
   end
 
-  def ungraded_submissions
-    submissions.where("id not in (select submission_id from rubric_grades)")
-  end
-
   # Checking to see if an assignment is individually graded
   def is_individual?
     !['Group'].include? grade_scope
@@ -218,16 +192,6 @@ class Assignment < ActiveRecord::Base
   # Getting a student's grade object for an assignment
   def grade_for_student(student)
     grades.graded_or_released.where(student_id: student).first
-  end
-
-  # Getting a student's score for an assignment
-  def score_for_student(student)
-    grades.graded_or_released.where(student_id: student).pluck('score').first
-  end
-
-  # Getting a student's released score for an assignment
-  def released_score_for_student(student)
-    grades.released.where(student: student).pluck('score').first
   end
 
   # Get a grade object for a student if it exists - graded or not. this is used in the import grade
@@ -397,7 +361,7 @@ class Assignment < ActiveRecord::Base
   end
 
   # Stripping the description of extra code
-  def clean_html
+  def sanitize_description
     self.description = Sanitize.clean(description, Sanitize::Config::BASIC)
   end
 
