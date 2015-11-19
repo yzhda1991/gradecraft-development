@@ -38,11 +38,6 @@ class Team < ActiveRecord::Base
       where("LOWER(name) = :name", name: name.downcase).first
   end
 
-  #Sorting team's students by their score, currently only used for in team leaderboards
-  def sorted_students
-    students.sort_by{ |student| - student.cached_score_for_course(course) }
-  end
-
   # @mz todo: add specs
   def recalculate_student_scores
     student_score_recalculator_jobs.each(&:enqueue)
