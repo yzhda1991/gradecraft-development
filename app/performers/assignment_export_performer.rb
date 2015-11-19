@@ -116,7 +116,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     sanitize_filename(fragment).slice(0..24) # take only 25 characters
   end
 
-  # mz todo: add specs
   def sanitize_filename(filename)
     filename
       .downcase
@@ -240,7 +239,12 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # @mz todo: add specs
   def submission_text_filename(student)
-    [ student.first_name, student.last_name, formatted_assignment_name, "submission_text.txt" ].join("_")
+    [ formatted_student_name(student), formatted_assignment_name, "submission_text.txt" ].join("_")
+  end
+
+  # @mz todo: add specs
+  def formatted_student_name(student)
+    sanitize_filename("#{student.first_name}_#{student.last_name}")
   end
 
   private

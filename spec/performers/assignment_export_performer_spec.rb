@@ -627,9 +627,10 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
-  describe "creating student submission text files" do
+  describe "creating student submission text files", inspect: true do
     let(:student1) { double(:student, first_name: "edwina", last_name: "herman") }
     let(:student2) { double(:student, first_name: "karen", last_name: "slotskova") }
+    before(:each) { performer.instance_variable_set(:@some_student, student1) }
 
     describe "create_submission_text_files" do
     end
@@ -640,10 +641,18 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     describe "submission_text_file_path" do
     end
 
-    describe "submission_text_filename", inspect:true do
+    describe "formatted student name" do
+      subject { performer.instance_eval { formatted_student_name(@some_student) }}
+      
+      it "calls sanitize_filename with the correct student name" do
+        expect(performer).to receive(:sanitize_filename).with("edwina_herman")
+        subject
+      end
+    end
+
+    describe "submission_text_filename" do
       before do
         allow(performer).to receive(:formatted_assignment_name) { "the_day_the_earth_stood_still" }
-        performer.instance_variable_set(:@some_student, student1)
       end
 
       subject { performer.instance_eval { submission_text_filename(@some_student) }}
