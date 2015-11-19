@@ -224,39 +224,28 @@ class Assignment < ActiveRecord::Base
 
   # The below four are the Quick Grading Types, can be set at either the assignment or assignment type level
   def grade_checkboxes?
-    self.mass_grade_type == "Checkbox"
+    mass_grade_type == "Checkbox"
   end
 
   def grade_select?
-    (self.mass_grade_type == "Select List" && self.assignment_score_levels.present?)
+    mass_grade_type == "Select List" && has_levels?
   end
 
   def grade_radio?
-    (self.mass_grade_type == "Radio Buttons" && self.assignment_score_levels.present?)
+    mass_grade_type == "Radio Buttons" && has_levels?
   end
 
   def grade_text?
-    self.mass_grade_type == "Text"
+    mass_grade_type == "Text"
   end
 
-  # Checking to see if an assignment has related score levels
   def has_levels?
-   self.assignment_score_levels.present?
+    assignment_score_levels.present?
   end
 
   # Finding what grade level was earned for a particular assignment
   def grade_level(grade)
-    assignment_score_levels.each do |assignment_score_level|
-      return assignment_score_level.name if grade.raw_score == assignment_score_level.value
-    end
-    nil
-  end
-
-  # Using the parent assignment type's score levels if they're present - otherwise getting the assignment score levels
-  def score_levels_set
-    if self.assignment_score_levels.present?
-      assignment_score_levels
-    end
+    assignment_score_levels.find { |asl| grade.raw_score == asl.value }.try(:name)
   end
 
   def future?
@@ -285,11 +274,6 @@ class Assignment < ActiveRecord::Base
     grades.graded_or_released.count
   end
 
-  # Counting how many non-zero grades there are for an assignment
-  def positive_grade_count
-    grades.graded_or_released.where("score > 0").count
-  end
-
   # Calculating attendance rate, which tallies number of people who have positive grades for attendance divided by the total number of students in the class
   def completion_rate(course)
    ((grade_count / course.graded_student_count.to_f) * 100).round(2)
@@ -302,13 +286,6 @@ class Assignment < ActiveRecord::Base
 
   def group_submission_rate
     ((submissions.count / self.groups.count) * 100).round(2)
-  end
-
-  # Calculates attendance rate as an integer.
-   def attendance_rate_int(course)
-    if course.graded_student_count > 0
-     ((positive_grade_count / course.graded_student_count.to_f) * 100).to_i
-    end
   end
 
   # Calculating how many of each score exists

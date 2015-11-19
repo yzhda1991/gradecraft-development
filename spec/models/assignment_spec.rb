@@ -181,6 +181,13 @@ describe Assignment do
     end
   end
 
+  describe "#fixed?" do
+    it "is fixed if the predictor display is fixed" do
+      subject.points_predictor_display = "Fixed"
+      expect(subject).to be_fixed
+    end
+  end
+
   describe "#future?" do
     it "is not for the future if there is no due date" do
       subject.due_at = nil
@@ -195,6 +202,92 @@ describe Assignment do
     it "is for the future if the due date is in the future" do
       subject.due_at = 2.days.from_now
       expect(subject).to be_future
+    end
+  end
+
+  describe "#grade_checkboxes?" do
+    it "should render checkboxes if the mass grade type is checkbox" do
+      subject.mass_grade_type = "Checkbox"
+      expect(subject).to be_grade_checkboxes
+    end
+  end
+
+  describe "#grade_count" do
+    before { subject.save }
+
+    it "counts the number of grades that were graded or released" do
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 105
+      expect(subject.grade_count).to eq 2
+    end
+  end
+
+  describe "#grade_level" do
+    it "returns the assignment score level for the grade's score" do
+      grade = build(:grade, raw_score: 123)
+      subject.assignment_score_levels.build name: "First level", value: 123
+      expect(subject.grade_level(grade)).to eq "First level"
+    end
+
+    it "returns nil if there is no assignment score level found" do
+      grade = build(:grade, raw_score: 123)
+      subject.assignment_score_levels.build name: "First level", value: 456
+      expect(subject.grade_level(grade)).to be_nil
+    end
+  end
+
+  describe "#grade_radio?" do
+    it "should render a radio list if the mass grade type is radio and there are assignment score levels" do
+      subject.mass_grade_type = "Radio Buttons"
+      subject.assignment_score_levels.build
+      expect(subject).to be_grade_radio
+    end
+
+    it "should not render a radio list if there are no assignment score levels" do
+      subject.mass_grade_type = "Radio List"
+      expect(subject).to_not be_grade_radio
+    end
+  end
+
+  describe "#grade_select?" do
+    it "should render a select if the mass grade type is select and there are assignment score levels" do
+      subject.mass_grade_type = "Select List"
+      subject.assignment_score_levels.build
+      expect(subject).to be_grade_select
+    end
+
+    it "should not render a select if there are no assignment score levels" do
+      subject.mass_grade_type = "Select List"
+      expect(subject).to_not be_grade_select
+    end
+  end
+
+  describe "#grade_text?" do
+    it "should render a text box if the mass grade type is text" do
+      subject.mass_grade_type = "Text"
+      expect(subject).to be_grade_text
+    end
+  end
+
+  describe "#has_levels?" do
+    it "has levels if there are assignment score levels" do
+      subject.assignment_score_levels.build
+      expect(subject).to have_levels
+    end
+  end
+
+  describe "#select?" do
+    it "is select if the predictor display is select list" do
+      subject.points_predictor_display = "Select List"
+      expect(subject).to be_select
+    end
+  end
+
+  describe "#slider?" do
+    it "is slider if the predictor display is slider" do
+      subject.points_predictor_display = "Slider"
+      expect(subject).to be_slider
     end
   end
 
