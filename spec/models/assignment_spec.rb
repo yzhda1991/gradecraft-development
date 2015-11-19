@@ -27,6 +27,35 @@ describe Assignment do
     end
   end
 
+  describe "#earned_score_count" do
+    before { subject.save }
+
+    it "returns only graded or released grades" do
+      subject.grades.create student_id: create(:user).id
+      expect(subject.earned_score_count).to be_empty
+    end
+
+    it "returns the number of unique scores for each grade" do
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 105, status: "Graded"
+      expect(subject.earned_score_count).to eq({ 85 => 2, 105 => 1 })
+    end
+  end
+
+  describe "#percentage_score_earned" do
+    before { subject.save }
+
+    it "returns the earned scores with a scores key" do
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 105, status: "Graded"
+      scores = subject.percentage_score_earned[:scores]
+      expect(scores).to include({ data: 1, name: 105 })
+      expect(scores).to include({ data: 2, name: 85 })
+    end
+  end
+
   describe "pass-fail assignments" do
     it "sets point total to zero on save" do
       subject.point_total = 3000
@@ -113,6 +142,20 @@ describe Assignment do
     end
   end
 
+  describe "#completion_rate" do
+    let(:course) { double(:course, graded_student_count: 10) }
+    before { allow(subject).to receive(:grade_count).and_return 8 }
+
+    it "calculates the number of grades divided by the number of students in the course" do
+      expect(subject.completion_rate(course)).to eq 80
+    end
+
+    it "handles if there are no graded students" do
+      allow(course).to receive(:graded_student_count).and_return 0
+      expect(subject.completion_rate(course)).to be_zero
+    end
+  end
+
   describe "#copy" do
     let(:assignment) { build :assignment }
     subject { assignment.copy }
@@ -147,6 +190,156 @@ describe Assignment do
     end
   end
 
+  describe "#fixed?" do
+    it "is fixed if the predictor display is fixed" do
+      subject.points_predictor_display = "Fixed"
+      expect(subject).to be_fixed
+    end
+  end
+
+  describe "#future?" do
+    it "is not for the future if there is no due date" do
+      subject.due_at = nil
+      expect(subject).to_not be_future
+    end
+
+    it "is not for the future if the due date is in the past" do
+      subject.due_at = 2.days.ago
+      expect(subject).to_not be_future
+    end
+
+    it "is for the future if the due date is in the future" do
+      subject.due_at = 2.days.from_now
+      expect(subject).to be_future
+    end
+  end
+
+  describe "#grade_checkboxes?" do
+    it "should render checkboxes if the mass grade type is checkbox" do
+      subject.mass_grade_type = "Checkbox"
+      expect(subject).to be_grade_checkboxes
+    end
+  end
+
+  describe "#grade_count" do
+    before { subject.save }
+
+    it "counts the number of grades that were graded or released" do
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 105
+      expect(subject.grade_count).to eq 2
+    end
+  end
+
+  describe "#grade_level" do
+    it "returns the assignment score level for the grade's score" do
+      grade = build(:grade, raw_score: 123)
+      subject.assignment_score_levels.build name: "First level", value: 123
+      expect(subject.grade_level(grade)).to eq "First level"
+    end
+
+    it "returns nil if there is no assignment score level found" do
+      grade = build(:grade, raw_score: 123)
+      subject.assignment_score_levels.build name: "First level", value: 456
+      expect(subject.grade_level(grade)).to be_nil
+    end
+  end
+
+  describe "#grade_radio?" do
+    it "should render a radio list if the mass grade type is radio and there are assignment score levels" do
+      subject.mass_grade_type = "Radio Buttons"
+      subject.assignment_score_levels.build
+      expect(subject).to be_grade_radio
+    end
+
+    it "should not render a radio list if there are no assignment score levels" do
+      subject.mass_grade_type = "Radio List"
+      expect(subject).to_not be_grade_radio
+    end
+  end
+
+  describe "#grade_select?" do
+    it "should render a select if the mass grade type is select and there are assignment score levels" do
+      subject.mass_grade_type = "Select List"
+      subject.assignment_score_levels.build
+      expect(subject).to be_grade_select
+    end
+
+    it "should not render a select if there are no assignment score levels" do
+      subject.mass_grade_type = "Select List"
+      expect(subject).to_not be_grade_select
+    end
+  end
+
+  describe "#grade_text?" do
+    it "should render a text box if the mass grade type is text" do
+      subject.mass_grade_type = "Text"
+      expect(subject).to be_grade_text
+    end
+  end
+
+  describe "#has_levels?" do
+    it "has levels if there are assignment score levels" do
+      subject.assignment_score_levels.build
+      expect(subject).to have_levels
+    end
+  end
+
+  describe "#predicted_count" do
+    it "returns the number of grades that are predicted to have a score greater than zero" do
+      grades = double(:grades, predicted_to_be_done: 43.times.to_a)
+      allow(subject).to receive(:grades).and_return grades
+      expect(subject.predicted_count).to eq 43
+    end
+  end
+
+  describe "#select?" do
+    it "is select if the predictor display is select list" do
+      subject.points_predictor_display = "Select List"
+      expect(subject).to be_select
+    end
+  end
+
+  describe "#slider?" do
+    it "is slider if the predictor display is slider" do
+      subject.points_predictor_display = "Slider"
+      expect(subject).to be_slider
+    end
+  end
+
+  describe "#soon?" do
+    it "is not soon if there is no due date" do
+      subject.due_at = nil
+      expect(subject).to_not be_soon
+    end
+
+    it "is not soon if the due date is too far in the future" do
+      subject.due_at = 8.days.from_now
+      expect(subject).to_not be_soon
+    end
+
+    it "is soon if the due date is within 7 days from now" do
+      subject.due_at = 2.days.from_now
+      expect(subject).to be_soon
+    end
+  end
+
+  describe "#submission_rate" do
+    let(:course) { double(:course, graded_student_count: 10) }
+    let(:submissions) { double(:submissions, count: 4) }
+    before { allow(subject).to receive(:submissions).and_return submissions }
+
+    it "calculates the number of submissions divided by the number of students in the course" do
+      expect(subject.submission_rate(course)).to eq 40
+    end
+
+    it "handles if there are no graded students" do
+      allow(course).to receive(:graded_student_count).and_return 0
+      expect(subject.submission_rate(course)).to be_zero
+    end
+  end
+
   describe "#opened?" do
     it "is opened if there is no open at date set" do
       subject.open_at = nil
@@ -164,19 +357,19 @@ describe Assignment do
     end
   end
 
-  describe "#overdue" do
+  describe "#overdue?" do
     it "is not overdue if there is no due date" do
-      subject.due_at= nil
+      subject.due_at = nil
       expect(subject).to_not be_overdue
     end
 
     it "is not overdue if the due date is in the future" do
-      subject.due_at= 2.days.from_now
+      subject.due_at = 2.days.from_now
       expect(subject).to_not be_overdue
     end
 
     it "is overdue if the due date has past" do
-      subject.due_at= 2.days.ago
+      subject.due_at = 2.days.ago
       expect(subject).to be_overdue
     end
   end

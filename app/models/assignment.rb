@@ -19,17 +19,15 @@ class Assignment < ActiveRecord::Base
   belongs_to :course, touch: true
   belongs_to :assignment_type, -> { order('position ASC') }, touch: true
 
-  has_one :rubric, :dependent => :destroy
-  delegate :mass_grade?, :student_weightable?, :to => :assignment_type
+  has_one :rubric, dependent: :destroy
 
   # For instances where the assignment needs its own unique score levels
   has_many :assignment_score_levels, -> { order "value" }, :dependent => :destroy
-  accepts_nested_attributes_for :assignment_score_levels, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? || a['name'].blank? }
+  accepts_nested_attributes_for :assignment_score_levels, allow_destroy: true,
+    reject_if: proc { |a| a['value'].blank? || a['name'].blank? }
 
   # This is the assignment weighting system (students decide how much assignments will be worth for them)
-  has_many :weights, :class_name => 'AssignmentWeight', :dependent => :destroy
-  #Why are there two? -ch
-  has_many :assignment_weights
+  has_many :weights, class_name: "AssignmentWeight", dependent: :destroy
 
   # Student created groups, can connect to multiple assignments and receive group level or individualized feedback
   has_many :assignment_groups, :dependent => :destroy
@@ -44,16 +42,15 @@ class Assignment < ActiveRecord::Base
   has_many :rubric_grades, :dependent => :destroy
 
   has_many :grades, :dependent => :destroy
-  accepts_nested_attributes_for :grades, :reject_if => Proc.new { |attrs| attrs[:raw_score].blank? }
-
-  has_many :users, :through => :grades
+  accepts_nested_attributes_for :grades,
+    reject_if: proc { |attrs| attrs[:raw_score].blank? }
 
   # Instructor uploaded resource files
-  has_many :assignment_files, :dependent => :destroy
+  has_many :assignment_files, dependent: :destroy
   accepts_nested_attributes_for :assignment_files
 
   # Preventing malicious content from being submitted
-  before_save :clean_html
+  before_save :sanitize_description
 
   # Strip points from pass/fail assignments
   before_save :zero_points_for_pass_fail
@@ -64,36 +61,25 @@ class Assignment < ActiveRecord::Base
   validates_presence_of :assignment_type_id
   validate :open_before_close, :submissions_after_due, :submissions_after_open
 
-  # Filtering Assignments by Team Work, Group Work, and Individual Work
-  scope :individual_assignments, -> { where grade_scope: "Individual" }
   scope :group_assignments, -> { where grade_scope: "Group" }
 
   # Filtering Assignments by where in the interface they are displayed
   scope :timelineable, -> { where(:include_in_timeline => true) }
-  scope :predictable, -> { where(:include_in_predictor => true) }
-  scope :todoable, -> { where(:include_in_to_do => true) }
-
-  # Invisible Assignments are displayed on the instructor side, but not students (until they have a grade for them)
-  scope :visible, -> { where visible: TRUE }
 
   # Sorting assignments by different properties
   scope :chronological, -> { order('due_at ASC') }
   scope :alphabetical, -> { order('name ASC') }
   acts_as_list scope: :assignment_type
 
-  default_scope { order('position ASC') }
-
   # Filtering Assignments by various date properties
   scope :with_dates, -> { where('assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL') }
-  scope :with_due_date, -> { where('assignments.due_at IS NOT NULL') }
-  scope :without_due_date, ->  { where('assignments.due_at IS NULL') }
-  scope :future, -> { with_due_date.where('assignments.due_at >= ?', Time.now) }
-  scope :past, -> { with_due_date.where('assignments.due_at < ?', Time.now) }
 
   # Assignments and Grading
   scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
 
-  scope :released, ->(student) { where('EXISTS (SELECT 1 FROM released_grades WHERE ((released_grades.assignment_id = assignments.id) AND (released_grades.student_id = ?)))', student.id) }
+  default_scope { order('position ASC') }
+
+  delegate :student_weightable?, to: :assignment_type
 
   def copy
     copy = self.dup
@@ -112,16 +98,8 @@ class Assignment < ActiveRecord::Base
     super.presence || 0
   end
 
-  def self.assignment_type_point_totals_for_student(student)
-    group('assignments.assignment_type_id').weighted_for_student(student).pluck('assignments.assignment_type_id, COALESCE(SUM(COALESCE(assignment_weights.point_total, self.course.total_points)), 0)')
-  end
-
   def self.point_total_for_student(student)
     weighted_for_student(student).pluck('SUM(COALESCE(assignment_weights.point_total, self.course.total_points))').first || 0
-  end
-
-  def self.with_assignment_weights_for_student(student)
-    joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'").select('assignments.*, COALESCE(assignment_weights.point_total, self.course.total_points) AS student_point_total')
   end
 
   # Used for calculating scores in the analytics tab in Assignments# show
@@ -179,10 +157,6 @@ class Assignment < ActiveRecord::Base
     Rubric.create assignment_id: self[:id]
   end
 
-  def ungraded_submissions
-    submissions.where("id not in (select submission_id from rubric_grades)")
-  end
-
   # Checking to see if an assignment is individually graded
   def is_individual?
     !['Group'].include? grade_scope
@@ -220,29 +194,9 @@ class Assignment < ActiveRecord::Base
     grades.graded_or_released.where(student_id: student).first
   end
 
-  # Getting a student's score for an assignment
-  def score_for_student(student)
-    grades.graded_or_released.where(student_id: student).pluck('score').first
-  end
-
-  # Getting a student's released score for an assignment
-  def released_score_for_student(student)
-    grades.released.where(student: student).pluck('score').first
-  end
-
   # Get a grade object for a student if it exists - graded or not. this is used in the import grade
   def all_grade_statuses_grade_for_student(student)
     grades.where(student_id: student).first
-  end
-
-  # Checking to see if an assignment's due date is past
-  def past?
-    due_at != nil && due_at < Time.now
-  end
-
-  # Checking to see if an assignment's due date is in the future
-  def future?
-    due_at != nil && due_at >= Time.now
   end
 
   # Checking to see if the assignment has submissions that don't have grades
@@ -252,9 +206,7 @@ class Assignment < ActiveRecord::Base
 
   # Checking to see if an assignment is due soon
   def soon?
-    if due_at?
-      Time.now <= due_at && due_at < (Time.now + 7.days)
-    end
+    future? && due_at < 7.days.from_now
   end
 
   # Setting the grade predictor displays
@@ -272,39 +224,32 @@ class Assignment < ActiveRecord::Base
 
   # The below four are the Quick Grading Types, can be set at either the assignment or assignment type level
   def grade_checkboxes?
-    self.mass_grade_type == "Checkbox"
+    mass_grade_type == "Checkbox"
   end
 
   def grade_select?
-    (self.mass_grade_type == "Select List" && self.assignment_score_levels.present?)
+    mass_grade_type == "Select List" && has_levels?
   end
 
   def grade_radio?
-    (self.mass_grade_type == "Radio Buttons" && self.assignment_score_levels.present?)
+    mass_grade_type == "Radio Buttons" && has_levels?
   end
 
   def grade_text?
-    self.mass_grade_type == "Text"
+    mass_grade_type == "Text"
   end
 
-  # Checking to see if an assignment has related score levels
   def has_levels?
-   self.assignment_score_levels.present?
+    assignment_score_levels.present?
   end
 
   # Finding what grade level was earned for a particular assignment
   def grade_level(grade)
-    assignment_score_levels.each do |assignment_score_level|
-      return assignment_score_level.name if grade.raw_score == assignment_score_level.value
-    end
-    nil
+    assignment_score_levels.find { |asl| grade.raw_score == asl.value }.try(:name)
   end
 
-  # Using the parent assignment type's score levels if they're present - otherwise getting the assignment score levels
-  def score_levels_set
-    if self.assignment_score_levels.present?
-      assignment_score_levels
-    end
+  def future?
+    !due_at.nil? && due_at >= Time.now
   end
 
   def opened?
@@ -312,7 +257,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def overdue?
-    !due_at.nil? && due_at <= Time.now
+    !due_at.nil? && due_at < Time.now
   end
 
   def accepting_submissions?
@@ -329,35 +274,16 @@ class Assignment < ActiveRecord::Base
     grades.graded_or_released.count
   end
 
-  # Counting how many non-zero grades there are for an assignment
-  def positive_grade_count
-    grades.graded_or_released.where("score > 0").count
-  end
-
   # Calculating attendance rate, which tallies number of people who have positive grades for attendance divided by the total number of students in the class
   def completion_rate(course)
+    return 0 if course.graded_student_count.zero?
    ((grade_count / course.graded_student_count.to_f) * 100).round(2)
   end
 
   # Counting the percentage of submissions from the entire class
   def submission_rate(course)
+    return 0 if course.graded_student_count.zero?
     ((submissions.count / course.graded_student_count.to_f) * 100).round(2)
-  end
-
-  def group_submission_rate
-    ((submissions.count / self.groups.count) * 100).round(2)
-  end
-
-  # Calculates attendance rate as an integer.
-   def attendance_rate_int(course)
-    if course.graded_student_count > 0
-     ((positive_grade_count / course.graded_student_count.to_f) * 100).to_i
-    end
-  end
-
-  # Calculating how many of each score exists
-  def score_count
-    Hash[grades.graded_or_released.group_by{ |g| g.score }.map{ |k, v| [k, v.size] }]
   end
 
   def predicted_count
@@ -366,28 +292,14 @@ class Assignment < ActiveRecord::Base
 
   # Calculating how many of each score exists
   def earned_score_count
-    Hash[grades.graded_or_released.group_by{ |g| g.raw_score }.map{ |k, v| [k, v.size ] }]
-  end
-
-  def earned_scores
-    scores = []
-    earned_score_count.each do |score|
-      scores << { :data => score[1], :name => score[0] }
-    end
-    return {
-      :scores => scores
-    }
+    grades.graded_or_released
+      .group_by { |g| g.raw_score }
+      .map { |score, grade| [score, grade.size ] }.to_h
   end
 
   # Creating an array with the set of scores earned on the assignment, and
   def percentage_score_earned
-    scores = []
-    earned_score_count.each do |score|
-      scores << { :data => score[1], :name => score[0] }
-    end
-    return {
-      :scores => scores
-    }
+    { scores: earned_score_count.collect { |s| { data: s[1], name: s[0] }}}
   end
 
   private
@@ -411,7 +323,7 @@ class Assignment < ActiveRecord::Base
   end
 
   # Stripping the description of extra code
-  def clean_html
+  def sanitize_description
     self.description = Sanitize.clean(description, Sanitize::Config::BASIC)
   end
 
