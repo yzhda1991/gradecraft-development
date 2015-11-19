@@ -21,11 +21,6 @@ class GradeSchemeElement < ActiveRecord::Base
     end
   end
 
-  # Checking to see if the grade elements overlap
-  def overlap?(element)
-    element.low_range <= high_range && element.high_range >= low_range
-  end
-
   #Calculating the range that covers this element
   def range
     high_range.to_f - low_range.to_f
