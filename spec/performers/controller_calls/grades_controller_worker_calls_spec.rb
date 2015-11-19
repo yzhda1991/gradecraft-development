@@ -30,7 +30,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
     end
   end
 
-  describe "triggering jobs as a professor" , focus: true do
+  describe "triggering jobs as a professor" do
     before(:each) { enroll_and_login_professor }
 
     describe "#submit_rubric" do
@@ -66,14 +66,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       subject { put :update, request_attrs }
 
       before do
-        # stub away the current_student.present? call
-        allow(controller).to receive_messages({
-          current_student: student,
-          extract_file_attributes_from_grade_params: true,
-          add_grade_files_to_grade: true,
-          sanitize_grade_params: true
-        })
-        allow(student).to receive(:grade_for_assignment).and_return grade
+        allow(Grade).to receive(:find_or_create).and_return grade
       end
 
       context "grade attributes are successfully updated" do
