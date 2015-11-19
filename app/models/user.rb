@@ -372,10 +372,6 @@ class User < ActiveRecord::Base
     grades.released.where(assignment_type: assignment_type).score
   end
 
-  def assignment_scores_for_course(course)
-    grades.released.where(course: course).score
-  end
-
   def point_total_for_assignment(assignment)
     grades.where(:assignment_id => assignment.id).first.try(:point_total) || nil
   end

@@ -69,7 +69,7 @@ class Team < ActiveRecord::Base
   def average_points
     total_score = 0
     students.each do |student|
-      total_score += (student.assignment_scores_for_course(course) || 0 )
+      total_score += (student.cached_score_for_course(course) || 0 )
     end
     if member_count > 0
       average_points = total_score / member_count
