@@ -1,4 +1,5 @@
 class AssignmentExportPerformer < ResqueJob::Performer
+  require 'fileutils' # need this for mkdir_p
   include ModelAddons::ImprovedLogging # log errors with attributes
 
   def setup
@@ -33,7 +34,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
       # end
     else
       if logger
-        log_error_with_attributes "@assignment.present? or @students.present? failed and both should have been present, could not do_the_work"
+        log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
       end
     end
   end
@@ -195,7 +196,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def create_student_directories
     @students.each do |student|
       dir_path = student_directory_path(student)
-      Dir.mkdir(dir_path) # unless Dir.exist?(dir_path)
+      FileUtils.mkdir_p(dir_path) # unless Dir.exist?(dir_path)
     end
   end
 
