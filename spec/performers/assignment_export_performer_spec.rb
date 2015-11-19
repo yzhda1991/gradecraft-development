@@ -146,11 +146,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         end
 
         it "requires success" do
-          expect(subject).to receive(:require_success).exactly(4).times
+          expect(subject).to receive(:require_success).exactly(5).times
         end
 
         it "adds outcomes to subject.outcomes" do
-          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(4)
+          expect { subject.do_the_work }.to change { subject.outcomes.size }.by(5)
         end
 
         it "fetches the csv data" do
@@ -317,29 +317,38 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   end
 
   describe "formatted_filename_fragment" do
+    subject { performer.instance_eval { formatted_filename_fragment("ABCDEFGHIJKLMNOPQRSTUVWXYZ") }}
+
+    it "sanitizes the fragment" do
+      allow(performer).to receive(:sanitize_filename) { "this is a jocular output" } 
+      expect(performer).to receive(:sanitize_filename).with("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+      subject
+    end
+
+    it "truncates the final string to twenty five characters" do
+      expect(subject).to eq("abcdefghijklmnopqrstuvwxy")  
+    end
+  end
+
+  describe "sanitize_filename" do
     it "downcases everything" do
-      expect(performer.instance_eval { formatted_filename_fragment("THISISSUPERCAPPY") }).to \
+      expect(performer.instance_eval { sanitize_filename("THISISSUPERCAPPY") }).to \
         eq("thisissupercappy")
     end
 
     it "substitutes consecutive non-word characters with underscores" do
-      expect(performer.instance_eval { formatted_filename_fragment("whoa\\ gEORG  !!! IS ...dead") }).to \
+      expect(performer.instance_eval { sanitize_filename("whoa\\ gEORG  !!! IS ...dead") }).to \
         eq("whoa_georg_is_dead")
     end
 
     it "removes leading underscores" do
-      expect(performer.instance_eval { formatted_filename_fragment("____________garrett_rules") }).to \
+      expect(performer.instance_eval { sanitize_filename("____________garrett_rules") }).to \
         eq("garrett_rules")  
     end
 
     it "removes trailing underscores" do
-      expect(performer.instance_eval { formatted_filename_fragment("garrett_sucks__________") }).to \
+      expect(performer.instance_eval { sanitize_filename("garrett_sucks__________") }).to \
         eq("garrett_sucks")  
-    end
-
-    it "truncates the final string to twenty five characters" do
-      expect(performer.instance_eval { formatted_filename_fragment("abcdefghijklmnopqrstuvwxyz") }).to \
-        eq("abcdefghijklmnopqrstuvwxy")  
     end
   end
 
@@ -618,6 +627,45 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
+  describe "creating student submission text files" do
+    let(:student1) { double(:student, first_name: "edwina", last_name: "herman") }
+    let(:student2) { double(:student, first_name: "karen", last_name: "slotskova") }
+
+    describe "create_submission_text_files" do
+    end
+
+    describe "create_submission_text_file" do
+    end
+
+    describe "submission_text_file_path" do
+    end
+
+    describe "submission_text_filename", inspect:true do
+      before do
+        allow(performer).to receive(:formatted_assignment_name) { "the_day_the_earth_stood_still" }
+        performer.instance_variable_set(:@some_student, student1)
+      end
+
+      subject { performer.instance_eval { submission_text_filename(@some_student) }}
+
+      it "builds the filename" do
+        expect(subject).to eq("edwina_herman_the_day_the_earth_stood_still_submission_text.txt")
+      end
+
+      it "includes the student name" do
+        expect(subject).to include("edwina")
+      end
+
+      it "includes the filename" do
+        expect(subject).to include("herman")
+      end
+
+      it "includes the default_suffix" do
+        expect(subject).to include("submission_text.txt")
+      end
+    end
+  end
+
   describe "student directories" do
     let(:tmp_dir_path) { "/tmp/123-456-abc-xyz" }
     let(:student_doubles) { [ student_double1, student_double2 ] }
@@ -656,7 +704,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
-    describe "student_directories_created_successfully?", inspect: true do
+    describe "student_directories_created_successfully?" do
       subject { performer.instance_eval { student_directories_created_successfully? }}
 
       context "missing_student_directories is empty" do

@@ -29,7 +29,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
         student_directories_created_successfully?
       end
 
-      require_success(create_submission_text_messages) do
+      require_success(create_submission_text_file_messages) do
         create_submission_text_files
       end
 
@@ -113,14 +113,18 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def formatted_filename_fragment(fragment)
-    fragment
+    sanitize_filename(fragment).slice(0..24) # take only 25 characters
+  end
+
+  # mz todo: add specs
+  def sanitize_filename(filename)
+    filename
       .downcase
       .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
       .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
       .gsub(/\s+/, '_') # replace spaces with underscores
       .gsub(/^_+/, '') # remove leading underscores
       .gsub(/_+$/, '') # remove trailing underscores
-      .slice(0..24) # take only 25 characters
   end
 
   def fetch_course
@@ -235,7 +239,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   # @mz todo: add specs
-  def submission_text_file_name(student)
+  def submission_text_filename(student)
     [ student.first_name, student.last_name, formatted_assignment_name, "submission_text.txt" ].join("_")
   end
 
@@ -294,6 +298,12 @@ class AssignmentExportPerformer < ResqueJob::Performer
     })
   end
 
+  def create_submission_text_file_messages
+    expand_messages ({
+      success: "Successfully created all text files for the student submissions",
+      failure: "Student submission text files did not create properly"
+    })
+  end
 
   def message_suffix
     "for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
