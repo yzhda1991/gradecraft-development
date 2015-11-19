@@ -20,10 +20,6 @@ class Metric < ActiveRecord::Base
 
   scope :ordered, lambda { order(:order) }
 
-  def description_missing?
-    description.nil? or description.blank?
-  end
-
   def copy
     copy = self.dup
     copy.add_default_tiers = false
