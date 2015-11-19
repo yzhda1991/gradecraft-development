@@ -59,6 +59,7 @@
     :total_assignment_weight => 0,
     :twitter_handle => nil,
     :twitter_hashtag => nil,
+    :use_timeline => true,
     :user_term => nil,
     :year => Date.today.year,
   }

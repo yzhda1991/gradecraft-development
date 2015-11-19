@@ -38,6 +38,11 @@ describe Grade do
       expect(another_grade).to_not be_valid
       expect(another_grade.errors[:assignment_id]).to include "has already been taken"
     end
+
+    it "converts raw_score from human readable strings" do
+      subject.update(raw_score: "1,234")
+      expect(subject.raw_score).to eq(1234)
+    end
   end
 
   describe "when assignment is pass-fail" do
@@ -107,6 +112,17 @@ describe Grade do
       course = create(:course)
       assignment = create(:assignment, course: course)
       expect{Grade.find_or_create(assignment,student)}.to change{ Grade.count }.by(1)
+    end
+  end
+
+  describe "#add_grade_files" do
+    it "adds a file from upload" do
+      student = create(:user)
+      assignment = create(:assignment)
+      grade = create(:grade, student: student, assignment: assignment)
+      grade_file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
+      grade.add_grade_files(grade_file)
+      expect(grade.grade_files.count).to eq(1)
     end
   end
 end

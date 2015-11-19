@@ -127,14 +127,70 @@ describe GradesController do
     end
 
     describe "POST update" do
+
+      it "creates a grade if none present" do
+        assignment = create(:assignment, course: @course)
+        grade_params = { raw_score: 12345, assignment_id: assignment.id }
+        expect{post :update, { :assignment_id => assignment.id, :student_id => @student.id, :grade => grade_params}}.to change{Grade.count}.by(1)
+      end
+
       it "updates the grade" do
-        skip "implement"
-        params = { raw_score: 1000, assignment_id: @assignment.id }
-        post :update, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }, :grade => params
+        grade_params = { raw_score: 12345, assignment_id: @assignment.id }
+        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
         @grade.reload
         expect(response).to redirect_to(assignment_path(@grade.assignment))
-        expect(@grade.score).to eq(1000)
+        expect(@grade.score).to eq(12345)
       end
+
+      it "handles a grade file upload" do
+        grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')]}}}
+        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        expect(GradeFile.last.grade_id).to eq(@grade.id)
+      end
+
+      it "handles commas in raw score params" do
+        grade_params = { raw_score: "12,345", assignment_id: @assignment.id }
+        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        @grade.reload
+        expect(response).to redirect_to(assignment_path(@grade.assignment))
+        expect(@grade.score).to eq(12345)
+      end
+
+      it "handles reverting nil raw score" do
+        grade_params = { raw_score: nil, assignment_id: @assignment.id }
+        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        @grade.reload
+        expect(response).to redirect_to(assignment_path(@grade.assignment))
+        expect(@grade.score).to eq(nil)
+      end
+
+      it "reverts empty raw score to nil, not zero" do
+        grade_params = { raw_score: "", assignment_id: @assignment.id }
+        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        @grade.reload
+        expect(response).to redirect_to(assignment_path(@grade.assignment))
+        expect(@grade.score).to eq(nil)
+      end
+    end
+
+    describe "async_update" do
+
+    end
+
+    describe "earn_student_badge" do
+
+    end
+
+    describe "earn_student_badges" do
+
+    end
+
+    describe "delete_all_earned_badges" do
+
+    end
+
+    describe "delete_earned_badge" do
+
     end
 
     describe "PUT submit_rubric"do
