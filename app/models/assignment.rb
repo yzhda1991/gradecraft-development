@@ -199,11 +199,6 @@ class Assignment < ActiveRecord::Base
     grades.where(student_id: student).first
   end
 
-  # Checking to see if an assignment's due date is in the future
-  def future?
-    due_at != nil && due_at >= Time.now
-  end
-
   # Checking to see if the assignment has submissions that don't have grades
   def has_ungraded_submissions?
     has_submissions == true && submissions.try(:ungraded)
@@ -264,6 +259,10 @@ class Assignment < ActiveRecord::Base
     if self.assignment_score_levels.present?
       assignment_score_levels
     end
+  end
+
+  def future?
+    !due_at.nil? && due_at >= Time.now
   end
 
   def opened?

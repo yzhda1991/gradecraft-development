@@ -181,6 +181,23 @@ describe Assignment do
     end
   end
 
+  describe "#future?" do
+    it "is not for the future if there is no due date" do
+      subject.due_at= nil
+      expect(subject).to_not be_future
+    end
+
+    it "is not for the future if the due date is in the past" do
+      subject.due_at= 2.days.ago
+      expect(subject).to_not be_future
+    end
+
+    it "is for the future if the due date is in the future" do
+      subject.due_at= 2.days.from_now
+      expect(subject).to be_future
+    end
+  end
+
   describe "#opened?" do
     it "is opened if there is no open at date set" do
       subject.open_at = nil
@@ -198,7 +215,7 @@ describe Assignment do
     end
   end
 
-  describe "#overdue" do
+  describe "#overdue?" do
     it "is not overdue if there is no due date" do
       subject.due_at= nil
       expect(subject).to_not be_overdue
