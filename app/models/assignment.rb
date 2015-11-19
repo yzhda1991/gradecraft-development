@@ -199,11 +199,6 @@ class Assignment < ActiveRecord::Base
     grades.where(student_id: student).first
   end
 
-  # Checking to see if an assignment's due date is past
-  def past?
-    due_at != nil && due_at < Time.now
-  end
-
   # Checking to see if an assignment's due date is in the future
   def future?
     due_at != nil && due_at >= Time.now
@@ -276,7 +271,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def overdue?
-    !due_at.nil? && due_at <= Time.now
+    !due_at.nil? && due_at < Time.now
   end
 
   def accepting_submissions?

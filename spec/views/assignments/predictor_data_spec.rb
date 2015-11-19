@@ -85,7 +85,7 @@ describe "assignments/predictor_data" do
     end
 
     it "adds is_late to model" do
-      allow(@assignment).to receive(:past?).and_return(true)
+      allow(@assignment).to receive(:overdue?).and_return(true)
       @assignment.update(accepts_submissions: true)
       render
       json = JSON.parse(response.body)

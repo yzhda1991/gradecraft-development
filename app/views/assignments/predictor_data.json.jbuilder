@@ -11,7 +11,7 @@ json.assignments @assignments do |assignment|
   # boolean states for icons
   json.is_required assignment.required
   json.has_info ! assignment.description.blank?
-  json.is_late assignment.past? && assignment.accepts_submissions && ! @student.submission_for_assignment(assignment).present? ? true : false
+  json.is_late assignment.overdue? && assignment.accepts_submissions && ! @student.submission_for_assignment(assignment).present? ? true : false
   json.is_earned_by_group assignment.grade_scope == "Group"
 
   json.is_locked ! assignment.is_unlocked_for_student?(@student)
