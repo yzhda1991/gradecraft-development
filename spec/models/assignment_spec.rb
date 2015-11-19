@@ -317,6 +317,21 @@ describe Assignment do
     end
   end
 
+  describe "#submission_rate" do
+    let(:course) { double(:course, graded_student_count: 10) }
+    let(:submissions) { double(:submissions, count: 4) }
+    before { allow(subject).to receive(:submissions).and_return submissions }
+
+    it "calculates the number of submissions divided by the number of students in the course" do
+      expect(subject.submission_rate(course)).to eq 40
+    end
+
+    it "handles if there are no graded students" do
+      allow(course).to receive(:graded_student_count).and_return 0
+      expect(subject.submission_rate(course)).to be_zero
+    end
+  end
+
   describe "#opened?" do
     it "is opened if there is no open at date set" do
       subject.open_at = nil
