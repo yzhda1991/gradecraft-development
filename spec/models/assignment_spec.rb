@@ -36,12 +36,9 @@ describe Assignment do
     end
 
     it "returns the number of unique scores for each grade" do
-      subject.grades.create student_id: create(:user).id, raw_score: 85,
-        status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 85,
-        status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 105,
-        status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 105, status: "Graded"
       expect(subject.earned_score_count).to eq({ 85 => 2, 105 => 1 })
     end
   end
@@ -50,14 +47,12 @@ describe Assignment do
     before { subject.save }
 
     it "returns the earned scores with a scores key" do
-      subject.grades.create student_id: create(:user).id, raw_score: 85,
-        status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 85,
-        status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 105,
-        status: "Graded"
-      expect(subject.percentage_score_earned).to \
-        eq({ scores: [{ data: 1, name: 105 }, { data: 2, name: 85 }]})
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 105, status: "Graded"
+      scores = subject.percentage_score_earned[:scores]
+      expect(scores).to include({ data: 1, name: 105 })
+      expect(scores).to include({ data: 2, name: 85 })
     end
   end
 
