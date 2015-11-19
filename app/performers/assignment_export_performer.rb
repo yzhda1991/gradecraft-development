@@ -29,6 +29,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
         student_directories_created_successfully?
       end
 
+      require_success(create_submission_text_messages) do
+        create_submission_text_files
+      end
+
       # require_sucess(start_archive_messages) do
       #  start_archive_process
       # end
@@ -161,6 +165,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @export_csv_successful ||= File.exist?(csv_file_path)
   end
 
+  # final archive concerns
+
   # create a separate tmp dir for storing the final generated archive
   def archive_tmp_dir
     @archive_tmp_dir ||= Dir.mktmpdir
@@ -196,12 +202,41 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def create_student_directories
     @students.each do |student|
       dir_path = student_directory_path(student)
-      FileUtils.mkdir_p(dir_path) # unless Dir.exist?(dir_path)
+      FileUtils.mkdir_p(dir_path) # unless Dir.exist?(dir_path) # create directory with parents
     end
   end
 
   def student_directory_path(student)
     File.expand_path(student.formatted_key_name, tmp_dir)
+  end
+
+  # @mz todo: add specs
+  def create_submission_text_files
+    # this is the block that determines whether or not a file needs to be built with the text link etc
+    @submissions.each do |submission|
+      if submission.text_comment.present? or submission.link.present? # write the text file for the submission into the student export directory
+        create_submission_text_file(submission)
+      end
+    end
+  end
+
+  # @mz todo: add specs
+  def create_submission_text_file(submission)
+    open(submission_text_file_path(submission.student), 'w') do |f|
+      f.puts "Submission items from #{student.last_name}, #{student.first_name}\n"
+      f.puts "\ntext comment: #{submission.text_comment}\n" if submission.text_comment.present?
+      f.puts "\nlink: #{submission.link }\n" if submission.link.present?
+    end
+  end
+
+  # @mz todo: add specs
+  def submission_text_file_path(student)
+    File.expand_path(submission_text_file_name(student), student_directory_path(student))
+  end
+
+  # @mz todo: add specs
+  def submission_text_file_name(student)
+    [ student.first_name, student.last_name, formatted_assignment_name, "submission_text.txt" ].join("_")
   end
 
   private
@@ -254,8 +289,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def check_student_directory_messages
     expand_messages ({
-      success: "Successfully created the student directories",
-      failure: "Failed to create student directories"
+      success: "Successfully confirmed creation of all student directories",
+      failure: "Some student directories did not create properly"
     })
   end
 
