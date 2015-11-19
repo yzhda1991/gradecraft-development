@@ -2,8 +2,6 @@ class ChallengeGrade < ActiveRecord::Base
 
   attr_accessible :name, :score, :challenge_id, :text_feedback, :status, :team_id, :final_score, :status, :team, :challenge
 
-  attr_accessor :graded_points
-
   belongs_to :course
   belongs_to :challenge
   belongs_to :team, :autosave => true
