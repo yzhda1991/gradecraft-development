@@ -27,6 +27,40 @@ describe Assignment do
     end
   end
 
+  describe "#earned_score_count" do
+    before { subject.save }
+
+    it "returns only graded or released grades" do
+      subject.grades.create student_id: create(:user).id
+      expect(subject.earned_score_count).to be_empty
+    end
+
+    it "returns the number of unique scores for each grade" do
+      subject.grades.create student_id: create(:user).id, raw_score: 85,
+        status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85,
+        status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 105,
+        status: "Graded"
+      expect(subject.earned_score_count).to eq({ 85 => 2, 105 => 1 })
+    end
+  end
+
+  describe "#percentage_score_earned" do
+    before { subject.save }
+
+    it "returns the earned scores with a scores key" do
+      subject.grades.create student_id: create(:user).id, raw_score: 85,
+        status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 85,
+        status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 105,
+        status: "Graded"
+      expect(subject.percentage_score_earned).to \
+        eq({ scores: [{ data: 1, name: 105 }, { data: 2, name: 85 }]})
+    end
+  end
+
   describe "pass-fail assignments" do
     it "sets point total to zero on save" do
       subject.point_total = 3000

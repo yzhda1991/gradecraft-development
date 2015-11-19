@@ -366,28 +366,14 @@ class Assignment < ActiveRecord::Base
 
   # Calculating how many of each score exists
   def earned_score_count
-    Hash[grades.graded_or_released.group_by{ |g| g.raw_score }.map{ |k, v| [k, v.size ] }]
-  end
-
-  def earned_scores
-    scores = []
-    earned_score_count.each do |score|
-      scores << { :data => score[1], :name => score[0] }
-    end
-    return {
-      :scores => scores
-    }
+    grades.graded_or_released
+      .group_by { |g| g.raw_score }
+      .map { |score, grade| [score, grade.size ] }.to_h
   end
 
   # Creating an array with the set of scores earned on the assignment, and
   def percentage_score_earned
-    scores = []
-    earned_score_count.each do |score|
-      scores << { :data => score[1], :name => score[0] }
-    end
-    return {
-      :scores => scores
-    }
+    { scores: earned_score_count.collect { |s| { data: s[1], name: s[0] }}}
   end
 
   private
