@@ -286,6 +286,14 @@ describe Assignment do
     end
   end
 
+  describe "#predicted_count" do
+    it "returns the number of grades that are predicted to have a score greater than zero" do
+      grades = double(:grades, predicted_to_be_done: 43.times.to_a)
+      allow(subject).to receive(:grades).and_return grades
+      expect(subject.predicted_count).to eq 43
+    end
+  end
+
   describe "#select?" do
     it "is select if the predictor display is select list" do
       subject.points_predictor_display = "Select List"
