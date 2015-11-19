@@ -19,14 +19,6 @@ class GradesController < ApplicationController
       @rubric_grades = serialized_rubric_grades
     end
 
-    fetch_grades_based_on_group
-    render :show, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
-                                              view_context: view_context })
-  end
-
-  private
-
-  def fetch_grades_based_on_group
     if @assignment.has_groups?
       @group = current_course.groups.find(params[:group_id])
       @title = "#{@group.name}'s Grade for #{ @assignment.name }"
@@ -35,9 +27,10 @@ class GradesController < ApplicationController
       @title = "#{current_student.name}'s Grade for #{ @assignment.name }"
       @grades_for_assignment = @assignment.grades_for_assignment(current_student)
     end
-  end
 
-  public
+    render :show, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+                                              view_context: view_context })
+  end
 
   # GET /assignments/:assignment_id/grade/edit?student_id=:id
   def edit
@@ -62,50 +55,38 @@ class GradesController < ApplicationController
     @serialized_init_data = serialized_init_data
   end
 
-  private
+  # To avoid duplicate grades, we don't supply a create method. Update will
+  # create a new grade if none exists, and otherwise update the existing grade
+  # PUT /assignments/:assignment_id/grade
+  def update
+    @grade = Grade.find_or_create(@assignment,current_student)
 
-  def temp_view_context
-    @temp_view_context ||= ApplicationController.new.view_context
-  end
+    # extract file attributes from grade params
+    if params[:grade][:grade_files_attributes].present?
+      @grade.add_grade_files(*(params[:grade][:grade_files_attributes]["0"]["file"]))
+      params[:grade].delete :grade_files_attributes
+    end
 
-  def serialized_init_data
-    JbuilderTemplate.new(temp_view_context).encode do |json|
-      json.grade do
-        json.partial! "grades/grade", grade: @grade, assignment: @assignment
+    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
+
+      # @mz TODO: ADD SPECS
+      if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
+        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        @grade_updater_job.enqueue
       end
 
-      json.badges do
-        json.partial! "grades/badges", badges: @badges, student_id: @student[:id]
+      if session[:return_to].present?
+        redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
+      else
+        redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
       end
 
-      json.assignment do
-        json.partial! "grades/assignment", assignment: @assignment
-      end
-
-      json.assignment_score_levels do
-        json.partial! "grades/assignment_score_levels", assignment_score_levels: @assignment_score_levels
-      end
-    end.to_json
+    else # failure
+      redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
+    end
   end
 
-  def serialized_rubric_grades
-    ActiveModel::ArraySerializer.new(fetch_rubric_grades, each_serializer: ExistingRubricGradesSerializer).to_json
-  end
-
-  def fetch_rubric_grades
-    RubricGrade.where(fetch_rubric_grades_params)
-  end
-
-  def fetch_rubric_grades_params
-    { student_id: params[:student_id], assignment_id: params[:assignment_id], metric_id: existing_metric_ids }
-  end
-
-  def existing_metric_ids
-    rubric_metrics_with_tiers.collect {|metric| metric[:id] }
-  end
-
-  public
-
+  # PUT /grades/:id/async_update
   def async_update
     Grade
       .where(id: params[:id])
@@ -199,65 +180,6 @@ class GradesController < ApplicationController
       status: params[:status],
       updated_at: Time.now
     }
-  end
-
-  public
-
-  # To avoid duplicate grades, we don't supply a create method. Update will
-  # create a new grade if none exists, and otherwise update the existing grade
-  def update
-    redirect_to @assignment and return unless current_student.present?
-    extract_file_attributes_from_grade_params
-    @grade = current_student.grade_for_assignment(@assignment)
-
-    if @grade_files
-      add_grade_files_to_grade
-    end
-
-    sanitize_grade_params
-
-    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
-      # @mz TODO: ADD SPECS
-      if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
-        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        @grade_updater_job.enqueue
-      end
-
-      update_success_redirect
-    else
-      update_failure_redirect
-    end
-  end
-
-  private
-
-  def sanitize_grade_params
-    params[:grade][:raw_score] = params[:grade][:raw_score].gsub(/\D/,"").to_i rescue nil
-  end
-
-  def update_failure_redirect
-    redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
-  end
-
-  def update_success_redirect
-    if session[:return_to].present?
-      redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-    else
-      redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-    end
-  end
-
-  def add_grade_files_to_grade
-    @grade_files.each do |gf|
-      @grade.grade_files.new(file: gf, filename: gf.original_filename[0..49])
-    end
-  end
-
-  def extract_file_attributes_from_grade_params
-    if params[:grade][:grade_files_attributes].present?
-      @grade_files = params[:grade][:grade_files_attributes]["0"]["file"]
-      params[:grade].delete :grade_files_attributes
-    end
   end
 
   public
@@ -681,6 +603,39 @@ class GradesController < ApplicationController
   end
 
   private
+
+  def temp_view_context
+    @temp_view_context ||= ApplicationController.new.view_context
+  end
+
+  def serialized_init_data
+    JbuilderTemplate.new(temp_view_context).encode do |json|
+      json.grade do
+        json.partial! "grades/grade", grade: @grade, assignment: @assignment
+      end
+
+      json.badges do
+        json.partial! "grades/badges", badges: @badges, student_id: @student[:id]
+      end
+
+      json.assignment do
+        json.partial! "grades/assignment", assignment: @assignment
+      end
+
+      json.assignment_score_levels do
+        json.partial! "grades/assignment_score_levels", assignment_score_levels: @assignment_score_levels
+      end
+    end.to_json
+  end
+
+  def serialized_rubric_grades
+    RubricGrade.where({ student_id: params[:student_id],
+                        assignment_id: params[:assignment_id],
+                        metric_id: rubric_metrics_with_tiers.collect {|metric| metric[:id] } }).
+                select(:id, :metric_id, :tier_id, :comments).to_json
+  end
+
+  #----------- jg: Specs to here -----------------------------------------------#
 
   def new_grade_from_rubric_grades_attributes
     {

@@ -67,6 +67,12 @@ class Grade < ActiveRecord::Base
     Grade.where(student_id: student.id, assignment_id: assignment.id).first || Grade.create(student_id: student.id, assignment_id: assignment.id)
   end
 
+  def add_grade_files(*files)
+    files.each do |f|
+      grade_files << GradeFile.create(file: f, filename: f.original_filename[0..49])
+    end
+  end
+
   def feedback_read!
     update_attributes feedback_read: true, feedback_read_at: DateTime.now
   end
@@ -81,6 +87,14 @@ class Grade < ActiveRecord::Base
 
   def in_progress?
     self.status == 'In Progress'
+  end
+
+  # Handle raw score attributes with commas (ex "300,000")
+  def raw_score=(rs)
+    if rs.class == String
+      rs.gsub!(",","").to_i
+    end
+    write_attribute(:raw_score,rs)
   end
 
   def score
