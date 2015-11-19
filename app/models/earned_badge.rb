@@ -31,18 +31,6 @@ class EarnedBadge < ActiveRecord::Base
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :student_visible, -> { where(student_visible: true) }
 
-  def self.duplicate_grade_badge_pairs
-    EarnedBadge.where("badge_id is not null and grade_id is not null").group(:grade_id,:badge_id).select(:grade_id,:badge_id).having("count(*)>1")
-  end
-
-  def self.delete_duplicate_grade_badge_pairs
-    EarnedBadge.duplicate_grade_badge_pairs.each do |group|
-      all_ids = EarnedBadge.select(:id).where(badge_id: group[:badge_id], grade_id: group[:grade_id]).collect(&:id)
-      all_ids.shift
-      EarnedBadge.destroy_all(id: all_ids)
-    end
-  end
-
   def check_unlockables
     if self.badge.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition => self.badge).each do |condition|
