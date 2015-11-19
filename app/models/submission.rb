@@ -1,7 +1,7 @@
 class Submission < ActiveRecord::Base
-  attr_accessible :task, :task_id, :assignment, :assignment_id, :assignment_type_id, :comment,
-    :feedback, :group, :group_id, :attachment, :link, :student, :student_id,
-    :creator, :creator_id, :text_feedback, :text_comment, :graded, :submission_file, :submission_files_attributes, :submission_files,
+  attr_accessible :task, :task_id, :assignment, :assignment_id, :assignment_type_id,
+    :group, :group_id, :link, :student, :student_id, :creator, :creator_id, 
+    :text_comment, :graded, :submission_file, :submission_files_attributes, :submission_files,
     :course_id, :submission_file_ids, :updated_at
 
   include Canable::Ables
@@ -71,15 +71,6 @@ class Submission < ActiveRecord::Base
       student_id == user.id
     elsif assignment.has_groups?
       group_id == user.group_for_assignment(assignment).id
-    end
-  end
-
-  #Grading status
-  def status
-    if grade
-      "Graded"
-    else
-      "Ungraded"
     end
   end
 

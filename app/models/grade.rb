@@ -10,9 +10,6 @@ class Grade < ActiveRecord::Base
                   :feedback_read, :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at,
                   :is_custom_value
 
-  # grade points available to the predictor from the assignment controller
-  attr_accessor :graded_points, :graded_pass_fail_status
-
   STATUSES= ["In Progress", "Graded", "Released"]
 
   # Note Pass and Fail use term_for in the views
@@ -65,23 +62,6 @@ class Grade < ActiveRecord::Base
   scope :student_visible, -> { joins(:assignment).where(student_visible_sql) }
 
   #validates_numericality_of :raw_score, integer_only: true
-
-  def self.score
-    pluck('COALESCE(SUM(grades.score), 0)').first
-  end
-
-  def self.predicted_points
-    #Only return back the total predicted points for a user, not including points they have been scored on
-    scoped.not_released.pluck('COALESCE(SUM(grades.predicted_score), 0)').first
-  end
-
-  def self.assignment_scores
-    pluck('grades.assignment_id, grades.score')
-  end
-
-  def self.assignment_type_scores
-    group('grades.assignment_type_id').pluck('grades.assignment_type_id, COALESCE(SUM(grades.score), 0)')
-  end
 
   def self.find_or_create(assignment,student)
     Grade.where(student_id: student.id, assignment_id: assignment.id).first || Grade.create(student_id: student.id, assignment_id: assignment.id)
@@ -139,19 +119,6 @@ class Grade < ActiveRecord::Base
     self.status == "Graded" || self.status == "Released"
   end
   alias_method :graded_or_released?, :status_is_graded_or_released?
-
-  #Canable Permissions
-  def updatable_by?(user)
-    creator == user
-  end
-
-  def creatable_by?(user)
-    student_id == user.id
-  end
-
-  def viewable_by?(user)
-    student_id == user.id
-  end
 
   # @mz todo: port this over to cache_team_and_student_scores once
   # related methods have tests
