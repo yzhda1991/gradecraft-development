@@ -26,15 +26,6 @@ class AssignmentType < ActiveRecord::Base
     assignment_weights.where(student: student).weight
   end
 
-  def has_predictable_assignments?
-    assignments.any?(&:include_in_predictor?)
-  end
-
-  #Powers the To Do list, checks if there are assignments within the next week (soon is a scope in the Assignment model)
-  def has_soon_assignments?
-    assignments.any?(&:soon?)
-  end
-
   def is_capped?
     max_points.present?
   end
