@@ -183,18 +183,35 @@ describe Assignment do
 
   describe "#future?" do
     it "is not for the future if there is no due date" do
-      subject.due_at= nil
+      subject.due_at = nil
       expect(subject).to_not be_future
     end
 
     it "is not for the future if the due date is in the past" do
-      subject.due_at= 2.days.ago
+      subject.due_at = 2.days.ago
       expect(subject).to_not be_future
     end
 
     it "is for the future if the due date is in the future" do
-      subject.due_at= 2.days.from_now
+      subject.due_at = 2.days.from_now
       expect(subject).to be_future
+    end
+  end
+
+  describe "#soon?" do
+    it "is not soon if there is no due date" do
+      subject.due_at = nil
+      expect(subject).to_not be_soon
+    end
+
+    it "is not soon if the due date is too far in the future" do
+      subject.due_at = 8.days.from_now
+      expect(subject).to_not be_soon
+    end
+
+    it "is soon if the due date is within 7 days from now" do
+      subject.due_at = 2.days.from_now
+      expect(subject).to be_soon
     end
   end
 
@@ -217,17 +234,17 @@ describe Assignment do
 
   describe "#overdue?" do
     it "is not overdue if there is no due date" do
-      subject.due_at= nil
+      subject.due_at = nil
       expect(subject).to_not be_overdue
     end
 
     it "is not overdue if the due date is in the future" do
-      subject.due_at= 2.days.from_now
+      subject.due_at = 2.days.from_now
       expect(subject).to_not be_overdue
     end
 
     it "is overdue if the due date has past" do
-      subject.due_at= 2.days.ago
+      subject.due_at = 2.days.ago
       expect(subject).to be_overdue
     end
   end

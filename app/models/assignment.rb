@@ -206,9 +206,7 @@ class Assignment < ActiveRecord::Base
 
   # Checking to see if an assignment is due soon
   def soon?
-    if due_at?
-      Time.now <= due_at && due_at < (Time.now + 7.days)
-    end
+    future? && due_at < 7.days.from_now
   end
 
   # Setting the grade predictor displays
