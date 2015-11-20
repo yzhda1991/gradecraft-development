@@ -34,7 +34,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
       end
 
       # require_sucess(start_archive_messages) do
-      #  start_archive_process
+      #   start_archive_process
       # end
     else
       if logger
@@ -226,7 +226,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   # @mz todo: add specs
   def create_submission_text_file(submission)
     open(submission_text_file_path(submission.student), 'w') do |f|
-      f.puts "Submission items from #{student.last_name}, #{student.first_name}\n"
+      f.puts "Submission items from #{submission.student.last_name}, #{submission.student.first_name}\n"
       f.puts "\ntext comment: #{submission.text_comment}\n" if submission.text_comment.present?
       f.puts "\nlink: #{submission.link }\n" if submission.link.present?
     end
@@ -237,12 +237,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
     File.expand_path(submission_text_file_name(student), student_directory_path(student))
   end
 
-  # @mz todo: add specs
   def submission_text_filename(student)
     [ formatted_student_name(student), formatted_assignment_name, "submission_text.txt" ].join("_")
   end
 
-  # @mz todo: add specs
   def formatted_student_name(student)
     sanitize_filename("#{student.first_name}_#{student.last_name}")
   end
