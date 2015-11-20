@@ -23,7 +23,7 @@ class Assignment < ActiveRecord::Base
   has_one :rubric, dependent: :destroy
 
   # For instances where the assignment needs its own unique score levels
-  score_levels :assignment_score_levels, -> { order "value" }, :dependent => :destroy
+  score_levels :assignment_score_levels, -> { order "value" }, dependent: :destroy
 
   # This is the assignment weighting system (students decide how much assignments will be worth for them)
   has_many :weights, class_name: "AssignmentWeight", dependent: :destroy
@@ -96,12 +96,9 @@ class Assignment < ActiveRecord::Base
 
   # Used for calculating scores in the analytics tab in Assignments# show
   def grades_for_assignment(student)
-    user_score = grades.where(:student_id => student.id).first.try(:raw_score)
-    scores = grades.graded_or_released.pluck('raw_score')
-    return {
-    :scores => scores,
-    :user_score => user_score
-   }
+    { scores: grades.graded_or_released.pluck(:raw_score),
+      user_score: grades.where(student_id: student.id).first.try(:raw_score)
+    }
   end
 
   def all_grades_for_assignment
