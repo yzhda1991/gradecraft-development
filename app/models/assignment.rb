@@ -74,9 +74,6 @@ class Assignment < ActiveRecord::Base
   # Filtering Assignments by various date properties
   scope :with_dates, -> { where('assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL') }
 
-  # Assignments and Grading
-  scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
-
   default_scope { order('position ASC') }
 
   delegate :student_weightable?, to: :assignment_type
@@ -98,10 +95,6 @@ class Assignment < ActiveRecord::Base
     super.presence || 0
   end
 
-  def self.point_total_for_student(student)
-    weighted_for_student(student).pluck('SUM(COALESCE(assignment_weights.point_total, self.course.total_points))').first || 0
-  end
-
   # Used for calculating scores in the analytics tab in Assignments# show
   def grades_for_assignment(student)
     user_score = grades.where(:student_id => student.id).first.try(:raw_score)
@@ -113,39 +106,33 @@ class Assignment < ActiveRecord::Base
   end
 
   def all_grades_for_assignment
-    scores = grades.graded_or_released.pluck('raw_score')
-    return {
-    :scores => scores
-   }
+    { scores: grades.graded_or_released.pluck(:raw_score) }
   end
 
   # Basic result stats - high, low, average, median
   def high_score
-    grades.graded_or_released.maximum('grades.raw_score')
+    grades.graded_or_released.maximum(:raw_score)
   end
 
   def low_score
-    grades.graded_or_released.minimum('grades.raw_score')
+    grades.graded_or_released.minimum(:raw_score)
   end
 
   # Average of all grades for an assignment
   def average
-    grades.graded_or_released.average('grades.raw_score').to_i if grades.graded_or_released.present?
+    grades.graded_or_released.average(:raw_score).to_i \
+      if grades.graded_or_released.present?
   end
 
   # Average of above-zero grades for an assignment
   def earned_average
-    if grades.graded_or_released.present?
-      grades.graded_or_released.where("score > 0").average('score').to_i
-    else
-      0
-    end
+    grades.graded_or_released.where("score > 0").average(:score).to_i
   end
 
   def median
-    sorted_grades = grades.graded_or_released.pluck('score').sort
-    len = sorted_grades.length
-    return (sorted_grades[(len - 1) / 2] + sorted_grades[len / 2]) / 2
+    sorted = grades.graded_or_released.pluck(:score).sort
+    return 0 if sorted.empty?
+    (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
   end
 
   def has_rubric?

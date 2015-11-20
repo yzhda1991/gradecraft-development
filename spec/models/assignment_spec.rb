@@ -48,6 +48,43 @@ describe Assignment do
     end
   end
 
+  describe "#all_grades_for_assignment" do
+    before { subject.save }
+
+    it "returns a hash of raw graded scores" do
+      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      expect(subject.all_grades_for_assignment).to eq({ scores: [85]})
+    end
+  end
+
+  describe "#average" do
+    before { subject.save }
+
+    it "returns the average raw score for a graded grade" do
+      subject.grades.create student_id: create(:user).id, raw_score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 5, status: "Graded"
+      expect(subject.average).to eq 6
+    end
+
+    it "returns nil if there are no grades" do
+      expect(subject.average).to be_nil
+    end
+  end
+
+  describe "#earned_average" do
+    before { subject.save }
+
+    it "returns the average score for a graded grade" do
+      subject.grades.create student_id: create(:user).id, raw_score: 8, score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 5, score: 8, status: "Graded"
+      expect(subject.earned_average).to eq 6
+    end
+
+    it "returns 0 if there are no grades" do
+      expect(subject.earned_average).to be_zero
+    end
+  end
+
   describe "#earned_score_count" do
     before { subject.save }
 
@@ -61,6 +98,20 @@ describe Assignment do
       subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
       subject.grades.create student_id: create(:user).id, raw_score: 105, status: "Graded"
       expect(subject.earned_score_count).to eq({ 85 => 2, 105 => 1 })
+    end
+  end
+
+  describe "#median" do
+    before { subject.save }
+
+    it "returns the median score for a graded grade" do
+      subject.grades.create student_id: create(:user).id, raw_score: 8, score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 5, score: 8, status: "Graded"
+      expect(subject.median).to eq 6
+    end
+
+    it "returns 0 if there are no grades" do
+      expect(subject.median).to be_zero
     end
   end
 
@@ -324,6 +375,16 @@ describe Assignment do
     end
   end
 
+  describe "#high_score" do
+    before { subject.save }
+
+    it "returns the maximum raw score for a graded grade" do
+      subject.grades.create student_id: create(:user).id, raw_score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 5, status: "Graded"
+      expect(subject.high_score).to eq 8
+    end
+  end
+
   describe "#is_predicted_by_student?" do
     let(:student) { create :user }
     before { subject.save }
@@ -335,6 +396,16 @@ describe Assignment do
 
     it "returns false if there are no grades for the student" do
       expect(subject.is_predicted_by_student?(student)).to eq false
+    end
+  end
+
+  describe "#low_score" do
+    before { subject.save }
+
+    it "returns the minimum raw score for a graded grade" do
+      subject.grades.create student_id: create(:user).id, raw_score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_score: 5, status: "Graded"
+      expect(subject.low_score).to eq 5
     end
   end
 
