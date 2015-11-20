@@ -1,13 +1,10 @@
 class AssignmentScoreLevel < ActiveRecord::Base
+  include ScoreLevel
+
   belongs_to :assignment
-
-  attr_accessible :name, :value, :assignment_id
-
-  validates_presence_of :value, :name
+  attr_accessible :assignment_id
 
   validates_associated :assignment
-
-  scope :order_by_value, -> { order 'value DESC' }
 
   #Displaying the name and the point value together in grading lists
   def formatted_name
@@ -17,5 +14,4 @@ class AssignmentScoreLevel < ActiveRecord::Base
   def copy
     self.dup
   end
-
 end

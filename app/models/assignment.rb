@@ -1,4 +1,5 @@
 class Assignment < ActiveRecord::Base
+  include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails
   include UnlockableCondition
@@ -22,9 +23,7 @@ class Assignment < ActiveRecord::Base
   has_one :rubric, dependent: :destroy
 
   # For instances where the assignment needs its own unique score levels
-  has_many :assignment_score_levels, -> { order "value" }, :dependent => :destroy
-  accepts_nested_attributes_for :assignment_score_levels, allow_destroy: true,
-    reject_if: proc { |a| a['value'].blank? || a['name'].blank? }
+  score_levels :assignment_score_levels, -> { order "value" }, :dependent => :destroy
 
   # This is the assignment weighting system (students decide how much assignments will be worth for them)
   has_many :weights, class_name: "AssignmentWeight", dependent: :destroy

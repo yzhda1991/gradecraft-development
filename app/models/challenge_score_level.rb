@@ -1,13 +1,10 @@
 class ChallengeScoreLevel < ActiveRecord::Base
+  include ScoreLevel
+
   belongs_to :challenge
-
-  attr_accessible :name, :value, :challenge_id
-
-  validates_presence_of :value, :name
-  scope :order_by_value, -> { order 'value DESC' }
+  attr_accessible :challenge_id
 
   def formatted_name
     "#{name} - #{value} points"
   end
-
 end
