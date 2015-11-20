@@ -35,7 +35,7 @@ describe "assignments/individual/_table_body" do
           allow(@grade).to receive(:present?) {true}
           allow(@grade).to receive(:instructor_modified) {true}
           render
-          assert_select "td.status-or-score", text: "#{@grade.raw_score}"
+          assert_select "td.status-or-score", text: "#{points @grade.raw_score}"
         end
       end
 
@@ -45,7 +45,7 @@ describe "assignments/individual/_table_body" do
           allow(@grade).to receive(:present?) {false}
           allow(@grade).to receive(:instructor_modified) {true}
           render
-          assert_select "td.status-or-score", text: "#{@grade.raw_score}"
+          assert_select "td.status-or-score", text: "#{points @grade.raw_score}"
         end
       end
 
@@ -55,7 +55,7 @@ describe "assignments/individual/_table_body" do
           allow(@grade).to receive(:present?) {true}
           allow(@grade).to receive(:instructor_modified) {false}
           render
-          assert_select "td.status-or-score", text: "#{@grade.raw_score}"
+          assert_select "td.status-or-score", text: "#{points @grade.raw_score}"
         end
       end
     end
