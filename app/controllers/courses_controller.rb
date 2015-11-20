@@ -8,10 +8,8 @@ class CoursesController < ApplicationController
     @courses = Course.all
     respond_to do |format|
       format.html { }
-      format.json do
-        json = @courses.map { |c| { id: c.id, name: c.name } }
-        render json: MultiJson.dump(json)
-      end
+      format.json { render json: @courses.to_json(only: [:id, :name, :courseno,
+                                                         :year, :semester]) }
     end
   end
 
@@ -107,7 +105,7 @@ class CoursesController < ApplicationController
     respond_to do |format|
       if new_course.save
         if ! current_user_is_admin?
-          new_course.course_memberships.create(:user_id => current_user.id, 
+          new_course.course_memberships.create(:user_id => current_user.id,
                                                 :role => current_user.role(current_course))
         end
         session[:course_id] = new_course.id
