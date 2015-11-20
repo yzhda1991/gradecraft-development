@@ -25,6 +25,27 @@ describe Assignment do
       expect(subject).to_not be_valid
       expect(subject.errors[:course_id]).to include "can't be blank"
     end
+
+    it "is invalid if it is due before it is open" do
+      subject.due_at = 2.days.from_now
+      subject.open_at = 3.days.from_now
+      expect(subject).to_not be_valid
+      expect(subject.errors[:base]).to include "Due date must be after open date."
+    end
+
+    it "is invalid if accepting submissions before it is open" do
+      subject.open_at = 2.days.from_now
+      subject.accepts_submissions_until = 1.day.from_now
+      expect(subject).to_not be_valid
+      expect(subject.errors[:base]).to include "Submission accept date must be after open date."
+    end
+
+    it "is invalid accepting submissions before it is due" do
+      subject.due_at = 2.days.from_now
+      subject.accepts_submissions_until = 1.day.from_now
+      expect(subject).to_not be_valid
+      expect(subject.errors[:base]).to include "Submission accept date must be after due date."
+    end
   end
 
   describe "#earned_score_count" do
