@@ -226,9 +226,15 @@ class AssignmentExportPerformer < ResqueJob::Performer
   # @mz todo: add specs
   def create_submission_text_file(submission)
     open(submission_text_file_path(submission.student), 'w') do |f|
-      f.puts "Submission items from #{submission.student.last_name}, #{submission.student.first_name}\n"
-      f.puts "\ntext comment: #{submission.text_comment}\n" if submission.text_comment.present?
-      f.puts "\nlink: #{submission.link }\n" if submission.link.present?
+      f.puts "Submission items from #{submission.student.last_name}, #{submission.student.first_name}"
+
+      if submission.text_comment.present?
+        f.puts "\ntext comment: #{submission.text_comment}"
+      end
+
+      if submission.link.present?
+        f.puts "\nlink: #{submission.link}"
+      end
     end
   end
 

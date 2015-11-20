@@ -632,6 +632,9 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     let(:student2) { double(:student, first_name: "karen", last_name: "slotskova") }
     let(:submission1) { double(:submission, text_comment: "This was tough.", link: "http://greatjob.com", student: student1) }
     let(:mkdir) { FileUtils.mkdir_p("/tmp/great_files") unless Dir.exist?("/tmp/great_files") }
+    let(:text_file) { File.readlines(text_file_path) }
+    let(:text_file_output) { puts "BEGIN TEXT FILE OUTPUT"; File.readlines(text_file_path).each {|line| puts line }}
+    let(:delete_text_file) { File.delete(text_file_path) if File.exist?(text_file_path) }
 
     before { mkdir }
     before(:each) { performer.instance_variable_set(:@some_student, student1) }
@@ -639,7 +642,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     describe "create_submission_text_files" do
     end
 
-    describe "create_submission_text_file" do
+    describe "create_submission_text_file", inspect: true do
       subject { performer.instance_eval { create_submission_text_file(@some_submission) }}
       let(:text_file_path) { "/tmp/great_files/submission_path.txt" }
 
@@ -648,38 +651,69 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         allow(performer).to receive(:submission_text_file_path) { text_file_path }
       end
 
-      it "creates a file at the text file path", inspect: true do
+      it "creates a file at the text file path" do
         expect(performer).to receive(:open).with(text_file_path, 'w')
         subject
       end
       
       it "creates a title line with the student name" do
         subject
-        expect(File.readlines(text_file_path).first).to eq("Submission items from herman, edwina\n")
+        expect(text_file.first).to eq("Submission items from herman, edwina\n")
       end
 
-      describe "submission text comment" do
-        context "submission has a text comment" do
-          it "adds the text comment to the text file" do
+      describe "conditional text file elements" do
+        before(:each) { subject } # the file will be overwritten each time
+        after(:each) { delete_text_file }
+
+        describe "submission text comment" do
+
+          context "submission has a text comment" do
+            it "adds the text comment to the text file" do
+              expect(text_file[2]).to eq("text comment: This was tough.\n")
+            end
+
+            it "creates a complete file" do
+              expect(text_file.size).to eq(5)
+            end
+          end
+
+          context "submission doesn't have a text comment" do
+            let(:submission1) { double(:submission, text_comment: nil, link: "http://greatjob.com", student: student1) }
+
+            it "doesn't add the text comment to the text file" do
+              expect(text_file).not_to include("text comment: This was tough.\n")
+            end
+
+            it "builds a file with two fewer lines" do
+              expect(text_file.size).to eq(3)
+            end
           end
         end
 
-        context "submission doesn't have a text comment" do
-          it "doesn't add the text comment to the text file" do
-          end
-        end
-      end
+        describe "submission link" do
+          context "submission has a link" do
+            it "adds the link to the text file" do
+              expect(text_file.last).to eq("link: http://greatjob.com\n")
+            end
 
-      describe "submission link" do
-        context "submission has a link" do
-          it "doesn't add link the text file" do
+            it "creates a complete file" do
+              expect(text_file.size).to eq(5)
+            end
+          end
+
+          context "submission doesn't have a link" do
+            let(:submission1) { double(:submission, text_comment: "This was tough.", link: nil, student: student1) }
+
+            it "doesn't add link the text file" do
+              expect(text_file).not_to include("link: http://greatjob.com\n")
+            end
+
+            it "builds a file with one fewer line" do
+              expect(text_file.size).to eq(3)
+            end
           end
         end
 
-        context "submission doesn't have a link" do
-          it "adds the link to the text file" do
-          end
-        end
       end
     end
 
