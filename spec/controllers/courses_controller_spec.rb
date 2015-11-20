@@ -21,6 +21,16 @@ describe CoursesController do
         expect(assigns(:courses)).to eq(Course.all)
         expect(response).to render_template(:index)
       end
+
+      context "with json format" do
+        it "returns all courses in json format" do
+          get :index, format: :json
+          json = JSON.parse(response.body)
+          expect(json.length).to eq Course.count
+          expect(json[0].keys).to eq ["id", "name", "courseno",
+                                      "year", "semester"]
+        end
+      end
     end
 
     describe "GET show" do
