@@ -90,6 +90,22 @@ describe Team do
   end
 
   describe "challenge_grade_score" do
+    it "sums all earned challenge grades together" do 
+      course = create(:course)
+      team = create(:team, course: course)
+      challenge_grade = create(:challenge_grade, score: 100, team: team, status: 'Released')
+      challenge_grade_2 = create(:challenge_grade, score: 100, team: team, status: 'Released')
+      challenge_grade_3 = create(:challenge_grade, score: 100, team: team, status: 'Released')
+      expect(team.challenge_grade_score).to eq(300)
+    end
+
+    it "should not include grades that are not student visible" do 
+      course = create(:course)
+      team = create(:team, course: course)
+      challenge_grade = create(:challenge_grade, score: 100, team: team, status: 'Released')
+      challenge_grade_2 = create(:challenge_grade, score: 100, team: team, status: nil)
+      expect(team.challenge_grade_score).to eq(100)
+    end
   end
 
   describe "revised_team_score" do

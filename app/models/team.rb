@@ -88,7 +88,6 @@ class Team < ActiveRecord::Base
   end
 
   #Summing all of the points the team has earned across their challenges
-  # @mz todo: add specs
   def challenge_grade_score
     # use student_visible scope from challenge_grades
     challenge_grades.student_visible.sum('score') || 0
