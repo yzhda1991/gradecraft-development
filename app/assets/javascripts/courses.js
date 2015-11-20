@@ -22,7 +22,8 @@
               return '<li><a href="#">' + label + '</a></li>';
             },
             filter: function(item, query) {
-              return item.name.match(new RegExp(query, 'i'));
+              var regex = new RegExp(query, 'i');
+              return item.name.match(regex) || item.courseno.match(regex);
             }
           }).on('omniselect:select', function(event, id) {
             var form = document.createElement("form");
