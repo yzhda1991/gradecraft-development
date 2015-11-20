@@ -1,4 +1,5 @@
 class Assignment < ActiveRecord::Base
+  include Gradable
   include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails
@@ -11,7 +12,7 @@ class Assignment < ActiveRecord::Base
     :visible, :visible_when_locked, :required, :pass_fail, :use_rubric,
     :hide_analytics, :points_predictor_display, :notify_released,
     :mass_grade_type, :include_in_timeline, :include_in_predictor,
-    :include_in_to_do, :grades_attributes, :assignment_file_ids,
+    :include_in_to_do, :assignment_file_ids,
     :assignment_files_attributes, :assignment_file,
     :assignment_score_levels_attributes, :assignment_score_level, :course
 
@@ -39,10 +40,6 @@ class Assignment < ActiveRecord::Base
   has_many :submissions, :dependent => :destroy
 
   has_many :rubric_grades, :dependent => :destroy
-
-  has_many :grades, :dependent => :destroy
-  accepts_nested_attributes_for :grades,
-    reject_if: proc { |attrs| attrs[:raw_score].blank? }
 
   # Instructor uploaded resource files
   has_many :assignment_files, dependent: :destroy
@@ -94,43 +91,6 @@ class Assignment < ActiveRecord::Base
     super.presence || 0
   end
 
-  # Used for calculating scores in the analytics tab in Assignments# show
-  def grades_for_assignment(student)
-    { scores: grades.graded_or_released.pluck(:raw_score),
-      user_score: grades.where(student_id: student.id).first.try(:raw_score)
-    }
-  end
-
-  def all_grades_for_assignment
-    { scores: grades.graded_or_released.pluck(:raw_score) }
-  end
-
-  # Basic result stats - high, low, average, median
-  def high_score
-    grades.graded_or_released.maximum(:raw_score)
-  end
-
-  def low_score
-    grades.graded_or_released.minimum(:raw_score)
-  end
-
-  # Average of all grades for an assignment
-  def average
-    grades.graded_or_released.average(:raw_score).to_i \
-      if grades.graded_or_released.present?
-  end
-
-  # Average of above-zero grades for an assignment
-  def earned_average
-    grades.graded_or_released.where("score > 0").average(:score).to_i
-  end
-
-  def median
-    sorted = grades.graded_or_released.pluck(:score).sort
-    return 0 if sorted.empty?
-    (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
-  end
-
   def has_rubric?
     !! rubric
   end
@@ -150,11 +110,6 @@ class Assignment < ActiveRecord::Base
     grade_scope=="Group"
   end
 
-  def is_predicted_by_student?(student)
-    grade = grades.where(student_id: student.id).first
-    !grade.nil? && grade.predicted_score > 0
-  end
-
   # Custom point total if the class has weighted assignments
   def point_total_for_student(student, weight = nil)
     (point_total * weight_for_student(student, weight)).round rescue 0
@@ -171,16 +126,6 @@ class Assignment < ActiveRecord::Base
   # Allows instructors to set a value (presumably less than 1) that would be multiplied by *not* weighted assignments
   def default_weight
     course.default_assignment_weight
-  end
-
-  # Getting a student's grade object for an assignment
-  def grade_for_student(student)
-    grades.graded_or_released.where(student_id: student.id).first
-  end
-
-  # Get a grade object for a student if it exists - graded or not. this is used in the import grade
-  def all_grade_statuses_grade_for_student(student)
-    grades.where(student_id: student).first
   end
 
   # Checking to see if an assignment is due soon
@@ -248,11 +193,6 @@ class Assignment < ActiveRecord::Base
     opened? && (!overdue? || accepting_submissions?)
   end
 
-  # Counting how many grades there are for an assignment
-  def grade_count
-    grades.graded_or_released.count
-  end
-
   # Calculating attendance rate, which tallies number of people who have positive grades for attendance divided by the total number of students in the class
   def completion_rate(course)
     return 0 if course.graded_student_count.zero?
@@ -263,17 +203,6 @@ class Assignment < ActiveRecord::Base
   def submission_rate(course)
     return 0 if course.graded_student_count.zero?
     ((submissions.count / course.graded_student_count.to_f) * 100).round(2)
-  end
-
-  def predicted_count
-    grades.predicted_to_be_done.count
-  end
-
-  # Calculating how many of each score exists
-  def earned_score_count
-    grades.graded_or_released
-      .group_by { |g| g.raw_score }
-      .map { |score, grade| [score, grade.size ] }.to_h
   end
 
   # Creating an array with the set of scores earned on the assignment, and

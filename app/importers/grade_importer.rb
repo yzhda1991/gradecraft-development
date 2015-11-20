@@ -28,7 +28,7 @@ class GradeImporter
             next
           end
 
-          grade = assignment.all_grade_statuses_grade_for_student(student)
+          grade = assignment.grades.where(student_id: student.id).first
           if row.update_grade? grade
             grade = update_grade row, grade
             report row, grade
