@@ -330,11 +330,4 @@ class Assignment < ActiveRecord::Base
   def zero_points_for_pass_fail
     self.point_total = 0 if self.pass_fail?
   end
-
-  # Checking to see if the assignment point total has altered, and if it has resaving weights
-  def save_weights
-    if self.point_total_changed?
-      weights.reload.each(&:save)
-    end
-  end
 end
