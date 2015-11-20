@@ -197,10 +197,6 @@ class Grade < ActiveRecord::Base
 
   public
 
-  def altered?
-    self.score_changed? == true  || self.feedback_changed? == true
-  end
-
   def check_unlockables
     if self.assignment.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|

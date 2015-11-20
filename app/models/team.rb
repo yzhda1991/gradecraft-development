@@ -38,11 +38,6 @@ class Team < ActiveRecord::Base
       where("LOWER(name) = :name", name: name.downcase).first
   end
 
-  #Sorting team's students by their score, currently only used for in team leaderboards
-  def sorted_students
-    students.sort_by{ |student| - student.cached_score_for_course(course) }
-  end
-
   # @mz todo: add specs
   def recalculate_student_scores
     student_score_recalculator_jobs.each(&:enqueue)
@@ -62,30 +57,37 @@ class Team < ActiveRecord::Base
 
   #Tallying how many badges the students on the team have earned total
   def badge_count
-    earned_badges.where(:course_id => self.course_id).count
+    earned_badges.where(:course_id => self.course_id).student_visible.count
   end
 
-  #Calculating the average points amongst all students on the team
-  def average_points
+  def total_earned_points
     total_score = 0
     students.each do |student|
       total_score += (student.cached_score_for_course(course) || 0 )
     end
+    return total_score
+  end
+
+  #Calculating the average points amongst all students on the team
+  def average_points
     if member_count > 0
-      average_points = total_score / member_count
+      average_points = total_earned_points / member_count
+    else
+      return 0
     end
   end
 
   def update_ranks
-    @teams = current_course.teams
-    rank_index = @teams.pluck(:scores).uniq.sort.index(team.score)
+    @teams = self.course.teams
+    rank_index = @teams.pluck(:score).uniq.sort.reverse
+    
     @teams.each do |team|
-      team.rank = rank_index.index(team.score)
+      team.rank = rank_index.index(team.score) + 1
+      team.save!
     end
   end
 
   #Summing all of the points the team has earned across their challenges
-  # @mz todo: add specs
   def challenge_grade_score
     # use student_visible scope from challenge_grades
     challenge_grades.student_visible.sum('score') || 0
