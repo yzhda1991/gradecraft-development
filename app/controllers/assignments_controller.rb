@@ -80,7 +80,11 @@ class AssignmentsController < ApplicationController
       else
         # TODO: refactor, see submissions_controller
         @title = "Create a New #{term_for :assignment}"
-        format.html {render :action => "new", :group => @group }
+        format.html do
+          render :new, AssignmentPresenter.build({
+            assignment: @assignment, course: current_course,
+            view_context: view_context })
+        end
       end
     end
   end
@@ -107,7 +111,11 @@ class AssignmentsController < ApplicationController
       else
         # TODO: refactor, see submissions_controller
         @title = "Edit #{term_for :assignment}"
-        format.html {render :action => "edit", :group => @group }
+        format.html do
+          render :edit, AssignmentPresenter.build({
+            assignment: @assignment, course: current_course,
+            view_context: view_context })
+        end
       end
     end
   end
