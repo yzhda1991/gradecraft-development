@@ -253,6 +253,16 @@ describe Assignment do
     end
   end
 
+  describe "#grade_for_student" do
+    let(:student) { create :user }
+    before { subject.save }
+
+    it "returns the first visible grade for the student" do
+      grade = subject.grades.create student_id: student.id, raw_score: 85, status: "Graded"
+      expect(subject.grade_for_student(student)).to eq grade
+    end
+  end
+
   describe "#grade_level" do
     it "returns the assignment score level for the grade's score" do
       grade = build(:grade, raw_score: 123)
@@ -304,6 +314,27 @@ describe Assignment do
     it "has levels if there are assignment score levels" do
       subject.assignment_score_levels.build
       expect(subject).to have_levels
+    end
+  end
+
+  describe "#has_rubric?" do
+    it "has a rubric if one is defined" do
+      subject.build_rubric
+      expect(subject).to have_rubric
+    end
+  end
+
+  describe "#is_predicted_by_student?" do
+    let(:student) { create :user }
+    before { subject.save }
+
+    it "returns true if the first grade for the student has a predicted score" do
+      subject.grades.create student_id: student.id, raw_score: 85, status: "Graded", predicted_score: 83
+      expect(subject.is_predicted_by_student?(student)).to eq true
+    end
+
+    it "returns false if there are no grades for the student" do
+      expect(subject.is_predicted_by_student?(student)).to eq false
     end
   end
 
@@ -463,6 +494,13 @@ describe Assignment do
     it "is open if there is a previous open date and a future accept date" do
       subject.accepts_submissions_until = 2.days.from_now
       expect(subject).to be_open
+    end
+  end
+
+  describe "#to_json" do
+    it "returns a json representation" do
+      json = subject.to_json
+      expect(json).to eq({ id: subject.id }.to_json)
     end
   end
 end

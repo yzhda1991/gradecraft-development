@@ -91,7 +91,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def to_json(options = {})
-    super(options.merge(:only => [ :id, :content, :order, :done ] ))
+    super(options.merge(only: [:id]))
   end
 
   def point_total
@@ -168,7 +168,8 @@ class Assignment < ActiveRecord::Base
   end
 
   def is_predicted_by_student?(student)
-    grades.where(:student => student).first.predicted_score > 0 rescue nil
+    grade = grades.where(student_id: student.id).first
+    !grade.nil? && grade.predicted_score > 0
   end
 
   # Custom point total if the class has weighted assignments
@@ -191,17 +192,12 @@ class Assignment < ActiveRecord::Base
 
   # Getting a student's grade object for an assignment
   def grade_for_student(student)
-    grades.graded_or_released.where(student_id: student).first
+    grades.graded_or_released.where(student_id: student.id).first
   end
 
   # Get a grade object for a student if it exists - graded or not. this is used in the import grade
   def all_grade_statuses_grade_for_student(student)
     grades.where(student_id: student).first
-  end
-
-  # Checking to see if the assignment has submissions that don't have grades
-  def has_ungraded_submissions?
-    has_submissions == true && submissions.try(:ungraded)
   end
 
   # Checking to see if an assignment is due soon
