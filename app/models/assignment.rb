@@ -1,4 +1,5 @@
 class Assignment < ActiveRecord::Base
+  include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails
   include UnlockableCondition
@@ -22,9 +23,7 @@ class Assignment < ActiveRecord::Base
   has_one :rubric, dependent: :destroy
 
   # For instances where the assignment needs its own unique score levels
-  has_many :assignment_score_levels, -> { order "value" }, :dependent => :destroy
-  accepts_nested_attributes_for :assignment_score_levels, allow_destroy: true,
-    reject_if: proc { |a| a['value'].blank? || a['name'].blank? }
+  score_levels :assignment_score_levels, -> { order "value" }, :dependent => :destroy
 
   # This is the assignment weighting system (students decide how much assignments will be worth for them)
   has_many :weights, class_name: "AssignmentWeight", dependent: :destroy
@@ -74,9 +73,6 @@ class Assignment < ActiveRecord::Base
   # Filtering Assignments by various date properties
   scope :with_dates, -> { where('assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL') }
 
-  # Assignments and Grading
-  scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignments.id = assignment_weights.assignment_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
-
   default_scope { order('position ASC') }
 
   delegate :student_weightable?, to: :assignment_type
@@ -91,15 +87,11 @@ class Assignment < ActiveRecord::Base
   end
 
   def to_json(options = {})
-    super(options.merge(:only => [ :id, :content, :order, :done ] ))
+    super(options.merge(only: [:id]))
   end
 
   def point_total
     super.presence || 0
-  end
-
-  def self.point_total_for_student(student)
-    weighted_for_student(student).pluck('SUM(COALESCE(assignment_weights.point_total, self.course.total_points))').first || 0
   end
 
   # Used for calculating scores in the analytics tab in Assignments# show
@@ -113,39 +105,33 @@ class Assignment < ActiveRecord::Base
   end
 
   def all_grades_for_assignment
-    scores = grades.graded_or_released.pluck('raw_score')
-    return {
-    :scores => scores
-   }
+    { scores: grades.graded_or_released.pluck(:raw_score) }
   end
 
   # Basic result stats - high, low, average, median
   def high_score
-    grades.graded_or_released.maximum('grades.raw_score')
+    grades.graded_or_released.maximum(:raw_score)
   end
 
   def low_score
-    grades.graded_or_released.minimum('grades.raw_score')
+    grades.graded_or_released.minimum(:raw_score)
   end
 
   # Average of all grades for an assignment
   def average
-    grades.graded_or_released.average('grades.raw_score').to_i if grades.graded_or_released.present?
+    grades.graded_or_released.average(:raw_score).to_i \
+      if grades.graded_or_released.present?
   end
 
   # Average of above-zero grades for an assignment
   def earned_average
-    if grades.graded_or_released.present?
-      grades.graded_or_released.where("score > 0").average('score').to_i
-    else
-      0
-    end
+    grades.graded_or_released.where("score > 0").average(:score).to_i
   end
 
   def median
-    sorted_grades = grades.graded_or_released.pluck('score').sort
-    len = sorted_grades.length
-    return (sorted_grades[(len - 1) / 2] + sorted_grades[len / 2]) / 2
+    sorted = grades.graded_or_released.pluck(:score).sort
+    return 0 if sorted.empty?
+    (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
   end
 
   def has_rubric?
@@ -168,7 +154,8 @@ class Assignment < ActiveRecord::Base
   end
 
   def is_predicted_by_student?(student)
-    grades.where(:student => student).first.predicted_score > 0 rescue nil
+    grade = grades.where(student_id: student.id).first
+    !grade.nil? && grade.predicted_score > 0
   end
 
   # Custom point total if the class has weighted assignments
@@ -191,17 +178,12 @@ class Assignment < ActiveRecord::Base
 
   # Getting a student's grade object for an assignment
   def grade_for_student(student)
-    grades.graded_or_released.where(student_id: student).first
+    grades.graded_or_released.where(student_id: student.id).first
   end
 
   # Get a grade object for a student if it exists - graded or not. this is used in the import grade
   def all_grade_statuses_grade_for_student(student)
     grades.where(student_id: student).first
-  end
-
-  # Checking to see if the assignment has submissions that don't have grades
-  def has_ungraded_submissions?
-    has_submissions == true && submissions.try(:ungraded)
   end
 
   # Checking to see if an assignment is due soon
@@ -329,12 +311,5 @@ class Assignment < ActiveRecord::Base
 
   def zero_points_for_pass_fail
     self.point_total = 0 if self.pass_fail?
-  end
-
-  # Checking to see if the assignment point total has altered, and if it has resaving weights
-  def save_weights
-    if self.point_total_changed?
-      weights.reload.each(&:save)
-    end
   end
 end

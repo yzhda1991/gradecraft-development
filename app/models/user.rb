@@ -328,10 +328,6 @@ class User < ActiveRecord::Base
 
   ### COURSE POINTS AVAILABLE
 
-  def point_total_for_course(course)
-    @point_total_for_course ||= course.assignments.point_total_for_student(self) + earned_badge_score_for_course(course)
-  end
-
   #TODO: Should take into account students weights
   def point_total_for_assignment_type(assignment_type)
     assignment_type.assignments.map{ |a| a.point_total }.sum

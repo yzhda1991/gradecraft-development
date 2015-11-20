@@ -1,9 +1,10 @@
 class Challenge < ActiveRecord::Base
+  include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails
 
-  attr_accessible :name, :description, :visible, :point_total, 
-    :due_at, :open_at, :accepts_submissions, :release_necessary, 
+  attr_accessible :name, :description, :visible, :point_total,
+    :due_at, :open_at, :accepts_submissions, :release_necessary,
     :course, :team, :challenge, :challenge_file_ids,
     :challenge_files_attributes, :challenge_file, :challenge_grades_attributes,
     :challenge_score_levels_attributes, :challenge_score_level
@@ -18,8 +19,7 @@ class Challenge < ActiveRecord::Base
 
   has_many :predicted_earned_challenges, :dependent => :destroy
 
-  has_many :challenge_score_levels
-  accepts_nested_attributes_for :challenge_score_levels, allow_destroy: true, :reject_if => proc { |a| a['value'].blank? || a['name'].blank? }
+  score_levels :challenge_score_levels
 
   has_many :challenge_files, :dependent => :destroy
   accepts_nested_attributes_for :challenge_files
