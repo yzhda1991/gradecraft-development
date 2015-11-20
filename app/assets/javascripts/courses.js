@@ -13,7 +13,8 @@
             resultsClass: 'typeahead dropdown-menu course-result',
             activeClass: 'active',
             itemLabel: function(course) {
-              return course.courseno + " " + course.name;
+              return course.courseno + " " + course.name +
+                " (" + course.semester + " " + course.year + ")";
             },
             itemId: function(course) {
               return course.id;
