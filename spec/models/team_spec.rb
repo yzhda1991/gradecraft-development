@@ -27,6 +27,68 @@ describe Team do
     end
   end
 
+  describe "#member_count" do 
+    it "returns the number of students on the team" do 
+      team = create(:team)
+      student = create(:user)
+      student_2 = create(:user)
+      student_3 = create(:user)
+      team.students << [student, student_2, student_3]
+      expect(team.member_count).to eq(3)
+    end
+  end
+
+  describe "#badge_count" do 
+    it 'returns the number of earned badges for the team' do 
+      course = create(:course)
+      team = create(:team, course: course)
+      student = create(:user)
+      student_2 = create(:user)
+      student_3 = create(:user)
+      badge = create(:badge)
+      team.students << [student, student_2, student_3]
+      earned_badge = create(:earned_badge, student: student, course: course, student_visible: true)
+      earned_badge_1 = create(:earned_badge, student: student, student_visible: true, course: course )
+      earned_badge_2 = create(:earned_badge, student: student_2, student_visible: true, course: course )
+      earned_badge_3 = create(:earned_badge, student: student_2, student_visible: true, course: course )
+      earned_badge_4 = create(:earned_badge, student: student_3, student_visible: true, course: course)
+      expect(team.badge_count).to eq(5)
+    end
+  end
+
+  describe "#total_earned_points" do 
+    it "returns the total points earned by students for the team" do 
+      course = create(:course)
+      team = create(:team, course: course)
+      student = create(:user)
+      course_membership = create(:course_membership, user: student, course: course, score: 100)
+      student_2 = create(:user)
+      course_membership = create(:course_membership, user: student_2, course: course, score: 100)
+      student_3 = create(:user)      
+      course_membership = create(:course_membership, user: student_3, course: course, score: 100)
+      team.students << [student, student_2]
+      expect(team.total_earned_points).to eq(200)
+    end
+  end
+
+  describe "#average_points" do 
+    it "returns 0 if there's no one on the team" do 
+      team = create(:team)
+      expect(team.average_points).to eq(0)
+    end
+
+    it "returns the average score if team members are present" do
+      course = create(:course)
+      team = create(:team, course: course)
+      student = create(:user)
+      course_membership = create(:course_membership, user: student, course: course, score: 100)
+      student_2 = create(:user)
+      course_membership = create(:course_membership, user: student_2, course: course, score: 100)
+      team.students << [student, student_2]
+      expect(team.average_points).to eq(100) 
+    end
+  end
+
   describe "challenge_grade_score" do
   end
 

@@ -57,25 +57,33 @@ class Team < ActiveRecord::Base
 
   #Tallying how many badges the students on the team have earned total
   def badge_count
-    earned_badges.where(:course_id => self.course_id).count
+    earned_badges.where(:course_id => self.course_id).student_visible.count
   end
 
-  #Calculating the average points amongst all students on the team
-  def average_points
+  def total_earned_points
     total_score = 0
     students.each do |student|
       total_score += (student.cached_score_for_course(course) || 0 )
     end
+    return total_score
+  end
+
+  #Calculating the average points amongst all students on the team
+  def average_points
     if member_count > 0
-      average_points = total_score / member_count
+      average_points = total_earned_points / member_count
+    else
+      return 0
     end
   end
 
   def update_ranks
-    @teams = current_course.teams
-    rank_index = @teams.pluck(:scores).uniq.sort.index(team.score)
+    @teams = self.course.teams
+    rank_index = @teams.pluck(:score).uniq.sort.reverse
+    
     @teams.each do |team|
-      team.rank = rank_index.index(team.score)
+      team.rank = rank_index.index(team.score) + 1
+      team.save!
     end
   end
 
