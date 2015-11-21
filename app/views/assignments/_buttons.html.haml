@@ -9,9 +9,9 @@
       %li= link_to raw('<i class="fa fa-copy fa-fw"> </i> Copy'), copy_assignments_path(id: presenter.assignment), method: :copy
       - if presenter.assignment.has_groups?
         %li= link_to raw("<i class='fa fa-users fa-fw'> </i> Create #{term_for :group}"), new_group_path
-      - if presenter.for_team? && !presenter.rubric_designed? && !presenter.use_rubric?
+      - if presenter.for_team?
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(presenter.assignment, team: presenter.team)
-      - elsif !presenter.rubric_designed? && !presenter.use_rubric?
+      - else
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(presenter.assignment)
       / - if presenter.assignment.submissions.present?
       /   %li
