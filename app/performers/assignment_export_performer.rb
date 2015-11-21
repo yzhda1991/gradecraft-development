@@ -213,9 +213,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
     File.expand_path(student.formatted_key_name, tmp_dir)
   end
 
-  # @mz todo: add specs
   def create_submission_text_files
-    # this is the block that determines whether or not a file needs to be built with the text link etc
     @submissions.each do |submission|
       if submission.text_comment.present? or submission.link.present? # write the text file for the submission into the student export directory
         create_submission_text_file(submission)
@@ -223,7 +221,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def create_submission_text_file(submission)
     open(submission_text_file_path(submission.student), 'w') do |f|
       f.puts "Submission items from #{submission.student.last_name}, #{submission.student.first_name}"

@@ -639,7 +639,25 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     before { mkdir }
     before(:each) { performer.instance_variable_set(:@some_student, student1) }
 
-    describe "create_submission_text_files" do
+    describe "create_submission_text_files", inspect: true do
+      subject { performer.instance_eval { create_submission_text_files }}
+      before(:each) { performer.instance_variable_set(:@submissions, [ submission1 ]) }
+
+      context "submission has a text comment or a link" do
+        it "creates a text file for the submission" do
+          expect(performer).to receive(:create_submission_text_file).with (submission1)
+          subject
+        end
+      end
+
+      context "submission has neither a comment nor a link" do
+        let(:submission1) { double(:submission, text_comment: nil, link: nil) }
+
+        it "doesn't create a text file for the submission" do
+          expect(performer).not_to receive(:create_submission_text_file).with (submission1)
+          subject
+        end
+      end
     end
 
     describe "create_submission_text_file", inspect: true do
@@ -708,7 +726,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
               expect(text_file).not_to include("link: http://greatjob.com\n")
             end
 
-            it "builds a file with one fewer line" do
+            it "builds a file with two fewer lines" do
               expect(text_file.size).to eq(3)
             end
           end
