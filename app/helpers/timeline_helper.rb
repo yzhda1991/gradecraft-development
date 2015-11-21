@@ -25,7 +25,7 @@ module TimelineHelper
   def detail_link_timeline_content(model)
     if model.course.show_see_details_link_in_timeline?
       content_tag(:p) do
-        content_tag(:a, "See the details", href: "#{url_for(model)}/#{model.id}")
+        content_tag(:a, "See the details", href: "#{url_for(model)}")
       end
     end
   end
