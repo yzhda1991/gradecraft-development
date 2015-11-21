@@ -92,6 +92,7 @@ describe StudentImporter do
           subject.import course
           expect(user.email).to eq "richard@umich.edu"
           expect(user.username).to eq "richard"
+          expect(user.kerberos_uid).to eq "richard"
           expect(user.course_memberships.first.course).to eq course
           expect(user.course_memberships.first.role).to eq "student"
         end
@@ -101,6 +102,7 @@ describe StudentImporter do
           user =  User.unscoped.first
           expect(user.email).to eq "peter@umich.edu"
           expect(user.username).to eq "peter"
+          expect(user.kerberos_uid).to eq "peter"
           expect(user.course_memberships.first.course).to eq course
           expect(user.course_memberships.first.role).to eq "student"
         end

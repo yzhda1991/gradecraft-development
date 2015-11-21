@@ -52,6 +52,7 @@ class StudentImporter
       u.first_name = row.first_name
       u.last_name = row.last_name
       u.username = row.username || (username_from_email(row.email) if internal_students)
+      u.kerberos_uid = row.username || (username_from_email(row.email) if internal_students)
       u.email = row.email || (email_from_username(row.username) if internal_students)
       u.password = row.has_password? ? row.password : generate_random_password unless internal_students
     end
