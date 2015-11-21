@@ -7,17 +7,17 @@ module TimelineHelper
   def assignment_timeline_content(assignment)
     content = detail_link_timeline_content(assignment) || ""
     content.concat file_attachment_timeline_content(assignment.assignment_files) || ""
-    content.concat assignment.description
+    content.concat raw assignment.description
   end
 
   def challenge_timeline_content(challenge)
     content = detail_link_timeline_content(challenge) || ""
     content.concat file_attachment_timeline_content(challenge.challenge_files) || ""
-    content.concat challenge.description
+    content.concat raw challenge.description
   end
 
   def event_timeline_content(event)
-    event.description
+    raw event.description
   end
 
   private
