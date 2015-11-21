@@ -33,6 +33,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
         create_submission_text_files
       end
 
+      require_success(create_submission_binary_file_messages) do
+        create_submission_binary_files
+      end
+
       # require_sucess(start_archive_messages) do
       #   start_archive_process
       # end
@@ -307,6 +311,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
     expand_messages ({
       success: "Successfully created all text files for the student submissions",
       failure: "Student submission text files did not create properly"
+    })
+  end
+
+  def create_submission_binary_file_messages
+    expand_messages ({
+      success: "Successfully created all binary files for the student submissions",
+      failure: "Student submission binary files did not create properly"
     })
   end
 
