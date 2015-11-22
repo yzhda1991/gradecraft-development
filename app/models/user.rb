@@ -48,13 +48,10 @@ class User < ActiveRecord::Base
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
   attr_accessible :username, :email, :password, :password_confirmation, :activation_state,
-    :avatar_file_name, :first_name, :last_name, :rank, :user_id, :kerberos_uid,
-    :display_name, :private_display, :default_course_id, :last_activity_at,
-    :last_login_at, :last_logout_at, :team_ids, :courses, :course_ids,
-    :earned_badges, :earned_badges_attributes, :major, :gpa, :current_term_credits,
-    :accumulated_credits,  :year_in_school, :state_of_residence, :high_school, :athlete,
-    :act_score, :sat_score, :student_academic_history_attributes, :team_role,
-    :course_memberships_attributes, :character_profile, :team_id, :lti_uid, :course_team_ids
+    :avatar_file_name, :first_name, :last_name, :user_id, :kerberos_uid, :display_name, 
+    :default_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids, 
+    :courses, :course_ids, :earned_badges, :earned_badges_attributes, :student_academic_history_attributes, 
+    :team_role, :course_memberships_attributes, :team_id, :lti_uid, :course_team_ids
 
   # all student display pages are ordered by last name except for the leaderboard, and top 10/bottom 10
   default_scope { order('last_name ASC') }
