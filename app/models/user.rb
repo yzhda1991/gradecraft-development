@@ -225,7 +225,7 @@ class User < ActiveRecord::Base
 
   # Space for users to build a narrative around their identity
   def character_profile(course)
-    course_memberships.where(course: course).try('character_profile')
+    course_memberships.where(course: course).first.try('character_profile')
   end
 
   def archived_courses

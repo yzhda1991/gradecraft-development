@@ -274,6 +274,40 @@ describe User do
     end
   end
 
+  describe "#character_profile(course)" do 
+    let(:student) { create :user }
+
+    before do 
+      create(:course_membership, course: world.course, user: student, character_profile: 'The six-fingered man.')
+    end
+
+    it "returns the student's character profile if it's present" do 
+      expect(student.character_profile(world.course)).to eq("The six-fingered man.")
+    end
+  end
+
+  describe "#archived_courses" do 
+    let(:student) { create :user }
+
+    before do 
+      create(:course_membership, course: course_3, user: student)
+    end
+
+    it "returns all archived courses for a student" do 
+      course_2 = create(:course, status: false)
+      create(:course_membership, course: course_2, user: student)
+      expect(student.archived_courses).to eq([course_2])
+    end
+  end
+
+  describe "#cached_score_for_course(course)" do 
+
+  end
+
+  describe "#scores_for_course(course)" do 
+
+  end
+
   context "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"
