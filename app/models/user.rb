@@ -323,12 +323,9 @@ class User < ActiveRecord::Base
   end
 
   ### SUBMISSIONS
-  def submissions_by_assignment_id
-    @submissions_by_assignment ||= submissions.group_by(&:assignment_id)
-  end
 
   def submission_for_assignment(assignment)
-    submissions_by_assignment_id[assignment.id].try(:first)
+    submissions.where(:assignment_id => assignment.id).try(:first)
   end
 
   ### BADGES

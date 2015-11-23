@@ -446,6 +446,16 @@ describe User do
     end
   end
 
+  describe "#submission_for_assignment(assignment)" do 
+    let(:student) { create :user }
+    let(:assignment) { create :assignment}
+
+    it "returns the submission for an assignment if it exists" do 
+      submission = create(:submission, assignment: assignment, student: student)
+      expect(student.submission_for_assignment(assignment)).to eq(submission)
+    end
+  end
+
   context "earn_badges" do
     it "should be able to earn badges" do
       badges = create_list(:badge, 2, course: world.course)
