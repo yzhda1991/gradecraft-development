@@ -139,17 +139,6 @@ class StudentsController < ApplicationController
 
   protected
 
-  def earned_badges_by_badge_id
-    @earned_badges.inject({}) do |memo, earned_badge|
-      if memo[earned_badge.badge.id]
-        memo[earned_badge.badge.id] << earned_badge
-      else
-        memo[earned_badge.badge.id] = [earned_badge]
-      end
-      memo
-    end
-  end
-
   # @mz todo: refactor and add specs, move out of controller
   def course_grade_scheme_by_student_id
     @students.inject({}) do |memo, student|
@@ -179,6 +168,17 @@ class StudentsController < ApplicationController
     @course_grade_scheme_elements ||= GradeSchemeElement.unscoped.where(course_id: current_course.id).order("low_range ASC")
   end
 
+  def earned_badges_by_badge_id
+    @earned_badges.inject({}) do |memo, earned_badge|
+      if memo[earned_badge.badge.id]
+        memo[earned_badge.badge.id] << earned_badge
+      else
+        memo[earned_badge.badge.id] = [earned_badge]
+      end
+      memo
+    end
+  end
+
   def earned_badges_by_student_id
     @earned_badges_by_student_id ||= student_earned_badges_for_entire_course.inject({}) do |memo, earned_badge|
       student_id = earned_badge.student_id
@@ -202,16 +202,6 @@ class StudentsController < ApplicationController
       .where("teams.course_id = ?", current_course.id)
       .where(student_id: @student_ids)
       .includes(:team)
-  end
-
-  def course_teams
-    @course_teams ||= Team.where(course: current_course)
-      .joins(:team_memberships)
-      .where("team_memberships.student_id in (?)", student_ids)
-  end
-
-  def course_team_membership_count
-    @course_team_membership_count = TeamMembership.joins(:team).where("teams.course_id = ?", current_course[:id]).count
   end
 
   def student_earned_badges_for_entire_course
