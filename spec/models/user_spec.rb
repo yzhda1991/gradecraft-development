@@ -131,6 +131,20 @@ describe User do
     end
   end
 
+  describe "#name", focus: true do 
+    let(:student) {create :user, first_name: "Daniel", last_name: "Hall"}
+
+    it "returns the student's full name if present" do 
+      expect(student.name).to eq("Daniel Hall")
+    end
+
+    it "it returns the User ID if not" do 
+      student.last_name = nil
+      student.first_name = nil
+      expect(student.name).to eq("User #{student.id}")
+    end
+  end
+
   describe "#self_reported_done?" do
     it "is not self reported if there are no grades" do
       expect(world.student).to_not be_self_reported_done(world.assignment)
