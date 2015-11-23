@@ -199,24 +199,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.graded_students_in_course(course_id)
-    User
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
-      .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
-      .where("course_memberships.course_id = ?", course_id)
-      .where("course_memberships.auditing = ?", false)
-      .where("course_memberships.role = ?", "student")
-      .includes(:course_memberships)
-      .group("users.id, course_memberships.score")
-  end
-
-  def self.graded_students_in_course_include_and_join_team(course_id)
-    self.graded_students_in_course(course_id)
-      .joins("INNER JOIN team_memberships ON team_memberships.student_id = users.id")
-      .where("course_memberships.user_id = team_memberships.student_id")
-      .includes(:team_memberships)
-  end
-
   def auditing_course?(course)
     course.membership_for_student(self).auditing?
   end
@@ -238,19 +220,18 @@ class User < ActiveRecord::Base
   end
 
   ### TEAMS
-  # Find the team associated with the team membership for a given course id
-  def course_team(course)
-    team_memberships.joins(:team).where("teams.course_id = ?", course.id).first.team rescue nil
-  end
-
   # Finding a student's team for a course
   def team_for_course(course)
     @team ||= teams.where(course_id: course).first
   end
 
+  def team_score(course)
+    teams.where(:course => course).pluck('score').first
+  end
+
   #Finding all of the team leaders for a single team
   def team_leaders(course)
-    @team_leaders ||= course_team(course).includes(:leaders) rescue nil
+    @team_leaders ||= team_for_course(course).includes(:leaders) rescue nil
   end
 
   #Finding all of a team leader's teams for a single course
@@ -315,23 +296,6 @@ class User < ActiveRecord::Base
     next_element_level(course).low_range - cached_score_for_course(course)
   end
 
-
-  ### COURSE POINTS AVAILABLE
-
-  #TODO: Should take into account students weights
-  def point_total_for_assignment_type(assignment_type)
-    assignment_type.assignments.map{ |a| a.point_total }.sum
-  end
-
-  ### ASSIGNMENT TYPE SCORES
-  def scores_by_assignment_type
-    grades.group(:assignment_type_id).pluck('assignment_type_id, SUM(score)')
-  end
-
-  def score_for_assignment_type(assignment_type)
-    grades.where(assignment_type: assignment_type).score
-  end
-
   ### GRADES
 
   #Checking specifically if there is a released grade for an assignment
@@ -341,10 +305,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  def score_for_assignment(assignment)
-    grades.where(:assignment_id => assignment.id).first.score
-  end
-
   #Grabbing the grade for an assignment
   def grade_for_assignment(assignment)
     grades.where(:assignment_id => assignment.id).first || grades.new(assignment: assignment)
@@ -352,14 +312,6 @@ class User < ActiveRecord::Base
 
   def grade_for_assignment_id(assignment_id)
     grades.where(assignment_id: assignment_id)
-  end
-
-  def released_score_for_assignment_type(assignment_type)
-    grades.released.where(assignment_type: assignment_type).score
-  end
-
-  def point_total_for_assignment(assignment)
-    grades.where(:assignment_id => assignment.id).first.try(:point_total) || nil
   end
 
   # @mz todo: add specs
@@ -387,22 +339,6 @@ class User < ActiveRecord::Base
     course_memberships.where(course_id: course_id).first
   end
 
-  public
-
-  ### TEAMS
-  # Find the team associated with the team membership for a given course id
-  def course_team(course)
-    team_memberships.joins(:team).where("teams.course_id = ?", course.id).first.team rescue nil
-  end
-
-  def team_for_course(course)
-    @team ||= teams.where(course_id: course).first
-  end
-
-  def team_score(course)
-    teams.where(:course => course).pluck('score').first
-  end
-
   ### SUBMISSIONS
   def submissions_by_assignment_id
     @submissions_by_assignment ||= submissions.group_by(&:assignment_id)
@@ -413,10 +349,6 @@ class User < ActiveRecord::Base
   end
 
   ### BADGES
-
-  def earned_badge?(badge)
-    earned_badges[badge.id].present?
-  end
 
   def earned_badges_by_badge
     @earned_badges_by_badge ||= earned_badges.group_by(&:badge_id)
@@ -478,12 +410,6 @@ class User < ActiveRecord::Base
       .where(final_earnable_course_badges_sql(grade))
   end
 
-  private
-  def final_earnable_course_badges_sql(grade)
-    earnable_course_badges_sql_conditions(grade).where_values.join(" OR ")
-  end
-
-  public
   def earnable_course_badges_sql_conditions(grade)
     Badge
       .unscoped
@@ -596,6 +522,10 @@ class User < ActiveRecord::Base
 
 
   private
+
+  def final_earnable_course_badges_sql(grade)
+    earnable_course_badges_sql_conditions(grade).where_values.join(" OR ")
+  end
 
   def set_default_course
     self.default_course ||= courses.first

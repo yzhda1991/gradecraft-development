@@ -6,7 +6,7 @@ module BadgesHelper
       content_tag(:div, nil, class: "display_on_hover hover-style right") do
         hover_content = "#{badge.name}#{", #{points badge.point_total} points" if badge.point_total.present? && badge.point_total > 0}"
         if badge.is_unlockable?
-          lock_icon_class = badge.is_unlockable_for_student?(student) ? "fa-unlock-alt" : "fa-lock"
+          lock_icon_class = badge.is_unlocked_for_student?(student) ? "fa-unlock-alt" : "fa-lock"
           concat content_tag(:i, hover_content, class: "fa #{lock_icon_class}")
         else
           concat hover_content
