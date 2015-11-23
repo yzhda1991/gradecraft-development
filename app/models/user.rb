@@ -508,16 +508,6 @@ class User < ActiveRecord::Base
     end
   end
 
-
-  ### WEIGHTS
-  def assignment_type_weights(course)
-    @assignment_type_weights ||= {}.tap do |assignment_type_weights|
-      course.assignment_types.weights_for_student(self).each do |assignment_type_id, weight|
-        assignment_type_weights[assignment_type_id] = weight
-      end
-    end
-  end
-
   #Returns the student's assigned weight for a specific assignment
   def weight_for_assignment(assignment)
     assignment_weights.where(:assignment => assignment).first.weight
