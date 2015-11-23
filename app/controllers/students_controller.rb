@@ -11,7 +11,7 @@ class StudentsController < ApplicationController
 
     @teams = current_course.teams
 
-    if params[:team_id].present?
+    if team_filter_active?
       @team = current_course.teams.find_by(id: params[:team_id])
       @students = current_course.students_being_graded_by_team(@team)
     else
@@ -191,6 +191,10 @@ class StudentsController < ApplicationController
     end
   end
 
+  def student_earned_badges_for_entire_course
+    @student_earned_badges ||= EarnedBadge.where(course: current_course).where("student_id in (?)", @student_ids).includes(:badge)
+  end
+
   def teams_by_student_id
     @teams_by_student_id ||= team_memberships_for_course.inject({}) do |memo, tm|
       memo.merge tm.student_id => tm.team
@@ -202,10 +206,6 @@ class StudentsController < ApplicationController
       .where("teams.course_id = ?", current_course.id)
       .where(student_id: @student_ids)
       .includes(:team)
-  end
-
-  def student_earned_badges_for_entire_course
-    @student_earned_badges ||= EarnedBadge.where(course: current_course).where("student_id in (?)", @student_ids).includes(:badge)
   end
 
   def team_filter_active?
