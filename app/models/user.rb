@@ -238,10 +238,6 @@ class User < ActiveRecord::Base
     team_leaderships.joins(:team).where("teams.course_id = ?", course.id)
   end
 
-  def load_team(course)
-    @team ||= team_for_course(course)
-  end
-
   # Space for users to build a narrative around their identity
   def character_profile(course)
     course_memberships.where(course: course).try('character_profile')
@@ -380,11 +376,7 @@ class User < ActiveRecord::Base
   end
 
   def team_for_course(course)
-    @cached_team ||= teams.where(course_id: course).first
-  end
-
-  def load_team(course)
-    @team ||= team_for_course(course)
+    @team ||= teams.where(course_id: course).first
   end
 
   def team_score(course)

@@ -90,7 +90,7 @@ class StudentsController < ApplicationController
   def show
     self.current_student = current_course.students.where(id: params[:id]).first
     @student = current_student
-    @student.load_team(current_course) if current_course.has_teams?
+    @student.team_for_course(current_course) if current_course.has_teams?
     @assignments = current_course.assignments
     @assignment_types = current_course.assignment_types
     @display_sidebar = true
