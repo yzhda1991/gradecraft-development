@@ -153,17 +153,6 @@ class StudentsController < ApplicationController
     end
   end
 
-  #TODO: take this out!
-  def scores_by_assignment
-    scores = current_course.grades.released.joins(:assignment_type)
-                           .group('grades.student_id, assignment_types.name')
-                           .order('grades.student_id, assignment_types.name')
-    scores = scores.pluck('grades.student_id, assignment_types.name, SUM(grades.score)')
-    render :json => {
-      :scores => scores,
-    }
-  end
-
   #All Admins to see all of one student's grades at once, proof for duplicates
   def grade_index
     @grades = current_student.grades.where(:course_id => current_course)
@@ -207,7 +196,6 @@ class StudentsController < ApplicationController
       memo.merge student[:id] => student_grade_scheme
     end
   end
-
 
   def course_grade_scheme_elements
     @course_grade_scheme_elements ||= GradeSchemeElement.unscoped.where(course_id: current_course.id).order("low_range ASC")
@@ -256,10 +244,6 @@ class StudentsController < ApplicationController
     "course_memberships.score DESC, users.last_name ASC, users.first_name ASC"
   end
 
-  def fetch_active_team
-    @team ||= Team.find params[:team_id]
-  end
-
   def team_filter_active?
     params[:team_id].present?
   end
@@ -272,26 +256,9 @@ class StudentsController < ApplicationController
     end
   end
 
-  def auditing_students_in_current_course
-    if course_team_membership_count > 0
-      User.unscoped.auditing_students_in_course_include_and_join_team(current_course.id)
-    else
-      User.unscoped.auditing_students_in_course(current_course.id)
-    end
-  end
-
   def graded_students_in_current_course_for_active_team
     if course_team_membership_count > 0
       User.unscoped.graded_students_in_course_include_and_join_team(current_course.id)
-        .where("team_memberships.team_id = ?", params[:team_id])
-    else
-      []
-    end
-  end
-
-  def auditing_students_in_current_course_for_active_team
-    if course_team_membership_count > 0
-      User.unscoped.auditing_students_in_course_include_and_join_team(current_course.id)
         .where("team_memberships.team_id = ?", params[:team_id])
     else
       []

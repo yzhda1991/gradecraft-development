@@ -85,8 +85,8 @@ describe User do
 
   describe ".instructors_of_record" do
     let(:ta_for_course) { create :user }
-    let(:instructor_1_for_course) { create :user }
-    let(:ta_2_for_course) { create :user }
+    let(:instructor_1_for_course) { create :user, :last_name => "Gaiman" }
+    let(:ta_2_for_course) { create :user, :last_name => "Palmer" }
     let(:professor_observer) {create :user}
     before do
       create(:course_membership, course: world.course, user: ta_for_course, role: "gsi")
