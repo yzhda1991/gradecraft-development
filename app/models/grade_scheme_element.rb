@@ -8,6 +8,8 @@ class GradeSchemeElement < ActiveRecord::Base
 
   default_scope { order 'high_range DESC' }
 
+  scope :order_by_low_range, -> { order 'low_range ASC' }
+
   # Getting the name of the Grade Scheme Element - the Level if it's present, the Letter if not
   def name
     if level? && letter?

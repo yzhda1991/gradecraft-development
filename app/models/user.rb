@@ -263,13 +263,14 @@ class User < ActiveRecord::Base
 
   def next_element_level(course)
     next_element = nil
-    course.grade_scheme_elements.order_by_low_range.each_with_index do |element, index|
+    grade_scheme_elements = course.grade_scheme_elements.unscoped.order_by_low_range
+    grade_scheme_elements.each_with_index do |element, index|
       if (element.high_range >= cached_score_for_course(course)) && (cached_score_for_course(course) >= element.low_range)
-        next_element = course.grade_scheme_elements[index + 1]
+        next_element = grade_scheme_elements[index + 1]
       end
       if next_element.nil?
         if element.low_range > cached_score_for_course(course)
-          next_element = course.grade_scheme_elements.order_by_low_range.first
+          next_element = grade_scheme_elements.first
         end
       end
     end
