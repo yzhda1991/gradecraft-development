@@ -83,6 +83,24 @@ describe User do
     end
   end
 
+  describe ".instructors_of_record" do
+    let(:ta_for_course) { create :user }
+    let(:instructor_1_for_course) { create :user }
+    let(:ta_2_for_course) { create :user }
+    let(:professor_observer) {create :user}
+    before do
+      create(:course_membership, course: world.course, user: ta_for_course, role: "gsi")
+      create(:course_membership, course: world.course, user: instructor_1_for_course, role: "professor", instructor_of_record: true)
+      create(:course_membership, course: world.course, user: ta_2_for_course, role: "gsi", instructor_of_record: true)
+      create(:course_membership, course: world.course, user: professor_observer, role: "professor", instructor_of_record: false)
+    end
+
+    it "returns only the staff listed as instructors of record" do
+      result = User.instructors_of_record(world.course)
+      expect(result.pluck(:id)).to eq [instructor_1_for_course.id, ta_2_for_course.id]
+    end
+  end
+
   describe "#activated?" do
     it "is activated when the activation state is active" do
       user = build :user, activation_state: "active"
