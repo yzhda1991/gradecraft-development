@@ -219,6 +219,25 @@ describe User do
     end
   end
 
+  describe "#team_for_course(course)" do 
+    let(:student) { create :user }
+    let(:team) { create :team, course: world.course }
+
+    before do 
+      create(:course_membership, course: world.course, user: student)
+    end
+
+    it "returns the student's team for the course" do 
+      create(:team_membership, team: team, student: student)
+      expect(student.team_for_course(world.course)).to eq(team)
+    end
+
+    it "returns nil if the student doesn't have a team" do 
+      expect(student.team_for_course(world.course)).to eq(nil)
+    end
+
+  end
+
   context "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"

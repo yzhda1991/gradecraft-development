@@ -213,10 +213,6 @@ class User < ActiveRecord::Base
     @team ||= teams.where(course_id: course).first
   end
 
-  def team_score(course)
-    teams.where(:course => course).pluck('score').first
-  end
-
   #Finding all of the team leaders for a single team
   def team_leaders(course)
     @team_leaders ||= team_for_course(course).includes(:leaders) rescue nil
