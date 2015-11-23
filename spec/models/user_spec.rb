@@ -308,6 +308,26 @@ describe User do
 
   end
 
+  describe "#grade_for_course(course)" do 
+
+  end
+
+  describe "#grade_level_for_course(course)" do 
+
+  end
+
+  describe "#grade_letter_for_course(course)" do 
+
+  end
+
+  describe "#next_element_level(course)" do 
+
+  end
+
+  describe "#points_to_next_level(course)" do 
+
+  end
+
   context "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"

@@ -298,7 +298,6 @@ class User < ActiveRecord::Base
     grades.where(assignment_id: assignment_id)
   end
 
-  # @mz todo: add specs
   # Powers the worker to recalculate student scores
   def cache_course_score(course_id)
     course_membership = fetch_course_membership(course_id)
@@ -307,7 +306,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # @mz todo: add specs
   # Powers the worker to recalculate student scores
   def improved_cache_course_score(course_id)
     course_membership = fetch_course_membership(course_id)
@@ -334,20 +332,12 @@ class User < ActiveRecord::Base
 
   ### BADGES
 
-  def earned_badges_by_badge
-    @earned_badges_by_badge ||= earned_badges.group_by(&:badge_id)
-  end
-
   def earned_badge_score_for_course(course)
-    earned_badges.where(:course_id => course).score
+    earned_badges.where(:course_id => course).sum(:score)
   end
 
   def earned_badges_for_course(course)
     earned_badges.where(course: course)
-  end
-
-  def earned_badge_count_for_course(course)
-    earned_badges.where(course: course).count
   end
 
   def earned_badge_for_badge(badge)
@@ -356,10 +346,6 @@ class User < ActiveRecord::Base
 
   def earned_badges_for_badge_count(badge)
     earned_badges.where(badge: badge).count
-  end
-
-  def earned_badge_score
-    @earned_badge_score ||= earned_badges.sum(:score)
   end
 
   # Unique badges associated with all of the earned badges for a given student/course combo
@@ -402,7 +388,6 @@ class User < ActiveRecord::Base
       .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
   end
 
-  public
   # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
   # 2) the student has either not earned at all, but is visible and available, or...
