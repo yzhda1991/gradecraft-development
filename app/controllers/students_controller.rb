@@ -49,24 +49,6 @@ class StudentsController < ApplicationController
     @student_grade_schemes_by_id = course_grade_scheme_by_student_id
   end
 
-  private
-
-  def unscoped_students_being_graded_for_course
-    User
-      .unscoped # override the order("last_name ASC") default scope on the User model
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
-      .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
-      .where("course_memberships.course_id = ?", current_course.id)
-      .where("course_memberships.auditing = ?", false)
-      .where("course_memberships.role = ?", "student")
-      .includes(:course_memberships)
-      .group("users.id, course_memberships.score")
-      .order(leaderboard_sort_order)
-      .includes(:team_memberships)
-  end
-
-  public
-
   #Displaying the list of assignments and team challenges for the semester
   def syllabus
     @assignment_types = current_course.assignment_types.includes(:assignments)
@@ -128,21 +110,6 @@ class StudentsController < ApplicationController
     @display_sidebar = true
   end
 
-  private
-
-  def earned_badges_by_badge_id
-    @earned_badges.inject({}) do |memo, earned_badge|
-      if memo[earned_badge.badge.id]
-        memo[earned_badge.badge.id] << earned_badge
-      else
-        memo[earned_badge.badge.id] = [earned_badge]
-      end
-      memo
-    end
-  end
-
-  public
-
   # Display the grade predictor
   #   students - style blocks to fill entire page, render layout with no sidebar
   #   staff - render standard laout with sidebar
@@ -171,6 +138,17 @@ class StudentsController < ApplicationController
   end
 
   protected
+  
+  def earned_badges_by_badge_id
+    @earned_badges.inject({}) do |memo, earned_badge|
+      if memo[earned_badge.badge.id]
+        memo[earned_badge.badge.id] << earned_badge
+      else
+        memo[earned_badge.badge.id] = [earned_badge]
+      end
+      memo
+    end
+  end
 
   # @mz todo: refactor and add specs, move out of controller
   def course_grade_scheme_by_student_id
@@ -263,6 +241,20 @@ class StudentsController < ApplicationController
     else
       []
     end
+  end  
+
+  def unscoped_students_being_graded_for_course
+    User
+      .unscoped # override the order("last_name ASC") default scope on the User model
+      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
+      .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
+      .where("course_memberships.course_id = ?", current_course.id)
+      .where("course_memberships.auditing = ?", false)
+      .where("course_memberships.role = ?", "student")
+      .includes(:course_memberships)
+      .group("users.id, course_memberships.score")
+      .order(leaderboard_sort_order)
+      .includes(:team_memberships)
   end
 
 end
