@@ -179,11 +179,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Any users who are connected to multiple classes
-  def multiple_courses?
-    course_memberships.count > 1
-  end
-
   def self.graded_students_in_course(course_id)
     User
       .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
