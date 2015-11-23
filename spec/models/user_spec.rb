@@ -9,6 +9,29 @@ describe User do
       .create_grade
   end
 
+  context "validations" do
+    it "requires the password confirmation to match" do
+      user = User.new password: "test", password_confirmation: "blah"
+      expect(user).to_not be_valid
+      expect(user.errors[:password_confirmation]).to include "doesn't match Password"
+    end
+
+    it "requires that there is a password confirmation" do
+      world.student.password = "test"
+      expect(world.student).to_not be_valid
+      expect(world.student.errors[:password_confirmation]).to include "can't be blank"
+    end
+  end
+
+  context "ordering" do
+    it "should return users alphabetical by last name" do
+      User.destroy_all
+      student = create(:user, last_name: 'Zed')
+      student2 = create(:user, last_name: 'Alpha')
+      expect(User.all).to eq([student2,student])
+    end
+  end
+
   describe ".find_by_insensitive_email" do
     it "should return the user no matter what the case the email address is in" do
       expect(User.find_by_insensitive_email(world.student.email.upcase)).to eq world.student
@@ -371,26 +394,55 @@ describe User do
     end
   end
 
-  context "validations" do
-    it "requires the password confirmation to match" do
-      user = User.new password: "test", password_confirmation: "blah"
-      expect(user).to_not be_valid
-      expect(user.errors[:password_confirmation]).to include "doesn't match Password"
+  describe "#grade_released_for_assignment?(assignment)" do 
+    let(:student) { create :user }
+    let(:assignment) { create :assignment}
+    let(:grade) {create :grade, assignment: assignment, student: student}
+
+    it "returns false if the grade is not student visible" do 
+      expect(student.grade_released_for_assignment?(assignment)).to eq(false)
     end
 
-    it "requires that there is a password confirmation" do
-      world.student.password = "test"
-      expect(world.student).to_not be_valid
-      expect(world.student.errors[:password_confirmation]).to include "can't be blank"
+    it "returns true if the grade is graded and does not require release" do 
+      grade.status = "Graded"
+      grade.save!
+      expect(student.grade_released_for_assignment?(assignment)).to eq(true)
+    end
+
+    it "returns false if the grade is graded and release is required" do 
+      assignment.release_necessary = true
+      assignment.save
+      grade.status = "Graded"
+      grade.save!
+      expect(student.grade_released_for_assignment?(assignment)).to eq(false)
+    end
+
+    it "returns true if the grade is released and release is required" do 
+      assignment.release_necessary = true
+      assignment.save
+      grade.status = "Released"
+      grade.save!
+      expect(student.grade_released_for_assignment?(assignment)).to eq(true)
     end
   end
 
-  context "ordering" do
-    it "should return users alphabetical by last name" do
-      User.destroy_all
-      student = create(:user, last_name: 'Zed')
-      student2 = create(:user, last_name: 'Alpha')
-      expect(User.all).to eq([student2,student])
+  describe "#grade_for_assignment(assignment)" do 
+    let(:student) { create :user }
+    let(:assignment) { create :assignment}
+
+    it "returns the grade for an assignment if it exists" do 
+      grade = create(:grade, assignment: assignment, student: student)
+      expect(student.grade_for_assignment(assignment)).to eq(grade)
+    end
+  end
+
+  describe "#grade_for_assignment_id(assignment_id)" do 
+    let(:student) { create :user }
+    let(:assignment) { create :assignment}
+
+    it "returns the grade for an assignment of a particular id if it exists" do 
+      grade = create(:grade, assignment: assignment, student: student)
+      expect(student.grade_for_assignment_id(assignment.id)).to eq([grade])
     end
   end
 
