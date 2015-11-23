@@ -52,12 +52,12 @@ class UsersController < ApplicationController
 
   def create
     @teams = current_course.teams
-    um_user = params[:um_user]
-    password = um_user ? nil : generate_random_password
+    internal = params[:internal]
+    password = internal ? nil : generate_random_password
     @user = User.create(params[:user].merge({password: password}))
 
     if @user.valid?
-      UserMailer.activation_needed_email(@user).deliver_now unless um_user
+      UserMailer.activation_needed_email(@user).deliver_now unless internal
       if @user.is_student?(current_course)
         redirect_to students_path,
           :notice => "#{term_for :student} #{@user.name} was successfully created!" and return

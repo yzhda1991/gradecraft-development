@@ -15,7 +15,7 @@ feature "creating a new user" do
         within(".pageContent") do
           new_user = build(:user)
           NewUserPage.new(new_user)
-            .submit(um_user: true, courses: [course_membership.course])
+            .submit(internal: true, courses: [course_membership.course])
 
           expect(current_path).to eq students_path
           expect(page).to have_notification_message("notice", "#{course_membership.course.user_term} #{new_user.name} was successfully created!")

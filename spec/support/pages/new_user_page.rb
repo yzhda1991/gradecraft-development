@@ -13,7 +13,7 @@ class NewUserPage
     fill_in "Username", with: fields[:username] || user.username
     fill_in "Email", with: fields[:email] || user.email
     fill_in "Display name", with: fields[:display_name] || user.display_name
-    check "UM User" if fields[:um_user]
+    check "UM User" if fields[:internal]
 
     courses = fields[:courses]
     courses.each { |course| check course.name } if courses
