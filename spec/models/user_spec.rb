@@ -238,6 +238,42 @@ describe User do
 
   end
 
+  describe "#team_leaders(course)" do 
+    let(:student) { create :user }
+    let(:team_leader) { create :user }
+    let(:team) { create :team, course: world.course }
+
+    before do 
+      create(:course_membership, course: world.course, user: student)
+    end
+
+    it "returns the students team leaders if they're present" do 
+      create(:team_leadership, team: team, leader: team_leader)
+      create(:team_membership, team: team, student: student)
+      expect(student.team_leaders(world.course)).to eq([team_leader])
+
+    end
+
+    it "returns nil if there are no team leaders present" do 
+      create(:team_membership, team: team, student: student)
+      expect(student.team_leaders(world.course)).to eq([])
+    end
+  end
+
+  describe "#team_leaderships_for_course(course)" do 
+    let(:team_leader) { create :user }
+    let(:team) { create :team, course: world.course }
+
+    it "returns the team leaderships if they're present" do 
+      leadership = create(:team_leadership, team: team, leader: team_leader)
+      expect(team_leader.team_leaderships(world.course)).to eq([leadership])
+    end
+
+    it "returns nil if there are no team leaderships present" do 
+      expect(team_leader.team_leaderships(world.course)).to eq([])
+    end
+  end
+
   context "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"

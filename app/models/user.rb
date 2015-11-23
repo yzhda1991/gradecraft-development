@@ -215,7 +215,7 @@ class User < ActiveRecord::Base
 
   #Finding all of the team leaders for a single team
   def team_leaders(course)
-    @team_leaders ||= team_for_course(course).includes(:leaders) rescue nil
+    @team_leaders ||= team_for_course(course).leaders rescue nil
   end
 
   #Finding all of a team leader's teams for a single course
