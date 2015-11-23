@@ -746,7 +746,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     describe "submission_text_file_path", inspect: true do
       subject { performer.instance_eval { submission_text_file_path(@some_student) }}
       before do
-        allow(performer).to receive(:submission_text_file_name) { "garrett_hornsby.txt" }
+        allow(performer).to receive(:submission_text_filename) { "garrett_hornsby.txt" }
         allow(performer).to receive(:student_directory_path) { "/some/student/dir" }
       end
 

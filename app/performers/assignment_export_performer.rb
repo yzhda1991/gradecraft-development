@@ -239,9 +239,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def submission_text_file_path(student)
-    File.expand_path(submission_text_file_name(student), student_directory_path(student))
+    File.expand_path(submission_text_filename(student), student_directory_path(student))
   end
 
   def submission_text_filename(student)
@@ -250,6 +249,46 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def formatted_student_name(student)
     sanitize_filename("#{student.first_name}_#{student.last_name}")
+  end
+
+  # @mz todo: add specs
+  def create_submission_binary_files
+    @submissions.each do |submission|
+      create_binary_files_for_submission(submission) if submission.submission_files
+    end
+  end
+
+  # @mz todo: add specs
+  def create_binary_files_for_submission(submission)
+    submission.submission_files.each_with_index do |submission_file, index|
+      write_submission_binary_file(student, submission_file, index)
+    end
+  end
+
+  # @mz todo: add specs
+  def student_file_path(student, filename)
+    File.expand_path(filename, student_directory_path(student))
+  end
+
+  # @mz todo: add specs
+  def submission_binary_file_path(student, submission_file, index)
+    filename = submission_binary_filename(student, submission_file, index)
+    student_file_path(student, filename)
+  end
+
+  # @mz todo: add specs
+  def submission_binary_filename(student, submission_file, index)
+    [ formatted_student_name(student), formatted_assignment_name, "submission_file#{index}", File.extname(submission_file.filename) ].join("_")
+  end
+
+  # @mz todo: add specs
+  def write_submission_binary_file(file_path, submission_file)
+    file_path = submission_binary_file_path(submission.student, submission_file, index)
+    open(file_path, 'w') do |f|
+      f.binmode
+      stringIO = open(submission_file.url)
+      f.write stringIO.read
+    end
   end
 
   private
