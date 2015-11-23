@@ -138,10 +138,24 @@ describe User do
       expect(student.name).to eq("Daniel Hall")
     end
 
-    it "it returns the User ID if not" do 
+    it "returns the User ID if not" do 
       student.last_name = nil
       student.first_name = nil
       expect(student.name).to eq("User #{student.id}")
+    end
+  end
+
+  describe "#auditing_course?(course)" do 
+    let(:student) { create :user }
+    
+    it "returns true if the student is auditing" do 
+      create(:course_membership, course: world.course, user: student, auditing: true)
+      expect(student.auditing_course?(world.course)).to eq(true)
+    end
+    
+    it "returns false if the student is being graded" do 
+      membership = create(:course_membership, course: world.course, user: student, auditing: false)
+      expect(student.auditing_course?(world.course)).to eq(false)
     end
   end
 
