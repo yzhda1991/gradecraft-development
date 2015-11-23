@@ -319,23 +319,56 @@ describe User do
   end
 
   describe "#grade_for_course(course)" do 
+    let(:student) { create :user }
 
+    it "returns the grade scheme element that matches the students score for the course" do 
+      create(:course_membership, course: world.course, user: student, score: 100000)
+      gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000)
+      expect(student.grade_for_course(world.course)).to eq(gse)
+    end
   end
 
   describe "#grade_level_for_course(course)" do 
+    let(:student) { create :user }
 
+    it "returns the grade scheme level name that matches the student's score for the course" do 
+      create(:course_membership, course: world.course, user: student, score: 100000)
+      gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000, level: "Meh")
+      expect(student.grade_level_for_course(world.course)).to eq("Meh")
+    end
   end
 
   describe "#grade_letter_for_course(course)" do 
+    let(:student) { create :user }
 
+    it "returns the grade scheme letter name that matches the student's score for the course" do 
+      create(:course_membership, course: world.course, user: student, score: 100000)
+      gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000, letter: "Q")
+      expect(student.grade_letter_for_course(world.course)).to eq("Q")
+    end
   end
 
   describe "#next_element_level(course)" do 
+    let(:student) { create :user }
 
+    it "returns the next level above a student's current score for the course" do 
+      create(:course_membership, course: world.course, user: student, score: 100000)
+      gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000, letter: "Q")
+      gse_1 = create(:grade_scheme_element, course: world.course, low_range: 120001, high_range: 150000, letter: "R")
+      gse_2 = create(:grade_scheme_element, course: world.course, low_range: 150001, high_range: 180000, letter: "S")
+      expect(student.next_element_level(world.course)).to eq(gse_1)
+    end
   end
 
   describe "#points_to_next_level(course)" do 
+    let(:student) { create :user }
 
+    it "returns the next level above a student's current score for the course" do 
+      create(:course_membership, course: world.course, user: student, score: 100000)
+      gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000, letter: "Q")
+      gse_1 = create(:grade_scheme_element, course: world.course, low_range: 120001, high_range: 150000, letter: "R")
+      expect(student.points_to_next_level(world.course)).to eq(20001)
+    end
   end
 
   context "validations" do

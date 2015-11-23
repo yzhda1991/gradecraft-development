@@ -14,5 +14,5 @@
             .display_on_hover.hover-style.right
               = "Not yet earned: #{badge.name}"
 
-    - if current_student.earned_badge_score > 0
-      .italic.small= "You've earned #{points current_student.earned_badge_score} points through #{(term_for :badges).titleize}."
+    - if current_student.earned_badge_score_for_course(current_course) > 0
+      .italic.small= "You've earned #{points current_student.earned_badge_score_for_course(current_course)} points through #{(term_for :badges).titleize}."

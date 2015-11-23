@@ -270,7 +270,7 @@ class User < ActiveRecord::Base
       end
       if next_element.nil?
         if element.low_range > cached_score_for_course(course)
-          next_element = grade_scheme_elements.first
+          next_element = grade_scheme_elements.last
         end
       end
     end
@@ -286,7 +286,7 @@ class User < ActiveRecord::Base
   #Checking specifically if there is a released grade for an assignment
   def grade_released_for_assignment?(assignment)
     if grade_for_assignment(assignment).present?
-      (grade_for_assignment(assignment).status == "Graded" && !assignment.release_necessary?) || grade_for_assignment(assignment).status == "Released"
+      grade_for_assignment(assignment).is_student_visible?
     end
   end
 
