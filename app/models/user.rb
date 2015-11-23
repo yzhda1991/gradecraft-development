@@ -45,8 +45,8 @@ class User < ActiveRecord::Base
       User.where(id: user_ids)
     end
 
-    def unscoped_students_being_graded_for_course(course)
-      User
+    def unscoped_students_being_graded_for_course(course, team=nil)
+      query = User
         .unscoped # override the order("last_name ASC") default scope on the User model
         .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
         .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
@@ -56,21 +56,9 @@ class User < ActiveRecord::Base
         .includes(:course_memberships)
         .group("users.id, course_memberships.score")
         .includes(:team_memberships)
-    end
-
-    def unscoped_students_being_graded_for_course_by_team(course, team)
-      User
-        .unscoped # override the order("last_name ASC") default scope on the User model
-        .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
-        .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
-        .where("course_memberships.course_id = ?", course.id)
-        .where("course_memberships.auditing = ?", false)
-        .where("course_memberships.role = ?", "student")
-        .includes(:course_memberships)
-        .group("users.id, course_memberships.score")
-        .includes(:team_memberships)
-        .joins("INNER JOIN team_memberships ON team_memberships.student_id = users.id")
-        .where("team_memberships.team_id = ?", team.id)
+      query = query.joins("INNER JOIN team_memberships ON team_memberships.student_id = users.id")
+          .where("team_memberships.team_id = ?", team.id) if team
+      query
     end
 
   end

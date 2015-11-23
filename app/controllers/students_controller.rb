@@ -35,7 +35,7 @@ class StudentsController < ApplicationController
     if team_filter_active?
       # fetch user ids for all students in the active team
       @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
-      @students = User.unscoped_students_being_graded_for_course_by_team(current_course, @team).order_by_high_score
+      @students = User.unscoped_students_being_graded_for_course(current_course, @team).order_by_high_score
     else
       # fetch user ids for all students in the course, regardless of team
       # cached_score_sql_alias is coming from custom unscoped_students_being_graded_for_course SQL
