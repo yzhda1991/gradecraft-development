@@ -290,7 +290,7 @@ describe User do
     let(:student) { create :user }
 
     before do 
-      create(:course_membership, course: course_3, user: student)
+      create(:course_membership, course: world.course, user: student)
     end
 
     it "returns all archived courses for a student" do 
@@ -301,7 +301,17 @@ describe User do
   end
 
   describe "#cached_score_for_course(course)" do 
+    let(:student) { create :user }
 
+    it "returns the student's score for the course" do 
+      create(:course_membership, course: world.course, user: student, score: 100000)
+      expect(student.cached_score_for_course(world.course)).to eq(100000)
+    end
+
+    it "returns 0 if the student has no score" do 
+      create(:course_membership, course: world.course, user: student)
+      expect(student.cached_score_for_course(world.course)).to eq(0)
+    end
   end
 
   describe "#scores_for_course(course)" do 
