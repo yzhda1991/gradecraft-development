@@ -83,6 +83,24 @@ describe User do
     end
   end
 
+  describe ".instructors_of_record" do
+    let(:ta_for_course) { create :user }
+    let(:instructor_1_for_course) { create :user, :last_name => "Gaiman" }
+    let(:ta_2_for_course) { create :user, :last_name => "Palmer" }
+    let(:professor_observer) {create :user}
+    before do
+      create(:course_membership, course: world.course, user: ta_for_course, role: "gsi")
+      create(:course_membership, course: world.course, user: instructor_1_for_course, role: "professor", instructor_of_record: true)
+      create(:course_membership, course: world.course, user: ta_2_for_course, role: "gsi", instructor_of_record: true)
+      create(:course_membership, course: world.course, user: professor_observer, role: "professor", instructor_of_record: false)
+    end
+
+    it "returns only the staff listed as instructors of record" do
+      result = User.instructors_of_record(world.course)
+      expect(result.pluck(:id)).to eq [instructor_1_for_course.id, ta_2_for_course.id]
+    end
+  end
+
   describe "#activated?" do
     it "is activated when the activation state is active" do
       user = build :user, activation_state: "active"
@@ -92,6 +110,52 @@ describe User do
     it "is not activated when the activation state is pending" do
       user = build :user, activation_state: "pending"
       expect(user).to_not be_activated
+    end
+  end
+
+  describe "#default_course" do 
+    let(:student) { create :user, default_course: world.course }
+    let(:second_course) {create :course}
+    before do 
+      create(:course_membership, course: world.course, user: student)
+      create(:course_membership, course: second_course, user: student)
+    end
+
+    it "returns the users default course if they've set one" do 
+      expect(student.default_course).to eq(world.course)
+    end
+
+    it "returns the first course they have if they haven't set one" do 
+      student.default_course = nil
+      expect(student.default_course).to eq(student.courses.first)
+    end
+  end
+
+  describe "#name" do 
+    let(:student) {create :user, first_name: "Daniel", last_name: "Hall"}
+
+    it "returns the student's full name if present" do 
+      expect(student.name).to eq("Daniel Hall")
+    end
+
+    it "returns the User ID if not" do 
+      student.last_name = nil
+      student.first_name = nil
+      expect(student.name).to eq("User #{student.id}")
+    end
+  end
+
+  describe "#auditing_course?(course)" do 
+    let(:student) { create :user }
+    
+    it "returns true if the student is auditing" do 
+      create(:course_membership, course: world.course, user: student, auditing: true)
+      expect(student.auditing_course?(world.course)).to eq(true)
+    end
+    
+    it "returns false if the student is being graded" do 
+      membership = create(:course_membership, course: world.course, user: student, auditing: false)
+      expect(student.auditing_course?(world.course)).to eq(false)
     end
   end
 
@@ -119,6 +183,18 @@ describe User do
       world.student.admin = true
       world.student.save
       expect(world.student.role(world.course)).to eq "admin"
+    end
+  end
+
+  describe "#public_name" do 
+    let(:student) {create :user, first_name: "Daniel", last_name: "Hall", display_name: "Hector's Kid"}
+    it "returns the username's display name if it's present" do 
+      expect(student.public_name).to eq("Hector's Kid")
+    end
+
+    it "returns the user's name otherwise" do 
+      student.display_name = nil
+      expect(student.public_name).to eq("Daniel Hall")
     end
   end
 

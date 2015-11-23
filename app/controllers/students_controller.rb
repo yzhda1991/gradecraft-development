@@ -11,7 +11,7 @@ class StudentsController < ApplicationController
 
     @teams = current_course.teams
 
-    if params[:team_id].present?
+    if team_filter_active?
       @team = current_course.teams.find_by(id: params[:team_id])
       @students = current_course.students_being_graded_by_team(@team)
     else
@@ -35,12 +35,12 @@ class StudentsController < ApplicationController
     if team_filter_active?
       # fetch user ids for all students in the active team
       @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
-      @students = graded_students_in_current_course_for_active_team.order(leaderboard_sort_order)
+      @students = User.unscoped_students_being_graded_for_course(current_course, @team).order_by_high_score
     else
       # fetch user ids for all students in the course, regardless of team
-      # cached_score_sql_alias is coming from custom graded_students_in_course SQL
+      # cached_score_sql_alias is coming from custom unscoped_students_being_graded_for_course SQL
 
-      @students = unscoped_students_being_graded_for_course
+      @students = User.unscoped_students_being_graded_for_course(current_course).order_by_high_score
     end
 
     @student_ids = @students.collect {|s| s[:id] }
@@ -48,24 +48,6 @@ class StudentsController < ApplicationController
     @earned_badges_by_student_id = earned_badges_by_student_id
     @student_grade_schemes_by_id = course_grade_scheme_by_student_id
   end
-
-  private
-
-  def unscoped_students_being_graded_for_course
-    User
-      .unscoped # override the order("last_name ASC") default scope on the User model
-      .select("users.id, users.first_name, users.last_name, users.email, users.display_name, users.updated_at, course_memberships.score as cached_score_sql_alias")
-      .joins("INNER JOIN course_memberships ON course_memberships.user_id = users.id")
-      .where("course_memberships.course_id = ?", current_course.id)
-      .where("course_memberships.auditing = ?", false)
-      .where("course_memberships.role = ?", "student")
-      .includes(:course_memberships)
-      .group("users.id, course_memberships.score")
-      .order(leaderboard_sort_order)
-      .includes(:team_memberships)
-  end
-
-  public
 
   #Displaying the list of assignments and team challenges for the semester
   def syllabus
@@ -90,7 +72,7 @@ class StudentsController < ApplicationController
   def show
     self.current_student = current_course.students.where(id: params[:id]).first
     @student = current_student
-    @student.load_team(current_course) if current_course.has_teams?
+    @student.team_for_course(current_course) if current_course.has_teams?
     @assignments = current_course.assignments
     @assignment_types = current_course.assignment_types
     @display_sidebar = true
@@ -128,21 +110,6 @@ class StudentsController < ApplicationController
     @display_sidebar = true
   end
 
-  private
-
-  def earned_badges_by_badge_id
-    @earned_badges.inject({}) do |memo, earned_badge|
-      if memo[earned_badge.badge.id]
-        memo[earned_badge.badge.id] << earned_badge
-      else
-        memo[earned_badge.badge.id] = [earned_badge]
-      end
-      memo
-    end
-  end
-
-  public
-
   # Display the grade predictor
   #   students - style blocks to fill entire page, render layout with no sidebar
   #   staff - render standard laout with sidebar
@@ -151,17 +118,6 @@ class StudentsController < ApplicationController
       @fullpage = true
       render :layout => 'predictor'
     end
-  end
-
-  #TODO: take this out!
-  def scores_by_assignment
-    scores = current_course.grades.released.joins(:assignment_type)
-                           .group('grades.student_id, assignment_types.name')
-                           .order('grades.student_id, assignment_types.name')
-    scores = scores.pluck('grades.student_id, assignment_types.name, SUM(grades.score)')
-    render :json => {
-      :scores => scores,
-    }
   end
 
   #All Admins to see all of one student's grades at once, proof for duplicates
@@ -208,9 +164,19 @@ class StudentsController < ApplicationController
     end
   end
 
-
   def course_grade_scheme_elements
     @course_grade_scheme_elements ||= GradeSchemeElement.unscoped.where(course_id: current_course.id).order("low_range ASC")
+  end
+
+  def earned_badges_by_badge_id
+    @earned_badges.inject({}) do |memo, earned_badge|
+      if memo[earned_badge.badge.id]
+        memo[earned_badge.badge.id] << earned_badge
+      else
+        memo[earned_badge.badge.id] = [earned_badge]
+      end
+      memo
+    end
   end
 
   def earned_badges_by_student_id
@@ -223,6 +189,10 @@ class StudentsController < ApplicationController
       end
       memo
     end
+  end
+
+  def student_earned_badges_for_entire_course
+    @student_earned_badges ||= EarnedBadge.where(course: current_course).where("student_id in (?)", @student_ids).includes(:badge)
   end
 
   def teams_by_student_id
@@ -238,64 +208,8 @@ class StudentsController < ApplicationController
       .includes(:team)
   end
 
-  def course_teams
-    @course_teams ||= Team.where(course: current_course)
-      .joins(:team_memberships)
-      .where("team_memberships.student_id in (?)", student_ids)
-  end
-
-  def course_team_membership_count
-    @course_team_membership_count = TeamMembership.joins(:team).where("teams.course_id = ?", current_course[:id]).count
-  end
-
-  def student_earned_badges_for_entire_course
-    @student_earned_badges ||= EarnedBadge.where(course: current_course).where("student_id in (?)", @student_ids).includes(:badge)
-  end
-
-  def leaderboard_sort_order
-    "course_memberships.score DESC, users.last_name ASC, users.first_name ASC"
-  end
-
-  def fetch_active_team
-    @team ||= Team.find params[:team_id]
-  end
-
   def team_filter_active?
     params[:team_id].present?
-  end
-
-  def graded_students_in_current_course
-    if course_team_membership_count > 0
-      User.unscoped.graded_students_in_course_include_and_join_team(current_course.id)
-    else
-      User.unscoped.graded_students_in_course(current_course.id)
-    end
-  end
-
-  def auditing_students_in_current_course
-    if course_team_membership_count > 0
-      User.unscoped.auditing_students_in_course_include_and_join_team(current_course.id)
-    else
-      User.unscoped.auditing_students_in_course(current_course.id)
-    end
-  end
-
-  def graded_students_in_current_course_for_active_team
-    if course_team_membership_count > 0
-      User.unscoped.graded_students_in_course_include_and_join_team(current_course.id)
-        .where("team_memberships.team_id = ?", params[:team_id])
-    else
-      []
-    end
-  end
-
-  def auditing_students_in_current_course_for_active_team
-    if course_team_membership_count > 0
-      User.unscoped.auditing_students_in_course_include_and_join_team(current_course.id)
-        .where("team_memberships.team_id = ?", params[:team_id])
-    else
-      []
-    end
   end
 
 end

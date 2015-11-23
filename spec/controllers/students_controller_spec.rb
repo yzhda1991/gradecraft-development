@@ -88,13 +88,6 @@ describe StudentsController do
       end
     end
 
-    describe "GET scores_by_assignment" do
-      it "provides a list of all assignments and their scores" do
-        get :scores_by_assignment
-        (expect(response.status).to eq(200))
-      end
-    end
-
     describe "GET grade_index" do
       it "shows the grade index page" do
         get :grade_index, :student_id => @student.id
@@ -156,7 +149,6 @@ describe StudentsController do
         :index,
         :leaderboard,
         :autocomplete_student_name,
-        :scores_by_assignment,
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)

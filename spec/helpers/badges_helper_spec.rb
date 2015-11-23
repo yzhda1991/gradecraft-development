@@ -20,14 +20,14 @@ describe BadgesHelper do
 
     it "renders an unlock icon if it's unlocked by the student" do
       allow(badge).to receive(:is_unlockable?).and_return true
-      allow(badge).to receive(:is_unlockable_for_student?).with(student).and_return true
+      allow(badge).to receive(:is_unlocked_for_student?).with(student).and_return true
       html = helper.sidebar_earned_badge(badge, student)
       expect(html).to have_tag "i", with: { class: "fa-unlock-alt" }
     end
 
     it "renders a lock icon if it's unlockable but not yet unlocked" do
       allow(badge).to receive(:is_unlockable?).and_return true
-      allow(badge).to receive(:is_unlockable_for_student?).with(student).and_return false
+      allow(badge).to receive(:is_unlocked_for_student?).with(student).and_return false
       html = helper.sidebar_earned_badge(badge, student)
       expect(html).to have_tag "i", with: { class: "fa-lock" }
     end
