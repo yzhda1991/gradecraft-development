@@ -198,6 +198,27 @@ describe User do
     end
   end
 
+  describe "#is_staff?(course)" do 
+    let(:user) { create :user }
+    it "returns true if the user is a professor in the course" do 
+      membership = create(:course_membership, course: world.course, user: user, role: "professor")
+      expect(user.is_staff?(world.course)).to eq(true)
+    end
+    it "returns true if the user is a GSI in the course" do 
+      membership = create(:course_membership, course: world.course, user: user, role: "gsi")
+      expect(user.is_staff?(world.course)).to eq(true)
+    end
+    it "returns true if the user is an admin in the course" do 
+      membership = create(:course_membership, course: world.course, user: user, role: "admin")
+      expect(user.is_staff?(world.course)).to eq(true)
+    end
+
+    it "returns false if the user is a student in the course" do 
+      membership = create(:course_membership, course: world.course, user: user, role: "student")
+      expect(user.is_staff?(world.course)).to eq(false)
+    end
+  end
+
   context "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"
