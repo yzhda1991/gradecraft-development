@@ -150,15 +150,6 @@ class User < ActiveRecord::Base
     where("LOWER(username) = :username", username: username.downcase).first
   end
 
-  #Course
-  def find_scoped_courses(course_id)
-    if is_admin? || self.course_ids.include?(course_id)
-      Course.find(course_id)
-    else
-      raise
-    end
-  end
-
   def activated?
     activation_state == "active"
   end
