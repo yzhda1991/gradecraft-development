@@ -12,13 +12,6 @@ module Services
       end
     end
 
-    class GeneratesPassword
-      extend LightService::Action
-
-      executed do |context|
-      end
-    end
-
     class SavesUser
       extend LightService::Action
 
