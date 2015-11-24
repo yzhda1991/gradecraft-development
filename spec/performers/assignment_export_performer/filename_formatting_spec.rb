@@ -38,6 +38,24 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
+  describe "student_directory_file_path" do
+    let(:student_double) { double(:student) }
+    subject { performer.instance_eval { student_directory_file_path(@some_student, "whats_up.doc") }}
+    before do
+      performer.instance_variable_set(:@some_student, student_double)
+      allow(performer).to receive(:student_directory_path) { "/this/great/path" }
+    end
+
+    it "gets the student directory path from the student" do
+      expect(performer).to receive(:student_directory_path).with(student_double)
+      subject
+    end
+
+    it "builds the correct path relative to the student directory" do
+      expect(subject).to eq("/this/great/path/whats_up.doc")
+    end
+  end
+
   describe "archive_basename" do
     subject { performer.instance_eval { archive_basename }}
     before(:each) do

@@ -263,15 +263,14 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
-  def student_file_path(student, filename)
+  def student_directory_file_path(student, filename)
     File.expand_path(filename, student_directory_path(student))
   end
 
   # @mz todo: add specs
   def submission_binary_file_path(student, submission_file, index)
     filename = submission_binary_filename(student, submission_file, index)
-    student_file_path(student, filename)
+    student_directory_file_path(student, filename)
   end
 
   # @mz todo: add specs
