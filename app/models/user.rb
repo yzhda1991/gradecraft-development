@@ -460,8 +460,8 @@ class User < ActiveRecord::Base
     return total
   end
 
-  def weighted_assignments?
-    assignment_weights.count > 0
+  def weighted_assignments?(course)
+    assignment_weights.where(course: course).count > 0
   end
 
   #Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count,

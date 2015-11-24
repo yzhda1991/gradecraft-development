@@ -553,7 +553,7 @@ describe User do
   #   end
   end
 
-  describe "#total_weight_spent(course)" do 
+  describe "#total_weight_spent(course)", focus: true do 
   #   total = 0
   #   course.assignment_types.each do |at|
   #     total += weight_for_assignment_type(at)
@@ -562,11 +562,31 @@ describe User do
   end
 
   describe "#weighted_assignments?" do
-  #   assignment_weights.count > 0
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+      create(:assignment_weight, student: student, course: world.course)
+    end
+
+    it "should return true if the student has weighted assignments" do 
+      expect(student.weighted_assignments?(world.course)).to eq(true)
+    end
   end
 
   describe "#weight_count(course)" do 
-  #   assignment_weights.where(course: course).pluck('weight').count
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+      create(:assignment_weight, student: student, course: world.course)
+      create(:assignment_weight, student: student, course: world.course)
+      create(:assignment_weight, student: student, course: world.course)
+    end
+
+    it "should return the summed weight count for a course, for a student" do 
+      expect(student.weight_count(world.course)).to eq(3)
+    end
   end
 
   describe "#group_for_assignment(assignment)" do 
