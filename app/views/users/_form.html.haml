@@ -19,8 +19,11 @@
       = f.label :display_name
       = f.text_field :display_name
     .form-item
-      = f.label :internal, "UM User"
-      = f.check_box :internal
+      = f.label :internal?, "UM User"
+      = f.check_box :internal?, { data: { behavior: 'toggle-disable turn-on', 'toggle-disable-target': '.send-welcome *', 'turn-on-target': '#send_welcome' }}
+    .form-item.send-welcome
+      = label_tag :send_welcome, "Send welcome email to new user accounts", { class: "disabled" }
+      = check_box_tag :send_welcome, '1', false, { disabled: true }
 
   - if current_user_is_admin?
     %section

@@ -146,7 +146,7 @@ class User < ActiveRecord::Base
   validates :password_confirmation, :presence => true, if: :password, on: :update
   validates :email, internal_email: { format: internal_email_regex, name: "University of Michigan" }
 
-  def internal
+  def internal?
     @internal || email_was =~ self.class.internal_email_regex
   end
 

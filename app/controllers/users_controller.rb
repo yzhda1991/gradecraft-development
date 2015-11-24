@@ -53,12 +53,12 @@ class UsersController < ApplicationController
   def create
     @teams = current_course.teams
     @user = User.new(params[:user])
-    @user.password = generate_random_password unless @user.internal
+    @user.password = generate_random_password unless @user.internal?
 
     if @user.save
-      if @user.internal
-        @user.activate!
+      if @user.internal?
         @user.update_attributes kerberos_uid: @user.username
+        @user.activate!
       else
         UserMailer.activation_needed_email(@user).deliver_now
       end
@@ -70,7 +70,6 @@ class UsersController < ApplicationController
           :notice => "Staff Member #{@user.name} was successfully created!" and return
       end
     end
-    expire_action :action => :index
     render :new
   end
 

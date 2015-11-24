@@ -8,7 +8,7 @@ class InternalEmailValidator < ActiveModel::EachValidator
   end
 
   def validate_each(record, attribute, value)
-    if record.internal && !(record.email =~ format)
+    if record.internal? && !(record.email =~ format)
       record.errors[attribute] << "must be a #{name} email"
     end
   end
