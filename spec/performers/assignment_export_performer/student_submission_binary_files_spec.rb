@@ -16,7 +16,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     let(:submission_without_files) { double(:submission, submission_files: []) }
 
     let(:submission_files) { [ submission_file1, submission_file2 ] }
-    let(:submission_file1) { double(:submission_file) }
+    let(:submission_file1) { double(:submission_file, extension: ".ralph") }
     let(:submission_file2) { double(:submission_file) }
 
     let(:student) { double(:student) }
@@ -70,26 +70,63 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
-    describe "submission_binary_file_path" do
-      subject { performer.instance_eval { submission_binary_file_path( @some_student, @some_submission_file, 5 ) } }
-
+    describe "submission binary file name stuff" do
       before do
         performer.instance_variable_set(:@some_submission_file, submission_file1)
         performer.instance_variable_set(:@some_student, student)
-
-        allow(performer).to receive(:submission_binary_filename) { "sweet_keith.potr" } # sweet keith pooped on the rug
-        allow(performer).to receive(:student_directory_file_path)
       end
 
-      it "builds a binary filename based on the arguments" do
-        expect(performer).to receive(:submission_binary_filename).with( student, submission_file1, 5 )
+      describe "submission_binary_file_path" do
+        subject { performer.instance_eval { submission_binary_file_path( @some_student, @some_submission_file, 5 ) } }
+
+        before do
+          allow(performer).to receive(:submission_binary_filename) { "sweet_keith.potr" } # sweet keith pooped on the rug
+          allow(performer).to receive(:student_directory_file_path)
+        end
+
+        it "builds a binary filename based on the arguments" do
+          expect(performer).to receive(:submission_binary_filename).with( student, submission_file1, 5 )
+        end
+
+        it "returns a full path for the file relative to the student directory" do
+          expect(performer).to receive(:student_directory_file_path).with( student, "sweet_keith.potr" )
+        end
+
+        after(:each) { subject }
       end
 
-      it "returns a full path for the file relative to the student directory" do
-        expect(performer).to receive(:student_directory_file_path).with( student, "sweet_keith.potr" )
+      describe "submission_binary_filename" do
+        subject { performer.instance_eval { submission_binary_filename( @some_student, @some_submission_file, 5 ) } }
+
+        before do
+          allow(performer).to receive(:formatted_student_name) { "jeff_mills" }
+          allow(performer).to receive(:formatted_assignment_name) { "the_wizard" }
+        end
+
+        it "gets the formatted student name from the student" do
+          expect(performer).to receive(:formatted_student_name).with(student)
+          subject
+        end
+
+        it "gets the formatted assignment name" do
+          expect(performer).to receive(:formatted_assignment_name)
+          subject
+        end
+
+        it "appends the index to 'submission_file'" do
+          expect(subject).to include("submission_file5")
+        end
+
+        it "gets the extension from the submission_file" do
+          expect(submission_file1).to receive(:extension) { ".ralph" }
+          subject
+        end
+
+        it "puts them all together and returns a filename" do
+          expect(subject).to eq("jeff_mills_the_wizard_submission_file5.ralph")
+        end
       end
 
-      after(:each) { subject }
     end
 
   end
