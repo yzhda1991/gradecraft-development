@@ -59,6 +59,7 @@ class UsersController < ApplicationController
       if @user.internal?
         @user.update_attributes kerberos_uid: @user.username
         @user.activate!
+        UserMailer.welcome_email(@user).deliver_now if params[:send_welcome]
       else
         UserMailer.activation_needed_email(@user).deliver_now
       end
