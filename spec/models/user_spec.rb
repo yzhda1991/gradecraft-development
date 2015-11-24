@@ -518,29 +518,6 @@ describe User do
     end
   end
 
-  describe "#unique_student_earned_badges(course)" do 
-  #   @unique_student_earned_badges ||= Badge
-  #     .includes(:earned_badges)
-  #     .where("earned_badges.course_id = ?", course[:id])
-  #     .where("earned_badges.student_id = ?", self[:id])
-  #     .where("earned_badges.student_visible = ?", true)
-  #     .references(:earned_badges)
-  end
-
-  describe "#student_visible_earned_badges(course)" do 
-  #   @student_visible_earned_badges ||= EarnedBadge
-  #     .includes(:badge)
-  #     .where(course: course)
-  #     .where(student_id: self[:id])
-  #     .where(student_visible: true)
-  end
-
-  describe "#earnable_course_badges_for_grade(grade)" do 
-  #   Badge
-  #     .where(course_id: grade[:course_id])
-  #     .where(final_earnable_course_badges_sql(grade))
-  end
-
   describe "#earnable_course_badges_sql_conditions(grade)" do 
   #   Badge
   #     .unscoped
@@ -549,41 +526,10 @@ describe User do
   #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
   end
 
-  describe "#student_visible_unearned_badges(course)" do 
-  #   Badge
-  #     .where(course_id: course[:id])
-  #     .where(visible: true)
-  #     .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], true)
-  end
-
-  describe "#student_invisible_badges(course)" do
-  #   Badge
-  #     .where(visible: false)
-  #     .where(course_id: course[:id])
-  #     .where("id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
-  end
-
-  describe "#earn_badge(badge)" do
-  #   raise TypeError, "Argument must be a Badge object" unless badge.class == Badge
-  #   earned_badges.create badge: badge, course: badge.course
-  end
-
-  describe "#earn_badge_for_grade(badge, grade)" do
-  #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
-  #   earned_badges.create badge: badge, course: badge.course, grade: grade
-  end
-
   describe "#earn_badges_for_grade(badges, grade)" do 
   #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
   #   badges.collect do |badge|
   #     earned_badges.create badge: badge, course: badge.course, grade: grade
-  #   end
-  end
-
-  describe "#earn_badges(badges)" do 
-  #   raise TypeError, "Argument must be an array of Badge objects" unless badges.class == Array
-  #   badges.each do |badge|
-  #     earned_badges.create badge: badge, course: badge.course
   #   end
   end
 
@@ -622,7 +568,7 @@ describe User do
   describe "#weight_count(course)" do 
   #   assignment_weights.where(course: course).pluck('weight').count
   end
-  
+
   describe "#group_for_assignment(assignment)" do 
     let(:student) { create :user }
     let(:assignment) {create :assignment, grade_scope: "Group"}
