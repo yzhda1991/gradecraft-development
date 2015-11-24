@@ -213,13 +213,9 @@ class User < ActiveRecord::Base
     @team ||= teams.where(course_id: course).first
   end
 
-  def team_score(course)
-    teams.where(:course => course).pluck('score').first
-  end
-
   #Finding all of the team leaders for a single team
   def team_leaders(course)
-    @team_leaders ||= team_for_course(course).includes(:leaders) rescue nil
+    @team_leaders ||= team_for_course(course).leaders rescue nil
   end
 
   #Finding all of a team leader's teams for a single course
@@ -229,7 +225,7 @@ class User < ActiveRecord::Base
 
   # Space for users to build a narrative around their identity
   def character_profile(course)
-    course_memberships.where(course: course).try('character_profile')
+    course_memberships.where(course: course).first.try('character_profile')
   end
 
   def archived_courses
@@ -267,13 +263,14 @@ class User < ActiveRecord::Base
 
   def next_element_level(course)
     next_element = nil
-    course.grade_scheme_elements.order_by_low_range.each_with_index do |element, index|
+    grade_scheme_elements = course.grade_scheme_elements.unscoped.order_by_low_range
+    grade_scheme_elements.each_with_index do |element, index|
       if (element.high_range >= cached_score_for_course(course)) && (cached_score_for_course(course) >= element.low_range)
-        next_element = course.grade_scheme_elements[index + 1]
+        next_element = grade_scheme_elements[index + 1]
       end
       if next_element.nil?
         if element.low_range > cached_score_for_course(course)
-          next_element = course.grade_scheme_elements.order_by_low_range.first
+          next_element = grade_scheme_elements.last
         end
       end
     end
@@ -289,7 +286,7 @@ class User < ActiveRecord::Base
   #Checking specifically if there is a released grade for an assignment
   def grade_released_for_assignment?(assignment)
     if grade_for_assignment(assignment).present?
-      (grade_for_assignment(assignment).status == "Graded" && !assignment.release_necessary?) || grade_for_assignment(assignment).status == "Released"
+      grade_for_assignment(assignment).is_student_visible?
     end
   end
 
@@ -302,7 +299,6 @@ class User < ActiveRecord::Base
     grades.where(assignment_id: assignment_id)
   end
 
-  # @mz todo: add specs
   # Powers the worker to recalculate student scores
   def cache_course_score(course_id)
     course_membership = fetch_course_membership(course_id)
@@ -311,7 +307,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # @mz todo: add specs
   # Powers the worker to recalculate student scores
   def improved_cache_course_score(course_id)
     course_membership = fetch_course_membership(course_id)
@@ -328,30 +323,19 @@ class User < ActiveRecord::Base
   end
 
   ### SUBMISSIONS
-  def submissions_by_assignment_id
-    @submissions_by_assignment ||= submissions.group_by(&:assignment_id)
-  end
 
   def submission_for_assignment(assignment)
-    submissions_by_assignment_id[assignment.id].try(:first)
+    submissions.where(:assignment_id => assignment.id).try(:first)
   end
 
   ### BADGES
 
-  def earned_badges_by_badge
-    @earned_badges_by_badge ||= earned_badges.group_by(&:badge_id)
-  end
-
   def earned_badge_score_for_course(course)
-    earned_badges.where(:course_id => course).score
+    earned_badges.where(:course_id => course).student_visible.sum(:score)
   end
 
   def earned_badges_for_course(course)
     earned_badges.where(course: course)
-  end
-
-  def earned_badge_count_for_course(course)
-    earned_badges.where(course: course).count
   end
 
   def earned_badge_for_badge(badge)
@@ -360,10 +344,6 @@ class User < ActiveRecord::Base
 
   def earned_badges_for_badge_count(badge)
     earned_badges.where(badge: badge).count
-  end
-
-  def earned_badge_score
-    @earned_badge_score ||= earned_badges.sum(:score)
   end
 
   # Unique badges associated with all of the earned badges for a given student/course combo
@@ -406,7 +386,6 @@ class User < ActiveRecord::Base
       .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
   end
 
-  public
   # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
   # 2) the student has either not earned at all, but is visible and available, or...
@@ -500,9 +479,6 @@ class User < ActiveRecord::Base
 
 
   ### GROUPS
-  def groups_by_assignment_id
-    @group_by_assignment ||= groups.group_by(&:assignment_id)
-  end
 
   def group_for_assignment(assignment)
     @group_for_assignment ||= assignment_groups.where(assignment: assignment).first.try(:group)
