@@ -11,12 +11,5 @@ module Services
         context[:user] = User.new attributes
       end
     end
-
-    class SavesUser
-      extend LightService::Action
-
-      executed do |context|
-      end
-    end
   end
 end
