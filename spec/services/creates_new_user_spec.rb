@@ -5,6 +5,11 @@ describe Services::CreatesNewUser do
   let(:user) { build :user }
   let(:params) { user.attributes }
 
+  before do
+    user_mailer = double(:user_mailer, activation_needed_email: double(:mailer, deliver_now: nil))
+    stub_const "UserMailer", user_mailer
+  end
+
   describe ".create" do
     it "initializes a new user" do
       expect(Services::Actions::BuildsUser).to receive(:execute).and_call_original
@@ -31,7 +36,11 @@ describe Services::CreatesNewUser do
       described_class.create params
     end
 
-    xit "sends out an activation email if needed"
+    it "sends out an activation email" do
+      expect(Services::Actions::SendsActivationNeededEmail).to receive(:execute).and_call_original
+      described_class.create params
+    end
+
     xit "sends out a welcome email if needed"
   end
 end

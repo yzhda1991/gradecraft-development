@@ -59,8 +59,6 @@ class UsersController < ApplicationController
     if result.success?
       if @user.internal?
         UserMailer.welcome_email(@user).deliver_now if params[:send_welcome]
-      else
-        UserMailer.activation_needed_email(@user).deliver_now
       end
       if @user.is_student?(current_course)
         redirect_to students_path,
