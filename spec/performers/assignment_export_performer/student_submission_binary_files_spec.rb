@@ -12,14 +12,14 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "creating submission binary files" do
     let(:submissions) { [ submission_with_files, submission_without_files ] }
-    let(:submission_with_files) { create(:submission, submission_files: submission_files, student: student) }
-    let(:submission_without_files) { create(:submission, submission_files: []) }
+    let(:submission_with_files) { double(:submission, submission_files: submission_files, student: student) }
+    let(:submission_without_files) { double(:submission, submission_files: []) }
 
     let(:submission_files) { [ submission_file1, submission_file2 ] }
-    let(:submission_file1) { create(:submission_file) }
-    let(:submission_file2) { create(:submission_file) }
+    let(:submission_file1) { double(:submission_file) }
+    let(:submission_file2) { double(:submission_file) }
 
-    let(:student) { create(:student_course_membership).user }
+    let(:student) { double(:student) }
 
     describe "create_submission_binary_files" do
       subject { performer.instance_eval { create_submission_binary_files } }
@@ -68,6 +68,28 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           subject
         end
       end
+    end
+
+    describe "submission_binary_file_path" do
+      subject { performer.instance_eval { submission_binary_file_path( @some_student, @some_submission_file, 5 ) } }
+
+      before do
+        performer.instance_variable_set(:@some_submission_file, submission_file1)
+        performer.instance_variable_set(:@some_student, student)
+
+        allow(performer).to receive(:submission_binary_filename) { "sweet_keith.potr" } # sweet keith pooped on the rug
+        allow(performer).to receive(:student_directory_file_path)
+      end
+
+      it "builds a binary filename based on the arguments" do
+        expect(performer).to receive(:submission_binary_filename).with( student, submission_file1, 5 )
+      end
+
+      it "returns a full path for the file relative to the student directory" do
+        expect(performer).to receive(:student_directory_file_path).with( student, "sweet_keith.potr" )
+      end
+
+      after(:each) { subject }
     end
 
   end
