@@ -19,8 +19,8 @@
       = f.label :display_name
       = f.text_field :display_name
     .form-item
-      = label_tag "internal", "UM User"
-      = check_box_tag "internal"
+      = f.label :internal, "UM User"
+      = f.check_box :internal
 
   - if current_user_is_admin?
     %section
