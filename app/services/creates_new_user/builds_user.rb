@@ -3,7 +3,12 @@ module Services
     class BuildsUser
       extend LightService::Action
 
+      expects :attributes
+      promises :user
+
       executed do |context|
+        attributes = context[:attributes]
+        context[:user] = User.new attributes
       end
     end
 

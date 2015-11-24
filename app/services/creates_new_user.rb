@@ -1,5 +1,5 @@
 require "light-service"
-require_relative "creates_new_user/build_user"
+require_relative "creates_new_user/builds_user"
 
 module Services
   class CreatesNewUser
