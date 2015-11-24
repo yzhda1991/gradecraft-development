@@ -65,9 +65,9 @@ class User < ActiveRecord::Base
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
   attr_accessible :username, :email, :password, :password_confirmation, :activation_state,
-    :avatar_file_name, :first_name, :last_name, :user_id, :kerberos_uid, :display_name, 
-    :default_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids, 
-    :courses, :course_ids, :earned_badges, :earned_badges_attributes, :student_academic_history_attributes, 
+    :avatar_file_name, :first_name, :last_name, :user_id, :kerberos_uid, :display_name,
+    :default_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids,
+    :courses, :course_ids, :earned_badges, :earned_badges_attributes, :student_academic_history_attributes,
     :team_role, :course_memberships_attributes, :team_id, :lti_uid, :course_team_ids
 
   # all student display pages are ordered by last name except for the leaderboard, and top 10/bottom 10
@@ -141,6 +141,15 @@ class User < ActiveRecord::Base
   validates :first_name, :last_name, :presence => true
   validates :password, :confirmation => true
   validates :password_confirmation, :presence => true, if: :password, on: :update
+  validates :email, internal_email: /(\.|@)umich\.edu$/
+
+  def internal
+    @internal || email_was =~ /(\.|@)umich\.edu$/
+  end
+
+  def internal=(value)
+    @internal = value
+  end
 
   def self.find_or_create_by_lti_auth_hash(auth_hash)
     criteria = { email: auth_hash['extra']['raw_info']['lis_person_contact_email_primary'] }

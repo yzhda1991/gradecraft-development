@@ -240,6 +240,21 @@ describe User do
       membership = create(:course_membership, course: world.course, user: user, role: "student")
       expect(user.is_staff?(world.course)).to eq(false)
     end
+
+    it "requires an email to end with umich if an internal user" do
+      world.student.internal = true
+      world.student.email = "blah@example.com"
+      expect(world.student).to_not be_valid
+      expect(world.student.errors[:email]).to include "must be a University of Michigan email"
+    end
+
+    it "requires an email to end with umich if it was saved with a umich email" do
+      world.student.email = "blah@umich.edu"
+      world.student.save
+      world.student.email = "blah@example.com"
+      expect(world.student).to_not be_valid
+      expect(world.student.errors[:email]).to include "must be a University of Michigan email"
+    end
   end
 
   describe "#team_for_course(course)" do
