@@ -277,8 +277,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   # @mz todo: add specs
-  def write_submission_binary_file(file_path, submission_file)
-    file_path = submission_binary_file_path(submission.student, submission_file, index)
+  def write_submission_binary_file(student, file_path, submission_file)
+    file_path = submission_binary_file_path(student, submission_file, index)
     open(file_path, 'w') do |f|
       f.binmode
       stringIO = open(submission_file.url)
