@@ -26,7 +26,9 @@ feature "creating a new user" do
         expect(result.last_name).to eq user.last_name
         expect(result.email).to eq user.email
         expect(result.username).to eq user.username
+        expect(result.kerberos_uid).to eq user.username
         expect(result.crypted_password).to be_nil
+        expect(result).to be_activated
       end
 
       scenario "with a non-umich email address" do

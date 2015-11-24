@@ -56,7 +56,12 @@ class UsersController < ApplicationController
     @user.password = generate_random_password unless @user.internal
 
     if @user.save
-      UserMailer.activation_needed_email(@user).deliver_now unless @user.internal
+      if @user.internal
+        @user.activate!
+        @user.update_attributes kerberos_uid: @user.username
+      else
+        UserMailer.activation_needed_email(@user).deliver_now
+      end
       if @user.is_student?(current_course)
         redirect_to students_path,
           :notice => "#{term_for :student} #{@user.name} was successfully created!" and return
