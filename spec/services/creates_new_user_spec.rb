@@ -41,6 +41,9 @@ describe Services::CreatesNewUser do
       described_class.create params
     end
 
-    xit "sends out a welcome email if needed"
+    it "sends out a welcome email if needed" do
+      expect(Services::Actions::SendsWelcomeEmail).to receive(:execute).and_call_original
+      described_class.create params, true
+    end
   end
 end

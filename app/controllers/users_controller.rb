@@ -57,9 +57,6 @@ class UsersController < ApplicationController
     @user = result[:user]
 
     if result.success?
-      if @user.internal?
-        UserMailer.welcome_email(@user).deliver_now if params[:send_welcome]
-      end
       if @user.is_student?(current_course)
         redirect_to students_path,
           :notice => "#{term_for :student} #{@user.name} was successfully created!" and return

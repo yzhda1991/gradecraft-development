@@ -5,19 +5,22 @@ require_relative "creates_new_user/generates_password"
 require_relative "creates_new_user/internalizes_user"
 require_relative "creates_new_user/saves_user"
 require_relative "creates_new_user/sends_activation_needed_email"
+require_relative "creates_new_user/sends_welcome_email"
 
 module Services
   class CreatesNewUser
     extend LightService::Organizer
 
-    def self.create(attributes)
-      with(attributes: attributes).reduce(
+    def self.create(attributes, send_welcome_email=false)
+      with(attributes: attributes, send_welcome_email: send_welcome_email)
+        .reduce(
         Actions::BuildsUser,
         Actions::GeneratesPassword,
         Actions::InternalizesUser,
         Actions::SavesUser,
         Actions::ActivatesUser,
-        Actions::SendsActivationNeededEmail
+        Actions::SendsActivationNeededEmail,
+        Actions::SendsWelcomeEmail
       )
     end
   end
