@@ -1,3 +1,5 @@
+require_relative "../services/creates_new_user"
+
 class UsersController < ApplicationController
   include UsersHelper
 
@@ -51,11 +53,10 @@ class UsersController < ApplicationController
   end
 
   def create
-    @teams = current_course.teams
-    @user = User.new(params[:user])
-    @user.password = generate_random_password unless @user.internal?
+    result = Services::CreatesNewUser.create params[:user]
+    @user = result[:user]
 
-    if @user.save
+    if result.success?
       if @user.internal?
         @user.update_attributes kerberos_uid: @user.username
         @user.activate!
@@ -71,6 +72,8 @@ class UsersController < ApplicationController
           :notice => "Staff Member #{@user.name} was successfully created!" and return
       end
     end
+
+    @teams = current_course.teams
     render :new
   end
 
