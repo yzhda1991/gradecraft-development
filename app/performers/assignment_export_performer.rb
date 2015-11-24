@@ -4,6 +4,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def setup
     fetch_assets
+    
+    # @mz todo: add specs
+    @errors = []
   end
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
@@ -276,14 +279,33 @@ class AssignmentExportPerformer < ResqueJob::Performer
     [ formatted_student_name(student), formatted_assignment_name, "submission_file#{index}"].join("_") + submission_file.extension
   end
 
-  # @mz todo: add specs
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
-    open(file_path, 'w') do |f|
-      f.binmode
-      stringIO = open(submission_file.url)
-      f.write stringIO.read
+    open(file_path, 'w') {|file| file.binmode; file.write open(submission_file.url).read }
+  end
+
+  # @mz todo: add specs
+  def rescue_binary_file_exceptions(student, submission_file, file_path)
+    begin
+      yield
+    rescue OpenURI::HTTPError => e
+      @errors << binary_file_error_message("Invalid URL for file", student, submission_file)
+      remove_if_exists file_path
+    rescue Exception => e
+      @errors << binary_file_error_message("Error on file", student, submission_file)
+      remove_if_exists file_path
     end
+  end
+
+  # @mz todo: add specs
+  def remove_if_exists(file_path)
+    File.delete file_path if File.exist? file_path
+  end
+
+  # @mz todo: add specs
+  def binary_file_error_message(message, student, submission_file)
+    "#{message}. Student ##{student.id}: #{student.last_name}, #{student.first_name}, " + 
+    "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{e}"
   end
 
   private
