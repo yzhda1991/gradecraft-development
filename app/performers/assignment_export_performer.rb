@@ -251,17 +251,15 @@ class AssignmentExportPerformer < ResqueJob::Performer
     sanitize_filename("#{student.first_name}_#{student.last_name}")
   end
 
-  # @mz todo: add specs
   def create_submission_binary_files
     @submissions.each do |submission|
-      create_binary_files_for_submission(submission) if submission.submission_files
+      create_binary_files_for_submission(submission) if submission.submission_files.present?
     end
   end
 
-  # @mz todo: add specs
   def create_binary_files_for_submission(submission)
     submission.submission_files.each_with_index do |submission_file, index|
-      write_submission_binary_file(student, submission_file, index)
+      write_submission_binary_file(submission.student, submission_file, index)
     end
   end
 
