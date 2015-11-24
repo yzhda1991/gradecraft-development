@@ -5,7 +5,7 @@ require "./app/services/creates_new_user/saves_user"
 describe Services::Actions::SavesUser do
   let(:user) { build :user, password: nil }
 
-  it "expects a user to generate a password for" do
+  it "expects a user to save" do
     expect { described_class.execute }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end

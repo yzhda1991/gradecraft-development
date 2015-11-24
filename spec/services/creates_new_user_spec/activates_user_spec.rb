@@ -1,17 +1,17 @@
 require "light-service"
 require "active_record_spec_helper"
-require "./app/services/creates_new_user/internalizes_user"
+require "./app/services/creates_new_user/activates_user"
 
-describe Services::Actions::InternalizesUser do
+describe Services::Actions::ActivatesUser do
   let(:user) { build :user, password: nil, internal: true }
 
-  it "expects a user to internalize" do
+  it "expects a user to activate" do
     expect { described_class.execute }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
-  it "sets the kerberos id to the username" do
+  it "activates the user if they are internal" do
     result = described_class.execute user: user
-    expect(result[:user].kerberos_uid).to eq user.username
+    expect(result[:user]).to be_activated
   end
 end

@@ -58,7 +58,6 @@ class UsersController < ApplicationController
 
     if result.success?
       if @user.internal?
-        @user.activate!
         UserMailer.welcome_email(@user).deliver_now if params[:send_welcome]
       else
         UserMailer.activation_needed_email(@user).deliver_now

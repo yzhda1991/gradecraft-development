@@ -1,4 +1,5 @@
 require "light-service"
+require_relative "creates_new_user/activates_user"
 require_relative "creates_new_user/builds_user"
 require_relative "creates_new_user/generates_password"
 require_relative "creates_new_user/internalizes_user"
@@ -13,7 +14,8 @@ module Services
         Actions::BuildsUser,
         Actions::GeneratesPassword,
         Actions::InternalizesUser,
-        Actions::SavesUser
+        Actions::SavesUser,
+        Actions::ActivatesUser
       )
     end
   end

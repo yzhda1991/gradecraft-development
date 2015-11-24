@@ -26,7 +26,11 @@ describe Services::CreatesNewUser do
       described_class.create params
     end
 
-    xit "activates a user if they are internal"
+    it "activates a user" do
+      expect(Services::Actions::ActivatesUser).to receive(:execute).and_call_original
+      described_class.create params
+    end
+
     xit "sends out an activation email if needed"
     xit "sends out a welcome email if needed"
   end
