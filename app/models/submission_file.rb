@@ -29,6 +29,10 @@ class SubmissionFile < ActiveRecord::Base
     end
   end
 
+  def extension
+    File.extname(filename)
+  end
+
   def content_type
     file.content_type
     # type = file.url.match(/\.(\S+)$/)[1]

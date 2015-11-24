@@ -274,7 +274,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # @mz todo: add specs
   def submission_binary_filename(student, submission_file, index)
-    [ formatted_student_name(student), formatted_assignment_name, "submission_file#{index}", File.extname(submission_file.filename) ].join("_")
+    [ formatted_student_name(student), formatted_assignment_name, "submission_file#{index}", submission_file.file_extension ].join("_")
   end
 
   # @mz todo: add specs

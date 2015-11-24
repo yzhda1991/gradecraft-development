@@ -54,6 +54,15 @@ describe SubmissionFile do
     end
   end
 
+  describe "extension", inspect: true do
+    subject { submission_file.extension }
+    let(:submission_file) { build(:submission_file, filename: "garrett_went_to_town.ppt") }
+
+    it "gets the extension from the filename" do
+      expect(subject).to eq(".ppt")
+    end
+  end
+
   describe "as a dependency of the submission" do
     it "is saved when the parent submission is saved" do
       subject.submission.save!
