@@ -1,5 +1,5 @@
 = simple_form_for @user do |f|
-  = render partial: 'layouts/alerts', locals: { model: @user, term: term_for(:assignment) }
+  = render partial: 'layouts/alerts', locals: { model: @user, term: "user" }
 
   %section
     %h4.uppercase= "User Profile"
