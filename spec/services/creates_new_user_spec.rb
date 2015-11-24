@@ -16,6 +16,11 @@ describe Services::CreatesNewUser do
       described_class.create params
     end
 
+    it "updates internal user" do
+      expect(Services::Actions::InternalizesUser).to receive(:execute).and_call_original
+      described_class.create params
+    end
+
     it "saves the user" do
       expect(Services::Actions::SavesUser).to receive(:execute).and_call_original
       described_class.create params
