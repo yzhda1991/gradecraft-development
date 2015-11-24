@@ -61,6 +61,9 @@ class User < ActiveRecord::Base
       query
     end
 
+    def internal_email_regex
+      /(\.|@)umich\.edu$/
+    end
   end
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
@@ -141,10 +144,10 @@ class User < ActiveRecord::Base
   validates :first_name, :last_name, :presence => true
   validates :password, :confirmation => true
   validates :password_confirmation, :presence => true, if: :password, on: :update
-  validates :email, internal_email: /(\.|@)umich\.edu$/
+  validates :email, internal_email: { format: internal_email_regex, name: "University of Michigan" }
 
   def internal
-    @internal || email_was =~ /(\.|@)umich\.edu$/
+    @internal || email_was =~ self.class.internal_email_regex
   end
 
   def internal=(value)
