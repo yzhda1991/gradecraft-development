@@ -127,6 +127,28 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         end
       end
 
+      describe "write_submission_binary_file" do
+        subject { performer.instance_eval { write_submission_binary_file( @some_student, @some_submission_file, 5 ) } }
+
+        let(:horses_path) { File.expand_path("horses.png", "spec/support/binary_files") }
+        let(:tmp_dir) { Dir.mktmpdir }
+        let(:mikos_bases_file_path) { "#{tmp_dir}/allyoarbases_r_belong_2_miko.snk" }
+
+        before do
+          allow(performer).to receive(:submission_binary_file_path) { mikos_bases_file_path }
+          allow(submission_file1).to receive(:url) { horses_path }
+        end
+
+        it "gets the binary submission file path" do
+          expect(performer).to receive(:submission_binary_file_path).with(student, submission_file1, 5)
+          subject
+        end
+
+        it "actually copies the file into the tmp dir" do
+          subject
+          expect(File.exist?(mikos_bases_file_path)).to be_truthy
+        end
+      end
     end
 
   end
