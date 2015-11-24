@@ -331,7 +331,7 @@ class User < ActiveRecord::Base
   ### BADGES
 
   def earned_badge_score_for_course(course)
-    earned_badges.where(:course_id => course).sum(:score)
+    earned_badges.where(:course_id => course).student_visible.sum(:score)
   end
 
   def earned_badges_for_course(course)

@@ -456,6 +456,159 @@ describe User do
     end
   end
 
+  describe "#earned_badge_score_for_course(course)" do 
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+      create(:earned_badge, score: 100, student: student, course: world.course, student_visible: true)
+      create(:earned_badge, score: 300, student: student, course: world.course, student_visible: true)
+    end
+
+    it "returns the sum of the badge score for a student" do 
+      expect(student.earned_badge_score_for_course(world.course)).to eq(400)
+    end
+
+    it "does not include earned badges that have not yet been made student visible" do 
+      create(:earned_badge, score: 155, student: student, course: world.course, student_visible: false)
+      expect(student.earned_badge_score_for_course(world.course)).to eq(400)
+    end
+  end
+
+  describe "#earned_badges_for_course(course)" do 
+  #   earned_badges.where(course: course)
+
+  end
+
+  describe "#earned_badge_for_badge(badge)" do
+  #   earned_badges.where(badge: badge) 
+
+  end
+
+  describe "#earned_badges_for_badge_count(badge)" do 
+  #   earned_badges.where(badge: badge).count
+  end
+
+
+  describe "#unique_student_earned_badges(course)" do 
+  #   @unique_student_earned_badges ||= Badge
+  #     .includes(:earned_badges)
+  #     .where("earned_badges.course_id = ?", course[:id])
+  #     .where("earned_badges.student_id = ?", self[:id])
+  #     .where("earned_badges.student_visible = ?", true)
+  #     .references(:earned_badges)
+  end
+
+  describe "#student_visible_earned_badges(course)" do 
+  #   @student_visible_earned_badges ||= EarnedBadge
+  #     .includes(:badge)
+  #     .where(course: course)
+  #     .where(student_id: self[:id])
+  #     .where(student_visible: true)
+  end
+
+  describe "#earnable_course_badges_for_grade(grade)" do 
+  #   Badge
+  #     .where(course_id: grade[:course_id])
+  #     .where(final_earnable_course_badges_sql(grade))
+  end
+
+  describe "#earnable_course_badges_sql_conditions(grade)" do 
+  #   Badge
+  #     .unscoped
+  #     .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
+  #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
+  #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
+  end
+
+  describe "#student_visible_unearned_badges(course)" do 
+  #   Badge
+  #     .where(course_id: course[:id])
+  #     .where(visible: true)
+  #     .where("id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], true)
+  end
+
+  describe "#student_invisible_badges(course)" do
+  #   Badge
+  #     .where(visible: false)
+  #     .where(course_id: course[:id])
+  #     .where("id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.student_visible = ?)", self[:id], course[:id], false)
+  end
+
+  describe "#earn_badge(badge)" do
+  #   raise TypeError, "Argument must be a Badge object" unless badge.class == Badge
+  #   earned_badges.create badge: badge, course: badge.course
+  end
+
+  describe "#earn_badge_for_grade(badge, grade)" do
+  #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
+  #   earned_badges.create badge: badge, course: badge.course, grade: grade
+  end
+
+  describe "#earn_badges_for_grade(badges, grade)" do 
+  #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
+  #   badges.collect do |badge|
+  #     earned_badges.create badge: badge, course: badge.course, grade: grade
+  #   end
+  end
+
+  describe "#earn_badges(badges)" do 
+  #   raise TypeError, "Argument must be an array of Badge objects" unless badges.class == Array
+  #   badges.each do |badge|
+  #     earned_badges.create badge: badge, course: badge.course
+  #   end
+  end
+
+  describe "#weight_for_assignment(assignment)" do 
+  #   assignment_weights.where(:assignment => assignment).first.weight
+  end
+
+  describe "#weight_for_assignment_type(assignment_type)" do 
+  #   assignment_weights.where(assignment_type: assignment_type).first.try(:weight) || 0
+  end
+
+  describe "#weight_spent?(course)" do 
+  #   total = 0
+  #   course.assignment_types.each do |at|
+  #     total += weight_for_assignment_type(at)
+  #   end
+  #   if total == course.total_assignment_weight
+  #     return true
+  #   else
+  #     false
+  #   end
+  end
+
+  describe "#total_weight_spent(course)" do 
+  #   total = 0
+  #   course.assignment_types.each do |at|
+  #     total += weight_for_assignment_type(at)
+  #   end
+  #   return total
+  end
+
+  describe "#weighted_assignments?" do
+  #   assignment_weights.count > 0
+  end
+
+  describe "#weight_count(course)" do 
+  #   assignment_weights.where(course: course).pluck('weight').count
+  end
+
+  describe "#self_reported_done?(assignment)" do
+  #   grade = grade_for_assignment(assignment)
+  #   grade.present? && grade.is_student_visible?
+  end
+
+
+  describe "#groups_by_assignment_id" do 
+  #   @group_by_assignment ||= groups.group_by(&:assignment_id)
+  end
+
+  describe "#group_for_assignment(assignment)" do 
+
+  end
+
   context "earn_badges" do
     it "should be able to earn badges" do
       badges = create_list(:badge, 2, course: world.course)
