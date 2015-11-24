@@ -476,19 +476,47 @@ describe User do
   end
 
   describe "#earned_badges_for_course(course)" do 
-  #   earned_badges.where(course: course)
+    let(:student) { create :user }
 
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "returns the students' earned_badges for a course" do 
+      earned_badge_1 = create(:earned_badge, score: 100, student: student, course: world.course, student_visible: true)
+      earned_badge_2 = create(:earned_badge, score: 300, student: student, course: world.course, student_visible: true)
+      expect(student.earned_badges_for_course(world.course)).to eq([earned_badge_1, earned_badge_2])
+    end
   end
 
   describe "#earned_badge_for_badge(badge)" do
-  #   earned_badges.where(badge: badge) 
+    let(:student) { create :user }
+    let(:badge) { create :badge, course: world.course }
 
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "returns the students' earned_badges for a particular badge" do 
+      earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: world.course, student_visible: true)
+      expect(student.earned_badge_for_badge(badge)).to eq([earned_badge_1])
+    end
   end
 
   describe "#earned_badges_for_badge_count(badge)" do 
-  #   earned_badges.where(badge: badge).count
-  end
+    let(:student) { create :user }
+    let(:badge) { create :badge, course: world.course }
 
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "returns the students' earned_badges for a course" do 
+      earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: world.course, student_visible: true)
+      earned_badge_2 = create(:earned_badge, badge: badge, student: student, course: world.course, student_visible: true)
+      expect(student.earned_badges_for_badge_count(badge)).to eq(2)
+    end
+  end
 
   describe "#unique_student_earned_badges(course)" do 
   #   @unique_student_earned_badges ||= Badge
@@ -594,19 +622,21 @@ describe User do
   describe "#weight_count(course)" do 
   #   assignment_weights.where(course: course).pluck('weight').count
   end
-
-  describe "#self_reported_done?(assignment)" do
-  #   grade = grade_for_assignment(assignment)
-  #   grade.present? && grade.is_student_visible?
-  end
-
-
-  describe "#groups_by_assignment_id" do 
-  #   @group_by_assignment ||= groups.group_by(&:assignment_id)
-  end
-
+  
   describe "#group_for_assignment(assignment)" do 
+    let(:student) { create :user }
+    let(:assignment) {create :assignment, grade_scope: "Group"}
 
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "returns a student's group for a particular assignment if present" do 
+      group = create(:group)
+      create(:assignment_group, group: group, assignment: assignment)
+      create(:group_membership, student: student, group: group)
+      expect(student.group_for_assignment(assignment)).to eq(group)
+    end
   end
 
   context "earn_badges" do

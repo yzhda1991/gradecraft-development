@@ -479,9 +479,6 @@ class User < ActiveRecord::Base
 
 
   ### GROUPS
-  def groups_by_assignment_id
-    @group_by_assignment ||= groups.group_by(&:assignment_id)
-  end
 
   def group_for_assignment(assignment)
     @group_for_assignment ||= assignment_groups.where(assignment: assignment).first.try(:group)
