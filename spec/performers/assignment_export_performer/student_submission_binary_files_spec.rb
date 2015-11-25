@@ -166,10 +166,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           end
 
           it "returns the outcome of the block yield" do
+            expect(subject).to eq("the great return")
           end
         end
 
-        context "block raises an http error", inspect:true do
+        context "block raises an http error" do
           subject do
             performer.instance_eval do
               rescue_binary_file_exceptions( @some_student, @some_submission_file, "#{@some_tmp_dir}/some_path" ) do
@@ -198,20 +199,6 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           end
 
           after(:each) { subject }
-        end
-
-        context "block raises another exception" do
-          it "rescues the error" do
-          end
-
-          it "builds a binary file error message" do
-          end
-
-          it "adds an error message to the @errors array" do
-          end
-            
-          it "removes the partially created file at file_path" do
-          end
         end
       end
     end

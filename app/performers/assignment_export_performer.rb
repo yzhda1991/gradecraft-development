@@ -289,7 +289,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def rescue_binary_file_exceptions(student, submission_file, file_path)
     begin
       yield
