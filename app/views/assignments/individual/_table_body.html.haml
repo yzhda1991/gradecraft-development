@@ -21,7 +21,7 @@
     // If the student can weight the assignment type
     - if presenter.assignment_type.student_weightable?
       %td
-        - if student.weighted_assignments?
+        - if student.weighted_assignments?(current_course)
           = points grade.score if grade.instructor_modified?
         - else
           = "(not yet assigned)"

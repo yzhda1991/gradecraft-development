@@ -338,7 +338,7 @@ describe User do
   end
 
   describe "#scores_for_course(course)" do 
-
+    skip "implement"
   end
 
   describe "#grade_for_course(course)" do 
@@ -519,6 +519,7 @@ describe User do
   end
 
   describe "#earnable_course_badges_sql_conditions(grade)" do 
+    skip "implement"
   #   Badge
   #     .unscoped
   #     .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
@@ -527,6 +528,7 @@ describe User do
   end
 
   describe "#earn_badges_for_grade(badges, grade)" do 
+    skip "implement"
   #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
   #   badges.collect do |badge|
   #     earned_badges.create badge: badge, course: badge.course, grade: grade
@@ -534,39 +536,110 @@ describe User do
   end
 
   describe "#weight_for_assignment(assignment)" do 
-  #   assignment_weights.where(:assignment => assignment).first.weight
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "should return a student's assigned weight for an assignment" do 
+      assignment_type = create(:assignment_type, course: world.course)
+      assignment = create(:assignment, assignment_type: assignment_type, course: world.course)
+      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      expect(student.weight_for_assignment(assignment)).to eq(3)
+    end
   end
 
   describe "#weight_for_assignment_type(assignment_type)" do 
-  #   assignment_weights.where(assignment_type: assignment_type).first.try(:weight) || 0
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "should return a student's assigned weight for an assignment type" do 
+      assignment_type = create(:assignment_type, course: world.course)
+      assignment = create(:assignment, assignment_type: assignment_type, course: world.course)
+      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      expect(student.weight_for_assignment_type(assignment_type)).to eq(3)
+    end
   end
 
   describe "#weight_spent?(course)" do 
-  #   total = 0
-  #   course.assignment_types.each do |at|
-  #     total += weight_for_assignment_type(at)
-  #   end
-  #   if total == course.total_assignment_weight
-  #     return true
-  #   else
-  #     false
-  #   end
+    let(:student) { create :user } 
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "should return the summed weight count for a course, for a student" do 
+      world.course.total_assignment_weight = 6
+      world.course.max_assignment_weight = 4
+      world.course.max_assignment_types_weighted = 3
+      assignment_type = create(:assignment_type, course: world.course, student_weightable: true)
+      assignment_type_2 = create(:assignment_type, course: world.course, student_weightable: true)
+      assignment = create(:assignment, course: world.course, assignment_type: assignment_type)
+      assignment_2 = create(:assignment, course: world.course, assignment_type: assignment_type_2)
+      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 4)
+      create(:assignment_weight, student: student, course: world.course, assignment: assignment_2, weight: 2)
+      expect(student.weight_spent?(world.course)).to eq(true)
+    end
   end
 
   describe "#total_weight_spent(course)" do 
-  #   total = 0
-  #   course.assignment_types.each do |at|
-  #     total += weight_for_assignment_type(at)
-  #   end
-  #   return total
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "should return the summed weight count for a course, for a student" do 
+      world.course.total_assignment_weight = 6
+      world.course.max_assignment_weight = 4
+      world.course.max_assignment_types_weighted = 3
+      assignment_type = create(:assignment_type, course: world.course, student_weightable: true)
+      assignment_type_2 = create(:assignment_type, course: world.course, student_weightable: true)
+      assignment_type_3 = create(:assignment_type, course: world.course, student_weightable: true)
+      assignment = create(:assignment, course: world.course, assignment_type: assignment_type)
+      assignment_2 = create(:assignment, course: world.course, assignment_type: assignment_type_2)
+      assignment_3 = create(:assignment, course: world.course, assignment_type: assignment_type_3)
+      assignment_weight_1 = create(:assignment_weight, student: student, assignment: assignment, weight: 2)
+      assignment_weight_2 = create(:assignment_weight, student: student, assignment: assignment_2, weight: 2)
+      assignment_weight_3 = create(:assignment_weight, student: student, assignment: assignment_3, weight: 2)
+      expect(student.total_weight_spent(world.course)).to eq(6)
+    end
   end
 
   describe "#weighted_assignments?" do
-  #   assignment_weights.count > 0
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+    end
+
+    it "should return true if the student has weighted assignments" do 
+      create(:assignment_weight, student: student, course: world.course)
+      expect(student.weighted_assignments?(world.course)).to eq(true)
+    end
+
+    it "should return false if the student has not weighted any assignments" do 
+      expect(student.weighted_assignments?(world.course)).to eq(false)
+    end
   end
 
   describe "#weight_count(course)" do 
-  #   assignment_weights.where(course: course).pluck('weight').count
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: world.course)
+      create(:assignment_weight, student: student, course: world.course)
+      create(:assignment_weight, student: student, course: world.course)
+      create(:assignment_weight, student: student, course: world.course)
+    end
+
+    it "should return the summed weight count for a course, for a student" do 
+      expect(student.weight_count(world.course)).to eq(3)
+    end
   end
 
   describe "#group_for_assignment(assignment)" do 
