@@ -108,6 +108,24 @@ describe Team do
     end
   end
 
+  describe "#update_team_rank" do 
+
+    it "Reassigns rank based on challenge grade scores" do 
+      course = create(:course, team_score_average: false)
+      team_1 = create(:team, course: course)
+      team_2 = create(:team, course: course)
+
+      challenge = create(:challenge, course: course, release_necessary: true)
+      challenge_grade = create(:challenge_grade, challenge: challenge, team: team_1, score: 100, status: "Released")
+      challenge_grade_2 = create(:challenge_grade, challenge: challenge, team: team_2, score: 10000, status: "Released")
+      
+      team_2.update_ranks
+      team_2.reload
+      expect(team_2.rank).to eq(1)
+    end
+
+  end
+
   describe "revised_team_score" do
     let(:course) { create :course }
     let(:team) { create(:team, course: course) }

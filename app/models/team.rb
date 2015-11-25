@@ -1,5 +1,5 @@
 class Team < ActiveRecord::Base
-  attr_accessible :name, :course, :course_id, :student_ids, :score, :students, :leaders, :teams_leaderboard, :in_team_leaderboard, :banner, :leader_ids
+  attr_accessible :name, :course, :course_id, :student_ids, :score, :students, :leaders, :teams_leaderboard, :in_team_leaderboard, :banner, :rank, :leader_ids
 
   validates_presence_of :course, :name
   validates :name, uniqueness: { case_sensitive: false, scope: :course_id }
@@ -82,8 +82,8 @@ class Team < ActiveRecord::Base
     rank_index = @teams.pluck(:score).uniq.sort.reverse
     
     @teams.each do |team|
-      team.rank = rank_index.index(team.score) + 1
-      team.save!
+      rank = rank_index.index(team.score) + 1
+      team.update_attributes rank: rank
     end
   end
 
