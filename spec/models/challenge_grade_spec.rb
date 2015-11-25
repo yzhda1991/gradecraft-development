@@ -40,10 +40,10 @@ describe ChallengeGrade do
 
   describe "#cache_team_score" do 
     it "triggers the resave of a team" do 
-      team = create(:team, created_at: Date.today - 1)
-      challenge_grade = create(:challenge_grade, team: team)
+      team = create(:team, score: 0)
+      challenge_grade = create(:challenge_grade, team: team, score: 100, status: "Released")
       challenge_grade.cache_team_score
-      expect(team.updated_at.strftime("%B %-e, %Y - %-l:%M%P")).to eq(DateTime.now.strftime("%B %-e, %Y - %-l:%M%P"))
+      expect(team.score).to eq(100)
     end
   end
 
