@@ -1,7 +1,10 @@
 require "active_record_spec_helper"
 
 describe SubmissionFile do
-  let(:submission) { build(:submission) }
+  let(:course) { build(:course) }
+  let(:assignment) { build(:assignment) }
+  let(:student) { build(:user) }
+  let(:submission) { build(:submission, course: course, assignment: assignment, student: student) }
 
   subject { submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg')) }
 
@@ -12,6 +15,24 @@ describe SubmissionFile do
       subject.filename = nil
       expect(subject).to_not be_valid
       expect(subject.errors[:filename]).to include "can't be blank"
+    end
+  end
+
+  describe "#course" do 
+    it "returns the course associated with the submission" do 
+      expect(subject.course).to eq(course)
+    end
+  end
+
+  describe "#assignment" do 
+    it "returns the assignment associated with the submission" do 
+      expect(subject.assignment).to eq(assignment)
+    end
+  end
+
+  describe "#student" do 
+    it "returns the course associated with the submission" do 
+      expect(subject.student).to eq(student)
     end
   end
 
