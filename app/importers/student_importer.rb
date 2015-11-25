@@ -1,4 +1,5 @@
 require 'csv'
+require_relative "../services/creates_new_user"
 
 class StudentImporter
   attr_reader :successful, :unsuccessful
@@ -27,8 +28,6 @@ class StudentImporter
 
         if user.valid?
           team.students << user if team
-          UserMailer.activation_needed_email(user).deliver_now unless user.activated?
-          UserMailer.welcome_email(user).deliver_now if user.activated? && send_welcome
           successful << user
         else
           append_unsuccessful row, user.errors.full_messages.join(", ")
@@ -48,15 +47,8 @@ class StudentImporter
   def find_or_create_user(row, course)
     user = User.find_by_insensitive_email row.email if row.email
     user ||= User.find_by_insensitive_username row.username if row.username
-    user ||= User.create do |u|
-      u.first_name = row.first_name
-      u.last_name = row.last_name
-      u.username = row.username || (username_from_email(row.email) if internal_students)
-      u.kerberos_uid = row.username || (username_from_email(row.email) if internal_students)
-      u.email = row.email || (email_from_username(row.username) if internal_students)
-      u.password = row.has_password? ? row.password : generate_random_password unless internal_students
-    end
-    user.activate! if user.valid? && !user.activated? && internal_students
+    user ||= Services::CreatesNewUser
+      .create(row.to_h.merge(internal: internal_students), send_welcome)[:user]
 
     user.course_memberships.create(course_id: course.id, role: "student") if course && user.valid?
     user
@@ -66,18 +58,6 @@ class StudentImporter
     return if row.team_name.blank?
     team = Team.find_by_course_and_name course.id, row.team_name
     team ||= Team.create course_id: course.id, name: row.team_name
-  end
-
-  def generate_random_password
-    Sorcery::Model::TemporaryToken.generate_random_token
-  end
-
-  def email_from_username(username)
-    "#{username}@umich.edu"
-  end
-
-  def username_from_email(email)
-    email.split(/@/).first
   end
 
   class UserRow
@@ -107,16 +87,23 @@ class StudentImporter
       data[5]
     end
 
-    def has_password?
-      password.present?
-    end
-
     def initialize(data)
       @data = data
     end
 
     def to_s
       data.to_s
+    end
+
+    def to_h
+      {
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        username: username,
+        password: password,
+        team_name: team_name
+      }
     end
   end
 end
