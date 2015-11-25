@@ -1,6 +1,15 @@
 require "active_record_spec_helper"
 
 describe TeamMembership do
+
+  subject { build(:team_membership) }
+
+  context "validations" do
+    it "is valid with a team, and a student" do
+      expect(subject).to be_valid
+    end
+  end
+
   describe ".for_course" do
     it "returns all the team memberships for a specific course" do
       course = create(:course)
@@ -21,4 +30,5 @@ describe TeamMembership do
       expect(results).to eq [student_team_membership]
     end
   end
+
 end

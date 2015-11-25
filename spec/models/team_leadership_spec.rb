@@ -2,7 +2,7 @@ require "active_record_spec_helper"
 
 describe TeamLeadership do 
 
-  subject { build(:earned_badge) }
+  subject { build(:team_leadership) }
 
   context "validations" do
     it "is valid with a team, and a leader" do
