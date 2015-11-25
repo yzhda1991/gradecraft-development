@@ -100,6 +100,8 @@ class UnlockCondition < ActiveRecord::Base
       if check_if_grade_earned_meets_condition_value(grade) && 
       check_if_grade_earned_met_condition_date(grade)
         return true
+      else
+        return false
       end
     elsif condition_value?
       check_if_grade_earned_meets_condition_value(grade)
