@@ -33,10 +33,12 @@ class AssignmentExportPerformer < ResqueJob::Performer
         student_directories_created_successfully?
       end
 
+      # create text files in each student directory if there is submission data that requires it
       require_success(create_submission_text_file_messages) do
         create_submission_text_files
       end
 
+      # create binary files in each student directory
       require_success(create_submission_binary_file_messages) do
         create_submission_binary_files
       end
@@ -302,7 +304,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     File.delete file_path if File.exist? file_path
   end
 
-  # @mz todo: add specs
   def binary_file_error_message(message, student, submission_file, error_io)
     "#{message}. Student ##{student.id}: #{student.last_name}, #{student.first_name}, " + 
     "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{error_io}"

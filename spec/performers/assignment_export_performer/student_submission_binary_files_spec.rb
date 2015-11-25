@@ -16,10 +16,10 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     let(:submission_without_files) { double(:submission, submission_files: []) }
 
     let(:submission_files) { [ submission_file1, submission_file2 ] }
-    let(:submission_file1) { double(:submission_file, extension: ".ralph") }
+    let(:submission_file1) { double(:submission_file, extension: ".ralph", id: 900, filename: "gary_ate_ants.ralph") }
     let(:submission_file2) { double(:submission_file) }
 
-    let(:student) { double(:student) }
+    let(:student) { double(:student, id: 59, first_name: "Edwina", last_name: "Georgebot") }
 
     describe "create_submission_binary_files" do
       subject { performer.instance_eval { create_submission_binary_files } }
@@ -41,7 +41,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
 
     describe "create binary files for submission" do
-      subject { performer.instance_eval { create_binary_files_for_submission( @some_submission ) } }
+      subject do
+        performer.instance_eval do
+          create_binary_files_for_submission( @some_submission )
+        end
+      end
 
       describe "submission with files" do
         before do
@@ -78,7 +82,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       let(:tmp_dir) { Dir.mktmpdir }
 
       describe "submission_binary_file_path" do
-        subject { performer.instance_eval { submission_binary_file_path( @some_student, @some_submission_file, 5 ) } }
+        subject do
+          performer.instance_eval do
+            submission_binary_file_path( @some_student, @some_submission_file, 5 )
+          end
+        end
 
         before do
           allow(performer).to receive(:submission_binary_filename) { "sweet_keith.potr" } # sweet keith pooped on the rug
@@ -97,7 +105,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
 
       describe "submission_binary_filename" do
-        subject { performer.instance_eval { submission_binary_filename( @some_student, @some_submission_file, 5 ) } }
+        subject do
+          performer.instance_eval do
+            submission_binary_filename( @some_student, @some_submission_file, 5 )
+          end
+        end
 
         before do
           allow(performer).to receive(:formatted_student_name) { "jeff_mills" }
@@ -129,7 +141,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
 
       describe "write_submission_binary_file" do
-        subject { performer.instance_eval { write_submission_binary_file( @some_student, @some_submission_file, 5 ) } }
+        subject do
+          performer.instance_eval do
+            write_submission_binary_file( @some_student, @some_submission_file, 5 )
+          end
+        end
 
         let(:horses_path) { File.expand_path("horses.png", "spec/support/binary_files") }
         let(:mikos_bases_file_path) { "#{tmp_dir}/allyoarbases_r_belong_2_miko.snk" }
@@ -223,10 +239,13 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         let(:clean_up_horses) { File.delete final_horses_path if File.exist? final_horses_path }
         let(:copy_horses) { FileUtils.cp horses_path, final_horses_path }
     
-        subject { performer.instance_eval { remove_if_exists( @some_horses_path ) }}
-        before do
-          performer.instance_variable_set(:@some_horses_path, final_horses_path)
+        subject do
+          performer.instance_eval do
+            remove_if_exists( @some_horses_path )
+          end
         end
+
+        before { performer.instance_variable_set(:@some_horses_path, final_horses_path) }
 
         context "nothing exists at file_path" do
           before { clean_up_horses }
@@ -249,6 +268,38 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
             subject
             expect(File.exist?(final_horses_path)).to be_falsey
           end
+        end
+      end
+
+      describe "binary_file_error_message" do
+        let(:message) { "the end of days is upon us" }
+        let(:error_io) { "error dun blowed stuff up" }
+
+        before(:each) do
+          performer.instance_variable_set(:@some_message, message)
+          performer.instance_variable_set(:@some_error_io, error_io)
+        end
+
+        subject do
+          performer.instance_eval do
+            binary_file_error_message( @some_message, @some_student, @some_submission_file, @some_error_io )
+          end
+        end
+
+        it "includes the custom message from the particular type of error" do
+          expect(subject).to include(message)
+        end
+
+        it "includes the student data" do
+          expect(subject).to include("Student ##{student.id}: #{student.last_name}, #{student.first_name},")
+        end
+
+        it "includes the submission_file data" do
+          expect(subject).to include("SubmissionFile ##{submission_file1.id}: #{submission_file1.filename},")
+        end
+
+        it "includes the io result from the rescued error block" do
+          expect(subject).to include("error: #{error_io}")
         end
       end
     end
