@@ -124,21 +124,38 @@ describe AssignmentType do
   end
 
   describe "#visible_score_for_student(student)" do 
-    
+    let(:assignment_type) {create :assignment_type, course: world.course}
+    let(:student) {create :user}
 
-    # score = (student.grades.released.where(:assignment_type => self).pluck('score').sum || 0)
-    # if max_points?
-    #   if score < max_points
-    #     return score
-    #   else
-    #     return max_points
-    #   end
-    # else
-    #   return score
-    # end
+    it 'returns the max point value for the type if present and the student has earned MORE than that cap' do 
+      assignment_type.max_points = 100
+      assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
+      grade = create(:grade, student: student, raw_score: 200, assignment: assignment, status: "Released")
+      expect(assignment_type.visible_score_for_student(student)).to eq(100)
+    end
+
+    it 'returns the student score if the max point total is present but they have earned less than that value' do 
+      assignment_type.max_points = 500
+      assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
+      grade = create(:grade, student: student, raw_score: 200, assignment: assignment, status: "Released")
+      expect(assignment_type.visible_score_for_student(student)).to eq(200)
+    end
+
+    it 'returns the student score if there is no total present' do 
+      assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
+      grade = create(:grade, student: student, raw_score: 1000, assignment: assignment, status: "Released")
+      expect(assignment_type.visible_score_for_student(student)).to eq(1000)
+    end
+
+    it 'does not include unreleased grades' do 
+      assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
+      grade = create(:grade, student: student, raw_score: 1000, assignment: assignment, status: "Graded")
+      expect(assignment_type.visible_score_for_student(student)).to eq(0)
+    end
+
   end
 
-  describe "#score_for_student(student)", focus: true do 
+  describe "#score_for_student(student)" do 
     let(:assignment_type) {create :assignment_type, course: world.course}
     let(:student) {create :user}
 
@@ -162,18 +179,34 @@ describe AssignmentType do
       expect(assignment_type.score_for_student(student)).to eq(0)
     end
 
-    it "does return a weighted score if present" do 
+    it "does return a weighted score if present"   do 
+      assignment_type.student_weightable = true
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
-      grade = create(:grade, student: student, raw_score: 100, assignment: assignment, status: "Released")
       create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      grade = create(:grade, student: student, raw_score: 100, assignment: assignment, status: "Released")
       
       expect(assignment_type.score_for_student(student)).to eq(300)
-    
     end
   end
 
   describe "#raw_score_for_student(student)" do 
-    #student.grades.where(:assignment_type => self).pluck('raw_score').compact.sum
+    let(:assignment_type) {create :assignment_type, course: world.course}
+    let(:student) {create :user}
+    
+    it "returns the raw score if present"  do 
+      assignment_type.student_weightable = true
+      assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
+      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      grade = create(:grade, student: student, raw_score: 100, assignment: assignment, status: "Released")
+      expect(assignment_type.raw_score_for_student(student)).to eq(100)
+    end
+
+    it "does not include unreleased grades" do 
+      assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
+      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      grade = create(:grade, student: student, raw_score: 100, assignment: assignment, status: "Graded")
+      expect(assignment_type.raw_score_for_student(student)).to eq(0)
+    end
   end
 
   describe "#export_scores" do 
