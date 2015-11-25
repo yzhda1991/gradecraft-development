@@ -75,6 +75,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         performer.instance_variable_set(:@some_submission_file, submission_file1)
         performer.instance_variable_set(:@some_student, student)
       end
+      let(:tmp_dir) { Dir.mktmpdir }
 
       describe "submission_binary_file_path" do
         subject { performer.instance_eval { submission_binary_file_path( @some_student, @some_submission_file, 5 ) } }
@@ -131,7 +132,6 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         subject { performer.instance_eval { write_submission_binary_file( @some_student, @some_submission_file, 5 ) } }
 
         let(:horses_path) { File.expand_path("horses.png", "spec/support/binary_files") }
-        let(:tmp_dir) { Dir.mktmpdir }
         let(:mikos_bases_file_path) { "#{tmp_dir}/allyoarbases_r_belong_2_miko.snk" }
 
         before do
@@ -169,34 +169,34 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           end
         end
 
-        context "block raises an http error" do
+        context "block raises an http error", inspect:true do
           subject do
             performer.instance_eval do
               rescue_binary_file_exceptions( @some_student, @some_submission_file, "#{tmp_dir}/some_path" ) do
-                raise OpenURI::HTTPError, "the weirdest http error"
+                raise OpenURI::HTTPError.new(STDOUT, "the weirdest http error")
               end
             end
           end
 
-          it "rescues the error" do
-            expect(performer).to receive(:rescue).with(OpenURI::HTTPError => e)
-            subject
+          before do
+            allow(performer).to receive(:binary_file_error_message) { "great error, man" }
           end
 
           it "builds a binary file error message" do
             expect(performer).to receive(:binary_file_error_message)
-              .with("Invalid URL for file", student, submission_file1)
-            subject
+              .with("Invalid URL for file", student, submission_file1, "the weirdest http error")
           end
 
           it "adds an error message to the @errors array" do
-            expect(performer).to receive(:binary_file_error_message)
-              .with("Invalid URL for file", student, submission_file1) { "great error, man" }
             subject
+            expect(performer.instance_variable_get(:@errors).first).to eq("great error, man")
           end
             
           it "removes the partially created file at file_path" do
+            expect(performer).to receive(:remove_if_exists).with("#{tmp_dir}/some_path")
           end
+
+          after(:each) { subject }
         end
 
         context "block raises another exception" do

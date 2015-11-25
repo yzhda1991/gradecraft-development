@@ -1,5 +1,6 @@
 class AssignmentExportPerformer < ResqueJob::Performer
   require 'fileutils' # need this for mkdir_p
+  require 'open-uri' # need this for getting the S3 file over http
   include ModelAddons::ImprovedLogging # log errors with attributes
 
   def setup
@@ -292,11 +293,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def rescue_binary_file_exceptions(student, submission_file, file_path)
     begin
       yield
-    rescue OpenURI::HTTPError => e
-      @errors << binary_file_error_message("Invalid URL for file", student, submission_file)
-      remove_if_exists file_path
-    rescue Exception => e
-      @errors << binary_file_error_message("Error on file", student, submission_file)
+    rescue OpenURI::HTTPError => error
+      @errors << binary_file_error_message("Invalid URL for file", student, submission_file, error.io)
       remove_if_exists file_path
     end
   end
@@ -307,9 +305,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   # @mz todo: add specs
-  def binary_file_error_message(message, student, submission_file)
+  def binary_file_error_message(message, student, submission_file, error_io)
     "#{message}. Student ##{student.id}: #{student.last_name}, #{student.first_name}, " + 
-    "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{e}"
+    "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{error_io}"
   end
 
   private
