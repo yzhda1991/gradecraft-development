@@ -216,6 +216,41 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           after(:each) { subject }
         end
       end
+
+      describe "remove_if_exists" do
+        let(:horses_path) { File.expand_path("horses.png", "spec/support/binary_files") }
+        let(:final_horses_path) { File.expand_path("horses.png", tmp_dir) }
+        let(:clean_up_horses) { File.delete final_horses_path if File.exist? final_horses_path }
+        let(:copy_horses) { FileUtils.cp horses_path, final_horses_path }
+    
+        subject { performer.instance_eval { remove_if_exists( @some_horses_path ) }}
+        before do
+          performer.instance_variable_set(:@some_horses_path, final_horses_path)
+        end
+
+        context "nothing exists at file_path" do
+          before { clean_up_horses }
+
+          it "shouldn't bother deleting anything" do
+            expect(File).not_to receive(:delete).with(final_horses_path)
+            subject
+          end
+        end
+
+        context "something exists at file_path" do
+          before(:each) { copy_horses }
+
+          it "calls File.delete on file_path if something's there" do
+            expect(File).to receive(:delete).with(final_horses_path)
+            subject
+          end
+
+          it "actually deletes the file at file_path" do
+            subject
+            expect(File.exist?(final_horses_path)).to be_falsey
+          end
+        end
+      end
     end
   end
 end

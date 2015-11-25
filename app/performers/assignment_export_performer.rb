@@ -298,7 +298,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def remove_if_exists(file_path)
     File.delete file_path if File.exist? file_path
   end
