@@ -441,11 +441,7 @@ class User < ActiveRecord::Base
   end
 
   def weight_spent?(course)
-    total = 0
-    course.assignment_types.each do |at|
-      total += weight_for_assignment_type(at)
-    end
-    if total == course.total_assignment_weight
+    if self.total_weight_spent(course) == course.total_assignment_weight
       return true
     else
       false
@@ -454,8 +450,8 @@ class User < ActiveRecord::Base
 
   def total_weight_spent(course)
     total = 0
-    course.assignment_types.each do |at|
-      total += weight_for_assignment_type(at)
+    course.assignment_types.student_weightable.each do |assignment_type|
+      total += self.weight_for_assignment_type(assignment_type)
     end
     return total
   end

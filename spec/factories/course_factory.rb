@@ -10,10 +10,13 @@ FactoryGirl.define do
       max_group_size 10
     end
 
-    total_assignment_weight ""
-    max_assignment_weight ""
-    max_assignment_types_weighted ""
-    default_assignment_weight ""
-    point_total ""
+    factory :course_with_weighting do
+      total_assignment_weight 6
+      max_assignment_weight 4
+      max_assignment_types_weighted 2
+      default_assignment_weight 3
+    end
+
+    
   end
 end
