@@ -1,70 +1,56 @@
-= simple_form_for @user do |f|
-  = render partial: 'layouts/alerts', locals: { model: @user, term: "user" }
+= render partial: 'layouts/alerts', locals: { model: @user, term: "user" }
 
-  %section
-    %h4.uppercase= "User Profile"
-    .form-item
-      = f.label :first_name
-      = f.text_field :first_name
-    .form-item
-      = f.label :last_name
-      = f.text_field :last_name
-    .form-item
-      = f.label :email
-      = f.text_field :email
-    .form-item
-      = f.label :username
-      = f.text_field :username
-    .form-item
-      = f.label :display_name
-      = f.text_field :display_name
-    .form-item
-      = f.label :internal?, "UM User"
-      = f.check_box :internal?, { data: { behavior: 'toggle-disable turn-on', 'toggle-disable-target': '.send-welcome *', 'turn-on-target': '#send_welcome' }}
-    .form-item.send-welcome
-      = label_tag :send_welcome, "Send welcome email to new user accounts", { class: "#{"disabled" if !@user.internal?}" }
-      = check_box_tag :send_welcome, '1', @user.internal?, { disabled: !@user.internal? }
+#tabs.ui-tabs.ui-widget
+  %ul.ui-tabs-nav{:role => "tablist"}
+    %li
+      %a{ "href" => "#tab1" } New GradeCraft User
+    %li
+      %a{ "href" => "#tab2" } New UM User
 
-  - if current_user_is_admin?
-    %section
-      %h4.uppercase= "GradeCraft Settings"
-
-      .form-item
-        = f.association :courses, :as => :check_boxes
-
-      - if @user.persisted?
-        .form-item
-          = f.label :default_course_id, "Default Course"
-          = f.select :default_course_id, options_from_collection_for_select(@user.courses, "id", "name", @user.try(:default_course_id))
-          .form_label This course will be automatically loaded when a student logs in to GradeCraft
-
-  - if current_user_is_staff?
-    %section
-      %h4.uppercase= "#{current_course.name} Settings"
-      - if current_course.has_teams? && @user.is_student?(current_course)
-        .form-item
-          = f.input :course_team_ids, :collection => @teams, :as => :select, :label => "Select #{term_for :team}", :selected => @user.team_for_course(current_course).try(:id), :include_blank => true
-      = f.simple_fields_for :course_memberships, @course_membership do |p|
-        - if current_user_is_admin?
+  #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
+    #tab1{ class: ("active" unless @user.internal?) }
+      = simple_form_for @user do |f|
+        %section
+          %h4.uppercase= "User Profile"
           .form-item
-            = p.label :role, "Select Role"
-            = p.select :role, [["Student", "student"],["GSI", "gsi"],["Professor", "professor"],["Admin", "admin"]]
-        - elsif current_user_is_professor?
+            = f.label :first_name
+            = f.text_field :first_name
           .form-item
-            = p.label :role, "Select Role"
-            = p.select :role, [["Student", "student"],["GSI", "gsi"],["Professor", "professor"]]
-        - if @user.is_student?(current_course)
+            = f.label :last_name
+            = f.text_field :last_name
           .form-item
-            = f.label :team_role, "#{term_for :team} Role"
-            = f.input :team_role, :input_html => { :maxlength => 255 }, :label => false
+            = f.label :email
+            = f.text_field :email
           .form-item
-            = p.input :character_profile, :class => "froala"
+            = f.label :username
+            = f.text_field :username
           .form-item
-            = f.label :auditing
-            = p.check_box :auditing
-            .form_label This #{term_for :student}'s grades will be excluded from course analysis
+            = f.label :display_name
+            = f.text_field :display_name
+        = render partial: "courses", locals: { form: f }
+        = render partial: "course_settings", locals: { form: f }
+        = render "buttons"
 
-  .submit-buttons
-    %ul
-      %li= submit_tag "#{@user.persisted? ? 'Update' : 'Create'} User", :class => "button"
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), users_path, :class => 'button'
+    #tab2{ class: ("active" if @user.internal?) }
+      = simple_form_for @user do |f|
+        %section
+          %h4.uppercase= "User Profile"
+          .form-item
+            = f.label :first_name
+            = f.text_field :first_name
+          .form-item
+            = f.label :last_name
+            = f.text_field :last_name
+          .form-item
+            = f.label :email
+            = f.text_field :email
+          .form-item
+            = f.label :display_name
+            = f.text_field :display_name
+          = f.hidden_field :internal, value: true
+          .form-item.send-welcome
+            = label_tag :send_welcome, "Send welcome email"
+            = check_box_tag :send_welcome, '1', true
+        = render partial: "courses", locals: { form: f }
+        = render partial: "course_settings", locals: { form: f }
+        = render "buttons"

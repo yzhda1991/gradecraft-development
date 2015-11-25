@@ -1,0 +1,25 @@
+- if current_user_is_staff?
+  %section
+    %h4.uppercase= "#{current_course.name} Settings"
+    - if current_course.has_teams? && @user.is_student?(current_course)
+      .form-item
+        = form.input :course_team_ids, :collection => @teams, :as => :select, :label => "Select #{term_for :team}", :selected => @user.team_for_course(current_course).try(:id), :include_blank => true
+    = form.simple_fields_for :course_memberships, @course_membership do |p|
+      - if current_user_is_admin?
+        .form-item
+          = p.label :role, "Select Role"
+          = p.select :role, [["Student", "student"],["GSI", "gsi"],["Professor", "professor"],["Admin", "admin"]]
+      - elsif current_user_is_professor?
+        .form-item
+          = p.label :role, "Select Role"
+          = p.select :role, [["Student", "student"],["GSI", "gsi"],["Professor", "professor"]]
+      - if @user.is_student?(current_course)
+        .form-item
+          = form.label :team_role, "#{term_for :team} Role"
+          = form.input :team_role, :input_html => { :maxlength => 255 }, :label => false
+        .form-item
+          = p.input :character_profile, :class => "froala"
+        .form-item
+          = form.label :auditing
+          = p.check_box :auditing
+          .form_label This #{term_for :student}'s grades will be excluded from course analysis

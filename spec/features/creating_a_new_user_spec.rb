@@ -12,8 +12,9 @@ feature "creating a new user" do
 
     context "for a UM student" do
       scenario "successfully" do
-        user = build(:user, email: "#{Faker::Internet.user_name}@umich.edu")
-        within(".pageContent") do
+        username = Faker::Internet.user_name
+        user = build(:user, email: "#{username}@umich.edu")
+        within(".pageContent #tab2") do
           NewUserPage.new(user)
             .submit(internal: true, courses: [course_membership.course])
         end
@@ -25,15 +26,15 @@ feature "creating a new user" do
         expect(result.first_name).to eq user.first_name
         expect(result.last_name).to eq user.last_name
         expect(result.email).to eq user.email
-        expect(result.username).to eq user.username
-        expect(result.kerberos_uid).to eq user.username
+        expect(result.username).to eq username
+        expect(result.kerberos_uid).to eq username
         expect(result.crypted_password).to be_nil
         expect(result).to be_activated
       end
 
       scenario "with a non-umich email address" do
         user = build(:user)
-        within(".pageContent") do
+        within(".pageContent #tab2") do
           NewUserPage.new(user)
             .submit(internal: true, courses: [course_membership.course])
         end
