@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe TeamLeadership, focus: true do 
+describe TeamLeadership do 
 
   subject { build(:earned_badge) }
 

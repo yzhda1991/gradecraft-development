@@ -75,13 +75,6 @@ class ChallengeGradesController < ApplicationController
     end
   end
 
-  private
-    def challenge_grade_is_student_visible?
-      @challenge_grade.is_student_visible?
-    end
-
-  public
-
   # @mz todo: refactor this whole thing, move into models and presenters
   def update
     @challenge = current_course.challenges.find(params[:challenge_id])
@@ -110,66 +103,7 @@ class ChallengeGradesController < ApplicationController
     end
   end
 
-  # @mz todo: refactor all of this nonsense, add specs etc, this works for now
-  private
-
-    def student_grades_require_update?
-      score_update_required? or visibility_update_required?
-    end
-
-    def score_update_required?
-      score_changed? and @challenge_grade.is_student_visible?
-    end
-
-    def visibility_update_required?
-      visibility_changed? and @challenge_grade.is_student_visible?
-    end
-
-    def visibility_changed?
-       @challenge_grade.previous_changes[:status].present?
-    end
-
-    def score_changed?
-       @challenge_grade.previous_changes[:score].present?
-    end
-
-  public
-
-    # # @mz todo: build out logic to trigger jobs in the event that the grades are student visible and the score changed, or if the grade became student invisible but used to be student visible
-
-    # private
-    # def student_grades_require_update?
-    #   (score_changed? and @challenge_grade.is_student_visible?) or 
-    #   (visibility_changed? and (was_released? or was_graded_and_became_invisible?))
-    # end
-
-    # def was_graded_and_became_invisible?
-    #   was_graded? and is_in_progress? and not @challenge.release_necessary
-    # end
-
-    # def score_changed?
-    #   @challenge_grade.previous_changes[:score].present?
-    # end
-
-    # def visibility_changed?
-    #   @challenge_grade.previous_changes[:status].present?
-    # end
-
-    # def was_released?
-    #   @challenge_grade.previous_changes[:status].first == "Released" rescue false
-    # end
-
-    # def was_graded?
-    #   @challenge_grade.previous_changes[:status].first == "Graded" rescue false
-    # end
-
-    # def is_in_progress?
-    #   @challenge_grade.previous_changes[:status].last == "In Progress" rescue false
-    # end
-
-    # public
-
-    # Changing the status of a grade - allows instructors to review "Graded" grades, before they are "Released" to students
+  # Changing the status of a grade - allows instructors to review "Graded" grades, before they are "Released" to students
   def edit_status
     @challenge = current_course.challenges.find(params[:challenge_id])
     @title = "#{@challenge.name} Grade Statuses"
@@ -186,7 +120,6 @@ class ChallengeGradesController < ApplicationController
     redirect_to challenge_path(@challenge)
   end
  
-
   # @mz todo: add specs
   def destroy
     @challenge_grade = current_course.challenge_grades.find(params[:id])
@@ -199,6 +132,33 @@ class ChallengeGradesController < ApplicationController
       format.html { redirect_to challenge_path(@challenge) }
       format.json { head :ok }
     end
+  end
+
+  # @mz todo: refactor all of this nonsense, add specs etc, this works for now
+  private
+
+  def student_grades_require_update?
+    score_update_required? or visibility_update_required?
+  end
+
+  def score_update_required?
+    score_changed? and @challenge_grade.is_student_visible?
+  end
+
+  def visibility_update_required?
+    visibility_changed? and @challenge_grade.is_student_visible?
+  end
+
+  def visibility_changed?
+     @challenge_grade.previous_changes[:status].present?
+  end
+
+  def score_changed?
+     @challenge_grade.previous_changes[:score].present?
+  end
+
+  def challenge_grade_is_student_visible?
+    @challenge_grade.is_student_visible?
   end
 
 end
