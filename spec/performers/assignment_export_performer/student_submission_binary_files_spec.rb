@@ -154,7 +154,65 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           expect(File.exist?(mikos_bases_file_path)).to be_truthy
         end
       end
-    end
 
+      describe "rescue_binary_file_exceptions" do
+        context "block doesn't raise an exception" do
+          subject do
+            performer.instance_eval do
+              rescue_binary_file_exceptions( @some_student, @some_submission_file, "#{tmp_dir}/some_path" ) do
+                "the great return"
+              end
+            end
+          end
+
+          it "returns the outcome of the block yield" do
+          end
+        end
+
+        context "block raises an http error" do
+          subject do
+            performer.instance_eval do
+              rescue_binary_file_exceptions( @some_student, @some_submission_file, "#{tmp_dir}/some_path" ) do
+                raise OpenURI::HTTPError, "the weirdest http error"
+              end
+            end
+          end
+
+          it "rescues the error" do
+            expect(performer).to receive(:rescue).with(OpenURI::HTTPError => e)
+            subject
+          end
+
+          it "builds a binary file error message" do
+            expect(performer).to receive(:binary_file_error_message)
+              .with("Invalid URL for file", student, submission_file1)
+            subject
+          end
+
+          it "adds an error message to the @errors array" do
+            expect(performer).to receive(:binary_file_error_message)
+              .with("Invalid URL for file", student, submission_file1) { "great error, man" }
+            subject
+          end
+            
+          it "removes the partially created file at file_path" do
+          end
+        end
+
+        context "block raises another exception" do
+          it "rescues the error" do
+          end
+
+          it "builds a binary file error message" do
+          end
+
+          it "adds an error message to the @errors array" do
+          end
+            
+          it "removes the partially created file at file_path" do
+          end
+        end
+      end
+    end
   end
 end
