@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe ChallengeGrade, focus: true do 
+describe ChallengeGrade do 
   subject { build(:challenge_grade) }
 
   context "validations" do
@@ -39,7 +39,12 @@ describe ChallengeGrade, focus: true do
   end
 
   describe "#cache_team_score" do 
-    #team.save!
+    it "triggers the resave of a team" do 
+      team = create(:team, created_at: Date.today - 1)
+      challenge_grade = create(:challenge_grade, team: team)
+      challenge_grade.cache_team_score
+      expect(team.updated_at.strftime("%B %-e, %Y - %-l:%M%P")).to eq(DateTime.now.strftime("%B %-e, %Y - %-l:%M%P"))
+    end
   end
 
   describe "#is_graded?" do
