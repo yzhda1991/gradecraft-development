@@ -29,7 +29,7 @@ class ChallengeGrade < ActiveRecord::Base
   end
 
   def score
-    super.presence || 0
+    super.presence || nil
   end
 
   def cache_team_score
@@ -38,10 +38,6 @@ class ChallengeGrade < ActiveRecord::Base
 
   def is_graded?
     status == 'Graded'
-  end
-
-  def in_progress?
-    status == 'In Progress'
   end
 
   def is_released?
