@@ -17,10 +17,6 @@ class AssignmentType < ActiveRecord::Base
 
   default_scope { order 'position' }
 
-  def self.weights_for_student(student)
-    group('assignment_types.id').weighted_for_student(student).pluck('assignment_types.id, COALESCE(MAX(assignment_weights.weight), 0)')
-  end
-
   def weight_for_student(student)
     return 1 unless student_weightable?
     assignment_weights.where(student: student).weight
@@ -30,13 +26,18 @@ class AssignmentType < ActiveRecord::Base
     max_points.present?
   end
 
-  # #Getting the assignment types max value if it's present, else summing all it's assignments to create the total
+  # #Getting the assignment types max value if it's present, else returning the summed total of assignment points
   def total_points
     if max_points.present?
       max_points
     else
-      assignments.map{ |a| a.point_total || 0 }.sum
+      summed_assignment_points
     end
+  end
+
+  # Calculating the total number of assignment points in the type
+  def summed_assignment_points
+    assignments.map{ |a| a.point_total || 0 }.sum
   end
 
   def total_points_for_student(student)
@@ -44,32 +45,36 @@ class AssignmentType < ActiveRecord::Base
       max_points
     else
       if student_weightable?
-        if assignment_weights.where(:student_id => student).present?
-          (total_points * weight_for_student(student)).to_i
-        else
-          (total_points * course.default_assignment_weight).to_i
-        end
+        weighted_total_for_student(student)
       else
-        total_points
+        summed_assignment_points
       end
     end
   end
 
+  def weighted_total_for_student(student)
+    if weight_for_student(student) >= 1
+      (total_points * weight_for_student(student)).to_i
+    else
+      (total_points * course.default_assignment_weight).to_i
+    end
+  end
+
   def visible_score_for_student(student)
-    score = (student.grades.released.where(:assignment_type => self).pluck('score').sum || 0)
-    if max_points?
-      if score < max_points
-        return score
-      else
-        return max_points
-      end
+    score = score_for_student(student)
+    if max_points? && score > max_points
+      return max_points
     else
       return score
     end
   end
 
+  def score_for_student(student)
+    student.grades.student_visible.where(:assignment_type => self).pluck('score').sum || 0
+  end
+
   def raw_score_for_student(student)
-    student.grades.where(:assignment_type => self).pluck('raw_score').compact.sum
+    student.grades.student_visible.where(:assignment_type => self).pluck('raw_score').compact.sum || 0
   end
 
   def export_scores
