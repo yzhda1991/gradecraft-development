@@ -172,14 +172,15 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         context "block raises an http error", inspect:true do
           subject do
             performer.instance_eval do
-              rescue_binary_file_exceptions( @some_student, @some_submission_file, "#{tmp_dir}/some_path" ) do
+              rescue_binary_file_exceptions( @some_student, @some_submission_file, "#{@some_tmp_dir}/some_path" ) do
                 raise OpenURI::HTTPError.new(STDOUT, "the weirdest http error")
               end
             end
           end
 
-          before do
+          before(:each) do
             allow(performer).to receive(:binary_file_error_message) { "great error, man" }
+            performer.instance_variable_set(:@some_tmp_dir, tmp_dir)
           end
 
           it "builds a binary file error message" do
