@@ -139,6 +139,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           allow(submission_file1).to receive(:url) { horses_path }
         end
 
+        it "rescues the file exceptions" do
+          expect(performer).to receive(:rescue_binary_file_exceptions).with(student, submission_file1, mikos_bases_file_path)
+          subject
+        end
+
         it "gets the binary submission file path" do
           expect(performer).to receive(:submission_binary_file_path).with(student, submission_file1, 5)
           subject
