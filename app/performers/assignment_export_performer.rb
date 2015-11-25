@@ -43,6 +43,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
         create_submission_binary_files
       end
 
+      # write error log for errors that may have occurred during file generation
+      require_success(generate_error_log_messages) do
+        generate_error_log
+      end
+
       # require_sucess(start_archive_messages) do
       #   start_archive_process
       # end
@@ -309,6 +314,16 @@ class AssignmentExportPerformer < ResqueJob::Performer
     "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{error_io}"
   end
 
+  # @mz todo: add spec examples
+  def generate_error_log
+    open(error_log_path, 'w') {|file| file.puts @errors }
+  end
+
+  # @mz todo: add spec examples
+  def error_log_path
+    File.expand_path("error_log.txt", tmp_dir)
+  end
+
   private
 
   # @mz todo: add specs, add require_success block
@@ -380,6 +395,14 @@ class AssignmentExportPerformer < ResqueJob::Performer
     expand_messages ({
       success: "Successfully created all binary files for the student submissions",
       failure: "Student submission binary files did not create properly"
+    })
+  end
+
+  # @mz todo: add specs
+  def generate_error_log_messages
+    expand_messages ({
+      success: "Successfully generated an error log for binary file creation if one was required",
+      failure: "Failed to build an error log for binary file creation errors"
     })
   end
 
