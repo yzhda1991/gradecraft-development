@@ -168,6 +168,21 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           it "returns the outcome of the block yield" do
             expect(subject).to eq("the great return")
           end
+
+          it "doesn't build a binary file error message" do
+            expect(performer).not_to receive(:binary_file_error_message)
+            subject
+          end
+
+          it "doesn't add an error message to the @errors array" do
+            subject
+            expect(performer.instance_variable_get(:@errors)).to be_empty
+          end
+            
+          it "doesn't try to remove any file at file_path" do
+            expect(performer).not_to receive(:remove_if_exists)
+            subject
+          end
         end
 
         context "block raises an http error" do
