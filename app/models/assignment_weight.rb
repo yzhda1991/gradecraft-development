@@ -13,7 +13,6 @@ class AssignmentWeight < ActiveRecord::Base
 
   validates_presence_of :student, :assignment, :assignment_type, :course, :weight
 
-  scope :except_weight, ->(weight) { where('assignment_weights.id != ?', weight.id) }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
 
@@ -43,5 +42,5 @@ class AssignmentWeight < ActiveRecord::Base
   def cache_point_total
     self.point_total = assignment.point_total_for_student(student, weight)
   end
-  
+
 end
