@@ -4,7 +4,6 @@ class ChallengeScoreLevel < ActiveRecord::Base
   belongs_to :challenge
   attr_accessible :challenge_id
 
-  def formatted_name
-    "#{name} - #{value} points"
-  end
+  validates_associated :challenge
+
 end
