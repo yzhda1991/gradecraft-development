@@ -64,4 +64,212 @@ describe Submission do
       expect(results).to eq [student_submission]
     end
   end
+
+  describe "#updatable_by?(user)" do
+    it "returns true for the student whose submission it is" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Individual")
+      submission = create(:submission, assignment: assignment, student: student)
+      expect(submission.updatable_by?(student)).to eq(true)
+    end
+
+    it "returns false for any student whose submission it is not" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Individual")
+      submission = create(:submission, assignment: assignment)
+      expect(submission.updatable_by?(student)).to eq(false)
+    end
+
+    it "returns true for any student in a group whose submission it is" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Group")
+      group = create(:group)
+      group.students << student
+      assignment.groups << group
+
+      submission = create(:submission, assignment: assignment, group: group)
+      expect(submission.updatable_by?(student)).to eq(true)
+    end
+
+    it "returns false for any student in other groups whose submission it is not" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Group")
+      group = create(:group)
+      group.students << student
+      assignment.groups << group
+
+      submission = create(:submission, assignment: assignment)
+      expect(submission.updatable_by?(student)).to eq(false)
+    end
+  end
+
+  describe "#destroyable_by?(user)" do 
+    it "returns true for the student whose submission it is" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Individual")
+      submission = create(:submission, assignment: assignment, student: student)
+      expect(submission.destroyable_by?(student)).to eq(true)
+    end
+
+    it "returns false for any student whose submission it is not" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Individual")
+      submission = create(:submission, assignment: assignment)
+      expect(submission.destroyable_by?(student)).to eq(false)
+    end
+
+    it "returns true for any student in a group whose submission it is" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Group")
+      group = create(:group)
+      group.students << student
+      assignment.groups << group
+
+      submission = create(:submission, assignment: assignment, group: group)
+      expect(submission.destroyable_by?(student)).to eq(true)
+    end
+
+    it "returns false for any student in other groups whose submission it is not" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Group")
+      group = create(:group)
+      group.students << student
+      assignment.groups << group
+
+      submission = create(:submission, assignment: assignment)
+      expect(submission.destroyable_by?(student)).to eq(false)
+    end
+  end
+
+  describe "#viewable_by?(user)" do 
+    it "returns true for the student whose submission it is" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Individual")
+      submission = create(:submission, assignment: assignment, student: student)
+      expect(submission.viewable_by?(student)).to eq(true)
+    end
+
+    it "returns false for any student whose submission it is not" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Individual")
+      submission = create(:submission, assignment: assignment)
+      expect(submission.viewable_by?(student)).to eq(false)
+    end
+
+    it "returns true for any student in a group whose submission it is" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Group")
+      group = create(:group)
+      group.students << student
+      assignment.groups << group
+
+      submission = create(:submission, assignment: assignment, group: group)
+      expect(submission.viewable_by?(student)).to eq(true)
+    end
+
+    it "returns false for any student in other groups whose submission it is not" do 
+      student = create(:user)
+      assignment = create(:assignment, grade_scope: "Group")
+      group = create(:group)
+      group.students << student
+      assignment.groups << group
+
+      submission = create(:submission, assignment: assignment)
+      expect(submission.viewable_by?(student)).to eq(false)
+    end
+  end
+
+  describe "#ungraded?" do
+    it "returns true for a submission that has no grade" do 
+      submission = create(:submission)
+      expect(submission.ungraded?).to eq(true)
+    end
+
+    it "returns true for a submission that has grade that is not student visible" do 
+      submission = create(:submission)
+      grade = create(:grade, submission: submission)
+      expect(submission.ungraded?).to eq(true)
+    end
+
+    it "returns false for a submission that has grade that is student visible" do 
+      submission = create(:submission)
+      grade = create(:grade, submission: submission, status: "Graded")
+      expect(submission.ungraded?).to eq(false)
+    end
+  end
+
+  describe "#resubmitted?" do
+    #student.grade_for_assignment(assignment).present? && student.grade_for_assignment(assignment).updated_at < self.updated_at
+  end
+
+  describe "#name" do
+    it "returns the student's name" do
+      student = create(:user, first_name: "Joon", last_name: "Pearl") 
+      submission = create(:submission, student: student)
+      expect(submission.name).to eq("Joon Pearl")
+    end    
+  end
+
+  describe "#late?" do
+    it "returns true if the submission was created after the due date" do
+      assignment = create(:assignment, due_at: Date.today - 1)
+      submission = create(:submission, assignment: assignment)
+      expect(submission.late?).to eq(true)
+    end  
+
+    it "returns false if the submission was created before the due date" do 
+      assignment = create(:assignment, due_at: Date.today + 1)
+      submission = create(:submission, assignment: assignment)
+      expect(submission.late?).to eq(false)
+    end
+  end
+
+  describe "#has_multiple_components?" do
+    it "returns true for any submission that has more than one file attachment" do 
+      assignment = create(:assignment, due_at: Date.today + 1)
+      submission = create(:submission, assignment: assignment)
+      file_1 = create(:submission_file, submission: submission)
+      file_2 = create(:submission_file, submission: submission)
+
+      expect(submission.has_multiple_components?).to eq(true)
+    end
+
+    it "returns true for any submission that has a link and a text comment" do 
+      assignment = create(:assignment, due_at: Date.today + 1)
+      submission = create(:submission, assignment: assignment, text_comment: "Having a Boo Radley moment, are we?", link: "http://www.gradecraft.com")
+
+      expect(submission.has_multiple_components?).to eq(true)
+    end
+
+    it "returns true for any submission that has one attachment and a text comment" do 
+      assignment = create(:assignment, due_at: Date.today + 1)
+      submission = create(:submission, assignment: assignment, text_comment: "Soap on a rope, slightly used")
+      file_1 = create(:submission_file, submission: submission)
+
+      expect(submission.has_multiple_components?).to eq(true)
+    end
+
+    it "returns false for any submission that has just a text comment" do 
+      assignment = create(:assignment, due_at: Date.today + 1)
+      submission = create(:submission, assignment: assignment, text_comment: "Raisins are really just humiliated grapes.")
+
+      expect(submission.has_multiple_components?).to eq(false)
+    end
+
+    it "returns false for any submission that has just a link" do 
+      assignment = create(:assignment, due_at: Date.today + 1)
+      submission = create(:submission, assignment: assignment, link: "http://www.gradecraft.com", text_comment: nil)
+
+      expect(submission.has_multiple_components?).to eq(false)
+    end
+  end
+
+  describe "#check_unlockables" do
+    # if self.assignment.is_a_condition?
+    #   unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
+    #     unlockable = condition.unlockable
+    #     unlockable.check_unlock_status(student)
+    #   end
+    # end
+  end
 end

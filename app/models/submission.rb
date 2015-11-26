@@ -16,7 +16,7 @@ class Submission < ActiveRecord::Base
   before_save :clean_html, :submit_something
   after_save :check_unlockables
 
-  has_one :grade, :dependent => :destroy
+  has_one :grade
   has_one :assignment_weight, through: :assignment
   has_many :rubric_grades, dependent: :destroy
 
@@ -48,7 +48,16 @@ class Submission < ActiveRecord::Base
 
   def destroyable_by?(user)
     if assignment.is_individual?
-      student_id == user.id || user.is_staff?(current_course)
+      student_id == user.id
+    elsif assignment.has_groups?
+      group_id == user.group_for_assignment(assignment).id
+    end
+  end
+
+  #Permissions regarding who can see a grade
+  def viewable_by?(user)
+    if assignment.is_individual?
+      student_id == user.id
     elsif assignment.has_groups?
       group_id == user.group_for_assignment(assignment).id
     end
@@ -64,16 +73,6 @@ class Submission < ActiveRecord::Base
     student.grade_for_assignment(assignment).present? && student.grade_for_assignment(assignment).updated_at < self.updated_at
   end
 
-
-  #Permissions regarding who can see a grade
-  def viewable_by?(user)
-    if assignment.is_individual?
-      student_id == user.id
-    elsif assignment.has_groups?
-      group_id == user.group_for_assignment(assignment).id
-    end
-  end
-
   # Getting the name of the student who submitted the work
   def name
     student.name
@@ -85,20 +84,23 @@ class Submission < ActiveRecord::Base
   end
 
   def has_multiple_components?
-    return true if (submission_files.count > 1) || (submission_files.present? && (link.present? || text_comment.present?))
+    count = 0
+    count += submission_files.count
+    if link.present?
+      count += 1
+    end
+    if text_comment.present?
+      count +=1
+    end
+    return true if count > 1
     false
   end
 
   def check_unlockables
     if self.assignment.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
-        if condition.unlockable_type == "Assignment"
-          unlockable = Assignment.find(condition.unlockable_id)
-          unlockable.check_unlock_status(student)
-        elsif condition.unlockable_type == "Badge"
-          unlockable = Badge.find(condition.unlockable_id)
-          unlockable.check_unlock_status(student)
-        end
+        unlockable = condition.unlockable
+        unlockable.check_unlock_status(student)
       end
     end
   end
