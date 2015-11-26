@@ -2,7 +2,7 @@ class Submission < ActiveRecord::Base
   attr_accessible :task, :task_id, :assignment, :assignment_id, :assignment_type_id,
     :group, :group_id, :link, :student, :student_id, :creator, :creator_id, 
     :text_comment, :graded, :submission_file, :submission_files_attributes, :submission_files,
-    :course_id, :submission_file_ids, :updated_at
+    :course_id, :submission_file_ids, :updated_at, :course_id
 
   include Canable::Ables
 
@@ -48,7 +48,7 @@ class Submission < ActiveRecord::Base
 
   def destroyable_by?(user)
     if assignment.is_individual?
-      student_id == user.id || user.is_staff?(current_course)
+      student_id == user.id
     elsif assignment.has_groups?
       group_id == user.group_for_assignment(assignment).id
     end
