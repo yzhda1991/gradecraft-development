@@ -1,8 +1,7 @@
 require "active_record_spec_helper"
 
 describe AssignmentFile do
-  let(:course) { build(:course) }
-  let(:assignment) { build(:assignment, course: course) }
+  let(:assignment) { build(:assignment) }
 
   subject { assignment.assignment_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg')) }
 
@@ -52,8 +51,10 @@ describe AssignmentFile do
       match(/.*\/uploads\/assignment_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
   end
 
-  describe "#course", focus: true do 
+  describe "#course" do 
     it 'returns the associated course' do 
+      course = create(:course)
+      assignment.course = course
       expect(subject.course).to eq(course)
     end
   end

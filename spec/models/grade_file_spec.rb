@@ -1,7 +1,9 @@
 require "active_record_spec_helper"
 
 describe GradeFile do
-  let(:grade) { build(:grade) }
+  let(:course) { build(:course) }
+  let(:assignment) { build(:assignment, course: course) }
+  let(:grade) { build(:grade, course: course, assignment: assignment) }
 
   subject { grade.grade_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg')) }
 
@@ -50,4 +52,17 @@ describe GradeFile do
     subject.grade.save!
     expect expect(subject.url).to match(/.*\/uploads\/grade_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
   end
+
+  describe "#course" do 
+    it 'returns the associated course' do 
+      expect(subject.course).to eq(course)
+    end
+  end
+
+  describe "#assignment" do 
+    it 'returns the associated assignment' do 
+      expect(subject.assignment).to eq(assignment)
+    end
+  end
+
 end
