@@ -39,28 +39,16 @@ class Submission < ActiveRecord::Base
 
   #Canable permissions#
   def updatable_by?(user)
-    if assignment.is_individual?
-      student_id == user.id
-    elsif assignment.has_groups?
-      group_id == user.group_for_assignment(assignment).id
-    end
+    permissions_check(user)
   end
 
   def destroyable_by?(user)
-    if assignment.is_individual?
-      student_id == user.id
-    elsif assignment.has_groups?
-      group_id == user.group_for_assignment(assignment).id
-    end
+    permissions_check(user)
   end
 
   #Permissions regarding who can see a grade
   def viewable_by?(user)
-    if assignment.is_individual?
-      student_id == user.id
-    elsif assignment.has_groups?
-      group_id == user.group_for_assignment(assignment).id
-    end
+    permissions_check(user)
   end
 
   # Grabbing any submission that has NO instructor-defined grade (if the student has predicted the grade,
@@ -106,6 +94,14 @@ class Submission < ActiveRecord::Base
   end
 
   private
+
+  def permissions_check(user)
+    if assignment.is_individual?
+      student_id == user.id
+    elsif assignment.has_groups?
+      group_id == user.group_for_assignment(assignment).id
+    end
+  end
 
   def clean_html
     self.text_comment = Sanitize.clean(text_comment, Sanitize::Config::RESTRICTED)
