@@ -3,48 +3,27 @@ require "active_record_spec_helper"
 describe CourseMembership do
   subject { build :course_membership }
 
-  describe "validations" do
-    describe "#student?" do
-      it "is a student if the role is student" do
-        subject.role = "student"
-        expect(subject).to be_student
-      end
+  context "validations" do
+
+    it "is valid with a user, a course and a role" do
+      expect(subject).to be_valid
     end
 
-    describe "#professor?" do
-      it "is a professor if the role is professor" do
-        subject.role = "professor"
-        expect(subject).to be_professor
-      end
+    it "requires a course" do
+      subject.course = nil
+      expect(subject).to_not be_valid
     end
 
-    describe "#gsi?" do
-      it "is a gsi if the role is gsi" do
-        subject.role = "gsi"
-        expect(subject).to be_gsi
-      end
+    it "requires a student" do
+      subject.user = nil
+      expect(subject).to_not be_valid
     end
 
-    describe "#admin?" do
-      it "is an admin if the role is admin" do
-        subject.role = "admin"
-        expect(subject).to be_admin
-      end
+    it "requires a role" do
+      subject.role = nil
+      expect(subject).to_not be_valid
     end
 
-    describe "#staff?" do
-      it "is staff if it has a professor, gsi, or admin role" do
-        roles = ["professor", "gsi", "admin"]
-        roles.each do |role|
-          subject.role = role
-          expect(subject).to be_staff
-        end
-      end
-
-      it "is not staff if it has a student role" do
-        subject.role = "student"
-        expect(subject).to_not be_staff
-      end
-    end
   end
+
 end

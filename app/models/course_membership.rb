@@ -18,6 +18,8 @@ class CourseMembership < ActiveRecord::Base
   scope :auditing, -> { where( :auditing => true ) }
   scope :being_graded, -> { where( :auditing => false) }
 
+  validates_presence_of :course, :user, :role
+
   validates :instructor_of_record, instructor_of_record: true
 
   def assign_role_from_lti(auth_hash)
@@ -47,33 +49,38 @@ class CourseMembership < ActiveRecord::Base
     conditional_student_team_score
   end
 
-  def recalculation_test
-    non_matching_sets = non_matching_test_score_sets
-    puts "Total score sets: #{recalculation_test_score_sets.count}"
-    puts "Total non-matching score sets: #{non_matching_sets.count}"
-    puts "Listed non-matching sets:"
-    non_matching_sets.each do |nms|
-      puts nms
-    end
-    puts "No non-matching sets. All score recalculations matched the original scores." if non_matching_sets.empty?
-  end
+  # Used to build and test the methods to build student scores - can be removed? -ch
+  # def recalculation_test
+  #   non_matching_sets = non_matching_test_score_sets
+  #   puts "Total score sets: #{recalculation_test_score_sets.count}"
+  #   puts "Total non-matching score sets: #{non_matching_sets.count}"
+  #   puts "Listed non-matching sets:"
+  #   non_matching_sets.each do |nms|
+  #     puts nms
+  #   end
+  #   puts "No non-matching sets. All score recalculations matched the original scores." if non_matching_sets.empty?
+  # end
 
-  def recalculation_test_score_sets
-    @recalculation_test_score_sets ||= CourseMembership.all.collect do |cm|
-      { 
-        current_score: cm.score,
-        recalculated_score: cm.recalculated_student_score,
-        course_membership_id: cm.id,
-        student_id: cm.user_id,
-        course_id: cm.course_id
-      }
-    end
-  end
+  # def recalculation_test_score_sets
+  #   @recalculation_test_score_sets ||= CourseMembership.all.collect do |cm|
+  #     { 
+  #       current_score: cm.score,
+  #       recalculated_score: cm.recalculated_student_score,
+  #       course_membership_id: cm.id,
+  #       student_id: cm.user_id,
+  #       course_id: cm.course_id
+  #     }
+  #   end
+  # end
 
-  def non_matching_test_score_sets
-    @non_matching_test_score_sets ||= recalculation_test_score_sets.select do |set|
-      set[:current_score] != set[:recalculated_score]
-    end
+  # def non_matching_test_score_sets
+  #   @non_matching_test_score_sets ||= recalculation_test_score_sets.select do |set|
+  #     set[:current_score] != set[:recalculated_score]
+  #   end
+  # end
+
+  def staff?
+    professor? || gsi? || admin?
   end
 
   private
@@ -106,15 +113,4 @@ class CourseMembership < ActiveRecord::Base
     course.add_team_score_to_student? and not course.team_score_average
   end
 
-  public
-
-  def staff?
-    professor? || gsi? || admin?
-  end
-
-  protected
-
-  def student_id
-    @student_id ||= user.id
-  end
 end
