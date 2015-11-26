@@ -3,7 +3,7 @@ class GradeSchemeElement < ActiveRecord::Base
 
   belongs_to :course, touch: true
 
-  validates_presence_of :low_range, :high_range
+  validates_presence_of :low_range, :high_range, :course
   validates_numericality_of :high_range, greater_than: Proc.new { |e| e.low_range.to_i }
 
   default_scope { order 'high_range DESC' }
