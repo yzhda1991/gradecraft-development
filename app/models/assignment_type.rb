@@ -18,8 +18,11 @@ class AssignmentType < ActiveRecord::Base
   default_scope { order 'position' }
 
   def weight_for_student(student)
+    #return a standard multiplier of 1 if the assignment type is not student weightable
     return 1 unless student_weightable?
-    assignment_weights.where(student: student).weight
+    
+    #find the assignment weight for the student if it's present
+    assignment_weights.where(student: student).first.try(:weight) || 0
   end
 
   def is_capped?

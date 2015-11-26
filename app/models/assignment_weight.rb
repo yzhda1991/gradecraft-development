@@ -12,35 +12,29 @@ class AssignmentWeight < ActiveRecord::Base
   before_validation :cache_associations, :cache_point_total
   #after_save :save_grades, :save_student
 
-  validates_presence_of :student, :assignment, :assignment_type, :course
-
-  # validate :course_total_assignment_weight_not_exceeded, :course_max_assignment_weight_not_exceeded
+  validates_presence_of :student, :assignment, :assignment_type, :course, :weight
 
   scope :except_weight, ->(weight) { where('assignment_weights.id != ?', weight.id) }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
 
-  def self.weight
-    limit(1).pluck(:weight).first || 0
-  end
-
   def updatable_by?(user)
-    self.student_id == student.id
+    permissions_check(user)
   end
 
   def destroyable_by?(user)
-    updatable_by?(user)
+    permissions_check(user)
   end
 
   def viewable_by?(user)
-    updatable_by?(user)
-  end
-
-  def course_total_assignment_weight
-    course.assignment_weight_for_student(student) + (persisted? ? 0 : weight)
+    permissions_check(user)
   end
 
   private
+
+  def permissions_check(user)
+    self.student_id == user.id
+  end
 
   def course_total_assignment_weight_not_exceeded
     if course_total_assignment_weight > course.total_assignment_weight
