@@ -1,6 +1,6 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
 
-RSpec.describe CourseMembership do
+describe CourseMembership do
   let(:course_membership) { build(:student_course_membership, course: course, user: student) }
   let(:course) { build(:course) }
   let(:student) { build(:user) }
