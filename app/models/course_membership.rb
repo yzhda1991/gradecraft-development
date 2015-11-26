@@ -18,6 +18,8 @@ class CourseMembership < ActiveRecord::Base
   scope :auditing, -> { where( :auditing => true ) }
   scope :being_graded, -> { where( :auditing => false) }
 
+  validates_presence_of :course, :user, :role
+
   validates :instructor_of_record, instructor_of_record: true
 
   def assign_role_from_lti(auth_hash)
@@ -76,6 +78,10 @@ class CourseMembership < ActiveRecord::Base
     end
   end
 
+  def staff?
+    professor? || gsi? || admin?
+  end
+
   private
 
   def assignment_type_totals_for_student
@@ -104,12 +110,6 @@ class CourseMembership < ActiveRecord::Base
 
   def include_team_score?
     course.add_team_score_to_student? and not course.team_score_average
-  end
-
-  public
-
-  def staff?
-    professor? || gsi? || admin?
   end
 
   protected
