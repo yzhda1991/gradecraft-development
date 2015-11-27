@@ -74,17 +74,18 @@ class AssignmentTypesController < ApplicationController
   end
 
   def export_scores
-    @assignment_type = current_course.assignment_types.find(params[:id])
+    assignment_type = current_course.assignment_types.find(params[:id])
     respond_to do |format|
-      format.csv { send_data @assignment_type.export_scores }
+      format.csv { send_data AssignmentTypeExporter.new.export_scores assignment_type, assignment_type.course.students, assignment_type.course }
     end
   end
 
   def export_all_scores
     if current_course.assignment_types.present?
-      @assignment_type = current_course.assignment_types.first
+      course = current_course
+      assignment_types = course.assignment_types
       respond_to do |format|
-        format.csv { send_data @assignment_type.export_summary_scores(current_course) }
+        format.csv { send_data AssignmentTypeExporter.new.export_summary_scores assignment_types, course, course.students }
       end
     else 
       redirect_to dashboard_path, :flash => { :error => "Sorry! You have not yet created an #{(term_for :assignment_type).titleize} for this course" }
