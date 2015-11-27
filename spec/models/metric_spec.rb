@@ -3,6 +3,22 @@ require "active_record_spec_helper"
 describe Metric do
   subject { build(:metric) }
 
+  describe "validations" do 
+    it "is valid with max_points, name, and order" do
+      expect(subject).to be_valid
+    end
+
+    it "is invalid without name" do 
+      subject.name = nil
+      expect(subject).to be_invalid
+    end
+
+    it "is invalid without order" do 
+      subject.order = nil
+      expect(subject).to be_invalid
+    end
+  end
+
   describe "#copy" do
     let(:metric) { build :metric }
     subject { metric.copy }

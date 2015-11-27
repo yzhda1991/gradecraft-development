@@ -21,6 +21,11 @@ describe AssignmentType do
       expect(subject).to_not be_valid
       expect(subject.errors[:name]).to include "can't be blank"
     end
+
+    it "is only valid with positive max points" do 
+      subject.max_points = -1000
+      expect(subject).to be_invalid
+    end
   end
 
   describe "#weight_for_student(student)" do 
