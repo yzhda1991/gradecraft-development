@@ -1,0 +1,21 @@
+= simple_form_for @user do |f|
+  %section
+    %h4.uppercase= "User Profile"
+    .form-item
+      = f.label :first_name
+      = f.text_field :first_name
+    .form-item
+      = f.label :last_name
+      = f.text_field :last_name
+    .form-item
+      = f.label :email
+      = f.text_field :email
+    .form-item
+      = f.label :username
+      = f.text_field :username
+    .form-item
+      = f.label :display_name
+      = f.text_field :display_name
+  = render partial: "courses", locals: { form: f }
+  = render partial: "course_settings", locals: { form: f }
+  = render "buttons"
