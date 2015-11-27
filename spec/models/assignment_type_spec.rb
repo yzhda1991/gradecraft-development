@@ -213,50 +213,5 @@ describe AssignmentType do
       expect(assignment_type.raw_score_for_student(student)).to eq(0)
     end
   end
-
-  describe "#export_scores" do 
-    # if student_weightable?
-    #   CSV.generate do |csv|
-    #     csv << ["First Name", "Last Name", "Username", "Raw Score", "Multiplied Score" ]
-    #     course.students.each do |student|
-    #       csv << [student.first_name, student.last_name, student.email, self.raw_score_for_student(student), self.score_for_student(student)]
-    #     end
-    #   end
-    # else
-    #   CSV.generate do |csv|
-    #     csv << ["First Name", "Last Name", "Username", "Raw Score" ]
-    #     course.students.each do |student|
-    #       csv << [student.first_name, student.last_name, student.email, self.raw_score_for_student(student)]
-    #     end
-    #   end
-    # end
-  end
-
-  describe "#export_summary_scores(course)" do 
-    # CSV.generate do |csv|
-    #   headers = []
-    #   headers << "First Name"
-    #   headers << "Last Name"
-    #   headers << "Email"
-    #   headers << "Username"
-    #   headers << "Team"
-    #   course.assignment_types.sort_by { |assignment_type| assignment_type.position }.each do |a|
-    #     headers << a.name
-    #   end
-    #   csv << headers
-    #   course.students.each do |student|
-    #     student_data = []
-    #     student_data << student.first_name
-    #     student_data << student.last_name
-    #     student_data << student.email
-    #     student_data << student.username
-    #     student_data << student.team_for_course(course).try(:name)
-    #     course.assignment_types.sort_by { |assignment_type| assignment_type.position }.each do |a|
-    #       student_data << a.visible_score_for_student(student)
-    #     end
-    #     csv << student_data
-    #   end
-    # end
-  end
-
+  
 end
