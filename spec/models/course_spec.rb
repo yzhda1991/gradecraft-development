@@ -327,6 +327,18 @@ describe Course do
     end
   end
 
+  describe "#active?" do 
+    it "returns true if the course status equals true" do 
+      subject.status = true
+      expect(subject.active?).to eq(true)
+    end
+
+    it "returns false if the course status equals false" do 
+      subject.status = false
+      expect(subject.active?).to eq(false)
+    end
+  end
+
   describe "#has_badges?" do 
     it "does not have badges turned on by default" do 
       expect(subject.has_badges?).to eq(false)
@@ -385,14 +397,13 @@ describe Course do
 
   describe "#formatted_tagline" do 
     it "returns an empty string if no tagline is present" do 
-      expect(subject.tagline).to eq(nil)
+      expect(subject.formatted_tagline).to eq(" ")
     end
 
     it "returns a tagline if present" do 
       subject.tagline = "Good night, Westley. Good work. Sleep well. I'll most likely kill you in the morning."
-      expect(subject.tagline).to eq("Good night, Westley. Good work. Sleep well. I'll most likely kill you in the morning.")
+      expect(subject.formatted_tagline).to eq("Good night, Westley. Good work. Sleep well. I'll most likely kill you in the morning.")
     end
-    
   end
 
   describe "#formatted_short_name" do 
