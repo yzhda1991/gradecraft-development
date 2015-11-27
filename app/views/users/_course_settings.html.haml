@@ -4,7 +4,8 @@
     - if current_course.has_teams? && @user.is_student?(current_course)
       .form-item
         = form.input :course_team_ids, :collection => @teams, :as => :select, :label => "Select #{term_for :team}", :selected => @user.team_for_course(current_course).try(:id), :include_blank => true
-    = form.simple_fields_for :course_memberships, @course_membership do |p|
+    = form.simple_fields_for :course_memberships do |p|
+      = p.hidden_field :course_id
       - if current_user_is_admin?
         .form-item
           = p.label :role, "Select Role"
