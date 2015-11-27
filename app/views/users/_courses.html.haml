@@ -3,7 +3,7 @@
     %h4.uppercase= "GradeCraft Settings"
 
     .form-item
-      = form.association :courses, :as => :check_boxes
+      = form.association :courses, as: :check_boxes, include_hidden: false
 
     - if @user.persisted?
       .form-item
