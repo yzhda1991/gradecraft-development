@@ -17,7 +17,7 @@ class AssignmentTypeWeightsController < ApplicationController
 
     if @form.save
       if current_user_is_student?
-        redirect_to syllabus_path , :notice => "You have successfully updated your #{(term_for :weight).titleize} choices!"
+        redirect_to syllabus_path, :notice => "You have successfully updated your #{(term_for :weight).titleize} choices!"
       else
         redirect_to multiplier_choices_path, :notice => "You have successfully updated #{current_student.name}'s #{(term_for :weight).capitalize} choices."
       end
@@ -75,9 +75,5 @@ class AssignmentTypeWeightsController < ApplicationController
 
   def student_params
     params.require(:student).permit(:assignment_type_weights_attributes => [:assignment_type_id, :weight])
-  end
-
-  def interpolation_options
-    { weights_term: term_for(:weights) }
   end
 end

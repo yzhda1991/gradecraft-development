@@ -58,10 +58,4 @@ class TeamsController < ApplicationController
     end
   end
 
-  private
-
-  def interpolation_options
-    { :resource_name => current_course.team_term }
-  end
-
 end
