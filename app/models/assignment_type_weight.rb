@@ -8,7 +8,7 @@ class AssignmentTypeWeight < Struct.new(:student, :assignment_type)
   validate :course_max_assignment_weight_not_exceeded
 
   def weight
-    @weight ||= assignment_type.assignment_weights.where(student: student).first.weight
+    @weight ||= assignment_type.assignment_weights.where(student: student).first.try(:weight) || 0
   end
 
   def assignment_type_id
@@ -22,6 +22,10 @@ class AssignmentTypeWeight < Struct.new(:student, :assignment_type)
     else
       false
     end
+  end
+
+  def persisted?
+    false
   end
 
   private
