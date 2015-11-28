@@ -80,51 +80,6 @@ class AssignmentType < ActiveRecord::Base
     student.grades.student_visible.where(:assignment_type => self).pluck('raw_score').compact.sum || 0
   end
 
-  def export_scores
-    if student_weightable?
-      CSV.generate do |csv|
-        csv << ["First Name", "Last Name", "Username", "Raw Score", "Multiplied Score" ]
-        course.students.each do |student|
-          csv << [student.first_name, student.last_name, student.email, self.raw_score_for_student(student), self.score_for_student(student)]
-        end
-      end
-    else
-      CSV.generate do |csv|
-        csv << ["First Name", "Last Name", "Username", "Raw Score" ]
-        course.students.each do |student|
-          csv << [student.first_name, student.last_name, student.email, self.raw_score_for_student(student)]
-        end
-      end
-    end
-  end
-
-  def export_summary_scores(course)
-    CSV.generate do |csv|
-      headers = []
-      headers << "First Name"
-      headers << "Last Name"
-      headers << "Email"
-      headers << "Username"
-      headers << "Team"
-      course.assignment_types.sort_by { |assignment_type| assignment_type.position }.each do |a|
-        headers << a.name
-      end
-      csv << headers
-      course.students.each do |student|
-        student_data = []
-        student_data << student.first_name
-        student_data << student.last_name
-        student_data << student.email
-        student_data << student.username
-        student_data << student.team_for_course(course).try(:name)
-        course.assignment_types.sort_by { |assignment_type| assignment_type.position }.each do |a|
-          student_data << a.visible_score_for_student(student)
-        end
-        csv << student_data
-      end
-    end
-  end
-
   private
 
   def positive_max_points
