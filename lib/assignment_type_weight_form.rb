@@ -50,9 +50,9 @@ class AssignmentTypeWeightForm < Struct.new(:student, :course)
   def validate_course_total_assignment_weight
     if course.total_assignment_weight.present?
       if course_total_assignment_weight > course.total_assignment_weight
-        errors.add :base, "You have allocated more than the course total"
+        errors.add(:base, "You have allocated more than the course total")
       elsif course_total_assignment_weight < course.total_assignment_weight
-        errors.add :base, "You must allocate the entire course total"
+        errors.add(:base, "You must allocate the entire course total")
       end
     end
   end
@@ -60,7 +60,7 @@ class AssignmentTypeWeightForm < Struct.new(:student, :course)
   def validate_course_max_assignment_types_weighted
     if course.max_assignment_types_weighted.present?
       if num_assignment_type_weights > course.max_assignment_types_weighted
-        errors.add :base, "You have weighted more assignment types than the course allows"
+        errors.add(:base, "You have weighted more assignment types than the course allows")
       end
     end
   end

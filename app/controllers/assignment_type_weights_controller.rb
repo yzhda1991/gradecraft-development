@@ -22,10 +22,12 @@ class AssignmentTypeWeightsController < ApplicationController
         redirect_to multiplier_choices_path, :notice => "You have successfully updated #{current_student.name}'s #{(term_for :weight).capitalize} choices."
       end
     else
-      if current_user_is_student?
-        redirect_to assignment_type_weights_path
-      else
-        redirect_to assignment_type_weights_path(:student_id => current_student)
+      respond_to do |format|
+        if current_user_is_student?
+          format.html { render action: "mass_edit" }
+        else
+          format.html { render action: "mass_edit", :student_id => current_student }
+        end
       end
     end
   end
