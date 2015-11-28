@@ -319,7 +319,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     open(error_log_path, 'w') {|file| file.puts @errors }
   end
 
-  # @mz todo: add spec examples
   def error_log_path
     File.expand_path("error_log.txt", tmp_dir)
   end
