@@ -98,7 +98,7 @@ describe AssignmentTypesController do
         it "returns scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
           get :export_scores, :id => @assignment_type, :format => :csv
-          expect(response.body).to include("First Name,Last Name,Username,Raw Score")
+          expect(response.body).to include("First Name,Last Name,Email,Username,Team,Raw Score,Score")
         end
       end
     end

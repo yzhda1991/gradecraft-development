@@ -1,6 +1,6 @@
 class AssignmentTypeExporter
 
-  def export_scores(assignment_type, students, course)
+  def export_scores(assignment_type, course, students)
     CSV.generate do |csv|
       csv.add_row baseline_headers + score_headers
       students.each do |student|
@@ -30,7 +30,7 @@ class AssignmentTypeExporter
 
   def assignment_type_names(assignment_types)
     assignment_types.collect do |assignment_type|
-      [ assignment_type.name ]
+      [ assignment_type.try(:name) ]
     end.flatten
   end
 

@@ -76,7 +76,7 @@ class AssignmentTypesController < ApplicationController
   def export_scores
     assignment_type = current_course.assignment_types.find(params[:id])
     respond_to do |format|
-      format.csv { send_data AssignmentTypeExporter.new.export_scores assignment_type, assignment_type.course.students, assignment_type.course }
+      format.csv { send_data AssignmentTypeExporter.new.export_scores assignment_type, assignment_type.course, assignment_type.course.students }
     end
   end
 
