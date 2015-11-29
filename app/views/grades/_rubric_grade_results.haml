@@ -11,7 +11,7 @@
 
 
   %tbody
-    - comments_by_metric_id = presenter.comments_by_metric_id(current_user)
+    - comments_by_metric_id = presenter.comments_by_metric_id(current_student)
     - presenter.metrics.ordered.each do |metric|
       %tr
         %td.metric

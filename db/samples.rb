@@ -94,9 +94,9 @@ end
     u.email = "#{username}@hogwarts.edu"
     u.password = 'uptonogood'
     u.courses << courses
-    u.teams << teams
     u.display_name = pseuydonyms.sample
   end
+  user.teams << teams
   user.activate!
   print "."
   user
