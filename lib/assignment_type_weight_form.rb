@@ -37,10 +37,12 @@ class AssignmentTypeWeightForm < Struct.new(:student, :course)
     end
   end
 
+  # Counting how many total weights have been assigned to make sure it's at/below the cap
   def course_total_assignment_weight
     assignment_type_weights.sum(&:weight)
   end
 
+  # Counting how many assignment types the student has weighted to ensure it's at/below the cap
   def num_assignment_type_weights
     assignment_type_weights.select { |atw| atw.weight > 0  }.count
   end
