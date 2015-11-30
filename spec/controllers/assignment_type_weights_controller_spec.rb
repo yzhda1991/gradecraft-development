@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-describe AssignmentTypeWeightsController, focus: true do
+describe AssignmentTypeWeightsController do
   before(:all) do
     @course = create :course,
                    total_assignment_weight: 6,
@@ -93,30 +93,29 @@ describe AssignmentTypeWeightsController, focus: true do
           course: @course
       end
 
-      it "updates assignment weights" do 
-        skip "broken"
-        student_params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"}, "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"}, "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } } }
-        post :mass_update, :student => @student, :student_params => student_params  
+      it "updates assignment weights" do
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"}, "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"}, "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
+        post :mass_update, params
         expect(@student.weight_spent?(@course)).to eq(true)
       end
 
-      it "updates points for corresponding grades" do 
+      it "updates points for corresponding grades" do
         skip "implement"
       end
 
-      it "returns an error message if the student has assigned more weight to an assignment type than is allowed" do 
+      it "returns an error message if the student has assigned more weight to an assignment type than is allowed" do
         skip "implement"
       end
 
-      it "returns an error if the student has not assigned all of their weights" do 
+      it "returns an error if the student has not assigned all of their weights" do
         skip "implement"
       end
 
-      it "returns an error if the student has assigned more total weights than allowed" do 
+      it "returns an error if the student has assigned more total weights than allowed" do
         skip "implement"
       end
 
-      it "returns an error if the student has weighted more assignment types than allowed" do 
+      it "returns an error if the student has weighted more assignment types than allowed" do
         skip "implement"
       end
     end
