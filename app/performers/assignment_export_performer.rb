@@ -48,9 +48,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
         generate_error_log
       end
 
-      # require_sucess(start_archive_messages) do
-      #   start_archive_process
-      # end
+      require_success(archive_exported_files_messages) do
+        archive_exported_files
+      end
+
+      require_success(upload_archive_to_s3_messages) do
+        upload_archive_to_s3
+      end
     else
       if logger
         log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
@@ -194,16 +198,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
   end
 
-  # @mz todo: add specs
-  def start_archive_process
-    case @archive_type
-    when :zip
-      `zip -r - #{tmp_dir} | pv -L #{@rate_limit} > #{expanded_archive_base_path}.zip`
-    when :tar
-      `tar czvf - #{tmp_dir} | pv -L #{@rate_limit} > #{expanded_archive_base_path}.tgz`
-    end
-  end
-
   ## creating student directories
   
   def student_directories_created_successfully?
@@ -323,6 +317,18 @@ class AssignmentExportPerformer < ResqueJob::Performer
     File.expand_path("error_log.txt", tmp_dir)
   end
 
+  # archive export directory
+  def archive_exported_files
+    case @archive_type
+    when :zip
+      `zip -r - #{tmp_dir} | pv -L #{@rate_limit} > #{expanded_archive_base_path}.zip`
+    end
+  end
+
+  # upload archive to S3
+  def upload_archive_to_S3
+  end
+
   private
 
   # @mz todo: add specs, add require_success block
@@ -402,6 +408,14 @@ class AssignmentExportPerformer < ResqueJob::Performer
     expand_messages ({
       success: "Successfully generated an error log for binary file creation if one was required",
       failure: "Failed to build an error log for binary file creation errors"
+    })
+  end
+
+  # @mz todo: add specs
+  def archive_exported_files_messages
+    expand_messages ({
+      success: "Successfully generated an archive containing the exported assignment files",
+      failure: "Failed to generate an archive containing the exported assignment files"
     })
   end
 
