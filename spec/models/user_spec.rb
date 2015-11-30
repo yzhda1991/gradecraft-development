@@ -136,47 +136,47 @@ describe User do
     end
   end
 
-  describe "#default_course" do 
+  describe "#default_course" do
     let(:student) { create :user, default_course: world.course }
     let(:second_course) {create :course}
-    before do 
+    before do
       create(:course_membership, course: world.course, user: student)
       create(:course_membership, course: second_course, user: student)
     end
 
-    it "returns the users default course if they've set one" do 
+    it "returns the users default course if they've set one" do
       expect(student.default_course).to eq(world.course)
     end
 
-    it "returns the first course they have if they haven't set one" do 
+    it "returns the first course they have if they haven't set one" do
       student.default_course = nil
       expect(student.default_course).to eq(student.courses.first)
     end
   end
 
-  describe "#name" do 
+  describe "#name" do
     let(:student) {create :user, first_name: "Daniel", last_name: "Hall"}
 
-    it "returns the student's full name if present" do 
+    it "returns the student's full name if present" do
       expect(student.name).to eq("Daniel Hall")
     end
 
-    it "returns the User ID if not" do 
+    it "returns the User ID if not" do
       student.last_name = nil
       student.first_name = nil
       expect(student.name).to eq("User #{student.id}")
     end
   end
 
-  describe "#auditing_course?(course)" do 
+  describe "#auditing_course?(course)" do
     let(:student) { create :user }
-    
-    it "returns true if the student is auditing" do 
+
+    it "returns true if the student is auditing" do
       create(:course_membership, course: world.course, user: student, auditing: true)
       expect(student.auditing_course?(world.course)).to eq(true)
     end
-    
-    it "returns false if the student is being graded" do 
+
+    it "returns false if the student is being graded" do
       membership = create(:course_membership, course: world.course, user: student, auditing: false)
       expect(student.auditing_course?(world.course)).to eq(false)
     end
@@ -209,172 +209,172 @@ describe User do
     end
   end
 
-  describe "#public_name" do 
+  describe "#public_name" do
     let(:student) {create :user, first_name: "Daniel", last_name: "Hall", display_name: "Hector's Kid"}
-    it "returns the username's display name if it's present" do 
+    it "returns the username's display name if it's present" do
       expect(student.public_name).to eq("Hector's Kid")
     end
 
-    it "returns the user's name otherwise" do 
+    it "returns the user's name otherwise" do
       student.display_name = nil
       expect(student.public_name).to eq("Daniel Hall")
     end
   end
 
-  describe "#is_staff?(course)" do 
+  describe "#is_staff?(course)" do
     let(:user) { create :user }
-    it "returns true if the user is a professor in the course" do 
+    it "returns true if the user is a professor in the course" do
       membership = create(:course_membership, course: world.course, user: user, role: "professor")
       expect(user.is_staff?(world.course)).to eq(true)
     end
-    it "returns true if the user is a GSI in the course" do 
+    it "returns true if the user is a GSI in the course" do
       membership = create(:course_membership, course: world.course, user: user, role: "gsi")
       expect(user.is_staff?(world.course)).to eq(true)
     end
-    it "returns true if the user is an admin in the course" do 
+    it "returns true if the user is an admin in the course" do
       membership = create(:course_membership, course: world.course, user: user, role: "admin")
       expect(user.is_staff?(world.course)).to eq(true)
     end
 
-    it "returns false if the user is a student in the course" do 
+    it "returns false if the user is a student in the course" do
       membership = create(:course_membership, course: world.course, user: user, role: "student")
       expect(user.is_staff?(world.course)).to eq(false)
     end
   end
 
-  describe "#team_for_course(course)" do 
+  describe "#team_for_course(course)" do
     let(:student) { create :user }
     let(:team) { create :team, course: world.course }
 
-    before do 
+    before do
       create(:course_membership, course: world.course, user: student)
     end
 
-    it "returns the student's team for the course" do 
+    it "returns the student's team for the course" do
       create(:team_membership, team: team, student: student)
       expect(student.team_for_course(world.course)).to eq(team)
     end
 
-    it "returns nil if the student doesn't have a team" do 
+    it "returns nil if the student doesn't have a team" do
       expect(student.team_for_course(world.course)).to eq(nil)
     end
 
   end
 
-  describe "#team_leaders(course)" do 
+  describe "#team_leaders(course)" do
     let(:student) { create :user }
     let(:team_leader) { create :user }
     let(:team) { create :team, course: world.course }
 
-    before do 
+    before do
       create(:course_membership, course: world.course, user: student)
     end
 
-    it "returns the students team leaders if they're present" do 
+    it "returns the students team leaders if they're present" do
       create(:team_leadership, team: team, leader: team_leader)
       create(:team_membership, team: team, student: student)
       expect(student.team_leaders(world.course)).to eq([team_leader])
 
     end
 
-    it "returns nil if there are no team leaders present" do 
+    it "returns nil if there are no team leaders present" do
       create(:team_membership, team: team, student: student)
       expect(student.team_leaders(world.course)).to eq([])
     end
   end
 
-  describe "#team_leaderships_for_course(course)" do 
+  describe "#team_leaderships_for_course(course)" do
     let(:team_leader) { create :user }
     let(:team) { create :team, course: world.course }
 
-    it "returns the team leaderships if they're present" do 
+    it "returns the team leaderships if they're present" do
       leadership = create(:team_leadership, team: team, leader: team_leader)
       expect(team_leader.team_leaderships(world.course)).to eq([leadership])
     end
 
-    it "returns nil if there are no team leaderships present" do 
+    it "returns nil if there are no team leaderships present" do
       expect(team_leader.team_leaderships(world.course)).to eq([])
     end
   end
 
-  describe "#character_profile(course)" do 
+  describe "#character_profile(course)" do
     let(:student) { create :user }
 
-    before do 
+    before do
       create(:course_membership, course: world.course, user: student, character_profile: 'The six-fingered man.')
     end
 
-    it "returns the student's character profile if it's present" do 
+    it "returns the student's character profile if it's present" do
       expect(student.character_profile(world.course)).to eq("The six-fingered man.")
     end
   end
 
-  describe "#archived_courses" do 
+  describe "#archived_courses" do
     let(:student) { create :user }
 
-    before do 
+    before do
       create(:course_membership, course: world.course, user: student)
     end
 
-    it "returns all archived courses for a student" do 
+    it "returns all archived courses for a student" do
       course_2 = create(:course, status: false)
       create(:course_membership, course: course_2, user: student)
       expect(student.archived_courses).to eq([course_2])
     end
   end
 
-  describe "#cached_score_for_course(course)" do 
+  describe "#cached_score_for_course(course)" do
     let(:student) { create :user }
 
-    it "returns the student's score for the course" do 
+    it "returns the student's score for the course" do
       create(:course_membership, course: world.course, user: student, score: 100000)
       expect(student.cached_score_for_course(world.course)).to eq(100000)
     end
 
-    it "returns 0 if the student has no score" do 
+    it "returns 0 if the student has no score" do
       create(:course_membership, course: world.course, user: student)
       expect(student.cached_score_for_course(world.course)).to eq(0)
     end
   end
 
-  describe "#scores_for_course(course)" do 
+  describe "#scores_for_course(course)" do
     skip "implement"
   end
 
-  describe "#grade_for_course(course)" do 
+  describe "#grade_for_course(course)" do
     let(:student) { create :user }
 
-    it "returns the grade scheme element that matches the students score for the course" do 
+    it "returns the grade scheme element that matches the students score for the course" do
       create(:course_membership, course: world.course, user: student, score: 100000)
       gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000)
       expect(student.grade_for_course(world.course)).to eq(gse)
     end
   end
 
-  describe "#grade_level_for_course(course)" do 
+  describe "#grade_level_for_course(course)" do
     let(:student) { create :user }
 
-    it "returns the grade scheme level name that matches the student's score for the course" do 
+    it "returns the grade scheme level name that matches the student's score for the course" do
       create(:course_membership, course: world.course, user: student, score: 100000)
       gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000, level: "Meh")
       expect(student.grade_level_for_course(world.course)).to eq("Meh")
     end
   end
 
-  describe "#grade_letter_for_course(course)" do 
+  describe "#grade_letter_for_course(course)" do
     let(:student) { create :user }
 
-    it "returns the grade scheme letter name that matches the student's score for the course" do 
+    it "returns the grade scheme letter name that matches the student's score for the course" do
       create(:course_membership, course: world.course, user: student, score: 100000)
       gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000, letter: "Q")
       expect(student.grade_letter_for_course(world.course)).to eq("Q")
     end
   end
 
-  describe "#next_element_level(course)" do 
+  describe "#next_element_level(course)" do
     let(:student) { create :user }
 
-    it "returns the next level above a student's current score for the course" do 
+    it "returns the next level above a student's current score for the course" do
       create(:course_membership, course: world.course, user: student, score: 100000)
       gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000, letter: "Q")
       gse_1 = create(:grade_scheme_element, course: world.course, low_range: 120001, high_range: 150000, letter: "R")
@@ -383,10 +383,10 @@ describe User do
     end
   end
 
-  describe "#points_to_next_level(course)" do 
+  describe "#points_to_next_level(course)" do
     let(:student) { create :user }
 
-    it "returns the next level above a student's current score for the course" do 
+    it "returns the next level above a student's current score for the course" do
       create(:course_membership, course: world.course, user: student, score: 100000)
       gse = create(:grade_scheme_element, course: world.course, low_range: 80000, high_range: 120000, letter: "Q")
       gse_1 = create(:grade_scheme_element, course: world.course, low_range: 120001, high_range: 150000, letter: "R")
@@ -394,22 +394,22 @@ describe User do
     end
   end
 
-  describe "#grade_released_for_assignment?(assignment)" do 
+  describe "#grade_released_for_assignment?(assignment)" do
     let(:student) { create :user }
     let(:assignment) { create :assignment}
     let(:grade) {create :grade, assignment: assignment, student: student}
 
-    it "returns false if the grade is not student visible" do 
+    it "returns false if the grade is not student visible" do
       expect(student.grade_released_for_assignment?(assignment)).to eq(false)
     end
 
-    it "returns true if the grade is graded and does not require release" do 
+    it "returns true if the grade is graded and does not require release" do
       grade.status = "Graded"
       grade.save!
       expect(student.grade_released_for_assignment?(assignment)).to eq(true)
     end
 
-    it "returns false if the grade is graded and release is required" do 
+    it "returns false if the grade is graded and release is required" do
       assignment.release_necessary = true
       assignment.save
       grade.status = "Graded"
@@ -417,7 +417,7 @@ describe User do
       expect(student.grade_released_for_assignment?(assignment)).to eq(false)
     end
 
-    it "returns true if the grade is released and release is required" do 
+    it "returns true if the grade is released and release is required" do
       assignment.release_necessary = true
       assignment.save
       grade.status = "Released"
@@ -426,37 +426,37 @@ describe User do
     end
   end
 
-  describe "#grade_for_assignment(assignment)" do 
+  describe "#grade_for_assignment(assignment)" do
     let(:student) { create :user }
     let(:assignment) { create :assignment}
 
-    it "returns the grade for an assignment if it exists" do 
+    it "returns the grade for an assignment if it exists" do
       grade = create(:grade, assignment: assignment, student: student)
       expect(student.grade_for_assignment(assignment)).to eq(grade)
     end
   end
 
-  describe "#grade_for_assignment_id(assignment_id)" do 
+  describe "#grade_for_assignment_id(assignment_id)" do
     let(:student) { create :user }
     let(:assignment) { create :assignment}
 
-    it "returns the grade for an assignment of a particular id if it exists" do 
+    it "returns the grade for an assignment of a particular id if it exists" do
       grade = create(:grade, assignment: assignment, student: student)
       expect(student.grade_for_assignment_id(assignment.id)).to eq([grade])
     end
   end
 
-  describe "#submission_for_assignment(assignment)" do 
+  describe "#submission_for_assignment(assignment)" do
     let(:student) { create :user }
     let(:assignment) { create :assignment}
 
-    it "returns the submission for an assignment if it exists" do 
+    it "returns the submission for an assignment if it exists" do
       submission = create(:submission, assignment: assignment, student: student)
       expect(student.submission_for_assignment(assignment)).to eq(submission)
     end
   end
 
-  describe "#earned_badge_score_for_course(course)" do 
+  describe "#earned_badge_score_for_course(course)" do
     let(:student) { create :user }
 
     before do
@@ -465,24 +465,24 @@ describe User do
       create(:earned_badge, score: 300, student: student, course: world.course, student_visible: true)
     end
 
-    it "returns the sum of the badge score for a student" do 
+    it "returns the sum of the badge score for a student" do
       expect(student.earned_badge_score_for_course(world.course)).to eq(400)
     end
 
-    it "does not include earned badges that have not yet been made student visible" do 
+    it "does not include earned badges that have not yet been made student visible" do
       create(:earned_badge, score: 155, student: student, course: world.course, student_visible: false)
       expect(student.earned_badge_score_for_course(world.course)).to eq(400)
     end
   end
 
-  describe "#earned_badges_for_course(course)" do 
+  describe "#earned_badges_for_course(course)" do
     let(:student) { create :user }
 
     before do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "returns the students' earned_badges for a course" do 
+    it "returns the students' earned_badges for a course" do
       earned_badge_1 = create(:earned_badge, score: 100, student: student, course: world.course, student_visible: true)
       earned_badge_2 = create(:earned_badge, score: 300, student: student, course: world.course, student_visible: true)
       expect(student.earned_badges_for_course(world.course)).to eq([earned_badge_1, earned_badge_2])
@@ -497,13 +497,13 @@ describe User do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "returns the students' earned_badges for a particular badge" do 
+    it "returns the students' earned_badges for a particular badge" do
       earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: world.course, student_visible: true)
       expect(student.earned_badge_for_badge(badge)).to eq([earned_badge_1])
     end
   end
 
-  describe "#earned_badges_for_badge_count(badge)" do 
+  describe "#earned_badges_for_badge_count(badge)" do
     let(:student) { create :user }
     let(:badge) { create :badge, course: world.course }
 
@@ -511,14 +511,14 @@ describe User do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "returns the students' earned_badges for a course" do 
+    it "returns the students' earned_badges for a course" do
       earned_badge_1 = create(:earned_badge, badge: badge, student: student, course: world.course, student_visible: true)
       earned_badge_2 = create(:earned_badge, badge: badge, student: student, course: world.course, student_visible: true)
       expect(student.earned_badges_for_badge_count(badge)).to eq(2)
     end
   end
 
-  describe "#earnable_course_badges_sql_conditions(grade)" do 
+  describe "#earnable_course_badges_sql_conditions(grade)" do
     skip "implement"
   #   Badge
   #     .unscoped
@@ -527,7 +527,7 @@ describe User do
   #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
   end
 
-  describe "#earn_badges_for_grade(badges, grade)" do 
+  describe "#earn_badges_for_grade(badges, grade)" do
     skip "implement"
   #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
   #   badges.collect do |badge|
@@ -535,14 +535,14 @@ describe User do
   #   end
   end
 
-  describe "#weight_for_assignment(assignment)" do 
+  describe "#weight_for_assignment(assignment)" do
     let(:student) { create :user }
 
     before do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "should return a student's assigned weight for an assignment" do 
+    it "should return a student's assigned weight for an assignment" do
       assignment_type = create(:assignment_type, course: world.course)
       assignment = create(:assignment, assignment_type: assignment_type, course: world.course)
       create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
@@ -550,14 +550,14 @@ describe User do
     end
   end
 
-  describe "#weight_for_assignment_type(assignment_type)" do 
+  describe "#weight_for_assignment_type(assignment_type)" do
     let(:student) { create :user }
 
     before do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "should return a student's assigned weight for an assignment type" do 
+    it "should return a student's assigned weight for an assignment type" do
       assignment_type = create(:assignment_type, course: world.course)
       assignment = create(:assignment, assignment_type: assignment_type, course: world.course)
       create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
@@ -565,14 +565,14 @@ describe User do
     end
   end
 
-  describe "#weight_spent?(course)" do 
-    let(:student) { create :user } 
+  describe "#weight_spent?(course)" do
+    let(:student) { create :user }
 
     before do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "should return the summed weight count for a course, for a student" do 
+    it "should return the summed weight count for a course, for a student" do
       world.course.total_assignment_weight = 6
       world.course.max_assignment_weight = 4
       world.course.max_assignment_types_weighted = 3
@@ -586,14 +586,14 @@ describe User do
     end
   end
 
-  describe "#total_weight_spent(course)" do 
+  describe "#total_weight_spent(course)" do
     let(:student) { create :user }
 
     before do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "should return the summed weight count for a course, for a student" do 
+    it "should return the summed weight count for a course, for a student" do
       world.course.total_assignment_weight = 6
       world.course.max_assignment_weight = 4
       world.course.max_assignment_types_weighted = 3
@@ -617,17 +617,17 @@ describe User do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "should return true if the student has weighted assignments" do 
+    it "should return true if the student has weighted assignments" do
       create(:assignment_weight, student: student, course: world.course)
       expect(student.weighted_assignments?(world.course)).to eq(true)
     end
 
-    it "should return false if the student has not weighted any assignments" do 
+    it "should return false if the student has not weighted any assignments" do
       expect(student.weighted_assignments?(world.course)).to eq(false)
     end
   end
 
-  describe "#weight_count(course)" do 
+  describe "#weight_count(course)" do
     let(:student) { create :user }
 
     before do
@@ -637,12 +637,12 @@ describe User do
       create(:assignment_weight, student: student, course: world.course)
     end
 
-    it "should return the summed weight count for a course, for a student" do 
+    it "should return the summed weight count for a course, for a student" do
       expect(student.weight_count(world.course)).to eq(3)
     end
   end
 
-  describe "#group_for_assignment(assignment)" do 
+  describe "#group_for_assignment(assignment)" do
     let(:student) { create :user }
     let(:assignment) {create :assignment, grade_scope: "Group"}
 
@@ -650,7 +650,7 @@ describe User do
       create(:course_membership, user: student, course: world.course)
     end
 
-    it "returns a student's group for a particular assignment if present" do 
+    it "returns a student's group for a particular assignment if present" do
       group = create(:group)
       create(:assignment_group, group: group, assignment: assignment)
       create(:group_membership, student: student, group: group)
@@ -691,6 +691,7 @@ describe User do
       create_list(:earned_badge, 3, course: world.course, student: world.student, student_visible: true)
     end
 
+    # Intermittent failure?
     it "should know which badges are unique to those student earned badges" do
       sorted_badges = world.student.earned_badges.collect(&:badge).sort_by(&:id).flatten
       expect(world.student.unique_student_earned_badges(world.course)).to eq(sorted_badges)
