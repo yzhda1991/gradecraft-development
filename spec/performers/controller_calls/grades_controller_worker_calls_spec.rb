@@ -34,18 +34,11 @@ RSpec.describe GradesController, type: :controller, background_job: true do
     before(:each) { enroll_and_login_professor }
 
     describe "#submit_rubric" do
-      let(:request_attrs) {{ assignment_id: assignment.id, format: :json }}
-      let(:null_methods) {[
-        :delete_existing_rubric_grades,
-        :create_rubric_grades,
-        :delete_existing_earned_badges_for_metrics,
-      ]}
-      let(:stub_null_methods) { null_methods.each {|method| allow(controller).to receive(method).and_return(nil) } }
+      let(:request_attrs) {{ assignment_id: assignment.id, rubric_grades: [], format: :json }}
       subject { put :submit_rubric, request_attrs }
 
       before do
         allow(Grade).to receive_message_chain(:where, :first) { grade }
-        stub_null_methods
       end
 
       context "grade is student visible" do

@@ -175,59 +175,149 @@ describe GradesController do
 
     describe "async_update" do
 
+      it "updates feedback, status and raw score from params" do
+        post :async_update, { id: @grade.id, raw_score: 20000, feedback: "good jorb!", status: "Graded" }
+        @grade.reload
+        expect(@grade.feedback).to eq("good jorb!")
+        expect(@grade.status).to eq("Graded")
+        expect(@grade.raw_score).to eq(20000)
+      end
+
+      it "updates instructor modified to true" do
+        post :async_update, { id: @grade.id, raw_score: 20000, feedback: "good jorb!" }
+        @grade.reload
+        expect(@grade.instructor_modified).to be_truthy
+      end
+
+      describe "manages update with model validations" do
+        it "handles commas in raw score params" do
+          post :async_update, { id: @grade.id, raw_score: "12,345", feedback: "good jorb!" }
+          @grade.reload
+          expect(@grade.score).to eq(12345)
+        end
+
+        it "handles reverting nil raw score" do
+          post :async_update, { id: @grade.id, raw_score: nil, feedback: "good jorb!" }
+          @grade.reload
+          expect(@grade.score).to eq(nil)
+        end
+
+        it "reverts empty raw score to nil, not zero" do
+          post :async_update, { id: @grade.id, raw_score: "", feedback: "good jorb!" }
+          @grade.reload
+          expect(@grade.score).to eq(nil)
+        end
+      end
     end
 
     describe "earn_student_badge" do
-
+      it "creates a new student badge from params" do
+        badge = create(:badge)
+        params = { earned_badge: { badge_id: badge.id, student_id: @student } }
+        expect{post :earn_student_badge, params}.to change {EarnedBadge.count}.by(1)
+      end
     end
 
     describe "earn_student_badges" do
-
+      it "creates new student badges from params" do
+        badge_1 = create(:badge)
+        badge_2 = create(:badge)
+        badge_3 = create(:badge)
+        params = {grade_id: @grade.id, earned_badges: [{ badge_id: badge_1.id, student_id: @student },
+                                  { badge_id: badge_2.id, student_id: @student },
+                                  { badge_id: badge_3.id, student_id: @student }]}
+        expect{post :earn_student_badges, params}.to change {EarnedBadge.count}.by(3)
+      end
     end
 
-    describe "delete_all_earned_badges" do
+    describe "delete_all_earned_badges"  do
+      it "destroys all earned badges for grade" do
+        earned_badge_1 = create(:earned_badge, grade: @grade)
+        earned_badge_2 = create(:earned_badge, grade: @grade)
+        expect{ delete :delete_all_earned_badges, grade_id: @grade.id }.to change {EarnedBadge.count}.by(-2)
+      end
 
+      it "also handles duplicate badges" do
+        skip "why is this necessary?"
+      end
     end
 
     describe "delete_earned_badge" do
 
+      it "deletes a badge when parameters include id, student id, badge id, and grade id" do
+        earned_badge = create(:earned_badge, grade: @grade, student: @student)
+        params = {grade_id: @grade.id, student_id: @student.id, badge_id: earned_badge.badge.id, id: earned_badge.id }
+        expect{ delete :delete_earned_badge, params }.to change {EarnedBadge.count}.by(-1)
+      end
+
+      it "also handles duplicate badges" do
+        skip "why is this necessary?"
+      end
     end
 
-    describe "PUT submit_rubric"do
+    describe "PUT submit_rubric" do
 
-      before(:each) do
-        # @rubric_assignment = create(:assignment, course: @course)
-        # @rubric = create(:rubric_with_metrics, assignment: @rubric_assignment)
-        # @metric = @rubric.metrics.first
-        # @tier = @rubric.metrics.first.tiers.first
-        # @rubric_grade = create(:rubric_grade, assignment: @rubric_assignment, student: @student, metric: @metric, tier: @tier)
+      before do
+        @rubric_assignment = create(:assignment, course: @course)
+        @rubric = create(:rubric_with_metrics, assignment: @rubric_assignment)
+        @params = {assignment_id: @rubric_assignment.id, student_id: @student.id,  format: :json }
+        @params[:rubric_grades] = @rubric.metrics.collect { |metric| { "metric_id" => metric.id, "metric_name" => metric.name, "order" => metric.order, "max_points"=> metric.max_points, "tier_id" => metric.tiers.first.id }}
+
+        allow(controller).to receive(:current_student).and_return(@student)
       end
 
       it "updates the submission grading status" do
+        submission = create(:submission, student: @student, assignment: @rubric_assignment)
+        expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(@rubric.metrics.count)
       end
 
-      it "assigns the grade" do
+      describe "finds or creates the grade for the assignment and student" do
+        it "finds and assigns the grade" do
+          grade = create(:grade, assignment: @rubric_assignment, student: @student)
+          post :submit_rubric, @params
+          expect(assigns(:grade)).to eq(grade)
+        end
 
+        it "cretes and assigns the grade" do
+          expect{ post :submit_rubric, @params }.to change { Grade.count }.by(1)
+          expect(assigns(:grade).assignment).to eq(@rubric_assignment)
+          expect(assigns(:grade).student).to eq(@student)
+        end
       end
 
-      it "deletes all preexisting rubric grades" do
+      describe "when an additional `metric_ids` parameter is supplied" do
 
+        before do
+          @params[:metric_ids] = @rubric.metrics.collect { |metric| metric.id }
+        end
+
+        it "deletes all preexisting rubric grades" do
+          expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(6)
+          expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(0)
+        end
+
+        it "deletes existing earned badges" do
+          earned_badge = create(:earned_badge, student: @student, metric_id: @rubric.metrics.first.id )
+          allow(controller).to receive(:current_student).and_return(@student)
+          expect{ post :submit_rubric, @params }.to change { EarnedBadge.count }.by(-1)
+        end
       end
 
       it "creates the rubric grades" do
-
-      end
-
-      it "deletes existing earned badges" do
-
+        allow(controller).to receive(:current_student).and_return(@student)
+        expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(@rubric.metrics.count)
       end
 
       it "adds earned tier badges" do
-
+        earnable_badge = create(:badge, course: @course)
+        tier_badge = TierBadge.create(badge: earnable_badge, tier: @rubric.metrics.first.tiers.first.id )
+        @params[:tier_badges] = [{badge_id: earnable_badge.id, tier_badge: tier_badge.id, tier_id: @rubric.metrics.first.tiers.first.id}]
+        expect{ post :submit_rubric, @params }.to change { EarnedBadge.count }.by(1)
       end
 
       it "renders nothing when request format is JSON" do
-
+        post :submit_rubric, @params
+        expect(response.body).to eq("")
       end
     end
 
