@@ -88,9 +88,15 @@ class GradesController < ApplicationController
 
   # PUT /grades/:id/async_update
   def async_update
-    Grade
-      .where(id: params[:id])
-      .update_all(async_update_params)
+    Grade.find(params[:id]).update_attributes(
+      {
+         feedback: params[:feedback],
+         instructor_modified: true,
+         status: params[:status],
+         updated_at: Time.now,
+         raw_score: params[:raw_score]
+      }
+    )
     render nothing: true
   end
 
@@ -105,6 +111,7 @@ class GradesController < ApplicationController
     render json: @earned_badges
   end
 
+  # DELETE grade/:grade_id/earned_badges
   def delete_all_earned_badges
     if EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
       destroy_earned_badge_with_duplicates
@@ -113,8 +120,10 @@ class GradesController < ApplicationController
     end
   end
 
+  # DELETE grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id
   def delete_earned_badge
-    if all_earned_badge_ids_present?
+    # Why check for this if required in route?
+    if params.slice(:grade_id, :student_id, :badge_id).size == 3
       destroy_earned_badge_with_duplicates
     else
       destroy_single_earned_badge
@@ -153,35 +162,6 @@ class GradesController < ApplicationController
     render json: {message: "Earned badge failed to delete", success: false}, status: 417
   end
 
-  def all_earned_badge_ids_present?
-    params[:grade_id] and params[:student_id] and params[:badge_id]
-  end
-
-  def async_update_params
-    if params[:save_type] == "feedback"
-      base_async_params
-    else
-      base_async_params.merge(raw_score: sanitized_raw_score)
-    end
-  end
-
-  def sanitized_raw_score
-    if params[:raw_score].class == String
-      params[:raw_score].gsub(/\D/, '')
-    else
-      params[:raw_score]
-    end
-  end
-
-  def base_async_params
-    {
-      feedback: params[:feedback],
-      instructor_modified: true,
-      status: params[:status],
-      updated_at: Time.now
-    }
-  end
-
   public
 
   # PUT /assignments/:assignment_id/grade/submit_rubric
@@ -199,11 +179,27 @@ class GradesController < ApplicationController
       @grade = Grade.create(new_grade_from_rubric_grades_attributes)
     end
 
-    delete_existing_rubric_grades
-    create_rubric_grades # create an individual record for each rubric grade
+    # delete existing rubric grades
+    # TODO: Shouldn't require a second parameter of metric_ids when already supplied.
+    # 1. Insure metric id is suplied in params[:rubric_grades] and required by RubricGrade model
+    # 2. params[:metric_ids] = params[:rubric_grades].collect{|rg| rg["metric_id"]}`
+    RubricGrade.where({ assignment_id: params[:assignment_id], student_id: params[:student_id], metric_id: params[:metric_ids] }).delete_all
 
-    delete_existing_earned_badges_for_metrics # if earned_badges_exist? # destroy earned_badges where assignment_id and student_id match
-    create_earned_tier_badges if params[:tier_badges]# create_earned_tier_badges
+    # create an individual record for each rubric grade
+    params[:rubric_grades].collect do |rubric_grade|
+      RubricGrade.create! rubric_grade.merge(
+        { submission_id: submission_id,
+          assignment_id: @assignment[:id],
+          student_id: params[:student_id]
+        }
+      )
+    end
+
+    # EarnedBadges created from a MetricBadge are deprecated, so we remove them
+    EarnedBadge.where(student_id: params[:student_id], metric_id: params[:metric_ids]).delete_all
+
+    # EarnedBadges associated with a TierBadge
+    EarnedBadge.import(new_earned_tier_badges, :validate => true) if params[:tier_badges]
 
     # @mz TODO: add specs
     if @grade.is_student_visible?
@@ -217,67 +213,6 @@ class GradesController < ApplicationController
   end
 
   private
-  def rubric_grades_exist?
-    rubric_grades.count > 0
-  end
-
-  def rubric_grades
-    @rubric_grades ||= RubricGrade.where(assignment_student_metric_params)
-  end
-
-  def rubric_grades_by_metric_id
-    @rubric_grades_by_metric_id = rubric_grades.inject({}) do |memo, rubric_grade|
-      memo[rubric_grade.metric_id] = rubric_grade
-      memo
-    end
-  end
-
-  def update_rubric_grades
-    params[:rubric_grades].each do |rubric_grade_params|
-      rubric_grades_by_metric_id[rubric_grade_params["metric_id"]].update_attributes rubric_grade_params
-    end
-  end
-
-  def earned_badges_exist?
-    EarnedBadge.where(assignment_student_metric_params).count > 0
-  end
-
-  def delete_existing_rubric_grades
-    RubricGrade.where(assignment_student_metric_params).delete_all
-  end
-
-  def delete_existing_earned_badges_for_metrics
-    EarnedBadge.where(assignment_student_metric_params).delete_all
-  end
-
-  def existing_earned_badges_by_tier_badge_id
-    @existing_earned_tier_badges ||= EarnedBadge.where(student_earned_tier_badge_attrs)
-  end
-
-  def student_earned_tier_badge_attrs
-    { student_id: params[:student_id], tier_badge_id: existing_tier_badge_ids }
-  end
-
-  def assignment_student_metric_params
-    { assignment_id: params[:assignment_id], student_id: params[:student_id], metric_id: params[:metric_ids] }
-  end
-
-  def create_rubric_grades
-    params[:rubric_grades].collect do |rubric_grade|
-      RubricGrade.create! rubric_grade.merge(extra_rubric_grade_params)
-    end
-  end
-
-  def extra_rubric_grade_params
-    { submission_id: submission_id,
-      assignment_id: @assignment[:id],
-      student_id: params[:student_id]
-    }
-  end
-
-  def create_earned_tier_badges
-    EarnedBadge.import(new_earned_tier_badges, :validate => true)
-  end
 
   def new_earned_tier_badges
     params[:tier_badges].collect do |tier_badge|
@@ -298,14 +233,6 @@ class GradesController < ApplicationController
 
   def submission_id
     @submission[:id] rescue nil
-  end
-
-  def serialized_course_badges
-    ActiveModel::ArraySerializer.new(course_badges, each_serializer: CourseBadgeSerializer).to_json
-  end
-
-  def course_badges
-    @course_badges ||= @assignment.course.badges.visible
   end
 
   public
