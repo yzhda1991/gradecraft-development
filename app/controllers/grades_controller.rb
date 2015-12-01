@@ -113,56 +113,24 @@ class GradesController < ApplicationController
 
   # DELETE grade/:grade_id/earned_badges
   def delete_all_earned_badges
-    if EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
-      destroy_earned_badge_with_duplicates
+    if EarnedBadge.exists?(grade_id: params[:grade_id])
+      EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
+      render json: {message: "Earned badges successfully deleted", success: true}, status: 200
     else
-      destroy_single_earned_badge
+      render json: {message: "Earned badges failed to delete", success: false}, status: 417
     end
   end
 
   # DELETE grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id
   def delete_earned_badge
-    # Why check for this if required in route?
-    if params.slice(:grade_id, :student_id, :badge_id).size == 3
-      destroy_earned_badge_with_duplicates
+    grade_params = params.slice(:grade_id, :student_id, :badge_id)
+    if EarnedBadge.exists?(grade_params)
+      EarnedBadge.where(grade_params).destroy_all
+      render json: {message: "Earned badge successfully deleted", success: true}, status: 200
     else
-      destroy_single_earned_badge
+      render json: {message: "Earned badge failed to delete", success: false}, status: 417
     end
   end
-
-  private
-
-  def destroy_earned_badge_with_duplicates
-    if EarnedBadge.where(duplicate_earned_badges_params).destroy_all
-      delete_earned_badge_success
-    else
-      delete_earned_badge_failure
-    end
-  end
-
-  def destroy_single_earned_badge
-    if EarnedBadge.where(id: params[:id]).destroy_all
-      delete_earned_badge_success
-    else
-      delete_earned_badge_failure
-    end
-  end
-
-  def duplicate_earned_badges_params
-    [:grade_id, :student_id, :badge_id].inject({}) do |memo, param|
-      memo.merge(param.to_sym => params[param])
-    end
-  end
-
-  def delete_earned_badge_success
-    render json: {message: "Earned badge successfully deleted", success: true}, status: 200
-  end
-
-  def delete_earned_badge_failure
-    render json: {message: "Earned badge failed to delete", success: false}, status: 417
-  end
-
-  public
 
   # PUT /assignments/:assignment_id/grade/submit_rubric
   def submit_rubric

@@ -171,6 +171,19 @@ describe GradesController do
         expect(response).to redirect_to(assignment_path(@grade.assignment))
         expect(@grade.score).to eq(nil)
       end
+
+      it "returns to session if present" do
+        session[:return_to] = login_path
+        grade_params = { raw_score: 12345, assignment_id: @assignment.id }
+        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        expect(response).to redirect_to(login_path)
+      end
+
+      it "redirects on failure" do
+        allow_any_instance_of(Grade).to receive(:update_attributes).and_return false
+        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => {}}
+        expect(response).to redirect_to(edit_assignment_grade_path(@assignment.id, :student_id => @student.id))
+      end
     end
 
     describe "async_update" do
@@ -235,10 +248,12 @@ describe GradesController do
         earned_badge_1 = create(:earned_badge, grade: @grade)
         earned_badge_2 = create(:earned_badge, grade: @grade)
         expect{ delete :delete_all_earned_badges, grade_id: @grade.id }.to change {EarnedBadge.count}.by(-2)
+        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badges successfully deleted", "success"=>true})
       end
 
-      it "also handles duplicate badges" do
-        skip "why is this necessary?"
+      it "renders error if no badges found to delete" do
+        delete :delete_all_earned_badges, {grade_id: @grade.id}
+        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badges failed to delete", "success"=>false})
       end
     end
 
@@ -248,10 +263,13 @@ describe GradesController do
         earned_badge = create(:earned_badge, grade: @grade, student: @student)
         params = {grade_id: @grade.id, student_id: @student.id, badge_id: earned_badge.badge.id, id: earned_badge.id }
         expect{ delete :delete_earned_badge, params }.to change {EarnedBadge.count}.by(-1)
+        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badge successfully deleted", "success"=>true})
       end
 
-      it "also handles duplicate badges" do
-        skip "why is this necessary?"
+      it "renders error if no badge found to delete" do
+        params = {grade_id: @grade.id, student_id: @student.id, badge_id: 1, id: 1234 }
+        delete :delete_earned_badge, params
+        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badge failed to delete", "success"=>false})
       end
     end
 
