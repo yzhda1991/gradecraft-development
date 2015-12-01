@@ -5,7 +5,7 @@
         %h4.uppercase
           = "#{cmf.object.course.name} Settings"
           .right
-            = link_to raw("<i class='fa fa-check fa-fw'></i> Add user to this course"), "#", class: "button #{"hidden" unless @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
+            = link_to raw("<i class='fa fa-check fa-fw'></i> Add user to this course"), "#", class: "button secondary #{"hidden" unless @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
             = link_to raw("<i class='fa fa-times fa-fw'></i> Remove user from this course"), "#", class: "button danger #{"hidden" if @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
         .course-setting{ class: ("hidden" if @user.role(cmf.object.course).nil?) }
           = hidden_field_tag :child_index, cmf.options[:child_index]
