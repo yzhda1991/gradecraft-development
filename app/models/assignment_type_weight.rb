@@ -5,10 +5,8 @@ class AssignmentTypeWeight < Struct.new(:student, :assignment_type)
 
   attr_accessor :weight
 
-  validate :course_max_assignment_weight_not_exceeded
-
   def weight
-    @weight ||= assignment_type.assignment_weights.where(student: student).first.weight
+    @weight ||= assignment_type.assignment_weights.where(student: student).first.try(:weight) || 0
   end
 
   def assignment_type_id
@@ -24,6 +22,10 @@ class AssignmentTypeWeight < Struct.new(:student, :assignment_type)
     end
   end
 
+  def persisted?
+    false
+  end
+
   private
 
   def save_assignment_weights
@@ -32,14 +34,6 @@ class AssignmentTypeWeight < Struct.new(:student, :assignment_type)
       assignment_weight.weight = weight
       assignment_weight.save!
       assignment.grades.where(student: student).each {|grade| grade.save!}
-    end
-  end
-
-  def course_max_assignment_weight_not_exceeded
-    if assignment_type.course.max_assignment_weight?
-      if weight > assignment_type.course.max_assignment_weight
-        errors.add :base, " Oops, you've set more Kapital than are allowed for a single category. Try it again?"
-      end
     end
   end
 end

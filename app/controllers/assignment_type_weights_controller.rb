@@ -4,12 +4,8 @@ class AssignmentTypeWeightsController < ApplicationController
 
   # Students set their assignment type weights all at once
   def mass_edit
-    if current_user_is_staff?
-      @title =  "Editing #{current_student.name}'s #{term_for :weights}"
-    else
-      @title =  "Editing My #{term_for :weight} Choices"
-    end
-
+    @title =  "Editing My #{term_for :weight} Choices" if current_user_is_student?
+    @title =  "Editing #{current_student.name}'s #{term_for :weight} Choices" if current_user_is_staff?
     @assignment_types = current_course.assignment_types
     respond_with @form = AssignmentTypeWeightForm.new(current_student, current_course)
   end
@@ -21,12 +17,18 @@ class AssignmentTypeWeightsController < ApplicationController
 
     if @form.save
       if current_user_is_student?
-        redirect_to syllabus_path , :notice => "You have successfully updated your #{(term_for :weight).titleize} choices!"
+        redirect_to syllabus_path, :notice => "You have successfully updated your #{(term_for :weight).titleize} choices!"
       else
         redirect_to multiplier_choices_path, :notice => "You have successfully updated #{current_student.name}'s #{(term_for :weight).capitalize} choices."
       end
     else
-      redirect_to assignment_type_weights_path
+      respond_to do |format|
+        if current_user_is_student?
+          format.html { render action: "mass_edit" }
+        else
+          format.html { render action: "mass_edit", :student_id => current_student }
+        end
+      end
     end
   end
 
@@ -75,9 +77,5 @@ class AssignmentTypeWeightsController < ApplicationController
 
   def student_params
     params.require(:student).permit(:assignment_type_weights_attributes => [:assignment_type_id, :weight])
-  end
-
-  def interpolation_options
-    { weights_term: term_for(:weights) }
   end
 end
