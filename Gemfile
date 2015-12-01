@@ -37,6 +37,8 @@ gem 'ims-lti', git: 'https://github.com/venturit/ims-lti.git', branch: 'master'
 gem 'jbuilder'
 gem 'jquery-rails', '~> 2.0'
 
+gem 'light-service'
+
 # interface for connecting to remote logging system Loggly
 gem 'logglier', '~> 0.3.0'
 # connect to papertrail

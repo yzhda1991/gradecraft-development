@@ -6,7 +6,15 @@ $(".make-lizards").dblclick(function() {
 });
 
 $( "#tabs" ).tabs({
-  event: "click"
+  event: "click",
+  create: function(event, ui) {
+    var widget = $(event.target);
+    var panel = widget.find(".ui-tabs-panel");
+    var activePanelIndex = panel.find(".active").index();
+    if (activePanelIndex >= 0) {
+      widget.tabs("option", "active", activePanelIndex);
+    }
+  }
 });
 
  $('.froala').editable(

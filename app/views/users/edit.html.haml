@@ -3,4 +3,8 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'form'
+  = render partial: 'layouts/alerts', locals: { model: @user, term: "user" }
+  - if @user.internal?
+    = render partial: "internal_user_form"
+  - else
+    = render partial: "gradecraft_user_form"

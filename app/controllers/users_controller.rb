@@ -1,3 +1,5 @@
+require_relative "../services/creates_new_user"
+
 class UsersController < ApplicationController
   include UsersHelper
 
@@ -27,35 +29,21 @@ class UsersController < ApplicationController
 
   def new
     @title = "Create a New User"
-    @teams = current_course.teams
-    @courses = Course.all
     @user = User.new
-    respond_with @user
+    CourseMembershipBuilder.new(current_user).build_for(@user)
   end
 
   def edit
-    session[:return_to] = request.referer
-    @teams = current_course.teams.alpha
-    @user = current_course.users.find(params[:id])
-    if @user.is_staff?(current_course)
-      @courses = Course.all
-      @teams_for_course = @user.teams.map do |t|
-        t.id
-      end
-    elsif current_user_is_staff?
-      @courses = Course.all
-    end
-    @course_membership = @user.course_memberships.where(course_id: current_course).first
+    @user = User.find(params[:id])
     @title = "Editing #{@user.name}"
-    @default_course_options = @user.courses
+    CourseMembershipBuilder.new(current_user).build_for(@user)
   end
 
   def create
-    @teams = current_course.teams
-    @user = User.create(params[:user].merge({password: generate_random_password}))
+    result = Services::CreatesNewUser.create params[:user], params[:send_welcome] == "1"
+    @user = result[:user]
 
-    if @user.valid?
-      UserMailer.activation_needed_email(@user).deliver_now
+    if result.success?
       if @user.is_student?(current_course)
         redirect_to students_path,
           :notice => "#{term_for :student} #{@user.name} was successfully created!" and return
@@ -64,26 +52,23 @@ class UsersController < ApplicationController
           :notice => "Staff Member #{@user.name} was successfully created!" and return
       end
     end
-    expire_action :action => :index
+
+    CourseMembershipBuilder.new(current_user).build_for(@user)
     render :new
   end
 
   def update
     @user = User.find(params[:id])
-    @course_membership = @user.course_memberships.where(course_id: current_course).first
-    @teams = current_course.teams
-    if @user.is_student?(current_course)
-      @user.teams.set_for_course(current_course.id, params[:user][:course_team_ids])
+    if @user.update_attributes(params[:user])
+      if @user.is_student?(current_course)
+        redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully updated!" and return
+      elsif @user.is_staff?(current_course)
+        redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully updated!" and return
+      end
     end
 
-    @user.update_attributes(params[:user])
-    if @user.save && @user.is_student?(current_course)
-      redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully updated!"
-    elsif @user.save && @user.is_staff?(current_course)
-      redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully updated!"
-    else
-      render :edit
-    end
+    CourseMembershipBuilder.new(current_user).build_for(@user)
+    render :edit
   end
 
   def destroy

@@ -61,14 +61,17 @@ class User < ActiveRecord::Base
       query
     end
 
+    def internal_email_regex
+      /(\.|@)umich\.edu$/
+    end
   end
 
-  attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
+  attr_accessor :password, :password_confirmation, :cached_last_login_at, :score, :team
   attr_accessible :username, :email, :password, :password_confirmation, :activation_state,
-    :avatar_file_name, :first_name, :last_name, :user_id, :kerberos_uid, :display_name, 
-    :default_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids, 
-    :courses, :course_ids, :earned_badges, :earned_badges_attributes, :student_academic_history_attributes, 
-    :team_role, :course_memberships_attributes, :team_id, :lti_uid, :course_team_ids
+    :avatar_file_name, :first_name, :last_name, :user_id, :kerberos_uid, :display_name,
+    :default_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids,
+    :courses, :course_ids, :earned_badges, :earned_badges_attributes, :student_academic_history_attributes,
+    :team_role, :course_memberships_attributes, :team_id, :lti_uid, :course_team_ids, :internal
 
   # all student display pages are ordered by last name except for the leaderboard, and top 10/bottom 10
   default_scope { order('last_name ASC') }
@@ -84,7 +87,7 @@ class User < ActiveRecord::Base
   has_many :courses, :through => :course_memberships
   has_many :course_users, :through => :courses, :source => 'users'
   accepts_nested_attributes_for :courses
-  accepts_nested_attributes_for :course_memberships
+  accepts_nested_attributes_for :course_memberships, allow_destroy: true
 
   belongs_to :default_course, :class_name => 'Course', touch: true
 
@@ -141,6 +144,15 @@ class User < ActiveRecord::Base
   validates :first_name, :last_name, :presence => true
   validates :password, :confirmation => true
   validates :password_confirmation, :presence => true, if: :password, on: :update
+  validates :email, internal_email: { format: internal_email_regex, name: "University of Michigan" }
+
+  def internal?
+    @internal || email_was =~ self.class.internal_email_regex
+  end
+
+  def internal=(value)
+    @internal = value
+  end
 
   def self.find_or_create_by_lti_auth_hash(auth_hash)
     criteria = { email: auth_hash['extra']['raw_info']['lis_person_contact_email_primary'] }

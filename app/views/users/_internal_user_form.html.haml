@@ -1,0 +1,22 @@
+= simple_form_for @user do |f|
+  %section
+    %h4.uppercase= "User Profile"
+    .form-item
+      = f.label :first_name
+      = f.text_field :first_name
+    .form-item
+      = f.label :last_name
+      = f.text_field :last_name
+    .form-item
+      = f.label :email
+      = f.text_field :email
+    .form-item
+      = f.label :display_name
+      = f.text_field :display_name
+    = f.hidden_field :internal, value: true
+    - if @user.new_record?
+      .form-item
+        = label_tag :send_welcome, "Send welcome email"
+        = check_box_tag :send_welcome, '1', true
+  = render partial: "courses", locals: { form: f }
+  = render "buttons"

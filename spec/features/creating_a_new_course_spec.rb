@@ -1,16 +1,14 @@
 require "rails_spec_helper"
 
 feature "creating a new course" do
-  let(:password) { "p@ssword" }
-
   context "as a professor" do
     let!(:course_membership) { create :professor_course_membership, user: user }
+    let(:password) { "p@ssword" }
     let(:user) { create :user, password: password }
 
-    before { visit new_user_session_path }
-
     before(:each) do
-      LoginPage.new(user).submit({ password: password })
+      login_as user, password
+      visit dashboard_path
     end
 
     scenario "successfully" do
