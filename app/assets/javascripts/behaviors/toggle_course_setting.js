@@ -1,5 +1,6 @@
 $(function() {
   $(document).on("click", "[data-behavior~=toggle-course-setting]", function(e) {
+    e.preventDefault();
     var target = $(e.target);
     var section = target.parents("section");
     var setting = section.find(".course-setting");
