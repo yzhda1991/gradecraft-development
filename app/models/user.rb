@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  attr_accessor :password, :password_confirmation, :cached_last_login_at, :course_team_ids, :score, :team
+  attr_accessor :password, :password_confirmation, :cached_last_login_at, :score, :team
   attr_accessible :username, :email, :password, :password_confirmation, :activation_state,
     :avatar_file_name, :first_name, :last_name, :user_id, :kerberos_uid, :display_name,
     :default_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids,
@@ -87,7 +87,7 @@ class User < ActiveRecord::Base
   has_many :courses, :through => :course_memberships
   has_many :course_users, :through => :courses, :source => 'users'
   accepts_nested_attributes_for :courses
-  accepts_nested_attributes_for :course_memberships
+  accepts_nested_attributes_for :course_memberships, allow_destroy: true
 
   belongs_to :default_course, :class_name => 'Course', touch: true
 
