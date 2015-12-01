@@ -1,6 +1,6 @@
 module Services
   module Actions
-    class InternalizesUser
+    class GeneratesUsernames
       extend LightService::Action
 
       expects :user
@@ -8,8 +8,8 @@ module Services
       executed do |context|
         user = context[:user]
 
+        user.username = username_from_email(user.email) if user.username.blank?
         if user.internal?
-          user.username = username_from_email(user.email) if user.username.blank?
           user.email = email_from_username(user.username) if user.email.blank?
           user.kerberos_uid = user.username
         end

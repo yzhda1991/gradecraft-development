@@ -1,11 +1,11 @@
 require "light-service"
 require "active_record_spec_helper"
-require "./app/services/creates_new_user/internalizes_user"
+require "./app/services/creates_new_user/generates_usernames"
 
-describe Services::Actions::InternalizesUser do
+describe Services::Actions::GeneratesUsernames do
   let(:user) { build :user, email: "blah@example.com", password: nil, username: "bleh", internal: true }
 
-  it "expects a user to internalize" do
+  it "expects a user to set usernames for" do
     expect { described_class.execute }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end
