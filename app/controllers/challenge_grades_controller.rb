@@ -50,28 +50,23 @@ class ChallengeGradesController < ApplicationController
     end
   end
 
-
   # @mz todo: refactor this whole thing, move into models and presenters
   def create
     @challenge = current_course.challenges.find(params[:challenge_id])
     @challenge_grade = @challenge.challenge_grades.create(params[:challenge_grade])
-    respond_to do |format|
-      if @challenge_grade.save
-        @course = current_course
-        if current_course.add_team_score_to_student? and challenge_grade_is_student_visible?
-          # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
-          @team = @challenge_grade.team
-          @score_recalculator_jobs = @team.students.collect do |student|
-            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
-          end
-          @score_recalculator_jobs.each(&:enqueue)
+    if @challenge_grade.save
+      @course = current_course
+      if current_course.add_team_score_to_student? and challenge_grade_is_student_visible?
+        # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
+        @team = @challenge_grade.team
+        @score_recalculator_jobs = @team.students.collect do |student|
+          ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
         end
-        format.html { redirect_to @challenge, notice: "#{@challenge.name} #{term_for :challenge} successfully graded" }
-        format.json { render json: @challenge, status: :created, location: @challenge_grade }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @challenge_grade.errors, status: :unprocessable_entity }
+        @score_recalculator_jobs.each(&:enqueue)
       end
+      redirect_to @challenge, notice: "#{@challenge.name} #{term_for :challenge} successfully graded"
+    else
+      render action: "new", alert: @challenge_grade.errors
     end
   end
 
@@ -79,27 +74,23 @@ class ChallengeGradesController < ApplicationController
   def update
     @challenge = current_course.challenges.find(params[:challenge_id])
     @challenge_grade = current_course.challenge_grades.find(params[:id])
-    respond_to do |format|
-      if @challenge_grade.update_attributes(params[:challenge_grade])
+    if @challenge_grade.update_attributes(params[:challenge_grade])
 
-        if current_course.add_team_score_to_student?
-          if student_grades_require_update?
-            # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
-            @team = @challenge_grade.team
-            # @mz TODO: figure out how @team.students is supposed to be sorted in the controller
-            @score_recalculator_jobs = @team.students.collect do |student|
-              ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
-            end
-            @score_recalculator_jobs.each(&:enqueue)
+      if current_course.add_team_score_to_student?
+        if student_grades_require_update?
+          # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
+          @team = @challenge_grade.team
+          # @mz TODO: figure out how @team.students is supposed to be sorted in the controller
+          @score_recalculator_jobs = @team.students.collect do |student|
+            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
           end
+          @score_recalculator_jobs.each(&:enqueue)
         end
-
-        format.html { redirect_to @challenge, notice: "Grade for #{@challenge.name} #{term_for :challenge} successfully updated" }
-        format.json { head :ok }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @challenge_grades.errors, status: :unprocessable_entity }
       end
+
+      redirect_to @challenge, notice: "Grade for #{@challenge.name} #{term_for :challenge} successfully updated"
+    else
+      render action: "edit", alert: @challenge_grade.errors
     end
   end
 

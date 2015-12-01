@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-describe ChallengeGradesController do
+describe ChallengeGradesController, focus: true do
   before(:all) do
     @course = create(:course)
     @student = create(:user)
@@ -83,6 +83,12 @@ describe ChallengeGradesController do
         post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
         expect(response).to redirect_to(challenge_path(@challenge))
         expect(@challenge_grade.reload.score).to eq(100000)
+      end
+
+      it "redirects to edit form with invalid attributes" do
+        params = { team_id: nil }
+        post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
+        expect(response).to render_template(:edit)
       end
     end
 
