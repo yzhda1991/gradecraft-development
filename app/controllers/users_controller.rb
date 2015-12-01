@@ -40,7 +40,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    result = Services::CreatesNewUser.create params[:user]
+    result = Services::CreatesNewUser.create params[:user], params[:send_welcome] == "1"
     @user = result[:user]
 
     if result.success?
