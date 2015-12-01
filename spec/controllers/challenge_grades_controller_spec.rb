@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-describe ChallengeGradesController, focus: true do
+describe ChallengeGradesController do
   before(:all) do
     @course = create(:course)
     @student = create(:user)
@@ -100,6 +100,12 @@ describe ChallengeGradesController, focus: true do
       end
     end
 
+    describe "POST mass_update" do
+      it "assigns params" do
+
+      end
+    end
+
     describe "GET edit_status" do
       it "displays the edit_status page" do
         get :edit_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ]}
@@ -111,6 +117,15 @@ describe ChallengeGradesController, focus: true do
     describe "GET destroy" do
       it "destroys the challenge grade" do
         expect{ get :destroy, {:id => @challenge_grade, :challenge_id => @challenge.id } }.to change(ChallengeGrade,:count).by(-1)
+      end
+
+      it "recalculates the team score" do 
+        @challenge = create(:challenge, course: @course)
+        @challenge_grade = create(:challenge_grade, challenge: @challenge, team: @team, score: 100, status: "Released")
+        expect(@team.score).to eq(100)
+        post :destroy, {:id => @challenge_grade, :challenge_id => @challenge.id}
+        expect(@team.reload.score).to eq(0)
+        expect(response).to redirect_to(challenge_path(@challenge))
       end
     end
   end

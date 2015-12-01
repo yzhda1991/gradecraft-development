@@ -46,7 +46,7 @@ class ChallengeGradesController < ApplicationController
     if @challenge.update_attributes(params[:challenge])
       redirect_to challenge_path(@challenge), notice: "#{@challenge.name} #{term_for :challenge} successfully graded"
     else
-      redirect_to mass_edit_challenge_challenge_grades_path(@challenge)
+      render action: "mass_edit", alert: @challenge.errors
     end
   end
 
@@ -107,22 +107,19 @@ class ChallengeGradesController < ApplicationController
     @challenge_grades.each do |challenge_grade|
       challenge_grade.update_attributes!(params[:challenge_grade].reject { |k,v| v.blank? })
     end
-    flash[:notice] = "Updated Grades!"
+    flash[:notice] = "Updated #{term_for :challenge} Grades!"
     redirect_to challenge_path(@challenge)
   end
  
-  # @mz todo: add specs
   def destroy
     @challenge_grade = current_course.challenge_grades.find(params[:id])
     @challenge = current_course.challenges.find(@challenge_grade.challenge_id)
+    @team = @challenge_grade.team
 
     @challenge_grade.destroy
     @challenge_grade.recalculate_student_and_team_scores 
 
-    respond_to do |format|
-      format.html { redirect_to challenge_path(@challenge) }
-      format.json { head :ok }
-    end
+    redirect_to challenge_path(@challenge), notice: "#{@team.name}'s grade for #{@challenge.name} has been successfully deleted."
   end
 
   # @mz todo: refactor all of this nonsense, add specs etc, this works for now
