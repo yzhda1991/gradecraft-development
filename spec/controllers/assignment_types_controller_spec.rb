@@ -70,12 +70,18 @@ describe AssignmentTypesController do
     end
 
     describe "POST update" do
-      it "updates the assignment" do
+      it "updates the assignment type with valid attributes" do
         params = { name: "new name" }
         post :update, id: @assignment_type.id, :assignment_type => params
         @assignment_type.reload
         expect(response).to redirect_to(assignment_types_path)
         expect(@assignment_type.name).to eq("new name")
+      end
+
+      it "redirects to the edit form with invalid attributes" do 
+        params = { name: nil }
+        post :update, id: @assignment_type.id, :assignment_type => params
+        expect(response).to render_template(:edit)
       end
     end
 
@@ -119,6 +125,36 @@ describe AssignmentTypesController do
         expect(assigns(:title)).to eq("#{@assignment_type.name} Grade Patterns")
         expect(assigns(:assignment_type)).to eq(@assignment_type)
         expect(response).to render_template(:all_grades)
+      end
+
+      describe "with team id in params" do
+        it "assigns team and students for team" do
+          # we verify only students on team assigned as @students
+          other_student = create(:user)
+          other_student.courses << @course
+
+          team = create(:team, course: @course)
+          team.students << @student
+
+          get :all_grades, { :id => @assignment_type.id, :team_id => team.id }
+          expect(assigns(:team)).to eq(team)
+          expect(assigns(:students)).to eq([@student])
+        end
+      end
+
+      describe "with no team id in params" do
+        it "assigns all students if no team supplied" do
+          # we verify non-team members also assigned as @students
+          other_student = create(:user)
+          other_student.courses << @course
+
+          team = create(:team, course: @course)
+          team.students << @student
+
+          get :all_grades, :id => @assignment_type.id
+          expect(assigns(:students)).to include(@student)
+          expect(assigns(:students)).to include(other_student)
+        end
       end
     end
 
