@@ -30,11 +30,41 @@ describe BadgesController do
     end
 
     describe "GET show" do
-      it "returns badges for the current course" do
+      it "displays the badge page" do
         get :show, :id => @badge.id
         expect(assigns(:title)).to eq(@badge.name)
         expect(assigns(:badge)).to eq(@badge)
         expect(response).to render_template(:show)
+      end
+
+      describe "with team id in params" do
+        it "assigns team and students for team" do
+          # we verify only students on team assigned as @students
+          other_student = create(:user)
+          other_student.courses << @course
+
+          team = create(:team, course: @course)
+          team.students << @student
+
+          get :show, { :id => @badge.id, :team_id => team.id }
+          expect(assigns(:team)).to eq(team)
+          expect(assigns(:students)).to eq([@student])
+        end
+      end
+
+      describe "with no team id in params" do
+        it "assigns all students if no team supplied" do
+          # we verify non-team members also assigned as @students
+          other_student = create(:user)
+          other_student.courses << @course
+
+          team = create(:team, course: @course)
+          team.students << @student
+
+          get :show, :id => @badge.id
+          expect(assigns(:students)).to include(@student)
+          expect(assigns(:students)).to include(other_student)
+        end
       end
     end
 
@@ -71,7 +101,7 @@ describe BadgesController do
         expect expect(badge.badge_files.count).to eq(1)
       end
 
-      it "redirects to new from with invalid attributes" do
+      it "redirects to new form with invalid attributes" do
         expect{ post :create, badge: attributes_for(:badge, name: nil) }.to_not change(Badge,:count)
       end
     end
@@ -92,6 +122,12 @@ describe BadgesController do
         params = {:badge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
         post :update, id: @badge_2.id, :badge => params
         expect expect(@badge_2.badge_files.count).to eq(1)
+      end
+
+      it "redirects to edit form with invalid attributes" do 
+        params = { name: nil }
+        post :update, id: @badge.id, :badge => params
+        expect(response).to render_template(:edit)
       end
     end
 

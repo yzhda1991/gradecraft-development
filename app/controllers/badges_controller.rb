@@ -47,16 +47,10 @@ class BadgesController < ApplicationController
       end
     end
 
-    respond_to do |format|
-      if @badge.save
-        format.html { redirect_to @badge, notice: "#{@badge.name} #{term_for :badge} successfully created" }
-        format.json { render json: @badge, status: :created, location: @badge }
-      else
-        # TODO: refactor, see submissions_controller
-        @title = "Create a New #{term_for :badge}"
-        format.html { render action: "new" }
-        format.json { render json: @badge.errors, status: :unprocessable_entity }
-      end
+    if @badge.save
+      redirect_to @badge, notice: "#{@badge.name} #{term_for :badge} successfully created"
+    else
+      render action: "new", alert: "#{@badge.errors}"
     end
   end
 
@@ -75,17 +69,10 @@ class BadgesController < ApplicationController
       end
     end
 
-    respond_to do |format|
-
-      if @badge.update_attributes(params[:badge])
-        format.html { redirect_to badges_path, notice: "#{@badge.name} #{term_for :badge} successfully updated" }
-        format.json { head :ok }
-      else
-        # TODO: refactor, see submissions_controller
-        @title = "Edit #{term_for :badge}"
-        format.html { render action: "edit" }
-        format.json { render json: @badge.errors, status: :unprocessable_entity }
-      end
+    if @badge.update_attributes(params[:badge])
+      redirect_to badges_path, notice: "#{@badge.name} #{term_for :badge} successfully updated"
+    else
+      render action: "edit", alert: @badge.errors
     end
   end
 
