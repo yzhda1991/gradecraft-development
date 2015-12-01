@@ -21,8 +21,8 @@ describe Services::CreatesNewUser do
       described_class.create params
     end
 
-    it "updates internal user" do
-      expect(Services::Actions::InternalizesUser).to receive(:execute).and_call_original
+    it "updates user usernames and emails" do
+      expect(Services::Actions::GeneratesUsernames).to receive(:execute).and_call_original
       described_class.create params
     end
 
