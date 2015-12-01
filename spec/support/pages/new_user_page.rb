@@ -15,7 +15,10 @@ class NewUserPage
     fill_in "Display name", with: fields[:display_name] || user.display_name
 
     courses = fields[:courses]
-    courses.each { |course| check course.name } if courses
+    courses.each_with_index do |course, index|
+      find(:xpath, ".//input[@id='user_course_memberships_attributes_#{index}__destroy']")
+        .set false
+    end if courses
 
     click_button "Create User"
   end
