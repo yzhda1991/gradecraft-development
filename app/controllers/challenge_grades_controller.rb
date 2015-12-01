@@ -54,17 +54,17 @@ class ChallengeGradesController < ApplicationController
   def create
     @challenge = current_course.challenges.find(params[:challenge_id])
     @challenge_grade = @challenge.challenge_grades.create(params[:challenge_grade])
+    @team = @challenge_grade.team
     if @challenge_grade.save
       @course = current_course
-      if current_course.add_team_score_to_student? and challenge_grade_is_student_visible?
+      if current_course.add_team_score_to_student? and @challenge_grade.is_student_visible?
         # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
-        @team = @challenge_grade.team
         @score_recalculator_jobs = @team.students.collect do |student|
           ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
         end
         @score_recalculator_jobs.each(&:enqueue)
       end
-      redirect_to @challenge, notice: "#{@challenge.name} #{term_for :challenge} successfully graded"
+      redirect_to @challenge, notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully graded"
     else
       render action: "new", alert: @challenge_grade.errors
     end
@@ -74,12 +74,12 @@ class ChallengeGradesController < ApplicationController
   def update
     @challenge = current_course.challenges.find(params[:challenge_id])
     @challenge_grade = current_course.challenge_grades.find(params[:id])
+    @team = @challenge_grade.team
     if @challenge_grade.update_attributes(params[:challenge_grade])
 
-      if current_course.add_team_score_to_student?
+      if current_course.add_team_score_to_student? and @challenge_grade.is_student_visible?
         if student_grades_require_update?
           # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
-          @team = @challenge_grade.team
           # @mz TODO: figure out how @team.students is supposed to be sorted in the controller
           @score_recalculator_jobs = @team.students.collect do |student|
             ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
@@ -88,7 +88,7 @@ class ChallengeGradesController < ApplicationController
         end
       end
 
-      redirect_to @challenge, notice: "Grade for #{@challenge.name} #{term_for :challenge} successfully updated"
+      redirect_to @challenge, notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully updated"
     else
       render action: "edit", alert: @challenge_grade.errors
     end
@@ -143,10 +143,6 @@ class ChallengeGradesController < ApplicationController
 
   def score_changed?
      @challenge_grade.previous_changes[:score].present?
-  end
-
-  def challenge_grade_is_student_visible?
-    @challenge_grade.is_student_visible?
   end
 
 end
