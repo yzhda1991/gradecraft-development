@@ -13,9 +13,6 @@
         .form-item
           = cmf.label :role, "Select Role"
           = cmf.select :role, available_roles(cmf.object.course)
-        - if cmf.object.course.has_teams?
-          .form-item
-            = form.input :course_team_ids, :collection => cmf.object.course.teams, :as => :select, :label => "Select #{term_for :team}", :selected => @user.team_for_course(cmf.object.course).try(:id), :include_blank => true
         - if cmf.object.course.character_profiles?
           .form-item
             = cmf.input :character_profile, :class => "froala"
