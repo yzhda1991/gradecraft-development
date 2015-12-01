@@ -51,17 +51,11 @@ class AssignmentTypesController < ApplicationController
     @assignment_type.update_attributes(params[:assignment_type])
 
     respond_to do |format|
-      if (@assignment_type.max_points?) && (@assignment_type.max_points < 1)
-        flash[:error] = 'Maximum points must be a positive number'
+      if @assignment_type.save
+        format.html { redirect_to assignment_types_path, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" } }
+      else
         format.html { render action: "new" }
         format.json { render json: @assignment_type.errors }
-      else
-        if @assignment_type.save
-          format.html { redirect_to assignment_types_path, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" } }
-        else
-          format.html { render action: "new" }
-          format.json { render json: @assignment_type.errors }
-        end
       end
     end
   end
