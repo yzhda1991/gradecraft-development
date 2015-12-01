@@ -1,22 +1,23 @@
 - if current_user_is_staff?
   = form.simple_fields_for :course_memberships do |cmf|
-    %section
-      %h4.uppercase
-        = "#{cmf.object.course.name} Settings"
-        .right
-          = link_to raw("<i class='fa fa-check fa-fw'></i> Add user to this course"), "#", class: "button #{"hidden" unless @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
-          = link_to raw("<i class='fa fa-times fa-fw'></i> Remove user from this course"), "#", class: "button danger #{"hidden" if @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
-      .course-setting{ class: ("hidden" if @user.role(cmf.object.course).nil?) }
-        = hidden_field_tag :child_index, cmf.options[:child_index]
-        = cmf.hidden_field :_destroy, value: @user.role(cmf.object.course).nil?
-        = cmf.hidden_field :course_id
-        .form-item
-          = cmf.label :role, "Select Role"
-          = cmf.select :role, available_roles(cmf.object.course)
-        - if cmf.object.course.character_profiles?
+    - unless current_user.role(cmf.object.course).nil?
+      %section
+        %h4.uppercase
+          = "#{cmf.object.course.name} Settings"
+          .right
+            = link_to raw("<i class='fa fa-check fa-fw'></i> Add user to this course"), "#", class: "button #{"hidden" unless @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
+            = link_to raw("<i class='fa fa-times fa-fw'></i> Remove user from this course"), "#", class: "button danger #{"hidden" if @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
+        .course-setting{ class: ("hidden" if @user.role(cmf.object.course).nil?) }
+          = hidden_field_tag :child_index, cmf.options[:child_index]
+          = cmf.hidden_field :_destroy, value: @user.role(cmf.object.course).nil?
+          = cmf.hidden_field :course_id
           .form-item
-            = cmf.input :character_profile, :class => "froala"
-        .form-item
-          = cmf.label :auditing
-          = cmf.check_box :auditing
-          .form_label This #{term_for(:student).downcase}'s grades will be excluded from course analysis
+            = cmf.label :role, "Select Role"
+            = cmf.select :role, available_roles(cmf.object.course)
+          - if cmf.object.course.character_profiles?
+            .form-item
+              = cmf.input :character_profile, :class => "froala"
+          .form-item
+            = cmf.label :auditing
+            = cmf.check_box :auditing
+            .form_label This #{term_for(:student).downcase}'s grades will be excluded from course analysis
