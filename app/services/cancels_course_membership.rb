@@ -1,4 +1,5 @@
 require "light-service"
+require_relative "cancels_course_membership/destroys_announcement_states"
 require_relative "cancels_course_membership/destroys_assignment_weights"
 require_relative "cancels_course_membership/destroys_earned_badges"
 require_relative "cancels_course_membership/destroys_earned_challenges"
@@ -46,13 +47,6 @@ class CancelsCourseMembership
   end
 
   private
-
-  def self.removes_announcement_states(membership)
-    AnnouncementState.for_course(membership.course)
-      .for_user(membership.user)
-      .destroy_all
-    self
-  end
 
   def self.removes_flagged_users(membership)
     FlaggedUser.for_course(membership.course)

@@ -72,15 +72,6 @@ describe CancelsCourseMembership do
     let(:membership) { create(:student_course_membership) }
     let(:student) { membership.user }
 
-    it "removes the announcement states for the student" do
-      another_announcement = create :announcement_state, user: student
-      course_announcement = create :announcement_state, user: student,
-        announcement: create(:announcement, course: course)
-      described_class.for_student membership
-      expect(AnnouncementState.where(user_id: student.id)).to \
-        eq [another_announcement]
-    end
-
     it "removes the flagged states for the student" do
       another_flagger = create(:professor_course_membership)
       student.courses << another_flagger.course
