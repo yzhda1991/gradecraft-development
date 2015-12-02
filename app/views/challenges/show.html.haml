@@ -81,6 +81,7 @@
                 - if challenge_grade
                   .center= check_box_tag "challenge_grade_ids[]", challenge_grade.id
 
+    %br
     .right
       - if @challenge.release_necessary? && @challenge.challenge_grades.present?
         = submit_tag "Update Grade Statuses", :class => "button"
