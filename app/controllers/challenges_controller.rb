@@ -109,6 +109,20 @@ class ChallengesController < ApplicationController
     end
   end
 
+  def predictor_data
+    if current_user.is_student?(current_course)
+      @student = current_student
+      @update_challenges = true
+    elsif params[:id]
+      @student = User.find(params[:id])
+      @update_challenges = false
+    else
+      @student = NullStudent.new
+      @update_challenges = false
+    end
+    @challenges = predictor_challenge_data
+  end
+
   private
 
   def predictor_event_attrs
@@ -125,24 +139,6 @@ class ChallengesController < ApplicationController
       prediction_saved_successfully: @prediction_saved
     }
   end
-
-  public
-
-  def predictor_data
-    if current_user.is_student?(current_course)
-      @student = current_student
-      @update_challenges = true
-    elsif params[:id]
-      @student = User.find(params[:id])
-      @update_challenges = false
-    else
-      @student = NullStudent.new
-      @update_challenges = false
-    end
-    @challenges = predictor_challenge_data
-  end
-
-  private
 
   def predictor_challenge_data
     challenges = []
