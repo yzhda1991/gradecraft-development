@@ -116,6 +116,20 @@ class BadgesController < ApplicationController
     end
   end
 
+  def predictor_data
+    if current_user.is_student?(current_course)
+      @student = current_student
+      @update_badges = true
+    elsif params[:id]
+      @student = User.find(params[:id])
+      @update_badges = false
+    else
+      @student = NullStudent.new
+      @update_badges = false
+    end
+    @badges = predictor_badge_data
+  end
+
   private
 
   def badge_predictor_event_attrs
@@ -138,24 +152,6 @@ class BadgesController < ApplicationController
   def badge_predicted_points
     @badge.point_total * params[:times_earned] rescue nil
   end
-
-  public
-
-  def predictor_data
-    if current_user.is_student?(current_course)
-      @student = current_student
-      @update_badges = true
-    elsif params[:id]
-      @student = User.find(params[:id])
-      @update_badges = false
-    else
-      @student = NullStudent.new
-      @update_badges = false
-    end
-    @badges = predictor_badge_data
-  end
-
-  private
 
   def predictor_badge_data
     badges = current_course.badges.select(
