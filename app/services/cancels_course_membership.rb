@@ -3,6 +3,7 @@ require_relative "cancels_course_membership/destroys_assignment_weights"
 require_relative "cancels_course_membership/destroys_earned_badges"
 require_relative "cancels_course_membership/destroys_earned_challenges"
 require_relative "cancels_course_membership/destroys_grades"
+require_relative "cancels_course_membership/destroys_group_memberships"
 require_relative "cancels_course_membership/destroys_membership"
 require_relative "cancels_course_membership/destroys_submissions"
 
@@ -55,13 +56,6 @@ class CancelsCourseMembership
   def self.removes_flagged_users(membership)
     FlaggedUser.for_course(membership.course)
       .for_flagged(membership.user)
-      .destroy_all
-    self
-  end
-
-  def self.removes_group_memberships(membership)
-    GroupMembership.for_course(membership.course)
-      .for_student(membership.user)
       .destroy_all
     self
   end

@@ -72,15 +72,6 @@ describe CancelsCourseMembership do
     let(:membership) { create(:student_course_membership) }
     let(:student) { membership.user }
 
-    it "removes the group memberships for the student" do
-      another_group_membership = create :group_membership, student: student
-      course_group_membership = create :group_membership, student: student,
-        group: create(:group, course: course)
-      described_class.for_student membership
-      expect(GroupMembership.where(student_id: student.id)).to \
-        eq [another_group_membership]
-    end
-
     it "removes the team memberships for the student" do
       another_team_membership = create :team_membership, student: student
       course_team_membership = create :team_membership, student: student,
