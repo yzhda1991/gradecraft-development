@@ -11,13 +11,6 @@ module Services
       end
     end
 
-    class DestroysTeamMemberships
-      extend LightService::Action
-
-      executed do |context|
-      end
-    end
-
     class DestroysAnnouncementStates
       extend LightService::Action
 
