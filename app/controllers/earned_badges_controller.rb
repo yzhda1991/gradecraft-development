@@ -115,7 +115,24 @@ class EarnedBadgesController < ApplicationController
     handle_mass_update_redirect
   end
 
+  # Display a chart of all badges earned in the course
+  def chart
+    @badges = current_course.badges
+    @students = current_course.students
+  end
+
+  def destroy
+    @badge = current_course.badges.find(params[:badge_id])
+    @name = "#{@badge.name}"
+    @earned_badge = @badge.earned_badges.find(params[:id])
+    @student_name = "#{@earned_badge.student.name}"
+    @earned_badge.destroy
+    expire_fragment "earned_badges"
+    redirect_to @badge, notice: "The #{@badge.name} #{term_for :badge} has been taken away from #{@student_name}."
+  end
+
   private
+  
   def parse_valid_earned_badges
     params[:student_ids].inject([]) do |valid_earned_badges, student_id|
       earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)
@@ -156,24 +173,6 @@ class EarnedBadgesController < ApplicationController
     else
       redirect_to mass_award_badge_path(:id => @badge), notice: "No earned badges were sucessfully created."
     end
-  end
-
-  public
-
-  # Display a chart of all badges earned in the course
-  def chart
-    @badges = current_course.badges
-    @students = current_course.students
-  end
-
-  def destroy
-    @badge = current_course.badges.find(params[:badge_id])
-    @name = "#{@badge.name}"
-    @earned_badge = @badge.earned_badges.find(params[:id])
-    @student_name = "#{@earned_badge.student.name}"
-    @earned_badge.destroy
-    expire_fragment "earned_badges"
-    redirect_to @badge, notice: "The #{@badge.name} #{term_for :badge} has been taken away from #{@student_name}."
   end
 
 end
