@@ -72,16 +72,6 @@ describe CancelsCourseMembership do
     let(:membership) { create(:student_course_membership) }
     let(:student) { membership.user }
 
-    it "removes the predicted earned challenges for the student" do
-      another_earned_challenge = create :predicted_earned_challenge,
-        student: student
-      course_earned_challenge = create :predicted_earned_challenge,
-        student: student, challenge: create(:challenge, course: course)
-      described_class.for_student membership
-      expect(PredictedEarnedChallenge.where(student_id: student.id)).to \
-        eq [another_earned_challenge]
-    end
-
     it "removes the group memberships for the student" do
       another_group_membership = create :group_membership, student: student
       course_group_membership = create :group_membership, student: student,

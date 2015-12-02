@@ -11,13 +11,6 @@ module Services
       end
     end
 
-    class DestroysEarnedChallenges
-      extend LightService::Action
-
-      executed do |context|
-      end
-    end
-
     class DestroysGroupMemberships
       extend LightService::Action
 
