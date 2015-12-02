@@ -7,7 +7,7 @@ describe Services::Actions::DestroysGrades do
   let(:membership) { create :student_course_membership }
   let(:student) { membership.user }
 
-  it "expects the membership to find the submissions to destroy" do
+  it "expects the membership to find the grades to destroy" do
     expect { described_class.execute }.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end

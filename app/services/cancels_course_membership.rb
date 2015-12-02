@@ -1,4 +1,5 @@
 require "light-service"
+require_relative "cancels_course_membership/destroys_assignment_weights"
 require_relative "cancels_course_membership/destroys_grades"
 require_relative "cancels_course_membership/destroys_membership"
 require_relative "cancels_course_membership/destroys_submissions"
@@ -45,13 +46,6 @@ class CancelsCourseMembership
   def self.removes_announcement_states(membership)
     AnnouncementState.for_course(membership.course)
       .for_user(membership.user)
-      .destroy_all
-    self
-  end
-
-  def self.removes_assignment_weights(membership)
-    AssignmentWeight.for_course(membership.course)
-      .for_student(membership.user)
       .destroy_all
     self
   end

@@ -72,13 +72,6 @@ describe CancelsCourseMembership do
     let(:membership) { create(:student_course_membership) }
     let(:student) { membership.user }
 
-    it "removes the assignment weights for the student" do
-      another_assignment_weight = create :assignment_weight, student: student
-      course_assignment_weight = create :assignment_weight, student: student, course: course
-      described_class.for_student membership
-      expect(student.reload.assignment_weights).to eq [another_assignment_weight]
-    end
-
     it "removes the earned badges for the student" do
       another_earned_badge = create :earned_badge, student: student
       course_earned_badge = create :earned_badge, student: student, course: course

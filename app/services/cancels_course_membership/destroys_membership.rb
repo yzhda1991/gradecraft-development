@@ -11,13 +11,6 @@ module Services
       end
     end
 
-    class DestroysAssignmentWeights
-      extend LightService::Action
-
-      executed do |context|
-      end
-    end
-
     class DestroysEarnedBadges
       extend LightService::Action
 
