@@ -1,3 +1,27 @@
+require "light-service"
+require_relative "cancels_course_membership/destroys_membership"
+
+module Services
+  class CancelsCourseMembership
+    extend LightService::Organizer
+
+    def self.for_student(membership)
+      with(membership: membership).reduce(
+        Actions::DestroysMembership,
+        Actions::DestroysSubmissions,
+        Actions::DestroysGrades,
+        Actions::DestroysAssignmentWeights,
+        Actions::DestroysEarnedBadges,
+        Actions::DestroysEarnedChallenges,
+        Actions::DestroysGroupMemberships,
+        Actions::DestroysTeamMemberships,
+        Actions::DestroysAnnouncementStates,
+        Actions::DestroysFlaggedUsers
+      )
+    end
+  end
+end
+
 class CancelsCourseMembership
   def self.for_student(membership)
     deletes_membership(membership)
