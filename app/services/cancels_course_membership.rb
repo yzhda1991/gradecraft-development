@@ -1,5 +1,6 @@
 require "light-service"
 require_relative "cancels_course_membership/destroys_membership"
+require_relative "cancels_course_membership/destroys_submissions"
 
 module Services
   class CancelsCourseMembership

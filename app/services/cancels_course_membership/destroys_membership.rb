@@ -11,13 +11,6 @@ module Services
       end
     end
 
-    class DestroysSubmissions
-      extend LightService::Action
-
-      executed do |context|
-      end
-    end
-
     class DestroysGrades
       extend LightService::Action
 
