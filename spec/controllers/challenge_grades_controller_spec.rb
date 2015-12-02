@@ -110,7 +110,7 @@ describe ChallengeGradesController do
       end
     end
 
-    describe "POST mass_update", focus: true do
+    describe "POST mass_update" do
       let(:challenge_grades_attributes) do
         { "#{@challenge.challenge_grades.index(@challenge_grade)}" =>
           { team_id: @team.id, score: 1000, status: "Released",
@@ -134,13 +134,7 @@ describe ChallengeGradesController do
     end
 
     describe "POST update_status" do 
-      it "updates the status of the challenge grades" do 
-        params = attributes_for(:challenge_grade)
-        params[:status] = "Released"
-        params[:challenge_grade_ids] = @challenge_grade.id
-        post :update_status, { :challenge_id => @challenge.id, params: params } 
-        expect(response).to redirect_to(challenge_path(@challenge))
-      end
+      skip "implement"
     end
 
     describe "GET destroy" do
