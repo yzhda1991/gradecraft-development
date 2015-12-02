@@ -72,6 +72,69 @@ describe CoursesController do
       end
     end
 
+    describe "POST copy" do 
+      it "creates a duplicate course" do 
+        expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
+      end
+
+      it "duplicates badges if present" do 
+        create(:badge, course: @course)
+        expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
+        course_2 = Course.last
+        expect(course_2.badges.present?).to eq(true)
+      end
+
+      it "duplicates challenges if present" do 
+        create(:challenge, course: @course)
+        expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
+        course_2 = Course.last
+        expect(course_2.challenges.present?).to eq(true)
+      end
+
+      it "duplicates grade_scheme_elements if present" do 
+        create(:grade_scheme_element, course: @course)
+        expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
+        course_2 = Course.last
+        expect(course_2.grade_scheme_elements.present?).to eq(true)
+      end
+
+      it "duplicates assignment_types and assignments if present" do 
+        assignment_type = create(:assignment_type, course: @course)
+        create(:assignment, assignment_type: assignment_type, course: @course)
+        expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
+        course_2 = Course.last
+        expect(course_2.assignment_types.present?).to eq(true)
+        expect(course_2.assignments.present?).to eq(true)
+      end
+
+      it "duplicates score levels if present" do         
+        assignment_type = create(:assignment_type, course: @course)
+        assignment = create(:assignment, assignment_type: assignment_type, course: @course)
+        score_level = create(:assignment_score_level, assignment: assignment)
+        expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
+        course_2 = Course.last
+        assignment_2 = course_2.assignments.first
+        expect(assignment_2.assignment_score_levels.present?).to eq(true)
+      end
+
+      it "duplicates rubrics if present" do 
+        assignment_type = create(:assignment_type, course: @course)
+        assignment = create(:assignment, assignment_type: assignment_type, course: @course)
+        rubric = create(:rubric, assignment: assignment)
+        metric = create(:metric, rubric: rubric)
+        tier = create(:tier, metric: metric)
+        expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
+        course_2 = Course.last
+        expect(course_2.assignments.present?).to eq(true)
+        assignment_2 = course_2.assignments.first
+        rubric_2 = assignment_2.rubric
+        metric_2 = rubric_2.metrics.first
+        expect(assignment_2.rubric.present?).to eq(true)
+        expect(rubric_2.metrics.present?).to eq(true)
+        expect(metric_2.tiers.present?).to eq(true)
+      end
+    end
+
     describe "POST update" do
       it "updates the course" do
         params = { name: "new name" }
