@@ -1,7 +1,7 @@
 require "active_record_spec_helper"
 require "./app/services/cancels_course_membership"
 
-describe Services::CancelsCourseMembership, focus: true do
+describe Services::CancelsCourseMembership do
   let(:course) { membership.course }
   let(:membership) { create(:student_course_membership) }
   let(:student) { membership.user }
@@ -62,27 +62,6 @@ describe Services::CancelsCourseMembership, focus: true do
       expect(Services::Actions::DestroysFlaggedUsers).to \
         receive(:execute).and_call_original
       described_class.for_student membership
-    end
-  end
-end
-
-describe CancelsCourseMembership do
-  describe ".for_student" do
-    let(:course) { membership.course }
-    let(:membership) { create(:student_course_membership) }
-    let(:student) { membership.user }
-
-    it "removes the flagged states for the student" do
-      another_flagger = create(:professor_course_membership)
-      student.courses << another_flagger.course
-      another_flagged_user = create :flagged_user, flagged: student,
-        flagger: another_flagger.user, course: another_flagger.course
-      flagger = create(:professor_course_membership, course: course)
-      course_flagged_user = create :flagged_user, flagged: student,
-        course: course, flagger: flagger.user
-      described_class.for_student membership
-      expect(FlaggedUser.where(flagged_id: student.id)).to \
-        eq [another_flagged_user]
     end
   end
 end

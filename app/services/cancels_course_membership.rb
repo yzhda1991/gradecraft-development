@@ -3,6 +3,7 @@ require_relative "cancels_course_membership/destroys_announcement_states"
 require_relative "cancels_course_membership/destroys_assignment_weights"
 require_relative "cancels_course_membership/destroys_earned_badges"
 require_relative "cancels_course_membership/destroys_earned_challenges"
+require_relative "cancels_course_membership/destroys_flagged_users"
 require_relative "cancels_course_membership/destroys_grades"
 require_relative "cancels_course_membership/destroys_group_memberships"
 require_relative "cancels_course_membership/destroys_membership"
@@ -27,31 +28,5 @@ module Services
         Actions::DestroysFlaggedUsers
       )
     end
-  end
-end
-
-class CancelsCourseMembership
-  def self.for_student(membership)
-    deletes_membership(membership)
-      .removes_submissions(membership)
-      .removes_grades(membership)
-      .removes_rubric_grades(membership)
-      .removes_assignment_weights(membership)
-      .removes_earned_badges(membership)
-      .removes_predicted_earned_badges(membership)
-      .removes_predicted_earned_challenges(membership)
-      .removes_group_memberships(membership)
-      .removes_team_memberships(membership)
-      .removes_announcement_states(membership)
-      .removes_flagged_users(membership)
-  end
-
-  private
-
-  def self.removes_flagged_users(membership)
-    FlaggedUser.for_course(membership.course)
-      .for_flagged(membership.user)
-      .destroy_all
-    self
   end
 end
