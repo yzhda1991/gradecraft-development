@@ -1,4 +1,5 @@
 require "light-service"
+require_relative "cancels_course_membership/destroys_grades"
 require_relative "cancels_course_membership/destroys_membership"
 require_relative "cancels_course_membership/destroys_submissions"
 
@@ -41,11 +42,6 @@ class CancelsCourseMembership
 
   private
 
-  def self.deletes_membership(membership)
-    membership.destroy
-    self
-  end
-
   def self.removes_announcement_states(membership)
     AnnouncementState.for_course(membership.course)
       .for_user(membership.user)
@@ -74,13 +70,6 @@ class CancelsCourseMembership
     self
   end
 
-  def self.removes_grades(membership)
-    Grade.for_course(membership.course)
-      .for_student(membership.user)
-      .destroy_all
-    self
-  end
-
   def self.removes_group_memberships(membership)
     GroupMembership.for_course(membership.course)
       .for_student(membership.user)
@@ -104,13 +93,6 @@ class CancelsCourseMembership
 
   def self.removes_submissions(membership)
     Submission.for_course(membership.course)
-      .for_student(membership.user)
-      .destroy_all
-    self
-  end
-
-  def self.removes_rubric_grades(membership)
-    RubricGrade.for_course(membership.course)
       .for_student(membership.user)
       .destroy_all
     self
