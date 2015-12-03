@@ -17,6 +17,10 @@ FactoryGirl.define do
       default_assignment_weight 3
     end
 
+    factory :invalid_course do
+      name nil
+    end
     
   end
+
 end
