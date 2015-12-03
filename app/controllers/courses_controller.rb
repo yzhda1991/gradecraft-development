@@ -77,6 +77,9 @@ class CoursesController < ApplicationController
                       tier.tier_badges.each do |tier_badge|
                         new_tier_badge = tier_badge.dup
                         new_tier_badge.tier_id = new_tier.id
+                        badge = tier_badge.badge
+                        new_badge = new_course.badges.where(:name => badge.name).first
+                        new_tier_badge.badge_id = new_badge.id
                         new_tier_badge.save
                       end
                     end
@@ -148,14 +151,14 @@ class CoursesController < ApplicationController
         bust_course_list_cache current_user
         format.html { redirect_to @course, notice: "Course #{@course.name} successfully updated" }
       else
-        redirect_to edit_course_path
+        format.html { render action: "edit" }
       end
     end
   end
 
   def timeline_settings
     @course = current_course
-    @assignments = current_course.assignments.includes(:assignment_type)
+    @assignments = @course.assignments.includes(:assignment_type)
     @title = "Timeline Settings"
   end
 
@@ -164,7 +167,7 @@ class CoursesController < ApplicationController
     if @course.update_attributes(params[:course])
       redirect_to dashboard_path
     else
-      redirect_to timeline_settings_path, :course => @course
+      render action: "timeline_settings", :course => @course
     end
   end
 
@@ -179,7 +182,7 @@ class CoursesController < ApplicationController
     if @course.update_attributes(params[:course])
       respond_with @course
     else
-      redirect_to predictor_settings_path, :course => @course
+      render action: "predictor_settings", :course => @course
     end
   end
 
