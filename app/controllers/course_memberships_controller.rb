@@ -1,3 +1,5 @@
+require_relative "../services/cancels_course_membership"
+
 class CourseMembershipsController < ApplicationController
 
   before_filter :ensure_staff?
@@ -13,7 +15,7 @@ class CourseMembershipsController < ApplicationController
   def destroy
     course_membership = current_course.course_memberships.find(params[:id])
     @name = course_membership.user.name
-    CancelsCourseMembership.for_student course_membership
+    Services::CancelsCourseMembership.for_student course_membership
 
     respond_to do |format|
       format.html { redirect_to students_path, notice: "#{@name} was successfully removed from course." }

@@ -1,3 +1,4 @@
+require_relative "../services/cancels_course_membership"
 require_relative "../services/creates_new_user"
 
 class UsersController < ApplicationController
@@ -59,7 +60,9 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if @user.update_attributes(params[:user])
+    @user.assign_attributes params[:user]
+    cancel_course_memberships @user
+    if @user.save
       if @user.is_student?(current_course)
         redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully updated!" and return
       elsif @user.is_staff?(current_course)
@@ -149,11 +152,5 @@ class UsersController < ApplicationController
         .import(current_course)
       render :import_results
     end
-  end
-
-  private
-
-  def increment_predictor_views
-    User.increment_counter(:predictor_views, current_user.id) if current_user && request.format.html?
   end
 end

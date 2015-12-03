@@ -1,8 +1,8 @@
-require "sorcery"
-
 module UsersHelper
-  def generate_random_password
-    Sorcery::Model::TemporaryToken.generate_random_token
+  def cancel_course_memberships(user)
+    user.course_memberships.select(&:marked_for_destruction?).map do |cm|
+      Services::CancelsCourseMembership.for_student(cm)
+    end
   end
 
   def flagged_user_icon(course, flagger, flagged_id)
