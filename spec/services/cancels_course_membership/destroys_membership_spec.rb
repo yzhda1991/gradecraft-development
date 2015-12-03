@@ -14,4 +14,10 @@ describe Services::Actions::DestroysMembership do
     described_class.execute membership: membership
     expect(CourseMembership.exists?(membership.id)).to eq false
   end
+
+  it "skips the rest of the actions if the membership is not for a student" do
+    admin_membership = create(:admin_course_membership)
+    result = described_class.execute membership: admin_membership
+    expect(result).to be_skip_all
+  end
 end
