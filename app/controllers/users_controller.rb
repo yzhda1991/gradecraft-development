@@ -61,7 +61,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     @user.assign_attributes params[:user]
-    @user.course_memberships.select(&:marked_for_destruction?).map { |cm| Services::CancelsCourseMembership.for_student(cm) }
+    cancel_course_memberships @user
     if @user.save
       if @user.is_student?(current_course)
         redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully updated!" and return
