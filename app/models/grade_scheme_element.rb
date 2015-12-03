@@ -35,7 +35,7 @@ class GradeSchemeElement < ActiveRecord::Base
   end
 
   #Calculating how far a student is through this level
-  def progress_percent(student, course)
-    ((student.cached_score_for_course(course) - low_range)/(range)) * 100
+  def progress_percent(student)
+    ((student.cached_score_for_course(self.course) - low_range)/(range)) * 100
   end
 end

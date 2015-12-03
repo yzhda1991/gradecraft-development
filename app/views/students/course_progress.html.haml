@@ -8,27 +8,26 @@
       .progress.bar_magic.transparent.center
         .meter
           %i.fa.fa-lock
-          %span= element.level
-          %span= element.letter
+          %span= element.name
           %span=points element.low_range
     - elsif current_student.cached_score_for_course(current_course) >= element.high_range
       .progress.bar_magic.success.center
         .meter
           %i.fa.fa-star
-          %span= element.level
-          %span= element.letter
+          %span= element.name
           %span has already been achieved!
           %span=points element.low_range
     - else
-      .progress.bar_magic.striped.center
-        .meter
-          %span Your rank:
-          %span= element.level
-          %span= element.letter
-          %span with
-          %span.underline=points current_student.cached_score_for_course(current_course)
-          %span points.
-          %span=points element.points_to_next_level(current_student, current_course)
-          %span= " points to the next level!"
+      .progress.bar_magic.current.center
+        %span Your rank:
+        %span= element.name
+        %span with
+        %span.underline=points current_student.cached_score_for_course(current_course)
+        %span points.
+        %span.hide-for-small= points element.points_to_next_level(current_student, current_course)
+        %span.hide-for-small= " points to the next level!"
+        .striped{:style => "width: #{element.progress_percent(current_student)}%;"}
+          
+          
 
   = render partial: "courses/grading_philosophy", locals: { course: current_course }

@@ -26,17 +26,25 @@ img.earned
 .bar_magic.success
   color: $color-white
   background-color: $color-green-3
+  border: 1px solid $color-green-3
 
   .has-tip
     color: $color-white
+
+.bar_magic.current
+  border: 1px solid $color-grey-2
+  padding-top: .85rem
+  height: 3rem
 
 p.predictor-description
   margin: 0.25rem 0 .5rem
 
 /*striping on course progress display*/
 .striped
-  width: 100%
-  background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, $color-blue-4 35px, $color-blue-4 70px)
+  height: .75rem
+  margin-left: 0.5rem
+  border-radius: 25px
+  background-image: repeating-linear-gradient(45deg, $color-yellow-1, $color-yellow-1 35px, $color-blue-3 35px, $color-blue-3 70px)
 
 #levels_per_assignment
   min-height: 200px
