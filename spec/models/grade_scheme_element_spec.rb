@@ -71,7 +71,7 @@ describe GradeSchemeElement do
     end
   end
 
-  describe "#progress_percent(student, course)" do 
+  describe "#progress_percent(student)" do 
     let(:student) { create :user }
     let(:course) { create :course}
 
@@ -83,7 +83,7 @@ describe GradeSchemeElement do
       subject.high_range = 100 
       subject.low_range = 0
       subject.course = course
-      expect(subject.progress_percent(student, course)).to eq(82)
+      expect(subject.progress_percent(student)).to eq(82)
     end
   end
 
