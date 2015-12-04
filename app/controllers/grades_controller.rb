@@ -233,30 +233,6 @@ class GradesController < ApplicationController
     @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
   end
 
-  private
-
-    # TODO: find_or_create should handle these methods:
-
-    def mass_edit_student_ids
-      @mass_edit_student_ids ||= @students.pluck(:id)
-    end
-
-    def no_grade_students
-      @no_grade_students ||= @students.where(id: mass_edit_student_ids - @grades.pluck(:student_id))
-    end
-
-    def create_missing_student_grades
-      no_grade_students.each do |student|
-        Grade.create(student: student, assignment: @assignment, graded_by_id: current_user)
-      end
-    end
-
-    def create_missing_grades
-      create_missing_student_grades
-    end
-
-  public
-
   def mass_update
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.update_attributes(params[:assignment])
