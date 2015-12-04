@@ -1,9 +1,10 @@
 module AssignmentsHelper
-  def assignment_has_rubric?(assignment)
-    "Yes" if assignment.has_rubric?
-  end
-
-  def tier_percent_of_total_graded(tier)
-    (tier.rubric_grades.size/@graded_count).to_f rescue 0
+  def mark_assignment_reviewed!(assignment, user)
+    if user.is_student?(assignment.course)
+      if user.grade_released_for_assignment?(assignment)
+        grade = user.grade_for_assignment(assignment)
+        grade.feedback_reviewed! if grade && !grade.new_record?
+      end
+    end
   end
 end
