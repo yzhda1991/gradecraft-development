@@ -9,7 +9,7 @@ module Gradable
       reject_if: proc { |attrs| attrs[:raw_score].blank? }
   end
 
-  def all_grades_for_assignment
+  def graded_or_released_scores
     { scores: grades.graded_or_released.pluck(:raw_score) }
   end
 

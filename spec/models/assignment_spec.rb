@@ -48,12 +48,12 @@ describe Assignment do
     end
   end
 
-  describe "#all_grades_for_assignment" do
+  describe "#graded_or_released_scores" do
     before { subject.save }
 
     it "returns a hash of raw graded scores" do
       subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
-      expect(subject.all_grades_for_assignment).to eq({ scores: [85]})
+      expect(subject.graded_or_released_scores).to eq({ scores: [85]})
     end
   end
 

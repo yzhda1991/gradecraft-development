@@ -135,7 +135,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def scores
-    assignment.all_grades_for_assignment
+    assignment.graded_or_released_scores
   end
 
   def scores_for(user)
