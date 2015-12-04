@@ -64,7 +64,14 @@ class Grade < ActiveRecord::Base
   #validates_numericality_of :raw_score, integer_only: true
 
   def self.find_or_create(assignment,student)
-    Grade.where(student_id: student.id, assignment_id: assignment.id).first || Grade.create(student_id: student.id, assignment_id: assignment.id)
+    Grade.where(student: student, assignment: assignment).first || Grade.create(student: student, assignment: assignment)
+  end
+
+  def self.find_or_create_grades(assignment,students)
+    students.each do |student|
+      find_or_create(assignment,student)
+    end
+    Grade.where(student_id: students.pluck(:id), assignment: assignment)
   end
 
   def add_grade_files(*files)
