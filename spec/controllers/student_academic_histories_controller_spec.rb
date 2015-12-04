@@ -7,6 +7,22 @@ describe StudentAcademicHistoriesController do
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
+  context "as a professor" do 
+    before(:all) do
+      @student = create(:user)
+      @student.courses << @course
+    end
+
+    describe "GET index" do
+      it "returns all academic histories for the current course" do
+        get :index
+        expect(assigns(:students)).to eq([@student])
+        expect(response).to render_template(:index)
+      end
+    end
+
+  end
+
   context "as a student" do
     before(:all) do
       @student = create(:user)
