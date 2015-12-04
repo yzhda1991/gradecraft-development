@@ -178,8 +178,8 @@ RSpec.describe GradesController, type: :controller, background_job: true do
 
   def enroll_and_login_student
     allow(controller).to receive_messages(current_student: student)
-    enroll_professor
-    login_user(professor)
+    enroll_student
+    login_user(student)
     session[:course_id] = course.id
   end
 end

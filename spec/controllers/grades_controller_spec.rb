@@ -337,11 +337,95 @@ describe GradesController do
       end
     end
 
+    describe "POST remove" do
+      before do
+        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+      end
+
+      it "resets the Grade paramters, while preserving the predicted score" do
+        @grade.update(
+          predicted_score: 400,
+          raw_score: 500,
+          status: "In Progress",
+          feedback: "should be nil",
+          feedback_read: true,
+          feedback_read_at: Time.now,
+          feedback_reviewed: true,
+          feedback_reviewed_at: Time.now,
+          instructor_modified: true,
+        )
+        post :remove, {id: @grade.id}
+
+        @grade.reload
+        expect(@grade.predicted_score).to eq(400)
+        expect(@grade.feedback).to eq("")
+        [ :raw_score,:status,:feedback_read_at,:feedback_reviewed_at,
+          :feedback_read,:feedback_reviewed,:instructor_modified].each do |attr|
+          expect(@grade[attr]).to be_falsy
+        end
+      end
+
+      it "returns an error message on failure" do
+        allow_any_instance_of(Grade).to receive(:save).and_return false
+        post :remove, {id: @grade.id}
+        expect(response.status).to eq(400)
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "removes the grade entirely" do
+        allow(controller).to receive(:current_student).and_return(@student)
+        expect{ delete :destroy, { :assignment_id => @assignment.id, :student_id => @student.id }}.to change{Grade.count}.by(-1)
+      end
+    end
+
+    describe "POST feedback_read" do
+      it "should be protected and redirect to root" do
+        expect( post :feedback_read, id: @assignment.id, grade_id: @grade.id ).to redirect_to(:root)
+      end
+    end
+
+    describe "POST self_log" do
+      it "should be protected and redirect to root" do
+        expect( post :self_log, id: @assignment.id ).to redirect_to(:root)
+      end
+    end
+
+    describe "POST predict_score" do
+      it "should be protected and redirect to root" do
+        expect( post :predict_score, { :id => @assignment.id, predicted_score: 0, format: :json } ).to redirect_to(:root)
+      end
+    end
+
     describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, :id => @assignment.id
         expect(assigns(:title)).to eq("Quick Grade #{@assignment.name}")
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
+        expect(assigns(:assignment_score_levels)).to eq(@assignment.assignment_score_levels)
+        expect(assigns(:grades)).to eq([@grade])
+        expect(assigns(:students)).to eq([@student])
         expect(response).to render_template(:mass_edit)
+      end
+
+      it "creates missing grades and orders grades by student name" do
+        student_2 = create(:user, last_name: "zzimmer", first_name: "aaron")
+        student_3 = create(:user, last_name: "zzimmer", first_name: "zoron")
+        [student_2,student_3].each {|s| s.courses << @course }
+        expect{ get :mass_edit, :id => @assignment.id }.to change{Grade.count}.by(2)
+        expect(assigns(:grades)[1].student).to eq(student_2)
+        expect(assigns(:grades)[2].student).to eq(student_3)
+      end
+
+      context "with teams" do
+        it "assigns params" do
+          team = create(:team, course: @course)
+          team.students << @student
+          get :mass_edit, :id => @assignment.id, team_id: team.id
+          expect(assigns(:students)).to eq([@student])
+          expect(assigns(:team)).to eq(team)
+        end
       end
     end
 
@@ -385,22 +469,36 @@ describe GradesController do
         group.students << @student
         get :group_edit, { :id => @assignment.id, :group_id => group.id}
         expect(assigns(:title)).to eq("Grading #{group.name}'s #{@assignment.name}")
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:assignment_score_levels)).to eq(@assignment.assignment_score_levels)
+        expect(assigns(:group)).to eq(group)
         expect(response).to render_template(:group_edit)
       end
     end
 
+    describe "group_update" do
+      #...
+    end
+
     describe "GET edit_status" do
-      it "displays the edit status page" do
+      it "assigns params" do
         get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id}
         expect(assigns(:title)).to eq("#{@assignment.name} Grade Statuses")
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:grades)).to eq([@grade])
         expect(response).to render_template(:edit_status)
       end
+    end
+
+    describe "update_status" do
+      #...
     end
 
     describe "GET import" do
       it "displays the import page" do
         get :import, { :id => @assignment.id}
         expect(assigns(:title)).to eq("Import Grades for #{@assignment.name}")
+        expect(assigns(:assignment)).to eq(@assignment)
         expect(response).to render_template(:import)
       end
     end
@@ -450,9 +548,8 @@ describe GradesController do
       let(:predicted_points) { (@assignment.point_total * 0.75).to_i }
 
       it "updates the predicted score for an assignment" do
-        get :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
-        @grade.reload
-        expect(@grade.predicted_score).to eq(predicted_points)
+        post :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
+        expect(@grade.reload.predicted_score).to eq(predicted_points)
         expect(JSON.parse(response.body)).to eq({"id" => @assignment.id, "points_earned" => predicted_points})
       end
 
@@ -507,8 +604,9 @@ describe GradesController do
     describe "POST feedback_read" do
       it "marks the grade as read by the student" do
         post :feedback_read, id: @assignment.id, grade_id: @grade.id
+        expect(@grade.reload.feedback_read).to be_truthy
+        expect(@grade.feedback_read_at).to be_within(1.second).of(Time.now)
         expect(response).to redirect_to assignment_path(@assignment)
-        expect(@grade.reload).to be_feedback_read
       end
     end
 

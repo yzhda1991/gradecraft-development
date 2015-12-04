@@ -2,7 +2,7 @@ class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
   before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update] # todo: probably need to add submit_rubric here
-  before_filter :ensure_student?, only: [:feedback_read, :predict_score]
+  before_filter :ensure_student?, only: [:feedback_read, :predict_score, :self_log]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
 
@@ -98,12 +98,14 @@ class GradesController < ApplicationController
     render nothing: true
   end
 
+  # POST /grades/earn_student_badge
   def earn_student_badge
     @earned_badge = EarnedBadge.create params[:earned_badge]
     logger.info @earned_badge.errors.full_messages
     render json: @earned_badge
   end
 
+  # POST /grades/earn_student_badges
   def earn_student_badges
     @earned_badges = EarnedBadge.create params[:earned_badges]
     render json: @earned_badges
@@ -115,7 +117,7 @@ class GradesController < ApplicationController
       EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
       render json: {message: "Earned badges successfully deleted", success: true}, status: 200
     else
-      render json: {message: "Earned badges failed to delete", success: false}, status: 417
+      render json: {message: "Earned badges failed to delete", success: false}, status: 400
     end
   end
 
@@ -126,7 +128,7 @@ class GradesController < ApplicationController
       EarnedBadge.where(grade_params).destroy_all
       render json: {message: "Earned badge successfully deleted", success: true}, status: 200
     else
-      render json: {message: "Earned badge failed to delete", success: false}, status: 417
+      render json: {message: "Earned badge failed to delete", success: false}, status: 400
     end
   end
 
@@ -154,7 +156,7 @@ class GradesController < ApplicationController
     # create an individual record for each rubric grade
     params[:rubric_grades].collect do |rubric_grade|
       RubricGrade.create! rubric_grade.merge(
-        { submission_id: submission_id,
+        { submission_id: safe_submission_id,
           assignment_id: @assignment[:id],
           student_id: params[:student_id]
         }
@@ -178,31 +180,9 @@ class GradesController < ApplicationController
     end
   end
 
-  private
-
-  def new_earned_tier_badges
-    params[:tier_badges].collect do |tier_badge|
-      EarnedBadge.new({
-        badge_id: tier_badge["badge_id"],
-        submission_id: submission_id,
-        course_id: current_course[:id],
-        student_id: current_student[:id],
-        assignment_id: @assignment[:id],
-        tier_id: tier_badge[:tier_id],
-        metric_id: tier_badge[:metric_id],
-        score: tier_badge[:point_total],
-        tier_badge_id: tier_badge[:id],
-        student_visible: @grade.is_student_visible?
-      })
-    end
-  end
-
-  def submission_id
-    @submission[:id] rescue nil
-  end
-
-  public
-
+  # This is the method used when faculty delete a grade
+  # it preserves the predicted grade
+  # POST /assignments/:id/grades/remove
   def remove
     @grade = Grade.find(params[:id])
     @grade.raw_score = nil
@@ -213,12 +193,19 @@ class GradesController < ApplicationController
     @grade.feedback_reviewed = false
     @grade.feedback_reviewed_at = nil
     @grade.instructor_modified = false
+
+
     @grade.update_attributes(params[:grade])
 
-    ScoreRecalculatorJob.new(user_id: @grade.student_id, course_id: current_course.id).enqueue
-    redirect_to @grade.assignment, notice: "#{ @grade.student.name}'s #{@grade.assignment.name} grade was successfully deleted."
+    if @grade.save
+      ScoreRecalculatorJob.new(user_id: @grade.student_id, course_id: current_course.id).enqueue
+      redirect_to @grade.assignment, notice: "#{ @grade.student.name}'s #{@grade.assignment.name} grade was successfully deleted."
+    else
+      redirect_to @grade.assignment, notice:  @grade.errors.full_messages, :status => 400
+    end
   end
 
+  # DELETE /assignments/:assignment_id/grade
   def destroy
     redirect_to @assignment and return unless current_student.present?
     @grade = current_student.grade_for_assignment(@assignment)
@@ -227,112 +214,8 @@ class GradesController < ApplicationController
     redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name}'s #{@assignment.name} grade was successfully deleted."
   end
 
-  def feedback_read
-    @assignment = current_course.assignments.find params[:id]
-    @grade = @assignment.grades.find params[:grade_id]
-    @grade.feedback_read!
-    redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
-  end
-
-  # Allows students to self log grades for a particular assignment if the instructor has turned that feature on - currently only used to log attendance
-  def self_log
-    @assignment = current_course.assignments.find(params[:id])
-    if @assignment.open?
-
-      @grade = current_student.grade_for_assignment(@assignment)
-      if params[:present] == "true"
-        if params[:grade].present? && params[:grade][:raw_score].present?
-          @grade.raw_score = params[:grade][:raw_score]
-        else
-          @grade.raw_score = @assignment.point_total
-        end
-      else
-        @grade.raw_score = 0
-      end
-
-      @grade.instructor_modified = true
-      @grade.status = "Graded"
-      respond_to do |format|
-        if @grade.save
-          # @mz TODO: add specs
-          @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-          @grade_updater_job.enqueue
-
-          format.html { redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!' }
-        else
-          format.html { redirect_to syllabus_path, notice: "We're sorry, this grade could not be added." }
-        end
-      end
-    else
-      format.html { redirect_to dashboard_path, notice: "We're sorry, this assignment is no longer open." }
-    end
-  end
-
-  # Students predicting the score they'll get on an assignent using the grade predictor
-  # TODO: Change to predict_points when 'score' changes to 'points_earned and PredictedEarnedAssignment model added
-  def predict_score
-    @assignment = current_course.assignments.find(params[:id])
-    if current_student.grade_released_for_assignment?(@assignment)
-      @grade = nil
-    else
-      @grade = current_student.grade_for_assignment(@assignment)
-      @grade.predicted_score = params[:predicted_score]
-    end
-
-    @grade_saved = @grade.nil? ? nil : @grade.save
-
-    enqueue_predictor_event_job
-
-    respond_to do |format|
-      format.json do
-        if @grade.nil?
-          render :json => {errors: "You cannot predict this assignment!"}, :status => 400
-        elsif @grade_saved
-          render :json => {id: @assignment.id, points_earned: @grade.predicted_score}
-        else
-          render :json => { errors:  @grade.errors.full_messages }, :status => 400
-        end
-      end
-    end
-  end
-
-  private
-
-  def enqueue_predictor_event_job
-    begin
-      # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
-      # create a predictor event in mongo to keep track of what happened
-      PredictorEventJob.new(data: predictor_event_attrs).enqueue
-    rescue
-      # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
-      # or because of some worker stayalive anomaly, then just use the PredictorEventJob.perform method
-      # to persist the record directly to mongo with all of the logging it entails
-      PredictorEventJob.perform(data: predictor_event_attrs)
-    end
-  end
-
-  def predictor_event_attrs
-    {
-      prediction_type: "grade",
-      course_id: current_course.id,
-      user_id: current_user.id,
-      student_id: current_student.try(:id),
-      user_role: current_user.role(current_course),
-      assignment_id: params[:id],
-      predicted_points: params[:predicted_score],
-      possible_points: grade_possible_points,
-      created_at: Time.now,
-      prediction_saved_successfully: @grade_saved
-    }
-  end
-
-  def grade_possible_points
-    @grade.point_total rescue nil
-  end
-
-  public
-
   # Quickly grading a single assignment for all students
+  # GET /assignments/:id/mass_grade(.:format)
   def mass_edit
     @assignment = current_course.assignments.find(params[:id])
     @title = "Quick Grade #{@assignment.name}"
@@ -346,14 +229,13 @@ class GradesController < ApplicationController
       @students = current_course.students
     end
 
-    @grades = Grade.where(student_id: mass_edit_student_ids, assignment_id: @assignment[:id] ).includes(:student,:assignment)
-
-    create_missing_grades # create grade objects for the student/assignment pair unless present
-
+    @grades = Grade.find_or_create_grades(@assignment,@students)
     @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
   end
 
   private
+
+    # TODO: find_or_create should handle these methods:
 
     def mass_edit_student_ids
       @mass_edit_student_ids ||= @students.pluck(:id)
@@ -495,6 +377,75 @@ class GradesController < ApplicationController
     end
   end
 
+  def feedback_read
+    @assignment = current_course.assignments.find params[:id]
+    @grade = @assignment.grades.find params[:grade_id]
+    @grade.feedback_read!
+    redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
+  end
+
+  # Allows students to self log grades for a particular assignment if the instructor has turned that feature on - currently only used to log attendance
+  def self_log
+    @assignment = current_course.assignments.find(params[:id])
+    if @assignment.open?
+
+      @grade = current_student.grade_for_assignment(@assignment)
+      if params[:present] == "true"
+        if params[:grade].present? && params[:grade][:raw_score].present?
+          @grade.raw_score = params[:grade][:raw_score]
+        else
+          @grade.raw_score = @assignment.point_total
+        end
+      else
+        @grade.raw_score = 0
+      end
+
+      @grade.instructor_modified = true
+      @grade.status = "Graded"
+      respond_to do |format|
+        if @grade.save
+          # @mz TODO: add specs
+          @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+          @grade_updater_job.enqueue
+
+          format.html { redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!' }
+        else
+          format.html { redirect_to syllabus_path, notice: "We're sorry, this grade could not be added." }
+        end
+      end
+    else
+      format.html { redirect_to dashboard_path, notice: "We're sorry, this assignment is no longer open." }
+    end
+  end
+
+  # Students predicting the score they'll get on an assignent using the grade predictor
+  # TODO: Change to predict_points when 'score' changes to 'points_earned and PredictedEarnedAssignment model added
+  def predict_score
+    @assignment = current_course.assignments.find(params[:id])
+    if current_student.grade_released_for_assignment?(@assignment)
+      @grade = nil
+    else
+      @grade = current_student.grade_for_assignment(@assignment)
+      @grade.predicted_score = params[:predicted_score]
+    end
+
+    @grade_saved = @grade.nil? ? nil : @grade.save
+
+    enqueue_predictor_event_job
+
+    respond_to do |format|
+      format.json do
+        if @grade.nil?
+          render :json => {errors: "You cannot predict this assignment!"}, :status => 400
+        elsif @grade_saved
+          render :json => {id: @assignment.id, points_earned: @grade.predicted_score}
+        else
+          render :json => { errors:  @grade.errors.full_messages }, :status => 400
+        end
+      end
+    end
+  end
+
   private
 
   def temp_view_context
@@ -528,6 +479,59 @@ class GradesController < ApplicationController
                 select(:id, :metric_id, :tier_id, :comments).to_json
   end
 
+  def safe_submission_id
+    @submission[:id] rescue nil
+  end
+
+  def safe_grade_possible_points
+    @grade.point_total rescue nil
+  end
+
+  def new_earned_tier_badges
+    params[:tier_badges].collect do |tier_badge|
+      EarnedBadge.new({
+        badge_id: tier_badge["badge_id"],
+        submission_id: safe_submission_id,
+        course_id: current_course[:id],
+        student_id: current_student[:id],
+        assignment_id: @assignment[:id],
+        tier_id: tier_badge[:tier_id],
+        metric_id: tier_badge[:metric_id],
+        score: tier_badge[:point_total],
+        tier_badge_id: tier_badge[:id],
+        student_visible: @grade.is_student_visible?
+      })
+    end
+  end
+
+  def enqueue_predictor_event_job
+    begin
+      # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
+      # create a predictor event in mongo to keep track of what happened
+      PredictorEventJob.new(data: predictor_event_attrs).enqueue
+    rescue
+      # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
+      # or because of some worker stayalive anomaly, then just use the PredictorEventJob.perform method
+      # to persist the record directly to mongo with all of the logging it entails
+      PredictorEventJob.perform(data: predictor_event_attrs)
+    end
+  end
+
+  def predictor_event_attrs
+    {
+      prediction_type: "grade",
+      course_id: current_course.id,
+      user_id: current_user.id,
+      student_id: current_student.try(:id),
+      user_role: current_user.role(current_course),
+      assignment_id: params[:id],
+      predicted_points: params[:predicted_score],
+      possible_points: safe_grade_possible_points,
+      created_at: Time.now,
+      prediction_saved_successfully: @grade_saved
+    }
+  end
+
   #----------- jg: Specs to here -----------------------------------------------#
 
   def new_grade_from_rubric_grades_attributes
@@ -549,7 +553,7 @@ class GradesController < ApplicationController
   def grade_attributes_from_rubric
     {
       raw_score: params[:points_given],
-      submission_id: submission_id,
+      submission_id: safe_submission_id,
       point_total: params[:points_possible],
       status: params[:grade_status],
       instructor_modified: true
