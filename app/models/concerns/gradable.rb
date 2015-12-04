@@ -10,7 +10,7 @@ module Gradable
   end
 
   def graded_or_released_scores
-    { scores: grades.graded_or_released.pluck(:raw_score) }
+    grades.graded_or_released.pluck(:raw_score)
   end
 
   def grade_count
@@ -18,7 +18,7 @@ module Gradable
   end
 
   def grades_for_assignment(student)
-    { scores: grades.graded_or_released.pluck(:raw_score),
+    { scores: graded_or_released_scores,
       user_score: grades.where(student_id: student.id).first.try(:raw_score)
     }
   end
