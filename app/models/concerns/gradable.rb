@@ -17,12 +17,6 @@ module Gradable
     grades.graded_or_released.count
   end
 
-  def grades_for_assignment(student)
-    { scores: graded_or_released_scores,
-      user_score: grades.where(student_id: student.id).first.try(:raw_score)
-    }
-  end
-
   # Getting a student's grade object for an assignment
   def grade_for_student(student)
     grades.graded_or_released.where(student_id: student.id).first
