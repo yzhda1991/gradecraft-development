@@ -1,4 +1,6 @@
 class AssignmentsController < ApplicationController
+  include AssignmentsHelper
+
   before_filter :ensure_staff?, :except => [:show, :index, :predictor_data]
   respond_to :html, :json
 
@@ -26,15 +28,7 @@ class AssignmentsController < ApplicationController
   def show
     assignment = current_course.assignments.find_by(id: params[:id])
     if assignment
-      if current_user_is_student?
-        if current_student.grade_released_for_assignment?(assignment)
-          grade = current_student.grade_for_assignment(assignment)
-          if grade && !grade.new_record?
-            grade.feedback_reviewed!
-          end
-        end
-      end
-
+      mark_assignment_reviewed! assignment, current_user
       render :show, AssignmentPresenter.build({ assignment: assignment, course: current_course,
                                                 team_id: params[:team_id], view_context: view_context })
     else
