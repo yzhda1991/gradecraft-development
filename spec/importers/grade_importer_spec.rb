@@ -97,7 +97,7 @@ describe GradeImporter do
           create :course_membership, user_id: username_student.id, course_id: course.id,
             role: "student"
           result = subject.import(course, assignment)
-          grade = assignment.all_grade_statuses_grade_for_student(username_student)
+          grade = assignment.grades.where(student_id: username_student.id).first
           expect(grade).to_not be_nil
         end
       end

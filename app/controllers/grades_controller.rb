@@ -22,10 +22,8 @@ class GradesController < ApplicationController
     if @assignment.has_groups?
       @group = current_course.groups.find(params[:group_id])
       @title = "#{@group.name}'s Grade for #{ @assignment.name }"
-      @grades_for_assignment = @assignment.grades.graded_or_released
     else
       @title = "#{current_student.name}'s Grade for #{ @assignment.name }"
-      @grades_for_assignment = @assignment.grades_for_assignment(current_student)
     end
 
     render :show, AssignmentPresenter.build({ assignment: @assignment, course: current_course,

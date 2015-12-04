@@ -47,7 +47,6 @@ describe GradesController do
           expect(assigns(:assignment)).to eq(assignment)
           expect(assigns(:group)).to eq(group)
           expect(assigns(:title)).to eq("#{group.name}'s Grade for #{assignment.name}")
-          expect(assigns(:grades_for_assignment)).to eq(assignment.grades.graded_or_released)
           expect(response).to render_template(:show)
         end
       end
@@ -56,7 +55,6 @@ describe GradesController do
         get :show, { :id => @grade.id, :assignment_id => @assignment.id, :student_id => @student.id }
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:title)).to eq("#{@student.name}'s Grade for #{@assignment.name}")
-        expect(assigns(:grades_for_assignment)).to eq(@assignment.grades_for_assignment(@student))
         expect(response).to render_template(:show)
       end
 

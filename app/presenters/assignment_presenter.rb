@@ -135,12 +135,15 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def scores
-    assignment.all_grades_for_assignment
+    { scores: assignment.graded_or_released_scores }
   end
 
   def scores_for(user)
-    return scores if user.is_staff?(course)
-    assignment.grades_for_assignment(user)
+    scores = self.scores
+    unless user.is_staff?(course)
+      scores[:user_score] = grades.where(student_id: user.id).first.try(:raw_score)
+    end
+    scores
   end
 
   def has_scores_for?(user)
