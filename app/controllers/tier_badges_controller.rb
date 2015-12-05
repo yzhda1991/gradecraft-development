@@ -5,11 +5,6 @@ class TierBadgesController< ApplicationController
 
   respond_to :html, :json
 
-  def new
-    @tier = Tier.new params[:tier]
-    respond_with @tier, layout: false
-  end
-
   def create
     @tier_badge = TierBadge.create params[:tier_badge]
     respond_with @tier_badge, layout: false, serializer: ExistingTierBadgeSerializer
@@ -17,17 +12,7 @@ class TierBadgesController< ApplicationController
 
   def destroy
     @tier_badge.destroy
-    respond_with @tier_badge, layout: false
-  end
-
-  def update
-    @tier.update_attributes params[:tier]
-    respond_with @tier, layout: false
-  end
-
-  def update_order
-    Tier.update params[:tier_order].keys, params[:tier_order].values
-    render nothing: true
+    render :nothing => true
   end
 
   private

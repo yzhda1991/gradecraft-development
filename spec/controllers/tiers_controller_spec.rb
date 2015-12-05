@@ -41,7 +41,6 @@ describe TiersController do
     end
   end
 
-
   context "as a student" do
     before(:all) do
       @student = create(:user)

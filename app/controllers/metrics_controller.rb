@@ -5,11 +5,6 @@ class MetricsController < ApplicationController
 
   respond_to :html, :json
 
-  def new
-    @metric = Metric.new params[:metric]
-    respond_with @metric, layout: false
-  end
-
   def create
     @metric = Metric.create params[:metric]
     respond_with @metric, layout: false, serializer: ExistingMetricSerializer
@@ -18,7 +13,7 @@ class MetricsController < ApplicationController
   def destroy
     @rubric = @metric.rubric
     @metric.destroy
-    respond_with @metric, layout: false
+    render :nothing => true
   end
 
   def update
