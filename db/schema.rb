@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151021153100) do
+ActiveRecord::Schema.define(version: 20151205135720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -679,6 +679,7 @@ ActiveRecord::Schema.define(version: 20151021153100) do
     t.boolean "athlete"
     t.integer "act_score"
     t.integer "sat_score"
+    t.integer "course_id"
   end
 
   create_table "student_assignment_type_weights", force: :cascade do |t|
