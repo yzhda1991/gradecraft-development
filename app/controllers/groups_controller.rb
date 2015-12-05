@@ -46,12 +46,7 @@ class GroupsController < ApplicationController
       if @group.save
         format.html { respond_with @group }
       else
-        @title = "Start a #{term_for :group}"
-        if current_user_is_student?
-          @other_students = current_course.students.where.not(id: current_user.id)
-        end
         format.html {render :action => "new", :group => @group }
-        format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -86,7 +81,6 @@ class GroupsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to groups_path, notice: "#{@name} #{term_for :group} successfully deleted" }
-      format.json { head :ok }
     end
   end
 end
