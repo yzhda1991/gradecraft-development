@@ -58,7 +58,7 @@ class AssignmentsController < ApplicationController
   end
 
   def update
-    assignment = current_course.assignments.includes(:assignment_score_levels).find(params[:id])
+    assignment = current_course.assignments.find(params[:id])
     if assignment.update_attributes(params[:assignment])
       set_assignment_weights(assignment)
       redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  <strong>#{assignment.name }</strong> successfully updated" and return
@@ -76,9 +76,9 @@ class AssignmentsController < ApplicationController
   end
 
   def update_rubrics
-    @assignment = current_course.assignments.find params[:id]
-    @assignment.update_attributes use_rubric: params[:use_rubric]
-    redirect_to assignment_path(@assignment)
+    assignment = current_course.assignments.find params[:id]
+    assignment.update_attributes use_rubric: params[:use_rubric]
+    redirect_to assignment_path(assignment)
   end
 
   def rubric_grades_review

@@ -134,12 +134,12 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET sort" do
+    describe "POST sort" do
       it "sorts the assignments by params" do
         second_assignment = create(:assignment, assignment_type: @assignment_type)
         @course.assignments << second_assignment
-        params = [second_assignment.id, @assignment.id]
-        post :sort, :assignment => params
+
+        post :sort, assignment: [second_assignment.id, @assignment.id]
 
         expect(@assignment.reload.position).to eq(2)
         expect(second_assignment.reload.position).to eq(1)
