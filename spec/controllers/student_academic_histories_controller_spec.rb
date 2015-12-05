@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-describe StudentAcademicHistoriesController, focus: true do
+describe StudentAcademicHistoriesController do
   before(:all) do
     @course = create(:course)
     @student = create(:user)
@@ -38,10 +38,8 @@ describe StudentAcademicHistoriesController, focus: true do
 
     describe "GET new" do 
       it "displays a form to create a new academic history" do
-        @student_2 = create(:user)
-        CourseMembership.create user: @student_2, course: @course, role: "student"
-        get :new, {:id => @student_2.id}
-        expect(assigns(:student)).to eq(@student_2)
+        get :new, {:id => @student.id}
+        expect(assigns(:student)).to eq(@student)
         expect(assigns(:academic_history)).to be_a_new(StudentAcademicHistory)
         expect(response).to render_template(:new)
       end
@@ -53,6 +51,30 @@ describe StudentAcademicHistoriesController, focus: true do
         expect(assigns(:student)).to eq(@student)
         expect(assigns(:academic_history)).to eq(@academic_history)
         expect(response).to render_template(:edit)
+      end
+    end
+
+    describe "POST create" do       
+      it "creates an academic history with valid attributes" do 
+        params = attributes_for(:student_academic_history)
+        params[:student_academic_history_id] = @academic_history
+        expect{ post :create, :student_academic_history => params, :id => @student.id }.to change(StudentAcademicHistory,:count).by(1)
+        expect(response).to redirect_to(student_path(@student))
+      end
+    end
+
+    describe "POST update" do       
+      it "updates an academic history with valid attributes" do 
+        params = { gpa: 2 }
+        post :update, :id => @student.id
+        expect(response).to redirect_to(student_path(@student))
+      end
+    end
+
+    describe "GET destroy" do
+      it "destroys the academic history profile" do
+        expect{ get :destroy, :id => @student }.to change(StudentAcademicHistory,:count).by(-1)
+        expect(response).to redirect_to(student_path(@student))
       end
     end
 
