@@ -1,13 +1,9 @@
 class TiersController < ApplicationController
   before_filter :ensure_staff?
 
-  before_action :find_tier, except: [:new, :create]
+  before_action :find_tier, except: [:create]
 
   respond_to :html, :json
-
-  def new
-    @tier = Tier.new params[:tier]
-  end
 
   def create
     @tier = Tier.create params[:tier]
@@ -16,7 +12,7 @@ class TiersController < ApplicationController
 
   def destroy
     @tier.destroy
-    respond_with @tier, layout: false
+    render :nothing => true
   end
   
   def update
