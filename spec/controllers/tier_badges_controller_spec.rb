@@ -7,6 +7,29 @@ describe TierBadgesController do
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
+  context "as a professor" do 
+    before(:all) do
+      @professor = create(:user)
+      CourseMembership.create user: @professor, course: @course, role: "professor"
+    end
+
+    before(:each) { login_user(@professor) }
+
+    describe "POST create" do 
+      it "creates a new tier badge" do 
+        params = attributes_for(:tier_badge)
+        expect{ post :create, :tier_badge => params }.to change(TierBadge,:count).by(1)  
+      end
+    end
+
+    describe "GET destroy" do 
+      it "destroys a tier badge" do 
+        @tier_badge = create(:tier_badge)
+        expect{ get :destroy, { :id => @tier_badge } }.to change(TierBadge,:count).by(-1)
+      end
+    end
+  end
+
   context "as a student" do
     before(:all) do
       @student = create(:user)
@@ -16,7 +39,6 @@ describe TierBadgesController do
 
     describe "protected routes" do
       [
-        :new,
         :create
       ].each do |route|
           it "#{route} redirects to root" do
@@ -27,7 +49,7 @@ describe TierBadgesController do
 
     describe "protected routes requiring id in params" do
       [
-        :update
+        :destroy
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, {:id => "10"}).to redirect_to(:root)
