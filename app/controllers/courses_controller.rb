@@ -6,11 +6,6 @@ class CoursesController < ApplicationController
   def index
     @title = "Course Index"
     @courses = Course.all
-    respond_to do |format|
-      format.html { }
-      format.json { render json: @courses.to_json(only: [:id, :name, :courseno,
-                                                         :year, :semester]) }
-    end
   end
 
   def show
@@ -115,7 +110,6 @@ class CoursesController < ApplicationController
         format.html { redirect_to course_path(new_course.id), notice: "#{@course.name} successfully copied" }
       else
         redirect_to courses_path, alert: "#{@course.name} was not successfully copied"
-        format.json { render json: @course.errors, status: :unprocessable_entity }
       end
     end
 
@@ -134,10 +128,8 @@ class CoursesController < ApplicationController
         session[:course_id] = @course.id
         bust_course_list_cache current_user
         format.html { redirect_to course_path(@course), notice: "Course #{@course.name} successfully created" }
-        format.json { render json: @course, status: :created, location: @course }
       else
         format.html { render action: "new" }
-        format.json { render json: @course.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -193,32 +185,13 @@ class CoursesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to courses_url, notice: "Course #{@name} successfully deleted" }
-      format.json { head :no_content }
-    end
-  end
-
-  def assignments
-    @course = current_course
-    @assignments = EventSearch.new(:current_user => current_user, :events => @course.events).find
-    respond_with @assignments do |format|
-      format.ics do
-        render :text => CalendarBuilder.new(:assignments => @assignments).to_ics, :content_type => 'text/calendar'
-      end
     end
   end
 
   def export_earned_badges
     @course = current_course
     respond_to do |format|
-      format.csv { send_data @course.earned_badges_for_course }
-    end
-  end
-
-  # Exporting student grades
-  def export_student_grades
-    @students = current_course.students_being_graded respond_to do |format|
-      format.json { render json: @students.where("first_name like ?", "%#{params[:q]}%") }
-      format.csv { send_data @students.csv_for_course(current_course) }
+      format.csv { send_data EarnedBadgeExporter.new.earned_badges_for_course current_course.earned_badges }
     end
   end
 
