@@ -89,6 +89,7 @@ class Course < ActiveRecord::Base
     :instructors_of_record_ids, :lti_uid
 
   with_options :dependent => :destroy do |c|
+    c.has_many :student_academic_histories
     c.has_many :assignment_types
     c.has_many :assignments
     c.has_many :announcements

@@ -3,13 +3,12 @@ class StudentAcademicHistoriesController < ApplicationController
   before_filter :ensure_staff?
 
   def index
-    @students = current_course.students
-    @academic_histories = @students.student_academic_histories
+    @academic_histories = current_course.student_academic_histories
   end
 
   def show
     @student = current_course.students.find(params[:id])
-    @academic_history = @student.student_academic_histories.first
+    @academic_history = @student.student_academic_histories.where(:course_id => current_course).first
   end
 
   def new
@@ -24,7 +23,7 @@ class StudentAcademicHistoriesController < ApplicationController
 
   def edit
     @student = current_course.students.find(params[:id])
-    @academic_history = @student.student_academic_histories.first
+    @academic_history = @student.student_academic_histories.where(:course_id => current_course).first
   end
 
   def update
