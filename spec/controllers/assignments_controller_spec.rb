@@ -28,7 +28,6 @@ describe AssignmentsController do
         get :index
         expect(assigns(:title)).to eq("assignments")
         expect(assigns(:assignment_types)).to eq([@assignment_type])
-        expect(assigns(:assignments)).to eq([@assignment])
         expect(response).to render_template(:index)
       end
     end

@@ -1,22 +1,13 @@
 class AssignmentsController < ApplicationController
   include AssignmentsHelper
 
-  before_filter :ensure_staff?, :except => [:show, :index, :predictor_data]
+  before_filter :ensure_staff?, except: [:show, :index, :predictor_data]
   respond_to :html, :json
 
   def index
-    if current_user_is_student?
-      redirect_to syllabus_path
-    else
-      @title = "#{term_for :assignments}"
-      @assignment_types = current_course.assignment_types.includes(:assignments)
-      @assignments = current_course.assignments.includes(:rubric)
-
-      respond_to do |format|
-        format.html
-        format.csv { send_data @assignments.csv_for_course(current_course) }
-      end
-    end
+    redirect_to syllabus_path and return if current_user_is_student?
+    @title = "#{term_for :assignments}"
+    @assignment_types = current_course.assignment_types.includes(:assignments)
   end
 
   #Gives the instructor the chance to quickly check all assignment settings for the whole course
