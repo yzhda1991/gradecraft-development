@@ -50,24 +50,6 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET new" do
-      it "assigns title and assignments" do
-        get :new
-        expect(assigns(:title)).to eq("Create a New assignment")
-        expect(assigns(:assignment)).to be_a_new(Assignment)
-        expect(response).to render_template(:new)
-      end
-    end
-
-    describe "GET edit" do
-      it "assigns title and assignments" do
-        get :edit, :id => @assignment.id
-        expect(assigns(:title)).to eq("Editing #{@assignment.name}")
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(response).to render_template(:edit)
-      end
-    end
-
     describe "POST copy" do
       before(:each) do
         Assignment.delete_all
