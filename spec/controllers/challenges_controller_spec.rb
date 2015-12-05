@@ -92,6 +92,12 @@ describe ChallengesController do
         expect(@challenge_2.reload.name).to eq("new name")
       end
 
+      it "redirects to the edit form if the update fails" do 
+        params = { name: nil }
+        post :update, id: @challenge_2.id, :challenge => params
+        expect(response).to render_template(:edit)
+      end
+
       it "manages file uploads" do
         params = {:challenge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
         post :update, id: @challenge_2.id, :challenge => params
