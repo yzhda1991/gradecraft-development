@@ -3,15 +3,15 @@ class ProposalsController < ApplicationController
   #Groups create proposals that they submit until their plan is approved
 
   def create
-    @proposal = Proposal.new(params[:proposal])
+    @proposal = Proposal.create(params[:proposal])
     flash[:notice] = 'Proposal was successfully created.' if @proposal.save
-    respond_with(@proposal)
+    render :nothing => true
   end
 
   def update
     @proposal = Proposal.find(params[:id])
     flash[:notice] = 'Proposal was successfully updated.' if @proposal.update(params[:proposal])
-    respond_with(@proposal)
+    render :nothing => true
   end
 
   def destroy
