@@ -74,6 +74,12 @@ class Assignment < ActiveRecord::Base
 
   delegate :student_weightable?, to: :assignment_type
 
+  # needed in order to support multiple file uploads
+  def assignment_files_attributes=(attributes)
+    files = attributes["0"]["file"]
+    super files.map { |f| { file: f, filename: f.original_filename } }
+  end
+
   def copy
     copy = self.dup
     copy.name.prepend "Copy of "
