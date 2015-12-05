@@ -41,12 +41,8 @@ class ChallengesController < ApplicationController
     respond_to do |format|
       if @challenge.save
         format.html { redirect_to @challenge, notice: "Challenge #{@challenge.name} successfully created" }
-        format.json { render json: @challenge, status: :created, location: @challenge }
       else
-        # TODO: refactor, see submissions_controller
-        @title = "Create a New #{term_for :challenge}"
         format.html { render action: "new" }
-        format.json { render json: @challenge.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -68,12 +64,8 @@ class ChallengesController < ApplicationController
     respond_to do |format|
       if @challenge.update_attributes(params[:challenge])
         format.html { redirect_to challenges_path, notice: "Challenge #{@challenge.name} successfully updated" }
-        format.json { head :ok }
       else
-        # TODO: refactor, see submissions_controller
-        @title = "Editing #{@challenge.name}"
         format.html { render action: "edit" }
-        format.json { render json: @challenge.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -85,7 +77,6 @@ class ChallengesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to challenges_path, notice: "Challenge #{@name} successfully deleted" }
-      format.json { head :ok }
     end
   end
 
