@@ -106,6 +106,7 @@ describe AssignmentsController do
         post :create, :assignment => params
         assignment = Assignment.where(name: params[:name]).last
         expect expect(assignment.assignment_files.count).to eq(1)
+        expect expect(assignment.assignment_files[0].filename).to eq("test_file.txt")
       end
 
       it "redirects to new from with invalid attributes" do
