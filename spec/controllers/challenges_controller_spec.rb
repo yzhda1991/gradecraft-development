@@ -113,8 +113,6 @@ describe ChallengesController do
     end
 
     describe "GET predictor_data" do
-      before { allow(controller).to receive(:current_user).and_return(@professor) }
-
       it "adds the prediction data to the challenge model with a zero points prediction" do
         prediction = create(:predicted_earned_challenge, challenge: @challenge, student: @student)
         get :predictor_data, format: :json, :id => @student.id
