@@ -64,7 +64,7 @@ describe AssignmentTypesController do
         expect{ post :create, :assignment_type => params }.to change(AssignmentType,:count).by(1)
       end
 
-      it "redirects to new from with invalid attributes" do
+      it "redirects to new form with invalid attributes" do
         expect{ post :create, assignment_type: attributes_for(:assignment_type, name: nil) }.to_not change(AssignmentType,:count)
       end
     end

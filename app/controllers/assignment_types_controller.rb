@@ -1,6 +1,7 @@
 class AssignmentTypesController < ApplicationController
 
   before_filter :ensure_staff?, :except => [:predictor_data]
+  before_action :find_assignment_type, only: [:show, :edit, :update, :export_scores, :all_grades, :destroy]
 
   #Display list of assignment types
   def index
@@ -11,7 +12,6 @@ class AssignmentTypesController < ApplicationController
 
   #See assignment type with all of its included assignments
   def show
-    @assignment_type = current_course.assignment_types.find(params[:id])
     @title = "#{@assignment_type.name}"
   end
 
@@ -23,7 +23,6 @@ class AssignmentTypesController < ApplicationController
 
   #Edit assignment type
   def edit
-    @assignment_type = current_course.assignment_types.find(params[:id])
     @title = "Editing #{@assignment_type.name}"
   end
 
@@ -31,7 +30,6 @@ class AssignmentTypesController < ApplicationController
   def create
     @assignment_type = current_course.assignment_types.new(params[:assignment_type])
     @title = "Create a New #{term_for :assignment_type}"
-    @assignment_type.save
 
     respond_to do |format|
       if @assignment_type.save
@@ -44,7 +42,6 @@ class AssignmentTypesController < ApplicationController
 
   #Update assignment type
   def update
-    @assignment_type = current_course.assignment_types.find(params[:id])
     @title = "Editing #{@assignment_type.name}"
     @assignment_type.update_attributes(params[:assignment_type])
 
@@ -65,9 +62,8 @@ class AssignmentTypesController < ApplicationController
   end
 
   def export_scores
-    assignment_type = current_course.assignment_types.find(params[:id])
     respond_to do |format|
-      format.csv { send_data AssignmentTypeExporter.new.export_scores assignment_type, current_course, current_course.students }
+      format.csv { send_data AssignmentTypeExporter.new.export_scores @assignment_type, current_course, current_course.students }
     end
   end
 
@@ -83,7 +79,6 @@ class AssignmentTypesController < ApplicationController
 
   #display all grades for all assignments in an assignment type
   def all_grades
-    @assignment_type = current_course.assignment_types.find(params[:id])
     @title = "#{@assignment_type.name} Grade Patterns"
 
     @teams = current_course.teams
@@ -99,7 +94,6 @@ class AssignmentTypesController < ApplicationController
 
   #delete the specified assignment type
   def destroy
-    @assignment_type = current_course.assignment_types.find(params[:id])
     @name = "#{@assignment_type.name}"
     @assignment_type.destroy
     redirect_to assignment_types_path, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@name} successfully deleted" }
@@ -124,5 +118,11 @@ class AssignmentTypesController < ApplicationController
       :position,
       :updated_at
     )
+  end
+
+  private
+
+  def find_assignment_type
+    @assignment_type = current_course.assignment_types.find(params[:id])
   end
 end
