@@ -1,6 +1,8 @@
 class GroupsController < ApplicationController
   before_filter :ensure_staff?, only: [:index, :review, :destroy]
 
+  before_action :find_group, only: [:show, :review, :edit, :update, :destroy]
+
   def index
     @pending_groups = current_course.groups.pending
     @approved_groups = current_course.groups.approved
@@ -10,33 +12,25 @@ class GroupsController < ApplicationController
   end
 
   def show
-    @group = current_course.groups.find(params[:id])
-    #TODO only show a group to students if they're in it
-    if current_user_is_student?
-      @user = current_user
-    end
     @title = "#{@group.name}"
     @assignments = current_course.assignments.group_assignments
   end
 
   def new
     @group = current_course.groups.new
-    if current_user_is_student?
-      @other_students = current_course.students.where.not(id: current_user.id)
-    end
-    @assignments = current_course.assignments.group_assignments.chronological.alphabetical
+    @assignments = current_course.assignments.group_assignments
     @title = "Start a #{term_for :group}"
+    @other_students = potential_team_members
   end
 
   def review
-    @group = current_course.groups.find(params[:id])
     @title = "Reviewing #{@group.name}"
   end
 
   def create
     @group = current_course.groups.new(params[:group])
     @assignments = current_course.assignments.group_assignments
-    @group.students << current_user if current_user_is_student?
+    @group.students << current_student if current_user_is_student?
     if current_user_is_student?
       @group.approved = "Pending"
     else
@@ -44,38 +38,33 @@ class GroupsController < ApplicationController
     end
     respond_to do |format|
       if @group.save
-        format.html { respond_with @group }
+        format.html { respond_with @group, notice: "#{@group.name} #{term_for :group} successfully created"  }
       else
-        format.html {render :action => "new", :group => @group }
+        @other_students = potential_team_members
+        format.html { render :action => "new", :group => @group  }
       end
     end
   end
 
   def edit
-    @group = current_course.groups.find(params[:id])
+    @other_students = potential_team_members
     @assignments = current_course.assignments.group_assignments
     @title = "Editing #{@group.name}"
   end
 
   def update
-    @group = current_course.groups.includes(:proposals).find(params[:id])
-    @title = "Editing #{@group.name} Details"
     @assignments = current_course.assignments.group_assignments
-
     respond_to do |format|
       if @group.update_attributes(params[:group])
-        format.html { respond_with @group }
+        format.html { respond_with @group, notice: "#{@group.name} #{term_for :group} successfully updated" }
       else
-        if current_user_is_student?
-          @other_students = current_course.students.where.not(id: current_user.id)
-        end
-        format.html {render :action => "edit", :group => @group }
+        @other_students = potential_team_members
+        format.html { render :action => "edit", :group => @group }
       end
     end
   end
 
   def destroy
-    @group = current_course.groups.find(params[:id])
     @name = @group.name
     @group.destroy
 
@@ -83,4 +72,15 @@ class GroupsController < ApplicationController
       format.html { redirect_to groups_path, notice: "#{@name} #{term_for :group} successfully deleted" }
     end
   end
+
+  private 
+
+  def potential_team_members
+    current_course.students.where.not(id: current_user.id)
+  end
+
+  def find_group
+    @group = current_course.groups.includes(:proposals).find(params[:id])
+  end
+
 end
