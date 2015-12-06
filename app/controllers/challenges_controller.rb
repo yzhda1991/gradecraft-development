@@ -2,6 +2,7 @@ class ChallengesController < ApplicationController
 
   before_filter :ensure_staff?, :except=>[:index, :show, :predictor_data, :predict_points]
   before_filter :ensure_student?, only: [:predict_points]
+  before_action :find_challenge, only: [:show, :edit, :update, :destroy]
 
   def index
     @title = "#{term_for :challenges}"
@@ -9,7 +10,6 @@ class ChallengesController < ApplicationController
   end
 
   def show
-    @challenge = current_course.challenges.find(params[:id])
     @title = @challenge.name
     @teams = current_course.teams
   end
@@ -20,7 +20,6 @@ class ChallengesController < ApplicationController
   end
 
   def edit
-    @challenge = current_course.challenges.find(params[:id])
     @title = "Editing #{@challenge.name}"
   end
 
@@ -53,8 +52,6 @@ class ChallengesController < ApplicationController
       params[:challenge].delete :challenge_files_attributes
     end
 
-    @challenge = current_course.challenges.includes(:challenge_score_levels).find(params[:id])
-
     if @challenge_files
       @challenge_files.each do |cf|
         @challenge.challenge_files.new(file: cf, filename: cf.original_filename[0..49])
@@ -71,7 +68,6 @@ class ChallengesController < ApplicationController
   end
 
   def destroy
-    @challenge = current_course.challenges.find(params[:id])
     @name = "#{@challenge.name}"
     @challenge.destroy
 
@@ -115,6 +111,10 @@ class ChallengesController < ApplicationController
   end
 
   private
+
+  def find_challenge
+    @challenge = current_course.challenges.includes(:challenge_score_levels).find(params[:id])
+  end
 
   def predictor_event_attrs
     {
