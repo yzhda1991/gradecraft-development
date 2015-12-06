@@ -240,6 +240,14 @@ class Course < ActiveRecord::Base
     point_total || assignments.sum('point_total')
   end
 
+  def timeline_events
+    if team_challenges?
+      assignments.timelineable.with_dates.to_a + challenges.with_dates.to_a + events.with_dates.to_a
+    else
+      assignments.timelineable.with_dates.to_a + events.with_dates.to_a
+    end
+  end
+
   def active?
     status == true
   end

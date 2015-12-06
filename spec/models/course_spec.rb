@@ -435,6 +435,24 @@ describe Course do
     end
   end
 
+  describe "#timeline_events" do 
+    it "returns all assignments with dates and events" do  
+      course = create(:course)
+      @assignment = create(:assignment, course: course, due_at: Date.today) 
+      @event = create(:event, course: course, due_at: Date.today)
+      @assignment_no_date = create(:assignment, course: course)
+      expect(course.timeline_events).to eq([@assignment, @event])
+    end
+
+    it "includes challenges with dates" do 
+      course = create(:course, team_challenges: true)
+      @assignment = create(:assignment, course: course, due_at: Date.today) 
+      @challenge = create(:challenge, course: course, due_at: Date.today)
+      @challenge_no_date = create(:challenge, course: course)
+      expect(course.timeline_events).to eq([@assignment, @challenge])
+    end
+  end
+
   describe "#student_weighted?" do 
     it "returns false if no weights are set" do 
       subject.total_assignment_weight = nil
