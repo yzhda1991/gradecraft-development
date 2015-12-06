@@ -2,12 +2,16 @@ class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
   before_filter :ensure_staff?, :except => [ :dashboard, :timeline_events ]
+  before_action :find_team, only: [ :awarded_badges, :choices, :resubmissions ]
+  before_action :find_students, only: [ :awarded_badges, :choices  ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
-    @grade_scheme_elements = current_course.grade_scheme_elements
-    #checking to see if the course uses the interactive timeline - if not sending students to their syllabus, and the staff to top 10
-    if ! current_course.use_timeline?
+    #checking to see if the course uses the interactive timeline - 
+    # if not sending students to their syllabus, and the staff to top 10
+    if current_course.use_timeline?
+      render :dashboard
+    else
       if current_user_is_student?
         redirect_to syllabus_path
       else
@@ -23,21 +27,12 @@ class InfoController < ApplicationController
 
   def awarded_badges
     @title = "Awarded #{term_for :badges}"
-
     @teams = current_course.teams
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-
-    if @team
-      @students = current_course.students_being_graded_by_team(@team)
-    else
-      @students = current_course.students_being_graded
-    end
   end
 
   # Displaying all ungraded, graded but unreleased, and in progress assignment submissions in the system
   def grading_status
     @title = "Grading Status"
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
     grades = current_course.grades
     unrealeased_grades = grades.not_released
     in_progress_grades = grades.in_progress
@@ -56,7 +51,6 @@ class InfoController < ApplicationController
     resubmissions = current_course.submissions.resubmitted
 
     @teams = current_course.teams
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
     if @team
       @students ||= @team.students.pluck(:id)
       @resubmissions = resubmissions.where(student_id: @students)
@@ -137,15 +131,20 @@ class InfoController < ApplicationController
   def choices
     @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types
-    @teams = current_course.teams
+    @teams = current_course.teams    
+  end
+
+  private
+
+  def find_team
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+  end
 
+  def find_students
     if @team
-      students = current_course.students_being_graded_by_team(@team)
+      @students = current_course.students_being_graded_by_team(@team)
     else
-      students = current_course.students_being_graded
+      @students = current_course.students_being_graded
     end
-
-    @students = students
   end
 end
