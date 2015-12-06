@@ -36,10 +36,8 @@ class AssignmentTypesController < ApplicationController
     respond_to do |format|
       if @assignment_type.save
         format.html { redirect_to @assignment_type, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully created" } }
-        format.json { render json: @assignment_type, status: :created, location: @assignment_type }
       else
         format.html { render action: "new" }
-        format.json { render json: @assignment_type.errors }
       end
     end
   end
@@ -55,7 +53,6 @@ class AssignmentTypesController < ApplicationController
         format.html { redirect_to assignment_types_path, :flash => { :success => "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" } }
       else
         format.html { render action: "edit" }
-        format.json { render json: @assignment_type.errors }
       end
     end
   end
