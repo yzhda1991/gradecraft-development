@@ -137,14 +137,6 @@ describe InfoController do
         expect(response).to render_template(:choices)
       end
     end
-
-    describe "GET all_grades" do
-      it "retrieves the all grades" do
-        skip "implement"
-        get :all_grades
-        expect(response).to render_template(:all_grades)
-      end
-    end
   end
 
   context "as a student" do
@@ -181,8 +173,7 @@ describe InfoController do
         :multiplied_gradebook,
         :final_grades,
         :research_gradebook,
-        :choices,
-        :all_grades
+        :choices
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route).to redirect_to(:root)

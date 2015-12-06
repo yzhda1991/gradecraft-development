@@ -148,9 +148,4 @@ class InfoController < ApplicationController
 
     @students = students
   end
-
-  # Display all grades in the course in list form
-  def all_grades
-    @grades = current_course.grades.paginate(:page => params[:page], :per_page => 500)
-  end
 end
