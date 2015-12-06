@@ -30,7 +30,7 @@
 * Multi-factor leveling system
 
 ## Pre-reqs:
-* Ruby 2.2
+* Ruby 2.2.2
 * PostgreSQL
 * MongoDB
 * Redis
