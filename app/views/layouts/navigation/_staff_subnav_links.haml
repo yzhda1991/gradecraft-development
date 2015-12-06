@@ -43,9 +43,9 @@
 %hr
 
 %h5 Analytics
-%li= link_to_unless_current raw('<i class="fa fa-star-half-empty fa-fw"></i> Top 10/Bottom 10'), analytics_top_10_path
+%li= link_to_unless_current raw('<i class="fa fa-star-half-empty fa-fw"></i> Top 10/Bottom 10'), top_10_path
 %li= link_to_unless_current raw('<i class="fa fa-bar-chart fa-fw"></i> System Analytics'), analytics_students_path
-%li= link_to_unless_current raw("<i class='fa fa-heartbeat fa-fw'></i> #{term_for :assignment} Analytics"), analytics_per_assign_path
+%li= link_to_unless_current raw("<i class='fa fa-heartbeat fa-fw'></i> #{term_for :assignment} Analytics"), per_assign_path
 
 - if current_user_is_professor? || current_user_is_admin?
   %hr

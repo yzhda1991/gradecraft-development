@@ -2,7 +2,7 @@
 require 'rails_spec_helper'
 include CourseTerms
 
-describe "analytics/per_assign" do
+describe "info/per_assign" do
 
   before(:all) do
     @course = create(:course)

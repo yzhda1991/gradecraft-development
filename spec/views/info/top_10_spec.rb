@@ -2,7 +2,7 @@
 require 'rails_spec_helper'
 include CourseTerms
 
-describe "analytics/top_10" do
+describe "info/top_10" do
 
   before(:all) do
     @course = create(:course)
