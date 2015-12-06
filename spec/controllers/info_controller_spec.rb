@@ -57,6 +57,22 @@ describe InfoController do
       end
     end
 
+    describe "GET top_10" do
+      it "returns the Top 10/Bottom 10 page for the current course" do
+        get :top_10
+        expect(assigns(:title)).to eq("Top 10/Bottom 10")
+        expect(response).to render_template(:top_10)
+      end
+    end
+
+    describe "GET per_assign" do
+      it "returns the Assignment Analytics page for the current course" do
+        get :per_assign
+        expect(assigns(:title)).to eq("assignment Analytics")
+        expect(response).to render_template(:per_assign)
+      end
+    end
+
     describe "GET gradebook" do
       it "retrieves the gradebook" do
         expect(GradebookExporterJob).to \
@@ -160,6 +176,8 @@ describe InfoController do
         :grading_status,
         :resubmissions,
         :ungraded_submissions,
+        :top_10, 
+        :per_assign,
         :gradebook,
         :multiplied_gradebook,
         :final_grades,

@@ -11,7 +11,7 @@ class InfoController < ApplicationController
       if current_user_is_student?
         redirect_to syllabus_path
       else
-        redirect_to analytics_top_10_path
+        redirect_to top_10_path
       end
     end
   end
@@ -74,11 +74,37 @@ class InfoController < ApplicationController
     @resubmission_count = @resubmissions.count
   end
 
-
   def ungraded_submissions
     @title = "Ungraded #{term_for :assignment} Submissions"
     @ungraded_submissions = current_course.submissions.ungraded.date_submitted.includes(:assignment, :student, :submission_files)
     @count_ungraded = @ungraded_submissions.count
+  end
+
+  # Displaying the top 10 and bottom 10 students for quick overview
+  def top_10
+    @title = "Top 10/Bottom 10"
+    students = current_course.students_being_graded
+    students.each do |s|
+      s.score = s.cached_score_for_course(current_course)
+      s.team_for_course(current_course)
+    end
+    @students = students.to_a.sort_by {|student| student.score}.reverse
+    if @students.length <= 10
+      @top_ten_students = students
+    elsif @students.length <= 20
+      @top_ten_students = @students[0..9]
+      @count = @students.length
+      @bottom_ten_students = @students[10..@count]
+    else
+      @top_ten_students = @students[0..9]
+      @bottom_ten_students = @students[-10..-1]
+    end
+  end
+
+  # Displaying per assignment summary outcome statistics
+  def per_assign
+    @assignment_types = current_course.assignment_types.includes(:assignments)
+    @title = "#{term_for :assignment} Analytics"
   end
 
   def gradebook

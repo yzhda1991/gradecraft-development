@@ -21,33 +21,6 @@ class AnalyticsController < ApplicationController
     render json: MultiJson.dump(data)
   end
 
-  # Displaying the top 10 and bottom 10 students for quick overview
-  def top_10
-    @title = "Top 10/Bottom 10"
-    students = current_course.students_being_graded
-    students.each do |s|
-      s.score = s.cached_score_for_course(current_course)
-      s.team_for_course(current_course)
-    end
-    @students = students.to_a.sort_by {|student| student.score}.reverse
-    if @students.length <= 10
-      @top_ten_students = students
-    elsif @students.length <= 20
-      @top_ten_students = @students[0..9]
-      @count = @students.length
-      @bottom_ten_students = @students[10..@count]
-    else
-      @top_ten_students = @students[0..9]
-      @bottom_ten_students = @students[-10..-1]
-    end
-  end
-
-  # Displaying per assignment summary outcome statistics
-  def per_assign
-    @assignment_types = current_course.assignment_types.includes(:assignments)
-    @title = "#{term_for :assignment} Analytics"
-  end
-
   def role_events
     data = CourseRoleEvent.data(@granularity, @range, {course_id: current_course.id, role_group: params[:role_group]}, {event_type: "_all"})
 
