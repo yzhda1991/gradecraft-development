@@ -221,7 +221,6 @@ GradeCraft::Application.routes.draw do
 
   #10. Informational Pages
   namespace :info do
-    get :all_grades
     get :choices
     get :awarded_badges
     get :dashboard

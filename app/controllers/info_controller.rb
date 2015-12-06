@@ -17,11 +17,7 @@ class InfoController < ApplicationController
   end
 
   def timeline_events
-    if current_course.team_challenges?
-      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.challenges.with_dates.to_a + current_course.events.with_dates.to_a
-    else
-      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.events.with_dates.to_a
-    end
+    @events = current_course.timeline_events
     render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])
   end
 
@@ -32,12 +28,10 @@ class InfoController < ApplicationController
     @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
 
     if @team
-      students = current_course.students_being_graded_by_team(@team)
+      @students = current_course.students_being_graded_by_team(@team)
     else
-      students = current_course.students_being_graded
+      @students = current_course.students_being_graded
     end
-
-    @students = students
   end
 
   # Displaying all ungraded, graded but unreleased, and in progress assignment submissions in the system
@@ -54,7 +48,6 @@ class InfoController < ApplicationController
     @count_unreleased = unrealeased_grades.not_released.count
     @count_ungraded = @ungraded_submissions.count
     @count_in_progress = in_progress_grades.count
-    @badges = current_course.badges.includes(:tasks)
   end
 
   # Displaying all resubmisisons
@@ -126,8 +119,7 @@ class InfoController < ApplicationController
 
   def final_grades
     respond_to do |format|
-      format.csv { send_data current_course.final_grades_for_course(current_course) }
-      format.xls { send_data current_course.final_grades_for_course(current_course).to_csv(col_sep: "\t") }
+      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
     end
   end
 
@@ -155,10 +147,5 @@ class InfoController < ApplicationController
     end
 
     @students = students
-  end
-
-  # Display all grades in the course in list form
-  def all_grades
-    @grades = current_course.grades.paginate(:page => params[:page], :per_page => 500)
   end
 end

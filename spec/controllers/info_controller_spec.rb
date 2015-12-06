@@ -117,9 +117,8 @@ describe InfoController do
 
     describe "GET final_grades" do
       it "retrieves the final_grades download" do
-        skip "implement"
-        get :final_grades
-        expect(response).to render_template(:final_grades)
+        get :final_grades, :format => :csv
+        expect(response.body).to include("First Name,Last Name,Email,Username,Score,Grade")
       end
     end
 
@@ -136,14 +135,6 @@ describe InfoController do
         get :choices
         expect(assigns(:title)).to eq("Multiplier Choices")
         expect(response).to render_template(:choices)
-      end
-    end
-
-    describe "GET all_grades" do
-      it "retrieves the all grades" do
-        skip "implement"
-        get :all_grades
-        expect(response).to render_template(:all_grades)
       end
     end
   end
@@ -182,8 +173,7 @@ describe InfoController do
         :multiplied_gradebook,
         :final_grades,
         :research_gradebook,
-        :choices,
-        :all_grades
+        :choices
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route).to redirect_to(:root)

@@ -240,6 +240,14 @@ class Course < ActiveRecord::Base
     point_total || assignments.sum('point_total')
   end
 
+  def timeline_events
+    if team_challenges?
+      assignments.timelineable.with_dates.to_a + challenges.with_dates.to_a + events.with_dates.to_a
+    else
+      assignments.timelineable.with_dates.to_a + events.with_dates.to_a
+    end
+  end
+
   def active?
     status == true
   end
@@ -353,16 +361,6 @@ class Course < ActiveRecord::Base
       csv << ["ID", "Name", "Point Total", "Description", "Open At", "Due At", "Accept Until"  ]
       assignments.each do |assignment|
         csv << [ assignment.id, assignment.name, assignment.point_total, assignment.description, assignment.open_at, assignment.due_at, assignment.accepts_submissions_until  ]
-      end
-    end
-  end
-
-  #final grades - total score + grade earned in course
-  def final_grades_for_course(course, options = {})
-    CSV.generate(options) do |csv|
-      csv << ["First Name", "Last Name", "Email", "Score", "Grade" ]
-      course.students.each do |student|
-        csv << [student.first_name, student.last_name, student.email, student.cached_score_for_course(course), student.grade_letter_for_course(course)]
       end
     end
   end
