@@ -17,8 +17,6 @@ Vagrant.configure(2) do |config|
         dpkg-reconfigure -f noninteractive tzdata
 
         # Add repository for dependancies
-        # apt-add-repository -y ppa:brightbox/ruby-ng
-
         # Per https://docs.mongodb.org/manual/tutorial/install-mongodb-on-ubuntu/
         apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
         echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" >> /etc/apt/sources.list.d/mongodb-org-3.0.list
