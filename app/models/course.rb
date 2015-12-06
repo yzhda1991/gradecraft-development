@@ -357,16 +357,6 @@ class Course < ActiveRecord::Base
     end
   end
 
-  #final grades - total score + grade earned in course
-  def final_grades_for_course(course, options = {})
-    CSV.generate(options) do |csv|
-      csv << ["First Name", "Last Name", "Email", "Score", "Grade" ]
-      course.students.each do |student|
-        csv << [student.first_name, student.last_name, student.email, student.cached_score_for_course(course), student.grade_letter_for_course(course)]
-      end
-    end
-  end
-
   #gradebook spreadsheet export for course
   # todo: refactor this, maybe into a Gradebook class
   def csv_gradebook

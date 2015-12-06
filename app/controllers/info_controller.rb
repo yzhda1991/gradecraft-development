@@ -126,8 +126,7 @@ class InfoController < ApplicationController
 
   def final_grades
     respond_to do |format|
-      format.csv { send_data current_course.final_grades_for_course(current_course) }
-      format.xls { send_data current_course.final_grades_for_course(current_course).to_csv(col_sep: "\t") }
+      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
     end
   end
 

@@ -117,9 +117,8 @@ describe InfoController do
 
     describe "GET final_grades" do
       it "retrieves the final_grades download" do
-        skip "implement"
-        get :final_grades
-        expect(response).to render_template(:final_grades)
+        get :final_grades, :format => :csv
+        expect(response.body).to include("First Name,Last Name,Email,Username,Score,Grade")
       end
     end
 

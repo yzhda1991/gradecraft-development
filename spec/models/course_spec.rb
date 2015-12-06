@@ -647,10 +647,6 @@ describe Course do
     skip "implement"
   end
 
-  describe "#final_grades_for_course(course, options = {})" do  
-    skip "implement"
-  end
-
   describe "#csv_gradebook" do  
     skip "implement"
   end
