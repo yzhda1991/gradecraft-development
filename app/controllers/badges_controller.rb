@@ -2,6 +2,7 @@ class BadgesController < ApplicationController
 
   before_filter :ensure_staff?, :except => [:predictor_data, :predict_times_earned]
   before_filter :ensure_student?, only: [:predict_times_earned]
+  before_action :find_badge, only: [:show, :edit, :update, :destroy]
 
   def index
     @title = "#{term_for :badges}"
@@ -9,7 +10,6 @@ class BadgesController < ApplicationController
   end
 
   def show
-    @badge = current_course.badges.find(params[:id])
     @title = @badge.name
     @earned_badges = @badge.earned_badges
     @teams = current_course.teams
@@ -28,7 +28,6 @@ class BadgesController < ApplicationController
   end
 
   def edit
-    @badge = current_course.badges.find(params[:id])
     @title = "Editing #{@badge.name}"
   end
 
@@ -61,8 +60,6 @@ class BadgesController < ApplicationController
       params[:badge].delete :badge_files_attributes
     end
 
-    @badge = current_course.badges.find(params[:id])
-
     if @badge_files
       @badge_files.each do |af|
         @badge.badge_files.new(file: af, filename: af.original_filename[0..49])
@@ -84,13 +81,11 @@ class BadgesController < ApplicationController
   end
 
   def destroy
-    @badge = current_course.badges.find(params[:id])
     @name = @badge.name
     @badge.destroy
 
     respond_to do |format|
       format.html { redirect_to badges_path, notice: "#{@name} #{term_for :badge} successfully deleted" }
-      format.json { head :ok }
     end
   end
 
@@ -174,5 +169,9 @@ class BadgesController < ApplicationController
       end
     end
     return badges
+  end
+
+  def find_badge 
+    @badge = current_course.badges.find(params[:id])
   end
 end
