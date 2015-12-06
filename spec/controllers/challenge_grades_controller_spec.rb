@@ -50,17 +50,16 @@ describe ChallengeGradesController do
         get :new, {:challenge_id => @challenge, :team_id => @team}
         expect(assigns(:challenge)).to eq(@challenge)
         expect(assigns(:team)).to eq(@team)
-        expect(assigns(:teams)).to eq([@team])
         expect(response).to render_template(:new)
       end
     end
 
     describe "GET edit" do
       it "shows the edit challenge grade form" do
-        get :edit, {:id => @challenge_grade, :challenge_id => @challenge}
+        get :edit, {:id => @challenge_grade, :challenge_id => @challenge, :team_id => @team.id }
         expect(assigns(:challenge)).to eq(@challenge)
         expect(assigns(:challenge_grade)).to eq(@challenge_grade)
-        expect(assigns(:teams)).to eq([@team])
+        expect(assigns(:team)).to eq(@team)
         expect(response).to render_template(:edit)
       end
     end
@@ -111,17 +110,24 @@ describe ChallengeGradesController do
     end
 
     describe "POST mass_update" do
-      let(:challenge_grades_attributes) do
-        { "#{@challenge.challenge_grades.index(@challenge_grade)}" =>
+      it "updates the challenge grades for the specific challenge" do
+        challenge_grades_attributes = { "#{@challenge.challenge_grades.index(@challenge_grade)}" =>
           { team_id: @team.id, score: 1000, status: "Released",
             id: @challenge_grade.id
           }
         }
-      end
-
-      it "updates the challenge grades for the specific challenge" do
         put :mass_update, id: @challenge.id, challenge: { challenge_grades_attributes: challenge_grades_attributes }
         expect(@challenge_grade.reload.score).to eq 1000
+      end
+
+      it "redirects to the mass_edit form if attributes are invalid" do 
+        challenge_grades_attributes = { "#{@challenge.challenge_grades.index(@challenge_grade)}" =>
+          { team_id: nil, score: 1000, status: "Released",
+            id: @challenge_grade.id
+          }
+        }
+        put :mass_update, id: @challenge.id, challenge: { challenge_grades_attributes: challenge_grades_attributes }
+        expect(response).to render_template(:mass_edit)
       end
     end
 
@@ -134,7 +140,10 @@ describe ChallengeGradesController do
     end
 
     describe "POST update_status" do 
-      skip "implement"
+      it "updates the status of multiple challenge grades" do 
+        post :update_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ], :challenge_grade => {"status"=> "Released"}}
+        expect(response).to redirect_to challenge_path(@challenge)
+      end
     end
 
     describe "GET destroy" do
