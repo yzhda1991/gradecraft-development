@@ -82,33 +82,8 @@ class AssignmentsController < ApplicationController
   end
 
   def rubric_grades_review
-    @assignment = current_course.assignments.find(params[:id])
-    @title = @assignment.name
-    @groups = @assignment.groups
-
-    @teams = current_course.teams
-
-    if params[:team_id].present?
-      @team = @teams.find_by(team_params)
-      @students = current_course.students_being_graded.joins(:teams).where(:teams => team_params)
-      @auditors = current_course.students_auditing.joins(:teams).where(:teams => team_params)
-    else
-      @students = current_course.students_being_graded
-      @auditors = current_course.students_auditing
-    end
-
-    @students.sort_by { |student| [ student.last_name, student.first_name ] }
-
-    @rubric = @assignment.fetch_or_create_rubric
-    @metrics = @rubric.metrics.ordered
-    @metrics.each do |m|
-      m.tiers = m.tiers.includes(:tier_badges).order("points ASC")
-    end
-    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
-    @course_student_ids = current_course.students.map(&:id)
-
-    @viewable_rubric_grades = @assignment.rubric_grades
-    render :rubric_grades_review, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+    assignment = current_course.assignments.find(params[:id])
+    render :rubric_grades_review, AssignmentPresenter.build({ assignment: assignment, course: current_course,
                                                               team_id: params[:team_id], view_context: view_context })
   end
 

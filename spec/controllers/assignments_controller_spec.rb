@@ -155,63 +155,9 @@ describe AssignmentsController do
     end
 
     describe "GET rubric_grades_review" do
-      it "assigns attributes for display" do
-        group = create(:group, course: @course)
-        group.assignments << @assignment
-
+      it "renders the correct template" do
         get :rubric_grades_review, :id => @assignment
-        expect(assigns(:title)).to eq(@assignment.name)
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:groups)).to eq([group])
         expect(response).to render_template(:rubric_grades_review)
-      end
-
-      it "assigns the rubric as rubric" do
-        rubric = create(:rubric_with_metrics, assignment: @assignment)
-        get :rubric_grades_review, :id => @assignment.id
-        expect(assigns(:rubric)).to eq(rubric)
-      end
-
-      it "assigns assignment score levels ordered by value" do
-        assignment_score_level_second = create(:assignment_score_level, assignment: @assignment, value: "1000")
-        assignment_score_level_first = create(:assignment_score_level, assignment: @assignment, value: "100")
-        get :rubric_grades_review, :id => @assignment.id
-        expect(assigns(:assignment_score_levels)).to eq([assignment_score_level_first,assignment_score_level_second])
-      end
-
-      it "assigns student ids" do
-        get :rubric_grades_review, :id => @assignment.id
-        expect(assigns(:course_student_ids)).to eq([@student.id])
-      end
-
-      describe "with team id in params" do
-        it "assigns team and students for team" do
-          # we verify only students on team assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-
-          get :rubric_grades_review, {:id => @assignment.id, :team_id => team.id}
-          expect(assigns(:team)).to eq(team)
-          expect(assigns(:students)).to eq([@student])
-        end
-      end
-
-      describe "with no team id in params" do
-        it "assigns all students if no team supplied" do
-          # we verify non-team members also assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-
-          get :rubric_grades_review, :id => @assignment.id
-          expect(assigns(:students)).to include(@student)
-          expect(assigns(:students)).to include(other_student)
-        end
       end
     end
 
