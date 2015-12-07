@@ -47,7 +47,7 @@ class GradesController < ApplicationController
       @rubric = @assignment.rubric
       @rubric_grades = serialized_rubric_grades
       # This is a patch for the Angular GradeRubricCtrl
-      @return_path = URI(request.referer).path
+      @return_path = URI(request.referer).path + "?student_id=#{current_student.id}"
     end
 
     @serialized_init_data = serialized_init_data

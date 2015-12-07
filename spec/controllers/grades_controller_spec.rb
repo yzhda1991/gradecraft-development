@@ -120,7 +120,7 @@ describe GradesController do
         get :edit, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
         expect(JSON.parse(assigns(:rubric_grades))).to eq([{ "id" => rubric_grade.id, "metric_id" => metric.id, "tier_id" => tier.id, "comments" => nil }])
-        expect(assigns(:return_path)).to eq('/assignments/123')
+        expect(assigns(:return_path)).to eq("/assignments/123?student_id=#{@student.id}")
       end
     end
 
