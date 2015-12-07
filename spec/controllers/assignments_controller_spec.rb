@@ -146,11 +146,11 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET update_rubrics" do
+    describe "PUT update_rubrics" do
       it "assigns true or false to assignment use_rubric" do
         @assignment.update(:use_rubric => false)
-        post :update_rubrics, :id => @assignment, :use_rubric => true
-        expect(@assignment.reload.use_rubric).to be_truthy
+        put :update_rubrics, id: @assignment, use_rubric: true
+        expect(@assignment.reload.use_rubric).to eq true
       end
     end
 
