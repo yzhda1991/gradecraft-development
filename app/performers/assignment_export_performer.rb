@@ -319,10 +319,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # archive export directory
   def archive_exported_files
-    case @archive_type
-    when :zip
-      `zip -r - #{tmp_dir} | pv -L #{@rate_limit} > #{expanded_archive_base_path}.zip`
-    end
+    `zip -r - #{tmp_dir} | pv -L 200k > #{expanded_archive_base_path}.zip`
   end
 
   # upload archive to S3
