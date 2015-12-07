@@ -1,4 +1,5 @@
 class AssignmentTypesController < ApplicationController
+  include SortsPosition
 
   before_filter :ensure_staff?, :except => [:predictor_data]
   before_action :find_assignment_type, only: [:show, :edit, :update, :export_scores, :all_grades, :destroy]
@@ -55,10 +56,7 @@ class AssignmentTypesController < ApplicationController
   end
 
   def sort
-    params[:"assignment-type"].each_with_index do |id, index|
-      current_course.assignment_types.update(id, position: index + 1)
-    end
-    render nothing: true
+    sort_position_for "assignment-type"
   end
 
   def export_scores
@@ -72,7 +70,7 @@ class AssignmentTypesController < ApplicationController
       respond_to do |format|
         format.csv { send_data AssignmentTypeExporter.new.export_summary_scores current_course.assignment_types, current_course, current_course.students }
       end
-    else 
+    else
       redirect_to dashboard_path, :flash => { :error => "Sorry! You have not yet created an #{(term_for :assignment_type).titleize} for this course" }
     end
   end

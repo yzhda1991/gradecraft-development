@@ -1,5 +1,6 @@
 class AssignmentsController < ApplicationController
   include AssignmentsHelper
+  include SortsPosition
 
   before_filter :ensure_staff?, except: [:show, :index, :predictor_data]
 
@@ -69,10 +70,7 @@ class AssignmentsController < ApplicationController
   end
 
   def sort
-    params[:"assignment"].each_with_index do |id, index|
-      current_course.assignments.update(id, position: index + 1)
-    end
-    render nothing: true
+    sort_position_for :assignment
   end
 
   def update_rubrics
