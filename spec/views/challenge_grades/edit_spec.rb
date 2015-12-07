@@ -8,15 +8,13 @@ describe "challenge_grades/edit" do
     @course = create(:course)
     @challenge = create(:challenge, course: @course)
     @challenge_grade = create(:challenge_grade, challenge: @challenge)
-    @team_1 = create(:team, course: @course)
-    @team_2 = create(:team, course: @course)
-    @course.teams << [@team_1, @team_2]
-    @teams = @course.teams
+    @team = create(:team, course: @course)
   end
 
   before(:each) do
     assign(:title, "Editing Challenge Grade")
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:team).and_return(@team)
   end
 
   it "renders successfully" do

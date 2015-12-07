@@ -38,22 +38,6 @@ describe AnalyticsController do
         expect(response).to render_template(:staff)
       end
     end
-
-    describe "GET top_10" do
-      it "returns the Top 10/Bottom 10 page for the current course" do
-        get :top_10
-        expect(assigns(:title)).to eq("Top 10/Bottom 10")
-        expect(response).to render_template(:top_10)
-      end
-    end
-
-    describe "GET per_assign" do
-      it "returns the Assignment Analytics page for the current course" do
-        get :per_assign
-        expect(assigns(:title)).to eq("assignment Analytics")
-        expect(response).to render_template(:per_assign)
-      end
-    end
   end
 
   context "as a student" do
@@ -74,8 +58,6 @@ describe AnalyticsController do
         :students,
         :staff,
         :all_events,
-        :top_10,
-        :per_assign,
         :role_events,
         :assignment_events,
         :login_frequencies,

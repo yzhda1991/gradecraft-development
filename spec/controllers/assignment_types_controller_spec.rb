@@ -64,7 +64,7 @@ describe AssignmentTypesController do
         expect{ post :create, :assignment_type => params }.to change(AssignmentType,:count).by(1)
       end
 
-      it "redirects to new from with invalid attributes" do
+      it "redirects to new form with invalid attributes" do
         expect{ post :create, assignment_type: attributes_for(:assignment_type, name: nil) }.to_not change(AssignmentType,:count)
       end
     end
@@ -113,8 +113,14 @@ describe AssignmentTypesController do
       context "with CSV format" do
         it "returns all scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
-          get :export_all_scores, :id => @assignment_type, :format => :csv
+          get :export_all_scores, :format => :csv
           expect(response.body).to include("First Name,Last Name,Email,Username,Team")
+        end
+
+        it "redirects to the dashboard if no assignment types exist" do 
+          @assignment_type.destroy
+          get :export_all_scores, :format => :csv
+          expect(response).to redirect_to dashboard_path
         end
       end
     end

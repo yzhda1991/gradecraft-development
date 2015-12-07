@@ -27,8 +27,6 @@ GradeCraft::Application.routes.draw do
     root action: :index
     get :staff
     get :students
-    get :top_10
-    get :per_assign
     get :all_events
     get :role_events
     get :assignment_events
@@ -204,6 +202,8 @@ GradeCraft::Application.routes.draw do
   get 'grading_status' => 'info#grading_status'
   get 'resubmissions' => 'info#resubmissions'
   get 'ungraded_submissions' => 'info#ungraded_submissions'
+  get 'top_10' => 'info#top_10'
+  get 'per_assign' => 'info#per_assign'
   get 'gradebook' => 'info#gradebook'
   get 'multiplied_gradebook' => 'info#multiplied_gradebook'
   get 'final_grades' => 'info#final_grades'
@@ -221,13 +221,14 @@ GradeCraft::Application.routes.draw do
 
   #10. Informational Pages
   namespace :info do
-    get :all_grades
     get :choices
     get :awarded_badges
     get :dashboard
     get :grading_status
     get :timeline_events
     get :resubmissions
+    get :top_10
+    get :per_assign
   end
 
   resources :home

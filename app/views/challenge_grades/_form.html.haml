@@ -1,8 +1,8 @@
 = simple_form_for([@challenge, @challenge_grade]) do |f|
   %section
     %h4 Score
-    
-    .form-item= f.association :team, :collection => @teams
+
+    = f.hidden_field :team_id, :team_id => @team.id
 
     .form-item
       = f.label :score

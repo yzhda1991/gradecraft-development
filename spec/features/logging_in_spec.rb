@@ -12,7 +12,7 @@ feature "logging in" do
     scenario "with a password successfully" do
       LoginPage.new(user).submit({ password: password })
 
-      expect(current_path).to eq syllabus_path
+      expect(current_path).to eq dashboard_path
       within("header") do
         expect(page).to have_content user.display_name
       end

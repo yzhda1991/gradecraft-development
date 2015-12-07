@@ -2,48 +2,37 @@ class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
   before_filter :ensure_staff?, :except => [ :dashboard, :timeline_events ]
+  before_action :find_team, only: [ :awarded_badges, :choices, :resubmissions ]
+  before_action :find_students, only: [ :awarded_badges, :choices  ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
-    @grade_scheme_elements = current_course.grade_scheme_elements
-    #checking to see if the course uses the interactive timeline - if not sending students to their syllabus, and the staff to top 10
-    if ! current_course.use_timeline?
+    #checking to see if the course uses the interactive timeline - 
+    # if not sending students to their syllabus, and the staff to top 10
+    if current_course.use_timeline?
+      render :dashboard
+    else
       if current_user_is_student?
         redirect_to syllabus_path
       else
-        redirect_to analytics_top_10_path
+        redirect_to top_10_path
       end
     end
   end
 
   def timeline_events
-    if current_course.team_challenges?
-      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.challenges.with_dates.to_a + current_course.events.with_dates.to_a
-    else
-      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.events.with_dates.to_a
-    end
+    @events = current_course.timeline_events
     render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])
   end
 
   def awarded_badges
     @title = "Awarded #{term_for :badges}"
-
     @teams = current_course.teams
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-
-    if @team
-      students = current_course.students_being_graded_by_team(@team)
-    else
-      students = current_course.students_being_graded
-    end
-
-    @students = students
   end
 
   # Displaying all ungraded, graded but unreleased, and in progress assignment submissions in the system
   def grading_status
     @title = "Grading Status"
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
     grades = current_course.grades
     unrealeased_grades = grades.not_released
     in_progress_grades = grades.in_progress
@@ -54,7 +43,6 @@ class InfoController < ApplicationController
     @count_unreleased = unrealeased_grades.not_released.count
     @count_ungraded = @ungraded_submissions.count
     @count_in_progress = in_progress_grades.count
-    @badges = current_course.badges.includes(:tasks)
   end
 
   # Displaying all resubmisisons
@@ -63,7 +51,6 @@ class InfoController < ApplicationController
     resubmissions = current_course.submissions.resubmitted
 
     @teams = current_course.teams
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
     if @team
       @students ||= @team.students.pluck(:id)
       @resubmissions = resubmissions.where(student_id: @students)
@@ -74,11 +61,37 @@ class InfoController < ApplicationController
     @resubmission_count = @resubmissions.count
   end
 
-
   def ungraded_submissions
     @title = "Ungraded #{term_for :assignment} Submissions"
     @ungraded_submissions = current_course.submissions.ungraded.date_submitted.includes(:assignment, :student, :submission_files)
     @count_ungraded = @ungraded_submissions.count
+  end
+
+  # Displaying the top 10 and bottom 10 students for quick overview
+  def top_10
+    @title = "Top 10/Bottom 10"
+    students = current_course.students_being_graded
+    students.each do |s|
+      s.score = s.cached_score_for_course(current_course)
+      s.team_for_course(current_course)
+    end
+    @students = students.to_a.sort_by {|student| student.score}.reverse
+    if @students.length <= 10
+      @top_ten_students = students
+    elsif @students.length <= 20
+      @top_ten_students = @students[0..9]
+      @count = @students.length
+      @bottom_ten_students = @students[10..@count]
+    else
+      @top_ten_students = @students[0..9]
+      @bottom_ten_students = @students[-10..-1]
+    end
+  end
+
+  # Displaying per assignment summary outcome statistics
+  def per_assign
+    @assignment_types = current_course.assignment_types.includes(:assignments)
+    @title = "#{term_for :assignment} Analytics"
   end
 
   def gradebook
@@ -100,8 +113,7 @@ class InfoController < ApplicationController
 
   def final_grades
     respond_to do |format|
-      format.csv { send_data current_course.final_grades_for_course(current_course) }
-      format.xls { send_data current_course.final_grades_for_course(current_course).to_csv(col_sep: "\t") }
+      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
     end
   end
 
@@ -119,20 +131,20 @@ class InfoController < ApplicationController
   def choices
     @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types
-    @teams = current_course.teams
-    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
-
-    if @team
-      students = current_course.students_being_graded_by_team(@team)
-    else
-      students = current_course.students_being_graded
-    end
-
-    @students = students
+    @teams = current_course.teams    
   end
 
-  # Display all grades in the course in list form
-  def all_grades
-    @grades = current_course.grades.paginate(:page => params[:page], :per_page => 500)
+  private
+
+  def find_team
+    @team = current_course.teams.find_by(id: params[:team_id]) if params[:team_id]
+  end
+
+  def find_students
+    if @team
+      @students = current_course.students_being_graded_by_team(@team)
+    else
+      @students = current_course.students_being_graded
+    end
   end
 end

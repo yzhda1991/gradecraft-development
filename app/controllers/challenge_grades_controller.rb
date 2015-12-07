@@ -1,41 +1,35 @@
 class ChallengeGradesController < ApplicationController
 
   before_filter :ensure_staff?, :except => [:show]
+  before_action :find_challenge, only: [:index, :create, :show, :new, :edit, :mass_edit, :challenge, 
+    :update, :edit_status, :update_status, :destroy ]
+  before_action :find_challenge_grade, only: [:show, :edit, :update, :destroy]
 
   def index
-    @challenge = current_course.challenges.find(params[:challenge_id])
     redirect_to @challenge
   end
 
   def show
-    @challenge = current_course.challenges.find(params[:challenge_id])
-    @challenge_grade = @challenge.challenge_grades.find(params[:id])
     @team = @challenge_grade.team
     @title = "#{@team.name}'s #{@challenge_grade.name} Grade"
   end
 
   def new
-    @challenge = current_course.challenges.find(params[:challenge_id])
     @team = current_course.teams.find(params[:team_id])
-    @teams = current_course.teams
     @challenge_grade = @team.challenge_grades.new
     @title = "Grading #{@team.name}'s #{@challenge.name}"
   end
 
   def edit
-    @challenge = current_course.challenges.find(params[:challenge_id])
     @title = "Editing #{@challenge.name} Grade"
-    @teams = current_course.teams
-    @challenge_grade = @challenge.challenge_grades.find(params[:id])
+    @team = current_course.teams.find(params[:team_id])
   end
 
   # Grade many teams on a particular challenge at once
   def mass_edit
-    @challenge = current_course.challenges.find(params[:challenge_id])
     @teams = current_course.teams
     @title = "Quick Grade #{@challenge.name}"
     @challenge_score_levels = @challenge.challenge_score_levels
-    @students = current_course.students
     @challenge_grades = @teams.map do |t|
       @challenge.challenge_grades.where(:team_id => t).first || @challenge.challenge_grades.new(:team => t, :challenge => @challenge)
     end
@@ -52,12 +46,11 @@ class ChallengeGradesController < ApplicationController
 
   # @mz todo: refactor this whole thing, move into models and presenters
   def create
-    @challenge = current_course.challenges.find(params[:challenge_id])
     @challenge_grade = @challenge.challenge_grades.create(params[:challenge_grade])
     @team = @challenge_grade.team
     respond_to do |format|
       if @challenge_grade.save
-        if current_course.add_team_score_to_student? and challenge_grade_is_student_visible?
+        if current_course.add_team_score_to_student? and @challenge_grade.is_student_visible?
           # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
           @score_recalculator_jobs = @team.students.collect do |student|
             ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
@@ -73,8 +66,6 @@ class ChallengeGradesController < ApplicationController
 
   # @mz todo: refactor this whole thing, move into models and presenters
   def update
-    @challenge = current_course.challenges.find(params[:challenge_id])
-    @challenge_grade = current_course.challenge_grades.find(params[:id])
     @team = @challenge_grade.team
     respond_to do |format|
       if @challenge_grade.update_attributes(params[:challenge_grade])
@@ -99,24 +90,20 @@ class ChallengeGradesController < ApplicationController
 
   # Changing the status of a grade - allows instructors to review "Graded" grades, before they are "Released" to students
   def edit_status
-    @challenge = current_course.challenges.find(params[:challenge_id])
     @title = "#{@challenge.name} Grade Statuses"
     @challenge_grades = @challenge.challenge_grades.find(params[:challenge_grade_ids])
   end
 
   def update_status
-    @challenge = current_course.challenges.find(params[:challenge_id])
     @challenge_grades = @challenge.challenge_grades.find(params[:challenge_grade_ids])
     @challenge_grades.each do |challenge_grade|
       challenge_grade.update_attributes!(params[:challenge_grade].reject { |k,v| v.blank? })
     end
-    flash[:notice] = "Updated #{term_for :challenge} Grades!"
+    flash[:notice] = "Updated #{(term_for :challenge).titleize} Grades!"
     redirect_to challenge_path(@challenge)
   end
  
   def destroy
-    @challenge_grade = current_course.challenge_grades.find(params[:id])
-    @challenge = current_course.challenges.find(@challenge_grade.challenge_id)
     @team = @challenge_grade.team
 
     @challenge_grade.destroy
@@ -146,6 +133,14 @@ class ChallengeGradesController < ApplicationController
 
   def score_changed?
      @challenge_grade.previous_changes[:score].present?
+  end
+
+  def find_challenge
+    @challenge = current_course.challenges.find(params[:challenge_id])
+  end
+
+  def find_challenge_grade
+    @challenge_grade = @challenge.challenge_grades.find(params[:id])
   end
 
 end
