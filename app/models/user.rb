@@ -74,7 +74,7 @@ class User < ActiveRecord::Base
     :team_role, :course_memberships_attributes, :team_id, :lti_uid, :course_team_ids, :internal
 
   # all student display pages are ordered by last name except for the leaderboard, and top 10/bottom 10
-  default_scope { order('last_name ASC') }
+  default_scope { order('last_name ASC, first_name ASC') }
 
   scope :order_by_high_score, -> { includes(:course_memberships).order 'course_memberships.score DESC' }
   scope :order_by_low_score, -> { includes(:course_memberships).order 'course_memberships.score ASC' }

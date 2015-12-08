@@ -1,6 +1,6 @@
-= render partial: 'layouts/alerts', locals: { model: @assignment, term: term_for(:assignment) }
+= render partial: 'layouts/alerts', locals: { model: presenter.assignment, term: term_for(:assignment) }
 
-= simple_form_for(@assignment, :html => { :novalidate => true }) do |f|
+= simple_form_for(presenter.assignment, :html => { :novalidate => true }) do |f|
   %section
     %h4 Basic Info
     .form-item
@@ -17,7 +17,7 @@
           = f.check_box :pass_fail
 
     .form-item
-      - if @assignment.pass_fail?
+      - if f.object.pass_fail?
         .pass-fail-contingent.hidden
           = f.label :point_total, "Total Points Possible"
           = f.text_field :point_total
@@ -27,13 +27,13 @@
           = f.text_field :point_total
 
     .form-item
-      = f.input :open_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:open_at) }
+      = f.input :open_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker' }
 
     .form-item
-      = f.input :due_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:due_at) }
+      = f.input :due_at, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker' }
 
     .form-item
-      = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker', :value => @assignment.try(:accepts_submissions_until) }, :label => "Accept until"
+      = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker' }, :label => "Accept until"
 
     .form-item
       = f.label :grade_scope, "Individual or Group?"
@@ -136,8 +136,8 @@
   %section
     %h4 Timeline
 
-    = render partial: "layouts/thumbnail_image_form_item", locals: { f: f, model: @assignment }
-    = render partial: "layouts/media_image_form_item", locals: { f: f, model: @assignment }
+    = render partial: "layouts/thumbnail_image_form_item", locals: { f: f, model: presenter.assignment }
+    = render partial: "layouts/media_image_form_item", locals: { f: f, model: presenter.assignment }
 
   %section
     %h4 Unlocks
@@ -150,7 +150,7 @@
         %fieldset.unlock-condition
           = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: 'form-inline', child_index: 'child_index' do |ucf|
             = render 'layouts/unlock_condition_fields', f: ucf
-      - @assignment.unlock_conditions.each do |condition|
+      - presenter.assignment.unlock_conditions.each do |condition|
         %fieldset.unlock-condition
           = f.simple_fields_for :unlock_conditions, condition, class: 'form-inline' do |ucf|
             = render 'layouts/unlock_condition_fields', f: ucf
@@ -164,7 +164,7 @@
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, AssignmentScoreLevel.new, class: 'form-inline', child_index: 'child_index' do |slf|
             = render 'assignment_score_level_fields', f: slf
-      - @assignment.assignment_score_levels.order_by_value.each do |assignment_score_level|
+      - presenter.assignment.assignment_score_levels.order_by_value.each do |assignment_score_level|
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: 'form-inline' do |slf|
             = render 'assignment_score_level_fields', f: slf
@@ -172,12 +172,12 @@
 
   %section
     %h4.uppercase Attachments
-    = f.simple_fields_for :assignment_files, @assignment.assignment_files.new do |af|
+    = f.simple_fields_for :assignment_files, presenter.assignment.assignment_files.new do |af|
       = af.file_field :file, :multiple => true
-    - if @assignment.assignment_files.exists?
+    - if presenter.assignment.assignment_files.exists?
       %h5.bold Uploaded files
       %ul.uploaded-files
-        - @assignment.assignment_files.each do |af|
+        - presenter.assignment.assignment_files.each do |af|
           - next if af.new_record?
           %li
             - if af.file_processing
@@ -188,8 +188,8 @@
                 Refresh page to confirm upload has completed
             - else
               = link_to af.filename, af.url, :target => "_blank"
-              = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => @assignment.id, :upload_id => af.id } )
+              = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => presenter.assignment.id, :upload_id => af.id } )
   .submit-buttons
     %ul
-      %li= f.button :submit, "#{@assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
+      %li= f.button :submit, "#{presenter.assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
       %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignments_path, :class => "button"

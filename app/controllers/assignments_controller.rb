@@ -1,20 +1,13 @@
 class AssignmentsController < ApplicationController
-  before_filter :ensure_staff?, :except => [:show, :index, :predictor_data]
-  respond_to :html, :json
+  include AssignmentsHelper
+  include SortsPosition
+
+  before_filter :ensure_staff?, except: [:show, :index, :predictor_data]
 
   def index
-    if current_user_is_student?
-      redirect_to syllabus_path
-    else
-      @title = "#{term_for :assignments}"
-      @assignment_types = current_course.assignment_types.includes(:assignments)
-      @assignments = current_course.assignments.includes(:rubric)
-
-      respond_to do |format|
-        format.html
-        format.csv { send_data @assignments.csv_for_course(current_course) }
-      end
-    end
+    redirect_to syllabus_path and return if current_user_is_student?
+    @title = "#{term_for :assignments}"
+    @assignment_types = current_course.assignment_types.includes(:assignments)
   end
 
   #Gives the instructor the chance to quickly check all assignment settings for the whole course
@@ -25,33 +18,26 @@ class AssignmentsController < ApplicationController
 
   def show
     assignment = current_course.assignments.find_by(id: params[:id])
-    if assignment
-      if current_user_is_student?
-        if current_student.grade_released_for_assignment?(assignment)
-          grade = current_student.grade_for_assignment(assignment)
-          if grade && !grade.new_record?
-            grade.feedback_reviewed!
-          end
-        end
-      end
+    redirect_to assignments_path,
+      alert: "The #{(term_for :assignment)} could not be found." and return unless assignment.present?
 
-      render :show, AssignmentPresenter.build({ assignment: assignment, course: current_course,
+    mark_assignment_reviewed! assignment, current_user
+    render :show, AssignmentPresenter.build({ assignment: assignment, course: current_course,
                                                 team_id: params[:team_id], view_context: view_context })
-    else
-      redirect_to assignments_path, alert: "The #{(term_for :assignment)} could not be found."
-    end
   end
 
   def new
-    @title = "Create a New #{term_for :assignment}"
-    @assignment = current_course.assignments.new
-    render :new, AssignmentPresenter.build({ assignment: @assignment, course: current_course, view_context: view_context })
+    render :new, AssignmentPresenter.build({ assignment: current_course.assignments.new,
+                                             course: current_course,
+                                             view_context: view_context })
   end
 
   def edit
-    @assignment = current_course.assignments.find(params[:id])
-    @title = "Editing #{@assignment.name}"
-    render :edit, AssignmentPresenter.build({ assignment: @assignment, course: current_course, view_context: view_context })
+    assignment = current_course.assignments.find(params[:id])
+    @title = "Editing #{assignment.name}"
+    render :edit, AssignmentPresenter.build({ assignment: assignment,
+                                              course: current_course,
+                                              view_context: view_context })
   end
 
   # Duplicate an assignment - important for super repetitive items like attendance and reading reactions
@@ -62,146 +48,59 @@ class AssignmentsController < ApplicationController
   end
 
   def create
-    if params[:assignment][:assignment_files_attributes].present?
-      @assignment_files = params[:assignment][:assignment_files_attributes]["0"]["file"]
-      params[:assignment].delete :assignment_files_attributes
+    assignment = current_course.assignments.new(params[:assignment])
+    if assignment.save
+      set_assignment_weights(assignment)
+      redirect_to assignment_path(assignment), notice: "#{(term_for :assignment).titleize}  #{assignment.name} successfully created" and return
     end
 
-    @assignment = current_course.assignments.new(params[:assignment])
-    if @assignment_files
-      @assignment_files.each do |af|
-        @assignment.assignment_files.new(file: af, filename: af.original_filename[0..49])
-      end
-    end
-    respond_to do |format|
-      if @assignment.save
-        set_assignment_weights
-        format.html { respond_with @assignment, notice: "#{(term_for :assignment).titleize}  #{@assignment.name} successfully created" }
-      else
-        # TODO: refactor, see submissions_controller
-        @title = "Create a New #{term_for :assignment}"
-        format.html do
-          render :new, AssignmentPresenter.build({
-            assignment: @assignment, course: current_course,
-            view_context: view_context })
-        end
-      end
-    end
+    @title = "Create a New #{term_for :assignment}"
+    render :new, AssignmentPresenter.build({assignment: assignment, course: current_course, view_context: view_context })
   end
 
   def update
-    if params[:assignment][:assignment_files_attributes].present?
-      @assignment_files = params[:assignment][:assignment_files_attributes]["0"]["file"]
-      params[:assignment].delete :assignment_files_attributes
+    assignment = current_course.assignments.find(params[:id])
+    if assignment.update_attributes(params[:assignment])
+      set_assignment_weights(assignment)
+      redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  <strong>#{assignment.name }</strong> successfully updated" and return
     end
 
-    @assignment = current_course.assignments.includes(:assignment_score_levels).find(params[:id])
-
-    if @assignment_files
-      @assignment_files.each do |af|
-        @assignment.assignment_files.new(file: af, filename: af.original_filename[0..49])
-      end
-    end
-
-    respond_to do |format|
-
-      if @assignment.update_attributes(params[:assignment])
-        set_assignment_weights
-        format.html { redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  <strong>#{@assignment.name }</strong> successfully updated" }
-      else
-        # TODO: refactor, see submissions_controller
-        @title = "Edit #{term_for :assignment}"
-        format.html do
-          render :edit, AssignmentPresenter.build({
-            assignment: @assignment, course: current_course,
-            view_context: view_context })
-        end
-      end
-    end
+    @title = "Edit #{term_for :assignment}"
+    render :edit, AssignmentPresenter.build({assignment: assignment, course: current_course, view_context: view_context })
   end
 
   def sort
-    params[:"assignment"].each_with_index do |id, index|
-      current_course.assignments.update(id, position: index + 1)
-    end
-    render nothing: true
+    sort_position_for :assignment
   end
 
   def update_rubrics
-    @assignment = current_course.assignments.find params[:id]
-    @assignment.update_attributes use_rubric: params[:use_rubric]
-    respond_with @assignment
+    assignment = current_course.assignments.find params[:id]
+    assignment.update_attributes use_rubric: params[:use_rubric]
+    redirect_to assignment_path(assignment)
   end
 
   def rubric_grades_review
-    @assignment = current_course.assignments.find(params[:id])
-    @title = @assignment.name
-    @groups = @assignment.groups
-
-    @teams = current_course.teams
-
-    if params[:team_id].present?
-      @team = @teams.find_by(team_params)
-      @students = current_course.students_being_graded.joins(:teams).where(:teams => team_params)
-      @auditors = current_course.students_auditing.joins(:teams).where(:teams => team_params)
-    else
-      @students = current_course.students_being_graded
-      @auditors = current_course.students_auditing
-    end
-
-    @students.sort_by { |student| [ student.last_name, student.first_name ] }
-
-    @rubric = @assignment.fetch_or_create_rubric
-    @metrics = @rubric.metrics.ordered
-    @metrics.each do |m|
-      m.tiers = m.tiers.includes(:tier_badges).order("points ASC")
-    end
-    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
-    @course_student_ids = current_course.students.map(&:id)
-
-    @viewable_rubric_grades = @assignment.rubric_grades
-    render :rubric_grades_review, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+    assignment = current_course.assignments.find(params[:id])
+    render :rubric_grades_review, AssignmentPresenter.build({ assignment: assignment, course: current_course,
                                                               team_id: params[:team_id], view_context: view_context })
   end
 
   # current student visible assignment
   def predictor_data
-    if current_user.is_student?(current_course)
-      @student = current_student
-      @update_assignments = true
+    if current_user_is_student?
+      student = current_student
     elsif params[:id]
-      @student = User.find(params[:id])
-      @update_assignments = false
+      student = User.find(params[:id])
     else
-      @student = NullStudent.new(current_course)
-      @update_assignments = false
+      student = NullStudent.new(current_course)
     end
-
-    @assignments = predictor_assignments_data
-    @grades = predictor_grades(@student)
-
-    @assignments.each do |assignment|
-      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
-        if grade.nil?
-          grade = Grade.create(:assignment => assignment, :student => @student)
-        end
-
-        assignment.current_student_grade = {
-          id: grade.id,
-          pass_fail_status: grade.is_student_visible? ? grade.pass_fail_status : nil,
-          score: grade.is_student_visible? ? grade.score : nil,
-          raw_score: grade.is_student_visible? ? grade.raw_score : nil,
-          predicted_score: current_user.is_student?(current_course) ? grade.predicted_score : 0
-        }
-      end
-    end
+    @assignments = PredictedAssignmentCollection.new current_course.assignments, student
   end
 
   def destroy
-    @assignment = current_course.assignments.find(params[:id])
-    @name = @assignment.name
-    @assignment.destroy
-    redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{@name} successfully deleted"
+    assignment = current_course.assignments.find(params[:id])
+    assignment.destroy
+    redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully deleted"
   end
 
   def download_current_grades
@@ -299,60 +198,13 @@ class AssignmentsController < ApplicationController
 
   private
 
-  def predictor_assignments_data
-    @assignments = current_course.assignments.select(
-      :accepts_resubmissions_until,
-      :accepts_submissions,
-      :accepts_submissions_until,
-      :assignment_type_id,
-      :course_id,
-      :description,
-      :due_at,
-      :grade_scope,
-      :id,
-      :include_in_predictor,
-      :name,
-      :open_at,
-      :pass_fail,
-      :point_total,
-      :points_predictor_display,
-      :position,
-      :release_necessary,
-      :required,
-      :resubmissions_allowed,
-      :student_logged,
-      :thumbnail,
-      :use_rubric,
-      :visible,
-      :visible_when_locked
-    )
-  end
-
-  def predictor_grades(student)
-    @grades = student.grades.where(:course_id => current_course).select(
-      :assignment_id,
-      :final_score,
-      :id,
-      :predicted_score,
-      :pass_fail_status,
-      :status,
-      :student_id,
-      :raw_score,
-      :score
-    )
-  end
-
-  def team_params
-    @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
-  end
-
-  def set_assignment_weights
-    return unless @assignment.student_weightable?
-    @assignment.weights = current_course.students.map do |student|
-      assignment_weight = @assignment.weights.where(student: student).first || @assignment.weights.new(student: student)
-      assignment_weight.weight = @assignment.assignment_type.weight_for_student(student)
+  def set_assignment_weights(assignment)
+    return unless assignment.student_weightable?
+    assignment.weights = current_course.students.map do |student|
+      assignment_weight = assignment.weights.where(student: student).first || assignment.weights.new(student: student)
+      assignment_weight.weight = assignment.assignment_type.weight_for_student(student)
       assignment_weight
     end
-    @assignment.save
+    assignment.save
   end
 end

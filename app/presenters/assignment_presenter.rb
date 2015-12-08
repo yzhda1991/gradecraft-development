@@ -159,6 +159,10 @@ class AssignmentPresenter < Showtime::Presenter
     for_team? ? course.students_by_team(team) : course.students
   end
 
+  def students_being_graded
+    for_team? ? course.students_being_graded_by_team(team) : course.students_being_graded
+  end
+
   def submission_date_for(student)
     submission = submissions_for(student).first
     submission.updated_at if submission
@@ -199,8 +203,10 @@ class AssignmentPresenter < Showtime::Presenter
     course.teams
   end
 
-  def viewable_rubric_grades(student_id)
-    assignment.rubric_grades.where(student_id: student_id)
+  def viewable_rubric_grades(student_id=nil)
+    query = assignment.rubric_grades
+    query = query.where(student_id: student_id) if student_id.present?
+    query
   end
 
   def viewable_rubric_tier_earned?(student_id, tier_id)

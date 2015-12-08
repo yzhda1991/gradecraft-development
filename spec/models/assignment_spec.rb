@@ -57,6 +57,17 @@ describe Assignment do
     end
   end
 
+  describe "#assignment_files_attributes=" do
+    it "supports multiple file uploads" do
+      file_attribute_1 = fixture_file "test_file.txt", "txt"
+      file_attribute_2 = fixture_file "test_image.jpg", "image/jpg"
+      subject.assignment_files_attributes = { "0" => { "file" => [file_attribute_1, file_attribute_2] }}
+      expect(subject.assignment_files.length).to eq 2
+      expect(subject.assignment_files[0].filename).to eq "test_file.txt"
+      expect(subject.assignment_files[1].filename).to eq "test_image.jpg"
+    end
+  end
+
   describe "#average" do
     before { subject.save }
 

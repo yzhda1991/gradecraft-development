@@ -1,8 +1,8 @@
-= content_nav_for @assignment, "Edit #{term_for :assignment}"
+= content_nav_for presenter.assignment, "Edit #{term_for :assignment}"
 
 %h3.pagetitle= @title
 
 = render partial: "buttons", locals: { presenter: presenter }
 
 .pageContent
-  = render 'form'
+  = render partial: "form", locals: { presenter: presenter }

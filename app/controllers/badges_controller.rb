@@ -1,4 +1,5 @@
 class BadgesController < ApplicationController
+  include SortsPosition
 
   before_filter :ensure_staff?, :except => [:predictor_data, :predict_times_earned]
   before_filter :ensure_student?, only: [:predict_times_earned]
@@ -74,10 +75,7 @@ class BadgesController < ApplicationController
   end
 
   def sort
-    params[:"badge"].each_with_index do |id, index|
-      current_course.badges.update(id, position: index + 1)
-    end
-    render nothing: true
+    sort_position_for :badge
   end
 
   def destroy
