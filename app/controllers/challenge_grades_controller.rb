@@ -40,7 +40,7 @@ class ChallengeGradesController < ApplicationController
     if @challenge.update_attributes(params[:challenge])
       redirect_to challenge_path(@challenge), notice: "#{@challenge.name} #{term_for :challenge} successfully graded"
     else
-      render action: "mass_edit", alert: @challenge.errors
+      render action: "mass_edit"
     end
   end
 
@@ -59,7 +59,7 @@ class ChallengeGradesController < ApplicationController
         end
         format.html { redirect_to @challenge, notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully graded" }
       else
-        format.html { render action: "new", alert: @challenge_grade.errors }
+        format.html { render action: "new" }
       end
     end
   end
@@ -83,7 +83,7 @@ class ChallengeGradesController < ApplicationController
 
         format.html { redirect_to @challenge, notice: "Grade for #{@challenge.name} #{term_for :challenge} successfully updated" }
       else
-        format.html { render action: "edit", alert: @challenge_grade.errors }
+        format.html { render action: "edit" }
       end
     end
   end

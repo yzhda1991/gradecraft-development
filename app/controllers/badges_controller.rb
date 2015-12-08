@@ -50,7 +50,7 @@ class BadgesController < ApplicationController
     if @badge.save
       redirect_to @badge, notice: "#{@badge.name} #{term_for :badge} successfully created"
     else
-      render action: "new", alert: "#{@badge.errors}"
+      render action: "new"
     end
   end
 
@@ -70,7 +70,7 @@ class BadgesController < ApplicationController
     if @badge.update_attributes(params[:badge])
       redirect_to badges_path, notice: "#{@badge.name} #{term_for :badge} successfully updated"
     else
-      render action: "edit", alert: @badge.errors
+      render action: "edit"
     end
   end
 
