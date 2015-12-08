@@ -22,9 +22,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.json { render json: @users }
       format.csv { send_data @users.to_csv }
-      format.xls { send_data @users.to_csv(col_sep: "\t") }
     end
   end
 
