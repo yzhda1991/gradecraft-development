@@ -8,7 +8,6 @@ describe PredictedAssignmentCollection do
   let(:user) { double(:user) }
 
   describe "#initialize" do
-
     it "requires assignments and a user as the context" do
       subject = described_class.new assignments, user
       expect(subject.assignments.size).to eq assignments.size
@@ -53,6 +52,14 @@ describe PredictedAssignmentCollection do
       subject.each do |assignment|
         expect(assignment).to be_instance_of PredictedAssignment
       end
+    end
+  end
+
+  describe "#[]" do
+    it "can be indexed" do
+      subject = described_class.new assignments, user
+      expect(subject[0]).to be_an_instance_of PredictedAssignment
+      expect(subject[0].id).to eq assignments[0].id
     end
   end
 end

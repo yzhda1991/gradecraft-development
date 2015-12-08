@@ -12,6 +12,10 @@ class PredictedAssignmentCollection
     assignments.each { |assignment| yield PredictedAssignment.new(assignment, user) }
   end
 
+  def [](index)
+    to_a[index]
+  end
+
   private
 
   def pluck_attributes(assignments)
