@@ -52,4 +52,8 @@ class NullGrade
   def updated_at
     nil
   end
+
+  def student
+    nil
+  end
 end

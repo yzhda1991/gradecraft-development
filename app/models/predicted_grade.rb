@@ -8,7 +8,7 @@ class PredictedGrade
   end
 
   def predicted_score
-    grade.predicted_score if grade.student.is_student?(grade.course)
+    grade.predicted_score if grade.student && grade.student.is_student?(grade.course)
   end
 
   def raw_score
