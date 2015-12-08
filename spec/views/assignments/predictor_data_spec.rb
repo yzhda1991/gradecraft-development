@@ -9,8 +9,8 @@ describe "assignments/predictor_data" do
   end
 
   before(:each) do
-    @assignment = create(:assignment, description: "...")
-    @assignments = [@assignment]
+    @assignment = create(:assignment, description: "...", course: @course)
+    @assignments = PredictedAssignmentCollection.new Assignment.where(id: @assignment.id), @student
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:current_user).and_return(@student)
   end
@@ -28,18 +28,24 @@ describe "assignments/predictor_data" do
   end
 
   it "includes the current student grade with the assignment" do
-    @assignment.current_student_grade = { id: 1, pass_fail_status: "should not persist", raw_score: 1000, score: 1000, predicted_score: 999 }
+    create :student_course_membership, user: @student, course: @assignment.course
+    grade = create :grade, assignment: @assignment, student: @student, course: @assignment.course,
+      pass_fail_status: "should not persist", raw_score: 1000, score: 1000, predicted_score: 999,
+      status: "Released"
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["grade"]).to eq({ "id" => 1, "raw_score" => 1000, "score" => 1000, "predicted_score" => 999 })
+    expect(json["assignments"][0]["grade"]).to eq({ "id" => grade.id, "raw_score" => 1000, "score" => 1000, "predicted_score" => 999 })
   end
 
   it "includes the pass fail status with the grade when the assignment is pass fail" do
-    @assignment.current_student_grade = { id: 1, pass_fail_status: "passed", raw_score: 1000, score: 1000, predicted_score: 999 }
+    create :student_course_membership, user: @student, course: @assignment.course
+    grade = create :grade, assignment: @assignment, student: @student, course: @assignment.course,
+      pass_fail_status: "passed", raw_score: 1000, score: 1000, predicted_score: 999,
+      status: "Released"
     @assignment.update(pass_fail: true)
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["grade"]).to eq({ "id" => 1, "pass_fail_status" => "passed", "raw_score" => 1000, "score" => 1000, "predicted_score" => 999 })
+    expect(json["assignments"][0]["grade"]).to eq({ "id" => grade.id, "pass_fail_status" => "passed", "raw_score" => 1000, "score" => 1000, "predicted_score" => 999 })
   end
 
   it "does not include assignments with no points" do
@@ -85,37 +91,41 @@ describe "assignments/predictor_data" do
     end
 
     it "adds is_late to model" do
-      allow(@assignment).to receive(:overdue?).and_return(true)
-      @assignment.update(accepts_submissions: true)
+      @assignment.update_attributes(accepts_submissions: true, due_at: 2.days.ago)
       render
       json = JSON.parse(response.body)
-      expect(json["assignments"][0]["is_late"]).to be_truthy
+      expect(json["assignments"][0]["is_late"]).to eq true
     end
 
     it "adds is_locked to model" do
-      allow(@assignment).to receive(:is_unlocked_for_student?).and_return(false)
+      allow_any_instance_of(PredictedAssignment).to \
+        receive(:is_unlocked_for_student?).and_return(false)
       render
       json = JSON.parse(response.body)
-      expect(json["assignments"][0]["is_locked"]).to be_truthy
+      expect(json["assignments"][0]["is_locked"]).to eq true
     end
 
     it "adds has_been_unlocked to model" do
-      allow(@assignment).to receive(:is_unlocked_for_student?).and_return(true)
-      allow(@assignment).to receive(:is_unlockable?).and_return(true)
+      allow_any_instance_of(PredictedAssignment).to \
+        receive(:is_unlocked_for_student?).and_return(true)
+      allow_any_instance_of(PredictedAssignment).to \
+        receive(:is_unlockable?).and_return(true)
       render
       json = JSON.parse(response.body)
-      expect(json["assignments"][0]["has_been_unlocked"]).to be_truthy
+      expect(json["assignments"][0]["has_been_unlocked"]).to eq true
     end
 
     it "adds is_a_condition to model" do
-      allow(@assignment).to receive(:is_a_condition?).and_return(true)
+      allow_any_instance_of(PredictedAssignment).to \
+        receive(:is_a_condition?).and_return(true)
       render
       json = JSON.parse(response.body)
       expect(json["assignments"][0]["is_a_condition"]).to be_truthy
     end
 
     it "adds is_earned_by_group to model" do
-      allow(@assignment).to receive(:grade_scope).and_return("Group")
+      allow_any_instance_of(PredictedAssignment).to \
+        receive(:grade_scope).and_return("Group")
       render
       @json = JSON.parse(response.body)
       expect(@json["assignments"][0]["is_earned_by_group"]).to be_truthy

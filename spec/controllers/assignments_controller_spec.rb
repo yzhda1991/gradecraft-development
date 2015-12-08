@@ -165,12 +165,11 @@ describe AssignmentsController do
       context "with a student id" do
         it "assigns the assignments with no call to update" do
           get :predictor_data, format: :json, :id => @student.id
-          expect(assigns(:student)).to eq(@student)
-          #expect(assigns(:assignments)[0].attributes.length).to eq(predictor_assignment_attributes.length)
+          expect(assigns(:assignments).user).to eq(@student)
           predictor_assignment_attributes().each do |attr|
-            expect(assigns(:assignments)[0][attr]).to eq(@assignment[attr])
+            expect(assigns(:assignments).assignments[0][attr]).to \
+              eq(@assignment[attr])
           end
-          expect(assigns(:update_assignments)).to be_falsy
           expect(response).to render_template(:predictor_data)
         end
       end
@@ -178,7 +177,7 @@ describe AssignmentsController do
       context "with no student" do
         it "assigns student as null student and no call to update" do
           get :predictor_data, format: :json
-          expect(assigns(:student).class).to eq(NullStudent)
+          expect(assigns(:assignments).user.class).to eq(NullStudent)
           expect(assigns(:update_assignments)).to be_falsy
         end
       end
@@ -266,39 +265,19 @@ describe AssignmentsController do
 
       it "assigns the assignments with the call to update" do
         get :predictor_data, format: :json, :id => @student.id
-        expect(assigns(:student)).to eq(@student)
-        # expect(assigns(:assignments)[0].attributes.length).to eq(predictor_assignment_attributes.length)
+        expect(assigns(:assignments).user).to eq(@student)
         predictor_assignment_attributes().each do |attr|
-          expect(assigns(:assignments)[0][attr]).to eq(@assignment[attr])
+          expect(assigns(:assignments).assignments[0][attr]).to \
+            eq(@assignment[attr])
         end
-        expect(assigns(:update_assignments)).to be_truthy
         expect(response).to render_template(:predictor_data)
-      end
-
-      it "includes the student's grade with score for assignment when released" do
-        grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id)
-        get :predictor_data, format: :json, :id => @student.id
-        [
-          :assignment_id,
-          :final_score,
-          :id,
-          :predicted_score,
-          :pass_fail_status,
-          :status,
-          :student_id,
-          :raw_score,
-          :score
-        ].each do |attr|
-           expect(assigns(:grades)[0][attr]).to eq(grade[attr])
-        end
-        expect(assigns(:assignments)[0].current_student_grade).to eq({ id: grade.id, pass_fail_status: nil, raw_score: grade.raw_score, score: grade.score, predicted_score: grade.predicted_score })
       end
 
       it "includes student grade with no score if not released" do
         grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
         get :predictor_data, format: :json, :id => @student.id
-        expect(assigns(:assignments)[0].current_student_grade[:score]).to eq(nil)
-        expect(assigns(:assignments)[0].current_student_grade[:raw_score]).to eq(nil)
+        expect(assigns(:assignments)[0].grade.score).to eq(nil)
+        expect(assigns(:assignments)[0].grade.raw_score).to eq(nil)
       end
 
       it "assigns data for displaying student grading distribution" do
@@ -325,13 +304,13 @@ describe AssignmentsController do
       it "includes pass/fail status for released pass/fail grades" do
         grade = create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
         get :predictor_data, format: :json, :id => @student.id
-        expect(assigns(:assignments)[0].current_student_grade[:pass_fail_status]).to eq("Pass")
+        expect(assigns(:assignments)[0].grade.pass_fail_status).to eq("Pass")
       end
 
       it "includes student grade with no pass fail status if not released" do
         grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
         get :predictor_data, format: :json, :id => @student.id
-        expect(assigns(:assignments)[0].current_student_grade[:pass_fail_status]).to be_nil
+        expect(assigns(:assignments)[0].grade.pass_fail_status).to be_nil
       end
     end
 

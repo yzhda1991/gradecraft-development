@@ -87,35 +87,14 @@ class AssignmentsController < ApplicationController
 
   # current student visible assignment
   def predictor_data
-    if current_user.is_student?(current_course)
-      @student = current_student
-      @update_assignments = true
+    if current_user_is_student?
+      student = current_student
     elsif params[:id]
-      @student = User.find(params[:id])
-      @update_assignments = false
+      student = User.find(params[:id])
     else
-      @student = NullStudent.new(current_course)
-      @update_assignments = false
+      student = NullStudent.new(current_course)
     end
-
-    @assignments = predictor_assignments_data
-    grades = predictor_grades(@student)
-
-    @assignments.each do |assignment|
-      grades.where(:assignment_id => assignment.id).first.tap do |grade|
-        if grade.nil?
-          grade = Grade.create(:assignment => assignment, :student => @student)
-        end
-
-        assignment.current_student_grade = {
-          id: grade.id,
-          pass_fail_status: grade.is_student_visible? ? grade.pass_fail_status : nil,
-          score: grade.is_student_visible? ? grade.score : nil,
-          raw_score: grade.is_student_visible? ? grade.raw_score : nil,
-          predicted_score: current_user.is_student?(current_course) ? grade.predicted_score : 0
-        }
-      end
-    end
+    @assignments = PredictedAssignmentCollection.new current_course.assignments, student
   end
 
   def destroy
