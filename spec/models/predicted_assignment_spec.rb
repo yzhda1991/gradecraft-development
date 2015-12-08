@@ -25,6 +25,11 @@ describe PredictedAssignment do
     it "returns an instance of a predicted grade" do
       expect(subject.grade).to be_instance_of PredictedGrade
     end
+
+    it "returns a nil predicted grade if the user cannot create grades" do
+      subject = described_class.new assignment, NullStudent.new
+      expect(subject.grade.id).to eq 0
+    end
   end
 end
 

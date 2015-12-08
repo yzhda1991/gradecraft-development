@@ -8,7 +8,11 @@ class PredictedAssignment < SimpleDelegator
   end
 
   def grade
-    @grade ||= PredictedGrade.new(Grade.find_or_create(assignment, user))
+    if @grade.nil?
+      grade = user.present? ? Grade.find_or_create(assignment, user) : NullGrade.new
+      @grade = PredictedGrade.new(grade)
+    end
+    @grade
   end
 
   private
