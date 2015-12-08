@@ -99,10 +99,10 @@ class AssignmentsController < ApplicationController
     end
 
     @assignments = predictor_assignments_data
-    @grades = predictor_grades(@student)
+    grades = predictor_grades(@student)
 
     @assignments.each do |assignment|
-      @grades.where(:assignment_id => assignment.id).first.tap do |grade|
+      grades.where(:assignment_id => assignment.id).first.tap do |grade|
         if grade.nil?
           grade = Grade.create(:assignment => assignment, :student => @student)
         end
@@ -119,10 +119,9 @@ class AssignmentsController < ApplicationController
   end
 
   def destroy
-    @assignment = current_course.assignments.find(params[:id])
-    @name = @assignment.name
-    @assignment.destroy
-    redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{@name} successfully deleted"
+    assignment = current_course.assignments.find(params[:id])
+    assignment.destroy
+    redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully deleted"
   end
 
   def download_current_grades
@@ -221,7 +220,7 @@ class AssignmentsController < ApplicationController
   private
 
   def predictor_assignments_data
-    @assignments = current_course.assignments.select(
+    current_course.assignments.select(
       :accepts_resubmissions_until,
       :accepts_submissions,
       :accepts_submissions_until,
@@ -250,7 +249,7 @@ class AssignmentsController < ApplicationController
   end
 
   def predictor_grades(student)
-    @grades = student.grades.where(:course_id => current_course).select(
+    student.grades.where(:course_id => current_course).select(
       :assignment_id,
       :final_score,
       :id,
@@ -261,10 +260,6 @@ class AssignmentsController < ApplicationController
       :raw_score,
       :score
     )
-  end
-
-  def team_params
-    @team_params ||= params[:team_id] ? { id: params[:team_id] } : {}
   end
 
   def set_assignment_weights(assignment)
