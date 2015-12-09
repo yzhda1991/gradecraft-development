@@ -120,6 +120,24 @@
     $scope.selectedMetrics = metrics
     metrics
 
+  # Patch: (TODO test and then remove gradedMetricsParams)
+  # For params submitted, we want to include metrics with
+  # comments but no selected tier
+  $scope.metricsParams = ()->
+    params = []
+    angular.forEach($scope.metrics, (metric, index)->
+      # get params just from the metric object
+      metricParams = $scope.metricOnlyParams(metric,index)
+
+      # add params from the tier if a tier has been selected
+      if metric.selectedTier
+        jQuery.extend(metricParams, $scope.gradedTierParams(metric))
+
+      # create params for the rubric grade regardless
+      params.push metricParams
+    )
+    params
+
   $scope.gradedMetricsParams = ()->
     params = []
     angular.forEach($scope.gradedMetrics(), (metric, index)->
@@ -183,7 +201,7 @@
       rubric_id: $scope.rubricId,
       student_id: $scope.studentId,
       points_possible: $scope.pointsPossible,
-      rubric_grades: $scope.gradedMetricsParams(),
+      rubric_grades: $scope.metricsParams(),
       tier_badges: $scope.tierBadgesParams(),
       tier_ids: $scope.selectedTierIds(),
       metric_ids: $scope.allMetricIds(),

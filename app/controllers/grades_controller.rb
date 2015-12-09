@@ -134,7 +134,6 @@ class GradesController < ApplicationController
 
   # PUT /assignments/:assignment_id/grade/submit_rubric
   def submit_rubric
-
     if @submission = Submission.where(current_assignment_and_student_ids).first
       @submission.update_attributes(graded: true)
     end
