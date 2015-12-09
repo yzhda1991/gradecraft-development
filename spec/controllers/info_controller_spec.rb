@@ -146,6 +146,13 @@ describe InfoController do
       end
     end
 
+    describe "GET assignment_structure" do
+      it "retrieves the assignment_structure download" do
+        get :assignment_structure, :format => :csv
+        expect(response.body).to include("Assignment ID,Name,Point Total,Description,Open At,Due At,Accept Until")
+      end
+    end
+
     describe "GET research_gradebook" do
       it "retrieves the research_gradebook" do
         skip "implement"
