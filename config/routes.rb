@@ -71,7 +71,7 @@ GradeCraft::Application.routes.draw do
       get 'rubric_grades_review'
       put :update_rubrics
       scope 'grades', as: :grades, controller: :grades do
-        post :edit_status
+        get :edit_status
         put :update_status
         get :import
         post :upload

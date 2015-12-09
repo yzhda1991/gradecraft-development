@@ -215,7 +215,7 @@ class GradesController < ApplicationController
   end
 
   # Quickly grading a single assignment for all students
-  # GET /assignments/:id/mass_grade(.:format)
+  # GET /assignments/:id/mass_grade
   def mass_edit
     @assignment = current_course.assignments.find(params[:id])
     @title = "Quick Grade #{@assignment.name}"
@@ -233,9 +233,11 @@ class GradesController < ApplicationController
     @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
   end
 
+  # PUT /assignments/:id/mass_grade
   def mass_update
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.update_attributes(params[:assignment])
+
       # @mz TODO: add specs
       @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: mass_update_grade_ids)
       @multiple_grade_updater_job.enqueue
@@ -250,20 +252,8 @@ class GradesController < ApplicationController
     end
   end
 
-  private
-    def mass_update_grade_ids
-      @assignment.grades.inject([]) do |memo, grade|
-        scored_changed = grade.previous_changes[:raw_score].present?
-        if scored_changed && grade.graded_or_released?
-          memo << grade.id
-        end
-        memo
-      end
-    end
-
-  public
-
   # Grading an assignment for a whole group
+  # GET /assignments/:id/group_grade
   def group_edit
     @assignment = current_course.assignments.find(params[:id])
     @group = @assignment.groups.find(params[:group_id])
@@ -271,12 +261,16 @@ class GradesController < ApplicationController
     @assignment_score_levels = @assignment.assignment_score_levels
   end
 
+  # PUT /assignments/:id/group_grade
   def group_update
     @assignment = current_course.assignments.find(params[:id])
     @group = @assignment.groups.find(params[:group_id])
+
+    # TODO change to find_or_create_grades(@assignment,@group.students)
     @grades = @group.students.map do |student|
       @assignment.grades.where(:student_id => student).first || @assignment.grades.new(:student => student, :assignment => @assignment, :graded_by_id => current_user, :status => "Graded", :group_id => @group.id)
     end
+
     grade_ids = []
     @grades = @grades.each do |grade|
       grade.update_attributes(params[:grade])
@@ -289,7 +283,8 @@ class GradesController < ApplicationController
     respond_with @assignment
   end
 
-  # Changing the status of a grade - allows instructors to review "Graded" grades, before they are "Released" to students
+  # For changing the status of a group of grades passed in grade_ids ("In Progress" => "Graded", or "Graded" => "Released")
+  # GET  /assignments/:id/grades/edit_status
   def edit_status
     session[:return_to] = request.referer
 
@@ -298,13 +293,21 @@ class GradesController < ApplicationController
     @grades = @assignment.grades.find(params[:grade_ids])
   end
 
+
+  # PUT /assignments/:id/grades/update_status
   def update_status
     @assignment = current_course.assignments.find(params[:id])
     @grades = @assignment.grades.find(params[:grade_ids])
+    status = params[:grade][:status]
+
+    grade_ids = []
+    @grades = @grades.each do |grade|
+      grade.update(status: status)
+      grade_ids << grade.id
+    end
 
     # @mz TODO: add specs
-    @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: update_status_grade_ids)
-    @multiple_grade_updater_job.enqueue
+    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
 
     if session[:return_to].present?
       redirect_to session[:return_to]
@@ -313,7 +316,6 @@ class GradesController < ApplicationController
     end
 
     flash[:notice] = "Updated Grades!"
-
   end
 
   private
@@ -508,6 +510,16 @@ class GradesController < ApplicationController
     }
   end
 
+  def mass_update_grade_ids
+    @assignment.grades.inject([]) do |memo, grade|
+      scored_changed = grade.previous_changes[:raw_score].present?
+      if scored_changed && grade.graded_or_released?
+        memo << grade.id
+      end
+      memo
+    end
+  end
+
   #----------- jg: Specs to here -----------------------------------------------#
 
   def new_grade_from_rubric_grades_attributes
@@ -530,6 +542,8 @@ class GradesController < ApplicationController
     {
       raw_score: params[:points_given],
       submission_id: safe_submission_id,
+      # TODO: point_total should be inherited from assignment,
+      # and not handled by front end logic
       point_total: params[:points_possible],
       status: params[:grade_status],
       instructor_modified: true
