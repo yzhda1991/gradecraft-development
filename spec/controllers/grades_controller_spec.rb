@@ -432,7 +432,7 @@ describe GradesController do
     describe "PUT mass_update" do
 
       let(:grades_attributes) do
-        { "#{@assignment.grades.index(@grade)}" =>
+        { "#{@assignment.reload.grades.index(@grade)}" =>
           { graded_by_id: @professor.id, instructor_modified: true,
             student_id: @grade.student_id, raw_score: 1000, status: "Graded",
             id: @grade.id
@@ -460,6 +460,13 @@ describe GradesController do
             change { ActionMailer::Base.deliveries.count }
         end
       end
+
+      it "redirects on failure" do
+        allow_any_instance_of(Assignment).to receive(:update_attributes).and_return false
+        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
+        expect(response).to redirect_to(mass_grade_assignment_path(id: @assignment.id))
+
+      end
     end
 
     describe "GET group_edit" do
@@ -477,12 +484,18 @@ describe GradesController do
     end
 
     describe "group_update" do
-      #...
+      it "updates the group grades for the specific assignment" do
+        group = create(:group)
+        @assignment.groups << group
+        group.students << @student
+        put :group_update, id: @assignment.id, group_id: group.id, grade: { graded_by_id: @professor.id, instructor_modified: true, raw_score: 1000, status: "Graded" }
+        expect(@grade.reload.raw_score).to eq 1000
+      end
     end
 
     describe "GET edit_status" do
       it "assigns params" do
-        get :edit_status, {:grade_ids => [@grade.id], :id => @assignment.id}
+        get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }
         expect(assigns(:title)).to eq("#{@assignment.name} Grade Statuses")
         expect(assigns(:assignment)).to eq(@assignment)
         expect(assigns(:grades)).to eq([@grade])
@@ -490,8 +503,11 @@ describe GradesController do
       end
     end
 
-    describe "update_status" do
-      #...
+    describe "PUT update_status" do
+      it "updates the grade status for grades" do
+        put :update_status, { grade_ids: [@grade.id], id: @assignment.id, grade: { status: "Graded" }}
+        expect(@grade.reload.status).to eq("Graded")
+      end
     end
 
     describe "GET import" do

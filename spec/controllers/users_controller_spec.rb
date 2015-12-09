@@ -134,6 +134,7 @@ describe UsersController do
       let(:file) { fixture_file "users.csv", "text/csv" }
       before { create :team, course: @course, name: "Zeppelin" }
 
+      # Sporadic failure?
       it "renders the results from the import" do
         post :upload, file: file
         expect(response).to render_template :import_results

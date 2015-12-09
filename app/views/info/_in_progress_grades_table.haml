@@ -8,7 +8,7 @@
       = link_to assignment.name, assignment
       = link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button"
 
-    = form_tag edit_status_grades_assignment_path assignment do
+    = form_tag edit_status_grades_assignment_path(assignment), method: :get do
       %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "inProgressTableCaption"}
         %thead
           %tr
