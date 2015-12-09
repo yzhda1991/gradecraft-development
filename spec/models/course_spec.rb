@@ -702,34 +702,6 @@ describe Course do
     end
   end
 
-  describe "#self.csv_summary_data" do
-    skip "implement"
-  end
-
-  describe "#self.csv_roster" do
-    skip "implement"
-  end
-
-  describe "#self.csv_assignments" do
-    skip "implement"
-  end
-
-  describe "#csv_gradebook" do
-    skip "implement"
-  end
-
-  describe "#csv_multiplied_gradebook" do
-    skip "implement"
-  end
-
-  describe "#research_grades_csv(options = {})" do
-    skip "implement"
-  end
-
-  describe "#earned_badges_for_course" do
-    skip "implement"
-  end
-
   describe "#course_badge_count" do
     it "tallies the number of badges in a course" do
       badge = create(:badge, course: subject)

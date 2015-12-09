@@ -1,5 +1,5 @@
 class AssignmentExporter
-  def export(assignment, students, options={})
+  def export_grades(assignment, students, options={})
     CSV.generate(options) do |csv|
       csv << headers
       students.each do |student|

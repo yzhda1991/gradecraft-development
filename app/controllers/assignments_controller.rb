@@ -113,7 +113,7 @@ class AssignmentsController < ApplicationController
   def export_grades
     assignment = current_course.assignments.find(params[:id])
     respond_to do |format|
-      format.csv { send_data AssignmentExporter.new.export assignment, assignment.course.students }
+      format.csv { send_data AssignmentExporter.new.export_grades assignment, assignment.course.students }
     end
   end
 
