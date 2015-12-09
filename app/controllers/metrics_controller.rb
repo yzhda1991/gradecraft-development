@@ -3,7 +3,7 @@ class MetricsController < ApplicationController
 
   before_action :find_metric, only: [:update, :destroy]
 
-  respond_to :html, :json
+  respond_to :json
 
   def create
     @metric = Metric.create params[:metric]

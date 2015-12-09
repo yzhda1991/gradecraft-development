@@ -13,6 +13,10 @@ $color-alt-blue-2: #6FA9DD
 $color-alt-blue-3: #55C3F5
 $alt-blues: (0: #1E267F, 1: #1460AE, 2: #6FA9DD, 3: #55C3F5)
 
+$color-purple-1: #490454
+$color-purple-2: #8F27A1
+$purples: (1: #490454, 2: #8F27A1)
+
 $color-green-0: #1C7200
 $color-green-1: #219800
 $color-green-2: #68A127
@@ -50,6 +54,10 @@ $greys: ("00": #000000, 0: #333333, 1: #444444, 2: #666666, 3: #CCCCCC, 4: #EEEE
 
 @each $number, $hex-code in $blues
   .color-blue-#{$number}
+    background-color: $hex-code
+
+@each $number, $hex-code in $purples
+  .color-purple-#{$number}
     background-color: $hex-code
 
 @each $number, $hex-code in $alt-blues

@@ -3,7 +3,7 @@ class TierBadgesController< ApplicationController
 
   before_action :find_tier_badge, only: [:update, :destroy]
 
-  respond_to :html, :json
+  respond_to :json
 
   def create
     @tier_badge = TierBadge.create params[:tier_badge]

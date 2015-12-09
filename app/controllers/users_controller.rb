@@ -22,9 +22,7 @@ class UsersController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.json { render json: @users }
       format.csv { send_data @users.to_csv }
-      format.xls { send_data @users.to_csv(col_sep: "\t") }
     end
   end
 
@@ -81,7 +79,6 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to users_url, :notice => "#{@name} was successfully deleted" }
-      format.json { head :ok }
     end
   end
 

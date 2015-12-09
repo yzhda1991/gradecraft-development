@@ -19,7 +19,6 @@ class CourseMembershipsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to students_path, notice: "#{@name} was successfully removed from course." }
-      format.json { head :ok }
     end
   end
 
