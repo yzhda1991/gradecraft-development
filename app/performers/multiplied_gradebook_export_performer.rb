@@ -2,8 +2,8 @@ class MultipliedGradebookExportPerformer < GradebookExportPerformer
 
   protected
 
-  def fetch_csv_data
-    @csv_data = GradebookExporter.new.multiplied_gradebook @course
+  def fetch_csv_data(course_id)
+    @csv_data = GradebookExporter.new.multiplied_gradebook(course_id)
   end
 
   def notify_gradebook_export
