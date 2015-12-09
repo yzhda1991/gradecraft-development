@@ -7,18 +7,18 @@
           Edit Submission
           %span.sr-only #{@student.try(:first_name)}'s Submission
       %li
-        = link_to raw("<i class='fa fa-trash fa-fw'></i>Delete Submission"), assignment_submission_path(:assignment => @assignment, :submission => @submission ), :data => { confirm: 'Are you sure?',  method: :delete }
+        = link_to raw("<i class='fa fa-trash fa-fw'></i> Delete Submission"), assignment_submission_path(:assignment => @assignment, :submission => @submission ), :data => { confirm: 'Are you sure?',  method: :delete }
 
-      %li= link_to raw("<i class='fa fa-check fa-fw'></i>Grade"), edit_assignment_grade_path(@assignment, @submission, :student_id => @student.id)
+      %li= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), edit_assignment_grade_path(@assignment, @submission, :student_id => @student.id)
 - elsif @assignment.has_groups?
   .context_menu
     %ul
       %li
-        %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?group_id=#{@group}" }
+        %a{:href => "#{edit_assignment_submission_path(@assignment, @submission)}?group_id=#{@group.id}" }
           %i.fa.fa-edit
           Edit Submission
           %span.sr-only #{@group.try(:name)}'s Submission
       %li
-        = link_to "Delete Submission", assignment_submission_path(:assignment => @assignment, :submission => @submission ), :data => { confirm: 'Are you sure?',  method: :delete }
+        = link_to raw("<i class='fa fa-trash fa-fw'></i> Delete Submission"), assignment_submission_path(:assignment => @assignment, :submission => @submission ), :data => { confirm: 'Are you sure?',  method: :delete }
 
-      %li= link_to "Grade", edit_assignment_grade_path(@assignment, @submission, :group_id => @group.id)
+      %li= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), group_grade_assignment_path(@assignment,  :group_id => @group.id)
