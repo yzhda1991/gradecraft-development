@@ -1,4 +1,4 @@
 class GradebookExporterJob < ResqueJob::Base
   @queue = :gradebook_exporter 
-  @performer_class = GradebookExportPerformer
+  @exporter_class = GradebookExportPerformer
 end

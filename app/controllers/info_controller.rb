@@ -94,6 +94,12 @@ class InfoController < ApplicationController
     @title = "#{term_for :assignment} Analytics"
   end
 
+  def final_grades
+    respond_to do |format|
+      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
+    end
+  end
+
   def gradebook
     GradebookExporterJob.new(user_id: current_user.id, course_id: current_course.id).enqueue
 
@@ -111,12 +117,6 @@ class InfoController < ApplicationController
     redirect_back_or_default
   end
 
-  def final_grades
-    respond_to do |format|
-      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
-    end
-  end
-
   #downloadable grades for course with  export
   def research_gradebook
     # @mz TODO: add specs
@@ -132,6 +132,12 @@ class InfoController < ApplicationController
     @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types
     @teams = current_course.teams
+  end
+
+  def assignment_structure
+    respond_to do |format|
+      format.csv { send_data AssignmentStructureExporter.new.assignment_structure current_course }
+    end
   end
 
   private
