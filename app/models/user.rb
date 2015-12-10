@@ -183,10 +183,6 @@ class User < ActiveRecord::Base
     activation_state == "active"
   end
 
-  def default_course
-    super || courses.first
-  end
-
   def name
     @name = [first_name,last_name].reject(&:blank?).join(' ').presence || "User #{id}"
   end
@@ -497,10 +493,6 @@ class User < ActiveRecord::Base
 
   def final_earnable_course_badges_sql(grade)
     earnable_course_badges_sql_conditions(grade).where_values.join(" OR ")
-  end
-
-  def set_default_course
-    self.default_course ||= courses.first
   end
 
   def cache_last_login
