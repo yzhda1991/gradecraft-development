@@ -6,8 +6,7 @@ module CurrentScopes
 
   def current_course
     return unless current_user
-    @__current_course ||= current_user.courses.find_by(id: session[:course_id]) if session[:course_id]
-    @__current_course ||= current_user.default_course
+    @__current_course ||= CourseRouter.current_course_for(current_user, session[:course_id])
   end
 
   def current_user_is_staff?
