@@ -94,12 +94,6 @@ class EarnedBadgesController < ApplicationController
     handle_mass_update_redirect
   end
 
-  # Display a chart of all badges earned in the course
-  def chart
-    @badges = current_course.badges
-    @students = current_course.students
-  end
-
   def destroy
     @name = "#{@badge.name}"
     @student_name = "#{@earned_badge.student.name}"
