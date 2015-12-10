@@ -205,13 +205,6 @@ describe EarnedBadgesController do
         expect{ get :destroy, { :id => @earned_badge, :badge_id => @badge.id } }.to change(EarnedBadge,:count).by(-1)
       end
     end
-
-    describe "GET chart" do
-      it "loads the chart page" do
-        get :chart
-        expect(response).to render_template(:chart)
-      end
-    end
   end
 
   context "as student" do
