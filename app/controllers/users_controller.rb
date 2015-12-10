@@ -112,7 +112,6 @@ class UsersController < ApplicationController
     @title = "Edit My Profile"
     @user = current_user
     @course_membership = @user.course_memberships.where(course_id: current_course).first
-    @default_course_options = @user.courses
   end
 
   def update_profile
@@ -128,7 +127,6 @@ class UsersController < ApplicationController
     else
       @title = "Edit My Profile"
       @course_membership = @user.course_memberships.where(course_id: current_course).first
-      @default_course_options = @user.courses
       render :edit_profile
     end
   end
