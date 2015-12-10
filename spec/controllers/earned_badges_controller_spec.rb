@@ -33,7 +33,6 @@ describe EarnedBadgesController do
     describe "GET show" do
       it "returns the earned badge show page" do
         get :show, { :id => @earned_badge.id, :badge_id => @badge.id }
-        expect(assigns(:title)).to eq("#{@student.reload.name}'s #{@badge.name} badge")
         expect(assigns(:earned_badge)).to eq(@earned_badge)
         expect(response).to render_template(:show)
       end
@@ -51,19 +50,18 @@ describe EarnedBadgesController do
     describe "GET edit" do
       it "displays the edit form" do
         get :edit, {:id => @earned_badge.id, :badge_id => @badge.id}
-        expect(assigns(:title)).to eq("Editing Awarded #{@badge.name}")
         expect(assigns(:earned_badge)).to eq(@earned_badge)
         expect(response).to render_template(:edit)
       end
     end
 
     describe "POST create" do
-      it "creates the earned badge with valid attributes"  do
-        skip "implement"
+      it "creates the earned badge with valid attributes" do
         params = attributes_for(:earned_badge)
-        params[:student] = @student.id
         params[:badge_id] = @badge.id
-        expect{ post :create, :badge_id => @badge.id, :earned_badge => params }.to change(EarnedBadge,:count).by(1)
+        params[:student_id] = @student.id
+        expect{ post :create, :badge_id => @badge.id, :student_id => @student.id, :earned_badge => params }.to change(EarnedBadge, :count).by(1) 
+        expect(response).to redirect_to badge_path(@badge)   
       end
 
       it "doesn't create earned badges with invalid attributes" do
@@ -71,7 +69,7 @@ describe EarnedBadgesController do
       end
     end
 
-    describe "POST mass_earn", working: true do
+    describe "POST mass_earn" do
       before(:all) do
         @students = create_list(:user, 2)
         @student_ids = @students.collect(&:id)
@@ -98,7 +96,7 @@ describe EarnedBadgesController do
       end
     end
 
-    describe "send_earned_badge_notifications", working: true do
+    describe "send_earned_badge_notifications" do
       before(:all) do
         @students = create_list(:user, 2)
         @student_ids = @students.collect(&:id)

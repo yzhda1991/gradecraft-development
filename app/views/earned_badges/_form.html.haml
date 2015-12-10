@@ -6,7 +6,7 @@
   = hidden_field_tag :badge_id, @badge.id
 
   %section
-    = select_tag :student, options_from_collection_for_select(current_course.students, "id", "name", @earned_badge.try(:student_id)), :prompt => "Select Student"
+    = select_tag :student_id, options_from_collection_for_select(current_course.students, "id", "name", @earned_badge.try(:student_id)), :prompt => "Select Student"
 
   %section
     .textarea
