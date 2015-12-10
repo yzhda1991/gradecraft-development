@@ -32,34 +32,30 @@ class EarnedBadgesController < ApplicationController
     @earned_badge.student =  current_course.students.find_by_id(params[:student_id])
     @earned_badge.student_visible = true
 
-    respond_to do |format|
-      if @earned_badge.save
-        if @badge.point_total?
-          # @mz TODO: add specs
-          ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: current_course.id).enqueue
-        end
-        NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver_now
-        format.html { redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded to #{@earned_badge.student.name}" }
-      else
-        format.html { render action: "new" }
+    if @earned_badge.save
+      if @badge.point_total?
+        # @mz TODO: add specs
+        ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: current_course.id).enqueue
       end
+      NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver_now
+      redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded to #{@earned_badge.student.name}"
+    else
+      render action: "new"
     end
   end
 
   def update
     @earned_badge.student_visible = true
 
-    respond_to do |format|
-      if @earned_badge.update_attributes(params[:earned_badge])
-        if @badge.point_total?
-          # @mz TODO: add specs
-          ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: current_course.id).enqueue
-        end
-        expire_fragment "earned_badges"
-        format.html { redirect_to badge_path(@badge), notice: "#{@earned_badge.student.name}'s #{@badge.name} #{term_for :badge} was successfully updated." }
-      else
-        format.html { render action: "edit" }
+    if @earned_badge.update_attributes(params[:earned_badge])
+      if @badge.point_total?
+        # @mz TODO: add specs
+        ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: current_course.id).enqueue
       end
+      expire_fragment "earned_badges"
+      redirect_to badge_path(@badge), notice: "#{@earned_badge.student.name}'s #{@badge.name} #{term_for :badge} was successfully updated."
+    else
+      render action: "edit"
     end
   end
 
