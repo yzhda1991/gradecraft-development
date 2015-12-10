@@ -41,11 +41,6 @@
               .form_label What's the background of your character in this class? What skills do you have and what are you motivated by?
               = p.input :character_profile, :label => false
 
-      .form-item
-        = f.input :default_course_id, :collection => (@default_course_options)
-        .form_label This course will be automatically loaded when you log in to GradeCraft
-
-
       .submit-buttons
         %ul
           %li= submit_tag 'Update Settings', :class => 'button'

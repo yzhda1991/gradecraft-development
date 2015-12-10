@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151205135720) do
+ActiveRecord::Schema.define(version: 20151210174029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -853,7 +853,7 @@ ActiveRecord::Schema.define(version: 20151205135720) do
     t.integer  "rank"
     t.string   "display_name",                    limit: 255
     t.boolean  "private_display",                             default: false
-    t.integer  "default_course_id"
+    t.integer  "current_course_id"
     t.string   "final_grade",                     limit: 255
     t.integer  "visit_count"
     t.integer  "predictor_views"

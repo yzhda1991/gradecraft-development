@@ -31,7 +31,7 @@ describe CurrentCoursesController do
 
     it "stores the course to the current course for the user" do
       post :change, course_id: another_course.id
-      expect(user.reload.default_course_id).to eq another_course.id
+      expect(user.reload.current_course_id).to eq another_course.id
     end
   end
 
