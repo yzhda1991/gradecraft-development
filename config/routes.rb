@@ -144,11 +144,7 @@ GradeCraft::Application.routes.draw do
   resources :badges do
     post :predict_times_earned
     resources :tasks
-    resources :earned_badges do
-      collection do
-        get :chart
-      end
-    end
+    resources :earned_badges
     member do
       get 'mass_award' => 'earned_badges#mass_edit', as: :mass_award
       post 'mass_earn' => 'earned_badges#mass_earn'
