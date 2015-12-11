@@ -1,15 +1,8 @@
 class SubmissionsController < ApplicationController
-
-  before_filter :ensure_staff?, :only=>[:show, :index, :destroy]
+  before_filter :ensure_staff?, only: [:show, :destroy]
 
   include Canable::Enforcers
   helper UploadsHelper
-
-  # Redirects to the parent assignment that should list all submissions in existence
-  def index
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    redirect_to @assignment
-  end
 
   def new
     session[:return_to] = request.referer

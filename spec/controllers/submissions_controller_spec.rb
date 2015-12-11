@@ -22,13 +22,6 @@ describe SubmissionsController do
       login_user(@professor)
     end
 
-    describe "GET index" do
-      it "redirects the submissions index to the assignment page" do
-        get :index, :assignment_id => @assignment.id
-        expect(response).to redirect_to(assignment_path(@assignment))
-      end
-    end
-
     describe "GET show" do
       it "returns the submission show page" do
         get :show, {:id => @submission.id, :assignment_id => @assignment.id}
@@ -126,18 +119,9 @@ describe SubmissionsController do
       end
     end
 
-    describe "protected routes" do
-      [
-        :index
-      ].each do |route|
-          it "#{route} redirects to root" do
-            expect(get route, {:assignment_id => "10"}).to redirect_to(:root)
-          end
-        end
-    end
-
     describe "protected routes requiring id in params" do
       [
+        :show,
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
