@@ -591,10 +591,23 @@ describe GradesController do
           @assignment.update(student_logged: true)
         end
 
-        it "creates a maximum score by the student" do
+        it "creates a maximum score by the student if present" do
           post :self_log, id: @assignment.id, present: "true"
           grade = @student.grade_for_assignment(@assignment)
           expect(grade.raw_score).to eq @assignment.point_total
+        end
+
+        it "creates a zero score if the student is not present" do
+          post :self_log, id: @assignment.id, present: "false"
+          grade = @student.grade_for_assignment(@assignment)
+          expect(grade.raw_score).to eq 0
+        end
+
+        it "reports errors on failure to save" do
+          allow_any_instance_of(Grade).to receive(:save).and_return false
+          post :self_log, id: @assignment.id, present: "true"
+          grade = @student.grade_for_assignment(@assignment)
+          expect(flash[:notice]).to eq("We're sorry, there was an error saving your grade.")
         end
 
         context "with assignment levels" do
@@ -631,6 +644,19 @@ describe GradesController do
       it "enqueues_the_predictor_event_job" do
         expect(controller).to receive(:enqueue_predictor_event_job)
         get :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
+      end
+
+      it "errors if grade is already released" do
+        allow(@student).to receive(:grade_released_for_assignment?).and_return true
+        post :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
+        expect(JSON.parse(response.body)).to eq({"errors" => "You cannot predict this assignment!"})
+        expect(response.status).to eq(400)
+      end
+
+      it "errors if prediction can't be saved" do
+        allow_any_instance_of(Grade).to receive(:save).and_return false
+        post :predict_score, { :id => @assignment.id, predicted_score: predicted_points, format: :json }
+        expect(response.status).to eq(400)
       end
     end
 
