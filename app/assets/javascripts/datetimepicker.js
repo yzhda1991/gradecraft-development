@@ -2244,9 +2244,11 @@
 
 }));
 
-$('.datetimepicker').datetimepicker({
-  controlType: 'select',
-  oneLine: true,
-  dateFormat: 'MM d, yy -',
-  timeFormat: 'h:mmtt'
+$(document).on('focus',".datetimepicker", function(){
+  $(this).datetimepicker({
+    controlType: 'select',
+    oneLine: true,
+    dateFormat: 'MM d, yy -',
+    timeFormat: 'h:mmtt'
+  });
 });
