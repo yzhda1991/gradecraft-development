@@ -378,11 +378,11 @@ class GradesController < ApplicationController
 
           format.html { redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!' }
         else
-          format.html { redirect_to syllabus_path, notice: "We're sorry, this grade could not be added." }
+          format.html { redirect_to syllabus_path, notice: "We're sorry, there was an error saving your grade." }
         end
       end
     else
-      redirect_to dashboard_path, notice: "We're sorry, this assignment is not open for self grading."
+      redirect_to dashboard_path, notice: "This assignment is not open for self grading."
     end
   end
 
@@ -510,8 +510,6 @@ class GradesController < ApplicationController
     end
   end
 
-  #----------- jg: Specs to here -----------------------------------------------#
-
   def new_grade_from_rubric_grades_attributes
     {
       course_id: current_course[:id],
@@ -538,10 +536,6 @@ class GradesController < ApplicationController
       status: params[:grade_status],
       instructor_modified: true
     }
-  end
-
-  def existing_metrics_as_json
-    ActiveModel::ArraySerializer.new(rubric_metrics_with_tiers, each_serializer: ExistingMetricSerializer).to_json
   end
 
   def rubric_metrics_with_tiers
