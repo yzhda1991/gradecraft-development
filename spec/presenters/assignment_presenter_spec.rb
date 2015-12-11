@@ -1,4 +1,4 @@
-require "rspec/core"
+require "spec_helper"
 require "./app/presenters/assignment_presenter"
 require "./app/presenters/assignment_group_presenter"
 
