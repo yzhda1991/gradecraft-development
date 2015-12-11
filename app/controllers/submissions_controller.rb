@@ -1,7 +1,6 @@
 class SubmissionsController < ApplicationController
   before_filter :ensure_staff?, only: [:show, :destroy]
 
-  include Canable::Enforcers
   helper UploadsHelper
 
   def new
