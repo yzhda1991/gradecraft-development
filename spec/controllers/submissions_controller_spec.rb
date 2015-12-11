@@ -35,7 +35,6 @@ describe SubmissionsController do
       it "assigns title and assignment relation" do
         get :new, assignment_id: @assignment.id
         expect(assigns(:title)).to eq("Submit #{@assignment.name} (#{@assignment.point_total} points)")
-        expect(assigns(:submission)).to be_a_new(Submission)
         expect(response).to render_template(:new)
       end
     end
@@ -79,14 +78,6 @@ describe SubmissionsController do
     before do
       @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
       login_user(@student)
-    end
-
-    describe "GET new" do
-      it "assigns a new submission as @submission" do
-        get :new, :assignment_id => @assignment.id
-        expect(assigns(:submission)).to be_a_new(Submission)
-        expect(response).to render_template(:new)
-      end
     end
 
     describe "GET edit" do

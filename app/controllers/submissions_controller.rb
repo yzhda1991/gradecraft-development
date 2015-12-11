@@ -7,7 +7,7 @@ class SubmissionsController < ApplicationController
     @title = "Submit #{@assignment.name} (#{@assignment.point_total} points)"
     @group = current_course.groups.find(params[:group_id]) if @assignment.has_groups?
     @student = current_student
-    @submission = @assignment.submissions.new
+    render :new, SubmissionPresenter.build({ submission: @assignment.submissions.new, view_context: view_context })
   end
 
   def edit
@@ -24,23 +24,20 @@ class SubmissionsController < ApplicationController
     end
     if current_user_is_student?
       @title = "Editing My Submission for #{@assignment.name}"
-      @user = current_user
       enforce_view_permission(@submission)
     end
-    @groups = @assignment.groups
-    @teams = current_course.teams
   end
 
   def create
     @assignment = current_course.assignments.find(params[:assignment_id])
     if params[:submission] && params[:submission][:submission_files_attributes].present?
-      @submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
+      submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
       params[:submission].delete :submission_files_attributes
     end
     @submission = @assignment.submissions.new(params[:submission])
     @submission.student = current_student if current_user_is_student?
-    if @submission_files
-      @submission_files.each do |sf|
+    if submission_files
+      submission_files.each do |sf|
         if sf.size > MAX_UPLOAD_FILE_SIZE
           return redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} not saved! #{sf.original_filename} was larger than the maximum #{MAX_UPLOAD_READABLE} file size."
         end
@@ -55,9 +52,6 @@ class SubmissionsController < ApplicationController
         redirect_to (session.delete(:return_to) || assignment_path(@assignment)), notice: "#{@assignment.name} was successfully submitted."
       end
       if @assignment.is_individual? && current_user_is_student?
-        user = { name: "#{@submission.student.first_name}", email: "#{@submission.student.email}" }
-        submission = { name: "#{@submission.assignment.name}", time: "#{@submission.created_at}" }
-        course = { courseno: "#{current_course.courseno}",  }
         NotificationMailer.successful_submission(@submission.id).deliver_now
       end
     elsif @submission.errors[:link].any?
@@ -82,14 +76,14 @@ class SubmissionsController < ApplicationController
   def update
     @assignment = current_course.assignments.find(params[:assignment_id])
     if params[:submission] && params[:submission][:submission_files_attributes].present?
-      @submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
+      submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
       params[:submission].delete :submission_files_attributes
     end
 
     @submission = @assignment.submissions.find(params[:id])
 
-    if @submission_files
-      @submission_files.each do |sf|
+    if submission_files
+      submission_files.each do |sf|
         if sf.size > MAX_UPLOAD_FILE_SIZE
           return redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} not saved! #{sf.original_filename} was larger than the maximum #{MAX_UPLOAD_READABLE} file size."
         end
@@ -100,9 +94,9 @@ class SubmissionsController < ApplicationController
     respond_to do |format|
       if @submission.update_attributes(params[:submission])
         if current_user_is_student?
+          NotificationMailer.updated_submission(@submission.id).deliver_now
           format.html { redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "Your submission for #{@assignment.name} was successfully updated." }
           format.json { render json: @assignment, status: :created, location: @assignment }
-          NotificationMailer.updated_submission(@submission.id).deliver_now
         else
           format.html { redirect_to assignment_submission_path(@assignment, @submission), notice: "#{@assignment.name} was successfully updated." }
         end
@@ -116,13 +110,9 @@ class SubmissionsController < ApplicationController
   end
 
   def destroy
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    @submission = current_course.submissions.find(params[:id])
-    @submission.destroy
-    respond_to do |format|
-      format.html { redirect_to assignment_path(@assignment) }
-    end
-    flash[:notice] = "Submission deleted"
+    assignment = current_course.assignments.find(params[:assignment_id])
+    submission = current_course.submissions.find(params[:id])
+    submission.destroy
+    redirect_to assignment_path(assignment, notice: "Submission deleted")
   end
-
 end

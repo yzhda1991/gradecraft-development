@@ -2,7 +2,7 @@
 
 %hr
 
-= simple_form_for([@assignment, @submission]) do |f|
+= simple_form_for([@assignment, presenter.submission]) do |f|
   - if @assignment.has_groups? && current_user_is_student?
     = f.input :group_id, :input_html => { :value => current_student.group_for_assignment(@assignment).id }, :as => :hidden
   - elsif @assignment.has_groups? && current_user_is_staff?
@@ -13,9 +13,9 @@
   %section
     - if @assignment.accepts_attachments
       %h4 Attachments
-      = f.simple_fields_for :submission_files, @submission.submission_files.new do |sf|
+      = f.simple_fields_for :submission_files, presenter.submission.submission_files.new do |sf|
         = sf.file_field :file, :multiple => true
-      - if @submission.submission_files.exists?
+      - if presenter.submission.submission_files.exists?
         %h5.bold Uploaded files
         %ul.uploaded-files
           - current_student.submission_for_assignment(@assignment).submission_files.each do |sf|
@@ -24,7 +24,7 @@
               = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
 
     - if @assignment.accepts_links
-      = f.input :link 
+      = f.input :link
 
     - if @assignment.accepts_text
       %h4.uppercase Content/Statement
@@ -32,5 +32,5 @@
 
   .submit-buttons
     %ul
-      %li= f.button :submit, "#{@submission.persisted? ? 'Update Submission' : "Submit #{term_for :assignment}"}"
+      %li= f.button :submit, "#{presenter.submission.persisted? ? 'Update Submission' : "Submit #{term_for :assignment}"}"
       %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(@assignment), :class => 'button'
