@@ -20,8 +20,7 @@ class GradeSchemeElementsController < ApplicationController
       :low_range,
       :letter,
       :high_range,
-      :course_id,
-      :updated_at
+      :course_id
     )
   end
 
@@ -44,19 +43,12 @@ class GradeSchemeElementsController < ApplicationController
           :low_range,
           :letter,
           :high_range,
-          :course_id,
-          :updated_at
+          :course_id
         ) }
 
       else
         format.json { render json: false, status: :internal_server_error }
       end
-    end
-  end
-
-  def update
-    respond_to do |format|
-      format.json { render json: true }
     end
   end
 
