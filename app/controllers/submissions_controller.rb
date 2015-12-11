@@ -1,32 +1,16 @@
 class SubmissionsController < ApplicationController
   before_filter :ensure_staff?, only: [:show, :destroy]
-
-  helper UploadsHelper
+  before_filter :save_referer, only: [:new, :edit]
 
   def new
-    session[:return_to] = request.referer
     @assignment = current_course.assignments.find(params[:assignment_id])
     @title = "Submit #{@assignment.name} (#{@assignment.point_total} points)"
-    if current_user_is_staff?
-      if @assignment.has_groups?
-        @group = current_course.groups.find(params[:group_id])
-      else
-        @student = current_student
-      end
-    end
-    if current_user_is_student?
-      @user = current_user
-      if @assignment.has_groups?
-        @group = current_course.groups.find(params[:group_id])
-      else
-        @student = current_user
-      end
-    end
+    @group = current_course.groups.find(params[:group_id]) if @assignment.has_groups?
+    @student = current_student
     @submission = @assignment.submissions.new
   end
 
   def edit
-    session[:return_to] = request.referer
     @assignment = current_course.assignments.find(params[:assignment_id])
     @submission = current_course.submissions.find(params[:id])
     @student = @submission.student

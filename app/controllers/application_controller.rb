@@ -107,6 +107,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def save_referer
+    session[:return_to] = request.referer
+  end
+
   private
 
   # Canable checks on permission

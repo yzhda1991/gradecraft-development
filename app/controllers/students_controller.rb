@@ -4,6 +4,7 @@ class StudentsController < ApplicationController
   respond_to :html, :json
 
   before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus ]
+  before_filter :save_referer, only: [:recalculate]
 
   #Lists all students in the course,
   #broken out by those being graded and auditors
@@ -26,7 +27,8 @@ class StudentsController < ApplicationController
     @students = FlaggedUser.flagged current_course, current_user
   end
 
-  #Course leaderboard - excludes auditors from view ordered by high score
+  # @mz todo:
+  #Course wide leaderboard - excludes auditors from view
   def leaderboard
     @title = "Leaderboard"
 
@@ -123,7 +125,6 @@ class StudentsController < ApplicationController
   end
 
   def recalculate
-    session[:return_to] = request.referer
     @student = current_course.students.find_by(id: params[:student_id])
 
     # @mz TODO: add specs
