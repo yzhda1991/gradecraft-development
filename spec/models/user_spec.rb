@@ -136,24 +136,6 @@ describe User do
     end
   end
 
-  describe "#default_course" do
-    let(:student) { create :user, default_course: world.course }
-    let(:second_course) {create :course}
-    before do
-      create(:course_membership, course: world.course, user: student)
-      create(:course_membership, course: second_course, user: student)
-    end
-
-    it "returns the users default course if they've set one" do
-      expect(student.default_course).to eq(world.course)
-    end
-
-    it "returns the first course they have if they haven't set one" do
-      student.default_course = nil
-      expect(student.default_course).to eq(student.courses.first)
-    end
-  end
-
   describe "#name" do
     let(:student) {create :user, first_name: "Daniel", last_name: "Hall"}
 

@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
   attr_accessor :password, :password_confirmation, :cached_last_login_at, :score, :team
   attr_accessible :username, :email, :password, :password_confirmation, :activation_state,
     :avatar_file_name, :first_name, :last_name, :user_id, :kerberos_uid, :display_name,
-    :default_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids,
+    :current_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids,
     :courses, :course_ids, :earned_badges, :earned_badges_attributes, :student_academic_history_attributes,
     :team_role, :course_memberships_attributes, :team_id, :lti_uid, :course_team_ids, :internal
 
@@ -89,7 +89,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :courses
   accepts_nested_attributes_for :course_memberships, allow_destroy: true
 
-  belongs_to :default_course, :class_name => 'Course', touch: true
+  belongs_to :current_course, :class_name => 'Course', touch: true
 
   has_many :student_academic_histories, :foreign_key => :student_id, :dependent => :destroy
   accepts_nested_attributes_for :student_academic_histories
@@ -181,10 +181,6 @@ class User < ActiveRecord::Base
 
   def activated?
     activation_state == "active"
-  end
-
-  def default_course
-    super || courses.first
   end
 
   def name
@@ -497,10 +493,6 @@ class User < ActiveRecord::Base
 
   def final_earnable_course_badges_sql(grade)
     earnable_course_badges_sql_conditions(grade).where_values.join(" OR ")
-  end
-
-  def set_default_course
-    self.default_course ||= courses.first
   end
 
   def cache_last_login

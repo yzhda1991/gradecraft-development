@@ -8,7 +8,10 @@ class TransferRoleToCourseMemberships < ActiveRecord::Migration
 
   def down
     User.all.each do |u|
-      u.update_attribute(:role, u.course_memberships.where(course_id: u.default_course).first.role) unless u.course_memberships.empty?
+      unless u.course_memberships.empty?
+        course_id = u.current_course_id || u.courses.first.id
+        u.update_attribute(:role, u.course_memberships.where(course_id: course_id).first.role)
+      end
     end
   end
 end
