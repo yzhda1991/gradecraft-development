@@ -74,7 +74,7 @@ describe StudentsController do
 
     describe "GET badges" do
       it "shows the student facing badge page" do
-        skip "implement"
+        allow(controller).to receive(:current_student).and_return(@student)
         get :badges, :id => @student.id
         expect(assigns(:title)).to eq("badges")
         expect(response).to render_template(:badges)

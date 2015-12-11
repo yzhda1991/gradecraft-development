@@ -6,6 +6,12 @@ class CoursesController < ApplicationController
   def index
     @title = "Course Index"
     @courses = Course.all
+    #Used to return the course list to search
+    respond_to do |format|
+      format.html { }
+      format.json { render json: @courses.to_json(only: [:id, :name, :courseno,
+                                                         :year, :semester]) }
+    end
   end
 
   def show

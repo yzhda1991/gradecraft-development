@@ -32,6 +32,19 @@ describe GradeSchemeElementsController do
       end
     end
 
+    describe "POST mass_update" do
+      it "updates the grade scheme elements all at once" do
+        skip "not working"
+        params = { "grade_scheme_elements_attributes" => [{ id: @grade_scheme_element.id, letter: "C", level: "Sea Slug", 
+          low_range: 0, high_range: 100000, course_id: @course.id }, { id: GradeSchemeElement.new, letter: "B", level: "Snail", 
+          low_range: 100001, high_range: 200000, course_id: @course.id }], 
+        "deleted_ids"=>nil, "grade_scheme_element"=>{} }
+        put :mass_edit, params
+        expect(@course.grade_scheme_elements.count).to eq(2)
+        expect(@grade_scheme_element.reload.level).to eq("Sea Slug")
+      end
+    end
+
     describe "GET student predictor data" do
       it "returns grade scheme elements with total points as json" do
         @grade_scheme_element.update(low_range: 1000)
