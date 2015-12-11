@@ -317,17 +317,6 @@ class GradesController < ApplicationController
     flash[:notice] = "Updated Grades!"
   end
 
-  private
-
-  def update_status_grade_ids
-    @grades.inject([]) do |memo, grade|
-      grade.update_attributes!(params[:grade].reject { |k,v| v.blank? })
-      memo << grade.id
-    end
-  end
-
-  public
-
   #upload grades for an assignment
   def import
     @assignment = current_course.assignments.find(params[:id])
@@ -335,12 +324,12 @@ class GradesController < ApplicationController
   end
 
   def upload
+    @assignment = current_course.assignments.find(params[:id])
+
     if params[:file].blank?
       flash[:notice] = "File missing"
       redirect_to assignment_path(@assignment)
     else
-      @assignment = current_course.assignments.find(params[:id])
-
       # @mz todo: check into what this calls is doing. is this being used?
       @students = current_course.students
 
@@ -364,9 +353,11 @@ class GradesController < ApplicationController
   # Allows students to self log grades for a particular assignment if the instructor has turned that feature on - currently only used to log attendance
   def self_log
     @assignment = current_course.assignments.find(params[:id])
-    if @assignment.open?
 
-      @grade = current_student.grade_for_assignment(@assignment)
+    if @assignment.open? && @assignment.student_logged?
+
+      @grade = Grade.find_or_create(@assignment,current_student)
+
       if params[:present] == "true"
         if params[:grade].present? && params[:grade][:raw_score].present?
           @grade.raw_score = params[:grade][:raw_score]
@@ -391,7 +382,7 @@ class GradesController < ApplicationController
         end
       end
     else
-      format.html { redirect_to dashboard_path, notice: "We're sorry, this assignment is no longer open." }
+      redirect_to dashboard_path, notice: "We're sorry, this assignment is not open for self grading."
     end
   end
 

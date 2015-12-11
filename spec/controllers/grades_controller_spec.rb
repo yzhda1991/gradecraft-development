@@ -461,11 +461,16 @@ describe GradesController do
         end
       end
 
+      it "redirects to assignment path with a team" do
+        team = create(:team, course: @course)
+        put :mass_update, id: @assignment.id, team_id: team.id, assignment: { grades_attributes: grades_attributes }
+        expect(response).to redirect_to(assignment_path(id: @assignment.id, team_id: team.id))
+      end
+
       it "redirects on failure" do
         allow_any_instance_of(Assignment).to receive(:update_attributes).and_return false
         put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
         expect(response).to redirect_to(mass_grade_assignment_path(id: @assignment.id))
-
       end
     end
 
@@ -508,6 +513,12 @@ describe GradesController do
         put :update_status, { grade_ids: [@grade.id], id: @assignment.id, grade: { status: "Graded" }}
         expect(@grade.reload.status).to eq("Graded")
       end
+
+      it "redirects to session if present"  do
+        session[:return_to] = login_path
+        put :update_status, { grade_ids: [@grade.id], id: @assignment.id, grade: { status: "Graded" }}
+        expect(response).to redirect_to(login_path)
+      end
     end
 
     describe "GET import" do
@@ -528,7 +539,6 @@ describe GradesController do
         @student.reload.update_attribute :email, "robert@example.com"
         second_student = create(:user, username: "jimmy")
         second_student.courses << @course
-
         post :upload, id: @assignment.id, file: file
         expect(response).to render_template :import_results
         expect(response.body).to include "2 Grades Imported Successfully"
@@ -538,6 +548,12 @@ describe GradesController do
         post :upload, id: @assignment.id, file: file
         expect(response.body).to include "3 Grades Not Imported"
         expect(response.body).to include "Student not found in course"
+      end
+
+      it "adds error and redirects without a file" do
+        post :upload, id: @assignment.id
+        expect(flash[:notice]).to eq("File missing")
+        expect(response).to redirect_to(assignment_path(@assignment))
       end
     end
   end
@@ -557,6 +573,49 @@ describe GradesController do
       it "redirects to the assignment" do
         get :show, {:grade_id => @grade.id, :assignment_id => @assignment.id}
         expect(response).to redirect_to(assignment_path(@assignment))
+      end
+    end
+
+    describe "POST feedback_read" do
+      it "marks the grade as read by the student" do
+        post :feedback_read, id: @assignment.id, grade_id: @grade.id
+        expect(@grade.reload.feedback_read).to be_truthy
+        expect(@grade.feedback_read_at).to be_within(1.second).of(Time.now)
+        expect(response).to redirect_to assignment_path(@assignment)
+      end
+    end
+
+    describe "POST self_log" do
+      context "with a student loggable grade" do
+        before(:all) do
+          @assignment.update(student_logged: true)
+        end
+
+        it "creates a maximum score by the student" do
+          post :self_log, id: @assignment.id, present: "true"
+          grade = @student.grade_for_assignment(@assignment)
+          expect(grade.raw_score).to eq @assignment.point_total
+        end
+
+        context "with assignment levels" do
+          it "creates a score for the student at the specified level" do
+            post :self_log, id: @assignment.id, present: "true", grade: { raw_score: "10000" }
+            grade = @student.grade_for_assignment(@assignment)
+            expect(grade.raw_score).to eq 10000
+          end
+        end
+      end
+
+      context "with an assignment not student loggable" do
+        before(:all) do
+          @assignment.update(student_logged: false)
+        end
+
+        it "creates should not change the student score" do
+          post :self_log, id: @assignment.id, present: "true"
+          grade = @student.grade_for_assignment(@assignment)
+          expect(grade.raw_score).to eq nil
+        end
       end
     end
 
@@ -613,31 +672,6 @@ describe GradesController do
           expect {
             controller.instance_eval { enqueue_predictor_event_job }
           }.to change{ Analytics::Event.count }.by(1)
-        end
-      end
-    end
-
-    describe "POST feedback_read" do
-      it "marks the grade as read by the student" do
-        post :feedback_read, id: @assignment.id, grade_id: @grade.id
-        expect(@grade.reload.feedback_read).to be_truthy
-        expect(@grade.feedback_read_at).to be_within(1.second).of(Time.now)
-        expect(response).to redirect_to assignment_path(@assignment)
-      end
-    end
-
-    describe "POST self_log" do
-      it "creates a maximum score by the student" do
-        post :self_log, id: @assignment.id, present: "true"
-        grade = @student.grade_for_assignment(@assignment)
-        expect(grade.raw_score).to eq @assignment.point_total
-      end
-
-      context "with assignment levels" do
-        it "creates a score for the student at the specified level" do
-          post :self_log, id: @assignment.id, present: "true", grade: { raw_score: "10000" }
-          grade = @student.grade_for_assignment(@assignment)
-          expect(grade.raw_score).to eq 10000
         end
       end
     end

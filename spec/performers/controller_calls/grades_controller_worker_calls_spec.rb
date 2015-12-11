@@ -21,6 +21,8 @@ RSpec.describe GradesController, type: :controller, background_job: true do
 
   context "triggering jobs as a student" do
     describe "#self_log" do
+
+      before { allow_any_instance_of(Assignment).to receive(:student_logged?) { true } }
       let(:request_attrs) {{ id: assignment.id }}
       subject { get :self_log, request_attrs }
       before { enroll_and_login_student }
