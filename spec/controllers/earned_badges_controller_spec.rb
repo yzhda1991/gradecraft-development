@@ -148,6 +148,13 @@ describe EarnedBadgesController do
         expect(@earned_badge.reload.feedback).to eq("more feedback")
         expect(response).to redirect_to(badge_path(@badge))
       end
+
+      it "renders the edit template if the update fails" do
+        params = { feedback: "more feedback" }
+        params[:student_id] = nil
+        post :update, { id: @earned_badge.id, :badge_id => @badge.id, :earned_badge => params }
+        expect(response).to render_template(:edit)
+      end
     end
 
     describe "GET mass_edit" do
@@ -196,6 +203,18 @@ describe EarnedBadgesController do
           expect(assigns(:earned_badges).count).to eq(2)
           expect(assigns(:earned_badges)[0].student_id).to eq(student2.id)
           expect(assigns(:earned_badges)[1].student_id).to eq(@student.id)
+        end
+        
+      end
+
+      describe "when badges can only be earned once" do 
+        it "builds a new one if it hasn't been earned" do 
+          @badge.can_earn_multiple_times = false
+          @badge.save
+
+          get :mass_edit, :id => @badge.id
+          expect(assigns(:earned_badges)).to eq([@earned_badge])
+          expect(response).to render_template(:mass_edit)
         end
       end
     end
