@@ -12,12 +12,12 @@ class EarnedBadgeExporter
           earned_badge.badge.id,
           earned_badge.badge.name,
           earned_badge.feedback,
-          earned_badge.created_at
+          earned_badge.created_at.to_formatted_s(:db)
         ]
       end
     end
   end
-  
+
   private
 
   def baseline_headers
