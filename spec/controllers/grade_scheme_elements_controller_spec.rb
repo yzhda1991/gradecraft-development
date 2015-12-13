@@ -41,6 +41,16 @@ describe GradeSchemeElementsController do
         expect(@course.reload.grade_scheme_elements.count).to eq(2)
         expect(@grade_scheme_element.reload.level).to eq("Sea Slug")
       end
+
+      it "does not save the changes if invalid" do
+        @grade_scheme_element_2 = create(:grade_scheme_element, course: @course)
+        params = { "grade_scheme_elements_attributes" => [{ id: @grade_scheme_element.id, letter: "C", level: "Sea Slugs Galore", low_range: 0, high_range: 100010, course_id: @course.id }, { id: GradeSchemeElement.new.id, letter: "B", level: "Snail",
+          low_range: 100011, high_range: nil, course_id: @course.id}],
+        "deleted_ids"=>nil, "grade_scheme_element"=>{} }
+        put :mass_update, params.merge(format: :json)
+        expect(@grade_scheme_element.reload.high_range).to eq(100000)
+        expect(response.status).to eq(500)
+      end
     end
 
     describe "GET student predictor data" do
@@ -49,6 +59,15 @@ describe GradeSchemeElementsController do
         get :predictor_data, format: :json
         expect(assigns(:grade_scheme_elements)).to eq([@grade_scheme_element])
         expect(assigns(:total_points)).to eq(1100)
+        expect(response).to render_template(:predictor_data)
+      end
+
+      it "returns the total points in the course if no grade scheme elements are present" do 
+        @grade_scheme_element.destroy
+        @assignment = create(:assignment, course: @course, :point_total => 2000)
+        get :predictor_data, format: :json
+        expect(@course.total_points).to eq(2000)
+        expect(assigns(:total_points)).to eq(2000)
         expect(response).to render_template(:predictor_data)
       end
     end
@@ -69,6 +88,15 @@ describe GradeSchemeElementsController do
         get :predictor_data, format: :json
         expect(assigns(:grade_scheme_elements)).to eq([@grade_scheme_element])
         expect(assigns(:total_points)).to eq(1100)
+        expect(response).to render_template(:predictor_data)
+      end
+
+      it "returns the total points in the course if no grade scheme elements are present" do 
+        @grade_scheme_element.destroy
+        @assignment = create(:assignment, course: @course, :point_total => 2000)
+        get :predictor_data, format: :json
+        expect(@course.total_points).to eq(2000)
+        expect(assigns(:total_points)).to eq(2000)
         expect(response).to render_template(:predictor_data)
       end
     end
