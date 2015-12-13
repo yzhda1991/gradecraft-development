@@ -169,7 +169,7 @@ class BadgesController < ApplicationController
     return badges
   end
 
-  def find_badge 
+  def find_badge
     @badge = current_course.badges.find(params[:id])
   end
 end

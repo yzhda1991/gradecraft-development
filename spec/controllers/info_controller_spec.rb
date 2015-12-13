@@ -182,7 +182,7 @@ describe InfoController do
         :grading_status,
         :resubmissions,
         :ungraded_submissions,
-        :top_10, 
+        :top_10,
         :per_assign,
         :gradebook,
         :multiplied_gradebook,
