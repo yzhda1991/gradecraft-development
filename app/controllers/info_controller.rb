@@ -7,7 +7,7 @@ class InfoController < ApplicationController
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
-    #checking to see if the course uses the interactive timeline - 
+    #checking to see if the course uses the interactive timeline -
     # if not sending students to their syllabus, and the staff to top 10
     if current_course.use_timeline?
       render :dashboard
@@ -131,7 +131,7 @@ class InfoController < ApplicationController
   def choices
     @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types
-    @teams = current_course.teams    
+    @teams = current_course.teams
   end
 
   private

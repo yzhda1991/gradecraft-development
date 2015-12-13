@@ -5,7 +5,8 @@ class StudentsController < ApplicationController
 
   before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus ]
 
-  #Lists all students in the course, broken out by those being graded and auditors
+  #Lists all students in the course,
+  #broken out by those being graded and auditors
   def index
     @title = "#{(current_course.user_term).singularize} Roster"
 
@@ -19,15 +20,14 @@ class StudentsController < ApplicationController
     end
   end
 
+  #Displays all students flagged by the current user
   def flagged
     @title = "Flagged #{(current_course.user_term).pluralize}"
     @students = FlaggedUser.flagged current_course, current_user
   end
 
-  # @mz todo: 
-  #Course wide leaderboard - excludes auditors from view
+  #Course leaderboard - excludes auditors from view ordered by high score
   def leaderboard
-    # before_filter :ensure_staff?
     @title = "Leaderboard"
 
     @teams = current_course.teams
@@ -49,7 +49,8 @@ class StudentsController < ApplicationController
     @student_grade_schemes_by_id = course_grade_scheme_by_student_id
   end
 
-  #Displaying the list of assignments and team challenges for the semester
+  #Students' primary page: displays all assignments and
+  #team challenges in course
   def syllabus
     @assignment_types = current_course.assignment_types.includes(:assignments)
     @assignments = current_course.assignments
@@ -61,11 +62,7 @@ class StudentsController < ApplicationController
     if current_user_is_student?
       redirect_to dashboard_path
     end
-    if current_course.team_challenges?
-      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.challenges.with_dates.to_a + current_course.events.with_dates.to_a
-    else
-      @events = current_course.assignments.timelineable.with_dates.to_a + current_course.events.with_dates.to_a
-    end
+    @events = current_course.timeline_events
   end
 
   #Displaying student profile to instructors

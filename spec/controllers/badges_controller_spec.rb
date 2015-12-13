@@ -124,7 +124,7 @@ describe BadgesController do
         expect expect(@badge_2.badge_files.count).to eq(1)
       end
 
-      it "redirects to edit form with invalid attributes" do 
+      it "redirects to edit form with invalid attributes" do
         params = { name: nil }
         post :update, id: @badge.id, :badge => params
         expect(response).to render_template(:edit)
@@ -195,6 +195,10 @@ describe BadgesController do
           post :predict_times_earned, badge_id: @badge.id, times_earned: predicted_times_earned, format: :json
           expect(PredictedEarnedBadge.where(student: @student, badge: @badge).first.times_earned).to eq(4)
           expect(JSON.parse(response.body)).to eq({"id" => @badge.id, "times_earned" => predicted_times_earned})
+        end
+
+        it "doesn't update with invalid attributes" do
+          skip "implement"
         end
       end
 

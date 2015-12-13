@@ -56,6 +56,10 @@ describe InfoController do
         get :resubmissions
         expect(response).to render_template(:resubmissions)
       end
+
+      it "shows only the resubmissions for the relevant team" do
+        skip "implement"
+      end
     end
 
     describe "GET ungraded_submissions" do
@@ -70,6 +74,18 @@ describe InfoController do
         get :top_10
         expect(assigns(:title)).to eq("Top 10/Bottom 10")
         expect(response).to render_template(:top_10)
+      end
+
+      it "shows the top 10 if there are less than ten students" do
+        skip "implement"
+      end
+
+      it "shows the top and bottom students if less than 20 students" do
+        skip "implement"
+      end
+
+      it "shows only the top 10 and bottom 10 if more than 20 students" do
+        skip "implement"
       end
     end
 
@@ -144,6 +160,18 @@ describe InfoController do
         expect(assigns(:title)).to eq("Multiplier Choices")
         expect(response).to render_template(:choices)
       end
+
+      it "only shows the students for the team" do
+        @team = create(:team, course: @course)
+        @student = create(:user)
+        @student.courses << @course
+        @student.teams << @team
+        @student_2 = create(:user)
+        @student_2.courses << @course
+        get :choices, :team_id => @team.id
+        expect(response).to render_template(:choices)
+        expect(assigns(:students)).to eq([@student])
+      end
     end
   end
 
@@ -182,7 +210,7 @@ describe InfoController do
         :grading_status,
         :resubmissions,
         :ungraded_submissions,
-        :top_10, 
+        :top_10,
         :per_assign,
         :gradebook,
         :multiplied_gradebook,
