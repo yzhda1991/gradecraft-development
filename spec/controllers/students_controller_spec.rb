@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-describe StudentsController, focus: true do
+describe StudentsController do
   before(:all) do
     @course = create(:course)
     @student = create(:user)
@@ -69,6 +69,31 @@ describe StudentsController, focus: true do
         expect(assigns(:students)).to eq([@student])
       end
 
+      it "shows the badges students have earned" do
+        skip "implement"
+      end
+    end
+
+    describe "GET flagged" do
+      before(:each) do
+        @student = create(:user)
+        @student.courses << @course
+        @student_2 = create(:user)
+        @student_2.courses << @course
+        @flagged_student = create(:flagged_user, flagger: @professor, course: @course, flagged: @student)
+      end
+
+      it 'shows the students the current user has flagged' do
+        get :flagged
+        expect(response).to render_template(:flagged)
+        expect(assigns(:students)).to eq([@student])
+      end
+
+      it "does not show unflagged students" do
+        get :flagged
+        expect(response).to render_template(:flagged)
+        expect(assigns(:students)).to_not include(@student_2)
+      end
     end
 
     describe "GET syllabus" do
