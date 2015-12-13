@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-RSpec.describe GradebookExportPerformer, type: :background_job, focus: true do
+RSpec.describe GradebookExportPerformer, type: :background_job do
   # public methods
   let(:course) { create(:course) }
   let(:user) { create(:user) }

@@ -3,7 +3,7 @@ class InfoController < ApplicationController
 
   before_filter :ensure_staff?, :except => [ :dashboard, :timeline_events ]
   before_action :find_team, only: [ :awarded_badges, :choices, :resubmissions ]
-  before_action :find_students, only: [ :awarded_badges, :choices  ]
+  before_action :find_students, only: [ :awarded_badges, :choices, :final_grades_for_course  ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
@@ -96,7 +96,7 @@ class InfoController < ApplicationController
 
   def final_grades
     respond_to do |format|
-      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
+      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course, @student }
     end
   end
 
