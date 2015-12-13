@@ -55,9 +55,12 @@ Vagrant.configure(2) do |config|
 
         sed -i 's/start on runlevel \[2345\]/#start on runlevel \[2345\]/g' /etc/init/mongod.conf
 
-        cp config/mongoid.yml.sample config/mongoid.yml
+        if [ ! -f config/mongoid.yml ]; then
+            cp config/mongoid.yml.sample config/mongoid.yml
+        fi
 
-        cat <<EOM > /vagrant/.env
+        if [ ! -f /vagrant/.env ]; then
+            cat <<EOM > /vagrant/.env
 NEW_RELIC_APP_NAME=GradeCraft
 NEW_RELIC_LICENSE_KEY=123
 RACK_ENV=development
@@ -70,8 +73,10 @@ S3_BUCKET_NAME=<s3 bucket - used in production and staging>
 AWS_ACCESS_KEY_ID=abc
 AWS_SECRET_ACCESS_KEY=abc
 EOM
+        fi
 
-        cat <<EOM > /vagrant/config/database.yml
+        if [ ! -f /vagrant/config/database.yml ]; then
+            cat <<EOM > /vagrant/config/database.yml
 development:
   adapter: postgresql
   database: gradecraft_development
@@ -91,8 +96,9 @@ test:
   username: vagrant
   # password:
 EOM
+        fi
 
-        cat <<EOM > ~vagrant/.bashrc
+        cat <<EOM >> ~vagrant/.bashrc
 export REDIS_PORT=6379
 export MONGO_PATH=/data/db
 EOM
