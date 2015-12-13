@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-describe StudentsController do
+describe StudentsController, focus: true do
   before(:all) do
     @course = create(:course)
     @student = create(:user)
@@ -25,6 +25,18 @@ describe StudentsController do
         expect(assigns(:students)).to eq([@student])
         expect(response).to render_template(:index)
       end
+
+      it "returns just the students on a team" do
+        @team = create(:team, course: @course)
+        @student = create(:user)
+        @student.courses << @course
+        @student.teams << @team
+        @student_2 = create(:user)
+        @student_2.courses << @course
+        get :index, :team_id => @team.id
+        expect(response).to render_template(:index)
+        expect(assigns(:students)).to eq([@student])
+      end
     end
 
     describe "GET show" do
@@ -36,11 +48,27 @@ describe StudentsController do
     end
 
     describe "GET leaderboard" do
+      before(:each) do
+        @team = create(:team, course: @course)
+        @student = create(:user)
+        @student.courses << @course
+        @student.teams << @team
+        @student_2 = create(:user)
+        @student_2.courses << @course
+      end
+
       it "shows the class leaderboard" do
         get :leaderboard
         expect(assigns(:title)).to eq("Leaderboard")
         expect(response).to render_template(:leaderboard)
       end
+
+      it "returns just the students on a team" do
+        get :leaderboard, :team_id => @team.id
+        expect(response).to render_template(:leaderboard)
+        expect(assigns(:students)).to eq([@student])
+      end
+
     end
 
     describe "GET syllabus" do
@@ -102,6 +130,13 @@ describe StudentsController do
         expect(response).to redirect_to(student_path(@student))
       end
     end
+
+    describe "GET teams" do
+      it 'shows the team page shown to students' do
+        get :teams, :student_id => @student.id
+        expect(response).to render_template(:teams)
+      end
+    end
   end
 
   context "as a student" do
@@ -141,6 +176,13 @@ describe StudentsController do
       it "shows the grade predictor page" do
         get :predictor, :id => 10
         expect(response).to render_template(:predictor)
+      end
+    end
+
+    describe "GET teams" do
+      it 'shows the team page shown to students' do
+        get :teams
+        expect(response).to render_template(:teams)
       end
     end
 
