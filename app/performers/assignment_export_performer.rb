@@ -52,9 +52,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
         archive_exported_files
       end
 
-      require_success(upload_archive_to_s3_messages) do
-        upload_archive_to_s3
-      end
+      # require_success(upload_archive_to_s3_messages) do
+      #  upload_archive_to_s3
+      # end
     else
       if logger
         log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
@@ -319,7 +319,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # archive export directory
   def archive_exported_files
-    `zip -r - #{tmp_dir} | pv -L 200k > #{expanded_archive_base_path}.zip`
+    # `zip -r - #{tmp_dir} | pv -L 200k > #{expanded_archive_base_path}.zip`
+    Archive::Zip.archive("#{expanded_archive_base_path}.zip", tmp_dir)
   end
 
   # upload archive to S3

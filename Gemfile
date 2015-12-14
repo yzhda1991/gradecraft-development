@@ -13,6 +13,11 @@ gem 'acts_as_list'
 gem 'addressable'
 gem 'angularjs-rails', '~> 1.4.2'
 gem 'angular-rails-templates', '~> 0.2.0'
+
+# zip utility for simple creation of zip files, pure ruby implementation
+# without the GC overhead of the Rubyzip library
+gem 'archive-zip', '~> 0.7.0'
+
 gem 'autonumeric-rails'
 gem 'aws-sdk', '< 2.0'
 gem 's3_direct_upload'
@@ -65,6 +70,10 @@ gem 'oj'
 gem 'omniauth'
 gem 'omniauth-kerberos'
 gem 'omniauth-lti', git: 'https://github.com/venturit/omniauth-lti.git', branch: 'master'
+
+# subprocess handling library 
+gem 'open4', '~> 1.3.4'
+
 gem 'pacecar'
 gem 'paper_trail'
 gem 'pg'
