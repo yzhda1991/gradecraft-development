@@ -96,7 +96,7 @@ class InfoController < ApplicationController
 
   def final_grades
     respond_to do |format|
-      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course, @student }
+      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course, current_course.students }
     end
   end
 

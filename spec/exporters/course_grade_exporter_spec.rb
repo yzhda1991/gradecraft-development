@@ -5,7 +5,7 @@ describe CourseGradeExporter do
   let(:course) { create :course }
   subject { CourseGradeExporter.new }
 
-  describe "#final_grades_for_course(course, students)", focus: true do
+  describe "#final_grades_for_course(course, students)" do
 
     it "generates an empty CSV if there are no students specified" do
       csv = subject.final_grades_for_course(course, nil)
@@ -13,27 +13,35 @@ describe CourseGradeExporter do
     end
 
     it "generates a CSV with student grades for the course" do
-      let(:students) { create_list :user, 2 }
-      updated_at = DateTime.now
-      allow(students[0]).to \
-        receive(:cached_score_for_course).with(course)
-          .and_return double(:course_membership, score: 123, course: course)
-      allow(students[1]).to \
-        receive(:cached_score_for_course).with(course)
-          .and_return double(:course_membership, score: 456, course: course)
+      @student = create(:user, :last_name => "Alpha")
+      @student_2 = create(:user, :last_name => "Zed")
+      create(:course_membership, course: course, user: @student, score: 80000)
+      @students = course.students
+      create(:course_membership, course: course, user: @student_2, score: 120000)
+      create(:grade_scheme_element, course: course, level: "Amazing", letter: "B-")
+      create(:grade_scheme_element, course: course, low_range: 100001, high_range: 200000, level: "Phenomenal", letter: "B")
+      @students = course.students
 
-      csv = CSV.new(subject.final_grades_for_course(course, students)).read
+      csv = CSV.new(subject.final_grades_for_course(course, @students)).read
       expect(csv.length).to eq 3
-      expect(csv[1][0]).to eq students[0].first_name
-      expect(csv[2][0]).to eq students[1].first_name
-      expect(csv[1][1]).to eq students[0].last_name
-      expect(csv[2][1]).to eq students[1].last_name
-      expect(csv[1][2]).to eq students[0].email
-      expect(csv[2][2]).to eq students[1].email
-      expect(csv[1][2]).to eq students[0].username
-      expect(csv[2][2]).to eq students[1].username
-      expect(csv[1][3]).to eq "123"
-      expect(csv[2][3]).to eq "456"
+      expect(csv[1][0]).to eq @student.first_name
+      expect(csv[2][0]).to eq @student_2.first_name
+      expect(csv[1][1]).to eq @student.last_name
+      expect(csv[2][1]).to eq @student_2.last_name
+      expect(csv[1][2]).to eq @student.email
+      expect(csv[2][2]).to eq @student_2.email
+      expect(csv[1][3]).to eq @student.username
+      expect(csv[2][3]).to eq @student_2.username
+      expect(csv[1][4]).to eq "80000"
+      expect(csv[2][4]).to eq "120000"
+      expect(csv[1][5]).to eq "B-"
+      expect(csv[2][5]).to eq "B"
+      expect(csv[1][6]).to eq "Amazing"
+      expect(csv[2][6]).to eq "Phenomenal"
+      expect(csv[1][7]).to eq "0"
+      expect(csv[2][7]).to eq "0"
+      expect(csv[1][8]).to eq "#{@student.id}"
+      expect(csv[2][8]).to eq "#{@student_2.id}"
     end
 
   end

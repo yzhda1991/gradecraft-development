@@ -6,7 +6,13 @@ class CourseGradeExporter
       csv.add_row baseline_headers
       if students.present?
         students.each do |student|
-          csv << [student.first_name, student.last_name, student.email, student.username, student.cached_score_for_course(course), student.earned_badges.count, student.id ]
+          csv << [student.first_name,
+            student.last_name,
+            student.email,
+            student.username,
+            student.cached_score_for_course(course), student.grade_letter_for_course(course), student.grade_level_for_course(course),
+            student.earned_badges.count,
+            student.id ]
         end
       end
     end

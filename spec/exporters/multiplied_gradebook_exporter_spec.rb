@@ -1,7 +1,7 @@
 require "active_record_spec_helper"
 require "./app/exporters/multiplied_gradebook_exporter"
 
-describe MultipliedGradebookExporter, focus: true do
+describe MultipliedGradebookExporter do
   let(:course) { create :course }
   subject { MultipliedGradebookExporter.new }
 
