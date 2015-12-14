@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-RSpec.describe GradeExportPerformer, type: :background_job do
+RSpec.describe GradeExportPerformer, type: :background_job, focus: true do
   # public methods
   let(:course) { create(:course) }
   let(:user) { create(:user) }
@@ -95,7 +95,7 @@ RSpec.describe GradeExportPerformer, type: :background_job do
 
 
   # private methods
-  
+
   describe "private methods" do
     describe "fetch_user" do
       subject { performer.instance_eval{fetch_user} }
