@@ -35,7 +35,6 @@ describe GradebookExporter do
       expect(csv[1][4]).to eq @student.team_for_course(course)
       expect(csv[1][5]).to eq "100"
       expect(csv[1][6]).to eq "200"
-
     end
   end
 end
