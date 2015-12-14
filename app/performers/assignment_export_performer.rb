@@ -52,9 +52,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
         archive_exported_files
       end
 
-      # require_success(upload_archive_to_s3_messages) do
-      #  upload_archive_to_s3
-      # end
+      require_success(upload_archive_to_s3_messages) do
+        upload_archive_to_s3
+      end
     else
       if logger
         log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
@@ -416,6 +416,15 @@ class AssignmentExportPerformer < ResqueJob::Performer
       failure: "Failed to generate an archive containing the exported assignment files"
     })
   end
+
+  # @mz todo: add specs
+  def upload_archive_to_s3_messages
+    expand_messages ({
+      success: "Successfully uploaded the submissions archive to S3",
+      failure: "Failed to upload the submissions archive to S3"
+    })
+  end
+
 
   def message_suffix
     "for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
