@@ -1,6 +1,7 @@
 class GradesForResearchExporter
 
-  def research_grades(course)
+  def research_grades(course_id)
+    course = find_course(course_id)
     CSV.generate do |csv|
       csv.add_row baseline_headers
       if course.grades.present?
@@ -12,6 +13,10 @@ class GradesForResearchExporter
   end
 
   private
+
+  def find_course(course_id)
+    Course.find(course_id)
+  end
 
   def baseline_headers
     ["Course ID", "Uniqname", "First Name", "Last Name", "GradeCraft ID", "Assignment Name", "Assignment ID", "Assignment Type", "Assignment Type Id", "Score", "Assignment Point Total", "Multiplied Score", "Predicted Score", "Text Feedback", "Submission ID", "Submission Creation Date", "Submission Updated Date", "Graded By", "Created At", "Updated At"]

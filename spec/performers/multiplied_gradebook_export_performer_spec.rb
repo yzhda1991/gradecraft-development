@@ -8,7 +8,7 @@ RSpec.describe MultipliedGradebookExportPerformer, type: :background_job do
 
   describe "fetch_csv_data" do
     let(:course_double) { double(:course) }
-    subject { performer.instance_eval{fetch_csv_data} }
+    subject { performer.instance_eval{fetch_csv_data(course)} }
 
     it "should call csv_multipled_gradebook on the course" do
       performer.instance_variable_set(:@course, course_double)
@@ -18,7 +18,7 @@ RSpec.describe MultipliedGradebookExportPerformer, type: :background_job do
   end
 
   describe "notify_gradebook_export" do
-    let(:csv_data) { performer.instance_variable_get(:@csv_data) }
+    let(:csv_data) { performer.instance_variable_get(:@csv_data).with(course) }
     subject { performer.instance_eval { notify_gradebook_export } }
 
     it "should create a new gradebook export notifier with proper parameters" do

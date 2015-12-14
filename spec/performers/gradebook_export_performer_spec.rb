@@ -39,8 +39,8 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
         end
 
         it "should fetch the csv data" do
-          allow(subject).to receive(:fetch_csv_data).and_return "some,csv,data"
-          expect(subject).to receive(:fetch_csv_data)
+          allow(subject).to receive(:fetch_csv_data).with(course).and_return "some,csv,data"
+          expect(subject).to receive(:fetch_csv_data).with(course)
         end
 
         it "should mail notification that the gradebook was exported" do
@@ -50,7 +50,7 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
         it "should return the result of notify_gradebook_export" do
           @export_result = double(:export_result)
           allow(subject).to receive_messages(notify_gradebook_export: @export_result)
-          allow(subject).to receive(:fetch_csv_data).and_return "some,csv,data"
+          allow(subject).to receive(:fetch_csv_data).with(course).and_return "some,csv,data"
           expect(subject).to receive(:require_success).and_return(@export_result)
           expect(subject).to receive(:require_success).and_return("some,csv,data")
         end
@@ -125,7 +125,7 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
     end
 
     describe "fetch_csv_data" do
-      subject { performer.instance_eval{fetch_csv_data} }
+      subject { performer.instance_eval{fetch_csv_data(course)} }
       let(:course_double) { double(:course) }
 
       it "should call csv_gradebook on the course" do

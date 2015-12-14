@@ -1,6 +1,6 @@
 require 'rails_spec_helper'
 
-RSpec.describe GradeExportPerformer, type: :background_job, focus: true do
+RSpec.describe GradeExportPerformer, type: :background_job do
   # public methods
   let(:course) { create(:course) }
   let(:user) { create(:user) }
@@ -39,8 +39,8 @@ RSpec.describe GradeExportPerformer, type: :background_job, focus: true do
         end
 
         it "should fetch the csv data" do
-          allow(subject).to receive(:fetch_csv_data).and_return "some,csv,data"
-          expect(subject).to receive(:fetch_csv_data)
+          allow(subject).to receive(:fetch_csv_data).with(course).and_return "some,csv,data"
+          expect(subject).to receive(:fetch_csv_data).with(course)
         end
 
         it "should mail notification that the grade was exported" do
@@ -50,7 +50,7 @@ RSpec.describe GradeExportPerformer, type: :background_job, focus: true do
         it "should return the result of notify_grade_export" do
           @export_result = double(:export_result)
           allow(subject).to receive_messages(notify_grade_export: @export_result)
-          allow(subject).to receive(:fetch_csv_data).and_return "some,csv,data"
+          allow(subject).to receive(:fetch_csv_data).with(course).and_return "some,csv,data"
           expect(subject).to receive(:require_success).and_return(@export_result)
           expect(subject).to receive(:require_success).and_return("some,csv,data")
         end
@@ -126,9 +126,9 @@ RSpec.describe GradeExportPerformer, type: :background_job, focus: true do
       subject { performer.instance_eval{fetch_csv_data} }
       let(:course_double) { double(:course) }
 
-      it "should call csv_grade on the course" do
+      it "should call csv_grade on the Course exporter" do
         performer.instance_variable_set(:@course, course_double)
-        expect(course_double).to receive(:research_grades_csv)
+        expect(GradesForResearchExporter).to receive(:research_grades).with(course.id)
         subject
       end
 
@@ -143,13 +143,13 @@ RSpec.describe GradeExportPerformer, type: :background_job, focus: true do
 
     describe "notify_grade_export" do
       subject { performer.instance_eval { notify_grade_export } }
-      let(:csv_data) { performer.instance_variable_get(:@csv_data) }
+      let(:csv_data) { performer.instance_variable_get(:@csv_data).with(course) }
       let(:csv_double) { double(:csv) }
       after(:each) { subject }
       before(:each) { allow(NotificationMailer).to receive(:grade_export).and_return(csv_double) }
 
       it "should create a new grade export notifier with @course, @user, and @csv_data" do
-        performer.instance_eval { fetch_csv_data }
+        performer.instance_eval { fetch_csv_data(course) }
         expect(NotificationMailer).to receive(:grade_export).with(course, user, csv_data)
         expect(csv_double).to receive(:deliver_now)
       end
