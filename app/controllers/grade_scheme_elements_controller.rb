@@ -27,7 +27,7 @@ class GradeSchemeElementsController < ApplicationController
   def mass_update
     @course = current_course
     gse = params[:grade_scheme_elements_attributes]
-    ActiveRecord::Base.transaction do
+    GradeSchemeElement.transaction do
       begin
         @course.grade_scheme_elements.where(id: params[:deleted_ids]).destroy_all
         @course.update_attributes(:grade_scheme_elements_attributes => gse) unless gse.nil?

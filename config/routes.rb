@@ -282,6 +282,7 @@ GradeCraft::Application.routes.draw do
     get :course_progress
     get :teams
     get :recalculate
+    resources :student_academic_histories
     collection do
       get :leaderboard
       get :choices
@@ -298,7 +299,6 @@ GradeCraft::Application.routes.draw do
   resources :staff, only: [:index, :show]
   resources :user_sessions
   resources :passwords, path_names: { new: 'reset' }, except: [:destroy, :index]
-  resources :student_academic_histories
 
   get 'timeline' => 'students#timeline'
   get 'syllabus' => 'students#syllabus'
