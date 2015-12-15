@@ -370,7 +370,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.6.1)
     mini_magick (4.2.7)
-    mini_portile2 (2.0.0)
+    mini_portile (0.5.3)
     minitest (5.8.2)
     mongoid (4.0.2)
       activemodel (~> 4.0)
@@ -386,8 +386,8 @@ GEM
     net-ssh (2.9.2)
     newrelic_rpm (3.12.1.298)
     ng-rails-csrf (0.1.0)
-    nokogiri (1.6.7)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
     nokogumbo (1.4.1)
       nokogiri
     oauth2 (1.0.0)
@@ -704,7 +704,7 @@ DEPENDENCIES
   multi_json
   newrelic_rpm
   ng-rails-csrf
-  nokogiri (= 1.6.7)
+  nokogiri (= 1.6.0)
   oauth!
   oink
   oj
