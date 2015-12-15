@@ -50,19 +50,19 @@ describe AssignmentTypeWeightsController do
       end
 
       it "updates assignment weights" do
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"}, 
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
         post :mass_update, params
         expect(@student.weight_spent?(@course)).to eq(true)
       end
 
       it "updates points for corresponding grades" do
-        grade = create :scored_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
-        grade_2 = create :scored_grade, assignment: @assignment_type_weightable_2.assignments.first, student: @student, course: @course, raw_score: 1000
-        grade_3 = create :scored_grade, assignment: @assignment_type_weightable_3.assignments.first, student: @student, course: @course, raw_score: 1000
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"}, 
+        grade = create :released_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
+        grade_2 = create :released_grade, assignment: @assignment_type_weightable_2.assignments.first, student: @student, course: @course, raw_score: 1000
+        grade_3 = create :released_grade, assignment: @assignment_type_weightable_3.assignments.first, student: @student, course: @course, raw_score: 1000
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
         post :mass_update, params
         expect(@assignment_type_weightable.visible_score_for_student(@student)).to eq(2000)
@@ -71,8 +71,8 @@ describe AssignmentTypeWeightsController do
       end
 
       it "returns an error message if the student has assigned more weight to an assignment type than is allowed" do
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "3"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "1"}, 
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "3"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "1"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
         post :mass_update, params
         expect(response).to render_template(:mass_edit)
@@ -85,8 +85,8 @@ describe AssignmentTypeWeightsController do
       end
 
       it "returns an error if the student has assigned more total weights than allowed" do
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "3"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "4"}, 
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "3"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "4"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
         post :mass_update, params
         expect(response).to render_template(:mass_edit)
@@ -98,10 +98,10 @@ describe AssignmentTypeWeightsController do
         @assignment_type_weightable_5 = create :assignment_type, course: @course,
           student_weightable: true
 
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "1"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "1"}, 
-        "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "1" }, 
-        "3" => { "assignment_type_id" => @assignment_type_weightable_4.id, "weight" => "1" }, 
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "1"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "1"},
+        "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "1" },
+        "3" => { "assignment_type_id" => @assignment_type_weightable_4.id, "weight" => "1" },
         "4" => { "assignment_type_id" => @assignment_type_weightable_5.id, "weight" => "2" }} }, student_id: @student.id }
         post :mass_update, params
         expect(response).to render_template(:mass_edit)
@@ -168,19 +168,19 @@ describe AssignmentTypeWeightsController do
       end
 
       it "updates assignment weights" do
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"}, 
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
         post :mass_update, params
         expect(@student.weight_spent?(@course)).to eq(true)
       end
 
       it "updates points for corresponding grades" do
-        grade = create :scored_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
-        grade_2 = create :scored_grade, assignment: @assignment_type_weightable_2.assignments.first, student: @student, course: @course, raw_score: 1000
-        grade_3 = create :scored_grade, assignment: @assignment_type_weightable_3.assignments.first, student: @student, course: @course, raw_score: 1000
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"}, 
+        grade = create :released_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
+        grade_2 = create :released_grade, assignment: @assignment_type_weightable_2.assignments.first, student: @student, course: @course, raw_score: 1000
+        grade_3 = create :released_grade, assignment: @assignment_type_weightable_3.assignments.first, student: @student, course: @course, raw_score: 1000
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
         post :mass_update, params
         expect(@assignment_type_weightable.visible_score_for_student(@student)).to eq(2000)
@@ -189,8 +189,8 @@ describe AssignmentTypeWeightsController do
       end
 
       it "returns an error message if the student has assigned more weight to an assignment type than is allowed" do
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "3"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "1"}, 
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "3"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "1"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
         post :mass_update, params
         expect(response).to render_template(:mass_edit)
@@ -203,8 +203,8 @@ describe AssignmentTypeWeightsController do
       end
 
       it "returns an error if the student has assigned more total weights than allowed" do
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "3"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "4"}, 
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "3"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "4"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
         post :mass_update, params
         expect(response).to render_template(:mass_edit)
@@ -216,10 +216,10 @@ describe AssignmentTypeWeightsController do
         @assignment_type_weightable_5 = create :assignment_type, course: @course,
           student_weightable: true
 
-        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "1"}, 
-        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "1"}, 
-        "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "1" }, 
-        "3" => { "assignment_type_id" => @assignment_type_weightable_4.id, "weight" => "1" }, 
+        params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "1"},
+        "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "1"},
+        "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "1" },
+        "3" => { "assignment_type_id" => @assignment_type_weightable_4.id, "weight" => "1" },
         "4" => { "assignment_type_id" => @assignment_type_weightable_5.id, "weight" => "2" }} }, student_id: @student.id }
         post :mass_update, params
         expect(response).to render_template(:mass_edit)
@@ -249,7 +249,7 @@ describe AssignmentTypeWeightsController do
       end
 
       it "updates points for corresponding grades" do
-        grade = create :scored_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
+        grade = create :released_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
         post :update, :id => @assignment_type_weightable.id, :weight => 2, :format => :json
         expect(@assignment_type_weightable.visible_score_for_student(@student)).to eq(2000)
       end

@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     factory :graded_submission do
       # TODO, verify this method exists and works, or fails with no method error: submission.graded?
-      association :grade, factory: :scored_grade
+      association :grade, factory: :released_grade
     end
   end
 end

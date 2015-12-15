@@ -4,7 +4,7 @@ require "./app/models/predicted_assignment"
 describe PredictedAssignment do
   let(:assignment) { create :assignment }
   let(:user) { create :user }
-  subject { described_class.new assignment, user }
+  subject { described_class.new assignment, user, user }
 
   it "responds to any method on the assignment" do
     expect(subject.id).to eq assignment.id
@@ -27,7 +27,7 @@ describe PredictedAssignment do
     end
 
     it "returns a nil predicted grade if the user cannot create grades" do
-      subject = described_class.new assignment, NullStudent.new
+      subject = described_class.new assignment, user, NullStudent.new
       expect(subject.grade.id).to eq 0
     end
   end

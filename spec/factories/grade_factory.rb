@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :grade do
-    association :assignment 
+    association :assignment
     association :student, factory: :user
 
-    factory :scored_grade do
+    factory :released_grade do
       raw_score { Faker::Number.number(5) }
       status "Released"
     end

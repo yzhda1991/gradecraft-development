@@ -10,7 +10,7 @@ describe "assignments/predictor_data" do
 
   before(:each) do
     @assignment = create(:assignment, description: "...", course: @course)
-    @assignments = PredictedAssignmentCollection.new Assignment.where(id: @assignment.id), @student
+    @assignments = PredictedAssignmentCollection.new Assignment.where(id: @assignment.id), @student, @student
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:current_user).and_return(@student)
   end
