@@ -94,7 +94,7 @@ class AssignmentsController < ApplicationController
     else
       student = NullStudent.new(current_course)
     end
-    @assignments = PredictedAssignmentCollection.new current_course.assignments, student
+    @assignments = PredictedAssignmentCollection.new current_course.assignments, current_user, student
   end
 
   def destroy

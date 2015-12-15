@@ -5,7 +5,8 @@ describe PredictedGrade do
   let(:course) { double(:course) }
   let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, raw_score: 84, student: user, course: course, is_student_visible?: true) }
   let(:user) { double(:user) }
-  subject { described_class.new grade }
+  let(:other_user) { double(:other_user) }
+  subject { described_class.new grade, user }
 
   describe "#id" do
     it "returns the grade's id" do
@@ -53,10 +54,13 @@ describe PredictedGrade do
       expect(subject.predicted_score).to eq grade.predicted_score
     end
 
-    it "returns nil if it's not visible" do
-      allow(grade.student).to \
-        receive(:is_student?).with(grade.course).and_return false
-      expect(subject.predicted_score).to be_nil
+    it "returns 0 predicted_score if user is not same as student for grade" do
+      expect((described_class.new grade, other_user).predicted_score).to eq 0
+    end
+
+    it "returns predicted score for student even if it's not visible" do
+      allow(grade).to receive(:is_student_visible?).and_return false
+      expect(subject.predicted_score).to eq grade.predicted_score
     end
   end
 end

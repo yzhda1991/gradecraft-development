@@ -1,16 +1,17 @@
 class PredictedAssignment < SimpleDelegator
-  attr_reader :user
+  attr_reader :current_user, :student
 
-  def initialize(assignment, user)
+  def initialize(assignment, current_user, student)
     @assignment = assignment
-    @user = user
+    @current_user = current_user
+    @student = student
     super assignment
   end
 
   def grade
     if @grade.nil?
-      grade = user.present? ? Grade.find_or_create(assignment, user) : NullGrade.new
-      @grade = PredictedGrade.new(grade)
+      grade = student.present? ? Grade.find_or_create(assignment, student) : NullGrade.new
+      @grade = PredictedGrade.new(grade, current_user)
     end
     @grade
   end

@@ -1,4 +1,6 @@
 class PredictedGrade
+  attr_reader :current_user
+
   def id
     grade.id
   end
@@ -8,7 +10,7 @@ class PredictedGrade
   end
 
   def predicted_score
-    grade.predicted_score if grade.student && grade.student.is_student?(grade.course)
+    grade.student == @current_user ? grade.predicted_score : 0
   end
 
   def raw_score
@@ -19,8 +21,9 @@ class PredictedGrade
     grade.score if grade.is_student_visible?
   end
 
-  def initialize(grade)
+  def initialize(grade, current_user)
     @grade = grade
+    @current_user = current_user
   end
 
   private

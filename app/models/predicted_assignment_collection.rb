@@ -1,19 +1,24 @@
 class PredictedAssignmentCollection
   include Enumerable
 
-  attr_reader :assignments, :user
+  attr_reader :assignments, :current_user, :student
 
-  def initialize(assignments, user)
+  def initialize(assignments, current_user, student)
     @assignments = pluck_attributes assignments
-    @user = user
+    @current_user = current_user
+    @student = student
   end
 
   def each
-    assignments.each { |assignment| yield PredictedAssignment.new(assignment, user) }
+    assignments.each { |assignment| yield PredictedAssignment.new(assignment, current_user, student) }
   end
 
   def [](index)
     to_a[index]
+  end
+
+  def permission_to_update?
+    @current_user == @student
   end
 
   private
