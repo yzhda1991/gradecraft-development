@@ -10,7 +10,7 @@ class PredictedGrade
   end
 
   def predicted_score
-    grade.student == @current_user ? grade.predicted_score : 0
+    grade.student == current_user ? grade.predicted_score : 0
   end
 
   def raw_score

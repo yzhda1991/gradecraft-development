@@ -18,7 +18,7 @@ class PredictedAssignmentCollection
   end
 
   def permission_to_update?
-    @current_user == @student
+    current_user == student
   end
 
   private
