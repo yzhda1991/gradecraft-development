@@ -350,37 +350,35 @@ class GradesController < ApplicationController
     redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
   end
 
-  # Allows students to self log grades for a particular assignment if the instructor has turned that feature on - currently only used to log attendance
+  # Allows students to log grades for student logged assignments
+  # either sets raw score to params[:grade][:raw_score]
+  # or defaults to point total for assignment
   def self_log
     @assignment = current_course.assignments.find(params[:id])
-
     if @assignment.open? && @assignment.student_logged?
 
       @grade = Grade.find_or_create(@assignment,current_student)
 
-      if params[:present] == "true"
-        if params[:grade].present? && params[:grade][:raw_score].present?
-          @grade.raw_score = params[:grade][:raw_score]
-        else
-          @grade.raw_score = @assignment.point_total
-        end
+      if params[:grade].present? && params[:grade][:raw_score].present?
+        @grade.raw_score = params[:grade][:raw_score]
       else
-        @grade.raw_score = 0
+        @grade.raw_score = @assignment.point_total
       end
 
       @grade.instructor_modified = true
       @grade.status = "Graded"
-      respond_to do |format|
-        if @grade.save
-          # @mz TODO: add specs
-          @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-          @grade_updater_job.enqueue
 
-          format.html { redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!' }
-        else
-          format.html { redirect_to syllabus_path, notice: "We're sorry, there was an error saving your grade." }
-        end
+
+      if @grade.save
+        # @mz TODO: add specs
+        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        @grade_updater_job.enqueue
+
+        redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!'
+      else
+        redirect_to syllabus_path, notice: "We're sorry, there was an error saving your grade."
       end
+
     else
       redirect_to dashboard_path, notice: "This assignment is not open for self grading."
     end

@@ -592,27 +592,21 @@ describe GradesController do
         end
 
         it "creates a maximum score by the student if present" do
-          post :self_log, id: @assignment.id, present: "true"
+          post :self_log, id: @assignment.id
           grade = @student.grade_for_assignment(@assignment)
           expect(grade.raw_score).to eq @assignment.point_total
         end
 
-        it "creates a zero score if the student is not present" do
-          post :self_log, id: @assignment.id, present: "false"
-          grade = @student.grade_for_assignment(@assignment)
-          expect(grade.raw_score).to eq 0
-        end
-
         it "reports errors on failure to save" do
           allow_any_instance_of(Grade).to receive(:save).and_return false
-          post :self_log, id: @assignment.id, present: "true"
+          post :self_log, id: @assignment.id
           grade = @student.grade_for_assignment(@assignment)
           expect(flash[:notice]).to eq("We're sorry, there was an error saving your grade.")
         end
 
         context "with assignment levels" do
           it "creates a score for the student at the specified level" do
-            post :self_log, id: @assignment.id, present: "true", grade: { raw_score: "10000" }
+            post :self_log, id: @assignment.id, grade: { raw_score: "10000" }
             grade = @student.grade_for_assignment(@assignment)
             expect(grade.raw_score).to eq 10000
           end
@@ -625,7 +619,7 @@ describe GradesController do
         end
 
         it "creates should not change the student score" do
-          post :self_log, id: @assignment.id, present: "true"
+          post :self_log, id: @assignment.id
           grade = @student.grade_for_assignment(@assignment)
           expect(grade.raw_score).to eq nil
         end
