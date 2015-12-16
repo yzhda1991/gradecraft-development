@@ -20,7 +20,7 @@ class AssignmentType < ActiveRecord::Base
   def weight_for_student(student)
     #return a standard multiplier of 1 if the assignment type is not student weightable
     return 1 unless student_weightable?
-    
+
     #find the assignment weight for the student if it's present
     assignment_weights.where(student: student).first.try(:weight) || 0
   end
@@ -73,7 +73,7 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def score_for_student(student)
-    student.grades.student_visible.where(:assignment_type => self).pluck('score').sum || 0
+    student.grades.student_visible.not_nil.where(:assignment_type => self).pluck('score').sum || 0
   end
 
   def raw_score_for_student(student)

@@ -57,6 +57,7 @@ class Grade < ActiveRecord::Base
   scope :predicted_to_be_done, -> { where('predicted_score > 0')}
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
+  scope :not_nil, -> { where.not(:score => nil)}
 
   # @mz todo: add specs
   scope :student_visible, -> { joins(:assignment).where(student_visible_sql) }
@@ -266,5 +267,5 @@ class Grade < ActiveRecord::Base
 
     failure_attrs
   end
-  
+
 end
