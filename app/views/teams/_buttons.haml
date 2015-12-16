@@ -1,0 +1,9 @@
+.context_menu
+  %ul
+    %li= link_to_unless_current raw("<i class='fa fa-plus fa-fw'></i> New #{(term_for :team).titleize}"), new_team_path
+    - if @team.persisted?
+      %li= link_to_unless_current raw("<i class='fa fa-edit fa-fw'></i> Edit #{(term_for :team).titleize}"), edit_team_path(@team)
+      %li
+        %a{:href => team_path(@team) }
+          %i.fa.fa-list
+          See #{term_for :team}

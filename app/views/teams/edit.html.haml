@@ -2,14 +2,9 @@
 
 %h3.pagetitle= @title
 
-.context_menu
-  %ul
-    %li
-      %a{:href => team_path(@team) }
-        %i.fa.fa-list
-        See #{term_for :team}
+= render "buttons"
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   = render 'form'
