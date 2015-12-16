@@ -6,7 +6,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def setup
     fetch_assets
     # @mz todo: add specs
-    @assignment_export = AssignmentExport.create(attributes, submissions_snapshot: submissions_snapshot)
+    @assignment_export = AssignmentExport.create(attributes,
+      submissions_snapshot: submissions_snapshot,
+      export_filename: "#{export_file_basename}.zip"
+    )
     
     # @mz todo: add specs
     @errors = []

@@ -1,4 +1,7 @@
+# @mz todo: add specs
 class Export < ActiveRecord::Base
+  before_create :set_s3_symmetric_key
+
   def initialize(filename
   end
 
@@ -14,7 +17,7 @@ class Export < ActiveRecord::Base
     "/exports"
   end
 
-  def s3_symmetric_key
-    self[:s3_symmetric_key] ||= OpenSSL::Cipher.new("AES-256-ECB").random_key
+  def set_s3_symmetric_key
+    self[:s3_symmetric_key] = OpenSSL::Cipher.new("AES-256-ECB").random_key
   end
 end
