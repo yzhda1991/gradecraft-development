@@ -2,15 +2,10 @@
 
 %h3.pagetitle= @title
 
-.context_menu
-  %ul
-    %li
-      %a{:href => new_team_path }
-        %i.fa.fa-plus
-        New #{(term_for :team).titleize}
+= render "buttons"
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   = render "leaderboard"
   = render "stats"
