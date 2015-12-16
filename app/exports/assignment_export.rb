@@ -14,8 +14,4 @@ class AssignmentExport < ActiveRecord::Base
     "/exports/courses/#{course_id}/assignments/#{assignment_id}"
   end
 
-  def s3_object_key
-    "#{s3_object_key_path}/#{export_filename}"
-  end
-
 end

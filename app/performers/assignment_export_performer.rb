@@ -343,6 +343,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
     Archive::Zip.archive("#{expanded_archive_base_path}.zip", tmp_dir)
   end
 
+  # @mz todo: add specs
   def upload_archive_to_S3
     @assignment_export.upload_to_s3("#{expanded_archive_base_path}.zip")
   end
