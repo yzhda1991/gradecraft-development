@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.text     "export_filename"
     t.text     "s3_object_key"
     t.text     "s3_symmetric_key"
-    t.text     "errors",               default: [], null: false, array: true
+    t.text     "performer_error_log",  default: [], null: false, array: true
     t.hstore   "submissions_snapshot", default: {}, null: false
     t.datetime "created_at",                        null: false
     t.datetime "updated_at",                        null: false

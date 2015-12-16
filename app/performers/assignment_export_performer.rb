@@ -6,10 +6,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def setup
     fetch_assets
     # @mz todo: add specs
-    @assignment_export = AssignmentExport.create(attributes,
-      submissions_snapshot: submissions_snapshot,
-      export_filename: "#{export_file_basename}.zip"
-    )
+    @assignment_export = AssignmentExport.create(assignment_export_attributes)
     
     # @mz todo: add specs
     @errors = []
@@ -78,6 +75,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
     }
   end
 
+  def assignment_export_attributes
+    attributes.merge({
+      submissions_snapshot: submissions_snapshot,
+      export_filename: "#{export_file_basename}.zip"
+    })
+  end
+
   protected
 
   def work_resources_present?
@@ -117,12 +121,12 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # @mz todo: add specs
   def submissions_snapshot
-    @submissions_snapshot ||= @submissions.collect do |submission|
-      {
-        submission_id: submission.id,
+    @submissions_snapshot ||= @submissions.inject({}) do |memo, submission|
+      memo[submission.id] = {
         student_id: submission.student_id,
         updated_at: submission.updated_at
       }
+      memo
     end
   end
 
@@ -339,11 +343,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
     Archive::Zip.archive("#{expanded_archive_base_path}.zip", tmp_dir)
   end
 
-  def s3_object_key
-  end
-
   def upload_archive_to_S3
-    AssignmentExport.new(export_filename: "#{export_file_basename}.zip")
+    @assignment_export.upload_to_s3("#{expanded_archive_base_path}.zip")
   end
 
   private
