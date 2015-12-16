@@ -58,7 +58,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
       end
 
       require_success(upload_archive_to_s3_messages) do
-        upload_archive_to_s3
+        # upload_archive_to_s3
       end
     else
       if logger

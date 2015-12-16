@@ -40,6 +40,21 @@ ActiveRecord::Schema.define(version: 20160119190311) do
   add_index "announcements", ["author_id"], name: "index_announcements_on_author_id", using: :btree
   add_index "announcements", ["course_id"], name: "index_announcements_on_course_id", using: :btree
 
+  create_table "assignment_exports", force: :cascade do |t|
+    t.integer  "assignment_id"
+    t.integer  "course_id"
+    t.integer  "professor_id"
+    t.integer  "student_ids",          default: [], null: false, array: true
+    t.integer  "team_id"
+    t.text     "export_filename"
+    t.text     "s3_object_key"
+    t.text     "s3_symmetric_key"
+    t.text     "errors",               default: [], null: false, array: true
+    t.hstore   "submissions_snapshot", default: {}, null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
   create_table "assignment_files", force: :cascade do |t|
     t.string   "filename",        limit: 255
     t.integer  "assignment_id"
@@ -434,9 +449,9 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.integer  "predicted_score",                  default: 0,     null: false
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
+    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
-    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
     t.datetime "graded_at"
