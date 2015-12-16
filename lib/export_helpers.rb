@@ -3,12 +3,17 @@ module ExportHelpers
   module S3
     before_create :set_s3_symmetric_key
 
-    def s3_client
+    def build_s3_client
       @s3_client ||= Aws::S3::Client.new
     end
 
+    def s3_resource
+      @s3_resource ||= Aws::S3::Resource.new
+    end
+
     def s3_bucket
-      @s3_bucket ||= s3_client.bucket(s3_bucket_name)
+      build_s3_client
+      @s3_bucket ||= s3_resource.bucket(s3_bucket_name)
     end
 
     def s3_bucket_name

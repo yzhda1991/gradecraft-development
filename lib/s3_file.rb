@@ -4,12 +4,17 @@ module S3File
   # Amazon key in the "filepath" field. Here we check if it has a value, and if
   # so we use this to retrieve our secure url. If not, we use the path supplied by
   # the carrierwave uploader
-  def s3_client
+  def build_s3_client
     @s3_client ||= Aws::S3::Client.new
   end
 
+  def s3_resource
+    @s3_resource ||= Aws::S3::Resource.new
+  end
+
   def s3_bucket
-    @s3_bucket ||= s3_client.bucket
+    build_s3_client
+    @s3_bucket ||= s3_resource.bucket(s3_bucket_name)
   end
 
   def s3_bucket_name
@@ -20,9 +25,9 @@ module S3File
     return file.url if Rails.env == "development"
 
     if filepath.present?
-      s3_bucket.object(CGI::unescape(filepath)).url_for(:read, :expires => 15 * 60).to_s #15 minutes
+      s3_bucket.object(CGI::unescape(filepath)).presigned_url(:get, expires_in: 900).to_s #15 minutes
     else
-      s3_bucket.object(file.path).url_for(:read, :expires => 15 * 60).to_s #15 minutes
+      s3_bucket.object(file.path).presigned_url(:get, expires_in: 900).to_s #15 minutes
     end
   end
 
@@ -38,7 +43,7 @@ module S3File
 
   def strip_path
     if filepath.present?
-      filepath.slice! "/gradecraft-#{Rails.env}/"
+      filepath.slice! "/#{s3_bucket_name}/"
       write_attribute(:filepath, filepath)
       name = filepath.clone
 
