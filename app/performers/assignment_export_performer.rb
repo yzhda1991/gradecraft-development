@@ -5,6 +5,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def setup
     fetch_assets
+    # @mz todo: add specs
+    @assignment_export = AssignmentExport.create(attributes, submissions_snapshot: submissions_snapshot)
     
     # @mz todo: add specs
     @errors = []
@@ -107,6 +109,17 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def submissions_grouped_by_student
     @submissions_grouped_by_student ||= @submissions.group_by do |submission|
       submission.student.formatted_key_name
+    end
+  end
+
+  # @mz todo: add specs
+  def submissions_snapshot
+    @submissions_snapshot ||= @submissions.collect do |submission|
+      {
+        submission_id: submission.id,
+        student_id: submission.student_id,
+        updated_at: submission.updated_at
+      }
     end
   end
 
@@ -323,8 +336,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
     Archive::Zip.archive("#{expanded_archive_base_path}.zip", tmp_dir)
   end
 
-  # upload archive to S3
+  def s3_object_key
+  end
+
   def upload_archive_to_S3
+    AssignmentExport.new(export_filename: "#{export_file_basename}.zip")
   end
 
   private

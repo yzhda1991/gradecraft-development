@@ -19,7 +19,7 @@ gem 'angular-rails-templates', '~> 0.2.0'
 gem 'archive-zip', '~> 0.7.0'
 
 gem 'autonumeric-rails'
-gem 'aws-sdk', '< 2.0'
+gem 'aws-sdk', '~> 2'
 gem 's3_direct_upload'
 gem 'canable'
 gem 'carrierwave'
