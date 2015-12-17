@@ -3,7 +3,7 @@
     - unless current_user.role(cmf.object.course).nil?
       %section
         %h4.uppercase
-          = "#{cmf.object.course.name} Settings"
+          = "#{cmf.object.course.courseno} #{cmf.object.course.name} #{cmf.object.course.try(:semester)} #{cmf.object.course.try(:year)} Settings"
           .right
             = link_to raw("<i class='fa fa-check fa-fw'></i> Add user to this course"), "#", class: "button secondary #{"hidden" unless @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
             = link_to raw("<i class='fa fa-times fa-fw'></i> Remove user from this course"), "#", class: "button danger #{"hidden" if @user.role(cmf.object.course).nil?}", data: { behavior: "toggle-course-setting" }
