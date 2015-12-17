@@ -26,7 +26,7 @@ describe StaffController do
     describe "GET show" do
       it "displays a single staff member's page" do
         get :show, :id => @professor.id
-        expect(assigns(:staff)).to eq(@professor)
+        expect(assigns(:staff_member)).to eq(@professor)
         expect(response).to render_template(:show)
       end
     end
