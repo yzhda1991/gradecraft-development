@@ -16,6 +16,12 @@ describe NewSubmissionPresenter do
   end
 
   describe "#student" do
-    xit "returns the current student from the view context"
+    let(:student) { double(:user) }
+    let(:view_context) { double(:view_context, current_student: student) }
+    subject { described_class.new view_context: view_context }
+
+    it "returns the current student from the view context" do
+      expect(subject.student).to eq student
+    end
   end
 end

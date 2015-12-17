@@ -6,7 +6,6 @@ class SubmissionsController < ApplicationController
     @assignment = current_course.assignments.find(params[:assignment_id])
     @title = "Submit #{@assignment.name} (#{@assignment.point_total} points)"
     @group = current_course.groups.find(params[:group_id]) if @assignment.has_groups?
-    @student = current_student
     render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
                                               course: current_course,
                                               view_context: view_context)
@@ -15,7 +14,6 @@ class SubmissionsController < ApplicationController
   def edit
     @assignment = current_course.assignments.find(params[:assignment_id])
     submission = @assignment.submissions.find params[:id]
-    @student = submission.student
     if current_user_is_staff?
       if @assignment.has_groups?
         @group = current_course.groups.find(params[:group_id])

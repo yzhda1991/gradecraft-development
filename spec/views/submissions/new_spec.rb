@@ -4,6 +4,8 @@ include CourseTerms
 
 describe "submissions/new" do
 
+  let(:presenter) { NewSubmissionPresenter.new({ course: @course, assignment_id: @assignment.id }) }
+
   before(:all) do
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
@@ -13,6 +15,7 @@ describe "submissions/new" do
   before(:each) do
     assign(:title, "Submit #{@assignment.name} (#{@assignment.point_total})")
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   it "renders successfully" do

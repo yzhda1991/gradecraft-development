@@ -8,4 +8,8 @@ class EditSubmissionPresenter < SubmissionPresenter
   def submission
     assignment.submissions.find(id)
   end
+
+  def student
+    submission.student
+  end
 end

@@ -8,7 +8,7 @@
   - elsif @assignment.has_groups? && current_user_is_staff?
     = f.input :group_id, :input_html => { :value => @group.id }, :as => :hidden
   - elsif @assignment.is_individual? && current_user_is_staff?
-    = f.input :student_id, :input_html => { :value => @student.id }, :as => :hidden
+    = f.input :student_id, :input_html => { :value => presenter.student.id }, :as => :hidden
 
   %section
     - if @assignment.accepts_attachments

@@ -1,9 +1,9 @@
-= content_nav_for @assignment, "New Submission"
+= content_nav_for presenter.assignment, "New Submission"
 
 %h3.pagetitle= @title
 
 .pageContent
   = render 'layouts/alerts'
-  
-  - if @assignment.accepts_submissions?
+
+  - if presenter.assignment.accepts_submissions?
     = render 'form'
