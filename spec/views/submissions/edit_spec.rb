@@ -4,7 +4,7 @@ include CourseTerms
 
 describe "submissions/edit" do
 
-  let(:presenter) { SubmissionPresenter.new({ submission: @submission }) }
+  let(:presenter) { EditSubmissionPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id }) }
 
   before(:all) do
     @course = create(:course)

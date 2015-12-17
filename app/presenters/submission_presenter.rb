@@ -3,7 +3,15 @@ require "./lib/showtime"
 class SubmissionPresenter < Showtime::Presenter
   include Showtime::ViewContext
 
-  def submission
-    properties[:submission]
+  def assignment
+    course.assignments.find assignment_id
+  end
+
+  def assignment_id
+    properties[:assignment_id]
+  end
+
+  def course
+    properties[:course]
   end
 end

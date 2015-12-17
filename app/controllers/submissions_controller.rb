@@ -7,12 +7,14 @@ class SubmissionsController < ApplicationController
     @title = "Submit #{@assignment.name} (#{@assignment.point_total} points)"
     @group = current_course.groups.find(params[:group_id]) if @assignment.has_groups?
     @student = current_student
-    render :new, SubmissionPresenter.build({ submission: @assignment.submissions.new, view_context: view_context })
+    render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
+                                              course: current_course,
+                                              view_context: view_context)
   end
 
   def edit
     @assignment = current_course.assignments.find(params[:assignment_id])
-    submission = current_course.submissions.find(params[:id])
+    submission = @assignment.submissions.find params[:id]
     @student = submission.student
     if current_user_is_staff?
       if @assignment.has_groups?
@@ -26,7 +28,10 @@ class SubmissionsController < ApplicationController
       @title = "Editing My Submission for #{@assignment.name}"
       enforce_view_permission(submission)
     end
-    render :edit, SubmissionPresenter.build({ submission: submission, view_context: view_context })
+    render :edit, EditSubmissionPresenter.build({ id: params[:id],
+                                                  assignment_id: params[:assignment_id],
+                                                  course: current_course,
+                                                  view_context: view_context })
   end
 
   def create
