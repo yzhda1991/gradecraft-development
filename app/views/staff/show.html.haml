@@ -1,13 +1,15 @@
-= content_nav_for @staff
+= content_nav_for @staff_member
 
-%h3.pagetitle= @staff.name
+%h3.pagetitle= @staff_member.name
+
+= render "buttons"
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %h4 Courses
   %ul
-    - @staff.courses.each do |course|
+    - @staff_member.courses.each do |course|
       %li= link_to course.name, course
 
   %h4 Recently Graded

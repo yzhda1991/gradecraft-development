@@ -1,0 +1,10 @@
+.context_menu
+  %ul
+    %li= link_to_unless_current raw("<i class='fa fa-plus fa-fw'></i> New User"), new_user_path
+    %li= link_to_unless_current raw("<i class='fa fa-plus fa-fw'></i> Import Users"), import_users_path
+    - if @user.present? && @user.persisted?
+      %li= link_to_unless_current raw("<i class='fa fa-edit fa-fw'></i> Edit User"), edit_user_path(@user)
+      - if @user.is_staff?(current_course)
+        %li= link_to_unless_current raw("<i class='fa fa-list fa-fw'></i> Show Staff Member"), staff_path(@user)
+      - else
+        %li= link_to_unless_current raw("<i class='fa fa-list fa-fw'></i> Show Student"), student_path(@user)
