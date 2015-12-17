@@ -124,7 +124,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @submissions_snapshot ||= @submissions.inject({}) do |memo, submission|
       memo[submission.id] = {
         student_id: submission.student_id,
-        updated_at: submission.updated_at
+        updated_at: submission.updated_at.to_s
       }
       memo
     end

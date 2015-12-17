@@ -19,11 +19,11 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
 
       it "requires success" do
-        expect(subject).to receive(:require_success).exactly(6).times
+        expect(subject).to receive(:require_success).exactly(9).times
       end
 
       it "adds outcomes to subject.outcomes" do
-        expect { subject.do_the_work }.to change { subject.outcomes.size }.by(6)
+        expect { subject.do_the_work }.to change { subject.outcomes.size }.by(9)
       end
 
       it "fetches the csv data" do

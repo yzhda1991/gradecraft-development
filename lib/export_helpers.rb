@@ -1,7 +1,11 @@
 # @mz todo: add specs
 module ExportHelpers
   module S3
-    before_create :set_s3_symmetric_key
+    extend ActiveSupport::Concern
+
+    self.included do
+      before_create :set_s3_symmetric_key
+    end
 
     def build_s3_client
       @s3_client ||= Aws::S3::Client.new
@@ -37,7 +41,7 @@ module ExportHelpers
     end
 
     def set_s3_symmetric_key
-      self[:s3_symmetric_key] = random_cipher_key
+      # self[:s3_symmetric_key] = random_cipher_key
     end
 
     def s3_object
