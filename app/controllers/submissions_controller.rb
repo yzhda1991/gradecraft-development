@@ -12,20 +12,21 @@ class SubmissionsController < ApplicationController
 
   def edit
     @assignment = current_course.assignments.find(params[:assignment_id])
-    @submission = current_course.submissions.find(params[:id])
-    @student = @submission.student
+    submission = current_course.submissions.find(params[:id])
+    @student = submission.student
     if current_user_is_staff?
       if @assignment.has_groups?
         @group = current_course.groups.find(params[:group_id])
         @title = "Editing #{@group.name}'s Submission "
       else
-        @title = "Editing #{@submission.student.name}'s Submission"
+        @title = "Editing #{submission.student.name}'s Submission"
       end
     end
     if current_user_is_student?
       @title = "Editing My Submission for #{@assignment.name}"
-      enforce_view_permission(@submission)
+      enforce_view_permission(submission)
     end
+    render :edit, SubmissionPresenter.build({ submission: submission, view_context: view_context })
   end
 
   def create

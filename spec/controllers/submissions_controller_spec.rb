@@ -26,7 +26,6 @@ describe SubmissionsController do
       it "returns the submission show page" do
         get :show, {:id => @submission.id, :assignment_id => @assignment.id}
         expect(assigns(:title)).to eq("#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)")
-        expect(assigns(:submission)).to eq(@submission)
         expect(response).to render_template(:show)
       end
     end
@@ -43,7 +42,6 @@ describe SubmissionsController do
       it "display the edit form" do
         get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
         expect(assigns(:title)).to eq("Editing #{@submission.student.name}'s Submission")
-        expect(assigns(:submission)).to eq(@submission)
         expect(response).to render_template(:edit)
       end
     end
@@ -84,7 +82,6 @@ describe SubmissionsController do
       it "shows the edit submission form" do
         get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
         expect(assigns(:title)).to eq("Editing My Submission for #{@assignment.name}")
-        expect(assigns(:submission)).to eq(@submission)
         expect(response).to render_template(:edit)
       end
     end

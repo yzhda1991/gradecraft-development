@@ -4,6 +4,8 @@ include CourseTerms
 
 describe "submissions/edit" do
 
+  let(:presenter) { SubmissionPresenter.new({ submission: @submission }) }
+
   before(:all) do
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
@@ -15,6 +17,7 @@ describe "submissions/edit" do
   before(:each) do
     assign(:title, "Editing #{@student.name}'s Submission")
     allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   it "renders successfully" do
