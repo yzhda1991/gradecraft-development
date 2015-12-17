@@ -23,7 +23,7 @@ gem 'aws-sdk', '~> 2'
 gem 's3_direct_upload'
 gem 'canable'
 gem 'carrierwave'
-gem 'carrierwave_backgrounder'
+gem 'carrierwave_backgrounder', '0.4.2'
 gem 'coffee-rails'
 gem "compass-rails"
 gem "d3-rails"

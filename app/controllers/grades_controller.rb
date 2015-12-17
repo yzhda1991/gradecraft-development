@@ -527,7 +527,7 @@ class GradesController < ApplicationController
     end
 
     # @mz todo: add specs
-    @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: update_status_grade_ids)
+    @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: grade_ids)
     @multiple_grade_updater_job.enqueue
 
     if session[:return_to].present?

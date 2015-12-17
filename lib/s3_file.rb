@@ -4,6 +4,9 @@ module S3File
   # Amazon key in the "filepath" field. Here we check if it has a value, and if
   # so we use this to retrieve our secure url. If not, we use the path supplied by
   # the carrierwave uploader
+
+  attr_accessor :process_file_upload
+
   def build_s3_client
     @s3_client ||= Aws::S3::Client.new
   end

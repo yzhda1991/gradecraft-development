@@ -1,5 +1,5 @@
 class AttachmentUploader < CarrierWave::Uploader::Base
-  # include ::CarrierWave::Backgrounder::Delay
+  include ::CarrierWave::Backgrounder::Delay
 
   # NOTE: course, assignment and assignment_file_type, and student should be defined on the model in order
   # to use them as subdirectories, otherwise they will be ommited:
