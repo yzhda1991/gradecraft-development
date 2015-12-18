@@ -4,8 +4,8 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
-  = render 'submissions/assignment_guidelines'
+
+  = render partial: 'submissions/assignment_guidelines', locals: { assignment: @assignment }
 
   - if @rubric && @rubric.designed? and @assignment.use_rubric
     = render "rubric_edit"

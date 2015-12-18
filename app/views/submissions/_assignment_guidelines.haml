@@ -1,24 +1,24 @@
-- if presenter.assignment.pass_fail?
+- if assignment.pass_fail?
   .italic.not_bold= "#{term_for :pass}/#{term_for :fail} Assignment"
 - else
-  .italic.not_bold= "#{points presenter.assignment.point_total} points possible"
+  .italic.not_bold= "#{points assignment.point_total} points possible"
 %br
-.italic.not_bold= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
-.italic.not_bold= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
-- if presenter.assignment.description.present?
+.italic.not_bold= "Opens: #{assignment.open_at}" if assignment.open_at?
+.italic.not_bold= "Due: #{assignment.due_at}" if assignment.due_at?
+- if assignment.description.present?
   %hr.dotted
 
   %h4.uppercase Guidelines:
-  - if presenter.assignment.assignment_files.present?
+  - if assignment.assignment_files.present?
     %ul
       Downloads
-      - presenter.assignment.assignment_files.each do |af|
+      - assignment.assignment_files.each do |af|
         %li= link_to af.filename, af.url
 
-  %p= raw presenter.assignment.description
+  %p= raw assignment.description
 
-- if presenter.assignment.assignment_type.description.present?
+- if assignment.assignment_type.description.present?
   %hr.dotted
-  %h4.uppercase #{ presenter.assignment.assignment_type.name} Guidelines:
+  %h4.uppercase #{ assignment.assignment_type.name} Guidelines:
 
-  %p= raw presenter.assignment.assignment_type.description
+  %p= raw assignment.assignment_type.description
