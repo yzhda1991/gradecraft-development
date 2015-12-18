@@ -30,14 +30,6 @@ describe SubmissionsController do
       end
     end
 
-    describe "GET new" do
-      it "assigns title and assignment relation" do
-        get :new, assignment_id: @assignment.id
-        expect(assigns(:title)).to eq("Submit #{@assignment.name} (#{@assignment.point_total} points)")
-        expect(response).to render_template(:new)
-      end
-    end
-
     describe "GET edit" do
       it "display the edit form" do
         get :edit, {:id => @submission.id, :assignment_id => @assignment.id}

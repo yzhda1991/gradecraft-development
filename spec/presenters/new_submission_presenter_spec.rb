@@ -1,12 +1,13 @@
+require "active_support/inflector"
 require "spec_helper"
 require "./app/presenters/new_submission_presenter"
 
 describe NewSubmissionPresenter do
+  let(:assignment) { double(:assignment) }
+
+  before { allow(subject).to receive(:assignment).and_return assignment }
+
   describe "#submission" do
-    let(:assignment) { double(:assignment) }
-
-    before { allow(subject).to receive(:assignment).and_return assignment }
-
     it "returns a new submission from the assignment" do
       submission = double(:submission)
       submissions = double(:active_record_relation, new: submission)
@@ -22,6 +23,15 @@ describe NewSubmissionPresenter do
 
     it "returns the current student from the view context" do
       expect(subject.student).to eq student
+    end
+  end
+
+  describe "#title" do
+    it "contains the assignment name and point total" do
+      view_context = double(:view_context, points: "10,000")
+      allow(subject).to receive(:view_context).and_return view_context
+      allow(assignment).to receive_messages name: "Fun Assignment", point_total: 10000
+      expect(subject.title).to eq "Submit Fun Assignment (10,000 points)"
     end
   end
 end

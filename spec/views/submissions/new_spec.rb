@@ -4,7 +4,8 @@ include CourseTerms
 
 describe "submissions/new" do
 
-  let(:presenter) { NewSubmissionPresenter.new({ course: @course, assignment_id: @assignment.id }) }
+  let(:presenter) { NewSubmissionPresenter.new({ course: @course, assignment_id: @assignment.id,
+                                                 view_context: ActionController::Base.new.view_context }) }
 
   before(:all) do
     @course = create(:course)
@@ -13,14 +14,14 @@ describe "submissions/new" do
   end
 
   before(:each) do
-    assign(:title, "Submit #{@assignment.name} (#{@assignment.point_total})")
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:presenter).and_return presenter
+    allow(presenter.view_context).to receive(:points).and_return @assignment.point_total
   end
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Submit #{@assignment.name} (#{@assignment.point_total})", :count => 1
+    assert_select "h3", text: "Submit #{@assignment.name} (#{@assignment.point_total} points)", :count => 1
   end
 
   it "renders the breadcrumbs" do

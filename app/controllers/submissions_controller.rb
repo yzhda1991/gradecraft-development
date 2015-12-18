@@ -3,8 +3,6 @@ class SubmissionsController < ApplicationController
   before_filter :save_referer, only: [:new, :edit]
 
   def new
-    assignment = current_course.assignments.find(params[:assignment_id])
-    @title = "Submit #{assignment.name} (#{assignment.point_total} points)"
     render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
                                               course: current_course,
                                               group_id: params[:group_id],
