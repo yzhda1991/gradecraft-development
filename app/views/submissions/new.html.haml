@@ -6,4 +6,4 @@
   = render 'layouts/alerts'
 
   - if presenter.assignment.accepts_submissions?
-    = render 'form'
+    = render partial: 'form', locals: { presenter: presenter }
