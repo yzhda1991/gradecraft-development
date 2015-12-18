@@ -1,10 +1,11 @@
-# encoding: utf-8
 require 'rails_spec_helper'
 include CourseTerms
 
 describe "submissions/edit" do
 
-  let(:presenter) { EditSubmissionPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id }) }
+  let(:presenter) { EditSubmissionPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id,
+                                                  view_context: view_context }) }
+  let(:view_context) { double(:view_context, current_user: @student) }
 
   before(:all) do
     @course = create(:course)
@@ -15,14 +16,13 @@ describe "submissions/edit" do
   end
 
   before(:each) do
-    assign(:title, "Editing #{@student.name}'s Submission")
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:presenter).and_return presenter
   end
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Editing #{@student.name}'s Submission", :count => 1
+    assert_select "h3", text: "Editing My Submission for #{@assignment.name}", :count => 1
   end
 
   it "renders the breadcrumbs" do

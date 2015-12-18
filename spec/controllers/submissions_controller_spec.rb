@@ -33,7 +33,6 @@ describe SubmissionsController do
     describe "GET edit" do
       it "display the edit form" do
         get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
-        expect(assigns(:title)).to eq("Editing #{@submission.student.name}'s Submission")
         expect(response).to render_template(:edit)
       end
     end
@@ -73,7 +72,6 @@ describe SubmissionsController do
     describe "GET edit" do
       it "shows the edit submission form" do
         get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
-        expect(assigns(:title)).to eq("Editing My Submission for #{@assignment.name}")
         expect(response).to render_template(:edit)
       end
     end

@@ -10,25 +10,11 @@ class SubmissionsController < ApplicationController
   end
 
   def edit
-    assignment = current_course.assignments.find(params[:assignment_id])
-    submission = assignment.submissions.find params[:id]
-    if current_user_is_staff?
-      if assignment.has_groups?
-        group = current_course.groups.find(params[:group_id])
-        @title = "Editing #{group.name}'s Submission "
-      else
-        @title = "Editing #{submission.student.name}'s Submission"
-      end
-    end
-    if current_user_is_student?
-      @title = "Editing My Submission for #{assignment.name}"
-      enforce_view_permission(submission)
-    end
-    render :edit, EditSubmissionPresenter.build({ id: params[:id],
-                                                  assignment_id: params[:assignment_id],
-                                                  course: current_course,
-                                                  group_id: params[:group_id],
-                                                  view_context: view_context })
+    presenter = EditSubmissionPresenter.new({ id: params[:id], assignment_id: params[:assignment_id],
+                                              course: current_course, group_id: params[:group_id],
+                                              view_context: view_context })
+    enforce_view_permission(presenter.submission)
+    render :edit, locals: { presenter: presenter }
   end
 
   def create
