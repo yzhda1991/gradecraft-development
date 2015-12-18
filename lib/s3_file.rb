@@ -7,22 +7,7 @@ module S3File
 
   attr_accessor :process_file_upload
 
-  def build_s3_client
-    @s3_client ||= Aws::S3::Client.new
-  end
-
-  def s3_resource
-    @s3_resource ||= Aws::S3::Resource.new
-  end
-
-  def s3_bucket
-    build_s3_client
-    @s3_bucket ||= s3_resource.bucket(s3_bucket_name)
-  end
-
-  def s3_bucket_name
-    "gradecraft-#{Rails.env}"
-  end
+  include S3Manager::Basics
 
   def url
     return file.url if Rails.env == "development"
