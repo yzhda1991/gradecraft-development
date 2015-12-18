@@ -2,19 +2,23 @@ class SubmissionsController < ApplicationController
   before_filter :ensure_staff?, only: [:show, :destroy]
   before_filter :save_referer, only: [:new, :edit]
 
+  def show
+    @assignment = current_course.assignments.find(params[:assignment_id])
+    @submission = @assignment.submissions.find(params[:id])
+    @student = @submission.student
+    if @assignment.is_individual?
+      @title = "#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
+    else
+      @group = @submission.group
+      @title = "#{@group.name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
+    end
+  end
+
   def new
     render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
                                               course: current_course,
                                               group_id: params[:group_id],
                                               view_context: view_context)
-  end
-
-  def edit
-    presenter = EditSubmissionPresenter.new({ id: params[:id], assignment_id: params[:assignment_id],
-                                              course: current_course, group_id: params[:group_id],
-                                              view_context: view_context })
-    enforce_view_permission(presenter.submission)
-    render :edit, locals: { presenter: presenter }
   end
 
   def create
@@ -50,16 +54,12 @@ class SubmissionsController < ApplicationController
     end
   end
 
-  def show
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    @submission = current_course.submissions.find(params[:id])
-    @student = @submission.student
-    if @assignment.is_individual?
-      @title = "#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
-    else
-      @group = @submission.group
-      @title = "#{@group.name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
-    end
+  def edit
+    presenter = EditSubmissionPresenter.new({ id: params[:id], assignment_id: params[:assignment_id],
+                                              course: current_course, group_id: params[:group_id],
+                                              view_context: view_context })
+    enforce_view_permission(presenter.submission)
+    render :edit, locals: { presenter: presenter }
   end
 
   def update
@@ -100,8 +100,7 @@ class SubmissionsController < ApplicationController
 
   def destroy
     assignment = current_course.assignments.find(params[:assignment_id])
-    submission = current_course.submissions.find(params[:id])
-    submission.destroy
+    assignment.submissions.find(params[:id]).destroy
     redirect_to assignment_path(assignment, notice: "Submission deleted")
   end
 end

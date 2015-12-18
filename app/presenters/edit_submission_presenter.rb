@@ -1,18 +1,6 @@
-require_relative "submission_presenter"
+require_relative "show_submission_presenter"
 
-class EditSubmissionPresenter < SubmissionPresenter
-  def id
-    properties[:id]
-  end
-
-  def submission
-    assignment.submissions.find(id)
-  end
-
-  def student
-    submission.student
-  end
-
+class EditSubmissionPresenter < ShowSubmissionPresenter
   def title
     if view_context.current_user.is_student?(course)
       "Editing My Submission for #{assignment.name}"
