@@ -1,6 +1,6 @@
 class Submission < ActiveRecord::Base
   attr_accessible :task, :task_id, :assignment, :assignment_id, :assignment_type_id,
-    :group, :group_id, :link, :student, :student_id, :creator, :creator_id, 
+    :group, :group_id, :link, :student, :student_id, :creator, :creator_id,
     :text_comment, :graded, :submission_file, :submission_files_attributes, :submission_files,
     :course_id, :submission_file_ids, :updated_at
 
@@ -96,6 +96,7 @@ class Submission < ActiveRecord::Base
   private
 
   def permissions_check(user)
+    return true if user.is_staff?(course)
     if assignment.is_individual?
       student_id == user.id
     elsif assignment.has_groups?
