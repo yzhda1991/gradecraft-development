@@ -14,4 +14,12 @@ class SubmissionPresenter < Showtime::Presenter
   def course
     properties[:course]
   end
+
+  def group
+    course.groups.find(group_id) if assignment.has_groups?
+  end
+
+  def group_id
+    properties[:group_id]
+  end
 end

@@ -21,4 +21,25 @@ describe SubmissionPresenter do
       expect(subject.course).to eq course
     end
   end
+
+  describe "#group" do
+    let(:assignment) { double(:assignment, has_groups?: true) }
+    let(:group_id) { 765 }
+    subject { described_class.new group_id: group_id, course: course }
+
+    before { allow(subject).to receive(:assignment).and_return assignment }
+
+    it "is nil if the assignment does not allow groups" do
+      allow(assignment).to receive(:has_groups?).and_return false
+      expect(subject.group).to eq nil
+    end
+
+    it "returns the group from the group id that was passed in as a property" do
+      group = double(:group)
+      groups = double(:active_record_relation)
+      allow(groups).to receive(:find).with(group_id).and_return group
+      allow(course).to receive(:groups).and_return groups
+      expect(subject.group).to eq group
+    end
+  end
 end
