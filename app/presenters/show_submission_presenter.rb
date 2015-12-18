@@ -12,4 +12,13 @@ class ShowSubmissionPresenter < SubmissionPresenter
   def student
     submission.student
   end
+
+  def title
+    if assignment.is_individual?
+      name = student.first_name
+    else
+      name = group.name
+    end
+    "#{name}'s #{assignment.name} Submission (#{view_context.points assignment.point_total} #{"point".pluralize(assignment.point_total)})"
+  end
 end
