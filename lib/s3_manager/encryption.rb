@@ -10,12 +10,20 @@ module S3Manager
       )
     end
 
-    def get_client_encrypted_object(object_key)
-      encrypted_client
-        .get_object object_attrs.merge(key: object_key)
+    def put_encrypted_object(object_key, body)
+      encrypted_client.put_object({
+        bucket: bucket_name,
+        server_side_encryption: "AES256",
+        key: object_key,
+        body: body
+      })
+    end
 
-    def put_client_encrypted_object(object_key, body)
-      encrypted_client.put_object object_attrs.merge(server_side_encryption: "AES256", key: object_key, body: body)
+    def get_encrypted_object(object_key)
+      encrypted_client.get_object({
+        bucket: bucket_name,
+        key: object_key
+      })
     end
   end
 end

@@ -36,10 +36,54 @@ RSpec.describe S3Manager::Encryption do
   end
 
   describe "managing client-encrypted objects" do
-    describe "#get_client_encrypted_object" do
+    let(:object_key) { "jerrys-hat" }
+    let(:object_body) { "jerry was here." }
+    let(:encrypted_client) { s3_manager.encrypted_client }
+
+    describe "#put_encrypted_object" do
+      subject { s3_manager.put_encrypted_object(object_key, object_body) }
+
+      it "should call #put_object on the encrypted client" do
+        expect(encrypted_client).to receive(:put_object)
+        subject
+      end
+
+      it "should get an AWS Seahorse object in response" do
+        expect(subject.class).to eq(Seahorse::Client::Response)
+      end
+
+      it "should have been sucessful" do
+        expect(subject.successful?).to be_truthy
+      end
+
+      it "should suggest that AES256 encryption was used" do
+        expect(subject.server_side_encryption).to eq("AES256")
+      end
     end
 
-    describe "#put_client_encrypted_object" do
+    describe "#get_encrypted_object" do
+      subject { s3_manager.get_encrypted_object(object_key) }
+
+      it "should call #get_object on the encrypted client" do
+        expect(encrypted_client).to receive(:get_object)
+        subject
+      end
+
+      it "should get an AWS Seahorse object in response" do
+        expect(subject.class).to eq(Seahorse::Client::Response)
+      end
+      
+      it "should have been sucessful" do
+        expect(subject.successful?).to be_truthy
+      end
+
+      it "should have the correct body of the gotten object" do
+        expect(subject.body.read).to eq(object_body)
+      end
+
+      it "should suggest that AES256 encryption was used" do
+        expect(subject.server_side_encryption).to eq("AES256")
+      end
     end
   end
 end
