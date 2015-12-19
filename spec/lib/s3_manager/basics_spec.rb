@@ -62,12 +62,15 @@ RSpec.describe S3Manager::Basics do
   end
 
   describe "#s3_bucket_name" do
-    it "tells you the bucket name" do
+    it "should be 'gradecraft-' plus the Rails env" do
+      expect(s3_manager_test.s3_bucket_name).to eq("gradecraft-test")
     end
   end
 
   describe"#s3_object_attrs" do
     it "returns a hash of attributes for a new object" do
+      allow(s3_manager_test).to receive(:s3_bucket_name) { "walrus-bucket" }
+      expect(s3_manager_test.s3_object_attrs).to eq({ bucket: "walrus-bucket" })
     end
   end
 end
