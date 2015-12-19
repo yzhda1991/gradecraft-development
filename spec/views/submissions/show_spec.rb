@@ -1,8 +1,10 @@
-# encoding: utf-8
 require 'rails_spec_helper'
 include CourseTerms
 
 describe "submissions/show" do
+
+  let(:presenter) { ShowSubmissionPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id, view_context: view_context }) }
+  let(:view_context) { double(:view_context, points: "12,000") }
 
   before(:all) do
     @course = create(:course)
@@ -13,15 +15,15 @@ describe "submissions/show" do
   end
 
   before(:each) do
-    assign(:title, "#{@student.name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)")
     allow(view).to receive(:current_course).and_return(@course)
     # stub path called in partial app/views/submissions/_buttons.haml
     allow(view).to receive(:assignment_submission_path).and_return("#")
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "#{@student.name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)", :count => 1
+    assert_select "h3", text: "#{@student.first_name}'s #{@assignment.name} Submission (12,000 points)", :count => 1
   end
 
   it "renders the breadcrumbs" do

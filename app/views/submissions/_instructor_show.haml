@@ -1,70 +1,70 @@
-- if @assignment.is_individual?
+- if presenter.assignment.is_individual?
 
   %p
     %span.smallcaps Submitted:
-    = @student.submission_for_assignment(@assignment).created_at
+    = presenter.student.submission_for_assignment(presenter.assignment).created_at
 
     // Late alert if submitted after due date
-    - if @student.submission_for_assignment(@assignment).late?
+    - if presenter.student.submission_for_assignment(presenter.assignment).late?
       %span.label.alert Late!
-      
+
     // Checking to see if the submission was updated - if the update date is different from the creation date, displaying it
-  - if @student.submission_for_assignment(@assignment).updated_at != @student.submission_for_assignment(@assignment).created_at
+  - if presenter.student.submission_for_assignment(presenter.assignment).updated_at != presenter.student.submission_for_assignment(presenter.assignment).created_at
     %p
       %span.smallcaps Updated:
-      %span= @student.submission_for_assignment(@assignment).updated_at
+      %span= presenter.student.submission_for_assignment(presenter.assignment).updated_at
 
   // Displaying the link to the submission if there is one
-  - if @student.submission_for_assignment(@assignment).link?
+  - if presenter.student.submission_for_assignment(presenter.assignment).link?
     %p
       %span.smallcaps Link:
-      = link_to @student.submission_for_assignment(@assignment).link, @student.submission_for_assignment(@assignment).link
+      = link_to presenter.student.submission_for_assignment(presenter.assignment).link, presenter.student.submission_for_assignment(presenter.assignment).link
 
-  - if @student.submission_for_assignment(@assignment).submission_files.present?
+  - if presenter.student.submission_for_assignment(presenter.assignment).submission_files.present?
     %p
       %span.smallcaps Attachments:
       %ul
-        - @student.submission_for_assignment(@assignment).submission_files.each do |sf|
+        - presenter.student.submission_for_assignment(presenter.assignment).submission_files.each do |sf|
           %li
             = link_to sf.filename, sf.url, :target => "_blank"
 
-  - if @student.submission_for_assignment(@assignment).text_comment?
+  - if presenter.student.submission_for_assignment(presenter.assignment).text_comment?
     %p
       %span.smallcaps Statement:
-      = raw @student.submission_for_assignment(@assignment).text_comment
+      = raw presenter.student.submission_for_assignment(presenter.assignment).text_comment
 
 
 - else
   // Displaying when the assignment was submitted
   %p
     %span.smallcaps Submitted:
-    = @group.submission_for_assignment(@assignment).created_at
+    = presenter.group.submission_for_assignment(presenter.assignment).created_at
 
     // Late alert if submitted after due date
-    - if @group.submission_for_assignment(@assignment).late?
+    - if presenter.group.submission_for_assignment(presenter.assignment).late?
       %span.label.alert Late!
     // Checking to see if the submission was updated - if the update date is different from the creation date, displaying it
-  - if @group.submission_for_assignment(@assignment).updated_at != @group.submission_for_assignment(@assignment).created_at
+  - if presenter.group.submission_for_assignment(presenter.assignment).updated_at != presenter.group.submission_for_assignment(presenter.assignment).created_at
     %p
       %span.smallcaps Updated:
-      %span= @group.submission_for_assignment(@assignment).updated_at
+      %span= presenter.group.submission_for_assignment(presenter.assignment).updated_at
 
   // Displaying the link to the submission if there is one
-  - if @group.submission_for_assignment(@assignment).link?
+  - if presenter.group.submission_for_assignment(presenter.assignment).link?
     %p
       %span.smallcaps Link:
-      = link_to @group.submission_for_assignment(@assignment).link, @group.submission_for_assignment(@assignment).link
+      = link_to presenter.group.submission_for_assignment(presenter.assignment).link, presenter.group.submission_for_assignment(presenter.assignment).link
 
-  - if @group.submission_for_assignment(@assignment).submission_files.present?
+  - if presenter.group.submission_for_assignment(presenter.assignment).submission_files.present?
     %p
       %span.smallcaps Attachments:
       %ul
-        - @group.submission_for_assignment(@assignment).submission_files.each do |sf|
+        - presenter.group.submission_for_assignment(presenter.assignment).submission_files.each do |sf|
           %li
             = link_to sf.filename, sf.url
-            = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
+            = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => presenter.assignment.id, :upload_id => sf.id } )
 
-  - if @group.submission_for_assignment(@assignment).text_comment?
+  - if presenter.group.submission_for_assignment(presenter.assignment).text_comment?
     %p
       %span.smallcaps Statement:
-      = raw @group.submission_for_assignment(@assignment).text_comment
+      = raw presenter.group.submission_for_assignment(presenter.assignment).text_comment

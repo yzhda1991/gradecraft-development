@@ -25,7 +25,6 @@ describe SubmissionsController do
     describe "GET show" do
       it "returns the submission show page" do
         get :show, {:id => @submission.id, :assignment_id => @assignment.id}
-        expect(assigns(:title)).to eq("#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)")
         expect(response).to render_template(:show)
       end
     end
