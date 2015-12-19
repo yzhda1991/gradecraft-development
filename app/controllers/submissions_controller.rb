@@ -19,35 +19,24 @@ class SubmissionsController < ApplicationController
 
   def create
     @assignment = current_course.assignments.find(params[:assignment_id])
-    if params[:submission] && params[:submission][:submission_files_attributes].present?
-      submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
-      params[:submission].delete :submission_files_attributes
-    end
     @submission = @assignment.submissions.new(params[:submission])
     @submission.student = current_student if current_user_is_student?
-    if submission_files
-      submission_files.each do |sf|
-        if sf.size > MAX_UPLOAD_FILE_SIZE
-          return redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} not saved! #{sf.original_filename} was larger than the maximum #{MAX_UPLOAD_READABLE} file size."
-        end
-        @submission.submission_files.new(file: sf, filename: sf.original_filename[0..49])
-      end
-    end
-
     if @submission.save
       if current_user_is_student?
-        redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "#{@assignment.name} was successfully submitted."
+        redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "#{@assignment.name} was successfully submitted." and return
       else
-        redirect_to (session.delete(:return_to) || assignment_path(@assignment)), notice: "#{@assignment.name} was successfully submitted."
+        redirect_to (session.delete(:return_to) || assignment_path(@assignment)), notice: "#{@assignment.name} was successfully submitted." and return
       end
       if @assignment.is_individual? && current_user_is_student?
         NotificationMailer.successful_submission(@submission.id).deliver_now
       end
     elsif @submission.errors[:link].any?
-      redirect_to new_assignment_submission_path(@assignment, @submission), notice: "Please provide a valid link for #{@assignment.name} submissions."
-    else
-      redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} was not successfully submitted! Please try again."
+      redirect_to new_assignment_submission_path(@assignment), notice: "Please provide a valid link for #{@assignment.name} submissions." and return
     end
+    render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
+                                              course: current_course,
+                                              group_id: params[:group_id],
+                                              view_context: view_context)
   end
 
   def edit

@@ -3,7 +3,7 @@
 %h3.pagetitle= presenter.title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render partial: "layouts/alerts", locals: { model: presenter.submission }
 
   - if presenter.assignment.accepts_submissions?
     = render partial: 'form', locals: { presenter: presenter }

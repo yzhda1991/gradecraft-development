@@ -93,6 +93,11 @@ class Submission < ActiveRecord::Base
     end
   end
 
+  def submission_files_attributes=(attributes)
+    files = attributes["0"]["file"]
+    super files.map { |f| { file: f, filename: f.original_filename } }
+  end
+
   private
 
   def permissions_check(user)

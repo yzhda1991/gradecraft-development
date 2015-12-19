@@ -39,8 +39,25 @@ describe SubmissionsController do
     describe "POST create" do
       it "creates the submission with valid attributes"  do
         params = attributes_for(:submission)
-        params[:assignment_id] = @assignment.id
         expect{ post :create, :assignment_id => @assignment.id, :submission => params }.to change(Submission,:count).by(1)
+      end
+
+      it "manages submission file uploads" do
+        params = attributes_for(:submission)
+        params.merge! submission_files_attributes: {"0" => {file: [fixture_file('test_file.txt', 'txt')]}}
+        post :create, assignment_id: @assignment.id, submission: params
+        submission = Submission.unscoped.last
+        expect(submission.submission_files.count).to eq 1
+        expect(submission.submission_files[0].filename).to eq "test_file.txt"
+      end
+
+      it "does not create the submission for large files" do
+        params = attributes_for(:submission)
+        file = fixture_file('test_file.txt', 'txt')
+        allow_any_instance_of(AttachmentUploader).to receive(:size).and_return 50_000_000
+        params.merge! submission_files_attributes: {"0" => {file: [file]}}
+        post :create, assignment_id: @assignment.id, submission: params
+        expect(response).to render_template :new
       end
     end
 
@@ -77,7 +94,6 @@ describe SubmissionsController do
 
     describe "POST create" do
       it "creates the submission with valid attributes"  do
-        skip "implement"
         params = attributes_for(:submission)
         params[:assignment_id] = @assignment.id
         allow(SubmissionsController).to receive(:student).and_return(@student)
