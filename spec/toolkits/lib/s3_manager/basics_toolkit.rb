@@ -1,7 +1,7 @@
 module Toolkits
   module S3Manager
     module BasicsToolkit
-      def s3_client_attributes
+      def client_attributes
         { 
           region: ENV['AWS_S3_REGION'],
           access_key_id: ENV['AWS_ACCESS_KEY_ID'],
