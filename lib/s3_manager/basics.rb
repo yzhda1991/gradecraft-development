@@ -18,7 +18,7 @@ module S3Manager
     end
 
     def s3_bucket_name
-      @s3_bucket_name ||= "gradecraft-#{Rails.env}"
+     "gradecraft-#{Rails.env}"
     end
 
     def s3_object_attrs
