@@ -44,15 +44,17 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.integer  "assignment_id"
     t.integer  "course_id"
     t.integer  "professor_id"
-    t.integer  "student_ids",          default: [], null: false, array: true
+    t.integer  "student_ids",              default: [], null: false, array: true
     t.integer  "team_id"
     t.text     "export_filename"
     t.text     "s3_object_key"
     t.text     "s3_bucket"
-    t.text     "performer_error_log",  default: [], null: false, array: true
-    t.hstore   "submissions_snapshot", default: {}, null: false
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.text     "performer_error_log",      default: [], null: false, array: true
+    t.hstore   "submissions_snapshot",     default: {}, null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.datetime "last_export_started_at"
+    t.datetime "last_export_completed_at"
   end
 
   create_table "assignment_files", force: :cascade do |t|

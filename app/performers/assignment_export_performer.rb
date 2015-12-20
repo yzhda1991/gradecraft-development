@@ -6,7 +6,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def setup
     fetch_assets
     # @mz todo: add specs
-    @assignment_export = AssignmentExport.create(assignment_export_attributes)
+    @assignment_export = AssignmentExport.create_with_s3_attributes(assignment_export_attributes)
     
     # @mz todo: add specs
     @errors = []
@@ -71,7 +71,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
       course_id: @course.try(:id),
       professor_id: @professor.try(:id),
       student_ids: @students.collect(&:id),
-      team_id: @team.try(:id)
+      team_id: @team.try(:id),
+      last_export_started_at: Time.now
     }
   end
 
@@ -345,7 +346,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # @mz todo: add specs
   def upload_archive_to_S3
-    @assignment_export.upload_to_s3("#{expanded_archive_base_path}.zip")
+    @assignment_export.upload_file_to_s3("#{expanded_archive_base_path}.zip")
   end
 
   private
