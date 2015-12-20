@@ -7,7 +7,7 @@
     = f.input :group_id, :input_html => { :value => current_student.group_for_assignment(presenter.assignment).id }, :as => :hidden
   - elsif presenter.assignment.has_groups? && current_user_is_staff?
     = f.input :group_id, :input_html => { :value => @group.id }, :as => :hidden
-  - elsif presenter.assignment.is_individual? && current_user_is_staff?
+  - elsif presenter.assignment.is_individual?
     = f.input :student_id, :input_html => { :value => presenter.student.id }, :as => :hidden
 
   %section

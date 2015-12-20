@@ -2,11 +2,11 @@ require_relative "submission_presenter"
 
 class NewSubmissionPresenter < SubmissionPresenter
   def submission
-    @submission ||= assignment.submissions.new
+    @submission ||= properties[:submission] || assignment.submissions.new
   end
 
   def student
-    view_context.current_student
+    properties[:student] || view_context.current_student
   end
 
   def title

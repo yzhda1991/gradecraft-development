@@ -18,22 +18,19 @@ class SubmissionsController < ApplicationController
   end
 
   def create
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    @submission = @assignment.submissions.new(params[:submission])
-    @submission.student = current_student if current_user_is_student?
-    if @submission.save
+    assignment = current_course.assignments.find(params[:assignment_id])
+    submission = assignment.submissions.new(params[:submission])
+    if submission.save
+      redirect_to = (session.delete(:return_to) || assignment_path(assignment))
       if current_user_is_student?
-        redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "#{@assignment.name} was successfully submitted." and return
-      else
-        redirect_to (session.delete(:return_to) || assignment_path(@assignment)), notice: "#{@assignment.name} was successfully submitted." and return
+        NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
+        redirect_to = assignment_path(assignment, anchor: "fndtn-tabt3")
       end
-      if @assignment.is_individual? && current_user_is_student?
-        NotificationMailer.successful_submission(@submission.id).deliver_now
-      end
-    elsif @submission.errors[:link].any?
-      redirect_to new_assignment_submission_path(@assignment), notice: "Please provide a valid link for #{@assignment.name} submissions." and return
+      redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." and return
     end
     render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
+                                              submission: submission,
+                                              student: submission.student,
                                               course: current_course,
                                               group_id: params[:group_id],
                                               view_context: view_context)

@@ -7,6 +7,20 @@ describe NewSubmissionPresenter do
 
   before { allow(subject).to receive(:assignment).and_return assignment }
 
+  describe "#initialize" do
+    it "allows a submission to be set" do
+      submission = double(:submission)
+      subject = described_class.new submission: submission
+      expect(subject.submission).to eq submission
+    end
+
+    it "allows a student to be set" do
+      student = double(:student)
+      subject = described_class.new student: student
+      expect(subject.student).to eq student
+    end
+  end
+
   describe "#submission" do
     it "returns a new submission from the assignment" do
       submission = double(:submission)
