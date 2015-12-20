@@ -14,6 +14,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     subject { performer.instance_eval { export_file_basename }}
 
     before(:each) do
+      performer.instance_variable_set(:@export_file_basename, nil)
       allow(performer).to receive(:archive_basename) { "some_great_assignment" }
       allow(Time).to receive(:now) { Date.parse("Jan 20 1995") }
     end
