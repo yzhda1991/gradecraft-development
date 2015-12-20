@@ -16,7 +16,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     before(:each) do
       performer.instance_variable_set(:@export_file_basename, nil)
       allow(performer).to receive(:archive_basename) { "some_great_assignment" }
-      allow(Time).to receive(:now) { Date.parse("Jan 20 1995") }
+      allow(Time).to receive(:now) { Date.parse("Jan 20 1995").to_time }
     end
 
     it "includes the fileized_assignment_name" do

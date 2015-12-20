@@ -13,25 +13,33 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   it_behaves_like "ModelAddons::ImprovedLogging is included"
 
   describe "attributes" do
+    subject { performer.attributes.merge(last_export_started_at: five_pm) }
+
     let(:default_attributes) {{
       assignment_id: assignment.id,
       course_id: course.id,
       professor_id: professor.id,
       student_ids: students.collect(&:id),
-      team_id: nil
+      team_id: nil,
+      last_export_started_at: five_pm
     }}
-    before(:each) { performer.instance_variable_set(:@students, students) }
+
+    let(:five_pm) { Time.now.change(hour: 17, min: 0) }
+
+    before(:each) do
+      performer.instance_variable_set(:@students, students)
+    end
 
     context "team is not present" do
       it "doesn't have a team_id" do
-        expect(performer.attributes).to eq(default_attributes)
+        expect(subject).to eq(default_attributes)
       end
     end
 
     context "team is present" do
       let(:performer) { performer_with_team }
       it "has a team_id" do
-        expect(performer.attributes).to eq(default_attributes.merge(team_id: team.id))
+        expect(subject).to eq(default_attributes.merge(team_id: team.id))
       end
     end
   end
