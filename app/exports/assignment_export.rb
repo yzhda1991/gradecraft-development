@@ -9,10 +9,9 @@ class AssignmentExport < ActiveRecord::Base
   include ExportAddons::S3
 
   attr_accessible :course_id, :professor_id, :team_id, :assignment_id, :submissions_snapshot,
-    :s3_object_key, :export_filename
+    :s3_object_key, :export_filename, :s3_bucket
 
-  def s3_object_key_path
-    "/exports/courses/#{course_id}/assignments/#{assignment_id}"
+  def s3_object_key
+    "/exports/courses/#{course_id}/assignments/#{assignment_id}/#{export_filename}"
   end
-
 end
