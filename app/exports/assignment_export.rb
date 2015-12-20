@@ -5,11 +5,6 @@ class AssignmentExport < ActiveRecord::Base
   belongs_to :team
   belongs_to :assignment
 
-  # libraries for managing S3 interactions
-  include S3Manager::Basics
-  include S3Manager::Kms
-  include S3Manager::Encryption
-
   # extra helper methods for managing S3 interactions through export classes
   include ExportAddons::S3
 
