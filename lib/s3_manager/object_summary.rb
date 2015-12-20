@@ -8,7 +8,15 @@ module S3Manager
       end
 
       def summary_client
-        @summary_client ||= Aws::S3::ObjectSummary.new(bucket: bucket, key: object_key, client: client)
+        @summary_client ||= Aws::S3::ObjectSummary.new summary_client_attributes
+      end
+
+      def summary_client_attributes
+        {
+          bucket: @s3_manager.bucket_name,
+          key: @object_key,
+          client: @s3_manager.client
+        }
       end
 
       def exists?
@@ -20,6 +28,7 @@ module S3Manager
       end
 
       def wait_until_not_exists
+        summary_client.wait_until_exists
       end
     end
   end
