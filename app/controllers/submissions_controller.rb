@@ -32,7 +32,7 @@ class SubmissionsController < ApplicationController
                                               submission: submission,
                                               student: submission.student,
                                               course: current_course,
-                                              group_id: params[:group_id],
+                                              group_id: submission.group_id,
                                               view_context: view_context)
   end
 
