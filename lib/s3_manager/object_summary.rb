@@ -6,6 +6,7 @@ module S3Manager
         @object_key = object_key
         @s3_manager = s3_manager
       end
+      attr_reader :object_key, :s3_manager
 
       def summary_client
         @summary_client ||= Aws::S3::ObjectSummary.new summary_client_attributes

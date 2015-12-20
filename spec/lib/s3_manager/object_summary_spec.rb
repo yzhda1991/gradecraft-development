@@ -36,4 +36,20 @@ RSpec.describe S3Manager::ObjectSummary do
       subject
     end
   end
+
+  describe "#summary_client_attributes" do
+    subject { object_summary.summary_client_attributes }
+
+    it "contains the bucket_name" do
+      expect(subject[:bucket_name]).to eq(s3_manager.bucket_name)
+    end
+
+    it "contains the key for the target object" do
+      expect(subject[:key]).to eq(object_summary.object_key)
+    end
+
+    it "contains the AWS client from the s3_manager" do
+      expect(subject[:client]).to eq(object_summary.s3_manager.client)
+    end
+  end
 end
