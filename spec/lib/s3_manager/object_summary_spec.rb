@@ -6,15 +6,27 @@ RSpec.describe S3Manager::ObjectSummary do
   let(:s3_manager) { S3Manager::Manager.new }
   let(:object_summary) { S3Manager::Manager::ObjectSummary.new("waffles", s3_manager) }
 
-  describe "#initialize" do
+  describe "an ObjectSummary instance" do
     subject { object_summary }
 
-    it "sets the object key" do
-      expect(subject.instance_variable_get(:@object_key)).to eq("waffles")
+    describe "#initialize" do
+      it "sets the object key" do
+        expect(subject.instance_variable_get(:@object_key)).to eq("waffles")
+      end
+
+      it "sets the s3_manager" do
+        expect(subject.instance_variable_get(:@s3_manager)).to eq(s3_manager)
+      end
     end
 
-    it "sets the s3_manager" do
-      expect(subject.instance_variable_get(:@s3_manager)).to eq(s3_manager)
+    describe "readers" do
+      it "can read the object_key" do
+        expect(object_summary.object_key).to eq("waffles")
+      end
+
+      it "can read the s3_manager" do
+        expect(object_summary.s3_manager).to eq(s3_manager)
+      end
     end
   end
 
@@ -50,6 +62,32 @@ RSpec.describe S3Manager::ObjectSummary do
 
     it "contains the AWS client from the s3_manager" do
       expect(subject[:client]).to eq(object_summary.s3_manager.client)
+    end
+  end
+
+  describe "summary client wrapper methods" do
+    subject { object_summary.summary_client }
+    let(:aws_waiter) { Aws::Waiters::Waiter.new(delay: 0.1, max_attempts: 1) }
+
+    describe "#exists?" do
+      it "calls #exists? on the summary client" do
+        expect(subject).to receive(:exists?)
+        object_summary.exists?
+      end
+    end
+
+    describe "#wait_until_exists" do
+      it "calls #wait_until_exists on the summary client" do
+        expect(subject).to receive(:wait_until_exists)
+        object_summary.wait_until_exists {|aws_waiter|}
+      end
+    end
+
+    describe "#wait_until_not_exists" do
+      it "calls #wait_until_not_exists on the summary client" do
+        expect(subject).to receive(:wait_until_not_exists)
+        object_summary.wait_until_not_exists {|aws_waiter|}
+      end
     end
   end
 end

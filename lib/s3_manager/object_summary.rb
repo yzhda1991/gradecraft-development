@@ -24,12 +24,14 @@ module S3Manager
         summary_client.exists?
       end
 
-      def wait_until_exists
-        summary_client.wait_until_exists
+      def wait_until_exists(waiter=nil)
+        waiter ||= Aws::Waiters::Waiter.new
+        summary_client.wait_until_exists {|waiter|}
       end
 
-      def wait_until_not_exists
-        summary_client.wait_until_exists
+      def wait_until_not_exists(waiter=nil)
+        waiter ||= Aws::Waiters::Waiter.new
+        summary_client.wait_until_not_exists {|waiter|}
       end
     end
   end
