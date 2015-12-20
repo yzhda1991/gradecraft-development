@@ -58,7 +58,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
         upload_archive_to_s3
       end
 
-      require_success(check_s3_upload_success) do
+      require_success(check_s3_upload_success_messages) do
         check_s3_upload_success
       end
 
@@ -351,7 +351,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   # @mz todo: add specs
-  def upload_archive_to_S3
+  def upload_archive_to_s3
     @assignment_export.upload_file_to_s3("#{expanded_archive_base_path}.zip")
   end
 
@@ -457,6 +457,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
     })
   end
 
+  # @mz todo: add specs
+  def check_s3_upload_success_messages
+    expand_messages ({
+      success: "Successfully confirmed that the exported archive was uploaded to S3",
+      failure: "Failed to confirm that the exported archive was uploaded to S3. ObjectSummary#exists? failed on the object instance."
+    })
+  end
 
   def message_suffix
     "for assignment #{@assignment.id} for students: #{@students.collect(&:id)}"
