@@ -13,17 +13,17 @@ module S3File
     return file.url if Rails.env == "development"
 
     if filepath.present?
-      s3_bucket.object(CGI::unescape(filepath)).presigned_url(:get, expires_in: 900).to_s #15 minutes
+      bucket.object(CGI::unescape(filepath)).presigned_url(:get, expires_in: 900).to_s #15 minutes
     else
-      s3_bucket.object(file.path).presigned_url(:get, expires_in: 900).to_s #15 minutes
+      bucket.object(file.path).presigned_url(:get, expires_in: 900).to_s #15 minutes
     end
   end
 
   def remove
     if filepath.present?
-      s3_bucket.object(CGI::unescape(filepath)).delete
+      bucket.object(CGI::unescape(filepath)).delete
     else
-      s3_bucket.object(file.path).delete
+      bucket.object(file.path).delete
     end
   end
 
@@ -31,7 +31,7 @@ module S3File
 
   def strip_path
     if filepath.present?
-      filepath.slice! "/#{s3_bucket_name}/"
+      filepath.slice! "/#{bucket_name}/"
       write_attribute(:filepath, filepath)
       name = filepath.clone
 
