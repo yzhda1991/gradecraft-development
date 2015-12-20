@@ -313,47 +313,6 @@ describe AssignmentsController do
         expect(response).to render_template(:predictor_data)
       end
 
-      describe "student's score for released assignment" do
-        let(:grade) { create(:scored_grade, student: @student, assignment: @assignment, course_id: @course.id) }
-        let(:grade_attrs_expectation) {{ id: grade.id, pass_fail_status: nil, raw_score: grade.raw_score, score: grade.score, predicted_score: grade.predicted_score }}
-        let(:assigned_grade_attrs) { predictor_grade_attributes_for(assigns(:grades).first) }
-        let(:attrs_for_current_grade) { predictor_grade_attributes_for(grade) }
-        let(:assignment_current_student_grade) { assigns(:assignments)[0].current_student_grade }
-
-        before(:each) do
-          grade
-          get :predictor_data, format: :json, :id => @student.id
-        end
-
-        it "includes the student's grade with score for assignment when released" do
-          expect(assigned_grade_attrs).to eq(attrs_for_current_grade)
-        end
-
-        it "matches the current student grade for the  first assignment" do
-          expect(assignment_current_student_grade).to eq(grade_attrs_expectation)
-        end
-
-        describe "#predictor_assignments_data" do
-          it "returns the assignments for the current course with selected attributes" do
-            expect(assigns(:assignments)).to eq @course.assignments.select(predictor_assignment_attributes)
-          end
-
-          it "includes the assignment for the grade" do
-            expect(assigns(:assignments)).to include(@assignment)
-          end
-        end
-
-        describe "#predictor_grades" do
-          it "returns the assignments for the current course with selected attributes" do
-            expect(assigns(:grades)).to eq @student.grades.where(:course_id => @course.id).select(predictor_grade_attributes)
-          end
-
-          it "includes the created grade" do
-            expect(assigns(:grades)).to include(Grade.where(id: grade.id).select(predictor_grade_attributes).first)
-          end
-        end
-      end
-
       it "includes student grade with no score if not released" do
         grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
         get :predictor_data, format: :json, :id => @student.id
