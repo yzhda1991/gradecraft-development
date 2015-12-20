@@ -25,9 +25,8 @@ RSpec.describe S3Manager::Kms do
     let(:kms_client) { s3_manager.kms_client }
     subject { s3_manager.kms_key_id }
 
-    it "creates a new kms key and gets the key id" do
-      expect(kms_client).to receive_message_chain(:create_key, :key_metadata, :key_id)
-      subject
+    it "uses the AWS kms_key_id" do
+      expect(subject).to eq(ENV['AWS_KMS_KEY_ID'])
     end
 
     it "should have 36 characters" do

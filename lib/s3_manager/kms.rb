@@ -5,7 +5,7 @@ module S3Manager
     end
 
     def kms_key_id
-      @kms_key_id ||= kms_client.create_key.key_metadata.key_id
+      @kms_key_id ||= ENV['AWS_KMS_KEY_ID']
     end
   end
 end
