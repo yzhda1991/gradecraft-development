@@ -13,7 +13,7 @@ module S3Manager
 
       def summary_client_attributes
         {
-          bucket: @s3_manager.bucket_name,
+          bucket_name: @s3_manager.bucket_name,
           key: @object_key,
           client: @s3_manager.client
         }

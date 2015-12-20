@@ -4,33 +4,35 @@ include Toolkits::S3Manager::EncryptionToolkit
 
 RSpec.describe S3Manager::ObjectSummary do
   let(:s3_manager) { S3Manager::Manager.new }
+  let(:object_summary) { S3Manager::Manager::ObjectSummary.new("waffles", s3_manager) }
 
-  describe "#encrypted_client" do
-    subject { s3_manager.encrypted_client }
+  describe "#initialize" do
+    subject { object_summary }
 
-    it "builds a new encrypted client" do
-      expect(subject.class).to eq(Aws::S3::Encryption::Client)
+    it "sets the object key" do
+      expect(subject.instance_variable_get(:@object_key)).to eq("waffles")
     end
 
-    it "uses a standard s3 client" do
-      expect(subject.instance_variable_get(:@client)).to eq(s3_manager.client)
+    it "sets the s3_manager" do
+      expect(subject.instance_variable_get(:@s3_manager)).to eq(s3_manager)
     end
+  end
 
-    describe "cipher provider" do
-      subject { s3_manager.encrypted_client.instance_variable_get(:@cipher_provider) }
+  describe "#summary_client" do
+    subject { object_summary.summary_client }
 
-      it "sets the kms_key_id" do
-        expect(subject.instance_variable_get(:@kms_key_id)).to eq(s3_manager.kms_key_id)
-      end
-
-      it "sets the kms_client" do
-        expect(subject.instance_variable_get(:@kms_client)).to eq(s3_manager.kms_client)
-      end
-    end
-
-    it "caches the encrypted client" do
+    it "creates a new ObjectSummary client from the attributes" do
+      expect(Aws::S3::ObjectSummary).to receive(:new).with(object_summary.summary_client_attributes)
       subject
-      expect(Aws::S3::Encryption::Client).not_to receive(:new)
+    end
+
+    it "returns an Aws::S3::ObjectSummary instance" do
+      expect(subject.class).to eq(Aws::S3::ObjectSummary)
+    end
+
+    it "caches the summary client" do
+      subject
+      expect(Aws::S3::ObjectSummary).not_to receive(:new)
       subject
     end
   end
