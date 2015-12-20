@@ -57,6 +57,12 @@ class AssignmentExportPerformer < ResqueJob::Performer
       require_success(upload_archive_to_s3_messages) do
         upload_archive_to_s3
       end
+
+      require_success(check_s3_upload_success) do
+        check_s3_upload_success
+      end
+
+      @assignment_export.update_export_completed_time
     else
       if logger
         log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
