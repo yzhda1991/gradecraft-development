@@ -39,6 +39,14 @@ class AssignmentExport < ActiveRecord::Base
     end
   end
 
+  def s3_object_exists?
+    s3_object_summary.exists?
+  end
+
+  def s3_object_summary
+    @s3_object_summary ||= S3Manager::Manager::ObjectSummary.new(s3_object_key, s3_manager)
+  end
+
   private
 
   def update_s3_attributes

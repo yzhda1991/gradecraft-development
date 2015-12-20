@@ -355,6 +355,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @assignment_export.upload_file_to_s3("#{expanded_archive_base_path}.zip")
   end
 
+  def check_s3_upload_success
+    @assignment_export.s3_object_exists?
+  end
+
   private
 
   # @mz todo: add specs, add require_success block
