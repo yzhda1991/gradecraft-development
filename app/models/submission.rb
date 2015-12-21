@@ -5,6 +5,7 @@ class Submission < ActiveRecord::Base
     :course_id, :submission_file_ids, :updated_at
 
   include Canable::Ables
+  include MultipleFileAttibutes
 
   belongs_to :task, touch: true
   belongs_to :assignment, touch: true
@@ -36,6 +37,8 @@ class Submission < ActiveRecord::Base
   validates_uniqueness_of :task, :scope => :student, :allow_nil => true
   validates :link, :format => URI::regexp(%w(http https)) , :allow_blank => true
   validates :assignment, presence: true
+
+  multiple_files :submission_files
 
   #Canable permissions#
   def updatable_by?(user)
@@ -91,11 +94,6 @@ class Submission < ActiveRecord::Base
         unlockable.check_unlock_status(student)
       end
     end
-  end
-
-  def submission_files_attributes=(attributes)
-    files = attributes["0"]["file"]
-    super files.map { |f| { file: f, filename: f.original_filename } }
   end
 
   private

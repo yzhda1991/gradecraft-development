@@ -1,5 +1,6 @@
 class Assignment < ActiveRecord::Base
   include Gradable
+  include MultipleFileAttibutes
   include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails
@@ -22,6 +23,8 @@ class Assignment < ActiveRecord::Base
   belongs_to :assignment_type, -> { order('position ASC') }, touch: true
 
   has_one :rubric, dependent: :destroy
+
+  multiple_files :assignment_files
 
   # For instances where the assignment needs its own unique score levels
   score_levels :assignment_score_levels, -> { order "value" }, dependent: :destroy
@@ -73,12 +76,6 @@ class Assignment < ActiveRecord::Base
   default_scope { order('position ASC') }
 
   delegate :student_weightable?, to: :assignment_type
-
-  # needed in order to support multiple file uploads
-  def assignment_files_attributes=(attributes)
-    files = attributes["0"]["file"]
-    super files.map { |f| { file: f, filename: f.original_filename } }
-  end
 
   def copy
     copy = self.dup
