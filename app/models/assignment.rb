@@ -1,3 +1,5 @@
+require_relative "concerns/multiple_file_attributes"
+
 class Assignment < ActiveRecord::Base
   include Gradable
   include MultipleFileAttibutes
