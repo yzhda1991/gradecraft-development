@@ -21,7 +21,7 @@ class AssignmentExport < ActiveRecord::Base
   end
 
   def update_export_completed_time
-    update_attributes last_export_completed_at: Time.now
+    update_attributes last_export_completed_at: export_time
   end
 
   def self.create_with_s3_attributes(creation_attributes)
@@ -46,6 +46,10 @@ class AssignmentExport < ActiveRecord::Base
   end
 
   private
+
+  def export_time
+    Time.now
+  end
 
   def s3_attributes
     {

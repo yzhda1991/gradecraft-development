@@ -73,4 +73,20 @@ RSpec.describe AssignmentExport do
       expect(subject).to eq("some s3 response")
     end
   end
+
+  describe "#update_export_completed_time" do
+    subject { assignment_export.update_export_completed_time }
+    let(:sometime) { Time.parse("Oct 20 1982") }
+    before { allow(assignment_export).to receive(:export_time) { sometime } }
+
+    it "calls update_attributes on the assignment export with the export time" do
+      expect(assignment_export).to receive(:update_attributes).with(last_export_completed_at: sometime)
+      subject
+    end
+
+    it "updates the last_export_completed_at timestamp to now" do
+      subject
+      expect(assignment_export.last_export_completed_at).to eq(sometime)
+    end
+  end
 end
