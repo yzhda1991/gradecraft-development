@@ -7,6 +7,14 @@ describe EditSubmissionPresenter do
 
   it_behaves_like "showing a submission"
 
+  describe "#initialize" do
+    it "allows a submission to be set" do
+      submission = double(:submission)
+      subject = described_class.new submission: submission
+      expect(subject.submission).to eq submission
+    end
+  end
+
   describe "#title" do
     let(:user) { double(:user, is_student?: false) }
     let(:view_context) { double(:view_context, current_user: user) }

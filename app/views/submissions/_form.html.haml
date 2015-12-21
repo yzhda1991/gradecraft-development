@@ -18,7 +18,7 @@
       - if presenter.submission.submission_files.exists?
         %h5.bold Uploaded files
         %ul.uploaded-files
-          - current_student.submission_for_assignment(presenter.assignment).submission_files.each do |sf|
+          - presenter.submission.submission_files.each do |sf|
             %li
               = link_to sf.filename, sf.url, :target => "_blank"
               = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => presenter.assignment.id, :upload_id => sf.id } )
