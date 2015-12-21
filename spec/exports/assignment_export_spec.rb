@@ -2,6 +2,7 @@ require 'rails_spec_helper'
 require 'active_record_spec_helper'
 
 RSpec.describe AssignmentExport do
+  let(:assignment_export) { AssignmentExport.new }
 
   describe "associations" do
     extend Toolkits::Exports::AssignmentExportToolkit::Context
@@ -28,7 +29,6 @@ RSpec.describe AssignmentExport do
   end
 
   describe "#s3_object_key" do
-    let(:assignment_export) { AssignmentExport.new }
     subject { assignment_export.s3_object_key }
 
     before do
@@ -37,6 +37,40 @@ RSpec.describe AssignmentExport do
 
     it "uses the correct object key" do
       expect(subject).to eq("/exports/courses/40/assignments/50/stuff.zip")
+    end
+  end
+
+  describe "#s3_manager" do
+    subject { assignment_export.s3_manager }
+
+    it "creates an S3Manager::Manager object" do
+      expect(subject.class).to eq(S3Manager::Manager)
+    end
+
+    it "caches the S3Manager object" do
+      subject
+      expect(S3Manager::Manager).not_to receive(:new)
+      subject
+    end
+  end
+
+  describe "#upload_file_to_s3" do
+    subject { assignment_export.upload_file_to_s3("great-file.txt") }
+    let(:s3_manager) { double(S3Manager::Manager) }
+
+    before do
+      allow(s3_manager).to receive(:put_encrypted_object) { "some s3 response" }
+      allow(assignment_export).to receive(:s3_object_key) { "snake-hat-key" }
+      allow(assignment_export).to receive(:s3_manager) { s3_manager }
+    end
+
+    it "puts an S3 encrypted object with the object key and file path" do
+      expect(s3_manager).to receive(:put_encrypted_object).with("snake-hat-key", "great-file.txt")
+      subject
+    end
+
+    it "returns the response from the S3 manager" do
+      expect(subject).to eq("some s3 response")
     end
   end
 end
