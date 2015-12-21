@@ -29,6 +29,13 @@ describe SubmissionsController do
       end
     end
 
+    describe "GET new" do
+      it "returns the submission new page" do
+        get :new, {:id => @submission.id, :assignment_id => @assignment.id}
+        expect(response).to render_template(:new)
+      end
+    end
+
     describe "GET edit" do
       it "display the edit form" do
         get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
