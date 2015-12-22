@@ -67,4 +67,4 @@
       %td
         .center
           - if grade.is_graded?
-            = check_box_tag "grade_ids[]", grade.id
+            = check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-individual-grades-command']" }

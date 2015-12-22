@@ -61,12 +61,12 @@
               %td
                 .center
                   %label
-                    = check_box_tag "grade_ids[]", g.id
+                    = check_box_tag "grade_ids[]", g.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-unreleased-grades-command']" }
                     .sr-only
                       Check/Uncheck #{first_name} #{last_name}
 
       .submit-buttons
         .right
-          = submit_tag "Update Selected Grade Statuses", :class => "button"
+          = submit_tag "Update Selected Grade Statuses", :class => "button disabled", disabled: true, data: { behavior: "selected-unreleased-grades-command" }
 
   %hr.dotted
