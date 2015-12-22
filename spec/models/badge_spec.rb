@@ -48,6 +48,15 @@ describe Badge do
     end
   end
 
+  describe "#copy" do
+    let(:badge) { build :badge }
+    subject { badge.copy }
+
+    it "makes a duplicated copy of itself" do
+      expect(subject).to_not eq badge
+    end
+  end
+
   describe "#is_a_condition?" do
     it "returns true if the badge is an unlock condition" do
       badge = create(:badge)
