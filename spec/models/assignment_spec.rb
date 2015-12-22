@@ -273,13 +273,6 @@ describe Assignment do
     end
   end
 
-  describe "#fixed?" do
-    it "is fixed if the predictor display is fixed" do
-      subject.points_predictor_display = "Fixed"
-      expect(subject).to be_fixed
-    end
-  end
-
   describe "#future?" do
     it "is not for the future if there is no due date" do
       subject.due_at = nil
@@ -304,6 +297,29 @@ describe Assignment do
     end
   end
 
+  describe "#predictor_display_type" do
+    it "is set to checkbox for 'Fixed' display type" do
+      subject.points_predictor_display = "Fixed"
+      subject.pass_fail = false
+      expect(subject.predictor_display_type).to eq "checkbox"
+    end
+
+    it "is set to checkbox for pass fail assignments" do
+      subject.points_predictor_display = "Fixed"
+      subject.pass_fail = true
+      expect(subject.predictor_display_type).to eq "checkbox"
+    end
+
+    it "is set to slider for 'Slider' display type" do
+      subject.points_predictor_display = "Slider"
+      expect(subject.predictor_display_type).to eq "slider"
+    end
+
+    it "is set to slider by default" do
+      subject.points_predictor_display = nil
+      expect(subject.predictor_display_type).to eq "slider"
+    end
+  end
   describe "#grade_count" do
     before { subject.save }
 
@@ -428,20 +444,6 @@ describe Assignment do
     end
   end
 
-  describe "#select?" do
-    it "is select if the predictor display is select list" do
-      subject.points_predictor_display = "Select List"
-      expect(subject).to be_select
-    end
-  end
-
-  describe "#slider?" do
-    it "is slider if the predictor display is slider" do
-      subject.points_predictor_display = "Slider"
-      expect(subject).to be_slider
-    end
-  end
-
   describe "#soon?" do
     it "is not soon if there is no due date" do
       subject.due_at = nil
@@ -522,6 +524,23 @@ describe Assignment do
     it "is not accepting submissions if the acceptance date was in the past" do
       subject.accepts_submissions_until = 2.days.ago
       expect(subject).to_not be_accepting_submissions
+    end
+  end
+
+  describe "#submissions_have_closed?" do
+    it "is true if the assignment no longer accepts submissions" do
+      subject.accepts_submissions_until = 2.days.ago
+      expect(subject.submissions_have_closed?).to be_truthy
+    end
+
+    it "is false if assignment accepts submisions currently or in the future" do
+      subject.accepts_submissions_until = nil
+      expect(subject.submissions_have_closed?).to_not be_truthy
+    end
+
+    it "is false if assignment never accepts submissions" do
+      subject.accepts_submissions_until = 2.days.from_now
+      expect(subject.submissions_have_closed?).to_not be_truthy
     end
   end
 

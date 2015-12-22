@@ -1,9 +1,10 @@
 require "spec_helper"
-require "./app/models/predicted_grade"
+require "./app/serializers/predicted_grade_serializer"
 
-describe PredictedGrade do
+describe PredictedGradeSerializer do
   let(:course) { double(:course) }
-  let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, raw_score: 84, student: user, course: course, is_student_visible?: true) }
+  let(:assignment) { double(:assignment, submissions_have_closed?: false)}
+  let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, raw_score: 84, student: user, course: course, assignment: assignment, is_student_visible?: true) }
   let(:user) { double(:user) }
   let(:other_user) { double(:other_user) }
   subject { described_class.new grade, user }
@@ -34,6 +35,11 @@ describe PredictedGrade do
       allow(grade).to receive(:is_student_visible?).and_return false
       expect(subject.score).to be_nil
     end
+
+    it "returns 0 if the assignment submissions have closed" do
+      allow(assignment).to receive(:submissions_have_closed?).and_return true
+      expect(subject.score).to eq(0)
+    end
   end
 
   describe "#raw_score" do
@@ -44,6 +50,11 @@ describe PredictedGrade do
     it "returns nil if it's not visible" do
       allow(grade).to receive(:is_student_visible?).and_return false
       expect(subject.raw_score).to be_nil
+    end
+
+    it "returns 0 if the assignment submissions have closed" do
+      allow(assignment).to receive(:submissions_have_closed?).and_return true
+      expect(subject.score).to eq(0)
     end
   end
 
@@ -61,6 +72,17 @@ describe PredictedGrade do
     it "returns predicted score for student even if it's not visible" do
       allow(grade).to receive(:is_student_visible?).and_return false
       expect(subject.predicted_score).to eq grade.predicted_score
+    end
+  end
+
+  describe "#attributes" do
+    it "returns a hash of grade attributes overriden by Class methods" do
+      expect(subject.attributes).to eq({
+        id: subject.id,
+        predicted_score: subject.predicted_score,
+        score: subject.score,
+        raw_score: subject.raw_score
+      })
     end
   end
 end

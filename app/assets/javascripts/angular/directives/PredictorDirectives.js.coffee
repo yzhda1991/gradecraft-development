@@ -46,6 +46,10 @@
           tooltip: 'This ' + scope.targetTerm() + ' is late!'
           icon: "fa-exclamation-triangle"
         }
+        has_closed: {
+          tooltip: 'This ' + scope.targetTerm() + ' is no longer open for submissions'
+          icon: "fa-ban"
+        }
         is_required: {
           tooltip: 'This ' + scope.targetTerm() + ' is required!'
           icon: "fa-star"
@@ -53,6 +57,14 @@
         has_info: {
           tooltip: scope.description()
           icon: "fa-info-circle"
+        }
+        has_rubric: {
+          tooltip: 'This ' + scope.targetTerm() + ' is rubric graded'
+          icon: "fa-th"
+        }
+        accepts_submissions: {
+          tooltip: 'This ' + scope.targetTerm() + ' accepts submissions'
+          icon: "fa-paperclip"
         }
         is_locked: {
           tooltip: scope.conditions()

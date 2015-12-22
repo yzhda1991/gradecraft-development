@@ -22,7 +22,7 @@
           {{termFor[assignment.grade.pass_fail_status]}}
 
     .article-predicted{'ng-if' => '! articleGraded(assignment)'}
-      %div{'ng-if' => 'assignment.pass_fail == false && assignment.fixed == false'}
+      %div{'ng-if' => 'assignment.predictor_display_type == "slider"'}
         .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}','article-type'=>'assignment'}}
 
         .grade{'ng-if' => '! hasLevels(assignment)'}
@@ -34,10 +34,10 @@
           .name
             {{levelNameForAssignmentScore(assignment)}}
 
-      %div{'ng-if' => 'assignment.pass_fail == true'}
+      %div{'ng-if' => 'assignment.predictor_display_type == "checkbox" && assignment.pass_fail == true'}
         .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'1'}
 
-      %div{'ng-if' => 'assignment.fixed == true'}
+      %div{'ng-if' => 'assignment.predictor_display_type == "checkbox"'}
         .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'assignment.point_total'}
 
 
