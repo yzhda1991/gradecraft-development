@@ -1,152 +1,81 @@
 class SubmissionsController < ApplicationController
+  before_filter :ensure_staff?, only: [:show, :destroy]
+  before_filter :save_referer, only: [:new, :edit]
 
-  before_filter :ensure_staff?, :only=>[:show, :index, :destroy]
-
-  include Canable::Enforcers
-  helper UploadsHelper
-
-  # Redirects to the parent assignment that should list all submissions in existence
-  def index
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    redirect_to @assignment
+  def show
+    presenter = ShowSubmissionPresenter.new({ id: params[:id], assignment_id: params[:assignment_id],
+                                              course: current_course, group_id: params[:group_id],
+                                              view_context: view_context })
+    enforce_view_permission(presenter.submission)
+    render :show, locals: { presenter: presenter }
   end
 
   def new
-    session[:return_to] = request.referer
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    @title = "Submit #{@assignment.name} (#{@assignment.point_total} points)"
-    if current_user_is_staff?
-      if @assignment.has_groups?
-        @group = current_course.groups.find(params[:group_id])
-      else
-        @student = current_student
-      end
-    end
-    if current_user_is_student?
-      @user = current_user
-      if @assignment.has_groups?
-        @group = current_course.groups.find(params[:group_id])
-      else
-        @student = current_user
-      end
-    end
-    @submission = @assignment.submissions.new
-  end
-
-  def edit
-    session[:return_to] = request.referer
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    @submission = current_course.submissions.find(params[:id])
-    @student = @submission.student
-    if current_user_is_staff?
-      if @assignment.has_groups?
-        @group = current_course.groups.find(params[:group_id])
-        @title = "Editing #{@group.name}'s Submission "
-      else
-        @title = "Editing #{@submission.student.name}'s Submission"
-      end
-    end
-    if current_user_is_student?
-      @title = "Editing My Submission for #{@assignment.name}"
-      @user = current_user
-      enforce_view_permission(@submission)
-    end
-    @groups = @assignment.groups
-    @teams = current_course.teams
+    render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
+                                              course: current_course,
+                                              group_id: params[:group_id],
+                                              view_context: view_context)
   end
 
   def create
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    if params[:submission] && params[:submission][:submission_files_attributes].present?
-      @submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
-      params[:submission].delete :submission_files_attributes
-    end
-    @submission = @assignment.submissions.new(params[:submission])
-    @submission.student = current_student if current_user_is_student?
-    if @submission_files
-      @submission_files.each do |sf|
-        if sf.size > MAX_UPLOAD_FILE_SIZE
-          return redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} not saved! #{sf.original_filename} was larger than the maximum #{MAX_UPLOAD_READABLE} file size."
-        end
-        @submission.submission_files.new(file: sf, filename: sf.original_filename[0..49])
-      end
-    end
-
-    if @submission.save
+    assignment = current_course.assignments.find(params[:assignment_id])
+    submission = assignment.submissions.new(params[:submission])
+    if submission.save
+      redirect_to = (session.delete(:return_to) || assignment_path(assignment))
       if current_user_is_student?
-        redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "#{@assignment.name} was successfully submitted."
-      else
-        redirect_to (session.delete(:return_to) || assignment_path(@assignment)), notice: "#{@assignment.name} was successfully submitted."
+        NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
+        redirect_to = assignment_path(assignment, anchor: "fndtn-tabt3")
       end
-      if @assignment.is_individual? && current_user_is_student?
-        user = { name: "#{@submission.student.first_name}", email: "#{@submission.student.email}" }
-        submission = { name: "#{@submission.assignment.name}", time: "#{@submission.created_at}" }
-        course = { courseno: "#{current_course.courseno}",  }
-        NotificationMailer.successful_submission(@submission.id).deliver_now
-      end
-    elsif @submission.errors[:link].any?
-      redirect_to new_assignment_submission_path(@assignment, @submission), notice: "Please provide a valid link for #{@assignment.name} submissions."
-    else
-      redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} was not successfully submitted! Please try again."
+      redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." and return
     end
+    render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
+                                              submission: submission,
+                                              student: submission.student,
+                                              course: current_course,
+                                              group_id: submission.group_id,
+                                              view_context: view_context)
   end
 
-  def show
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    @submission = current_course.submissions.find(params[:id])
-    @student = @submission.student
-    if @assignment.is_individual?
-      @title = "#{@student.first_name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
-    else
-      @group = @submission.group
-      @title = "#{@group.name}'s #{@assignment.name} Submission (#{@assignment.point_total} points)"
-    end
+  def edit
+    presenter = EditSubmissionPresenter.new(id: params[:id], assignment_id: params[:assignment_id],
+                                            course: current_course, group_id: params[:group_id],
+                                            view_context: view_context)
+    enforce_view_permission(presenter.submission)
+    render :edit, locals: { presenter: presenter }
   end
 
   def update
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    if params[:submission] && params[:submission][:submission_files_attributes].present?
-      @submission_files = params[:submission][:submission_files_attributes]["0"]["file"]
-      params[:submission].delete :submission_files_attributes
-    end
-
-    @submission = @assignment.submissions.find(params[:id])
-
-    if @submission_files
-      @submission_files.each do |sf|
-        if sf.size > MAX_UPLOAD_FILE_SIZE
-          return redirect_to new_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} not saved! #{sf.original_filename} was larger than the maximum #{MAX_UPLOAD_READABLE} file size."
-        end
-        @submission.submission_files.new(file: sf, filename: sf.original_filename[0..49])
-      end
-    end
+    assignment = current_course.assignments.find(params[:assignment_id])
+    submission = assignment.submissions.find(params[:id])
 
     respond_to do |format|
-      if @submission.update_attributes(params[:submission])
+      if submission.update_attributes(params[:submission])
+        path = assignment.has_groups? ? { group_id: submission.group_id } :
+          { student_id: submission.student_id }
+        redirect_to = assignment_submission_path(assignment, submission, path)
         if current_user_is_student?
-          format.html { redirect_to assignment_path(@assignment, :anchor => "fndtn-tabt3"), notice: "Your submission for #{@assignment.name} was successfully updated." }
-          format.json { render json: @assignment, status: :created, location: @assignment }
-          NotificationMailer.updated_submission(@submission.id).deliver_now
-        else
-          format.html { redirect_to assignment_submission_path(@assignment, @submission), notice: "#{@assignment.name} was successfully updated." }
+          NotificationMailer.updated_submission(submission.id).deliver_now if assignment.is_individual?
+          redirect_to = assignment_path(assignment, anchor: "fndtn-tabt3")
         end
-      elsif @submission.errors[:link].any?
-        format.html { redirect_to edit_assignment_submission_path(@assignment, @submission), notice: "Please provide a valid link for #{@assignment.name} submissions." }
+        format.html { redirect_to redirect_to, notice: "Your submission for #{assignment.name} was successfully updated." }
+        format.json { render json: assignment, status: :created, location: assignment }
       else
-        format.html { redirect_to edit_assignment_submission_path(@assignment, @submission), alert: "#{@assignment.name} was not successfully submitted! Please try again." }
-        format.json { render json: @submission.errors, status: :unprocessable_entity }
+        format.html do
+          render :edit, EditSubmissionPresenter.build(id: params[:id],
+                                                      assignment_id: params[:assignment_id],
+                                                     course: current_course,
+                                                     group_id: submission.group_id,
+                                                     submission: submission,
+                                                     view_context: view_context)
+        end
+        format.json { render json: submission.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def destroy
-    @assignment = current_course.assignments.find(params[:assignment_id])
-    @submission = current_course.submissions.find(params[:id])
-    @submission.destroy
-    respond_to do |format|
-      format.html { redirect_to assignment_path(@assignment) }
-    end
-    flash[:notice] = "Submission deleted"
+    assignment = current_course.assignments.find(params[:assignment_id])
+    assignment.submissions.find(params[:id]).destroy
+    redirect_to assignment_path(assignment, notice: "Submission deleted")
   end
-
 end

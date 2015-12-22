@@ -1,12 +1,12 @@
-# encoding: utf-8
 require 'rails_spec_helper'
 
 describe "submissions/_assignment_guidelines" do
 
   before(:each) do
-    @course = create(:course)
-    @assignment = create(:assignment)
-    allow(view).to receive(:current_course).and_return(@course)
+    course = create(:course)
+    @assignment = create(:assignment, course: course)
+    allow(view).to receive(:current_course).and_return(course)
+    allow(view).to receive(:assignment).and_return @assignment
   end
 
   describe "with a graded assignment" do
@@ -18,6 +18,8 @@ describe "submissions/_assignment_guidelines" do
 
   describe "with a pass fail assignment"  do
     it "renders Pass/Fail and not the points total" do
+      allow(view).to receive(:term_for).with(:pass).and_return "Pass"
+      allow(view).to receive(:term_for).with(:fail).and_return "Fail"
       @assignment.update(pass_fail: true)
       render
       assert_select "div.italic.not_bold", text: "#{points @assignment.point_total} points possible", count: 0

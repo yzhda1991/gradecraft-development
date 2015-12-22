@@ -1,36 +1,36 @@
-= render 'assignment_guidelines'
+= render partial: 'assignment_guidelines', locals: { assignment: presenter.assignment }
 
 %hr
 
-= simple_form_for([@assignment, @submission]) do |f|
-  - if @assignment.has_groups? && current_user_is_student?
-    = f.input :group_id, :input_html => { :value => current_student.group_for_assignment(@assignment).id }, :as => :hidden
-  - elsif @assignment.has_groups? && current_user_is_staff?
-    = f.input :group_id, :input_html => { :value => @group.id }, :as => :hidden
-  - elsif @assignment.is_individual? && current_user_is_staff?
-    = f.input :student_id, :input_html => { :value => @student.id }, :as => :hidden
+= simple_form_for([presenter.assignment, presenter.submission]) do |f|
+  - if presenter.assignment.has_groups? && current_user_is_student?
+    = f.input :group_id, :input_html => { :value => current_student.group_for_assignment(presenter.assignment).id }, :as => :hidden
+  - elsif presenter.assignment.has_groups? && current_user_is_staff?
+    = f.input :group_id, :input_html => { :value => presenter.group.id }, :as => :hidden
+  - elsif presenter.assignment.is_individual?
+    = f.input :student_id, :input_html => { :value => presenter.student.id }, :as => :hidden
 
   %section
-    - if @assignment.accepts_attachments
+    - if presenter.assignment.accepts_attachments
       %h4 Attachments
-      = f.simple_fields_for :submission_files, @submission.submission_files.new do |sf|
+      = f.simple_fields_for :submission_files, presenter.submission.submission_files.new do |sf|
         = sf.file_field :file, :multiple => true
-      - if @submission.submission_files.exists?
+      - if presenter.submission.submission_files.exists?
         %h5.bold Uploaded files
         %ul.uploaded-files
-          - current_student.submission_for_assignment(@assignment).submission_files.each do |sf|
+          - presenter.submission.submission_files.each do |sf|
             %li
               = link_to sf.filename, sf.url, :target => "_blank"
-              = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
+              = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => presenter.assignment.id, :upload_id => sf.id } )
 
-    - if @assignment.accepts_links
-      = f.input :link 
+    - if presenter.assignment.accepts_links
+      = f.input :link
 
-    - if @assignment.accepts_text
+    - if presenter.assignment.accepts_text
       %h4.uppercase Content/Statement
       = f.text_area :text_comment, :class => "froala"
 
   .submit-buttons
     %ul
-      %li= f.button :submit, "#{@submission.persisted? ? 'Update Submission' : "Submit #{term_for :assignment}"}"
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(@assignment), :class => 'button'
+      %li= f.button :submit, "#{presenter.submission.persisted? ? 'Update Submission' : "Submit #{term_for :assignment}"}"
+      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(presenter.assignment), :class => 'button'

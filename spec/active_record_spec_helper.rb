@@ -72,6 +72,8 @@ CarrierWave::Uploader::Base.descendants.each do |klass|
   end
 end
 
+FactoryGirl::SyntaxRunner.send(:include, FileHelpers)
+
 RSpec.configure do |config|
   config.include FileHelpers
   config.include FactoryGirl::Syntax::Methods

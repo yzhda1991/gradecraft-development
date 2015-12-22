@@ -1,10 +1,13 @@
+require_relative "concerns/multiple_file_attributes"
+
 class Submission < ActiveRecord::Base
   attr_accessible :task, :task_id, :assignment, :assignment_id, :assignment_type_id,
-    :group, :group_id, :link, :student, :student_id, :creator, :creator_id, 
+    :group, :group_id, :link, :student, :student_id, :creator, :creator_id,
     :text_comment, :graded, :submission_file, :submission_files_attributes, :submission_files,
     :course_id, :submission_file_ids, :updated_at
 
   include Canable::Ables
+  include MultipleFileAttibutes
 
   belongs_to :task, touch: true
   belongs_to :assignment, touch: true
@@ -36,6 +39,8 @@ class Submission < ActiveRecord::Base
   validates_uniqueness_of :task, :scope => :student, :allow_nil => true
   validates :link, :format => URI::regexp(%w(http https)) , :allow_blank => true
   validates :assignment, presence: true
+
+  multiple_files :submission_files
 
   #Canable permissions#
   def updatable_by?(user)
@@ -96,6 +101,7 @@ class Submission < ActiveRecord::Base
   private
 
   def permissions_check(user)
+    return true if user.is_staff?(course)
     if assignment.is_individual?
       student_id == user.id
     elsif assignment.has_groups?

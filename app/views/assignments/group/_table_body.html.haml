@@ -7,7 +7,7 @@
         %ul.button-bar
           %li= link_to "Review #{term_for :group}", review_groups_path(:id => group_presenter.group), :class => 'button'
           - if group_presenter.submission
-            %li= link_to "See Submission", assignment_submission_path(group_presenter.assignment, id: group_presenter.submission.id), :class => 'button'
+            %li= link_to "See Submission", assignment_submission_path(group_presenter.assignment, id: group_presenter.submission.id, group_id: group_presenter.group.id), :class => 'button'
           - elsif presenter.assignment.accepts_submissions?
             %li= link_to "Submit", new_assignment_submission_path(group_presenter.assignment, group_presenter.submission, :group_id => group_presenter.group.id), :class => 'button'
           - if group_presenter.assignment_graded?

@@ -5,10 +5,11 @@ class SubmissionFile < ActiveRecord::Base
 
   belongs_to :submission
 
-  validates :filename, presence: true, length: { maximum: 50 }
-
   mount_uploader :file, AttachmentUploader
   process_in_background :file
+
+  validates :filename, presence: true, length: { maximum: 50 }
+  validates :file, file_size: { maximum: 40.megabytes.to_i }
 
   def course
     submission.course

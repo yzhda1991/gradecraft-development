@@ -3,6 +3,7 @@ class UnlockStatesController < ApplicationController
   #Unlock States are used to ...
 
   before_filter :ensure_staff?
+  before_filter :save_referer, only: [:manually_unlock]
 
   def create
     @unlock_state = current_course.unlock_state.new(params[:unlock_condition])
@@ -16,7 +17,6 @@ class UnlockStatesController < ApplicationController
   end
 
   def manually_unlock
-    session[:return_to] = request.referer
     if params[:assignment_id].present?
       @unlockable = current_course.assignments.find(params[:assignment_id])
     elsif params[:badge_id].present?
@@ -33,5 +33,5 @@ class UnlockStatesController < ApplicationController
     @unlock_state = current_course.unlock_state.find(params[:id])
     @unlock_state.destroy
   end
-  
+
 end

@@ -3,6 +3,7 @@ class GradesController < ApplicationController
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
   before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update] # todo: probably need to add submit_rubric here
   before_filter :ensure_student?, only: [:feedback_read, :predict_score, :self_log]
+  before_filter :save_referer, only: [:edit, :edit_status]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
 
@@ -32,7 +33,6 @@ class GradesController < ApplicationController
 
   # GET /assignments/:assignment_id/grade/edit?student_id=:id
   def edit
-    session[:return_to] = request.referer
     @student = current_student
 
     @grade = Grade.find_or_create(@assignment,@student)
@@ -285,8 +285,6 @@ class GradesController < ApplicationController
   # For changing the status of a group of grades passed in grade_ids ("In Progress" => "Graded", or "Graded" => "Released")
   # GET  /assignments/:id/grades/edit_status
   def edit_status
-    session[:return_to] = request.referer
-
     @assignment = current_course.assignments.find(params[:id])
     @title = "#{@assignment.name} Grade Statuses"
     @grades = @assignment.grades.find(params[:grade_ids])
