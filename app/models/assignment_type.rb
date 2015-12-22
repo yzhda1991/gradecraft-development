@@ -17,6 +17,13 @@ class AssignmentType < ActiveRecord::Base
 
   default_scope { order 'position' }
 
+  def copy
+    copy = self.dup
+    copy.save unless self.new_record?
+    copy.assignments << self.assignments.map(&:copy)
+    copy
+  end
+
   def weight_for_student(student)
     #return a standard multiplier of 1 if the assignment type is not student weightable
     return 1 unless student_weightable?
