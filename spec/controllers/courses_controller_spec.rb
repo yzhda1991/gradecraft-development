@@ -73,33 +73,33 @@ describe CoursesController do
       end
     end
 
-    describe "POST copy" do 
-      it "creates a duplicate course" do 
+    describe "POST copy" do
+      it "creates a duplicate course" do
         expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
       end
 
-      it "duplicates badges if present" do 
+      it "duplicates badges if present" do
         create(:badge, course: @course)
         expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
         course_2 = Course.last
         expect(course_2.badges.present?).to eq(true)
       end
 
-      it "duplicates challenges if present" do 
+      it "duplicates challenges if present" do
         create(:challenge, course: @course)
         expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
         course_2 = Course.last
         expect(course_2.challenges.present?).to eq(true)
       end
 
-      it "duplicates grade_scheme_elements if present" do 
+      it "duplicates grade_scheme_elements if present" do
         create(:grade_scheme_element, course: @course)
         expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
         course_2 = Course.last
         expect(course_2.grade_scheme_elements.present?).to eq(true)
       end
 
-      it "duplicates assignment_types and assignments if present" do 
+      it "duplicates assignment_types and assignments if present" do
         assignment_type = create(:assignment_type, course: @course)
         create(:assignment, assignment_type: assignment_type, course: @course)
         expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
@@ -108,7 +108,7 @@ describe CoursesController do
         expect(course_2.assignments.present?).to eq(true)
       end
 
-      it "duplicates score levels if present" do         
+      it "duplicates score levels if present" do
         assignment_type = create(:assignment_type, course: @course)
         assignment = create(:assignment, assignment_type: assignment_type, course: @course)
         score_level = create(:assignment_score_level, assignment: assignment)
@@ -118,7 +118,7 @@ describe CoursesController do
         expect(assignment_2.assignment_score_levels.present?).to eq(true)
       end
 
-      it "duplicates rubrics if present" do 
+      it "duplicates rubrics if present" do
         assignment_type = create(:assignment_type, course: @course)
         badge = create(:badge, course: @course, name: "First")
         assignment = create(:assignment, assignment_type: assignment_type, course: @course)
@@ -129,7 +129,7 @@ describe CoursesController do
         course_2 = Course.last
         assignment_2 = course_2.assignments.first
         rubric_2 = assignment_2.rubric
-        metric_2 = rubric_2.metrics.first 
+        metric_2 = rubric_2.metrics.first
         tier_2 = metric_2.tiers.last
         expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
         expect(assignment_2.rubric.present?).to eq(true)
@@ -138,8 +138,11 @@ describe CoursesController do
         expect(tier_2.tier_badges.present?).to eq(true)
       end
 
-      it "redirects to the courses path if the copy fails" do 
-        skip "pending"
+      it "redirects to the courses path if the copy fails" do
+        @course.update_attribute :max_group_size, 0
+        post :copy, id: @course.id
+        expect(response).to redirect_to courses_path
+        expect(flash[:alert]).to eq "#{@course.name} was not successfully copied"
       end
     end
 
@@ -151,7 +154,7 @@ describe CoursesController do
         expect(@course.reload.name).to eq("new name")
       end
 
-      it "redirects to the edit path if the course fails to update" do 
+      it "redirects to the edit path if the course fails to update" do
         params = { name: "" }
         post :update, id: @course.id, :course => params
         expect(response).to render_template(:edit)
@@ -164,8 +167,8 @@ describe CoursesController do
       end
     end
 
-    describe "GET timeline settings" do 
-      it "displays a list of all assignments for the course and their timeline info " do 
+    describe "GET timeline settings" do
+      it "displays a list of all assignments for the course and their timeline info " do
         get :timeline_settings, :id => @course.id
         expect(assigns(:title)).to eq("Timeline Settings")
         expect(assigns(:course)).to eq(@course)
@@ -173,9 +176,9 @@ describe CoursesController do
       end
     end
 
-    describe "POST timeline settings update" do 
+    describe "POST timeline settings update" do
 
-      it "changes the list of all assignments for the course and their timeline info " do 
+      it "changes the list of all assignments for the course and their timeline info " do
         @assignment = create(:assignment, course: @course)
         params = { "course" => { "assignments_attributes" => { "0" => { "media"=>"", "thumbnail"=>"", "media_credit"=>"", "media_caption"=>"Testing", "id"=> @assignment.id } } }, :id => @course.id}
         post :timeline_settings_update, params
@@ -183,7 +186,7 @@ describe CoursesController do
         expect(response).to redirect_to dashboard_path
       end
 
-      it "redirects to the edit timeline settings page if it fails" do 
+      it "redirects to the edit timeline settings page if it fails" do
         @assignment = create(:assignment, course: @course)
         params = { "course" => { "assignments_attributes" => { "0" => { "media"=>"", "thumbnail"=>"", "media_credit"=>"", "media_caption"=>"Testing", "id"=> nil} } }, :id => @course.id}
         post :timeline_settings_update, params
@@ -192,8 +195,8 @@ describe CoursesController do
       end
     end
 
-    describe "GET predictor settings" do 
-      it "displays a list of all assignments for the course and their predictor info " do 
+    describe "GET predictor settings" do
+      it "displays a list of all assignments for the course and their predictor info " do
         get :predictor_settings, :id => @course.id
         expect(assigns(:title)).to eq("Grade Predictor Settings")
         expect(assigns(:course)).to eq(@course)
@@ -201,8 +204,8 @@ describe CoursesController do
       end
     end
 
-    describe "POST predictor settings update" do 
-      it "changes the predictor settings for all assignments for the course" do 
+    describe "POST predictor settings update" do
+      it "changes the predictor settings for all assignments for the course" do
         @assignment = create(:assignment, course: @course)
         params = { "course" => { "assignments_attributes" => { "0" => {"include_in_predictor"=>"1", "points_predictor_display"=>"Fixed", "id"=> @assignment.id } } }, :id => @course.id}
         post :predictor_settings_update, params
@@ -210,7 +213,7 @@ describe CoursesController do
         expect(response).to redirect_to @course
       end
 
-      it "redirects to the edit predictor settings page if it fails" do 
+      it "redirects to the edit predictor settings page if it fails" do
         @assignment = create(:assignment, course: @course)
         params = { "course" => { "assignments_attributes" => { "0" => {"include_in_predictor"=>"1", "points_predictor_display"=>"Fixed", "id"=> nil } } }, :id => @course.id}
         post :predictor_settings_update, params
@@ -247,7 +250,7 @@ describe CoursesController do
         :destroy,
         :timeline_settings,
         :timeline_settings_update,
-        :predictor_settings, 
+        :predictor_settings,
         :predictor_settings_update
       ].each do |route|
         it "#{route} redirects to root" do

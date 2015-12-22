@@ -115,7 +115,7 @@ class CoursesController < ApplicationController
         session[:course_id] = new_course.id
         format.html { redirect_to course_path(new_course.id), notice: "#{@course.name} successfully copied" }
       else
-        redirect_to courses_path, alert: "#{@course.name} was not successfully copied"
+        format.html { redirect_to courses_path, alert: "#{@course.name} was not successfully copied" }
       end
     end
 
