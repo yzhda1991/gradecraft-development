@@ -138,22 +138,21 @@ class Assignment < ActiveRecord::Base
     future? && due_at < 7.days.from_now
   end
 
-  # Setting the grade predictor displays
-  def fixed?
-    points_predictor_display == "Fixed"
-  end
-
-  def slider?
-    points_predictor_display == "Slider"
-  end
-
-  def select?
-    points_predictor_display == "Select List"
-  end
-
   # The below four are the Quick Grading Types, can be set at either the assignment or assignment type level
   def grade_checkboxes?
     mass_grade_type == "Checkbox"
+  end
+
+  # Current types: "Fixed", "Slider"
+  # TODO: revisit question "Should Professors still be setting this?"
+  def predictor_display_type
+    if points_predictor_display == "Fixed" || pass_fail
+      "checkbox"
+    elsif points_predictor_display == "Slider"
+      "slider"
+    else # default for now
+      "slider"
+    end
   end
 
   def grade_select?
@@ -193,12 +192,21 @@ class Assignment < ActiveRecord::Base
     accepts_submissions_until.nil? || accepts_submissions_until > Time.now
   end
 
+  # No longer accepting submissions.
+  def submissions_have_closed?
+    ! accepts_submissions_until.nil? && accepts_submissions_until < Time.now
+  end
+
+  # TODO: We need a closed? (or has_closed?) method for assignments with
+  # or without submissions
+
   # Checking to see if the assignment is still open and accepting submissons
   def open?
     opened? && (!overdue? || accepting_submissions?)
   end
 
-  # Calculating attendance rate, which tallies number of people who have positive grades for attendance divided by the total number of students in the class
+  # Calculating attendance rate, which tallies number of people who have
+  # positive grades for attendance divided by the total number of students in the class
   def completion_rate(course)
     return 0 if course.graded_student_count.zero?
    ((grade_count / course.graded_student_count.to_f) * 100).round(2)

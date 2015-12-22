@@ -18,7 +18,7 @@
     }
     badges = []
     challenges = []
-    icons = ["is_required", "is_late", "has_info", "is_locked", "has_been_unlocked", "is_a_condition", "is_earned_by_group"]
+    icons = ["is_required", "is_late", "has_closed", "has_info", "has_rubric", "accepts_submissions", "is_locked", "has_been_unlocked", "is_a_condition", "is_earned_by_group"]
     unusedWeights = null
 
     getGradeLevels = ()->
@@ -60,10 +60,7 @@
         angular.copy(data.assignments,assignments)
         termFor.assignment = data.term_for_assignment
         termFor.pass = data.term_for_pass
-        termFor.Pass = data.term_for_pass
-        termFor.pass = data.term_for_pass
         termFor.fail = data.term_for_fail
-        termFor.Fail = data.term_for_fail
         update.assignments = data.update_assignments
       )
 

@@ -69,7 +69,7 @@
 
   # Assignments with Score Levels: returns true
   $scope.hasLevels = (assignment)->
-    assignment.score_levels.length > 0
+    assignment.score_levels != undefined && assignment.score_levels.length > 0
 
   # Assignments with Score Levels: Returns the Level Name if predicted score in range
   $scope.levelNameForAssignmentScore = (assignment)->
@@ -120,7 +120,7 @@
       # use raw score to keep weighting calculation on assignment type level
       if assignment.grade.raw_score != null
         total += assignment.grade.raw_score
-      else if ! assignment.pass_fail && includePredicted
+      else if ! assignment.pass_fail && ! assignment.has_closed? && includePredicted
         total += assignment.grade.predicted_score
     )
     total

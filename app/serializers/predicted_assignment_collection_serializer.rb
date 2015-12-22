@@ -1,4 +1,8 @@
-class PredictedAssignmentCollection
+# Called from the assignments Controller, this assembles the assignments
+# for a student with the student's grades nested within each assigment.
+# Permission to update predictions is only granted if the user is the student.
+
+class PredictedAssignmentCollectionSerializer
   include Enumerable
 
   attr_reader :assignments, :current_user, :student
@@ -10,7 +14,7 @@ class PredictedAssignmentCollection
   end
 
   def each
-    assignments.each { |assignment| yield PredictedAssignment.new(assignment, current_user, student) }
+    assignments.each { |assignment| yield PredictedAssignmentSerializer.new(assignment, current_user, student) }
   end
 
   def [](index)
@@ -25,30 +29,24 @@ class PredictedAssignmentCollection
 
   def pluck_attributes(assignments)
     assignments.select(
-      :accepts_resubmissions_until,
       :accepts_submissions,
       :accepts_submissions_until,
       :assignment_type_id,
-      :course_id,
       :description,
       :due_at,
       :grade_scope,
       :id,
       :include_in_predictor,
       :name,
-      :open_at,
       :pass_fail,
       :point_total,
       :points_predictor_display,
       :position,
-      :release_necessary,
       :required,
-      :resubmissions_allowed,
-      :student_logged,
-      :thumbnail,
       :use_rubric,
       :visible,
       :visible_when_locked
     )
   end
 end
+

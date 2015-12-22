@@ -10,7 +10,7 @@ describe "assignments/predictor_data" do
 
   before(:each) do
     @assignment = create(:assignment, description: "...", course: @course)
-    @assignments = PredictedAssignmentCollection.new Assignment.where(id: @assignment.id), @student, @student
+    @assignments = PredictedAssignmentCollectionSerializer.new Assignment.where(id: @assignment.id), @student, @student
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:current_user).and_return(@student)
   end
@@ -21,10 +21,17 @@ describe "assignments/predictor_data" do
     expect(json["assignments"].length).to eq(1)
   end
 
-  it "adds attribute 'fixed' to the assignments" do
+  it "adds the predictor_display_type 'checkbox' to assignments" do
+    allow_any_instance_of(Assignment).to receive(:points_predictor_display).and_return("Slider")
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["fixed"]).to eq(true)
+    expect(json["assignments"][0]["predictor_display_type"]).to eq("slider")
+  end
+
+  it "adds the predictor_display_type 'checkbox' to assignments" do
+    render
+    json = JSON.parse(response.body)
+    expect(json["assignments"][0]["predictor_display_type"]).to eq("checkbox")
   end
 
   it "includes the current student grade with the assignment" do
@@ -98,7 +105,7 @@ describe "assignments/predictor_data" do
     end
 
     it "adds is_locked to model" do
-      allow_any_instance_of(PredictedAssignment).to \
+      allow_any_instance_of(Assignment).to \
         receive(:is_unlocked_for_student?).and_return(false)
       render
       json = JSON.parse(response.body)
@@ -106,17 +113,17 @@ describe "assignments/predictor_data" do
     end
 
     it "adds has_been_unlocked to model" do
-      allow_any_instance_of(PredictedAssignment).to \
-        receive(:is_unlocked_for_student?).and_return(true)
-      allow_any_instance_of(PredictedAssignment).to \
+      allow_any_instance_of(Assignment).to \
         receive(:is_unlockable?).and_return(true)
+      allow_any_instance_of(Assignment).to \
+        receive(:is_unlocked_for_student?).and_return(true)
       render
       json = JSON.parse(response.body)
       expect(json["assignments"][0]["has_been_unlocked"]).to eq true
     end
 
     it "adds is_a_condition to model" do
-      allow_any_instance_of(PredictedAssignment).to \
+      allow_any_instance_of(PredictedAssignmentSerializer).to \
         receive(:is_a_condition?).and_return(true)
       render
       json = JSON.parse(response.body)
@@ -124,7 +131,7 @@ describe "assignments/predictor_data" do
     end
 
     it "adds is_earned_by_group to model" do
-      allow_any_instance_of(PredictedAssignment).to \
+      allow_any_instance_of(Assignment).to \
         receive(:grade_scope).and_return("Group")
       render
       @json = JSON.parse(response.body)
