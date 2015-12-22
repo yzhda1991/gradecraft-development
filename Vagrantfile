@@ -69,6 +69,7 @@ RAILS_TOKEN=gradecraft
 RAILS_SECRET=changeme
 REDIS_URL=redis://localhost:6379
 REDIS_PORT=6379
+TERM_CHILD=1
 S3_BUCKET_NAME=<s3 bucket - used in production and staging>
 AWS_ACCESS_KEY_ID=abc
 AWS_SECRET_ACCESS_KEY=abc
