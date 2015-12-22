@@ -188,6 +188,9 @@ class Course < ActiveRecord::Base
     copy.name.prepend "Copy of "
     copy.save unless self.new_record?
     copy.badges << self.badges.map(&:copy)
+    copy.assignment_types << self.assignment_types.map(&:copy)
+    copy.challenges << self.challenges.map(&:copy)
+    copy.grade_scheme_elements << self.grade_scheme_elements.map(&:copy)
     copy
   end
 

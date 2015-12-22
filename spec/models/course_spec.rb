@@ -48,7 +48,7 @@ describe Course do
     end
   end
 
-  describe "#copy", focus: true do
+  describe "#copy" do
     let(:course) { build :course }
     subject { course.copy }
 
@@ -73,9 +73,26 @@ describe Course do
       expect(subject.badges.map(&:course_id)).to eq [subject.id]
     end
 
-    xit "copies the assignment types"
-    xit "copies the challenges"
-    xit "copies the grade scheme elements"
+    it "copies the assignment types" do
+      course.save
+      create :assignment_type, course: course
+      expect(subject.assignment_types.size).to eq 1
+      expect(subject.assignment_types.map(&:course_id)).to eq [subject.id]
+    end
+
+    it "copies the challenges" do
+      course.save
+      create :challenge, course: course
+      expect(subject.challenges.size).to eq 1
+      expect(subject.challenges.map(&:course_id)).to eq [subject.id]
+    end
+
+    it "copies the grade scheme elements" do
+      course.save
+      create :grade_scheme_element, course: course
+      expect(subject.grade_scheme_elements.size).to eq 1
+      expect(subject.grade_scheme_elements.map(&:course_id)).to eq [subject.id]
+    end
   end
 
   describe "#staff" do
