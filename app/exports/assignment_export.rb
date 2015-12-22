@@ -8,6 +8,8 @@ class AssignmentExport < ActiveRecord::Base
   attr_accessible :course_id, :professor_id, :team_id, :assignment_id, :submissions_snapshot,
     :s3_object_key, :export_filename, :s3_bucket, :last_export_started_at, :last_export_completed_at
 
+  before_create :set_s3_attributes
+
   def s3_object_key
     "/exports/courses/#{course_id}/assignments/#{assignment_id}/#{export_filename}"
   end
@@ -22,13 +24,6 @@ class AssignmentExport < ActiveRecord::Base
 
   def update_export_completed_time
     update_attributes last_export_completed_at: export_time
-  end
-
-  def self.create_with_s3_attributes(creation_attributes)
-    new_assignment_export = self.new(creation_attributes)
-    new_assignment_export.set_s3_attributes
-    new_assignment_export.save
-    new_assignment_export
   end
 
   def set_s3_attributes

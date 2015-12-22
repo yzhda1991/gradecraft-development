@@ -89,4 +89,5 @@ RSpec.describe AssignmentExport do
       expect(assignment_export.last_export_completed_at).to eq(sometime)
     end
   end
+
 end

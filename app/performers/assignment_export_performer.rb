@@ -6,7 +6,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   def setup
     fetch_assets
     # @mz todo: add specs
-    @assignment_export = AssignmentExport.create_with_s3_attributes(assignment_export_attributes)
+    @assignment_export = AssignmentExport.create(assignment_export_attributes)
     
     # @mz todo: add specs
     @errors = []
