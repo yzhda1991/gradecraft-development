@@ -1,4 +1,5 @@
 class GradeSchemeElement < ActiveRecord::Base
+  include Copyable
   attr_accessible :letter, :low_range, :high_range, :level, :description, :course_id, :course, :updated_at
 
   belongs_to :course, touch: true
@@ -9,10 +10,6 @@ class GradeSchemeElement < ActiveRecord::Base
   default_scope { order 'high_range DESC' }
 
   scope :order_by_low_range, -> { order 'low_range ASC' }
-
-  def copy
-    self.dup
-  end
 
   # Getting the name of the Grade Scheme Element - the Level if it's present, the Letter if not
   def name

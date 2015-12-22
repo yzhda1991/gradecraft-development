@@ -1,4 +1,5 @@
 class Challenge < ActiveRecord::Base
+  include Copyable
   include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails
@@ -32,10 +33,6 @@ class Challenge < ActiveRecord::Base
 
   validates_presence_of :course, :name
   validate :positive_points, :open_before_close
-
-  def copy
-    self.dup
-  end
 
   def has_levels?
     challenge_score_levels.present?

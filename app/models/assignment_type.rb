@@ -1,4 +1,6 @@
 class AssignmentType < ActiveRecord::Base
+  include Copyable
+
   acts_as_list scope: :course
 
   attr_accessible :max_points, :name, :description, :student_weightable, :position
@@ -19,7 +21,7 @@ class AssignmentType < ActiveRecord::Base
 
   def copy(attributes={})
     copy = self.dup
-    copy.assign_attributes(attributes)
+    copy.copy_attributes(attributes)
     copy.save unless self.new_record?
     copy.assignments << self.assignments.map { |a| a.copy(attributes) }
     copy

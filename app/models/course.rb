@@ -1,6 +1,7 @@
 require_relative "role"
 
 class Course < ActiveRecord::Base
+  include Copyable
   include UploadsMedia
 
   after_create :create_admin_memberships
@@ -183,7 +184,7 @@ class Course < ActiveRecord::Base
     super.presence || 'Player'
   end
 
-  def copy
+  def copy(attributes={})
     copy = self.dup
     copy.name.prepend "Copy of "
     copy.save unless self.new_record?

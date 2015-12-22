@@ -1,4 +1,6 @@
 class Rubric < ActiveRecord::Base
+  include Copyable
+
   belongs_to :assignment
   has_many :metrics
   has_many :rubric_grades
@@ -17,7 +19,7 @@ class Rubric < ActiveRecord::Base
     metrics.count > 0
   end
 
-  def copy
+  def copy(attributes={})
     copy = self.dup
     copy.save unless self.new_record?
     copy.metrics << self.metrics.map(&:copy)

@@ -1,4 +1,5 @@
 class Badge < ActiveRecord::Base
+  include Copyable
   include UnlockableCondition
 
   attr_accessible :name, :description, :icon, :visible, :can_earn_multiple_times,
@@ -37,10 +38,6 @@ class Badge < ActiveRecord::Base
   #indexed badges
   def awarded_count
     earned_badges.student_visible.count
-  end
-
-  def copy
-    self.dup
   end
 
   #badges per role

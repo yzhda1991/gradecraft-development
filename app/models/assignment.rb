@@ -1,6 +1,7 @@
 require_relative "concerns/multiple_file_attributes"
 
 class Assignment < ActiveRecord::Base
+  include Copyable
   include Gradable
   include MultipleFileAttibutes
   include ScoreLevelable
@@ -82,7 +83,7 @@ class Assignment < ActiveRecord::Base
   def copy(attributes={})
     copy = self.dup
     copy.name.prepend "Copy of "
-    copy.assign_attributes(attributes)
+    copy.copy_attributes(attributes)
     copy.save unless self.new_record?
     copy.assignment_score_levels << self.assignment_score_levels.map(&:copy)
     copy.rubric = self.rubric.copy if self.rubric.present?

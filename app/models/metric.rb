@@ -1,4 +1,6 @@
 class Metric < ActiveRecord::Base
+  include Copyable
+
   belongs_to :rubric
   has_many :tiers, dependent: :destroy
 
@@ -20,7 +22,7 @@ class Metric < ActiveRecord::Base
 
   scope :ordered, lambda { order(:order) }
 
-  def copy
+  def copy(attributes={})
     copy = self.dup
     copy.add_default_tiers = false
     copy.save unless self.new_record?
