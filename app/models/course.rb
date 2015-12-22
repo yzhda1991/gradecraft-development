@@ -183,6 +183,14 @@ class Course < ActiveRecord::Base
     super.presence || 'Player'
   end
 
+  def copy
+    copy = self.dup
+    copy.name.prepend "Copy of "
+    copy.save unless self.new_record?
+    copy.badges << self.badges.map(&:copy)
+    copy
+  end
+
   def has_teams?
     team_setting == true
   end
