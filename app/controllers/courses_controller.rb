@@ -29,96 +29,18 @@ class CoursesController < ApplicationController
     @course = Course.find(params[:id])
   end
 
-  # Important for instructors to be able to copy one course's structure into a new one - does not copy students or grades
   def copy
-    @course = Course.find(params[:id])
-    new_course = @course.dup
-    new_course.name.prepend("Copy of ")
-    new_course.save
-    if @course.badges.present?
-      @course.badges.each do |b|
-        nb = b.dup
-        nb.course_id = new_course.id
-        nb.save
+    course = Course.find(params[:id])
+    duplicated = course.copy
+    if duplicated.save
+      if !current_user_is_admin?
+        duplicated.course_memberships.create(user: current_user, role: current_role)
       end
+      session[:course_id] = duplicated.id
+      redirect_to course_path(duplicated.id), notice: "#{course.name} successfully copied"
+    else
+      redirect_to courses_path, alert: "#{course.name} was not successfully copied"
     end
-    if @course.assignment_types.present?
-      @course.assignment_types.each do |at|
-        nat = at.dup
-        nat.course_id = new_course.id
-        nat.save
-        at.assignments.each do |a|
-          na = a.dup
-          na.assignment_type_id = nat.id
-          na.course_id = new_course.id
-          na.save
-          if a.assignment_score_levels.present?
-            a.assignment_score_levels.each do |asl|
-              nasl = asl.dup
-              nasl.assignment_id = na.id
-              nasl.save
-            end
-          end
-          if a.rubric.present?
-            new_rubric = a.rubric.dup
-            new_rubric.assignment_id = na.id
-            new_rubric.save
-            if a.rubric.metrics.present?
-              a.rubric.metrics.each do |metric|
-                new_metric = metric.dup
-                new_metric.rubric_id = new_rubric.id
-                new_metric.add_default_tiers = false
-                new_metric.save
-                if metric.tiers.present?
-                  metric.tiers.each do |tier|
-                    new_tier = tier.dup
-                    new_tier.metric_id = new_metric.id
-                    new_tier.save
-                    if tier.tier_badges.present?
-                      tier.tier_badges.each do |tier_badge|
-                        new_tier_badge = tier_badge.dup
-                        new_tier_badge.tier_id = new_tier.id
-                        badge = tier_badge.badge
-                        new_badge = new_course.badges.where(:name => badge.name).first
-                        new_tier_badge.badge_id = new_badge.id
-                        new_tier_badge.save
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    if @course.challenges.present?
-      @course.challenges.each do |c|
-        nc = c.dup
-        nc.course_id = new_course.id
-        nc.save
-      end
-    end
-    if @course.grade_scheme_elements.present?
-      @course.grade_scheme_elements.each do |gse|
-        ngse = gse.dup
-        ngse.course_id = new_course.id
-        ngse.save
-      end
-    end
-    respond_to do |format|
-      if new_course.save
-        if ! current_user_is_admin?
-          new_course.course_memberships.create(:user_id => current_user.id,
-                                                :role => current_user.role(current_course))
-        end
-        session[:course_id] = new_course.id
-        format.html { redirect_to course_path(new_course.id), notice: "#{@course.name} successfully copied" }
-      else
-        redirect_to courses_path, alert: "#{@course.name} was not successfully copied"
-      end
-    end
-
   end
 
   def create

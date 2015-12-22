@@ -1,4 +1,6 @@
 class Tier < ActiveRecord::Base
+  include Copyable
+
   belongs_to :metric
   has_many :tier_badges
   has_many :badges, through: :tier_badges
@@ -13,7 +15,7 @@ class Tier < ActiveRecord::Base
 
   include DisplayHelpers
 
-  def copy
+  def copy(attributes={})
     copy = self.dup
     copy.save unless self.new_record?
     copy.badges << self.badges.map(&:dup)

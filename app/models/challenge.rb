@@ -1,4 +1,5 @@
 class Challenge < ActiveRecord::Base
+  include Copyable
   include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails

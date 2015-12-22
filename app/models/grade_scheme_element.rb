@@ -1,4 +1,5 @@
 class GradeSchemeElement < ActiveRecord::Base
+  include Copyable
   attr_accessible :letter, :low_range, :high_range, :level, :description, :course_id, :course, :updated_at
 
   belongs_to :course, touch: true

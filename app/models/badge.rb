@@ -1,9 +1,10 @@
 class Badge < ActiveRecord::Base
+  include Copyable
   include UnlockableCondition
 
-  attr_accessible :name, :description, :icon, :visible, :can_earn_multiple_times, 
-    :point_total, :earned_badges, :earned_badges_attributes, :badge_file_ids, 
-    :badge_files_attributes, :badge_file, :position, :visible_when_locked, 
+  attr_accessible :name, :description, :icon, :visible, :can_earn_multiple_times,
+    :point_total, :earned_badges, :earned_badges_attributes, :badge_file_ids,
+    :badge_files_attributes, :badge_file, :position, :visible_when_locked,
     :course_id, :course
 
   # grade points available to the predictor from the assignment controller

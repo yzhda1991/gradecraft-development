@@ -1,6 +1,7 @@
 require_relative "role"
 
 class Course < ActiveRecord::Base
+  include Copyable
   include UploadsMedia
 
   after_create :create_admin_memberships
@@ -181,6 +182,17 @@ class Course < ActiveRecord::Base
 
   def user_term
     super.presence || 'Player'
+  end
+
+  def copy(attributes={})
+    copy = self.dup
+    copy.name.prepend "Copy of "
+    copy.save unless self.new_record?
+    copy.badges << self.badges.map(&:copy)
+    copy.assignment_types << self.assignment_types.map { |at| at.copy(course_id: copy.id) }
+    copy.challenges << self.challenges.map(&:copy)
+    copy.grade_scheme_elements << self.grade_scheme_elements.map(&:copy)
+    copy
   end
 
   def has_teams?

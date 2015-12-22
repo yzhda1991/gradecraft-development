@@ -1,4 +1,6 @@
 class AssignmentType < ActiveRecord::Base
+  include Copyable
+
   acts_as_list scope: :course
 
   attr_accessible :max_points, :name, :description, :student_weightable, :position
@@ -16,6 +18,14 @@ class AssignmentType < ActiveRecord::Base
   scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignment_types.id = assignment_weights.assignment_type_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
 
   default_scope { order 'position' }
+
+  def copy(attributes={})
+    copy = self.dup
+    copy.copy_attributes(attributes)
+    copy.save unless self.new_record?
+    copy.assignments << self.assignments.map { |a| a.copy(attributes) }
+    copy
+  end
 
   def weight_for_student(student)
     #return a standard multiplier of 1 if the assignment type is not student weightable
