@@ -115,7 +115,7 @@ describe CoursesController do
         expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
         course_2 = Course.last
         assignment_2 = course_2.assignments.first
-        expect(assignment_2.assignment_score_levels.present?).to eq(true)
+        expect(assignment_2.assignment_score_levels).to be_present
       end
 
       it "duplicates rubrics if present" do
@@ -138,11 +138,19 @@ describe CoursesController do
         expect(tier_2.tier_badges.present?).to eq(true)
       end
 
+      it "assigns the professor to the duplicated course" do
+        post :copy, id: @course.id
+        duplicated = Course.unscoped.last
+        expect(duplicated.course_memberships.count).to eq 1
+        expect(duplicated.course_memberships[0].role).to eq "professor"
+        expect(duplicated.course_memberships[0].user).to eq @professor
+      end
+
       it "redirects to the courses path if the copy fails" do
         @course.update_attribute :max_group_size, 0
         post :copy, id: @course.id
         expect(response).to redirect_to courses_path
-        expect(flash[:alert]).to eq "#{@course.name} was not successfully copied"
+        expect(flash[:alert]).to eq "#{@course.reload.name} was not successfully copied"
       end
     end
 
@@ -234,7 +242,8 @@ describe CoursesController do
       [
         :index,
         :new,
-        :create
+        :create,
+        :copy
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route).to redirect_to(:root)
