@@ -17,7 +17,7 @@ class Assignment < ActiveRecord::Base
     :mass_grade_type, :include_in_timeline, :include_in_predictor,
     :include_in_to_do, :assignment_file_ids,
     :assignment_files_attributes, :assignment_file,
-    :assignment_score_levels_attributes, :assignment_score_level, :course
+    :assignment_score_levels_attributes, :assignment_score_level, :course, :course_id
 
   attr_accessor :current_student_grade
 
@@ -79,9 +79,10 @@ class Assignment < ActiveRecord::Base
 
   delegate :student_weightable?, to: :assignment_type
 
-  def copy
+  def copy(attributes={})
     copy = self.dup
     copy.name.prepend "Copy of "
+    copy.assign_attributes(attributes)
     copy.save unless self.new_record?
     copy.assignment_score_levels << self.assignment_score_levels.map(&:copy)
     copy.rubric = self.rubric.copy if self.rubric.present?

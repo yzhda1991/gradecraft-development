@@ -75,9 +75,11 @@ describe Course do
 
     it "copies the assignment types" do
       course.save
-      create :assignment_type, course: course
+      assignment_type = create :assignment_type, course: course
+      create :assignment, assignment_type: assignment_type
       expect(subject.assignment_types.size).to eq 1
       expect(subject.assignment_types.map(&:course_id)).to eq [subject.id]
+      expect(subject.assignments.map(&:course_id)).to eq [subject.id]
     end
 
     it "copies the challenges" do

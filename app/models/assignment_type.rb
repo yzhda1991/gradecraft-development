@@ -17,10 +17,11 @@ class AssignmentType < ActiveRecord::Base
 
   default_scope { order 'position' }
 
-  def copy
+  def copy(attributes={})
     copy = self.dup
+    copy.assign_attributes(attributes)
     copy.save unless self.new_record?
-    copy.assignments << self.assignments.map(&:copy)
+    copy.assignments << self.assignments.map { |a| a.copy(attributes) }
     copy
   end
 
