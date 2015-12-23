@@ -7,10 +7,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   def setup
     fetch_assets
-    # @mz todo: add specs
     @assignment_export = AssignmentExport.create(assignment_export_attributes)
-    
-    # @mz todo: add specs
     @errors = []
   end
 
@@ -128,7 +125,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def submissions_snapshot
     @submissions_snapshot ||= @submissions.inject({}) do |memo, submission|
       memo[submission.id] = {
@@ -291,7 +287,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def create_binary_files_for_submission(submission)
     submission.submission_files.each_with_index do |submission_file, index|
       write_submission_binary_file(submission.student, submission_file, index)
