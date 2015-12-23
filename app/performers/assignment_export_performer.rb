@@ -332,7 +332,6 @@ class AssignmentExportPerformer < ResqueJob::Performer
     "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{error_io}"
   end
 
-  # @mz todo: add spec examples
   def generate_error_log
     open(error_log_path, 'w') {|file| file.puts @errors }
   end

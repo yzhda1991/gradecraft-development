@@ -247,4 +247,32 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       expect(subject["mccaffrey_mike-#{student2.id}"]).to eq([submission2, submission4])
     end
   end
+
+  describe "s3 concerns" do
+    let(:assignment_export) { AssignmentExport.new }
+
+    before do
+      performer.instance_variable_set(:@assignment_export, assignment_export)
+      allow(performer).to receive(:expanded_archive_base_path) { "/this/weird/path" }
+    end
+
+    
+    describe "#upload_archive_to_s3" do
+      subject { performer.instance_eval { upload_archive_to_s3 }}
+
+      it "calls #upload_file_to_s3 on the assignment export with the file path" do
+        expect(assignment_export).to receive(:upload_file_to_s3).with("/this/weird/path.zip")
+        subject
+      end
+    end
+
+    describe "check_s3_upload_success" do
+      subject { performer.instance_eval { check_s3_upload_success }}
+
+      it "checks if the object exists on S3 through the assignment export" do
+        expect(assignment_export).to receive(:s3_object_exists?)
+        subject
+      end
+    end
+  end
 end
