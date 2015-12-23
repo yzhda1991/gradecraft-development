@@ -3,6 +3,8 @@ require 'active_record_spec_helper'
 
 RSpec.describe AssignmentExport do
   let(:assignment_export) { AssignmentExport.new }
+  let(:s3_manager) { double(S3Manager::Manager) }
+  let(:s3_object_key) { double(:s3_object_key) }
 
   describe "associations" do
     extend Toolkits::Exports::AssignmentExportToolkit::Context
@@ -56,7 +58,6 @@ RSpec.describe AssignmentExport do
 
   describe "#upload_file_to_s3" do
     subject { assignment_export.upload_file_to_s3("great-file.txt") }
-    let(:s3_manager) { double(S3Manager::Manager) }
 
     before do
       allow(s3_manager).to receive(:put_encrypted_object) { "some s3 response" }
@@ -98,6 +99,29 @@ RSpec.describe AssignmentExport do
     it "sets the assignment export value to the index in the s3_attributes hash" do
       assignment_export.set_s3_attributes
       expect(assignment_export.assignment_id).to eq(98000)
+    end
+  end
+
+  describe "#s3_object_summary" do
+    before do
+      allow(assignment_export).to receive_messages(s3_object_key: s3_object_key, s3_manager: s3_manager)
+    end
+
+    subject { assignment_export.s3_object_summary }
+
+    it "builds a new object summary with the object key and the s3 manager" do
+      expect(S3Manager::Manager::ObjectSummary).to receive(:new).with(s3_object_key, s3_manager)
+      subject
+    end
+
+    it "returns an ObjectSummary object" do
+      expect(subject.class).to eq(S3Manager::Manager::ObjectSummary)
+    end
+
+    it "caches the new object summary" do
+      subject
+      expect(S3Manager::Manager::ObjectSummary).not_to receive(:new)
+      subject
     end
   end
 
