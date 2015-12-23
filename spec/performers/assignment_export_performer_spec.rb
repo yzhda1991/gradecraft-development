@@ -44,6 +44,30 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
+  describe "#assignment_export_attributes" do
+    before do
+      allow(performer).to receive_messages({
+        attributes: { assignment_id: 84000 },
+        submissions_snapshot: {some: "hash"},
+        export_file_basename: "really_bad_file"
+      })
+    end
+
+    subject { performer.assignment_export_attributes }
+
+    it "should include the submissions snapshot" do
+      expect(subject[:submissions_snapshot]).to eq({some: "hash"})
+    end
+
+    it "should include the export filename" do
+      expect(subject[:export_filename]).to eq("really_bad_file.zip")
+    end
+
+    it "should merge the attributes hash" do
+      expect(subject[:assignment_id]).to eq(84000)
+    end
+  end
+
   # private and protected methods
   
   describe "sorted_student_directory_keys" do
