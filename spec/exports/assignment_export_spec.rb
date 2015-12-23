@@ -90,4 +90,15 @@ RSpec.describe AssignmentExport do
     end
   end
 
+  describe "#set_s3_attributes" do
+    before do
+      allow(assignment_export).to receive(:s3_attributes) {{ assignment_id: 98000 }}
+    end
+
+    it "sets the assignment export value to the index in the s3_attributes hash" do
+      assignment_export.set_s3_attributes
+      expect(assignment_export.assignment_id).to eq(98000)
+    end
+  end
+
 end
