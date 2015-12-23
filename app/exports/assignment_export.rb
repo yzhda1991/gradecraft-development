@@ -49,7 +49,7 @@ class AssignmentExport < ActiveRecord::Base
   def s3_attributes
     {
       s3_object_key: s3_object_key,
-      s3_bucket: s3_manager.bucket
+      s3_bucket_name: s3_manager.bucket_name
     }
   end
 end

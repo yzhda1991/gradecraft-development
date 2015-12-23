@@ -125,4 +125,23 @@ RSpec.describe AssignmentExport do
     end
   end
 
+  describe "#export_time" do
+    it "should return the time now" do
+      expect(Time).to receive(:now)
+      assignment_export.instance_eval { export_time }
+    end
+  end
+
+  describe "#s3_attributes" do
+    subject { assignment_export.instance_eval { s3_attributes }}
+
+    before do
+      allow(assignment_export).to receive_messages(s3_object_key: s3_object_key)
+      allow(assignment_export).to receive_message_chain(:s3_manager, :bucket_name) { "dave is home" }
+    end
+
+    it "should return a hash with the s3 object key and the s3 bucket name" do
+      expect(subject).to eq({s3_object_key: s3_object_key, s3_bucket_name: "dave is home"})
+    end
+  end
 end

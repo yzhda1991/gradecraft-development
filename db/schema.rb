@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.integer  "team_id"
     t.text     "export_filename"
     t.text     "s3_object_key"
-    t.text     "s3_bucket"
+    t.text     "s3_bucket_name"
     t.text     "performer_error_log",      default: [], null: false, array: true
     t.hstore   "submissions_snapshot",     default: {}, null: false
     t.datetime "created_at",                            null: false
