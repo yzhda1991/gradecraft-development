@@ -13,6 +13,21 @@ describe Submission do
     end
   end
 
+  describe "versioning", focus: true, versioning: true do
+    it "is enabled for submissions" do
+      expect(PaperTrail).to be_enabled
+      expect(subject).to be_versioned
+    end
+
+    xit "creates a version when the submission is created" do
+      submission = subject.save
+    end
+
+    xit "creates a version when the link is updated"
+    xit "creates a version when the attachment is updated"
+    xit "creates a version when the comment is updated"
+  end
+
   it "can't be saved without any information" do
     subject.link = nil
     subject.text_comment = nil

@@ -9,6 +9,8 @@ class Submission < ActiveRecord::Base
   include Canable::Ables
   include MultipleFileAttibutes
 
+  has_paper_trail
+
   belongs_to :task, touch: true
   belongs_to :assignment, touch: true
   belongs_to :student, :class_name => 'User', touch: true
