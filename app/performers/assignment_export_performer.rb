@@ -373,28 +373,28 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  def archive_failed_mailer
+  def deliver_archive_failed_mailer
     if @team
-      deliver_team_archive_failed_mailer
+      deliver_team_export_failure_mailer
     else
-      deliver_archive_failed_mailer
+      deliver_export_failure_mailer
     end
   end
 
   def deliver_export_successful_mailer
-    ExportsMailer.submissions_export_success(@course, @professor, @csv_data).deliver_now
+    ExportsMailer.submissions_export_success(@professor, @assignment, @csv_data).deliver_now
   end
 
   def deliver_team_export_successful_mailer
-    ExportsMailer.team_submissions_export_success(@course, @professor, @team, @csv_data).deliver_now
+    ExportsMailer.team_submissions_export_success(@professor, @assignment, @team, @csv_data).deliver_now
   end
 
   def deliver_export_failure_mailer
-    ExportsMailer.submissions_export_failure(@course, @professor, @csv_data).deliver_now
+    ExportsMailer.submissions_export_failure(@professor, @assignment, @csv_data).deliver_now
   end
 
   def deliver_team_export_failure_mailer
-    ExportsMailer.team_submissions_export_failure(@course, @professor, @team, @csv_data).deliver_now
+    ExportsMailer.team_submissions_export_failure(@professor, @assignment, @team, @csv_data).deliver_now
   end
 
   # @mz todo: modify specs
