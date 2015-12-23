@@ -50,6 +50,16 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       it "creates submission binary files in each student directory where present" do
         expect(subject).to receive(:create_submission_binary_files)
       end
+
+      describe "updating the export_completed_at time" do
+        before do
+          performer.setup
+        end
+
+        it "updates the export_completed_at time on the @assignment_export" do
+          expect(performer.assignment_export).to receive(:update_export_completed_time)
+        end
+      end
     end
 
     context "work resources are not present" do
@@ -72,5 +82,6 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         expect(subject).not_to receive(:generate_export_csv)
       end
     end
+
   end
 end

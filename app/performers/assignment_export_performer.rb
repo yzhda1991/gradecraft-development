@@ -3,6 +3,8 @@ class AssignmentExportPerformer < ResqueJob::Performer
   require 'open-uri' # need this for getting the S3 file over http
   include ModelAddons::ImprovedLogging # log errors with attributes
 
+  attr_reader :assignment_export
+
   def setup
     fetch_assets
     # @mz todo: add specs
