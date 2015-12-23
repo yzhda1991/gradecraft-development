@@ -61,6 +61,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
         check_s3_upload_success
       end
 
+      deliver_outcome_mailer
       @assignment_export.update_export_completed_time
     else
       if logger
@@ -346,25 +347,54 @@ class AssignmentExportPerformer < ResqueJob::Performer
     Archive::Zip.archive("#{expanded_archive_base_path}.zip", tmp_dir)
   end
 
-  # @mz todo: add specs
   def upload_archive_to_s3
     @assignment_export.upload_file_to_s3("#{expanded_archive_base_path}.zip")
   end
 
   def check_s3_upload_success
-    @assignment_export.s3_object_exists?
+    @check_s3_upload_success ||= @assignment_export.s3_object_exists?
   end
 
   private
 
-  # @mz todo: add specs, add require_success block
-  def deliver_archive_complete_mailer
-    ExportsMailer.submissions_archive_complete(@course, @professor, @csv_data).deliver_now
+  def deliver_outcome_mailer
+    if check_s3_upload_success
+      deliver_archive_success_mailer
+    else
+      deliver_archive_failed_mailer
+    end
   end
 
-  # @mz todo: add specs, add require_success block
-  def deliver_team_archive_complete_mailer
-    ExportsMailer.team_submissions_archive_complete(@course, @professor, @csv_data).deliver_now
+  def deliver_archive_success_mailer
+    if @team
+      deliver_team_export_successful_mailer
+    else
+      deliver_export_successful_mailer
+    end
+  end
+
+  def archive_failed_mailer
+    if @team
+      deliver_team_archive_failed_mailer
+    else
+      deliver_archive_failed_mailer
+    end
+  end
+
+  def deliver_export_successful_mailer
+    ExportsMailer.submissions_export_success(@course, @professor, @csv_data).deliver_now
+  end
+
+  def deliver_team_export_successful_mailer
+    ExportsMailer.team_submissions_export_success(@course, @professor, @team, @csv_data).deliver_now
+  end
+
+  def deliver_export_failure_mailer
+    ExportsMailer.submissions_export_failure(@course, @professor, @csv_data).deliver_now
+  end
+
+  def deliver_team_export_failure_mailer
+    ExportsMailer.team_submissions_export_failure(@course, @professor, @team, @csv_data).deliver_now
   end
 
   # @mz todo: modify specs
