@@ -18,20 +18,29 @@ describe SubmissionFile do
     end
   end
 
-  describe "#course" do 
-    it "returns the course associated with the submission" do 
+  describe "versioning", versioning: true do
+    before { subject.save }
+
+    it "is enabled for submissions" do
+      expect(PaperTrail).to be_enabled
+      expect(subject).to be_versioned
+    end
+  end
+
+  describe "#course" do
+    it "returns the course associated with the submission" do
       expect(subject.course).to eq(course)
     end
   end
 
-  describe "#assignment" do 
-    it "returns the assignment associated with the submission" do 
+  describe "#assignment" do
+    it "returns the assignment associated with the submission" do
       expect(subject.assignment).to eq(assignment)
     end
   end
 
-  describe "#student" do 
-    it "returns the course associated with the submission" do 
+  describe "#student" do
+    it "returns the course associated with the submission" do
       expect(subject.student).to eq(student)
     end
   end
