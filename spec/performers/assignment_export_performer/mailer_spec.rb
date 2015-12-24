@@ -24,7 +24,29 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
         before { allow(performer).to receive(:check_s3_upload_success) { false }}
 
         it "should deliver the failure mailer" do
-          expect(performer).to receive(:deliver_archive_success_mailer)
+          expect(performer).to receive(:deliver_archive_failed_mailer)
+          subject
+        end
+      end
+    end
+
+    describe "#deliver_archive_success_mailer" do
+      subject { performer.instance_eval { deliver_archive_success_mailer }}
+
+      context "a @team is present" do
+        before { performer.instance_variable_set(:@team, true) }
+
+        it "should deliver the team success mailer" do
+          expect(performer).to receive(:deliver_team_export_successful_mailer)
+          subject
+        end
+      end
+
+      context "no @team is present" do
+        before { performer.instance_variable_set(:@team, false) }
+
+        it "should deliver the non-team success mailer" do
+          expect(performer).to receive(:deliver_export_successful_mailer)
           subject
         end
       end
