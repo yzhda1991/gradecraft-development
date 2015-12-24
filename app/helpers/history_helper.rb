@@ -28,8 +28,9 @@ module HistoryHelper
   end
 
   def build_actor(actor_id)
-    user = User.where(id: actor_id).first
-    { actor: user.name }
+    name = "You" if current_user && current_user.id == actor_id
+    name ||= User.where(id: actor_id).first.try(:name)
+    { actor: name }
   end
 
   def build_changes(attribute, changes)
