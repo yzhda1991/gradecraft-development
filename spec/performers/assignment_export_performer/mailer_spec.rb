@@ -52,5 +52,26 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
 
+    describe "#deliver_archive_failed_mailer" do
+      subject { performer.instance_eval { deliver_archive_failed_mailer }}
+
+      context "a @team is present" do
+        before { performer.instance_variable_set(:@team, true) }
+
+        it "should deliver the team failure mailer" do
+          expect(performer).to receive(:deliver_team_export_failure_mailer)
+          subject
+        end
+      end
+
+      context "no @team is present" do
+        before { performer.instance_variable_set(:@team, false) }
+
+        it "should deliver the non-team failure mailer" do
+          expect(performer).to receive(:deliver_export_failure_mailer)
+          subject
+        end
+      end
+    end
   end
 end

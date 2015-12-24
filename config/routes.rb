@@ -354,6 +354,7 @@ GradeCraft::Application.routes.draw do
   get 'students/:id/predictor_weights' => 'assignment_type_weights#predictor_data', defaults: {format: :json}
 
   #18. Exports
+  resources :exports
   scope "/exports" do
     scope "/assignments" do
       get '/:assignment_id/submissions' => 'assignment_exports#submissions', as: :assignment_exports_submissions
