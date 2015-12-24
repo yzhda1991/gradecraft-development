@@ -74,4 +74,73 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       end
     end
   end
+
+  describe "mailer methods" do
+    let(:professor) { create(:user) }
+    let(:assignment) { create(:assignment) }
+    let(:team) { create(:team) }
+    let(:archive_data) {{ format: "zip", url: "http://gc.com/exports-or-whatevs" }}
+    let(:mailer_double) { double(:mailer_double) }
+
+    before(:each) do
+      performer.instance_variable_set(:@professor, professor)
+      performer.instance_variable_set(:@assignment, assignment)
+      performer.instance_variable_set(:@team, team)
+      allow(performer).to receive(:archive_data) { archive_data }
+      subject
+    end
+
+    describe "#deliver_export_successful_mailer" do
+      subject { performer.instance_eval { deliver_export_successful_mailer }}
+      before(:each) { allow(performer).to receive(:deliver_export_successful_mailer) { mailer_double }}
+
+      it "creates an export success mailer" do
+        expect(ExportsMailer).to receive(:submissions_export_success).with(professor, assignment, archive_data)
+      end
+
+      it "delivers the mailer" do
+        expect(mailer_double).to receive(:deliver_now)
+      end
+    end
+
+    describe "#deliver_team_export_successful_mailer" do
+      subject { performer.instance_eval { deliver_team_export_successful_mailer }}
+      before(:each) { allow(performer).to receive(:deliver_team_export_successful_mailer) { mailer_double }}
+
+
+      it "delivers a team export success mailer" do
+        expect(ExportsMailer).to receive(:team_submissions_export_successful).with(professor, assignment, team, archive_data)
+      end
+
+      it "delivers the mailer" do
+        expect(mailer_double).to receive(:deliver_now)
+      end
+    end
+
+    describe "#deliver_export_failure_mailer" do
+      subject { performer.instance_eval { deliver_export_failure_mailer }}
+      before(:each) { allow(performer).to receive(:deliver_export_failure_mailer) { mailer_double }}
+
+      it "delivers an export failure mailer" do
+        expect(ExportsMailer).to receive(:submissions_export_failure).with(professor, assignment, archive_data)
+      end
+
+      it "delivers the mailer" do
+        expect(mailer_double).to receive(:deliver_now)
+      end
+    end
+
+    describe "#deliver_team_export_failure_mailer" do
+      subject { performer.instance_eval { deliver_team_export_failure_mailer }}
+      before(:each) { allow(performer).to receive(:deliver_team_export_failure_mailer) { mailer_double }}
+
+      it "delivers a team export failure mailer" do
+        expect(ExportsMailer).to receive(:team_submissions_export_failure).with(professor, assignment, team, archive_data)
+      end
+
+      it "delivers the mailer" do
+        expect(mailer_double).to receive(:deliver_now)
+      end
+    end
+  end
 end

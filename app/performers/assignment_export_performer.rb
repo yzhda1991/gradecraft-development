@@ -366,19 +366,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def deliver_archive_success_mailer
-    if @team
-      deliver_team_export_successful_mailer
-    else
-      deliver_export_successful_mailer
-    end
+    @team ? deliver_team_export_successful_mailer : deliver_export_successful_mailer
   end
 
   def deliver_archive_failed_mailer
-    if @team
-      deliver_team_export_failure_mailer
-    else
-      deliver_export_failure_mailer
-    end
+    @team ? deliver_team_export_failure_mailer : deliver_export_failure_mailer
   end
 
   def archive_data
