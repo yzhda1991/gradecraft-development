@@ -1,38 +1,15 @@
-class MultipliedGradebookExporter
-
-  #gradebook spreadsheet export for course with multipliers
-  def multiplied_gradebook(course_id)
-    course = fetch_course(course_id)
-    CSV.generate do |csv|
-      csv << gradebook_columns(course)
-      course.students.each do |student|
-        csv << student_data_for(student, course)
-      end
-    end
-  end
+class MultipliedGradebookExporter < GradebookExporter
 
   private
 
-  def fetch_course(course_id)
-    Course.find(course_id)
-  end
-
-  def base_student_columns
-    ["First Name", "Last Name", "Email", "Username", "Team"]
-  end
-
   def gradebook_columns(course)
-    base_student_columns + assignment_name_columns(course)
+    base_student_columns + doubled_assignment_name_columns(course)
   end
 
-  def assignment_name_columns(course)
+  def doubled_assignment_name_columns(course)
     course.assignments.collect do |assignment|
       [ assignment.name, assignment.name ]
     end.flatten
-  end
-
-  def base_student_methods
-     [:first_name, :last_name, :email, :username]
   end
 
   def student_data_for(student, course)
