@@ -101,7 +101,8 @@ class InfoController < ApplicationController
   end
 
   def gradebook
-    GradebookExporterJob.new(user_id: current_user.id, course_id: current_course.id).enqueue
+    GradebookExporterJob
+      .new(user_id: current_user.id, course_id: current_course.id).enqueue
 
     flash[:notice]="Your request to export the gradebook for \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
     redirect_back_or_default
