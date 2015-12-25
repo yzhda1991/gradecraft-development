@@ -17,16 +17,12 @@ class MultipliedGradebookExporter
     Course.find(course_id)
   end
 
-  def base_assignment_columns
+  def base_student_columns
     ["First Name", "Last Name", "Email", "Username", "Team"]
   end
 
-  def assignments
-    @assignments ||= @course.assignments.sort_by(&:created_at)
-  end
-
   def gradebook_columns(course)
-    base_assignment_columns + assignment_name_columns(course)
+    base_student_columns + assignment_name_columns(course)
   end
 
   def assignment_name_columns(course)
@@ -35,13 +31,13 @@ class MultipliedGradebookExporter
     end.flatten
   end
 
-  def base_column_methods
+  def base_student_methods
      [:first_name, :last_name, :email, :username]
   end
 
   def student_data_for(student, course)
     # add the base column names
-    student_data = base_column_methods.inject([]) do |memo, method|
+    student_data = base_student_methods.inject([]) do |memo, method|
       memo << student.send(method)
     end
     # todo: we need to pre-fetch the course teams for this
