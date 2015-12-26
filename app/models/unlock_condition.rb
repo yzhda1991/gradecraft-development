@@ -26,6 +26,16 @@ class UnlockCondition < ActiveRecord::Base
     end
   end
 
+  def requirements_description_sentence
+    "#{condition_state_do} the #{condition.name} #{condition_type}"
+  end
+
+  def key_description_sentence
+    "#{condition_state_doing} it unlocks the #{unlockable.name} #{unlockable_type}"
+  end
+
+  private
+
   def condition_state_do
     if condition_state == "Submitted"
       "Submit"
@@ -49,16 +59,6 @@ class UnlockCondition < ActiveRecord::Base
       "Earning"
     end
   end
-
-  def requirements_description_sentence
-    "#{condition_state_do} the #{condition.name} #{condition_type}"
-  end
-
-  def key_description_sentence
-    "#{condition_state_doing} it unlocks the #{unlockable.name} #{unlockable_type}"
-  end
-
-  private
 
   def check_badge_condition(student)
     badge = student.earned_badge_for_badge(condition_id)
