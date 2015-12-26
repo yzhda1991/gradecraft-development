@@ -234,16 +234,46 @@ describe UnlockCondition do
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
   end
-  
+
   describe "#requirements_description_sentence" do
-    it "returns a sentence summarizing the unlock condition" do
+    it "returns a sentence summarizing a badge unlock condition" do
       expect(subject.requirements_description_sentence).to eq("Earn the #{badge.name} Badge")
+    end
+
+    it "returns a sentence summarizing an assignment feedback read unlock condition" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read"
+      expect(unlock_condition.requirements_description_sentence).to eq("Read the feedback for the #{assignment.name} Assignment")
+    end
+
+    it "returns a sentence summarizing an assignment submission unlock condition" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted"
+      expect(unlock_condition.requirements_description_sentence).to eq("Submit the #{assignment.name} Assignment")
+    end
+
+    it "returns a sentence summarizing an grade earned unlock condition" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned"
+      expect(unlock_condition.requirements_description_sentence).to eq("Earn a grade for the #{assignment.name} Assignment")
     end
   end
 
   describe "#key_description_sentence" do
-    it "returns a sentence summarizing the unlock condition" do
+    it "returns a sentence summarizing the badge as an unlock key" do
       expect(subject.key_description_sentence).to eq("Earning it unlocks the #{unlockable_assignment.name} Assignment")
+    end
+
+    it "returns a sentence summarizing an assignment feedback read unlock condition" do
+      subject.condition_state = "Feedback Read"
+      expect(subject.key_description_sentence).to eq("Reading the feedback for it unlocks the #{unlockable_assignment.name} Assignment")
+    end
+
+    it "returns a sentence summarizing an assignment submission unlock condition" do
+      subject.condition_state = "Submitted"
+      expect(subject.key_description_sentence).to eq("Submitting it unlocks the #{unlockable_assignment.name} Assignment")
+    end
+
+    it "returns a sentence summarizing an grade earned unlock condition" do
+      subject.condition_state = "Grade Earned"
+      expect(subject.key_description_sentence).to eq("Earning a grade for it unlocks the #{unlockable_assignment.name} Assignment")
     end
   end
 end
