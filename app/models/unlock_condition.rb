@@ -26,11 +26,43 @@ class UnlockCondition < ActiveRecord::Base
     end
   end
 
-  private 
+  def condition_state_do
+    if condition_state == "Submitted"
+      "Submit"
+    elsif condition_state == "Grade Earned"
+      "Earn a grade for"
+    elsif condition_state == "Feedback Read"
+      "Read the feedback for"
+    elsif condition_state == "Earned"
+      "Earn"
+    end
+  end
+
+  def condition_state_doing
+    if condition_state == "Submitted"
+      "Submitting"
+    elsif condition_state == "Grade Earned"
+      "Earning a grade for"
+    elsif condition_state == "Feedback Read"
+      "Reading the feedback for"
+    elsif condition_state == "Earned"
+      "Earning"
+    end
+  end
+
+  def requirements_description_sentence
+    "#{condition_state_do} the #{condition.name} #{condition_type}"
+  end
+
+  def key_description_sentence
+    "#{condition_state_doing} it unlocks the #{unlockable.name} #{unlockable_type}"
+  end
+
+  private
 
   def check_badge_condition(student)
     badge = student.earned_badge_for_badge(condition_id)
-    if badge.present? 
+    if badge.present?
       if condition_value? && condition_date?
         check_if_badge_earned_enough_times_by_date(student)
       elsif condition_value?
@@ -78,7 +110,7 @@ class UnlockCondition < ActiveRecord::Base
     if submission.present?
       if condition_date?
         check_if_submitted_by_condition_date(submission)
-      else 
+      else
         return true
       end
     else
@@ -97,7 +129,7 @@ class UnlockCondition < ActiveRecord::Base
   def check_grade_earned_condition(student)
     grade = student.grade_for_assignment_id(condition_id).first
     if condition_value? && condition_date?
-      if check_if_grade_earned_meets_condition_value(grade) && 
+      if check_if_grade_earned_meets_condition_value(grade) &&
       check_if_grade_earned_met_condition_date(grade)
         return true
       else
@@ -117,7 +149,7 @@ class UnlockCondition < ActiveRecord::Base
   def check_if_grade_earned_meets_condition_value(grade)
     if grade.is_student_visible? && grade.score >= condition_value
       return true
-    else 
+    else
       return false
     end
   end
@@ -125,7 +157,7 @@ class UnlockCondition < ActiveRecord::Base
   def check_if_grade_earned_met_condition_date(grade)
     if grade.is_student_visible? && grade.updated_at < condition_date
       return true
-    else 
+    else
       return false
     end
   end
@@ -136,10 +168,10 @@ class UnlockCondition < ActiveRecord::Base
       if condition_date?
         if (grade.feedback_read_at < condition_date)
           return true
-        else 
+        else
           return false
         end
-      else 
+      else
         return true
       end
     else

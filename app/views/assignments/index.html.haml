@@ -15,7 +15,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   .assignments
     - @assignment_types.each do |assignment_type|
       .assignment_type{:id => "assignment-type-#{assignment_type.id}" }
@@ -46,18 +46,19 @@
                       %a
                         %i.fa.fa-lock
                       .display_on_hover.hover-style
-                        %h3 Unlock Requirements
+                        %h3 This #{term_for :assignment} is Locked
+                        .small.italic In order to unlock it you must:
                         %ul
                           - assignment.unlock_conditions.each do |condition|
-                            %li= "#{condition.name} must be #{condition.condition_state}"
+                            %li= condition.requirements_description_sentence
                     - if assignment.is_a_condition?
                       %a
                         %i.fa.fa-key
                       .display_on_hover.hover-style
-                        %h3 Unlock Key
+                        %h3 This #{term_for :assignment} is a Key
                         %ul
                           - assignment.unlock_keys.each do |key|
-                            %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+                            %li= key.key_description_sentence
                   %td= link_to assignment.name, assignment
                   %td= assignment.try(:due_at) || "Ongoing"
                   %td{:style => "display: none"}

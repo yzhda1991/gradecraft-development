@@ -5,20 +5,20 @@
     %i.fa.fa-exclamation-circle.fa-fw
   .display_on_hover.hover-style
     This #{term_for :assignment} is required!
-
 - if assignment.is_unlockable?
   %a
-    %i.fa.fa-lock.fa-fw
+    %i.fa.fa-lock
   .display_on_hover.hover-style
-    %h3 Unlock Requirements
+    %h3 This #{term_for :assignment} is Locked
+    .small.italic In order to unlock it you must:
     %ul
       - assignment.unlock_conditions.each do |condition|
-        %li= "#{condition.name} must be #{condition.condition_state}"
+        %li= condition.requirements_description_sentence
 - if assignment.is_a_condition?
   %a
-    %i.fa.fa-key.fa-fw
+    %i.fa.fa-key
   .display_on_hover.hover-style
-    %h3 Unlock Key
+    %h3 This #{term_for :assignment} is a Key
     %ul
       - assignment.unlock_keys.each do |key|
-        %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+        %li= key.key_description_sentence
