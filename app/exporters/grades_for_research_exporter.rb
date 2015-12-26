@@ -1,7 +1,7 @@
 class GradesForResearchExporter
 
   def research_grades(course_id)
-    course = find_course(course_id)
+    course = fetch_course(course_id)
     CSV.generate do |csv|
       csv.add_row baseline_headers
       if course.grades.present?
@@ -14,7 +14,7 @@ class GradesForResearchExporter
 
   private
 
-  def find_course(course_id)
+  def fetch_course(course_id)
     Course.find(course_id)
   end
 
