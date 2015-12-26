@@ -234,49 +234,7 @@ describe UnlockCondition do
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
   end
-
-  describe "#condition_state_do" do
-    it "returns 'earn' as the verb for badge conditions" do
-      expect(subject.condition_state_do).to eq("Earn")
-    end
-
-    it "returns 'submit' as the verb for submission conditions" do
-      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted"
-      expect(unlock_condition.condition_state_do).to eq("Submit")
-    end
-
-    it "returns 'earn a grade for' as the verb for grade earned conditions" do
-      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned"
-      expect(unlock_condition.condition_state_do).to eq("Earn a grade for")
-    end
-
-    it "returns 'earn a grade for' as the verb for grade earned conditions" do
-      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read"
-      expect(unlock_condition.condition_state_do).to eq("Read the feedback for")
-    end
-  end
-
-  describe "#condition_state_doing" do
-    it "returns 'earning' as the verb for badge conditions" do
-      expect(subject.condition_state_doing).to eq("Earning")
-    end
-
-    it "returns 'submitting' as the verb for submission conditions" do
-      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted"
-      expect(unlock_condition.condition_state_doing).to eq("Submitting")
-    end
-
-    it "returns 'earning a grade for' as the verb for grade earned conditions" do
-      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned"
-      expect(unlock_condition.condition_state_doing).to eq("Earning a grade for")
-    end
-
-    it "returns 'earn a grade for' as the verb for grade earned conditions" do
-      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read"
-      expect(unlock_condition.condition_state_doing).to eq("Reading the feedback for")
-    end
-  end
-
+  
   describe "#requirements_description_sentence" do
     it "returns a sentence summarizing the unlock condition" do
       expect(subject.requirements_description_sentence).to eq("Earn the #{badge.name} Badge")
