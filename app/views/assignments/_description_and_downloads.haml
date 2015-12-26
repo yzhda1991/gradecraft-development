@@ -24,8 +24,17 @@
     %hr.dotted
     %i.fa.fa-lock
     Unlock Requirements
-    - presenter.assignment.unlock_conditions.each do |uc|
-      = link_to uc.condition.name, uc.condition
+    %ul
+      - presenter.assignment.unlock_conditions.each do |uc|
+        %li= link_to uc.requirements_description_sentence, uc.condition
+
+  - if presenter.assignment.is_a_condition?
+    %hr.dotted
+    %i.fa.fa-key
+    This #{term_for :assignment} is a Key
+    %ul
+      - presenter.assignment.unlock_keys.each do |key|
+        %li= link_to key.key_description_sentence, key.unlockable
 
   - if presenter.assignment.description.present?
     %hr.dotted
