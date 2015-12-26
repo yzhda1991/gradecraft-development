@@ -35,7 +35,7 @@ describe UnlockCondition do
     it "returns the name of a badge condition" do
       expect(subject.name).to eq "fancy name"
     end
-    
+
     it "returns the name of an assignment condition" do
       assignment_condition_unlock = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted"
       expect(assignment_condition_unlock.name).to eq "fancier name"
@@ -47,16 +47,16 @@ describe UnlockCondition do
       unlockable_badge_subject = UnlockCondition.new condition_id: badge.id, condition_type: "Badge", condition_state: "Earned", unlockable_id: unlockable_badge.id, unlockable_type: "Badge"
       expect(unlockable_badge_subject.unlockable_name).to eq "unlockable badge"
     end
-    
+
     it "returns the name of an assignment to be unlocked" do
       unlockable_assignment_subject = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", unlockable_id: unlockable_assignment.id, unlockable_type: "Assignment"
       expect(unlockable_assignment_subject .unlockable_name).to eq "unlockable assignment"
     end
   end
 
-  describe "#is_complete?" do 
+  describe "#is_complete?" do
 
-    #badge conditions as an unlock 
+    #badge conditions as an unlock
 
     it "returns true if the badge has been earned once" do
       student = create(:user)
@@ -69,7 +69,7 @@ describe UnlockCondition do
       expect(subject.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the badge has been earned enough times" do 
+    it "returns true if the badge has been earned enough times" do
       student = create(:user)
       student_earned_badge = create(:earned_badge, badge: badge, student: student)
       student_earned_badge_2 = create(:earned_badge, badge: badge, student: student)
@@ -77,7 +77,7 @@ describe UnlockCondition do
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the badge has been earned enough times" do 
+    it "returns false if the badge has been earned enough times" do
       student = create(:user)
       student_earned_badge = create(:earned_badge, badge: badge, student: student)
       student_earned_badge_2 = create(:earned_badge, badge: badge, student: student)
@@ -109,132 +109,183 @@ describe UnlockCondition do
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the assignment has been submitted" do 
+    it "returns true if the assignment has been submitted" do
       student = create(:user)
       student_submission = create(:submission, assignment: assignment, student: student)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted"
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the assignment has not been submitted" do 
+    it "returns false if the assignment has not been submitted" do
       student = create(:user)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted"
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the assignment has been submitted by a specific date" do 
+    it "returns true if the assignment has been submitted by a specific date" do
       student = create(:user)
       student_submission = create(:submission, assignment: assignment, student: student)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", condition_date: (Date.today + 1)
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the assignment has been submitted but not by the specified date" do 
+    it "returns false if the assignment has been submitted but not by the specified date" do
       student = create(:user)
       student_submission = create(:submission, assignment: assignment, student: student)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", condition_date: (Date.today - 1)
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the grade earned is present and student visible" do 
+    it "returns true if the grade earned is present and student visible" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Released")
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned"
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the grade earned is present but not student visible" do 
+    it "returns false if the grade earned is present but not student visible" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: nil)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned"
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the grade earned meets the condition value" do 
+    it "returns true if the grade earned meets the condition value" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Released")
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the grade earned does not meet the condition value" do 
+    it "returns false if the grade earned does not meet the condition value" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 99, status: "Released")
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns false if the grade earned meets the condition value but is not student visible" do 
+    it "returns false if the grade earned meets the condition value but is not student visible" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: nil, instructor_modified: false)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the grade earned meets the condition date" do 
+    it "returns true if the grade earned meets the condition date" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_date: (Date.today + 1)
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the grade earned did not meet the condition date" do 
+    it "returns false if the grade earned did not meet the condition date" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_date: (Date.today - 1)
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the grade earned meets condition value and the condition date" do 
+    it "returns true if the grade earned meets condition value and the condition date" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100, condition_date: (Date.today + 1)
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the grade earned does not meet the condition value but does meet the condition date" do 
+    it "returns false if the grade earned does not meet the condition value but does meet the condition date" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 90, status: "Graded", instructor_modified: true)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100, condition_date: (Date.today + 1)
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns false if the grade earned does meet the condition value but does not meet the condition date" do 
+    it "returns false if the grade earned does meet the condition value but does not meet the condition date" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100, condition_date: (Date.today - 1)
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the grade feedback is read" do 
+    it "returns true if the grade feedback is read" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, status: "Graded", instructor_modified: true, feedback_read: true)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read"
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the grade feedback is not read" do 
+    it "returns false if the grade feedback is not read" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, status: "Graded", instructor_modified: true, feedback_read: false)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read"
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
-    it "returns true if the grade feedback is read by specified condition date" do 
+    it "returns true if the grade feedback is read by specified condition date" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, status: "Graded", instructor_modified: true, feedback_read: true, feedback_read_at: Date.today)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read", condition_date: Date.today + 1
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
-    it "returns false if the grade feedback is read but not by the specified condition date" do 
+    it "returns false if the grade feedback is read but not by the specified condition date" do
       student = create(:user)
       grade = create(:grade, assignment: assignment, student: student, status: "Graded", instructor_modified: true, feedback_read: true, feedback_read_at: Date.today)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read", condition_date: Date.today - 1
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
-
-
   end
 
+  describe "#condition_state_do" do
+    it "returns 'earn' as the verb for badge conditions" do
+      expect(subject.condition_state_do).to eq("Earn")
+    end
+
+    it "returns 'submit' as the verb for submission conditions" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted"
+      expect(unlock_condition.condition_state_do).to eq("Submit")
+    end
+
+    it "returns 'earn a grade for' as the verb for grade earned conditions" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned"
+      expect(unlock_condition.condition_state_do).to eq("Earn a grade for")
+    end
+
+    it "returns 'earn a grade for' as the verb for grade earned conditions" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read"
+      expect(unlock_condition.condition_state_do).to eq("Read the feedback for")
+    end
+  end
+
+  describe "#condition_state_doing" do
+    it "returns 'earning' as the verb for badge conditions" do
+      expect(subject.condition_state_doing).to eq("Earning")
+    end
+
+    it "returns 'submitting' as the verb for submission conditions" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted"
+      expect(unlock_condition.condition_state_doing).to eq("Submitting")
+    end
+
+    it "returns 'earning a grade for' as the verb for grade earned conditions" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned"
+      expect(unlock_condition.condition_state_doing).to eq("Earning a grade for")
+    end
+
+    it "returns 'earn a grade for' as the verb for grade earned conditions" do
+      unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Feedback Read"
+      expect(unlock_condition.condition_state_doing).to eq("Reading the feedback for")
+    end
+  end
+
+  describe "#requirements_description_sentence" do
+    it "returns a sentence summarizing the unlock condition" do
+      expect(subject.requirements_description_sentence).to eq("Earn the #{badge.name} Badge")
+    end
+  end
+
+  describe "#key_description_sentence" do
+    it "returns a sentence summarizing the unlock condition" do
+      expect(subject.key_description_sentence).to eq("Earning it unlocks the #{unlockable_assignment.name} Assignment")
+    end
+  end
 end
