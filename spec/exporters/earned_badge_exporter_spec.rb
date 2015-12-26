@@ -24,7 +24,7 @@ describe EarnedBadgeExporter do
       expect(csv[1][1]).to eq @student.last_name
       expect(csv[1][2]).to eq @student.username
       expect(csv[1][3]).to eq @student.email
-      expect(csv[1][4]).to eq "#{@earned_badge.id}"
+      expect(csv[1][4]).to eq "#{@badge.id}"
       expect(csv[1][5]).to eq @earned_badge.name
       expect(csv[1][6]).to eq @earned_badge.feedback
       expect(csv[1][7]).to eq @earned_badge.created_at.to_formatted_s(:db)

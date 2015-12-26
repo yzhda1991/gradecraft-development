@@ -15,8 +15,8 @@ describe GradesForResearchExporter do
       @student = create(:user)
       @student.courses << course
       @assignment_type = create(:assignment_type, course: course)
-      @assignment = create(:assignment, course: course, assignment_type: @assignment_type)
-      @assignment_2 = create(:assignment, course: course, assignment_type: @assignment_type)
+      @assignment = create(:assignment, course: course, assignment_type: @assignment_type, name: "Quiz")
+      @assignment_2 = create(:assignment, course: course, assignment_type: @assignment_type, name: "Essay")
       @grade = create(:grade, raw_score: 100, course: course, student: @student, assignment: @assignment)
       @grade_2 = create(:grade, raw_score: 200, course: course, student: @student, assignment: @assignment_2)
 
@@ -32,8 +32,8 @@ describe GradesForResearchExporter do
       expect(csv[2][3]).to eq @student.last_name
       expect(csv[1][4]).to eq "#{@student.id}"
       expect(csv[2][4]).to eq "#{@student.id}"
-      expect(csv[1][5]).to eq @assignment_2.name
-      expect(csv[2][5]).to eq @assignment.name
+      expect(csv[1][5]).to eq "Essay"
+      expect(csv[2][5]).to eq "Quiz"
       expect(csv[1][6]).to eq "#{@assignment_2.id}"
       expect(csv[2][6]).to eq "#{@assignment.id}"
       expect(csv[1][7]).to eq @assignment_type.name
