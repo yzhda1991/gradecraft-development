@@ -14,6 +14,12 @@ $( "#tabs" ).tabs({
     if (activePanelIndex >= 0) {
       widget.tabs("option", "active", activePanelIndex);
     }
+    //sends the user to the right tab if specified through url
+    var hash = $.trim( window.location.hash );
+    var urlPanelIndex = panel.find(hash).index();
+    if (urlPanelIndex >= 0) {
+      widget.tabs("option", "active", urlPanelIndex);
+    }
   }
 });
 
