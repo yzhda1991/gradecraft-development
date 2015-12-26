@@ -27,9 +27,11 @@
       #tab1.active
         = render partial: 'assignments/description_and_downloads', locals: { presenter: presenter }
       - if presenter.rubric_designed? && !presenter.grades_available_for?(current_student)
-        #tab2= render partial: 'assignments/rubric_preview', locals: { presenter: presenter }
+        #tab2
+          = render partial: 'assignments/rubric_preview', locals: { presenter: presenter }
       - if presenter.has_submission_for?(current_student)
-        #tab3= render partial: "submissions/student_show", locals: { presenter: presenter }
+        #tab3
+          = render partial: "submissions/student_show", locals: { presenter: presenter }
       - if presenter.grades_available_for?(current_student)
         #tab4
           - if presenter.assignment.has_groups?

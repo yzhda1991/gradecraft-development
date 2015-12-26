@@ -24,7 +24,7 @@ class SubmissionsController < ApplicationController
       redirect_to = (session.delete(:return_to) || assignment_path(assignment))
       if current_user_is_student?
         NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
-        redirect_to = assignment_path(assignment, anchor: "fndtn-tabt3")
+        redirect_to = assignment_path(assignment, anchor: "tab3")
       end
       redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." and return
     end
@@ -55,7 +55,7 @@ class SubmissionsController < ApplicationController
         redirect_to = assignment_submission_path(assignment, submission, path)
         if current_user_is_student?
           NotificationMailer.updated_submission(submission.id).deliver_now if assignment.is_individual?
-          redirect_to = assignment_path(assignment, anchor: "fndtn-tabt3")
+          redirect_to = assignment_path(assignment, anchor: "tab3")
         end
         format.html { redirect_to redirect_to, notice: "Your submission for #{assignment.name} was successfully updated." }
         format.json { render json: assignment, status: :created, location: assignment }
