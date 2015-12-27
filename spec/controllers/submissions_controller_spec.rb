@@ -113,7 +113,7 @@ describe SubmissionsController do
         params[:assignment_id] = @assignment.id
         params[:text_comment] = "Ausgezeichnet"
         post :update, :assignment_id => @assignment.id, :id => @submission, :submission => params
-        expect(response).to redirect_to(assignment_path(@assignment, :anchor => "fndtn-tabt3"))
+        expect(response).to redirect_to(assignment_path(@assignment, :anchor => "tab3"))
         expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
       end
     end

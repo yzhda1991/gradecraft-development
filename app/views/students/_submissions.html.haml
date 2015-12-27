@@ -2,7 +2,7 @@
 - if assignment.is_individual?
   - if student_submission.present?
     - if current_user_is_student?
-      %li= link_to raw("<i class='fa fa-file-o fa-fw'></i> See Submission"), assignment_path(assignment, :anchor => "fndtn-tabt3"), :class => 'button'
+      %li= link_to raw("<i class='fa fa-file-o fa-fw'></i> See Submission"), assignment_path(assignment, :anchor => "tab3"), :class => 'button'
     - else
       %li= link_to raw("<i class='fa fa-file-o fa-fw'></i> See Submission"), assignment_submission_path(assignment, student_submission.id), :class => 'button'
   - elsif assignment.open?
