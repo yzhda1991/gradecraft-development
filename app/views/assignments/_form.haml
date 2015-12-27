@@ -34,6 +34,7 @@
 
     .form-item
       = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { :class => 'datetimepicker' }, :label => "Accept until"
+      .form_label If you set a due date but no accept-until date, submissions and self-logged grades will be marked as late but always accepted. 
 
     .form-item
       = f.label :grade_scope, "Individual or Group?"
