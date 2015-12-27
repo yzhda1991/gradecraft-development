@@ -51,7 +51,7 @@ class AssignmentsController < ApplicationController
     assignment = current_course.assignments.new(params[:assignment])
     if assignment.save
       set_assignment_weights(assignment)
-      redirect_to assignment_path(assignment), notice: "#{(term_for :assignment).titleize}  #{assignment.name} successfully created" and return
+      redirect_to assignment_path(assignment), notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" and return
     end
 
     @title = "Create a New #{term_for :assignment}"
