@@ -279,7 +279,7 @@ class GradesController < ApplicationController
     # @mz TODO: add specs
     MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
 
-    respond_with @assignment
+    respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
   end
 
   # For changing the status of a group of grades passed in grade_ids ("In Progress" => "Graded", or "Graded" => "Released")
