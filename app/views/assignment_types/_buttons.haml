@@ -2,5 +2,6 @@
   %ul
     %li= link_to raw("<i class='fa fa-plus fa-fw'></i> New #{term_for :assignment_type}"), new_assignment_type_path
     - if @assignment_type.present? && @assignment_type.persisted?
-      %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See #{@assignment_type.name}"), assignment_type_path(@assignment_type)      
+      %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_assignment_type_path(@assignment_type) 
+      %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See #{@assignment_type.name}"), assignment_type_path(@assignment_type)
       %li= link_to raw("<i class='fa fa-heartbeat fa-fw'></i> #{@assignment_type.name} Performance"), all_grades_assignment_type_path(@assignment_type)
