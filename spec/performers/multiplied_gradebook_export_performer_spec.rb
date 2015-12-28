@@ -8,7 +8,7 @@ RSpec.describe MultipliedGradebookExportPerformer, type: :background_job do
   let(:performer) { MultipliedGradebookExportPerformer.new(attrs) }
   subject { performer }
 
-  describe "public methods inherited from GradeBookExportPerformer" do
+  describe "methods inherited from GradeBookExportPerformer" do
 
     describe "setup" do
       it "should fetch the user and set it to user" do
@@ -94,6 +94,4 @@ RSpec.describe MultipliedGradebookExportPerformer, type: :background_job do
       end
     end
   end
-
-
 end
