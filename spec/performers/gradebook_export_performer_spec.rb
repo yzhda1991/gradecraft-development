@@ -38,8 +38,8 @@ RSpec.describe GradebookExportPerformer, type: :background_job do
       end
 
       it "should fetch the csv data" do
-        allow(subject).to receive(:fetch_csv_data).with(course.id).and_return "some,csv,data"
-        expect(subject).to receive(:fetch_csv_data).with(course.id)
+        allow(subject).to receive(:fetch_csv_data).with(course).and_return "some,csv,data"
+        expect(subject).to receive(:fetch_csv_data).with(course)
       end
 
       it "should mail notification that the gradebook was exported" do

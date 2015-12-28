@@ -7,12 +7,12 @@ describe MultipliedGradebookExporter do
 
   describe "#export" do
     it "generates an empty CSV if there are no students or assignments" do
-      csv = subject.gradebook(course.id)
+      csv = subject.gradebook(course)
       expect(csv).to eq "First Name,Last Name,Email,Username,Team\n"
     end
     it "generates an empty CSV if there are no students" do
       @assignment = create(:assignment, course: course, name: "The Flash!")
-      csv = subject.gradebook(course.id)
+      csv = subject.gradebook(course)
       expect(csv).to eq "First Name,Last Name,Email,Username,Team,The Flash!,The Flash!\n"
     end
 
@@ -26,7 +26,7 @@ describe MultipliedGradebookExporter do
       create(:grade, assignment: @assignment, student: @student, raw_score: 100, status: "Released" )
       create(:grade, assignment: @assignment_3, student: @student, raw_score: 200, status: "Released")
 
-      csv = CSV.new(subject.gradebook(course.id)).read
+      csv = CSV.new(subject.gradebook(course)).read
       expect(csv.length).to eq 2
       expect(csv[1][0]).to eq @student.first_name
       expect(csv[1][1]).to eq @student.last_name

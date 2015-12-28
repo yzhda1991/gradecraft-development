@@ -1,8 +1,7 @@
 class GradebookExporter
 
   #gradebook spreadsheet export for course
-  def gradebook(course_id)
-    course = fetch_course(course_id)
+  def gradebook(course)
     CSV.generate do |csv|
       csv << gradebook_columns(course)
       course.students.each do |student|
@@ -12,10 +11,6 @@ class GradebookExporter
   end
 
   private
-
-  def fetch_course(course_id)
-    Course.find(course_id)
-  end
 
   def base_student_columns
     ["First Name", "Last Name", "Email", "Username", "Team"]

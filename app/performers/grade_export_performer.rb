@@ -28,7 +28,7 @@ class GradeExportPerformer < ResqueJob::Performer
   end
 
   def fetch_csv_data(course)
-    @csv_data = GradesForResearchExporter.new.research_grades course.id
+    @csv_data = GradesForResearchExporter.new.research_grades course
   end
 
   def notify_grade_export
