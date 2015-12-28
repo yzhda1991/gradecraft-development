@@ -1,4 +1,4 @@
-require_relative "concerns/multiple_file_attributes"
+require_dependency "concerns/multiple_file_attributes"
 
 class Submission < ActiveRecord::Base
   attr_accessible :task, :task_id, :assignment, :assignment_id, :assignment_type_id,

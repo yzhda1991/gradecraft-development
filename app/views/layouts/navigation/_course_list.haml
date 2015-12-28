@@ -4,6 +4,7 @@
       %li= link_to raw("<i class ='fa fa-home fa-fw'></i> #{c.formatted_short_name} "), change_current_course_path(:course_id => c.id), :method => 'post'
 - if current_user_is_staff?
   %li= link_to raw("Create a New Course <i class='fa fa-angle-double-right fa-fw'></i>"), new_course_path
+  %li= link_to raw("Copy this Course <i class='fa fa-rotate-right fa-fw'></i>"), copy_courses_path(:id => current_course.id), :method => 'post'
 
 - cache archived_courses_cache_key(current_user), skip_digest: true do
   - if current_user.archived_courses.present?
