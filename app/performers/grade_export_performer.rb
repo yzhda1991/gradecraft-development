@@ -8,7 +8,7 @@ class GradeExportPerformer < ResqueJob::Performer
   def do_the_work
     if @course.present? and @user.present?
       require_success(fetch_csv_messages, max_result_size: 250) do
-        fetch_csv_data
+        fetch_csv_data(@course)
       end
 
       require_success(notification_messages, max_result_size: 200) do
@@ -27,8 +27,8 @@ class GradeExportPerformer < ResqueJob::Performer
     Course.find @attrs[:course_id]
   end
 
-  def fetch_csv_data
-    @csv_data = @course.research_grades_csv
+  def fetch_csv_data(course)
+    @csv_data = GradesForResearchExporter.new.research_grades course
   end
 
   def notify_grade_export

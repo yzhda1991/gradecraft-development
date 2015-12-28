@@ -64,6 +64,8 @@
     %li
       %a{:href => export_earned_badges_path(format: 'csv')} <i class="fa fa-certificate fa-fw"></i> Awarded  #{current_course.badge_term.pluralize}
 
+  %li= link_to_unless_current raw('<i class="fa  fa-fw"></i> Assignment Structure'), export_structure_assignments_path(format: 'csv')
+
 %hr
 
 %h5 Users

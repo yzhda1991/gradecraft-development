@@ -212,6 +212,13 @@ describe AssignmentsController do
       end
     end
 
+    describe "GET export_structure" do
+      it "retrieves the export_structure download" do
+        get :export_structure, :format => :csv
+        expect(response.body).to include("Assignment ID,Name,Point Total,Description,Open At,Due At,Accept Until")
+      end
+    end
+
     describe "GET destroy" do
       it "destroys the assignment" do
         expect{ get :destroy, :id => @assignment }.to change(Assignment,:count).by(-1)
@@ -222,7 +229,7 @@ describe AssignmentsController do
       context "with CSV format" do
         it "returns sample csv data" do
           get :download_current_grades, :id => @assignment, :format => :csv
-          expect(response.body).to include("First Name,Last Name,Email,Score,Feedback")
+          expect(response.body).to include("First Name,Last Name,Email,Username,Score,Feedback")
         end
       end
     end
@@ -233,7 +240,7 @@ describe AssignmentsController do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
           submission = create(:submission, grade: grade, student: @student, assignment: @assignment)
           get :export_grades, :id => @assignment, :format => :csv
-          expect(response.body).to include("First Name,Last Name,Uniqname,Score,Raw Score,Statement,Feedback")
+          expect(response.body).to include("First Name,Last Name,Email,Username,Score,Feedback,Raw Score,Statement")
         end
       end
     end

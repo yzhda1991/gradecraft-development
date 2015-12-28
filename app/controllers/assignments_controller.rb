@@ -106,14 +106,20 @@ class AssignmentsController < ApplicationController
   def download_current_grades
     assignment = current_course.assignments.find(params[:id])
     respond_to do |format|
-      format.csv { send_data GradeExporter.new.export(assignment, current_course.students) }
+      format.csv { send_data GradeExporter.new.export_grades(assignment, current_course.students) }
+    end
+  end
+
+  def export_structure
+    respond_to do |format|
+      format.csv { send_data AssignmentExporter.new.export current_course }
     end
   end
 
   def export_grades
     assignment = current_course.assignments.find(params[:id])
     respond_to do |format|
-      format.csv { send_data AssignmentExporter.new.export assignment, assignment.course.students }
+      format.csv { send_data GradeExporter.new.export_grades_with_detail assignment, assignment.course.students }
     end
   end
 
@@ -139,7 +145,7 @@ class AssignmentsController < ApplicationController
           error_log = ""
 
           open( "#{export_dir}/_grade_import_template.csv",'w' ) do |f|
-            f.puts GradeExporter.new.export(@assignment, @students)
+            f.puts GradeExporter.new.export_grades(@assignment, @students)
           end
 
           @students.each do |student|

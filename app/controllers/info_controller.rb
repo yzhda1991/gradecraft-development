@@ -3,7 +3,7 @@ class InfoController < ApplicationController
 
   before_filter :ensure_staff?, :except => [ :dashboard, :timeline_events ]
   before_action :find_team, only: [ :awarded_badges, :choices, :resubmissions ]
-  before_action :find_students, only: [ :awarded_badges, :choices  ]
+  before_action :find_students, only: [ :awarded_badges, :choices, :final_grades_for_course  ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
@@ -94,8 +94,15 @@ class InfoController < ApplicationController
     @title = "#{term_for :assignment} Analytics"
   end
 
+  def final_grades
+    respond_to do |format|
+      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
+    end
+  end
+
   def gradebook
-    GradebookExporterJob.new(user_id: current_user.id, course_id: current_course.id).enqueue
+    GradebookExporterJob
+      .new(user_id: current_user.id, course_id: current_course.id).enqueue
 
     flash[:notice]="Your request to export the gradebook for \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
     redirect_back_or_default
@@ -109,12 +116,6 @@ class InfoController < ApplicationController
                     for \"#{current_course.name}\" is currently being processed. \
                     We will email you the data shortly."
     redirect_back_or_default
-  end
-
-  def final_grades
-    respond_to do |format|
-      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
-    end
   end
 
   #downloadable grades for course with  export

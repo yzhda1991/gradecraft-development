@@ -701,35 +701,7 @@ describe Course do
       expect(subject.ordered_student_ids).to eq([student_2.id, student_1.id, student_3.id])
     end
   end
-
-  describe "#self.csv_summary_data" do
-    skip "implement"
-  end
-
-  describe "#self.csv_roster" do
-    skip "implement"
-  end
-
-  describe "#self.csv_assignments" do
-    skip "implement"
-  end
-
-  describe "#csv_gradebook" do
-    skip "implement"
-  end
-
-  describe "#csv_multiplied_gradebook" do
-    skip "implement"
-  end
-
-  describe "#research_grades_csv(options = {})" do
-    skip "implement"
-  end
-
-  describe "#earned_badges_for_course" do
-    skip "implement"
-  end
-
+  
   describe "#course_badge_count" do
     it "tallies the number of badges in a course" do
       badge = create(:badge, course: subject)
