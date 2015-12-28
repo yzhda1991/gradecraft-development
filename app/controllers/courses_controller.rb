@@ -117,9 +117,9 @@ class CoursesController < ApplicationController
   end
 
   def export_earned_badges
-    @course = current_course
+    course = current_course
     respond_to do |format|
-      format.csv { send_data EarnedBadgeExporter.new.earned_badges_for_course @course.earned_badges }
+      format.csv { send_data EarnedBadgeExporter.new.earned_badges_for_course course.earned_badges }
     end
   end
 
