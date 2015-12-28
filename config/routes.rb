@@ -58,6 +58,7 @@ GradeCraft::Application.routes.draw do
       get :feed
       get :settings
       post 'copy' => 'assignments#copy'
+      get 'export_structure'
       get 'weights' => 'assignment_weights#mass_edit', :as => :mass_edit_weights
     end
     member do
@@ -203,7 +204,6 @@ GradeCraft::Application.routes.draw do
   get 'gradebook' => 'info#gradebook'
   get 'multiplied_gradebook' => 'info#multiplied_gradebook'
   get 'final_grades' => 'info#final_grades'
-  get 'assignment_structure' => 'info#assignment_structure'
   get 'research_gradebook' => 'info#research_gradebook'
   get 'export_earned_badges' => 'courses#export_earned_badges'
 

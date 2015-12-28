@@ -24,8 +24,8 @@ class MultipliedGradebookExporter < GradebookExporter
     course.assignments.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
       if grade and grade.is_student_visible?
-        memo << grade.try(:raw_score)
-        memo << grade.try(:score)
+        memo << grade.raw_score
+        memo << grade.score
       else
         memo << ""
         memo << ""

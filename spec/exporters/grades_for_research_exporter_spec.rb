@@ -15,8 +15,8 @@ describe GradesForResearchExporter do
       @student = create(:user)
       @student.courses << course
       @assignment_type = create(:assignment_type, course: course)
-      @assignment = create(:assignment, course: course, assignment_type: @assignment_type, name: "Quiz")
-      @assignment_2 = create(:assignment, course: course, assignment_type: @assignment_type, name: "Essay")
+      @assignment = create(:assignment, course: course, assignment_type: @assignment_type, name: "Quiz", position: 1)
+      @assignment_2 = create(:assignment, course: course, assignment_type: @assignment_type, name: "Essay", position: 2)
       @grade = create(:grade, raw_score: 100, course: course, student: @student, assignment: @assignment)
       @grade_2 = create(:grade, raw_score: 200, course: course, student: @student, assignment: @assignment_2)
 

@@ -135,12 +135,6 @@ class InfoController < ApplicationController
     @teams = current_course.teams
   end
 
-  def assignment_structure
-    respond_to do |format|
-      format.csv { send_data AssignmentStructureExporter.new.assignment_structure current_course }
-    end
-  end
-
   private
 
   def find_team
