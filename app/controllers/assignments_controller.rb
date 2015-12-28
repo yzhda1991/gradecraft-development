@@ -62,7 +62,7 @@ class AssignmentsController < ApplicationController
     assignment = current_course.assignments.find(params[:id])
     if assignment.update_attributes(params[:assignment])
       set_assignment_weights(assignment)
-      redirect_to assignments_path, notice: "#{(term_for :assignment).titleize}  <strong>#{assignment.name }</strong> successfully updated" and return
+      redirect_to assignments_path, notice: "#{(term_for :assignment).titleize} #{assignment.name } successfully updated" and return
     end
 
     @title = "Edit #{term_for :assignment}"
