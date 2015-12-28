@@ -5,10 +5,10 @@ describe CourseGradeExporter do
   let(:course) { create :course }
   subject { CourseGradeExporter.new }
 
-  describe "#final_grades_for_course(course, students)" do
+  describe "#final_grades_for_course(course)" do
 
-    it "generates an empty CSV if there are no students specified" do
-      csv = subject.final_grades_for_course(course, nil)
+    it "generates an empty CSV if there are no students" do
+      csv = subject.final_grades_for_course(course)
       expect(csv).to include 'First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID'
     end
 
@@ -22,7 +22,7 @@ describe CourseGradeExporter do
       create(:grade_scheme_element, course: course, low_range: 100001, high_range: 200000, level: "Phenomenal", letter: "B")
       @students = course.students
 
-      csv = CSV.new(subject.final_grades_for_course(course, @students)).read
+      csv = CSV.new(subject.final_grades_for_course(course)).read
       expect(csv.length).to eq 3
       expect(csv[1][0]).to eq @student.first_name
       expect(csv[2][0]).to eq @student_2.first_name
