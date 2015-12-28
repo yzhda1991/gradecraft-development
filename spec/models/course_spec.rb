@@ -666,7 +666,7 @@ describe Course do
       student3 = create(:user)
       student3.courses << subject
       student4 = create(:user)
-      expect(subject.students.count).to eq(3)
+      expect(subject.student_count).to eq(3)
     end
   end
 
@@ -701,7 +701,7 @@ describe Course do
       expect(subject.ordered_student_ids).to eq([student_2.id, student_1.id, student_3.id])
     end
   end
-  
+
   describe "#course_badge_count" do
     it "tallies the number of badges in a course" do
       badge = create(:badge, course: subject)
