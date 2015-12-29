@@ -59,11 +59,6 @@ class UserSessionsController < ApplicationController
     NotificationMailer.lti_error(user, course).deliver_now
   end
 
-  def kerberos_error_notification
-    user = { uid: auth_hash['uid'] }
-    NotificationMailer.kerberos_error(user).deliver_now
-  end
-
   def redirect_back_or(default)
     redirect_to(session[:return_to] || default)
     clear_return_to

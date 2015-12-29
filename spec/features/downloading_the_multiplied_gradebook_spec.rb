@@ -1,8 +1,8 @@
 require "rails_spec_helper"
 
-feature "downloading assignment type summary file" do
+feature "downloading multiplied gradebook file" do
   context "as a professor" do
-    let(:course) { create :course }
+    let(:course) { create :course, name: "Course Name", total_assignment_weight: 6 }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
 
@@ -13,15 +13,12 @@ feature "downloading assignment type summary file" do
 
     scenario "successfully" do
 
-      @assignment_type = create(:assignment_type, course: course)
-
       within(".sidebar-container") do
-        click_link "assignment type Summaries"
+        click_link "Multiplied Gradebook"
       end
 
-      expect(page.response_headers['Content-Type']).to eq('application/octet-stream')
+      expect(page).to have_notification_message('notice', "Your request to export the multiplied gradebook for \"Course Name\" is currently being processed. We will email you the data shortly.")
 
-      expect(page).to have_content "First Name,Last Name,Email,Username,Team"
     end
   end
 end

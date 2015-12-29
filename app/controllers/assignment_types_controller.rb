@@ -69,6 +69,8 @@ class AssignmentTypesController < ApplicationController
     if current_course.assignment_types.present?
       respond_to do |format|
         format.csv { send_data AssignmentTypeExporter.new.export_summary_scores current_course.assignment_types, current_course, current_course.students }
+
+        flash[:success]= "Your assignment type summary file has been successfully downloaded"
       end
     else
       redirect_to dashboard_path, :flash => { :error => "Sorry! You have not yet created an #{(term_for :assignment_type).titleize} for this course" }

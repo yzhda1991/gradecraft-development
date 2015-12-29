@@ -1,7 +1,7 @@
 class ChallengeGradesController < ApplicationController
 
   before_filter :ensure_staff?, :except => [:show]
-  before_action :find_challenge, only: [:index, :create, :show, :new, :edit, :mass_edit, :challenge, 
+  before_action :find_challenge, only: [:index, :create, :show, :new, :edit, :mass_edit, :challenge,
     :update, :edit_status, :update_status, :destroy ]
   before_action :find_challenge_grade, only: [:show, :edit, :update, :destroy]
 
@@ -81,7 +81,7 @@ class ChallengeGradesController < ApplicationController
           end
         end
 
-        format.html { redirect_to @challenge, notice: "Grade for #{@challenge.name} #{term_for :challenge} successfully updated" }
+        format.html { redirect_to @challenge, notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully updated" }
       else
         format.html { render action: "edit" }
       end
@@ -102,12 +102,12 @@ class ChallengeGradesController < ApplicationController
     flash[:notice] = "Updated #{(term_for :challenge).titleize} Grades!"
     redirect_to challenge_path(@challenge)
   end
- 
+
   def destroy
     @team = @challenge_grade.team
 
     @challenge_grade.destroy
-    @challenge_grade.recalculate_student_and_team_scores 
+    @challenge_grade.recalculate_student_and_team_scores
 
     redirect_to challenge_path(@challenge), notice: "#{@team.name}'s grade for #{@challenge.name} has been successfully deleted."
   end

@@ -3,9 +3,9 @@ ENV["RAILS_ENV"] ||= 'test'
 if ENV["COVERAGE"]
   require 'simplecov'
   SimpleCov.start do
-    add_filter "/spec/"
+    add_filter "spec/*"
     add_filter "app/helpers/color_palette_helper.rb"
-    add_filter "config/initializers/*"
+    add_filter "config/*"
   end
 
 
