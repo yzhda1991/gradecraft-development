@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   - if current_course.has_teams?
     .team-filter
       = form_tag mass_award_badge_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
@@ -35,7 +35,7 @@
                 %img{:src => earned_badge.badge.try(:icon), :alt => earned_badge.badge.try(:name), :width => "25", :height => "25"}
             %td.center
               - if @badge.can_earn_multiple_times? || ! earned_badge.student.earned_badges.where(:badge_id => @badge).present?
-                %input(type="checkbox" name="student_ids[]" value="#{earned_badge[:student_id]}")
+                %input(type="checkbox" id="student-id-#{earned_badge[:student_id]}" name="student_ids[]" value="#{earned_badge[:student_id]}")
 
       .submit-buttons
         %ul
