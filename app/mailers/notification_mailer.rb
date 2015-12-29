@@ -9,13 +9,6 @@ class NotificationMailer < ActionMailer::Base
     end
   end
 
-  def kerberos_error(user_info)
-    @user = user_info
-    mail(:to => 'cholma@umich.edu', :subject => 'Unknown Kerberos user') do |format|
-      format.text
-    end
-  end
-
   def grade_export(course, user, csv_data)
     @user = user
     @course = course

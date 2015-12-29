@@ -142,16 +142,8 @@ describe AssignmentPresenter do
   end
 
   describe "#title" do
-    it "is the assignment name and total points available" do
-      allow(view_context).to receive(:number_with_delimiter).with(5000).and_return "5,000"
-      expect(subject.title).to eq "Crazy Wizardry (5,000 points)"
-    end
-
-    it "is the assigment name and pass fail" do
-      allow(view_context).to receive(:term_for).with(:pass).and_return "Pass"
-      allow(view_context).to receive(:term_for).with(:fail).and_return "Fail"
-      allow(assignment).to receive(:pass_fail?).and_return true
-      expect(subject.title).to eq "Crazy Wizardry (Pass/Fail)"
+    it "is the assignment name" do
+      expect(subject.title).to eq "Crazy Wizardry"
     end
   end
 end

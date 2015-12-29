@@ -12,7 +12,11 @@
             %a
               %img{:src => badge.icon, :alt => badge.name, :class => "unearned"}
             .display_on_hover.hover-style.right
-              = "Not yet earned: #{badge.name}"
+              - if badge.name_visible_for_student?(current_student)
+                = "Not yet earned: #{badge.name}"
+              - else
+                .bold= "Locked #{(term_for :badge).titleize}"
+                .italic= "You must unlock this #{term_for :badge} to learn more about it"
 
     - if current_student.earned_badge_score_for_course(current_course) > 0
       .italic.small= "You've earned #{points current_student.earned_badge_score_for_course(current_course)} points through #{(term_for :badges).titleize}."

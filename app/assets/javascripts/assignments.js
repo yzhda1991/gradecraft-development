@@ -81,6 +81,20 @@
     }
   }
 
+  if($('.locked-visibility-options > input').is(':checked')) {
+    $('ul > .locked-display').show();
+  } else {
+    $('ul > .locked-display').hide();
+  }
+
+  $('.locked-visibility-options').change(function(){
+    if($(this).is(":checked")) {
+      $('ul > .locked-display').toggle();
+    } else {
+      $('ul > .locked-display').toggle();
+    }
+  });
+
   if($('.assignment_options > input').is(':checked')) {
     $('ul > .submit').show();
   } else {
@@ -94,7 +108,6 @@
       $('ul > .submit').toggle();
     }
   });
-
 
   $(init);
 }(jQuery);

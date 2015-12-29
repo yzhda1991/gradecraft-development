@@ -18,7 +18,7 @@ class Assignment < ActiveRecord::Base
     :mass_grade_type, :include_in_timeline, :include_in_predictor,
     :include_in_to_do, :assignment_file_ids,
     :assignment_files_attributes, :assignment_file,
-    :assignment_score_levels_attributes, :assignment_score_level, :course, :course_id
+    :assignment_score_levels_attributes, :assignment_score_level, :course, :course_id, :show_name_when_locked, :show_points_when_locked, :show_description_when_locked
 
   attr_accessor :current_student_grade
 

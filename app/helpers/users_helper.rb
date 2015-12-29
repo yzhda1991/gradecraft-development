@@ -17,7 +17,7 @@ module UsersHelper
                   name: assignment_type.name }
     end
 
-    earned_badge_score = user.earned_badges.where(course: course).score
+    earned_badge_score = user.earned_badges.where(course: course).pluck('score').sum
     if earned_badge_score > 0
       scores << { :data => [earned_badge_score], :name => "#{course.badge_term.pluralize}" }
     end
