@@ -64,4 +64,25 @@ module UnlockableCondition
      (visible_when_locked? || is_unlocked_for_student?(student))) ||
     (!is_unlockable? && visible?)
   end
+
+  def description_visible_for_student?(student)
+    (is_unlockable? &&
+      (visible_when_locked? && show_description_when_locked? ||
+     is_unlocked_for_student?(student))) ||
+    (!is_unlockable? && visible?)
+  end
+
+  def points_visible_for_student?(student)
+    (is_unlockable? &&
+      (visible_when_locked? && show_points_when_locked? ||
+     is_unlocked_for_student?(student))) ||
+    (!is_unlockable? && visible?)
+  end
+
+  def name_visible_for_student?(student)
+    (is_unlockable? &&
+      (visible_when_locked? && show_name_when_locked? ||
+     is_unlocked_for_student?(student))) ||
+    (!is_unlockable? && visible?)
+  end
 end

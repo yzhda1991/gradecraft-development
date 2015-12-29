@@ -206,10 +206,191 @@ describe Assignment do
         allow(condition).to receive(:is_complete?).with(student).and_return true
         expect(subject.check_unlock_status(student)).to eq \
           subject.unlock_states.last
+        expect(subject.unlock_states.last.unlockable_type).to eq subject.class.name
         expect(subject.unlock_states.last.student).to eq student
         expect(subject.unlock_states.last).to be_unlocked
         expect(subject.unlock_states.last.unlockable_id).to eq subject.id
       end
+    end
+  end
+
+  describe "#visible_for_student?(student)" do
+    it "returns true if the assignment is visible" do
+      assignment = create(:assignment)
+      student = create(:user)
+      expect(assignment.visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the assignment is invisible" do
+      assignment = create(:assignment, visible: false)
+      student = create(:user)
+      expect(assignment.visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the assignment is invisible but the student has earned a grade" do
+      assignment = create(:assignment)
+      student = create(:user)
+      grade = create(:grade, student: student, assignment: assignment)
+      expect(assignment.visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns true if the assignment is locked but visible" do
+      assignment= create(:assignment, visible_when_locked: true)
+      student = create(:user)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment)
+      expect(assignment.visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the assignment is invisible when locked and the student has not met the conditions" do
+      assignment = create(:assignment, visible_when_locked: false)
+      student = create(:user)
+      badge = create(:badge)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment.id, unlockable_type: "Assignment", condition_id: badge.id, condition_state: "Earned")
+      expect(assignment.visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the assignment is invisible when locked and the student has met the conditions" do
+      assignment = create(:assignment, visible_when_locked: false)
+      student = create(:user)
+      assignment_2 = create(:assignment)
+      submission = create(:submission, assignment: assignment_2, student: student)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment, condition_id: assignment_2.id, condition_type: "Assignment", condition_state: "Submitted")
+      expect(assignment.visible_for_student?(student)).to eq(true)
+    end
+  end
+
+  describe "#description_visible_for_student?(student)" do
+    it "returns true if the assignment is visible" do
+      assignment = create(:assignment)
+      student = create(:user)
+      expect(assignment.description_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the assignment is invisible" do
+      assignment = create(:assignment, visible: false)
+      student = create(:user)
+      expect(assignment.description_visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the assignment description is invisible but the student has earned a grade" do
+      assignment = create(:assignment, show_description_when_locked: false )
+      student = create(:user)
+      grade = create(:grade, student: student, assignment: assignment)
+      expect(assignment.description_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns true if the assignment is locked but the description is visible" do
+      assignment= create(:assignment, visible_when_locked: true,  show_description_when_locked: true )
+      student = create(:user)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment)
+      expect(assignment.description_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the assignment description is invisible when locked and the student has not met the conditions" do
+      assignment = create(:assignment, visible_when_locked: true, show_description_when_locked: false )
+      student = create(:user)
+      badge = create(:badge)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment.id, unlockable_type: "Assignment", condition_id: badge.id, condition_state: "Earned")
+      expect(assignment.description_visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the assignment description is invisible when locked and the student has met the conditions" do
+      assignment = create(:assignment, visible_when_locked: true, show_description_when_locked: false )
+      student = create(:user)
+      assignment_2 = create(:assignment)
+      submission = create(:submission, assignment: assignment_2, student: student)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment, condition_id: assignment_2.id, condition_type: "Assignment", condition_state: "Submitted")
+      expect(assignment.description_visible_for_student?(student)).to eq(true)
+    end
+  end
+
+  describe "#points_visible_for_student?(student)" do
+    it "returns true if the assignment is visible" do
+      assignment = create(:assignment)
+      student = create(:user)
+      expect(assignment.points_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the assignment is invisible" do
+      assignment = create(:assignment, visible: false)
+      student = create(:user)
+      expect(assignment.points_visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the assignment points is invisible but the student has earned a grade" do
+      assignment = create(:assignment, show_points_when_locked: false )
+      student = create(:user)
+      grade = create(:grade, student: student, assignment: assignment)
+      expect(assignment.points_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns true if the assignment is locked but the points are visible" do
+      assignment= create(:assignment, visible_when_locked: true,  show_points_when_locked: true )
+      student = create(:user)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment)
+      expect(assignment.points_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the assignment points are invisible when locked and the student has not met the conditions" do
+      assignment = create(:assignment, visible_when_locked: true, show_points_when_locked: false )
+      student = create(:user)
+      badge = create(:badge)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment.id, unlockable_type: "Assignment", condition_id: badge.id, condition_state: "Earned")
+      expect(assignment.points_visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the assignment points are invisible when locked and the student has met the conditions" do
+      assignment = create(:assignment, visible_when_locked: true, show_points_when_locked: false )
+      student = create(:user)
+      assignment_2 = create(:assignment)
+      submission = create(:submission, assignment: assignment_2, student: student)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment, condition_id: assignment_2.id, condition_type: "Assignment", condition_state: "Submitted")
+      expect(assignment.points_visible_for_student?(student)).to eq(true)
+    end
+  end
+
+  describe "#name_visible_for_student?(student)" do
+    it "returns true if the assignment is visible" do
+      assignment = create(:assignment)
+      student = create(:user)
+      expect(assignment.name_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the assignment is invisible" do
+      assignment = create(:assignment, visible: false)
+      student = create(:user)
+      expect(assignment.name_visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the assignment name is invisible but the student has earned a grade" do
+      assignment = create(:assignment, show_points_when_locked: false )
+      student = create(:user)
+      grade = create(:grade, student: student, assignment: assignment)
+      expect(assignment.name_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns true if the assignment is locked but the name is visible" do
+      assignment= create(:assignment, visible_when_locked: true,  show_name_when_locked: true )
+      student = create(:user)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment)
+      expect(assignment.name_visible_for_student?(student)).to eq(true)
+    end
+
+    it "returns false if the assignment name is invisible when locked and the student has not met the conditions" do
+      assignment = create(:assignment, visible_when_locked: true, show_name_when_locked: false )
+      student = create(:user)
+      badge = create(:badge)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment.id, unlockable_type: "Assignment", condition_id: badge.id, condition_state: "Earned")
+      expect(assignment.name_visible_for_student?(student)).to eq(false)
+    end
+
+    it "returns true if the assignment name is invisible when locked and the student has met the conditions" do
+      assignment = create(:assignment, visible_when_locked: true, show_name_when_locked: false )
+      student = create(:user)
+      assignment_2 = create(:assignment)
+      submission = create(:submission, assignment: assignment_2, student: student)
+      unlock_condition = create(:unlock_condition, unlockable_id: assignment, condition_id: assignment_2.id, condition_type: "Assignment", condition_state: "Submitted")
+      expect(assignment.name_visible_for_student?(student)).to eq(true)
     end
   end
 
@@ -332,6 +513,7 @@ describe Assignment do
       expect(subject.predictor_display_type).to eq "slider"
     end
   end
+
   describe "#grade_count" do
     before { subject.save }
 
