@@ -10,9 +10,9 @@
   was successfully created for #{ @course.team_term.downcase } #{ @team.name }.
 %p
 %p{:align => "center"}
-  You can download your completed #{@archive_data[:format].upcase} archive
+  You can download your completed ZIP archive
   = succeed "." do
-    %a{:href => "#{ @archive_data[:url] }"} here
+    %a{:href => "#{ exports_url }"} here
 %hr/
 
 %p Sincerely,

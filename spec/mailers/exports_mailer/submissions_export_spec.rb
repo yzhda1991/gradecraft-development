@@ -30,21 +30,21 @@ end
 
 RSpec.shared_examples "a submissions export email with archive data" do 
   it "includes the archive format" do
-    should include archive_data[:format].upcase
+    should include "ZIP"
   end
 
   it "includes the archive url" do
-    should include archive_data[:url]
+    should include exports_path
   end
 end
 
 RSpec.shared_examples "a submissions export email without archive data" do 
   it "includes the archive format" do
-    should include archive_data[:format].upcase
+    should include "ZIP"
   end
 
   it "doesn't include the archive url" do
-    should_not include archive_data[:url]
+    should_not include exports_path
   end
 end
 
@@ -66,7 +66,7 @@ describe NotificationMailer do
   before(:each) { deliver_email }
 
   describe "#submissions_export_started" do
-    let(:deliver_email) { ExportsMailer.submissions_export_started(professor, assignment, archive_data).deliver_now }
+    let(:deliver_email) { ExportsMailer.submissions_export_started(professor, assignment).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -94,7 +94,7 @@ describe NotificationMailer do
   end
 
   describe "#submissions_export_success" do
-    let(:deliver_email) { ExportsMailer.submissions_export_success(professor, assignment, archive_data).deliver_now }
+    let(:deliver_email) { ExportsMailer.submissions_export_success(professor, assignment).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -122,7 +122,7 @@ describe NotificationMailer do
   end
 
   describe "#submissions_export_failure" do
-    let(:deliver_email) { ExportsMailer.submissions_export_failure(professor, assignment, archive_data).deliver_now }
+    let(:deliver_email) { ExportsMailer.submissions_export_failure(professor, assignment).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -148,7 +148,7 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_started" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_started(professor, assignment, team, archive_data).deliver_now }
+    let(:deliver_email) { ExportsMailer.team_submissions_export_started(professor, assignment, team).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -178,7 +178,7 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_success" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_success(professor, assignment, team, archive_data).deliver_now }
+    let(:deliver_email) { ExportsMailer.team_submissions_export_success(professor, assignment, team).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -208,7 +208,7 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_failure" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_failure(professor, assignment, team,  archive_data).deliver_now }
+    let(:deliver_email) { ExportsMailer.team_submissions_export_failure(professor, assignment, team).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 

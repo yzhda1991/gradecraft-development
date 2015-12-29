@@ -373,27 +373,20 @@ class AssignmentExportPerformer < ResqueJob::Performer
     @team ? deliver_team_export_failure_mailer : deliver_export_failure_mailer
   end
 
-  def archive_data
-    {
-      format: "zip",
-      url: exports_url
-    }
-  end
-
   def deliver_export_successful_mailer
-    ExportsMailer.submissions_export_success(@professor, @assignment, archive_data).deliver_now
+    ExportsMailer.submissions_export_success(@professor, @assignment).deliver_now
   end
 
   def deliver_team_export_successful_mailer
-    ExportsMailer.team_submissions_export_success(@professor, @assignment, @team, archive_data).deliver_now
+    ExportsMailer.team_submissions_export_success(@professor, @assignment, @team).deliver_now
   end
 
   def deliver_export_failure_mailer
-    ExportsMailer.submissions_export_failure(@professor, @assignment, archive_data).deliver_now
+    ExportsMailer.submissions_export_failure(@professor, @assignment).deliver_now
   end
 
   def deliver_team_export_failure_mailer
-    ExportsMailer.team_submissions_export_failure(@professor, @assignment, @team, archive_data).deliver_now
+    ExportsMailer.team_submissions_export_failure(@professor, @assignment, @team).deliver_now
   end
 
   # @mz todo: modify specs

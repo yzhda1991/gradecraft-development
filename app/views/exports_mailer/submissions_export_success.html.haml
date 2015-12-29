@@ -7,9 +7,9 @@
 %h3{:align => "center"} Your requested export for #{ @course.assignment_term.downcase} "#{ @assignment.name }" was successfully created for course #{ @course.name }.
 %p
 %p{:align => "center"}
-  You can download your completed #{@archive_data[:format].upcase} archive
+  You can download your completed ZIP archive
   = succeed "." do
-    %a{:href => "#{ @archive_data[:url] }"} here
+    %a{:href => "#{ exports_url }"} here
 %hr/
 
 %p Sincerely,

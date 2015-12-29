@@ -79,14 +79,12 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     let(:professor) { create(:user) }
     let(:assignment) { create(:assignment) }
     let(:team) { create(:team) }
-    let(:archive_data) {{ format: "zip", url: "http://gc.com/exports-or-whatevs" }}
     let(:mailer_double) { double('mailer something').as_null_object }
 
     before(:each) do
       performer.instance_variable_set(:@professor, professor)
       performer.instance_variable_set(:@assignment, assignment)
       performer.instance_variable_set(:@team, team)
-      allow(performer).to receive(:archive_data) { archive_data }
       allow(mailer_double).to receive(:deliver_now)
     end
 
@@ -99,7 +97,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       before(:each) { allow(ExportsMailer).to receive(:submissions_export_success) { mailer_double }}
 
       it "creates an export success mailer" do
-        expect(ExportsMailer).to receive(:submissions_export_success).with(professor, assignment, archive_data)
+        expect(ExportsMailer).to receive(:submissions_export_success).with(professor, assignment)
       end
 
       it "delivers the mailer" do
@@ -112,7 +110,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       before(:each) { allow(ExportsMailer).to receive(:team_submissions_export_success) { mailer_double }}
 
       it "delivers a team export success mailer" do
-        expect(ExportsMailer).to receive(:team_submissions_export_success).with(professor, assignment, team, archive_data)
+        expect(ExportsMailer).to receive(:team_submissions_export_success).with(professor, assignment, team)
       end
 
       it "delivers the mailer" do
@@ -125,7 +123,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       before(:each) { allow(ExportsMailer).to receive(:submissions_export_failure) { mailer_double }}
 
       it "delivers an export failure mailer" do
-        expect(ExportsMailer).to receive(:submissions_export_failure).with(professor, assignment, archive_data)
+        expect(ExportsMailer).to receive(:submissions_export_failure).with(professor, assignment)
       end
 
       it "delivers the mailer" do
@@ -138,7 +136,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       before(:each) { allow(ExportsMailer).to receive(:team_submissions_export_failure) { mailer_double }}
 
       it "delivers a team export failure mailer" do
-        expect(ExportsMailer).to receive(:team_submissions_export_failure).with(professor, assignment, team, archive_data)
+        expect(ExportsMailer).to receive(:team_submissions_export_failure).with(professor, assignment, team)
       end
 
       it "delivers the mailer" do
