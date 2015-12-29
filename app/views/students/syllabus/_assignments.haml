@@ -34,38 +34,41 @@
             - if assignment.visible_for_student?(current_student) || grade_released_for_assignment
               %tr
                 %td= render "students/syllabus/assignment_icons", :assignment => assignment
-                %td= link_to assignment.name, assignment_path(assignment)
                 %td
-                  - if assignment.pass_fail?
-                    - if current_student.grade_released_for_assignment?(assignment)
-                      .bold
-                        - if grade_for_assignment.pass_fail_status
-                          = term_for(grade_for_assignment.pass_fail_status)
+                  - if assignment.name_visible_for_student?(current_student)
+                    = link_to assignment.name, assignment_path(assignment)
+                %td
+                  - if assignment.points_visible_for_student?(current_student)
+                    - if assignment.pass_fail?
+                      - if current_student.grade_released_for_assignment?(assignment)
+                        .bold
+                          - if grade_for_assignment.pass_fail_status
+                            = term_for(grade_for_assignment.pass_fail_status)
+                      - else
+                        = "#{term_for :pass}/#{term_for :fail}"
                     - else
-                      = "#{term_for :pass}/#{term_for :fail}"
-                  - else
-                    - grade = grade_for_assignment
-                    // Checking to see if this assignment type is student weightable
-                    - if assignment.assignment_type.student_weightable?
-                      // Checking to see if this student has weighted this assignment anything other than 1
-                      - if (current_student.weight_for_assignment_type(assignment.assignment_type) == 0 && current_course.default_assignment_weight != 1) || current_student.weight_for_assignment_type(assignment.assignment_type) > 1
-                        - if grade_released_for_assignment
-                          = "#{points grade.raw_score} / #{ points assignment.point_total } points (Raw)"
-                          .bold= "#{ points grade.score } / #{points grade.point_total} points (Multiplied)"
+                      - grade = grade_for_assignment
+                      // Checking to see if this assignment type is student weightable
+                      - if assignment.assignment_type.student_weightable?
+                        // Checking to see if this student has weighted this assignment anything other than 1
+                        - if (current_student.weight_for_assignment_type(assignment.assignment_type) == 0 && current_course.default_assignment_weight != 1) || current_student.weight_for_assignment_type(assignment.assignment_type) > 1
+                          - if grade_released_for_assignment
+                            = "#{points grade.raw_score} / #{ points assignment.point_total } points (Raw)"
+                            .bold= "#{ points grade.score } / #{points grade.point_total} points (Multiplied)"
+                          - else
+                            .italic= "#{points grade.point_total} points possible"
                         - else
-                          .italic= "#{points grade.point_total} points possible"
+                          - if grade_released_for_assignment
+                            .bold= "#{points grade.raw_score} / #{ points grade.point_total } points"
+                          - else
+                            .italic= "#{points assignment.point_total} points possible"
                       - else
                         - if grade_released_for_assignment
-                          .bold= "#{points grade.raw_score} / #{ points grade.point_total } points"
+                          .bold
+                            = "#{points grade.score} / #{points grade.point_total} points earned"
                         - else
                           .italic= "#{points assignment.point_total} points possible"
-                    - else
-                      - if grade_released_for_assignment
-                        .bold
-                          = "#{points grade.score} / #{points grade.point_total} points earned"
-                      - else
-                        .italic= "#{points assignment.point_total} points possible"
-                    .bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
+                      .bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
                 %td
                   - if assignment.future?
                     %span= "#{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}"
