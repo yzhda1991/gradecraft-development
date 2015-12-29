@@ -10,10 +10,6 @@ class AssignmentGroupPresenter < Showtime::Presenter
     !grade.nil? && grade.is_graded?
   end
 
-  def can_grade?
-    assignment.release_necessary? && assignment.grades.present?
-  end
-
   def grade_for(student)
     assignment.grades.find_by(student_id: student.id) || assignment.grades.build
   end

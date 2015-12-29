@@ -68,6 +68,18 @@ describe Assignment do
     end
   end
 
+  describe "#fetch_or_create_rubric" do
+    it "returns a rubric if one exists" do
+      rubric = create(:rubric, assignment: subject)
+      expect(subject.fetch_or_create_rubric).to eq(rubric)
+    end
+
+    it "creates a rubric if one does not exist" do
+      skip "pending"
+      #expect(subject.fetch_or_create_rubric).to eq(Rubric.new)
+    end
+  end
+
   describe "#average" do
     before { subject.save }
 
