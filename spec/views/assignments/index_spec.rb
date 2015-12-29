@@ -19,19 +19,6 @@ describe "assignments/index" do
     allow(view).to receive(:current_course).and_return(@course)
   end
 
-  it "renders successfully" do
-    render
-    assert_select "h3", text: "Assignments", :count => 1
-  end
-
-  it "renders the breadcrumbs" do
-    render
-    assert_select ".content-nav", :count => 1
-    assert_select ".breadcrumbs" do
-      assert_select "a", :count => 2
-    end
-  end
-
   describe "pass fail assignments" do
     it "renders pass/fail in the points field" do
       @assignment_1.update(pass_fail: true)

@@ -50,7 +50,7 @@ class EarnedBadgesController < ApplicationController
         ScoreRecalculatorJob.new(user_id: @earned_badge.student_id, course_id: current_course.id).enqueue
       end
       expire_fragment "earned_badges"
-      redirect_to badge_path(@badge), notice: "#{@earned_badge.student.name}'s #{@badge.name} #{term_for :badge} was successfully updated."
+      redirect_to badge_path(@badge), notice: "#{@earned_badge.student.name}'s #{@badge.name} #{term_for :badge} was successfully updated"
     else
       render action: "edit"
     end
@@ -112,7 +112,7 @@ class EarnedBadgesController < ApplicationController
     @earned_badge = @badge.earned_badges.find(params[:id])
   end
 
-  
+
   def parse_valid_earned_badges
     params[:student_ids].inject([]) do |valid_earned_badges, student_id|
       earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)

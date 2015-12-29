@@ -2,7 +2,12 @@ ENV["RAILS_ENV"] ||= 'test'
 
 if ENV["COVERAGE"]
   require 'simplecov'
-  SimpleCov.start
+  SimpleCov.start do
+    add_filter "/spec/"
+    add_filter "app/helpers/color_palette_helper.rb"
+    add_filter "config/initializers/*"
+  end
+
 
   require 'codeclimate-test-reporter'
   CodeClimate::TestReporter.start
