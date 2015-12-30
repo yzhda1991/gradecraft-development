@@ -1,6 +1,6 @@
 require "spec_helper"
 require "active_support/inflector"
-require "./app/models/created_history_token"
+require "./lib/historical/created_history_token"
 
 describe CreatedHistoryToken do
   describe ".tokenizable?" do

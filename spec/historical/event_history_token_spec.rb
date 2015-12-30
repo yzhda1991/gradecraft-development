@@ -1,5 +1,5 @@
 require "spec_helper"
-require "./app/models/event_history_token"
+require "./lib/historical/event_history_token"
 
 describe EventHistoryToken do
   describe ".tokenizable?" do

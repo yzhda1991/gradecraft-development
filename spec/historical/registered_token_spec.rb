@@ -1,6 +1,6 @@
 require "spec_helper"
-require "./app/models/history_tokenizer"
-require "./app/models/registered_token"
+require "./lib/historical/actor_history_token"
+require "./lib/historical/registered_token"
 
 describe RegisteredToken do
   describe "#create" do

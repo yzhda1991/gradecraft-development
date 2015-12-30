@@ -1,10 +1,10 @@
 require "spec_helper"
-require "./app/models/history_tokenizer"
-require "./app/models/history_token_registry"
-require "./app/models/registered_token"
+require "./lib/historical/history_tokenizer"
+require "./lib/historical/history_token_registry"
+require "./lib/historical/registered_token"
 
 describe HistoryTokenRegistry do
-  after { described_class.clear }
+  before { described_class.clear }
 
   describe ".register" do
     it "adds the token type to the registry" do

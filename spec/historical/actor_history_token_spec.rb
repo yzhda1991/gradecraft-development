@@ -1,5 +1,5 @@
 require "active_record_spec_helper"
-require "./app/models/actor_history_token"
+require "./lib/historical/actor_history_token"
 
 describe ActorHistoryToken do
   describe ".tokenizable?" do

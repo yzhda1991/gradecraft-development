@@ -1,5 +1,5 @@
 require "spec_helper"
-require "./app/models/history_token_parser"
+require "./lib/historical/history_token_parser"
 
 describe HistoryTokenParser do
   it "initializes with a tokenizer" do

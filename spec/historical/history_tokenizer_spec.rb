@@ -1,7 +1,8 @@
 require "spec_helper"
-require "./app/models/history_tokenizer"
-require "./app/models/history_token_registry"
-require "./app/models/registered_token"
+require "./lib/historical/actor_history_token"
+require "./lib/historical/history_tokenizer"
+require "./lib/historical/history_token_registry"
+require "./lib/historical/registered_token"
 
 describe HistoryTokenizer do
   it "initializes with a changeset" do

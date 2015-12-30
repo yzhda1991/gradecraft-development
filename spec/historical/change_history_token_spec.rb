@@ -1,6 +1,6 @@
 require "spec_helper"
 require "active_model"
-require "./app/models/change_history_token"
+require "./lib/historical/change_history_token"
 
 describe ChangeHistoryToken do
   describe ".tokenizable?" do

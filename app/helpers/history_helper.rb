@@ -1,3 +1,5 @@
+require "./lib/historical"
+
 module HistoryHelper
   def history(changesets)
     content_tag(:div) do

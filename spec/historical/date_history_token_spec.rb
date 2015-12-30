@@ -1,6 +1,6 @@
 require "spec_helper"
 require "active_support/inflector"
-require "./app/models/date_history_token"
+require "./lib/historical/date_history_token"
 
 describe DateHistoryToken do
   describe ".tokenizable?" do
