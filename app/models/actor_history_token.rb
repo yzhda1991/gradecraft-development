@@ -7,7 +7,7 @@ class ActorHistoryToken
 
   def parse(options={})
     current_user = options[:current_user]
-    name = "You" if current_user && current_user.id == user_id
+    name = "You" if current_user && current_user.id.to_s == user_id.to_s
     name ||= User.where(id: user_id).first.try(:name)
     name ||= "Someone"
     { self.class.token => name }
