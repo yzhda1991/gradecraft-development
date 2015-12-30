@@ -14,6 +14,15 @@ describe HistoryHelper do
          "object" => "User",
          "actor_id" => user.id }]
     end
+    let(:multiple_changeset) do
+      [{ "first_name" => ["Bob", "Jimmy"],
+         "last_name" => ["Pig", "Page"],
+         "updated_at" => [DateTime.new(2015, 4, 15, 1, 20),
+                          DateTime.new(2015, 4, 15, 1, 21)],
+         "event" => "update",
+         "object" => "User",
+         "actor_id" => user.id }]
+    end
     let(:created_changeset) do
       [{ "first_name" => [nil, "Bob"],
          "updated_at" => [nil, DateTime.new(2015, 4, 15, 1, 21)],
@@ -53,7 +62,11 @@ describe HistoryHelper do
       end
     end
 
-    xit "describes a changeset of multiple fields"
-    xit "describes a changeset of a text field"
+    it "describes a changeset of multiple fields" do
+      history = helper.history multiple_changeset
+      expect(history).to have_tag("div") do
+        with_text "Robert Plant changed the first name from \"Bob\" to \"Jimmy\" and the last name from \"Pig\" to \"Page\" on April 15th, 2015 at 1:21 AM"
+      end
+    end
   end
 end
