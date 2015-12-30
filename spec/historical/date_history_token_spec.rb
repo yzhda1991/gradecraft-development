@@ -2,7 +2,7 @@ require "spec_helper"
 require "active_support/inflector"
 require "./lib/historical/date_history_token"
 
-describe DateHistoryToken do
+describe Historical::DateHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is an updated_at" do
       expect(described_class.tokenizable?("updated_at", nil, nil)).to eq true

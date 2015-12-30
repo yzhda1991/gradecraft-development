@@ -16,7 +16,7 @@ module HistoryHelper
   end
 
   def build_sentence(changeset)
-    tokenizer = HistoryTokenizer.new(changeset)
-    assemble_sentence HistoryTokenParser.new(tokenizer).parse(current_user: current_user)
+    tokenizer = Historical::HistoryTokenizer.new(changeset)
+    assemble_sentence Historical::HistoryTokenParser.new(tokenizer).parse(current_user: current_user)
   end
 end

@@ -2,7 +2,7 @@ require "spec_helper"
 require "active_model"
 require "./lib/historical/change_history_token"
 
-describe ChangeHistoryToken do
+describe Historical::ChangeHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the value is an array" do
       expect(described_class.tokenizable?("blah", [], {})).to eq true

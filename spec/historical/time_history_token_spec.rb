@@ -1,7 +1,7 @@
 require "spec_helper"
 require "./lib/historical/time_history_token"
 
-describe TimeHistoryToken do
+describe Historical::TimeHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is an updated_at" do
       expect(described_class.tokenizable?("updated_at", nil, nil)).to eq true
