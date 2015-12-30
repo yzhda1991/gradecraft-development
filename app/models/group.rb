@@ -46,6 +46,10 @@ class Group < ActiveRecord::Base
     approved == "Rejected"
   end
 
+  def pending?
+    approved == "Pending"
+  end
+
   #Group submissions
   def submissions_by_assignment_id
     @submissions_by_assignment ||= submissions.group_by(&:assignment_id)

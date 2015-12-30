@@ -41,29 +41,7 @@
                 %tr{:id => "assignment-#{assignment.id}"}
                   %td.draggable
                     %i.fa.fa-arrows-v
-                  %td
-                    - if assignment.is_unlockable?
-                      %a
-                        %i.fa.fa-lock
-                      .display_on_hover.hover-style
-                        %h3 This #{term_for :assignment} is Locked
-                        .small.italic In order to unlock it you must:
-                        %ul
-                          - assignment.unlock_conditions.each do |condition|
-                            %li= condition.requirements_description_sentence
-                    - if assignment.is_a_condition?
-                      %a
-                        %i.fa.fa-key
-                      .display_on_hover.hover-style
-                        %h3 This #{term_for :assignment} is a Key
-                        %ul
-                          - assignment.unlock_keys.each do |key|
-                            %li= key.key_description_sentence
-                    - if assignment.has_groups?
-                      %a
-                        %i.fa.fa-group.fa-fw
-                      .display_on_hover.hover-style
-                        This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
+                  %td= render "index_icons", assignment: assignment
                   %td= link_to assignment.name, assignment
                   %td= assignment.try(:due_at) || "Ongoing"
                   %td{:style => "display: none"}

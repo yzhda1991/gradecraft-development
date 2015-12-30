@@ -1,7 +1,7 @@
 require 'rails_spec_helper'
 
 describe GroupsController do
-  before(:all) do 
+  before(:all) do
     @course = create(:course_accepting_groups)
     @assignment = create(:assignment, course: @course)
     @student = create(:user)
@@ -60,7 +60,7 @@ describe GroupsController do
 
     describe "POST create" do
       it "creates the group with valid attributes" do
-        params = {"name"=>"Test Name", "assignment_ids"=>["#{@assignment.id}"], 
+        params = {"name"=>"Test Name", "assignment_ids"=>["#{@assignment.id}"],
           "student_ids"=>["#{@student.id}", "#{@student_2.id}", "#{@student_3.id}"] }
         expect{ post :create, :group => params }.to change(Group, :count).by(1)
         expect(response).to redirect_to(Group.last)
@@ -80,7 +80,7 @@ describe GroupsController do
       end
 
       it "redirects to edit from with invalid attributes" do
-        post :update, id: @group.id, group: attributes_for(:group, name: nil) 
+        post :update, id: @group.id, group: attributes_for(:group, name: nil)
         expect(response).to render_template(:edit)
       end
     end
@@ -88,14 +88,6 @@ describe GroupsController do
     describe "GET destroy" do
       it "destroys the group" do
         expect{ get :destroy, :id => @group }.to change(Group,:count).by(-1)
-      end
-    end
-
-    describe "GET review" do
-      it "allows the instructor to review the specified group" do
-        get :review, :id => @group.id
-        expect(assigns(:group)).to eq(@group)
-        expect(response).to render_template(:review)
       end
     end
   end
@@ -118,7 +110,7 @@ describe GroupsController do
 
     describe "POST create" do
       it "creates the group with valid attributes"  do
-        params = {"name"=>"Test Name", "assignment_ids"=>["#{@assignment.id}"], 
+        params = {"name"=>"Test Name", "assignment_ids"=>["#{@assignment.id}"],
           "student_ids"=>["#{@student_2.id}", "#{@student_3.id}"] }
         expect{ post :create, :group => params }.to change(Group, :count).by(1)
         expect(@student.group_for_assignment(@assignment).present?).to eq(true)

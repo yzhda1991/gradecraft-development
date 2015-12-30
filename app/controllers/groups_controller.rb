@@ -23,10 +23,6 @@ class GroupsController < ApplicationController
     @other_students = potential_team_members
   end
 
-  def review
-    @title = "Reviewing #{@group.name}"
-  end
-
   def create
     @group = current_course.groups.new(params[:group])
     @assignments = current_course.assignments.group_assignments
@@ -73,7 +69,7 @@ class GroupsController < ApplicationController
     end
   end
 
-  private 
+  private
 
   def potential_team_members
     current_course.students.where.not(id: current_user.id)

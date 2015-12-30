@@ -235,6 +235,66 @@ describe UnlockCondition do
     end
   end
 
+  describe "#is_complete_for_group(group)", focus: true do
+
+    it "returns false if the students in the group have not earned the badge" do
+      course = create(:course)
+      student = create(:user)
+      student_2 = create(:user)
+      student_3 = create(:user)
+      group = create(:group, course: course)
+      group_assignment = create(:assignment, grade_scope: "Group", course: course)
+      group_membership = create(:group_membership, group: group, student: student)
+      group_membership_2 = create(:group_membership, group: group, student: student_2)
+      group_membership_3 = create(:group_membership, group: group, student: student_3)
+      assignment_group = create(:assignment_group, group: group, assignment: group_assignment)
+      new_badge = create(:badge, course: course)
+      unlock_condition = UnlockCondition.new unlockable_id: group_assignment.id, unlockable_type: "Assignment", condition_id: new_badge.id, condition_type: "Badge", condition_state: "Earned"
+      expect(unlock_condition.is_complete_for_group?(group)).to eq(false)
+    end
+
+    it "returns false if one of the students in the group has not earned the badge" do
+      course = create(:course)
+      student = create(:user)
+      student_2 = create(:user)
+      student_3 = create(:user)
+      group = create(:group, course: course)
+      group_assignment = create(:assignment, grade_scope: "Group", course: course)
+      group_membership = create(:group_membership, group: group, student: student)
+      group_membership_2 = create(:group_membership, group: group, student: student_2)
+      group_membership_3 = create(:group_membership, group: group, student: student_3)
+      assignment_group = create(:assignment_group, group: group, assignment: group_assignment)
+      new_badge = create(:badge, course: course)
+      unlock_condition = UnlockCondition.new unlockable_id: group_assignment.id, unlockable_type: "Assignment", condition_id: new_badge.id, condition_type: "Badge", condition_state: "Earned"
+      earned_badge = create(:earned_badge, badge: new_badge, student: student, student_visible: true)
+      expect(unlock_condition.is_complete_for_group?(group)).to eq(false)
+    end
+
+    it "returns true if all of the students in the group have earned the badge" do
+      course = create(:course)
+      student = create(:user)
+      student_2 = create(:user)
+      student_3 = create(:user)
+      student.courses << course
+      student_2.courses << course
+      student_3.courses << course
+      group = build(:group, course: course)
+      group_membership = create(:group_membership, group: group, student: student)
+      group_membership_2 = create(:group_membership, group: group, student: student_2)
+      group_membership_3 = create(:group_membership, group: group, student: student_3)
+      group_assignment = create(:assignment, grade_scope: "Group")
+      assignment_group = create(:assignment_group, group: group, assignment: group_assignment)
+      new_badge = create(:badge, course: course)
+      unlock_condition = UnlockCondition.create unlockable_id: group_assignment.id, unlockable_type: "Assignment", condition_id: new_badge.id, condition_type: "Badge", condition_state: "Earned"
+      earned_badge = create(:earned_badge, badge: new_badge, student: student, student_visible: true)
+      earned_badge_2 = create(:earned_badge, badge: new_badge, student: student_2, student_visible: true)
+      earned_badge_3 = create(:earned_badge, badge: new_badge, student: student_3, student_visible: true)
+      expect(group.group_memberships.count).to eq 3
+      #expect(unlock_condition.is_complete_for_group?(@group)).to eq(true)
+    end
+
+  end
+
   describe "#requirements_description_sentence" do
     it "returns a sentence summarizing a badge unlock condition" do
       expect(subject.requirements_description_sentence).to eq("Earn the #{badge.name} Badge")

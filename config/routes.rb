@@ -208,9 +208,6 @@ GradeCraft::Application.routes.draw do
 
   #9. Groups
   resources :groups do
-    collection do
-      get :review
-    end
     resources :proposals
   end
   resources :group_memberships
