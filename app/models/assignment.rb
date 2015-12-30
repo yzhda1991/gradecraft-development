@@ -1,4 +1,4 @@
-require_dependency "concerns/multiple_file_attributes"
+require_relative "concerns/multiple_file_attributes"
 
 class Assignment < ActiveRecord::Base
   include Copyable
