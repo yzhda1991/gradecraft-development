@@ -15,10 +15,10 @@ describe CoursesController do
     before { login_user(@professor) }
 
     describe "GET index" do
-      it "returns all courses" do
+      it "returns all courses the professor has an association with" do
         get :index
         expect(assigns(:title)).to eq("Course Index")
-        expect(assigns(:courses)).to eq(Course.all)
+        expect(assigns(:courses)).to eq([@course])
         expect(response).to render_template(:index)
       end
 
@@ -27,7 +27,7 @@ describe CoursesController do
         it "returns all courses in json format" do
           get :index, format: :json
           json = JSON.parse(response.body)
-          expect(json.length).to eq Course.count
+          expect(json.length).to eq 1
           expect(json[0].keys).to eq ["id", "name", "courseno",
                                       "year", "semester"]
         end

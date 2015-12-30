@@ -15,7 +15,7 @@ feature "deleting a course" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "Course Index"
+        click_link "My Courses"
       end
 
       expect(current_path).to eq courses_path
