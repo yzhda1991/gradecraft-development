@@ -92,7 +92,7 @@ class Submission < ActiveRecord::Base
   end
 
   def history
-    self.versions.map do |version|
+    self.versions.reverse.map do |version|
       changeset = version.changeset.dup
       changeset.merge!("object" => self.class.name)
       changeset.merge!("event" => version.event)
