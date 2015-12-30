@@ -18,7 +18,7 @@ class ActorHistoryToken
       :actor
     end
 
-    def tokenizable?(key, _)
+    def tokenizable?(key, _, _)
       key == "actor_id"
     end
   end

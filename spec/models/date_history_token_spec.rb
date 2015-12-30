@@ -5,7 +5,7 @@ require "./app/models/date_history_token"
 describe DateHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is an updated_at" do
-      expect(described_class.tokenizable?("updated_at", nil)).to eq true
+      expect(described_class.tokenizable?("updated_at", nil, nil)).to eq true
     end
   end
 

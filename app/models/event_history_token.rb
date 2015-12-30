@@ -14,7 +14,7 @@ class EventHistoryToken
       :event
     end
 
-    def tokenizable?(key, _)
+    def tokenizable?(key, _, _)
       key == "event"
     end
   end

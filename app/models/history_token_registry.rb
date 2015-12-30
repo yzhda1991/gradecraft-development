@@ -14,7 +14,7 @@ class HistoryTokenRegistry
 
     def register(type, selector=nil)
       if selector.nil? && type.respond_to?(:tokenizable?)
-        selector = ->(key, value) { type.tokenizable?(key, value) }
+        selector = ->(key, value, changeset) { type.tokenizable?(key, value, changeset) }
       end
       registered_tokens << RegisteredToken.new(type, selector) unless registered?(type)
     end
@@ -23,9 +23,9 @@ class HistoryTokenRegistry
       registered_tokens.delete_if { |registered_token| registered_token.type == type }
     end
 
-    def for(key, value)
+    def for(key, value, changeset)
       registered_tokens.map do |registered_token|
-        registered_token if registered_token.selector.call(key, value)
+        registered_token if registered_token.selector.call(key, value, changeset)
       end.delete_if(&:nil?)
     end
   end

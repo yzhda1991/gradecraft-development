@@ -16,7 +16,7 @@ class ChangeHistoryToken
       :change
     end
 
-    def tokenizable?(key, value)
+    def tokenizable?(key, value, _)
       !["created_at", "updated_at"].include?(key) && value.is_a?(Array)
     end
   end

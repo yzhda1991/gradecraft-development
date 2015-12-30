@@ -16,7 +16,8 @@ class HistoryTokenizer
 
   def tokenize
     changeset.each do |key, value|
-      tokens << HistoryTokenRegistry.for(key, value).map { |t| t.create(key, value, type) }
+      tokens << HistoryTokenRegistry.for(key, value, changeset)
+        .map { |t| t.create(key, value, type) }
     end
     tokens.flatten!
 

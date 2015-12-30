@@ -14,7 +14,7 @@ class TimeHistoryToken
       :time
     end
 
-    def tokenizable?(key, _)
+    def tokenizable?(key, _, _)
       key == "updated_at"
     end
   end

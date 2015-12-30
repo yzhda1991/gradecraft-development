@@ -5,7 +5,7 @@ require "./app/models/change_history_token"
 describe ChangeHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the value is an array" do
-      expect(described_class.tokenizable?("blah", [])).to eq true
+      expect(described_class.tokenizable?("blah", [], {})).to eq true
     end
   end
 
