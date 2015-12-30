@@ -1,5 +1,8 @@
 - if assignment.has_groups?
-  %i.fa.fa-group.fa-fw
+  %a
+    %i.fa.fa-group.fa-fw
+  .display_on_hover.hover-style
+    This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
 - if assignment.required?
   %a
     %i.fa.fa-exclamation-circle.fa-fw

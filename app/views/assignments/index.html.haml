@@ -59,6 +59,11 @@
                         %ul
                           - assignment.unlock_keys.each do |key|
                             %li= key.key_description_sentence
+                    - if assignment.has_groups?
+                      %a
+                        %i.fa.fa-group.fa-fw
+                      .display_on_hover.hover-style
+                        This #{term_for :assignment} is completed by #{term_for :students} in #{term_for :groups}
                   %td= link_to assignment.name, assignment
                   %td= assignment.try(:due_at) || "Ongoing"
                   %td{:style => "display: none"}
