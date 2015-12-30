@@ -21,11 +21,6 @@ describe ChangeHistoryToken do
 
   describe "#parse" do
     it "returns the attribute and the changes" do
-      class String
-        def classify
-          ActiveSupport::Inflector.classify(self)
-        end
-      end
       class Object
         extend ActiveModel::Translation
       end
