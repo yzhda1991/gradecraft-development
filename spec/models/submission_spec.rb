@@ -78,6 +78,17 @@ describe Submission do
     end
   end
 
+  describe "#has_history?", versioning: true do
+    it "returns false if there is no history" do
+      expect(subject).to_not have_history
+    end
+
+    it "returns true if there is history" do
+      subject.save
+      expect(subject).to have_history
+    end
+  end
+
   it "can't be saved without any information" do
     subject.link = nil
     subject.text_comment = nil

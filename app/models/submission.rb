@@ -91,6 +91,10 @@ class Submission < ActiveRecord::Base
     false
   end
 
+  def has_history?
+    !history.empty?
+  end
+
   def history
     self.versions.reverse.map do |version|
       changeset = version.changeset.dup
