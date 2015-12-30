@@ -7,6 +7,10 @@ describe ChangeHistoryToken do
     it "is tokenizable if the value is an array" do
       expect(described_class.tokenizable?("blah", [], {})).to eq true
     end
+
+    it "is tokenizable if there is not a created at change within the changeset" do
+      expect(described_class.tokenizable?("blah", [], { "created_at" => [nil, DateTime.new(2015, 4, 15, 1, 22)]})).to eq false
+    end
   end
 
   describe ".token" do
