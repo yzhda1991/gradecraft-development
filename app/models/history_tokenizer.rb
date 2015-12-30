@@ -1,5 +1,6 @@
 require_relative "actor_history_token"
 require_relative "change_history_token"
+require_relative "created_history_token"
 require_relative "date_history_token"
 require_relative "event_history_token"
 require_relative "time_history_token"
@@ -31,6 +32,7 @@ class HistoryTokenizer
     HistoryTokenRegistry.register DateHistoryToken
     HistoryTokenRegistry.register TimeHistoryToken
     HistoryTokenRegistry.register EventHistoryToken
+    HistoryTokenRegistry.register CreatedHistoryToken
     HistoryTokenRegistry.register ChangeHistoryToken
   end
 end

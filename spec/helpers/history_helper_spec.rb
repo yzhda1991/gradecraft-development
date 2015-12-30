@@ -46,7 +46,7 @@ describe HistoryHelper do
       end
     end
 
-    xit "describes the creation of a model" do
+    it "describes the creation of a model" do
       history = helper.history created_changeset
       expect(history).to have_tag("div") do
         with_text "Robert Plant created the user on April 15th, 2015 at 1:21 AM"
