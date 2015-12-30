@@ -1,3 +1,4 @@
+require_relative "concerns/historical"
 require_relative "concerns/multiple_file_attributes"
 
 class Submission < ActiveRecord::Base
@@ -7,6 +8,7 @@ class Submission < ActiveRecord::Base
     :course_id, :submission_file_ids, :updated_at
 
   include Canable::Ables
+  include Historical
   include MultipleFileAttibutes
 
   belongs_to :task, touch: true
@@ -26,8 +28,6 @@ class Submission < ActiveRecord::Base
   accepts_nested_attributes_for :grade
   has_many :submission_files, :dependent => :destroy, autosave: true
   accepts_nested_attributes_for :submission_files
-
-  has_paper_trail
 
   scope :ungraded, -> { where('NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))', "Graded", "Released") }
   scope :graded, -> { where(:grade) }
@@ -89,19 +89,6 @@ class Submission < ActiveRecord::Base
     end
     return true if count > 1
     false
-  end
-
-  def has_history?
-    !history.empty?
-  end
-
-  def history
-    self.versions.reverse.map do |version|
-      changeset = version.changeset.dup
-      changeset.merge!("object" => self.class.name)
-      changeset.merge!("event" => version.event)
-      changeset.merge!("actor_id" => version.whodunnit)
-    end
   end
 
   def check_unlockables
