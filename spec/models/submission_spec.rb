@@ -1,4 +1,5 @@
 require "active_record_spec_helper"
+require "toolkits/historical_toolkit"
 
 describe Submission do
   subject { build(:submission) }
@@ -13,17 +14,10 @@ describe Submission do
     end
   end
 
+  it_behaves_like "a historical model", :submission, link: "http://example.org"
+
   describe "versioning", versioning: true do
     before { subject.save }
-
-    it "is enabled for submissions" do
-      expect(PaperTrail).to be_enabled
-      expect(subject).to be_versioned
-    end
-
-    it "creates a version when the submission is created" do
-      expect(subject.versions.count).to eq 1
-    end
 
     it "creates a version when the link is updated" do
       previous_link = subject.link
@@ -42,50 +36,6 @@ describe Submission do
       previous_comment = subject.text_comment
       subject.update_attributes text_comment: "This was updated"
       expect(subject).to have_a_version_with text_comment: previous_comment
-    end
-  end
-
-  describe "#history", versioning: true do
-    let(:user) { create :user }
-
-    before do
-      PaperTrail.whodunnit = user.id
-      subject.save
-    end
-
-    it "returns the changesets for the created submission" do
-      expect(subject.history.length).to eq 1
-      expect(subject.history.first.keys).to include("created_at")
-      expect(subject.history.first).to include({ "object" => "Submission" })
-      expect(subject.history.first).to include({ "event" => "create" })
-      expect(subject.history.first).to include({ "actor_id" => user.id.to_s })
-    end
-
-    it "returns the changesets for an updated submission" do
-      subject.update_attributes link: "http://example.org"
-      expect(subject.history.length).to eq 2
-      expect(subject.history.first).to include({ "link" => [nil, "http://example.org"] })
-      expect(subject.history.first).to include({ "object" => "Submission" })
-      expect(subject.history.first).to include({ "event" => "update" })
-      expect(subject.history.first).to include({ "actor_id" => user.id.to_s })
-    end
-
-    it "orders the changesets so the newest changes are at the top" do
-      subject.update_attributes link: "http://example.org"
-      expect(subject.history.length).to eq 2
-      expect(subject.history.first["event"]).to eq "update"
-      expect(subject.history.last["event"]).to eq "create"
-    end
-  end
-
-  describe "#has_history?", versioning: true do
-    it "returns false if there is no history" do
-      expect(subject).to_not have_history
-    end
-
-    it "returns true if there is history" do
-      subject.save
-      expect(subject).to have_history
     end
   end
 
