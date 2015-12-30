@@ -4,12 +4,11 @@
   %input#student-search.students-search-query.search-input{ data: { autocompleteUrl: autocomplete_student_name_students_path }, type: "text", placeholder: "Search #{term_for :students}", label: false }
   %a.alert.button{ :href => "#" } Go
 
-- if current_user_is_admin?
-  %li.has-form{:role => "search"}
-    %label.sr-only{:for => "search-input"}
-      Search Courses
-    %input.courses-search-query.search-input{ data: { autocompleteUrl: courses_path }, type: "text", placeholder: "Search Courses", label: false }
-    %a.alert.button{ :href => "#" } Go
+%li.has-form{:role => "search"}
+  %label.sr-only{:for => "search-input"}
+    Search Courses
+  %input.courses-search-query.search-input{ data: { autocompleteUrl: courses_path }, type: "text", placeholder: "Search Courses", label: false }
+  %a.alert.button{ :href => "#" } Go
 
 %h5 Overview
 - if current_course.use_timeline?
@@ -73,7 +72,10 @@
 %li= link_to_unless_current raw("<i class='fa fa-flag fa-fw'></i> Flagged #{term_for :students}"), flagged_students_path
 - if current_course.has_teams?
   %li= link_to_unless_current raw("<i class='fa fa-users fa-fw'></i> #{term_for :teams}"), teams_path
-%li= link_to_unless_current raw("<i class='fa fa-user-plus fa-fw'></i> #{term_for :groups}"), groups_path
+%li
+  = link_to_unless_current raw("<i class='fa fa-user-plus fa-fw'></i> #{term_for :groups}"), groups_path
+  - if current_course.groups_to_review_count > 0
+    %span.alert= current_course.groups_to_review_count
 %li= link_to_unless_current raw('<i class="fa fa-user-secret fa-fw"></i> Staff'), staff_index_path
 
 %hr
@@ -93,11 +95,12 @@
   - LTIProvider.all.each do |tool|
     %li= link_to_unless_current raw("<i class='fa fa-external-link-square fa-fw'></i> #{tool.name}"), launch_lti_provider_path(tool)
 
-- if current_user_is_admin?
   %hr
 
   %h5{ class: "make-lizards" } Admin
-  %li= link_to_unless_current raw('<i class="fa fa-user-times fa-fw"></i> All Users'), users_path
-  %li= link_to_unless_current raw('<i class="fa fa-university fa-fw"></i> Course Index'), courses_path
-  %li= link_to_unless_current raw('<i class="fa fa-check-square-o fa-fw"></i> Predictor Settings'), predictor_settings_course_path(current_course)
-  %li= link_to_unless_current raw('<i class="fa fa-photo fa-fw"></i> Timeline Settings'), timeline_settings_course_path(current_course)
+  %li= link_to_unless_current raw('<i class="fa fa-university fa-fw"></i> My Courses'), courses_path
+
+  - if current_user_is_admin?
+    %li= link_to_unless_current raw('<i class="fa fa-user-times fa-fw"></i> All Users'), users_path
+    %li= link_to_unless_current raw('<i class="fa fa-check-square-o fa-fw"></i> Predictor Settings'), predictor_settings_course_path(current_course)
+    %li= link_to_unless_current raw('<i class="fa fa-photo fa-fw"></i> Timeline Settings'), timeline_settings_course_path(current_course)
