@@ -1,0 +1,67 @@
+require "spec_helper"
+require "./app/models/history_tokenizer"
+require "./app/models/history_token_registry"
+require "./app/models/registered_token"
+
+describe HistoryTokenizer do
+  it "initializes with a changeset" do
+    changeset = { "name" =>  ["Bill", "Jimmy"] }
+
+    expect(described_class.new(changeset).changeset).to eq changeset
+  end
+
+  it "does not have any tokens until it is analyzed" do
+    changeset = { "name" =>  ["Bill", "Jimmy"] }
+
+    expect(described_class.new(changeset).tokens).to be_empty
+  end
+
+  describe "#tokenize" do
+    it "adds an actor token when an actor id is included in the changeset" do
+      changeset = { "actor_id" => 123 }
+
+      subject = described_class.new(changeset).tokenize
+
+      expect(subject.tokens.length).to eq 1
+      expect(subject.tokens.first).to be_kind_of ActorHistoryToken
+    end
+
+    it "adds an event token when an event is included in the changeset" do
+      changeset = { "event" => "update" }
+
+      subject = described_class.new(changeset).tokenize
+
+      expect(subject.tokens.length).to eq 1
+      expect(subject.tokens.first).to be_kind_of EventHistoryToken
+    end
+
+    it "adds a date token when an updated at is included in the changeset" do
+      changeset = { "updated_at" => [DateTime.new(2015, 4, 12, 1, 12),
+                                     DateTime.new(2015, 4, 12, 1, 23)] }
+
+      subject = described_class.new(changeset).tokenize
+
+      expect(subject.tokens.length).to eq 2
+      expect(subject.tokens.first).to be_kind_of DateHistoryToken
+    end
+
+    it "adds a time token when an updated at is included in the changeset" do
+      changeset = { "updated_at" => [DateTime.new(2015, 4, 12, 1, 12),
+                                     DateTime.new(2015, 4, 12, 1, 23)] }
+
+      subject = described_class.new(changeset).tokenize
+
+      expect(subject.tokens.length).to eq 2
+      expect(subject.tokens.last).to be_kind_of TimeHistoryToken
+    end
+
+    it "adds a subject when a change is included in the changeset" do
+      changeset = { "name" => ["Bill", "Jimmy"] }
+
+      subject = described_class.new(changeset).tokenize
+
+      expect(subject.tokens.length).to eq 1
+      expect(subject.tokens.first).to be_kind_of ChangeHistoryToken
+    end
+  end
+end

@@ -10,36 +10,11 @@ module HistoryHelper
   private
 
   def assemble_sentence(structure)
-    "#{structure[:actor]} changed #{structure[:change]} on #{structure[:date]} at #{structure[:time]}"
-  end
-
-  def assemble_structure(structure)
-    assemble_sentence structure.delete_if(&:nil?).reduce Hash.new, :merge
+    "#{structure[:actor]} #{structure[:event]} #{structure[:change]} on #{structure[:date]} at #{structure[:time]}"
   end
 
   def build_sentence(changeset)
-    assemble_structure changeset.collect { |key, value| build_sentence_structure(key, value) }
-  end
-
-  def build_sentence_structure(key, value)
-    return build_actor(value) if key == "actor_id"
-    return build_updated_at(value) if key == "updated_at"
-    build_changes(key, value) if value.is_a? Array
-  end
-
-  def build_actor(actor_id)
-    name = "You" if current_user && current_user.id == actor_id
-    name ||= User.where(id: actor_id).first.try(:name)
-    { actor: name }
-  end
-
-  def build_changes(attribute, changes)
-    { change: "the #{attribute} from \"#{changes.first}\" to \"#{changes.last}\"" }
-  end
-
-  def build_updated_at(value)
-    datetime = value.last
-    { date: datetime.strftime("%B #{datetime.day.ordinalize}, %Y"),
-      time: datetime.strftime("%-I:%M %p") }
+    tokenizer = HistoryTokenizer.new(changeset)
+    assemble_sentence HistoryTokenParser.new(tokenizer).parse(current_user: current_user)
   end
 end
