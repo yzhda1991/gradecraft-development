@@ -45,6 +45,32 @@ describe Submission do
     end
   end
 
+  describe "#history", versioning: true, focus: true do
+    let(:user) { create :user }
+
+    before do
+      PaperTrail.whodunnit = user.id
+      subject.save
+    end
+
+    it "returns the changesets for the created submission" do
+      expect(subject.history.length).to eq 1
+      expect(subject.history.first.keys).to include("created_at")
+      expect(subject.history.first).to include({ "object" => "Submission" })
+      expect(subject.history.first).to include({ "event" => "create" })
+      expect(subject.history.first).to include({ "actor_id" => user.id.to_s })
+    end
+
+    it "returns the changesets for an updated submission" do
+      subject.update_attributes link: "http://example.org"
+      expect(subject.history.length).to eq 2
+      expect(subject.history.last).to include({ "link" => [nil, "http://example.org"] })
+      expect(subject.history.last).to include({ "object" => "Submission" })
+      expect(subject.history.last).to include({ "event" => "update" })
+      expect(subject.history.last).to include({ "actor_id" => user.id.to_s })
+    end
+  end
+
   it "can't be saved without any information" do
     subject.link = nil
     subject.text_comment = nil

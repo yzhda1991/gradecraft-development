@@ -91,6 +91,15 @@ class Submission < ActiveRecord::Base
     false
   end
 
+  def history
+    self.versions.map do |version|
+      changeset = version.changeset.dup
+      changeset.merge!("object" => self.class.name)
+      changeset.merge!("event" => version.event)
+      changeset.merge!("actor_id" => version.whodunnit)
+    end
+  end
+
   def check_unlockables
     if self.assignment.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
