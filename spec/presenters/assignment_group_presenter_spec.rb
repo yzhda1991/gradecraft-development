@@ -38,6 +38,14 @@ describe AssignmentGroupPresenter do
     end
   end
 
+  describe "#students" do
+    it "returns the students for the group" do
+      student = double(:user, grade_for_assignment: double(:grade, is_graded?: true))
+      allow(group).to receive(:students).and_return [student]
+      expect(subject.students).to eq ([student])
+    end
+  end
+
   describe "#title" do
     it "has the group name" do
       expect(subject.title).to eq "My Group Grades"

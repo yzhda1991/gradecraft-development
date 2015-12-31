@@ -51,20 +51,9 @@ class Group < ActiveRecord::Base
   end
 
   #Group submissions
-  def submissions_by_assignment_id
-    @submissions_by_assignment ||= submissions.group_by(&:assignment_id)
-  end
-
   def submission_for_assignment(assignment)
     submissions_by_assignment_id[assignment.id].try(:first)
   end
-
-  #Badges awarded to a whole group
-  #TODO: We've never built a way to award these
-  def earned_badges_by_badge_id
-    @earned_badges_by_badge ||= earned_badges.group_by(&:badge_id)
-  end
-
 
   private
 
@@ -72,9 +61,7 @@ class Group < ActiveRecord::Base
     self.text_proposal = Sanitize.clean(text_proposal, Sanitize::Config::BASIC)
   end
 
-
   #Checking to make sure any constraints the instructor has set up around min/max group members are honored
-  #TODO verify that the course accepts groups? Otherwise comparison with nil fails
   def min_group_number_met
     if self.students.to_a.count < course.min_group_size
       errors.add :base, "You don't have enough group members."
@@ -87,6 +74,7 @@ class Group < ActiveRecord::Base
     end
   end
 
+  #Checking to make sure the group is actually working on an assignment
   def assignment_group_present
     if self.assignment_groups.to_a.count == 0
       errors.add :base, "You need to check off which #{(course.assignment_term).downcase} your #{(course.group_term).downcase} will work on."
@@ -102,6 +90,10 @@ class Group < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def submissions_by_assignment_id
+    @submissions_by_assignment ||= submissions.group_by(&:assignment_id)
   end
 
   def cache_associations
