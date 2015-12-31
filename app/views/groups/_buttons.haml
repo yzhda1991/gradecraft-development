@@ -1,0 +1,8 @@
+.context_menu
+  %ul
+    %li= link_to_unless_current raw("<i class='fa fa-list fa-fw'></i> See all #{term_for :groups}"), groups_path
+    %li= link_to_unless_current raw("<i class='fa fa-plus fa-fw'></i>New #{term_for :group}"), new_group_path
+    - if @group.present? && @group.persisted?
+      %li= link_to_unless_current raw("<i class='fa fa-eye fa-fw'></i>See #{term_for :group}"), group_path(@group)
+
+      %li= link_to_unless_current raw("<i class='fa fa-edit fa-fw'></i>Review #{term_for :group}"), edit_group_path(@group)

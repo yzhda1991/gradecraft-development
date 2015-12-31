@@ -5,34 +5,12 @@
 
 %h3.pagetitle= @title
 
-- if current_user_is_staff?
-  .context_menu
-    %ul
-      %li
-        %a{:href => new_group_path }
-          %i.fa.fa-plus
-          New #{(term_for :group).titleize}
-      %li
-        %a{:href => edit_group_path(:id => @group) }
-          %i.fa.fa-edit
-          Review #{term_for :group}
+= render "buttons"
 
 .pageContent
   = render 'layouts/alerts'
 
-  - if @group.approved?
-    .alert-box.success
-      %i.fa.fa-check.fa-fw
-      %span.bold Status: Approved
-  - elsif @group.rejected?
-    .alert-box.alert
-      %i.fa.fa-times-circle.fa-fw
-      %span.bold Status: Rejected
-  - else
-    .alert-box.notice
-      %i.fa.fa-flag.fa-fw
-      %span.bold Status: Pending
-      This #{term_for :group} must be approved by your instructor before you can proceed
+  = render "status_display", group: @group
 
   %h4
     Members:
@@ -42,7 +20,6 @@
         %li= link_to gm.student.name, student_path(gm.student)
       - else
         %li= gm.student.name
-
 
   %h4 #{term_for :assignments}:
   %ul

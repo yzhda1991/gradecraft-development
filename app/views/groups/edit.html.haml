@@ -2,12 +2,8 @@
 
 %h3.pagetitle= @title
 
-.context_menu
-  %ul
-    %li
-      %a{:href => group_path(@group) }
-        %i.fa.fa-eye
-        See #{term_for :group}
+- if current_user_is_staff?
+  = render "buttons"
 
 .pageContent
   = render 'form'
