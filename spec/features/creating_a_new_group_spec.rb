@@ -37,5 +37,27 @@ feature "creating a new group" do
 
       expect(page).to have_notification_message('alert', "You don't have enough group members.")
     end
+
+    scenario "unsuccessfully without an assignment" do
+      within(".sidebar-container") do
+        click_link "groups"
+      end
+
+      expect(current_path).to eq groups_path
+
+      within(".context_menu") do
+        click_link "New group"
+      end
+
+      expect(current_path).to eq new_group_path
+
+      within(".pageContent") do
+        fill_in "Name", with: "New Group Name"
+        find(:css, "#group_assignment_ids_#{assignment.id}").set(false)
+        click_button "Create group"
+      end
+
+      expect(page).to have_notification_message('alert', "You need to check off which assignment your group will work on.")
+    end
   end
 end

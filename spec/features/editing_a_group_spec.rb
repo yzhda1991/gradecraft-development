@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-feature "editing a group" do
+feature "editing a group", focus: true do
   context "as a professor" do
     let(:course) { create :course, min_group_size: 2 }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
@@ -41,7 +41,7 @@ feature "editing a group" do
         click_button "Update group"
       end
 
-      expect(page).to have_notification_message('notice', "Less Excited Group Name group successfully updated")
+      expect(page).to have_notification_message('success', "Less Excited Group Name group successfully updated")
     end
   end
 end

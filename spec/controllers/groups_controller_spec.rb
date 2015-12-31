@@ -150,8 +150,7 @@ describe GroupsController do
 
     describe "protected routes" do
       [
-        :index,
-        :review
+        :index
       ].each do |route|
           it "#{route} redirects to root" do
             assigns(:id => @student.id)

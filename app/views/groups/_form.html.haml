@@ -14,7 +14,7 @@
       = f.input :name, :label => "#{term_for :group} Name"
 
     .form-item
-      = f.association :assignments, :collection => @assignments, :as => :check_boxes, :label => "#{(term_for :assignments).titleize}"
+      = f.association :assignments, :collection => @group_assignments, :as => :check_boxes, :label => "#{(term_for :assignments).titleize}"
       .form_label{:id => "txtGroupAssignment"} What #{term_for :assignments} will this #{term_for :group} work on together?
 
     - if current_user_is_student? && !@group.persisted?
