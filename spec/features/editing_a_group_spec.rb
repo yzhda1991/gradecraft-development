@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-feature "editing a group", focus: true do
+feature "editing a group" do
   context "as a professor" do
     let(:course) { create :course, min_group_size: 2 }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }

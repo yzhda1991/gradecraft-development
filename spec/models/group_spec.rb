@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe Group, focus: true do
+describe Group do
   let!(:course) { create :course, max_group_size: 4 }
   subject { create(:group, course: course ) }
 

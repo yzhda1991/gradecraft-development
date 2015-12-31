@@ -24,4 +24,4 @@
                 %li= link_to raw("<i class='fa fa-eye fa-fw'></i> Review #{term_for :group}"), edit_group_path(:id => group), :class => 'button'
               - else
                 %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit #{term_for :group}"), edit_group_path(:id => group), :class => 'button'
-              %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), group_path(group), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete
+              %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), group_path(group), :class => 'button', :data => { confirm: "This will delete the #{group.name} #{term_for :group} - are you sure?" }, :method => :delete

@@ -235,7 +235,7 @@ describe UnlockCondition do
     end
   end
 
-  describe "#is_complete_for_group(group)", focus: true do
+  describe "#is_complete_for_group(group)" do
 
     it "returns false if the students in the group have not earned the badge" do
       course = create(:course)
