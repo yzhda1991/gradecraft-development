@@ -10,17 +10,18 @@ class AssignmentExportsController < ApplicationController
     })
 
     @job_enqueued = @assignment_export_job.enqueue
-    write_flash_response
+    register_flash_response
 
+    redirect_to exports_path
   end
 
   protected
 
-  def write_flash_response
+  def register_flash_response
     if @job_enqueued
-      flash[:notice] = "Your archive is being prepared. You'll receive an email when it's complete."
+      flash[:success] = "Your assignment export is being prepared. You'll receive an email when it's complete."
     else
-      flash[:warning] = "Your archive failed to build. An administrator has been contacted about the issue."
+      flash[:alert] = "Your assignment export failed to build. An administrator has been contacted about the issue."
     end
   end
 end
