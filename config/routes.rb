@@ -1,5 +1,7 @@
 GradeCraft::Application.routes.draw do
 
+  get 'exports_controller/index'
+
   mount RailsEmailPreview::Engine, at: 'emails' if Rails.env.development?
 
   require 'admin_constraint'
@@ -359,6 +361,12 @@ GradeCraft::Application.routes.draw do
     scope "/assignments" do
       get '/:assignment_id/submissions' => 'assignment_exports#submissions', as: :assignment_exports_submissions
       get '/:assignment_id/teams/:team_id/submissions' => 'assignment_exports#team_submissions', as: :assignment_exports_team_submissions
+    end
+  end
+
+  resources :assignment_exports do
+    member do
+      put :rebuild
     end
   end
 end
