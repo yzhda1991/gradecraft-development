@@ -222,6 +222,7 @@ class GradesController < ApplicationController
   private
 
   def sanitize_grade_params
+    return nil if params[:grade][:raw_score] == ""
     params[:grade][:raw_score] = params[:grade][:raw_score].gsub(/\D/,"").to_i rescue nil
   end
 
