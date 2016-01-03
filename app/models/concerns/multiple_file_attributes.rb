@@ -1,4 +1,4 @@
-module MultipleFileAttibutes
+module MultipleFileAttributes
   extend ActiveSupport::Concern
 
   class_methods do
