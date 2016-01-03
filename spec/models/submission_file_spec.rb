@@ -40,7 +40,7 @@ describe SubmissionFile do
   end
 
   describe "#student" do
-    it "returns the course associated with the submission" do
+    it "returns the student associated with the submission" do
       expect(subject.student).to eq(student)
     end
   end
