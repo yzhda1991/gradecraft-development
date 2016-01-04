@@ -1,6 +1,6 @@
-require 'rails_helper'
+require 'rails_spec_helper'
 
-RSpec.describe ExportsControllerController, type: :controller do
+RSpec.describe ExportsController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do
