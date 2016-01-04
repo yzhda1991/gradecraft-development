@@ -56,8 +56,9 @@ Vagrant.configure(2) do |config|
         mkdir -p /data/db
         chown -R vagrant:vagrant /data/db
 
-        service mongod stop # foreman will start mongo as needed
-
+        # foreman will start mongo as needed
+        service mongod stop || echo "mongod already stopped"
+        # prevent mongod from starting on boot
         sed -i 's/start on runlevel \[2345\]/#start on runlevel \[2345\]/g' /etc/init/mongod.conf
 
         if [ ! -f config/mongoid.yml ]; then
@@ -115,7 +116,7 @@ EOM
         echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
 
         # create a postgres user
-        su postgres -c "createuser vagrant --superuser"
+        su postgres -c "createuser vagrant --superuser" || echo "postgres user 'vagrant' already exists"
 
         su vagrant -c "bundle install"
 
