@@ -140,6 +140,17 @@ describe GradesController do
         expect(@grade.score).to eq(12345)
       end
 
+      it "attaches the student submission" do
+        submission = create :submission, assignment: @assignment, student: @student
+        grade_params = { raw_score: 12345,
+                         assignment_id: @assignment.id,
+                         submission_id: submission.id }
+        post :update, { assignment_id: @assignment.id,
+                        student_id: @student.id, grade: grade_params }
+        grade = Grade.last
+        expect(grade.submission).to eq submission
+      end
+
       it "handles a grade file upload" do
         grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')]}}}
         post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
