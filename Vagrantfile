@@ -104,6 +104,11 @@ export REDIS_PORT=6379
 export MONGO_PATH=/data/db
 EOM
 
+        # kernel setting to make redis happy in this environment
+        sysctl vm.overcommit_memory=1
+        # and make sure that setting is in place across reboots
+        echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
+
         # create a postgres user
         su postgres -c "createuser vagrant --superuser"
 
