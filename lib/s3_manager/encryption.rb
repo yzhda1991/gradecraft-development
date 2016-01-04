@@ -10,17 +10,27 @@ module S3Manager
       )
     end
 
-    def put_encrypted_object(object_key, body)
-      encrypted_client.put_object({
-        bucket: bucket_name,
-        server_side_encryption: "AES256",
-        key: object_key,
-        body: body
-      })
+    def put_encrypted_object(object_key, file_path)
+      File.open(file_path, 'rb') do |streamed_file|
+        encrypted_client.put_object({
+          bucket: bucket_name,
+          server_side_encryption: "AES256",
+          key: object_key,
+          body: streamed_file
+        })
+      end
     end
 
     def get_encrypted_object(object_key)
       encrypted_client.get_object({
+        bucket: bucket_name,
+        key: object_key
+      })
+    end
+
+    def write_encrypted_object_to_file(object_key, local_file_path)
+      encrypted_client.get_object({
+        response_target: local_file_path,
         bucket: bucket_name,
         key: object_key
       })

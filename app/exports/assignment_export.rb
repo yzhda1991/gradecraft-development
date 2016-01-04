@@ -34,6 +34,16 @@ class AssignmentExport < ActiveRecord::Base
     s3_manager.put_encrypted_object(s3_object_key, file_path)
   end
 
+  # @mz todo: write specs
+  def fetch_object_from_s3
+    s3_manager.get_encrypted_object(s3_object_key)
+  end
+
+  # @mz todo: write specs
+  def write_s3_object_to_file(target_file_path)
+    s3_manager.write_encrypted_object_to_file(s3_object_key, target_file_path)
+  end
+
   def update_export_completed_time
     update_attributes last_export_completed_at: export_time
   end
