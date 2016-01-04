@@ -259,6 +259,20 @@ describe Submission do
     end
   end
 
+  describe "#will_be_resubmission?", versioning: true do
+    before { subject.save }
+
+    it "returns false if there is no grade" do
+      expect(subject).to_not be_will_be_resubmission
+    end
+
+    it "returns true if there is a grade" do
+      create :grade, status: "Graded", submission: subject, assignment: subject.assignment
+
+      expect(subject).to be_will_be_resubmission
+    end
+  end
+
   describe "#resubmitted?", versioning: true do
     it "returns false if there are no resubmissions" do
       expect(subject).to_not be_resubmitted

@@ -61,6 +61,10 @@ class Submission < ActiveRecord::Base
     ! grade || grade.status == nil
   end
 
+  def will_be_resubmission?
+    Resubmission.future_resubmission?(self)
+  end
+
   def resubmitted?
     !resubmissions.empty?
   end
