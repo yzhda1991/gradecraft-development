@@ -10,7 +10,7 @@ class Resubmission
   def self.find_for_submission(submission)
     resubmissions = []
     grade = submission.grade
-    if grade.present?
+    if grade.present? && grade.is_student_visible?
       grade.versions.updates.each do |grade_revision|
         if grade_revision.changeset.has_key?("raw_score")
           submission_revision = submission.versions.updates

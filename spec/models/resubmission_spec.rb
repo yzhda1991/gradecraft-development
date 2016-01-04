@@ -16,7 +16,10 @@ describe Resubmission do
   end
 
   describe ".find_for_submission", versioning: true do
-    let(:grade) { create :grade, submission: submission, assignment: submission.assignment }
+    let(:grade) do
+      create :grade, status: "Released", submission: submission,
+        assignment: submission.assignment
+    end
 
     describe "it pairs up the grade revision with the submission revision" do
       before { submission.update_attributes link: "http://example.org" }
@@ -82,7 +85,14 @@ describe Resubmission do
         end
       end
 
-      xit "with a grade that is not visible to the student"
+      context "with a grade that is not visible to the student" do
+        before { grade.update_attributes status: nil, raw_score: 1234 }
+
+        it "returns no resubmissions" do
+          expect(described_class.find_for_submission(submission)).to be_empty
+        end
+      end
+
       xit "with an assignment that no longer accepts submissions"
     end
   end
