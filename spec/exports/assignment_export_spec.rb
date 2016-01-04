@@ -38,7 +38,7 @@ RSpec.describe AssignmentExport do
     end
 
     it "uses the correct object key" do
-      expect(subject).to eq("/exports/courses/40/assignments/50/stuff.zip")
+      expect(subject).to eq("exports/courses/40/assignments/50/stuff.zip")
     end
   end
 

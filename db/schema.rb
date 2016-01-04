@@ -44,17 +44,27 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.integer  "assignment_id"
     t.integer  "course_id"
     t.integer  "professor_id"
-    t.integer  "student_ids",              default: [], null: false, array: true
+    t.integer  "student_ids",                              default: [], null: false, array: true
     t.integer  "team_id"
     t.text     "export_filename"
     t.text     "s3_object_key"
     t.text     "s3_bucket_name"
-    t.text     "performer_error_log",      default: [], null: false, array: true
-    t.hstore   "submissions_snapshot",     default: {}, null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.text     "performer_error_log",                      default: [], null: false, array: true
+    t.hstore   "submissions_snapshot",                     default: {}, null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
     t.datetime "last_export_started_at"
     t.datetime "last_export_completed_at"
+    t.boolean  "generate_export_csv"
+    t.boolean  "export_csv_successful"
+    t.boolean  "create_student_directories"
+    t.boolean  "student_directories_created_successfully"
+    t.boolean  "create_submission_text_files"
+    t.boolean  "create_submission_binary_files"
+    t.boolean  "generate_error_log"
+    t.boolean  "archive_exported_files"
+    t.boolean  "upload_archive_to_s3"
+    t.boolean  "check_s3_upload_success"
   end
 
   create_table "assignment_files", force: :cascade do |t|
@@ -451,9 +461,9 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.integer  "predicted_score",                  default: 0,     null: false
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
-    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
+    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
     t.datetime "graded_at"

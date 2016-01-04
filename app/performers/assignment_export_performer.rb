@@ -17,47 +17,57 @@ class AssignmentExportPerformer < ResqueJob::Performer
       # generate the csv overview for the assignment or team
       require_success(generate_csv_messages, max_result_size: 250) do
         generate_export_csv
+        @assignment_export.update_attributes generate_export_csv: true
       end
 
       # check whether the csv export was successful
       require_success(csv_export_messages) do
+        @assignment_export.update_attributes export_csv_successful: true
         export_csv_successful?
       end
 
       # generate student directories
       require_success(create_student_directory_messages) do
+        @assignment_export.update_attributes create_student_directories: true
         create_student_directories
       end
 
       # check whether the student directories were all created successfully
       require_success(check_student_directory_messages) do
+        @assignment_export.update_attributes student_directories_created_successfully: true
         student_directories_created_successfully?
       end
 
       # create text files in each student directory if there is submission data that requires it
       require_success(create_submission_text_file_messages) do
+        @assignment_export.update_attributes create_submission_text_files: true
         create_submission_text_files
       end
 
       # create binary files in each student directory
       require_success(create_submission_binary_file_messages) do
+        @assignment_export.update_attributes create_submission_binary_files: true
         create_submission_binary_files
       end
 
       # write error log for errors that may have occurred during file generation
       require_success(generate_error_log_messages) do
+        @assignment_export.update_attributes generate_error_log: true
         generate_error_log
       end
 
       require_success(archive_exported_files_messages) do
+        @assignment_export.update_attributes archive_exported_files: true
         archive_exported_files
       end
 
       require_success(upload_archive_to_s3_messages) do
+        @assignment_export.update_attributes upload_archive_to_s3: true
         upload_archive_to_s3
       end
 
       require_success(check_s3_upload_success_messages) do
+        @assignment_export.update_attributes check_s3_upload_success: true
         check_s3_upload_success
       end
 

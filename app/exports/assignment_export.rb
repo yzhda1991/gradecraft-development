@@ -7,12 +7,23 @@ class AssignmentExport < ActiveRecord::Base
 
   attr_accessible :course_id, :professor_id, :team_id, :assignment_id, :submissions_snapshot,
     :s3_object_key, :export_filename, :s3_bucket, :last_export_started_at, :last_export_completed_at,
-    :student_ids, :performer_error_log
+    :student_ids, :performer_error_log,
+    :generate_export_csv,
+    :export_csv_successful,
+    :create_student_directories,
+    :student_directories_created_successfully,
+    :create_submission_text_files,
+    :create_submission_binary_files,
+    :generate_error_log,
+    :archive_exported_files,
+    :upload_archive_to_s3,
+    :check_s3_upload_success
+
 
   before_create :set_s3_attributes
 
   def s3_object_key
-    "/exports/courses/#{course_id}/assignments/#{assignment_id}/#{export_filename}"
+    "exports/courses/#{course_id}/assignments/#{assignment_id}/#{export_filename}"
   end
 
   def s3_manager
