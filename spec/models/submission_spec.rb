@@ -240,41 +240,60 @@ describe Submission do
     end
   end
 
+  describe "#graded_at" do
+    it "returns when the grade was updated if it was graded" do
+      subject.save
+      grade = create(:grade, submission: subject, status: "Graded")
+      expect(subject.graded_at).to eq grade.updated_at
+    end
+
+    it "returns nil if there is no grade" do
+      subject.save
+      expect(subject.graded_at).to be_nil
+    end
+
+    it "returns nil if the grade is not released" do
+      subject.save
+      grade = create(:grade, submission: subject)
+      expect(subject.graded_at).to be_nil
+    end
+  end
+
   describe "#graded?" do
     it "returns false for a submission that has no grade" do
-      submission = create(:submission)
-      expect(submission).to_not be_graded
+      subject.save
+      expect(subject).to_not be_graded
     end
 
     it "returns false for a submission that has grade that is not student visible" do
-      submission = create(:submission)
-      grade = create(:grade, submission: submission)
-      expect(submission).to_not be_graded
+      subject.save
+      grade = create(:grade, submission: subject)
+      expect(subject).to_not be_graded
     end
 
     it "returns true for a submission that has grade that is student visible" do
-      submission = create(:submission)
-      grade = create(:grade, submission: submission, status: "Graded")
-      expect(submission).to be_graded
+      subject.save
+      grade = create(:grade, submission: subject, status: "Graded")
+      expect(subject).to be_graded
     end
   end
 
   describe "#ungraded?" do
     it "returns true for a submission that has no grade" do
-      submission = create(:submission)
-      expect(submission).to be_ungraded
+      subject.save
+      expect(subject).to be_ungraded
     end
 
     it "returns true for a submission that has grade that is not student visible" do
-      submission = create(:submission)
-      grade = create(:grade, submission: submission)
-      expect(submission).to be_ungraded
+      subject.save
+      grade = create(:grade, submission: subject)
+      expect(subject).to be_ungraded
     end
 
     it "returns false for a submission that has grade that is student visible" do
-      submission = create(:submission)
-      grade = create(:grade, submission: submission, status: "Graded")
-      expect(submission).to_not be_ungraded
+      subject.save
+      grade = create(:grade, submission: subject, status: "Graded")
+      expect(subject).to_not be_ungraded
     end
   end
 

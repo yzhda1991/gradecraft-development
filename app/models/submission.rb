@@ -55,6 +55,10 @@ class Submission < ActiveRecord::Base
     permissions_check(user)
   end
 
+  def graded_at
+    grade.updated_at if graded?
+  end
+
   def graded?
     !ungraded?
   end
