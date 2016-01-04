@@ -1,9 +1,7 @@
-require_dependency "concerns/multiple_file_attributes"
-
 class Assignment < ActiveRecord::Base
   include Copyable
   include Gradable
-  include MultipleFileAttibutes
+  include MultipleFileAttributes
   include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails

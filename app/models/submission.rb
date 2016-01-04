@@ -1,5 +1,3 @@
-require_dependency "concerns/multiple_file_attributes"
-
 class Submission < ActiveRecord::Base
   attr_accessible :task, :task_id, :assignment, :assignment_id, :assignment_type_id,
     :group, :group_id, :link, :student, :student_id, :creator, :creator_id,
@@ -7,7 +5,8 @@ class Submission < ActiveRecord::Base
     :course_id, :submission_file_ids, :updated_at
 
   include Canable::Ables
-  include MultipleFileAttibutes
+  include Historical
+  include MultipleFileAttributes
 
   belongs_to :task, touch: true
   belongs_to :assignment, touch: true

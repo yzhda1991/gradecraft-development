@@ -21,15 +21,6 @@ require_relative "support/sorcery_stubbing"
 require_relative "support/file_helpers"
 require_relative "support/world"
 
-# stub out Rails.env
-unless defined?(Rails)
-  module Rails
-    def self.env
-      ENV["RAILS_ENV"]
-    end
-  end
-end
-
 # stub out the process_in_background for carrierwave_backgrounder
 module CarrierWave
   module Backgrounder
@@ -48,6 +39,18 @@ ActiveRecord::Base.establish_connection(connection_info)
 # supress the warning that is generated from CarrierWave because it uses
 # after_commit/after_save callbacks
 ActiveRecord::Base.raise_in_transactional_callbacks = true
+
+require "paper_trail"
+require "paper_trail/frameworks/rspec"
+
+# stub out Rails.env
+unless defined?(Rails)
+  module Rails
+    def self.env
+      ENV["RAILS_ENV"]
+    end
+  end
+end
 
 Dir["./app/uploaders/*.rb"].each { |f| require f }
 Dir["./app/validators/*.rb"].each { |f| require f }

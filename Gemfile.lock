@@ -410,6 +410,10 @@ GEM
     origin (2.1.1)
     pacecar (2.0.0)
       activerecord (>= 4.0.0)
+    paper_trail (4.0.1)
+      activerecord (>= 3.0, < 6.0)
+      activesupport (>= 3.0, < 6.0)
+      request_store (~> 1.1)
     parallel (1.6.1)
     parallel_tests (1.6.1)
       parallel
@@ -709,6 +713,7 @@ DEPENDENCIES
   omniauth-kerberos
   omniauth-lti!
   pacecar
+  paper_trail
   parallel_tests
   pg
   protected_attributes

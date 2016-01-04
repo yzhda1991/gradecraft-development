@@ -1,4 +1,5 @@
 require "active_record_spec_helper"
+require "toolkits/historical_toolkit"
 
 describe Submission do
   subject { build(:submission) }
@@ -10,6 +11,31 @@ describe Submission do
       subject.link = "not a url"
       expect(subject).to_not be_valid
       expect(subject.errors[:link]).to include "is invalid"
+    end
+  end
+
+  it_behaves_like "a historical model", :submission, link: "http://example.org"
+
+  describe "versioning", versioning: true do
+    before { subject.save }
+
+    it "creates a version when the link is updated" do
+      previous_link = subject.link
+      subject.update_attributes link: "http://example.com"
+      expect(subject).to have_a_version_with link: previous_link
+    end
+
+    it "creates a version when the attachment is updated" do
+      subject.submission_files.create(filename: "test",
+                                      filepath: "polsci101/submissionfile/",
+                                      file: fixture_file('test_image.jpg', 'img/jpg'))
+      expect(subject.submission_files[0].versions.count).to eq 1
+    end
+
+    it "creates a version when the comment is updated" do
+      previous_comment = subject.text_comment
+      subject.update_attributes text_comment: "This was updated"
+      expect(subject).to have_a_version_with text_comment: previous_comment
     end
   end
 

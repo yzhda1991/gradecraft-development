@@ -15,6 +15,8 @@
       - if presenter.has_submission_for?(current_student)
         %li
           %a{ :href => "#tab3"} My Submission
+        %li
+          %a{ href: "#history" } My Submission History
 
       - if presenter.grades_available_for?(current_student)
         %li
@@ -32,6 +34,8 @@
       - if presenter.has_submission_for?(current_student)
         #tab3
           = render partial: "submissions/student_show", locals: { presenter: presenter }
+        #history
+          = history presenter.submission_for_assignment(current_student).history
       - if presenter.grades_available_for?(current_student)
         #tab4
           - if presenter.assignment.has_groups?

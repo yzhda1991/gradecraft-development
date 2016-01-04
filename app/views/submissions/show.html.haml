@@ -6,5 +6,16 @@
   = render partial: "submissions/buttons", locals: { presenter: presenter }
 
 .pageContent
-  = render partial: 'layouts/alerts'
-  = render partial: 'submissions/instructor_show', locals: { presenter: presenter }
+  #tabs.ui-tabs.ui-widget
+    %ul.ui-tabs-nav{role: "tablist"}
+      %li
+        %a{href: "#submission"} Submission
+      %li
+        %a{href: "#history"} Submission History
+
+    #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
+      .ui-tabs-panel#submission.active{role: "tabpanel", "aria-hidden" => false}
+        = render partial: 'layouts/alerts'
+        = render partial: 'submissions/instructor_show', locals: { presenter: presenter }
+      .ui-tabs-panel#history{role: "tabpanel", "aria-hidden" => false}
+        = history presenter.submission.history
