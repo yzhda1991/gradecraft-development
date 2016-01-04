@@ -26,5 +26,12 @@ module S3Manager
         bucket: bucket_name
       }
     end
+
+    def delete_object(object_key)
+      client.delete_object({
+        bucket: bucket_name,
+        key: object_key
+      })
+    end
   end
 end

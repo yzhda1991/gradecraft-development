@@ -52,5 +52,4 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit"), rebuild_assignment_export_path(export), :class => 'button'
-                %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), export, :class => 'button', :data => { confirm: 'This will delete the student from your course - Are you sure?' }, :method => :delete
+                %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), export, :class => 'button', :data => { confirm: 'This will delete the assignment export. Are you sure?' }, :method => :delete

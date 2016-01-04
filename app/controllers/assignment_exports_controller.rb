@@ -7,7 +7,27 @@ class AssignmentExportsController < ApplicationController
     redirect_to assignment_path(assignment)
   end
 
+  def destroy
+    if delete_s3_object
+      assignment_export.destroy
+      flash[:success] = "Assignment export successfully deleted from server"
+    else
+      flash[:notice] = "Unable to delete the assignment export from the server"
+    end
+
+    redirect_to exports_path
+  end
+
   protected
+
+  def delete_s3_object
+    @delete_s3_object ||= assignment_export.delete_object_from_s3
+  end
+
+  def assignment_export
+    @assignment_export ||= AssignmentExport.find params[:id]
+  end
+    
 
   def create_assignment_export_job
     @assignment_export_job = AssignmentExportJob.new({
