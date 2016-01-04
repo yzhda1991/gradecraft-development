@@ -11,12 +11,12 @@ class Resubmission
     resubmissions = []
     grade = submission.grade
     if grade.present?
-      submission.versions.where(event: :update).each do |submission_revision|
-        grade_revision = grade.versions
+      grade.versions.where(event: :update).each do |grade_revision|
+        submission_revision = submission.versions
           .where(event: :update)
-          .where("created_at >= :created_at", created_at: submission_revision.created_at)
+          .where("created_at <= :created_at", created_at: grade_revision.created_at)
           .last
-        if grade_revision.present?
+        if submission_revision.present?
           resubmissions << Resubmission.new(submission: submission,
                                             grade_revision: grade_revision,
                                             submission_revision: submission_revision)

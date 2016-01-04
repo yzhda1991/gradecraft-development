@@ -42,6 +42,20 @@ describe Resubmission do
         end
       end
 
+      context "with several submission changes and one grade change" do
+        before do
+          submission.update_attributes link: "http://google.com"
+          grade.update_attributes raw_score: 1234
+        end
+
+        it "returns one resubmission for the last submission change" do
+          results = described_class.find_for_submission(submission)
+
+          expect(results.length).to eq 1
+          expect(results.first.submission_revision.reify.link).to eq "http://example.org"
+        end
+      end
+
       xit "with several submission changes and several grades"
       xit "with a grade that is not visible to the student"
       xit "with an assignment that no longer accepts submissions"
