@@ -92,8 +92,6 @@ describe Resubmission do
           expect(described_class.find_for_submission(submission)).to be_empty
         end
       end
-
-      xit "with an assignment that no longer accepts submissions"
     end
   end
 end
