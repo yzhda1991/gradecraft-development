@@ -148,7 +148,15 @@ class AssignmentExportPerformer < ResqueJob::Performer
 
   # methods for building and formatting the archive filename
   def export_file_basename
-    @export_file_basename ||= "#{archive_basename}_export_#{Time.now.strftime("%Y-%m-%d")}"
+    @export_file_basename ||= "#{archive_basename}_export_#{filename_timestamp}"
+  end
+
+  def filename_timestamp
+    "#{filename_time.strftime("%Y-%m-%d")}__#{filename_time.to_f}".gsub(".","")
+  end
+
+  def filename_time
+    @filename_time ||= Time.now
   end
 
   def archive_basename
