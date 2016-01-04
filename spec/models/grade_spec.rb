@@ -1,4 +1,5 @@
 require "active_record_spec_helper"
+require "toolkits/historical_toolkit"
 
 describe Grade do
   subject { build(:grade) }
@@ -38,7 +39,11 @@ describe Grade do
       expect(another_grade).to_not be_valid
       expect(another_grade.errors[:assignment_id]).to include "has already been taken"
     end
+  end
 
+  it_behaves_like "a historical model", :grade, raw_score: 1234
+
+  describe "#raw_score" do
     it "converts raw_score from human readable strings" do
       subject.update(raw_score: "1,234")
       expect(subject.raw_score).to eq(1234)
@@ -98,7 +103,6 @@ describe Grade do
   end
 
   describe ".find_or_create" do
-
     it "finds and existing grade for assignment and student" do
       student = create(:user)
       assignment = create(:assignment)

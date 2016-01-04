@@ -1,5 +1,8 @@
+require_relative "concerns/historical"
+
 class Grade < ActiveRecord::Base
   include Canable::Ables
+  include Historical
 
   attr_accessible :assignment, :assignments_attributes, :assignment_id,
     :assignment_type_id, :course_id, :feedback, :final_score, :grade_file,
