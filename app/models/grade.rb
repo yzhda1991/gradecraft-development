@@ -1,5 +1,3 @@
-require_relative "concerns/historical"
-
 class Grade < ActiveRecord::Base
   include Canable::Ables
   include Historical
