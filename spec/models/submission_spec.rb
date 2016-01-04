@@ -240,22 +240,41 @@ describe Submission do
     end
   end
 
+  describe "#graded?" do
+    it "returns false for a submission that has no grade" do
+      submission = create(:submission)
+      expect(submission).to_not be_graded
+    end
+
+    it "returns false for a submission that has grade that is not student visible" do
+      submission = create(:submission)
+      grade = create(:grade, submission: submission)
+      expect(submission).to_not be_graded
+    end
+
+    it "returns true for a submission that has grade that is student visible" do
+      submission = create(:submission)
+      grade = create(:grade, submission: submission, status: "Graded")
+      expect(submission).to be_graded
+    end
+  end
+
   describe "#ungraded?" do
     it "returns true for a submission that has no grade" do
       submission = create(:submission)
-      expect(submission.ungraded?).to eq(true)
+      expect(submission).to be_ungraded
     end
 
     it "returns true for a submission that has grade that is not student visible" do
       submission = create(:submission)
       grade = create(:grade, submission: submission)
-      expect(submission.ungraded?).to eq(true)
+      expect(submission).to be_ungraded
     end
 
     it "returns false for a submission that has grade that is student visible" do
       submission = create(:submission)
       grade = create(:grade, submission: submission, status: "Graded")
-      expect(submission.ungraded?).to eq(false)
+      expect(submission).to_not be_ungraded
     end
   end
 

@@ -55,6 +55,10 @@ class Submission < ActiveRecord::Base
     permissions_check(user)
   end
 
+  def graded?
+    !ungraded?
+  end
+
   # Grabbing any submission that has NO instructor-defined grade (if the student has predicted the grade,
   # it'll exist, but we still don't want to catch those here)
   def ungraded?
