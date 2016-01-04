@@ -26,6 +26,11 @@ class Resubmission
       resubmissions
     end
 
+    def future_resubmission?(submission)
+      grade = submission.grade
+      include_grade?(grade)
+    end
+
     private
 
     def include_grade?(grade)
