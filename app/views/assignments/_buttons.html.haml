@@ -41,6 +41,12 @@
             Edit Rubric
           - else
             Create Rubric
+      %li
+
+        .fa.fa-sliders.fa-fw
+          = form_tag assignment_exports_path, :method => :post do
+            = hidden_field_tag "assignment_id", presenter.assignment.id
+            = button_tag "Export"
 
       - if presenter.rubric_designed?
         - if presenter.has_reviewable_grades?

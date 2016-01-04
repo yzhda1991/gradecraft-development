@@ -93,6 +93,7 @@ class Course < ActiveRecord::Base
     c.has_many :student_academic_histories
     c.has_many :assignment_types
     c.has_many :assignments
+    c.has_many :assignment_exports
     c.has_many :announcements
     c.has_many :badges
     c.has_many :challenges
