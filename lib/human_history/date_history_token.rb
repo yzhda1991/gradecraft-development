@@ -1,4 +1,4 @@
-module Historical
+module HumanHistory
   class DateHistoryToken
     attr_reader :datetime
 

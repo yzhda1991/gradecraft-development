@@ -1,7 +1,7 @@
 require "spec_helper"
-require "./lib/historical/history_token_parser"
+require "./lib/human_history/history_token_parser"
 
-describe Historical::HistoryTokenParser do
+describe HumanHistory::HistoryTokenParser do
   it "initializes with a tokenizer" do
     tokenizer = double(:history_tokenizer)
     expect(described_class.new(tokenizer).tokenizer).to eq tokenizer

@@ -1,4 +1,4 @@
-module Historical
+module HumanHistory
   class CreatedHistoryToken
     attr_reader :type
 

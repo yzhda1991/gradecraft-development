@@ -5,7 +5,7 @@ require_relative "date_history_token"
 require_relative "event_history_token"
 require_relative "time_history_token"
 
-module Historical
+module HumanHistory
   class HistoryTokenizer
     attr_reader :changeset, :tokens, :type
 

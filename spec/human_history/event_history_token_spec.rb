@@ -1,7 +1,7 @@
 require "spec_helper"
-require "./lib/historical/event_history_token"
+require "./lib/human_history/event_history_token"
 
-describe Historical::EventHistoryToken do
+describe HumanHistory::EventHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is an event" do
       expect(described_class.tokenizable?("event", nil, nil)).to eq true

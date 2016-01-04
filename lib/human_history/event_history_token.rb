@@ -1,4 +1,4 @@
-module Historical
+module HumanHistory
   class EventHistoryToken
     attr_reader :event
 

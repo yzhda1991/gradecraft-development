@@ -1,4 +1,4 @@
-require "./lib/historical"
+require "./lib/human_history"
 
 module HistoryHelper
   def history(changesets)
@@ -16,7 +16,7 @@ module HistoryHelper
   end
 
   def build_sentence(changeset)
-    tokenizer = Historical::HistoryTokenizer.new(changeset)
-    assemble_sentence Historical::HistoryTokenParser.new(tokenizer).parse(current_user: current_user)
+    tokenizer = HumanHistory::HistoryTokenizer.new(changeset)
+    assemble_sentence HumanHistory::HistoryTokenParser.new(tokenizer).parse(current_user: current_user)
   end
 end

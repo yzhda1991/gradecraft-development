@@ -1,4 +1,4 @@
-module Historical
+module HumanHistory
   class RegisteredToken
     attr_reader :type, :selector
 

@@ -1,4 +1,4 @@
-module Historical
+module HumanHistory
   class ChangeHistoryToken
     attr_reader :attribute, :changes, :type
 

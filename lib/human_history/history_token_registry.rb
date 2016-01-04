@@ -1,4 +1,4 @@
-module Historical
+module HumanHistory
   class HistoryTokenRegistry
     class << self
       def registered_tokens

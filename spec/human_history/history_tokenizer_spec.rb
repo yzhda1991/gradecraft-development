@@ -1,10 +1,10 @@
 require "spec_helper"
-require "./lib/historical/actor_history_token"
-require "./lib/historical/history_tokenizer"
-require "./lib/historical/history_token_registry"
-require "./lib/historical/registered_token"
+require "./lib/human_history/actor_history_token"
+require "./lib/human_history/history_tokenizer"
+require "./lib/human_history/history_token_registry"
+require "./lib/human_history/registered_token"
 
-describe Historical::HistoryTokenizer do
+describe HumanHistory::HistoryTokenizer do
   it "initializes with a changeset" do
     changeset = { "name" =>  ["Bill", "Jimmy"] }
 
@@ -24,7 +24,7 @@ describe Historical::HistoryTokenizer do
       subject = described_class.new(changeset).tokenize
 
       expect(subject.tokens.length).to eq 1
-      expect(subject.tokens.first).to be_kind_of Historical::ActorHistoryToken
+      expect(subject.tokens.first).to be_kind_of HumanHistory::ActorHistoryToken
     end
 
     it "adds an event token when an event is included in the changeset" do
@@ -33,7 +33,7 @@ describe Historical::HistoryTokenizer do
       subject = described_class.new(changeset).tokenize
 
       expect(subject.tokens.length).to eq 1
-      expect(subject.tokens.first).to be_kind_of Historical::EventHistoryToken
+      expect(subject.tokens.first).to be_kind_of HumanHistory::EventHistoryToken
     end
 
     it "adds a date token when an updated at is included in the changeset" do
@@ -43,7 +43,7 @@ describe Historical::HistoryTokenizer do
       subject = described_class.new(changeset).tokenize
 
       expect(subject.tokens.length).to eq 2
-      expect(subject.tokens.first).to be_kind_of Historical::DateHistoryToken
+      expect(subject.tokens.first).to be_kind_of HumanHistory::DateHistoryToken
     end
 
     it "adds a time token when an updated at is included in the changeset" do
@@ -53,7 +53,7 @@ describe Historical::HistoryTokenizer do
       subject = described_class.new(changeset).tokenize
 
       expect(subject.tokens.length).to eq 2
-      expect(subject.tokens.last).to be_kind_of Historical::TimeHistoryToken
+      expect(subject.tokens.last).to be_kind_of HumanHistory::TimeHistoryToken
     end
 
     it "adds a change when a change is included in the changeset" do
@@ -62,7 +62,7 @@ describe Historical::HistoryTokenizer do
       subject = described_class.new(changeset).tokenize
 
       expect(subject.tokens.length).to eq 1
-      expect(subject.tokens.first).to be_kind_of Historical::ChangeHistoryToken
+      expect(subject.tokens.first).to be_kind_of HumanHistory::ChangeHistoryToken
     end
 
     it "adds a change when a created at is included in the changeset" do
@@ -71,7 +71,7 @@ describe Historical::HistoryTokenizer do
       subject = described_class.new(changeset).tokenize
 
       expect(subject.tokens.length).to eq 1
-      expect(subject.tokens.first).to be_kind_of Historical::CreatedHistoryToken
+      expect(subject.tokens.first).to be_kind_of HumanHistory::CreatedHistoryToken
     end
   end
 end

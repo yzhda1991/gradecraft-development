@@ -1,4 +1,4 @@
-module Historical
+module HumanHistory
   class ActorHistoryToken
     attr_reader :user_id
 

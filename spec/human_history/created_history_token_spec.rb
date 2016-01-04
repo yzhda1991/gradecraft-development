@@ -1,8 +1,8 @@
 require "spec_helper"
 require "active_support/inflector"
-require "./lib/historical/created_history_token"
+require "./lib/human_history/created_history_token"
 
-describe Historical::CreatedHistoryToken do
+describe HumanHistory::CreatedHistoryToken do
   describe ".tokenizable?" do
     it "is tokenizable if the key is created_at" do
       expect(described_class.tokenizable?("created_at", nil, nil)).to eq true
