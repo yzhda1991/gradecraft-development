@@ -7,23 +7,37 @@ class Resubmission
     end
   end
 
-  def self.find_for_submission(submission)
-    resubmissions = []
-    grade = submission.grade
-    if grade.present? && grade.is_student_visible?
-      grade.versions.updates.each do |grade_revision|
-        if grade_revision.changeset.has_key?("raw_score")
-          submission_revision = submission.versions.updates
-            .preceding(grade_revision.created_at, true)
-            .last
-          if submission_revision.present?
-            resubmissions << Resubmission.new(submission: submission,
-                                              grade_revision: grade_revision,
-                                              submission_revision: submission_revision)
+  class << self
+    def find_for_submission(submission)
+      resubmissions = []
+      grade = submission.grade
+      if include_grade?(grade)
+        grade.versions.updates.each do |grade_revision|
+          if include_grade_revision? grade_revision
+            submission_revision = submission_revision_for_grade submission, grade_revision
+            if submission_revision.present?
+              resubmissions << Resubmission.new(submission: submission,
+                                                grade_revision: grade_revision,
+                                                submission_revision: submission_revision)
+            end
           end
         end
       end
+      resubmissions
     end
-    resubmissions
+
+    private
+
+    def include_grade?(grade)
+      grade.present? && grade.is_student_visible?
+    end
+
+    def include_grade_revision?(grade_revision)
+      grade_revision.changeset.has_key?("raw_score")
+    end
+
+    def submission_revision_for_grade(submission, grade_revision)
+      submission.versions.updates.preceding(grade_revision.created_at, true).last
+    end
   end
 end
