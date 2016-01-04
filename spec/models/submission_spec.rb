@@ -259,8 +259,52 @@ describe Submission do
     end
   end
 
-  describe "#resubmitted?" do
-    #student.grade_for_assignment(assignment).present? && student.grade_for_assignment(assignment).updated_at < self.updated_at
+  describe "#resubmitted?", versioning: true do
+    it "returns false if there are no resubmissions" do
+      expect(subject).to_not be_resubmitted
+    end
+
+    it "returns true if there are resubmissions" do
+      subject.save
+      grade = create :grade, status: "Graded", submission: subject,
+        assignment: subject.assignment
+      subject.update_attributes link: "http://example.com"
+      grade.update_attributes raw_score: 1234
+
+      expect(subject).to be_resubmitted
+    end
+  end
+
+  describe "#resubmissions", versioning: true do
+    it "caches the resubmissions" do
+      expect(Resubmission).to receive(:find_for_submission).with(subject).once.and_call_original
+      2.times { subject.resubmissions }
+    end
+
+    context "with no resubmissions" do
+      it "returns an empty array" do
+        expect(subject.resubmissions).to be_empty
+      end
+    end
+
+    context "with a single resubmission" do
+      let(:grade) do
+        create :grade, status: "Graded", submission: subject, assignment: subject.assignment
+      end
+
+      before do
+        subject.save
+        subject.update_attributes link: "http://example.com"
+        grade.update_attributes raw_score: 1234
+      end
+
+      it "returns an array of resubmissions" do
+        results = subject.resubmissions
+
+        expect(results.length).to eq 1
+        expect(results.first.submission).to eq subject
+      end
+    end
   end
 
   describe "#name" do

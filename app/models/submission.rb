@@ -62,7 +62,11 @@ class Submission < ActiveRecord::Base
   end
 
   def resubmitted?
-    student.grade_for_assignment(assignment).present? && student.grade_for_assignment(assignment).updated_at < self.updated_at
+    !resubmissions.empty?
+  end
+
+  def resubmissions
+    @resubmissions ||= Resubmission.find_for_submission(self)
   end
 
   # Getting the name of the student who submitted the work
