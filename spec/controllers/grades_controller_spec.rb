@@ -311,12 +311,6 @@ describe GradesController do
           expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(6)
           expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(0)
         end
-
-        it "deletes existing earned badges" do
-          earned_badge = create(:earned_badge, student: @student, metric_id: @rubric.metrics.first.id )
-          allow(controller).to receive(:current_student).and_return(@student)
-          expect{ post :submit_rubric, @params }.to change { EarnedBadge.count }.by(-1)
-        end
       end
 
       it "creates the rubric grades" do

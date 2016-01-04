@@ -162,9 +162,6 @@ class GradesController < ApplicationController
       )
     end
 
-    # EarnedBadges created from a MetricBadge are deprecated, so we remove them
-    EarnedBadge.where(student_id: params[:student_id], metric_id: params[:metric_ids]).delete_all
-
     # EarnedBadges associated with a TierBadge
     EarnedBadge.import(new_earned_tier_badges, :validate => true) if params[:tier_badges]
 

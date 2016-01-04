@@ -52,4 +52,8 @@ describe NullGrade do
   it "returns 555 for the point total" do
     expect(subject.point_total).to eq(555)
   end
+
+  it "handles queries for assignments with closed submissions" do
+    expect(subject.assignment.submissions_have_closed?).to be_falsy
+  end
 end

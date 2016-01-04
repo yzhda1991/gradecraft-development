@@ -5,6 +5,10 @@ class NullGrade
     @predicted_score = 0
   end
 
+  def assignment
+    NullAssignment.new
+  end
+
   def is_student_visible?
     true
   end
@@ -55,5 +59,11 @@ class NullGrade
 
   def student
     nil
+  end
+end
+
+class NullAssignment
+  def submissions_have_closed?
+    false
   end
 end

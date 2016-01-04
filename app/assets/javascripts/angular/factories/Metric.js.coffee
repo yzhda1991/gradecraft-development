@@ -53,19 +53,6 @@
     order: ()->
       jQuery.inArray(this, @$scope.metrics)
 
-    loadMetricBadge: (metricBadge)->
-      courseBadge = @availableBadges[metricBadge.badge_id]
-      loadedBadge = new MetricBadge(@, angular.copy(courseBadge))
-      @badges[courseBadge.id] = loadedBadge # add metric badge to metric
-      delete @availableBadges[courseBadge.id] # remove badge from available badges on metric
-
-    # Badges
-    loadMetricBadges: (metricBadges)->
-      angular.forEach(metricBadges, (metricBadge, index)=>
-        if (@availableBadges[metricBadge.badge_id])
-          @loadMetricBadge(metricBadge)
-      )
-
     index: ()->
       @order()
     createRubricGrade: ()->
@@ -91,21 +78,6 @@
         tier_id: @selectedTier.id,
         comments: @comments
       }
-    selectBadge: ()->
-      newBadge = new MetricBadge(@, angular.copy(@selectedBadge))
-      @badges[newBadge.badge.id] = newBadge # add metric badge to metric
-      delete @availableBadges[@selectedBadge.id] # remove badge from available badges on metric
-      @selectedBadge = "" # reset selected badge
-
-    deleteMetricBadge: (metricBadge)->
-      if confirm("Are you sure you want to delete this badge from the metric?")
-        $http.delete("/metric_badges/#{metricBadge.id}").success(
-          (data,status)=>
-            @availableBadges[metricBadge.badge.id] = angular.copy(@$scope.courseBadges[metricBadge.badge.id])
-            delete @badges[metricBadge.badge.id]
-        ).error((err)->
-          alert("delete failed!")
-        )
 
     badgeIds: ()->
       # distill ids for all badges
