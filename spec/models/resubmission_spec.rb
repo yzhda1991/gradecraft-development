@@ -56,7 +56,25 @@ describe Resubmission do
         end
       end
 
-      xit "with several submission changes and several grades"
+      context "with several submission changes and two grades changes" do
+        before do
+          grade.update_attributes raw_score: 1234
+          submission.update_attributes link: "http://google.com"
+          grade.update_attributes raw_score: 5678
+        end
+
+        it "returns two resubmissions for the each grade change" do
+          results = described_class.find_for_submission(submission)
+
+          expect(results.length).to eq 2
+          expect(results.first.submission_revision.reify.link).to eq nil
+          expect(results.first.grade_revision.reify.raw_score).to eq nil
+          expect(results.last.submission_revision.reify.link).to eq "http://example.org"
+          expect(results.last.grade_revision.reify.raw_score).to eq 1234
+        end
+      end
+
+      xit "with a grade that is updated for other reasons than the score"
       xit "with a grade that is not visible to the student"
       xit "with an assignment that no longer accepts submissions"
     end
