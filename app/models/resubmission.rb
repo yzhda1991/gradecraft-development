@@ -11,15 +11,16 @@ class Resubmission
     resubmissions = []
     grade = submission.grade
     if grade.present?
-      grade.versions.where(event: :update).each do |grade_revision|
-        submission_revision = submission.versions
-          .where(event: :update)
-          .where("created_at <= :created_at", created_at: grade_revision.created_at)
-          .last
-        if submission_revision.present?
-          resubmissions << Resubmission.new(submission: submission,
-                                            grade_revision: grade_revision,
-                                            submission_revision: submission_revision)
+      grade.versions.updates.each do |grade_revision|
+        if grade_revision.changeset.has_key?("raw_score")
+          submission_revision = submission.versions.updates
+            .preceding(grade_revision.created_at, true)
+            .last
+          if submission_revision.present?
+            resubmissions << Resubmission.new(submission: submission,
+                                              grade_revision: grade_revision,
+                                              submission_revision: submission_revision)
+          end
         end
       end
     end

@@ -21,7 +21,7 @@ describe Resubmission do
     describe "it pairs up the grade revision with the submission revision" do
       before { submission.update_attributes link: "http://example.org" }
 
-      context "with a submission change and no grades" do
+      context "with a submission change and no grade" do
         it "returns no resubmissions" do
           expect(described_class.find_for_submission(submission)).to be_empty
         end
@@ -74,7 +74,14 @@ describe Resubmission do
         end
       end
 
-      xit "with a grade that is updated for other reasons than the score"
+      context "with a grade that is updated for other reasons than the score" do
+        before { grade.update_attributes feedback: "You rock!" }
+
+        it "returns no resubmissions" do
+          expect(described_class.find_for_submission(submission)).to be_empty
+        end
+      end
+
       xit "with a grade that is not visible to the student"
       xit "with an assignment that no longer accepts submissions"
     end
