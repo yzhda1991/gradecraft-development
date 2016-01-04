@@ -15,26 +15,36 @@ describe Resubmission do
     end
   end
 
-  describe ".find_for_submission" do
-    it "is empty if there are no grades for the submission" do
-      expect(described_class.find_for_submission(submission)).to be_empty
-    end
+  describe ".find_for_submission", versioning: true do
+    let(:grade) { create :grade, submission: submission, assignment: submission.assignment }
 
-    context "with one grade revision", versioning: true do
-      let(:grade) { create :grade, submission: submission, assignment: submission.assignment }
+    describe "it pairs up the grade revision with the submission revision" do
+      before { submission.update_attributes link: "http://example.org" }
 
-      before do
-        grade.update_attributes raw_score: 1234
+      context "with a submission change and no grades" do
+        it "returns no resubmissions" do
+          expect(described_class.find_for_submission(submission)).to be_empty
+        end
       end
 
-      it "returns one resubmission" do
-        results = described_class.find_for_submission(submission)
+      context "with a submission change and one grade change" do
+        before { grade.update_attributes raw_score: 1234 }
 
-        expect(results.length).to eq 1
-        expect(results.first.submission).to eq submission
-        expect(results.first.grade.event).to eq "update"
-        expect(results.first.grade.reify.raw_score).to eq nil
+        it "returns one resubmission" do
+          results = described_class.find_for_submission(submission)
+
+          expect(results.length).to eq 1
+          expect(results.first.submission).to eq submission
+          expect(results.first.submission_revision.event).to eq "update"
+          expect(results.first.submission_revision.reify.link).to eq nil
+          expect(results.first.grade_revision.event).to eq "update"
+          expect(results.first.grade_revision.reify.raw_score).to eq nil
+        end
       end
+
+      xit "with several submission changes and several grades"
+      xit "with a grade that is not visible to the student"
+      xit "with an assignment that no longer accepts submissions"
     end
   end
 end
