@@ -75,28 +75,6 @@ INTEGER_REGEXP = /^\-?\d+$/
     return
   ]
 
-@gradecraft.directive "collapseToggler", ->
-  restrict : 'C',
-  link: (scope, elm, attrs) ->
-    elm.bind('click', (event)->
-      if angular.element(event.target).hasClass('collapse-arrow')
-        elm.siblings().toggleClass('collapsed')
-        elm.toggleClass('collapsed')
-    )
-    return
-
-@gradecraft.directive "collapseAllToggler", ->
-  restrict : 'C',
-  link: (scope, elm, attrs) ->
-    elm.bind('click', ()->
-      if elm.hasClass('collapsed')
-        angular.element(".collapse-toggler.collapsed .collapse-arrow").click()
-      else
-        angular.element(".collapse-toggler").not(".collapsed").children(".collapse-arrow").click()
-      elm.toggleClass('collapsed')
-    )
-    return
-
 FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/
 @gradecraft.directive "smartFloat", ->
   require: "ngModel"
