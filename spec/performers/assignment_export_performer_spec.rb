@@ -12,13 +12,6 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   it_behaves_like "ModelAddons::ImprovedLogging is included"
 
-#   {
-#     student_ids: @students.collect(&:id),
-#     submissions_snapshot: submissions_snapshot,
-#     export_filename: "#{export_file_basename}.zip",
-#     last_export_started_at: Time.now
-#   }
-
   describe "#assignment_export_attributes" do
     before do
       allow(performer).to receive_messages({
