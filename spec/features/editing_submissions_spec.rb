@@ -18,7 +18,7 @@ feature "editing submissions" do
       visit edit_assignment_submission_path assignment, submission
 
       within ".pageContent" do
-        expect(page).to have_content "Resubmission"
+        expect(page).to have_content "Resubmission!"
       end
     end
   end
