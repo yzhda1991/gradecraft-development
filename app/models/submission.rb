@@ -70,7 +70,7 @@ class Submission < ActiveRecord::Base
   end
 
   def will_be_resubmission?
-    Resubmission.future_resubmission?(self)
+    graded?
   end
 
   def resubmitted?

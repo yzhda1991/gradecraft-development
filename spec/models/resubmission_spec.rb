@@ -111,20 +111,4 @@ describe Resubmission do
       end
     end
   end
-
-  describe ".future_resubmission?" do
-    it "returns false if the grade is not created" do
-      expect(described_class.future_resubmission?(submission)).to eq false
-    end
-
-    it "returns true if the grade has already been assigned" do
-      grade.touch
-      expect(described_class.future_resubmission?(submission)).to eq true
-    end
-
-    it "returns false if the grade is not visible to the student" do
-      grade.update_attributes status: nil
-      expect(described_class.future_resubmission?(submission)).to eq false
-    end
-  end
 end

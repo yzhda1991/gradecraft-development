@@ -24,11 +24,6 @@ class Resubmission
       resubmissions
     end
 
-    def future_resubmission?(submission)
-      grade = submission.grade
-      include_grade?(grade)
-    end
-
     private
 
     def grade_revision_for_submission(grade, submission_revision)

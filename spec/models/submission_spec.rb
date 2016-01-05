@@ -346,8 +346,8 @@ describe Submission do
 
       before do
         subject.save
-        subject.update_attributes link: "http://example.com"
         grade.update_attributes raw_score: 1234
+        subject.update_attributes link: "http://example.com"
       end
 
       it "returns an array of resubmissions" do
