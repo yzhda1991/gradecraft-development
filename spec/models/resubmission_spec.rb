@@ -21,87 +21,92 @@ describe Resubmission do
 
   describe ".find_for_submission", versioning: true do
     describe "it pairs up the grade revision with the submission revision" do
-      before { submission.update_attributes link: "http://example.org" }
-
       context "with a submission change and no grade" do
         it "returns no resubmissions" do
+          submission.update_attributes link: "http://example.org"
           expect(described_class.find_for_submission(submission)).to be_empty
         end
       end
 
-      context "with a submission change after the grade is created" do
-        it "returns one ungraded resubmission" do
+      context "with a grade" do
+        before do
           grade.touch
-          results = described_class.find_for_submission(submission)
-
-          expect(results.length).to eq 1
-          expect(results.first.submission).to eq submission
-          expect(results.first.submission_revision.event).to eq "update"
-          expect(results.first.submission_revision.reify.link).to eq nil
-          expect(results.first.grade_revision.event).to eq "create"
-        end
-      end
-
-      context "with a submission change and one grade change" do
-        before { grade.update_attributes raw_score: 1234 }
-
-        it "returns one resubmission" do
-          results = described_class.find_for_submission(submission)
-
-          expect(results.length).to eq 1
-          expect(results.first.submission).to eq submission
-          expect(results.first.submission_revision.event).to eq "update"
-          expect(results.first.submission_revision.reify.link).to eq nil
-          expect(results.first.grade_revision.event).to eq "update"
-          expect(results.first.grade_revision.reify.raw_score).to eq nil
-        end
-      end
-
-      context "with several submission changes and one grade change" do
-        before do
-          submission.update_attributes link: "http://google.com"
-          grade.update_attributes raw_score: 1234
+          submission.update_attributes link: "http://example.org"
         end
 
-        it "returns one resubmission for the last submission change" do
-          results = described_class.find_for_submission(submission)
+        context "with a submission change after the grade is created" do
+          it "returns one ungraded resubmission" do
+            results = described_class.find_for_submission(submission)
 
-          expect(results.length).to eq 2
-          expect(results.last.submission_revision.reify.link).to eq "http://example.org"
-        end
-      end
-
-      context "with several submission changes and two grades changes" do
-        before do
-          grade.update_attributes raw_score: 1234
-          submission.update_attributes link: "http://google.com"
-          grade.update_attributes raw_score: 5678
+            expect(results.length).to eq 1
+            expect(results.first.submission).to eq submission
+            expect(results.first.submission_revision.event).to eq "update"
+            expect(results.first.submission_revision.reify.link).to eq nil
+            expect(results.first.grade_revision.event).to eq "create"
+          end
         end
 
-        it "returns two resubmissions for the each grade change" do
-          results = described_class.find_for_submission(submission)
+        context "with a submission change and one grade change" do
+          before { grade.update_attributes raw_score: 1234 }
 
-          expect(results.length).to eq 2
-          expect(results.first.submission_revision.reify.link).to eq nil
-          expect(results.first.grade_revision.reify.raw_score).to eq 1234
-          expect(results.last.submission_revision.reify.link).to eq "http://example.org"
-          expect(results.last.grade_revision.reify.raw_score).to eq 1234
+          it "returns one resubmission" do
+            results = described_class.find_for_submission(submission)
+
+            expect(results.length).to eq 1
+            expect(results.first.submission).to eq submission
+            expect(results.first.submission_revision.event).to eq "update"
+            expect(results.first.submission_revision.reify.link).to eq nil
+            expect(results.first.grade_revision.event).to eq "create"
+          end
         end
-      end
 
-      context "with a grade that is updated for other reasons than the score" do
-        before { grade.update_attributes feedback: "You rock!" }
+        context "with several submission changes and one grade change" do
+          before do
+            submission.update_attributes link: "http://google.com"
+            grade.update_attributes raw_score: 1234
+          end
 
-        it "returns no resubmissions" do
-          expect(described_class.find_for_submission(submission)).to be_empty
+          it "returns one resubmission for the last submission change" do
+            results = described_class.find_for_submission(submission)
+
+            expect(results.length).to eq 2
+            expect(results.last.submission_revision.reify.link).to eq "http://example.org"
+          end
         end
-      end
 
-      context "with a grade that is not visible to the student" do
-        before { grade.update_attributes status: nil, raw_score: 1234 }
+        context "with several submission changes and two grades changes" do
+          before do
+            grade.update_attributes raw_score: 1234
+            submission.update_attributes link: "http://google.com"
+            grade.update_attributes raw_score: 5678
+          end
 
-        it "returns no resubmissions" do
-          expect(described_class.find_for_submission(submission)).to be_empty
+          it "returns two resubmissions for the each grade change" do
+            results = described_class.find_for_submission(submission)
+
+            expect(results.length).to eq 2
+            expect(results.first.submission_revision.reify.link).to eq nil
+            expect(results.last.submission_revision.reify.link).to eq "http://example.org"
+            expect(results.last.grade_revision.reify.raw_score).to eq nil
+          end
+        end
+
+        context "with a grade that is updated for other reasons than the score" do
+          before { grade.update_attributes feedback: "You rock!" }
+
+          it "returns only the grade created resubmission" do
+            results = described_class.find_for_submission(submission)
+            expect(results.length).to eq 1
+            expect(results.first.grade_revision.event).to eq "create"
+          end
+        end
+
+        context "with a grade that is not visible to the student" do
+          before { grade.update_attributes status: nil, raw_score: 1234 }
+
+          it "returns no resubmissions" do
+            expect(described_class.find_for_submission(submission)).to be_empty
+          end
         end
       end
     end

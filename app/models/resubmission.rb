@@ -32,7 +32,7 @@ class Resubmission
     private
 
     def grade_revision_for_submission(grade, submission_revision)
-      grade.versions.subsequent(submission_revision.created_at, true).last
+      grade.versions.preceding(submission_revision.created_at, true).last
     end
 
     def include_grade?(grade)
@@ -40,8 +40,9 @@ class Resubmission
     end
 
     def include_grade_revision?(grade_revision)
-      grade_revision.changeset.has_key?("raw_score") ||
-        grade_revision.event == "create"
+      grade_revision.present? &&
+        (grade_revision.changeset.has_key?("raw_score") ||
+         grade_revision.event == "create")
     end
   end
 end
