@@ -51,7 +51,7 @@ Vagrant.configure(2) do |config|
 
         cd /vagrant
 
-        gem install bundler debugger-ruby_core_source
+        gem install bundler:1.10.6 debugger-ruby_core_source
 
         mkdir -p /data/db
         chown -R vagrant:vagrant /data/db
