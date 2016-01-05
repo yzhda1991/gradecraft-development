@@ -7,12 +7,10 @@ feature "viewing submissions" do
   end
   let(:student) { create :user }
 
-  context "as a student" do
+  context "as a student", versioning: true do
     let(:membership) { create :student_course_membership, user: student }
 
-    before do
-      login_as student
-    end
+    before { login_as student }
 
     scenario "allows an editable submission if it's before the due date" do
       visit assignment_path assignment
@@ -21,9 +19,9 @@ feature "viewing submissions" do
     end
 
     scenario "displays a resubmitted alert for a resubmitted submission" do
-      grade = create :grade, submission: submission, assignment: assignment, student: student, raw_score: 10000, status: "Released"
+      create :grade, submission: submission, assignment: assignment, student: student,
+        raw_score: 10000, status: "Released"
       submission.update_attributes link: "http://example.org"
-      grade.update_attributes raw_score: 1234 # TODO: Does a resubmission mean that it has a grade?
       visit assignment_path assignment
 
       within ".pageContent" do
