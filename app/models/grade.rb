@@ -2,6 +2,9 @@ class Grade < ActiveRecord::Base
   include Canable::Ables
   include Historical
 
+  has_paper_trail ignore: [:feedback_reviewed, :feedback_reviewed_at,
+                           :feedback_read, :feedback_read_at]
+
   attr_accessible :assignment, :assignments_attributes, :assignment_id,
     :assignment_type_id, :course_id, :feedback, :final_score, :grade_file,
     :grade_file_ids, :grade_files_attributes, :graded_by_id, :group, :group_id,
