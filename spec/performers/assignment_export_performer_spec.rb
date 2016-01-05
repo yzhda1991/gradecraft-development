@@ -12,48 +12,32 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   it_behaves_like "ModelAddons::ImprovedLogging is included"
 
-  describe "attributes" do
-    subject { performer.attributes.merge(last_export_started_at: five_pm) }
-
-    let(:default_attributes) {{
-      assignment_id: assignment.id,
-      course_id: course.id,
-      professor_id: professor.id,
-      student_ids: students.collect(&:id),
-      team_id: nil,
-      last_export_started_at: five_pm
-    }}
-
-    let(:five_pm) { Time.now.change(hour: 17, min: 0) }
-
-    before(:each) do
-      performer.instance_variable_set(:@students, students)
-    end
-
-    context "team is not present" do
-      it "doesn't have a team_id" do
-        expect(subject).to eq(default_attributes)
-      end
-    end
-
-    context "team is present" do
-      let(:performer) { performer_with_team }
-      it "has a team_id" do
-        expect(subject).to eq(default_attributes.merge(team_id: team.id))
-      end
-    end
-  end
+#   {
+#     student_ids: @students.collect(&:id),
+#     submissions_snapshot: submissions_snapshot,
+#     export_filename: "#{export_file_basename}.zip",
+#     last_export_started_at: Time.now
+#   }
 
   describe "#assignment_export_attributes" do
     before do
       allow(performer).to receive_messages({
-        attributes: { assignment_id: 84000 },
         submissions_snapshot: {some: "hash"},
         export_file_basename: "really_bad_file"
       })
     end
 
     subject { performer.assignment_export_attributes }
+    let(:export_start_time) { Date.parse("Jan 20 1987").to_time }
+
+    it "should include the student ids" do
+      expect(subject[:student_ids]).to eq(performer.instance_variable_get(:@students).collect(&:id))
+    end
+
+    it "should include the last export started time" do
+      allow(Time).to receive(:now) { export_start_time }
+      expect(subject[:last_export_started_at]).to eq(export_start_time)
+    end
 
     it "should include the submissions snapshot" do
       expect(subject[:submissions_snapshot]).to eq({some: "hash"})
@@ -61,10 +45,6 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
     it "should include the export filename" do
       expect(subject[:export_filename]).to eq("really_bad_file.zip")
-    end
-
-    it "should merge the attributes hash" do
-      expect(subject[:assignment_id]).to eq(84000)
     end
   end
 
@@ -249,13 +229,10 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
   end
 
   describe "s3 concerns" do
-    let(:assignment_export) { AssignmentExport.new }
-
     before do
       performer.instance_variable_set(:@assignment_export, assignment_export)
       allow(performer).to receive(:expanded_archive_base_path) { "/this/weird/path" }
     end
-
     
     describe "#upload_archive_to_s3" do
       subject { performer.instance_eval { upload_archive_to_s3 }}
