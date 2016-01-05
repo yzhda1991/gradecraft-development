@@ -4,7 +4,7 @@
 Vagrant.configure(2) do |config|
     config.vm.box = 'ubuntu/trusty64'
     config.vm.provider 'virtualbox' do |v|
-        v.memory = 1024
+        v.memory = 2048
     end
 
     config.vm.network 'forwarded_port', guest: 5000, host: 5000
@@ -36,23 +36,29 @@ Vagrant.configure(2) do |config|
             libxslt-dev libxml2-dev \
             ruby-dev ruby-railties-4.0
 
-        cd /usr/src
-        curl -s -O https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.bz2
-        tar xjf ruby-2.2.2.tar.bz2
-        cd ruby-2.2.2/
-        ./configure
-        make
-        make install
+        RUBY_VERSION=`ruby --version | cut -c6-10`
+        if [ "x${RUBY_VERSION}" != "x2.2.2" ]; then
+            cd /usr/src
+            curl -s -O https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.bz2
+            tar xjf ruby-2.2.2.tar.bz2
+            cd ruby-2.2.2/
+            ./configure
+            make
+            make install
+        else
+            echo "ruby 2.2.2 already installed"
+        fi
 
         cd /vagrant
 
-        gem install bundler debugger-ruby_core_source
+        gem install bundler:1.10.6 debugger-ruby_core_source
 
         mkdir -p /data/db
         chown -R vagrant:vagrant /data/db
 
-        service mongod stop # foreman will start mongo as needed
-
+        # foreman will start mongo as needed
+        service mongod stop || echo "mongod already stopped"
+        # prevent mongod from starting on boot
         sed -i 's/start on runlevel \[2345\]/#start on runlevel \[2345\]/g' /etc/init/mongod.conf
 
         if [ ! -f config/mongoid.yml ]; then
@@ -104,8 +110,13 @@ export REDIS_PORT=6379
 export MONGO_PATH=/data/db
 EOM
 
+        # kernel setting to make redis happy in this environment
+        sysctl vm.overcommit_memory=1
+        # and make sure that setting is in place across reboots
+        echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
+
         # create a postgres user
-        su postgres -c "createuser vagrant --superuser"
+        su postgres -c "createuser vagrant --superuser" || echo "postgres user 'vagrant' already exists"
 
         su vagrant -c "bundle install"
 
