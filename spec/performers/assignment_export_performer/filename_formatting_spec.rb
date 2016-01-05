@@ -40,6 +40,45 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
   end
 
+  describe "#filename_timestamp" do
+    subject { performer.instance_eval { filename_timestamp }}
+    let(:filename_time) { Date.parse("Jan 20 1995").to_time }
+    before do
+      allow(performer).to receive(:filename_time) { filename_time }
+    end
+
+    it "formats the filename time" do
+      expect(subject).to match(/^1995-01-20/)
+    end
+
+    it "converts the filename time to a float" do
+      expect(subject).to match("#{filename_time.to_f}".gsub(".",""))
+    end
+
+    it "removes decimal points from the timestamp" do
+      expect(subject).not_to match(/\./)
+    end
+  end
+
+  describe "#filename_time" do
+    subject { performer.instance_eval { filename_time }}
+    let(:time_now) { Date.parse("Jan 20 1995").to_time }
+    before do
+      allow(Time).to receive(:now) { time_now }
+    end
+
+    it "caches the time" do
+      subject
+      expect(Time).not_to receive(:now)
+      subject
+    end
+
+    it "gets the time now" do
+      expect(Time).to receive(:now) { time_now }
+      subject
+    end
+  end
+
   describe "student_directory_file_path" do
     let(:student_double) { double(:student) }
     subject { performer.instance_eval { student_directory_file_path(@some_student, "whats_up.doc") }}
