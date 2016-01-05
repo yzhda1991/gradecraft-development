@@ -36,8 +36,8 @@ Vagrant.configure(2) do |config|
             libxslt-dev libxml2-dev \
             ruby-dev ruby-railties-4.0
 
-        ruby --version | grep "^ruby 2.2.2" &> /dev/null; rc=$?
-        if [ ${rc} -ne 0 ]; then
+        RUBY_VERSION=`ruby --version | cut -c6-10`
+        if [ "x${RUBY_VERSION}" != "x2.2.2" ]; then
             cd /usr/src
             curl -s -O https://cache.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.bz2
             tar xjf ruby-2.2.2.tar.bz2
