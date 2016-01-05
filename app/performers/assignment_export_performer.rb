@@ -6,8 +6,9 @@ class AssignmentExportPerformer < ResqueJob::Performer
   attr_reader :assignment_export
 
   def setup
+    @assignment_export = AssignmentExport.find @attrs[:assignment_export_id]
     fetch_assets
-    @assignment_export = AssignmentExport.create(assignment_export_attributes)
+    @assignment_export.update_attributes assignment_export_attributes
     @errors = []
   end
 
@@ -80,23 +81,13 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  # add this for logging_with_attributes
-  def attributes
-    { 
-      assignment_id: @assignment.try(:id),
-      course_id: @course.try(:id),
-      professor_id: @professor.try(:id),
+  def assignment_export_attributes
+    {
       student_ids: @students.collect(&:id),
-      team_id: @team.try(:id),
+      submissions_snapshot: submissions_snapshot,
+      export_filename: "#{export_file_basename}.zip",
       last_export_started_at: Time.now
     }
-  end
-
-  def assignment_export_attributes
-    attributes.merge({
-      submissions_snapshot: submissions_snapshot,
-      export_filename: "#{export_file_basename}.zip"
-    })
   end
 
   protected
@@ -106,11 +97,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def fetch_assets
-    @assignment = fetch_assignment # this should pull in submissions as well
-    @course = fetch_course
-    @professor = fetch_professor
+    @assignment = @assignment_export.assignment
+    @course = @assignment_export.course
+    @professor = @assignment_export.professor
+    @team = @assignment_export.team
     @students = fetch_students
-    @team = fetch_team if team_present?
     @submissions = fetch_submissions
   end
 
