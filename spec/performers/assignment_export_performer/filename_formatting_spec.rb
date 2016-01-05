@@ -12,11 +12,12 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "export_file_basename" do
     subject { performer.instance_eval { export_file_basename }}
+    let(:filename_timestamp) { "2020-10-15_2394829348234893" }
 
     before(:each) do
       performer.instance_variable_set(:@export_file_basename, nil)
       allow(performer).to receive(:archive_basename) { "some_great_assignment" }
-      allow(Time).to receive(:now) { Date.parse("Jan 20 1995").to_time }
+      allow(performer).to receive(:filename_timestamp) { filename_timestamp }
     end
 
     it "includes the fileized_assignment_name" do
@@ -24,7 +25,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
     end
 
     it "is appended with a YYYY-MM-DD formatted timestamp" do
-      expect(subject).to match(/1995-01-20$/)
+      expect(subject).to match(/2020-10-15_/)
     end
 
     it "caches the filename" do
@@ -35,7 +36,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
     it "sets the filename to an @export_file_basename" do
       subject
-      expect(performer.instance_variable_get(:@export_file_basename)).to eq("some_great_assignment_export_1995-01-20")
+      expect(performer.instance_variable_get(:@export_file_basename)).to eq("some_great_assignment_export_#{filename_timestamp}")
     end
   end
 

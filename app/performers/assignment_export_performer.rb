@@ -143,7 +143,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def filename_timestamp
-    "#{filename_time.strftime("%Y-%m-%d")}__#{filename_time.to_f}".gsub(".","")
+    "#{filename_time.strftime("%Y-%m-%d")}_#{filename_time.to_f}".gsub(".","")
   end
 
   def filename_time
