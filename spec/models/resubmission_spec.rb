@@ -29,6 +29,19 @@ describe Resubmission do
         end
       end
 
+      context "with a submission change after the grade is created" do
+        it "returns one ungraded resubmission" do
+          grade.touch
+          results = described_class.find_for_submission(submission)
+
+          expect(results.length).to eq 1
+          expect(results.first.submission).to eq submission
+          expect(results.first.submission_revision.event).to eq "update"
+          expect(results.first.submission_revision.reify.link).to eq nil
+          expect(results.first.grade_revision.event).to eq "create"
+        end
+      end
+
       context "with a submission change and one grade change" do
         before { grade.update_attributes raw_score: 1234 }
 
@@ -53,8 +66,8 @@ describe Resubmission do
         it "returns one resubmission for the last submission change" do
           results = described_class.find_for_submission(submission)
 
-          expect(results.length).to eq 1
-          expect(results.first.submission_revision.reify.link).to eq "http://example.org"
+          expect(results.length).to eq 2
+          expect(results.last.submission_revision.reify.link).to eq "http://example.org"
         end
       end
 
@@ -70,7 +83,7 @@ describe Resubmission do
 
           expect(results.length).to eq 2
           expect(results.first.submission_revision.reify.link).to eq nil
-          expect(results.first.grade_revision.reify.raw_score).to eq nil
+          expect(results.first.grade_revision.reify.raw_score).to eq 1234
           expect(results.last.submission_revision.reify.link).to eq "http://example.org"
           expect(results.last.grade_revision.reify.raw_score).to eq 1234
         end
