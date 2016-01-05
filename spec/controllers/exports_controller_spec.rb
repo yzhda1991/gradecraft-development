@@ -23,5 +23,4 @@ RSpec.describe ExportsController, type: :controller do
       expect(assigns(:teams)).to eq(course.teams)
     end
   end
-
 end

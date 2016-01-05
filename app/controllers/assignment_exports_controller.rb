@@ -3,7 +3,7 @@ class AssignmentExportsController < ApplicationController
 
   def create
     create_assignment_export
-    assignment_export_job.enqueue ? job_success_outcome : job_failure_outcome
+    assignment_export_job.enqueue ? job_success_flash : job_failure_flash
     redirect_to assignment_path(assignment)
   end
 
@@ -47,11 +47,11 @@ class AssignmentExportsController < ApplicationController
     })
   end
 
-  def job_success_outcome
+  def job_success_flash
     flash[:success] = "Your assignment export is being prepared. You'll receive an email when it's complete."
   end
 
-  def job_failure_outcome
+  def job_failure_flash
     flash[:alert] = "Your assignment export failed to build. An administrator has been contacted about the issue."
   end
 
