@@ -8,30 +8,35 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "#setup" do
     subject { performer.setup }
-    let(:assignment_export_attributes) {{assignment_id: 900}}
-    let(:assignment_export_double) { double(AssignmentExport) }
+    let(:assignment_export_attributes) {{assignment_export_id: assignment_export.id}}
 
     before do
       allow(performer).to receive(:assignment_export_attributes) { assignment_export_attributes }
     end
 
-    it "should fetch the assets" do
+    it "finds the assignment export by id" do
+      allow(AssignmentExport).to receive(:find) { double(AssignmentExport).as_null_object }
+      expect(AssignmentExport).to receive(:find).with(assignment_export.id)
+      subject
+    end
+
+    it "fetches the assets" do
       expect(performer).to receive(:fetch_assets)
       subject
     end
 
-    it "should create an assignment export record from the attributes" do
-      expect(AssignmentExport).to receive(:create).with(assignment_export_attributes)
+    it "creates an assignment export record from the attributes" do
+      allow(AssignmentExport).to receive(:find) { assignment_export }
+      expect(assignment_export).to receive(:update_attributes)
       subject
     end
     
-    it "should set an instance variable for the created assignment export" do
-      allow(AssignmentExport).to receive(:create) { assignment_export_double }
+    it "sets an instance variable for the created assignment export" do
       subject
-      expect(performer.instance_variable_get(:@assignment_export)).to eq(assignment_export_double)
+      expect(performer.instance_variable_get(:@assignment_export)).to eq(assignment_export)
     end
     
-    it "should create an empty array for error handling" do
+    it "creates an empty array for error handling" do
       subject
       expect(performer.instance_variable_get(:@errors)).to eq([])
     end
