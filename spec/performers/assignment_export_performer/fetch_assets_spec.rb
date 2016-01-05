@@ -14,16 +14,17 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "fetch_assets" do
     subject { performer.instance_eval { fetch_assets }}
+    before { performer.instance_variable_set(:@assignment_export, assignment_export) }
 
     describe "assignment submissions export" do
-      it_behaves_like "a fetchable resource", :professor, User # this is a User object fetched as 'professor'
-      it_behaves_like "a fetchable resource", :assignment
-      it_behaves_like "a fetchable resource", :course
+      it_behaves_like "an assignment export resource", :professor, User # this is a User object fetched as 'professor'
+      it_behaves_like "an assignment export resource", :assignment
+      it_behaves_like "an assignment export resource", :course
     end
 
     describe "team submissions export" do
       let(:performer) { performer_with_team }
-      it_behaves_like "a fetchable resource", :team
+      it_behaves_like "an assignment export resource", :team
     end
   end
 

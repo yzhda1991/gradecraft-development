@@ -18,8 +18,11 @@ module Toolkits
           let(:submission1) { create(:submission, assignment: assignment, student: student_course_membership1.user) }
           let(:submission2) { create(:submission, assignment: assignment, student: student_course_membership2.user) }
           let(:submissions) { [ submission1, submission2 ] }
+          let(:assignment_export) do
+            create(:assignment_export, course: course, professor: professor, assignment: assignment, team: team)
+          end
 
-          let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id }}
+          let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id, assignment_export_id: assignment_export.id }}
           let(:job_attrs_with_team) { job_attrs.merge(team_id: team.try(:id)) }
 
           let(:performer) { AssignmentExportPerformer.new(job_attrs) }
@@ -28,6 +31,25 @@ module Toolkits
       end
 
       module SharedExamples
+
+        RSpec.shared_examples "an assignment export resource" do |resource_name, resource_klass|
+          let(:expected_klass) { resource_klass || resource_name.to_s.camelize.constantize }
+
+          it "gets the #{resource_name} from the assignment export" do
+            expect(assignment_export).to receive(resource_name).and_return send(resource_name.to_sym)
+            subject
+          end
+
+          it "assigns the #{resource_name} to @#{resource_name}" do
+            subject
+            expect(performer.instance_variable_get(:"@#{resource_name}")).to eq(send(resource_name.to_sym))
+          end
+
+          it "fetches an object that actually has the correct class" do
+            subject
+            expect(performer.instance_variable_get(:"@#{resource_name}").class).to eq(expected_klass)
+          end
+        end
 
         RSpec.shared_examples "an expandable messages hash" do
           it "expands the base messages" do
