@@ -367,6 +367,7 @@ GradeCraft::Application.routes.draw do
   resources :assignment_exports do
     member do
       put :rebuild
+      get :download
     end
   end
 end

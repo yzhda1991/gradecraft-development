@@ -1,19 +1,12 @@
-= content_nav_for User
+= content_nav_for AssignmentExport
 
 %h3.pagetitle= @title
 
 .pageContent
   = render 'layouts/alerts'
 
-  - if current_course.has_teams?
-    .team-filter
-      = form_tag assignment_exports_path, :method => :post do
-        %label
-          .sr-only Select #{term_for :team}
-        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
-        = button_tag "Generate New Assignment Export"
-
-  %h3 Assignment Exports
+  %h2 Assignment Exports
+  %br 
   %table.nofeatures_default_last_name_dynatable
     %thead
       %tr
@@ -41,7 +34,7 @@
           %td
             = export.student_ids.count
           %td
-            = export.export_filename
+            = link_to export.export_filename, download_assignment_export_path(export)
           %td
             = "#{time_ago_in_words(export.last_export_completed_at)} ago" if export.last_export_completed_at
           %td

@@ -8,10 +8,8 @@ class AssignmentExportsController < ApplicationController
   end
 
   def destroy
-    fetch_assignment_export
-
     if delete_s3_object
-      @assignment_export.destroy
+      assignment_export.destroy
       flash[:success] = "Assignment export successfully deleted from server"
     else
       flash[:notice] = "Unable to delete the assignment export from the server"
@@ -20,13 +18,17 @@ class AssignmentExportsController < ApplicationController
     redirect_to exports_path
   end
 
+  def download
+    send_data assignment_export.fetch_object_from_s3.body.read, filename: assignment_export.export_filename
+  end
+
   protected
 
   def delete_s3_object
     @delete_s3_object ||= assignment_export.delete_object_from_s3
   end
 
-  def fetch_assignment_export
+  def assignment_export
     @assignment_export ||= AssignmentExport.find params[:id]
   end
     
