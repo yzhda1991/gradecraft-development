@@ -38,7 +38,7 @@ RSpec.describe S3Manager::Encryption do
   describe "managing client-encrypted objects" do
     let(:object_key) { "jerrys-hat" }
     let(:encrypted_client) { s3_manager.encrypted_client }
-    let(:object_body) { File.new("jerry-was-here.doc", "wb") }
+    let(:object_body) { File.new("jerry-was-here.doc", "w+b") }
     let(:put_encrypted_object) { s3_manager.put_encrypted_object(object_key, object_body) }
 
     describe "#put_encrypted_object" do
@@ -65,6 +65,9 @@ RSpec.describe S3Manager::Encryption do
     describe "#get_encrypted_object" do
       subject { s3_manager.get_encrypted_object(object_key) }
       before { put_encrypted_object }
+      let(:get_object_attrs) do
+        { bucket: s3_manager.bucket_name, key: object_key }
+      end
 
       it "should call #get_object on the encrypted client" do
         expect(encrypted_client).to receive(:get_object)
@@ -80,7 +83,8 @@ RSpec.describe S3Manager::Encryption do
       end
 
       it "should have the correct body of the gotten object" do
-        expect(subject.body.read).to eq(object_body)
+        expect(encrypted_client).to receive(:get_object).with(get_object_attrs)
+        subject
       end
 
       it "should suggest that AES256 encryption was used" do
