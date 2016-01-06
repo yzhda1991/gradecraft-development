@@ -182,7 +182,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
     it "caches the assignment export job" do
       subject
-      expect(AssignmentExportNew).not_to receive(:new)
+      expect(AssignmentExportJob).not_to receive(:new)
       subject
     end
   end
