@@ -16,12 +16,12 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     before(:each) do
       performer.instance_variable_set(:@export_file_basename, nil)
-      allow(performer).to receive(:archive_basename) { "some_great_assignment" }
+      allow(performer).to receive(:archive_basename) { "some_great_submissions" }
       allow(performer).to receive(:filename_timestamp) { filename_timestamp }
     end
 
     it "includes the fileized_assignment_name" do
-      expect(subject).to match(/^some_great_assignment/)
+      expect(subject).to match(/^some_great_submissions/)
     end
 
     it "is appended with a YYYY-MM-DD formatted timestamp" do
