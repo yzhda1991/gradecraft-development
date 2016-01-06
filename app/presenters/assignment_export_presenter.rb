@@ -1,4 +1,4 @@
-class AssignmentExportPresenter < Presenter::Base
+class SubmissionsExportPresenter < Presenter::Base
   def export_file_name
     properties.export_file_name
   end

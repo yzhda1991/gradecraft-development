@@ -1,11 +1,11 @@
 require 'rails_spec_helper'
 
-RSpec.describe AssignmentExportPerformer, type: :background_job do
+RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
-  include Toolkits::Performers::AssignmentExport::SharedExamples
+  include Toolkits::Performers::SubmissionsExport::SharedExamples
   include ModelAddons::SharedExamples
 
-  extend Toolkits::Performers::AssignmentExport::Context
+  extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 
   subject { performer }
@@ -56,8 +56,8 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
           performer.setup
         end
 
-        it "updates the export_completed_at time on the @assignment_export" do
-          expect(performer.assignment_export).to receive(:update_export_completed_time)
+        it "updates the export_completed_at time on the @submissions_export" do
+          expect(performer.submissions_export).to receive(:update_export_completed_time)
         end
       end
     end

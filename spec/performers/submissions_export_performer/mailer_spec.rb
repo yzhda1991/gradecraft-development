@@ -1,7 +1,7 @@
 require 'rails_spec_helper'
 
-RSpec.describe AssignmentExportPerformer, type: :background_job do
-  extend Toolkits::Performers::AssignmentExport::Context
+RSpec.describe SubmissionsExportPerformer, type: :background_job do
+  extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 
   subject { performer }

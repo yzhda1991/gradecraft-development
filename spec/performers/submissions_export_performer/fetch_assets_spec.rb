@@ -1,11 +1,11 @@
 require 'rails_spec_helper'
 
-RSpec.describe AssignmentExportPerformer, type: :background_job do
+RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
-  include Toolkits::Performers::AssignmentExport::SharedExamples
+  include Toolkits::Performers::SubmissionsExport::SharedExamples
   include ModelAddons::SharedExamples
 
-  extend Toolkits::Performers::AssignmentExport::Context
+  extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 
   subject { performer }
@@ -14,7 +14,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "fetch_assets" do
     subject { performer.instance_eval { fetch_assets }}
-    before { performer.instance_variable_set(:@assignment_export, assignment_export) }
+    before { performer.instance_variable_set(:@submissions_export, submissions_export) }
 
     describe "assignment submissions export" do
       it_behaves_like "an assignment export resource", :professor, User # this is a User object fetched as 'professor'

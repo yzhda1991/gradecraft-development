@@ -1,11 +1,11 @@
 require 'rails_spec_helper'
 
-RSpec.describe AssignmentExportPerformer, type: :background_job do
+RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
-  include Toolkits::Performers::AssignmentExport::SharedExamples
+  include Toolkits::Performers::SubmissionsExport::SharedExamples
   include ModelAddons::SharedExamples
 
-  extend Toolkits::Performers::AssignmentExport::Context
+  extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 
   subject { performer }

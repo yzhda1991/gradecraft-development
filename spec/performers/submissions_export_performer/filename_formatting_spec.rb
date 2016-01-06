@@ -1,11 +1,11 @@
 require 'rails_spec_helper'
 
-RSpec.describe AssignmentExportPerformer, type: :background_job do
+RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
-  include Toolkits::Performers::AssignmentExport::SharedExamples
+  include Toolkits::Performers::SubmissionsExport::SharedExamples
   include ModelAddons::SharedExamples
 
-  extend Toolkits::Performers::AssignmentExport::Context
+  extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 
   subject { performer }
@@ -36,7 +36,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
     it "sets the filename to an @export_file_basename" do
       subject
-      expect(performer.instance_variable_get(:@export_file_basename)).to eq("some_great_assignment_export_#{filename_timestamp}")
+      expect(performer.instance_variable_get(:@export_file_basename)).to eq("some_great_submissions_export_#{filename_timestamp}")
     end
   end
 

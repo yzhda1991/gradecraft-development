@@ -1,18 +1,18 @@
 require 'rails_spec_helper'
 
-RSpec.describe AssignmentExportPerformer, type: :background_job do
+RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
-  include Toolkits::Performers::AssignmentExport::SharedExamples
+  include Toolkits::Performers::SubmissionsExport::SharedExamples
   include ModelAddons::SharedExamples
 
-  extend Toolkits::Performers::AssignmentExport::Context
+  extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 
   subject { performer }
 
   it_behaves_like "ModelAddons::ImprovedLogging is included"
 
-  describe "#assignment_export_attributes" do
+  describe "#submissions_export_attributes" do
     before do
       allow(performer).to receive_messages({
         submissions_snapshot: {some: "hash"},
@@ -20,7 +20,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       })
     end
 
-    subject { performer.assignment_export_attributes }
+    subject { performer.submissions_export_attributes }
     let(:export_start_time) { Date.parse("Jan 20 1987").to_time }
 
     it "should include the student ids" do
@@ -223,7 +223,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
 
   describe "s3 concerns" do
     before do
-      performer.instance_variable_set(:@assignment_export, assignment_export)
+      performer.instance_variable_set(:@submissions_export, submissions_export)
       allow(performer).to receive(:expanded_archive_base_path) { "/this/weird/path" }
     end
     
@@ -231,7 +231,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       subject { performer.instance_eval { upload_archive_to_s3 }}
 
       it "calls #upload_file_to_s3 on the assignment export with the file path" do
-        expect(assignment_export).to receive(:upload_file_to_s3).with("/this/weird/path.zip")
+        expect(submissions_export).to receive(:upload_file_to_s3).with("/this/weird/path.zip")
         subject
       end
     end
@@ -240,7 +240,7 @@ RSpec.describe AssignmentExportPerformer, type: :background_job do
       subject { performer.instance_eval { check_s3_upload_success }}
 
       it "checks if the object exists on S3 through the assignment export" do
-        expect(assignment_export).to receive(:s3_object_exists?)
+        expect(submissions_export).to receive(:s3_object_exists?)
         subject
       end
     end

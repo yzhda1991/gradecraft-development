@@ -1,4 +1,4 @@
-= content_nav_for AssignmentExport
+= content_nav_for SubmissionsExport
 
 %h3.pagetitle= @title
 
@@ -34,7 +34,7 @@
           %td
             = export.student_ids.count
           %td
-            = link_to export.export_filename, download_assignment_export_path(export)
+            = link_to export.export_filename, download_submissions_export_path(export)
           %td
             = "#{time_ago_in_words(export.last_export_completed_at)} ago" if export.last_export_completed_at
           %td
