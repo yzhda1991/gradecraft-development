@@ -30,6 +30,22 @@ RSpec.describe AssignmentExport do
     end
   end
 
+  describe "validations" do
+    describe "course_id" do
+      subject { create(:assignment_export, course: nil) }
+      it "requires a course_id" do
+        expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    describe "assignment_id" do
+      subject { create(:assignment_export, course: nil) }
+      it "requires an assignment_id" do
+        expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+  end
+
   describe "#s3_object_key" do
     subject { assignment_export.s3_object_key }
 

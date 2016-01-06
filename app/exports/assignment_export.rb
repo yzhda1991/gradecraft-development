@@ -19,6 +19,9 @@ class AssignmentExport < ActiveRecord::Base
     :upload_archive_to_s3,
     :check_s3_upload_success
 
+  validates :course_id, presence: true
+  validates :assignment_id, presence: true
+
 
   before_create :set_s3_attributes
 
