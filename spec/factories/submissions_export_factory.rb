@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :assignment_export do
+  factory :submissions_export do
     association :course
     association :professor, factory: :user
     association :team

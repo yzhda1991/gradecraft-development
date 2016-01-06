@@ -40,33 +40,6 @@ ActiveRecord::Schema.define(version: 20160119190311) do
   add_index "announcements", ["author_id"], name: "index_announcements_on_author_id", using: :btree
   add_index "announcements", ["course_id"], name: "index_announcements_on_course_id", using: :btree
 
-  create_table "assignment_exports", force: :cascade do |t|
-    t.integer  "assignment_id"
-    t.integer  "course_id"
-    t.integer  "professor_id"
-    t.integer  "student_ids",                              default: [], null: false, array: true
-    t.integer  "team_id"
-    t.text     "export_filename"
-    t.text     "s3_object_key"
-    t.text     "s3_bucket_name"
-    t.text     "performer_error_log",                      default: [], null: false, array: true
-    t.hstore   "submissions_snapshot",                     default: {}, null: false
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
-    t.datetime "last_export_started_at"
-    t.datetime "last_export_completed_at"
-    t.boolean  "generate_export_csv"
-    t.boolean  "export_csv_successful"
-    t.boolean  "create_student_directories"
-    t.boolean  "student_directories_created_successfully"
-    t.boolean  "create_submission_text_files"
-    t.boolean  "create_submission_binary_files"
-    t.boolean  "generate_error_log"
-    t.boolean  "archive_exported_files"
-    t.boolean  "upload_archive_to_s3"
-    t.boolean  "check_s3_upload_success"
-  end
-
   create_table "assignment_files", force: :cascade do |t|
     t.string   "filename",        limit: 255
     t.integer  "assignment_id"
@@ -655,6 +628,33 @@ ActiveRecord::Schema.define(version: 20160119190311) do
 
   add_index "submissions", ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
   add_index "submissions", ["course_id"], name: "index_submissions_on_course_id", using: :btree
+
+  create_table "submissions_exports", force: :cascade do |t|
+    t.integer  "assignment_id"
+    t.integer  "course_id"
+    t.integer  "professor_id"
+    t.integer  "student_ids",                              default: [], null: false, array: true
+    t.integer  "team_id"
+    t.text     "export_filename"
+    t.text     "s3_object_key"
+    t.text     "s3_bucket_name"
+    t.text     "performer_error_log",                      default: [], null: false, array: true
+    t.hstore   "submissions_snapshot",                     default: {}, null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.datetime "last_export_started_at"
+    t.datetime "last_export_completed_at"
+    t.boolean  "generate_export_csv"
+    t.boolean  "export_csv_successful"
+    t.boolean  "create_student_directories"
+    t.boolean  "student_directories_created_successfully"
+    t.boolean  "create_submission_text_files"
+    t.boolean  "create_submission_binary_files"
+    t.boolean  "generate_error_log"
+    t.boolean  "archive_exported_files"
+    t.boolean  "upload_archive_to_s3"
+    t.boolean  "check_s3_upload_success"
+  end
 
   create_table "tasks", force: :cascade do |t|
     t.integer  "assignment_id"

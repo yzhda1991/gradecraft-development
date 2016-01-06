@@ -1,5 +1,4 @@
-# @mz todo: add specs
-class AssignmentExport < ActiveRecord::Base
+class SubmissionsExport < ActiveRecord::Base
   belongs_to :course
   belongs_to :professor, class_name: "User", foreign_key: "professor_id"
   belongs_to :team
@@ -21,7 +20,6 @@ class AssignmentExport < ActiveRecord::Base
 
   validates :course_id, presence: true
   validates :assignment_id, presence: true
-
 
   before_create :set_s3_attributes
 

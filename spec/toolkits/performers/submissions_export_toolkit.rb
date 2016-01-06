@@ -1,6 +1,6 @@
 module Toolkits
   module Performers
-    module AssignmentExport
+    module SubmissionsExport
 
       module Context
         def define_context
@@ -18,15 +18,15 @@ module Toolkits
           let(:submission1) { create(:submission, assignment: assignment, student: student_course_membership1.user) }
           let(:submission2) { create(:submission, assignment: assignment, student: student_course_membership2.user) }
           let(:submissions) { [ submission1, submission2 ] }
-          let(:assignment_export) do
-            create(:assignment_export, course: course, professor: professor, assignment: assignment, team: team)
+          let(:submissions_export) do
+            create(:submissions_export, course: course, professor: professor, assignment: assignment, team: team)
           end
 
-          let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id, assignment_export_id: assignment_export.id }}
+          let(:job_attrs) {{ professor_id: professor.id, assignment_id: assignment.id, submissions_export_id: submissions_export.id }}
           let(:job_attrs_with_team) { job_attrs.merge(team_id: team.try(:id)) }
 
-          let(:performer) { AssignmentExportPerformer.new(job_attrs) }
-          let(:performer_with_team) { AssignmentExportPerformer.new(job_attrs_with_team) }
+          let(:performer) { SubmissionsExportPerformer.new(job_attrs) }
+          let(:performer_with_team) { SubmissionsExportPerformer.new(job_attrs_with_team) }
         end
       end
 
@@ -36,7 +36,7 @@ module Toolkits
           let(:expected_klass) { resource_klass || resource_name.to_s.camelize.constantize }
 
           it "gets the #{resource_name} from the assignment export" do
-            expect(assignment_export).to receive(resource_name).and_return send(resource_name.to_sym)
+            expect(submissions_export).to receive(resource_name).and_return send(resource_name.to_sym)
             subject
           end
 

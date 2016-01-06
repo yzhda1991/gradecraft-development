@@ -14,12 +14,10 @@
       - else
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(presenter.assignment)
 
-      // @mz #assignment_export
-      // THIS IS WHERE THE SUBMISSION EXPORT WILL START
       - if presenter.team
-        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download Team Submissions'), assignment_exports_path(assignment_id: presenter.assignment.id, team_id: presenter.team.id), method: :post 
+        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download Team Submissions'), submissions_exports_path(assignment_id: presenter.assignment.id, team_id: presenter.team.id), method: :post 
       - else
-        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download All Submissions'), assignment_exports_path(assignment_id: presenter.assignment.id), method: :post 
+        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download All Submissions'), submissions_exports_path(assignment_id: presenter.assignment.id), method: :post 
 
       %li
         %a{:href => import_grades_assignment_path(presenter.assignment) }

@@ -1,14 +1,14 @@
-class AssignmentExportPerformer < ResqueJob::Performer
+class SubmissionsExportPerformer < ResqueJob::Performer
   require 'fileutils' # need this for mkdir_p
   require 'open-uri' # need this for getting the S3 file over http
   include ModelAddons::ImprovedLogging # log errors with attributes
 
-  attr_reader :assignment_export
+  attr_reader :submissions_export
 
   def setup
-    @assignment_export = AssignmentExport.find @attrs[:assignment_export_id]
+    @submissions_export = SubmissionsExport.find @attrs[:submissions_export_id]
     fetch_assets
-    @assignment_export.update_attributes assignment_export_attributes
+    @submissions_export.update_attributes submissions_export_attributes
     @errors = []
   end
 
@@ -18,62 +18,62 @@ class AssignmentExportPerformer < ResqueJob::Performer
       # generate the csv overview for the assignment or team
       require_success(generate_csv_messages, max_result_size: 250) do
         generate_export_csv
-        @assignment_export.update_attributes generate_export_csv: true
+        @submissions_export.update_attributes generate_export_csv: true
       end
 
       # check whether the csv export was successful
       require_success(csv_export_messages) do
-        @assignment_export.update_attributes export_csv_successful: true
+        @submissions_export.update_attributes export_csv_successful: true
         export_csv_successful?
       end
 
       # generate student directories
       require_success(create_student_directory_messages) do
-        @assignment_export.update_attributes create_student_directories: true
+        @submissions_export.update_attributes create_student_directories: true
         create_student_directories
       end
 
       # check whether the student directories were all created successfully
       require_success(check_student_directory_messages) do
-        @assignment_export.update_attributes student_directories_created_successfully: true
+        @submissions_export.update_attributes student_directories_created_successfully: true
         student_directories_created_successfully?
       end
 
       # create text files in each student directory if there is submission data that requires it
       require_success(create_submission_text_file_messages) do
-        @assignment_export.update_attributes create_submission_text_files: true
+        @submissions_export.update_attributes create_submission_text_files: true
         create_submission_text_files
       end
 
       # create binary files in each student directory
       require_success(create_submission_binary_file_messages) do
-        @assignment_export.update_attributes create_submission_binary_files: true
+        @submissions_export.update_attributes create_submission_binary_files: true
         create_submission_binary_files
       end
 
       # write error log for errors that may have occurred during file generation
       require_success(generate_error_log_messages) do
-        @assignment_export.update_attributes generate_error_log: true
+        @submissions_export.update_attributes generate_error_log: true
         generate_error_log
       end
 
       require_success(archive_exported_files_messages) do
-        @assignment_export.update_attributes archive_exported_files: true
+        @submissions_export.update_attributes archive_exported_files: true
         archive_exported_files
       end
 
       require_success(upload_archive_to_s3_messages) do
-        @assignment_export.update_attributes upload_archive_to_s3: true
+        @submissions_export.update_attributes upload_archive_to_s3: true
         upload_archive_to_s3
       end
 
       require_success(check_s3_upload_success_messages) do
-        @assignment_export.update_attributes check_s3_upload_success: true
+        @submissions_export.update_attributes check_s3_upload_success: true
         check_s3_upload_success
       end
 
       deliver_outcome_mailer
-      @assignment_export.update_export_completed_time
+      @submissions_export.update_export_completed_time
     else
       if logger
         log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
@@ -81,7 +81,7 @@ class AssignmentExportPerformer < ResqueJob::Performer
     end
   end
 
-  def assignment_export_attributes
+  def submissions_export_attributes
     {
       student_ids: @students.collect(&:id),
       submissions_snapshot: submissions_snapshot,
@@ -97,10 +97,10 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def fetch_assets
-    @assignment = @assignment_export.assignment
-    @course = @assignment_export.course
-    @professor = @assignment_export.professor
-    @team = @assignment_export.team
+    @assignment = @submissions_export.assignment
+    @course = @submissions_export.course
+    @professor = @submissions_export.professor
+    @team = @submissions_export.team
     @students = fetch_students
     @submissions = fetch_submissions
   end
@@ -357,11 +357,11 @@ class AssignmentExportPerformer < ResqueJob::Performer
   end
 
   def upload_archive_to_s3
-    @assignment_export.upload_file_to_s3("#{expanded_archive_base_path}.zip")
+    @submissions_export.upload_file_to_s3("#{expanded_archive_base_path}.zip")
   end
 
   def check_s3_upload_success
-    @check_s3_upload_success ||= @assignment_export.s3_object_exists?
+    @check_s3_upload_success ||= @submissions_export.s3_object_exists?
   end
 
   private

@@ -1,6 +1,6 @@
 module Toolkits
   module Exports
-    module AssignmentExportToolkit
+    module SubmissionsExportToolkit
 
       module Context
         def define_association_context
@@ -9,7 +9,7 @@ module Toolkits
           let(:team) { create(:team) }
           let(:assignment) { create(:assignment) }
 
-          let(:assignment_export_associations) {{
+          let(:submissions_export_associations) {{
             course: course,
             professor: professor,
             team: team,

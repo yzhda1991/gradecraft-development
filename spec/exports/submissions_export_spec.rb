@@ -1,17 +1,17 @@
 require 'rails_spec_helper'
 require 'active_record_spec_helper'
 
-RSpec.describe AssignmentExport do
-  let(:assignment_export) { AssignmentExport.new }
+RSpec.describe SubmissionsExport do
+  let(:submissions_export) { SubmissionsExport.new }
   let(:s3_manager) { double(S3Manager::Manager) }
   let(:s3_object_key) { double(:s3_object_key) }
 
   describe "associations" do
-    extend Toolkits::Exports::AssignmentExportToolkit::Context
+    extend Toolkits::Exports::SubmissionsExportToolkit::Context
     define_association_context
 
-    let(:assignment_export) { create(:assignment_export, assignment_export_associations) }
-    subject { assignment_export }
+    let(:submissions_export) { create(:submissions_export, submissions_export_associations) }
+    subject { submissions_export }
 
     it "belongs to a course" do
       expect(subject.course).to eq(course)
@@ -32,14 +32,14 @@ RSpec.describe AssignmentExport do
 
   describe "validations" do
     describe "course_id" do
-      subject { create(:assignment_export, course: nil) }
+      subject { create(:submissions_export, course: nil) }
       it "requires a course_id" do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
 
     describe "assignment_id" do
-      subject { create(:assignment_export, course: nil) }
+      subject { create(:submissions_export, course: nil) }
       it "requires an assignment_id" do
         expect { subject }.to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -47,10 +47,10 @@ RSpec.describe AssignmentExport do
   end
 
   describe "#s3_object_key" do
-    subject { assignment_export.s3_object_key }
+    subject { submissions_export.s3_object_key }
 
     before do
-      allow(assignment_export).to receive_messages(course_id: 40, assignment_id: 50, export_filename: "stuff.zip")
+      allow(submissions_export).to receive_messages(course_id: 40, assignment_id: 50, export_filename: "stuff.zip")
     end
 
     it "uses the correct object key" do
@@ -59,7 +59,7 @@ RSpec.describe AssignmentExport do
   end
 
   describe "#s3_manager" do
-    subject { assignment_export.s3_manager }
+    subject { submissions_export.s3_manager }
 
     it "creates an S3Manager::Manager object" do
       expect(subject.class).to eq(S3Manager::Manager)
@@ -73,12 +73,12 @@ RSpec.describe AssignmentExport do
   end
 
   describe "#upload_file_to_s3" do
-    subject { assignment_export.upload_file_to_s3("great-file.txt") }
+    subject { submissions_export.upload_file_to_s3("great-file.txt") }
 
     before do
       allow(s3_manager).to receive(:put_encrypted_object) { "some s3 response" }
-      allow(assignment_export).to receive(:s3_object_key) { "snake-hat-key" }
-      allow(assignment_export).to receive(:s3_manager) { s3_manager }
+      allow(submissions_export).to receive(:s3_object_key) { "snake-hat-key" }
+      allow(submissions_export).to receive(:s3_manager) { s3_manager }
     end
 
     it "puts an S3 encrypted object with the object key and file path" do
@@ -92,38 +92,38 @@ RSpec.describe AssignmentExport do
   end
 
   describe "#update_export_completed_time" do
-    subject { assignment_export.update_export_completed_time }
+    subject { submissions_export.update_export_completed_time }
     let(:sometime) { Time.parse("Oct 20 1982") }
-    before { allow(assignment_export).to receive(:export_time) { sometime } }
+    before { allow(submissions_export).to receive(:export_time) { sometime } }
 
     it "calls update_attributes on the assignment export with the export time" do
-      expect(assignment_export).to receive(:update_attributes).with(last_export_completed_at: sometime)
+      expect(submissions_export).to receive(:update_attributes).with(last_export_completed_at: sometime)
       subject
     end
 
     it "updates the last_export_completed_at timestamp to now" do
       subject
-      expect(assignment_export.last_export_completed_at).to eq(sometime)
+      expect(submissions_export.last_export_completed_at).to eq(sometime)
     end
   end
 
   describe "#set_s3_attributes" do
     before do
-      allow(assignment_export).to receive(:s3_attributes) {{ assignment_id: 98000 }}
+      allow(submissions_export).to receive(:s3_attributes) {{ assignment_id: 98000 }}
     end
 
     it "sets the assignment export value to the index in the s3_attributes hash" do
-      assignment_export.set_s3_attributes
-      expect(assignment_export.assignment_id).to eq(98000)
+      submissions_export.set_s3_attributes
+      expect(submissions_export.assignment_id).to eq(98000)
     end
   end
 
   describe "#s3_object_summary" do
     before do
-      allow(assignment_export).to receive_messages(s3_object_key: s3_object_key, s3_manager: s3_manager)
+      allow(submissions_export).to receive_messages(s3_object_key: s3_object_key, s3_manager: s3_manager)
     end
 
-    subject { assignment_export.s3_object_summary }
+    subject { submissions_export.s3_object_summary }
 
     it "builds a new object summary with the object key and the s3 manager" do
       expect(S3Manager::Manager::ObjectSummary).to receive(:new).with(s3_object_key, s3_manager)
@@ -144,16 +144,16 @@ RSpec.describe AssignmentExport do
   describe "#export_time" do
     it "should return the time now" do
       expect(Time).to receive(:now)
-      assignment_export.instance_eval { export_time }
+      submissions_export.instance_eval { export_time }
     end
   end
 
   describe "#s3_attributes" do
-    subject { assignment_export.instance_eval { s3_attributes }}
+    subject { submissions_export.instance_eval { s3_attributes }}
 
     before do
-      allow(assignment_export).to receive_messages(s3_object_key: s3_object_key)
-      allow(assignment_export).to receive_message_chain(:s3_manager, :bucket_name) { "dave is home" }
+      allow(submissions_export).to receive_messages(s3_object_key: s3_object_key)
+      allow(submissions_export).to receive_message_chain(:s3_manager, :bucket_name) { "dave is home" }
     end
 
     it "should return a hash with the s3 object key and the s3 bucket name" do

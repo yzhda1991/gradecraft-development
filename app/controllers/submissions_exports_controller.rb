@@ -1,8 +1,8 @@
-class AssignmentExportsController < ApplicationController
+class SubmissionsExportsController < ApplicationController
   before_filter :ensure_staff?
 
   def create
-    if create_assignment_export and assignment_export_job.enqueue
+    if create_submissions_export and submissions_export_job.enqueue
       job_success_flash 
     else
       job_failure_flash
@@ -13,7 +13,7 @@ class AssignmentExportsController < ApplicationController
 
   def destroy
     if delete_s3_object
-      assignment_export.destroy
+      submissions_export.destroy
       flash[:success] = "Assignment export successfully deleted from server"
     else
       flash[:alert] = "Unable to delete the assignment export from the server"
@@ -23,21 +23,21 @@ class AssignmentExportsController < ApplicationController
   end
 
   def download
-    send_data assignment_export.fetch_object_from_s3.body.read, filename: assignment_export.export_filename
+    send_data submissions_export.fetch_object_from_s3.body.read, filename: submissions_export.export_filename
   end
 
   protected
 
   def delete_s3_object
-    @delete_s3_object ||= assignment_export.delete_object_from_s3
+    @delete_s3_object ||= submissions_export.delete_object_from_s3
   end
 
-  def assignment_export
-    @assignment_export ||= AssignmentExport.find params[:id]
+  def submissions_export
+    @submissions_export ||= SubmissionsExport.find params[:id]
   end
     
-  def create_assignment_export
-    @assignment_export = AssignmentExport.create(
+  def create_submissions_export
+    @submissions_export = SubmissionsExport.create(
       assignment_id: params[:assignment_id],
       course_id: current_course.id,
       professor_id: current_user.id,
@@ -45,8 +45,8 @@ class AssignmentExportsController < ApplicationController
     )
   end
 
-  def assignment_export_job
-    @assignment_export_job ||= AssignmentExportJob.new assignment_export_id: @assignment_export.id
+  def submissions_export_job
+    @submissions_export_job ||= SubmissionsExportJob.new submissions_export_id: @submissions_export.id
   end
 
   def job_success_flash

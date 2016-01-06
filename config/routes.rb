@@ -357,16 +357,9 @@ GradeCraft::Application.routes.draw do
 
   #18. Exports
   resources :exports
-  scope "/exports" do
-    scope "/assignments" do
-      get '/:assignment_id/submissions' => 'assignment_exports#submissions', as: :assignment_exports_submissions
-      get '/:assignment_id/teams/:team_id/submissions' => 'assignment_exports#team_submissions', as: :assignment_exports_team_submissions
-    end
-  end
 
-  resources :assignment_exports do
+  resources :submissions_exports do
     member do
-      put :rebuild
       get :download
     end
   end
