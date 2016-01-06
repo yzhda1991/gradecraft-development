@@ -30,15 +30,15 @@ describe EarnedBadge do
     end
   end
 
-  describe "#multiple_allowed" do 
-    it "allows a student to earn a badge if they haven't earned it yet" do 
+  describe "#multiple_allowed" do
+    it "allows a student to earn a badge if they haven't earned it yet" do
       badge = create(:badge)
       student = create(:user)
       earned_badge = create(:earned_badge, badge: badge, student: student)
       expect(earned_badge).to be_valid
     end
 
-    it "allows a student to earn a badge multiple times if multiple_allowed" do 
+    it "allows a student to earn a badge multiple times if multiple_allowed" do
       badge = create(:badge, can_earn_multiple_times: true)
       student = create(:user)
       earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
@@ -47,7 +47,7 @@ describe EarnedBadge do
       expect(badge.earned_badge_count_for_student(student)).to eq(3)
     end
 
-    it "prevents a student from earning a badge if multiple_times not allowed" do 
+    it "prevents a student from earning a badge if multiple_times not allowed" do
       badge = create(:badge, can_earn_multiple_times: false)
       student = create(:user)
       EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
@@ -56,7 +56,16 @@ describe EarnedBadge do
     end
   end
 
-  describe "#check_unlockables" do 
+  describe "#check_unlockables" do
     skip "implement"
+  end
+
+  describe "score" do
+    it "caches 0 for a badge with nil points" do
+      badge = create(:badge, point_total: nil)
+      student = create(:user)
+      earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
+      expect(earned_badge.score).to eq(0)
+    end
   end
 end

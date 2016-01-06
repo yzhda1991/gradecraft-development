@@ -44,7 +44,7 @@ class EarnedBadge < ActiveRecord::Base
 
   def cache_associations
     self.course_id ||= badge.try(:course_id)
-    self.score ||= badge.try(:point_total)
+    self.score ||= badge.try(:point_total) || 0
   end
 
   def multiple_allowed
