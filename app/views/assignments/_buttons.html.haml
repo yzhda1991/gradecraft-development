@@ -16,22 +16,10 @@
 
       // @mz #assignment_export
       // THIS IS WHERE THE SUBMISSION EXPORT WILL START
-      %li
-        - if presenter.team
-          = form_tag assignment_exports_path, :method => :post do
-            = hidden_field_tag "assignment_id", presenter.assignment.id
-            = hidden_field_tag "team_id", presenter.team.id
-            .fa.fa-file-zip-o.fa-fw
-            = button_tag "Export Team Submissions"
-
-        - if ! presenter.team
-          = form_tag assignment_exports_path, :method => :post do
-            = hidden_field_tag "assignment_id", presenter.assignment.id
-            .fa.fa-file-zip-o.fa-fw
-            = button_tag "Export Submissions"
-
-          %a{:href => assignment_exports_submissions_path(presenter.assignment, format: 'zip') }
-            Download Submissions
+      - if presenter.team
+        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download Team Submissions'), assignment_exports_path(assignment_id: presenter.assignment.id, team_id: presenter.team.id), method: :post 
+      - else
+        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download All Submissions'), assignment_exports_path(assignment_id: presenter.assignment.id), method: :post 
 
       %li
         %a{:href => import_grades_assignment_path(presenter.assignment) }
