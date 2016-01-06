@@ -109,4 +109,24 @@ RSpec.describe AssignmentExportsController, type: :controller do
     end
   end
 
+  describe "#delete_s3_object" do
+    subject { controller.instance_eval { delete_s3_object } }
+
+    it "calls #delete_object_from_s3 on the assignment export" do
+      allow(controller).to receive(:assignment_export) { assignment_export }
+      expect(assignment_export).to receive(:delete_object_from_s3)
+      subject
+    end
+  end
+
+  describe "#assignment_export" do
+    subject { controller.instance_eval { assignment_export } }
+
+    it "fetches an assignment export by id" do
+      allow(controller).to receive(:params) {{ id: assignment_export.id }}
+      expect(AssignmentExport).to receive(:find).with(assignment_export.id)
+      subject
+    end
+  end
+
 end
