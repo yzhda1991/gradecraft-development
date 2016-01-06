@@ -8,15 +8,15 @@ describe HumanHistory::HistoryTokenRegistry do
 
   describe ".register" do
     it "adds the token type to the registry" do
-      described_class.register HumanHistory::ActorHistoryToken, ->(key, _, _) { key == "actor_id" }
+      described_class.register HumanHistory::ActorHistoryToken, ->(key, value, set) { key == "actor_id" }
 
       expect(described_class.registered_tokens.length).to eq 1
       expect(described_class.registered_tokens.first.type).to eq HumanHistory::ActorHistoryToken
     end
 
     it "does not register the same token type twice" do
-      described_class.register HumanHistory::ActorHistoryToken, ->(key, _, _) { key == "actor_id" }
-      described_class.register HumanHistory::ActorHistoryToken, ->(key, _, _) { key == "actor_id" }
+      described_class.register HumanHistory::ActorHistoryToken, ->(key, value, set) { key == "actor_id" }
+      described_class.register HumanHistory::ActorHistoryToken, ->(key, value, set) { key == "actor_id" }
 
       expect(described_class.registered_tokens.length).to eq 1
     end
@@ -34,7 +34,7 @@ describe HumanHistory::HistoryTokenRegistry do
 
   describe ".unregister" do
     it "removes the token type from the registry" do
-      described_class.register HumanHistory::ActorHistoryToken, ->(key, _, _) { key == "actor_id" }
+      described_class.register HumanHistory::ActorHistoryToken, ->(key, value, set) { key == "actor_id" }
       described_class.unregister HumanHistory::ActorHistoryToken
 
       expect(described_class.registered_tokens).to be_empty
