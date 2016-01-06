@@ -34,7 +34,10 @@
           %td
             = export.student_ids.count
           %td
-            = link_to export.export_filename, download_submissions_export_path(export)
+            - if export.downloadable?
+              = link_to export.export_filename, download_submissions_export_path(export)
+            - else
+              = export.export_filename
           %td
             = "#{time_ago_in_words(export.last_export_completed_at)} ago" if export.last_export_completed_at
           %td
@@ -45,4 +48,6 @@
           %td
             .right
               %ul.button-bar
+                - if export.downloadable?
+                  %li= link_to raw("<i class='fa fa-download fa-fw'> </i> Download"), download_submissions_export_path(export), :class => 'button', style: "margin-right: 18px"
                 %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete"), export, :class => 'button', :data => { confirm: 'This will delete the submissions export. Are you sure?' }, :method => :delete

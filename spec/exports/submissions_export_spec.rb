@@ -30,6 +30,24 @@ RSpec.describe SubmissionsExport do
     end
   end
 
+  describe "#downloadable?" do
+    subject { submissions_export.downloadable? }
+
+    context "export has a last_export_completed_at time" do
+      it "is downloadable" do
+        submissions_export.last_export_completed_at = Time.now
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "export doesn't have a last_export_completed_at time" do
+      it "isn't download able" do
+        submissions_export.last_export_completed_at = nil
+        expect(subject).to be_falsey
+      end
+    end
+  end
+
   describe "validations" do
     describe "course_id" do
       subject { create(:submissions_export, course: nil) }

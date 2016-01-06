@@ -31,6 +31,10 @@ class SubmissionsExport < ActiveRecord::Base
     @s3_manager ||= S3Manager::Manager.new
   end
 
+  def downloadable?
+    !! last_export_completed_at
+  end
+
   def upload_file_to_s3(file_path)
     s3_manager.put_encrypted_object(s3_object_key, file_path)
   end
