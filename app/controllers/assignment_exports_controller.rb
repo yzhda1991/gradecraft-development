@@ -16,7 +16,7 @@ class AssignmentExportsController < ApplicationController
       assignment_export.destroy
       flash[:success] = "Assignment export successfully deleted from server"
     else
-      flash[:notice] = "Unable to delete the assignment export from the server"
+      flash[:alert] = "Unable to delete the assignment export from the server"
     end
 
     redirect_to exports_path

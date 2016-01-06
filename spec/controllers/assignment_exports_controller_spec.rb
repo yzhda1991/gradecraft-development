@@ -6,6 +6,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
   let(:team) { teams.first }
   let(:course) { create(:course, teams: teams) }
   let(:assignment_exports) { create_list(:assignment_export, 2, course: course, assignment: assignment) }
+  let(:assignment_export) { create(:assignment_export, course: course, assignment: assignment) }
   let(:assignment) { create(:assignment) }
   let(:professor) { create(:professor_course_membership, course: course).user }
 
@@ -46,5 +47,51 @@ RSpec.describe AssignmentExportsController, type: :controller do
       expect(response).to redirect_to(assignment_path(assignment))
     end
   end
+
+  describe "DELETE #destroy" do
+    subject { delete :destroy, id: assignment_export.id }
+
+    it "deletes the corresponding s3 object for the assignment export" do
+      expect(controller).to receive(:delete_s3_object)
+      subject
+    end
+
+
+    describe "determining success and failure" do
+      context "the assignment export is destroyed and the s3 object deleted" do
+        before do
+          allow(controller).to receive(:delete_s3_object) { true }
+        end
+
+        it "destroys the assignment export" do
+          allow(AssignmentExport).to receive(:find) { assignment_export }
+          expect(assignment_export).to receive(:destroy)
+          subject
+        end
+
+        it "notifies the user of success" do
+          subject
+          expect(flash[:success]).to match(/Assignment export successfully deleted/)
+        end
+      end
+
+      context "the assignment export is not destroyed and the s3 object fails to delete" do
+        before do
+          allow(controller).to receive(:delete_s3_object) { false }
+        end
+
+        it "notifies the user of the failure" do
+          subject
+          expect(flash[:alert]).to match(/Unable to delete the assignment export/)
+        end
+      end
+    end
+
+    it "redirects to the exports path" do
+      subject
+      expect(response).to redirect_to(exports_path)
+    end
+  end
+
 
 end
