@@ -24,6 +24,7 @@ class AssignmentExportsController < ApplicationController
 
   def download
     send_data assignment_export.fetch_object_from_s3.body.read, filename: assignment_export.export_filename
+    render nothing: true
   end
 
   protected

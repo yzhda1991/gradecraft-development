@@ -93,5 +93,20 @@ RSpec.describe AssignmentExportsController, type: :controller do
     end
   end
 
+  describe "GET #download" do
+    subject { get :download, id: assignment_export.id }
+    let(:s3_object_body) { double("s3 object body").as_null_object }
+    let(:export_filename) { "/some/file/name.zip" }
+
+    before do
+      allow(controller).to receive_message_chain(:assignment_export, :fetch_object_from_s3, :body, :read) { s3_object_body }
+      allow(controller).to receive_message_chain(:assignment_export, :export_filename) { export_filename }
+    end
+
+    it "streams the s3 object to the client" do
+      expect(controller).to receive(:send_data).with(s3_object_body, filename: export_filename)
+      subject
+    end
+  end
 
 end
