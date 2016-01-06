@@ -1,5 +1,7 @@
 class CreateAssignmentExports < ActiveRecord::Migration
   def change
+    enable_extension 'hstore'
+
     create_table :assignment_exports do |t|
       t.integer :assignment_id
       t.integer :course_id
