@@ -20,4 +20,14 @@ describe UsersHelper do
       helper.cancel_course_memberships user
     end
   end
+
+  describe "#total_scores_for_chart" do
+    it "handles the summing of earned badges, including old badges cached with nil points" do
+      course = double(:course, assignment_types: [], badge_term: "Badgeinskies", total_points: 0)
+      pluck = double(:pluck, pluck: [1000,nil])
+      earned_badges = double(:earned_badges, where: pluck)
+      user = double(:user, earned_badges: earned_badges)
+      expect(helper.total_scores_for_chart(user,course)).to eq({:scores=>[{:data=>[1000], :name=>"Badgeinskies"}], :course_total=>1000})
+    end
+  end
 end
