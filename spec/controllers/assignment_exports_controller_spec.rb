@@ -111,22 +111,79 @@ RSpec.describe AssignmentExportsController, type: :controller do
 
   describe "#delete_s3_object" do
     subject { controller.instance_eval { delete_s3_object } }
+    before { allow(controller).to receive(:assignment_export) { assignment_export } }
 
     it "calls #delete_object_from_s3 on the assignment export" do
-      allow(controller).to receive(:assignment_export) { assignment_export }
       expect(assignment_export).to receive(:delete_object_from_s3)
+      subject
+    end
+
+    it "caches the deletion outcome" do
+      subject
+      expect(assignment_export).not_to receive(:delete_object_from_s3)
       subject
     end
   end
 
   describe "#assignment_export" do
     subject { controller.instance_eval { assignment_export } }
+    before { allow(controller).to receive(:params) {{ id: assignment_export.id }} }
 
     it "fetches an assignment export by id" do
-      allow(controller).to receive(:params) {{ id: assignment_export.id }}
       expect(AssignmentExport).to receive(:find).with(assignment_export.id)
+      subject
+    end
+
+    it "caches the deletion outcome" do
+      subject
+      expect(AssignmentExport).not_to receive(:find).with(assignment_export.id)
       subject
     end
   end
 
+  describe "#create_assignment_export" do
+    subject { controller.instance_eval { create_assignment_export } }
+    let(:assignment_export_attrs) {{
+      assignment_id: assignment.id,
+      course_id: course.id,
+      professor_id: professor.id,
+      team_id: team.id
+    }}
+
+    before do
+      allow(controller).to receive(:params) {{ assignment_id: assignment.id, team_id: team.id }}
+      allow(controller).to receive_messages(current_course: course, current_user: professor)
+    end
+
+    it "creates an assignment export" do
+      expect(AssignmentExport).to receive(:create).with(assignment_export_attrs)
+      subject
+    end
+
+    it "caches the created assignment export" do
+      subject
+      expect(AssignmentExport).not_to receive(:create)
+      subject
+    end
+  end
+
+  describe "#assignment_export_job" do
+    subject { controller.instance_eval { assignment_export_job } }
+    let(:assignment_export_job_attrs) {{ assignment_export_id: assignment_export.id }}
+
+    before do
+      controller.instance_variable_set(:@assignment_export, assignment_export)
+    end
+
+    it "instantiates a new assignment export job" do
+      expect(AssignmentExportJob).to receive(:new).with(assignment_export_job_attrs)
+      subject
+    end
+
+    it "caches the assignment export job" do
+      subject
+      expect(AssignmentExportNew).not_to receive(:new)
+      subject
+    end
+  end
 end

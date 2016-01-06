@@ -47,9 +47,7 @@ class AssignmentExportsController < ApplicationController
   end
 
   def assignment_export_job
-    @assignment_export_job ||= AssignmentExportJob.new({
-      assignment_export_id: @assignment_export.id
-    })
+    @assignment_export_job ||= AssignmentExportJob.new assignment_export_id: @assignment_export.id
   end
 
   def job_success_flash
