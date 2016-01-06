@@ -134,7 +134,7 @@ RSpec.describe AssignmentExportsController, type: :controller do
       subject
     end
 
-    it "caches the deletion outcome" do
+    it "caches the assignment export outcome" do
       subject
       expect(AssignmentExport).not_to receive(:find).with(assignment_export.id)
       subject
@@ -183,6 +183,38 @@ RSpec.describe AssignmentExportsController, type: :controller do
     it "caches the assignment export job" do
       subject
       expect(AssignmentExportJob).not_to receive(:new)
+      subject
+    end
+  end
+
+  describe "#job_success_flash" do
+    subject { controller.instance_eval { job_success_flash } }
+    it "sets the flash success" do
+      subject
+      expect(flash[:success]).to match(/Your assignment export is being prepared/)
+    end
+  end
+
+  describe "#job_failure_flash" do
+    subject { controller.instance_eval { job_failure_flash } }
+    it "sets a flash alert" do
+      subject
+      expect(flash[:alert]).to match(/Your assignment export failed to build/)
+    end
+  end
+
+  describe "#assignment" do
+    subject { controller.instance_eval { assignment } }
+    before { allow(controller).to receive(:params) {{ assignment_id: assignment.id }} }
+
+    it "fetches an assignment by assignment id" do
+      expect(Assignment).to receive(:find).with(assignment.id)
+      subject
+    end
+
+    it "caches the fetch assignment outcome" do
+      subject
+      expect(Assignment).not_to receive(:find).with(assignment_export.id)
       subject
     end
   end
