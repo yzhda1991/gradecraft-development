@@ -65,10 +65,8 @@ class GradesController < ApplicationController
         instructor_modified: true)
 
       # @mz TODO: ADD SPECS
-      if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
-        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        @grade_updater_job.enqueue
-      end
+      @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+      @grade_updater_job.enqueue
 
       if session[:return_to].present?
         redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"

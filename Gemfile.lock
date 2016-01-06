@@ -120,14 +120,17 @@ GEM
       sprockets (~> 2)
       tilt
     angularjs-rails (1.4.3)
+    archive-zip (0.7.0)
+      io-like (~> 0.3.0)
     arel (6.0.2)
     autonumeric-rails (1.9.37)
       jquery-rails (>= 2.0.2)
-    aws-sdk (1.64.0)
-      aws-sdk-v1 (= 1.64.0)
-    aws-sdk-v1 (1.64.0)
-      json (~> 1.4)
-      nokogiri (>= 1.4.4)
+    aws-sdk (2.2.6)
+      aws-sdk-resources (= 2.2.6)
+    aws-sdk-core (2.2.6)
+      jmespath (~> 1.0)
+    aws-sdk-resources (2.2.6)
+      aws-sdk-core (= 2.2.6)
     bcrypt (3.1.10)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
@@ -153,7 +156,7 @@ GEM
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
-    carrierwave_backgrounder (0.4.1)
+    carrierwave_backgrounder (0.4.2)
       carrierwave (~> 0.5)
     childprocess (0.5.6)
       ffi (~> 1.0, >= 1.0.11)
@@ -337,10 +340,12 @@ GEM
       ruby_parser (~> 3.5)
     i18n (0.7.0)
     inflecto (0.0.2)
+    io-like (0.3.0)
     ipaddress (0.8.0)
     jbuilder (2.3.1)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
+    jmespath (1.1.3)
     jquery-fileupload-rails (0.4.5)
       actionpack (>= 3.1)
       railties (>= 3.1)
@@ -411,6 +416,7 @@ GEM
       timfel-krb5-auth (~> 0.8)
     omniauth-multipassword (0.4.2)
       omniauth (~> 1.0)
+    open4 (1.3.4)
     optionable (0.2.0)
     origin (2.1.1)
     pacecar (2.0.0)
@@ -671,15 +677,16 @@ DEPENDENCIES
   addressable
   angular-rails-templates (~> 0.2.0)
   angularjs-rails (~> 1.4.2)
+  archive-zip (~> 0.7.0)
   autonumeric-rails
-  aws-sdk (< 2.0)
+  aws-sdk (~> 2)
   bullet
   byebug
   canable
   capybara (~> 2.5.0)
   capybara-select2
   carrierwave
-  carrierwave_backgrounder
+  carrierwave_backgrounder (= 0.4.2)
   codeclimate-test-reporter
   coffee-rails
   compass-rails
@@ -716,6 +723,7 @@ DEPENDENCIES
   omniauth
   omniauth-kerberos
   omniauth-lti!
+  open4 (~> 1.3.4)
   pacecar
   paper_trail
   parallel_tests
