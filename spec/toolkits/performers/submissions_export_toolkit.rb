@@ -32,10 +32,10 @@ module Toolkits
 
       module SharedExamples
 
-        RSpec.shared_examples "an assignment export resource" do |resource_name, resource_klass|
+        RSpec.shared_examples "an submissions export resource" do |resource_name, resource_klass|
           let(:expected_klass) { resource_klass || resource_name.to_s.camelize.constantize }
 
-          it "gets the #{resource_name} from the assignment export" do
+          it "gets the #{resource_name} from the submissions export" do
             expect(submissions_export).to receive(resource_name).and_return send(resource_name.to_sym)
             subject
           end

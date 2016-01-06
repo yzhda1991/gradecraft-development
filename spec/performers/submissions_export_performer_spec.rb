@@ -230,7 +230,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     describe "#upload_archive_to_s3" do
       subject { performer.instance_eval { upload_archive_to_s3 }}
 
-      it "calls #upload_file_to_s3 on the assignment export with the file path" do
+      it "calls #upload_file_to_s3 on the submissions export with the file path" do
         expect(submissions_export).to receive(:upload_file_to_s3).with("/this/weird/path.zip")
         subject
       end
@@ -239,7 +239,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     describe "check_s3_upload_success" do
       subject { performer.instance_eval { check_s3_upload_success }}
 
-      it "checks if the object exists on S3 through the assignment export" do
+      it "checks if the object exists on S3 through the submissions export" do
         expect(submissions_export).to receive(:s3_object_exists?)
         subject
       end

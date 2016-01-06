@@ -19,13 +19,13 @@ RSpec.describe SubmissionsExportsController, type: :controller do
   describe "POST #create" do
     subject { post :create, assignment_id: assignment.id, team_id: team.id }
 
-    it "creates an assignment export" do
+    it "creates an submissions export" do
       expect(controller).to receive(:create_submissions_export)
       subject
     end
 
-    describe "enqueuing the assignment export job" do
-      context "the assignment export job is enqueued" do
+    describe "enqueuing the submissions export job" do
+      context "the submissions export job is enqueued" do
         before { allow(controller).to receive_message_chain(:submissions_export_job, :enqueue) { true } }
         it "sets the job success flash message" do
           expect(controller).to receive(:job_success_flash)
@@ -33,7 +33,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
         end
       end
 
-      context "assignment export job is not enqueued" do
+      context "submissions export job is not enqueued" do
         before { allow(controller).to receive_message_chain(:submissions_export_job, :enqueue) { false } }
         it "sets the job failure flash message" do
           expect(controller).to receive(:job_failure_flash)
@@ -51,19 +51,19 @@ RSpec.describe SubmissionsExportsController, type: :controller do
   describe "DELETE #destroy" do
     subject { delete :destroy, id: submissions_export.id }
 
-    it "deletes the corresponding s3 object for the assignment export" do
+    it "deletes the corresponding s3 object for the submissions export" do
       expect(controller).to receive(:delete_s3_object)
       subject
     end
 
 
     describe "determining success and failure" do
-      context "the assignment export is destroyed and the s3 object deleted" do
+      context "the submissions export is destroyed and the s3 object deleted" do
         before do
           allow(controller).to receive(:delete_s3_object) { true }
         end
 
-        it "destroys the assignment export" do
+        it "destroys the submissions export" do
           allow(SubmissionsExport).to receive(:find) { submissions_export }
           expect(submissions_export).to receive(:destroy)
           subject
@@ -75,14 +75,14 @@ RSpec.describe SubmissionsExportsController, type: :controller do
         end
       end
 
-      context "the assignment export is not destroyed and the s3 object fails to delete" do
+      context "the submissions export is not destroyed and the s3 object fails to delete" do
         before do
           allow(controller).to receive(:delete_s3_object) { false }
         end
 
         it "notifies the user of the failure" do
           subject
-          expect(flash[:alert]).to match(/Unable to delete the assignment export/)
+          expect(flash[:alert]).to match(/Unable to delete the submissions export/)
         end
       end
     end
@@ -113,7 +113,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
     subject { controller.instance_eval { delete_s3_object } }
     before { allow(controller).to receive(:submissions_export) { submissions_export } }
 
-    it "calls #delete_object_from_s3 on the assignment export" do
+    it "calls #delete_object_from_s3 on the submissions export" do
       expect(submissions_export).to receive(:delete_object_from_s3)
       subject
     end
@@ -129,12 +129,12 @@ RSpec.describe SubmissionsExportsController, type: :controller do
     subject { controller.instance_eval { submissions_export } }
     before { allow(controller).to receive(:params) {{ id: submissions_export.id }} }
 
-    it "fetches an assignment export by id" do
+    it "fetches an submissions export by id" do
       expect(SubmissionsExport).to receive(:find).with(submissions_export.id)
       subject
     end
 
-    it "caches the assignment export outcome" do
+    it "caches the submissions export outcome" do
       subject
       expect(SubmissionsExport).not_to receive(:find).with(submissions_export.id)
       subject
@@ -155,12 +155,12 @@ RSpec.describe SubmissionsExportsController, type: :controller do
       allow(controller).to receive_messages(current_course: course, current_user: professor)
     end
 
-    it "creates an assignment export" do
+    it "creates an submissions export" do
       expect(SubmissionsExport).to receive(:create).with(submissions_export_attrs)
       subject
     end
 
-    it "caches the created assignment export" do
+    it "caches the created submissions export" do
       subject
       expect(SubmissionsExport).not_to receive(:create)
       subject
@@ -175,12 +175,12 @@ RSpec.describe SubmissionsExportsController, type: :controller do
       controller.instance_variable_set(:@submissions_export, submissions_export)
     end
 
-    it "instantiates a new assignment export job" do
+    it "instantiates a new submissions export job" do
       expect(SubmissionsExportJob).to receive(:new).with(submissions_export_job_attrs)
       subject
     end
 
-    it "caches the assignment export job" do
+    it "caches the submissions export job" do
       subject
       expect(SubmissionsExportJob).not_to receive(:new)
       subject
@@ -191,7 +191,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
     subject { controller.instance_eval { job_success_flash } }
     it "sets the flash success" do
       subject
-      expect(flash[:success]).to match(/Your assignment export is being prepared/)
+      expect(flash[:success]).to match(/Your submissions export is being prepared/)
     end
   end
 
@@ -199,7 +199,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
     subject { controller.instance_eval { job_failure_flash } }
     it "sets a flash alert" do
       subject
-      expect(flash[:alert]).to match(/Your assignment export failed to build/)
+      expect(flash[:alert]).to match(/Your submissions export failed to build/)
     end
   end
 

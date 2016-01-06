@@ -96,7 +96,7 @@ RSpec.describe SubmissionsExport do
     let(:sometime) { Time.parse("Oct 20 1982") }
     before { allow(submissions_export).to receive(:export_time) { sometime } }
 
-    it "calls update_attributes on the assignment export with the export time" do
+    it "calls update_attributes on the submissions export with the export time" do
       expect(submissions_export).to receive(:update_attributes).with(last_export_completed_at: sometime)
       subject
     end
@@ -112,7 +112,7 @@ RSpec.describe SubmissionsExport do
       allow(submissions_export).to receive(:s3_attributes) {{ assignment_id: 98000 }}
     end
 
-    it "sets the assignment export value to the index in the s3_attributes hash" do
+    it "sets the submissions export value to the index in the s3_attributes hash" do
       submissions_export.set_s3_attributes
       expect(submissions_export.assignment_id).to eq(98000)
     end

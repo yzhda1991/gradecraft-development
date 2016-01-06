@@ -13,7 +13,7 @@ RSpec.describe ExportsController, type: :controller do
   end
 
   describe "GET #index" do
-    it "should get the relevant assignment exports" do
+    it "should get the relevant submissions exports" do
       get :index
       expect(assigns(:assignment_exports)).to eq(course.assignment_exports.order("updated_at DESC"))
     end

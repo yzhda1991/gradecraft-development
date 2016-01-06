@@ -16,7 +16,7 @@ class SubmissionsExportsController < ApplicationController
       submissions_export.destroy
       flash[:success] = "Assignment export successfully deleted from server"
     else
-      flash[:alert] = "Unable to delete the assignment export from the server"
+      flash[:alert] = "Unable to delete the submissions export from the server"
     end
 
     redirect_to exports_path
@@ -50,11 +50,11 @@ class SubmissionsExportsController < ApplicationController
   end
 
   def job_success_flash
-    flash[:success] = "Your assignment export is being prepared. You'll receive an email when it's complete."
+    flash[:success] = "Your submissions export is being prepared. You'll receive an email when it's complete."
   end
 
   def job_failure_flash
-    flash[:alert] = "Your assignment export failed to build. An administrator has been contacted about the issue."
+    flash[:alert] = "Your submissions export failed to build. An administrator has been contacted about the issue."
   end
 
   def assignment

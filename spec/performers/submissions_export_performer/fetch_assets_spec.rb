@@ -17,14 +17,14 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     before { performer.instance_variable_set(:@submissions_export, submissions_export) }
 
     describe "assignment submissions export" do
-      it_behaves_like "an assignment export resource", :professor, User # this is a User object fetched as 'professor'
-      it_behaves_like "an assignment export resource", :assignment
-      it_behaves_like "an assignment export resource", :course
+      it_behaves_like "an submissions export resource", :professor, User # this is a User object fetched as 'professor'
+      it_behaves_like "an submissions export resource", :assignment
+      it_behaves_like "an submissions export resource", :course
     end
 
     describe "team submissions export" do
       let(:performer) { performer_with_team }
-      it_behaves_like "an assignment export resource", :team
+      it_behaves_like "an submissions export resource", :team
     end
   end
 
