@@ -2,8 +2,12 @@ class AssignmentExportsController < ApplicationController
   before_filter :ensure_staff?
 
   def create
-    create_assignment_export
-    assignment_export_job.enqueue ? job_success_flash : job_failure_flash
+    if create_assignment_export and assignment_export_job.enqueue
+      job_success_flash 
+    else
+      job_failure_flash
+    end
+
     redirect_to assignment_path(assignment)
   end
 
@@ -33,12 +37,12 @@ class AssignmentExportsController < ApplicationController
   end
     
   def create_assignment_export
-    @assignment_export = AssignmentExport.create({
+    @assignment_export = AssignmentExport.create(
       assignment_id: params[:assignment_id],
       course_id: current_course.id,
       professor_id: current_user.id,
       team_id: params[:team_id]
-    })
+    )
   end
 
   def assignment_export_job

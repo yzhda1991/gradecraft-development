@@ -42,8 +42,8 @@ RSpec.describe AssignmentExportsController, type: :controller do
     end
 
     it "redirects to the assignment page for the given assignment" do
-      expect(response).to redirect_to(assignment_path(assignment))
       subject
+      expect(response).to redirect_to(assignment_path(assignment))
     end
   end
 
