@@ -190,6 +190,29 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
+  describe "#ensure_s3fs_tmp_dir" do
+    subject { performer.instance_eval { ensure_s3fs_tmp_dir } }
+    let(:s3fs_tmp_dir_path) { Dir.mktmpdir }
+    before(:each) do
+      allow(performer).to receive(:s3fs_tmp_dir_path) { s3fs_tmp_dir_path }
+    end
+
+    context "s3fs_tmp_dir_path already exists" do
+      it "doesn't build any new directories" do
+        expect(FileUtils).not_to receive(:mkdir_p).with(s3fs_tmp_dir_path)
+        subject
+      end
+    end
+
+    context "s3fs_tmp_dir_path doesn't exist" do
+      before { FileUtils.rmdir(s3fs_tmp_dir_path) }
+      it "recursively builds the directories for tmp dir" do
+        expect(FileUtils).to receive(:mkdir_p).with(s3fs_tmp_dir_path)
+        subject
+      end
+    end
+  end
+
   describe "archive_tmp_dir" do
     subject { performer.instance_eval { archive_tmp_dir }}
     it "builds a temporary directory for the archive" do
