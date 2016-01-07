@@ -1,24 +1,24 @@
-@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Metric', 'CourseBadge', 'MetricService', '$http', ($scope, Restangular, Metric, CourseBadge, MetricService, $http) ->
+@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'CriterionService', '$http', ($scope, Restangular, Criterion, CourseBadge, CriterionService, $http) ->
   Restangular.setRequestSuffix('.json')
-  $scope.metrics = []
+  $scope.criteria = []
   $scope.courseBadges = {}
-  $scope.savedMetricCount = 0
+  $scope.savedCriterionCount = 0
   $scope.urlId = parseInt(window.location.pathname.split('/')[2])
 
   $scope.init = (rubricId, pointTotal)->
     $scope.rubricId = rubricId
     $scope.pointTotal = parseInt(pointTotal)
 
-  MetricService.getBadges($scope.urlId).success (courseBadges)->
+  CriterionService.getBadges($scope.urlId).success (courseBadges)->
     $scope.addCourseBadges(courseBadges)
-  MetricService.getMetrics($scope.urlId).success (metrics)->
-    $scope.addMetrics(metrics)
+  CriterionService.getCriteria($scope.urlId).success (criteria)->
+    $scope.addCriteria(criteria)
 
-  # distill key/value pairs for metric ids and relative order
+  # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->
     points = 0
-    angular.forEach($scope.metrics, (metric, index)->
-      points += metric.max_points if metric.max_points
+    angular.forEach($scope.criteria, (criterion, index)->
+      points += criterion.max_points if criterion.max_points
     )
     points or 0
 
@@ -44,11 +44,11 @@
   $scope.pointsOverage = ()->
     $scope.pointsDifference() < 0
 
-  $scope.showMetric = (attrs)->
-    new Metric(attrs, $scope)
+  $scope.showCriterion = (attrs)->
+    new Criterion(attrs, $scope)
 
-  $scope.countSavedMetric = () ->
-    $scope.savedMetricCount += 1
+  $scope.countSavedCriterion = () ->
+    $scope.savedCriterionCount += 1
 
   $scope.addCourseBadges = (courseBadges)->
     angular.forEach(courseBadges, (badge, index)->
@@ -56,29 +56,29 @@
       $scope.courseBadges[badge.id] = courseBadge
     )
 
-  $scope.addMetrics = (existingMetrics)->
-    angular.forEach(existingMetrics, (em, index)->
-      emProto = new Metric(em, $scope)
-      $scope.countSavedMetric() # indicate saved metric present
-      $scope.metrics.push emProto
+  $scope.addCriteria = (existingCriteria)->
+    angular.forEach(existingCriteria, (em, index)->
+      emProto = new Criterion(em, $scope)
+      $scope.countSavedCriterion() # indicate saved criterion present
+      $scope.criteria.push emProto
     )
 
-  $scope.newMetric = ()->
-    m = new Metric(null, $scope)
-    $scope.metrics.push m
+  $scope.newCriterion = ()->
+    m = new Criterion(null, $scope)
+    $scope.criteria.push m
 
-  $scope.getNewMetric = ()->
-    $scope.newerMetric = Restangular.one('metrics', 'new.json').getList().then ()->
+  $scope.getNewCriterion = ()->
+    $scope.newerCriterion = Restangular.one('criteria', 'new.json').getList().then ()->
 
-  $scope.viewMetrics = ()->
-    if $scope.metrics.length > 0
-      $scope.displayMetrics = []
-      angular.forEach($scope.metrics, (value, key)->
-        $scope.displayMetrics.push(value.name)
+  $scope.viewCriteria = ()->
+    if $scope.criteria.length > 0
+      $scope.displayCriteria = []
+      angular.forEach($scope.criteria, (value, key)->
+        $scope.displayCriteria.push(value.name)
       )
-      $scope.displayMetrics
+      $scope.displayCriteria
 
-  $scope.existingMetrics = []
+  $scope.existingCriteria = []
 
   # declare a sortableEle variable for the sortable function
   sortableEle = undefined
@@ -92,28 +92,28 @@
   $scope.dragEnd = (e, ui) ->
     start = ui.item.data("start")
     end = ui.item.index()
-    $scope.metrics.splice end, 0, $scope.metrics.splice(start, 1)[0]
+    $scope.criteria.splice end, 0, $scope.criteria.splice(start, 1)[0]
     $scope.$apply()
-    $scope.updateMetricOrder()
+    $scope.updateCriterionOrder()
     return
 
-  # send the metric order to the server with ids
-  $scope.updateMetricOrder = ()->
-    if $scope.savedMetricCount > 0
-      $http.put("/metrics/update_order", metric_order: $scope.orderedMetrics()).success(
+  # send the criterion order to the server with ids
+  $scope.updateCriterionOrder = ()->
+    if $scope.savedCriterionCount > 0
+      $http.put("/criteria/update_order", criterion_order: $scope.orderedCriteria()).success(
       )
       .error(
       )
 
-  # distill key/value pairs for metric ids and relative order
-  $scope.orderedMetrics = ()->
-    metrics = {}
-    angular.forEach($scope.metrics, (value, index)->
-      metrics[value.id] = {order: index} if value.id != null
+  # distill key/value pairs for criterion ids and relative order
+  $scope.orderedCriteria = ()->
+    criteria = {}
+    angular.forEach($scope.criteria, (value, index)->
+      criteria[value.id] = {order: index} if value.id != null
     )
-    metrics
+    criteria
 
-  sortableEle = $("#metric-box").sortable(
+  sortableEle = $("#criterion-box").sortable(
     start: $scope.dragStart
     update: $scope.dragEnd
   )

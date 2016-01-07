@@ -12,7 +12,7 @@ module Services
           .for_student(membership.user)
           .destroy_all
 
-        RubricGrade.for_course(membership.course)
+        CriterionGrade.for_course(membership.course)
           .for_student(membership.user)
           .destroy_all
       end

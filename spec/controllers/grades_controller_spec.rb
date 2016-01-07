@@ -58,16 +58,16 @@ describe GradesController do
         expect(response).to render_template(:show)
       end
 
-      it "assigns the rubric and metrics for individual assignments" do
+      it "assigns the rubric and criteria for individual assignments" do
         assignment = create(:assignment, course: @course)
-        rubric = create(:rubric_with_metrics, assignment: assignment)
-        metric = rubric.metrics.first
-        tier = rubric.metrics.first.tiers.first
-        rubric_grade = create(:rubric_grade, assignment: assignment, student: @student, metric: metric, tier: tier)
+        rubric = create(:rubric_with_criteria, assignment: assignment)
+        criterion = rubric.criteria.first
+        level = rubric.criteria.first.levels.first
+        criterion_grade = create(:criterion_grade, assignment: assignment, student: @student, criterion: criterion, level: level)
         get :show, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
-        expect(assigns(:metrics)).to eq(rubric.metrics)
-        expect(JSON.parse(assigns(:rubric_grades))).to eq([{ "id" => rubric_grade.id, "metric_id" => metric.id, "tier_id" => tier.id, "comments" => nil }])
+        expect(assigns(:criteria)).to eq(rubric.criteria)
+        expect(JSON.parse(assigns(:criterion_grades))).to eq([{ "id" => criterion_grade.id, "criterion_id" => criterion.id, "level_id" => level.id, "comments" => nil }])
       end
     end
 
@@ -113,13 +113,13 @@ describe GradesController do
       it "if rubric present, assigns the rubric and rubric grades" do
         allow(request).to receive(:referer).and_return('http://gradecraft.com/assignments/123')
         assignment = create(:assignment, course: @course)
-        rubric = create(:rubric_with_metrics, assignment: assignment)
-        metric = rubric.metrics.first
-        tier = rubric.metrics.first.tiers.first
-        rubric_grade = create(:rubric_grade, assignment: assignment, student: @student, metric: metric, tier: tier)
+        rubric = create(:rubric_with_criteria, assignment: assignment)
+        criterion = rubric.criteria.first
+        level = rubric.criteria.first.levels.first
+        criterion_grade = create(:criterion_grade, assignment: assignment, student: @student, criterion: criterion, level: level)
         get :edit, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
-        expect(JSON.parse(assigns(:rubric_grades))).to eq([{ "id" => rubric_grade.id, "metric_id" => metric.id, "tier_id" => tier.id, "comments" => nil }])
+        expect(JSON.parse(assigns(:criterion_grades))).to eq([{ "id" => criterion_grade.id, "criterion_id" => criterion.id, "level_id" => level.id, "comments" => nil }])
         expect(assigns(:return_path)).to eq("/assignments/123?student_id=#{@student.id}")
       end
     end
@@ -275,16 +275,16 @@ describe GradesController do
 
       before do
         @rubric_assignment = create(:assignment, course: @course)
-        @rubric = create(:rubric_with_metrics, assignment: @rubric_assignment)
+        @rubric = create(:rubric_with_criteria, assignment: @rubric_assignment)
         @params = {assignment_id: @rubric_assignment.id, student_id: @student.id,  format: :json }
-        @params[:rubric_grades] = @rubric.metrics.collect { |metric| { "metric_id" => metric.id, "metric_name" => metric.name, "order" => metric.order, "max_points"=> metric.max_points, "tier_id" => metric.tiers.first.id }}
+        @params[:criterion_grades] = @rubric.criteria.collect { |criterion| { "criterion_id" => criterion.id, "criterion_name" => criterion.name, "order" => criterion.order, "max_points"=> criterion.max_points, "level_id" => criterion.levels.first.id }}
 
         allow(controller).to receive(:current_student).and_return(@student)
       end
 
       it "updates the submission grading status" do
         submission = create(:submission, student: @student, assignment: @rubric_assignment)
-        expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(@rubric.metrics.count)
+        expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(@rubric.criteria.count)
       end
 
       describe "finds or creates the grade for the assignment and student" do
@@ -301,27 +301,27 @@ describe GradesController do
         end
       end
 
-      describe "when an additional `metric_ids` parameter is supplied" do
+      describe "when an additional `criterion_ids` parameter is supplied" do
 
         before do
-          @params[:metric_ids] = @rubric.metrics.collect { |metric| metric.id }
+          @params[:criterion_ids] = @rubric.criteria.collect { |criterion| criterion.id }
         end
 
         it "deletes all preexisting rubric grades" do
-          expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(6)
-          expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(0)
+          expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(6)
+          expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(0)
         end
       end
 
       it "creates the rubric grades" do
         allow(controller).to receive(:current_student).and_return(@student)
-        expect{ post :submit_rubric, @params }.to change { RubricGrade.count }.by(@rubric.metrics.count)
+        expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(@rubric.criteria.count)
       end
 
-      it "adds earned tier badges" do
+      it "adds earned level badges" do
         earnable_badge = create(:badge, course: @course)
-        tier_badge = TierBadge.create(badge: earnable_badge, tier: @rubric.metrics.first.tiers.first.id )
-        @params[:tier_badges] = [{badge_id: earnable_badge.id, tier_badge: tier_badge.id, tier_id: @rubric.metrics.first.tiers.first.id}]
+        level_badge = LevelBadge.create(badge: earnable_badge, level: @rubric.criteria.first.levels.first.id )
+        @params[:level_badges] = [{badge_id: earnable_badge.id, level_badge: level_badge.id, level_id: @rubric.criteria.first.levels.first.id}]
         expect{ post :submit_rubric, @params }.to change { EarnedBadge.count }.by(1)
       end
 

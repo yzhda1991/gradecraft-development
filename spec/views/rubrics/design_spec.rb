@@ -8,10 +8,10 @@ describe "rubrics/design" do
     @course = create(:course)
     @assignment = create(:assignment, course: @course)
     @rubric = create(:rubric, assignment: @assignment)
-    @metric_1 = create(:metric, rubric: @rubric)
-    @metric_2 = create(:metric, rubric: @rubric)
-    @rubric.metrics << [ @metric_1, @metric_2 ]
-    @metrics = @rubric.metrics
+    @criterion_1 = create(:criterion, rubric: @rubric)
+    @criterion_2 = create(:criterion, rubric: @rubric)
+    @rubric.criteria << [ @criterion_1, @criterion_2 ]
+    @criteria = @rubric.criteria
   end
 
   before(:each) do

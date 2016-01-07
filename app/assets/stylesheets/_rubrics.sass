@@ -42,7 +42,7 @@
   height: 70px
   border-bottom-left-radius: $global-radius
   border-bottom-right-radius: $global-radius
-  background: $color-blue-0 
+  background: $color-blue-0
 
   h4#points-legend, h4.points-legend
     font-size: 24px
@@ -69,26 +69,26 @@ h4.notice
 
 #rubric-column-heading
   margin-top: 1rem
-  .metric-heading
+  .criterion-heading
     background: $color-grey-4
     margin: 0 .5rem .5rem
     padding: .5rem
     float: left
     width: 195px
 
-  .tier-heading
+  .level-heading
     background: $color-grey-4
     padding: .5rem
     float: left
     width: calc(100% - 250px)
 
-td.tier-td
+td.level-td
   border: 1px solid $color-grey-4
 
-#metric-box
+#criterion-box
   width: 94%
 
-  .metric, .tier
+  .criterion, .level
     padding: 2rem .5rem .5rem
     margin-right: 10px
     height: 240px
@@ -96,15 +96,15 @@ td.tier-td
     float: left
     width: 190px
 
-.tier-container
+.level-container
   height: 280px !important
   width: 10000px
 
-  .tier
+  .level
     float: left
     display: inline
 
-.metric
+.criterion
   background: $color-grey-3
 
   &.saved
@@ -142,7 +142,7 @@ td.tier-td
   font-size: 11px
   color: $color-white
 
-.metric.ng-valid .messages
+.criterion.ng-valid .messages
   color:  $color-white
 
 button.delete
@@ -156,7 +156,7 @@ button.delete
   &:hover
     background: $color-red-1
 
-.tier
+.level
   background: $color-grey-3
 
   &.nocredit
@@ -214,7 +214,7 @@ button.delete
     background: $color-red-1
     color: $color-white
 
-.tier-badge, .tier-badge-image
+.level-badge, .level-badge-image
   font-size: 12px
   color: white
   padding: 0 0 0 4px
@@ -222,17 +222,17 @@ button.delete
   position: relative
 
 .modal-window
-  .tier-badge
+  .level-badge
     margin: .5rem
     background: $color-blue-1
     clear: both
 
-.tier-badge-image
+.level-badge-image
   float: left
   background: none
   border: none
 
-.add-tier
+.add-level
   position: absolute
   margin-top: -20px
   right: 70px
@@ -279,7 +279,7 @@ button.delete
   background-color: $color-blue-4
   box-shadow: 4px 4px 80px #000
 
-  select 
+  select
     width: 200px
 
 .update-badges
@@ -290,55 +290,55 @@ button.delete
   border-radius: $global-radius
 
 #grade-rubric-table, #rubric-results-table
-  td 
+  td
     vertical-align: top
     text-align: left
 
-  td.metric.heading
+  td.criterion.heading
     background-color: $color-blue-1
     color: $color-white
 
-  td.tier.heading
+  td.level.heading
     background-color: $color-blue-3
 
-  .metric
+  .criterion
     background-color: $color-blue-1
 
-  .metric-name, .tier-name
+  .criterion-name, .level-name
     font-weight: bold
 
-  .metric-name, .metric-points
+  .criterion-name, .criterion-points
     color: $color-white
 
-  .metric-points, .tier-points
+  .criterion-points, .level-points
     font-size: 80%
     text-transform: uppercase
 
-  .metric-description, .tier-description
+  .criterion-description, .level-description
     font-style: italic
 
-  td.tier-level
+  td.level-level
     border: 1px solid $color-grey-4
 
-  .tier.selected
+  .level.selected
     background-color: $color-green-3
 
-  .tier-badge-image img
+  .level-badge-image img
     height: 35px
 
   .badge-row:hover
     background-color: transparent
 
-  .badges, .earned_tier, .graded-students
+  .badges, .earned_level, .graded-students
     display: block
     padding: .25rem
 
-  .earned_tier
+  .earned_level
     background-color: $color-green-3
     color: $color-white
     font-style: italic
 
-  .graded-students 
+  .graded-students
     background-color: $color-blue-3
 
   td.comments-box
@@ -358,6 +358,6 @@ button.delete
 
 #grade-rubric-table.edit
 
-  .tier:hover 
+  .level:hover
     background-color: $color-green-3
 

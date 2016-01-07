@@ -69,7 +69,7 @@ GradeCraft::Application.routes.draw do
       get 'export_grades'
       get 'export_submissions'
       get 'download_current_grades' => 'assignments#download_current_grades'
-      get 'rubric_grades_review'
+      get 'criterion_grades_review'
       put :update_rubrics
       scope 'grades', as: :grades, controller: :grades do
         get :edit_status
@@ -91,9 +91,9 @@ GradeCraft::Application.routes.draw do
       resources :earned_badges
     end
     resource :rubric do
-      get :existing_metrics
+      get :existing_criteria
       get :course_badges
-      resources :metrics
+      resources :criteria
       get :design, on: :collection
     end
   end
@@ -112,14 +112,14 @@ GradeCraft::Application.routes.draw do
   delete "grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id", to: "grades#delete_earned_badge"
   delete "grade/:grade_id/earned_badges", to: "grades#delete_all_earned_badges"
 
-  resources :metrics do
+  resources :criteria do
     put :update_order, on: :collection
   end
 
-  resources :tiers
-  resources :graded_metrics
+  resources :levels
+  resources :graded_criteria
 
-  resources :tier_badges
+  resources :level_badges
 
   #4. Assignment Types
   resources :assignment_types do

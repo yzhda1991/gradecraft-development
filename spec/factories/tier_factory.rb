@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  factory :tier do
+  factory :level do
     name Faker::Lorem.word
     points Faker::Number.number(4)
-    association :metric
+    association :criterion
   end
 end

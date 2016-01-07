@@ -1,5 +1,5 @@
 .pageContent
-  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment[:id]}, #{params[:student_id]}, #{@rubric_grades}, \"#{@grade.status if @grade}\", #{@assignment.release_necessary?}, '#{@return_path}')")
+  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment[:id]}, #{params[:student_id]}, #{@criterion_grades}, \"#{@grade.status if @grade}\", #{@assignment.release_necessary?}, '#{@return_path}')")
     .row
       #rubric-heading.columns
         %h3.text-right
@@ -28,43 +28,43 @@
     %table#grade-rubric-table.edit(ng-cloak)
       %thead
         %tr
-          %td.metric.heading
+          %td.criterion.heading
             %label.larger
               <strong>Criterion</strong>:&nbsp;Max&nbsp;points
 
-          %td.tier.heading(colspan="#{@rubric.max_tier_count}")
+          %td.level.heading(colspan="#{@rubric.max_level_count}")
             %label.larger
               %strong Level:
               Points Awarded
-          %td.comments.heading(ng-show="tiersSelected().length > 0")
+          %td.comments.heading(ng-show="levelsSelected().length > 0")
             %label.larger
               Comments
 
       %tbody
-        %tr(ng-repeat="metric in metrics")
-          %td.metric
-            .metric-heading
-              .metric-name {{metric.name.replace(' ','&nbsp;')}}
-              .metric-points
-                {{(metric.max_points || 0) | number:0}}&nbsp;Points
-            .metric-description {{metric.description}}
+        %tr(ng-repeat="criterion in criteria")
+          %td.criterion
+            .criterion-heading
+              .criterion-name {{criterion.name.replace(' ','&nbsp;')}}
+              .criterion-points
+                {{(criterion.max_points || 0) | number:0}}&nbsp;Points
+            .criterion-description {{criterion.description}}
 
-          %td.tier.tier-level(ng-repeat="tier in metric.tiers" ng-click="metric.gradeWithTier(tier)" ng-class="{selected: metric.isUsingTier(tier)}")
-            .tier-heading
-              .tier-name {{tier.name.replace(' ','&nbsp;')}}
-              .tier-points
-                {{tier.points | number:0}}&nbsp;Points
-                %input(class="tier-select" type='radio' name="metric_tier_{{metric.id}}" ng-checked="metric.isUsingTier(tier)")
+          %td.level.level-level(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level)}")
+            .level-heading
+              .level-name {{level.name.replace(' ','&nbsp;')}}
+              .level-points
+                {{level.points | number:0}}&nbsp;Points
+                %input(class="level-select" type='radio' name="criterion_level_{{criterion.id}}" ng-checked="criterion.isUsingLevel(level)")
             .clear
-            .tier-description
-              {{tier.description}}
+            .level-description
+              {{level.description}}
             .row.badge-row
-              .tier-badge-image(ng-repeat="(tierBadgeId, tierBadge) in tier.badges")
-                %img(ng-src="{{tierBadge.badge.icon}}" height="50px")
+              .level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
+                %img(ng-src="{{levelBadge.badge.icon}}" height="50px")
               .clear
-          %td.filler(ng-show="metric.tiers.length < #{@rubric.max_tier_count}" colspan="{{#{@rubric.max_tier_count} - metric.tiers.length}}")
+          %td.filler(ng-show="criterion.levels.length < #{@rubric.max_level_count}" colspan="{{#{@rubric.max_level_count} - criterion.levels.length}}")
           %td.comments-box
-            %textarea(ng-model="metric.comments")
+            %textarea(ng-model="criterion.comments")
 
     %br
     .right
@@ -94,4 +94,4 @@
 
     .clear
     .right
-      %button#submit-grade(ng-click="submitGrade()" ng-disabled="selectedTiers().length == 0") Submit Grade
+      %button#submit-grade(ng-click="submitGrade()" ng-disabled="selectedLevels().length == 0") Submit Grade

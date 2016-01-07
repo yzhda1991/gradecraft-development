@@ -2,34 +2,34 @@
   %table#grade-rubric-table.preview
     %thead
       %tr
-        %td.metric.heading
+        %td.criterion.heading
           %label.larger
             <strong>Criterion</strong>:&nbsp;Max&nbsp;points
 
-        %td.tier.heading(colspan="#{presenter.rubric.max_tier_count}")
+        %td.level.heading(colspan="#{presenter.rubric.max_level_count}")
           %label.larger
             %strong Level:
             Points Awarded
 
     %tbody
-      - presenter.metrics.each do |metric|
+      - presenter.criteria.each do |criterion|
         %tr
-          %td.metric
-            .metric-heading
-              .metric-name= metric.wrapped_name(28).html_safe
-              .metric-points= "#{points metric.max_points} Points"
-            .metric-description= metric.wrapped_description(40).html_safe
-          - metric.tiers.sorted.each do |tier|
-            %td.tier.tier-level
-              .tier-heading
-                .tier-name= tier.wrapped_name(25).html_safe
-                .tier-points= "#{points tier.points} Points"
-              .tier-description= tier.description
+          %td.criterion
+            .criterion-heading
+              .criterion-name= criterion.wrapped_name(28).html_safe
+              .criterion-points= "#{points criterion.max_points} Points"
+            .criterion-description= criterion.wrapped_description(40).html_safe
+          - criterion.levels.sorted.each do |level|
+            %td.level.level-level
+              .level-heading
+                .level-name= level.wrapped_name(25).html_safe
+                .level-points= "#{points level.points} Points"
+              .level-description= level.description
 
               .row.badge-row
-                - tier.tier_badges.each_with_index do |badge, index|
+                - level.level_badges.each_with_index do |badge, index|
                   - if index < 2
-                    .tier-badge-image
-                      %img{:src => badge.badge.icon, :class => "tier_badge" }
-          - if metric.tiers.size < presenter.rubric_max_tier_count
-            %td.filler(colspan="#{presenter.rubric_max_tier_count - metric.tiers.size}")
+                    .level-badge-image
+                      %img{:src => badge.badge.icon, :class => "level_badge" }
+          - if criterion.levels.size < presenter.rubric_max_level_count
+            %td.filler(colspan="#{presenter.rubric_max_level_count - criterion.levels.size}")

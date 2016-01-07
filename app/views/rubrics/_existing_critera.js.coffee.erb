@@ -1,0 +1,6 @@
+<% @criteria.each do |criterion| %>
+  criterionProto = $scope.showCriterion(<%= criterion.to_json %>)
+  <% criterion.levels.each do |level| %>
+    criterionProto.addLevel(<%= level.to_json %>)
+  <% end %>
+<% end %>

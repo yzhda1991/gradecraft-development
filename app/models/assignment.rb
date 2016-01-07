@@ -43,7 +43,7 @@ class Assignment < ActiveRecord::Base
   # Student created submissions to be graded
   has_many :submissions, :dependent => :destroy
 
-  has_many :rubric_grades, :dependent => :destroy
+  has_many :criterion_grades, :dependent => :destroy
 
   # Instructor uploaded resource files
   has_many :assignment_files, dependent: :destroy

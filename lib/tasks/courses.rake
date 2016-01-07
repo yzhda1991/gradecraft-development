@@ -31,11 +31,11 @@ namespace :courses do
     remove_orphans collect_orphans(memberships, Grade.all),
       Grade, dry_run
 
-    # RubricGrades
-    rubric_grades = collect_orphans memberships, RubricGrade.all do |rg, m|
-      RubricGrade.for_course(m.course).where(student_id: m.user_id).present?
+    # CriterionGrades
+    criterion_grades = collect_orphans memberships, CriterionGrade.all do |rg, m|
+      CriterionGrade.for_course(m.course).where(student_id: m.user_id).present?
     end
-    remove_orphans rubric_grades, RubricGrade, dry_run
+    remove_orphans criterion_grades, CriterionGrade, dry_run
 
     # AssignmentWeights
     remove_orphans collect_orphans(memberships, AssignmentWeight.all),

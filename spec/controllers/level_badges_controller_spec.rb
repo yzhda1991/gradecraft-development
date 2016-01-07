@@ -1,13 +1,13 @@
 require 'rails_spec_helper'
 
-describe TierBadgesController do
+describe LevelBadgesController do
   before(:all) { @course = create(:course) }
   before(:each) do
     session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
-  context "as a professor" do 
+  context "as a professor" do
     before(:all) do
       @professor = create(:user)
       CourseMembership.create user: @professor, course: @course, role: "professor"
@@ -15,17 +15,17 @@ describe TierBadgesController do
 
     before(:each) { login_user(@professor) }
 
-    describe "POST create" do 
-      it "creates a new tier badge" do 
-        params = attributes_for(:tier_badge)
-        expect{ post :create, :tier_badge => params }.to change(TierBadge,:count).by(1)  
+    describe "POST create" do
+      it "creates a new level badge" do
+        params = attributes_for(:level_badge)
+        expect{ post :create, :level_badge => params }.to change(LevelBadge,:count).by(1)
       end
     end
 
-    describe "GET destroy" do 
-      it "destroys a tier badge" do 
-        @tier_badge = create(:tier_badge)
-        expect{ get :destroy, { :id => @tier_badge } }.to change(TierBadge,:count).by(-1)
+    describe "GET destroy" do
+      it "destroys a level badge" do
+        @level_badge = create(:level_badge)
+        expect{ get :destroy, { :id => @level_badge } }.to change(LevelBadge,:count).by(-1)
       end
     end
   end

@@ -12,9 +12,9 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.assignment_type
   end
 
-  def comments_by_metric_id(user)
-    rubric_grades(user).inject({}) do |comments, rubric_grade|
-      comments.merge rubric_grade.metric_id => rubric_grade.comments
+  def comments_by_criterion_id(user)
+    criterion_grades(user).inject({}) do |comments, criterion_grade|
+      comments.merge criterion_grade.criterion_id => criterion_grade.comments
     end
   end
 
@@ -99,8 +99,8 @@ class AssignmentPresenter < Showtime::Presenter
     end
   end
 
-  def metrics
-    rubric.metrics.ordered.includes(:tiers => :tier_badges)
+  def criteria
+    rubric.criteria.ordered.includes(:levels => :level_badges)
   end
 
   def new_assignment?
@@ -115,19 +115,19 @@ class AssignmentPresenter < Showtime::Presenter
     !assignment.rubric.nil? && assignment.rubric.designed?
   end
 
-  def rubric_grades(user_id)
-    RubricGrade.
-      joins("left outer join submissions on submissions.id = rubric_grades.submission_id").
+  def criterion_grades(user_id)
+    CriterionGrade.
+      joins("left outer join submissions on submissions.id = criterion_grades.submission_id").
       where(student_id: user_id).
       where(assignment_id: assignment.id)
   end
 
-  def rubric_max_tier_count
-    rubric.max_tier_count
+  def rubric_max_level_count
+    rubric.max_level_count
   end
 
-  def rubric_tier_earned?(user_id, tier_id)
-    rubric_grades(user_id).any? { |rubric_grade| rubric_grade.tier_id == tier_id }
+  def rubric_level_earned?(user_id, level_id)
+    criterion_grades(user_id).any? { |criterion_grade| criterion_grade.level_id == level_id }
   end
 
   def use_rubric?
@@ -197,13 +197,13 @@ class AssignmentPresenter < Showtime::Presenter
     course.teams
   end
 
-  def viewable_rubric_grades(student_id=nil)
-    query = assignment.rubric_grades
+  def viewable_criterion_grades(student_id=nil)
+    query = assignment.criterion_grades
     query = query.where(student_id: student_id) if student_id.present?
     query
   end
 
-  def viewable_rubric_tier_earned?(student_id, tier_id)
-    viewable_rubric_grades(student_id).any? { |rubric_grade| rubric_grade.tier_id == tier_id }
+  def viewable_rubric_level_earned?(student_id, level_id)
+    viewable_criterion_grades(student_id).any? { |criterion_grade| criterion_grade.level_id == level_id }
   end
 end

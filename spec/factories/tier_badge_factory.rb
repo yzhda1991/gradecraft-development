@@ -1,6 +1,6 @@
 FactoryGirl.define do
-  factory :tier_badge do
-    association :tier
+  factory :level_badge do
+    association :level
     association :badge
   end
 end
