@@ -6,6 +6,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   attr_reader :submissions_export
 
   def setup
+    ensure_s3fs_tmp_dir if use_s3fs?
     @submissions_export = SubmissionsExport.find @attrs[:submissions_export_id]
     fetch_assets
     @submissions_export.update_attributes submissions_export_attributes
@@ -110,7 +111,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def tmp_dir
-    @tmp_dir ||= Dir.mktmpdir
+    @tmp_dir ||= Dir.mktmpdir(nil, tmp_dir_parent_path)
   end
 
   def csv_file_path
@@ -225,8 +226,24 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   # final archive concerns
 
   # create a separate tmp dir for storing the final generated archive
+  def ensure_s3fs_tmp_dir
+    FileUtils.mkdir_p(s3fs_tmp_dir_path) unless Dir.exist?(s3fs_tmp_dir_path)
+  end
+
   def archive_tmp_dir
-    @archive_tmp_dir ||= Dir.mktmpdir
+    @archive_tmp_dir ||= Dir.mktmpdir(nil, tmp_dir_parent_path)
+  end
+
+  def tmp_dir_parent_path
+    use_s3fs? ? s3fs_tmp_dir_path : nil
+  end
+
+  def s3fs_tmp_dir_path
+    "/s3mnt/tmp/#{Rails.env}"
+  end
+
+  def use_s3fs?
+    Rails.env.staging? || Rails.env.production?
   end
 
   def expanded_archive_base_path
@@ -318,10 +335,32 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
+    #open(file_path, 'w') {|file| file.binmode; file.write open(submission_file.url).read }
 
-    rescue_binary_file_exceptions(student, submission_file, file_path) do
-      open(file_path, 'w') {|file| file.binmode; file.write open(submission_file.url).read }
+    File.open(file_path, "wb") do |saved_file|
+      # the following "open" is provided by open-uri
+      open(File.expand_path(submission_file.url, Rails.root), "rb") do |read_file|
+        saved_file.write(read_file.read)
+      end
     end
+
+    #     f = open(file_path)
+    #     begin
+    #         http.request_get(submission_file.url) do |resp|
+    #             resp.read_body do |segment|
+    #                 f.write(segment)
+    #             end
+    #         end
+    #     ensure
+    #         f.close()
+    #     end
+
+    # file = Tempfile.new file_path
+    # file.binmode # note that our tempfile must be in binary mode
+    # file.write open(submission_file.url).read
+    # file.rewind
+    # file
+
   end
 
   def rescue_binary_file_exceptions(student, submission_file, file_path)
