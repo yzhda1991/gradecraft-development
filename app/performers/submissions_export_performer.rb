@@ -335,32 +335,14 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
-    #open(file_path, 'w') {|file| file.binmode; file.write open(submission_file.url).read }
 
-    File.open(file_path, "wb") do |saved_file|
-      # the following "open" is provided by open-uri
-      open(File.expand_path(submission_file.url, Rails.root), "rb") do |read_file|
-        saved_file.write(read_file.read)
+    rescue_binary_file_exceptions(student, submission_file, file_path) do
+      File.open(file_path, "wb") do |saved_file|
+        open("#{Rails.root}/public#{submission_file.url}", "rb") do |read_file|
+          saved_file.write(read_file.read)
+        end
       end
     end
-
-    #     f = open(file_path)
-    #     begin
-    #         http.request_get(submission_file.url) do |resp|
-    #             resp.read_body do |segment|
-    #                 f.write(segment)
-    #             end
-    #         end
-    #     ensure
-    #         f.close()
-    #     end
-
-    # file = Tempfile.new file_path
-    # file.binmode # note that our tempfile must be in binary mode
-    # file.write open(submission_file.url).read
-    # file.rewind
-    # file
-
   end
 
   def rescue_binary_file_exceptions(student, submission_file, file_path)
