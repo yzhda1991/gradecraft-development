@@ -6,7 +6,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   #rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment.point_total})")
 
     #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
@@ -20,27 +20,27 @@
     .italic
       = link_to '&laquo; Return to Assignment'.html_safe, assignment_path(@assignment), class: "return-link"
       –
-      %span Rubric is saved automatically.    
+      %span Rubric is saved automatically.
 
     .splash(ng-cloak) Loading rubric...
 
     #rubric-column-heading
-      .metric-heading
+      .criterion-heading
         %h4.italic.not_bold Criteria
-      .tier-heading 
+      .level-heading
         %h4.italic.not_bold Score Levels
 
-    #metric-box(ng-cloak)
+    #criterion-box(ng-cloak)
 
-      .rubric-container.divider(ng-repeat="metric in metrics")
+      .rubric-container.divider(ng-repeat="criterion in criteria")
         .order-label {{$index + 1}}
-        .metric(name="metricForm" ng-form ng-submit="metric.create()" ng-class="{saved: metric.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
-          = render "rubrics/new_metric"
-        .tier-container
-          .tier-wrapper
-            .tier(name="tierForm" ng-repeat="tier in metric.tiers" ng-form ng-submit="tier.create()" ng-class="{saved: tier.isSaved(), nocredit: tier.noCredit}")
-              = render "rubrics/new_tier"
-        %button.add-tier(name="newTier" ng-click="metric.addTier()" ng-show="metric.isSaved()")
+        .criterion(name="criterionForm" ng-form ng-submit="criterion.create()" ng-class="{saved: criterion.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
+          = render "rubrics/new_criterion"
+        .level-container
+          .level-wrapper
+            .level(name="levelForm" ng-repeat="level in criterion.levels" ng-form ng-submit="level.create()" ng-class="{saved: level.isSaved(), nocredit: level.noCredit}")
+              = render "rubrics/new_level"
+        %button.add-level(name="newLevel" ng-click="criterion.addLevel()" ng-show="criterion.isSaved()")
           + Level
 
-    %button#new-rubric-metric(type="button" ng-click="newMetric()" ng-hide) + Criterion
+    %button#new-rubric-criterion(type="button" ng-click="newCriterion()" ng-hide) + Criterion

@@ -1,7 +1,7 @@
 class RubricsController < ApplicationController
   before_filter :ensure_staff?
 
-  before_action :find_rubric, except: [:design, :create, :existing_metrics, :course_badges]
+  before_action :find_rubric, except: [:design, :create, :existing_criteria, :course_badges]
 
   respond_to :html, :json
 
@@ -28,13 +28,13 @@ class RubricsController < ApplicationController
     respond_with @rubric, status: :not_found
   end
 
-  def existing_metrics
+  def existing_criteria
     @assignment = current_course.assignments.find params[:assignment_id]
     @rubric = @assignment.rubric
     render json:  MultiJson.dump(
                     ActiveModel::ArraySerializer.new(
-                      @rubric.metrics.order(:order).includes(:tiers),
-                        each_serializer: ExistingMetricSerializer
+                      @rubric.criteria.order(:order).includes(:levels),
+                        each_serializer: ExistingCriterionSerializer
                     )
                   )
   end

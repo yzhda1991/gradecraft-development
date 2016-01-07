@@ -37,7 +37,7 @@
       - if presenter.rubric_designed?
         - if presenter.has_reviewable_grades?
           %li
-            %a{:href => rubric_grades_review_assignment_path(presenter.assignment) }
+            %a{:href => criterion_grades_review_assignment_path(presenter.assignment) }
               Review Grades
         %li.on(ng-cloak ng-show="useRubric")
           %a(ng-click="rubricsOff()")

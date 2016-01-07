@@ -1,7 +1,7 @@
 require 'rails_spec_helper'
 
-describe TiersController do
-  before(:all) do 
+describe LevelsController do
+  before(:all) do
     @course = create(:course)
   end
   before(:each) do
@@ -9,7 +9,7 @@ describe TiersController do
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
-  context "as a professor" do 
+  context "as a professor" do
     before(:all) do
       @professor = create(:user)
       CourseMembership.create user: @professor, course: @course, role: "professor"
@@ -17,26 +17,26 @@ describe TiersController do
 
     before(:each) { login_user(@professor) }
 
-    describe "POST create" do 
-      it "creates a new tier" do 
-        params = attributes_for(:tier)
-        expect{ post :create, :tier => params }.to change(Tier,:count).by(1)  
+    describe "POST create" do
+      it "creates a new level" do
+        params = attributes_for(:level)
+        expect{ post :create, :level => params }.to change(Level,:count).by(1)
       end
     end
 
-    describe "GET destroy" do 
-      it "destroys a tier" do 
-        @tier = create(:tier)
-        expect{ get :destroy, { :id => @tier } }.to change(Tier,:count).by(-1)
+    describe "GET destroy" do
+      it "destroys a level" do
+        @level = create(:level)
+        expect{ get :destroy, { :id => @level } }.to change(Level,:count).by(-1)
       end
     end
 
-    describe "POST update" do 
-      it "updates a tier" do 
-        @tier = create(:tier)
+    describe "POST update" do
+      it "updates a level" do
+        @level = create(:level)
         params = { name: "new name" }
-        post :update, id: @tier.id, :tier=> params
-        expect(@tier.reload.name).to eq("new name")
+        post :update, id: @level.id, :level=> params
+        expect(@level.reload.name).to eq("new name")
       end
     end
   end

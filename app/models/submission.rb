@@ -20,7 +20,7 @@ class Submission < ActiveRecord::Base
 
   has_one :grade
   has_one :assignment_weight, through: :assignment
-  has_many :rubric_grades, dependent: :destroy
+  has_many :criterion_grades, dependent: :destroy
 
   accepts_nested_attributes_for :grade
   has_many :submission_files, :dependent => :destroy, autosave: true

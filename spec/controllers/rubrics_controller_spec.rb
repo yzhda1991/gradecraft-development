@@ -43,7 +43,7 @@ describe RubricsController do
         :create,
         :destroy,
         :update,
-        :existing_metrics,
+        :existing_criteria,
         :course_badges
       ].each do |route|
           it "#{route} redirects to root" do

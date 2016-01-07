@@ -73,14 +73,14 @@ describe AssignmentsController do
 
       it "duplicates rubrics" do
         @assignment.create_rubric
-        @assignment.rubric.metrics.create name: "Rubric 1", max_points: 10_000, order: 1
-        @assignment.rubric.metrics.first.tiers.first.badges.create! name: "Blah", course: @course
+        @assignment.rubric.criteria.create name: "Rubric 1", max_points: 10_000, order: 1
+        @assignment.rubric.criteria.first.levels.first.badges.create! name: "Blah", course: @course
         post :copy, id: @assignment.id
         duplicated = Assignment.last
         expect(duplicated.rubric).to_not be_nil
-        expect(duplicated.rubric.metrics.first.name).to eq "Rubric 1"
-        expect(duplicated.rubric.metrics.first.tiers.first.name).to eq "Full Credit"
-        expect(duplicated.rubric.metrics.first.tiers.first.tier_badges.count).to \
+        expect(duplicated.rubric.criteria.first.name).to eq "Rubric 1"
+        expect(duplicated.rubric.criteria.first.levels.first.name).to eq "Full Credit"
+        expect(duplicated.rubric.criteria.first.levels.first.level_badges.count).to \
           eq 1
       end
 
@@ -154,10 +154,10 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET rubric_grades_review" do
+    describe "GET criterion_grades_review" do
       it "renders the correct template" do
-        get :rubric_grades_review, :id => @assignment
-        expect(response).to render_template(:rubric_grades_review)
+        get :criterion_grades_review, :id => @assignment
+        expect(response).to render_template(:criterion_grades_review)
       end
     end
 
@@ -358,11 +358,11 @@ describe AssignmentsController do
 
       it "assigns rubric grades" do
         skip "implement"
-        rubric = create(:rubric_with_metrics, assignment: @assignment)
+        rubric = create(:rubric_with_criteria, assignment: @assignment)
         # TODO: Test for this line:
-        # @rubric_grades = RubricGrade.joins("left outer join submissions on submissions.id = rubric_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
+        # @criterion_grades = CriterionGrade.joins("left outer join submissions on submissions.id = criterion_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
         get :show, :id => @assignment.id
-        expect(assigns(:rubric_grades)).to eq("?")
+        expect(assigns(:criterion_grades)).to eq("?")
       end
 
       it "includes pass/fail status for released pass/fail grades" do
@@ -400,7 +400,7 @@ describe AssignmentsController do
         :export_grades,
         :download_current_grades,
         :update_rubrics,
-        :rubric_grades_review
+        :criterion_grades_review
 
       ].each do |route|
         it "#{route} redirects to root" do

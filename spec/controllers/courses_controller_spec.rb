@@ -123,19 +123,19 @@ describe CoursesController do
         badge = create(:badge, course: @course, name: "First")
         assignment = create(:assignment, assignment_type: assignment_type, course: @course)
         rubric = create(:rubric, assignment: assignment)
-        metric = create(:metric, rubric: rubric)
-        tier = create(:tier, metric: metric)
-        tier_badge = create(:tier_badge, tier: tier, badge: badge)
+        criterion = create(:criterion, rubric: rubric)
+        level = create(:level, criterion: criterion)
+        level_badge = create(:level_badge, level: level, badge: badge)
         course_2 = Course.last
         assignment_2 = course_2.assignments.first
         rubric_2 = assignment_2.rubric
-        metric_2 = rubric_2.metrics.first
-        tier_2 = metric_2.tiers.last
+        criterion_2 = rubric_2.criteria.first
+        level_2 = criterion_2.levels.last
         expect{ post :copy, :id => @course.id }.to change(Course, :count).by(1)
         expect(assignment_2.rubric.present?).to eq(true)
-        expect(rubric_2.metrics.present?).to eq(true)
-        expect(metric_2.tiers.present?).to eq(true)
-        expect(tier_2.tier_badges.present?).to eq(true)
+        expect(rubric_2.criteria.present?).to eq(true)
+        expect(criterion_2.levels.present?).to eq(true)
+        expect(level_2.level_badges.present?).to eq(true)
       end
 
       it "assigns the professor to the duplicated course" do

@@ -79,9 +79,9 @@ class AssignmentsController < ApplicationController
     redirect_to assignment_path(assignment)
   end
 
-  def rubric_grades_review
+  def criterion_grades_review
     assignment = current_course.assignments.find(params[:id])
-    render :rubric_grades_review, AssignmentPresenter.build({ assignment: assignment, course: current_course,
+    render :criterion_grades_review, AssignmentPresenter.build({ assignment: assignment, course: current_course,
                                                               team_id: params[:team_id], view_context: view_context })
   end
 

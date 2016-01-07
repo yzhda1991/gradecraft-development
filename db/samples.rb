@@ -274,15 +274,15 @@ end
           rubric.assignment = assignment
           rubric.save
           1.upto(15).each do |n|
-            rubric.metrics.create! do |metric|
-              metric.name = "Criteria ##{n}"
-              metric.max_points = 10.times.collect {|i| (i + 1) * 10000}.sample
-              metric.order = n
-              metric.save
+            rubric.criteria.create! do |criterion|
+              criterion.name = "Criteria ##{n}"
+              criterion.max_points = 10.times.collect {|i| (i + 1) * 10000}.sample
+              criterion.order = n
+              criterion.save
               1.upto(5).each do |m|
-                metric.tiers.create! do |tier|
-                  tier.name = "Tier ##{m}"
-                  tier.points = metric.max_points - (m * 1000)
+                criterion.levels.create! do |level|
+                  level.name = "Level ##{m}"
+                  level.points = criterion.max_points - (m * 1000)
                 end
               end
             end
@@ -317,13 +317,13 @@ end
 
       if config[:rubric] and config[:grades]
         @students.each do |student|
-          assignment.rubric.metrics.each do |metric|
-            metric.rubric_grades.create! do |rg|
-              rg.max_points = metric.max_points
-              rg.points = metric.tiers.first.points
-              rg.tier = metric.tiers.first
-              rg.metric_name = metric.name
-              rg.tier_name = metric.tiers.first.name
+          assignment.rubric.criteria.each do |criterion|
+            criterion.rubric_grades.create! do |rg|
+              rg.max_points = criterion.max_points
+              rg.points = criterion.levels.first.points
+              rg.level = criterion.levels.first
+              rg.criterion_name = criterion.name
+              rg.level_name = criterion.levels.first.name
               rg.assignment_id = assignment.id
               rg.order = 1
               rg.student_id = student.id

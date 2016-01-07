@@ -16,8 +16,8 @@ class GradesController < ApplicationController
     # TODO: we need to add rubrics for group assignment
     if @assignment.rubric.present? && @assignment.is_individual?
       @rubric = @assignment.rubric
-      @metrics = @rubric.metrics
-      @rubric_grades = serialized_rubric_grades
+      @criteria = @rubric.criteria
+      @criterion_grades = serialized_criterion_grades
     end
 
     if @assignment.has_groups?
@@ -45,7 +45,7 @@ class GradesController < ApplicationController
 
     if @assignment.rubric.present?
       @rubric = @assignment.rubric
-      @rubric_grades = serialized_rubric_grades
+      @criterion_grades = serialized_criterion_grades
       # This is a patch for the Angular GradeRubricCtrl
       @return_path = URI(request.referer).path + "?student_id=#{current_student.id}"
     end
@@ -143,18 +143,18 @@ class GradesController < ApplicationController
     if @grade
       @grade.update_attributes grade_attributes_from_rubric
     else
-      @grade = Grade.create(new_grade_from_rubric_grades_attributes)
+      @grade = Grade.create(new_grade_from_criterion_grades_attributes)
     end
 
     # delete existing rubric grades
-    # TODO: Shouldn't require a second parameter of metric_ids when already supplied.
-    # 1. Insure metric id is suplied in params[:rubric_grades] and required by RubricGrade model
-    # 2. params[:metric_ids] = params[:rubric_grades].collect{|rg| rg["metric_id"]}`
-    RubricGrade.where({ assignment_id: params[:assignment_id], student_id: params[:student_id], metric_id: params[:metric_ids] }).delete_all
+    # TODO: Shouldn't require a second parameter of criterion_ids when already supplied.
+    # 1. Insure criterion id is suplied in params[:criterion_grades] and required by CriterionGrade model
+    # 2. params[:criterion_ids] = params[:criterion_grades].collect{|rg| rg["criterion_id"]}`
+    CriterionGrade.where({ assignment_id: params[:assignment_id], student_id: params[:student_id], criterion_id: params[:criterion_ids] }).delete_all
 
     # create an individual record for each rubric grade
-    params[:rubric_grades].collect do |rubric_grade|
-      RubricGrade.create! rubric_grade.merge(
+    params[:criterion_grades].collect do |criterion_grade|
+      CriterionGrade.create! criterion_grade.merge(
         { submission_id: safe_submission_id,
           assignment_id: @assignment[:id],
           student_id: params[:student_id]
@@ -162,8 +162,8 @@ class GradesController < ApplicationController
       )
     end
 
-    # EarnedBadges associated with a TierBadge
-    EarnedBadge.import(new_earned_tier_badges, :validate => true) if params[:tier_badges]
+    # EarnedBadges associated with a LevelBadge
+    EarnedBadge.import(new_earned_level_badges, :validate => true) if params[:level_badges]
 
     # @mz TODO: add specs
     if @grade.is_student_visible?
@@ -433,11 +433,11 @@ class GradesController < ApplicationController
     end.to_json
   end
 
-  def serialized_rubric_grades
-    RubricGrade.where({ student_id: params[:student_id],
+  def serialized_criterion_grades
+    CriterionGrade.where({ student_id: params[:student_id],
                         assignment_id: params[:assignment_id],
-                        metric_id: rubric_metrics_with_tiers.collect {|metric| metric[:id] } }).
-                select(:id, :metric_id, :tier_id, :comments).to_json
+                        criterion_id: rubric_criteria_with_levels.collect {|criterion| criterion[:id] } }).
+                select(:id, :criterion_id, :level_id, :comments).to_json
   end
 
   def safe_submission_id
@@ -448,18 +448,17 @@ class GradesController < ApplicationController
     @grade.point_total rescue nil
   end
 
-  def new_earned_tier_badges
-    params[:tier_badges].collect do |tier_badge|
+  def new_earned_level_badges
+    params[:level_badges].collect do |level_badge|
       EarnedBadge.new({
-        badge_id: tier_badge["badge_id"],
+        badge_id: level_badge["badge_id"],
         submission_id: safe_submission_id,
         course_id: current_course[:id],
         student_id: current_student[:id],
         assignment_id: @assignment[:id],
-        tier_id: tier_badge[:tier_id],
-        metric_id: tier_badge[:metric_id],
-        score: tier_badge[:point_total],
-        tier_badge_id: tier_badge[:id],
+        level_id: level_badge[:level_id],
+        score: level_badge[:point_total],
+        level_badge_id: level_badge[:id],
         student_visible: @grade.is_student_visible?
       })
     end
@@ -503,7 +502,7 @@ class GradesController < ApplicationController
     end
   end
 
-  def new_grade_from_rubric_grades_attributes
+  def new_grade_from_criterion_grades_attributes
     {
       course_id: current_course[:id],
       assignment_type_id: @assignment.assignment_type_id
@@ -531,8 +530,8 @@ class GradesController < ApplicationController
     }
   end
 
-  def rubric_metrics_with_tiers
-    @rubric_metrics_with_tiers ||= @rubric.metrics.order(:order).includes(:tiers)
+  def rubric_criteria_with_levels
+    @rubric_criteria_with_levels ||= @rubric.criteria.order(:order).includes(:levels)
   end
 
   def set_assignment

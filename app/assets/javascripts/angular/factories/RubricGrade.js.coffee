@@ -1,7 +1,7 @@
-@gradecraft.factory 'RubricGrade', ->
-	class RubricGrade
+@gradecraft.factory 'CriterionGrade', ->
+	class CriterionGrade
 		constructor: (attrs={})->
 		  @id = attrs.id
-		  @metric_id = attrs.metric_id
-		  @tier_id = attrs.tier_id
+		  @criterion_id = attrs.criterion_id
+		  @level_id = attrs.level_id
 		  @comments = attrs.comments

@@ -1,8 +1,8 @@
-@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Metric', 'CourseBadge', 'RubricGrade','MetricService', '$http', ($scope, Restangular, Metric, CourseBadge, RubricGrade, MetricService, $http) ->
+@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'CriterionGrade','CriterionService', '$http', ($scope, Restangular, Criterion, CourseBadge, CriterionGrade, CriterionService, $http) ->
 
-  $scope.metrics = []
+  $scope.criteria = []
   $scope.courseBadges = {}
-  $scope.rubricGrades = {} # index in hash with metric_id as key
+  $scope.criterionGrades = {} # index in hash with criterion_id as key
   $scope.gsiGradeStatuses = ["In Progress", "Graded"]
   $scope.professorGradeStatuses = ["In Progress", "Graded", "Released"]
   $scope.urlId = parseInt(window.location.pathname.split('/')[2])
@@ -10,7 +10,7 @@
   $scope.pointsPossible = 0
   $scope.pointsGiven = 0
 
-  $scope.init = (rubricId, assignmentId, studentId, rubricGrades, gradeStatus, releaseNecessary, returnURL)->
+  $scope.init = (rubricId, assignmentId, studentId, criterionGrades, gradeStatus, releaseNecessary, returnURL)->
     $scope.rubricId = rubricId
     $scope.assignmentId = assignmentId
     $scope.studentId = studentId
@@ -26,18 +26,18 @@
 
     $scope.returnURL = returnURL
 
-    $scope.addRubricGrades(rubricGrades)
+    $scope.addCriterionGrades(criterionGrades)
 
-  MetricService.getBadges($scope.urlId).success (courseBadges)->
+  CriterionService.getBadges($scope.urlId).success (courseBadges)->
     $scope.addCourseBadges(courseBadges)
-  MetricService.getMetrics($scope.urlId).success (metrics)->
-    $scope.addMetrics(metrics)
+  CriterionService.getCriteria($scope.urlId).success (criteria)->
+    $scope.addCriteria(criteria)
 
-  # distill key/value pairs for metric ids and relative order
+  # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->
     points = 0
-    angular.forEach($scope.metrics, (metric, index)->
-      points += metric.max_points if metric.max_points
+    angular.forEach($scope.criteria, (criterion, index)->
+      points += criterion.max_points if criterion.max_points
     )
     points or 0
 
@@ -58,133 +58,133 @@
   $scope.pointsOverage = ()->
     $scope.pointsDifference() < 0
 
-  $scope.showMetric = (attrs)->
-    new Metric(attrs, $scope)
+  $scope.showCriterion = (attrs)->
+    new Criterion(attrs, $scope)
 
-  # count how many tiers have been selected in the UI
-  $scope.tiersSelected = []
-  $scope.selectedTiers = ()->
-    tiers = []
-    angular.forEach($scope.metrics, (metric, index)->
-      if metric.selectedTier
-        tiers.push metric.selectedTier
+  # count how many levels have been selected in the UI
+  $scope.levelsSelected = []
+  $scope.selectedLevels = ()->
+    levels = []
+    angular.forEach($scope.criteria, (criterion, index)->
+      if criterion.selectedLevel
+        levels.push criterion.selectedLevel
     )
-    $scope.tiersSelected = tiers
-    tiers
+    $scope.levelsSelected = levels
+    levels
 
 
-  $scope.selectedTierIds = []
-  # count how many tiers have been selected in the UI
-  $scope.selectedTierIds = ()->
-    tierIds = []
-    angular.forEach($scope.metrics, (metric, index)->
-      if metric.selectedTier
-        tierIds.push metric.selectedTier.id
+  $scope.selectedLevelIds = []
+  # count how many levels have been selected in the UI
+  $scope.selectedLevelIds = ()->
+    levelIds = []
+    angular.forEach($scope.criteria, (criterion, index)->
+      if criterion.selectedLevel
+        levelIds.push criterion.selectedLevel.id
     )
-    $scope.selectedTierIds = tierIds
-    tierIds
+    $scope.selectedLevelIds = levelIds
+    levelIds
 
-  $scope.allMetricIds = []
-  # ids of all the metrics in the rubric
-  $scope.allMetricIds = ()->
-    metricIds = []
-    angular.forEach($scope.metrics, (metric, index)->
-      metricIds.push metric.id
+  $scope.allCriterionIds = []
+  # ids of all the criteria in the rubric
+  $scope.allCriterionIds = ()->
+    criterionIds = []
+    angular.forEach($scope.criteria, (criterion, index)->
+      criterionIds.push criterion.id
     )
-    $scope.allMetricIds = metricIds
-    metricIds
+    $scope.allCriterionIds = criterionIds
+    criterionIds
 
-  # count how many points have been given from those tiers
+  # count how many points have been given from those levels
   $scope.pointsGiven = ()->
     points = 0
-    angular.forEach($scope.metrics, (metric, index)->
-      if metric.selectedTier
-        points += metric.selectedTier.points
+    angular.forEach($scope.criteria, (criterion, index)->
+      if criterion.selectedLevel
+        points += criterion.selectedLevel.points
     )
     points
 
-  $scope.gradedMetrics = ()->
-    metrics = []
-    angular.forEach($scope.metrics, (metric, index)->
-      if metric.selectedTier
-        metrics.push metric
+  $scope.gradedCriteria = ()->
+    criteria = []
+    angular.forEach($scope.criteria, (criterion, index)->
+      if criterion.selectedLevel
+        criteria.push criterion
     )
-    metrics
+    criteria
 
-  $scope.selectedMetrics = ()->
-    metrics = []
-    angular.forEach($scope.metrics, (metric, index)->
-      if metric.selectedTier
-        metrics.push metric
+  $scope.selectedCriteria = ()->
+    criteria = []
+    angular.forEach($scope.criteria, (criterion, index)->
+      if criterion.selectedLevel
+        criteria.push criterion
     )
-    $scope.selectedMetrics = metrics
-    metrics
+    $scope.selectedCriteria = criteria
+    criteria
 
-  # Patch: (TODO test and then remove gradedMetricsParams)
-  # For params submitted, we want to include metrics with
-  # comments but no selected tier
-  $scope.metricsParams = ()->
+  # Patch: (TODO test and then remove gradedCriteriaParams)
+  # For params submitted, we want to include criteria with
+  # comments but no selected level
+  $scope.criteriaParams = ()->
     params = []
-    angular.forEach($scope.metrics, (metric, index)->
-      # get params just from the metric object
-      metricParams = $scope.metricOnlyParams(metric,index)
+    angular.forEach($scope.criteria, (criterion, index)->
+      # get params just from the criterion object
+      criterionParams = $scope.criterionOnlyParams(criterion,index)
 
-      # add params from the tier if a tier has been selected
-      if metric.selectedTier
-        jQuery.extend(metricParams, $scope.gradedTierParams(metric))
+      # add params from the level if a level has been selected
+      if criterion.selectedLevel
+        jQuery.extend(criterionParams, $scope.gradedLevelParams(criterion))
 
       # create params for the rubric grade regardless
-      params.push metricParams
+      params.push criterionParams
     )
     params
 
-  $scope.gradedMetricsParams = ()->
+  $scope.gradedCriteriaParams = ()->
     params = []
-    angular.forEach($scope.gradedMetrics(), (metric, index)->
-      # get params just from the metric object
-      metricParams = $scope.metricOnlyParams(metric,index)
+    angular.forEach($scope.gradedCriteria(), (criterion, index)->
+      # get params just from the criterion object
+      criterionParams = $scope.criterionOnlyParams(criterion,index)
 
-      # add params from the tier if a tier has been selected
-      if metric.selectedTier
-        jQuery.extend(metricParams, $scope.gradedTierParams(metric))
+      # add params from the level if a level has been selected
+      if criterion.selectedLevel
+        jQuery.extend(criterionParams, $scope.gradedLevelParams(criterion))
 
       # create params for the rubric grade regardless
-      params.push metricParams
+      params.push criterionParams
     )
     params
 
-  # params for just the metric
-  $scope.metricOnlyParams = (metric,index)->
+  # params for just the criterion
+  $scope.criterionOnlyParams = (criterion,index)->
     {
-      metric_name: metric.name,
-      metric_description: metric.description,
-      max_points: metric.max_points,
+      criterion_name: criterion.name,
+      criterion_description: criterion.description,
+      max_points: criterion.max_points,
       order: index,
-      metric_id: metric.id,
-      comments: metric.comments
+      criterion_id: criterion.id,
+      comments: criterion.comments
     }
 
-  # additional tier params if a tier is selected
-  $scope.gradedTierParams = (metric) ->
+  # additional level params if a level is selected
+  $scope.gradedLevelParams = (criterion) ->
     {
-      tier_name: metric.selectedTier.name,
-      tier_description: metric.selectedTier.description,
-      points: metric.selectedTier.points,
-      tier_id: metric.selectedTier.id
+      level_name: criterion.selectedLevel.name,
+      level_description: criterion.selectedLevel.description,
+      points: criterion.selectedLevel.points,
+      level_id: criterion.selectedLevel.id
     }
 
-  $scope.tierBadgesParams = ()->
+  $scope.levelBadgesParams = ()->
     params = []
-    # alert("# of graded metrics:" + $scope.gradedMetrics.length)
-    angular.forEach($scope.gradedMetrics(), (metric, index)->
-      # alert(metric.name)
-      # grab the selected tier for the active metric
-      tier = metric.selectedTier
-      angular.forEach(tier.badges, (badge, index)->
+    # alert("# of graded criteria:" + $scope.gradedCriteria.length)
+    angular.forEach($scope.gradedCriteria(), (criterion, index)->
+      # alert(criterion.name)
+      # grab the selected level for the active criterion
+      level = criterion.selectedLevel
+      angular.forEach(level.badges, (badge, index)->
         params.push {
           name: badge.name,
-          tier_id: tier.id,
-          metric_id: tier.metric_id,
+          level_id: level.id,
+          criterion_id: level.criterion_id,
           badge_id: badge.badge.id,
           description: badge.description,
           point_total: badge.point_total,
@@ -201,27 +201,27 @@
       rubric_id: $scope.rubricId,
       student_id: $scope.studentId,
       points_possible: $scope.pointsPossible,
-      rubric_grades: $scope.metricsParams(),
-      tier_badges: $scope.tierBadgesParams(),
-      tier_ids: $scope.selectedTierIds(),
-      metric_ids: $scope.allMetricIds(),
+      criterion_grades: $scope.criteriaParams(),
+      level_badges: $scope.levelBadgesParams(),
+      level_ids: $scope.selectedLevelIds(),
+      criterion_ids: $scope.allCriterionIds(),
       grade_status: $scope.gradeStatus
     }
 
   $scope.submitGrade = ()->
     self = this
     if confirm "Are you sure you want to submit the grade for this assignment?"
-      # alert(self.gradedRubricParams().tier_badges.length)
+      # alert(self.gradedRubricParams().level_badges.length)
       $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", self.gradedRubricParams()).success(
         window.location = $scope.returnURL
       )
       .error(
       )
 
-  $scope.addRubricGrades = (rubricGrades)->
-    angular.forEach(rubricGrades, (rg, index)->
-      rubricGrade = new RubricGrade(rg)
-      $scope.rubricGrades[rg.metric_id] = rubricGrade
+  $scope.addCriterionGrades = (criterionGrades)->
+    angular.forEach(criterionGrades, (rg, index)->
+      criterionGrade = new CriterionGrade(rg)
+      $scope.criterionGrades[rg.criterion_id] = criterionGrade
     )
 
   $scope.addCourseBadges = (courseBadges)->
@@ -230,12 +230,12 @@
       $scope.courseBadges[badge.id] = courseBadge
     )
 
-  $scope.addMetrics = (existingMetrics)->
-    angular.forEach(existingMetrics, (metric, index)->
-      metricObject = new Metric(metric, $scope)
-      $scope.metrics.push metricObject
-      $scope.pointsPossible += metricObject.max_points
+  $scope.addCriteria = (existingCriteria)->
+    angular.forEach(existingCriteria, (criterion, index)->
+      criterionObject = new Criterion(criterion, $scope)
+      $scope.criteria.push criterionObject
+      $scope.pointsPossible += criterionObject.max_points
     )
 
-  $scope.existingMetrics = []
+  $scope.existingCriteria = []
 ]

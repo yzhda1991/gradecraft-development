@@ -37,7 +37,7 @@
 
   - if presenter.has_teams? && presenter.assignment.is_individual?
     .team-filter
-      = form_tag rubric_grades_review_assignment_path(presenter.assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+      = form_tag criterion_grades_review_assignment_path(presenter.assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         %label.sr-only{:for => "team_id"}
           Select #{term_for :team}
         = select_tag :team_id, options_for_select(presenter.teams.map { |t| [t.name, t.id] }, presenter.team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
@@ -59,7 +59,7 @@
                 %td
                   %strong Criterion
                   .not_bold.italic Max points
-                %td(colspan="#{presenter.rubric.max_tier_count}")
+                %td(colspan="#{presenter.rubric.max_level_count}")
                   .larger
                     %strong Level
                     .not_bold.italic Points
@@ -67,36 +67,36 @@
                   %strong
                     Comments
             %tbody
-              - presenter.metrics.each do |metric|
+              - presenter.criteria.each do |criterion|
                 %tr
-                  %td.metric(style="font-size: 12px !important; width: 10%")
-                    .metric-heading
-                      .metric-name.bold= metric.wrapped_name(28).html_safe
-                      .metric-points.italic= "#{points metric.max_points} Points"
+                  %td.criterion(style="font-size: 12px !important; width: 10%")
+                    .criterion-heading
+                      .criterion-name.bold= criterion.wrapped_name(28).html_safe
+                      .criterion-points.italic= "#{points criterion.max_points} Points"
                       .clear
-                    .metric-description= metric.wrapped_description(40).html_safe
+                    .criterion-description= criterion.wrapped_description(40).html_safe
 
-                  - metric.tiers.each do |tier|
-                    %td.tier
-                      .tier-heading
-                        .tier-name.uppercase= tier.wrapped_name(25).html_safe
+                  - criterion.levels.each do |level|
+                    %td.level
+                      .level-heading
+                        .level-name.uppercase= level.wrapped_name(25).html_safe
                         .clear
-                        .tier-points.italic= "#{points tier.points} Points"
+                        .level-points.italic= "#{points level.points} Points"
                       .clear
-                      .tier-description= tier.description
+                      .level-description= level.description
 
                       .row.badge-row
                         %br
-                        - tier.tier_badges.each_with_index do |badge, index|
+                        - level.level_badges.each_with_index do |badge, index|
                           - if index < 2
-                            %span.tier-badge-image
+                            %span.level-badge-image
                               %img{:src => badge.badge.icon, width: "30px", height: "30px" }
                         %br
                         %br
-                        - presenter.viewable_rubric_grades.where(student_id: student.id, tier_id: tier.id).each do |rg|
+                        - presenter.viewable_criterion_grades.where(student_id: student.id, level_id: level.id).each do |rg|
                           .italic{style: "color: #00BD39; font-size: 110%"} #{student.first_name} earned this level
-                  - if metric.tiers.size < presenter.rubric.max_tier_count
-                    %td.filler(colspan="#{presenter.rubric.max_tier_count - metric.tiers.size}")
+                  - if criterion.levels.size < presenter.rubric.max_level_count
+                    %td.filler(colspan="#{presenter.rubric.max_level_count - criterion.levels.size}")
                   %td.comments.italic{style: "font-size: 100%"}
-                    - presenter.viewable_rubric_grades.where(student_id: student.id, metric_id: metric.id).each do |rg|
+                    - presenter.viewable_criterion_grades.where(student_id: student.id, criterion_id: criterion.id).each do |rg|
                       = rg.comments
