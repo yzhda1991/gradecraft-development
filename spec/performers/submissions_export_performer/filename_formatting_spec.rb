@@ -193,9 +193,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   describe "#ensure_s3fs_tmp_dir" do
     subject { performer.instance_eval { ensure_s3fs_tmp_dir } }
     let(:s3fs_tmp_dir_path) { Dir.mktmpdir }
-    before(:each) do
-      allow(performer).to receive(:s3fs_tmp_dir_path) { s3fs_tmp_dir_path }
-    end
+    before(:each) { allow(performer).to receive(:s3fs_tmp_dir_path) { s3fs_tmp_dir_path } }
 
     context "s3fs_tmp_dir_path already exists" do
       it "doesn't build any new directories" do
@@ -213,10 +211,34 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
+  describe "tmp_dir_parent_path" do
+    subject { performer.instance_eval { tmp_dir_parent_path } }
+    let(:s3fs_tmp_dir_path) { Dir.mktmpdir }
+    before(:each) { allow(performer).to receive(:s3fs_tmp_dir_path) { s3fs_tmp_dir_path } }
+
+    context "system is using s3fs" do
+      it "uses the s3fs parent path" do
+        allow(performer).to receive(:use_s3fs?) { true }
+        expect(subject).to eq(s3fs_tmp_dir_path)
+      end
+    end
+
+    context "system is not using s3fs" do
+      it "uses the system default tmp dir path" do
+        allow(performer).to receive(:use_s3fs?) { false }
+        expect(subject).to be_nil
+      end
+    end
+  end
+
   describe "archive_tmp_dir" do
     subject { performer.instance_eval { archive_tmp_dir }}
+    let(:tmp_dir_parent_path) { nil }
+
     it "builds a temporary directory for the archive" do
-      expect(subject).to match(/\/tmp\/[\w\d-]+/) # match the tmp dir hash
+      allow(performer).to receive(:tmp_dir_parent_path) { nil }
+      expect(Dir).to receive(:mktmpdir).with(nil, tmp_dir_parent_path)
+      subject
     end
 
     it "caches the temporary directory" do
