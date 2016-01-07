@@ -338,7 +338,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
     rescue_binary_file_exceptions(student, submission_file, file_path) do
       File.open(file_path, "wb") do |saved_file|
-        open("#{Rails.root}/public#{submission_file.url}", "rb") do |read_file|
+        open(submission_file.url, "rb") do |read_file|
           saved_file.write(read_file.read)
         end
       end
