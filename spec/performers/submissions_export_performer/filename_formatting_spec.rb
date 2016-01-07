@@ -231,6 +231,44 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
+  describe "#s3fs_tmp_dir_path" do
+    subject { performer.instance_eval { s3fs_tmp_dir_path } }
+    it "uses a base path" do
+      expect(subject).to match(/\/s3mnt\/tmp/)
+    end
+
+    it "includes the current environment name" do
+      expect(subject).to match(Rails.env)
+    end
+  end
+
+  describe "#use_s3fs?" do
+    subject { performer.instance_eval { use_s3fs? } }
+    let(:s3fs_tmp_dir_path) { Dir.mktmpdir }
+    before(:each) { allow(performer).to receive(:s3fs_tmp_dir_path) { s3fs_tmp_dir_path } }
+
+    context "staging environment" do
+      before { allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("staging") }}
+      it "uses s3fs" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "production environment" do
+      before { allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("production") }}
+      it "uses s3fs" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "development environment" do
+      before { allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("development") }}
+      it "uses s3fs" do
+        expect(subject).to be_falsey
+      end
+    end
+  end
+
   describe "archive_tmp_dir" do
     subject { performer.instance_eval { archive_tmp_dir }}
     let(:tmp_dir_parent_path) { nil }
