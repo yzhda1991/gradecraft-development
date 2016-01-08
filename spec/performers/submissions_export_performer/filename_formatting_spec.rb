@@ -263,7 +263,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     context "development environment" do
       before { allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("development") }}
-      it "uses s3fs" do
+      it "doesn't use s3fs" do
         expect(subject).to be_falsey
       end
     end
@@ -271,11 +271,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "archive_tmp_dir" do
     subject { performer.instance_eval { archive_tmp_dir }}
-    let(:tmp_dir_parent_path) { nil }
 
     it "builds a temporary directory for the archive" do
-      allow(performer).to receive(:tmp_dir_parent_path) { nil }
-      expect(Dir).to receive(:mktmpdir).with(nil, tmp_dir_parent_path)
+      expect(Dir).to receive(:mktmpdir).with(no_args)
       subject
     end
 
