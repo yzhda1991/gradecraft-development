@@ -10,7 +10,7 @@ module S3File
   include S3Manager::Basics
 
   def url
-    "#{Rails.root}/public#{file.url}" if Rails.env == "development"
+    return file.url if Rails.env.development?
 
     if filepath.present?
       bucket.object(CGI::unescape(filepath)).presigned_url(:get, expires_in: 900).to_s #15 minutes

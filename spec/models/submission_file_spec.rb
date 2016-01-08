@@ -28,18 +28,18 @@ describe SubmissionFile do
     end
   end
 
-  describe "#development_url" do
+  describe "#public_url" do
     it "uses the Rails root" do
-      expect(subject.development_url).to match(/#{Rails.root}/)
+      expect(subject.public_url).to match(/#{Rails.root}/)
     end
 
     it "uses the public directory" do
-      expect(subject.development_url).to match("public")
+      expect(subject.public_url).to match("public")
     end
 
     it "uses the submission file url" do
       allow(subject).to receive(:url) { "/great/scott.jpg" }
-      expect(subject.development_url).to match("/great/scott.jpg")
+      expect(subject.public_url).to match("/great/scott.jpg")
     end
   end
 

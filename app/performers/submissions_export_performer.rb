@@ -111,7 +111,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def tmp_dir
-    @tmp_dir ||= Dir.mktmpdir(nil, tmp_dir_parent_path)
+    if use_s3fs?
+      @tmp_dir ||= Dir.mktmpdir(nil, s3fs_tmp_dir_path)
+    else
+      @tmp_dir ||= Dir.mktmpdir
+    end
   end
 
   def csv_file_path
@@ -231,7 +235,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def archive_tmp_dir
-    @archive_tmp_dir ||= Dir.mktmpdir(nil, tmp_dir_parent_path)
+    if use_s3fs?
+      @archive_tmp_dir ||= Dir.mktmpdir(nil, s3fs_tmp_dir_path)
+    else
+      @archive_tmp_dir ||= Dir.mktmpdir
+    end
   end
 
   def tmp_dir_parent_path
@@ -243,7 +251,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def use_s3fs?
-    Rails.env.staging? || Rails.env.production?
+    @use_s3fs ||= Rails.env.staging? || Rails.env.production?
   end
 
   def expanded_archive_base_path
@@ -335,10 +343,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
+    source_file_url = Rails.env.development? ? submission_file.public_url : submission_file.url
 
     rescue_binary_file_exceptions(student, submission_file, file_path) do
       File.open(file_path, "wb") do |saved_file|
-        open(submission_file.url, "rb") do |read_file|
+        open(source_file_url, "rb") do |read_file|
           saved_file.write(read_file.read)
         end
       end

@@ -13,7 +13,7 @@ class SubmissionFile < ActiveRecord::Base
   validates :filename, presence: true, length: { maximum: 50 }
   validates :file, file_size: { maximum: 40.megabytes.to_i }
 
-  def development_url
+  def public_url
     "#{Rails.root}/public#{url}"
   end
 
