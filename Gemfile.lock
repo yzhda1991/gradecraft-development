@@ -608,9 +608,6 @@ GEM
       bcrypt (~> 3.1)
       oauth (~> 0.4, >= 0.4.4)
       oauth2 (>= 0.8.0)
-    spring (1.3.6)
-    spring-commands-rspec (1.0.4)
-      spring (>= 0.9.1)
     sprockets (2.12.4)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -756,8 +753,6 @@ DEPENDENCIES
   simplecov
   sinatra (>= 1.3.0)
   sorcery
-  spring (~> 1.3.6)
-  spring-commands-rspec
   timelineJS-rails!
   uglifier
   underscore-rails
