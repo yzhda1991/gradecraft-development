@@ -191,9 +191,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def fetch_students
     if team_present?
-      @students = @course.students_being_graded_by_team(@team)
+      @students = User.students_by_team(@course, @team)
     else
-      @students = @course.students_being_graded
+      @students = User.with_role_in_course("student", @course)
     end
   end
 

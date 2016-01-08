@@ -36,11 +36,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       before(:each) do
         allow(performer_with_team).to receive(:team_present?) { true }
         performer_with_team.instance_variable_set(:@course, course)
-        allow(course).to receive(:students_being_graded_by_team) { students}
+        allow(User).to receive(:students_by_team) { students }
       end
 
       it "returns the students being graded for that team" do
-        expect(course).to receive(:students_being_graded_by_team).with(team)
+        expect(User).to receive(:students_by_team).with(course, team)
         subject
       end
 
@@ -57,11 +57,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       before(:each) do
         allow(performer).to receive(:team_present?) { false }
         performer.instance_variable_set(:@course, course)
-        allow(course).to receive(:students_being_graded) { students }
+        allow(User).to receive(:with_role_in_course) { students }
       end
 
       it "returns students being graded for the course" do
-        expect(course).to receive(:students_being_graded)
+        expect(User).to receive(:with_role_in_course).with("student", course)
         subject
       end
 

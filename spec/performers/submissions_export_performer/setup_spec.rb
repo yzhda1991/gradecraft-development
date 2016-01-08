@@ -36,7 +36,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     it "finds the submissions export by id" do
-      allow(SubmissionsExport).to receive(:find) { double(SubmissionsExport).as_null_object }
+      allow(SubmissionsExport).to receive(:find) { create(:submissions_export) }
       expect(SubmissionsExport).to receive(:find).with(submissions_export.id)
       subject
     end
