@@ -110,6 +110,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @attrs[:team_id].present?
   end
 
+  # @mz todo: add specs
+  def s3_manager
+    @s3_manager ||= @submissions_export.s3_manager || S3Manager::Manager.new
+  end
+
   def tmp_dir
     if use_s3fs?
       @tmp_dir ||= Dir.mktmpdir(nil, s3fs_tmp_dir_path)

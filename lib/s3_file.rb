@@ -9,22 +9,22 @@ module S3File
 
   include S3Manager::Basics
 
+  # @mz todo: add specs
   def url
-    return file.url if Rails.env.development?
-
-    if filepath.present?
-      bucket.object(CGI::unescape(filepath)).presigned_url(:get, expires_in: 900).to_s #15 minutes
+    if Rails.env.development?
+      file.url 
     else
-      bucket.object(file.path).presigned_url(:get, expires_in: 900).to_s #15 minutes
+      bucket.object(s3_object_file_key).presigned_url(:get, expires_in: 900).to_s #15 minutes
     end
   end
 
+  # @mz todo: add specs
+  def s3_object_file_key
+    filepath.present? ? CGI::unescape(filepath) : file.path
+  end
+
   def remove
-    if filepath.present?
-      bucket.object(CGI::unescape(filepath)).delete
-    else
-      bucket.object(file.path).delete
-    end
+    bucket.object(s3_object_file_key).delete
   end
 
   private
