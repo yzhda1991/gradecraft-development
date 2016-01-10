@@ -348,11 +348,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
-    source_file_url = Rails.env.development? ? submission_file.public_url : submission_file.url
 
     rescue_binary_file_exceptions(student, submission_file, file_path) do
       File.open(file_path, "wb") do |saved_file|
-        open(source_file_url, "rb") do |read_file|
+        open(submission_file.source_file_url, "rb") do |read_file|
           saved_file.write(read_file.read)
         end
       end

@@ -13,6 +13,26 @@ class SubmissionFile < ActiveRecord::Base
   validates :filename, presence: true, length: { maximum: 50 }
   validates :file, file_size: { maximum: 40.megabytes.to_i }
 
+  # use this to find submission files that have either been confirmed as having files on S3 or don't have them at all
+  scope :export_eligible, -> { where("(last_confirmed_at is not null AND file_missing = ?) OR last_confirmed_at is null", true) }
+
+  # @mz todo: add specs
+  def confirmed?
+    confirmed_at and ! file_missing
+  end
+
+  def missing?
+    confirmed_at and file_missing
+  end
+
+  def needs_confirmation?
+    confirmed_at == nil
+  end
+
+  def source_file_url
+    Rails.env.development? ? submission_file.public_url : submission_file.url
+  end
+
   def public_url
     "#{Rails.root}/public#{url}"
   end
