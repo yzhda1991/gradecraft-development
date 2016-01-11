@@ -17,6 +17,8 @@ class SubmissionFile < ActiveRecord::Base
   scope :export_eligible, -> { where("(last_confirmed_at is not null AND file_missing = ?) OR last_confirmed_at is null", true) }
   scope :unconfirmed, -> { where(last_confirmed_at: nil) }
   scope :confirmed, -> { where("last_confirmed_at is not null") }
+  scope :missing, -> { where(file_missing: true) }
+  scope :present, -> { where(file_missing: false) }
 
   # @mz todo: add specs
   def confirmed?
