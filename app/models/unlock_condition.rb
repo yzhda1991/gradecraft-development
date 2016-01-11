@@ -197,7 +197,7 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_feedback_read_condition(student)
     grade = student.grade_for_assignment_id(condition_id).first
-    if grade.feedback_read?
+    if grade && grade.feedback_read?
       if condition_date?
         if (grade.feedback_read_at < condition_date)
           return true
