@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
 
 describe SubmissionFile do
   let(:course) { build(:course) }
@@ -24,6 +24,9 @@ describe SubmissionFile do
 
     it "is enabled for submissions" do
       expect(PaperTrail).to be_enabled
+    end
+
+    it "is versioned" do
       expect(subject).to be_versioned
     end
   end
