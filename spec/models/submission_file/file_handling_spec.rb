@@ -74,4 +74,28 @@ describe SubmissionFile do
       end
     end
   end
+
+  describe "#source_file_url" do
+    subject { submission_file.source_file_url }
+    let(:submission_file) { build(:submission_file) }
+
+    before(:each) do
+      allow(submission_file).to receive(:public_url) { "/some/file/path/srsly.txt" }
+      allow(submission_file).to receive(:url) { "http://werewolf.com" }
+    end
+
+    context "Rails environment is development" do
+      before { allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("development") }}
+      it "uses the public url" do
+        expect(subject).to eq("/some/file/path/srsly.txt")
+      end
+    end
+
+    context "Rails env is anything but development" do
+      before { allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("badgerenv") }}
+      it "uses the url method from S3File" do
+        expect(subject).to eq("http://werewolf.com")
+      end
+    end
+  end
 end
