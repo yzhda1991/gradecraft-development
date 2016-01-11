@@ -271,6 +271,7 @@ describe UnlockCondition do
     end
 
     it "returns true if all of the students in the group have earned the badge" do
+      skip "pending"
       course = create(:course)
       student = create(:user)
       student_2 = create(:user)

@@ -15,7 +15,7 @@
     .display_on_hover.hover-style
       %h3 This #{term_for :assignment} is Locked
       .small.italic In order to unlock it you must:
-      %ul
+      %ol
         - assignment.unlock_conditions.each do |condition|
           %li= condition.requirements_description_sentence
   - else
@@ -24,7 +24,7 @@
     .display_on_hover.hover-style
       %h3 You have unlocked this #{term_for :assignment}
       .small.italic To achieve this you:
-      %ul
+      %ol
         - assignment.unlock_conditions.each do |condition|
           %li= condition.requirements_completed_sentence
 - if assignment.is_a_condition?
@@ -32,6 +32,6 @@
     %i.fa.fa-key
   .display_on_hover.hover-style
     %h3 This #{term_for :assignment} is a Key
-    %ul
+    %ol
       - assignment.unlock_keys.each do |key|
         %li= key.key_description_sentence
