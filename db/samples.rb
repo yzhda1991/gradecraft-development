@@ -247,6 +247,8 @@ end
   puts_success :assignment_type, assignment_type_name, :assignment_type_created
 end
 
+PaperTrail.whodunnit = nil
+
 # Create Assignments!
 
 @assignments.each do |assignment_name,config|
@@ -304,6 +306,7 @@ end
 
       if config[:student_submissions]
         @students.each do |student|
+          PaperTrail.whodunnit = student.id
           submission = student.submissions.create! do |s|
             s.assignment = assignment
             s.text_comment = "Wingardium Leviosa"
@@ -357,6 +360,7 @@ end
                 g[attr] = grade_attributes[attr] || @assignment_default_config[:grade_attributes][attr]
               end
               g.graded_by_id = course_config[:staff_ids].sample
+              PaperTrail.whodunnit = g.graded_by_id
             end
             g.assignment = assignment
           end
