@@ -34,7 +34,7 @@ class SubmissionFile < ActiveRecord::Base
   end
 
   def source_file_url
-    Rails.env.development? ? submission_file.public_url : submission_file.url
+    Rails.env.development? ? public_url : url
   end
 
   # @mz todo: add specs

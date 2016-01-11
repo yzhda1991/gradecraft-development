@@ -324,7 +324,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def create_submission_binary_files
     @submissions.each do |submission|
       if submission.submission_files.present?
-        process_unconfirmed_files if submission.submission_files.unconfirmed.count > 0
+        submission.process_unconfirmed_files if submission.submission_files.unconfirmed.count > 0
         create_binary_files_for_submission(submission) 
         write_note_for_missing_binary_files(submission)
       end
@@ -335,7 +335,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     File.expand_path("missing_files.txt", student_directory_path(student))
   end
 
-  def write_note_for_missing_binary_file(submission)
+  def write_note_for_missing_binary_files(submission)
     open(missing_binaries_file_path(submission.student), 'w') do |f|
       f.puts "The following files were uploaded, but no longer appear to be available on the server:"
       submission.submission_files.missing.each do |missing_file|

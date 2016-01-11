@@ -12,26 +12,31 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "creating submission binary files" do
     let(:submissions) { [ submission_with_files, submission_without_files ] }
-    let(:submission_with_files) { double(:submission, submission_files: submission_files, student: student).as_null_object }
-    let(:submission_without_files) { double(:submission, submission_files: []).as_null_object }
+    let(:submission_with_files) { create(:submission, submission_files: submission_files, student: student) }
+    let(:submission_without_files) { create(:submission, submission_files: []) }
 
     let(:submission_files) { [ submission_file1, submission_file2 ] }
-    let(:submission_file1) { double(:submission_file, extension: ".ralph", id: 900, filename: "gary_ate_ants.ralph").as_null_object }
-    let(:submission_file2) { double(:submission_file).as_null_object }
+    let(:submission_file1) { create(:submission_file, filename: "gary_ate_ants.ralph", file_missing: false) }
+    let(:submission_file2) { create(:submission_file, file_missing: false) }
 
-    let(:student) { double(:student, id: 59, first_name: "Edwina", last_name: "Georgebot") }
+    let(:student) { create(:user, first_name: "Edwina", last_name: "Georgebot") }
 
     describe "create_submission_binary_files" do
       subject { performer.instance_eval { create_submission_binary_files } }
-      before { performer.instance_variable_set(:@submissions, submissions) }
+      before(:each) do
+        performer.instance_variable_set(:@submissions, submissions)
+        allow(performer).to receive(:write_note_for_missing_binary_files) { true }
+      end
 
       describe "submission with files" do
+        before { performer.instance_variable_set(:@submissions, [ submission_with_files ]) }
         it "creates a binary file for that submission" do
           expect(performer).to receive(:create_binary_files_for_submission).with(submission_with_files)
         end
       end
 
       describe "submission without files" do
+        before { performer.instance_variable_set(:@submissions, [ submission_without_files ]) }
         it "doesn't create a binary file for that submission" do
           expect(performer).not_to receive(:create_binary_files_for_submission).with(submission_without_files)
         end
@@ -42,26 +47,18 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     describe "create binary files for submission" do
       subject do
-        performer.instance_eval do
-          create_binary_files_for_submission( @some_submission )
-        end
+        performer.instance_eval { create_binary_files_for_submission( @some_submission ) }
       end
 
       describe "submission with files" do
         before do
           performer.instance_variable_set(:@some_submission, submission_with_files)
-          allow(performer).to receive(:write_submission_binary_file)
         end
 
-        it "calls write_submission_binary_file for submission_file1" do
-          expect(performer).to receive(:write_submission_binary_file).with(student, submission_file1, 0)
+        it "calls write_submission_binary_file for both submission files" do
+          expect(performer).to receive(:write_submission_binary_file).twice
+          subject
         end
-
-        it "calls write_submission_binary_file for submission_file2" do
-          expect(performer).to receive(:write_submission_binary_file).with(student, submission_file2, 1)
-        end
-
-        after(:each) { subject }
       end
 
       describe "submission without files" do
@@ -75,10 +72,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     describe "submission binary file name stuff" do
-      before do
+      before(:each) do
         performer.instance_variable_set(:@some_submission_file, submission_file1)
         performer.instance_variable_set(:@some_student, student)
       end
+
       let(:tmp_dir) { Dir.mktmpdir }
 
       describe "submission_binary_file_path" do
@@ -140,7 +138,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         end
       end
 
-      describe "write_submission_binary_file" do
+      describe "#write_submission_binary_file" do
         subject do
           performer.instance_eval do
             write_submission_binary_file( @some_student, @some_submission_file, 5 )
@@ -160,9 +158,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           subject
         end
 
-        it "actually copies the file into the tmp dir" do
+        it "writes the binary submission file to the target path" do
+          expect(submission_file1).to receive(:write_source_binary_to_path).with(mikos_bases_file_path)
           subject
-          expect(File.exist?(mikos_bases_file_path)).to be_truthy
         end
       end
 
