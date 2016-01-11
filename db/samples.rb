@@ -318,7 +318,7 @@ end
       if config[:rubric] and config[:grades]
         @students.each do |student|
           assignment.rubric.criteria.each do |criterion|
-            criterion.rubric_grades.create! do |rg|
+            criterion.criterion_grades.create! do |rg|
               rg.max_points = criterion.max_points
               rg.points = criterion.levels.first.points
               rg.level = criterion.levels.first
