@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111164104) do
+ActiveRecord::Schema.define(version: 20160111164938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -732,8 +732,8 @@ ActiveRecord::Schema.define(version: 20160111164104) do
     t.integer  "student_id"
     t.string   "feedback",           limit: 255
     t.string   "comment",            limit: 255
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.string   "link",               limit: 255
     t.text     "text_feedback"
     t.text     "text_comment"
@@ -744,7 +744,6 @@ ActiveRecord::Schema.define(version: 20160111164104) do
     t.integer  "course_id"
     t.integer  "assignment_type_id"
     t.string   "assignment_type",    limit: 255
-    t.boolean  "resubmission",                   default: false
   end
 
   add_index "submissions", ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
