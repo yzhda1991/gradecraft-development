@@ -12,12 +12,12 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "creating submission binary files" do
     let(:submissions) { [ submission_with_files, submission_without_files ] }
-    let(:submission_with_files) { double(:submission, submission_files: submission_files, student: student) }
-    let(:submission_without_files) { double(:submission, submission_files: []) }
+    let(:submission_with_files) { double(:submission, submission_files: submission_files, student: student).as_null_object }
+    let(:submission_without_files) { double(:submission, submission_files: []).as_null_object }
 
     let(:submission_files) { [ submission_file1, submission_file2 ] }
-    let(:submission_file1) { double(:submission_file, extension: ".ralph", id: 900, filename: "gary_ate_ants.ralph") }
-    let(:submission_file2) { double(:submission_file) }
+    let(:submission_file1) { double(:submission_file, extension: ".ralph", id: 900, filename: "gary_ate_ants.ralph").as_null_object }
+    let(:submission_file2) { double(:submission_file).as_null_object }
 
     let(:student) { double(:student, id: 59, first_name: "Edwina", last_name: "Georgebot") }
 
@@ -155,11 +155,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           allow(submission_file1).to receive(:url) { horses_path }
         end
 
-        it "rescues the file exceptions" do
-          expect(performer).to receive(:rescue_binary_file_exceptions).with(student, submission_file1, mikos_bases_file_path)
-          subject
-        end
-
         it "gets the binary submission file path" do
           expect(performer).to receive(:submission_binary_file_path).with(student, submission_file1, 5)
           subject
@@ -168,68 +163,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         it "actually copies the file into the tmp dir" do
           subject
           expect(File.exist?(mikos_bases_file_path)).to be_truthy
-        end
-      end
-
-      describe "rescue_binary_file_exceptions" do
-        context "block doesn't raise an exception" do
-          subject do
-            performer.instance_eval do
-              rescue_binary_file_exceptions( @some_student, @some_submission_file, "#{tmp_dir}/some_path" ) do
-                "the great return"
-              end
-            end
-          end
-
-          it "returns the outcome of the block yield" do
-            expect(subject).to eq("the great return")
-          end
-
-          it "doesn't build a binary file error message" do
-            expect(performer).not_to receive(:binary_file_error_message)
-            subject
-          end
-
-          it "doesn't add an error message to the @errors array" do
-            subject
-            expect(performer.instance_variable_get(:@errors)).to be_empty
-          end
-            
-          it "doesn't try to remove any file at file_path" do
-            expect(performer).not_to receive(:remove_if_exists)
-            subject
-          end
-        end
-
-        context "block raises an http error" do
-          subject do
-            performer.instance_eval do
-              rescue_binary_file_exceptions( @some_student, @some_submission_file, "#{@some_tmp_dir}/some_path" ) do
-                raise OpenURI::HTTPError.new(STDOUT, "the weirdest http error")
-              end
-            end
-          end
-
-          before(:each) do
-            allow(performer).to receive(:binary_file_error_message) { "great error, man" }
-            performer.instance_variable_set(:@some_tmp_dir, tmp_dir)
-          end
-
-          it "builds a binary file error message" do
-            expect(performer).to receive(:binary_file_error_message)
-              .with("Invalid URL for file", student, submission_file1, "the weirdest http error")
-          end
-
-          it "adds an error message to the @errors array" do
-            subject
-            expect(performer.instance_variable_get(:@errors).first).to eq("great error, man")
-          end
-            
-          it "removes the partially created file at file_path" do
-            expect(performer).to receive(:remove_if_exists).with("#{tmp_dir}/some_path")
-          end
-
-          after(:each) { subject }
         end
       end
 
