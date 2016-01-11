@@ -30,7 +30,7 @@ class SubmissionFile < ActiveRecord::Base
   end
 
   def needs_confirmation?
-    last_confirmed_at == nil
+    last_confirmed_at.nil?
   end
 
   def source_file_url

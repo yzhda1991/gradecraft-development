@@ -57,4 +57,21 @@ describe SubmissionFile do
     end
   end
   
+  describe "#needs_confirmation?" do
+    subject { submission_file.needs_confirmation? }
+
+    context "last_confirmed_at is nil" do
+      let(:submission_file) { build(:submission_file, last_confirmed_at: nil) }
+      it "needs confirmation" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "it has a last_confirmed_at time" do
+      let(:submission_file) { build(:submission_file, last_confirmed_at: Time.now) }
+      it "is does not need confirmation" do
+        expect(subject).to be_falsey
+      end
+    end
+  end
 end
