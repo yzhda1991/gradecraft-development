@@ -14,7 +14,7 @@
   - if group.present?
     - if submission.present?
       %li= link_to raw("<i class='fa fa-edit fa-fw'></i>Edit Our Submission"), edit_assignment_submission_path(assignment, :id => submission), :class => 'button'
-    - else
+    - elsif group.approved?
       %li= link_to raw("<i class='fa fa-upload fa-fw'></i> Submit"), new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
   - else
     %li= link_to "Create a Group", new_group_path, :class => 'button'
