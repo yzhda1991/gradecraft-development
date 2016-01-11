@@ -1,7 +1,7 @@
 class SubmissionFile < ActiveRecord::Base
   include S3File
 
-  attr_accessible :file, :filename, :filepath, :submission_id
+  attr_accessible :file, :filename, :filepath, :submission_id, :file_missing, :last_confirmed_at
 
   belongs_to :submission
 
@@ -15,6 +15,8 @@ class SubmissionFile < ActiveRecord::Base
 
   # use this to find submission files that have either been confirmed as having files on S3 or don't have them at all
   scope :export_eligible, -> { where("(last_confirmed_at is not null AND file_missing = ?) OR last_confirmed_at is null", true) }
+  scope :unconfirmed, -> { where(last_confirmed_at: nil) }
+  scope :confirmed, -> { where("last_confirmed_at is not null") }
 
   # @mz todo: add specs
   def confirmed?
@@ -31,6 +33,35 @@ class SubmissionFile < ActiveRecord::Base
 
   def source_file_url
     Rails.env.development? ? submission_file.public_url : submission_file.url
+  end
+
+  # @mz todo: add specs
+  def s3_manager
+    @s3_manager ||= S3Manager::Manager.new
+  end
+
+  def check_and_set_confirmed_status
+    update_attributes file_missing: file_missing?, last_confirmed_at: Time.now
+  end
+
+  def write_source_binary_to_path(target_path)
+    File.open(target_path, "wb") do |saved_file|
+      open(source_file_url, "rb") do |read_file|
+        saved_file.write(read_file.read)
+      end
+    end
+  end
+
+  def file_missing?
+    ! exists_on_storage?
+  end
+  
+  def exists_on_storage?
+    if Rails.env.development?
+      File.exist? public_url
+    else
+      S3Manager::Manager::ObjectSummary.new(s3_object_file_key, s3_manager).exists?
+    end
   end
 
   def public_url

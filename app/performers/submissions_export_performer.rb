@@ -348,23 +348,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
-
-    rescue_binary_file_exceptions(student, submission_file, file_path) do
-      File.open(file_path, "wb") do |saved_file|
-        open(submission_file.source_file_url, "rb") do |read_file|
-          saved_file.write(read_file.read)
-        end
-      end
-    end
-  end
-
-  def rescue_binary_file_exceptions(student, submission_file, file_path)
-    begin
-      yield
-    rescue OpenURI::HTTPError => error
-      @errors << binary_file_error_message("Invalid URL for file", student, submission_file, error.io)
-      remove_if_exists file_path
-    end
+    submission_file.write_source_binary_to_path(file_path)
   end
 
   def remove_if_exists(file_path)

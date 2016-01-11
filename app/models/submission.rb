@@ -114,51 +114,19 @@ class Submission < ActiveRecord::Base
     end
   end
 
-
   def process_unconfirmed_files
-    submission_files_by_confirmation[:unconfirmed].each do |submission_file|
-      process_unconfirmed_file(submission_file)
+    submission_files.unconfirmed.each do |submission_file|
+      submission_file.check_and_set_confirmed_status
     end
-    @submission_files_by_confirmation.delete(:unconfirmed)
-    @submission_files_by_confirmation
   end
 
-  def submission_files_by_confirmation
-    @submission_files_by_confirmation||= submission_files.inject({valid:[], invalid:[], unconfirmed: []}) do |submission_file, memo|
-      if submission_file.last_confirmed_at
-        if submission_file.file_missing
-          memo[:invalid] << submission_file
-        else
-          memo[:valid] << submission_file
-        end
-      else
-        memo[:unconfirmed] << submission_file
-      end
-      memo
+  def confirm_all_files
+    submission_files.each do |submission_file|
+      submission_file.check_and_set_confirmed_status
     end
   end
 
   private
-
-  def process_unconfirmed_file(submission_file)
-    if s3_object_exists?(submission_file.s3_object_file_key)
-      submission_file.update_attributes file_missing: false, last_confirmed_at: Time.now
-      @submission_files_by_confirmation[:valid] << submission_file
-    else
-      update_attributes file_missing: true, last_confirmed_at: Time.now
-      @submission_files_by_confirmation[:invalid] << submission_file
-    end
-  end
-
-  # @mz todo: add specs
-  def s3_manager
-    @s3_manager ||= S3Manager::Manager.new
-  end
-  
-  def s3_object_exists?(s3_object_key)
-    S3Manager::Manager::ObjectSummary.new(s3_object_key, s3_manager).exists?
-  end
-
 
   def permissions_check(user)
     return true if user.is_staff?(course)
