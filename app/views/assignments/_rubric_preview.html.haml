@@ -30,6 +30,6 @@
                 - level.level_badges.each_with_index do |badge, index|
                   - if index < 2
                     .level-badge-image
-                      %img{:src => badge.badge.icon, :class => "level_badge" }
+                      %img{:src => badge.badge.try(:icon), :class => "level_badge" }
           - if criterion.levels.size < presenter.rubric_max_level_count
             %td.filler(colspan="#{presenter.rubric_max_level_count - criterion.levels.size}")

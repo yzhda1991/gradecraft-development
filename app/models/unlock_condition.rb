@@ -26,12 +26,33 @@ class UnlockCondition < ActiveRecord::Base
     end
   end
 
+  def is_complete_for_group?(group)
+    check_condition_for_each_student(group)
+  end
+
+  #Human readable sentence to describe what students need to do to unlock this thing
   def requirements_description_sentence
     "#{condition_state_do} the #{condition.name} #{condition_type}"
   end
 
+  def requirements_completed_sentence
+    "#{condition_state_past} the #{condition.name} #{condition_type}"
+  end
+
+  #Human readable sentence to describe what doing work on this thing unlocks
   def key_description_sentence
     "#{condition_state_doing} it unlocks the #{unlockable.name} #{unlockable_type}"
+  end
+
+  # Counting how many students in a group have done the work to unlock an assignment
+  def count_unlocked_in_group(group)
+    unlocked_count = 0
+    group.students.each do |student|
+      if self.is_complete?(student)
+        unlocked_count += 1
+      end
+    end
+    return unlocked_count
   end
 
   private
@@ -57,6 +78,18 @@ class UnlockCondition < ActiveRecord::Base
       "Reading the feedback for"
     elsif condition_state == "Earned"
       "Earning"
+    end
+  end
+
+  def condition_state_past
+    if condition_state == "Submitted"
+      "Submitted"
+    elsif condition_state == "Grade Earned"
+      "Earned a grade for"
+    elsif condition_state == "Feedback Read"
+      "Read the feedback for"
+    elsif condition_state == "Earned"
+      "Earned"
     end
   end
 
@@ -164,7 +197,7 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_feedback_read_condition(student)
     grade = student.grade_for_assignment_id(condition_id).first
-    if grade.feedback_read?
+    if grade && grade.feedback_read?
       if condition_date?
         if (grade.feedback_read_at < condition_date)
           return true
@@ -174,6 +207,16 @@ class UnlockCondition < ActiveRecord::Base
       else
         return true
       end
+    else
+      return false
+    end
+  end
+
+  # Checking if the number of students who have completed the condition match the size of the group, returning true if so.
+  def check_condition_for_each_student(group)
+    unlocked_count = count_unlocked_in_group(group)
+    if unlocked_count == group.students.count
+      return true
     else
       return false
     end

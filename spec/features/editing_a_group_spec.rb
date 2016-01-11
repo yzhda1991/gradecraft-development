@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-feature "reviewing a group" do
+feature "editing a group" do
   context "as a professor" do
     let(:course) { create :course, min_group_size: 2 }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
@@ -12,7 +12,7 @@ feature "reviewing a group" do
     let(:student_3) { create :user, first_name: "George", last_name: "Weasley"}
     let!(:course_membership_3) { create :student_course_membership, user: student_2, course: course }
     let!(:course_membership_4) { create :student_course_membership, user: student_3, course: course }
-    let!(:group) { create :group, course: course, name: "Group!", approved: "Pending" }
+    let!(:group) { create :group, course: course, name: "Group!", approved: "Approved" }
     let!(:assignment_group) { create :assignment_group, group: group, assignment: assignment }
     let!(:group_membership) { create :group_membership, student: student_1, group: group }
     let!(:group_membership_2) { create :group_membership, student: student_2, group: group }
@@ -31,17 +31,17 @@ feature "reviewing a group" do
       expect(current_path).to eq groups_path
 
       within(".pageContent") do
-        click_link "Review group"
+        click_link "Edit group"
       end
 
       expect(current_path).to eq edit_group_path(group)
 
       within(".pageContent") do
-        select "Approved", :from => "group_approved"
+        fill_in "Name", with: "Less Excited Group Name"
         click_button "Update group"
       end
 
-      expect(page).to have_notification_message('success', "Group! group successfully updated")
+      expect(page).to have_notification_message('success', "Less Excited Group Name group successfully updated")
     end
   end
 end

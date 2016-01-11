@@ -8,7 +8,7 @@
   .italic= "Opens: #{presenter.assignment.open_at}" if presenter.assignment.open_at?
   .italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
-  - if current_student.present? && presenter.assignment.accepts_submissions? &&  presenter.assignment.is_unlocked_for_student?(current_student)
+  - if current_student.present? && presenter.assignment.accepts_submissions? &&  (presenter.assignment.is_unlocked_for_student?(current_student) || (presenter.assignment.has_groups? && presenter.assignment.is_unlocked_for_group?(current_student.group_for_assignment(presenter.assignment))))
     .no-bullet= render "students/submissions", assignment: presenter.assignment
 
   - if presenter.student_logged?(current_user)
@@ -21,13 +21,41 @@
       - presenter.assignment.assignment_files.each do |af|
         %li= link_to af.filename, af.url
 
-  - if presenter.assignment.is_unlockable?
-    %hr.dotted
-    %i.fa.fa-lock
-    Unlock Requirements
-    %ul
-      - presenter.assignment.unlock_conditions.each do |uc|
-        %li= link_to uc.requirements_description_sentence, uc.condition
+  - if current_student.present?
+    - if presenter.group_assignment?
+      %hr.dotted
+        - @group = current_student.group_for_assignment(presenter.assignment)
+      - if @group.present?
+        = render "groups/status_display", group: @group
+        Your #{term_for :group} for this #{term_for :assignment}:
+        %ul
+          - @group.students.each do |student|
+            %li= student.name
+      - else
+        = link_to raw("<i class='fa fa-users fa-fw'></i> Create a #{term_for :group}"), new_group_path, :class => "button"
+
+    - if presenter.assignment.is_unlockable?
+      %hr.dotted
+      - if presenter.assignment.is_unlocked_for_student?(current_student)
+        .italic You have unlocked this #{term_for :assignment}. To achieve this you:
+        %ul
+          - presenter.assignment.unlock_conditions.each do |condition|
+            %li
+              = condition.requirements_completed_sentence
+              - if presenter.assignment.has_groups?
+                = "(#{condition.count_unlocked_in_group(@group)}/#{@group.students.count} #{term_for :group} members have completed this requirement)"
+        - if ! presenter.assignment.is_unlocked_for_group?(@group)
+          All #{term_for :group} members must complete this requirement before the #{term_for :group} can proceed
+        - else
+          Congratulations! Your #{term_for :group} has successfully unlocked this #{term_for :assignment}
+
+      - else
+        %i.fa.fa-lock
+        Unlock Requirements
+        .italic You have not unlocked this #{term_for :assignment}. To achieve this you must:
+        %ul
+          - presenter.assignment.unlock_conditions.each do |uc|
+            %li= link_to uc.requirements_description_sentence, uc.condition
 
   - if presenter.assignment.is_a_condition?
     %hr.dotted

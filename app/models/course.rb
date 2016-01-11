@@ -329,6 +329,10 @@ class Course < ActiveRecord::Base
     students_being_graded.count
   end
 
+  def groups_to_review_count
+    groups.pending.count
+  end
+
   def point_total_for_challenges
     challenges.pluck('point_total').sum
   end

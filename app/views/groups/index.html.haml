@@ -2,16 +2,11 @@
 
 %h3.pagetitle= @title
 
-.context_menu
-  %ul
-    %li
-      %a{:href => new_group_path }
-        %i.fa.fa-plus
-        New #{term_for :group}
+= render "buttons"
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   - if @pending_groups.present?
     %h4.subtitle= "Pending #{term_for :groups}"
 

@@ -1,0 +1,13 @@
+- if @group.approved?
+  .alert-box.success
+    %i.fa.fa-check.fa-fw
+    %span.bold Status: Approved
+- elsif @group.rejected?
+  .alert-box.alert
+    %i.fa.fa-times-circle.fa-fw
+    %span.bold Status: Rejected
+- else
+  .alert-box.notice
+    %i.fa.fa-flag.fa-fw
+    %span.bold Status: Pending
+    This #{term_for :group} must be approved by your instructor before you can proceed

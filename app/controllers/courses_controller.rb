@@ -5,7 +5,7 @@ class CoursesController < ApplicationController
 
   def index
     @title = "Course Index"
-    @courses = Course.all
+    @courses = current_user.courses
     #Used to return the course list to search
     respond_to do |format|
       format.html { }

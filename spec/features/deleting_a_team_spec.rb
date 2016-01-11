@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-feature "editing a team" do
+feature "deleting a team" do
   context "as a professor" do
     let(:course) { create :course, team_setting: true }
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
@@ -20,21 +20,10 @@ feature "editing a team" do
       expect(current_path).to eq teams_path
 
       within(".pageContent") do
-        click_link "Team Name"
+        click_link "Delete"
       end
 
-      expect(current_path).to eq team_path(team.id)
-
-      within(".context_menu") do
-        click_link "Edit"
-      end
-
-      within(".pageContent") do
-        fill_in "Name", with: "Edited Team Name"
-        click_button "Update team"
-      end
-
-      expect(page).to have_notification_message('notice', 'Team Edited Team Name successfully updated')
+      expect(page).to have_notification_message('notice', 'Team Team Name successfully deleted')
     end
   end
 end

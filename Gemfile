@@ -130,6 +130,7 @@ group :test do
   gem 'faker', '~> 1.4.3'
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'rspec-rails', '~> 3.3.3'
+  gem 'capybara-select2'
   # add spec helpers for testing Resque objects and resque scheduler
   gem 'resque_spec', github: 'leshill/resque_spec'
   gem 'rspec-html-matchers'
