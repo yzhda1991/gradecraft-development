@@ -31,5 +31,30 @@ describe SubmissionFile do
       end
     end
   end
+
+  describe "#missing?" do
+    subject { submission_file.missing? }
+
+    context "has a last_confirmed_at time and the file is missing" do
+      let(:submission_file) { build(:submission_file, last_confirmed_at: Time.now, file_missing: true) }
+      it "is missing" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "has no last_confirmed_at time" do
+      let(:submission_file) { build(:submission_file, last_confirmed_at: nil, file_missing: true) }
+      it "is not missing" do
+        expect(subject).to be_falsey
+      end
+    end
+
+    context "the file is not missing" do
+      let(:submission_file) { build(:submission_file, last_confirmed_at: Time.now, file_missing: false) }
+      it "is not confirmed" do
+        expect(subject).to be_falsey
+      end
+    end
+  end
   
 end
