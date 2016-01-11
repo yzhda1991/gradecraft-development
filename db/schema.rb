@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160105155201) do
+ActiveRecord::Schema.define(version: 20160111161343) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -743,7 +743,6 @@ ActiveRecord::Schema.define(version: 20160105155201) do
     t.text     "text_comment"
     t.integer  "creator_id"
     t.integer  "group_id"
-    t.boolean  "graded"
     t.datetime "released_at"
     t.integer  "task_id"
     t.integer  "course_id"
