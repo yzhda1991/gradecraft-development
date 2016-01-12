@@ -22,9 +22,10 @@ describe SubmissionFile do
   describe "scopes" do
     let(:unconfirmed_file) { create(:submission_file, last_confirmed_at: nil) }
     let(:confirmed_file) { create(:submission_file, last_confirmed_at: Time.now) }
+    let(:confirmed_and_missing) { create(:submission_file, file_missing: true, last_confirmed_at: Time.now) }
     let(:missing_file) { create(:submission_file, file_missing: true) }
     let(:present_file) { create(:submission_file, file_missing: false) }
-    before { unconfirmed_file; confirmed_file; missing_file; present_file }
+    before { unconfirmed_file; confirmed_file; missing_file; present_file; confirmed_and_missing }
 
     describe "unconfirmed" do
       subject { SubmissionFile.unconfirmed }
