@@ -98,4 +98,20 @@ describe SubmissionFile do
       end
     end
   end
+
+  describe "#s3_manager" do
+    subject { submission_file.s3_manager }
+    let(:submission_file) { build(:submission_file) }
+
+    it "creates an S3Manager::Manager object" do
+      expect(subject.class).to eq(S3Manager::Manager)
+    end
+
+    it "caches the S3Manager object" do
+      subject
+      expect(S3Manager::Manager).not_to receive(:new)
+      subject
+    end
+  end
+
 end
