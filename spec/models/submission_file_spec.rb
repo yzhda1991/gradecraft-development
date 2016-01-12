@@ -19,6 +19,58 @@ describe SubmissionFile do
     end
   end
 
+  describe "scopes" do
+    let(:unconfirmed_file) { create(:submission_file, last_confirmed_at: nil) }
+    let(:confirmed_file) { create(:submission_file, last_confirmed_at: Time.now) }
+    let(:missing_file) { create(:submission_file, file_missing: true) }
+    let(:present_file) { create(:submission_file, file_missing: false) }
+    before { unconfirmed_file; confirmed_file; missing_file; present_file }
+
+    describe "unconfirmed" do
+      subject { SubmissionFile.unconfirmed }
+      it "returns submission files with null last_confirmed_at dates" do
+        expect(subject).to include(unconfirmed_file)
+      end
+
+      it "doesn't return submission files with last_confirmed_at dates" do
+        expect(subject).not_to include(confirmed_file)
+      end
+    end
+
+    describe "confirmed" do
+      subject { SubmissionFile.confirmed }
+      it "returns submission files where last_confirmed_at is not null" do
+        expect(subject).to include(confirmed_file)
+      end
+
+      it "returns submission files with null last_confirmed_at dates" do
+        expect(subject).not_to include(unconfirmed_file)
+      end
+    end
+
+    describe "missing" do
+      subject { SubmissionFile.missing }
+      it "returns submission files where the file is missing" do
+        expect(subject).to include(missing_file)
+      end
+
+      it "doesn't return submission files where the file is present" do
+        expect(subject).not_to include(present_file)
+      end
+    end
+    
+    describe "present" do
+      subject { SubmissionFile.present }
+      it "returns submission files where the file is not missing" do
+        expect(subject).to include(present_file)
+      end
+      
+      it "doesn't return submission files where the file is missing" do
+        expect(subject).not_to include(missing_file)
+      end
+    end
+  end
+
   describe "versioning", versioning: true do
     before { subject.save }
 
