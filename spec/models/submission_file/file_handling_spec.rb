@@ -150,23 +150,57 @@ describe SubmissionFile do
       expect(File.stat(target_path).size).to eq(File.stat(source_file_url).size)
     end
   end
-  # def write_source_binary_to_path(target_path)
-  #   File.open(target_path, "wb") do |saved_file|
-  #     open(source_file_url, "rb") do |read_file|
-  #       saved_file.write(read_file.read)
-  #     end
-  #   end
-  # end
 
-  # def file_missing?
-  #   ! exists_on_storage?
-  # end
-  # 
-  # def exists_on_storage?
-  #   if Rails.env.development?
-  #     File.exist? public_url
-  #   else
-  #     S3Manager::Manager::ObjectSummary.new(s3_object_file_key, s3_manager).exists?
-  #   end
-  # end
+  describe "#file_missing?" do
+    subject { submission_file.file_missing? }
+    let(:submission_file) { build(:submission_file) }
+    before { allow(submission_file).to receive(:exists_on_storage?) { false }}
+
+    it "negates #exists_on_storage?" do
+      expect(subject).to be_truthy
+    end
+  end
+
+  describe "#exists_on_storage?" do
+    subject { submission_file.exists_on_storage? }
+    let(:submission_file) { build(:submission_file) }
+    let(:public_url) { Tempfile.new('waffle') }
+
+    context "Rails env is development" do
+      before do
+        allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("development") }
+        allow(submission_file).to receive(:public_url) { public_url }
+      end
+
+      it "checks if a file exists at the public url" do
+        expect(File).to receive(:exist?).with(public_url)
+        subject
+      end
+    end
+
+    context "Rails env is anything but development" do
+      let(:s3_manager) { double(S3Manager) }
+      let(:s3_object_summary) { double(S3Manager::Manager::ObjectSummary).as_null_object }
+      let(:s3_object_file_key) { "really-this-shouldnt-make-it.txt" }
+
+      before do
+        allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("test") }
+        allow(submission_file).to receive_messages({
+          s3_object_file_key: s3_object_file_key,
+          s3_manager: s3_manager
+        })
+        allow(S3Manager::Manager::ObjectSummary).to receive(:new) { s3_object_summary }
+      end
+
+      it "builds a new S3 object summary with the object file key and s3 manager" do
+        expect(S3Manager::Manager::ObjectSummary).to receive(:new).with(s3_object_file_key, s3_manager)
+        subject
+      end
+
+      it "checks whether the object exists" do
+        expect(s3_object_summary).to receive(:exists?)
+        subject
+      end
+    end
+  end
 end

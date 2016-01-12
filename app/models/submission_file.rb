@@ -20,7 +20,6 @@ class SubmissionFile < ActiveRecord::Base
   scope :missing, -> { where(file_missing: true) }
   scope :present, -> { where(file_missing: false) }
 
-  # @mz todo: START add specs
   def confirmed?
     last_confirmed_at and ! file_missing
   end
@@ -64,7 +63,6 @@ class SubmissionFile < ActiveRecord::Base
       S3Manager::Manager::ObjectSummary.new(s3_object_file_key, s3_manager).exists?
     end
   end
-  # @mz todo: END add specs
 
   def public_url
     "#{Rails.root}/public#{url}"
