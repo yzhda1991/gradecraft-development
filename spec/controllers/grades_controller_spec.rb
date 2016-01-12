@@ -300,10 +300,17 @@ describe GradesController do
           expect(assigns(:grade)).to eq(grade)
         end
 
-        it "cretes and assigns the grade" do
+        it "creates and assigns the grade" do
           expect{ post :submit_rubric, @params }.to change { Grade.count }.by(1)
           expect(assigns(:grade).assignment).to eq(@rubric_assignment)
           expect(assigns(:grade).student).to eq(@student)
+        end
+
+        it "assigns the grade to the submission" do
+          submission = create :submission, assignment: @rubric_assignment, student: @student
+          post :submit_rubric, @params
+          grade = Grade.unscoped.last
+          expect(grade.submission).to eq submission
         end
       end
 

@@ -134,6 +134,8 @@ class GradesController < ApplicationController
 
   # PUT /assignments/:assignment_id/grade/submit_rubric
   def submit_rubric
+    @submission = Submission.where(current_assignment_and_student_ids).first
+
     @grade = Grade.where(student_id: current_student[:id], assignment_id: @assignment[:id]).first
 
     if @grade
@@ -141,8 +143,6 @@ class GradesController < ApplicationController
     else
       @grade = Grade.create(new_grade_from_criterion_grades_attributes)
     end
-
-    @submission = Submission.where(current_assignment_and_student_ids).first
 
     # delete existing rubric grades
     # TODO: Shouldn't require a second parameter of criterion_ids when already supplied.
