@@ -13,7 +13,7 @@ class SubmissionFile < ActiveRecord::Base
   validates :filename, presence: true, length: { maximum: 50 }
   validates :file, file_size: { maximum: 40.megabytes.to_i }
 
-  scope :unconfirmed, -> { where(last_confirmed_at: nil) }
+  scope :unconfirmed, -> { where("last_confirmed_at is null") }
   scope :confirmed, -> { where("last_confirmed_at is not null") }
   scope :missing, -> { where(file_missing: true) }
   scope :present, -> { where(file_missing: false) }

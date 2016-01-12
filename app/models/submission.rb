@@ -114,7 +114,6 @@ class Submission < ActiveRecord::Base
     end
   end
 
-  # @mz todo: add specs
   def process_unconfirmed_files
     submission_files.unconfirmed.each do |submission_file|
       submission_file.check_and_set_confirmed_status
