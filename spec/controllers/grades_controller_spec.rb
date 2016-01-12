@@ -293,11 +293,6 @@ describe GradesController do
         allow(controller).to receive(:current_student).and_return(@student)
       end
 
-      it "updates the submission grading status" do
-        submission = create(:submission, student: @student, assignment: @rubric_assignment)
-        expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(@rubric.criteria.count)
-      end
-
       describe "finds or creates the grade for the assignment and student" do
         it "finds and assigns the grade" do
           grade = create(:grade, assignment: @rubric_assignment, student: @student)
