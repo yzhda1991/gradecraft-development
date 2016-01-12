@@ -118,9 +118,10 @@
     total = 0
     _.each(assignments, (assignment)->
       # use raw score to keep weighting calculation on assignment type level
+      debugger
       if assignment.grade.raw_score != null
         total += assignment.grade.raw_score
-      else if ! assignment.pass_fail && ! assignment.has_closed? && includePredicted
+      else if ! assignment.pass_fail && ! assignment.has_closed && includePredicted
         total += assignment.grade.predicted_score
     )
     total
