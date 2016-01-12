@@ -47,7 +47,7 @@ class SubmissionFile < ActiveRecord::Base
 
   def write_source_binary_to_path(target_path)
     File.open(target_path, "wb") do |saved_file|
-      open(source_file_url, "rb") do |read_file|
+      File.open(source_file_url, "rb") do |read_file|
         saved_file.write(read_file.read)
       end
     end

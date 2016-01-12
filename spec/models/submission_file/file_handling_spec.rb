@@ -114,4 +114,59 @@ describe SubmissionFile do
     end
   end
 
+  describe "#check_and_set_confirmed_status" do
+    subject { submission_file.check_and_set_confirmed_status }
+    let(:submission_file) { build(:submission_file) }
+    let(:someday) { Date.parse("June 20 2502").to_time }
+
+    before do
+      allow(Time).to receive(:now) { someday }
+      allow(submission_file).to receive(:file_missing?) { "probably" }
+    end
+
+    it "checks whether the file is missing and updates the confirmed attributes" do
+      expect(submission_file).to receive(:update_attributes).with(file_missing: "probably", last_confirmed_at: someday)
+      subject
+    end
+  end
+
+  describe "#write_source_binary_to_path" do
+    subject { submission_file.write_source_binary_to_path(target_path) }
+
+    let(:tmp_dir) { Dir.mktmpdir }
+    let(:target_path) { File.expand_path("something.txt", tmp_dir) }
+    let(:source_file_url) { File.expand_path("something_else.txt", tmp_dir) }
+    let(:random_string) { (10000..(rand(10000) + 10000)).map { (65 + rand(26)).chr }.join }
+    let(:write_source_file) { File.open(source_file_url, "wb") {|file| file.puts random_string }}
+    let(:submission_file) { build(:submission_file) }
+
+    before do
+      write_source_file
+      allow(submission_file).to receive(:source_file_url) { source_file_url }
+    end
+
+    it "writes the source file to the target path" do
+      subject
+      expect(File.stat(target_path).size).to eq(File.stat(source_file_url).size)
+    end
+  end
+  # def write_source_binary_to_path(target_path)
+  #   File.open(target_path, "wb") do |saved_file|
+  #     open(source_file_url, "rb") do |read_file|
+  #       saved_file.write(read_file.read)
+  #     end
+  #   end
+  # end
+
+  # def file_missing?
+  #   ! exists_on_storage?
+  # end
+  # 
+  # def exists_on_storage?
+  #   if Rails.env.development?
+  #     File.exist? public_url
+  #   else
+  #     S3Manager::Manager::ObjectSummary.new(s3_object_file_key, s3_manager).exists?
+  #   end
+  # end
 end
