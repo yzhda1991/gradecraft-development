@@ -14,6 +14,7 @@ describe "Submission file checking" do
 
   describe "#process_unconfirmed_files" do
     subject { submission.process_unconfirmed_files }
+    before { allow(submission).to receive_message_chain(:submission_files, :unconfirmed) { [ unconfirmed_submission_file ] }}
 
     it "checks and sets confirmed status for unconfirmed files" do
       expect(unconfirmed_submission_file).to receive(:check_and_set_confirmed_status)
