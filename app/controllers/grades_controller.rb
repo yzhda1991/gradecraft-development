@@ -188,7 +188,7 @@ class GradesController < ApplicationController
     @grade.feedback_reviewed = false
     @grade.feedback_reviewed_at = nil
     @grade.instructor_modified = false
-
+    @grade.graded_at = nil
 
     @grade.update_attributes(params[:grade])
 
@@ -230,6 +230,9 @@ class GradesController < ApplicationController
 
   # PUT /assignments/:id/mass_grade
   def mass_update
+    params[:assignment][:grades_attributes].each do |index, grade_params|
+      grade_params.merge!(graded_at: DateTime.now)
+    end
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.update_attributes(params[:assignment])
 
@@ -268,7 +271,7 @@ class GradesController < ApplicationController
 
     grade_ids = []
     @grades = @grades.each do |grade|
-      grade.update_attributes(params[:grade])
+      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now))
       grade_ids << grade.id
     end
 
@@ -525,7 +528,8 @@ class GradesController < ApplicationController
       # and not handled by front end logic
       point_total: params[:points_possible],
       status: params[:grade_status],
-      instructor_modified: true
+      instructor_modified: true,
+      graded_at: DateTime.now
     }
   end
 

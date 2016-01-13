@@ -315,6 +315,13 @@ describe GradesController do
           grade = Grade.unscoped.last
           expect(grade.submission).to eq submission
         end
+
+        it "timestamps the grade" do
+          current_time = DateTime.now
+          post :submit_rubric, @params
+          grade = Grade.unscoped.last
+          expect(grade.graded_at).to be > current_time
+        end
       end
 
       describe "when an additional `criterion_ids` parameter is supplied" do
@@ -363,6 +370,7 @@ describe GradesController do
           feedback_reviewed: true,
           feedback_reviewed_at: Time.now,
           instructor_modified: true,
+          graded_at: DateTime.now
         )
         post :remove, {id: @grade.id}
 
@@ -370,7 +378,7 @@ describe GradesController do
         expect(@grade.predicted_score).to eq(400)
         expect(@grade.feedback).to eq("")
         [ :raw_score,:status,:feedback_read_at,:feedback_reviewed_at,
-          :feedback_read,:feedback_reviewed,:instructor_modified].each do |attr|
+          :feedback_read,:feedback_reviewed,:instructor_modified,:graded_at].each do |attr|
           expect(@grade[attr]).to be_falsy
         end
       end
@@ -455,6 +463,12 @@ describe GradesController do
         expect(@grade.reload.raw_score).to eq 1000
       end
 
+      it "timestamps the grades" do
+        current_time = DateTime.now
+        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
+        expect(@grade.reload.graded_at).to be > current_time
+      end
+
       it "sends a notification to the student to inform them of a new grade" do
         pending "fix this later, needs to account for the job sending the mailer"
         run_resque_inline do
@@ -503,8 +517,10 @@ describe GradesController do
         group = create(:group)
         @assignment.groups << group
         group.students << @student
+        current_time = DateTime.now
         put :group_update, id: @assignment.id, group_id: group.id, grade: { graded_by_id: @professor.id, instructor_modified: true, raw_score: 1000, status: "Graded" }
         expect(@grade.reload.raw_score).to eq 1000
+        expect(@grade.graded_at).to be > current_time
       end
     end
 
