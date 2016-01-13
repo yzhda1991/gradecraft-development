@@ -36,7 +36,7 @@ class GradesForResearchExporter
       (grade.submission.try(:updated_at) || ""),
       (grade.graded_by_id || ""),
       grade.created_at,
-      grade.graded_at]
+      grade.graded_at || ""]
   end
 
 end
