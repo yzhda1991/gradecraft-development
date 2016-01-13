@@ -136,12 +136,11 @@ describe SubmissionFile do
     let(:tmp_dir) { Dir.mktmpdir }
     let(:target_path) { File.expand_path("something.txt", tmp_dir) }
     let(:source_file_url) { File.expand_path("something_else.txt", tmp_dir) }
-    let(:random_string) { (10000..(rand(10000) + 10000)).map { (65 + rand(26)).chr }.join }
-    let(:write_source_file) { File.open(source_file_url, "wb") {|file| file.puts random_string }}
+    let(:source_file) { RandomFile::TextFile.new(source_file_url) }
     let(:submission_file) { build(:submission_file) }
 
     before do
-      write_source_file
+      source_file.write
       allow(submission_file).to receive(:source_file_url) { source_file_url }
     end
 

@@ -72,18 +72,43 @@ RSpec.describe S3Manager::Manager do
 
   describe "object management" do
     let(:s3_manager) { S3Manager::Manager.new }
+    let(:object_key) { "jerrys-unencrypted-hat" }
+    let(:client) { s3_manager.client }
+    let(:object_body) { File.new("unencrypted-jerry-was-here.doc", "w+b") }
+    let(:put_object) { s3_manager.put_object(object_key, object_body) }
 
     before(:each) { client }
 
     describe "#delete_object" do
+      subject { s3_manager.delete_object(object_key) }
+
+      before(:each) { put_object }
+
+      let(:delete_object_attrs) do
+        { bucket: s3_manager.bucket_name, key: object_key }
+      end
+
+      it "should call #delete_object on the client" do
+        expect(client).to receive(:delete_object).with(delete_object_attrs)
+        subject
+      end
+
+      it "should get an AWS Seahorse object in response" do
+        expect(subject.class).to eq(Seahorse::Client::Response)
+      end
+      
+      it "should have been successful" do
+        expect(subject.successful?).to be_truthy
+      end
+
+      it "should actually remove the object from the server" do
+        subject
+        expect(S3Manager::Manager::ObjectSummary.new(object_key, s3_manager).exists?).to be_falsey
+      end
     end
 
     describe "#get_object" do
       subject { s3_manager.get_object(object_key) }
-      let(:object_key) { "jerrys-unencrypted-hat" }
-      let(:client) { s3_manager.client }
-      let(:object_body) { File.new("unencrypted-jerry-was-here.doc", "w+b") }
-      let(:put_object) { s3_manager.put_object(object_key, object_body) }
 
       before { put_object }
 
@@ -115,11 +140,6 @@ RSpec.describe S3Manager::Manager do
     end
 
     describe "#put_object" do
-      let(:object_key) { "jerrys-unencrypted-hat" }
-      let(:client) { s3_manager.client }
-      let(:object_body) { File.new("unencrypted-jerry-was-here.doc", "w+b") }
-      let(:put_object) { s3_manager.put_object(object_key, object_body) }
-
       subject { put_object }
 
       it "should call #put_object on the encrypted client" do
