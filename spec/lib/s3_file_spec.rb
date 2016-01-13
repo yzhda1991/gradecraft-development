@@ -62,4 +62,29 @@ RSpec.describe "An S3File inheritor" do
       after(:each) { subject }
     end
   end
+
+  describe "#s3_object_file_key" do
+    let(:tempfile) { Tempfile.new('walter') }
+    subject { s3_file_cylon.s3_object_file_key }
+
+    context "filepath is present" do
+      before { allow(s3_file_cylon).to receive(:filepath) { tempfile }}
+
+      it "returns the CGI-unescaped filepath" do
+        expect(CGI).to receive(:unescape).with(tempfile)
+        subject
+      end
+    end
+
+    context "filepath is not present" do
+      before do
+        allow(s3_file_cylon).to receive(:filepath) { nil }
+        allow(s3_file_cylon).to receive_message_chain(:file, :path) { "/stuff/path" }
+      end
+
+      it "returns the #path from the file" do
+        expect(subject).to eq("/stuff/path")
+      end
+    end
+  end
 end
