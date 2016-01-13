@@ -9,4 +9,9 @@ namespace :grades do
     puts "DONE"
   end
 
+  desc "Update all of the graded_at dates to the updated_at for the grades"
+  task :update_graded_at => :environment do
+    Grade.all.each { |g| g.update_attributes(graded_at: g.graded_at) }
+  end
+
 end
