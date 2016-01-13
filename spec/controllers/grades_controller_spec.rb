@@ -214,6 +214,12 @@ describe GradesController do
         expect(@grade.instructor_modified).to be_truthy
       end
 
+      it "timestamps the grade" do
+          current_time = DateTime.now
+          post :async_update, { id: @grade.id, raw_score: 20000, feedback: "good jorb!" }
+          expect(@grade.reload.graded_at).to be > current_time
+        end
+
       describe "manages update with model validations" do
         it "handles commas in raw score params" do
           post :async_update, { id: @grade.id, raw_score: "12,345", feedback: "good jorb!" }

@@ -93,6 +93,7 @@ class GradesController < ApplicationController
          instructor_modified: true,
          status: params[:status],
          updated_at: Time.now,
+         graded_at: DateTime.now,
          raw_score: params[:raw_score]
       }
     )
