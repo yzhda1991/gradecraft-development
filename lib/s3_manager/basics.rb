@@ -33,5 +33,23 @@ module S3Manager
         key: object_key
       })
     end
+
+    def get_object(object_key)
+      client.get_object({
+        bucket: bucket_name,
+        key: object_key
+      })
+    end
+
+    def put_object(object_key, file_path)
+      File.open(file_path, 'rb') do |streamed_file|
+        client.put_object({
+          bucket: bucket_name,
+          server_side_encryption: "AES256",
+          key: object_key,
+          body: streamed_file
+        })
+      end
+    end
   end
 end
