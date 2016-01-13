@@ -3,11 +3,11 @@
 
   = render partial: 'layouts/alerts', locals: { model: @grade, display_flash: false }
 
-  - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
-    %section
+  / - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
+  /   %section
 
-      %h4.uppercase= "#{@student.first_name}'s Submission"
-      = render 'submissions/instructor_show'
+  /     %h4.uppercase= "#{@student.first_name}'s Submission"
+  /     = render 'submissions/instructor_show'
 
   %section
     %hr.dotted
