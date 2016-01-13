@@ -87,4 +87,30 @@ RSpec.describe "An S3File inheritor" do
       end
     end
   end
+
+  describe "#remove" do
+    subject { s3_file_cylon.remove }
+
+    let(:bucket) { double(:bucket).as_null_object }
+    let(:object) { double(:object).as_null_object }
+    let(:s3_object_file_key) { "hopefully-this-never-happens" }
+
+    before(:each) do
+      allow(s3_file_cylon).to receive_messages({
+        bucket: bucket,
+        s3_object_file_key: s3_object_file_key
+      })
+      allow(bucket).to receive(:object) { object }
+    end
+
+    it "fetches the bucket object with the s3_object_file_key" do
+      expect(bucket).to receive(:object).with(s3_object_file_key)
+    end
+
+    it "gets the presigned url for the object" do
+      expect(object).to receive(:delete)
+    end
+
+    after(:each) { subject }
+  end
 end
