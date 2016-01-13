@@ -31,6 +31,10 @@ describe NullGrade do
     expect(subject.updated_at).to eq(nil)
   end
 
+  it "has a nil graded at timestamp" do
+    expect(subject.graded_at).to eq(nil)
+  end
+
   it "has a team id of zero" do
     expect(subject.team_id).to eq(0)
   end
