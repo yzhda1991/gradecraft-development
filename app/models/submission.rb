@@ -56,7 +56,7 @@ class Submission < ActiveRecord::Base
   end
 
   def graded_at
-    grade.updated_at if graded?
+    grade.graded_at if graded?
   end
 
   def graded?

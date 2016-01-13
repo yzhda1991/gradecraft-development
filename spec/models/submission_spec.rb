@@ -241,10 +241,11 @@ describe Submission do
   end
 
   describe "#graded_at" do
-    it "returns when the grade was updated if it was graded" do
+    it "returns when the grade was graded if it was graded" do
       subject.save
-      grade = create(:grade, submission: subject, status: "Graded")
-      expect(subject.graded_at).to eq grade.updated_at
+      graded_at = DateTime.now
+      grade = create(:grade, submission: subject, status: "Graded", graded_at: graded_at)
+      expect(subject.graded_at).to eq graded_at
     end
 
     it "returns nil if there is no grade" do
