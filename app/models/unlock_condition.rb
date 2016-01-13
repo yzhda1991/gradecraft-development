@@ -152,11 +152,7 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def check_if_submitted_by_condition_date(submission)
-    if submission.updated_at < condition_date
-      return true
-    else
-      return false
-    end
+    submission.submitted_at < condition_date
   end
 
   def check_grade_earned_condition(student)
