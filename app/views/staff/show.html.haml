@@ -31,7 +31,7 @@
           %td= points grade.score
           %td= raw grade.feedback
           %td= grade.created_at
-          %td= grade.updated_at
+          %td= grade.graded_at
           %td
             %ul.button-bar
               %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_grade_path(grade.assignment, :student_id => grade.student.id), :class => 'button'
