@@ -184,11 +184,7 @@ class UnlockCondition < ActiveRecord::Base
   end
 
   def check_if_grade_earned_met_condition_date(grade)
-    if grade.present? && grade.is_student_visible? && grade.updated_at < condition_date
-      return true
-    else
-      return false
-    end
+    grade.present? && grade.is_student_visible? && grade.graded_at < condition_date
   end
 
   def check_feedback_read_condition(student)
