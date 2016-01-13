@@ -12,7 +12,7 @@ class Grade < ActiveRecord::Base
     :predicted_score, :raw_score, :status, :student, :student_id, :submission,
     :_destroy, :submission_id, :task, :task_id, :team_id, :earned_badges,
     :earned_badges_attributes, :feedback_read, :feedback_read_at,
-    :feedback_reviewed, :feedback_reviewed_at, :is_custom_value
+    :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at
 
   STATUSES= ["In Progress", "Graded", "Released"]
 

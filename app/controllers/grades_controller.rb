@@ -57,7 +57,7 @@ class GradesController < ApplicationController
   # create a new grade if none exists, and otherwise update the existing grade
   # PUT /assignments/:assignment_id/grade
   def update
-    @grade = Grade.find_or_create(@assignment,current_student)
+    @grade = Grade.find_or_create(@assignment, current_student)
 
     # extract file attributes from grade params
     if params[:grade][:grade_files_attributes].present?
@@ -65,7 +65,8 @@ class GradesController < ApplicationController
       params[:grade].delete :grade_files_attributes
     end
 
-    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
+    if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
+        instructor_modified: true)
 
       # @mz TODO: ADD SPECS
       if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
