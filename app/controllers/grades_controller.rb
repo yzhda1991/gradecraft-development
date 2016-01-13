@@ -233,7 +233,7 @@ class GradesController < ApplicationController
   def mass_update
     params[:assignment][:grades_attributes].each do |index, grade_params|
       grade_params.merge!(graded_at: DateTime.now)
-    end
+    end if params[:assignment][:grades_attributes].present?
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.update_attributes(params[:assignment])
 
