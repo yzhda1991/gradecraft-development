@@ -41,7 +41,7 @@ describe GradeImporter do
 
         it "creates the grade if it is not there" do
           result = subject.import(course, assignment)
-          grade = Grade.last
+          grade = Grade.unscoped.last
           expect(grade.raw_score).to eq 4000
           expect(grade.feedback).to eq "You did great!"
           expect(grade.status).to eq "Graded"
@@ -50,12 +50,20 @@ describe GradeImporter do
           expect(result.successful.last).to eq grade
         end
 
+        it "timestamps the grade" do
+          current_time = DateTime.now
+          result = subject.import(course, assignment)
+          grade = Grade.unscoped.last
+          expect(grade.graded_at).to be > current_time
+        end
+
         it "updates the grade if it is already there" do
           create :grade, assignment: assignment, student: student, raw_score: 1000
           subject.import(course, assignment)
           grade = Grade.last
           expect(grade.raw_score).to eq 4000
           expect(grade.feedback).to eq "You did great!"
+          expect(grade.graded_at).to_not be_nil
         end
 
         it "does not update the grade if the grade and the feedback are the same as the one being imported" do
@@ -74,6 +82,7 @@ describe GradeImporter do
           create(:student_course_membership, course: course, user: student)
           result = subject.import(course, assignment)
           expect(grade.reload.raw_score).to eq 4000
+          expect(grade.graded_at).to be_nil
           expect(result.unsuccessful.last[:errors]).to eq "Grade not specified"
         end
 

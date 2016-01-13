@@ -56,6 +56,7 @@ class GradeImporter
     grade.feedback = row.feedback
     grade.status = "Graded" if grade.status.nil?
     grade.instructor_modified = true
+    grade.graded_at = DateTime.now
   end
 
   def create_grade(row, assignment, student)
