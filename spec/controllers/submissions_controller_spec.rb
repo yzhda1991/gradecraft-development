@@ -88,7 +88,9 @@ describe SubmissionsController do
 
   context "as a student" do
     before do
-      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
+      @submission = create(:submission, assignment_id: @assignment.id,
+                           assignment_type: "Assignment", student_id: @student.id,
+                           course_id: @course.id)
       login_user(@student)
     end
 
@@ -102,19 +104,36 @@ describe SubmissionsController do
     describe "POST create" do
       it "creates the submission with valid attributes" do
         params = attributes_for(:submission, student_id: @student.id)
-        params[:assignment_id] = @assignment.id
-        expect{ post :create, :assignment_id => @assignment.id, :submission => params }.to change(Submission,:count).by(1)
+          .merge(assignment_id: @assignment_id)
+        expect { post :create, assignment_id: @assignment.id, submission: params }.to \
+          change(Submission,:count).by(1)
+      end
+
+      it "timestamps the submission" do
+        params = attributes_for(:submission, student_id: @student.id)
+          .merge(assignment_id: @assignment_id)
+        current_time = DateTime.now
+        post :create, assignment_id: @assignment.id, submission: params
+        submission = Submission.unscoped.last
+        expect(submission.submitted_at).to be > current_time
       end
     end
 
-    describe "GET update" do
+    describe "PUT update" do
       it "updates the submission successfully"  do
-        params = attributes_for(:submission)
-        params[:assignment_id] = @assignment.id
+        params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
         params[:text_comment] = "Ausgezeichnet"
-        post :update, :assignment_id => @assignment.id, :id => @submission, :submission => params
+        put :update, assignment_id: @assignment.id, id: @submission, submission: params
         expect(response).to redirect_to(assignment_path(@assignment, :anchor => "tab3"))
         expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
+      end
+
+      it "timestamps the submission" do
+        params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
+        params[:text_comment] = "Ausgezeichnet"
+        current_time = DateTime.now
+        put :update, assignment_id: @assignment.id, id: @submission, submission: params
+        expect(@submission.reload.submitted_at).to be > current_time
       end
     end
 
