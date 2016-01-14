@@ -34,6 +34,14 @@ module S3Manager
       })
     end
 
+    def write_s3_object_to_disk(object_key, target_file_path)
+      client.get_object({
+        response_target: target_file_path,
+        bucket: bucket_name,
+        key: object_key
+      })
+    end
+
     def get_object(object_key)
       client.get_object({
         bucket: bucket_name,

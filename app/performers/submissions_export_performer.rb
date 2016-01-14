@@ -325,8 +325,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @submissions.each do |submission|
       if submission.submission_files.present?
         submission.process_unconfirmed_files if submission.submission_files.unconfirmed.count > 0
-        create_binary_files_for_submission(submission) 
         write_note_for_missing_binary_files(submission)
+        create_binary_files_for_submission(submission) 
       end
     end
   end
