@@ -1,4 +1,5 @@
 require 'rails_spec_helper'
+require 'active_record_spec_helper'
 
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
