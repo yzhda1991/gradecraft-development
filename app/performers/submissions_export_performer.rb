@@ -133,7 +133,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @attrs[:team_id].present?
   end
 
-  # @mz todo: add specs
   def s3_manager
     @s3_manager ||= @submissions_export.s3_manager || S3Manager::Manager.new
   end
@@ -176,7 +175,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def filename_timestamp
-    "#{filename_time.strftime("%Y-%m-%d")}_#{filename_time.to_f}".gsub(".","")
+    filename_time.strftime("%Y-%m-%d--%I:%M:%S%p")
   end
 
   def filename_time

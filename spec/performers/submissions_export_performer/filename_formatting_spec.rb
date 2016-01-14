@@ -12,7 +12,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "export_file_basename" do
     subject { performer.instance_eval { export_file_basename }}
-    let(:filename_timestamp) { "2020-10-15_2394829348234893" }
+    let(:filename_timestamp) { "2020-10-15--12:30:20pm" }
 
     before(:each) do
       performer.instance_variable_set(:@export_file_basename, nil)
@@ -25,7 +25,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     it "is appended with a YYYY-MM-DD formatted timestamp" do
-      expect(subject).to match(/2020-10-15_/)
+      expect(subject).to match(/2020-10-15/)
     end
 
     it "caches the filename" do
@@ -48,15 +48,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     it "formats the filename time" do
-      expect(subject).to match(/^1995-01-20/)
-    end
-
-    it "converts the filename time to a float" do
-      expect(subject).to match("#{filename_time.to_f}".gsub(".",""))
-    end
-
-    it "removes decimal points from the timestamp" do
-      expect(subject).not_to match(/\./)
+      expect(subject).to match(filename_time.strftime("%Y-%m-%d--%I:%M:%S%p"))
     end
   end
 
