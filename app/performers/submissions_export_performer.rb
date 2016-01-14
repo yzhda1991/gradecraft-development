@@ -83,11 +83,34 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def submissions_export_attributes
+    if @submissions_export.last_export_started_at
+      base_export_attributes.merge(clear_progress_attributes)
+    else
+      base_export_attributes
+    end
+  end
+
+  def base_export_attributes
     {
       student_ids: @students.collect(&:id),
       submissions_snapshot: submissions_snapshot,
       export_filename: "#{export_file_basename}.zip",
       last_export_started_at: Time.now
+    }
+  end
+
+  def clear_progress_attributes
+    {
+      generate_export_csv: nil,
+      export_csv_successful: nil,
+      create_student_directories: nil,
+      student_directories_created_successfully: nil,
+      create_submission_text_files: nil,
+      create_submission_binary_files: nil,
+      generate_error_log: nil,
+      archive_exported_files: nil,
+      upload_archive_to_s3: nil,
+      check_s3_upload_success: nil
     }
   end
 

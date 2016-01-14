@@ -12,35 +12,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   it_behaves_like "ModelAddons::ImprovedLogging is included"
 
-  describe "#submissions_export_attributes" do
-    before do
-      allow(performer).to receive_messages({
-        submissions_snapshot: {some: "hash"},
-        export_file_basename: "really_bad_file"
-      })
-    end
-
-    subject { performer.submissions_export_attributes }
-    let(:export_start_time) { Date.parse("Jan 20 1987").to_time }
-
-    it "should include the student ids" do
-      expect(subject[:student_ids]).to eq(performer.instance_variable_get(:@students).collect(&:id))
-    end
-
-    it "should include the last export started time" do
-      allow(Time).to receive(:now) { export_start_time }
-      expect(subject[:last_export_started_at]).to eq(export_start_time)
-    end
-
-    it "should include the submissions snapshot" do
-      expect(subject[:submissions_snapshot]).to eq({some: "hash"})
-    end
-
-    it "should include the export filename" do
-      expect(subject[:export_filename]).to eq("really_bad_file.zip")
-    end
-  end
-
   # private and protected methods
   
   describe "sorted_student_directory_keys" do
