@@ -154,25 +154,29 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   end
 
   describe "submissions_by_student" do
-    let(:student1) { create(:user, first_name: "Ben", last_name: "Bailey") }
+    let(:student1) { create(:user, first_name: "Ben", last_name: "Bailey", username: "benfriend") }
     let(:student2) { create(:user, first_name: "Mike", last_name: "McCaffrey") }
     let(:student3) { create(:user, first_name: "Dana", last_name: "Dafferty") }
+    let(:student4) { create(:user, first_name: "Ben", last_name: "Bailey", username: "benweirdo") }
 
     let(:submission1) { double(:submission, id: 1, student: student1) }
     let(:submission2) { double(:submission, id: 2, student: student2) }
     let(:submission3) { double(:submission, id: 3, student: student3) }
     let(:submission4) { double(:submission, id: 4, student: student2) } # note that this uses student 2
+    let(:submission5) { double(:submission, id: 5, student: student4) }
 
     let(:grouped_submission_expectation) {{
-      "bailey_ben-#{student1.id}" => [submission1],
-      "mccaffrey_mike-#{student2.id}" => [submission2, submission4],
-      "dafferty_dana-#{student3.id}" => [submission3]
+      "bailey_ben--benfriend" => [submission1],
+      "mccaffrey_mike" => [submission2, submission4],
+      "dafferty_dana" => [submission3],
+      "bailey_ben--benweirdo" => [submission5]
     }}
 
-    let(:submissions_by_id) { [submission1, submission2, submission3, submission4].sort_by(&:id) }
+    let(:submissions_by_id) { [submission1, submission2, submission3, submission4, submission5].sort_by(&:id) }
 
     before(:each) do
       performer.instance_variable_set(:@submissions, submissions_by_id)
+      performer.instance_variable_set(:@students, [ student1, student2, student3, student4 ])
     end
 
     subject do
@@ -184,11 +188,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     it "should use 'last_name_first_name-id' for the hash keys" do
-      expect(subject.keys.first).to eq("bailey_ben-#{student1.id}")
+      expect(subject.keys.first).to eq("bailey_ben--benfriend")
     end
 
     it "should return an array of submissions for each student" do
-      expect(subject["mccaffrey_mike-#{student2.id}"]).to eq([submission2, submission4])
+      expect(subject["mccaffrey_mike"]).to eq([submission2, submission4])
     end
   end
 

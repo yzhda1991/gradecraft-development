@@ -153,7 +153,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     submissions_grouped_by_student.keys.sort
   end
 
-  # @mz todo: modify specs
   def submissions_grouped_by_student
     @submissions_grouped_by_student ||= @submissions.group_by do |submission|
       student_directory_names[submission.student.id]
