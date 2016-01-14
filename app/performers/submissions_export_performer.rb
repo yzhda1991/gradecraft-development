@@ -298,9 +298,14 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  def create_student_directory_hash
-    @students.inject({}) do |memo, active_student|
+  def student_directory_names_by_id
+    @student_directory_names_by_id ||= @students.inject({}) do |memo, active_student|
+      # check to see whether there are any duplicate student names
       if @students.count {|student| student.same_name_as?(active_student) } > 1
+        memo[active_student.id] = active_student.alphabetical_name_key_with_username
+      else
+        memo[active_student.id] = active_student.alphabetical_name_key
+      end
     end
   end
 

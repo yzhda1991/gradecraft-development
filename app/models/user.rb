@@ -210,11 +210,11 @@ class User < ActiveRecord::Base
     "#{self.last_name}_#{self.first_name}-#{self.id}".downcase
   end
 
-  def alphabetical_key
+  def alphabetical_name_key
     "#{self.last_name}_#{self.first_name}".downcase
   end
 
-  def alphabetical_key_with_username
+  def alphabetical_name_key_with_username
     "#{self.last_name}_#{self.first_name}--#{self.username}".downcase
   end
 
