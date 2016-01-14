@@ -323,6 +323,7 @@ describe Submission do
 
   describe ".order_by_submitted" do
     it "returns the submissions in the order they were submitted" do
+      Submission.delete_all
       submitted_yesterday = create(:submission, submitted_at: 1.day.ago)
       never_submitted = create(:submission)
       just_submitted = create(:submission, submitted_at: DateTime.now)
