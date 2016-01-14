@@ -158,9 +158,20 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           subject
         end
 
-        it "writes the binary submission file to the target path" do
-          expect(submission_file1).to receive(:write_source_binary_to_path).with(mikos_bases_file_path)
-          subject
+        context "rails env is development" do
+          before { allow(Rails).to receive_message_chain(:env, :development?) { true }}
+          it "writes the binary submission file to the target path" do
+            expect(submission_file1).to receive(:write_source_binary_to_path).with(mikos_bases_file_path)
+            subject
+          end
+        end
+
+        context "rails env is anything but development" do
+          before { allow(Rails).to receive_message_chain(:env, :development?) { false }}
+          it "streams the s3 file to the disk via the submission file" do
+            expect(performer).to receive(:stream_s3_file_to_disk).with(submission_file1, mikos_bases_file_path)
+            subject
+          end
         end
       end
 

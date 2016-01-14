@@ -38,7 +38,6 @@ class SubmissionFile < ActiveRecord::Base
     @s3_manager ||= S3Manager::Manager.new
   end
 
-  # @mz todo: add specs
   def mark_file_missing
     update_attributes file_missing: true, last_confirmed_at: Time.now
   end
@@ -47,6 +46,8 @@ class SubmissionFile < ActiveRecord::Base
     update_attributes file_missing: file_missing?, last_confirmed_at: Time.now
   end
 
+  # this is only being used in development, get rid of it when it deveopment is migrated to s3
+  # for submission file persistence
   def write_source_binary_to_path(target_path)
     File.open(target_path, "wb") do |saved_file|
       File.open(source_file_url, "rb") do |read_file|
