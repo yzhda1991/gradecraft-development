@@ -38,6 +38,11 @@ class SubmissionFile < ActiveRecord::Base
     @s3_manager ||= S3Manager::Manager.new
   end
 
+  # @mz todo: add specs
+  def mark_file_missing
+    update_attributes file_missing: true, last_confirmed_at: Time.now
+  end
+
   def check_and_set_confirmed_status
     update_attributes file_missing: file_missing?, last_confirmed_at: Time.now
   end

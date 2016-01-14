@@ -130,6 +130,28 @@ describe SubmissionFile do
     end
   end
 
+  describe "#mark_file_missing" do
+    subject { submission_file.mark_file_missing }
+    let(:submission_file) { create(:submission_file, file_missing: false, last_confirmed_at: Time.now) }
+    let(:someday) { Date.parse("June 20 2502").to_time }
+
+    before do
+      allow(Time).to receive(:now) { someday }
+    end
+
+    it "sets the file as missing and updates the last confirmed day" do
+      expect(submission_file).to receive(:update_attributes).with(file_missing: true, last_confirmed_at: someday)
+      subject
+    end
+
+    it "actually updates the submission file" do
+      subject
+      expect(submission_file[:file_missing]).to be_truthy
+      expect(submission_file[:last_confirmed_at]).to eq(someday)
+    end
+  end
+
+
   describe "#write_source_binary_to_path" do
     subject { submission_file.write_source_binary_to_path(target_path) }
 

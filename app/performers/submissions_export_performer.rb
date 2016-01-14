@@ -325,8 +325,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @submissions.each do |submission|
       if submission.submission_files.present?
         submission.process_unconfirmed_files if submission.submission_files.unconfirmed.count > 0
-        write_note_for_missing_binary_files(submission)
         create_binary_files_for_submission(submission) 
+        write_note_for_missing_binary_files(submission)
       end
     end
   end
@@ -363,9 +363,13 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     [ formatted_student_name(student), formatted_assignment_name, "submission_file#{index}"].join("_") + submission_file.extension
   end
 
+  # @mz todo: add specs
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
-    submission_file.write_source_binary_to_path(file_path)
+    begin
+      s3_manager.write_s3_object_to_disk(submission_file.s3_object_file_key, file_path)
+    rescue Aws::S3::Errors::NoSuchKey
+    end
   end
 
   def remove_if_exists(file_path)
