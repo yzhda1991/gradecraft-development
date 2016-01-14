@@ -18,9 +18,10 @@ RSpec.describe "An S3File inheritor" do
   end
 
   describe "#url" do
-    subject { s3_file_cylon.url }
+    subject(:each) { s3_file_cylon.url }
     before do
       allow(s3_file_cylon).to receive_message_chain(:file, :url) { "great url, bro" }
+      allow(s3_file_cylon).to receive(:filepath) { "sumpin'" }
     end
 
     context "Rails env is development" do
@@ -32,27 +33,17 @@ RSpec.describe "An S3File inheritor" do
     end
 
     context "Rails env is anything but development" do
-      let(:bucket) { double(:bucket).as_null_object }
-      let(:object) { double(:object).as_null_object }
       let(:presigned_url) { double(:presigned_url).as_null_object }
-      let(:s3_object_file_key) { "hopefully-this-never-happens" }
+      let(:s3_object) { double(:s3_object).as_null_object }
 
       before(:each) do
+        allow(s3_file_cylon).to receive(:s3_object) { s3_object }
         allow(Rails).to receive_message_chain(:env, :development?) { false }
-        allow(s3_file_cylon).to receive_messages({
-          bucket: bucket,
-          s3_object_file_key: s3_object_file_key
-        })
-        allow(bucket).to receive(:object) { object }
-        allow(object).to receive(:presigned_url) { presigned_url }
+        allow(s3_object).to receive(:presigned_url) { presigned_url }
       end
 
-      it "fetches the bucket object with the s3_object_file_key" do
-        expect(bucket).to receive(:object).with(s3_object_file_key)
-      end
-
-      it "gets the presigned url for the object" do
-        expect(object).to receive(:presigned_url).with(:get, expires_in: 900)
+      it "gets the presigned url for the s3 object" do
+        expect(s3_object).to receive(:presigned_url).with(:get, expires_in: 900)
       end
 
       it "converts all of that into a string" do
@@ -61,6 +52,29 @@ RSpec.describe "An S3File inheritor" do
 
       after(:each) { subject }
     end
+  end
+
+  describe "#s3_object" do
+    subject(:each) { s3_file_cylon.s3_object }
+
+    let(:bucket) { double(:bucket).as_null_object }
+    let(:object) { double(:object).as_null_object }
+    let(:s3_object_file_key) { "hopefully-this-never-happens" }
+
+    before(:each) do
+      allow(s3_file_cylon).to receive(:bucket) { bucket }
+      allow(bucket).to receive(:object) { object }
+      allow(s3_file_cylon).to receive_messages({
+        bucket: bucket,
+        s3_object_file_key: s3_object_file_key
+      })
+    end
+
+    it "fetches the bucket object with the s3_object_file_key" do
+      expect(bucket).to receive(:object).with(s3_object_file_key)
+    end
+
+    after(:each) { subject }
   end
 
   describe "#s3_object_file_key" do
