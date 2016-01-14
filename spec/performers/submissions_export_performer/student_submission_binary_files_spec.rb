@@ -175,6 +175,39 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         end
       end
 
+      describe "#stream_s3_file_to_disk" do
+        subject { performer.instance_eval { stream_s3_file_to_disk(@some_submission_file, @some_target_file_path) }}
+        let(:s3_manager) { performer.instance_eval { s3_manager }}
+        let(:mikos_bases_file_path) { "#{tmp_dir}/allyoarbases_r_belong_2_miko.snk" }
+        before(:each) do
+          performer.instance_variable_set(:@some_submission_file, submission_file1)
+          performer.instance_variable_set(:@some_target_file_path, mikos_bases_file_path)
+          allow(submission_file1).to receive(:s3_object_file_path) { "something-weird-happened-here" }
+        end
+
+        context "s3_manager#write_s3_manager_to_disk succeeds without error" do
+          before do
+            allow(s3_manager).to receive(:write_s3_manager_to_disk) { true }
+          end
+
+          it "writes the s3 file to the file path for the archive directory" do
+            expect(s3_manager).to receive(:write_s3_object_to_disk).with(submission_file1.s3_object_file_key, mikos_bases_file_path)
+            subject
+          end
+        end
+
+        context "s3_manager#write_s3_object_to_disk raises an Aws NoSuchKey error" do
+          before do
+            allow(s3_manager).to receive(:write_s3_manager_to_disk).and_raise(Aws::S3::Errors::NoSuchKey)
+          end
+
+          it "marks the submission file as missing" do
+            expect(submission_file1).to receive(:mark_file_missing)
+            subject
+          end
+        end
+      end
+
       describe "remove_if_exists" do
         let(:horses_path) { File.expand_path("horses.png", "spec/support/binary_files") }
         let(:final_horses_path) { File.expand_path("horses.png", tmp_dir) }

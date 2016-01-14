@@ -363,7 +363,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     [ formatted_student_name(student), formatted_assignment_name, "submission_file#{index}"].join("_") + submission_file.extension
   end
 
-  # @mz todo: add specs
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
     if Rails.env.development?
@@ -373,10 +372,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
-  def stream_s3_file_to_disk(submission_file, file_path)
+  def stream_s3_file_to_disk(submission_file, target_file_path)
     begin
-      s3_manager.write_s3_object_to_disk(submission_file.s3_object_file_key, file_path)
+      s3_manager.write_s3_object_to_disk(submission_file.s3_object_file_key, target_file_path)
     rescue Aws::S3::Errors::NoSuchKey
       submission_file.mark_file_missing
     end
