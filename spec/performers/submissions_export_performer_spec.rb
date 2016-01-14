@@ -15,8 +15,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   # private and protected methods
   
   describe "sorted_student_directory_keys" do
-    let(:contrived_student_submissions_hash) {{ "dave_hoggworthy_40"=>"", "carla_makeshift_10"=>"", "bordwell_hamhock_25"=>"" }}
-    let(:expected_keys_result) { %w[ bordwell_hamhock_25  carla_makeshift_10  dave_hoggworthy_40 ] }
+    let(:contrived_student_submissions_hash) {{ "dave_hoggworthy"=>"", "carla_makeshift"=>"", "bordwell_hamhock"=>"" }}
+    let(:expected_keys_result) { %w[ bordwell_hamhock carla_makeshift dave_hoggworthy ] }
 
     before do
       allow(performer).to receive(:submissions_grouped_by_student) { contrived_student_submissions_hash }
