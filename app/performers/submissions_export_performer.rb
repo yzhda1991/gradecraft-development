@@ -298,6 +298,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
+  def create_student_directory_hash
+    @students.inject({}) do |memo, active_student|
+      if @students.count {|student| student.same_name_as?(active_student) } > 1
+    end
+  end
+
   def create_student_directories
     @students.each do |student|
       dir_path = student_directory_path(student)

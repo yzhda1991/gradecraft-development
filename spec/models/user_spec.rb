@@ -54,11 +54,37 @@ describe User do
     end
   end
 
-  describe "#formatted_key_name", inspect: true do
+  describe "#formatted_key_name" do
     let(:user) { create(:user, first_name: "Ben", last_name: "Bailey") }
 
     it "formats the student info into a usable key" do
       expect(user.formatted_key_name).to eq("bailey_ben-#{user.id}")
+    end
+  end
+
+  describe "#full_name" do
+    let(:user) { create(:user, first_name: "Ben", last_name: "Bailey") }
+
+    it "prints the full name" do
+      expect(user.full_name).to eq("Ben Bailey")
+    end
+  end
+
+  describe "#same_name_as?" do
+    let(:ben_bailey1) { create(:user, first_name: "Ben", last_name: "Bailey") }
+    let(:ben_bailey2) { create(:user, first_name: "Ben", last_name: "Bailey") }
+    let(:roger_daltry) { create(:user, first_name: "Roger", last_name: "Daltry") }
+
+    context "has the same name as the user given" do
+      it "returns true" do
+        expect(ben_bailey1.same_name_as?(ben_bailey2)).to be_truthy
+      end
+    end
+
+    context "has a different name than the user given" do
+      it "returns false" do
+        expect(ben_bailey1.same_name_as?(roger_daltry)).to be_falsey
+      end
     end
   end
 

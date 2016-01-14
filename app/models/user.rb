@@ -210,6 +210,22 @@ class User < ActiveRecord::Base
     "#{self.last_name}_#{self.first_name}-#{self.id}".downcase
   end
 
+  def alphabetical_key
+    "#{self.last_name}_#{self.first_name}".downcase
+  end
+
+  def alphabetical_key_with_username
+    "#{self.last_name}_#{self.first_name}--#{self.username}".downcase
+  end
+
+  def full_name
+    "#{self.first_name} #{self.last_name}"
+  end
+
+  def same_name_as?(another_user)
+    full_name.downcase == another_user.full_name.downcase
+  end
+
   def self.auditing_students_in_course(course_id)
     User
       .select("users.id, users.first_name, users.last_name, users.email, users.display_name, course_memberships.score as cached_score_sql_alias")
