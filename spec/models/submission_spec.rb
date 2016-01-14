@@ -321,6 +321,16 @@ describe Submission do
     end
   end
 
+  describe ".order_by_submitted" do
+    it "returns the submissions in the order they were submitted" do
+      submitted_yesterday = create(:submission, submitted_at: 1.day.ago)
+      never_submitted = create(:submission)
+      just_submitted = create(:submission, submitted_at: DateTime.now)
+
+      expect(Submission.order_by_submitted).to eq [submitted_yesterday, just_submitted, never_submitted]
+    end
+  end
+
   describe "#will_be_resubmission?", versioning: true do
     before { subject.save }
 

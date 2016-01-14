@@ -30,7 +30,7 @@ class Submission < ActiveRecord::Base
   scope :graded, -> { where(:grade) }
   scope :resubmitted, -> { joins(:grade).where(grades: { status: ["Graded", "Released"] })
                                         .where("grades.graded_at < submitted_at") }
-  scope :date_submitted, -> { order('created_at ASC') }
+  scope :order_by_submitted, -> { order('submitted_at ASC') }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
 
