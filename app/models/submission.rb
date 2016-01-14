@@ -28,7 +28,8 @@ class Submission < ActiveRecord::Base
 
   scope :ungraded, -> { where('NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))', "Graded", "Released") }
   scope :graded, -> { where(:grade) }
-  scope :resubmitted, -> { where('EXISTS(SELECT 1 FROM grades WHERE (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (updated_at < submissions.updated_at) AND (status = ? OR status = ?))', "Graded", "Released") }
+  scope :resubmitted, -> { joins(:grade).where(grades: { status: ["Graded", "Released"] })
+                                        .where("grades.graded_at < submitted_at") }
   scope :date_submitted, -> { order('created_at ASC') }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }

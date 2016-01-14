@@ -298,6 +298,29 @@ describe Submission do
     end
   end
 
+  describe ".resubmitted" do
+    it "returns the submissions that have been submitted after they were graded" do
+      grade = create(:grade, submission: subject, status: "Graded", graded_at: 1.day.ago)
+      subject.submitted_at = DateTime.now
+      subject.save
+      expect(Submission.resubmitted).to eq [subject]
+    end
+
+    it "does not return non-graded or released grades" do
+      grade = create(:grade, submission: subject, graded_at: 1.day.ago)
+      subject.submitted_at = DateTime.now
+      subject.save
+      expect(Submission.resubmitted).to be_empty
+    end
+
+    it "does not return resubmissions that have been graded" do
+      grade = create(:grade, submission: subject, status: "Graded", graded_at: 1.day.ago)
+      subject.submitted_at = 2.days.ago
+      subject.save
+      expect(Submission.resubmitted).to be_empty
+    end
+  end
+
   describe "#will_be_resubmission?", versioning: true do
     before { subject.save }
 
