@@ -366,9 +366,19 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   # @mz todo: add specs
   def write_submission_binary_file(student, submission_file, index)
     file_path = submission_binary_file_path(student, submission_file, index)
+    if Rails.env.development?
+      submission_file.write_source_binary_to_path(file_path)
+    else
+      stream_s3_file_to_disk(submission_file, file_path)
+    end
+  end
+
+  # @mz todo: add specs
+  def stream_s3_file_to_disk(submission_file, file_path)
     begin
       s3_manager.write_s3_object_to_disk(submission_file.s3_object_file_key, file_path)
     rescue Aws::S3::Errors::NoSuchKey
+      submission_file.mark_file_missing
     end
   end
 
