@@ -48,14 +48,11 @@ class InfoController < ApplicationController
   # Displaying all resubmisisons
   def resubmissions
     @title = "Resubmitted Assignments"
-    resubmissions = current_course.submissions.resubmitted
+    @resubmissions = current_course.submissions.resubmitted
 
     @teams = current_course.teams
     if @team
-      @students ||= @team.students.pluck(:id)
-      @resubmissions = resubmissions.where(student_id: @students)
-    else
-      @resubmissions = resubmissions
+      @resubmissions = @resubmissions.where(student_id: @team.students.pluck(:id))
     end
 
     @resubmission_count = @resubmissions.count
