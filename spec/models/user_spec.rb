@@ -54,7 +54,7 @@ describe User do
     end
   end
 
-  describe "formatted name keys", focus: true do
+  describe "formatted name keys" do
     let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
     describe "#formatted_key_name" do
 
