@@ -311,6 +311,7 @@ PaperTrail.whodunnit = nil
             s.assignment = assignment
             s.text_comment = "Wingardium Leviosa"
             s.link = "http://www.twitter.com"
+            s.submitted_at = DateTime.now
           end
           print "."
         end
@@ -359,6 +360,7 @@ PaperTrail.whodunnit = nil
               else
                 g[attr] = grade_attributes[attr] || @assignment_default_config[:grade_attributes][attr]
               end
+              g.graded_at = DateTime.now
               g.graded_by_id = course_config[:staff_ids].sample
               PaperTrail.whodunnit = g.graded_by_id
             end
