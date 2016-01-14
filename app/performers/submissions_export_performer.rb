@@ -153,9 +153,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     submissions_grouped_by_student.keys.sort
   end
 
+  # @mz todo: modify specs
   def submissions_grouped_by_student
     @submissions_grouped_by_student ||= @submissions.group_by do |submission|
-      submission.student.formatted_key_name
+      student_directory_names[submission.student.id]
     end
   end
 
@@ -293,19 +294,22 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def missing_student_directories
     @students.inject([]) do |memo, student|
-      memo << student.formatted_key_name unless Dir.exist?(student_directory_path(student))
+      memo << student_directory_names[student.id] unless Dir.exist?(student_directory_path(student))
       memo
     end
   end
 
-  def student_directory_names_by_id
-    @student_directory_names_by_id ||= @students.inject({}) do |memo, active_student|
+  # @mz todo: add specs
+  # in the format of { student_id => "lastname_firstname(--username-if-naming-conflict)" }
+  def student_directory_names
+    @student_directory_names ||= @students.inject({}) do |memo, student|
       # check to see whether there are any duplicate student names
-      if @students.count {|student| student.same_name_as?(active_student) } > 1
-        memo[active_student.id] = active_student.alphabetical_name_key_with_username
+      if @students.count {|compared_student| student.same_name_as?(compared_student) } > 1
+        memo[student.id] = student.alphabetical_name_key_with_username
       else
-        memo[active_student.id] = active_student.alphabetical_name_key
+        memo[student.id] = student.alphabetical_name_key
       end
+      memo
     end
   end
 
@@ -317,7 +321,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def student_directory_path(student)
-    File.expand_path(student.formatted_key_name, tmp_dir)
+    File.expand_path(student_directory_names[student.id], tmp_dir)
   end
 
   def create_submission_text_files
@@ -478,7 +482,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     ExportsMailer.team_submissions_export_failure(@professor, @assignment, @team).deliver_now
   end
 
-  # @mz todo: modify specs
   def expand_messages(messages={})
     {
       success: [ messages[:success], message_suffix ].join(" "),
@@ -500,7 +503,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def csv_export_messages
     expand_messages ({
       success: "Successfully saved the CSV file on disk",
@@ -508,7 +510,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def create_student_directory_messages
     expand_messages ({
       success: "Successfully created the student directories",
@@ -516,7 +517,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def check_student_directory_messages
     expand_messages ({
       success: "Successfully confirmed creation of all student directories",
@@ -524,7 +524,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def create_submission_text_file_messages
     expand_messages ({
       success: "Successfully created all text files for the student submissions",
@@ -532,7 +531,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def create_submission_binary_file_messages
     expand_messages ({
       success: "Successfully created all binary files for the student submissions",
@@ -540,7 +538,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def generate_error_log_messages
     expand_messages ({
       success: "Successfully generated an error log for binary file creation if one was required",
@@ -548,7 +545,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def archive_exported_files_messages
     expand_messages ({
       success: "Successfully generated an archive containing the exported assignment files",
@@ -556,7 +552,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def upload_archive_to_s3_messages
     expand_messages ({
       success: "Successfully uploaded the submissions archive to S3",
@@ -564,7 +559,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  # @mz todo: add specs
   def check_s3_upload_success_messages
     expand_messages ({
       success: "Successfully confirmed that the exported archive was uploaded to S3",

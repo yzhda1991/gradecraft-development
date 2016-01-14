@@ -11,13 +11,14 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   subject { performer }
 
   describe "student directories" do
-    let(:tmp_dir_path) { "/tmp/123-456-abc-xyz" }
-    let(:student_doubles) { [ student_double1, student_double2 ] }
-    let(:stub_student_doubles) { performer.instance_variable_set(:@students, student_doubles) }
-    let(:student_double1) { double(:student, formatted_key_name: "stevens_anna-10") }
-    let(:student_double2) { double(:student, formatted_key_name: "rogers_tina-20") }
-    let(:student_dir_path1) { "#{tmp_dir_path}/stevens_anna-10" }
-    let(:student_dir_path2) { "#{tmp_dir_path}/rogers_tina-20" }
+    let(:tmp_dir_path) { Dir.mktmpdir }
+    let(:students) { [ student1, student2 ] }
+    let(:stub_students) { performer.instance_variable_set(:@students, students) }
+    let(:student1) { create(:user, first_name: "Anna", last_name: "Stevens") }
+    let(:student2) { create(:user, first_name: "Tina", last_name: "Rogers") }
+    let(:student_directory_names) {{ student1.id => "stevens_anna", student2.id => "rogers_tina" }}
+    let(:student_dir_path1) { "#{tmp_dir_path}/stevens_anna" }
+    let(:student_dir_path2) { "#{tmp_dir_path}/rogers_tina" }
     let(:student_dir_paths) { [ student_dir_path1, student_dir_path2 ] }
     let(:remove_student_dirs) do
       [ student_dir_path1, student_dir_path2 ].each do |dir_path|
@@ -27,15 +28,16 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     before(:each) do
       allow(performer).to receive(:tmp_dir) { tmp_dir_path }
+      allow(performer).to receive(:student_directory_names) { student_directory_names }
     end
 
     describe "missing_student_directories" do
       subject { performer.instance_eval { missing_student_directories }}
-      before(:each) { stub_student_doubles }
+      before(:each) { stub_students }
 
       context "student directories are missing" do
         it "returns the names of the missing directories relative to the tmp_dir" do
-          expect(subject).to eq(["stevens_anna-10", "rogers_tina-20"])
+          expect(subject).to eq(["stevens_anna", "rogers_tina"])
         end
       end
 
@@ -60,7 +62,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
       context "missing_student_directories are present" do
         it "returns false" do
-          allow(performer).to receive(:missing_student_directories) { ["stevens_anna-10", "rogers_tina-20"] }
+          allow(performer).to receive(:missing_student_directories) { ["stevens_anna", "rogers_tina"] }
           expect(subject).to be_falsey
         end
       end
@@ -68,10 +70,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     describe "create_student_directories" do
       subject { performer.instance_eval { create_student_directories }}
-      before(:each) { stub_student_doubles }
+      before(:each) { stub_students }
 
       it "calls Dir.mkdir once for each student in @students" do
-        expect(Dir).to receive(:mkdir).exactly(2).times
+        expect(Dir).to receive(:mkdir).with(student_dir_path1).once
+        expect(Dir).to receive(:mkdir).with(student_dir_path2).once
         subject
       end
 
@@ -97,11 +100,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "returns the correct directory path" do
-        expect(subject).to eq("#{tmp_dir_path}/#{student1.formatted_key_name}")
+        expect(subject).to eq("#{tmp_dir_path}/#{student_directory_names[student1.id]}")
       end
 
       it "expands the path relative to the tmp_dir" do
-        expect(File).to receive(:expand_path).with(student1.formatted_key_name, tmp_dir_path)
+        expect(File).to receive(:expand_path).with(student_directory_names[student1.id], tmp_dir_path)
         subject
       end
     end
