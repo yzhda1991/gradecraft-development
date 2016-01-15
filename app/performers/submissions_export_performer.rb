@@ -126,6 +126,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @professor = @submissions_export.professor
     @team = @submissions_export.team
     @students = fetch_students
+    @students_for_csv = fetch_students_for_csv
     @submissions = fetch_submissions
   end
 
@@ -216,19 +217,27 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @course = @assignment.course
   end
 
+  def fetch_students_for_csv
+    if team_present?
+      @students_for_csv = User.students_by_team(@course, @team)
+    else
+      @students_for_csv = User.with_role_in_course("student", @course)
+    end
+  end
+
   def fetch_students
     if team_present?
-      @students = User.students_by_team(@course, @team)
+      @students = @assignment.students_with_text_or_binary_files_on_team(@team)
     else
-      @students = User.with_role_in_course("student", @course)
+      @students = @assignment.students_with_text_or_binary_files
     end
   end
 
   def fetch_submissions
     if team_present?
-      @submissions = @assignment.student_submissions_for_team(@team)
+      @submissions = @assignment.student_submissions_with_files_for_team(@team)
     else
-      @submissions = @assignment.student_submissions
+      @submissions = @assignment.student_submissions_with_files
     end
   end
   
@@ -291,6 +300,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     missing_student_directories.empty?
   end
 
+  # @mz todo: modify specs for @students
   def missing_student_directories
     @students.inject([]) do |memo, student|
       memo << student_directory_names[student.id] unless Dir.exist?(student_directory_path(student))
@@ -298,7 +308,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
+  # @mz todo: modify specs for @students
   # in the format of { student_id => "lastname_firstname(--username-if-naming-conflict)" }
   def student_directory_names
     @student_directory_names ||= @students.inject({}) do |memo, student|
@@ -312,6 +322,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
+  # @mz todo: modify specs for @students
   def create_student_directories
     @students.each do |student|
       dir_path = student_directory_path(student)

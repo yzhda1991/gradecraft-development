@@ -169,14 +169,51 @@ class Assignment < ActiveRecord::Base
       .to_a # force array to trigger eager loading call
   end
 
+  def student_submissions_with_files
+    Submission
+      .includes(:submission_files)
+      .includes(:student)
+      .where(assignment_id: self[:id])
+      .where(submissions_with_files_query, true)
+      .to_a # force array to trigger eager loading call
+  end
+
+  def student_submissions_with_files_for_team(team)
+    Submission
+      .includes(:submission_files)
+      .includes(:student)
+      .where(assignment_id: self[:id])
+      .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+      .where(submissions_with_files_query, true)
+      .to_a # force array to trigger eager loading call
+  end
+
+  def student_with_submissions_query
+    "select distinct(student_id) from submissions where assignment_id = ?"
+  end
+
+  def submissions_with_files_query
+   "text_comment is not null or link is not null or id in (select distinct(submission_id) from submission_files where file_missing != ?)"
+  end
+
+  def students_with_text_or_binary_files_on_team(team)
+    students_with_text_or_binary_files
+      .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+  end
+
+  def students_with_text_or_binary_files
+    User
+      .order_by_name
+      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
+  end
+
   def students_with_submissions
     User
       .order_by_name
-      .where("id in (select student_id from submissions where assignment_id = ?)", self.id)
+      .where("id in (#{student_with_submissions_query})", self.id)
   end
 
   def students_with_submissions_on_team(team)
-    puts team
     User
       .order_by_name
       .where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team.id)
@@ -185,24 +222,7 @@ class Assignment < ActiveRecord::Base
   private
 
     def students_with_submissions_on_team_conditions
-      ["id in (select student_id from submissions where assignment_id = ?)",
-       "id in (select distinct(student_id) from team_memberships where team_id = ?)"]
-    end
-
-  public
-
-  def students_with_submissions
-    User.order_by_name.where("id in (select student_id from submissions where assignment_id = ?)", self.id)
-  end
-
-  def students_with_submissions_on_team(team)
-    User.order_by_name.where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team[:id])
-  end
-
-  private
-
-    def students_with_submissions_on_team_conditions
-      ["id in (select student_id from submissions where assignment_id = ?)",
+      ["id in (#{student_with_submissions_query})",
        "id in (select distinct(student_id) from team_memberships where team_id = ?)"]
     end
 
