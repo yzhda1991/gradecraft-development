@@ -10,7 +10,7 @@ class CollectionMerger
     opts = default_options.merge options
 
     merged = left | right
-    merged.sort! { |l, r| l.send(opts[:field]) <=> r.send(opts[:field]) }
+    merged.sort! { |l, r| value_of(l, opts[:field]) <=> value_of(r, opts[:field]) }
     merged.reverse! if opts[:order] == :desc
     merged
   end
@@ -19,5 +19,13 @@ class CollectionMerger
 
   def default_options
     { field: :created_at, order: :asc }.freeze
+  end
+
+  def value_of(obj, field)
+    if field.respond_to? :call
+      field.call(obj)
+    else
+      obj.send(field)
+    end
   end
 end

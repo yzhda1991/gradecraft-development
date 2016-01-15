@@ -25,6 +25,15 @@ describe CollectionMerger do
       expect(subject.merge(field: :blah)).to eq [fourth, third, second, first]
     end
 
+    it "can merge on a different field via a proc" do
+      allow(first).to receive(:method).and_return seed_date - 1
+      allow(second).to receive(:method).and_return seed_date - 2
+      allow(third).to receive(:method).and_return seed_date - 3
+      allow(fourth).to receive(:method).and_return seed_date - 4
+      expect(subject.merge(field: ->(obj) { obj.method })).to \
+        eq [fourth, third, second, first]
+    end
+
     it "can merge in a descending order" do
       expect(subject.merge(order: :desc)).to eq [fourth, third, second, first]
     end
