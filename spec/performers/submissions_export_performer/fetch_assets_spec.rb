@@ -28,10 +28,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  describe "fetch_students" do
+  describe "fetch_students_for_csv" do
     context "a team is present" do
-      let(:students_ivar) { performer_with_team.instance_variable_get(:@students) }
-      subject { performer_with_team.instance_eval { fetch_students }}
+      let(:students_ivar) { performer_with_team.instance_variable_get(:@students_for_csv) }
+      subject { performer_with_team.instance_eval { fetch_students_for_csv }}
 
       before(:each) do
         allow(performer_with_team).to receive(:team_present?) { true }
@@ -51,8 +51,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     context "no team is present" do
-      let(:students_ivar) { performer.instance_variable_get(:@students) }
-      subject { performer.instance_eval { fetch_students }}
+      let(:students_ivar) { performer.instance_variable_get(:@students_for_csv) }
+      subject { performer.instance_eval { fetch_students_for_csv }}
 
       before(:each) do
         allow(performer).to receive(:team_present?) { false }
@@ -81,11 +81,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         allow(performer_with_team).to receive(:team_present?) { true }
         performer_with_team.instance_variable_set(:@assignment, assignment)
         performer_with_team.instance_variable_set(:@team, team)
-        allow(assignment).to receive(:student_submissions_for_team) { submissions }
+        allow(assignment).to receive(:student_submissions_with_files_for_team) { submissions }
       end
 
       it "returns the submissions being graded for that team" do
-        expect(assignment).to receive(:student_submissions_for_team).with(team)
+        expect(assignment).to receive(:student_submissions_with_files_for_team).with(team)
         subject
       end
 
@@ -103,11 +103,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         allow(performer).to receive(:team_present?) { false }
         performer.instance_variable_set(:@assignment, assignment)
         performer.instance_variable_set(:@team, team)
-        allow(assignment).to receive(:student_submissions) { submissions }
+        allow(assignment).to receive(:student_submissions_with_files) { submissions }
       end
 
       it "returns submissions being graded for the assignment" do
-        expect(assignment).to receive(:student_submissions)
+        expect(assignment).to receive(:student_submissions_with_files)
         subject
       end
 

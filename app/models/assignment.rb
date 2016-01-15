@@ -157,6 +157,7 @@ class Assignment < ActiveRecord::Base
       .includes(:submission_files)
       .includes(:student)
       .where(assignment_id: self[:id])
+      .to_a # eager-load
   end
 
   def student_submissions_for_team(team)
@@ -165,15 +166,23 @@ class Assignment < ActiveRecord::Base
       .includes(:student)
       .where(assignment_id: self[:id])
       .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+      .to_a # eager-load
   end
 
   def student_submissions_with_files
-    student_submissions
+    Submission
+      .includes(:submission_files)
+      .includes(:student)
+      .where(assignment_id: self[:id])
       .where(submissions_with_files_query, true)
   end
 
   def student_submissions_with_files_for_team(team)
-    student_submissions_for_team(team)
+    Submission
+      .includes(:submission_files)
+      .includes(:student)
+      .where(assignment_id: self[:id])
+      .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
       .where(submissions_with_files_query, true)
   end
 
