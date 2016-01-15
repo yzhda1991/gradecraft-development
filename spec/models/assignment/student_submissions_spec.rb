@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 
-describe Assignment do
-  include AssignmentsToolkit
+describe "Assignment #student_submissions methods" do
+  include Toolkits::Models::AssignmentsToolkit
 
   subject { build(:assignment) }
 
@@ -11,7 +11,7 @@ describe Assignment do
       setup_submissions_environment_with_users
     end
 
-    describe "submissions by team", working: true do
+    describe "#student_submissions_for_team", working: true do
       it "returns submissions for the students on the given team" do
         expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).to eq(@submissions)
       end
@@ -20,58 +20,11 @@ describe Assignment do
         @submission = create_teamless_student_with_submission
         expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).not_to include([@submission])
       end
-
-      describe "eager loading" do
-        let(:submissions) { @assignment.student_submissions_for_team(@team) }
-
-        it "makes queries for data on the initial call" do
-          expect { submissions }.to make_database_queries
-        end
-
-        describe "subsequent calls on eager-loaded data" do
-          before { @submission_results = @assignment.student_submissions_for_team(@team) }
-
-          it "doesn't trigger queries for the first submission" do
-            expect { @submission_results.first.submission_files }.not_to make_database_queries
-          end
-
-          it "doesn't trigger queries for the last submission" do
-            expect { @submission_results.last.submission_files }.not_to make_database_queries
-          end
-
-          it "doesn't trigger queries when looking for a student on a submission" do
-            expect { @submission_results.first.student }.not_to make_database_queries
-          end
-        end
-      end
     end
 
     describe "student submissions" do
       it "should return a list of submissions for that assignment" do
         expect(@assignment.student_submissions.sort_by(&:id)).to eq(@submissions)
-      end
-      describe "eager loading" do
-        let(:submissions) { @assignment.student_submissions }
-
-        it "makes queries for data on the initial call" do
-          expect { submissions }.to make_database_queries
-        end
-
-        describe "subsequent calls on eager-loaded data" do
-          before { @submission_results = @assignment.student_submissions }
-
-          it "doesn't trigger queries for the first submission" do
-            expect { @submission_results.first.submission_files }.not_to make_database_queries
-          end
-
-          it "doesn't trigger queries for the last submission" do
-            expect { @submission_results.last.submission_files }.not_to make_database_queries
-          end
-
-          it "doesn't trigger queries when looking for a student on a submission" do
-            expect { @submission_results.first.student }.not_to make_database_queries
-          end
-        end
       end
     end
   end

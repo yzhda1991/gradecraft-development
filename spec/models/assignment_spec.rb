@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 
 describe Assignment do
-  include AssignmentsToolkit
+  include Toolkits::Models::AssignmentsToolkit
 
   subject { build(:assignment) }
 
