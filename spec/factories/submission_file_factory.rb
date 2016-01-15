@@ -13,11 +13,11 @@ FactoryGirl.define do
     end
 
     factory :missing_submission_file do
-      file_missing :true
+      file_missing true
     end
 
     factory :present_submission_file do
-      file_missing :false
+      file_missing false
     end
   end
 end

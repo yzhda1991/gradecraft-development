@@ -12,15 +12,25 @@ module Toolkits
         end
       end
 
-      # setup default submissions environment
-      def setup_submissions_environment_with_users
+      def setup_default_env
         @students = []
         @course = create(:course_accepting_groups)
         @professor = create_professor_for_course # also adds professor to course
         @assignment = create_assignment_for_course # also creates @assignment_type
         @students += create_students_for_course(2)
-        @submissions = create_submissions_for_students
         @team = create_team_and_add_students
+      end
+
+      # setup default submissions environment
+      def setup_submissions_environment_with_users
+        setup_default_env
+        @submissions = create_submissions_for_students
+      end
+
+      # setup default submissions environment
+      def setup_fileless_submissions_environment_with_users
+        setup_default_env
+        @submissions = create_fileless_submissions_for_students
       end
 
       # helper methods
@@ -86,6 +96,14 @@ module Toolkits
         @students.collect do |student|
           grade = grade_student_for_active_assignment(student)
           submission = create(:submission, grade: grade, student: student, assignment: @assignment, course: @course)
+          submission
+        end
+      end
+
+      def create_fileless_submissions_for_students
+        @students.collect do |student|
+          grade = grade_student_for_active_assignment(student)
+          submission = create(:empty_submission, grade: grade, student: student, assignment: @assignment, course: @course)
           submission
         end
       end

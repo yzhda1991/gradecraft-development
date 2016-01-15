@@ -6,25 +6,63 @@ describe "Assignment #student_submissions methods" do
   subject { build(:assignment) }
 
   describe "fetching student submissions from an assignment", working: true do
-    before(:each) do
-      clear_rails_cache
-      setup_submissions_environment_with_users
-    end
-
-    describe "#student_submissions_for_team", working: true do
-      it "returns submissions for the students on the given team" do
-        expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).to eq(@submissions)
+    describe "finding student submissions regardless of files" do
+      before(:each) do
+        clear_rails_cache
+        setup_submissions_environment_with_users
       end
 
-      it "does not return submissions for students not on the team" do
-        @submission = create_teamless_student_with_submission
-        expect(@assignment.student_submissions_for_team(@team).sort_by(&:id)).not_to include([@submission])
+      describe "#student_submissions_for_team" do
+        let(:teamless_submission) { create_teamless_student_with_submission }
+
+        subject { @assignment.student_submissions_for_team(@team).sort_by(&:id) }
+        it "returns submissions for the students on the given team" do
+          expect(subject).to eq(@submissions)
+        end
+
+        it "does not return submissions for students not on the team" do
+          teamless_submission
+          expect(subject).not_to include([teamless_submission])
+        end
+      end
+
+      describe "#student_submissions" do
+        subject { @assignment.student_submissions.sort_by(&:id) }
+
+        it "should return a list of submissions for that assignment" do
+          expect(subject).to eq(@submissions)
+        end
       end
     end
 
-    describe "student submissions" do
-      it "should return a list of submissions for that assignment" do
-        expect(@assignment.student_submissions.sort_by(&:id)).to eq(@submissions)
+    describe "finding student submissions based on present files" do
+      context "submissions don't have files" do
+        before(:each) do
+          clear_rails_cache
+          setup_fileless_submissions_environment_with_users
+        end
+
+        describe "#student_submissions_with_files_for_team" do
+          subject { @assignment.student_submissions_with_files_for_team(@team).sort_by(&:id) }
+          let(:teamless_submission) { create_teamless_student_with_submission }
+
+          it "returns submissions for the students on the given team" do
+            expect(subject).to be_empty
+          end
+
+          it "does not return submissions for students not on the team" do
+            teamless_submission
+            expect(subject).not_to include([teamless_submission])
+          end
+        end
+
+        describe "#student_submissions_with_files" do
+          subject { @assignment.student_submissions_with_files.sort_by(&:id) }
+
+          it "should return a list of submissions for that assignment" do
+            expect(subject).to be_empty
+          end
+        end
       end
     end
   end
