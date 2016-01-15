@@ -121,9 +121,22 @@ describe AssignmentPresenter do
   describe "#submission_date_for" do
     it "returns the submitted at date for the students first submission" do
       submitted_at = DateTime.now
-      submission = double(submission, submitted_at: submitted_at)
+      submission = double(:submission, submitted_at: submitted_at)
       allow(subject).to receive(:submissions_for).and_return [submission]
       expect(subject.submission_date_for(double(:user))).to eq submitted_at
+    end
+  end
+
+  describe "#submission_grade_history" do
+    it "returns the combined history for the submission and grade for an assignment and student" do
+      grade_version = double(:version)
+      submission_version = double(:version)
+      grade = double(:grade)
+      submission = double(:submission, historical_merge: [submission_version, grade_version])
+      allow(subject).to receive(:grade_for).and_return grade
+      allow(subject).to receive(:submission_for_assignment).and_return submission
+
+      expect(subject.submission_grade_history(double(:user))).to eq [submission_version, grade_version]
     end
   end
 

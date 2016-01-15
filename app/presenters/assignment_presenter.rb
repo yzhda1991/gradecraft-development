@@ -181,6 +181,12 @@ class AssignmentPresenter < Showtime::Presenter
     submission.updated_at != submission.created_at
   end
 
+  def submission_grade_history(student)
+    grade = self.grade_for(student)
+    submission = self.submission_for_assignment(student)
+    submission.historical_merge(grade)
+  end
+
   def title
     title = assignment.name
   end
