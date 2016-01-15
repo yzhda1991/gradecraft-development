@@ -17,6 +17,8 @@ describe GradesForResearchExporter do
       @assignment_type = create(:assignment_type, course: course)
       @assignment = create(:assignment, course: course, assignment_type: @assignment_type, name: "Quiz")
       @grade = create(:grade, raw_score: 100, course: course, student: @student, assignment: @assignment)
+      graded_at = DateTime.now
+      allow_any_instance_of(Grade).to receive(:graded_at).and_return graded_at
 
       csv = CSV.new(subject.research_grades(course)).read
       expect(csv.length).to eq 2
@@ -39,7 +41,7 @@ describe GradesForResearchExporter do
       expect(csv[1][16]).to eq "#{@grade.submission.try(:updated_at)}"
       expect(csv[1][17]).to eq "#{@grade.graded_by_id}"
       expect(csv[1][18]).to eq "#{@grade.created_at}"
-      expect(csv[1][19]).to eq "#{@grade.updated_at}"
+      expect(csv[1][19]).to eq "#{graded_at}"
     end
   end
 end

@@ -1,4 +1,5 @@
 require "active_record_spec_helper"
+require "toolkits/historical_toolkit"
 
 describe Grade do
   subject { build(:grade) }
@@ -38,7 +39,41 @@ describe Grade do
       expect(another_grade).to_not be_valid
       expect(another_grade.errors[:assignment_id]).to include "has already been taken"
     end
+  end
 
+  it_behaves_like "a historical model", :grade, raw_score: 1234
+
+  describe "versioning", versioning: true do
+    it "ignores changes to feedback_reviewed" do
+      subject.save!
+      subject.update_attributes feedback_reviewed: true
+      expect(subject.versions.count).to eq 1
+      expect(subject.versions.first.event).to eq "create"
+    end
+
+    it "ignores changes to feedback_reviewed_at" do
+      subject.save!
+      subject.update_attributes feedback_reviewed_at: DateTime.now
+      expect(subject.versions.count).to eq 1
+      expect(subject.versions.first.event).to eq "create"
+    end
+
+    it "ignores changes to feedback_read" do
+      subject.save!
+      subject.update_attributes feedback_read: true
+      expect(subject.versions.count).to eq 1
+      expect(subject.versions.first.event).to eq "create"
+    end
+
+    it "ignores changes to feedback_read_at" do
+      subject.save!
+      subject.update_attributes feedback_read_at: DateTime.now
+      expect(subject.versions.count).to eq 1
+      expect(subject.versions.first.event).to eq "create"
+    end
+  end
+
+  describe "#raw_score" do
     it "converts raw_score from human readable strings" do
       subject.update(raw_score: "1,234")
       expect(subject.raw_score).to eq(1234)
@@ -98,7 +133,6 @@ describe Grade do
   end
 
   describe ".find_or_create" do
-
     it "finds and existing grade for assignment and student" do
       student = create(:user)
       assignment = create(:assignment)

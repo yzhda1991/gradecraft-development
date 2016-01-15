@@ -240,27 +240,158 @@ describe Submission do
     end
   end
 
-  describe "#ungraded?" do
-    it "returns true for a submission that has no grade" do
-      submission = create(:submission)
-      expect(submission.ungraded?).to eq(true)
+  describe "#graded_at" do
+    it "returns when the grade was graded if it was graded" do
+      subject.save
+      graded_at = DateTime.now
+      grade = create(:grade, submission: subject, status: "Graded", graded_at: graded_at)
+      expect(subject.graded_at).to eq graded_at
     end
 
-    it "returns true for a submission that has grade that is not student visible" do
-      submission = create(:submission)
-      grade = create(:grade, submission: submission)
-      expect(submission.ungraded?).to eq(true)
+    it "returns nil if there is no grade" do
+      subject.save
+      expect(subject.graded_at).to be_nil
     end
 
-    it "returns false for a submission that has grade that is student visible" do
-      submission = create(:submission)
-      grade = create(:grade, submission: submission, status: "Graded")
-      expect(submission.ungraded?).to eq(false)
+    it "returns nil if the grade is not released" do
+      subject.save
+      grade = create(:grade, submission: subject)
+      expect(subject.graded_at).to be_nil
     end
   end
 
-  describe "#resubmitted?" do
-    #student.grade_for_assignment(assignment).present? && student.grade_for_assignment(assignment).updated_at < self.updated_at
+  describe "#graded?" do
+    it "returns false for a submission that has no grade" do
+      subject.save
+      expect(subject).to_not be_graded
+    end
+
+    it "returns false for a submission that has grade that is not student visible" do
+      subject.save
+      grade = create(:grade, submission: subject)
+      expect(subject).to_not be_graded
+    end
+
+    it "returns true for a submission that has grade that is student visible" do
+      subject.save
+      grade = create(:grade, submission: subject, status: "Graded")
+      expect(subject).to be_graded
+    end
+  end
+
+  describe "#ungraded?" do
+    it "returns true for a submission that has no grade" do
+      subject.save
+      expect(subject).to be_ungraded
+    end
+
+    it "returns true for a submission that has grade that is not student visible" do
+      subject.save
+      grade = create(:grade, submission: subject)
+      expect(subject).to be_ungraded
+    end
+
+    it "returns false for a submission that has grade that is student visible" do
+      subject.save
+      grade = create(:grade, submission: subject, status: "Graded")
+      expect(subject).to_not be_ungraded
+    end
+  end
+
+  describe ".resubmitted" do
+    it "returns the submissions that have been submitted after they were graded" do
+      grade = create(:grade, submission: subject, status: "Graded", graded_at: 1.day.ago)
+      subject.submitted_at = DateTime.now
+      subject.save
+      expect(Submission.resubmitted).to eq [subject]
+    end
+
+    it "does not return non-graded or released grades" do
+      grade = create(:grade, submission: subject, graded_at: 1.day.ago)
+      subject.submitted_at = DateTime.now
+      subject.save
+      expect(Submission.resubmitted).to be_empty
+    end
+
+    it "does not return resubmissions that have been graded" do
+      grade = create(:grade, submission: subject, status: "Graded", graded_at: 1.day.ago)
+      subject.submitted_at = 2.days.ago
+      subject.save
+      expect(Submission.resubmitted).to be_empty
+    end
+  end
+
+  describe ".order_by_submitted" do
+    it "returns the submissions in the order they were submitted" do
+      Submission.delete_all
+      submitted_yesterday = create(:submission, submitted_at: 1.day.ago)
+      never_submitted = create(:submission)
+      just_submitted = create(:submission, submitted_at: DateTime.now)
+
+      expect(Submission.order_by_submitted).to eq [submitted_yesterday, just_submitted, never_submitted]
+    end
+  end
+
+  describe "#will_be_resubmission?", versioning: true do
+    before { subject.save }
+
+    it "returns false if there is no grade" do
+      expect(subject).to_not be_will_be_resubmission
+    end
+
+    it "returns true if there is a grade" do
+      create :grade, status: "Graded", submission: subject, assignment: subject.assignment
+
+      expect(subject).to be_will_be_resubmission
+    end
+  end
+
+  describe "#resubmitted?", versioning: true do
+    it "returns false if there are no resubmissions" do
+      expect(subject).to_not be_resubmitted
+    end
+
+    it "returns true if there are resubmissions" do
+      subject.save
+      grade = create :grade, status: "Graded", submission: subject,
+        assignment: subject.assignment
+      subject.update_attributes link: "http://example.com"
+      grade.update_attributes raw_score: 1234
+
+      expect(subject).to be_resubmitted
+    end
+  end
+
+  describe "#resubmissions", versioning: true do
+    it "caches the resubmissions" do
+      expect(Resubmission).to receive(:find_for_submission).with(subject).once.and_call_original
+      2.times { subject.resubmissions }
+    end
+
+    context "with no resubmissions" do
+      it "returns an empty array" do
+        expect(subject.resubmissions).to be_empty
+      end
+    end
+
+    context "with a single resubmission" do
+      let(:grade) do
+        create :grade, status: "Graded", submission: subject, assignment: subject.assignment
+      end
+
+      before do
+        subject.save
+        grade.update_attributes raw_score: 1234
+        subject.update_attributes link: "http://example.com"
+      end
+
+      it "returns an array of resubmissions" do
+        results = subject.resubmissions
+
+        expect(results.length).to eq 1
+        expect(results.first.submission).to eq subject
+      end
+    end
   end
 
   describe "#name" do

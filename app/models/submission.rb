@@ -1,8 +1,8 @@
 class Submission < ActiveRecord::Base
   attr_accessible :task, :task_id, :assignment, :assignment_id, :assignment_type_id,
     :group, :group_id, :link, :student, :student_id, :creator, :creator_id,
-    :text_comment, :graded, :submission_file, :submission_files_attributes, :submission_files,
-    :course_id, :submission_file_ids, :updated_at
+    :text_comment, :submission_file, :submission_files_attributes, :submission_files,
+    :course_id, :submission_file_ids, :updated_at, :submitted_at
 
   include Canable::Ables
   include Historical
@@ -28,8 +28,9 @@ class Submission < ActiveRecord::Base
 
   scope :ungraded, -> { where('NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))', "Graded", "Released") }
   scope :graded, -> { where(:grade) }
-  scope :resubmitted, -> { where('EXISTS(SELECT 1 FROM grades WHERE (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (updated_at < submissions.updated_at) AND (status = ? OR status = ?))', "Graded", "Released") }
-  scope :date_submitted, -> { order('created_at ASC') }
+  scope :resubmitted, -> { joins(:grade).where(grades: { status: ["Graded", "Released"] })
+                                        .where("grades.graded_at < submitted_at") }
+  scope :order_by_submitted, -> { order('submitted_at ASC') }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
 
@@ -55,14 +56,30 @@ class Submission < ActiveRecord::Base
     permissions_check(user)
   end
 
+  def graded_at
+    grade.graded_at if graded?
+  end
+
+  def graded?
+    !ungraded?
+  end
+
   # Grabbing any submission that has NO instructor-defined grade (if the student has predicted the grade,
   # it'll exist, but we still don't want to catch those here)
   def ungraded?
     ! grade || grade.status == nil
   end
 
+  def will_be_resubmission?
+    graded?
+  end
+
   def resubmitted?
-    student.grade_for_assignment(assignment).present? && student.grade_for_assignment(assignment).updated_at < self.updated_at
+    !resubmissions.empty?
+  end
+
+  def resubmissions
+    @resubmissions ||= Resubmission.find_for_submission(self)
   end
 
   # Getting the name of the student who submitted the work

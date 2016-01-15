@@ -57,6 +57,10 @@ class NullGrade
     nil
   end
 
+  def graded_at
+    nil
+  end
+
   def student
     nil
   end

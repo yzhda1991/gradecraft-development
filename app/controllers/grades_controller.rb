@@ -57,7 +57,7 @@ class GradesController < ApplicationController
   # create a new grade if none exists, and otherwise update the existing grade
   # PUT /assignments/:assignment_id/grade
   def update
-    @grade = Grade.find_or_create(@assignment,current_student)
+    @grade = Grade.find_or_create(@assignment, current_student)
 
     # extract file attributes from grade params
     if params[:grade][:grade_files_attributes].present?
@@ -65,7 +65,8 @@ class GradesController < ApplicationController
       params[:grade].delete :grade_files_attributes
     end
 
-    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
+    if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
+        instructor_modified: true)
 
       # @mz TODO: ADD SPECS
       if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
@@ -92,6 +93,7 @@ class GradesController < ApplicationController
          instructor_modified: true,
          status: params[:status],
          updated_at: Time.now,
+         graded_at: DateTime.now,
          raw_score: params[:raw_score]
       }
     )
@@ -134,9 +136,7 @@ class GradesController < ApplicationController
 
   # PUT /assignments/:assignment_id/grade/submit_rubric
   def submit_rubric
-    if @submission = Submission.where(current_assignment_and_student_ids).first
-      @submission.update_attributes(graded: true)
-    end
+    @submission = Submission.where(current_assignment_and_student_ids).first
 
     @grade = Grade.where(student_id: current_student[:id], assignment_id: @assignment[:id]).first
 
@@ -189,7 +189,7 @@ class GradesController < ApplicationController
     @grade.feedback_reviewed = false
     @grade.feedback_reviewed_at = nil
     @grade.instructor_modified = false
-
+    @grade.graded_at = nil
 
     @grade.update_attributes(params[:grade])
 
@@ -231,6 +231,9 @@ class GradesController < ApplicationController
 
   # PUT /assignments/:id/mass_grade
   def mass_update
+    params[:assignment][:grades_attributes].each do |index, grade_params|
+      grade_params.merge!(graded_at: DateTime.now)
+    end if params[:assignment][:grades_attributes].present?
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.update_attributes(params[:assignment])
 
@@ -269,7 +272,7 @@ class GradesController < ApplicationController
 
     grade_ids = []
     @grades = @grades.each do |grade|
-      grade.update_attributes(params[:grade])
+      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now))
       grade_ids << grade.id
     end
 
@@ -526,7 +529,8 @@ class GradesController < ApplicationController
       # and not handled by front end logic
       point_total: params[:points_possible],
       status: params[:grade_status],
-      instructor_modified: true
+      instructor_modified: true,
+      graded_at: DateTime.now
     }
   end
 

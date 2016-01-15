@@ -124,14 +124,14 @@ describe UnlockCondition do
 
     it "returns true if the assignment has been submitted by a specific date" do
       student = create(:user)
-      student_submission = create(:submission, assignment: assignment, student: student)
+      student_submission = create(:submission, assignment: assignment, student: student, submitted_at: DateTime.now)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", condition_date: (Date.today + 1)
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
     it "returns false if the assignment has been submitted but not by the specified date" do
       student = create(:user)
-      student_submission = create(:submission, assignment: assignment, student: student)
+      student_submission = create(:submission, assignment: assignment, student: student, submitted_at: DateTime.now)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Submitted", condition_date: (Date.today - 1)
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
@@ -166,28 +166,28 @@ describe UnlockCondition do
 
     it "returns false if the grade earned meets the condition value but is not student visible" do
       student = create(:user)
-      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: nil, instructor_modified: false)
+      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: nil, instructor_modified: false, graded_at: DateTime.now)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
     it "returns true if the grade earned meets the condition date" do
       student = create(:user)
-      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true)
+      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true, graded_at: DateTime.now)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_date: (Date.today + 1)
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
 
     it "returns false if the grade earned did not meet the condition date" do
       student = create(:user)
-      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true)
+      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true, graded_at: DateTime.now)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_date: (Date.today - 1)
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end
 
     it "returns true if the grade earned meets condition value and the condition date" do
       student = create(:user)
-      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true)
+      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true, graded_at: DateTime.now)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100, condition_date: (Date.today + 1)
       expect(unlock_condition.is_complete?(student)).to eq(true)
     end
@@ -201,7 +201,7 @@ describe UnlockCondition do
 
     it "returns false if the grade earned does meet the condition value but does not meet the condition date" do
       student = create(:user)
-      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true)
+      grade = create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Graded", instructor_modified: true, graded_at: DateTime.now)
       unlock_condition = UnlockCondition.new condition_id: assignment.id, condition_type: "Assignment", condition_state: "Grade Earned", condition_value: 100, condition_date: (Date.today - 1)
       expect(unlock_condition.is_complete?(student)).to eq(false)
     end

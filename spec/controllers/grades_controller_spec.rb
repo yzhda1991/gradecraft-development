@@ -124,62 +124,76 @@ describe GradesController do
       end
     end
 
-    describe "POST update" do
+    describe "PUT update" do
 
       it "creates a grade if none present" do
         assignment = create(:assignment, course: @course)
         grade_params = { raw_score: 12345, assignment_id: assignment.id }
-        expect{post :update, { :assignment_id => assignment.id, :student_id => @student.id, :grade => grade_params}}.to change{Grade.count}.by(1)
+        expect{put :update, { :assignment_id => assignment.id, :student_id => @student.id, :grade => grade_params}}.to change{Grade.count}.by(1)
       end
 
       it "updates the grade" do
         grade_params = { raw_score: 12345, assignment_id: @assignment.id }
-        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
-        @grade.reload
-        expect(response).to redirect_to(assignment_path(@grade.assignment))
+        put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        expect(response).to redirect_to(assignment_path(@grade.reload.assignment))
         expect(@grade.score).to eq(12345)
+      end
+
+      it "timestamps the grade" do
+        grade_params = { raw_score: 12345, assignment_id: @assignment.id }
+        current_time = DateTime.now
+        put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        expect(@grade.reload.graded_at).to be > current_time
+      end
+
+      it "attaches the student submission" do
+        submission = create :submission, assignment: @assignment, student: @student
+        grade_params = { raw_score: 12345,
+                         assignment_id: @assignment.id,
+                         submission_id: submission.id }
+        put :update, { assignment_id: @assignment.id,
+                       student_id: @student.id, grade: grade_params }
+        grade = Grade.last
+        expect(grade.submission).to eq submission
       end
 
       it "handles a grade file upload" do
         grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')]}}}
-        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
         expect(GradeFile.last.grade_id).to eq(@grade.id)
       end
 
       it "handles commas in raw score params" do
         grade_params = { raw_score: "12,345", assignment_id: @assignment.id }
-        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
-        @grade.reload
-        expect(response).to redirect_to(assignment_path(@grade.assignment))
+        put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        expect(response).to redirect_to(assignment_path(@grade.reload.assignment))
         expect(@grade.score).to eq(12345)
       end
 
       it "handles reverting nil raw score" do
         grade_params = { raw_score: nil, assignment_id: @assignment.id }
-        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
-        @grade.reload
-        expect(response).to redirect_to(assignment_path(@grade.assignment))
+        put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        expect(response).to redirect_to(assignment_path(@grade.reload.assignment))
         expect(@grade.score).to eq(nil)
       end
 
       it "reverts empty raw score to nil, not zero" do
         grade_params = { raw_score: "", assignment_id: @assignment.id }
-        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
-        @grade.reload
-        expect(response).to redirect_to(assignment_path(@grade.assignment))
+        put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        expect(response).to redirect_to(assignment_path(@grade.reload.assignment))
         expect(@grade.score).to eq(nil)
       end
 
       it "returns to session if present" do
         session[:return_to] = login_path
         grade_params = { raw_score: 12345, assignment_id: @assignment.id }
-        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
+        put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
         expect(response).to redirect_to(login_path)
       end
 
       it "redirects on failure" do
         allow_any_instance_of(Grade).to receive(:update_attributes).and_return false
-        post :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => {}}
+        put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => {}}
         expect(response).to redirect_to(edit_assignment_grade_path(@assignment.id, :student_id => @student.id))
       end
     end
@@ -199,6 +213,12 @@ describe GradesController do
         @grade.reload
         expect(@grade.instructor_modified).to be_truthy
       end
+
+      it "timestamps the grade" do
+          current_time = DateTime.now
+          post :async_update, { id: @grade.id, raw_score: 20000, feedback: "good jorb!" }
+          expect(@grade.reload.graded_at).to be > current_time
+        end
 
       describe "manages update with model validations" do
         it "handles commas in raw score params" do
@@ -282,11 +302,6 @@ describe GradesController do
         allow(controller).to receive(:current_student).and_return(@student)
       end
 
-      it "updates the submission grading status" do
-        submission = create(:submission, student: @student, assignment: @rubric_assignment)
-        expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(@rubric.criteria.count)
-      end
-
       describe "finds or creates the grade for the assignment and student" do
         it "finds and assigns the grade" do
           grade = create(:grade, assignment: @rubric_assignment, student: @student)
@@ -294,10 +309,24 @@ describe GradesController do
           expect(assigns(:grade)).to eq(grade)
         end
 
-        it "cretes and assigns the grade" do
+        it "creates and assigns the grade" do
           expect{ post :submit_rubric, @params }.to change { Grade.count }.by(1)
           expect(assigns(:grade).assignment).to eq(@rubric_assignment)
           expect(assigns(:grade).student).to eq(@student)
+        end
+
+        it "assigns the grade to the submission" do
+          submission = create :submission, assignment: @rubric_assignment, student: @student
+          post :submit_rubric, @params
+          grade = Grade.unscoped.last
+          expect(grade.submission).to eq submission
+        end
+
+        it "timestamps the grade" do
+          current_time = DateTime.now
+          post :submit_rubric, @params
+          grade = Grade.unscoped.last
+          expect(grade.graded_at).to be > current_time
         end
       end
 
@@ -347,6 +376,7 @@ describe GradesController do
           feedback_reviewed: true,
           feedback_reviewed_at: Time.now,
           instructor_modified: true,
+          graded_at: DateTime.now
         )
         post :remove, {id: @grade.id}
 
@@ -354,7 +384,7 @@ describe GradesController do
         expect(@grade.predicted_score).to eq(400)
         expect(@grade.feedback).to eq("")
         [ :raw_score,:status,:feedback_read_at,:feedback_reviewed_at,
-          :feedback_read,:feedback_reviewed,:instructor_modified].each do |attr|
+          :feedback_read,:feedback_reviewed,:instructor_modified,:graded_at].each do |attr|
           expect(@grade[attr]).to be_falsy
         end
       end
@@ -439,6 +469,12 @@ describe GradesController do
         expect(@grade.reload.raw_score).to eq 1000
       end
 
+      it "timestamps the grades" do
+        current_time = DateTime.now
+        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
+        expect(@grade.reload.graded_at).to be > current_time
+      end
+
       it "sends a notification to the student to inform them of a new grade" do
         pending "fix this later, needs to account for the job sending the mailer"
         run_resque_inline do
@@ -487,8 +523,10 @@ describe GradesController do
         group = create(:group)
         @assignment.groups << group
         group.students << @student
+        current_time = DateTime.now
         put :group_update, id: @assignment.id, group_id: group.id, grade: { graded_by_id: @professor.id, instructor_modified: true, raw_score: 1000, status: "Graded" }
         expect(@grade.reload.raw_score).to eq 1000
+        expect(@grade.graded_at).to be > current_time
       end
     end
 

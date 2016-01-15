@@ -3,17 +3,19 @@
 
   = render partial: 'layouts/alerts', locals: { model: @grade, display_flash: false }
 
-  / - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
-  /   %section
+  - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
+    %section
 
-  /     %h4.uppercase= "#{@student.first_name}'s Submission"
-  /     = render 'submissions/instructor_show'
+      %h4.uppercase= "#{@student.first_name}'s Submission"
+      = render partial: 'submissions/instructor_show',
+          locals: { presenter: ShowSubmissionPresenter.new(id: @submission.id,
+            assignment_id: @assignment.id, course: current_course) }
 
   %section
     %hr.dotted
     = simple_form_for @grade, url: assignment_grade_path(@assignment), method: :patch do |f|
       = hidden_field_tag :student_id, current_student.id
-      = hidden_field_tag :instructor_modified, true
+      = f.hidden_field :submission_id, value: @submission.try(:id)
 
       #grade(ng-controller="GradeCtrl" ng-init="init(#{@serialized_init_data})")
         .panel.splash(ng-cloak) Loading grade for #{@student.name}...

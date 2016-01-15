@@ -94,9 +94,7 @@ class AssignmentPresenter < Showtime::Presenter
 
   def submission_updated_date_for(submissions)
     submission = submissions.first
-    if submission
-      submission.updated_at if submission.updated_at != submission.created_at
-    end
+    submission.submitted_at if submission
   end
 
   def criteria
@@ -164,8 +162,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def submission_date_for(student)
-    submission = submissions_for(student).first
-    submission.updated_at if submission
+    submission_updated_date_for(submissions_for(student))
   end
 
   def submission_for_assignment(student)

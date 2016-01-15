@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160105155201) do
+ActiveRecord::Schema.define(version: 20160113195301) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -552,6 +552,7 @@ ActiveRecord::Schema.define(version: 20160105155201) do
     t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
+    t.datetime "graded_at"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
@@ -709,11 +710,11 @@ ActiveRecord::Schema.define(version: 20160105155201) do
   end
 
   create_table "submission_files", force: :cascade do |t|
-    t.string   "filename",        limit: 255,                 null: false
-    t.integer  "submission_id",                               null: false
-    t.string   "filepath",        limit: 255
-    t.string   "file",            limit: 255
-    t.boolean  "file_processing",             default: false, null: false
+    t.string   "filename",          limit: 255,                 null: false
+    t.integer  "submission_id",                                 null: false
+    t.string   "filepath",          limit: 255
+    t.string   "file",              limit: 255
+    t.boolean  "file_processing",               default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -730,27 +731,20 @@ ActiveRecord::Schema.define(version: 20160105155201) do
   create_table "submissions", force: :cascade do |t|
     t.integer  "assignment_id"
     t.integer  "student_id"
-    t.string   "feedback",                limit: 255
-    t.string   "comment",                 limit: 255
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
-    t.string   "attachment_file_name",    limit: 255
-    t.string   "attachment_content_type", limit: 255
-    t.integer  "attachment_file_size"
-    t.datetime "attachment_updated_at"
-    t.string   "link",                    limit: 255
-    t.text     "text_feedback"
+    t.string   "feedback",           limit: 255
+    t.string   "comment",            limit: 255
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "link",               limit: 255
     t.text     "text_comment"
     t.integer  "creator_id"
     t.integer  "group_id"
-    t.boolean  "graded"
     t.datetime "released_at"
     t.integer  "task_id"
     t.integer  "course_id"
     t.integer  "assignment_type_id"
-    t.string   "assignment_type",         limit: 255
-    t.datetime "submitted_at_date"
-    t.boolean  "resubmission",                        default: false
+    t.string   "assignment_type",    limit: 255
+    t.datetime "submitted_at"
   end
 
   add_index "submissions", ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree

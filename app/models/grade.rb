@@ -1,5 +1,9 @@
 class Grade < ActiveRecord::Base
   include Canable::Ables
+  include Historical
+
+  has_paper_trail ignore: [:feedback_reviewed, :feedback_reviewed_at,
+                           :feedback_read, :feedback_read_at]
 
   attr_accessible :assignment, :assignments_attributes, :assignment_id,
     :assignment_type_id, :course_id, :feedback, :final_score, :grade_file,
@@ -8,7 +12,7 @@ class Grade < ActiveRecord::Base
     :predicted_score, :raw_score, :status, :student, :student_id, :submission,
     :_destroy, :submission_id, :task, :task_id, :team_id, :earned_badges,
     :earned_badges_attributes, :feedback_read, :feedback_read_at,
-    :feedback_reviewed, :feedback_reviewed_at, :is_custom_value
+    :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at
 
   STATUSES= ["In Progress", "Graded", "Released"]
 

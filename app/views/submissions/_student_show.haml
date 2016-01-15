@@ -14,6 +14,9 @@
     - if presenter.submission_for_assignment(current_student).late?
       %span.label.alert Late!
 
+    - if presenter.submission_for_assignment(current_student).resubmitted?
+      %span.label.alert Resubmission!
+
     // Checking to see if the submission was updated - if the update date is different from the creation date, displaying it
   - if presenter.submission_updated?(current_student)
     %p

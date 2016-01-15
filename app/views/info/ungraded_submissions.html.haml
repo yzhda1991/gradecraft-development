@@ -31,7 +31,7 @@
               = link_to submission.student.try(:name), student_path(submission.student)
             - elsif submission.assignment.has_groups?
               = link_to submission.group.try(:name), group_path(submission.group)
-          %td= submission.updated_at
+          %td= submission.submitted_at
           %td= raw submission.text_comment
           - if current_course.has_teams?
             %td

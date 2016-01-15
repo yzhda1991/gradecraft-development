@@ -27,7 +27,7 @@ class GradeExporter
                 grade.feedback || "",
                 grade.raw_score || "",
                 submission.try(:text_comment) || "",
-                grade.updated_at || ""]
+                grade.graded_at || ""]
       end
     end
   end
