@@ -717,8 +717,6 @@ ActiveRecord::Schema.define(version: 20160113195301) do
     t.boolean  "file_processing",               default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "last_confirmed_at"
-    t.boolean  "file_missing"
   end
 
   create_table "submission_files_duplicate", id: false, force: :cascade do |t|
