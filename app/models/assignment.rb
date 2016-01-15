@@ -168,7 +168,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def student_submissions_with_files
-    student_submissions_for_team(team)
+    student_submissions
       .where(submissions_with_files_query, true)
   end
 
