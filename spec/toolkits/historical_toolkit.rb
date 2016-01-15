@@ -59,4 +59,19 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       expect(model.history.last["event"]).to eq "create"
     end
   end
+
+  describe "#historical_merge", versioning: true do
+    let(:another_model) { build fixture }
+
+    it "returns new history with 2 histories for 2 creation events" do
+      model.save
+      another_model.save
+
+      history = model.historical_merge(another_model)
+
+      expect(history.length).to eq 2
+      expect(history.first["id"].last).to eq another_model.id
+      expect(history.last["id"].last).to eq model.id
+    end
+  end
 end
