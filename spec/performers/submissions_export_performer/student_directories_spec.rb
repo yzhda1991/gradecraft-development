@@ -15,20 +15,18 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     let(:tmp_dir_path) { Dir.mktmpdir }
     let(:students) { [ student1, student2, student3 ] }
     let(:stub_students) { performer.instance_variable_set(:@students, students) }
-    let(:clear_directory_names) { performer.instance_variable_set(:@student_directory_names, nil) }
 
-    let(:student1) { create(:user, first_name: "Geraldine", last_name: "Munkhausen", username: "the-destroyer") }
-    let(:student2) { create(:user, first_name: "geraldine", last_name: "munkhausen", username: "ferrari-jones") }
-    let(:student3) { create(:user, first_name: "Stephen", last_name: "Root") }
+    let(:student1) { create(:user) }
+    let(:student2) { create(:user, first_name: student1.first_name, last_name: student1.last_name) }
+    let(:student3) { create(:user) }
 
-    let(:student_directory_names) {{
-      student1.id => "munkhausen_geraldine--the-destroyer",
-      student2.id => "munkhausen_geraldine--ferrari-jones",
-      student3.id => "root_stephen"
-    }}
-    let(:student_dir_path1) { "#{tmp_dir_path}/munkhausen_geraldine--the-destroyer" }
-    let(:student_dir_path2) { "#{tmp_dir_path}/munkhausen_geraldine--ferrari-jones" }
-    let(:student_dir_path3) { "#{tmp_dir_path}/root_stephen" }
+    let(:student_dir_name1) { student1.alphabetical_name_key_with_username }
+    let(:student_dir_name2) { student2.alphabetical_name_key_with_username }
+    let(:student_dir_name3) { student3.alphabetical_name_key }
+
+    let(:student_dir_path1) { "#{tmp_dir_path}/#{student_dir_name1}" }
+    let(:student_dir_path2) { "#{tmp_dir_path}/#{student_dir_name2}" }
+    let(:student_dir_path3) { "#{tmp_dir_path}/#{student_dir_name3}" }
 
     let(:student_dir_paths) { [ student_dir_path1, student_dir_path2, student_dir_path3 ] }
     let(:remove_student_dirs) do
@@ -45,7 +43,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     before(:each) do
       allow(performer).to receive(:tmp_dir) { tmp_dir_path }
-      allow(performer).to receive(:student_directory_names) { student_directory_names }
     end
 
     describe "missing_student_directories" do
@@ -58,11 +55,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
       context "student directories are missing" do
         it "returns the names of the missing directories relative to the tmp_dir" do
-          expect(subject).to eq(["munkhausen_geraldine--the-destroyer", "munkhausen_geraldine--ferrari-jones"])
+          expect(subject).to eq([student_dir_name1, student_dir_name2])
         end
 
         it "doesn't return the name of directories that are actually there" do
-          expect(subject).not_to include("root_stephen")
+          expect(subject).not_to include(student_dir_name3)
         end
       end
 
@@ -87,7 +84,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
       context "missing_student_directories are present" do
         it "returns false" do
-          allow(performer).to receive(:missing_student_directories) { ["munkhausen_geraldine--the-destroyer", "munkhausen_geraldine--ferrari-jones"] }
+          allow(performer).to receive(:missing_student_directories) { [student_dir_name1, student_dir_name2] }
           expect(subject).to be_falsey
         end
       end
@@ -121,40 +118,41 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     describe "student_directory_path" do
       subject { performer.instance_eval { student_directory_path( @some_student ) }}
-      before do
+      before(:each) do
+        performer.instance_variable_set(:@students, students)
         performer.instance_variable_set(:@some_student, student1)
       end
 
       it "returns the correct directory path" do
-        expect(subject).to eq("#{tmp_dir_path}/#{student_directory_names[student1.id]}")
+        expect(subject).to eq(student_dir_path1)
       end
 
       it "expands the path relative to the tmp_dir" do
-        expect(File).to receive(:expand_path).with(student_directory_names[student1.id], tmp_dir_path)
+        expect(File).to receive(:expand_path).with(student_dir_name1, tmp_dir_path)
         subject
       end
     end
 
     describe "#student_directory_names" do
       subject { performer.instance_eval { student_directory_names }}
-      before(:each) { stub_students; clear_directory_names }
+      before(:each) { stub_students }
 
       context "students have identical names" do
         it "appends the username to the student name key" do
-          expect(subject[student1.id]).to eq("munkhausen_geraldine--the-destroyer")
-          expect(subject[student2.id]).to eq("munkhausen_geraldine--ferrari-jones")
+          expect(subject[student1.id]).to eq(student_dir_name1)
+          expect(subject[student2.id]).to eq(student_dir_name2)
         end
       end
 
       context "student name doesn't match any others" do
         it "just uses the student name without the username" do
-          expect(subject[student3.id]).to eq("root_stephen")
+          expect(subject[student3.id]).to eq(student_dir_name3)
         end
       end
 
       describe "caching" do
         it "doesn't have a cached result to begin with" do
-          expect(student1).to receive(:same_name_as?)
+          expect(student1).to receive(:same_name_as?).exactly(students.size).times
           subject
         end
 
