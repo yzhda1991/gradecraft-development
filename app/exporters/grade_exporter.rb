@@ -7,7 +7,6 @@ class GradeExporter
         grade = student.grade_for_assignment(assignment) || NullGrade.new
         csv << [student.first_name, student.last_name,
                 student.email,
-                student.username,
                 grade.score || "",
                 grade.feedback || ""]
       end
@@ -22,7 +21,7 @@ class GradeExporter
         grade = NullGrade.new if grade.nil? || !(grade.instructor_modified? || grade.graded_or_released?)
         submission = student.submission_for_assignment(assignment)
         csv << [student.first_name, student.last_name,
-                student.email, student.username,
+                student.email,
                 grade.score || "",
                 grade.feedback || "",
                 grade.raw_score || "",
@@ -35,7 +34,7 @@ class GradeExporter
   private
 
   def headers
-    ["First Name", "Last Name", "Email", "Username", "Score", "Feedback"].freeze
+    ["First Name", "Last Name", "Email", "Score", "Feedback"].freeze
   end
 
   def detail_headers

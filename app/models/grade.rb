@@ -1,6 +1,7 @@
 class Grade < ActiveRecord::Base
   include Canable::Ables
   include Historical
+  include MultipleFileAttributes
 
   has_paper_trail ignore: [:feedback_reviewed, :feedback_reviewed_at,
                            :feedback_read, :feedback_read_at]
@@ -39,6 +40,7 @@ class Grade < ActiveRecord::Base
   before_save :zero_points_for_pass_fail
   after_save :check_unlockables
 
+  multiple_files :grade_files
   has_many :grade_files, :dependent => :destroy
   accepts_nested_attributes_for :grade_files
 

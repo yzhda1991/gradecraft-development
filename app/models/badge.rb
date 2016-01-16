@@ -1,6 +1,7 @@
 class Badge < ActiveRecord::Base
   include Copyable
   include UnlockableCondition
+  include MultipleFileAttributes
 
   attr_accessible :name, :description, :icon, :visible, :can_earn_multiple_times,
     :point_total, :earned_badges, :earned_badges_attributes, :badge_file_ids,
@@ -21,6 +22,7 @@ class Badge < ActiveRecord::Base
 
   accepts_nested_attributes_for :earned_badges, allow_destroy: true, :reject_if => proc { |a| a['score'].blank? }
 
+  multiple_files :badge_files
   has_many :badge_files, :dependent => :destroy
   accepts_nested_attributes_for :badge_files
 

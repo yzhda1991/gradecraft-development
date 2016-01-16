@@ -3,6 +3,7 @@ class Challenge < ActiveRecord::Base
   include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails
+  include MultipleFileAttributes
 
   attr_accessible :name, :description, :visible, :point_total,
     :due_at, :open_at, :accepts_submissions, :release_necessary,
@@ -22,6 +23,7 @@ class Challenge < ActiveRecord::Base
 
   score_levels :challenge_score_levels
 
+  multiple_files :challenge_files
   has_many :challenge_files, :dependent => :destroy
   accepts_nested_attributes_for :challenge_files
 

@@ -33,19 +33,7 @@ class BadgesController < ApplicationController
   end
 
   def create
-
-    if params[:badge][:badge_files_attributes].present?
-      @badge_files = params[:badge][:badge_files_attributes]["0"]["file"]
-      params[:badge].delete :badge_files_attributes
-    end
-
     @badge = current_course.badges.new(params[:badge])
-
-    if @badge_files
-      @badge_files.each do |af|
-        @badge.badge_files.new(file: af, filename: af.original_filename[0..49])
-      end
-    end
 
     if @badge.save
       redirect_to @badge, notice: "#{@badge.name} #{term_for :badge} successfully created"
@@ -55,18 +43,6 @@ class BadgesController < ApplicationController
   end
 
   def update
-
-    if params[:badge][:badge_files_attributes].present?
-      @badge_files = params[:badge][:badge_files_attributes]["0"]["file"]
-      params[:badge].delete :badge_files_attributes
-    end
-
-    if @badge_files
-      @badge_files.each do |af|
-        @badge.badge_files.new(file: af, filename: af.original_filename[0..49])
-      end
-    end
-
     if @badge.update_attributes(params[:badge])
       redirect_to badges_path, notice: "#{@badge.name} #{term_for :badge} successfully updated"
     else

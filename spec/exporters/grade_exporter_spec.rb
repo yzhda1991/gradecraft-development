@@ -9,12 +9,12 @@ describe GradeExporter do
   describe "#export_grades" do
     it "generates an empty CSV if there is no assignment specified" do
       csv = subject.export_grades(nil, [])
-      expect(csv).to eq "First Name,Last Name,Email,Username,Score,Feedback\n"
+      expect(csv).to eq "First Name,Last Name,Email,Score,Feedback\n"
     end
 
     it "generates an empty CSV if there are no students specified" do
       csv = subject.export_grades(assignment, [])
-      expect(csv).to eq "First Name,Last Name,Email,Username,Score,Feedback\n"
+      expect(csv).to eq "First Name,Last Name,Email,Score,Feedback\n"
     end
 
     it "generates a CSV with student scores" do
@@ -33,12 +33,10 @@ describe GradeExporter do
       expect(csv[2][1]).to eq students[1].last_name
       expect(csv[1][2]).to eq students[0].email
       expect(csv[2][2]).to eq students[1].email
-      expect(csv[1][3]).to eq students[0].username
-      expect(csv[2][3]).to eq students[1].username
-      expect(csv[1][4]).to eq "123"
-      expect(csv[2][4]).to eq "456"
-      expect(csv[1][5]).to eq ""
-      expect(csv[2][5]).to eq "Grrrrreat!"
+      expect(csv[1][3]).to eq "123"
+      expect(csv[2][3]).to eq "456"
+      expect(csv[1][4]).to eq ""
+      expect(csv[2][4]).to eq "Grrrrreat!"
     end
 
     it "includes students that do not have grades for the assignment" do
@@ -46,19 +44,19 @@ describe GradeExporter do
         receive(:grade_for_assignment).with(assignment)
           .and_return nil
       csv = CSV.new(subject.export_grades(assignment, students)).read
-      expect(csv[1][4]).to eq ""
+      expect(csv[1][3]).to eq ""
     end
   end
 
   describe "#export_grades_with_detail" do
     it "generates an empty CSV if there is no assignment specified" do
       csv = subject.export_grades_with_detail(nil, [])
-      expect(csv).to eq "First Name,Last Name,Email,Username,Score,Feedback,Raw Score,Statement,Last Updated\n"
+      expect(csv).to eq "First Name,Last Name,Email,Score,Feedback,Raw Score,Statement,Last Updated\n"
     end
 
     it "generates an empty CSV if there are no students specified" do
       csv = subject.export_grades_with_detail(assignment, [])
-      expect(csv).to eq "First Name,Last Name,Email,Username,Score,Feedback,Raw Score,Statement,Last Updated\n"
+      expect(csv).to eq "First Name,Last Name,Email,Score,Feedback,Raw Score,Statement,Last Updated\n"
     end
 
     it "generates a CSV with student grades for the assignment" do
@@ -83,18 +81,16 @@ describe GradeExporter do
       expect(csv[2][1]).to eq students[1].last_name
       expect(csv[1][2]).to eq students[0].email
       expect(csv[2][2]).to eq students[1].email
-      expect(csv[1][3]).to eq students[0].username
-      expect(csv[2][3]).to eq students[1].username
-      expect(csv[1][4]).to eq "123"
-      expect(csv[2][4]).to eq "456"
-      expect(csv[1][5]).to eq ""
-      expect(csv[2][5]).to eq "Grrrrreat!"
-      expect(csv[1][6]).to eq "789"
-      expect(csv[2][6]).to eq "456"
-      expect(csv[1][7]).to eq ""
-      expect(csv[2][7]).to eq "Hello there"
-      expect(csv[1][8]).to eq "#{updated_at}"
-      expect(csv[2][8]).to eq "#{updated_at}"
+      expect(csv[1][3]).to eq "123"
+      expect(csv[2][3]).to eq "456"
+      expect(csv[1][4]).to eq ""
+      expect(csv[2][4]).to eq "Grrrrreat!"
+      expect(csv[1][5]).to eq "789"
+      expect(csv[2][5]).to eq "456"
+      expect(csv[1][6]).to eq ""
+      expect(csv[2][6]).to eq "Hello there"
+      expect(csv[1][7]).to eq "#{updated_at}"
+      expect(csv[2][7]).to eq "#{updated_at}"
     end
 
     it "includes students that do not have grades for the assignment" do
@@ -102,7 +98,7 @@ describe GradeExporter do
         receive(:grade_for_assignment).with(assignment)
           .and_return nil
       csv = CSV.new(subject.export_grades_with_detail(assignment, students)).read
-      expect(csv[1][4]).to eq ""
+      expect(csv[1][3]).to eq ""
     end
 
     it "does not include the grade if it has not been graded or released" do
@@ -110,7 +106,7 @@ describe GradeExporter do
         receive(:grade_for_assignment).with(assignment)
           .and_return double(:grade, instructor_modified?: false, graded_or_released?: false)
       csv = CSV.new(subject.export_grades_with_detail(assignment, students)).read
-      expect(csv[1][4]).to eq ""
+      expect(csv[1][3]).to eq ""
     end
   end
 end
