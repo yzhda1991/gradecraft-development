@@ -3,6 +3,10 @@ FactoryGirl.define do
     association :assignment
     text_comment "needs a link, file, or text comment to be valid"
 
+    factory :submission_with_submission_files do
+      submission_files { create_list(:present_submission_file, 2) }
+    end
+
     factory :graded_submission do
       association :grade, factory: :released_grade
     end
@@ -12,17 +16,14 @@ FactoryGirl.define do
     end
 
     factory :submission_with_link do
-      text_comment nil
       link Faker::Internet.url
     end
 
     factory :submission_with_present_file do
-      text_comment nil
       submission_files { create_list(:present_submission_file, 2) }
     end
 
     factory :submission_with_missing_file do
-      text_comment nil
       submission_files { create_list(:missing_submission_file, 2) }
     end
 

@@ -197,7 +197,9 @@ class Assignment < ActiveRecord::Base
   end
 
   def students_with_text_or_binary_files_on_team(team)
-    students_with_text_or_binary_files
+    User
+      .order_by_name
+      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
       .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
   end
 
