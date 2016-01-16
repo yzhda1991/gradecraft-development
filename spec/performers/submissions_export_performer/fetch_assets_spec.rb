@@ -28,6 +28,52 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
+  describe "fetch_students" do
+    context "a team is present" do
+      let(:students_ivar) { performer_with_team.instance_variable_get(:@students) }
+      subject { performer_with_team.instance_eval { fetch_students }}
+
+      before(:each) do
+        allow(performer_with_team).to receive(:team_present?) { true }
+        performer_with_team.instance_variable_set(:@assignment, assignment)
+        performer_with_team.instance_variable_set(:@team, team)
+        allow(assignment).to receive(:students_with_text_or_binary_files_on_team) { students }
+      end
+
+      it "returns the submissions being graded for that team" do
+        expect(assignment).to receive(:students_with_text_or_binary_files_on_team).with(team)
+        subject
+      end
+
+      it "fetches the students" do
+        subject
+        expect(students_ivar).to eq(students)
+      end
+    end
+
+    context "no team is present" do
+      let(:students_ivar) { performer.instance_variable_get(:@students) }
+      subject { performer.instance_eval { fetch_students }}
+
+      before(:each) do
+        allow(performer_with_team).to receive(:team_present?) { false }
+        performer_with_team.instance_variable_set(:@assignment, assignment)
+        performer_with_team.instance_variable_set(:@team, nil)
+        allow(assignment).to receive(:students_with_text_or_binary_files) { students }
+      end
+
+      it "returns the submissions being graded for that team" do
+        expect(assignment).to receive(:students_with_text_or_binary_files)
+        subject
+      end
+
+      it "fetches the students" do
+        subject
+        expect(students_ivar).to eq(students)
+      end
+    end
+  end
+
   describe "fetch_students_for_csv" do
     context "a team is present" do
       let(:students_ivar) { performer_with_team.instance_variable_get(:@students_for_csv) }

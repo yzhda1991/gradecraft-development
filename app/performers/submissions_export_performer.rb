@@ -217,6 +217,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @course = @assignment.course
   end
 
+  # @mz todo: modify specs
   def fetch_students_for_csv
     if team_present?
       @students_for_csv = User.students_by_team(@course, @team)
@@ -253,9 +254,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @professor = User.find @attrs[:professor_id]
   end
 
+  # @mz todo: modify specs for @students_for_csv
   def generate_export_csv
     open(csv_file_path, 'w') do |f|
-      f.puts @assignment.grade_import(@students)
+      f.puts @assignment.grade_import(@students_for_csv)
     end
   end
 
