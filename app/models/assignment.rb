@@ -151,7 +151,7 @@ class Assignment < ActiveRecord::Base
     points_predictor_display == "Select List"
   end
 
-  # helper methods for submissions and students with submissions
+  # helper methods for finding #student_submissions
   def student_submissions
     Submission
       .includes(:submission_files)
@@ -196,18 +196,7 @@ class Assignment < ActiveRecord::Base
    "text_comment <> '' or link <> '' or id in (select distinct(submission_id) from submission_files where file_missing != ?)"
   end
 
-  def students_with_text_or_binary_files_on_team(team)
-    User
-      .order_by_name
-      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
-      .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
-  end
-
-  def students_with_text_or_binary_files
-    User
-      .order_by_name
-      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
-  end
+  # #students_with_submissions methods 
 
   def students_with_submissions
     User
@@ -219,6 +208,19 @@ class Assignment < ActiveRecord::Base
     User
       .order_by_name
       .where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team.id)
+  end
+
+  def students_with_text_or_binary_files
+    User
+      .order_by_name
+      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
+  end
+
+  def students_with_text_or_binary_files_on_team(team)
+    User
+      .order_by_name
+      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
+      .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
   end
 
   private
