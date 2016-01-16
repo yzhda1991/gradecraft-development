@@ -229,7 +229,7 @@ describe AssignmentsController do
       context "with CSV format" do
         it "returns sample csv data" do
           get :download_current_grades, :id => @assignment, :format => :csv
-          expect(response.body).to include("First Name,Last Name,Email,Username,Score,Feedback")
+          expect(response.body).to include("First Name,Last Name,Email,Score,Feedback")
         end
       end
     end
@@ -240,7 +240,7 @@ describe AssignmentsController do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
           submission = create(:submission, grade: grade, student: @student, assignment: @assignment)
           get :export_grades, :id => @assignment, :format => :csv
-          expect(response.body).to include("First Name,Last Name,Email,Username,Score,Feedback,Raw Score,Statement")
+          expect(response.body).to include("First Name,Last Name,Email,Score,Feedback,Raw Score,Statement")
         end
       end
     end
