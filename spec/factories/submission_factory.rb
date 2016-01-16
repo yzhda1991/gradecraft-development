@@ -27,6 +27,24 @@ FactoryGirl.define do
       submission_files { create_list(:missing_submission_file, 2) }
     end
 
+    factory :submission_with_text_comment_only do
+      text_comment "some cool stuff happened"
+      link nil
+      submission_files {[]}
+    end
+
+    factory :submission_with_link_only do
+      text_comment "some cool stuff happened"
+      link nil
+      submission_files {[]}
+    end
+
+    factory :submission_with_files_only do
+      text_comment nil
+      link nil
+      submission_files { create_list(:present_submission_file, 2) }
+    end
+
     factory :empty_submission do
       text_comment nil
       link nil

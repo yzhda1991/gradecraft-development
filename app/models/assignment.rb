@@ -193,7 +193,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def submissions_with_files_query
-   "text_comment is not null or link is not null or id in (select distinct(submission_id) from submission_files where file_missing != ?)"
+   "text_comment <> '' or link <> '' or id in (select distinct(submission_id) from submission_files where file_missing != ?)"
   end
 
   def students_with_text_or_binary_files_on_team(team)
