@@ -33,7 +33,6 @@ class BadgesController < ApplicationController
   end
 
   def create
-
     @badge = current_course.badges.new(params[:badge])
 
     if @badge.save

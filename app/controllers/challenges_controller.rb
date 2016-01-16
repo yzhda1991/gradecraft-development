@@ -24,18 +24,7 @@ class ChallengesController < ApplicationController
   end
 
   def create
-    if params[:challenge][:challenge_files_attributes].present?
-      @challenge_files = params[:challenge][:challenge_files_attributes]["0"]["file"]
-      params[:challenge].delete :challenge_files_attributes
-    end
-
     @challenge = current_course.challenges.create(params[:challenge])
-
-    if @challenge_files
-      @challenge_files.each do |cf|
-        @challenge.challenge_files.new(file: cf, filename: cf.original_filename[0..49])
-      end
-    end
 
     respond_to do |format|
       if @challenge.save
@@ -47,17 +36,6 @@ class ChallengesController < ApplicationController
   end
 
   def update
-    if params[:challenge][:challenge_files_attributes].present?
-      @challenge_files = params[:challenge][:challenge_files_attributes]["0"]["file"]
-      params[:challenge].delete :challenge_files_attributes
-    end
-
-    if @challenge_files
-      @challenge_files.each do |cf|
-        @challenge.challenge_files.new(file: cf, filename: cf.original_filename[0..49])
-      end
-    end
-
     respond_to do |format|
       if @challenge.update_attributes(params[:challenge])
         format.html { redirect_to challenges_path, notice: "Challenge #{@challenge.name} successfully updated" }
