@@ -7,34 +7,6 @@
 .pageContent
   = render 'layouts/alerts'
 
-  - if presenter.assignment.open_at?
-    .small-12.large-4.columns.panel
-      .bold Open date:
-      = presenter.assignment.open_at
-
-  - if presenter.assignment.due_at?
-    .small-12.large-4.columns.panel
-      .bold Due date:
-      = presenter.assignment.due_at
-
-  - if presenter.assignment.accepts_submissions_until?
-    .small-12.large-4.columns.panel
-      .bold Accept submissions until:
-      = presenter.assignment.accepts_submissions_until
-
-  - if presenter.assignment.description?
-    %p= raw presenter.assignment.description
-
-  - assignment_files = presenter.assignment.assignment_files
-  - if assignment_files.present?
-    %p
-      %b Attachments:
-      %ul
-        - assignment_files.each do |assignment_file|
-          %li
-            = link_to assignment_file.filename, assignment_file.url
-            = link_to " (Remove)", remove_uploads_path({ :model => "AssignmentFile", :upload_id => assignment_file.id, :redirect => { :controller => "assignments", :id => presenter.assignment.id} } )
-
   - if presenter.has_teams? && presenter.assignment.is_individual?
     .team-filter
       = form_tag criterion_grades_review_assignment_path(presenter.assignment), :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
@@ -44,59 +16,13 @@
 
   - if presenter.rubric_designed?
     - presenter.students_being_graded.each do |student|
-      .small-12.columns
-        - grade_for_assignment = student.grade_for_assignment(presenter.assignment)
-        - if grade_for_assignment.present? && grade_for_assignment.instructor_modified?
-          %h4.uppercase= student.name
-          .left
-            %h5.bold= "#{grade_for_assignment.score} / #{presenter.assignment.point_total} points "
-          .right= link_to "Edit Grade", edit_assignment_grade_path(presenter.assignment, :student_id => student.id), :class => 'button'
-          %br
-          %br
-          %table#grade-rubric-table.small-12
-            %thead
-              %tr
-                %td
-                  %strong Criterion
-                  .not_bold.italic Max points
-                %td(colspan="#{presenter.rubric.max_level_count}")
-                  .larger
-                    %strong Level
-                    .not_bold.italic Points
-                %td{:width => "25%"}
-                  %strong
-                    Comments
-            %tbody
-              - presenter.criteria.each do |criterion|
-                %tr
-                  %td.criterion(style="font-size: 12px !important; width: 10%")
-                    .criterion-heading
-                      .criterion-name.bold= criterion.wrapped_name(28).html_safe
-                      .criterion-points.italic= "#{points criterion.max_points} Points"
-                      .clear
-                    .criterion-description= criterion.wrapped_description(40).html_safe
-
-                  - criterion.levels.each do |level|
-                    %td.level
-                      .level-heading
-                        .level-name.uppercase= level.wrapped_name(25).html_safe
-                        .clear
-                        .level-points.italic= "#{points level.points} Points"
-                      .clear
-                      .level-description= level.description
-
-                      .row.badge-row
-                        %br
-                        - level.level_badges.each_with_index do |badge, index|
-                          - if index < 2
-                            %span.level-badge-image
-                              %img{:src => badge.badge.icon, width: "30px", height: "30px" }
-                        %br
-                        %br
-                        - presenter.viewable_criterion_grades.where(student_id: student.id, level_id: level.id).each do |rg|
-                          .italic{style: "color: #00BD39; font-size: 110%"} #{student.first_name} earned this level
-                  - if criterion.levels.size < presenter.rubric.max_level_count
-                    %td.filler(colspan="#{presenter.rubric.max_level_count - criterion.levels.size}")
-                  %td.comments.italic{style: "font-size: 100%"}
-                    - presenter.viewable_criterion_grades.where(student_id: student.id, criterion_id: criterion.id).each do |rg|
-                      = rg.comments
+      - grade_for_assignment = student.grade_for_assignment(presenter.assignment)
+      - if grade_for_assignment.present? && grade_for_assignment.instructor_modified?
+        %h4.uppercase= student.name
+        .left
+          %h5.bold= "#{points grade_for_assignment.score} / #{points presenter.assignment.point_total} points "
+        .right= link_to "Edit #{student.first_name}'s Grade", edit_assignment_grade_path(presenter.assignment, :student_id => student.id), :class => 'button'
+        %br
+        %br
+        .rubric-container= render partial: 'grades/criterion_grade_results', locals: { presenter: presenter, current_student: student }
+        %hr
