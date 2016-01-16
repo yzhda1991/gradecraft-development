@@ -30,9 +30,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "generate_export_csv" do
     subject { performer.instance_eval { generate_export_csv }}
+    let(:students_for_csv) { create_list(:user, 2) }
     let(:csv_path) { performer.instance_eval { csv_file_path }}
 
     before(:each) do
+      performer.instance_variable_set(:@students_for_csv, students_for_csv)
       performer.instance_variable_set(:@assignment, assignment)
       allow(assignment).to receive(:grade_import) { CSV.generate {|csv| csv << ["dogs", "are", "nice"]} }
     end
@@ -40,6 +42,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     it "saves the result of assignment#grade_import" do
       subject
       expect(CSV.read(csv_path).first).to eq(["dogs", "are", "nice"])
+    end
+
+    it "sends an array of students to assignment#grade_import" do
+      expect(assignment).to receive(:grade_import).with(students_for_csv)
+      subject
     end
   end
 

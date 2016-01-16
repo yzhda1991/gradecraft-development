@@ -217,7 +217,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @course = @assignment.course
   end
 
-  # @mz todo: modify specs
   def fetch_students_for_csv
     if team_present?
       @students_for_csv = User.students_by_team(@course, @team)
@@ -254,7 +253,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @professor = User.find @attrs[:professor_id]
   end
 
-  # @mz todo: modify specs for @students_for_csv
   def generate_export_csv
     open(csv_file_path, 'w') do |f|
       f.puts @assignment.grade_import(@students_for_csv)
@@ -302,7 +300,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     missing_student_directories.empty?
   end
 
-  # @mz todo: modify specs for @students
   def missing_student_directories
     @students.inject([]) do |memo, student|
       memo << student_directory_names[student.id] unless Dir.exist?(student_directory_path(student))
@@ -310,7 +307,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: modify specs for @students
   # in the format of { student_id => "lastname_firstname(--username-if-naming-conflict)" }
   def student_directory_names
     @student_directory_names ||= @students.inject({}) do |memo, student|
@@ -324,7 +320,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: modify specs for @students
   def create_student_directories
     @students.each do |student|
       dir_path = student_directory_path(student)
