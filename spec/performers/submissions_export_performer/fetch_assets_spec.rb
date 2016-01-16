@@ -56,10 +56,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer.instance_eval { fetch_students }}
 
       before(:each) do
-        allow(performer_with_team).to receive(:team_present?) { false }
-        performer_with_team.instance_variable_set(:@assignment, assignment)
-        performer_with_team.instance_variable_set(:@team, nil)
+        allow(performer).to receive(:team_present?) { false }
+        performer.instance_variable_set(:@team, nil)
         allow(assignment).to receive(:students_with_text_or_binary_files) { students }
+        performer.instance_variable_set(:@assignment, assignment)
       end
 
       it "returns the submissions being graded for that team" do
