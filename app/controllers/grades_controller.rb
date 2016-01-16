@@ -59,12 +59,6 @@ class GradesController < ApplicationController
   def update
     @grade = Grade.find_or_create(@assignment, current_student)
 
-    # extract file attributes from grade params
-    if params[:grade][:grade_files_attributes].present?
-      @grade.add_grade_files(*(params[:grade][:grade_files_attributes]["0"]["file"]))
-      params[:grade].delete :grade_files_attributes
-    end
-
     if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
         instructor_modified: true)
 
