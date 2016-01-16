@@ -158,9 +158,11 @@ describe GradesController do
       end
 
       it "handles a grade file upload" do
-        grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')]}}}
+        grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file('test_file.txt', 'txt')]}}}
+        
         put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
-        expect(GradeFile.last.grade_id).to eq(@grade.id)
+        expect expect(GradeFile.count).to eq(1)
+        expect expect(GradeFile.last.filename).to eq("test_file.txt")
       end
 
       it "handles commas in raw score params" do

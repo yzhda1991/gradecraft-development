@@ -710,11 +710,11 @@ ActiveRecord::Schema.define(version: 20160113195301) do
   end
 
   create_table "submission_files", force: :cascade do |t|
-    t.string   "filename",          limit: 255,                 null: false
-    t.integer  "submission_id",                                 null: false
-    t.string   "filepath",          limit: 255
-    t.string   "file",              limit: 255
-    t.boolean  "file_processing",               default: false, null: false
+    t.string   "filename",        limit: 255,                 null: false
+    t.integer  "submission_id",                               null: false
+    t.string   "filepath",        limit: 255
+    t.string   "file",            limit: 255
+    t.boolean  "file_processing",             default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
