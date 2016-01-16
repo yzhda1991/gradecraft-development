@@ -45,6 +45,12 @@ FactoryGirl.define do
       submission_files { create_list(:present_submission_file, 2) }
     end
 
+    factory :full_submission do
+      text_comment "Something wicked this way comes"
+      link Faker::Internet.url
+      submission_files { create_list(:present_submission_file, 2) }
+    end
+
     factory :empty_submission do
       text_comment nil
       link nil

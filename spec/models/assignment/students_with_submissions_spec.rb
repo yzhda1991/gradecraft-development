@@ -65,26 +65,81 @@ describe "Assignment #students_with_submissions methods" do
     end
   end
 
-  describe "#students_with_text_or_binary_files" do
-    subject { assignment.students_with_text_or_binary_files }
-    before(:each) { cache_submissions }
+  describe "finding students that have submitted text or binary files" do
+    describe "#students_with_text_or_binary_files" do
+      subject { assignment.students_with_text_or_binary_files }
+      let(:submission) { create(:full_submission, assignment: assignment, student: student) }
+      let(:empty_submission) { create(:empty_submission, student: empty_student, assignment: assignment) }
+      let(:empty_student) { create(:user) }
 
-    describe "ordering" do
-      let(:another_submission) { create(:submission, assignment: assignment, student: another_student) }
-      let(:another_student) { create(:user) }
-      let(:cache_submissions) { submission; errant_submission; another_submission }
+      let(:cache_submissions) { submission; errant_submission; empty_submission }
+      before(:each) { cache_submissions }
 
-      it "orders the students by name" do
-        expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+      describe "ordering" do
+        let(:another_submission) { create(:full_submission, assignment: assignment, student: another_student) }
+        let(:another_student) { create(:user) }
+        let(:cache_submissions) { submission; errant_submission; another_submission }
+
+        it "orders the students by name" do
+          expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+        end
+      end
+
+      it "returns students that have submissions with text or binary files for the assignment" do
+        expect(subject).to include(student)
+      end
+
+      it "doesn't return students that don't have a submission for the assignment" do
+        expect(subject).not_to include(errant_student)
+      end
+
+      it "doesn't return students that have a submission for the assignment, but one that has no relevant files" do
+        expect(subject).not_to include(empty_student)
       end
     end
 
-    it "returns students that have submissions for the assignment" do
-      expect(subject).to include(student)
-    end
+    describe "#students_with_text_or_binary_files_on_team" do
+      subject { assignment.students_with_text_or_binary_files_on_team(team_membership.team) }
 
-    it "doesn't return students that don't have a submission for the assignment" do
-      expect(subject).not_to include(errant_student)
+      let(:team_membership) { create(:team_membership) }
+      let(:team_submission) { create(:full_submission, assignment: assignment, student: team_membership.student) }
+      let(:another_submission) { create(:full_submission, assignment: assignment, student: another_student) }
+      let(:another_student) { create(:user) }
+      let(:empty_submission) { create(:empty_submission, student: empty_team_membership.student, assignment: assignment) }
+      let(:empty_team_membership) { create(:team_membership, team: team_membership.team, student: empty_student) }
+      let(:empty_student) { create(:user) }
+
+      let(:cache_submissions) { team_submission; errant_submission; another_submission; empty_submission }
+      let(:submission) { create(:full_submission, assignment: assignment, student: student) }
+
+      before(:each) { cache_submissions }
+
+      describe "ordering" do
+        let(:another_team_membership) { create(:team_membership, team: team_membership.team) }
+        let(:another_submission) { create(:submission, assignment: assignment, student: another_team_membership.student) }
+
+        it "orders the students by name" do
+          expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+        end
+      end
+
+      describe "team constraints" do
+        it "returns students on the team that have fileized submissions for the assignment" do
+          expect(subject).to include(team_membership.student)
+        end
+
+        it  "doesn't return students that have submissions for the assignment but aren't on the team" do
+          expect(subject).not_to include(another_student)
+        end
+
+        it "doesn't return students that are on the team, and have submissions for the assignment, but for which there are no files" do
+          expect(subject).not_to include(empty_student)
+        end
+      end
+
+      it "doesn't return students that don't have a submission for the assignment at all" do
+        expect(subject).not_to include(errant_student)
+      end
     end
   end
-
+end
