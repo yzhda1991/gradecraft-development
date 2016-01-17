@@ -77,25 +77,58 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
 
   describe "#write_note_for_missing_binary_files" do
     subject { performer.instance_eval { write_note_for_missing_binary_files }}
-    let(:missing_binaries_file_path) { Tempfile.new('whaleio') }
+    let(:tmp_dir) { Dir.mktmpdir }
+    let(:missing_binaries_file_path) { "#{tmp_dir}/missing_files.txt" }
     let(:file_lines) { File.open(missing_binaries_file_path, "rt").readlines }
 
     before(:each) do
-      allow(performer).to receive_messages({
-        missing_binary_files_path: missing_binaries_file_path,
-        students_with_missing_binaries: [],
-        submission_files_with_missing_binaries: []
-      })
+      allow(performer).to receive(:tmp_dir) { tmp_dir }
     end
 
-    after(:each) do
-      FileUtils.rm(missing_binaries_file_path) if File.exist?(missing_binaries_file_path)
+    describe "intro line" do
+      it "adds a message to the missing files text file" do
+        subject
+        expect(file_lines.first).to match(/The following files were uploaded/)
+      end
     end
 
-    it "adds a message to the missing files text file" do
-      subject
-      puts file_lines
-      expect(file_lines.select {|line| line.match(/following files were uploaded/) }.count).to eq(1)
+    describe "printing students with missing files" do
+      let(:students) { create_list(:user, 2) }
+      before { allow(performer).to receive(:students_with_missing_binaries) { students }}
+
+      it "prints a line for each student with a missing file" do
+        subject
+        expect(file_lines).to include(students.first.full_name + ":\n")
+        expect(file_lines).to include(students.last.full_name + ":\n")
+      end
+    end
+
+    describe "printing submission file names for each student" do
+      let(:students) { create_list(:user, 2) }
+      let(:submission_file_with_student) { create(:submission_file, filename: "stuff_rly.txt", submission: submission_with_student) }
+      let(:submission_with_student) { create(:submission, student: students.first) }
+      let(:submission_file_without_student) { create(:submission_file, filename: "srsly.txt") }
+      let(:submission_files) { [ submission_file_with_student, submission_file_without_student ] }
+
+      before do
+        allow(performer).to receive(:students_with_missing_binaries) { students }
+        allow(performer).to receive(:submission_files_with_missing_binaries) { submission_files }
+      end
+
+      context "missing file student id matches the id of the current student" do
+        it "prints the name of the current file" do
+          subject
+          expect(file_lines).to include(submission_file_with_student.filename + "\n")
+        end
+      end
+
+      context "missing file student id doesn't match the id of a current student" do
+        it "doesn't print the name of the current file" do
+          subject
+          expect(file_lines).not_to include(submission_file_without_student.filename + "\n")
+        end
+      end
+
     end
   end
 end

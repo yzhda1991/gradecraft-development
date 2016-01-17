@@ -375,9 +375,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: modify specs
   def missing_binaries_file_path
-    @missing_binaries_file_path ||= File.expand_path("missing_files.txt", tmp_dir)
+    File.expand_path("missing_files.txt", tmp_dir)
   end
 
   def submission_files_with_missing_binaries
@@ -395,12 +394,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
         f.puts "" if index == 0
         f.puts "#{student.full_name}:"
         submission_files_with_missing_binaries.each do |missing_file|
-          f.puts "#{missing_file.filename}" if missing_file.student_id == student.id
+          f.puts "#{missing_file.filename}" if missing_file.submission.student_id == student.id
         end
       end
     end
   end
-  # @mz todo: modify specs
 
   def create_binary_files_for_submission(submission)
     submission.submission_files.present.each_with_index do |submission_file, index|
