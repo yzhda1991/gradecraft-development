@@ -37,7 +37,7 @@ RSpec.describe "Assignment #missing_binaries methods" do
       describe "ordering" do
         let(:cache_submission_files) { missing_submission_file; present_submission_file; another_missing_submission_file }
 
-        it "orders the students by create_at ASC" do
+        it "orders the submission files by create_at ASC" do
           expect(subject.index(missing_submission_file)).to be < subject.index(another_missing_submission_file)
         end
       end
@@ -99,17 +99,29 @@ RSpec.describe "Assignment #missing_binaries methods" do
   end
 
   context "a team is given" do
-    let(:team)( { create(:team) } )
+    let(:team) { create(:team) }
     let(:team_membership) { create(:team_membership, team: team, student: student1) }
+    let(:another_team_membership) { create(:team_membership, team: team, student: student3) }
 
     let(:cache_submission_files) { missing_submission_file; present_submission_file; another_missing_submission_file }
+    let(:cache_team_memberships) { team_membership }
+
+    before(:each) { cache_team_memberships }
 
     describe "#submission_files_with_missing_binaries_for_team" do
       subject { assignment.submission_files_with_missing_binaries_for_team(team) }
 
       context "submission file is marked 'file_missing'" do
-        it "returns missing submission_files for the the assignment" do
-          expect(subject).to include(missing_submission_file)
+        context "student who submitted the file is on the given team" do
+          it "returns missing submission_files for the assignment for students on the given team" do
+            expect(subject).to include(missing_submission_file)
+          end
+        end
+
+        context "student who submitted the file is not on the team" do
+          it "returns missing submission_files for the assignment for students on the given team" do
+            expect(subject).not_to include(another_missing_submission_file)
+          end
         end
       end
 
@@ -120,16 +132,16 @@ RSpec.describe "Assignment #missing_binaries methods" do
       end
 
       describe "ordering" do
-        let(:cache_submission_files) { missing_submission_file; present_submission_file; another_missing_submission_file }
+        let(:cache_team_memberships) { team_membership; another_team_membership }
 
-        it "orders the students by create_at ASC" do
+        it "orders the submission files by create_at ASC" do
           expect(subject.index(missing_submission_file)).to be < subject.index(another_missing_submission_file)
         end
       end
 
       describe "assignment association" do
-        let(:cache_submission_files) { missing_submission_file; present_submission_file; another_missing_submission_file }
         let(:another_submission_with_missing_file) { create(:submission, student: student3) } # some other assignment
+        let(:cache_team_memberships) { team_membership; another_team_membership }
 
         context "submission file is associated with submission for that assignment" do
           it "returns the submission file" do
