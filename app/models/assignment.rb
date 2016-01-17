@@ -199,28 +199,36 @@ class Assignment < ActiveRecord::Base
   # #students_with_submissions methods 
 
   def students_with_submissions
-    User
-      .order_by_name
+    User.order_by_name
       .where("id in (#{student_with_submissions_query})", self.id)
   end
 
   def students_with_submissions_on_team(team)
-    User
-      .order_by_name
+    User.order_by_name
       .where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team.id)
   end
 
   def students_with_text_or_binary_files
-    User
-      .order_by_name
+    User.order_by_name
       .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
   end
 
   def students_with_text_or_binary_files_on_team(team)
-    User
-      .order_by_name
+    User.order_by_name
       .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
       .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+  end
+
+  # students and submissions with missing binaries
+  def students_with_missing_binaries
+    User.order_by_name
+      .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (select distinct(submission_id) from submission_files where file_missing = ?))", self.id, true)
+  end
+
+  def submission_files_with_missing_binaries
+    SubmissionFile.order("created_at ASC")
+      .where(file_missing: true)
+      .where("submission_id in (select id from submissions where assignment_id = ?)")
   end
 
   private
