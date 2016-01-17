@@ -13,6 +13,12 @@ describe CollectionMerger do
 
     subject { described_class.new(collection1, collection2) }
 
+    it "returns the left side if the right side is nil" do
+      subject = described_class.new(collection1, nil)
+
+      expect(subject.merge).to eq collection1
+    end
+
     it "merges collections on a created at field by default" do
       expect(subject.merge).to eq [first, second, third, fourth]
     end

@@ -9,6 +9,8 @@ class CollectionMerger
   def merge(options={})
     opts = default_options.merge options
 
+    return left if right.nil?
+
     merged = left | right
     merged.sort! { |l, r| value_of(l, opts[:field]) <=> value_of(r, opts[:field]) }
     merged.reverse! if opts[:order] == :desc
