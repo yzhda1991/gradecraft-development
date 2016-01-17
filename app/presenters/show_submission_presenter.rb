@@ -5,8 +5,17 @@ class ShowSubmissionPresenter < SubmissionPresenter
     properties[:id]
   end
 
+  def grade
+    assignment.grades.where(student_id: student.id).first ||
+      Grade.new(assignment_id: assignment.id, student_id: student.id)
+  end
+
   def submission
     assignment.submissions.find(id)
+  end
+
+  def submission_grade_history
+    submission.historical_merge(grade)
   end
 
   def student
