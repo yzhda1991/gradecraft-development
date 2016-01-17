@@ -6,8 +6,7 @@ class ShowSubmissionPresenter < SubmissionPresenter
   end
 
   def grade
-    assignment.grades.where(student_id: student.id).first ||
-      Grade.new(assignment_id: assignment.id, student_id: student.id)
+    assignment.grades.where(student_id: student.id).first
   end
 
   def submission
