@@ -25,7 +25,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer.instance_eval { create_submission_binary_files } }
       before(:each) do
         performer.instance_variable_set(:@submissions, submissions)
-        allow(performer).to receive(:write_note_for_missing_binary_files) { true }
       end
 
       describe "submission with files" do

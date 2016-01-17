@@ -50,6 +50,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       require_success(create_submission_binary_file_messages) do
         @submissions_export.update_attributes create_submission_binary_files: true
         create_submission_binary_files
+        write_note_for_missing_binary_files
       end
 
       # write error log for errors that may have occurred during file generation
@@ -370,11 +371,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       if submission.submission_files.present?
         submission.process_unconfirmed_files if submission.submission_files.unconfirmed.count > 0
         create_binary_files_for_submission(submission) 
-        write_note_for_missing_binary_files(submission)
       end
     end
   end
 
+  # @mz todo: modify specs
   def missing_binaries_file_path
     File.expand_path("missing_files.txt", tmp_dir)
   end
@@ -399,6 +400,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       end
     end
   end
+  # @mz todo: modify specs
 
   def create_binary_files_for_submission(submission)
     submission.submission_files.present.each_with_index do |submission_file, index|
