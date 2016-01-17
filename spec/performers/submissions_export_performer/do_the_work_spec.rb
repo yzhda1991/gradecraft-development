@@ -51,6 +51,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         expect(subject).to receive(:create_submission_binary_files)
       end
 
+      it "generates a text file to enumerate all missing files" do
+        expect(subject).to receive(:write_note_for_missing_binary_files)
+      end
+
       describe "updating the export_completed_at time" do
         before do
           performer.setup
