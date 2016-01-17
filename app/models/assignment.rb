@@ -225,10 +225,24 @@ class Assignment < ActiveRecord::Base
       .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (select distinct(submission_id) from submission_files where file_missing = ?))", self.id, true)
   end
 
+  # students and submissions with missing binaries
+  def students_with_missing_binaries_on_team(team)
+    User.order_by_name
+      .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (select distinct(submission_id) from submission_files where file_missing = ?))", self.id, true)
+      .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+  end
+
   def submission_files_with_missing_binaries
     SubmissionFile.order("created_at ASC")
       .where(file_missing: true)
-      .where("submission_id in (select id from submissions where assignment_id = ?)")
+      .where("submission_id in (select id from submissions where assignment_id = ?)", self.id)
+  end
+
+  def submission_files_with_missing_binaries_for_team(team)
+    SubmissionFile.order("created_at ASC")
+      .where(file_missing: true)
+      .where("submission_id in (select id from submissions where assignment_id = ?)", self.id)
+      .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
   end
 
   private

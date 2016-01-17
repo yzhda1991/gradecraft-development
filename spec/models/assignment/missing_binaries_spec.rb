@@ -18,6 +18,47 @@ RSpec.describe "Assignment #missing_binaries methods" do
 
   before(:each) { cache_submission_files }
 
+  describe "#submission_files_with_missing_binaries" do
+    subject { assignment.submission_files_with_missing_binaries }
+
+    context "submission file is marked 'file_missing'" do
+      it "returns missing submission_files for the the assignment" do
+        expect(subject).to include(missing_submission_file)
+      end
+    end
+
+    context "submission file is not marked 'file_missing'" do
+      it "doesn't return non-missing submission files" do
+        expect(subject).not_to include(present_submission_file)
+      end
+    end
+
+    describe "ordering" do
+      let(:cache_submission_files) { missing_submission_file; present_submission_file; another_missing_submission_file }
+
+      it "orders the students by create_at ASC" do
+        expect(subject.index(missing_submission_file)).to be < subject.index(another_missing_submission_file)
+      end
+    end
+
+    describe "assignment association" do
+      let(:cache_submission_files) { missing_submission_file; present_submission_file; another_missing_submission_file }
+      let(:another_submission_with_missing_file) { create(:submission, student: student3) } # some other assignment
+
+      context "submission file is associated with submission for that assignment" do
+        it "returns the submission file" do
+          expect(subject).to include(missing_submission_file)
+        end
+      end
+
+      context "submission_file is associated with another assignment" do
+        it "doesn't return the submission file" do
+          expect(subject).not_to include(another_missing_submission_file)
+        end
+      end
+    end
+  end
+
   describe "#students_with_missing_binaries" do
     subject { assignment.students_with_missing_binaries }
 
