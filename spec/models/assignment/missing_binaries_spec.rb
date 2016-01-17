@@ -156,5 +156,40 @@ RSpec.describe "Assignment #missing_binaries methods" do
         end
       end
     end
+
+    describe "#students_with_missing_binaries_on_team" do
+      subject { assignment.students_with_missing_binaries_on_team(team) }
+
+      describe "student team membership" do
+        context "student is on the team" do
+          it "returns students that have missing submission binaries for the assignment and are on the team" do
+            expect(subject).to include(student1)
+          end
+        end
+
+        context "student is not on the team" do
+          it "returns students that have missing submission binaries for the assignment but are not on the team" do
+            expect(subject).not_to include(student3)
+          end
+        end
+      end
+
+      describe "assignment association" do
+        let(:cache_team_memberships) { team_membership; another_team_membership }
+        let(:another_submission_with_missing_file) { create(:submission, student: student3) } # some other assignment
+
+        it "doesn't return students that don't have a missing submission file for the assignment" do
+          expect(subject).not_to include(student2)
+        end
+      end
+
+      describe "ordering" do
+        let(:cache_team_memberships) { team_membership; another_team_membership }
+
+        it "orders the students by name" do
+          expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+        end
+      end
+    end
   end
 end
