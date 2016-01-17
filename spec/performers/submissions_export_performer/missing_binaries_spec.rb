@@ -74,4 +74,28 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
       end
     end
   end
+
+  describe "#write_note_for_missing_binary_files" do
+    subject { performer.instance_eval { write_note_for_missing_binary_files }}
+    let(:missing_binaries_file_path) { Tempfile.new('whaleio') }
+    let(:file_lines) { File.open(missing_binaries_file_path, "rt").readlines }
+
+    before(:each) do
+      allow(performer).to receive_messages({
+        missing_binary_files_path: missing_binaries_file_path,
+        students_with_missing_binaries: [],
+        submission_files_with_missing_binaries: []
+      })
+    end
+
+    after(:each) do
+      FileUtils.rm(missing_binaries_file_path) if File.exist?(missing_binaries_file_path)
+    end
+
+    it "adds a message to the missing files text file" do
+      subject
+      puts file_lines
+      expect(file_lines.select {|line| line.match(/following files were uploaded/) }.count).to eq(1)
+    end
+  end
 end
