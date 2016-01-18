@@ -73,6 +73,7 @@ RSpec.describe "SubmissionsExport attributes", type: :background_job do
         create_submission_text_files: nil,
         create_submission_binary_files: nil,
         generate_error_log: nil,
+        remove_empty_student_directories: nil,
         archive_exported_files: nil,
         upload_archive_to_s3: nil,
         check_s3_upload_success: nil

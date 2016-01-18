@@ -49,10 +49,14 @@ class SubmissionFile < ActiveRecord::Base
   # this is only being used in development, get rid of it when it deveopment is migrated to s3
   # for submission file persistence
   def write_source_binary_to_path(target_path)
-    File.open(target_path, "wb") do |saved_file|
-      File.open(source_file_url, "rb") do |read_file|
-        saved_file.write(read_file.read)
+    if File.exist? source_file_url
+      File.open(target_path, "wb") do |saved_file|
+        File.open(source_file_url, "rb") do |read_file|
+          saved_file.write(read_file.read)
+        end
       end
+    else
+      mark_file_missing
     end
   end
 

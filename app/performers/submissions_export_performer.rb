@@ -105,6 +105,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       last_export_started_at: Time.now
     }
   end
+  alias_method :attributes, :base_export_attributes
 
   def clear_progress_attributes
     {
@@ -115,6 +116,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       create_submission_text_files: nil,
       create_submission_binary_files: nil,
       generate_error_log: nil,
+      remove_empty_student_directories: nil,
       archive_exported_files: nil,
       upload_archive_to_s3: nil,
       check_s3_upload_success: nil
@@ -182,8 +184,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}"
   end
 
+  # @mz todo: update specs
   def filename_timestamp
-    filename_time.strftime("%Y-%m-%d - %I:%M:%S%p")
+    filename_time.strftime("%Y-%m-%d - %l:%M:%S%P").gsub("\s+"," ")
   end
 
   def filename_time
@@ -207,7 +210,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def formatted_filename_fragment(fragment)
-    titleize_filename(fragment).slice(0..24) # take only 25 characters
+    titleize_filename(fragment)
   end
 
   def titleize_filename(filename)
@@ -390,11 +393,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def submission_text_filename(student)
-    [ formatted_student_name(student), formatted_assignment_name, "submission_text.txt" ].join("_")
+    [ formatted_student_name(student), formatted_assignment_name, "Submission Text.txt" ].join(" - ")
   end
 
+  # @mz todo: update specs
   def formatted_student_name(student)
-    sanitize_filename("#{student.first_name}_#{student.last_name}")
+    titleize_filename student.full_name
   end
 
   def create_submission_binary_files
@@ -418,14 +422,17 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @students_with_missing_binaries ||= @assignment.students_with_missing_binaries
   end
 
+  # @mz todo: update specs
   def write_note_for_missing_binary_files
-    open(missing_binaries_file_path, 'wt') do |f|
-      f.puts "The following files were uploaded, but no longer appear to be available on the server:"
-      students_with_missing_binaries.each_with_index do |student, index|
-        f.puts "" if index == 0
-        f.puts "#{student.full_name}:"
-        submission_files_with_missing_binaries.each do |missing_file|
-          f.puts "#{missing_file.filename}" if missing_file.submission.student_id == student.id
+    unless students_with_missing_binaries.empty?
+      open(missing_binaries_file_path, 'wt') do |f|
+        f.puts "The following files were uploaded, but no longer appear to be available on the server:"
+        students_with_missing_binaries.each_with_index do |student, index|
+          f.puts "" if index == 0
+          f.puts "#{student.full_name}:"
+          submission_files_with_missing_binaries.each do |missing_file|
+            f.puts "#{missing_file.filename}" if missing_file.submission.student_id == student.id
+          end
         end
       end
     end
@@ -446,8 +453,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     student_directory_file_path(student, filename)
   end
 
+  # @mz todo: update specs
   def submission_binary_filename(student, submission_file, index)
-    [ formatted_student_name(student), formatted_assignment_name, "submission_file#{index}"].join("_") + submission_file.extension
+    [ formatted_student_name(student), formatted_assignment_name, "Submission File #{index + 1}"].join(" - ") + submission_file.extension
   end
 
   def write_submission_binary_file(student, submission_file, index)
@@ -476,8 +484,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{error_io}"
   end
 
+  # @mz todo: modify specs
   def generate_error_log
-    open(error_log_path, 'w') {|file| file.puts @errors }
+    unless @errors.empty?
+      open(error_log_path, 'w') {|file| file.puts @errors }
+    end
   end
 
   def error_log_path

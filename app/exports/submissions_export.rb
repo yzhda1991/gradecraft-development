@@ -13,6 +13,7 @@ class SubmissionsExport < ActiveRecord::Base
     :student_directories_created_successfully,
     :create_submission_text_files,
     :create_submission_binary_files,
+    :remove_empty_student_directories,
     :generate_error_log,
     :archive_exported_files,
     :upload_archive_to_s3,

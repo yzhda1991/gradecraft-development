@@ -138,8 +138,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject
     end
 
-    it "truncates the final string to twenty five characters" do
-      expect(subject).to eq("Abcdefghijklmnopqrstuvwxy")  
+    it "doesn't truncate the final string" do
+      expect(subject).to eq("Abcdefghijklmnopqrstuvwxyz")  
     end
   end
 
