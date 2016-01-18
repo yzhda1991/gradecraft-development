@@ -633,6 +633,7 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.boolean  "archive_exported_files"
     t.boolean  "upload_archive_to_s3"
     t.boolean  "check_s3_upload_success"
+    t.boolean  "remove_empty_student_directories"
   end
 
   create_table "tasks", force: :cascade do |t|

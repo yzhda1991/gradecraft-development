@@ -53,6 +53,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
         write_note_for_missing_binary_files
       end
 
+      # create binary files in each student directory
+      require_success(remove_empty_student_directories_messages) do
+        @submissions_export.update_attributes remove_empty_student_directories: true
+        remove_empty_student_directories
+      end
+
       # write error log for errors that may have occurred during file generation
       require_success(generate_error_log_messages) do
         @submissions_export.update_attributes generate_error_log: true
@@ -328,6 +334,18 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
+  # removing student directories
+
+  def remove_empty_student_directories
+    @students.each do |students|
+      Dir.delete(student_directory_path(student)) if student_directory_empty?(student)
+    end
+  end
+
+  def student_directory_empty?(student)
+    (Dir.entries(student_directory_path(student)) - %w{ . .. }).empty?
+  end
+
   def student_directory_path(student)
     File.expand_path(student_directory_names[student.id], tmp_dir)
   end
@@ -575,6 +593,13 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     expand_messages ({
       success: "Successfully uploaded the submissions archive to S3",
       failure: "Failed to upload the submissions archive to S3"
+    })
+  end
+
+  def remove_empty_student_directories_messages
+    expand_messages ({
+      success: "Successfully removed empty student directories from archive",
+      failure: "Failed to remove empty student directories"
     })
   end
 

@@ -19,11 +19,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "requires success" do
-        expect(subject).to receive(:require_success).exactly(10).times
+        expect(subject).to receive(:require_success).exactly(11).times
       end
 
       it "adds outcomes to subject.outcomes" do
-        expect { subject.do_the_work }.to change { subject.outcomes.size }.by(10)
+        expect { subject.do_the_work }.to change { subject.outcomes.size }.by(11)
       end
 
       it "fetches the csv data" do
@@ -53,6 +53,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
       it "generates a text file to enumerate all missing files" do
         expect(subject).to receive(:write_note_for_missing_binary_files)
+      end
+
+      it "removes any student directories that were created but weren't used" do
+        expect(subject).to receive(:remove_empty_student_directries)
       end
 
       describe "updating the export_completed_at time" do
@@ -86,6 +90,5 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         expect(subject).not_to receive(:generate_export_csv)
       end
     end
-
   end
 end
