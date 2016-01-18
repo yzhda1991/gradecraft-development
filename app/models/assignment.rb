@@ -242,7 +242,7 @@ class Assignment < ActiveRecord::Base
     SubmissionFile.order("created_at ASC")
       .where(file_missing: true)
       .where("submission_id in (select id from submissions where assignment_id = ?)", self.id)
-      .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+      .where("submission_id in (select id from submissions where student_id in (select distinct(student_id) from team_memberships where team_id = ?))", team.id)
   end
 
   private

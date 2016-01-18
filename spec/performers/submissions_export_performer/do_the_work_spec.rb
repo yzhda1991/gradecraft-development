@@ -56,7 +56,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "removes any student directories that were created but weren't used" do
-        expect(subject).to receive(:remove_empty_student_directries)
+        expect(subject).to receive(:remove_empty_student_directories)
       end
 
       describe "updating the export_completed_at time" do
