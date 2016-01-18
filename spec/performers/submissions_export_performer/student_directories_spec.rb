@@ -168,6 +168,48 @@ RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :
     end
   end
 
+  describe "#remove_empty_student_directories" do
+    subject { performer.instance_eval { remove_empty_student_directories }}
+    let(:student_with_empty_dir) { create(:user) }
+    let(:student_with_files) { create(:user) }
+    let(:empty_dir_path) { Dir.mktmpdir }
+    let(:empty_dir) { Dir.mktmpdir }
+    let(:dir_with_files) { Dir.mktmpdir }
+    let(:students) {[ student_with_empty_dir, student_with_files ]}
+
+    before(:each) do
+      performer.instance_variable_set(:@students, students)
+      allow(performer).to receive(:student_directory_path).with(student_with_empty_dir) { empty_dir }
+      allow(performer).to receive(:student_directory_path).with(student_with_files) { dir_with_files }
+      allow(performer).to receive(:student_directory_empty?).with(student_with_empty_dir) { true }
+      allow(performer).to receive(:student_directory_empty?).with(student_with_files) { false }
+    end
+
+    context "student directory is empty" do
+      it "calls Dir.delete on the student directory path" do
+        expect(Dir).to receive(:delete).with(empty_dir)
+        subject
+      end
+
+      it "actually deletes the directory" do
+        subject
+        expect(Dir.exist?(empty_dir)).to be_falsey
+      end
+    end
+
+    context "student directory is not empty" do
+      it "doesn't call Dir.delete on the directory" do
+        expect(Dir).not_to receive(:delete).with(dir_with_files)
+        subject
+      end
+
+      it "leaves the directory in place" do
+        subject
+        expect(Dir.exist?(dir_with_files)).to be_truthy
+      end
+    end
+  end
+
   describe "#student_directory_empty?" do
     subject { performer.instance_eval { student_directory_empty?(@some_student) }}
     let(:student) { create(:user) }

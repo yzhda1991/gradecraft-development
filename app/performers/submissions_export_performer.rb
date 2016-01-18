@@ -337,8 +337,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   # removing student directories
 
   def remove_empty_student_directories
-    @students.each do |students|
-      Dir.delete(student_directory_path(student)) if student_directory_empty?(student)
+    @students.each do |student|
+      if student_directory_empty?(student)
+        Dir.delete student_directory_path(student)
+      end
     end
   end
 
