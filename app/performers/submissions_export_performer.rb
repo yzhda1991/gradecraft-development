@@ -179,11 +179,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   # methods for building and formatting the archive filename
   def export_file_basename
-    @export_file_basename ||= "#{archive_basename}_export_#{filename_timestamp}"
+    @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}"
   end
 
   def filename_timestamp
-    filename_time.strftime("%Y-%m-%d--%I:%M:%S%p")
+    filename_time.strftime("%Y-%m-%d - %I:%M:%S%p")
   end
 
   def filename_time
@@ -192,7 +192,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def archive_basename
     if team_present?
-      "#{formatted_assignment_name}_#{formatted_team_name}"
+      "#{formatted_assignment_name} Export - #{formatted_team_name}"
     else
       formatted_assignment_name
     end
@@ -207,7 +207,18 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def formatted_filename_fragment(fragment)
-    sanitize_filename(fragment).slice(0..24) # take only 25 characters
+    titleize_filename(fragment).slice(0..24) # take only 25 characters
+  end
+
+  def titleize_filename(filename)
+    filename
+      .downcase
+      .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
+      .gsub(/_+/, ' ') # replace underscores with spaces
+      .gsub(/ +/, ' ') # replace underscores with spaces
+      .gsub(/^ +/, '') # remove leading spaces
+      .gsub(/ +$/, '') # remove trailing spaces
+      .titleize
   end
 
   def sanitize_filename(filename)

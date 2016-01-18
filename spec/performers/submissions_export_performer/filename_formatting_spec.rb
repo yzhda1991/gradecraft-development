@@ -12,7 +12,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "export_file_basename" do
     subject { performer.instance_eval { export_file_basename }}
-    let(:filename_timestamp) { "2020-10-15--12:30:20pm" }
+    let(:filename_timestamp) { "2020-10-15 - 12:30:20pm" }
 
     before(:each) do
       performer.instance_variable_set(:@export_file_basename, nil)
@@ -36,7 +36,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     it "sets the filename to an @export_file_basename" do
       subject
-      expect(performer.instance_variable_get(:@export_file_basename)).to eq("some_great_submissions_export_#{filename_timestamp}")
+      expect(performer.instance_variable_get(:@export_file_basename)).to eq("some_great_submissions - #{filename_timestamp}")
     end
   end
 
@@ -48,7 +48,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     it "formats the filename time" do
-      expect(subject).to match(filename_time.strftime("%Y-%m-%d--%I:%M:%S%p"))
+      expect(subject).to match(filename_time.strftime("%Y-%m-%d - %I:%M:%S%p"))
     end
   end
 
@@ -99,7 +99,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     context "team_present? is true" do
       before { allow(performer).to receive(:team_present?) { true }}
       it "combines the formatted assignment and team names" do
-        expect(subject).to eq("blog_entry_5_the_walloping_wildebeest")
+        expect(subject).to eq("blog_entry_5 Export - the_walloping_wildebeest")
       end
     end
 
@@ -133,13 +133,35 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     subject { performer.instance_eval { formatted_filename_fragment("ABCDEFGHIJKLMNOPQRSTUVWXYZ") }}
 
     it "sanitizes the fragment" do
-      allow(performer).to receive(:sanitize_filename) { "this is a jocular output" } 
-      expect(performer).to receive(:sanitize_filename).with("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+      allow(performer).to receive(:titleize_filename) { "this is a jocular output" } 
+      expect(performer).to receive(:titleize_filename).with("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
       subject
     end
 
     it "truncates the final string to twenty five characters" do
-      expect(subject).to eq("abcdefghijklmnopqrstuvwxy")  
+      expect(subject).to eq("Abcdefghijklmnopqrstuvwxy")  
+    end
+  end
+
+  describe "titleize_filename" do
+    it "titleizes everything" do
+      expect(performer.instance_eval { titleize_filename("THISISSUPERCAPPY") }).to \
+        eq("Thisissupercappy")
+    end
+
+    it "substitutes consecutive non-word characters with spaces" do
+      expect(performer.instance_eval { titleize_filename("whoa\\ gEORG  !!! IS ...dead") }).to \
+        eq("Whoa Georg Is Dead")
+    end
+
+    it "removes leading spaces" do
+      expect(performer.instance_eval { titleize_filename("          garrett_rules") }).to \
+        eq("Garrett Rules")  
+    end
+
+    it "removes trailing spaces" do
+      expect(performer.instance_eval { titleize_filename("garrett_sucks        ") }).to \
+        eq("Garrett Sucks")  
     end
   end
 
