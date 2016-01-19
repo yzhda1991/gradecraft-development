@@ -4,8 +4,8 @@ require "./lib/human_history/date_history_token"
 
 describe HumanHistory::DateHistoryToken do
   describe ".tokenizable?" do
-    it "is tokenizable if the key is an updated_at" do
-      expect(described_class.tokenizable?("updated_at", nil, nil)).to eq true
+    it "is tokenizable if the key is a recorded at" do
+      expect(described_class.tokenizable?("recorded_at", nil, nil)).to eq true
     end
   end
 
@@ -23,7 +23,7 @@ describe HumanHistory::DateHistoryToken do
         end
       end
 
-      subject = described_class.new "updated_at", [nil, DateTime.new(2015, 4, 14, 2, 30)], Object
+      subject = described_class.new "recorded_at", DateTime.new(2015, 4, 14, 2, 30), Object
 
       expect(subject.parse).to eq({ date: "April 14th, 2015" })
     end

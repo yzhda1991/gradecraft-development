@@ -3,8 +3,8 @@ require "./lib/human_history/time_history_token"
 
 describe HumanHistory::TimeHistoryToken do
   describe ".tokenizable?" do
-    it "is tokenizable if the key is an updated_at" do
-      expect(described_class.tokenizable?("updated_at", nil, nil)).to eq true
+    it "is tokenizable if the key is a recorded at" do
+      expect(described_class.tokenizable?("recorded_at", nil, nil)).to eq true
     end
   end
 
@@ -15,8 +15,9 @@ describe HumanHistory::TimeHistoryToken do
   end
 
   describe "#parse" do
-    it "returns a string representation of the updated at timestamp" do
-      subject = described_class.new "updated_at", [nil, DateTime.new(2015, 4, 14, 2, 31)], Object
+    it "returns a string representation of the recorded at timestamp" do
+      subject = described_class.new "recorded_at", DateTime.new(2015, 4, 14, 2, 31), Object
+
       expect(subject.parse).to eq({ time: "2:31 AM" })
     end
   end
