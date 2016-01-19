@@ -299,12 +299,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  # @mz todo: add specs
   def archive_root_dir
     @archive_root_dir ||= FileUtils.mkdir_p(archive_root_dir_path).first
   end
   
-  # @mz todo: add specs
   def archive_root_dir_path
     @archive_root_dir_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
   end
@@ -322,7 +320,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def expanded_archive_base_path
-    @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
+    @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_root_dir)
   end
 
   ## creating student directories

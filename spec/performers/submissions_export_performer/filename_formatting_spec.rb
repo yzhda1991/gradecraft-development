@@ -369,11 +369,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     subject { performer.instance_eval { expanded_archive_base_path }}
     before do
       allow(performer).to receive(:export_file_basename) { "the_best_filename" }
-      allow(performer).to receive(:archive_tmp_dir) { "/archive/tmp/dir" }
+      allow(performer).to receive(:archive_root_dir) { "/archive/root/dir" }
     end
 
     it "expands the export file basename from the archive tmp dir path" do
-      expect(subject).to eq("/archive/tmp/dir/the_best_filename")
+      expect(subject).to eq("/archive/root/dir/the_best_filename")
     end
 
     it "caches the basename" do
