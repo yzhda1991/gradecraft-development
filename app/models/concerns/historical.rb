@@ -17,6 +17,7 @@ module Historical
       changeset.merge!("object" => self.class.name)
       changeset.merge!("event" => version.event)
       changeset.merge!("actor_id" => version.whodunnit)
+      changeset.merge!("recorded_at" => version.created_at)
     end
   end
 

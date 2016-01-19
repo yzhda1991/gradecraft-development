@@ -39,6 +39,7 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       expect(model.history.first).to include({ "object" => described_class.name })
       expect(model.history.first).to include({ "event" => "create" })
       expect(model.history.first).to include({ "actor_id" => user.id.to_s })
+      expect(model.history.first).to include({ "recorded_at" => model.versions.last.created_at })
     end
 
     it "returns the changesets for an updated #{fixture}" do
@@ -50,6 +51,7 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       expect(model.history.first).to include({ "object" => described_class.name })
       expect(model.history.first).to include({ "event" => "update" })
       expect(model.history.first).to include({ "actor_id" => user.id.to_s })
+      expect(model.history.first).to include({ "recorded_at" => model.versions.last.created_at })
     end
 
     it "orders the changesets so the newest changes are at the top" do
