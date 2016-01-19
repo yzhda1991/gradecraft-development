@@ -1,4 +1,5 @@
 require 'rails_spec_helper'
+require 'active_record_spec_helper'
 
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
@@ -11,9 +12,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   subject { performer }
 
   describe "creating student submission text files", inspect: true do
-    let(:student1) { double(:student, first_name: "edwina", last_name: "herman") }
-    let(:student2) { double(:student, first_name: "karen", last_name: "slotskova") }
-    let(:submission1) { double(:submission, text_comment: "This was tough.", link: "http://greatjob.com", student: student1) }
+    let(:student1) { create(:user, first_name: "edwina", last_name: "herman") }
+    let(:student2) { create(:user, first_name: "karen", last_name: "slotskova") }
+    let(:submission1) { create(:submission, text_comment: "This was tough.", link: "http://greatjob.com", student: student1) }
     let(:mkdir) { FileUtils.mkdir_p("/tmp/great_files") unless Dir.exist?("/tmp/great_files") }
     let(:text_file) { File.readlines(text_file_path) }
     let(:text_file_output) { puts "BEGIN TEXT FILE OUTPUT"; File.readlines(text_file_path).each {|line| puts line }}
@@ -34,7 +35,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       context "submission has neither a comment nor a link" do
-        let(:submission1) { double(:submission, text_comment: nil, link: nil) }
+        let(:submission1) { create(:submission_with_files_only, text_comment: nil, link: nil) }
 
         it "doesn't create a text file for the submission" do
           expect(performer).not_to receive(:create_submission_text_file).with (submission1)
@@ -79,7 +80,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           end
 
           context "submission doesn't have a text comment" do
-            let(:submission1) { double(:submission, text_comment: nil, link: "http://greatjob.com", student: student1) }
+            let(:submission1) { create(:submission, text_comment: nil, link: "http://greatjob.com", student: student1) }
 
             it "doesn't add the text comment to the text file" do
               expect(text_file).not_to include("text comment: This was tough.\n")
@@ -103,7 +104,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           end
 
           context "submission doesn't have a link" do
-            let(:submission1) { double(:submission, text_comment: "This was tough.", link: nil, student: student1) }
+            let(:submission1) { create(:submission, text_comment: "This was tough.", link: nil, student: student1) }
 
             it "doesn't add link the text file" do
               expect(text_file).not_to include("link: http://greatjob.com\n")
@@ -134,7 +135,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer.instance_eval { formatted_student_name(@some_student) }}
       
       it "calls sanitize_filename with the correct student name" do
-        expect(performer).to receive(:sanitize_filename).with("edwina_herman")
+        expect(performer).to receive(:titleize_filename).with("edwina herman")
         subject
       end
     end
@@ -147,7 +148,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject { performer.instance_eval { submission_text_filename(@some_student) }}
 
       it "builds the filename" do
-        expect(subject).to eq("edwina_herman_the_day_the_earth_stood_still_submission_text.txt")
+        expect(subject).to eq("Edwina Herman - the_day_the_earth_stood_still - Submission Text.txt")
       end
 
       it "uses the formatted_assignment_name" do
@@ -161,15 +162,15 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "includes the student name" do
-        expect(subject).to include("edwina")
+        expect(subject).to include("Edwina")
       end
 
       it "includes the filename" do
-        expect(subject).to include("herman")
+        expect(subject).to include("Herman")
       end
 
       it "includes the default_suffix" do
-        expect(subject).to include("submission_text.txt")
+        expect(subject).to include("Submission Text.txt")
       end
     end
   end
