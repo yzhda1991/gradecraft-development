@@ -6,31 +6,50 @@ describe HistoryFilter do
     expect(described_class.new(changeset).changeset).to eq changeset
   end
 
+  describe "#empty_changeset?" do
+    it "is not empty if none of the values are arrays which represent changes" do
+      changeset = [{ "change" => ["before", "after"] }]
+      expect(described_class.new(changeset).empty_changeset?(changeset.first)).to eq false
+    end
+
+    it "is empty if none of the values are arrays which represent changes" do
+      changeset = [{ "event" => "blah" }]
+      expect(described_class.new(changeset).empty_changeset?(changeset.first)).to eq true
+    end
+  end
+
   describe "#exclude" do
     it "filters a changeset by event type" do
-      changeset = [{ "event" => "blah" }, { "event" => "bleh" }, {}]
+      changeset = [{ "event" => "blah", "change" => ["before", "after"] },
+                   { "event" => "bleh", "change" => ["before", "after"] }, {}]
       result = described_class.new(changeset).exclude("event" => "blah").changeset
-      expect(result).to eq [{ "event" => "bleh" }]
+      expect(result).to eq [{ "event" => "bleh", "change" => ["before", "after"] }]
     end
 
     it "filters a changeset by object" do
-      changeset = [{ "event" => "blah", "object" => "Grade" }, { "event" => "bleh" }, {}]
+      changeset = [{ "event" => "blah", "object" => "Grade",
+                     "change" => ["before", "after"] },
+                   { "event" => "bleh", "change" => ["before", "after"] }, {}]
       result = described_class.new(changeset).exclude("object" => "Grade").changeset
-      expect(result).to eq [{ "event" => "bleh" }]
+      expect(result).to eq [{ "event" => "bleh", "change" => ["before", "after"] }]
     end
   end
 
   describe "#include" do
     it "includes a changeset by event type" do
-      changeset = [{ "event" => "blah" }, { "event" => "bleh" }, {}]
+      changeset = [{ "event" => "blah", "change" => ["before", "after"] },
+                   { "event" => "bleh", "change" => ["before", "after"] }, {}]
       result = described_class.new(changeset).include("event" => "blah").changeset
-      expect(result).to eq [{ "event" => "blah" }]
+      expect(result).to eq [{ "event" => "blah", "change" => ["before", "after"] }]
     end
 
     it "includes a changeset by object" do
-      changeset = [{ "event" => "blah", "object" => "Grade" }, { "event" => "bleh" }, {}]
+      changeset = [{ "event" => "blah", "object" => "Grade",
+                     "change" => ["before", "after"] },
+                   { "event" => "bleh", "change" => ["before", "after"] }, {}]
       result = described_class.new(changeset).include("object" => "Grade").changeset
-      expect(result).to eq [{ "event" => "blah", "object" => "Grade" }]
+      expect(result).to eq [{ "event" => "blah", "object" => "Grade",
+                              "change" => ["before", "after"] }]
     end
   end
 

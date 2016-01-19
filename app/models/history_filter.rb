@@ -12,7 +12,7 @@ class HistoryFilter
       exclusions.inject(true) do |select, exclusion|
         set[exclusion] != options[exclusion]
       end
-    end.delete_if { |set| set.empty? }
+    end.delete_if { |set| empty_changeset?(set) }
     self
   end
 
@@ -22,7 +22,7 @@ class HistoryFilter
       inclusions.inject(true) do |select, inclusion|
         set[inclusion] == options[inclusion]
       end
-    end.delete_if { |set| set.empty? }
+    end.delete_if { |set| empty_changeset?(set) }
     self
   end
 
@@ -31,7 +31,11 @@ class HistoryFilter
 
     @changeset = changeset.map do |set|
       set.delete_if { |key, value| name == key } if name
-    end.delete_if { |set| set.empty? }
+    end.delete_if { |set| empty_changeset?(set) }
     self
+  end
+
+  def empty_changeset?(set)
+    set.values.none? { |value| value.is_a? Array }
   end
 end
