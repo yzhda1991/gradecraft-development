@@ -63,11 +63,12 @@ describe GradesController do
         rubric = create(:rubric_with_criteria, assignment: assignment)
         criterion = rubric.criteria.first
         level = rubric.criteria.first.levels.first
-        criterion_grade = CriterionGrade.create( assignment_id: assignment.id, student_id: @student.id, criterion_id: criterion.id, level_id: level.id)
+        criterion_grade = create(:criterion_grade, criterion: criterion, level: level)
         get :show, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
         expect(assigns(:criteria)).to eq(rubric.criteria)
-        expect(JSON.parse(assigns(:criterion_grades))).to eq([{ "id" => criterion_grade.id, "criterion_id" => criterion.id, "level_id" => level.id, "comments" => nil }])
+        expect(JSON.parse(assigns(:criterion_grades))).to eq(
+          [{ "id" => criterion_grade.id, "criterion_id" => criterion.id, "level_id" => level.id, "comments" => nil }])
       end
     end
 

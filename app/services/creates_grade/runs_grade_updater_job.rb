@@ -8,7 +8,7 @@ module Services
 
       executed do |context|
         grade = context[:grade]
-        if grade.is_student_visible?
+        if context[:student_visible_status] == true
           grade_updater_job = GradeUpdaterJob.new(grade_id: grade.id)
           grade_updater_job.enqueue
         end

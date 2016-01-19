@@ -17,10 +17,8 @@ describe Services::Actions::RunsGradeUpdaterJob do
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
-
-  it "does its thing" do
-    result = described_class.execute context
-    # @mz TODO: add specs
-    # ^^ moved from /app/controllers/grades_controller.rb 2016-01-18 @jg
+  it "enqueues the grade updater job" do
+    expect_any_instance_of(GradeUpdaterJob).to receive(:enqueue)
+    described_class.execute context
   end
 end

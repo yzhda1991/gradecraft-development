@@ -8,7 +8,7 @@ module Services
 
       executed do |context|
         grade = context[:grade]
-        context.fail_with_rollback!("The grade is invalid and cannot be saved") \
+        context.fail_with_rollback!("The grade is invalid and cannot be saved", error_code: 422) \
           unless grade.save
         # warning: LightService doesn't set context keys to false, will be nil !
         context[:student_visible_status] = grade.is_student_visible?

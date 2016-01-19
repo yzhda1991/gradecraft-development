@@ -7,7 +7,7 @@ module Services
 
       executed do |context|
         context[:criterion_grades].each do |cg|
-          context.fail_with_rollback!("The criterion grade is invalid and cannot be saved") \
+          context.fail_with_rollback!("The criterion grade is invalid and cannot be saved", error_code: 422) \
             unless cg.save
         end
       end
