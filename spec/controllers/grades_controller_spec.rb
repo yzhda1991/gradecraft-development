@@ -63,7 +63,7 @@ describe GradesController do
         rubric = create(:rubric_with_criteria, assignment: assignment)
         criterion = rubric.criteria.first
         level = rubric.criteria.first.levels.first
-        criterion_grade = create(:criterion_grade, assignment: assignment, student: @student, criterion: criterion, level: level)
+        criterion_grade = CriterionGrade.create( assignment_id: assignment.id, student_id: @student.id, criterion_id: criterion.id, level_id: level.id)
         get :show, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
         expect(assigns(:criteria)).to eq(rubric.criteria)
@@ -116,7 +116,7 @@ describe GradesController do
         rubric = create(:rubric_with_criteria, assignment: assignment)
         criterion = rubric.criteria.first
         level = rubric.criteria.first.levels.first
-        criterion_grade = create(:criterion_grade, assignment: assignment, student: @student, criterion: criterion, level: level)
+        criterion_grade = CriterionGrade.create( assignment_id: assignment.id, student_id: @student.id, criterion_id: criterion.id, level_id: level.id)
         get :edit, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
         expect(JSON.parse(assigns(:criterion_grades))).to eq([{ "id" => criterion_grade.id, "criterion_id" => criterion.id, "level_id" => level.id, "comments" => nil }])
@@ -159,7 +159,7 @@ describe GradesController do
 
       it "handles a grade file upload" do
         grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file('test_file.txt', 'txt')]}}}
-        
+
         put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
         expect expect(GradeFile.count).to eq(1)
         expect expect(GradeFile.last.filename).to eq("test_file.txt")
@@ -305,16 +305,16 @@ describe GradesController do
       end
 
       describe "finds or creates the grade for the assignment and student" do
-        it "finds and assigns the grade" do
+        it "finds and updates existing grades" do
           grade = create(:grade, assignment: @rubric_assignment, student: @student)
-          post :submit_rubric, @params
-          expect(assigns(:grade)).to eq(grade)
+          expect{ post :submit_rubric, @params }.to change { Grade.count }.by(0)
         end
 
-        it "creates and assigns the grade" do
+        it "creates grade when one doesn't exists" do
           expect{ post :submit_rubric, @params }.to change { Grade.count }.by(1)
-          expect(assigns(:grade).assignment).to eq(@rubric_assignment)
-          expect(assigns(:grade).student).to eq(@student)
+          grade = Grade.unscoped.last
+          expect(grade.assignment).to eq(@rubric_assignment)
+          expect(grade.student).to eq(@student)
         end
 
         it "assigns the grade to the submission" do
@@ -351,14 +351,23 @@ describe GradesController do
 
       it "adds earned level badges" do
         earnable_badge = create(:badge, course: @course)
-        level_badge = LevelBadge.create(badge: earnable_badge, level: @rubric.criteria.first.levels.first.id )
+        level_badge = LevelBadge.create(badge_id: earnable_badge.id, level_id: @rubric.criteria.first.levels.first.id )
         @params[:level_badges] = [{badge_id: earnable_badge.id, level_badge: level_badge.id, level_id: @rubric.criteria.first.levels.first.id}]
         expect{ post :submit_rubric, @params }.to change { EarnedBadge.count }.by(1)
       end
 
-      it "renders nothing when request format is JSON" do
+      it "renders success message when request format is JSON" do
         post :submit_rubric, @params
-        expect(response.body).to eq("")
+        expect(JSON.parse(response.body)).to eq({"message"=>"Grade successfully saved", "success"=>true})
+      end
+
+      describe "on error" do
+        it "describes lacking student or assignment" do
+          @params.delete(:student_id)
+          post :submit_rubric, @params
+          expect(JSON.parse(response.body)).to eq({"message"=>"Unable to verify both student and assignment", "success"=>false})
+          expect(response.status).to eq(404)
+        end
       end
     end
 

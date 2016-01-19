@@ -275,7 +275,7 @@ PaperTrail.whodunnit = nil
         Rubric.create! do |rubric|
           rubric.assignment = assignment
           rubric.save
-          1.upto(15).each do |n|
+          1.upto(5).each do |n|
             rubric.criteria.create! do |criterion|
               criterion.name = "Criteria ##{n}"
               criterion.max_points = 10.times.collect {|i| (i + 1) * 10000}.sample
@@ -322,24 +322,22 @@ PaperTrail.whodunnit = nil
       if config[:rubric] and config[:grades]
         @students.each do |student|
           assignment.rubric.criteria.each do |criterion|
-            criterion.criterion_grades.create! do |rg|
-              rg.max_points = criterion.max_points
-              rg.points = criterion.levels.first.points
-              rg.level = criterion.levels.first
-              rg.criterion_name = criterion.name
-              rg.level_name = criterion.levels.first.name
-              rg.assignment_id = assignment.id
-              rg.order = 1
-              rg.student_id = student.id
+            criterion.criterion_grades.create! do |cg|
+              cg.assignment_id = assignment.id
+              cg.comments = "good work #{student.display_name}!"
+              cg.criterion_id = criterion.id
+              cg.level_id = criterion.levels.first.id
+              cg.points = criterion.levels.first.points
+              cg.student_id = student.id
             end
           end
           print "."
         end
         print "\n"
         puts_success :assignment, assignment_name, :grades_created if course_name == @courses.keys[-1]
+      end
 
-
-      elsif config[:grades]
+      if config[:grades]
 
         grade_attributes = config[:grade_attributes] || {}
 

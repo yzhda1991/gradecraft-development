@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160113195301) do
+ActiveRecord::Schema.define(version: 20160119190311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -390,14 +390,7 @@ ActiveRecord::Schema.define(version: 20160113195301) do
   end
 
   create_table "criterion_grades", force: :cascade do |t|
-    t.string   "criterion_name",        limit: 255
-    t.text     "criterion_description"
-    t.integer  "max_points"
-    t.integer  "order"
-    t.string   "level_name",            limit: 255
-    t.text     "level_description"
     t.integer  "points"
-    t.integer  "submission_id"
     t.integer  "criterion_id"
     t.integer  "level_id"
     t.datetime "created_at"
@@ -406,6 +399,8 @@ ActiveRecord::Schema.define(version: 20160113195301) do
     t.integer  "student_id"
     t.text     "comments"
   end
+
+  add_index "criterion_grades", ["criterion_id", "student_id"], name: "index_criterion_grades_on_criterion_id_and_student_id", unique: true, using: :btree
 
   create_table "dashboards", force: :cascade do |t|
     t.datetime "created_at"
@@ -436,7 +431,6 @@ ActiveRecord::Schema.define(version: 20160113195301) do
     t.integer  "assignment_id"
     t.integer  "criterion_grade_id"
     t.integer  "level_id"
-    t.integer  "level_badge_id"
     t.boolean  "student_visible",                default: false
   end
 

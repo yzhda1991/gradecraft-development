@@ -115,7 +115,6 @@ class AssignmentPresenter < Showtime::Presenter
 
   def criterion_grades(user_id)
     CriterionGrade.
-      joins("left outer join submissions on submissions.id = criterion_grades.submission_id").
       where(student_id: user_id).
       where(assignment_id: assignment.id)
   end

@@ -225,7 +225,27 @@
   },
   assignment_type: :grading,
   attributes: {
-    name: "Rubric Graded Assignment",
+    name: "Rubric Graded Assignment [No Grades]",
+    open_at: 4.weeks.ago,
+    due_at: 3.weeks.ago,
+    point_total: 80000,
+    accepts_submissions: true,
+    release_necessary: true,
+  },
+  rubric: true,
+  student_submissions: true
+}
+
+@assignments[:rubric_assignment_graded] = {
+  quotes: {
+    assignment_created: "We spend the first year of a child's life teaching it to walk and talk and the rest of its life to shut up and sit down. There's something wrong there. ― Neil deGrasse Tyson",
+    rubric_created: "What is this? A center for ants? How can we be expected to teach children to learn how to read... if they can't even fit inside the building? --Derek Zoolander",
+    submissions_created: "I was the intellectual equivalent of a 98-pound weakling! I would go to the beach and people would kick copies of Byron in my face! - John Keating",
+    grade_created: "Volumetric flask is for general mixing and titration. You wouldn't apply heat to a volumetric flask. That's what a boiling flask is for. Did you learn nothing from my chemistry class? - Walter H. White",
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "Rubric Graded Assignment [Grades]",
     open_at: 4.weeks.ago,
     due_at: 3.weeks.ago,
     point_total: 80000,
@@ -235,6 +255,7 @@
   grades: true,
   grade_attributes: {
     status: "Graded",
+    raw_score: Proc.new { 80000 },
   },
   rubric: true,
   student_submissions: true

@@ -4,7 +4,8 @@ class World
   end
 
   class Instance
-    attr_reader :assignments, :badges, :courses, :course_memberships, :grades, :teams, :users
+    attr_reader :assignments, :badges, :courses, :course_memberships, :criteria,
+                :criterion_grades, :grades, :rubrics, :students, :teams, :users
 
     def assignment
       assignments.first
@@ -18,8 +19,20 @@ class World
       courses.first
     end
 
+    def criterion
+      criteria.first
+    end
+
+    def criterion_grade
+      criterion_grades.first
+    end
+
     def grade
       grades.first
+    end
+
+    def rubric
+      rubrics.first
     end
 
     def students
@@ -36,6 +49,13 @@ class World
 
     def user
       users.first
+    end
+
+    def with(*items)
+      items.each do |item|
+        self.send("create_#{item}")
+      end
+      self
     end
 
     def create_assignment(attributes={})
@@ -55,6 +75,23 @@ class World
       self
     end
 
+    def create_criterion(attributes={})
+      assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
+      student = attributes.delete(:student) || self.student || FactoryGirl.build(:user)
+      rubric = attributes.delete(:rubric) || self.rubric || FactoryGirl.build(:rubric, assignment: assignment)
+      criteria << FactoryGirl.create(:criterion, attributes.merge(rubric: rubric))
+    end
+
+    def create_criterion_grade(attributes={})
+      assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
+      student = attributes.delete(:student) || self.student || FactoryGirl.build(:user)
+      rubric = attributes.delete(:rubric) || self.rubric || FactoryGirl.build(:rubric, assignment: assignment)
+      criterion = attributes.delete(:criterion) || self.criterion || FactoryGirl.build(:criterion, assignment: assignment)
+      criterion_grades << FactoryGirl.create(:criterion_grade, \
+        attributes.merge(assignment: assignment, student: student, criterion: criterion))
+      self
+    end
+
     def create_grade(attributes={})
       assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
       assignment_type = attributes.delete(:assignment_type) || assignment.assignment_type
@@ -62,6 +99,12 @@ class World
       student = attributes.delete(:student) || self.student || FactoryGirl.build(:user)
       grades << FactoryGirl.create(:grade, attributes.merge(assignment: assignment, assignment_type: assignment_type,
                                                             course: course, student: student))
+      self
+    end
+
+    def create_rubric(attributes={})
+      assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
+      rubrics << FactoryGirl.create(:rubric, attributes.merge(assignment: assignment))
       self
     end
 
@@ -85,8 +128,11 @@ class World
       @assignments = []
       @badges = []
       @courses = []
+      @criteria = []
+      @criterion_grades = []
       @course_memberships = []
       @grades = []
+      @rubrics = []
       @teams = []
       @users = []
     end

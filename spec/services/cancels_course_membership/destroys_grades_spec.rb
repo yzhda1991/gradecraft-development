@@ -19,17 +19,6 @@ describe Services::Actions::DestroysGrades do
     expect(student.reload.grades).to eq [another_grade]
   end
 
-  it "destroys the rubric grades for the course submission" do
-    another_submission = create :submission, student: student
-    course_submission = create :submission, student: student, course: course
-    another_grade = create :criterion_grade, submission: another_submission,
-      student: student
-    course_grade = create :criterion_grade, submission: course_submission,
-      student: student
-    described_class.execute membership: membership
-    expect(CriterionGrade.for_student(membership.user)).to eq [another_grade]
-  end
-
   it "destroys the rubric grades for the course assignments" do
     course_assignment = create :assignment, course: course
     another_grade = create :criterion_grade, student: student
