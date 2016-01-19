@@ -18,7 +18,7 @@ RSpec.shared_examples "a complete submission email body" do
   end
 
   it "includes the submission created_at timestamp" do
-    should include submission.created_at
+    should include submission.submitted_at
   end
 end
 
