@@ -216,7 +216,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def titleize_filename(filename)
     filename
       .downcase
-      .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
+      .gsub(/[^\w\s_-]+/, ' ') # strip out characters besides letters and digits
       .gsub(/_+/, ' ') # replace underscores with spaces
       .gsub(/ +/, ' ') # replace underscores with spaces
       .gsub(/^ +/, '') # remove leading spaces
@@ -297,6 +297,16 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     else
       @archive_tmp_dir ||= Dir.mktmpdir
     end
+  end
+
+  # @mz todo: add specs
+  def archive_root_dir
+    @archive_root_dir ||= FileUtils.mkdir_p(archive_root_dir_path).first
+  end
+  
+  # @mz todo: add specs
+  def archive_root_dir_path
+    @archive_root_dir_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
   end
 
   def tmp_dir_parent_path

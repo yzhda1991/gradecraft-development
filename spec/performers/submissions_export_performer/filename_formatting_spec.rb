@@ -187,6 +187,41 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
+  describe "#archive_root_dir", focus: true do
+    let(:archive_root_dir_path) { Dir.mktmpdir }
+    subject { performer.instance_eval { archive_root_dir }}
+    before(:each) do
+      performer.instance_variable_set(:@archive_root_dir, nil)
+      allow(performer).to receive(:archive_root_dir_path) { archive_root_dir_path }
+    end
+
+    it "returns the archive root dir path" do
+      expect(subject).to eq(archive_root_dir_path)
+    end
+
+    it "recursively builds the archive root dir path" do
+      allow(FileUtils).to receive(:mkdir_p) {[archive_root_dir_path]}
+      expect(FileUtils).to receive(:mkdir_p).with(archive_root_dir_path)
+      subject
+    end
+
+    it "actually builds the archive root dir" do
+      subject
+      expect(Dir.exist?(archive_root_dir_path)).to be_truthy
+    end
+
+    it "caches the root dir path" do
+      subject
+      expect(FileUtils).not_to receive(:mkdir_p).with(archive_root_dir_path)
+      subject
+    end
+
+    it "sets the root dir path to @archive_root_dir" do
+      subject
+      expect(performer.instance_variable_get(:@archive_root_dir)).to eq(archive_root_dir_path)
+    end
+  end
+
   describe "tmp_dir" do
     subject { performer.instance_eval { tmp_dir }}
     it "builds a temporary directory" do
