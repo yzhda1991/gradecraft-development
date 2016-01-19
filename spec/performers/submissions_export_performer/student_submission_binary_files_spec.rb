@@ -124,7 +124,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         end
 
         it "appends the index to 'submission_file'" do
-          expect(subject).to include("submission_file5")
+          expect(subject).to include("Submission File 6")
         end
 
         it "gets the extension from the submission_file" do
@@ -133,7 +133,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         end
 
         it "puts them all together and returns a filename" do
-          expect(subject).to eq("jeff_mills_the_wizard_submission_file5.ralph")
+          expect(subject).to eq("jeff_mills - the_wizard - Submission File 6.ralph")
         end
       end
 
