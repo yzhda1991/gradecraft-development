@@ -187,7 +187,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  describe "#archive_root_dir", focus: true do
+  describe "#archive_root_dir" do
     let(:archive_root_dir_path) { Dir.mktmpdir }
     subject { performer.instance_eval { archive_root_dir }}
     before(:each) do
@@ -222,7 +222,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  describe "#archive_root_dir_path", focus: true do
+  describe "#archive_root_dir_path" do
     let(:tmp_dir) { Dir.mktmpdir }
     let(:expected_outcome) { File.expand_path(export_base_filename, tmp_dir) }
     let(:export_base_filename) { performer.instance_eval { export_file_basename }}
