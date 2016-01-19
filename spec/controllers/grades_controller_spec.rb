@@ -63,7 +63,8 @@ describe GradesController do
         rubric = create(:rubric_with_criteria, assignment: assignment)
         criterion = rubric.criteria.first
         level = rubric.criteria.first.levels.first
-        criterion_grade = create(:criterion_grade, criterion: criterion, level: level)
+        # can't get this to work with factory-girl... criterion_grade = create(:criterion_grade, criterion: criterion, level: level)...
+        criterion_grade = CriterionGrade.create( assignment_id: assignment.id, student_id: @student.id, criterion_id: criterion.id, level_id: level.id)
         get :show, { :id => @grade.id, :assignment_id => assignment.id, :student_id => @student.id }
         expect(assigns(:rubric)).to eq(rubric)
         expect(assigns(:criteria)).to eq(rubric.criteria)
