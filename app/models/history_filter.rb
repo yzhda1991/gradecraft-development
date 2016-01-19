@@ -5,23 +5,27 @@ class HistoryFilter
     @changeset = changeset
   end
 
-  def exclude(options)
+  def exclude(options={})
     exclusions = options.keys
 
     @changeset = changeset.select do |set|
-      exclusions.inject(true) do |select, exclusion|
+      result = exclusions.inject(true) do |select, exclusion|
         set[exclusion] != options[exclusion]
       end
+      result &= !yield(set) if block_given?
+      result
     end.delete_if { |set| empty_changeset?(set) }
     self
   end
 
-  def include(options)
+  def include(options={})
     inclusions = options.keys
     @changeset = changeset.select do |set|
-      inclusions.inject(true) do |select, inclusion|
+      result = inclusions.inject(true) do |select, inclusion|
         set[inclusion] == options[inclusion]
       end
+      result &= yield(set) if block_given?
+      result
     end.delete_if { |set| empty_changeset?(set) }
     self
   end

@@ -33,6 +33,16 @@ describe HistoryFilter do
       result = described_class.new(changeset).exclude("object" => "Grade").changeset
       expect(result).to eq [{ "event" => "bleh", "change" => ["before", "after"] }]
     end
+
+    it "filters a changeset via a block" do
+      changeset = [{ "event" => "blah", "object" => "Grade",
+                     "change" => ["before", "after"] },
+                   { "event" => "bleh", "change" => ["before", "after"] }, {}]
+      result = described_class.new(changeset).exclude { |changeset|
+        changeset["object"] == "Grade"
+      }.changeset
+      expect(result).to eq [{ "event" => "bleh", "change" => ["before", "after"] }]
+    end
   end
 
   describe "#include" do
@@ -48,6 +58,17 @@ describe HistoryFilter do
                      "change" => ["before", "after"] },
                    { "event" => "bleh", "change" => ["before", "after"] }, {}]
       result = described_class.new(changeset).include("object" => "Grade").changeset
+      expect(result).to eq [{ "event" => "blah", "object" => "Grade",
+                              "change" => ["before", "after"] }]
+    end
+
+    it "filters a changeset via a block" do
+      changeset = [{ "event" => "blah", "object" => "Grade",
+                     "change" => ["before", "after"] },
+                   { "event" => "bleh", "change" => ["before", "after"] }, {}]
+      result = described_class.new(changeset).include { |changeset|
+        changeset["object"] == "Grade"
+      }.changeset
       expect(result).to eq [{ "event" => "blah", "object" => "Grade",
                               "change" => ["before", "after"] }]
     end
