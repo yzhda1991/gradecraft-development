@@ -22,6 +22,8 @@ module Historical
   end
 
   def historical_merge(historical_model)
+    return self.history if historical_model.nil?
+
     CollectionMerger.new(self.history, historical_model.history)
       .merge(field: ->(version) { version["recorded_at"] }, order: :desc)
   end
