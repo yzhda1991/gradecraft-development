@@ -23,6 +23,6 @@ module Historical
 
   def historical_merge(historical_model)
     CollectionMerger.new(self.history, historical_model.history)
-      .merge(field: ->(version) { version["updated_at"].last }, order: :desc)
+      .merge(field: ->(version) { version["recorded_at"] }, order: :desc)
   end
 end
