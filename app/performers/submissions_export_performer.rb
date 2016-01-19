@@ -428,8 +428,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       open(missing_binaries_file_path, 'wt') do |f|
         f.puts "The following files were uploaded, but no longer appear to be available on the server:"
         students_with_missing_binaries.each_with_index do |student, index|
-          f.puts "" if index == 0
-          f.puts "#{student.full_name}:"
+          f.puts "\n#{student.full_name}:"
           submission_files_with_missing_binaries.each do |missing_file|
             f.puts "#{missing_file.filename}" if missing_file.submission.student_id == student.id
           end

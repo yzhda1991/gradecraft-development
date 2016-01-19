@@ -61,7 +61,7 @@ class GradesController < ApplicationController
   def update
     @grade = Grade.find_or_create(@assignment, current_student)
 
-    if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
+    if @grade.update_attributes params[:grade].merge(graded_at: Time.now,
         instructor_modified: true)
 
       # @mz TODO: ADD SPECS
