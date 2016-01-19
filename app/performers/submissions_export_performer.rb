@@ -372,7 +372,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def student_directory_path(student)
-    File.expand_path(student_directory_names[student.id], tmp_dir)
+    File.expand_path(student_directory_names[student.id], archive_root_dir)
   end
 
   def create_submission_text_files

@@ -11,7 +11,7 @@ RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :
 
   subject { performer }
 
-  let(:tmp_dir_path) { Dir.mktmpdir }
+  let(:archive_root_dir) { Dir.mktmpdir }
   let(:students) { [ student1, student2, student3 ] }
   let(:stub_students) { performer.instance_variable_set(:@students, students) }
 
@@ -23,9 +23,9 @@ RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :
   let(:student_dir_name2) { student2.alphabetical_name_key_with_username }
   let(:student_dir_name3) { student3.alphabetical_name_key }
 
-  let(:student_dir_path1) { "#{tmp_dir_path}/#{student_dir_name1}" }
-  let(:student_dir_path2) { "#{tmp_dir_path}/#{student_dir_name2}" }
-  let(:student_dir_path3) { "#{tmp_dir_path}/#{student_dir_name3}" }
+  let(:student_dir_path1) { "#{archive_root_dir}/#{student_dir_name1}" }
+  let(:student_dir_path2) { "#{archive_root_dir}/#{student_dir_name2}" }
+  let(:student_dir_path3) { "#{archive_root_dir}/#{student_dir_name3}" }
 
   let(:student_dir_paths) { [ student_dir_path1, student_dir_path2, student_dir_path3 ] }
   let(:remove_student_dirs) do
@@ -41,7 +41,7 @@ RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :
   end
 
   before(:each) do
-    allow(performer).to receive(:tmp_dir) { tmp_dir_path }
+    allow(performer).to receive(:archive_root_dir) { archive_root_dir }
   end
 
   describe "missing_student_directories" do
@@ -53,7 +53,7 @@ RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :
     end
 
     context "student directories are missing" do
-      it "returns the names of the missing directories relative to the tmp_dir" do
+      it "returns the names of the missing directories relative to the archive_root_dir" do
         expect(subject).to eq([student_dir_name1, student_dir_name2])
       end
 
@@ -127,7 +127,7 @@ RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :
     end
 
     it "expands the path relative to the tmp_dir" do
-      expect(File).to receive(:expand_path).with(student_dir_name1, tmp_dir_path)
+      expect(File).to receive(:expand_path).with(student_dir_name1, archive_root_dir)
       subject
     end
   end
