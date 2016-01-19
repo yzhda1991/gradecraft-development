@@ -31,8 +31,16 @@ module HumanHistory
 
     def change_description
       description = "the #{attribute_name} "
-      description += "from \"#{changes.first}\" " unless changes.first.nil?
-      description += "to \"#{changes.last}\""
+      description += "from #{format_change changes.first} " unless changes.first.nil?
+      description += "to #{format_change changes.last}"
+    end
+
+    def format_change(change)
+      requires_quotes?(change) ? "\"#{change}\"" : change
+    end
+
+    def requires_quotes?(change)
+      !change.is_a?(Integer) && !change.is_a?(TrueClass) && !change.is_a?(FalseClass)
     end
   end
 end
