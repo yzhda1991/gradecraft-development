@@ -9,7 +9,7 @@ module HumanHistory
     end
 
     def parse(options={})
-      { change: "the #{attribute_name} from \"#{changes.first}\" to \"#{changes.last}\"" }
+      { change: change_description }
     end
 
     class << self
@@ -27,6 +27,12 @@ module HumanHistory
 
     def attribute_name
       type.classify.constantize.human_attribute_name(attribute).downcase
+    end
+
+    def change_description
+      description = "the #{attribute_name} "
+      description += "from \"#{changes.first}\" " unless changes.first.nil?
+      description += "to \"#{changes.last}\""
     end
   end
 end
