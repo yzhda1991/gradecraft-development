@@ -1,3 +1,5 @@
+require_relative "../services/creates_grade_using_rubric"
+
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
@@ -130,43 +132,12 @@ class GradesController < ApplicationController
 
   # PUT /assignments/:assignment_id/grade/submit_rubric
   def submit_rubric
-    @submission = Submission.where(current_assignment_and_student_ids).first
+    result = Services::CreatesGradeUsingRubric.create params
 
-    @grade = Grade.where(student_id: current_student[:id], assignment_id: @assignment[:id]).first
-
-    if @grade
-      @grade.update_attributes grade_attributes_from_rubric
+    if result.success?
+      render json: {message: "Grade successfully saved", success: true}, status: 200
     else
-      @grade = Grade.create(new_grade_from_criterion_grades_attributes)
-    end
-
-    # delete existing rubric grades
-    # TODO: Shouldn't require a second parameter of criterion_ids when already supplied.
-    # 1. Insure criterion id is suplied in params[:criterion_grades] and required by CriterionGrade model
-    # 2. params[:criterion_ids] = params[:criterion_grades].collect{|rg| rg["criterion_id"]}`
-    CriterionGrade.where({ assignment_id: params[:assignment_id], student_id: params[:student_id], criterion_id: params[:criterion_ids] }).delete_all
-
-    # create an individual record for each rubric grade
-    params[:criterion_grades].collect do |criterion_grade|
-      CriterionGrade.create! criterion_grade.merge(
-        { submission_id: safe_submission_id,
-          assignment_id: @assignment[:id],
-          student_id: params[:student_id]
-        }
-      )
-    end
-
-    # EarnedBadges associated with a LevelBadge
-    EarnedBadge.import(new_earned_level_badges, :validate => true) if params[:level_badges]
-
-    # @mz TODO: add specs
-    if @grade.is_student_visible?
-      @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-      @grade_updater_job.enqueue
-    end
-
-    respond_to do |format|
-      format.json { render nothing: true }
+      render json: {message: result.message, success: false}, status:  result.error_code || 400
     end
   end
 
@@ -437,28 +408,8 @@ class GradesController < ApplicationController
                 select(:id, :criterion_id, :level_id, :comments).to_json
   end
 
-  def safe_submission_id
-    @submission[:id] rescue nil
-  end
-
   def safe_grade_possible_points
     @grade.point_total rescue nil
-  end
-
-  def new_earned_level_badges
-    params[:level_badges].collect do |level_badge|
-      EarnedBadge.new({
-        badge_id: level_badge["badge_id"],
-        submission_id: safe_submission_id,
-        course_id: current_course[:id],
-        student_id: current_student[:id],
-        assignment_id: @assignment[:id],
-        level_id: level_badge[:level_id],
-        score: level_badge[:point_total],
-        level_badge_id: level_badge[:id],
-        student_visible: @grade.is_student_visible?
-      })
-    end
   end
 
   def enqueue_predictor_event_job
@@ -497,35 +448,6 @@ class GradesController < ApplicationController
       end
       memo
     end
-  end
-
-  def new_grade_from_criterion_grades_attributes
-    {
-      course_id: current_course[:id],
-      assignment_type_id: @assignment.assignment_type_id
-    }
-      .merge(current_assignment_and_student_ids)
-      .merge(grade_attributes_from_rubric)
-  end
-
-  def current_assignment_and_student_ids
-    {
-      assignment_id: @assignment[:id],
-      student_id: params[:student_id]
-    }
-  end
-
-  def grade_attributes_from_rubric
-    {
-      raw_score: params[:points_given],
-      submission_id: safe_submission_id,
-      # TODO: point_total should be inherited from assignment,
-      # and not handled by front end logic
-      point_total: params[:points_possible],
-      status: params[:grade_status],
-      instructor_modified: true,
-      graded_at: DateTime.now
-    }
   end
 
   def rubric_criteria_with_levels

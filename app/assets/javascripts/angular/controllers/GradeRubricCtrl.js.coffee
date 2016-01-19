@@ -212,10 +212,14 @@
     self = this
     if confirm "Are you sure you want to submit the grade for this assignment?"
       # alert(self.gradedRubricParams().level_badges.length)
+
+      # !!! Document any updates to this call in the specs: /spec/support/api_calls/rubric_grade_put.rb
       $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", self.gradedRubricParams()).success(
         window.location = $scope.returnURL
       )
       .error(
+        (data)->
+          console.log(data);
       )
 
   $scope.addCriterionGrades = (criterionGrades)->

@@ -3,7 +3,6 @@ class Rubric < ActiveRecord::Base
 
   belongs_to :assignment
   has_many :criteria
-  has_many :criterion_grades
 
   validates :assignment, presence: true
 

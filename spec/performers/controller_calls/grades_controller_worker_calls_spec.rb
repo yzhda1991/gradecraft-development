@@ -36,7 +36,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
     before(:each) { enroll_and_login_professor }
 
     describe "#submit_rubric" do
-      let(:request_attrs) {{ assignment_id: assignment.id, criterion_grades: [], format: :json }}
+      let(:request_attrs) {{ student_id: student.id, assignment_id: assignment.id, criterion_grades: [], format: :json }}
       subject { put :submit_rubric, request_attrs }
 
       before do
