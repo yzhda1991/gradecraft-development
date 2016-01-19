@@ -36,9 +36,8 @@ describe HumanHistory::HistoryTokenizer do
       expect(subject.tokens.first).to be_kind_of HumanHistory::EventHistoryToken
     end
 
-    it "adds a date token when an updated at is included in the changeset" do
-      changeset = { "updated_at" => [DateTime.new(2015, 4, 12, 1, 12),
-                                     DateTime.new(2015, 4, 12, 1, 23)] }
+    it "adds a date token when an recorded at is included in the changeset" do
+      changeset = { "recorded_at" => DateTime.new(2015, 4, 12, 1, 23) }
 
       subject = described_class.new(changeset).tokenize
 
@@ -46,9 +45,8 @@ describe HumanHistory::HistoryTokenizer do
       expect(subject.tokens.first).to be_kind_of HumanHistory::DateHistoryToken
     end
 
-    it "adds a time token when an updated at is included in the changeset" do
-      changeset = { "updated_at" => [DateTime.new(2015, 4, 12, 1, 12),
-                                     DateTime.new(2015, 4, 12, 1, 23)] }
+    it "adds a time token when an recorded at is included in the changeset" do
+      changeset = { "recorded_at" => DateTime.new(2015, 4, 12, 1, 23) }
 
       subject = described_class.new(changeset).tokenize
 
