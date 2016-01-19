@@ -140,7 +140,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def team_present?
-    @attrs[:team_id].present?
+    @submissions_export[:team_id].present?
   end
 
   def s3_manager
@@ -195,7 +195,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def archive_basename
     if team_present?
-      "#{formatted_assignment_name} Export - #{formatted_team_name}"
+      "#{formatted_assignment_name} - #{formatted_team_name}"
     else
       formatted_assignment_name
     end
@@ -267,7 +267,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def fetch_team
-    @team = Team.find @attrs[:team_id]
+    @team = Team.find @submissions_export[:team_id]
   end
 
   def fetch_professor
