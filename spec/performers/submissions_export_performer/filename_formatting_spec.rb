@@ -12,7 +12,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "export_file_basename" do
     subject { performer.instance_eval { export_file_basename }}
-    let(:filename_timestamp) { "2020-10-15 - 12:30:20pm" }
+    let(:filename_timestamp) { "2020-10-15 - 1230PM" }
 
     before(:each) do
       performer.instance_variable_set(:@export_file_basename, nil)
@@ -48,7 +48,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     it "formats the filename time" do
-      expect(subject).to match(filename_time.strftime("%Y-%m-%d - %I:%M:%S%P"))
+      expect(subject).to match(filename_time.strftime("%Y-%m-%d - %l%M%p"))
     end
   end
 

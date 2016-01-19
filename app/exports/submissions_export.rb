@@ -25,7 +25,7 @@ class SubmissionsExport < ActiveRecord::Base
   before_create :set_s3_attributes
 
   def s3_object_key
-    "exports/courses/#{course_id}/assignments/#{assignment_id}/#{export_filename}"
+    "exports/courses/#{course_id}/assignments/#{assignment_id}/#{export_filename}/#{created_at.to_f}"
   end
 
   def s3_manager

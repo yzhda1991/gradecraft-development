@@ -188,14 +188,15 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
+  # @mz todo: update specs
   # methods for building and formatting the archive filename
   def export_file_basename
-    @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}"
+    @export_file_basename ||= "#{archive_basename} - #{filename_timestamp}".gsub("\s+"," ")
   end
 
   # @mz todo: update specs
   def filename_timestamp
-    filename_time.strftime("%Y-%m-%d - %l:%M:%S%P").gsub("\s+"," ")
+    filename_time.strftime("%Y-%m-%d - %l%M%p").gsub("\s+"," ")
   end
 
   def filename_time
@@ -225,7 +226,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def titleize_filename(filename)
     filename
       .downcase
-      .gsub(/[^\w\s_-]+/, ' ') # strip out characters besides letters and digits
+      .gsub(/[^\w\s_\:-]+/, ' ') # strip out characters besides letters and digits
       .gsub(/_+/, ' ') # replace underscores with spaces
       .gsub(/ +/, ' ') # replace underscores with spaces
       .gsub(/^ +/, '') # remove leading spaces
@@ -236,7 +237,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def sanitize_filename(filename)
     filename
       .downcase
-      .gsub(/[^\w\s_-]+/, '') # strip out characters besides letters and digits
+      .gsub(/[^\w\s_\:-]+/, '') # strip out characters besides letters and digits
       .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
       .gsub(/\s+/, '_') # replace spaces with underscores
       .gsub(/^_+/, '') # remove leading underscores

@@ -72,7 +72,7 @@ RSpec.describe SubmissionsExport do
     end
 
     it "uses the correct object key" do
-      expect(subject).to eq("exports/courses/40/assignments/50/stuff.zip")
+      expect(subject).to eq("exports/courses/40/assignments/50/stuff.zip/#{submissions_export.created_at.to_f}")
     end
   end
 
