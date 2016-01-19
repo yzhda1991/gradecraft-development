@@ -47,16 +47,20 @@ module UnlockableCondition
   def is_unlocked_for_group?(group)
     return true unless unlock_conditions.present?
 
-    goal = group.students.count
-    achieved = 0
-    group.students.each do |student|
-      unlock_state = unlock_states.where(student_id: student.id).first
-      if unlock_state.present? && unlock_state.is_unlocked?
-        achieved += 1
+    if group.present?
+      goal = group.students.count
+      achieved = 0
+      group.students.each do |student|
+        unlock_state = unlock_states.where(student_id: student.id).first
+        if unlock_state.present? && unlock_state.is_unlocked?
+          achieved += 1
+        end
       end
-    end
-    if goal == achieved
-      return true
+      if goal == achieved
+        return true
+      else
+        return false
+      end
     else
       return false
     end
