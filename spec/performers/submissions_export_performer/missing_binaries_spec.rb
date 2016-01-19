@@ -86,6 +86,9 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
     end
 
     describe "intro line" do
+      let(:students) { create_list(:user, 1) }
+      before { allow(performer).to receive(:students_with_missing_binaries) { students }}
+
       it "adds a message to the missing files text file" do
         subject
         expect(file_lines.first).to match(/The following files were uploaded/)
