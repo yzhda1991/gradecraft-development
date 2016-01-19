@@ -222,6 +222,34 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
+  describe "#archive_root_dir_path", focus: true do
+    let(:archive_tmp_dir) { Dir.mktmpdir }
+    let(:expected_outcome) { File.expand_path(export_base_filename, archive_tmp_dir) }
+    let(:export_base_filename) { performer.instance_eval { export_file_basename }}
+    subject { performer.instance_eval { archive_root_dir_path }}
+
+    before(:each) do
+      allow(performer).to receive_messages({
+        archive_tmp_dir: archive_tmp_dir
+      })
+    end
+
+    it "returns the archive root dir path" do
+      expect(subject).to eq(expected_outcome)
+    end
+
+    it "caches the root dir path" do
+      subject
+      expect(File).not_to receive(:expand_path).with(export_base_filename, archive_tmp_dir)
+      subject
+    end
+
+    it "sets the root dir path to @archive_root_dir_path" do
+      subject
+      expect(performer.instance_variable_get(:@archive_root_dir_path)).to eq(expected_outcome)
+    end
+  end
+
   describe "tmp_dir" do
     subject { performer.instance_eval { tmp_dir }}
     it "builds a temporary directory" do
