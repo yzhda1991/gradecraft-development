@@ -50,13 +50,18 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
+  # @submissions_export[:team_id].present?
   describe "team_present?" do
-    context "team_id was included in the initialized performer attributes" do
+    before(:each) { performer.instance_variable_set(:@submissions_export, submissions_export) }
+
+    context "the @submissions_export has a team_id" do
+      let(:submissions_export) { create(:submissions_export, team_id: nil) }
       subject { performer.instance_eval { team_present? }}
       it { should be_falsey }
     end
 
-    context "team_id was not included in the initialized performer attributes" do
+    context "the @submissions_export doesn't have a team_id" do
+      let(:submissions_export) { create(:submissions_export, team_id: team.id) }
       subject { performer_with_team.instance_eval { team_present? }}
       it { should be_truthy }
     end

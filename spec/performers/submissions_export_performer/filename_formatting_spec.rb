@@ -48,7 +48,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     it "formats the filename time" do
-      expect(subject).to match(filename_time.strftime("%Y-%m-%d - %I:%M:%S%p"))
+      expect(subject).to match(filename_time.strftime("%Y-%m-%d - %I:%M:%S%P"))
     end
   end
 
@@ -99,7 +99,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     context "team_present? is true" do
       before { allow(performer).to receive(:team_present?) { true }}
       it "combines the formatted assignment and team names" do
-        expect(subject).to eq("blog_entry_5 Export - the_walloping_wildebeest")
+        expect(subject).to eq("blog_entry_5 - the_walloping_wildebeest")
       end
     end
 
