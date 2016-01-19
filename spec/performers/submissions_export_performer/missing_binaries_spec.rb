@@ -6,16 +6,16 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
 
   describe "#missing_binaries_file_path" do
     subject { performer.instance_eval { missing_binaries_file_path }}
-    let(:tmp_dir) { Dir.mktmpdir }
-    before { allow(performer).to receive(:tmp_dir) { tmp_dir } }
+    let(:archive_root_dir) { Dir.mktmpdir }
+    before { allow(performer).to receive(:archive_root_dir) { archive_root_dir } }
 
     it "returns the file path for the missing files text" do
-      expect(File).to receive(:expand_path).with("missing_files.txt", tmp_dir)
+      expect(File).to receive(:expand_path).with("missing_files.txt", archive_root_dir)
       subject
     end
 
     it "builds a file path for the submission file" do
-      expect(subject).to eq("#{tmp_dir}/missing_files.txt")
+      expect(subject).to eq("#{archive_root_dir}/missing_files.txt")
     end
   end
 
@@ -77,12 +77,12 @@ RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
 
   describe "#write_note_for_missing_binary_files" do
     subject { performer.instance_eval { write_note_for_missing_binary_files }}
-    let(:tmp_dir) { Dir.mktmpdir }
-    let(:missing_binaries_file_path) { "#{tmp_dir}/missing_files.txt" }
+    let(:archive_root_dir) { Dir.mktmpdir }
+    let(:missing_binaries_file_path) { "#{archive_root_dir}/missing_files.txt" }
     let(:file_lines) { File.open(missing_binaries_file_path, "rt").readlines }
 
     before(:each) do
-      allow(performer).to receive(:tmp_dir) { tmp_dir }
+      allow(performer).to receive(:archive_root_dir) { archive_root_dir }
     end
 
     describe "intro line" do

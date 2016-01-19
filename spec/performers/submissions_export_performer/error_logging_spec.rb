@@ -13,10 +13,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   describe "error logging" do
     describe "error_log_path" do
       subject { performer.instance_eval { error_log_path }}
-      before { allow(performer).to receive(:tmp_dir) { "/some/serious/tmp_dir" } }
+      before { allow(performer).to receive(:archive_root_dir) { "/some/serious/archive_root_dir" } }
 
       it "expands the error log file relative to the tmp dir" do
-        expect(subject).to eq("/some/serious/tmp_dir/error_log.txt")
+        expect(subject).to eq("/some/serious/archive_root_dir/error_log.txt")
       end
     end
 

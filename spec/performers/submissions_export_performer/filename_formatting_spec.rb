@@ -223,16 +223,12 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   end
 
   describe "#archive_root_dir_path", focus: true do
-    let(:archive_tmp_dir) { Dir.mktmpdir }
-    let(:expected_outcome) { File.expand_path(export_base_filename, archive_tmp_dir) }
+    let(:tmp_dir) { Dir.mktmpdir }
+    let(:expected_outcome) { File.expand_path(export_base_filename, tmp_dir) }
     let(:export_base_filename) { performer.instance_eval { export_file_basename }}
     subject { performer.instance_eval { archive_root_dir_path }}
 
-    before(:each) do
-      allow(performer).to receive_messages({
-        archive_tmp_dir: archive_tmp_dir
-      })
-    end
+    before(:each) { allow(performer).to receive(:tmp_dir) { tmp_dir }}
 
     it "returns the archive root dir path" do
       expect(subject).to eq(expected_outcome)
@@ -240,7 +236,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     it "caches the root dir path" do
       subject
-      expect(File).not_to receive(:expand_path).with(export_base_filename, archive_tmp_dir)
+      expect(File).not_to receive(:expand_path).with(export_base_filename, tmp_dir)
       subject
     end
 
@@ -369,11 +365,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     subject { performer.instance_eval { expanded_archive_base_path }}
     before do
       allow(performer).to receive(:export_file_basename) { "the_best_filename" }
-      allow(performer).to receive(:archive_root_dir) { "/archive/root/dir" }
+      allow(performer).to receive(:archive_tmp_dir) { "/archive/tmp/dir" }
     end
 
     it "expands the export file basename from the archive tmp dir path" do
-      expect(subject).to eq("/archive/root/dir/the_best_filename")
+      expect(subject).to eq("/archive/tmp/dir/the_best_filename")
     end
 
     it "caches the basename" do

@@ -126,8 +126,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       expect(subject).to match(/grade_import_template\.csv$/)
     end
 
-    it "expands the path off of tmp_dir" do
-      allow(performer).to receive(:tmp_dir) { "/some/weird/path/" }
+    it "expands the path off of archive_root_dir" do
+      allow(performer).to receive(:archive_root_dir) { "/some/weird/path/" }
       expect(subject).to match(/^\/some\/weird\/path\//)
     end
 

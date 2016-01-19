@@ -155,8 +155,17 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
+  def archive_root_dir
+    @archive_root_dir ||= FileUtils.mkdir_p(archive_root_dir_path).first
+  end
+  
+  def archive_root_dir_path
+    @archive_root_dir_path ||= File.expand_path(export_file_basename, tmp_dir)
+  end
+
+
   def csv_file_path
-    @csv_file_path ||= File.expand_path("_grade_import_template.csv", tmp_dir)
+    @csv_file_path ||= File.expand_path("_grade_import_template.csv", archive_root_dir)
   end
 
   def sorted_student_directory_keys
@@ -299,14 +308,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  def archive_root_dir
-    @archive_root_dir ||= FileUtils.mkdir_p(archive_root_dir_path).first
-  end
-  
-  def archive_root_dir_path
-    @archive_root_dir_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
-  end
-
   def tmp_dir_parent_path
     use_s3fs? ? s3fs_tmp_dir_path : nil
   end
@@ -320,7 +321,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def expanded_archive_base_path
-    @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_root_dir)
+    @expanded_archive_base_path ||= File.expand_path(export_file_basename, archive_tmp_dir)
   end
 
   ## creating student directories
@@ -419,7 +420,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def missing_binaries_file_path
-    File.expand_path("missing_files.txt", tmp_dir)
+    File.expand_path("missing_files.txt", archive_root_dir)
   end
 
   def submission_files_with_missing_binaries
@@ -499,13 +500,13 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def error_log_path
-    File.expand_path("error_log.txt", tmp_dir)
+    File.expand_path("error_log.txt", archive_root_dir)
   end
 
   # archive export directory
   def archive_exported_files
     # `zip -r - #{tmp_dir} | pv -L 200k > #{expanded_archive_base_path}.zip`
-    Archive::Zip.archive("#{expanded_archive_base_path}.zip", tmp_dir)
+    Archive::Zip.archive("#{expanded_archive_base_path}.zip", archive_root_dir)
   end
 
   def upload_archive_to_s3
