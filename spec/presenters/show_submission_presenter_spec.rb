@@ -29,20 +29,4 @@ describe ShowSubmissionPresenter do
       expect(subject.title).to eq "My group's New Assignment Submission (12,000 points)"
     end
   end
-
-  describe "#submission_grade_history" do
-    let(:grade) { double(:grade) }
-
-    it "returns the combined history for the submission and grade for the student" do
-      submission_version = double(:version)
-      grade_version = double(:version)
-      allow(subject).to receive(:assignment).and_return assignment
-      allow(subject).to receive(:submission).and_return submission
-      allow(subject).to receive(:grade).and_return grade
-      allow(submission).to receive(:historical_merge).with(grade)
-        .and_return [submission_version, grade_version]
-
-      expect(subject.submission_grade_history).to eq [submission_version, grade_version]
-    end
-  end
 end
