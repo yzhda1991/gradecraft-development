@@ -82,12 +82,12 @@ RSpec.describe SubmissionsExport do
     end
   end
 
-  describe "#s3_object_key" do
+  describe "#build_s3_object_key" do
     let(:submissions_export) { create(:submissions_export) }
-    subject { submissions_export.s3_object_key }
+    subject { submissions_export.build_s3_object_key("stuff.zip") }
 
     before do
-      allow(submissions_export).to receive_messages(course_id: 40, assignment_id: 50, export_filename: "stuff.zip")
+      allow(submissions_export).to receive_messages(course_id: 40, assignment_id: 50)
     end
 
     it "uses the correct object key" do
@@ -189,12 +189,11 @@ RSpec.describe SubmissionsExport do
     subject { submissions_export.instance_eval { s3_attributes }}
 
     before do
-      allow(submissions_export).to receive_messages(s3_object_key: s3_object_key)
       allow(submissions_export).to receive_message_chain(:s3_manager, :bucket_name) { "dave is home" }
     end
 
     it "should return a hash with the s3 object key and the s3 bucket name" do
-      expect(subject).to eq({s3_object_key: s3_object_key, s3_bucket_name: "dave is home"})
+      expect(subject).to eq({s3_bucket_name: "dave is home"})
     end
   end
 

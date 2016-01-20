@@ -102,6 +102,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       student_ids: @students.collect(&:id),
       submissions_snapshot: submissions_snapshot,
       export_filename: "#{export_file_basename}.zip",
+      s3_object_key: @submissions_export.build_s3_object_key("#{export_file_basename}.zip"),
       last_export_started_at: Time.now
     }
   end

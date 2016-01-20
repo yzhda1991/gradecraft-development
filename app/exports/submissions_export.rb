@@ -24,8 +24,8 @@ class SubmissionsExport < ActiveRecord::Base
 
   before_create :set_s3_attributes
 
-  def s3_object_key
-    "exports/courses/#{course_id}/assignments/#{assignment_id}/#{created_at_date}/#{created_at_in_microseconds}/#{export_filename}"
+  def build_s3_object_key(s3_object_filename)
+    "exports/courses/#{course_id}/assignments/#{assignment_id}/#{created_at_date}/#{created_at_in_microseconds}/#{s3_object_filename}"
   end
 
   def created_at_in_microseconds
@@ -86,7 +86,6 @@ class SubmissionsExport < ActiveRecord::Base
 
   def s3_attributes
     {
-      s3_object_key: s3_object_key,
       s3_bucket_name: s3_manager.bucket_name
     }
   end
