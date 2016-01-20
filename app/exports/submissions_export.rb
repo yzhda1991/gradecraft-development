@@ -28,6 +28,10 @@ class SubmissionsExport < ActiveRecord::Base
     "exports/courses/#{course_id}/assignments/#{assignment_id}/#{created_at_date}/#{created_at_in_microseconds}/#{s3_object_filename}"
   end
 
+  def presigned_s3_url
+    s3_manager.bucket.object(s3_object_key).presigned_url(:get, expires_in: 1209600).to_s
+  end
+
   def created_at_in_microseconds
     created_at.to_f.to_s.gsub(".","")
   end

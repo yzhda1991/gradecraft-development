@@ -109,6 +109,16 @@ RSpec.describe SubmissionsExport do
     end
   end
 
+  describe "#presigned_s3_url" do
+    subject { submissions_export.presigned_s3_url }
+    let(:submissions_export) { create(:submissions_export) }
+
+    it "gets the presigned url for the s3 object" do
+      expect(submissions_export.s3_manager).to receive_message_chain(:bucket, :object, :presigned_url, :to_s)
+      subject
+    end
+  end
+
   describe "#upload_file_to_s3" do
     subject { submissions_export.upload_file_to_s3("great-file.txt") }
 
