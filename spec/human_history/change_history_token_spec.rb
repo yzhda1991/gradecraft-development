@@ -36,6 +36,12 @@ describe HumanHistory::ChangeHistoryToken do
       expect(subject.parse).to eq({ change: "the blah date to \"new\"" })
     end
 
+    it "does not include a 'from' if the previous value was empty" do
+      subject = described_class.new "blah_date", ["", "new"], "Object"
+
+      expect(subject.parse).to eq({ change: "the blah date to \"new\"" })
+    end
+
     it "does not place quotes around integer changes" do
       subject = described_class.new "blah_date", [123, "new"], "Object"
 
