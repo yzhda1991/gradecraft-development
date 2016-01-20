@@ -343,7 +343,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def student_directory_names
     @student_directory_names ||= @students.inject({}) do |memo, student|
       # check to see whether there are any duplicate student names
-      if @students.count {|compared_student| student.same_name_as?(compared_student) } > 1
+      if @students.to_a.select {|compared_student| student.same_name_as?(compared_student) }.size > 1
         memo[student.id] = student.alphabetical_name_key_with_username
       else
         memo[student.id] = student.alphabetical_name_key

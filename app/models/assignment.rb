@@ -174,7 +174,7 @@ class Assignment < ActiveRecord::Base
       .includes(:submission_files)
       .includes(:student)
       .where(assignment_id: self[:id])
-      .where(submissions_with_files_query, true)
+      .where(submissions_with_files_query)
       .to_a # eager-load
   end
 
@@ -184,7 +184,7 @@ class Assignment < ActiveRecord::Base
       .includes(:student)
       .where(assignment_id: self[:id])
       .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
-      .where(submissions_with_files_query, true)
+      .where(submissions_with_files_query)
       .to_a # eager-load
   end
 
@@ -193,7 +193,15 @@ class Assignment < ActiveRecord::Base
   end
 
   def submissions_with_files_query
-   "text_comment <> '' or link <> '' or id in (select distinct(submission_id) from submission_files where file_missing != ?)"
+   "text_comment <> '' or link <> '' or id in (#{present_submission_files_query})"
+  end
+
+  def present_submission_files_query
+    "select distinct(submission_id) from submission_files where file_missing is null or file_missing = 'f'"
+  end
+
+  def missing_submission_files_query
+    "select distinct(submission_id) from submission_files where file_missing = ?"
   end
 
   # #students_with_submissions methods 
@@ -210,25 +218,25 @@ class Assignment < ActiveRecord::Base
 
   def students_with_text_or_binary_files
     User.order_by_name
-      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
+      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id)
   end
 
   def students_with_text_or_binary_files_on_team(team)
     User.order_by_name
-      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id, true)
+      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id)
       .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
   end
 
   # students and submissions with missing binaries
   def students_with_missing_binaries
     User.order_by_name
-      .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (select distinct(submission_id) from submission_files where file_missing = ?))", self.id, true)
+      .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (#{missing_submission_files_query}))", self.id, true)
   end
 
   # students and submissions with missing binaries
   def students_with_missing_binaries_on_team(team)
     User.order_by_name
-      .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (select distinct(submission_id) from submission_files where file_missing = ?))", self.id, true)
+      .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (#{missing_submission_files_query}))", self.id, true)
       .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
   end
 
