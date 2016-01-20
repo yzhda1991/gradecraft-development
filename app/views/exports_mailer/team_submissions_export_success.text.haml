@@ -2,7 +2,9 @@ Dear #{ @professor.first_name },
 
 Your requested submissions export of #{ @course.assignment_term.downcase} "#{ @assignment.name }" in course #{ @course.name } was successfully created for #{ @course.team_term.downcase } #{ @team.name }.
 
-You can download your completed ZIP archive here: #{ exports_url }.
+You can download your completed ZIP archive here: #{ @submissions_export.presigned_s3_url }.
+
+Alternatively you can download the submissions archive on the submissions downloads page here: #{ exports_url }.
 
 Sincerely,
 The GradeCraft Team

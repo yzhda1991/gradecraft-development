@@ -61,6 +61,7 @@ describe NotificationMailer do
   let(:team) { create(:team, course: course) }
   let(:team_term) { course.team_term.downcase }
   let(:assignment_term) { course.assignment_term.downcase }
+  let(:submissions_export) { create(:submissions_export, assignment: assignment, course: course) }
   let(:archive_data) {{ format: "zip", url: "http://aws.com/some-archive-hash" }}
 
   before(:each) { deliver_email }
@@ -94,7 +95,7 @@ describe NotificationMailer do
   end
 
   describe "#submissions_export_success" do
-    let(:deliver_email) { ExportsMailer.submissions_export_success(professor, assignment).deliver_now }
+    let(:deliver_email) { ExportsMailer.submissions_export_success(professor, assignment, submissions_export).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -178,7 +179,7 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_success" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_success(professor, assignment, team).deliver_now }
+    let(:deliver_email) { ExportsMailer.team_submissions_export_success(professor, assignment, team, submissions_export).deliver_now }
 
     it_behaves_like "a gradecraft email to a professor"
 
