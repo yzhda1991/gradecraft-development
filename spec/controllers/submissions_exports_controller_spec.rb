@@ -5,8 +5,8 @@ RSpec.describe SubmissionsExportsController, type: :controller do
   let(:teams) { create_list(:team, 2) }
   let(:team) { teams.first }
   let(:course) { create(:course, teams: teams) }
-  let(:submissions_exports) { create_list(:submissions_export, 2, course: course, assignment: assignment) }
-  let(:submissions_export) { create(:submissions_export, course: course, assignment: assignment) }
+  let(:submissions_exports) { create_list(:submissions_export, 2, course: course, assignment: assignment, s3_object_key: "some thing") }
+  let(:submissions_export) { create(:submissions_export, course: course, assignment: assignment, s3_object_key: "some thing") }
   let(:assignment) { create(:assignment) }
   let(:professor) { create(:professor_course_membership, course: course).user }
 
