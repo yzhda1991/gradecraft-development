@@ -1,8 +1,11 @@
 require "active_support/inflector"
 require "./lib/showtime"
+require_relative "submission_grade_history"
+require_relative "../models/history_filter"
 
 class AssignmentPresenter < Showtime::Presenter
   include Showtime::ViewContext
+  include SubmissionGradeHistory
 
   def assignment
     properties[:assignment]
@@ -184,7 +187,7 @@ class AssignmentPresenter < Showtime::Presenter
   def submission_grade_history(student)
     grade = self.grade_for(student)
     submission = self.submission_for_assignment(student)
-    submission.historical_merge(grade)
+    submission_grade_filtered_history(submission, grade)
   end
 
   def title
