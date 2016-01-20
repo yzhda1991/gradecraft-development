@@ -29,7 +29,9 @@ class SubmissionsExport < ActiveRecord::Base
   end
 
   def presigned_s3_url
-    s3_manager.bucket.object(s3_object_key).presigned_url(:get, expires_in: 1209600).to_s rescue nil
+    if s3_object_key
+      s3_manager.bucket.object(s3_object_key).presigned_url(:get, expires_in: 604800).to_s
+    end
   end
 
   def created_at_in_microseconds
