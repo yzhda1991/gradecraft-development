@@ -154,14 +154,15 @@ RSpec.describe SubmissionsExport do
     end
   end
 
-  describe "#set_s3_attributes" do
+  describe "#set_s3_bucket_name" do
+    subject { submissions_export.set_s3_bucket_name }
     before do
-      allow(submissions_export).to receive(:s3_attributes) {{ assignment_id: 98000 }}
+      allow(submissions_export).to receive_message_chain(:s3_manager, :bucket_name) { "test-bucket" }
     end
 
     it "sets the submissions export value to the index in the s3_attributes hash" do
-      submissions_export.set_s3_attributes
-      expect(submissions_export.assignment_id).to eq(98000)
+      subject
+      expect(submissions_export[:s3_bucket_name]).to eq("test-bucket")
     end
   end
 
@@ -200,10 +201,11 @@ RSpec.describe SubmissionsExport do
 
     before do
       allow(submissions_export).to receive_message_chain(:s3_manager, :bucket_name) { "dave is home" }
+      allow(submissions_export).to receive(:s3_object_key) { "some-key" }
     end
 
     it "should return a hash with the s3 object key and the s3 bucket name" do
-      expect(subject).to eq({s3_bucket_name: "dave is home"})
+      expect(subject).to eq({s3_bucket_name: "dave is home", s3_object_key: "some-key"})
     end
   end
 

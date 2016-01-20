@@ -22,7 +22,7 @@ class SubmissionsExport < ActiveRecord::Base
   validates :course_id, presence: true
   validates :assignment_id, presence: true
 
-  before_create :set_s3_attributes
+  before_create :set_s3_bucket_name
 
   def build_s3_object_key(s3_object_filename)
     "exports/courses/#{course_id}/assignments/#{assignment_id}/#{created_at_date}/#{created_at_in_microseconds}/#{s3_object_filename}"
@@ -68,10 +68,8 @@ class SubmissionsExport < ActiveRecord::Base
     update_attributes last_export_completed_at: export_time
   end
 
-  def set_s3_attributes
-    s3_attributes.each do |key, value|
-      self[key] = value
-    end
+  def set_s3_bucket_name
+    self[:s3_bucket_name] = s3_manager.bucket_name
   end
 
   def s3_object_exists?
@@ -90,7 +88,8 @@ class SubmissionsExport < ActiveRecord::Base
 
   def s3_attributes
     {
-      s3_bucket_name: s3_manager.bucket_name
+      s3_bucket_name: s3_manager.bucket_name,
+      s3_object_key: s3_object_key
     }
   end
 end
