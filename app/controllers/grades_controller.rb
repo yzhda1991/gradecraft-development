@@ -79,6 +79,31 @@ class GradesController < ApplicationController
     end
   end
 
+  def update
+    redirect_to @assignment and return unless current_student.present?
+    extract_file_attributes_from_grade_params
+    @grade = current_student.grade_for_assignment(@assignment)
+
+    if @grade_files
+      add_grade_files_to_grade
+    end
+
+    sanitize_grade_params
+
+    if @grade.update_attributes params[:grade].merge(instructor_modified: true)
+      # @mz todo: ADD SPECS
+      if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
+        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        @grade_updater_job.enqueue
+      end
+
+      update_success_redirect
+    else
+      update_failure_redirect
+    end
+  end
+
+
   # PUT /grades/:id/async_update
   def async_update
     Grade.find(params[:id]).update_attributes(
