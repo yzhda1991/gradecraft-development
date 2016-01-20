@@ -143,7 +143,7 @@ class Grade < ActiveRecord::Base
   end
 
   def status_is_graded_or_released?
-    self.status == "Graded" || self.status == "Released"
+    is_graded? || is_releaed?
   end
   alias_method :graded_or_released?, :status_is_graded_or_released?
 
