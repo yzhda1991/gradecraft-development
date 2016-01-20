@@ -1,4 +1,4 @@
-.cd-container
+.timeline-container
   /* this class is used to give a max-width to the element it is applied to, and center it horizontally when it reaches that max-width
   width: 90%
   max-width: 1170px
@@ -9,7 +9,7 @@
     display: table
     clear: both
 
-#cd-timeline
+#history-timeline
   *
     -webkit-box-sizing: border-box
     -moz-box-sizing: border-box
@@ -34,14 +34,14 @@
     background: #d7e4ed
 
 @media only screen and (min-width: 1170px)
-  #cd-timeline
+  #history-timeline
     margin-top: 3em
     margin-bottom: 3em
     &::before
       left: 50%
       margin-left: -2px
 
-.cd-timeline-block
+.timeline-block
   position: relative
   margin: 2em 0
   &:after
@@ -54,14 +54,14 @@
     margin-bottom: 0
 
 @media only screen and (min-width: 1170px)
-  .cd-timeline-block
+  .timeline-block
     margin: 4em 0
     &:first-child
       margin-top: 0
     &:last-child
       margin-bottom: 0
 
-.cd-timeline-img
+.timeline-img
   position: absolute
   top: 0
   left: 0
@@ -78,13 +78,13 @@
     top: 50%
     margin-left: -12px
     margin-top: -12px
-  &.cd-grade
+  &.timeline-grade
     background: #75ce66
-  &.cd-submission
+  &.timeline-submission
     background: #c03b44
 
 @media only screen and (min-width: 1170px)
-  .cd-timeline-img
+  .timeline-img
     width: 60px
     height: 60px
     left: 50%
@@ -92,16 +92,16 @@
     /* Force Hardware Acceleration in WebKit */
     -webkit-transform: translateZ(0)
     -webkit-backface-visibility: hidden
-  .cssanimations .cd-timeline-img
+  .cssanimations .timeline-img
     &.is-hidden
       visibility: hidden
     &.bounce-in
       visibility: visible
-      -webkit-animation: cd-bounce-1 0.6s
-      -moz-animation: cd-bounce-1 0.6s
-      animation: cd-bounce-1 0.6s
+      -webkit-animation: timeline-bounce-1 0.6s
+      -moz-animation: timeline-bounce-1 0.6s
+      animation: timeline-bounce-1 0.6s
 
-@-webkit-keyframes cd-bounce-1
+@-webkit-keyframes timeline-bounce-1
   0%
     opacity: 0
     -webkit-transform: scale(0.5)
@@ -114,7 +114,7 @@
     -webkit-transform: scale(1)
 
 
-@-moz-keyframes cd-bounce-1
+@-moz-keyframes timeline-bounce-1
   0%
     opacity: 0
     -moz-transform: scale(0.5)
@@ -127,7 +127,7 @@
     -moz-transform: scale(1)
 
 
-@keyframes cd-bounce-1
+@keyframes timeline-bounce-1
   0%
     opacity: 0
     -webkit-transform: scale(0.5)
@@ -152,7 +152,7 @@
     transform: scale(1)
 
 
-.cd-timeline-content
+.timeline-content
   position: relative
   margin-left: 60px
   background: #e9f0f5
@@ -168,14 +168,14 @@
   p
     font-size: 13px
     font-size: 0.8125rem
-  .cd-date
+  .timeline-date
     font-size: 13px
     font-size: 0.8125rem
     display: inline-block
   p
     margin: 1em 0
     line-height: 1.6
-  .cd-date
+  .timeline-date
     float: left
     padding: .8em 0
     opacity: .7
@@ -190,19 +190,19 @@
     border-right: 7px solid #e9f0f5
 
 @media only screen and (min-width: 768px)
-  .cd-timeline-content
+  .timeline-content
     h2
       font-size: 20px
       font-size: 1.25rem
     p
       font-size: 16px
       font-size: 1rem
-    .cd-timeline-content .cd-date
+    .timeline-content .timeline-date
       font-size: 14px
       font-size: 0.875rem
 
 @media only screen and (min-width: 1170px)
-  .cd-timeline-content
+  .timeline-content
     margin-left: 0
     padding: 1.6em
     width: 45%
@@ -212,14 +212,14 @@
       border-color: transparent
       border-left-color: #e9f0f5
     float: left
-    .cd-date
+    .timeline-date
       position: absolute
       width: 100%
       left: 122%
       top: 6px
       font-size: 16px
       font-size: 1rem
-  .cd-timeline-block:nth-child(even) .cd-timeline-content
+  .timeline-block:nth-child(even) .timeline-content
     float: right
     &::before
       top: 24px
@@ -227,27 +227,27 @@
       right: 100%
       border-color: transparent
       border-right-color: #e9f0f5
-    .cd-date
+    .timeline-date
       left: auto
       right: 122%
       text-align: right
-  .cssanimations .cd-timeline-content
+  .cssanimations .timeline-content
     &.is-hidden
       visibility: hidden
     &.bounce-in
       visibility: visible
-      -webkit-animation: cd-bounce-2 0.6s
-      -moz-animation: cd-bounce-2 0.6s
-      animation: cd-bounce-2 0.6s
+      -webkit-animation: timeline-bounce-2 0.6s
+      -moz-animation: timeline-bounce-2 0.6s
+      animation: timeline-bounce-2 0.6s
 
 @media only screen and (min-width: 1170px)
   /* inverse bounce effect on even content blocks */
-  .cssanimations .cd-timeline-block:nth-child(even) .cd-timeline-content.bounce-in
-    -webkit-animation: cd-bounce-2-inverse 0.6s
-    -moz-animation: cd-bounce-2-inverse 0.6s
-    animation: cd-bounce-2-inverse 0.6s
+  .cssanimations .timeline-block:nth-child(even) .timeline-content.bounce-in
+    -webkit-animation: timeline-bounce-2-inverse 0.6s
+    -moz-animation: timeline-bounce-2-inverse 0.6s
+    animation: timeline-bounce-2-inverse 0.6s
 
-@-webkit-keyframes cd-bounce-2
+@-webkit-keyframes timeline-bounce-2
   0%
     opacity: 0
     -webkit-transform: translateX(-100px)
@@ -260,7 +260,7 @@
     -webkit-transform: translateX(0)
 
 
-@-moz-keyframes cd-bounce-2
+@-moz-keyframes timeline-bounce-2
   0%
     opacity: 0
     -moz-transform: translateX(-100px)
@@ -273,7 +273,7 @@
     -moz-transform: translateX(0)
 
 
-@keyframes cd-bounce-2
+@keyframes timeline-bounce-2
   0%
     opacity: 0
     -webkit-transform: translateX(-100px)
@@ -298,7 +298,7 @@
     transform: translateX(0)
 
 
-@-webkit-keyframes cd-bounce-2-inverse
+@-webkit-keyframes timeline-bounce-2-inverse
   0%
     opacity: 0
     -webkit-transform: translateX(100px)
@@ -311,7 +311,7 @@
     -webkit-transform: translateX(0)
 
 
-@-moz-keyframes cd-bounce-2-inverse
+@-moz-keyframes timeline-bounce-2-inverse
   0%
     opacity: 0
     -moz-transform: translateX(100px)
@@ -324,7 +324,7 @@
     -moz-transform: translateX(0)
 
 
-@keyframes cd-bounce-2-inverse
+@keyframes timeline-bounce-2-inverse
   0%
     opacity: 0
     -webkit-transform: translateX(100px)
