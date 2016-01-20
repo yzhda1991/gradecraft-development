@@ -48,6 +48,24 @@ RSpec.describe SubmissionsExport do
     end
   end
 
+  describe "#created_at_date" do
+    let(:submissions_export) { create(:submissions_export) }
+    subject { submissions_export.created_at_date }
+
+    it "formats the created_at date" do
+      expect(subject).to eq(submissions_export.created_at.strftime("%F"))
+    end
+  end
+  
+  describe "#created_at_in_microseconds" do
+    let(:submissions_export) { create(:submissions_export) }
+    subject { submissions_export.created_at_in_microseconds }
+
+    it "formats the created_at time in microseconds" do
+      expect(subject).to eq(submissions_export.created_at.to_f.to_s.gsub(".",""))
+    end
+  end
+
   describe "validations" do
     describe "course_id" do
       subject { create(:submissions_export, course: nil) }
@@ -65,6 +83,7 @@ RSpec.describe SubmissionsExport do
   end
 
   describe "#s3_object_key" do
+    let(:submissions_export) { create(:submissions_export) }
     subject { submissions_export.s3_object_key }
 
     before do
@@ -72,7 +91,7 @@ RSpec.describe SubmissionsExport do
     end
 
     it "uses the correct object key" do
-      expect(subject).to eq("exports/courses/40/assignments/50/stuff.zip/#{submissions_export.created_at.to_f}")
+      expect(subject).to eq("exports/courses/40/assignments/50/#{submissions_export.created_at_date}/#{submissions_export.created_at_in_microseconds}/stuff.zip")
     end
   end
 

@@ -537,11 +537,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def deliver_export_successful_mailer
-    ExportsMailer.submissions_export_success(@professor, @assignment).deliver_now
+    ExportsMailer.submissions_export_success(@professor, @assignment, @submissions_export).deliver_now
   end
 
   def deliver_team_export_successful_mailer
-    ExportsMailer.team_submissions_export_success(@professor, @assignment, @team).deliver_now
+    ExportsMailer.team_submissions_export_success(@professor, @assignment, @team, @submissions_export).deliver_now
   end
 
   def deliver_export_failure_mailer
