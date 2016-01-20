@@ -8,7 +8,7 @@
 %p
 %p{:align => "center"}
   You can download your completed ZIP archive
-  = succeed "." do
+  = succeed ". This link will expire after one week." do
     %a{:href => "#{ @submissions_export.presigned_s3_url }"} here
 
 %p{:align => "center"}
