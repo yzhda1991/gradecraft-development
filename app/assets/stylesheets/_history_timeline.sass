@@ -1,3 +1,10 @@
+$color-timeline-content: $color-grey-4
+$color-timeline-content-shadow: $color-grey-3
+$color-timeline-header: $color-black
+$color-timeline-grade: $color-green-5
+$color-timeline-submission: $color-blue-5
+$color-timeline-vertical-line: $color-blue-2
+
 .timeline-container
   /* this class is used to give a max-width to the element it is applied to, and center it horizontally when it reaches that max-width
   width: 90%
@@ -31,7 +38,7 @@
     left: 18px
     height: 100%
     width: 4px
-    background: #d7e4ed
+    background: $color-timeline-vertical-line
 
 @media only screen and (min-width: 1170px)
   #history-timeline
@@ -79,16 +86,14 @@
     margin-left: -12px
     margin-top: -12px
   &.timeline-grade
-    background: #75ce66
+    background: $color-timeline-grade
   &.timeline-submission
-    background: #c03b44
+    background: $color-timeline-submission
 
 @media only screen and (min-width: 1170px)
   .timeline-img
-    width: 60px
-    height: 60px
     left: 50%
-    margin-left: -30px
+    margin-left: -20px
     /* Force Hardware Acceleration in WebKit */
     -webkit-transform: translateZ(0)
     -webkit-backface-visibility: hidden
@@ -155,16 +160,16 @@
 .timeline-content
   position: relative
   margin-left: 60px
-  background: #e9f0f5
+  background: $color-timeline-content
   border-radius: 0.25em
   padding: 1em
-  box-shadow: 0 3px 0 #d7e4ed
+  box-shadow: 0 3px 0 $color-timeline-content-shadow
   &:after
     content: ""
     display: table
     clear: both
   h2
-    color: #303e49
+    color: $color-timeline-header
   p
     font-size: 13px
     font-size: 0.8125rem
@@ -187,7 +192,7 @@
     height: 0
     width: 0
     border: 7px solid transparent
-    border-right: 7px solid #e9f0f5
+    border-right: 7px solid $color-timeline-content
 
 @media only screen and (min-width: 768px)
   .timeline-content
@@ -210,7 +215,7 @@
       top: 24px
       left: 100%
       border-color: transparent
-      border-left-color: #e9f0f5
+      border-left-color: $color-timeline-content
     float: left
     .timeline-date
       position: absolute
@@ -226,7 +231,7 @@
       left: auto
       right: 100%
       border-color: transparent
-      border-right-color: #e9f0f5
+      border-right-color: $color-timeline-content
     .timeline-date
       left: auto
       right: 122%
