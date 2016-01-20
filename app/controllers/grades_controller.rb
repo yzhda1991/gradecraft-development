@@ -259,36 +259,6 @@ class GradesController < ApplicationController
       render json: {message: "Grade successfully saved", success: true}, status: 200
     else
       render json: {message: result.message, success: false}, status:  result.error_code || 400
-      @grade = Grade.create(new_grade_from_criterion_grades_attributes)
-    end
-
-    # delete existing rubric grades
-    # TODO: Shouldn't require a second parameter of criterion_ids when already supplied.
-    # 1. Insure criterion id is suplied in params[:criterion_grades] and required by CriterionGrade model
-    # 2. params[:criterion_ids] = params[:criterion_grades].collect{|rg| rg["criterion_id"]}`
-    CriterionGrade.where({ assignment_id: params[:assignment_id], student_id: params[:student_id], criterion_id: params[:criterion_ids] }).delete_all
-
-    # create an individual record for each rubric grade
-    params[:criterion_grades].collect do |criterion_grade|
-      CriterionGrade.create! criterion_grade.merge(
-        { submission_id: safe_submission_id,
-          assignment_id: @assignment[:id],
-          student_id: params[:student_id]
-        }
-      )
-    end
-
-    # EarnedBadges associated with a LevelBadge
-    EarnedBadge.import(new_earned_level_badges, :validate => true) if params[:level_badges]
-
-    # @mz todo: add specs
-    if @grade.is_student_visible?
-      @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-      @grade_updater_job.enqueue
-    end
-
-    respond_to do |format|
-      format.json { render nothing: true }
     end
   end
 
