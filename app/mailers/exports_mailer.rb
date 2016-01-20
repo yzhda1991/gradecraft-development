@@ -9,7 +9,8 @@ class ExportsMailer < ApplicationMailer
     end
   end
 
-  def submissions_export_success(professor, assignment)
+  def submissions_export_success(professor, assignment, submissions_export)
+    @submissions_export = submissions_export
     cache_submission_attrs(professor, assignment)
     mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} is ready")) do |format|
       format.text
@@ -33,7 +34,8 @@ class ExportsMailer < ApplicationMailer
     end
   end
 
-  def team_submissions_export_success(professor, assignment, team)
+  def team_submissions_export_success(professor, assignment, team, submissions_export)
+    @submissions_export = submissions_export
     cache_team_submission_attrs(professor, assignment, team)
     mail(default_attrs.merge(:subject => "Submissions export for #{@course.team_term.downcase} #{@team.name} is ready")) do |format|
       format.text
