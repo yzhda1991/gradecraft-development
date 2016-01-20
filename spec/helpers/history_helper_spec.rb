@@ -4,34 +4,33 @@ require "./app/helpers/history_helper"
 describe HistoryHelper do
   include RSpecHtmlMatchers
 
-  describe "#history" do
-    let(:user) { create :user, first_name: "Robert", last_name: "Plant" }
-    let(:single_changeset) do
-      [{ "first_name" => ["Bob", "Jimmy"],
-         "updated_at" => [DateTime.new(2015, 4, 15, 1, 20),
-                          DateTime.new(2015, 4, 15, 1, 21)],
-         "event" => "update",
-         "object" => "User",
-         "actor_id" => user.id }]
-    end
-    let(:multiple_changeset) do
-      [{ "first_name" => ["Bob", "Jimmy"],
-         "last_name" => ["Pig", "Page"],
-         "updated_at" => [DateTime.new(2015, 4, 15, 1, 20),
-                          DateTime.new(2015, 4, 15, 1, 21)],
-         "event" => "update",
-         "object" => "User",
-         "actor_id" => user.id }]
-    end
-    let(:created_changeset) do
-      [{ "first_name" => [nil, "Bob"],
-         "updated_at" => [nil, DateTime.new(2015, 4, 15, 1, 21)],
-         "created_at" => [nil, DateTime.new(2015, 4, 15, 1, 21)],
-         "event" => "create",
-         "object" => "User",
-         "actor_id" => user.id }]
-    end
+  let(:user) { create :user, first_name: "Robert", last_name: "Plant" }
+  let(:single_changeset) do
+    [{ "first_name" => ["Bob", "Jimmy"],
+       "event" => "update",
+       "object" => "User",
+       "recorded_at" => DateTime.new(2015, 4, 15, 1, 21),
+       "actor_id" => user.id }]
+  end
+  let(:multiple_changeset) do
+    [{ "first_name" => ["Bob", "Jimmy"],
+       "last_name" => ["Pig", "Page"],
+       "event" => "update",
+       "object" => "User",
+       "recorded_at" => DateTime.new(2015, 4, 15, 1, 21),
+       "actor_id" => user.id }]
+  end
+  let(:created_changeset) do
+    [{ "first_name" => [nil, "Bob"],
+       "updated_at" => [nil, DateTime.new(2015, 4, 15, 1, 21)],
+       "created_at" => [nil, DateTime.new(2015, 4, 15, 1, 21)],
+       "event" => "create",
+       "object" => "User",
+       "recorded_at" => DateTime.new(2015, 4, 15, 1, 21),
+       "actor_id" => user.id }]
+  end
 
+  describe "#history" do
     it "describes a changeset on an update of a single field" do
       history = helper.history single_changeset
       expect(history).to have_tag("div") do
