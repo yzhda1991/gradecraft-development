@@ -48,5 +48,13 @@ describe HumanHistory::HistoryTokenParser do
       allow(tokenizer).to receive(:tokens).and_return [token1, token2]
       expect(subject.parse).to eq({ token: "blah and bleh" })
     end
+
+    it "puts parsed tokens of the same key in an array if that option is specified" do
+      token1 = TestToken.new({ token: "blah" })
+      token2 = TestToken.new({ token: "bleh" })
+      token3 = TestToken.new({ token: "blew" })
+      allow(tokenizer).to receive(:tokens).and_return [token1, token2, token3]
+      expect(subject.parse(merge_strategy: :array)).to eq({ token: ["blah", "bleh", "blew"] })
+    end
   end
 end
