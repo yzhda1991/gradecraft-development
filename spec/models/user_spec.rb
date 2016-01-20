@@ -54,6 +54,22 @@ describe User do
     end
   end
 
+  describe "student directory names" do
+    let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
+
+    describe "#student_directory_name" do
+      it "formats the student info into an alphabetical student directory name" do
+        expect(user.student_directory_name).to eq("Bailey, Ben")
+      end
+    end
+
+    describe "#student_directory_name_with_username" do
+      it "formats the student directory name with username" do
+        expect(user.student_directory_name_with_username).to eq("Bailey, Ben - Bbailey10")
+      end
+    end
+  end
+
   describe "formatted name keys" do
     let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
     describe "#formatted_key_name" do

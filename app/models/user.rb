@@ -210,6 +210,14 @@ class User < ActiveRecord::Base
     "#{self.last_name}_#{self.first_name}-#{self.id}".downcase
   end
 
+  def student_directory_name
+    "#{last_name.titleize}, #{first_name.titleize}"
+  end
+
+  def student_directory_name_with_username
+    "#{student_directory_name} - #{username.titleize}"
+  end
+
   def alphabetical_name_key
     "#{self.last_name}_#{self.first_name}".downcase
   end
