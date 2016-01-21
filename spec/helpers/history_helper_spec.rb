@@ -107,5 +107,13 @@ describe HistoryHelper do
         with_tag "li", text: "Robert Plant changed the last name from \"Pig\" to \"Page\""
       end
     end
+
+    it "renders the changes as html_safe" do
+      multiple_changeset.first.merge!("profile" => [nil, "I am <strong>awesome</strong>!"])
+      history = helper.history_timeline multiple_changeset
+      expect(history).to have_tag("div.timeline-content") do
+        with_tag "li", text: "Robert Plant changed the profile to \"I am awesome!\""
+      end
+    end
   end
 end

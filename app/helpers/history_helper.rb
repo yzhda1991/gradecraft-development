@@ -40,7 +40,7 @@ module HistoryHelper
     content_tag(:ul, nil) do
       item = "#{structure[:actor]} #{structure[:event]}"
       [structure[:change]].flatten.each do |change|
-        concat content_tag :li, "#{item} #{change}"
+        concat content_tag :li, "#{item} #{change}".html_safe
       end
     end
   end
