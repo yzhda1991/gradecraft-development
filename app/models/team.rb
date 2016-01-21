@@ -16,7 +16,7 @@ class Team < ActiveRecord::Base
   has_many :leaders, :through => :team_leaderships
 
   #Teams design banners that they display on the leadboard
-  mount_uploader :banner, ThumbnailUploader
+  mount_uploader :banner, ImageUploader
 
   #Teams don't currently earn badges directly - but they are recognized for the badges their students earn
   has_many :earned_badges, :through => :students
@@ -80,7 +80,7 @@ class Team < ActiveRecord::Base
   def update_ranks
     @teams = self.course.teams
     rank_index = @teams.pluck(:score).uniq.sort.reverse
-    
+
     @teams.each do |team|
       rank = rank_index.index(team.score) + 1
       team.update_attributes rank: rank

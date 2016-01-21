@@ -7,6 +7,9 @@
 .pageContent
   = render 'layouts/alerts'
 
+  - if @team.banner.present?
+    %img{:src => @team.banner, :height => 200 }
+
   %h4.subtitle= "#{term_for :student} Roster"
 
   %table.nofeatures_default_last_name_dynatable
