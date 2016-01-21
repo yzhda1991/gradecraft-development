@@ -63,7 +63,7 @@
               .clear
           %td.filler(ng-show="criterion.levels.length < #{@rubric.max_level_count}" colspan="{{#{@rubric.max_level_count} - criterion.levels.length}}")
           %td.comments-box
-            %textarea(ng-model="criterion.comments")
+            %textarea(ng-model="criterion.comments" froala="froalaOptions")
 
     %br
     .right

@@ -62,18 +62,15 @@
     new Criterion(attrs, $scope)
 
   # count how many levels have been selected in the UI
-  $scope.levelsSelected = []
   $scope.selectedLevels = ()->
     levels = []
     angular.forEach($scope.criteria, (criterion, index)->
       if criterion.selectedLevel
         levels.push criterion.selectedLevel
     )
-    $scope.levelsSelected = levels
     levels
 
 
-  $scope.selectedLevelIds = []
   # count how many levels have been selected in the UI
   $scope.selectedLevelIds = ()->
     levelIds = []
@@ -81,17 +78,14 @@
       if criterion.selectedLevel
         levelIds.push criterion.selectedLevel.id
     )
-    $scope.selectedLevelIds = levelIds
     levelIds
 
-  $scope.allCriterionIds = []
   # ids of all the criteria in the rubric
   $scope.allCriterionIds = ()->
     criterionIds = []
     angular.forEach($scope.criteria, (criterion, index)->
       criterionIds.push criterion.id
     )
-    $scope.allCriterionIds = criterionIds
     criterionIds
 
   # count how many points have been given from those levels
@@ -213,14 +207,12 @@
     if confirm "Are you sure you want to submit the grade for this assignment?"
       # alert(self.gradedRubricParams().level_badges.length)
 
-      # store in a var because this call has side effects
-      # and can't be called twice! TODO: debug this
-      params = self.gradedRubricParams()
       # !!! Document any updates to this call in the specs: /spec/support/api_calls/rubric_grade_put.rb
-      $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", params).success(
-        window.location = $scope.returnURL
-      )
-      .error(
+      $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", self.gradedRubricParams()).success(
+        (data)->
+          console.log(data)
+          window.location = $scope.returnURL
+      ).error(
         (data)->
           console.log(data)
       )
@@ -245,4 +237,12 @@
     )
 
   $scope.existingCriteria = []
+
+
+  $scope.froalaOptions = {
+    inlineMode: false,
+    minHeight: 100,
+    buttons: [ "bold", "italic", "underline", "strikeThrough", "insertOrderedList",
+               "insertUnorderedList"],
+  }
 ]
