@@ -1,4 +1,4 @@
-@gradecraft.controller 'GradeCtrl', ['$timeout', '$rootScope', '$scope', 'Grade', 'AssignmentScoreLevel', '$window', '$http', 'Badge', 'EventHelper', ($timeout, $rootScope, $scope, Grade, AssignmentScoreLevel, $window, $http, Badge, EventHelper) -> 
+@gradecraft.controller 'GradeCtrl', ['$timeout', '$rootScope', '$scope', 'Grade', 'AssignmentScoreLevel', '$window', '$http', 'Badge', 'EventHelper', ($timeout, $rootScope, $scope, Grade, AssignmentScoreLevel, $window, $http, Badge, EventHelper) ->
 
   # setup the controller scope on initialize
   $scope.init = (initData)->
@@ -15,7 +15,7 @@
     $scope.rawScoreUpdating = false
     $scope.hasChanges = false
     $scope.gradeStatuses = ["In Progress", "Graded", "Released"]
-    
+
     # establish and populate all necessary collections for UI
     $scope.populateCollections(initData.badges, initData.assignment_score_levels)
 

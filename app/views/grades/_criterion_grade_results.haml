@@ -50,4 +50,4 @@
           %td.filler(colspan="#{presenter.rubric.max_level_count - criterion.levels.size}")
         %td.level.level-comments.comments-box
           - unless comments_by_criterion_id.empty?
-            = comments_by_criterion_id[criterion.id]
+            = raw comments_by_criterion_id[criterion.id]
