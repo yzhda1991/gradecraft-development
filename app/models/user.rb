@@ -211,11 +211,11 @@ class User < ActiveRecord::Base
   end
 
   def student_directory_name
-    "#{last_name.titleize}, #{first_name.titleize}"
+    "#{last_name.camelize}, #{first_name.camelize}"
   end
 
   def student_directory_name_with_username
-    "#{student_directory_name} - #{username.titleize}"
+    "#{student_directory_name} - #{username.camelize}"
   end
 
   def alphabetical_name_key
