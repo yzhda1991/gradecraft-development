@@ -82,41 +82,41 @@
     postPredictedGrade = (assignment_id,value)->
       if update.assignments
         $http.post('/assignments/' + assignment_id + '/grades/predict_score', predicted_score: value).success(
-          (data)->
-            console.log(data);
+            (data)->
+              console.log(data);
           ).error(
-          (data)->
-            console.log(data);
+            (data)->
+              console.log(data);
           )
 
     postPredictedChallenge = (challenge_id,value)->
       if update.challenges
         $http.post('/challenges/' + challenge_id + '/predict_points', points_earned: value).success(
-          (data)->
-            console.log(data);
+            (data)->
+              console.log(data);
           ).error(
-          (data)->
-            console.log(data);
+            (data)->
+              console.log(data);
           )
 
     postPredictedBadge = (badge_id,value)->
       if update.badges
         $http.post('/badges/' + badge_id + '/predict_times_earned', times_earned: value).success(
-          (data)->
-            console.log(data);
+            (data)->
+              console.log(data);
           ).error(
-          (data)->
-            console.log(data);
+            (data)->
+              console.log(data);
           )
 
     postAssignmentTypeWeight = (assignmentType_id,value)->
       if update.weights
         $http.post('/assignment_type_weight', id: assignmentType_id, weight: value).success(
-          (data)->
-            console.log(data);
+            (data)->
+              console.log(data);
           ).error(
-          (data)->
-            console.log(data);
+            (data)->
+              console.log(data);
           )
 
     return {
