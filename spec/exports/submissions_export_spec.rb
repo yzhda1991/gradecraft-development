@@ -111,7 +111,7 @@ RSpec.describe SubmissionsExport do
 
   describe "#presigned_s3_url" do
     subject { submissions_export.presigned_s3_url }
-    let(:submissions_export) { create(:submissions_export) }
+    let(:submissions_export) { create(:submissions_export, s3_object_key: "some-test-key") }
 
     it "gets the presigned url for the s3 object" do
       expect(submissions_export.s3_manager).to receive_message_chain(:bucket, :object, :presigned_url, :to_s)
