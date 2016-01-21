@@ -213,13 +213,16 @@
     if confirm "Are you sure you want to submit the grade for this assignment?"
       # alert(self.gradedRubricParams().level_badges.length)
 
+      # store in a var because this call has side effects
+      # and can't be called twice! TODO: debug this
+      params = self.gradedRubricParams()
       # !!! Document any updates to this call in the specs: /spec/support/api_calls/rubric_grade_put.rb
-      $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", self.gradedRubricParams()).success(
+      $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", params).success(
         window.location = $scope.returnURL
       )
       .error(
         (data)->
-          console.log(data);
+          console.log(data)
       )
 
   $scope.addCriterionGrades = (criterionGrades)->
