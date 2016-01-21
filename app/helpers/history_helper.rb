@@ -40,9 +40,33 @@ module HistoryHelper
     content_tag(:ul, nil) do
       item = "#{structure[:actor]} #{structure[:event]}"
       [structure[:change]].flatten.each do |change|
-        concat content_tag :li, "#{item} #{change}".html_safe
+        concat content_tag :li, "#{item} #{history_timeline_change(change)}".html_safe
       end
     end
+  end
+
+  def history_timeline_change(change)
+    timeline_change = change
+
+    from = /(?<=from ")(.*)(?=" to)/.match(change)
+    from_attribute = from.nil? ? nil : from[0]
+    unless from_attribute.nil?
+      if from_attribute.length > 50
+        omission_link = omission_link_to from_attribute, "#", data: { behavior: "display-omission" }
+        timeline_change = timeline_change.gsub "#{from_attribute}", omission_link
+      end
+    end
+
+    to = /(?<=to ")(.*)(?="$)/.match(change)
+    to_attribute = to.nil? ? nil : to[0]
+    unless to_attribute.nil?
+      if to_attribute.length > 50
+        omission_link = omission_link_to to_attribute, "#", data: { behavior: "display-omission" }
+        timeline_change = timeline_change.gsub "#{to_attribute}", omission_link
+      end
+    end
+
+    timeline_change
   end
 
   private
