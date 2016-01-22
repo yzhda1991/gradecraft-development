@@ -446,13 +446,6 @@ class GradesController < ApplicationController
     end
   end
 
-  def feedback_read
-    @assignment = current_course.assignments.find params[:id]
-    @grade = @assignment.grades.find params[:grade_id]
-    @grade.feedback_read!
-    redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
-  end
-
   # Allows students to log grades for student logged assignments
   # either sets raw score to params[:grade][:raw_score]
   # or defaults to point total for assignment
