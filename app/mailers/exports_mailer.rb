@@ -40,35 +40,10 @@ class ExportsMailer < ApplicationMailer
   end
 
   def mail_message_with_subject(subject)
-    mail(default_attrs.merge(:subject => subject) do |format|
+    mail(default_attrs.merge(:subject => subject)) do |format|
       format.text
       format.html
     end
-  end
-
-  def mail_message_with_subject(subject)
-  end
-
-  def default_attrs
-    {
-      to: @professor.email,
-      bcc: ExportsMailer::ADMIN_EMAIL
-    }
-  end
-
-  def cache_submission_attrs(professor, assignment)
-    @professor = professor
-    @assignment = assignment
-    @course = assignment.course
-  end
-
-  def cache_team_submission_attrs(professor, assignment, team)
-    @professor = professor
-    @assignment = assignment
-    @course = assignment.course
-    @team = team
-  end
-end
   end
 
   def default_attrs
