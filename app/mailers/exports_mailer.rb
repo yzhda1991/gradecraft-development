@@ -31,18 +31,44 @@ class ExportsMailer < ApplicationMailer
 
   def mail_submissions_export(message, professor, assignment)
     cache_submission_attrs(professor, assignment)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} #{message}")) do |format|
+    mail_message_with_subject "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} #{message}"
+  end
+
+  def mail_team_submissions_export(message, professor, assignment, team)
+    cache_team_submission_attrs(professor, assignment, team)
+    mail_message_with_subject "Submissions export for #{@course.team_term.downcase} #{@team.name} #{message}"
+  end
+
+  def mail_message_with_subject(subject)
+    mail(default_attrs.merge(:subject => subject) do |format|
       format.text
       format.html
     end
   end
 
-  def mail_team_submissions_export(message, professor, assignment, team)
-    cache_team_submission_attrs(professor, assignment, team)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@course.team_term.downcase} #{@team.name} #{message}")) do |format|
-      format.text
-      format.html
-    end
+  def mail_message_with_subject(subject)
+  end
+
+  def default_attrs
+    {
+      to: @professor.email,
+      bcc: ExportsMailer::ADMIN_EMAIL
+    }
+  end
+
+  def cache_submission_attrs(professor, assignment)
+    @professor = professor
+    @assignment = assignment
+    @course = assignment.course
+  end
+
+  def cache_team_submission_attrs(professor, assignment, team)
+    @professor = professor
+    @assignment = assignment
+    @course = assignment.course
+    @team = team
+  end
+end
   end
 
   def default_attrs
