@@ -12,13 +12,13 @@
         %th{ "data-dynatable-column" => "badges"} #{term_for :badges} Earned
       %th{:style => "min-width: 260px"}
   %tbody
-    - @teams.order_by_high_score.each_with_index do |team, index|
+    - @teams.each_with_index do |team, index|
       %tr
         %td= index + 1
         %td= link_to team.name, team
         %td= team.average_points
         - if current_course.team_challenges?
-          %td= team.score
+          %td= points team.challenge_grade_score
         %td= team.member_count
         %td
           - team.leaders.each do |leader|

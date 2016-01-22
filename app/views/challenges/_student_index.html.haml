@@ -1,10 +1,11 @@
+%h4.subtitle= "#{term_for :challenges }"
 %table.no_radius.nofeatures_dynatable
   %thead
     %tr
       %th Name
       %th Description
       %th Due date
-      - if current_student.team_for_course(current_course).present?
+      - if @team.present?
         %th Score
       - else
         %th Point total
@@ -28,9 +29,9 @@
                   = link_to cf.filename, cf.url
 
         %td= challenge.due_at
-        - if current_student.team_for_course(current_course).present?
+        - if @team.present?
           %td
-            %span= points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score) if challenge.graded?
+            %span= points challenge.challenge_grade_for_team(@team).try(:score) if challenge.graded?
             %span= "/" if challenge.graded?
             %span= points challenge.point_total
 

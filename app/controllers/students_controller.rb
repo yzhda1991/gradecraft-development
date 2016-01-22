@@ -95,6 +95,7 @@ class StudentsController < ApplicationController
   def teams
     @title = "#{term_for :teams}"
     @display_sidebar = true
+    @team = current_student.team_for_course(current_course)
   end
 
   def badges
