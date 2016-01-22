@@ -43,22 +43,12 @@ RSpec.describe S3Manager::Encryption do
 
     describe "#put_encrypted_object" do
       subject { put_encrypted_object }
+      let(:file_path) { Tempfile.new('something-old').path }
+      let(:put_encrypted_object) { s3_manager.put_encrypted_object(object_key, file_path) }
 
       it "should call #put_object on the encrypted client" do
-        expect(encrypted_client).to receive(:put_object)
+        expect(s3_manager).to receive(:put_object_with_client).with(encrypted_client, object_key, file_path)
         subject
-      end
-
-      it "should get an AWS Seahorse object in response" do
-        expect(subject.class).to eq(Seahorse::Client::Response)
-      end
-
-      it "should have been sucessful" do
-        expect(subject.successful?).to be_truthy
-      end
-
-      it "should suggest that AES256 encryption was used" do
-        expect(subject.server_side_encryption).to eq("AES256")
       end
     end
 
