@@ -313,34 +313,6 @@ class GradesController < ApplicationController
     end
   end
 
-  # Students predicting the score they'll get on an assignent using the grade predictor
-  # TODO: Change to predict_points when 'score' changes to 'points_earned and PredictedEarnedAssignment model added
-  def predict_score
-    @assignment = current_course.assignments.find(params[:id])
-    if current_student.grade_released_for_assignment?(@assignment)
-      @grade = nil
-    else
-      @grade = current_student.grade_for_assignment(@assignment)
-      @grade.predicted_score = params[:predicted_score]
-    end
-
-    @grade_saved = @grade.nil? ? nil : @grade.save
-
-    enqueue_predictor_event_job
-
-    respond_to do |format|
-      format.json do
-        if @grade.nil?
-          render :json => {errors: "You cannot predict this assignment!"}, :status => 400
-        elsif @grade_saved
-          render :json => {id: @assignment.id, points_earned: @grade.predicted_score}
-        else
-          render :json => { errors:  @grade.errors.full_messages }, :status => 400
-        end
-      end
-    end
-  end
-
   private
 
   def enqueue_predictor_event_job
