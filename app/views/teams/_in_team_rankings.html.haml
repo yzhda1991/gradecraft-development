@@ -1,24 +1,27 @@
-- if current_student.team_for_course(current_course).present?
-  - if current_user_is_student? && ! current_student.display_name? && (current_course.in_team_leaderboard? || current_student.team_for_course(current_course).in_team_leaderboard?)
+%h4.subtitle= "In-#{term_for :team} Rankings"
+- if team.present?
+  - if current_user_is_student? && ! current_student.display_name? && (current_course.in_team_leaderboard? || team.in_team_leaderboard?)
     %h6.small.right
       %span= "Want to participate in the #{term_for :team} leaderboard?"
       %span.bold= link_to "Set your screen name!", edit_profile_users_path
   %table.nofeatures_default_score_dynatable
     %thead
       %tr
-        %th Name
+        %th Rank
+        %th Pseudonym
         - if current_course.character_profiles?
           %th Character Profile
         - if current_course.team_roles?
           %th Role
         %th{ "data-dynatable-sorts" => "numericScore" } Score
     %tbody
-      - current_student.team_for_course(current_course).students.each do |student|
+      - team.students.reverse.each_with_index do |student, index|
         - if student.display_name?
           %tr{class: ("complete" if student == current_student) }
+            %td{"data-title" => "Rank"}= index + 1
             %td= student.display_name
             - if current_course.character_profiles?
               %td= student.character_profile(current_course)
             - if current_course.team_roles?
               %td= student.team_role
-            %td= points student.cached_score_for_course(current_course) if student.respond_to?(:grades)
+            %td{"data-title" => "Score"}= points student.cached_score_for_course(current_course) if student.respond_to?(:grades)

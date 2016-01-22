@@ -12,35 +12,8 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
-  %table.nofeatures_default_due_date_dynatable
-    %thead
-      %tr
-        %th Name
-        %th Description
-        %th Max Points
-        %th{"data-dynatable-sorts" => "dueDate"} Due
-        %th{:style => "display: none"} Due Date
-        %th Visible
-        %th Submissions?
-        %th Release necessary
-        %th{ :style => "min-width: 220px" }
 
-    %tbody
-      - @challenges.each do |challenge|
-        %tr
-          %td= link_to challenge.name, challenge
-          %td= raw challenge.description
-          %td= challenge.point_total
-          %td= challenge.due_at
-          %td{:style => "display: none"}
-            = challenge.try(:due_at).to_formatted_s(:db) if challenge.due_at.present?
-          %td= challenge.visible? ? 'Visible' : 'Hidden'
-          %td= challenge.accepts_submissions? ? 'Yes' : 'No'
-          %td= challenge.release_necessary? ? 'Yes' : 'No'
-          %td
-            .right
-              %ul.button-bar
-                %li= link_to raw("<i class='fa fa-check fa-fw'></i> Quick Grade"), mass_edit_challenge_challenge_grades_path(challenge), :class => 'button'
-                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_challenge_path(challenge), :class => 'button'
-                %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), challenge, :class => 'button', :method => :delete, data: { confirm: 'Are you sure?' }
+  - if current_user_is_staff?
+    = render 'staff_index'
+  - else
+    = render 'student_index'

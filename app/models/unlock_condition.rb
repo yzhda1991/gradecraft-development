@@ -47,12 +47,16 @@ class UnlockCondition < ActiveRecord::Base
   # Counting how many students in a group have done the work to unlock an assignment
   def count_unlocked_in_group(group)
     unlocked_count = 0
-    group.students.each do |student|
-      if self.is_complete?(student)
-        unlocked_count += 1
+    if group.present?
+      group.students.each do |student|
+        if self.is_complete?(student)
+          unlocked_count += 1
+        end
       end
+      return unlocked_count
+    else
+      return false
     end
-    return unlocked_count
   end
 
   private
