@@ -278,41 +278,6 @@ class GradesController < ApplicationController
     redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
   end
 
-  # Allows students to self log grades for a particular assignment if the instructor has turned that feature on - currently only used to log attendance
-  def self_log
-    @assignment = current_course.assignments.find(params[:id])
-    if @assignment.open?
-
-      @grade = current_student.grade_for_assignment(@assignment)
-      if params[:present] == "true"
-        if params[:grade].present? && params[:grade][:raw_score].present?
-          @grade.raw_score = params[:grade][:raw_score]
-        else
-          @grade.raw_score = @assignment.point_total
-        end
-      else
-        @grade.raw_score = 0
-      end
-
-      @grade.instructor_modified = true
-      @grade.status = "Graded"
-      respond_to do |format|
-        if @grade.save
-
-          # @mz todo: add specs
-          @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-          @grade_updater_job.enqueue
-
-          format.html { redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!' }
-        else
-          format.html { redirect_to syllabus_path, notice: "We're sorry, this grade could not be added." }
-        end
-      end
-    else
-      format.html { redirect_to dashboard_path, notice: "We're sorry, this assignment is no longer open." }
-    end
-  end
-
   private
 
   def enqueue_predictor_event_job
