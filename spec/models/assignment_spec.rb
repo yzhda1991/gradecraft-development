@@ -4,6 +4,7 @@ describe Assignment do
   include Toolkits::Models::AssignmentsToolkit
 
   subject { build(:assignment) }
+  let(:assignment) { build :assignment }
 
   context "validations" do
     it "is valid with a name and assignment type" do
@@ -431,26 +432,6 @@ describe Assignment do
     it "handles if there are no graded students" do
       allow(course).to receive(:graded_student_count).and_return 0
       expect(subject.completion_rate(course)).to be_zero
-    end
-  end
-
-  describe "grade import" do
-    it "returns sample csv data, including ungraded students" do
-      course = create(:course)
-      course.assignments << subject
-      student = create(:user)
-      student.courses << course
-      expect(subject.grade_import(course.students)).to eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},\"\",\"\"\n")
-    end
-
-    it "also returns grade fields with instructor modified grade" do
-      course = create(:course)
-      course.assignments << subject
-      student = create(:user)
-      student.courses << course
-      grade = create(:grade, assignment: subject, student: student, feedback: "good jorb!", instructor_modified: true)
-      submission = create(:submission, grade: grade, student: student, assignment: subject)
-      expect(subject.grade_import(course.students)).to eq("First Name,Last Name,Email,Score,Feedback\n#{student.first_name},#{student.last_name},#{student.email},#{grade.score},#{grade.feedback}\n")
     end
   end
 
