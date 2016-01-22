@@ -2,56 +2,48 @@ class ExportsMailer < ApplicationMailer
   layout "mailers/exports_layout"
 
   def submissions_export_started(professor, assignment)
-    cache_submission_attrs(professor, assignment)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} is being created")) do |format|
-      format.text
-      format.html
-    end
+    mail_submissions_export("is being created", professor, assignment)
   end
 
   def submissions_export_success(professor, assignment, submissions_export)
     @submissions_export = submissions_export
-    cache_submission_attrs(professor, assignment)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} is ready")) do |format|
-      format.text
-      format.html
-    end
+    mail_submissions_export("is ready", professor, assignment)
   end
 
   def submissions_export_failure(professor, assignment)
-    cache_submission_attrs(professor, assignment)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} failed to build")) do |format|
-      format.text
-      format.html
-    end
+    mail_submissions_export("failed to build", professor, assignment)
   end
 
   def team_submissions_export_started(professor, assignment, team)
-    cache_team_submission_attrs(professor, assignment, team)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@course.team_term.downcase} #{@team.name} is being created")) do |format|
-      format.text
-      format.html
-    end
+    mail_team_submissions_export("is being created", professor, assignment, team)
   end
 
   def team_submissions_export_success(professor, assignment, team, submissions_export)
     @submissions_export = submissions_export
-    cache_team_submission_attrs(professor, assignment, team)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@course.team_term.downcase} #{@team.name} is ready")) do |format|
-      format.text
-      format.html
-    end
+    mail_team_submissions_export("is ready", professor, assignment, team)
   end
 
   def team_submissions_export_failure(professor, assignment, team)
-    cache_team_submission_attrs(professor, assignment, team)
-    mail(default_attrs.merge(:subject => "Submissions export for #{@course.team_term.downcase} #{@team.name} failed to build")) do |format|
+    mail_team_submissions_export("failed to build", professor, assignment, team)
+  end
+
+  private
+
+  def mail_submissions_export(message, professor, assignment)
+    cache_submission_attrs(professor, assignment)
+    mail(default_attrs.merge(:subject => "Submissions export for #{@course.assignment_term.downcase} #{@assignment.name} #{message}")) do |format|
       format.text
       format.html
     end
   end
 
-  private
+  def mail_team_submissions_export(message, professor, assignment, team)
+    cache_team_submission_attrs(professor, assignment, team)
+    mail(default_attrs.merge(:subject => "Submissions export for #{@course.team_term.downcase} #{@team.name} #{message}")) do |format|
+      format.text
+      format.html
+    end
+  end
 
   def default_attrs
     {
