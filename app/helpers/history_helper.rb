@@ -52,8 +52,9 @@ module HistoryHelper
     from_attribute = from.nil? ? nil : from[0]
     unless from_attribute.nil?
       if from_attribute.length > 50
-        omission_link = omission_link_to from_attribute, "#", data: { behavior: "display-omission" }
-        timeline_change = timeline_change.gsub "#{from_attribute}", omission_link
+        replacement = omission_link_to from_attribute, "#", title: ""
+        replacement += content_tag(:div, from_attribute.html_safe, class: "display_on_hover hover-style")
+        timeline_change = timeline_change.gsub "#{from_attribute}", replacement
       end
     end
 
@@ -61,8 +62,9 @@ module HistoryHelper
     to_attribute = to.nil? ? nil : to[0]
     unless to_attribute.nil?
       if to_attribute.length > 50
-        omission_link = omission_link_to to_attribute, "#", data: { behavior: "display-omission" }
-        timeline_change = timeline_change.gsub "#{to_attribute}", omission_link
+        replacement = omission_link_to to_attribute, "#", title: ""
+        replacement += content_tag(:div, to_attribute.html_safe, class: "display_on_hover hover-style")
+        timeline_change = timeline_change.gsub "#{to_attribute}", replacement
       end
     end
 
