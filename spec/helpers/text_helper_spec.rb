@@ -29,9 +29,9 @@ describe TextHelper do
       expect(link).to have_tag("a", text: "#{content[0..47]}#{indicator}", without: { indicator: indicator })
     end
 
-    it "moves the original content to a data attribute" do
+    it "moves the original content to the title" do
       link = helper.omission_link_to(content, "http://bacon.com")
-      expect(link).to have_tag("a", with: { "data-omission-content" => content })
+      expect(link).to have_tag("a", with: { "title" => content })
     end
 
     context "with content from a block" do
@@ -51,9 +51,9 @@ describe TextHelper do
         expect(link).to have_tag("a", text: content)
       end
 
-      it "moves the original content to a data attribute" do
+      it "moves the original content to the title" do
         link = helper.omission_link_to("http://bacon.com") do content end
-        expect(link).to have_tag("a", with: { "data-omission-content" => content })
+        expect(link).to have_tag("a", with: { "title" => content })
       end
     end
   end

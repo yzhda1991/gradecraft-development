@@ -5,15 +5,15 @@ module TextHelper
     indicator = omission_options.delete(:indicator) { "..." }
 
     content = block_given? ? capture(&block) : name
-    original_content = content
+    original_content = content.html_safe
     content = "#{content[0..(limit - indicator.length)]}#{indicator}" if content.length > limit
 
     if block_given?
       block = lambda { content } if block_given?
-      options = (options || {}).merge("data-omission-content" => original_content)
+      options = (options || {}).merge("title" => original_content)
     else
       name = content
-      html_options = (html_options || {}).merge("data-omission-content" => original_content)
+      html_options = (html_options || {}).merge("title" => original_content)
     end
 
     link_to name, options, html_options, &block
