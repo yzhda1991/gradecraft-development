@@ -392,15 +392,27 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   # @mz todo: update specs
   def write_note_for_missing_binary_files
     unless students_with_missing_binaries.empty?
-      open(missing_binaries_file_path, 'wt') do |f|
-        f.puts "The following files were uploaded, but no longer appear to be available on the server:"
-        students_with_missing_binaries.each_with_index do |student, index|
-          f.puts "\n#{student.full_name}:"
-          submission_files_with_missing_binaries.each do |missing_file|
-            f.puts "#{missing_file.filename}" if missing_file.submission.student_id == student.id
-          end
-        end
+      open(missing_binaries_file_path, 'wt') do |file|
+        write_missing_binary_text(file)
       end
+    end
+  end
+
+  def write_missing_binary_text(file)
+    file.puts "The following files were uploaded, but no longer appear to be available on the server:"
+    write_missing_binary_files_for_student(file)
+  end
+
+  def write_missing_binary_files_for_student(file)
+    students_with_missing_binaries.each_with_index do |student, index|
+      file.puts "\n#{student.full_name}:"
+      add_missing_binary_filenames_to_file(file)
+    end
+  end
+
+  def add_missing_binary_filenames_to_file(file)
+    submission_files_with_missing_binaries.each do |missing_file|
+      file.puts "#{missing_file.filename}" if missing_file.submission.student_id == student.id
     end
   end
 
