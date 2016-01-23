@@ -49,22 +49,14 @@ class NotificationMailer < ApplicationMailer
 
   def grade_released(grade_id)
     set_grade_ivars(grade_id)
-    mail(to: @student.email,
-      subject: "#{@course.courseno} - #{@assignment.name} Graded") do |format|
-      format.text
-      format.html
-    end
+    send_student_email "#{@course.courseno} - #{@assignment.name} Graded"
   end
 
   def earned_badge_awarded(earned_badge_id)
     @earned_badge = EarnedBadge.find earned_badge_id
     @student = @earned_badge.student
     @course = @earned_badge.course
-    mail(to: @student.email,
-      subject: "#{@course.courseno} - You've earned a new #{@course.badge_term}!") do |format|
-      format.text
-      format.html
-    end
+    send_student_email "#{@course.courseno} - You've earned a new #{@course.badge_term}!"
   end
 
   private
@@ -84,6 +76,13 @@ class NotificationMailer < ApplicationMailer
 
   def send_export_email(subject)
     mail(to: @user.email, bcc:ADMIN_EMAIL, subject: subject) {|format| format.text }
+  end
+
+  def send_student_email
+    mail(to: @student.email, subject: subject) do |format|
+      format.text
+      format.html
+    end
   end
 
   def set_export_ivars(course, user)
