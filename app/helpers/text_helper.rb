@@ -10,10 +10,10 @@ module TextHelper
 
     if block_given?
       block = lambda { content } if block_given?
-      options = (options || {}).merge("title" => original_content)
+      options = { "title" => original_content }.merge(options || {})
     else
       name = content
-      html_options = (html_options || {}).merge("title" => original_content)
+      html_options = { "title" => original_content }.merge(html_options || {})
     end
 
     link_to name, options, html_options, &block
