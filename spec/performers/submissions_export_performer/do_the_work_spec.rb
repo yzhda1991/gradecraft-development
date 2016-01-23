@@ -19,11 +19,11 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "requires success" do
-        expect(subject).to receive(:require_success).exactly(11).times
+        expect(subject).to receive(:require_success).exactly(12).times
       end
 
       it "adds outcomes to subject.outcomes" do
-        expect { subject.do_the_work }.to change { subject.outcomes.size }.by(11)
+        expect { subject.do_the_work }.to change { subject.outcomes.size }.by(12)
       end
 
       it "fetches the csv data" do
@@ -32,7 +32,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "checks whether the exported csv was successfully saved on disk" do
-        expect(subject).to receive(:export_csv_successful?)
+        expect(subject).to receive(:confirm_export_csv_integrity)
       end
 
       it "creates directories for each student" do
@@ -40,7 +40,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "ensures that all student directories were created successfully" do
-        expect(subject).to receive(:student_directories_created_successfully?)
+        expect(subject).to receive(:student_directories_created_successfully)
       end
 
       it "creates submission text files in each student directory where needed" do

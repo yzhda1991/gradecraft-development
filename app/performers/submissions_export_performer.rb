@@ -16,76 +16,41 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
     if work_resources_present?
-      # generate the csv overview for the assignment or team
-      require_success(generate_csv_messages, max_result_size: 250) do
-        generate_export_csv
-        @submissions_export.update_attributes generate_export_csv: true
-      end
-
-      # check whether the csv export was successful
-      require_success(csv_export_messages) do
-        @submissions_export.update_attributes export_csv_successful: true
-        export_csv_successful?
-      end
-
-      # generate student directories
-      require_success(create_student_directory_messages) do
-        @submissions_export.update_attributes create_student_directories: true
-        create_student_directories
-      end
-
-      # check whether the student directories were all created successfully
-      require_success(check_student_directory_messages) do
-        @submissions_export.update_attributes student_directories_created_successfully: true
-        student_directories_created_successfully?
-      end
-
-      # create text files in each student directory if there is submission data that requires it
-      require_success(create_submission_text_file_messages) do
-        @submissions_export.update_attributes create_submission_text_files: true
-        create_submission_text_files
-      end
-
-      # create binary files in each student directory
-      require_success(create_submission_binary_file_messages) do
-        @submissions_export.update_attributes create_submission_binary_files: true
-        create_submission_binary_files
-        write_note_for_missing_binary_files
-      end
-
-      # create binary files in each student directory
-      require_success(remove_empty_student_directories_messages) do
-        @submissions_export.update_attributes remove_empty_student_directories: true
-        remove_empty_student_directories
-      end
-
-      # write error log for errors that may have occurred during file generation
-      require_success(generate_error_log_messages) do
-        @submissions_export.update_attributes generate_error_log: true
-        generate_error_log
-      end
-
-      require_success(archive_exported_files_messages) do
-        @submissions_export.update_attributes archive_exported_files: true
-        archive_exported_files
-      end
-
-      require_success(upload_archive_to_s3_messages) do
-        @submissions_export.update_attributes upload_archive_to_s3: true
-        upload_archive_to_s3
-      end
-
-      require_success(check_s3_upload_success_messages) do
-        @submissions_export.update_attributes check_s3_upload_success: true
-        check_s3_upload_success
-      end
-
+      run_performer_steps
       deliver_outcome_mailer
       @submissions_export.update_export_completed_time
     else
       if logger
         log_error_with_attributes "@assignment.present? and/or @students.present? failed and both should have been present, could not do_the_work"
       end
+    end
+  end
+
+  def performer_steps
+    [
+      :generate_export_csv, # generate the csv overview for the assignment or team
+      :confirm_export_csv_integrity, # check whether the csv export was successful
+      :create_student_directories, # generate student directories
+      :student_directories_created_successfully, # check whether the student directories were all created successfully
+      :create_submission_text_files, # create text files in each student directory if there is submission data that requires it
+      :create_submission_binary_files, # create binary files in each student directory
+      :write_note_for_missing_binary_files, 
+      :remove_empty_student_directories,
+      :generate_error_log, # write error log for errors that may have occurred during file generation
+      :archive_exported_files,
+      :upload_archive_to_s3,
+      :check_s3_upload_success
+    ]
+  end
+
+  def run_performer_steps
+    performer_steps.each {|step_name| run_step(step_name) }
+  end
+
+  def run_step(step_name)
+    require_success(send("#{step_name}_messages"), max_result_size: 250) do
+      send(step_name)
+      @submissions_export.update_attributes step_name => true
     end
   end
 
@@ -109,19 +74,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   alias_method :attributes, :base_export_attributes
 
   def clear_progress_attributes
-    {
-      generate_export_csv: nil,
-      export_csv_successful: nil,
-      create_student_directories: nil,
-      student_directories_created_successfully: nil,
-      create_submission_text_files: nil,
-      create_submission_binary_files: nil,
-      generate_error_log: nil,
-      remove_empty_student_directories: nil,
-      archive_exported_files: nil,
-      upload_archive_to_s3: nil,
-      check_s3_upload_success: nil
-    }
+    performer_steps.inject({}) do |memo, step|
+      memo[step] = nil
+      memo
+    end
   end
 
   protected
@@ -291,8 +247,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  def export_csv_successful?
-    @export_csv_successful ||= File.exist?(csv_file_path)
+  def confirm_export_csv_integrity
+    @conirm_export_csv_integrity ||= File.exist?(csv_file_path)
   end
 
   # final archive concerns
@@ -328,7 +284,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   ## creating student directories
   
-  def student_directories_created_successfully?
+  def student_directories_created_successfully
     missing_student_directories.empty?
   end
 
@@ -567,42 +523,49 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     })
   end
 
-  def generate_csv_messages
+  def generate_export_csv_messages
     expand_messages({
       success: "Successfully generated the csv data",
       failure: "Failed to generate the csv data"
     })
   end
 
-  def csv_export_messages
+  def confirm_export_csv_integrity_messages
     expand_messages ({
       success: "Successfully saved the CSV file on disk",
       failure: "Failed to save the CSV file on disk"
     })
   end
 
-  def create_student_directory_messages
+  def create_student_directories_messages
     expand_messages ({
       success: "Successfully created the student directories",
       failure: "Failed to create the student directories"
     })
   end
 
-  def check_student_directory_messages
+  def write_note_for_missing_binary_files_messages
+    expand_messages ({
+      success: "Successfully wrote the note for missing binary files",
+      failure: "Failed to write the missing binary files note"
+    })
+  end
+
+  def student_directories_created_successfully_messages
     expand_messages ({
       success: "Successfully confirmed creation of all student directories",
       failure: "Some student directories did not create properly"
     })
   end
 
-  def create_submission_text_file_messages
+  def create_submission_text_files_messages
     expand_messages ({
       success: "Successfully created all text files for the student submissions",
       failure: "Student submission text files did not create properly"
     })
   end
 
-  def create_submission_binary_file_messages
+  def create_submission_binary_files_messages
     expand_messages ({
       success: "Successfully created all binary files for the student submissions",
       failure: "Student submission binary files did not create properly"
