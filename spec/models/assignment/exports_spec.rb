@@ -5,7 +5,7 @@ RSpec.describe "Assignment grade export methods" do
   let(:students) { build_list(:user, 2) }
   let(:course) { build(:course) }
 
-  describe "#grade_import", focus: true do
+  describe "#grade_import" do
     subject { assignment.grade_import(students, options) }
 
     let(:options) {{ encoding: "UTF-8" }}
@@ -26,7 +26,7 @@ RSpec.describe "Assignment grade export methods" do
     end
   end
 
-  describe "#gradebook_for_assignment", focus: true do
+  describe "#gradebook_for_assignment" do
     subject { assignment.gradebook_for_assignment(options) }
 
     let(:options) {{ encoding: "UTF-8" }}
