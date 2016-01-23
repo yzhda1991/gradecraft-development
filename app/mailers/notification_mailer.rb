@@ -4,16 +4,12 @@ class NotificationMailer < ApplicationMailer
   def lti_error(user_data, course_data)
     @user_data = user_data
     @course_data = course_data
-    mail(to: ADMIN_EMAIL, subject: 'Unknown LTI user/course') do |format|
-      format.text
-    end
+    send_admin_email 'Unknown LTI user/course'
   end
 
   def kerberos_error(kerberos_uid)
     @kerberos_uid = kerberos_uid
-    mail(to: ADMIN_EMAIL, subject: 'Unknown Kerberos user') do |format|
-      format.text
-    end
+    send_admin_email 'Unknown Kerberos user'
   end
 
   def grade_export(course, user, csv_data)
@@ -60,7 +56,6 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
-
   def earned_badge_awarded(earned_badge_id)
     @earned_badge = EarnedBadge.find earned_badge_id
     @student = @earned_badge.student
@@ -88,14 +83,16 @@ class NotificationMailer < ApplicationMailer
   end
 
   def send_export_email(subject)
-    mail(to: @user.email, bcc:ADMIN_EMAIL, subject: subject) do |format|
-      format.text
-    end
+    mail(to: @user.email, bcc:ADMIN_EMAIL, subject: subject) {|format| format.text }
   end
 
   def set_export_ivars(course, user)
     @course = course
     @user = user
+  end
+
+  def send_admin_email(subject)
+    mail(to: ADMIN_EMAIL, subject: subject) {|format| format.text }
   end
 
   def set_grade_ivars(grade_id)
