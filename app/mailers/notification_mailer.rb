@@ -40,34 +40,23 @@ class NotificationMailer < ApplicationMailer
   end
 
   def successful_submission(submission_id)
-    @submission = Submission.find submission_id
-    @user = @submission.student
-    @course = @submission.course
-    @assignment = @submission.assignment
-    mail(to: @user.email,
-         subject: "#{@course.courseno} - #{@assignment.name} Submitted") do |format|
+    set_submission_ivars(submission_id)
+    mail(to: @user.email, subject: "#{@course.courseno} - #{@assignment.name} Submitted") do |format|
       format.text
       format.html
     end
   end
 
   def updated_submission(submission_id)
-    @submission = Submission.find submission_id
-    @user = @submission.student
-    @course = @submission.course
-    @assignment = @submission.assignment
-    mail(to: @user.email,
-      subject: "#{@course.courseno} - #{@assignment.name} Submission Updated") do |format|
+    set_submission_ivars_with_user(submission_id)
+    mail(to: @user.email, subject: "#{@course.courseno} - #{@assignment.name} Submission Updated") do |format|
       format.text
       format.html
     end
   end
 
   def new_submission(submission_id, professor)
-    @submission = Submission.find submission_id
-    @student = @submission.student
-    @course = @submission.course
-    @assignment = @submission.assignment
+    set_submission_ivars_with_student(submission_id)
     @professor = professor
     mail(to: @professor.email, subject: "#{@course[:courseno]} - #{@assignment.name} - New Submission to Grade") do |format|
       format.text
@@ -75,10 +64,7 @@ class NotificationMailer < ApplicationMailer
   end
 
   def revised_submission(submission_id, professor)
-    @submission = Submission.find submission_id
-    @student = @submission.student
-    @course = @submission.course
-    @assignment = @submission.assignment
+    set_submission_ivars_with_student(submission_id)
     @professor = professor
     mail(to: @professor.email, subject: "#{@course[:courseno]} - #{@assignment.name} - Updated Submission to Grade") do |format|
       format.text
@@ -86,10 +72,7 @@ class NotificationMailer < ApplicationMailer
   end
 
   def grade_released(grade_id)
-    @grade = Grade.find grade_id
-    @student = @grade.student
-    @course = @grade.course
-    @assignment = @grade.assignment
+    set_grade_ivars(grade_id)
     mail(to: @student.email,
       subject: "#{@course.courseno} - #{@assignment.name} Graded") do |format|
       format.text
@@ -109,35 +92,28 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
-  #  def group_created(group_id, professor)
-  #    @group = Group.find group_id
-  #    @course = @group.course
-  #    @professor = professor
-  #    mail(to: @professor.email, subject: "#{@course.courseno} - New Group to Review") do |format|
-  #      format.text
-  #    end
-  #  end
+  private
 
-  # these have been commented out in the group controller
-  # def group_notify(group_id)
-  #   @group = Group.find group_id
-  #   @course = @group.course
-  #   @group.students.each do |group_member|
-  #     mail(to: group_member.email, subject: "#{@course.courseno} - New Group") do |format|
-  #       @student = group_member
-  #       format.text
-  #     end
-  #   end
-  # end
+  def set_grade_ivars(grade_id)
+    @grade = Grade.find grade_id
+    @student = @grade.student
+    @course = @grade.course
+    @assignment = @grade.assignment
+  end
 
-  # def group_status_updated(group_id)
-  #   @group = Group.find group_id
-  #   @course = @group.course
-  #   @group.students.each do |group_member|
-  #     mail(to: group_member.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
-  #       @student = group_member
-  #       format.text
-  #     end
-  #   end
-  # end
+  def set_submission_ivars_with_student(submission_id)
+    @student = @submission.student
+    set_submission_ivars(submission_id)
+  end
+
+  def set_submission_ivars_with_user(submission_id)
+    @user = @submission.student
+    set_submission_ivars(submission_id)
+  end
+
+  def set_submission_ivars
+    @submission = Submission.find submission_id
+    @course = @submission.course
+    @assignment = @submission.assignment
+  end
 end
