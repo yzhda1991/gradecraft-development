@@ -537,10 +537,6 @@ class GradesController < ApplicationController
                 select(:id, :criterion_id, :level_id, :comments).to_json
   end
 
-  def safe_grade_possible_points
-    @grade.point_total rescue nil
-  end
-
   def enqueue_predictor_event_job
     begin
       # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
@@ -552,21 +548,6 @@ class GradesController < ApplicationController
       # to persist the record directly to mongo with all of the logging it entails
       PredictorEventJob.perform(data: predictor_event_attrs)
     end
-  end
-
-  def predictor_event_attrs
-    {
-      prediction_type: "grade",
-      course_id: current_course.id,
-      user_id: current_user.id,
-      student_id: current_student.try(:id),
-      user_role: current_user.role(current_course),
-      assignment_id: params[:id],
-      predicted_points: params[:predicted_score],
-      possible_points: safe_grade_possible_points,
-      created_at: Time.now,
-      prediction_saved_successfully: @grade_saved
-    }
   end
 
   def mass_update_grade_ids
