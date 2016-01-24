@@ -53,6 +53,11 @@ describe LinkHelper do
       expect(helper.external_link?(link)).to eq false
     end
 
+    it "is not external if it's for localhost" do
+      link = "http://localhost:5000"
+      expect(helper.external_link?(link)).to eq false
+    end
+
     it "is not external if it's an invalid url" do
       link = "blah^^^test"
       expect(helper.external_link?(link)).to eq false

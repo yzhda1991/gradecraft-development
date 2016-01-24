@@ -14,7 +14,8 @@ module LinkHelper
   def external_link?(href)
     return false if href.blank?
     uri = URI(href)
-    !uri.relative? && !uri.host.end_with?("gradecraft.com")
+    !uri.relative? && !uri.host.end_with?("gradecraft.com") &&
+      !uri.host.end_with?("localhost")
   rescue URI::InvalidURIError
     false
   end
