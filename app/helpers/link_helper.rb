@@ -11,13 +11,12 @@ module LinkHelper
     link_to name, options, html_options, &block
   end
 
-  def external_link?(href)
-    return false if href.blank?
-    uri = URI(href)
-    !uri.relative? && !uri.host.end_with?("gradecraft.com") &&
-      !uri.host.end_with?("localhost")
-  rescue URI::InvalidURIError
-    false
+  def external_link?(uri)
+    UriInspector.new(uri).external?
+  end
+
+  def sanitize_internal_links(content)
+    sanitize content, scrubber: InternalLinkScrubber.new
   end
 
   def omission_link_to(name = nil, options = nil, html_options = nil, &block)
@@ -38,5 +37,32 @@ module LinkHelper
     end
 
     link_to name, options, html_options, &block
+  end
+
+  protected
+
+  class InternalLinkScrubber < Rails::Html::PermitScrubber
+    def scrub(node)
+      return super unless (node.type == Nokogiri::XML::Node::ELEMENT_NODE) &&
+        (node.name == 'a')
+      node.set_attribute("target", "_blank") if UriInspector.new(node["href"]).external?
+    end
+  end
+
+  class UriInspector
+    attr_reader :uri
+
+    def initialize(uri)
+      @uri = uri
+    end
+
+    def external?
+      return false if self.uri.blank?
+      uri = URI(self.uri)
+      !uri.relative? && !uri.host.end_with?("gradecraft.com") &&
+        !uri.host.end_with?("localhost")
+    rescue URI::InvalidURIError
+      false
+    end
   end
 end

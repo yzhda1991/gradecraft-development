@@ -142,4 +142,13 @@ describe LinkHelper do
       end
     end
   end
+
+  describe "#sanitize_internal_links" do
+    let(:content) { "<p>This is some content for <a href='http://example.org'>External</a>" }
+
+    it "adds a target to all external links" do
+      sanitized = helper.sanitize_internal_links content
+      expect(sanitized).to eq "<p>This is some content for <a href=\"http://example.org\" target=\"_blank\">External</a></p>"
+    end
+  end
 end
