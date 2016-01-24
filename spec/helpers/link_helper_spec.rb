@@ -39,6 +39,10 @@ describe LinkHelper do
   end
 
   describe "#external_link?" do
+    it "is not external if there is no link to check" do
+      expect(helper.external_link?(nil)).to eq false
+    end
+
     it "is external if it's not a part of the gradecraft domain" do
       link = "http://example.org"
       expect(helper.external_link?(link)).to eq true
