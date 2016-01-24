@@ -1,4 +1,23 @@
-module TextHelper
+require "uri"
+
+module LinkHelper
+  def external_link_to(name = nil, options = nil, html_options = nil, &block)
+    if block_given?
+      options = { "target" => "_blank" }.merge(options || {}) if external_link? name
+    else
+      html_options = { "target" => "_blank" }.merge(html_options || {}) if external_link? options
+    end
+
+    link_to name, options, html_options, &block
+  end
+
+  def external_link?(href)
+    uri = URI(href)
+    !uri.relative? && !uri.host.end_with?("gradecraft.com")
+  rescue URI::InvalidURIError
+    false
+  end
+
   def omission_link_to(name = nil, options = nil, html_options = nil, &block)
     omission_options = (block_given? ? options : html_options) || {}
     limit = omission_options.delete(:limit) { 50 }
