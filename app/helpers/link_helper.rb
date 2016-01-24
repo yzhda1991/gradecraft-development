@@ -15,7 +15,7 @@ module LinkHelper
     UriInspector.new(uri).external?
   end
 
-  def sanitize_internal_links(content)
+  def sanitize_external_links(content)
     sanitize content, scrubber: InternalLinkScrubber.new
   end
 
