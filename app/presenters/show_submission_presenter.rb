@@ -1,12 +1,24 @@
+require_relative "../models/history_filter"
 require_relative "submission_presenter"
+require_relative "submission_grade_history"
 
 class ShowSubmissionPresenter < SubmissionPresenter
+  include SubmissionGradeHistory
+
   def id
     properties[:id]
   end
 
+  def grade
+    assignment.grades.where(student_id: student.id).first
+  end
+
   def submission
     assignment.submissions.find(id)
+  end
+
+  def submission_grade_history
+    submission_grade_filtered_history(submission, grade)
   end
 
   def student

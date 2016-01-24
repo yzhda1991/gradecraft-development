@@ -44,30 +44,9 @@ describe Grade do
   it_behaves_like "a historical model", :grade, raw_score: 1234
 
   describe "versioning", versioning: true do
-    it "ignores changes to feedback_reviewed" do
+    it "ignores changes to predicted_score" do
       subject.save!
-      subject.update_attributes feedback_reviewed: true
-      expect(subject.versions.count).to eq 1
-      expect(subject.versions.first.event).to eq "create"
-    end
-
-    it "ignores changes to feedback_reviewed_at" do
-      subject.save!
-      subject.update_attributes feedback_reviewed_at: DateTime.now
-      expect(subject.versions.count).to eq 1
-      expect(subject.versions.first.event).to eq "create"
-    end
-
-    it "ignores changes to feedback_read" do
-      subject.save!
-      subject.update_attributes feedback_read: true
-      expect(subject.versions.count).to eq 1
-      expect(subject.versions.first.event).to eq "create"
-    end
-
-    it "ignores changes to feedback_read_at" do
-      subject.save!
-      subject.update_attributes feedback_read_at: DateTime.now
+      subject.update_attributes predicted_score: 12000
       expect(subject.versions.count).to eq 1
       expect(subject.versions.first.event).to eq "create"
     end

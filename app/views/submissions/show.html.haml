@@ -18,4 +18,4 @@
         = render partial: 'layouts/alerts'
         = render partial: 'submissions/instructor_show', locals: { presenter: presenter }
       .ui-tabs-panel#history{role: "tabpanel", "aria-hidden" => false}
-        = history presenter.submission.history
+        = history_timeline presenter.submission_grade_history

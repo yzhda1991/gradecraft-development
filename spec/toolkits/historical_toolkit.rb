@@ -39,6 +39,7 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       expect(model.history.first).to include({ "object" => described_class.name })
       expect(model.history.first).to include({ "event" => "create" })
       expect(model.history.first).to include({ "actor_id" => user.id.to_s })
+      expect(model.history.first).to include({ "recorded_at" => model.versions.last.created_at })
     end
 
     it "returns the changesets for an updated #{fixture}" do
@@ -50,6 +51,7 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       expect(model.history.first).to include({ "object" => described_class.name })
       expect(model.history.first).to include({ "event" => "update" })
       expect(model.history.first).to include({ "actor_id" => user.id.to_s })
+      expect(model.history.first).to include({ "recorded_at" => model.versions.last.created_at })
     end
 
     it "orders the changesets so the newest changes are at the top" do
@@ -57,6 +59,21 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       expect(model.history.length).to eq 2
       expect(model.history.first["event"]).to eq "update"
       expect(model.history.last["event"]).to eq "create"
+    end
+  end
+
+  describe "#historical_merge", versioning: true do
+    let(:another_model) { build fixture }
+
+    it "returns new history with 2 histories for 2 creation events" do
+      model.save
+      another_model.save
+
+      history = model.historical_merge(another_model)
+
+      expect(history.length).to eq 2
+      expect(history.first["id"].last).to eq another_model.id
+      expect(history.last["id"].last).to eq model.id
     end
   end
 end

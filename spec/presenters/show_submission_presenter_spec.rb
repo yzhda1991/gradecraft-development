@@ -3,12 +3,13 @@ require "./app/presenters/show_submission_presenter"
 require_relative "showing_a_submission_spec"
 
 describe ShowSubmissionPresenter do
+  let(:assignment) { double(:assignment, point_total: 12000) }
+  let(:student) { double(:user, first_name: "Jimmy") }
+  let(:submission) { double(:submission, student: student) }
+
   it_behaves_like "showing a submission"
 
   describe "#title" do
-    let(:assignment) { double(:assignment, point_total: 12000) }
-    let(:student) { double(:user, first_name: "Jimmy") }
-    let(:submission) { double(:submission, student: student) }
     let(:view_context) { double(:view_context, points: "12,000") }
 
     before do

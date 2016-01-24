@@ -3,7 +3,7 @@ module HumanHistory
     attr_reader :datetime
 
     def initialize(_, value, _)
-      @datetime = value.last
+      @datetime = value
     end
 
     def parse(options={})
@@ -16,7 +16,7 @@ module HumanHistory
       end
 
       def tokenizable?(key, _, _)
-        key == "updated_at"
+        key == "recorded_at"
       end
     end
   end

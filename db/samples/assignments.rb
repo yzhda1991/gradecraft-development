@@ -27,6 +27,7 @@
     accepts_links: false,
     accepts_submissions: false,
     accepts_submissions_until: nil,
+    resubmissions_allowed: false,
     accepts_text: false,
     description: nil,
     grade_scope: "Individual",
@@ -309,7 +310,7 @@
   },
   assignment_type: :submissions,
   attributes: {
-    name: "Assignment Does Not Accept Submissions",
+    name: "Does Not Accept Submissions",
     open_at: 2.weeks.ago,
     due_at: DateTime.now + 0.05,
     point_total: 200000,
@@ -323,10 +324,27 @@
   },
   assignment_type: :submissions,
   attributes: {
-    name: "Assignment Accepts All Types of Submissions",
+    name: "Accepts All Types of Submissions",
     due_at: DateTime.now + 0.25,
     point_total: 200000,
     accepts_submissions: true,
+    accepts_text: true,
+    accepts_links: true,
+  }
+}
+
+@assignments[:accepts_resubmissions_assignment] = {
+  quotes: {
+  },
+  assignment_type: :submissions,
+  attributes: {
+    name: "Accepts Resubmissions of All Types",
+    due_at: DateTime.now + 0.25,
+    point_total: 200000,
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_text: true,
+    accepts_links: true,
   }
 }
 
@@ -336,7 +354,7 @@
   },
   assignment_type: :submissions,
   attributes: {
-    name: "Assignment Accepts Link Submissions",
+    name: "Accepts Link Submissions",
     due_at: DateTime.now + 0.25,
     point_total: 15000,
     accepts_attachments: false,
@@ -352,7 +370,7 @@
   },
   assignment_type: :submissions,
   attributes: {
-    name: "Assignment Accepts Attachment Submissions",
+    name: "Accepts Attachment Submissions",
     due_at: DateTime.now + 0.25,
     point_total: 15000,
     accepts_attachments: true,
@@ -368,7 +386,7 @@
   },
   assignment_type: :submissions,
   attributes: {
-    name: "Assignment Accepts Text Submissions",
+    name: "Accepts Text Submissions",
     due_at: DateTime.now + 0.25,
     point_total: 15000,
     accepts_attachments: false,

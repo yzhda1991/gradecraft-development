@@ -3,8 +3,7 @@ class Grade < ActiveRecord::Base
   include Historical
   include MultipleFileAttributes
 
-  has_paper_trail ignore: [:feedback_reviewed, :feedback_reviewed_at,
-                           :feedback_read, :feedback_read_at]
+  has_paper_trail ignore: [:predicted_score]
 
   attr_accessible :assignment, :assignments_attributes, :assignment_id,
     :assignment_type_id, :course_id, :feedback, :final_score, :grade_file,
@@ -144,7 +143,7 @@ class Grade < ActiveRecord::Base
   end
 
   def status_is_graded_or_released?
-    self.status == "Graded" || self.status == "Released"
+    is_graded? || is_released?
   end
   alias_method :graded_or_released?, :status_is_graded_or_released?
 

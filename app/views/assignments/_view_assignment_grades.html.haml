@@ -35,7 +35,7 @@
         #tab3
           = render partial: "submissions/student_show", locals: { presenter: presenter }
         #history
-          = history presenter.submission_for_assignment(current_student).history
+          = history_timeline presenter.submission_grade_history(current_student)
       - if presenter.grades_available_for?(current_student)
         #tab4
           - if presenter.assignment.has_groups?
