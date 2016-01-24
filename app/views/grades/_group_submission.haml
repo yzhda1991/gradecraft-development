@@ -38,7 +38,7 @@
   - if current_student.submission_for_assignment(@assignment).text_comment?
     %p
       Content:
-      = raw current_student.submission_for_assignment(@assignment).text_comment
+      = raw sanitize_external_links current_student.submission_for_assignment(@assignment).text_comment
 
 
 - else
@@ -81,4 +81,4 @@
   - if @group.submission_for_assignment(@assignment).text_comment?
     %p
       %b Statement:
-      = raw @group.submission_for_assignment(@assignment).text_comment
+      = raw sanitize_external_links @group.submission_for_assignment(@assignment).text_comment

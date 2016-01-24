@@ -34,7 +34,7 @@
   - if presenter.student.submission_for_assignment(presenter.assignment).text_comment?
     %p
       %span.smallcaps Statement:
-      = raw presenter.student.submission_for_assignment(presenter.assignment).text_comment
+      = raw sanitize_external_links presenter.student.submission_for_assignment(presenter.assignment).text_comment
 
 
 - else
@@ -70,4 +70,4 @@
   - if presenter.group.submission_for_assignment(presenter.assignment).text_comment?
     %p
       %span.smallcaps Statement:
-      = raw presenter.group.submission_for_assignment(presenter.assignment).text_comment
+      = raw sanitize_external_links presenter.group.submission_for_assignment(presenter.assignment).text_comment
