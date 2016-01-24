@@ -38,13 +38,20 @@ feature "viewing submissions" do
       login_as professor
       grade = create :grade, submission: submission, assignment: assignment, student: student, raw_score: 10000, status: "Released"
       submission.update_attributes link: "http://example.org"
-      grade.update_attributes raw_score: 1234 # TODO: Does a resubmission mean that it has a grade?
+      grade.update_attributes raw_score: 1234
       visit assignment_submission_path assignment, submission
     end
 
     scenario "displays a resubmitted alert for a resubmitted submission" do
       within ".pageContent" do
         expect(page).to have_content "Resubmission!"
+      end
+    end
+
+    scenario "links open new tabs if they are external" do
+      within ".pageContent" do
+        expect(page).to have_link("http://example.org", href: "http://example.org")
+        expect(find_link("http://example.org")[:target]).to eq "_blank"
       end
     end
   end
