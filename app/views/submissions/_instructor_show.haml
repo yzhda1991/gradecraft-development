@@ -56,7 +56,7 @@
   - if presenter.group.submission_for_assignment(presenter.assignment).link?
     %p
       %span.smallcaps Link:
-      = link_to presenter.group.submission_for_assignment(presenter.assignment).link, presenter.group.submission_for_assignment(presenter.assignment).link
+      = external_link_to presenter.group.submission_for_assignment(presenter.assignment).link, presenter.group.submission_for_assignment(presenter.assignment).link
 
   - if presenter.group.submission_for_assignment(presenter.assignment).submission_files.present?
     %p
