@@ -201,29 +201,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Any users who are connected to multiple classes
-  def multiple_courses?
-    course_memberships.count > 1
-  end
-
-  def formatted_key_name
-    "#{self.last_name}_#{self.first_name}-#{self.id}".downcase
-  end
-
   def student_directory_name
     "#{last_name.camelize}, #{first_name.camelize}"
   end
 
   def student_directory_name_with_username
     "#{student_directory_name} - #{username.camelize}"
-  end
-
-  def alphabetical_name_key
-    "#{self.last_name}_#{self.first_name}".downcase
-  end
-
-  def alphabetical_name_key_with_username
-    "#{self.last_name}_#{self.first_name}--#{self.username}".downcase
   end
 
   def full_name
@@ -254,13 +237,6 @@ class User < ActiveRecord::Base
       .where("course_memberships.role = ?", "student")
       .includes(:course_memberships)
       .group("users.id, course_memberships.score")
-  end
-
-  def self.graded_students_in_course_include_and_join_team(course_id)
-    self.graded_students_in_course(course_id)
-      .joins("INNER JOIN team_memberships ON team_memberships.student_id = users.id")
-      .where("course_memberships.user_id = team_memberships.student_id")
-      .includes(:team_memberships)
   end
 
   def self.auditing_students_in_course_include_and_join_team(course_id)
@@ -365,21 +341,6 @@ class User < ActiveRecord::Base
   end
 
   ### COURSE POINTS AVAILABLE
-
-  #TODO: Should take into account students weights
-  def point_total_for_course(course)
-    @point_total_for_course ||= course.assignments.point_total_for_student(self) + earned_badge_score_for_course(course)
-  end
-
-  # @mz todo: Should take into account students weights
-  def point_total_for_assignment_type(assignment_type)
-    assignment_type.assignments.map{ |a| a.point_total }.sum
-  end
-
-  ### ASSIGNMENT TYPE SCORES
-  def scores_by_assignment_type
-    grades.group(:assignment_type_id).pluck('assignment_type_id, SUM(score)')
-  end
 
   def score_for_assignment_type(assignment_type)
     grades.where(assignment_type: assignment_type).score
