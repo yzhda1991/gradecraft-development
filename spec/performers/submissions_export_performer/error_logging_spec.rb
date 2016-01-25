@@ -3,8 +3,6 @@ require 'rails_spec_helper'
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
   include Toolkits::Performers::SubmissionsExport::SharedExamples
-  include ModelAddons::SharedExamples
-
   extend Toolkits::Performers::SubmissionsExport::Context
   define_context
 

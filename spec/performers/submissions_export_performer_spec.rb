@@ -4,7 +4,7 @@ require 'active_record_spec_helper'
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
   include Toolkits::Performers::SubmissionsExport::SharedExamples
-  include ModelAddons::SharedExamples
+  include Toolkits::ModelAddons::SharedExamples
 
   extend Toolkits::Performers::SubmissionsExport::Context
   define_context
@@ -67,8 +67,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  describe "export_csv_successful?" do
-    subject { performer.instance_eval { export_csv_successful? }}
+  describe "confirm_export_csv_integrity" do
+    subject { performer.instance_eval { confirm_export_csv_integrity }}
     let(:tmp_dir) { Dir.mktmpdir }
     let(:test_file_path) { File.expand_path("csv_test.txt", tmp_dir) }
 
@@ -82,9 +82,9 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         expect(subject).to be_truthy
       end
 
-      it "sets an @export_csv_successful ivar" do
+      it "sets an @confirm_export_csv_integrity ivar" do
         subject
-        expect(performer.instance_variable_get(:@export_csv_successful)).to be_truthy
+        expect(performer.instance_variable_get(:@confirm_export_csv_integrity)).to be_truthy
       end
 
       it "caches the value" do
@@ -110,7 +110,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "doesn't cache the value" do
-        expect(performer.instance_variable_get(:@export_csv_successful)).to eq(nil)
+        expect(performer.instance_variable_get(:@confirm_export_csv_integrity)).to eq(nil)
       end
 
       after do

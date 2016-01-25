@@ -248,7 +248,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def confirm_export_csv_integrity
-    @conirm_export_csv_integrity ||= File.exist?(csv_file_path)
+    @confirm_export_csv_integrity ||= File.exist?(csv_file_path)
   end
 
   # final archive concerns
