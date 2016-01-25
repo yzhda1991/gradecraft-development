@@ -28,16 +28,16 @@ RSpec.describe SubmissionsExportsController, type: :controller do
       context "the submissions export job is enqueued" do
         before { allow(controller).to receive_message_chain(:submissions_export_job, :enqueue) { true } }
         it "sets the job success flash message" do
-          expect(controller).to receive(:job_success_flash)
           subject
+          expect(flash[:success]).to match(/Your submissions export is being prepared/)
         end
       end
 
       context "submissions export job is not enqueued" do
         before { allow(controller).to receive_message_chain(:submissions_export_job, :enqueue) { false } }
         it "sets the job failure flash message" do
-          expect(controller).to receive(:job_failure_flash)
           subject
+          expect(flash[:alert]).to match(/Your submissions export failed to build/)
         end
       end
     end
@@ -184,22 +184,6 @@ RSpec.describe SubmissionsExportsController, type: :controller do
       subject
       expect(SubmissionsExportJob).not_to receive(:new)
       subject
-    end
-  end
-
-  describe "#job_success_flash" do
-    subject { controller.instance_eval { job_success_flash } }
-    it "sets the flash success" do
-      subject
-      expect(flash[:success]).to match(/Your submissions export is being prepared/)
-    end
-  end
-
-  describe "#job_failure_flash" do
-    subject { controller.instance_eval { job_failure_flash } }
-    it "sets a flash alert" do
-      subject
-      expect(flash[:alert]).to match(/Your submissions export failed to build/)
     end
   end
 
