@@ -170,11 +170,6 @@ describe SubmissionFile do
     expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
   end
 
-  it "has a content_type method" do
-    subject.submission.save!
-    expect(subject.content_type).to eq("img/jpg")
-  end
-
   it "shortens and removes non-word characters from file names on save" do
     subject.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
     subject.submission.save!
