@@ -18,18 +18,6 @@ class SubmissionFile < ActiveRecord::Base
   scope :missing, -> { where(file_missing: true) }
   scope :present, -> { where(file_missing: false) }
 
-  def confirmed?
-    last_confirmed_at and ! file_missing
-  end
-
-  def missing?
-    last_confirmed_at and file_missing
-  end
-
-  def needs_confirmation?
-    last_confirmed_at.nil?
-  end
-
   def source_file_url
     Rails.env.development? ? public_url : url
   end
@@ -94,14 +82,5 @@ class SubmissionFile < ActiveRecord::Base
 
   def extension
     File.extname(filename)
-  end
-
-  def content_type
-    file.content_type
-    # type = file.url.match(/\.(\S+)$/)[1]
-    # case type
-    # when 'jpg','png','gif'
-
-    # end
   end
 end
