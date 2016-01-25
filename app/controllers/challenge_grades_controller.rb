@@ -72,9 +72,8 @@ class ChallengeGradesController < ApplicationController
 
         if current_course.add_team_score_to_student?
           if student_grades_require_update?
-            @team = @challenge_grade.team
-            # @mz todo: figure out how @team.students is supposed to be sorted in the controller
-
+            # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
+            # @mz TODO: figure out how @team.students is supposed to be sorted in the controller
             @score_recalculator_jobs = @team.students.collect do |student|
               ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
             end
