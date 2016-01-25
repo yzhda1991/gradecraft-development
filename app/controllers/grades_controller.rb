@@ -530,6 +530,11 @@ class GradesController < ApplicationController
     end.to_json
   end
 
+  # generates a temporary view context for the purposes of injecting into Jbuilder
+  def temp_view_context
+    @temp_view_context ||= ApplicationController.new.view_context
+  end
+
   def serialized_criterion_grades
     CriterionGrade.where({ student_id: params[:student_id],
                         assignment_id: params[:assignment_id],
