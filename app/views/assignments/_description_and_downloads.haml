@@ -22,9 +22,9 @@
         %li= link_to af.filename, af.url
 
   - if current_student.present?
+    - @group = current_student.group_for_assignment(presenter.assignment)
     - if presenter.group_assignment?
       %hr.dotted
-        - @group = current_student.group_for_assignment(presenter.assignment)
       - if @group.present?
         = render "groups/status_display", group: @group
         Your #{term_for :group} for this #{term_for :assignment}:
@@ -42,12 +42,15 @@
           - presenter.assignment.unlock_conditions.each do |condition|
             %li
               = condition.requirements_completed_sentence
-              - if presenter.assignment.has_groups?
+              - if presenter.assignment.has_groups? && @group.present?
                 = "(#{condition.count_unlocked_in_group(@group)}/#{@group.students.count} #{term_for :group} members have completed this requirement)"
-        - if ! presenter.assignment.is_unlocked_for_group?(@group)
-          All #{term_for :group} members must complete this requirement before the #{term_for :group} can proceed
-        - else
-          Congratulations! Your #{term_for :group} has successfully unlocked this #{term_for :assignment}
+        - if presenter.assignment.has_groups? && @group.present?
+          - if ! presenter.assignment.is_unlocked_for_group?(@group)
+            All #{term_for :group} members must complete the unlock conditions before the #{term_for :group} can proceed
+          - else
+            Congratulations! Your #{term_for :group} has successfully unlocked this #{term_for :assignment}
+        - if presenter.assignment.has_groups? && ! @group.present?
+          You must create a #{term_for :group} to complete this #{term_for :assignment}
 
       - else
         %i.fa.fa-lock
