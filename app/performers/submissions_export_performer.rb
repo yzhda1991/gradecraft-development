@@ -406,11 +406,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def write_missing_binary_files_for_student(file)
     students_with_missing_binaries.each_with_index do |student, index|
       file.puts "\n#{student.full_name}:"
-      add_missing_binary_filenames_to_file(file)
+      add_missing_binary_filenames_to_file(file, student)
     end
   end
 
-  def add_missing_binary_filenames_to_file(file)
+  def add_missing_binary_filenames_to_file(file, student)
     submission_files_with_missing_binaries.each do |missing_file|
       file.puts "#{missing_file.filename}" if missing_file.submission.student_id == student.id
     end

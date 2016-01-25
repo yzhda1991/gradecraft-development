@@ -72,24 +72,6 @@ describe User do
 
   describe "formatted name keys" do
     let(:user) { create(:user, first_name: "Ben", last_name: "Bailey", username: "bbailey10") }
-    describe "#formatted_key_name" do
-
-      it "formats the student info into a usable key" do
-        expect(user.formatted_key_name).to eq("bailey_ben-#{user.id}")
-      end
-    end
-
-    describe "#alphabetical_name_key" do
-      it "formats the student info into a usable key" do
-        expect(user.alphabetical_name_key).to eq("bailey_ben")
-      end
-    end
-
-    describe "#alphabetical_name_key_with_username" do
-      it "formats the student info into a usable key" do
-        expect(user.alphabetical_name_key_with_username).to eq("bailey_ben--bbailey10")
-      end
-    end
 
     describe "#full_name" do
       it "prints the full name" do
