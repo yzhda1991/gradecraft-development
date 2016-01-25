@@ -123,8 +123,6 @@ class AssignmentsController < ApplicationController
     end
   end
 
-  private
-
   def predictor_assignments_data
     @assignments = current_course.assignments.select(
       :accepts_resubmissions_until,
