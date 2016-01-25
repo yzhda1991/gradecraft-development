@@ -12,7 +12,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     before { performer.instance_variable_set(:@students, students) }
 
     describe "generate_csv_messages" do
-      subject { performer.instance_eval{ generate_csv_messages } }
+      subject { performer.instance_eval{ generate_export_csv_messages } }
 
       it_behaves_like "an expandable messages hash"
       it_behaves_like "it has a success message", "Successfully generated"
@@ -28,7 +28,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     describe "csv_export_messages" do
-      subject { performer.instance_eval{ csv_export_messages } }
+      subject { performer.instance_eval{ confirm_export_csv_integrity_messages } }
 
       it_behaves_like "an expandable messages hash"
       it_behaves_like "it has a success message", "Successfully saved the CSV file"
