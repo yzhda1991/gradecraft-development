@@ -65,7 +65,7 @@ RSpec.describe "SubmissionsExport attributes", type: :background_job do
     it "returns a list of all progress attributes as nils" do
       expect(subject).to eq({
         generate_export_csv: nil,
-        export_csv_successful: nil,
+        confirm_export_csv_integrity: nil,
         create_student_directories: nil,
         student_directories_created_successfully: nil,
         create_submission_text_files: nil,
@@ -74,7 +74,8 @@ RSpec.describe "SubmissionsExport attributes", type: :background_job do
         remove_empty_student_directories: nil,
         archive_exported_files: nil,
         upload_archive_to_s3: nil,
-        check_s3_upload_success: nil
+        check_s3_upload_success: nil,
+        write_note_for_missing_binary_files: nil
       })
     end
   end
