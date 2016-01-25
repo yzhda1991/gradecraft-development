@@ -26,25 +26,19 @@ class NotificationMailer < ApplicationMailer
   end
 
   def successful_submission(submission_id)
-    set_submission_ivars(submission_id)
-    send_assignment_email_to_user "Submitted"
+    send_assignment_email_to_user submission_id, "Submitted"
   end
 
   def updated_submission(submission_id)
-    set_submission_ivars_with_user(submission_id)
-    send_assignment_email_to_user "Submission updated"
+    send_assignment_email_to_user submission_id, "Submission Updated"
   end
 
   def new_submission(submission_id, professor)
-    set_submission_ivars_with_student(submission_id)
-    @professor = professor
-    send_assignment_email_to_professor "New Submission to Grade"
+    send_assignment_email_to_professor professor, submission_id, "New Submission to Grade"
   end
 
   def revised_submission(submission_id, professor)
-    set_submission_ivars_with_student(submission_id)
-    @professor = professor
-    send_assignment_email_to_professor "New Submission to Grade"
+    send_assignment_email_to_professor professor, submission_id, "Updated Submission to Grade"
   end
 
   def grade_released(grade_id)
@@ -61,13 +55,16 @@ class NotificationMailer < ApplicationMailer
 
   private
 
-  def send_assignment_email_to_professor(subject)
+  def send_assignment_email_to_professor(professor, submission_id, subject)
+    set_submission_ivars_with_student(submission_id)
+    @professor = professor
     mail(to: @professor.email, subject: "#{@course[:courseno]} - #{@assignment.name} - #{subject}") do |format|
       format.text
     end
   end
 
-  def send_assignment_email_to_user(subject)
+  def send_assignment_email_to_user(submission_id, subject)
+    set_submission_ivars_with_user(submission_id)
     mail(to: @user.email, subject: "#{@course.courseno} - #{@assignment.name} #{subject}") do |format|
       format.text
       format.html
@@ -78,7 +75,7 @@ class NotificationMailer < ApplicationMailer
     mail(to: @user.email, bcc:ADMIN_EMAIL, subject: subject) {|format| format.text }
   end
 
-  def send_student_email
+  def send_student_email(subject)
     mail(to: @student.email, subject: subject) do |format|
       format.text
       format.html
@@ -102,16 +99,16 @@ class NotificationMailer < ApplicationMailer
   end
 
   def set_submission_ivars_with_student(submission_id)
-    @student = @submission.student
     set_submission_ivars(submission_id)
+    @student = @submission.student
   end
 
   def set_submission_ivars_with_user(submission_id)
-    @user = @submission.student
     set_submission_ivars(submission_id)
+    @user = @submission.student
   end
 
-  def set_submission_ivars
+  def set_submission_ivars(submission_id)
     @submission = Submission.find submission_id
     @course = @submission.course
     @assignment = @submission.assignment

@@ -69,8 +69,8 @@ RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :
     end
   end
 
-  describe "student_directories_created_successfully?" do
-    subject { performer.instance_eval { student_directories_created_successfully? }}
+  describe "student_directories_created_successfully" do
+    subject { performer.instance_eval { student_directories_created_successfully }}
 
     context "missing_student_directories is empty" do
       it "returns true" do
