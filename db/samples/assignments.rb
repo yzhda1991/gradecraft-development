@@ -231,6 +231,9 @@
     due_at: 3.weeks.ago,
     point_total: 80000,
     accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_links: true,
+    accepts_text: true,
     release_necessary: true,
   },
   rubric: true,
@@ -251,6 +254,9 @@
     due_at: 3.weeks.ago,
     point_total: 80000,
     accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_links: true,
+    accepts_text: true,
     release_necessary: true,
   },
   grades: true,
@@ -328,6 +334,7 @@
     due_at: DateTime.now + 0.25,
     point_total: 200000,
     accepts_submissions: true,
+    accepts_attachments: true,
     accepts_text: true,
     accepts_links: true,
   }
@@ -343,6 +350,7 @@
     point_total: 200000,
     accepts_submissions: true,
     resubmissions_allowed: true,
+    accepts_attachments: true,
     accepts_text: true,
     accepts_links: true,
   }
@@ -357,10 +365,8 @@
     name: "Accepts Link Submissions",
     due_at: DateTime.now + 0.25,
     point_total: 15000,
-    accepts_attachments: false,
     accepts_links: true,
     accepts_submissions: true,
-    accepts_text: false,
   }
 }
 
@@ -753,6 +759,9 @@
     due_at: 4.weeks.from_now,
     point_total: 180000,
     accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_links: true,
+    accepts_text: true,
   }
 }
 
