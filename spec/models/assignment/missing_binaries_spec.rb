@@ -76,7 +76,7 @@ RSpec.describe "Assignment #missing_binaries methods" do
         let(:cache_submission_files) { missing_submission_file; present_submission_file; another_missing_submission_file }
 
         it "orders the students by name" do
-          expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+          expect(subject.first.student_directory_name < subject.last.student_directory_name).to be_truthy
         end
       end
 
@@ -188,7 +188,7 @@ RSpec.describe "Assignment #missing_binaries methods" do
         let(:cache_team_memberships) { team_membership; another_team_membership }
 
         it "orders the students by name" do
-          expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+          expect(subject.first.student_directory_name < subject.last.student_directory_name).to be_truthy
         end
       end
     end

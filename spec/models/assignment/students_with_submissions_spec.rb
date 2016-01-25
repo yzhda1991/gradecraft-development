@@ -18,7 +18,7 @@ describe "Assignment #students_with_submissions methods" do
       let(:cache_submissions) { submission; errant_submission; another_submission }
 
       it "orders the students by name" do
-        expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+        expect(subject.first.student_directory_name < subject.last.student_directory_name).to be_truthy
       end
     end
 
@@ -46,7 +46,7 @@ describe "Assignment #students_with_submissions methods" do
       let(:another_submission) { create(:submission, assignment: assignment, student: another_team_membership.student) }
 
       it "orders the students by name" do
-        expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+        expect(subject.first.student_directory_name < subject.last.student_directory_name).to be_truthy
       end
     end
 
@@ -81,7 +81,7 @@ describe "Assignment #students_with_submissions methods" do
         let(:cache_submissions) { submission; errant_submission; another_submission }
 
         it "orders the students by name" do
-          expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+          expect(subject.first.student_directory_name < subject.last.student_directory_name).to be_truthy
         end
       end
 
@@ -119,7 +119,7 @@ describe "Assignment #students_with_submissions methods" do
         let(:another_submission) { create(:submission, assignment: assignment, student: another_team_membership.student) }
 
         it "orders the students by name" do
-          expect(subject.first.alphabetical_name_key < subject.last.alphabetical_name_key).to be_truthy
+          expect(subject.first.student_directory_name < subject.last.student_directory_name).to be_truthy
         end
       end
 
