@@ -253,15 +253,6 @@ class Assignment < ActiveRecord::Base
       .where("submission_id in (select id from submissions where student_id in (select distinct(student_id) from team_memberships where team_id = ?))", team.id)
   end
 
-  private
-
-    def students_with_submissions_on_team_conditions
-      ["id in (#{student_with_submissions_query})",
-       "id in (select distinct(student_id) from team_memberships where team_id = ?)"]
-    end
-
-  public
-
   # The below four are the Quick Grading Types, can be set at either the assignment or assignment type level
   def grade_checkboxes?
     mass_grade_type == "Checkbox"
@@ -384,6 +375,11 @@ class Assignment < ActiveRecord::Base
   end
 
   private
+
+  def students_with_submissions_on_team_conditions
+    ["id in (#{student_with_submissions_query})",
+     "id in (select distinct(student_id) from team_memberships where team_id = ?)"]
+  end
 
   def open_before_close
     if (due_at.present? && open_at.present?) && (due_at < open_at)
