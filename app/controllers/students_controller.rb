@@ -27,7 +27,6 @@ class StudentsController < ApplicationController
     @students = FlaggedUser.flagged current_course, current_user
   end
 
-  # @mz todo:
   #Course wide leaderboard - excludes auditors from view
   def leaderboard
     @title = "Leaderboard"

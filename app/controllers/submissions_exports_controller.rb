@@ -3,9 +3,9 @@ class SubmissionsExportsController < ApplicationController
 
   def create
     if create_submissions_export and submissions_export_job.enqueue
-      job_success_flash 
+      flash[:success] = "Your submissions export is being prepared. You'll receive an email when it's complete."
     else
-      job_failure_flash
+      flash[:alert] = "Your submissions export failed to build. An administrator has been contacted about the issue."
     end
 
     redirect_to assignment_path(assignment)
@@ -47,14 +47,6 @@ class SubmissionsExportsController < ApplicationController
 
   def submissions_export_job
     @submissions_export_job ||= SubmissionsExportJob.new submissions_export_id: @submissions_export.id
-  end
-
-  def job_success_flash
-    flash[:success] = "Your submissions export is being prepared. You'll receive an email when it's complete."
-  end
-
-  def job_failure_flash
-    flash[:alert] = "Your submissions export failed to build. An administrator has been contacted about the issue."
   end
 
   def assignment
