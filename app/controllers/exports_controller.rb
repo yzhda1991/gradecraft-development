@@ -6,6 +6,5 @@ class ExportsController < ApplicationController
       .submissions_exports
       .order("updated_at DESC")
       .includes(:assignment, :course, :team)
-    @teams = current_course.teams
   end
 end

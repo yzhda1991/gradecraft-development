@@ -59,30 +59,27 @@ class GradesController < ApplicationController
   # create a new grade if none exists, and otherwise update the existing grade
   # PUT /assignments/:assignment_id/grade
   def update
-    redirect_to @assignment and return unless current_student.present?
-    extract_file_attributes_from_grade_params
-    # @grade = current_student.grade_for_assignment(@assignment)
     @grade = Grade.find_or_create(@assignment, current_student)
 
-    if @grade_files
-      add_grade_files_to_grade
-    end
-
-    sanitize_grade_params
-
-    if @grade.update_attributes params[:grade].merge(graded_at: Time.now,
+    if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
         instructor_modified: true)
+
+      # @mz TODO: ADD SPECS
       if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
         @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
         @grade_updater_job.enqueue
       end
 
-      update_success_redirect
-    else
-      update_failure_redirect
+      if session[:return_to].present?
+        redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
+      else
+        redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
+      end
+
+    else # failure
+      redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
     end
   end
-
 
   # PUT /grades/:id/async_update
   def async_update
@@ -133,99 +130,6 @@ class GradesController < ApplicationController
     end
   end
 
-  private
-
-  def destroy_earned_badge_with_duplicates
-    if EarnedBadge.where(duplicate_earned_badges_params).destroy_all
-      delete_earned_badge_success
-    else
-      delete_earned_badge_failure
-    end
-  end
-
-  def destroy_single_earned_badge
-    if EarnedBadge.where(id: params[:id]).destroy_all
-      delete_earned_badge_success
-    else
-      delete_earned_badge_failure
-    end
-  end
-
-  def duplicate_earned_badges_params
-    [:grade_id, :student_id, :badge_id].inject({}) do |memo, param|
-      memo.merge(param.to_sym => params[param])
-    end
-  end
-
-  def delete_earned_badge_success
-    render json: {message: "Earned badge successfully deleted", success: true}, status: 200
-  end
-
-  def delete_earned_badge_failure
-    render json: {message: "Earned badge failed to delete", success: false}, status: 417
-  end
-
-  def all_earned_badge_ids_present?
-    params[:grade_id] and params[:student_id] and params[:badge_id]
-  end
-
-  def async_update_params
-    if params[:save_type] == "feedback"
-      base_async_params
-    else
-      base_async_params.merge(raw_score: sanitized_raw_score)
-    end
-  end
-
-  def sanitized_raw_score
-    if params[:raw_score].class == String
-      params[:raw_score].gsub(/\D/, '')
-    else
-      params[:raw_score]
-    end
-  end
-
-  def base_async_params
-    {
-      feedback: params[:feedback],
-      instructor_modified: true,
-      status: params[:status],
-      updated_at: Time.now
-    }
-  end
-
-  def sanitize_grade_params
-    return nil if params[:grade][:raw_score] == ""
-    params[:grade][:raw_score] = params[:grade][:raw_score].gsub(/\D/,"").to_i rescue nil
-  end
-
-  def update_failure_redirect
-    redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
-  end
-
-  def update_success_redirect
-    if session[:return_to].present?
-      redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-    else
-      redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-    end
-  end
-
-  def add_grade_files_to_grade
-    @grade_files.each do |gf|
-      @grade.grade_files.new(file: gf, filename: gf.original_filename[0..49])
-    end
-  end
-
-  def extract_file_attributes_from_grade_params
-    if params[:grade][:grade_files_attributes].present?
-      @grade_files = params[:grade][:grade_files_attributes]["0"]["file"]
-      params[:grade].delete :grade_files_attributes
-    end
-  end
-
-  public
-
   # PUT /assignments/:assignment_id/grade/submit_rubric
   def submit_rubric
     result = Services::CreatesGradeUsingRubric.create params
@@ -271,49 +175,6 @@ class GradesController < ApplicationController
     redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name}'s #{@assignment.name} grade was successfully deleted."
   end
 
-  def feedback_read
-    @assignment = current_course.assignments.find params[:id]
-    @grade = @assignment.grades.find params[:grade_id]
-    @grade.feedback_read!
-    redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
-  end
-
-  private
-
-  def enqueue_predictor_event_job
-    begin
-      # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
-      # create a predictor event in mongo to keep track of what happened
-      PredictorEventJob.new(data: predictor_event_attrs).enqueue
-    rescue
-      # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
-      # or because of some worker stayalive anomaly, then just use the PredictorEventJob.perform method
-      # to persist the record directly to mongo with all of the logging it entails
-      PredictorEventJob.perform(data: predictor_event_attrs)
-    end
-  end
-
-  def predictor_event_attrs
-    {
-      prediction_type: "grade",
-      course_id: current_course.id,
-      user_id: current_user.id,
-      student_id: current_student.try(:id),
-      user_role: current_user.role(current_course),
-      assignment_id: params[:id],
-      predicted_points: params[:predicted_score],
-      possible_points: grade_possible_points,
-      created_at: Time.now,
-      prediction_saved_successfully: @grade_saved
-    }
-  end
-
-  def grade_possible_points
-    @grade.point_total rescue nil
-  end
-
-  public
-
   # Quickly grading a single assignment for all students
   # GET /assignments/:id/mass_grade
   def mass_edit
@@ -341,7 +202,7 @@ class GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.update_attributes(params[:assignment])
 
-      # @mz todo: add specs
+      # @mz TODO: add specs
       @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: mass_update_grade_ids)
       @multiple_grade_updater_job.enqueue
 
@@ -380,7 +241,7 @@ class GradesController < ApplicationController
       grade_ids << grade.id
     end
 
-    # @mz todo: add specs
+    # @mz TODO: add specs
     MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
 
     respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
@@ -407,9 +268,8 @@ class GradesController < ApplicationController
       grade_ids << grade.id
     end
 
-    # @mz todo: add specs
-    @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: grade_ids)
-    @multiple_grade_updater_job.enqueue
+    # @mz TODO: add specs
+    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
 
     if session[:return_to].present?
       redirect_to session[:return_to]
@@ -438,12 +298,19 @@ class GradesController < ApplicationController
 
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
 
-      # @mz todo: add specs
+      # @mz TODO: add specs
       @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: @result.successful.map(&:id))
       @multiple_grade_updater_job.enqueue
 
       render :import_results
     end
+  end
+
+  def feedback_read
+    @assignment = current_course.assignments.find params[:id]
+    @grade = @assignment.grades.find params[:grade_id]
+    @grade.feedback_read!
+    redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
   end
 
   # Allows students to log grades for student logged assignments
@@ -510,6 +377,10 @@ class GradesController < ApplicationController
 
   private
 
+  def temp_view_context
+    @temp_view_context ||= ApplicationController.new.view_context
+  end
+
   def serialized_init_data
     JbuilderTemplate.new(temp_view_context).encode do |json|
       json.grade do
@@ -530,16 +401,15 @@ class GradesController < ApplicationController
     end.to_json
   end
 
-  # generates a temporary view context for the purposes of injecting into Jbuilder
-  def temp_view_context
-    @temp_view_context ||= ApplicationController.new.view_context
-  end
-
   def serialized_criterion_grades
     CriterionGrade.where({ student_id: params[:student_id],
                         assignment_id: params[:assignment_id],
                         criterion_id: rubric_criteria_with_levels.collect {|criterion| criterion[:id] } }).
                 select(:id, :criterion_id, :level_id, :comments).to_json
+  end
+
+  def safe_grade_possible_points
+    @grade.point_total rescue nil
   end
 
   def enqueue_predictor_event_job
@@ -553,6 +423,21 @@ class GradesController < ApplicationController
       # to persist the record directly to mongo with all of the logging it entails
       PredictorEventJob.perform(data: predictor_event_attrs)
     end
+  end
+
+  def predictor_event_attrs
+    {
+      prediction_type: "grade",
+      course_id: current_course.id,
+      user_id: current_user.id,
+      student_id: current_student.try(:id),
+      user_role: current_user.role(current_course),
+      assignment_id: params[:id],
+      predicted_points: params[:predicted_score],
+      possible_points: safe_grade_possible_points,
+      created_at: Time.now,
+      prediction_saved_successfully: @grade_saved
+    }
   end
 
   def mass_update_grade_ids
