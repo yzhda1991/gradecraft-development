@@ -14,11 +14,19 @@ module SubmissionGradeHistory
       .remove("name" => "submission_id")
       .remove("name" => "submitted_at")
       .remove("name" => "updated_at")
-      .exclude { |changeset|
-        changeset["object"] == "Grade" &&
-          changeset["event"] == "create" &&
-          !changeset.keys.include?("raw_score")
+      .include { |history|
+        if (history.changeset["object"] == "Grade")
+          grade = history.version.reify
+          grade.nil? || grade.is_student_visible?
+        else
+          true
+        end
       }
-      .changeset
+      .exclude { |history|
+        history.changeset["object"] == "Grade" &&
+          history.changeset["event"] == "create" &&
+          !history.changeset.keys.include?("raw_score")
+      }
+      .changesets
   end
 end
