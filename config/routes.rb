@@ -1,7 +1,5 @@
 GradeCraft::Application.routes.draw do
 
-  get 'exports_controller/index'
-
   mount RailsEmailPreview::Engine, at: 'emails' if Rails.env.development?
 
   require 'admin_constraint'
@@ -357,6 +355,7 @@ GradeCraft::Application.routes.draw do
 
   #18. Exports
   resources :exports
+  get 'exports_controller/index'
 
   resources :submissions_exports do
     member do
