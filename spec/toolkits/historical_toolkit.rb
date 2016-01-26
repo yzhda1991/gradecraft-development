@@ -33,32 +33,32 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       model.save
     end
 
-    it "returns the changesets for the created #{fixture}" do
+    it "returns the history for the created #{fixture}" do
       expect(model.history.length).to eq 1
-      expect(model.history.first.keys).to include("created_at")
-      expect(model.history.first).to include({ "object" => described_class.name })
-      expect(model.history.first).to include({ "event" => "create" })
-      expect(model.history.first).to include({ "actor_id" => user.id.to_s })
-      expect(model.history.first).to include({ "recorded_at" => model.versions.last.created_at })
+      expect(model.history.first.changeset.keys).to include("created_at")
+      expect(model.history.first.changeset).to include({ "object" => described_class.name })
+      expect(model.history.first.changeset).to include({ "event" => "create" })
+      expect(model.history.first.changeset).to include({ "actor_id" => user.id.to_s })
+      expect(model.history.first.changeset).to include({ "recorded_at" => model.versions.last.created_at })
     end
 
     it "returns the changesets for an updated #{fixture}" do
       model.update_attributes updated_attributes
       expect(model.history.length).to eq 2
       updated_attributes.each do |key, value|
-        expect(model.history.first).to include({ key.to_s => [nil, value] })
+        expect(model.history.first.changeset).to include({ key.to_s => [nil, value] })
       end
-      expect(model.history.first).to include({ "object" => described_class.name })
-      expect(model.history.first).to include({ "event" => "update" })
-      expect(model.history.first).to include({ "actor_id" => user.id.to_s })
-      expect(model.history.first).to include({ "recorded_at" => model.versions.last.created_at })
+      expect(model.history.first.changeset).to include({ "object" => described_class.name })
+      expect(model.history.first.changeset).to include({ "event" => "update" })
+      expect(model.history.first.changeset).to include({ "actor_id" => user.id.to_s })
+      expect(model.history.first.changeset).to include({ "recorded_at" => model.versions.last.created_at })
     end
 
     it "orders the changesets so the newest changes are at the top" do
       model.update_attributes updated_attributes
       expect(model.history.length).to eq 2
-      expect(model.history.first["event"]).to eq "update"
-      expect(model.history.last["event"]).to eq "create"
+      expect(model.history.first.changeset["event"]).to eq "update"
+      expect(model.history.last.changeset["event"]).to eq "create"
     end
   end
 
@@ -72,8 +72,8 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       history = model.historical_merge(another_model)
 
       expect(history.length).to eq 2
-      expect(history.first["id"].last).to eq another_model.id
-      expect(history.last["id"].last).to eq model.id
+      expect(history.first.changeset["id"].last).to eq another_model.id
+      expect(history.last.changeset["id"].last).to eq model.id
     end
   end
 end
