@@ -8,7 +8,6 @@ class SubmissionsExport < ActiveRecord::Base
     :s3_object_key, :export_filename, :s3_bucket, :last_export_started_at, :last_export_completed_at,
     :student_ids, :performer_error_log,
     :generate_export_csv,
-    :export_csv_successful,
     :create_student_directories,
     :student_directories_created_successfully,
     :create_submission_text_files,
@@ -17,7 +16,9 @@ class SubmissionsExport < ActiveRecord::Base
     :generate_error_log,
     :archive_exported_files,
     :upload_archive_to_s3,
-    :check_s3_upload_success
+    :check_s3_upload_success,
+    :confirm_export_csv_integrity,
+    :write_note_for_missing_binary_files
 
   validates :course_id, presence: true
   validates :assignment_id, presence: true
