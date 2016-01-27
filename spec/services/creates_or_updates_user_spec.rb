@@ -8,7 +8,7 @@ describe Services::CreatesOrUpdatesUser do
 
   describe ".create_or_update" do
     it "decides if a user gets created or updated" do
-      expect(Services::Actions::CreateOrUpdateUser).to receive(:execute).and_call_original
+      expect(Services::Actions::CreatesOrUpdatesUser).to receive(:execute).and_call_original
       described_class.create_or_update params, course
     end
   end

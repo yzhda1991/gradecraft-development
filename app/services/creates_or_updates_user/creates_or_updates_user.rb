@@ -1,7 +1,9 @@
 module Services
   module Actions
-    class CreateOrUpdateUser
+    class CreatesOrUpdatesUser
       extend LightService::Action
+
+      expects :attributes, :course
 
       executed do |context|
       end

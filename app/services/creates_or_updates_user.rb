@@ -1,5 +1,5 @@
 require "light-service"
-require_relative "creates_or_updates_user/create_or_update_user"
+require_relative "creates_or_updates_user/creates_or_updates_user"
 
 module Services
   class CreatesOrUpdatesUser
@@ -8,7 +8,7 @@ module Services
     def self.create_or_update(attributes, course, send_welcome_email=false)
       with(attributes: attributes, course: course, send_welcome_email: send_welcome_email)
         .reduce(
-        Actions::CreateOrUpdateUser
+        Actions::CreatesOrUpdatesUser
       )
     end
   end
