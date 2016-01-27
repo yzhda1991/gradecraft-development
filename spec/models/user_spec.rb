@@ -44,6 +44,16 @@ describe User do
     end
   end
 
+  describe ".email_exists?" do
+    it "should return true if the email already exists" do
+      expect(User.email_exists?(world.student.email.upcase)).to eq true
+    end
+
+    it "should return false if the email does not exist" do
+      expect(User.email_exists?("blah@somewhere-cool.biz")).to eq false
+    end
+  end
+
   describe ".students_auditing" do
     let(:student_being_audited) { create(:user) }
     before do

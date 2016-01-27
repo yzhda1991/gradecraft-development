@@ -179,6 +179,10 @@ class User < ActiveRecord::Base
     where("LOWER(username) = :username", username: username.downcase).first
   end
 
+  def self.email_exists?(email)
+    !!find_by_insensitive_email(email)
+  end
+
   def activated?
     activation_state == "active"
   end
