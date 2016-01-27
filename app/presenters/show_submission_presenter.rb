@@ -10,7 +10,11 @@ class ShowSubmissionPresenter < SubmissionPresenter
   end
 
   def grade
-    assignment.grades.where(student_id: student.id).first
+    if assignment.is_individual?
+      assignment.grades.where(student_id: student.id).first
+    else
+      assignment.grades.where(group_id: group.id).first
+    end
   end
 
   def submission
@@ -23,6 +27,15 @@ class ShowSubmissionPresenter < SubmissionPresenter
 
   def student
     submission.student
+  end
+
+  # override: params[:group_id] not available on show
+  def group
+    submission.group
+  end
+
+  def group_id
+    submission.group.id
   end
 
   def title

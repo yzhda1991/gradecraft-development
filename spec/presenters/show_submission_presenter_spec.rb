@@ -5,7 +5,8 @@ require_relative "showing_a_submission_spec"
 describe ShowSubmissionPresenter do
   let(:assignment) { double(:assignment, point_total: 12000) }
   let(:student) { double(:user, first_name: "Jimmy") }
-  let(:submission) { double(:submission, student: student) }
+  let(:group) { double(:group, name: "My group") }
+  let(:submission) { double(:submission, student: student, group: group) }
 
   it_behaves_like "showing a submission"
 
@@ -23,8 +24,6 @@ describe ShowSubmissionPresenter do
     end
 
     it "includes the groups's name for a group" do
-      group = double(:group, name: "My group")
-      allow(subject).to receive(:group).and_return group
       allow(assignment).to receive_messages name: "New Assignment", is_individual?: false, has_groups?: true
       expect(subject.title).to eq "My group's New Assignment Submission (12,000 points)"
     end

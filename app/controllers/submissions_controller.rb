@@ -3,8 +3,9 @@ class SubmissionsController < ApplicationController
   before_filter :save_referer, only: [:new, :edit]
 
   def show
-    presenter = ShowSubmissionPresenter.new({ id: params[:id], assignment_id: params[:assignment_id],
-                                              course: current_course, group_id: params[:group_id],
+    presenter = ShowSubmissionPresenter.new({ id: params[:id],
+                                              assignment_id: params[:assignment_id],
+                                              course: current_course,
                                               view_context: view_context })
     enforce_view_permission(presenter.submission)
     render :show, locals: { presenter: presenter }
