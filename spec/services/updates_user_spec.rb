@@ -11,5 +11,10 @@ describe Services::UpdatesUser do
       expect(Services::Actions::UpdatesUser).to receive(:execute).and_call_original
       described_class.update params, course
     end
+
+    it "creates the course membership with the user and course" do
+      expect(Services::Actions::CreatesCourseMembership).to receive(:execute).and_call_original
+      described_class.update params, course
+    end
   end
 end
