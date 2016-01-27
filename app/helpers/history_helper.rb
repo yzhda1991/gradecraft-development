@@ -85,7 +85,7 @@ module HistoryHelper
     tokenizer = HumanHistory::HistoryTokenizer.new(changeset)
     HumanHistory::HistoryTokenParser.new(tokenizer)
       .parse({ current_user: current_user,
-               change_description_formatters: [HumanHistory::DefaultChangeDescriptionFormatter] }
+               change_description_formatters: [HumanHistory::RawScoreChangeDescriptionFormatter, HumanHistory::DefaultChangeDescriptionFormatter] }
       .merge(options))
   end
 end
