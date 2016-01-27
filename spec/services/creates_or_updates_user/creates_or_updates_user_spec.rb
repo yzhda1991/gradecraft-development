@@ -5,7 +5,7 @@ require "./app/services/creates_or_updates_user/creates_or_updates_user"
 describe Services::Actions::CreatesOrUpdatesUser do
   let(:course) { create :course }
   let(:user) { build :user }
-  let(:attributes) { user.attributes }
+  let(:attributes) { user.attributes.symbolize_keys }
 
   before do
     user_mailer = double(:user_mailer, activation_needed_email: double(:mailer, deliver_now: nil))
@@ -29,10 +29,26 @@ describe Services::Actions::CreatesOrUpdatesUser do
 
   it "creates the user if they do not exist" do
     expect(Services::CreatesNewUser).to receive(:create).and_call_original
+    expect(Services::UpdatesUser).to_not receive(:update)
     described_class.execute attributes: attributes, course: course, send_welcome_email: false
   end
 
-  xit "updates the user if they do not exist"
-  xit "fails if the attributes do not have an email address to check"
-  xit "promises the created or updated user"
+  it "updates the user if they already exist" do
+    user.save!
+    expect(Services::UpdatesUser).to receive(:update).and_call_original
+    expect(Services::CreatesNewUser).to_not receive(:create)
+    described_class.execute attributes: attributes, course: course, send_welcome_email: false
+  end
+
+  it "fails if the attributes do not have an email address to check" do
+    attributes.delete(:email)
+    expect(Services::CreatesNewUser).to_not receive(:create)
+    expect(Services::UpdatesUser).to_not receive(:update)
+    described_class.execute attributes: attributes, course: course, send_welcome_email: false
+  end
+
+  it "promises the created or updated user" do
+    result = described_class.execute attributes: attributes, course: course, send_welcome_email: false
+    expect(result).to have_key :user
+  end
 end
