@@ -4,7 +4,7 @@ require "./app/services/updates_user"
 describe Services::UpdatesUser do
   let(:course) { create :course }
   let(:user) { create :user }
-  let(:params) { user.attributes }
+  let(:params) { user.attributes.symbolize_keys }
 
   describe ".update" do
     it "updates the existing user" do
