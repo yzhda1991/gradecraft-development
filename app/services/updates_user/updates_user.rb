@@ -7,13 +7,10 @@ module Services
 
       executed do |context|
         attributes = context[:attributes]
-        id = attributes[:id]
+        email = attributes[:email]
 
-        begin
-          user = User.find id
-        rescue ActiveRecord::RecordNotFound => e
-          context.fail_with_rollback!(e.message, error_code: 404)
-        end
+        user = User.find_by_insensitive_email email
+        context.fail_with_rollback!("User could not be found", error_code: 404) if user.nil?
 
         context.fail_with_rollback!("The user is invalid and cannot be saved", error_code: 422) \
           unless user.update_attributes attributes

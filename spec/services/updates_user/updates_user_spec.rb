@@ -18,7 +18,7 @@ describe Services::Actions::UpdatesUser do
   end
 
   it "halts if the user cannot be found" do
-    attributes.merge!(id: 0)
+    attributes.merge!(email: "blah@somewhere.com")
     expect { described_class.execute attributes: attributes }.to \
       raise_error LightService::FailWithRollbackError
   end
