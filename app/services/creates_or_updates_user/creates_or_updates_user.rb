@@ -18,7 +18,7 @@ module Services
         end
 
         if User.email_exists? email
-          course = attributes[:course]
+          course = context[:course]
           context.add_to_context Services::UpdatesUser.update(attributes, course)
         else
           send_welcome_email = attributes[:send_welcome_email]
