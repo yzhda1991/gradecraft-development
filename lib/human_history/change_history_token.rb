@@ -1,3 +1,5 @@
+require_relative "default_change_description_formatter"
+
 module HumanHistory
   class ChangeHistoryToken
     attr_reader :attribute, :changes, :type
@@ -9,7 +11,10 @@ module HumanHistory
     end
 
     def parse(options={})
-      { change: change_description }
+      formatters = default_options
+        .merge(options)[:change_description_formatters]
+
+      { change: change_description(formatters) }
     end
 
     class << self
@@ -25,26 +30,18 @@ module HumanHistory
 
     private
 
-    def attribute_name
-      type.classify.constantize.human_attribute_name(attribute).downcase
+    def change_description(formatters)
+      formatters.each do |formatter_type|
+        formatter = formatter_type.new(attribute, changes, type)
+        if formatter.formattable?
+          return formatter.change_description
+        end
+      end
     end
 
-    def change_description
-      description = "the #{attribute_name} "
-      description += "from #{format_change changes.first} " if include_from? changes.first
-      description += "to #{format_change changes.last}"
-    end
-
-    def format_change(change)
-      requires_quotes?(change) ? "\"#{change}\"" : change
-    end
-
-    def include_from?(change)
-      !change.nil? && (!change.respond_to?(:empty?) || !change.empty?)
-    end
-
-    def requires_quotes?(change)
-      !change.is_a?(Integer) && !change.is_a?(TrueClass) && !change.is_a?(FalseClass)
+    def default_options
+      { change_description_formatters: [DefaultChangeDescriptionFormatter] }
+        .freeze
     end
   end
 end
