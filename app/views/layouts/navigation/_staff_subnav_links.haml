@@ -18,11 +18,18 @@
 %li
   = link_to_unless_current raw('<i class="fa fa-list-ol fa-fw"></i> Leaderboard'), leaderboard_path
 %li
-  = link_to_unless_current raw('<i class="fa fa-flag-checkered fa-fw"></i> Grading Status'), grading_status_path
+  = link_to_unless_current raw('<i class="fa fa-flag-checkered fa-fw"></i> Grading Status'), grading_status_path do |name|
+    = raw("<span class='sidebar-nav'>#{name}</span>")
+  %div.notification-badge.staff-notification-badge 123
 %li
-  = link_to_unless_current raw('<i class="fa fa-history fa-fw"></i> Resubmissions'), resubmissions_path
+  = link_to_unless_current raw('<i class="fa fa-history fa-fw"></i> Resubmissions'), resubmissions_path do |name|
+    = raw("<span class='sidebar-nav'>#{name}</span>")
+
+  %div.notification-badge.staff-notification-badge 12
 %li
-  = link_to_unless_current raw('<i class="fa fa-exclamation-triangle fa-fw"></i> Ungraded Submissions'), ungraded_submissions_path
+  = link_to_unless_current raw('<i class="fa fa-exclamation-triangle fa-fw"></i> Ungraded Submissions'), ungraded_submissions_path do |name|
+    = raw("<span class='sidebar-nav'>#{name}</span>")
+  %div.notification-badge.staff-notification-badge 6
 
 - if current_course.student_weighted?
   %li= link_to_unless_current raw("<i class='fa fa-cubes fa-fw'></i> #{term_for :weight} Choices"), multiplier_choices_path
