@@ -21,7 +21,11 @@ class SubmissionFile < ActiveRecord::Base
     submission.assignment
   end
 
-  def student
-    submission.student
+  def owner_name
+    if submission.assignment.grade_scope == "Group"
+      submission.group.name
+    else
+      "#{submission.student.last_name} #{submission.student.first_name}"
+    end
   end
 end

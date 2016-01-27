@@ -291,7 +291,11 @@
     name: "Group Assignment + Submissions",
     due_at: 2.weeks.ago + 0.05,
     point_total: 15000,
-    grade_scope: "Group"
+    grade_scope: "Group",
+    accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true
   }
 }
 

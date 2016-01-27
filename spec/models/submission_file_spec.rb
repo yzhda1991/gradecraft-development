@@ -39,9 +39,17 @@ describe SubmissionFile do
     end
   end
 
-  describe "#student" do
-    it "returns the student associated with the submission" do
-      expect(subject.student).to eq(student)
+  describe "#owner_name" do
+    it "returns the formatted student name associated with the submission" do
+      expect(subject.owner_name).to eq("#{student.last_name} #{student.first_name}")
+    end
+
+    it "returns the group name associated with a group submission" do
+      group = build(:group, name: "Group Name")
+      group_assignment = build(:assignment, grade_scope: "Group")
+      group_submission = build(:submission, course: course, assignment: group_assignment, group: group)
+      group_file = group_submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg'))
+      expect(group_file.owner_name).to eq(group.name)
     end
   end
 
