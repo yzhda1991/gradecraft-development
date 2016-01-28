@@ -145,7 +145,7 @@ describe GradesController do
         grade_params = { raw_score: 12345, assignment_id: @assignment.id }
         current_time = DateTime.now
         put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
-        expect(Grade.reload.graded_at).to be > current_time
+        expect(@grade.reload.graded_at).to be > current_time
       end
 
       it "attaches the student submission" do
