@@ -10,9 +10,15 @@ describe HumanHistory::DefaultChangeDescriptionFormatter do
   subject { described_class.new attribute, changes, type }
 
   describe "#initialize" do
-    it "is initialized attribute, changes, and type" do
+    it "is initialized with an attribute" do
       expect(subject.attribute).to eq attribute
+    end
+
+    it "is initialized with the changes" do
       expect(subject.changes).to eq changes
+    end
+
+    it "is initialized with the type" do
       expect(subject.type).to eq type
     end
   end
