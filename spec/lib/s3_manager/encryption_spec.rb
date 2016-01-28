@@ -50,6 +50,8 @@ RSpec.describe S3Manager::Encryption do
         expect(s3_manager).to receive(:put_object_with_client).with(encrypted_client, object_key, file_path)
         subject
       end
+
+      after { FileUtils.rm("jerry-was-here.doc") if File.exist?("jerry-was-here.doc") }
     end
 
     describe "#get_encrypted_object" do

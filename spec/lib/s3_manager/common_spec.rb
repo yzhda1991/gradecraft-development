@@ -8,7 +8,6 @@ RSpec.describe S3Manager::Common do
     let(:object_key) { "jerrys-hat" }
     let(:encrypted_client) { s3_manager.encrypted_client }
     let(:client) { s3_manager.client }
-    let(:object_body) { File.new("jerry-was-here.doc", "w+b") }
     let(:put_object_with_client) { s3_manager.put_object_with_client(client, object_key, file_path) }
 
     describe "#put_object_with_client" do

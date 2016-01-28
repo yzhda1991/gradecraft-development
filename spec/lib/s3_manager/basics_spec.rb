@@ -74,8 +74,10 @@ RSpec.describe S3Manager::Manager do
     let(:s3_manager) { S3Manager::Manager.new }
     let(:object_key) { "jerrys-unencrypted-hat" }
     let(:client) { s3_manager.client }
-    let(:object_body) { File.new("unencrypted-jerry-was-here.doc", "w+b") }
+    let(:filename) { "unencrypted-jerry-was-here.doc" }
+    let(:object_body) { File.new(filename, "w+b") }
     let(:put_object) { s3_manager.put_object(object_key, object_body) }
+    let(:delete_jerry) { FileUtils.rm(filename) if File.exist?(filename) }
 
     before(:each) { client }
 
@@ -105,6 +107,8 @@ RSpec.describe S3Manager::Manager do
         subject
         expect(S3Manager::Manager::ObjectSummary.new(object_key, s3_manager).exists?).to be_falsey
       end
+
+      after(:each) { delete_jerry }
     end
 
     describe "#get_object" do
@@ -137,6 +141,8 @@ RSpec.describe S3Manager::Manager do
       it "should suggest that AES256 encryption was used" do
         expect(subject.server_side_encryption).to eq("AES256")
       end
+
+      after { FileUtils.rm(filename) if File.exist?(filename) }
     end
 
     describe "#write_s3_object_to_disk" do
