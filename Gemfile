@@ -71,9 +71,6 @@ gem 'omniauth'
 gem 'omniauth-kerberos'
 gem 'omniauth-lti', git: 'https://github.com/venturit/omniauth-lti.git', branch: 'master'
 
-# subprocess handling library 
-gem 'open4', '~> 1.3.4'
-
 gem 'pacecar'
 gem 'paper_trail'
 gem 'pg'

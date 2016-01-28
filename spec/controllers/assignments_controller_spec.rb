@@ -413,16 +413,6 @@ describe AssignmentsController do
   end
 end
 
-
-# helper methods:
-#
-def predictor_grade_attributes_for(object)
-  predictor_grade_attributes.inject({}) do |memo, attr|
-    memo[attr] = object.send(attr)
-    memo
-  end
-end
-
 def predictor_grade_attributes
   [
     :assignment_id,
