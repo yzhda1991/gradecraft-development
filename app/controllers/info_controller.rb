@@ -40,9 +40,6 @@ class InfoController < ApplicationController
     @ungraded_submissions_by_assignment = @ungraded_submissions.group_by(&:assignment)
     @unreleased_grades_by_assignment = unrealeased_grades.group_by(&:assignment)
     @in_progress_grades_by_assignment = in_progress_grades.group_by(&:assignment)
-    @count_unreleased = unrealeased_grades.not_released.count
-    @count_ungraded = @ungraded_submissions.count
-    @count_in_progress = in_progress_grades.count
   end
 
   # Displaying all resubmisisons
@@ -61,7 +58,6 @@ class InfoController < ApplicationController
   def ungraded_submissions
     @title = "Ungraded #{term_for :assignment} Submissions"
     @ungraded_submissions = current_course.submissions.ungraded.order_by_submitted.includes(:assignment, :student, :submission_files)
-    @count_ungraded = @ungraded_submissions.count
   end
 
   # Displaying the top 10 and bottom 10 students for quick overview

@@ -1,6 +1,6 @@
 %h4.subtitle#inProgressTableCaption
   = "In Progress Grades"
-  %span.label.alert= @count_in_progress
+  %span.label.alert= in_progress_grades_count_for(course)
 
 - @in_progress_grades_by_assignment.each do |assignment, grades|
   .assignment-in-progress
