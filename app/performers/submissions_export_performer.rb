@@ -157,7 +157,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def filename_time
-    @filename_time ||= Time.now
+    Time.zone = @professor.time_zone
+    @filename_time ||= Time.zone.now
   end
 
   def archive_basename

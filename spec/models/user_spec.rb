@@ -9,7 +9,7 @@ describe User do
       .create_grade
   end
 
-  context "validations" do
+  describe "validations" do
     it "requires the password confirmation to match" do
       user = User.new password: "test", password_confirmation: "blah"
       expect(user).to_not be_valid
@@ -23,7 +23,7 @@ describe User do
     end
   end
 
-  context "ordering" do
+  describe "ordering" do
     it "should return users alphabetical by last name" do
       User.destroy_all
       student = create(:user, last_name: 'Zed')
@@ -77,6 +77,15 @@ describe User do
       it "prints the full name" do
         expect(user.full_name).to eq("Ben Bailey")
       end
+    end
+  end
+
+  describe "#time_zone" do
+    subject { user.time_zone }
+    let(:user) { create(:user) }
+
+    it "defaults to Eastern Time" do
+      expect(subject).to eq("Eastern Time (US & Canada)")
     end
   end
 
