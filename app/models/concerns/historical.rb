@@ -24,10 +24,10 @@ module Historical
   def history
     self.versions.reverse.map do |version|
       history = HistoryItem.new(version)
-      history.changeset.merge!("object" => self.class.name)
-      history.changeset.merge!("event" => version.event)
-      history.changeset.merge!("actor_id" => version.whodunnit)
-      history.changeset.merge!("recorded_at" => version.created_at)
+      history.changeset.merge!("object" => self.class.name,
+                               "event" => version.event,
+                               "actor_id" => version.whodunnit,
+                               "recorded_at" => version.created_at)
       history
     end
   end
