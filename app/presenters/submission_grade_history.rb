@@ -1,5 +1,5 @@
 module SubmissionGradeHistory
-  def submission_grade_filtered_history(submission, grade)
+  def submission_grade_filtered_history(submission, grade, only_student_visible_grades=true)
     HistoryFilter.new(submission.historical_merge(grade))
       .remove("name" => "admin_notes")
       .remove("name" => "feedback_read")
@@ -14,11 +14,14 @@ module SubmissionGradeHistory
       .remove("name" => "submission_id")
       .remove("name" => "submitted_at")
       .remove("name" => "updated_at")
-      .exclude { |changeset|
-        changeset["object"] == "Grade" &&
-          changeset["event"] == "create" &&
-          !changeset.keys.include?("raw_score")
+      .include { |history|
+        if (history.changeset["object"] == "Grade" && only_student_visible_grades)
+          grade = history.version.reify
+          !grade.nil? && grade.is_student_visible?
+        else
+          true
+        end
       }
-      .changeset
+      .changesets
   end
 end

@@ -1,41 +1,46 @@
 class HistoryFilter
-  attr_reader :changeset
+  attr_reader :history
 
-  def initialize(changeset)
-    @changeset = changeset
+  def changesets
+    history.map(&:changeset)
+  end
+
+  def initialize(history)
+    @history = history
   end
 
   def exclude(options={})
     exclusions = options.keys
 
-    @changeset = changeset.select do |set|
+    @history = history.select do |history_item|
       result = exclusions.inject(true) do |select, exclusion|
-        set[exclusion] != options[exclusion]
+        history_item.changeset[exclusion] != options[exclusion]
       end
-      result &= !yield(set) if block_given?
+      result &= !yield(history_item) if block_given?
       result
-    end.delete_if { |set| empty_changeset?(set) }
+    end.delete_if { |history_item| empty_changeset?(history_item.changeset) }
     self
   end
 
   def include(options={})
     inclusions = options.keys
-    @changeset = changeset.select do |set|
+
+    @history = history.select do |history_item|
       result = inclusions.inject(true) do |select, inclusion|
-        set[inclusion] == options[inclusion]
+        history_item.changeset[inclusion] == options[inclusion]
       end
-      result &= yield(set) if block_given?
+      result &= yield(history_item) if block_given?
       result
-    end.delete_if { |set| empty_changeset?(set) }
+    end.delete_if { |history_item| empty_changeset?(history_item.changeset) }
     self
   end
 
   def remove(options)
     name = options["name"]
 
-    @changeset = changeset.map do |set|
-      set.delete_if { |key, value| name == key } if name
-    end.delete_if { |set| empty_changeset?(set) }
+    @history = history.select do |history_item|
+      history_item.changeset.delete_if { |key, value| name == key } if name
+    end.delete_if { |history_item| empty_changeset?(history_item.changeset) }
     self
   end
 

@@ -33,32 +33,77 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       model.save
     end
 
-    it "returns the changesets for the created #{fixture}" do
-      expect(model.history.length).to eq 1
-      expect(model.history.first.keys).to include("created_at")
-      expect(model.history.first).to include({ "object" => described_class.name })
-      expect(model.history.first).to include({ "event" => "create" })
-      expect(model.history.first).to include({ "actor_id" => user.id.to_s })
-      expect(model.history.first).to include({ "recorded_at" => model.versions.last.created_at })
+    subject { model.history }
+
+    it "only contains the one event" do
+      expect(subject.length).to eq 1
     end
 
-    it "returns the changesets for an updated #{fixture}" do
-      model.update_attributes updated_attributes
-      expect(model.history.length).to eq 2
-      updated_attributes.each do |key, value|
-        expect(model.history.first).to include({ key.to_s => [nil, value] })
+    context "the changeset for the #{fixture}" do
+      subject { model.history.first.changeset }
+
+      it "includes a created at date" do
+        expect(subject.keys).to include("created_at")
       end
-      expect(model.history.first).to include({ "object" => described_class.name })
-      expect(model.history.first).to include({ "event" => "update" })
-      expect(model.history.first).to include({ "actor_id" => user.id.to_s })
-      expect(model.history.first).to include({ "recorded_at" => model.versions.last.created_at })
+
+      it "includes the class name" do
+        expect(subject).to include({ "object" => described_class.name })
+      end
+
+      it "includes the event" do
+        expect(subject).to include({ "event" => "create" })
+      end
+
+      it "includes the actor id" do
+        expect(subject).to include({ "actor_id" => user.id.to_s })
+      end
+
+      it "includes the timestamp of when the changeset occured" do
+        expect(subject).to include({ "recorded_at" => model.versions.last.created_at })
+      end
+    end
+
+    context "with an updated changeset" do
+      subject { model.history }
+
+      before { model.update_attributes updated_attributes }
+
+      it "contains the updated event" do
+        expect(subject.length).to eq 2
+      end
+
+      context "the changeset for the #{fixture}" do
+        subject { model.history.first.changeset }
+
+        it "returns the changesets for an updated #{fixture}" do
+          updated_attributes.each do |key, value|
+            expect(subject).to include({ key.to_s => [nil, value] })
+          end
+        end
+
+        it "includes the class name" do
+          expect(subject).to include({ "object" => described_class.name })
+        end
+
+        it "includes the event" do
+          expect(subject).to include({ "event" => "update" })
+        end
+
+        it "includes the actor id" do
+          expect(subject).to include({ "actor_id" => user.id.to_s })
+        end
+
+        it "includes the timestamp of when the changeset occured" do
+          expect(subject).to include({ "recorded_at" => model.versions.last.created_at })
+        end
+      end
     end
 
     it "orders the changesets so the newest changes are at the top" do
       model.update_attributes updated_attributes
       expect(model.history.length).to eq 2
-      expect(model.history.first["event"]).to eq "update"
-      expect(model.history.last["event"]).to eq "create"
+      expect(model.history.first.changeset["event"]).to eq "update"
+      expect(model.history.last.changeset["event"]).to eq "create"
     end
   end
 
@@ -72,8 +117,8 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       history = model.historical_merge(another_model)
 
       expect(history.length).to eq 2
-      expect(history.first["id"].last).to eq another_model.id
-      expect(history.last["id"].last).to eq model.id
+      expect(history.first.changeset["id"].last).to eq another_model.id
+      expect(history.last.changeset["id"].last).to eq model.id
     end
   end
 end

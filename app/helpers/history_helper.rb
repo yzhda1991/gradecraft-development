@@ -83,6 +83,13 @@ module HistoryHelper
 
   def tokenize_sentence(changeset, options={})
     tokenizer = HumanHistory::HistoryTokenizer.new(changeset)
-    HumanHistory::HistoryTokenParser.new(tokenizer).parse({ current_user: current_user }.merge(options))
+    HumanHistory::HistoryTokenParser.new(tokenizer)
+      .parse({ current_user: current_user,
+               change_description_formatters: change_description_formatters }
+      .merge(options))
+  end
+
+  def change_description_formatters
+    [HumanHistory::RawScoreChangeDescriptionFormatter, HumanHistory::DefaultChangeDescriptionFormatter]
   end
 end

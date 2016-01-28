@@ -22,7 +22,7 @@ class ShowSubmissionPresenter < SubmissionPresenter
   end
 
   def submission_grade_history
-    submission_grade_filtered_history(submission, grade)
+    submission_grade_filtered_history(submission, grade, false)
   end
 
   def student
