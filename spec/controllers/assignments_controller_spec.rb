@@ -247,18 +247,7 @@ describe AssignmentsController do
   end
 
   context "as a student" do
-    before do
-      @course = create(:course_accepting_groups)
-      @student = create(:user)
-      CourseMembership.create user: @student, course: @course, role: "student"
-      @assignment_type = create(:assignment_type, course: @course)
-    end
-
-    before(:each) do
-      @assignment = create(:assignment, course: @course)
-      @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
-      login_user(@student)
-    end
+    before(:each) { login_user(@student) }
 
     describe "GET index" do
       it "redirects to syllabus path" do
@@ -287,13 +276,6 @@ describe AssignmentsController do
     end
 
     describe "GET predictor_data" do
-      before do
-        @course = create(:course)
-        @student = create(:user)
-        login_user(@student)
-        @student.courses << @course
-      end
-
       before do
         assignment_type = create(:assignment_type, course: @course)
         @assignment = create(:assignment)
@@ -411,20 +393,6 @@ describe AssignmentsController do
       end
     end
   end
-end
-
-def predictor_grade_attributes
-  [
-    :assignment_id,
-    :final_score,
-    :id,
-    :predicted_score,
-    :pass_fail_status,
-    :status,
-    :student_id,
-    :raw_score,
-    :score
-  ]
 end
 
 def predictor_assignment_attributes
