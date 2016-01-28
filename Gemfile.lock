@@ -424,9 +424,6 @@ GEM
       activerecord (>= 3.0, < 6.0)
       activesupport (>= 3.0, < 6.0)
       request_store (~> 1.1)
-    parallel (1.6.1)
-    parallel_tests (1.6.1)
-      parallel
     pg (0.18.2)
     protected_attributes (1.1.3)
       activemodel (>= 4.0.1, < 5.0)
@@ -724,7 +721,6 @@ DEPENDENCIES
   omniauth-lti!
   pacecar
   paper_trail
-  parallel_tests
   pg
   protected_attributes
   pry

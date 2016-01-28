@@ -59,6 +59,17 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     end
   end
 
+  describe "#default_options" do
+    subject { performer.default_options }
+    it "doesn't skip setup by default" do
+      expect(subject).to eq({skip_setup: false}.freeze)
+    end
+
+    it "doesn't allow changes to the returned value" do
+      expect { subject[:snake] = "walrus" }.to raise_error(RuntimeError)
+    end
+  end
+
   describe "setup" do
     it "should have an empty setup method" do
       expect(subject.setup).to be_nil

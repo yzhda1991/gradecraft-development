@@ -1,9 +1,9 @@
 class ResqueJob::Performer
   # DSL improvements and resque-scheduler helpers
-  def initialize(attrs={}, logger=nil, options={skip_setup: false})
+  def initialize(attrs={}, logger=nil, options={})
     @attrs = attrs.symbolize_keys
     @logger = logger
-    @options = options
+    @options = options.merge default_options
     @outcomes = []
     @outcome_messages = []
     setup unless @options[:skip_setup]
@@ -35,6 +35,10 @@ class ResqueJob::Performer
       add_message(messages[:failure]) 
       outcome.message = messages[:failure]
     end
+  end
+
+  def default_options
+    { skip_setup: false }.freeze
   end
 
   # refactor this to literally be a list of 
