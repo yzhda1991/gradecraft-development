@@ -52,20 +52,31 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "#filename_time" do
     subject { performer.instance_eval { filename_time }}
-    let(:time_now) { Date.parse("Jan 20 1995").to_time }
-    before do
-      allow(Time).to receive(:now) { time_now }
+    let(:professor) { create(:user, time_zone: "Bogota") }
+
+    before(:each) do
+      performer.instance_variable_set(:@filename_time, nil)
+      performer.instance_variable_set(:@professor, professor)
     end
 
-    it "caches the time" do
+    it "sets the timezone from the @professor" do
       subject
-      expect(Time).not_to receive(:now)
-      subject
+      expect(Time.zone.name).to eq("Bogota")
     end
 
     it "gets the time now" do
-      expect(Time).to receive(:now) { time_now }
+      expect(Time).to receive_message_chain(:zone, :now)
       subject
+    end
+
+    describe "returning the actual time" do
+      let(:some_time) { Date.parse("Feb 20 1835").to_time }
+      before { allow(Time).to receive_message_chain(:zone, :now) { some_time } }
+
+      it "should return the proper time" do
+        subject
+        expect(performer.instance_variable_get(:@filename_time)).to eq(some_time)
+      end
     end
   end
 
