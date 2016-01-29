@@ -39,6 +39,29 @@ describe Submission do
     end
   end
 
+  describe "basic html sanitization" do
+    describe "#text_comment" do
+      it "does not allow images before saving" do
+        subject.text_comment = "This is an image <img src='test.jpg' />, ok."
+        subject.save
+        expect(subject.text_comment).to eq "This is an image , ok."
+      end
+
+      it "does not allow tables before saving" do
+        subject.text_comment = "This is a table <table></table>, ok."
+        subject.save
+        expect(subject.text_comment).to eq "This is a table , ok."
+      end
+
+      it "adds a no-follow attribute to links" do
+        subject.text_comment = "This is a link <a href=\"gradecraft.com\">GradeCraft</a>, ok."
+        subject.save
+        expect(subject.text_comment).to \
+          eq "This is a link <a href=\"gradecraft.com\" rel=\"nofollow\">GradeCraft</a>, ok."
+      end
+    end
+  end
+
   it "can't be saved without any information" do
     subject.link = nil
     subject.text_comment = nil

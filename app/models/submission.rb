@@ -137,7 +137,7 @@ class Submission < ActiveRecord::Base
   end
 
   def clean_html
-    self.text_comment = Sanitize.clean(text_comment, Sanitize::Config::RESTRICTED)
+    self.text_comment = Sanitize.clean(text_comment, Sanitize::Config::BASIC)
   end
 
   def submit_something
