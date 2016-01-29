@@ -71,6 +71,15 @@ describe UsersController do
         end
       end
 
+      it "updates an existing user" do
+        existing_user = create :user, email: "jimmy@example.com"
+        post :create, user: { first_name: "Jimmy",
+                              last_name: "Page",
+                              username: "jimmy",
+                              email: "jimmy@example.com" }
+        expect(user.first_name).to_not eq existing_user.first_name
+      end
+
       it "sends an activation email for the user" do
         expect {
           post :create, user: { first_name: "Jimmy",

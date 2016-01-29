@@ -1,5 +1,5 @@
 require_relative "../services/cancels_course_membership"
-require_relative "../services/creates_new_user"
+require_relative "../services/creates_or_updates_user"
 
 class UsersController < ApplicationController
   include UsersHelper
@@ -39,7 +39,8 @@ class UsersController < ApplicationController
   end
 
   def create
-    result = Services::CreatesNewUser.create params[:user], params[:send_welcome] == "1"
+    result = Services::CreatesOrUpdatesUser.create_or_update params[:user], current_course,
+      params[:send_welcome] == "1"
     @user = result[:user]
 
     if result.success?

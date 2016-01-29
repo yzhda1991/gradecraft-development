@@ -10,6 +10,24 @@ feature "creating a new user" do
       visit new_user_path
     end
 
+    context "for an existing GradeCraft student" do
+      scenario "successfully" do
+        user = create(:user)
+        within(".pageContent #tab1") do
+          NewUserPage.new(user)
+            .submit(courses: [course_membership.course])
+        end
+
+        expect(current_path).to eq students_path
+        expect(page).to have_notification_message "notice", "#{course_membership.course.user_term} #{user.name} was successfully created!"
+
+        result = user.reload
+        expect(result.course_memberships.count).to eq 1
+        expect(result.course_memberships.first.course).to eq course_membership.course
+        expect(result.course_memberships.first.role).to eq "student"
+      end
+    end
+
     context "for a UM student" do
       scenario "successfully" do
         username = Faker::Internet.user_name
