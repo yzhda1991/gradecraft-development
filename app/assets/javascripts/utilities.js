@@ -23,10 +23,17 @@ $( "#tabs" ).tabs({
   }
 });
 
- $('.froala').editable(
-    {inlineMode: false,
-      minHeight: 280
-    })
+ $('.froala').editable({
+  inlineMode: false,
+  minHeight: 280,
+  buttons: [
+    'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript',
+    'superscript', 'fontFamily', 'fontSize', 'sep', 'inlineStyle', 'blockStyle',
+    'sep', 'formatBlock', 'align', 'insertOrderedList', 'insertUnorderedList',
+    'outdent', 'indent', 'insertHorizontalRule', 'createLink', 'undo', 'redo',
+    'removeFormat', 'selectAll'
+  ]
+})
 
 // handle 'select all' buttons, used on release grade forms
 $(".select-all").click(function(e){
