@@ -7,6 +7,7 @@ class Submission < ActiveRecord::Base
   include Canable::Ables
   include Historical
   include MultipleFileAttributes
+  include Sanitizable
 
   belongs_to :task, touch: true
   belongs_to :assignment, touch: true
@@ -15,7 +16,7 @@ class Submission < ActiveRecord::Base
   belongs_to :group, touch: true
   belongs_to :course, touch: true
 
-  before_save :clean_html, :submit_something
+  before_save :submit_something
   after_save :check_unlockables
 
   has_one :grade
@@ -39,6 +40,7 @@ class Submission < ActiveRecord::Base
   validates :link, :format => URI::regexp(%w(http https)) , :allow_blank => true
   validates :assignment, presence: true
 
+  clean_html :text_comment
   multiple_files :submission_files
 
   #Canable permissions#
@@ -134,10 +136,6 @@ class Submission < ActiveRecord::Base
     elsif assignment.has_groups?
       group_id == user.group_for_assignment(assignment).id
     end
-  end
-
-  def clean_html
-    self.text_comment = Sanitize.clean(text_comment, Sanitize::Config::BASIC)
   end
 
   def submit_something
