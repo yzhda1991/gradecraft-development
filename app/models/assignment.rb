@@ -333,17 +333,6 @@ class Assignment < ActiveRecord::Base
     ((submissions.count / course.graded_student_count.to_f) * 100).round(2)
   end
 
-  def group_submission_rate
-    ((submissions.count / self.groups.count) * 100).round(2)
-  end
-
-  # Calculates attendance rate as an integer.
-   def attendance_rate_int(course)
-    if course.graded_student_count > 0
-     ((positive_grade_count / course.graded_student_count.to_f) * 100).to_i
-    end
-  end
-
   # Single assignment gradebook
   def gradebook_for_assignment(options = {})
     GradebookExporter.new.gradebook(course)
@@ -351,22 +340,6 @@ class Assignment < ActiveRecord::Base
 
   def grade_import(students, options = {})
     GradeExporter.new.export_grades(self, students, options)
-  end
-
-  # Calculating how many of each score exists
-  def score_count
-    Hash[grades.graded_or_released.group_by{ |g| g.score }.map{ |k, v| [k, v.size] }]
-  end
-
-  def predicted_count
-    grades.predicted_to_be_done.count
-  end
-
-  # Calculating how many of each score exists
-  def earned_score_count
-    grades.graded_or_released
-      .group_by { |g| g.raw_score }
-      .map { |score, grade| [score, grade.size ] }.to_h
   end
 
   # Creating an array with the set of scores earned on the assignment, and
