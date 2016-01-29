@@ -469,13 +469,6 @@ describe Assignment do
     end
   end
 
-  describe "#fixed?" do
-    it "is fixed if the predictor display is fixed" do
-      subject.points_predictor_display = "Fixed"
-      expect(subject).to be_fixed
-    end
-  end
-
   describe "#future?" do
     it "is not for the future if there is no due date" do
       subject.due_at = nil
@@ -800,20 +793,12 @@ describe Assignment do
       subject.accepts_submissions_until = 2.days.from_now
       expect(subject).to be_open
     end
-
-    it "is opened if there is no open at date set" do
-      subject.open_at = nil
-      expect(subject).to be_opened
-    end
-
-    it "is opened if the open at date is in the past" do
-      subject.open_at = 2.days.ago
-      expect(subject).to be_opened
-    end
-
-    it "is not opened if the assignment opens in the future" do
-      subject.open_at = 2.days.from_now
-      expect(subject).to_not be_opened
+  end
+ 
+  describe "#to_json" do
+    it "returns a json representation" do
+      json = subject.to_json
+      expect(json).to eq({ id: subject.id }.to_json)
     end
   end
 end

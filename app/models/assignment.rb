@@ -138,19 +138,6 @@ class Assignment < ActiveRecord::Base
     future? && due_at < 7.days.from_now
   end
 
-  # Setting the grade predictor displays
-  def fixed?
-    points_predictor_display == "Fixed"
-  end
-
-  def slider?
-    points_predictor_display == "Slider"
-  end
-
-  def select?
-    points_predictor_display == "Select List"
-  end
-
   # helper methods for finding #student_submissions
   def student_submissions
     Submission
