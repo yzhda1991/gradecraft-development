@@ -1,4 +1,4 @@
-RSpec.shared_examples "a model that needs sanitation" do |attribute|
+RSpec.shared_examples "a model that needs sanitization" do |attribute|
   describe "basic html sanitization" do
     describe "##{attribute}" do
       def get(attribute)

@@ -1,5 +1,5 @@
 require "active_record_spec_helper"
-require "toolkits/sanitation_toolkit"
+require "toolkits/sanitization_toolkit"
 
 describe Assignment do
   include Toolkits::Models::AssignmentsToolkit
@@ -7,7 +7,7 @@ describe Assignment do
   subject { build(:assignment) }
   let(:assignment) { build :assignment }
 
-  it_behaves_like "a model that needs sanitation", :description
+  it_behaves_like "a model that needs sanitization", :description
 
   context "validations" do
     it "is valid with a name and assignment type" do

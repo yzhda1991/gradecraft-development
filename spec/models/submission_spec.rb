@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 require "toolkits/historical_toolkit"
-require "toolkits/sanitation_toolkit"
+require "toolkits/sanitization_toolkit"
 
 describe Submission do
   subject { build(:submission) }
@@ -16,7 +16,7 @@ describe Submission do
   end
 
   it_behaves_like "a historical model", :submission, link: "http://example.org"
-  it_behaves_like "a model that needs sanitation", :text_comment
+  it_behaves_like "a model that needs sanitization", :text_comment
 
   describe "versioning", versioning: true do
     before { subject.save }

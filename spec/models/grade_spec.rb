@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 require "toolkits/historical_toolkit"
-require "toolkits/sanitation_toolkit"
+require "toolkits/sanitization_toolkit"
 
 describe Grade do
   subject { build(:grade) }
@@ -43,7 +43,7 @@ describe Grade do
   end
 
   it_behaves_like "a historical model", :grade, raw_score: 1234
-  it_behaves_like "a model that needs sanitation", :feedback
+  it_behaves_like "a model that needs sanitization", :feedback
 
   describe "versioning", versioning: true do
     it "ignores changes to predicted_score" do

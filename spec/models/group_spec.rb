@@ -1,11 +1,11 @@
 require "active_record_spec_helper"
-require "toolkits/sanitation_toolkit"
+require "toolkits/sanitization_toolkit"
 
 describe Group do
   let!(:course) { create :course, max_group_size: 4 }
   subject { create(:group, course: course ) }
 
-  it_behaves_like "a model that needs sanitation", :text_proposal
+  it_behaves_like "a model that needs sanitization", :text_proposal
 
   describe "validations" do
     it "is valid with a name and an approval state" do
