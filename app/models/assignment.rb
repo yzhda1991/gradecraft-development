@@ -320,11 +320,6 @@ class Assignment < ActiveRecord::Base
     ((submissions.count / course.graded_student_count.to_f) * 100).round(2)
   end
 
-  # Single assignment gradebook
-  def gradebook_for_assignment(options = {})
-    GradebookExporter.new.gradebook(course)
-  end
-
   def grade_import(students, options = {})
     GradeExporter.new.export_grades(self, students, options)
   end
