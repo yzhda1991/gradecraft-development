@@ -25,25 +25,4 @@ RSpec.describe "Assignment grade export methods" do
       subject
     end
   end
-
-  describe "#gradebook_for_assignment" do
-    subject { assignment.gradebook_for_assignment(options) }
-
-    let(:options) {{ encoding: "UTF-8" }}
-    let(:gradebook_exporter) { double(GradebookExporter) }
-    before do
-      allow(GradebookExporter).to receive(:new) { gradebook_exporter }
-      allow(gradebook_exporter).to receive(:gradebook)
-    end
-
-    it "builds a new GradebookExporter" do
-      expect(GradebookExporter).to receive(:new)
-      subject
-    end
-
-    it "exports the grades with GradebookExporter" do
-      expect(gradebook_exporter).to receive(:gradebook).with(course)
-      subject
-    end
-  end
 end
