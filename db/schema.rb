@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128181053) do
+ActiveRecord::Schema.define(version: 20160131155433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -242,8 +242,8 @@ ActiveRecord::Schema.define(version: 20160128181053) do
     t.string   "year",                              limit: 255
     t.string   "semester",                          limit: 255
     t.integer  "grade_scheme_id"
-    t.datetime "created_at",                                                                            null: false
-    t.datetime "updated_at",                                                                            null: false
+    t.datetime "created_at",                                                                                                   null: false
+    t.datetime "updated_at",                                                                                                   null: false
     t.boolean  "badge_setting",                                                         default: true
     t.boolean  "team_setting",                                                          default: false
     t.string   "user_term",                         limit: 255
@@ -305,6 +305,7 @@ ActiveRecord::Schema.define(version: 20160128181053) do
     t.boolean  "hide_analytics"
     t.string   "character_names"
     t.boolean  "show_see_details_link_in_timeline",                                     default: true
+    t.string   "time_zone",                                                             default: "Eastern Time (US & Canada)"
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree

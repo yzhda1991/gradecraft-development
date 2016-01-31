@@ -52,14 +52,14 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "#filename_time" do
     subject { performer.instance_eval { filename_time }}
-    let(:professor) { create(:user, time_zone: "Bogota") }
+    let(:course) { create(:course, time_zone: "Bogota") }
 
     before(:each) do
       performer.instance_variable_set(:@filename_time, nil)
-      performer.instance_variable_set(:@professor, professor)
+      performer.instance_variable_set(:@course, course)
     end
 
-    it "sets the timezone from the @professor" do
+    it "sets the timezone from the @course" do
       subject
       expect(Time.zone.name).to eq("Bogota")
     end

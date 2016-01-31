@@ -157,7 +157,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def filename_time
-    Time.zone = @professor.time_zone
+    Time.zone = @course.time_zone
     @filename_time ||= Time.zone.now
   end
 
@@ -463,7 +463,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{error_io}"
   end
 
-  # @mz todo: modify specs
   def generate_error_log
     unless @errors.empty?
       open(error_log_path, 'w') {|file| file.puts @errors }
@@ -476,7 +475,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   # archive export directory
   def archive_exported_files
-    # `zip -r - #{tmp_dir} | pv -L 200k > #{expanded_archive_base_path}.zip`
     Archive::Zip.archive("#{expanded_archive_base_path}.zip", archive_root_dir)
   end
 
