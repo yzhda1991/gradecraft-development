@@ -340,12 +340,6 @@ class User < ActiveRecord::Base
     next_element_level(course).low_range - cached_score_for_course(course)
   end
 
-  ### COURSE POINTS AVAILABLE
-
-  def score_for_assignment_type(assignment_type)
-    grades.where(assignment_type: assignment_type).score
-  end
-
   ### GRADES
 
   #Checking specifically if there is a released grade for an assignment
