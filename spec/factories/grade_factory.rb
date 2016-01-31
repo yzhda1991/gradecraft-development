@@ -8,11 +8,6 @@ FactoryGirl.define do
       status "Released"
     end
 
-    factory :scored_grade do
-      raw_score { Faker::Number.number(5) }
-      score { Faker::Number.number(5) }
-    end
-
     # minimal conditions when a grade has been graded but not visible to students
     factory :unreleased_grade do
       raw_score { Faker::Number.number(5) }
