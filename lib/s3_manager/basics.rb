@@ -18,7 +18,7 @@ module S3Manager
     end
 
     def bucket_name
-     "gradecraft-#{Rails.env}"
+      ENV['AWS_S3_BUCKET']
     end
 
     def object_attrs
