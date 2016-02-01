@@ -244,22 +244,6 @@ describe AssignmentsController do
         end
       end
     end
-
-    describe "GET export_submissions" do
-      context "with ZIP format" do
-        it "returns a zip directory" do
-          get :export_submissions, :id => @assignment, :format => :zip
-          expect(response.content_type).to eq("application/zip")
-        end
-
-        it "uses the team name was specified" do
-          team = create(:team, course: @course)
-          team.students << create(:user)
-          get :export_submissions, id: @assignment, team_id: team.id, :format => :zip
-          expect(response.headers["Content-Disposition"]).to eq "attachment; filename=\"#{@assignment.name}_#{team.name}.zip\""
-        end
-      end
-    end
   end
 
   context "as a student" do
@@ -410,9 +394,6 @@ describe AssignmentsController do
     end
   end
 end
-
-
-# helper methods:
 
 def predictor_assignment_attributes
   [

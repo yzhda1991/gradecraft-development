@@ -469,6 +469,15 @@ describe Course do
 
   end
 
+  describe "#time_zone" do
+    subject { course.time_zone }
+    let(:course) { create(:course) }
+
+    it "defaults to Eastern Time" do
+      expect(subject).to eq("Eastern Time (US & Canada)")
+    end
+  end
+
   describe "#total_points" do
     it "returns the total points available if they're set by the instructor" do
       subject.point_total = 100000

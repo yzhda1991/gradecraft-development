@@ -134,7 +134,6 @@ class EarnedBadgesController < ApplicationController
 
   def update_student_point_totals
     @valid_earned_badges.each do |earned_badge|
-      # @mz TODO: add specs
       ScoreRecalculatorJob.new(user_id: earned_badge.student.id, course_id: current_course.id).enqueue
       logger.info "Updated student scores to include EarnedBadge ##{earned_badge[:id]}"
     end

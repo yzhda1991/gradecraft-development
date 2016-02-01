@@ -13,12 +13,17 @@ gem 'acts_as_list'
 gem 'addressable'
 gem 'angularjs-rails', '~> 1.4.2'
 gem 'angular-rails-templates', '~> 0.2.0'
+
+# zip utility for simple creation of zip files, pure ruby implementation
+# without the GC overhead of the Rubyzip library
+gem 'archive-zip', '~> 0.7.0'
+
 gem 'autonumeric-rails'
-gem 'aws-sdk', '< 2.0'
+gem 'aws-sdk', '~> 2'
 gem 's3_direct_upload'
 gem 'canable'
 gem 'carrierwave'
-gem 'carrierwave_backgrounder'
+gem 'carrierwave_backgrounder', '0.4.2'
 gem 'coffee-rails'
 gem "compass-rails"
 gem "d3-rails"
@@ -29,9 +34,15 @@ gem 'dalli'
 gem 'db-query-matchers'
 
 gem 'dotenv-rails'
+
 gem 'fast_blank'
 gem 'fog'
 gem 'font-awesome-rails'
+
+# add intelligent app-wide eager loading by default to remove n+1 loading issues
+# TODO: max needs to test this in conjunction with the Bullet gem to ensure
+# gem 'goldiloader'
+
 gem 'haml'
 gem 'ims-lti', git: 'https://github.com/venturit/ims-lti.git', branch: 'master'
 gem 'jbuilder'
@@ -59,6 +70,7 @@ gem 'oj'
 gem 'omniauth'
 gem 'omniauth-kerberos'
 gem 'omniauth-lti', git: 'https://github.com/venturit/omniauth-lti.git', branch: 'master'
+
 gem 'pacecar'
 gem 'paper_trail'
 gem 'pg'
@@ -98,8 +110,6 @@ gem 'whenever'
 gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'wysiwyg-rails'
-# gem 'zeus-parallel_tests'
-gem 'parallel_tests'
 gem 'ruby-saml', '~> 1.0.0'
 
 group :development do
@@ -129,8 +139,9 @@ group :test do
   gem 'database_cleaner', '~> 1.5.1'
   gem 'faker', '~> 1.4.3'
   gem 'factory_girl_rails', '~> 4.5.0'
-  gem 'rspec-rails', '~> 3.3.3'
   gem 'capybara-select2'
+  gem 'launchy'
+  gem 'rspec-rails', '~> 3.4.0'
   # add spec helpers for testing Resque objects and resque scheduler
   gem 'resque_spec', github: 'leshill/resque_spec'
   gem 'rspec-html-matchers'

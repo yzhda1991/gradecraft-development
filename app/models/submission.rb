@@ -113,6 +113,18 @@ class Submission < ActiveRecord::Base
     end
   end
 
+  def process_unconfirmed_files
+    submission_files.unconfirmed.each do |submission_file|
+      submission_file.check_and_set_confirmed_status
+    end
+  end
+
+  def confirm_all_files
+    submission_files.each do |submission_file|
+      submission_file.check_and_set_confirmed_status
+    end
+  end
+
   private
 
   def permissions_check(user)

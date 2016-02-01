@@ -68,7 +68,11 @@ RSpec.describe GradesController, type: :controller, background_job: true do
         before { allow(grade).to receive(:update_attributes) { true } }
 
         context "grade is released" do
-          before { allow(grade).to receive(:is_released?) { true } }
+          let(:grade) { create(:released_grade, grade_attributes) }
+
+          before do
+            allow(grade).to receive(:is_released?) { true }
+          end
 
           it_behaves_like "a successful resque job", GradeUpdaterJob
         end

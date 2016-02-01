@@ -1,13 +1,15 @@
 class ResqueJob::Performer
   # DSL improvements and resque-scheduler helpers
-  def initialize(attrs={})
+  def initialize(attrs={}, logger=nil, options={})
     @attrs = attrs.symbolize_keys
+    @logger = logger
+    @options = options.merge default_options
     @outcomes = []
     @outcome_messages = []
-    setup
+    setup unless @options[:skip_setup]
   end
 
-  attr_reader :outcomes, :outcome_messages
+  attr_reader :outcomes, :outcome_messages, :logger
 
   # this is where the heavy lifting is done
   def do_the_work
@@ -35,12 +37,8 @@ class ResqueJob::Performer
     end
   end
 
-  # todo: add specs
-  def log_outcome_messages(job_logger)
-    @outcome_messages.each do |message|
-      puts message
-      job_logger.info message
-    end
+  def default_options
+    { skip_setup: false }.freeze
   end
 
   # refactor this to literally be a list of 

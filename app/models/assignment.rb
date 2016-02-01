@@ -138,6 +138,108 @@ class Assignment < ActiveRecord::Base
     future? && due_at < 7.days.from_now
   end
 
+  # helper methods for finding #student_submissions
+  def student_submissions
+    Submission
+      .includes(:submission_files)
+      .includes(:student)
+      .where(assignment_id: self[:id])
+      .to_a # eager-load
+  end
+
+  def student_submissions_for_team(team)
+    Submission
+      .includes(:submission_files)
+      .includes(:student)
+      .where(assignment_id: self[:id])
+      .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+      .to_a # eager-load
+  end
+
+  def student_submissions_with_files
+    Submission
+      .includes(:submission_files)
+      .includes(:student)
+      .where(assignment_id: self[:id])
+      .where(submissions_with_files_query)
+      .to_a # eager-load
+  end
+
+  def student_submissions_with_files_for_team(team)
+    Submission
+      .includes(:submission_files)
+      .includes(:student)
+      .where(assignment_id: self[:id])
+      .where("student_id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+      .where(submissions_with_files_query)
+      .to_a # eager-load
+  end
+
+  def student_with_submissions_query
+    "select distinct(student_id) from submissions where assignment_id = ?"
+  end
+
+  def submissions_with_files_query
+   "text_comment <> '' or link <> '' or id in (#{present_submission_files_query})"
+  end
+
+  def present_submission_files_query
+    "select distinct(submission_id) from submission_files where file_missing is null or file_missing = 'f'"
+  end
+
+  def missing_submission_files_query
+    "select distinct(submission_id) from submission_files where file_missing = ?"
+  end
+
+  # #students_with_submissions methods 
+
+  def students_with_submissions
+    User.order_by_name
+      .where("id in (#{student_with_submissions_query})", self.id)
+  end
+
+  def students_with_submissions_on_team(team)
+    User.order_by_name
+      .where(students_with_submissions_on_team_conditions.join(" AND "), self[:id], team.id)
+  end
+
+  def students_with_text_or_binary_files
+    User.order_by_name
+      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id)
+  end
+
+  def students_with_text_or_binary_files_on_team(team)
+    User.order_by_name
+      .where("id in (#{student_with_submissions_query} and (#{submissions_with_files_query}))", self.id)
+      .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+  end
+
+  # students and submissions with missing binaries
+  def students_with_missing_binaries
+    User.order_by_name
+      .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (#{missing_submission_files_query}))", self.id, true)
+  end
+
+  # students and submissions with missing binaries
+  def students_with_missing_binaries_on_team(team)
+    User.order_by_name
+      .where("id in (select distinct(student_id) from submissions where assignment_id = ? and id in (#{missing_submission_files_query}))", self.id, true)
+      .where("id in (select distinct(student_id) from team_memberships where team_id = ?)", team.id)
+  end
+
+  def submission_files_with_missing_binaries
+    SubmissionFile.order("created_at ASC")
+      .where(file_missing: true)
+      .where("submission_id in (select id from submissions where assignment_id = ?)", self.id)
+  end
+
+  def submission_files_with_missing_binaries_for_team(team)
+    SubmissionFile.order("created_at ASC")
+      .where(file_missing: true)
+      .where("submission_id in (select id from submissions where assignment_id = ?)", self.id)
+      .where("submission_id in (select id from submissions where student_id in (select distinct(student_id) from team_memberships where team_id = ?))", team.id)
+  end
+
   # The below four are the Quick Grading Types, can be set at either the assignment or assignment type level
   def grade_checkboxes?
     mass_grade_type == "Checkbox"
@@ -218,12 +320,21 @@ class Assignment < ActiveRecord::Base
     ((submissions.count / course.graded_student_count.to_f) * 100).round(2)
   end
 
+  def grade_import(students, options = {})
+    GradeExporter.new.export_grades(self, students, options)
+  end
+
   # Creating an array with the set of scores earned on the assignment, and
   def percentage_score_earned
     { scores: earned_score_count.collect { |s| { data: s[1], name: s[0] }}}
   end
 
   private
+
+  def students_with_submissions_on_team_conditions
+    ["id in (#{student_with_submissions_query})",
+     "id in (select distinct(student_id) from team_memberships where team_id = ?)"]
+  end
 
   def open_before_close
     if (due_at.present? && open_at.present?) && (due_at < open_at)

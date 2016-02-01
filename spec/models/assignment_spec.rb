@@ -1,7 +1,10 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 
 describe Assignment do
+  include Toolkits::Models::AssignmentsToolkit
+
   subject { build(:assignment) }
+  let(:assignment) { build :assignment }
 
   context "validations" do
     it "is valid with a name and assignment type" do
@@ -687,7 +690,7 @@ describe Assignment do
     end
   end
 
-  describe "#overdue?" do
+  describe "#overdue" do
     it "is not overdue if there is no due date" do
       subject.due_at = nil
       expect(subject).to_not be_overdue
@@ -791,7 +794,7 @@ describe Assignment do
       expect(subject).to be_open
     end
   end
-
+ 
   describe "#to_json" do
     it "returns a json representation" do
       json = subject.to_json

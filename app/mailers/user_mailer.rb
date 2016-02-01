@@ -1,5 +1,4 @@
-class UserMailer < ActionMailer::Base
-  default from: "mailer@gradecraft.com"
+class UserMailer < ApplicationMailer
 
   def activation_needed_email(user)
     @user = user

@@ -18,7 +18,6 @@ class GradeUpdatePerformer < ResqueJob::Performer
   end
 
   def require_notify_released_success
-    # @mz TODO: chech the #is_student_visible? call with cait
     if @grade.assignment.notify_released? and @grade.is_student_visible? 
       require_success(notify_released_messages, max_result_size: 200) { notify_grade_released } 
     end

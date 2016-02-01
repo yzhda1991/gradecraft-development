@@ -19,10 +19,10 @@ module ResqueJob
 
     # perform block that is ultimately called by Resque
     def self.perform(attrs={})
-      # TODO: catch everything with an exception, log the exception message, and then throw another exception
+      # @mz todo: catch everything with an exception, log the exception message, and then throw another exception
       # mention to the logger that something is happening
 
-      # TODO: need to add specs for the new begin/resque
+      # @mz todo: need to add specs for the new begin/resque
       begin
         logger = self.logger
         # build a new background job logger
@@ -34,12 +34,8 @@ module ResqueJob
         # log_message "This is retry ##{@retry_attempt}" if @retry_attempt > 0 # add specs for this
         #
         # this is where the magic happens
-        performer = @performer_class.new(attrs) # self.class is the job class
+        performer = @performer_class.new(attrs, logger) # self.class is the job class
         performer.do_the_work
-
-        # mention to the logger how things went
-        # performer.log_outcome_messages(@logger) # todo: add specs for logger
-        # combined_outcome_messages(@logger) # todo: add specs for logger
 
         performer.outcomes.each do |outcome|
           logger.info "SUCCESS: #{outcome.message}" if outcome.success?
@@ -56,7 +52,7 @@ module ResqueJob
         raise ResqueJob::Errors::ForcedRetryError
       end
     end
-    attr_reader :attrs # TODO: add spec for this
+    attr_reader :attrs # @mz todo: add spec for this
 
     def initialize(attrs={})
       @attrs = attrs
@@ -104,7 +100,7 @@ module ResqueJob
       Resque.enqueue(self.object_class, @attrs)
     end
 
-    # todo: modify specs for this
+    # @mz todo: modify specs for this
     def self.start_message(attrs)
       @start_message || "Starting #{self.job_type} in queue '#{@queue}' with attributes #{attrs}."
     end

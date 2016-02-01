@@ -4,33 +4,38 @@ module S3File
   # Amazon key in the "filepath" field. Here we check if it has a value, and if
   # so we use this to retrieve our secure url. If not, we use the path supplied by
   # the carrierwave uploader
-  def url
-    return file.url if Rails.env == "development"
 
-    s3 = AWS::S3.new
-    bucket = s3.buckets["gradecraft-#{Rails.env}"]
-    if filepath.present?
-      bucket.objects[CGI::unescape(filepath)].url_for(:read, :expires => 15 * 60).to_s #15 minutes
+  attr_accessor :process_file_upload
+
+  include S3Manager::Basics
+
+  def url
+    if Rails.env.development?
+      file.url 
     else
-      bucket.objects[file.path].url_for(:read, :expires => 15 * 60).to_s #15 minutes
+      if s3_object
+        s3_object.presigned_url(:get, expires_in: 900).to_s
+      end
     end
   end
 
+  def s3_object
+    bucket.object(s3_object_file_key)
+  end
+
+  def s3_object_file_key
+    filepath.present? ? CGI::unescape(filepath) : file.path
+  end
+
   def remove
-    s3 = AWS::S3.new
-    bucket = s3.buckets["gradecraft-#{Rails.env}"]
-    if filepath.present?
-      bucket.objects[CGI::unescape(filepath)].delete
-    else
-      bucket.objects[file.path].delete
-    end
+    bucket.object(s3_object_file_key).delete
   end
 
   private
 
   def strip_path
     if filepath.present?
-      filepath.slice! "/gradecraft-#{Rails.env}/"
+      filepath.slice! "/#{bucket_name}/"
       write_attribute(:filepath, filepath)
       name = filepath.clone
 

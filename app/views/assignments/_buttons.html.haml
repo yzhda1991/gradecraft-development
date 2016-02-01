@@ -3,7 +3,7 @@
     - if !presenter.new_assignment?
       %li
         %a{:href => new_assignment_path }
-          %i.fa.fa-plus.fa-fw
+          .fa.fa-plus.fa-fw
           New #{(term_for :assignment).titleize}
       %li= link_to raw('<i class="fa fa-edit fa-fw"> </i> Edit'), edit_assignment_path(presenter.assignment)
       %li= link_to raw('<i class="fa fa-copy fa-fw"> </i> Copy'), copy_assignments_path(id: presenter.assignment), method: :copy
@@ -13,26 +13,28 @@
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(presenter.assignment, team: presenter.team)
       - else
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(presenter.assignment)
-      / - if presenter.assignment.submissions.present?
-      /   %li
-      /     %a{:href => export_submissions_assignment_path(presenter.assignment, :team_id => presenter.team, format: 'zip') }
-      /       %i.fa.fa-zip-o.fa-fw
-      /       Download Submissions
+
+      - if presenter.team
+        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download Team Submissions'), submissions_exports_path(assignment_id: presenter.assignment.id, team_id: presenter.team.id), method: :post 
+      - else
+        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download All Submissions'), submissions_exports_path(assignment_id: presenter.assignment.id), method: :post 
+
       %li
         %a{:href => import_grades_assignment_path(presenter.assignment) }
-          %i.fa.fa-upload.fa-fw
+          .fa.fa-upload.fa-fw
           Import Grades
       %li
         %a{:href => export_grades_assignment_path(presenter.assignment, format: 'csv') }
-          %i.fa.fa-download.fa-fw
+          .fa.fa-download.fa-fw
           Download Grades
       %li
         %a{:href => design_assignment_rubric_path(presenter.assignment) }
-          %i.fa.fa-sliders.fa-fw
+          .fa.fa-sliders.fa-fw
           - if presenter.rubric_designed?
             Edit Rubric
           - else
             Create Rubric
+      %li
 
       - if presenter.rubric_designed?
         - if presenter.has_reviewable_grades?
@@ -41,9 +43,9 @@
               Review Grades
         %li.on(ng-cloak ng-show="useRubric")
           %a(ng-click="rubricsOff()")
-            %i.fa.fa-power-off.fa-fw
+            .fa.fa-power-off.fa-fw
             Rubric is On
         %li.off(ng-cloak ng-hide="useRubric")
           %a(ng-click="rubricsOn()")
-            %i.fa.fa-power-off.fa-fw
+            .fa.fa-power-off.fa-fw
             Rubric is Off

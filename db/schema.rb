@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119190311) do
+ActiveRecord::Schema.define(version: 20160131155433) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -242,8 +242,8 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.string   "year",                              limit: 255
     t.string   "semester",                          limit: 255
     t.integer  "grade_scheme_id"
-    t.datetime "created_at",                                                                            null: false
-    t.datetime "updated_at",                                                                            null: false
+    t.datetime "created_at",                                                                                                   null: false
+    t.datetime "updated_at",                                                                                                   null: false
     t.boolean  "badge_setting",                                                         default: true
     t.boolean  "team_setting",                                                          default: false
     t.string   "user_term",                         limit: 255
@@ -305,6 +305,7 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.boolean  "hide_analytics"
     t.string   "character_names"
     t.boolean  "show_see_details_link_in_timeline",                                     default: true
+    t.string   "time_zone",                                                             default: "Eastern Time (US & Canada)"
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
@@ -434,9 +435,9 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.integer  "predicted_score",                  default: 0,     null: false
     t.boolean  "instructor_modified",              default: false
     t.string   "pass_fail_status"
+    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_read",                    default: false
     t.datetime "feedback_read_at"
-    t.boolean  "is_custom_value",                  default: false
     t.boolean  "feedback_reviewed",                default: false
     t.datetime "feedback_reviewed_at"
     t.datetime "graded_at"
@@ -575,13 +576,15 @@ ActiveRecord::Schema.define(version: 20160119190311) do
   end
 
   create_table "submission_files", force: :cascade do |t|
-    t.string   "filename",        limit: 255,                 null: false
-    t.integer  "submission_id",                               null: false
-    t.string   "filepath",        limit: 255
-    t.string   "file",            limit: 255
-    t.boolean  "file_processing",             default: false, null: false
+    t.string   "filename",          limit: 255,                 null: false
+    t.integer  "submission_id",                                 null: false
+    t.string   "filepath",          limit: 255
+    t.string   "file",              limit: 255
+    t.boolean  "file_processing",               default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_confirmed_at"
+    t.boolean  "file_missing",                  default: false
   end
 
   create_table "submissions", force: :cascade do |t|
@@ -605,6 +608,35 @@ ActiveRecord::Schema.define(version: 20160119190311) do
 
   add_index "submissions", ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
   add_index "submissions", ["course_id"], name: "index_submissions_on_course_id", using: :btree
+
+  create_table "submissions_exports", force: :cascade do |t|
+    t.integer  "assignment_id"
+    t.integer  "course_id"
+    t.integer  "professor_id"
+    t.integer  "student_ids",                              default: [],    null: false, array: true
+    t.integer  "team_id"
+    t.text     "export_filename"
+    t.text     "s3_object_key"
+    t.text     "s3_bucket_name"
+    t.text     "performer_error_log",                      default: [],    null: false, array: true
+    t.hstore   "submissions_snapshot",                     default: {},    null: false
+    t.datetime "created_at",                                               null: false
+    t.datetime "updated_at",                                               null: false
+    t.datetime "last_export_started_at"
+    t.datetime "last_export_completed_at"
+    t.boolean  "generate_export_csv"
+    t.boolean  "confirm_export_csv_integrity"
+    t.boolean  "create_student_directories"
+    t.boolean  "student_directories_created_successfully"
+    t.boolean  "create_submission_text_files"
+    t.boolean  "create_submission_binary_files"
+    t.boolean  "generate_error_log"
+    t.boolean  "archive_exported_files"
+    t.boolean  "upload_archive_to_s3"
+    t.boolean  "check_s3_upload_success"
+    t.boolean  "remove_empty_student_directories"
+    t.boolean  "write_note_for_missing_binary_files",      default: false
+  end
 
   create_table "tasks", force: :cascade do |t|
     t.integer  "assignment_id"
@@ -681,7 +713,7 @@ ActiveRecord::Schema.define(version: 20160119190311) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "username",                        limit: 255,                 null: false
+    t.string   "username",                        limit: 255,                                        null: false
     t.string   "email",                           limit: 255
     t.string   "crypted_password",                limit: 255
     t.string   "salt",                            limit: 255
@@ -717,6 +749,7 @@ ActiveRecord::Schema.define(version: 20160119190311) do
     t.string   "activation_token"
     t.datetime "activation_token_expires_at"
     t.boolean  "admin",                                       default: false
+    t.string   "time_zone",                                   default: "Eastern Time (US & Canada)"
   end
 
   add_index "users", ["activation_token"], name: "index_users_on_activation_token", using: :btree

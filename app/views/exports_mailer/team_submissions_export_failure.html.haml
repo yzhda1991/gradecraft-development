@@ -1,0 +1,18 @@
+%p{:align => "center"}
+  %a{:href => "http://gradecraft.com", :target => "_blank"}
+    %img{:alt => "", :border => "0", :src => "https://www.gradecraft.com/images/gradecraft_logo.png", :width => "207"}/
+%h2{:align => "center"}
+  %strong Dear #{ @professor.first_name },
+%h3{:align => "center"} 
+  Your requested submissions export of #{ @course.assignment_term.downcase} "#{ @assignment.name }"
+  in course #{ @course.name }
+  failed to complete for  #{ @course.team_term.downcase } #{ @team.name }.
+
+%p
+%p{:align => "center"}
+  Our system administrators have been notified of the problem, but you may send an additional email to
+  %a{:href => "mailto: #{ ExportsMailer::ADMIN_EMAIL }"} #{ExportsMailer::ADMIN_EMAIL}
+  if you'd like.
+%p Sincerely,
+%p The GradeCraft Team
+%hr/

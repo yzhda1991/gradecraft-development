@@ -5,6 +5,7 @@ describe SubmissionFile do
   let(:assignment) { build(:assignment) }
   let(:student) { build(:user) }
   let(:submission) { build(:submission, course: course, assignment: assignment, student: student) }
+  let(:submission_file) { submission.submission_files.last }
 
   subject { submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg')) }
 
@@ -18,12 +19,83 @@ describe SubmissionFile do
     end
   end
 
+  describe "scopes" do
+    let(:unconfirmed_file) { create(:submission_file, last_confirmed_at: nil) }
+    let(:confirmed_file) { create(:submission_file, last_confirmed_at: Time.now) }
+    let(:confirmed_and_missing) { create(:submission_file, file_missing: true, last_confirmed_at: Time.now) }
+    let(:missing_file) { create(:submission_file, file_missing: true) }
+    let(:present_file) { create(:submission_file, file_missing: false) }
+    before { unconfirmed_file; confirmed_file; missing_file; present_file; confirmed_and_missing }
+
+    describe "unconfirmed" do
+      subject { SubmissionFile.unconfirmed }
+      it "returns submission files with null last_confirmed_at dates" do
+        expect(subject).to include(unconfirmed_file)
+      end
+
+      it "doesn't return submission files with last_confirmed_at dates" do
+        expect(subject).not_to include(confirmed_file)
+      end
+    end
+
+    describe "confirmed" do
+      subject { SubmissionFile.confirmed }
+      it "returns submission files where last_confirmed_at is not null" do
+        expect(subject).to include(confirmed_file)
+      end
+
+      it "returns submission files with null last_confirmed_at dates" do
+        expect(subject).not_to include(unconfirmed_file)
+      end
+    end
+
+    describe "missing" do
+      subject { SubmissionFile.missing }
+      it "returns submission files where the file is missing" do
+        expect(subject).to include(missing_file)
+      end
+
+      it "doesn't return submission files where the file is present" do
+        expect(subject).not_to include(present_file)
+      end
+    end
+    
+    describe "present" do
+      subject { SubmissionFile.present }
+      it "returns submission files where the file is not missing" do
+        expect(subject).to include(present_file)
+      end
+      
+      it "doesn't return submission files where the file is missing" do
+        expect(subject).not_to include(missing_file)
+      end
+    end
+  end
+
   describe "versioning", versioning: true do
     before { subject.save }
 
     it "is enabled for submissions" do
       expect(PaperTrail).to be_enabled
+    end
+
+    it "is versioned" do
       expect(subject).to be_versioned
+    end
+  end
+
+  describe "#public_url" do
+    it "uses the Rails root" do
+      expect(subject.public_url).to match(/#{Rails.root}/)
+    end
+
+    it "uses the public directory" do
+      expect(subject.public_url).to match("public")
+    end
+
+    it "uses the submission file url" do
+      allow(subject).to receive(:url) { "/great/scott.jpg" }
+      expect(subject.public_url).to match("/great/scott.jpg")
     end
   end
 
@@ -50,6 +122,15 @@ describe SubmissionFile do
       group_submission = build(:submission, course: course, assignment: group_assignment, group: group)
       group_file = group_submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg'))
       expect(group_file.owner_name).to eq(group.name)
+    end
+  end
+
+  describe "extension", inspect: true do
+    subject { submission_file.extension }
+    let(:submission_file) { build(:submission_file, filename: "garrett_went_to_town.ppt") }
+
+    it "gets the extension from the filename" do
+      expect(subject).to eq(".ppt")
     end
   end
 
@@ -86,6 +167,12 @@ describe SubmissionFile do
   it "shortens and removes non-word characters from file names on save" do
     subject.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
     subject.submission.save!
-    expect expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
+    expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
+  end
+
+  it "shortens and removes non-word characters from file names on save" do
+    subject.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
+    subject.submission.save!
+    expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{submission_file.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
   end
 end

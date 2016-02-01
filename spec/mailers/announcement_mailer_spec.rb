@@ -6,7 +6,7 @@ describe AnnouncementMailer do
   let(:author) { create :user }
   let(:student) { create :user }
 
-  describe ".announcement_email" do
+  describe "#announcement_email" do
     before(:each) do
       AnnouncementMailer.announcement_email(announcement, student).deliver_now
     end
@@ -29,6 +29,10 @@ describe AnnouncementMailer do
 
     it "has the announcement link" do
       expect(email.body).to include announcement_url(announcement)
+    end
+
+    it "has the email html title" do
+      expect(email.body).to include "GradeCraft Announcement"
     end
   end
 end

@@ -2,7 +2,8 @@ require 'rails_spec_helper'
 
 RSpec.describe ResqueJob::Performer, type: :vendor_library do
   let(:attrs) { Hash.new(color: "green") }
-  subject { ResqueJob::Performer.new(attrs) }
+  let(:performer) { ResqueJob::Performer.new(attrs) }
+  subject { performer }
 
   # todo: add specs for all cases in subclassed conditions
   describe "initialize" do
@@ -22,6 +23,26 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
       expect(subject).to receive(:setup)
       subject.instance_eval { initialize }
     end
+
+    describe "logger" do
+      let(:performer_with_logger) { ResqueJob::Performer.new(attrs, logger) }
+      let(:logger) { Logger.new(STDOUT) }
+
+      context "a logger is passed in on instantiation" do
+        subject { performer_with_logger }
+
+        it "sets the logger to @logger" do
+          expect(performer_with_logger.instance_variable_get(:@logger)).to eq(logger)
+        end
+      end
+
+      context "no logger is passed in" do
+        subject { performer }
+        it "sets @logger to nil" do
+          expect(performer.instance_variable_get(:@logger)).to be_nil
+        end
+      end
+    end
   end
 
   describe "do_the_work" do
@@ -35,6 +56,17 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
 
     it "should receive a puts" do
       expect(subject).to receive(:puts)
+    end
+  end
+
+  describe "#default_options" do
+    subject { performer.default_options }
+    it "doesn't skip setup by default" do
+      expect(subject).to eq({skip_setup: false}.freeze)
+    end
+
+    it "doesn't allow changes to the returned value" do
+      expect { subject[:snake] = "walrus" }.to raise_error(RuntimeError)
     end
   end
 
