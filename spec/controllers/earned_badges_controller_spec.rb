@@ -60,8 +60,8 @@ describe EarnedBadgesController do
         params = attributes_for(:earned_badge)
         params[:badge_id] = @badge.id
         params[:student_id] = @student.id
-        expect{ post :create, :badge_id => @badge.id, :student_id => @student.id, :earned_badge => params }.to change(EarnedBadge, :count).by(1) 
-        expect(response).to redirect_to badge_path(@badge)   
+        expect{ post :create, :badge_id => @badge.id, :student_id => @student.id, :earned_badge => params }.to change(EarnedBadge.student_visible, :count).by(1)
+        expect(response).to redirect_to badge_path(@badge)
       end
 
       it "doesn't create earned badges with invalid attributes" do
@@ -204,11 +204,11 @@ describe EarnedBadgesController do
           expect(assigns(:earned_badges)[0].student_id).to eq(student2.id)
           expect(assigns(:earned_badges)[1].student_id).to eq(@student.id)
         end
-        
+
       end
 
-      describe "when badges can only be earned once" do 
-        it "builds a new one if it hasn't been earned" do 
+      describe "when badges can only be earned once" do
+        it "builds a new one if it hasn't been earned" do
           @badge.can_earn_multiple_times = false
           @badge.save
 
