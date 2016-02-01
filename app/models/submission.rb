@@ -16,7 +16,6 @@ class Submission < ActiveRecord::Base
   belongs_to :group, touch: true
   belongs_to :course, touch: true
 
-  before_save :submit_something
   after_save :check_unlockables
 
   has_one :grade
@@ -39,6 +38,7 @@ class Submission < ActiveRecord::Base
   validates_uniqueness_of :task, :scope => :student, :allow_nil => true
   validates :link, :format => URI::regexp(%w(http https)) , :allow_blank => true
   validates :assignment, presence: true
+  validates_with SubmissionValidator
 
   clean_html :text_comment
   multiple_files :submission_files
@@ -136,10 +136,6 @@ class Submission < ActiveRecord::Base
     elsif assignment.has_groups?
       group_id == user.group_for_assignment(assignment).id
     end
-  end
-
-  def submit_something
-    link.present? || text_comment.present? || submission_files.present?
   end
 
   def cache_associations

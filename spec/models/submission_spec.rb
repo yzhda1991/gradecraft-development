@@ -13,6 +13,14 @@ describe Submission do
       expect(subject).to_not be_valid
       expect(subject.errors[:link]).to include "is invalid"
     end
+
+    it "requires something to have been submitted" do
+      subject.link = nil
+      subject.text_comment = nil
+      subject.submission_files.clear
+      expect(subject).to_not be_valid
+      expect(subject.errors[:base]).to include "Submission cannot be empty"
+    end
   end
 
   it_behaves_like "a historical model", :submission, link: "http://example.org"
@@ -39,12 +47,6 @@ describe Submission do
       subject.update_attributes text_comment: "This was updated"
       expect(subject).to have_a_version_with text_comment: previous_comment
     end
-  end
-
-  it "can't be saved without any information" do
-    subject.link = nil
-    subject.text_comment = nil
-    expect { subject.save! }.to raise_error(ActiveRecord::RecordNotSaved)
   end
 
   it "can be saved with only a text comment" do
