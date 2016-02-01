@@ -21,7 +21,7 @@
   - if presenter.student.submission_for_assignment(presenter.assignment).link?
     %p
       %span.smallcaps Link:
-      = link_to presenter.student.submission_for_assignment(presenter.assignment).link, presenter.student.submission_for_assignment(presenter.assignment).link
+      = external_link_to presenter.student.submission_for_assignment(presenter.assignment).link, presenter.student.submission_for_assignment(presenter.assignment).link
 
   - if presenter.student.submission_for_assignment(presenter.assignment).submission_files.present?
     %p
@@ -34,7 +34,7 @@
   - if presenter.student.submission_for_assignment(presenter.assignment).text_comment?
     %p
       %span.smallcaps Statement:
-      = raw presenter.student.submission_for_assignment(presenter.assignment).text_comment
+      = raw sanitize_external_links presenter.student.submission_for_assignment(presenter.assignment).text_comment
 
 
 - else
@@ -56,7 +56,7 @@
   - if presenter.group.submission_for_assignment(presenter.assignment).link?
     %p
       %span.smallcaps Link:
-      = link_to presenter.group.submission_for_assignment(presenter.assignment).link, presenter.group.submission_for_assignment(presenter.assignment).link
+      = external_link_to presenter.group.submission_for_assignment(presenter.assignment).link, presenter.group.submission_for_assignment(presenter.assignment).link
 
   - if presenter.group.submission_for_assignment(presenter.assignment).submission_files.present?
     %p
@@ -70,4 +70,4 @@
   - if presenter.group.submission_for_assignment(presenter.assignment).text_comment?
     %p
       %span.smallcaps Statement:
-      = raw presenter.group.submission_for_assignment(presenter.assignment).text_comment
+      = raw sanitize_external_links presenter.group.submission_for_assignment(presenter.assignment).text_comment
