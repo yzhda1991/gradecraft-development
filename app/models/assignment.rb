@@ -2,6 +2,7 @@ class Assignment < ActiveRecord::Base
   include Copyable
   include Gradable
   include MultipleFileAttributes
+  include Sanitizable
   include ScoreLevelable
   include UploadsMedia
   include UploadsThumbnails
@@ -26,6 +27,8 @@ class Assignment < ActiveRecord::Base
   has_one :rubric, dependent: :destroy
 
   multiple_files :assignment_files
+  # Preventing malicious content from being submitted
+  clean_html :description
 
   # For instances where the assignment needs its own unique score levels
   score_levels :assignment_score_levels, -> { order "value" }, dependent: :destroy
@@ -48,9 +51,6 @@ class Assignment < ActiveRecord::Base
   # Instructor uploaded resource files
   has_many :assignment_files, dependent: :destroy
   accepts_nested_attributes_for :assignment_files
-
-  # Preventing malicious content from being submitted
-  before_save :sanitize_description
 
   # Strip points from pass/fail assignments
   before_save :zero_points_for_pass_fail
@@ -352,11 +352,6 @@ class Assignment < ActiveRecord::Base
     if (accepts_submissions_until.present? && open_at.present?) && (accepts_submissions_until < open_at)
       errors.add :base, 'Submission accept date must be after open date.'
     end
-  end
-
-  # Stripping the description of extra code
-  def sanitize_description
-    self.description = Sanitize.clean(description, Sanitize::Config::BASIC)
   end
 
   def zero_points_for_pass_fail

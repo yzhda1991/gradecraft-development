@@ -1,10 +1,14 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
+require "toolkits/sanitization_toolkit"
+require "toolkits/models/assignments_toolkit"
 
 describe Assignment do
   include Toolkits::Models::AssignmentsToolkit
 
   subject { build(:assignment) }
   let(:assignment) { build :assignment }
+
+  it_behaves_like "a model that needs sanitization", :description
 
   context "validations" do
     it "is valid with a name and assignment type" do
@@ -794,7 +798,7 @@ describe Assignment do
       expect(subject).to be_open
     end
   end
- 
+
   describe "#to_json" do
     it "returns a json representation" do
       json = subject.to_json

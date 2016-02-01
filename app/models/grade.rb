@@ -2,6 +2,7 @@ class Grade < ActiveRecord::Base
   include Canable::Ables
   include Historical
   include MultipleFileAttributes
+  include Sanitizable
 
   has_paper_trail ignore: [:predicted_score]
 
@@ -40,6 +41,8 @@ class Grade < ActiveRecord::Base
   after_save :check_unlockables
 
   multiple_files :grade_files
+  clean_html :feedback
+
   has_many :grade_files, :dependent => :destroy
   accepts_nested_attributes_for :grade_files
 
@@ -48,7 +51,6 @@ class Grade < ActiveRecord::Base
 
   delegate :name, :description, :due_at, :assignment_type, :course, :to => :assignment
 
-  before_save :clean_html
   after_destroy :save_student_and_team_scores
 
   scope :completion, -> { where(order: "assignments.due_at ASC", :joins => :assignment) }
@@ -184,10 +186,6 @@ class Grade < ActiveRecord::Base
 
   def self.student_visible_sql
     ["status = 'Released' OR (status = 'Graded' AND assignments.release_necessary = ?)", false]
-  end
-
-  def clean_html
-    self.feedback = Sanitize.clean(feedback, Sanitize::Config::BASIC)
   end
 
   def save_student

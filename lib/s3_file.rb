@@ -1,3 +1,5 @@
+require_relative "s3_manager"
+
 module S3File
 
   # Legacy submission files were handled by S3 direct upload and we stored their
@@ -11,7 +13,7 @@ module S3File
 
   def url
     if Rails.env.development?
-      file.url 
+      file.url
     else
       if s3_object
         s3_object.presigned_url(:get, expires_in: 900).to_s
