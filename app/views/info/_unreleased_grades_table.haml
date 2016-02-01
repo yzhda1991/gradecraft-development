@@ -1,6 +1,6 @@
 %h4.subtitle#unreleasedTableCaption
   = "Unreleased Grades"
-  %span.label.alert= @count_unreleased
+  %span.label.alert= unreleased_grades_count_for(course)
 
 - @unreleased_grades_by_assignment.each do |assignment, grades|
   .assignment-unreleased

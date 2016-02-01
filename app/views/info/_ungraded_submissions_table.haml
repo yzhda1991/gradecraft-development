@@ -1,6 +1,6 @@
 %h4.subtitle#ungradedTableCaption
   = "Ungraded #{term_for :assignment} Submissions"
-  %span.label.alert= @count_ungraded
+  %span.label.alert= ungraded_submissions_count_for(course)
 
 - @ungraded_submissions_by_assignment.each do |assignment, submissions|
   %h4.assignment_name
