@@ -33,7 +33,7 @@ en:
         alert: "We're sorry, the requested %{weights_term} could not be updated. Check below for possible errors."
     groups:
       create:
-        notice: "Your group was successfully created."
+        success: "Your group was successfully created."
         alert: "We're sorry, your group could not be created. Check below for possible errors."
   sessions:
     create:

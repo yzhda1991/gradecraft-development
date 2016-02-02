@@ -5,7 +5,8 @@
 
 %h3.pagetitle= @title
 
-= render "buttons"
+- if current_user_is_staff?
+  = render "buttons"
 
 .pageContent
   = render 'layouts/alerts'

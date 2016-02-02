@@ -3,7 +3,7 @@
   = render partial: 'layouts/alerts', locals: { model: @group }
 
   %section
-    - if @group.pending?
+    - if @group.pending? && current_user_is_staff?
       = f.label :approved, "Status"
       = f.select :approved, [["Pending"], ["Approved"], ["Rejected"]]
       .form_label If rejected, this #{term_for :group} will be unable to submit any further work for these assignments

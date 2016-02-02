@@ -34,7 +34,6 @@ class GroupsController < ApplicationController
     respond_to do |format|
       if @group.save
         format.html { respond_with @group }
-        flash[:success]= "#{@group.name} #{term_for :group} successfully created"
       else
         @other_students = potential_team_members
         format.html { render action: "new" }

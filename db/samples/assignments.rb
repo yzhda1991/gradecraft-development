@@ -917,7 +917,7 @@
 
 @assignments[:group_assignment_submission_is_an_unlock] = {
   quotes: {
-    assignment_created: "The difference between school and life? In school, you're taught a lesson and then given a test. In life, you're given a test that teaches you a lesson.",
+    assignment_created: "My contention is that creativity now is as important in education as literacy, and we should treat it with the same status. – Sir Ken Robinson",
   },
   assignment_type: :unlocks,
   attributes: {
@@ -934,6 +934,41 @@
     condition_state: "Submitted"
   }
 }
+
+@assignments[:group_assignment_submission_is_a_condition] = {
+  quotes: {
+    assignment_created: "The difference between school and life? In school, you're taught a lesson and then given a test. In life, you're given a test that teaches you a lesson. – Tom Bodett",
+  },
+  assignment_type: :unlocks,
+  attributes: {
+    name: "Group-Assignment-Submission-Unlocks ",
+    description: "All members of a Group Submitting 'Submission-Key' unlocks this assignment",
+    due_at: 5.weeks.from_now,
+    point_total: 120000,
+    grade_scope: "Group"
+  }
+}
+
+@assignments[:individual_assignment_submission_is_unlocked_by_group_submission] = {
+  quotes: {
+    assignment_created: "The difference between school and life? In school, you're taught a lesson and then given a test. In life, you're given a test that teaches you a lesson. – Tom Bodett",
+  },
+  assignment_type: :unlocks,
+  attributes: {
+    name: "Individual-Assignment-Unlocked-By-Group ",
+    description: "All members of a Group Submitting 'Submission-Key' unlocks this assignment",
+    due_at: 5.weeks.from_now,
+    point_total: 120000
+  },
+  unlock_condition: true,
+  unlock_attributes: {
+    condition: :group_assignment_submission_is_a_condition,
+    condition_type: "Assignment",
+    condition_state: "Submitted"
+  }
+}
+
+
 
 @assignments[:alphanum_1_condition] = {
   quotes: {
