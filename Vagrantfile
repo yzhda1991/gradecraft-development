@@ -60,6 +60,7 @@ Vagrant.configure(2) do |config|
         service mongod stop || echo "mongod already stopped"
         # prevent mongod from starting on boot
         sed -i 's/start on runlevel \[2345\]/#start on runlevel \[2345\]/g' /etc/init/mongod.conf
+        sed -i 's/ENABLE_MONGOD="yes"/ENABLE_MONGOD="no"/g' /etc/init/mongod.conf
 
         if [ ! -f config/mongoid.yml ]; then
             cp config/mongoid.yml.sample config/mongoid.yml
