@@ -1,6 +1,6 @@
 class UploadsController < ApplicationController
   def remove
-    fetch_upload
+    @upload = upload_klass.find params[:upload_id]
     @upload.delete_from_s3
 
     if @upload.exists_on_s3?
@@ -14,8 +14,8 @@ class UploadsController < ApplicationController
 
   protected
 
-  def fetch_upload
-    @upload = params[:model].classify.constantize.find params[:upload_id]
+  def upload_klass
+    params[:model].classify.constantize
   end
 
   def destroy_upload_with_flash
