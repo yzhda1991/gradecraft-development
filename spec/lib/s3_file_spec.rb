@@ -127,4 +127,26 @@ RSpec.describe "An S3File inheritor" do
 
     after(:each) { subject }
   end
+
+  describe "actually removing the object" do
+    subject { s3_file_cylon.remove }
+    let(:s3_manager) { S3Manager::Manager.new }
+    let(:source_object) { Tempfile.new('walter-srsly') }
+    let(:s3_object_key) { "lets-see-what-happens.txt" }
+    let(:object_summary) { S3Manager::Manager::ObjectSummary.new(s3_object_key, s3_manager) }
+
+    before(:each) do
+      s3_manager.put_object(s3_object_key, source_object)
+    end
+
+    it "should actually be operating on a file that's present to begin with" do
+      expect(object_summary.exists?).to be_truthy
+    end
+
+    it "actually removes the object from the server" do
+      allow(s3_file_cylon).to receive(:s3_object_file_key) { s3_object_key }
+      subject
+      expect(object_summary.exists?).to be_falsey
+    end
+  end
 end

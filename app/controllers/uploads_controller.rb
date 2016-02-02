@@ -1,16 +1,19 @@
 class UploadsController < ApplicationController
+  before_filter :fetch_upload, only: :remove
+
   def remove
-    upload = params[:model].classify.constantize.find params[:upload_id]
-    s3 = AWS::S3.new
-    bucket = s3.buckets["gradecraft-#{Rails.env}"]
-    if Rails.env == "staging" || Rails.env == "production"
-      if upload.filepath.present?
-        bucket.objects[CGI::unescape(upload.filepath)].delete
-      else
-        bucket.objects[CGI::unescape(upload.file.path)].delete
-      end
+    if upload.remove # delete from s3
+      upload.destroy # destroy the actual persisted active record object resource
+    else
+      flash[:error] = "File could not be deleted from the server."
     end
-    upload.destroy
+
     redirect_to :back
+  end
+
+  protected
+
+  def fetch_upload
+    @upload = params[:model].classify.constantize.find params[:upload_id]
   end
 end
