@@ -5,6 +5,14 @@ class StudentLeaderboardPresenter < Showtime::Presenter
     properties[:course]
   end
 
+  def display_pseudonyms?
+    course.in_team_leaderboard? || course.character_names?
+  end
+
+  def has_badges?
+    course.has_badges?
+  end
+
   def has_teams?
     course.has_teams?
   end
