@@ -915,6 +915,26 @@
   }
 }
 
+@assignments[:group_assignment_submission_is_an_unlock] = {
+  quotes: {
+    assignment_created: "The difference between school and life? In school, you're taught a lesson and then given a test. In life, you're given a test that teaches you a lesson.",
+  },
+  assignment_type: :unlocks,
+  attributes: {
+    name: "Group-Assignment-Unlocked-By-Submission",
+    description: "All members of a Group Submitting 'Submission-Key' unlocks this assignment",
+    due_at: 3.weeks.from_now,
+    point_total: 180000,
+    grade_scope: "Group"
+  },
+  unlock_condition: true,
+  unlock_attributes: {
+    condition: :unlock_submission_condition,
+    condition_type: "Assignment",
+    condition_state: "Submitted"
+  }
+}
+
 @assignments[:alphanum_1_condition] = {
   quotes: {
     assignment_created: "In a classical joke a child stays behind after school to ask a personal question. 'Teacher, what did I learn today?' The surprised teacher asks, 'Why do you ask that?' and the child replies, 'Daddy always asks me and I never know what to say.' ― Seymour Papert",
