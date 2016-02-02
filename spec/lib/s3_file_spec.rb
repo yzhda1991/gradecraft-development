@@ -7,8 +7,14 @@ class S3FileCylon
 end
 
 RSpec.describe "An S3File inheritor" do
-  let(:s3_file_cylon) { S3FileCylon.new }
   subject { s3_file_cylon }
+
+  let(:s3_file_cylon) { S3FileCylon.new }
+  let(:s3_manager) { S3Manager::Manager.new }
+  let(:source_object) { Tempfile.new('walter-srsly') }
+  let(:s3_object_key) { "lets-see-what-happens.txt" }
+  let(:object_exists?) { s3_file_cylon.exists_on_s3? }
+  let(:put_object_to_s3) { s3_manager.put_object(s3_object_key, source_object) }
 
   describe "inclusion of S3Manager::Basics" do
     it "responds to S3Manager::Basics methods" do
@@ -102,8 +108,8 @@ RSpec.describe "An S3File inheritor" do
     end
   end
 
-  describe "#remove" do
-    subject { s3_file_cylon.remove }
+  describe "#delete_from_s3" do
+    subject { s3_file_cylon.delete_from_s3 }
 
     let(:bucket) { double(:bucket).as_null_object }
     let(:object) { double(:object).as_null_object }
@@ -128,25 +134,50 @@ RSpec.describe "An S3File inheritor" do
     after(:each) { subject }
   end
 
-  describe "actually removing the object" do
-    subject { s3_file_cylon.remove }
-    let(:s3_manager) { S3Manager::Manager.new }
-    let(:source_object) { Tempfile.new('walter-srsly') }
-    let(:s3_object_key) { "lets-see-what-happens.txt" }
-    let(:object_summary) { S3Manager::Manager::ObjectSummary.new(s3_object_key, s3_manager) }
+  describe "actually deleting the object" do
+    subject { s3_file_cylon.delete_from_s3 }
 
     before(:each) do
-      s3_manager.put_object(s3_object_key, source_object)
-    end
-
-    it "should actually be operating on a file that's present to begin with" do
-      expect(object_summary.exists?).to be_truthy
-    end
-
-    it "actually removes the object from the server" do
       allow(s3_file_cylon).to receive(:s3_object_file_key) { s3_object_key }
-      subject
-      expect(object_summary.exists?).to be_falsey
+    end
+
+    context "file exists on server" do
+      before(:each) { put_object_to_s3 }
+
+      it "should actually be operating on a file that's present to begin with" do
+        expect(object_exists?).to be_truthy
+      end
+
+      it "actually removes the object from the server" do
+        subject
+        expect(object_exists?).to be_falsey
+      end
+
+      it "returns an Aws::S3::Types::DeleteObjectOutput object" do
+        expect(subject.class).to eq(Seahorse::Client::Response)
+      end
+    end
+  end
+
+  describe "#exists_on_s3?" do
+    subject { s3_file_cylon.exists_on_s3? }
+
+    before(:each) do
+      allow(s3_file_cylon).to receive(:s3_object_file_key) { s3_object_key }
+    end
+
+    context "file exists on server" do
+      it "returns a truthy value" do
+        put_object_to_s3
+        expect(subject).to be_truthy
+        s3_file_cylon.delete_from_s3 # clean up the file
+      end
+    end
+
+    context "file does not exist on server" do
+      it "returns an Aws::S3::Types::DeleteObjectOutput object" do
+        expect(subject).to be_falsey
+      end
     end
   end
 end
