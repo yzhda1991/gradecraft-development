@@ -6,7 +6,7 @@ NumberModule.directive 'smartNumber',
     defaultOptions = smartNumberConfig.defaultOptions
 
     # 0 = tab, 8 = backspace , 13 = enter, 46 = delete, 37 = left arrow, 39 = right arrow, 65 = A
-    controlKeys = [0,8,13, 46, 37, 39, 65] 
+    controlKeys = [0,8,13, 46, 37, 39, 65]
 
     # 37 = left arrow, 39 = right arrow, 9 = enter, 33 = page up, 34 = page down
     inertKeys = [37, 39, 9, 33, 34]
@@ -58,7 +58,7 @@ NumberModule.directive 'smartNumber',
             for own option, value of scope.$eval(attrs.smartNumberOptions)
                 options[option] = value
         options
-    
+
     isNumber = (val) ->
         !isNaN(parseFloat(val)) && isFinite(val)
 
@@ -85,15 +85,11 @@ NumberModule.directive 'smartNumber',
       inertKeys.indexOf(which) >= 0
 
     invalidInput = (elem, event) ->
-      invalidKey(event) or invalidZero(elem, event)
+      invalidKey(event)
 
     # invalid actions
     invalidKey = (event) ->
       isNotDigit(event.which) && isNotControlKey(event.which)
-
-    invalidZero = (elem, event) ->
-      # entering 0 in the first place
-      elem[0].selectionStart == 0 and event.which == 48 
 
     maxDigitsReached = (elem, maxDigits) ->
       elem.val().length >= maxDigits
@@ -109,7 +105,7 @@ NumberModule.directive 'smartNumber',
         validRegex = new RegExp regexString
 
         (val) -> validRegex.test val
-        
+
     makeMaxNumber = (maxNumber) ->
         (val, number) -> number <= maxNumber
 
@@ -212,7 +208,7 @@ NumberModule.directive 'smartNumber',
 
     makeIsValid = (options) ->
         validations = []
-        
+
         if options.maxDecimals?
             validations.push makeMaxDecimals options.maxDecimals
         if options.max?
@@ -221,7 +217,7 @@ NumberModule.directive 'smartNumber',
             validations.push makeMinNumber options.min
         if options.maxDigits?
             validations.push makeMaxDigits options.maxDigits
-            
+
         (val) ->
             return false unless isNumber val
             return false if hasMultipleDecimals val
@@ -229,7 +225,7 @@ NumberModule.directive 'smartNumber',
             for i in [0...validations.length]
                 return false unless validations[i] val, number
             true
-        
+
     addCommasToInteger = (val) ->
         decimals = `val.indexOf('.') == -1 ? '' : val.replace(/^-?\d+(?=\.)/, '')`
         wholeNumbers = val.replace /(\.\d+)$/, ''
@@ -298,9 +294,9 @@ NumberModule.directive 'smartNumber',
 
               # do nothing if the key pressed isn't a permissable operation
               return if invalidInput(elem, event)
-              
+
               # find the cursor position
-              initialPosition = elem[0].selectionStart 
+              initialPosition = elem[0].selectionStart
 
 
               # do different stuff if ctrl is pressed
@@ -341,7 +337,7 @@ NumberModule.directive 'smartNumber',
 
                   ## replacing a selected area with a number character
                   if elem[0].selectionEnd > elem[0].selectionStart # text is highlighted
-                    
+
                     # get the string before the selection and figure out how many commas it has
                     originalCursorPosition = elem[0].selectionStart
                     stringBeforeCursor = elem.val().slice(0, originalCursorPosition)
@@ -403,7 +399,7 @@ NumberModule.directive 'smartNumber',
 
                     # trigger final change event
                     triggerChange(elem)
-                
+
                 if isDelete(event) # delete is pressed
                   if elem[0].selectionEnd > elem[0].selectionStart # text is highlighted
                     # get the string before the selection and figure out how many commas it has
@@ -435,7 +431,7 @@ NumberModule.directive 'smartNumber',
 
                     # trigger final change event
                     triggerChange(elem)
-              
+
             elem.on 'keypress', (event) ->
               killEvent(event)
 
