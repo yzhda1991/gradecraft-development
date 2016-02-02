@@ -17,6 +17,15 @@ en:
       size_too_small: "is too small (should be at least %{file_size})"
       size_too_big: "is too big (should be at most %{file_size})"
   flash:
+    groups:
+      create:
+        success: "Your group was successfully created."
+        alert: "We're sorry, your group could not be created. Check below for possible errors."
+      update:
+        notice: "Your group was successfully updated."
+        alert: "We're sorry, your group could not be updated. Check below for possible errors."
+      destroy:
+        notice: "Your group was successfully deleted."
     actions:
       create:
         notice: "%{resource_name} was successfully created."
@@ -31,10 +40,7 @@ en:
       mass_update:
         notice: "%{weights_term} were successfully updated."
         alert: "We're sorry, the requested %{weights_term} could not be updated. Check below for possible errors."
-    groups:
-      create:
-        success: "Your group was successfully created."
-        alert: "We're sorry, your group could not be created. Check below for possible errors."
+
   sessions:
     create:
       error: 'Sorry, we could not log you in.'

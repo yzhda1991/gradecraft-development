@@ -110,7 +110,13 @@ class Submission < ActiveRecord::Base
     if self.assignment.is_a_condition?
       unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
         unlockable = condition.unlockable
-        unlockable.check_unlock_status(student)
+        if self.assignment.has_groups?
+          self.group.students.each do |student|
+            unlockable.check_unlock_status(student)
+          end
+        else
+          unlockable.check_unlock_status(student)
+        end
       end
     end
   end

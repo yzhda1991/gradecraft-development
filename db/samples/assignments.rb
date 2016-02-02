@@ -925,7 +925,11 @@
     description: "All members of a Group Submitting 'Submission-Key' unlocks this assignment",
     due_at: 3.weeks.from_now,
     point_total: 180000,
-    grade_scope: "Group"
+    grade_scope: "Group",
+    accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_links: true,
+    accepts_text: true,
   },
   unlock_condition: true,
   unlock_attributes: {
@@ -945,7 +949,11 @@
     description: "All members of a Group Submitting 'Submission-Key' unlocks this assignment",
     due_at: 5.weeks.from_now,
     point_total: 120000,
-    grade_scope: "Group"
+    grade_scope: "Group",
+    accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_links: true,
+    accepts_text: true,
   }
 }
 

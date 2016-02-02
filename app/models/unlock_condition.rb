@@ -143,7 +143,12 @@ class UnlockCondition < ActiveRecord::Base
 
   def check_submission_condition(student)
     assignment = Assignment.find(condition_id)
-    submission = student.submission_for_assignment(assignment)
+    if assignment.has_groups?
+      group = student.group_for_assignment(assignment)
+      submission = group.submission_for_assignment(assignment)
+    else
+      submission = student.submission_for_assignment(assignment)
+    end
     if submission.present?
       if condition_date?
         check_if_submitted_by_condition_date(submission)
