@@ -27,8 +27,6 @@ class StudentsController < ApplicationController
 
   #Course wide leaderboard - excludes auditors from view
   def leaderboard
-    @title = "Leaderboard"
-
     if team_filter_active?
       team = current_course.teams.find_by id: params[:team_id]
       # fetch user ids for all students in the active team
@@ -40,7 +38,6 @@ class StudentsController < ApplicationController
       @students = User.unscoped_students_being_graded_for_course(current_course).order_by_high_score
     end
 
-    @student_ids = @students.collect {|s| s[:id] }
     @teams_by_student_id = teams_by_student_id
     @earned_badges_by_student_id = earned_badges_by_student_id
     @student_grade_schemes_by_id = course_grade_scheme_by_student_id
