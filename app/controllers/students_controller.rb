@@ -138,31 +138,13 @@ class StudentsController < ApplicationController
 
   # @mz todo: refactor and add specs, move out of controller
   def course_grade_scheme_by_student_id
+    elements = GradeSchemeElement.unscoped.for_course(current_course).order_by_low_range.to_a
     @students.inject({}) do |memo, student|
       student_score = student.cached_score_sql_alias
-      student_grade_scheme = nil
-
-      course_grade_scheme_elements.each do |grade_scheme|
-        if student_score >= grade_scheme.low_range and student_score <= grade_scheme.high_range
-          student_grade_scheme = grade_scheme
-          break
-        end
-      end
-
-      if student_grade_scheme.nil? and course_grade_scheme_elements.present?
-        if student_score < course_grade_scheme_elements.first.low_range
-          student_grade_scheme = GradeSchemeElement.new(level: "Not yet on board")
-        elsif student_score > course_grade_scheme_elements.last.high_range
-          student_grade_scheme = course_grade_scheme_elements.last
-        end
-      end
+      student_grade_scheme = GradeSchemeElement.for_score(student_score, elements)
 
       memo.merge student[:id] => student_grade_scheme
     end
-  end
-
-  def course_grade_scheme_elements
-    @course_grade_scheme_elements ||= GradeSchemeElement.unscoped.where(course_id: current_course.id).order("low_range ASC")
   end
 
   def earned_badges_by_badge_id
