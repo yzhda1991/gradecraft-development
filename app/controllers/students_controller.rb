@@ -1,6 +1,4 @@
 class StudentsController < ApplicationController
-  helper_method :predictions
-
   respond_to :html, :json
 
   before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus ]
@@ -31,12 +29,10 @@ class StudentsController < ApplicationController
   def leaderboard
     @title = "Leaderboard"
 
-    @teams = current_course.teams
-
     if team_filter_active?
+      team = current_course.teams.find_by id: params[:team_id]
       # fetch user ids for all students in the active team
-      @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
-      @students = User.unscoped_students_being_graded_for_course(current_course, @team).order_by_high_score
+      @students = User.unscoped_students_being_graded_for_course(current_course, team).order_by_high_score
     else
       # fetch user ids for all students in the course, regardless of team
       # cached_score_sql_alias is coming from custom unscoped_students_being_graded_for_course SQL
@@ -48,6 +44,7 @@ class StudentsController < ApplicationController
     @teams_by_student_id = teams_by_student_id
     @earned_badges_by_student_id = earned_badges_by_student_id
     @student_grade_schemes_by_id = course_grade_scheme_by_student_id
+    render :leaderboard, StudentLeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
   #Students' primary page: displays all assignments and
@@ -134,7 +131,7 @@ class StudentsController < ApplicationController
     redirect_to session[:return_to] || student_path(@student)
   end
 
-  protected
+  private
 
   # @mz todo: refactor and add specs, move out of controller
   def course_grade_scheme_by_student_id
