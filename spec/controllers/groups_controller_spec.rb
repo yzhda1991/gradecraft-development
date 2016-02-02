@@ -79,7 +79,7 @@ describe GroupsController do
         expect(@group.reload.name).to eq("new name")
       end
 
-      it "redirects to edit from with invalid attributes" do
+      it "redirects to edit with invalid attributes" do
         post :update, id: @group.id, group: attributes_for(:group, name: nil)
         expect(response).to render_template(:edit)
       end
