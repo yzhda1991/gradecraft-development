@@ -17,10 +17,16 @@ class GradeSchemeElement < ActiveRecord::Base
   end
 
   def self.for_course_and_score(course, score)
-    elements = unscoped.for_course(course.id).order_by_low_range
-    element = elements.find { |element| element.within_range?(score) }
-    element ||= elements.last if score > elements.last.high_range
-    element ||= default if score < elements.first.low_range
+    for_score score, unscoped.for_course(course.id).order_by_low_range.to_a
+  end
+
+  def self.for_score(score, elements)
+    element = elements.sort_by!(&:low_range)
+      .find { |element| element.within_range?(score) }
+    unless elements.empty?
+      element ||= elements.last if score > elements.last.high_range
+      element ||= default if score < elements.first.low_range
+    end
     element
   end
 

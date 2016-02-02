@@ -154,5 +154,37 @@ describe GradeSchemeElement do
 
       expect(result.level).to eq "Not yet on board"
     end
+
+    it "handles no grade scheme elements" do
+      result = described_class.for_course_and_score(build(:course), 99)
+
+      expect(result).to be_nil
+    end
+  end
+
+  describe ".for_score" do
+    let(:course) { create :course}
+    let(:low) { build(:grade_scheme_element, low_range: 100, high_range: 1000, course: course) }
+    let(:middle) { build(:grade_scheme_element, low_range: 1001, high_range: 2000, course: course) }
+    let(:high) { build(:grade_scheme_element, low_range: 2001, high_range: 3000, course: course) }
+    let(:elements) { [middle, high, low] }
+
+    it "returns the first grade scheme where the score falls between" do
+      result = described_class.for_score(1100, elements)
+
+      expect(result).to eq middle
+    end
+
+    it "returns the highest grade scheme if the score if greater than the highest" do
+      result = described_class.for_score(3001, elements)
+
+      expect(result).to eq high
+    end
+
+    it "returns a new grade scheme if the score is lower that the lowest" do
+      result = described_class.for_score(99, elements)
+
+      expect(result.level).to eq "Not yet on board"
+    end
   end
 end
