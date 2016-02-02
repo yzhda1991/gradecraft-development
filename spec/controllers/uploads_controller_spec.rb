@@ -30,5 +30,33 @@ RSpec.describe UploadsController do
   end
 
   describe "#destroy_upload_with_flash" do
+    subject { controller_instance.instance_eval { destroy_upload_with_flash } }
+    let(:submission_file) { create(:submission_file) }
+
+    before(:each) do
+      controller_instance.request = ActionDispatch::Request.new('rack.input' => [])
+      controller_instance.instance_variable_set(:@upload, submission_file)
+    end
+
+    it "destroys the upload" do
+      expect(submission_file).to receive(:destroy)
+      subject
+    end
+
+    context "upload destroys successfully" do
+      before { allow(submission_file).to receive(:destroy) { true }}
+      it "sets a success message" do
+        subject
+        expect(controller_instance.flash[:success]).to match(/File was successfully removed/)
+      end
+    end
+
+    context "upload fails to destroy" do
+      before { allow(submission_file).to receive(:destroy) { false }}
+      it "sets an alert message" do
+        subject
+        expect(controller_instance.flash[:alert]).to match(/File was deleted/)
+      end
+    end
   end
 end
