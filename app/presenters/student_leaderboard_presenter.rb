@@ -61,6 +61,8 @@ class StudentLeaderboardPresenter < Showtime::Presenter
       .includes(:team)
   end
 
+  private
+
   class LeaderboardStudentCollection
     include Enumerable
 
