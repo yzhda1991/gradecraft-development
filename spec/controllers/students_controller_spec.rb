@@ -48,29 +48,9 @@ describe StudentsController do
     end
 
     describe "GET leaderboard" do
-      before(:each) do
-        @team = create(:team, course: @course)
-        @student = create(:user)
-        @student.courses << @course
-        @student.teams << @team
-        @student_2 = create(:user)
-        @student_2.courses << @course
-      end
-
       it "shows the class leaderboard" do
         get :leaderboard
-        expect(assigns(:title)).to eq("Leaderboard")
         expect(response).to render_template(:leaderboard)
-      end
-
-      it "returns just the students on a team" do
-        get :leaderboard, :team_id => @team.id
-        expect(response).to render_template(:leaderboard)
-        expect(assigns(:students)).to eq([@student])
-      end
-
-      it "shows the badges students have earned" do
-        skip "implement"
       end
     end
 
