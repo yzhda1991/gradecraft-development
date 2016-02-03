@@ -40,6 +40,7 @@ RSpec.describe S3Manager::Encryption do
     let(:encrypted_client) { s3_manager.encrypted_client }
     let(:object_body) { File.new("jerry-was-here.doc", "w+b") }
     let(:put_encrypted_object) { s3_manager.put_encrypted_object(object_key, object_body) }
+    after(:all) { FileUtils.rm("jerry-was-here.doc") if File.exist?("jerry-was-here.doc") }
 
     describe "#put_encrypted_object" do
       subject { put_encrypted_object }
@@ -50,8 +51,6 @@ RSpec.describe S3Manager::Encryption do
         expect(s3_manager).to receive(:put_object_with_client).with(encrypted_client, object_key, file_path)
         subject
       end
-
-      after { FileUtils.rm("jerry-was-here.doc") if File.exist?("jerry-was-here.doc") }
     end
 
     describe "#get_encrypted_object" do
@@ -69,7 +68,7 @@ RSpec.describe S3Manager::Encryption do
       it "should get an AWS Seahorse object in response" do
         expect(subject.class).to eq(Seahorse::Client::Response)
       end
-      
+
       it "should have been sucessful" do
         expect(subject.successful?).to be_truthy
       end

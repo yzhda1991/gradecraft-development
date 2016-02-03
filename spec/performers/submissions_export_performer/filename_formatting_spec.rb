@@ -119,7 +119,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
     end
   end
-  
+
   describe "formatted_assignment_name" do
     subject { performer.instance_eval { formatted_assignment_name }}
 
@@ -128,7 +128,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       subject
     end
   end
-  
+
   describe "formatted_team_name" do
     subject { performer_with_team.instance_eval { formatted_team_name }}
 
@@ -142,13 +142,13 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     subject { performer.instance_eval { formatted_filename_fragment("ABCDEFGHIJKLMNOPQRSTUVWXYZ") }}
 
     it "sanitizes the fragment" do
-      allow(performer).to receive(:titleize_filename) { "this is a jocular output" } 
+      allow(performer).to receive(:titleize_filename) { "this is a jocular output" }
       expect(performer).to receive(:titleize_filename).with("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
       subject
     end
 
     it "doesn't truncate the final string" do
-      expect(subject).to eq("Abcdefghijklmnopqrstuvwxyz")  
+      expect(subject).to eq("Abcdefghijklmnopqrstuvwxyz")
     end
   end
 
@@ -165,12 +165,12 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     it "removes leading spaces" do
       expect(performer.instance_eval { titleize_filename("          garrett_rules") }).to \
-        eq("Garrett Rules")  
+        eq("Garrett Rules")
     end
 
     it "removes trailing spaces" do
       expect(performer.instance_eval { titleize_filename("garrett_sucks        ") }).to \
-        eq("Garrett Sucks")  
+        eq("Garrett Sucks")
     end
   end
 
@@ -187,12 +187,12 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     it "removes leading underscores" do
       expect(performer.instance_eval { sanitize_filename("____________garrett_rules") }).to \
-        eq("garrett_rules")  
+        eq("garrett_rules")
     end
 
     it "removes trailing underscores" do
       expect(performer.instance_eval { sanitize_filename("garrett_sucks__________") }).to \
-        eq("garrett_sucks")  
+        eq("garrett_sucks")
     end
   end
 
@@ -258,7 +258,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   describe "tmp_dir" do
     subject { performer.instance_eval { tmp_dir }}
     it "builds a temporary directory" do
-      expect(subject).to match(/\/tmp\/[\w\d-]+/) # match the tmp dir hash
+      expect(subject).to match(/\/(tmp|var\/folders)\/[\w\d-]+/) # match the tmp dir hash
     end
 
     it "caches the temporary directory" do
