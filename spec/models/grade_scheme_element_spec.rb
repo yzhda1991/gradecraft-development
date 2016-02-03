@@ -186,5 +186,11 @@ describe GradeSchemeElement do
 
       expect(result.level).to eq "Not yet on board"
     end
+
+    it "returns nil if the elements are empty" do
+      result = described_class.for_score(99, [])
+
+      expect(result).to be_nil
+    end
   end
 end
