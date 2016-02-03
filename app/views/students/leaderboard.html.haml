@@ -42,13 +42,12 @@
             %td{"data-title" => "Last Name"}= link_to student.last_name, student_path(student)
             - if presenter.display_pseudonyms?
               %td{"data-title" => "Pseudonym"}= student.display_name
-            %td{"data-title" => "Score"}= points student.cached_score_sql_alias
+            %td{"data-title" => "Score"}= points student.score
             - if presenter.has_teams?
               %td#team_for_course{"data-title" => "Team"}
                 = link_to student.team.name, student.team if student.team
             %td{"data-title" => "Grade"}
-              - unless @student_grade_schemes_by_id[student.id].nil?
-                = "#{@student_grade_schemes_by_id[student.id].name}"
+              = student.grade_scheme.try(:name)
             - if presenter.has_badges?
               %td#earned_badges{"data-title" => "Badges"}
                 - if @earned_badges_by_student_id[student.id]

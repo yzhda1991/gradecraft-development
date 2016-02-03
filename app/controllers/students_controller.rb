@@ -28,7 +28,6 @@ class StudentsController < ApplicationController
   #Course wide leaderboard - excludes auditors from view
   def leaderboard
     @earned_badges_by_student_id = earned_badges_by_student_id
-    @student_grade_schemes_by_id = [] #course_grade_scheme_by_student_id
     render :leaderboard, StudentLeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
@@ -117,17 +116,6 @@ class StudentsController < ApplicationController
   end
 
   private
-
-  # @mz todo: refactor and add specs, move out of controller
-  def course_grade_scheme_by_student_id
-    elements = GradeSchemeElement.unscoped.for_course(current_course).order_by_low_range.to_a
-    @students.inject({}) do |memo, student|
-      student_score = student.cached_score_sql_alias
-      student_grade_scheme = GradeSchemeElement.for_score(student_score, elements)
-
-      memo.merge student[:id] => student_grade_scheme
-    end
-  end
 
   def earned_badges_by_badge_id
     @earned_badges.inject({}) do |memo, earned_badge|

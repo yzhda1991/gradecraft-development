@@ -9,6 +9,11 @@ class StudentLeaderboardPresenter < Showtime::Presenter
     course.in_team_leaderboard? || course.character_names?
   end
 
+  def grade_scheme_elements
+    @grade_scheme_elements ||=
+      GradeSchemeElement.unscoped.for_course(course).order_by_low_range
+  end
+
   def has_badges?
     course.has_badges?
   end
@@ -66,6 +71,14 @@ class StudentLeaderboardPresenter < Showtime::Presenter
 
   class LeaderboardStudentDecorator < SimpleDelegator
     attr_reader :presenter
+
+    def grade_scheme
+      GradeSchemeElement.for_score(score, presenter.grade_scheme_elements.to_a)
+    end
+
+    def score
+      self.cached_score_sql_alias
+    end
 
     def team
       presenter.team_memberships.find { |tm| tm.student_id == self.id }.try(:team)
