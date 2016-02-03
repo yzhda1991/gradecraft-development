@@ -32,7 +32,7 @@
         %th{:scope => "col", "data-dynatable-no-sort" => "true", :style => "min-width: 120px" }
           %span.sr-only Actions
       %tbody
-        - @students.each_with_index do |student, index|
+        - presenter.students.each_with_index do |student, index|
           %tr
             %td
               = div_for student do
@@ -44,9 +44,8 @@
               %td{"data-title" => "Pseudonym"}= student.display_name
             %td{"data-title" => "Score"}= points student.cached_score_sql_alias
             - if presenter.has_teams?
-              - student_team = @teams_by_student_id[student.id]
               %td#team_for_course{"data-title" => "Team"}
-                = link_to student_team.try(:name), student_team if student_team
+                = link_to student.team.name, student.team if student.team
             %td{"data-title" => "Grade"}
               - unless @student_grade_schemes_by_id[student.id].nil?
                 = "#{@student_grade_schemes_by_id[student.id].name}"

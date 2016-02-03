@@ -1,8 +1,8 @@
-require "spec_helper"
+require "active_record_spec_helper"
 require "./app/presenters/student_leaderboard_presenter"
 
 describe StudentLeaderboardPresenter do
-  let(:course) { double(:course) }
+  let(:course) { create(:course) }
   subject { described_class.new course: course }
 
   describe "#display_pseudonyms?" do
@@ -33,6 +33,32 @@ describe StudentLeaderboardPresenter do
     end
   end
 
+  describe "#students" do
+    let!(:student1) { create :student_course_membership, course: course }
+    let!(:student2) { create :student_course_membership, course: course }
+    let(:team) { create :team, course: course }
+
+    it "returns a list of users that are being graded" do
+      expect(subject.students.map(&:id)).to eq [student1, student2].map(&:user_id)
+    end
+
+    it "returns a list of users on the team that are being graded" do
+      create :team_membership, student: student1.user, team: team
+      allow(subject).to receive(:team_id).and_return team.id
+      allow(subject).to receive(:team).and_return team
+      expect(subject.students.map(&:id)).to eq [student1.user_id]
+    end
+  end
+
+  describe "#student_ids" do
+    let!(:student1) { create :student_course_membership, course: course }
+    let!(:student2) { create :student_course_membership, course: course }
+
+    it "returns the user ids for the students" do
+      expect(subject.student_ids).to eq [student1, student2].map(&:user_id)
+    end
+  end
+
   describe "#team" do
     subject { described_class.new course: course, team_id: 123 }
 
@@ -49,6 +75,17 @@ describe StudentLeaderboardPresenter do
       team = double(:team)
       allow(course).to receive(:teams).and_return [team]
       expect(subject.teams).to eq [team]
+    end
+  end
+
+  describe "#team_memberships" do
+    let!(:student1) { create :student_course_membership, course: course }
+    let!(:student2) { create :student_course_membership, course: course }
+    let(:team) { create :team, course: course }
+
+    it "returns the team memberships for all the students" do
+      membership = create :team_membership, student: student1.user, team: team
+      expect(subject.team_memberships).to eq [membership]
     end
   end
 

@@ -17,6 +17,16 @@ class StudentLeaderboardPresenter < Showtime::Presenter
     course.has_teams?
   end
 
+  def student_ids
+    students.map(&:id)
+  end
+
+  def students
+    @students ||= LeaderboardStudentCollection.new(User
+      .unscoped_students_being_graded_for_course(course, team)
+      .order_by_high_score, self)
+  end
+
   def team_id
     properties[:team_id]
   end
@@ -31,5 +41,39 @@ class StudentLeaderboardPresenter < Showtime::Presenter
 
   def title
     "Leaderboard"
+  end
+
+  def team_memberships
+    @team_memberships ||= TeamMembership.for_course(course).
+      where(student_id: student_ids)
+      .includes(:team)
+  end
+
+  class LeaderboardStudentCollection
+    include Enumerable
+
+    attr_reader :presenter
+
+    def initialize(students, presenter)
+      @students = students
+      @presenter = presenter
+    end
+
+    def each
+      @students.each { |student| yield LeaderboardStudentDecorator.new(student, presenter) }
+    end
+  end
+
+  class LeaderboardStudentDecorator < SimpleDelegator
+    attr_reader :presenter
+
+    def team
+      presenter.team_memberships.find { |tm| tm.student_id == self.id }.try(:team)
+    end
+
+    def initialize(student, presenter)
+      @presenter = presenter
+      super student
+    end
   end
 end

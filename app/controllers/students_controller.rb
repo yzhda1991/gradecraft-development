@@ -11,7 +11,7 @@ class StudentsController < ApplicationController
 
     @teams = current_course.teams
 
-    if team_filter_active?
+    if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
       @students = current_course.students_being_graded_by_team(@team)
     else
@@ -27,20 +27,8 @@ class StudentsController < ApplicationController
 
   #Course wide leaderboard - excludes auditors from view
   def leaderboard
-    if team_filter_active?
-      team = current_course.teams.find_by id: params[:team_id]
-      # fetch user ids for all students in the active team
-      @students = User.unscoped_students_being_graded_for_course(current_course, team).order_by_high_score
-    else
-      # fetch user ids for all students in the course, regardless of team
-      # cached_score_sql_alias is coming from custom unscoped_students_being_graded_for_course SQL
-
-      @students = User.unscoped_students_being_graded_for_course(current_course).order_by_high_score
-    end
-
-    @teams_by_student_id = teams_by_student_id
     @earned_badges_by_student_id = earned_badges_by_student_id
-    @student_grade_schemes_by_id = course_grade_scheme_by_student_id
+    @student_grade_schemes_by_id = [] #course_grade_scheme_by_student_id
     render :leaderboard, StudentLeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
@@ -167,22 +155,4 @@ class StudentsController < ApplicationController
   def student_earned_badges_for_entire_course
     @student_earned_badges ||= EarnedBadge.where(course: current_course).where("student_id in (?)", @student_ids).includes(:badge)
   end
-
-  def teams_by_student_id
-    @teams_by_student_id ||= team_memberships_for_course.inject({}) do |memo, tm|
-      memo.merge tm.student_id => tm.team
-    end
-  end
-
-  def team_memberships_for_course
-    @team_memberships_for_course ||= TeamMembership.joins(:team)
-      .where("teams.course_id = ?", current_course.id)
-      .where(student_id: @student_ids)
-      .includes(:team)
-  end
-
-  def team_filter_active?
-    params[:team_id].present?
-  end
-
 end
