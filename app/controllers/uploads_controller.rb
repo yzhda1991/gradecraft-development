@@ -1,10 +1,11 @@
 class UploadsController < ApplicationController
+  before_filter :fetch_upload_with_model, only: :remove
+
   def remove
-    @upload = upload_klass.find params[:upload_id]
     @upload.delete_from_s3
 
     if @upload.exists_on_s3?
-      flash[:alert] = "File was not successfully deleted from the server."
+      flash[:alert] = "File failed to delete from the server."
     else
       destroy_upload_with_flash
     end
@@ -13,6 +14,10 @@ class UploadsController < ApplicationController
   end
 
   protected
+
+  def fetch_upload_with_model
+    @upload = upload_klass.find params[:upload_id].to_i
+  end
 
   def upload_klass
     params[:model].classify.constantize
