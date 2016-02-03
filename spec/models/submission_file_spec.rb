@@ -175,4 +175,16 @@ describe SubmissionFile do
     subject.submission.save!
     expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{submission_file.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
   end
+
+  describe "S3File inclusion" do
+    let(:submission_file) { build(:submission_file) }
+
+    it "can be deleted from s3" do
+      expect(submission_file.respond_to?(:delete_from_s3)).to be_truthy
+    end
+
+    it "can check whether it exists on s3" do
+      expect(submission_file.respond_to?(:exists_on_s3?)).to be_truthy
+    end
+  end
 end
