@@ -41,7 +41,7 @@ feature "reviewing a group" do
         click_button "Update group"
       end
 
-      expect(page).to have_notification_message('success', "Group! group successfully updated")
+      expect(page).to have_notification_message('notice', "Your group was successfully updated.")
     end
   end
 end
