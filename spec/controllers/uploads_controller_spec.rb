@@ -45,6 +45,11 @@ RSpec.describe UploadsController do
         expect(submission_file).to receive(:destroy)
         subject
       end
+
+      it "destroys the upload with flash" do
+        expect(controller).to receive(:destroy_upload_with_flash)
+        subject
+      end
     end
 
     context "upload failed to delete from s3" do
