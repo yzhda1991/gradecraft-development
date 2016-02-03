@@ -135,63 +135,59 @@ RSpec.describe UploadsController do
     end
   end
 
-  context ":model param is GradeFile" do
-    let(:grade_file) { create(:grade_file) }
-    subject { get :remove, model: "GradeFile", upload_id: grade_file.id }
+  describe "all possible upload file classes" do
+    before(:each) { subject }
 
-    it "returns a GradeFile object" do
-      subject
-      expect(assigns(:upload).class).to eq(GradeFile)
+    context ":model param is GradeFile" do
+      let(:grade_file) { create(:grade_file) }
+      subject { get :remove, model: "GradeFile", upload_id: grade_file.id }
+
+      it "returns a GradeFile object" do
+        expect(assigns(:upload).class).to eq(GradeFile)
+      end
+
+      it "returns the correct GradeFile" do
+        expect(assigns(:upload).id).to eq(grade_file.id)
+      end
     end
 
-    it "returns the correct GradeFile" do
-      subject
-      expect(assigns(:upload).id).to eq(grade_file.id)
-    end
-  end
+    context ":model param is ChallengeFile" do
+      let(:challenge_file) { create(:challenge_file) }
+      subject { get :remove, model: "ChallengeFile", upload_id: challenge_file.id }
 
-  context ":model param is ChallengeFile" do
-    let(:challenge_file) { create(:challenge_file) }
-    subject { get :remove, model: "ChallengeFile", upload_id: challenge_file.id }
+      it "returns a ChallengeFile object" do
+        expect(assigns(:upload).class).to eq(ChallengeFile)
+      end
 
-    it "returns a ChallengeFile object" do
-      subject
-      expect(assigns(:upload).class).to eq(ChallengeFile)
+      it "returns the correct ChallengeFile" do
+        expect(assigns(:upload).id).to eq(challenge_file.id)
+      end
     end
 
-    it "returns the correct ChallengeFile" do
-      subject
-      expect(assigns(:upload).id).to eq(challenge_file.id)
-    end
-  end
+    context ":model param is BadgeFile" do
+      let(:badge_file) { create(:badge_file) }
+      subject { get :remove, model: "BadgeFile", upload_id: badge_file.id }
 
-  context ":model param is BadgeFile" do
-    let(:badge_file) { create(:badge_file) }
-    subject { get :remove, model: "BadgeFile", upload_id: badge_file.id }
+      it "returns a BadgeFile object" do
+        expect(assigns(:upload).class).to eq(BadgeFile)
+      end
 
-    it "returns a BadgeFile object" do
-      subject
-      expect(assigns(:upload).class).to eq(BadgeFile)
+      it "returns the correct BadgeFile" do
+        expect(assigns(:upload).id).to eq(badge_file.id)
+      end
     end
 
-    it "returns the correct BadgeFile" do
-      subject
-      expect(assigns(:upload).id).to eq(badge_file.id)
-    end
-  end
+    context ":model param is AssignmentFile" do
+      let(:assignment_file) { create(:assignment_file) }
+      subject { get :remove, model: "AssignmentFile", upload_id: assignment_file.id }
 
-  context ":model param is AssignmentFile" do
-    let(:assignment_file) { create(:assignment_file) }
-    subject { get :remove, model: "AssignmentFile", upload_id: assignment_file.id }
+      it "returns a AssignmentFile object" do
+        expect(assigns(:upload).class).to eq(AssignmentFile)
+      end
 
-    it "returns a AssignmentFile object" do
-      subject
-      expect(assigns(:upload).class).to eq(AssignmentFile)
-    end
-
-    it "returns the correct AssignmentFile" do
-      subject
-      expect(assigns(:upload).id).to eq(assignment_file.id)
+      it "returns the correct AssignmentFile" do
+        expect(assigns(:upload).id).to eq(assignment_file.id)
+      end
     end
   end
 end
