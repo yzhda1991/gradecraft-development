@@ -50,9 +50,8 @@
               = student.grade_scheme.try(:name)
             - if presenter.has_badges?
               %td#earned_badges{"data-title" => "Badges"}
-                - if @earned_badges_by_student_id[student.id]
-                  - @earned_badges_by_student_id[student.id].each do |badge|
-                    %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
+                - student.earned_badges.each do |badge|
+                  %img{:src => badge.icon, :alt => badge.name, :width => "20", :title => badge.name}
               %td{:style => "display: none"}= student.earned_badges_for_course(presenter.course).count
             %td{"data-title" => "Options"}
               .right

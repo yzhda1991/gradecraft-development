@@ -9,6 +9,13 @@ class StudentLeaderboardPresenter < Showtime::Presenter
     course.in_team_leaderboard? || course.character_names?
   end
 
+  def earned_badges
+    @earned_badges ||=
+      EarnedBadge.for_course(course)
+        .where(student_id: student_ids)
+        .includes(:badge)
+  end
+
   def grade_scheme_elements
     @grade_scheme_elements ||=
       GradeSchemeElement.unscoped.for_course(course).order_by_low_range
@@ -71,6 +78,10 @@ class StudentLeaderboardPresenter < Showtime::Presenter
 
   class LeaderboardStudentDecorator < SimpleDelegator
     attr_reader :presenter
+
+    def earned_badges
+      presenter.earned_badges.select { |eb| eb.student_id == self.id }
+    end
 
     def grade_scheme
       GradeSchemeElement.for_score(score, presenter.grade_scheme_elements.to_a)

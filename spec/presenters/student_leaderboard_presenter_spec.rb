@@ -19,6 +19,17 @@ describe StudentLeaderboardPresenter do
     end
   end
 
+  describe "#earned_badges" do
+    let(:student1) { create :student_course_membership, course: course }
+    let(:student2) { create :student_course_membership, course: course }
+    let!(:earned_badge1) { create :earned_badge, course: course, student: student1.user }
+    let!(:earned_badge2) { create :earned_badge, course: course, student: student2.user }
+
+    it "returns the earned badges for all the students" do
+      expect(subject.earned_badges).to eq [earned_badge1, earned_badge2]
+    end
+  end
+
   describe "#grade_scheme_elements" do
     let!(:high_grade_scheme_element) { create :grade_scheme_element_high, course: course }
     let!(:low_grade_scheme_element) { create :grade_scheme_element_low, course: course }
@@ -80,7 +91,7 @@ describe StudentLeaderboardPresenter do
   end
 
   describe "#teams" do
-    it "returns the teams on the coursesubmission_presenter" do
+    it "returns the teams on the course" do
       team = double(:team)
       allow(course).to receive(:teams).and_return [team]
       expect(subject.teams).to eq [team]

@@ -27,7 +27,6 @@ class StudentsController < ApplicationController
 
   #Course wide leaderboard - excludes auditors from view
   def leaderboard
-    @earned_badges_by_student_id = earned_badges_by_student_id
     render :leaderboard, StudentLeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
@@ -126,21 +125,5 @@ class StudentsController < ApplicationController
       end
       memo
     end
-  end
-
-  def earned_badges_by_student_id
-    @earned_badges_by_student_id ||= student_earned_badges_for_entire_course.inject({}) do |memo, earned_badge|
-      student_id = earned_badge.student_id
-      if memo[student_id]
-        memo[student_id] << earned_badge
-      else
-        memo[student_id] = [earned_badge]
-      end
-      memo
-    end
-  end
-
-  def student_earned_badges_for_entire_course
-    @student_earned_badges ||= EarnedBadge.where(course: current_course).where("student_id in (?)", @student_ids).includes(:badge)
   end
 end
