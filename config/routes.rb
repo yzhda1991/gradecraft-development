@@ -328,6 +328,7 @@ GradeCraft::Application.routes.draw do
   #15. Uploads
   resource :uploads do
     get :remove
+    get :stuff
     get :remove_submission_file
   end
 
