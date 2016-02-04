@@ -86,7 +86,9 @@ class StudentLeaderboardPresenter < Showtime::Presenter
     end
 
     def grade_scheme
-      GradeSchemeElement.for_score(score, presenter.grade_scheme_elements.to_a)
+      scheme = presenter.course.grade_scheme_elements.for_score(score)
+      puts scheme.inspect
+      scheme
     end
 
     def score
