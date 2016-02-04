@@ -1,21 +1,16 @@
-# encoding: utf-8
 require 'rails_spec_helper'
-include CourseTerms
 
 describe "students/leaderboard" do
+  include CourseTerms
 
-  before(:all) do
-    @course = create(:course)
-    @student_1 = create(:user)
-    @student_2 = create(:user)
-    @student_3 = create(:user)
-    @course.students << [@student_1, @student_2, @student_3]
-    @students = @course.students
-  end
+  let(:course) { create :course }
+  let(:presenter) { StudentLeaderboardPresenter.new(course: course) }
 
   before(:each) do
+    @students = course.students
     assign(:title, "Leaderboard")
-    allow(view).to receive(:current_course).and_return(@course)
+    allow(view).to receive(:current_course).and_return(course)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   it "renders successfully" do

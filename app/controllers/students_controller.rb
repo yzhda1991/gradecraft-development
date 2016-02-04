@@ -1,6 +1,4 @@
 class StudentsController < ApplicationController
-  helper_method :predictions
-
   respond_to :html, :json
 
   before_filter :ensure_staff?, :except=> [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus ]
@@ -13,7 +11,7 @@ class StudentsController < ApplicationController
 
     @teams = current_course.teams
 
-    if team_filter_active?
+    if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])
       @students = current_course.students_being_graded_by_team(@team)
     else
@@ -29,25 +27,7 @@ class StudentsController < ApplicationController
 
   #Course wide leaderboard - excludes auditors from view
   def leaderboard
-    @title = "Leaderboard"
-
-    @teams = current_course.teams
-
-    if team_filter_active?
-      # fetch user ids for all students in the active team
-      @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
-      @students = User.unscoped_students_being_graded_for_course(current_course, @team).order_by_high_score
-    else
-      # fetch user ids for all students in the course, regardless of team
-      # cached_score_sql_alias is coming from custom unscoped_students_being_graded_for_course SQL
-
-      @students = User.unscoped_students_being_graded_for_course(current_course).order_by_high_score
-    end
-
-    @student_ids = @students.collect {|s| s[:id] }
-    @teams_by_student_id = teams_by_student_id
-    @earned_badges_by_student_id = earned_badges_by_student_id
-    @student_grade_schemes_by_id = course_grade_scheme_by_student_id
+    render :leaderboard, StudentLeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
   #Students' primary page: displays all assignments and
@@ -134,36 +114,7 @@ class StudentsController < ApplicationController
     redirect_to session[:return_to] || student_path(@student)
   end
 
-  protected
-
-  # @mz todo: refactor and add specs, move out of controller
-  def course_grade_scheme_by_student_id
-    @students.inject({}) do |memo, student|
-      student_score = student.cached_score_sql_alias
-      student_grade_scheme = nil
-
-      course_grade_scheme_elements.each do |grade_scheme|
-        if student_score >= grade_scheme.low_range and student_score <= grade_scheme.high_range
-          student_grade_scheme = grade_scheme
-          break
-        end
-      end
-
-      if student_grade_scheme.nil? and course_grade_scheme_elements.present?
-        if student_score < course_grade_scheme_elements.first.low_range
-          student_grade_scheme = GradeSchemeElement.new(level: "Not yet on board")
-        elsif student_score > course_grade_scheme_elements.last.high_range
-          student_grade_scheme = course_grade_scheme_elements.last
-        end
-      end
-
-      memo.merge student[:id] => student_grade_scheme
-    end
-  end
-
-  def course_grade_scheme_elements
-    @course_grade_scheme_elements ||= GradeSchemeElement.unscoped.where(course_id: current_course.id).order("low_range ASC")
-  end
+  private
 
   def earned_badges_by_badge_id
     @earned_badges.inject({}) do |memo, earned_badge|
@@ -175,38 +126,4 @@ class StudentsController < ApplicationController
       memo
     end
   end
-
-  def earned_badges_by_student_id
-    @earned_badges_by_student_id ||= student_earned_badges_for_entire_course.inject({}) do |memo, earned_badge|
-      student_id = earned_badge.student_id
-      if memo[student_id]
-        memo[student_id] << earned_badge
-      else
-        memo[student_id] = [earned_badge]
-      end
-      memo
-    end
-  end
-
-  def student_earned_badges_for_entire_course
-    @student_earned_badges ||= EarnedBadge.where(course: current_course).where("student_id in (?)", @student_ids).includes(:badge)
-  end
-
-  def teams_by_student_id
-    @teams_by_student_id ||= team_memberships_for_course.inject({}) do |memo, tm|
-      memo.merge tm.student_id => tm.team
-    end
-  end
-
-  def team_memberships_for_course
-    @team_memberships_for_course ||= TeamMembership.joins(:team)
-      .where("teams.course_id = ?", current_course.id)
-      .where(student_id: @student_ids)
-      .includes(:team)
-  end
-
-  def team_filter_active?
-    params[:team_id].present?
-  end
-
 end

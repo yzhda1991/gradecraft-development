@@ -34,6 +34,17 @@ describe GradeSchemeElement do
     end
   end
 
+  describe ".default" do
+    subject { described_class.default }
+    it "returns a new grade scheme element" do
+      expect(subject).to_not be_persisted
+    end
+
+    it "returns a default level" do
+      expect(subject.level).to eq "Not yet on board"
+    end
+  end
+
   describe "#name" do
     it 'returns the name as the level and letter if both are present' do
       subject.level = "Kvothe Kingkiller"
@@ -96,4 +107,27 @@ describe GradeSchemeElement do
     end
   end
 
+  describe "#within_range?" do
+    subject { build(:grade_scheme_element, low_range: 1000, high_range: 1999) }
+
+    it "returns true if the score is between the low and high ranges" do
+      expect(subject).to be_within_range 1500
+    end
+
+    it "returns true if the score is equal to the low range" do
+      expect(subject).to be_within_range 1000
+    end
+
+    it "returns true if the score is equal to the high range" do
+      expect(subject).to be_within_range 1999
+    end
+
+    it "returns false if the score is below the low range" do
+      expect(subject).to_not be_within_range 999
+    end
+
+    it "returns false if the score is higher the high range" do
+      expect(subject).to_not be_within_range 2000
+    end
+  end
 end

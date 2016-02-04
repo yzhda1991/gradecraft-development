@@ -9,7 +9,12 @@ class GradeSchemeElement < ActiveRecord::Base
 
   default_scope { order 'high_range DESC' }
 
+  scope :for_course, -> (course_id) { where(course_id: course_id) }
   scope :order_by_low_range, -> { order 'low_range ASC' }
+
+  def self.default
+    GradeSchemeElement.new(level: "Not yet on board")
+  end
 
   # Getting the name of the Grade Scheme Element - the Level if it's present, the Letter if not
   def name
@@ -38,5 +43,9 @@ class GradeSchemeElement < ActiveRecord::Base
   #Calculating how far a student is through this level
   def progress_percent(student)
     ((student.cached_score_for_course(self.course) - low_range)/(range)) * 100
+  end
+
+  def within_range?(score)
+    score >= self.low_range && score <= self.high_range
   end
 end
