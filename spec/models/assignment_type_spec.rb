@@ -2,11 +2,7 @@ require "active_record_spec_helper"
 
 describe AssignmentType do
   let!(:world) do
-    World.create
-      .create_course
-      .create_student
-      .create_assignment
-      .create_grade
+    World.create.with(:course, :student, :assignment, :grade)
   end
 
   describe "validations" do

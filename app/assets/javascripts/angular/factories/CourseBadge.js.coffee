@@ -7,6 +7,5 @@
         @description = attrs.description if attrs.description
         @point_total = attrs.point_total if attrs.point_total
         @icon = attrs.icon if attrs.icon
-        @multiple = attrs.multiple if attrs.multiple
-
+        @multiple = !!attrs.can_earn_multiple_times
   ]

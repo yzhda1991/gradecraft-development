@@ -1,14 +1,9 @@
-@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'CriterionGrade','CriterionService', '$http', ($scope, Restangular, Criterion, CourseBadge, CriterionGrade, CriterionService, $http) ->
+@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'CriterionGrade','RubricService', '$http', ($scope, Restangular, Criterion, CourseBadge, CriterionGrade, RubricService, $http) ->
 
-  $scope.criteria = []
-  $scope.courseBadges = {}
   $scope.criterionGrades = {} # index in hash with criterion_id as key
   $scope.gsiGradeStatuses = ["In Progress", "Graded"]
   $scope.professorGradeStatuses = ["In Progress", "Graded", "Released"]
   $scope.urlId = parseInt(window.location.pathname.split('/')[2])
-
-  $scope.pointsPossible = 0
-  $scope.pointsGiven = 0
 
   $scope.init = (rubricId, assignmentId, studentId, criterionGrades, gradeStatus, releaseNecessary, returnURL)->
     $scope.rubricId = rubricId
@@ -28,10 +23,14 @@
 
     $scope.addCriterionGrades(criterionGrades)
 
-  CriterionService.getBadges($scope.urlId).success (courseBadges)->
-    $scope.addCourseBadges(courseBadges)
-  CriterionService.getCriteria($scope.urlId).success (criteria)->
-    $scope.addCriteria(criteria)
+  RubricService.getBadges()
+  RubricService.getCriteria($scope.urlId, $scope)
+
+  $scope.courseBadges = RubricService.badges
+  $scope.criteria = RubricService.criteria
+
+  $scope.pointsPossible = ()->
+    RubricService.pointsPossible()
 
   # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->
@@ -42,7 +41,7 @@
     points or 0
 
   $scope.pointsDifference = ()->
-    $scope.pointsPossible - $scope.pointsGiven()
+    $scope.pointsPossible() - $scope.pointsGiven()
 
   $scope.pointsRemaining = ()->
     pointsRemaining = $scope.pointsDifference()
@@ -169,9 +168,7 @@
 
   $scope.levelBadgesParams = ()->
     params = []
-    # alert("# of graded criteria:" + $scope.gradedCriteria.length)
     angular.forEach($scope.gradedCriteria(), (criterion, index)->
-      # alert(criterion.name)
       # grab the selected level for the active criterion
       level = criterion.selectedLevel
       angular.forEach(level.badges, (badge, index)->
@@ -194,7 +191,7 @@
       points_given: $scope.pointsGiven(),
       rubric_id: $scope.rubricId,
       student_id: $scope.studentId,
-      points_possible: $scope.pointsPossible,
+      points_possible: $scope.pointsPossible(),
       criterion_grades: $scope.criteriaParams(),
       level_badges: $scope.levelBadgesParams(),
       level_ids: $scope.selectedLevelIds(),
@@ -205,8 +202,6 @@
   $scope.submitGrade = ()->
     self = this
     if confirm "Are you sure you want to submit the grade for this assignment?"
-      # alert(self.gradedRubricParams().level_badges.length)
-
       # !!! Document any updates to this call in the specs: /spec/support/api_calls/rubric_grade_put.rb
       $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", self.gradedRubricParams()).success(
         (data)->
@@ -222,22 +217,6 @@
       criterionGrade = new CriterionGrade(rg)
       $scope.criterionGrades[rg.criterion_id] = criterionGrade
     )
-
-  $scope.addCourseBadges = (courseBadges)->
-    angular.forEach(courseBadges, (badge, index)->
-      courseBadge = new CourseBadge(badge)
-      $scope.courseBadges[badge.id] = courseBadge
-    )
-
-  $scope.addCriteria = (existingCriteria)->
-    angular.forEach(existingCriteria, (criterion, index)->
-      criterionObject = new Criterion(criterion, $scope)
-      $scope.criteria.push criterionObject
-      $scope.pointsPossible += criterionObject.max_points
-    )
-
-  $scope.existingCriteria = []
-
 
   $scope.froalaOptions = {
     inlineMode: false,

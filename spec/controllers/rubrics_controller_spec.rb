@@ -42,9 +42,7 @@ describe RubricsController do
         :design,
         :create,
         :destroy,
-        :update,
-        :existing_criteria,
-        :course_badges
+        :update
       ].each do |route|
           it "#{route} redirects to root" do
             expect(get route, {:assignment_id => 1, :id => "1"}).to redirect_to(:root)

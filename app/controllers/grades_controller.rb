@@ -451,7 +451,7 @@ class GradesController < ApplicationController
   end
 
   def rubric_criteria_with_levels
-    @rubric_criteria_with_levels ||= @rubric.criteria.order(:order).includes(:levels)
+    @rubric_criteria_with_levels ||= @rubric.criteria.ordered.includes(:levels)
   end
 
   def set_assignment

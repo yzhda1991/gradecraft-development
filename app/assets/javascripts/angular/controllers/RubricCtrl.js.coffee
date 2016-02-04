@@ -1,7 +1,6 @@
-@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'CriterionService', '$http', ($scope, Restangular, Criterion, CourseBadge, CriterionService, $http) ->
+@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'RubricService', '$http', ($scope, Restangular, Criterion, CourseBadge, RubricService, $http) ->
   Restangular.setRequestSuffix('.json')
-  $scope.criteria = []
-  $scope.courseBadges = {}
+
   $scope.savedCriterionCount = 0
   $scope.urlId = parseInt(window.location.pathname.split('/')[2])
 
@@ -9,10 +8,11 @@
     $scope.rubricId = rubricId
     $scope.pointTotal = parseInt(pointTotal)
 
-  CriterionService.getBadges($scope.urlId).success (courseBadges)->
-    $scope.addCourseBadges(courseBadges)
-  CriterionService.getCriteria($scope.urlId).success (criteria)->
-    $scope.addCriteria(criteria)
+  RubricService.getBadges()
+  RubricService.getCriteria($scope.urlId, $scope)
+
+  $scope.courseBadges = RubricService.badges
+  $scope.criteria = RubricService.criteria
 
   # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->
@@ -49,19 +49,6 @@
 
   $scope.countSavedCriterion = () ->
     $scope.savedCriterionCount += 1
-
-  $scope.addCourseBadges = (courseBadges)->
-    angular.forEach(courseBadges, (badge, index)->
-      courseBadge = new CourseBadge(badge)
-      $scope.courseBadges[badge.id] = courseBadge
-    )
-
-  $scope.addCriteria = (existingCriteria)->
-    angular.forEach(existingCriteria, (em, index)->
-      emProto = new Criterion(em, $scope)
-      $scope.countSavedCriterion() # indicate saved criterion present
-      $scope.criteria.push emProto
-    )
 
   $scope.newCriterion = ()->
     m = new Criterion(null, $scope)
