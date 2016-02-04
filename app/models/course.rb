@@ -186,6 +186,12 @@ class Course < ActiveRecord::Base
   end
 
   def copy(attributes={})
+=begin
+    ModelCopier.new(self).copy(:badges,
+                               [:assignment_types, { course_id: :id }],
+                               :challenges,
+                               :grade_scheme_elements)
+=end
     copy = self.dup
     copy.name.prepend "Copy of "
     copy.save unless self.new_record?
