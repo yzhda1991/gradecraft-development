@@ -98,7 +98,7 @@ class Course < ActiveRecord::Base
     c.has_many :challenges
     c.has_many :challenge_grades, :through => :challenges
     c.has_many :earned_badges
-    c.has_many :grade_scheme_elements
+    c.has_many :grade_scheme_elements, -> { extending GradeSchemeElementScoringExtension }
     c.has_many :grades
     c.has_many :groups
     c.has_many :group_memberships

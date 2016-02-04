@@ -97,6 +97,49 @@ describe Course do
     end
   end
 
+  describe "#grade_scheme_elements", focus: true do
+    let!(:high) { create(:grade_scheme_element, low_range: 2001, high_range: 3000, course: subject) }
+    let!(:low) { create(:grade_scheme_element, low_range: 100, high_range: 1000, course: subject) }
+    let!(:middle) { create(:grade_scheme_element, low_range: 1001, high_range: 2000, course: subject) }
+
+    describe "#for_score" do
+      it "returns the grade scheme element that falls within that range" do
+        result = subject.grade_scheme_elements.for_score(1100)
+
+        expect(result).to eq middle
+      end
+
+      it "returns the highest grade scheme if the score if greater than the highest" do
+        result = subject.grade_scheme_elements.for_score(3001)
+
+        expect(result).to eq high
+      end
+
+      it "returns a new grade scheme if the score is lower that the lowest" do
+        result = subject.grade_scheme_elements.for_score(99)
+
+        expect(result.level).to eq "Not yet on board"
+      end
+
+      it "handles no grade scheme elements" do
+        subject.grade_scheme_elements.delete_all
+
+        result = subject.grade_scheme_elements.for_score(99)
+
+        expect(result).to be_nil
+      end
+
+      it "does not include other courses" do
+        another_course = create :course
+        create :grade_scheme_element, low_range: 0, high_range: 100, course: another_course
+
+        result = subject.grade_scheme_elements.for_score(99)
+
+        expect(result.id).to be_nil
+      end
+    end
+  end
+
   describe "#staff" do
     it "returns an alphabetical list of the staff in the course" do
       course = create(:course)
