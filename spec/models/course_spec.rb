@@ -97,7 +97,7 @@ describe Course do
     end
   end
 
-  describe "#grade_scheme_elements", focus: true do
+  describe "#grade_scheme_elements" do
     let!(:high) { create(:grade_scheme_element, low_range: 2001, high_range: 3000, course: subject) }
     let!(:low) { create(:grade_scheme_element, low_range: 100, high_range: 1000, course: subject) }
     let!(:middle) { create(:grade_scheme_element, low_range: 1001, high_range: 2000, course: subject) }
