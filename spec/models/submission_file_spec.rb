@@ -121,7 +121,7 @@ describe SubmissionFile do
       group_assignment = build(:assignment, grade_scope: "Group")
       group_submission = build(:submission, course: course, assignment: group_assignment, group: group)
       group_file = group_submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg'))
-      expect(group_file.owner_name).to eq(group.name)
+      expect(group_file.owner_name).to eq("Group-Name")
     end
   end
 

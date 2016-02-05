@@ -74,7 +74,7 @@ class SubmissionFile < ActiveRecord::Base
 
   def owner_name
     if submission.assignment.grade_scope == "Group"
-      submission.group.name
+      submission.group.name.gsub(/\s/, "-")
     else
       "#{submission.student.last_name}-#{submission.student.first_name}"
     end
