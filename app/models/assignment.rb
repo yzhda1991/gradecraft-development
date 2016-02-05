@@ -79,10 +79,12 @@ class Assignment < ActiveRecord::Base
   delegate :student_weightable?, to: :assignment_type
 
   def copy(attributes={})
-    copy = ModelCopier.new(self).copy(associations: [:assignment_score_levels],
-                                      options: { prepend: { name: "Copy of "}})
-    copy.rubric = self.rubric.copy if self.rubric.present?
-    copy
+    ModelCopier.new(self).copy(attributes: attributes,
+                               associations: [:assignment_score_levels],
+                               options: { prepend: { name: "Copy of "},
+                                          overrides: [->(copy) {
+                                  copy.rubric = self.rubric.copy if self.rubric.present?
+                               }]})
   end
 
   def to_json(options = {})
