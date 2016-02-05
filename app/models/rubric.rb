@@ -19,9 +19,6 @@ class Rubric < ActiveRecord::Base
   end
 
   def copy(attributes={})
-    copy = self.dup
-    copy.save unless self.new_record?
-    copy.criteria << self.criteria.map(&:copy)
-    copy
+    ModelCopier.new(self).copy(attributes: attributes, associations: [:criteria])
   end
 end
