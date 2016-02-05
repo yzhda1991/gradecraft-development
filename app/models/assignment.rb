@@ -79,11 +79,8 @@ class Assignment < ActiveRecord::Base
   delegate :student_weightable?, to: :assignment_type
 
   def copy(attributes={})
-    copy = self.dup
-    copy.name.prepend "Copy of "
-    copy.copy_attributes(attributes)
-    copy.save unless self.new_record?
-    copy.assignment_score_levels << self.assignment_score_levels.map(&:copy)
+    copy = ModelCopier.new(self).copy(associations: [:assignment_score_levels],
+                                      options: { prepend: { name: "Copy of "}})
     copy.rubric = self.rubric.copy if self.rubric.present?
     copy
   end
@@ -191,7 +188,7 @@ class Assignment < ActiveRecord::Base
     "select distinct(submission_id) from submission_files where file_missing = ?"
   end
 
-  # #students_with_submissions methods 
+  # #students_with_submissions methods
 
   def students_with_submissions
     User.order_by_name
