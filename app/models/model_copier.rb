@@ -8,6 +8,7 @@ class ModelCopier
   def copy(options={})
     @copied = original.dup
     copied.copy_attributes options.delete(:attributes) {{}}
+    handle_options options.delete(:options) {{}}
     copy_associations options.delete(:associations) {[]}
     copied
   end
@@ -16,6 +17,16 @@ class ModelCopier
 
   def copy_associations(associations)
     ModelAssociationCopier.new(original, copied).copy([associations].flatten)
+  end
+
+  def handle_options(options)
+    prepend_attributes options.delete(:prepend) {{}}
+  end
+
+  def prepend_attributes(attributes)
+    attributes.each_pair do |attribute, text|
+      copied.send(attribute).prepend text
+    end
   end
 
   class ModelAssociationCopier

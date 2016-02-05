@@ -33,6 +33,15 @@ describe ModelCopier do
       expect(subject).to_not be_persisted
     end
 
+    context "with prepend option" do
+      it "prepends the specified attribute with the specified text" do
+        name = model.name
+        subject = described_class.new(model).copy options: { prepend: { name: "Copy of " }}
+
+        expect(subject.name).to eq "Copy of #{name}"
+      end
+    end
+
     context "with attributes" do
       it "copies the attribute values" do
         model.courseno = "BLAH"
