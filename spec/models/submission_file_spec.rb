@@ -3,7 +3,7 @@ require "active_record_spec_helper"
 describe SubmissionFile do
   let(:course) { build(:course) }
   let(:assignment) { build(:assignment) }
-  let(:student) { build(:user) }
+  let(:student) { build(:user, last_name: "de Kooning", first_name: "Willem") }
   let(:submission) { build(:submission, course: course, assignment: assignment, student: student) }
   let(:submission_file) { submission.submission_files.last }
 
