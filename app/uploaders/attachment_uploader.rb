@@ -12,7 +12,7 @@ class AttachmentUploader < CarrierWave::Uploader::Base
     course = "/#{model.course.courseno}-#{model.course.id}" if model.class.method_defined? :course
     assignment =  "/assignments/#{model.assignment.name.gsub(/\s/, "_").downcase[0..20]}-#{model.assignment.id}" if model.class.method_defined? :assignment
     file_type = "/#{model.class.to_s.underscore.pluralize}"
-    owner = "/#{model.owner_name.gsub(/\s/, "-")}" if model.class.method_defined? :owner_name
+    owner = "/#{model.owner_name}" if model.class.method_defined? :owner_name
     "uploads#{course}#{assignment}#{file_type}#{owner}"
   end
 

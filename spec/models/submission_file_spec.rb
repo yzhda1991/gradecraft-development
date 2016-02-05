@@ -59,13 +59,13 @@ describe SubmissionFile do
         expect(subject).not_to include(present_file)
       end
     end
-    
+
     describe "present" do
       subject { SubmissionFile.present }
       it "returns submission files where the file is not missing" do
         expect(subject).to include(present_file)
       end
-      
+
       it "doesn't return submission files where the file is missing" do
         expect(subject).not_to include(missing_file)
       end
@@ -113,7 +113,7 @@ describe SubmissionFile do
 
   describe "#owner_name" do
     it "returns the formatted student name associated with the submission" do
-      expect(subject.owner_name).to eq("#{student.last_name} #{student.first_name}")
+      expect(subject.owner_name).to eq("#{student.last_name}-#{student.first_name}")
     end
 
     it "returns the group name associated with a group submission" do
