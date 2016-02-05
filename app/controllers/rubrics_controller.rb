@@ -1,7 +1,7 @@
 class RubricsController < ApplicationController
   before_filter :ensure_staff?
 
-  before_action :find_rubric, except: [:design, :create, :existing_criteria, :course_badges]
+  before_action :find_rubric, except: [:design, :create]
 
   respond_to :html, :json
 
@@ -28,31 +28,7 @@ class RubricsController < ApplicationController
     respond_with @rubric, status: :not_found
   end
 
-  def existing_criteria
-    @assignment = current_course.assignments.find params[:assignment_id]
-    @rubric = @assignment.rubric
-    render json:  MultiJson.dump(
-                    ActiveModel::ArraySerializer.new(
-                      @rubric.criteria.order(:order).includes(:levels),
-                        each_serializer: ExistingCriterionSerializer
-                    )
-                  )
-  end
-
-  def course_badges
-    @assignment = current_course.assignments.find params[:assignment_id]
-    render json:  MultiJson.dump(
-                    ActiveModel::ArraySerializer.new(
-                      find_course_badges, each_serializer: CourseBadgeSerializer
-                    )
-                  )
-  end
-
   private
-
-  def find_course_badges
-     @course_badges ||= @assignment.course.badges.visible
-  end
 
   def find_rubric
     @rubric = @assignment.rubric

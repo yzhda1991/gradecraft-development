@@ -10,7 +10,7 @@
       #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
         %h4#points-legend
           %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsGiven() | number:0}}
-          \/{{pointsPossible | number:0}} Points Allocated
+          \/{{pointsPossible() | number:0}} Points Allocated
         %h4.notice(ng-hide="pointsSatisfied() || pointsMissing()") You have not yet allocated any points
         %h4.notice(ng-show="pointsMissing()") {{pointsRemaining() | number:0}} point{{pointsRemaining() > 1 ? "s" : ""}} have not been assigned
         %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points

@@ -17,7 +17,7 @@ class Criterion < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 30 }
   validates :order, presence: true
 
-  scope :ordered, lambda { order(:order) }
+  scope :ordered, -> { order(:order) }
 
   def copy(attributes={})
     copy = self.dup

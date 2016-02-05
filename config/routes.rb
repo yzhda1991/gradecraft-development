@@ -98,7 +98,6 @@ GradeCraft::Application.routes.draw do
     end
     resource :rubric do
       get :existing_criteria
-      get :course_badges
       resources :criteria
       get :design, on: :collection
     end
@@ -334,9 +333,17 @@ GradeCraft::Application.routes.draw do
   #16. Events
   resources :events
 
+  #17. API Calls
 
-  #16. Predictor, Student View
   get 'gse_mass_edit' => 'grade_scheme_elements#mass_edit', defaults: {format: :json}
+
+  #17.a Rubric Calls
+  namespace :api do
+    get "assignments/:id/criteria", to: 'criteria#index', defaults: {format: :json}
+    resources :badges, only: :index, defaults: {format: :json}
+  end
+
+  #17b. Predictor, Student View
   get 'predictor' => 'students#predictor'
   get 'predictor_grade_levels' => 'grade_scheme_elements#predictor_data', defaults: {format: :json}
   get 'predictor_assignment_types' => 'assignment_types#predictor_data', defaults: {format: :json}
@@ -345,7 +352,7 @@ GradeCraft::Application.routes.draw do
   get 'predictor_challenges' => 'challenges#predictor_data', defaults: {format: :json}
   get 'predictor_weights' => 'assignment_type_weights#predictor_data', defaults: {format: :json}
 
-  #17b. Predictor, Instructor View
+  #17c. Predictor, Instructor View
   get 'students/:id/predictor_grade_levels' => 'grade_scheme_elements#predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_assignment_types' => 'assignment_types#predictor_data', defaults: {format: :json}
   get 'students/:id/predictor_assignments' => 'assignments#predictor_data', defaults: {format: :json}

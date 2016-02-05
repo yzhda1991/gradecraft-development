@@ -9,7 +9,7 @@ class Level < ActiveRecord::Base
   validates :points, presence: true, numericality: {greater_than_or_equal_to: 0}
   validates :name, presence: true, length: { maximum: 30 }
 
-  scope :sorted, -> { order('points ASC') }
+  scope :ordered, -> { order('points ASC') }
 
   attr_accessible :name, :description, :points, :criterion_id, :durable, :full_credit, :no_credit, :sort_order
 
@@ -21,5 +21,4 @@ class Level < ActiveRecord::Base
     copy.badges << self.badges.map(&:dup)
     copy
   end
-
 end

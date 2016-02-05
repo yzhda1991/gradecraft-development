@@ -35,9 +35,7 @@
         @comments = ""
 
       @addLevels(attrs["levels"]) if attrs["levels"] #add levels if passed on init
-      # would this always have an id?
-    alert: ()->
-      alert("snakes!")
+
     addLevel: (attrs={})->
       newLevel = new Level(@, attrs, @$scope)
       @levels.push newLevel

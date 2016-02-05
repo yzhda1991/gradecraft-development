@@ -19,7 +19,7 @@
               .criterion-name= criterion.wrapped_name(28).html_safe
               .criterion-points= "#{points criterion.max_points} Points"
             .criterion-description= criterion.wrapped_description(40).html_safe
-          - criterion.levels.sorted.each do |level|
+          - criterion.levels.ordered.each do |level|
             %td.level.level-level
               .level-heading
                 .level-name= level.wrapped_name(25).html_safe

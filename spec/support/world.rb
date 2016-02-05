@@ -77,7 +77,6 @@ class World
 
     def create_criterion(attributes={})
       assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
-      student = attributes.delete(:student) || self.student || FactoryGirl.build(:user)
       rubric = attributes.delete(:rubric) || self.rubric || FactoryGirl.build(:rubric, assignment: assignment)
       criteria << FactoryGirl.create(:criterion, attributes.merge(rubric: rubric))
     end
