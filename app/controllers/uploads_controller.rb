@@ -16,10 +16,10 @@ class UploadsController < ApplicationController
   protected
 
   def fetch_upload_with_model
-    @upload = upload_klass.find params[:upload_id].to_i
+    @upload = upload_class.find params[:upload_id].to_i
   end
 
-  def upload_klass
+  def upload_class
     params[:model].classify.constantize
   end
 

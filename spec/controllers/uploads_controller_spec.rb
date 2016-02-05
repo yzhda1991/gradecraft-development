@@ -33,7 +33,7 @@ RSpec.describe UploadsController do
       subject
       expect(assigns(:upload)).to eq(submission_file)
     end
-    
+
     it "redirects back to where you were" do
       subject
       expect(response).to redirect_to("localhost:8000")
@@ -64,8 +64,8 @@ RSpec.describe UploadsController do
     end
   end
 
-  describe "#upload_klass" do
-    subject { controller_instance.instance_eval { upload_klass } }
+  describe "#upload_class" do
+    subject { controller_instance.instance_eval { upload_class } }
     before { allow(controller_instance).to receive(:params) { model_params }}
 
     context "model is passed in camelcased format" do
@@ -120,7 +120,7 @@ RSpec.describe UploadsController do
 
     before(:each) do
       controller_instance.instance_variable_set(:@upload, submission_file)
-      allow(controller_instance).to receive(:upload_klass) { SubmissionFile }
+      allow(controller_instance).to receive(:upload_class) { SubmissionFile }
       allow(controller_instance).to receive(:params) { upload_params }
     end
 
