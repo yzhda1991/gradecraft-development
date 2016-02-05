@@ -29,8 +29,12 @@ module S3File
     filepath.present? ? CGI::unescape(filepath) : file.path
   end
 
-  def remove
-    bucket.object(s3_object_file_key).delete
+  def delete_from_s3
+    s3_object.delete
+  end
+
+  def exists_on_s3?
+    s3_object.exists?
   end
 
   private

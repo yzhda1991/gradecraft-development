@@ -58,4 +58,16 @@ describe BadgeFile do
       expect(subject.course).to eq(course)
     end
   end
+
+  describe "S3File inclusion" do
+    let(:badge_file) { build(:badge_file) }
+
+    it "can be deleted from s3" do
+      expect(badge_file.respond_to?(:delete_from_s3)).to be_truthy
+    end
+
+    it "can check whether it exists on s3" do
+      expect(badge_file.respond_to?(:exists_on_s3?)).to be_truthy
+    end
+  end
 end

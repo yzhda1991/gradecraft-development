@@ -50,4 +50,16 @@ describe ChallengeFile do
     subject.challenge.save!
     expect expect(subject.url).to match(/.*\/uploads\/challenge_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
   end
+
+  describe "S3File inclusion" do
+    let(:challenge_file) { build(:challenge_file) }
+
+    it "can be deleted from s3" do
+      expect(challenge_file.respond_to?(:delete_from_s3)).to be_truthy
+    end
+
+    it "can check whether it exists on s3" do
+      expect(challenge_file.respond_to?(:exists_on_s3?)).to be_truthy
+    end
+  end
 end
