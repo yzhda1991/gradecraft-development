@@ -1,0 +1,71 @@
+require "active_record_spec_helper"
+
+describe ModelCopier do
+  let(:model) { create :course }
+
+  describe "#initialize" do
+    it "initializes with the model you want to copy" do
+      expect(described_class.new(model).original).to eq model
+    end
+  end
+
+  describe "#copy" do
+    subject { described_class.new(model).copy }
+
+    it "duplicates the model" do
+      expect(subject).to be_an_instance_of model.class
+      expect(subject.object_id).to_not eq model.object_id
+    end
+
+    it "duplicates the attributes" do
+      model.courseno = "BLAH"
+
+      expect(subject.courseno).to eq "BLAH"
+    end
+
+    it "saves the duplicated model" do
+      expect(subject).to be_persisted
+    end
+
+    it "does not save the duplicated model if the model is not saved" do
+      subject = build model.class.name.underscore.to_sym
+
+      expect(subject).to_not be_persisted
+    end
+
+    context "with attributes" do
+      it "copies the attribute values" do
+        model.courseno = "BLAH"
+        subject = described_class.new(model).copy attributes: { courseno: "BLEH" }
+
+        expect(subject.courseno).to eq "BLEH"
+      end
+    end
+
+    context "with an association to copy" do
+      subject { described_class.new(model).copy associations: :badges }
+
+      before(:each) { create :badge, course: model }
+
+      it "copies the associations" do
+        expect(subject.badges.count).to eq 1
+        expect(subject.badges.map(&:course_id).uniq).to eq [subject.id]
+      end
+
+      context "with association attributes" do
+        subject { described_class.new(model).copy associations: [assignment_types: { course_id: :id }] }
+
+        before(:each) do
+          assignment_type = create :assignment_type, course: model
+          create :assignment, assignment_type: assignment_type
+        end
+
+        it "copies the associations with the attributes" do
+          expect(subject.assignment_types.count).to eq 1
+          expect(subject.assignment_types.map(&:course_id).uniq).to eq [subject.id]
+          expect(subject.assignments.map(&:course_id)).to eq [subject.id]
+        end
+      end
+    end
+  end
+end
