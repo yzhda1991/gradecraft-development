@@ -60,5 +60,5 @@
                 .right
                   %ul.button-bar
                     %li= link_to re.group.try(:name), group_path(re.group)
-                    %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Submission"), assignment_submission_path(re.assignment, :group_id => re.group.id), :class => "button"
+                    %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See Submission"), assignment_submission_path(re.assignment.id, :id => re.id), :class => "button"
               %td= link_to raw("<i class='fa fa-check fa-fw'></i> Grade"), group_grade_assignment_path(re.assignment, :group_id => re.group), :class => "button"
