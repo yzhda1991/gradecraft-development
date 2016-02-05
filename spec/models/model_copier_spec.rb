@@ -42,6 +42,14 @@ describe ModelCopier do
       end
     end
 
+    context "with overrides option" do
+      it "runs the overrides" do
+        subject = described_class.new(model).copy options: { overrides: [->(copy) { copy.name = "Blah" }]}
+
+        expect(subject.name).to eq "Blah"
+      end
+    end
+
     context "with attributes" do
       it "copies the attribute values" do
         model.courseno = "BLAH"

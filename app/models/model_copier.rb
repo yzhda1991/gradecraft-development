@@ -7,26 +7,32 @@ class ModelCopier
 
   def copy(options={})
     @copied = original.dup
-    copied.copy_attributes options.delete(:attributes) {{}}
+    attributes = options.delete(:attributes) {{}}
+    copied.copy_attributes attributes
     handle_options options.delete(:options) {{}}
-    copy_associations options.delete(:associations) {[]}
+    copy_associations options.delete(:associations) {[]}, attributes
     copied
   end
 
   private
 
-  def copy_associations(associations)
-    ModelAssociationCopier.new(original, copied).copy([associations].flatten)
+  def copy_associations(associations, attributes)
+    ModelAssociationCopier.new(original, copied).copy([associations].flatten, attributes)
   end
 
   def handle_options(options)
     prepend_attributes options.delete(:prepend) {{}}
+    run_overrides options.delete(:overrides) {{}}
   end
 
   def prepend_attributes(attributes)
     attributes.each_pair do |attribute, text|
       copied.send(attribute).prepend text
     end
+  end
+
+  def run_overrides(overrides)
+    overrides.each { |override| override.call copied }
   end
 
   class ModelAssociationCopier
@@ -37,26 +43,26 @@ class ModelCopier
       @copied = copied
     end
 
-    def copy(associations)
+    def copy(associations, attributes)
       copied.save unless original.new_record?
-      associations.each { |association| copy_association(association) }
+      associations.each { |association| copy_association(association, attributes) }
     end
 
-    def copy_association(association)
+    def copy_association(association, attributes)
       if association.is_a? Hash
-        add_association_with_attributes association
+        add_association_with_attributes association, attributes
       else
-        add_association association, &:copy
+        add_association association, attributes
       end
     end
 
-    def add_association_with_attributes(association)
+    def add_association_with_attributes(association, attributes)
       parsed = AssociationAttributeParser.new(association).parse(copied)
-      add_association parsed.association do |child| child.copy(parsed.attributes) end
+      add_association parsed.association, attributes.merge(parsed.attributes)
     end
 
-    def add_association(association, &block)
-      copied.send(association).send "<<", original.send(association).map(&block)
+    def add_association(association, attributes)
+      copied.send(association).send "<<", original.send(association).map { |child| child.copy(attributes) }
     end
   end
 
