@@ -20,7 +20,7 @@ class AssignmentType < ActiveRecord::Base
   default_scope { order 'position' }
 
   def copy(attributes={})
-    ModelCopier.new(self).copy(associations: [:assignments])
+    ModelCopier.new(self).copy(attributes: attributes, associations: [:assignments])
   end
 
   def weight_for_student(student)
