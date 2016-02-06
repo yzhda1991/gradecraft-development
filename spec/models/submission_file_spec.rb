@@ -3,7 +3,7 @@ require "active_record_spec_helper"
 describe SubmissionFile do
   let(:course) { build(:course) }
   let(:assignment) { build(:assignment) }
-  let(:student) { build(:user) }
+  let(:student) { build(:user, last_name: "de Kooning", first_name: "Willem") }
   let(:submission) { build(:submission, course: course, assignment: assignment, student: student) }
   let(:submission_file) { submission.submission_files.last }
 
@@ -59,13 +59,13 @@ describe SubmissionFile do
         expect(subject).not_to include(present_file)
       end
     end
-    
+
     describe "present" do
       subject { SubmissionFile.present }
       it "returns submission files where the file is not missing" do
         expect(subject).to include(present_file)
       end
-      
+
       it "doesn't return submission files where the file is missing" do
         expect(subject).not_to include(missing_file)
       end
@@ -113,7 +113,7 @@ describe SubmissionFile do
 
   describe "#owner_name" do
     it "returns the formatted student name associated with the submission" do
-      expect(subject.owner_name).to eq("#{student.last_name} #{student.first_name}")
+      expect(subject.owner_name).to eq("#{student.last_name}-#{student.first_name}")
     end
 
     it "returns the group name associated with a group submission" do
@@ -121,7 +121,7 @@ describe SubmissionFile do
       group_assignment = build(:assignment, grade_scope: "Group")
       group_submission = build(:submission, course: course, assignment: group_assignment, group: group)
       group_file = group_submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg'))
-      expect(group_file.owner_name).to eq(group.name)
+      expect(group_file.owner_name).to eq("Group-Name")
     end
   end
 
