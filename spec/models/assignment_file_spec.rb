@@ -59,7 +59,7 @@ describe AssignmentFile do
     end
   end
 
-  describe "S3File inclusion" do
+  describe "S3Manager::Carrierwave inclusion" do
     let(:assignment_file) { build(:assignment_file) }
 
     it "can be deleted from s3" do

@@ -65,7 +65,7 @@ describe GradeFile do
     end
   end
 
-  describe "S3File inclusion" do
+  describe "S3Manager::Carrierwave inclusion" do
     let(:grade_file) { build(:grade_file) }
 
     it "can be deleted from s3" do

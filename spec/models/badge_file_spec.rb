@@ -59,7 +59,8 @@ describe BadgeFile do
     end
   end
 
-  describe "S3File inclusion" do
+  describe "S3Manager::Carrierwave inclusion" do
+
     let(:badge_file) { build(:badge_file) }
 
     it "can be deleted from s3" do
