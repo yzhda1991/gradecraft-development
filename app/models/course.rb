@@ -186,12 +186,14 @@ class Course < ActiveRecord::Base
   end
 
   def copy(attributes={})
-    ModelCopier.new(self).copy(associations: [
-      :badges,
-      { assignment_types: { course_id: :id }},
-      :challenges,
-      :grade_scheme_elements
-    ], options: { prepend: { name: "Copy of " }})
+    ModelCopier.new(self).copy(attributes: attributes,
+                               associations: [
+                                :badges,
+                                { assignment_types: { course_id: :id }},
+                                :challenges,
+                                :grade_scheme_elements
+                               ],
+                               options: { prepend: { name: "Copy of " }})
   end
 
   def has_teams?
