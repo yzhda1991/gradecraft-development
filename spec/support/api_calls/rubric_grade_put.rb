@@ -33,18 +33,16 @@ class RubricGradePUT
 
   def params
     {"points_given"=>assignment.point_total,
-     "rubric_id"=>rubric.id,
      "student_id"=>student.id,
      "points_possible"=>assignment.point_total,
      "criterion_grades"=> criterion_grades_params,
      "level_badges"=>[level_badge_params(level_badge)],
      "level_ids"=>(criteria.collect {|c| c.levels.pluck(:id)}).flatten,
      "criterion_ids"=> criteria.pluck(:id),
-     "grade_status"=>"Released",
      "controller"=>"grades",
      "action"=>"submit_rubric",
      "assignment_id"=>assignment.id,
-     "grade"=>{"student_id"=>student.id}
+     "grade"=>{ "status"=>"Released", "feedback"=>"good jorb!" }
     }
   end
 

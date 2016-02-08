@@ -302,7 +302,7 @@ describe GradesController do
         @rubric = create(:rubric_with_criteria, assignment: @rubric_assignment)
         @params = {assignment_id: @rubric_assignment.id, student_id: @student.id,  format: :json }
         @params[:criterion_grades] = @rubric.criteria.collect { |criterion| { "criterion_id" => criterion.id, "criterion_name" => criterion.name, "order" => criterion.order, "max_points"=> criterion.max_points, "level_id" => criterion.levels.first.id }}
-
+        @params[:grade] = @grade
         allow(controller).to receive(:current_student).and_return(@student)
       end
 

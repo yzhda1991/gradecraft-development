@@ -14,7 +14,8 @@ module Services
 
         grade.raw_score = context[:attributes]["points_given"]
         grade.point_total = context[:assignment].point_total
-        grade.status =  context[:attributes]["grade_status"]
+        grade.status =  context[:attributes]["grade"]["status"]
+        grade.feedback =  context[:attributes]["grade"]["feedback"]
 
         context[:grade] = grade
       end

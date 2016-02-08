@@ -1,5 +1,5 @@
 .pageContent
-  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment[:id]}, #{params[:student_id]}, #{@criterion_grades}, \"#{@grade.status if @grade}\", #{@assignment.release_necessary?}, '#{@return_path}')")
+  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{@criterion_grades}, '#{@return_path}')")
     .row
       #rubric-heading.columns
         %h3.text-right
@@ -77,19 +77,20 @@
           %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
     .clear
 
+    .summary_feedback
+      %textarea(ng-model="grade.feedback" froala="froalaSummaryOptions")
+    .clear
 
-    - if @assignment.release_necessary?
       .right
-
-        .row
-          - if current_user_is_gsi?
-            %select(ng-model="gradeStatus" ng-options="status for status in gsiGradeStatuses")
-              %option(value="" disabled) Select grade status for this submission...
-            .form_label Is this grade ready to be reviewed?
-          - else
-            %select(ng-model="gradeStatus" ng-options="status for status in professorGradeStatuses")
-              %option(value="" disabled) Select grade status for this submission...
-            .align-right.form_label Can the student see this grade?
+      .row
+        - if !@assignment.release_necessary?
+          %select(ng-model="grade.status" ng-options="status for status in noReleaseGradeStatuses")
+            %option(value="" disabled) Select grade status for this submission...
+          .form_label Is this grade ready to be reviewed?
+        - else
+          %select(ng-model="grade.status" ng-options="status for status in releaseNecessaryGradeStatuses")
+            %option(value="" disabled) Select grade status for this submission...
+          .align-right.form_label Can the student see this grade?
 
     .clear
     .right
