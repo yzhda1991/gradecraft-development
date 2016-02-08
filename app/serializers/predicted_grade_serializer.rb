@@ -21,12 +21,12 @@ class PredictedGradeSerializer
   end
 
   def raw_score
-    return 0 if grade.assignment.submissions_have_closed?
+    return 0 if show_zero_in_predictor grade.raw_score
     grade.raw_score if grade.is_student_visible?
   end
 
   def score
-    return 0 if grade.assignment.submissions_have_closed?
+    return 0 if show_zero_in_predictor grade.score
     grade.score if grade.is_student_visible?
   end
 
@@ -45,6 +45,13 @@ class PredictedGradeSerializer
  end
 
   private
+
+  def show_zero_in_predictor(score)
+    score.nil? and
+    grade.assignment.accepts_submissions? and
+    grade.assignment.submissions_have_closed? and
+    grade.student.submission_for_assignment(grade.assignment).nil?
+  end
 
   attr_reader :grade
 end

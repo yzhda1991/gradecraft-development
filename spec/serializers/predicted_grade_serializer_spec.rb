@@ -3,9 +3,9 @@ require "./app/serializers/predicted_grade_serializer"
 
 describe PredictedGradeSerializer do
   let(:course) { double(:course) }
-  let(:assignment) { double(:assignment, submissions_have_closed?: false)}
+  let(:assignment) { double(:assignment, accepts_submissions?: true, submissions_have_closed?: true, )}
   let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, raw_score: 84, student: user, course: course, assignment: assignment, is_student_visible?: true) }
-  let(:user) { double(:user) }
+  let(:user) { double(:user, submission_for_assignment: "sumbission") }
   let(:other_user) { double(:other_user) }
   subject { described_class.new grade, user }
 
@@ -36,9 +36,15 @@ describe PredictedGradeSerializer do
       expect(subject.score).to be_nil
     end
 
-    it "returns 0 if the assignment submissions have closed" do
-      allow(assignment).to receive(:submissions_have_closed?).and_return true
+    it "returns 0 with no score and no sumbission if the assignment submissions have closed" do
+      allow(grade).to receive(:score).and_return nil
+      allow(user).to receive(:submission_for_assignment).and_return nil
       expect(subject.score).to eq(0)
+    end
+
+    it "doesn't override the score is present regardless of submission status" do
+      allow(user).to receive(:submission_for_assignment).and_return nil
+      expect(subject.score).to eq(grade.score)
     end
   end
 
@@ -52,9 +58,15 @@ describe PredictedGradeSerializer do
       expect(subject.raw_score).to be_nil
     end
 
-    it "returns 0 if the assignment submissions have closed" do
-      allow(assignment).to receive(:submissions_have_closed?).and_return true
-      expect(subject.score).to eq(0)
+    it "returns 0 with no raw score and no sumbission if the assignment submissions have closed" do
+      allow(grade).to receive(:raw_score).and_return nil
+      allow(user).to receive(:submission_for_assignment).and_return nil
+      expect(subject.raw_score).to eq(0)
+    end
+
+    it "doesn't override the raw score is present regardless of submission status" do
+      allow(user).to receive(:submission_for_assignment).and_return nil
+      expect(subject.raw_score).to eq(grade.raw_score)
     end
   end
 
