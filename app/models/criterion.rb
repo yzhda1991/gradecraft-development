@@ -20,11 +20,10 @@ class Criterion < ActiveRecord::Base
   scope :ordered, -> { order(:order) }
 
   def copy(attributes={})
-    copy = self.dup
-    copy.add_default_levels = false
-    copy.save unless self.new_record?
-    copy.levels << self.levels.map(&:copy)
-    copy
+    ModelCopier.new(self).copy(attributes: attributes,
+                               associations: [:levels],
+                               options: { overrides: [
+                                  ->(copy) { copy.add_default_levels = false }]})
   end
 
   include DisplayHelpers

@@ -186,14 +186,14 @@ class Course < ActiveRecord::Base
   end
 
   def copy(attributes={})
-    copy = self.dup
-    copy.name.prepend "Copy of "
-    copy.save unless self.new_record?
-    copy.badges << self.badges.map(&:copy)
-    copy.assignment_types << self.assignment_types.map { |at| at.copy(course_id: copy.id) }
-    copy.challenges << self.challenges.map(&:copy)
-    copy.grade_scheme_elements << self.grade_scheme_elements.map(&:copy)
-    copy
+    ModelCopier.new(self).copy(attributes: attributes,
+                               associations: [
+                                :badges,
+                                { assignment_types: { course_id: :id }},
+                                :challenges,
+                                :grade_scheme_elements
+                               ],
+                               options: { prepend: { name: "Copy of " }})
   end
 
   def has_teams?

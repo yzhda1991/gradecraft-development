@@ -1,4 +1,4 @@
-require "active_record_spec_helper"
+require "rails_spec_helper"
 
 describe Criterion do
   subject { build(:criterion) }

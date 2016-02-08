@@ -16,9 +16,6 @@ class Level < ActiveRecord::Base
   include DisplayHelpers
 
   def copy(attributes={})
-    copy = self.dup
-    copy.save unless self.new_record?
-    copy.badges << self.badges.map(&:dup)
-    copy
+    ModelCopier.new(self).copy(attributes: attributes, associations: [:badges])
   end
 end
