@@ -7,6 +7,8 @@ Vagrant.configure(2) do |config|
         v.memory = 2048
     end
 
+    config.vm.network 'private_network', type: "dhcp" # needed for the nfs synced_folder
+    config.vm.synced_folder ".", "/vagrant", type: "nfs" # needed because the default synced_folder method is way too slow
     config.vm.network 'forwarded_port', guest: 5000, host: 5000
 
     config.vm.provision 'shell', inline: <<-SHELL
