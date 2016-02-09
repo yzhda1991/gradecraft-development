@@ -3,7 +3,7 @@
     %img{:alt => "", :border => "0", :src => "https://www.gradecraft.com/images/gradecraft_logo.png", :width => "207"}/
 %h2{:align => "center"}
   %strong Dear #{ @professor.first_name },
-%h3{:align => "center"} 
+%h3{:align => "center"}
   Your requested submissions export of #{ @course.assignment_term.downcase} "#{ @assignment.name }"
   in course #{ @course.name }
   failed to complete for  #{ @course.team_term.downcase } #{ @team.name }.
@@ -14,5 +14,5 @@
   %a{:href => "mailto: #{ ExportsMailer::ADMIN_EMAIL }"} #{ExportsMailer::ADMIN_EMAIL}
   if you'd like.
 %p Sincerely,
-%p The GradeCraft Team
+%p GradeCraft
 %hr/
