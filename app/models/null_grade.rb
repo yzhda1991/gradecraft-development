@@ -70,4 +70,8 @@ class NullAssignment
   def submissions_have_closed?
     false
   end
+
+  def accepts_submissions?
+    false
+  end
 end

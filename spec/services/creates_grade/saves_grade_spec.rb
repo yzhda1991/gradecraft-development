@@ -28,7 +28,7 @@ describe Services::Actions::SavesGrade do
 
   it "sets the student visible status to nil when grade not visible" do
     result = described_class.execute grade: grade
-    expect(result[:student_visible_status]).to be_falsy
+    expect(result[:student_visible_status]).to be_falsey
   end
 
   it "sets the student visible status to true when grade is visible" do
