@@ -2,16 +2,15 @@ require "active_record_spec_helper"
 
 describe Timeline do
   let(:course) { create :course }
+  subject { described_class.new(course) }
 
   describe "#initialize" do
     it "is initialized with a course" do
-      expect(described_class.new(course).course).to eq course
+      expect(subject.course).to eq course
     end
   end
 
   describe "#events" do
-    subject { described_class.new(course) }
-
     it "includes assignments that have due dates or open dates" do
       assignment = create(:assignment, course: course, due_at: Date.today)
       assignment_no_date = create(:assignment, course: course, due_at: nil)
