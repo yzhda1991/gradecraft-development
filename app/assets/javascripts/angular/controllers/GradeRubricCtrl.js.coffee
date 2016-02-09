@@ -1,33 +1,22 @@
 @gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'CriterionGrade','RubricService', '$http', ($scope, Restangular, Criterion, CourseBadge, CriterionGrade, RubricService, $http) ->
 
   $scope.criterionGrades = {} # index in hash with criterion_id as key
-  $scope.gsiGradeStatuses = ["In Progress", "Graded"]
-  $scope.professorGradeStatuses = ["In Progress", "Graded", "Released"]
-  $scope.urlId = parseInt(window.location.pathname.split('/')[2])
+  $scope.noReleaseGradeStatuses = ["In Progress", "Graded"]
+  $scope.releaseNecessaryGradeStatuses = ["In Progress", "Graded", "Released"]
+  $scope.assignmentId = parseInt(window.location.pathname.split('/')[2])
+  $scope.studentId = parseInt(window.location.search.match(/student_id=(\d+)/)[1])
 
-  $scope.init = (rubricId, assignmentId, studentId, criterionGrades, gradeStatus, releaseNecessary, returnURL)->
-    $scope.rubricId = rubricId
-    $scope.assignmentId = assignmentId
-    $scope.studentId = studentId
-    if gradeStatus
-      $scope.gradeStatus = gradeStatus
-    else
-      $scope.gradeStatus = ""
-
-    # use 'Graded' for all assignments for which release is necessary, bypass ui
-    $scope.releaseNecessary = releaseNecessary
-    if not $scope.releaseNecessary
-      $scope.gradeStatus = "Graded"
-
+  $scope.init = (criterionGrades, returnURL)->
     $scope.returnURL = returnURL
-
     $scope.addCriterionGrades(criterionGrades)
 
   RubricService.getBadges()
-  RubricService.getCriteria($scope.urlId, $scope)
+  RubricService.getCriteria($scope.assignmentId, $scope)
+  RubricService.getGrade($scope.assignmentId, $scope.studentId)
 
   $scope.courseBadges = RubricService.badges
   $scope.criteria = RubricService.criteria
+  $scope.grade = RubricService.grade
 
   $scope.pointsPossible = ()->
     RubricService.pointsPossible()
@@ -149,21 +138,21 @@
   # params for just the criterion
   $scope.criterionOnlyParams = (criterion,index)->
     {
-      criterion_name: criterion.name,
+      criterion_name:        criterion.name,
       criterion_description: criterion.description,
-      max_points: criterion.max_points,
-      order: index,
-      criterion_id: criterion.id,
-      comments: criterion.comments
+      max_points:            criterion.max_points,
+      order:                 index,
+      criterion_id:          criterion.id,
+      comments:              criterion.comments
     }
 
   # additional level params if a level is selected
   $scope.gradedLevelParams = (criterion) ->
     {
-      level_name: criterion.selectedLevel.name,
+      level_name:        criterion.selectedLevel.name,
       level_description: criterion.selectedLevel.description,
-      points: criterion.selectedLevel.points,
-      level_id: criterion.selectedLevel.id
+      points:            criterion.selectedLevel.points,
+      level_id:          criterion.selectedLevel.id
     }
 
   $scope.levelBadgesParams = ()->
@@ -173,30 +162,35 @@
       level = criterion.selectedLevel
       angular.forEach(level.badges, (badge, index)->
         params.push {
-          name: badge.name,
-          level_id: level.id,
+          name:         badge.name,
+          level_id:     level.id,
           criterion_id: level.criterion_id,
-          badge_id: badge.badge.id,
-          description: badge.description,
-          point_total: badge.point_total,
-          icon: badge.icon,
-          multiple: badge.multiple
+          badge_id:     badge.badge.id,
+          description:  badge.description,
+          point_total:  badge.point_total,
+          icon:         badge.icon,
+          multiple:     badge.multiple
         }
       )
     )
     return params
 
+  $scope.gradeParams = ()->
+    {
+      feedback: $scope.grade.feedback,
+      status:   $scope.grade.status
+    }
+
   $scope.gradedRubricParams = ()->
     {
-      points_given: $scope.pointsGiven(),
-      rubric_id: $scope.rubricId,
-      student_id: $scope.studentId,
-      points_possible: $scope.pointsPossible(),
+      points_given:     $scope.pointsGiven(),
+      student_id:       $scope.studentId,
+      points_possible:  $scope.pointsPossible(),
       criterion_grades: $scope.criteriaParams(),
-      level_badges: $scope.levelBadgesParams(),
-      level_ids: $scope.selectedLevelIds(),
-      criterion_ids: $scope.allCriterionIds(),
-      grade_status: $scope.gradeStatus
+      level_badges:     $scope.levelBadgesParams(),
+      level_ids:        $scope.selectedLevelIds(),
+      criterion_ids:    $scope.allCriterionIds(),
+      grade:            $scope.gradeParams(),
     }
 
   $scope.submitGrade = ()->
@@ -221,7 +215,21 @@
   $scope.froalaOptions = {
     inlineMode: false,
     minHeight: 100,
-    buttons: [ "bold", "italic", "underline", "strikeThrough", "insertOrderedList",
-               "insertUnorderedList"],
+    buttons: [
+      "bold", "italic", "underline", "strikeThrough",
+      "insertOrderedList", "insertUnorderedList"
+    ]
+  }
+
+  $scope.froalaSummaryOptions = {
+    inlineMode: false,
+    minHeight: 100,
+    buttons: [
+      'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript',
+      'superscript', 'fontFamily', 'fontSize', 'sep', 'inlineStyle', 'blockStyle',
+      'sep', 'formatBlock', 'align', 'insertOrderedList', 'insertUnorderedList',
+      'outdent', 'indent', 'insertHorizontalRule', 'createLink', 'undo', 'redo',
+      'removeFormat', 'selectAll'
+    ]
   }
 ]

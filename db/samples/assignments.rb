@@ -46,6 +46,7 @@
     instructor_modified: true,
     status: nil,
     predicted_score: Proc.new { 0 },
+    feedback: nil
   },
   assignment_score_levels: false,
   rubric: false,
@@ -263,6 +264,7 @@
   grade_attributes: {
     status: "Graded",
     raw_score: Proc.new { 80000 },
+    feedback: 'As Aristotle said, <strong>"The whole is greater than the sum of its parts."</strong>'
   },
   rubric: true,
   student_submissions: true
@@ -861,6 +863,12 @@
     description: "I'm the thing you need to read the feedback on to unlock 'Unlocked-By-Feedback-Read'",
     due_at: 4.weeks.from_now,
     point_total: 180000,
+  },
+  grades: true,
+  grade_attributes: {
+    status: "Graded",
+    raw_score: Proc.new { 180000 },
+    feedback: 'As George Washington Carver said, <strong>"Education is the key to unlock the golden door of freedom."</strong>'
   }
 }
 
@@ -892,6 +900,12 @@
     description: "I'm the thing you need to read the feedback on by a date to unlock 'Unlocked-By-Feedback-Read-By-Date'",
     due_at: 4.weeks.from_now,
     point_total: 180000,
+  },
+  grades: true,
+  grade_attributes: {
+    status: "Graded",
+    raw_score: Proc.new { 180000 },
+    feedback: 'As Winston Churchill said, <strong>"Continuous effort - not strength or intelligence - is the key to unlocking our potential."</strong>'
   }
 }
 

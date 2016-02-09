@@ -42,9 +42,8 @@ describe Services::Actions::BuildsEarnedLevelBadges do
   end
 
   it "builds an earned badge for each record in the params" do
-    pending "add level params to RubricGradePUT"
     result = described_class.execute context
     expect(result[:earned_level_badges].length).to \
-      eq(raw_params["level_badge"].length)
+      eq(raw_params["level_badges"].length)
   end
 end

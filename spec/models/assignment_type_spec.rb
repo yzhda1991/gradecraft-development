@@ -66,11 +66,11 @@ describe AssignmentType do
   describe "#is_capped?" do
     let(:assignment_type) {create :assignment_type}
 
-    it 'returns false if the assignment type has no max value' do
+    it "returns false if the assignment type has no max value" do
       expect(assignment_type.is_capped?).to eq(false)
     end
 
-    it 'returns true if the assignment type has a max value' do
+    it "returns true if the assignment type has a max value" do
       assignment_type.max_points = 10000
       expect(assignment_type.is_capped?).to eq(true)
     end
@@ -79,12 +79,12 @@ describe AssignmentType do
   describe "#total_points" do
     let(:assignment_type) {create :assignment_type}
 
-    it 'returns true if the assignment type has max points' do
+    it "returns true if the assignment type has max points" do
       assignment_type.max_points = 10000
       expect(assignment_type.total_points).to eq(10000)
     end
 
-    it 'returns the sum of the assignments in the assignment type if it does not have max points' do
+    it "returns the sum of the assignments in the assignment type if it does not have max points" do
       create(:assignment, assignment_type: assignment_type, point_total: 100)
       expect(assignment_type.total_points).to eq(100)
     end
@@ -94,7 +94,7 @@ describe AssignmentType do
     let(:assignment_type) {create :assignment_type, course: world.course}
     let(:student) {create :user}
 
-    it 'returns the max points if they are present' do
+    it "returns the max points if they are present" do
       assignment_type.max_points = 10000
       expect(assignment_type.total_points_for_student(student)).to eq(10000)
     end
@@ -116,7 +116,7 @@ describe AssignmentType do
   describe "#summed_assignment_points" do
     let(:assignment_type) {create :assignment_type, course: world.course}
 
-    it 'returns the sum of the assignments in the assignment type if it does not have max points' do
+    it "returns the sum of the assignments in the assignment type if it does not have max points" do
       create(:assignment, assignment_type: assignment_type, point_total: 100)
       create(:assignment, assignment_type: assignment_type, point_total: 100)
       create(:assignment, assignment_type: assignment_type, point_total: 100)
@@ -149,27 +149,27 @@ describe AssignmentType do
     let(:assignment_type) {create :assignment_type, course: world.course}
     let(:student) {create :user}
 
-    it 'returns the max point value for the type if present and the student has earned MORE than that cap' do
+    it "returns the max point value for the type if present and the student has earned MORE than that cap" do
       assignment_type.max_points = 100
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
       grade = create(:grade, student: student, raw_score: 200, assignment: assignment, status: "Released")
       expect(assignment_type.visible_score_for_student(student)).to eq(100)
     end
 
-    it 'returns the student score if the max point total is present but they have earned less than that value' do
+    it "returns the student score if the max point total is present but they have earned less than that value" do
       assignment_type.max_points = 500
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
       grade = create(:grade, student: student, raw_score: 200, assignment: assignment, status: "Released")
       expect(assignment_type.visible_score_for_student(student)).to eq(200)
     end
 
-    it 'returns the student score if there is no total present' do
+    it "returns the student score if there is no total present" do
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
       grade = create(:grade, student: student, raw_score: 1000, assignment: assignment, status: "Released")
       expect(assignment_type.visible_score_for_student(student)).to eq(1000)
     end
 
-    it 'does not include unreleased grades' do
+    it "does not include unreleased grades" do
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
       grade = create(:grade, student: student, raw_score: 1000, assignment: assignment, status: "Graded")
       expect(assignment_type.visible_score_for_student(student)).to eq(0)
