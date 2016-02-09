@@ -63,7 +63,7 @@ describe StudentsController do
         @flagged_student = create(:flagged_user, flagger: @professor, course: @course, flagged: @student)
       end
 
-      it 'shows the students the current user has flagged' do
+      it "shows the students the current user has flagged" do
         get :flagged
         expect(response).to render_template(:flagged)
         expect(assigns(:students)).to eq([@student])
@@ -137,7 +137,7 @@ describe StudentsController do
     end
 
     describe "GET teams" do
-      it 'shows the team page shown to students' do
+      it "shows the team page shown to students" do
         get :teams, :student_id => @student.id
         expect(response).to render_template(:teams)
       end
@@ -185,7 +185,7 @@ describe StudentsController do
     end
 
     describe "GET teams" do
-      it 'shows the team page shown to students' do
+      it "shows the team page shown to students" do
         get :teams
         expect(response).to render_template(:teams)
       end

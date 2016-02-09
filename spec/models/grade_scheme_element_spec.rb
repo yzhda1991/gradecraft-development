@@ -46,18 +46,18 @@ describe GradeSchemeElement do
   end
 
   describe "#name" do
-    it 'returns the name as the level and letter if both are present' do
+    it "returns the name as the level and letter if both are present" do
       subject.level = "Kvothe Kingkiller"
       subject.letter = "B+"
       expect(subject.name).to eq("B+ / Kvothe Kingkiller")
     end
 
-    it 'returns the name as just the level if present' do
+    it "returns the name as just the level if present" do
       subject.level = "Kvothe Kingkiller"
       expect(subject.name).to eq("Kvothe Kingkiller")
     end
 
-    it 'returns the name as just the letter if present' do
+    it "returns the name as just the letter if present" do
       subject.letter = "B+"
       expect(subject.name).to eq("B+")
     end

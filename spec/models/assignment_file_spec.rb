@@ -51,8 +51,8 @@ describe AssignmentFile do
       match(/.*\/uploads\/assignment_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
   end
 
-  describe "#course" do 
-    it 'returns the associated course' do 
+  describe "#course" do
+    it "returns the associated course" do
       course = create(:course)
       assignment.course = course
       expect(subject.course).to eq(course)

@@ -52,12 +52,12 @@ describe Challenge do
   end
 
   describe "#mass_grade?" do
-    it 'returns true if mass grade is turned on' do
+    it "returns true if mass grade is turned on" do
       subject.mass_grade = true
       expect(subject.mass_grade?).to be(true)
     end
 
-    it 'returns false if the mass grade is off' do
+    it "returns false if the mass grade is off" do
       subject.mass_grade = false
       expect(subject.mass_grade?).to be(true)
     end
@@ -77,17 +77,17 @@ describe Challenge do
   end
 
   describe "#future?" do
-    it 'returns true if due date is after today' do
+    it "returns true if due date is after today" do
       subject.due_at = Date.today + 1
       expect(subject.future?).to be(true)
     end
 
-    it 'returns false if there is no due date' do
+    it "returns false if there is no due date" do
       subject.due_at = nil
       expect(subject.future?).to be(false)
     end
 
-    it 'returns false if the due date is in the past' do
+    it "returns false if the due date is in the past" do
       subject.due_at = Date.today - 1
       expect(subject.future?).to be(false)
     end
@@ -95,23 +95,23 @@ describe Challenge do
   end
 
   describe "#graded?" do
-    it 'returns true if challenge grades are present' do
+    it "returns true if challenge grades are present" do
       create(:challenge_grade, challenge: subject)
       expect(subject.graded?).to be(true)
     end
 
-    it 'returns false if no challenge grades are present' do
+    it "returns false if no challenge grades are present" do
       expect(subject.graded?).to be(false)
     end
   end
 
   describe "#visible_for_student?(student)" do
-    it 'returns true if challenge is visible' do
+    it "returns true if challenge is visible" do
       subject.visible = true
       expect(subject.visible?).to be(true)
     end
 
-    it 'returns false if the challenge is invisible' do
+    it "returns false if the challenge is invisible" do
       subject.visible = false
       expect(subject.visible?).to be(false)
     end
