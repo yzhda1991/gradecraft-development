@@ -58,6 +58,10 @@ describe NullGrade do
   end
 
   it "handles queries for assignments with closed submissions" do
-    expect(subject.assignment.submissions_have_closed?).to be_falsy
+    expect(subject.assignment.submissions_have_closed?).to be_falsey
+  end
+
+  it "handles queries for assignments accepting submissions" do
+    expect(subject.assignment.accepts_submissions?).to be_falsey
   end
 end

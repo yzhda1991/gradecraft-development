@@ -398,7 +398,7 @@ describe GradesController do
         expect(@grade.feedback).to eq("")
         [ :raw_score,:status,:feedback_read_at,:feedback_reviewed_at,
           :feedback_read,:feedback_reviewed,:instructor_modified,:graded_at].each do |attr|
-          expect(@grade[attr]).to be_falsy
+          expect(@grade[attr]).to be_falsey
         end
       end
 

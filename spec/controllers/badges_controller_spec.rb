@@ -169,7 +169,7 @@ describe BadgesController do
           predictor_badge_attributes do |attr|
             expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
           end
-          expect(assigns(:update_badges)).to be_falsy
+          expect(assigns(:update_badges)).to be_falsey
           expect(response).to render_template(:predictor_data)
         end
       end
@@ -178,7 +178,7 @@ describe BadgesController do
         it "assigns student as null student and no call to update" do
           get :predictor_data, format: :json
           expect(assigns(:student).class).to eq(NullStudent)
-          expect(assigns(:update_badges)).to be_falsy
+          expect(assigns(:update_badges)).to be_falsey
         end
       end
     end

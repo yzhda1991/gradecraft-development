@@ -92,7 +92,7 @@ describe ChallengesController do
         expect(@challenge_2.reload.name).to eq("new name")
       end
 
-      it "redirects to the edit form if the update fails" do 
+      it "redirects to the edit form if the update fails" do
         params = { name: nil }
         post :update, id: @challenge_2.id, :challenge => params
         expect(response).to render_template(:edit)
@@ -140,7 +140,7 @@ describe ChallengesController do
           predictor_challenge_attributes do |attr|
             expect(assigns(:challenges)[0][attr]).to eq(@challenge[attr])
           end
-          expect(assigns(:update_challenges)).to be_falsy
+          expect(assigns(:update_challenges)).to be_falsey
           expect(response).to render_template(:predictor_data)
         end
       end
@@ -149,7 +149,7 @@ describe ChallengesController do
         it "assigns student as null student and no call to update" do
           get :predictor_data, format: :json
           expect(assigns(:student).class).to eq(NullStudent)
-          expect(assigns(:update_challenges)).to be_falsy
+          expect(assigns(:update_challenges)).to be_falsey
         end
       end
     end

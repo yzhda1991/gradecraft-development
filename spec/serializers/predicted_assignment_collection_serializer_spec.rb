@@ -65,7 +65,7 @@ describe PredictedAssignmentCollectionSerializer do
 
     it "doens't allow updates when current user is other than student" do
       subject = described_class.new assignments, other_user, user
-      expect(subject.permission_to_update?).to be_falsy
+      expect(subject.permission_to_update?).to be_falsey
     end
   end
 end

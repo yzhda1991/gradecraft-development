@@ -171,7 +171,7 @@ describe AssignmentsController do
             expect(assigns(:assignments).assignments[0][attr]).to \
               eq(@assignment[attr])
           end
-          expect(assigns(:assignments).permission_to_update?).to be_falsy
+          expect(assigns(:assignments).permission_to_update?).to be_falsey
           expect(response).to render_template(:predictor_data)
         end
 
@@ -207,7 +207,7 @@ describe AssignmentsController do
           get :predictor_data, format: :json
           expect(assigns(:assignments).current_user).to eq(@professor)
           expect(assigns(:assignments).student.class).to eq(NullStudent)
-          expect(assigns(:assignments).permission_to_update?).to be_falsy
+          expect(assigns(:assignments).permission_to_update?).to be_falsey
         end
       end
     end
