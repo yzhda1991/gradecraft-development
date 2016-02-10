@@ -11,29 +11,41 @@ describe Timeline do
   end
 
   describe "#events" do
-    it "includes assignments that have due dates or open dates" do
-      assignment = create(:assignment, course: course, due_at: Date.today)
-      assignment_no_date = create(:assignment, course: course, due_at: nil)
-      expect(subject.events).to eq [assignment]
+    context "with assignments for the course" do
+      let!(:assignment) { create :assignment, course: course, due_at: Date.today }
+      let!(:assignment_not_due) { create :assignment, course: course, due_at: nil }
+
+      it "includes the assignments" do
+        expect(subject.events).to eq [assignment]
+      end
     end
 
-    it "includes events that have due dates or open dates" do
-      event = create(:event, course: course, due_at: Date.today)
-      event_no_date = create(:event, course: course, due_at: nil)
-      expect(subject.events).to eq [event]
+    context "with events for the course" do
+      let!(:event) { create :event, course: course, due_at: Date.today }
+      let!(:event_not_due) { create :event, course: course, due_at: nil }
+
+      it "includes the events" do
+        expect(subject.events).to eq [event]
+      end
     end
 
-    it "includes challenge that have due dates or open dates if the course allows it" do
-      course.update_attributes team_challenges: true
-      challenge = create(:challenge, course: course, due_at: Date.today)
-      challenge_no_date = create(:challenge, course: course, due_at: nil)
-      expect(subject.events).to eq [challenge]
-    end
+    context "with challenges for the course" do
+      let!(:challenge) { create :challenge, course: course, due_at: Date.today }
+      let!(:challenge_not_due) { create :challenge, course: course, due_at: nil }
 
-    it "does not include challenge that have due dates or open dates if the course does not allows it" do
-      challenge = create(:challenge, course: course, due_at: Date.today)
-      challenge_no_date = create(:challenge, course: course, due_at: nil)
-      expect(subject.events).to eq []
+      context "that accepts team challenges" do
+        before { course.update_attributes team_challenges: true }
+
+        it "includes the challenges" do
+          expect(subject.events).to eq [challenge]
+        end
+      end
+
+      context "that does not accept team challenges" do
+        it "does not include the challenges" do
+          expect(subject.events).to eq []
+        end
+      end
     end
   end
 end
