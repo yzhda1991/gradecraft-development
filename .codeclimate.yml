@@ -9,11 +9,12 @@ engines:
   coffeelint:
     enabled: false
   duplication:
-    enabled: false
+    enabled: true
     config:
       languages:
-      - ruby
-      - javascript
+        ruby:
+          mass_threshold: 20
+        javascript:
   eslint:
     enabled: false
   fixme:
