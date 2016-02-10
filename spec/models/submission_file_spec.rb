@@ -1,5 +1,6 @@
 require "active_record_spec_helper"
-require_relative '../toolkits/models/shared/files'
+require "toolkits/models/shared/files"
+require "toolkits/historical_toolkit"
 
 describe SubmissionFile do
   let(:course) { build(:course) }
@@ -23,6 +24,8 @@ describe SubmissionFile do
       expect(subject.errors[:filename]).to include "can't be blank"
     end
   end
+
+  it_behaves_like "a historical model", :submission_file, filename: "my_submission.doc"
 
   describe "scopes" do
     let(:unconfirmed_file) { create(:submission_file, last_confirmed_at: nil) }
@@ -86,6 +89,21 @@ describe SubmissionFile do
 
     it "is versioned" do
       expect(subject).to be_versioned
+    end
+  end
+
+  describe "#public_url" do
+    it "uses the Rails root" do
+      expect(subject.public_url).to match(/#{Rails.root}/)
+    end
+
+    it "uses the public directory" do
+      expect(subject.public_url).to match("public")
+    end
+
+    it "uses the submission file url" do
+      allow(subject).to receive(:url) { "/great/scott.jpg" }
+      expect(subject.public_url).to match("/great/scott.jpg")
     end
   end
 
