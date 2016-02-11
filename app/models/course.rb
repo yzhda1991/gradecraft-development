@@ -15,8 +15,15 @@ class Course < ActiveRecord::Base
     end
   end
 
+  # Staff returns all professors and GSI for the course.
+  # Note that this is different from is_staff? which currently
+  # includes Admin users
+  def staff
+    User.with_role_in_course("staff", self)
+  end
+
   def instructors_of_record
-    User.instructors_of_record(self)
+    InstructorOfRecord.new(self).users
   end
 
   def instructors_of_record_ids
@@ -26,13 +33,6 @@ class Course < ActiveRecord::Base
   def instructors_of_record_ids=(value)
     user_ids = value.map(&:to_i)
     InstructorOfRecord.new(self).update_course_memberships(user_ids)
-  end
-
-  # Staff returns all professors and GSI for the course.
-  # Note that this is different from is_staff? which currently
-  # includes Admin users
-  def staff
-    User.with_role_in_course("staff", self)
   end
 
   def students_being_graded
