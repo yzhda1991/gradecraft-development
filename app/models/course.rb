@@ -25,22 +25,7 @@ class Course < ActiveRecord::Base
 
   def instructors_of_record_ids=(value)
     user_ids = value.map(&:to_i)
-
-    # Remove instructors of record that are not in the array of ids
-    course_memberships.select do |membership|
-      membership.instructor_of_record && !user_ids.include?(membership.user_id)
-    end.each do |membership|
-      membership.instructor_of_record = false
-      membership.save
-    end
-
-    # Add instructors of record that are in the array of ids
-    course_memberships.select do |membership|
-      !membership.instructor_of_record && user_ids.include?(membership.user_id)
-    end.each do |membership|
-      membership.instructor_of_record = true
-      membership.save
-    end
+    InstructorOfRecord.new(self).update_course_memberships(user_ids)
   end
 
   # Staff returns all professors and GSI for the course.
