@@ -26,13 +26,6 @@ class User < ActiveRecord::Base
       query
     end
 
-    def students_auditing(course, team=nil)
-      user_ids = CourseMembership.where(course: course, role: "student", auditing: true).pluck(:user_id)
-      query = User.where(id: user_ids)
-      query = query.students_in_team(team.id, user_ids) if team
-      query
-    end
-
     def students_by_team(course, team)
       user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
       User.where(id: user_ids).students_in_team(team.id, user_ids)

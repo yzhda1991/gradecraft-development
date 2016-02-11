@@ -107,32 +107,6 @@ describe User do
     end
   end
 
-  describe ".students_auditing" do
-    let(:student_being_audited) { create(:user) }
-    before do
-      create(:course_membership, course: world.course, user: student_being_audited, auditing: true)
-    end
-
-    it "returns all the students that are being audited" do
-      result = User.students_auditing(world.course)
-      expect(result.pluck(:id)).to eq [student_being_audited.id]
-    end
-
-    context "with a team" do
-      let(:student_in_team) { create :user }
-      let(:team) { create :team, course: world.course }
-      before do
-        create(:course_membership, course: world.course, user: student_in_team, auditing: true)
-        team.students << student_in_team
-      end
-
-      it "returns only students in the team that are being audited" do
-        result = User.students_auditing(world.course, team)
-        expect(result.pluck(:id)).to eq [student_in_team.id]
-      end
-    end
-  end
-
   describe ".students_being_graded" do
     let(:student_not_being_graded) { create(:user) }
     before do
