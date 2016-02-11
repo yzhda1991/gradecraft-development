@@ -10,6 +10,14 @@ describe InstructorOfRecord do
     end
   end
 
+  describe "#users" do
+    let!(:membership) { create :staff_course_membership, course: course, instructor_of_record: true }
+
+    it "returns the users that are marked as instructors of record for the course" do
+      expect(subject.users).to eq [membership.user]
+    end
+  end
+
   describe "#update_course_memberships" do
     let(:membership) { create :staff_course_membership, course: course }
 

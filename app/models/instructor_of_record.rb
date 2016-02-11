@@ -16,11 +16,15 @@ class InstructorOfRecord
     end
   end
 
+  def users
+    course.course_memberships.instructors_of_record.map(&:user)
+  end
+
   private
 
   def current_instructors_of_record(user_ids)
-    course.course_memberships.select do |membership|
-      !user_ids.include?(membership.user_id) && membership.instructor_of_record?
+    course.course_memberships.instructors_of_record.select do |membership|
+      !user_ids.include?(membership.user_id)
     end
   end
 
