@@ -43,14 +43,6 @@ class Course < ActiveRecord::Base
     User.students_being_graded(self,team)
   end
 
-  def students_auditing
-    User.students_auditing(self)
-  end
-
-  def students_auditing_by_team(team)
-    User.students_auditing(self,team)
-  end
-
   def students_by_team(team)
     User.students_by_team(self, team)
   end
