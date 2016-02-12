@@ -108,11 +108,11 @@ a:hover + .display_on_hover
   position: absolute
   margin-left: -240px
 
-@media (min-width: 1072px)
+@media (min-width: $media-medium-max)
   .panel .row
     margin-bottom: 1rem
 
-@media (max-width: 1072px)
+@media (max-width: $media-medium-max)
   .box
     border-bottom: 1px solid $color-grey-3
     padding: 1rem
@@ -121,7 +121,7 @@ a:hover + .display_on_hover
     margin-right: 1rem
     width: 23%
 
-@media (max-width:787px)
+@media (max-width: $media-small-max)
   .mainContent
     width: 100% !important
   .mainContainer.staff
