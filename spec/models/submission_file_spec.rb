@@ -1,4 +1,5 @@
 require "active_record_spec_helper"
+require_relative '../toolkits/models/shared/files'
 
 describe SubmissionFile do
   let(:course) { build(:course) }
@@ -6,8 +7,12 @@ describe SubmissionFile do
   let(:student) { build(:user, last_name: "de Kooning", first_name: "Willem") }
   let(:submission) { build(:submission, course: course, assignment: assignment, student: student) }
   let(:submission_file) { submission.submission_files.last }
+  let(:new_submission_file) { submission.submission_files.new image_file_attrs }
 
-  subject { submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg')) }
+  extend Toolkits::Models::Shared::Files
+  define_context # pull in attrs for image and text files
+
+  subject { new_submission_file }
 
   describe "validations" do
     it { is_expected.to be_valid }
@@ -84,21 +89,6 @@ describe SubmissionFile do
     end
   end
 
-  describe "#public_url" do
-    it "uses the Rails root" do
-      expect(subject.public_url).to match(/#{Rails.root}/)
-    end
-
-    it "uses the public directory" do
-      expect(subject.public_url).to match("public")
-    end
-
-    it "uses the submission file url" do
-      allow(subject).to receive(:url) { "/great/scott.jpg" }
-      expect(subject.public_url).to match("/great/scott.jpg")
-    end
-  end
-
   describe "#course" do
     it "returns the course associated with the submission" do
       expect(subject.course).to eq(course)
@@ -120,7 +110,7 @@ describe SubmissionFile do
       group = build(:group, name: "Group Name")
       group_assignment = build(:assignment, grade_scope: "Group")
       group_submission = build(:submission, course: course, assignment: group_assignment, group: group)
-      group_file = group_submission.submission_files.new(filename: "test", file: fixture_file('test_image.jpg', 'img/jpg'))
+      group_file = group_submission.submission_files.new image_file_attrs
       expect(group_file.owner_name).to eq("Group-Name")
     end
   end
@@ -147,36 +137,46 @@ describe SubmissionFile do
     end
   end
 
-  it "accepts text files as well as images" do
-    subject.file = fixture_file('test_file.txt', 'txt')
-    subject.submission.save!
-    expect expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{subject.id}\/\d+_test_file\.txt/)
+  describe "uploading multiple files" do
+    it "accepts multiple files" do
+      submission.submission_files.new text_file_attrs.merge(filepath: 'uploads/submission_file/')
+      subject.submission.save!
+      expect(submission.submission_files.count).to equal 2
+    end
   end
 
-  it "accepts multiple files" do
-    submission.submission_files.new(filename: "test", filepath: 'uploads/submission_file/', file: fixture_file('test_file.txt', 'img/jpg'))
-    subject.submission.save!
-    expect(submission.submission_files.count).to equal 2
+  describe "formatting name of mounted file" do
+    subject { new_submission_file.read_attribute(:file) }
+    let(:save_submission) { new_submission_file.submission.save! }
+
+    it "accepts text files as well as images" do
+      new_submission_file.file = fixture_file('test_file.txt', 'txt')
+      save_submission
+      expect expect(subject).to match(/\d+_test_file\.txt/)
+    end
+
+    it "has an accessible url" do
+      save_submission
+      expect expect(subject).to match(/\d+_test_image\.jpg/)
+    end
+
+    it "shortens and removes non-word characters from file names on save" do
+      new_submission_file.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
+      save_submission
+      expect(subject).to match(/\d+_too_long__strange_characters__and_spaces_\.jpg/)
+    end
   end
 
-  it "has an accessible url" do
-    subject.submission.save!
-    expect expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{subject.id}\/\d+_test_image\.jpg/)
+  describe "url" do
+    subject { new_submission_file.url }
+    before { allow(new_submission_file).to receive_message_chain(:s3_object, :presigned_url) { "http://some.url" }}
+
+    it "returns the presigned amazon url" do
+      expect(subject).to eq("http://some.url")
+    end
   end
 
-  it "shortens and removes non-word characters from file names on save" do
-    subject.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
-    subject.submission.save!
-    expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{subject.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
-  end
-
-  it "shortens and removes non-word characters from file names on save" do
-    subject.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
-    subject.submission.save!
-    expect(subject.url).to match(/.*\/uploads\/submission_file\/file\/#{submission_file.id}\/\d+_too_long__strange_characters__and_spaces_\.jpg/)
-  end
-
-  describe "S3File inclusion" do
+  describe "S3Manager::Carrierwave inclusion" do
     let(:submission_file) { build(:submission_file) }
 
     it "can be deleted from s3" do

@@ -1,15 +1,9 @@
 require 'rails_spec_helper'
 
-# a cylon looks exactly the same, but is not the same.
-# the whole point of the cylon is to include the S3File.
-class S3FileCylon
-  include S3File
-end
-
-RSpec.describe "An S3File inheritor" do
+RSpec.describe S3Manager::Carrierwave do
   subject { s3_file_cylon }
 
-  let(:s3_file_cylon) { S3FileCylon.new }
+  let(:s3_file_cylon) { SubmissionFile.new }
   let(:s3_manager) { S3Manager::Manager.new }
   let(:source_object) { Tempfile.new('walter-srsly') }
   let(:s3_object_key) { "lets-see-what-happens.txt" }
@@ -25,39 +19,26 @@ RSpec.describe "An S3File inheritor" do
 
   describe "#url" do
     subject(:each) { s3_file_cylon.url }
-    before do
+
+    let(:presigned_url) { double(:presigned_url).as_null_object }
+    let(:s3_object) { double(:s3_object).as_null_object }
+
+    before(:each) do
       allow(s3_file_cylon).to receive_message_chain(:file, :url) { "great url, bro" }
       allow(s3_file_cylon).to receive(:filepath) { "sumpin'" }
+      allow(s3_file_cylon).to receive(:s3_object) { s3_object }
+      allow(s3_object).to receive(:presigned_url) { presigned_url }
     end
 
-    context "Rails env is development" do
-      before { allow(Rails).to receive_message_chain(:env, :development?) { true }}
-      it "returns the url of the file" do
-        expect(subject).to eq("great url, bro")
-        subject
-      end
+    it "gets the presigned url for the s3 object" do
+      expect(s3_object).to receive(:presigned_url).with(:get, expires_in: 900)
     end
 
-    context "Rails env is anything but development" do
-      let(:presigned_url) { double(:presigned_url).as_null_object }
-      let(:s3_object) { double(:s3_object).as_null_object }
-
-      before(:each) do
-        allow(s3_file_cylon).to receive(:s3_object) { s3_object }
-        allow(Rails).to receive_message_chain(:env, :development?) { false }
-        allow(s3_object).to receive(:presigned_url) { presigned_url }
-      end
-
-      it "gets the presigned url for the s3 object" do
-        expect(s3_object).to receive(:presigned_url).with(:get, expires_in: 900)
-      end
-
-      it "converts all of that into a string" do
-        expect(presigned_url).to receive(:to_s)
-      end
-
-      after(:each) { subject }
+    it "converts all of that into a string" do
+      expect(presigned_url).to receive(:to_s)
     end
+
+    after(:each) { subject }
   end
 
   describe "#s3_object" do
@@ -84,11 +65,24 @@ RSpec.describe "An S3File inheritor" do
   end
 
   describe "#s3_object_file_key" do
-    let(:tempfile) { Tempfile.new('walter') }
     subject { s3_file_cylon.s3_object_file_key }
+    let(:tempfile) { Tempfile.new('walter') }
+
+    context "cached_file_path is present" do
+      before do
+        allow(s3_file_cylon).to receive_messages(store_dir: "great_dir", mounted_filename: "stuff.txt")
+        allow(s3_file_cylon).to receive(:cached_file_path) { "/some/great/path.png" }
+      end
+
+      it "returns the cached file path" do
+        expect(subject).to eq "/some/great/path.png"
+      end
+    end
 
     context "filepath is present" do
-      before { allow(s3_file_cylon).to receive(:filepath) { tempfile }}
+      before do
+        allow(s3_file_cylon).to receive_messages(filepath: tempfile, filepath_includes_filename?: true)
+      end
 
       it "returns the CGI-unescaped filepath" do
         expect(CGI).to receive(:unescape).with(tempfile)
@@ -105,6 +99,89 @@ RSpec.describe "An S3File inheritor" do
       it "returns the #path from the file" do
         expect(subject).to eq("/stuff/path")
       end
+    end
+  end
+
+  describe "#mounted_filename" do
+    subject { mounted_submission_file.mounted_filename }
+    let(:mounted_submission_file) { create(:submission_file, filepath: "this-is-great.txt") }
+    before { allow(mounted_submission_file).to receive_message_chain(:file, :mounted_as) { :filepath }}
+
+    it "returns the value for the #mounted_as attribute" do
+      expect(subject).to eq("this-is-great.txt")
+    end
+  end
+
+  describe "filepath_includes_filename?" do
+    subject { s3_file_cylon.filepath_includes_filename? }
+    context "filepath is present and filepath includes/matches the filename" do
+      before do
+        allow(s3_file_cylon).to receive_messages(filepath: "some/path/to/nowhere.txt", filename: "nowhere.txt")
+      end
+
+      it "returns true" do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context "filepath is not present" do
+      before do
+        allow(s3_file_cylon).to receive(:filepath) { nil }
+      end
+
+      it "returns false" do
+        expect(subject).to be_falsey
+      end
+    end
+
+    context "filepath is present but doesn't match the filename" do
+      before do
+        allow(s3_file_cylon).to receive_messages(filepath: "some/path/to/nowhere.txt", filename: "everglades.pdf")
+      end
+
+      it "returns false" do
+        expect(subject).to be_falsey
+      end
+    end
+  end
+
+  describe "#cached_file_path" do
+    subject { s3_file_cylon.cached_file_path }
+    before do
+      allow(s3_file_cylon).to receive_messages(store_dir: "great_dir", mounted_filename: "stuff.txt")
+    end
+
+    context "both store_dir and filename exist" do
+      it "joins the store_dir and the filename with a forward slash" do
+        expect(subject).to eq "great_dir/stuff.txt"
+      end
+
+      it "caches the joined cached_file_path value" do
+        first_call = subject
+        expect(first_call.object_id).to eq(subject.object_id)
+      end
+    end
+  end
+
+  describe "#cache_store_dir" do
+    subject { s3_file_cylon.instance_eval { cache_store_dir }}
+    before { allow(s3_file_cylon).to receive(:file) { double(:file, store_dir: "some-dir") }}
+
+    it "caches the store_dir attribute" do
+      subject
+      expect(s3_file_cylon[:store_dir]).to eq("some-dir")
+    end
+  end
+
+  describe "caching the store_dir before create" do
+    let(:create_submission_file) { create(:submission_file) }
+    before do
+      allow_any_instance_of(AttachmentUploader).to receive(:store_dir) { "some-dir" }
+      create_submission_file
+    end
+
+    it "caches the store_dir before create" do
+      expect(create_submission_file[:store_dir]).to eq("some-dir")
     end
   end
 

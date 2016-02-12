@@ -1,5 +1,5 @@
 class SubmissionFile < ActiveRecord::Base
-  include S3File
+  include S3Manager::Carrierwave
 
   attr_accessible :file, :filename, :filepath, :submission_id, :file_missing, :last_confirmed_at
 
@@ -18,9 +18,6 @@ class SubmissionFile < ActiveRecord::Base
   scope :missing, -> { where(file_missing: true) }
   scope :present, -> { where(file_missing: false) }
 
-  def source_file_url
-    Rails.env.development? ? public_url : url
-  end
 
   def s3_manager
     @s3_manager ||= S3Manager::Manager.new
@@ -34,34 +31,12 @@ class SubmissionFile < ActiveRecord::Base
     update_attributes file_missing: file_missing?, last_confirmed_at: Time.now
   end
 
-  # this is only being used in development, get rid of it when it deveopment is migrated to s3
-  # for submission file persistence
-  def write_source_binary_to_path(target_path)
-    if File.exist? source_file_url
-      File.open(target_path, "wb") do |saved_file|
-        File.open(source_file_url, "rb") do |read_file|
-          saved_file.write(read_file.read)
-        end
-      end
-    else
-      mark_file_missing
-    end
-  end
-
   def file_missing?
     ! exists_on_storage?
   end
 
   def exists_on_storage?
-    if Rails.env.development?
-      File.exist? public_url
-    else
-      S3Manager::Manager::ObjectSummary.new(s3_object_file_key, s3_manager).exists?
-    end
-  end
-
-  def public_url
-    "#{Rails.root}/public#{url}"
+    S3Manager::Manager::ObjectSummary.new(s3_object_file_key, s3_manager).exists?
   end
 
   def course

@@ -8,12 +8,13 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   # grade_file: uploads/<course-name_id>/assignments/<assignment-name_id>/grade_files/<timestamp_file-name.ext>
   # badge_file: uploads/<course-name_id>/badge_files/<timestamp_file-name.ext>
   # challenge_file: uploads/<course-name_id>/challenge_files/<timestamp_file-name.ext>
+  #
   def store_dir
-    course = "/#{model.course.courseno}-#{model.course.id}" if model.class.method_defined? :course
-    assignment =  "/assignments/#{model.assignment.name.gsub(/\s/, "_").downcase[0..20]}-#{model.assignment.id}" if model.class.method_defined? :assignment
-    file_type = "/#{model.class.to_s.underscore.pluralize}"
-    owner = "/#{model.owner_name}" if model.class.method_defined? :owner_name
-    "uploads#{course}#{assignment}#{file_type}#{owner}"
+    if Rails.env.development?
+      [ ENV['AWS_S3_DEVELOPER_TAG'] ].concat(store_dir_pieces).join("/")
+    else
+      store_dir_pieces.join("/")
+    end
   end
 
   # Override the filename of the uploaded files:
@@ -29,8 +30,35 @@ class AttachmentUploader < CarrierWave::Uploader::Base
 
   private
 
+  def store_dir_pieces
+    [ "uploads", course, assignment, file_klass, owner_name ].compact
+  end
+
+  def course
+    "#{model.course.courseno}-#{model.course.id}" if model and model.class.method_defined? :course
+  end
+
+  def assignment
+    "assignments/#{model.assignment.name.gsub(/\s/, "_").downcase[0..20]}-#{model.assignment.id}" if model.class.method_defined? :assignment
+  end
+
+  def file_klass
+    model.class.to_s.underscore.pluralize
+  end
+
+  def owner_name
+    model.owner_name if model.class.method_defined? :owner_name
+  end
+
   def tokenized_name
-    var = :"@#{mounted_as}_secure_token"
-    model.instance_variable_get(var) || model.instance_variable_set(var, "#{Time.now.to_i}_#{file.basename.gsub(/\W+/, "_").downcase[0..40]}")
+    model.instance_variable_get(secure_token_name) || model.instance_variable_set(secure_token_name, filename_from_basename)
+  end
+
+  def filename_from_basename
+    "#{Time.now.to_i}_#{file.basename.gsub(/\W+/, "_").downcase[0..40]}"
+  end
+
+  def secure_token_name
+    :"@#{mounted_as}_secure_token"
   end
 end

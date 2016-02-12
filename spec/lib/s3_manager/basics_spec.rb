@@ -58,8 +58,16 @@ RSpec.describe S3Manager::Manager do
   end
 
   describe "#bucket_name" do
-    it "should be 'gradecraft-' plus the Rails env" do
-      expect(s3_manager.bucket_name).to eq("gradecraft-test")
+    before do
+      ENV['AWS_S3_BUCKET'] = "some-bucket-name"
+    end
+
+    it "should use the bucketname from AWS_S3_BUCKET" do
+      expect(s3_manager.bucket_name).to eq("some-bucket-name")
+    end
+
+    after do
+      ENV['AWS_S3_BUCKET'] = "gradecraft-test"
     end
   end
 
@@ -98,7 +106,7 @@ RSpec.describe S3Manager::Manager do
       it "should get an AWS Seahorse object in response" do
         expect(subject.class).to eq(Seahorse::Client::Response)
       end
-      
+
       it "should have been successful" do
         expect(subject.successful?).to be_truthy
       end
@@ -128,7 +136,7 @@ RSpec.describe S3Manager::Manager do
       it "should get an AWS Seahorse object in response" do
         expect(subject.class).to eq(Seahorse::Client::Response)
       end
-      
+
       it "should have been successful" do
         expect(subject.successful?).to be_truthy
       end
@@ -171,7 +179,7 @@ RSpec.describe S3Manager::Manager do
         it "should get an AWS Seahorse object in response" do
           expect(subject.class).to eq(Seahorse::Client::Response)
         end
-        
+
         it "should have been successful" do
           expect(subject.successful?).to be_truthy
         end
