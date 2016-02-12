@@ -43,7 +43,7 @@ class StudentsController < ApplicationController
     if current_user_is_student?
       redirect_to dashboard_path
     end
-    @events = current_course.timeline_events
+    @events = Timeline.new(current_course).events
   end
 
   #Displaying student profile to instructors

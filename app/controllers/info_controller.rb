@@ -21,7 +21,7 @@ class InfoController < ApplicationController
   end
 
   def timeline_events
-    @events = current_course.timeline_events
+    @events = Timeline.new(current_course).events
     render(:partial => 'info/timeline', :handlers => [:jbuilder], :formats => [:js])
   end
 
