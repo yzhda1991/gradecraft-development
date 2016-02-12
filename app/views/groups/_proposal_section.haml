@@ -10,7 +10,7 @@
         %fieldset.proposal.panel
           %span.columns
             %h6= "Created: #{proposal.created_at}"
-            %p= proposal.proposal
+            %p= raw proposal.proposal
             - i += 1
             = f.hidden_field :id
     - else
