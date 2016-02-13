@@ -1,4 +1,4 @@
-class InstructorOfRecord
+class InstructorsOfRecord
   attr_reader :course
 
   def self.for(course)

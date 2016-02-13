@@ -23,7 +23,7 @@ class Course < ActiveRecord::Base
   end
 
   def instructors_of_record
-    InstructorOfRecord.for(self).users
+    InstructorsOfRecord.for(self).users
   end
 
   def instructors_of_record_ids
@@ -32,7 +32,7 @@ class Course < ActiveRecord::Base
 
   def instructors_of_record_ids=(value)
     user_ids = value.map(&:to_i)
-    InstructorOfRecord.for(self).update_course_memberships(user_ids)
+    InstructorsOfRecord.for(self).update_course_memberships(user_ids)
   end
 
   def students_being_graded

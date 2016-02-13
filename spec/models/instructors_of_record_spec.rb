@@ -1,6 +1,6 @@
 require "active_record_spec_helper"
 
-describe InstructorOfRecord do
+describe InstructorsOfRecord do
   let(:course) { create :course }
   subject { described_class.for(course) }
 
