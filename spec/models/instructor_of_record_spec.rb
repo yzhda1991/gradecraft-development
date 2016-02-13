@@ -2,9 +2,9 @@ require "active_record_spec_helper"
 
 describe InstructorOfRecord do
   let(:course) { create :course }
-  subject { described_class.new(course) }
+  subject { described_class.for(course) }
 
-  describe "#initialize" do
+  describe ".for" do
     it "is initialized with a course" do
       expect(subject.course).to eq course
     end

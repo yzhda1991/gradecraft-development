@@ -1,8 +1,8 @@
 class InstructorOfRecord
   attr_reader :course
 
-  def initialize(course)
-    @course = course
+  def self.for(course)
+    new(course)
   end
 
   def update_course_memberships(user_ids)
@@ -21,6 +21,10 @@ class InstructorOfRecord
   end
 
   private
+
+  def initialize(course)
+    @course = course
+  end
 
   def current_instructors_of_record(user_ids)
     course.course_memberships.instructors_of_record.select do |membership|
