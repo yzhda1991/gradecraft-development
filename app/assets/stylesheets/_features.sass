@@ -46,6 +46,12 @@
       margin-top: 40px
       text-transform: none !important
 
+    .promo-text
+      color: $color-white
+
+  .double-height-feature-section
+    height: 75% !important
+
   .feature-section
     height: 50%
     padding: 2rem
@@ -68,15 +74,16 @@
       background-color: lighten($color-blue-4, 20%)
 
     .text
-      padding-top: 5%
-      line-height: 2.5rem
-      font-size: 1.6rem
+      line-height: 2.25rem
+      font-size: 1.25rem
 
     h2
       font-size: 2rem
       color: $color-blue-3
-      font-weight: lighter
       margin-bottom: 1rem
+
+    .half h2
+      text-align: left
 
     h4
       text-transform: none !important
@@ -88,7 +95,7 @@
 
     .half
       width: calc(50% - 6rem)
-      margin: 0 3rem 0 3rem !important
+      margin: 0 2rem 0 3rem !important
       position: relative
 
     .whole
@@ -106,17 +113,18 @@
       margin-top: 4rem
 
       h1
-        margin-top: 3rem
+        margin-top: 0rem
+        margin-bottom: 6rem
 
     .feature-section
       height: auto !important
 
       .image-container
-        margin: 0 auto
+        margin: 1rem auto !important
         padding: 0 !important
 
       img, .text, .center-image
-        margin-top: 0
+        margin: 0 auto !important
         padding: 0 !important
         max-width: 100%
         height: auto !important
@@ -135,14 +143,18 @@
       margin-top: 1%
 
       h1
+        margin-top: 2rem
         font-size: 1.5rem !important
         height: 50px !important
         padding-bottom: 1rem
 
+      .promo-text
+        font-size: .8rem
+
   .features
     .feature-section
-      .half
-        margin: 0 auto !important
+      h2
+        line-height: 2.5rem
 
       img
         margin-top: 1%
@@ -150,7 +162,7 @@
       .text
         font-size: 1rem !important
         line-height: 1.75rem !important
-        margin: 0 auto !important
+        margin: 1% auto !important
         padding: 0  !important
 
       .whole

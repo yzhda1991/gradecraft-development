@@ -33,14 +33,11 @@
             = render 'layouts/navigation/login_nav'
       - if ! current_user
         %nav.mobile-nav.hide-for-large
-          %ul.nav.nav-pill
+          .left
             %a.no-hover.site-title{:href => root_url }
-              = image_tag "GradeCraft_Logo_Mark_RGB.png", :width => "28"
-            %li.dropdown
-              %a Login
-              %i.fa.fa-caret-down
-              %ul.subnav
-                = render 'layouts/navigation/login_nav'
+              .hide-for-small= image_tag "gradecraft_logo.png", :width => "150"
+              .hide-for-medium= image_tag "GradeCraft_Logo_Mark_RGB.png", :width => "34"
+          .right= render 'layouts/navigation/login_nav'
       - if current_user.present?
         %a.btn-navbar-right.btn-navbar-navtoggle.btn-flyout-right-trigger
           %i.fa.fa-user.fa-fw
