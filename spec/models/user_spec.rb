@@ -107,32 +107,6 @@ describe User do
     end
   end
 
-  describe ".students_auditing" do
-    let(:student_being_audited) { create(:user) }
-    before do
-      create(:course_membership, course: world.course, user: student_being_audited, auditing: true)
-    end
-
-    it "returns all the students that are being audited" do
-      result = User.students_auditing(world.course)
-      expect(result.pluck(:id)).to eq [student_being_audited.id]
-    end
-
-    context "with a team" do
-      let(:student_in_team) { create :user }
-      let(:team) { create :team, course: world.course }
-      before do
-        create(:course_membership, course: world.course, user: student_in_team, auditing: true)
-        team.students << student_in_team
-      end
-
-      it "returns only students in the team that are being audited" do
-        result = User.students_auditing(world.course, team)
-        expect(result.pluck(:id)).to eq [student_in_team.id]
-      end
-    end
-  end
-
   describe ".students_being_graded" do
     let(:student_not_being_graded) { create(:user) }
     before do
@@ -166,24 +140,6 @@ describe User do
       team.students << world.student
       result = User.students_by_team(world.course, team)
       expect(result.pluck(:id)).to eq [world.student.id]
-    end
-  end
-
-  describe ".instructors_of_record" do
-    let(:ta_for_course) { create :user }
-    let(:instructor_1_for_course) { create :user, :last_name => "Gaiman" }
-    let(:ta_2_for_course) { create :user, :last_name => "Palmer" }
-    let(:professor_observer) {create :user}
-    before do
-      create(:course_membership, course: world.course, user: ta_for_course, role: "gsi")
-      create(:course_membership, course: world.course, user: instructor_1_for_course, role: "professor", instructor_of_record: true)
-      create(:course_membership, course: world.course, user: ta_2_for_course, role: "gsi", instructor_of_record: true)
-      create(:course_membership, course: world.course, user: professor_observer, role: "professor", instructor_of_record: false)
-    end
-
-    it "returns only the staff listed as instructors of record" do
-      result = User.instructors_of_record(world.course)
-      expect(result.pluck(:id)).to eq [instructor_1_for_course.id, ta_2_for_course.id]
     end
   end
 

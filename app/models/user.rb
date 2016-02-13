@@ -26,23 +26,9 @@ class User < ActiveRecord::Base
       query
     end
 
-    def students_auditing(course, team=nil)
-      user_ids = CourseMembership.where(course: course, role: "student", auditing: true).pluck(:user_id)
-      query = User.where(id: user_ids)
-      query = query.students_in_team(team.id, user_ids) if team
-      query
-    end
-
     def students_by_team(course, team)
       user_ids = CourseMembership.where(course: course, role: "student").pluck(:user_id)
       User.where(id: user_ids).students_in_team(team.id, user_ids)
-    end
-
-    def instructors_of_record(course)
-      user_ids = CourseMembership
-        .where(course: course, instructor_of_record: true)
-        .pluck(:user_id)
-      User.where(id: user_ids)
     end
 
     def unscoped_students_being_graded_for_course(course, team=nil)

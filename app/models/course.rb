@@ -15,8 +15,15 @@ class Course < ActiveRecord::Base
     end
   end
 
+  # Staff returns all professors and GSI for the course.
+  # Note that this is different from is_staff? which currently
+  # includes Admin users
+  def staff
+    User.with_role_in_course("staff", self)
+  end
+
   def instructors_of_record
-    User.instructors_of_record(self)
+    InstructorsOfRecord.for(self).users
   end
 
   def instructors_of_record_ids
@@ -25,29 +32,7 @@ class Course < ActiveRecord::Base
 
   def instructors_of_record_ids=(value)
     user_ids = value.map(&:to_i)
-
-    # Remove instructors of record that are not in the array of ids
-    course_memberships.select do |membership|
-      membership.instructor_of_record && !user_ids.include?(membership.user_id)
-    end.each do |membership|
-      membership.instructor_of_record = false
-      membership.save
-    end
-
-    # Add instructors of record that are in the array of ids
-    course_memberships.select do |membership|
-      !membership.instructor_of_record && user_ids.include?(membership.user_id)
-    end.each do |membership|
-      membership.instructor_of_record = true
-      membership.save
-    end
-  end
-
-  # Staff returns all professors and GSI for the course.
-  # Note that this is different from is_staff? which currently
-  # includes Admin users
-  def staff
-    User.with_role_in_course("staff", self)
+    InstructorsOfRecord.for(self).update_course_memberships(user_ids)
   end
 
   def students_being_graded
@@ -56,14 +41,6 @@ class Course < ActiveRecord::Base
 
   def students_being_graded_by_team(team)
     User.students_being_graded(self,team)
-  end
-
-  def students_auditing
-    User.students_auditing(self)
-  end
-
-  def students_auditing_by_team(team)
-    User.students_auditing(self,team)
   end
 
   def students_by_team(team)
