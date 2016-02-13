@@ -39,5 +39,12 @@ describe InstructorOfRecord do
         expect(memberships.map(&:id)).to be_empty
       end
     end
+
+    it "returns all the course memberships that have instructors of record" do
+      membership1 = create :staff_course_membership, course: course, instructor_of_record: true
+      membership2 = create :staff_course_membership, course: course, instructor_of_record: true
+      result = subject.update_course_memberships [membership1.user_id, membership2.user_id]
+      expect(result).to eq [membership1, membership2]
+    end
   end
 end

@@ -12,8 +12,8 @@ class InstructorOfRecord
 
     not_instructors_of_record(user_ids).map do |membership|
       membership.update_attributes instructor_of_record: true
-      membership
     end
+    course.course_memberships.instructors_of_record
   end
 
   def users
