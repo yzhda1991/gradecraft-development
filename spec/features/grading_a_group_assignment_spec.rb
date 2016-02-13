@@ -11,6 +11,7 @@ feature "grading a group assignment" do
     let!(:group) { create :group, course: course, name: "Group Name", approved: "Approved" }
     let!(:assignment_group) { create :assignment_group, group: group, assignment: assignment }
     let!(:group_membership) { create :group_membership, student: student, group: group }
+    let!(:submission) { create :submission, course: course, assignment: assignment, group: group }
 
     before(:each) do
       login_as professor
@@ -41,6 +42,9 @@ feature "grading a group assignment" do
         click_button "Submit Grades"
       end
       expect(page).to have_notification_message('notice', "Group Name's Group Assignment was successfully updated")
+      grade = Grade.where(assignment_id: assignment.id).last
+      expect(grade.group_id).to eq group.id
+      expect(grade.submission_id).to eq submission.id
     end
   end
 end
