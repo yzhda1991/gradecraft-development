@@ -1,5 +1,5 @@
 class SubmissionsExportsController < ApplicationController
-  before_filter :ensure_staff?
+  before_filter :ensure_staff?, except: [:download_with_token]
 
   def create
     if create_submissions_export && submissions_export_job.enqueue
@@ -24,6 +24,9 @@ class SubmissionsExportsController < ApplicationController
 
   def download
     send_data submissions_export.fetch_object_from_s3.body.read, filename: submissions_export.export_filename
+  end
+
+  def download_with_token
   end
 
   protected
