@@ -23,7 +23,7 @@ describe InstructorOfRecord do
 
     context "for new instructors of record" do
       it "adds instructors of record to the course membership" do
-        InstructorOfRecord.new(course).update_course_memberships([membership.user_id])
+        subject.update_course_memberships([membership.user_id])
 
         expect(course.instructors_of_record).to eq [membership.user]
       end
@@ -32,10 +32,9 @@ describe InstructorOfRecord do
     context "for existing instructors of record" do
       it "removes instructors of record to the course membership if they are not included" do
         membership.update_attributes instructor_of_record: true
-        memberships = InstructorOfRecord.new(course).update_course_memberships([])
+        subject.update_course_memberships([])
 
         expect(course.instructors_of_record).to be_empty
-        expect(memberships.map(&:id)).to be_empty
       end
     end
 
