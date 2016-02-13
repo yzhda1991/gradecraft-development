@@ -29,7 +29,7 @@ class InstructorOfRecord
   end
 
   def not_instructors_of_record(user_ids)
-    course.course_memberships.select do |membership|
+    course.course_memberships.select(&:staff?).select do |membership|
       user_ids.include?(membership.user_id) && !membership.instructor_of_record?
     end
   end
