@@ -1,6 +1,14 @@
 @import color
 @import layout
 
+img.profile-pic
+  position: relative
+  margin: 0 0 -5px -5px
+  padding: 0
+
+a.site-title
+  color: $color-blue-1
+
 .container
   width: 95%
   margin: 0 auto
@@ -124,11 +132,6 @@
   z-index: 1
   color: $color-green-2
 
-@media screen and (min-width: $media-small-max)
-  .btn-navbar-right, .btn-navbar-left, .mobile
-    display: none
-
-
 /* Navbar Styles */
 .navbar
   position: fixed
@@ -137,40 +140,51 @@
   height: 45px !important
   background-color: $color-blue-1
 
-@media (max-width: $media-small-max)
-
-  ul.subnav
-    margin: 0
-    padding: 0
-    font-size: .9rem
-    background: $color-blue-4
-    li a
-      padding: 5px 10px
-      display: block
-      &:hover
-        background-color: $color-blue-2
-        color: $color-white
-
-  li.dropdown a.section-title
-    display: block
-    background: $color-blue-1
+ul.subnav.logged-out
+  left: -6.25rem
+  background-color: $color-blue-3
+  border-bottom-left-radius: $global-radius
+  border-bottom-right-radius: $global-radius
+  padding: .5rem 0
+  li a
+    border-radius: 0
+    font-size: 1rem !important
     color: $color-white
-    padding: 5px 10px
+    text-transform: none !important
 
-img.profile-pic
-  position: relative
-  left: -5px
-  margin: 0 0 -5px -5px
-  padding: 0
+.login-buttons
+  padding-top: .75rem
+  padding-right: .25rem
+  padding-left: .5rem
+  float: right
 
-a.site-title
-  color: $color-blue-1
+  .um-login
+    background-image: image-url('UM.png')
+    background-position: .5rem
+    margin-right: .5rem
+    padding-left: 3.5rem !important
+    background-repeat: no-repeat
+    background-color: $color-blue-2
+
+  .gc-login
+    background-image: image-url('GC.png')
+    padding-left: 2.75rem !important
+    background-repeat: no-repeat
+    background-color: $color-grey-3
+
+  .button:hover
+    background-color: $color-blue-1
+
+.offscreen-sidebar
+  display: none
+
+.isCbFlyNavLeftActive .offscreen-sidebar
+  margin-right: 0
+  display: block
+  padding-right: 1rem
 
 /* Large Screen Styles*/
 @media (min-width: $media-small-max)
-  .hidden-med-and-up
-    display: none
-
   .navbar
     height: auto
   .container
@@ -262,48 +276,6 @@ a.site-title
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
 
-ul.subnav.logged-out
-  left: -6.25rem
-  background-color: $color-blue-3
-  border-bottom-left-radius: $global-radius
-  border-bottom-right-radius: $global-radius
-  padding: .5rem 0
-  li a
-    border-radius: 0
-    font-size: 1rem !important
-    color: $color-white
-    text-transform: none !important
-
-.login-buttons
-  padding-top: .75rem
-  padding-right: .25rem
-  padding-left: .5rem
-  float: right
-
-  .um-login
-    background-image: image-url('UM.png')
-    background-position: .5rem
-    margin-right: .5rem
-    padding-left: 3.5rem !important
-    background-repeat: no-repeat
-    background-color: $color-blue-2
-
-  .gc-login
-    background-image: image-url('GC.png')
-    padding-left: 2.75rem !important
-    background-repeat: no-repeat
-    background-color: $color-grey-3
-
-  .button:hover
-    background-color: $color-blue-1
-
-.offscreen-sidebar
-  display: none
-
-.isCbFlyNavLeftActive .offscreen-sidebar
-  margin-right: 0
-  display: block
-
 /* Mobile Styles */
 @media (max-width: $media-medium-max)
   .mobile-nav
@@ -319,8 +291,25 @@ ul.subnav.logged-out
   .nav.nav-pill
     padding: 0
     margin: .75rem
+    
+  ul.subnav
+    margin: 0
+    padding: 0
+    font-size: .9rem
+    background: $color-blue-4
+    li a
+      padding: 5px 10px
+      display: block
+      &:hover
+        background-color: $color-blue-2
+        color: $color-white
 
-@media (max-width: $media-small-max)
+  li.dropdown a.section-title
+    display: block
+    background: $color-blue-1
+    color: $color-white
+    padding: 5px 10px
+
   .layout-left-flyout
     padding: .25rem
     width: 15.25rem

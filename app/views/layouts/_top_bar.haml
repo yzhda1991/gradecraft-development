@@ -1,44 +1,31 @@
-#left-flyout-nav.layout-left-flyout
+- if ! current_user
+  = render 'layouts/navigation/top_bar_logged_out'
+- else
+  #left-flyout-nav.layout-left-flyout
 
-.offscreen-sidebar
-  - if current_user_is_staff?
-    = render 'layouts/navigation/staff_subnav'
-  - elsif current_user_is_student?
-    .sidebar= render 'students/student_profile_tabs'
+  .offscreen-sidebar
+    - if current_user_is_student?
+      = render 'students/student_profile_tabs'
+    - elsif current_user_is_staff?
+      = render 'layouts/navigation/staff_subnav'
 
-.layout-right-content
-  %header
-    .navbar.container
-      - if current_user.present?
-        %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
-          %i.fa.fa-dashboard.fa-fw
-      %nav.the-nav.nav-collapse.hide-for-small.hide-for-medium.clearfix{:role => "navigation"}
-        %ul.nav.nav-pill.left
-          %li.course-site
-            - if current_course
+  .layout-right-content
+    %header
+      .navbar.container
+        %nav.the-nav.nav-collapse.hide-for-small.hide-for-medium.clearfix{:role => "navigation"}
+          %ul.nav.nav-pill.left
+            %li.course-site
               %a.no-hover.site-title{:href => dashboard_path}
-                %span.course.left= "#{current_course.courseno} "
-                %span.course_name.left.hidden-med.hidden-sm= "#{current_course.name} "
-                %span.course_semester.left.hidden-med.hidden-sm= "#{current_course.try(:semester)} #{current_course.try(:year)}"
+                %span.course= "#{current_course.courseno} "
+                %span.course_name= "#{current_course.name} "
+                %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
                 - if current_course.tagline?
-                  %span.tagline.left.hidden-med.hidden-sm= current_course.try(:tagline)
-            - else
-              %a.no-hover.site-title{:href => root_url }
-                = image_tag "gradecraft_logo.png", :width => "150"
-        %ul.nav.nav-pill.right
-          - if current_user
+                  %span.tagline= current_course.try(:tagline)
+          %ul.nav.nav-pill.right
             = render 'layouts/navigation/authenticated_nav'
-          - else
-            = render 'layouts/navigation/overview_nav'
-            = render 'layouts/navigation/login_nav'
-      - if ! current_user
         %nav.mobile-nav.hide-for-large
-          .left
-            %a.no-hover.site-title{:href => root_url }
-              .hide-for-small= image_tag "gradecraft_logo.png", :width => "150"
-              .hide-for-medium= image_tag "GradeCraft_Logo_Mark_RGB.png", :width => "34"
-          .right= render 'layouts/navigation/login_nav'
-      - if current_user.present?
-        %a.btn-navbar-right.btn-navbar-navtoggle.btn-flyout-right-trigger
-          %i.fa.fa-user.fa-fw
-#right-flyout-nav.layout-right-flyout
+          %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
+            %i.fa.fa-dashboard.fa-fw
+          %a.btn-navbar-right.btn-navbar-navtoggle.btn-flyout-right-trigger
+            %i.fa.fa-user.fa-fw
+  #right-flyout-nav.layout-right-flyout
