@@ -1,11 +1,171 @@
+@import color
+@import layout
+
 .features
-  section
-    clear: both
-    position: relative
-    margin: 0 auto
-    padding: 4rem 2rem   
-    min-height: 400px
-    height: auto
-    opacity: .8
-    font-size: 1rem
-    background-color: $color-blue-3
+  .ui-widget-content
+    background: transparent !important
+    border: 0px
+
+  .ui-widget-content#tabs
+    margin: 0 0 2rem
+    padding: 0
+
+    .ui-tabs-panel
+      padding: 0
+      float: left
+
+    ul
+      width: 210px
+      height: 50px
+      margin: .5rem auto 0
+      border: 0
+      background: transparent !important
+
+      li
+        border-radius: 0 !important
+        margin: 0
+        border: 0
+        padding: 0
+
+  .hero-section
+    background:rgba(0,0,0,0.1)
+    padding: 1rem 0 1rem
+
+    h1
+      font-size: 2.2rem
+      color: $color-white
+      font-weight: lighter
+      width: 50%
+      height: 150px
+      margin: 2rem auto 1rem
+
+    h3
+      font-size: 1.1rem
+      color: $color-white
+      font-weight: lighter
+      margin-top: 40px
+      text-transform: none !important
+
+    .promo-text
+      color: $color-white
+
+  .double-height-feature-section
+    height: 75% !important
+
+  .feature-section
+    height: 50%
+    padding: 2rem
+
+    .image-container
+      width: 100%
+      padding-top: 2%
+
+    img
+      position: relative
+      height: 90%
+
+      &.center-image
+        height: 40%
+
+    &.white
+      background-color: $color-white
+
+    &.alternate-white
+      background-color: lighten($color-blue-4, 20%)
+
+    .text
+      line-height: 2.25rem
+      font-size: 1.25rem
+
+    h2
+      font-size: 2rem
+      color: $color-blue-3
+      margin-bottom: 1rem
+
+    .half h2
+      text-align: left
+
+    h4
+      text-transform: none !important
+      margin: 1rem 0
+
+    p
+      margin: 0 auto
+      text-align: left
+
+    .half
+      width: calc(50% - 6rem)
+      margin: 0 2rem 0 3rem !important
+      position: relative
+
+    .whole
+      margin 0 auto
+      width: 100%
+      text-align: center
+
+      p
+        width: 75%
+        font-size: 1.5rem
+
+@media (max-width: $media-small-max)
+  .features
+    .hero-section
+      margin-top: 4rem
+
+      h1
+        margin-top: 0rem
+        margin-bottom: 6rem
+
+    .feature-section
+      height: auto !important
+
+      .image-container
+        margin: 1rem auto !important
+        padding: 0 !important
+
+      img, .text, .center-image
+        margin: 0 auto !important
+        padding: 0 !important
+        max-width: 100%
+        height: auto !important
+
+      .half
+        width: 100% !important
+
+      .whole
+        p
+          width: 100%
+          font-size: 1rem
+
+@media (max-width: $media-medium-max)
+  .logged-out .features
+    .hero-section
+      margin-top: 1%
+
+      h1
+        margin-top: 2rem
+        font-size: 1.5rem !important
+        height: 50px !important
+        padding-bottom: 1rem
+
+      .promo-text
+        font-size: .8rem
+
+  .features
+    .feature-section
+      h2
+        line-height: 2.5rem
+
+      img
+        margin-top: 1%
+
+      .text
+        font-size: 1rem !important
+        line-height: 1.75rem !important
+        margin: 1% auto !important
+        padding: 0  !important
+
+      .whole
+        p
+          width: 100%
+          font-size: 1rem !important

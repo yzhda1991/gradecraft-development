@@ -1,4 +1,4 @@
-.sidebar-container
+.sidebar-container.hide-for-small.hide-for-medium
   / Staff-only sidebar navigation
   = render 'layouts/navigation/staff_subnav'
 
@@ -9,7 +9,7 @@
       = render "students/student_profile_tabs"
 
   / Page content
-  .panel.mainContent{ :class => (@display_sidebar ? 'student' : '') }= render 'layouts/content'
+  .mainContent{ :class => (@display_sidebar ? 'student' : '') }= render 'layouts/content'
 
   - if @display_sidebar == true
     .student-sidebar

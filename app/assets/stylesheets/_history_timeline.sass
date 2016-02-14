@@ -1,9 +1,12 @@
-$color-timeline-content: $color-grey-4
-$color-timeline-content-shadow: $color-grey-3
+@import color
+@import layout
+
+$color-timeline-content: $color-grey-6
+$color-timeline-content-shadow: $color-grey-5
 $color-timeline-header: $color-black
-$color-timeline-grade: $color-green-5
+$color-timeline-grade: $color-green-2
 $color-timeline-submission: $color-blue-5
-$color-timeline-vertical-line: $color-blue-2
+$color-timeline-vertical-line: $color-blue-5
 
 .timeline-container
   /* this class is used to give a max-width to the element it is applied to, and center it horizontally when it reaches that max-width
@@ -51,20 +54,25 @@ $color-timeline-vertical-line: $color-blue-2
 .timeline-block
   position: relative
   margin: 2em 0
+
   &:after
     content: ""
     display: table
     clear: both
+
   &:first-child
     margin-top: 0
+
   &:last-child
     margin-bottom: 0
 
-@media only screen and (min-width: 1170px)
+@media only screen and (min-width: $media-medium-max)
   .timeline-block
     margin: 4em 0
+
     &:first-child
       margin-top: 0
+
     &:last-child
       margin-bottom: 0
 
@@ -76,6 +84,7 @@ $color-timeline-vertical-line: $color-blue-2
   height: 40px
   border-radius: 50%
   box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05)
+
   img
     display: block
     width: 24px
@@ -85,21 +94,25 @@ $color-timeline-vertical-line: $color-blue-2
     top: 50%
     margin-left: -12px
     margin-top: -12px
+
   &.timeline-grade
     background: $color-timeline-grade
+
   &.timeline-submission
     background: $color-timeline-submission
 
-@media only screen and (min-width: 1170px)
+@media only screen and (min-width: $media-medium-max)
   .timeline-img
     left: 50%
     margin-left: -20px
     /* Force Hardware Acceleration in WebKit */
     -webkit-transform: translateZ(0)
     -webkit-backface-visibility: hidden
+
   .cssanimations .timeline-img
     &.is-hidden
       visibility: hidden
+
     &.bounce-in
       visibility: visible
       -webkit-animation: timeline-bounce-1 0.6s
@@ -164,26 +177,33 @@ $color-timeline-vertical-line: $color-blue-2
   border-radius: 0.25em
   padding: 1em
   box-shadow: 0 3px 0 $color-timeline-content-shadow
+
   &:after
     content: ""
     display: table
     clear: both
+
   h2
     color: $color-timeline-header
+
   p
     font-size: 13px
     font-size: 0.8125rem
+
   .timeline-date
     font-size: 13px
     font-size: 0.8125rem
     display: inline-block
+
   p
     margin: 1em 0
     line-height: 1.6
+
   .timeline-date
     float: left
     padding: .8em 0
     opacity: .7
+
   &::before
     content: ''
     position: absolute
@@ -194,29 +214,33 @@ $color-timeline-vertical-line: $color-blue-2
     border: 7px solid transparent
     border-right: 7px solid $color-timeline-content
 
-@media only screen and (min-width: 768px)
+@media only screen and (min-width: $media-small-max)
   .timeline-content
     h2
       font-size: 20px
       font-size: 1.25rem
+
     p
       font-size: 16px
       font-size: 1rem
+
     .timeline-content .timeline-date
       font-size: 14px
       font-size: 0.875rem
 
-@media only screen and (min-width: 1170px)
+@media only screen and (min-width: $media-medium-max)
   .timeline-content
     margin-left: 0
     padding: 1.6em
     width: 45%
+    float: left
+
     &::before
       top: 24px
       left: 100%
       border-color: transparent
       border-left-color: $color-timeline-content
-    float: left
+
     .timeline-date
       position: absolute
       width: 100%
@@ -224,28 +248,33 @@ $color-timeline-vertical-line: $color-blue-2
       top: 6px
       font-size: 16px
       font-size: 1rem
+
   .timeline-block:nth-child(even) .timeline-content
     float: right
+
     &::before
       top: 24px
       left: auto
       right: 100%
       border-color: transparent
       border-right-color: $color-timeline-content
+
     .timeline-date
       left: auto
       right: 122%
       text-align: right
+
   .cssanimations .timeline-content
     &.is-hidden
       visibility: hidden
+
     &.bounce-in
       visibility: visible
       -webkit-animation: timeline-bounce-2 0.6s
       -moz-animation: timeline-bounce-2 0.6s
       animation: timeline-bounce-2 0.6s
 
-@media only screen and (min-width: 1170px)
+@media only screen and (min-width: $media-medium-max)
   /* inverse bounce effect on even content blocks */
   .cssanimations .timeline-block:nth-child(even) .timeline-content.bounce-in
     -webkit-animation: timeline-bounce-2-inverse 0.6s

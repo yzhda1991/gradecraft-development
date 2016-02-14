@@ -1,12 +1,29 @@
+@import color
+@import layout
+
+img.profile-pic
+  position: relative
+  margin: 0 0 -5px -5px
+  padding: 0
+
+a.site-title
+  color: $color-blue-1
+
+.container
+  width: 95%
+  margin: 0 auto
+  &.navbar
+    width: 100%
+
 .layout-right-flyout, .layout-left-flyout
   height: 100%
   position: fixed
   visibility: hidden
   padding: 0
-  z-index: 0  
+  z-index: 0
   top: 0
   transition: visibility 0 linear .2s
-  background-color: $color-blue-3
+  background-color: $color-blue-2
   transition: visibility 0 linear .2s
   -webkit-perspective: 1000
   -webkit-backface-visibility: hidden
@@ -72,7 +89,6 @@
   transform: translate3d(250px,0,0)
   position: relative
 
-
 .nav-flyout-navmask, .nav-flyout-contentmask, .nav-flyout-navmask-left, .nav-flyout-contentmask-left
   position: absolute
   top: 0
@@ -116,52 +132,60 @@
   z-index: 1
   color: $color-green-2
 
-@media screen and (min-width: $media-small-max)
-  .btn-navbar-right, .btn-navbar-left, .mobile
-    display: none
-
-
 /* Navbar Styles */
 .navbar
   position: fixed
   top: 0 !important
-  z-index: 1000 
-  height: 40px !important
-  display: inline
-  background: $color-blue-00
+  z-index: 1000
+  height: 45px !important
+  background-color: $color-blue-1
 
-@media (max-width: $media-small-max)
-
-  ul.subnav
-    margin: 0
-    padding: 0
-    font-size: .9rem
-    background: $color-blue-4
-    li a
-      padding: 5px 10px
-      display: block
-      &:hover
-        background-color: $color-blue-0
-        color: $color-white
-
-  li.dropdown a.section-title
-    display: block
-    background: $color-blue-00
+ul.subnav.logged-out
+  left: -6.25rem
+  background-color: $color-blue-3
+  border-bottom-left-radius: $global-radius
+  border-bottom-right-radius: $global-radius
+  padding: .5rem 0
+  li a
+    border-radius: 0
+    font-size: 1rem !important
     color: $color-white
-    padding: 5px 10px
+    text-transform: none !important
 
-img.profile-pic
-  position: relative
-  left: -5px
-  margin: 0 0 -5px -5px 
-  padding: 0
+.login-buttons
+  padding-top: .75rem
+  padding-right: .25rem
+  padding-left: .5rem
+  float: right
 
-a.site-title
-  color: $color-blue-3
+  .um-login
+    background-image: image-url('UM.png')
+    background-position: .5rem
+    margin-right: .5rem
+    padding-left: 3.5rem !important
+    background-repeat: no-repeat
+    background-color: $color-blue-2
 
-/* Large Screen Styles*/ 
-@media (min-width: $media-small-max)
-  .navbar 
+  .gc-login
+    background-image: image-url('GC.png')
+    padding-left: 2.75rem !important
+    background-repeat: no-repeat
+    background-color: $color-grey-3
+
+  .button:hover
+    background-color: $color-blue-1
+
+.offscreen-sidebar
+  display: none
+
+.isCbFlyNavLeftActive .offscreen-sidebar
+  margin-right: 0
+  display: block
+  padding-right: 1rem
+
+/* Large Screen Styles*/
+@media (min-width: $media-medium-max)
+  .navbar
     height: auto
   .container
     width: 95%
@@ -173,9 +197,9 @@ a.site-title
   .the-nav .nav-pill:after
     content: ""
     display: table
-    clear: both 
+    clear: both
   .the-nav .nav-pill.left
-    height: 40px
+    height: 45px
     overflow: hidden
   .the-nav .nav-pill.right
     z-index: 100
@@ -188,39 +212,41 @@ a.site-title
     margin-bottom: 0
     position: relative
     font-size: .9rem
-  .the-nav > .nav > li .caret 
+  .the-nav > .nav > li .caret
     margin-top: 8px
     margin-left: 2px
-    border-top-color: $color-grey-6
-    border-bottom-color: $color-grey-6
+    border-top-color: $color-grey-8
+    border-bottom-color: $color-grey-8
   .the-nav > .nav > li a
     display: block
-    padding: 10px 1rem
+    padding: .5rem
     color: $color-blue-4
-    font-weight: 400
     text-decoration: none
-    .course_name 
+    .course_name
       margin-left: .25rem
     .course_semester
       margin-left: .5rem
-      color: $color-blue-1
+      color: $color-blue-3
       text-transform: uppercase
 
     .tagline
       margin-left: .5rem
-      color: $color-green-3
+      color: $color-green-2
 
-  /* Active State */ 
+  .logged-in .the-nav > .nav > li a
+    padding-top: .85rem
+
+  /* Active State */
   .the-nav > .nav > li:hover > a
     color: $color-white
-    background-color: $color-blue-0
+    background-color: $color-blue-2
   .the-nav > .nav > li:hover > a.no-hover
-    background-color: $color-blue-00
+    background-color: $color-blue-1
     color: $color-blue-4
   .the-nav > .nav > li:hover .subnav
     display: block
 
-  /* Subnav */ 
+  /* Subnav */
 
   .nav > li > .subnav
     display: none
@@ -244,93 +270,102 @@ a.site-title
     padding: 6px 10px
     transition: all .2s
   .nav > li > .subnav > li:hover a
-    background: $color-blue-0
+    background: $color-blue-2
     color: $color-white
   .nav > li > .subnav > li:last-of-type a:hover
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
 
-ul.subnav.logged-out
-  left: -6.25rem
-  background-color: $color-blue-1
-  border-bottom-left-radius: $global-radius
-  border-bottom-right-radius: $global-radius
-  padding: .5rem 0 
-  li a
-    border-radius: 0
-    font-size: 1rem !important
-    color: $color-white
-    text-transform: none !important
-
-.login-buttons
-  padding-top: .6rem
-  padding-right: .25rem
-
-  .um-login 
-    background-image: image-url('UM.png')
-    padding-left: 2.75rem
-    background-repeat: no-repeat
-    background-color: $color-blue-0
-
-  .gc-login 
-    background-image: image-url('GC.png')
-    padding-left: 2.75rem
-    background-repeat: no-repeat
-    background-color: $color-grey-1
-
-  .button:hover
-    background-color: $color-blue-2
-
-.offscreen-sidebar
-  display: none
-
-.isCbFlyNavLeftActive .offscreen-sidebar 
-  margin-right: 0
-  display: block
-
-/* Mobile Styles */ 
-
-@media (max-width: $media-small-max)
-
+/* Mobile Styles */
+@media (max-width: $media-medium-max)
   .navbar .nav-collapse
     display: none
 
-  .navbar .nav-collapse .logged-in a.site-title
-    display: block
-    line-height: .75rem
+  .mobile-nav
+    padding-top: .5rem
+    padding-left: .5rem
+    margin: 0 auto
+    text-align: center
 
-  .navbar
-    height: auto !important
+    .login-buttons
+      padding-top: 0.25rem
+      padding-right: .5rem
+
+  .nav.nav-pill
+    padding: 0
+    margin: .75rem
+
+  ul.subnav
+    margin: 0
+    padding: 0
+    font-size: .9rem
+    background: $color-blue-4
+    li a
+      padding: 5px 10px
+      display: block
+      &:hover
+        background-color: $color-blue-2
+        color: $color-white
+
+  li.dropdown a.section-title
+    display: block
+    background: $color-blue-1
+    color: $color-white
+    padding: 5px 10px
+
+  .layout-left-flyout
+    padding: .25rem
+    width: 15.25rem
+
+    li, li a
+      color: $color-white
+      height: 1.5rem
+      text-transform: capitalize
+      padding: .15rem
+      font-size: 1rem
+      &:hover, &.active
+        color: $color-yellow-1
+
+    h5
+      color: $color-yellow-1
+      text-transform: uppercase
+      font-size: 1rem
+      padding: .25rem 0 .25rem .5rem
+      font-style: Light-Weight
+      font-weight: normal
+
+    hr
+      border-bottom-color: $color-blue-4
+      border-top-color: $color-blue-4
+      margin: .5rem 0
+
+  li.course-site
+    background-color: darken($color-blue-1, 20%)
+    width: 16rem
+    padding: .5rem .75rem
+    height: 2.75rem
+    font-size: 2rem
+
+    a
+      color: $color-green-2
 
   .navbar .mobile-nav
-    line-height: 1
-    padding-top: 0
+    padding-top: .5rem
+    padding-left: .5rem
+    margin: 0 auto
+    text-align: center
 
     .nav.nav-pill
       width: 100% !important
       text-align: center
 
+      li
+        display: inline
+        a
+          color: $color-blue-4
+
     .site-title
       padding: 0
-      margin-left: -6rem
 
-    .login-buttons
-      padding-top: 0 !important
-
-  .hidden-sm
-    display: none
-
-@media (min-width: $media-small-max)
-  .hidden-med-and-up
-    display: none
-
-
-@media (min-width: $media-small-max) and (max-width: $media-medium-max)
-  .hidden-med
-    display: none
-
-.container
-  width: 95%
-  margin: 0 auto
-  &.navbar
-    width: 100%
+    .right
+      margin-right: 1rem
