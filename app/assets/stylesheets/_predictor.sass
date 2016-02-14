@@ -45,21 +45,21 @@ $predictor-font-size-5 : .55rem
     text
       font-size: $predictor-font-size-4
   #svg-graph-points-earned
-    fill: $color-blue-2
+    fill: $color-green-1
   #svg-graph-points-predicted
-    fill: $color-green-2
+    fill: $color-blue-3
   #svg-earned-key
     -webkit-transform: translate(10px,90px) /* Safari */
     transform: translate(10px,90px)
     .key
-      fill: $color-blue-2
+      fill: $color-green-1
       width: 20
       height: 20
   #svg-predicted-key
     transform: translate(230px,90px)
     -webkit-transform: translate(230px,90px)
     .key
-      fill: $color-green-2
+      fill: $color-blue-3
       width: 20
       height: 20
 
@@ -230,8 +230,6 @@ $predictor-font-size-5 : .55rem
 article.predictor-article
   display: block
   margin-bottom: $predictor-font-size-3
-  border: 1px solid $color-green-2
-  border-bottom: .25rem solid $color-green-2
   background-color: lighten($color-grey-6, 5%)
   float: left
   margin: 3px
@@ -242,7 +240,7 @@ article.predictor-article
     margin: 0
 
 .predictor-article-title
-  background-color: $color-green-1
+  background-color: $color-blue-3
   color: $txt-color-inverse
   padding: 3px 0 0 .5rem
   overflow: hidden
@@ -252,7 +250,7 @@ article.predictor-article
 
 .predictor-article-icons
   height: $predictor-font-size-3
-  background-color: lighten($color-green-2, 30%)
+  background-color: $color-blue-4
   padding: .25rem
 
 .badge-predicted
@@ -299,13 +297,11 @@ article.predictor-article.status-locked
       background-color: $color-orange-1
 
 article.predictor-article.status-graded
-  background-color: $color-blue-4
-  border: 1px solid $color-blue-3
-  border-bottom: .25rem solid $color-blue-3
+  background-color: lighten($color-green-2, 30%)
   .predictor-article-title
-    background-color: $color-blue-1
+    background-color: $color-green-1
   .predictor-article-icons
-    background-color: $color-blue-3
+    background-color: lighten($color-green-2, 10%)
 
 article.predictor-article.status-graded.status-no-points
   background-color: $color-grey-6
@@ -339,7 +335,7 @@ article.predictor-article.status-graded.status-no-points
 article.predictor-article
   .slider.ui-widget-content
     background: lighten($color-white, 0%)
-    border: 1px solid $color-grey-5
+    border: 1px solid $color-blue-3
     width: 80%
     margin-left: 10%
     border-radius: 1rem
@@ -349,16 +345,16 @@ article.predictor-article
 
   .ui-slider
     .ui-slider-range
-      background: $color-green-2
+      background: $color-blue-3
       border-radius: 1rem
 
     .ui-slider-handle
-      width: 25px
-      height: 25px
+      width: 22px
+      height: 22px
       position: absolute
-      top: -7px
+      top: -5px
       margin-left: -12px
-      background: $color-green-1
+      background: $color-blue-1
       border-radius: 1rem
 
 /* Binary Switch */
@@ -368,23 +364,25 @@ article.predictor-article
 
 .predictor-binary-switch .switch-socket
   width: 40px
-  height: 20px
+  height: 14px
   position: relative
   background: $color-white
   border-radius: 1rem
-  border: 1px solid $color-grey-5
+  border: 1px solid $color-blue-3
   margin: auto
 
 .predictor-binary-switch .switch-handle
-  width: 20px
-  height: 20px
+  width: 22px
+  height: 22px
   position: absolute
-  background: $color-green-1
+  top: -4px
+  left: -1px
+  background: $color-blue-1
   border-radius: 1rem
 
 .predictor-binary-switch .switch-socket.on
-  background: $color-green-2
-  border: 1px solid $color-grey-6
+  background: $color-blue-3
+  border: 1px solid $color-blue-3
   .switch-handle
     left: 20px
 
