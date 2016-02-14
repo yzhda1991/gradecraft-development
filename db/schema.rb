@@ -706,6 +706,13 @@ ActiveRecord::Schema.define(version: 20160312161642) do
     t.datetime "updated_at",             null: false
   end
 
+  create_table "tokens", force: :cascade do |t|
+    t.datetime "expires_at"
+    t.text     "hashed_key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "unlock_conditions", force: :cascade do |t|
     t.integer  "unlockable_id"
     t.string   "unlockable_type"

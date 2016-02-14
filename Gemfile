@@ -95,6 +95,10 @@ gem 'rollbar'
 gem 'sampler'
 gem 'sanitize'
 gem 'sassc-rails'
+
+# secure crypt hashing library stronger than bcrypt or PBDBF2
+gem 'scrypt'
+
 gem 'select2-rails'
 gem 'simple_form'
 gem 'sorcery'

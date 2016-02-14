@@ -1,24 +1,25 @@
 class Token < ActiveRecord::Base
-  require 'bcrypt'
   require 'secure_random'
 
-  before_create :generate_secure_keys
+  before_create :cache_secure_key
+  attr_reader :naked_key
 
-  attr_reader :naked_keys
-
-  self.find_with_keys(key1,key2,key3)
+  def naked_key
+    @naked_key ||= SecureRandom.base64(255)
   end
 
-  def naked_keys
-    @naked_keys ||= (1..3).collect { SecureRandom.base64(100) }
+  def cache_secure_key
+    self[:hashed_key] = SCrypt::Password.create naked_key, scrypt_options
   end
 
-  def hashed_keys
-    @hashed_keys ||= naked_keys.collect do |naked_key|
-      BCrypt::Password.create naked_key
-    end
-  end
+  protected
 
-  def generate_secure_keys
+  def scrypt_options
+    # bogart system resources on key hashing to deter brute force attacks
+    {
+      key_len: 512, # 512 bit security
+      max_time: 1000, # max one second computation
+      max_mem: 5 # use 5mb memory
+    }
   end
 end
