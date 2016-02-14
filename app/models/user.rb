@@ -522,7 +522,7 @@ class User < ActiveRecord::Base
   ### GROUPS
 
   def group_for_assignment(assignment)
-    @group_for_assignment ||= assignment_groups.where(assignment: assignment).first.try(:group)
+    assignment_groups.where(assignment: assignment).first.try(:group)
   end
 
 
