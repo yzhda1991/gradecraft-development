@@ -85,4 +85,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "#{@challenge.persisted? ? 'Update' : 'Create'} #{term_for :challenge }"
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), challenges_path, :class => 'button'
+      %li= link_to glyph("times-circle") + "Cancel", challenges_path, :class => 'button'

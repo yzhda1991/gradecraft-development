@@ -7,15 +7,15 @@
     %ul
       %li
         %a{:href => new_challenge_path }
-          %i.fa.fa-plus
+          = glyph(:plus)
           New #{(term_for :challenge).titleize}
       %li
         %a{:href => edit_challenge_path(@challenge) }
-          %i.fa.fa-edit
+          = glyph(:edit)
           Edit
       %li
         %a{:href => mass_edit_challenge_challenge_grades_path(@challenge) }
-          %i.fa.fa-check
+          = glyph(:check)
           Quick Grade
 
 .pageContent
@@ -69,12 +69,12 @@
                 .right
                   - if challenge_grade
                     %ul.button-bar
-                      %li= link_to raw("<i class='fa fa-eye fa-fw'></i><span class='hide-for-small'>See Grade</span>"), challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'
-                      %li= link_to raw("<i class='fa fa-edit fa-fw'></i><span class='hide-for-small'>Edit Grade</span>"), edit_challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'
-                      %li= link_to raw("<i class='fa fa-trash fa-fw'></i><span class='hide-for-small'>Delete Grade</span>"), challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button', :data => { confirm: 'Are you sure?', method: :delete }
+                      %li= link_to glyph(:eye) + "See Grade", challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'
+                      %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button'
+                      %li= link_to glyph(:trash) + "Delete Grade", challenge_challenge_grade_path(@challenge.id, challenge_grade.id, :team_id => team.id), :class => 'button', :data => { confirm: 'Are you sure?', method: :delete }
                   - else
                     %ul.button-bar
-                      %li= link_to raw("<i class='fa fa-check fa-fw'></i> <span class='hide-for-small'>Grade</span>"), new_challenge_challenge_grade_path(:challenge_id => @challenge.id, :team_id => team.id), :class => 'button'
+                      %li= link_to glyph(:check) + "Grade", new_challenge_challenge_grade_path(:challenge_id => @challenge.id, :team_id => team.id), :class => 'button'
 
             - if @challenge.release_necessary?
               %td
