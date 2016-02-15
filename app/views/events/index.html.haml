@@ -6,12 +6,12 @@
   %ul
     %li
       %a{:href => new_event_path }
-        %i.fa.fa-edit
+        = glyph(:plus)
         New Event
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %table.responsive.nofeatures_default_due_date_dynatable
     %thead
       %tr
@@ -31,5 +31,5 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to 'Edit', edit_event_path(event), :class => "button"
-                %li= link_to 'Delete', event, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "button"
+                %li= link_to glyph(:edit) + 'Edit', edit_event_path(event), :class => "button"
+                %li= link_to glyph(:trash) + 'Delete', event, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => "button"

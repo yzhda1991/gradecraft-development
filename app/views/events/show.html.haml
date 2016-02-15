@@ -6,16 +6,16 @@
   %ul
     %li
       %a{:href => new_event_path }
-        %i.fa.fa-plus
+        = glyph(:plus)
         New Calendar Event
     %li
       %a{:href => edit_event_path(@event) }
-        %i.fa.fa-edit
+        = glyph(:edit)
         Edit
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %p
     %b Name:
     = @event.name
