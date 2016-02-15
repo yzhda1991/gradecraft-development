@@ -390,7 +390,7 @@ GradeCraft::Application.routes.draw do
 
   #19. Secure Downloads
   namespace :secure_downloads do
-    get 'submissions_exports/:token_uuid/secret_key/:secret_key' => 'submissions_exports#secure_download'
+    get 'submissions_exports/:secure_token_uuid/secret_key/:secret_key' => 'submissions_exports#secure_download', as: "submissions_exports"
   end
 end
 

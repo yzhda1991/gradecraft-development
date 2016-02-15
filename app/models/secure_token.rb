@@ -15,6 +15,13 @@ class SecureToken < ActiveRecord::Base
     encrypted_key == SCrypt::Password.create(secret_key, scrypt_options)
   end
 
+  def secret_url
+  end
+
+  def has_valid_target_of_class?(required_class)
+    target and target.class == required_class.to_s
+  end
+
   protected
 
   def cache_encrypted_key

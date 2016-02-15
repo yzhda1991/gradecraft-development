@@ -23,13 +23,30 @@ class SubmissionsExportsController < ApplicationController
   end
 
   def download
-    send_data submissions_export.fetch_object_from_s3.body.read, filename: submissions_export.export_filename
+    stream_file_from_s3
   end
 
-  def download_with_token
+  def secure_download
+    if SecureTokenAuthenticator.new(secure_download_attributes).authenticates?
+      stream_file_from_s3
+    else
+      render status: :forbidden
+    end
   end
 
   protected
+
+  def secure_download_attributes
+    {
+      uuid: params[:secure_token_id],
+      target_class: SubmissionsExport,
+      secret_key: params[:secret_key]
+    }
+  end
+
+  def stream_file_from_s3
+    send_data submissions_export.fetch_object_from_s3.body.read, filename: submissions_export.export_filename
+  end
 
   def delete_s3_object
     @delete_s3_object ||= submissions_export.delete_object_from_s3
