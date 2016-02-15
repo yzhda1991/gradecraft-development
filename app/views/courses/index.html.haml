@@ -39,7 +39,7 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to raw("<i class='fa fa-eye fa-fw'></i> See"), course_path(course), :class => 'button'
-                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_course_path(course), :class => 'button'
-                %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), course, :class => 'button', :id => "course-id-#{course.id}", :data => { confirm: "This will delete #{course.name} - are you sure?" }, :method => :delete
-                %li= link_to raw("<i class='fa fa-copy fa-fw'></i> Copy"), copy_courses_path(:id => course.id), :class => 'button', :method => :copy
+                %li= link_to glyph(:eye) + "See", course_path(course), :class => 'button'
+                %li= link_to glyph(:edit) + "Edit", edit_course_path(course), :class => 'button'
+                %li= link_to glyph(:trash) + "Delete", course, :class => 'button', :id => "course-id-#{course.id}", :data => { confirm: "This will delete #{course.name} - are you sure?" }, :method => :delete
+                %li= link_to glyph(:copy) + "Copy", copy_courses_path(:id => course.id), :class => 'button', :method => :copy
