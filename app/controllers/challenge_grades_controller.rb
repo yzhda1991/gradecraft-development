@@ -40,6 +40,10 @@ class ChallengeGradesController < ApplicationController
   def mass_update
     @challenge = current_course.challenges.find(params[:id])
     if @challenge.update_attributes(params[:challenge])
+      @multiple_challenge_grade_updater_job =
+        MultipleChallengeGradeUpdaterJob.new(challenge_grade_ids: mass_update_challenge_grade_ids)
+      @multiple_challenge_grade_updater_job.enqueue
+
       redirect_to challenge_path(@challenge),
         notice: "#{@challenge.name} #{term_for :challenge} successfully graded"
     else
@@ -162,4 +166,18 @@ class ChallengeGradesController < ApplicationController
   def find_challenge_grade
     @challenge_grade = @challenge.challenge_grades.find(params[:id])
   end
+<<<<<<< 0c3ce27a0f07656ac27778ede97eabb054564fdd
+=======
+
+  def mass_update_challenge_grade_ids
+    @challenge.challenge_grades.inject([]) do |memo, challenge_grade|
+      scored_changed = challenge_grade.previous_changes[:score].present?
+      if scored_changed && challenge_grade.is_student_visible?
+        memo << challenge_grade.id
+      end
+      memo
+    end
+  end
+
+>>>>>>> updating scores for all teams
 end
