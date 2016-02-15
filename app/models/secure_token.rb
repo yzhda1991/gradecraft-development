@@ -1,4 +1,4 @@
-class Token < ActiveRecord::Base
+class SecureToken < ActiveRecord::Base
   require 'secure_random'
 
   belongs_to :target, polymorphic: true
