@@ -4,6 +4,7 @@ module GradesHelper
   def grading_status_count_for(course)
     unreleased_grades_count_for(course) +
       in_progress_grades_count_for(course) +
+      in_limbo_grades_count_for(course) + 
       ungraded_submissions_count_for(course)
   end
 
@@ -16,6 +17,17 @@ module GradesHelper
   def in_progress_grades_count_cache_key(course)
     # This cache key is busted when a grade is updated as a Grade touches a Course
     "#{course.cache_key}/in_progress_grades_count"
+  end
+
+  def in_limbo_grades_count_for(course)
+    Rails.cache.fetch(in_limbo_grades_count_cache_key(course)) do
+      course.grades.in_limbo.count
+    end
+  end
+
+  def in_limbo_grades_count_cache_key(course)
+    # This cache key is busted when a grade is updated as a Grade touches a Course
+    "#{course.cache_key}/in_limbo_grades_count"
   end
 
   def unreleased_grades_count_for(course)

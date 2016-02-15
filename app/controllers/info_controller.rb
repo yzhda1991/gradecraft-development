@@ -33,13 +33,15 @@ class InfoController < ApplicationController
   # Displaying all ungraded, graded but unreleased, and in progress assignment submissions in the system
   def grading_status
     @title = "Grading Status"
-    grades = current_course.grades
-    unrealeased_grades = grades.not_released
+    grades = current_course.grades.instructor_modified
+    unreleased_grades = grades.not_released
     in_progress_grades = grades.in_progress
+    in_limbo_grades = grades.in_limbo
     @ungraded_submissions = current_course.submissions.ungraded.includes(:assignment, :grade, :student, :group, :submission_files)
     @ungraded_submissions_by_assignment = @ungraded_submissions.group_by(&:assignment)
-    @unreleased_grades_by_assignment = unrealeased_grades.group_by(&:assignment)
+    @unreleased_grades_by_assignment = unreleased_grades.group_by(&:assignment)
     @in_progress_grades_by_assignment = in_progress_grades.group_by(&:assignment)
+    @in_limbo_grades_by_assignment = in_limbo_grades.group_by(&:assignment)
   end
 
   # Displaying all resubmisisons
