@@ -27,7 +27,6 @@
     - @group.assignment_groups.each do |ag|
       %li= link_to ag.assignment.name, ag.assignment
 
-
   - if @group.text_feedback?
     %h4 Instructor Feedback:
     %p= raw @group.try(:text_feedback)
