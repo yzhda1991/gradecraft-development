@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160312161642) do
+ActiveRecord::Schema.define(version: 20160215084414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -708,9 +708,12 @@ ActiveRecord::Schema.define(version: 20160312161642) do
 
   create_table "tokens", force: :cascade do |t|
     t.datetime "expires_at"
-    t.text     "hashed_key"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.text     "encrypted_key"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "token_id_hex"
+    t.string   "target_class"
+    t.integer  "target_id"
   end
 
   create_table "unlock_conditions", force: :cascade do |t|
