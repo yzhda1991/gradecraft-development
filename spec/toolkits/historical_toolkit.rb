@@ -64,6 +64,7 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
     end
 
     context "with an updated changeset" do
+      let!(:changes) { model.previous_changes }
       subject { model.history }
 
       before { model.update_attributes updated_attributes }
@@ -77,7 +78,8 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
 
         it "returns the changesets for an updated #{fixture}" do
           updated_attributes.each do |key, value|
-            expect(subject).to include({ key.to_s => [nil, value] })
+            change = changes[key].nil? ? nil : changes[key].last
+            expect(subject).to include({ key.to_s => [change, value] })
           end
         end
 
@@ -110,15 +112,28 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
   describe "#historical_merge", versioning: true do
     let(:another_model) { build fixture }
 
-    it "returns new history with 2 histories for 2 creation events" do
+    it "merges history with 2 histories for 2 creation events" do
       model.save
       another_model.save
 
-      history = model.historical_merge(another_model)
+      history = model.historical_merge(another_model).history
 
       expect(history.length).to eq 2
       expect(history.first.changeset["id"].last).to eq another_model.id
       expect(history.last.changeset["id"].last).to eq model.id
+    end
+  end
+
+  describe "#historical_collection_merge", versioning: true do
+    let(:historical_collection) { [build(fixture), build(fixture)] }
+
+    it "merges history for all the historical models in the collection" do
+      model.save
+      historical_collection.each(&:save)
+
+      history = model.historical_collection_merge(historical_collection).history
+
+      expect(history.length).to eq 3
     end
   end
 end

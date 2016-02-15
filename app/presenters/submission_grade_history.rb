@@ -1,6 +1,7 @@
 module SubmissionGradeHistory
   def submission_grade_filtered_history(submission, grade, only_student_visible_grades=true)
-    HistoryFilter.new(submission.historical_merge(grade))
+    HistoryFilter.new(submission.historical_collection_merge(submission.submission_files)
+      .historical_merge(grade).history)
       .remove("name" => "admin_notes")
       .remove("name" => "feedback_read")
       .remove("name" => "feedback_read_at")
@@ -14,6 +15,7 @@ module SubmissionGradeHistory
       .remove("name" => "submission_id")
       .remove("name" => "submitted_at")
       .remove("name" => "updated_at")
+      .rename("SubmissionFile" => "Attachment")
       .include { |history|
         if (history.changeset["object"] == "Grade" && only_student_visible_grades)
           grade = history.version.reify
