@@ -1,9 +1,7 @@
 class SecureToken < ActiveRecord::Base
-  require 'secure_random'
   include Rails.application.routes.url_helpers
 
   belongs_to :target, polymorphic: true
-
   before_create :cache_encrypted_key, :cache_uuid, :set_expires_at
   attr_reader :random_secret_key
 
@@ -12,6 +10,7 @@ class SecureToken < ActiveRecord::Base
     @random_secret_key ||= SecureRandom.urlsafe_base64(190)
   end
 
+  # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)
     encrypted_key == SCrypt::Password.create(secret_key, scrypt_options)
   end
