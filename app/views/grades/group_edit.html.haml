@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   .bold #{term_for :students}
   %ul
     - @group.students.each do |s|
@@ -40,4 +40,4 @@
     .submit-buttons
       %ul
         %li= f.button :submit, "Submit Grades", :class => "button"
-        %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(@assignment), :class => 'button'
+        %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), :class => 'button'

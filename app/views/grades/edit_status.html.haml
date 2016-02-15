@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %table.nofeatures_dynatable
     %thead
       %tr
@@ -26,4 +26,4 @@
     .submit-buttons
       %ul
         %li= f.button :submit, "Update Statuses"
-        %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(@assignment), :class => 'button'
+        %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), :class => 'button'
