@@ -3,22 +3,11 @@ require "rails_spec_helper"
 require "resque-scheduler"
 require "resque_spec/scheduler"
 
-class ApplicationControllerFiltersTest < ApplicationController
-  def html_page
-    respond_to do |format|
-      format.html { render text: "<div>page loaded</div>", response: 200 }
-    end
-  end
+# pulls in the FiltersTest Class, which is a descendent of ApplicationController for test purposes
+include Toolkits::Controllers::ApplicationController::TestClass
 
-  def json_page
-    respond_to do |format|
-      format.json { render json: { waffles: ["blueberry", "strawberry"]}, response: 200 }
-    end
-  end
-end
-
-RSpec.describe ApplicationControllerFiltersTest, type: :controller do
-  include PageviewEventLoggerToolkit
+RSpec.describe FiltersTest, type: :controller do
+  include Toolkits::Controllers::ApplicationController::Filters
 
   describe "#increment_page_views" do
 
