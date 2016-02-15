@@ -154,12 +154,30 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  # NOTE: does this need to be re-activated?
   # Tracking course logins
-  def log_course_login_event
-    # membership = current_user.course_memberships.where(course_id: current_course.id).first
-    # Resque.enqueue(EventLogger,'login', course_id: current_course.id, user_id: current_user.id, student_id: current_student.try(:id), user_role: current_user.role(current_course), last_login_at: membership.last_login_at.to_i, created_at: Time.now)
-    # membership.update_attribute(:last_login_at, Time.now)
+  def record_login_event
+    if current_user and request.format.html?
+      begin
+        # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
+        LoginEventLogger.new(login_logger_attrs).enqueue_in(time_until_next_lull)
+      rescue
+        # otherwise persist it directly to mongo
+        LoginEventLogger.perform('login', login_logger_attrs)
+      end
+      membership.update_attribute(:last_login_at, Time.now)
+    end
+  end
+
+  def login_logger_attrs
+    membership = current_user.course_memberships.where(course_id: current_course.id).first
+    {
+      course_id: current_course.id,
+      user_id: current_user.id,
+      student_id: current_student.try(:id),
+      user_role: current_user.role(current_course),
+      last_login_at: membership.last_login_at.to_i,
+      created_at: Time.zone.now
+    }
   end
 
 end
