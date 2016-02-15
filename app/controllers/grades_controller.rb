@@ -221,6 +221,7 @@ class GradesController < ApplicationController
   def group_edit
     @assignment = current_course.assignments.find(params[:id])
     @group = @assignment.groups.find(params[:group_id])
+    @submission_id = @assignment.submissions.where(group_id: @group.id).first.try(:id)
     @title = "Grading #{@group.name}'s #{@assignment.name}"
     @assignment_score_levels = @assignment.assignment_score_levels
   end
