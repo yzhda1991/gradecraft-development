@@ -27,7 +27,5 @@
         %span.hide-for-small= points element.points_to_next_level(current_student, current_course)
         %span.hide-for-small= " points to the next level!"
         .striped{:style => "width: #{element.progress_percent(current_student)}%;"}
-          
-          
 
   = render partial: "courses/grading_philosophy", locals: { course: current_course }
