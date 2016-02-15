@@ -46,5 +46,4 @@
       .submit-buttons
         %ul
           %li= submit_tag 'Update Settings', :class => 'button'
-          %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), root_path, :class => 'button'
-      %br
+          %li= link_to glyph("times-circle") + "Cancel", root_path, :class => 'button'

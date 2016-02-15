@@ -30,4 +30,4 @@
   .submit-buttons
     %ul
       %li= f.submit "#{@team.persisted? ? 'Update' : 'Create'} #{ term_for :team }", :class => 'button'
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), teams_path, :class => 'button'
+      %li= link_to glyph("times-circle") + "Cancel", teams_path, :class => 'button'
