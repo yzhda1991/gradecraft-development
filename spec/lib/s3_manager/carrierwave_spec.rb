@@ -253,6 +253,7 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "file does not exist on server" do
       it "returns an Aws::S3::Types::DeleteObjectOutput object" do
+        s3_file_cylon.delete_from_s3 # make sure this doesn't exist
         expect(subject).to be_falsey
       end
     end
