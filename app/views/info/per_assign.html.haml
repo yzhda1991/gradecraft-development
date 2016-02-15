@@ -50,5 +50,5 @@
                 %th= assignment.grade_count
                 %th
                   %ul.button-bar.right
-                    %li= link_to raw("<i class='fa fa-check fa-fw'></i> Quick Grade"), mass_grade_assignment_path(assignment), :class => "button"
-                    %li= link_to raw("<i class='fa fa-cloud-download fa-fw'></i> Download Grades"), export_grades_assignment_path(assignment, format: 'csv'), :class => "button"
+                    %li= link_to glyph(:check) + "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
+                    %li= link_to glyph("cloud-download") + "Download Grades", export_grades_assignment_path(assignment, format: 'csv'), :class => "button"
