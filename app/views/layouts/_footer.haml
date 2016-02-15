@@ -1,8 +1,8 @@
 .right
   %ul.social
-    %li= link_to raw("<i class='fa fa-envelope fa-fw'></i>"), "mailto:help@gradecraft.com"
-    %li= link_to raw("<i class='fa fa-twitter fa-fw'></i>"), "https://twitter.com/gradecraft", :target => "_blank"
-    %li= link_to raw("<i class='fa fa-facebook fa-fw'></i>"), "https://facebook.com/gradecraft", :target => "_blank"
+    %li= link_to glyph(:envelope), "mailto:help@gradecraft.com"
+    %li= link_to glyph(:twitter), "https://twitter.com/gradecraft", :target => "_blank"
+    %li= link_to glyph(:facebook), "https://facebook.com/gradecraft", :target => "_blank"
 .left
   %ul
     %li= link_to_unless_current "Features", features_path
