@@ -1,11 +1,14 @@
 class Token < ActiveRecord::Base
   require 'secure_random'
 
+  belongs_to :target, polymorphic: true
+
   before_create :cache_encrypted_key, :cache_token_id_hash
-  attr_reader :naked_key
+  attr_reader :random_secret_key
 
   def random_secret_key
-    @secret_key ||= SecureRandom.base64(255)
+    # generates a 254-character URL-safe secret key
+    @random_secret_key ||= SecureRandom.urlsafe_base64(190)
   end
 
   def authenticates_with?(secret_key)
@@ -18,8 +21,8 @@ class Token < ActiveRecord::Base
     self[:encrypted_key] = SCrypt::Password.create(random_secret_key, scrypt_options)
   end
 
-  def cache_token_id_hex
-    self[:token_id_hex] = SecureRandom.hex(64)
+  def cache_uuid
+    self[:uuid] = SecureRandom.uuid
   end
 
   def scrypt_options
@@ -27,7 +30,7 @@ class Token < ActiveRecord::Base
     {
       key_len: 512, # 512 bit security
       max_time: 1000, # max one second computation
-      max_mem: 5 # use 5mb memory
+      max_mem: 2 # use max 2mb memory
     }
   end
 end
