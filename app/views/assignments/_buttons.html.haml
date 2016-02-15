@@ -15,9 +15,9 @@
         %li= link_to raw('<i class="fa fa-check fa-fw"> </i> Quick Grade'), mass_grade_assignment_path(presenter.assignment)
 
       - if presenter.team
-        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download Team Submissions'), submissions_exports_path(assignment_id: presenter.assignment.id, team_id: presenter.team.id), method: :post 
+        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download Team Submissions'), submissions_exports_path(assignment_id: presenter.assignment.id, team_id: presenter.team.id), method: :post
       - else
-        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download All Submissions'), submissions_exports_path(assignment_id: presenter.assignment.id), method: :post 
+        %li= link_to raw('<i class="fa fa-file-zip-o fa-fw"> </i> Download All Submissions'), submissions_exports_path(assignment_id: presenter.assignment.id), method: :post
 
       %li
         %a{:href => import_grades_assignment_path(presenter.assignment) }
@@ -43,9 +43,9 @@
               Review Grades
         %li.on(ng-cloak ng-show="useRubric")
           %a(ng-click="rubricsOff()")
-            .fa.fa-power-off.fa-fw
+            glyph(:power-off)
             Rubric is On
         %li.off(ng-cloak ng-hide="useRubric")
           %a(ng-click="rubricsOn()")
-            .fa.fa-power-off.fa-fw
+            glyph(:power-off)
             Rubric is Off
