@@ -1,9 +1,10 @@
 class SecureToken < ActiveRecord::Base
   require 'secure_random'
+  include Rails.application.routes.url_helpers
 
   belongs_to :target, polymorphic: true
 
-  before_create :cache_encrypted_key, :cache_token_id_hash
+  before_create :cache_encrypted_key, :cache_uuid, :set_expires_at
   attr_reader :random_secret_key
 
   def random_secret_key
@@ -16,6 +17,7 @@ class SecureToken < ActiveRecord::Base
   end
 
   def secret_url
+    secure_tokens_submissions_exports_url(target_uuid: uuid, secret_key: random_secret_key)
   end
 
   def has_valid_target_of_class?(required_class)
@@ -23,6 +25,10 @@ class SecureToken < ActiveRecord::Base
   end
 
   protected
+
+  def set_expires_at
+    self[:expires_at] = Time.zone.now + 7.days
+  end
 
   def cache_encrypted_key
     self[:encrypted_key] = SCrypt::Password.create(random_secret_key, scrypt_options)
