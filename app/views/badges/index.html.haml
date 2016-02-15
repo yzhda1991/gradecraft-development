@@ -11,7 +11,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   //instructor badge index table
   %table
     %thead
@@ -44,7 +44,7 @@
                 %ul
                   - badge.unlock_keys.each do |key|
                     %li= "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
-          %td            
+          %td
             %img.badge-icon{ :src => badge.icon, :alt => badge.name, :width => 40 }
             - if badge.point_total.present? && badge.point_total > 0
               .italic= "#{points badge.point_total} points"
@@ -55,7 +55,7 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to raw("<i class='fa fa-check fa-fw'></i> Quick Award"), mass_award_badge_path(badge.id), :class => "button"
-                %li= link_to raw("<i class='fa fa-star fa-fw'></i> Award"), new_badge_earned_badge_path(badge), :class => "button"
-                %li= link_to raw("<i class='fa fa-edit fa-fw'></i> Edit"), edit_badge_path(badge), :class => 'button'
-                %li= link_to raw("<i class='fa fa-trash fa-fw'></i> Delete"), badge_path(badge),:class => "button", :data => { confirm: 'Are you sure?',  method: :delete }
+                %li= link_to glyph(:check) + "Quick Award", mass_award_badge_path(badge.id), :class => "button"
+                %li= link_to glyph(:star) + "Award", new_badge_earned_badge_path(badge), :class => "button"
+                %li= link_to glyph(:edit) + "Edit", edit_badge_path(badge), :class => 'button'
+                %li= link_to glyph(:trash) + "Delete", badge_path(badge),:class => "button", :data => { confirm: 'Are you sure?',  method: :delete }
