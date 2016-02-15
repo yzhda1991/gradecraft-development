@@ -91,11 +91,10 @@
 - if current_course.has_teams?
   %li= link_to_unless_current raw("<i class='fa fa-users fa-fw'></i> #{term_for :teams}"), teams_path
 %li
-  %a{:href => groups_path }
-    %i.fa.fa-user-plus.fa-fw
-    #{term_for :groups}
-    - if current_course.groups_to_review_count > 0
-      %div.notification-badge.staff-notification-badge= current_course.groups_to_review_count
+  = link_to_unless_current raw("<i class='fa fa-user-plus fa-fw'></i> #{term_for :groups}"), groups_path do |name|
+    = raw("<span class='sidebar-nav'>#{name}</span>")
+  - if current_course.groups_to_review_count > 0
+    %div.notification-badge.staff-notification-badge= current_course.groups_to_review_count
 %li= link_to_unless_current raw('<i class="fa fa-user-secret fa-fw"></i> Staff'), staff_index_path
 
 %hr
