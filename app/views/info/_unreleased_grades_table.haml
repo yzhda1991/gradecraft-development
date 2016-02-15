@@ -9,7 +9,7 @@
       - if assignment.is_individual?
         = link_to glyph(:check) + "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
       - else
-        = link_to glyph(:check) + Grade", assignment, :class => "button"
+        = link_to glyph(:check) + "Grade", assignment, :class => "button"
 
     = form_tag edit_status_grades_assignment_path(assignment), method: :get do
       %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "unreleasedTableCaption"}
