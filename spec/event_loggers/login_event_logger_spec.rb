@@ -1,14 +1,23 @@
 require 'rails_spec_helper'
 
-include LoginEventLoggerToolkit # login_logger_attrs comes from here
-
-# LoginEventLogger.new(login_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
+# LoginEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe LoginEventLogger, type: :background_job do
-  describe "initialize" do
+  let(:new_logger) { LoginEventLogger.new(logger_attrs) }
+
+  let(:logger_attrs) {{
+    course_id: rand(100),
+    user_id: rand(100),
+    student_id: rand(100),
+    user_role: "great role",
+    page: "/a/great/path",
+    created_at: Time.parse("Jan 20 1972")
+  }}
+
+  describe "#initialize" do
+    subject { new_logger }
+
     it "should set an @attrs hash" do
-      @some_attrs = { goats: 10, hillbilly_name: "Jake" }
-      @login_logger = LoginEventLogger.new(@some_attrs)
-      expect(@login_logger.instance_variable_get(:@attrs)).to eq(@some_attrs)
+      expect(subject.instance_variable_get(:@attrs)).to eq(logger_attrs)
     end
   end
 
@@ -18,15 +27,15 @@ RSpec.describe LoginEventLogger, type: :background_job do
     end
 
     describe "enqueue without schedule" do
+      subject { new_logger.enqueue }
+      before(:each) { subject }
+
       it "should find a job in the login queue" do
-        @login_logger = LoginEventLogger.new(login_logger_attrs).enqueue
         resque_job = Resque.peek(:login_event_logger)
-        puts "Job is #{resque_job}"
         expect(resque_job).to be_present
       end
 
       it "should have a login logger event in the queue" do
-        @login_logger = LoginEventLogger.new(login_logger_attrs).enqueue
         expect(LoginEventLogger).to have_queue_size_of(1)
       end
     end
@@ -34,17 +43,19 @@ RSpec.describe LoginEventLogger, type: :background_job do
     describe "enqueue with schedule" do
 
       describe"enqueue_in" do
+        let!(:login_event_logger) { new_logger.enqueue_in(2.hours) }
+
         it "should schedule a login event" do
-          @login_logger = LoginEventLogger.new(login_logger_attrs).enqueue_in(2.hours)
-          expect(LoginEventLogger).to have_scheduled('login', login_logger_attrs).in(2.hours)
+          expect(LoginEventLogger).to have_scheduled('login', logger_attrs).in(2.hours)
         end
       end
 
       describe "enqueue_at" do
-        it "should enqueue the login logger to trigger @later" do
-          @later = Time.parse "Feb 10 2052"
-          @login_logger = LoginEventLogger.new(login_logger_attrs).enqueue_at(@later)
-          expect(LoginEventLogger).to have_scheduled('login', login_logger_attrs).at(@later)
+        let(:later) { Time.parse "Feb 10 2052" }
+        let!(:login_event_logger) { new_logger.enqueue_at later }
+
+        it "should enqueue the login logger to trigger :later" do
+          expect(LoginEventLogger).to have_scheduled('login', logger_attrs).at later
         end
       end
     end
