@@ -14,98 +14,94 @@
 %h5 Overview
 - if current_course.use_timeline?
   %li
-    = link_to_unless_current raw('<i class="fa fa-home fa-fw"></i> Timeline'), dashboard_path
+    = link_to_unless_current glyph(:home) + "Timeline", dashboard_path
 
 %li
-  = link_to_unless_current raw('<i class="fa fa-list-ol fa-fw"></i> Leaderboard'), leaderboard_path
+  = link_to_unless_current glyph("list-ol") + "Leaderboard", leaderboard_path
 %li
   - grading_status_count = grading_status_count_for(current_course)
-  = link_to_unless_current raw('<i class="fa fa-flag-checkered fa-fw"></i> Grading Status'), grading_status_path do |name|
+  = link_to_unless_current glyph("flag-checkered") + "Grading Status", grading_status_path do |name|
     = raw("<span class='sidebar-nav'>#{name}</span>")
   - if grading_status_count > 0
     %div.notification-badge.staff-notification-badge= grading_status_count
 %li
   - resubmission_count = resubmission_count_for(current_course)
-  = link_to_unless_current raw('<i class="fa fa-history fa-fw"></i> Resubmissions'), resubmissions_path do |name|
+  = link_to_unless_current glyph(:history) + "Resubmissions", resubmissions_path do |name|
     = raw("<span class='sidebar-nav'>#{name}</span>")
 
   - if resubmission_count > 0
     %div.notification-badge.staff-notification-badge= resubmission_count
 %li
   - ungraded_submissions_count = ungraded_submissions_count_for(current_course)
-  = link_to_unless_current raw('<i class="fa fa-exclamation-triangle fa-fw"></i> Ungraded Submissions'), ungraded_submissions_path do |name|
+  = link_to_unless_current glyph("exclamation-triangle") + "Ungraded Submissions", ungraded_submissions_path do |name|
     = raw("<span class='sidebar-nav'>#{name}</span>")
   - if ungraded_submissions_count > 0
     %div.notification-badge.staff-notification-badge= ungraded_submissions_count
 
 - if current_course.student_weighted?
-  %li= link_to_unless_current raw("<i class='fa fa-cubes fa-fw'></i> #{term_for :weight} Choices"), multiplier_choices_path
+  %li= link_to_unless_current glyph(:cubes) + "#{term_for :weight} Choices", multiplier_choices_path
 
 - if current_course.has_badges?
-  %li= link_to_unless_current raw("<i class='fa fa-shield fa-fw'></i> Awarded #{current_course.badge_term} Chart"), earned_badges_path
+  %li= link_to_unless_current glyph(:shield) + "Awarded #{current_course.badge_term} Chart", earned_badges_path
 
 %li
-  = link_to_unless_current raw('<i class="fa fa-file-archive-o fa-fw"></i> Submission Downloads'), exports_path
+  = link_to_unless_current glyph("file-archive-o") + "Submission Downloads", exports_path
 
 %hr
 
 %h5 Coursework
-%li= link_to_unless_current raw("<i class='fa fa-bars fa-fw'></i> #{term_for :assignments}"), assignments_path
+%li= link_to_unless_current glyph(:bars) + "#{term_for :assignments}", assignments_path
 - if current_course.has_badges?
-  %li= link_to_unless_current raw("<i class='fa fa-shield fa-fw'></i> #{term_for :badges}"), badges_path
+  %li= link_to_unless_current glyph(:shield) + "#{term_for :badges}", badges_path
 - if current_course.team_challenges?
-  %li= link_to_unless_current raw("<i class='fa fa-trophy fa-fw'></i> #{term_for :challenges}"), challenges_path
+  %li= link_to_unless_current glyph(:trophy) + "#{term_for :challenges}", challenges_path
 
 %hr
 
 %h5 Analytics
-%li= link_to_unless_current raw('<i class="fa fa-star-half-empty fa-fw"></i> Top 10/Bottom 10'), top_10_path
-%li= link_to_unless_current raw('<i class="fa fa-bar-chart fa-fw"></i> System Analytics'), analytics_students_path
-%li= link_to_unless_current raw("<i class='fa fa-heartbeat fa-fw'></i> #{term_for :assignment} Analytics"), per_assign_path
+%li= link_to_unless_current glyph("star-half-empty") + "Top 10/Bottom 10", top_10_path
+%li= link_to_unless_current glyph("bar-chart") + "System Analytics", analytics_students_path
+%li= link_to_unless_current glyph("heartbeat") + "#{term_for :assignment} Analytics", per_assign_path
 
 - if current_user_is_professor? || current_user_is_admin?
   .hide-for-small
     %hr
 
     %h5 Downloads
-    %li= link_to_unless_current raw('<i class="fa fa-list-ul fa-fw"></i> Final Grades'), final_grades_path(format: 'csv')
-    %li
-      %a{:href => gradebook_path(format: 'csv')} <i class="fa fa-table fa-fw"></i> Full Gradebook
+    %li= link_to_unless_current glyph("list-ul") + "Final Grades", final_grades_path(format: 'csv')
+    %li= link_to glyph(:table) + "Full Gradebook", gradebook_path(format: 'csv')
     - if current_course.student_weighted?
-      %li
-        %a{:href => multiplied_gradebook_path(format: 'csv')} <i class="fa fa-table fa-fw"></i> Multiplied Gradebook
-    %li
-      %a{:href => export_all_scores_assignment_types_path(format: 'csv')} <i class="fa fa-th-large fa-fw"></i> #{term_for :assignment_type } Summaries
+      %li= link_to glyph(:table) + "Multiplied Gradebook",  multiplied_gradebook_path(format: 'csv')
+    %li= link_to glyph("th-large") + "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(format: 'csv')
 
     - if current_course.has_badges?
-      %li
-        %a{:href => export_earned_badges_path(format: 'csv')} <i class="fa fa-certificate fa-fw"></i> Awarded #{current_course.badge_term.pluralize}
+      %li= link_to glyph(:certificate) + "Awarded #{current_course.badge_term.pluralize}",  export_earned_badges_path(format: 'csv')
 
-    %li= link_to_unless_current raw("<i class='fa  fa-fw'></i> #{term_for :assignment} Structure"), export_structure_assignments_path(format: 'csv')
+    %li= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(format: 'csv')
 
 %hr
 
 %h5 Users
-%li= link_to_unless_current raw("<i class='fa fa-user fa-fw'></i> #{term_for :students}"), students_path
-%li= link_to_unless_current raw("<i class='fa fa-flag fa-fw'></i> Flagged #{term_for :students}"), flagged_students_path
+%li= link_to_unless_current glyph(:user) + "#{term_for :students}", students_path
+%li= link_to_unless_current glyph(:flag) + "Flagged #{term_for :students}", flagged_students_path
 - if current_course.has_teams?
-  %li= link_to_unless_current raw("<i class='fa fa-users fa-fw'></i> #{term_for :teams}"), teams_path
+  %li= link_to_unless_current glyph(:users) + "#{term_for :teams}", teams_path
 %li
-  = link_to_unless_current raw("<i class='fa fa-user-plus fa-fw'></i> #{term_for :groups}"), groups_path do |name|
+  = link_to_unless_current glyph("user-plus") + "#{term_for :groups}", groups_path do |name|
     = raw("<span class='sidebar-nav'>#{name}</span>")
   - if current_course.groups_to_review_count > 0
     %div.notification-badge.staff-notification-badge= current_course.groups_to_review_count
-%li= link_to_unless_current raw('<i class="fa fa-user-secret fa-fw"></i> Staff'), staff_index_path
+%li= link_to_unless_current glyph("user-secret") + 'Staff', staff_index_path
 
 %hr
 
 %h5 Course Setup
-%li= link_to_unless_current raw('<i class="fa fa-cog fa-fw"></i> Options'), edit_course_path(current_course)
-%li= link_to_unless_current raw("<i class='fa fa-book fa-fw'></i> #{term_for :assignment_types}"), assignment_types_path
-%li= link_to_unless_current raw('<i class="fa fa-sliders fa-fw"></i> Predictor Preview'), predictor_path
-%li= link_to_unless_current raw('<i class="fa fa-level-up fa-fw"></i> Grading Scheme'), grade_scheme_elements_path
-%li= link_to_unless_current raw('<i class="fa fa-bullhorn fa-fw"></i> Announcements'), announcements_path
-%li= link_to_unless_current raw('<i class="fa fa-calendar fa-fw"></i> Calendar Events'), events_path
+%li= link_to_unless_current glyph(:cog) + 'Options', edit_course_path(current_course)
+%li= link_to_unless_current glyph(:book) + "#{term_for :assignment_types}", assignment_types_path
+%li= link_to_unless_current glyph(:sliders) + "Predictor Preview", predictor_path
+%li= link_to_unless_current glyph("level-up") + "Grading Scheme", grade_scheme_elements_path
+%li= link_to_unless_current glyph(:bullhorn) + "Announcements", announcements_path
+%li= link_to_unless_current glyph(:calendar) + "Calendar Events", events_path
 
 
 - if LTIProvider.present?
@@ -114,15 +110,15 @@
 
     %h5 Tools
     - LTIProvider.all.each do |tool|
-      %li= link_to_unless_current raw("<i class='fa fa-external-link-square fa-fw'></i> #{tool.name}"), launch_lti_provider_path(tool)
+      %li= link_to_unless_current glyph("external-link-square") + "#{tool.name}", launch_lti_provider_path(tool)
 
 .hide-for-small
   %hr
 
   %h5{ class: "make-lizards" } Admin
-  %li= link_to_unless_current raw('<i class="fa fa-university fa-fw"></i> My Courses'), courses_path
+  %li= link_to_unless_current glyph(:university) + "My Courses", courses_path
 
   - if current_user_is_admin?
-    %li= link_to_unless_current raw('<i class="fa fa-user-times fa-fw"></i> All Users'), users_path
-    %li= link_to_unless_current raw('<i class="fa fa-check-square-o fa-fw"></i> Predictor Settings'), predictor_settings_course_path(current_course)
-    %li= link_to_unless_current raw('<i class="fa fa-photo fa-fw"></i> Timeline Settings'), timeline_settings_course_path(current_course)
+    %li= link_to_unless_current glyph("user-times") + "All Users", users_path
+    %li= link_to_unless_current glyph("check-square-o") + "Predictor Settings", predictor_settings_course_path(current_course)
+    %li= link_to_unless_current glyph(:photo) + "Timeline Settings", timeline_settings_course_path(current_course)

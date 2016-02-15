@@ -18,4 +18,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "#{@earned_badge.persisted? ? 'Update' : 'Award'} #{term_for :badge}"
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), badge_path(@badge), :class => 'button'
+      %li= link_to glyph("times-circle") + "Cancel", badge_path(@badge), :class => 'button'

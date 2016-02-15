@@ -14,9 +14,9 @@
         = f.label :status
         = f.select :status, Grade::STATUSES
         .form_label= "Can the #{term_for :team} see this grade?"
-      - else 
+      - else
         = f.input :status, :as => :hidden, :input_html => { :value => "Graded" }
-        
+
   %section
     %h4 Feedback
     .textarea
@@ -25,4 +25,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}"
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), challenges_path, :class => 'button'
+      %li= link_to glyph("times-circle") + "Cancel", challenges_path, :class => 'button'

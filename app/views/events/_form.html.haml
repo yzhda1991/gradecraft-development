@@ -23,4 +23,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, :class => "button"
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), events_path, :class => 'button'
+      %li= link_to glyph("times-circle") + "Cancel", events_path, :class => 'button'

@@ -6,15 +6,15 @@
   %ul
     %li
       %a{:href => badge_path(@badge) }
-        %i.fa.fa-eye.fa-fw
+        = glyph(:eye)
         See
     %li
       %a{:href => new_badge_earned_badge_path(:badge_id => @badge) }
-        %i.fa.fa-star.fa-fw
+        = glyph(:star)
         Award
     %li
       %a{:href => mass_award_badge_path(@badge) }
-        %i.fa.fa-check.fa-fw
+        = glyph(:check)
         Quick Award
 
 .pageContent

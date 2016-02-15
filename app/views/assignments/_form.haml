@@ -209,4 +209,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "#{presenter.assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignments_path, :class => "button"
+      %li= link_to glyph("times-circle") + "Cancel", assignments_path, :class => "button"

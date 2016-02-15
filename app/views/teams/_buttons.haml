@@ -1,6 +1,6 @@
 .context_menu
   %ul
-    %li= link_to_unless_current raw("<i class='fa fa-plus fa-fw'></i> New #{(term_for :team).titleize}"), new_team_path
+    %li= link_to_unless_current glyph(:plus) + "New #{(term_for :team).titleize}", new_team_path
     - if @team.present? && @team.persisted?
-      %li= link_to_unless_current raw("<i class='fa fa-edit fa-fw'></i> Edit #{(term_for :team).titleize}"), edit_team_path(@team)
-      %li= link_to_unless_current raw("<i class='fa fa-list fa-fw'></i> Show #{(term_for :team).titleize}"), team_path(@team)
+      %li= link_to_unless_current glyph(:edit) + "Edit #{(term_for :team).titleize}", edit_team_path(@team)
+      %li= link_to_unless_current glyph(:list) + "Show #{(term_for :team).titleize}", team_path(@team)

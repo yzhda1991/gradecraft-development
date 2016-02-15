@@ -1,11 +1,11 @@
-.small-12.columns.panel
-  %span.large-3.columns
+.columns.panel
+  %span.columns
     = f.label :name, "Score Name"
     = f.text_field :name
-  %span.large-3.columns
+  %span.columns
     = f.label :value
     = f.text_field :value
     = f.hidden_field :id
-  %span.large-6.columns
+  %span.columns
     = f.hidden_field :_destroy, class: 'destroy'
     = link_to 'Remove Level', '#', class: 'remove-level button right'

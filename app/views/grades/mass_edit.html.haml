@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   - if current_course.has_teams? && @assignment.is_individual?
     .team-filter
       = form_tag mass_grade_assignment_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
@@ -59,4 +59,4 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Submit Grades"
-          %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignments_path, :class => "button"
+          %li= link_to glyph("times-circle") + "Cancel", assignments_path, :class => "button"

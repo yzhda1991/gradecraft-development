@@ -3,12 +3,12 @@
 %h3.pagetitle= @title
 
 .pageContent
-  
+
   - if current_course.assignment_weight_open? || current_user_is_staff?
     = simple_form_for @form, as: :student, url: assignment_type_weights_path, method: :put do |f|
       .assignment_weights
         %h4 RULES OF THE GAME
-        %ul 
+        %ul
           - if current_course.total_assignment_weight?
             %li You have a total of #{current_course.try(:total_assignment_weight)} #{(term_for :weights).titleize} to spend
           - if current_course.assignment_weight_close_at?
@@ -35,7 +35,7 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Update #{term_for :weights}"
-          %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), current_user_is_student? ? dashboard_path : choices_students_path, class: 'button'
+          %li= link_to glyph('times-circle') + "Cancel", current_user_is_student? ? dashboard_path : choices_students_path, class: 'button'
 
   - else
     %h3 Your #{term_for :weight} choices:

@@ -6,11 +6,11 @@
 - if current_user.can_create?(@announcement)
   .context_menu
     %ul
-      %li= link_to_unless_current raw('<i class="fa fa-plus fa-fw"></i> New Announcement'), new_announcement_path
+      %li= link_to_unless_current glyph(:plus) + 'New Announcement', new_announcement_path
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   %p
     %strong Course:
     = @announcement.course.name

@@ -29,4 +29,4 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Update Settings", :class => "button"
-          %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), dashboard_path, :class => "button"
+          %li= link_to glyph("times-circle") + "Cancel", dashboard_path, :class => "button"

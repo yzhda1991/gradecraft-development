@@ -28,6 +28,6 @@
         %td
           .right
             %ul.button-bar
-              %li= link_to raw("<i class='fa fa-dashboard fa-fw'> </i> See #{term_for :team}"), team, :class => 'button'
-              %li= link_to raw("<i class='fa fa-edit fa-fw'> </i> Edit #{term_for :team}"), edit_team_path(team), :class => 'button'
-              %li= link_to raw("<i class='fa fa-trash fa-fw'> </i> Delete #{term_for :team}"), team_path(team), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete
+              %li= link_to glyph(:dashboard) + "See #{term_for :team}", team, :class => 'button'
+              %li= link_to glyph(:edit) + "Edit #{term_for :team}", edit_team_path(team), :class => 'button'
+              %li= link_to glyph(:trash) + "Delete #{term_for :team}", team_path(team), :class => 'button', :data => { confirm: 'Are you sure?' }, :method => :delete

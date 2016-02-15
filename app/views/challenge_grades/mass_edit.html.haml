@@ -4,7 +4,7 @@
 
 .pageContent
   = render 'layouts/alerts'
-  
+
   #massGrade
     = simple_form_for @challenge, method: :put, :url => mass_edit_challenge_path(@challenge) do |f|
       %table.responsive.dynatable
@@ -27,4 +27,4 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Submit"
-          %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), challenges_path, :class => 'button'
+          %li= link_to glyph("times-circle") + "Cancel", challenges_path, :class => 'button'
