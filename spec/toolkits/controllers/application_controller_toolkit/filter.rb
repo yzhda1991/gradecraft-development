@@ -1,6 +1,6 @@
 module Toolkits
   module Controllers
-    module ApplicationController
+    module ApplicationControllerToolkit
       module Filters
 
         def pageview_logger_attrs

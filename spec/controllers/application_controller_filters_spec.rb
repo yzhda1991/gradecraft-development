@@ -4,10 +4,10 @@ require "resque-scheduler"
 require "resque_spec/scheduler"
 
 # pulls in the FiltersTest Class, which is a descendent of ApplicationController for test purposes
-include Toolkits::Controllers::ApplicationController::TestClass
+include Toolkits::Controllers::ApplicationControllerToolkit::TestClass
 
-RSpec.describe FiltersTest, type: :controller do
-  include Toolkits::Controllers::ApplicationController::Filters
+RSpec.describe ApplicationControllerFiltersTest, type: :controller do
+  include Toolkits::Controllers::ApplicationControllerToolkit::Filters
 
   describe "#increment_page_views" do
 

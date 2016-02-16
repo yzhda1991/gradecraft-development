@@ -1,7 +1,7 @@
 require 'resque-retry'
 require 'resque/errors'
-require 'event_logger/base'
-require 'event_logger/enqueuing'
+require_relative 'event_logger/base'
+require_relative 'event_logger/enqueue'
 
 module EventLogger
 end

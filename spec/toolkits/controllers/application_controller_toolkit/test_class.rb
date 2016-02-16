@@ -1,9 +1,9 @@
 module Toolkits
   module Controllers
-    module ApplicationController
+    module ApplicationControllerToolkit
       module TestClass
 
-        class FiltersTest < ApplicationController
+        class ApplicationControllerFilterTest < ApplicationController
           def html_page
             respond_to do |format|
               format.html { render text: "<div>page loaded</div>", response: 200 }

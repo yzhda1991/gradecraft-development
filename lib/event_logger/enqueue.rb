@@ -6,20 +6,16 @@ module EventLogger
       @attrs = attrs
     end
 
-    def enqueue_as(event_type)
-      @event_type = event_type.to_s
-    end
-
     def enqueue_in(time_until_start)
-      Resque.enqueue_in(time_until_start, self.class, event_type, @attrs)
+      Resque.enqueue_in(time_until_start, self.class, @event_type, @attrs)
     end
 
     def enqueue_at(scheduled_time)
-      Resque.enqueue_at(scheduled_time, self.class, event_type, @attrs)
+      Resque.enqueue_at(scheduled_time, self.class, @event_type, @attrs)
     end
 
     def enqueue
-      Resque.enqueue(self.class, event_type, @attrs)
+      Resque.enqueue(self.class, @event_type, @attrs)
     end
   end
 end
