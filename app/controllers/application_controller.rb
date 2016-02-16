@@ -128,12 +128,8 @@ class ApplicationController < ActionController::Base
   def increment_page_views
     if current_user and request.format.html?
       begin
-        # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
         PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(time_until_next_lull)
       rescue
-        # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
-        # or because of some worker stayalive anomaly, then just use the PageviewEventLogger.perform method
-        # to persist the record directly to mongo with all of the logging it entails
         PageviewEventLogger.perform("pageview", pageview_logger_attrs)
       end
     end
@@ -158,10 +154,8 @@ class ApplicationController < ActionController::Base
   def record_login_event
     if current_user and request.format.html?
       begin
-        # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
         LoginEventLogger.new(login_logger_attrs).enqueue_in(time_until_next_lull)
       rescue
-        # otherwise persist it directly to mongo
         LoginEventLogger.perform('login', login_logger_attrs)
       end
     end
@@ -173,7 +167,6 @@ class ApplicationController < ActionController::Base
       user_id: current_user.id,
       student_id: current_student.try(:id),
       user_role: current_user.role(current_course),
-      last_login_at: membership.last_login_at.to_i,
       created_at: Time.zone.now
     }
   end

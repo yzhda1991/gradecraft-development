@@ -27,8 +27,7 @@ RSpec.describe LoginEventLogger, type: :background_job do
     end
 
     describe "enqueue without schedule" do
-      subject { new_logger.enqueue }
-      before(:each) { subject }
+      before(:each) { new_logger.enqueue }
 
       it "should find a job in the login queue" do
         resque_job = Resque.peek(:login_event_logger)
@@ -41,7 +40,6 @@ RSpec.describe LoginEventLogger, type: :background_job do
     end
 
     describe "enqueue with schedule" do
-
       describe"enqueue_in" do
         let!(:login_event_logger) { new_logger.enqueue_in(2.hours) }
 
@@ -51,8 +49,8 @@ RSpec.describe LoginEventLogger, type: :background_job do
       end
 
       describe "enqueue_at" do
-        let(:later) { Time.parse "Feb 10 2052" }
         let!(:login_event_logger) { new_logger.enqueue_at later }
+        let(:later) { Time.parse "Feb 10 2052" }
 
         it "should enqueue the login logger to trigger :later" do
           expect(LoginEventLogger).to have_scheduled('login', logger_attrs).at later
