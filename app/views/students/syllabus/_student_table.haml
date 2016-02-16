@@ -81,5 +81,5 @@
               - elsif assignment.has_groups? && group
                 - if group.submission_for_assignment(assignment)
                   %li= link_to glyph("file-o") + "See Submission", assignment_path(assignment, :anchor => "tab3"), :class => 'button'
-                - elsif group.approved?
+                - elsif group.approved? && assignment.open?
                   %li= link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
