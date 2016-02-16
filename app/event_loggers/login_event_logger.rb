@@ -1,16 +1,31 @@
 class LoginEventLogger < EventLogger::Base
   include EventLogger::Enqueue
 
-  @queue= :login_event_logger
+  # queue to use for login event jobs
+  @queue = :login_event_logger
+
+  # name of the events as they'll be stored in the events store in Mongo
   @event_type = "login"
-
-  @success_message = "Login event was successfully created in mongo"
-  @failure_message = "Login event failed creation in mongo"
-
-  # message that posts to the log when being queued
-  @start_message = "Starting LoginEventLogger"
 
   # perform block that is ultimately called by Resque
   def self.perform(event_type, data={})
+    super
+    @data = data
+    update_last_login
+  end
+
+  def self.update_last_login
+    course_membership.update_attribute(:last_login_at, Time.now)
+  end
+
+  def self.course_membership
+    CourseMembership.where(course_membership_attrs).first
+  end
+
+  def self.course_membership_attrs
+    {
+      course_id: @data[:course_id],
+      user_id: @data[:user_id]
+    }
   end
 end

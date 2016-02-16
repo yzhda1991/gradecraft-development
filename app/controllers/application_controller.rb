@@ -164,12 +164,10 @@ class ApplicationController < ActionController::Base
         # otherwise persist it directly to mongo
         LoginEventLogger.perform('login', login_logger_attrs)
       end
-      membership.update_attribute(:last_login_at, Time.now)
     end
   end
 
   def login_logger_attrs
-    membership = current_user.course_memberships.where(course_id: current_course.id).first
     {
       course_id: current_course.id,
       user_id: current_user.id,
@@ -179,5 +177,4 @@ class ApplicationController < ActionController::Base
       created_at: Time.zone.now
     }
   end
-
 end

@@ -7,7 +7,7 @@ module EventLogger
     @event_type = "event" # this should be downcased
     @backoff_strategy = [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800]
 
-    @start_message = "Starting EventLogger"
+    @start_message = "Starting #{class}"
     @success_message = "#{@event_type.capitalize} analytics record was successfully created."
     @failure_message = "#{@event_type.capitalize} analytics record failed to create."
 

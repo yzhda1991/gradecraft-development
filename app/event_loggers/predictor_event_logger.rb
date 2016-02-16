@@ -1,9 +1,9 @@
 class PredictorEventLogger < EventLogger::Base
   include EventLogger::Enqueue
-  enqueue_as :predictor
 
-  @queue= :predictor_event_logger
-  @start_message = "Starting PredictorEventLogger"
-  @success_message = "Predictor event was successfully created in mongo"
-  @failure_message = "Predictor event failed creation in mongo"
+  # queue to use for login event jobs
+  @queue = :predictor_event_logger
+
+  # name of the events as they'll be stored in the events store in Mongo
+  @event_type = "predictor"
 end
