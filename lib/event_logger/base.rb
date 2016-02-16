@@ -13,11 +13,10 @@ module EventLogger
 
     # perform block that is ultimately called by Resque
     def self.perform(event_type, data={})
-      logger = self.logger
-      logger.info @start_message
+      self.logger.info @start_message
       event = Analytics::Event.create self.event_attrs(event_type, data)
       outcome = notify_event_outcome(event, data)
-      logger.info outcome
+      self.logger.info outcome
     end
 
     def self.notify_event_outcome(event, data)
@@ -67,7 +66,7 @@ module EventLogger
     end
 
     def self.instance_variable_names
-      self.inheritable_attributes.collect {|ivar_name| "@#{ivar_name}" }
+      self.inheritable_attributes.collect {|attr_name| "@#{attr_name}" }
     end
 
     def self.inheritable_attributes
