@@ -22,5 +22,12 @@ FactoryGirl.define do
       score { raw_score }
       status 'In Progress'
     end
+
+    factory :in_limbo_grade do
+      raw_score { Faker::Number.number(5) }
+      score { raw_score }
+      status ''
+      instructor_modified true
+    end
   end
 end

@@ -14,9 +14,6 @@ describe "students/syllabus" do
     allow(view).to receive(:current_student).and_return(@student)
   end
 
-  #TODO: once merged, move to assignments_spec
-  # they are in here for now to avoid conflicts with the specs Max is currently writing.
-
   it "renders the points possible for the assignment" do
     render
     assert_select ".pagetitle", :count => 1
