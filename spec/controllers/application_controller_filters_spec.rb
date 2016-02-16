@@ -3,22 +3,14 @@ require "rails_spec_helper"
 require "resque-scheduler"
 require "resque_spec/scheduler"
 
-# pulls in the FiltersTest Class, which is a descendent of ApplicationController for test purposes
-include Toolkits::Controllers::ApplicationControllerToolkit::TestClass
+# define routes for mapping #html_page and #json_page to the test controller
+include Toolkits::Controllers::ApplicationControllerToolkit::Routes
 
-RSpec.describe ApplicationControllerFiltersTest, type: :controller do
+RSpec.describe ApplicationControllerFiltersTest do
   include Toolkits::Controllers::ApplicationControllerToolkit::Filters
 
   describe "#increment_page_views" do
-
-    before do
-      Rails.application.routes.draw do
-        get "/html_page", to: "application_controller_filters_test#html_page"
-        get "/json_page", to: "application_controller_filters_test#json_page"
-        root to: "application_controller_filters_test#html_page"
-      end
-    end
-
+    before { define_filters_test_routes }
     before(:each) do
       allow(controller).to receive_messages(pageview_logger_attrs: pageview_logger_attrs)
     end
