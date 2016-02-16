@@ -335,6 +335,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  def grade_instructor_modified_for_assignment?(assignment)
+    if grade_for_assignment(assignment).present?
+      grade_for_assignment(assignment).instructor_modified?
+    end
+  end
+
   #Grabbing the grade for an assignment
   def grade_for_assignment(assignment)
     grades.where(:assignment_id => assignment.id).first || grades.new(assignment: assignment)
