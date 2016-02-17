@@ -39,6 +39,7 @@
     release_necessary: false,
     student_logged: false,
     visible: true,
+    pass_fail: false,
   },
   grades: false,
   # only used if :grades is true:
@@ -66,6 +67,20 @@
 @assignments = {}
 
 # Add each assignment below, override default configuration for custom attributes
+
+@assignments[:pass_fail_grade] = {
+  quotes: {
+    assignment_created: "You will always pass failure on the way to success. – Mickey Rooney"
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "Pass/Fail [no grades]",
+    open_at: 1.weeks.from_now,
+    due_at: 1.weeks.from_now + 0.05,
+    pass_fail: true,
+
+  }
+}
 
 @assignments[:standard_edit_quick_grade_text] = {
   quotes: {
