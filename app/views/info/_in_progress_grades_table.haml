@@ -32,11 +32,11 @@
               - team = student.team_for_course(course)
               %tr
                 - if assignment.is_individual?
-                  %td= link_to student.try(:first_name), student_path(student)
-                  %td= link_to student.try(:last_name), student_path(student)
+                  %td= link_to student.first_name, student_path(student)
+                  %td= link_to student.last_name, student_path(student)
                   %td
                     - if course.has_teams? && student.present? && team.present?
-                      = link_to team.try(:name), team
+                      = link_to team.name, team
                   %td= points g.score
                   %td= raw g.feedback
                 %td

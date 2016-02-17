@@ -1,8 +1,8 @@
 %h4.subtitle#inProgressTableCaption
   = "In Limbo Grades"
-  %span.label.alert= in_limbo_grades_count_for(course)
+  %span.label.alert= no_status_grades_count_for(course)
 
-- @in_limbo_grades_by_assignment.each do |assignment, grades|
+- @no_status_grades_by_assignment.each do |assignment, grades|
   .assignment-in-progress
     %h4.assignment_name
       = link_to assignment.name, assignment
@@ -32,11 +32,11 @@
               - team = student.team_for_course(course)
               %tr
                 - if assignment.is_individual?
-                  %td= link_to student.try(:first_name), student_path(student)
-                  %td= link_to student.try(:last_name), student_path(student)
+                  %td= link_to student.first_name, student_path(student)
+                  %td= link_to student.last_name, student_path(student)
                   %td
                     - if course.has_teams? && student.present? && team.present?
-                      = link_to team.try(:name), team
+                      = link_to team.name, team
                   %td= points g.score
                   %td= raw g.feedback
                 %td

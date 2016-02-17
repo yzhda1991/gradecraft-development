@@ -22,7 +22,7 @@ describe "info/grading_status" do
       @ungraded_submissions_by_assignment = [ungraded_submission].group_by(&:assignment)
       @unreleased_grades_by_assignment = []
       @in_progress_grades_by_assignment = []
-      @in_limbo_grades_by_assignment = []
+      @no_status_grades_by_assignment = []
     end
     it "renders successfully" do
       render
@@ -35,7 +35,7 @@ describe "info/grading_status" do
       @ungraded_submissions_by_assignment = []
       @unreleased_grades_by_assignment = @grades.group_by(&:assignment)
       @in_progress_grades_by_assignment = []
-      @in_limbo_grades_by_assignment = []
+      @no_status_grades_by_assignment = []
     end
     it "renders successfully" do
       render
@@ -47,7 +47,7 @@ describe "info/grading_status" do
       @grades = [create(:in_progress_grade, course: @course, assignment: @assignment, student: @student)]
       @ungraded_submissions_by_assignment = []
       @unreleased_grades_by_assignment = []
-      @in_limbo_grades_by_assignment = []
+      @no_status_grades_by_assignment = []
       @in_progress_grades_by_assignment = @grades.group_by(&:assignment)
     end
     it "renders successfully" do
@@ -57,11 +57,11 @@ describe "info/grading_status" do
 
   describe "with in limbo grades"  do
     before(:each) do
-      @grades = [create(:in_limbo_grade, course: @course, assignment: @assignment, student: @student)]
+      @grades = [create(:no_status_grade, course: @course, assignment: @assignment, student: @student)]
       @ungraded_submissions_by_assignment = []
       @unreleased_grades_by_assignment = []
       @in_progress_grades_by_assignment = []
-      @in_limbo_grades_by_assignment = @grades.group_by(&:assignment)
+      @no_status_grades_by_assignment = @grades.group_by(&:assignment)
     end
     it "renders successfully" do
       render

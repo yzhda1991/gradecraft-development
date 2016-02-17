@@ -36,12 +36,12 @@ class InfoController < ApplicationController
     grades = current_course.grades.instructor_modified
     unreleased_grades = grades.not_released
     in_progress_grades = grades.in_progress
-    in_limbo_grades = grades.in_limbo
+    no_status_grades = grades.no_status
     @ungraded_submissions = current_course.submissions.ungraded.includes(:assignment, :grade, :student, :group, :submission_files)
     @ungraded_submissions_by_assignment = @ungraded_submissions.group_by(&:assignment)
     @unreleased_grades_by_assignment = unreleased_grades.group_by(&:assignment)
     @in_progress_grades_by_assignment = in_progress_grades.group_by(&:assignment)
-    @in_limbo_grades_by_assignment = in_limbo_grades.group_by(&:assignment)
+    @no_status_grades_by_assignment = no_status_grades.group_by(&:assignment)
   end
 
   # Displaying all resubmisisons
