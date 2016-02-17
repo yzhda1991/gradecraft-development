@@ -6,6 +6,7 @@ module EventLogger
     # class-level instance variables for Resque interaction
     @queue = :event_logger
     @event_name = "Event"
+    @analytics_class = Analytics::Event
     @backoff_strategy = [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800]
 
     @start_message = "Starting #{@queue.to_s.camelize}"
@@ -20,7 +21,7 @@ module EventLogger
     # perform block that is ultimately called by Resque
     def self.perform(event_type, data={})
       self.logger.info @start_message
-      event = Analytics::Event.create self.event_attrs(event_type, data)
+      event = @analytics_class.create self.event_attrs(event_type, data)
       outcome = notify_event_outcome(event, data)
       self.logger.info outcome
     end
@@ -49,8 +50,6 @@ module EventLogger
       @logger ||= Logglier.new(self.logger_url, format: :json)
     end
 
-    # @mz todo: add specs
-    # these all need to be spec'd out
     # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
     def self.logger_url
       [ self.logger_base_url, ENV['LOGGLY_TOKEN'], "tag", self.queue_tag_name ].join("/")
@@ -78,6 +77,8 @@ module EventLogger
     def self.inheritable_attributes
       [
         :queue,
+        :event_name,
+        :analytics_class,
         :backoff_strategy,
         :start_message,
         :success_message,

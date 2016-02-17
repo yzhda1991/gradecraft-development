@@ -45,6 +45,8 @@ RSpec.describe LoginEventLogger, type: :background_job do
       end
 
       it "calls self#perform from the superclass" do
+        expect(class_instance.logger).to receive(:info).exactly(2).times
+        subject
       end
 
       it "updates the last login" do

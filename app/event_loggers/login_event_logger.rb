@@ -4,6 +4,7 @@ class LoginEventLogger < EventLogger::Base
   # queue to use for login event jobs
   @queue = :login_event_logger
   @event_name = "Login"
+  @analytics_class = Analytics::LoginEvent
 
   def event_type
     "login"
@@ -13,18 +14,12 @@ class LoginEventLogger < EventLogger::Base
   def self.perform(event_type, data={})
     @data = data
     data.merge! last_login_at: self.previous_last_login_at
-
-    # super
-    self.logger.info @start_message
-    event = Analytics::Event.create self.event_attrs(event_type, data)
-    outcome = notify_event_outcome(event, data)
-    self.logger.info outcome
-
+    super
     update_last_login
   end
 
   def self.update_last_login
-    course_membership.update_attribute(:last_login_at, Time.now)
+    course_membership.update_attributes(last_login_at: Time.now)
   end
 
   def self.course_membership
