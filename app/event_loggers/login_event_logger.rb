@@ -3,13 +3,11 @@ class LoginEventLogger < EventLogger::Base
 
   # queue to use for login event jobs
   @queue = :login_event_logger
+  @event_name = "Login"
 
-  # instance methods
   def event_type
     "login"
   end
-
-  # class methods
 
   # perform block that is ultimately called by Resque
   def self.perform(event_type, data={})

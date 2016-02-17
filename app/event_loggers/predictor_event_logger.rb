@@ -3,6 +3,7 @@ class PredictorEventLogger < EventLogger::Base
 
   # queue to use for login event jobs
   @queue = :predictor_event_logger
+  @event_name = "Predictor"
 
   # instance methods
   def event_type
