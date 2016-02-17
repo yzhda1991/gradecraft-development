@@ -45,14 +45,17 @@ RSpec.describe LoginEventLogger, type: :background_job do
       let(:last_login) { Time.parse("June 20, 1968") }
       let(:class_instance) { LoginEventLogger }
 
-      before { course_membership }
+      before(:each) { course_membership }
 
       it "merges the previous last_login_at value into the data hash" do
+        allow(class_instance).to receive(:previous_last_login_at) { last_login.to_i }
+        expect(logger_attrs).to receive(:merge!).with({ last_login_at: last_login.to_i })
+        subject
       end
 
       it "sets the data hash to @data" do
         subject
-        expect(class_instance).instance_variable_get(:@data).to eq(logger_attrs)
+        expect(class_instance.instance_variable_get(:@data)).to eq(logger_attrs)
       end
 
       it "calls self#perform from the superclass" do
