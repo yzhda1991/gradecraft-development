@@ -1,8 +1,8 @@
 %h4.subtitle#inProgressTableCaption
-  = "In Progress Grades"
-  %span.label.alert= in_progress_grades_count_for(course)
+  = "In Limbo Grades"
+  %span.label.alert= no_status_grades_count_for(course)
 
-- @in_progress_grades_by_assignment.each do |assignment, grades|
+- @no_status_grades_by_assignment.each do |assignment, grades|
   .assignment-in-progress
     %h4.assignment_name
       = link_to assignment.name, assignment

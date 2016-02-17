@@ -44,7 +44,7 @@
   grade_attributes: {
     raw_score: Proc.new { rand(5000) },
     instructor_modified: true,
-    status: nil,
+    status: "Graded",
     predicted_score: Proc.new { 0 },
     feedback: nil
   },

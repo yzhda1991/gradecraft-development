@@ -28,12 +28,12 @@
           %tr
             - if ug_assignment.is_individual?
               - team = student.team_for_course(course)
-              %td= link_to student.try(:first_name), student_path(student)
-              %td= link_to student.try(:last_name), student_path(student)
+              %td= link_to student.first_name, student_path(student)
+              %td= link_to student.last_name, student_path(student)
               %td= ug.updated_at
               %td
                 - if course.has_teams? && student.present? && team.present?
-                  = link_to team.try(:name), team
+                  = link_to team.name, team
               %td
                 .right
                   %ul.button-bar

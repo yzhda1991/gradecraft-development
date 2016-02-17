@@ -15,10 +15,10 @@ class Grade < ActiveRecord::Base
     :earned_badges_attributes, :feedback_read, :feedback_read_at,
     :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at
 
-  STATUSES= ["In Progress", "Graded", "Released"]
+  STATUSES = ['In Progress', 'Graded', 'Released']
 
   # Note Pass and Fail use term_for in the views
-  PASS_FAIL_STATUS = ["Pass", "Fail"]
+  PASS_FAIL_STATUS = ['Pass', 'Fail']
 
   belongs_to :course, touch: true
   belongs_to :assignment, touch: true
@@ -54,12 +54,13 @@ class Grade < ActiveRecord::Base
   after_destroy :save_student_and_team_scores
 
   scope :completion, -> { where(order: "assignments.due_at ASC", :joins => :assignment) }
-  scope :graded, -> { where('status = ?', 'Graded') }
-  scope :in_progress, -> { where('status = ?', 'In Progress') }
+  scope :graded, -> { where status: 'Graded' }
+  scope :in_progress, -> { where status: 'In Progress' }
   scope :released, -> { joins(:assignment).where("status = 'Released' OR (status = 'Graded' AND NOT assignments.release_necessary)") }
-  scope :graded_or_released, -> { where("status = 'Graded' OR status = 'Released'")}
-  scope :not_released, -> { joins(:assignment).where("status = 'Graded' AND assignments.release_necessary")}
-  scope :instructor_modified, -> { where('instructor_modified = ?', true) }
+  scope :no_status, -> { instructor_modified.where(status: '') }
+  scope :graded_or_released, -> { where(status: ['Graded', 'Released'])}
+  scope :not_released, -> { joins(:assignment).where(assignments: { release_necessary: true }).where(status: 'Graded') }
+  scope :instructor_modified, -> { where instructor_modified: true }
   scope :positive, -> { where('score > 0')}
   scope :predicted_to_be_done, -> { where('predicted_score > 0')}
   scope :for_course, ->(course) { where(course_id: course.id) }

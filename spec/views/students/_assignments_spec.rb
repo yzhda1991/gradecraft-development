@@ -163,7 +163,7 @@ describe "students/syllabus/_assignments" do
       allow(view).to receive(:current_user_is_staff?).and_return(true)
       allow(view).to receive(:term_for).and_return("custom_term")
       assign(:students, [@student])
-      create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: 'Released')
+      create(:grade, course: @course, instructor_modified: true, assignment: @assignment, student: @student, raw_score: 2000, status: 'Released')
       render
       assert_select "li", text: "Edit Grade", :count => 1
     end
