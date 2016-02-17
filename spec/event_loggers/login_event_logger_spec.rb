@@ -5,15 +5,63 @@ RSpec.describe LoginEventLogger, type: :background_job do
   include InQueueHelper # get help from ResqueSpec
 
   let(:new_logger) { LoginEventLogger.new(logger_attrs) }
+  let(:course) { build(:course) }
+  let(:user) { build(:user) }
 
   let(:logger_attrs) {{
-    course_id: rand(100),
-    user_id: rand(100),
-    student_id: rand(100),
+    course_id: course.id,
+    user_id: user.id,
+    student_id: 90,
     user_role: "great role",
     page: "/a/great/path",
     created_at: Time.parse("Jan 20 1972")
   }}
+
+  describe "class-level instance variables" do
+    describe "@queue" do
+      it "uses the login_event_logger queue" do
+        expect(LoginEventLogger.instance_variable_get(:@queue)).to eq(:login_event_logger)
+      end
+    end
+
+    describe "@event_name" do
+      it "uses Login as an event name for messaging" do
+        expect(LoginEventLogger.instance_variable_get(:@event_name)).to eq("Login")
+      end
+    end
+  end
+
+  describe "#event_type" do
+    it "provides 'login' as an event type" do
+      expect(new_logger.event_type).to eq("login")
+    end
+  end
+
+  describe "class methods" do
+    describe "self#peform" do
+      subject { class_instance.perform('login', logger_attrs) }
+
+      let(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
+      let(:last_login) { Time.parse("June 20, 1968") }
+      let(:class_instance) { LoginEventLogger }
+
+      before { course_membership }
+
+      it "merges the previous last_login_at value into the data hash" do
+      end
+
+      it "sets the data hash to @data" do
+        subject
+        expect(class_instance).instance_variable_get(:@data).to eq(logger_attrs)
+      end
+
+      it "calls self#perform from the superclass" do
+      end
+
+      it "updates the last login" do
+      end
+    end
+  end
 
   describe "#initialize" do
     subject { new_logger }

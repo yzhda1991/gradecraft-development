@@ -11,8 +11,8 @@ class LoginEventLogger < EventLogger::Base
 
   # perform block that is ultimately called by Resque
   def self.perform(event_type, data={})
-    data.merge! last_login_at: course_membership.lost_login_at.to_i
     @data = data
+    data.merge! last_login_at: course_membership.lost_login_at.to_i
     super
     update_last_login
   end
