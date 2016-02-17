@@ -2,6 +2,10 @@ require "rails_spec_helper"
 
 # PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe PageviewEventLogger, type: :background_job do
+  include InQueueHelper # get help from ResqueSpec
+
+  @logger_class = PageviewEventLogger
+
   let(:new_logger) { PageviewEventLogger.new(logger_attrs) }
 
   let(:logger_attrs) {{
@@ -42,16 +46,17 @@ RSpec.describe PageviewEventLogger, type: :background_job do
 
     describe "enqueue with schedule" do
       describe"enqueue_in" do
-        let!(:pageview_event_logger) { new_logger.enqueue_in(2.hours) }
+        subject { new_logger.enqueue_in(2.hours) }
 
         it "should schedule a pageview event" do
+          subject
           expect(PageviewEventLogger).to have_scheduled('pageview', logger_attrs).in(2.hours)
         end
       end
 
       describe "enqueue_at" do
-        let(:later) { Time.parse "Feb 10 2052" }
         let!(:pageview_event_logger) { new_logger.enqueue_at later }
+        let(:later) { Time.parse "Feb 10 2052" }
 
         it "should enqueue the pageview logger to trigger :later" do
           expect(PageviewEventLogger).to have_scheduled('pageview', logger_attrs).at later

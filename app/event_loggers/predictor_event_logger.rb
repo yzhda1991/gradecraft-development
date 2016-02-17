@@ -4,6 +4,8 @@ class PredictorEventLogger < EventLogger::Base
   # queue to use for login event jobs
   @queue = :predictor_event_logger
 
-  # name of the events as they'll be stored in the events store in Mongo
-  @event_type = "predictor"
+  # instance methods
+  def event_type
+    "predictor"
+  end
 end

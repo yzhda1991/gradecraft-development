@@ -4,8 +4,12 @@ class LoginEventLogger < EventLogger::Base
   # queue to use for login event jobs
   @queue = :login_event_logger
 
-  # name of the events as they'll be stored in the events store in Mongo
-  @event_type = "login"
+  # instance methods
+  def event_type
+    "login"
+  end
+
+  # class methods
 
   # perform block that is ultimately called by Resque
   def self.perform(event_type, data={})
