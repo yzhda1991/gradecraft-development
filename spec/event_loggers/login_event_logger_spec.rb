@@ -13,7 +13,6 @@ RSpec.describe LoginEventLogger, type: :background_job do
 
   let(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
   let(:last_login) { Time.parse("June 20, 1968") }
-  let(:class_instance) { LoginEventLogger }
 
   let(:logger_attrs) {{
     course_id: course.id,
@@ -30,28 +29,28 @@ RSpec.describe LoginEventLogger, type: :background_job do
 
   describe "class methods" do
     describe "self#peform" do
-      subject { class_instance.perform('login', logger_attrs) }
+      subject { described_class.perform('login', logger_attrs) }
 
       before(:each) { course_membership }
 
       it "merges the previous last_login_at value into the data hash" do
-        allow(class_instance).to receive(:previous_last_login_at) { last_login.to_i }
+        allow(described_class).to receive(:previous_last_login_at) { last_login.to_i }
         expect(logger_attrs).to receive(:merge!).with({ last_login_at: last_login.to_i })
         subject
       end
 
       it "sets the data hash to @data" do
         subject
-        expect(class_instance.instance_variable_get(:@data)).to eq(logger_attrs)
+        expect(described_class.instance_variable_get(:@data)).to eq(logger_attrs)
       end
 
       it "calls self#perform from the superclass" do
-        expect(class_instance.logger).to receive(:info).exactly(2).times
+        expect(described_class.logger).to receive(:info).exactly(2).times
         subject
       end
 
       it "updates the last login" do
-        expect(class_instance).to receive(:update_last_login)
+        expect(described_class).to receive(:update_last_login)
         subject
       end
     end
@@ -61,12 +60,47 @@ RSpec.describe LoginEventLogger, type: :background_job do
 
       before do
         allow(Time.zone).to receive(:now) { time_zone_now }
-        allow(class_instance).to receive(:course_membership) { course_membership }
+        allow(described_class).to receive(:course_membership) { course_membership }
       end
 
       it "updates the last_login_at for the course memberhship" do
         expect(course_membership).to receive(:update_attributes).with({ last_login_at: time_zone_now })
-        class_instance.update_last_login
+        described_class.update_last_login
+      end
+    end
+
+    describe "self#course_membership" do
+      let(:course) { create(:course) }
+      let(:user) { create(:user) }
+
+      subject { described_class.course_membership }
+      let(:course_membership_attrs) {{ course_id: course.id, user_id: user.id }}
+
+      before(:each) do
+        described_class.instance_variable_set(:@data, course_membership_attrs)
+        allow(described_class).to receive(:course_membership) { course_membership }
+        described_class.instance_variable_set(:@course_membership, nil)
+      end
+
+      it "finds the first course membership for the given course_id/user_id pair" do
+        expect(CourseMembership).to receive_message_chain(:where, :first)
+        subject
+      end
+
+      it "something" do
+        expect(CourseMembership).to receive(:where).with course_membership_attrs
+        subject
+      end
+
+      it "caches the course membership" do
+        subject
+        expect(CourseMembership).not_to receive(:where)
+        subject
+      end
+
+      it "sets the course membership to @course_membership" do
+        subject
+        expect(described_class.instance_variable_get(:@course_membership)).to eq(course_membership)
       end
     end
   end
