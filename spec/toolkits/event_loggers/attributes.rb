@@ -3,9 +3,9 @@ module Toolkits
     module Attributes
       def base_logger_attrs
         {
-          course_id: rand(100),
-          user_id: rand(100),
-          student_id: rand(100),
+          course_id: 50,
+          user_id: 60,
+          student_id: 70,
           user_role: "great role",
           page: "/a/great/path",
           created_at: Time.parse("Jan 20 1972")
