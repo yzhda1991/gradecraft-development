@@ -55,6 +55,11 @@ class HistoryFilter
     self
   end
 
+  def transform(&blk)
+    history.map(&blk)
+    self
+  end
+
   def empty_changeset?(set)
     set.values.none? { |value| value.is_a? Array }
   end

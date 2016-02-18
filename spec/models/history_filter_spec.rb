@@ -107,4 +107,18 @@ describe HistoryFilter do
       expect(result.first["object"]).to eq "BLAH"
     end
   end
+
+  describe "#transform" do
+    it "manipulates a single history item" do
+      history = [OpenStruct.new(changeset: { "event" => "create",
+                                             "object" => "SubmissionFile",
+                                             "filename" => [nil, "blah"]
+      })]
+      result = described_class.new(history).transform do |history_item|
+        puts history_item.inspect
+        history_item.changeset["event"] = "upload"
+      end.changesets
+      expect(result.first["event"]).to eq "upload"
+    end
+  end
 end
