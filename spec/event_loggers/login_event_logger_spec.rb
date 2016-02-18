@@ -75,16 +75,17 @@ RSpec.describe LoginEventLogger, type: :background_job do
     describe "self#course_membership" do
       subject { class_instance.course_membership }
 
-      let!(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
-      let(:course_membership_params) {{ course_id: course_membership.course_id, user_id: course_membership.user_id }}
+      let(:course) { create(:course) }
+      let(:user) { create(:user) }
 
-      before do
-        allow(class_instance).to receive(:course_membership_attrs) { course_membership_params }
+      before(:each) do
+        class_instance.remove_instance_variable(:@course_membership)
+        course_membership # cache the course membership
+        allow(class_instance).to receive(:course_membership_attrs) {{ course_id: course.id, user_id: user.id }}
       end
 
-      it "something" do
-        expect(CourseMembership).to receive(:where).with(course_membership_params) { course_membership }
-        subject
+      it "returns the correct course membership" do
+        expect(subject).to eq(course_membership)
       end
 
       it "caches the course membership" do
