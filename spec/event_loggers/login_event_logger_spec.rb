@@ -70,25 +70,20 @@ RSpec.describe LoginEventLogger, type: :background_job do
     end
 
     describe "self#course_membership" do
+      subject { class_instance.course_membership }
+      before do
+        CourseMembership.destroy_all
+        allow(class_instance).to receive(:course_membership_attrs) { course_membership_params }
+      end
+
       let(:course) { create(:course) }
       let(:user) { create(:user) }
-
-      subject { described_class.course_membership }
-      let(:course_membership_attrs) {{ course_id: course.id, user_id: user.id }}
-
-      before(:each) do
-        described_class.instance_variable_set(:@data, course_membership_attrs)
-        allow(described_class).to receive(:course_membership) { course_membership }
-        described_class.instance_variable_set(:@course_membership, nil)
-      end
-
-      it "finds the first course membership for the given course_id/user_id pair" do
-        expect(CourseMembership).to receive_message_chain(:where, :first)
-        subject
-      end
+      let!(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
+      let(:class_instance) { LoginEventLogger }
+      let(:course_membership_params) {{ course_id: course_membership.course_id, user_id: course_membership.user_id }}
 
       it "something" do
-        expect(CourseMembership).to receive(:where).with course_membership_attrs
+        expect(CourseMembership).to receive(:where).with(course_membership_params) { course_membership }
         subject
       end
 
@@ -100,7 +95,7 @@ RSpec.describe LoginEventLogger, type: :background_job do
 
       it "sets the course membership to @course_membership" do
         subject
-        expect(described_class.instance_variable_get(:@course_membership)).to eq(course_membership)
+        expect(class_instance.instance_variable_get(:@course_membership)).to eq(course_membership)
       end
     end
   end
