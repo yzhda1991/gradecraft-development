@@ -14,8 +14,8 @@ RSpec.describe EventLogger::Base, type: :background_job do
     it "should print the @start_message class instance variable to the log" do
       described_class.instance_variable_set(:@start_message, "some message")
       allow(Analytics::Event).to receive(:create) { true }
-      expect(described_class).to receive(:puts).with("some message")
-      expect(described_class).to receive(:puts).with("another message")
+      expect(described_class.logger).to receive(:info).with("some message")
+      expect(described_class.logger).to receive(:info).with("another message")
       described_class.perform "event"
     end
 
