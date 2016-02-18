@@ -2,10 +2,12 @@ require "./lib/string"
 
 describe Gradecraft::String do
   describe "#past_tense" do
-    xit "adds a 'd' to the end of the string" do
-      subject = described_class.new("create")
+    it "adds a 'd' to the end of the string if it ends in an 'e'" do
+      expect(described_class.new("create").past_tense).to eq "created"
+    end
 
-      expect(subject.past_tense).to eq "created"
+    it "adds an 'ed' to the end of the string if it ends in a 'd'" do
+      expect(described_class.new("poop").past_tense).to eq "pooped"
     end
   end
 

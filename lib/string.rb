@@ -4,6 +4,11 @@ module Gradecraft
       @string = string.to_s
     end
 
+    def past_tense
+      ending = string.end_with?("e") ? "d" : "ed"
+      "#{string}#{ending}"
+    end
+
     def to_s
       string
     end
