@@ -2,28 +2,26 @@ require 'rails_spec_helper'
 require_relative '../support/uni_mock/stub_time'
 
 include Toolkits::EventLoggers::SharedExamples
+include Toolkits::Controllers::ApplicationControllerToolkit::Filters
 
 # LoginEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe LoginEventLogger, type: :background_job do
   include InQueueHelper # get help from ResqueSpec
 
+  # this needs to be declared since Resque interacts with class-level instance
+  # variables, and using mulitple class instances could misrepresent class-level
+  # instance variable circumstances
   let(:class_instance) { LoginEventLogger }
 
-  let(:new_logger) { LoginEventLogger.new(logger_attrs) }
-  let(:course) { build(:course) }
-  let(:user) { build(:user) }
+  # build this off of the class instance for consistent behavior
+  let(:new_logger) { class_instance.new(logger_attrs) }
 
   let(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
+  let(:course) { build(:course) }
+  let(:user) { build(:user) }
   let(:last_login) { Time.parse("June 20, 1968") }
 
-  let(:logger_attrs) {{
-    course_id: course.id,
-    user_id: user.id,
-    student_id: 90,
-    user_role: "great role",
-    page: "/a/great/path",
-    created_at: Time.parse("Jan 20 1972")
-  }}
+  let(:logger_attrs) { login_logger_attrs }
 
   # shared examples for EventLogger subclasses
   it_behaves_like "an EventLogger subclass", LoginEventLogger, "login"
@@ -31,28 +29,28 @@ RSpec.describe LoginEventLogger, type: :background_job do
 
   describe "class methods" do
     describe "self#peform" do
-      subject { described_class.perform('login', logger_attrs) }
+      subject { class_instance.perform('login', logger_attrs) }
 
       before(:each) { course_membership }
 
       it "merges the previous last_login_at value into the data hash" do
-        allow(described_class).to receive(:previous_last_login_at) { last_login.to_i }
+        allow(class_instance).to receive(:previous_last_login_at) { last_login.to_i }
         expect(logger_attrs).to receive(:merge!).with({ last_login_at: last_login.to_i })
         subject
       end
 
       it "sets the data hash to @data" do
         subject
-        expect(described_class.instance_variable_get(:@data)).to eq(logger_attrs)
+        expect(class_instance.instance_variable_get(:@data)).to eq(logger_attrs)
       end
 
       it "calls self#perform from the superclass" do
-        expect(described_class.logger).to receive(:info).exactly(2).times
+        expect(class_instance.logger).to receive(:info).exactly(2).times
         subject
       end
 
       it "updates the last login" do
-        expect(described_class).to receive(:update_last_login)
+        expect(class_instance).to receive(:update_last_login)
         subject
       end
     end
