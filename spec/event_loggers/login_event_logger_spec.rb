@@ -7,6 +7,8 @@ include Toolkits::EventLoggers::SharedExamples
 RSpec.describe LoginEventLogger, type: :background_job do
   include InQueueHelper # get help from ResqueSpec
 
+  let(:class_instance) { LoginEventLogger }
+
   let(:new_logger) { LoginEventLogger.new(logger_attrs) }
   let(:course) { build(:course) }
   let(:user) { build(:user) }
@@ -57,30 +59,28 @@ RSpec.describe LoginEventLogger, type: :background_job do
 
     describe "self#update_last_login" do
       let(:time_zone_now) { Date.parse("April 9 1992").to_time }
+      let(:data) {{ created_at: time_zone_now }}
 
       before do
-        allow(Time.zone).to receive(:now) { time_zone_now }
-        allow(described_class).to receive(:course_membership) { course_membership }
+        class_instance.instance_variable_set(:@data, data)
+        allow(class_instance).to receive(:course_membership) { course_membership }
       end
 
-      it "updates the last_login_at for the course memberhship" do
+      it "updates the last_login_at for the course membership" do
         expect(course_membership).to receive(:update_attributes).with({ last_login_at: time_zone_now })
-        described_class.update_last_login
+        class_instance.update_last_login
       end
     end
 
     describe "self#course_membership" do
       subject { class_instance.course_membership }
+
+      let!(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
+      let(:course_membership_params) {{ course_id: course_membership.course_id, user_id: course_membership.user_id }}
+
       before do
-        CourseMembership.destroy_all
         allow(class_instance).to receive(:course_membership_attrs) { course_membership_params }
       end
-
-      let(:course) { create(:course) }
-      let(:user) { create(:user) }
-      let!(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
-      let(:class_instance) { LoginEventLogger }
-      let(:course_membership_params) {{ course_id: course_membership.course_id, user_id: course_membership.user_id }}
 
       it "something" do
         expect(CourseMembership).to receive(:where).with(course_membership_params) { course_membership }
@@ -96,6 +96,41 @@ RSpec.describe LoginEventLogger, type: :background_job do
       it "sets the course membership to @course_membership" do
         subject
         expect(class_instance.instance_variable_get(:@course_membership)).to eq(course_membership)
+      end
+    end
+
+    describe "self#previous_last_login_at" do
+      subject { class_instance.previous_last_login_at }
+
+      before do
+        allow(class_instance).to receive(:course_membership) { course_membership }
+      end
+
+      context "course membership has a last_login_at value" do
+        it "returns the timestamp as an integer in seconds" do
+          allow(course_membership).to receive(:last_login_at) { last_login }
+          expect(subject).to eq(last_login.to_i)
+        end
+      end
+
+      context "course membership has no last_login_at value" do
+        it "returns nil" do
+          allow(course_membership).to receive(:last_login_at) { nil }
+          expect(subject).to be_nil
+        end
+      end
+    end
+
+    describe "self#course_membership_attrs" do
+      subject { class_instance.course_membership_attrs }
+      let(:data) {{ course_id: 20, user_id: 90 }}
+
+      before do
+        class_instance.instance_variable_set(:@data, data)
+      end
+
+      it "returns the timestamp as an integer in seconds" do
+        expect(subject).to eq(data)
       end
     end
   end

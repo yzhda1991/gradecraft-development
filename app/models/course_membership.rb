@@ -7,9 +7,7 @@ class CourseMembership < ActiveRecord::Base
   include ModelAddons::AdvancedRescue
 
   attr_accessible :auditing, :character_profile, :course, :course_id,
-    :instructor_of_record, :user, :user_id, :role
-
-  attr_reader :last_login_at
+    :instructor_of_record, :user, :user_id, :role, :last_login_at
 
   Role.all.each do |role|
     scope role.pluralize, ->(course) { where role: role }
