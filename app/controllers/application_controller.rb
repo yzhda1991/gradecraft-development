@@ -28,7 +28,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :require_login, :except => [:not_authenticated]
   before_filter :increment_page_views
-  before_filter :record_login_event
   before_filter :get_course_scores
 
   include ApplicationHelper
@@ -142,8 +141,8 @@ class ApplicationController < ActionController::Base
   end
 
   # Tracking course logins
-  def record_login_event
-    if current_user and request.format.html?
+  def record_course_login_event
+    if current_user and request.format.html? or request.format.xml?
       begin
         # schedule the event for later if Resque is available
         LoginEventLogger.new(login_logger_attrs).enqueue_in(Lull.time_until_next_lull)

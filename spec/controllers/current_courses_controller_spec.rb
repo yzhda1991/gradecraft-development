@@ -19,13 +19,13 @@ describe CurrentCoursesController do
       expect(session[:course_id]).to eq(another_course.id)
     end
 
-    it "logs the course login event if the course changed" do
-      expect(subject).to receive(:log_course_login_event)
+    it "records the course login event if the course changed" do
+      expect(subject).to receive(:record_course_login_event)
       post :change, course_id: another_course.id.to_s
     end
 
-    it "does not log the course login event if the course does not change" do
-      expect(subject).to_not receive(:log_course_login_event)
+    it "does not record the course login event if the course does not change" do
+      expect(subject).to_not receive(:record_course_login_event)
       post :change, course_id: course.id.to_s
     end
 

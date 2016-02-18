@@ -3,7 +3,7 @@ module Toolkits
     module ApplicationControllerToolkit
       module SharedExamples
 
-        RSpec.shared_examples "an EventLogger triggered by filter" do |logger_class|
+        RSpec.shared_examples "an EventLogger added to Resque with Mongo fallback" do |logger_class|
           let(:logger_event_type) { logger_class.to_s.gsub("EventLogger","").downcase }
 
           # if current_user && request.format.html?

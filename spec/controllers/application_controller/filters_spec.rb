@@ -19,7 +19,7 @@ RSpec.describe ApplicationControllerFiltersTest do
     let(:logger_attrs) { pageview_logger_attrs }
     before { allow(controller).to receive(:pageview_logger_attrs) { pageview_logger_attrs }}
 
-    it_behaves_like "an EventLogger triggered by filter", PageviewEventLogger
+    it_behaves_like "an EventLogger added to Resque with Mongo fallback", PageviewEventLogger
   end
 
   describe "trigger login logger events" do
@@ -32,7 +32,7 @@ RSpec.describe ApplicationControllerFiltersTest do
       allow(controller).to receive(:login_logger_attrs) { login_logger_attrs }
     end
 
-    it_behaves_like "an EventLogger triggered by filter", LoginEventLogger
+    it_behaves_like "an EventLogger added to Resque with Mongo fallback", LoginEventLogger
   end
 
   after do

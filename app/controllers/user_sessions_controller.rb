@@ -11,7 +11,7 @@ class UserSessionsController < ApplicationController
   def create
     respond_to do |format|
       if @user = login(params[:user][:email], params[:user][:password])
-        log_course_login_event
+        record_course_login_event
         format.html { redirect_back_or_to dashboard_path }
         format.xml { render :xml => @user, :status => :created, :location => @user }
       else
