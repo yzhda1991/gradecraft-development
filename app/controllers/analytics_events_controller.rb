@@ -24,13 +24,8 @@ class AnalyticsEventsController < ApplicationController
                               student_id: current_student.try(:id),
                               user_role: current_user.role(current_course),
                               page: "#{params[:url]}#{params[:tab]}",
-                              created_at: Time.now
+                              created_at: Time.zone.now
                               )
     render :nothing => true, :status => :ok
   end
-
-  protected
-  # add helpers for performing various tasks relative to the nightly lull
-  extend EventsHelper::Lull
-
 end
