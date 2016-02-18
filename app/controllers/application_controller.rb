@@ -27,9 +27,8 @@ class ApplicationController < ActionController::Base
   end
 
   before_filter :require_login, :except => [:not_authenticated]
-
   before_filter :increment_page_views
-
+  before_filter :record_login_event
   before_filter :get_course_scores
 
   include ApplicationHelper
@@ -118,25 +117,15 @@ class ApplicationController < ActionController::Base
     raise Canable::Transgression unless can_view?(resource)
   end
 
-  require_relative "../event_loggers/pageview_event_logger"
-  module ResqueManager
-    extend EventsHelper::Lull
-  end
-
-  # TODO: add specs for enqueing
   # Tracking page view counts
   def increment_page_views
     if current_user and request.format.html?
       begin
-        PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(time_until_next_lull)
+        PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(Lull.time_until_next_lull)
       rescue
         PageviewEventLogger.perform("pageview", pageview_logger_attrs)
       end
     end
-  end
-
-  def time_until_next_lull
-    ResqueManager.time_until_next_lull
   end
 
   def pageview_logger_attrs
@@ -154,7 +143,7 @@ class ApplicationController < ActionController::Base
   def record_login_event
     if current_user and request.format.html?
       begin
-        LoginEventLogger.new(login_logger_attrs).enqueue_in(time_until_next_lull)
+        LoginEventLogger.new(login_logger_attrs).enqueue_in(Lull.time_until_next_lull)
       rescue
         LoginEventLogger.perform('login', login_logger_attrs)
       end
