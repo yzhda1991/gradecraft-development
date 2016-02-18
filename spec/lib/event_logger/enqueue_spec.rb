@@ -12,10 +12,7 @@ class TestEventLogger
   end
 end
 
-# PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe EventLogger::Enqueue, type: :background_job do
-  include InQueueHelper # get help from ResqueSpec
-
   let(:logger_attrs) {{}}
   let(:new_logger) { TestEventLogger.new logger_attrs }
 

@@ -5,9 +5,10 @@ RSpec.describe EventLogger::Base, type: :background_job do
   let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
 
   describe "self.perform" do
+    let(:now) { Time.parse "Oct 20 1985" }
+    let(:mongoid_event) { double(:mongoid_event) }
+
     before do
-      @now = Time.parse "Oct 20 1985"
-      @mongoid_event = double(:mongoid_event)
       allow(described_class).to receive(:notify_event_outcome).and_return "another message"
     end
 
@@ -20,14 +21,14 @@ RSpec.describe EventLogger::Base, type: :background_job do
     end
 
     it "should create a new analytics event using the event attrs" do
-      allow(described_class).to receive_messages(event_type: "event", data: {created_at: @now})
-      expect(Analytics::Event).to receive(:create).with described_class.event_attrs("event", {created_at: @now})
-      described_class.perform "event", created_at: @now
+      allow(described_class).to receive_messages(event_type: "event", data: {created_at: now})
+      expect(Analytics::Event).to receive(:create).with described_class.event_attrs("event", {created_at: now})
+      described_class.perform "event", created_at: now
     end
 
     it "should notify the event outcome to the log" do
-      allow(Analytics::Event).to receive_messages(create: @mongoid_event)
-      expect(described_class).to receive(:notify_event_outcome).with(@mongoid_event, {caruthers: "stew"})
+      allow(Analytics::Event).to receive_messages(create: mongoid_event)
+      expect(described_class).to receive(:notify_event_outcome).with(mongoid_event, {caruthers: "stew"})
       described_class.perform "event", {caruthers: "stew"}
     end
   end
@@ -56,7 +57,7 @@ RSpec.describe EventLogger::Base, type: :background_job do
 
       it "should output the @failure_message" do
         allow(Analytics::Event).to receive(:create) { invalid_event }
-        expect(described_class).to receive(:notify_event_outcome).with(invalid_event, {heads: 10}) { notify_failure}
+        expect(described_class).to receive(:notify_event_outcome).with(invalid_event, {heads: 10}) { notify_failure }
         described_class.perform "event", {heads: 10}
       end
     end
