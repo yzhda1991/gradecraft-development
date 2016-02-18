@@ -129,4 +129,20 @@ RSpec.describe EventLogger::Base, type: :background_job do
       expect(described_class.instance_variable_names).to include("@ostriches", "@badgers")
     end
   end
+
+  describe "self.inheritable_attributes" do
+    let(:expected_attrs) {[
+      :queue,
+      :event_name,
+      :analytics_class,
+      :backoff_strategy,
+      :start_message,
+      :success_message,
+      :failure_message
+    ]}
+
+    it "should have a list of inheritable attributes" do
+      expect(described_class.inheritable_attributes).to eq(expected_attrs)
+    end
+  end
 end
