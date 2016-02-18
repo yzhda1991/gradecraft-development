@@ -10,19 +10,30 @@ include Toolkits::Controllers::ApplicationControllerToolkit::SharedExamples
 RSpec.describe ApplicationControllerFiltersTest do
   include Toolkits::Controllers::ApplicationControllerToolkit::Filters
 
-  before do
-    define_filters_test_routes
-
-  end
+  before { define_filters_test_routes }
 
   describe "triggering pageview logger events" do
-    let(:logger_attrs) { pageview_logger_attrs }
-    before { allow(controller).to receive(:pageview_logger_attrs) { pageview_logger_attrs }}
+    subject { get :html_page }
 
-    it_behaves_like "an EventLogger added to Resque with Mongo fallback", PageviewEventLogger
+    let(:logger_attrs) { pageview_logger_attrs }
+    before do
+      allow(controller).to receive(:pageview_logger_attrs) { pageview_logger_attrs }
+    end
+
+    it_behaves_like "an EventLogger calling Resque with Mongo fallback", PageviewEventLogger
+
+    context "the request is not html" do
+      it "should not call #{described_class}" do
+        stub_current_user
+        expect(PageviewEventLogger).not_to receive(:new).with logger_attrs
+        get :json_page, format: "json"
+      end
+    end
   end
 
-  describe "trigger login logger events" do
+  describe "#record_course_login_event" do
+    subject { controller.instance_eval { record_course_login_event }}
+
     let(:course) { create(:course) }
     let(:user) { create(:user) }
     let(:logger_attrs) { login_logger_attrs }
@@ -30,9 +41,21 @@ RSpec.describe ApplicationControllerFiltersTest do
     before do
       create :professor_course_membership, course: course, user: user
       allow(controller).to receive(:login_logger_attrs) { login_logger_attrs }
+      allow(controller).to receive_message_chain(:request, :format, :html?) { true }
     end
 
-    it_behaves_like "an EventLogger added to Resque with Mongo fallback", LoginEventLogger
+    it_behaves_like "an EventLogger calling Resque with Mongo fallback", LoginEventLogger
+
+    context "the request is not html or xml" do
+      let(:format) {{ html?: false, xml?: false, json?: true }}
+
+      it "should not call #{described_class}" do
+        stub_current_user
+        allow(controller.request.format).to receive_messages(format)
+        expect(PageviewEventLogger).not_to receive(:new).with logger_attrs
+        subject
+      end
+    end
   end
 
   after do

@@ -142,13 +142,15 @@ class ApplicationController < ActionController::Base
 
   # Tracking course logins
   def record_course_login_event
-    if current_user and request.format.html? or request.format.xml?
-      begin
-        # schedule the event for later if Resque is available
-        LoginEventLogger.new(login_logger_attrs).enqueue_in(Lull.time_until_next_lull)
-      rescue
-        # otherwise insert directly into Mongo
-        LoginEventLogger.perform('login', login_logger_attrs)
+    if current_user
+      if request.format.html? or request.format.xml?
+        begin
+          # schedule the event for later if Resque is available
+          LoginEventLogger.new(login_logger_attrs).enqueue_in(Lull.time_until_next_lull)
+        rescue
+          # otherwise insert directly into Mongo
+          LoginEventLogger.perform('login', login_logger_attrs)
+        end
       end
     end
   end
