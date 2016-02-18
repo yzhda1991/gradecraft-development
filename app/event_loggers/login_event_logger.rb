@@ -19,7 +19,7 @@ class LoginEventLogger < EventLogger::Base
   end
 
   def self.update_last_login
-    course_membership.update_attributes(last_login_at: Time.now)
+    course_membership.update_attributes(last_login_at: Time.zone.now)
   end
 
   def self.course_membership
