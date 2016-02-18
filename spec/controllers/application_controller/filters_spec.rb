@@ -16,6 +16,7 @@ RSpec.describe ApplicationControllerFiltersTest do
     subject { get :html_page }
 
     let(:logger_attrs) { pageview_logger_attrs }
+
     before do
       allow(controller).to receive(:pageview_logger_attrs) { pageview_logger_attrs }
     end
