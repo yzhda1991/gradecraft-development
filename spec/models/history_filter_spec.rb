@@ -115,7 +115,6 @@ describe HistoryFilter do
                                              "filename" => [nil, "blah"]
       })]
       result = described_class.new(history).transform do |history_item|
-        puts history_item.inspect
         history_item.changeset["event"] = "upload"
       end.changesets
       expect(result.first["event"]).to eq "upload"
