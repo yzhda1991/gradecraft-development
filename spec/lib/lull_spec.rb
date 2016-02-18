@@ -5,7 +5,7 @@ include Toolkits::Lib::LullToolkit
 
 RSpec.describe Lull do
 
-  # next_lull_start - Time.now
+  # next_lull_start - Time.zone.now
   describe "#time_until_next_lull" do
     it "should return seconds until the next lull" do
       allow(Time.zone).to receive_messages(now: six_am)
@@ -14,7 +14,7 @@ RSpec.describe Lull do
     end
   end
 
-  # Time.now < todays_lull_start
+  # Time.zone.now < todays_lull_start
   describe "#is_before_todays_lull" do
     before do
       allow(Time).to receive_messages(now: noon)
@@ -32,7 +32,7 @@ RSpec.describe Lull do
     end
   end
 
-  # Time.now > todays_lull_end
+  # Time.zone.now > todays_lull_end
   describe "#is_after_todays_lull" do
     before do
       allow(Time).to receive_messages(now: noon)
@@ -49,11 +49,11 @@ RSpec.describe Lull do
     end
   end
 
-  # Time.now > todays_lull_start and
-  # Time.now < todays_lull_end
+  # Time.zone.now > todays_lull_start and
+  # Time.zone.now < todays_lull_end
   describe "#is_during_todays_lull" do
     before do
-      allow(Time).to receive_messages(now: noon)
+      allow(Time.zone).to receive_messages(now: noon)
     end
 
     it "should be true if it's after the lull has started but before it's ended" do
@@ -106,18 +106,18 @@ RSpec.describe Lull do
       end
     end
 
-    # Time.now.change(LULL_END_PARAMS)
+    # Time.zone.now.change(LULL_END_PARAMS)
     describe "#todays_lull_end" do
       it "should match today's lull end" do
-        allow(Time).to receive_messages(now: @today)
+        allow(Time.zone).to receive_messages(now: @today)
         expect(Lull.todays_lull_end).to eq(@today.change(hour: 18, min: 40))
       end
     end
 
-    # Time.now.change(LULL_START_PARAMS)
+    # Time.zone.now.change(LULL_START_PARAMS)
     describe "#todays_lull_start" do
       it "should match today's lull start" do
-        allow(Time).to receive_messages(now: @today)
+        allow(Time.zone).to receive_messages(now: @today)
         expect(Lull.todays_lull_start).to eq(@today.change(hour: 15, min: 20))
       end
     end
