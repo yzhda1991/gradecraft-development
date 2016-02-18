@@ -42,7 +42,6 @@ RSpec.describe ApplicationControllerFiltersTest do
     before do
       create :professor_course_membership, course: course, user: user
       allow(controller).to receive(:login_logger_attrs) { login_logger_attrs }
-      allow(controller).to receive_message_chain(:request, :format, :html?) { true }
     end
 
     it_behaves_like "an EventLogger calling Resque with Mongo fallback", LoginEventLogger
