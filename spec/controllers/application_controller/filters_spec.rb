@@ -10,15 +10,29 @@ include Toolkits::Controllers::ApplicationControllerToolkit::SharedExamples
 RSpec.describe ApplicationControllerFiltersTest do
   include Toolkits::Controllers::ApplicationControllerToolkit::Filters
 
-  before { define_filters_test_routes }
+  before do
+    define_filters_test_routes
 
-  describe "#increment_page_views" do
+  end
+
+  describe "triggering pageview logger events" do
+    let(:logger_attrs) { pageview_logger_attrs }
+    before { allow(controller).to receive(:pageview_logger_attrs) { pageview_logger_attrs }}
+
+    it_behaves_like "an EventLogger triggered by filter", PageviewEventLogger
+  end
+
+  describe "trigger login logger events" do
+    let(:course) { create(:course) }
+    let(:user) { create(:user) }
+    let(:logger_attrs) { login_logger_attrs }
+
     before do
-      allow(controller).to receive_messages(pageview_logger_attrs: pageview_logger_attrs)
+      create :professor_course_membership, course: course, user: user
+      allow(controller).to receive(:login_logger_attrs) { login_logger_attrs }
     end
 
-    let(:logger_attrs) { pageview_logger_attrs }
-    it_behaves_like "an EventLogger triggered by filter", PageviewEventLogger
+    it_behaves_like "an EventLogger triggered by filter", LoginEventLogger
   end
 
   after do
