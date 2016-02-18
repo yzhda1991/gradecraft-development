@@ -2,7 +2,7 @@ require 'rails_spec_helper'
 require_relative '../support/uni_mock/stub_time'
 
 include Toolkits::EventLoggers::SharedExamples
-include Toolkits::Controllers::ApplicationControllerToolkit::Filters
+include Toolkits::EventLoggers::Attributes
 
 # LoginEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe LoginEventLogger, type: :background_job do
@@ -21,7 +21,7 @@ RSpec.describe LoginEventLogger, type: :background_job do
   let(:user) { build(:user) }
   let(:last_login) { Time.parse("June 20, 1968") }
 
-  let(:logger_attrs) { login_logger_attrs }
+  let(:logger_attrs) { login_logger_attrs } # pulled in from Toolkits::EventLoggers::Attributes
 
   # shared examples for EventLogger subclasses
   it_behaves_like "an EventLogger subclass", LoginEventLogger, "login"

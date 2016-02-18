@@ -9,6 +9,7 @@ include Toolkits::Controllers::ApplicationControllerToolkit::SharedExamples
 
 RSpec.describe ApplicationControllerFiltersTest do
   include Toolkits::Controllers::ApplicationControllerToolkit::Filters
+  include Toolkits::EventLoggers::Attributes
 
   before { define_filters_test_routes }
 
