@@ -119,49 +119,23 @@ class ApplicationController < ActionController::Base
   # Tracking page view counts
   def increment_page_views
     if current_user and request.format.html?
-      begin
-        # schedule the event for later if Resque is available
-        PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(Lull.time_until_next_lull)
-      rescue
-        # otherwise insert directly into Mongo
-        PageviewEventLogger.perform("pageview", pageview_logger_attrs)
-      end
+      PageviewEventLogger.new(event_session).enqueue_in_with_fallback(Lull.time_until_next_lull)
     end
-  end
-
-  def pageview_logger_attrs
-    {
-      course_id: current_course.try(:id),
-      user_id: current_user.id,
-      student_id: current_student.try(:id),
-      user_role: current_user.role(current_course),
-      page: request.original_fullpath,
-      created_at: Time.zone.now
-    }
   end
 
   # Tracking course logins
   def record_course_login_event
-    if current_user
-      if request.format.html? or request.format.xml?
-        begin
-          # schedule the event for later if Resque is available
-          LoginEventLogger.new(login_logger_attrs).enqueue_in(Lull.time_until_next_lull)
-        rescue
-          # otherwise insert directly into Mongo
-          LoginEventLogger.perform('login', login_logger_attrs)
-        end
-      end
+    if current_user and (request.format.html? or request.format.xml?)
+      LoginEventLogger.new(event_session).enqueue_in_with_fallback(Lull.time_until_next_lull)
     end
   end
 
-  def login_logger_attrs
+  def event_session
     {
-      course_id: current_course.try(:id),
-      user_id: current_user.id,
-      student_id: current_student.try(:id),
-      user_role: current_user.role(current_course),
-      created_at: Time.zone.now
+      course: current_course,
+      user: current_user,
+      student: current_student,
+      request: request
     }
   end
 end
