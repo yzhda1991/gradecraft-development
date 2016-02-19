@@ -6,8 +6,8 @@ module Toolkits
         describe "#initialize" do
           subject { new_logger }
 
-          it "should set an @attrs hash" do
-            expect(subject.instance_variable_get(:@attrs)).to eq(logger_attrs)
+          it "should set an @event_session hash" do
+            expect(subject.instance_variable_get(:@event_session)).to eq(event_session)
           end
         end
 
@@ -29,7 +29,7 @@ module Toolkits
             end
           end
 
-          describe "enqueue with schedule" do
+          describe "#enqueue with schedule" do
             describe"enqueue_in" do
               subject { new_logger.enqueue_in(2.hours) }
 
@@ -39,7 +39,7 @@ module Toolkits
               end
             end
 
-            describe "enqueue_at" do
+            describe "#enqueue_at" do
               let!(:"#{logger_name}_event_logger") { new_logger.enqueue_at later }
               let(:later) { Time.parse "Feb 10 2052" }
 
@@ -47,6 +47,32 @@ module Toolkits
                 expect(logger_class).to have_scheduled(logger_name, logger_attrs).at later
               end
             end
+
+            describe "#enqueue_in_with_fallback" do
+              subject { new_logger.enqueue_in_with_fallback(2.hours) }
+
+              it "should schedule a #{logger_name} event" do
+                subject
+                expect(logger_class).to have_scheduled(logger_name, logger_attrs).in(2.hours)
+              end
+
+              context "Resque reaches Redis correctly and no error is thrown" do
+                it "doesn't call #{logger_class}#perform directly" do
+                  expect(logger_class).not_to receive(:perform).with(logger_name, logger_attrs)
+                end
+              end
+
+              context "Resque can't reach Redis and throws an error" do
+                before do
+                  allow(new_logger).to receive(:enqueue_in).and_raise("FAKE RSPEC ERROR: Could not connect to Redis: getaddrinfo socket error.")
+                end
+
+                it "calls #{logger_class}#perform directly" do
+                  expect(logger_class).to receive(:perform).with(logger_name, logger_attrs)
+                end
+              end
+            end
+
           end
         end
       end
