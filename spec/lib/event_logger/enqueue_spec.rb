@@ -12,4 +12,10 @@ RSpec.describe EventLogger::Enqueue, type: :background_job do
 
   # taken from Toolkits::EventLoggers::SharedExamples
   it_behaves_like "EventLogger::Enqueue is included", TestEventLogger, "test"
+
+  describe "#event_attrs" do
+    it "aliases #base_attrs" do
+      expect(new_logger.event_attrs).to eq(new_logger.base_attrs)
+    end
+  end
 end

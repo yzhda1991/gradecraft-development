@@ -111,11 +111,6 @@ module Toolkits
               end
             end
 
-            describe "#event_attrs" do
-              it "aliases #base_attrs" do
-                expect(new_logger.event_attrs).to eq(new_logger.base_attrs)
-              end
-            end
           end
         end
       end

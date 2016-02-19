@@ -23,8 +23,8 @@ class LoginEventLogger < EventLogger::Base
     "login"
   end
 
-  def attrs
-    @attrs ||= base_attrs.merge({ last_login_at: previous_last_login_at })
+  def event_attrs
+    @event_attrs ||= base_attrs.merge({ last_login_at: previous_last_login_at })
   end
 
   def course_membership

@@ -11,9 +11,32 @@ RSpec.describe PageviewEventLogger, type: :background_job do
   define_event_session # pulls in #event_session attributes from EventLoggers::EventSession
 
   let(:new_logger) { PageviewEventLogger.new(event_session) }
-  let(:logger_attrs) { pageview_logger_attrs } # pulled in from Toolkits::EventLoggers::Attributes
 
   # shared examples for EventLogger subclasses
   it_behaves_like "an EventLogger subclass", PageviewEventLogger, "pageview"
   it_behaves_like "EventLogger::Enqueue is included", PageviewEventLogger, "pageview"
+
+  describe "#event_attrs" do
+    subject { new_logger.event_attrs }
+    let(:request_path) { "/path/to/chaos" }
+
+    before do
+      allow(request).to receive(:original_fullpath) { request_path }
+    end
+
+    it "merges the page from the original request with the base_attrs" do
+      expect(subject).to eq new_logger.base_attrs.merge(page: request_path)
+    end
+
+    it "caches the #event_attrs" do
+      subject
+      expect(new_logger.base_attrs).not_to receive(:merge)
+      subject
+    end
+
+    it "sets the event attrs to @event_attrs" do
+      subject
+      expect(new_logger.instance_variable_get(:@event_attrs)).to eq(new_logger.event_attrs)
+    end
+  end
 end
