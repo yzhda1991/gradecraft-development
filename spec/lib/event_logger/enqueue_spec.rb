@@ -11,6 +11,8 @@ RSpec.describe EventLogger::Enqueue, type: :background_job do
 
   define_event_session # from Toolkits::EventLoggers::EventSession
 
+  before { allow(new_logger).to receive(:attrs) { logger_attrs }}
+
   # taken from Toolkits::EventLoggers::SharedExamples
   it_behaves_like "EventLogger::Enqueue is included", TestEventLogger, "test"
 end

@@ -59,6 +59,7 @@ module Toolkits
               context "Resque reaches Redis correctly and no error is thrown" do
                 it "doesn't call #{logger_class}#perform directly" do
                   expect(logger_class).not_to receive(:perform).with(logger_name, logger_attrs)
+                  subject
                 end
               end
 
@@ -69,10 +70,51 @@ module Toolkits
 
                 it "calls #{logger_class}#perform directly" do
                   expect(logger_class).to receive(:perform).with(logger_name, logger_attrs)
+                  subject
                 end
               end
             end
 
+            describe "#base_attrs" do
+              subject { new_logger.base_attrs }
+
+              let(:expected_base_attrs) {{
+                course_id: event_session[:course].id,
+                user_id: event_session[:user].id,
+                student_id: event_session[:student].id,
+                user_role: "great-role",
+                created_at: time_zone_now
+              }}
+
+              let(:time_zone_now) { Date.parse("June 9 1900") }
+
+              before do
+                allow(Time.zone).to receive(:now) { time_zone_now }
+                allow(event_session[:user]).to receive(:role).with(event_session[:course]) { "great-role" }
+              end
+
+              it "returns a hash of default attributes for session events" do
+                expect(subject).to eq(expected_base_attrs)
+              end
+
+              it "caches the attributes hash" do
+                subject
+                expect(event_session[:user]).not_to receive(:role)
+                subject
+              end
+
+              it "sets the hash to @base_attrs" do
+                subject
+                expect(new_logger.instance_variable_get(:@base_attrs)).to eq(expected_base_attrs)
+              end
+            end
+
+            describe "#attrs" do
+              subject { new_logger.attrs }
+
+              it "aliases #base_attrs" do
+              end
+            end
           end
         end
       end

@@ -27,10 +27,13 @@ module EventLogger
         enqueue_in(time_until_start)
       rescue
         # otherwise insert directly into Mongo
-        self.perform(event_type, attrs)
+        self.class.perform(event_type, attrs)
       end
     end
 
+    # this is the default attribute set for EventLogger classes
+    # should be extended in #attrs inside of child classes for better
+    # granularity when more specific attributes are needed
     def base_attrs
       @base_attrs ||= {
         course_id: event_session[:course].try(:id),
@@ -40,6 +43,9 @@ module EventLogger
         created_at: Time.zone.now
       }
     end
+
+    # this is set in the event that the base attributes are all that's
+    # needed by the target class
     alias_method :attrs, :base_attrs
   end
 end
