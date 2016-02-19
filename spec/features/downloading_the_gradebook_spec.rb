@@ -17,7 +17,7 @@ feature "downloading gradebook file" do
         click_link "Full Gradebook"
       end
 
-      expect(page).to have_notification_message('notice', 'Your request to export the gradebook for "Course Name" is currently being processed. We will email you the data shortly.')
+      expect(page).to have_notification_message("notice", "Your request to export the gradebook for \"Course Name\" is currently being processed. We will email you the data shortly.")
     end
   end
 end

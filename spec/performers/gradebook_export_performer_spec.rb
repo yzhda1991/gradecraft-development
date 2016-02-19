@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe GradebookExportPerformer, type: :background_job do
   # public methods

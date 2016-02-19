@@ -1,7 +1,7 @@
 #spec/controllers/application_controller_spec.rb
-require 'rails_spec_helper'
-require 'resque-scheduler'
-require 'resque_spec/scheduler'
+require "rails_spec_helper"
+require "resque-scheduler"
+require "resque_spec/scheduler"
 
 class ApplicationControllerFiltersTest < ApplicationController
   def html_page
@@ -24,9 +24,9 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
 
     before do
       Rails.application.routes.draw do
-        get '/html_page', to: 'application_controller_filters_test#html_page'
-        get '/json_page', to: 'application_controller_filters_test#json_page'
-        root to: 'application_controller_filters_test#html_page'
+        get "/html_page", to: "application_controller_filters_test#html_page"
+        get "/json_page", to: "application_controller_filters_test#json_page"
+        root to: "application_controller_filters_test#html_page"
       end
     end
 
@@ -81,7 +81,7 @@ RSpec.describe ApplicationControllerFiltersTest, type: :controller do
       end
 
       it "performs the pageview event log directly from the controller" do
-        expect(PageviewEventLogger).to receive(:perform).with('pageview', pageview_logger_attrs)
+        expect(PageviewEventLogger).to receive(:perform).with("pageview", pageview_logger_attrs)
         get :html_page
       end
 

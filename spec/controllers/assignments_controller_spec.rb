@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe AssignmentsController do
   before(:all) do
@@ -102,7 +102,7 @@ describe AssignmentsController do
         Assignment.delete_all
         params = attributes_for(:assignment)
         params[:assignment_type_id] = @assignment_type
-        params.merge! :assignment_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}
+        params.merge! :assignment_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
         post :create, :assignment => params
         assignment = Assignment.where(name: params[:name]).last
         expect expect(assignment.assignment_files.count).to eq(1)
@@ -128,7 +128,7 @@ describe AssignmentsController do
       end
 
       it "manages file uploads" do
-        params = {:assignment_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
+        params = {:assignment_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
         post :update, id: @assignment.id, :assignment => params
         expect expect(@assignment.assignment_files.count).to eq(1)
       end

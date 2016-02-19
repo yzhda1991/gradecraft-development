@@ -3,7 +3,7 @@
 %h3.pagetitle= presenter.title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   #tabs.ui-tabs.ui-widget
     %ul.ui-tabs-nav{:role => "tablist"}
@@ -27,10 +27,10 @@
 
     #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
       #tab1.active
-        = render partial: 'assignments/description_and_downloads', locals: { presenter: presenter }
+        = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
       - if presenter.rubric_designed? && !presenter.grades_available_for?(current_student) && ( !current_student || presenter.assignment.description_visible_for_student?(current_student) )
         #tab2
-          = render partial: 'assignments/rubric_preview', locals: { presenter: presenter }
+          = render partial: "assignments/rubric_preview", locals: { presenter: presenter }
       - if presenter.has_submission_for?(current_student)
         #tab3
           = render partial: "submissions/student_show", locals: { presenter: presenter }

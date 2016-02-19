@@ -32,7 +32,7 @@ class GradeSchemeElementsController < ApplicationController
         @course.grade_scheme_elements.where(id: params[:deleted_ids]).destroy_all
         @course.update_attributes(:grade_scheme_elements_attributes => gse) unless gse.nil?
       rescue
-        raise 'HandleThis'
+        raise "HandleThis"
       end
     end
     respond_to do |format|

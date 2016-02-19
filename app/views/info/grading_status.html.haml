@@ -3,9 +3,9 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
-  = render 'ungraded_submissions_table', :course => current_course
+  = render "ungraded_submissions_table", :course => current_course
 
   = render 'grades_table', grade_type: "unreleased", subtitle: "Unreleased Grades", grades_by_assignment: @unreleased_grades_by_assignment, count: unreleased_grades_count_for(current_course), course: current_course
 

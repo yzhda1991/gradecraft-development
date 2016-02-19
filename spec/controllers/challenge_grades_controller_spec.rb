@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe ChallengeGradesController do
 
@@ -120,7 +120,7 @@ describe ChallengeGradesController do
         expect(@challenge_grade.reload.score).to eq 1000
       end
 
-      it "redirects to the mass_edit form if attributes are invalid" do 
+      it "redirects to the mass_edit form if attributes are invalid" do
         challenge_grades_attributes = { "#{@challenge.challenge_grades.index(@challenge_grade)}" =>
           { team_id: nil, score: 1000, status: "Released",
             id: @challenge_grade.id
@@ -139,8 +139,8 @@ describe ChallengeGradesController do
       end
     end
 
-    describe "POST update_status" do 
-      it "updates the status of multiple challenge grades" do 
+    describe "POST update_status" do
+      it "updates the status of multiple challenge grades" do
         post :update_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ], :challenge_grade => {"status"=> "Released"}}
         expect(response).to redirect_to challenge_path(@challenge)
       end
@@ -151,7 +151,7 @@ describe ChallengeGradesController do
         expect{ get :destroy, {:id => @challenge_grade, :challenge_id => @challenge.id } }.to change(ChallengeGrade,:count).by(-1)
       end
 
-      it "recalculates the team score" do 
+      it "recalculates the team score" do
         @challenge = create(:challenge, course: @course)
         @challenge_grade = create(:challenge_grade, challenge: @challenge, team: @team, score: 100, status: "Released")
         expect(@team.score).to eq(100)

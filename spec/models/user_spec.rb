@@ -26,8 +26,8 @@ describe User do
   describe "ordering" do
     it "should return users alphabetical by last name" do
       User.destroy_all
-      student = create(:user, last_name: 'Zed')
-      student2 = create(:user, last_name: 'Alpha')
+      student = create(:user, last_name: "Zed")
+      student2 = create(:user, last_name: "Alpha")
       expect(User.all).to eq([student2,student])
     end
   end
@@ -317,7 +317,7 @@ describe User do
     let(:student) { create :user }
 
     before do
-      create(:course_membership, course: world.course, user: student, character_profile: 'The six-fingered man.')
+      create(:course_membership, course: world.course, user: student, character_profile: "The six-fingered man.")
     end
 
     it "returns the student's character profile if it's present" do

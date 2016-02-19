@@ -23,7 +23,7 @@ feature "deleting a group" do
         click_link "Delete"
       end
 
-      expect(page).to have_notification_message('success', 'Group Name group successfully deleted')
+      expect(page).to have_notification_message("success", "Group Name group successfully deleted")
     end
   end
 end

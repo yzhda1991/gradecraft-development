@@ -1,6 +1,6 @@
 class SubmissionsExportPerformer < ResqueJob::Performer
-  require 'fileutils' # need this for mkdir_p
-  require 'open-uri' # need this for getting the S3 file over http
+  require "fileutils" # need this for mkdir_p
+  require "open-uri" # need this for getting the S3 file over http
   include ModelAddons::ImprovedLogging # log errors with attributes
 
   attr_reader :submissions_export
@@ -182,22 +182,22 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def titleize_filename(filename)
     filename
       .downcase
-      .gsub(/[^\w\s_\:-]+/, ' ') # strip out characters besides letters and digits
-      .gsub(/_+/, ' ') # replace underscores with spaces
-      .gsub(/ +/, ' ') # replace underscores with spaces
-      .gsub(/^ +/, '') # remove leading spaces
-      .gsub(/ +$/, '') # remove trailing spaces
+      .gsub(/[^\w\s_\:-]+/, " ") # strip out characters besides letters and digits
+      .gsub(/_+/, " ") # replace underscores with spaces
+      .gsub(/ +/, " ") # replace underscores with spaces
+      .gsub(/^ +/, "") # remove leading spaces
+      .gsub(/ +$/, "") # remove trailing spaces
       .titleize
   end
 
   def sanitize_filename(filename)
     filename
       .downcase
-      .gsub(/[^\w\s_\:-]+/, '') # strip out characters besides letters and digits
-      .gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2') # remove extra spaces
-      .gsub(/\s+/, '_') # replace spaces with underscores
-      .gsub(/^_+/, '') # remove leading underscores
-      .gsub(/_+$/, '') # remove trailing underscores
+      .gsub(/[^\w\s_\:-]+/, "") # strip out characters besides letters and digits
+      .gsub(/(^|\b\s)\s+($|\s?\b)/, "\\1\\2") # remove extra spaces
+      .gsub(/\s+/, "_") # replace spaces with underscores
+      .gsub(/^_+/, "") # remove leading underscores
+      .gsub(/_+$/, "") # remove trailing underscores
   end
 
   def fetch_course
@@ -241,7 +241,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def generate_export_csv
-    open(csv_file_path, 'w') do |f|
+    open(csv_file_path, "w") do |f|
       f.puts @assignment.grade_import(@students_for_csv)
     end
   end
@@ -341,7 +341,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def create_submission_text_file(submission)
-    open(submission_text_file_path(submission.student), 'w') do |f|
+    open(submission_text_file_path(submission.student), "w") do |f|
       f.puts "Submission items from #{submission.student.last_name}, #{submission.student.first_name}"
 
       if submission.text_comment.present?
@@ -391,7 +391,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   # @mz todo: update specs
   def write_note_for_missing_binary_files
     unless students_with_missing_binaries.empty?
-      open(missing_binaries_file_path, 'wt') do |file|
+      open(missing_binaries_file_path, "wt") do |file|
         write_missing_binary_text(file)
       end
     end
@@ -458,7 +458,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def generate_error_log
     unless @errors.empty?
-      open(error_log_path, 'w') {|file| file.puts @errors }
+      open(error_log_path, "w") {|file| file.puts @errors }
     end
   end
 

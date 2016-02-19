@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :course do
     name { Faker::Internet.domain_word }
     courseno { Faker::Internet.domain_word }
-    semester 'Fall'
+    semester "Fall"
     badge_setting false
     use_timeline true
 
@@ -18,14 +18,14 @@ FactoryGirl.define do
       default_assignment_weight 3
     end
 
-    factory :course_without_timeline do 
+    factory :course_without_timeline do
       use_timeline false
     end
 
     factory :invalid_course do
       name nil
     end
-    
+
   end
 
 end

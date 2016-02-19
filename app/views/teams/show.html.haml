@@ -48,8 +48,8 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph(:dashboard) + "Dashboard", student_path(student), :class => 'button'
-                %li= link_to glyph(:edit) + "Edit", edit_user_path(student), :class => 'button'
+                %li= link_to glyph(:dashboard) + "Dashboard", student_path(student), :class => "button"
+                %li= link_to glyph(:edit) + "Edit", edit_user_path(student), :class => "button"
 
   %h4.subtitle #{term_for :challenge } Grades
 
@@ -73,7 +73,7 @@
             .right
               %ul.button-bar
                 - if challenge.challenge_grade_for_team(@team).present?
-                  %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => 'button'
-                  %li= link_to glyph(:trash) + "Delete Grade", challenge_challenge_grade_path(challenge.id, challenge.challenge_grade_for_team(@team).id, :team_id => @team.id), :class => 'button', :data => { confirm: 'Are you sure?', method: :delete }
+                  %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_challenge_grade_path(:challenge_id => challenge, :id => challenge.challenge_grade_for_team(@team).id), :class => "button"
+                  %li= link_to glyph(:trash) + "Delete Grade", challenge_challenge_grade_path(challenge.id, challenge.challenge_grade_for_team(@team).id, :team_id => @team.id), :class => "button", :data => { confirm: "Are you sure?", method: :delete }
                 - else
-                  %li= link_to glyph(:check) + "Grade", new_challenge_challenge_grade_path(:challenge_id => challenge, :team_id => @team.id), :class => 'button'
+                  %li= link_to glyph(:check) + "Grade", new_challenge_challenge_grade_path(:challenge_id => challenge, :team_id => @team.id), :class => "button"

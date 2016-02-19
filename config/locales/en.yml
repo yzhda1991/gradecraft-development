@@ -5,12 +5,12 @@ en:
   simple_form:
     placeholders:
       user:
-        email: 'Email'
-        password: 'Password'
+        email: "Email"
+        password: "Password"
     labels:
       submission:
         submission_files:
-          filename: 'File'
+          filename: "File"
   errors:
     messages:
       wrong_size: "is the wrong size (should be %{file_size})"
@@ -43,4 +43,4 @@ en:
 
   sessions:
     create:
-      error: 'Sorry, we could not log you in.'
+      error: "Sorry, we could not log you in."

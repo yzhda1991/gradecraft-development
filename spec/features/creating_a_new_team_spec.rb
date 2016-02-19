@@ -27,7 +27,7 @@ feature "creating a new team" do
         click_button "Create team"
       end
 
-      expect(page).to have_notification_message('notice', 'Team New Team Name successfully created')
+      expect(page).to have_notification_message("notice", "Team New Team Name successfully created")
     end
   end
 end

@@ -3,7 +3,7 @@ class AnalyticsEventsController < ApplicationController
 
   def predictor_event
     # limited to 5 predictor jobs/second in Resque initializer
-    Resque.enqueue(PredictorEventLogger, 'predictor',
+    Resque.enqueue(PredictorEventLogger, "predictor",
                                 course_id: current_course.id,
                                 user_id: current_user.id,
                                 student_id: current_student.try(:id),
@@ -12,13 +12,13 @@ class AnalyticsEventsController < ApplicationController
                                 score: params[:score].to_i,
                                 possible: params[:possible].to_i,
                                 created_at: Time.now
-                                )  
+                                )
     render :nothing => true, :status => :ok
   end
 
   def tab_select_event
     # limited to 2 predictor jobs/second in Resque initializer
-    Resque.enqueue_in(Lull.time_until_next_lull, PageviewEventLogger, 'pageview',
+    Resque.enqueue_in(Lull.time_until_next_lull, PageviewEventLogger, "pageview",
                               course_id: current_course.id,
                               user_id: current_user.id,
                               student_id: current_student.try(:id),

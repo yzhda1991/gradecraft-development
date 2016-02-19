@@ -68,7 +68,7 @@ module Analytics::Aggregate
 
     def incr(event)
       decorated_event = decorate_event(event)
-      self.aggregate_scope(event).find_and_modify({'$inc' => upsert_hash(decorated_event)}, {'upsert' => 'true', :new => true})
+      self.aggregate_scope(event).find_and_modify({"$inc" => upsert_hash(decorated_event)}, {"upsert" => "true", :new => true})
     end
 
     def aggregate_scope(event)
@@ -107,7 +107,7 @@ module Analytics::Aggregate
       scope = self.aggregate_scope(event)
       #STDOUT.puts "  Decrementing #{self.name} #{scope.selector}"
 
-      record = scope.find_and_modify({'$inc' => hash}, {:new => true})
+      record = scope.find_and_modify({"$inc" => hash}, {:new => true})
 
       # Then, remove if values empty (this is the opposite of the 'upsert' => 'true' in the #incr method)
       unset_keys = {}
@@ -117,7 +117,7 @@ module Analytics::Aggregate
         if record[key] == 0 || (record[key].is_a?(Float) && record[key].nan?)
           record.unset(key)
 
-          key_levels = key.split('.')
+          key_levels = key.split(".")
 
           # Then delete each parent key of nested hash if it is now empty after unset
           loop do
@@ -126,7 +126,7 @@ module Analytics::Aggregate
 
             break if key_levels.empty?
 
-            next_key = key_levels.join('.')
+            next_key = key_levels.join(".")
 
             unset_keys[next_key] ? unset_keys[next_key] << last_key : unset_keys[next_key] = [last_key]
             value_excluding_unset_keys = record[next_key].reject{ |k,v| unset_keys[next_key].include?(k) }
@@ -168,7 +168,7 @@ module Analytics::Aggregate
     # granular_key(:all_time, nil)           #=> "all_time"
     # granular_key(:minutely, 1.minute.to_i) #=> "minutely.1377704400"
     def granular_key(granularity, interval, time)
-      [granularity, time_key(time, interval)].compact.join('.')
+      [granularity, time_key(time, interval)].compact.join(".")
     end
 
     # Auto-populate our format_hash with all attributes from event.
@@ -218,7 +218,7 @@ module Analytics::Aggregate
       end
       results = self.
         in(scope).
-        where('$or' => keys.map{ |k| {k => { '$exists' => true}} }).
+        where("$or" => keys.map{ |k| {k => { "$exists" => true}} }).
         only(granularity, *@scope_by, *keys, :name).
         to_a
 

@@ -143,9 +143,9 @@ describe Course do
   describe "#staff" do
     it "returns an alphabetical list of the staff in the course" do
       course = create(:course)
-      staff_1 = create(:user, last_name: 'Zeto')
-      staff_2 = create(:user, last_name: 'Able')
-      staff_3 = create(:user, last_name: 'Able')
+      staff_1 = create(:user, last_name: "Zeto")
+      staff_2 = create(:user, last_name: "Able")
+      staff_3 = create(:user, last_name: "Able")
       course_membership = create(:course_membership, user: staff_1, role: "gsi", course: course)
       course_membership = create(:course_membership, user: staff_2, role: "gsi", course: course)
       expect(course.staff).to eq([staff_2,staff_1])
@@ -154,9 +154,9 @@ describe Course do
 
   describe "#students_being_graded" do
     it "returns an alphabetical list of students being graded" do
-      student = create(:user, last_name: 'Zed')
+      student = create(:user, last_name: "Zed")
       student.courses << subject
-      student2 = create(:user, last_name: 'Alpha')
+      student2 = create(:user, last_name: "Alpha")
       student2.courses << subject
       expect(subject.students_being_graded).to eq([student2,student])
     end
@@ -164,11 +164,11 @@ describe Course do
 
   describe "#students_being_graded_by_team(team)"do
     it "returns an alphabetical list of students being graded for a specific team" do
-      student = create(:user, last_name: 'Zed')
+      student = create(:user, last_name: "Zed")
       student.courses << subject
-      student2 = create(:user, last_name: 'Alpha')
+      student2 = create(:user, last_name: "Alpha")
       student2.courses << subject
-      student3 = create(:user, last_name: 'Mr. Green')
+      student3 = create(:user, last_name: "Mr. Green")
       student3.courses << subject
       team = create(:team, course: subject)
       team.students << [ student, student2]
@@ -178,11 +178,11 @@ describe Course do
 
   describe "#students_by_team(team)" do
     it "returns an alphabetical list of all students in a team" do
-      student = create(:user, last_name: 'Zed')
+      student = create(:user, last_name: "Zed")
       course_membership = create(:auditing_membership, user: student, course: subject)
-      student2 = create(:user, last_name: 'Alpha')
+      student2 = create(:user, last_name: "Alpha")
       student2.courses << subject
-      student3 = create(:user, last_name: 'Mr. Green')
+      student3 = create(:user, last_name: "Mr. Green")
       course_membership_2 = create(:auditing_membership, user: student3, course: subject)
       team = create(:team, course: subject)
       team.students << [ student, student2]
@@ -242,7 +242,7 @@ describe Course do
 
   describe "#assignment_term" do
     it "returns the set assignment_term if present" do
-      subject.assignment_term = 'Quest'
+      subject.assignment_term = "Quest"
       expect(subject.assignment_term).to eq("Quest")
     end
 
@@ -253,7 +253,7 @@ describe Course do
 
   describe "#badge_term" do
     it "returns the set badge_term if present" do
-      subject.badge_term = 'Achievement'
+      subject.badge_term = "Achievement"
       expect(subject.badge_term).to eq("Achievement")
     end
 
@@ -264,7 +264,7 @@ describe Course do
 
   describe "#challenge_term" do
     it "returns the set challenge_term if present" do
-      subject.challenge_term = 'Boss Battle'
+      subject.challenge_term = "Boss Battle"
       expect(subject.challenge_term).to eq("Boss Battle")
     end
 
@@ -275,7 +275,7 @@ describe Course do
 
   describe "#fail_term" do
     it "returns the set fail_term if present" do
-      subject.fail_term = 'Miss'
+      subject.fail_term = "Miss"
       expect(subject.fail_term).to eq("Miss")
     end
 
@@ -286,7 +286,7 @@ describe Course do
 
   describe "#group_term" do
     it "returns the set group_term if present" do
-      subject.group_term = 'Flange'
+      subject.group_term = "Flange"
       expect(subject.group_term).to eq("Flange")
     end
 
@@ -297,7 +297,7 @@ describe Course do
 
   describe "#pass_term" do
     it "returns the set pass_term if present" do
-      subject.pass_term = 'Win'
+      subject.pass_term = "Win"
       expect(subject.pass_term).to eq("Win")
     end
 
@@ -308,7 +308,7 @@ describe Course do
 
   describe "#team_term" do
     it "returns the set team_term if present" do
-      subject.team_term = 'Horde'
+      subject.team_term = "Horde"
       expect(subject.team_term).to eq("Horde")
     end
 
@@ -319,7 +319,7 @@ describe Course do
 
   describe "#team_leader_term" do
     it "returns the set team_leader_term if present" do
-      subject.team_leader_term = 'Captain'
+      subject.team_leader_term = "Captain"
       expect(subject.team_leader_term).to eq("Captain")
     end
 
@@ -330,7 +330,7 @@ describe Course do
 
   describe "#weight_term" do
     it "returns the set weight_term if present" do
-      subject.weight_term = 'Kapital'
+      subject.weight_term = "Kapital"
       expect(subject.weight_term).to eq("Kapital")
     end
 
@@ -341,7 +341,7 @@ describe Course do
 
   describe "#user_term" do
     it "returns the set user_term if present" do
-      subject.user_term = 'User'
+      subject.user_term = "User"
       expect(subject.user_term).to eq("User")
     end
 
@@ -681,8 +681,8 @@ describe Course do
 
   describe "#graded_student_count" do
     it "returns the number of student who are being graded in the course" do
-      student = create(:user, last_name: 'Zed')
-      student2 = create(:user, last_name: 'Alpha')
+      student = create(:user, last_name: "Zed")
+      student2 = create(:user, last_name: "Alpha")
       student3 = create(:user)
       student3.courses << subject
       course_membership = create(:auditing_membership, user: student, course: subject)

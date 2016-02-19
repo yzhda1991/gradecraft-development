@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   extend Toolkits::Performers::SubmissionsExport::Context
@@ -80,7 +80,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     let(:assignment) { create(:assignment) }
     let(:team) { create(:team) }
     let(:submissions_export) { create(:submissions_export) }
-    let(:mailer_double) { double('mailer something').as_null_object }
+    let(:mailer_double) { double("mailer something").as_null_object }
 
     before(:each) do
       performer.instance_variable_set(:@professor, professor)

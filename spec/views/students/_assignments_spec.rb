@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe "students/syllabus/_assignments" do
 
@@ -86,10 +86,10 @@ describe "students/syllabus/_assignments" do
     end
 
     it "shows the description if it's present" do
-      @assignment_type_1.update(description: 'Tabula Rasa')
+      @assignment_type_1.update(description: "Tabula Rasa")
       @assignment_type_1.save
       render
-      assert_select "p", text: 'Tabula Rasa', count: 1
+      assert_select "p", text: "Tabula Rasa", count: 1
     end
 
     it "highlights assignments that are required" do
@@ -103,7 +103,7 @@ describe "students/syllabus/_assignments" do
       @assignment.update(accepts_submissions: true)
       @submission = create(:submission, course: @course, assignment: @assignment, student: @student)
       render
-      assert_select "a", text: 'See Submission', count: 1
+      assert_select "a", text: "See Submission", count: 1
     end
 
     it "shows the due date if it's in the future" do
@@ -113,7 +113,7 @@ describe "students/syllabus/_assignments" do
     end
 
     it "shows a button to see more results if the grade is released" do
-      create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: 'Released')
+      create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: "Released")
       render
       assert_select "a", text: "See Results", :count => 1
     end
@@ -163,7 +163,7 @@ describe "students/syllabus/_assignments" do
       allow(view).to receive(:current_user_is_staff?).and_return(true)
       allow(view).to receive(:term_for).and_return("custom_term")
       assign(:students, [@student])
-      create(:grade, course: @course, instructor_modified: true, assignment: @assignment, student: @student, raw_score: 2000, status: 'Released')
+      create(:grade, course: @course, instructor_modified: true, assignment: @assignment, student: @student, raw_score: 2000, status: "Released")
       render
       assert_select "li", text: "Edit Grade", :count => 1
     end
@@ -175,7 +175,7 @@ describe "students/syllabus/_assignments" do
       @assignment.update(accepts_submissions: true)
       @submission = create(:submission, course: @course, assignment: @assignment, student: @student)
       render
-      assert_select "a", text: 'See Submission', count: 1
+      assert_select "a", text: "See Submission", count: 1
     end
 
   end

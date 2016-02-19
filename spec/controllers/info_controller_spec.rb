@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe InfoController do
   before(:all) { @course = create(:course) }
@@ -200,7 +200,7 @@ describe InfoController do
     describe "GET timeline_events" do
       it "retrieves the timeline events" do
         get :timeline_events
-        expect(response).to render_template('info/_timeline')
+        expect(response).to render_template("info/_timeline")
       end
     end
 

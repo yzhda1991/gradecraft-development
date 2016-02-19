@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe GradeSchemeElementsController do
   before(:all) { @course = create(:course) }
@@ -62,7 +62,7 @@ describe GradeSchemeElementsController do
         expect(response).to render_template(:predictor_data)
       end
 
-      it "returns the total points in the course if no grade scheme elements are present" do 
+      it "returns the total points in the course if no grade scheme elements are present" do
         @grade_scheme_element.destroy
         @assignment = create(:assignment, course: @course, :point_total => 2000)
         get :predictor_data, format: :json
@@ -91,7 +91,7 @@ describe GradeSchemeElementsController do
         expect(response).to render_template(:predictor_data)
       end
 
-      it "returns the total points in the course if no grade scheme elements are present" do 
+      it "returns the total points in the course if no grade scheme elements are present" do
         @grade_scheme_element.destroy
         @assignment = create(:assignment, course: @course, :point_total => 2000)
         get :predictor_data, format: :json

@@ -1,5 +1,5 @@
 require "active_record_spec_helper"
-require_relative '../toolkits/models/shared/files'
+require_relative "../toolkits/models/shared/files"
 
 describe ChallengeFile do
   let(:challenge) { build(:challenge) }
@@ -38,7 +38,7 @@ describe ChallengeFile do
     let(:save_challenge) { new_challenge_file.challenge.save! }
 
     it "accepts text files as well as images" do
-      new_challenge_file.file = fixture_file('test_file.txt', 'txt')
+      new_challenge_file.file = fixture_file("test_file.txt", "txt")
       save_challenge
       expect expect(subject).to match(/\d+_test_file\.txt/)
     end
@@ -49,7 +49,7 @@ describe ChallengeFile do
     end
 
     it "shortens and removes non-word characters from file names on save" do
-      new_challenge_file.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
+      new_challenge_file.file = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
       save_challenge
       expect(subject).to match(/\d+_too_long__strange_characters__and_spaces_\.jpg/)
     end

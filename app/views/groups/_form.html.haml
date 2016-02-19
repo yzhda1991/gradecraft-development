@@ -1,6 +1,6 @@
 = simple_form_for @group do |f|
 
-  = render partial: 'layouts/alerts', locals: { model: @group }
+  = render partial: "layouts/alerts", locals: { model: @group }
 
   %section
     - if @group.pending? && current_user_is_staff?
@@ -31,5 +31,5 @@
 
   .submit-buttons
     %ul
-      %li= submit_tag "#{@group.persisted? ? 'Update' : 'Create'} #{ term_for :group } ",  :class => 'button'
-      %li= link_to glyph("times-circle") + "Cancel", groups_path, :class => 'button'
+      %li= submit_tag "#{@group.persisted? ? 'Update' : 'Create'} #{ term_for :group } ",  :class => "button"
+      %li= link_to glyph("times-circle") + "Cancel", groups_path, :class => "button"

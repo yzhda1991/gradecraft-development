@@ -3,15 +3,15 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
-  
+  = render "layouts/alerts"
+
   - if current_course.has_teams?
     .team-filter
       = form_tag earned_badges_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         %label
           .sr-only Select #{term_for :team}
         = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
-  
+
   %table.nofeatures_default_last_name_dynatable
     %caption.sr-only All Awarded Achievements
     %thead
@@ -29,7 +29,7 @@
           %td= link_to student.last_name, student_path(student)
           %td
             - student.earned_badges_for_course(current_course).each do |eb|
-              %a 
+              %a
                 %img{:src => eb.try(:icon), :alt => eb.try(:name), :width => "20", :title => eb.name}
               .display_on_hover.hover-style
                 = eb.name

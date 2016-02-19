@@ -1,7 +1,7 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
 if ENV["COVERAGE"]
-  require 'simplecov'
+  require "simplecov"
   SimpleCov.start do
     add_filter "spec/*"
     add_filter "app/helpers/color_palette_helper.rb"
@@ -9,7 +9,7 @@ if ENV["COVERAGE"]
   end
 
 
-  require 'codeclimate-test-reporter'
+  require "codeclimate-test-reporter"
   CodeClimate::TestReporter.start
 end
 
@@ -37,13 +37,13 @@ if $LOADED_FEATURES.grep(/spec\/rails_spec_helper\.rb/).any?
 end
 
 require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
-require 'paper_trail'
-require 'paper_trail/frameworks/rspec'
-require 'capybara/rspec'
+require "rspec/rails"
+require "paper_trail"
+require "paper_trail/frameworks/rspec"
+require "capybara/rspec"
 
 # ResqueSpec libraries
-require 'resque_spec/scheduler' # allow resque spec to test scheduled jobs
+require "resque_spec/scheduler" # allow resque spec to test scheduled jobs
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

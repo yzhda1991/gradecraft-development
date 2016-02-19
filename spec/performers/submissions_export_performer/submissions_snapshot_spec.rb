@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   extend Toolkits::Performers::SubmissionsExport::Context
@@ -17,7 +17,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       performer.instance_variable_set(:@submissions_snapshot, nil)
       performer.instance_variable_set(:@submissions, [ submission ])
     end
-    
+
     it "generates a serialized hash of the submission data" do
       subject
       expect(subject).to eq(snapshot_expectation)

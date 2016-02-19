@@ -1,4 +1,4 @@
-require_relative '../test_helper'
+require_relative "../test_helper"
 class GradeUpdaterTest
   def subject
     lambda { GradeUpdaterJob.new({ grade_id: 10 }) }.call

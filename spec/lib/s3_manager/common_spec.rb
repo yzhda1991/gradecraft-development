@@ -1,10 +1,10 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe S3Manager::Common do
   let(:s3_manager) { S3Manager::Manager.new }
 
   describe "master method for putting objects to S3 from a given client" do
-    let(:file_path) { Tempfile.new('some-file') }
+    let(:file_path) { Tempfile.new("some-file") }
     let(:object_key) { "jerrys-hat" }
     let(:encrypted_client) { s3_manager.encrypted_client }
     let(:client) { s3_manager.client }
@@ -14,7 +14,7 @@ RSpec.describe S3Manager::Common do
       subject { put_object_with_client }
 
       it "should open the file path" do
-        expect(File).to receive(:open).with(file_path, 'rb')
+        expect(File).to receive(:open).with(file_path, "rb")
         subject
       end
 

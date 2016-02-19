@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 include CourseTerms
 
 describe "submissions/show" do

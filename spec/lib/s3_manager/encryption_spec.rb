@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 include Toolkits::S3Manager::EncryptionToolkit
 
@@ -44,7 +44,7 @@ RSpec.describe S3Manager::Encryption do
 
     describe "#put_encrypted_object" do
       subject { put_encrypted_object }
-      let(:file_path) { Tempfile.new('something-old').path }
+      let(:file_path) { Tempfile.new("something-old").path }
       let(:put_encrypted_object) { s3_manager.put_encrypted_object(object_key, file_path) }
 
       it "should call #put_object on the encrypted client" do

@@ -5,7 +5,7 @@ module ScoreLevel
   included do
     attr_accessible :name, :value
 
-    scope :order_by_value, -> { order 'value DESC' }
+    scope :order_by_value, -> { order "value DESC" }
 
     validates :name, presence: true
     validates :value, presence: true

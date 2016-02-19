@@ -17,7 +17,7 @@ feature "copying a course" do
       end
 
       expect(current_path).to eq course_path(Course.last)
-      expect(page).to have_notification_message('notice', 'Course Name successfully copied')
+      expect(page).to have_notification_message("notice", "Course Name successfully copied")
     end
 
   end

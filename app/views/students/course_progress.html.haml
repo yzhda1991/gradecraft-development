@@ -1,7 +1,7 @@
 %h3.pagetitle= "Course Progress"
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   - @grade_scheme_elements.each do |element|
     - if current_student.cached_score_for_course(current_course) < element.low_range

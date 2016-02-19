@@ -11,9 +11,9 @@
           New #{(term_for :challenge).titleize}
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   - if current_user_is_staff?
-    = render 'staff_index'
+    = render "staff_index"
   - else
-    = render 'student_index'
+    = render "student_index"

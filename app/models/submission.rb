@@ -11,8 +11,8 @@ class Submission < ActiveRecord::Base
 
   belongs_to :task, touch: true
   belongs_to :assignment, touch: true
-  belongs_to :student, :class_name => 'User', touch: true
-  belongs_to :creator, :class_name => 'User', touch: true
+  belongs_to :student, :class_name => "User", touch: true
+  belongs_to :creator, :class_name => "User", touch: true
   belongs_to :group, touch: true
   belongs_to :course, touch: true
 
@@ -25,11 +25,11 @@ class Submission < ActiveRecord::Base
   has_many :submission_files, :dependent => :destroy, autosave: true
   accepts_nested_attributes_for :submission_files
 
-  scope :ungraded, -> { where('NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))', "Graded", "Released") }
+  scope :ungraded, -> { where("NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))", "Graded", "Released") }
   scope :graded, -> { where(:grade) }
   scope :resubmitted, -> { joins(:grade).where(grades: { status: ["Graded", "Released"] })
                                         .where("grades.graded_at < submitted_at") }
-  scope :order_by_submitted, -> { order('submitted_at ASC') }
+  scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
 

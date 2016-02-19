@@ -16,10 +16,10 @@ SimpleForm.setup do |config|
   end
 
   # CSS class for buttons
-  config.button_class = 'button'
+  config.button_class = "button"
 
   # CSS class to add for error notification helper.
-  config.error_notification_class = 'alert-box alert'
+  config.error_notification_class = "alert-box alert"
 
   # The default wrapper to be used by the FormBuilder.
   config.default_wrapper = :foundation

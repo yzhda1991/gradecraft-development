@@ -33,8 +33,8 @@
                 .right
                   %ul.button-bar
                     - if challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
-                      %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_challenge_grade_path(challenge.id, challenge.challenge_grade_for_team(current_student.team_for_course(current_course)), :team => current_student.team_for_course(current_course)), :class => 'button'
+                      %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_challenge_grade_path(challenge.id, challenge.challenge_grade_for_team(current_student.team_for_course(current_course)), :team => current_student.team_for_course(current_course)), :class => "button"
                     - else
                       %li
-                        %a{:href => new_challenge_challenge_grade_path(:challenge_id => challenge.id, :team_id => current_student.team_for_course(current_course).id), :class => 'button'}
+                        %a{:href => new_challenge_challenge_grade_path(:challenge_id => challenge.id, :team_id => current_student.team_for_course(current_course).id), :class => "button"}
                           Grade

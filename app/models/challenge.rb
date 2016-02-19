@@ -27,10 +27,10 @@ class Challenge < ActiveRecord::Base
   has_many :challenge_files, :dependent => :destroy
   accepts_nested_attributes_for :challenge_files
 
-  scope :with_dates, -> { where('challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL') }
+  scope :with_dates, -> { where("challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL") }
   scope :visible, -> { where visible: TRUE }
-  scope :chronological, -> { order('due_at ASC') }
-  scope :alphabetical, -> { order('name ASC') }
+  scope :chronological, -> { order("due_at ASC") }
+  scope :alphabetical, -> { order("name ASC") }
   scope :visible, -> { where visible: TRUE }
 
   validates_presence_of :course, :name
@@ -75,13 +75,13 @@ class Challenge < ActiveRecord::Base
 
   def open_before_close
     if (due_at? && open_at?) && (due_at < open_at)
-      errors.add :base, 'Due date must be after open date.'
+      errors.add :base, "Due date must be after open date."
     end
   end
 
   def positive_points
     if point_total? && point_total < 1
-      errors.add :base, 'Point total must be a positive number'
+      errors.add :base, "Point total must be a positive number"
     end
   end
 end

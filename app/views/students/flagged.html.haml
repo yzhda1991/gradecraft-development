@@ -3,5 +3,5 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
-  = render 'students_table', :course => current_course, :students => @students
+  = render "layouts/alerts"
+  = render "students_table", :course => current_course, :students => @students

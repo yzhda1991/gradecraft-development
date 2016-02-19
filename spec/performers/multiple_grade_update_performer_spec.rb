@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
   let(:grades) { create_list(:grade, 2) }
@@ -307,13 +307,13 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
 
     it "should have a success message" do
       subject.each do |messages|
-        expect(messages[:success]).to match('saved successfully')
+        expect(messages[:success]).to match("saved successfully")
       end
     end
 
     it "should have a failure message" do
       subject.each do |messages|
-        expect(messages[:failure]).to match('failed to save')
+        expect(messages[:failure]).to match("failed to save")
       end
     end
 
@@ -341,13 +341,13 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
 
     it "should have a success message" do
       subject.each do |messages|
-        expect(messages[:success]).to match('Successfully sent notification')
+        expect(messages[:success]).to match("Successfully sent notification")
       end
     end
 
     it "should have a failure message" do
       subject.each do |messages|
-        expect(messages[:failure]).to match('Failed to send')
+        expect(messages[:failure]).to match("Failed to send")
       end
     end
 

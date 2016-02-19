@@ -41,7 +41,7 @@ feature "grading a group assignment" do
         fill_in("grade_raw_score", with: 100)
         click_button "Submit Grades"
       end
-      expect(page).to have_notification_message('notice', "Group Name's Group Assignment was successfully updated")
+      expect(page).to have_notification_message("notice", "Group Name's Group Assignment was successfully updated")
       grade = Grade.where(assignment_id: assignment.id).last
       expect(grade.group_id).to eq group.id
       expect(grade.submission_id).to eq submission.id

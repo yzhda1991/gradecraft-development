@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'rails_spec_helper'
+require "rails_spec_helper"
 include CourseTerms
 
 describe "students/teams" do
@@ -8,7 +8,7 @@ describe "students/teams" do
     @course = create(:course)
     @student = create(:user)
     @student.courses << @course
-    @membership = CourseMembership.where(user: @student, course: @course).first.update(score: '100000')
+    @membership = CourseMembership.where(user: @student, course: @course).first.update(score: "100000")
   end
 
   before(:each) do

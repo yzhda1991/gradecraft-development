@@ -3,10 +3,10 @@ GradeCraft::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
   config.asset_host = "http://localhost:5000"
 
-  config.action_mailer.default_url_options = { :host => 'localhost:5000' }
+  config.action_mailer.default_url_options = { :host => "localhost:5000" }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => 'localhost',
+    :address => "localhost",
     :port => 1025,
   }
   config.action_mailer.perform_deliveries = true
@@ -20,7 +20,7 @@ GradeCraft::Application.configure do
   config.consider_all_requests_local = true
   config.eager_load = false
   config.log_level = :debug
-  config.session_store :cookie_store, key: '_gradecraft_session'
+  config.session_store :cookie_store, key: "_gradecraft_session"
   config.active_record.mass_assignment_sanitizer = :strict
   config.after_initialize do
     Bullet.enable = true

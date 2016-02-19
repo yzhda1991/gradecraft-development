@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe ResqueJob::Base, type: :vendor_library do
   let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
@@ -64,7 +64,7 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
 
     # @mz todo: finish these
     describe "logging outcome messages" do
-      before(:each) do 
+      before(:each) do
         allow(performer).to receive(:outcomes) { outcomes }
         allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
         allow(logger).to receive(:info).with("waffles have started")

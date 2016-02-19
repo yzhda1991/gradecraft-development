@@ -1,11 +1,11 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe S3Manager::Carrierwave do
   subject { s3_file_cylon }
 
   let(:s3_file_cylon) { SubmissionFile.new }
   let(:s3_manager) { S3Manager::Manager.new }
-  let(:source_object) { Tempfile.new('walter-srsly') }
+  let(:source_object) { Tempfile.new("walter-srsly") }
   let(:s3_object_key) { "lets-see-what-happens.txt" }
   let(:object_exists?) { s3_file_cylon.exists_on_s3? }
   let(:put_object_to_s3) { s3_manager.put_object(s3_object_key, source_object) }
@@ -66,7 +66,7 @@ RSpec.describe S3Manager::Carrierwave do
 
   describe "#s3_object_file_key" do
     subject { s3_file_cylon.s3_object_file_key }
-    let(:tempfile) { Tempfile.new('walter') }
+    let(:tempfile) { Tempfile.new("walter") }
 
     context "cached_file_path is present" do
       before do

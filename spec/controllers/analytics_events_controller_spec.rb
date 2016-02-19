@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe AnalyticsEventsController, type: :controller do
   describe "POST predictor_event" do

@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'rails_spec_helper'
+require "rails_spec_helper"
 include CourseTerms
 
 describe "courses/predictor_settings" do
@@ -15,7 +15,7 @@ describe "courses/predictor_settings" do
   end
 
   before(:each) do
-    assign(:title, 'Grade Predictor Settings')
+    assign(:title, "Grade Predictor Settings")
     allow(view).to receive(:current_course).and_return(@course)
   end
 

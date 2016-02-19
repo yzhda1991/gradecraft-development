@@ -10,7 +10,7 @@
         New #{(term_for :assignment).titleize}
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   .assignments
     - @assignment_types.each do |assignment_type|
@@ -156,9 +156,9 @@
                     %span.not_bold= label_tag(asl.name)
                     %br
                 - elsif assignment.grade_checkboxes?
-                  = check_box_tag 'score', '', false, :disabled => true
+                  = check_box_tag "score", "", false, :disabled => true
                 - else
-                  = text_field_tag 'score', '', :disabled => true
+                  = text_field_tag "score", "", :disabled => true
               %td= points assignment.point_total
               %td
                 %ul
@@ -174,5 +174,5 @@
               %td
                 .right
                   %ul.button-bar
-                    %li= link_to glyph(:edit) + "Edit", edit_assignment_path(assignment), :class => 'button'
-                    %li= link_to glyph(:trash) + "Delete", assignment_path(assignment), :data => { confirm: 'Are you sure?', method: :delete },  :class => 'button'
+                    %li= link_to glyph(:edit) + "Edit", edit_assignment_path(assignment), :class => "button"
+                    %li= link_to glyph(:trash) + "Delete", assignment_path(assignment), :data => { confirm: "Are you sure?", method: :delete },  :class => "button"

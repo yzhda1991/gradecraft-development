@@ -20,4 +20,4 @@ namespace :backup do
   end
 end
 
-task :backup => 'backup:db'
+task :backup => "backup:db"

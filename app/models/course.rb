@@ -108,38 +108,38 @@ class Course < ActiveRecord::Base
 
   validate :max_more_than_min
 
-  scope :alphabetical, -> { order('courseno ASC') }
+  scope :alphabetical, -> { order("courseno ASC") }
   scope :active, -> { where(status: true) }
   scope :inactive, -> { where.not(status: true) }
 
   def self.find_or_create_by_lti_auth_hash(auth_hash)
-    criteria = { lti_uid: auth_hash['extra']['raw_info']['context_id'] }
+    criteria = { lti_uid: auth_hash["extra"]["raw_info"]["context_id"] }
     where(criteria).first || create!(criteria) do |c|
-      c.lti_uid = auth_hash['extra']['raw_info']['context_id']
-      c.courseno = auth_hash['extra']['raw_info']['context_label']
-      c.name = auth_hash['extra']['raw_info']['context_title']
+      c.lti_uid = auth_hash["extra"]["raw_info"]["context_id"]
+      c.courseno = auth_hash["extra"]["raw_info"]["context_label"]
+      c.name = auth_hash["extra"]["raw_info"]["context_title"]
       c.year = Date.today.year
     end
   end
 
   def assignment_term
-    super.presence || 'Assignment'
+    super.presence || "Assignment"
   end
 
   def badge_term
-    super.presence || 'Badge'
+    super.presence || "Badge"
   end
 
   def challenge_term
-    super.presence || 'Challenge'
+    super.presence || "Challenge"
   end
 
   def fail_term
-    super.presence || 'Fail'
+    super.presence || "Fail"
   end
 
   def group_term
-    super.presence || 'Group'
+    super.presence || "Group"
   end
 
   def pass_term
@@ -147,19 +147,19 @@ class Course < ActiveRecord::Base
   end
 
   def team_term
-    super.presence || 'Team'
+    super.presence || "Team"
   end
 
   def team_leader_term
-    super.presence || 'Team Leader'
+    super.presence || "Team Leader"
   end
 
   def weight_term
-    super.presence || 'Multiplier'
+    super.presence || "Multiplier"
   end
 
   def user_term
-    super.presence || 'Player'
+    super.presence || "Player"
   end
 
   def copy(attributes={})
@@ -227,7 +227,7 @@ class Course < ActiveRecord::Base
 
   #total number of points 'available' in the course - sometimes set by an instructor as a cap, sometimes just the sum of all assignments
   def total_points
-    point_total || assignments.sum('point_total')
+    point_total || assignments.sum("point_total")
   end
 
   def active?
@@ -251,15 +251,15 @@ class Course < ActiveRecord::Base
   end
 
   def grade_level_for_score(score)
-    grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).pluck('level').first
+    grade_scheme_elements.where("low_range <= ? AND high_range >= ?", score, score).pluck("level").first
   end
 
   def grade_letter_for_score(score)
-    grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).pluck('letter').first
+    grade_scheme_elements.where("low_range <= ? AND high_range >= ?", score, score).pluck("letter").first
   end
 
   def element_for_score(score)
-    grade_scheme_elements.where('low_range <= ? AND high_range >= ?', score, score).first
+    grade_scheme_elements.where("low_range <= ? AND high_range >= ?", score, score).first
   end
 
   def membership_for_student(student)
@@ -267,7 +267,7 @@ class Course < ActiveRecord::Base
   end
 
   def assignment_weight_for_student(student)
-    student.assignment_weights.where(:course_id => self.id).pluck('weight').sum
+    student.assignment_weights.where(:course_id => self.id).pluck("weight").sum
   end
 
   def assignment_weight_spent_for_student(student)
@@ -280,15 +280,15 @@ class Course < ActiveRecord::Base
 
   #Descriptive stats of the grades
   def minimum_course_score
-    CourseMembership.where(:course => self, :auditing => false, :role => "student").minimum('score')
+    CourseMembership.where(:course => self, :auditing => false, :role => "student").minimum("score")
   end
 
   def maximum_course_score
-    CourseMembership.where(:course => self, :auditing => false, :role => "student").maximum('score')
+    CourseMembership.where(:course => self, :auditing => false, :role => "student").maximum("score")
   end
 
   def average_course_score
-    CourseMembership.where(:course => self, :auditing => false, :role => "student").average('score').to_i
+    CourseMembership.where(:course => self, :auditing => false, :role => "student").average("score").to_i
   end
 
   def student_count
@@ -304,7 +304,7 @@ class Course < ActiveRecord::Base
   end
 
   def point_total_for_challenges
-    challenges.pluck('point_total').sum
+    challenges.pluck("point_total").sum
   end
 
   def recalculate_student_scores
@@ -334,7 +334,7 @@ class Course < ActiveRecord::Base
 
   def max_more_than_min
     if (max_group_size? && min_group_size?) && (max_group_size < min_group_size)
-      errors.add :base, 'Maximum group size must be greater than minimum group size.'
+      errors.add :base, "Maximum group size must be greater than minimum group size."
     end
   end
 

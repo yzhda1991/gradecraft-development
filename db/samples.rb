@@ -1,27 +1,27 @@
-require './db/samples/courses.rb'
-require './db/samples/assignment_types.rb'
-require './db/samples/assignments.rb'
-require './db/samples/challenges.rb'
+require "./db/samples/courses.rb"
+require "./db/samples/assignment_types.rb"
+require "./db/samples/assignments.rb"
+require "./db/samples/challenges.rb"
 
 # Output quotes for each successful step passed
 def puts_success(type, name, event)
   puts eval("@#{type}s")[name][:quotes][event] || eval("@#{type}_default_config")[:quotes][event] + ": #{name}"
 end
 
-user_names = ['Ron Weasley','Fred Weasley','Harry Potter','Hermione Granger','Colin Creevey','Seamus Finnigan','Hannah Abbott',
-  'Pansy Parkinson','Zacharias Smith','Blaise Zabini', 'Draco Malfoy', 'Dean Thomas', 'Millicent Bulstrode', 'Terry Boot', 'Ernie Macmillan',
-  'Roland Abberlay', 'Katie Bell', 'Regulus Black', 'Euan Abercrombie', 'Brandon Angel']
+user_names = ["Ron Weasley","Fred Weasley","Harry Potter","Hermione Granger","Colin Creevey","Seamus Finnigan","Hannah Abbott",
+  "Pansy Parkinson","Zacharias Smith","Blaise Zabini", "Draco Malfoy", "Dean Thomas", "Millicent Bulstrode", "Terry Boot", "Ernie Macmillan",
+  "Roland Abberlay", "Katie Bell", "Regulus Black", "Euan Abercrombie", "Brandon Angel"]
 
-majors = ['Engineering','American Culture','Anthropology','Asian Studies','Astronomy','Cognitive Science','Creative Writing and Literature','English','German','Informatics','Linguistics','Physics']
-pseuydonyms = ['Bigby Wolf', 'Snow White', 'Beauty', 'the Beast', 'Trusty John', 'Grimble', 'Bufkin', 'Prince Charming', 'Cinderella', 'Old King Cole','Hobbes', 'Pinocchio', 'Briar Rose', 'Doctor Swineheart', 'Rapunzel', 'Kay', 'Mrs. Sprat', 'Frau Totenkinder', 'Ozma', 'Great Fairy Witch','Maddy', 'Mr. Grandours', 'Mrs. Someone', 'Prospero', 'Mr. Kadabra','Geppetto', 'Morgan le Fay','Rose Red','Boy Blue','Weyland Smith','Reynard the Fox','Brock Blueheart','Peter Piper','Bo Peep','The Adversary','Goldilocks','Bluebeard','Ichabod Crane','Baba Yaga','The Snow Queen','Rodney', 'June', 'Hansel', 'The Nome King', 'Max Piper', 'Mister Dark', 'Fairy Godmother', 'Dorothy Gale', 'Hadeon the Destroyer', 'Prince Brandish']
+majors = ["Engineering","American Culture","Anthropology","Asian Studies","Astronomy","Cognitive Science","Creative Writing and Literature","English","German","Informatics","Linguistics","Physics"]
+pseuydonyms = ["Bigby Wolf", "Snow White", "Beauty", "the Beast", "Trusty John", "Grimble", "Bufkin", "Prince Charming", "Cinderella", "Old King Cole","Hobbes", "Pinocchio", "Briar Rose", "Doctor Swineheart", "Rapunzel", "Kay", "Mrs. Sprat", "Frau Totenkinder", "Ozma", "Great Fairy Witch","Maddy", "Mr. Grandours", "Mrs. Someone", "Prospero", "Mr. Kadabra","Geppetto", "Morgan le Fay","Rose Red","Boy Blue","Weyland Smith","Reynard the Fox","Brock Blueheart","Peter Piper","Bo Peep","The Adversary","Goldilocks","Bluebeard","Ichabod Crane","Baba Yaga","The Snow Queen","Rodney", "June", "Hansel", "The Nome King", "Max Piper", "Mister Dark", "Fairy Godmother", "Dorothy Gale", "Hadeon the Destroyer", "Prince Brandish"]
 
 # Generate sample admin
 User.create! do |u|
-  u.username = 'albus'
-  u.first_name = 'Albus'
-  u.last_name = 'Dumbledore'
-  u.email = 'dumbledore@hogwarts.edu'
-  u.password = 'fawkes'
+  u.username = "albus"
+  u.first_name = "Albus"
+  u.last_name = "Dumbledore"
+  u.email = "dumbledore@hogwarts.edu"
+  u.password = "fawkes"
   u.admin = true
   u.save!
 end.activate!
@@ -85,14 +85,14 @@ end
   courses = @courses.map {|name,config| config[:course]}
   teams = @courses.map {|name,config| config[:teams].sample}
 
-  first_name, last_name = name.split(' ')
-  username = name.parameterize.sub('-','.')
+  first_name, last_name = name.split(" ")
+  username = name.parameterize.sub("-",".")
   user = User.create! do |u|
     u.username = username
     u.first_name = first_name
     u.last_name = last_name
     u.email = "#{username}@hogwarts.edu"
-    u.password = 'uptonogood'
+    u.password = "uptonogood"
     u.courses << courses
     u.display_name = pseuydonyms.sample
   end
@@ -105,11 +105,11 @@ puts "Everything starts from a dot. - Kandinsky"
 
 # Generate sample professor
 User.create! do |u|
-  u.username = 'mcgonagall'
-  u.first_name = 'Minerva'
-  u.last_name = 'McGonagall'
-  u.email = 'mcgonagall@hogwarts.edu'
-  u.password = 'pineanddragonheart'
+  u.username = "mcgonagall"
+  u.first_name = "Minerva"
+  u.last_name = "McGonagall"
+  u.email = "mcgonagall@hogwarts.edu"
+  u.password = "pineanddragonheart"
   u.save!
   u.course_memberships.create! do |cm|
     cm.course = @courses[:teams_badges_points][:course]
@@ -119,11 +119,11 @@ end.activate!
 
 # Generate sample professor
 User.create! do |u|
-  u.username = 'headless_nick'
-  u.first_name = 'Nicholas'
-  u.last_name = 'de Mimsy-Porpington'
-  u.email = 'headless_nick@hogwarts.edu'
-  u.password = 'october31'
+  u.username = "headless_nick"
+  u.first_name = "Nicholas"
+  u.last_name = "de Mimsy-Porpington"
+  u.email = "headless_nick@hogwarts.edu"
+  u.password = "october31"
   u.save!
   u.course_memberships.create! do |cm|
     cm.course = @courses[:power_ups_locks_weighting_config][:course]
@@ -133,11 +133,11 @@ end.activate!
 
 # Generate sample professor
 User.create! do |u|
-  u.username = 'severus'
-  u.first_name = 'Severus'
-  u.last_name = 'Snape'
-  u.email = 'snape@hogwarts.edu'
-  u.password = 'lily'
+  u.username = "severus"
+  u.first_name = "Severus"
+  u.last_name = "Snape"
+  u.email = "snape@hogwarts.edu"
+  u.password = "lily"
   u.save!
   u.course_memberships.create! do |cm|
     cm.course = @courses[:leaderboards_team_challenges][:course]
@@ -147,11 +147,11 @@ end.activate!
 
 # Generate sample GSI
 User.create! do |u|
-  u.username = 'percy.weasley'
-  u.first_name = 'Percy'
-  u.last_name = 'Weasley'
-  u.email = 'percy.weasley@hogwarts.edu'
-  u.password = 'bestprefect'
+  u.username = "percy.weasley"
+  u.first_name = "Percy"
+  u.last_name = "Weasley"
+  u.email = "percy.weasley@hogwarts.edu"
+  u.password = "bestprefect"
   u.save!
   @courses.each do |name,config|
     u.course_memberships.create! do |cm|

@@ -62,14 +62,14 @@
           - if grade_modified
             %li= link_to glyph(:eye) + "See Results", assignment_grade_path(assignment, :student_id => @student.id), :class => "button"
             - if assignment.is_individual?
-              %li= link_to glyph(:edit) + "Edit Grade", edit_assignment_grade_path(assignment.id, :student_id => @student.id), :class => 'button'
+              %li= link_to glyph(:edit) + "Edit Grade", edit_assignment_grade_path(assignment.id, :student_id => @student.id), :class => "button"
             - elsif assignment.has_groups?
-              %li= link_to glyph(:edit) + "Edit Grade", group_grade_assignment_path(assignment, :group_id => group), :class => 'button'
+              %li= link_to glyph(:edit) + "Edit Grade", group_grade_assignment_path(assignment, :group_id => group), :class => "button"
           - else
             - if assignment.is_individual?
-              %li= link_to glyph(:check) + "Grade", edit_assignment_grade_path(:assignment_id => assignment.id, :student_id => @student.id), :class => 'button'
+              %li= link_to glyph(:check) + "Grade", edit_assignment_grade_path(:assignment_id => assignment.id, :student_id => @student.id), :class => "button"
             - elsif assignment.has_groups?
-              %li= link_to glyph(:check) + "Grade", group_grade_assignment_path(assignment, :group_id => group), :class => 'button'
+              %li= link_to glyph(:check) + "Grade", group_grade_assignment_path(assignment, :group_id => group), :class => "button"
 
           / Group Management /
           - if assignment.has_groups?
@@ -82,15 +82,15 @@
           - if assignment.accepts_submissions? && assignment.is_unlocked_for_student?(@student)
             - if assignment.is_individual?
               - if submission.present?
-                %li= link_to glyph("file-o") + "See Submission", assignment_submission_path(assignment, submission.id), :class => 'button'
+                %li= link_to glyph("file-o") + "See Submission", assignment_submission_path(assignment, submission.id), :class => "button"
               - elsif assignment.open?
-                %li= link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => 'button'
+                %li= link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, :student_id => @student), :class => "button"
             - elsif assignment.has_groups? && group
               - if group.submission_for_assignment(assignment)
-                %li= link_to glyph("file-o") + "See Submission", assignment_path(assignment, :anchor => "tab3"), :class => 'button'
+                %li= link_to glyph("file-o") + "See Submission", assignment_path(assignment, :anchor => "tab3"), :class => "button"
               - else
                 - if group.approved?
-                  %li= link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, :group_id => group), :class => 'button'
+                  %li= link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, :group_id => group), :class => "button"
 
           / Manual Unlock /
           - if assignment.is_unlockable? && ! assignment.is_unlocked_for_student?(@student)

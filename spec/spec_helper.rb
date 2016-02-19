@@ -1,4 +1,4 @@
-ENV["RAILS_ENV"] ||= 'test'
+ENV["RAILS_ENV"] ||= "test"
 
 RSpec.configure do |config|
   config.filter_run :focus
@@ -15,6 +15,6 @@ RSpec.configure do |config|
   end
 
   if config.files_to_run.one?
-    config.default_formatter = 'doc'
+    config.default_formatter = "doc"
   end
 end

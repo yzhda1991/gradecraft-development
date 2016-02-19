@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe ResqueJob::Performer, type: :vendor_library do
   let(:attrs) { Hash.new(color: "green") }
@@ -268,7 +268,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
         expect(@performer.outcome_failure?).to be_falsey
       end
     end
-    
+
     context "some failures present" do
       it "should be true" do
         @performer.instance_variable_set(:@outcomes, @failures)
@@ -292,7 +292,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
         expect(@performer.outcome_success?).to be_falsey
       end
     end
-    
+
     context "some successes present" do
       it "should be true" do
         @performer.instance_variable_set(:@outcomes, @successes)

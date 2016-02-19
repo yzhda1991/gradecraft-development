@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe UploadsController do
   let(:controller_instance) { UploadsController.new }
@@ -11,7 +11,7 @@ RSpec.describe UploadsController do
   before(:each) do
     create_student_course_membership
     login_user(student)
-    request.env['HTTP_REFERER'] = 'localhost:8000'
+    request.env["HTTP_REFERER"] = "localhost:8000"
   end
 
   describe "#remove" do
@@ -87,7 +87,7 @@ RSpec.describe UploadsController do
     subject { controller_instance.instance_eval { destroy_upload_with_flash } }
 
     before(:each) do
-      controller_instance.request = ActionDispatch::Request.new('rack.input' => [])
+      controller_instance.request = ActionDispatch::Request.new("rack.input" => [])
       controller_instance.instance_variable_set(:@upload, submission_file)
     end
 

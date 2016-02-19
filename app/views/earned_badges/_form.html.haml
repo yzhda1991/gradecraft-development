@@ -1,4 +1,4 @@
-= render partial: 'layouts/alerts', locals: { model: @earned_badge, term: term_for(:badge) }
+= render partial: "layouts/alerts", locals: { model: @earned_badge, term: term_for(:badge) }
 
 = simple_form_for([@badge, @earned_badge]) do |f|
   .italic= "You are awarding the #{@badge.name} #{term_for :badge} to..."
@@ -18,4 +18,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "#{@earned_badge.persisted? ? 'Update' : 'Award'} #{term_for :badge}"
-      %li= link_to glyph("times-circle") + "Cancel", badge_path(@badge), :class => 'button'
+      %li= link_to glyph("times-circle") + "Cancel", badge_path(@badge), :class => "button"

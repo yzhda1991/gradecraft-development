@@ -3,7 +3,7 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   %table.nofeatures_dynatable
     %thead
@@ -26,4 +26,4 @@
     .submit-buttons
       %ul
         %li= f.button :submit, "Update Statuses"
-        %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), :class => 'button'
+        %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), :class => "button"

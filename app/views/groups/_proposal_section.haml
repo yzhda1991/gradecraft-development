@@ -3,8 +3,8 @@
     - if @group.persisted?
       %script(id="proposal-template" type="text/x-template")
         %fieldset.proposal.callout.panel
-          = f.simple_fields_for :proposals, Proposal.new, class: 'form-inline', child_index: 'child_index' do |pf|
-            = render 'proposal_fields', f: pf
+          = f.simple_fields_for :proposals, Proposal.new, class: "form-inline", child_index: "child_index" do |pf|
+            = render "proposal_fields", f: pf
       - i = 1
       - @group.proposals.order_by_creation_date.each do |proposal|
         %fieldset.proposal.panel
@@ -14,7 +14,7 @@
             - i += 1
             = f.hidden_field :id
     - else
-      = f.simple_fields_for :proposals, Proposal.new, class: 'form-inline', child_index: 'child_index' do |f|
+      = f.simple_fields_for :proposals, Proposal.new, class: "form-inline", child_index: "child_index" do |f|
         %h4= "#{term_for :assignment} Proposal"
         .textarea
           .form_label= "What is your #{term_for :group} planning to do for this #{term_for :assignment}?"
@@ -22,4 +22,4 @@
           = f.hidden_field :id
 
     - if @group.persisted?
-      = link_to 'Add a Proposal', '#', class: 'add-proposal button'
+      = link_to "Add a Proposal", "#", class: "add-proposal button"

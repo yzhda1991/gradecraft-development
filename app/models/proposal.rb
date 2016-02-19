@@ -3,5 +3,5 @@ class Proposal < ActiveRecord::Base
 
   belongs_to :group
 
-  scope :order_by_creation_date, -> { order('created_at ASC') }
+  scope :order_by_creation_date, -> { order("created_at ASC") }
 end

@@ -3,7 +3,7 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   - @assignment_types.each do |assignment_type|
     - assignments_for_type = assignment_type.assignments
@@ -18,13 +18,13 @@
             %th{"scope" => "col"} Min
             %th{"scope" => "col"} Max
             %th{"scope" => "col"} Median
-            %th{"scope" => "col", 'data-dynatable-column' => 'ave'}
+            %th{"scope" => "col", "data-dynatable-column" => "ave"}
               Ave
               %a
                 %i.fa.fa-info-circle
               .display_on_hover.hover-style
                 The average of all grades, including those who earned zero
-            %th{"scope" => "col", 'data-dynatable-column' => 'aveEarned'}
+            %th{"scope" => "col", "data-dynatable-column" => "aveEarned"}
               Avg Earned
               %a
                 %i.fa.fa-info-circle
@@ -51,4 +51,4 @@
                 %th
                   %ul.button-bar.right
                     %li= link_to glyph(:check) + "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
-                    %li= link_to glyph("cloud-download") + "Download Grades", export_grades_assignment_path(assignment, format: 'csv'), :class => "button"
+                    %li= link_to glyph("cloud-download") + "Download Grades", export_grades_assignment_path(assignment, format: "csv"), :class => "button"

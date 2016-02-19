@@ -1,13 +1,13 @@
 GradeCraft::Application.configure do
-  config.action_controller.default_url_options = { :host => 'staging.gradecraft.com' }
+  config.action_controller.default_url_options = { :host => "staging.gradecraft.com" }
   config.action_controller.perform_caching = true
-  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
+  config.action_dispatch.x_sendfile_header = "X-Accel-Redirect"
   config.asset_host = "https://staging.gradecraft.com"
-  config.action_mailer.default_url_options = { :host => 'staging.gradecraft.com' }
+  config.action_mailer.default_url_options = { :host => "staging.gradecraft.com" }
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => 'gcmailcatcher',
+    :address => "gcmailcatcher",
     :port => 25,
   }
   config.action_mailer.perform_deliveries = true
@@ -19,7 +19,7 @@ GradeCraft::Application.configure do
   config.assets.digest = true
   config.assets.js_compressor = :uglifier
   config.cache_classes = true
-  config.cache_store = :dalli_store, ENV['MEMCACHED_URL'], { :namespace => 'gradecraft_staging', :expires_in => 1.day, :compress => true }
+  config.cache_store = :dalli_store, ENV["MEMCACHED_URL"], { :namespace => "gradecraft_staging", :expires_in => 1.day, :compress => true }
   config.consider_all_requests_local = false
   config.eager_load = true
   config.i18n.fallbacks = true

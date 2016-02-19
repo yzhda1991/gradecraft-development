@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe "SubmissionsExportPerformer missing binary file handling" do
   extend Toolkits::Performers::SubmissionsExport::Context

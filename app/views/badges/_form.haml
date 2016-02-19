@@ -1,4 +1,4 @@
-= render partial: 'layouts/alerts', locals: { model: @badge, term: term_for(:badge) }
+= render partial: "layouts/alerts", locals: { model: @badge, term: term_for(:badge) }
 
 = simple_form_for @badge do |f|
   %section
@@ -60,13 +60,13 @@
         %p.hint Unlock description here
         %script(id="unlock-condition-template" type="text/x-template")
           %fieldset.unlock-condition
-            = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: 'form-inline', child_index: 'child_index' do |ucf|
-              = render 'layouts/unlock_condition_fields', f: ucf
+            = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: "form-inline", child_index: "child_index" do |ucf|
+              = render "layouts/unlock_condition_fields", f: ucf
         - @badge.unlock_conditions.each do |condition|
           %fieldset.unlock-condition
-            = f.simple_fields_for :unlock_conditions, condition, class: 'form-inline' do |ucf|
-              = render 'layouts/unlock_condition_fields', f: ucf
-      = link_to 'Add a Condition', '#', class: 'add-unlock-condition button'
+            = f.simple_fields_for :unlock_conditions, condition, class: "form-inline" do |ucf|
+              = render "layouts/unlock_condition_fields", f: ucf
+      = link_to "Add a Condition", "#", class: "add-unlock-condition button"
 
   %section
     %h4 Attachments
@@ -91,5 +91,5 @@
 
   .submit-buttons
     %ul
-      %li= submit_tag "#{@badge.persisted? ? 'Update' : 'Create'} #{term_for :badge}", :class => 'button'
-      %li= link_to glyph("times-circle") + "Cancel", badges_path, :class => 'button'
+      %li= submit_tag "#{@badge.persisted? ? 'Update' : 'Create'} #{term_for :badge}", :class => "button"
+      %li= link_to glyph("times-circle") + "Cancel", badges_path, :class => "button"

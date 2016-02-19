@@ -4,7 +4,7 @@
     %p.bold
       #{current_student.first_name}'s Grade
       %span
-        %a{:href => "#{edit_assignment_grade_path(presenter.assignment)}?student_id=#{current_student.id}", :class => 'button'  }
+        %a{:href => "#{edit_assignment_grade_path(presenter.assignment)}?student_id=#{current_student.id}", :class => "button"  }
           Edit
           %span.sr-only #{current_student.first_name}'s Grade
 
@@ -36,7 +36,7 @@
             = link_to gf.filename, gf.url, :target => "_blank"
 
   - if presenter.rubric_designed?
-    .rubric-container= render partial: 'grades/criterion_grade_results', locals: { presenter: presenter }
+    .rubric-container= render partial: "grades/criterion_grade_results", locals: { presenter: presenter }
 
   .right
     %br

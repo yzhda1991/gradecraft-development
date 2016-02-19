@@ -35,7 +35,7 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Update #{term_for :weights}"
-          %li= link_to glyph('times-circle') + "Cancel", current_user_is_student? ? dashboard_path : choices_students_path, class: 'button'
+          %li= link_to glyph("times-circle") + "Cancel", current_user_is_student? ? dashboard_path : choices_students_path, class: "button"
 
   - else
     %h3 Your #{term_for :weight} choices:

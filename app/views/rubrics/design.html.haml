@@ -5,7 +5,7 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   #rubric(ng-app="gradecraft" ng-controller="RubricCtrl" ng-init="init(#{@rubric[:id]}, #{@assignment.point_total})")
 
@@ -18,7 +18,7 @@
       %h4.notice(ng-show="pointsOverage()") You have allocated more points than the assignment total
 
     .italic
-      = link_to '&laquo; Return to Assignment'.html_safe, assignment_path(@assignment), class: "return-link"
+      = link_to glyph("angle-double-left") + "Return to Assignment", assignment_path(@assignment), class: "return-link"
       –
       %span Rubric is saved automatically.
 

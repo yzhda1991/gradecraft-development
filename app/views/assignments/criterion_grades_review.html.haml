@@ -5,7 +5,7 @@
 = render partial: "buttons", locals: { presenter: presenter }
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   - if presenter.has_teams? && presenter.assignment.is_individual?
     .team-filter
@@ -21,8 +21,8 @@
         %h4.uppercase= student.name
         .left
           %h5.bold= "#{points grade_for_assignment.score} / #{points presenter.assignment.point_total} points "
-        .right= link_to "Edit #{student.first_name}'s Grade", edit_assignment_grade_path(presenter.assignment, :student_id => student.id), :class => 'button'
+        .right= link_to "Edit #{student.first_name}'s Grade", edit_assignment_grade_path(presenter.assignment, :student_id => student.id), :class => "button"
         %br
         %br
-        .rubric-container= render partial: 'grades/criterion_grade_results', locals: { presenter: presenter, current_student: student }
+        .rubric-container= render partial: "grades/criterion_grade_results", locals: { presenter: presenter, current_student: student }
         %hr

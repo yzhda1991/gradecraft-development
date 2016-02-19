@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 require "set"
 
 include ResqueJobSharedExamplesToolkit
@@ -43,7 +43,7 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
     allow(controller).to receive(:current_course) { course }
     allow(professor).to receive(:admin?) { true } # let's call the prof an admin for now
     allow(controller).to receive(:scored_changed) { true }
-    allow(request).to receive_message_chain(:format, :html?) { false } #increment_page_views 
+    allow(request).to receive_message_chain(:format, :html?) { false } #increment_page_views
     allow(challenge).to receive_message_chain(:challenge_grades, :create) { challenge_grade }
     allow(course).to receive(:add_team_score_to_student?) { true }
     allow(challenge_grade).to receive(:team).and_return team

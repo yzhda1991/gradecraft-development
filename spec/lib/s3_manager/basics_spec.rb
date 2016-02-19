@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 include Toolkits::S3Manager::BasicsToolkit
 
@@ -59,7 +59,7 @@ RSpec.describe S3Manager::Manager do
 
   describe "#bucket_name" do
     before do
-      ENV['AWS_S3_BUCKET'] = "some-bucket-name"
+      ENV["AWS_S3_BUCKET"] = "some-bucket-name"
     end
 
     it "should use the bucketname from AWS_S3_BUCKET" do
@@ -67,7 +67,7 @@ RSpec.describe S3Manager::Manager do
     end
 
     after do
-      ENV['AWS_S3_BUCKET'] = "gradecraft-test"
+      ENV["AWS_S3_BUCKET"] = "gradecraft-test"
     end
   end
 
@@ -155,11 +155,11 @@ RSpec.describe S3Manager::Manager do
 
     describe "#write_s3_object_to_disk" do
       subject { s3_manager.write_s3_object_to_disk(object_key, target_file_path) }
-      let(:target_file_path) { Tempfile.new('something-new') }
+      let(:target_file_path) { Tempfile.new("something-new") }
       let(:target_file_size) { File.stat(target_file_path).size }
 
       context "file actually exists on s3" do
-        let(:original_file_path) { Tempfile.new('something-old').path }
+        let(:original_file_path) { Tempfile.new("something-old").path }
         let(:original_file) { RandomFile::TextFile.new(original_file_path) }
         let(:original_file_size) { original_file.size }
         let(:read_original_file) { File.open(original_file_path, "rb") }
@@ -218,7 +218,7 @@ RSpec.describe S3Manager::Manager do
     end
 
     describe "#put_object" do
-      let(:file_path) { Tempfile.new('something-old').path }
+      let(:file_path) { Tempfile.new("something-old").path }
       let(:put_object) { s3_manager.put_object(object_key, file_path) }
       subject { put_object }
 

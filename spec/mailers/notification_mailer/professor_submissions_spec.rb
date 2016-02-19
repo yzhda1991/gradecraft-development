@@ -1,6 +1,6 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
-RSpec.shared_examples "a submission email to a professor" do 
+RSpec.shared_examples "a submission email to a professor" do
   it "includes the student's first name" do
     should include student.first_name
   end

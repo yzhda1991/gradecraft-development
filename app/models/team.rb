@@ -28,10 +28,10 @@ class Team < ActiveRecord::Base
   accepts_nested_attributes_for :team_memberships
 
   #Various ways to sort the display of teams
-  scope :order_by_high_score, -> { order 'teams.score DESC' }
-  scope :order_by_low_score, -> { order 'teams.score ASC' }
-  scope :order_by_average_high_score, -> { order 'average_points DESC'}
-  scope :alpha, -> { order 'teams.name ASC'}
+  scope :order_by_high_score, -> { order "teams.score DESC" }
+  scope :order_by_low_score, -> { order "teams.score ASC" }
+  scope :order_by_average_high_score, -> { order "average_points DESC"}
+  scope :alpha, -> { order "teams.name ASC"}
 
   def self.find_by_course_and_name(course_id, name)
     where(course_id: course_id).
@@ -90,7 +90,7 @@ class Team < ActiveRecord::Base
   #Summing all of the points the team has earned across their challenges
   def challenge_grade_score
     # use student_visible scope from challenge_grades
-    challenge_grades.student_visible.sum('score') || 0
+    challenge_grades.student_visible.sum("score") || 0
   end
 
   #Teams rack up points in two ways, which is used is determined by the instructor in the course settings.

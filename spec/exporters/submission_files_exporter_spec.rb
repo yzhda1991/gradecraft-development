@@ -1,11 +1,11 @@
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe SubmissionFilesExporter, type: :exporter do
   let(:stubbed_submission) { @stubbed_submission || submission_double }
   let(:exporter) do
     SubmissionFilesExporter.new(stubbed_submission)
   end
-  
+
   # public methods
   describe "directory_files" do
     context "has comment or link?" do

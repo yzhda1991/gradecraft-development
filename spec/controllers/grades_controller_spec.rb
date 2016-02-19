@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe GradesController do
   include PredictorEventJobsToolkit
@@ -113,7 +113,7 @@ describe GradesController do
       end
 
       it "if rubric present, assigns the rubric and rubric grades" do
-        allow(request).to receive(:referer).and_return('http://gradecraft.com/assignments/123')
+        allow(request).to receive(:referer).and_return("http://gradecraft.com/assignments/123")
         assignment = create(:assignment, course: @course)
         rubric = create(:rubric_with_criteria, assignment: assignment)
         criterion = rubric.criteria.first
@@ -160,7 +160,7 @@ describe GradesController do
       end
 
       it "handles a grade file upload" do
-        grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file('test_file.txt', 'txt')]}}}
+        grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file("test_file.txt", "txt")]}}}
 
         put :update, { :assignment_id => @assignment.id, :student_id => @student.id, :grade => grade_params}
         expect expect(GradeFile.count).to eq(1)

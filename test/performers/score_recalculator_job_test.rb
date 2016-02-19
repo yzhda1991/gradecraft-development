@@ -1,4 +1,4 @@
-require_relative '../test_helper'
+require_relative "../test_helper"
 class ScoreRecalculatorTest
   def subject
     lambda { ScoreRecalculatorJob.new({ user_id: 18, course_id: 3 }) }.call

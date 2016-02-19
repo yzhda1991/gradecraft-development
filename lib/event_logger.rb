@@ -1,5 +1,5 @@
-require 'resque-retry'
-require 'resque/errors'
+require "resque-retry"
+require "resque/errors"
 
 class EventLogger
   extend Resque::Plugins::Retry
@@ -51,7 +51,7 @@ class EventLogger
   # these all need to be spec'd out
   # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
   def self.logger_url
-    [ self.logger_base_url, ENV['LOGGLY_TOKEN'], "tag", self.queue_tag_name ].join("/")
+    [ self.logger_base_url, ENV["LOGGLY_TOKEN"], "tag", self.queue_tag_name ].join("/")
   end
 
   def self.logger_base_url
@@ -80,7 +80,7 @@ class EventLogger
       start_message: "Starting EventLogger",
       success_message: "Event was successfully created.",
       failure_message: "Event creation was not successful"
-    }   
+    }
   end
 
   # need to figure out how to integrate this more cleanly

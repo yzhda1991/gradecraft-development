@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe BadgesController do
   before(:all) do
@@ -95,7 +95,7 @@ describe BadgesController do
       it "manages file uploads" do
         Badge.delete_all
         params = attributes_for(:badge)
-        params.merge! :badge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}
+        params.merge! :badge_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
         post :create, :badge => params
         badge = Badge.where(name: params[:name]).last
         expect expect(badge.badge_files.count).to eq(1)
@@ -119,7 +119,7 @@ describe BadgesController do
       end
 
       it "manages file uploads" do
-        params = {:badge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
+        params = {:badge_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
         post :update, id: @badge_2.id, :badge => params
         expect expect(@badge_2.badge_files.count).to eq(1)
       end
