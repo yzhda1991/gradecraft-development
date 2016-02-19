@@ -143,5 +143,30 @@ RSpec.describe LoginEventLogger, type: :background_job do
       end
     end
 
+    describe "#course_membership" do
+      subject { new_logger.course_membership }
+
+      before do
+        new_logger.instance_variable_set(:@course_membership, nil)
+        course_membership # cache the course membership
+        allow(new_logger).to receive(:course_membership_attrs) {{ course_id: course.id, user_id: user.id }}
+      end
+
+      it "returns the correct course membership" do
+        expect(subject).to eq(course_membership)
+      end
+
+      it "caches the course membership" do
+        subject
+        expect(CourseMembership).not_to receive(:where)
+        subject
+      end
+
+      it "sets the course membership to @course_membership" do
+        subject
+        expect(new_logger.instance_variable_get(:@course_membership)).to eq(course_membership)
+      end
+    end
+
   end
 end
