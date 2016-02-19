@@ -3,14 +3,14 @@ module Toolkits
     module ApplicationControllerToolkit
       module SharedExamples
 
-        RSpec.shared_examples "an EventLogger calling Resque with Mongo fallback" do |logger_class|
+        RSpec.shared_examples "an EventLogger calling #enqueue_in_with_fallback" do |logger_class|
           let(:logger_event_type) { logger_class.to_s.gsub("EventLogger","").downcase }
 
           # if current_user
           context "no user is logged in" do
             it "should not call #{described_class}" do
               allow(controller).to receive_messages(current_user: nil)
-              expect(logger_class).not_to receive(:new).with logger_attrs
+              expect(logger_class).not_to receive(:new).with event_session
               subject
             end
           end
@@ -27,7 +27,7 @@ module Toolkits
             end
 
             it "should create a new #{logger_class.to_s} object" do
-              expect(logger_class).to receive(:new).with(logger_attrs) { event_logger }
+              expect(logger_class).to receive(:new).with(event_session) { event_logger }
             end
 
             it "should enqueue the new #{logger_class.to_s} object in 2 hours" do
@@ -36,24 +36,7 @@ module Toolkits
 
             after(:each) { subject }
           end
-
-          context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
-            before do
-              stub_current_user
-              allow(logger_class).to receive(:new).and_raise("Could not connect to Redis: getaddrinfo socket error.")
-            end
-
-            it "performs the #{logger_class} event log directly from the controller" do
-              expect(logger_class).to receive(:perform).with(logger_event_type, logger_attrs)
-              subject
-            end
-
-            it "adds an additional record to mongo" do
-              expect { subject }.to change{ logger_class.instance_variable_get(:@analytics_class).count }.by(1)
-            end
-          end
         end
-
       end
     end
   end

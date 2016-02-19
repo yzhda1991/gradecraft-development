@@ -130,6 +130,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Session data used for building attributes hashes in EventLogger classes
   def event_session
     {
       course: current_course,

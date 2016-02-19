@@ -32,7 +32,7 @@ module EventLogger
     end
 
     def base_attrs
-      {
+      @base_attrs ||= {
         course_id: event_session[:course].try(:id),
         user_id: event_session[:user].try(:id),
         student_id: event_session[:student].try(:id),
@@ -40,5 +40,6 @@ module EventLogger
         created_at: Time.zone.now
       }
     end
+    alias_method :attrs, :base_attrs
   end
 end
