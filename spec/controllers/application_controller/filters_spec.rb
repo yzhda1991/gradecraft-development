@@ -13,13 +13,13 @@ RSpec.describe ApplicationControllerFiltersTest do
   let(:course) { build(:course) }
   let(:user) { build(:user) }
   let(:student) { build(:user) }
+
   let(:event_session) {{
     course: course,
     user: user,
     student: student,
     request: request
   }}
-
 
   before do
     define_filters_test_routes
@@ -42,10 +42,6 @@ RSpec.describe ApplicationControllerFiltersTest do
 
   describe "#record_course_login_event" do
     subject { controller.instance_eval { record_course_login_event }}
-
-    let(:course) { create(:course) }
-    let(:user) { create(:user) }
-    let(:student) { create(:user) }
 
     before do
       create :professor_course_membership, course: course, user: user
