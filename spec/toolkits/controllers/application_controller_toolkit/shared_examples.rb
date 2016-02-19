@@ -15,7 +15,7 @@ module Toolkits
             end
           end
 
-          context "a user is logged in and the request is formatted as html" do
+          context "a user is logged in and the request is of an acceptable format" do
             let(:event_logger) { logger_class.new }
             let(:enqueue_response) { double(:enqueue_response) }
 
@@ -31,7 +31,7 @@ module Toolkits
             end
 
             it "should enqueue the new #{logger_class.to_s} object in 2 hours" do
-              expect(event_logger).to receive(:enqueue_in).with(2.hours) { enqueue_response }
+              expect(event_logger).to receive(:enqueue_in_with_fallback).with(2.hours) { enqueue_response }
             end
 
             after(:each) { subject }
