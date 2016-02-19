@@ -4,32 +4,31 @@ require 'active_record_spec_helper'
 RSpec.describe EventLogger::Base, type: :background_job do
   let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
 
+  let(:event_type) { "waffle" }
+  let(:some_data) {{ some: "new weird data" }}
+  let(:time_now) { Time.parse "Jun 20 1942" }
+  let(:mongoid_event) { double(:mongoid_event) }
+  let(:analytics_attrs) {{ event_type: event_type, created_at: time_now }.merge(some_data) }
+
   describe "self.perform" do
-    let(:now) { Time.parse "Oct 20 1985" }
-    let(:mongoid_event) { double(:mongoid_event) }
+    subject { described_class.perform(event_type, some_data) }
 
     before do
+      allow(Time.zone).to receive(:now) { time_now }
       allow(described_class).to receive(:notify_event_outcome).and_return "another message"
     end
 
-    it "should print the @start_message class instance variable to the log" do
-      described_class.instance_variable_set(:@start_message, "some message")
-      allow(Analytics::Event).to receive(:create) { true }
-      expect(described_class.logger).to receive(:info).with("some message")
-      expect(described_class.logger).to receive(:info).with("another message")
-      described_class.perform "event"
+    it "should send a start message an event outcome message to the logger" do
+      described_class.instance_variable_set(:@start_message, "mario was here")
+      expect(described_class.logger).to receive(:info).with "mario was here"
+      expect(described_class.logger).to receive(:info).with "another message"
+      subject
     end
 
-    it "should create a new analytics event using the event attrs" do
-      allow(described_class).to receive_messages(event_type: "event", data: {created_at: now})
-      expect(Analytics::Event).to receive(:create).with described_class.analytics_attrs("event", {created_at: now})
-      described_class.perform "event", created_at: now
-    end
-
-    it "should notify the event outcome to the log" do
-      allow(Analytics::Event).to receive_messages(create: mongoid_event)
-      expect(described_class).to receive(:notify_event_outcome).with(mongoid_event, {caruthers: "stew"})
-      described_class.perform "event", {caruthers: "stew"}
+    it "should create a new analytics object with the analytics attributes" do
+      analytics_class = described_class.instance_variable_get(:@analytics_class)
+      expect(analytics_class).to receive(:create).with analytics_attrs
+      subject
     end
   end
 
@@ -65,14 +64,11 @@ RSpec.describe EventLogger::Base, type: :background_job do
 
   describe "self.analytics_attrs(event_type, data)" do
     subject { described_class.analytics_attrs(event_type, some_data) }
-    let(:event_type) { "waffle" }
-    let(:some_data) {{ some: "new weird data" }}
-    let(:time_now) { Time.parse "Jun 20 1942" }
 
     before { allow(Time.zone).to receive(:now) { time_now }}
 
     it "should return an array of required attributes by default" do
-      expect(subject).to eq({ event_type: "waffle", created_at: time_now }.merge(some_data))
+      expect(subject).to eq(analytics_attrs)
     end
   end
 
