@@ -97,28 +97,6 @@ RSpec.describe LoginEventLogger, type: :background_job do
       end
     end
 
-    describe "previous_last_login_at" do
-      subject { new_logger.previous_last_login_at }
-
-      before do
-        allow(new_logger).to receive(:course_membership) { course_membership }
-      end
-
-      context "course membership has a last_login_at value" do
-        it "returns the timestamp as an integer in seconds" do
-          allow(course_membership).to receive(:last_login_at) { last_login }
-          expect(subject).to eq(last_login.to_i)
-        end
-      end
-
-      context "course membership has no last_login_at value" do
-        it "returns nil" do
-          allow(course_membership).to receive(:last_login_at) { nil }
-          expect(subject).to be_nil
-        end
-      end
-    end
-
     describe "#event_attrs" do
       subject { new_logger.event_attrs }
       let(:previous_last_login_at) { (Time.zone.now - 5.days).to_i }
@@ -167,6 +145,39 @@ RSpec.describe LoginEventLogger, type: :background_job do
         expect(new_logger.instance_variable_get(:@course_membership)).to eq(course_membership)
       end
     end
+
+    describe "previous_last_login_at" do
+      subject { new_logger.previous_last_login_at }
+
+      before do
+        allow(new_logger).to receive(:course_membership) { course_membership }
+      end
+
+      context "course membership has a last_login_at value" do
+        it "returns the timestamp as an integer in seconds" do
+          allow(course_membership).to receive(:last_login_at) { last_login }
+          expect(subject).to eq(last_login.to_i)
+        end
+      end
+
+      context "course membership has no last_login_at value" do
+        it "returns nil" do
+          allow(course_membership).to receive(:last_login_at) { nil }
+          expect(subject).to be_nil
+        end
+      end
+    end
+
+    describe "#course_membership_attrs" do
+      subject { new_logger.course_membership_attrs }
+      let(:funky_attrs) {{ course_id: 90, user_id: 150 }}
+      before { allow(new_logger).to receive(:base_attrs) { funky_attrs }}
+
+      it "returns the timestamp as an integer in seconds" do
+        expect(subject).to eq(funky_attrs)
+      end
+    end
+
 
   end
 end
