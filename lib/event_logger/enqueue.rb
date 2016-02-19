@@ -10,15 +10,15 @@ module EventLogger
     end
 
     def enqueue_in(time_until_start)
-      Resque.enqueue_in(time_until_start, logger_class, event_type, attrs)
+      Resque.enqueue_in(time_until_start, logger_class, event_type, event_attrs)
     end
 
     def enqueue_at(scheduled_time)
-      Resque.enqueue_at(scheduled_time, logger_class, event_type, attrs)
+      Resque.enqueue_at(scheduled_time, logger_class, event_type, event_attrs)
     end
 
     def enqueue
-      Resque.enqueue(logger_class, event_type, attrs)
+      Resque.enqueue(logger_class, event_type, event_attrs)
     end
 
     def enqueue_in_with_fallback(time_until_start)
@@ -27,7 +27,7 @@ module EventLogger
         enqueue_in(time_until_start)
       rescue
         # otherwise insert directly into Mongo
-        self.class.perform(event_type, attrs)
+        self.class.perform(event_type, event_attrs)
       end
     end
 
@@ -46,6 +46,8 @@ module EventLogger
 
     # this is set in the event that the base attributes are all that's
     # needed by the target class
-    alias_method :attrs, :base_attrs
+    def event_attrs
+      base_attrs
+    end
   end
 end

@@ -10,7 +10,7 @@ class PageviewEventLogger < EventLogger::Base
     "pageview"
   end
 
-  def attrs
-    @attrs ||= base_attrs.merge(page: event_session[:request].try(:original_fullpath))
+  def event_attrs
+    @event_attrs ||= base_attrs.merge(page: event_session[:request].try(:original_fullpath))
   end
 end

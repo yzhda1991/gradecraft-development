@@ -12,6 +12,8 @@ module Toolkits
         end
 
         describe "enqueuing" do
+          let(:event_attrs) { new_logger.event_attrs }
+
           before(:each) do
             ResqueSpec.reset!
           end
@@ -35,7 +37,7 @@ module Toolkits
 
               it "should schedule a #{logger_name} event" do
                 subject
-                expect(logger_class).to have_scheduled(logger_name, logger_attrs).in(2.hours)
+                expect(logger_class).to have_scheduled(logger_name, event_attrs).in(2.hours)
               end
             end
 
@@ -44,7 +46,7 @@ module Toolkits
               let(:later) { Time.parse "Feb 10 2052" }
 
               it "should enqueue the login logger to trigger :later" do
-                expect(logger_class).to have_scheduled(logger_name, logger_attrs).at later
+                expect(logger_class).to have_scheduled(logger_name, event_attrs).at later
               end
             end
 
@@ -53,12 +55,12 @@ module Toolkits
 
               it "should schedule a #{logger_name} event" do
                 subject
-                expect(logger_class).to have_scheduled(logger_name, logger_attrs).in(2.hours)
+                expect(logger_class).to have_scheduled(logger_name, event_attrs).in(2.hours)
               end
 
               context "Resque reaches Redis correctly and no error is thrown" do
                 it "doesn't call #{logger_class}#perform directly" do
-                  expect(logger_class).not_to receive(:perform).with(logger_name, logger_attrs)
+                  expect(logger_class).not_to receive(:perform).with(logger_name, event_attrs)
                   subject
                 end
               end
@@ -69,7 +71,7 @@ module Toolkits
                 end
 
                 it "calls #{logger_class}#perform directly" do
-                  expect(logger_class).to receive(:perform).with(logger_name, logger_attrs)
+                  expect(logger_class).to receive(:perform).with(logger_name, event_attrs)
                   subject
                 end
               end
@@ -109,10 +111,9 @@ module Toolkits
               end
             end
 
-            describe "#attrs" do
-              subject { new_logger.attrs }
-
+            describe "#event_attrs" do
               it "aliases #base_attrs" do
+                expect(new_logger.event_attrs).to eq(new_logger.base_attrs)
               end
             end
           end
