@@ -1,11 +1,13 @@
 require 'rails_spec_helper'
 require_relative '../support/uni_mock/stub_time'
 
-include Toolkits::EventLoggers::SharedExamples
-include Toolkits::EventLoggers::Attributes
 
 # LoginEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe LoginEventLogger, type: :background_job do
+  include Toolkits::EventLoggers::SharedExamples
+  include Toolkits::EventLoggers::Attributes
+  extend Toolkits::EventLoggers::EventSession
+
   include InQueueHelper # get help from ResqueSpec
 
   # this needs to be declared since Resque interacts with class-level instance
@@ -14,12 +16,14 @@ RSpec.describe LoginEventLogger, type: :background_job do
   let(:class_instance) { LoginEventLogger }
 
   # build this off of the class instance for consistent behavior
-  let(:new_logger) { class_instance.new(logger_attrs) }
+  let(:new_logger) { class_instance.new(event_session) }
 
   let(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
   let(:course) { build(:course) }
   let(:user) { build(:user) }
   let(:last_login) { Time.parse("June 20, 1968") }
+
+  define_event_session # pulls in #event_session attributes from EventLoggers::EventSession
 
   let(:logger_attrs) { login_logger_attrs } # pulled in from Toolkits::EventLoggers::Attributes
 

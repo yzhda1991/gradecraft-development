@@ -1,13 +1,16 @@
 require "rails_spec_helper"
 
-include Toolkits::EventLoggers::SharedExamples
-include Toolkits::EventLoggers::Attributes
 
 # PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe PageviewEventLogger, type: :background_job do
   include InQueueHelper # get help from ResqueSpec
+  include Toolkits::EventLoggers::SharedExamples
+  include Toolkits::EventLoggers::Attributes
+  extend Toolkits::EventLoggers::EventSession
 
-  let(:new_logger) { PageviewEventLogger.new(logger_attrs) }
+  define_event_session # pulls in #event_session attributes from EventLoggers::EventSession
+
+  let(:new_logger) { PageviewEventLogger.new(event_session) }
   let(:logger_attrs) { pageview_logger_attrs } # pulled in from Toolkits::EventLoggers::Attributes
 
   # shared examples for EventLogger subclasses
