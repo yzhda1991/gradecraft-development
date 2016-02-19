@@ -6,4 +6,7 @@ class TestEventLogger
   def event_type
     "test"
   end
+
+  def self.perform(event_type, data={})
+  end
 end
