@@ -21,7 +21,7 @@ module EventLogger
     # perform block that is ultimately called by Resque
     def self.perform(event_type, data={})
       self.logger.info @start_message
-      event = @analytics_class.create self.event_attrs(event_type, data)
+      event = @analytics_class.create self.analytics_attrs(event_type, data)
       outcome = notify_event_outcome(event, data)
       self.logger.info outcome
     end
@@ -42,8 +42,8 @@ module EventLogger
       "#{@failure_message} with data #{data}"
     end
 
-    def self.event_attrs(event_type, data)
-      { event_type: event_type, created_at: Time.now }.merge data
+    def self.analytics_attrs(event_type, data={})
+      { event_type: event_type, created_at: Time.zone.now }.merge data
     end
 
     def self.logger

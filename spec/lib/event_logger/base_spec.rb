@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require 'active_record_spec_helper'
 
 # PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe EventLogger::Base, type: :background_job do
@@ -22,7 +22,7 @@ RSpec.describe EventLogger::Base, type: :background_job do
 
     it "should create a new analytics event using the event attrs" do
       allow(described_class).to receive_messages(event_type: "event", data: {created_at: now})
-      expect(Analytics::Event).to receive(:create).with described_class.event_attrs("event", {created_at: now})
+      expect(Analytics::Event).to receive(:create).with described_class.analytics_attrs("event", {created_at: now})
       described_class.perform "event", created_at: now
     end
 
@@ -63,22 +63,16 @@ RSpec.describe EventLogger::Base, type: :background_job do
     end
   end
 
-  describe "self.event_attrs(event_type, data)" do
-    before do
-      @now = Time.parse "Jun 20 1942"
-      @base_attrs = { event_type: "waffle", created_at: @now }
-    end
+  describe "self.analytics_attrs(event_type, data)" do
+    subject { described_class.analytics_attrs(event_type, some_data) }
+    let(:event_type) { "waffle" }
+    let(:some_data) {{ some: "new weird data" }}
+    let(:time_now) { Time.parse "Jun 20 1942" }
+
+    before { allow(Time.zone).to receive(:now) { time_now }}
 
     it "should return an array of required attributes by default" do
-      expect(described_class).to receive(:event_attrs).and_return @base_attrs
-      allow(Time).to receive_messages(now: @now)
-      described_class.event_attrs("waffle")
-    end
-
-    it "should merge the options in the data hash" do
-      @later = Time.parse "Jan 9 2055"
-      expect(described_class).to receive(:event_attrs).and_return @base_attrs.merge(created_at: @later)
-      described_class.event_attrs("waffle", created_at: @later)
+      expect(subject).to eq({ event_type: "waffle", created_at: time_now }.merge(some_data))
     end
   end
 
