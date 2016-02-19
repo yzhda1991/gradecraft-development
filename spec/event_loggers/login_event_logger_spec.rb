@@ -4,11 +4,10 @@ require_relative '../support/uni_mock/stub_time'
 
 # LoginEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe LoginEventLogger, type: :background_job do
+  include InQueueHelper # get help from ResqueSpec
   include Toolkits::EventLoggers::SharedExamples
   include Toolkits::EventLoggers::Attributes
   extend Toolkits::EventLoggers::EventSession
-
-  include InQueueHelper # get help from ResqueSpec
 
   # this needs to be declared since Resque interacts with class-level instance
   # variables, and using mulitple class instances could misrepresent class-level
@@ -85,6 +84,19 @@ RSpec.describe LoginEventLogger, type: :background_job do
       end
     end
 
+    describe "self#course_membership_attrs" do
+      subject { class_instance.course_membership_attrs }
+      let(:data) {{ course_id: 20, user_id: 90 }}
+
+      before do
+        class_instance.instance_variable_set(:@data, data)
+      end
+
+      it "returns the timestamp as an integer in seconds" do
+        expect(subject).to eq(data)
+      end
+    end
+
     describe "previous_last_login_at" do
       subject { new_logger.previous_last_login_at }
 
@@ -107,17 +119,29 @@ RSpec.describe LoginEventLogger, type: :background_job do
       end
     end
 
-    describe "self#course_membership_attrs" do
-      subject { class_instance.course_membership_attrs }
-      let(:data) {{ course_id: 20, user_id: 90 }}
+    describe "#event_attrs" do
+      subject { new_logger.event_attrs }
+      let(:previous_last_login_at) { (Time.zone.now - 5.days).to_i }
 
       before do
-        class_instance.instance_variable_set(:@data, data)
+        allow(new_logger).to receive(:previous_last_login_at) { previous_last_login_at }
       end
 
-      it "returns the timestamp as an integer in seconds" do
-        expect(subject).to eq(data)
+      it "merges the page from the original request with the base_attrs" do
+        expect(subject).to eq new_logger.base_attrs.merge(last_login_at: previous_last_login_at)
+      end
+
+      it "caches the #event_attrs" do
+        subject
+        expect(new_logger.base_attrs).not_to receive(:merge)
+        subject
+      end
+
+      it "sets the event attrs to @event_attrs" do
+        subject
+        expect(new_logger.instance_variable_get(:@event_attrs)).to eq(new_logger.event_attrs)
       end
     end
+
   end
 end
