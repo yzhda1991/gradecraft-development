@@ -18,6 +18,14 @@ class LoginEventLogger < EventLogger::Base
     course_membership.update_attributes(last_login_at: @data[:created_at])
   end
 
+  def self.course_membership
+    CourseMembership.where(course_membership_attrs).first
+  end
+
+  def self.course_membership_attrs
+    { course_id: @data[:course_id], user_id: @data[:user_id] }
+  end
+
   # instance methods, for use as a LoginEventLogger instance
   def event_type
     "login"
@@ -36,6 +44,6 @@ class LoginEventLogger < EventLogger::Base
   end
 
   def course_membership_attrs
-    { course_id: attrs[:course_id], user_id: attrs[:user_id] }
+    { course_id: base_attrs[:course_id], user_id: base_attrs[:user_id] }
   end
 end
