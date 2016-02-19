@@ -9,7 +9,6 @@ include Toolkits::Controllers::ApplicationControllerToolkit::SharedExamples
 
 RSpec.describe ApplicationControllerFiltersTest do
   include Toolkits::Controllers::ApplicationControllerToolkit::Filters
-  include Toolkits::EventLoggers::Attributes
 
   let(:course) { build(:course) }
   let(:user) { build(:user) }
