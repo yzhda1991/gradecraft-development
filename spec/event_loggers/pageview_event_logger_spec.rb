@@ -1,5 +1,9 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
+require "resque_spec/scheduler"
 
+require_relative "../toolkits/event_loggers/shared_examples"
+require_relative "../toolkits/event_loggers/attributes"
+require_relative "../toolkits/event_loggers/event_session"
 
 # PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe PageviewEventLogger, type: :background_job do

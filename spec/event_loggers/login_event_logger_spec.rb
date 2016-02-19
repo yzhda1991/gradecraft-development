@@ -1,6 +1,9 @@
-require 'rails_spec_helper'
-require_relative '../support/uni_mock/stub_time'
+require 'active_record_spec_helper'
+require 'resque_spec/scheduler'
 
+require_relative '../toolkits/event_loggers/shared_examples'
+require_relative '../toolkits/event_loggers/attributes'
+require_relative '../toolkits/event_loggers/event_session'
 
 # LoginEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe LoginEventLogger, type: :background_job do
