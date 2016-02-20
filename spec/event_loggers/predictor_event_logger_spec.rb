@@ -25,11 +25,11 @@ RSpec.describe PredictorEventLogger, type: :background_job do
   it_behaves_like "an EventLogger subclass", PredictorEventLogger, "predictor"
   it_behaves_like "EventLogger::Enqueue is included", PredictorEventLogger, "predictor"
 
+  let(:params) {{ assignment: "40", score: "50", possible: "60" }}
+  let(:param_attrs) {{ assignment_id: 40, score: 50, possible: 60 }}
+
   describe "#event_attrs" do
     subject { new_logger.event_attrs }
-
-    let(:params) {{ assignment: "40", score: "50", possible: "60" }}
-    let(:converted_params) {{ assignment_id: 40, score: 50, possible: 60 }}
 
     before(:each) do
       new_logger.instance_variable_set(:@event_attrs, nil)
@@ -37,7 +37,7 @@ RSpec.describe PredictorEventLogger, type: :background_job do
     end
 
     it "merges the param_attrs from the original request with the base_attrs" do
-      expect(subject).to eq new_logger.base_attrs.merge(converted_params)
+      expect(subject).to eq new_logger.base_attrs.merge(param_attrs)
     end
 
     it "caches the #event_attrs" do
@@ -49,6 +49,13 @@ RSpec.describe PredictorEventLogger, type: :background_job do
     it "sets the event attrs to @event_attrs" do
       subject
       expect(new_logger.instance_variable_get(:@event_attrs)).to eq(new_logger.event_attrs)
+    end
+  end
+
+  describe "#param_attrs" do
+    before { allow(new_logger).to receive_messages(param_attrs) }
+    it "builds a hash from the filtered param attribute values" do
+      expect(new_logger.param_attrs).to eq(param_attrs)
     end
   end
 
