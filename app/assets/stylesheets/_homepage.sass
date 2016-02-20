@@ -10,7 +10,7 @@
   .hero-section
     background:rgba(255,255,255,0.5)
     height: 300px
-    padding: 40px 0 0
+    padding: 10px 0 0
 
     h1
       text-transform: none
@@ -22,8 +22,9 @@
     h3
       font-size: .9rem
       color: $color-grey-4
-      margin-top: 20px
       text-transform: none !important
+      width: 80%
+      margin: 20px auto
 
   .section-container
     margin: 0 auto
@@ -128,7 +129,10 @@ a.outline-button
 @media (max-width: $media-small-max)
   .homepage
     .hero-section
-      height: 180px
+      height: 250px
+
+      img
+        padding-top: 3rem
 
       h1
         padding: 2rem 0 0
@@ -186,3 +190,10 @@ a.outline-button
     .logo
       padding-top: 2rem
       margin: 0 auto
+
+
+@media (max-width: $media-xsmall-max)
+  .hero-section
+    height: 280px !important
+    h1
+      padding: 1rem 0 0 !important
