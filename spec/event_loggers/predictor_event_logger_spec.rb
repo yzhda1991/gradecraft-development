@@ -36,8 +36,17 @@ RSpec.describe PredictorEventLogger, type: :background_job do
       allow(new_logger).to receive(:params) { params }
     end
 
-    it "merges the param_attrs from the original request with the base_attrs" do
-      expect(subject).to eq new_logger.base_attrs.merge(param_attrs)
+    context "params exists" do
+      it "merges the param_attrs from the original request with the base_attrs" do
+        expect(subject).to eq new_logger.base_attrs.merge(param_attrs)
+      end
+    end
+
+    context "params does not exist" do
+      let(:params) { nil }
+      it "simply returns the base_attrs" do
+        expect(subject).to eq new_logger.base_attrs
+      end
     end
 
     it "caches the #event_attrs" do
