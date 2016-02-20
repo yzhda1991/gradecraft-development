@@ -71,58 +71,18 @@ RSpec.describe PredictorEventLogger, type: :background_job do
   describe "params attributes" do
     before(:each) { allow(new_logger).to receive(:params) { params }}
 
+    # shared examples here are defining the input :param_name, and then the :output_name
+    # in this instance the :assignment param is being output as :assignment_id
     describe "#assignment_id" do
-      subject { new_logger.assignment_id }
-
-      context "params[:assignment] exists" do
-        let(:params) {{ assignment: "40" }}
-        it "returns the assignment value as an integer" do
-          expect(subject).to eq(40)
-        end
-      end
-
-      context "params[:assignment] does not exist" do
-        let(:params) {{ waffles: "40" }}
-        it "returns nil" do
-          expect(subject).to be_nil
-        end
-      end
+      it_behaves_like "a numerical param attribute", :assignment, :assignment_id
     end
 
     describe "#score" do
-      subject { new_logger.score }
-
-      context "params[:score] exists" do
-        let!(:params) {{ score: "40" }}
-        it "returns the score value as an integer" do
-          expect(subject).to eq(40)
-        end
-      end
-
-      context "params[:score] does not exist" do
-        let!(:params) {{ waffles: "40" }}
-        it "returns nil" do
-          expect(subject).to be_nil
-        end
-      end
+      it_behaves_like "a numerical param attribute", :score, :score
     end
 
     describe "#possible" do
-      subject { new_logger.possible }
-
-      context "params[:possible] exists" do
-        let(:params) {{ possible: "40" }}
-        it "returns the possible value as an integer" do
-          expect(subject).to eq(40)
-        end
-      end
-
-      context "params[:possible] does not exist" do
-        let(:params) {{ waffles: "40" }}
-        it "returns nil" do
-          expect(subject).to be_nil
-        end
-      end
+      it_behaves_like "a numerical param attribute", :possible, :possible
     end
   end
 end

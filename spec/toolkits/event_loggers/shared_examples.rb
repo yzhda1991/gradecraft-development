@@ -167,6 +167,24 @@ module Toolkits
 
       end
 
+      RSpec.shared_examples "a numerical param attribute" do |param_name, output_name|
+        subject { new_logger.send(output_name) }
+
+        context "params[#{param_name}] exists" do
+          let!(:params) {{ param_name => "40" }}
+          it "returns the #{output_name} value as an integer" do
+            expect(subject).to eq(40)
+          end
+        end
+
+        context "params[#{param_name}] does not exist" do
+          let!(:params) {{ waffles: "40" }}
+          it "returns nil" do
+            expect(subject).to be_nil
+          end
+        end
+      end
+
     end
   end
 end
