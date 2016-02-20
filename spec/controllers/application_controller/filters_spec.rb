@@ -9,19 +9,19 @@ include Toolkits::Controllers::ApplicationControllerToolkit::SharedExamples
 
 RSpec.describe ApplicationControllerFiltersTest do
   include Toolkits::Controllers::ApplicationControllerToolkit::Filters
+  extend Toolkits::EventLoggers::EventSession
 
-  let(:course) { build(:course) }
-  let(:user) { build(:user) }
-  let(:student) { build(:user) }
+  # pulls in #event_session attributes from EventLoggers::EventSession
+  # creates course, user, student objects, uses native controller request variable
+  define_event_session
 
-  let(:event_session) {{
-    course: course,
-    user: user,
-    student: student,
-    request: request
-  }}
+  let(:stub_current_user) do
+    allow(user).to receive_messages(current_course: course)
+    allow(controller).to receive_messages(current_user: user)
+  end
 
   before do
+    stub_current_user
     define_filters_test_routes
     allow(controller).to receive(:event_session) { event_session }
   end
@@ -29,11 +29,42 @@ RSpec.describe ApplicationControllerFiltersTest do
   describe "triggering pageview logger events" do
     subject { get :html_page }
 
-    it_behaves_like "an EventLogger calling #enqueue_in_with_fallback", PageviewEventLogger
+    let(:logger_class) { PageviewEventLogger }
+
+    it_behaves_like "no EventLogger is built unless a user is logged in", PageviewEventLogger
+
+    # if current_user
+    context "no user is logged in" do
+      it "should not call #{described_class}" do
+        allow(controller).to receive_messages(current_user: nil)
+        expect(logger_class).not_to receive(:new).with event_session
+        subject
+      end
+    end
+
+    context "a user is logged in and the request is for html" do
+      let(:event_logger) { logger_class.new }
+      let(:enqueue_response) { double(:enqueue_response) }
+
+      before(:each) do
+        allow(Lull).to receive_messages(time_until_next_lull: 2.hours)
+        allow(event_logger).to receive_messages(enqueue_in: enqueue_response)
+        allow(logger_class).to receive_messages(new: event_logger)
+      end
+
+      it "should create a new PageviewEventLogger" do
+        expect(logger_class).to receive(:new).with(event_session) { event_logger }
+      end
+
+      it "should enqueue the new pageview event in 2 hours" do
+        expect(event_logger).to receive(:enqueue_in_with_fallback).with(2.hours) { enqueue_response }
+      end
+
+      after(:each) { subject }
+    end
 
     context "the request is not html" do
       it "should not call #{described_class}" do
-        stub_current_user
         expect(PageviewEventLogger).not_to receive(:new).with event_session
         get :json_page, format: "json"
       end
@@ -43,17 +74,37 @@ RSpec.describe ApplicationControllerFiltersTest do
   describe "#record_course_login_event" do
     subject { controller.instance_eval { record_course_login_event }}
 
+    let(:logger_class) { LoginEventLogger }
+
     before do
       create :professor_course_membership, course: course, user: user
     end
 
-    it_behaves_like "an EventLogger calling #enqueue_in_with_fallback", LoginEventLogger
+    it_behaves_like "no EventLogger is built unless a user is logged in", LoginEventLogger
+    context "a user is logged in and the request is for either html or xml" do
+      let(:event_logger) { logger_class.new }
+      let(:enqueue_response) { double(:enqueue_response) }
+
+      before(:each) do
+        allow(event_logger).to receive_messages(enqueue: enqueue_response)
+        allow(logger_class).to receive_messages(new: event_logger)
+      end
+
+      it "should create a new login event" do
+        expect(logger_class).to receive(:new).with(event_session) { event_logger }
+      end
+
+      it "should enqueue the new login event" do
+        expect(event_logger).to receive(:enqueue_with_fallback) { enqueue_response }
+      end
+
+      after(:each) { subject }
+    end
 
     context "the request is not html or xml" do
       let(:format) {{ html?: false, xml?: false, json?: true }}
 
       it "should not call #{described_class}" do
-        stub_current_user
         allow(controller.request.format).to receive_messages(format)
         expect(PageviewEventLogger).not_to receive(:new).with event_session
         subject

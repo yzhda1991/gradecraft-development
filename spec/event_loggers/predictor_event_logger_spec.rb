@@ -12,7 +12,9 @@ RSpec.describe PredictorEventLogger, type: :background_job do
   include Toolkits::EventLoggers::Attributes
   extend Toolkits::EventLoggers::EventSession
 
-  define_event_session # pulls in #event_session attributes from EventLoggers::EventSession
+  # pulls in #event_session attributes from EventLoggers::EventSession
+  # creates course, user, student objects, and a request double
+  define_event_session_with_request
 
   include InQueueHelper # get help from ResqueSpec
 

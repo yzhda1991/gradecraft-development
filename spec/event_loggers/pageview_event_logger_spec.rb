@@ -15,8 +15,8 @@ RSpec.describe PageviewEventLogger, type: :background_job do
   extend Toolkits::EventLoggers::EventSession
 
   # pulls in #event_session attributes from EventLoggers::EventSession
-  # creates course, user, student objects and a request double
-  define_event_session
+  # creates course, user, student objects, and a request double
+  define_event_session_with_request
 
   let(:new_logger) { PageviewEventLogger.new(event_session) }
   let(:expected_base_attrs) { application_logger_base_attrs } # pulled in from Toolkits::EventLoggers::ApplicationEventLoggerToolkit

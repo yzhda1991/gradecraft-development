@@ -6,7 +6,6 @@ module Toolkits
         let(:course) { build(:course) }
         let(:user) { build(:user) }
         let(:student) { build(:user) }
-        let(:request) { double(:request) }
 
         let(:event_session) {{
           course: course,
@@ -14,6 +13,11 @@ module Toolkits
           student: student,
           request: request
         }}
+      end
+
+      def define_event_session_with_request
+        define_event_session
+        let(:request) { double(:request) }
       end
 
     end

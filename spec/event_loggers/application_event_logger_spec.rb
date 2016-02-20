@@ -14,9 +14,10 @@ RSpec.describe ApplicationEventLogger, type: :background_job do
   include Toolkits::EventLoggers::ApplicationEventLoggerToolkit
   extend Toolkits::EventLoggers::EventSession
 
+  let(:request) { double(:request) } # needed for the event_session
   # pulls in #event_session attributes from EventLoggers::EventSession
-  # creates course, user, student objects and a request double
-  define_event_session
+  # creates course, user, student objects, and a request double
+  define_event_session_with_request
 
   let(:new_logger) { ApplicationEventLogger.new }
   let(:expected_base_attrs) { application_logger_base_attrs } # pulled in from Toolkits::EventLoggers::ApplicationEventLoggerToolkit
