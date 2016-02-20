@@ -13,7 +13,9 @@ RSpec.describe EventLogger::Enqueue, type: :background_job do
 
   let(:new_logger) { TestEventLogger.new event_session }
 
-  define_event_session # from Toolkits::EventLoggers::EventSession
+  # pulls in #event_session attributes from EventLoggers::EventSession
+  # creates course, user, student objects, and a request double
+  define_event_session_with_request
 
   # taken from Toolkits::EventLoggers::SharedExamples
   it_behaves_like "EventLogger::Enqueue is included", TestEventLogger, "test"
