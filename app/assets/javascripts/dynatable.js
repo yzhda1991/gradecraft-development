@@ -224,7 +224,7 @@ $('table.nofeatures_default_score_dynatable').dynatable({
       meanStudentScore: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       },
-      challengeScore: function(el, record) {
+      numericScore: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
       },
       badges: function(el, record) {
@@ -389,12 +389,16 @@ $('table.nofeatures_default_rank_dynatable').dynatable({
     rank: function(el, record) {
       return Number(el.innerHTML) || 0;
     },
-    score: function(el, record) {
-      record.numericScore = Number(el.innerHTML.replace(/,/g,""));
-      return el.innerHTML;
+    numericScore: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
     },
     badgeCount: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,""));
+    }
+  },
+  writers: {
+    numericScore: function(record) {
+      return record['numericScore'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
 });
