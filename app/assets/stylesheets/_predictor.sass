@@ -180,9 +180,7 @@ $predictor-font-size-5 : .55rem
         float: left
         width: 25px
         height: 25px
-        -moz-border-radius: 14px
-        -webkit-border-radius: 14px
-        border-radius: 14px
+        @include rounded-corners(14px)
         margin: 2px 0 0 2px
       .coin, .coin-non-interactive
         background-color: $color-yellow-1

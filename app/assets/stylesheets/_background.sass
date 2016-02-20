@@ -114,9 +114,7 @@ $layer-back-color: -1000
   top: $top * 1px
   width: $main-size
   height: $main-size
-  -moz-border-radius: $radius-size
-  -webkit-border-radius: $radius-size
-  border-radius: $radius-size
+  @include rounded-corners($radius-size)
 
 // small bubbles in the corners
 .cloud-bubble-1
