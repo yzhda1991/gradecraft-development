@@ -75,23 +75,26 @@
           %h4.notice(ng-hide="pointsSatisfied() || pointsMissing()") You have not yet allocated any points
           %h4.notice(ng-show="pointsMissing()") {{pointsRemaining() | number:0}} point{{pointsRemaining() > 1 ? "s" : ""}} have not been assigned
           %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
+
     .clear
 
     .summary_feedback
+      %h3.text-right Overall Feedback
       %textarea(ng-model="grade.feedback" froala="froalaSummaryOptions")
     .clear
+    %br
 
-      .right
-      .row
-        - if !@assignment.release_necessary?
-          %select(ng-model="grade.status" ng-options="status for status in noReleaseGradeStatuses")
-            %option(value="" disabled) Select grade status for this submission...
-          .form_label Is this grade ready to be reviewed?
-        - else
-          %select(ng-model="grade.status" ng-options="status for status in releaseNecessaryGradeStatuses")
-            %option(value="" disabled) Select grade status for this submission...
-          .align-right.form_label Can the student see this grade?
-
-    .clear
     .right
-      %button#submit-grade(ng-click="submitGrade()") Submit Grade
+      - if !@assignment.release_necessary?
+        %select(ng-model="grade.status" ng-options="status for status in noReleaseGradeStatuses")
+          %option(value="" disabled) Select grade status for this submission...
+        .form_label Is this grade ready to be reviewed?
+      - else
+        %select(ng-model="grade.status" ng-options="status for status in releaseNecessaryGradeStatuses")
+          %option(value="" disabled) Select grade status for this submission...
+        .align-right.form_label Can the student see this grade?
+    .clear
+    %br
+
+    .right
+      %button#submit-grade(ng-click="submitGrade()" ng-class='{"disabled" : !grade.status}') Submit Grade
