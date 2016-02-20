@@ -92,9 +92,10 @@ RSpec.describe Lull do
   end
 
   describe "fundamental lull Lulls" do
+    let(:today) { october(15) }
+    let(:tomorrow) { october(16) }
+
     before do
-      @today = october(15)
-      @tomorrow = october(16)
       allow(Lull).to receive_messages(lull_start_params: {hour: 15, min: 20})
       allow(Lull).to receive_messages(lull_end_params: {hour: 18, min: 40})
     end
@@ -102,24 +103,24 @@ RSpec.describe Lull do
     # DateTime.tomorrow.to_time.change(LULL_START_PARAMS)
     describe "#tomorrows_lull_start" do
       it "should match Tomorrow's lull start time" do
-        allow(Date).to receive_message_chain(:tomorrow, :to_time) { @tomorrow }
-        expect(Lull.tomorrows_lull_start).to eq(@tomorrow.change(hour: 15, min: 20))
+        allow(Date).to receive_message_chain(:tomorrow, :to_time) { tomorrow }
+        expect(Lull.tomorrows_lull_start).to eq(tomorrow.change(hour: 15, min: 20))
       end
     end
 
     # Time.zone.now.change(LULL_END_PARAMS)
     describe "#todays_lull_end" do
       it "should match today's lull end" do
-        allow(Time.zone).to receive_messages(now: @today)
-        expect(Lull.todays_lull_end).to eq(@today.change(hour: 18, min: 40))
+        allow(Time.zone).to receive_messages(now: today)
+        expect(Lull.todays_lull_end).to eq(today.change(hour: 18, min: 40))
       end
     end
 
     # Time.zone.now.change(LULL_START_PARAMS)
     describe "#todays_lull_start" do
       it "should match today's lull start" do
-        allow(Time.zone).to receive_messages(now: @today)
-        expect(Lull.todays_lull_start).to eq(@today.change(hour: 15, min: 20))
+        allow(Time.zone).to receive_messages(now: today)
+        expect(Lull.todays_lull_start).to eq(today.change(hour: 15, min: 20))
       end
     end
   end
