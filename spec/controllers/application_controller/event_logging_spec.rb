@@ -13,9 +13,6 @@ RSpec.describe ApplicationControllerEventLoggingTest do
   # creates course, user, student objects, uses native controller request variable
   define_event_session
 
-  let(:stub_current_user) do
-  end
-
   before do
     allow(user).to receive_messages(current_course: course)
     define_event_logging_test_routes # pulled in from Toolkits::Controllers::ApplicationControllerToolkit::Routes

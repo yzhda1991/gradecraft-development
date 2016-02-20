@@ -36,7 +36,6 @@ RSpec.describe LoginEventLogger, type: :background_job do
   it_behaves_like "an EventLogger subclass", LoginEventLogger, "login"
   it_behaves_like "EventLogger::Enqueue is included", LoginEventLogger, "login"
 
-
   describe "class methods" do
     describe "self#peform" do
       subject { class_instance.perform('login', logger_attrs) }
@@ -82,9 +81,6 @@ RSpec.describe LoginEventLogger, type: :background_job do
 
     describe "self#course_membership" do
       subject { class_instance.course_membership }
-
-      let(:course) { create(:course) }
-      let(:user) { create(:user) }
 
       before(:each) do
         course_membership # cache the course membership
