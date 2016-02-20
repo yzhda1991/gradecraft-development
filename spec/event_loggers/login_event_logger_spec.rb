@@ -23,11 +23,11 @@ RSpec.describe LoginEventLogger, type: :background_job do
   let(:new_logger) { class_instance.new(event_session) }
 
   let!(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
-  let!(:course) { create(:course) }
-  let!(:user) { create(:user) }
   let(:last_login) { Time.parse("June 20, 1968") }
 
-  define_event_session # pulls in #event_session attributes from EventLoggers::EventSession
+  # pulls in #event_session attributes from EventLoggers::EventSession
+  # creates course, user, student objects and a request double
+  define_event_session
 
   let(:logger_attrs) { login_logger_attrs } # pulled in from Toolkits::EventLoggers::Attributes
   let(:expected_base_attrs) { application_logger_base_attrs } # pulled in from Toolkits::EventLoggers::ApplicationEventLoggerToolkit
