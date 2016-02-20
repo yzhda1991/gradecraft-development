@@ -10,7 +10,7 @@
   .hero-section
     background:rgba(255,255,255,0.5)
     height: 300px
-    padding: 40px 0 0
+    padding: 10px 0 0
 
     h1
       text-transform: none
@@ -22,8 +22,9 @@
     h3
       font-size: .9rem
       color: $color-grey-4
-      margin-top: 20px
       text-transform: none !important
+      width: 80%
+      margin: 20px auto
 
   .section-container
     margin: 0 auto
@@ -36,7 +37,7 @@
     height: auto
 
   .feature-section
-    padding: 40px
+    padding: 2rem 2rem 4rem
 
     &.white
       background-color: $color-white
@@ -46,9 +47,9 @@
 
     /* Gameful features itemized on the homepage */
     .feature
-      width: 90%
+      width: 95%
       height: auto !important
-      padding: 0 1.5rem
+      padding: 0 .75rem
       margin-bottom: 1rem
 
     p
@@ -128,14 +129,20 @@ a.outline-button
 @media (max-width: $media-small-max)
   .homepage
     .hero-section
-      height: 225px
+      height: 250px
+
+      img
+        padding-top: 3rem
 
       h1
+        padding: 2rem 0 0
+        margin: 0 auto
         font-size: 1.3rem
-        width: 80%
+        width: 90%
 
     .section-container
       padding: 0 !important
+      margin: 0 !important
 
     .gameful
       h2
@@ -147,7 +154,7 @@ a.outline-button
       padding: 0
 
     .feature
-      text-align: center !important
+      text-align: center
       clear: both
       padding: 0 !important
       margin-bottom: 2rem !important
@@ -163,13 +170,14 @@ a.outline-button
         width: 100%
 
       p
-        line-height: 1.75rem
+        line-height: 1.25rem
+        margin: 0 1.25rem !important
 
     .feature-section
-      padding: 0 0 3rem!important
+      padding: 0 0 3rem !important
 
       h2
-        padding-top: 1rem
+        padding: 1rem .25rem 0
 
     .quarter
       width: calc(100% - 2rem) !important
@@ -184,3 +192,10 @@ a.outline-button
     .logo
       padding-top: 2rem
       margin: 0 auto
+
+
+@media (max-width: $media-xsmall-max)
+  .hero-section
+    height: 280px !important
+    h1
+      padding: 1rem 0 0 !important
