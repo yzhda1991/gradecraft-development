@@ -11,9 +11,9 @@ class AnalyticsEventsController < ApplicationController
   def tab_select_event
     # limited to 20 pageview jobs/second in Resque initializer
     # only run at night during the Lull period
-    PageviewEventLogger.new(event_session_with_params)
-      .build_page_from_params
-      .enqueue_in(Lull.time_until_next_lull)
+    event_logger = PageviewEventLogger.new(event_session_with_params)
+    event_logger.build_page_from_params
+    event_logger.enqueue_in_with_fallback(Lull.time_until_next_lull)
 
     render :nothing => true, :status => :ok
   end

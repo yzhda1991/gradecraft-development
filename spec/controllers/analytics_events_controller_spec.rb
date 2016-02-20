@@ -12,6 +12,9 @@ describe AnalyticsEventsController, type: :controller do
   let(:event_session_with_params) { event_session.merge(params) }
   let(:params) {{ assignment: "40", score: "50", possible: "60" }}
 
+  let(:event_logger) { logger_class.new }
+  let(:enqueue_response) { double(:enqueue_response) }
+
   before do
     allow(user).to receive_messages(current_course: course)
     allow(controller).to receive_messages({
@@ -21,19 +24,16 @@ describe AnalyticsEventsController, type: :controller do
     })
   end
 
+  before(:each) do
+    allow(logger_class).to receive_messages(new: event_logger)
+  end
+
   describe "POST #predictor_event" do
     subject { post :predictor_event }
 
     let(:logger_class) { PredictorEventLogger }
 
     context "a user is logged in and the request is for html" do
-      let(:event_logger) { logger_class.new }
-      let(:enqueue_response) { double(:enqueue_response) }
-
-      before(:each) do
-        allow(logger_class).to receive_messages(new: event_logger)
-      end
-
       it "should create a new PredictorEventLogger" do
         expect(logger_class).to receive(:new).with(event_session_with_params) { event_logger }
         subject
@@ -41,6 +41,49 @@ describe AnalyticsEventsController, type: :controller do
 
       it "should enqueue the new PredictorEventLogger object with fallback" do
         expect(event_logger).to receive(:enqueue_with_fallback)
+        subject
+      end
+
+      it "should not increment page views" do
+        expect(controller).not_to receive(:increment_page_views)
+        subject
+      end
+
+      it "should render nothing" do
+        subject
+        expect(response.body).to be_empty
+      end
+
+      it "should render an :ok response" do
+        subject
+        expect(response.status).to eq(200)
+      end
+    end
+  end
+
+  describe "POST #tab_select_event" do
+    subject { post :tab_select_event }
+
+    let(:logger_class) { PageviewEventLogger }
+
+    before do
+      allow(controller).to receive(:params) {{ url: "http://some.url", tab: "#great_tab" }}
+    end
+
+    context "a user is logged in and the request is for html" do
+      it "should create a new PredictorEventLogger" do
+        expect(logger_class).to receive(:new).with(event_session_with_params) { event_logger }
+        subject
+      end
+
+      it "should enqueue the new PredictorEventLogger object with fallback" do
+        expect(event_logger).to receive(:build_page_from_params)
+        subject
+      end
+
+      it "should enqueue the new PredictorEventLogger object with fallback" do
+        allow(Lull).to receive(:time_until_next_lull) { 3.hours }
+        expect(event_logger).to receive(:enqueue_in_with_fallback).with(Lull.time_until_next_lull)
         subject
       end
 
