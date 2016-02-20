@@ -1,7 +1,8 @@
 class ApplicationEventLogger < EventLogger::Base
-
   @queue = :application_event_logger
   @event_name = "Application"
+
+  attr_reader :event_session
 
   def event_type
     "application"

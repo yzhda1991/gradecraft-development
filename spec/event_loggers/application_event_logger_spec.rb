@@ -24,4 +24,11 @@ RSpec.describe ApplicationEventLogger, type: :background_job do
 
   # shared examples for EventLogger subclasses
   it_behaves_like "an EventLogger subclass", ApplicationEventLogger, "application"
+
+  describe "#params" do
+    it "returns event_sessions[:params]" do
+      allow(new_logger).to receive(:event_session) { event_session.merge(params: "param_stuff") }
+      expect(new_logger.params).to eq("param_stuff")
+    end
+  end
 end
