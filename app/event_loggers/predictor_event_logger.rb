@@ -11,23 +11,29 @@ class PredictorEventLogger < ApplicationEventLogger
   end
 
   def event_attrs
-    @event_attrs ||= base_attrs.merge({
-      assignment_id: assignment_id,
-      score: score,
-      possible: possible
-    })
+    @event_attrs ||= params ? base_attrs.merge(param_attrs) : base_attrs
+  end
+
+  def param_attrs
+    { assignment_id: assignment_id, score: score, possible: possible }
   end
 
   # params method is defined in ApplicationEventLogger
   def assignment_id
-    params[:assignment].to_i if params[:assignment]
+    if params[:assignment]
+      params[:assignment].to_i
+    end
   end
 
   def score
-    params[:score].to_i if params[:score]
+    if params[:score]
+      params[:score].to_i
+    end
   end
 
   def possible
-    params[:possible].to_i if params[:possible]
+    if params[:possible]
+      params[:possible].to_i
+    end
   end
 end
