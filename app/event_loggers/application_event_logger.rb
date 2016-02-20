@@ -1,4 +1,12 @@
 class ApplicationEventLogger < EventLogger::Base
+
+  @queue = :application_event_logger
+  @event_name = "Application"
+
+  def event_type
+    "application"
+  end
+
   # this is the default attribute set for EventLogger classes
   # should be extended in #attrs inside of child classes for better
   # granularity when more specific attributes are needed
