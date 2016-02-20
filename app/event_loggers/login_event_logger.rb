@@ -1,4 +1,4 @@
-class LoginEventLogger < EventLogger::Base
+class LoginEventLogger < ApplicationEventLogger
   include EventLogger::Enqueue
 
   # queue to use for login event jobs

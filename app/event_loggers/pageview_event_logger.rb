@@ -1,4 +1,4 @@
-class PageviewEventLogger < EventLogger::Base
+class PageviewEventLogger < ApplicationEventLogger
   include EventLogger::Enqueue
 
   # queue to use for login event jobs

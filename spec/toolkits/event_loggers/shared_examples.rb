@@ -80,13 +80,7 @@ module Toolkits
             describe "#base_attrs" do
               subject { new_logger.base_attrs }
 
-              let(:expected_base_attrs) {{
-                course_id: event_session[:course].id,
-                user_id: event_session[:user].id,
-                student_id: event_session[:student].id,
-                user_role: "great-role",
-                created_at: time_zone_now
-              }}
+              let(:expected_base_attrs) {{ created_at: time_zone_now }}
 
               let(:time_zone_now) { Date.parse("June 9 1900") }
 
