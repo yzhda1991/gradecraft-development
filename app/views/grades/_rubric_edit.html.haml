@@ -80,18 +80,16 @@
     .summary_feedback
       %textarea(ng-model="grade.feedback" froala="froalaSummaryOptions")
     .clear
-
-      .right
-      .row
-        - if !@assignment.release_necessary?
-          %select(ng-model="grade.status" ng-options="status for status in noReleaseGradeStatuses")
-            %option(value="" disabled) Select grade status for this submission...
-          .form_label Is this grade ready to be reviewed?
-        - else
-          %select(ng-model="grade.status" ng-options="status for status in releaseNecessaryGradeStatuses")
-            %option(value="" disabled) Select grade status for this submission...
-          .align-right.form_label Can the student see this grade?
+    .right
+      - if !@assignment.release_necessary?
+        %select(ng-model="grade.status" ng-options="status for status in noReleaseGradeStatuses")
+          %option(value="" disabled) Select grade status for this submission...
+        .form_label Is this grade ready to be reviewed?
+      - else
+        %select(ng-model="grade.status" ng-options="status for status in releaseNecessaryGradeStatuses")
+          %option(value="" disabled) Select grade status for this submission...
+        .align-right.form_label Can the student see this grade?
 
     .clear
     .right
-      %button#submit-grade(ng-click="submitGrade()") Submit Grade
+      %button#submit-grade(ng-click="submitGrade()" ng-class='{"disabled" : !grade.status}') Submit Grade
