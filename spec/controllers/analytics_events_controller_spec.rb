@@ -24,12 +24,10 @@ describe AnalyticsEventsController, type: :controller do
     })
   end
 
-  before(:each) do
-    allow(logger_class).to receive_messages(new: event_logger)
-  end
-
   describe "POST #predictor_event" do
     subject { post :predictor_event }
+
+    before(:each) { allow(logger_class).to receive_messages(new: event_logger) }
 
     let(:logger_class) { PredictorEventLogger }
 
@@ -65,10 +63,10 @@ describe AnalyticsEventsController, type: :controller do
     subject { post :tab_select_event }
 
     let(:logger_class) { PageviewEventLogger }
+    let(:params) {{ url: "http://some.url", tab: "#great_tab" }}
 
-    before do
-      allow(controller).to receive(:params) {{ url: "http://some.url", tab: "#great_tab" }}
-    end
+    before { allow(controller).to receive(:params) { params } }
+    before(:each) { allow(logger_class).to receive_messages(new: event_logger) }
 
     context "a user is logged in and the request is for html" do
       it "should create a new PredictorEventLogger" do
@@ -101,6 +99,16 @@ describe AnalyticsEventsController, type: :controller do
         subject
         expect(response.status).to eq(200)
       end
+    end
+  end
+
+  describe "#event_session_with_params" do
+    subject { controller.instance_eval { event_session_with_params }}
+    let(:params) {{ url: "http://some.url", tab: "#great_tab" }}
+    before { allow(controller).to receive(:params) { params } }
+
+    it "merges the params with the event session" do
+      expect(subject).to eq(event_session.merge(params))
     end
   end
 end

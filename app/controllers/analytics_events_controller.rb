@@ -20,6 +20,7 @@ class AnalyticsEventsController < ApplicationController
 
   protected
 
+  # event_session method is defined in ApplicationController
   def event_session_with_params
     event_session.merge params
   end
