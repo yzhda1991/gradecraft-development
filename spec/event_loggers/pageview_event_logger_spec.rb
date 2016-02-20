@@ -70,4 +70,36 @@ RSpec.describe PageviewEventLogger, type: :background_job do
     end
   end
 
+  describe "#build_page_from_params" do
+    subject { new_logger.build_page_from_params }
+    before(:each) { allow(new_logger).to receive(:params) { params }}
+
+    context "params exists" do
+      context "params[:url] and params[:tab] don't exists" do
+        let(:params) {{ stuff: "dude" }}
+        it "returns nil" do
+          expect(subject).to be_nil
+        end
+      end
+
+      context "params[:url] and params[:tab] both exist" do
+        let(:params) {{ url: "http://some.url", tab: "#greatness" }}
+        it "builds a string from the params :url and :tab values" do
+          expect(subject).to eq("http://some.url#greatness")
+        end
+
+        it "sets @page to the string built from \#{url}\#{tab}" do
+          subject
+          expect(new_logger.instance_variable_get(:@page)).to eq("http://some.url#greatness")
+        end
+      end
+    end
+
+    context "params does not exist" do
+      let(:params) { nil }
+      it "returns nil" do
+        expect(subject).to be_nil
+      end
+    end
+  end
 end
