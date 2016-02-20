@@ -21,6 +21,16 @@ module EventLogger
       Resque.enqueue(logger_class, event_type, event_attrs)
     end
 
+    def enqueue_with_fallback
+      begin
+        # schedule the event in the background if Resque is available
+        enqueue
+      rescue
+        # otherwise insert directly into Mongo
+        self.class.perform(event_type, event_attrs)
+      end
+    end
+
     def enqueue_in_with_fallback(time_until_start)
       begin
         # schedule the event for later if Resque is available

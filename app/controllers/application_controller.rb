@@ -126,7 +126,7 @@ class ApplicationController < ActionController::Base
   # Tracking course logins
   def record_course_login_event
     if current_user and (request.format.html? or request.format.xml?)
-      LoginEventLogger.new(event_session).enqueue_in_with_fallback(Lull.time_until_next_lull)
+      LoginEventLogger.new(event_session).enqueue_with_fallback
     end
   end
 

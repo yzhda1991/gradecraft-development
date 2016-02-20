@@ -77,6 +77,34 @@ module Toolkits
               end
             end
 
+            describe "#enqueue_with_fallback" do
+              subject { new_logger.enqueue_with_fallback }
+
+              it "should schedule a #{logger_name} event" do
+                subject
+                expect(logger_class).to have_scheduled(logger_name, event_attrs)
+              end
+
+              context "Resque reaches Redis correctly and no error is thrown" do
+                it "doesn't call #{logger_class}#perform directly" do
+                  expect(logger_class).not_to receive(:perform).with(logger_name, event_attrs)
+                  subject
+                end
+              end
+
+              context "Resque can't reach Redis and throws an error" do
+                before do
+                  allow(new_logger).to receive(:enqueue_in).and_raise("FAKE RSPEC ERROR: Could not connect to Redis: getaddrinfo socket error.")
+                end
+
+                it "calls #{logger_class}#perform directly" do
+                  expect(logger_class).to receive(:perform).with(logger_name, event_attrs)
+                  subject
+                end
+              end
+            end
+
+
             describe "#base_attrs" do
               subject { new_logger.base_attrs }
 
