@@ -185,6 +185,18 @@ module Toolkits
         end
       end
 
+      RSpec.shared_examples "#event_attrs that are cached in @event_attrs" do
+        it "caches the #event_attrs" do
+          subject
+          expect(new_logger.base_attrs).not_to receive(:merge)
+          subject
+        end
+
+        it "sets the event attrs to @event_attrs" do
+          subject
+          expect(new_logger.instance_variable_get(:@event_attrs)).to eq(new_logger.event_attrs)
+        end
+      end
     end
   end
 end

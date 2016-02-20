@@ -34,16 +34,7 @@ RSpec.describe PageviewEventLogger, type: :background_job do
       expect(subject).to eq new_logger.base_attrs.merge(page: "some great page")
     end
 
-    it "caches the #event_attrs" do
-      subject
-      expect(new_logger.base_attrs).not_to receive(:merge)
-      subject
-    end
-
-    it "sets the event attrs to @event_attrs" do
-      subject
-      expect(new_logger.instance_variable_get(:@event_attrs)).to eq(new_logger.event_attrs)
-    end
+    it_behaves_like "#event_attrs that are cached in @event_attrs"
   end
 
   describe "#page" do
