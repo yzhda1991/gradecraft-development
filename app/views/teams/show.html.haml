@@ -28,29 +28,28 @@
         %th{:width => "20%"}
     %tbody
       - @students.each do |student|
-        - if student.is_student?(current_course)
-          %tr
-            %td= link_to student.first_name, student_path(student)
-            %td= link_to student.last_name, student_path(student)
-            %td= mail_to student.email, student.email
-            - if current_course.team_roles?
-              %td= student.team_role
-            %td= student.cached_score_for_course(current_course) if student.respond_to?(:grades)
-            %td= student.grade_for_course(current_course).try(:name)
-            - if current_course.has_badges?
-              %td
-                - student.earned_badges_for_course(current_course).each do |badge|
-                  %a
-                    %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
-                  .display_on_hover.hover-style
-                    = badge.try(:name)
-
-              %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
+        %tr
+          %td= link_to student.first_name, student_path(student)
+          %td= link_to student.last_name, student_path(student)
+          %td= mail_to student.email, student.email
+          - if current_course.team_roles?
+            %td= student.team_role
+          %td= points student.cached_score_for_course(current_course) if student.respond_to?(:grades)
+          %td= student.grade_for_course(current_course).try(:name)
+          - if current_course.has_badges?
             %td
-              .right
-                %ul.button-bar
-                  %li= link_to glyph(:dashboard) + "Dashboard", student_path(student), :class => 'button'
-                  %li= link_to glyph(:edit) + "Edit", edit_user_path(student), :class => 'button'
+              - student.earned_badges_for_course(current_course).each do |badge|
+                %a
+                  %img{:src => badge.try(:icon), :alt => badge.try(:name), :width => "20", :title => badge.name }
+                .display_on_hover.hover-style
+                  = badge.try(:name)
+
+            %th{:style => "display: none"}= student.earned_badges_for_course(current_course).count
+          %td
+            .right
+              %ul.button-bar
+                %li= link_to glyph(:dashboard) + "Dashboard", student_path(student), :class => 'button'
+                %li= link_to glyph(:edit) + "Edit", edit_user_path(student), :class => 'button'
 
   %h4.subtitle #{term_for :challenge } Grades
 
