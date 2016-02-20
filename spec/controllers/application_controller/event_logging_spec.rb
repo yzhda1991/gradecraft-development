@@ -1,4 +1,3 @@
-#spec/controllers/application_controller_spec.rb
 require 'rails_spec_helper'
 require 'resque-scheduler'
 require 'resque_spec/scheduler'
@@ -7,8 +6,7 @@ require 'resque_spec/scheduler'
 include Toolkits::Controllers::ApplicationControllerToolkit::Routes
 include Toolkits::Controllers::ApplicationControllerToolkit::SharedExamples
 
-RSpec.describe ApplicationControllerFiltersTest do
-  include Toolkits::Controllers::ApplicationControllerToolkit::Filters
+RSpec.describe ApplicationControllerEventLoggingTest do
   extend Toolkits::EventLoggers::EventSession
 
   # pulls in #event_session attributes from EventLoggers::EventSession
@@ -16,14 +14,12 @@ RSpec.describe ApplicationControllerFiltersTest do
   define_event_session
 
   let(:stub_current_user) do
-    allow(user).to receive_messages(current_course: course)
-    allow(controller).to receive_messages(current_user: user)
   end
 
   before do
-    stub_current_user
-    define_filters_test_routes
-    allow(controller).to receive(:event_session) { event_session }
+    allow(user).to receive_messages(current_course: course)
+    define_event_logging_test_routes # pulled in from Toolkits::Controllers::ApplicationControllerToolkit::Routes
+    allow(controller).to receive_messages(current_user: user, event_session: event_session)
   end
 
   describe "triggering pageview logger events" do
