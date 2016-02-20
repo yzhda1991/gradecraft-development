@@ -19,4 +19,8 @@ class ApplicationEventLogger < EventLogger::Base
       created_at: Time.zone.now
     }
   end
+
+  def params
+    event_session[:params]
+  end
 end

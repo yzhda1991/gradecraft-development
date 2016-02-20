@@ -1,14 +1,4 @@
-# this class can still use EventLogger::Base because it's not calling #event_attrs
-# from an instance of this class in order to build the Resque call.
-# Instead it's being passed into Resque in the traditional format as a class,
-# and doesn't need to internally build #event_attrs for the call
-#
-# This should be refactored at a later time when the implementation of the
-# PredictorEventLogger in the AnalyticsEventsController is updated to use the
-# conventional format of:
-# PredictorEventLogger.new(event_session).enqueue_in_with_fallback(time_until_enqueue)
-
-class PredictorEventLogger < EventLogger::Base
+class PredictorEventLogger < ApplicationEventLogger
   include EventLogger::Enqueue
 
   # queue to use for login event jobs
@@ -18,5 +8,26 @@ class PredictorEventLogger < EventLogger::Base
   # instance methods
   def event_type
     "predictor"
+  end
+
+  def event_attrs
+    @event_attrs ||= base_attrs.merge({
+      assignment_id: assignment_id,
+      score: score,
+      possible: possible
+    })
+  end
+
+  # params method is defined in ApplicationEventLogger
+  def assignment_id
+    params[:assignment].to_i if params[:assignment]
+  end
+
+  def score
+    params[:score].to_i if params[:score]
+  end
+
+  def possible
+    params[:possible].to_i if params[:possible]
   end
 end
