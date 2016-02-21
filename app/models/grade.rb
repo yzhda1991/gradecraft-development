@@ -57,7 +57,7 @@ class Grade < ActiveRecord::Base
   scope :graded, -> { where status: 'Graded' }
   scope :in_progress, -> { where status: 'In Progress' }
   scope :released, -> { joins(:assignment).where("status = 'Released' OR (status = 'Graded' AND NOT assignments.release_necessary)") }
-  scope :no_status, -> { instructor_modified.where(status: '') }
+  scope :no_status, -> { instructor_modified.where(status: ['', nil])}
   scope :graded_or_released, -> { where(status: ['Graded', 'Released'])}
   scope :not_released, -> { joins(:assignment).where(assignments: { release_necessary: true }).where(status: 'Graded') }
   scope :instructor_modified, -> { where instructor_modified: true }
