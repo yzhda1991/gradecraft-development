@@ -47,7 +47,7 @@
                     = link_to group_for_assignment.try(:name), group_path(:id => group_for_assignment)
               - if course.has_teams? && ! assignment.has_groups?
                 %td
-                  = link_to team.name, team
+                  = link_to team.try(:name), team
 
               %td= g.try(:score)
               %td= raw g.feedback
