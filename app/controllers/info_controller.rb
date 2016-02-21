@@ -2,7 +2,7 @@ class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
   before_filter :ensure_staff?, :except => [ :dashboard, :timeline_events ]
-  before_action :find_team, only: [ :awarded_badges, :choices, :resubmissions ]
+  before_action :find_team, only: [ :awarded_badges, :choices, :resubmissions, :ungraded_submissions ]
   before_action :find_students, only: [ :awarded_badges, :choices, :final_grades_for_course  ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
@@ -59,7 +59,15 @@ class InfoController < ApplicationController
 
   def ungraded_submissions
     @title = "Ungraded #{term_for :assignment} Submissions"
-    @ungraded_submissions = current_course.submissions.ungraded.order_by_submitted.includes(:assignment, :student, :submission_files)
+    @ungraded_submissions = current_course.submissions.ungraded
+
+    @teams = current_course.teams
+
+    if @team
+      @ungraded_submissions = @ungraded_submissions.where(student_id: @team.students.pluck(:id))
+    end
+
+    @ungraded_submissions_count = @ungraded_submissions.count
   end
 
   # Displaying the top 10 and bottom 10 students for quick overview
