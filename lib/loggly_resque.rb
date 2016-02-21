@@ -18,6 +18,6 @@ module LogglyResque
   end
 
   def queue_tag_name
-    "#{@queue.to_s.gsub(/_+/,'-')}-jobs-#{Rails.env}"
+    [ @queue.to_s.gsub(/_+/,'-'), LOGGLY_CONFIG['TAG_SUFFIX'] ].join("-")
   end
 end
