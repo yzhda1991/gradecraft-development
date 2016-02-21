@@ -35,9 +35,9 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
   describe "self.perform(attrs={})" do
     let(:attrs) {{ hounds: 5, teeth: 9 }}
     let(:performer) { double(:performer).as_null_object }
-    let(:outcome1) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
-    let(:outcome2) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
-    let(:outcomes) { [ outcome1, outcome2 ] }
+    let(:successful_outcome) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
+    let(:failed_outcome) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
+    let(:outcomes) { [ successful_outcome, failed_outcome ] }
     let(:logger) { double(Logger).as_null_object }
 
     before(:each) do
@@ -51,7 +51,7 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
 
     it "should print a start message" do
       allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
-      expect(ResqueJob::Base).to receive(:puts).with("waffles have started")
+      expect(logger).to receive(:info).with("waffles have started")
     end
 
     it "should build a new performer" do
@@ -62,7 +62,6 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       expect(performer).to receive(:do_the_work)
     end
 
-    # @mz todo: finish these
     describe "logging outcome messages" do
       before(:each) do
         allow(performer).to receive(:outcomes) { outcomes }
@@ -70,13 +69,11 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
         allow(logger).to receive(:info).with("waffles have started")
       end
 
-
-      # @mz TODO: break these out into individual examples
-      it "logs the success for each successful outcome" do
-        expect(logger).to receive(:info).with("SUCCESS: #{outcome1.message}").once
-        expect(logger).to receive(:info).with("RESULT: #{outcome1.result_excerpt}").once
-        expect(logger).to receive(:info).with("FAILURE: #{outcome2.message}").once
-        expect(logger).to receive(:info).with("RESULT: #{outcome2.result_excerpt}").once
+      it "logs the message and a result excerpt for all outcomes" do
+        expect(logger).to receive(:info).with("SUCCESS: #{successful_outcome.message}").once
+        expect(logger).to receive(:info).with("RESULT: #{successful_outcome.result_excerpt}").once
+        expect(logger).to receive(:info).with("FAILURE: #{failed_outcome.message}").once
+        expect(logger).to receive(:info).with("RESULT: #{failed_outcome.result_excerpt}").once
       end
     end
   end
@@ -113,23 +110,6 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     end
   end
 
-  describe "self.instance_variable_names" do
-    before do
-      @class_ivars = { ostriches: 50, badgers: 24 }
-      allow(ResqueJob::Base).to receive_messages(class_level_instance_variables: @class_ivars)
-    end
-
-    it "should return an array of instance variable names" do
-      expect(ResqueJob::Base.instance_variable_names).to include("@ostriches", "@badgers")
-    end
-  end
-
-  describe "self.class_level_instance_variables" do
-    it "should return a hash of ivar-value pairs" do
-      expect(ResqueJob::Base.class_level_instance_variables.class).to eq(Hash)
-    end
-  end
-
   describe "self.start_message" do
     let(:attrs) {{ snakes: 10, steve: true }}
 
@@ -141,13 +121,13 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     end
 
     context "class doens't have a @start_message variable" do
-      it "should return a start message with job_type and queue" do
-        if ResqueJob::Base.instance_variable_defined?(:@start_message)
-          ResqueJob::Base.remove_instance_variable(:@start_message)
-        end
-
+      before do
+        ResqueJob::Base.instance_variable_set(:@start_message, nil)
         ResqueJob::Base.instance_variable_set(:@queue, :snake)
         allow(ResqueJob::Base).to receive_messages(job_type: "terrible job")
+      end
+
+      it "should return a start message with job_type and queue" do
         expected_message = "Starting terrible job in queue 'snake' with attributes {:snakes=>10, :steve=>true}."
         expect(ResqueJob::Base.start_message(attrs)).to eq(expected_message)
       end
@@ -177,6 +157,28 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
           expect(WeirdJob.object_class).to eq(WeirdJob)
         end
       end
+    end
+  end
+
+  describe "self.instance_variable_names" do
+    before do
+      allow(described_class).to receive(:inheritable_attributes) { [:ostriches, :badgers] }
+    end
+
+    it "should return an array of instance variable names" do
+      expect(described_class.instance_variable_names).to include("@ostriches", "@badgers")
+    end
+  end
+
+  describe "self.inheritable_attributes" do
+    let(:expected_attrs) {[
+      :queue,
+      :performer_class,
+      :backoff_strategy
+    ]}
+
+    it "should have a list of inheritable attributes" do
+      expect(described_class.inheritable_attributes).to eq(expected_attrs)
     end
   end
 end

@@ -2,6 +2,7 @@ module EventLogger
   class Base
     extend Resque::Plugins::Retry
     extend Resque::Plugins::ExponentialBackoff
+    extend LogglyResque # pulls in logger class method for logging to Loggly
 
     # class-level instance variables for Resque interaction
     @queue = :event_logger
@@ -44,23 +45,6 @@ module EventLogger
 
     def self.analytics_attrs(event_type, data={})
       { event_type: event_type, created_at: Time.zone.now }.merge data
-    end
-
-    def self.logger
-      @logger ||= Logglier.new(self.logger_url, format: :json)
-    end
-
-    # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
-    def self.logger_url
-      [ self.logger_base_url, ENV['LOGGLY_TOKEN'], "tag", self.queue_tag_name ].join("/")
-    end
-
-    def self.logger_base_url
-      "https://logs-01.loggly.com/inputs"
-    end
-
-    def self.queue_tag_name
-      "#{@queue.to_s.gsub(/_+/,'-')}-jobs-#{Rails.env}"
     end
 
     # allow sub-classes to inherit class-level instance variables
