@@ -8,6 +8,7 @@ module ResqueJob
     extend Resque::Plugins::Retry
     extend Resque::Plugins::ExponentialBackoff
     extend LogglyResque # pulls in logger class method for logging to Loggly
+    extend InheritableIvars # pass designated ivars from #inheritable_ivars down to descendent subclasses
 
     # defaults
     @queue = :main # put all jobs in the 'main' queue
@@ -72,21 +73,7 @@ module ResqueJob
       self.new.class.name
     end
 
-    ## Inheritance Behaviors
-
-    # allow sub-classes to inherit class-level instance variables
-    def self.inherited(subclass)
-      self.instance_variable_names.each do |ivar|
-        subclass.instance_variable_set(ivar, instance_variable_get(ivar))
-      end
-    end
-
-    # get a list of instance variable names for inheritance
-    def self.instance_variable_names
-      self.inheritable_attributes.collect {|attr_name| "@#{attr_name}" }
-    end
-
-    def self.inheritable_attributes
+    def self.inheritable_ivars
       [
         :queue,
         :performer_class,
