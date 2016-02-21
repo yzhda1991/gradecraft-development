@@ -12,56 +12,7 @@
         = link_to glyph(:check) + "Grade", assignment, :class => "button"
 
     = form_tag edit_status_grades_assignment_path(assignment), method: :get do
-      %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "unreleasedTableCaption"}
-        %thead
-          %tr
-            %th{:scope => "col", :width => "8%"} First Name
-            %th{:scope => "col", :width => "8%"} Last Name
-            - if assignment.has_groups?
-              %th{:scope => "col"}= "#{term_for :groups}"
-            - elsif course.has_teams?
-              %th{:scope => "col", :width => "15%"}= "#{term_for :team}"
-            %th{:scope => "col", "data-dynatable-column" => "score", "data-dynatable-sorts" => "numericScore", :width => "8%"} Score
-            %th{:scope => "col"} Feedback
-            %th{:scope => "col", "data-dynatable-no-sort" => "true", :style => "min-width: 200px"}
-              %span.sr-only Actions
-            %th{"data-dynatable-no-sort" => "true", :width => "140px" }
-              %button.button.select-all
-                %i.hide-for-small.fa.fa-check-square.fa-fw
-                = "Check"
-              %button.button.select-none
-                %i.hide-for-small.fa.fa-square.fa-fw
-                = "Uncheck"
-        %tbody
-          - grades.each do |g|
-            - graded_assignment = g.assignment
-            - student = g.student
-            - team = student.team_for_course(course)
-            %tr
-              %td= link_to student.first_name, student_path(student)
-              %td= link_to student.last_name, student_path(student)
-              - if graded_assignment.has_groups?
-                %td
-                  - group_for_assignment = student.group_for_assignment(graded_assignment)
-                  - if group_for_assignment. present?
-                    = link_to group_for_assignment.try(:name), group_path(:id => group_for_assignment)
-              - if course.has_teams? && ! assignment.has_groups?
-                %td
-                  = link_to team.try(:name), team
-
-              %td= g.try(:score)
-              %td= raw g.feedback
-              %td
-                .right
-                  %ul.button-bar
-                    %li= link_to glyph(:eye) + "See Grade", assignment_grade_path(g.assignment, :student_id => g.student_id), :class => "button"
-                    %li= link_to glyph(:edit) + "Edit", edit_assignment_grade_path(:assignment_id => assignment.id, :student_id => student.try(:id)), :class => "button"
-              %td
-                .center
-                  %label
-                    = check_box_tag "grade_ids[]", g.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-unreleased-grades-command']" }
-                    .sr-only
-                      Check/Uncheck #{student.first_name} #{student.last_name}
+      = render "grades_management_table", { assignment: assignment, grades: grades, course: course }
 
       .submit-buttons
         .right
