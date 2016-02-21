@@ -25,7 +25,6 @@ Vagrant.configure(2) do |config|
 
         # Update repositories and upgrade OS
         apt-get update -y
-        apt-get dist-upgrade -y
 
         # Install dependancies
         apt-get --no-install-recommends install --yes \
@@ -36,7 +35,7 @@ Vagrant.configure(2) do |config|
             build-essential libreadline-dev \
             libpq-dev libkrb5-dev \
             libxslt-dev libxml2-dev \
-            ruby-dev ruby-railties-4.0
+            ruby-dev
 
         RUBY_VERSION=`ruby --version | cut -c6-10`
         if [ "x${RUBY_VERSION}" != "x2.2.2" ]; then
