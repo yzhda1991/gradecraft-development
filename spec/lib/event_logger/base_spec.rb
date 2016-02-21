@@ -100,7 +100,7 @@ RSpec.describe EventLogger::Base, type: :background_job do
   describe "subclass inheritance" do
     it "should pass class-level instance variables to subclasses" do
       described_class.instance_variable_set(:@wallaby_necks, 5)
-      allow(described_class).to receive(:instance_variable_names).and_return ["@wallaby_necks"]
+      allow(described_class).to receive(:inheritable_instance_variable_names).and_return ["@wallaby_necks"]
       class Wallabydescribed_class < described_class; end
       expect(Wallabydescribed_class.instance_variable_get(:@wallaby_necks)).to eq(5)
     end
@@ -111,17 +111,17 @@ RSpec.describe EventLogger::Base, type: :background_job do
     end
   end
 
-  describe "self.instance_variable_names" do
+  describe "self.inheritable_instance_variable_names" do
     before do
-      allow(described_class).to receive(:inheritable_attributes) { [:ostriches, :badgers] }
+      allow(described_class).to receive(:inheritable_ivars) { [:ostriches, :badgers] }
     end
 
     it "should return an array of instance variable names" do
-      expect(described_class.instance_variable_names).to include("@ostriches", "@badgers")
+      expect(described_class.inheritable_instance_variable_names).to include("@ostriches", "@badgers")
     end
   end
 
-  describe "self.inheritable_attributes" do
+  describe "self.inheritable_ivars" do
     let(:expected_attrs) {[
       :queue,
       :event_name,
@@ -133,7 +133,7 @@ RSpec.describe EventLogger::Base, type: :background_job do
     ]}
 
     it "should have a list of inheritable attributes" do
-      expect(described_class.inheritable_attributes).to eq(expected_attrs)
+      expect(described_class.inheritable_ivars).to eq(expected_attrs)
     end
   end
 end

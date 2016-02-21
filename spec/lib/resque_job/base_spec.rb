@@ -92,18 +92,6 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
   end
 
   describe "subclass inheritance" do
-    it "should pass class-level instance variables to subclasses" do
-      ResqueJob::Base.instance_variable_set(:@wallaby_necks, 5)
-      allow(ResqueJob::Base).to receive(:instance_variable_names).and_return ["@wallaby_necks"]
-      class WallabyResqueJob < ResqueJob::Base; end
-      expect(WallabyResqueJob.instance_variable_get(:@wallaby_necks)).to eq(5)
-    end
-
-    it "should pass some actual values to subclasses" do
-      class PseudoResqueJob < ResqueJob::Base; end
-      expect(PseudoResqueJob.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
-    end
-
     it "inherits the inclusion of Resque::Plugins::ExponentialBackoff" do
       class PseudoResqueJob < ResqueJob::Base; end
       expect(PseudoResqueJob.retry_delay_multiplicand_min).to eq(1.0) # default from resque-retry
@@ -160,17 +148,31 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     end
   end
 
-  describe "self.instance_variable_names" do
-    before do
-      allow(described_class).to receive(:inheritable_attributes) { [:ostriches, :badgers] }
+  describe "ivar inheritance through subclasses" do
+    it "should pass class-level instance variables to subclasses" do
+      ResqueJob::Base.instance_variable_set(:@wallaby_necks, 5)
+      allow(ResqueJob::Base).to receive(:inheritable_instance_variable_names).and_return ["@wallaby_necks"]
+      class WallabyResqueJob < ResqueJob::Base; end
+      expect(WallabyResqueJob.instance_variable_get(:@wallaby_necks)).to eq(5)
     end
 
-    it "should return an array of instance variable names" do
-      expect(described_class.instance_variable_names).to include("@ostriches", "@badgers")
+    it "should pass some actual values to subclasses" do
+      class PseudoResqueJob < ResqueJob::Base; end
+      expect(PseudoResqueJob.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
     end
   end
 
-  describe "self.inheritable_attributes" do
+  describe "self.inheritable_instance_variable_names" do
+    before do
+      allow(described_class).to receive(:inheritable_ivars) { [:ostriches, :badgers] }
+    end
+
+    it "should return an array of instance variable names" do
+      expect(described_class.inheritable_instance_variable_names).to include("@ostriches", "@badgers")
+    end
+  end
+
+  describe "self.inheritable_ivars" do
     let(:expected_attrs) {[
       :queue,
       :performer_class,
@@ -178,7 +180,7 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     ]}
 
     it "should have a list of inheritable attributes" do
-      expect(described_class.inheritable_attributes).to eq(expected_attrs)
+      expect(described_class.inheritable_ivars).to eq(expected_attrs)
     end
   end
 end

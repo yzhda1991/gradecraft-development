@@ -6,13 +6,13 @@
 module InheritableIvars
   # allow sub-classes to inherit class-level instance variables
   def inherited(subclass)
-    instance_variable_names.each do |ivar|
+    inheritable_instance_variable_names.each do |ivar|
       subclass.instance_variable_set(ivar, instance_variable_get(ivar))
     end
   end
 
   # get a list of instance variable names for inheritance
-  def instance_variable_names
-    inheritable_attributes.collect {|attr_name| "@#{attr_name}" }
+  def inheritable_instance_variable_names
+    inheritable_ivars.collect {|attr_name| "@#{attr_name}" }
   end
 end
