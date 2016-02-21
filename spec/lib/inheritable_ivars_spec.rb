@@ -5,9 +5,7 @@ require_relative '../toolkits/lib/inheritable_ivars/shared_examples'
 describe InheritableIvars, type: :library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
 
-  # InheritableIvars is extended here
-  # pulled in from /spec/support/test_classes/inheritable_ivars
-  let(:superclass) { IvarInheritanceSuperclass }
-
+  # InheritableIvars is extended in the target class IvarInheritanceSuperclass
+  # which is defined in /spec/support/test_classes/inheritable_ivars
   it_behaves_like "some @ivars are inheritable by subclasses", IvarInheritanceSuperclass
 end

@@ -7,7 +7,7 @@ module Toolkits
             subject { target_class.logger }
 
             let(:logger_url) { "http://some.url" }
-            let(:logglier_instance) { double(Logglier) }
+            let(:logglier_instance) { double(Logglier).as_null_object }
 
             before do
               allow(target_class).to receive(:logger_url) { logger_url }

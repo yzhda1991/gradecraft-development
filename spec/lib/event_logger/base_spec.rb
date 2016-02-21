@@ -24,9 +24,12 @@ RSpec.describe EventLogger::Base, type: :vendor_library do
   describe "self.perform" do
     subject { described_class.perform(event_type, some_data) }
 
+    let(:logger) { double(Logger).as_null_object }
+
     before do
       allow(Time.zone).to receive(:now) { time_now }
       allow(described_class).to receive(:notify_event_outcome).and_return "another message"
+      allow(described_class).to receive(:logger) { logger }
     end
 
     it "should send a start message an event outcome message to the logger" do
