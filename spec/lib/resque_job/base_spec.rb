@@ -7,6 +7,11 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
 
   let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
+  let(:successful_outcome) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
+  let(:failed_outcome) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
+  let(:outcomes) { [ successful_outcome, failed_outcome ] }
+  let(:logger) { double(Logger).as_null_object }
+
   describe "extensions" do
     it "should use resque-retry" do
       expect(ResqueJob::Base).to respond_to(:retry_delay)
@@ -34,20 +39,17 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     it "should have a default @backoff_strategy for resque-retry" do
       expect(ResqueJob::Base.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
     end
-
   end
 
   describe "self.perform(attrs={})" do
     let(:attrs) {{ hounds: 5, teeth: 9 }}
     let(:performer) { double(:performer).as_null_object }
-    let(:successful_outcome) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
-    let(:failed_outcome) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
-    let(:outcomes) { [ successful_outcome, failed_outcome ] }
-    let(:logger) { double(Logger).as_null_object }
 
     before(:each) do
       allow(ResqueJob::Performer).to receive_messages(new: performer)
       allow(ResqueJob::Base).to receive(:logger) { logger }
+      allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
+      allow(performer).to receive(:outcomes) { outcomes }
     end
 
     after(:each) do
@@ -67,19 +69,21 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       expect(performer).to receive(:do_the_work)
     end
 
-    describe "logging outcome messages" do
-      before(:each) do
-        allow(performer).to receive(:outcomes) { outcomes }
-        allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
-        allow(logger).to receive(:info).with("waffles have started")
-      end
+    it "should log the outcome messages" do
+      expect(ResqueJob::Base).to receive(:log_outcomes).with(performer.outcomes)
+    end
+  end
 
-      it "logs the message and a result excerpt for all outcomes" do
-        expect(logger).to receive(:info).with("SUCCESS: #{successful_outcome.message}").once
-        expect(logger).to receive(:info).with("RESULT: #{successful_outcome.result_excerpt}").once
-        expect(logger).to receive(:info).with("FAILURE: #{failed_outcome.message}").once
-        expect(logger).to receive(:info).with("RESULT: #{failed_outcome.result_excerpt}").once
-      end
+  describe "self#log_outcomes" do
+    subject { ResqueJob::Base.log_outcomes(outcomes) }
+    before { allow(ResqueJob::Base).to receive(:logger) { logger }}
+
+    it "logs the message and a result excerpt for all outcomes" do
+      expect(logger).to receive(:info).with("SUCCESS: #{successful_outcome.message}").once
+      expect(logger).to receive(:info).with("RESULT: #{successful_outcome.result_excerpt}").once
+      expect(logger).to receive(:info).with("FAILURE: #{failed_outcome.message}").once
+      expect(logger).to receive(:info).with("RESULT: #{failed_outcome.result_excerpt}").once
+      subject
     end
   end
 
