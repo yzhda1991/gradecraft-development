@@ -1,6 +1,11 @@
-require "rails_spec_helper"
+require_relative "../../../lib/resque_job/base"
+require_relative "../../../lib/resque_job/performer"
+require_relative "../../../lib/inheritable_ivars"
+require_relative "../../toolkits/lib/inheritable_ivars/shared_examples"
 
 RSpec.describe ResqueJob::Base, type: :vendor_library do
+  include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
+
   let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
   describe "extensions" do
     it "should use resque-retry" do
@@ -148,29 +153,11 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     end
   end
 
-  describe "ivar inheritance through subclasses" do
-    it "should pass class-level instance variables to subclasses" do
-      ResqueJob::Base.instance_variable_set(:@wallaby_necks, 5)
-      allow(ResqueJob::Base).to receive(:inheritable_instance_variable_names).and_return ["@wallaby_necks"]
-      class WallabyResqueJob < ResqueJob::Base; end
-      expect(WallabyResqueJob.instance_variable_get(:@wallaby_necks)).to eq(5)
-    end
-
-    it "should pass some actual values to subclasses" do
-      class PseudoResqueJob < ResqueJob::Base; end
-      expect(PseudoResqueJob.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
-    end
-  end
-
-  describe "self.inheritable_instance_variable_names" do
-    before do
-      allow(described_class).to receive(:inheritable_ivars) { [:ostriches, :badgers] }
-    end
-
-    it "should return an array of instance variable names" do
-      expect(described_class.inheritable_instance_variable_names).to include("@ostriches", "@badgers")
-    end
-  end
+  # test whether @ivars are properly inheritable after extending the
+  # InheritableIvars module, pulled in from shared examples in the
+  # InheritableIvarsToolit. Defined in:
+  # /spec/toolkits/lib/inheritable_ivars/shared_examples
+  it_behaves_like "some @ivars are inheritable by subclasses", ResqueJob::Base
 
   describe "self.inheritable_ivars" do
     let(:expected_attrs) {[
