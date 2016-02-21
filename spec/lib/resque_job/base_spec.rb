@@ -1,10 +1,14 @@
+require "logglier"
 require_relative "../../../lib/resque_job/base"
 require_relative "../../../lib/resque_job/performer"
 require_relative "../../../lib/inheritable_ivars"
+require_relative "../../../lib/loggly_resque"
 require_relative "../../toolkits/lib/inheritable_ivars/shared_examples"
+require_relative "../../toolkits/lib/loggly_resque/shared_examples"
 
 RSpec.describe ResqueJob::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
+  include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
 
   let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
   let(:successful_outcome) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
@@ -174,4 +178,9 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       expect(described_class.inheritable_ivars).to eq(expected_attrs)
     end
   end
+
+  describe "the logger implementation" do
+    it_behaves_like "the #logger is implemented through Logglier with LogglyResque", described_class
+  end
+
 end

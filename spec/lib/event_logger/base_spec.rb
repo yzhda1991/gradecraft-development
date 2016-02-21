@@ -1,10 +1,14 @@
+require 'logglier'
 require_relative '../../../lib/event_logger/base'
 require_relative '../../../lib/analytics/event'
 require_relative '../../../lib/inheritable_ivars'
+require_relative '../../../lib/loggly_resque'
 require_relative '../../toolkits/lib/inheritable_ivars/shared_examples'
+require_relative '../../toolkits/lib/loggly_resque/shared_examples'
 
 RSpec.describe EventLogger::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
+  include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
 
   let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
   let(:event_type) { "waffle" }
@@ -12,6 +16,10 @@ RSpec.describe EventLogger::Base, type: :vendor_library do
   let(:time_now) { Time.parse "Jun 20 1942" }
   let(:mongoid_event) { double(:mongoid_event) }
   let(:analytics_attrs) {{ event_type: event_type, created_at: time_now }.merge(some_data) }
+
+  describe "the logger implementation" do
+    it_behaves_like "the #logger is implemented through Logglier with LogglyResque", described_class
+  end
 
   describe "self.perform" do
     subject { described_class.perform(event_type, some_data) }

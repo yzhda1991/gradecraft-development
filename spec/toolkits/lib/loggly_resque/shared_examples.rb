@@ -11,9 +11,12 @@ module Toolkits
 
             before do
               allow(target_class).to receive(:logger_url) { logger_url }
+            end
+
+            before(:each) do
+              target_class.instance_variable_set(:@logger, nil)
               allow(Logglier).to receive(:new) { logglier_instance }
             end
-            before(:each) { target_class.instance_variable_set(:@logger, nil) }
 
             it "builds a new logger with the logger_url and format" do
               expect(Logglier).to receive(:new).with(logger_url, {format: :json})
