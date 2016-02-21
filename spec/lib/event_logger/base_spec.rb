@@ -1,9 +1,12 @@
-require 'active_record_spec_helper'
+require_relative '../../../lib/event_logger/base'
+require_relative '../../../lib/analytics/event'
+require_relative '../../../lib/inheritable_ivars'
+require_relative '../../toolkits/lib/inheritable_ivars/shared_examples'
 
-# PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
-RSpec.describe EventLogger::Base, type: :background_job do
+RSpec.describe EventLogger::Base, type: :vendor_library do
+  include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
+
   let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
-
   let(:event_type) { "waffle" }
   let(:some_data) {{ some: "new weird data" }}
   let(:time_now) { Time.parse "Jun 20 1942" }
@@ -97,29 +100,11 @@ RSpec.describe EventLogger::Base, type: :background_job do
     end
   end
 
-  describe "subclass inheritance" do
-    it "should pass class-level instance variables to subclasses" do
-      described_class.instance_variable_set(:@wallaby_necks, 5)
-      allow(described_class).to receive(:inheritable_instance_variable_names).and_return ["@wallaby_necks"]
-      class Wallabydescribed_class < described_class; end
-      expect(Wallabydescribed_class.instance_variable_get(:@wallaby_necks)).to eq(5)
-    end
-
-    it "should pass some actual values to subclasses" do
-      class Pseudodescribed_class < described_class; end
-      expect(Pseudodescribed_class.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
-    end
-  end
-
-  describe "self.inheritable_instance_variable_names" do
-    before do
-      allow(described_class).to receive(:inheritable_ivars) { [:ostriches, :badgers] }
-    end
-
-    it "should return an array of instance variable names" do
-      expect(described_class.inheritable_instance_variable_names).to include("@ostriches", "@badgers")
-    end
-  end
+  # test whether @ivars are properly inheritable after extending the
+  # InheritableIvars module, pulled in from shared examples in the
+  # InheritableIvarsToolit. Defined in:
+  # /spec/toolkits/lib/inheritable_ivars/shared_examples
+  it_behaves_like "some @ivars are inheritable by subclasses", EventLogger::Base
 
   describe "self.inheritable_ivars" do
     let(:expected_attrs) {[
