@@ -6,7 +6,7 @@ require_relative '../../../lib/loggly_resque'
 require_relative '../../toolkits/lib/inheritable_ivars/shared_examples'
 require_relative '../../toolkits/lib/loggly_resque/shared_examples'
 
-RSpec.describe EventLogger::Base, type: :vendor_library do
+describe EventLogger::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
   include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
 

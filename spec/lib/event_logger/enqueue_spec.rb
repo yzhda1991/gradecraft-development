@@ -6,7 +6,7 @@ require_relative '../../toolkits/event_loggers/shared_examples'
 require_relative '../../toolkits/event_loggers/event_session'
 
 # TestEventLogger is required from /spec/support/test_classes/event_logger/test_event_logger
-RSpec.describe EventLogger::Enqueue, type: :background_job do
+describe EventLogger::Enqueue, type: :vendor_library do
   include InQueueHelper
   include Toolkits::EventLoggers::SharedExamples
   extend Toolkits::EventLoggers::EventSession

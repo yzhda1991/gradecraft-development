@@ -8,7 +8,6 @@ module Toolkits
             let(:subclass_constant) { subclass_name.constantize }
 
             before do
-              puts subclass_name
               allow(target_class).to receive(:inheritable_ivars) { [:wallaby_necks] }
               target_class.instance_variable_set(:@wallaby_necks, 5)
               # define a temporary subclass that inherits from target_class

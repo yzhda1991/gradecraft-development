@@ -4,7 +4,7 @@ require_relative '../toolkits/lib/lull_toolkit'
 # pull in various time helper methods
 include Toolkits::Lib::LullToolkit
 
-RSpec.describe Lull do
+describe Lull, type: :vendor_library do
 
   # next_lull_start - Time.zone.now
   describe "#time_until_next_lull" do

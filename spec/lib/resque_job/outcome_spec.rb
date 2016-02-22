@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-RSpec.describe ResqueJob::Outcome,  type: :vendor_library do
+describe ResqueJob::Outcome,  type: :vendor_library do
   describe "initialize" do
     it "should set the result" do
       outcome = ResqueJob::Outcome.new true

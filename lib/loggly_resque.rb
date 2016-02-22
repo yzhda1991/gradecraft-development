@@ -7,8 +7,9 @@ module LogglyResque
     @logger ||= Logglier.new(logger_url, format: :json)
   end
 
-  # these all need to be spec'd out
+  # this produces a url for interacting with the loggly api in the format of:
   # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
+  #
   def logger_url
     [ logger_base_url, ENV['LOGGLY_TOKEN'], "tag", queue_tag_name ].join("/")
   end
