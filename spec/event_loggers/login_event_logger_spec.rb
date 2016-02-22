@@ -7,7 +7,7 @@ require_relative '../toolkits/event_loggers/event_session'
 require_relative '../toolkits/event_loggers/application_event_logger_toolkit'
 
 # LoginEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
-RSpec.describe LoginEventLogger, type: :background_job do
+RSpec.describe LoginEventLogger, type: :event_logger do
   include InQueueHelper # get help from ResqueSpec
   include Toolkits::EventLoggers::SharedExamples
   include Toolkits::EventLoggers::Attributes

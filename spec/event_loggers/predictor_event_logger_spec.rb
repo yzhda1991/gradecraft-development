@@ -6,7 +6,7 @@ require_relative '../toolkits/event_loggers/attributes'
 require_relative '../toolkits/event_loggers/event_session'
 
 # PredictorEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
-RSpec.describe PredictorEventLogger, type: :background_job do
+RSpec.describe PredictorEventLogger, type: :event_logger do
   include InQueueHelper # get help from ResqueSpec
   include Toolkits::EventLoggers::SharedExamples
   include Toolkits::EventLoggers::Attributes
