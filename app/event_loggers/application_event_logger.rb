@@ -4,7 +4,7 @@ class ApplicationEventLogger < EventLogger::Base
 
   attr_reader :event_session
 
-  # Used by enqueueing methods in EventLogger::Enqueue
+  # Used by enqueuing methods in EventLogger::Enqueue
   def event_type
     "application"
   end

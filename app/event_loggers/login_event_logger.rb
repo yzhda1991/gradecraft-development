@@ -8,7 +8,7 @@ class LoginEventLogger < ApplicationEventLogger # pull in EventLogger::Enqueue f
 
   # instance methods, for use as a LoginEventLogger instance
 
-  # Used by enqueueing methods in EventLogger::Enqueue
+  # Used by enqueuing methods in EventLogger::Enqueue
   def event_type
     "login"
   end

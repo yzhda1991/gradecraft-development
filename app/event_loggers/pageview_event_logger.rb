@@ -9,7 +9,7 @@ class PageviewEventLogger < ApplicationEventLogger
 
   # instance methods, for use as a LoginEventLogger instance
 
-  # used by enqueueing methods in EventLogger::Enqueue
+  # used by enqueuing methods in EventLogger::Enqueue
   def event_type
     "pageview"
   end
