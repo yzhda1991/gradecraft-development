@@ -603,6 +603,19 @@ describe Assignment do
     end
   end
 
+  describe "#grade_with_rubric?" do
+    it "is true if all required conditions are met" do
+      subject.create_rubric
+      allow(subject.rubric).to receive(:designed?).and_return true
+      expect(subject.grade_with_rubric?).to be_truthy
+    end
+
+    it "is false if the rubric is not designed" do
+      subject.create_rubric
+      expect(subject.grade_with_rubric?).to be_falsey
+    end
+  end
+
   describe "#high_score" do
     before { subject.save }
 

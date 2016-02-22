@@ -11,4 +11,7 @@ json.data do
   end
 end
 
+json.meta do
+  json.grade_status_options @grade_status_options
+end
 

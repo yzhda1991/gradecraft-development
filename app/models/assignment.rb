@@ -99,6 +99,10 @@ class Assignment < ActiveRecord::Base
     !! rubric
   end
 
+  def grade_with_rubric?
+    use_rubric && rubric.present? && rubric.designed?
+  end
+
   def fetch_or_create_rubric
     return rubric if rubric
     Rubric.create assignment_id: self[:id]

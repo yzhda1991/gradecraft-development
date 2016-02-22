@@ -1,7 +1,6 @@
 require "rails_spec_helper"
 
 describe API::GradesController do
-
   let(:world) { World.create.with(:course, :student, :assignment, :grade) }
   let(:professor) { create(:professor_course_membership, course: world.course).user }
 
@@ -14,16 +13,56 @@ describe API::GradesController do
         expect(assigns(:grade).id).to eq(world.grade.id)
         expect(response).to render_template(:show)
       end
+
+      it "assigns all options when release necessary" do
+        allow_any_instance_of(Assignment).to receive(:release_necessary?).and_return(true)
+        get :show, id: world.assignment.id, student_id: world.student.id, format: :json
+        expect(assigns(:grade_status_options)).to eq(["In Progress", "Graded", "Released"])
+      end
+
+      it "assigns limited options when release not necessary" do
+        get :show, id: world.assignment.id, student_id: world.student.id, format: :json
+        expect(assigns(:grade_status_options)).to eq(["In Progress", "Graded"])
+      end
+    end
+
+    describe "GET group_index" do
+      before(:each) do
+        world.create_group
+        world.assignment.groups << world.group
+        world.group.students.each do |student|
+          world.create_grade(assignment_id: world.assignment.id, student_id: student.id)
+        end
+      end
+
+      it "returns 400 error code with individual assignment" do
+        allow_any_instance_of(Assignment).to receive(:grade_scope).and_return("Individual")
+        get :group_index, id: world.assignment.id, group_id: world.group.id, format: :json
+        expect(response.status).to be(400)
+      end
+
+      it "returns criterion_grades and student ids for a group" do
+        allow_any_instance_of(Assignment).to receive(:grade_scope).and_return("Group")
+        get :group_index, id: world.assignment.id, group_id: world.group.id, format: :json
+        expect(assigns(:student_ids)).to eq(world.group.students.pluck(:id))
+        expect(assigns(:grades).length).to eq(world.group.students.length)
+        expect(response).to render_template(:group_index)
+      end
     end
   end
 
   context "as student" do
-
     before(:each) { login_user(world.student) }
 
     describe "GET show" do
       it "is a protected route" do
         expect(get :show, id: world.assignment.id, student_id: world.student.id, format: :json).to redirect_to(:root)
+      end
+    end
+
+    describe "GET group_index" do
+      it "is a protected route" do
+        expect(get :group_index, id: world.assignment.id, group_id: 1, format: :json).to redirect_to(:root)
       end
     end
   end

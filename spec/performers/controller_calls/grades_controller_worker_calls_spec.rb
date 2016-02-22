@@ -7,7 +7,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
   include InQueueHelper
   let(:course) { create(:course_accepting_groups) }
   let(:assignment) { create(:assignment, course_id: course.id) }
-  let(:job_attributes) {{grade_id: grade.id}} # for GradeUpdaterJob calls
+  let(:job_attributes) {{ grade_id: grade.id }} # for GradeUpdaterJob calls
   let(:grade_attributes) {{ course_id: course.id, student_id: student.id, assignment_id: assignment.id }}
   let(:grade) { create(:grade, grade_attributes) }
   let(:cache_everything) { course; assignment; grade; student; professor }
@@ -36,7 +36,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
     before(:each) { enroll_and_login_professor }
 
     describe "#update" do
-      let(:request_attrs) {{ assignment_id: assignment.id, grade: {raw_score: 50} }}
+      let(:request_attrs) {{ assignment_id: assignment.id, grade: { raw_score: 50 } }}
       subject { put :update, request_attrs }
 
       before do
@@ -76,7 +76,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       let(:grade2) { create(:grade, grade_attributes.merge(student_id: student2.id)) }
       let(:grades) { [grade, grade2] }
       let(:grade_ids) { [grade.id, grade2.id] }
-      let(:job_attributes) {{grade_ids: grade_ids}} # for GradeUpdaterJob calls
+      let(:job_attributes) {{ grade_ids: grade_ids }} # for GradeUpdaterJob calls
 
       # duplicate this
 
@@ -100,7 +100,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
         context "grade attributes fail to update" do
           # pass an invalid assignment name to fail the update
           # todo: FIX this, I have no idea why it won't stub
-          let(:request_attrs) {{ id: assignment.id, assignment: {name: nil}}}
+          let(:request_attrs) {{ id: assignment.id, assignment: { name: nil }}}
           before { allow(assignment).to receive_messages(update_attributes: false) }
 
           it_behaves_like "a failed resque job", MultipleGradeUpdaterJob
@@ -146,8 +146,6 @@ RSpec.describe GradesController, type: :controller, background_job: true do
         context "params[:file] is present" do
           let(:request_attrs) {{ id: assignment.id, grade_ids: grade_ids }}
           before { allow(controller).to receive_messages(update_status_grade_ids: grade_ids) }
-          # skip: why are we testing with params[:file]? This should only update status
-          #it_behaves_like "a successful resque job", MultipleGradeUpdaterJob
         end
       end
 

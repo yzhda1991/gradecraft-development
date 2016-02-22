@@ -3,14 +3,17 @@ require "active_record_spec_helper"
 require "./app/services/creates_criterion_grade/builds_earned_level_badges"
 
 describe Services::Actions::BuildsEarnedLevelBadges do
-
-  let(:raw_params) { RubricGradePUT.new.params }
-  let(:context) {{
-      raw_params: raw_params,
+  let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge) }
+  let(:raw_params) { RubricGradePUT.new(world).params }
+  let(:context) do
+    { raw_params: raw_params,
       student_visible_status: true,
-      student: User.find(raw_params["student_id"]),
-      assignment: Assignment.find(raw_params["assignment_id"])
-    }}
+      student: world.student,
+      assignment: world.assignment
+    }
+  end
+  let(:badge_id) { context[:raw_params]["level_badges"][0]["badge_id"] }
+  let(:level_id) { context[:raw_params]["level_badges"][0]["level_id"] }
 
   it "expects attributes to assign to criterion grades" do
     context.delete(:raw_params)
@@ -45,5 +48,12 @@ describe Services::Actions::BuildsEarnedLevelBadges do
     result = described_class.execute context
     expect(result[:earned_level_badges].length).to \
       eq(raw_params["level_badges"].length)
+  end
+
+  # See note above #destroy_exisiting_earned_badges
+  # This should not be the expected behavior
+  it "clears out old badges" do
+    EarnedBadge.create(badge_id: badge_id, student_id: world.student.id, level_id: level_id)
+    expect { described_class.execute context }.to change { EarnedBadge.count }.by(-1)
   end
 end

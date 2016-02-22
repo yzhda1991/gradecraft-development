@@ -4,8 +4,8 @@ require "rails_spec_helper"
 describe "api/badges/index" do
   before(:all) do
     @world = World.create
-                  .create_course({ badge_term: "baj" })
-                  .create_badge({ description: "..." })
+                  .create_course(badge_term: "baj")
+                  .create_badge(description: "...")
     @badge = @world.badge
     @badges = [@badge]
   end
@@ -42,11 +42,22 @@ describe "api/badges/index" do
 
   it "includes unlock keys when badge is an unlock condition" do
     assignment = create(:assignment)
+<<<<<<< HEAD
     unlock_key = create(:unlock_condition, unlockable: assignment, unlockable_type: "Assignment", condition: @badge, condition_type: "Badge")
     @badge.reload
     render
     json = JSON.parse(response.body)
     expect(json["data"][0]["attributes"]["unlock_keys"]).to eq(["#{assignment.name} is unlocked by #{unlock_key.condition_state} #{@badge.name}"])
+=======
+    unlock_key = create(:unlock_condition,
+                        unlockable: assignment, unlockable_type: "Assignment",
+                        condition: @badge, condition_type: "Badge")
+    @badge.reload
+    render
+    json = JSON.parse(response.body)
+    expect(json["data"][0]["attributes"]["unlock_keys"]).to \
+      eq(["#{assignment.name} is unlocked by #{unlock_key.condition_state} #{@badge.name}"])
+>>>>>>> Adds rubric grading functionality to group assignments
   end
 
   it "renders term for badge, badges" do
