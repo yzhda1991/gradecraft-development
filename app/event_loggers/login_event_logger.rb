@@ -7,11 +7,14 @@ class LoginEventLogger < ApplicationEventLogger # pull in EventLogger::Enqueue f
   @analytics_class = Analytics::LoginEvent
 
   # instance methods, for use as a LoginEventLogger instance
+
+  # Used by enqueueing methods in EventLogger::Enqueue
   def event_type
     "login"
   end
 
-  # class methods, for use when being called directly by Resque
+  ## class methods, for use when being called directly by Resque
+
   # perform block that is ultimately called by Resque
   def self.perform(event_type, data={})
     @data = data
