@@ -22,7 +22,7 @@
     %tbody
       - submissions.each do |submission|
         - student = submission.student
-        - team = student.team_for_course(course)
+        - team = student.team_for_course(course) if student
         - group = submission.group
         %tr
           - if assignment.is_individual?
