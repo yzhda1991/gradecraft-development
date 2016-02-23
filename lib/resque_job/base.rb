@@ -1,7 +1,6 @@
 require "resque-retry"
 require "resque/errors"
 
-# mz todo: move a lot of this logic into an ApplicationJob file in /app/background_jobs
 module ResqueJob
   class Base
     # add resque-retry for all jobs
@@ -13,7 +12,6 @@ module ResqueJob
     # defaults
     @queue = :main # put all jobs in the 'main' queue
     @performer_class = ResqueJob::Performer
-    @backoff_strategy = ResqueJob.configuration.backoff_strategy
 
     class << self
       attr_reader :performer_class, :queue
@@ -33,6 +31,11 @@ module ResqueJob
       end
     end
     attr_reader :attrs
+
+    # override the backoff strategy from Resque::ExponentialBackoff
+    def self.backoff_strategy
+      @backoff_strategy ||= ResqueJob.configuration.backoff_strategy
+    end
 
     def initialize(attrs={})
       @attrs = attrs

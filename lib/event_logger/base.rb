@@ -9,7 +9,6 @@ module EventLogger
     @queue = :event_logger
     @event_name = "Event"
     @analytics_class = Analytics::Event
-    @backoff_strategy = EventLogger.configuration.backoff_strategy
 
     @start_message = "Starting #{@queue.to_s.camelize}"
     @success_message = "#{@event_name} analytics record was successfully created."
@@ -26,6 +25,11 @@ module EventLogger
       event = @analytics_class.create self.analytics_attrs(event_type, data)
       outcome = notify_event_outcome(event, data)
       self.logger.info outcome
+    end
+
+    # override the backoff strategy from Resque::ExponentialBackoff
+    def self.backoff_strategy
+      @backoff_strategy ||= EventLogger.configuration.backoff_strategy
     end
 
     def self.notify_event_outcome(event, data)

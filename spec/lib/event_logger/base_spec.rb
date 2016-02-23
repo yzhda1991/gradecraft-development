@@ -10,7 +10,6 @@ describe EventLogger::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
   include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
 
-  let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
   let(:event_type) { "waffle" }
   let(:some_data) {{ some: "new weird data" }}
   let(:time_now) { Time.parse "Jun 20 1942" }
@@ -92,6 +91,25 @@ describe EventLogger::Base, type: :vendor_library do
     end
   end
 
+  describe "#backoff_strategy" do
+    subject { EventLogger::Base.backoff_strategy }
+    let(:configured_value) { EventLogger.configuration.backoff_strategy }
+
+    it "should use the configured default #backoff_strategy for resque-retry" do
+      expect(subject).to eq(configured_value)
+    end
+
+    it "should cache the value" do
+      subject
+      expect(EventLogger).not_to receive(:configuration)
+      subject
+    end
+
+    it "should set a class-level instance variable of #backoff_strategy" do
+      expect(described_class.instance_variable_get(:@backoff_strategy)).to eq(configured_value)
+    end
+  end
+
   describe "class-level instance variable defaults" do
     it "should have a default @queue" do
       described_class.instance_variable_set(:@queue, :herman)
@@ -104,10 +122,6 @@ describe EventLogger::Base, type: :vendor_library do
 
     it "should not have a default @retry_delay for resque-retry" do
       expect(described_class.instance_variable_get(:@retry_delay)).to eq(nil)
-    end
-
-    it "should have a default @backoff_strategy for resque-retry" do
-      expect(described_class.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
     end
   end
 
@@ -122,7 +136,6 @@ describe EventLogger::Base, type: :vendor_library do
       :queue,
       :event_name,
       :analytics_class,
-      :backoff_strategy,
       :start_message,
       :success_message,
       :failure_message

@@ -40,8 +40,8 @@ describe ResqueJob::Base, type: :vendor_library do
       expect(ResqueJob::Base.instance_variable_get(:@retry_delay)).to eq(nil)
     end
 
-    it "should have a default @backoff_strategy for resque-retry" do
-      expect(ResqueJob::Base.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
+    it "should have a default #backoff_strategy for resque-retry" do
+      expect(ResqueJob::Base.backoff_strategy).to eq(backoff_strategy)
     end
   end
 
