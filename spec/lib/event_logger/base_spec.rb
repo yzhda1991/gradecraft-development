@@ -5,10 +5,12 @@ require_relative '../../../lib/inheritable_ivars'
 require_relative '../../../lib/loggly_resque'
 require_relative '../../toolkits/lib/inheritable_ivars/shared_examples'
 require_relative '../../toolkits/lib/loggly_resque/shared_examples'
+require_relative '../../toolkits/lib/resque_retry/shared_examples'
 
 describe EventLogger::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
   include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
+  include Toolkits::Lib::ResqueRetryToolkit::SharedExamples
 
   let(:event_type) { "waffle" }
   let(:some_data) {{ some: "new weird data" }}
@@ -91,24 +93,10 @@ describe EventLogger::Base, type: :vendor_library do
     end
   end
 
-  describe "#backoff_strategy" do
-    subject { EventLogger::Base.backoff_strategy }
-    let(:configured_value) { EventLogger.configuration.backoff_strategy }
-
-    it "should use the configured default #backoff_strategy for resque-retry" do
-      expect(subject).to eq(configured_value)
-    end
-
-    it "should cache the value" do
-      subject
-      expect(EventLogger).not_to receive(:configuration)
-      subject
-    end
-
-    it "should set a class-level instance variable of #backoff_strategy" do
-      expect(described_class.instance_variable_get(:@backoff_strategy)).to eq(configured_value)
-    end
-  end
+  # shared examples for testing that the #backoff_strategy is overridden and
+  # included from the target IsConfigurable class. Takes block arguments
+  # |target_class, config_class|
+  it_behaves_like "it uses a configurable backoff strategy", EventLogger::Base, EventLogger
 
   describe "class-level instance variable defaults" do
     it "should have a default @queue" do

@@ -80,8 +80,7 @@ module ResqueJob
     def self.inheritable_ivars
       [
         :queue,
-        :performer_class,
-        :backoff_strategy
+        :performer_class
       ]
     end
 

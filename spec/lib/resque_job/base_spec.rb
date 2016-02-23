@@ -5,12 +5,13 @@ require_relative "../../../lib/inheritable_ivars"
 require_relative "../../../lib/loggly_resque"
 require_relative "../../toolkits/lib/inheritable_ivars/shared_examples"
 require_relative "../../toolkits/lib/loggly_resque/shared_examples"
+require_relative "../../toolkits/lib/resque_retry/shared_examples"
 
 describe ResqueJob::Base, type: :vendor_library do
   include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
   include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
+  include Toolkits::Lib::ResqueRetryToolkit::SharedExamples
 
-  let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
   let(:successful_outcome) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
   let(:failed_outcome) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
   let(:outcomes) { [ successful_outcome, failed_outcome ] }
@@ -29,7 +30,8 @@ describe ResqueJob::Base, type: :vendor_library do
     end
 
     it "should have a default @performer_class" do
-      expect(ResqueJob::Base.instance_variable_get(:@performer_class)).to eq(ResqueJob::Performer)
+      expect(ResqueJob::Base.instance_variable_get(:@performer_class)).to
+        eq(ResqueJob::Performer)
     end
 
     it "should not have a default @retry_limit for resque-retry" do
@@ -39,30 +41,12 @@ describe ResqueJob::Base, type: :vendor_library do
     it "should not have a default @retry_delay for resque-retry" do
       expect(ResqueJob::Base.instance_variable_get(:@retry_delay)).to eq(nil)
     end
-
-    it "should have a default #backoff_strategy for resque-retry" do
-      expect(ResqueJob::Base.backoff_strategy).to eq(backoff_strategy)
-    end
   end
 
-  describe "#backoff_strategy" do
-    subject { ResqueJob::Base.backoff_strategy }
-    let(:configured_value) { ResqueJob.configuration.backoff_strategy }
-
-    it "should use the configured default #backoff_strategy for resque-retry" do
-      expect(subject).to eq(configured_value)
-    end
-
-    it "should cache the value" do
-      subject
-      expect(ResqueJob).not_to receive(:configuration)
-      subject
-    end
-
-    it "should set a class-level instance variable of #backoff_strategy" do
-      expect(described_class.instance_variable_get(:@backoff_strategy)).to eq(configured_value)
-    end
-  end
+  # shared examples for testing that the #backoff_strategy is overridden and
+  # included from the target IsConfigurable class. Takes block arguments
+  # |target_class, config_class|
+  it_behaves_like "it uses a configurable backoff strategy", ResqueJob::Base, ResqueJob
 
   describe "self.perform(attrs={})" do
     let(:attrs) {{ hounds: 5, teeth: 9 }}
@@ -190,7 +174,6 @@ describe ResqueJob::Base, type: :vendor_library do
     let(:expected_attrs) {[
       :queue,
       :performer_class,
-      :backoff_strategy
     ]}
 
     it "should have a list of inheritable attributes" do
