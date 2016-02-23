@@ -57,7 +57,6 @@ module EventLogger
         :queue,
         :event_name,
         :analytics_class,
-        :backoff_strategy,
         :start_message,
         :success_message,
         :failure_message

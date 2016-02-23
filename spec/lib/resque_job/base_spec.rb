@@ -45,6 +45,25 @@ describe ResqueJob::Base, type: :vendor_library do
     end
   end
 
+  describe "#backoff_strategy" do
+    subject { ResqueJob::Base.backoff_strategy }
+    let(:configured_value) { ResqueJob.configuration.backoff_strategy }
+
+    it "should use the configured default #backoff_strategy for resque-retry" do
+      expect(subject).to eq(configured_value)
+    end
+
+    it "should cache the value" do
+      subject
+      expect(ResqueJob).not_to receive(:configuration)
+      subject
+    end
+
+    it "should set a class-level instance variable of #backoff_strategy" do
+      expect(described_class.instance_variable_get(:@backoff_strategy)).to eq(configured_value)
+    end
+  end
+
   describe "self.perform(attrs={})" do
     let(:attrs) {{ hounds: 5, teeth: 9 }}
     let(:performer) { double(:performer).as_null_object }
