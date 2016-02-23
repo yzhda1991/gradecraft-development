@@ -23,7 +23,7 @@ class UnlockStatesController < ApplicationController
       @unlockable = current_course.badges.find(params[:badge_id])
     end
     @student = current_course.students.find(params[:student_id])
-    @unlock_state = @unlockable.find_or_create_unlock_state(@student)
+    @unlock_state = @unlockable.find_or_create_unlock_state(@student.id)
     @unlock_state.instructor_unlocked = true
     @unlock_state.save
     redirect_to session[:return_to]

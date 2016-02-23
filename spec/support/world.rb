@@ -5,7 +5,7 @@ class World
 
   class Instance
     attr_reader :assignments, :badges, :courses, :course_memberships, :criteria,
-                :criterion_grades, :grades, :rubrics, :students, :teams, :users
+                :criterion_grades, :grades, :groups, :rubrics, :students, :teams, :users
 
     def assignment
       assignments.first
@@ -29,6 +29,10 @@ class World
 
     def grade
       grades.first
+    end
+
+    def group
+      groups.first
     end
 
     def rubric
@@ -101,6 +105,11 @@ class World
       self
     end
 
+    def create_group(attributes={})
+      course = attributes.delete(:course) || self.course
+      groups << FactoryGirl.create(:group, attributes.merge(course: course, approved: "Approved"))
+    end
+
     def create_rubric(attributes={})
       assignment = attributes.delete(:assignment) || self.assignment || FactoryGirl.build(:assignment)
       rubrics << FactoryGirl.create(:rubric, attributes.merge(assignment: assignment))
@@ -131,6 +140,7 @@ class World
       @criterion_grades = []
       @course_memberships = []
       @grades = []
+      @groups = []
       @rubrics = []
       @teams = []
       @users = []

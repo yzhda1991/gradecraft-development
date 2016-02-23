@@ -117,10 +117,20 @@ describe Challenge do
     end
   end
 
-  describe "#find_or_create_predicted_earned_challenge(student)" do
-    skip "implement"
-    #PredictedEarnedChallenge.where(student: student, challenge: self).first || PredictedEarnedChallenge.create(student_id: student.id, challenge_id: self.id)
+  describe "#find_or_create_predicted_earned_challenge" do
+    it "creates a predicted earned challenge for a student" do
+      student = create(:user)
+      challenge = create(:challenge, point_total: 1000)
+      expect { challenge.find_or_create_predicted_earned_challenge(student.id) }.to \
+        change(PredictedEarnedChallenge,:count).by 1
+    end
+
+    it "finds an existing predicted earned challenge for a student" do
+      student = create(:user)
+      challenge = create(:challenge, point_total: 1000)
+      pec = create(:predicted_earned_challenge, student: student, challenge: challenge)
+      expect(challenge.find_or_create_predicted_earned_challenge(student.id)).to \
+        eq(pec)
+    end
   end
-
-
 end

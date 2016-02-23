@@ -35,27 +35,6 @@ RSpec.describe GradesController, type: :controller, background_job: true do
   describe "triggering jobs as a professor" do
     before(:each) { enroll_and_login_professor }
 
-    describe "#submit_rubric" do
-      let(:request_attrs) {{ student_id: student.id, assignment_id: assignment.id, criterion_grades: [], grade: {status: "", feedback: ""}, format: :json }}
-      subject { put :submit_rubric, request_attrs }
-
-      before do
-        allow(Grade).to receive_message_chain(:where, :first) { grade }
-      end
-
-      context "grade is student visible" do
-        before { allow(grade).to receive(:is_student_visible?) { true } }
-
-        it_behaves_like "a successful resque job", GradeUpdaterJob
-      end
-
-      context "grade is not student visible" do
-        before { allow(grade).to receive(:is_student_visible?) { false } }
-
-        it_behaves_like "a failed resque job", GradeUpdaterJob
-      end
-    end
-
     describe "#update" do
       let(:request_attrs) {{ assignment_id: assignment.id, grade: {raw_score: 50} }}
       subject { put :update, request_attrs }

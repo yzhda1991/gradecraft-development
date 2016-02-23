@@ -24,10 +24,8 @@ module UnlockableCondition
     unlock_state
   end
 
-  def find_or_create_unlock_state(student)
-    UnlockState.where(student: student, unlockable: self).first ||
-      UnlockState.create(student_id: student.id, unlockable_id: self.id,
-                         unlockable_type: self.class.name)
+  def find_or_create_unlock_state(student_id)
+    UnlockState.find_or_create_by(student_id: student_id, unlockable: self)
   end
 
   def is_a_condition?

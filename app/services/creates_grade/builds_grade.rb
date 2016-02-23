@@ -10,7 +10,7 @@ module Services
       promises :grade
 
       executed do |context|
-        grade = Grade.find_or_create(context[:assignment],context[:student])
+        grade = Grade.find_or_create(context[:assignment].id,context[:student].id)
 
         grade.raw_score = context[:attributes]["points_given"]
         grade.point_total = context[:assignment].point_total
