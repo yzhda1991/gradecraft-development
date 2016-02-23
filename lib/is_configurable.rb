@@ -1,18 +1,16 @@
-# this should be extended in the target class
+# this should be extended in the target class/module
 module IsConfigurable
-  class << self
-    attr_writer :config
+  attr_writer :configuration
+
+  def configuration
+    @configuration ||= const_get("Configuration").new
   end
 
-  def self.config
-    @configuration ||= Configuration.new
+  def reset
+    @configuration = const_get("Configuration").new
   end
 
-  def self.reset
-    @configuration = Configuration.new
-  end
-
-  def self.configure
-    yield(configuration)
+  def configure
+    yield configuration
   end
 end

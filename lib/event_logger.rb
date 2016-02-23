@@ -1,8 +1,11 @@
 require 'resque-retry'
 require 'resque/errors'
-require_relative 'event_logger/base'
-require_relative 'event_logger/enqueue'
 
 module EventLogger
   extend IsConfigurable
 end
+
+require_dependency 'is_configurable'
+require_dependency 'event_logger/base'
+require_dependency 'event_logger/configuration'
+require_dependency 'event_logger/enqueue'

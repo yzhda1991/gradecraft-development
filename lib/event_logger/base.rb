@@ -9,7 +9,7 @@ module EventLogger
     @queue = :event_logger
     @event_name = "Event"
     @analytics_class = Analytics::Event
-    @backoff_strategy = RESQUE_CONFIG['BACKOFF_STRATEGY']
+    @backoff_strategy = EventLogger.configuration.backoff_strategy
 
     @start_message = "Starting #{@queue.to_s.camelize}"
     @success_message = "#{@event_name} analytics record was successfully created."

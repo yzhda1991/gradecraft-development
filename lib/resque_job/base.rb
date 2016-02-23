@@ -13,7 +13,7 @@ module ResqueJob
     # defaults
     @queue = :main # put all jobs in the 'main' queue
     @performer_class = ResqueJob::Performer
-    @backoff_strategy = ResqueJob.config.backoff_strategy
+    @backoff_strategy = ResqueJob.configuration.backoff_strategy
 
     class << self
       attr_reader :performer_class, :queue
