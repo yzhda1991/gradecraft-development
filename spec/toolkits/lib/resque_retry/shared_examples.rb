@@ -17,7 +17,7 @@ module Toolkits
           end
 
           it "should set a class-level instance variable of #backoff_strategy" do
-            expect(described_class.instance_variable_get(:@backoff_strategy)).to eq(configured_value)
+            expect(target_class.instance_variable_get(:@backoff_strategy)).to eq(configured_value)
           end
         end
       end
