@@ -4,12 +4,11 @@ module Toolkits
       module SharedExamples
 
         RSpec.shared_examples "it is configurable" do |target_class, demo_config|
-          let(:configurable_class) { target_class }
-          let(:configuration) { configurable_class.configuration }
-          let(:default_configuration) { configurable_class::Configuration.new }
+          let(:configuration) { target_class.configuration }
+          let(:default_configuration) { target_class::Configuration.new }
 
           let(:apply_demo_config) do
-            configurable_class.configure do |config|
+            target_class.configure do |config|
               demo_config.each do |config_attr, value|
                 config.send("#{config_attr}=", value)
               end
@@ -18,28 +17,28 @@ module Toolkits
 
           describe "writeable attributes" do
             it "should be able to write a configuration" do
-              configurable_class.configuration = "hamhocks"
-              expect(configurable_class.configuration).to eq("hamhocks")
+              target_class.configuration = "hamhocks"
+              expect(target_class.configuration).to eq("hamhocks")
             end
           end
 
           describe "#configuration" do
-            subject { configurable_class.configuration }
+            subject { target_class.configuration }
 
             it "should build a new ::Configuration object in the target class" do
-              expect(subject.class).to eq(configurable_class::Configuration)
+              expect(subject.class).to eq(target_class::Configuration)
             end
 
             it "should cache the configuration" do
               subject
-              expect(configurable_class::Configuration).not_to receive(:new)
+              expect(target_class::Configuration).not_to receive(:new)
               subject
             end
 
             it "should set the configuration to @configuration" do
               subject
-              expect(configurable_class.instance_variable_get(:@configuration).class)
-                .to eq(configurable_class::Configuration)
+              expect(target_class.instance_variable_get(:@configuration).class)
+                .to eq(target_class::Configuration)
             end
           end
 
@@ -47,7 +46,7 @@ module Toolkits
             before { apply_demo_config }
 
             it "should reset the configuration" do
-              configurable_class.reset_configuration
+              target_class.reset_configuration
               demo_config.keys.each do |config_attr|
                 expect(configuration.send(config_attr))
                   .to eq(default_configuration.send(config_attr))
