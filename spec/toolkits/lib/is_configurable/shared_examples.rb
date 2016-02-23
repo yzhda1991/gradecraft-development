@@ -5,7 +5,7 @@ module Toolkits
 
         RSpec.shared_examples "it is configurable" do |target_class, demo_config|
           let(:configuration) { target_class.configuration }
-          let(:default_configuration) { target_class::Configuration.new }
+          let(:new_configuration) { target_class::Configuration.new }
 
           let(:apply_demo_config) do
             target_class.configure do |config|
@@ -17,8 +17,8 @@ module Toolkits
 
           describe "writeable attributes" do
             it "should be able to write a configuration" do
-              target_class.configuration = "hamhocks"
-              expect(target_class.configuration).to eq("hamhocks")
+              target_class.configuration = new_configuration
+              expect(target_class.configuration).to eq(new_configuration)
             end
           end
 
@@ -49,7 +49,7 @@ module Toolkits
               target_class.reset_configuration
               demo_config.keys.each do |config_attr|
                 expect(configuration.send(config_attr))
-                  .to eq(default_configuration.send(config_attr))
+                  .to eq(new_configuration.send(config_attr))
               end
             end
           end
