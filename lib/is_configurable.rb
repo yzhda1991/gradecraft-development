@@ -6,7 +6,7 @@ module IsConfigurable
     @configuration ||= const_get("Configuration").new
   end
 
-  def reset
+  def reset_configuration
     @configuration = const_get("Configuration").new
   end
 
