@@ -16,7 +16,8 @@ module Toolkits
             subject
           end
 
-          it "should set a class-level instance variable of #backoff_strategy" do
+          it "should set a class-level instance variable of @backoff_strategy" do
+            subject
             expect(target_class.instance_variable_get(:@backoff_strategy)).to eq(configured_value)
           end
         end
