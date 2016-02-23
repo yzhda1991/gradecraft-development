@@ -30,8 +30,8 @@ describe ResqueJob::Base, type: :vendor_library do
     end
 
     it "should have a default @performer_class" do
-      expect(ResqueJob::Base.instance_variable_get(:@performer_class)).to
-        eq(ResqueJob::Performer)
+      expect(ResqueJob::Base.instance_variable_get(:@performer_class))
+        .to eq(ResqueJob::Performer)
     end
 
     it "should not have a default @retry_limit for resque-retry" do
