@@ -132,5 +132,11 @@ describe Challenge do
       expect(challenge.find_or_create_predicted_earned_challenge(student.id)).to \
         eq(pec)
     end
+
+    it "returns a null object for a student id of 0" do
+      challenge = create(:challenge, point_total: 1000)
+      expect(challenge.find_or_create_predicted_earned_challenge(0).class).to \
+        eq(NullPredictedEarnedChallenge)
+    end
   end
 end

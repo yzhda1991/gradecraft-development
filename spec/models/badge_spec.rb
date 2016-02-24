@@ -273,6 +273,12 @@ describe Badge do
       expect(badge.find_or_create_predicted_earned_badge(student.id)).to \
         eq(peb)
     end
+
+    it "returns a null object for a student id of 0" do
+      badge = create(:badge, point_total: 1000)
+      expect(badge.find_or_create_predicted_earned_badge(0).class).to \
+        eq(NullPredictedEarnedBadge)
+    end
   end
 
   describe "#earned_badge_count_for_student(student)" do

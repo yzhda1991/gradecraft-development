@@ -52,7 +52,11 @@ class Badge < ActiveRecord::Base
   end
 
   def find_or_create_predicted_earned_badge(student_id)
-    PredictedEarnedBadge.find_or_create_by(student_id: student_id, badge_id: self.id)
+    if student_id == 0
+      NullPredictedEarnedBadge.new
+    else
+      PredictedEarnedBadge.find_or_create_by(student_id: student_id, badge_id: self.id)
+    end
   end
 
   #Counting how many times a particular student has earned this badge
