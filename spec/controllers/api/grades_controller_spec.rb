@@ -15,7 +15,7 @@ describe API::GradesController do
       end
 
       it "assigns all options when release necessary" do
-        allow_any_instance_of(Assignment).to receive(:release_necessary?).and_return(true)
+        world.assignment.update_attributes release_necessary: true
         get :show, id: world.assignment.id, student_id: world.student.id, format: :json
         expect(assigns(:grade_status_options)).to eq(["In Progress", "Graded", "Released"])
       end
@@ -36,13 +36,13 @@ describe API::GradesController do
       end
 
       it "returns 400 error code with individual assignment" do
-        allow_any_instance_of(Assignment).to receive(:grade_scope).and_return("Individual")
+        world.assignment.update_attributes grade_scope: "Individual"
         get :group_index, id: world.assignment.id, group_id: world.group.id, format: :json
         expect(response.status).to be(400)
       end
 
       it "returns criterion_grades and student ids for a group" do
-        allow_any_instance_of(Assignment).to receive(:grade_scope).and_return("Group")
+        world.assignment.update_attributes grade_scope: "Group"
         get :group_index, id: world.assignment.id, group_id: world.group.id, format: :json
         expect(assigns(:student_ids)).to eq(world.group.students.pluck(:id))
         expect(assigns(:grades).length).to eq(world.group.students.length)
