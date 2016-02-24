@@ -7,8 +7,8 @@
 
   = render 'ungraded_submissions_table', :course => current_course
 
-  = render 'unreleased_grades_table', :course => current_course
+  = render 'grades_table', grade_type: "unreleased", subtitle: "Unreleased Grades", grades_by_assignment: @unreleased_grades_by_assignment, count: unreleased_grades_count_for(current_course), course: current_course
 
-  = render 'in_progress_grades_table', :course => current_course
+  = render 'grades_table', grade_type: "in_progress", subtitle: "In Progress Grades", grades_by_assignment: @in_progress_grades_by_assignment, count: in_progress_grades_count_for(current_course), course: current_course
 
-  = render 'no_status_grades_table', :course => current_course
+  = render 'grades_table', grade_type: "in_limbo", subtitle: "In Limbo Grades", grades_by_assignment: @no_status_grades_by_assignment, count: no_status_grades_count_for(current_course), course: current_course
