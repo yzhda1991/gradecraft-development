@@ -1,5 +1,4 @@
 module EventLogger
-
   # This class is intended to be inherited by EventLogger subclasses that
   # interact directly with Resque in anyway. It implements multiple behaviors
   # such as advanced logging, retry, and interaction with the target
@@ -34,7 +33,7 @@ module EventLogger
     @analytics_class = Analytics::Event
 
     @start_message = "Starting #{@queue.to_s.camelize}"
-    @success_message = "#{@event_name} analytics record was" +
+    @success_message = "#{@event_name} analytics record was" \
       "successfully created."
     @failure_message = "#{@event_name} analytics record failed to create."
 
@@ -44,7 +43,7 @@ module EventLogger
     end
 
     # perform block that is ultimately called by Resque
-    def self.perform( event_type, data={} )
+    def self.perform(event_type, data = {})
       logger.info @start_message
       event = @analytics_class.create analytics_attrs(event_type, data)
       outcome = notify_event_outcome(event, data)
@@ -56,7 +55,7 @@ module EventLogger
       @backoff_strategy ||= EventLogger.configuration.backoff_strategy
     end
 
-    def self.notify_event_outcome( event, data )
+    def self.notify_event_outcome(event, data)
       if event.valid?
         success_message_with_data(data)
       else
@@ -64,15 +63,15 @@ module EventLogger
       end
     end
 
-    def self.success_message_with_data( data )
+    def self.success_message_with_data(data)
       "#{@success_message} with data #{data}"
     end
 
-    def self.failure_message_with_data( data )
+    def self.failure_message_with_data(data)
       "#{@failure_message} with data #{data}"
     end
 
-    def self.analytics_attrs( event_type, data={} )
+    def self.analytics_attrs(event_type, data = {})
       { event_type: event_type, created_at: Time.zone.now }.merge data
     end
 
