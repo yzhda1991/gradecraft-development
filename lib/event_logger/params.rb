@@ -22,7 +22,6 @@ module EventLogger
     # numerical_params :score, :possible, { :assignment => :assignment_id }
     def numerical_params(*param_schema)
       param_schema.each do |param_format|
-
         # if it's a symbol, just define a method with the same name as the
         # input param
         if param_format.is_a?(Symbol)
@@ -43,7 +42,7 @@ module EventLogger
     # logger that ultimately does the work in either filtering the given
     # params, or returning nil rather than zero if no value exists for the
     # given param
-    def define_filtered_numerical_param(input_name, output_name=nil)
+    def define_filtered_numerical_param(input_name, output_name = nil)
       # if an output name is given, use that for the method_name, otherwise
       # just define a method with the same name as the param
       method_name = output_name ? output_name : input_name
