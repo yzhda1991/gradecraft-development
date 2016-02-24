@@ -16,43 +16,43 @@ describe Lull, type: :vendor_library do
   end
 
   # Time.zone.now < todays_lull_start
-  describe "#is_before_todays_lull" do
+  describe "#before_todays_lull" do
     before do
       allow(Time).to receive_messages(now: noon)
     end
 
     it "should be true if todays lull happens after right now" do
       allow(Lull).to receive_messages(todays_lull_start: five_pm)
-      expect(Lull.is_before_todays_lull?).to be_truthy
+      expect(Lull.before_todays_lull?).to be_truthy
     end
 
 
     it "should be false if todays lull has already started" do
       allow(Lull).to receive_messages(todays_lull_start: six_am)
-      expect(Lull.is_before_todays_lull?).to be_falsey
+      expect(Lull.before_todays_lull?).to be_falsey
     end
   end
 
   # Time.zone.now > todays_lull_end
-  describe "#is_after_todays_lull" do
+  describe "#after_todays_lull" do
     before do
       allow(Time).to receive_messages(now: noon)
     end
 
     it "should be true if today's lull is already over" do
       allow(Lull).to receive_messages(todays_lull_end: six_am)
-      expect(Lull.is_after_todays_lull?).to be_truthy
+      expect(Lull.after_todays_lull?).to be_truthy
     end
 
     it "should be false if today's lull hasn't ended yet" do
       allow(Lull).to receive_messages(todays_lull_end: five_pm)
-      expect(Lull.is_after_todays_lull?).to be_falsey
+      expect(Lull.after_todays_lull?).to be_falsey
     end
   end
 
   # Time.zone.now > todays_lull_start and
   # Time.zone.now < todays_lull_end
-  describe "#is_during_todays_lull" do
+  describe "#during_todays_lull" do
     before do
       allow(Time.zone).to receive_messages(now: noon)
     end
@@ -60,33 +60,33 @@ describe Lull, type: :vendor_library do
     it "should be true if it's after the lull has started but before it's ended" do
       allow(Lull).to receive_messages(todays_lull_start: six_am)
       allow(Lull).to receive_messages(todays_lull_end: five_pm)
-      expect(Lull.is_during_todays_lull?).to be_truthy
+      expect(Lull.during_todays_lull?).to be_truthy
     end
 
     it "should be false if before the lull has started" do
       allow(Lull).to receive_messages(todays_lull_start: five_pm)
-      expect(Lull.is_during_todays_lull?).to be_falsey
+      expect(Lull.during_todays_lull?).to be_falsey
     end
 
     it "should be false if after the lull has ended" do
       allow(Lull).to receive_messages(todays_lull_end: six_am)
-      expect(Lull.is_during_todays_lull?).to be_falsey
+      expect(Lull.during_todays_lull?).to be_falsey
     end
   end
 
-  # is_after_todays_lull? ? tomorrows_lull_start : todays_lull_start
+  # after_todays_lull? ? tomorrows_lull_start : todays_lull_start
   describe "#next_lull_start" do
     it "should return the start time of tomorrow's lull if after today's lull" do
       tomorrows_lull_start = double("Tomorrow's Lull Start")
       allow(Lull).to receive_messages(tomorrows_lull_start: tomorrows_lull_start)
-      allow(Lull).to receive_messages(is_after_todays_lull?: true)
+      allow(Lull).to receive_messages(after_todays_lull?: true)
       expect(Lull.next_lull_start).to eq(tomorrows_lull_start)
     end
 
     it "should return today's lull start time if it hasn't ended yet" do
       todays_lull_start = double("Today's Lull Start")
       allow(Lull).to receive_messages(todays_lull_start: todays_lull_start)
-      allow(Lull).to receive_messages(is_after_todays_lull?: false)
+      allow(Lull).to receive_messages(after_todays_lull?: false)
       expect(Lull.next_lull_start).to eq(todays_lull_start)
     end
   end

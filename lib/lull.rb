@@ -5,21 +5,21 @@ module Lull
       next_lull_start - Time.zone.now
     end
 
-    def is_before_todays_lull?
+    def before_todays_lull?
       Time.zone.now < todays_lull_start
     end
 
-    def is_after_todays_lull?
+    def after_todays_lull?
       Time.zone.now > todays_lull_end
     end
 
-    def is_during_todays_lull?
-      Time.zone.now > todays_lull_start and
+    def during_todays_lull?
+      Time.zone.now > todays_lull_start &&
       Time.zone.now < todays_lull_end
     end
 
     def next_lull_start
-      is_after_todays_lull? ? tomorrows_lull_start : todays_lull_start
+      after_todays_lull? ? tomorrows_lull_start : todays_lull_start
     end
 
     def tomorrows_lull_start
@@ -35,11 +35,11 @@ module Lull
     end
 
     def lull_start_params
-      {hour: 2, min: 30} # zoned to Eastern US and Canada
+      { hour: 2, min: 30 } # zoned to Eastern US and Canada
     end
 
     def lull_end_params
-      {hour: 5, min: 0} # zoned to Eastern US and Canada
+      { hour: 5, min: 0 } # zoned to Eastern US and Canada
     end
   end
 end

@@ -1,8 +1,7 @@
 # this module adds some logic for automatically setting instance variables from
-# superclasses on their descendents. As with all such behaviors in Ruby, if those
-# instance variables are overwritten on the subclass then the superclass ivar
-# values will be ignored
-
+# superclasses on their descendents. As with all such behaviors in Ruby, if
+# those instance variables are overwritten on the subclass then the superclass
+# ivar values will be ignored
 module InheritableIvars
   # allow sub-classes to inherit class-level instance variables
   def inherited(subclass)
@@ -13,6 +12,6 @@ module InheritableIvars
 
   # get a list of instance variable names for inheritance
   def inheritable_instance_variable_names
-    inheritable_ivars.collect {|attr_name| "@#{attr_name}" }
+    inheritable_ivars.collect { |attr_name| "@#{attr_name}" }
   end
 end
