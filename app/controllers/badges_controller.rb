@@ -135,7 +135,7 @@ class BadgesController < ApplicationController
       :updated_at,
       :icon)
     badges.each do |badge|
-      prediction = badge.find_or_create_predicted_earned_badge(@student)
+      prediction = badge.find_or_create_predicted_earned_badge(@student.id)
       if current_user.is_student?(current_course)
         badge.prediction = {id: prediction.id, times_earned: prediction.times_earned_including_actual}
       else

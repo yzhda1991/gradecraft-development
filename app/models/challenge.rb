@@ -63,8 +63,12 @@ class Challenge < ActiveRecord::Base
     end
   end
 
-  def find_or_create_predicted_earned_challenge(student)
-    PredictedEarnedChallenge.where(student: student, challenge: self).first || PredictedEarnedChallenge.create(student_id: student.id, challenge_id: self.id)
+  def find_or_create_predicted_earned_challenge(student_id)
+    if student_id == 0
+      NullPredictedEarnedChallenge.new
+    else
+      PredictedEarnedChallenge.find_or_create_by(student: student_id, challenge_id: self.id)
+    end
   end
 
   private

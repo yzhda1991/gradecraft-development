@@ -14,7 +14,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
 
   def grade
     if @grade.nil?
-      grade = student.present? ? Grade.find_or_create(assignment, student) : NullGrade.new
+      grade = student.present? ? Grade.find_or_create(assignment.id, student.id) : NullGrade.new
       @grade = PredictedGradeSerializer.new(grade, current_user)
     end
     @grade

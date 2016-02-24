@@ -51,13 +51,17 @@ class Badge < ActiveRecord::Base
     earned_badges_by_student_id[[student.id]].try(:first)
   end
 
-  def find_or_create_predicted_earned_badge(student)
-    PredictedEarnedBadge.where(student_id: student, badge: self).first || PredictedEarnedBadge.create(student_id: student.id, badge_id: self.id)
+  def find_or_create_predicted_earned_badge(student_id)
+    if student_id == 0
+      NullPredictedEarnedBadge.new
+    else
+      PredictedEarnedBadge.find_or_create_by(student_id: student_id, badge_id: self.id)
+    end
   end
 
   #Counting how many times a particular student has earned this badge
   def earned_badge_count_for_student(student)
-     earned_badges.where(:student_id => student, :student_visible => true).count
+    earned_badges.where(:student_id => student.id, :student_visible => true).count
   end
 
   def earned_badge_total_points(student)

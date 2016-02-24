@@ -226,9 +226,20 @@ describe Badge do
     end
   end
 
-  describe "#find_or_create_unlock_state(student)" do
-    it "should find or create an unlock state for a student" do
-      skip "implement"
+  describe "#find_or_create_unlock_state" do
+    it "creates an unlock state for a student" do
+      student = create(:user)
+      badge = create(:badge, point_total: 1000)
+      expect { badge.find_or_create_unlock_state(student.id) }.to \
+        change(UnlockState,:count).by 1
+    end
+
+    it "finds an existing unlock state for a student" do
+      student = create(:user)
+      badge = create(:badge, point_total: 1000)
+      unlock_state = create(:unlock_state, student: student, unlockable: badge)
+      expect(badge.find_or_create_unlock_state(student.id)).to \
+        eq(unlock_state)
     end
   end
 
@@ -247,9 +258,26 @@ describe Badge do
     end
   end
 
-  describe "#find_or_create_predicted_earned_badge(student)" do
-    it "should find or create a predicted earned badge for a student" do
-      skip "implement"
+  describe "#find_or_create_predicted_earned_badge" do
+    it "creates a predicted earned badge for a student" do
+      student = create(:user)
+      badge = create(:badge, point_total: 1000)
+      expect { badge.find_or_create_predicted_earned_badge(student.id) }.to \
+        change(PredictedEarnedBadge,:count).by 1
+    end
+
+    it "finds an existing predicted earned badge for a student" do
+      student = create(:user)
+      badge = create(:badge, point_total: 1000)
+      peb = create(:predicted_earned_badge, student: student, badge: badge)
+      expect(badge.find_or_create_predicted_earned_badge(student.id)).to \
+        eq(peb)
+    end
+
+    it "returns a null object for a student id of 0" do
+      badge = create(:badge, point_total: 1000)
+      expect(badge.find_or_create_predicted_earned_badge(0).class).to \
+        eq(NullPredictedEarnedBadge)
     end
   end
 

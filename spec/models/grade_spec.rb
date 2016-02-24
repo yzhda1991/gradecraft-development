@@ -116,13 +116,29 @@ describe Grade do
   describe ".find_or_create" do
     it "finds and existing grade for assignment and student" do
       world = World.create.with(:course, :student, :assignment, :grade)
-      results = Grade.find_or_create(world.assignment,world.student)
+      results = Grade.find_or_create(world.assignment.id,world.student.id)
       expect(results).to eq world.grade
     end
 
     it "creates a grade for assignment and student if none exists" do
       world = World.create.with(:course, :student, :assignment)
-      expect{Grade.find_or_create(world.assignment,world.student)}.to change{ Grade.count }.by(1)
+      expect{Grade.find_or_create(world.assignment.id,world.student.id)}.to \
+        change{ Grade.count }.by(1)
+    end
+  end
+
+  describe ".find_or_create_grades" do
+    let(:world) { World.create.with(:course, :group, :assignment) }
+    let(:ids) { world.group.students.pluck(:id) }
+
+    it "finds and existing grade for assignment and student" do
+      results = Grade.find_or_create_grades(world.assignment.id, ids)
+      expect(results.count).to eq ids.length
+    end
+
+    it "creates a grade for assignment and student if none exists" do
+      expect { Grade.find_or_create_grades(world.assignment.id, ids) }.to \
+        change{ Grade.count }.by(ids.length)
     end
   end
 

@@ -123,13 +123,12 @@ class ChallengesController < ApplicationController
       @grades = team.challenge_grades
 
       challenges.each do |challenge|
-        prediction = challenge.find_or_create_predicted_earned_challenge(@student)
-
-        if current_user.is_student?(current_course)
-          challenge.prediction = { id: prediction.id, points_earned: prediction.points_earned }
-        else
-          challenge.prediction = { id: prediction.id, points_earned: 0 }
-        end
+         prediction = challenge.find_or_create_predicted_earned_challenge(@student.id)
+         if current_user.is_student?(current_course)
+           challenge.prediction = { id: prediction.id, points_earned: prediction.points_earned }
+         else
+           challenge.prediction = { id: prediction.id, points_earned: 0 }
+         end
 
         grade = @grades.where(:challenge_id => challenge.id).first
 

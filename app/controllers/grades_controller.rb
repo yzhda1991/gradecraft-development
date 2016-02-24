@@ -37,7 +37,7 @@ class GradesController < ApplicationController
   def edit
     @student = current_student
 
-    @grade = Grade.find_or_create(@assignment,@student)
+    @grade = Grade.find_or_create(@assignment.id, @student.id)
     @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
 
     @submission = @student.submission_for_assignment(@assignment)
@@ -59,7 +59,7 @@ class GradesController < ApplicationController
   # create a new grade if none exists, and otherwise update the existing grade
   # PUT /assignments/:assignment_id/grade
   def update
-    @grade = Grade.find_or_create(@assignment, current_student)
+    @grade = Grade.find_or_create(@assignment.id, current_student.id)
 
     if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
         instructor_modified: true)
@@ -190,7 +190,7 @@ class GradesController < ApplicationController
       @students = current_course.students
     end
 
-    @grades = Grade.find_or_create_grades(@assignment,@students)
+    @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
     @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
   end
 
@@ -231,14 +231,11 @@ class GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:id])
     @group = @assignment.groups.find(params[:group_id])
 
-    # TODO change to find_or_create_grades(@assignment,@group.students)
-    @grades = @group.students.map do |student|
-      @assignment.grades.where(:student_id => student).first || @assignment.grades.new(:student => student, :assignment => @assignment, :graded_by_id => current_user, :status => "Graded", :group_id => @group.id)
-    end
+    @grades = Grade.find_or_create_grades(@assignment.id, @group.students.pluck(:id))
 
     grade_ids = []
     @grades = @grades.each do |grade|
-      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now))
+      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now, group_id: @group.id))
       grade_ids << grade.id
     end
 
@@ -321,7 +318,7 @@ class GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:id])
     if @assignment.open? && @assignment.student_logged?
 
-      @grade = Grade.find_or_create(@assignment,current_student)
+      @grade = Grade.find_or_create(@assignment.id, current_student.id)
 
       if params[:grade].present? && params[:grade][:raw_score].present?
         @grade.raw_score = params[:grade][:raw_score]

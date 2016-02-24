@@ -51,3 +51,27 @@ class NullTeam
     NullStudentGrades.new
   end
 end
+
+class NullPredictedEarnedBadge
+  def id
+    0
+  end
+
+  def actual_times_earned
+    0
+  end
+
+  def times_earned_including_actual
+    0
+  end
+end
+
+class NullPredictedEarnedChallenge
+  def id
+    0
+  end
+
+  def points_earned
+    0
+  end
+end

@@ -539,6 +539,7 @@ describe GradesController do
         current_time = DateTime.now
         put :group_update, id: @assignment.id, group_id: group.id, grade: { graded_by_id: @professor.id, instructor_modified: true, raw_score: 1000, status: "Graded" }
         expect(@grade.reload.raw_score).to eq 1000
+        expect(@grade.group_id).to eq(group.id)
         expect(@grade.graded_at).to be > current_time
       end
     end
