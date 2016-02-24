@@ -1,4 +1,5 @@
-# helpers for performing various tasks relative to the nightly low-usage downtime lull
+# helpers for performing various tasks relative to the nightly low-usage
+# downtime lull
 module Lull
   class << self
     def time_until_next_lull
@@ -15,7 +16,7 @@ module Lull
 
     def during_todays_lull?
       Time.zone.now > todays_lull_start &&
-      Time.zone.now < todays_lull_end
+        Time.zone.now < todays_lull_end
     end
 
     def next_lull_start
@@ -34,12 +35,16 @@ module Lull
       Time.zone.now.change(lull_start_params)
     end
 
+    # define the zoned hour and minute at which the lull is
+    # scheduled to begin
     def lull_start_params
-      { hour: 2, min: 30 } # zoned to Eastern US and Canada
+      { hour: 2, min: 30 }
     end
 
+    # define the zoned hour and minute at which the lull is
+    # scheduled to end
     def lull_end_params
-      { hour: 5, min: 0 } # zoned to Eastern US and Canada
+      { hour: 5, min: 0 }
     end
   end
 end
