@@ -1,8 +1,8 @@
-# this is the default configuration module for EventLogger. Any configuration
-# values that need to be modified on the system-wide configuration for
-# EventLogger should have an attr_accessor value set here.
-
 module EventLogger
+
+  # this is the default configuration module for EventLogger. Any configuration
+  # values that need to be modified on the system-wide configuration for
+  # EventLogger should have an attr_accessor value set here.
   class Configuration
 
     # all accessible configuration values

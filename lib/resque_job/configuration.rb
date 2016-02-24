@@ -1,8 +1,8 @@
-# this is the default configuration module for ResqueJob. Any configuration
-# values that need to be modified on the system-wide configuration for
-# ResqueJob should have an attr_accessor value set here.
-
 module ResqueJob
+
+  # this is the default configuration module for ResqueJob. Any configuration
+  # values that need to be modified on the system-wide configuration for
+  # ResqueJob should have an attr_accessor value set here.
   class Configuration
 
     # all accessible configuration values
