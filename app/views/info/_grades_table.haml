@@ -1,9 +1,9 @@
-%h4.subtitle#unreleasedTableCaption
+%h4.subtitle{ id: "#{grade_type}TableCaption" }
   = subtitle
   %span.label.alert= count
 
 - grades_by_assignment.each do |assignment, grades|
-  .assignment-unreleased
+  %div{ class: "assignment-#{grade_type}"}
     %h4.assignment_name
       = link_to assignment.name, assignment
       - if assignment.is_individual?
