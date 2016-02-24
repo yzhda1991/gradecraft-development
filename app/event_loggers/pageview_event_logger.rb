@@ -24,7 +24,7 @@ class PageviewEventLogger < ApplicationEventLogger
 
   # params method is defined in ApplicationEventLogger
   def build_page_from_params
-    if params and params[:url] and params[:tab]
+    if params && params[:url] && params[:tab]
       @page = "#{params[:url]}#{params[:tab]}"
     end
   end

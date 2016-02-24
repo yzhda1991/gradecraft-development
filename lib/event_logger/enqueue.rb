@@ -11,7 +11,7 @@ module EventLogger
   # probably just replaced with a fallback method which can be overwritten
   # without having to overwrite either of the enqueue_with_fallback methods.
   module Enqueue
-    def initialize(event_session={})
+    def initialize(event_session = {})
       @event_session = event_session
     end
     attr_reader :event_session

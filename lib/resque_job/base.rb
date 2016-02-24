@@ -83,6 +83,5 @@ module ResqueJob
         :performer_class
       ]
     end
-
   end
 end
