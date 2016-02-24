@@ -44,4 +44,10 @@ describe Services::Actions::BuildsGrade do
     expect(result[:grade].status).to eq "Released"
     expect(result[:grade].feedback).to eq "good jorb!"
   end
+
+  it "adds the group id if supplied" do
+    context[:attributes]["group_id"] = 777
+    result = described_class.execute context
+    expect(result[:grade].group_id).to eq 777
+  end
 end

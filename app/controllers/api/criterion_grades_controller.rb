@@ -16,7 +16,7 @@ class API::CriterionGradesController < ApplicationController
 
   def group_index
     if !Assignment.find(params[:id]).has_groups?
-      render json: { message: "not a group assignment", success: false }, status: 400
+      render json: { errors: [{ detail: "not a group assignment" }], success: false }, status: 400
     else
       @student_ids = Group.find(params[:group_id]).students.pluck(:id)
       @criterion_grades = CriterionGrade.where(

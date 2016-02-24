@@ -114,6 +114,14 @@ describe API::CriterionGradesController do
           student_id: world.group.students.pluck(:id), assignment_id: world.assignment.id
         ).pluck(:raw_score)).to eq([target, target, target, target])
       end
+
+      it "adds the group id to all grades" do
+        target = world.group.id
+        put :group_update, params
+        expect(Grade.where(
+          student_id: world.group.students.pluck(:id), assignment_id: world.assignment.id
+        ).pluck(:group_id)).to eq([target, target, target, target])
+      end
     end
   end
 
