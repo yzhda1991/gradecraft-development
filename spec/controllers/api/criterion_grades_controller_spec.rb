@@ -42,7 +42,7 @@ describe API::CriterionGradesController do
     describe "PUT update" do
       let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge) }
       let(:params) do
-        RubricGradePUT.new(world).params.merge(student_id: world.student.id, assignment_id: world.assignment.id)
+        RubricGradePUT.new(world).params.merge(id: world.assignment.id, student_id: world.student.id)
       end
 
       describe "finds or creates the grade for the assignment and student" do
@@ -95,7 +95,7 @@ describe API::CriterionGradesController do
         it "describes unfound student or assignment" do
           params["student_id"] = 0
           put :update, params
-          expect(JSON.parse(response.body)).to eq("message" => "Unable to verify both student and assignment", "success" => false)
+          expect(JSON.parse(response.body)).to eq("errors"=>[{"detail"=>"Unable to verify both student and assignment"}], "success"=>false)
           expect(response.status).to eq(404)
         end
       end
@@ -104,7 +104,7 @@ describe API::CriterionGradesController do
     describe "PUT group_update" do
       let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge, :group) }
       let(:params) do
-        RubricGradePUT.new(world).params.merge(group_id: world.group.id, assignment_id: world.assignment.id)
+        RubricGradePUT.new(world).params.merge(id: world.assignment.id, group_id: world.group.id)
       end
 
       it "updates the grade for all students in group" do
@@ -124,7 +124,7 @@ describe API::CriterionGradesController do
       [
         -> { get :index, id: world.assignment.id, student_id: world.student.id, format: :json },
         -> { get :group_index, id: world.assignment.id, group_id: 1, format: :json },
-        -> { put :update, RubricGradePUT.new(world).params.merge(student_id: world.student.id, assignment_id: world.assignment.id) }
+        -> { put :update, RubricGradePUT.new(world).params.merge(id: world.assignment.id, student_id: world.student.id) }
       ].each do |protected_route|
         expect(protected_route.call).to redirect_to(:root)
       end

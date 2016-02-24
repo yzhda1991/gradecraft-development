@@ -46,7 +46,7 @@ class GradesController < ApplicationController
     if @assignment.grade_with_rubric?
       @rubric = @assignment.rubric
       @criterion_grades = serialized_criterion_grades
-      # This is a patch for the Angular GradeRubricCtrl
+      # This is sent to the Angular controlled submit button
       @return_path = URI(request.referer).path + "?student_id=#{current_student.id}"
     end
 
@@ -214,6 +214,8 @@ class GradesController < ApplicationController
 
     if @assignment.grade_with_rubric?
       @rubric = @assignment.rubric
+      # This is sent to the Angular controlled submit button
+      @return_path = URI(request.referer).path + "?group_id=#{@group.id}"
     end
   end
 

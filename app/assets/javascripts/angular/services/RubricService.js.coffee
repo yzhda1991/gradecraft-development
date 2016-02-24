@@ -55,7 +55,9 @@
       )
     else if assignment.scope.type == "GROUP"
       $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/criterion_grades/').success((res)->
-        # We filter to the first student since all students grades are identical (for now)
+
+        # The API sends all student information so we can add the ability to custom grade group members
+        # For now we filter to the first student's grade since all students grades are identical
         addCriterionGrades(_.filter(res.data, { attributes: { 'student_id': res.meta.student_ids[0] }}))
       )
 
@@ -75,7 +77,9 @@
       )
     else if assignment.scope.type == "GROUP"
       $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/grades/').success((res)->
-        # We filter to the first student's grade since all students grades are identical (for now)
+
+        # The API sends all student information so we can add the ability to custom grade group members
+        # For now we filter to the first student's grade since all students grades are identical
         angular.copy(_.find(res.data, { attributes: {'student_id' : res.meta.student_ids[0] }}).attributes, grade)
         angular.copy(res.meta.grade_status_options, gradeStatusOptions)
       )
@@ -88,7 +92,8 @@
         window.location = returnURL
     ).error(
       (data)->
-        console.log(data)
+        if data.errors.length
+          console.log(data.errors[0].detail)
     )
 
   pointsPossible = ()->

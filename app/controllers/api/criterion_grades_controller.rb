@@ -33,7 +33,7 @@ class API::CriterionGradesController < ApplicationController
     if result.success?
       render json: { message: "Grade successfully saved", success: true }, status: 200
     else
-      render json: { message: result.message, success: false }, status:  result.error_code || 400
+      render json: { errors: [{ detail: result.message }], success: false }, status:  result.error_code || 400
     end
   end
 
@@ -43,7 +43,7 @@ class API::CriterionGradesController < ApplicationController
     if result.success?
       render json: { message: "Grade successfully saved", success: true }, status: 200
     else
-      render json: { message: result.message, success: false }, status:  result.error_code || 400
+      render json: { errors: [{ detail: result.message }], success: false }, status:  result.error_code || 400
     end
   end
 end

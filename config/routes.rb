@@ -346,8 +346,8 @@ GradeCraft::Application.routes.draw do
     get 'assignments/:id/students/:student_id/grade', to: 'grades#show', defaults: { format: :json }
     get 'assignments/:id/groups/:group_id/grades', to: 'grades#group_index', defaults: { format: :json }
     get 'assignments/:id/students/:student_id/criterion_grades', to: 'criterion_grades#index', defaults: { format: :json }
-    put "assignments/:assignment_id/students/:student_id/criterion_grades", to: "criterion_grades#update", defaults: { format: :json }
-    put "assignments/:assignment_id/groups/:group_id/criterion_grades", to: "criterion_grades#group_update", defaults: { format: :json }
+    put "assignments/:id/students/:student_id/criterion_grades", to: "criterion_grades#update", defaults: { format: :json }
+    put "assignments/:id/groups/:group_id/criterion_grades", to: "criterion_grades#group_update", defaults: { format: :json }
     get 'assignments/:id/groups/:group_id/criterion_grades', to: 'criterion_grades#group_index', defaults: { format: :json }
     resources :badges, only: :index, defaults: { format: :json }
   end

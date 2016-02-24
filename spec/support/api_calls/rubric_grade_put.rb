@@ -31,7 +31,7 @@ class RubricGradePUT
     criteria.collect { |c| criterion_grade_to_h(c) }
   end
 
-  # "student_id" or "group_id" is passed through the route
+  # "assignment id" and "student_id" or "group_id" is passed through the route
   def params
     { "points_given" => assignment.point_total,
       "points_possible" => assignment.point_total,
