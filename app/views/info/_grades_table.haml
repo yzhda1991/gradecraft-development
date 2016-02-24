@@ -1,15 +1,19 @@
-%h4.subtitle#inProgressTableCaption
-  = "In Limbo Grades"
-  %span.label.alert= no_status_grades_count_for(course)
+%h4.subtitle{ id: "#{grade_type}TableCaption" }
+  = subtitle
+  %span.label.alert= count
 
-- @no_status_grades_by_assignment.each do |assignment, grades|
-  .assignment-in-progress
+- grades_by_assignment.each do |assignment, grades|
+  %div{ class: "assignment-#{grade_type}"}
     %h4.assignment_name
       = link_to assignment.name, assignment
-      = link_to 'Quick Grade', mass_grade_assignment_path(assignment), :class => "button"
+      - if assignment.is_individual?
+        = link_to glyph(:check) + "Quick Grade", mass_grade_assignment_path(assignment), :class => "button"
+      - else
+        = link_to glyph(:check) + "Grade", assignment, :class => "button"
 
     = form_tag edit_status_grades_assignment_path(assignment), method: :get do
-      %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "inProgressTableCaption"}
+
+      %table.nofeatures_default_last_name_dynatable
         %thead
           %tr
             - if assignment.is_individual?
@@ -29,7 +33,7 @@
           %tbody
             - grades.each do |grade|
               - student = grade.student
-              - team = student.team_for_course(course)
+              - team = student.team_for_course(course) if student
               - group = grade.group
               %tr
                 - if assignment.is_individual?
@@ -51,9 +55,10 @@
                       - elsif assignment.has_groups?
                         %li= link_to glyph(:eye) + "See Grade", assignment_grade_path(assignment, :group_id => group.id), :class => 'button'
                         %li= link_to glyph(:check) + "Edit Grade", group_grade_assignment_path(assignment, :group_id => group.id), :class => "button"
-                %td.center= check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-in-progress-grades-command']" }
+                %td.center= check_box_tag "grade_ids[]", grade.id, false, data: { behavior: "toggle-disable-list-command", commands: "[data-behavior='selected-#{grade_type}-grades-command']" }
+
       .submit-buttons
         .right
-          = submit_tag "Update Selected Grade Statuses", :class => "button disabled", disabled: true, data: { behavior: "selected-in-progress-grades-command" }
+          = submit_tag "Update Selected Grade Statuses", :class => "button disabled", disabled: true, data: { behavior: "selected-unreleased-grades-command" }
 
   %hr.dotted
