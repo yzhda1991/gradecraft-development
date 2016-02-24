@@ -1,4 +1,18 @@
-class LoginEventLogger < ApplicationEventLogger # pull in EventLogger::Enqueue from ApplicationEventLogger
+# This class is responsible for handling circumstances in which a user has
+# logged into a course and a record needs to be made of that login
+# circumstances.
+#
+# It has a dedicated :login_event_logger queue in order to
+# handle throttling through resque-throttle, and sets a custom @analytics_class
+# so that the .perform block in the superclass will generate the event using
+# Analytics::LoginEvent instead of the default Analytics::Event mongoid class.
+#
+# The most notable behavior here is that the .perform block is caching the
+# data before the superclass generates the Analytics event so that it can
+# update the previous_last_login_at on the analytics event record. This may
+# be extracted into a separate job in a future iteration of this workflow
+#
+class LoginEventLogger < ApplicationEventLogger
   include EventLogger::Enqueue
 
   # queue to use for login event jobs
@@ -16,9 +30,9 @@ class LoginEventLogger < ApplicationEventLogger # pull in EventLogger::Enqueue f
   ## class methods, for use when being called directly by Resque
 
   # perform block that is ultimately called by Resque
-  def self.perform(event_type, data={})
+  def self.perform(event_type, data = {})
     @data = data
-    data.merge!(last_login_at: previous_last_login_at)
+    data[:last_login_at] = previous_last_login_at
     super
     update_last_login
   end
