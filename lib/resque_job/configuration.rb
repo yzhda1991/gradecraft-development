@@ -1,10 +1,8 @@
 module ResqueJob
-
   # this is the default configuration module for ResqueJob. Any configuration
   # values that need to be modified on the system-wide configuration for
   # ResqueJob should have an attr_accessor value set here.
   class Configuration
-
     # all accessible configuration values
     attr_accessor :backoff_strategy
 
@@ -15,6 +13,5 @@ module ResqueJob
     def initialize
       self.backoff_strategy = []
     end
-
   end
 end
