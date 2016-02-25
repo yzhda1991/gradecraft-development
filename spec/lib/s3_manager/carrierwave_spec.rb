@@ -163,25 +163,33 @@ RSpec.describe S3Manager::Carrierwave do
     end
   end
 
-  describe "#cache_store_dir" do
-    subject { s3_file_cylon.instance_eval { cache_store_dir }}
-    before { allow(s3_file_cylon).to receive(:file) { double(:file, store_dir: "some-dir") }}
+  describe "caching the #store_dir" do
+    let(:store_dir) { Dir.mktmpdir }
 
-    it "caches the store_dir attribute" do
-      subject
-      expect(s3_file_cylon[:store_dir]).to eq("some-dir")
-    end
-  end
+    describe "#cache_store_dir" do
+      subject { s3_file_cylon.instance_eval { cache_store_dir }}
+      before { allow(s3_file_cylon).to receive(:file) { double(:file, store_dir: store_dir) }}
 
-  describe "caching the store_dir before create" do
-    let(:create_submission_file) { create(:submission_file) }
-    before do
-      allow_any_instance_of(AttachmentUploader).to receive(:store_dir) { "some-dir" }
-      create_submission_file
+      it "caches the store_dir attribute" do
+        subject
+        expect(s3_file_cylon[:store_dir]).to eq(store_dir)
+      end
     end
 
-    it "caches the store_dir before create" do
-      expect(create_submission_file[:store_dir]).to eq("some-dir")
+    describe "caching the store_dir before create" do
+      let(:submission_file) { create(:submission_file) }
+      before do
+        allow_any_instance_of(AttachmentUploader).to receive(:store_dir) { store_dir }
+        submission_file # create/cache the submission file after the stub
+      end
+
+      it "caches the store_dir before create" do
+        expect(submission_file[:store_dir]).to eq(store_dir)
+      end
+    end
+
+    after do
+      FileUtils.rm_rf(store_dir, secure: true)
     end
   end
 
