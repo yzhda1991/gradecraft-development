@@ -1,7 +1,7 @@
 require "active_record_spec_helper"
 require_relative "../toolkits/uploaders/attachment_uploader"
 require_relative "../support/uni_mock/rails"
-require_relative "../support/uni_mock/time"
+require_relative "../support/uni_mock/stub_time"
 require_relative "../support/random_file/content"
 
 include Toolkits::Uploaders::AttachmentUploader
