@@ -25,7 +25,8 @@ RSpec.describe S3Manager::Carrierwave do
     let(:s3_object) { double(:s3_object).as_null_object }
 
     before(:each) do
-      allow(submission_file).to receive_message_chain(:file, :url) { "great url, bro" }
+      allow(submission_file).to receive_message_chain(:file, :url)
+        .and_return "great url, bro"
       allow(submission_file).to receive(:filepath) { "sumpin'" }
       allow(submission_file).to receive(:s3_object) { s3_object }
       allow(s3_object).to receive(:presigned_url) { presigned_url }
@@ -52,10 +53,10 @@ RSpec.describe S3Manager::Carrierwave do
     before(:each) do
       allow(submission_file).to receive(:bucket) { bucket }
       allow(bucket).to receive(:object) { object }
-      allow(submission_file).to receive_messages({
+      allow(submission_file).to receive_messages(
         bucket: bucket,
         s3_object_file_key: s3_object_file_key
-      })
+      )
     end
 
     it "fetches the bucket object with the s3_object_file_key" do
@@ -71,8 +72,11 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "cached_file_path is present" do
       before do
-        allow(submission_file).to receive_messages(store_dir: "great_dir", mounted_filename: "stuff.txt")
-        allow(submission_file).to receive(:cached_file_path) { "/some/great/path.png" }
+        allow(submission_file).to receive_messages(
+          store_dir: "great_dir",
+          mounted_filename: "stuff.txt",
+          cached_file_path: "/some/great/path.png"
+        )
       end
 
       it "returns the cached file path" do
@@ -82,7 +86,10 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "filepath is present" do
       before do
-        allow(submission_file).to receive_messages(filepath: tempfile, filepath_includes_filename?: true)
+        allow(submission_file).to receive_messages(
+          filepath: tempfile,
+          filepath_includes_filename?: true
+        )
       end
 
       it "returns the CGI-unescaped filepath" do
@@ -94,7 +101,8 @@ RSpec.describe S3Manager::Carrierwave do
     context "filepath is not present" do
       before do
         allow(submission_file).to receive(:filepath) { nil }
-        allow(submission_file).to receive_message_chain(:file, :path) { "/stuff/path" }
+        allow(submission_file).to receive_message_chain(:file, :path)
+          .and_return "/stuff/path"
       end
 
       it "returns the #path from the file" do
@@ -104,24 +112,34 @@ RSpec.describe S3Manager::Carrierwave do
   end
 
   describe "#mounted_filename" do
-    subject { mounted_submission_file.mounted_filename }
-    let(:mounted_submission_file) { create(:submission_file, filepath: "this-is-great.txt") }
-    before { allow(mounted_submission_file).to receive_message_chain(:file, :mounted_as) { :filepath }}
+    subject(:result) { mounted_submission_file.mounted_filename }
+
+    let(:mounted_submission_file) do
+      create(:submission_file, filepath: "this-is-great.txt")
+    end
+
+    before do
+      allow(mounted_submission_file)
+        .to receive_message_chain(:file, :mounted_as).and_return :filepath
+    end
 
     it "returns the value for the #mounted_as attribute" do
-      expect(subject).to eq("this-is-great.txt")
+      expect(result).to eq("this-is-great.txt")
     end
   end
 
   describe "filepath_includes_filename?" do
-    subject { submission_file.filepath_includes_filename? }
+    subject(:result) { submission_file.filepath_includes_filename? }
     context "filepath is present and filepath includes/matches the filename" do
       before do
-        allow(submission_file).to receive_messages(filepath: "some/path/to/nowhere.txt", filename: "nowhere.txt")
+        allow(submission_file).to receive_messages(
+          filepath: "some/path/to/nowhere.txt",
+          filename: "nowhere.txt"
+        )
       end
 
       it "returns true" do
-        expect(subject).to be_truthy
+        expect(result).to be_truthy
       end
     end
 
@@ -137,7 +155,10 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "filepath is present but doesn't match the filename" do
       before do
-        allow(submission_file).to receive_messages(filepath: "some/path/to/nowhere.txt", filename: "everglades.pdf")
+        allow(submission_file).to receive_messages(
+          filepath: "some/path/to/nowhere.txt",
+          filename: "everglades.pdf"
+        )
       end
 
       it "returns false" do
@@ -149,7 +170,10 @@ RSpec.describe S3Manager::Carrierwave do
   describe "#cached_file_path" do
     subject { submission_file.cached_file_path }
     before do
-      allow(submission_file).to receive_messages(store_dir: "great_dir", mounted_filename: "stuff.txt")
+      allow(submission_file).to receive_messages(
+        store_dir: "great_dir",
+        mounted_filename: "stuff.txt"
+      )
     end
 
     context "both store_dir and filename exist" do
@@ -166,7 +190,7 @@ RSpec.describe S3Manager::Carrierwave do
 
   describe "caching the #store_dir" do
     let(:store_dir) { Dir.mktmpdir }
-    let(:cache_store_dir) { submission_file.instance_eval { cache_store_dir }}
+    let(:cache_store_dir) { submission_file.instance_eval { cache_store_dir } }
 
     describe "#cache_store_dir" do
       before do
@@ -207,10 +231,10 @@ RSpec.describe S3Manager::Carrierwave do
     let(:s3_object_file_key) { "hopefully-this-never-happens" }
 
     before(:each) do
-      allow(submission_file).to receive_messages({
+      allow(submission_file).to receive_messages(
         bucket: bucket,
         s3_object_file_key: s3_object_file_key
-      })
+      )
       allow(bucket).to receive(:object) { object }
     end
 
@@ -235,7 +259,7 @@ RSpec.describe S3Manager::Carrierwave do
     context "file exists on server" do
       before(:each) { put_object_to_s3 }
 
-      it "should actually be operating on a file that's present to begin with" do
+      it "should be operating on a file that's present" do
         expect(object_exists?).to be_truthy
       end
 
