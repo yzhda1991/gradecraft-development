@@ -14,7 +14,6 @@ engines:
       languages:
         ruby:
           mass_threshold: 20
-        javascript:
   eslint:
     enabled: false
   fixme:
@@ -44,3 +43,4 @@ exclude_paths:
 - spec/**/*
 - test/**/*
 - vendor/**/*
+- assets/**/*
