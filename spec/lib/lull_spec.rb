@@ -1,5 +1,5 @@
-require_relative '../../lib/lull'
-require_relative '../toolkits/lib/lull_toolkit'
+require_relative "../../lib/lull"
+require_relative "../toolkits/lib/lull_toolkit"
 
 # pull in various time helper methods
 include Toolkits::Lib::LullToolkit

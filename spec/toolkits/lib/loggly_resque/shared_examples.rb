@@ -39,7 +39,7 @@ module Toolkits
           # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
           #
           #  def logger_url
-          #    [ logger_base_url, ENV['LOGGLY_TOKEN'], "tag", queue_tag_name ].join("/")
+          #    [ logger_base_url, ENV["LOGGLY_TOKEN"], "tag", queue_tag_name ].join("/")
           #  end
           #
           describe "#logger_url" do
@@ -47,11 +47,11 @@ module Toolkits
 
             let(:logger_base_url) { "http://some.base.url" }
             let(:queue_tag_name) { "some-app-environmentname" }
-            let!(:cached_loggly_token) { ENV['LOGGLY_TOKEN'] } # cache the loggly token to reset later
+            let!(:cached_loggly_token) { ENV["LOGGLY_TOKEN"] } # cache the loggly token to reset later
 
             before do
               allow(target_class).to receive_messages(logger_base_url: logger_base_url, queue_tag_name: queue_tag_name)
-              ENV['LOGGLY_TOKEN'] = 'some_bogus_token'
+              ENV["LOGGLY_TOKEN"] = "some_bogus_token"
             end
 
             it "builds a target url for the logger" do
@@ -60,7 +60,7 @@ module Toolkits
 
             after do
               # reset this for use in other specs
-              ENV['LOGGLY_TOKEN'] = cached_loggly_token
+              ENV["LOGGLY_TOKEN"] = cached_loggly_token
             end
           end
 
@@ -72,21 +72,21 @@ module Toolkits
           end
 
           #  def queue_tag_name
-          #    [ @queue.to_s.gsub(/_+/,'-'), LOGGLY_CONFIG['TAG_SUFFIX'] ].join("-")
+          #    [ @queue.to_s.gsub(/_+/,"-"), LOGGLY_CONFIG["TAG_SUFFIX"] ].join("-")
           #  end
           describe "#queue_tag_name" do
             subject { target_class.queue_tag_name }
             let(:loggly_tag_suffix) { "some-weird-stuff" }
-            let(:formatted_queue_name) { target_class.instance_variable_get(:@queue).to_s.gsub(/_+/,'-') }
-            let!(:cached_loggly_tag_suffix) { LOGGLY_CONFIG['TAG_SUFFIX'] }
+            let(:formatted_queue_name) { target_class.instance_variable_get(:@queue).to_s.gsub(/_+/, "-") }
+            let!(:cached_loggly_tag_suffix) { LOGGLY_CONFIG["TAG_SUFFIX"] }
 
-            before { LOGGLY_CONFIG['TAG_SUFFIX'] = loggly_tag_suffix }
+            before { LOGGLY_CONFIG["TAG_SUFFIX"] = loggly_tag_suffix }
 
             it "builds a queue tag name from the queue name and the loggly config tag suffix" do
               expect(subject).to eq "#{formatted_queue_name}-#{loggly_tag_suffix}"
             end
 
-            after { LOGGLY_CONFIG['TAG_SUFFIX'] = cached_loggly_tag_suffix }
+            after { LOGGLY_CONFIG["TAG_SUFFIX"] = cached_loggly_tag_suffix }
           end
         end
       end

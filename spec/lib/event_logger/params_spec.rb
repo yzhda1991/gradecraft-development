@@ -1,6 +1,6 @@
-require_relative '../../../lib/event_logger/params'
-require_relative '../../toolkits/event_loggers/shared_examples'
-require_relative '../../support/test_classes/lib/event_logger/params_test_class'
+require_relative "../../../lib/event_logger/params"
+require_relative "../../toolkits/event_loggers/shared_examples"
+require_relative "../../support/test_classes/lib/event_logger/params_test_class"
 
 describe EventLogger::Params, type: :vendor_library do
   include Toolkits::EventLoggers::SharedExamples

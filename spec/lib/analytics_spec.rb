@@ -1,5 +1,5 @@
-require_relative '../../lib/is_configurable'
-require_relative '../toolkits/lib/is_configurable/shared_examples'
+require_relative "../../lib/is_configurable"
+require_relative "../toolkits/lib/is_configurable/shared_examples"
 
 describe Analytics, type: :vendor_library do
   include Toolkits::Lib::IsConfigurableToolkit::SharedExamples
@@ -15,8 +15,8 @@ describe Analytics, type: :vendor_library do
       ["Weekly", :weekly]
     ],
     default_range_options_for_select: [
-      ['Past Day', 'past_day'],
-      ['Past Year', 'past_year']
+      ["Past Day", "past_day"],
+      ["Past Year", "past_year"]
     ],
     exports: ["some_other_constant_here"]
   }

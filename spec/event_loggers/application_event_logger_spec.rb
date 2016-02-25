@@ -1,10 +1,10 @@
-require 'active_record_spec_helper'
-require 'resque_spec/scheduler'
+require "active_record_spec_helper"
+require "resque_spec/scheduler"
 
-require_relative '../toolkits/event_loggers/shared_examples'
-require_relative '../toolkits/event_loggers/attributes'
-require_relative '../toolkits/event_loggers/event_session'
-require_relative '../toolkits/event_loggers/application_event_logger_toolkit'
+require_relative "../toolkits/event_loggers/shared_examples"
+require_relative "../toolkits/event_loggers/attributes"
+require_relative "../toolkits/event_loggers/event_session"
+require_relative "../toolkits/event_loggers/application_event_logger_toolkit"
 
 # PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe ApplicationEventLogger, type: :event_logger do
