@@ -1,13 +1,14 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
+require_relative "../../../lib/s3_manager"
 
 RSpec.describe S3Manager::Carrierwave do
-  subject { s3_file_cylon }
+  subject { submission_file }
 
-  let(:s3_file_cylon) { SubmissionFile.new }
+  let(:submission_file) { build(:submission_file) }
   let(:s3_manager) { S3Manager::Manager.new }
   let(:source_object) { Tempfile.new("walter-srsly") }
   let(:s3_object_key) { "lets-see-what-happens.txt" }
-  let(:object_exists?) { s3_file_cylon.exists_on_s3? }
+  let(:object_exists?) { submission_file.exists_on_s3? }
   let(:put_object_to_s3) { s3_manager.put_object(s3_object_key, source_object) }
 
   describe "inclusion of S3Manager::Basics" do
@@ -18,15 +19,15 @@ RSpec.describe S3Manager::Carrierwave do
   end
 
   describe "#url" do
-    subject(:each) { s3_file_cylon.url }
+    subject(:each) { submission_file.url }
 
     let(:presigned_url) { double(:presigned_url).as_null_object }
     let(:s3_object) { double(:s3_object).as_null_object }
 
     before(:each) do
-      allow(s3_file_cylon).to receive_message_chain(:file, :url) { "great url, bro" }
-      allow(s3_file_cylon).to receive(:filepath) { "sumpin'" }
-      allow(s3_file_cylon).to receive(:s3_object) { s3_object }
+      allow(submission_file).to receive_message_chain(:file, :url) { "great url, bro" }
+      allow(submission_file).to receive(:filepath) { "sumpin'" }
+      allow(submission_file).to receive(:s3_object) { s3_object }
       allow(s3_object).to receive(:presigned_url) { presigned_url }
     end
 
@@ -42,16 +43,16 @@ RSpec.describe S3Manager::Carrierwave do
   end
 
   describe "#s3_object" do
-    subject(:each) { s3_file_cylon.s3_object }
+    subject(:each) { submission_file.s3_object }
 
     let(:bucket) { double(:bucket).as_null_object }
     let(:object) { double(:object).as_null_object }
     let(:s3_object_file_key) { "hopefully-this-never-happens" }
 
     before(:each) do
-      allow(s3_file_cylon).to receive(:bucket) { bucket }
+      allow(submission_file).to receive(:bucket) { bucket }
       allow(bucket).to receive(:object) { object }
-      allow(s3_file_cylon).to receive_messages({
+      allow(submission_file).to receive_messages({
         bucket: bucket,
         s3_object_file_key: s3_object_file_key
       })
@@ -65,13 +66,13 @@ RSpec.describe S3Manager::Carrierwave do
   end
 
   describe "#s3_object_file_key" do
-    subject { s3_file_cylon.s3_object_file_key }
+    subject { submission_file.s3_object_file_key }
     let(:tempfile) { Tempfile.new("walter") }
 
     context "cached_file_path is present" do
       before do
-        allow(s3_file_cylon).to receive_messages(store_dir: "great_dir", mounted_filename: "stuff.txt")
-        allow(s3_file_cylon).to receive(:cached_file_path) { "/some/great/path.png" }
+        allow(submission_file).to receive_messages(store_dir: "great_dir", mounted_filename: "stuff.txt")
+        allow(submission_file).to receive(:cached_file_path) { "/some/great/path.png" }
       end
 
       it "returns the cached file path" do
@@ -81,7 +82,7 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "filepath is present" do
       before do
-        allow(s3_file_cylon).to receive_messages(filepath: tempfile, filepath_includes_filename?: true)
+        allow(submission_file).to receive_messages(filepath: tempfile, filepath_includes_filename?: true)
       end
 
       it "returns the CGI-unescaped filepath" do
@@ -92,8 +93,8 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "filepath is not present" do
       before do
-        allow(s3_file_cylon).to receive(:filepath) { nil }
-        allow(s3_file_cylon).to receive_message_chain(:file, :path) { "/stuff/path" }
+        allow(submission_file).to receive(:filepath) { nil }
+        allow(submission_file).to receive_message_chain(:file, :path) { "/stuff/path" }
       end
 
       it "returns the #path from the file" do
@@ -113,10 +114,10 @@ RSpec.describe S3Manager::Carrierwave do
   end
 
   describe "filepath_includes_filename?" do
-    subject { s3_file_cylon.filepath_includes_filename? }
+    subject { submission_file.filepath_includes_filename? }
     context "filepath is present and filepath includes/matches the filename" do
       before do
-        allow(s3_file_cylon).to receive_messages(filepath: "some/path/to/nowhere.txt", filename: "nowhere.txt")
+        allow(submission_file).to receive_messages(filepath: "some/path/to/nowhere.txt", filename: "nowhere.txt")
       end
 
       it "returns true" do
@@ -126,7 +127,7 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "filepath is not present" do
       before do
-        allow(s3_file_cylon).to receive(:filepath) { nil }
+        allow(submission_file).to receive(:filepath) { nil }
       end
 
       it "returns false" do
@@ -136,7 +137,7 @@ RSpec.describe S3Manager::Carrierwave do
 
     context "filepath is present but doesn't match the filename" do
       before do
-        allow(s3_file_cylon).to receive_messages(filepath: "some/path/to/nowhere.txt", filename: "everglades.pdf")
+        allow(submission_file).to receive_messages(filepath: "some/path/to/nowhere.txt", filename: "everglades.pdf")
       end
 
       it "returns false" do
@@ -146,9 +147,9 @@ RSpec.describe S3Manager::Carrierwave do
   end
 
   describe "#cached_file_path" do
-    subject { s3_file_cylon.cached_file_path }
+    subject { submission_file.cached_file_path }
     before do
-      allow(s3_file_cylon).to receive_messages(store_dir: "great_dir", mounted_filename: "stuff.txt")
+      allow(submission_file).to receive_messages(store_dir: "great_dir", mounted_filename: "stuff.txt")
     end
 
     context "both store_dir and filename exist" do
@@ -165,17 +166,17 @@ RSpec.describe S3Manager::Carrierwave do
 
   describe "caching the #store_dir" do
     let(:store_dir) { Dir.mktmpdir }
+    let(:cache_store_dir) { submission_file.instance_eval { cache_store_dir }}
 
     describe "#cache_store_dir" do
-      subject(:result) { s3_file_cylon.instance_eval { cache_store_dir }}
       before do
-        allow(s3_file_cylon).to receive(:file)
+        allow(submission_file).to receive(:file)
           .and_return double(:file, store_dir: store_dir)
       end
 
       it "caches the store_dir attribute" do
-        result
-        expect(s3_file_cylon[:store_dir]).to eq(store_dir)
+        cache_store_dir
+        expect(submission_file[:store_dir]).to eq(store_dir)
       end
     end
 
@@ -183,30 +184,30 @@ RSpec.describe S3Manager::Carrierwave do
       before do
         allow_any_instance_of(AttachmentUploader)
           .to receive(:store_dir).and_return store_dir
+        # cache the submission file after the
+        submission_file
+        cache_store_dir
       end
-
-      # this has to be created after the stub has occurred
-      let!(:submission_file) { create(:submission_file) }
 
       it "caches the store_dir before create" do
         expect(submission_file[:store_dir]).to eq(store_dir)
       end
     end
 
-    after do
+    after(:each) do
       FileUtils.rm_rf(store_dir, secure: true)
     end
   end
 
   describe "#delete_from_s3" do
-    subject { s3_file_cylon.delete_from_s3 }
+    subject { submission_file.delete_from_s3 }
 
     let(:bucket) { double(:bucket).as_null_object }
     let(:object) { double(:object).as_null_object }
     let(:s3_object_file_key) { "hopefully-this-never-happens" }
 
     before(:each) do
-      allow(s3_file_cylon).to receive_messages({
+      allow(submission_file).to receive_messages({
         bucket: bucket,
         s3_object_file_key: s3_object_file_key
       })
@@ -225,10 +226,10 @@ RSpec.describe S3Manager::Carrierwave do
   end
 
   describe "actually deleting the object" do
-    subject { s3_file_cylon.delete_from_s3 }
+    subject { submission_file.delete_from_s3 }
 
     before(:each) do
-      allow(s3_file_cylon).to receive(:s3_object_file_key) { s3_object_key }
+      allow(submission_file).to receive(:s3_object_file_key) { s3_object_key }
     end
 
     context "file exists on server" do
@@ -250,23 +251,23 @@ RSpec.describe S3Manager::Carrierwave do
   end
 
   describe "#exists_on_s3?" do
-    subject { s3_file_cylon.exists_on_s3? }
+    subject { submission_file.exists_on_s3? }
 
     before(:each) do
-      allow(s3_file_cylon).to receive(:s3_object_file_key) { s3_object_key }
+      allow(submission_file).to receive(:s3_object_file_key) { s3_object_key }
     end
 
     context "file exists on server" do
       it "returns a truthy value" do
         put_object_to_s3
         expect(subject).to be_truthy
-        s3_file_cylon.delete_from_s3 # clean up the file
+        submission_file.delete_from_s3 # clean up the file
       end
     end
 
     context "file does not exist on server" do
       it "returns an Aws::S3::Types::DeleteObjectOutput object" do
-        s3_file_cylon.delete_from_s3 # make sure this doesn't exist
+        submission_file.delete_from_s3 # make sure this doesn't exist
         expect(subject).to be_falsey
       end
     end
