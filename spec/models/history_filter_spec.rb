@@ -81,6 +81,26 @@ describe HistoryFilter do
     end
   end
 
+  describe "#merge" do
+    it "merges the changeset from one object to another" do
+      history = [OpenStruct.new(version: OpenStruct.new(item_type: "SubmissionFile"),
+                                changeset: { "event" => "create",
+                                             "object" => "SubmissionFile",
+                                             "filename" => [nil, "blah"]}),
+                 OpenStruct.new(version: OpenStruct.new(item_type: "Submission"),
+                                changeset: { "event" => "create",
+                                             "object" => "Submission",
+                                             "link" => [nil, "http://example.org"]})
+      ]
+      result = described_class.new(history).merge("SubmissionFile" => "Submission")
+        .changesets
+      expect(result).to eq [{ "event" => "create",
+                              "object" => "Submission",
+                              "link" => [nil, "http://example.org"],
+                              "filename" => [nil, "blah"]}]
+    end
+  end
+
   describe "#remove" do
     it "filters a changeset by the changes" do
       history = [OpenStruct.new(changeset: { "attr" => ["value1", "value2"],

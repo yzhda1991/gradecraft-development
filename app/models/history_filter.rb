@@ -37,6 +37,27 @@ class HistoryFilter
     self
   end
 
+  def merge(options)
+    from_versions = []
+    to_versions = []
+
+    options.each_pair do |from, to|
+      (from_versions << history.select { |h| h.version.item_type == from }).flatten!
+      (to_versions << history.select { |h| h.version.item_type == to }).flatten!
+    end
+
+    from_versions.each_with_index do |history_item, index|
+      history_item.changeset.each_pair do |key, value|
+        if !["created_at", "updated_at"].include?(key) && value.is_a?(Array)
+          to_versions[index].changeset.merge!({ "#{key}" => value })
+        end
+      end
+      exclude("object" => history_item.changeset["object"])
+    end
+
+    self
+  end
+
   def remove(options)
     name = options["name"]
 
