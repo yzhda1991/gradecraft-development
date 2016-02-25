@@ -1,5 +1,5 @@
 .pageContent
-  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{@criterion_grades}, '#{@return_path}')")
+  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl")
     .row
       #rubric-heading.columns
         %h3.text-right
@@ -85,16 +85,13 @@
     %br
 
     .right
-      - if !@assignment.release_necessary?
-        %select(ng-model="grade.status" ng-options="status for status in noReleaseGradeStatuses")
-          %option(value="" disabled) Select grade status for this submission...
-        .form_label Is this grade ready to be reviewed?
-      - else
-        %select(ng-model="grade.status" ng-options="status for status in releaseNecessaryGradeStatuses")
+      .row
+        %select(ng-model="grade.status" ng-options="status for status in gradeStatusOptions")
           %option(value="" disabled) Select grade status for this submission...
         .align-right.form_label Can the student see this grade?
+
     .clear
     %br
 
     .right
-      %button#submit-grade(ng-click="submitGrade()" ng-class='{"disabled" : !grade.status}') Submit Grade
+      %button#submit-grade(ng-click="submitGrade('#{@return_path}')" ng-class='{"disabled" : !grade.status}') Submit Grade

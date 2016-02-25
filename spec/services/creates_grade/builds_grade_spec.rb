@@ -4,11 +4,12 @@ require "./app/services/creates_grade/builds_grade"
 
 describe Services::Actions::BuildsGrade do
 
-  let(:attributes) { RubricGradePUT.new.params }
+  let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge) }
+  let(:attributes) { RubricGradePUT.new(world).params }
   let(:context) {{
       attributes: attributes,
-      student: User.find(attributes["student_id"]),
-      assignment: Assignment.find(attributes["assignment_id"])
+      student: world.student,
+      assignment: world.assignment
     }}
 
   it "expects attributes to assign to grade" do
@@ -36,11 +37,17 @@ describe Services::Actions::BuildsGrade do
 
   it "adds attributes to the grade" do
     result = described_class.execute context
-    expect(result[:grade].assignment_id).to eq attributes["assignment_id"]
-    expect(result[:grade].student_id).to eq attributes["student_id"]
+    expect(result[:grade].assignment_id).to eq world.assignment.id
+    expect(result[:grade].student_id).to eq world.student.id
     expect(result[:grade].point_total).to eq attributes["points_possible"]
     expect(result[:grade].raw_score).to eq attributes["points_given"]
     expect(result[:grade].status).to eq "Released"
     expect(result[:grade].feedback).to eq "good jorb!"
+  end
+
+  it "adds the group id if supplied" do
+    context[:attributes]["group_id"] = 777
+    result = described_class.execute context
+    expect(result[:grade].group_id).to eq 777
   end
 end

@@ -61,3 +61,6 @@
           - if presenter.grade_for(student).feedback.present?
             %p.bold Instructor Feedback:
             %p= raw presenter.grade_for(student).feedback
+
+  - if presenter.rubric_designed?
+    .rubric-container= render partial: 'grades/criterion_grade_results', locals: { presenter: presenter }

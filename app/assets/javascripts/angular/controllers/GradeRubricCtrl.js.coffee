@@ -1,22 +1,24 @@
-@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'CriterionGrade','RubricService', '$http', ($scope, Restangular, Criterion, CourseBadge, CriterionGrade, RubricService, $http) ->
+@gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'RubricService', '$q', ($scope, Restangular, RubricService, $q) ->
 
-  $scope.criterionGrades = {} # index in hash with criterion_id as key
-  $scope.noReleaseGradeStatuses = ["In Progress", "Graded"]
-  $scope.releaseNecessaryGradeStatuses = ["In Progress", "Graded", "Released"]
-  $scope.assignmentId = parseInt(window.location.pathname.split('/')[2])
-  $scope.studentId = parseInt(window.location.search.match(/student_id=(\d+)/)[1])
-
-  $scope.init = (criterionGrades, returnURL)->
-    $scope.returnURL = returnURL
-    $scope.addCriterionGrades(criterionGrades)
-
-  RubricService.getBadges()
-  RubricService.getCriteria($scope.assignmentId, $scope)
-  RubricService.getGrade($scope.assignmentId, $scope.studentId)
-
+  $scope.assignment = RubricService.assignment
   $scope.courseBadges = RubricService.badges
   $scope.criteria = RubricService.criteria
+  $scope.criterionGrades = RubricService.criterionGrades
   $scope.grade = RubricService.grade
+  $scope.gradeStatusOptions = RubricService.gradeStatusOptions
+
+  RubricService.getAssignment(window.location)
+
+  # Criterion factory is dependent on CriterionGrades existing in scope
+  $scope.init = ()->
+    $q.all([RubricService.getCriterionGrades($scope.assignment)])
+
+  $scope.init().then(()->
+    RubricService.getCriteria($scope.assignment, $scope)
+  )
+
+  RubricService.getBadges()
+  RubricService.getGrade($scope.assignment)
 
   $scope.pointsPossible = ()->
     RubricService.pointsPossible()
@@ -45,9 +47,6 @@
 
   $scope.pointsOverage = ()->
     $scope.pointsDifference() < 0
-
-  $scope.showCriterion = (attrs)->
-    new Criterion(attrs, $scope)
 
   # count how many levels have been selected in the UI
   $scope.selectedLevels = ()->
@@ -181,38 +180,25 @@
       status:   $scope.grade.status
     }
 
+  # Document any updates to this format in the specs: /spec/support/api_calls/rubric_grade_put.rb
+  # student_id or group_id is now passed through the route, see RubricService.putRubricGradeSubmission
   $scope.gradedRubricParams = ()->
     {
       points_given:     $scope.pointsGiven(),
-      student_id:       $scope.studentId,
       points_possible:  $scope.pointsPossible(),
       criterion_grades: $scope.criteriaParams(),
       level_badges:     $scope.levelBadgesParams(),
       level_ids:        $scope.selectedLevelIds(),
       criterion_ids:    $scope.allCriterionIds(),
       grade:            $scope.gradeParams(),
-    }
+  }
 
-  $scope.submitGrade = ()->
+  $scope.submitGrade = (returnURL)->
     self = this
     if !$scope.grade.status
       return alert "You must select a grade status before you can submit this grade"
     if confirm "Are you sure you want to submit the grade for this assignment?"
-      # !!! Document any updates to this call in the specs: /spec/support/api_calls/rubric_grade_put.rb
-      $http.put("/assignments/#{$scope.assignmentId}/grade/submit_rubric", self.gradedRubricParams()).success(
-        (data)->
-          console.log(data)
-          window.location = $scope.returnURL
-      ).error(
-        (data)->
-          console.log(data)
-      )
-
-  $scope.addCriterionGrades = (criterionGrades)->
-    angular.forEach(criterionGrades, (rg, index)->
-      criterionGrade = new CriterionGrade(rg)
-      $scope.criterionGrades[rg.criterion_id] = criterionGrade
-    )
+      RubricService.putRubricGradeSubmission(self.assignment, self.gradedRubricParams(), returnURL)
 
   $scope.froalaOptions = {
     inlineMode: false,

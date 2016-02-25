@@ -5,6 +5,7 @@ describe "api/grades/show" do
   before(:all) do
     world = World.create.with(:course, :assignment, :student, :grade)
     @grade = world.grade
+    @grade_status_options = ["In Progress","Graded", "Released"]
   end
 
   it "responds with a grade" do
@@ -21,5 +22,11 @@ describe "api/grades/show" do
     expect(json["data"]["attributes"]["student_id"]).to eq(@grade.student_id)
     expect(json["data"]["attributes"]["feedback"]).to eq(@grade.feedback)
     expect(json["data"]["attributes"]["status"]).to eq(@grade.status)
+  end
+
+  it "adds grading status options to meta data" do
+    render
+    json = JSON.parse(response.body)
+    expect(json["meta"]["grade_status_options"]).to eq(@grade_status_options)
   end
 end

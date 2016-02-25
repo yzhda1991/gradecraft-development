@@ -32,10 +32,10 @@ describe "api/criteria/index" do
 
   it "adds level badges to the level" do
     allow_any_instance_of(Level).to receive(:level_badges)
-          .and_return [double(:level_badge, id: 123, level_id: 456, badge_id: 789)]
+      .and_return [double(:level_badge, id: 123, level_id: 456, badge_id: 789)]
     render
     json = JSON.parse(response.body)
     expect(json["data"][0]["attributes"]["levels"][0]["level_badges"][0]).to \
-      eq({ "id"=>123, "level_id"=>456, "badge_id"=>789 })
+      eq("id" => 123, "level_id" => 456, "badge_id" => 789)
   end
 end

@@ -1,5 +1,3 @@
-require_relative "../services/creates_grade_using_rubric"
-
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
@@ -15,8 +13,8 @@ class GradesController < ApplicationController
     if current_user_is_student?
       redirect_to @assignment and return
     end
-    # TODO: we need to add rubrics for group assignment
-    if @assignment.rubric.present? && @assignment.is_individual?
+
+    if @assignment.grade_with_rubric?
       @rubric = @assignment.rubric
       @criteria = @rubric.criteria
       @criterion_grades = serialized_criterion_grades
@@ -45,10 +43,10 @@ class GradesController < ApplicationController
     @badges = @student.earnable_course_badges_for_grade(@grade)
     @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
 
-    if @assignment.rubric.present?
+    if @assignment.grade_with_rubric?
       @rubric = @assignment.rubric
       @criterion_grades = serialized_criterion_grades
-      # This is a patch for the Angular GradeRubricCtrl
+      # This is sent to the Angular controlled submit button
       @return_path = URI(request.referer).path + "?student_id=#{current_student.id}"
     end
 
@@ -127,17 +125,6 @@ class GradesController < ApplicationController
       render json: {message: "Earned badge successfully deleted", success: true}, status: 200
     else
       render json: {message: "Earned badge failed to delete", success: false}, status: 400
-    end
-  end
-
-  # PUT /assignments/:assignment_id/grade/submit_rubric
-  def submit_rubric
-    result = Services::CreatesGradeUsingRubric.create params
-
-    if result.success?
-      render json: {message: "Grade successfully saved", success: true}, status: 200
-    else
-      render json: {message: result.message, success: false}, status:  result.error_code || 400
     end
   end
 
@@ -224,6 +211,12 @@ class GradesController < ApplicationController
     @submission_id = @assignment.submissions.where(group_id: @group.id).first.try(:id)
     @title = "Grading #{@group.name}'s #{@assignment.name}"
     @assignment_score_levels = @assignment.assignment_score_levels
+
+    if @assignment.grade_with_rubric?
+      @rubric = @assignment.rubric
+      # This is sent to the Angular controlled submit button
+      @return_path = URI(request.referer).path + "?group_id=#{@group.id}"
+    end
   end
 
   # PUT /assignments/:id/group_grade

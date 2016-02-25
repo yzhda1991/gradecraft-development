@@ -117,7 +117,7 @@ Style/ClassAndModuleCamelCase:
 
 Style/ClassAndModuleChildren:
   Description: 'Checks style of children classes and modules.'
-  Enabled: true
+  Enabled: false
 
 Style/ClassCheck:
   Description: 'Enforces consistent use of `Object#is_a?` or `Object#kind_of?`.'
@@ -422,6 +422,10 @@ Style/NestedTernaryOperator:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-nested-ternary'
   Enabled: true
 
+Style/NestedParenthesizedCalls:
+  Description: 'Add parentheses to nested method calls'
+  Enabled: false
+
 Style/Next:
   Description: 'Use `next` to skip iteration instead of a condition at the end.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-nested-conditionals'
@@ -654,6 +658,10 @@ Style/SpaceAroundEqualsInParameterDefault:
 Style/SpaceAroundOperators:
   Description: 'Use a single space around operators.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-operators'
+  Enabled: true
+
+Style/SpaceBeforeModifierKeyword:
+  Description: 'Put a space before the modifier keyword.'
   Enabled: true
 
 Style/SpaceInsideBrackets:

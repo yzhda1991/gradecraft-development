@@ -295,84 +295,6 @@ describe GradesController do
       end
     end
 
-    describe "PUT submit_rubric" do
-
-      before do
-        @rubric_assignment = create(:assignment, course: @course)
-        @rubric = create(:rubric_with_criteria, assignment: @rubric_assignment)
-        @params = {assignment_id: @rubric_assignment.id, student_id: @student.id,  format: :json }
-        @params[:criterion_grades] = @rubric.criteria.collect { |criterion| { "criterion_id" => criterion.id, "criterion_name" => criterion.name, "order" => criterion.order, "max_points"=> criterion.max_points, "level_id" => criterion.levels.first.id }}
-        @params[:grade] = @grade
-        allow(controller).to receive(:current_student).and_return(@student)
-      end
-
-      describe "finds or creates the grade for the assignment and student" do
-        it "finds and updates existing grades" do
-          grade = create(:grade, assignment: @rubric_assignment, student: @student)
-          expect{ post :submit_rubric, @params }.to change { Grade.count }.by(0)
-        end
-
-        it "creates grade when one doesn't exists" do
-          expect{ post :submit_rubric, @params }.to change { Grade.count }.by(1)
-          grade = Grade.unscoped.last
-          expect(grade.assignment).to eq(@rubric_assignment)
-          expect(grade.student).to eq(@student)
-        end
-
-        it "assigns the grade to the submission" do
-          submission = create :submission, assignment: @rubric_assignment, student: @student
-          post :submit_rubric, @params
-          grade = Grade.unscoped.last
-          expect(grade.submission).to eq submission
-        end
-
-        it "timestamps the grade" do
-          current_time = DateTime.now
-          post :submit_rubric, @params
-          grade = Grade.unscoped.last
-          expect(grade.graded_at).to be > current_time
-        end
-      end
-
-      describe "when an additional `criterion_ids` parameter is supplied" do
-
-        before do
-          @params[:criterion_ids] = @rubric.criteria.collect { |criterion| criterion.id }
-        end
-
-        it "deletes all preexisting rubric grades" do
-          expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(6)
-          expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(0)
-        end
-      end
-
-      it "creates the rubric grades" do
-        allow(controller).to receive(:current_student).and_return(@student)
-        expect{ post :submit_rubric, @params }.to change { CriterionGrade.count }.by(@rubric.criteria.count)
-      end
-
-      it "adds earned level badges" do
-        earnable_badge = create(:badge, course: @course)
-        level_badge = LevelBadge.create(badge_id: earnable_badge.id, level_id: @rubric.criteria.first.levels.first.id )
-        @params[:level_badges] = [{badge_id: earnable_badge.id, level_badge: level_badge.id, level_id: @rubric.criteria.first.levels.first.id}]
-        expect{ post :submit_rubric, @params }.to change { EarnedBadge.count }.by(1)
-      end
-
-      it "renders success message when request format is JSON" do
-        post :submit_rubric, @params
-        expect(JSON.parse(response.body)).to eq({"message"=>"Grade successfully saved", "success"=>true})
-      end
-
-      describe "on error" do
-        it "describes lacking student or assignment" do
-          @params.delete(:student_id)
-          post :submit_rubric, @params
-          expect(JSON.parse(response.body)).to eq({"message"=>"Unable to verify both student and assignment", "success"=>false})
-          expect(response.status).to eq(404)
-        end
-      end
-    end
-
     describe "POST remove" do
       before do
         allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
@@ -753,7 +675,6 @@ describe GradesController do
           Proc.new { get :update, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
           Proc.new { get :edit, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
           Proc.new { get :update, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
-          Proc.new { get :submit_rubric, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
           Proc.new { get :remove, { :id => @assignment.id, :grade_id => @grade.id }},
           Proc.new { delete :destroy, {:grade_id => @grade.id, :assignment_id => @assignment.id }},
           Proc.new { get :mass_edit, { :id => @assignment.id  }},
