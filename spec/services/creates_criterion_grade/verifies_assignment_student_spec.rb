@@ -4,7 +4,7 @@ require "./app/services/creates_criterion_grade/verifies_assignment_student"
 
 describe Services::Actions::VerifiesAssignmentStudent do
   let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge, :group) }
-  let(:route_params) {{ "id" => world.assignment.id, "student_id" => world.student.id }}
+  let(:route_params) {{ "assignment_id" => world.assignment.id, "student_id" => world.student.id }}
   let(:raw_params) { RubricGradePUT.new(world).params.merge route_params }
 
   it "expects attributes to assign to assignment and student" do
@@ -18,7 +18,7 @@ describe Services::Actions::VerifiesAssignmentStudent do
   end
 
   it "halts with error if assignment is not found" do
-    raw_params["id"] = 1000
+    raw_params["assignment_id"] = 1000
     expect { described_class.execute raw_params: raw_params }.to \
       raise_error LightService::FailWithRollbackError
   end

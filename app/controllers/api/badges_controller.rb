@@ -1,5 +1,6 @@
 class API::BadgesController < ApplicationController
 
+  # GET api/assignments/:assignment_id/badges
   def index
     @badges = current_course.badges.select(
       :id,

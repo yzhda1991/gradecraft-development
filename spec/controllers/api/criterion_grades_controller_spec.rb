@@ -9,7 +9,7 @@ describe API::CriterionGradesController do
 
     describe "GET index" do
       it "returns a student's criterion grades for the current assignment" do
-        get :index, id: world.assignment.id, student_id: world.student.id, format: :json
+        get :index, assignment_id: world.assignment.id, student_id: world.student.id, format: :json
         expect(assigns(:criterion_grades)).to eq([world.criterion_grade])
         expect(response).to render_template(:index)
       end
@@ -26,13 +26,13 @@ describe API::CriterionGradesController do
 
       it "returns 400 error code with individual assignment" do
         world.assignment.update_attributes grade_scope: "Individual"
-        get :group_index, id: world.assignment.id, group_id: world.group.id, format: :json
+        get :group_index, assignment_id: world.assignment.id, group_id: world.group.id, format: :json
         expect(response.status).to be(400)
       end
 
       it "returns criterion_grades and student ids for a group" do
         world.assignment.update_attributes grade_scope: "Group"
-        get :group_index, id: world.assignment.id, group_id: world.group.id, format: :json
+        get :group_index, assignment_id: world.assignment.id, group_id: world.group.id, format: :json
         expect(assigns(:student_ids)).to eq(world.group.students.pluck(:id))
         expect(assigns(:criterion_grades).length).to eq(world.group.students.length)
         expect(response).to render_template(:group_index)
@@ -42,7 +42,7 @@ describe API::CriterionGradesController do
     describe "PUT update" do
       let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge) }
       let(:params) do
-        RubricGradePUT.new(world).params.merge(id: world.assignment.id, student_id: world.student.id)
+        RubricGradePUT.new(world).params.merge(assignment_id: world.assignment.id, student_id: world.student.id)
       end
 
       describe "finds or creates the grade for the assignment and student" do
@@ -104,7 +104,7 @@ describe API::CriterionGradesController do
     describe "PUT group_update" do
       let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion, :criterion_grade, :badge, :group) }
       let(:params) do
-        RubricGradePUT.new(world).params.merge(id: world.assignment.id, group_id: world.group.id)
+        RubricGradePUT.new(world).params.merge(assignment_id: world.assignment.id, group_id: world.group.id)
       end
 
       it "updates the grade for all students in group" do
@@ -130,9 +130,9 @@ describe API::CriterionGradesController do
 
     it "redirects protected routes to root" do
       [
-        -> { get :index, id: world.assignment.id, student_id: world.student.id, format: :json },
-        -> { get :group_index, id: world.assignment.id, group_id: 1, format: :json },
-        -> { put :update, RubricGradePUT.new(world).params.merge(id: world.assignment.id, student_id: world.student.id) }
+        -> { get :index, assignment_id: world.assignment.id, student_id: world.student.id, format: :json },
+        -> { get :group_index, assignment_id: world.assignment.id, group_id: 1, format: :json },
+        -> { put :update, RubricGradePUT.new(world).params.merge(assignment_id: world.assignment.id, student_id: world.student.id) }
       ].each do |protected_route|
         expect(protected_route.call).to redirect_to(:root)
       end
