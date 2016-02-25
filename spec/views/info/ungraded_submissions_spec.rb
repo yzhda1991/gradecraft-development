@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'rails_spec_helper'
+require "rails_spec_helper"
 include CourseTerms
 
 describe "info/ungraded_submissions" do

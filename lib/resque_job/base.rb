@@ -1,5 +1,5 @@
-require 'resque-retry'
-require 'resque/errors'
+require "resque-retry"
+require "resque/errors"
 
 # mz todo: move a lot of this logic into an ApplicationJob file in /app/background_jobs
 module ResqueJob
@@ -65,7 +65,7 @@ module ResqueJob
     # these all need to be spec'd out
     # https://logs-01.loggly.com/inputs/<loggly-token>/tag/tag-name
     def self.logger_url
-      [ self.logger_base_url, ENV['LOGGLY_TOKEN'], "tag", self.queue_tag_name ].join("/")
+      [ self.logger_base_url, ENV["LOGGLY_TOKEN"], "tag", self.queue_tag_name ].join("/")
     end
 
     def self.logger_base_url

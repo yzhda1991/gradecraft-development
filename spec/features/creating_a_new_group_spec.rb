@@ -35,7 +35,7 @@ feature "creating a new group" do
         click_button "Create group"
       end
 
-      expect(page).to have_notification_message('alert', "You don't have enough group members.")
+      expect(page).to have_notification_message("alert", "You don't have enough group members.")
     end
 
     scenario "unsuccessfully without an assignment" do
@@ -57,7 +57,7 @@ feature "creating a new group" do
         click_button "Create group"
       end
 
-      expect(page).to have_notification_message('alert', "You need to check off which assignment your group will work on.")
+      expect(page).to have_notification_message("alert", "You need to check off which assignment your group will work on.")
     end
   end
 end

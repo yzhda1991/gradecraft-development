@@ -1,9 +1,9 @@
-require 'resque'
-require 'resque/throttler' # throttles number of jobs being run in a queue at a time
-require 'resque-retry' # retries failed/exceptioned jobs
-require 'resque/failure/redis'
+require "resque"
+require "resque/throttler" # throttles number of jobs being run in a queue at a time
+require "resque-retry" # retries failed/exceptioned jobs
+require "resque/failure/redis"
 
-REDIS = Redis.new(:host =>  ENV['REDIS_HOST_IP'], :port => ENV['REDIS_PORT'])
+REDIS = Redis.new(:host =>  ENV["REDIS_HOST_IP"], :port => ENV["REDIS_PORT"])
 Resque.redis = REDIS
 
 

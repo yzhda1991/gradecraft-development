@@ -3,7 +3,7 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   %table.nopage_dynatable
     %thead
@@ -27,5 +27,3 @@
     .clear
     %br
     .right= f.button :submit, "Update Statuses", :class => "button"
-
-    

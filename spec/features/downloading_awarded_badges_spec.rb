@@ -18,7 +18,7 @@ feature "downloading awarded badges file" do
         click_link "Awarded Badges"
       end
 
-      expect(page.response_headers['Content-Type']).to eq('application/octet-stream')
+      expect(page.response_headers["Content-Type"]).to eq("application/octet-stream")
 
       expect(page).to have_content "First Name,Last Name,Uniqname,Email,Badge ID,Badge Name,Feedback,Awarded Date"
     end

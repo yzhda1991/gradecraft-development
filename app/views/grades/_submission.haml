@@ -4,7 +4,7 @@
     - if current_user_is_staff?
       = "#{current_student.first_name}'s Submission"
     %span
-      %a{:href => "#{edit_assignment_submission_path(@assignment, current_student.submission_for_assignment(@assignment))}?student_id=#{current_student.id}", :class => 'button'  }
+      %a{:href => "#{edit_assignment_submission_path(@assignment, current_student.submission_for_assignment(@assignment))}?student_id=#{current_student.id}", :class => "button"  }
         Edit My Submission
         %span.sr-only #{current_student.try(:first_name)}'s Submission
   %p

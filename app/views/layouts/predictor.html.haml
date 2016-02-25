@@ -4,7 +4,7 @@
     %meta(name="viewport" content="width=device-width, initial-scale=1")
     %title
       = "#{@title.titleize} - " if @title
-      = current_course.try(:name) || 'GradeCraft'
+      = current_course.try(:name) || "GradeCraft"
     = stylesheet_link_tag "application", :media => "all", media: "all"
     = csrf_meta_tags
     = yield(:head)
@@ -13,25 +13,25 @@
     .off-canvas-wrap{:"data-offcanvas" => true}
       .inner-wrap
         .fixed
-          = render 'layouts/top_bar'
+          = render "layouts/top_bar"
 
         - if current_user
           .outer-wrap{:role => "main"}
-            = render 'layouts/alerts'
+            = render "layouts/alerts"
             .show-for-medium-up
               = content_nav do
                 = render "students/student_profile_tabs"
-            = render 'layouts/content'
+            = render "layouts/content"
 
           = render "layouts/help/uservoice"
 
           .footer
-            = render 'layouts/footer'
+            = render "layouts/footer"
         - else
-          = render 'layouts/public'
+          = render "layouts/public"
           .row.panel.footer
             .columns
-              = render 'layouts/footer'
-        = render 'layouts/background'
-        = render 'layouts/google_analytics'
-        = javascript_include_tag "application", 'data-turbolinks-track' => true
+              = render "layouts/footer"
+        = render "layouts/background"
+        = render "layouts/google_analytics"
+        = javascript_include_tag "application", "data-turbolinks-track" => true

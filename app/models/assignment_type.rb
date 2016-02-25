@@ -6,7 +6,7 @@ class AssignmentType < ActiveRecord::Base
   attr_accessible :max_points, :name, :description, :student_weightable, :position
 
   belongs_to :course, touch: true
-  has_many :assignments, -> { order('position ASC') }, :dependent => :destroy
+  has_many :assignments, -> { order("position ASC") }, :dependent => :destroy
   has_many :submissions, :through => :assignments
   has_many :assignment_weights
   has_many :grades
@@ -17,7 +17,7 @@ class AssignmentType < ActiveRecord::Base
   scope :student_weightable, -> { where(:student_weightable => true) }
   scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignment_types.id = assignment_weights.assignment_type_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
 
-  default_scope { order 'position' }
+  default_scope { order "position" }
 
   def copy(attributes={})
     ModelCopier.new(self).copy(attributes: attributes, associations: [:assignments])
@@ -79,11 +79,11 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def score_for_student(student)
-    student.grades.student_visible.not_nil.where(:assignment_type => self).pluck('score').sum || 0
+    student.grades.student_visible.not_nil.where(:assignment_type => self).pluck("score").sum || 0
   end
 
   def raw_score_for_student(student)
-    student.grades.student_visible.where(:assignment_type => self).pluck('raw_score').compact.sum || 0
+    student.grades.student_visible.where(:assignment_type => self).pluck("raw_score").compact.sum || 0
   end
 
   private

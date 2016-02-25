@@ -1,4 +1,4 @@
-require 'active_record_spec_helper'
+require "active_record_spec_helper"
 require "rails_spec_helper"
 
 RSpec.describe "Assignment #missing_binaries methods" do

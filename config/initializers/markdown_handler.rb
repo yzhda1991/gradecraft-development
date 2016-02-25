@@ -1,4 +1,4 @@
-require 'rdiscount'
+require "rdiscount"
 
 module MarkdownHandler
   def self.erb

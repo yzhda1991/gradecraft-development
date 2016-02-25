@@ -7,10 +7,10 @@ class GradeSchemeElement < ActiveRecord::Base
   validates_presence_of :low_range, :high_range, :course
   validates_numericality_of :high_range, greater_than: Proc.new { |e| e.low_range.to_i }
 
-  default_scope { order 'high_range DESC' }
+  default_scope { order "high_range DESC" }
 
   scope :for_course, -> (course_id) { where(course_id: course_id) }
-  scope :order_by_low_range, -> { order 'low_range ASC' }
+  scope :order_by_low_range, -> { order "low_range ASC" }
 
   def self.default
     GradeSchemeElement.new(level: "Not yet on board")

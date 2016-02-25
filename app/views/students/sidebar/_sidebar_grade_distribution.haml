@@ -2,7 +2,7 @@
   %h3 Points Distribution
   %hr
   %h4.not_bold.italic= "You've earned #{points current_student.cached_score_for_course(current_course)} points"
-  #student_grade_distro{'data-scores' => current_student.scores_for_course(current_course).to_json}
+  #student_grade_distro{"data-scores"=> current_student.scores_for_course(current_course).to_json}
   #gradeDistro
   .italic= "Class Average: #{points current_course.average_course_score} points"
   .italic= "Low Score: #{points current_course.minimum_course_score} points"

@@ -1,10 +1,10 @@
 - cache current_courses_cache_key(current_user), skip_digest: true do
   - current_user.courses.active.alphabetical.each do |c|
     - cache ["v1", c] do
-      %li= link_to glyph(:home) + "#{c.formatted_short_name}", change_current_course_path(:course_id => c.id), :method => 'post'
+      %li= link_to glyph(:home) + "#{c.formatted_short_name}", change_current_course_path(:course_id => c.id), :method => "post"
 - if current_user_is_staff?
   %li= link_to glyph("plus-circle") + "Create a New Course", new_course_path
-  %li= link_to glyph("rotate-right") + "Copy this Course", copy_courses_path(:id => current_course.id), :method => 'post'
+  %li= link_to glyph("rotate-right") + "Copy this Course", copy_courses_path(:id => current_course.id), :method => "post"
 
 - cache archived_courses_cache_key(current_user), skip_digest: true do
   - if current_user.archived_courses.present?
@@ -12,4 +12,4 @@
     %h4.past-label Past Courses
     - current_user.courses.inactive.alphabetical.each do |c|
       - cache ["v1", c] do
-        %li.archived= link_to glyph(:home) + "#{c.formatted_short_name}", change_current_course_path(:course_id => c.id), :method => 'post'
+        %li.archived= link_to glyph(:home) + "#{c.formatted_short_name}", change_current_course_path(:course_id => c.id), :method => "post"

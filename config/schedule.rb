@@ -1,16 +1,16 @@
-env :PATH, ENV['PATH']
-set :output, 'log/cron.log'
+env :PATH, ENV["PATH"]
+set :output, "log/cron.log"
 
-Time.zone = 'America/Detroit'
+Time.zone = "America/Detroit"
 
-every 1.day, :at => Time.zone.parse('12:00am').utc do
-  rake 'backup:db'
+every 1.day, :at => Time.zone.parse("12:00am").utc do
+  rake "backup:db"
 end
 
-every 1.day, :at => Time.zone.parse('12:00am').utc do
-  rake 'backup:files'
+every 1.day, :at => Time.zone.parse("12:00am").utc do
+  rake "backup:files"
 end
 
-every 1.day, :at => Time.zone.parse('12:00am').utc do
-  rake 'teams:update_team_rank'
+every 1.day, :at => Time.zone.parse("12:00am").utc do
+  rake "teams:update_team_rank"
 end

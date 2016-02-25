@@ -17,7 +17,7 @@ feature "downloading multiplied gradebook file" do
         click_link "Multiplied Gradebook"
       end
 
-      expect(page).to have_notification_message('notice', "Your request to export the multiplied gradebook for \"Course Name\" is currently being processed. We will email you the data shortly.")
+      expect(page).to have_notification_message("notice", "Your request to export the multiplied gradebook for \"Course Name\" is currently being processed. We will email you the data shortly.")
 
     end
   end

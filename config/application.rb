@@ -1,18 +1,18 @@
-require File.expand_path('../boot', __FILE__)
+require File.expand_path("../boot", __FILE__)
 
 
-require 'active_record/railtie'
-require 'action_controller/railtie'
-require 'action_mailer/railtie'
-require 'csv'
-require 'sprockets/railtie'
-require 'sanitize'
+require "active_record/railtie"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "csv"
+require "sprockets/railtie"
+require "sanitize"
 
 Bundler.require(:default, Rails.env)
 
 module GradeCraft
   class Application < Rails::Application
-    config.time_zone = 'America/Detroit'
+    config.time_zone = "America/Detroit"
     config.autoload_paths += %W(#{config.root}/lib)
 
     config.assets.precompile += %w(.svg .eot .otf .woff .ttf)

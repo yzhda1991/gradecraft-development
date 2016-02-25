@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe StudentAcademicHistoriesController do
   before(:all) do
@@ -13,14 +13,14 @@ describe StudentAcademicHistoriesController do
     allow(Resque).to receive(:enqueue).and_return(true)
   end
 
-  context "as a professor" do 
+  context "as a professor" do
     before(:all) do
       @professor = create(:user)
       CourseMembership.create user: @professor, course: @course, role: "professor"
     end
     before(:each) { login_user(@professor) }
 
-    describe "GET show" do 
+    describe "GET show" do
       it "displays a single student's academic history for this course" do 
         get :show, {:student_id => @student.id, :id => @academic_history.id}
         expect(assigns(:student)).to eq(@student)
@@ -28,7 +28,7 @@ describe StudentAcademicHistoriesController do
       end
     end
 
-    describe "GET new" do 
+    describe "GET new" do
       it "displays a form to create a new academic history" do
         get :new, {:student_id => @student.id}
         expect(assigns(:student)).to eq(@student)
@@ -37,7 +37,7 @@ describe StudentAcademicHistoriesController do
       end
     end
 
-    describe "GET edit" do 
+    describe "GET edit" do
       it "displays the form to edit a student's academic history" do
         get :edit, {:student_id => @student.id, :id => @academic_history.id}
         expect(assigns(:student)).to eq(@student)
@@ -46,8 +46,8 @@ describe StudentAcademicHistoriesController do
       end
     end
 
-    describe "POST create" do       
-      it "creates an academic history with valid attributes" do 
+    describe "POST create" do
+      it "creates an academic history with valid attributes" do
         @student_2 = create(:user)
         @student_2.courses << @course
         params = attributes_for(:student_academic_history)
@@ -58,21 +58,21 @@ describe StudentAcademicHistoriesController do
         expect(@student_2.student_academic_histories.where(:course_id => @course.id).first.gpa).to eq(3)
       end
 
-      it "does not increase the count with invalid attributes" do 
+      it "does not increase the count with invalid attributes" do
         params = attributes_for(:student_academic_history, :course_id => nil)
         expect{ post :create, :student_academic_history => params, :student_id => @student.id }.to_not change(StudentAcademicHistory,:count)
       end
     end
 
-    describe "POST update" do       
-      it "updates an academic history with valid attributes" do 
+    describe "POST update" do
+      it "updates an academic history with valid attributes" do
         params = attributes_for(:student_academic_history, gpa: 2.0)
         put :update, { :student_id => @student.id, :id => @academic_history.id, :student_academic_history => params }
         expect(response).to redirect_to(student_path(@student))
         expect(@academic_history.reload.gpa.to_f).to eq(2.0)
       end
 
-      it "does not update with invalid attributes" do 
+      it "does not update with invalid attributes" do
         params = { gpa: -1 }
         put :update, { :student_id => @student.id, :id => @academic_history.id, :student_academic_history => params }
         expect(@academic_history.reload.gpa.to_f).to eq(2.2)

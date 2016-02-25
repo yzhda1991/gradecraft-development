@@ -1,4 +1,4 @@
-= render partial: 'layouts/alerts', locals: { model: @assignment_type, term: term_for(:assignment_type) }
+= render partial: "layouts/alerts", locals: { model: @assignment_type, term: term_for(:assignment_type) }
 
 = simple_form_for(@assignment_type) do |f|
   / First section should cover the simple stuff we need to know about every assignment type
@@ -32,4 +32,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "#{@assignment_type.persisted? ? 'Update' : 'Create'} #{term_for :assignment_type}"
-      %li= link_to glyph('times-circle') + "Cancel", assignment_types_path, :class => "button"
+      %li= link_to glyph("times-circle") + "Cancel", assignment_types_path, :class => "button"

@@ -3,9 +3,9 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
-  = render partial: 'submissions/assignment_guidelines', locals: { assignment: @assignment }
+  = render partial: "submissions/assignment_guidelines", locals: { assignment: @assignment }
 
   - if @rubric && @rubric.designed? and @assignment.use_rubric
     = render "rubric_edit"

@@ -3,17 +3,17 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
-  
+  = render "layouts/alerts"
+
   %h4.subtitle Top 10
 
-  = render 'students_table', :course => current_course, :students => @top_ten_students
+  = render "students_table", :course => current_course, :students => @top_ten_students
 
   - if @bottom_ten_students.present?
     %h4.subtitle Bottom 10
 
-    = render 'students_table', :course => current_course, :students => @bottom_ten_students
+    = render "students_table", :course => current_course, :students => @bottom_ten_students
 
   - if current_course.teams.present?
     %h4.subtitle #{term_for :team} Overview
-    = render 'teams_table', :course => current_course, :teams => current_course.teams
+    = render "teams_table", :course => current_course, :teams => current_course.teams

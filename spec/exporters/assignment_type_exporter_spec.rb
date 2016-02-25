@@ -21,7 +21,7 @@ describe AssignmentTypeExporter do
 
     it "generates an empty CSV if there are no students specified" do
       csv = subject.export_summary_scores(@assignment_types, course, [])
-      expect(csv).to include 'First Name,Last Name,Email,Username,Team,Charms,History of Wizardry'
+      expect(csv).to include "First Name,Last Name,Email,Username,Team,Charms,History of Wizardry"
     end
 
     it "generates a CSV with scores if students and grades are present" do
@@ -45,7 +45,7 @@ describe AssignmentTypeExporter do
   describe "#export_scores" do
     it "generates an empty CSV if there are no students specified" do
       csv = subject.export_scores(assignment_type_1, course, [])
-      expect(csv).to include 'First Name,Last Name,Email,Username,Team,Raw Score,Score'
+      expect(csv).to include "First Name,Last Name,Email,Username,Team,Raw Score,Score"
     end
 
     it "generates a CSV with scores if students and grades are present" do

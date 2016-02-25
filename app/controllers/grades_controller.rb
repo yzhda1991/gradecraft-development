@@ -7,7 +7,7 @@ class GradesController < ApplicationController
   before_filter :ensure_student?, only: [:feedback_read, :predict_score, :self_log]
   before_filter :save_referer, only: [:edit, :edit_status]
 
-  protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
+  protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
 
   # GET /assignments/:assignment_id/grade?student_id=:id
   def show

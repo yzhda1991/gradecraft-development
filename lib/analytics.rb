@@ -10,7 +10,7 @@ module Analytics
   end
 end
 
-require_dependency 'analytics/configuration'
-require_dependency 'analytics/event'
-require_dependency 'analytics/aggregate'
-require_dependency 'analytics/data'
+require_dependency "analytics/configuration"
+require_dependency "analytics/event"
+require_dependency "analytics/aggregate"
+require_dependency "analytics/data"

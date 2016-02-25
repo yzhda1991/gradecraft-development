@@ -4,26 +4,26 @@
     %meta(name="viewport" content="width=device-width, initial-scale=1")
     %title
       = "#{@title.titleize} - " if @title
-      = current_course.try(:name) || 'GradeCraft'
+      = current_course.try(:name) || "GradeCraft"
     = stylesheet_link_tag "application", :media => "all"
-    = render 'layouts/favicon'
+    = render "layouts/favicon"
     = csrf_meta_tags
     = yield(:head)
 
   %body(class="#{body_class}")
-    = render 'layouts/top_bar'
+    = render "layouts/top_bar"
     - if current_user
       .inner-wrap
         - if current_user_is_staff?
-          = render 'layouts/staff'
+          = render "layouts/staff"
         - else
-          = render 'layouts/student'
+          = render "layouts/student"
     - else
-      = render 'layouts/public'
+      = render "layouts/public"
     = render "layouts/help/uservoice"
     .footer
-      = render 'layouts/footer'
-    = render 'layouts/background'
-    = render 'layouts/google_analytics'
-    = javascript_include_tag "application", 'data-turbolinks-track' => true
+      = render "layouts/footer"
+    = render "layouts/background"
+    = render "layouts/google_analytics"
+    = javascript_include_tag "application", "data-turbolinks-track" => true
     = yield(:scripts)

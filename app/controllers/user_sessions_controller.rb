@@ -28,7 +28,7 @@ class UserSessionsController < ApplicationController
     @course = Course.find_or_create_by_lti_auth_hash(auth_hash)
     if !@user || !@course
       lti_error_notification
-      flash[:alert] = t('sessions.create.error')
+      flash[:alert] = t("sessions.create.error")
       redirect_to auth_failure_path
       return
     end
@@ -50,12 +50,12 @@ class UserSessionsController < ApplicationController
   private
 
   def auth_hash
-    request.env['omniauth.auth']
+    request.env["omniauth.auth"]
   end
 
   def lti_error_notification
-    user = { name: auth_hash['extra']['raw_info']['lis_person_name_full'], email: auth_hash['extra']['raw_info']['lis_person_contact_email_primary'], lti_uid: auth_hash['extra']['raw_info']['context_id'] }
-    course = { name: auth_hash['extra']['raw_info']['context_label'], uid: auth_hash['extra']['raw_info']['context_id'] }
+    user = { name: auth_hash["extra"]["raw_info"]["lis_person_name_full"], email: auth_hash["extra"]["raw_info"]["lis_person_contact_email_primary"], lti_uid: auth_hash["extra"]["raw_info"]["context_id"] }
+    course = { name: auth_hash["extra"]["raw_info"]["context_label"], uid: auth_hash["extra"]["raw_info"]["context_id"] }
     NotificationMailer.lti_error(user, course).deliver_now
   end
 

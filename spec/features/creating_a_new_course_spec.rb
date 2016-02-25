@@ -23,7 +23,7 @@ feature "creating a new course" do
       end
 
       expect(current_path).to eq course_path(Course.last)
-      expect(page).to have_notification_message('notice', 'Course Course Name successfully created')
+      expect(page).to have_notification_message("notice", "Course Course Name successfully created")
     end
   end
 end

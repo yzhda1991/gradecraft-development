@@ -4,7 +4,6 @@ class AnalyticsController < ApplicationController
 
   def index
     @title = "User Analytics"
-    @students = current_course.students.order('last_name ASC')
   end
 
   def students
@@ -39,13 +38,13 @@ class AnalyticsController < ApplicationController
   def login_frequencies
     data = CourseLogin.data(@granularity, @range, {course_id: current_course.id})
 
-    data[:lookup_keys] = ['{{t}}.average']
+    data[:lookup_keys] = ["{{t}}.average"]
 
     data.decorate! do |result|
       result[:name] = "Average #{data[:granularity]} login frequency"
       # Get frequency
       result[data[:granularity]].each do |key, values|
-        result[data[:granularity]][key][:average] = (values['total'] / values['count']).round(2)
+        result[data[:granularity]][key][:average] = (values["total"] / values["count"]).round(2)
       end
     end
 
@@ -55,13 +54,13 @@ class AnalyticsController < ApplicationController
   def role_login_frequencies
     data = CourseRoleLogin.data(@granularity, @range, {course_id: current_course.id, role_group: params[:role_group]})
 
-    data[:lookup_keys] = ['{{t}}.average']
+    data[:lookup_keys] = ["{{t}}.average"]
 
     data.decorate! do |result|
       result[:name] = "Average #{data[:granularity]} login frequency"
       # Get frequency
       result[data[:granularity]].each do |key, values|
-        result[data[:granularity]][key][:average] = (values['total'] / values['count']).round(2)
+        result[data[:granularity]][key][:average] = (values["total"] / values["count"]).round(2)
       end
     end
 
@@ -72,7 +71,7 @@ class AnalyticsController < ApplicationController
     data = CourseLogin.data(@granularity, @range, {course_id: current_course.id})
 
     # Only graph counts
-    data[:lookup_keys] = ['{{t}}.count']
+    data[:lookup_keys] = ["{{t}}.count"]
 
     render json: MultiJson.dump(data)
   end
@@ -81,7 +80,7 @@ class AnalyticsController < ApplicationController
     data = CourseRoleLogin.data(@granularity, @range, {course_id: current_course.id, role_group: params[:role_group]})
 
     # Only graph counts
-    data[:lookup_keys] = ['{{t}}.count']
+    data[:lookup_keys] = ["{{t}}.count"]
 
     render json: MultiJson.dump(data)
   end
@@ -130,10 +129,10 @@ class AnalyticsController < ApplicationController
   def prediction_averages
     data = CoursePrediction.data(@granularity, @range, {course_id: current_course.id})
 
-    data[:lookup_keys] = ['{{t}}.average']
+    data[:lookup_keys] = ["{{t}}.average"]
     data.decorate! do |result|
       result[data[:granularity]].each do |key, values|
-        result[data[:granularity]][key][:average] = (values['total'] / values['count'] * 100).to_i
+        result[data[:granularity]][key][:average] = (values["total"] / values["count"] * 100).to_i
       end
     end
 
@@ -144,7 +143,7 @@ class AnalyticsController < ApplicationController
     assignments = Hash[current_course.assignments.select([:id, :name]).collect{ |h| [h.id, h.name] }]
     data = AssignmentPrediction.data(@granularity, @range, {assignment_id: assignments.keys})
 
-    data[:lookup_keys] = ['{{t}}.count','{{t}}.total']
+    data[:lookup_keys] = ["{{t}}.count", "{{t}}.total"]
     data.decorate! do |result|
       result[:name] = assignments[result.assignment_id]
     end

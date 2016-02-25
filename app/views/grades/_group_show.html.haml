@@ -3,7 +3,7 @@
     %span.bold= "#{(term_for :group).titleize}:"
     - if presenter.group_for(current_user).present?
       = link_to presenter.group_for(current_user).name, group_path(presenter.group_for(current_user))
-      = link_to "Edit", edit_group_path(presenter.group_for(current_user)), :class => 'button'
+      = link_to "Edit", edit_group_path(presenter.group_for(current_user)), :class => "button"
 
     .clear
 
@@ -17,7 +17,7 @@
 
       - if current_user_is_staff?
         - if presenter.group_for(current_user).grades.graded_or_released.present?
-          = link_to "Edit Grade", group_grade_assignment_path(presenter.assignment, :group_id => presenter.group_for(current_user)), :class => 'button'
+          = link_to "Edit Grade", group_grade_assignment_path(presenter.assignment, :group_id => presenter.group_for(current_user)), :class => "button"
 
   - if current_user_is_student?
     - if presenter.grade_for(current_student).present?
@@ -26,7 +26,7 @@
       - else
         %p.bold
           #{current_student.first_name}'s Grade
-          %span= link_to "Edit", edit_assignment_grade_path(presenter.assignment, :student_id => current_student.id), :class => 'button'
+          %span= link_to "Edit", edit_assignment_grade_path(presenter.assignment, :student_id => current_student.id), :class => "button"
 
       - grade = presenter.grade_for(current_student)
       %p
@@ -48,7 +48,7 @@
         - if presenter.grade_for(student).present?
           %p.bold
             #{student.first_name}'s Grade
-            = link_to "Edit #{student.first_name}'s Grade", edit_assignment_grade_path(presenter.assignment, :student_id => student.id), :class => 'button'
+            = link_to "Edit #{student.first_name}'s Grade", edit_assignment_grade_path(presenter.assignment, :student_id => student.id), :class => "button"
 
           - grade = presenter.grade_for(student)
           %p

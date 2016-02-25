@@ -33,7 +33,7 @@ feature "editing a badge" do
         fill_in "Name", with: "Edited Badge Name"
         click_button "Update badge"
       end
-      expect(page).to have_notification_message('notice', 'Edited Badge Name badge successfully updated')
+      expect(page).to have_notification_message("notice", "Edited Badge Name badge successfully updated")
     end
   end
 end

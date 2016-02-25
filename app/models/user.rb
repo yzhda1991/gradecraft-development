@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   class << self
     def with_role_in_course(role, course)
       if role == "staff"
-        user_ids = CourseMembership.where('course_id=? AND (role=? OR role=?)', course, 'professor', 'gsi').pluck(:user_id)
+        user_ids = CourseMembership.where("course_id=? AND (role=? OR role=?)", course, "professor", "gsi").pluck(:user_id)
       else
         user_ids = CourseMembership.where(course: course, role: role).pluck(:user_id)
       end
@@ -60,10 +60,10 @@ class User < ActiveRecord::Base
     :team_role, :course_memberships_attributes, :team_id, :lti_uid, :course_team_ids, :internal
 
   # all student display pages are ordered by last name except for the leaderboard, and top 10/bottom 10
-  default_scope { order('last_name ASC, first_name ASC') }
+  default_scope { order("last_name ASC, first_name ASC") }
 
-  scope :order_by_high_score, -> { includes(:course_memberships).order 'course_memberships.score DESC' }
-  scope :order_by_low_score, -> { includes(:course_memberships).order 'course_memberships.score ASC' }
+  scope :order_by_high_score, -> { includes(:course_memberships).order "course_memberships.score DESC" }
+  scope :order_by_low_score, -> { includes(:course_memberships).order "course_memberships.score ASC" }
   scope :students_in_team, -> (team_id, student_ids) \
     { includes(:team_memberships).where(team_memberships: { team_id: team_id, student_id: student_ids }) }
 
@@ -73,11 +73,11 @@ class User < ActiveRecord::Base
 
   has_many :course_memberships, :dependent => :destroy
   has_many :courses, :through => :course_memberships
-  has_many :course_users, :through => :courses, :source => 'users'
+  has_many :course_users, :through => :courses, :source => "users"
   accepts_nested_attributes_for :courses
   accepts_nested_attributes_for :course_memberships, allow_destroy: true
 
-  belongs_to :current_course, :class_name => 'Course', touch: true
+  belongs_to :current_course, :class_name => "Course", touch: true
 
   has_many :student_academic_histories, :foreign_key => :student_id, :dependent => :destroy
   accepts_nested_attributes_for :student_academic_histories
@@ -92,10 +92,10 @@ class User < ActiveRecord::Base
   has_many :created_submissions, :as => :creator
 
   has_many :grades, :foreign_key => :student_id, :dependent => :destroy
-  has_many :graded_grades, foreign_key: :graded_by_id, :class_name => 'Grade'
+  has_many :graded_grades, foreign_key: :graded_by_id, :class_name => "Grade"
 
   has_many :earned_badges, :foreign_key => :student_id, :dependent => :destroy
-  accepts_nested_attributes_for :earned_badges, :reject_if => proc { |attributes| attributes['earned'] != '1' }
+  accepts_nested_attributes_for :earned_badges, :reject_if => proc { |attributes| attributes["earned"] != "1" }
   has_many :badges, :through => :earned_badges
 
   has_many :group_memberships, :foreign_key => :student_id, :dependent => :destroy
@@ -143,20 +143,20 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_by_lti_auth_hash(auth_hash)
-    criteria = { email: auth_hash['extra']['raw_info']['lis_person_contact_email_primary'] }
+    criteria = { email: auth_hash["extra"]["raw_info"]["lis_person_contact_email_primary"] }
     where(criteria).first || create!(criteria) do |u|
-      u.lti_uid = auth_hash['extra']['raw_info']['lis_person_sourcedid']
-      u.first_name = auth_hash['extra']['raw_info']['lis_person_name_given']
-      u.last_name = auth_hash['extra']['raw_info']['lis_person_name_family']
-      email = auth_hash['extra']['raw_info']['lis_person_contact_email_primary']
-      username = email.split('@')[0]
+      u.lti_uid = auth_hash["extra"]["raw_info"]["lis_person_sourcedid"]
+      u.first_name = auth_hash["extra"]["raw_info"]["lis_person_name_given"]
+      u.last_name = auth_hash["extra"]["raw_info"]["lis_person_name_family"]
+      email = auth_hash["extra"]["raw_info"]["lis_person_contact_email_primary"]
+      username = email.split("@")[0]
       u.username = username
       u.kerberos_uid = username
     end
   end
 
   def self.find_by_kerberos_auth_hash(auth_hash)
-    where(kerberos_uid: auth_hash['uid']).first
+    where(kerberos_uid: auth_hash["uid"]).first
   end
 
   def self.find_by_insensitive_email(email)
@@ -176,7 +176,7 @@ class User < ActiveRecord::Base
   end
 
   def name
-    @name = [first_name,last_name].reject(&:blank?).join(' ').presence || "User #{id}"
+    @name = [first_name,last_name].reject(&:blank?).join(" ").presence || "User #{id}"
   end
 
   def public_name
@@ -270,7 +270,7 @@ class User < ActiveRecord::Base
 
   # Space for users to build a narrative around their identity
   def character_profile(course)
-    course_memberships.where(course: course).first.try('character_profile')
+    course_memberships.where(course: course).first.try("character_profile")
   end
 
   def archived_courses
@@ -284,7 +284,7 @@ class User < ActiveRecord::Base
 
   # Powers the grade distribution box plot
   def scores_for_course(course)
-     user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck('score')
+     user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck("score")
      scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
      return {
       :scores => scores,
@@ -509,7 +509,7 @@ class User < ActiveRecord::Base
   #and not the assignment type count. Because students make the choice at the AT level rather than the A level,
   #this can be confusing.
   def weight_count(course)
-    assignment_weights.where(course: course).pluck('weight').count
+    assignment_weights.where(course: course).pluck("weight").count
   end
 
   #Used to allow students to self-log a grade, currently only a boolean (complete or not)

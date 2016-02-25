@@ -72,7 +72,7 @@ describe SubmissionFile do
   describe "#exists_on_storage?" do
     subject { submission_file.exists_on_storage? }
     let(:submission_file) { build(:submission_file) }
-    let(:public_url) { Tempfile.new('waffle') }
+    let(:public_url) { Tempfile.new("waffle") }
 
     context "Rails env is anything but development" do
       let(:s3_manager) { double(S3Manager) }

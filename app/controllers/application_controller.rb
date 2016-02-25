@@ -101,7 +101,7 @@ class ApplicationController < ActionController::Base
     begin
       file_creation.call
       zip_data = ZipUtils::Zip.new(temp_dir)
-      send_data(zip_data.zipstring, :type => 'application/zip', :filename => "#{export_name}.zip")
+      send_data(zip_data.zipstring, :type => "application/zip", :filename => "#{export_name}.zip")
     ensure
       FileUtils.remove_entry_secure temp_dir
     end
@@ -118,7 +118,7 @@ class ApplicationController < ActionController::Base
     raise Canable::Transgression unless can_view?(resource)
   end
 
-  require_relative '../event_loggers/pageview_event_logger'
+  require_relative "../event_loggers/pageview_event_logger"
   module ResqueManager
     extend EventsHelper::Lull
   end
@@ -134,7 +134,7 @@ class ApplicationController < ActionController::Base
         # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
         # or because of some worker stayalive anomaly, then just use the PageviewEventLogger.perform method
         # to persist the record directly to mongo with all of the logging it entails
-        PageviewEventLogger.perform('pageview', pageview_logger_attrs)
+        PageviewEventLogger.perform("pageview", pageview_logger_attrs)
       end
     end
   end

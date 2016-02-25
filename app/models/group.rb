@@ -1,7 +1,7 @@
 class Group < ActiveRecord::Base
   include Sanitizable
 
-  APPROVED_STATUSES = ['Pending', 'Approved', 'Rejected']
+  APPROVED_STATUSES = ["Pending", "Approved", "Rejected"]
 
   attr_accessible :name, :approved, :assignment_id, :assignment_ids, :student_ids,
     :assignment_groups_attributes, :group_membership_attributes, :text_feedback,
@@ -21,7 +21,7 @@ class Group < ActiveRecord::Base
 
   has_many :grades
   has_many :proposals
-  accepts_nested_attributes_for :proposals, allow_destroy: true, :reject_if => proc { |a| a['proposal'].blank? }
+  accepts_nested_attributes_for :proposals, allow_destroy: true, :reject_if => proc { |a| a["proposal"].blank? }
 
   has_many :submissions
 

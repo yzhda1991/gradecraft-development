@@ -34,7 +34,7 @@ feature "editing an assignment type" do
         click_button "Update assignment type"
       end
 
-      expect(page).to have_notification_message('success', 'Assignment Type Edited Assignment Type Name successfully updated')
+      expect(page).to have_notification_message("success", "Assignment Type Edited Assignment Type Name successfully updated")
     end
   end
 end

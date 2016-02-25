@@ -42,7 +42,7 @@ class GradebookExporter
       if grade and grade.is_student_visible?
         memo << grade.raw_score
       else
-        memo << ''
+        memo << ""
       end
       memo
     end

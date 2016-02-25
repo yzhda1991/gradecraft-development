@@ -1,13 +1,13 @@
 .grade-container(ng-app="gradecraft")
   = csrf_meta_tag
 
-  = render partial: 'layouts/alerts', locals: { model: @grade, display_flash: false }
+  = render partial: "layouts/alerts", locals: { model: @grade, display_flash: false }
 
   - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
     %section
 
       %h4.uppercase= "#{@student.first_name}'s Submission"
-      = render partial: 'submissions/instructor_show',
+      = render partial: "submissions/instructor_show",
           locals: { presenter: ShowSubmissionPresenter.new(id: @submission.id,
             assignment_id: @assignment.id, course: current_course) }
 
@@ -47,7 +47,7 @@
                   %option(value="{{grade_status}}" ng-repeat="grade_status in gradeStatuses" ng-selected="grade_status == grade.status") {{grade_status}}
 
           - elsif @grade.status.blank?
-            = f.hidden_field :status, value: 'Graded'
+            = f.hidden_field :status, value: "Graded"
 
           .attachments(ng-cloak)
             .clear
@@ -71,7 +71,7 @@
           .submit-buttons
             %ul
               %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", :class => "button"
-              %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), :class => 'button'
+              %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), :class => "button"
 
         %section
 

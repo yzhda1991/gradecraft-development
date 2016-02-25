@@ -1,4 +1,4 @@
-= render partial: 'layouts/alerts', locals: { model: @announcement }
+= render partial: "layouts/alerts", locals: { model: @announcement }
 
 = simple_form_for(@announcement) do |f|
   %section
@@ -13,4 +13,4 @@
   .submit-buttons
     %ul
       %li= f.button :submit, "Send Announcement"
-      %li= link_to glyph('times-circle') + "Cancel", announcements_path, :class => 'button'
+      %li= link_to glyph("times-circle") + "Cancel", announcements_path, :class => "button"

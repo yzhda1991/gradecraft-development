@@ -1,5 +1,5 @@
-require 'rails_spec_helper'
-require 'active_record_spec_helper'
+require "rails_spec_helper"
+require "active_record_spec_helper"
 
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
@@ -52,10 +52,10 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
 
       it "creates a file at the text file path" do
-        expect(performer).to receive(:open).with(text_file_path, 'w')
+        expect(performer).to receive(:open).with(text_file_path, "w")
         subject
       end
-      
+
       it "creates a title line with the student name" do
         subject
         expect(text_file.first).to eq("Submission items from herman, edwina\n")
@@ -131,7 +131,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     describe "formatted student name" do
       subject { performer.instance_eval { formatted_student_name(@some_student) }}
-      
+
       it "calls sanitize_filename with the correct student name" do
         expect(performer).to receive(:titleize_filename).with("edwina herman")
         subject

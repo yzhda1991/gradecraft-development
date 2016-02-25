@@ -10,7 +10,7 @@ module UnlockableCondition
     has_many :unlock_states, as: :unlockable, dependent: :destroy
 
     accepts_nested_attributes_for :unlock_conditions, allow_destroy: true,
-      reject_if: proc { |uc| uc['condition_type'].blank? || uc['condition_id'].blank? }
+      reject_if: proc { |uc| uc["condition_type"].blank? || uc["condition_id"].blank? }
   end
 
   def check_unlock_status(student)

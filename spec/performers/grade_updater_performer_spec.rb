@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe GradeUpdatePerformer, type: :background_job do
   let(:assignment) { create(:assignment) }
@@ -242,11 +242,11 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
     let(:performer_grade) { performer.instance_variable_get(:@grade) }
 
     it "should have a success message" do
-      expect(subject[:success]).to match('saved successfully')
+      expect(subject[:success]).to match("saved successfully")
     end
 
     it "should have a failure message" do
-      expect(subject[:failure]).to match('failed to save')
+      expect(subject[:failure]).to match("failed to save")
     end
 
     it "should include the grade id in the success condition" do
@@ -263,11 +263,11 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
     subject { performer.instance_eval{ notify_released_messages } }
 
     it "should have a success message" do
-      expect(subject[:success]).to include('Successfully sent notification')
+      expect(subject[:success]).to include("Successfully sent notification")
     end
 
     it "should have a failure message" do
-      expect(subject[:failure]).to include('Failed to send')
+      expect(subject[:failure]).to include("Failed to send")
     end
   end
 end

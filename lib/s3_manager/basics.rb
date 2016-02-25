@@ -2,9 +2,9 @@ module S3Manager
   module Basics
     def client
       @client ||= Aws::S3::Client.new({
-        region: ENV['AWS_S3_REGION'],
-        access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+        region: ENV["AWS_S3_REGION"],
+        access_key_id: ENV["AWS_ACCESS_KEY_ID"],
+        secret_access_key: ENV["AWS_SECRET_ACCESS_KEY"]
       })
     end
 
@@ -18,7 +18,7 @@ module S3Manager
     end
 
     def bucket_name
-      ENV['AWS_S3_BUCKET']
+      ENV["AWS_S3_BUCKET"]
     end
 
     def object_attrs

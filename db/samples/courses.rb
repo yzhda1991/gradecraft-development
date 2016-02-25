@@ -16,12 +16,12 @@
     weights_created: "Weights have been configured for the course"
   },
   # All courses must have grade scheme elements
-  grade_scheme_hash: { [0,600000] => 'F', [600000,649000] => 'D+', [650000,699999] => 'C-', [700000,749999] => 'C', [750000,799999] => 'C+', [800000,849999] => 'B-', [850000,899999] => 'B', [900000,949999] => 'B+', [950000,999999] => 'A-', [1000000,1244999] => 'A', [1245000,1600000] => 'A+'},
-  grade_levels: ['Amoeba', 'Sponge', 'Roundworm', 'Jellyfish', 'Leech', 'Snail', 'Sea Slug', 'Fruit Fly', 'Lobster', 'Ant', 'Honey Bee', 'Cockroach', 'Frog', 'Mouse', 'Rat', 'Octopus', 'Cat', 'Chimpanzee', 'Elephant', 'Human', 'Orca'].shuffle,
+  grade_scheme_hash: { [0,600000] => "F", [600000,649000] => "D+", [650000,699999] => "C-", [700000,749999] => "C", [750000,799999] => "C+", [800000,849999] => "B-", [850000,899999] => "B", [900000,949999] => "B+", [950000,999999] => "A-", [1000000,1244999] => "A", [1245000,1600000] => "A+"},
+  grade_levels: ["Amoeba", "Sponge", "Roundworm", "Jellyfish", "Leech", "Snail", "Sea Slug", "Fruit Fly", "Lobster", "Ant", "Honey Bee", "Cockroach", "Frog", "Mouse", "Rat", "Octopus", "Cat", "Chimpanzee", "Elephant", "Human", "Orca"].shuffle,
     # Not all courses have teams
-  team_names: ['Harm & Hammer','Abusement Park','Silver Woogidy Woogidy Woogidy Snakes','Carpe Ludus','Eduception','Operation Unthinkable','Team Wang','The Carpal Tunnel Crusaders','Pwn Depot'].shuffle,
+  team_names: ["Harm & Hammer","Abusement Park","Silver Woogidy Woogidy Woogidy Snakes","Carpe Ludus","Eduception","Operation Unthinkable","Team Wang","The Carpal Tunnel Crusaders","Pwn Depot"].shuffle,
     # Not all courses have badges
-  badge_names: ['Creative', 'Inner Eye', 'Patronus Producer','Cheerful Charmer','Invisiblity Cloak','Marauders Map','Lumos','Rune Reader','Tea Leaf Guru','Wizard Chess Grand Master','Green Thumb','Gamekeeper','Seeker','Alchemist','Healer','Parseltongue','House Cup'].shuffle,
+  badge_names: ["Creative", "Inner Eye", "Patronus Producer","Cheerful Charmer","Invisiblity Cloak","Marauders Map","Lumos","Rune Reader","Tea Leaf Guru","Wizard Chess Grand Master","Green Thumb","Gamekeeper","Seeker","Alchemist","Healer","Parseltongue","House Cup"].shuffle,
   attributes: {
     academic_history_visible: false,
     accepts_submissions: false,
@@ -128,9 +128,9 @@
     badges_created: "Self-education is, I firmly believe, the only kind of education there is. ― Isaac Asimov",
     weights_created: nil
   },
-  grade_levels: ['Hammurabi', 'Confucius', 'Socrates', 'Cicero', 'William of Ockham', 'Mozi', 'Xenophon', 'Saint Augustine', 'Plato', 'Diogenes', 'Machiavelli', 'Aeschines', 'Ghazali', 'Martin Luther', 'Aristotle', 'Calvin', 'Maimonides', 'St. Thomas Aquinas', 'Xun Zi', 'Ibn Khaldun', 'Thiruvalluvar', 'Locke'].shuffle,
-  team_names: ['Section 1', 'Section 2', 'Section 3', 'Section 4', 'Section 5', 'Section 6', 'Section 7', 'Section 8', 'Section 9', 'Section 10', 'Section 11', 'Section 12', 'Section 13', 'Section 14', 'Section 15', 'Section 16'].shuffle,
-  badge_names: ['MINOR: Learning from Mistakes', 'MINOR: Learning from Mistakes', 'MINOR: Halloween Special', 'MINOR: Thanksgiving Special', 'MINOR: Now It is Personal', 'MAJOR: Makeup Much', 'MAJOR: Practice Makes Perfect', 'MAJOR: Combo Platter', 'MINOR: Makeup Some', 'MINOR: Participatory Democrat', 'MINOR: Number One', 'MINOR: Rockstar', 'MINOR: Over-achiever', 'MINOR: Avid Reader', 'MINOR: Nice Save!', 'MINOR: The Nightstalker', 'MINOR: Paragon of Virtue', 'MAJOR: Bad Investment', 'MINOR: Leader of the pack', 'MINOR: Thoughtful Contribution'].shuffle,
+  grade_levels: ["Hammurabi", "Confucius", "Socrates", "Cicero", "William of Ockham", "Mozi", "Xenophon", "Saint Augustine", "Plato", "Diogenes", "Machiavelli", "Aeschines", "Ghazali", "Martin Luther", "Aristotle", "Calvin", "Maimonides", "St. Thomas Aquinas", "Xun Zi", "Ibn Khaldun", "Thiruvalluvar", "Locke"].shuffle,
+  team_names: ["Section 1", "Section 2", "Section 3", "Section 4", "Section 5", "Section 6", "Section 7", "Section 8", "Section 9", "Section 10", "Section 11", "Section 12", "Section 13", "Section 14", "Section 15", "Section 16"].shuffle,
+  badge_names: ["MINOR: Learning from Mistakes", "MINOR: Learning from Mistakes", "MINOR: Halloween Special", "MINOR: Thanksgiving Special", "MINOR: Now It is Personal", "MAJOR: Makeup Much", "MAJOR: Practice Makes Perfect", "MAJOR: Combo Platter", "MINOR: Makeup Some", "MINOR: Participatory Democrat", "MINOR: Number One", "MINOR: Rockstar", "MINOR: Over-achiever", "MINOR: Avid Reader", "MINOR: Nice Save!", "MINOR: The Nightstalker", "MINOR: Paragon of Virtue", "MAJOR: Bad Investment", "MINOR: Leader of the pack", "MINOR: Thoughtful Contribution"].shuffle,
   attributes: {
     academic_history_visible: true,
     accepts_submissions: true,
@@ -174,9 +174,9 @@
     grade_sceme_elements_created: "The world is a book and those who do not travel read only one page. ― Augustine of Hippo",
     teams_created: "Spoon feeding in the long run teaches us nothing but the shape of the spoon. ― E.M. Forster",
   },
-  grade_levels: ['Shannon', 'Weaver', 'Vannevar Bush', 'Turing', 'Boole', 'Gardner', 'Shestakov', 'Blackman', 'Bode', 'John Pierce', 'Thorpe', 'Renyi', 'Cohen', 'Berners Lee', 'Nash', 'Cailliau', 'Andreessen', 'Hartill', 'Ada Lovelace', 'Grace Hopper', 'Henrietta Leavitt', 'Anita Borg'].shuffle,
-  team_names: ['Late Night Information Nation', 'Heisenberg', 'Big Red Dogs', 'Liu Man Group', 'The House that Cliff Built', 'TMI'].shuffle,
-  badge_names: ['MINOR: Learning from Mistakes', 'MINOR: Learning from Mistakes', 'MINOR: Halloween Special', 'MINOR: Thanksgiving Special', 'MINOR: Now It is Personal', 'MAJOR: Makeup Much', 'MAJOR: Practice Makes Perfect', 'MAJOR: Combo Platter', 'MINOR: Makeup Some', 'MINOR: Participatory Democrat', 'MINOR: Number One', 'MINOR: Rockstar', 'MINOR: Over-achiever', 'MINOR: Avid Reader', 'MINOR: Nice Save!', 'MINOR: The Nightstalker', 'MINOR: Paragon of Virtue', 'MAJOR: Bad Investment', 'MINOR: Leader of the pack', 'MINOR: Thoughtful Contribution'].shuffle,
+  grade_levels: ["Shannon", "Weaver", "Vannevar Bush", "Turing", "Boole", "Gardner", "Shestakov", "Blackman", "Bode", "John Pierce", "Thorpe", "Renyi", "Cohen", "Berners Lee", "Nash", "Cailliau", "Andreessen", "Hartill", "Ada Lovelace", "Grace Hopper", "Henrietta Leavitt", "Anita Borg"].shuffle,
+  team_names: ["Late Night Information Nation", "Heisenberg", "Big Red Dogs", "Liu Man Group", "The House that Cliff Built", "TMI"].shuffle,
+  badge_names: ["MINOR: Learning from Mistakes", "MINOR: Learning from Mistakes", "MINOR: Halloween Special", "MINOR: Thanksgiving Special", "MINOR: Now It is Personal", "MAJOR: Makeup Much", "MAJOR: Practice Makes Perfect", "MAJOR: Combo Platter", "MINOR: Makeup Some", "MINOR: Participatory Democrat", "MINOR: Number One", "MINOR: Rockstar", "MINOR: Over-achiever", "MINOR: Avid Reader", "MINOR: Nice Save!", "MINOR: The Nightstalker", "MINOR: Paragon of Virtue", "MAJOR: Bad Investment", "MINOR: Leader of the pack", "MINOR: Thoughtful Contribution"].shuffle,
   attributes: {
     academic_history_visible: true,
     accepts_submissions: true,
@@ -211,7 +211,7 @@
     grade_sceme_elements_created: "To emphasize only the beautiful seems to me to be like a mathematical system that only concerns itself with positive numbers. ― Paul Klee",
     teams_created: "We learn from failure, not from success! ― Bram Stoker, Dracula",
   },
-  grade_levels: ['Arp', 'Breton', 'Dali', 'Duchamp', 'Earnst', 'Giacometti', 'Magritte', 'Masson', 'Miro', 'Oppenheim', 'Ray', 'Tanguy'].shuffle,
+  grade_levels: ["Arp", "Breton", "Dali", "Duchamp", "Earnst", "Giacometti", "Magritte", "Masson", "Miro", "Oppenheim", "Ray", "Tanguy"].shuffle,
   attributes: {
     academic_history_visible: true,
     accepts_submissions: true,

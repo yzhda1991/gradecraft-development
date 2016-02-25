@@ -31,7 +31,7 @@ feature "awarding a badge" do
         select "Hermione Granger", :from => "student_id"
         click_button "Award badge"
       end
-      expect(page).to have_notification_message('notice', 'The Fancy Badge badge was successfully awarded to Hermione Granger')
+      expect(page).to have_notification_message("notice", "The Fancy Badge badge was successfully awarded to Hermione Granger")
     end
   end
 end

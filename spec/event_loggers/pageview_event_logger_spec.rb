@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 include PageviewEventLoggerToolkit # pageview_logger_attrs comes from here
 
@@ -36,7 +36,7 @@ RSpec.describe PageviewEventLogger, type: :background_job do
       describe"enqueue_in" do
         it "should schedule a pageview event" do
           @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(2.hours)
-          expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs).in(2.hours)
+          expect(PageviewEventLogger).to have_scheduled("pageview", pageview_logger_attrs).in(2.hours)
         end
       end
 
@@ -44,7 +44,7 @@ RSpec.describe PageviewEventLogger, type: :background_job do
         it "should enqueue the pageview logger to trigger @later" do
           @later = Time.parse "Feb 10 2052"
           @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_at(@later)
-          expect(PageviewEventLogger).to have_scheduled('pageview', pageview_logger_attrs).at(@later)
+          expect(PageviewEventLogger).to have_scheduled("pageview", pageview_logger_attrs).at(@later)
         end
       end
     end

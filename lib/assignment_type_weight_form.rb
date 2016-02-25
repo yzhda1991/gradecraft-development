@@ -32,8 +32,8 @@ class AssignmentTypeWeightForm < Struct.new(:student, :course)
 
   def assignment_type_weights_attributes=(attributes_collection)
     @assignment_type_weights = attributes_collection.map do |key, attributes|
-      AssignmentTypeWeight.new(student, AssignmentType.find(attributes['assignment_type_id'])).tap do |assignment_type_weight|
-        assignment_type_weight.weight = attributes['weight'].to_i
+      AssignmentTypeWeight.new(student, AssignmentType.find(attributes["assignment_type_id"])).tap do |assignment_type_weight|
+        assignment_type_weight.weight = attributes["weight"].to_i
       end
     end
   end

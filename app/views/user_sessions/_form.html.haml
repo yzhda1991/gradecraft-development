@@ -1,10 +1,10 @@
 #gradecraft-auth
   = form_for User.new, :url => user_sessions_path do |f|
-    = label_tag :user_email, 'Email', class:'sr-only'
+    = label_tag :user_email, "Email", class:"sr-only"
     = f.text_field :email, placeholder: "Email", :autocorrect => "off", :autocapitalize => "off"
-    = label_tag :user_password, 'Password', class:'sr-only'
-    = f.password_field :password, placeholder: 'Password'
-    = f.submit "Log in", class: 'button', alt: "Log in"
+    = label_tag :user_password, "Password", class:"sr-only"
+    = f.password_field :password, placeholder: "Password"
+    = f.submit "Log in", class: "button", alt: "Log in"
     %p
     .small
       * This will not work if you use a @umich email address to log in. You must

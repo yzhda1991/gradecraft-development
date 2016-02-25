@@ -4,7 +4,7 @@
 
 .pageContent
   #massGrade
-    = render partial: 'layouts/alerts', locals: { model: @course, term: "settings" }
+    = render partial: "layouts/alerts", locals: { model: @course, term: "settings" }
 
     = simple_form_for @course, method: :put, :url => predictor_settings_course_path(@course) do |f|
 
@@ -29,9 +29,9 @@
                   %td{:width => "25%"}
                     - if assignment.include_in_predictor?
                       - if assignment.assignment_score_levels.present?
-                        .slider{:max => assignment.point_total, :'data-scorelevelvals' => "#{assignment.assignment_score_levels.map(&:value)}", :'data-scorelevelnames' => "#{assignment.assignment_score_levels.map(&:name)}", :'data-highlight' => "true"}
+                        .slider{:max => assignment.point_total, :"data-scorelevelvals" => "#{assignment.assignment_score_levels.map(&:value)}", :"data-scorelevelnames" => "#{assignment.assignment_score_levels.map(&:name)}", :"data-highlight" => "true"}
                       - else
-                        .slider{:max => assignment.point_total, :'data-highlight' => "true"}
+                        .slider{:max => assignment.point_total, :"data-highlight" => "true"}
                     - else
                       %input{:type => "checkbox" }
       .right.form_buttons

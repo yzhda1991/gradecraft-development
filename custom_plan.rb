@@ -1,5 +1,5 @@
 # ./custom_plan.rb
-require 'zeus/rails'
+require "zeus/rails"
 
 class CustomPlan < Zeus::Rails
   # def test

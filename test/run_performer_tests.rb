@@ -1,4 +1,4 @@
-require_relative './test_helper'
+require_relative "./test_helper"
 
 GradebookExporterTest.new.run(3, Rails)
 sleep(20)

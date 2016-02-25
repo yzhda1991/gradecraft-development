@@ -9,7 +9,7 @@ describe CourseGradeExporter do
 
     it "generates an empty CSV if there are no students" do
       csv = subject.final_grades_for_course(course)
-      expect(csv).to include 'First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID'
+      expect(csv).to include "First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID"
     end
 
     it "generates a CSV with student grades for the course" do

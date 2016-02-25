@@ -42,7 +42,7 @@ feature "editing an awarded a badge" do
 
       expect(current_path).to eq badge_path(badge.id)
 
-      expect(page).to have_notification_message('notice', "Hermione Granger's Fancy Badge badge was successfully updated")
+      expect(page).to have_notification_message("notice", "Hermione Granger's Fancy Badge badge was successfully updated")
     end
   end
 end

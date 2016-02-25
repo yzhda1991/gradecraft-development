@@ -5,7 +5,7 @@ class EventsController < ApplicationController
   respond_to :html, :json
 
   def index
-    @events = current_course.events.order('due_at ASC')
+    @events = current_course.events.order("due_at ASC")
     @title = "Calendar Events"
   end
 

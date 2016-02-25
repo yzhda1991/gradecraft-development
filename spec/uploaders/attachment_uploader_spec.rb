@@ -1,8 +1,8 @@
-require 'active_record_spec_helper'
-require_relative '../toolkits/uploaders/attachment_uploader'
-require_relative '../support/uni_mock/rails'
-require_relative '../support/uni_mock/time'
-require_relative '../support/random_file/content'
+require "active_record_spec_helper"
+require_relative "../toolkits/uploaders/attachment_uploader"
+require_relative "../support/uni_mock/rails"
+require_relative "../support/uni_mock/time"
+require_relative "../support/random_file/content"
 
 include Toolkits::Uploaders::AttachmentUploader
 
@@ -28,7 +28,7 @@ RSpec.describe AttachmentUploader do
     context "env is development" do
       before do
         allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("development") }
-        ENV['AWS_S3_DEVELOPER_TAG'] = "jeff-moses"
+        ENV["AWS_S3_DEVELOPER_TAG"] = "jeff-moses"
       end
 
       it "prepends the developer tag to the store dirs and joins them" do

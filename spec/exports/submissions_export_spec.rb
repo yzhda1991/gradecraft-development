@@ -1,5 +1,5 @@
-require 'rails_spec_helper'
-require 'active_record_spec_helper'
+require "rails_spec_helper"
+require "active_record_spec_helper"
 
 RSpec.describe SubmissionsExport do
   let(:submissions_export) { SubmissionsExport.new }
@@ -89,7 +89,7 @@ RSpec.describe SubmissionsExport do
 
     before(:each) do
       allow(submissions_export).to receive_messages(course_id: 40, assignment_id: 50)
-      ENV['AWS_S3_DEVELOPER_TAG'] = "jeff-moses"
+      ENV["AWS_S3_DEVELOPER_TAG"] = "jeff-moses"
     end
 
     context "env is development" do

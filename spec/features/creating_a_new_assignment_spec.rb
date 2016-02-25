@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 feature "creating a new assignment" do
   context "as a professor" do
-    let(:course) { create :course, name: "Course Name", assignment_term: 'Assignment'}
+    let(:course) { create :course, name: "Course Name", assignment_term: "Assignment"}
     let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
     let!(:assignment_type) { create :assignment_type, course: course, name: "Assignment Type Name"}
@@ -29,7 +29,7 @@ feature "creating a new assignment" do
         click_button "Create assignment"
       end
 
-      expect(page).to have_notification_message('notice', 'Assignment New Assignment Name successfully created')
+      expect(page).to have_notification_message("notice", "Assignment New Assignment Name successfully created")
     end
   end
 end

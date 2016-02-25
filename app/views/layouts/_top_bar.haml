@@ -1,13 +1,13 @@
 - if ! current_user
-  = render 'layouts/navigation/top_bar_logged_out'
+  = render "layouts/navigation/top_bar_logged_out"
 - else
   #left-flyout-nav.layout-left-flyout
 
   .offscreen-sidebar
     - if current_user_is_student?
-      .sidebar= render 'students/student_profile_tabs'
+      .sidebar= render "students/student_profile_tabs"
     - elsif current_user_is_staff?
-      = render 'layouts/navigation/staff_subnav'
+      = render "layouts/navigation/staff_subnav"
 
   .layout-right-content
     %header
@@ -22,7 +22,7 @@
                 - if current_course.tagline?
                   %span.tagline= current_course.try(:tagline)
           %ul.nav.nav-pill.right
-            = render 'layouts/navigation/authenticated_nav'
+            = render "layouts/navigation/authenticated_nav"
         %nav.mobile-nav.hide-for-large
           %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
             %i.fa.fa-dashboard.fa-fw

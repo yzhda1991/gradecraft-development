@@ -1,4 +1,4 @@
-ENV["RAILS_ENV"] ||= 'development'
+ENV["RAILS_ENV"] ||= "development"
 require File.expand_path("../../config/environment", __FILE__)
 
 # Requires supporting ruby files with custom matchers and macros, etc,

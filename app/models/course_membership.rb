@@ -25,17 +25,17 @@ class CourseMembership < ActiveRecord::Base
   validates :instructor_of_record, instructor_of_record: true
 
   def assign_role_from_lti(auth_hash)
-    return unless auth_hash['extra'] && auth_hash['extra']['raw_info'] && auth_hash['extra']['raw_info']['roles']
+    return unless auth_hash["extra"] && auth_hash["extra"]["raw_info"] && auth_hash["extra"]["raw_info"]["roles"]
 
-    auth_hash['extra']['raw_info'].tap do |extra|
+    auth_hash["extra"]["raw_info"].tap do |extra|
 
-      case extra['roles'].downcase
+      case extra["roles"].downcase
       when /instructor/
-        self.update_attribute(:role, 'professor')
+        self.update_attribute(:role, "professor")
       when /teachingassistant/
-        self.update_attribute(:role, 'gsi')
+        self.update_attribute(:role, "gsi")
       else
-        self.update_attribute(:role, 'student')
+        self.update_attribute(:role, "student")
         self.update_attribute(:instructor_of_record, false)
       end
     end

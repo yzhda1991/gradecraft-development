@@ -10,7 +10,7 @@
         Edit
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   .panel
     %h4 THE BASICS
@@ -37,10 +37,10 @@
       = @course.year
     %p
       %b GradeCraft will accept assignment submissions for this course:
-      = @course.has_submissions? ? 'Yes' : 'No'
+      = @course.has_submissions? ? "Yes" : "No"
     %p
       %b Course Status:
-      = @course.status? ? 'Active' : 'Archived'
+      = @course.status? ? "Active" : "Archived"
     %p
       %b Maximum Number of Points:
       = points @course.total_points
@@ -74,7 +74,7 @@
     %h4 BADGES
     %p.clear
       %b Badges will be used:
-      = @course.badge_setting? ? 'Yes' : 'No'
+      = @course.badge_setting? ? "Yes" : "No"
     - if @course.badge_setting?
       %p
         %b Badges will be called:
@@ -84,17 +84,17 @@
     %h4 SECTIONS
     %p.clear
       %b Students will be grouped into sections:
-      = @course.team_setting? ? 'Yes' : 'No'
+      = @course.team_setting? ? "Yes" : "No"
     -if @course.team_setting?
       %p
         %b These sections will be called:
         = @course.team_term.pluralize
       %p
         %b Students can see the sections, the section's points, and the team's badges:
-        = @course.teams_visible? ? 'Yes' : 'No'
+        = @course.teams_visible? ? "Yes" : "No"
       %p
         %b Section Score = Average User Score:
-        = @course.team_score_average? ? 'Yes' : 'No'
+        = @course.team_score_average? ? "Yes" : "No"
       %p
         %b Section Leaders will be called:
         = @course.team_leader_term
@@ -113,7 +113,7 @@
         = @course.group_term.pluralize
       %p
         %b Students self-declare their group roles:
-        = @course.team_roles? ? 'Yes' : 'No'
+        = @course.team_roles? ? "Yes" : "No"
       %p
         %b Max Group Size:
         = @course.max_group_size

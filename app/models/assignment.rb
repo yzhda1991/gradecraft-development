@@ -22,7 +22,7 @@ class Assignment < ActiveRecord::Base
   attr_accessor :current_student_grade
 
   belongs_to :course, touch: true
-  belongs_to :assignment_type, -> { order('position ASC') }, touch: true
+  belongs_to :assignment_type, -> { order("position ASC") }, touch: true
 
   has_one :rubric, dependent: :destroy
 
@@ -67,14 +67,14 @@ class Assignment < ActiveRecord::Base
   scope :timelineable, -> { where(:include_in_timeline => true) }
 
   # Sorting assignments by different properties
-  scope :chronological, -> { order('due_at ASC') }
-  scope :alphabetical, -> { order('name ASC') }
+  scope :chronological, -> { order("due_at ASC") }
+  scope :alphabetical, -> { order("name ASC") }
   acts_as_list scope: :assignment_type
 
   # Filtering Assignments by various date properties
-  scope :with_dates, -> { where('assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL') }
+  scope :with_dates, -> { where("assignments.due_at IS NOT NULL OR assignments.open_at IS NOT NULL") }
 
-  default_scope { order('position ASC') }
+  default_scope { order("position ASC") }
 
   delegate :student_weightable?, to: :assignment_type
 
@@ -106,7 +106,7 @@ class Assignment < ActiveRecord::Base
 
   # Checking to see if an assignment is individually graded
   def is_individual?
-    !['Group'].include? grade_scope
+    !["Group"].include? grade_scope
   end
 
   # Checking to see if the assignment is a group assignment
@@ -123,7 +123,7 @@ class Assignment < ActiveRecord::Base
   # Grabbing a student's set weight for the assignment - returns one if the course doesn't have weights
   def weight_for_student(student, weight = nil)
     return 1 unless student_weightable?
-    weight ||= (weights.where(student: student).pluck('weight').first || 0)
+    weight ||= (weights.where(student: student).pluck("weight").first || 0)
     weight > 0 ? weight : default_weight
   end
 
@@ -337,19 +337,19 @@ class Assignment < ActiveRecord::Base
 
   def open_before_close
     if (due_at.present? && open_at.present?) && (due_at < open_at)
-      errors.add :base, 'Due date must be after open date.'
+      errors.add :base, "Due date must be after open date."
     end
   end
 
   def submissions_after_due
     if (accepts_submissions_until.present? && due_at.present?) && (accepts_submissions_until < due_at)
-      errors.add :base, 'Submission accept date must be after due date.'
+      errors.add :base, "Submission accept date must be after due date."
     end
   end
 
   def submissions_after_open
     if (accepts_submissions_until.present? && open_at.present?) && (accepts_submissions_until < open_at)
-      errors.add :base, 'Submission accept date must be after open date.'
+      errors.add :base, "Submission accept date must be after open date."
     end
   end
 

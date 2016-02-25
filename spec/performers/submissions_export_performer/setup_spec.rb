@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   extend Toolkits::Performers::SubmissionsExport::Context
@@ -51,12 +51,12 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       expect(submissions_export).to receive(:update_attributes)
       subject
     end
-    
+
     it "sets an instance variable for the created submissions export" do
       subject
       expect(performer.instance_variable_get(:@submissions_export)).to eq(submissions_export)
     end
-    
+
     it "creates an empty array for error handling" do
       subject
       expect(performer.instance_variable_get(:@errors)).to eq([])

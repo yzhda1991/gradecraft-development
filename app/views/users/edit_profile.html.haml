@@ -5,7 +5,7 @@
 = render "buttons"
 
 .pageContent
-  = render partial: 'layouts/alerts', locals: { model: @user, term: "profile" }
+  = render partial: "layouts/alerts", locals: { model: @user, term: "profile" }
 
   = simple_form_for(@user, method: :put, :url => update_profile_users_path) do |f|
     %section
@@ -45,5 +45,5 @@
 
       .submit-buttons
         %ul
-          %li= submit_tag 'Update Settings', :class => 'button'
-          %li= link_to glyph("times-circle") + "Cancel", root_path, :class => 'button'
+          %li= submit_tag "Update Settings", :class => "button"
+          %li= link_to glyph("times-circle") + "Cancel", root_path, :class => "button"

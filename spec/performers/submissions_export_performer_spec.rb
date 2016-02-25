@@ -1,5 +1,5 @@
-require 'rails_spec_helper'
-require 'active_record_spec_helper'
+require "rails_spec_helper"
+require "active_record_spec_helper"
 
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
@@ -14,7 +14,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   it_behaves_like "ModelAddons::ImprovedLogging is included"
 
   # private and protected methods
-  
+
   describe "sorted_student_directory_keys" do
     let(:contrived_student_submissions_hash) {{ "dave_hoggworthy"=>"", "carla_makeshift"=>"", "bordwell_hamhock"=>"" }}
     let(:expected_keys_result) { %w[ bordwell_hamhock carla_makeshift dave_hoggworthy ] }
@@ -74,7 +74,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     context "the csv was successfully created" do
       before do
-        File.open(test_file_path, 'w') {|f| f.write("test file") }
+        File.open(test_file_path, "w") {|f| f.write("test file") }
         allow(performer).to receive(:csv_file_path) { test_file_path }
       end
 
@@ -119,7 +119,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
   end
-  
+
   describe "csv_file_path" do
     subject { performer.instance_eval { csv_file_path }}
     it "uses the grade import template" do
@@ -136,7 +136,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       expect(subject).to eq(cached_call)
     end
   end
-  
+
   describe "work_resources_present?" do
     let(:assignment_present) { performer.instance_variable_set(:@assignment, true) }
     let(:assignment_not_present) { performer.instance_variable_set(:@assignment, false) }
@@ -214,7 +214,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       performer.instance_variable_set(:@submissions_export, submissions_export)
       allow(performer).to receive(:expanded_archive_base_path) { "/this/weird/path" }
     end
-    
+
     describe "#upload_archive_to_s3" do
       subject { performer.instance_eval { upload_archive_to_s3 }}
 

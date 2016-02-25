@@ -7,7 +7,7 @@
           Edit Submission
           %span.sr-only #{presenter.student.try(:first_name)}'s Submission
       %li
-        = link_to glyph(:trash) + "Delete Submission", assignment_submission_path(:assignment => presenter.assignment, :submission => presenter.submission ), :data => { confirm: 'Are you sure?',  method: :delete }
+        = link_to glyph(:trash) + "Delete Submission", assignment_submission_path(:assignment => presenter.assignment, :submission => presenter.submission ), :data => { confirm: "Are you sure?",  method: :delete }
 
       %li= link_to glyph(:check) + "Grade", edit_assignment_grade_path(presenter.assignment, presenter.submission, :student_id => presenter.student.id)
 - elsif presenter.assignment.has_groups?
@@ -19,5 +19,5 @@
           Edit Submission
           %span.sr-only #{presenter.group.name}'s Submission
       %li
-        = link_to glyph(:trash) + "Delete Submission", assignment_submission_path(:assignment => presenter.assignment, :submission => presenter.submission ), :data => { confirm: 'Are you sure?',  method: :delete }
+        = link_to glyph(:trash) + "Delete Submission", assignment_submission_path(:assignment => presenter.assignment, :submission => presenter.submission ), :data => { confirm: "Are you sure?",  method: :delete }
       %li= link_to glyph(:check) + "Grade", group_grade_assignment_path(presenter.assignment,  :group_id => presenter.group.id)

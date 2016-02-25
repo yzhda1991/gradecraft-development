@@ -19,7 +19,7 @@ class ChallengeGrade < ActiveRecord::Base
 
   #TODO: Need to bring this in and resolve dup challenge grades in production
   #validates :challenge_id, :uniqueness => {:scope => :team_id}
-  
+
   # @mz todo: add specs
   def recalculate_student_and_team_scores
     team.update_revised_team_score
@@ -37,11 +37,11 @@ class ChallengeGrade < ActiveRecord::Base
   end
 
   def is_graded?
-    status == 'Graded'
+    status == "Graded"
   end
 
   def is_released?
-    status == 'Released'
+    status == "Released"
   end
 
   def is_student_visible?

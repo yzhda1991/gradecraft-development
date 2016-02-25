@@ -27,7 +27,7 @@ class SubmissionsExport < ActiveRecord::Base
 
   def build_s3_object_key(object_filename)
     if Rails.env.development?
-      [ ENV['AWS_S3_DEVELOPER_TAG'] ].concat(s3_object_key_pieces(object_filename)).join("/")
+      [ ENV["AWS_S3_DEVELOPER_TAG"] ].concat(s3_object_key_pieces(object_filename)).join("/")
     else
       s3_object_key_pieces(object_filename).join("/")
     end

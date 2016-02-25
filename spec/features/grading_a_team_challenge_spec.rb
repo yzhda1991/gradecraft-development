@@ -36,7 +36,7 @@ feature "grading a team challenge" do
         fill_in("challenge_grade_score", with: 100)
         click_button "Submit Grade"
       end
-      expect(page).to have_notification_message('notice', "Team Name's Grade for Team Challenge Name Team Challenge successfully graded")
+      expect(page).to have_notification_message("notice", "Team Name's Grade for Team Challenge Name Team Challenge successfully graded")
     end
   end
 end

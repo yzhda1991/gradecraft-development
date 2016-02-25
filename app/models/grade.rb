@@ -15,25 +15,25 @@ class Grade < ActiveRecord::Base
     :earned_badges_attributes, :feedback_read, :feedback_read_at,
     :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at
 
-  STATUSES = ['In Progress', 'Graded', 'Released']
+  STATUSES = ["In Progress", "Graded", "Released"]
 
   # Note Pass and Fail use term_for in the views
-  PASS_FAIL_STATUS = ['Pass', 'Fail']
+  PASS_FAIL_STATUS = ["Pass", "Fail"]
 
   belongs_to :course, touch: true
   belongs_to :assignment, touch: true
   belongs_to :assignment_type, touch: true
-  belongs_to :student, :class_name => 'User', touch: true
+  belongs_to :student, :class_name => "User", touch: true
   belongs_to :team, touch: true
   belongs_to :submission
   belongs_to :task, touch: true # Optional
   belongs_to :group, :polymorphic => true, touch: true # Optional
-  belongs_to :graded_by, class_name: 'User', touch: true
+  belongs_to :graded_by, class_name: "User", touch: true
 
   has_many :earned_badges, :dependent => :destroy
 
   has_many :badges, :through => :earned_badges
-  accepts_nested_attributes_for :earned_badges, :reject_if => proc { |a| (a['score'].blank?) }, :allow_destroy => true
+  accepts_nested_attributes_for :earned_badges, :reject_if => proc { |a| (a["score"].blank?) }, :allow_destroy => true
 
   before_validation :cache_associations
   before_save :cache_point_total
@@ -54,15 +54,15 @@ class Grade < ActiveRecord::Base
   after_destroy :save_student_and_team_scores
 
   scope :completion, -> { where(order: "assignments.due_at ASC", :joins => :assignment) }
-  scope :graded, -> { where status: 'Graded' }
-  scope :in_progress, -> { where status: 'In Progress' }
+  scope :graded, -> { where status: "Graded" }
+  scope :in_progress, -> { where status: "In Progress" }
   scope :released, -> { joins(:assignment).where("status = 'Released' OR (status = 'Graded' AND NOT assignments.release_necessary)") }
-  scope :no_status, -> { instructor_modified.where(status: ['', nil])}
-  scope :graded_or_released, -> { where(status: ['Graded', 'Released'])}
-  scope :not_released, -> { joins(:assignment).where(assignments: { release_necessary: true }).where(status: 'Graded') }
+  scope :no_status, -> { instructor_modified.where(status: ["", nil])}
+  scope :graded_or_released, -> { where(status: ["Graded", "Released"])}
+  scope :not_released, -> { joins(:assignment).where(assignments: { release_necessary: true }).where(status: "Graded") }
   scope :instructor_modified, -> { where instructor_modified: true }
-  scope :positive, -> { where('score > 0')}
-  scope :predicted_to_be_done, -> { where('predicted_score > 0')}
+  scope :positive, -> { where("score > 0")}
+  scope :predicted_to_be_done, -> { where("predicted_score > 0")}
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :not_nil, -> { where.not(:score => nil)}
@@ -98,11 +98,11 @@ class Grade < ActiveRecord::Base
   end
 
   def is_graded?
-    self.status == 'Graded'
+    self.status == "Graded"
   end
 
   def in_progress?
-    self.status == 'In Progress'
+    self.status == "In Progress"
   end
 
   # Handle raw score attributes with commas (ex "300,000")
@@ -138,7 +138,7 @@ class Grade < ActiveRecord::Base
   end
 
   def is_released?
-    status == 'Released'
+    status == "Released"
   end
 
   def is_student_visible?

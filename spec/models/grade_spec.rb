@@ -147,7 +147,7 @@ describe Grade do
       student = create(:user)
       assignment = create(:assignment)
       grade = create(:grade, student: student, assignment: assignment)
-      grade_file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
+      grade_file = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
       grade.add_grade_files(grade_file)
       expect(grade.grade_files.count).to eq(1)
     end

@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe SubmissionsExportPerformer, type: :background_job do
   include PerformerToolkit::SharedExamples
@@ -17,7 +17,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     before { performer.instance_variable_set(:@submissions_export, submissions_export) }
 
     describe "assignment submissions export" do
-      it_behaves_like "an submissions export resource", :professor, User # this is a User object fetched as 'professor'
+      it_behaves_like "an submissions export resource", :professor, User # this is a User object fetched as "professor"
       it_behaves_like "an submissions export resource", :assignment
       it_behaves_like "an submissions export resource", :course
     end

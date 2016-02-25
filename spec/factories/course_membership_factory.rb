@@ -4,22 +4,22 @@ FactoryGirl.define do
     association :user
 
     factory :student_course_membership do
-      role 'student'
+      role "student"
     end
 
     factory :staff_course_membership do
-      role 'gsi'
+      role "gsi"
     end
 
     factory :professor_course_membership do
-      role 'professor'
+      role "professor"
     end
 
     factory :admin_course_membership do
-      role 'admin'
+      role "admin"
     end
 
-    factory :auditing_membership do 
+    factory :auditing_membership do
       auditing true
     end
 

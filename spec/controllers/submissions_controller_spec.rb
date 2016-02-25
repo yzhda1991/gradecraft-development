@@ -51,7 +51,7 @@ describe SubmissionsController do
 
       it "manages submission file uploads" do
         params = attributes_for(:submission).merge(student_id: @student.id)
-        params.merge! submission_files_attributes: {"0" => {file: [fixture_file('test_file.txt', 'txt')]}}
+        params.merge! submission_files_attributes: {"0" => {file: [fixture_file("test_file.txt", "txt")]}}
         post :create, assignment_id: @assignment.id, submission: params
         submission = Submission.unscoped.last
         expect(submission.submission_files.count).to eq 1
@@ -60,7 +60,7 @@ describe SubmissionsController do
 
       it "does not create the submission for large files" do
         params = attributes_for(:submission)
-        file = fixture_file('test_file.txt', 'txt')
+        file = fixture_file("test_file.txt", "txt")
         allow_any_instance_of(AttachmentUploader).to receive(:size).and_return 50_000_000
         params.merge! submission_files_attributes: {"0" => {file: [file]}}
         post :create, assignment_id: @assignment.id, submission: params

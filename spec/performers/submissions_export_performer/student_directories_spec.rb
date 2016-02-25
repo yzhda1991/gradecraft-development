@@ -1,5 +1,5 @@
-require 'active_record_spec_helper'
-require 'rails_spec_helper'
+require "active_record_spec_helper"
+require "rails_spec_helper"
 
 RSpec.describe "SubmissionsExportPerformer: student directory handling", type: :background_job do
   include PerformerToolkit::SharedExamples

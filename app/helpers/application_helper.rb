@@ -13,13 +13,13 @@ module ApplicationHelper
   def body_class
     classes = []
     if logged_in?
-      classes << 'logged-in'
-      classes << 'staff' if current_user_is_staff?
+      classes << "logged-in"
+      classes << "staff" if current_user_is_staff?
       classes << current_user.role(current_course)
     else
-      classes << 'logged-out'
+      classes << "logged-out"
     end
-    classes.join ' '
+    classes.join " "
   end
 
   # Return a title on a per-page basis.
@@ -43,7 +43,7 @@ module ApplicationHelper
     fields = f.fields_for(association, new_object, child_index: id) do |builder|
       render(association.to_s.singularize + "_fields", f: builder)
     end
-    link_to(name, '#', class: "add_fields", data: {id: id, fields: fields.gsub("\n", "")})
+    link_to(name, "#", class: "add_fields", data: {id: id, fields: fields.gsub("\n", "")})
   end
 
   def json_for(target, options = {})

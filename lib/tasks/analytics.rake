@@ -3,7 +3,7 @@ namespace :analytics do
   task :drop do
     STDOUT.puts "Are you sure you want to delete all analytics data? (y/n)"
     input = STDIN.gets.strip
-    if input == 'y'
+    if input == "y"
       Rake::Task["db:mongoid:drop"].invoke
     else
       STDOUT.puts "Aborted, analytics intact."
@@ -13,8 +13,8 @@ namespace :analytics do
   desc "Populate with events to simulate user activity"
   task :populate => :environment do
 
-    if ENV['COURSE'] and Course.exists?(ENV['COURSE'])
-      current_course = Course.find(ENV['COURSE'])
+    if ENV["COURSE"] and Course.exists?(ENV["COURSE"])
+      current_course = Course.find(ENV["COURSE"])
     else
       raise("No course provided. Please add COURSE=ID to the rake task")
     end
@@ -90,7 +90,7 @@ namespace :analytics do
   # #=> {:event_type => "some_type", :some_attribute => 0}
   #
   task :delete_events, [:criteria] => [:environment] do |t, args|
-    criteria_array = args[:criteria].split(/\s+/).map{ |a| a.split('=') }
+    criteria_array = args[:criteria].split(/\s+/).map{ |a| a.split("=") }
     criteria_hash = Hash[ criteria_array.map{ |k,v| [k.strip,convert(v.strip)] } ]
 
     mongoid_criteria = Analytics::Event.where(criteria_hash)
@@ -101,7 +101,7 @@ namespace :analytics do
     STDOUT.print "Are you sure you want to delete these events? (y/n) "
 
     input = STDIN.gets.strip
-    if input == 'y'
+    if input == "y"
       STDOUT.puts "Deleting events and adjusting aggregate data..."
       events.each do |e|
         #e = events.first
@@ -122,7 +122,7 @@ namespace :analytics do
     STDOUT.print "Are you sure you want to delete all #{aggregate} aggregate data and rebuild from stored events? (y/n) "
 
     input = STDIN.gets.strip
-    if input == 'y'
+    if input == "y"
       STDOUT.puts "Deleting #{aggregate} data."
       aggregate.destroy_all
 
@@ -152,7 +152,7 @@ namespace :analytics do
     namespace :courses do
       desc "Export all course analytics data as JSON"
       task :raw => [:environment] do
-        export_dir = ENV['EXPORT_DIR']
+        export_dir = ENV["EXPORT_DIR"]
         course_ids.each do |id|
           puts "Exporting for course: #{id}"
 
@@ -167,7 +167,7 @@ namespace :analytics do
 
       desc "Export filtered course analytics data as CSV"
       task :csv => [:environment] do
-        export_dir = ENV['EXPORT_DIR'] || raise("No export directory provided. Prepend \"EXPORT_DIR=/path/to/exports\" to rake command.")
+        export_dir = ENV["EXPORT_DIR"] || raise("No export directory provided. Prepend \"EXPORT_DIR=/path/to/exports\" to rake command.")
         course_ids.each do |id|
           puts "Exporting for course: #{id}"
 
@@ -193,8 +193,8 @@ namespace :analytics do
 
       desc "Export analyzed course analytics data as CSV"
       task :csv_analyzed => [:environment] do
-        export_dir = ENV['EXPORT_DIR'] || raise("No export directory provided. Prepend \"EXPORT_DIR=/path/to/exports\" to rake command.")
-        selected_course_ids = ENV['COURSES'].try(:split, ',').try(:map, &:to_i)
+        export_dir = ENV["EXPORT_DIR"] || raise("No export directory provided. Prepend \"EXPORT_DIR=/path/to/exports\" to rake command.")
+        selected_course_ids = ENV["COURSES"].try(:split, ",").try(:map, &:to_i)
         export_course_ids = selected_course_ids.present? ? (selected_course_ids & course_ids) : course_ids
         elapsed = Benchmark.realtime do
           export_course_ids.each do |id|

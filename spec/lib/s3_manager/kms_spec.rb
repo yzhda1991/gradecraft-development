@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe S3Manager::Kms do
   let(:s3_manager) { S3Manager::Manager.new }
@@ -26,13 +26,13 @@ RSpec.describe S3Manager::Kms do
     subject { s3_manager.kms_key_id }
 
     it "uses the AWS kms_key_id" do
-      expect(subject).to eq(ENV['AWS_KMS_KEY_ID'])
+      expect(subject).to eq(ENV["AWS_KMS_KEY_ID"])
     end
 
     it "should have 36 characters" do
       expect(subject.size).to eq(36)
     end
-    
+
     it "should be a string of alphanum characters and hyphens" do
       expect(subject).to match(/[a-z0-9\-]{36}/)
     end

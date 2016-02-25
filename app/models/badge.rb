@@ -20,7 +20,7 @@ class Badge < ActiveRecord::Base
 
   belongs_to :course, touch: true
 
-  accepts_nested_attributes_for :earned_badges, allow_destroy: true, :reject_if => proc { |a| a['score'].blank? }
+  accepts_nested_attributes_for :earned_badges, allow_destroy: true, :reject_if => proc { |a| a["score"].blank? }
 
   multiple_files :badge_files
   has_many :badge_files, :dependent => :destroy
@@ -31,7 +31,7 @@ class Badge < ActiveRecord::Base
 
   scope :visible, -> { where(visible: true) }
 
-  default_scope { order('position ASC') }
+  default_scope { order("position ASC") }
 
   def can_earn_multiple_times
     super || false
@@ -65,6 +65,6 @@ class Badge < ActiveRecord::Base
   end
 
   def earned_badge_total_points(student)
-    earned_badges.where(:student_id => student, :student_visible => true).pluck('score').sum
+    earned_badges.where(:student_id => student, :student_visible => true).pluck("score").sum
   end
 end

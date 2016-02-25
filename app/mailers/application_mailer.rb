@@ -1,6 +1,6 @@
 class ApplicationMailer < ActionMailer::Base
-  SENDER_EMAIL = 'mailer@gradecraft.com'
-  ADMIN_EMAIL = 'admin@gradecraft.com'
+  SENDER_EMAIL = "mailer@gradecraft.com"
+  ADMIN_EMAIL = "admin@gradecraft.com"
   SENDER = "GradeCraft <#{SENDER_EMAIL}>"
 
   default from: SENDER

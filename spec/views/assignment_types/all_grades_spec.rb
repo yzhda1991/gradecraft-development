@@ -1,5 +1,5 @@
 # encoding: utf-8
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe "assignment_types/all_grades" do
 
@@ -14,7 +14,7 @@ describe "assignment_types/all_grades" do
   end
 
   before(:each) do
-    assign(:assignment_type, @assignment_type)  
+    assign(:assignment_type, @assignment_type)
     assign(:title, "#{@assignment_type.name} Grade Patterns")
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:term_for).and_return("Assignment")

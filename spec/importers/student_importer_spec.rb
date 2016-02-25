@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe StudentImporter do
   before(:all) { User.destroy_all }

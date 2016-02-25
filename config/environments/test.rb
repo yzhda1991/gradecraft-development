@@ -1,7 +1,7 @@
 GradeCraft::Application.configure do
   config.action_controller.allow_forgery_protection = false
   config.asset_host = "http://localhost:5000"
-  config.action_mailer.default_url_options = { :host => 'localhost:5000' }
+  config.action_mailer.default_url_options = { :host => "localhost:5000" }
   config.action_controller.perform_caching = false
   config.action_dispatch.show_exceptions = false
   config.action_mailer.delivery_method = :test
@@ -10,7 +10,7 @@ GradeCraft::Application.configure do
   config.eager_load = false
   config.serve_static_files = true
   config.static_cache_control = "public, max-age=3600"
-  config.session_store :cookie_store, key: '_gradecraft_session', :expire_after => 60.minutes
+  config.session_store :cookie_store, key: "_gradecraft_session", :expire_after => 60.minutes
 end
 
 CarrierWave.configure do |config|

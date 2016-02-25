@@ -6,9 +6,9 @@
 - if current_user.can_create?(Announcement.new(course_id: current_course.id))
   .context_menu
     %ul
-      %li= link_to_unless_current raw('<i class="fa fa-plus fa-fw"></i> New Announcement'), new_announcement_path
+      %li= link_to_unless_current glyph(:plus) + "New Announcement", new_announcement_path
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   = render "list"

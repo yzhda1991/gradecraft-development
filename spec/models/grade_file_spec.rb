@@ -1,5 +1,5 @@
 require "active_record_spec_helper"
-require_relative '../toolkits/models/shared/files'
+require_relative "../toolkits/models/shared/files"
 
 describe GradeFile do
   subject { grade.grade_files.new image_file_attrs }
@@ -48,7 +48,7 @@ describe GradeFile do
     let(:save_grade) { new_grade_file.grade.save! }
 
     it "accepts text files as well as images" do
-      new_grade_file.file = fixture_file('test_file.txt', 'txt')
+      new_grade_file.file = fixture_file("test_file.txt", "txt")
       save_grade
       expect expect(subject).to match(/\d+_test_file\.txt/)
     end
@@ -59,7 +59,7 @@ describe GradeFile do
     end
 
     it "shortens and removes non-word characters from file names on save" do
-      new_grade_file.file = fixture_file('Too long, strange characters, and Spaces (In) Name.jpg', 'img/jpg')
+      new_grade_file.file = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
       save_grade
       expect(subject).to match(/\d+_too_long__strange_characters__and_spaces_\.jpg/)
     end

@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe AssignmentTypesController do
   before(:all) { @course = create(:course) }
@@ -78,7 +78,7 @@ describe AssignmentTypesController do
         expect(@assignment_type.name).to eq("new name")
       end
 
-      it "redirects to the edit form with invalid attributes" do 
+      it "redirects to the edit form with invalid attributes" do
         params = { name: nil }
         post :update, id: @assignment_type.id, :assignment_type => params
         expect(response).to render_template(:edit)
@@ -117,7 +117,7 @@ describe AssignmentTypesController do
           expect(response.body).to include("First Name,Last Name,Email,Username,Team")
         end
 
-        it "redirects to the dashboard if no assignment types exist" do 
+        it "redirects to the dashboard if no assignment types exist" do
           @assignment_type.destroy
           get :export_all_scores, :format => :csv
           expect(response).to redirect_to dashboard_path

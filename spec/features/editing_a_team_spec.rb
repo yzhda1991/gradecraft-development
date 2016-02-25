@@ -34,7 +34,7 @@ feature "editing a team" do
         click_button "Update team"
       end
 
-      expect(page).to have_notification_message('notice', 'Team Edited Team Name successfully updated')
+      expect(page).to have_notification_message("notice", "Team Edited Team Name successfully updated")
     end
   end
 end

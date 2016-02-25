@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 describe ChallengesController do
   before(:all) do
@@ -71,7 +71,7 @@ describe ChallengesController do
         Challenge.delete_all
         params = attributes_for(:challenge)
         params[:challenge_id] = @challenge
-        params.merge! :challenge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}
+        params.merge! :challenge_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
         post :create, :challenge => params
         challenge = Challenge.where(name: params[:name]).last
         expect expect(challenge.challenge_files.count).to eq(1)
@@ -99,7 +99,7 @@ describe ChallengesController do
       end
 
       it "manages file uploads" do
-        params = {:challenge_files_attributes => {"0" => {"file" => [fixture_file('test_file.txt', 'txt')]}}}
+        params = {:challenge_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
         post :update, id: @challenge_2.id, :challenge => params
         expect expect(@challenge_2.challenge_files.count).to eq(1)
       end

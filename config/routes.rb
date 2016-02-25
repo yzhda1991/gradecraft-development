@@ -1,8 +1,8 @@
 GradeCraft::Application.routes.draw do
 
-  mount RailsEmailPreview::Engine, at: 'emails' if Rails.env.development?
+  mount RailsEmailPreview::Engine, at: "emails" if Rails.env.development?
 
-  require 'admin_constraint'
+  require "admin_constraint"
 
   #1. Analytics & Charts
   #2. Announcements
@@ -46,8 +46,8 @@ GradeCraft::Application.routes.draw do
     get :export
   end
 
-  post 'analytics_events/predictor_event'
-  post 'analytics_events/tab_select_event'
+  post "analytics_events/predictor_event"
+  post "analytics_events/tab_select_event"
 
   #2. Announcements
   resources :announcements, except: [:destroy, :edit, :update]
@@ -58,26 +58,26 @@ GradeCraft::Application.routes.draw do
       post :sort
       get :feed
       get :settings
-      post 'copy' => 'assignments#copy'
-      get 'export_structure'
-      get 'weights' => 'assignment_weights#mass_edit', :as => :mass_edit_weights
+      post "copy" => "assignments#copy"
+      get "export_structure"
+      get "weights" => "assignment_weights#mass_edit", :as => :mass_edit_weights
     end
     member do
-      get 'mass_grade' => 'grades#mass_edit', as: :mass_grade
-      put 'mass_grade' => 'grades#mass_update'
-      get 'group_grade' => 'grades#group_edit', as: :group_grade
-      put 'group_grade' => 'grades#group_update'
-      get 'export_grades'
-      get 'export_submissions'
-      get 'download_current_grades' => 'assignments#download_current_grades'
-      get 'criterion_grades_review'
-      get 'export_team_submissions'
-      get 'submissions_export', defaults: {format: :json}
-      get 'export_team_submissions'
-      get 'grade_import' => 'assignments#grade_import'
-      get 'rubric_grades_review'
+      get "mass_grade" => "grades#mass_edit", as: :mass_grade
+      put "mass_grade" => "grades#mass_update"
+      get "group_grade" => "grades#group_edit", as: :group_grade
+      put "group_grade" => "grades#group_update"
+      get "export_grades"
+      get "export_submissions"
+      get "download_current_grades" => "assignments#download_current_grades"
+      get "criterion_grades_review"
+      get "export_team_submissions"
+      get "submissions_export", defaults: {format: :json}
+      get "export_team_submissions"
+      get "grade_import" => "assignments#grade_import"
+      get "rubric_grades_review"
       put :update_rubrics
-      scope 'grades', as: :grades, controller: :grades do
+      scope "grades", as: :grades, controller: :grades do
         get :edit_status
         put :update_status
         get :import
@@ -129,19 +129,19 @@ GradeCraft::Application.routes.draw do
   #4. Assignment Types
   resources :assignment_types do
     member do
-      get 'all_grades'
-      get 'export_scores'
+      get "all_grades"
+      get "export_scores"
     end
     collection do
       post :sort
-      get 'export_all_scores'
+      get "export_all_scores"
     end
   end
 
   #5. Assignment Type Weights
-  get 'assignment_type_weights' => 'assignment_type_weights#mass_edit', as: :assignment_type_weights
-  put 'assignment_type_weights' => 'assignment_type_weights#mass_update'
-  post 'assignment_type_weight' => 'assignment_type_weights#update'
+  get "assignment_type_weights" => "assignment_type_weights#mass_edit", as: :assignment_type_weights
+  put "assignment_type_weights" => "assignment_type_weights#mass_update"
+  post "assignment_type_weight" => "assignment_type_weights#update"
 
   resources :assignment_weights
 
@@ -151,8 +151,8 @@ GradeCraft::Application.routes.draw do
     resources :tasks
     resources :earned_badges
     member do
-      get 'mass_award' => 'earned_badges#mass_edit', as: :mass_award
-      post 'mass_earn' => 'earned_badges#mass_earn'
+      get "mass_award" => "earned_badges#mass_edit", as: :mass_award
+      post "mass_earn" => "earned_badges#mass_earn"
     end
     collection do
       post :sort
@@ -171,8 +171,8 @@ GradeCraft::Application.routes.draw do
       end
     end
     member do
-      get 'mass_edit' => 'challenge_grades#mass_edit', as: :mass_edit
-      put 'mass_edit' => 'challenge_grades#mass_update'
+      get "mass_edit" => "challenge_grades#mass_edit", as: :mass_edit
+      put "mass_edit" => "challenge_grades#mass_update"
     end
     resources :challenge_files do
       get :remove
@@ -182,34 +182,34 @@ GradeCraft::Application.routes.draw do
   #8. Courses
   resources :courses do
     collection do
-      post 'copy' => 'courses#copy'
+      post "copy" => "courses#copy"
     end
     member do
-      get 'timeline_settings' => 'courses#timeline_settings'
-      put 'timeline_settings' => 'courses#timeline_settings_update'
-      get 'predictor_settings' => 'courses#predictor_settings', as: :predictor_settings
-      put 'predictor_settings' => 'courses#predictor_settings_update'
-#      get 'predictor_preview' => 'courses#predictor_preview'
+      get "timeline_settings" => "courses#timeline_settings"
+      put "timeline_settings" => "courses#timeline_settings_update"
+      get "predictor_settings" => "courses#predictor_settings", as: :predictor_settings
+      put "predictor_settings" => "courses#predictor_settings_update"
+#      get "predictor_preview" => "courses#predictor_preview"
     end
   end
   resources :course_memberships
 
-  post '/current_course/change' => 'current_courses#change', :as => :change_current_course
-  get 'current_course' => 'current_courses#show'
+  post "/current_course/change" => "current_courses#change", :as => :change_current_course
+  get "current_course" => "current_courses#show"
 
-  get 'leaderboard' => 'students#leaderboard'
-  get 'multiplier_choices' => 'info#choices'
-  get 'earned_badges' => 'info#awarded_badges'
-  get 'grading_status' => 'info#grading_status'
-  get 'resubmissions' => 'info#resubmissions'
-  get 'ungraded_submissions' => 'info#ungraded_submissions'
-  get 'top_10' => 'info#top_10'
-  get 'per_assign' => 'info#per_assign'
-  get 'gradebook' => 'info#gradebook'
-  get 'multiplied_gradebook' => 'info#multiplied_gradebook'
-  get 'final_grades' => 'info#final_grades'
-  get 'research_gradebook' => 'info#research_gradebook'
-  get 'export_earned_badges' => 'courses#export_earned_badges'
+  get "leaderboard" => "students#leaderboard"
+  get "multiplier_choices" => "info#choices"
+  get "earned_badges" => "info#awarded_badges"
+  get "grading_status" => "info#grading_status"
+  get "resubmissions" => "info#resubmissions"
+  get "ungraded_submissions" => "info#ungraded_submissions"
+  get "top_10" => "info#top_10"
+  get "per_assign" => "info#per_assign"
+  get "gradebook" => "info#gradebook"
+  get "multiplied_gradebook" => "info#multiplied_gradebook"
+  get "final_grades" => "info#final_grades"
+  get "research_gradebook" => "info#research_gradebook"
+  get "export_earned_badges" => "courses#export_earned_badges"
 
   #9. Groups
   resources :groups do
@@ -231,11 +231,11 @@ GradeCraft::Application.routes.draw do
 
   resources :home
 
-  get 'um_pilot' => 'pages#um_pilot'
-  get 'features' => 'pages#features'
-  get 'press' => 'pages#press'
-  get 'research' => 'pages#research'
-  get 'our_team' => 'pages#team'
+  get "um_pilot" => "pages#um_pilot"
+  get "features" => "pages#features"
+  get "press" => "pages#press"
+  get "research" => "pages#research"
+  get "our_team" => "pages#team"
 
   #11. Rubrics & Grade Schemes
   resources :rubrics
@@ -244,8 +244,8 @@ GradeCraft::Application.routes.draw do
   resources :grade_scheme_elements do
     collection do
       post :destroy_multiple
-      get 'mass_edit' => 'grade_scheme_elements#mass_edit', as: :mass_edit
-      put 'mass_edit' => 'grade_scheme_elements#mass_update'
+      get "mass_edit" => "grade_scheme_elements#mass_edit", as: :mass_edit
+      put "mass_edit" => "grade_scheme_elements#mass_update"
     end
   end
 
@@ -257,14 +257,14 @@ GradeCraft::Application.routes.draw do
     resources :earned_badges
   end
 
-  get 'home' => 'pages#home'
-  get 'dashboard' => 'info#dashboard'
-  get 'brand_and_style' => 'pages#brand_and_style_guidelines'
+  get "home" => "pages#home"
+  get "dashboard" => "info#dashboard"
+  get "brand_and_style" => "pages#brand_and_style_guidelines"
   root :to => "pages#home"
 
   #13. Users
   %w{students gsis professors admins}.each do |role|
-    get "users/#{role}/new" => 'users#new', :as => "new_#{role.singularize}", :role => role.singularize
+    get "users/#{role}/new" => "users#new", :as => "new_#{role.singularize}", :role => role.singularize
   end
 
   resources :users do
@@ -303,29 +303,29 @@ GradeCraft::Application.routes.draw do
   end
   resources :staff, only: [:index, :show]
   resources :user_sessions
-  resources :passwords, path_names: { new: 'reset' }, except: [:destroy, :index]
+  resources :passwords, path_names: { new: "reset" }, except: [:destroy, :index]
 
-  get 'timeline' => 'students#timeline'
-  get 'syllabus' => 'students#syllabus'
-  get 'course_progress' => 'students#course_progress'
-  get 'my_badges' => 'students#badges'
-  get 'my_team' => 'students#teams'
+  get "timeline" => "students#timeline"
+  get "syllabus" => "students#syllabus"
+  get "course_progress" => "students#course_progress"
+  get "my_badges" => "students#badges"
+  get "my_team" => "students#teams"
 
   #14. User Auth
-  post 'auth/lti/callback', to: 'user_sessions#lti_create'
-  get 'auth/failure' => 'pages#auth_failure', as: :auth_failure
+  post "auth/lti/callback", to: "user_sessions#lti_create"
+  get "auth/failure" => "pages#auth_failure", as: :auth_failure
 
-  get 'login' => 'user_sessions#new', :as => :login
-  get 'logout' => 'user_sessions#destroy', :as => :logout
-  get 'reset' => 'user_sessions#new'
+  get "login" => "user_sessions#new", :as => :login
+  get "logout" => "user_sessions#destroy", :as => :logout
+  get "reset" => "user_sessions#new"
 
   #SAML
-  get 'saml/init'
-  post 'saml/consume'
-  get 'saml/metadata'
-  get 'saml/logout'
+  get "saml/init"
+  post "saml/consume"
+  get "saml/metadata"
+  get "saml/logout"
 
-  get 'lti/:provider/launch', to: 'lti#launch', :as => :launch_lti_provider
+  get "lti/:provider/launch", to: "lti#launch", :as => :launch_lti_provider
 
   #15. Uploads
   resource :uploads do
@@ -339,36 +339,36 @@ GradeCraft::Application.routes.draw do
 
   #17. API Calls
 
-  get 'gse_mass_edit' => 'grade_scheme_elements#mass_edit', defaults: { format: :json }
+  get "gse_mass_edit" => "grade_scheme_elements#mass_edit", defaults: { format: :json }
 
   #17.a Rubric Calls
   namespace :api do
-    get 'assignments/:id/criteria', to: 'criteria#index', defaults: { format: :json }
-    get 'assignments/:id/students/:student_id/grade', to: 'grades#show', defaults: { format: :json }
+    get "assignments/:id/criteria", to: "criteria#index", defaults: { format: :json }
+    get "assignments/:id/students/:student_id/grade", to: "grades#show", defaults: { format: :json }
     resources :badges, only: :index, defaults: { format: :json }
 
   end
 
   #17b. Predictor, Student View
-  get 'predictor' => 'students#predictor'
-  get 'predictor_grade_levels' => 'grade_scheme_elements#predictor_data', defaults: { format: :json }
-  get 'predictor_assignment_types' => 'assignment_types#predictor_data', defaults: { format: :json }
-  get 'predictor_assignments' => 'assignments#predictor_data', defaults: { format: :json }
-  get 'predictor_badges' => 'badges#predictor_data', defaults: { format: :json }
-  get 'predictor_challenges' => 'challenges#predictor_data', defaults: { format: :json }
-  get 'predictor_weights' => 'assignment_type_weights#predictor_data', defaults: { format: :json }
+  get "predictor" => "students#predictor"
+  get "predictor_grade_levels" => "grade_scheme_elements#predictor_data", defaults: { format: :json }
+  get "predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
+  get "predictor_assignments" => "assignments#predictor_data", defaults: { format: :json }
+  get "predictor_badges" => "badges#predictor_data", defaults: { format: :json }
+  get "predictor_challenges" => "challenges#predictor_data", defaults: { format: :json }
+  get "predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
   #17c. Predictor, Instructor View
-  get 'students/:id/predictor_grade_levels' => 'grade_scheme_elements#predictor_data', defaults: { format: :json }
-  get 'students/:id/predictor_assignment_types' => 'assignment_types#predictor_data', defaults: { format: :json }
-  get 'students/:id/predictor_assignments' => 'assignments#predictor_data', defaults: { format: :json }
-  get 'students/:id/predictor_badges' => 'badges#predictor_data', defaults: { format: :json }
-  get 'students/:id/predictor_challenges' => 'challenges#predictor_data', defaults: { format: :json }
-  get 'students/:id/predictor_weights' => 'assignment_type_weights#predictor_data', defaults: { format: :json }
+  get "students/:id/predictor_grade_levels" => "grade_scheme_elements#predictor_data", defaults: { format: :json }
+  get "students/:id/predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
+  get "students/:id/predictor_assignments" => "assignments#predictor_data", defaults: { format: :json }
+  get "students/:id/predictor_badges" => "badges#predictor_data", defaults: { format: :json }
+  get "students/:id/predictor_challenges" => "challenges#predictor_data", defaults: { format: :json }
+  get "students/:id/predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
   #18. Exports
   resources :exports
-  get 'exports_controller/index'
+  get "exports_controller/index"
 
   resources :submissions_exports do
     member do

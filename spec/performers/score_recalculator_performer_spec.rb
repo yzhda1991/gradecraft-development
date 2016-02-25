@@ -1,4 +1,4 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
 RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
   # public methods
@@ -31,7 +31,7 @@ RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
           expect { performer.do_the_work }.to change { performer.outcomes.size }.by(1)
           subject
         end
-    
+
         it "should return the result of cache_course_score" do
           allow(student).to receive(:cache_course_score).with(course.id) { cache_score_result }
           expect(performer).to receive(:require_success).and_return(cache_score_result)
@@ -69,7 +69,7 @@ RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
   end
 
   # private methods
-  
+
   describe "private methods" do
     describe "fetch_student" do
       subject { performer.instance_eval{fetch_student} }
@@ -86,11 +86,11 @@ RSpec.describe ScoreRecalculatorPerformer, type: :background_job do
     describe "messages" do
       subject { performer.instance_eval{messages} }
       it "should have a success message" do
-        expect(subject[:success]).to match('Successfully cached student')
+        expect(subject[:success]).to match("Successfully cached student")
       end
 
       it "should have a failure message" do
-        expect(subject[:failure]).to match('Failed to cache student')
+        expect(subject[:failure]).to match("Failed to cache student")
       end
     end
   end

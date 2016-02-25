@@ -17,6 +17,6 @@
     - if @user.new_record?
       .form-item
         = label_tag :send_welcome, "Send welcome email"
-        = check_box_tag :send_welcome, '1', true
+        = check_box_tag :send_welcome, "1", true
   = render partial: "courses", locals: { form: f }
   = render "submit_buttons"

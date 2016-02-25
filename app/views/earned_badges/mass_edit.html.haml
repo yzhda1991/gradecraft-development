@@ -3,7 +3,7 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render 'layouts/alerts'
+  = render "layouts/alerts"
 
   - if current_course.has_teams?
     .team-filter
@@ -13,7 +13,7 @@
         = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   #massGrade
-    = simple_form_for @badge, method: :post, :html => {:class => 'mass-edit-earned-badges' }, :url => mass_earn_badge_path(@badge) do |f|
+    = simple_form_for @badge, method: :post, :html => {:class => "mass-edit-earned-badges" }, :url => mass_earn_badge_path(@badge) do |f|
       %table
         %thead
           %tr

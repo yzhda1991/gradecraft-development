@@ -68,16 +68,16 @@
     %hr
 
     %h5 Downloads
-    %li= link_to_unless_current glyph("list-ul") + "Final Grades", final_grades_path(format: 'csv')
-    %li= link_to glyph(:table) + "Full Gradebook", gradebook_path(format: 'csv')
+    %li= link_to_unless_current glyph("list-ul") + "Final Grades", final_grades_path(format: "csv")
+    %li= link_to glyph(:table) + "Full Gradebook", gradebook_path(format: "csv")
     - if current_course.student_weighted?
-      %li= link_to glyph(:table) + "Multiplied Gradebook",  multiplied_gradebook_path(format: 'csv')
-    %li= link_to glyph("th-large") + "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(format: 'csv')
+      %li= link_to glyph(:table) + "Multiplied Gradebook",  multiplied_gradebook_path(format: "csv")
+    %li= link_to glyph("th-large") + "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(format: "csv")
 
     - if current_course.has_badges?
-      %li= link_to glyph(:certificate) + "Awarded #{current_course.badge_term.pluralize}",  export_earned_badges_path(format: 'csv')
+      %li= link_to glyph(:certificate) + "Awarded #{current_course.badge_term.pluralize}",  export_earned_badges_path(format: "csv")
 
-    %li= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(format: 'csv')
+    %li= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(format: "csv")
 
 %hr
 
@@ -91,12 +91,12 @@
     = raw("<span class='sidebar-nav'>#{name}</span>")
   - if current_course.groups_to_review_count > 0
     %div.notification-badge.staff-notification-badge= current_course.groups_to_review_count
-%li= link_to_unless_current glyph("user-secret") + 'Staff', staff_index_path
+%li= link_to_unless_current glyph("user-secret") + "Staff", staff_index_path
 
 %hr
 
 %h5 Course Setup
-%li= link_to_unless_current glyph(:cog) + 'Options', edit_course_path(current_course)
+%li= link_to_unless_current glyph(:cog) + "Options", edit_course_path(current_course)
 %li= link_to_unless_current glyph(:book) + "#{term_for :assignment_types}", assignment_types_path
 %li= link_to_unless_current glyph(:sliders) + "Predictor Preview", predictor_path
 %li= link_to_unless_current glyph("level-up") + "Grading Scheme", grade_scheme_elements_path

@@ -59,7 +59,7 @@ class StudentsController < ApplicationController
   # AJAX endpoint for student name search
   def autocomplete_student_name
     students = current_course.students.map do |u|
-      { :name => [u.first_name, u.last_name].join(' '), :id => u.id }
+      { :name => [u.first_name, u.last_name].join(" "), :id => u.id }
     end
     render json: MultiJson.dump(students)
   end
@@ -94,7 +94,7 @@ class StudentsController < ApplicationController
   def predictor
     if current_user_is_student?
       @fullpage = true
-      render :layout => 'predictor'
+      render :layout => "predictor"
     end
   end
 

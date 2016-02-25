@@ -2,22 +2,22 @@
 # Add your own tasks in files placed in lib/tasks ending in .rake,
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
-require File.expand_path('../config/application', __FILE__)
+require File.expand_path("../config/application", __FILE__)
 
 GradeCraft::Application.load_tasks
-require 'resque/tasks'
-require 'resque/scheduler/tasks'
+require "resque/tasks"
+require "resque/scheduler/tasks"
 
 namespace :resque do
   task :setup => :environment do
-    require 'resque'
+    require "resque"
 
-    ENV['QUEUE'] = "*"
-    ENV['INTERVAL'] = "0.5"
+    ENV["QUEUE"] = "*"
+    ENV["INTERVAL"] = "0.5"
   end
 
   task :setup_schedule => :setup do
-    require 'resque-scheduler'
+    require "resque-scheduler"
 
     # If you want to be able to dynamically change the schedule,
     # uncomment this line.  A dynamic schedule can be updated via the

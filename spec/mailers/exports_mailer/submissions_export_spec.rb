@@ -1,6 +1,6 @@
-require 'rails_spec_helper'
+require "rails_spec_helper"
 
-RSpec.shared_examples "a complete submissions export email body" do 
+RSpec.shared_examples "a complete submissions export email body" do
   it "includes the professor's first name" do
     should include professor.first_name
   end
@@ -18,7 +18,7 @@ RSpec.shared_examples "a complete submissions export email body" do
   end
 end
 
-RSpec.shared_examples "a team submissions export email" do 
+RSpec.shared_examples "a team submissions export email" do
   it "includes the team term for the course" do
     should include course.team_term.downcase
   end
@@ -28,7 +28,7 @@ RSpec.shared_examples "a team submissions export email" do
   end
 end
 
-RSpec.shared_examples "a submissions export email with archive data" do 
+RSpec.shared_examples "a submissions export email with archive data" do
   it "includes the archive format" do
     should include "ZIP"
   end
@@ -38,7 +38,7 @@ RSpec.shared_examples "a submissions export email with archive data" do
   end
 end
 
-RSpec.shared_examples "a submissions export email without archive data" do 
+RSpec.shared_examples "a submissions export email without archive data" do
   it "includes the archive format" do
     should include "ZIP"
   end
