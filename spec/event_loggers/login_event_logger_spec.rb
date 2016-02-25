@@ -38,29 +38,29 @@ RSpec.describe LoginEventLogger, type: :event_logger do
 
   describe "class methods" do
     describe "self#peform" do
-      subject { class_instance.perform('login', logger_attrs) }
+      subject(:result) { class_instance.perform('login', logger_attrs) }
 
       before(:each) { course_membership }
 
       it "merges the previous last_login_at value into the data hash" do
         allow(class_instance).to receive(:previous_last_login_at) { last_login.to_i }
-        expect(logger_attrs).to receive(:merge!).with({ last_login_at: last_login.to_i })
-        subject
+        expect(logger_attrs).to receive("[]=").with(:last_login_at, last_login.to_i)
+        result
       end
 
       it "sets the data hash to @data" do
-        subject
+        result
         expect(class_instance.instance_variable_get(:@data)).to eq(logger_attrs)
       end
 
       it "calls self#perform from the superclass" do
         expect(class_instance.logger).to receive(:info).exactly(2).times
-        subject
+        result
       end
 
       it "updates the last login" do
         expect(class_instance).to receive(:update_last_login)
-        subject
+        result
       end
     end
 
