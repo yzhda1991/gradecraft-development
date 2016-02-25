@@ -15,6 +15,15 @@ module SubmissionGradeHistory
       .remove("name" => "submission_id")
       .remove("name" => "submitted_at")
       .remove("name" => "updated_at")
+      .remove("name" => "file")
+      .remove("name" => "store_dir")
+      .remove("name" => "id")
+      .merge("SubmissionFile" => "Submission")
+      .transform { |history|
+        if history.version.item_type == "SubmissionFile"
+          history.changeset["event"] = "upload"
+        end
+      }
       .rename("SubmissionFile" => "Attachment")
       .include { |history|
         if (history.changeset["object"] == "Grade" && only_student_visible_grades)
