@@ -1,11 +1,12 @@
-#----------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
-#                                          ASSIGNMENT DEFAULT CONFIGURATION                                            #
+#                  ASSIGNMENT DEFAULT CONFIGURATION                            #
 
-#----------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
-# Add all attributes that will be passed on any assignment creation here, with a default value
-# All assignments will use defaults when individual attributes aren't supplied
+# Add all attributes that will be passed on any assignment creation here
+# with a default value.  All assignments will use defaults when individual
+# attributes aren't supplied.
 
 @assignment_default_config = {
   quotes: {
@@ -50,7 +51,7 @@
   },
   assignment_score_levels: false,
   rubric: false,
-  student_submissions: true,
+  student_submissions: true, # adds submissions for students
   unlock_condition: false,
   unlock_attributes: {
     condition: :nil,
@@ -59,8 +60,8 @@
   }
 }
 
-#----------------------------------------------------------------------------------------------------------------------#
-#----------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 
 @assignments = {}
 
@@ -98,7 +99,10 @@
 
 @assignments[:standard_edit_quick_grade_checkbox] = {
   quotes: {
-    assignment_created: "For me, I am driven by two main philosophies: know more today about the world than I knew yesterday and lessen the suffering of others. You'd be surprised how far that gets you. ― Neil deGrasse Tyson"
+    assignment_created: "For me, I am driven by two main philosophies: "\
+      "know more today about the world than I knew yesterday and lessen "\
+      "the suffering of others. You'd be surprised how far that gets you. "\
+      "― Neil deGrasse Tyson"
   },
   assignment_type: :grading,
   attributes: {
@@ -111,7 +115,9 @@
 
 @assignments[:standard_edit_quick_grade_checkbox_graded] = {
   quotes: {
-    assignment_created: "I hope you're pleased with yourselves. We could all have been killed - or worse, expelled. Now if you don't mind, I'm going to bed. ― J.K. Rowling"
+    assignment_created: "I hope you're pleased with yourselves. "\
+      "We could all have been killed - or worse, expelled. "\
+      "Now if you don't mind, I'm going to bed. ― J.K. Rowling"
   },
   assignment_type: :grading,
   attributes: {
@@ -442,7 +448,7 @@
   }
 }
 
-@assignments[:predictor_past_assignment_submission_closed] = {
+@assignments[:predictor_past_assignment_submission_open] = {
   quotes: {
     assignment_created: nil,
   },
@@ -476,6 +482,22 @@
     predicted_score: Proc.new { rand(15000) },
     point_total: Proc.new { nil },
   }
+}
+
+@assignments[:predictor_past_assignment_with_submissions] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :predictor,
+  attributes: {
+    name: "Has Submissions Past Acceptance No Grades",
+    description: "Should not have a late icon, should still accept predictions.",
+    due_at: 1.week.ago,
+    accepts_submissions_until: 1.week.ago,
+    point_total: 15000,
+    points_predictor_display: "Slider",
+  },
+  student_submissions: true
 }
 
 @assignments[:predictor_past_with_unreleased_grade_assignment] = {
