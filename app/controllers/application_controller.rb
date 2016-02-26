@@ -27,9 +27,7 @@ class ApplicationController < ActionController::Base
   end
 
   before_filter :require_login, :except => [:not_authenticated]
-
   before_filter :increment_page_views
-
   before_filter :get_course_scores
 
   include ApplicationHelper
@@ -118,48 +116,27 @@ class ApplicationController < ActionController::Base
     raise Canable::Transgression unless can_view?(resource)
   end
 
-  require_relative "../event_loggers/pageview_event_logger"
-  module ResqueManager
-    extend EventsHelper::Lull
-  end
-
-  # TODO: add specs for enqueing
   # Tracking page view counts
   def increment_page_views
     if current_user and request.format.html?
-      begin
-        # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
-        PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(time_until_next_lull)
-      rescue
-        # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
-        # or because of some worker stayalive anomaly, then just use the PageviewEventLogger.perform method
-        # to persist the record directly to mongo with all of the logging it entails
-        PageviewEventLogger.perform("pageview", pageview_logger_attrs)
-      end
+      PageviewEventLogger.new(event_session).enqueue_in_with_fallback(Lull.time_until_next_lull)
     end
   end
 
-  def time_until_next_lull
-    ResqueManager.time_until_next_lull
+  # Tracking course logins
+  def record_course_login_event
+    if current_user and (request.format.html? or request.format.xml?)
+      LoginEventLogger.new(event_session).enqueue_with_fallback
+    end
   end
 
-  def pageview_logger_attrs
+  # Session data used for building attributes hashes in EventLogger classes
+  def event_session
     {
-      course_id: current_course.try(:id),
-      user_id: current_user.id,
-      student_id: current_student.try(:id),
-      user_role: current_user.role(current_course),
-      page: request.original_fullpath,
-      created_at: Time.now
+      course: current_course,
+      user: current_user,
+      student: current_student,
+      request: request
     }
   end
-
-  # NOTE: does this need to be re-activated?
-  # Tracking course logins
-  def log_course_login_event
-    # membership = current_user.course_memberships.where(course_id: current_course.id).first
-    # Resque.enqueue(EventLogger,'login', course_id: current_course.id, user_id: current_user.id, student_id: current_student.try(:id), user_role: current_user.role(current_course), last_login_at: membership.last_login_at.to_i, created_at: Time.now)
-    # membership.update_attribute(:last_login_at, Time.now)
-  end
-
 end

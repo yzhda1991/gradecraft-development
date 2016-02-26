@@ -1,51 +1,95 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
+require "resque_spec/scheduler"
 
-include PageviewEventLoggerToolkit # pageview_logger_attrs comes from here
+require_relative "../toolkits/event_loggers/shared_examples"
+require_relative "../toolkits/event_loggers/attributes"
+require_relative "../toolkits/event_loggers/event_session"
+require_relative "../toolkits/event_loggers/application_event_logger_toolkit"
 
-# PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(ResqueManager.time_until_next_lull)
-RSpec.describe PageviewEventLogger, type: :background_job do
-  describe "initialize" do
-    it "should set an @attrs hash" do
-      @some_attrs = { goats: 10, hillbilly_name: "Jake" }
-      @pageview_logger = PageviewEventLogger.new(@some_attrs)
-      expect(@pageview_logger.instance_variable_get(:@attrs)).to eq(@some_attrs)
+# PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
+RSpec.describe PageviewEventLogger, type: :event_logger do
+  include InQueueHelper # get help from ResqueSpec
+  include Toolkits::EventLoggers::SharedExamples
+  include Toolkits::EventLoggers::Attributes
+  include Toolkits::EventLoggers::ApplicationEventLoggerToolkit
+  extend Toolkits::EventLoggers::EventSession
+
+  # pulls in #event_session attributes from EventLoggers::EventSession
+  # creates course, user, student objects, and a request double
+  define_event_session_with_request
+
+  let(:new_logger) { PageviewEventLogger.new(event_session) }
+  let(:expected_base_attrs) { application_logger_base_attrs } # pulled in from Toolkits::EventLoggers::ApplicationEventLoggerToolkit
+
+  # shared examples for EventLogger subclasses
+  it_behaves_like "an EventLogger subclass", PageviewEventLogger, "pageview"
+  it_behaves_like "EventLogger::Enqueue is included", PageviewEventLogger, "pageview"
+
+  describe "#event_attrs" do
+    subject { new_logger.event_attrs }
+
+    before { allow(new_logger).to receive(:page) { "some great page" } }
+
+    it "merges the page from the original request with the base_attrs" do
+      expect(subject).to eq new_logger.base_attrs.merge(page: "some great page")
+    end
+
+    it_behaves_like "#event_attrs that are cached in @event_attrs"
+  end
+
+  describe "#page" do
+    subject { new_logger.page }
+    let(:request_path) { "/path/to/chaos" }
+
+    before do
+      allow(request).to receive(:original_fullpath) { request_path }
+    end
+
+    it "gets the original fullpath from the request" do
+      expect(subject).to eq request_path
+    end
+
+    it "caches the #page" do
+      subject
+      expect(request).not_to receive(:try).with(:original_fullpath)
+      subject
+    end
+
+    it "sets the page to @page" do
+      subject
+      expect(new_logger.instance_variable_get(:@page)).to eq(request_path)
     end
   end
 
-  describe "enqueuing" do
-    before(:each) do
-      ResqueSpec.reset!
-    end
+  describe "#build_page_from_params" do
+    subject { new_logger.build_page_from_params }
+    before(:each) { allow(new_logger).to receive(:params) { params }}
 
-    describe "enqueue without schedule" do
-      it "should find a job in the pageview queue" do
-        @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue
-        resque_job = Resque.peek(:pageview_event_logger)
-        puts "Job is #{resque_job}"
-        expect(resque_job).to be_present
-      end
-
-      it "should have a pageview logger event in the queue" do
-        @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue
-        expect(PageviewEventLogger).to have_queue_size_of(1)
-      end
-    end
-
-    describe "enqueue with schedule" do
-
-      describe"enqueue_in" do
-        it "should schedule a pageview event" do
-          @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_in(2.hours)
-          expect(PageviewEventLogger).to have_scheduled("pageview", pageview_logger_attrs).in(2.hours)
+    context "params exists" do
+      context "params[:url] and params[:tab] don't exists" do
+        let(:params) {{ stuff: "dude" }}
+        it "returns nil" do
+          expect(subject).to be_nil
         end
       end
 
-      describe "enqueue_at" do
-        it "should enqueue the pageview logger to trigger @later" do
-          @later = Time.parse "Feb 10 2052"
-          @pageview_logger = PageviewEventLogger.new(pageview_logger_attrs).enqueue_at(@later)
-          expect(PageviewEventLogger).to have_scheduled("pageview", pageview_logger_attrs).at(@later)
+      context "params[:url] and params[:tab] both exist" do
+        let(:params) {{ url: "http://some.url", tab: "#greatness" }}
+        it "builds a string from the params :url and :tab values" do
+          expect(subject).to eq("http://some.url#greatness")
         end
+
+        it "sets @page to the string built from \#{url}\#{tab}" do
+          subject
+          expect(new_logger.instance_variable_get(:@page)).to eq("http://some.url#greatness")
+        end
+      end
+    end
+
+    context "params does not exist" do
+      let(:params) { nil }
+      it "returns nil" do
+        expect(subject).to be_nil
       end
     end
   end

@@ -1,25 +1,31 @@
-class PageviewEventLogger < EventLogger
-  # queue name
-  @queue= :pageview_event_logger
-  @success_message = "Pageview event was successfully created in mongo"
-  @failure_message = "Pageview event failed creation in mongo"
+class PageviewEventLogger < ApplicationEventLogger
+  include EventLogger::Enqueue
 
-  # message that posts to the log when being queued
-  @start_message = "Starting PageviewEventLogger"
+  # queue to use for login event jobs
+  @queue = :pageview_event_logger
+  @event_name = "Pageview"
 
-  def initialize(attrs={})
-    @attrs = attrs
+  attr_writer :page
+
+  # instance methods, for use as a LoginEventLogger instance
+
+  # used by enqueuing methods in EventLogger::Enqueue
+  def event_type
+    "pageview"
   end
 
-  def enqueue_in(time_until_start)
-    Resque.enqueue_in(time_until_start, self.class, "pageview", @attrs)
+  def event_attrs
+    @event_attrs ||= base_attrs.merge page: page
   end
 
-  def enqueue_at(scheduled_time)
-    Resque.enqueue_at(scheduled_time, self.class, "pageview", @attrs)
+  def page
+    @page ||= event_session[:request].try(:original_fullpath)
   end
 
-  def enqueue
-    Resque.enqueue(self.class, "pageview", @attrs)
+  # params method is defined in ApplicationEventLogger
+  def build_page_from_params
+    if params && params[:url] && params[:tab]
+      @page = "#{params[:url]}#{params[:tab]}"
+    end
   end
 end

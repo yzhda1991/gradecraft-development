@@ -12,6 +12,4 @@ class Analytics::Event
       aggregates.each { |a| a.incr(event) }
     end
   end
-
-  # TODO: Create methods to export Event collection for backup and clear out persisted collection.
 end

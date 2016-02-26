@@ -3,34 +3,25 @@ class AnalyticsEventsController < ApplicationController
 
   def predictor_event
     # limited to 5 predictor jobs/second in Resque initializer
-    Resque.enqueue(PredictorEventLogger, "predictor",
-                                course_id: current_course.id,
-                                user_id: current_user.id,
-                                student_id: current_student.try(:id),
-                                user_role: current_user.role(current_course),
-                                assignment_id: params[:assignment].to_i,
-                                score: params[:score].to_i,
-                                possible: params[:possible].to_i,
-                                created_at: Time.now
-                                )
+    PredictorEventLogger.new(event_session_with_params).enqueue_with_fallback
+
     render :nothing => true, :status => :ok
   end
 
   def tab_select_event
-    # limited to 2 predictor jobs/second in Resque initializer
-    Resque.enqueue_in(Lull.time_until_next_lull, PageviewEventLogger, "pageview",
-                              course_id: current_course.id,
-                              user_id: current_user.id,
-                              student_id: current_student.try(:id),
-                              user_role: current_user.role(current_course),
-                              page: "#{params[:url]}#{params[:tab]}",
-                              created_at: Time.now
-                              )
+    # limited to 20 pageview jobs/second in Resque initializer
+    # only run at night during the Lull period
+    event_logger = PageviewEventLogger.new(event_session_with_params)
+    event_logger.build_page_from_params
+    event_logger.enqueue_in_with_fallback(Lull.time_until_next_lull)
+
     render :nothing => true, :status => :ok
   end
 
   protected
-  # add helpers for performing various tasks relative to the nightly lull
-  extend EventsHelper::Lull
 
+  # event_session method is defined in ApplicationController
+  def event_session_with_params
+    event_session.merge params
+  end
 end

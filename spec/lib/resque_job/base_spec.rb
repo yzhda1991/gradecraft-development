@@ -1,7 +1,22 @@
-require "rails_spec_helper"
+require "logglier"
+require_relative "../../../lib/resque_job/base"
+require_relative "../../../lib/resque_job/performer"
+require_relative "../../../lib/inheritable_ivars"
+require_relative "../../../lib/loggly_resque"
+require_relative "../../toolkits/lib/inheritable_ivars/shared_examples"
+require_relative "../../toolkits/lib/loggly_resque/shared_examples"
+require_relative "../../toolkits/lib/resque_retry/shared_examples"
 
-RSpec.describe ResqueJob::Base, type: :vendor_library do
-  let(:backoff_strategy) { [0, 15, 30, 45, 60, 90, 120, 150, 180, 240, 300, 360, 420, 540, 660, 780, 900, 1140, 1380, 1520, 1760, 3600, 7200, 14400, 28800] }
+describe ResqueJob::Base, type: :vendor_library do
+  include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
+  include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
+  include Toolkits::Lib::ResqueRetryToolkit::SharedExamples
+
+  let(:successful_outcome) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
+  let(:failed_outcome) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
+  let(:outcomes) { [ successful_outcome, failed_outcome ] }
+  let(:logger) { double(Logger).as_null_object }
+
   describe "extensions" do
     it "should use resque-retry" do
       expect(ResqueJob::Base).to respond_to(:retry_delay)
@@ -15,7 +30,8 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     end
 
     it "should have a default @performer_class" do
-      expect(ResqueJob::Base.instance_variable_get(:@performer_class)).to eq(ResqueJob::Performer)
+      expect(ResqueJob::Base.instance_variable_get(:@performer_class))
+        .to eq(ResqueJob::Performer)
     end
 
     it "should not have a default @retry_limit for resque-retry" do
@@ -25,24 +41,22 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     it "should not have a default @retry_delay for resque-retry" do
       expect(ResqueJob::Base.instance_variable_get(:@retry_delay)).to eq(nil)
     end
-
-    it "should have a default @backoff_strategy for resque-retry" do
-      expect(ResqueJob::Base.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
-    end
-
   end
+
+  # shared examples for testing that the #backoff_strategy is overridden and
+  # included from the target IsConfigurable class. Takes block arguments
+  # |target_class, config_class|
+  it_behaves_like "it uses a configurable backoff strategy", ResqueJob::Base, ResqueJob
 
   describe "self.perform(attrs={})" do
     let(:attrs) {{ hounds: 5, teeth: 9 }}
     let(:performer) { double(:performer).as_null_object }
-    let(:outcome1) { double(:outcome, message: "great things happened", success?: true, failure?: false, result_excerpt: "great thi" ) }
-    let(:outcome2) { double(:outcome, message: "bad things happened", failure?: true, success?: false, result_excerpt: "bad thin") }
-    let(:outcomes) { [ outcome1, outcome2 ] }
-    let(:logger) { double(Logger).as_null_object }
 
     before(:each) do
       allow(ResqueJob::Performer).to receive_messages(new: performer)
       allow(ResqueJob::Base).to receive(:logger) { logger }
+      allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
+      allow(performer).to receive(:outcomes) { outcomes }
     end
 
     after(:each) do
@@ -51,7 +65,7 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
 
     it "should print a start message" do
       allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
-      expect(ResqueJob::Base).to receive(:puts).with("waffles have started")
+      expect(logger).to receive(:info).with("waffles have started")
     end
 
     it "should build a new performer" do
@@ -62,22 +76,21 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       expect(performer).to receive(:do_the_work)
     end
 
-    # @mz todo: finish these
-    describe "logging outcome messages" do
-      before(:each) do
-        allow(performer).to receive(:outcomes) { outcomes }
-        allow(ResqueJob::Base).to receive_messages(start_message: "waffles have started")
-        allow(logger).to receive(:info).with("waffles have started")
-      end
+    it "should log the outcome messages" do
+      expect(ResqueJob::Base).to receive(:log_outcomes).with(performer.outcomes)
+    end
+  end
 
+  describe "self#log_outcomes" do
+    subject { ResqueJob::Base.log_outcomes(outcomes) }
+    before { allow(ResqueJob::Base).to receive(:logger) { logger }}
 
-      # @mz TODO: break these out into individual examples
-      it "logs the success for each successful outcome" do
-        expect(logger).to receive(:info).with("SUCCESS: #{outcome1.message}").once
-        expect(logger).to receive(:info).with("RESULT: #{outcome1.result_excerpt}").once
-        expect(logger).to receive(:info).with("FAILURE: #{outcome2.message}").once
-        expect(logger).to receive(:info).with("RESULT: #{outcome2.result_excerpt}").once
-      end
+    it "logs the message and a result excerpt for all outcomes" do
+      expect(logger).to receive(:info).with("SUCCESS: #{successful_outcome.message}").once
+      expect(logger).to receive(:info).with("RESULT: #{successful_outcome.result_excerpt}").once
+      expect(logger).to receive(:info).with("FAILURE: #{failed_outcome.message}").once
+      expect(logger).to receive(:info).with("RESULT: #{failed_outcome.result_excerpt}").once
+      subject
     end
   end
 
@@ -95,38 +108,9 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
   end
 
   describe "subclass inheritance" do
-    it "should pass class-level instance variables to subclasses" do
-      ResqueJob::Base.instance_variable_set(:@wallaby_necks, 5)
-      allow(ResqueJob::Base).to receive(:instance_variable_names).and_return ["@wallaby_necks"]
-      class WallabyResqueJob < ResqueJob::Base; end
-      expect(WallabyResqueJob.instance_variable_get(:@wallaby_necks)).to eq(5)
-    end
-
-    it "should pass some actual values to subclasses" do
-      class PseudoResqueJob < ResqueJob::Base; end
-      expect(PseudoResqueJob.instance_variable_get(:@backoff_strategy)).to eq(backoff_strategy)
-    end
-
     it "inherits the inclusion of Resque::Plugins::ExponentialBackoff" do
       class PseudoResqueJob < ResqueJob::Base; end
       expect(PseudoResqueJob.retry_delay_multiplicand_min).to eq(1.0) # default from resque-retry
-    end
-  end
-
-  describe "self.instance_variable_names" do
-    before do
-      @class_ivars = { ostriches: 50, badgers: 24 }
-      allow(ResqueJob::Base).to receive_messages(class_level_instance_variables: @class_ivars)
-    end
-
-    it "should return an array of instance variable names" do
-      expect(ResqueJob::Base.instance_variable_names).to include("@ostriches", "@badgers")
-    end
-  end
-
-  describe "self.class_level_instance_variables" do
-    it "should return a hash of ivar-value pairs" do
-      expect(ResqueJob::Base.class_level_instance_variables.class).to eq(Hash)
     end
   end
 
@@ -141,13 +125,13 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
     end
 
     context "class doens't have a @start_message variable" do
-      it "should return a start message with job_type and queue" do
-        if ResqueJob::Base.instance_variable_defined?(:@start_message)
-          ResqueJob::Base.remove_instance_variable(:@start_message)
-        end
-
+      before do
+        ResqueJob::Base.instance_variable_set(:@start_message, nil)
         ResqueJob::Base.instance_variable_set(:@queue, :snake)
         allow(ResqueJob::Base).to receive_messages(job_type: "terrible job")
+      end
+
+      it "should return a start message with job_type and queue" do
         expected_message = "Starting terrible job in queue 'snake' with attributes {:snakes=>10, :steve=>true}."
         expect(ResqueJob::Base.start_message(attrs)).to eq(expected_message)
       end
@@ -179,4 +163,26 @@ RSpec.describe ResqueJob::Base, type: :vendor_library do
       end
     end
   end
+
+  # test whether @ivars are properly inheritable after extending the
+  # InheritableIvars module, pulled in from shared examples in the
+  # InheritableIvarsToolit. Defined in:
+  # /spec/toolkits/lib/inheritable_ivars/shared_examples
+  it_behaves_like "some @ivars are inheritable by subclasses", ResqueJob::Base
+
+  describe "self.inheritable_ivars" do
+    let(:expected_attrs) {[
+      :queue,
+      :performer_class,
+    ]}
+
+    it "should have a list of inheritable attributes" do
+      expect(described_class.inheritable_ivars).to eq(expected_attrs)
+    end
+  end
+
+  describe "the logger implementation" do
+    it_behaves_like "the #logger is implemented through Logglier with LogglyResque", described_class
+  end
+
 end
