@@ -30,6 +30,7 @@
                 %i.fa.fa-info-circle
               .display_on_hover.hover-style
                 The average of all scores above zero
+            %th{"scope" => "col"} Predicted
             %th Submissions
             %th Grades
             %th{:style => "min-width: 220px"}
@@ -44,6 +45,7 @@
                 %td= assignment.median
                 %td= assignment.average
                 %td= assignment.earned_average
+                %td= assignment.predicted_count
                 %td
                   - if assignment.accepts_submissions?
                     = assignment.submissions.count

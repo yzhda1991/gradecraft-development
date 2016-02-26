@@ -53,9 +53,12 @@ module Gradable
   end
 
   def median
-    sorted = grades.graded_or_released.pluck(:score).sort
-    return 0 if sorted.empty?
-    (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
+    sorted = grades.graded_or_released.not_nil.pluck(:score).sort
+    if sorted.empty?
+      return 0
+    else
+      (sorted[(sorted.length - 1) / 2] + sorted[sorted.length / 2]) / 2
+    end
   end
 
   def predicted_count
