@@ -525,6 +525,9 @@ class User < ActiveRecord::Base
     assignment_groups.where(assignment: assignment).first.try(:group)
   end
 
+  def has_group_for_assignment?(assignment)
+    assignment.has_groups? && group_for_assignment(assignment).present?
+  end
 
   private
 

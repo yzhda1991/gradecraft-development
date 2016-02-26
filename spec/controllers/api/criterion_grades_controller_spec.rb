@@ -18,7 +18,6 @@ describe API::CriterionGradesController do
     describe "GET group_index" do
       before(:each) do
         world.create_group
-        world.assignment.groups << world.group
         world.group.students.each do |student|
           world.create_criterion_grade(assignment_id: world.assignment.id, student_id: student.id)
         end
