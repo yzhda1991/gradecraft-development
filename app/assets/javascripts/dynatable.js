@@ -389,7 +389,7 @@ $('table.nofeatures_default_rank_dynatable').dynatable({
     rank: function(el, record) {
       return Number(el.innerHTML) || 0;
     },
-    numericScore: function(el, record) {
+    score: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,"")) || 0;
     },
     badgeCount: function(el, record) {
@@ -397,8 +397,8 @@ $('table.nofeatures_default_rank_dynatable').dynatable({
     }
   },
   writers: {
-    numericScore: function(record) {
-      return record['numericScore'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    score: function(record) {
+      return record['score'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
 });
