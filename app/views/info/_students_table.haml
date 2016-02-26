@@ -3,6 +3,7 @@
     %tr
       %th{ :scope => "column", :width => "20%" }= course.user_term
       %th{ :scope => "column", :width => "10%" } Score
+      %th{ :scope => "column", :width => "10%" } Level
       - if course.has_badges?
         %th{ :scope => "column", :width => "5%" } Badges
       - if course.has_teams?
@@ -14,6 +15,7 @@
       %tr
         %td= link_to student.name, student_path(student)
         %td= points student.cached_score_for_course(current_course)
+        %td= points student.grade_for_course(current_course).name
 
         - if course.has_badges?
           %td= student.earned_badges.count
