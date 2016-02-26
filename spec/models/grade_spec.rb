@@ -128,7 +128,7 @@ describe Grade do
   end
 
   describe ".find_or_create_grades" do
-    let(:world) { World.create.with(:course, :group, :assignment) }
+    let(:world) { World.create.with(:course, :assignment, :group) }
     let(:ids) { world.group.students.pluck(:id) }
 
     it "finds and existing grade for assignment and student" do

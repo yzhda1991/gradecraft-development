@@ -658,15 +658,23 @@ describe User do
   end
 
   describe "#group_for_assignment(assignment)" do
+    let!(:create_group) { world.create_group }
+    let(:group) { world.group }
+
     it "returns a student's group for a particular assignment if present" do
-      world.create_group
+      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+      FactoryGirl.create(:group_membership, student: student, group: group)
       expect(student.group_for_assignment(assignment)).to eq(world.group)
     end
   end
 
   describe "#has_group_for_assignment?" do
+    let!(:create_group) { world.create_group }
+    let(:group) { world.group }
+
     it "returns false for individual assignments" do
-      world.create_group
+      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+      FactoryGirl.create(:group_membership, student: student, group: group)
       assignment.update(grade_scope: "Individual")
       expect(student.has_group_for_assignment?(assignment)).to be_falsey
     end
@@ -678,7 +686,8 @@ describe User do
 
     it "returns true if the student is in a group" do
       assignment.update(grade_scope: "Group")
-      world.create_group
+      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
+      FactoryGirl.create(:group_membership, student: student, group: group)
       expect(student.has_group_for_assignment?(assignment)).to be_truthy
     end
   end

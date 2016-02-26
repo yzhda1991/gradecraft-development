@@ -27,10 +27,6 @@ class World
       criterion_grades.first
     end
 
-    def course_membership
-      course_memberships.first
-    end
-
     def grade
       grades.first
     end
@@ -109,12 +105,9 @@ class World
       self
     end
 
-    # creates a group and adds the current student to the group
     def create_group(attributes={})
       course = attributes.delete(:course) || self.course
       groups << FactoryGirl.create(:group, attributes.merge(course: course, approved: "Approved"))
-      FactoryGirl.create(:assignment_group, group: group, assignment: assignment)
-      FactoryGirl.create(:group_membership, student: student, group: group)
     end
 
     def create_rubric(attributes={})
