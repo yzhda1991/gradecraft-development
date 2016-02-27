@@ -69,6 +69,9 @@ $('table.nopage_dynatable').dynatable({
     },
     grades: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,"")) || 0;
+    },
+    maxPoints: function(el, record) {
+      return Number(el.innerHTML.replace(/,/g,"")) || 0;
     }
   },
   writers: {
@@ -95,6 +98,9 @@ $('table.nopage_dynatable').dynatable({
     },
     grades: function(record) {
       return record['grades'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    maxPoints: function(record) {
+      return record['maxPoints'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   }
 });
@@ -288,13 +294,17 @@ $('table.default_assignments_dynatable').bind('dynatable:init', function(e, dyna
     search: false,
     recordCount: false,
     sort: true
-  },
-  dataset: {
-    sortTypes: {
-      assignment: 'alphaNumeric'
     },
-    sorts: { 'assignment': 1 }
-  }
+  readers: {
+      pointsPossible: function(el, record) {
+        return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      }
+    },
+    writers: {
+      pointsPossible: function(record) {
+        return record['pointsPossible'].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+    }
 });
 
 $('table.nofeatures_dynatable').dynatable({

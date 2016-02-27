@@ -2,7 +2,8 @@
   %tr
     %th
     %th= "#{term_for :assignment}"
-    %th Points
+    %th{ "data-dynatable-sorts" => "pointsPossible" } Points
+    %th{:style => "display: none"} Points Possible
     %th Due
     %th
     %th
@@ -50,6 +51,7 @@
               - else
                 .italic= "#{points assignment.point_total} points possible"
             .bold= "Your Goal: #{points grade.predicted_score}" if grade && grade.predicted_score > 0 && current_user_is_student?
+      %td{:style => "display: none"}= assignment.point_total
       %td
         - if assignment.future?
           %span= "#{assignment.due_at.strftime("%A, %b %d, %l:%M%p")}"
