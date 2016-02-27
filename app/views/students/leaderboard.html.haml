@@ -21,7 +21,7 @@
         %th{:scope => "col"} Last Name
         - if presenter.display_pseudonyms?
           %th Pseudonyms
-        %th{:scope => "col", "data-dynatable-sorts" => "numericScore"} Score
+        %th{:scope => "col"} Score
         - if presenter.has_teams?
           %th{:scope => "col"} #{presenter.course.team_term}
         %th{:scope => "col"} Grade
@@ -41,7 +41,7 @@
             %td{"data-title" => "Last Name"}= link_to student.last_name, student_path(student)
             - if presenter.display_pseudonyms?
               %td{"data-title" => "Pseudonym"}= student.display_name
-            %td{"data-title" => "Score"}= points student.score
+            %td= points student.score
             - if presenter.has_teams?
               %td#team_for_course{"data-title" => "Team"}
                 = link_to student.team.name, student.team if student.team

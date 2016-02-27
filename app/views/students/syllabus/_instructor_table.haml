@@ -2,7 +2,8 @@
   %tr
     %th
     %th= "#{term_for :assignment}"
-    %th Points
+    %th{ "data-dynatable-sorts" => "pointsPossible" } Points
+    %th{:style => "display: none"} Points Possible
     %th Due
     %th
     %th
@@ -49,6 +50,7 @@
                 = "#{points grade.score} / #{points grade.point_total} points earned"
             - else
               .italic= "#{points assignment.point_total} points possible"
+    %td{:style => "display: none"}= assignment.point_total
     %td
       %span
         - if assignment.future?
