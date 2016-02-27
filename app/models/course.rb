@@ -250,16 +250,16 @@ class Course < ActiveRecord::Base
     accepts_submissions == true
   end
 
+  def element_for_score(score)
+    grade_scheme_elements.where("low_range <= ? AND high_range >= ?", score, score).first
+  end
+
   def grade_level_for_score(score)
-    grade_scheme_elements.where("low_range <= ? AND high_range >= ?", score, score).pluck("level").first
+    element_for_score(score).try(:level)
   end
 
   def grade_letter_for_score(score)
-    grade_scheme_elements.where("low_range <= ? AND high_range >= ?", score, score).pluck("letter").first
-  end
-
-  def element_for_score(score)
-    grade_scheme_elements.where("low_range <= ? AND high_range >= ?", score, score).first
+    element_for_score(score).try(:letter)
   end
 
   def membership_for_student(student)
