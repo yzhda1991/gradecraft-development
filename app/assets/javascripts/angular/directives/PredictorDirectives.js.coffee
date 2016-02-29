@@ -66,6 +66,10 @@
           tooltip: 'This ' + scope.targetTerm() + ' accepts submissions'
           icon: "fa-paperclip"
         }
+        has_submission: {
+          tooltip: 'You have made a submission for this ' + scope.targetTerm()
+          icon: "fa-file"
+        }
         is_locked: {
           tooltip: scope.conditions()
           icon: "fa-lock"

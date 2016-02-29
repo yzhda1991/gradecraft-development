@@ -44,10 +44,10 @@
   grades: false,
   # only used if :grades is true:
   grade_attributes: {
-    raw_score: Proc.new { rand(5000) },
-    instructor_modified: true,
-    status: "Graded",
-    predicted_score: Proc.new { 0 },
+    raw_score: -> { rand(5000) },
+    instructor_modified: false,
+    status: nil,
+    predicted_score: -> { 0 },
     feedback: nil
   },
   assignment_score_levels: false,
@@ -62,6 +62,9 @@
 }
 
 #------------------------------------------------------------------------------#
+
+#                        Grading Assignment Types
+
 #------------------------------------------------------------------------------#
 
 @assignments = {}
@@ -109,6 +112,7 @@
   grades: true,
   grade_attributes: {
     status: "Graded",
+    instructor_modified: true
   }
 }
 
@@ -144,6 +148,7 @@
   grades: true,
   grade_attributes: {
     status: "Graded",
+    instructor_modified: true
   }
 }
 
@@ -178,6 +183,7 @@
   grades: true,
   grade_attributes: {
     status: "Graded",
+    instructor_modified: true
   }
 }
 
@@ -208,6 +214,7 @@
   grades: true,
   grade_attributes: {
     status: "Graded",
+    instructor_modified: true
   }
 }
 
@@ -284,7 +291,8 @@
   grades: true,
   grade_attributes: {
     status: "Graded",
-    raw_score: Proc.new { 80000 },
+    instructor_modified: true,
+    raw_score: -> { 80000 },
     feedback: 'As Aristotle said, <strong>"The whole is greater than the sum of its parts."</strong>'
   },
   rubric: true,
@@ -336,6 +344,12 @@
   },
   rubric: true
 }
+
+#------------------------------------------------------------------------------#
+
+#                        Submission Assignment Types
+
+#------------------------------------------------------------------------------#
 
 @assignments[:no_submissions_assignment] = {
   quotes: {
@@ -429,14 +443,21 @@
   }
 }
 
+#------------------------------------------------------------------------------#
+
+#                        Predictor Assignment Types
+
+#------------------------------------------------------------------------------#
+
+
 @assignments[:predictor_with_graded_grade_assignment] = {
   quotes: {
     assignment_created: nil,
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Assignment is Past with Grade",
-    description: "Description should be present as icon",
+    name: "Past Assignment with Grade",
+    description: "Points displayed and info icon",
     due_at: 1.week.ago,
     point_total: 15000,
     points_predictor_display: "Slider",
@@ -444,8 +465,9 @@
   grades: true,
   grade_attributes: {
     instructor_modified: true,
-    predicted_score: Proc.new { rand(15000) },
-    status: "Graded"
+    predicted_score: -> { rand(15000) },
+    status: "Graded",
+    instructor_modified: true
   }
 }
 
@@ -455,11 +477,34 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Assignment is Past with no Grade",
-    description: "Description and late should be present as icon",
+    name: "Past Assignment no Grade",
+    description: "Displays a Slider. Displays the info icon with this text on hover",
     due_at: 1.week.ago,
     point_total: 15000,
     points_predictor_display: "Slider",
+  }
+}
+
+@assignments[:predictor_past_with_unreleased_grade_assignment] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :predictor,
+  attributes: {
+    name: "Past Assignment Unreleased Grade",
+    description: "Should have a prediction slider, should have a prediction, should not have a visible grade",
+    due_at: 1.week.ago,
+    point_total: 15000,
+    points_predictor_display: "Slider",
+    release_necessary: true,
+  },
+  grades: true,
+  grade_attributes: {
+    instructor_modified: true,
+    predicted_score: -> { rand(15000) },
+    raw_score: -> { rand(15000) },
+    status: "Graded",
+    instructor_modified: true
   }
 }
 
@@ -469,12 +514,17 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Submissions Late",
-    description: "Should have a late icon, should still accept predictions.",
+    name: "Not Submitted, Late",
+    description: "Should have a submission and late icon, should still accept predictions.",
     due_at: 1.week.ago,
     accepts_submissions_until: 3.week.from_now,
     point_total: 15000,
     points_predictor_display: "Slider",
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
   }
 }
 
@@ -484,18 +534,24 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Submissions Past Acceptance",
-    description: "Should not have a prediction slider, should be predicted at 0 points.",
+    name: "Not Submitted, Closed",
+    description: "Fixed at 0 points, displays 'Accepts Submissions', 'Closed' and 'Late' icons.",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
     point_total: 15000,
     points_predictor_display: "Slider",
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
   },
   grades: true,
   grade_attributes: {
     instructor_modified: false,
-    predicted_score: Proc.new { rand(15000) },
-    point_total: Proc.new { nil },
+    raw_score: -> { nil },
+    status: nil,
+    predicted_score: -> { rand(15000) },
   }
 }
 
@@ -505,36 +561,40 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Has Submissions Past Acceptance No Grades",
-    description: "Should not have a late icon, should still accept predictions.",
+    name: "Has Submissions, Closed",
+    description: "Displays 'Accepts Submissions', 'Has Submission', and 'Closed' icon but no 'Late' icon, has slider, accepts prediction.",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
     point_total: 15000,
     points_predictor_display: "Slider",
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
   },
   student_submissions: true
 }
 
-@assignments[:predictor_past_with_unreleased_grade_assignment] = {
+@assignments[:predictor_open_assignment_with_submissions] = {
   quotes: {
     assignment_created: nil,
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Assignment is Past with Unreleased Grade",
-    description: "Should have a prediction slider, should have a prediction, should not have released grade",
-    due_at: 1.week.ago,
+    name: "Has Submission, Open",
+    description: "Displays 'Accepts Submissions' and 'Has Submission' icons, has slider, accepts prediction.",
+    due_at: 5.weeks.from_now,
+    accepts_submissions_until: 5.weeks.from_now,
     point_total: 15000,
     points_predictor_display: "Slider",
-    release_necessary: true,
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
   },
-  grades: true,
-  grade_attributes: {
-    instructor_modified: true,
-    predicted_score: Proc.new { rand(15000) },
-    point_total: Proc.new { rand(15000) },
-    status: "Graded"
-  }
+  student_submissions: true
 }
 
 @assignments[:predictor_fixed_assignment] = {
@@ -543,7 +603,8 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Assignment Shows Switch in Predictor",
+    name: "Fixed no Prediction",
+    description: "Should have a binary predictor switch with zero prediction",
     due_at: 1.week.from_now,
     point_total: 15000,
     points_predictor_display: "Fixed",
@@ -556,7 +617,8 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Assignment Shows Predicted Full Points with a Binary Switch",
+    name: "Fixed with Prediction",
+    description: "Should have a binary predictor switch with zero prediction",
     due_at: 1.week.from_now,
     point_total: 15000,
     points_predictor_display: "Fixed",
@@ -564,8 +626,30 @@
   grades: true,
   grade_attributes: {
     instructor_modified: false,
-    raw_score: Proc.new { nil },
-    predicted_score: Proc.new { rand(15000) },
+    raw_score: -> { nil },
+    status: nil,
+    predicted_score: -> { 15000 }
+  }
+}
+
+@assignments[:predictor_fixed_assignment_graded_predicted] = {
+  quotes: {
+    assignment_created: "The whole educational and professional training system is a very elaborate filter, which just weeds out people who are too independent, and who think for themselves, and who don't know how to be submissive, and so on -- because they're dysfunctional to the institutions. ― Noam Chomsky",
+  },
+  assignment_type: :predictor,
+  attributes: {
+    name: "Graded Fixed Assignment",
+    description: "Should have full points",
+    due_at: 1.week.from_now,
+    point_total: 15000,
+    points_predictor_display: "Fixed",
+  },
+  grades: true,
+  grade_attributes: {
+    instructor_modified: true,
+    raw_score: -> { 15000 },
+    predicted_score: -> { rand(15000) },
+    status: "Graded"
   }
 }
 
@@ -575,7 +659,8 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Slider No Levels [Not Graded]",
+    name: "Slider No Prediction",
+    description: "Should have a continuous slider with zero prediction",
     due_at: 1.week.from_now,
     point_total: 15000,
     points_predictor_display: "Slider"
@@ -588,7 +673,8 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Slider No Levels [Predicted, Not Graded]",
+    name: "Slider with Prediction",
+    description: "Should have a continuous slider with random prediction",
     due_at: 1.week.from_now,
     point_total: 15000,
     points_predictor_display: "Slider",
@@ -596,8 +682,9 @@
   grades: true,
   grade_attributes: {
     instructor_modified: false,
-    raw_score: Proc.new { nil },
-    predicted_score: Proc.new { rand(15000) },
+    raw_score: -> { nil },
+    status: nil,
+    predicted_score: -> { rand(15000) }
   }
 }
 
@@ -607,7 +694,8 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Slider with Levels [Not Predicted,Not Graded]",
+    name: "Level Slider no Prediction",
+    description: "Should have a slider with levels with zero prediction",
     due_at: 1.week.from_now,
     point_total: 25000,
     points_predictor_display: "Slider",
@@ -621,7 +709,8 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Slider with Levels [Predicted,Not Graded]",
+    name: "Level Slider with Prediction",
+    description: "Should have a slider with levels with random prediction",
     due_at: 1.week.from_now,
     point_total: 25000,
     points_predictor_display: "Slider",
@@ -630,10 +719,17 @@
   grades: true,
   grade_attributes: {
     instructor_modified: false,
-    raw_score: Proc.new { nil },
-    predicted_score: Proc.new { rand(25000) },
+    raw_score: -> { nil },
+    status: nil,
+    predicted_score: -> { rand(25000) }
   }
 }
+
+#------------------------------------------------------------------------------#
+
+#                        Visibility Assignment Types
+
+#------------------------------------------------------------------------------#
 
 @assignments[:invisible_assignment] = {
   quotes: {
@@ -904,7 +1000,8 @@
   grades: true,
   grade_attributes: {
     status: "Graded",
-    raw_score: Proc.new { 180000 },
+    instructor_modified: true,
+    raw_score: -> { 180000 },
     feedback: 'As George Washington Carver said, <strong>"Education is the key to unlock the golden door of freedom."</strong>'
   }
 }
@@ -941,7 +1038,8 @@
   grades: true,
   grade_attributes: {
     status: "Graded",
-    raw_score: Proc.new { 180000 },
+    instructor_modified: true,
+    raw_score: -> { 180000 },
     feedback: 'As Winston Churchill said, <strong>"Continuous effort - not strength or intelligence - is the key to unlocking our potential."</strong>'
   }
 }

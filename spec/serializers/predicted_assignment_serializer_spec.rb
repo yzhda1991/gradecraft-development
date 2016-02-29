@@ -77,7 +77,7 @@ describe PredictedAssignmentSerializer do
       expect(exposed_attributes & subject.attributes.keys).to eq(exposed_attributes)
     end
 
-    describe "additional boolean flags" do
+    describe "#boolean flags" do
       subject { described_class.new( assignment, user, user).attributes }
 
       describe "is_required" do
@@ -116,14 +116,39 @@ describe PredictedAssignmentSerializer do
       end
 
       describe "accepts_submissions" do
-        it "is true when assignment has a rubric" do
+        it "is true when assignment accepts submissions" do
           allow(assignment).to receive(:accepts_submissions?).and_return true
           expect(subject[:accepts_submissions]).to eq(true)
         end
 
-        it "is false if assignment has no rubric" do
+        it "is false if assignment doesn't accept submissions" do
           allow(assignment).to receive(:accepts_submissions?).and_return false
           expect(subject[:accepts_submissions]).to eq(false)
+        end
+
+        it "is false if accept submission field is nil" do
+          allow(assignment).to receive(:accepts_submissions?).and_return nil
+          expect(subject[:accepts_submissions]).to eq(false)
+        end
+      end
+
+      describe "has_submission" do
+        it "is false whenever the assignment doesn't accept submissions" do
+          allow(assignment).to receive(:accepts_submissions?).and_return false
+          allow(user).to receive(:submission_for_assignment).and_return "submission"
+          expect(subject[:has_submission]).to eq(false)
+        end
+
+        it "is true when the student has a submission for the assignment" do
+          allow(assignment).to receive(:accepts_submissions?).and_return true
+          allow(user).to receive(:submission_for_assignment).and_return "submission"
+          expect(subject[:has_submission]).to eq(true)
+        end
+
+        it "is false when the student has no submission for the assignment" do
+          allow(assignment).to receive(:accepts_submissions?).and_return true
+          allow(user).to receive(:submission_for_assignment).and_return nil
+          expect(subject[:has_submission]).to eq(false)
         end
       end
 

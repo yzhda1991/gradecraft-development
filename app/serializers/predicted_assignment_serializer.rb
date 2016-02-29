@@ -72,6 +72,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
       has_info: has_info?,
       has_rubric: has_rubric?,
       accepts_submissions: accepts_submissions?,
+      has_submission: has_submission?,
       is_a_condition: is_a_condition?,
       is_earned_by_group: is_earned_by_group?,
       is_late: is_late?,
@@ -97,13 +98,18 @@ class PredictedAssignmentSerializer < SimpleDelegator
     !!assignment.accepts_submissions?
   end
 
+  def has_submission?
+    !!assignment.accepts_submissions? && \
+      student.submission_for_assignment(assignment).present?
+  end
+
   def is_earned_by_group?
     assignment.grade_scope == "Group"
   end
 
   def is_late?
     assignment.overdue? && assignment.accepts_submissions && \
-    !student.submission_for_assignment(assignment).present?
+      !student.submission_for_assignment(assignment).present?
   end
 
   # TODO: update when closed? method added to assignments
