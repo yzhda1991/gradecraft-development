@@ -23,7 +23,7 @@ describe HumanHistory::ActorHistoryToken do
     end
 
     context "user is not found" do
-      let(:subject) { described_class.new "actor_id", 123, Object }
+      let(:subject) { described_class.new "actor_id", nil, Object }
 
       it "returns 'Someone'" do
         expect(subject.parse).to eq({ actor: "Someone" })
