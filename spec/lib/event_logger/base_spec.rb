@@ -22,7 +22,7 @@ describe EventLogger::Base, type: :vendor_library do
     it_behaves_like "the #logger is implemented through Logglier with LogglyResque", described_class
   end
 
-  describe "self.perform" do
+  describe ".perform" do
     subject { described_class.perform(event_type, some_data) }
 
     let(:logger) { double(Logger).as_null_object }
@@ -47,7 +47,7 @@ describe EventLogger::Base, type: :vendor_library do
     end
   end
 
-  describe "self.notify_event_outcome(event, data)" do
+  describe ".notify_event_outcome(event, data)" do
     let!(:valid_event) { Analytics::Event.new }
     let!(:invalid_event) { Analytics::Event.new }
 
@@ -79,7 +79,7 @@ describe EventLogger::Base, type: :vendor_library do
     end
   end
 
-  describe "self.analytics_attrs(event_type, data)" do
+  describe ".analytics_attrs(event_type, data)" do
     subject { described_class.analytics_attrs(event_type, some_data) }
 
     before { allow(Time.zone).to receive(:now) { time_now }}
@@ -121,7 +121,7 @@ describe EventLogger::Base, type: :vendor_library do
   # /spec/toolkits/lib/inheritable_ivars/shared_examples
   it_behaves_like "some @ivars are inheritable by subclasses", EventLogger::Base
 
-  describe "self.inheritable_ivars" do
+  describe ".inheritable_ivars" do
     let(:expected_attrs) {[
       :queue,
       :event_name,
