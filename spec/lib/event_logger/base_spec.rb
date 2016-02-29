@@ -48,10 +48,12 @@ describe EventLogger::Base, type: :vendor_library do
   end
 
   describe "self.notify_event_outcome(event, data)" do
-    let!(:valid_event) { double(Logger, valid?: true ) }
-    let!(:invalid_event) { double(Logger, valid?: false ) }
+    let!(:valid_event) { Analytics::Event.new }
+    let!(:invalid_event) { Analytics::Event.new }
 
     before(:each) do
+      allow(valid_event).to receive(:valid?).and_return true
+      allow(invalid_event).to receive(:valid?).and_return false
       described_class.instance_variable_set(:@success_message, "great stuff happened")
       described_class.instance_variable_set(:@failure_message, "bad stuff happened")
     end
