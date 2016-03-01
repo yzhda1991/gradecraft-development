@@ -127,7 +127,8 @@ describe EventLogger::Base, type: :vendor_library do
       :start_message,
       :success_message,
       :failure_message
-    ]}
+    ]
+  }
 
     it "should have a list of inheritable attributes" do
       expect(described_class.inheritable_ivars).to eq(expected_attrs)

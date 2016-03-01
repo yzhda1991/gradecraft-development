@@ -10,7 +10,8 @@ class CoursesController < ApplicationController
     respond_to do |format|
       format.html { }
       format.json { render json: @courses.to_json(only: [:id, :name, :courseno,
-                                                         :year, :semester]) }
+                                                         :year, :semester])
+                                                       }
     end
   end
 

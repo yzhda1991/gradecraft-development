@@ -6,7 +6,8 @@ describe SubmissionsHelper do
 
   describe "#resubmission_count_for" do
     let!(:grade) { create :grade, course: course, status: "Released", submission: submission,
-                   graded_at: 1.day.ago }
+                   graded_at: 1.day.ago
+                 }
     let(:submission) { create :submission, course: course, submitted_at: DateTime.now }
 
     it "returns the number of resubmitted submissions" do

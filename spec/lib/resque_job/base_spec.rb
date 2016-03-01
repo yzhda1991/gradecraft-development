@@ -174,7 +174,8 @@ describe ResqueJob::Base, type: :vendor_library do
     let(:expected_attrs) {[
       :queue,
       :performer_class,
-    ]}
+    ]
+  }
 
     it "should have a list of inheritable attributes" do
       expect(described_class.inheritable_ivars).to eq(expected_attrs)
