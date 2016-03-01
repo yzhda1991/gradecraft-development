@@ -32,8 +32,11 @@ class Pancake
   end
 
   def caller_parent4; caller_parent3; end
+
   def caller_parent3; caller_parent2; end
+
   def caller_parent2; caller_parent1; end
+  
   def caller_parent1; caller_method; end
 end
 
