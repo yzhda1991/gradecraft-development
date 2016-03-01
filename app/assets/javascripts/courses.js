@@ -27,16 +27,7 @@
               return item.name.match(regex) || item.courseno.match(regex);
             }
           }).on('omniselect:select', function(event, id) {
-            var form = document.createElement("form");
-            form.setAttribute("method", "post");
-            form.setAttribute("action", "/current_course/change");
-            var field = document.createElement("input");
-            field.setAttribute("type", "hidden");
-            field.setAttribute("name", "course_id");
-            field.setAttribute("value", id);
-            form.appendChild(field);
-            document.body.appendChild(form);
-            form.submit();
+            window.location = "/current_course/change?course_id=" + id
             return false;
           });
         }

@@ -193,7 +193,7 @@ GradeCraft::Application.routes.draw do
   end
   resources :course_memberships
 
-  post "/current_course/change" => "current_courses#change", as: :change_current_course
+  get "/current_course/change" => "current_courses#change", as: :change_current_course
   get "current_course" => "current_courses#show"
 
   get "leaderboard" => "students#leaderboard"
