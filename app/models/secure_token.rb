@@ -1,3 +1,10 @@
+# this class can generate secure tokens for short-term use case that comes up
+# across the entire system. Because the #target parent association is,
+# any class that implements:
+#
+#   has_many :targets, as: :targetable
+#
+# Will be able to use a SecureToken to implement polymorphic
 class SecureToken < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
@@ -12,7 +19,7 @@ class SecureToken < ActiveRecord::Base
 
   # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)
-    # in order to check the give
+    # in order to check the
     secret_key == SCrypt::Password.new(encrypted_key)
   end
 
