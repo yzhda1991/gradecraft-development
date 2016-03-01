@@ -12,7 +12,7 @@ describe Services::Actions::RunsGradeUpdaterJob do
       raise_error LightService::ExpectedKeysNotInContextError
   end
 
-    it "expects student visible status passed to service" do
+  it "expects student visible status passed to service" do
     expect { described_class.execute({ grade: grade })}.to \
       raise_error LightService::ExpectedKeysNotInContextError
   end

@@ -269,3 +269,52 @@ Style/InitialIndentation:
 Style/FirstParameterIndentation:
   Description: 'Checks the indentation of the first parameter in a method call.'
   Enabled: true
+
+Style/FlipFlop:
+  Description: 'Checks for flip flops'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-flip-flops'
+  Enabled: true
+
+Style/For:
+  Description: 'Checks use of for or each in multiline loops.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-for-loops'
+  Enabled: true
+
+Style/FormatString:
+  Description: 'Enforce the use of Kernel#sprintf, Kernel#format or String#%.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#sprintf'
+  Enabled: true
+
+Style/GlobalVars:
+  Description: 'Do not introduce global variables.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#instance-vars'
+  Reference: 'http://www.zenspider.com/Languages/Ruby/QuickRef.html'
+  Enabled: true
+
+Style/GuardClause:
+  Description: 'Check for conditionals that can be replaced with guard clauses'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-nested-conditionals'
+  Enabled: true
+
+Style/HashSyntax:
+  Description: >-
+                 Prefer Ruby 1.9 hash syntax { a: 1, b: 2 } over 1.8 syntax
+                 { :a => 1, :b => 2 }.
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#hash-literals'
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Description: >-
+                 Favor modifier if/unless usage when you have a
+                 single-line body.
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#if-as-a-modifier'
+  Enabled: false
+
+Style/IfWithSemicolon:
+  Description: 'Do not use if x; .... Use the ternary operator instead.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-semicolon-ifs'
+  Enabled: true
+
+Style/IndentationConsistency:
+  Description: 'Keep indentation straight.'
+  Enabled: true

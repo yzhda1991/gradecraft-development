@@ -30,9 +30,8 @@ describe Group do
       skip "implement"
     end
 
-    it "does not allow students to belong to more than one group per assignment"
-      skip "implement" do
-
+    it "does not allow students to belong to more than one group per assignment" do
+      skip "implement"
     end
 
     it "requires the group to work on at least one assignment" do
