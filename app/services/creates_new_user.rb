@@ -21,7 +21,7 @@ module Services
         Actions::ActivatesUser,
         Actions::SendsActivationNeededEmail,
         Actions::SendsWelcomeEmail
-      )
+        )
     end
   end
 end

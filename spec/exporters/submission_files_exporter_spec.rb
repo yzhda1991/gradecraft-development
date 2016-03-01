@@ -273,8 +273,7 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
       text_comment: "Greezus!",
       submission_files: submission_file_doubles,
       student: student_double,
-      assignment: assignment_double
-    )
+      assignment: assignment_double)
   end
 
   def submission_double_with_nils(*nil_attrs)
@@ -287,9 +286,8 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
 
   def student_double
     double(:student,
-      first_name: "Anne",
-      last_name: "Haight"
-    )
+           first_name: "Anne",
+           last_name: "Haight")
   end
 
   def files_double

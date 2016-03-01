@@ -29,7 +29,7 @@ module Services
         Actions::BuildsEarnedLevelBadges,
         Actions::SavesEarnedLevelBadges,
         Actions::RunsGradeUpdaterJob
-      )
+        )
     end
   end
 end

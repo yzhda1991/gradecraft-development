@@ -9,7 +9,7 @@ module Services
       with(attributes: attributes, course: course, send_welcome_email: send_welcome_email)
         .reduce(
         Actions::CreatesOrUpdatesUser
-      )
+        )
     end
   end
 end

@@ -11,7 +11,7 @@ module Services
         .reduce(
         Actions::UpdatesUser,
         Actions::CreatesCourseMembership
-      )
+        )
     end
   end
 end
