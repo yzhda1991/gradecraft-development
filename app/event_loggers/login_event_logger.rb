@@ -38,7 +38,9 @@ class LoginEventLogger < ApplicationEventLogger
   end
 
   def self.previous_last_login_at
-    course_membership.last_login_at.to_i if course_membership.last_login_at
+    if course_membership && course_membership.last_login_at
+      course_membership.last_login_at.to_i
+    end
   end
 
   def self.update_last_login

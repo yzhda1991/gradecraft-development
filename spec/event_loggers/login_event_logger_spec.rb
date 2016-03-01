@@ -118,24 +118,39 @@ RSpec.describe LoginEventLogger, type: :event_logger do
     end
 
     describe "self#previous_last_login_at" do
-      subject { class_instance.previous_last_login_at }
+      let(:result) { class_instance.previous_last_login_at }
 
-      before do
-        allow(class_instance).to receive(:course_membership) { course_membership }
-      end
+      context "a course membership is present" do
+        before do
+          allow(class_instance).to receive(:course_membership)
+            .and_return course_membership
+        end
 
-      context "course membership has a last_login_at value" do
-        it "returns the timestamp as an integer in seconds" do
-          allow(course_membership).to receive(:last_login_at) { last_login }
-          expect(subject).to eq(last_login.to_i)
+        context "course membership has a last_login_at value" do
+          it "returns the timestamp as an integer in seconds" do
+            allow(course_membership).to receive(:last_login_at) { last_login }
+            expect(result).to eq(last_login.to_i)
+          end
+        end
+
+        context "course membership has no last_login_at value" do
+          it "returns nil" do
+            allow(course_membership).to receive(:last_login_at) { nil }
+            expect(result).to be_nil
+          end
         end
       end
 
-      context "course membership has no last_login_at value" do
+      context "no course membership is found for the login data" do
+        before do
+          allow(class_instance).to receive(:course_membership) { nil }
+        end
+
         it "returns nil" do
           allow(course_membership).to receive(:last_login_at) { nil }
-          expect(subject).to be_nil
+          expect(result).to be_nil
         end
+
       end
     end
 
