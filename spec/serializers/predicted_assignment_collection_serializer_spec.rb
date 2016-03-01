@@ -1,7 +1,6 @@
 require "active_record_spec_helper"
 require "./app/serializers/predicted_assignment_collection_serializer"
 
-
 describe PredictedAssignmentCollectionSerializer do
   let(:assignment1) { create :assignment }
   let(:assignment2) { create :assignment }

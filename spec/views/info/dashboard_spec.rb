@@ -38,7 +38,6 @@ describe "info/dashboard" do
     allow(view).to receive(:current_course).and_return(@course)
   end
 
-
   context "as a professor" do
 
     it "shows the timeline" do

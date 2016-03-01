@@ -8,7 +8,6 @@ if ENV["COVERAGE"]
     add_filter "config/*"
   end
 
-
   require "codeclimate-test-reporter"
   CodeClimate::TestReporter.start
 end

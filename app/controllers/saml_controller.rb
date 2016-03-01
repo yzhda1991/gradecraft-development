@@ -35,6 +35,4 @@ class SamlController < ApplicationController
   def logout
     redirect_to logout_url
   end
-
-
 end

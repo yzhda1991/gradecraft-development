@@ -83,7 +83,6 @@ describe Group do
       expect(subject.submission_for_assignment(assignment)).to eq(submission)
     end
 
-
     it "returns nil if the group doesn't have an assignment submission" do
       assignment = create(:assignment, grade_scope: "Group")
       expect(subject.submission_for_assignment(assignment)).to eq(nil)

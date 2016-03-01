@@ -9,10 +9,10 @@ describe GradesController do
     @student = create(:user)
     @student.courses << @course
   end
+  
   before(:each) do
     allow(Resque).to receive(:enqueue).and_return(true)
   end
-
 
   context "as professor" do
     before(:all) do

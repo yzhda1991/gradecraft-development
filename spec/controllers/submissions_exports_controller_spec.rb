@@ -56,7 +56,6 @@ RSpec.describe SubmissionsExportsController, type: :controller do
       subject
     end
 
-
     describe "determining success and failure" do
       context "the submissions export is destroyed and the s3 object deleted" do
         before do

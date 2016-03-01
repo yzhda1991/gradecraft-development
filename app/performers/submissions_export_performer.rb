@@ -120,7 +120,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @archive_root_dir_path ||= File.expand_path(export_file_basename, tmp_dir)
   end
 
-
   def csv_file_path
     @csv_file_path ||= File.expand_path("_grade_import_template.csv", archive_root_dir)
   end
@@ -315,7 +314,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   # removing student directories
-
   def remove_empty_student_directories
     @students.each do |student|
       if student_directory_empty?(student)

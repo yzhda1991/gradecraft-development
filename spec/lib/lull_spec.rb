@@ -26,7 +26,6 @@ describe Lull, type: :vendor_library do
       expect(Lull.before_todays_lull?).to be_truthy
     end
 
-
     it "should be false if todays lull has already started" do
       allow(Lull).to receive_messages(todays_lull_start: six_am)
       expect(Lull.before_todays_lull?).to be_falsey

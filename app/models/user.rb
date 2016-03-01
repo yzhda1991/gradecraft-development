@@ -518,7 +518,6 @@ class User < ActiveRecord::Base
     grade.present? && grade.is_student_visible?
   end
 
-
   ### GROUPS
 
   def group_for_assignment(assignment)

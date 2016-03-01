@@ -48,6 +48,4 @@ class GradeExportPerformer < ResqueJob::Performer
       failure: "Grade export notification mailer was not delivered."
     }
   end
-
-
 end

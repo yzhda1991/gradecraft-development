@@ -246,7 +246,6 @@ class GradesController < ApplicationController
     @grades = @assignment.grades.find(params[:grade_ids])
   end
 
-
   # PUT /assignments/:id/grades/update_status
   def update_status
     @assignment = current_course.assignments.find(params[:id])
@@ -321,7 +320,6 @@ class GradesController < ApplicationController
 
       @grade.instructor_modified = true
       @grade.status = "Graded"
-
 
       if @grade.save
         # @mz TODO: add specs

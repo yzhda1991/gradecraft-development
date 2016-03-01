@@ -122,4 +122,3 @@ class PredictedAssignmentSerializer < SimpleDelegator
     assignment.is_a_condition?
   end
 end
-
