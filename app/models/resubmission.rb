@@ -36,7 +36,7 @@ class Resubmission
 
     def include_grade_revision?(grade_revision)
       grade_revision.present? &&
-        (grade_revision.changeset.has_key?("raw_score") ||
+        (grade_revision.changeset.key?("raw_score") ||
          grade_revision.event == "create")
     end
   end
