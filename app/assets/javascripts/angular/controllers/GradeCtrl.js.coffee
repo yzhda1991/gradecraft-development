@@ -134,14 +134,10 @@
     unless badge.creating
       badge.setCreating()
       badge.earnBadgeForStudent({earned_badge: $scope.earnedBadgePostParams(badge)}).then ((response)->
-        if response.earned_badge
-          # earned badge promise returned successfully,
-          # so add the badge and remove the hold on creation
-          thisBadge.earnBadge(response.earned_badge)
-          thisBadge.doneCreating()
-        else
-          #indicate that badge was not created
-          thisBadge.doneCreating()
+        # earned badge promise returned successfully,
+        # so add the badge and remove the hold on creation
+        thisBadge.earnBadge(response)
+        thisBadge.doneCreating()
         return
       ), (error) ->
         # promise rejected, could log the error with: console.log('error', error);
