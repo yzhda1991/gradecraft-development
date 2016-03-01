@@ -132,7 +132,7 @@ class ChallengesController < ApplicationController
 
         grade = @grades.where(:challenge_id => challenge.id).first
 
-        if grade.present? and grade.is_student_visible?
+        if grade.present? && grade.is_student_visible?
           # point_total is presented on the grade model to mirror the assignment.grade.point_total,
           # which is necessary since assignment.grade.point_total is student specific
           #

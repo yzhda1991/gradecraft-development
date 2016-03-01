@@ -23,7 +23,7 @@ class MultipliedGradebookExporter < GradebookExporter
     # add the grades for the necessary assignments, todo: improve the performance here
     course.assignments.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
-      if grade and grade.is_student_visible?
+      if grade && grade.is_student_visible?
         memo << grade.raw_score
         memo << grade.score
       else

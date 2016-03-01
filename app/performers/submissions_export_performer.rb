@@ -71,7 +71,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       last_export_started_at: Time.now
     }
   end
-  alias_method :attributes, :base_export_attributes
+  alias attributes base_export_attributes
 
   def clear_progress_attributes
     performer_steps.inject({}) do |memo, step|
@@ -83,7 +83,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   protected
 
   def work_resources_present?
-    @assignment.present? and @students.present?
+    @assignment.present? && @students.present?
   end
 
   def fetch_assets
@@ -334,7 +334,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def create_submission_text_files
     @submissions.each do |submission|
-      if submission.text_comment.present? or submission.link.present? # write the text file for the submission into the student export directory
+      if submission.text_comment.present? || submission.link.present? # write the text file for the submission into the student export directory
         create_submission_text_file(submission)
       end
     end

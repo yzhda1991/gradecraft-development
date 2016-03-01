@@ -13,7 +13,7 @@ namespace :analytics do
   desc "Populate with events to simulate user activity"
   task :populate => :environment do
 
-    if ENV["COURSE"] and Course.exists?(ENV["COURSE"])
+    if ENV["COURSE"] && Course.exists?(ENV["COURSE"])
       current_course = Course.find(ENV["COURSE"])
     else
       raise("No course provided. Please add COURSE=ID to the rake task")

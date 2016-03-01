@@ -50,7 +50,7 @@ class ChallengeGradesController < ApplicationController
     @team = @challenge_grade.team
     respond_to do |format|
       if @challenge_grade.save
-        if current_course.add_team_score_to_student? and @challenge_grade.is_student_visible?
+        if current_course.add_team_score_to_student? && @challenge_grade.is_student_visible?
           # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
           @score_recalculator_jobs = @team.students.collect do |student|
             ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
@@ -116,15 +116,15 @@ class ChallengeGradesController < ApplicationController
   private
 
   def student_grades_require_update?
-    score_update_required? or visibility_update_required?
+    score_update_required? || visibility_update_required?
   end
 
   def score_update_required?
-    score_changed? and @challenge_grade.is_student_visible?
+    score_changed? && @challenge_grade.is_student_visible?
   end
 
   def visibility_update_required?
-    visibility_changed? and @challenge_grade.is_student_visible?
+    visibility_changed? && @challenge_grade.is_student_visible?
   end
 
   def visibility_changed?

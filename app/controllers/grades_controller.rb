@@ -11,7 +11,7 @@ class GradesController < ApplicationController
   def show
     @assignment = current_course.assignments.find(params[:assignment_id])
     if current_user_is_student?
-      redirect_to @assignment and return
+      redirect_to @assignment && return
     end
 
     if @assignment.grade_with_rubric?
@@ -155,7 +155,7 @@ class GradesController < ApplicationController
 
   # DELETE /assignments/:assignment_id/grade
   def destroy
-    redirect_to @assignment and return unless current_student.present?
+    redirect_to @assignment && return unless current_student.present?
     @grade = current_student.grade_for_assignment(@assignment)
     @grade.destroy
 

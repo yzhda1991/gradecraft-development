@@ -10,14 +10,14 @@ class ResqueJob::Outcome
   attr_accessor :message #, :additional_messages
 
   def truthy?
-    @result != false and @result != nil
+    @result != false && @result != nil
   end
-  alias_method :success?, :truthy?
+  alias success? truthy?
 
   def falsey?
     @result == false || @result.nil?
   end
-  alias_method :failure?, :falsey?
+  alias failure? falsey?
 
   def result_excerpt
     # "#{result}"[0..2000].split("\n").first rescue "#{result}"

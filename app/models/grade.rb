@@ -148,7 +148,7 @@ class Grade < ActiveRecord::Base
   def status_is_graded_or_released?
     is_graded? || is_released?
   end
-  alias_method :graded_or_released?, :status_is_graded_or_released?
+  alias graded_or_released? status_is_graded_or_released?
 
   # @mz todo: port this over to cache_team_and_student_scores once
   # related methods have tests
@@ -264,7 +264,7 @@ class Grade < ActiveRecord::Base
         failure_attrs.merge! student: @student.attributes
       end
 
-      unless @team_update_successful and @student_update_successful
+      unless @team_update_successful && @student_update_successful
         failure_attrs.merge! grade: self.attributes
       end
     end

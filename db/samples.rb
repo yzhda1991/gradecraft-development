@@ -319,7 +319,7 @@ PaperTrail.whodunnit = nil
         puts_success :assignment, assignment_name, :submissions_created if course_name == @courses.keys[-1]
       end
 
-      if config[:rubric] and config[:grades]
+      if config[:rubric] && config[:grades]
         @students.each do |student|
           assignment.rubric.criteria.each do |criterion|
             criterion.criterion_grades.create! do |cg|

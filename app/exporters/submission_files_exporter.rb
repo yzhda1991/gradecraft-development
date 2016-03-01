@@ -14,7 +14,7 @@ class SubmissionFilesExporter
 
   attr_reader :files, :submission, :student, :assignment
 
-  private 
+  private
 
   # master attachment format for the archiver
   def serialized_submission_files
@@ -58,6 +58,6 @@ class SubmissionFilesExporter
   end
 
   def has_comment_or_link?
-    submission.text_comment.present? or submission.link.present?
+    submission.text_comment.present? || submission.link.present?
   end
 end

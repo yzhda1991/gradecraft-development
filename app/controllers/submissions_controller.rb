@@ -27,7 +27,7 @@ class SubmissionsController < ApplicationController
         NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
         redirect_to = assignment_path(assignment, anchor: "tab3")
       end
-      redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." and return
+      redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." && return
     end
     render :new, NewSubmissionPresenter.build(assignment_id: params[:assignment_id],
                                               submission: submission,

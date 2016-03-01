@@ -56,7 +56,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_back_or_default(path=root_path, options={})
-    if request.env["HTTP_REFERER"].present? and
+    if request.env["HTTP_REFERER"].present? &&
        request.env["HTTP_REFERER"] != request.env["REQUEST_URI"]
       redirect_to :back
     else
@@ -118,14 +118,14 @@ class ApplicationController < ActionController::Base
 
   # Tracking page view counts
   def increment_page_views
-    if current_user and request.format.html?
+    if current_user && request.format.html?
       PageviewEventLogger.new(event_session).enqueue_in_with_fallback(Lull.time_until_next_lull)
     end
   end
 
   # Tracking course logins
   def record_course_login_event
-    if current_user and (request.format.html? or request.format.xml?)
+    if current_user && (request.format.html? || request.format.xml?)
       LoginEventLogger.new(event_session).enqueue_with_fallback
     end
   end

@@ -5,7 +5,7 @@ class AssignmentsController < ApplicationController
   before_filter :ensure_staff?, except: [:show, :index, :predictor_data]
 
   def index
-    redirect_to syllabus_path and return if current_user_is_student?
+    redirect_to syllabus_path && return if current_user_is_student?
     @title = "#{term_for :assignments}"
     @assignment_types = current_course.assignment_types.includes(:assignments)
   end
@@ -19,7 +19,7 @@ class AssignmentsController < ApplicationController
   def show
     assignment = current_course.assignments.find_by(id: params[:id])
     redirect_to assignments_path,
-      alert: "The #{(term_for :assignment)} could not be found." and return unless assignment.present?
+      alert: "The #{(term_for :assignment)} could not be found." && return unless assignment.present?
 
     mark_assignment_reviewed! assignment, current_user
     render :show, AssignmentPresenter.build({ assignment: assignment, course: current_course,
@@ -51,7 +51,7 @@ class AssignmentsController < ApplicationController
     assignment = current_course.assignments.new(params[:assignment])
     if assignment.save
       set_assignment_weights(assignment)
-      redirect_to assignment_path(assignment), notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" and return
+      redirect_to assignment_path(assignment), notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" && return
     end
 
     @title = "Create a New #{term_for :assignment}"
@@ -62,7 +62,7 @@ class AssignmentsController < ApplicationController
     assignment = current_course.assignments.find(params[:id])
     if assignment.update_attributes(params[:assignment])
       set_assignment_weights(assignment)
-      redirect_to assignments_path, notice: "#{(term_for :assignment).titleize} #{assignment.name } successfully updated" and return
+      redirect_to assignments_path, notice: "#{(term_for :assignment).titleize} #{assignment.name } successfully updated" && return
     end
 
     @title = "Edit #{term_for :assignment}"

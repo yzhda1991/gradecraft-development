@@ -183,28 +183,28 @@ describe CourseMembership do
     # course.add_team_score_to_student? and not course.team_score_average
     context "course adds team score to student but uses the team average" do
       it "returns false" do
-        add_team_score_true and use_team_average_true
+        add_team_score_true && use_team_average_true
         expect(subject).to be_falsey
       end
     end
 
     context "course doesn't add team score but isn't using the team average" do
       it "returns false" do
-        add_team_score_false and use_team_average_false
+        add_team_score_false && use_team_average_false
         expect(subject).to be_falsey
       end
     end
 
     context "course doesn't add team score and is using the team average" do
       it "returns false" do
-        add_team_score_false and use_team_average_true
+        add_team_score_false && use_team_average_true
         expect(subject).to be_falsey
       end
     end
 
     context "course adds team score and isn't using the team average" do
       it "returns true" do
-        add_team_score_true and use_team_average_false
+        add_team_score_true && use_team_average_false
         expect(subject).to be_truthy
       end
     end

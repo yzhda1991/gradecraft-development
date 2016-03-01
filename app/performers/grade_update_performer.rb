@@ -18,8 +18,8 @@ class GradeUpdatePerformer < ResqueJob::Performer
   end
 
   def require_notify_released_success
-    if @grade.assignment.notify_released? and @grade.is_student_visible? 
-      require_success(notify_released_messages, max_result_size: 200) { notify_grade_released } 
+    if @grade.assignment.notify_released? && @grade.is_student_visible? 
+      require_success(notify_released_messages, max_result_size: 200) { notify_grade_released }
     end
   end
 

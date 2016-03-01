@@ -36,13 +36,13 @@ class AssignmentTypeWeightsController < ApplicationController
   def update
     assignment_type = current_course.assignment_types.find(params[:id])
     weight = params[:weight]
-    if assignment_type and weight and assignment_type.student_weightable?
+    if assignment_type && weight && assignment_type.student_weightable?
       assignment_type_weight = AssignmentTypeWeight.new(current_student, assignment_type)
       assignment_type_weight.weight = weight
     end
     respond_to do |format|
       format.json do
-        if assignment_type_weight and assignment_type_weight.save
+        if assignment_type_weight && assignment_type_weight.save
           render :json => {assignment_type: assignment_type.id, weight: assignment_type.weight_for_student(current_student)}
         else
           render :json => { errors:  "Unable to update assignment type weight" }, :status => 400
