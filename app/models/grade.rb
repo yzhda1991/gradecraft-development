@@ -248,8 +248,6 @@ class Grade < ActiveRecord::Base
       @team = cached_student_team
       @team_update_successful = @team.update_revised_team_score
       @team_update_successful ? @team.score : false
-    else
-      nil
     end
   end
 
