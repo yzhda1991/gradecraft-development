@@ -17,11 +17,15 @@ class SecureToken < ActiveRecord::Base
     # In order to check the secret key against the encrypted key the encrypted
     # key check has to be on the left of the equivalency operand since == has
     # been overwritten in SCrypt::Password and will perform the authentication
-    # against the secret_key which is just a plain string.
+    # against the secret_key which is just a plain string. Performing the check
+    # in the opposite direction (with the secret_key on the left) will result in
+    # a failed outcome since Ruby will recognize that the plain secret_key
+    # string is not the same as the SCrypt::Password object.
     #
-    # Performing the check the other way will result in a failed outcome since
-    # Ruby will recognize that the plain secret_key string is not the same as
-    # the SCrypt::Password object.
+    # This seems like a poor way to perform the encryption authentication but
+    # SCrypt is the strongest encryption available for these purposes, and the
+    # scrypt library that implements this method seems to be the most robust
+    # available for Ruby at the moment.
     #
     # Also please note that we only have to build a new key here which contains
     # the output from the original SCrypt::Password.create call from
@@ -30,7 +34,7 @@ class SecureToken < ActiveRecord::Base
     # rather than just building a new SCrypt::Password object to perform the
     # authentication against the string.
     #
-    # Additionally, since the documentation for SCrypt is somewhat lacking,
+    # Additionally since the documentation for SCrypt is somewhat lacking
     # it's worth noting here that the #scrypt_options hash only need to be
     # passed in with SCrypt::Password.create, and not when building the new
     # SCrypt::Password object below to perform the equivalency/authentication
