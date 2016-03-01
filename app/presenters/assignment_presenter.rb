@@ -117,9 +117,9 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def criterion_grades(user_id)
-    CriterionGrade.
-      where(student_id: user_id).
-      where(assignment_id: assignment.id)
+    CriterionGrade
+      .where(student_id: user_id)
+      .where(assignment_id: assignment.id)
   end
 
   def rubric_max_level_count

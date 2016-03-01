@@ -395,8 +395,8 @@ class GradesController < ApplicationController
   def serialized_criterion_grades
     CriterionGrade.where({ student_id: params[:student_id],
                         assignment_id: params[:assignment_id],
-                        criterion_id: rubric_criteria_with_levels.collect {|criterion| criterion[:id] } }).
-                select(:id, :criterion_id, :level_id, :comments).to_json
+                        criterion_id: rubric_criteria_with_levels.collect {|criterion| criterion[:id] } })
+                        .select(:id, :criterion_id, :level_id, :comments).to_json
   end
 
   def safe_grade_possible_points

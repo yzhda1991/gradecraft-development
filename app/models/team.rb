@@ -34,8 +34,8 @@ class Team < ActiveRecord::Base
   scope :alpha, -> { order "teams.name ASC"}
 
   def self.find_by_course_and_name(course_id, name)
-    where(course_id: course_id).
-      where("LOWER(name) = :name", name: name.downcase).first
+    where(course_id: course_id)
+      .where("LOWER(name) = :name", name: name.downcase).first
   end
 
   # @mz todo: add specs
