@@ -21,6 +21,7 @@ module ModelAddons
     end
 
     protected
+    
     def valid_logging_types
       [:debug, :info, :warn, :error, :fatal]
     end

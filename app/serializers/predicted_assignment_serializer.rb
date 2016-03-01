@@ -47,6 +47,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
   end
 
   private
+  
   attr_reader :assignment
 
   def select_attributes

@@ -196,6 +196,7 @@ class AnalyticsController < ApplicationController
   end
 
   private
+  
   def set_granularity_and_range
 
     @granularity = :daily

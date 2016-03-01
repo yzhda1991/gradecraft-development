@@ -21,6 +21,7 @@ class LevelsController < ApplicationController
   end
 
   private
+  
   def find_level
     @level = Level.find params[:id]
   end
