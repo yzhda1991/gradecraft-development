@@ -86,19 +86,40 @@ RSpec.describe SecureToken do
 
     describe "cache_encrypted_key" do
       let(:result) { subject.instance_eval { cache_encrypted_key } }
+
+      before do
+        allow(subject).to receive_messages(
+          random_secret_key: "stuffkey!!",
+          scrypt_options: {}
+        )
+      end
+
       it "creates an encrypted key from the secret key and scrypt options" do
+        expect(SCrypt::Password).to receive(:create).with("stuffkey!!", {})
+        result
       end
 
       it "sets the encrypted key value to the :encrypted_key attribute on SecureToken" do
+        allow(SCrypt::Password).to receive(:create) { "some-encrypted-key" }
+        result
+        expect(subject[:encrypted_key]).to eq("some-encrypted-key")
       end
     end
 
     describe "cache_uuid" do
       let(:result) { subject.instance_eval { cache_uuid } }
+
+      before do
+        allow(SecureRandom).to receive(:uuid) { "find-this-uuid" }
+      end
+
       it "creates random uuid for the SecureToken" do
+        expect(result).to eq "find-this-uuid"
       end
 
       it "sets the random uuid value to the :uuid attribute on SecureToken" do
+        result
+        expect(subject[:uuid]).to eq "find-this-uuid"
       end
     end
   end
