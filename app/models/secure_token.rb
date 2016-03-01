@@ -12,7 +12,8 @@ class SecureToken < ActiveRecord::Base
 
   # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)
-    encrypted_key == SCrypt::Password.create(secret_key, scrypt_options)
+    # in order to check the give
+    secret_key == SCrypt::Password.new(encrypted_key)
   end
 
   def secret_url
@@ -38,11 +39,11 @@ class SecureToken < ActiveRecord::Base
   end
 
   def scrypt_options
-    # bogart system resources on key hashing to deter brute force attacks
-    {
-      key_len: 512, # 512 bit security
-      max_time: 1000, # max one second computation
-      max_mem: 2 # use max 2mb memory
-    }
+    # let's use 512 bit security here becaues the only real loss is speed, and
+    # since we'd prefer that this interaction take as long as it needs to in
+    # order to deter brute force attacks, the maximum 512-bit hash here suits
+    # our needs very well
+
+    { key_len: 512 }
   end
 end
