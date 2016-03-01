@@ -71,12 +71,21 @@ RSpec.describe SecureToken do
   end
 
   describe "protected methods" do
+
     describe "#set_expires_at" do
+      let(:result) { subject.instance_eval { set_expires_at } }
+      let(:time_now) { Date.parse("Oct 20 1999").to_time }
+
+      before { allow(Time).to receive(:now) { time_now } }
+
       it "sets the :expires_at attribute to 7 days from now with timezone" do
+        result
+        expect(subject[:expires_at]).to eq(time_now + 7.days)
       end
     end
 
     describe "cache_encrypted_key" do
+      let(:result) { subject.instance_eval { cache_encrypted_key } }
       it "creates an encrypted key from the secret key and scrypt options" do
       end
 
@@ -85,6 +94,7 @@ RSpec.describe SecureToken do
     end
 
     describe "cache_uuid" do
+      let(:result) { subject.instance_eval { cache_uuid } }
       it "creates random uuid for the SecureToken" do
       end
 

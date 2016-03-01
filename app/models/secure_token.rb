@@ -34,7 +34,7 @@ class SecureToken < ActiveRecord::Base
   end
 
   def set_expires_at
-    self[:expires_at] = Time.zone.now + 7.days
+    self[:expires_at] = Time.now + 7.days
   end
 
   def cache_encrypted_key
