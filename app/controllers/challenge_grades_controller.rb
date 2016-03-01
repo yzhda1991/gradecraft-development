@@ -128,11 +128,11 @@ class ChallengeGradesController < ApplicationController
   end
 
   def visibility_changed?
-     @challenge_grade.previous_changes[:status].present?
+    @challenge_grade.previous_changes[:status].present?
   end
 
   def score_changed?
-     @challenge_grade.previous_changes[:score].present?
+    @challenge_grade.previous_changes[:score].present?
   end
 
   def find_challenge

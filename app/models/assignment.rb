@@ -83,7 +83,7 @@ class Assignment < ActiveRecord::Base
                                associations: [:assignment_score_levels],
                                options: { prepend: { name: "Copy of "},
                                           overrides: [->(copy) {
-                                  copy.rubric = self.rubric.copy if self.rubric.present?
+                                 copy.rubric = self.rubric.copy if self.rubric.present?
                                }]})
   end
 
@@ -183,7 +183,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def submissions_with_files_query
-   "text_comment <> '' or link <> '' or id in (#{present_submission_files_query})"
+    "text_comment <> '' or link <> '' or id in (#{present_submission_files_query})"
   end
 
   def present_submission_files_query

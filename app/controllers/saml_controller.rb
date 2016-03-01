@@ -22,7 +22,7 @@ class SamlController < ApplicationController
         redirect_to um_pilot_path
       end
     else
-       redirect_to root_url, :notice => "authentication error"
+      redirect_to root_url, :notice => "authentication error"
     end
   end
 

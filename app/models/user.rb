@@ -284,12 +284,12 @@ class User < ActiveRecord::Base
 
   # Powers the grade distribution box plot
   def scores_for_course(course)
-     user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck("score")
-     scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
-     return {
+    user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck("score")
+    scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
+    return {
       :scores => scores,
       :user_score => user_score
-     }
+    }
   end
 
   ### EARNED LEVELS AND GRADE LETTERS

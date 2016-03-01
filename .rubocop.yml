@@ -6,6 +6,7 @@ AllCops:
     - "db/**/*"
     - "config/**/*"
     - "script/**/*"
+    - "Vagrantfile"
 
 ################## STYLE #################################
 
@@ -317,4 +318,15 @@ Style/IfWithSemicolon:
 
 Style/IndentationConsistency:
   Description: 'Keep indentation straight.'
+  Enabled: true
+
+Style/IndentationWidth:
+  Description: 'Use 2 spaces for indentation.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-indentation'
+  Enabled: true
+
+Style/IndentArray:
+  Description: >-
+                 Checks the indentation of the first element in an array
+                 literal.
   Enabled: true

@@ -165,10 +165,10 @@ class Course < ActiveRecord::Base
   def copy(attributes={})
     ModelCopier.new(self).copy(attributes: attributes,
                                associations: [
-                                :badges,
-                                { assignment_types: { course_id: :id }},
-                                :challenges,
-                                :grade_scheme_elements
+                                 :badges,
+                                 { assignment_types: { course_id: :id }},
+                                 :challenges,
+                                 :grade_scheme_elements
                                ],
                                options: { prepend: { name: "Copy of " }})
   end
@@ -325,11 +325,11 @@ class Course < ActiveRecord::Base
 
   #badges
   def course_badge_count
-   badges.count
+    badges.count
   end
 
   def awarded_course_badge_count
-   earned_badges.count
+    earned_badges.count
   end
 
   def max_more_than_min

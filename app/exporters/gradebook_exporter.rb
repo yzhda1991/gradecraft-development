@@ -25,7 +25,7 @@ class GradebookExporter
   end
 
   def base_student_methods
-     [:first_name, :last_name, :email, :username]
+    [:first_name, :last_name, :email, :username]
   end
 
   def student_data_for(student, course)
