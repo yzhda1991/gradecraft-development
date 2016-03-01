@@ -3,11 +3,6 @@ require 'active_record_spec_helper'
 RSpec.describe SecureToken do
   subject { SecureToken.new }
 
-  describe "polymorphism" do
-    it "can belong to a polymorphic target" do
-    end
-  end
-
   describe "#random_secret_key" do
     let(:result) { subject.instance_eval { random_secret_key } }
 
@@ -28,10 +23,23 @@ RSpec.describe SecureToken do
   end
 
   describe "#authenticates_with?" do
-    it "creates a password with the secret key and scrypt options" do
+    before(:each) do
+      subject.instance_variable_set(:@random_secret_key, "some-secret-key")
+      subject.save
     end
 
-    it "checks the password against the encrypted key" do
+    context "the secret key matches the encrypted key" do
+      it "authenticates (returns true)" do
+        result = subject.authenticates_with?("some-secret-key")
+        expect(result).to be_truthy
+      end
+    end
+
+    context "the secret key does not match the encrypted key" do
+      it "does not authenticate (returns false)" do
+        result = subject.authenticates_with?("not-the-secret-key")
+        expect(result).to be_falsey
+      end
     end
   end
 
@@ -138,6 +146,5 @@ RSpec.describe SecureToken do
         expect(result).to eq({ key_len: 512 })
       end
     end
-
   end
 end

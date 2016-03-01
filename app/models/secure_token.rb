@@ -14,8 +14,29 @@ class SecureToken < ActiveRecord::Base
 
   # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)
-    # in order to check the
-    secret_key == SCrypt::Password.new(encrypted_key)
+    # In order to check the secret key against the encrypted key the encrypted
+    # key check has to be on the left of the equivalency operand since == has
+    # been overwritten in SCrypt::Password and will perform the authentication
+    # against the secret_key which is just a plain string.
+    #
+    # Performing the check the other way will result in a failed outcome since
+    # Ruby will recognize that the plain secret_key string is not the same as
+    # the SCrypt::Password object.
+    #
+    # Also please note that we only have to build a new key here which contains
+    # the output from the original SCrypt::Password.create call from
+    # SecureToken#cache_encrypted_key. Creating a new token will produce a
+    # false outcome since it will literally be creating an entirely new hash
+    # rather than just building a new SCrypt::Password object to perform the
+    # authentication against the string.
+    #
+    # Additionally, since the documentation for SCrypt is somewhat lacking,
+    # it's worth noting here that the #scrypt_options hash only need to be
+    # passed in with SCrypt::Password.create, and not when building the new
+    # SCrypt::Password object below to perform the equivalency/authentication
+    # check.
+    #
+    SCrypt::Password.new(encrypted_key) == secret_key
   end
 
   def secret_url
