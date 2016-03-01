@@ -196,9 +196,8 @@ class AnalyticsController < ApplicationController
   end
 
   private
-  
-  def set_granularity_and_range
 
+  def set_granularity_and_range
     @granularity = :daily
 
     if current_course.start_date && current_course.end_date

@@ -8,7 +8,6 @@ class SamlController < ApplicationController
   end
 
   def consume
-
     response = OneLogin::RubySaml::Response.new(params[:SAMLResponse], :settings => SAML_SETTINGS)
 
     if response.success?
