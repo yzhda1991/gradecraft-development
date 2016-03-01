@@ -1,4 +1,4 @@
-%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : articleGraded(assignment),"status-no-points":articleNoPoints(assignment), "status-locked" : assignment.locked}'}
+%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : articleGraded(assignment),"status-no-points":articleNoPoints(assignment), "status-locked" : assignment.is_locked, "status-late" : assignment.is_late}'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
     {{assignment.name | limitTo:50}}

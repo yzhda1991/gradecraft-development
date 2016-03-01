@@ -263,10 +263,8 @@ article.predictor-article
 .predictor-article-main
   padding-top: 8px
 
-article.predictor-article.status-locked
+article.predictor-article.status-late
   background-color: $color-yellow-1
-  border: 1px solid $color-red-1
-  border-bottom: .25rem solid $color-red-1
   .predictor-article-title
     background-color: $color-red-1
   .predictor-article-icons
@@ -276,7 +274,9 @@ article.predictor-article.status-locked
   .ui-slider .ui-slider-range
     background-color: $color-orange-1
   .slider.ui-widget-content
-    background-color: $color-orange-1
+    background-color: $color-yellow-1
+  .slider.ui-widget-content
+    border: 1px solid $color-red-1
   .predictor-counter-switch
     .switch-socket
       background-color: $color-orange-1
@@ -294,6 +294,14 @@ article.predictor-article.status-locked
     .switch-socket.on
       background-color: $color-orange-1
 
+article.predictor-article.status-locked
+  // background-color: $color-yellow-1
+  .predictor-article-title
+    background-color: $color-purple-2
+  .predictor-article-icons
+    background-color: lighten( $color-purple-2, 15%)
+
+
 article.predictor-article.status-graded
   background-color: lighten($color-green-2, 30%)
   .predictor-article-title
@@ -303,8 +311,6 @@ article.predictor-article.status-graded
 
 article.predictor-article.status-graded.status-no-points
   background-color: $color-grey-6
-  border: 1px solid $color-grey-5
-  border-bottom: .25rem solid $color-grey-5
   .predictor-article-title
     background-color: $color-grey-4
   .predictor-article-icons

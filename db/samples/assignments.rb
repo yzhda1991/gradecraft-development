@@ -118,10 +118,7 @@
 
 @assignments[:standard_edit_quick_grade_checkbox] = {
   quotes: {
-    assignment_created: "For me, I am driven by two main philosophies: "\
-      "know more today about the world than I knew yesterday and lessen "\
-      "the suffering of others. You'd be surprised how far that gets you. "\
-      "― Neil deGrasse Tyson"
+    assignment_created: "For me, I am driven by two main philosophies: know more today about the world than I knew yesterday and lessen the suffering of others. You'd be surprised how far that gets you. ― Neil deGrasse Tyson"
   },
   assignment_type: :grading,
   attributes: {
@@ -134,9 +131,7 @@
 
 @assignments[:standard_edit_quick_grade_checkbox_graded] = {
   quotes: {
-    assignment_created: "I hope you're pleased with yourselves. "\
-      "We could all have been killed - or worse, expelled. "\
-      "Now if you don't mind, I'm going to bed. ― J.K. Rowling"
+    assignment_created: "I hope you're pleased with yourselves. We could all have been killed - or worse, expelled. Now if you don't mind, I'm going to bed. ― J.K. Rowling"
   },
   assignment_type: :grading,
   attributes: {
@@ -514,8 +509,28 @@
   },
   assignment_type: :predictor,
   attributes: {
+    name: "Not Submitted, On Time",
+    description: "Displays 'Accepts Submissions' icon. Still accepts predictions.",
+    due_at: 3.week.from_now,
+    accepts_submissions_until: 3.week.from_now,
+    point_total: 15000,
+    points_predictor_display: "Slider",
+    accepts_submissions: true,
+    resubmissions_allowed: true,
+    accepts_attachments: true,
+    accepts_text: true,
+    accepts_links: true,
+  }
+}
+
+@assignments[:predictor_past_assignment_submission_open] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :predictor,
+  attributes: {
     name: "Not Submitted, Late",
-    description: "Should have a submission and late icon, should still accept predictions.",
+    description: "Displays 'Accepts Submissions' and 'Late' icons. Still accepts predictions.",
     due_at: 1.week.ago,
     accepts_submissions_until: 3.week.from_now,
     point_total: 15000,
@@ -535,7 +550,7 @@
   assignment_type: :predictor,
   attributes: {
     name: "Not Submitted, Closed",
-    description: "Fixed at 0 points, displays 'Accepts Submissions', 'Closed' and 'Late' icons.",
+    description: "Fixed at 0 points, displays 'Closed' and 'Late' icons.",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
     point_total: 15000,
@@ -561,8 +576,8 @@
   },
   assignment_type: :predictor,
   attributes: {
-    name: "Has Submissions, Closed",
-    description: "Displays 'Accepts Submissions', 'Has Submission', and 'Closed' icon but no 'Late' icon, has slider, accepts prediction.",
+    name: "Has Submission, Closed",
+    description: "Displays 'Has Submission' icon. Has slider, accepts prediction.",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
     point_total: 15000,
@@ -583,7 +598,7 @@
   assignment_type: :predictor,
   attributes: {
     name: "Has Submission, Open",
-    description: "Displays 'Accepts Submissions' and 'Has Submission' icons, has slider, accepts prediction.",
+    description: "Displays 'Has Submission' icons, has slider, accepts prediction.",
     due_at: 5.weeks.from_now,
     accepts_submissions_until: 5.weeks.from_now,
     point_total: 15000,

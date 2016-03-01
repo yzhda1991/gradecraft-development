@@ -71,12 +71,12 @@ class PredictedAssignmentSerializer < SimpleDelegator
       is_required: is_required?,
       has_info: has_info?,
       has_rubric: has_rubric?,
-      accepts_submissions: accepts_submissions?,
+      accepting_submissions: accepting_submissions?,
       has_submission: has_submission?,
       is_a_condition: is_a_condition?,
       is_earned_by_group: is_earned_by_group?,
       is_late: is_late?,
-      has_closed: has_closed?,
+      closed_without_sumbission: closed_without_sumbission?,
       is_locked: is_locked?,
       has_been_unlocked: has_been_unlocked?,
     }
@@ -94,15 +94,6 @@ class PredictedAssignmentSerializer < SimpleDelegator
     !!assignment.has_rubric?
   end
 
-  def accepts_submissions?
-    !!assignment.accepts_submissions?
-  end
-
-  def has_submission?
-    !!assignment.accepts_submissions? && \
-      student.submission_for_assignment(assignment).present?
-  end
-
   def is_earned_by_group?
     assignment.grade_scope == "Group"
   end
@@ -112,9 +103,20 @@ class PredictedAssignmentSerializer < SimpleDelegator
       !student.submission_for_assignment(assignment).present?
   end
 
-  # TODO: update when closed? method added to assignments
-  def has_closed?
-    assignment.submissions_have_closed?
+  def accepting_submissions?
+    !!assignment.accepts_submissions? && \
+    !assignment.submissions_have_closed? && \
+    !student.submission_for_assignment(assignment).present?
+  end
+
+  def has_submission?
+    !!assignment.accepts_submissions? && \
+      student.submission_for_assignment(assignment).present?
+  end
+
+  def closed_without_sumbission?
+    assignment.submissions_have_closed? && \
+     !student.submission_for_assignment(assignment).present?
   end
 
   def is_locked?
