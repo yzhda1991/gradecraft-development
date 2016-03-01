@@ -5,6 +5,8 @@ class EarnedBadge < ActiveRecord::Base
 
   STATUSES= ["Predicted", "Earned"]
 
+  before_validation :cache_associations
+
   belongs_to :course, touch: true
   belongs_to :badge
   belongs_to :student, :class_name => "User", touch: true
@@ -13,8 +15,6 @@ class EarnedBadge < ActiveRecord::Base
   belongs_to :grade # Optional
   belongs_to :group, :polymorphic => true # Optional
   has_many :badge_files, :through => :badge
-
-  before_validation :cache_associations
 
   validates_presence_of :badge, :course, :student
 
@@ -45,6 +45,8 @@ class EarnedBadge < ActiveRecord::Base
   def cache_associations
     self.course_id ||= badge.try(:course_id)
     self.score ||= badge.try(:point_total) || 0
+    self.student_visible = grade.is_student_visible? if grade.present?
+    true
   end
 
   def multiple_allowed
