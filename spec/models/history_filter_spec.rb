@@ -83,21 +83,21 @@ describe HistoryFilter do
 
   describe "#merge" do
     it "merges the changeset from one object to another" do
-      history = [OpenStruct.new(version: OpenStruct.new(item_type: "SubmissionFile"),
+      history = [OpenStruct.new(version: OpenStruct.new(item_type: "FromObjectType"),
                                 changeset: { "event" => "create",
-                                             "object" => "SubmissionFile",
-                                             "filename" => [nil, "blah"]}),
-                 OpenStruct.new(version: OpenStruct.new(item_type: "Submission"),
+                                             "object" => "FromObject",
+                                             "attribute1" => [nil, "blah"]}),
+                 OpenStruct.new(version: OpenStruct.new(item_type: "ToObjectType"),
                                 changeset: { "event" => "create",
-                                             "object" => "Submission",
-                                             "link" => [nil, "http://example.org"]})
+                                             "object" => "ToObject",
+                                             "attribute2" => [nil, "http://example.org"]})
       ]
-      result = described_class.new(history).merge("SubmissionFile" => "Submission")
+      result = described_class.new(history).merge("FromObjectType" => "ToObjectType")
         .changesets
       expect(result).to eq [{ "event" => "create",
-                              "object" => "Submission",
-                              "link" => [nil, "http://example.org"],
-                              "filename" => [nil, "blah"]}]
+                              "object" => "ToObject",
+                              "attribute2" => [nil, "http://example.org"],
+                              "attribute1" => [nil, "blah"]}]
     end
   end
 
