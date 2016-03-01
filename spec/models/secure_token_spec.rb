@@ -8,19 +8,6 @@ RSpec.describe SecureToken do
     end
   end
 
-  describe "callbacks" do
-    describe "before create" do
-      it "caches the encrypted key" do
-      end
-
-      it "caches the uuid" do
-      end
-
-      it "sets a time-zoned expires_at timestamp" do
-      end
-    end
-  end
-
   describe "#random_secret_key" do
     let(:result) { subject.instance_eval { random_secret_key } }
 
@@ -82,16 +69,24 @@ RSpec.describe SecureToken do
         result
         expect(subject[:expires_at]).to eq(time_now + 7.days)
       end
+
+      describe "caching :expires_at on create" do
+        it "caches the encrypted key on create" do
+          subject.save
+          expect(subject[:expires_at]).to eq(time_now + 7.days)
+        end
+      end
     end
 
-    describe "cache_encrypted_key" do
+    describe "#cache_encrypted_key" do
       let(:result) { subject.instance_eval { cache_encrypted_key } }
+      let(:subject_attrs) do
+        { random_secret_key: "stuffkey!!", scrypt_options: {} }
+      end
 
       before do
-        allow(subject).to receive_messages(
-          random_secret_key: "stuffkey!!",
-          scrypt_options: {}
-        )
+        allow(subject).to receive_messages(subject_attrs)
+        allow(SCrypt::Password).to receive(:create) { "some-encrypted-key" }
       end
 
       it "creates an encrypted key from the secret key and scrypt options" do
@@ -100,13 +95,19 @@ RSpec.describe SecureToken do
       end
 
       it "sets the encrypted key value to the :encrypted_key attribute on SecureToken" do
-        allow(SCrypt::Password).to receive(:create) { "some-encrypted-key" }
         result
         expect(subject[:encrypted_key]).to eq("some-encrypted-key")
       end
+
+      describe "caching :encrypted_key on create" do
+        it "caches the encrypted key on create" do
+          subject.save
+          expect(subject[:encrypted_key]).to eq("some-encrypted-key")
+        end
+      end
     end
 
-    describe "cache_uuid" do
+    describe "#cache_uuid" do
       let(:result) { subject.instance_eval { cache_uuid } }
 
       before do
@@ -121,9 +122,16 @@ RSpec.describe SecureToken do
         result
         expect(subject[:uuid]).to eq "find-this-uuid"
       end
+
+      describe "caching :uuid on create" do
+        it "caches the uuid on create" do
+          subject.save
+          expect(subject[:uuid]).to eq("find-this-uuid")
+        end
+      end
     end
 
-    describe "scrypt_options" do
+    describe "#scrypt_options" do
       let(:result) { subject.instance_eval { scrypt_options } }
 
       it "creates random uuid for the SecureToken" do
