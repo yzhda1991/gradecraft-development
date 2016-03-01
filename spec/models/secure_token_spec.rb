@@ -122,5 +122,14 @@ RSpec.describe SecureToken do
         expect(subject[:uuid]).to eq "find-this-uuid"
       end
     end
+
+    describe "scrypt_options" do
+      let(:result) { subject.instance_eval { scrypt_options } }
+
+      it "creates random uuid for the SecureToken" do
+        expect(result).to eq({ key_len: 512 })
+      end
+    end
+
   end
 end

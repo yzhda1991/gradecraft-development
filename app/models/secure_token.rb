@@ -46,10 +46,11 @@ class SecureToken < ActiveRecord::Base
   end
 
   def scrypt_options
-    # let's use 512 bit security here becaues the only real loss is speed, and
+    # let's use 512 bit security here because the only real loss is speed, and
     # since we'd prefer that this interaction take as long as it needs to in
     # order to deter brute force attacks, the maximum 512-bit hash here suits
-    # our needs very well
+    # our needs very well. At this resolution this is basically an uncrackable
+    # password unless any of our other security measures fail.
 
     { key_len: 512 }
   end
