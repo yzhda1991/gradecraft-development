@@ -6,21 +6,25 @@ class ChallengeGradesController < ApplicationController
     :update, :edit_status, :update_status, :destroy ]
   before_action :find_challenge_grade, only: [:show, :edit, :update, :destroy]
 
+  # GET /challenges/:challenge_id/
   def index
     redirect_to @challenge
   end
 
+  # GET /challenges/:challenge_id/challenge_grades/:id
   def show
     @team = @challenge_grade.team
     @title = "#{@team.name}'s #{@challenge_grade.name} Grade"
   end
 
+  # GET /challenges/:challenge_id/challenge_grades/new?team_id=:team_id
   def new
     @team = current_course.teams.find(params[:team_id])
     @challenge_grade = @team.challenge_grades.new
     @title = "Grading #{@team.name}'s #{@challenge.name}"
   end
 
+  # GET /challenges/:challenge_id/challenge_grades/:id/edit?team_id=:team_id
   def edit
     @title = "Editing #{@challenge.name} Grade"
     @team = current_course.teams.find(params[:team_id])
@@ -120,7 +124,7 @@ class ChallengeGradesController < ApplicationController
     @challenge_grades =
       @challenge.challenge_grades.find(params[:challenge_grade_ids])
     @challenge_grades.each do |challenge_grade|
-      challenge_grade.update_attributes!(params[:challenge_grade].reject { |k,v| v.blank? })
+      challenge_grade.update_attributes!(params[:challenge_grade].reject { |k, v| v.blank? })
     end
     flash[:notice] = "Updated #{(term_for :challenge).titleize} Grades!"
     redirect_to challenge_path(@challenge)
@@ -166,8 +170,6 @@ class ChallengeGradesController < ApplicationController
   def find_challenge_grade
     @challenge_grade = @challenge.challenge_grades.find(params[:id])
   end
-<<<<<<< 0c3ce27a0f07656ac27778ede97eabb054564fdd
-=======
 
   def mass_update_challenge_grade_ids
     @challenge.challenge_grades.inject([]) do |memo, challenge_grade|
@@ -178,6 +180,4 @@ class ChallengeGradesController < ApplicationController
       memo
     end
   end
-
->>>>>>> updating scores for all teams
 end
