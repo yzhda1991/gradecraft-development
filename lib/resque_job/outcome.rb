@@ -1,7 +1,7 @@
 class ResqueJob::Outcome
   def initialize(result, options={})
     @result = result
-    @message = nil # todo: spec
+    @message = nil # TODO: spec
     @options = options
     # @additional_messages = []
   end

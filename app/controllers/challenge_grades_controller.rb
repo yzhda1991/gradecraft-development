@@ -44,14 +44,14 @@ class ChallengeGradesController < ApplicationController
     end
   end
 
-  # @mz todo: refactor this whole thing, move into models and presenters
+  # @mz TODO: refactor this whole thing, move into models and presenters
   def create
     @challenge_grade = @challenge.challenge_grades.create(params[:challenge_grade])
     @team = @challenge_grade.team
     respond_to do |format|
       if @challenge_grade.save
         if current_course.add_team_score_to_student? && @challenge_grade.is_student_visible?
-          # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
+          # @mz TODO: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
           @score_recalculator_jobs = @team.students.collect do |student|
             ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
           end
@@ -64,7 +64,7 @@ class ChallengeGradesController < ApplicationController
     end
   end
 
-  # @mz todo: refactor this whole thing, move into models and presenters
+  # @mz TODO: refactor this whole thing, move into models and presenters
   def update
     @team = @challenge_grade.team
     respond_to do |format|
@@ -72,7 +72,7 @@ class ChallengeGradesController < ApplicationController
 
         if current_course.add_team_score_to_student?
           if student_grades_require_update?
-            # @mz todo: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
+            # @mz TODO: substitute with ChallengeGrade#recalculate_team_scores method, revise specs
             # @mz TODO: figure out how @team.students is supposed to be sorted in the controller
             @score_recalculator_jobs = @team.students.collect do |student|
               ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
@@ -112,7 +112,7 @@ class ChallengeGradesController < ApplicationController
     redirect_to challenge_path(@challenge), notice: "#{@team.name}'s grade for #{@challenge.name} has been successfully deleted."
   end
 
-  # @mz todo: refactor all of this nonsense, add specs etc, this works for now
+  # @mz TODO: refactor all of this nonsense, add specs etc, this works for now
   private
 
   def student_grades_require_update?

@@ -151,7 +151,7 @@ class AnalyticsController < ApplicationController
     render json: MultiJson.dump(data)
   end
 
-  # @mz todo: fix this
+  # TODO: fix this
   def export
     respond_to do |format|
       format.zip do

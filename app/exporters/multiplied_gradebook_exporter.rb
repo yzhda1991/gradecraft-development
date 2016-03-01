@@ -17,7 +17,7 @@ class MultipliedGradebookExporter < GradebookExporter
     student_data = base_student_methods.inject([]) do |memo, method|
       memo << student.send(method)
     end
-    # todo: we need to pre-fetch the course teams for this
+    # TODO: we need to pre-fetch the course teams for this
     student_data << student.team_for_course(course).try(:name)
 
     # add the grades for the necessary assignments, todo: improve the performance here
