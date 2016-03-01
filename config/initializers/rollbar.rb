@@ -5,11 +5,11 @@ Rollbar.configure do |config|
   # Without configuration, Rollbar is enabled by in all environments.
   # To disable in specific environments, set config.enabled=false.
   # Here we'll disable in 'test':
-if %w(development test).include? Rails.env
-  config.enabled = false
-end
+  if %w(development test).include? Rails.env
+    config.enabled = false
+  end
 
- # Ignoring 404 errors
+  # Ignoring 404 errors
   config.exception_level_filters.merge!({
     "ActionController::RoutingError" => "ignore",
     "AbstractController::ActionNotFound" => "ignore"

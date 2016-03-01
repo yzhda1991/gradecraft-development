@@ -2,6 +2,10 @@
 # This is used to easily disable Style/* checks
 AllCops:
   DisabledByDefault: true
+  Exclude:
+    - "db/**/*"
+    - "config/**/*"
+    - "script/**/*"
 
 ################## STYLE #################################
 

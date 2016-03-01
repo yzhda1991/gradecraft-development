@@ -250,7 +250,7 @@ describe BadgesController do
     end
   end
 
-# helper methods:
+  # helper methods:
 
   def predictor_badge_attributes
     [
