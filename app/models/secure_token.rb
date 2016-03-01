@@ -2,20 +2,15 @@
 # across the entire system. Because the #target parent association is,
 # any class that implements:
 #
-#   has_many :targets, as: :targetable
+#   has_many :secure_tokens, as: :target
 #
 # Will be able to use a SecureToken to implement polymorphic
 class SecureToken < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
-  belongs_to :target, polymorphic: true
+  belongs_to :tokenable, polymorphic: true
   before_create :cache_encrypted_key, :cache_uuid, :set_expires_at
   attr_reader :random_secret_key
-
-  def random_secret_key
-    # generates a 254-character URL-safe secret key
-    @random_secret_key ||= SecureRandom.urlsafe_base64(190)
-  end
 
   # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)
@@ -32,6 +27,11 @@ class SecureToken < ActiveRecord::Base
   end
 
   protected
+
+  def random_secret_key
+    # generates a 254-character URL-safe secret key
+    @random_secret_key ||= SecureRandom.urlsafe_base64(190)
+  end
 
   def set_expires_at
     self[:expires_at] = Time.zone.now + 7.days

@@ -1,6 +1,8 @@
 require 'active_record_spec_helper'
 
 RSpec.describe SecureToken do
+  subject { SecureToken.new }
+
   describe "polymorphism" do
     it "can belong to a polymorphic target" do
     end
@@ -20,13 +22,21 @@ RSpec.describe SecureToken do
   end
 
   describe "#random_secret_key" do
+    let(:result) { subject.instance_eval { random_secret_key } }
+
     it "creates a 190-bit url-safe base64 hex key" do
+      expect(result).to match(/[a-zA-Z0-9_\-]{254}/)
     end
 
     it "caches the @random_secret_key" do
+      result
+      expect(SecureRandom).not_to receive(:urlsafe_base64).with(190)
+      result
     end
 
     it "sets a @random_secret_key ivar" do
+      result
+      expect(subject.instance_variable_get(:@random_secret_key)).to eq result
     end
   end
 
