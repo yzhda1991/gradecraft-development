@@ -17,6 +17,7 @@ describe EventLogger::Base, type: :vendor_library do
   let(:time_now) { Time.parse "Jun 20 1942" }
   let(:mongoid_event) { double(:mongoid_event) }
   let(:analytics_attrs) {{ event_type: event_type, created_at: time_now }.merge(some_data) }
+  let(:logger) { Logger.new(STDOUT) }
 
   describe "the logger implementation" do
     it_behaves_like "the #logger is implemented through Logglier with LogglyResque", described_class
@@ -24,8 +25,6 @@ describe EventLogger::Base, type: :vendor_library do
 
   describe ".perform" do
     subject { described_class.perform(event_type, some_data) }
-
-    let(:logger) { double(Logger).as_null_object }
 
     before do
       allow(Time.zone).to receive(:now) { time_now }
@@ -54,6 +53,7 @@ describe EventLogger::Base, type: :vendor_library do
     before(:each) do
       allow(valid_event).to receive(:valid?).and_return true
       allow(invalid_event).to receive(:valid?).and_return false
+      allow(described_class).to receive(:logger) { logger }
       described_class.instance_variable_set(:@success_message, "great stuff happened")
       described_class.instance_variable_set(:@failure_message, "bad stuff happened")
     end
