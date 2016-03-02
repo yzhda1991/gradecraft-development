@@ -1,7 +1,7 @@
 class SecureTokenAuthenticator
   def initialize(options={})
     @secure_token_uuid = options[:secure_token_uuid]
-    @target_class = options[:target_class].to_s rescue ""
+    @target_class = options[:target_class]
     @secret_key = options[:secret_key]
   end
   attr_reader :secure_token_uuid, :target_class, :secret_key
