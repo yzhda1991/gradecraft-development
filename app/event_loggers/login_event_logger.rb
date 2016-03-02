@@ -31,10 +31,11 @@ class LoginEventLogger < ApplicationEventLogger
 
   # perform block that is ultimately called by Resque
   def self.perform(event_type, data = {})
-    @data = data
+    logger.info "Starting #{@queue} with data #{data}"
+    @cached_data = data
     data[:last_login_at] = previous_last_login_at
     super
-    update_last_login
+    update_last_login if course_membership
   end
 
   def self.previous_last_login_at
@@ -44,7 +45,7 @@ class LoginEventLogger < ApplicationEventLogger
   end
 
   def self.update_last_login
-    course_membership.update_attributes(last_login_at: @data[:created_at])
+    course_membership.update_attributes(last_login_at: @cached_data[:created_at])
   end
 
   def self.course_membership
@@ -52,6 +53,6 @@ class LoginEventLogger < ApplicationEventLogger
   end
 
   def self.course_membership_attrs
-    { course_id: @data[:course_id], user_id: @data[:user_id] }
+    { course_id: @cached_data[:course_id], user_id: @cached_data[:user_id] }
   end
 end

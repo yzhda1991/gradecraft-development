@@ -14,13 +14,10 @@ RSpec.describe LoginEventLogger, type: :event_logger do
   include Toolkits::EventLoggers::ApplicationEventLoggerToolkit
   extend Toolkits::EventLoggers::EventSession
 
-  # this needs to be declared since Resque interacts with class-level instance
-  # variables, and using mulitple class instances could misrepresent class-level
-  # instance variable circumstances
-  let(:class_instance) { LoginEventLogger }
+  subject { LoginEventLogger }
 
   # build this off of the class instance for consistent behavior
-  let(:new_logger) { class_instance.new(event_session) }
+  let(:new_logger) { described_class.new(event_session) }
 
   let!(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
   let(:last_login) { Time.parse("June 20, 1968") }
@@ -37,92 +34,102 @@ RSpec.describe LoginEventLogger, type: :event_logger do
   it_behaves_like "EventLogger::Enqueue is included", LoginEventLogger, "login"
 
   describe "class methods" do
-    describe "self#peform" do
-      subject(:result) { class_instance.perform('login', logger_attrs) }
+    describe ".perform" do
+      let(:result) { subject.perform('login', logger_attrs) }
 
       before(:each) { course_membership }
 
       it "merges the previous last_login_at value into the data hash" do
-        allow(class_instance).to receive(:previous_last_login_at) { last_login.to_i }
+        allow(subject).to receive(:previous_last_login_at) { last_login.to_i }
         expect(logger_attrs).to receive("[]=").with(:last_login_at, last_login.to_i)
         result
       end
 
-      it "sets the data hash to @data" do
+      it "sets the data hash to @cached_data" do
         result
-        expect(class_instance.instance_variable_get(:@data)).to eq(logger_attrs)
+        expect(subject.instance_variable_get(:@cached_data)).to eq(logger_attrs)
       end
 
-      it "calls self#perform from the superclass" do
-        expect(class_instance.logger).to receive(:info).exactly(2).times
+      it "calls .perform from the superclass" do
+        expect(subject.logger).to receive(:info).exactly(3).times
         result
       end
 
-      it "updates the last login" do
-        expect(class_instance).to receive(:update_last_login)
-        result
+      context "course membership exists" do
+        it "updates the last login" do
+          expect(subject).to receive(:update_last_login)
+          result
+        end
+      end
+
+      context "no course membership is found" do
+        it "updates the last login" do
+          allow(subject).to receive(:course_membership) { nil }
+          expect(subject).not_to receive(:update_last_login)
+          result
+        end
       end
     end
 
-    describe "self#update_last_login" do
+    describe ".update_last_login" do
       let(:time_zone_now) { Date.parse("April 9 1992").to_time }
       let(:data) {{ created_at: time_zone_now }}
 
       before do
-        class_instance.instance_variable_set(:@data, data)
-        allow(class_instance).to receive(:course_membership) { course_membership }
+        subject.instance_variable_set(:@cached_data, data)
+        allow(subject).to receive(:course_membership) { course_membership }
       end
 
       it "updates the last_login_at for the course membership" do
         expect(course_membership).to receive(:update_attributes).with({ last_login_at: time_zone_now })
-        class_instance.update_last_login
+        subject.update_last_login
       end
     end
 
-    describe "self#course_membership" do
-      subject { class_instance.course_membership }
+    describe ".course_membership" do
+      let(:result) { subject.course_membership }
 
       before(:each) do
         course_membership # cache the course membership
-        class_instance.instance_variable_set(:@course_membership, nil)
-        allow(class_instance).to receive(:course_membership_attrs) {{ course_id: course.id, user_id: user.id }}
+        subject.instance_variable_set(:@course_membership, nil)
+        allow(subject).to receive(:course_membership_attrs) {{ course_id: course.id, user_id: user.id }}
       end
 
       it "returns the correct course membership" do
-        expect(subject).to eq(course_membership)
+        expect(result).to eq(course_membership)
       end
 
       it "caches the course membership" do
-        subject
+        result
         expect(CourseMembership).not_to receive(:where)
-        subject
+        result
       end
 
       it "sets the course membership to @course_membership" do
-        subject
-        expect(class_instance.instance_variable_get(:@course_membership)).to eq(course_membership)
+        result
+        expect(subject.instance_variable_get(:@course_membership)).to eq(course_membership)
       end
     end
 
-    describe "self#course_membership_attrs" do
-      subject { class_instance.course_membership_attrs }
-      let(:data) {{ course_id: 20, user_id: 90 }}
+    describe ".course_membership_attrs" do
+      let(:result) { subject.course_membership_attrs }
+      let(:data) { { course_id: 20, user_id: 90 } }
 
       before do
-        class_instance.instance_variable_set(:@data, data)
+        subject.instance_variable_set(:@cached_data, data)
       end
 
       it "returns the timestamp as an integer in seconds" do
-        expect(subject).to eq(data)
+        expect(result).to eq(data)
       end
     end
 
-    describe "self#previous_last_login_at" do
-      let(:result) { class_instance.previous_last_login_at }
+    describe ".previous_last_login_at" do
+      let(:result) { subject.previous_last_login_at }
 
       context "a course membership is present" do
         before do
-          allow(class_instance).to receive(:course_membership)
+          allow(subject).to receive(:course_membership)
             .and_return course_membership
         end
 
@@ -143,7 +150,7 @@ RSpec.describe LoginEventLogger, type: :event_logger do
 
       context "no course membership is found for the login data" do
         before do
-          allow(class_instance).to receive(:course_membership) { nil }
+          allow(subject).to receive(:course_membership) { nil }
         end
 
         it "returns nil" do
