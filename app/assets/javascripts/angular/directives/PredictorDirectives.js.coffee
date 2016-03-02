@@ -46,7 +46,7 @@
           tooltip: 'This ' + scope.targetTerm() + ' is late!'
           icon: "fa-exclamation-triangle"
         }
-        closed_without_sumbission: {
+        closed_without_submission: {
           tooltip: 'This ' + scope.targetTerm() + ' is no longer open for submissions'
           icon: "fa-ban"
         }

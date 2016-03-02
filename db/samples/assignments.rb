@@ -577,7 +577,7 @@
   assignment_type: :predictor,
   attributes: {
     name: "Has Submission, Closed",
-    description: "Displays 'Has Submission' icon. Has slider, accepts prediction.",
+    description: "Displays 'Has Submission' icon. Has slider, accepts prediction. Faculty generic predictor is closed",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
     point_total: 15000,

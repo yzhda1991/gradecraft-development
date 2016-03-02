@@ -11,7 +11,7 @@ class NullStudent
   end
 
   def submission_for_assignment(*)
-    self
+    nil
   end
 
   def weight_for_assignment_type(*)

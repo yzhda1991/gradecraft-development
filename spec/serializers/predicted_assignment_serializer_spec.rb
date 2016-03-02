@@ -116,19 +116,39 @@ describe PredictedAssignmentSerializer do
       end
 
       describe "accepts_submissions" do
-        it "is true when assignment accepts submissions" do
-          allow(assignment).to receive(:accepts_submissions?).and_return true
-          expect(subject[:accepts_submissions]).to eq(true)
-        end
-
         it "is false if assignment doesn't accept submissions" do
           allow(assignment).to receive(:accepts_submissions?).and_return false
-          expect(subject[:accepts_submissions]).to eq(false)
+          allow(assignment).to receive(:submissions_closed?).and_return false
+          allow(user).to receive(:submission_for_assignment).and_return nil
+          expect(subject[:accepting_submissions]).to eq(false)
         end
 
         it "is false if accept submission field is nil" do
           allow(assignment).to receive(:accepts_submissions?).and_return nil
-          expect(subject[:accepts_submissions]).to eq(false)
+          allow(assignment).to receive(:submissions_closed?).and_return false
+          allow(user).to receive(:submission_for_assignment).and_return nil
+          expect(subject[:accepting_submissions]).to eq(false)
+        end
+
+        it "is false if the submissions have closed" do
+          allow(assignment).to receive(:accepts_submissions?).and_return false
+          allow(assignment).to receive(:submissions_closed?).and_return true
+          allow(user).to receive(:submission_for_assignment).and_return nil
+          expect(subject[:accepting_submissions]).to eq(false)
+        end
+
+        it "is false if the student has already submitted" do
+          allow(assignment).to receive(:accepts_submissions?).and_return false
+          allow(assignment).to receive(:submissions_closed?).and_return true
+          allow(user).to receive(:submission_for_assignment).and_return "submission"
+          expect(subject[:accepting_submissions]).to eq(false)
+        end
+
+        it "is true when assignment currently accepts submissions and the student hasn't sumbitted" do
+          allow(assignment).to receive(:accepts_submissions?).and_return true
+          allow(assignment).to receive(:submissions_closed?).and_return false
+          allow(user).to receive(:submission_for_assignment).and_return nil
+          expect(subject[:accepting_submissions]).to eq(true)
         end
       end
 
@@ -187,15 +207,21 @@ describe PredictedAssignmentSerializer do
         end
       end
 
-      describe "has_closed" do
+      describe "closed_without_submission" do
         it "is true when the submissions for the assignment have closed" do
           allow(assignment).to receive(:submissions_have_closed?).and_return true
-          expect(subject[:has_closed]).to eq(true)
+          expect(subject[:closed_without_submission]).to eq(true)
         end
 
         it "is false if the assignment accepts_submissions in the future" do
           allow(assignment).to receive(:submissions_have_closed?).and_return false
-          expect(subject[:has_closed]).to eq(false)
+          expect(subject[:closed_without_submission]).to eq(false)
+        end
+
+        it "is always false if the student has already submitted" do
+          allow(assignment).to receive(:submissions_have_closed?).and_return true
+          allow(user).to receive(:submission_for_assignment).and_return "submission"
+          expect(subject[:closed_without_submission]).to eq(false)
         end
       end
 

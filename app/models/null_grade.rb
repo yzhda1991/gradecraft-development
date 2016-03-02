@@ -62,7 +62,7 @@ class NullGrade
   end
 
   def student
-    nil
+    NullStudent.new
   end
 end
 

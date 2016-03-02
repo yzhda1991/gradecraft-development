@@ -7,7 +7,7 @@ describe PredictedGradeSerializer do
   let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, raw_score: 84, student: user, course: course, assignment: assignment, is_student_visible?: true) }
   let(:user) { double(:user, submission_for_assignment: "sumbission") }
   let(:other_user) { double(:other_user) }
-  subject { described_class.new grade, user }
+  subject { described_class.new assignment, grade, user }
 
   describe "#id" do
     it "returns the grade's id" do
@@ -46,6 +46,10 @@ describe PredictedGradeSerializer do
       allow(user).to receive(:submission_for_assignment).and_return nil
       expect(subject.score).to eq(grade.score)
     end
+
+    it "always returns 0 for Null Student if the assignment sumbission has closed" do
+      expect(described_class.new(assignment, NullGrade.new, NullStudent.new).raw_score).to eq(0)
+    end
   end
 
   describe "#raw_score" do
@@ -64,9 +68,13 @@ describe PredictedGradeSerializer do
       expect(subject.raw_score).to eq(0)
     end
 
-    it "doesn't override the raw score is present regardless of submission status" do
+    it "doesn't override the raw score if present regardless of submission status" do
       allow(user).to receive(:submission_for_assignment).and_return nil
       expect(subject.raw_score).to eq(grade.raw_score)
+    end
+
+    it "always returns 0 for Null Student if the assignment sumbission has closed" do
+      expect(described_class.new(assignment, NullGrade.new, NullStudent.new).raw_score).to eq(0)
     end
   end
 
@@ -78,7 +86,7 @@ describe PredictedGradeSerializer do
     end
 
     it "returns 0 predicted_score if user is not same as student for grade" do
-      expect((described_class.new grade, other_user).predicted_score).to eq 0
+      expect((described_class.new assignment, grade, other_user).predicted_score).to eq 0
     end
 
     it "returns predicted score for student even if it's not visible" do

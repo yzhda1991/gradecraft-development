@@ -18,7 +18,7 @@
     }
     badges = []
     challenges = []
-    icons = ["has_info", "is_required", "has_rubric", "accepting_submissions", "has_submission", "is_late", "closed_without_sumbission", "is_locked", "has_been_unlocked", "is_a_condition", "is_earned_by_group"]
+    icons = ["has_info", "is_required", "has_rubric", "accepting_submissions", "has_submission", "is_late", "closed_without_submission", "is_locked", "has_been_unlocked", "is_a_condition", "is_earned_by_group"]
     unusedWeights = null
 
     getGradeLevels = ()->

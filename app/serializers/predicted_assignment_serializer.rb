@@ -15,7 +15,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
   def grade
     if @grade.nil?
       grade = student.present? ? Grade.find_or_create(assignment.id, student.id) : NullGrade.new
-      @grade = PredictedGradeSerializer.new(grade, current_user)
+      @grade = PredictedGradeSerializer.new(assignment, grade, current_user)
     end
     @grade
   end
@@ -76,7 +76,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
       is_a_condition: is_a_condition?,
       is_earned_by_group: is_earned_by_group?,
       is_late: is_late?,
-      closed_without_sumbission: closed_without_sumbission?,
+      closed_without_submission: closed_without_sumbission?,
       is_locked: is_locked?,
       has_been_unlocked: has_been_unlocked?,
     }
