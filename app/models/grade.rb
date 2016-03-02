@@ -33,7 +33,8 @@ class Grade < ActiveRecord::Base
   has_many :earned_badges, dependent: :destroy
 
   has_many :badges, through: :earned_badges
-  accepts_nested_attributes_for :earned_badges, reject_if: proc { |a| (a["score"].blank?) }, allow_destroy: true
+  accepts_nested_attributes_for :earned_badges,
+    reject_if: proc { |a| (a["score"].blank?) }, allow_destroy: true
 
   before_validation :cache_associations
   before_save :calculate_points
