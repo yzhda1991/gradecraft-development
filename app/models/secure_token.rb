@@ -44,7 +44,10 @@ class SecureToken < ActiveRecord::Base
   end
 
   def secret_url
-    secure_tokens_submissions_exports_url(target_uuid: uuid, secret_key: random_secret_key)
+    secure_tokens_submissions_exports_url(
+      target_uuid: uuid,
+      secret_key: random_secret_key
+    )
   end
 
   def has_valid_target_of_class?(required_class)
@@ -58,12 +61,14 @@ class SecureToken < ActiveRecord::Base
     @random_secret_key ||= SecureRandom.urlsafe_base64(190)
   end
 
+  # let's expire the token in a week
   def set_expires_at
     self[:expires_at] = Time.now + 7.days
   end
 
   def cache_encrypted_key
-    self[:encrypted_key] = SCrypt::Password.create(random_secret_key, scrypt_options)
+    self[:encrypted_key] = SCrypt::Password
+      .create(random_secret_key, scrypt_options)
   end
 
   def cache_uuid
