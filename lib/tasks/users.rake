@@ -21,7 +21,7 @@ namespace :users do
       end
 
       puts "\nSuccessfully set master password to '#{password}'"
-      task password.to_sym do ; end
+      task password.to_sym do; end
     end
   end
 
