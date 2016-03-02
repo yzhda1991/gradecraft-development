@@ -42,8 +42,8 @@ class SecureToken < ActiveRecord::Base
     SCrypt::Password.new(encrypted_key) == secret_key
   end
 
-  def has_valid_target_of_class?(required_class)
-    target and target.class == required_class.to_s
+  def has_target_of_class?(required_class)
+    target and target.class.to_s == required_class.to_s
   end
 
   protected

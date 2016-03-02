@@ -43,21 +43,37 @@ RSpec.describe SecureToken do
     end
   end
 
-  describe "#has_valid_target_of_class?" do
-    let(:result) { subject.has_valid_target_of_class?(required_class) }
+  describe "#has_target_of_class?" do
+    let(:result) { subject.has_target_of_class?(target_class) }
+    let!(:target) { create(:submissions_export) }
 
-    context "SecureToken has a target and the target class matches the required class" do
-      it "returns true" do
+    context "searching for the correct class" do
+      let(:target_class) { "SubmissionsExport" }
+
+      context "SecureToken has a target and the target class matches the required class" do
+        it "returns true" do
+          subject.target = target
+          subject.save
+          expect(result).to be_truthy
+        end
       end
-    end
 
-    context "no target is present" do
-      it "returns false" do
+      context "no target is present" do
+        it "returns false" do
+          subject.target = nil
+          subject.save
+          expect(result).to be_falsey
+        end
       end
     end
 
     context "target is present but the target class doesn't match the required class" do
+      let(:target_class) { "SomeOtherClass" }
+
       it "returns false" do
+        subject.target = target
+        subject.save
+        expect(result).to be_falsey
       end
     end
   end
