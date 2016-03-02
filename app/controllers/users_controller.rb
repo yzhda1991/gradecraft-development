@@ -46,10 +46,10 @@ class UsersController < ApplicationController
     if result.success?
       if @user.is_student?(current_course)
         redirect_to students_path,
-          :notice => "#{term_for :student} #{@user.name} was successfully created!" && return
+          :notice => "#{term_for :student} #{@user.name} was successfully created!" and return
       elsif @user.is_staff?(current_course)
         redirect_to staff_index_path,
-          :notice => "Staff Member #{@user.name} was successfully created!" && return
+          :notice => "Staff Member #{@user.name} was successfully created!" and return
       end
     end
 
@@ -63,9 +63,9 @@ class UsersController < ApplicationController
     cancel_course_memberships @user
     if @user.save
       if @user.is_student?(current_course)
-        redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully updated!" && return
+        redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully updated!" and return
       elsif @user.is_staff?(current_course)
-        redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully updated!" && return
+        redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully updated!" and return
       end
     end
 
@@ -86,19 +86,19 @@ class UsersController < ApplicationController
   def activate
     @user = User.load_from_activation_token(params[:id])
     @token = params[:id]
-    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." && return unless @user
+    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
   end
 
   def activated
     @token = params[:token]
     @user = User.load_from_activation_token(@token)
 
-    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." && return unless @user
+    redirect_to root_path, alert: "Invalid activation token. Please contact support to request a new one." and return unless @user
 
     if @user.update_attributes params[:user]
       @user.activate!
       auto_login @user
-      redirect_to dashboard_path, notice: "Welcome to GradeCraft!" && return
+      redirect_to dashboard_path, notice: "Welcome to GradeCraft!" and return
     end
     render :activate, alert: @user.errors.full_messages.first
   end
