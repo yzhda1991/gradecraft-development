@@ -162,7 +162,7 @@ describe Course do
     end
   end
 
-  describe "#students_being_graded_by_team(team)"do
+  describe "#students_being_graded_by_team(team)" do
     it "returns an alphabetical list of students being graded for a specific team" do
       student = create(:user, last_name: "Zed")
       student.courses << subject
@@ -563,24 +563,24 @@ describe Course do
 
   describe "#grade_level_for_score(score)" do
     it "returns the grade level that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
       expect(subject.grade_level_for_score(9990)).to eq("Awful")
     end
   end
 
   describe "#grade_letter_for_score(score)" do
     it "returns the grade letter that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
       expect(subject.grade_letter_for_score(9990)).to eq("F")
     end
   end
 
   describe "#element_for_score(score)" do
     it "returns the level that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
       expect(subject.element_for_score(10000)).to eq(high_grade_scheme_element)
     end
   end

@@ -1,7 +1,7 @@
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
-  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update] # todo: probably need to add submit_rubric here
+  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update] # TODO: probably need to add submit_rubric here
   before_filter :ensure_student?, only: [:feedback_read, :predict_score, :self_log]
   before_filter :save_referer, only: [:edit, :edit_status]
 
@@ -199,7 +199,7 @@ class GradesController < ApplicationController
         respond_with @assignment
       end
     else
-      redirect_to mass_grade_assignment_path(id: @assignment.id,team_id:params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
+      redirect_to mass_grade_assignment_path(id: @assignment.id, team_id: params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
     end
   end
 
@@ -245,7 +245,6 @@ class GradesController < ApplicationController
     @title = "#{@assignment.name} Grade Statuses"
     @grades = @assignment.grades.find(params[:grade_ids])
   end
-
 
   # PUT /assignments/:id/grades/update_status
   def update_status
@@ -322,7 +321,6 @@ class GradesController < ApplicationController
       @grade.instructor_modified = true
       @grade.status = "Graded"
 
-
       if @grade.save
         # @mz TODO: add specs
         @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
@@ -395,8 +393,8 @@ class GradesController < ApplicationController
   def serialized_criterion_grades
     CriterionGrade.where({ student_id: params[:student_id],
                         assignment_id: params[:assignment_id],
-                        criterion_id: rubric_criteria_with_levels.collect {|criterion| criterion[:id] } }).
-                select(:id, :criterion_id, :level_id, :comments).to_json
+                        criterion_id: rubric_criteria_with_levels.collect {|criterion| criterion[:id] } })
+                        .select(:id, :criterion_id, :level_id, :comments).to_json
   end
 
   def safe_grade_possible_points

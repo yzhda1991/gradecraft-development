@@ -19,17 +19,17 @@ module Services
     def self.create(raw_params)
       with(raw_params: raw_params)
         .reduce(
-        Actions::VerifiesAssignmentStudent,
-        Actions::BuildsCriterionGrades,
-        Actions::SavesCriterionGrades,
-        Actions::BuildsGrade,
-        Actions::AssociatesSubmissionWithGrade,
-        Actions::MarksAsGraded,
-        Actions::SavesGrade,
-        Actions::BuildsEarnedLevelBadges,
-        Actions::SavesEarnedLevelBadges,
-        Actions::RunsGradeUpdaterJob
-      )
+          Actions::VerifiesAssignmentStudent,
+          Actions::BuildsCriterionGrades,
+          Actions::SavesCriterionGrades,
+          Actions::BuildsGrade,
+          Actions::AssociatesSubmissionWithGrade,
+          Actions::MarksAsGraded,
+          Actions::SavesGrade,
+          Actions::BuildsEarnedLevelBadges,
+          Actions::SavesEarnedLevelBadges,
+          Actions::RunsGradeUpdaterJob
+        )
     end
   end
 end

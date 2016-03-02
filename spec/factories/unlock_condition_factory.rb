@@ -4,6 +4,6 @@ FactoryGirl.define do
     unlockable_type "Badge"
     association :condition, factory: :assignment
     condition_type "Assignment"
- 		condition_state "Earned"
+    condition_state "Earned"
   end
 end

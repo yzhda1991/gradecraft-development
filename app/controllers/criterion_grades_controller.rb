@@ -21,6 +21,7 @@ class CriterionGradesController < ApplicationController
   end
 
   private
+  
   def find_criterion_grade
     @criterion_grade = CriterionGrade.find params[:id]
   end

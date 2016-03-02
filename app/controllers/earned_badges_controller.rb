@@ -113,7 +113,6 @@ class EarnedBadgesController < ApplicationController
     @earned_badge = @badge.earned_badges.find(params[:id])
   end
 
-
   def parse_valid_earned_badges
     params[:student_ids].inject([]) do |valid_earned_badges, student_id|
       earned_badge = EarnedBadge.create(student_id: student_id, badge: @badge)

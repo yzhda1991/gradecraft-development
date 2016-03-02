@@ -26,13 +26,13 @@ class ResqueJob::Performer
   end
 
   def add_outcome_messages(outcome, messages={})
-    if messages[:success] and outcome.success?
-      add_message(messages[:success]) 
+    if messages[:success] && outcome.success?
+      add_message(messages[:success])
       outcome.message = messages[:success]
     end
 
-    if messages[:failure] and outcome.failure?
-      add_message(messages[:failure]) 
+    if messages[:failure] && outcome.failure?
+      add_message(messages[:failure])
       outcome.message = messages[:failure]
     end
   end
@@ -41,7 +41,7 @@ class ResqueJob::Performer
     { skip_setup: false }.freeze
   end
 
-  # refactor this to literally be a list of 
+  # refactor this to literally be a list of
   def failures
     @failures ||= @outcomes.select {|outcome| outcome.failure? }
   end
@@ -51,11 +51,11 @@ class ResqueJob::Performer
   end
 
   def outcome_success?
-    has_successes? and ! has_failures?
+    has_successes? && !has_failures?
   end
 
   def outcome_failure?
-    has_failures? and ! has_successes?
+    has_failures? && !has_successes?
   end
 
   def has_failures?

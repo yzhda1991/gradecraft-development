@@ -151,7 +151,7 @@ class AnalyticsController < ApplicationController
     render json: MultiJson.dump(data)
   end
 
-  # @mz todo: fix this
+  # TODO: fix this
   def export
     respond_to do |format|
       format.zip do
@@ -196,8 +196,8 @@ class AnalyticsController < ApplicationController
   end
 
   private
-  def set_granularity_and_range
 
+  def set_granularity_and_range
     @granularity = :daily
 
     if current_course.start_date && current_course.end_date

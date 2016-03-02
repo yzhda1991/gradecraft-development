@@ -83,7 +83,7 @@ class Assignment < ActiveRecord::Base
                                associations: [:assignment_score_levels],
                                options: { prepend: { name: "Copy of "},
                                           overrides: [->(copy) {
-                                  copy.rubric = self.rubric.copy if self.rubric.present?
+                                 copy.rubric = self.rubric.copy if self.rubric.present?
                                }]})
   end
 
@@ -96,7 +96,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def has_rubric?
-    !! rubric
+    !!rubric
   end
 
   def grade_with_rubric?
@@ -183,7 +183,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def submissions_with_files_query
-   "text_comment <> '' or link <> '' or id in (#{present_submission_files_query})"
+    "text_comment <> '' or link <> '' or id in (#{present_submission_files_query})"
   end
 
   def present_submission_files_query
@@ -299,7 +299,7 @@ class Assignment < ActiveRecord::Base
 
   # No longer accepting submissions.
   def submissions_have_closed?
-    ! accepts_submissions_until.nil? && accepts_submissions_until < Time.now
+    !accepts_submissions_until.nil? && accepts_submissions_until < Time.now
   end
 
   # TODO: We need a closed? (or has_closed?) method for assignments with
@@ -314,7 +314,7 @@ class Assignment < ActiveRecord::Base
   # positive grades for attendance divided by the total number of students in the class
   def completion_rate(course)
     return 0 if course.graded_student_count.zero?
-   ((grade_count / course.graded_student_count.to_f) * 100).round(2)
+    ((grade_count / course.graded_student_count.to_f) * 100).round(2)
   end
 
   # Counting the percentage of submissions from the entire class

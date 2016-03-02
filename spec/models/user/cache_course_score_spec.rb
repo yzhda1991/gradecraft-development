@@ -7,7 +7,6 @@ describe User do
   let(:assignment) { create(:assignment, course: course) }
   let(:grade) { create(:grade, assignment: assignment, course: course, student: student) }
 
-
   describe "#cache_course_score" do
     subject { student.cache_course_score(course.id) }
 

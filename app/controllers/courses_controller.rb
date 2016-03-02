@@ -10,7 +10,8 @@ class CoursesController < ApplicationController
     respond_to do |format|
       format.html { }
       format.json { render json: @courses.to_json(only: [:id, :name, :courseno,
-                                                         :year, :semester]) }
+                                                         :year, :semester])
+                                                       }
     end
   end
 
@@ -49,7 +50,7 @@ class CoursesController < ApplicationController
 
     respond_to do |format|
       if @course.save
-        if ! current_user_is_admin?
+        if !current_user_is_admin?
           @course.course_memberships.create(user_id: current_user.id,
                                             role: current_user.role(current_course))
         end

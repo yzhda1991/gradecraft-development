@@ -10,7 +10,6 @@ describe AssignmentFile do
   extend Toolkits::Models::Shared::Files
   define_context # pull in attrs for image and text files
 
-
   describe "validations" do
     it "requires a filename" do
       subject.filename = nil

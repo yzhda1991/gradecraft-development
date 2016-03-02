@@ -30,7 +30,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def for_team?
-    properties.has_key?(:team_id) && !team.nil?
+    properties.key?(:team_id) && !team.nil?
   end
 
   def grade_for(student)
@@ -117,9 +117,9 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def criterion_grades(user_id)
-    CriterionGrade.
-      where(student_id: user_id).
-      where(assignment_id: assignment.id)
+    CriterionGrade
+      .where(student_id: user_id)
+      .where(assignment_id: assignment.id)
   end
 
   def rubric_max_level_count
@@ -148,7 +148,7 @@ class AssignmentPresenter < Showtime::Presenter
 
   def has_scores_for?(user)
     scores = scores_for(user)
-    !scores.nil? && !scores.empty? && scores.has_key?(:scores) && !scores[:scores].empty?
+    !scores.nil? && !scores.empty? && scores.key?(:scores) && !scores[:scores].empty?
   end
 
   def student_logged?(user)

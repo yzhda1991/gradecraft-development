@@ -27,7 +27,6 @@ class NullStudent
   end
 end
 
-
 class NullStudentGrades
 
   def where(*)
@@ -47,6 +46,7 @@ class NullTeam
   def id
     0
   end
+
   def challenge_grades
     NullStudentGrades.new
   end

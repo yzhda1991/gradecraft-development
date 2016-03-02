@@ -5,7 +5,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
   let(:performer) { ResqueJob::Performer.new(attrs) }
   subject { performer }
 
-  # todo: add specs for all cases in subclassed conditions
+  # TODO: add specs for all cases in subclassed conditions
   describe "initialize" do
     it "should set @attrs" do
       expect(subject.instance_variable_get(:@attrs)).to eq(attrs)

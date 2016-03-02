@@ -26,8 +26,8 @@ module Toolkits
         }
       end
 
-      alias_method :pageview_logger_attrs, :base_logger_attrs
-      alias_method :predictor_logger_attrs, :base_logger_attrs
+      alias pageview_logger_attrs base_logger_attrs
+      alias predictor_logger_attrs base_logger_attrs
     end
   end
 end

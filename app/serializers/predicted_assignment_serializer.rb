@@ -47,6 +47,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
   end
 
   private
+  
   attr_reader :assignment
 
   def select_attributes
@@ -122,4 +123,3 @@ class PredictedAssignmentSerializer < SimpleDelegator
     assignment.is_a_condition?
   end
 end
-

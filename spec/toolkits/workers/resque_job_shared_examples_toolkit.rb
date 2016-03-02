@@ -15,7 +15,6 @@ module ResqueJobSharedExamplesToolkit
     end
   end
 
-
   RSpec.shared_examples "a failed resque job" do |job_klass|
     it "doesn't change the queue size" do
       expect{ subject }.to change { queue(job_klass).size }.by(0)

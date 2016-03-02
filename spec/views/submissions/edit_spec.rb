@@ -4,7 +4,8 @@ include CourseTerms
 describe "submissions/edit" do
 
   let(:presenter) { EditSubmissionPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id,
-                                                  view_context: view_context }) }
+                                                  view_context: view_context })
+                                                }
   let(:view_context) { double(:view_context, current_user: @student) }
 
   before(:all) do

@@ -71,7 +71,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       last_export_started_at: Time.now
     }
   end
-  alias_method :attributes, :base_export_attributes
+  alias attributes base_export_attributes
 
   def clear_progress_attributes
     performer_steps.inject({}) do |memo, step|
@@ -83,7 +83,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   protected
 
   def work_resources_present?
-    @assignment.present? and @students.present?
+    @assignment.present? && @students.present?
   end
 
   def fetch_assets
@@ -119,7 +119,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def archive_root_dir_path
     @archive_root_dir_path ||= File.expand_path(export_file_basename, tmp_dir)
   end
-
 
   def csv_file_path
     @csv_file_path ||= File.expand_path("_grade_import_template.csv", archive_root_dir)
@@ -315,7 +314,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   # removing student directories
-
   def remove_empty_student_directories
     @students.each do |student|
       if student_directory_empty?(student)
@@ -334,7 +332,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def create_submission_text_files
     @submissions.each do |submission|
-      if submission.text_comment.present? or submission.link.present? # write the text file for the submission into the student export directory
+      if submission.text_comment.present? || submission.link.present? # write the text file for the submission into the student export directory
         create_submission_text_file(submission)
       end
     end

@@ -14,14 +14,14 @@ module Services
     def self.create(attributes, send_welcome_email=false)
       with(attributes: attributes, send_welcome_email: send_welcome_email)
         .reduce(
-        Actions::BuildsUser,
-        Actions::GeneratesPassword,
-        Actions::GeneratesUsernames,
-        Actions::SavesUser,
-        Actions::ActivatesUser,
-        Actions::SendsActivationNeededEmail,
-        Actions::SendsWelcomeEmail
-      )
+          Actions::BuildsUser,
+          Actions::GeneratesPassword,
+          Actions::GeneratesUsernames,
+          Actions::SavesUser,
+          Actions::ActivatesUser,
+          Actions::SendsActivationNeededEmail,
+          Actions::SendsWelcomeEmail
+        )
     end
   end
 end

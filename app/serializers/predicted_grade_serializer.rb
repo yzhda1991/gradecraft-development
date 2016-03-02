@@ -47,9 +47,9 @@ class PredictedGradeSerializer
   private
 
   def show_zero_in_predictor(score)
-    score.nil? and
-    grade.assignment.accepts_submissions? and
-    grade.assignment.submissions_have_closed? and
+    score.nil? &&
+    grade.assignment.accepts_submissions? &&
+    grade.assignment.submissions_have_closed? &&
     grade.student.submission_for_assignment(grade.assignment).nil?
   end
 

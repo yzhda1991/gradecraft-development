@@ -8,9 +8,9 @@ json.badges @badges do |badge|
   json.prediction badge.prediction
 
   # boolean states for icons
-  json.has_info ! badge.description.blank?
+  json.has_info !badge.description.blank?
 
-  json.is_locked ! badge.is_unlocked_for_student?(@student)
+  json.is_locked !badge.is_unlocked_for_student?(@student)
 
   json.has_been_unlocked badge.is_unlockable? && badge.is_unlocked_for_student?(@student)
   if badge.is_unlockable?

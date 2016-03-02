@@ -13,7 +13,7 @@ FactoryGirl.define do
     end
 
     factory :group_assignment do
-    	grade_scope "Group"
+      grade_scope "Group"
     end
 
     factory :individual_assignment_with_submissions do

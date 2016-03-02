@@ -110,7 +110,6 @@ module Toolkits
               end
             end
 
-
             describe "#base_attrs" do
               subject { new_logger.base_attrs }
 

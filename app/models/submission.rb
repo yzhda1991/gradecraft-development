@@ -28,7 +28,8 @@ class Submission < ActiveRecord::Base
   scope :ungraded, -> { where("NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))", "Graded", "Released") }
   scope :graded, -> { where(:grade) }
   scope :resubmitted, -> { joins(:grade).where(grades: { status: ["Graded", "Released"] })
-                                        .where("grades.graded_at < submitted_at") }
+                                        .where("grades.graded_at < submitted_at")
+                                      }
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
@@ -36,7 +37,7 @@ class Submission < ActiveRecord::Base
   before_validation :cache_associations
 
   validates_uniqueness_of :task, :scope => :student, :allow_nil => true
-  validates :link, :format => URI::regexp(%w(http https)) , :allow_blank => true
+  validates :link, :format => URI::regexp(%w(http https)), :allow_blank => true
   validates :assignment, presence: true
   validates_with SubmissionValidator
 
@@ -68,7 +69,7 @@ class Submission < ActiveRecord::Base
   # Grabbing any submission that has NO instructor-defined grade (if the student has predicted the grade,
   # it'll exist, but we still don't want to catch those here)
   def ungraded?
-    ! grade || grade.status == nil
+    !grade || grade.status == nil
   end
 
   def will_be_resubmission?

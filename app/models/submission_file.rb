@@ -18,7 +18,6 @@ class SubmissionFile < ActiveRecord::Base
   scope :missing, -> { where(file_missing: true) }
   scope :present, -> { where(file_missing: false) }
 
-
   def s3_manager
     @s3_manager ||= S3Manager::Manager.new
   end
@@ -32,7 +31,7 @@ class SubmissionFile < ActiveRecord::Base
   end
 
   def file_missing?
-    ! exists_on_storage?
+    !exists_on_storage?
   end
 
   def exists_on_storage?

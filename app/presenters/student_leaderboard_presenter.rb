@@ -56,8 +56,8 @@ class StudentLeaderboardPresenter < Showtime::Presenter
   end
 
   def team_memberships
-    @team_memberships ||= TeamMembership.for_course(course).
-      where(student_id: student_ids)
+    @team_memberships ||= TeamMembership.for_course(course)
+      .where(student_id: student_ids)
       .includes(:team)
   end
 

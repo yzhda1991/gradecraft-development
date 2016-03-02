@@ -82,6 +82,6 @@ class CourseMembership < ActiveRecord::Base
   end
 
   def include_team_score?
-    course.add_team_score_to_student? and not course.team_score_average
+    course.add_team_score_to_student? && !course.team_score_average
   end
 end

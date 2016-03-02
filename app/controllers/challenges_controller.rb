@@ -123,16 +123,16 @@ class ChallengesController < ApplicationController
       @grades = team.challenge_grades
 
       challenges.each do |challenge|
-         prediction = challenge.find_or_create_predicted_earned_challenge(@student.id)
-         if current_user.is_student?(current_course)
-           challenge.prediction = { id: prediction.id, points_earned: prediction.points_earned }
-         else
-           challenge.prediction = { id: prediction.id, points_earned: 0 }
-         end
+        prediction = challenge.find_or_create_predicted_earned_challenge(@student.id)
+        if current_user.is_student?(current_course)
+          challenge.prediction = { id: prediction.id, points_earned: prediction.points_earned }
+        else
+          challenge.prediction = { id: prediction.id, points_earned: 0 }
+        end
 
         grade = @grades.where(:challenge_id => challenge.id).first
 
-        if grade.present? and grade.is_student_visible?
+        if grade.present? && grade.is_student_visible?
           # point_total is presented on the grade model to mirror the assignment.grade.point_total,
           # which is necessary since assignment.grade.point_total is student specific
           #

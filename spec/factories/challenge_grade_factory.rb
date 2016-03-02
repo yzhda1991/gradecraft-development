@@ -6,7 +6,7 @@ FactoryGirl.define do
     factory :graded_challenge_grade do
       association :challenge
       association :team
-      # TODO this should change to points_earned on the model
+      # TODO: this should change to points_earned on the model
       score { rand(challenge.point_total) }
       status "Graded"
     end
@@ -14,7 +14,7 @@ FactoryGirl.define do
     factory :grades_not_released_challenge_grade do
       association :challenge, release_necessary: true
       association :team
-      # TODO this should change to points_earned on the model
+      # TODO: this should change to points_earned on the model
       score { rand(challenge.point_total) }
       status "Graded"
     end

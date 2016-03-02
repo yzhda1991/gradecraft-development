@@ -23,7 +23,7 @@ class Criterion < ActiveRecord::Base
     ModelCopier.new(self).copy(attributes: attributes,
                                associations: [:levels],
                                options: { overrides: [
-                                  ->(copy) { copy.add_default_levels = false }]})
+                                 ->(copy) { copy.add_default_levels = false }]})
   end
 
   include DisplayHelpers

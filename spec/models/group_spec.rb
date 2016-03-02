@@ -30,9 +30,8 @@ describe Group do
       skip "implement"
     end
 
-    it "does not allow students to belong to more than one group per assignment"
-      skip "implement" do
-
+    it "does not allow students to belong to more than one group per assignment" do
+      skip "implement"
     end
 
     it "requires the group to work on at least one assignment" do
@@ -82,7 +81,6 @@ describe Group do
       submission = create(:submission, group: subject, assignment: assignment)
       expect(subject.submission_for_assignment(assignment)).to eq(submission)
     end
-
 
     it "returns nil if the group doesn't have an assignment submission" do
       assignment = create(:assignment, grade_scope: "Group")

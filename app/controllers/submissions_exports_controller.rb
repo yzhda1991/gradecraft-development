@@ -2,7 +2,7 @@ class SubmissionsExportsController < ApplicationController
   before_filter :ensure_staff?
 
   def create
-    if create_submissions_export and submissions_export_job.enqueue
+    if create_submissions_export && submissions_export_job.enqueue
       flash[:success] = "Your submissions export is being prepared. You'll receive an email when it's complete."
     else
       flash[:alert] = "Your submissions export failed to build. An administrator has been contacted about the issue."
@@ -35,7 +35,7 @@ class SubmissionsExportsController < ApplicationController
   def submissions_export
     @submissions_export ||= SubmissionsExport.find params[:id]
   end
-    
+
   def create_submissions_export
     @submissions_export = SubmissionsExport.create(
       assignment_id: params[:assignment_id],

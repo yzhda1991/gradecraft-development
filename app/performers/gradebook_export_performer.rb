@@ -6,7 +6,7 @@ class GradebookExportPerformer < ResqueJob::Performer
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
   def do_the_work
-    if @course.present? and @user.present?
+    if @course.present? && @user.present?
       require_success(fetch_csv_messages, max_result_size: 250) do
        fetch_csv_data(@course)
      end
@@ -23,7 +23,7 @@ class GradebookExportPerformer < ResqueJob::Performer
     User.find @attrs[:user_id]
   end
 
-  # todo: speed this up by condensing the CSV generator into a single query
+  # TODO: speed this up by condensing the CSV generator into a single query
   def fetch_course # TODO: add specs for includes
     Course.find @attrs[:course_id]
   end

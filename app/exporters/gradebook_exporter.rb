@@ -25,7 +25,7 @@ class GradebookExporter
   end
 
   def base_student_methods
-     [:first_name, :last_name, :email, :username]
+    [:first_name, :last_name, :email, :username]
   end
 
   def student_data_for(student, course)
@@ -33,13 +33,14 @@ class GradebookExporter
     student_data = base_student_methods.inject([]) do |memo, method|
       memo << student.send(method)
     end
-    # todo: we need to pre-fetch the course teams for this
+    # TODO: we need to pre-fetch the course teams for this
     student_data << student.team_for_course(course).try(:name)
 
-    # add the grades for the necessary assignments, todo: improve the performance here
+    # add the grades for the necessary assignments
+    # TODO: improve the performance here
     course.assignments.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
-      if grade and grade.is_student_visible?
+      if grade && grade.is_student_visible?
         memo << grade.raw_score
       else
         memo << ""

@@ -44,7 +44,7 @@ describe AssignmentsController do
     end
 
     describe "GET show" do
-      it "returns the assignment show page"do
+      it "returns the assignment show page" do
         get :show, :id => @assignment.id
         expect(response).to render_template(:show)
       end

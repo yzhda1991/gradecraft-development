@@ -14,9 +14,9 @@ namespace :student do
 
     desc "Check which student visible earned badges are found"
     task :student_visible_earned_badges => [:environment, :setup] do
-      earned_badges = @u.student_visible_earned_badges(@c)
-      puts "Found #{earned_badges.count} visible earned badges for that student."
-      pp earned_badges if ARGV.last == "verbose"
+     earned_badges = @u.student_visible_earned_badges(@c)
+     puts "Found #{earned_badges.count} visible earned badges for that student."
+     pp earned_badges if ARGV.last == "verbose"
    end
 
     desc "Check which unique badges are associated with student visible earned badges"

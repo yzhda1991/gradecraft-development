@@ -72,7 +72,7 @@ class NotificationMailer < ApplicationMailer
   end
 
   def send_export_email(subject)
-    mail(to: @user.email, bcc:ADMIN_EMAIL, subject: subject) {|format| format.text }
+    mail(to: @user.email, bcc: ADMIN_EMAIL, subject: subject) {|format| format.text }
   end
 
   def send_student_email(subject)

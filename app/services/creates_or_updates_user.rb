@@ -8,8 +8,8 @@ module Services
     def self.create_or_update(attributes, course, send_welcome_email=false)
       with(attributes: attributes, course: course, send_welcome_email: send_welcome_email)
         .reduce(
-        Actions::CreatesOrUpdatesUser
-      )
+          Actions::CreatesOrUpdatesUser
+        )
     end
   end
 end

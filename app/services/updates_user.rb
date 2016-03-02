@@ -9,9 +9,9 @@ module Services
     def self.update(attributes, course)
       with(attributes: attributes, course: course)
         .reduce(
-        Actions::UpdatesUser,
-        Actions::CreatesCourseMembership
-      )
+          Actions::UpdatesUser,
+          Actions::CreatesCourseMembership
+        )
     end
   end
 end

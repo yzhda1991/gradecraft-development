@@ -298,7 +298,6 @@ describe UsersController do
       end
     end
 
-
     describe "protected routes" do
       [
         :index,

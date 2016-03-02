@@ -125,7 +125,7 @@ class UnlockCondition < ActiveRecord::Base
     badge_count = student.earned_badges_for_badge_count(condition_id)
     if badge_count >= condition_value &&
       (student.earned_badges.where(:badge_id => condition_id).last.created_at < condition_date)
-        return true
+      return true
     else
       return false
     end

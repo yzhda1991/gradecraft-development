@@ -7,6 +7,7 @@ describe BadgesController do
     @student.courses << @course
     @badge = create(:badge, course: @course)
   end
+
   before(:each) do
     session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
@@ -235,7 +236,6 @@ describe BadgesController do
         end
     end
 
-
     describe "protected routes requiring id in params" do
       [
         :edit,
@@ -250,8 +250,7 @@ describe BadgesController do
     end
   end
 
-# helper methods:
-
+  # helper methods:
   def predictor_badge_attributes
     [
       :id,

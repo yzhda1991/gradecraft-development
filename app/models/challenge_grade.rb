@@ -45,7 +45,7 @@ class ChallengeGrade < ActiveRecord::Base
   end
 
   def is_student_visible?
-    is_released? || (is_graded? && ! challenge.release_necessary)
+    is_released? || (is_graded? && !challenge.release_necessary)
   end
 
   private

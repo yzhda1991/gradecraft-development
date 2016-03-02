@@ -227,7 +227,7 @@ describe ChallengesController do
     end
   end
 
-# helper methods:
+  # helper methods:
 
   def predictor_challenge_attributes
     [

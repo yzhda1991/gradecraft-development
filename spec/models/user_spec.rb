@@ -535,19 +535,19 @@ describe User do
 
   describe "#earnable_course_badges_sql_conditions(grade)" do
     skip "implement"
-  #   Badge
-  #     .unscoped
-  #     .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
-  #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
-  #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
+    #   Badge
+    #     .unscoped
+    #     .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
+    #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
+    #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
   end
 
   describe "#earn_badges_for_grade(badges, grade)" do
     skip "implement"
-  #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
-  #   badges.collect do |badge|
-  #     earned_badges.create badge: badge, course: badge.course, grade: grade
-  #   end
+    #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
+    #   badges.collect do |badge|
+    #     earned_badges.create badge: badge, course: badge.course, grade: grade
+    #   end
   end
 
   describe "#weight_for_assignment(assignment)" do

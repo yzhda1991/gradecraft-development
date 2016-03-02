@@ -146,7 +146,6 @@ describe "students/syllabus/_assignments" do
       assert_select "a", text: "Create a Group", :count => 1
     end
 
-
   end
 
   describe "as faculty" do

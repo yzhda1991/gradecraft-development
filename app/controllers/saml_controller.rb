@@ -8,7 +8,6 @@ class SamlController < ApplicationController
   end
 
   def consume
-
     response = OneLogin::RubySaml::Response.new(params[:SAMLResponse], :settings => SAML_SETTINGS)
 
     if response.success?
@@ -23,7 +22,7 @@ class SamlController < ApplicationController
         redirect_to um_pilot_path
       end
     else
-       redirect_to root_url, :notice => "authentication error"
+      redirect_to root_url, :notice => "authentication error"
     end
   end
 
@@ -35,6 +34,4 @@ class SamlController < ApplicationController
   def logout
     redirect_to logout_url
   end
-
-
 end

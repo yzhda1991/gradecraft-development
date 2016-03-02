@@ -1,6 +1,7 @@
 module SorceryStubbing
   class TestUserMailer
     def self.activation_needed_email(_); end
+    
     def self.activation_success_email(_); end
   end
 
@@ -14,5 +15,5 @@ module SorceryStubbing
       end
     end
   end
-  
+
 end
