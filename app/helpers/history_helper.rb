@@ -28,7 +28,7 @@ module HistoryHelper
     end
 
     content = content_tag(:div, nil, class: "timeline-content") do
-      concat content_tag(:h2, "#{changeset["object"].humanize} #{changeset["event"]}d")
+      concat content_tag(:h2, "#{changeset["object"].humanize} #{Gradecraft::String.new(changeset["event"]).past_tense}")
       concat history_timeline_list(changeset)
       concat content_tag(:span, changeset["recorded_at"], class: "timeline-date")
     end

@@ -81,6 +81,26 @@ describe HistoryFilter do
     end
   end
 
+  describe "#merge" do
+    it "merges the changeset from one object to another" do
+      history = [OpenStruct.new(version: OpenStruct.new(item_type: "FromObjectType"),
+                                changeset: { "event" => "create",
+                                             "object" => "FromObject",
+                                             "attribute1" => [nil, "blah"]}),
+                 OpenStruct.new(version: OpenStruct.new(item_type: "ToObjectType"),
+                                changeset: { "event" => "create",
+                                             "object" => "ToObject",
+                                             "attribute2" => [nil, "http://example.org"]})
+      ]
+      result = described_class.new(history).merge("FromObjectType" => "ToObjectType")
+        .changesets
+      expect(result).to eq [{ "event" => "create",
+                              "object" => "ToObject",
+                              "attribute2" => [nil, "http://example.org"],
+                              "attribute1" => [nil, "blah"]}]
+    end
+  end
+
   describe "#remove" do
     it "filters a changeset by the changes" do
       history = [OpenStruct.new(changeset: { "attr" => ["value1", "value2"],
@@ -105,6 +125,19 @@ describe HistoryFilter do
                  OpenStruct.new(changeset: {})]
       result = described_class.new(history).rename("Grade" => "BLAH").changesets
       expect(result.first["object"]).to eq "BLAH"
+    end
+  end
+
+  describe "#transform" do
+    it "manipulates a single history item" do
+      history = [OpenStruct.new(changeset: { "event" => "create",
+                                             "object" => "SubmissionFile",
+                                             "filename" => [nil, "blah"]
+      })]
+      result = described_class.new(history).transform do |history_item|
+        history_item.changeset["event"] = "upload"
+      end.changesets
+      expect(result.first["event"]).to eq "upload"
     end
   end
 end

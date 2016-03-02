@@ -1,3 +1,5 @@
+require_relative "../string"
+
 module HumanHistory
   class EventHistoryToken
     attr_reader :event
@@ -7,7 +9,8 @@ module HumanHistory
     end
 
     def parse(options={})
-      { self.class.token => event == "update" ? "changed" : "created" }
+      { self.class.token => event == "update" ? "changed" :
+        Gradecraft::String.new(event).past_tense }
     end
 
     class << self
