@@ -37,7 +37,7 @@
       %div{'ng-if' => 'assignment.predictor_display_type == "checkbox" && assignment.pass_fail == true'}
         .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'1'}
 
-      %div{'ng-if' => 'assignment.predictor_display_type == "checkbox"'}
+      %div{'ng-if' => 'assignment.predictor_display_type == "checkbox" && !assignment.pass_fail == true'}
         .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'assignment.point_total'}
 
 
