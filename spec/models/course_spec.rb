@@ -162,7 +162,7 @@ describe Course do
     end
   end
 
-  describe "#students_being_graded_by_team(team)"do
+  describe "#students_being_graded_by_team(team)" do
     it "returns an alphabetical list of students being graded for a specific team" do
       student = create(:user, last_name: "Zed")
       student.courses << subject

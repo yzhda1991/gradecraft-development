@@ -69,7 +69,7 @@ class Submission < ActiveRecord::Base
   # Grabbing any submission that has NO instructor-defined grade (if the student has predicted the grade,
   # it'll exist, but we still don't want to catch those here)
   def ungraded?
-    ! grade || grade.status == nil
+    !grade || grade.status == nil
   end
 
   def will_be_resubmission?

@@ -3,7 +3,7 @@ json.challenges @challenges do |challenge|
   json.merge! challenge.attributes
 
   # boolean states for icons
-  json.has_info ! challenge.description.blank?
+  json.has_info !challenge.description.blank?
 
   json.score_levels challenge.challenge_score_levels.map {|csl| {name: csl.name, value: csl.value}}
 

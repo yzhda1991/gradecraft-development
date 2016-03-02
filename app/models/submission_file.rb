@@ -31,7 +31,7 @@ class SubmissionFile < ActiveRecord::Base
   end
 
   def file_missing?
-    ! exists_on_storage?
+    !exists_on_storage?
   end
 
   def exists_on_storage?

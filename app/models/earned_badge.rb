@@ -48,7 +48,7 @@ class EarnedBadge < ActiveRecord::Base
   end
 
   def multiple_allowed
-    if ! self.badge.can_earn_multiple_times? && self.badge.earned_badge_for_student(self.student)
+    if !self.badge.can_earn_multiple_times? && self.badge.earned_badge_for_student(self.student)
       errors.add :base, " Oops, they've already earned the '#{name}' #{course.badge_term.downcase}."
     end
   end

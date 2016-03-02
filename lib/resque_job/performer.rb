@@ -51,11 +51,11 @@ class ResqueJob::Performer
   end
 
   def outcome_success?
-    has_successes? && ! has_failures?
+    has_successes? && !has_failures?
   end
 
   def outcome_failure?
-    has_failures? && ! has_successes?
+    has_failures? && !has_successes?
   end
 
   def has_failures?

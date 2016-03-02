@@ -65,7 +65,7 @@ class SubmissionsExport < ActiveRecord::Base
   end
 
   def downloadable?
-    !! last_export_completed_at
+    !!last_export_completed_at
   end
 
   def upload_file_to_s3(file_path)

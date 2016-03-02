@@ -588,3 +588,24 @@ Style/SpaceAfterColon:
   Description: 'Use spaces after colons.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-operators'
   Enabled: true
+
+Style/SpaceAfterComma:
+  Description: 'Use spaces after commas.'
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#spaces-operators'
+  Enabled: false
+
+Style/SpaceAroundKeyword:
+  Description: 'Use spaces after if/elsif/unless/while/until/case/when.'
+  Enabled: true
+
+Style/SpaceAfterMethodName:
+  Description: >-
+                 Do not put a space between a method name and the opening
+                 parenthesis in a method definition.
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#parens-no-spaces'
+  Enabled: true
+
+Style/SpaceAfterNot:
+  Description: Tracks redundant space after the ! operator.
+  StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#no-space-bang'
+  Enabled: true

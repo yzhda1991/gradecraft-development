@@ -96,7 +96,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def has_rubric?
-    !! rubric
+    !!rubric
   end
 
   def grade_with_rubric?
@@ -299,7 +299,7 @@ class Assignment < ActiveRecord::Base
 
   # No longer accepting submissions.
   def submissions_have_closed?
-    ! accepts_submissions_until.nil? && accepts_submissions_until < Time.now
+    !accepts_submissions_until.nil? && accepts_submissions_until < Time.now
   end
 
   # TODO: We need a closed? (or has_closed?) method for assignments with
