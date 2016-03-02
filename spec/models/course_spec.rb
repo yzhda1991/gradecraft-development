@@ -563,24 +563,24 @@ describe Course do
 
   describe "#grade_level_for_score(score)" do
     it "returns the grade level that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
       expect(subject.grade_level_for_score(9990)).to eq("Awful")
     end
   end
 
   describe "#grade_letter_for_score(score)" do
     it "returns the grade letter that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
       expect(subject.grade_letter_for_score(9990)).to eq("F")
     end
   end
 
   describe "#element_for_score(score)" do
     it "returns the level that matches the score" do
-      low_grade_scheme_element = create(:grade_scheme_element_low, course:subject)
-      high_grade_scheme_element = create(:grade_scheme_element_high, course:subject)
+      low_grade_scheme_element = create(:grade_scheme_element_low, course: subject)
+      high_grade_scheme_element = create(:grade_scheme_element_high, course: subject)
       expect(subject.element_for_score(10000)).to eq(high_grade_scheme_element)
     end
   end

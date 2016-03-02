@@ -199,7 +199,7 @@ class GradesController < ApplicationController
         respond_with @assignment
       end
     else
-      redirect_to mass_grade_assignment_path(id: @assignment.id,team_id:params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
+      redirect_to mass_grade_assignment_path(id: @assignment.id, team_id: params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
     end
   end
 
