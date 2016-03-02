@@ -1,7 +1,9 @@
 require "./lib/grade_proctor"
 
 describe GradeProctor::Viewable do
-  let(:grade) { double(:grade, student_id: 123, is_released?: false) }
+  let(:assignment) { double(:assignment, release_necessary?: true) }
+  let(:grade) { double(:grade, assignment: assignment, student_id: 123,
+                       is_graded?: true, is_released?: false) }
   let(:user) { double(:user, id: 123) }
 
   describe "#viewable?" do
@@ -9,6 +11,7 @@ describe GradeProctor::Viewable do
 
     context "as a student" do
       it "cannot view the grade if it's not assigned to them" do
+        allow(grade).to receive(:student_id).and_return 456
         expect(subject).to_not be_viewable user
       end
 
@@ -17,8 +20,14 @@ describe GradeProctor::Viewable do
         expect(subject).to be_viewable user
       end
 
-      xit "can view the grade if it's been graded and a release is not necessary"
-      xit "cannot view the grade if it's been graded and a release is necessary"
+      it "can view the grade if it's been graded and a release is not necessary" do
+        allow(assignment).to receive(:release_necessary?).and_return false
+        expect(subject).to be_viewable user
+      end
+
+      it "cannot view the grade if it's been graded and a release is necessary" do
+        expect(subject).to_not be_viewable user
+      end
     end
   end
 end
