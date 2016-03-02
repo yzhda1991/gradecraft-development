@@ -55,16 +55,16 @@ RSpec.describe LoginEventLogger, type: :event_logger do
         result
       end
 
-      context "course membership exists" do
+      context "a course membership is present" do
         it "updates the last login" do
           expect(subject).to receive(:update_last_login)
           result
         end
       end
 
-      context "no course membership is found" do
+      context "no course membership is present" do
         it "updates the last login" do
-          allow(subject).to receive(:course_membership) { nil }
+          allow(subject).to receive(:course_membership_present?) { nil }
           expect(subject).not_to receive(:update_last_login)
           result
         end
@@ -124,13 +124,44 @@ RSpec.describe LoginEventLogger, type: :event_logger do
       end
     end
 
+    describe ".course_membership_attrs_present?" do
+      let(:result) { subject.course_membership_attrs_present? }
+
+      before(:each) do
+        subject.instance_variable_set(:@cached_data, cached_data)
+      end
+
+      context "course_id and user_id are present in the @cached_data" do
+        let(:cached_data) { { course_id: 5, user_id: 6 } }
+        it "returns true" do
+          expect(result).to be_truthy
+        end
+      end
+
+      context "course_id is not present" do
+        let(:cached_data) { { course_id: nil, user_id: 6 } }
+        it "returns true" do
+          expect(result).to be_falsey
+        end
+      end
+
+      context "user_id is not present" do
+        let(:cached_data) { { course_id: 20, user_id: nil } }
+        it "returns true" do
+          expect(result).to be_falsey
+        end
+      end
+    end
+
     describe ".previous_last_login_at" do
       let(:result) { subject.previous_last_login_at }
 
       context "a course membership is present" do
         before do
-          allow(subject).to receive(:course_membership)
-            .and_return course_membership
+          allow(subject).to receive_messages(
+            course_membership: course_membership,
+            course_membership_present?: true
+          )
         end
 
         context "course membership has a last_login_at value" do
@@ -150,16 +181,14 @@ RSpec.describe LoginEventLogger, type: :event_logger do
 
       context "no course membership is found for the login data" do
         before do
-          allow(subject).to receive(:course_membership) { nil }
+          allow(subject).to receive(:course_membership_present?) { nil }
         end
 
         it "returns nil" do
           allow(course_membership).to receive(:last_login_at) { nil }
           expect(result).to be_nil
         end
-
       end
     end
-
   end
 end
