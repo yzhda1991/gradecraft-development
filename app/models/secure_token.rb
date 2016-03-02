@@ -6,11 +6,10 @@
 #
 # Will be able to use a SecureToken to implement polymorphic
 class SecureToken < ActiveRecord::Base
-  include Rails.application.routes.url_helpers
 
-  belongs_to :tokenable, polymorphic: true
+  belongs_to :target, polymorphic: true
   before_create :cache_encrypted_key, :cache_uuid, :set_expires_at
-  attr_reader :random_secret_key
+  attr_reader :random_secret_key, :uuid
 
   # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)
@@ -41,13 +40,6 @@ class SecureToken < ActiveRecord::Base
     # check.
     #
     SCrypt::Password.new(encrypted_key) == secret_key
-  end
-
-  def secret_url
-    secure_tokens_submissions_exports_url(
-      target_uuid: uuid,
-      secret_key: random_secret_key
-    )
   end
 
   def has_valid_target_of_class?(required_class)

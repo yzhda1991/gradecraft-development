@@ -44,11 +44,23 @@ RSpec.describe SecureToken do
   end
 
   describe "#secret_url" do
+    let(:result) { subject.secret_url }
+
+    before do
+      allow(subject).to receive_messages(
+        uuid: "some-weird-uuid",
+        random_secret_key: "some-rando-key"
+      )
+    end
+
     it "generates a url with the secret key for the secure download" do
+      expect(result).to eq("http://stuff")
     end
   end
 
   describe "#has_valid_target_of_class?" do
+    let(:result) { subject.has_valid_target_of_class?(required_class) }
+
     context "SecureToken has a target and the target class matches the required class" do
       it "returns true" do
       end
