@@ -51,11 +51,13 @@ class LoginEventLogger < ApplicationEventLogger
     end
 
     def update_last_login
-      course_membership.update_attributes(last_login_at: @cached_data[:created_at])
+      course_membership
+        .update_attributes(last_login_at: @cached_data[:created_at])
     end
 
     def course_membership
-      @course_membership ||= CourseMembership.where(course_membership_attrs).first
+      @course_membership ||= CourseMembership.where(course_membership_attrs)
+        .first
     end
 
     # let's make sure that we've got the necessary attributes present in order
