@@ -56,7 +56,8 @@ class LoginEventLogger < ApplicationEventLogger
     end
 
     def course_membership
-      @course_membership ||= CourseMembership.where(course_membership_attrs)
+      @course_membership ||= CourseMembership
+        .where(course_membership_attrs)
         .first
     end
 
