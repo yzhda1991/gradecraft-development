@@ -13,14 +13,17 @@ describe EventLogger::Base, type: :vendor_library do
   include Toolkits::Lib::ResqueRetryToolkit::SharedExamples
 
   let(:event_type) { "waffle" }
-  let(:some_data) {{ some: "new weird data" }}
+  let(:some_data) { { some: "new weird data" } }
   let(:time_now) { Time.parse "Jun 20 1942" }
   let(:mongoid_event) { double(:mongoid_event) }
-  let(:analytics_attrs) {{ event_type: event_type, created_at: time_now }.merge(some_data) }
+  let(:analytics_attrs) do
+    { event_type: event_type, created_at: time_now }.merge(some_data)
+  end
   let(:logger) { Logger.new(STDOUT) }
 
   describe "the logger implementation" do
-    it_behaves_like "the #logger is implemented through Logglier with LogglyResque", described_class
+    it_behaves_like "the #logger is implemented through Logglier with " \
+      "LogglyResque", described_class
   end
 
   describe ".perform" do
@@ -28,7 +31,8 @@ describe EventLogger::Base, type: :vendor_library do
 
     before do
       allow(Time.zone).to receive(:now) { time_now }
-      allow(described_class).to receive(:notify_event_outcome).and_return "another message"
+      allow(described_class).to receive(:notify_event_outcome)
+        .and_return "another message"
       allow(described_class).to receive(:logger) { logger }
     end
 
@@ -54,8 +58,10 @@ describe EventLogger::Base, type: :vendor_library do
       allow(valid_event).to receive(:valid?).and_return true
       allow(invalid_event).to receive(:valid?).and_return false
       allow(described_class).to receive(:logger) { logger }
-      described_class.instance_variable_set(:@success_message, "great stuff happened")
-      described_class.instance_variable_set(:@failure_message, "bad stuff happened")
+      described_class
+        .instance_variable_set(:@success_message, "great stuff happened")
+      described_class
+        .instance_variable_set(:@failure_message, "bad stuff happened")
     end
 
     context "the event is valid" do
@@ -63,7 +69,8 @@ describe EventLogger::Base, type: :vendor_library do
 
       it "should output the @success_message" do
         allow(Analytics::Event).to receive(:create) { valid_event }
-        expect(described_class).to receive(:notify_event_outcome).with(valid_event, {heads: 5}) { notify_success }
+        expect(described_class).to receive(:notify_event_outcome)
+          .with(valid_event, {heads: 5}) { notify_success }
         described_class.perform "event", {heads: 5}
       end
     end
@@ -73,7 +80,8 @@ describe EventLogger::Base, type: :vendor_library do
 
       it "should output the @failure_message" do
         allow(Analytics::Event).to receive(:create) { invalid_event }
-        expect(described_class).to receive(:notify_event_outcome).with(invalid_event, {heads: 10}) { notify_failure }
+        expect(described_class).to receive(:notify_event_outcome)
+          .with(invalid_event, {heads: 10}) { notify_failure }
         described_class.perform "event", {heads: 10}
       end
     end
@@ -82,7 +90,7 @@ describe EventLogger::Base, type: :vendor_library do
   describe ".analytics_attrs(event_type, data)" do
     subject { described_class.analytics_attrs(event_type, some_data) }
 
-    before { allow(Time.zone).to receive(:now) { time_now }}
+    before { allow(Time.zone).to receive(:now) { time_now } }
 
     it "should return an array of required attributes by default" do
       expect(subject).to eq(analytics_attrs)
@@ -98,7 +106,8 @@ describe EventLogger::Base, type: :vendor_library do
   # shared examples for testing that the #backoff_strategy is overridden and
   # included from the target IsConfigurable class. Takes block arguments
   # |target_class, config_class|
-  it_behaves_like "it uses a configurable backoff strategy", EventLogger::Base, EventLogger
+  it_behaves_like "it uses a configurable backoff strategy", \
+    EventLogger::Base, EventLogger
 
   describe "class-level instance variable defaults" do
     it "should have a default @queue" do
