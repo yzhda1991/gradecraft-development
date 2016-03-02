@@ -107,7 +107,8 @@ RSpec.describe LoginEventLogger, type: :event_logger do
 
       it "sets the course membership to @course_membership" do
         result
-        expect(subject.instance_variable_get(:@course_membership)).to eq(course_membership)
+        expect(subject.instance_variable_get(:@course_membership))
+          .to eq(course_membership)
       end
     end
 
@@ -121,6 +122,38 @@ RSpec.describe LoginEventLogger, type: :event_logger do
 
       it "returns the timestamp as an integer in seconds" do
         expect(result).to eq(data)
+      end
+    end
+
+    describe ".course_membership_present?" do
+      let(:result) { subject.course_membership_present? }
+
+      before(:each) do
+        allow(subject).to receive_messages(
+          course_membership: true,
+          course_membership_attrs_present?: true
+        )
+      end
+
+      context "course membership attrs exist but the resource is not found" do
+        it "returns true" do
+          expect(result).to be_truthy
+        end
+      end
+
+      context "course membership attributes are not present" do
+        it "returns false" do
+          allow(subject).to receive(:course_membership_attrs_present?)
+            .and_return false
+          expect(result).to be_falsey
+        end
+      end
+
+      context "course membership resource does not exist" do
+        it "returns false" do
+          allow(subject).to receive(:course_membership) { false }
+          expect(result).to be_falsey
+        end
       end
     end
 
@@ -140,14 +173,14 @@ RSpec.describe LoginEventLogger, type: :event_logger do
 
       context "course_id is not present" do
         let(:cached_data) { { course_id: nil, user_id: 6 } }
-        it "returns true" do
+        it "returns false" do
           expect(result).to be_falsey
         end
       end
 
       context "user_id is not present" do
         let(:cached_data) { { course_id: 20, user_id: nil } }
-        it "returns true" do
+        it "returns false" do
           expect(result).to be_falsey
         end
       end
