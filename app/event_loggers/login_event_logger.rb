@@ -56,9 +56,8 @@ class LoginEventLogger < ApplicationEventLogger
     end
 
     def course_membership
-      @course_membership ||= CourseMembership
-        .where(course_membership_attrs)
-        .first
+      @course_membership ||= \
+        CourseMembership.where(course_membership_attrs).first
     end
 
     # let's make sure that we've got the necessary attributes present in order
