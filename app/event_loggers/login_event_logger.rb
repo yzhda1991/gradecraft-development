@@ -70,7 +70,7 @@ class LoginEventLogger < ApplicationEventLogger
     end
 
     def course_membership_attrs_present?
-      @cached_data[:course_id].present? && @cached_data[:user_id].present?
+      course_membership_attrs.values.all?(&:present?)
     end
 
     def course_membership_attrs

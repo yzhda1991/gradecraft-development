@@ -19,15 +19,25 @@ RSpec.describe LoginEventLogger, type: :event_logger do
   # build this off of the class instance for consistent behavior
   let(:new_logger) { described_class.new(event_session) }
 
-  let!(:course_membership) { create(:professor_course_membership, course: course, user: user, last_login_at: last_login) }
+  let!(:course_membership) do
+    create(:professor_course_membership,
+      course: course,
+      user: user,
+      last_login_at: last_login
+    )
+  end
+
   let(:last_login) { Time.parse("June 20, 1968") }
 
   # pulls in #event_session attributes from EventLoggers::EventSession
   # creates course, user, student objects, and a request double
   define_event_session_with_request
 
-  let(:logger_attrs) { login_logger_attrs } # pulled in from Toolkits::EventLoggers::Attributes
-  let(:expected_base_attrs) { application_logger_base_attrs } # pulled in from Toolkits::EventLoggers::ApplicationEventLoggerToolkit
+  # pulled in from Toolkits::EventLoggers::Attributes
+  let(:logger_attrs) { login_logger_attrs }
+
+  # pulled in from Toolkits::EventLoggers::ApplicationEventLoggerToolkit
+  let(:expected_base_attrs) { application_logger_base_attrs }
 
   # shared examples for EventLogger subclasses
   it_behaves_like "an EventLogger subclass", LoginEventLogger, "login"
@@ -63,7 +73,7 @@ RSpec.describe LoginEventLogger, type: :event_logger do
       end
 
       context "no course membership is present" do
-        it "updates the last login" do
+        it "does not update the last login" do
           allow(subject).to receive(:course_membership_present?) { nil }
           expect(subject).not_to receive(:update_last_login)
           result
@@ -81,7 +91,8 @@ RSpec.describe LoginEventLogger, type: :event_logger do
       end
 
       it "updates the last_login_at for the course membership" do
-        expect(course_membership).to receive(:update_attributes).with({ last_login_at: time_zone_now })
+        expect(course_membership).to receive(:update_attributes)
+          .with({ last_login_at: time_zone_now })
         subject.update_last_login
       end
     end
@@ -92,7 +103,8 @@ RSpec.describe LoginEventLogger, type: :event_logger do
       before(:each) do
         course_membership # cache the course membership
         subject.instance_variable_set(:@course_membership, nil)
-        allow(subject).to receive(:course_membership_attrs) {{ course_id: course.id, user_id: user.id }}
+        allow(subject).to receive(:course_membership_attrs)
+          .and_return({ course_id: course.id, user_id: user.id })
       end
 
       it "returns the correct course membership" do
@@ -161,11 +173,13 @@ RSpec.describe LoginEventLogger, type: :event_logger do
       let(:result) { subject.course_membership_attrs_present? }
 
       before(:each) do
-        subject.instance_variable_set(:@cached_data, cached_data)
+        allow(subject).to receive(:course_membership_attrs)
+          .and_return cached_data
       end
 
       context "course_id and user_id are present in the @cached_data" do
         let(:cached_data) { { course_id: 5, user_id: 6 } }
+
         it "returns true" do
           expect(result).to be_truthy
         end
@@ -173,6 +187,7 @@ RSpec.describe LoginEventLogger, type: :event_logger do
 
       context "course_id is not present" do
         let(:cached_data) { { course_id: nil, user_id: 6 } }
+
         it "returns false" do
           expect(result).to be_falsey
         end
@@ -180,6 +195,7 @@ RSpec.describe LoginEventLogger, type: :event_logger do
 
       context "user_id is not present" do
         let(:cached_data) { { course_id: 20, user_id: nil } }
+
         it "returns false" do
           expect(result).to be_falsey
         end
