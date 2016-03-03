@@ -79,7 +79,10 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def score_for_student(student)
-    student.grades.student_visible.not_nil.where(assignment_type: self).pluck("score").sum || 0
+    student.grades.student_visible
+                  .not_nil
+                  .included_in_course_score
+                  .where(assignment_type: self).pluck("score").sum || 0
   end
 
   def raw_score_for_student(student)

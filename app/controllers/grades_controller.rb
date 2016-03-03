@@ -163,12 +163,13 @@ class GradesController < ApplicationController
     grade.excluded_from_course_score = true
     grade.excluded_by = current_user.id
     grade.excluded_date = Time.now
-    grade.save
-    ScoreRecalculatorJob.new(user_id: grade.student_id,
+    if grade.save
+      ScoreRecalculatorJob.new(user_id: grade.student_id,
                              course_id: current_course.id).enqueue
 
-    redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
+      redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
       #{ grade.assignment.name } grade was successfully excluded from their total score."
+    end
   end
 
   # DELETE /assignments/:assignment_id/grade
