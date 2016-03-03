@@ -18,14 +18,14 @@ describe LevelBadgesController do
     describe "POST create" do
       it "creates a new level badge" do
         params = attributes_for(:level_badge)
-        expect{ post :create, :level_badge => params }.to change(LevelBadge,:count).by(1)
+        expect{ post :create, level_badge: params }.to change(LevelBadge,:count).by(1)
       end
     end
 
     describe "GET destroy" do
       it "destroys a level badge" do
         @level_badge = create(:level_badge)
-        expect{ get :destroy, { :id => @level_badge } }.to change(LevelBadge,:count).by(-1)
+        expect{ get :destroy, { id: @level_badge } }.to change(LevelBadge,:count).by(-1)
       end
     end
   end
@@ -52,7 +52,7 @@ describe LevelBadgesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "10"}).to redirect_to(:root)
+          expect(get route, {id: "10"}).to redirect_to(:root)
         end
       end
     end

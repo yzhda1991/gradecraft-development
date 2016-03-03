@@ -7,7 +7,7 @@
 
   - if current_course.has_teams? && @assignment.is_individual?
     .team-filter
-      = form_tag mass_grade_assignment_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+      = form_tag mass_grade_assignment_path, name: "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         = hidden_field_tag :assignment_id, @assignment.id
         %label.sr-only{:for => "team_id"}
           Select Team
@@ -22,7 +22,7 @@
         %thead
           %tr
             %th{:style => "text-align: right"}= "#{term_for :student}"
-            %th.center{:align => "center", :scope => "col", "data-dynatable-no-sort" => "true" }
+            %th.center{:align => "center", scope: "col", "data-dynatable-no-sort" => "true" }
               - if @assignment.grade_checkboxes?
                 %span.sr-only Check/Uncheck
                 %button.button.select-all= "Check All"
@@ -45,7 +45,7 @@
                   - elsif @assignment.grade_radio? && @assignment.has_levels?
                     - @assignment_score_levels.each do |assignment_score_level|
                       = gf.label :raw_score, "#{assignment_score_level.formatted_name}", value: assignment_score_level.value
-                      = gf.radio_button :raw_score, assignment_score_level.value, :class => "radio_inline"
+                      = gf.radio_button :raw_score, assignment_score_level.value, class: "radio_inline"
                   - elsif @assignment.grade_checkboxes?
                     = gf.check_box :raw_score, {}, @assignment.point_total, nil
                   - else
@@ -59,4 +59,4 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Submit Grades"
-          %li= link_to glyph("times-circle") + "Cancel", assignments_path, :class => "button"
+          %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"

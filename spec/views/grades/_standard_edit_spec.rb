@@ -13,7 +13,7 @@ describe "grades/_standard_edit" do
     @grade = create(:grade, course: @course, assignment: @assignment, student: @student)
     @assignment_score_levels = [] # add this so the view doesn't crash
     allow(view).to receive(:current_student).and_return(@student)
-    current_user = double()
+    current_user = double
     allow(current_user).to receive(:id) {0}
     allow(view).to receive(:current_user).and_return(current_user)
     allow(view).to receive(:current_course).and_return(@course)

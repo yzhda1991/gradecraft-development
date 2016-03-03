@@ -11,7 +11,7 @@ namespace :analytics do
   end
 
   desc "Populate with events to simulate user activity"
-  task :populate => :environment do
+  task populate: :environment do
 
     if ENV["COURSE"] && Course.exists?(ENV["COURSE"])
       current_course = Course.find(ENV["COURSE"])
@@ -43,12 +43,12 @@ namespace :analytics do
           data =  case event
                   when :pageview
                     pages = %w(/ /dashboard /users/predictor)
-                    {:page => pages.sample}
+                    {page: pages.sample}
                   when :login
                     # Set the last login at up to 100 hours prior
                     last_login_at = created_at - Random.rand(3600)
                     last_login_at = last_login_at > current_course.start_date ? last_login_at : current_course.start_date
-                    {:last_login_at => last_login_at}
+                    { last_login_at: last_login_at }
                   when :predictor
                     assignment = current_course.assignments.sample
                     if assignment
@@ -60,7 +60,7 @@ namespace :analytics do
                       score = (random_score.rng * (possible/2)/3) + possible/2
                       score = [0,score].max
                       score = [possible,score].min
-                      {:assignment_id => assignment.id, :score => score.to_i, :possible => possible}
+                      {assignment_id: assignment.id, score: score.to_i, possible: possible}
                     else
                       false
                     end
@@ -68,7 +68,7 @@ namespace :analytics do
 
           attributes = {course_id: current_course.id, user_id: user.id, user_role: user.role(current_course), created_at: created_at}
           Resque.enqueue(EventLogger, event, attributes.merge(data)) if data
-          #EventLogger.perform_async(event, attributes.merge(data)) if data
+          # EventLogger.perform_async(event, attributes.merge(data)) if data
           puts "#{event}: #{attributes.merge(data)}" if data
           sleep(rand)
         end
@@ -104,7 +104,7 @@ namespace :analytics do
     if input == "y"
       STDOUT.puts "Deleting events and adjusting aggregate data..."
       events.each do |e|
-        #e = events.first
+        # e = events.first
         if aggregates = Analytics.configuration.event_aggregates.stringify_keys[e.event_type]
           aggregates.each { |a| a.decr(e) }
         end
@@ -151,7 +151,7 @@ namespace :analytics do
   namespace :export do
     namespace :courses do
       desc "Export all course analytics data as JSON"
-      task :raw => [:environment] do
+      task raw: [:environment] do
         export_dir = ENV["EXPORT_DIR"]
         course_ids.each do |id|
           puts "Exporting for course: #{id}"
@@ -166,7 +166,7 @@ namespace :analytics do
       end
 
       desc "Export filtered course analytics data as CSV"
-      task :csv => [:environment] do
+      task csv: [:environment] do
         export_dir = ENV["EXPORT_DIR"] || raise("No export directory provided. Prepend \"EXPORT_DIR=/path/to/exports\" to rake command.")
         course_ids.each do |id|
           puts "Exporting for course: #{id}"
@@ -192,7 +192,7 @@ namespace :analytics do
       end
 
       desc "Export analyzed course analytics data as CSV"
-      task :csv_analyzed => [:environment] do
+      task csv_analyzed: [:environment] do
         export_dir = ENV["EXPORT_DIR"] || raise("No export directory provided. Prepend \"EXPORT_DIR=/path/to/exports\" to rake command.")
         selected_course_ids = ENV["COURSES"].try(:split, ",").try(:map, &:to_i)
         export_course_ids = selected_course_ids.present? ? (selected_course_ids & course_ids) : course_ids
@@ -206,26 +206,26 @@ namespace :analytics do
             %w"student professor gsi admin total".each do |role|
               role_subdir = File.join(course_export_dir,role.pluralize)
 
-              events = Analytics::Event.where(:course_id => id)
-              predictor_events = Analytics::Event.where(:course_id => id, :event_type => "predictor")
-              user_pageviews = CourseUserPageview.data(:all_time, nil, {:course_id => id}, {:page => "_all"})
-              user_predictor_pageviews = CourseUserPagePageview.data(:all_time, nil, {:course_id => id, :page => "/dashboard#predictor"})
-              user_logins = CourseUserLogin.data(:all_time, nil, {:course_id => id})
+              events = Analytics::Event.where(course_id: id)
+              predictor_events = Analytics::Event.where(course_id: id, event_type: "predictor")
+              user_pageviews = CourseUserPageview.data(:all_time, nil, { course_id: id }, { page: "_all" })
+              user_predictor_pageviews = CourseUserPagePageview.data(:all_time, nil, { course_id: id, page: "/dashboard#predictor" })
+              user_logins = CourseUserLogin.data(:all_time, nil, {course_id: id})
 
               user_ids = events.collect(&:user_id).compact.uniq
               assignment_ids = events.select { |event| event.respond_to? :assignment_id }.collect(&:assignment_id).compact.uniq
 
-              users = User.where(:id => user_ids).select(:id, :username)
-              assignments = Assignment.where(:id => assignment_ids).select(:id, :name)
+              users = User.where(id: user_ids).select(:id, :username)
+              assignments = Assignment.where(id: assignment_ids).select(:id, :name)
 
               data = {
-                :events => events,
-                :predictor_events => predictor_events,
-                :user_pageviews => user_pageviews[:results],
-                :user_predictor_pageviews => user_predictor_pageviews[:results],
-                :user_logins => user_logins[:results],
-                :users => users,
-                :assignments => assignments
+                events: events,
+                predictor_events: predictor_events,
+                user_pageviews: user_pageviews[:results],
+                user_predictor_pageviews: user_predictor_pageviews[:results],
+                user_logins: user_logins[:results],
+                users: users,
+                assignments: assignments
               }
 
               Analytics.configuration.exports[:course].each do |export|

@@ -31,7 +31,7 @@
       %li{class: ("active" if current_page?(announcements_path)) }
         - unread_count = unread_count_for current_student, current_course
         - if unread_count > 0
-          = link_to_unless_current "Announcements", announcements_path, :class => "notification-right"
+          = link_to_unless_current "Announcements", announcements_path, class: "notification-right"
           %div.notification-badge.announcement-notification-badge= unread_count
         - else
           = link_to_unless_current "Announcements", announcements_path

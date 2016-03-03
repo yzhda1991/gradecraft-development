@@ -127,8 +127,8 @@ RSpec.describe GradesController, type: :controller, background_job: true do
             allow(course).to receive(:students) { students }
             allow(professor).to receive(:admin?) { true } # let's call the prof an admin for now
             # stub away before filters
-            allow(request).to receive_message_chain(:format, :html?) { false } #increment_page_views
-            allow(controller).to receive_message_chain(:current_student, :present?) { false } #get_course_scores
+            allow(request).to receive_message_chain(:format, :html?) { false } # increment_page_views
+            allow(controller).to receive_message_chain(:current_student, :present?) { false } # get_course_scores
             # some more stubs
             allow(controller).to receive_message_chain(:current_course, :students) { students }
             allow(GradeImporter).to receive_message_chain(:new, :import) { result_double }

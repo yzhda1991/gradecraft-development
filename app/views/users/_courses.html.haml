@@ -16,7 +16,7 @@
             = cmf.select :role, available_roles(cmf.object.course)
           - if cmf.object.course.character_profiles?
             .form-item
-              = cmf.input :character_profile, :class => "froala"
+              = cmf.input :character_profile, class: "froala"
           .form-item
             = cmf.label :auditing
             = cmf.check_box :auditing

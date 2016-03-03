@@ -16,16 +16,16 @@
   %table.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
     %thead
       %tr
-        %th{:scope => "col"} Grade
-        %th{:scope => "col"} Level
-        %th{:scope => "col"} Low Range
-        %th{:scope => "col"} High Range
+        %th{scope: "col"} Grade
+        %th{scope: "col"} Level
+        %th{scope: "col"} Low Range
+        %th{scope: "col"} High Range
     %tbody
       - @grade_scheme_elements.each do |element|
         %tr
           %td= element.letter
           %td= element.level
-          %td{:data => { :"sort-value" => "#{element.low_range }" }}= points element.low_range
-          %td{:data => { :"sort-value" => "#{element.high_range }" }}= points element.high_range
+          %td{data: { :"sort-value" => "#{element.low_range }" }}= points element.low_range
+          %td{data: { :"sort-value" => "#{element.high_range }" }}= points element.high_range
 
   = render partial: "courses/grading_philosophy", locals: { course: current_course }

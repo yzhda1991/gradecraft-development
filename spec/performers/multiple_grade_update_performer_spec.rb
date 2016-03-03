@@ -141,7 +141,7 @@ RSpec.describe MultipleGradeUpdatePerformer, type: :background_job do
 
         it "should require success with notify released messages" do
           allow(performer).to receive_messages(notify_released_messages: notify_released_messages)
-          expect(performer).to receive(:require_success).with(notify_released_messages, {:max_result_size=>200}).exactly(grades.size).times
+          expect(performer).to receive(:require_success).with(notify_released_messages, { max_result_size: 200 }).exactly(grades.size).times
           subject
         end
 

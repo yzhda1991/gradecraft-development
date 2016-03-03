@@ -5,7 +5,7 @@
     - else
       Your Submission
     // link to edit the submission
-    %span= link_to "Edit My Submission", edit_assignment_submission_path(@assignment, current_student.submission_for_assignment(@assignment), :student_id => current_student.id), :class => "button"
+    %span= link_to "Edit My Submission", edit_assignment_submission_path(@assignment, current_student.submission_for_assignment(@assignment), student_id: current_student.id), class: "button"
   // Displaying when the assignment was submitted
   %p
     Submitted:
@@ -44,11 +44,11 @@
 - else
   - if current_user_is_staff?
     %b= "#{@group.name}'s Submission"
-    %span= link_to "Grade", group_grade_assignment_path(@assignment, :group_id => @group), :class => "button"
+    %span= link_to "Grade", group_grade_assignment_path(@assignment, group_id: @group), class: "button"
   - else
     Your Submission
   // link to edit the submission
-  %span= link_to "Edit My Submission", edit_assignment_submission_path(@assignment, @group.submission_for_assignment(@assignment), :group_id => @group), :class => "button"
+  %span= link_to "Edit My Submission", edit_assignment_submission_path(@assignment, @group.submission_for_assignment(@assignment), group_id: @group), class: "button"
   // Displaying when the assignment was submitted
   %p
     %b Submitted:
@@ -76,7 +76,7 @@
         - @group.submission_for_assignment(@assignment).submission_files.each do |sf|
           %li
             = link_to sf.filename, sf.url
-            = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", :assignment_id => @assignment.id, :upload_id => sf.id } )
+            = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", assignment_id: @assignment.id, :upload_id => sf.id } )
 
   - if @group.submission_for_assignment(@assignment).text_comment?
     %p

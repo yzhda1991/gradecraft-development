@@ -1,6 +1,6 @@
 class UnlockConditionsController < ApplicationController
 
-  #Unlock Conditions are used to ...
+  # Unlock Conditions are used to ...
 
   before_filter :ensure_staff?
 
@@ -19,5 +19,5 @@ class UnlockConditionsController < ApplicationController
     @unlock_condition = current_course.unlock_conditions.find(params[:id])
     @unlock_condition.destroy
   end
-  
+
 end

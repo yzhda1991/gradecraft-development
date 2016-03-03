@@ -3,13 +3,13 @@ class CoursePredictorExport
 
   rows_by :events
 
-  set_schema :username => :username,
-             :role => :user_role,
-             :student_profile => :student_profile,
-             :assignment => :assignment_name,
-             :prediction => :score,
-             :possible => :possible,
-             :date_time => lambda { |event| event.created_at.to_formatted_s(:db) }
+  set_schema username: :username,
+             role: :user_role,
+             student_profile: :student_profile,
+             assignment: :assignment_name,
+             prediction: :score,
+             possible: :possible,
+             date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
   def schema_records_for_role(role)
     self.schema_records records.select {|event| event.user_role == role }

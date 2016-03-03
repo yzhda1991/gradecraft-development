@@ -33,7 +33,7 @@ describe StudentsController do
         @student.teams << @team
         @student_2 = create(:user)
         @student_2.courses << @course
-        get :index, :team_id => @team.id
+        get :index, team_id: @team.id
         expect(response).to render_template(:index)
         expect(assigns(:students)).to eq([@student])
       end
@@ -41,7 +41,7 @@ describe StudentsController do
 
     describe "GET show" do
       it "shows the student page" do
-        get :show, {:id => @student.id}
+        get :show, {id: @student.id}
         expect(assigns(:student)).to eq(@student)
         expect(response).to render_template(:show)
       end
@@ -78,28 +78,28 @@ describe StudentsController do
 
     describe "GET syllabus" do
       it "shows the class syllabus" do
-        get :syllabus, :id => 10
+        get :syllabus, id: 10
         expect(response).to render_template(:syllabus)
       end
     end
 
     describe "GET timeline" do
       it "shows the course timeline" do
-        get :timeline, :id => 10
+        get :timeline, id: 10
         expect(response).to render_template(:timeline)
       end
     end
 
     describe "GET autocomplete_student_name" do
       it "provides a list of all students and their ids" do
-        get :autocomplete_student_name, :id => 10
+        get :autocomplete_student_name, id: 10
         (expect(response.status).to eq(200))
       end
     end
 
     describe "GET course_progress" do
       it "shows the course progress" do
-        get :course_progress, :id => 10
+        get :course_progress, id: 10
         expect(assigns(:title)).to eq("Your Course Progress")
         expect(response).to render_template(:course_progress)
       end
@@ -108,7 +108,7 @@ describe StudentsController do
     describe "GET badges" do
       it "shows the student facing badge page" do
         allow(controller).to receive(:current_student).and_return(@student)
-        get :badges, :id => @student.id
+        get :badges, id: @student.id
         expect(assigns(:title)).to eq("badges")
         expect(response).to render_template(:badges)
       end
@@ -116,14 +116,14 @@ describe StudentsController do
 
     describe "GET predictor" do
       it "shows the grade predictor page" do
-        get :predictor, :id => 10
+        get :predictor, id: 10
         expect(response).to render_template(:predictor)
       end
     end
 
     describe "GET grade_index" do
       it "shows the grade index page" do
-        get :grade_index, :student_id => @student.id
+        get :grade_index, student_id: @student.id
         allow(StudentsController).to receive(:current_student).and_return(@student)
         expect(response).to render_template(:grade_index)
       end
@@ -131,14 +131,14 @@ describe StudentsController do
 
     describe "GET recalculate" do
       it "triggers the recalculation of a student's grade" do
-        get :recalculate, { :student_id => @student.id }
+        get :recalculate, { student_id: @student.id }
         expect(response).to redirect_to(student_path(@student))
       end
     end
 
     describe "GET teams" do
       it "shows the team page shown to students" do
-        get :teams, :student_id => @student.id
+        get :teams, student_id: @student.id
         expect(response).to render_template(:teams)
       end
     end
@@ -156,14 +156,14 @@ describe StudentsController do
 
     describe "GET timeline" do
       it "shows the course timeline" do
-        get :timeline, :id => 10
+        get :timeline, id: 10
         expect(response).to redirect_to(dashboard_path)
       end
     end
 
     describe "GET course_progress" do
       it "shows the course progress" do
-        get :course_progress, :id => 10
+        get :course_progress, id: 10
         expect(assigns(:title)).to eq("Your Course Progress")
         expect(response).to render_template(:course_progress)
       end
@@ -179,7 +179,7 @@ describe StudentsController do
 
     describe "GET predictor" do
       it "shows the grade predictor page" do
-        get :predictor, :id => 10
+        get :predictor, id: 10
         expect(response).to render_template(:predictor)
       end
     end
@@ -209,7 +209,7 @@ describe StudentsController do
         :recalculate
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:student_id => "10"}).to redirect_to(:root)
+          expect(get route, {student_id: "10"}).to redirect_to(:root)
         end
       end
     end
@@ -219,7 +219,7 @@ describe StudentsController do
         :show
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "10"}).to redirect_to(:root)
+          expect(get route, {id: "10"}).to redirect_to(:root)
         end
       end
     end

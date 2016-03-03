@@ -311,7 +311,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
     end
 
     it "should build a new outcome with the yield of the block" do
-      expect(ResqueJob::Outcome).to receive(:new).with("waffle", {:max_result_size=>false})
+      expect(ResqueJob::Outcome).to receive(:new).with("waffle", { max_result_size: false })
 
       @performer.require_success { "waffle" }
     end

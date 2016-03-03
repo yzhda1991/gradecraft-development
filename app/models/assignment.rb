@@ -37,16 +37,16 @@ class Assignment < ActiveRecord::Base
   has_many :weights, class_name: "AssignmentWeight", dependent: :destroy
 
   # Student created groups, can connect to multiple assignments and receive group level or individualized feedback
-  has_many :assignment_groups, :dependent => :destroy
-  has_many :groups, :through => :assignment_groups
+  has_many :assignment_groups, dependent: :destroy
+  has_many :groups, through: :assignment_groups
 
   # Multipart assignments
-  has_many :tasks, :as => :assignment, :dependent => :destroy
+  has_many :tasks, as: :assignment, dependent: :destroy
 
   # Student created submissions to be graded
-  has_many :submissions, :dependent => :destroy
+  has_many :submissions, dependent: :destroy
 
-  has_many :criterion_grades, :dependent => :destroy
+  has_many :criterion_grades, dependent: :destroy
 
   # Instructor uploaded resource files
   has_many :assignment_files, dependent: :destroy
@@ -64,7 +64,7 @@ class Assignment < ActiveRecord::Base
   scope :group_assignments, -> { where grade_scope: "Group" }
 
   # Filtering Assignments by where in the interface they are displayed
-  scope :timelineable, -> { where(:include_in_timeline => true) }
+  scope :timelineable, -> { where(include_in_timeline: true) }
 
   # Sorting assignments by different properties
   scope :chronological, -> { order("due_at ASC") }

@@ -35,7 +35,7 @@ feature "grading a group assignment" do
         click_link "Grade group"
       end
 
-      expect(current_path).to eq  group_grade_assignment_path(assignment)
+      expect(current_path).to eq group_grade_assignment_path(assignment)
 
       within(".pageContent") do
         fill_in("grade_raw_score", with: 100)

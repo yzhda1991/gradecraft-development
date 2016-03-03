@@ -15,7 +15,7 @@
             %td.right{:width => "20%"}
               = f.simple_fields_for :challenge_grades, cg do |cgf|
                 = cgf.hidden_field :team_id
-                = cgf.input :status, :as => :hidden, :input_html => { :value => "Graded" }
+                = cgf.input :status, as: :hidden, :input_html => { :value => "Graded" }
                 - if @challenge.challenge_score_levels.present?
                   = cgf.select :score, options_from_collection_for_select(@challenge_score_levels, :value, :name, cg.try(:score)), include_blank: true
                 - else
@@ -28,4 +28,4 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Submit"
-          %li= link_to glyph("times-circle") + "Cancel", challenges_path, :class => "button"
+          %li= link_to glyph("times-circle") + "Cancel", challenges_path, class: "button"

@@ -36,7 +36,7 @@ describe UsersController do
 
     describe "GET edit" do
       it "renders the edit user form" do
-        get :edit, :id => @student.id
+        get :edit, id: @student.id
         expect(assigns(:title)).to eq("Editing #{@student.name}")
         expect(assigns(:user)).to eq(@student)
         expect(response).to render_template(:edit)
@@ -92,7 +92,7 @@ describe UsersController do
 
     describe "GET destroy" do
       it "destroys the user" do
-        expect{ get :destroy, {:id => @student } }.to change(User,:count).by(-1)
+        expect{ get :destroy, {id: @student } }.to change(User,:count).by(-1)
       end
     end
 
@@ -124,7 +124,7 @@ describe UsersController do
     describe "POST update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "gandalf" }
-        post :update_profile, id: @professor.id, :user => params
+        post :update_profile, id: @professor.id, user: params
         expect(response).to redirect_to(dashboard_path)
         expect(@professor.reload.display_name).to eq("gandalf")
       end
@@ -285,14 +285,14 @@ describe UsersController do
     describe "POST update_profile" do
       it "successfully updates the users profile" do
         params = { display_name: "frodo", password: "", password_confirmation: "" }
-        post :update_profile, id: @student.id, :user => params
+        post :update_profile, id: @student.id, user: params
         expect(response).to redirect_to(dashboard_path)
         expect(@student.reload.display_name).to eq("frodo")
       end
 
       it "successfully updates the user's password" do
         params = { password: "test", password_confirmation: "test" }
-        post :update_profile, id: @student.id, :user => params
+        post :update_profile, id: @student.id, user: params
         expect(response).to redirect_to(dashboard_path)
         expect(User.authenticate(@student.email, "test")).to eq @student
       end
@@ -319,7 +319,7 @@ describe UsersController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "1"}).to redirect_to(:root)
+          expect(get route, {id: "1"}).to redirect_to(:root)
         end
       end
     end

@@ -7,7 +7,7 @@ describe "students/syllabus/_assignments" do
     @course = create(:course)
     @assignment_type_1 = create(:assignment_type, course: @course, max_points: 1000)
     @assignment_type_2 = create(:assignment_type, course: @course, max_points: 1000)
-    @assignment = create(:assignment, :assignment_type => @assignment_type_1)
+    @assignment = create(:assignment, assignment_type: @assignment_type_1)
     @course.assignment_types << [@assignment_type_1, @assignment_type_2]
     @assignment_types = @course.assignment_types
     @course.assignments << @assignment
@@ -25,7 +25,7 @@ describe "students/syllabus/_assignments" do
 
     it "does not render instructor menu" do
       render
-      assert_select "li", text: "Grade", :count => 0
+      assert_select "li", text: "Grade", count: 0
     end
 
     it "renders when assignment is student_logged" do
@@ -115,7 +115,7 @@ describe "students/syllabus/_assignments" do
     it "shows a button to see more results if the grade is released" do
       create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: "Released")
       render
-      assert_select "a", text: "See Results", :count => 1
+      assert_select "a", text: "See Results", count: 1
     end
 
     it "shows a button to see the group if a group exists" do
@@ -125,7 +125,7 @@ describe "students/syllabus/_assignments" do
       @group.students << @student
       allow(view).to receive(:term_for).and_return("Group")
       render
-      assert_select "a", text: "See Group", :count => 1
+      assert_select "a", text: "See Group", count: 1
     end
 
     it "shows a button to see the group submission if one is present" do
@@ -136,14 +136,14 @@ describe "students/syllabus/_assignments" do
       @group.students << @student
       @submission = create(:submission, course: @course, assignment: @assignment, group: @group)
       render
-      assert_select "a", text: "See Submission", :count => 1
+      assert_select "a", text: "See Submission", count: 1
     end
 
     it "shows a button to create a group if no group is present" do
       @assignment.update(grade_scope: "Group")
       allow(view).to receive(:term_for).and_return("Group")
       render
-      assert_select "a", text: "Create a Group", :count => 1
+      assert_select "a", text: "Create a Group", count: 1
     end
 
   end
@@ -155,7 +155,7 @@ describe "students/syllabus/_assignments" do
       assign(:students, [@student])
       assign(:grades, {@student.id => nil})
       render
-      assert_select "li", text: "Grade", :count => 1
+      assert_select "li", text: "Grade", count: 1
     end
 
     it "shows a button to edit a grade for an assignment if one is present" do
@@ -164,7 +164,7 @@ describe "students/syllabus/_assignments" do
       assign(:students, [@student])
       create(:grade, course: @course, instructor_modified: true, assignment: @assignment, student: @student, raw_score: 2000, status: "Released")
       render
-      assert_select "li", text: "Edit Grade", :count => 1
+      assert_select "li", text: "Edit Grade", count: 1
     end
 
     it "shows a button to see their submission if one is present" do

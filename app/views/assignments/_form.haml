@@ -27,13 +27,13 @@
           = f.text_field :point_total
 
     .form-item
-      = f.input :open_at, as: :string, :include_blank => true, :input_html => { :class => "datetimepicker" }
+      = f.input :open_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }
 
     .form-item
-      = f.input :due_at, as: :string, :include_blank => true, :input_html => { :class => "datetimepicker" }
+      = f.input :due_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }
 
     .form-item
-      = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { :class => "datetimepicker" }, :label => "Accept until"
+      = f.input :accepts_submissions_until, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }, :label => "Accept until"
       .form_label If you set a due date but no accept-until date, submissions and self-logged grades will be marked as late but always accepted.
 
     .form-item
@@ -55,7 +55,7 @@
     %h4 Assignment Description
     .textarea
       .form_label This will be shown to students on their dashboard, and when they submit their assignment.
-      = f.text_area :description, :class => "froala"
+      = f.text_area :description, class: "froala"
 
   %section
     %h4= "Advanced Settings"
@@ -111,7 +111,7 @@
     .form-item
       = f.label :include_in_timeline, "Timeline"
       = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
-      .form_label{:id => "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :assignment} in the course timeline? Note that #{term_for :assignments} without open or due dates will be excluded automatically.
+      .form_label{id: "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :assignment} in the course timeline? Note that #{term_for :assignments} without open or due dates will be excluded automatically.
 
     .form-item
       = f.label :include_in_predictor, "Predictor"
@@ -127,7 +127,7 @@
       .form-item
         = f.label :hide_analytics, "Hide Analytics?"
         = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
-        .form_label{:id => "hideAnalytics"}  Do you want to hide assignment analytics from students?
+        .form_label{id: "hideAnalytics"}  Do you want to hide assignment analytics from students?
 
     .form-item
       = f.label :student_logged
@@ -205,8 +205,8 @@
                 Refresh page to confirm upload has completed
             - else
               = link_to af.filename, af.url, :target => "_blank"
-              = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", :assignment_id => presenter.assignment.id, :upload_id => af.id } )
+              = link_to "(Remove)", remove_uploads_path({ :model => "AssignmentFile", assignment_id: presenter.assignment.id, :upload_id => af.id } )
   .submit-buttons
     %ul
       %li= f.button :submit, "#{presenter.assignment.persisted? ? 'Update' : 'Create'} #{term_for :assignment}"
-      %li= link_to glyph("times-circle") + "Cancel", assignments_path, :class => "button"
+      %li= link_to glyph("times-circle") + "Cancel", assignments_path, class: "button"

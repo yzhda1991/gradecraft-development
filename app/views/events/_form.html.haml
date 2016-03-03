@@ -6,13 +6,13 @@
     .form-item
       = f.input :name
     .form-item
-      = f.input :open_at, as: :string, :input_html => { :class => "datetimepicker", :value => @event.try(:open_at) }, :label => "Start Date"
+      = f.input :open_at, as: :string, :input_html => { class: "datetimepicker", :value => @event.try(:open_at) }, :label => "Start Date"
     .form-item
-      = f.input :due_at, as: :string, :input_html => { :class => "datetimepicker", :value => @event.try(:due_at) }, :label => "End Date"
+      = f.input :due_at, as: :string, :input_html => { class: "datetimepicker", :value => @event.try(:due_at) }, :label => "End Date"
 
   %section
     %h4 Description
-    = f.text_area :description, :class => "froala"
+    = f.text_area :description, class: "froala"
 
   %section
     %h4 Timeline Settings
@@ -22,5 +22,5 @@
 
   .submit-buttons
     %ul
-      %li= f.button :submit, :class => "button"
-      %li= link_to glyph("times-circle") + "Cancel", events_path, :class => "button"
+      %li= f.button :submit, class: "button"
+      %li= link_to glyph("times-circle") + "Cancel", events_path, class: "button"

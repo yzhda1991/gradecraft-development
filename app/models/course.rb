@@ -66,14 +66,14 @@ class Course < ActiveRecord::Base
     :start_date, :end_date, :pass_term, :fail_term, :syllabus, :hide_analytics,
     :instructors_of_record_ids, :lti_uid
 
-  with_options :dependent => :destroy do |c|
+  with_options dependent: :destroy do |c|
     c.has_many :student_academic_histories
     c.has_many :assignment_types
     c.has_many :assignments
     c.has_many :announcements
     c.has_many :badges
     c.has_many :challenges
-    c.has_many :challenge_grades, :through => :challenges
+    c.has_many :challenge_grades, through: :challenges
     c.has_many :earned_badges
     c.has_many :grade_scheme_elements, -> { extending GradeSchemeElementScoringExtension }
     c.has_many :grades
@@ -86,7 +86,7 @@ class Course < ActiveRecord::Base
     c.has_many :events
   end
 
-  has_many :users, :through => :course_memberships
+  has_many :users, through: :course_memberships
   accepts_nested_attributes_for :users
   accepts_nested_attributes_for :assignments
 
@@ -95,16 +95,16 @@ class Course < ActiveRecord::Base
   accepts_nested_attributes_for :grade_scheme_elements, allow_destroy: true
 
   validates_presence_of :name, :courseno
-  validates_numericality_of :max_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
-  validates_numericality_of :min_group_size, :allow_nil => true, :greater_than_or_equal_to => 1
+  validates_numericality_of :max_group_size, allow_nil: true, greater_than_or_equal_to: 1
+  validates_numericality_of :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
 
-  validates_numericality_of :total_assignment_weight, :allow_blank => true
-  validates_numericality_of :max_assignment_weight, :allow_blank => true
-  validates_numericality_of :max_assignment_types_weighted, :allow_blank => true
-  validates_numericality_of :default_assignment_weight, :allow_blank => true
-  validates_numericality_of :point_total, :allow_blank => true
+  validates_numericality_of :total_assignment_weight, allow_blank: true
+  validates_numericality_of :max_assignment_weight, allow_blank: true
+  validates_numericality_of :max_assignment_types_weighted, allow_blank: true
+  validates_numericality_of :default_assignment_weight, allow_blank: true
+  validates_numericality_of :point_total, allow_blank: true
 
-  validates_format_of :twitter_hashtag, :with => /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, :allow_blank => true, :length   => { :within => 3..20 }
+  validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
 
   validate :max_more_than_min
 
@@ -225,7 +225,7 @@ class Course < ActiveRecord::Base
     end
   end
 
-  #total number of points 'available' in the course - sometimes set by an instructor as a cap, sometimes just the sum of all assignments
+  # total number of points 'available' in the course - sometimes set by an instructor as a cap, sometimes just the sum of all assignments
   def total_points
     point_total || assignments.sum("point_total")
   end
@@ -267,7 +267,7 @@ class Course < ActiveRecord::Base
   end
 
   def assignment_weight_for_student(student)
-    student.assignment_weights.where(:course_id => self.id).pluck("weight").sum
+    student.assignment_weights.where(course_id: self.id).pluck("weight").sum
   end
 
   def assignment_weight_spent_for_student(student)
@@ -275,20 +275,20 @@ class Course < ActiveRecord::Base
   end
 
   def score_for_student(student)
-    course_memberships.where(:user_id => student).first.score
+    course_memberships.where(user_id: student).first.score
   end
 
-  #Descriptive stats of the grades
+  # Descriptive stats of the grades
   def minimum_course_score
-    CourseMembership.where(:course => self, :auditing => false, :role => "student").minimum("score")
+    CourseMembership.where(course: self, auditing: false, role: "student").minimum("score")
   end
 
   def maximum_course_score
-    CourseMembership.where(:course => self, :auditing => false, :role => "student").maximum("score")
+    CourseMembership.where(course: self, auditing: false, role: "student").maximum("score")
   end
 
   def average_course_score
-    CourseMembership.where(:course => self, :auditing => false, :role => "student").average("score").to_i
+    CourseMembership.where(course: self, auditing: false, role: "student").average("score").to_i
   end
 
   def student_count
@@ -323,7 +323,7 @@ class Course < ActiveRecord::Base
       .collect(&:id)
   end
 
-  #badges
+  # badges
   def course_badge_count
     badges.count
   end

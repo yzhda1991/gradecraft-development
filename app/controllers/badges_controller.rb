@@ -1,7 +1,7 @@
 class BadgesController < ApplicationController
   include SortsPosition
 
-  before_filter :ensure_staff?, :except => [:predictor_data, :predict_times_earned]
+  before_filter :ensure_staff?, except: [:predictor_data, :predict_times_earned]
   before_filter :ensure_student?, only: [:predict_times_earned]
   before_action :find_badge, only: [:show, :edit, :update, :destroy]
 
@@ -77,9 +77,9 @@ class BadgesController < ApplicationController
     respond_to do |format|
       format.json do
         if @prediction_saved
-          render :json => {id: @badge.id, times_earned: @badgePrediction.times_earned}
+          render json: {id: @badge.id, times_earned: @badgePrediction.times_earned}
         else
-          render :json => { errors:  @badgePrediction.errors.full_messages }, :status => 400
+          render json: { errors:  @badgePrediction.errors.full_messages }, status: 400
         end
       end
     end

@@ -32,7 +32,7 @@ describe BadgesController do
 
     describe "GET show" do
       it "displays the badge page" do
-        get :show, :id => @badge.id
+        get :show, id: @badge.id
         expect(assigns(:title)).to eq(@badge.name)
         expect(assigns(:badge)).to eq(@badge)
         expect(response).to render_template(:show)
@@ -47,7 +47,7 @@ describe BadgesController do
           team = create(:team, course: @course)
           team.students << @student
 
-          get :show, { :id => @badge.id, :team_id => team.id }
+          get :show, { id: @badge.id, team_id: team.id }
           expect(assigns(:team)).to eq(team)
           expect(assigns(:students)).to eq([@student])
         end
@@ -62,7 +62,7 @@ describe BadgesController do
           team = create(:team, course: @course)
           team.students << @student
 
-          get :show, :id => @badge.id
+          get :show, id: @badge.id
           expect(assigns(:students)).to include(@student)
           expect(assigns(:students)).to include(other_student)
         end
@@ -80,7 +80,7 @@ describe BadgesController do
 
     describe "GET edit" do
       it "renders the edit badge form" do
-        get :edit, :id => @badge.id
+        get :edit, id: @badge.id
         expect(assigns(:title)).to eq("Editing #{@badge.name}")
         expect(assigns(:badge)).to eq(@badge)
         expect(response).to render_template(:edit)
@@ -90,14 +90,14 @@ describe BadgesController do
     describe "POST create" do
       it "creates the badge with valid attributes"  do
         params = attributes_for(:badge)
-        expect{ post :create, :badge => params }.to change(Badge,:count).by(1)
+        expect{ post :create, badge: params }.to change(Badge,:count).by(1)
       end
 
       it "manages file uploads" do
         Badge.delete_all
         params = attributes_for(:badge)
-        params.merge! :badge_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
-        post :create, :badge => params
+        params.merge! badge_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
+        post :create, badge: params
         badge = Badge.where(name: params[:name]).last
         expect expect(badge.badge_files.count).to eq(1)
       end
@@ -114,20 +114,20 @@ describe BadgesController do
 
       it "updates the badge" do
         params = { name: "new name" }
-        post :update, id: @badge_2.id, :badge => params
+        post :update, id: @badge_2.id, badge: params
         expect(response).to redirect_to(badges_path)
         expect(@badge_2.reload.name).to eq("new name")
       end
 
       it "manages file uploads" do
-        params = {:badge_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
-        post :update, id: @badge_2.id, :badge => params
+        params = {badge_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
+        post :update, id: @badge_2.id, badge: params
         expect expect(@badge_2.badge_files.count).to eq(1)
       end
 
       it "redirects to edit form with invalid attributes" do
         params = { name: nil }
-        post :update, id: @badge.id, :badge => params
+        post :update, id: @badge.id, badge: params
         expect(response).to render_template(:edit)
       end
     end
@@ -137,7 +137,7 @@ describe BadgesController do
         second_badge = create(:badge)
         @course.badges << second_badge
         params = [second_badge.id, @badge.id]
-        post :sort, :badge => params
+        post :sort, badge: params
 
         expect(@badge.reload.position).to eq(2)
         expect(second_badge.reload.position).to eq(1)
@@ -147,7 +147,7 @@ describe BadgesController do
     describe "GET destroy" do
       it "destroys the badge" do
         another_badge = create :badge, course: @course
-        expect{ get :destroy, :id => another_badge }.to change(Badge,:count).by -1
+        expect{ get :destroy, id: another_badge }.to change(Badge,:count).by -1
       end
     end
 
@@ -159,13 +159,13 @@ describe BadgesController do
 
       it "adds the prediction data to the badge model with prediction no less than earned" do
         prediction = create(:predicted_earned_badge, badge: @badge, student: @student, times_earned: 4)
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, times_earned: 0 })
       end
 
       context "with a student id" do
         it "assigns the badges with no call to update" do
-          get :predictor_data, format: :json, :id => @student.id
+          get :predictor_data, format: :json, id: @student.id
           expect(assigns(:student)).to eq(@student)
           predictor_badge_attributes do |attr|
             expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
@@ -205,7 +205,7 @@ describe BadgesController do
 
       describe "GET predictor_data" do
         it "assigns the student and badges with the call to update" do
-          get :predictor_data, format: :json, :id => @student.id
+          get :predictor_data, format: :json, id: @student.id
           expect(assigns(:student)).to eq(@student)
           @badge.reload
           predictor_badge_attributes.each do |attr|
@@ -217,7 +217,7 @@ describe BadgesController do
 
         it "adds the prediction data to the badge model" do
           prediction = create(:predicted_earned_badge, badge: @badge, student: @student)
-          get :predictor_data, format: :json, :id => @student.id
+          get :predictor_data, format: :json, id: @student.id
           expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, times_earned: prediction.times_earned })
         end
       end
@@ -244,7 +244,7 @@ describe BadgesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "1"}).to redirect_to(:root)
+          expect(get route, {id: "1"}).to redirect_to(:root)
         end
       end
     end

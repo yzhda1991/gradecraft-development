@@ -15,14 +15,14 @@
   %table.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
     %thead
       %tr
-        %th{:scope => "col"} Name
-        %th{:scope => "col"} Course No
-        %th{:scope => "col"} Year
-        %th{:scope => "col"} Semester
-        %th{:scope => "col"} Badges
-        %th{:scope => "col"} Total Points
+        %th{scope: "col"} Name
+        %th{scope: "col"} Course No
+        %th{scope: "col"} Year
+        %th{scope: "col"} Semester
+        %th{scope: "col"} Badges
+        %th{scope: "col"} Total Points
         %th
-        %th{:scope => "col", :style => "min-width: 250px" }
+        %th{scope: "col", :style => "min-width: 250px" }
           %span.sr-only Actions
     %tbody
       - @courses.each do |course|
@@ -39,7 +39,7 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph(:eye) + "See", course_path(course), :class => "button"
-                %li= link_to glyph(:edit) + "Edit", edit_course_path(course), :class => "button"
-                %li= link_to glyph(:trash) + "Delete", course, :class => "button", :id => "course-id-#{course.id}", :data => { confirm: "This will delete #{course.name} - are you sure?" }, :method => :delete
-                %li= link_to glyph(:copy) + "Copy", copy_courses_path(:id => course.id), :class => "button", :method => :copy
+                %li= link_to glyph(:eye) + "See", course_path(course), class: "button"
+                %li= link_to glyph(:edit) + "Edit", edit_course_path(course), class: "button"
+                %li= link_to glyph(:trash) + "Delete", course, class: "button", id: "course-id-#{course.id}", data: { confirm: "This will delete #{course.name} - are you sure?" }, :method => :delete
+                %li= link_to glyph(:copy) + "Copy", copy_courses_path(id: course.id), class: "button", :method => :copy

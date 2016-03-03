@@ -11,7 +11,7 @@ class Criterion < ActiveRecord::Base
 
   after_initialize :set_defaults
   after_create :generate_default_levels, if: :add_default_levels?
-  #after_save :update_full_credit, if: :add_default_levels?
+  # after_save :update_full_credit, if: :add_default_levels?
 
   validates :max_points, presence: true
   validates :name, presence: true, length: { maximum: 30 }
@@ -41,7 +41,7 @@ class Criterion < ActiveRecord::Base
   def generate_default_levels
     @full_credit_level = create_full_credit_level
     create_no_credit_level
-    #update_attributes full_credit_level_id: @full_credit_level[:id]
+    # update_attributes full_credit_level_id: @full_credit_level[:id]
   end
 
   def update_full_credit

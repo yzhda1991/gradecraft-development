@@ -31,5 +31,5 @@
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph(:edit) + "Edit", edit_event_path(event), :class => "button"
-                %li= link_to glyph(:trash) + "Delete", event, :method => :delete, :data => { :confirm => "Are you sure?" }, :class => "button"
+                %li= link_to glyph(:edit) + "Edit", edit_event_path(event), class: "button"
+                %li= link_to glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }, class: "button"

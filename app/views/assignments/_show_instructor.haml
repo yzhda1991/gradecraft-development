@@ -9,7 +9,7 @@
   = render "layouts/alerts"
 
   #tabs.ui-tabs.ui-widget
-    %ul.ui-tabs-nav{:role => "tablist"}
+    %ul.ui-tabs-nav{role: "tablist"}
       %li
         %a{ "href" => "#tab"} Grades
       %li
@@ -21,21 +21,21 @@
         %li
           %a{ :href => "#tabt4"} Class Analytics
 
-    #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
-      .ui-tabs-panel#tab.active{:role => "tabpanel", "aria-hidden" => false }
+    #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
+      .ui-tabs-panel#tab.active{role: "tabpanel", "aria-hidden" => false }
         - if presenter.group_assignment?
           = render partial: "assignments/group/group_show", locals: { presenter: presenter }
         - else
           = render partial: "assignments/individual/individual_show", locals: { presenter: presenter }
-      .ui-tabs-panel#tabt2{:role => "tabpanel", "aria-hidden" => false }
+      .ui-tabs-panel#tabt2{role: "tabpanel", "aria-hidden" => false }
         = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
 
       - if presenter.rubric_designed?
-        .content#tabt3{:role => "tabpanel", "aria-hidden" => false }
+        .content#tabt3{role: "tabpanel", "aria-hidden" => false }
           %br
           = render partial: "assignments/rubric_preview", locals: { presenter: presenter }
       - if presenter.has_grades?
-        .ui-tabs-panel#tabt4{:role => "tabpanel", "aria-hidden" => false }
+        .ui-tabs-panel#tabt4{role: "tabpanel", "aria-hidden" => false }
           - if presenter.group_assignment?
             = render partial: "grades/analytics/group_analytics", locals: { presenter: presenter }
           - else

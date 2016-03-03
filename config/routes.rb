@@ -60,7 +60,7 @@ GradeCraft::Application.routes.draw do
       get :settings
       post "copy" => "assignments#copy"
       get "export_structure"
-      get "weights" => "assignment_weights#mass_edit", :as => :mass_edit_weights
+      get "weights" => "assignment_weights#mass_edit", as: :mass_edit_weights
     end
     member do
       get "mass_grade" => "grades#mass_edit", as: :mass_grade
@@ -193,7 +193,7 @@ GradeCraft::Application.routes.draw do
   end
   resources :course_memberships
 
-  post "/current_course/change" => "current_courses#change", :as => :change_current_course
+  post "/current_course/change" => "current_courses#change", as: :change_current_course
   get "current_course" => "current_courses#show"
 
   get "leaderboard" => "students#leaderboard"
@@ -259,11 +259,11 @@ GradeCraft::Application.routes.draw do
   get "home" => "pages#home"
   get "dashboard" => "info#dashboard"
   get "brand_and_style" => "pages#brand_and_style_guidelines"
-  root :to => "pages#home"
+  root to: "pages#home"
 
   #13. Users
   %w{students gsis professors admins}.each do |role|
-    get "users/#{role}/new" => "users#new", :as => "new_#{role.singularize}", :role => role.singularize
+    get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}", role: role.singularize
   end
 
   resources :users do
@@ -314,8 +314,8 @@ GradeCraft::Application.routes.draw do
   post "auth/lti/callback", to: "user_sessions#lti_create"
   get "auth/failure" => "pages#auth_failure", as: :auth_failure
 
-  get "login" => "user_sessions#new", :as => :login
-  get "logout" => "user_sessions#destroy", :as => :logout
+  get "login" => "user_sessions#new", as: :login
+  get "logout" => "user_sessions#destroy", as: :logout
   get "reset" => "user_sessions#new"
 
   #SAML
@@ -324,7 +324,7 @@ GradeCraft::Application.routes.draw do
   get "saml/metadata"
   get "saml/logout"
 
-  get "lti/:provider/launch", to: "lti#launch", :as => :launch_lti_provider
+  get "lti/:provider/launch", to: "lti#launch", as: :launch_lti_provider
 
   #15. Uploads
   resource :uploads do

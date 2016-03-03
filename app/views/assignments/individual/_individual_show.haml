@@ -13,6 +13,6 @@
   - if presenter.assignment.release_necessary? && presenter.has_grades?
     .right
       %br
-      = submit_tag "Update Selected Grade Statuses", :class => "button disabled", disabled: true, data: { behavior: "selected-individual-grades-command" }
+      = submit_tag "Update Selected Grade Statuses", class: "button disabled", disabled: true, data: { behavior: "selected-individual-grades-command" }
 
   .clear

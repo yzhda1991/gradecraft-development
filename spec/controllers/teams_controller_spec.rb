@@ -28,7 +28,7 @@ describe TeamsController do
 
     describe "GET show" do
       it "returns the team show page" do
-        get :show, :id => @team.id
+        get :show, id: @team.id
         expect(assigns(:title)).to eq(@team.name)
         expect(assigns(:team)).to eq(@team)
         expect(response).to render_template(:show)
@@ -46,7 +46,7 @@ describe TeamsController do
 
     describe "GET edit" do
       it "assigns name " do
-        get :edit, :id => @team.id
+        get :edit, id: @team.id
         expect(assigns(:title)).to eq("Editing #{@team.name}")
         expect(assigns(:team)).to eq(@team)
         expect(response).to render_template(:edit)
@@ -57,7 +57,7 @@ describe TeamsController do
       it "creates the team with valid attributes"  do
         params = attributes_for(:team)
         params[:id] = @team
-        expect{ post :create, :team => params }.to change(Team,:count).by(1)
+        expect{ post :create, team: params }.to change(Team,:count).by(1)
       end
 
       it "redirects to new from with invalid attributes" do
@@ -68,7 +68,7 @@ describe TeamsController do
     describe "POST update" do
       it "updates the team" do
         params = { name: "new name" }
-        post :update, id: @team.id, :team => params
+        post :update, id: @team.id, team: params
         expect(response).to redirect_to(team_path(@team))
         expect(@team.reload.name).to eq("new name")
       end
@@ -76,7 +76,7 @@ describe TeamsController do
 
     describe "GET destroy" do
       it "destroys the team" do
-        expect{ get :destroy, :id => @team }.to change(Team,:count).by(-1)
+        expect{ get :destroy, id: @team }.to change(Team,:count).by(-1)
       end
     end
   end
@@ -108,7 +108,7 @@ describe TeamsController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "10"}).to redirect_to(:root)
+          expect(get route, {id: "10"}).to redirect_to(:root)
         end
       end
     end

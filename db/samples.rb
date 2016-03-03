@@ -408,7 +408,7 @@ end
       if config[:grades]
         # Used to set point total
         # You can also set a custom point total in the grade attributes:
-        # :point_total => Proc.new { rand(20000) }
+        # point_total: Proc.new { rand(20000) }
         grade_attributes = config[:grade_attributes] || {}
         assignment_points_total = config[:attributes][:point_total] || @challenge_default_config[:attributes][:point_total]
 

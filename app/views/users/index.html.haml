@@ -9,7 +9,7 @@
 
   - if current_course.has_teams?
     .team-filter
-      = form_tag users_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+      = form_tag users_path, name: "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         %label
           .sr-only Select #{term_for :team}
         = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
@@ -29,7 +29,7 @@
         %tr
           - user_is_student = user.is_student?(current_course)
           - user_is_staff = user.is_staff?(current_course)
-          - course_membership = user.course_memberships.where(:course_id => current_course.id).first
+          - course_membership = user.course_memberships.where(course_id: current_course.id).first
           %td
             - if user.avatar_file_name.present?
               %img.img-rounded{:src => user.avatar_file_name, :width => 30}
@@ -52,8 +52,8 @@
             .right
               %ul.button-bar
                 - if user_is_student
-                  %li= link_to glyph(:dashboard) + "Dashboard", student_path(user), :class => "button" if user_is_student
+                  %li= link_to glyph(:dashboard) + "Dashboard", student_path(user), class: "button" if user_is_student
                 - elsif user_is_staff
-                  %li= link_to glyph(:dashboard) + "Dashboard", staff_path(user), :class => "button" if user_is_staff
-                %li= link_to glyph(:edit) + "Edit", edit_user_path(user), :class => "button"
-                %li= link_to glyph(:trash) + "Delete", course_membership, :class => "button", :data => { confirm: "This will delete the student from your course - Are you sure?" }, :method => :delete
+                  %li= link_to glyph(:dashboard) + "Dashboard", staff_path(user), class: "button" if user_is_staff
+                %li= link_to glyph(:edit) + "Edit", edit_user_path(user), class: "button"
+                %li= link_to glyph(:trash) + "Delete", course_membership, class: "button", data: { confirm: "This will delete the student from your course - Are you sure?" }, :method => :delete

@@ -12,12 +12,12 @@ module Gradecraft
     def to_s
       string
     end
-    alias_method :to_str,  :to_s
+    alias to_str  to_s
 
     def ==(other)
       to_s == other
     end
-    alias_method :eql?, :==
+    alias eql? ==
 
     def method_missing(m, *args, &blk)
       if respond_to?(m)

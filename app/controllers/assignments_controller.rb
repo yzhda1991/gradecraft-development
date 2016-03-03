@@ -10,7 +10,7 @@ class AssignmentsController < ApplicationController
     @assignment_types = current_course.assignment_types.includes(:assignments)
   end
 
-  #Gives the instructor the chance to quickly check all assignment settings for the whole course
+  # Gives the instructor the chance to quickly check all assignment settings for the whole course
   def settings
     @title = "Review #{term_for :assignment} Settings"
     @assignment_types = current_course.assignment_types.includes(:assignments)

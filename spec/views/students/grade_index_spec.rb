@@ -21,7 +21,7 @@ describe "students/grade_index" do
 
   it "renders successfully" do
     render
-    assert_select "h3", :count => 1
+    assert_select "h3", count: 1
   end
 
 end

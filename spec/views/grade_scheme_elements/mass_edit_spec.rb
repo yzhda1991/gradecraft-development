@@ -19,14 +19,14 @@ describe "grade_scheme_elements/mass_edit" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Edit Grading Scheme", :count => 1
+    assert_select "h3", text: "Edit Grading Scheme", count: 1
   end
 
   it "renders the breadcrumbs" do
     render
-    assert_select ".content-nav", :count => 1
+    assert_select ".content-nav", count: 1
     assert_select ".breadcrumbs" do
-      assert_select "a", :count => 4
+      assert_select "a", count: 4
     end
   end
 end

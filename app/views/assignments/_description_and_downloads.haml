@@ -32,7 +32,7 @@
           - @group.students.each do |student|
             %li= student.name
       - else
-        = link_to glyph(:users) + "Create a #{term_for :group}", new_group_path, :class => "button"
+        = link_to glyph(:users) + "Create a #{term_for :group}", new_group_path, class: "button"
 
     - if presenter.assignment.is_unlockable?
       %hr.dotted

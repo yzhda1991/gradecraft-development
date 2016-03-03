@@ -43,7 +43,7 @@ describe "info/dashboard" do
     it "shows the timeline" do
       allow(view).to receive(:current_user).and_return(@professor)
       render
-      assert_select "#time_line", :count => 1
+      assert_select "#time_line", count: 1
     end
 
   end
@@ -54,7 +54,7 @@ describe "info/dashboard" do
       allow(view).to receive(:current_user).and_return(@student_1)
       allow(view).to receive(:current_student).and_return(@student_1)
       render
-      assert_select "#time_line", :count => 1
+      assert_select "#time_line", count: 1
     end
 
   end
@@ -64,7 +64,7 @@ describe "info/dashboard" do
     it "shows the timeline" do
       allow(view).to receive(:current_user).and_return(@gsi)
       render
-      assert_select "#time_line", :count => 1
+      assert_select "#time_line", count: 1
     end
 
   end

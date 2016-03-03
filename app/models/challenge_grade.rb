@@ -4,7 +4,7 @@ class ChallengeGrade < ActiveRecord::Base
 
   belongs_to :course
   belongs_to :challenge
-  belongs_to :team, :autosave => true
+  belongs_to :team, autosave: true
   belongs_to :submission # Optional
   belongs_to :task # Optional
 
@@ -12,13 +12,13 @@ class ChallengeGrade < ActiveRecord::Base
 
   validates_presence_of :team, :challenge
 
-  delegate :name, :description, :due_at, :point_total, :to => :challenge
+  delegate :name, :description, :due_at, :point_total, to: :challenge
 
   # @mz todo: add specs
   scope :student_visible, -> { joins(:challenge).where(student_visible_sql) }
 
-  #TODO: Need to bring this in and resolve dup challenge grades in production
-  #validates :challenge_id, :uniqueness => {:scope => :team_id}
+  # TODO: Need to bring this in and resolve dup challenge grades in production
+  # validates :challenge_id, uniqueness: {scope: :team_id}
 
   # @mz todo: add specs
   def recalculate_student_and_team_scores

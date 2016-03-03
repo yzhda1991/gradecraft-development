@@ -4,7 +4,7 @@ namespace :teams do
   # students in each team as gsis
   #
   desc "Set the first member of each team as a gsi (for testing in development)"
-  task :development_db_create_leaders => :environment do
+  task development_db_create_leaders: :environment do
     raise "This task should only be run in development!" unless Rails.env == "development"
     Team.all.each do |team|
       leaders = []
@@ -29,7 +29,7 @@ namespace :teams do
   # after running the transfer, they should be listed as leaders, and not students
   #
   desc "Outputs a list of team leaders and students to the console"
-  task :puts_memberships => :environment do
+  task puts_memberships: :environment do
     team_member_list = Hash.new {|h, k| h[k] = {students: [], leaders: []} }
     Team.all.each do |team|
       team.leaders.each do |leader|
@@ -58,7 +58,7 @@ namespace :teams do
   # for the course. They will also be removed from the team memberships
   #
   desc "Tranfer team leaders from team membership to team leadership"
-  task :transfer_leaderships => :environment do
+  task transfer_leaderships: :environment do
     Team.all.each do |team|
       team.students.each do |student|
         if student.role(team.course) == "gsi"

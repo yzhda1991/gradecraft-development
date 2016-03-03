@@ -28,7 +28,7 @@ describe AssignmentTypeWeightsController do
 
     describe "GET mass_edit" do
       it "assigns params" do
-        get :mass_edit, :student_id => @student.id
+        get :mass_edit, student_id: @student.id
         expect(assigns(:title)).to eq("Editing #{@student.name}'s multiplier Choices")
         expect(response).to render_template(:mass_edit)
       end
@@ -110,7 +110,7 @@ describe AssignmentTypeWeightsController do
 
     describe "GET student predictor data" do
       it "returns weightable assignment type ids and all course info regarding weighting assignments" do
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignment_types_weightable)).to eq([@assignment_type_weightable.id])
         expect(assigns(:total_weights)).to eq(@course.total_assignment_weight)
         expect(assigns(:close_at).to_s).to eq(@course.assignment_weight_close_at.to_s)
@@ -120,7 +120,7 @@ describe AssignmentTypeWeightsController do
       end
 
       it "returns assignment types as json with current student if id present and no call to update" do
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:student)).to eq(@student)
         expect(assigns(:update_weights)).to be_falsey
         expect(response).to render_template(:predictor_data)
@@ -146,7 +146,7 @@ describe AssignmentTypeWeightsController do
 
     describe "GET mass_edit" do
       it "assigns params" do
-        get :mass_edit, :student_id => @student.id
+        get :mass_edit, student_id: @student.id
         expect(assigns(:title)).to eq("Editing My multiplier Choices")
         expect(response).to render_template(:mass_edit)
       end
@@ -237,20 +237,20 @@ describe AssignmentTypeWeightsController do
       end
 
       it "updates assignment weights" do
-        post :update, :id => @assignment_type_weightable.id, :weight => 2, :format => :json
+        post :update, id: @assignment_type_weightable.id, weight: 2, format: :json
         expect(@student.weight_for_assignment_type(@assignment_type_weightable)).to eq(2)
         expect(JSON.parse(response.body)).to eq({ "assignment_type" => @assignment_type_weightable.id, "weight" => 2 })
       end
 
       it "returns error message when assignment type is not weightable" do
-        post :update, :id => @assignment_type_not_weightable.id, :weight => 2, :format => :json
+        post :update, id: @assignment_type_not_weightable.id, weight: 2, format: :json
         expect(@student.weight_for_assignment_type(@assignment_type_not_weightable)).to eq(0)
         expect(JSON.parse(response.body)).to eq({"errors"=>"Unable to update assignment type weight"})
       end
 
       it "updates points for corresponding grades" do
         grade = create :released_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
-        post :update, :id => @assignment_type_weightable.id, :weight => 2, :format => :json
+        post :update, id: @assignment_type_weightable.id, weight: 2, format: :json
         expect(@assignment_type_weightable.visible_score_for_student(@student)).to eq(2000)
       end
     end

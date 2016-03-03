@@ -1,12 +1,12 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  before_filter :ensure_staff?, :except => [:timeline]
+  before_filter :ensure_staff?, except: [:timeline]
 
   def index
     @title = "Course Index"
     @courses = current_user.courses
-    #Used to return the course list to search
+    # Used to return the course list to search
     respond_to do |format|
       format.html { }
       format.json { render json: @courses.to_json(only: [:id, :name, :courseno,
@@ -88,7 +88,7 @@ class CoursesController < ApplicationController
     if @course.update_attributes(params[:course])
       redirect_to dashboard_path
     else
-      render action: "timeline_settings", :course => @course
+      render action: "timeline_settings", course: @course
     end
   end
 
@@ -103,7 +103,7 @@ class CoursesController < ApplicationController
     if @course.update_attributes(params[:course])
       respond_with @course
     else
-      render action: "predictor_settings", :course => @course
+      render action: "predictor_settings", course: @course
     end
   end
 

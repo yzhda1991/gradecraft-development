@@ -1,28 +1,28 @@
 module Analytics::Aggregate
   GRANULARITIES = {
-    :all_time => nil,
-    :yearly => 1.year.to_i,
-    :monthly => 1.month.to_i,
-    :weekly => 1.week.to_i,
-    :daily => 1.day.to_i,
-    :hourly => 1.hour.to_i,
-    :minutely => 1.minute.to_i
+    all_time: nil,
+    yearly: 1.year.to_i,
+    monthly: 1.month.to_i,
+    weekly: 1.week.to_i,
+    daily: 1.day.to_i,
+    hourly: 1.hour.to_i,
+    minutely: 1.minute.to_i
   }
 
   RANGE_SELECTS = {
-    :past_year => lambda { (1.year.ago..Time.now) },
-    :past_month => lambda { (1.month.ago..Time.now) },
-    :past_week => lambda { (1.week.ago..Time.now) },
-    :past_day => lambda { (1.day.ago..Time.now) },
-    :past_hour => lambda { (1.hour.ago..Time.now) },
+    past_year: lambda { (1.year.ago..Time.now) },
+    past_month: lambda { (1.month.ago..Time.now) },
+    past_week: lambda { (1.week.ago..Time.now) },
+    past_day: lambda { (1.day.ago..Time.now) },
+    past_hour: lambda { (1.hour.ago..Time.now) },
   }
 
   AUTO_RANGE_GRANULARITIES = {
-    :past_year => :monthly,
-    :past_month => :weekly,
-    :past_week => :daily,
-    :past_day => :hourly,
-    :past_hour => :minutely
+    past_year: :monthly,
+    past_month: :weekly,
+    past_week: :daily,
+    past_day: :hourly,
+    past_hour: :minutely
   }
 
   def self.included(base)
@@ -68,7 +68,7 @@ module Analytics::Aggregate
 
     def incr(event)
       decorated_event = decorate_event(event)
-      self.aggregate_scope(event).find_and_modify({"$inc" => upsert_hash(decorated_event)}, {"upsert" => "true", :new => true})
+      self.aggregate_scope(event).find_and_modify({"$inc" => upsert_hash(decorated_event)}, {"upsert" => "true", new: true})
     end
 
     def aggregate_scope(event)
@@ -105,9 +105,9 @@ module Analytics::Aggregate
       # First decrement
       hash = downsert_hash(event)
       scope = self.aggregate_scope(event)
-      #STDOUT.puts "  Decrementing #{self.name} #{scope.selector}"
+      # STDOUT.puts "  Decrementing #{self.name} #{scope.selector}"
 
-      record = scope.find_and_modify({"$inc" => hash}, {:new => true})
+      record = scope.find_and_modify({ "$inc" => hash }, { new: true })
 
       # Then, remove if values empty (this is the opposite of the 'upsert' => 'true' in the #incr method)
       unset_keys = {}
@@ -140,7 +140,7 @@ module Analytics::Aggregate
         end
 
       end
-      #STDOUT.puts "  Unset keys: #{unset_keys}" if unset_keys.any?
+      # STDOUT.puts "  Unset keys: #{unset_keys}" if unset_keys.any?
       record
     end
 

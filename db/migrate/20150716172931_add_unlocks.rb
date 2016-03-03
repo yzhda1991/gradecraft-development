@@ -1,8 +1,8 @@
 class AddUnlocks < ActiveRecord::Migration
   def change
 
-  	add_column :assignments, :visible_when_locked, :boolean, :default => true
-  	add_column :badges, :visible_when_locked, :boolean, :default => true
+  	add_column :assignments, :visible_when_locked, :boolean, default: true
+  	add_column :badges, :visible_when_locked, :boolean, default: true
 
   	create_table :unlock_conditions do |t|
   		t.integer :unlockable_id

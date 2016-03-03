@@ -1,5 +1,5 @@
 class EarnedBadgeExporter
-  #all awarded badges for a single course
+  # all awarded badges for a single course
   def earned_badges_for_course(earned_badges)
     CSV.generate do |csv|
       csv.add_row baseline_headers

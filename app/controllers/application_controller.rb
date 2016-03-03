@@ -2,7 +2,7 @@ require 'application_responder'
 
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
-  #Canable details
+  # Canable details
   include Omniauth::Lti::Context
   include Canable::Enforcers
   include CustomNamedRoutes
@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   include CourseTerms
   include ZipUtils
 
-  delegate :can_view?, :to => :current_user
+  delegate :can_view?, to: :current_user
   helper_method :can_view?
   hide_action :can_view?
 
@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
     redirect_to request.protocol + "www." + request.host_with_port + request.fullpath if !/^www/.match(request.host)
   end
 
-  before_filter :require_login, :except => [:not_authenticated]
+  before_filter :require_login, except: [:not_authenticated]
   before_filter :increment_page_views
   before_filter :get_course_scores
 
@@ -40,11 +40,11 @@ class ApplicationController < ActionController::Base
         User.increment_counter(:visit_count, @user.id)
         redirect_to dashboard_path
       else
-        redirect_to root_url, :alert => "Please login first."
-        #We ultimately need to handle Cosign approved users who don't have GradeCraft accounts
+        redirect_to root_url, alert: "Please login first."
+        # We ultimately need to handle Cosign approved users who don't have GradeCraft accounts
       end
     else
-      redirect_to root_path, :alert => "Please login first."
+      redirect_to root_path, alert: "Please login first."
     end
   end
 
@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
     begin
       file_creation.call
       zip_data = ZipUtils::Zip.new(temp_dir)
-      send_data(zip_data.zipstring, :type => "application/zip", :filename => "#{export_name}.zip")
+      send_data(zip_data.zipstring, type: "application/zip", filename: "#{export_name}.zip")
     ensure
       FileUtils.remove_entry_secure temp_dir
     end

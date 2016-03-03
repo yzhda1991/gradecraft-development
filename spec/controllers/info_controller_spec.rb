@@ -141,7 +141,7 @@ describe InfoController do
 
     describe "GET final_grades" do
       it "retrieves the final_grades download" do
-        get :final_grades, :format => :csv
+        get :final_grades, format: :csv
         expect(response.body).to include("First Name,Last Name,Email,Username,Score,Grade")
       end
     end
@@ -168,7 +168,7 @@ describe InfoController do
         @student.teams << @team
         @student_2 = create(:user)
         @student_2.courses << @course
-        get :choices, :team_id => @team.id
+        get :choices, team_id: @team.id
         expect(response).to render_template(:choices)
         expect(assigns(:students)).to eq([@student])
       end

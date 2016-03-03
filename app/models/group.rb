@@ -11,21 +11,21 @@ class Group < ActiveRecord::Base
 
   belongs_to :course
 
-  has_many :assignment_groups, :dependent => :destroy
-  has_many :assignments, :through => :assignment_groups
+  has_many :assignment_groups, dependent: :destroy
+  has_many :assignments, through: :assignment_groups
   accepts_nested_attributes_for :assignment_groups
 
-  has_many :group_memberships, :dependent => :destroy
-  has_many :students, :through => :group_memberships
+  has_many :group_memberships, dependent: :destroy
+  has_many :students, through: :group_memberships
   accepts_nested_attributes_for :group_memberships
 
   has_many :grades
   has_many :proposals
-  accepts_nested_attributes_for :proposals, allow_destroy: true, :reject_if => proc { |a| a["proposal"].blank? }
+  accepts_nested_attributes_for :proposals, allow_destroy: true, reject_if: proc { |a| a["proposal"].blank? }
 
   has_many :submissions
 
-  has_many :earned_badges, :as => :group
+  has_many :earned_badges, as: :group
 
   before_validation :cache_associations
 
@@ -39,7 +39,7 @@ class Group < ActiveRecord::Base
 
   clean_html :text_proposal
 
-  #Instructors need to approve a group before the group is allowed to proceed
+  # Instructors need to approve a group before the group is allowed to proceed
   def approved?
     approved == "Approved"
   end
@@ -52,14 +52,14 @@ class Group < ActiveRecord::Base
     approved == "Pending"
   end
 
-  #Group submissions
+  # Group submissions
   def submission_for_assignment(assignment)
     submissions_by_assignment_id[assignment.id].try(:first)
   end
 
   private
 
-  #Checking to make sure any constraints the instructor has set up around min/max group members are honored
+  # Checking to make sure any constraints the instructor has set up around min/max group members are honored
   def min_group_number_met
     if self.students.to_a.count < course.min_group_size
       errors.add :base, "You don't have enough group members."
@@ -72,14 +72,14 @@ class Group < ActiveRecord::Base
     end
   end
 
-  #Checking to make sure the group is actually working on an assignment
+  # Checking to make sure the group is actually working on an assignment
   def assignment_group_present
     if self.assignment_groups.to_a.count == 0
       errors.add :base, "You need to check off which #{(course.assignment_term).downcase} your #{(course.group_term).downcase} will work on."
     end
   end
 
-  #We need to make sure students only belong to one group working on a single assignment
+  # We need to make sure students only belong to one group working on a single assignment
   def unique_assignment_per_group_membership
     assignments.each do |a|
       students.each do |s|

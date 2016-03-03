@@ -6,15 +6,15 @@ class AssignmentType < ActiveRecord::Base
   attr_accessible :max_points, :name, :description, :student_weightable, :position
 
   belongs_to :course, touch: true
-  has_many :assignments, -> { order("position ASC") }, :dependent => :destroy
-  has_many :submissions, :through => :assignments
+  has_many :assignments, -> { order("position ASC") }, dependent: :destroy
+  has_many :submissions, through: :assignments
   has_many :assignment_weights
   has_many :grades
 
   validates_presence_of :name
   validate :positive_max_points
 
-  scope :student_weightable, -> { where(:student_weightable => true) }
+  scope :student_weightable, -> { where(student_weightable: true) }
   scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignment_types.id = assignment_weights.assignment_type_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
 
   default_scope { order "position" }
@@ -24,10 +24,10 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def weight_for_student(student)
-    #return a standard multiplier of 1 if the assignment type is not student weightable
+    # return a standard multiplier of 1 if the assignment type is not student weightable
     return 1 unless student_weightable?
 
-    #find the assignment weight for the student if it's present
+    # find the assignment weight for the student if it's present
     assignment_weights.where(student: student).first.try(:weight) || 0
   end
 
@@ -35,7 +35,7 @@ class AssignmentType < ActiveRecord::Base
     max_points.present?
   end
 
-  # #Getting the assignment types max value if it's present, else returning the summed total of assignment points
+  # Getting the assignment types max value if it's present, else returning the summed total of assignment points
   def total_points
     if max_points.present?
       max_points
@@ -79,11 +79,11 @@ class AssignmentType < ActiveRecord::Base
   end
 
   def score_for_student(student)
-    student.grades.student_visible.not_nil.where(:assignment_type => self).pluck("score").sum || 0
+    student.grades.student_visible.not_nil.where(assignment_type: self).pluck("score").sum || 0
   end
 
   def raw_score_for_student(student)
-    student.grades.student_visible.where(:assignment_type => self).pluck("raw_score").compact.sum || 0
+    student.grades.student_visible.where(assignment_type: self).pluck("raw_score").compact.sum || 0
   end
 
   private

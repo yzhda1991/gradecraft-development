@@ -8,7 +8,7 @@ class UserMailer < ApplicationMailer
 
   def reset_password_email(user)
     @user = user
-    mail(:to => user.email, :subject => "Your GradeCraft Password Reset Instructions")
+    mail(to: user.email, subject: "Your GradeCraft Password Reset Instructions")
   end
 
   def welcome_email(user)

@@ -462,7 +462,7 @@ describe Submission do
 
   describe "#check_unlockables" do
     # if self.assignment.is_a_condition?
-    #   unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
+    #   unlock_conditions = UnlockCondition.where(condition_id: self.assignment.id, condition_type: "Assignment").each do |condition|
     #     unlockable = condition.unlockable
     #     unlockable.check_unlock_status(student)
     #   end

@@ -9,14 +9,14 @@ require "resque/tasks"
 require "resque/scheduler/tasks"
 
 namespace :resque do
-  task :setup => :environment do
+  task setup: :environment do
     require "resque"
 
     ENV["QUEUE"] = "*"
     ENV["INTERVAL"] = "0.5"
   end
 
-  task :setup_schedule => :setup do
+  task setup_schedule: :setup do
     require "resque-scheduler"
 
     # If you want to be able to dynamically change the schedule,
@@ -39,6 +39,6 @@ namespace :resque do
     Dir[Rails.root.join("app/workers/**/*.rb")].each { |f| require f }
   end
 
-  task :scheduler => :setup_schedule
+  task scheduler: :setup_schedule
 end
 

@@ -9,7 +9,7 @@ class CourseMembershipsController < ApplicationController
     @course_membership.save
 
     respond_with @course_membership
-    expire_action :action => :index
+    expire_action action: :index
   end
 
   def destroy

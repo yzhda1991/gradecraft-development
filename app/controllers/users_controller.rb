@@ -6,16 +6,16 @@ class UsersController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :ensure_staff?, :except => [:activate, :activated, :edit_profile, :update_profile]
-  before_filter :ensure_admin?, :only => [:all]
-  skip_before_filter :require_login, :only => [:activate, :activated]
+  before_filter :ensure_staff?, except: [:activate, :activated, :edit_profile, :update_profile]
+  before_filter :ensure_admin?, only: [:all]
+  skip_before_filter :require_login, only: [:activate, :activated]
 
   def index
     @title = "All Users"
     @teams = current_course.teams
     @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
     if params[:team_id].present?
-      #TODO: should show TAs as well
+      # TODO: should show TAs as well
       @users = @team.students
     else
       @users = current_course.users.includes(:courses, :teams)
@@ -46,10 +46,10 @@ class UsersController < ApplicationController
     if result.success?
       if @user.is_student?(current_course)
         redirect_to students_path,
-          :notice => "#{term_for :student} #{@user.name} was successfully created!" and return
+          notice: "#{term_for :student} #{@user.name} was successfully created!" and return
       elsif @user.is_staff?(current_course)
         redirect_to staff_index_path,
-          :notice => "Staff Member #{@user.name} was successfully created!" and return
+          notice: "Staff Member #{@user.name} was successfully created!" and return
       end
     end
 
@@ -63,9 +63,9 @@ class UsersController < ApplicationController
     cancel_course_memberships @user
     if @user.save
       if @user.is_student?(current_course)
-        redirect_to students_path, :notice => "#{term_for :student} #{@user.name} was successfully updated!" and return
+        redirect_to students_path, notice: "#{term_for :student} #{@user.name} was successfully updated!" and return
       elsif @user.is_staff?(current_course)
-        redirect_to staff_index_path, :notice => "Staff Member #{@user.name} was successfully updated!" and return
+        redirect_to staff_index_path, notice: "Staff Member #{@user.name} was successfully updated!" and return
       end
     end
 
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html { redirect_to users_url, :notice => "#{@name} was successfully deleted" }
+      format.html { redirect_to users_url, notice: "#{@name} was successfully deleted" }
     end
   end
 
@@ -124,7 +124,7 @@ class UsersController < ApplicationController
     end
 
     if @user.update_attributes(params[:user])
-      redirect_to dashboard_path, :notice => "Your profile was successfully updated!"
+      redirect_to dashboard_path, notice: "Your profile was successfully updated!"
     else
       @title = "Edit My Profile"
       @course_membership = @user.course_memberships.where(course_id: current_course).first
@@ -136,7 +136,7 @@ class UsersController < ApplicationController
     @title = "Import Users"
   end
 
-  #import users for class
+  # import users for class
   def upload
     if params[:file].blank?
       flash[:notice] = "File missing"

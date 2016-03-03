@@ -29,7 +29,7 @@ describe NullStudent do
   describe "NullStudent has NullStudentGrades" do
     it "handles student.grades.where(...).select(...)" do
       student = NullStudent.new
-      expect(student.grades.where(:course_id => 5).select(:score).class).to eq(NullStudentGrades)
+      expect(student.grades.where(course_id: 5).select(:score).class).to eq(NullStudentGrades)
     end
 
     it "handles student.grades.first" do

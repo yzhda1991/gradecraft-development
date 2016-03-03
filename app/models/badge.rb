@@ -15,19 +15,19 @@ class Badge < ActiveRecord::Base
 
   mount_uploader :icon, BadgeIconUploader
 
-  has_many :earned_badges, :dependent => :destroy
-  has_many :predicted_earned_badges, :dependent => :destroy
+  has_many :earned_badges, dependent: :destroy
+  has_many :predicted_earned_badges, dependent: :destroy
 
   belongs_to :course, touch: true
 
-  accepts_nested_attributes_for :earned_badges, allow_destroy: true, :reject_if => proc { |a| a["score"].blank? }
+  accepts_nested_attributes_for :earned_badges, allow_destroy: true, reject_if: proc { |a| a["score"].blank? }
 
   multiple_files :badge_files
-  has_many :badge_files, :dependent => :destroy
+  has_many :badge_files, dependent: :destroy
   accepts_nested_attributes_for :badge_files
 
   validates_presence_of :course, :name
-  validates_numericality_of :point_total, :allow_blank => true
+  validates_numericality_of :point_total, allow_blank: true
 
   scope :visible, -> { where(visible: true) }
 
@@ -37,12 +37,12 @@ class Badge < ActiveRecord::Base
     super || false
   end
 
-  #indexed badges
+  # indexed badges
   def awarded_count
     earned_badges.student_visible.count
   end
 
-  #badges per role
+  # badges per role
   def earned_badges_by_student_id
     @earned_badges_by_student_id ||= earned_badges.group_by { |eb| [eb.student_id] }
   end
@@ -59,12 +59,12 @@ class Badge < ActiveRecord::Base
     end
   end
 
-  #Counting how many times a particular student has earned this badge
+  # Counting how many times a particular student has earned this badge
   def earned_badge_count_for_student(student)
-    earned_badges.where(:student_id => student.id, :student_visible => true).count
+    earned_badges.where(student_id: student.id, student_visible: true).count
   end
 
   def earned_badge_total_points(student)
-    earned_badges.where(:student_id => student, :student_visible => true).pluck("score").sum
+    earned_badges.where(student_id: student, student_visible: true).pluck("score").sum
   end
 end

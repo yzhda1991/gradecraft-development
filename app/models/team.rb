@@ -4,30 +4,30 @@ class Team < ActiveRecord::Base
   validates_presence_of :course, :name
   validates :name, uniqueness: { case_sensitive: false, scope: :course_id }
 
-  #TODO: remove these callbacks
+  # TODO: remove these callbacks
   before_save :cache_score
 
-  #Teams belong to a single course
+  # Teams belong to a single course
   belongs_to :course, touch: true
 
   has_many :team_memberships
-  has_many :students, :through => :team_memberships, :autosave => true
+  has_many :students, through: :team_memberships, autosave: true
   has_many :team_leaderships
-  has_many :leaders, :through => :team_leaderships
+  has_many :leaders, through: :team_leaderships
 
-  #Teams design banners that they display on the leadboard
+  # Teams design banners that they display on the leadboard
   mount_uploader :banner, ImageUploader
 
-  #Teams don't currently earn badges directly - but they are recognized for the badges their students earn
-  has_many :earned_badges, :through => :students
+  # Teams don't currently earn badges directly - but they are recognized for the badges their students earn
+  has_many :earned_badges, through: :students
 
-  #Teams compete through challenges, which receive points through challenge_grades
+  # Teams compete through challenges, which receive points through challenge_grades
   has_many :challenge_grades
-  has_many :challenges, :through => :challenge_grades
+  has_many :challenges, through: :challenge_grades
 
   accepts_nested_attributes_for :team_memberships
 
-  #Various ways to sort the display of teams
+  # Various ways to sort the display of teams
   scope :order_by_high_score, -> { order "teams.score DESC" }
   scope :order_by_low_score, -> { order "teams.score ASC" }
   scope :order_by_average_high_score, -> { order "average_points DESC"}
@@ -50,14 +50,14 @@ class Team < ActiveRecord::Base
     end
   end
 
-  #Tallying how many students are on the team
+  # Tallying how many students are on the team
   def member_count
     students.count
   end
 
-  #Tallying how many badges the students on the team have earned total
+  # Tallying how many badges the students on the team have earned total
   def badge_count
-    earned_badges.where(:course_id => self.course_id).student_visible.count
+    earned_badges.where(course_id: self.course_id).student_visible.count
   end
 
   def total_earned_points
@@ -68,7 +68,7 @@ class Team < ActiveRecord::Base
     return total_score
   end
 
-  #Calculating the average points amongst all students on the team
+  # Calculating the average points amongst all students on the team
   def average_points
     if member_count > 0
       average_points = total_earned_points / member_count
@@ -87,17 +87,17 @@ class Team < ActiveRecord::Base
     end
   end
 
-  #Summing all of the points the team has earned across their challenges
+  # Summing all of the points the team has earned across their challenges
   def challenge_grade_score
     # use student_visible scope from challenge_grades
     challenge_grades.student_visible.sum("score") || 0
   end
 
-  #Teams rack up points in two ways, which is used is determined by the instructor in the course settings.
-  #The first way is that the team's score is the average of its students' scores, and challenge grades are
-  #added directly into students' scores
-  #The second way is that the teams compete in team challenges that earn the team points. At the end of the
-  #semester these usually get added back into students' scores - this has not yet been built into GC.
+  # Teams rack up points in two ways, which is used is determined by the instructor in the course settings.
+  # The first way is that the team's score is the average of its students' scores, and challenge grades are
+  # added directly into students' scores
+  # The second way is that the teams compete in team challenges that earn the team points. At the end of the
+  # semester these usually get added back into students' scores - this has not yet been built into GC.
   def cache_score
     if course.team_score_average
       self.score = average_points

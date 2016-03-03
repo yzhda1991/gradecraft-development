@@ -8,7 +8,7 @@ describe "info/grading_status" do
     @course = create(:course)
     @team = create(:team, course: @course)
     @assignment_types = [create(:assignment_type, course: @course, max_points: 1000)]
-    @assignment = create(:assignment, :assignment_type => @assignment_types[0])
+    @assignment = create(:assignment, assignment_type: @assignment_types[0])
     @student = create(:user)
     assign(:assignment_types, @assignment_types)
     allow(view).to receive(:current_course).and_return(@course)

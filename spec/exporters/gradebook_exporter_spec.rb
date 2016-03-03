@@ -21,9 +21,9 @@ describe GradebookExporter do
       @assignment_type_1 = create(:assignment_type, course: course, name: "Charms")
       @assignment = create(:assignment, course: course, assignment_type: @assignment_type_1)
       @assignment_2 = create(:assignment, course: course, assignment_type: @assignment_type_1)
-      @student = create(:user, :last_name => "Aad")
+      @student = create(:user, last_name: "Aad")
       @student.courses << course
-      @student_2 = create(:user, :last_name => "Zep")
+      @student_2 = create(:user, last_name: "Zep")
       @student_2.courses << course
       create(:grade, assignment: @assignment, student: @student, raw_score: 100, status: "Released" )
       create(:grade, assignment: @assignment_2, student: @student, raw_score: 200, status: "Released")

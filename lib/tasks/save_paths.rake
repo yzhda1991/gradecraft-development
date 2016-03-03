@@ -1,5 +1,5 @@
 namespace :upload_paths do
-  task :save => :environment do
+  task save: :environment do
     SubmissionFile.all.each do |sf|
       if sf.filepath.nil? || (!sf.filepath.include? "filename/")
         sf.filepath = "uploads/submission_file/filename/" + sf.id.to_s + "/" + sf.filename

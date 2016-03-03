@@ -4,7 +4,7 @@ module Gradable
   included do
     attr_accessible :grades_attributes
 
-    has_many :grades, :dependent => :destroy
+    has_many :grades, dependent: :destroy
     accepts_nested_attributes_for :grades,
       reject_if: proc { |attrs| attrs[:raw_score].blank? }
   end

@@ -3,7 +3,7 @@ require "./app/serializers/predicted_grade_serializer"
 
 describe PredictedGradeSerializer do
   let(:course) { double(:course) }
-  let(:assignment) { double(:assignment, accepts_submissions?: true, submissions_have_closed?: true, )}
+  let(:assignment) { double(:assignment, accepts_submissions?: true, submissions_have_closed?: true )}
   let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, raw_score: 84, student: user, course: course, assignment: assignment, is_student_visible?: true) }
   let(:user) { double(:user, submission_for_assignment: "sumbission") }
   let(:other_user) { double(:other_user) }

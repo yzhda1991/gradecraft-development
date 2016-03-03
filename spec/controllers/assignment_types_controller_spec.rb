@@ -32,7 +32,7 @@ describe AssignmentTypesController do
 
     describe "GET show" do
       it "returns the assignment type show page" do
-        get :show, :id => @assignment_type.id
+        get :show, id: @assignment_type.id
         expect(assigns(:title)).to eq(@assignment_type.name)
         expect(assigns(:assignment_type)).to eq(@assignment_type)
         expect(response).to render_template(:show)
@@ -50,7 +50,7 @@ describe AssignmentTypesController do
 
     describe "GET edit" do
       it "assigns title and assignment types" do
-        get :edit, :id => @assignment_type.id
+        get :edit, id: @assignment_type.id
         expect(assigns(:title)).to eq("Editing #{@assignment_type.name}")
         expect(assigns(:assignment_type)).to eq(@assignment_type)
         expect(response).to render_template(:edit)
@@ -61,7 +61,7 @@ describe AssignmentTypesController do
       it "creates the assignment type with valid attributes"  do
         params = attributes_for(:assignment_type)
         params[:assignment_type_id] = @assignment_type
-        expect{ post :create, :assignment_type => params }.to change(AssignmentType,:count).by(1)
+        expect{ post :create, assignment_type: params }.to change(AssignmentType,:count).by(1)
       end
 
       it "redirects to new form with invalid attributes" do
@@ -72,7 +72,7 @@ describe AssignmentTypesController do
     describe "POST update" do
       it "updates the assignment type with valid attributes" do
         params = { name: "new name" }
-        post :update, id: @assignment_type.id, :assignment_type => params
+        post :update, id: @assignment_type.id, assignment_type: params
         @assignment_type.reload
         expect(response).to redirect_to(assignment_types_path)
         expect(@assignment_type.name).to eq("new name")
@@ -80,7 +80,7 @@ describe AssignmentTypesController do
 
       it "redirects to the edit form with invalid attributes" do
         params = { name: nil }
-        post :update, id: @assignment_type.id, :assignment_type => params
+        post :update, id: @assignment_type.id, assignment_type: params
         expect(response).to render_template(:edit)
       end
     end
@@ -103,7 +103,7 @@ describe AssignmentTypesController do
       context "with CSV format" do
         it "returns scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
-          get :export_scores, :id => @assignment_type, :format => :csv
+          get :export_scores, id: @assignment_type, format: :csv
           expect(response.body).to include("First Name,Last Name,Email,Username,Team,Raw Score,Score")
         end
       end
@@ -113,13 +113,13 @@ describe AssignmentTypesController do
       context "with CSV format" do
         it "returns all scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
-          get :export_all_scores, :format => :csv
+          get :export_all_scores, format: :csv
           expect(response.body).to include("First Name,Last Name,Email,Username,Team")
         end
 
         it "redirects to the dashboard if no assignment types exist" do
           @assignment_type.destroy
-          get :export_all_scores, :format => :csv
+          get :export_all_scores, format: :csv
           expect(response).to redirect_to dashboard_path
         end
       end
@@ -127,7 +127,7 @@ describe AssignmentTypesController do
 
     describe "GET all_grades" do
       it "displays all grades for an assignment type" do
-        get :all_grades, :id => @assignment_type.id
+        get :all_grades, id: @assignment_type.id
         expect(assigns(:title)).to eq("#{@assignment_type.name} Grade Patterns")
         expect(assigns(:assignment_type)).to eq(@assignment_type)
         expect(response).to render_template(:all_grades)
@@ -142,7 +142,7 @@ describe AssignmentTypesController do
           team = create(:team, course: @course)
           team.students << @student
 
-          get :all_grades, { :id => @assignment_type.id, :team_id => team.id }
+          get :all_grades, { id: @assignment_type.id, team_id: team.id }
           expect(assigns(:team)).to eq(team)
           expect(assigns(:students)).to eq([@student])
         end
@@ -157,7 +157,7 @@ describe AssignmentTypesController do
           team = create(:team, course: @course)
           team.students << @student
 
-          get :all_grades, :id => @assignment_type.id
+          get :all_grades, id: @assignment_type.id
           expect(assigns(:students)).to include(@student)
           expect(assigns(:students)).to include(other_student)
         end
@@ -166,13 +166,13 @@ describe AssignmentTypesController do
 
     describe "GET destroy" do
       it "destroys the assignment type" do
-        expect{ get :destroy, :id => @assignment_type }.to change(AssignmentType,:count).by(-1)
+        expect{ get :destroy, id: @assignment_type }.to change(AssignmentType,:count).by(-1)
       end
     end
 
     describe "GET student predictor data" do
       it "returns assignment types as json with current student if id present" do
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:student)).to eq(@student)
         expect(assigns(:assignment_types)).to eq([@assignment_type])
         expect(response).to render_template(:predictor_data)
@@ -234,7 +234,7 @@ describe AssignmentTypesController do
         :all_grades
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "1"}).to redirect_to(:root)
+          expect(get route, {id: "1"}).to redirect_to(:root)
         end
       end
     end
