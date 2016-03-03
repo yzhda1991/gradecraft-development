@@ -77,7 +77,7 @@ describe PredictedAssignmentSerializer do
       expect(exposed_attributes & subject.attributes.keys).to eq(exposed_attributes)
     end
 
-    describe "#boolean flags" do
+    describe "boolean flags" do
       subject { described_class.new( assignment, user, user).attributes }
 
       describe "is_required" do
