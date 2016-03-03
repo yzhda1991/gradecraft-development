@@ -330,8 +330,9 @@ class User < ActiveRecord::Base
 
   # Checking specifically if there is a released grade for an assignment
   def grade_released_for_assignment?(assignment)
-    if grade_for_assignment(assignment).present?
-      grade_for_assignment(assignment).is_student_visible?
+    grade = grade_for_assignment(assignment)
+    if grade.present?
+      GradeProctor.new(grade).viewable? self, assignment.course
     end
   end
 
@@ -511,7 +512,7 @@ class User < ActiveRecord::Base
   # (complete or not)
   def self_reported_done?(assignment)
     grade = grade_for_assignment(assignment)
-    grade.present? && grade.is_student_visible?
+    GradeProctor.new(grade).viewable?(self, assignment.course)
   end
 
   ### GROUPS
