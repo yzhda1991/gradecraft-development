@@ -1,8 +1,9 @@
 class GradeProctor
   module Viewable
     def viewable?(user, course)
-      grade_for_context?(user, course) &&
-        (user.is_staff?(course) || grade_visible_by_student?(user, course))
+      !resource.nil? &&
+        grade_for_context?(user, course) &&
+          (user.is_staff?(course) || grade_visible_by_student?(user, course))
     end
 
     private

@@ -10,6 +10,11 @@ describe GradeProctor::Viewable do
   describe "#viewable?" do
     subject { GradeProctor.new(grade) }
 
+    it "cannot be viewable if the grade is nil" do
+      subject = GradeProctor.new(nil)
+      expect(subject).to_not be_viewable user, course
+    end
+
     context "as a student" do
       it "cannot view the grade if it's not assigned to them" do
         allow(grade).to receive(:student_id).and_return 456
