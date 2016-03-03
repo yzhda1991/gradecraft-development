@@ -1,14 +1,13 @@
 require 'active_record_spec_helper'
 
 describe SecureTokenAuthenticator do
-  subject { described_class }
+  subject { described_class.new attributes }
 
-  # def initialize(options={})
-  #   @secure_token_uuid = options[:secure_token_uuid]
-  #   @target_class = options[:target_class]
-  #   @secret_key = options[:secret_key]
-  # end
-  # attr_reader :secure_token_uuid, :target_class, :secret_key
+  let(:attributes) {{
+    secure_token_uuid: "some_uuid",
+    target_class: "WaffleClass",
+    secret_key: "skeletonkeysrsly"
+  }}
 
   # def authenticates?
   #   options_valid? && secure_token && target_exists? && secure_token_authenticated?
@@ -33,18 +32,80 @@ describe SecureTokenAuthenticator do
   # end
 
   describe "#initialize" do
-    let!(:result) do
-      subject.new(
-        secure_token_uuid: "some_uuid",
-        target_class: "WaffleClass",
-        secret_key: "skeletonkeysrsly"
+    it "caches the uuid" do
+      expect(subject.instance_variable_get(:@secure_token_uuid))
+        .to eq("some_uuid")
+    end
+
+    it "caches the target class" do
+      expect(subject.instance_variable_get(:@target_class))
+        .to eq("WaffleClass")
+    end
+
+    it "caches the secret key" do
+      expect(subject.instance_variable_get(:@secret_key))
+        .to eq("skeletonkeysrsly")
+    end
+  end
+
+  describe "readable attributes" do
+    it "has a readable uuid" do
+      expect(subject.secure_token_uuid).to eq("some_uuid")
+    end
+
+    it "has a readable target class" do
+      expect(subject.target_class).to eq("WaffleClass")
+    end
+
+    it "has a readable secret_key" do
+      expect(subject.secret_key).to eq("skeletonkeysrsly")
+    end
+  end
+
+  describe "#authenticates?" do
+    let(:result) { subject.authenticates? }
+
+    before do
+      allow(subject).to receive_messages(
+        options_present?: true,
+        secure_token_found?: true,
+        target_exists?: true,
+        secure_token_authenticated?: true
       )
     end
 
-    it "caches the options" do
-      expect(result.secure_token_uuid).to eq("some_uuid")
-      expect(result.target_class).to eq("WaffleClass")
-      expect(result.secret_key).to eq("skeletonkeysrsly")
+    context "all steps return true" do
+      it "authenticates" do
+        expect(result).to be_truthy
+      end
+    end
+
+    context "options are not present" do
+      it "does not authenticate" do
+        allow(subject).to receive(:options_present?) { false }
+        expect(result).to be_falsey
+      end
+    end
+
+    context "the secure token is not found" do
+      it "does not authenticate" do
+        allow(subject).to receive(:secure_token_found?) { false }
+        expect(result).to be_falsey
+      end
+    end
+
+    context "the target does not exist" do
+      it "does not authenticate" do
+        allow(subject).to receive(:target_exists?) { false }
+        expect(result).to be_falsey
+      end
+    end
+
+    context "the secure token does not authenticate properly" do
+      it "does not authenticate" do
+        allow(subject).to receive(:secure_token_authenticated?) { false }
+        expect(result).to be_falsey
+      end
     end
   end
 

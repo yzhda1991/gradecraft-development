@@ -7,10 +7,10 @@ class SecureTokenAuthenticator
   attr_reader :secure_token_uuid, :target_class, :secret_key
 
   def authenticates?
-    options_present?
-      && secure_token_found?
-      && target_exists?
-      && secure_token_authenticated?
+    options_present? &&
+      secure_token_found? &&
+      target_exists? &&
+      secure_token_authenticated?
   end
 
   def options_present?
