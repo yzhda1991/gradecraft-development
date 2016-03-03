@@ -3,12 +3,12 @@ class CourseUserAggregateExport
 
   rows_by :users
 
-  set_schema :username => :username,
-             :role => :user_role,
-             :total_pageviews => :pageviews,
-             :total_logins => :logins,
-             :total_predictor_events => :predictor_events,
-             :total_predictor_sessions => :predictor_sessions
+  set_schema username: :username,
+             role: :user_role,
+             total_pageviews: :pageviews,
+             total_logins: :logins,
+             total_predictor_events: :predictor_events,
+             total_predictor_sessions: :predictor_sessions
 
   def schema_records_for_role(role)
     self.schema_records records.select {|user| @roles[user.id] == role }

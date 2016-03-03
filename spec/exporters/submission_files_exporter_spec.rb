@@ -56,7 +56,7 @@ RSpec.describe SubmissionFilesExporter, type: :exporter do
   describe "base_text_filename" do
     it "should render the unformatted filename for the text file" do
       expect(subject.instance_eval { base_text_filename }).to eq(
-        "Haight_Anne_This_name_is_long_fo__submission_content.txt",
+        "Haight_Anne_This_name_is_long_fo__submission_content.txt"
       )
     end
   end

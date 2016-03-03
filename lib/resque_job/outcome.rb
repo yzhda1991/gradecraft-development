@@ -7,7 +7,7 @@ class ResqueJob::Outcome
   end
 
   attr_reader :result
-  attr_accessor :message #, :additional_messages
+  attr_accessor :message # , :additional_messages
 
   def truthy?
     @result != false && @result != nil

@@ -11,7 +11,7 @@ module ScoreLevel
     validates :value, presence: true
   end
 
-  #Displaying the name and the point value together in grading lists
+  # Displaying the name and the point value together in grading lists
   def formatted_name
     "#{name} (#{value} points)"
   end

@@ -1,6 +1,6 @@
 namespace :courses do
   desc "Updates all the administrators in the system to have access to all courses"
-  task :update_admins => :environment do
+  task update_admins: :environment do
     courses = Course.all
     CourseMembership.where(role: "admin").select(:user_id).uniq.each do |membership|
       user = User.find membership.user_id

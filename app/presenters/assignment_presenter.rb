@@ -101,7 +101,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def criteria
-    rubric.criteria.ordered.includes(:levels => :level_badges)
+    rubric.criteria.ordered.includes(levels: :level_badges)
   end
 
   def new_assignment?

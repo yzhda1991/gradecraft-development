@@ -2,7 +2,7 @@
   %section
     %h4 Score
 
-    = f.hidden_field :team_id, :team_id => @team.id
+    = f.hidden_field :team_id, team_id: @team.id
 
     .form-item
       = f.label :score
@@ -15,14 +15,14 @@
         = f.select :status, Grade::STATUSES
         .form_label= "Can the #{term_for :team} see this grade?"
       - else
-        = f.input :status, :as => :hidden, :input_html => { :value => "Graded" }
+        = f.input :status, as: :hidden, :input_html => { :value => "Graded" }
 
   %section
     %h4 Feedback
     .textarea
-      = f.text_area :text_feedback, :class => "froala"
+      = f.text_area :text_feedback, class: "froala"
 
   .submit-buttons
     %ul
       %li= f.button :submit, "#{ @challenge_grade.persisted? ? 'Update Grade' : 'Submit Grade'}"
-      %li= link_to glyph("times-circle") + "Cancel", challenges_path, :class => "button"
+      %li= link_to glyph("times-circle") + "Cancel", challenges_path, class: "button"

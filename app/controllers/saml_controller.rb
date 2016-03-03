@@ -1,5 +1,5 @@
 class SamlController < ApplicationController
-  skip_before_filter :require_login, :except => [:logout]
+  skip_before_filter :require_login, except: [:logout]
   protect_from_forgery except: :consume
 
   def init
@@ -8,7 +8,7 @@ class SamlController < ApplicationController
   end
 
   def consume
-    response = OneLogin::RubySaml::Response.new(params[:SAMLResponse], :settings => SAML_SETTINGS)
+    response = OneLogin::RubySaml::Response.new(params[:SAMLResponse], settings: SAML_SETTINGS)
 
     if response.success?
       email = response.attributes["urn:oid:0.9.2342.19200300.100.1.3"]
@@ -22,13 +22,13 @@ class SamlController < ApplicationController
         redirect_to um_pilot_path
       end
     else
-      redirect_to root_url, :notice => "authentication error"
+      redirect_to root_url, notice: "authentication error"
     end
   end
 
   def metadata
     meta = OneLogin::RubySaml::Metadata.new
-    render :xml => meta.generate(SAML_SETTINGS, true)
+    render xml: meta.generate(SAML_SETTINGS, true)
   end
 
   def logout

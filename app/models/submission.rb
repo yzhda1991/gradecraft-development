@@ -11,8 +11,8 @@ class Submission < ActiveRecord::Base
 
   belongs_to :task, touch: true
   belongs_to :assignment, touch: true
-  belongs_to :student, :class_name => "User", touch: true
-  belongs_to :creator, :class_name => "User", touch: true
+  belongs_to :student, class_name: "User", touch: true
+  belongs_to :creator, class_name: "User", touch: true
   belongs_to :group, touch: true
   belongs_to :course, touch: true
 
@@ -22,7 +22,7 @@ class Submission < ActiveRecord::Base
   has_one :assignment_weight, through: :assignment
 
   accepts_nested_attributes_for :grade
-  has_many :submission_files, :dependent => :destroy, autosave: true
+  has_many :submission_files, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :submission_files
 
   scope :ungraded, -> { where("NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))", "Graded", "Released") }
@@ -36,15 +36,15 @@ class Submission < ActiveRecord::Base
 
   before_validation :cache_associations
 
-  validates_uniqueness_of :task, :scope => :student, :allow_nil => true
-  validates :link, :format => URI::regexp(%w(http https)), :allow_blank => true
+  validates_uniqueness_of :task, scope: :student, allow_nil: true
+  validates :link, format: URI::regexp(%w(http https)), allow_blank: true
   validates :assignment, presence: true
   validates_with SubmissionValidator
 
   clean_html :text_comment
   multiple_files :submission_files
 
-  #Canable permissions#
+  # Canable permissions
   def updatable_by?(user)
     permissions_check(user)
   end
@@ -53,7 +53,7 @@ class Submission < ActiveRecord::Base
     permissions_check(user)
   end
 
-  #Permissions regarding who can see a grade
+  # Permissions regarding who can see a grade
   def viewable_by?(user)
     permissions_check(user)
   end
@@ -66,8 +66,9 @@ class Submission < ActiveRecord::Base
     !ungraded?
   end
 
-  # Grabbing any submission that has NO instructor-defined grade (if the student has predicted the grade,
-  # it'll exist, but we still don't want to catch those here)
+  # Grabbing any submission that has NO instructor-defined grade (if the
+  # student has predicted the grade, it'll exist, but we still don't want to
+  # catch those here)
   def ungraded?
     !grade || grade.status == nil
   end
@@ -109,7 +110,7 @@ class Submission < ActiveRecord::Base
 
   def check_unlockables
     if self.assignment.is_a_condition?
-      unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
+      unlock_conditions = UnlockCondition.where(condition_id: self.assignment.id, condition_type: "Assignment").each do |condition|
         unlockable = condition.unlockable
         if self.assignment.has_groups?
           self.group.students.each do |student|

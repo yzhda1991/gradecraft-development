@@ -24,14 +24,14 @@ describe "info/choices" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Multiplier Choices", :count => 1
+    assert_select "h3", text: "Multiplier Choices", count: 1
   end
 
   it "renders the breadcrumbs" do
     render
-    assert_select ".content-nav", :count => 1
+    assert_select ".content-nav", count: 1
     assert_select ".breadcrumbs" do
-      assert_select "a", :count => 2
+      assert_select "a", count: 2
     end
   end
 end

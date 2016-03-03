@@ -12,7 +12,7 @@ class LevelsController < ApplicationController
 
   def destroy
     @level.destroy
-    render :nothing => true
+    render nothing: true
   end
 
   def update

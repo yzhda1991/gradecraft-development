@@ -1,13 +1,13 @@
 class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
-  before_filter :ensure_staff?, :except => [ :dashboard, :timeline_events ]
+  before_filter :ensure_staff?, except: [ :dashboard, :timeline_events ]
   before_action :find_team, only: [ :awarded_badges, :choices, :resubmissions, :ungraded_submissions ]
   before_action :find_students, only: [ :awarded_badges, :choices, :final_grades_for_course  ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
-    #checking to see if the course uses the interactive timeline -
+    # checking to see if the course uses the interactive timeline -
     # if not sending students to their syllabus, and the staff to top 10
     if current_course.use_timeline?
       render :dashboard
@@ -22,7 +22,7 @@ class InfoController < ApplicationController
 
   def timeline_events
     @events = Timeline.new(current_course).events
-    render(:partial => "info/timeline", :handlers => [:jbuilder], :formats => [:js])
+    render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])
   end
 
   def awarded_badges
@@ -119,7 +119,7 @@ class InfoController < ApplicationController
     redirect_back_or_default
   end
 
-  #downloadable grades for course with  export
+  # downloadable grades for course with  export
   def research_gradebook
     # @mz todo: add specs
     @grade_export_job = GradeExportJob.new(user_id: current_user.id, course_id: current_course.id)

@@ -7,4 +7,4 @@
       %tbody= render partial: "assignments/group/table_body", locals: { presenter: presenter }
       .right
         - if presenter.assignment.release_necessary? && presenter.has_grades?
-          = submit_tag "Update Grade Statuses", :class => "button"
+          = submit_tag "Update Grade Statuses", class: "button"

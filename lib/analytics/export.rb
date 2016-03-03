@@ -19,8 +19,8 @@ module Analytics::Export
   end
 
   # {
-  #   :username => ["blah", "blah2", "blah3"],
-  #   :role => ["admin", "owner", "owner"], ...
+  #   username: ["blah", "blah2", "blah3"],
+  #   role: ["admin", "owner", "owner"], ...
   # }
   def schema_records(records_set=nil)
     puts "  => generating schema records"

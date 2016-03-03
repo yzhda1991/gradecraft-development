@@ -6,7 +6,7 @@ module UnlockableCondition
 
     has_many :unlock_conditions, as: :unlockable, dependent: :destroy
     has_many :unlock_keys, class_name: "UnlockCondition",
-      foreign_key: :condition_id, :dependent => :destroy
+      foreign_key: :condition_id, dependent: :destroy
     has_many :unlock_states, as: :unlockable, dependent: :destroy
 
     accepts_nested_attributes_for :unlock_conditions, allow_destroy: true,

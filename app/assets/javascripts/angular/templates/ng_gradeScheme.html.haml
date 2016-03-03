@@ -5,5 +5,5 @@
   %input.level{'name' => 'level', 'ng-model' => 'element.level'}
   %ranges{'grade-scheme-ranges' => '','index' => '$index', 'ng-model' => 'element'}
   .right
-    %button{:type => 'button', :class => 'remove-element button alert', 'ng-click' => 'gradeService.remove($index)'} Remove <i class="fa fa-times" ></i>
-  %button{:type => 'button', :class => 'add-element button', 'ng-click' => 'gradeService.addNew($index)'} <i class="fa fa-plus" ></i> Add A Level
+    %button{:type => 'button', class: 'remove-element button alert', 'ng-click' => 'gradeService.remove($index)'} Remove <i class="fa fa-times" ></i>
+  %button{:type => 'button', class: 'add-element button', 'ng-click' => 'gradeService.addNew($index)'} <i class="fa fa-plus" ></i> Add A Level

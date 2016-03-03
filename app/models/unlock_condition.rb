@@ -3,8 +3,8 @@ class UnlockCondition < ActiveRecord::Base
   attr_accessible :unlockable_id, :unlockable_type, :condition_id, :condition_type,
   :condition_state, :condition_value, :condition_date
 
-  belongs_to :unlockable, :polymorphic => true
-  belongs_to :condition, :polymorphic => true
+  belongs_to :unlockable, polymorphic: true
+  belongs_to :condition, polymorphic: true
 
   validates_presence_of :condition_id, :condition_type, :condition_state
   validates_associated :unlockable
@@ -30,7 +30,7 @@ class UnlockCondition < ActiveRecord::Base
     check_condition_for_each_student(group)
   end
 
-  #Human readable sentence to describe what students need to do to unlock this thing
+  # Human readable sentence to describe what students need to do to unlock this thing
   def requirements_description_sentence
     "#{condition_state_do} the #{condition.name} #{condition_type}"
   end
@@ -39,7 +39,7 @@ class UnlockCondition < ActiveRecord::Base
     "#{condition_state_past} the #{condition.name} #{condition_type}"
   end
 
-  #Human readable sentence to describe what doing work on this thing unlocks
+  # Human readable sentence to describe what doing work on this thing unlocks
   def key_description_sentence
     "#{condition_state_doing} it unlocks the #{unlockable.name} #{unlockable_type}"
   end
@@ -124,7 +124,7 @@ class UnlockCondition < ActiveRecord::Base
   def check_if_badge_earned_enough_times_by_date(student)
     badge_count = student.earned_badges_for_badge_count(condition_id)
     if badge_count >= condition_value &&
-      (student.earned_badges.where(:badge_id => condition_id).last.created_at < condition_date)
+      (student.earned_badges.where(badge_id: condition_id).last.created_at < condition_date)
       return true
     else
       return false

@@ -1,6 +1,6 @@
 class ChallengesController < ApplicationController
 
-  before_filter :ensure_staff?, :except=>[:index, :show, :predictor_data, :predict_points]
+  before_filter :ensure_staff?, except: [:index, :show, :predictor_data, :predict_points]
   before_filter :ensure_student?, only: [:predict_points]
   before_action :find_challenge, only: [:show, :edit, :update, :destroy]
 
@@ -66,9 +66,9 @@ class ChallengesController < ApplicationController
     respond_to do |format|
       format.json do
         if @prediction_saved
-          render :json => {id: @challenge.id, points_earned: @challengePrediction.points_earned}
+          render json: {id: @challenge.id, points_earned: @challengePrediction.points_earned}
         else
-          render :json => { errors:  @challengePrediction.errors.full_messages }, :status => 400
+          render json: { errors:  @challengePrediction.errors.full_messages }, status: 400
         end
       end
     end
@@ -130,7 +130,7 @@ class ChallengesController < ApplicationController
           challenge.prediction = { id: prediction.id, points_earned: 0 }
         end
 
-        grade = @grades.where(:challenge_id => challenge.id).first
+        grade = @grades.where(challenge_id: challenge.id).first
 
         if grade.present? && grade.is_student_visible?
           # point_total is presented on the grade model to mirror the assignment.grade.point_total,

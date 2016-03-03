@@ -25,15 +25,15 @@ describe "assignment_types/all_grades" do
     it "renders successfully" do
       allow(view).to receive(:current_user_is_staff?).and_return(true)
       render
-      assert_select "h3", :count => 1
+      assert_select "h3", count: 1
     end
 
     it "renders the breadcrumbs" do
       allow(view).to receive(:current_user_is_staff?).and_return(true)
       render
-      assert_select ".content-nav", :count => 1
+      assert_select ".content-nav", count: 1
       assert_select ".breadcrumbs" do
-        assert_select "a", :count => 4
+        assert_select "a", count: 4
       end
     end
 

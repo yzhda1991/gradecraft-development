@@ -13,9 +13,9 @@
     .textarea
       %h4 #{term_for :badge} Feedback
       .form_label Enter a message to the #{term_for :student} regarding their work
-      = f.text_area :feedback, :class => "froala"
+      = f.text_area :feedback, class: "froala"
 
   .submit-buttons
     %ul
       %li= f.button :submit, "#{@earned_badge.persisted? ? 'Update' : 'Award'} #{term_for :badge}"
-      %li= link_to glyph("times-circle") + "Cancel", badge_path(@badge), :class => "button"
+      %li= link_to glyph("times-circle") + "Cancel", badge_path(@badge), class: "button"

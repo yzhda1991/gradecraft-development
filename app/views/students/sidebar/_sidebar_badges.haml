@@ -10,7 +10,7 @@
         - cache ["v1", badge] do
           %li
             %a
-              %img{:src => badge.icon, :alt => badge.name, :class => "unearned"}
+              %img{:src => badge.icon, :alt => badge.name, class: "unearned"}
             .display_on_hover.hover-style.right
               - if badge.name_visible_for_student?(current_student)
                 = "Not yet earned: #{badge.name}"

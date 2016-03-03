@@ -40,7 +40,7 @@ class ExportsMailer < ApplicationMailer
   end
 
   def mail_message_with_subject(subject)
-    mail(default_attrs.merge(:subject => subject)) do |format|
+    mail(default_attrs.merge(subject: subject)) do |format|
       format.text
       format.html
     end

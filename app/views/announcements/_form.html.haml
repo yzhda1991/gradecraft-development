@@ -8,9 +8,9 @@
 
   %section
     %h4 Body
-    = f.text_area :body, :class => "froala"
+    = f.text_area :body, class: "froala"
 
   .submit-buttons
     %ul
       %li= f.button :submit, "Send Announcement"
-      %li= link_to glyph("times-circle") + "Cancel", announcements_path, :class => "button"
+      %li= link_to glyph("times-circle") + "Cancel", announcements_path, class: "button"

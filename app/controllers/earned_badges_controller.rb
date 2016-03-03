@@ -1,6 +1,6 @@
 class EarnedBadgesController < ApplicationController
 
-  #Earned badges are to badges what grades are to assignments - the record of how what and how a student performed
+  # Earned badges are to badges what grades are to assignments - the record of how what and how a student performed
 
   before_filter :ensure_staff?
   before_action :find_badge, only: [:index, :show, :new, :edit, :create, :update, :destroy ]
@@ -73,12 +73,12 @@ class EarnedBadgesController < ApplicationController
     # build a new badge automatically if they can be earned at will
     if @badge.can_earn_multiple_times?
       @earned_badges = @students.map do |student|
-        @badge.earned_badges.new(:student => student, :badge => @badge)
+        @badge.earned_badges.new(student: student, badge: @badge)
       end
     # otherwise build a new one only if it hasn't been earned
     else
       @earned_badges = @students.map do |student|
-        @badge.earned_badges.where(:student_id => student).first || @badge.earned_badges.new(:student => student, :badge => @badge)
+        @badge.earned_badges.where(student_id: student).first || @badge.earned_badges.new(student: student, badge: @badge)
       end
     end
   end
@@ -150,7 +150,7 @@ class EarnedBadgesController < ApplicationController
     if @valid_earned_badges.any?
       redirect_to badge_path(@badge), notice: "The #{@badge.name} #{term_for :badge} was successfully awarded #{@valid_earned_badges.count} times"
     else
-      redirect_to mass_award_badge_path(:id => @badge), notice: "No earned badges were sucessfully created."
+      redirect_to mass_award_badge_path(id: @badge), notice: "No earned badges were sucessfully created."
     end
   end
 

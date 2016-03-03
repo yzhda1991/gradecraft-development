@@ -23,17 +23,17 @@ class Grade < ActiveRecord::Base
   belongs_to :course, touch: true
   belongs_to :assignment, touch: true
   belongs_to :assignment_type, touch: true
-  belongs_to :student, :class_name => "User", touch: true
+  belongs_to :student, class_name: "User", touch: true
   belongs_to :team, touch: true
   belongs_to :submission
   belongs_to :task, touch: true # Optional
-  belongs_to :group, :polymorphic => true, touch: true # Optional
+  belongs_to :group, polymorphic: true, touch: true # Optional
   belongs_to :graded_by, class_name: "User", touch: true
 
-  has_many :earned_badges, :dependent => :destroy
+  has_many :earned_badges, dependent: :destroy
 
-  has_many :badges, :through => :earned_badges
-  accepts_nested_attributes_for :earned_badges, :reject_if => proc { |a| (a["score"].blank?) }, :allow_destroy => true
+  has_many :badges, through: :earned_badges
+  accepts_nested_attributes_for :earned_badges, reject_if: proc { |a| (a["score"].blank?) }, allow_destroy: true
 
   before_validation :cache_associations
   before_save :cache_point_total
@@ -43,17 +43,17 @@ class Grade < ActiveRecord::Base
   multiple_files :grade_files
   clean_html :feedback
 
-  has_many :grade_files, :dependent => :destroy
+  has_many :grade_files, dependent: :destroy
   accepts_nested_attributes_for :grade_files
 
   validates_presence_of :assignment, :assignment_type, :course, :student
-  validates :assignment_id, :uniqueness => {:scope => :student_id}
+  validates :assignment_id, uniqueness: { scope: :student_id }
 
-  delegate :name, :description, :due_at, :assignment_type, :course, :to => :assignment
+  delegate :name, :description, :due_at, :assignment_type, :course, to: :assignment
 
   after_destroy :save_student_and_team_scores
 
-  scope :completion, -> { where(order: "assignments.due_at ASC", :joins => :assignment) }
+  scope :completion, -> { where(order: "assignments.due_at ASC", joins: :assignment) }
   scope :graded, -> { where status: "Graded" }
   scope :in_progress, -> { where status: "In Progress" }
   scope :released, -> { joins(:assignment).where("status = 'Released' OR (status = 'Graded' AND NOT assignments.release_necessary)") }
@@ -65,12 +65,12 @@ class Grade < ActiveRecord::Base
   scope :predicted_to_be_done, -> { where("predicted_score > 0")}
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
-  scope :not_nil, -> { where.not(:score => nil)}
+  scope :not_nil, -> { where.not(score: nil)}
 
   # @mz todo: add specs
   scope :student_visible, -> { joins(:assignment).where(student_visible_sql) }
 
-  #validates_numericality_of :raw_score, integer_only: true
+  # validates_numericality_of :raw_score, integer_only: true
 
   def self.find_or_create(assignment_id,student_id)
     Grade.find_or_create_by(student_id: student_id, assignment_id: assignment_id)
@@ -171,7 +171,7 @@ class Grade < ActiveRecord::Base
 
   def check_unlockables
     if self.assignment.is_a_condition?
-      unlock_conditions = UnlockCondition.where(:condition_id => self.assignment.id, :condition_type => "Assignment").each do |condition|
+      unlock_conditions = UnlockCondition.where(condition_id: self.assignment.id, condition_type: "Assignment").each do |condition|
         if condition.unlockable_type == "Assignment"
           unlockable = Assignment.find(condition.unlockable_id)
           unlockable.check_unlock_status(student)
@@ -212,7 +212,7 @@ class Grade < ActiveRecord::Base
     self.assignment_id ||= submission.try(:assignment_id) || task.try(:assignment_id)
     self.assignment_type_id ||= assignment.try(:assignment_type_id)
     self.course_id ||= assignment.try(:course_id)
-    #self.team_id ||= student.team_for_course(course).try(:id)
+    # self.team_id ||= student.team_for_course(course).try(:id)
   end
 
   def zero_points_for_pass_fail
@@ -227,7 +227,7 @@ class Grade < ActiveRecord::Base
   end
 
   def duplicate_badge_for_grade
-    if self.earned_badges.where(:badge_id => earned_badge.badge_id).persisted?
+    if self.earned_badges.where(badge_id: earned_badge.badge_id).persisted?
       errors.add("")
     end
   end

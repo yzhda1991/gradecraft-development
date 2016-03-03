@@ -6,7 +6,7 @@ describe "students/syllabus" do
   before(:each) do
     @course = create(:course)
     @assignment_types = [create(:assignment_type, course: @course, max_points: 1000)]
-    @assignment = create(:assignment, :assignment_type => @assignment_types[0])
+    @assignment = create(:assignment, assignment_type: @assignment_types[0])
     @course.assignments << @assignment
     @student = create(:user)
     @student.courses << @course
@@ -16,7 +16,7 @@ describe "students/syllabus" do
 
   it "renders the points possible for the assignment" do
     render
-    assert_select ".pagetitle", :count => 1
+    assert_select ".pagetitle", count: 1
   end
 
 end

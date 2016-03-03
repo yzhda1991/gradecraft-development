@@ -24,21 +24,21 @@ describe SubmissionsController do
 
     describe "GET show" do
       it "returns the submission show page" do
-        get :show, {:id => @submission.id, :assignment_id => @assignment.id}
+        get :show, {id: @submission.id, assignment_id: @assignment.id}
         expect(response).to render_template(:show)
       end
     end
 
     describe "GET new" do
       it "returns the submission new page" do
-        get :new, {:id => @submission.id, :assignment_id => @assignment.id}
+        get :new, {id: @submission.id, assignment_id: @assignment.id}
         expect(response).to render_template(:new)
       end
     end
 
     describe "GET edit" do
       it "display the edit form" do
-        get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
+        get :edit, {id: @submission.id, assignment_id: @assignment.id}
         expect(response).to render_template(:edit)
       end
     end
@@ -46,7 +46,7 @@ describe SubmissionsController do
     describe "POST create" do
       it "creates the submission with valid attributes"  do
         params = attributes_for(:submission)
-        expect{ post :create, :assignment_id => @assignment.id, :submission => params }.to change(Submission,:count).by(1)
+        expect{ post :create, assignment_id: @assignment.id, submission: params }.to change(Submission,:count).by(1)
       end
 
       it "manages submission file uploads" do
@@ -73,7 +73,7 @@ describe SubmissionsController do
         params = attributes_for(:submission)
         params[:assignment_id] = @assignment.id
         params[:text_comment] = "Ausgezeichnet"
-        post :update, :assignment_id => @assignment.id, :id => @submission, :submission => params
+        post :update, assignment_id: @assignment.id, id: @submission, submission: params
         expect(response).to redirect_to(assignment_submission_path(@assignment, @submission, student_id: @student.id))
         expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
       end
@@ -81,7 +81,7 @@ describe SubmissionsController do
 
     describe "GET destroy" do
       it "destroys the submission" do
-        expect{ get :destroy, {:id => @submission, :assignment_id => @assignment.id } }.to change(Submission,:count).by(-1)
+        expect{ get :destroy, {id: @submission, assignment_id: @assignment.id } }.to change(Submission,:count).by(-1)
       end
     end
   end
@@ -96,7 +96,7 @@ describe SubmissionsController do
 
     describe "GET edit" do
       it "shows the edit submission form" do
-        get :edit, {:id => @submission.id, :assignment_id => @assignment.id}
+        get :edit, {id: @submission.id, assignment_id: @assignment.id}
         expect(response).to render_template(:edit)
       end
     end
@@ -124,7 +124,7 @@ describe SubmissionsController do
         params = attributes_for(:submission).merge({ assignment_id: @assignment.id })
         params[:text_comment] = "Ausgezeichnet"
         put :update, assignment_id: @assignment.id, id: @submission, submission: params
-        expect(response).to redirect_to(assignment_path(@assignment, :anchor => "tab3"))
+        expect(response).to redirect_to(assignment_path(@assignment, anchor: "tab3"))
         expect(@submission.reload.text_comment).to eq("Ausgezeichnet")
       end
 
@@ -143,7 +143,7 @@ describe SubmissionsController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:assignment_id => 1, :id => "1"}).to redirect_to(:root)
+          expect(get route, {assignment_id: 1, id: "1"}).to redirect_to(:root)
         end
       end
     end

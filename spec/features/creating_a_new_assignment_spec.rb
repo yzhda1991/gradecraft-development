@@ -24,7 +24,7 @@ feature "creating a new assignment" do
       expect(current_path).to eq new_assignment_path
 
       within(".pageContent") do
-        select "Assignment Type Name", :from => "assignment_assignment_type_id"
+        select "Assignment Type Name", from: "assignment_assignment_type_id"
         fill_in "Name", with: "New Assignment Name"
         click_button "Create assignment"
       end

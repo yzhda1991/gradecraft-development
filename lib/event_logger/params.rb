@@ -19,7 +19,7 @@ module EventLogger
     #
     # Here is an example of conditionally defining context for each parameter:
     #
-    # numerical_params :score, :possible, { :assignment => :assignment_id }
+    # numerical_params :score, :possible, { assignment: :assignment_id }
     def numerical_params(*param_schema)
       param_schema.each do |param_format|
         # if it's a symbol, just define a method with the same name as the

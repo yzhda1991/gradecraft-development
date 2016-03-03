@@ -45,7 +45,7 @@ describe AssignmentsController do
 
     describe "GET show" do
       it "returns the assignment show page" do
-        get :show, :id => @assignment.id
+        get :show, id: @assignment.id
         expect(response).to render_template(:show)
       end
     end
@@ -95,15 +95,15 @@ describe AssignmentsController do
       it "creates the assignment with valid attributes"  do
         params = attributes_for(:assignment)
         params[:assignment_type_id] = @assignment_type
-        expect{ post :create, :assignment => params }.to change(Assignment,:count).by(1)
+        expect{ post :create, assignment: params }.to change(Assignment,:count).by(1)
       end
 
       it "manages file uploads" do
         Assignment.delete_all
         params = attributes_for(:assignment)
         params[:assignment_type_id] = @assignment_type
-        params.merge! :assignment_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
-        post :create, :assignment => params
+        params.merge! assignment_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}
+        post :create, assignment: params
         assignment = Assignment.where(name: params[:name]).last
         expect expect(assignment.assignment_files.count).to eq(1)
         expect expect(assignment.assignment_files[0].filename).to eq("test_file.txt")
@@ -117,7 +117,7 @@ describe AssignmentsController do
     describe "POST update" do
       it "updates the assignment" do
         params = { name: "new name" }
-        post :update, id: @assignment.id, :assignment => params
+        post :update, id: @assignment.id, assignment: params
         expect(response).to redirect_to(assignments_path)
         expect(@assignment.reload.name).to eq("new name")
       end
@@ -128,8 +128,8 @@ describe AssignmentsController do
       end
 
       it "manages file uploads" do
-        params = {:assignment_files_attributes => {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
-        post :update, id: @assignment.id, :assignment => params
+        params = {assignment_files_attributes: {"0" => {"file" => [fixture_file("test_file.txt", "txt")]}}}
+        post :update, id: @assignment.id, assignment: params
         expect expect(@assignment.assignment_files.count).to eq(1)
       end
     end
@@ -148,7 +148,7 @@ describe AssignmentsController do
 
     describe "PUT update_rubrics" do
       it "assigns true or false to assignment use_rubric" do
-        @assignment.update(:use_rubric => false)
+        @assignment.update(use_rubric: false)
         put :update_rubrics, id: @assignment, use_rubric: true
         expect(@assignment.reload.use_rubric).to eq true
       end
@@ -156,7 +156,7 @@ describe AssignmentsController do
 
     describe "GET criterion_grades_review" do
       it "renders the correct template" do
-        get :criterion_grades_review, :id => @assignment
+        get :criterion_grades_review, id: @assignment
         expect(response).to render_template(:criterion_grades_review)
       end
     end
@@ -164,10 +164,10 @@ describe AssignmentsController do
     describe "GET predictor_data" do
       context "with a student id" do
         it "assigns the assignments with no call to update" do
-          get :predictor_data, format: :json, :id => @student.id
+          get :predictor_data, format: :json, id: @student.id
           expect(assigns(:assignments).current_user).to eq(@professor)
           expect(assigns(:assignments).student).to eq(@student)
-          predictor_assignment_attributes().each do |attr|
+          predictor_assignment_attributes.each do |attr|
             expect(assigns(:assignments).assignments[0][attr]).to \
               eq(@assignment[attr])
           end
@@ -177,7 +177,7 @@ describe AssignmentsController do
 
         it "assigns a unreleased grade for the assignment with no score data" do
           grade = create(:unreleased_grade, student: @student, assignment: @assignment, predicted_score: 500)
-          get :predictor_data, format: :json, :id => @student.id
+          get :predictor_data, format: :json, id: @student.id
           expect(assigns(:assignments).current_user).to eq(@professor)
           expect(assigns(:assignments).student).to eq(@student)
           assigns(:assignments)[0].grade.tap do |assigned_grade|
@@ -190,7 +190,7 @@ describe AssignmentsController do
 
         it "assigns a released grade for the assignment with no predicted score" do
           grade = create(:released_grade, student: @student, assignment: @assignment, predicted_score: 500)
-          get :predictor_data, format: :json, :id => @student.id
+          get :predictor_data, format: :json, id: @student.id
           expect(assigns(:assignments).current_user).to eq(@professor)
           expect(assigns(:assignments).student).to eq(@student)
           assigns(:assignments)[0].grade.tap do |assigned_grade|
@@ -214,21 +214,21 @@ describe AssignmentsController do
 
     describe "GET export_structure" do
       it "retrieves the export_structure download" do
-        get :export_structure, :format => :csv
+        get :export_structure, format: :csv
         expect(response.body).to include("Assignment ID,Name,Point Total,Description,Open At,Due At,Accept Until")
       end
     end
 
     describe "GET destroy" do
       it "destroys the assignment" do
-        expect{ get :destroy, :id => @assignment }.to change(Assignment,:count).by(-1)
+        expect{ get :destroy, id: @assignment }.to change(Assignment,:count).by(-1)
       end
     end
 
     describe "GET download_current_grades" do
       context "with CSV format" do
         it "returns sample csv data" do
-          get :download_current_grades, :id => @assignment, :format => :csv
+          get :download_current_grades, id: @assignment, format: :csv
           expect(response.body).to include("First Name,Last Name,Email,Score,Feedback")
         end
       end
@@ -239,7 +239,7 @@ describe AssignmentsController do
         it "returns sample csv data" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
           submission = create(:submission, grade: grade, student: @student, assignment: @assignment)
-          get :export_grades, :id => @assignment, :format => :csv
+          get :export_grades, id: @assignment, format: :csv
           expect(response.body).to include("First Name,Last Name,Email,Score,Feedback,Raw Score,Statement")
         end
       end
@@ -264,7 +264,7 @@ describe AssignmentsController do
 
       it "marks the grade as reviewed" do
         grade = create :grade, assignment: @assignment, student: @student, status: "Graded"
-        get :show, :id => @assignment.id
+        get :show, id: @assignment.id
         expect(grade.reload).to be_feedback_reviewed
       end
 
@@ -284,10 +284,10 @@ describe AssignmentsController do
       end
 
       it "assigns the assignments with the call to update" do
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignments).current_user).to eq(@student)
         expect(assigns(:assignments).student).to eq(@student)
-        predictor_assignment_attributes().each do |attr|
+        predictor_assignment_attributes.each do |attr|
           expect(assigns(:assignments).assignments[0][attr]).to \
             eq(@assignment[attr])
         end
@@ -297,14 +297,14 @@ describe AssignmentsController do
 
       it "includes student grade with no score if not released" do
         grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignments)[0].grade.score).to eq(nil)
         expect(assigns(:assignments)[0].grade.raw_score).to eq(nil)
       end
 
       it "assigns a unreleased grade for the assignment with only predicted score data" do
         grade = create(:unreleased_grade, student: @student, assignment: @assignment, predicted_score: 500)
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignments).current_user).to eq(@student)
         expect(assigns(:assignments).student).to eq(@student)
         assigns(:assignments)[0].grade.tap do |assigned_grade|
@@ -317,7 +317,7 @@ describe AssignmentsController do
 
       it "assigns a released grade for the assignment with all score data" do
         grade = create(:released_grade, student: @student, assignment: @assignment, predicted_score: 500)
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignments).current_user).to eq(@student)
         expect(assigns(:assignments).student).to eq(@student)
         assigns(:assignments)[0].grade.tap do |assigned_grade|
@@ -333,7 +333,7 @@ describe AssignmentsController do
         ungraded_submission = create(:submission, assignment: @assignment)
         student_submission = create(:graded_submission, assignment: @assignment, student: @student)
         @assignment.submissions << [student_submission, ungraded_submission]
-        get :show, :id => @assignment.id
+        get :show, id: @assignment.id
         expect(assigns(:submissions_count)).to eq(2)
         expect(assigns(:ungraded_submissions_count)).to eq(1)
         expect(assigns(:ungraded_percentage)).to eq(1/2)
@@ -345,19 +345,19 @@ describe AssignmentsController do
         rubric = create(:rubric_with_criteria, assignment: @assignment)
         # TODO: Test for this line:
         # @criterion_grades = CriterionGrade.joins("left outer join submissions on submissions.id = criterion_grades.submission_id").where(student_id: current_user[:id]).where(assignment_id: params[:id])
-        get :show, :id => @assignment.id
+        get :show, id: @assignment.id
         expect(assigns(:criterion_grades)).to eq("?")
       end
 
       it "includes pass/fail status for released pass/fail grades" do
         grade = create(:released_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignments)[0].grade.pass_fail_status).to eq("Pass")
       end
 
       it "includes student grade with no pass fail status if not released" do
         grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id, pass_fail_status: "Pass")
-        get :predictor_data, format: :json, :id => @student.id
+        get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignments)[0].grade.pass_fail_status).to be_nil
       end
     end
@@ -388,7 +388,7 @@ describe AssignmentsController do
 
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "1"}).to redirect_to(:root)
+          expect(get route, {id: "1"}).to redirect_to(:root)
         end
       end
     end

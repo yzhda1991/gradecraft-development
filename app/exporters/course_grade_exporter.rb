@@ -1,6 +1,6 @@
 class CourseGradeExporter
 
-  #final grades: total score + grade earned in course
+  # final grades: total score + grade earned in course
   def final_grades_for_course(course)
     CSV.generate do |csv|
       csv.add_row baseline_headers

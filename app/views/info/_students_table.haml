@@ -1,15 +1,15 @@
-%table.nofeatures_default_rank_dynatable{:role => "grid"}
+%table.nofeatures_default_rank_dynatable{role: "grid"}
   %thead
     %tr
-      %th{ :scope => "column", :width => "20%" }= course.user_term
-      %th{ :scope => "column", :width => "10%" } Score
-      %th{ :scope => "column", :width => "10%" } Level
+      %th{ scope: "column", :width => "20%" }= course.user_term
+      %th{ scope: "column", :width => "10%" } Score
+      %th{ scope: "column", :width => "10%" } Level
       - if course.has_badges?
-        %th{ :scope => "column", :width => "5%" } Badges
+        %th{ scope: "column", :width => "5%" } Badges
       - if course.has_teams?
-        %th{ :scope => "column" }= course.team_term
-        %th{ :scope => "column" }= course.team_leader_term
-      %th{ :scope => "column", :width => "20%"  } Last Login
+        %th{ scope: "column" }= course.team_term
+        %th{ scope: "column" }= course.team_leader_term
+      %th{ scope: "column", :width => "20%"  } Last Login
   %tbody
     - students.each do |student|
       %tr

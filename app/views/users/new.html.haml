@@ -8,13 +8,13 @@
   = render partial: "layouts/alerts", locals: { model: @user, term: "user" }
 
   #tabs.ui-tabs.ui-widget
-    %ul.ui-tabs-nav{:role => "tablist"}
+    %ul.ui-tabs-nav{role: "tablist"}
       %li
         %a{ "href" => "#tab1" } New GradeCraft User
       %li
         %a{ "href" => "#tab2" } New UM User
 
-    #tabt1.ui-tabs-panel.ui-widget-content{:role => "tabpanel"}
+    #tabt1.ui-tabs-panel.ui-widget-content{role: "tabpanel"}
       #tab1{ class: ("active" unless @user.internal?) }
         = render partial: "gradecraft_user_form"
 

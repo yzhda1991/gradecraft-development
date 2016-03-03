@@ -33,7 +33,7 @@ feature "grading an individual assignment" do
         click_link "Grade"
       end
 
-      expect(current_path).to eq  edit_assignment_grade_path(assignment)
+      expect(current_path).to eq edit_assignment_grade_path(assignment)
 
       within(".pageContent") do
         fill_in("grade_raw_score", with: 100)

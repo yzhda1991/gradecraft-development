@@ -18,64 +18,64 @@
       %table{"aria-describedby" => "assignment-type-#{assignment_type.id}"}
         %thead
           %tr
-            %th{:scope => "col"} Name
-            %th{:scope => "col"}
+            %th{scope: "col"} Name
+            %th{scope: "col"}
               %span
                 %a
                   %i.fa.fa-eye.fa-fw
                 .display_on_hover.hover-style
                   Visible to Students
-            %th{:scope => "col"}
+            %th{scope: "col"}
               %a
                 !
               .display_on_hover.hover-style
                 Required
-            %th{:scope => "col"}
+            %th{scope: "col"}
               %a
                 %i.fa.fa-paperclip.fa-fw
               .display_on_hover.hover-style
                 Accepts Submissions
-            %th{:scope => "col"}
+            %th{scope: "col"}
               %a
                 %i.fa.fa-calendar.fa-fw
               .display_on_hover.hover-style
                 Shown in Timeline
 
-            %th{:scope => "col"}
+            %th{scope: "col"}
               %a
                 %i.fa.fa-sliders.fa-fw
               .display_on_hover.hover-style
                 Shown in Predictor
 
-            %th{:scope => "col"}
+            %th{scope: "col"}
               %a
                 %i.fa.fa-list.fa-fw
               .display_on_hover.hover-style
                 Shown in Due This Week
 
-            %th{:scope => "col"}
+            %th{scope: "col"}
               %a
                 %i.fa.fa-pencil.fa-fw
               .display_on_hover.hover-style
                 Logged By Students
 
-            %th{:scope => "col"}
+            %th{scope: "col"}
               %a
                 %i.fa.fa-unlock-alt.fa-fw
               .display_on_hover.hover-style
                 Release Required
 
-            %th{:scope => "col"}
+            %th{scope: "col"}
               %a
                 %i.fa.fa-envelope.fa-fw
               .display_on_hover.hover-style
                 Email Students on Release
 
-            %th{:scope => "col"} Grade Form Preview
-            %th{:scope => "col"} Points
+            %th{scope: "col"} Grade Form Preview
+            %th{scope: "col"} Points
 
-            %th{:scope => "col"} Dates
-            %th{:scope => "col", :style => "min-width: 110px"}
+            %th{scope: "col"} Dates
+            %th{scope: "col", :style => "min-width: 110px"}
               %span.sr-only Actions
         %tbody
           - assignments = assignment_type.assignments
@@ -174,5 +174,5 @@
               %td
                 .right
                   %ul.button-bar
-                    %li= link_to glyph(:edit) + "Edit", edit_assignment_path(assignment), :class => "button"
-                    %li= link_to glyph(:trash) + "Delete", assignment_path(assignment), :data => { confirm: "Are you sure?", method: :delete },  :class => "button"
+                    %li= link_to glyph(:edit) + "Edit", edit_assignment_path(assignment), class: "button"
+                    %li= link_to glyph(:trash) + "Delete", assignment_path(assignment), data: { confirm: "Are you sure?", method: :delete },  class: "button"

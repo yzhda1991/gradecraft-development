@@ -1,6 +1,6 @@
 namespace :db do
   desc "Clear out the database and replace it with sample data"
-  task :sample => ["db:ensure_development_or_staging","environment","db:drop","db:setup"] do
+  task sample: ["db:ensure_development_or_staging","environment","db:drop","db:setup"] do
     sample_file = "db/samples.rb"
     load(sample_file) if File.exists?(sample_file)
   end

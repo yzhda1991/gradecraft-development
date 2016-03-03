@@ -3,4 +3,4 @@
 .pageContent
   = render "layouts/alerts"
 
-  #time_line{"data-timeline" => render(:partial => "info/timeline", :handlers => [:jbuilder], :formats => [:js])}
+  #time_line{"data-timeline" => render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])}

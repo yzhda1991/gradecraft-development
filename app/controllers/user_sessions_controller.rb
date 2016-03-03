@@ -1,28 +1,28 @@
 class UserSessionsController < ApplicationController
 
-  skip_before_filter :require_login, :except => [:index]
-  skip_before_filter :verify_authenticity_token, :only => [:lti_create]
+  skip_before_filter :require_login, except: [:index]
+  skip_before_filter :verify_authenticity_token, only: [:lti_create]
 
   def new
     @user = User.new
   end
 
-  #sorcery login - users have passwords stored in our db
+  # sorcery login - users have passwords stored in our db
   def create
     respond_to do |format|
       if @user = login(params[:user][:email], params[:user][:password])
         record_course_login_event
         format.html { redirect_back_or_to dashboard_path }
-        format.xml { render :xml => @user, :status => :created, :location => @user }
+        format.xml { render xml: @user, status: :created, location: @user }
       else
         @user = User.new
-        format.html { flash.now[:error] = "Email or Password were invalid, login failed."; render :action => "new" }
-        format.xml { render :xml => @user.errors, :status => :unprocessable_entity }
+        format.html { flash.now[:error] = "Email or Password were invalid, login failed."; render action: "new" }
+        format.xml { render xml: @user.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  #lti login - we do not record users passwords, they login via an outside app
+  # lti login - we do not record users passwords, they login via an outside app
   def lti_create
     @user = User.find_or_create_by_lti_auth_hash(auth_hash)
     @course = Course.find_or_create_by_lti_auth_hash(auth_hash)
@@ -44,7 +44,7 @@ class UserSessionsController < ApplicationController
 
   def destroy
     logout
-    redirect_to root_url, :notice => "You are now logged out. Thanks for playing!"
+    redirect_to root_url, notice: "You are now logged out. Thanks for playing!"
   end
 
   private

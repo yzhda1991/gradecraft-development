@@ -75,7 +75,7 @@ class GradesController < ApplicationController
       end
 
     else # failure
-      redirect_to edit_assignment_grade_path(@assignment, :student_id => @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
+      redirect_to edit_assignment_grade_path(@assignment, student_id: @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
     end
   end
 
@@ -149,7 +149,7 @@ class GradesController < ApplicationController
       ScoreRecalculatorJob.new(user_id: @grade.student_id, course_id: current_course.id).enqueue
       redirect_to @grade.assignment, notice: "#{ @grade.student.name}'s #{@grade.assignment.name} grade was successfully deleted."
     else
-      redirect_to @grade.assignment, notice:  @grade.errors.full_messages, :status => 400
+      redirect_to @grade.assignment, notice:  @grade.errors.full_messages, status: 400
     end
   end
 
@@ -194,7 +194,7 @@ class GradesController < ApplicationController
       @multiple_grade_updater_job.enqueue
 
       if !params[:team_id].blank?
-        redirect_to assignment_path(@assignment, :team_id => params[:team_id])
+        redirect_to assignment_path(@assignment, team_id: params[:team_id])
       else
         respond_with @assignment
       end
@@ -270,7 +270,7 @@ class GradesController < ApplicationController
     flash[:notice] = "Updated Grades!"
   end
 
-  #upload grades for an assignment
+  # upload grades for an assignment
   def import
     @assignment = current_course.assignments.find(params[:id])
     @title = "Import Grades for #{@assignment.name}"
@@ -354,11 +354,11 @@ class GradesController < ApplicationController
     respond_to do |format|
       format.json do
         if @grade.nil?
-          render :json => {errors: "You cannot predict this assignment!"}, :status => 400
+          render json: {errors: "You cannot predict this assignment!"}, status: 400
         elsif @grade_saved
-          render :json => {id: @assignment.id, points_earned: @grade.predicted_score}
+          render json: {id: @assignment.id, points_earned: @grade.predicted_score}
         else
-          render :json => { errors:  @grade.errors.full_messages }, :status => 400
+          render json: { errors:  @grade.errors.full_messages }, status: 400
         end
       end
     end

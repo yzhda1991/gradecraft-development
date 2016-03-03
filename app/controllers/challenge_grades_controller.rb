@@ -1,6 +1,6 @@
 class ChallengeGradesController < ApplicationController
 
-  before_filter :ensure_staff?, :except => [:show]
+  before_filter :ensure_staff?, except: [:show]
   before_action :find_challenge, only: [:index, :create, :show, :new, :edit, :mass_edit, :challenge,
     :update, :edit_status, :update_status, :destroy ]
   before_action :find_challenge_grade, only: [:show, :edit, :update, :destroy]
@@ -31,7 +31,7 @@ class ChallengeGradesController < ApplicationController
     @title = "Quick Grade #{@challenge.name}"
     @challenge_score_levels = @challenge.challenge_score_levels
     @challenge_grades = @teams.map do |t|
-      @challenge.challenge_grades.where(:team_id => t).first || @challenge.challenge_grades.new(:team => t, :challenge => @challenge)
+      @challenge.challenge_grades.where(team_id: t).first || @challenge.challenge_grades.new(team: t, challenge: @challenge)
     end
   end
 

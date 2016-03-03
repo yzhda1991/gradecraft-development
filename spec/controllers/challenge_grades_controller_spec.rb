@@ -29,7 +29,7 @@ describe ChallengeGradesController do
 
     describe "GET index" do
       it "redirects the user to the challenge" do
-        get :index, :challenge_id => @challenge
+        get :index, challenge_id: @challenge
         expect(assigns(:challenge)).to eq(@challenge)
         expect(response).to redirect_to(@challenge)
       end
@@ -37,7 +37,7 @@ describe ChallengeGradesController do
 
     describe "GET show" do
       it "shows the challenge grade" do
-        get :show, {:id => @challenge_grade, :challenge_id => @challenge}
+        get :show, {id: @challenge_grade, challenge_id: @challenge}
         expect(assigns(:challenge)).to eq(@challenge)
         expect(assigns(:challenge_grade)).to eq(@challenge_grade)
         expect(assigns(:team)).to eq(@team)
@@ -47,7 +47,7 @@ describe ChallengeGradesController do
 
     describe "GET new" do
       it "shows the new challenge grade form" do
-        get :new, {:challenge_id => @challenge, :team_id => @team}
+        get :new, {challenge_id: @challenge, team_id: @team}
         expect(assigns(:challenge)).to eq(@challenge)
         expect(assigns(:team)).to eq(@team)
         expect(response).to render_template(:new)
@@ -56,7 +56,7 @@ describe ChallengeGradesController do
 
     describe "GET edit" do
       it "shows the edit challenge grade form" do
-        get :edit, {:id => @challenge_grade, :challenge_id => @challenge, :team_id => @team.id }
+        get :edit, {id: @challenge_grade, challenge_id: @challenge, team_id: @team.id }
         expect(assigns(:challenge)).to eq(@challenge)
         expect(assigns(:challenge_grade)).to eq(@challenge_grade)
         expect(assigns(:team)).to eq(@team)
@@ -71,13 +71,13 @@ describe ChallengeGradesController do
         params[:challenge_id] = @challenge.id
         params[:team_id] = @team.id
         params[:status] = "Released"
-        expect{ post :create, :challenge_id => @challenge.id, :challenge_grade => params }.to change(ChallengeGrade,:count).by(1)
+        expect{ post :create, challenge_id: @challenge.id, challenge_grade: params }.to change(ChallengeGrade,:count).by(1)
         expect(@team.reload.score).to eq(100)
         expect(response).to redirect_to(@challenge)
       end
 
       it "redirects to new form with invalid attributes" do
-        expect{ post :create, :challenge_id => @challenge.id, challenge_grade: attributes_for(:challenge_grade, team_id: nil) }.to_not change(ChallengeGrade,:count)
+        expect{ post :create, challenge_id: @challenge.id, challenge_grade: attributes_for(:challenge_grade, team_id: nil) }.to_not change(ChallengeGrade,:count)
       end
     end
 
@@ -88,7 +88,7 @@ describe ChallengeGradesController do
         params[:challenge_id] = @challenge.id
         params[:team_id] = @team.id
         params[:status] = "Released"
-        post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
+        post :update, challenge_id: @challenge.id, id: @challenge_grade.id, challenge_grade: params
         expect(response).to redirect_to(challenge_path(@challenge))
         expect(@challenge_grade.reload.score).to eq(100000)
         expect(@team.reload.score).to eq(100000)
@@ -96,14 +96,14 @@ describe ChallengeGradesController do
 
       it "redirects to edit form with invalid attributes" do
         params = { team_id: nil }
-        post :update, :challenge_id => @challenge.id, :id => @challenge_grade.id, :challenge_grade => params
+        post :update, challenge_id: @challenge.id, id: @challenge_grade.id, challenge_grade: params
         expect(response).to render_template(:edit)
       end
     end
 
     describe "GET mass_edit" do
       it "assigns params" do
-        get :mass_edit, :challenge_id => @challenge.id
+        get :mass_edit, challenge_id: @challenge.id
         expect(assigns(:title)).to eq("Quick Grade #{@challenge.name}")
         expect(response).to render_template(:mass_edit)
       end
@@ -133,7 +133,7 @@ describe ChallengeGradesController do
 
     describe "GET edit_status" do
       it "displays the edit_status page" do
-        get :edit_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ]}
+        get :edit_status, {challenge_id: @challenge.id, challenge_grade_ids: [ @challenge_grade.id ]}
         expect(assigns(:title)).to eq("#{@challenge.name} Grade Statuses")
         expect(response).to render_template(:edit_status)
       end
@@ -141,21 +141,21 @@ describe ChallengeGradesController do
 
     describe "POST update_status" do
       it "updates the status of multiple challenge grades" do
-        post :update_status, {:challenge_id => @challenge.id, :challenge_grade_ids => [ @challenge_grade.id ], :challenge_grade => {"status"=> "Released"}}
+        post :update_status, {challenge_id: @challenge.id, challenge_grade_ids: [ @challenge_grade.id ], challenge_grade: {"status"=> "Released"}}
         expect(response).to redirect_to challenge_path(@challenge)
       end
     end
 
     describe "GET destroy" do
       it "destroys the challenge grade" do
-        expect{ get :destroy, {:id => @challenge_grade, :challenge_id => @challenge.id } }.to change(ChallengeGrade,:count).by(-1)
+        expect{ get :destroy, {id: @challenge_grade, challenge_id: @challenge.id } }.to change(ChallengeGrade,:count).by(-1)
       end
 
       it "recalculates the team score" do
         @challenge = create(:challenge, course: @course)
         @challenge_grade = create(:challenge_grade, challenge: @challenge, team: @team, score: 100, status: "Released")
         expect(@team.score).to eq(100)
-        post :destroy, {:id => @challenge_grade, :challenge_id => @challenge.id}
+        post :destroy, {id: @challenge_grade, challenge_id: @challenge.id}
         expect(@team.reload.score).to eq(0)
         expect(response).to redirect_to(challenge_path(@challenge))
       end
@@ -170,7 +170,7 @@ describe ChallengeGradesController do
 
     describe "GET show" do
       it "shows the challenge grade" do
-        get :show, {:id => @challenge_grade, :challenge_id => @challenge}
+        get :show, {id: @challenge_grade, challenge_id: @challenge}
         expect(assigns(:challenge)).to eq(@challenge)
         expect(assigns(:challenge_grade)).to eq(@challenge_grade)
         expect(assigns(:team)).to eq(@team)
@@ -185,7 +185,7 @@ describe ChallengeGradesController do
         :create
       ].each do |route|
           it "#{route} redirects to root" do
-            expect(get route, {:challenge_id => 2 }).to redirect_to(:root)
+            expect(get route, {challenge_id: 2 }).to redirect_to(:root)
           end
         end
     end
@@ -201,7 +201,7 @@ describe ChallengeGradesController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:challenge_id => 2, :id => "1"}).to redirect_to(:root)
+          expect(get route, {challenge_id: 2, id: "1"}).to redirect_to(:root)
         end
       end
     end

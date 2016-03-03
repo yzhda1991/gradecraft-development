@@ -45,7 +45,7 @@ describe RubricsController do
         :update
       ].each do |route|
           it "#{route} redirects to root" do
-            expect(get route, {:assignment_id => 1, :id => "1"}).to redirect_to(:root)
+            expect(get route, {assignment_id: 1, id: "1"}).to redirect_to(:root)
           end
         end
     end

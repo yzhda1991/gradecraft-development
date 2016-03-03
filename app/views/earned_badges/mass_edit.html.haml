@@ -7,13 +7,13 @@
 
   - if current_course.has_teams?
     .team-filter
-      = form_tag mass_award_badge_path, :name => "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
+      = form_tag mass_award_badge_path, name: "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
         %label.sr-only{:for => "team_id"}
           Select #{term_for :team}
         = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
 
   #massGrade
-    = simple_form_for @badge, method: :post, :html => {:class => "mass-edit-earned-badges" }, :url => mass_earn_badge_path(@badge) do |f|
+    = simple_form_for @badge, method: :post, :html => {class: "mass-edit-earned-badges" }, :url => mass_earn_badge_path(@badge) do |f|
       %table
         %thead
           %tr
@@ -31,13 +31,13 @@
           %tr
             %td{:style => "text-align: right"}= link_to earned_badge.student.name, student_path(earned_badge.student)
             %td{:style => "text-align: right"}
-              - earned_badge.student.earned_badges.where(:badge_id => @badge).each do |earned_badge|
+              - earned_badge.student.earned_badges.where(badge_id: @badge).each do |earned_badge|
                 %img{:src => earned_badge.badge.try(:icon), :alt => earned_badge.badge.try(:name), :width => "25", :height => "25"}
             %td.center
-              - if @badge.can_earn_multiple_times? || ! earned_badge.student.earned_badges.where(:badge_id => @badge).present?
+              - if @badge.can_earn_multiple_times? || ! earned_badge.student.earned_badges.where(badge_id: @badge).present?
                 %input(type="checkbox" id="student-id-#{earned_badge[:student_id]}" name="student_ids[]" value="#{earned_badge[:student_id]}")
 
       .submit-buttons
         %ul
-          %li= f.button :submit, "Award", :class => "button"
-          %li= link_to glyph("times-circle") + "Cancel", badges_path, :class => "button"
+          %li= f.button :submit, "Award", class: "button"
+          %li= link_to glyph("times-circle") + "Cancel", badges_path, class: "button"

@@ -54,7 +54,7 @@ class GroupsController < ApplicationController
         flash[:success]= "#{@group.name} #{term_for :group} successfully updated"
       else
         @other_students = potential_team_members
-        format.html { render :action => "edit" }
+        format.html { render action: "edit" }
       end
     end
   end

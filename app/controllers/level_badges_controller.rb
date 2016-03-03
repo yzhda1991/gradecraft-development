@@ -12,7 +12,7 @@ class LevelBadgesController< ApplicationController
 
   def destroy
     @level_badge.destroy
-    render :nothing => true
+    render nothing: true
   end
 
   private

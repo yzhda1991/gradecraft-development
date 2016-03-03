@@ -13,7 +13,7 @@ class CriteriaController < ApplicationController
   def destroy
     @rubric = @criterion.rubric
     @criterion.destroy
-    render :nothing => true
+    render nothing: true
   end
 
   def update

@@ -20,14 +20,14 @@ describe LevelsController do
     describe "POST create" do
       it "creates a new level" do
         params = attributes_for(:level)
-        expect{ post :create, :level => params }.to change(Level,:count).by(1)
+        expect{ post :create, level: params }.to change(Level,:count).by(1)
       end
     end
 
     describe "GET destroy" do
       it "destroys a level" do
         @level = create(:level)
-        expect{ get :destroy, { :id => @level } }.to change(Level,:count).by(-1)
+        expect{ get :destroy, { id: @level } }.to change(Level,:count).by(-1)
       end
     end
 
@@ -35,7 +35,7 @@ describe LevelsController do
       it "updates a level" do
         @level = create(:level)
         params = { name: "new name" }
-        post :update, id: @level.id, :level=> params
+        post :update, id: @level.id, level: params
         expect(@level.reload.name).to eq("new name")
       end
     end
@@ -64,7 +64,7 @@ describe LevelsController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "10"}).to redirect_to(:root)
+          expect(get route, {id: "10"}).to redirect_to(:root)
         end
       end
     end

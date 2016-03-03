@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.2.2'
 
 gem 'rails'
-gem "resque", "1.25.2", git: "https://github.com/resque/resque.git", :branch => "1-x-stable"
+gem "resque", "1.25.2", git: "https://github.com/resque/resque.git", branch: "1-x-stable"
 gem 'actionpack-action_caching'
 gem 'activerecord-import'
 gem 'actionpack-page_caching'
@@ -108,7 +108,7 @@ gem 'uglifier'
 gem 'underscore-rails'
 gem 'whenever'
 gem 'newrelic_rpm'
-gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'sinatra', '>= 1.3.0', require: nil
 gem 'wysiwyg-rails'
 gem 'ruby-saml', '~> 1.0.0'
 

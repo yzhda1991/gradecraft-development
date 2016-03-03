@@ -19,10 +19,10 @@
       - if ! @user.kerberos_uid.present?
         .form-item
           = f.label :password
-          = f.password_field :password, :as => :password
+          = f.password_field :password, as: :password
         .form-item
           = f.label :password_confirmation
-          = f.password_field :password_confirmation, :as => :password
+          = f.password_field :password_confirmation, as: :password
 
       - if @user.is_student?(current_course)
         - if current_course.teams_visible? && (current_course.in_team_leaderboard? || (current_student.team_for_course(current_course).present? && current_student.team_for_course(current_course).in_team_leaderboard?)) || current_course.character_names?
@@ -45,5 +45,5 @@
 
       .submit-buttons
         %ul
-          %li= submit_tag "Update Settings", :class => "button"
-          %li= link_to glyph("times-circle") + "Cancel", root_path, :class => "button"
+          %li= submit_tag "Update Settings", class: "button"
+          %li= link_to glyph("times-circle") + "Cancel", root_path, class: "button"

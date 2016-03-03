@@ -64,7 +64,7 @@ describe GradeSchemeElementsController do
 
       it "returns the total points in the course if no grade scheme elements are present" do
         @grade_scheme_element.destroy
-        @assignment = create(:assignment, course: @course, :point_total => 2000)
+        @assignment = create(:assignment, course: @course, point_total: 2000)
         get :predictor_data, format: :json
         expect(@course.total_points).to eq(2000)
         expect(assigns(:total_points)).to eq(2000)
@@ -93,7 +93,7 @@ describe GradeSchemeElementsController do
 
       it "returns the total points in the course if no grade scheme elements are present" do
         @grade_scheme_element.destroy
-        @assignment = create(:assignment, course: @course, :point_total => 2000)
+        @assignment = create(:assignment, course: @course, point_total: 2000)
         get :predictor_data, format: :json
         expect(@course.total_points).to eq(2000)
         expect(assigns(:total_points)).to eq(2000)

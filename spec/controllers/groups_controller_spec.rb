@@ -36,7 +36,7 @@ describe GroupsController do
 
     describe "GET show" do
       it "displays the specified group" do
-        get :show, :id => @group.id
+        get :show, id: @group.id
         expect(assigns(:group)).to eq(@group)
         expect(response).to render_template(:show)
       end
@@ -52,7 +52,7 @@ describe GroupsController do
 
     describe "GET edit" do
       it "renders the edit group form" do
-        get :edit, :id => @group.id
+        get :edit, id: @group.id
         expect(assigns(:group)).to eq(@group)
         expect(response).to render_template(:edit)
       end
@@ -62,7 +62,7 @@ describe GroupsController do
       it "creates the group with valid attributes" do
         params = {"name"=>"Test Name", "assignment_ids"=>["#{@assignment.id}"],
           "student_ids"=>["#{@student.id}", "#{@student_2.id}", "#{@student_3.id}"] }
-        expect{ post :create, :group => params }.to change(Group, :count).by(1)
+        expect{ post :create, group: params }.to change(Group, :count).by(1)
         expect(response).to redirect_to(Group.last)
       end
 
@@ -74,7 +74,7 @@ describe GroupsController do
     describe "POST update" do
       it "updates the group" do
         params = { name: "new name" }
-        post :update, id: @group.id, :group => params
+        post :update, id: @group.id, group: params
         expect(response).to redirect_to(group_path(@group))
         expect(@group.reload.name).to eq("new name")
       end
@@ -87,7 +87,7 @@ describe GroupsController do
 
     describe "GET destroy" do
       it "destroys the group" do
-        expect{ get :destroy, :id => @group }.to change(Group,:count).by(-1)
+        expect{ get :destroy, id: @group }.to change(Group,:count).by(-1)
       end
     end
   end
@@ -102,7 +102,7 @@ describe GroupsController do
     describe "GET new" do
       it "renders the new group form" do
         get :new
-        assigns(:id => @student.id)
+        assigns(id: @student.id)
         expect(assigns(:group)).to be_a_new(Group)
         expect(response).to render_template(:new)
       end
@@ -112,7 +112,7 @@ describe GroupsController do
       it "creates the group with valid attributes"  do
         params = {"name"=>"Test Name", "assignment_ids"=>["#{@assignment.id}"],
           "student_ids"=>["#{@student_2.id}", "#{@student_3.id}"] }
-        expect{ post :create, :group => params }.to change(Group, :count).by(1)
+        expect{ post :create, group: params }.to change(Group, :count).by(1)
         expect(@student.group_for_assignment(@assignment).present?).to eq(true)
         expect(response).to redirect_to(Group.last)
       end
@@ -124,7 +124,7 @@ describe GroupsController do
 
     describe "GET edit" do
       it "renders the edit group form" do
-        get :edit, :id => @group.id
+        get :edit, id: @group.id
         expect(assigns(:group)).to eq(@group)
         expect(response).to render_template(:edit)
       end
@@ -133,7 +133,7 @@ describe GroupsController do
     describe "POST update" do
       it "updates the group" do
         params = { name: "new name" }
-        post :update, id: @group.id, :group => params
+        post :update, id: @group.id, group: params
         @group.reload
         expect(response).to redirect_to(group_path(@group))
         expect(@group.name).to eq("new name")
@@ -142,7 +142,7 @@ describe GroupsController do
 
     describe "GET show" do
       it "displays the specified group" do
-        get :show, :id => @group.id
+        get :show, id: @group.id
         expect(assigns(:group)).to eq(@group)
         expect(response).to render_template(:show)
       end
@@ -153,7 +153,7 @@ describe GroupsController do
         :index
       ].each do |route|
           it "#{route} redirects to root" do
-            assigns(:id => @student.id)
+            assigns(id: @student.id)
             expect(get route).to redirect_to(:root)
           end
         end
@@ -164,7 +164,7 @@ describe GroupsController do
         :destroy
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {:id => "1"}).to redirect_to(:root)
+          expect(get route, {id: "1"}).to redirect_to(:root)
         end
       end
     end

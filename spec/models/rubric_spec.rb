@@ -37,7 +37,7 @@ describe Rubric do
       level_2 = create(:level, criterion: criterion_1)
       level_3 = create(:level, criterion: criterion_1)
 
-      #count is the number created + the zero credit and the max credit
+      # count is the number created + the zero credit and the max credit
       expect(rubric.max_level_count).to eq(5)
     end
   end

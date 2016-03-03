@@ -27,13 +27,13 @@
     .form-item
       = f.label :point_total, "Max Number of Points"
       = f.number_field :point_total, {"aria-describedby" => "txtMaxPoints"}
-      .form_label{:id => "txtMaxPoints"} If you leave this blank, GradeCraft will calculate the total number of points based on the assignments you create.
+      .form_label{id: "txtMaxPoints"} If you leave this blank, GradeCraft will calculate the total number of points based on the assignments you create.
 
     .form-item
-      = f.input :start_date, as: :string, :include_blank => true, :input_html => { :class => "datetimepicker", :value => @course.try(:start_date) }
+      = f.input :start_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:start_date) }
 
     .form-item
-      = f.input :end_date, as: :string, :include_blank => true, :input_html => { :class => "datetimepicker", :value => @course.try(:end_date) }
+      = f.input :end_date, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @course.try(:end_date) }
 
 
     .form-item
@@ -100,22 +100,22 @@
     .form-item
       = f.label :use_timeline, "Timeline"
       = f.check_box :use_timeline, {"aria-describedby" => "txtUseTimeline"}
-      .form_label{:id => "txtUseTimeline"} Would you like to use the interactive timeline to display your syllabus?
+      .form_label{id: "txtUseTimeline"} Would you like to use the interactive timeline to display your syllabus?
 
     .form-item
       = f.label :accepts_submissions, "Submissions"
       = f.check_box :accepts_submissions, {"aria-describedby" => "txtAcceptSubmission"}
-      .form_label{:id => "txtAcceptSubmission"} Will you be using GradeCraft to accept assignment submissions?
+      .form_label{id: "txtAcceptSubmission"} Will you be using GradeCraft to accept assignment submissions?
 
     .form-item
       = f.label :team_setting, "Sections"
       = f.check_box :team_setting, {"aria-describedby" => "txtSections"}
-      .form_label{:id => "txtSections"}  Will you have semester-long sections in your course?
+      .form_label{id: "txtSections"}  Will you have semester-long sections in your course?
 
     .form-item
       = f.label :team_challenges, "Section Assignments"
       = f.check_box :team_challenges, {"aria-describedby" => "txtSections"}
-      .form_label{:id => "txtSections"}  Will you have section assignments in your course?
+      .form_label{id: "txtSections"}  Will you have section assignments in your course?
 
     .form-item
       = f.label :badge_setting, "Badges"
@@ -125,47 +125,47 @@
     .form-item
       = f.label :teams_visible, "Section Leaderboard"
       = f.check_box :teams_visible, {"aria-describedby" => "txtSectionLeaderboard"}
-      .form_label{:id => "txtSectionLeaderboard"} Can students see a leaderboard of the section rankings and their points?
+      .form_label{id: "txtSectionLeaderboard"} Can students see a leaderboard of the section rankings and their points?
 
     .form-item
       = f.label :in_team_leaderboard, "In-Section Leaderboard"
       = f.check_box :in_team_leaderboard, {"aria-describedby" => "txtInSectionLeaderboard"}
-      .form_label{:id => "txtInSectionLeaderboard"} Can students see in-section rankings and points (students must opt in to this by adding a screenname to protect their privacy)?
+      .form_label{id: "txtInSectionLeaderboard"} Can students see in-section rankings and points (students must opt in to this by adding a screenname to protect their privacy)?
 
     .form-item
       = f.label :character_names, "Character Names"
       = f.check_box :character_names, {"aria-describedby" => "txtCharacterRoles"}
-      .form_label{:id => "txtCharacterRoles"} Do students create a new name for themselves?
+      .form_label{id: "txtCharacterRoles"} Do students create a new name for themselves?
 
     .form-item
       = f.label :team_roles, "Character Roles"
       = f.check_box :team_roles, {"aria-describedby" => "txtTeamRoles"}
-      .form_label{:id => "txtTeamRoles"} Do students self-declare their role within the section?
+      .form_label{id: "txtTeamRoles"} Do students self-declare their role within the section?
 
     .form-item
       = f.label :character_profiles, "Character Profiles"
       = f.check_box :character_profiles, {"aria-describedby" => "character_profiles"}
-      .form_label{:id => "character_profiles"} Do students create a profile for their character in the class?
+      .form_label{id: "character_profiles"} Do students create a profile for their character in the class?
 
     .form-item
       = f.label :team_score_average, "Section Score = Average User Score"
       = f.check_box :team_score_average, {"aria-describedby" => "txtScoreAverage"}
-      .form_label{:id => "txtScoreAverage"}  Will sections' scores be the average of their students' scores?
+      .form_label{id: "txtScoreAverage"}  Will sections' scores be the average of their students' scores?
 
     .form-item
       = f.label :add_team_score_to_student, "Student Score = Grades + Team Assignments"
       = f.check_box :add_team_score_to_student, {"aria-describedby" => "txtScoreToStudent"}
-      .form_label{:id => "txtScoreToStudent"}  Do you want team assignment scores to be added directly into student scores?
+      .form_label{id: "txtScoreToStudent"}  Do you want team assignment scores to be added directly into student scores?
 
     .form-item
       = f.label :show_see_details_link_in_timeline, "'See the details' Link"
       = f.check_box :show_see_details_link_in_timeline, {"aria-describedby" => "seeDetails"}
-      .form_label{:id => "seeDetails"}  Would you like to add a link from each event in the timeline to its own individual page?
+      .form_label{id: "seeDetails"}  Would you like to add a link from each event in the timeline to its own individual page?
 
     .form-item
       = f.label :hide_analytics, "Hide Analytics?"
       = f.check_box :hide_analytics, {"aria-describedby" => "hideAnalytics"}
-      .form_label{:id => "hideAnalytics"}  Do you want to hide assignment and course analytics from students?
+      .form_label{id: "hideAnalytics"}  Do you want to hide assignment and course analytics from students?
 
 
     - if current_user_is_admin?
@@ -179,7 +179,7 @@
     .form-item
       .textarea
         .form_label What would you like to tell students about how they should expected to be graded?
-        = f.text_area :grading_philosophy, :class => "froala"
+        = f.text_area :grading_philosophy, class: "froala"
 
   %section
     %h4 Multipliers
@@ -188,31 +188,31 @@
     .form-item
       = f.label :total_assignment_weight, "Multiplier Count"
       = f.number_field :total_assignment_weight, {"aria-describedby" => "txtMultiplierCount"}
-      .form_label{:id => "txtMultiplierCount"}= "How many multipliers do #{term_for :students} have to allocate?"
+      .form_label{id: "txtMultiplierCount"}= "How many multipliers do #{term_for :students} have to allocate?"
 
     .form-item
-      = f.input :assignment_weight_close_at, as: :string, :include_blank => true, :input_html => { :class => "datetimepicker", :value => @assignment.try(:open_at) }, :label => "Decision By"
+      = f.input :assignment_weight_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "Decision By"
       .form_label What date must they make this decision by?
 
     .form-item
       = f.label :max_assignment_weight, "Maximum Per #{term_for :assignment_type}"
       = f.number_field :max_assignment_weight, {"aria-describedby" => "txtMaxPerAssignment"}
-      .form_label{:id => "txtMaxPerAssignment"} Is there a maximum weight they may place on a single assignment type?
+      .form_label{id: "txtMaxPerAssignment"} Is there a maximum weight they may place on a single assignment type?
 
     .form-item
       = f.label :max_assignment_types_weighted, "Max Assignment Types"
       = f.number_field :max_assignment_types_weighted, {"aria-describedby" => "txtMaxWeighted"}
-      .form_label{:id => "txtMaxWeighted"} Is there a maximum number of assignment types they can weight?
+      .form_label{id: "txtMaxWeighted"} Is there a maximum number of assignment types they can weight?
 
     .form-item
       = f.label :default_assignment_weight, "Default Weight"
       = f.text_field :default_assignment_weight, {"aria-describedby" => "txtDefaultWeight"}
-      .form_label{:id => "txtDefaultWeight"} What amount should the assignment types that the student doesn't select to boost be multiplied by?
+      .form_label{id: "txtDefaultWeight"} What amount should the assignment types that the student doesn't select to boost be multiplied by?
 
     .form-item
       = f.label :weight_term
       = f.text_field :weight_term, {"aria-describedby" => "txtWeightTerm"}
-      .form_label{:id => "txtWeightTerm"} What do you want to call these weights/multipliers?
+      .form_label{id: "txtWeightTerm"} What do you want to call these weights/multipliers?
 
   %section
     %h4 Terminology
@@ -220,49 +220,49 @@
     .form-item
       = f.label :user_term, "User Term"
       = f.text_field :user_term, {"aria-describedby" => "txtUserTerm"}
-      .form_label{:id => "txtUserTerm"} What will you call your user? Student, Learner, Player..."
+      .form_label{id: "txtUserTerm"} What will you call your user? Student, Learner, Player..."
 
     .form-item
       = f.label :assignment_term, "Assignment Term"
       = f.text_field :assignment_term, {"aria-describedby" => "txtAssignmentTerm"}
-      .form_label{:id => "txtAssignmentTerm"} Would you like to call assignments something else?
+      .form_label{id: "txtAssignmentTerm"} Would you like to call assignments something else?
 
     .form-item
       = f.label :group_term
       = f.text_field :group_term, {"aria-describedby" => "txtGroupTerm"}
-      .form_label{:id => "txtGroupTerm"} What will these groups be called?
+      .form_label{id: "txtGroupTerm"} What will these groups be called?
 
     .form-item
       = f.label :team_leader_term, "Section Leader Term"
       = f.text_field :team_leader_term, {"aria-describedby" => "txtTeamLeader"}
-      .form_label{:id => "txtTeamLeader"} TA, GSI, Team Leader...
+      .form_label{id: "txtTeamLeader"} TA, GSI, Team Leader...
 
     .form-item
       = f.label :challenge_term, "Section Assignment Term"
       = f.text_field :challenge_term, {"aria-describedby" => "txtChallenge"}
-      .form_label{:id => "txtChallenge"} What would you like to call these section assignments? Quests, Boss Battles, Challenges...
+      .form_label{id: "txtChallenge"} What would you like to call these section assignments? Quests, Boss Battles, Challenges...
 
     .form-item
       = f.label :team_term, "Section Term"
       = f.text_field :team_term, {"aria-describedby" => "txtSectionTerm"}
-      .form_label{:id => "txtSectionTerm"}  What will you call these? Team, House, Section...
+      .form_label{id: "txtSectionTerm"}  What will you call these? Team, House, Section...
 
     .form-item
       = f.label :badge_term, "Badge Term"
       = f.text_field :badge_term, {"aria-describedby" => "txtBadgeTerm"}
-      .form_label{:id => "txtBadgeTerm"} Would you like to call badges something else?
+      .form_label{id: "txtBadgeTerm"} Would you like to call badges something else?
 
     .form-item
       = f.label :pass_term, "Pass Term"
       = f.text_field :pass_term, {"aria-describedby" => "txtPassTerm"}
-      .form_label{:id => "txtPassTerm"} What would you like to call success for a pass/fail assignment?
+      .form_label{id: "txtPassTerm"} What would you like to call success for a pass/fail assignment?
 
     .form-item
       = f.label :fail_term, "Fail Term"
       = f.text_field :fail_term, {"aria-describedby" => "txtFailTerm"}
-      .form_label{:id => "txtFailTerm"} What would you like to call failure for a pass/fail assignment?
+      .form_label{id: "txtFailTerm"} What would you like to call failure for a pass/fail assignment?
 
   .submit-buttons
     %ul
-      %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", :class => "button"
-      %li= link_to glyph("times-circle") + "Cancel", courses_path, :class => "button"
+      %li= f.button :submit, "#{@course.persisted? ? 'Update' : 'Create'} Course", class: "button"
+      %li= link_to glyph("times-circle") + "Cancel", courses_path, class: "button"

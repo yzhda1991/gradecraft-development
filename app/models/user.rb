@@ -71,40 +71,40 @@ class User < ActiveRecord::Base
 
   mount_uploader :avatar_file_name, ImageUploader
 
-  has_many :course_memberships, :dependent => :destroy
-  has_many :courses, :through => :course_memberships
-  has_many :course_users, :through => :courses, :source => "users"
+  has_many :course_memberships, dependent: :destroy
+  has_many :courses, through: :course_memberships
+  has_many :course_users, through: :courses, source: "users"
   accepts_nested_attributes_for :courses
   accepts_nested_attributes_for :course_memberships, allow_destroy: true
 
-  belongs_to :current_course, :class_name => "Course", touch: true
+  belongs_to :current_course, class_name: "Course", touch: true
 
-  has_many :student_academic_histories, :foreign_key => :student_id, :dependent => :destroy
+  has_many :student_academic_histories, foreign_key: :student_id, dependent: :destroy
   accepts_nested_attributes_for :student_academic_histories
 
-  has_many :assignments, :through => :grades
+  has_many :assignments, through: :grades
 
-  has_many :unlock_states, :foreign_key => :student_id, :dependent => :destroy
+  has_many :unlock_states, foreign_key: :student_id, dependent: :destroy
 
-  has_many :assignment_weights, :foreign_key => :student_id
+  has_many :assignment_weights, foreign_key: :student_id
 
-  has_many :submissions, :foreign_key => :student_id, :dependent => :destroy
-  has_many :created_submissions, :as => :creator
+  has_many :submissions, foreign_key: :student_id, dependent: :destroy
+  has_many :created_submissions, as: :creator
 
-  has_many :grades, :foreign_key => :student_id, :dependent => :destroy
-  has_many :graded_grades, foreign_key: :graded_by_id, :class_name => "Grade"
+  has_many :grades, foreign_key: :student_id, dependent: :destroy
+  has_many :graded_grades, foreign_key: :graded_by_id, class_name: "Grade"
 
-  has_many :earned_badges, :foreign_key => :student_id, :dependent => :destroy
-  accepts_nested_attributes_for :earned_badges, :reject_if => proc { |attributes| attributes["earned"] != "1" }
-  has_many :badges, :through => :earned_badges
+  has_many :earned_badges, foreign_key: :student_id, dependent: :destroy
+  accepts_nested_attributes_for :earned_badges, reject_if: proc { |attributes| attributes["earned"] != "1" }
+  has_many :badges, through: :earned_badges
 
-  has_many :group_memberships, :foreign_key => :student_id, :dependent => :destroy
-  has_many :groups, :through => :group_memberships
-  has_many :assignment_groups, :through => :groups
+  has_many :group_memberships, foreign_key: :student_id, dependent: :destroy
+  has_many :groups, through: :group_memberships
+  has_many :assignment_groups, through: :groups
 
-  has_many :team_memberships, :foreign_key => :student_id, :dependent => :destroy
-  has_many :team_leaderships, :foreign_key => :leader_id, :dependent => :destroy
-  has_many :teams, :through => :team_memberships do
+  has_many :team_memberships, foreign_key: :student_id, dependent: :destroy
+  has_many :team_leaderships, foreign_key: :leader_id, dependent: :destroy
+  has_many :teams, through: :team_memberships do
     def set_for_course(course_id, ids)
       other_team_ids = proxy_association.owner.teams.where("course_id != ?", course_id).pluck(:id)
       if proxy_association.owner.role(Course.find(course_id)) == "student"
@@ -123,15 +123,15 @@ class User < ActiveRecord::Base
   # Longterm, we'd like to build a way for students enrolled in multiple gameful coursres to see
   # a unified dashboard.
 
-  validates :username, :presence => true,
-                    :length => { :maximum => 50 }
-  validates :email, :presence => true,
-                    :format   => { :with => email_regex },
-                    :uniqueness => { :case_sensitive => false }
+  validates :username, presence: true,
+                    length: { maximum: 50 }
+  validates :email, presence: true,
+                    format: { with: email_regex },
+                    uniqueness: { case_sensitive: false }
 
-  validates :first_name, :last_name, :presence => true
-  validates :password, :confirmation => true
-  validates :password_confirmation, :presence => true, if: :password, on: :update
+  validates :first_name, :last_name, presence: true
+  validates :password, confirmation: true
+  validates :password_confirmation, presence: true, if: :password, on: :update
   validates :email, internal_email: { format: internal_email_regex, name: "University of Michigan" }
 
   def internal?
@@ -258,12 +258,12 @@ class User < ActiveRecord::Base
     @team ||= teams.where(course_id: course).first
   end
 
-  #Finding all of the team leaders for a single team
+  # Finding all of the team leaders for a single team
   def team_leaders(course)
     @team_leaders ||= team_for_course(course).leaders rescue nil
   end
 
-  #Finding all of a team leader's teams for a single course
+  # Finding all of a team leader's teams for a single course
   def team_leaderships_for_course(course)
     team_leaderships.joins(:team).where("teams.course_id = ?", course.id)
   end
@@ -274,21 +274,21 @@ class User < ActiveRecord::Base
   end
 
   def archived_courses
-    courses.where(:status => false)
+    courses.where(status: false)
   end
 
   ### SCORE
   def cached_score_for_course(course)
-    @cached_score ||= course_memberships.where(:course_id => course).first.score || 0
+    @cached_score ||= course_memberships.where(course_id: course).first.score || 0
   end
 
   # Powers the grade distribution box plot
   def scores_for_course(course)
-    user_score = course_memberships.where(:course_id => course, :auditing => FALSE).pluck("score")
+    user_score = course_memberships.where(course_id: course, auditing: FALSE).pluck("score")
     scores = CourseMembership.where(course: course, role: "student", auditing: false).pluck(:score)
     return {
-      :scores => scores,
-      :user_score => user_score
+      scores: scores,
+      user_score: user_score
     }
   end
 
@@ -328,16 +328,16 @@ class User < ActiveRecord::Base
 
   ### GRADES
 
-  #Checking specifically if there is a released grade for an assignment
+  # Checking specifically if there is a released grade for an assignment
   def grade_released_for_assignment?(assignment)
     if grade_for_assignment(assignment).present?
       grade_for_assignment(assignment).is_student_visible?
     end
   end
 
-  #Grabbing the grade for an assignment
+  # Grabbing the grade for an assignment
   def grade_for_assignment(assignment)
-    grades.where(:assignment_id => assignment.id).first || grades.new(assignment: assignment)
+    grades.where(assignment_id: assignment.id).first || grades.new(assignment: assignment)
   end
 
   def grade_for_assignment_id(assignment_id)
@@ -370,13 +370,13 @@ class User < ActiveRecord::Base
   ### SUBMISSIONS
 
   def submission_for_assignment(assignment)
-    submissions.where(:assignment_id => assignment.id).try(:first)
+    submissions.where(assignment_id: assignment.id).try(:first)
   end
 
   ### BADGES
 
   def earned_badge_score_for_course(course)
-    earned_badges.where(:course_id => course).student_visible.sum(:score)
+    earned_badges.where(course_id: course).student_visible.sum(:score)
   end
 
   def earned_badges_for_course(course)
@@ -475,9 +475,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  #Returns the student's assigned weight for a specific assignment
+  # Returns the student's assigned weight for a specific assignment
   def weight_for_assignment(assignment)
-    assignment_weights.where(:assignment => assignment).first.weight
+    assignment_weights.where(assignment: assignment).first.weight
   end
 
   # Returns the student's assigned weight for an assignment type category
@@ -505,14 +505,14 @@ class User < ActiveRecord::Base
     assignment_weights.where(course: course).count > 0
   end
 
-  #Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count,
-  #and not the assignment type count. Because students make the choice at the AT level rather than the A level,
-  #this can be confusing.
+  # Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count,
+  # and not the assignment type count. Because students make the choice at the AT level rather than the A level,
+  # this can be confusing.
   def weight_count(course)
     assignment_weights.where(course: course).pluck("weight").count
   end
 
-  #Used to allow students to self-log a grade, currently only a boolean (complete or not)
+  # Used to allow students to self-log a grade, currently only a boolean (complete or not)
   def self_reported_done?(assignment)
     grade = grade_for_assignment(assignment)
     grade.present? && grade.is_student_visible?

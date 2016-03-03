@@ -5,7 +5,7 @@ class StudentAcademicHistoriesController < ApplicationController
   before_action :find_student, only: [:show, :new, :create, :edit, :update, :destroy]
 
   def show
-    @academic_history = @student.student_academic_histories.where(:course_id => current_course).first
+    @academic_history = @student.student_academic_histories.where(course_id: current_course).first
   end
 
   def new
@@ -23,11 +23,11 @@ class StudentAcademicHistoriesController < ApplicationController
   end
 
   def edit
-    @academic_history = @student.student_academic_histories.where(:course_id => current_course).first
+    @academic_history = @student.student_academic_histories.where(course_id: current_course).first
   end
 
   def update
-    @academic_history = @student.student_academic_histories.where(:course_id => current_course).first
+    @academic_history = @student.student_academic_histories.where(course_id: current_course).first
     @academic_history.update_attributes(params[:student_academic_history])
 
     if @academic_history.save
@@ -39,7 +39,7 @@ class StudentAcademicHistoriesController < ApplicationController
   end
 
   def destroy
-    @academic_history = @student.student_academic_histories.where(:course_id => current_course).first
+    @academic_history = @student.student_academic_histories.where(course_id: current_course).first
     @academic_history.destroy
 
     respond_to do |format|

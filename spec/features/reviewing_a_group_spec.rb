@@ -37,7 +37,7 @@ feature "reviewing a group" do
       expect(current_path).to eq edit_group_path(group)
 
       within(".pageContent") do
-        select "Approved", :from => "group_approved"
+        select "Approved", from: "group_approved"
         click_button "Update group"
       end
 

@@ -11,7 +11,7 @@
     - else
       = f.text_field :raw_score, :label => "Score", :hint => "Total Assignment Points: #{ points @assignment.point_total }", data: {autonumeric: true, "m-dec" => "0"}, :value => @group.students.first.grade_for_assignment(@assignment).try(:raw_score)
 
-  = f.text_area :feedback, :value => @group.students.first.grade_for_assignment(@assignment).try(:feedback), :class => "froala"
+  = f.text_area :feedback, :value => @group.students.first.grade_for_assignment(@assignment).try(:feedback), class: "froala"
 
   - if @assignment.release_necessary?
     - if current_user_is_gsi?
@@ -24,5 +24,5 @@
 
   .submit-buttons
     %ul
-      %li= f.button :submit, "Submit Grades", :class => "button"
-      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(@assignment), :class => 'button'
+      %li= f.button :submit, "Submit Grades", class: "button"
+      %li= link_to raw("<i class='fa fa-times-circle fa-fw'></i> Cancel"), assignment_path(@assignment), class: 'button'

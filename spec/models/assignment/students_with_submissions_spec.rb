@@ -55,7 +55,7 @@ describe "Assignment #students_with_submissions methods" do
         expect(subject).to include(team_membership.student)
       end
 
-      it  "doesn't return students that have submissions for the assignment but aren't on the team" do
+      it "doesn't return students that have submissions for the assignment but aren't on the team" do
         expect(subject).not_to include(another_student)
       end
     end
@@ -128,7 +128,7 @@ describe "Assignment #students_with_submissions methods" do
           expect(subject).to include(team_membership.student)
         end
 
-        it  "doesn't return students that have submissions for the assignment but aren't on the team" do
+        it "doesn't return students that have submissions for the assignment but aren't on the team" do
           expect(subject).not_to include(another_student)
         end
 

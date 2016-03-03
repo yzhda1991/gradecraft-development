@@ -7,7 +7,7 @@
   gradeStatusOptions = []
   criteria = []
 
-  #TODO standardize to array
+  # TODO standardize to array
   badges = {}
   criterionGrades = {}
 

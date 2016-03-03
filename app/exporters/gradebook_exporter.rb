@@ -1,6 +1,6 @@
 class GradebookExporter
 
-  #gradebook spreadsheet export for course
+  # gradebook spreadsheet export for course
   def gradebook(course)
     CSV.generate do |csv|
       csv << gradebook_columns(course)

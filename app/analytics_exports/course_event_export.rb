@@ -3,11 +3,11 @@ class CourseEventExport
 
   rows_by :events
 
-  set_schema  :username => :username,
-              :role => :user_role,
-              :page => :page,
-              :action => :page_name,
-              :date_time => lambda { |event| event.created_at.to_formatted_s(:db) }
+  set_schema  username: :username,
+              role: :user_role,
+              page: :page,
+              action: :page_name,
+              date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
   def schema_records_for_role(role)
     self.schema_records records.select {|event| event.user_role == role }

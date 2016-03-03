@@ -31,7 +31,7 @@
         - if current_course.has_teams?
           %td
             - if student.team_for_course(current_course)
-              = link_to student.team_for_course(current_course).name, team_path(:id => student.team_for_course(current_course).id)
+              = link_to student.team_for_course(current_course).name, team_path(id: student.team_for_course(current_course).id)
         - if current_course.team_roles?
           %td= student.try(:team_role)
         %td
@@ -43,5 +43,5 @@
         %td
           .right
             %ul.button-bar
-              %li= link_to glyph(:edit) + "Edit", edit_user_path(student), :class => "button"
-              %li= link_to glyph(:trash) + "Delete", student.course_memberships.where(:course_id => current_course.id).first, :class => "button", :data => { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete
+              %li= link_to glyph(:edit) + "Edit", edit_user_path(student), class: "button"
+              %li= link_to glyph(:trash) + "Delete", student.course_memberships.where(course_id: current_course.id).first, class: "button", data: { confirm: "This will delete #{student.name} from your course - are you sure?" }, :method => :delete

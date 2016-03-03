@@ -17,7 +17,7 @@ describe EventLogger::Params, type: :vendor_library do
 
   describe "self.#numerical_params" do
     subject { logger_class.numerical_params(*param_schema) }
-    let(:param_schema) { [ :ralph_jones, { :physicist => :stephen_hawking } ] }
+    let(:param_schema) { [ :ralph_jones, { physicist: :stephen_hawking } ] }
 
     it "defines filtered numerical params for the given param schema" do
       expect(logger_class).to receive(:define_filtered_numerical_param).with(:ralph_jones)

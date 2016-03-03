@@ -25,7 +25,7 @@
             .switch-label
               = "#{term_for :pass} / #{term_for :fail} Status"
             .pass-fail-grade-toggle
-              .switch.pass-fail-contingent{:data => {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
+              .switch.pass-fail-contingent{data: {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
                 = f.check_box :pass_fail_status, { :checked=> @grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
                 - label_text = @grade.pass_fail_status ? (term_for @grade.pass_fail_status) : (term_for :fail)
                 = f.label :pass_fail_status, label_text
@@ -70,8 +70,8 @@
 
           .submit-buttons
             %ul
-              %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", :class => "button"
-              %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), :class => "button"
+              %li= submit_tag "#{@grade.persisted? && @grade.is_graded? ? 'Update' : 'Submit'} Grade", class: "button"
+              %li= link_to glyph("times-circle") + "Cancel", assignment_path(@assignment), class: "button"
 
         %section
 

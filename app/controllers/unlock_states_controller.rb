@@ -1,6 +1,6 @@
 class UnlockStatesController < ApplicationController
 
-  #Unlock States are used to ...
+  # Unlock States are used to ...
 
   before_filter :ensure_staff?
   before_filter :save_referer, only: [:manually_unlock]

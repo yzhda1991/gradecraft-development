@@ -3,7 +3,7 @@ class PredictedEarnedBadge < ActiveRecord::Base
   attr_accessible :student_id, :badge_id, :times_earned
 
   belongs_to :badge
-  belongs_to :student, :class_name => "User"
+  belongs_to :student, class_name: "User"
 
   scope :for_course, ->(course) do
     joins(:badge).where(badges: {course_id: course.id})

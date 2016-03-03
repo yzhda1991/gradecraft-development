@@ -18,14 +18,14 @@ describe CriteriaController do
     describe "POST create" do
       it "creates a new criterion" do
         params = attributes_for(:criterion)
-        expect{ post :create, :criterion => params }.to change(Criterion,:count).by(1)
+        expect{ post :create, criterion: params }.to change(Criterion,:count).by(1)
       end
     end
 
     describe "GET destroy" do
       it "destroys a criterion" do
         @criterion = create(:criterion)
-        expect{ get :destroy, { :id => @criterion } }.to change(Criterion,:count).by(-1)
+        expect{ get :destroy, { id: @criterion } }.to change(Criterion,:count).by(-1)
       end
     end
 
@@ -33,7 +33,7 @@ describe CriteriaController do
       it "updates a criterion" do
         @criterion = create(:criterion)
         params = { name: "new name" }
-        post :update, id: @criterion.id, :criterion=> params
+        post :update, id: @criterion.id, criterion: params
         expect(@criterion.reload.name).to eq("new name")
       end
     end

@@ -16,15 +16,15 @@ class Challenge < ActiveRecord::Base
 
   belongs_to :course, touch: true
   has_many :submissions
-  has_many :challenge_grades, :dependent => :destroy
+  has_many :challenge_grades, dependent: :destroy
   accepts_nested_attributes_for :challenge_grades
 
-  has_many :predicted_earned_challenges, :dependent => :destroy
+  has_many :predicted_earned_challenges, dependent: :destroy
 
   score_levels :challenge_score_levels
 
   multiple_files :challenge_files
-  has_many :challenge_files, :dependent => :destroy
+  has_many :challenge_files, dependent: :destroy
   accepts_nested_attributes_for :challenge_files
 
   scope :with_dates, -> { where("challenges.due_at IS NOT NULL OR challenges.open_at IS NOT NULL") }
@@ -45,7 +45,7 @@ class Challenge < ActiveRecord::Base
   end
 
   def challenge_grade_for_team(team)
-    challenge_grades.where(:team_id => team.id).first
+    challenge_grades.where(team_id: team.id).first
   end
 
   def future?
