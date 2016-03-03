@@ -66,6 +66,9 @@ NumberModule.directive 'smartNumber',
     isNotDigit = (which) ->
         (which < 44 || which > 57 || which is 47)
 
+    isNegative = (which) ->
+      which == 109 || which == 189
+
     isTooLong = (val, maxDigits) ->
       val >= maxDigits
 
@@ -89,7 +92,7 @@ NumberModule.directive 'smartNumber',
 
     # invalid actions
     invalidKey = (event) ->
-      isNotDigit(event.which) && isNotControlKey(event.which)
+      isNotDigit(event.which) && isNotControlKey(event.which) && !isNegative(event.which)
 
     maxDigitsReached = (elem, maxDigits) ->
       elem.val().length >= maxDigits
@@ -235,9 +238,11 @@ NumberModule.directive 'smartNumber',
     numberWithCommas = (integer) ->
       integer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
+    stripCommas = (val) ->
+      val.replace(/,/g, "")
+
     resetCommas = (val) ->
-      stripped = val.replace(/,/g, "")
-      numberWithCommas(stripped)
+      numberWithCommas(stripCommas(val))
 
     {
         restrict: 'A'
@@ -431,6 +436,15 @@ NumberModule.directive 'smartNumber',
 
                     # trigger final change event
                     triggerChange(elem)
+
+                if isNegative(event.which)
+                  return if initialPosition != 0
+                  # return the "-" character if no number present
+                  return elem.val("-") if elem.val() == ""
+
+                  negatedVal = -stripCommas(elem.val())
+                  elem.val(numberWithCommas(negatedVal))
+                  elem[0].setSelectionRange(1,1)
 
             elem.on 'keypress', (event) ->
               killEvent(event)
