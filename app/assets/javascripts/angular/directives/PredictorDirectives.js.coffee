@@ -46,7 +46,7 @@
           tooltip: 'This ' + scope.targetTerm() + ' is late!'
           icon: "fa-exclamation-triangle"
         }
-        has_closed: {
+        closed_without_submission: {
           tooltip: 'This ' + scope.targetTerm() + ' is no longer open for submissions'
           icon: "fa-ban"
         }
@@ -62,9 +62,13 @@
           tooltip: 'This ' + scope.targetTerm() + ' is rubric graded'
           icon: "fa-th"
         }
-        accepts_submissions: {
+        accepting_submissions: {
           tooltip: 'This ' + scope.targetTerm() + ' accepts submissions'
           icon: "fa-paperclip"
+        }
+        has_submission: {
+          tooltip: 'You have submitted this ' + scope.targetTerm()
+          icon: "fa-file"
         }
         is_locked: {
           tooltip: scope.conditions()

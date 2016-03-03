@@ -64,4 +64,8 @@ describe NullGrade do
   it "handles queries for assignments accepting submissions" do
     expect(subject.assignment.accepts_submissions?).to be_falsey
   end
+
+  it "returns a null student for student" do
+    expect(subject.student.class).to eq(NullStudent)
+  end
 end

@@ -30,7 +30,8 @@ class PredictedGradeSerializer
     grade.score if grade.is_student_visible?
   end
 
-  def initialize(grade, current_user)
+  def initialize(assignment, grade, current_user)
+    @assignment = assignment
     @grade = grade
     @current_user = current_user
   end
@@ -48,11 +49,11 @@ class PredictedGradeSerializer
 
   def show_zero_in_predictor(score)
     score.nil? &&
-    grade.assignment.accepts_submissions? &&
-    grade.assignment.submissions_have_closed? &&
+    assignment.accepts_submissions? &&
+    assignment.submissions_have_closed? &&
     grade.student.submission_for_assignment(grade.assignment).nil?
   end
 
-  attr_reader :grade
+  attr_reader :assignment, :grade
 end
 

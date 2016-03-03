@@ -120,7 +120,7 @@
       # use raw score to keep weighting calculation on assignment type level
       if assignment.grade.raw_score != null
         total += assignment.grade.raw_score
-      else if ! assignment.pass_fail && ! assignment.has_closed && includePredicted
+      else if ! assignment.pass_fail && ! assignment.closed_without_sumbission && includePredicted
         total += assignment.grade.predicted_score
     )
     total
@@ -232,6 +232,14 @@
 
   $scope.badgeCompleted = (badge)->
     if (badge.point_total == badge.total_earned_points && ! badge.can_earn_multiple_times)
+      return true
+    else
+      return false
+
+  # We keep the predictor open on closed assignments IF the student has a
+  # a submission
+  $scope.closed_for_prediction = (assignment)->
+    if assignment.has_closed && !assignment.has_submission
       return true
     else
       return false

@@ -656,6 +656,7 @@ describe GradesController do
           controller.instance_eval { enqueue_predictor_event_job }
         end
 
+        # intermittent failure?
         it "adds an additional pageview record to mongo" do
           expect {
             controller.instance_eval { enqueue_predictor_event_job }

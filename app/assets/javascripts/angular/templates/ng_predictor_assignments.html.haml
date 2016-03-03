@@ -1,4 +1,4 @@
-%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : articleGraded(assignment),"status-no-points":articleNoPoints(assignment), "status-locked" : assignment.locked}'}
+%article.predictor-article{'ng-repeat' => 'assignment in assignments | filter:{assignment_type_id: assignmentType.id}:true','ng-class'=>'{"status-graded" : articleGraded(assignment),"status-no-points":articleNoPoints(assignment), "status-locked" : assignment.is_locked, "status-late" : assignment.is_late}'}
 
   .predictor-article-title{'title' => '{{assignment.name}}'}
     {{assignment.name | limitTo:50}}
@@ -37,7 +37,7 @@
       %div{'ng-if' => 'assignment.predictor_display_type == "checkbox" && assignment.pass_fail == true'}
         .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'1'}
 
-      %div{'ng-if' => 'assignment.predictor_display_type == "checkbox"'}
+      %div{'ng-if' => 'assignment.predictor_display_type == "checkbox" && !assignment.pass_fail == true'}
         .predictor-binary-switch{'target'=>'assignment','target-type'=>'assignment','off-value'=>'0','on-value'=>'assignment.point_total'}
 
 
