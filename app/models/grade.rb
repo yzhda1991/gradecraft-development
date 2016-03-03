@@ -14,7 +14,8 @@ class Grade < ActiveRecord::Base
     :raw_score, :status, :student, :student_id, :submission,
     :_destroy, :submission_id, :task, :task_id, :team_id, :earned_badges,
     :earned_badges_attributes, :feedback_read, :feedback_read_at,
-    :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at
+    :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at,
+    :excluded_from_course_score, :excluded_date, :excluded_by
 
   STATUSES = ["In Progress", "Graded", "Released"]
   UNRELEASED_STATUSES = ["In Progress", "Graded"]
@@ -59,6 +60,8 @@ class Grade < ActiveRecord::Base
   scope :no_status, -> { instructor_modified.where(status: ["", nil])}
   scope :graded_or_released, -> { where(status: ["Graded", "Released"])}
   scope :not_released, -> { joins(:assignment).where(assignments: { release_necessary: true }).where(status: "Graded") }
+  scope :excluded_from_course_score, -> { where excluded_from_course_score: true }
+  scope :included_in_course_score, -> { where excluded_from_course_score: false }
   scope :instructor_modified, -> { where instructor_modified: true }
   scope :positive, -> { where("score > 0")}
   scope :predicted_to_be_done, -> { where("predicted_score > 0")}

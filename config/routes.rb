@@ -86,6 +86,7 @@ GradeCraft::Application.routes.draw do
         post :predict_score
         post :feedback_read
         post :remove
+        post :exclude
       end
     end
     resources :submissions, except: :index do
