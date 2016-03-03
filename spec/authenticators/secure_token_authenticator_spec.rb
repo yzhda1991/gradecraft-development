@@ -8,22 +8,7 @@ describe SecureTokenAuthenticator do
     target_class: "WaffleClass",
     secret_key: "skeletonkeysrsly"
   }}
-
-  # def options_valid?
-  #   secure_token_uuid.present? && target_class.present? && secret_key.present?
-  # end
-
-  # def secure_token_found?
-  #   @secure_token ||= SecureToken.find_by_uuid secure_token_uuid
-  # end
-
-  # def target_exists?
-  #   @secure_token.has_target_of_class?(target_class)
-  # end
-
-  # def secure_token_authenticated?
-  #   @secure_token.authenticates_with?(secret_key)
-  # end
+  let(:secure_token) { SecureToken.new }
 
   describe "#initialize" do
     it "caches the uuid" do
@@ -39,6 +24,12 @@ describe SecureTokenAuthenticator do
     it "caches the secret key" do
       expect(subject.instance_variable_get(:@secret_key))
         .to eq("skeletonkeysrsly")
+    end
+
+    describe "fetching the secure token" do
+      it "fetches the secure token" do
+        allow(subject).to receive(:fetch_secure_token) { secure_token }
+      end
     end
   end
 
@@ -102,27 +93,4 @@ describe SecureTokenAuthenticator do
       end
     end
   end
-
-  describe "#options_present?" do
-    let(:result) { subject.options_present? }
-
-    before(:each) do
-      allow(subject).to receive(:required_options) { required_options }
-    end
-
-    context "all of the required options are present" do
-      let(:required_options) { ["great", "seriously"] }
-      it "returns true" do
-        expect(result).to be_truthy
-      end
-    end
-
-    context "some of the required options are not present" do
-      let(:required_options) { ["", nil] }
-      it "returns false" do
-        expect(result).to be_falsey
-      end
-    end
-  end
-
 end

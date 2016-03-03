@@ -7,29 +7,39 @@ class SecureTokenAuthenticator
   attr_reader :secure_token_uuid, :target_class, :secret_key
 
   def authenticates?
-    options_present? &&
-      secure_token_found? &&
-      target_exists? &&
-      secure_token_authenticated?
+    uuid_valid? && secure_token && @secure_token.authenticates_with?(secret_key)
   end
 
-  def options_present?
-    required_options.all?(&:present?)
+  def secure_token
+    @secure_token ||= SecureToken.where(
+      uuid: secure_token_uuid,
+      target_class: target_class
+    ).first
   end
 
-  def secure_token_found?
-    @secure_token ||= SecureToken.find_by_uuid secure_token_uuid
+  def uuid_has_valid_format?
+    if secure_token_uuid.match REGEX["UUID"]
+      true
+    else
+      # This should only occur is somebody is attempting to crack a key by
+      # searching for random uuid values. By waiting for a second here we
+      # drastically hinder attacks by slowing down the rate at which they can
+      # be made but we do so without sacrificing system resources.
+      sleep 3
+      false
+    end
   end
 
-  def target_exists?
-    @secure_token.has_target_of_class?(target_class)
-  end
-
-  def secure_token_authenticated?
-    @secure_token.authenticates_with?(secret_key)
-  end
-
-  def required_options
-    [ secure_token_uuid, target_class, secret_key ]
+  def secure_key_has_valid_format?
+    if secret_key.match REGEX["190_BIT_SECRET_KEY"]
+      true
+    else
+      # This should only occur is somebody is attempting to crack a key by
+      # searching for random uuid values. By waiting for a second here we
+      # drastically hinder attacks by slowing down the rate at which they can
+      # be made but we do so without sacrificing system resources.
+      sleep 3
+      false
+    end
   end
 end
