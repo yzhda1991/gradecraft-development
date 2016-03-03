@@ -56,16 +56,31 @@ describe EarnedBadge do
     end
   end
 
-  describe "#check_unlockables" do
-    skip "implement"
-  end
-
-  describe "score" do
+  describe "#score" do
     it "caches 0 for a badge with nil points" do
       badge = create(:badge, point_total: nil)
       student = create(:user)
       earned_badge = EarnedBadge.create(badge_id: badge.id, student_id: student.id, student_visible: true)
       expect(earned_badge.score).to eq(0)
+    end
+  end
+
+  describe "#student_visible" do
+    it "is not visible if the grade is not visible" do
+      grade = create(:grade, status: "In Progress")
+      subject = create(:earned_badge, grade: grade)
+      expect(subject).to_not be_student_visible
+    end
+
+    it "is visible if the grade is visible" do
+      grade = create(:grade, status: "Released")
+      subject = create(:earned_badge, grade: grade)
+      expect(subject).to be_student_visible
+    end
+
+    it "can be overriden by passing in a value" do
+      subject = create(:earned_badge, student_visible: true)
+      expect(subject).to be_student_visible
     end
   end
 end
