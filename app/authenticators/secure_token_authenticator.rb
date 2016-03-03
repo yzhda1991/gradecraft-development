@@ -7,13 +7,14 @@ class SecureTokenAuthenticator
   attr_reader :secure_token_uuid, :target_class, :secret_key
 
   def authenticates?
-    options_valid? && secure_token && target_exists? && secure_token_authenticated?
+    options_present?
+      && secure_token_found?
+      && target_exists?
+      && secure_token_authenticated?
   end
 
-  protected
-
-  def options_valid?
-    secure_token_uuid.present? && target_class.present? && secret_key.present?
+  def options_present?
+    required_options.all?(&:present?)
   end
 
   def secure_token_found?
@@ -26,5 +27,9 @@ class SecureTokenAuthenticator
 
   def secure_token_authenticated?
     @secure_token.authenticates_with?(secret_key)
+  end
+
+  def required_options
+    [ secure_token_uuid, target_class, secret_key ]
   end
 end
