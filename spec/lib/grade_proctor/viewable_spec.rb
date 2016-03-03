@@ -5,7 +5,7 @@ describe GradeProctor::Viewable do
   let(:course) { double(:course, id: 456) }
   let(:grade) { double(:grade, assignment: assignment, course_id: course.id,
                        student_id: 123, is_graded?: true, is_released?: false) }
-  let(:user) { double(:user, id: 123) }
+  let(:user) { double(:user, id: 123, is_staff?: false) }
 
   describe "#viewable?" do
     subject { GradeProctor.new(grade) }
@@ -37,13 +37,16 @@ describe GradeProctor::Viewable do
       end
     end
 
-    context "as a professor" do
-      xit "can view the grade if they are the instructor for the course"
-      xit "cannot view the grade if they are not the instructor for the course"
-    end
+    context "as part of the course staff" do
+      it "can view the grade if they are the instructor for the course" do
+        allow(user).to receive(:is_staff?).with(course).and_return true
+        expect(subject).to be_viewable user, course
+      end
 
-    context "as an administrator" do
-      xit "can view the grade"
+      it "cannot view the grade if they are not the instructor for the course" do
+        allow(user).to receive(:is_staff?).with(course).and_return false
+        expect(subject).to_not be_viewable user, course
+      end
     end
   end
 end
