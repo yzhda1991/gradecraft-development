@@ -64,8 +64,8 @@ class GradesController < ApplicationController
 
       # @mz TODO: ADD SPECS
       if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
-        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        @grade_updater_job.enqueue
+        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        grade_updater_job.enqueue
       end
 
       if session[:return_to].present?
@@ -190,8 +190,7 @@ class GradesController < ApplicationController
     if @assignment.update_attributes(params[:assignment])
 
       # @mz TODO: add specs
-      @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: mass_update_grade_ids)
-      @multiple_grade_updater_job.enqueue
+      enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
 
       if !params[:team_id].blank?
         redirect_to assignment_path(@assignment, team_id: params[:team_id])
@@ -233,7 +232,7 @@ class GradesController < ApplicationController
     end
 
     # @mz TODO: add specs
-    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
+    enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
 
     respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
   end
@@ -259,7 +258,7 @@ class GradesController < ApplicationController
     end
 
     # @mz TODO: add specs
-    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
+    enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
 
     if session[:return_to].present?
       redirect_to session[:return_to]
@@ -289,8 +288,9 @@ class GradesController < ApplicationController
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
 
       # @mz TODO: add specs
-      @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: @result.successful.map(&:id))
-      @multiple_grade_updater_job.enqueue
+      grade_ids = @result.successful.map(&:id)
+
+      enqueue_multiple_grade_update_jobs(grade_ids)
 
       render :import_results
     end
@@ -323,8 +323,8 @@ class GradesController < ApplicationController
 
       if @grade.save
         # @mz TODO: add specs
-        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        @grade_updater_job.enqueue
+        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        grade_updater_job.enqueue
 
         redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!'
       else
@@ -436,6 +436,13 @@ class GradesController < ApplicationController
         memo << grade.id
       end
       memo
+    end
+  end
+
+  def enqueue_multiple_grade_update_jobs(grade_ids)
+    grade_ids.each do |grade_id|
+      grade_updater_job = GradeUpdaterJob.new(grade_id: grade_id)
+      grade_updater_job.enqueue
     end
   end
 

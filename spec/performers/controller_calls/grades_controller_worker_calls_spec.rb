@@ -70,7 +70,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       end
     end
 
-    describe "actions that use MultipleGradeUpdaterJob" do
+    describe "actions that use GradeUpdaterJob" do
       let(:student2) { create(:user) }
       let(:students) { [student, student2] }
       let(:grade2) { create(:grade, grade_attributes.merge(student_id: student2.id)) }
@@ -94,7 +94,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
           let(:request_attrs) {{ id: assignment.id, assignment: {name: "Some Great Name"}}}
           before { allow(assignment).to receive_messages(update_attributes: true) }
 
-          it_behaves_like "a successful resque job", MultipleGradeUpdaterJob
+          it_behaves_like "a successful resque job", GradeUpdaterJob
         end
 
         context "grade attributes fail to update" do
@@ -103,7 +103,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
           let(:request_attrs) {{ id: assignment.id, assignment: { name: nil }}}
           before { allow(assignment).to receive_messages(update_attributes: false) }
 
-          it_behaves_like "a failed resque job", MultipleGradeUpdaterJob
+          it_behaves_like "a failed resque job", GradeUpdaterJob
         end
       end
 
@@ -135,7 +135,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
             allow(result_double).to receive(:successful).and_return(grades)
           end
 
-          it_behaves_like "a successful resque job", MultipleGradeUpdaterJob
+          it_behaves_like "a successful resque job", GradeUpdaterJob
         end
       end
 
