@@ -352,17 +352,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Powers the worker to recalculate student scores
-  def improved_cache_course_score(course_id)
-    course_membership = fetch_course_membership(course_id)
-    total_score = 0
-    unless course_membership.nil?
-      total_score = course_membership.recalculated_student_score
-      course_membership.update_attribute :score, total_score
-    end
-    total_score
-  end
-
   def fetch_course_membership(course_id)
     course_memberships.where(course_id: course_id).first
   end

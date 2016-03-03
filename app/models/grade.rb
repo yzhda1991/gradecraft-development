@@ -161,7 +161,7 @@ class Grade < ActiveRecord::Base
   # related methods have tests
   # want to make sure that nothing depends on the output of this method
   def save_student_and_team_scores
-    self.student.improved_cache_course_score(self.course.id)
+    self.student.cache_course_score(self.course.id)
     if self.course.has_teams? && self.student.team_for_course(self.course).present?
       self.student.team_for_course(self.course).cache_score
     end
@@ -265,7 +265,7 @@ class Grade < ActiveRecord::Base
   # @mz todo: add specs
   def cache_student_score
     @student = self.student
-    @student_update_successful = @student.improved_cache_course_score(self.course.id)
+    @student_update_successful = @student.cache_course_score(self.course.id)
   end
 
   # @mz todo: add specs, improve the syntax here
