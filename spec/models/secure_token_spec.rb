@@ -1,4 +1,6 @@
 require 'active_record_spec_helper'
+require 'scrypt'
+require_relative "../../config/initializers/regex" unless defined? REGEX
 
 RSpec.describe SecureToken do
   subject { SecureToken.new }
@@ -7,7 +9,7 @@ RSpec.describe SecureToken do
     let(:result) { subject.instance_eval { random_secret_key } }
 
     it "creates a 190-bit url-safe base64 hex key" do
-      expect(result).to match(/[a-zA-Z0-9_\-]{254}/)
+      expect(result).to match REGEX["190_BIT_SECRET_KEY"]
     end
 
     it "caches the @random_secret_key" do

@@ -7,7 +7,10 @@ class SecureTokenAuthenticator
   attr_reader :secure_token_uuid, :target_class, :secret_key
 
   def authenticates?
-    uuid_valid? && secure_token && @secure_token.authenticates_with?(secret_key)
+    uuid_format_valid? &&
+    secure_key_format_valid? &&
+    secure_token &&
+    secure_token.authenticates_with?(secret_key)
   end
 
   def secure_token
@@ -17,7 +20,7 @@ class SecureTokenAuthenticator
     ).first
   end
 
-  def uuid_has_valid_format?
+  def uuid_format_valid?
     if secure_token_uuid.match REGEX["UUID"]
       true
     else
@@ -30,7 +33,7 @@ class SecureTokenAuthenticator
     end
   end
 
-  def secure_key_has_valid_format?
+  def secure_key_format_valid?
     if secret_key.match REGEX["190_BIT_SECRET_KEY"]
       true
     else

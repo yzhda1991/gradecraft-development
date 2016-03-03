@@ -1,4 +1,6 @@
 require 'active_record_spec_helper'
+require_relative "../../app/authenticators/secure_token_authenticator"
+require_relative "../../config/initializers/regex" unless defined? REGEX
 
 describe SecureTokenAuthenticator do
   subject { described_class.new attributes }
@@ -25,12 +27,6 @@ describe SecureTokenAuthenticator do
       expect(subject.instance_variable_get(:@secret_key))
         .to eq("skeletonkeysrsly")
     end
-
-    describe "fetching the secure token" do
-      it "fetches the secure token" do
-        allow(subject).to receive(:fetch_secure_token) { secure_token }
-      end
-    end
   end
 
   describe "readable attributes" do
@@ -49,14 +45,18 @@ describe SecureTokenAuthenticator do
 
   describe "#authenticates?" do
     let(:result) { subject.authenticates? }
+    let(:secure_token) { SecureToken.new }
 
-    before do
+    before(:each) do
       allow(subject).to receive_messages(
-        options_present?: true,
-        secure_token_found?: true,
-        target_exists?: true,
-        secure_token_authenticated?: true
+        uuid_format_valid?: true,
+        secure_key_format_valid?: true,
+        secure_token: secure_token,
+        secret_key: "the-secret-key"
       )
+
+      allow(secure_token).to receive(:authenticates_with?)
+        .with("the-secret-key").and_return true
     end
 
     context "all steps return true" do
@@ -65,30 +65,34 @@ describe SecureTokenAuthenticator do
       end
     end
 
-    context "options are not present" do
+    context "the uuid format is not valid" do
       it "does not authenticate" do
-        allow(subject).to receive(:options_present?) { false }
+        allow(subject).to receive(:uuid_format_valid?) { false }
         expect(result).to be_falsey
       end
     end
 
-    context "the secure token is not found" do
+    context "the secure key format is not valid" do
       it "does not authenticate" do
-        allow(subject).to receive(:secure_token_found?) { false }
+        allow(subject).to receive(:secure_key_format_valid?) { false }
         expect(result).to be_falsey
       end
     end
 
-    context "the target does not exist" do
+    context "the secure token isn't present" do
       it "does not authenticate" do
-        allow(subject).to receive(:target_exists?) { false }
+        allow(subject).to receive(:secure_token) { nil }
         expect(result).to be_falsey
       end
     end
 
-    context "the secure token does not authenticate properly" do
+    context "the secure token doesn't authenticate with the given secret key" do
+      before(:each) do
+        allow(secure_token).to receive(:authenticates_with?)
+          .with("the-secret-key").and_return false
+      end
+
       it "does not authenticate" do
-        allow(subject).to receive(:secure_token_authenticated?) { false }
         expect(result).to be_falsey
       end
     end

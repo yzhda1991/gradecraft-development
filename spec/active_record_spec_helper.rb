@@ -28,6 +28,7 @@ module CarrierWave
     module Delay; end
   end
 end
+
 class ActiveRecord::Base
   def self.process_in_background(_); end
 end
