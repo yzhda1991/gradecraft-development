@@ -16,7 +16,7 @@ class SecureTokenAuthenticator
   def secure_token
     @secure_token ||= SecureToken.where(
       uuid: secure_token_uuid,
-      target_class: target_class
+      target_type: target_class
     ).first
   end
 
