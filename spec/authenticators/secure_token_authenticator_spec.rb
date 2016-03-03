@@ -9,12 +9,6 @@ describe SecureTokenAuthenticator do
     secret_key: "skeletonkeysrsly"
   }}
 
-  # def authenticates?
-  #   options_valid? && secure_token && target_exists? && secure_token_authenticated?
-  # end
-
-  # protected
-
   # def options_valid?
   #   secure_token_uuid.present? && target_class.present? && secret_key.present?
   # end
@@ -104,6 +98,28 @@ describe SecureTokenAuthenticator do
     context "the secure token does not authenticate properly" do
       it "does not authenticate" do
         allow(subject).to receive(:secure_token_authenticated?) { false }
+        expect(result).to be_falsey
+      end
+    end
+  end
+
+  describe "#options_present?" do
+    let(:result) { subject.options_present? }
+
+    before(:each) do
+      allow(subject).to receive(:required_options) { required_options }
+    end
+
+    context "all of the required options are present" do
+      let(:required_options) { ["great", "seriously"] }
+      it "returns true" do
+        expect(result).to be_truthy
+      end
+    end
+
+    context "some of the required options are not present" do
+      let(:required_options) { ["", nil] }
+      it "returns false" do
         expect(result).to be_falsey
       end
     end
