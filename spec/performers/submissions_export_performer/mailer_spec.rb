@@ -80,13 +80,15 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     let(:assignment) { create(:assignment) }
     let(:team) { create(:team) }
     let(:submissions_export) { create(:submissions_export) }
+    let(:secure_token) { create(:secure_token) }
     let(:mailer_double) { double("mailer something").as_null_object }
 
     before(:each) do
-      performer.instance_variable_set(:@professor, professor)
-      performer.instance_variable_set(:@assignment, assignment)
-      performer.instance_variable_set(:@team, team)
-      performer.instance_variable_set(:@submissions_export, submissions_export)
+      [:professor, :assignment, :team, :submissions_export].each do |attr|
+        performer.instance_variable_set "@#{attr}", send(attr)
+      end
+
+      allow(performer).to receive(:new_secure_token) { secure_token }
       allow(mailer_double).to receive(:deliver_now)
     end
 
@@ -99,7 +101,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       before(:each) { allow(ExportsMailer).to receive(:submissions_export_success) { mailer_double }}
 
       it "creates an export success mailer" do
-        expect(ExportsMailer).to receive(:submissions_export_success).with(professor, assignment, submissions_export)
+        expect(ExportsMailer).to receive(:submissions_export_success).with(professor, assignment, submissions_export, secure_token)
       end
 
       it "delivers the mailer" do
@@ -112,7 +114,7 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       before(:each) { allow(ExportsMailer).to receive(:team_submissions_export_success) { mailer_double }}
 
       it "delivers a team export success mailer" do
-        expect(ExportsMailer).to receive(:team_submissions_export_success).with(professor, assignment, team, submissions_export)
+        expect(ExportsMailer).to receive(:team_submissions_export_success).with(professor, assignment, team, submissions_export, secure_token)
       end
 
       it "delivers the mailer" do

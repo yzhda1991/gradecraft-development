@@ -5,8 +5,8 @@ class ExportsMailer < ApplicationMailer
     mail_submissions_export("is being created", professor, assignment)
   end
 
-  def submissions_export_success(professor, assignment, submissions_export)
-    @submissions_export = submissions_export
+  def submissions_export_success(professor, assignment, submissions_export, secure_token)
+    cache_success_mailer_attrs(submissions_export, secure_token)
     mail_submissions_export("is ready", professor, assignment)
   end
 
@@ -18,8 +18,8 @@ class ExportsMailer < ApplicationMailer
     mail_team_submissions_export("is being created", professor, assignment, team)
   end
 
-  def team_submissions_export_success(professor, assignment, team, submissions_export)
-    @submissions_export = submissions_export
+  def team_submissions_export_success(professor, assignment, team, submissions_export, secure_token)
+    cache_success_mailer_attrs(submissions_export, secure_token)
     mail_team_submissions_export("is ready", professor, assignment, team)
   end
 
@@ -80,6 +80,11 @@ class ExportsMailer < ApplicationMailer
       to: @professor.email,
       bcc: ExportsMailer::ADMIN_EMAIL
     }
+  end
+
+  def cache_success_mailer_attrs(submissions_export, secure_token)
+    @submissions_export = submissions_export
+    @secure_token = secure_token
   end
 
   def cache_submission_attrs(professor, assignment)

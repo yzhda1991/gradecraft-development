@@ -4,7 +4,7 @@ class SubmissionsExport < ActiveRecord::Base
   belongs_to :team
   belongs_to :assignment
 
-  has_many :secure_tokens, as: :target
+  has_many :secure_tokens, as: :target, dependent: :destroy
 
   attr_accessible :course_id, :professor_id, :team_id, :assignment_id, :submissions_snapshot,
     :s3_object_key, :export_filename, :s3_bucket, :last_export_started_at, :last_export_completed_at,

@@ -3,7 +3,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   require "open-uri" # need this for getting the S3 file over http
   include ModelAddons::ImprovedLogging # log errors with attributes
 
-  attr_reader :submissions_export
+  attr_reader :submissions_export, :professor, :course
 
   def setup
     ensure_s3fs_tmp_dir if use_s3fs?
@@ -491,7 +491,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def deliver_archive_success_mailer
-    @team ? deliver_team_export_successful_mailer : deliver_export_successful_mailer
+    @team ? deliver_team_export_successful_mailer : \
+      deliver_export_successful_mailer
   end
 
   def deliver_archive_failed_mailer
@@ -499,19 +500,30 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def deliver_export_successful_mailer
-    ExportsMailer.submissions_export_success(@professor, @assignment, @submissions_export).deliver_now
+    ExportsMailer.submissions_export_success(professor, @assignment, \
+      @submissions_export, new_secure_token).deliver_now
   end
 
   def deliver_team_export_successful_mailer
-    ExportsMailer.team_submissions_export_success(@professor, @assignment, @team, @submissions_export).deliver_now
+    ExportsMailer.team_submissions_export_success(professor, @assignment, \
+      @team, @submissions_export, new_secure_token).deliver_now
   end
 
   def deliver_export_failure_mailer
-    ExportsMailer.submissions_export_failure(@professor, @assignment).deliver_now
+    ExportsMailer.submissions_export_failure(@professor, @assignment)
+      .deliver_now
   end
 
   def deliver_team_export_failure_mailer
-    ExportsMailer.team_submissions_export_failure(@professor, @assignment, @team).deliver_now
+    ExportsMailer.team_submissions_export_failure(@professor, @assignment, \
+      @team).deliver_now
+  end
+
+  def new_secure_token
+    # be sure to add the user_id and course_id here in the event that we'd like
+    # to revoke the secure token later in the event that, say, the staff member
+    # is removed from the course or from the system
+    SecureToken.create user_id: professor[:id], course_id: course[:id]
   end
 
   def expand_messages(messages={})

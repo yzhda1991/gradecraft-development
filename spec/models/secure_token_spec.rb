@@ -1,6 +1,5 @@
-require 'active_record_spec_helper'
+require 'rails_spec_helper'
 require 'scrypt'
-require_relative "../../config/initializers/regex" unless defined? REGEX
 
 RSpec.describe SecureToken do
   subject { SecureToken.new }
