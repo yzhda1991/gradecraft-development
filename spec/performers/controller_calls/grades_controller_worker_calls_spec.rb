@@ -70,7 +70,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       end
     end
 
-    describe "actions that use GradeUpdaterJob" do
+    describe "actions that trigger multiple GradeUpdaterJob instances" do
       let(:student2) { create(:user) }
       let(:students) { [student, student2] }
       let(:grade2) { create(:grade, grade_attributes.merge(student_id: student2.id)) }
