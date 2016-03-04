@@ -26,7 +26,7 @@ class SecureTokenAuthenticator
       true
     else
       # This should only occur is somebody is attempting to crack a key by
-      # searching for random uuid values. By waiting for a second here we
+      # searching for random uuid values. By sleeping for a moment here we
       # drastically hinder attacks by slowing down the rate at which they can
       # be made but we do so without sacrificing system resources.
       sleep slowdown_duration
@@ -39,7 +39,7 @@ class SecureTokenAuthenticator
       true
     else
       # This should only occur is somebody is attempting to crack a key by
-      # searching for random uuid values. By waiting for a second here we
+      # searching for random uuid values. By sleeping for a moment here we
       # drastically hinder attacks by slowing down the rate at which they can
       # be made but we do so without sacrificing system resources.
       sleep slowdown_duration

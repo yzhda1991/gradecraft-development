@@ -29,7 +29,7 @@ describe SecureTokenAuthenticator do
     end
 
     it "sets a slowdown duration of 1 second" do
-      expect(subject.slowdown_duration).to eq 1
+      expect(subject.instance_variable_get(:@slowdown_duration)).to eq 1
     end
   end
 
@@ -44,6 +44,10 @@ describe SecureTokenAuthenticator do
 
     it "has a readable secret_key" do
       expect(subject.secret_key).to eq("skeletonkeysrsly")
+    end
+
+    it "has a slowdown_duration" do
+      expect(subject.slowdown_duration).to eq 1
     end
   end
 
