@@ -3,8 +3,9 @@ class SecureTokenAuthenticator
     @secure_token_uuid = options[:secure_token_uuid]
     @target_class = options[:target_class]
     @secret_key = options[:secret_key]
+    @slowdown_duration = 1
   end
-  attr_accessor :secure_token_uuid, :target_class, :secret_key
+  attr_reader :secure_token_uuid, :target_class, :secret_key, :slowdown_duration
 
   def authenticates?
     uuid_format_valid? &&
@@ -28,7 +29,7 @@ class SecureTokenAuthenticator
       # searching for random uuid values. By waiting for a second here we
       # drastically hinder attacks by slowing down the rate at which they can
       # be made but we do so without sacrificing system resources.
-      sleep 1
+      sleep slowdown_duration
       false
     end
   end
@@ -41,7 +42,7 @@ class SecureTokenAuthenticator
       # searching for random uuid values. By waiting for a second here we
       # drastically hinder attacks by slowing down the rate at which they can
       # be made but we do so without sacrificing system resources.
-      sleep 1
+      sleep slowdown_duration
       false
     end
   end

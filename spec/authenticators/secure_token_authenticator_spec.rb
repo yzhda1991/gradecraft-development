@@ -27,6 +27,10 @@ describe SecureTokenAuthenticator do
       expect(subject.instance_variable_get(:@secret_key))
         .to eq("skeletonkeysrsly")
     end
+
+    it "sets a slowdown duration of 1 second" do
+      expect(subject.slowdown_duration).to eq 1
+    end
   end
 
   describe "readable attributes" do
@@ -138,53 +142,77 @@ describe SecureTokenAuthenticator do
     end
   end
 
-  describe "#uuid_format_valid?" do
-    let(:result) { subject.uuid_format_valid? }
-    let!(:cached_uuid_regex) { REGEX["UUID"] }
+  describe "checking uuid and secure key formatting" do
+    # use this so sleep calls don't delay rspec
+    let(:slowdown_duration) { 1e-10 }
 
-    before { REGEX["UUID"] = /VALID-UUID/ }
+    before do
+      allow(subject).to receive(:slowdown_duration) { slowdown_duration }
+    end
 
-    context "secure_token_uuid format matches the regex" do
-      it "returns true" do
-        allow(subject).to receive(:secure_token_uuid) { "VALID-UUID" }
-        expect(result).to be_truthy
+    describe "#uuid_format_valid?" do
+      let(:result) { subject.uuid_format_valid? }
+      let!(:cached_uuid_regex) { REGEX["UUID"] }
+
+      before do
+        REGEX["UUID"] = /VALID-UUID/
+      end
+
+      context "secure_token_uuid format matches the regex" do
+        it "returns true" do
+          allow(subject).to receive(:secure_token_uuid) { "VALID-UUID" }
+          expect(result).to be_truthy
+        end
+      end
+
+      context "secure_token_uuid format does not match the regex" do
+        it "returns false" do
+          allow(subject).to receive(:secure_token_uuid) { "invalid-uuid" }
+          expect(result).to be_falsey
+        end
+
+        it "sleeps" do
+          expect(subject).to receive(:sleep).with(slowdown_duration)
+          result
+        end
+      end
+
+      after do
+        REGEX["UUID"] = cached_uuid_regex
       end
     end
 
-    context "secure_token_uuid format does not match the regex" do
-      it "returns false" do
-        allow(subject).to receive(:secure_token_uuid) { "invalid-uuid" }
-        expect(result).to be_falsey
+    describe "#secure_key_format_valid?" do
+      let(:result) { subject.secure_key_format_valid? }
+      let!(:cached_secret_key_regex) { REGEX["190_BIT_SECRET_KEY"] }
+
+      before do
+        REGEX["190_BIT_SECRET_KEY"] = /VALID-SECRET-KEY/
+        allow(subject).to receive(:sleep) { 0.000000001 } # don't sleep for long
       end
-    end
 
-    after do
-      REGEX["UUID"] = cached_uuid_regex
-    end
-  end
-
-  describe "#secure_key_format_valid?" do
-    let(:result) { subject.secure_key_format_valid? }
-    let!(:cached_secret_key_regex) { REGEX["190_BIT_SECRET_KEY"] }
-
-    before { REGEX["190_BIT_SECRET_KEY"] = /VALID-SECRET-KEY/ }
-
-    context "secure_key format matches the regex" do
-      it "returns true" do
-        allow(subject).to receive(:secret_key) { "VALID-SECRET-KEY" }
-        expect(result).to be_truthy
+      context "secure_key format matches the regex" do
+        it "returns true" do
+          allow(subject).to receive(:secret_key) { "VALID-SECRET-KEY" }
+          expect(result).to be_truthy
+        end
       end
-    end
 
-    context "secure_key format does not match the regex" do
-      it "returns false" do
-        allow(subject).to receive(:secret_key) { "invalid-secret-key" }
-        expect(result).to be_falsey
+      context "secure_key format does not match the regex" do
+        it "returns false" do
+          allow(subject).to receive(:secret_key) { "invalid-secret-key" }
+          expect(result).to be_falsey
+        end
+
+        it "sleeps" do
+          expect(subject).to receive(:sleep).with(slowdown_duration)
+          result
+        end
       end
-    end
 
-    after do
-      REGEX["UUID"] = cached_secret_key_regex
+      after do
+        REGEX["UUID"] = cached_secret_key_regex
+      end
     end
   end
 end
