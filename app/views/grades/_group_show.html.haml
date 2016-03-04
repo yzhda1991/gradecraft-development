@@ -1,23 +1,23 @@
-- if presenter.group_for(current_user).present?
+- if presenter.group_for(current_student).present?
   %p
     %span.bold= "#{(term_for :group).titleize}:"
-    - if presenter.group_for(current_user).present?
-      = link_to presenter.group_for(current_user).name, group_path(presenter.group_for(current_user))
-      = link_to "Edit", edit_group_path(presenter.group_for(current_user)), class: "button"
+    - if presenter.group_for(current_student).present?
+      = link_to presenter.group_for(current_student).name, group_path(presenter.group_for(current_student))
+      = link_to "Edit", edit_group_path(presenter.group_for(current_student)), class: "button"
 
     .clear
 
     %span.bold= "#{term_for :students}:"
     %ul
-      - presenter.group_for(current_user).students.each do |student|
+      - presenter.group_for(current_student).students.each do |student|
         - if current_user_is_student?
           %li= student.name
         - else
           %li= link_to student.name, student_path(student)
 
       - if current_user_is_staff?
-        - if presenter.group_for(current_user).grades.graded_or_released.present?
-          = link_to "Edit Grade", group_grade_assignment_path(presenter.assignment, group_id: presenter.group_for(current_user)), class: "button"
+        - if presenter.group_for(current_student).grades.graded_or_released.present?
+          = link_to "Edit Grade", group_grade_assignment_path(presenter.assignment, group_id: presenter.group_for(current_student)), class: "button"
 
   - if current_user_is_student?
     - if presenter.grade_for(current_student).present?
@@ -43,7 +43,7 @@
       = render partial: "grades/request_feedback", locals: { grade: grade, assignment: presenter.assignment }
 
   - else
-    - presenter.group_for(current_user).students.each do |student|
+    - presenter.group_for(current_student).students.each do |student|
       .panel
         - if presenter.grade_for(student).present?
           %p.bold

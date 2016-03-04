@@ -9,7 +9,7 @@ describe GradesController do
     @student = create(:user)
     @student.courses << @course
   end
-  
+
   before(:each) do
     allow(Resque).to receive(:enqueue).and_return(true)
   end
@@ -29,7 +29,7 @@ describe GradesController do
       @grade.delete
     end
 
-    describe "GET show" do
+    describe "GET show", focus: true do
 
       context "for a group grade" do
         it "assigns group, title, and grades for assignment when assignment has groups" do
