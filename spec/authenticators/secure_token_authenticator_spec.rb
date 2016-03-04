@@ -1,15 +1,16 @@
-require 'active_record_spec_helper'
-require_relative "../../app/authenticators/secure_token_authenticator"
-require_relative "../../config/initializers/regex" unless defined? REGEX
+require 'rails_spec_helper'
 
 describe SecureTokenAuthenticator do
   subject { described_class.new subject_attrs }
 
-  let(:subject_attrs) {{
-    secure_token_uuid: "some_uuid",
-    target_class: "WaffleClass",
-    secret_key: "skeletonkeysrsly"
-  }}
+  let(:subject_attrs) do
+    {
+      secure_token_uuid: "some_uuid",
+      target_class: "WaffleClass",
+      secret_key: "skeletonkeysrsly"
+    }
+  end
+
   let(:secure_token) { SecureToken.new }
 
   describe "#initialize" do
