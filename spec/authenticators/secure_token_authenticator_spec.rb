@@ -99,6 +99,8 @@ describe SecureTokenAuthenticator do
   end
 
   describe "#secure_token" do
+    let(:result) { subject.secure_token }
+
     let(:secure_token) do
       create(:secure_token, target_type: "ValidClass")
     end
@@ -109,7 +111,19 @@ describe SecureTokenAuthenticator do
       end
 
       it "returns the first secure token matching this pair" do
-        expect(subject.secure_token).to eq(secure_token)
+        expect(result).to eq(secure_token)
+      end
+
+      it "caches the secure token" do
+        result
+        expect(SecureToken).not_to receive(:where)
+        result
+      end
+
+      it "sets the secure token to @secure_token" do
+        result
+        expect(subject.instance_variable_get(:@secure_token))
+          .to eq(secure_token)
       end
     end
 
@@ -119,7 +133,7 @@ describe SecureTokenAuthenticator do
       end
 
       it "doesn't find anything and returns nil" do
-        expect(subject.secure_token).to be_nil
+        expect(result).to be_nil
       end
     end
   end
