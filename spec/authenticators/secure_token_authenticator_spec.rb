@@ -137,4 +137,54 @@ describe SecureTokenAuthenticator do
       end
     end
   end
+
+  describe "#uuid_format_valid?" do
+    let(:result) { subject.uuid_format_valid? }
+    let!(:cached_uuid_regex) { REGEX["UUID"] }
+
+    before { REGEX["UUID"] = /VALID-UUID/ }
+
+    context "secure_token_uuid format matches the regex" do
+      it "returns true" do
+        allow(subject).to receive(:secure_token_uuid) { "VALID-UUID" }
+        expect(result).to be_truthy
+      end
+    end
+
+    context "secure_token_uuid format does not match the regex" do
+      it "returns false" do
+        allow(subject).to receive(:secure_token_uuid) { "invalid-uuid" }
+        expect(result).to be_falsey
+      end
+    end
+
+    after do
+      REGEX["UUID"] = cached_uuid_regex
+    end
+  end
+
+  describe "#secure_key_format_valid?" do
+    let(:result) { subject.secure_key_format_valid? }
+    let!(:cached_secret_key_regex) { REGEX["190_BIT_SECRET_KEY"] }
+
+    before { REGEX["190_BIT_SECRET_KEY"] = /VALID-SECRET-KEY/ }
+
+    context "secure_key format matches the regex" do
+      it "returns true" do
+        allow(subject).to receive(:secret_key) { "VALID-SECRET-KEY" }
+        expect(result).to be_truthy
+      end
+    end
+
+    context "secure_key format does not match the regex" do
+      it "returns false" do
+        allow(subject).to receive(:secret_key) { "invalid-secret-key" }
+        expect(result).to be_falsey
+      end
+    end
+
+    after do
+      REGEX["UUID"] = cached_secret_key_regex
+    end
+  end
 end
