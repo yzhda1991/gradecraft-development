@@ -45,7 +45,8 @@ class SubmissionsExportsController < ApplicationController
   end
 
   def stream_file_from_s3
-    send_data submissions_export.fetch_object_from_s3.body.read, filename: submissions_export.export_filename
+    send_data submissions_export.fetch_object_from_s3.body.read, \
+      filename: submissions_export.export_filename
   end
 
   def delete_s3_object

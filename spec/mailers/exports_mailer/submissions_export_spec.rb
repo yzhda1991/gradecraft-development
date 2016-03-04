@@ -62,12 +62,26 @@ describe NotificationMailer do
   let(:team_term) { course.team_term.downcase }
   let(:assignment_term) { course.assignment_term.downcase }
   let(:submissions_export) { create(:submissions_export, assignment: assignment, course: course) }
-  let(:archive_data) {{ format: "zip", url: "http://aws.com/some-archive-hash" }}
+
+  let(:secure_token) do
+    create(:secure_token,
+      user_id: professor.id,
+      course_id: course.id
+    )
+  end
+
+  let(:archive_data) do
+    { format: "zip", url: "http://aws.com/some-archive-hash" }
+  end
 
   before(:each) { deliver_email }
 
   describe "#submissions_export_started" do
-    let(:deliver_email) { ExportsMailer.submissions_export_started(professor, assignment).deliver_now }
+    let(:deliver_email) do
+      ExportsMailer
+        .submissions_export_started(professor, assignment)
+        .deliver_now
+    end
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -95,7 +109,11 @@ describe NotificationMailer do
   end
 
   describe "#submissions_export_success" do
-    let(:deliver_email) { ExportsMailer.submissions_export_success(professor, assignment, submissions_export).deliver_now }
+    let(:deliver_email) do
+      ExportsMailer
+        .submissions_export_success(professor, assignment, submissions_export, secure_token)
+        .deliver_now
+    end
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -123,7 +141,11 @@ describe NotificationMailer do
   end
 
   describe "#submissions_export_failure" do
-    let(:deliver_email) { ExportsMailer.submissions_export_failure(professor, assignment).deliver_now }
+    let(:deliver_email) do
+      ExportsMailer
+        .submissions_export_failure(professor, assignment)
+        .deliver_now
+    end
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -149,7 +171,11 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_started" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_started(professor, assignment, team).deliver_now }
+    let(:deliver_email) do
+      ExportsMailer
+        .team_submissions_export_started(professor, assignment, team)
+        .deliver_now
+    end
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -158,7 +184,8 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for #{team_term} #{team.name} is being created"
+      expect(email.subject).to eq \
+        "Submissions export for #{team_term} #{team.name} is being created"
     end
 
     describe "text part body" do
@@ -179,7 +206,11 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_success" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_success(professor, assignment, team, submissions_export).deliver_now }
+    let(:deliver_email) do
+      ExportsMailer.team_submissions_export_success(
+        professor, assignment, team, submissions_export, secure_token
+      ).deliver_now
+    end
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -188,7 +219,8 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for #{team_term} #{team.name} is ready"
+      expect(email.subject).to eq \
+        "Submissions export for #{team_term} #{team.name} is ready"
     end
 
     describe "text part body" do
@@ -209,7 +241,11 @@ describe NotificationMailer do
   end
 
   describe "#team_submissions_export_failure" do
-    let(:deliver_email) { ExportsMailer.team_submissions_export_failure(professor, assignment, team).deliver_now }
+    let(:deliver_email) do
+      ExportsMailer
+        .team_submissions_export_failure(professor, assignment, team)
+        .deliver_now
+    end
 
     it_behaves_like "a gradecraft email to a professor"
 
@@ -218,7 +254,8 @@ describe NotificationMailer do
     end
 
     it "has the correct subject" do
-      expect(email.subject).to eq "Submissions export for #{team_term} #{team.name} failed to build"
+      expect(email.subject).to eq \
+        "Submissions export for #{team_term} #{team.name} failed to build"
     end
 
     describe "text part body" do
