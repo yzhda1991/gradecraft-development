@@ -19,7 +19,9 @@ class SecureTokenAuthenticator
   end
 
   def valid_token_expired?
-    secure_token and secure_token.expired?
+    if secure_token
+      secure_token.expired?
+    end
   end
 
   def secure_token
@@ -34,7 +36,7 @@ class SecureTokenAuthenticator
     if secure_token_uuid.match REGEX["UUID"]
       true
     else
-      # This should only occur is somebody is attempting to crack a key by
+      # This should only occur if somebody is attempting to crack a key by
       # searching for random uuid values. By sleeping for a moment here we
       # drastically hinder attacks by slowing down the rate at which they can
       # be made but we do so without sacrificing system resources.
@@ -47,7 +49,7 @@ class SecureTokenAuthenticator
     if secret_key.match REGEX["190_BIT_SECRET_KEY"]
       true
     else
-      # This should only occur is somebody is attempting to crack a key by
+      # This should only occur if somebody is attempting to crack a key by
       # searching for random uuid values. By sleeping for a moment here we
       # drastically hinder attacks by slowing down the rate at which they can
       # be made but we do so without sacrificing system resources.

@@ -116,6 +116,7 @@ describe SecureTokenAuthenticator do
 
   describe "#valid_token_expired?" do
     let(:result) { subject.valid_token_expired? }
+
     before(:each) do
       allow(subject).to receive(:secure_token) { secure_token }
     end
@@ -123,26 +124,21 @@ describe SecureTokenAuthenticator do
     context "no secure token exists" do
       let(:secure_token) { nil }
 
-      it "returns false" do
-        expect(result).to be_falsey
+      it "returns nil" do
+        expect(result).to be_nil
       end
     end
 
     context "a secure token exists" do
-      let(:secure_token) { SecureToken.new(expires_at: expiry_time) }
-
       context "the secure token is not expired" do
-        let(:expiry_time) { Time.now + 2.years } # expires two years from now
-
-        it "returns true" do
-          expect(result).to be_truthy
+        it "returns false" do
+          allow(secure_token).to receive(:expired?) { false }
+          expect(result).to be_falsey
         end
       end
 
       context "the secure token is expired" do
-        let(:expiry_time) { Time.now - 2.years } # expired two years ago
-
-        it "returns false" do
+        it "returns true" do
           allow(secure_token).to receive(:expired?) { true }
           expect(result).to be_truthy
         end
