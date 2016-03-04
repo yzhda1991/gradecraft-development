@@ -501,12 +501,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def deliver_export_successful_mailer
     ExportsMailer.submissions_export_success(professor, @assignment, \
-      @submissions_export, new_secure_token).deliver_now
+      @submissions_export, secure_token).deliver_now
   end
 
   def deliver_team_export_successful_mailer
     ExportsMailer.team_submissions_export_success(professor, @assignment, \
-      @team, @submissions_export, new_secure_token).deliver_now
+      @team, @submissions_export, secure_token).deliver_now
   end
 
   def deliver_export_failure_mailer
@@ -519,11 +519,18 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       @team).deliver_now
   end
 
-  def new_secure_token
+  def secure_token
     # be sure to add the user_id and course_id here in the event that we'd like
     # to revoke the secure token later in the event that, say, the staff member
     # is removed from the course or from the system
-    SecureToken.create user_id: professor[:id], course_id: course[:id]
+    #
+    # also let's cache this to make sure that there are never any more generated
+    # than absolutely need to be
+    #
+    @secure_token ||= SecureToken.create(
+      user_id: professor[:id],
+      course_id: course[:id]
+    )
   end
 
   def expand_messages(messages={})

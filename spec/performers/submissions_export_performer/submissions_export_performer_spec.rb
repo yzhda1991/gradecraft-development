@@ -233,4 +233,35 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
     end
   end
+
+  describe "#secure_token" do
+    let(:result) { performer.instance_eval { secure_token } }
+    let!(:professor) { create(:user) }
+    let!(:course) { create(:course) }
+
+    before do
+      allow(performer).to receive_messages(
+        professor: professor,
+        course: course
+      )
+    end
+
+    it "creates a secure token with the professor and course ids" do
+      expect(result.user_id).to eq professor.id
+      expect(result.course_id).to eq course.id
+      expect(result.class).to eq SecureToken
+      expect(result).to be_valid
+    end
+
+    it "caches the secure token" do
+      result
+      expect(SecureToken).not_to receive(:create)
+      result
+    end
+
+    it "sets the secure token to @secure_token" do
+      result
+      expect(performer.instance_variable_get(:@secure_token)).to eq result
+    end
+  end
 end
