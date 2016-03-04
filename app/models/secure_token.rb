@@ -60,7 +60,7 @@ class SecureToken < ActiveRecord::Base
   end
 
   def expired?
-    expires_at > Time.now
+    expires_at <= Time.now
   end
 
   protected

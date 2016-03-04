@@ -45,6 +45,39 @@ RSpec.describe SecureToken do
     end
   end
 
+  describe "#expired?" do
+    subject { SecureToken.new(expires_at: expiry_time) }
+
+    let(:result) { subject.expired? }
+
+    context "the expires_at time is in the future" do
+      let(:expiry_time) { Time.now + 1.year } # a year from now
+      it "returns false" do
+        expect(result).to be_falsey
+      end
+    end
+
+    context "the expires_at time is in the past" do
+      let(:expiry_time) { Time.now - 1.year } # a year from now
+      it "returns true" do
+        expect(result).to be_truthy
+      end
+    end
+
+    context "the expires_at time is right now" do
+      let(:expiry_time) { Time.now } # right GD now
+
+      before do
+        # let's make sure that all Time.now calls are actually right now
+        allow(Time).to receive(:now) { Date.parse("Jan 1 2000").to_time }
+      end
+
+      it "returns true" do
+        expect(result).to be_truthy
+      end
+    end
+  end
+
   describe "#has_target_of_class?" do
     let(:result) { subject.has_target_of_class?(target_class) }
     let!(:target) { create(:submissions_export) }
