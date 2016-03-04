@@ -15,10 +15,12 @@ class SecureTokenAuthenticator
   end
 
   def secure_token
-    @secure_token ||= SecureToken.where(
-      uuid: secure_token_uuid,
-      target_type: target_class
-    ).first
+    @secure_token ||= SecureToken
+      .where("expires_at > ?", Time.now)
+      .find_by(
+        uuid: secure_token_uuid,
+        target_type: target_class
+      )
   end
 
   def uuid_format_valid?

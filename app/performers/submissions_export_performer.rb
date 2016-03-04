@@ -71,7 +71,10 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       last_export_started_at: Time.now
     }
   end
-  alias attributes base_export_attributes
+
+  def attributes
+    base_export_attributes
+  end
 
   def clear_progress_attributes
     performer_steps.inject({}) do |memo, step|

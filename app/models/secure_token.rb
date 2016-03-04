@@ -10,8 +10,19 @@ require 'scrypt'
 class SecureToken < ActiveRecord::Base
 
   belongs_to :target, polymorphic: true
-  before_create :cache_encrypted_key, :cache_uuid, :set_expires_at
+
+  before_validation(on: :create) do
+    cache_encrypted_key
+    cache_uuid
+    set_expires_at
+  end
+
   attr_reader :random_secret_key
+
+  validates :uuid, uniqueness: true, format: { with: REGEX["UUID"] }
+  validates :encrypted_key, uniqueness: true, format: {
+    with: REGEX["512_BIT_ENCRYPTED_KEY"]
+  }
 
   # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)
