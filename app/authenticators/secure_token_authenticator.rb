@@ -7,16 +7,23 @@ class SecureTokenAuthenticator
   end
   attr_reader :secure_token_uuid, :target_class, :secret_key, :slowdown_duration
 
+  # we should probably add a separate workflow here for just telling the user
+  # if the secure token expired so they know that this is happening instead of
+  #
   def authenticates?
     uuid_format_valid? &&
     secure_key_format_valid? &&
     secure_token &&
+    !secure_token.expired? &&
     secure_token.authenticates_with?(secret_key)
+  end
+
+  def valid_token_expired?
+    secure_token and secure_token.expired?
   end
 
   def secure_token
     @secure_token ||= SecureToken
-      .where("expires_at > ?", Time.now)
       .find_by(
         uuid: secure_token_uuid,
         target_type: target_class

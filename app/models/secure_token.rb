@@ -59,6 +59,10 @@ class SecureToken < ActiveRecord::Base
     target and target.class.to_s == required_class.to_s
   end
 
+  def expired?
+    expires_at > Time.now
+  end
+
   protected
 
   def random_secret_key
