@@ -11,9 +11,6 @@ class SecureToken < ActiveRecord::Base
 
   belongs_to :target, polymorphic: true
   before_create :cache_encrypted_key, :cache_uuid, :set_expires_at
-  attr_reader :random_secret_key, :uuid
-
-  validates :uuid, uniqueness: true # every uuid value should be unique
 
   # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)

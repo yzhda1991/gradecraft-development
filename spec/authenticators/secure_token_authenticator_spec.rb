@@ -3,9 +3,9 @@ require_relative "../../app/authenticators/secure_token_authenticator"
 require_relative "../../config/initializers/regex" unless defined? REGEX
 
 describe SecureTokenAuthenticator do
-  subject { described_class.new attributes }
+  subject { described_class.new subject_attrs }
 
-  let(:attributes) {{
+  let(:subject_attrs) {{
     secure_token_uuid: "some_uuid",
     target_class: "WaffleClass",
     secret_key: "skeletonkeysrsly"
@@ -99,42 +99,27 @@ describe SecureTokenAuthenticator do
   end
 
   describe "#secure_token" do
-    let(:result) { subject.secure_token }
-
-    # it's pretty much impossible for there to be multiple secure tokens with
-    # the same uuid and target class since the uuid values are being generated
-    # by the SecureRandom library, and the uuid value is intended always to be a
-    # unique value, but since it's technically possible let's test for it anyway
-    # to ensure we don't encounter any unexpected regressions here
-    #
-    before(:each) do
-      # let's make sure that there aren't any instance variables screwing with
-      # us between examples
-      subject.instance_variable_set(:@secure_token, nil)
+    let(:secure_token) do
+      create(:secure_token, target_type: "ValidClass")
     end
 
     context "multiple secure tokens exist with the uuid and target class" do
-      let(:secure_token) do
-        # the attributes being used to build this secure token match the stubbed
-        # values being passed into the subject at the top of the spec, so this
-        # secure token matches the default subject attributes
-        #
-        SecureToken.create target_type: attributes[:target_class]
+      let(:subject_attrs) do
+        { secure_token_uuid: secure_token.uuid, target_class: "ValidClass" }
       end
 
       it "returns the first secure token matching this pair" do
-        allow(subject).to receive(:secure_token_uuid) { secure_token.uuid }
-        expect(result).to eq(secure_token)
+        expect(subject.secure_token).to eq(secure_token)
       end
     end
 
     context "no secure tokens exist for the uuid and target class" do
-      let(:attributes) do
+      let(:subject_attrs) do
         { secure_token_uuid: "doesnt-exist", target_class: "NotAClass" }
       end
 
       it "doesn't find anything and returns nil" do
-        expect(result).to be_nil
+        expect(subject.secure_token).to be_nil
       end
     end
   end
