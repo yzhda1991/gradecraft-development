@@ -24,11 +24,6 @@ RUN cp /intermidiate/puma.rb /gradecraft/config/puma.rb
 RUN cp /intermidiate/Procfile /gradecraft/Procfile
 RUN printf  "if [ \$WEBRESQUE = 'WEB' ]\nthen \n RAILS_ENV=production bundle exec rake resque:scheduler &\n/mounts3.sh\nservice nginx start\npuma\nelse \nbundle exec rake resque:work >> resque.log\nfi" > /gradecraft/start.sh
 RUN chmod +x /gradecraft/start.sh
-RUN RAILS_ENV=staging bundle exec rake assets:precompile
-RUN RAILS_ENV=staging bundle exec rake db:migrate
-ENTRYPOINT /gradecraft/start.sh
-
-RUN chmod +x /gradecraft/start.sh
 RUN RAILS_ENV=production bundle exec rake assets:precompile
 RUN RAILS_ENV=production bundle exec rake db:migrate
 ENTRYPOINT /gradecraft/start.sh
