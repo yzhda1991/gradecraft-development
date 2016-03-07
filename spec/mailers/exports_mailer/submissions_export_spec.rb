@@ -1,6 +1,5 @@
 require "rails_spec_helper"
 
-
 # specs for submission notifications that are sent to students
 describe NotificationMailer do
   # brings in helpers for default emails and parts
@@ -12,6 +11,9 @@ describe NotificationMailer do
 
   # include SubmissionsExport-specific shared examples
   include Toolkits::Mailers::ExportsMailerToolkit::SharedExamples
+
+  # include the #secure_downloads_url so we can test that it's being included
+  include SecureTokenHelper
 
   let(:professor) { create(:user) }
   let(:assignment) { create(:assignment, course: course) }
@@ -89,6 +91,10 @@ describe NotificationMailer do
       it_behaves_like "a complete submissions export email body"
       it_behaves_like "a submissions export email with archive data"
       it_behaves_like "an email text part"
+
+      it "includes the secure download url" do
+        expect(subject).to include secure_download_url(secure_token)
+      end
     end
 
     describe "html part body" do
@@ -96,6 +102,10 @@ describe NotificationMailer do
       it_behaves_like "a complete submissions export email body"
       it_behaves_like "a submissions export email with archive data"
       it_behaves_like "an email html part"
+
+      it "includes the secure download url" do
+        expect(subject).to include secure_download_url(secure_token)
+      end
     end
   end
 
@@ -188,6 +198,10 @@ describe NotificationMailer do
       it_behaves_like "a team submissions export email"
       it_behaves_like "a submissions export email with archive data"
       it_behaves_like "an email text part"
+
+      it "includes the secure download url" do
+        expect(subject).to include secure_download_url(secure_token)
+      end
     end
 
     describe "html part body" do
@@ -196,6 +210,10 @@ describe NotificationMailer do
       it_behaves_like "a team submissions export email"
       it_behaves_like "a submissions export email with archive data"
       it_behaves_like "an email html part"
+
+      it "includes the secure download url" do
+        expect(subject).to include secure_download_url(secure_token)
+      end
     end
   end
 
