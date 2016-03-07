@@ -12,7 +12,7 @@ describe LinkHelper do
 
     it "returns a secure download link for the SecureToken target" do
       expect(result).to eq (
-        "http://test.host/submissions_exports/secure_download/" \
+        "http://test.host/submissions_exports/#{target.id}/secure_download/" \
           "#{secure_token.uuid}/secret_key/#{secure_token.random_secret_key}"
       )
     end

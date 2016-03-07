@@ -1,5 +1,9 @@
 class SubmissionsExportsController < ApplicationController
-  before_filter :ensure_staff?, except: [:download_with_token]
+  before_filter :ensure_staff?, except: [:secure_download]
+
+  skip_before_filter :require_login, only: [:secure_download]
+  skip_before_filter :increment_page_views, only: [:secure_download]
+  skip_before_filter :get_course_scores, only: [:secure_download]
 
   def create
     if create_submissions_export && submissions_export_job.enqueue
@@ -27,21 +31,29 @@ class SubmissionsExportsController < ApplicationController
   end
 
   def secure_download
-    if SecureTokenAuthenticator.new(secure_download_attributes).authenticates?
+    if secure_download_authenticator.authenticates?
       stream_file_from_s3
     else
-      render status: :forbidden
+      if secure_download_authenticator.valid_token_expired?
+        flash[:alert] = "The email link you used has expired."
+      else
+        flash[:alert] = "The link you attempted to access does not exist."
+      end
+
+      flash[:alert] += " Please login to download the desired file."
+      redirect_to root_url
     end
   end
 
   protected
 
-  def secure_download_attributes
-    {
-      uuid: params[:secure_token_id],
-      target_class: SubmissionsExport,
-      secret_key: params[:secret_key]
-    }
+  def secure_download_authenticator
+    @secure_download_authenticator ||= SecureTokenAuthenticator.new(
+      secure_token_uuid: params[:secure_token_uuid],
+      secret_key: params[:secret_key],
+      target_class: "SubmissionsExport",
+      target_id: params[:id]
+    )
   end
 
   def stream_file_from_s3
