@@ -42,6 +42,12 @@
       if @criterionGradeLevelId and @criterionGradeLevelId == newLevel.id
         @selectedLevel = newLevel
 
+    # For adding new levels through UI, we want to insert them
+    # before the Full Credit Level
+    insertLevel: (attrs={})->
+      newLevel = new Level(@, attrs, @$scope)
+      @levels.splice(-1, -1, newLevel)
+
     addLevels: (levels)->
       angular.forEach(levels, (level,index)=>
         @addLevel(level)
