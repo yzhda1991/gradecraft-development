@@ -9,7 +9,7 @@ module SecureTokenHelper
     # the custom routes using the uuid and the secret key, but by inferring the
     # target type from from the SecureToken we can clean up the views and really
     # don't need multiple helper methods for this single purpose.
-    send("secure_downloads_#{target_type}_url",
+    send("secure_download_#{target_type}_url",
       secure_token_uuid: secure_token.uuid,
       secret_key: secure_token.random_secret_key
     )
