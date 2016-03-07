@@ -156,6 +156,35 @@ RSpec.describe SubmissionsExportsController, type: :controller do
           expect(response).to redirect_to root_path
         end
       end
+
+      describe "skipped filters" do
+        let(:result) { get :secure_download, secure_download_params }
+
+        before do
+          # since we just want to test filter skipping let's disregard the
+          # secure token authenticator here
+          allow(controller).to receive(:secure_download_authenticator)
+            .and_return double(SecureTokenAuthenticator).as_null_object
+
+          # let's disregard s3 file streaming as well
+          allow(controller).to receive(:stream_file_from_s3) { false }
+        end
+
+        # make the GET secure_download call after each expectation
+        after(:each) { result }
+
+        it "doesn't require login" do
+          expect(controller).not_to receive(:require_login)
+        end
+
+        it "doesn't increment the page views" do
+          expect(controller).not_to receive(:increment_page_views)
+        end
+
+        it "doesn't get course scores" do
+          expect(controller).not_to receive(:get_course_scores)
+        end
+      end
     end
 
     describe "#secure_download_authenticator" do
