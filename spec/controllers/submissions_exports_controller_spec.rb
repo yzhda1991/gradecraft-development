@@ -91,18 +91,11 @@ RSpec.describe SubmissionsExportsController, type: :controller do
   end
 
   describe "GET #download" do
-    subject { get :download, id: submissions_export.id }
-    let(:s3_object_body) { double("s3 object body").as_null_object }
-    let(:export_filename) { "/some/file/name.zip" }
-
-    before do
-      allow(controller).to receive_message_chain(:submissions_export, :fetch_object_from_s3, :body, :read) { s3_object_body }
-      allow(controller).to receive_message_chain(:submissions_export, :export_filename) { export_filename }
-    end
+    let(:result) { get :download, id: submissions_export.id }
 
     it "streams the s3 object to the client" do
-      expect(controller).to receive(:send_data).with(s3_object_body, filename: export_filename)
-      subject
+      expect(controller).to receive(:stream_file_from_s3)
+      result
     end
   end
 
