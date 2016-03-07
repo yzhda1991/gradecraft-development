@@ -529,7 +529,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     #
     @secure_token ||= SecureToken.create(
       user_id: professor[:id],
-      course_id: course[:id]
+      course_id: course[:id],
+      target: submissions_export
     )
   end
 

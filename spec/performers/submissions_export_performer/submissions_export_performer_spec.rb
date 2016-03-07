@@ -242,13 +242,15 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     before do
       allow(performer).to receive_messages(
         professor: professor,
-        course: course
+        course: course,
+        submissions_export: submissions_export
       )
     end
 
     it "creates a secure token with the professor and course ids" do
       expect(result.user_id).to eq professor.id
       expect(result.course_id).to eq course.id
+      expect(result.target).to eq performer.submissions_export
       expect(result.class).to eq SecureToken
       expect(result).to be_valid
     end
