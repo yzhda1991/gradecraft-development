@@ -9,11 +9,12 @@
 
       #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
         %h4#points-legend
-          %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsGiven() | number:0}}
+          %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsGivenAfterAdjustment() | number:0}}
           \/{{pointsPossible() | number:0}} Points Allocated
         %h4.notice(ng-hide="pointsSatisfied() || pointsMissing()") You have not yet allocated any points
         %h4.notice(ng-show="pointsMissing()") {{pointsRemaining() | number:0}} point{{pointsRemaining() > 1 ? "s" : ""}} have not been assigned
         %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
+        %h4.notice.adjustment(ng-class="{'positive-adjustment' : pointsAdjustment() > 0}" ng-show="pointsAdjusted()") You have adjusted the total by {{pointsAdjustment()}} points
 
       .clear
 
@@ -71,12 +72,24 @@
         .points-overview.bottom(ng-cloak)
           %h4.points-legend
             %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsGiven() | number:0}}
-            \/{{pointsPossible | number:0}} Points Allocated
+            \/{{pointsPossible() | number:0}} Points Allocated
           %h4.notice(ng-hide="pointsSatisfied() || pointsMissing()") You have not yet allocated any points
           %h4.notice(ng-show="pointsMissing()") {{pointsRemaining() | number:0}} point{{pointsRemaining() > 1 ? "s" : ""}} have not been assigned
           %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
-
+      %br
+      .points-adjustment(ng-cloak)
+        %h4 Points Adjustment
+        %input(type="text" placeholder="Enter points adjustment to calculated total" smart-number="" ng-model="grade.points_adjustment")
+    .right
+      .points-adjustment-feedback(ng-if="grade.points_adjustment != 0" ng-cloak)
+        %h4.text-right Points Adjustment Feedback
+        %textarea(ng-model="grade.points_adjustment_feedback" froala="froalaOptions")
     .clear
+
+    %br
+    .right
+      %h3 Total Points
+      %h4 {{pointsGivenAfterAdjustment() | number:0}}
 
     .summary_feedback
       %h3.text-right Overall Feedback

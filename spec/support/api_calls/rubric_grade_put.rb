@@ -33,14 +33,19 @@ class RubricGradePUT
 
   # "assignment id" and "student_id" or "group_id" is passed through the route
   def params
-    { "points_given" => assignment.point_total,
-      "points_possible" => assignment.point_total,
+    { "points_possible" => assignment.point_total,
       "criterion_grades" => criterion_grades_params,
       "level_badges" => [level_badge_params(level_badge)],
       "level_ids" => (criteria.collect { |c| c.levels.pluck(:id) }).flatten,
       "criterion_ids" => criteria.pluck(:id),
       "controller" => "grades",
-      "grade" => { "status" => "Released", "feedback" => "good jorb!" }
+      "grade" => {
+        "raw_score" => assignment.point_total - 10,
+        "status" => "Released",
+        "feedback" => "good jorb!",
+        "points_adjustment" => "-10",
+        "points_adjustment_feedback" => "reduced by 10 points"
+      }
     }
   end
 

@@ -22,6 +22,8 @@ describe "api/grades/show" do
     expect(json["data"]["attributes"]["student_id"]).to eq(@grade.student_id)
     expect(json["data"]["attributes"]["feedback"]).to eq(@grade.feedback)
     expect(json["data"]["attributes"]["status"]).to eq(@grade.status)
+    expect(json["data"]["attributes"]["points_adjustment"]).to eq(@grade.points_adjustment)
+    expect(json["data"]["attributes"]["points_adjustment_feedback"]).to eq(@grade.points_adjustment_feedback)
   end
 
   it "adds grading status options to meta data" do

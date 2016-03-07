@@ -5,8 +5,8 @@ NumberModule.directive 'smartNumber',
 
     defaultOptions = smartNumberConfig.defaultOptions
 
-    # 0 = tab, 8 = backspace , 13 = enter, 46 = delete, 37 = left arrow, 39 = right arrow, 65 = A
-    controlKeys = [0,8,13, 46, 37, 39, 65]
+    # 0 = tab, 8 = backspace , 13 = enter, 46 = delete, 37 = left arrow, 39 = right arrow, 65 = A, 82 = R
+    controlKeys = [0,8,13, 46, 37, 39, 65, 82]
 
     # 37 = left arrow, 39 = right arrow, 9 = enter, 33 = page up, 34 = page down
     inertKeys = [37, 39, 9, 33, 34]
@@ -445,6 +445,7 @@ NumberModule.directive 'smartNumber',
                   negatedVal = -stripCommas(elem.val())
                   elem.val(numberWithCommas(negatedVal))
                   elem[0].setSelectionRange(1,1)
+                  triggerChange(elem)
 
             elem.on 'keypress', (event) ->
               killEvent(event)
