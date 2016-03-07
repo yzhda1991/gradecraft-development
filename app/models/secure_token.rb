@@ -17,8 +17,6 @@ class SecureToken < ActiveRecord::Base
     set_expires_at
   end
 
-  attr_reader :random_secret_key
-
   validates :uuid, uniqueness: true, format: { with: REGEX["UUID"] }
   validates :encrypted_key, uniqueness: true, format: {
     with: REGEX["512_BIT_ENCRYPTED_KEY"]
@@ -63,12 +61,12 @@ class SecureToken < ActiveRecord::Base
     expires_at <= Time.now
   end
 
-  protected
-
   def random_secret_key
     # generates a 254-character URL-safe secret key
     @random_secret_key ||= SecureRandom.urlsafe_base64(190)
   end
+
+  protected
 
   # let's expire the token in a week
   def set_expires_at
