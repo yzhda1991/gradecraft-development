@@ -21,12 +21,12 @@
         %span=" out of #{points presenter.assignment.point_total } possible points."
 
   - if grade.points_adjustment != 0
-    %p
-      %span Points Adjustment:
-      %span= grade.points_adjustment
-    - if grade.points_adjustment_feedback.present?
-      %p.small_uppercase Points Adjustment Feedback:
-      %p= raw grade.points_adjustment_feedback
+    %div.grade-points-adjustment
+      %p
+        %span Points Adjustment:
+        %span= grade.points_adjustment
+      - if grade.points_adjustment_feedback.present?
+        %p= raw grade.points_adjustment_feedback
 
 
     - if presenter.assignment.release_necessary? && current_user_is_staff?

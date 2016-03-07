@@ -80,16 +80,15 @@
       .points-adjustment(ng-cloak)
         %h4 Points Adjustment
         %input(type="text" placeholder="Enter points adjustment to calculated total" smart-number="" ng-model="grade.points_adjustment")
+      %br
+      .total-points(ng-cloak)
+        %h3 {{pointsGivenAfterAdjustment() | number:0}} Total Points
+
     .right
       .points-adjustment-feedback(ng-if="grade.points_adjustment != 0" ng-cloak)
         %h4.text-right Points Adjustment Feedback
         %textarea(ng-model="grade.points_adjustment_feedback" froala="froalaOptions")
     .clear
-
-    %br
-    .right
-      %h3 Total Points
-      %h4 {{pointsGivenAfterAdjustment() | number:0}}
 
     .summary_feedback
       %h3.text-right Overall Feedback
