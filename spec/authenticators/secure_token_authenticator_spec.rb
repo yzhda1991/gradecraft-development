@@ -271,7 +271,7 @@ describe SecureTokenAuthenticator do
       end
 
       after do
-        REGEX["UUID"] = cached_secret_key_regex
+        REGEX["190_BIT_SECRET_KEY"] = cached_secret_key_regex
       end
     end
   end
