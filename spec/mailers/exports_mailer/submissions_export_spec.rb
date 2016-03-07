@@ -25,10 +25,10 @@ describe NotificationMailer do
 
   let(:secure_token) do
     create(:secure_token,
-      user_id: professor.id,
-      course_id: course.id,
-      target: submissions_export
-    )
+             user_id: professor.id,
+             course_id: course.id,
+             target: submissions_export
+          )
   end
 
   let(:archive_data) do
