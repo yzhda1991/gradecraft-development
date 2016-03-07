@@ -1,59 +1,17 @@
 require "rails_spec_helper"
 
-RSpec.shared_examples "a complete submissions export email body" do
-  it "includes the professor's first name" do
-    should include professor.first_name
-  end
-
-  it "includes the assignment name" do
-    should include assignment.name
-  end
-
-  it "includes the assignment term for the course" do
-    should include course.assignment_term.downcase
-  end
-
-  it "includes the course name" do
-    should include course.name
-  end
-end
-
-RSpec.shared_examples "a team submissions export email" do
-  it "includes the team term for the course" do
-    should include course.team_term.downcase
-  end
-
-  it "includes the team name" do
-    should include team.name
-  end
-end
-
-RSpec.shared_examples "a submissions export email with archive data" do
-  it "includes the archive format" do
-    should include "ZIP"
-  end
-
-  it "includes the archive url" do
-    should include exports_path
-  end
-end
-
-RSpec.shared_examples "a submissions export email without archive data" do
-  it "includes the archive format" do
-    should include "ZIP"
-  end
-
-  it "doesn't include the archive url" do
-    should_not include exports_path
-  end
-end
 
 # specs for submission notifications that are sent to students
 describe NotificationMailer do
-  extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
-  define_email_context # taken from the definitions toolkit
+  # brings in helpers for default emails and parts
+  extend Toolkits::Mailers::EmailToolkit::Definitions
+  define_email_context # defined in EmailToolkit::Definitions
 
-  include Toolkits::Mailers::EmailToolkit::SharedExamples # brings in shared examples for emails and parts
+  # brings in shared examples for emails and parts
+  include Toolkits::Mailers::EmailToolkit::SharedExamples
+
+  # include SubmissionsExport-specific shared examples
+  include Toolkits::Mailers::ExportsMailerToolkit::SharedExamples
 
   let(:professor) { create(:user) }
   let(:assignment) { create(:assignment, course: course) }
@@ -66,7 +24,8 @@ describe NotificationMailer do
   let(:secure_token) do
     create(:secure_token,
       user_id: professor.id,
-      course_id: course.id
+      course_id: course.id,
+      target: submissions_export
     )
   end
 

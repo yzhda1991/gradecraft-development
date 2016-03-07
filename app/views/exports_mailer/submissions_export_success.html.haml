@@ -6,7 +6,7 @@
 %p{:align => "center"}
   You can download your completed ZIP archive
   = succeed ". This link will expire after one week." do
-    %a{ :href => secure_download_url(secure_token) } here
+    %a{ :href => secure_download_url(@secure_token) } here
 
 %p{:align => "center"}
   Alternatively you can download the submissions archive on the submissions downloads page

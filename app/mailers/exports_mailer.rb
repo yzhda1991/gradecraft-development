@@ -1,6 +1,10 @@
 class ExportsMailer < ApplicationMailer
   layout "mailers/exports_layout"
 
+  # the SecureTokenHelper brings in the #secure_downloads_url method which we
+  # need for building the secure download method on success emails
+  add_template_helper(SecureTokenHelper)
+
   def submissions_export_started(professor, assignment)
     mail_submissions_export("is being created", professor, assignment)
   end

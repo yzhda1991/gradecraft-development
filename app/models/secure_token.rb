@@ -21,6 +21,7 @@ class SecureToken < ActiveRecord::Base
   validates :encrypted_key, uniqueness: true, format: {
     with: REGEX["512_BIT_ENCRYPTED_KEY"]
   }
+  validates :target, presence: true
 
   # double-check to make sure that the authentication process is correct here
   def authenticates_with?(secret_key)
