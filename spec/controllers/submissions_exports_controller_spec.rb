@@ -198,18 +198,25 @@ RSpec.describe SubmissionsExportsController, type: :controller do
     end
   end
 
-  # describe "#stream_file_from_s3" do
-  #   it "does some stuff" do
-  #     allow(controller).to receive(:submissions_export) { submissions_export }
+  describe "#stream_file_from_s3" do
+    let(:result) do
+      controller.instance_eval { stream_file_from_s3 }
+    end
+    let(:temp_file) { Tempfile.new("s3_object") }
 
-  #     allow(submissions_export).to receive_message_chain(
-  #       :fetch_object_from_s3, :body, :read
-  #     ).and_return s3_object_body
+    before do
+      allow(controller).to receive(:submissions_export) { submissions_export }
+      allow(submissions_export).to receive(:export_filename) { "some_filename.txt" }
+      allow(submissions_export).to receive_message_chain(:fetch_object_from_s3,
+        :body, :read).and_return temp_file
+    end
 
-  #     allow(submissions_export).to receive(:export_filename)
-  #       .and_return export_filename
-  #   end
-  # end
+    it "renders the s3 object data with the submissions export filename" do
+      expect(controller).to receive(:send_data).with(temp_file,
+        filename: "some_filename.txt")
+      result
+    end
+  end
 
   describe "#submissions_export" do
     subject { controller.instance_eval { submissions_export } }
