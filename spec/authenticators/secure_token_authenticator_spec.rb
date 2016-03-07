@@ -149,14 +149,14 @@ describe SecureTokenAuthenticator do
 
   describe "#secure_token" do
     let(:result) { subject.secure_token }
+    let!(:secure_token) { create(:secure_token) }
 
-    let(:secure_token) do
-      create(:secure_token, target_type: "ValidClass")
-    end
-
-    context "multiple secure tokens exist with the uuid and target class" do
+    context "a secure token exists with the uuid and target class" do
       let(:subject_attrs) do
-        { secure_token_uuid: secure_token.uuid, target_class: "ValidClass" }
+        {
+          secure_token_uuid: secure_token.uuid,
+          target_class: secure_token.target_type
+        }
       end
 
       it "returns the first secure token matching this pair" do
