@@ -106,48 +106,117 @@ RSpec.describe SubmissionsExportsController, type: :controller do
     end
   end
 
-  describe "#secure_download_authenticator" do
-    subject { controller }
-
-    let(:result) { controller.instance_eval { secure_download_authenticator } }
+  describe "secure downloads" do
+    let(:authenticator) { SecureTokenAuthenticator.new }
     let(:secure_token) { create(:secure_token, target: submissions_export) }
-    let(:authenticator_attrs) do
+    let(:secure_download_params) do
       {
         secure_token_uuid: secure_token.uuid,
         secret_key: secure_token.random_secret_key,
-        target_id: submissions_export.id,
-        target_class: "SubmissionsExport"
+        id: submissions_export.id
       }
     end
 
-    before do
-      allow(controller).to receive(:params).and_return({
-        secure_token_uuid: secure_token.uuid,
-        secret_key: secure_token.random_secret_key,
-        id: submissions_export.id,
-      })
+    describe "GET #secure_download" do
+      let(:result) { get :secure_download, secure_download_params }
+
+      before(:each) do
+        allow(controller).to receive(:secure_download_authenticator)
+          .and_return authenticator
+      end
+
+      context "the SecureDownloadAuthenticator authenticates" do
+        before do
+          allow(authenticator).to receive(:authenticates?) { true }
+        end
+
+        it "streams the s3 object to the client" do
+          expect(controller).to receive(:stream_file_from_s3)
+          result
+        end
+      end
+
+      context "the SecureDownloadAuthenticator doesn't authenticate" do
+        before do
+          allow(authenticator).to receive(:authenticates?) { false }
+        end
+
+        context "the request was for a valid token that has expired" do
+          it "alerts the user that their token has expired" do
+            allow(authenticator).to receive(:valid_token_expired?) { true }
+            result
+            expect(flash[:alert]).to match /email link.*expired/
+          end
+        end
+
+        context "the request completely failed to authenticate" do
+          it "alerts the user that their request was invalid" do
+            allow(authenticator).to receive(:valid_token_expired?) { false }
+            result
+            expect(flash[:alert]).to match /does not exist/
+          end
+        end
+
+        it "redirects the user to the root page and tells them to log in" do
+          result
+          expect(flash[:alert]).to match /Please login/
+          expect(response).to redirect_to root_path
+        end
+      end
     end
 
-    it "builds a new SecureTokenAuthenticator" do
-      expect(SecureTokenAuthenticator).to receive(:new)
-        .with authenticator_attrs
-      result
-    end
+    describe "#secure_download_authenticator" do
+      let(:result) do
+        controller.instance_eval { secure_download_authenticator }
+      end
 
-    it "caches the SecureTokenAuthenticator" do
-      result
-      expect(SecureTokenAuthenticator).not_to receive(:new)
-      result
-    end
+      let(:authenticator_attrs) do
+        {
+          secure_token_uuid: secure_token.uuid,
+          secret_key: secure_token.random_secret_key,
+          target_id: submissions_export.id,
+          target_class: "SubmissionsExport"
+        }
+      end
 
-    it "sets the returned value to @secure_token_authenticator" do
-      authenticator = SecureTokenAuthenticator.new authenticator_attrs
-      allow(SecureTokenAuthenticator).to receive(:new) { authenticator }
-      result
-      expect(controller.instance_variable_get(:@secure_download_authenticator))
-        .to eq(authenticator)
+      before do
+        allow(controller).to receive(:params) { secure_download_params }
+      end
+
+      it "builds a new SecureTokenAuthenticator" do
+        expect(SecureTokenAuthenticator).to receive(:new)
+          .with authenticator_attrs
+        result
+      end
+
+      it "caches the SecureTokenAuthenticator" do
+        result
+        expect(SecureTokenAuthenticator).not_to receive(:new)
+        result
+      end
+
+      it "sets the returned value to @secure_token_authenticator" do
+        authenticator = SecureTokenAuthenticator.new authenticator_attrs
+        allow(SecureTokenAuthenticator).to receive(:new) { authenticator }
+        result
+        expect(controller.instance_variable_get(:@secure_download_authenticator))
+          .to eq(authenticator)
+      end
     end
   end
+
+  # describe "#stream_file_from_s3" do
+  #   it "does some stuff" do
+  #     allow(controller).to receive(:submissions_export) { submissions_export }
+
+  #     allow(submissions_export).to receive_message_chain(
+  #       :fetch_object_from_s3, :body, :read
+  #     ).and_return s3_object_body
+
+  #     allow(submissions_export).to receive(:export_filename)
+  #       .and_return export_filename
+  #   end
+  # end
 
   describe "#submissions_export" do
     subject { controller.instance_eval { submissions_export } }
