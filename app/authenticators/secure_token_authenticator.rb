@@ -1,11 +1,14 @@
 class SecureTokenAuthenticator
   def initialize(options={})
     @secure_token_uuid = options[:secure_token_uuid]
-    @target_class = options[:target_class]
     @secret_key = options[:secret_key]
+    @target_class = options[:target_class]
+    @target_id = options[:target_id]
     @slowdown_duration = 1
   end
-  attr_reader :secure_token_uuid, :target_class, :secret_key, :slowdown_duration
+
+  attr_reader :secure_token_uuid, :target_class, :target_id, :secret_key,
+    :slowdown_duration
 
   # we should probably add a separate workflow here for just telling the user
   # if the secure token expired so they know that this is happening instead of
@@ -28,7 +31,8 @@ class SecureTokenAuthenticator
     @secure_token ||= SecureToken
       .find_by(
         uuid: secure_token_uuid,
-        target_type: target_class
+        target_type: target_class,
+        target_id: target_id
       )
   end
 

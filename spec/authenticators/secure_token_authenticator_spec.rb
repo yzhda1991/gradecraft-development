@@ -6,8 +6,9 @@ describe SecureTokenAuthenticator do
   let(:subject_attrs) do
     {
       secure_token_uuid: "some_uuid",
+      secret_key: "skeletonkeysrsly",
       target_class: "WaffleClass",
-      secret_key: "skeletonkeysrsly"
+      target_id: "8",
     }
   end
 
@@ -22,6 +23,11 @@ describe SecureTokenAuthenticator do
     it "caches the target class" do
       expect(subject.instance_variable_get(:@target_class))
         .to eq("WaffleClass")
+    end
+
+    it "caches the target id" do
+      expect(subject.instance_variable_get(:@target_id))
+        .to eq("8")
     end
 
     it "caches the secret key" do
@@ -41,6 +47,10 @@ describe SecureTokenAuthenticator do
 
     it "has a readable target class" do
       expect(subject.target_class).to eq("WaffleClass")
+    end
+
+    it "has a readable target id" do
+      expect(subject.target_id).to eq("8")
     end
 
     it "has a readable secret_key" do
@@ -155,7 +165,8 @@ describe SecureTokenAuthenticator do
       let(:subject_attrs) do
         {
           secure_token_uuid: secure_token.uuid,
-          target_class: secure_token.target_type
+          target_class: secure_token.target_type,
+          target_id: secure_token.target_id
         }
       end
 
@@ -178,7 +189,11 @@ describe SecureTokenAuthenticator do
 
     context "no secure tokens exist for the uuid and target class" do
       let(:subject_attrs) do
-        { secure_token_uuid: "doesnt-exist", target_class: "NotAClass" }
+        {
+          secure_token_uuid: "doesnt-exist",
+          target_class: "NotAClass",
+          target_id: nil
+        }
       end
 
       it "doesn't find anything and returns nil" do
