@@ -51,8 +51,8 @@ class SubmissionsExportsController < ApplicationController
     @secure_download_authenticator ||= SecureTokenAuthenticator.new(
       secure_token_uuid: params[:secure_token_uuid],
       secret_key: params[:secret_key],
-      target_class: "SubmissionsExport",
-      target_id: params[:id]
+      target_id: params[:id],
+      target_class: "SubmissionsExport"
     )
   end
 
@@ -75,7 +75,9 @@ class SubmissionsExportsController < ApplicationController
   end
 
   def submissions_export_job
-    @submissions_export_job ||= SubmissionsExportJob.new submissions_export_id: @submissions_export.id
+    @submissions_export_job ||= SubmissionsExportJob.new(
+      submissions_export_id: @submissions_export.id
+    )
   end
 
   def assignment

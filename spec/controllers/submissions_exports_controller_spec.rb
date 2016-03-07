@@ -106,6 +106,42 @@ RSpec.describe SubmissionsExportsController, type: :controller do
     end
   end
 
+  describe "#secure_download_authenticator" do
+    subject { controller }
+
+    let(:result) { controller.instance_eval { secure_download_authenticator } }
+    let(:authenticator) { SecureTokenAuthenticator.new(secure_download_params) }
+    let(:secure_token) { create(:secure_token, target: submissions_export) }
+    let(:params) do
+      { secure_token_uuid: secure_token.uuid,
+        secret_key: secure_token.random_secret_key,
+        id: submissions_export.id }
+    end
+
+    before do
+      allow(controller).to receive(:params) { params }
+    end
+
+    it "builds a new SecureTokenAuthenticator" do
+      expect(SecureTokenAuthenticator).to receive(:new).with \
+        params.merge(target_class: "SubmissionsExport")
+      result
+    end
+
+    it "caches the SecureTokenAuthenticator" do
+      result
+      expect(SecureTokenAuthenticator).not_to receive(:new)
+      result
+    end
+
+    it "sets the returned value to @secure_token_authenticator" do
+      allow(SecureTokenAuthenticator).to receive(:new) { authenticator }
+      result
+      expect(controller.instance_variable_get(:@secure_token_authenticator))
+        .to eq(authenticator)
+    end
+  end
+
   describe "#submissions_export" do
     subject { controller.instance_eval { submissions_export } }
     before { allow(controller).to receive(:params) {{ id: submissions_export.id }} }
