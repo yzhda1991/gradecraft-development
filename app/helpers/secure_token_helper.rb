@@ -10,9 +10,9 @@ module SecureTokenHelper
     # target type from from the SecureToken we can clean up the views and really
     # don't need multiple helper methods for this single purpose.
     send("secure_download_#{target_type}_url",
-      id: secure_token.target_id,
-      secure_token_uuid: secure_token.uuid,
-      secret_key: secure_token.random_secret_key
-    )
+           id: secure_token.target_id,
+           secure_token_uuid: secure_token.uuid,
+           secret_key: secure_token.random_secret_key
+        )
   end
 end

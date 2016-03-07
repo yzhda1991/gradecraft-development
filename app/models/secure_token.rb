@@ -55,7 +55,7 @@ class SecureToken < ActiveRecord::Base
   end
 
   def has_target_of_class?(required_class)
-    target and target.class.to_s == required_class.to_s
+    target && target.class.to_s == required_class.to_s
   end
 
   def expired?

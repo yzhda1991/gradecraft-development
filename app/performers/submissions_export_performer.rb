@@ -300,7 +300,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def student_directory_names
     @student_directory_names ||= @students.inject({}) do |memo, student|
       # check to see whether there are any duplicate student names
-      if @students.to_a.select {|compared_student| student.same_name_as?(compared_student) }.size > 1
+      if @students.to_a.count {|compared_student| student.same_name_as?(compared_student) } > 1
         memo[student.id] = student.student_directory_name_with_username
       else
         memo[student.id] = student.student_directory_name
@@ -453,14 +453,15 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def binary_file_error_message(message, student, submission_file, error_io)
-    "#{message}. Student ##{student.id}: #{student.last_name}, #{student.first_name}, " +
-    "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, error: #{error_io}"
+    "#{message}. "\
+    "Student ##{student.id}: #{student.last_name}, #{student.first_name}, " \
+    "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, " \
+    "error: #{error_io}"
   end
 
   def generate_error_log
-    unless @errors.empty?
-      open(error_log_path, "w") {|file| file.puts @errors }
-    end
+    return if @errors.empty?
+    open(error_log_path, "w") {|file| file.puts @errors }
   end
 
   def error_log_path
@@ -491,8 +492,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def deliver_archive_success_mailer
-    @team ? deliver_team_export_successful_mailer : \
+    if @team
+      deliver_team_export_successful_mailer
+    else
       deliver_export_successful_mailer
+    end
   end
 
   def deliver_archive_failed_mailer
