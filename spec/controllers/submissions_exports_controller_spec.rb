@@ -51,19 +51,17 @@ RSpec.describe SubmissionsExportsController, type: :controller do
   describe "DELETE #destroy" do
     subject { delete :destroy, id: submissions_export.id }
 
-    it "deletes the corresponding s3 object for the submissions export" do
-      expect(controller).to receive(:delete_s3_object)
-      subject
+    before(:each) do
+      allow(controller).to receive(:submissions_export) { submissions_export }
     end
 
     describe "determining success and failure" do
       context "the submissions export is destroyed and the s3 object deleted" do
         before do
-          allow(controller).to receive(:delete_s3_object) { true }
+          allow(submissions_export).to receive(:delete_object_from_s3) { true }
         end
 
         it "destroys the submissions export" do
-          allow(SubmissionsExport).to receive(:find) { submissions_export }
           expect(submissions_export).to receive(:destroy)
           subject
         end
@@ -76,7 +74,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
 
       context "the submissions export is not destroyed and the s3 object fails to delete" do
         before do
-          allow(controller).to receive(:delete_s3_object) { false }
+          allow(submissions_export).to receive(:delete_object_from_s3) { false }
         end
 
         it "notifies the user of the failure" do
@@ -104,22 +102,6 @@ RSpec.describe SubmissionsExportsController, type: :controller do
 
     it "streams the s3 object to the client" do
       expect(controller).to receive(:send_data).with(s3_object_body, filename: export_filename)
-      subject
-    end
-  end
-
-  describe "#delete_s3_object" do
-    subject { controller.instance_eval { delete_s3_object } }
-    before { allow(controller).to receive(:submissions_export) { submissions_export } }
-
-    it "calls #delete_object_from_s3 on the submissions export" do
-      expect(submissions_export).to receive(:delete_object_from_s3)
-      subject
-    end
-
-    it "caches the deletion outcome" do
-      subject
-      expect(submissions_export).not_to receive(:delete_object_from_s3)
       subject
     end
   end

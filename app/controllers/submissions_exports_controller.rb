@@ -16,7 +16,7 @@ class SubmissionsExportsController < ApplicationController
   end
 
   def destroy
-    if delete_s3_object
+    if submissions_export.delete_object_from_s3
       submissions_export.destroy
       flash[:success] = "Assignment export successfully deleted from server"
     else
@@ -59,10 +59,6 @@ class SubmissionsExportsController < ApplicationController
   def stream_file_from_s3
     send_data submissions_export.fetch_object_from_s3.body.read, \
       filename: submissions_export.export_filename
-  end
-
-  def delete_s3_object
-    @delete_s3_object ||= submissions_export.delete_object_from_s3
   end
 
   def submissions_export
