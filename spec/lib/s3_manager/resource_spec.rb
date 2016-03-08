@@ -1,4 +1,5 @@
-require_relative "../../lib/s3_manager/resource"
+require_relative "../../../lib/s3_manager/resource"
+require_relative "../../support/test_classes/lib/s3_manager/s3_resource_test"
 
 RSpec.describe S3Manager::Resource do
   subject { S3ResourceTest.new s3_object_key: s3_object_key }
