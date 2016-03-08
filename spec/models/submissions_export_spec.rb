@@ -156,13 +156,13 @@ RSpec.describe SubmissionsExport do
         "exports", "courses", 40, "assignments", 50,
         subject.created_at_date,
         subject.created_at_in_microseconds
-      ].join "/"
+      ]
     end
 
     it "returns the expected pieces" do
       allow(subject).to \
         receive_messages(course_id: 40, assignment_id: 50)
-      expect(result).to eq(expected_object_key_prefix)
+      expect(result).to eq expected_object_key_prefix.join("/")
     end
   end
 
