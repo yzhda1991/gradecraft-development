@@ -135,16 +135,5 @@ RSpec.describe S3Manager::Resource do
         subject.presigned_s3_url
       end
     end
-
-    # def build_s3_object_key(object_filename)
-    #   key_pieces = [ s3_object_key_prefix, object_filename ].flatten
-    #   key_pieces.unshift ENV["AWS_S3_DEVELOPER_TAG"] if Rails.env.development?
-    #   key_pieces.join "/"
-    # end
-
-    describe "#build_s3_object_key" do
-      context "env is development" do
-      end
-    end
   end
 end

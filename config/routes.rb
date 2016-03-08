@@ -386,7 +386,8 @@ GradeCraft::Application.routes.draw do
   resources :submissions_exports do
     member do
       get :download
-      get '/secure_download/:secure_token_uuid/secret_key/:secret_key', action: "secure_download", as: "secure_download"
+      get '/secure_download/:secure_token_uuid/secret_key/:secret_key',
+        action: "secure_download", as: "secure_download"
     end
   end
 end
