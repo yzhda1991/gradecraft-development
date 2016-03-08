@@ -117,67 +117,21 @@ RSpec.describe SubmissionsExport do
     end
   end
 
-  describe "#s3_object_key_pieces" do
-    let(:result) { submissions_export.s3_object_key_pieces("stuff.zip") }
+  describe "#s3_object_key_prefix" do
+    let(:result) { submissions_export.s3_object_key_prefix }
     let(:submissions_export) { create(:submissions_export) }
-    let(:expected_object_key_pieces) do
+    let(:expected_object_key_prefix) do
       [
         "exports", "courses", 40, "assignments", 50,
         submissions_export.created_at_date,
-        submissions_export.created_at_in_microseconds,
-        "stuff.zip"
+        submissions_export.created_at_in_microseconds
       ]
     end
 
     it "returns the expected pieces" do
       allow(submissions_export).to \
         receive_messages(course_id: 40, assignment_id: 50)
-      expect(result).to eq(expected_object_key_pieces)
-    end
-  end
-
-  describe "#s3_manager" do
-    let(:result) { submissions_export.s3_manager }
-
-    it "creates an S3Manager::Manager object" do
-      expect(result.class).to eq(S3Manager::Manager)
-    end
-
-    it "caches the S3Manager object" do
-      result
-      expect(S3Manager::Manager).not_to receive(:new)
-      result
-    end
-  end
-
-  describe "#presigned_s3_url" do
-    let(:result) { submissions_export.presigned_s3_url }
-    let(:submissions_export) { create(:submissions_export, s3_object_key: "some-test-key") }
-
-    it "gets the presigned url for the s3 object" do
-      expect(submissions_export.s3_manager).to \
-        receive_message_chain(:bucket, :object, :presigned_url, :to_s)
-      result
-    end
-  end
-
-  describe "#upload_file_to_s3" do
-    let(:result) { submissions_export.upload_file_to_s3("great-file.txt") }
-
-    before do
-      allow(s3_manager).to receive(:put_encrypted_object) { "some s3 response" }
-      allow(submissions_export).to receive(:s3_object_key) { "snake-hat-key" }
-      allow(submissions_export).to receive(:s3_manager) { s3_manager }
-    end
-
-    it "puts an S3 encrypted object with the object key and file path" do
-      expect(s3_manager).to receive(:put_encrypted_object)
-        .with("snake-hat-key", "great-file.txt")
-      result
-    end
-
-    it "returns the response from the S3 manager" do
-      expect(result).to eq("some s3 response")
+      expect(result).to eq(expected_object_key_prefix)
     end
   end
 
@@ -195,45 +149,6 @@ RSpec.describe SubmissionsExport do
     it "updates the last_export_completed_at timestamp to now" do
       result
       expect(submissions_export.last_export_completed_at).to eq(sometime)
-    end
-  end
-
-  describe "#set_s3_bucket_name" do
-    let(:result) { submissions_export.set_s3_bucket_name }
-    before do
-      allow(submissions_export)
-        .to receive_message_chain(:s3_manager, :bucket_name) { "test-bucket" }
-    end
-
-    it "sets the submissions export value to the index in the s3_attributes hash" do
-      result
-      expect(submissions_export[:s3_bucket_name]).to eq("test-bucket")
-    end
-  end
-
-  describe "#s3_object_summary" do
-    let(:result) { submissions_export.s3_object_summary }
-
-    before do
-      allow(submissions_export).to receive_messages(
-        s3_object_key: s3_object_key, s3_manager: s3_manager
-      )
-    end
-
-    it "builds a new object summary with the object key and the s3 manager" do
-      expect(S3Manager::Manager::ObjectSummary).to receive(:new)
-        .with(s3_object_key, s3_manager)
-      result
-    end
-
-    it "returns an ObjectSummary object" do
-      expect(result.class).to eq(S3Manager::Manager::ObjectSummary)
-    end
-
-    it "caches the new object summary" do
-      result
-      expect(S3Manager::Manager::ObjectSummary).not_to receive(:new)
-      result
     end
   end
 end

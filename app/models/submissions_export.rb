@@ -1,4 +1,7 @@
 class SubmissionsExport < ActiveRecord::Base
+  # treat this resource if it's responsible for managing an object on s3
+  include S3Manager::Resource
+
   belongs_to :course
   belongs_to :professor, class_name: "User", foreign_key: "professor_id"
   belongs_to :team
