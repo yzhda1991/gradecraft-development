@@ -32,15 +32,17 @@ class SubmissionsExport < ActiveRecord::Base
   before_save :rebuild_s3_object_key, if: :export_filename_changed?
 
   def rebuild_s3_object_key
+    # #build_s3_object_key is defined in S3Manager::Resource, and presumes that
+    # the resource will have both an accessible s3_object_key attribute as well
+    # as an s3_object_key_prefix
     self[:s3_object_key] = build_s3_object_key(export_filename)
   end
 
-  def build_s3_object_key(object_filename)
-    key_pieces = [ s3_object_key_prefix, object_filename ].flatten
-    key_pieces.unshift ENV["AWS_S3_DEVELOPER_TAG"] if Rails.env.development?
-    key_pieces.join "/"
-  end
   # END THESE NEED SPECS
+
+  def update_export_completed_time
+    update_attributes last_export_completed_at: Time.now
+  end
 
   def s3_object_key_prefix
     [

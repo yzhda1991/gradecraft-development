@@ -49,13 +49,50 @@ RSpec.describe S3Manager::Resource do
       end
     end
 
-    #  def upload_file_to_s3(file_path)
-    #    s3_manager.put_encrypted_object(s3_object_key, file_path)
-    #  end
+    describe "#fetch_object_from_s3" do
+      it "fetches the encrypted object from s3" do
+        expect(s3_manager).to receive(:get_encrypted_object)
+          .with(s3_object_key)
+        subject.fetch_object_from_s3
+      end
+    end
 
-    #  def fetch_object_from_s3
-    #    s3_manager.get_encrypted_object(s3_object_key)
-    #  end
+    describe "#stream_s3_object_body" do
+      let(:result) { subject.stream_s3_object_body }
+      it "fetches the encrypted object from s3" do
+        expect(s3_manager).to receive(:get_encrypted_object).with(s3_object_key)
+        result
+      end
+
+      context "s3_object doesn't exist" do
+        it "returns nil" do
+          allow(subject).to receive(:fetch_object_from_s3) { nil }
+          expect(result).to be_nil
+        end
+      end
+
+      context "s3_object exists" do
+        let(:s3_object) { double(:s3_object).as_null_object }
+
+        before do
+          allow(subject).to receive(:fetch_object_from_s3) { s3_object }
+        end
+
+        context "s3_object has no body" do
+          it "returns nil" do
+            allow(s3_object).to receive(:body) { nil }
+            expect(result).to be_nil
+          end
+        end
+
+        context "s3_object has a body" do
+          it "streams the object body via #read" do
+            allow(s3_object).to receive_message_chain(:body, :read) { "a-body" }
+            expect(result).to eq("a-body")
+          end
+        end
+      end
+    end
 
     #  def stream_s3_object_body
     #    s3_object = fetch_object_from_s3
