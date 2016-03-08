@@ -235,9 +235,10 @@ RSpec.describe SubmissionsExportsController, type: :controller do
 
     before do
       allow(controller).to receive(:submissions_export) { submissions_export }
-      allow(submissions_export).to receive(:export_filename) { "some_filename.txt" }
-      allow(submissions_export).to receive_message_chain(:fetch_object_from_s3,
-        :body, :read).and_return temp_file
+      allow(submissions_export).to receive_messages(
+        export_filename: "some_filename.txt",
+        stream_s3_object_body: temp_file
+      )
     end
 
     it "renders the s3 object data with the submissions export filename" do
