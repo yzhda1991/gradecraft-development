@@ -26,10 +26,6 @@ module S3Manager
       s3_manager.delete_object(s3_object_key)
     end
 
-    def update_export_completed_time
-      update_attributes last_export_completed_at: Time.now
-    end
-
     def s3_object_exists?
       s3_object_summary.exists?
     end
