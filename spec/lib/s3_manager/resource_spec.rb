@@ -1,4 +1,4 @@
-require "rails_spec_helper"
+require_relative "../../lib/s3_manager/resource"
 
 RSpec.describe S3Manager::Resource do
   subject { S3ResourceTest.new s3_object_key: s3_object_key }
@@ -31,15 +31,6 @@ RSpec.describe S3Manager::Resource do
     before do
       allow(subject).to receive(:s3_manager) { s3_manager }
     end
-
-    describe "#presigned_s3_url" do
-      it "gets the presigned url for the s3 object" do
-        expect(subject.s3_manager).to receive_message_chain(
-          :bucket, :object, :presigned_url, :to_s)
-        subject.presigned_s3_url
-      end
-    end
-
 
     describe "#upload_file_to_s3" do
       it "puts the encrypted object to s3" do
@@ -133,6 +124,25 @@ RSpec.describe S3Manager::Resource do
         result
         expect(S3Manager::Manager::ObjectSummary).not_to receive(:new)
         result
+      end
+    end
+
+    describe "#presigned_s3_url" do
+      it "gets the presigned url for the s3 object" do
+        expect(subject.s3_manager).to receive_message_chain(
+          :bucket, :object, :presigned_url, :to_s)
+        subject.presigned_s3_url
+      end
+    end
+
+    # def build_s3_object_key(object_filename)
+    #   key_pieces = [ s3_object_key_prefix, object_filename ].flatten
+    #   key_pieces.unshift ENV["AWS_S3_DEVELOPER_TAG"] if Rails.env.development?
+    #   key_pieces.join "/"
+    # end
+
+    describe "#build_s3_object_key" do
+      context "env is development" do
       end
     end
   end
