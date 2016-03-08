@@ -331,9 +331,7 @@ class User < ActiveRecord::Base
   # Checking specifically if there is a released grade for an assignment
   def grade_released_for_assignment?(assignment)
     grade = grade_for_assignment(assignment)
-    if grade.present?
-      GradeProctor.new(grade).viewable? self, assignment.course
-    end
+    GradeProctor.new(grade).viewable? self, assignment.course
   end
 
   # Grabbing the grade for an assignment
