@@ -27,7 +27,7 @@
     %tbody
       - @courses.each do |course|
         %tr
-          %td= link_to course.name, change_current_course_path(course_id: course.id), data: { method: "post" }
+          %td= link_to course.name, change_current_course_path(course_id: course.id)
           %td= course.courseno
           %td= course.year
           %td= course.semester
