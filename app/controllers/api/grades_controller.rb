@@ -6,7 +6,7 @@ class API::GradesController < ApplicationController
   def show
     @grade = Grade.find_or_create(params[:assignment_id], params[:student_id])
     @grade_status_options = @grade.assignment.release_necessary? ?
-      ["In Progress", "Graded", "Released"] : ["In Progress", "Graded"]
+      Grade::STATUSES : Grade::UNRELEASED_STATUSES
   end
 
   # GET api/assignments/:assignment_id/groups/:group_id/grades
@@ -19,7 +19,7 @@ class API::GradesController < ApplicationController
       @student_ids = students.pluck(:id)
       @grades = Grade.find_or_create_grades(params[:assignment_id], @student_ids)
       @grade_status_options = assignment.release_necessary? ?
-        ["In Progress", "Graded", "Released"] : ["In Progress", "Graded"]
+        Grade::STATUSES : Grade::UNRELEASED_STATUSES
     end
   end
 end

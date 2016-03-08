@@ -37,7 +37,7 @@
 
           - if @assignment.release_necessary?
             .assignment-status
-              = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @grade.status, :include_blank => true
+              = f.input :status,  as: :select, :collection => Grade::STATUSES, :selected => @grade.status, :include_blank => true
               .form_label Can the student see this grade? (Won't be updated until the grade is submitted.)
 
               -# angular code for status update
