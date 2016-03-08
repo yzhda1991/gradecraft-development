@@ -94,19 +94,20 @@ RSpec.describe S3Manager::Resource do
       end
     end
 
-    #  def stream_s3_object_body
-    #    s3_object = fetch_object_from_s3
-    #    return unless s3_object and s3_object.body
-    #    s3_object.body.read
-    #  end
+    describe "#write_s3_object_to_file" do
+      it "writes the encrypted object to a local file" do
+        expect(s3_manager).to receive(:write_encrypted_object_to_file)
+          .with(s3_object_key, temp_file)
+        subject.write_s3_object_to_file(temp_file)
+      end
+    end
 
-    #  def write_s3_object_to_file(target_file_path)
-    #    s3_manager.write_encrypted_object_to_file(s3_object_key, target_file_path)
-    #  end
-
-    #  def delete_object_from_s3
-    #    s3_manager.delete_object(s3_object_key)
-    #  end
+    describe "#delete_object_from_s3" do
+      it "deletees the encrypted object from s3" do
+        expect(s3_manager).to receive(:delete_object).with(s3_object_key)
+        subject.delete_object_from_s3
+      end
+    end
 
     describe "#s3_object_summary" do
       let(:result) { subject.s3_object_summary }
