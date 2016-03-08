@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 RSpec.describe S3Manager::Resource do
   subject { S3ResourceTest.new }
-  let(:s3_manager) { S3Manager::Manager.new }
+  let(:s3_manager) { double(S3Manager::Manager) }
   let(:s3_object_key) { double(:s3_object_key) }
 
   describe "#presigned_s3_url" do
@@ -12,6 +12,26 @@ RSpec.describe S3Manager::Resource do
       expect(subject.s3_manager).to receive_message_chain(
         :bucket, :object, :presigned_url, :to_s)
       subject.presigned_s3_url
+    end
+  end
+
+  describe "#s3_manager" do
+    let(:result) { subject.s3_manager }
+
+    it "builds a new S3Manager::Manager object" do
+      expect(S3Manager::Manager).to receive(:new)
+      result
+    end
+
+    it "caches the object" do
+      result
+      expect(S3Manager::Manager).not_to receive(:new)
+      result
+    end
+
+    it "sets the S3Manager object to @s3_manager" do
+      allow(S3Manager::Manager).to receive(:new) { s3_manager }
+      expect(result).to eq s3_manager
     end
   end
 
