@@ -109,14 +109,15 @@ RSpec.describe S3Manager::Resource do
       end
     end
 
+    describe "#s3_object_exists?" do
+      it "checks whether the s3_object_exists?" do
+        expect(subject).to receive_message_chain(:s3_object_summary, :exists?)
+        subject.s3_object_exists?
+      end
+    end
+
     describe "#s3_object_summary" do
       let(:result) { subject.s3_object_summary }
-
-      before do
-        allow(subject).to receive_messages(
-          s3_object_key: s3_object_key, s3_manager: s3_manager
-        )
-      end
 
       it "builds a new object summary with the object key and the s3 manager" do
         expect(S3Manager::Manager::ObjectSummary).to receive(:new)
