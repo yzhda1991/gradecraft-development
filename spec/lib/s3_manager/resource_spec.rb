@@ -6,13 +6,12 @@ RSpec.describe S3Manager::Resource do
   let(:s3_object_key) { double(:s3_object_key) }
 
   describe "#presigned_s3_url" do
-    let(:result) { subject.presigned_s3_url }
-    let(:subject) { create(:subject, s3_object_key: "some-test-key") }
+    before { subject.s3_object_key = "some-test-key" }
 
     it "gets the presigned url for the s3 object" do
-      expect(subject.s3_manager).to \
-        receive_message_chain(:bucket, :object, :presigned_url, :to_s)
-      result
+      expect(subject.s3_manager).to receive_message_chain(
+        :bucket, :object, :presigned_url, :to_s)
+      subject.presigned_s3_url
     end
   end
 
