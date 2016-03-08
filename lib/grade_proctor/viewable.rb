@@ -1,5 +1,7 @@
 class GradeProctor
   module Viewable
+    include Base
+
     def viewable?(user=nil, course=nil)
       return false if resource.nil?
 
@@ -11,10 +13,6 @@ class GradeProctor
     end
 
     private
-
-    def grade_for_context?(user, course)
-      resource.course_id == course.id && resource.student_id == user.id
-    end
 
     def grade_visible_by_student?(user, course)
       resource.is_released? ||
