@@ -78,6 +78,12 @@ class SubmissionsExport < ActiveRecord::Base
     s3_manager.get_encrypted_object(s3_object_key)
   end
 
+  def stream_s3_object_body
+    s3_object = fetch_object_from_s3
+    return unless s3_object and s3_object.body
+    s3_object.body.read
+  end
+
   def write_s3_object_to_file(target_file_path)
     s3_manager.write_encrypted_object_to_file(s3_object_key, target_file_path)
   end
@@ -106,12 +112,5 @@ class SubmissionsExport < ActiveRecord::Base
 
   def export_time
     Time.now
-  end
-
-  def s3_attributes
-    {
-      s3_bucket_name: s3_manager.bucket_name,
-      s3_object_key: s3_object_key
-    }
   end
 end

@@ -230,18 +230,4 @@ RSpec.describe SubmissionsExport do
       expect(subject).to eq(parsed_time)
     end
   end
-
-  describe "#s3_attributes" do
-    subject { submissions_export.instance_eval { s3_attributes }}
-
-    before do
-      allow(submissions_export).to receive_message_chain(:s3_manager, :bucket_name) { "dave is home" }
-      allow(submissions_export).to receive(:s3_object_key) { "some-key" }
-    end
-
-    it "should return a hash with the s3 object key and the s3 bucket name" do
-      expect(subject).to eq({s3_bucket_name: "dave is home", s3_object_key: "some-key"})
-    end
-  end
-
 end
