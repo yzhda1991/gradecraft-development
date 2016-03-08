@@ -28,7 +28,6 @@ class SubmissionsExport < ActiveRecord::Base
   validates :course_id, presence: true
   validates :assignment_id, presence: true
 
-  # THESE NEED SPECS
   before_save :rebuild_s3_object_key, if: :export_filename_changed?
 
   def rebuild_s3_object_key
@@ -40,8 +39,6 @@ class SubmissionsExport < ActiveRecord::Base
     key_pieces.unshift ENV["AWS_S3_DEVELOPER_TAG"] if Rails.env.development?
     key_pieces.join "/"
   end
-
-  # END THESE NEED SPECS
 
   def s3_object_key_prefix
     [
@@ -60,10 +57,12 @@ class SubmissionsExport < ActiveRecord::Base
   end
 
   def created_at_in_microseconds
+    return unless created_at
     created_at.to_f.to_s.gsub(".","")
   end
 
   def created_at_date
+    return unless created_at
     created_at.strftime("%F")
   end
 
