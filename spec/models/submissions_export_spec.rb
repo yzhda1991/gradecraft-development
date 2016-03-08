@@ -85,6 +85,20 @@ RSpec.describe SubmissionsExport do
     end
   end
 
+  describe "#rebuild_s3_object_key" do
+    before do
+      allow(submissions_export).to receive_messages(
+        build_s3_object_key: "new-key",
+        export_filename: "some_filename.txt"
+      )
+    end
+
+    it "builds a new s3_object_key and caches it" do
+      submissions_export.rebuild_s3_object_key
+      expect(submissions_export[:s3_object_key]).to eq "new-key"
+    end
+  end
+
   describe "#build_s3_object_key" do
     let(:result) { submissions_export.build_s3_object_key("stuff.zip") }
 
@@ -125,7 +139,7 @@ RSpec.describe SubmissionsExport do
         "exports", "courses", 40, "assignments", 50,
         submissions_export.created_at_date,
         submissions_export.created_at_in_microseconds
-      ]
+      ].join "/"
     end
 
     it "returns the expected pieces" do
