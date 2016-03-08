@@ -68,6 +68,23 @@ describe Grade do
     end
   end
 
+  describe "#predicted?" do
+    it "is predicted if it has a predicted score" do
+      subject.predicted_score = 57_000
+      expect(subject).to be_predicted
+    end
+
+    it "is not predicted if it has a nil predicted score" do
+      subject.predicted_score = nil
+      expect(subject).to_not be_predicted
+    end
+
+    it "is not predicted if it has a default predicted score of zero" do
+      subject.predicted_score = 0
+      expect(subject).to_not be_predicted
+    end
+  end
+
   describe "#raw_score" do
     it "converts raw_score from human readable strings" do
       subject.update(raw_score: "1,234")
