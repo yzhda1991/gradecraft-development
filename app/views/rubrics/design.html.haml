@@ -40,7 +40,7 @@
           .level-wrapper
             .level(name="levelForm" ng-repeat="level in criterion.levels" ng-form ng-submit="level.create()" ng-class="{saved: level.isSaved(), nocredit: level.noCredit}")
               = render "rubrics/new_level"
-        %button.add-level(name="newLevel" ng-click="criterion.addLevel()" ng-show="criterion.isSaved()")
+        %button.add-level(name="newLevel" ng-click="criterion.insertLevel()" ng-show="criterion.isSaved()")
           + Level
 
     %button#new-rubric-criterion(type="button" ng-click="newCriterion()" ng-hide) + Criterion
