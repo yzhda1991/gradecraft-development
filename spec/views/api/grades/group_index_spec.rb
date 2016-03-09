@@ -6,7 +6,7 @@ describe "api/grades/group_index" do
     world = World.create.with(:course, :assignment, :student, :grade)
 
     # Expected instance variables on render:
-    @grades = create(:grade)
+    @grades = [create(:grade)]
     @student_ids = [1,2,3,4,5]
     @grades_status_options = ["In Progress","Graded", "Released"]
   end
