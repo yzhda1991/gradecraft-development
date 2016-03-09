@@ -14,7 +14,7 @@
 
     .article-graded{'ng-if' => 'articleGraded(assignment)'}
       .grade{'ng-if' => 'assignment.pass_fail == false'}
-        {{assignment.grade.raw_score | number}} / {{assignment.point_total | number}}
+        {{assignment.grade.final_score | number}} / {{assignment.point_total | number}}
       .grade{'ng-if' => 'assignment.pass_fail == true'}
         .no-status{{'ng-if'=>'!assignment.grade.pass_fail_status'}}
           {{termFor["pass"]}} / {{termFor["fail"]}}

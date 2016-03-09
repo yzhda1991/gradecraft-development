@@ -118,8 +118,8 @@
     total = 0
     _.each(assignments, (assignment)->
       # use raw score to keep weighting calculation on assignment type level
-      if assignment.grade.raw_score != null
-        total += assignment.grade.raw_score
+      if assignment.grade.final_score != null
+        total += assignment.grade.final_score
       else if ! assignment.pass_fail && ! assignment.closed_without_sumbission && includePredicted
         total += assignment.grade.predicted_score
     )

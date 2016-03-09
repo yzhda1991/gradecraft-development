@@ -20,9 +20,9 @@ class PredictedGradeSerializer
     grade.student == current_user ? grade.predicted_score : 0
   end
 
-  def raw_score
-    return 0 if show_zero_in_predictor grade.raw_score
-    grade.raw_score if grade.is_student_visible?
+  def final_score
+    return 0 if show_zero_in_predictor grade.final_score
+    grade.final_score if grade.is_student_visible?
   end
 
   def score
@@ -41,7 +41,7 @@ class PredictedGradeSerializer
       id: id,
       predicted_score: predicted_score,
       score: score,
-      raw_score: raw_score,
+      final_score: final_score,
     }
  end
 
