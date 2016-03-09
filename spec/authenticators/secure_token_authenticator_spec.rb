@@ -1,9 +1,9 @@
 require 'rails_spec_helper'
 
 describe SecureTokenAuthenticator do
-  subject { described_class.new subject_attrs }
+  subject { described_class.new given_options }
 
-  let(:subject_attrs) do
+  let(:given_options) do
     {
       secure_token_uuid: "some_uuid",
       secret_key: "skeletonkeysrsly",
@@ -15,28 +15,19 @@ describe SecureTokenAuthenticator do
   let(:secure_token) { SecureToken.new }
 
   describe "#initialize" do
-    it "caches the uuid" do
-      expect(subject.instance_variable_get(:@secure_token_uuid))
-        .to eq("some_uuid")
+    it "merges the default options into the options" do
+      expect(subject.options).to eq subject.default_options.merge(given_options)
     end
 
-    it "caches the target class" do
-      expect(subject.instance_variable_get(:@target_class))
-        .to eq("WaffleClass")
+    it "sets the slowdown duration" do
+      subject = described_class.new given_options.merge(slowdown_duration: 20)
+      expect(subject.slowdown_duration).to eq(20)
     end
 
-    it "caches the target id" do
-      expect(subject.instance_variable_get(:@target_id))
-        .to eq("8")
-    end
-
-    it "caches the secret key" do
-      expect(subject.instance_variable_get(:@secret_key))
-        .to eq("skeletonkeysrsly")
-    end
-
-    it "sets a slowdown duration of 1 second" do
-      expect(subject.instance_variable_get(:@slowdown_duration)).to eq 1
+    it "sets the required options" do
+      subject.required_options.each do |option|
+        expect(subject.send option).to eq given_options[option]
+      end
     end
   end
 
@@ -167,7 +158,7 @@ describe SecureTokenAuthenticator do
     let!(:secure_token) { create(:secure_token) }
 
     context "a secure token exists with the uuid and target class" do
-      let(:subject_attrs) do
+      let(:given_options) do
         {
           secure_token_uuid: secure_token.uuid,
           target_class: secure_token.target_type,
@@ -193,7 +184,7 @@ describe SecureTokenAuthenticator do
     end
 
     context "no secure tokens exist for the uuid and target class" do
-      let(:subject_attrs) do
+      let(:given_options) do
         {
           secure_token_uuid: "doesnt-exist",
           target_class: "NotAClass",

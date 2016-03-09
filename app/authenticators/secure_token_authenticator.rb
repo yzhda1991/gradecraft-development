@@ -8,6 +8,8 @@ class SecureTokenAuthenticator
   attr_accessor :secure_token_uuid, :target_class, :target_id, :secret_key,
     :slowdown_duration
 
+  attr_reader :options
+
   # we should probably add a separate workflow here for just telling the user
   # if the secure token expired so they know that this is happening instead of
   #
@@ -39,7 +41,7 @@ class SecureTokenAuthenticator
   end
 
   def required_options_present?
-    required_options.all? {|option| send(option).present? }
+    required_options.all? { |option| send(option).present? }
   end
 
   def uuid_format_valid?
