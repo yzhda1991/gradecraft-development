@@ -48,7 +48,9 @@ class HistoryFilter
 
     from_versions.each_with_index do |history_item, index|
       history_item.changeset.each_pair do |key, value|
-        if !["created_at", "updated_at"].include?(key) && value.is_a?(Array)
+        if !["created_at", "updated_at"].include?(key) &&
+            value.is_a?(Array) &&
+            to_versions.size > index
           to_versions[index].changeset.merge!({ "#{key}" => value })
         end
       end

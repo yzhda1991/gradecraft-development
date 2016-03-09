@@ -99,6 +99,17 @@ describe HistoryFilter do
                               "attribute2" => [nil, "http://example.org"],
                               "attribute1" => [nil, "blah"]}]
     end
+
+    it "does not merge if the destination does not exist" do
+      history = [OpenStruct.new(version: OpenStruct.new(item_type: "FromObjectType"),
+                                changeset: { "event" => "create",
+                                             "object" => "FromObject",
+                                             "attribute1" => [nil, "blah"]})
+      ]
+      result = described_class.new(history).merge("FromObjectType" => "ToObjectType")
+        .changesets
+      expect(result).to be_empty
+    end
   end
 
   describe "#remove" do
