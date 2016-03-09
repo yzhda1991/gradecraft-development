@@ -713,21 +713,24 @@ describe GradesController do
       end
 
       context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
-        before do
-          allow(PredictorEventJob).to receive_message_chain(:new, :enqueue).and_raise("MOCK FAUX LAME NONERROR: Could not connect to Redis: getaddrinfo socket error.")
-          allow(controller).to receive(:predictor_event_attrs) { predictor_event_attrs_expectation }
-        end
-
-        it "performs the pageview event log directly from the controller" do
-          expect(PredictorEventJob).to receive(:perform).with(data: predictor_event_attrs_expectation)
+        let(:result) do
           controller.instance_eval { enqueue_predictor_event_job }
         end
 
-        # intermittent failure?
-        it "adds an additional pageview record to mongo" do
-          expect {
-            controller.instance_eval { enqueue_predictor_event_job }
-          }.to change{ Analytics::Event.count }.by(1)
+        before do
+          allow(PredictorEventJob).to receive_message_chain(:new, :enqueue)
+            .and_raise("MOCK FAUX LAME NONERROR: Could not connect to Redis:") \
+              "getaddrinfo socket error.")
+
+          allow(controller).to receive(:predictor_event_attrs) do
+            predictor_event_attrs_expectation
+          end
+        end
+
+        it "performs the pageview event log directly from the controller" do
+          expect(PredictorEventJob).to receive(:perform)
+            .with(data: predictor_event_attrs_expectation)
+          result
         end
       end
     end
