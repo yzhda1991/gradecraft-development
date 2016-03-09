@@ -14,7 +14,7 @@ module S3Manager
 
     def stream_s3_object_body
       s3_object = fetch_object_from_s3
-      return unless s3_object and s3_object.body
+      return unless s3_object && s3_object.body
       s3_object.body.read
     end
 

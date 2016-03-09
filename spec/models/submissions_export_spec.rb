@@ -101,7 +101,7 @@ RSpec.describe SubmissionsExport do
 
     context "created_at is present" do
       it "formats the created_at time in microseconds" do
-        expect(result).to eq subject.created_at.to_f.to_s.gsub(".","")
+        expect(result).to eq subject.created_at.to_f.to_s.delete(".")
       end
     end
 
