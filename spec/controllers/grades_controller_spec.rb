@@ -731,8 +731,8 @@ describe GradesController do
         end
 
         it "performs the pageview event log directly from the controller" do
-          expect(PredictorEventJob).to receive(:perform)
-            .with(data: predictor_event_attrs_expectation)
+          expect(PredictorEventJob).to receive(:perform).with \
+            data: predictor_event_attrs_expectation
           result
         end
       end
