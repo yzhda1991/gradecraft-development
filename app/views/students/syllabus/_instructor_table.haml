@@ -35,13 +35,13 @@
             // Checking to see if this student has weighted this assignment anything other than 1
             - if (@student.weight_for_assignment_type(assignment_type) == 0 && current_course.default_assignment_weight != 1) || @student.weight_for_assignment_type(assignment_type) > 1
               - if grade_modified
-                = "#{points grade.raw_score} / #{ points assignment.point_total } points (Raw)"
+                = "#{points grade.final_score} / #{ points assignment.point_total } points (Raw)"
                 .bold= "#{ points grade.score } / #{points grade.point_total} points (Multiplied)"
               - else
                 .italic= "#{points grade.point_total} points possible"
             - else
               - if grade_modified
-                .bold= "#{points grade.raw_score} / #{ points grade.point_total } points"
+                .bold= "#{points grade.final_score} / #{ points grade.point_total } points"
               - else
                 .italic= "#{points assignment.point_total} points possible"
           - else

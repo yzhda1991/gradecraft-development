@@ -10,8 +10,8 @@
         %th ID | Assignment
         %th Task
         %th Submission
-        %th Raw Score
-        %th{ "data-dynatable-sorts" => "numericScore" } Score
+        %th Final Score
+        %th{ "data-dynatable-sorts" => "numericScore" } Score With Weights
         %th Predicted Score
         %th Feedback
         %th Status
@@ -25,7 +25,7 @@
           %td= "#{g.assignment_id} • #{g.assignment.try(:name)}"
           %td= g.task.name if g.task.present?
           %td= g.submission.id if g.submission.present?
-          %td= g.raw_score
+          %td= g.final_score
           %td= g.try(:score)
           %td= g.predicted_score
           %td= g.feedback

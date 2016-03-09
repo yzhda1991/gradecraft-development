@@ -4,6 +4,8 @@ require "rails_spec_helper"
 describe "api/grades/show" do
   before(:all) do
     world = World.create.with(:course, :assignment, :student, :grade)
+
+    # Expected instance variables on render:
     @grade = world.grade
     @grade_status_options = ["In Progress","Graded", "Released"]
   end
