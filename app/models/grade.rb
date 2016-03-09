@@ -10,7 +10,8 @@ class Grade < ActiveRecord::Base
     :assignment_type_id, :course_id, :feedback, :final_score, :grade_file,
     :grade_file_ids, :grade_files_attributes, :graded_by_id, :group, :group_id,
     :group_type, :instructor_modified, :pass_fail_status, :point_total,
-    :predicted_score, :raw_score, :status, :student, :student_id, :submission,
+    :points_adjustment, :points_adjustment_feedback, :predicted_score,
+    :raw_score, :status, :student, :student_id, :submission,
     :_destroy, :submission_id, :task, :task_id, :team_id, :earned_badges,
     :earned_badges_attributes, :feedback_read, :feedback_read_at,
     :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at
@@ -34,7 +35,7 @@ class Grade < ActiveRecord::Base
   accepts_nested_attributes_for :earned_badges, reject_if: proc { |a| (a["score"].blank?) }, allow_destroy: true
 
   before_validation :cache_associations
-  before_save :cache_point_total
+  before_save :calculate_points
   before_save :zero_points_for_pass_fail
   after_save :check_unlockables
 
@@ -106,25 +107,13 @@ class Grade < ActiveRecord::Base
   # Handle raw score attributes with commas (ex "300,000")
   def raw_score=(rs)
     if rs.class == String
-      rs.gsub!(",","").to_i
+      rs.delete!(",").to_i
     end
     write_attribute(:raw_score,rs)
   end
 
-  def score
-    if assignment_type.student_weightable?
-      final_score || ((raw_score * assignment_weight).round if raw_score.present?)  || nil
-    else
-      final_score || raw_score || nil
-    end
-  end
-
   def predicted_score
     self[:predicted_score] || 0
-  end
-
-  def point_total
-    assignment.point_total_for_student(student)
   end
 
   def assignment_weight
@@ -132,7 +121,7 @@ class Grade < ActiveRecord::Base
   end
 
   def has_feedback?
-    feedback != "" && feedback != nil
+    feedback.present?
   end
 
   def is_released?
@@ -183,25 +172,44 @@ class Grade < ActiveRecord::Base
 
   private
 
+  # full points (with student's weighting)
+  def calculate_point_total
+    assignment.point_total_for_student(student)
+  end
+
+  # totaled points (adds adjustment, without weighting)
+  def calculate_final_score
+    return nil unless raw_score.present?
+    raw_score + points_adjustment
+  end
+
+  # points with student's weighting
+  def calculate_score
+    return nil unless raw_score.present?
+    weighting = assignment_type.student_weightable? ? assignment_weight : 1
+    (final_score * weighting).round
+  end
+
+  # Calculate all stored points fields before save
+  def calculate_points
+    self.point_total = calculate_point_total
+    self.final_score = calculate_final_score
+    self.score = calculate_score
+  end
+
   def self.student_visible_sql
     ["status = 'Released' OR (status = 'Graded' AND assignments.release_necessary = ?)", false]
   end
 
   def save_student
-    if self.raw_score_changed? || self.status_changed?
-      student.save
-    end
+    return unless self.raw_score_changed? || self.status_changed?
+    student.save
   end
 
   def save_team
     if course.has_teams? && student.team_for_course(course).present?
       student.team_for_course(course).save
     end
-  end
-
-  def cache_point_total
-    self.score = score
-    self.point_total = point_total
   end
 
   def cache_associations
@@ -267,5 +275,4 @@ class Grade < ActiveRecord::Base
 
     failure_attrs
   end
-
 end

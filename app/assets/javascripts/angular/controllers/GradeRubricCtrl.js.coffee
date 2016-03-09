@@ -185,7 +185,7 @@
 
   $scope.gradeParams = ()->
     {
-      raw_score: $scope.pointsGivenAfterAdjustment(),
+      raw_score: $scope.pointsGiven(),
       feedback: $scope.grade.feedback,
       status:   $scope.grade.status,
       points_adjustment: $scope.grade.points_adjustment,
