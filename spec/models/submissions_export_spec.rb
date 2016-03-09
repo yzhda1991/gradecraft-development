@@ -67,6 +67,16 @@ RSpec.describe SubmissionsExport do
     end
   end
 
+  describe "#update_export_completed_time" do
+    let(:time_now) { Date.parse("Oct 20 1999").to_time }
+
+    it "updates the last_export_completed_at time to now" do
+      allow(Time).to receive(:now) { time_now }
+      subject.update_export_completed_time
+      expect(subject.last_export_completed_at).to eq(time_now)
+    end
+  end
+
   describe "#created_at_date" do
     subject { create(:submissions_export) }
     let(:result) { subject.created_at_date }

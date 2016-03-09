@@ -1,5 +1,5 @@
 class SubmissionsExport < ActiveRecord::Base
-  # treat this resource if it's responsible for managing an object on s3
+  # treat this resource as if it's responsible for managing an object on s3
   include S3Manager::Resource
 
   belongs_to :course

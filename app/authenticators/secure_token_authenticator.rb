@@ -1,5 +1,5 @@
 class SecureTokenAuthenticator
-  def initialize(options={})
+  def initialize(options = {})
     @options = default_options.merge options
     @slowdown_duration = @options[:slowdown_duration]
     required_options.each {|option| send "#{option}=", @options[option] }
