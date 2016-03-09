@@ -217,6 +217,32 @@ describe SecureTokenAuthenticator do
     end
   end
 
+  describe "#required_options_present?" do
+    context "all required options are present, non-nil values" do
+      it "returns true" do
+        expect(subject.required_options_present?).to be_truthy
+      end
+    end
+
+    context "some required options are nil or not present" do
+      let(:given_options) { { secret_key: "", target_class: nil } }
+
+      it "returns false" do
+        expect(subject.required_options_present?).to be_falsey
+      end
+    end
+  end
+
+  describe "#default_options" do
+    it "should set a default slowdown duration" do
+      expect(subject.default_options).to eq({ slowdown_duration: 1 })
+    end
+
+    it "should be frozen" do
+      expect(subject.default_options.frozen?).to be_truthy
+    end
+  end
+
   describe "checking uuid and secure key formatting" do
     # use this so sleep calls don't delay rspec
     let(:slowdown_duration) { 1e-10 }
