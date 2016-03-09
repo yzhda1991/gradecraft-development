@@ -206,6 +206,17 @@ describe SecureTokenAuthenticator do
     end
   end
 
+  describe "#required_options" do
+    it "should be an array of required options" do
+      expect(subject.required_options).to eq \
+        [ :secure_token_uuid, :secret_key, :target_class, :target_id ]
+    end
+
+    it "should be frozen" do
+      expect(subject.required_options.frozen?).to be_truthy
+    end
+  end
+
   describe "checking uuid and secure key formatting" do
     # use this so sleep calls don't delay rspec
     let(:slowdown_duration) { 1e-10 }

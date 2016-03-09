@@ -37,7 +37,7 @@ class SecureTokenAuthenticator
   end
 
   def required_options
-    [ :secure_token_uuid, :secret_key, :target_class, :target_id ]
+    [ :secure_token_uuid, :secret_key, :target_class, :target_id ].freeze
   end
 
   def required_options_present?
