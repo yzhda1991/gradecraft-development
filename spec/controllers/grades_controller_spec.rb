@@ -719,7 +719,7 @@ describe GradesController do
 
         before do
           allow(PredictorEventJob).to receive_message_chain(:new, :enqueue)
-            .and_raise("MOCK FAUX LAME NONERROR: Could not connect to Redis:") \
+            .and_raise("MOCK FAUX LAME NONERROR: Could not connect to Redis:" \
               "getaddrinfo socket error.")
 
           allow(controller).to receive(:predictor_event_attrs) do
