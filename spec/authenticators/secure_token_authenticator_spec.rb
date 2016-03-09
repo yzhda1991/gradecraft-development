@@ -40,25 +40,30 @@ describe SecureTokenAuthenticator do
     end
   end
 
-  describe "readable attributes" do
-    it "has a readable uuid" do
-      expect(subject.secure_token_uuid).to eq("some_uuid")
+  describe "accessible attributes" do
+    it "has an accessible uuid" do
+      subject.secure_token_uuid = "great"
+      expect(subject.secure_token_uuid).to eq("great")
     end
 
-    it "has a readable target class" do
-      expect(subject.target_class).to eq("WaffleClass")
+    it "has an accessible target class" do
+      subject.target_class = "GreatClass"
+      expect(subject.target_class).to eq("GreatClass")
     end
 
-    it "has a readable target id" do
-      expect(subject.target_id).to eq("8")
+    it "has an accessible target id" do
+      subject.target_id = 9
+      expect(subject.target_id).to eq(9)
     end
 
-    it "has a readable secret_key" do
-      expect(subject.secret_key).to eq("skeletonkeysrsly")
+    it "has an accessible secret_key" do
+      subject.secret_key = "the-secret-key"
+      expect(subject.secret_key).to eq("the-secret-key")
     end
 
-    it "has a slowdown_duration" do
-      expect(subject.slowdown_duration).to eq 1
+    it "has an accessible slowdown_duration" do
+      subject.slowdown_duration = 10
+      expect(subject.slowdown_duration).to eq 10
     end
   end
 
