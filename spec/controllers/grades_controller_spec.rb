@@ -689,42 +689,45 @@ describe GradesController do
       end
     end
 
-    describe "enqueue_predictor_event_job" do
-      context "Resque connects to redis and enqueues the damn job" do
-        before(:each) do
-          @predictor_event_job = double(:predictor_event_job)
-          @enqueue_response = double(:enqueue_response)
-          allow(@predictor_event_job).to receive(:enqueue)
-          allow(PredictorEventJob).to receive_messages(new: @predictor_event_job)
-          allow(controller).to receive(:predictor_event_attrs) { predictor_event_attrs_expectation }
+    # the fallback logic here should be moved into a similar fallback pattern as
+    # was done in the EventLogger, but until that's prioritized let's just clean
+    # up some of the redundancy between the various contexts here
+    #
+    describe "#enqueue_predictor_event_job" do
+      let(:result) do
+        controller.instance_eval { enqueue_predictor_event_job }
+      end
+
+      let(:predictor_event_job) { double(PredictorEventJob).as_null_object }
+      let(:enqueue_response) { double(:enqueue_response) }
+
+      before do
+        allow(controller).to receive(:predictor_event_attrs)
+          .and_return predictor_event_attrs_expectation
+      end
+
+      context "Resque connects to redis and enqueues the job" do
+        before do
+          allow(PredictorEventJob).to receive(:new) { predictor_event_job }
         end
 
         it "should create a new pageview logger" do
-          expect(PredictorEventJob).to receive(:new).with(data: predictor_event_attrs_expectation)
+          expect(PredictorEventJob).to receive(:new).with \
+            data: predictor_event_attrs_expectation
+          result
         end
 
         it "should enqueue the new pageview logger in 2 hours" do
-          expect(@predictor_event_job).to receive(:enqueue) { @enqueue_response }
-        end
-
-        after(:each) do
-          controller.instance_eval { enqueue_predictor_event_job }
+          expect(predictor_event_job).to receive(:enqueue) { enqueue_response }
+          result
         end
       end
 
       context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
-        let(:result) do
-          controller.instance_eval { enqueue_predictor_event_job }
-        end
-
         before do
           allow(PredictorEventJob).to receive_message_chain(:new, :enqueue)
             .and_raise("MOCK FAUX LAME NONERROR: Could not connect to Redis:" \
               "getaddrinfo socket error.")
-
-          allow(controller).to receive(:predictor_event_attrs) do
-            predictor_event_attrs_expectation
-          end
         end
 
         it "performs the pageview event log directly from the controller" do
