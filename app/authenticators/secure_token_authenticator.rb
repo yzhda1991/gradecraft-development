@@ -1,19 +1,18 @@
 class SecureTokenAuthenticator
   def initialize(options={})
-    @secure_token_uuid = options[:secure_token_uuid]
-    @secret_key = options[:secret_key]
-    @target_class = options[:target_class]
-    @target_id = options[:target_id]
-    @slowdown_duration = 1
+    @options = default_options.merge options
+    @slowdown_duration = @options[:slowdown_duration]
+    required_options.each {|option| send "#{option}=", @options[option] }
   end
 
-  attr_reader :secure_token_uuid, :target_class, :target_id, :secret_key,
+  attr_accessor :secure_token_uuid, :target_class, :target_id, :secret_key,
     :slowdown_duration
 
   # we should probably add a separate workflow here for just telling the user
   # if the secure token expired so they know that this is happening instead of
   #
   def authenticates?
+    required_options_present? &&
     uuid_format_valid? &&
     secure_key_format_valid? &&
     secure_token &&
@@ -33,6 +32,14 @@ class SecureTokenAuthenticator
         target_type: target_class,
         target_id: target_id
       )
+  end
+
+  def required_options
+    [ :secure_token_uuid, :secret_key, :target_class, :target_id ]
+  end
+
+  def required_options_present?
+    required_options.all? {|option| send(option).present? }
   end
 
   def uuid_format_valid?
@@ -59,5 +66,9 @@ class SecureTokenAuthenticator
       sleep slowdown_duration
       false
     end
+  end
+
+  def default_options
+    { slowdown_duration: 1 }.freeze
   end
 end
