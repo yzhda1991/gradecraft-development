@@ -64,6 +64,7 @@ describe SecureTokenAuthenticator do
 
     before(:each) do
       allow(subject).to receive_messages(
+        required_options_present?: true,
         uuid_format_valid?: true,
         secure_key_format_valid?: true,
         secure_token: secure_token,
@@ -78,6 +79,13 @@ describe SecureTokenAuthenticator do
     context "all steps return true" do
       it "authenticates" do
         expect(result).to be_truthy
+      end
+    end
+
+    context "all required options are not present" do
+      it "does not authenticate" do
+        allow(subject).to receive(:required_options_present?) { false }
+        expect(result).to be_falsey
       end
     end
 

@@ -44,6 +44,10 @@ class SecureTokenAuthenticator
     required_options.all? { |option| send(option).present? }
   end
 
+  def default_options
+    { slowdown_duration: 1 }.freeze
+  end
+
   def uuid_format_valid?
     if secure_token_uuid.match REGEX["UUID"]
       true
@@ -68,9 +72,5 @@ class SecureTokenAuthenticator
       sleep slowdown_duration
       false
     end
-  end
-
-  def default_options
-    { slowdown_duration: 1 }.freeze
   end
 end
