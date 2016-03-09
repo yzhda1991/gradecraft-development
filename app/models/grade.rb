@@ -16,9 +16,7 @@ class Grade < ActiveRecord::Base
     :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at
 
   STATUSES = ["In Progress", "Graded", "Released"]
-
-  # Note Pass and Fail use term_for in the views
-  PASS_FAIL_STATUS = ["Pass", "Fail"]
+  UNRELEASED_STATUSES = ["In Progress", "Graded"]
 
   belongs_to :course, touch: true
   belongs_to :assignment, touch: true

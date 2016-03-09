@@ -15,10 +15,10 @@
 
   - if @assignment.release_necessary?
     - if current_user_is_gsi?
-      = f.input :status, as: :select, :collection => ["In Progress", "Graded"], :selected => @group.students.first.grade_for_assignment(@assignment).try(:status)
+      = f.input :status, as: :select, :collection => Grade::UNRELEASED_STATUSES, :selected => @group.students.first.grade_for_assignment(@assignment).try(:status)
       .form_label Is this grade ready to be reviewed?
     - else
-      = f.input :status,  as: :select, :collection => ["In Progress", "Graded", "Released"], :selected => @group.students.first.grade_for_assignment(@assignment).try(:status)
+      = f.input :status,  as: :select, :collection => Grade::STATUSES, :selected => @group.students.first.grade_for_assignment(@assignment).try(:status)
   - else
     = f.hidden_field :status, value: 'Graded'
 
