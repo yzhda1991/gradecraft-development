@@ -81,8 +81,17 @@ RSpec.describe SubmissionsExport do
     subject { create(:submissions_export) }
     let(:result) { subject.created_at_date }
 
-    it "formats the created_at date" do
-      expect(result).to eq(subject.created_at.strftime("%F"))
+    context "created_at is present" do
+      it "formats the created_at date" do
+        expect(result).to eq subject.created_at.strftime("%F")
+      end
+    end
+
+    context "created_at is nil" do
+      it "returns nil" do
+        allow(subject).to receive(:created_at) { nil }
+        expect(result).to be_nil
+      end
     end
   end
 
@@ -90,8 +99,17 @@ RSpec.describe SubmissionsExport do
     subject { create(:submissions_export) }
     let(:result) { subject.created_at_in_microseconds }
 
-    it "formats the created_at time in microseconds" do
-      expect(result).to eq subject.created_at.to_f.to_s.gsub(".","")
+    context "created_at is present" do
+      it "formats the created_at time in microseconds" do
+        expect(result).to eq subject.created_at.to_f.to_s.gsub(".","")
+      end
+    end
+
+    context "created_at is nil" do
+      it "returns nil" do
+        allow(subject).to receive(:created_at) { nil }
+        expect(result).to be_nil
+      end
     end
   end
 
