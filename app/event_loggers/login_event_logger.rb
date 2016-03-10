@@ -17,10 +17,6 @@ class LoginEventLogger < ApplicationEventLogger
 
   # queue to use for login event jobs
   @queue = :login_event_logger
-  @event_name = "Login"
-  @analytics_class = Analytics::LoginEvent
-
-  # instance methods, for use as a LoginEventLogger instance
 
   # Used by enqueuing methods in EventLogger::Enqueue
   def event_type
@@ -31,56 +27,22 @@ class LoginEventLogger < ApplicationEventLogger
   class << self
     # perform block that is ultimately called by Resque
     def perform(event_type, data = {})
-      logger.info "Starting #{@queue} with data #{data}"
-      @cached_data = data
+      logger.info "Starting LoginEventLogger with data #{data}"
 
-      data[:last_login_at] = previous_last_login_at
+      course_membership = find_course_membership(data)
+      if course_membership
+        data[:last_login_at] = course_membership.last_login_at.try(:to_i)
+        course_membership.update_attributes last_login_at data[:created_at]
+      end
 
       event = Analytics::LoginEvent.create analytics_attrs(event_type, data)
 
-      update_last_login if course_membership_present?
-
-      outcome = notify_event_outcome(event, data)
-      logger.info outcome
+      logger.info event_outcome_message(event, data)
     end
 
-    def previous_last_login_at
-      # Let's be sure to check here whether last_login_at exists before
-      # converting it into an integer. nil.to_i won't produce an error, but it
-      # will give us a 0 value where we might instead just mean nil. This could
-      # result in a substantial amount of erroneous data on the backend that
-      # will be harder to interpret later in analytics.
-      #
-      if course_membership_present? && course_membership.last_login_at
-        course_membership.last_login_at.to_i
-      end
-    end
-
-    def update_last_login
-      course_membership
-        .update_attributes(last_login_at: @cached_data[:created_at])
-    end
-
-    def course_membership
-      @course_membership ||= \
-        CourseMembership.where(course_membership_attrs).first
-    end
-
-    # let's make sure that we've got the necessary attributes present in order
-    # to find the CourseMembership before we attempt to find it. There's no good
-    # reason to perform a search for the CourseMembership if we know that it
-    # can't possibly exist.
-    #
-    def course_membership_present?
-      course_membership_attrs_present? && course_membership
-    end
-
-    def course_membership_attrs_present?
-      course_membership_attrs.values.all?(&:present?)
-    end
-
-    def course_membership_attrs
-      { course_id: @cached_data[:course_id], user_id: @cached_data[:user_id] }
+    def find_course_membership(data)
+      CourseMembership.find_by user_id: data[:user_id],
+        course_id: data[:course_id]
     end
   end
 end
