@@ -10,7 +10,6 @@
 # where they're passed directly into the event logger class
 class ApplicationEventLogger < EventLogger::Base
   @queue = :application_event_logger
-  @event_name = "Application"
 
   attr_reader :event_session
 
