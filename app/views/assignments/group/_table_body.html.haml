@@ -11,9 +11,10 @@
           - elsif presenter.assignment.accepts_submissions?
             %li= link_to "Submit", new_assignment_submission_path(group_presenter.assignment, group_presenter.submission, group_id: group_presenter.group.id), class: "button"
           - if group_presenter.assignment_graded?
-            %li= link_to "Edit #{term_for :group} Grade", group_grade_assignment_path(group_presenter.assignment, group_id: group_presenter.group), class: "button"
+            %li= link_to glyph(:eye) + "See Grade", assignment_grade_path(presenter.assignment, student_id: group_presenter.group.students.first.id), class: "button"
+            %li= link_to glyph(:edit) + "Edit Grade", group_grade_assignment_path(group_presenter.assignment, group_id: group_presenter.group), class: "button"
           - else
-            %li= link_to "Grade #{term_for :group}", group_grade_assignment_path(group_presenter.assignment, group_id: group_presenter.group), class: "button"
+            %li= link_to glyph(:edit) + "Grade", group_grade_assignment_path(group_presenter.assignment, group_id: group_presenter.group), class: "button"
     %td
       %table
         %thead{:style => "background: none !important; color: #000000; margin: 0; padding: 0;"}
