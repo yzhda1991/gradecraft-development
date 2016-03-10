@@ -32,10 +32,10 @@ class LoginEventLogger < ApplicationEventLogger
       course_membership = find_course_membership(data)
       if course_membership
         data[:last_login_at] = course_membership.last_login_at.try(:to_i)
-        course_membership.update_attributes last_login_at data[:created_at]
+        course_membership.update_attributes last_login_at: data[:created_at]
       end
 
-      event = Analytics::LoginEvent.create analytics_attrs(event_type, data)
+      event = Analytics::LoginEvent.create data
 
       logger.info event_outcome_message(event, data)
     end
