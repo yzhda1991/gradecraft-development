@@ -32,7 +32,7 @@ feature "grading a group assignment" do
       expect(current_path).to eq assignment_path(assignment.id)
 
       within(".pageContent") do
-        click_link "Grade group"
+        click_link "Grade"
       end
 
       expect(current_path).to eq group_grade_assignment_path(assignment)
