@@ -33,9 +33,15 @@ class LoginEventLogger < ApplicationEventLogger
     def perform(event_type, data = {})
       logger.info "Starting #{@queue} with data #{data}"
       @cached_data = data
+
       data[:last_login_at] = previous_last_login_at
-      super
+
+      event = Analytics::LoginEvent.create analytics_attrs(event_type, data)
+
       update_last_login if course_membership_present?
+
+      outcome = notify_event_outcome(event, data)
+      logger.info outcome
     end
 
     def previous_last_login_at

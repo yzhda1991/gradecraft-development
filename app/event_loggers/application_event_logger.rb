@@ -28,7 +28,7 @@ class ApplicationEventLogger < EventLogger::Base
       user_id: event_session[:user].try(:id),
       student_id: event_session[:student].try(:id),
       user_role: event_session[:user].role(event_session[:course]),
-      created_at: Time.zone.now
+      created_at: Time.now
     }
   end
 
