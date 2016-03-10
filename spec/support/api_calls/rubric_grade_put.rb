@@ -43,8 +43,8 @@ class RubricGradePUT
         "raw_score" => assignment.point_total - 10,
         "status" => "Released",
         "feedback" => "good jorb!",
-        "points_adjustment" => "-10",
-        "points_adjustment_feedback" => "reduced by 10 points"
+        "adjustment_points" => "-10",
+        "adjustment_points_feedback" => "reduced by 10 points"
       }
     }
   end

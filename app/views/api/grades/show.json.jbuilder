@@ -8,8 +8,8 @@ json.data do
     json.student_id                 @grade.student_id
     json.feedback                   @grade.feedback
     json.status                     @grade.status
-    json.points_adjustment          @grade.points_adjustment
-    json.points_adjustment_feedback @grade.points_adjustment_feedback
+    json.adjustment_points          @grade.adjustment_points
+    json.adjustment_points_feedback @grade.adjustment_points_feedback
   end
 end
 

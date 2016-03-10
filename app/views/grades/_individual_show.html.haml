@@ -17,16 +17,16 @@
         %span= "the #{term_for :assignment}."
       - elsif grade.score.present?
         %span You earned
-        %span.bold= "#{points grade.final_score }"
+        %span.bold= "#{points grade.final_points }"
         %span=" out of #{points presenter.assignment.point_total } possible points."
 
-  - if grade.points_adjustment != 0
+  - if grade.adjustment_points != 0
     %div.grade-points-adjustment
       %p
         %span Points Adjustment:
-        %span= grade.points_adjustment
-      - if grade.points_adjustment_feedback.present?
-        %p= raw grade.points_adjustment_feedback
+        %span= grade.adjustment_points
+      - if grade.adjustment_points_feedback.present?
+        %p= raw grade.adjustment_points_feedback
 
     - if presenter.assignment.release_necessary? && current_user_is_staff?
       %p

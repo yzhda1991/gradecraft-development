@@ -43,8 +43,8 @@ describe Services::Actions::BuildsGrade do
     expect(result[:grade].raw_score).to eq world.assignment.point_total - 10
     expect(result[:grade].status).to eq "Released"
     expect(result[:grade].feedback).to eq "good jorb!"
-    expect(result[:grade].points_adjustment).to eq -10
-    expect(result[:grade].points_adjustment_feedback).to eq "reduced by 10 points"
+    expect(result[:grade].adjustment_points).to eq -10
+    expect(result[:grade].adjustment_points_feedback).to eq "reduced by 10 points"
   end
 
   it "adds the group id if supplied" do

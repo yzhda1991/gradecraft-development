@@ -15,6 +15,10 @@ describe NullGrade do
     expect(subject.final_score).to eq(nil)
   end
 
+  it "has a nil final points" do
+    expect(subject.final_points).to eq(nil)
+  end
+
   it "has nil feedback" do
     expect(subject.feedback).to be_nil
   end

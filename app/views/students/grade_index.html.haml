@@ -25,7 +25,7 @@
           %td= "#{g.assignment_id} • #{g.assignment.try(:name)}"
           %td= g.task.name if g.task.present?
           %td= g.submission.id if g.submission.present?
-          %td= g.final_score
+          %td= g.final_points
           %td= g.try(:score)
           %td= g.predicted_score
           %td= g.feedback

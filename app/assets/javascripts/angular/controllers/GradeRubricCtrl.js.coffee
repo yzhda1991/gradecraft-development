@@ -31,11 +31,11 @@
     )
     points or 0
 
-  $scope.pointsAdjustment = ()->
-    parseInt($scope.grade.points_adjustment) || 0
+  $scope.adjustmentPoints = ()->
+    parseInt($scope.grade.adjustment_points) || 0
 
   $scope.pointsAdjusted = ()->
-    $scope.pointsAdjustment() != 0
+    $scope.adjustmentPoints() != 0
 
   $scope.pointsDifference = ()->
     $scope.pointsPossible() - $scope.pointsGiven()
@@ -91,7 +91,7 @@
     points
 
   $scope.pointsGivenAfterAdjustment = ()->
-    $scope.pointsGiven() + $scope.pointsAdjustment()
+    $scope.pointsGiven() + $scope.adjustmentPoints()
 
   $scope.gradedCriteria = ()->
     criteria = []
@@ -188,8 +188,8 @@
       raw_score: $scope.pointsGiven(),
       feedback: $scope.grade.feedback,
       status:   $scope.grade.status,
-      points_adjustment: $scope.grade.points_adjustment,
-      points_adjustment_feedback: $scope.grade.points_adjustment_feedback
+      adjustment_points: $scope.grade.adjustment_points,
+      adjustment_points_feedback: $scope.grade.adjustment_points_feedback
     }
 
   # Document any updates to this format in the specs: /spec/support/api_calls/rubric_grade_put.rb

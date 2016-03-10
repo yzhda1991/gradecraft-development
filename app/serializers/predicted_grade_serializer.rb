@@ -21,8 +21,8 @@ class PredictedGradeSerializer
   end
 
   def final_score
-    return 0 if show_zero_in_predictor grade.final_score
-    grade.final_score if grade.is_student_visible?
+    return 0 if show_zero_in_predictor grade.final_points
+    grade.final_points if grade.is_student_visible?
   end
 
   def score

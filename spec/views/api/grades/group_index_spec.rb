@@ -25,8 +25,8 @@ describe "api/grades/group_index" do
     expect(json["data"][0]["attributes"]["student_id"]).to eq(@grades[0].student_id)
     expect(json["data"][0]["attributes"]["feedback"]).to eq(@grades[0].feedback)
     expect(json["data"][0]["attributes"]["status"]).to eq(@grades[0].status)
-    expect(json["data"][0]["attributes"]["points_adjustment"]).to eq(@grades[0].points_adjustment)
-    expect(json["data"][0]["attributes"]["points_adjustment_feedback"]).to eq(@grades[0].points_adjustment_feedback)
+    expect(json["data"][0]["attributes"]["adjustment_points"]).to eq(@grades[0].adjustment_points)
+    expect(json["data"][0]["attributes"]["adjustment_points_feedback"]).to eq(@grades[0].adjustment_points_feedback)
   end
 
   it "adds grading status options to meta data" do

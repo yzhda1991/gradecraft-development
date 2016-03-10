@@ -10,7 +10,7 @@ class Grade < ActiveRecord::Base
     :assignment_type_id, :course_id, :feedback, :final_score, :grade_file,
     :grade_file_ids, :grade_files_attributes, :graded_by_id, :group, :group_id,
     :group_type, :instructor_modified, :pass_fail_status, :point_total,
-    :points_adjustment, :points_adjustment_feedback, :predicted_score,
+    :adjustment_points, :adjustment_points_feedback, :predicted_score,
     :raw_score, :status, :student, :student_id, :submission,
     :_destroy, :submission_id, :task, :task_id, :team_id, :earned_badges,
     :earned_badges_attributes, :feedback_read, :feedback_read_at,
@@ -112,6 +112,26 @@ class Grade < ActiveRecord::Base
     write_attribute(:raw_score,rs)
   end
 
+  # Temporary Helper for grade.final_score, grade.raw_score:
+  #
+  # This method handles grades saved before adjustment_points was added,
+  # when final_score was on the model but was always nil.
+  #
+  # This will allow views to default to the raw_score if the final_score
+  # is not available.
+  #
+  # TODO between semesters:
+  #  * run rake task to calculate update all grades with final scores
+  #  * change codebase and add migrations to standardize points/score nomenclature
+  #    -  point_total -> full_points
+  #    -  raw_score -> raw_points
+  #    -  final_score -> final_points
+  #  * remove this method, but keep calls to grade.final_points in the views
+  #
+  def final_points
+    final_score || raw_score
+  end
+
   def predicted_score
     self[:predicted_score] || 0
   end
@@ -180,7 +200,7 @@ class Grade < ActiveRecord::Base
   # totaled points (adds adjustment, without weighting)
   def calculate_final_score
     return nil unless raw_score.present?
-    raw_score + points_adjustment
+    raw_score + adjustment_points
   end
 
   # points with student's weighting

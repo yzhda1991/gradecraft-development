@@ -24,16 +24,16 @@
       %p.bold Your Results
       - grade = presenter.grade_for(current_student)
       %p
-        %span.bold= "#{points grade.final_score }"
+        %span.bold= "#{points grade.final_points }"
         %span=" / #{points presenter.assignment.point_total } possible points"
 
-      - if grade.points_adjustment != 0
-        %div.grade-points-adjustment
+      - if grade.adjustment_points != 0
+        %div.grade-adjustment-points
           %p
             %span Points Adjustment:
-            %span= grade.points_adjustment
-          - if grade.points_adjustment_feedback.present?
-            %p= raw grade.points_adjustment_feedback
+            %span= grade.adjustment_points
+          - if grade.adjustment_points_feedback.present?
+            %p= raw grade.adjustment_points_feedback
 
       - if grade.feedback.present?
         %p.bold Instructor Feedback:
@@ -51,7 +51,7 @@
 
           - grade = presenter.grade_for(student)
           %p
-            %span.bold= "#{points grade.final_score }"
+            %span.bold= "#{points grade.final_points }"
             %span=" / #{points presenter.assignment.point_total } possible points"
           - if presenter.grade_for(student).assignment.release_necessary?
             %p

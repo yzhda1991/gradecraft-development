@@ -14,7 +14,7 @@
         %h4.notice(ng-hide="pointsSatisfied() || pointsMissing()") You have not yet allocated any points
         %h4.notice(ng-show="pointsMissing()") {{pointsRemaining() | number:0}} point{{pointsRemaining() > 1 ? "s" : ""}} have not been assigned
         %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
-        %h4.notice.adjustment(ng-class="{'positive-adjustment' : pointsAdjustment() > 0}" ng-show="pointsAdjusted()") You have adjusted the total by {{pointsAdjustment()}} points
+        %h4.notice.adjustment(ng-class="{'positive-adjustment' : adjustmentPoints() > 0}" ng-show="pointsAdjusted()") You have adjusted the total by {{adjustmentPoints()}} points
 
       .clear
 
@@ -79,15 +79,15 @@
       %br
       .points-adjustment(ng-cloak)
         %h4 Points Adjustment
-        %input(type="text" placeholder="Enter points adjustment to calculated total" smart-number="" ng-model="grade.points_adjustment")
+        %input(type="text" placeholder="Enter points adjustment to calculated total" smart-number="" ng-model="grade.adjustment_points")
       %br
       .total-points(ng-cloak)
         %h3 {{pointsGivenAfterAdjustment() | number:0}} Total Points
 
     .right
-      .points-adjustment-feedback(ng-if="grade.points_adjustment != 0" ng-cloak)
+      .points-adjustment-feedback(ng-if="grade.adjustment_points != 0" ng-cloak)
         %h4.text-right Points Adjustment Feedback
-        %textarea(ng-model="grade.points_adjustment_feedback" froala="froalaOptions")
+        %textarea(ng-model="grade.adjustment_points_feedback" froala="froalaOptions")
     .clear
 
     .summary_feedback

@@ -15,11 +15,13 @@ module Services
         grade.raw_score = context[:attributes]["grade"]["raw_score"]
         grade.status = context[:attributes]["grade"]["status"]
         grade.feedback = context[:attributes]["grade"]["feedback"]
-        grade.points_adjustment = context[:attributes]["grade"]["points_adjustment"]
-        grade.points_adjustment_feedback = context[:attributes]["grade"]["points_adjustment_feedback"]
+        grade.adjustment_points = context[:attributes]["grade"]["adjustment_points"]
+        grade.adjustment_points_feedback = context[:attributes]["grade"]["adjustment_points_feedback"]
         grade.group_id = context[:attributes]["group_id"] if context[:attributes]["group_id"]
         context[:grade] = grade
       end
     end
   end
 end
+
+

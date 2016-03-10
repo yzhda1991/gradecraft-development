@@ -16,7 +16,7 @@
         - else
           No Grade
       - else
-        = points grade.final_score if grade.instructor_modified?
+        = points grade.final_points if grade.instructor_modified?
 
     // If the student can weight the assignment type
     - if presenter.assignment_type.student_weightable?

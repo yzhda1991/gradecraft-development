@@ -81,8 +81,8 @@ describe Grade do
       expect(subject.final_score).to eq(nil)
     end
 
-    it "is the sum of raw_score and points_adjustment" do
-      subject.update(raw_score: "1234", points_adjustment: -234)
+    it "is the sum of raw_score and adjustment_points" do
+      subject.update(raw_score: "1234", adjustment_points: -234)
       expect(subject.final_score).to eq(1000)
     end
   end
@@ -94,14 +94,14 @@ describe Grade do
     end
 
     it "is the same as final score when assignment isn't weighted" do
-      subject.update(raw_score: "1234", points_adjustment: -234)
+      subject.update(raw_score: "1234", adjustment_points: -234)
       expect(subject.score).to eq(1000)
     end
 
     it "is the final score weighted by the students weight for the assignment" do
       subject.assignment.assignment_type.update(student_weightable: true)
       create(:assignment_weight, student: subject.student, assignment: subject.assignment, weight: 3 )
-      subject.update(raw_score: "1,234", points_adjustment: -234)
+      subject.update(raw_score: "1,234", adjustment_points: -234)
       expect(subject.score).to eq(3000)
     end
   end

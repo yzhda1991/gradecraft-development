@@ -4,7 +4,7 @@ require "./app/serializers/predicted_grade_serializer"
 describe PredictedGradeSerializer do
   let(:course) { double(:course) }
   let(:assignment) { double(:assignment, accepts_submissions?: true, submissions_have_closed?: true )}
-  let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, final_score: 84, student: user, course: course, assignment: assignment, is_student_visible?: true) }
+  let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, final_points: 84, student: user, course: course, assignment: assignment, is_student_visible?: true) }
   let(:user) { double(:user, submission_for_assignment: "sumbission") }
   let(:other_user) { double(:other_user) }
   subject { described_class.new assignment, grade, user }
@@ -54,7 +54,7 @@ describe PredictedGradeSerializer do
 
   describe "#final_score" do
     it "returns the grade's final score if it's visible" do
-      expect(subject.final_score).to eq grade.final_score
+      expect(subject.final_score).to eq grade.final_points
     end
 
     it "returns nil if it's not visible" do
@@ -63,14 +63,14 @@ describe PredictedGradeSerializer do
     end
 
     it "returns 0 with no final score and no sumbission if the assignment submissions have closed" do
-      allow(grade).to receive(:final_score).and_return nil
+      allow(grade).to receive(:final_points).and_return nil
       allow(user).to receive(:submission_for_assignment).and_return nil
       expect(subject.final_score).to eq(0)
     end
 
     it "doesn't override the final score if present regardless of submission status" do
       allow(user).to receive(:submission_for_assignment).and_return nil
-      expect(subject.final_score).to eq(grade.final_score)
+      expect(subject.final_score).to eq(grade.final_points)
     end
 
     it "always returns 0 for Null Student if the assignment sumbission has closed" do
