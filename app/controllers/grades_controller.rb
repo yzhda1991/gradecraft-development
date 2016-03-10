@@ -21,8 +21,8 @@ class GradesController < ApplicationController
     end
 
     if @assignment.has_groups?
-      @group = current_course.groups.find(params[:group_id])
-      @title = "#{@group.name}'s Grade for #{ @assignment.name }"
+      group = current_student.group_for_assignment(@assignment)
+      @title = "#{group.name}'s Grade for #{ @assignment.name }"
     else
       @title = "#{current_student.name}'s Grade for #{ @assignment.name }"
     end

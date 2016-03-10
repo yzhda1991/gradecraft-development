@@ -70,7 +70,7 @@
           - else
             - if assignment.is_individual?
               %li= link_to glyph(:check) + "Grade", edit_assignment_grade_path(assignment_id: assignment.id, student_id: @student.id), class: "button"
-            - elsif assignment.has_groups?
+            - elsif assignment.has_groups? && group.present?
               %li= link_to glyph(:check) + "Grade", group_grade_assignment_path(assignment, group_id: group), class: "button"
 
           / Group Management /

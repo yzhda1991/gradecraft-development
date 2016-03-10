@@ -4,12 +4,12 @@ describe GradesController do
   include PredictorEventJobsToolkit
 
   before(:all) do
-    @course = create(:course)
+    @course = create(:course_accepting_groups)
     @assignment = create(:assignment, course: @course)
     @student = create(:user)
     @student.courses << @course
   end
-  
+
   before(:each) do
     allow(Resque).to receive(:enqueue).and_return(true)
   end
@@ -33,19 +33,14 @@ describe GradesController do
 
       context "for a group grade" do
         it "assigns group, title, and grades for assignment when assignment has groups" do
-          course = create(:course_accepting_groups)
-          group = create(:group, course: course)
-          assignment = group.assignments.first
-          course.assignments << assignment
-          student = create(:user)
-          student.courses << course
-          group.students << student
-          grade = create(:grade, group: group, assignment: assignment, course: course, student_id: @student.id)
-          allow(controller).to receive(:current_course).and_return(course)
-          get :show, { id: grade.id, assignment_id: assignment.id, student_id: student.id, group_id: group.id }
+          group = create(:group, course: @course)
+          assignment = create(:group_assignment, course: @course)
+          group.assignments << assignment
+          group.students << @student
+          grade = create(:grade, group_id: group.id, assignment: assignment, course: @course, student_id: @student.id)
 
-          expect(assigns(:assignment)).to eq(assignment)
-          expect(assigns(:group)).to eq(group)
+          get :show, { id: grade.id, assignment_id: assignment.id, student_id: @student.id }
+
           expect(assigns(:title)).to eq("#{group.name}'s Grade for #{assignment.name}")
           expect(response).to render_template(:show)
         end
