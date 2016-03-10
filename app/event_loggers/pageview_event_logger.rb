@@ -3,7 +3,6 @@ class PageviewEventLogger < ApplicationEventLogger
 
   # queue to use for login event jobs
   @queue = :pageview_event_logger
-  @event_name = "Pageview"
 
   attr_writer :page
 
@@ -15,7 +14,7 @@ class PageviewEventLogger < ApplicationEventLogger
   end
 
   def event_attrs
-    @event_attrs ||= base_attrs.merge page: page
+    application_attrs.merge page: page
   end
 
   def page
@@ -24,8 +23,7 @@ class PageviewEventLogger < ApplicationEventLogger
 
   # params method is defined in ApplicationEventLogger
   def build_page_from_params
-    if params && params[:url] && params[:tab]
-      @page = "#{params[:url]}#{params[:tab]}"
-    end
+    return unless params && !params[:url].present?
+    @page = "#{params[:url]}#{params[:tab]}"
   end
 end

@@ -4,7 +4,6 @@ class PredictorEventLogger < ApplicationEventLogger
 
   # queue to use for login event jobs
   @queue = :predictor_event_logger
-  @event_name = "Predictor"
 
   # this defines filtering methods for all of the keys that will be taken out
   # of the params hash. If the value is a symbol, then a method will be defined
@@ -21,7 +20,7 @@ class PredictorEventLogger < ApplicationEventLogger
 
   # params method is defined in ApplicationEventLogger
   def event_attrs
-    @event_attrs ||= params ? base_attrs.merge(param_attrs) : base_attrs
+    params ? application_attrs.merge(param_attrs) : application_attrs
   end
 
   def param_attrs

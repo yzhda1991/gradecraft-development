@@ -22,6 +22,14 @@ module EventLogger
     # be enqueued to
     @queue = :event_logger
 
+    def base_attrs
+      { event_type: event_type, created_at: Time.now }
+    end
+
+    def event_type
+      self.class.to_s.underscore
+    end
+
     class << self
       attr_reader :queue
 
@@ -32,7 +40,7 @@ module EventLogger
       # perform block that is ultimately called by Resque
       def perform(event_type, data = {})
         logger.info "Starting #{event_name} with data #{data}"
-        event = analytics_class.create analytics_attrs(event_type, data)
+        event = analytics_class.create data
         logger.info event_outcome_message(event, data)
       end
 
@@ -44,10 +52,6 @@ module EventLogger
       def event_outcome_message(event, data)
         message = event.valid? ? success_message : failure_message
         "#{message} with data #{data}"
-      end
-
-      def analytics_attrs(event_type, data = {})
-        { event_type: event_type, created_at: Time.now }.merge data
       end
 
       def analytics_class
