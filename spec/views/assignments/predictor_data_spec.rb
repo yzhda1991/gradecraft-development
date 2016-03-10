@@ -41,7 +41,7 @@ describe "assignments/predictor_data" do
       status: "Released"
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["grade"]).to eq({ "id" => grade.id, "final_score" => 1000, "score" => 1000, "predicted_score" => 999 })
+    expect(json["assignments"][0]["grade"]).to eq({ "id" => grade.id, "final_points" => 1000, "score" => 1000, "predicted_score" => 999 })
   end
 
   it "includes the pass fail status with the grade when the assignment is pass fail" do
@@ -52,7 +52,7 @@ describe "assignments/predictor_data" do
     @assignment.update(pass_fail: true)
     render
     json = JSON.parse(response.body)
-    expect(json["assignments"][0]["grade"]).to eq({ "id" => grade.id, "pass_fail_status" => "passed", "final_score" => 1000, "score" => 1000, "predicted_score" => 999 })
+    expect(json["assignments"][0]["grade"]).to eq({ "id" => grade.id, "pass_fail_status" => "passed", "final_points" => 1000, "score" => 1000, "predicted_score" => 999 })
   end
 
   it "does not include assignments with no points" do

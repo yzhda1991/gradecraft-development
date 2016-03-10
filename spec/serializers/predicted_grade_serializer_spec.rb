@@ -48,33 +48,33 @@ describe PredictedGradeSerializer do
     end
 
     it "always returns 0 for Null Student if the assignment sumbission has closed" do
-      expect(described_class.new(assignment, NullGrade.new, NullStudent.new).final_score).to eq(0)
+      expect(described_class.new(assignment, NullGrade.new, NullStudent.new).final_points).to eq(0)
     end
   end
 
-  describe "#final_score" do
+  describe "#final_points" do
     it "returns the grade's final score if it's visible" do
-      expect(subject.final_score).to eq grade.final_points
+      expect(subject.final_points).to eq grade.final_points
     end
 
     it "returns nil if it's not visible" do
       allow(grade).to receive(:is_student_visible?).and_return false
-      expect(subject.final_score).to be_nil
+      expect(subject.final_points).to be_nil
     end
 
     it "returns 0 with no final score and no sumbission if the assignment submissions have closed" do
       allow(grade).to receive(:final_points).and_return nil
       allow(user).to receive(:submission_for_assignment).and_return nil
-      expect(subject.final_score).to eq(0)
+      expect(subject.final_points).to eq(0)
     end
 
     it "doesn't override the final score if present regardless of submission status" do
       allow(user).to receive(:submission_for_assignment).and_return nil
-      expect(subject.final_score).to eq(grade.final_points)
+      expect(subject.final_points).to eq(grade.final_points)
     end
 
     it "always returns 0 for Null Student if the assignment sumbission has closed" do
-      expect(described_class.new(assignment, NullGrade.new, NullStudent.new).final_score).to eq(0)
+      expect(described_class.new(assignment, NullGrade.new, NullStudent.new).final_points).to eq(0)
     end
   end
 
@@ -101,7 +101,7 @@ describe PredictedGradeSerializer do
         id: subject.id,
         predicted_score: subject.predicted_score,
         score: subject.score,
-        final_score: subject.final_score
+        final_points: subject.final_points
       })
     end
   end
