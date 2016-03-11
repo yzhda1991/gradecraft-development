@@ -22,6 +22,9 @@ class LoginEventLogger < ApplicationEventLogger
     # instance variables to handle the logic as theoretically that could
     # cause issues in threaded environments
     #
-    LoginEventPerformer.new(data: data, logger).perform
+    outcome = LoginEventPerformer.new(data: data, logger).perform
+
+    # get the message from the LoginEventPerformer outcome and log it
+    logger.info outcome.message if outcome.message
   end
 end

@@ -6,7 +6,7 @@ class LoginEventPerformer < ResqueJob::Performer
     @data = attrs[:data] || {}
     @course_membership = find_course_membership
     return unless course_membership # these methods require a course_membership
-    set_last_login_at
+    cache_last_login_at
     update_course_membership_login
   end
 
@@ -19,7 +19,7 @@ class LoginEventPerformer < ResqueJob::Performer
   end
 
   # pass the last_login_at time from the CourseMembership to the data hash
-  def set_last_login_at
+  def cache_last_login_at
     @data[:last_login_at] = course_membership.last_login_at.try(:to_i)
   end
 

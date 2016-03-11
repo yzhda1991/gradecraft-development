@@ -1,13 +1,12 @@
 class ResqueJob::Outcome
   def initialize(result, options={})
     @result = result
-    @message = nil # TODO: spec
+    @message = nil
     @options = options
-    # @additional_messages = []
   end
 
-  attr_reader :result
-  attr_accessor :message # , :additional_messages
+  attr_reader :result, :options
+  attr_accessor :message
 
   def truthy?
     @result != false && @result != nil
@@ -20,15 +19,7 @@ class ResqueJob::Outcome
   alias failure? falsey?
 
   def result_excerpt
-    # "#{result}"[0..2000].split("\n").first rescue "#{result}"
-    if @options[:max_result_size]
-      "#{result}"[0..@options[:max_result_size].to_i] rescue "#{result}"
-    else
-      "#{result}"
-    end
+    return result unless options[:max_result_size]
+    "#{result}"[0..@options[:max_result_size].to_i] rescue "#{result}"
   end
-
-  # def print_additional_messages
-  #  @additional_messages.join(", ")
-  # end
 end
