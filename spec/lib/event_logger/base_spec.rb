@@ -90,9 +90,9 @@ describe EventLogger::Base, type: :vendor_library do
 
     describe ".backoff_strategy" do
       let(:result) { subject.backoff_strategy }
-      let(:backoff_strategy) { double(:backoff_strategy).as_null_object }
+      let(:backoff_strategy) { [5,10,20] }
 
-      before do
+      before(:each) do
         allow(EventLogger).to receive_message_chain(:configuration, \
           :backoff_strategy) { backoff_strategy }
       end
@@ -114,39 +114,23 @@ describe EventLogger::Base, type: :vendor_library do
       end
     end
 
-    describe ".event_outcome_message(event, data)" do
-      let!(:valid_event) { Analytics::Event.new }
-      let!(:invalid_event) { Analytics::Event.new }
-
-      before(:each) do
-        allow(valid_event).to receive(:valid?).and_return true
-        allow(invalid_event).to receive(:valid?).and_return false
-        allow(subject).to receive_messages(
-          logger: logger,
-          success_message: "great stuff happened",
-          failure_message: "bad stuff happened"
-        )
-      end
+    describe ".event_outcome_message" do
+      let(:result) { subject.event_outcome_message(event, "!!some-data") }
+      let!(:event) { double(Analytics::Event).as_null_object }
 
       context "the event is valid" do
-        let(:notify_success) { "great stuff happened with data {:heads=>5}" }
-
-        it "should output the @success_message" do
-          allow(Analytics::Event).to receive(:create) { valid_event }
-          expect(subject).to receive(:event_outcome_message)
-            .with(valid_event, {heads: 5}) { notify_success }
-          subject.perform "event", {heads: 5}
+        it "logs the success message" do
+          allow(event).to receive(:valid?) { true }
+          allow(subject).to receive(:success_message) { "great!" }
+          expect(result).to eq "great! with data !!some-data"
         end
       end
 
       context "the event is not valid" do
-        let(:notify_failure) { "bad stuff happened with data {:heads=>10}" }
-
-        it "should output the @failure_message" do
-          allow(Analytics::Event).to receive(:create) { invalid_event }
-          expect(subject).to receive(:event_outcome_message)
-            .with(invalid_event, {heads: 10}) { notify_failure }
-          subject.perform "event", {heads: 10}
+        it "logs the failure message" do
+          allow(event).to receive(:valid?) { false }
+          allow(subject).to receive(:failure_message) { "bad!" }
+          expect(result).to eq "bad! with data !!some-data"
         end
       end
     end
