@@ -135,8 +135,29 @@ describe EventLogger::Base, type: :vendor_library do
       end
     end
 
-    it "should have a list of inheritable attributes" do
+    it "has an .analytics_class" do
+      expect(subject.analytics_class).to eq Analytics::Event
+    end
+
+    it "has a list of inheritable attributes" do
       expect(subject.inheritable_ivars).to eq [:queue]
+      expect(subject.inheritable_ivars.frozen?).to be_truthy
+    end
+
+    describe "messages" do
+      before do
+        allow(subject).to receive(:event_name) { "wombat" }
+      end
+
+      it "has a .success_message" do
+        expect(subject.success_message).to eq \
+        "wombat analytics record was successfully created"
+      end
+
+      it "has a .failure_message" do
+        expect(subject.failure_message).to eq \
+          "wombat analytics record failed to create"
+      end
     end
   end
 end
