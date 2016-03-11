@@ -28,6 +28,10 @@ RSpec.describe ApplicationEventLogger, type: :event_logger do
     expect(subject.event_type).to eq "application"
   end
 
+  it "inherits from EventLogger::Base" do
+    expect(described_class.superclass).to eq EventLogger::Base
+  end
+
   describe "#event_session_user_role" do
     let(:result) { subject.event_session_user_role(event_session) }
 

@@ -25,6 +25,10 @@ RSpec.describe PageviewEventLogger, type: :event_logger do
     expect(subject.event_type).to eq "pageview"
   end
 
+  it "inherits from the ApplicationEventLogger" do
+    expect(described_class.superclass).to eq ApplicationEventLogger
+  end
+
   describe "#event_attrs" do
     before do
       allow(subject).to receive(:page) { "some great page" }

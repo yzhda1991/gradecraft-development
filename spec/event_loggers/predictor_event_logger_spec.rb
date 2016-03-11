@@ -9,6 +9,10 @@ RSpec.describe PredictorEventLogger, type: :event_logger do
     allow(subject).to receive(:application_attrs) { application_attrs }
   end
 
+  it "inherits from the ApplicationEventLogger" do
+    expect(described_class.superclass).to eq ApplicationEventLogger
+  end
+
   it "has an #event_type" do
     expect(subject.event_type).to eq "predictor"
   end

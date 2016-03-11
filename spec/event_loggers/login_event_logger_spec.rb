@@ -11,6 +11,10 @@ RSpec.describe LoginEventLogger, type: :event_logger do
     expect(subject.event_type).to eq "login"
   end
 
+  it "inherits from the ApplicationEventLogger" do
+    expect(described_class.superclass).to eq ApplicationEventLogger
+  end
+
   describe ".perform" do
     let(:result) { described_class.perform("login", data) }
     let(:data) { { some: "info" } }
