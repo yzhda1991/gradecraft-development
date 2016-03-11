@@ -8,8 +8,13 @@ module Services
       expects :grade
 
       executed do |context|
-        s = Submission.where({ assignment_id: context[:assignment].id,
+        if context[:group]
+          s = Submission.where({ assignment_id: context[:assignment].id,
+                               group_id: context[:group].id }).first
+        else
+          s = Submission.where({ assignment_id: context[:assignment].id,
                                student_id: context[:student].id }).first
+        end
         context[:grade].submission_id = s.nil? ? nil : s.id
       end
     end
