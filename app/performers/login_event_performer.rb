@@ -3,7 +3,7 @@ class LoginEventPerformer < ResqueJob::Performer
 
   # this is called on #initialize
   def setup
-    @data = attrs[:data] || {}
+    @data = attrs[:data].is_a?(Hash) ? attrs[:data] : {}
     @course_membership = find_course_membership
     return unless course_membership # these methods require a course_membership
     cache_last_login_at
@@ -30,7 +30,12 @@ class LoginEventPerformer < ResqueJob::Performer
   end
 
   def find_course_membership
-    CourseMembership.find_by user_id: data[:user_id], course_id: data[:course_id]
+    return unless course_membership_attrs.values.all?(&:present?)
+    CourseMembership.find_by course_membership_attrs
+  end
+
+  def course_membership_attrs
+    { user_id: data[:user_id], course_id: data[:course_id] }
   end
 
   def messages
