@@ -4,7 +4,7 @@ class PageviewEventLogger < ApplicationEventLogger
   # queue to use for login event jobs
   @queue = :pageview_event_logger
 
-  attr_writer :page
+  attr_accessor :page
 
   # instance methods, for use as a LoginEventLogger instance
 
@@ -23,7 +23,7 @@ class PageviewEventLogger < ApplicationEventLogger
 
   # params method is defined in ApplicationEventLogger
   def build_page_from_params
-    return unless params && !params[:url].present?
+    return if params.nil? || !params[:url].present?
     @page = "#{params[:url]}#{params[:tab]}"
   end
 end
