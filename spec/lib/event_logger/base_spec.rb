@@ -88,6 +88,32 @@ describe EventLogger::Base, type: :vendor_library do
       end
     end
 
+    describe ".backoff_strategy" do
+      let(:result) { subject.backoff_strategy }
+      let(:backoff_strategy) { double(:backoff_strategy).as_null_object }
+
+      before do
+        allow(EventLogger).to receive_message_chain(:configuration, \
+          :backoff_strategy) { backoff_strategy }
+      end
+
+      it "uses the backoff strategy from the EventLogger configuration" do
+        expect(result).to eq(backoff_strategy)
+      end
+
+      it "caches the backoff strategy" do
+        result
+        expect(EventLogger).not_to receive(:configuration)
+        result
+      end
+
+      it "sets the result to @backoff_strategy" do
+        result
+        expect(subject.instance_variable_get(:@backoff_strategy))
+          .to eq backoff_strategy
+      end
+    end
+
     describe ".event_outcome_message(event, data)" do
       let!(:valid_event) { Analytics::Event.new }
       let!(:invalid_event) { Analytics::Event.new }
