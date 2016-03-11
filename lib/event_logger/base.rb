@@ -40,7 +40,7 @@ module EventLogger
       # perform block that is ultimately called by Resque
       def perform(event_type, data = {})
         logger.info "Starting #{event_name} with data #{data}"
-        event = analytics_class.create data
+        event = analytics_class.create data.merge(event_type: event_type)
         logger.info event_outcome_message(event, data)
       end
 
