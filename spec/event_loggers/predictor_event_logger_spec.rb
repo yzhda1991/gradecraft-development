@@ -1,6 +1,5 @@
 require "active_record_spec_helper"
 require "resque_spec/scheduler"
-require_relative "../toolkits/event_loggers/shared_examples"
 
 RSpec.describe PredictorEventLogger, type: :event_logger do
   subject { described_class.new }
@@ -16,10 +15,6 @@ RSpec.describe PredictorEventLogger, type: :event_logger do
 
   it "includes EventLogger::Enqueue" do
     expect(subject).to respond_to(:enqueue_in_with_fallback)
-  end
-
-  it "extends EventLogger::Params" do
-    expect(described_class).to respond_to(:define_filtered_numerical_param)
   end
 
   it "uses the :predictor_event_logger queue" do

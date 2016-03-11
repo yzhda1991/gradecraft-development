@@ -1,6 +1,5 @@
 class PredictorEventLogger < ApplicationEventLogger
   include EventLogger::Enqueue
-  extend EventLogger::Params
 
   # queue to use for login event jobs
   @queue = :predictor_event_logger
