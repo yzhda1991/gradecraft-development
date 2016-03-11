@@ -76,6 +76,7 @@ RSpec.describe ApplicationEventLogger, type: :event_logger do
     end
 
     it "is frozen" do
+      expect(subject.application_attrs.frozen?).to be_truthy
     end
   end
 
