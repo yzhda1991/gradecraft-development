@@ -153,7 +153,7 @@ module Toolkits
 
           describe "@event_name" do
             it "uses #{logger_name.capitalize} as an event name for messaging" do
-              expect(logger_class.instance_variable_get(:@event_name)).to eq(logger_name.capitalize)
+              expect(logger_class.event_name).to eq(logger_class.to_s)
             end
           end
         end
