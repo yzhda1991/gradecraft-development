@@ -11,7 +11,7 @@
 class ApplicationEventLogger < EventLogger::Base
   @queue = :application_event_logger
 
-  attr_reader :event_session
+  attr_accessor :event_session
 
   # Used by enqueuing methods in EventLogger::Enqueue
   def event_type
