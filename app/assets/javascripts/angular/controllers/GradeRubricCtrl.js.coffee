@@ -90,7 +90,7 @@
     )
     points
 
-  $scope.pointsGivenAfterAdjustment = ()->
+  $scope.finalPoints = ()->
     $scope.pointsGiven() + $scope.adjustmentPoints()
 
   $scope.gradedCriteria = ()->

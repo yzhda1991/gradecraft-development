@@ -9,7 +9,7 @@
 
       #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
         %h4#points-legend
-          %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{pointsGivenAfterAdjustment() | number:0}}
+          %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{finalPoints() | number:0}}
           \/{{pointsPossible() | number:0}} Points Allocated
         %h4.notice(ng-hide="pointsSatisfied() || pointsMissing()") You have not yet allocated any points
         %h4.notice(ng-show="pointsMissing()") {{pointsRemaining() | number:0}} point{{pointsRemaining() > 1 ? "s" : ""}} have not been assigned
@@ -82,7 +82,7 @@
         %input(type="text" placeholder="Enter points adjustment to calculated total" smart-number="" ng-model="grade.adjustment_points")
       %br
       .total-points(ng-cloak)
-        %h3 {{pointsGivenAfterAdjustment() | number:0}} Total Points
+        %h3 {{finalPoints() | number:0}} Total Points
 
     .right
       .points-adjustment-feedback(ng-if="grade.adjustment_points != 0" ng-cloak)
