@@ -8,6 +8,23 @@ RSpec.describe PageviewEventLogger, type: :event_logger do
     allow(Time).to receive(:now) { Date.parse("Oct 20 1999").to_time }
   end
 
+  it "has a queue" do
+    expect(described_class.queue).to eq :pageview_event_logger
+  end
+
+  it "has an accessible :page attribute" do
+    subject.page = "waffles"
+    expect(subject.page).to eq "waffles"
+  end
+
+  it "includes EventLogger::Enqueue" do
+    expect(subject).to respond_to(:enqueue_in_with_fallback)
+  end
+
+  it "has an #event_type" do
+    expect(subject.event_type).to eq "pageview"
+  end
+
   describe "#event_attrs" do
     before do
       allow(subject).to receive(:page) { "some great page" }
