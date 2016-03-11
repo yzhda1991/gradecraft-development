@@ -47,19 +47,22 @@ RSpec.describe LoginEventPerformer, type: :performer do
     end
 
     describe "finding the course membership" do
+      # let's build a new logger here but skip #setup so we can test it
+      # explicitly: LoginEventPerformer#initialize(data_hash, logger, options)
+      subject { described_class.new({}, nil, skip_setup: true) }
+
       let(:course_membership) { double(CourseMembership).as_null_object }
+      let(:stub_valid_course_membership) do
+        allow_any_instance_of(described_class).to \
+          receive(:find_course_membership) { course_membership }
+      end
 
       it "finds the course membership" do
-        allow_any_instance_of(described_class).to receive( \
-          :find_course_membership) { course_membership }
+        stub_valid_course_membership
         expect(subject.course_membership).to eq course_membership
       end
 
       context "CourseMembership is nil" do
-        # let's build a new logger here but skip #setup so we can test it
-        # explicitly: LoginEventPerformer#initialize(data_hash, logger, options)
-        subject { described_class.new({}, nil, skip_setup: true) }
-
         it "returns from the setup" do
           expect(subject).not_to receive(:cache_last_login_at)
           expect(subject.setup).to be_nil
@@ -67,10 +70,16 @@ RSpec.describe LoginEventPerformer, type: :performer do
       end
 
       context "CourseMembership is present" do
+        before  { stub_valid_course_membership }
+
         it "caches the :last_login_at value from the CourseMembership" do
+          expect(subject).to receive(:cache_last_login_at)
+          subject.setup
         end
 
         it "updates the CourseMembership with the new last_login_at value" do
+          expect(subject).to receive(:update_course_membership_login)
+          subject.setup
         end
       end
     end
