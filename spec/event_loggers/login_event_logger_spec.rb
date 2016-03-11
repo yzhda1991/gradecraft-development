@@ -19,7 +19,7 @@ RSpec.describe LoginEventLogger, type: :event_logger do
     let(:result) { described_class.perform("login", data) }
     let(:data) { { some: "info" } }
     let(:performer) { double(LoginEventPerformer).as_null_object }
-    let(:logger) { Logger.new(STDOUT) }
+    let(:logger) { Logger.new Tempfile.new("logger") }
 
     before do
       allow(LoginEventPerformer).to receive(:new) { performer }
