@@ -17,6 +17,12 @@ describe Services::Actions::VerifiesAssignmentStudent do
     expect(result).to have_key :assignment
   end
 
+  it "returns the group if present" do
+    raw_params["group_id"] = world.group.id
+    result = described_class.execute raw_params: raw_params
+    expect(result).to have_key :group
+  end
+
   it "halts with error if assignment is not found" do
     raw_params["assignment_id"] = 1000
     expect { described_class.execute raw_params: raw_params }.to \
