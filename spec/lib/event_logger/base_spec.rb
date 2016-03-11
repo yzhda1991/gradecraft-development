@@ -1,33 +1,38 @@
-require "logglier"
 require_relative "../../../lib/event_logger/base"
 require_relative "../../../lib/analytics/event"
 require_relative "../../../lib/inheritable_ivars"
 require_relative "../../../lib/loggly_resque"
-require_relative "../../toolkits/lib/inheritable_ivars/shared_examples"
-require_relative "../../toolkits/lib/loggly_resque/shared_examples"
-require_relative "../../toolkits/lib/resque_retry/shared_examples"
 
 describe EventLogger::Base, type: :vendor_library do
-  include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
-  include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
-  include Toolkits::Lib::ResqueRetryToolkit::SharedExamples
+  subject { described_class.new }
 
   let(:event_type) { "waffle" }
-  let(:some_data) { { some: "new weird data" } }
+  let(:event_data) { { some: "new weird data" } }
   let(:time_now) { Time.parse "Jun 20 1942" }
   let(:mongoid_event) { double(:mongoid_event) }
   let(:analytics_attrs) do
-    { event_type: event_type, created_at: time_now }.merge(some_data)
+    { event_type: event_type, created_at: time_now }.merge(event_data)
   end
   let(:logger) { Logger.new(STDOUT) }
 
-  describe "the logger implementation" do
-    it_behaves_like "the #logger is implemented through Logglier with " \
-      "LogglyResque", described_class
+  it "includes Resque::Retry" do
+    expect(described_class).to respond_to :retry_delay
+  end
+
+  it "includes Resque::ExponentialBackoff" do
+    expect(described_class).to respond_to :retry_delay_multiplicand_max
+  end
+
+  it "includes LogglyResque" do
+    expect(described_class).to respond_to :logger_base_url
+  end
+
+  it "includes InheritableIvars" do
+    expect(described_class).to respond_to :inheritable_instance_variable_names
   end
 
   describe ".perform" do
-    subject { described_class.perform(event_type, some_data) }
+    let(:result) { described_class.perform(event_type, event_data) }
 
     before do
       allow(Time.zone).to receive(:now) { time_now }
@@ -40,28 +45,28 @@ describe EventLogger::Base, type: :vendor_library do
       described_class.instance_variable_set(:@start_message, "mario was here")
       expect(described_class.logger).to receive(:info).with "mario was here"
       expect(described_class.logger).to receive(:info).with "another message"
-      subject
+      result
     end
 
     it "should create a new analytics object with the analytics attributes" do
       analytics_class = described_class.instance_variable_get(:@analytics_class)
       expect(analytics_class).to receive(:create).with analytics_attrs
-      subject
+      result
     end
   end
 
-  describe ".notify_event_outcome(event, data)" do
+  describe ".event_outcome_message(event, data)" do
     let!(:valid_event) { Analytics::Event.new }
     let!(:invalid_event) { Analytics::Event.new }
 
     before(:each) do
       allow(valid_event).to receive(:valid?).and_return true
       allow(invalid_event).to receive(:valid?).and_return false
-      allow(described_class).to receive(:logger) { logger }
-      described_class
-        .instance_variable_set(:@success_message, "great stuff happened")
-      described_class
-        .instance_variable_set(:@failure_message, "bad stuff happened")
+      allow(described_class).to receive_messages(
+        logger: logger,
+        success_message: "great stuff happened",
+        failure_message: "bad stuff happened"
+      )
     end
 
     context "the event is valid" do
@@ -87,62 +92,7 @@ describe EventLogger::Base, type: :vendor_library do
     end
   end
 
-  describe ".analytics_attrs(event_type, data)" do
-    subject { described_class.analytics_attrs(event_type, some_data) }
-
-    before { allow(Time.zone).to receive(:now) { time_now } }
-
-    it "should return an array of required attributes by default" do
-      expect(subject).to eq(analytics_attrs)
-    end
-  end
-
-  describe "extensions" do
-    it "should use resque-retry" do
-      expect(described_class).to respond_to(:retry_delay)
-    end
-  end
-
-  # shared examples for testing that the #backoff_strategy is overridden and
-  # included from the target IsConfigurable class. Takes block arguments
-  # |target_class, config_class|
-  it_behaves_like "it uses a configurable backoff strategy", \
-    EventLogger::Base, EventLogger
-
-  describe "class-level instance variable defaults" do
-    it "should have a default @queue" do
-      described_class.instance_variable_set(:@queue, :herman)
-      expect(described_class.instance_variable_get(:@queue)).to eq(:herman)
-    end
-
-    it "should not have a default @retry_limit for resque-retry" do
-      expect(described_class.instance_variable_get(:@retry_limit)).to eq(nil)
-    end
-
-    it "should not have a default @retry_delay for resque-retry" do
-      expect(described_class.instance_variable_get(:@retry_delay)).to eq(nil)
-    end
-  end
-
-  # test whether @ivars are properly inheritable after extending the
-  # InheritableIvars module, pulled in from shared examples in the
-  # InheritableIvarsToolit. Defined in:
-  # /spec/toolkits/lib/inheritable_ivars/shared_examples
-  it_behaves_like "some @ivars are inheritable by subclasses", EventLogger::Base
-
-  describe ".inheritable_ivars" do
-    let(:expected_attrs) {[
-      :queue,
-      :event_name,
-      :analytics_class,
-      :start_message,
-      :success_message,
-      :failure_message
-    ]
-  }
-
-    it "should have a list of inheritable attributes" do
-      expect(described_class.inheritable_ivars).to eq(expected_attrs)
-    end
+  it "should have a list of inheritable attributes" do
+    expect(described_class.inheritable_ivars).to eq [:queue]
   end
 end

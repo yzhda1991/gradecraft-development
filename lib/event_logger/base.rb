@@ -46,7 +46,7 @@ module EventLogger
 
       # override the backoff strategy from Resque::ExponentialBackoff
       def backoff_strategy
-        EventLogger.configuration.backoff_strategy
+        @backoff_strategy ||= EventLogger.configuration.backoff_strategy
       end
 
       def event_outcome_message(event, data)
