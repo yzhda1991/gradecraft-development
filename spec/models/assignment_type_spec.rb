@@ -191,7 +191,7 @@ describe AssignmentType do
 
     it "returns the total score a student has earned for an assignment type and has a reduced final score" do
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
-      grade = create(:grade, student: student, raw_score: 100, final_score: 75, assignment: assignment, status: "Released")
+      grade = create(:grade, student: student, raw_score: 100, adjustment_points: -25, assignment: assignment, status: "Released")
       expect(assignment_type.score_for_student(student)).to eq(75)
     end
 

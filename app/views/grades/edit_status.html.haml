@@ -15,7 +15,7 @@
       - for grade in @grades
         %tr
           %td= grade.student.name
-          %td= points grade.raw_score
+          %td= points grade.final_points
           %td= grade.status
 
   = simple_form_for :grade, :url => update_status_grades_assignment_path(@assignment), :html => { :method => :put} do |f|

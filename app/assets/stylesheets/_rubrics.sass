@@ -41,7 +41,7 @@
   right: 28px
   z-index: 800
   padding: 1.5rem 1rem .5rem
-  height: 70px
+  height: 5rem
   border-bottom-left-radius: $global-radius
   border-bottom-right-radius: $global-radius
   background: $color-blue-2
@@ -68,6 +68,10 @@ h4.notice
   font-weight: normal
   color: $color-yellow-1
   text-transform: none
+  &.adjustment
+    color: $color-orange-1
+  &.adjustment.positive-adjustment
+    color: $color-green-2
 
 #rubric-column-heading
   margin-top: 1rem
@@ -357,6 +361,13 @@ button.delete
 
   h4.notice
     color: $color-green-2
+
+
+.adjustment-points-feedback
+  margin-right: 1rem;
+
+.total-points
+  margin-bottom: 1rem;
 
 #grade-rubric-table.edit
   .level:hover

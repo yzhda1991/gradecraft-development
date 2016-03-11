@@ -41,6 +41,10 @@ class NullGrade
     nil
   end
 
+  def final_points
+    nil
+  end
+
   def status
     nil
   end

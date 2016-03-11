@@ -31,6 +31,12 @@
     )
     points or 0
 
+  $scope.adjustmentPoints = ()->
+    parseInt($scope.grade.adjustment_points) || 0
+
+  $scope.pointsAdjusted = ()->
+    $scope.adjustmentPoints() != 0
+
   $scope.pointsDifference = ()->
     $scope.pointsPossible() - $scope.pointsGiven()
 
@@ -83,6 +89,9 @@
         points += criterion.selectedLevel.points
     )
     points
+
+  $scope.finalPoints = ()->
+    $scope.pointsGiven() + $scope.adjustmentPoints()
 
   $scope.gradedCriteria = ()->
     criteria = []
@@ -176,29 +185,30 @@
 
   $scope.gradeParams = ()->
     {
+      raw_score: $scope.pointsGiven(),
       feedback: $scope.grade.feedback,
-      status:   $scope.grade.status
+      status:   $scope.grade.status,
+      adjustment_points: $scope.grade.adjustment_points,
+      adjustment_points_feedback: $scope.grade.adjustment_points_feedback
     }
 
   # Document any updates to this format in the specs: /spec/support/api_calls/rubric_grade_put.rb
   # student_id or group_id is now passed through the route, see RubricService.putRubricGradeSubmission
   $scope.gradedRubricParams = ()->
     {
-      points_given:     $scope.pointsGiven(),
       points_possible:  $scope.pointsPossible(),
       criterion_grades: $scope.criteriaParams(),
       level_badges:     $scope.levelBadgesParams(),
       level_ids:        $scope.selectedLevelIds(),
       criterion_ids:    $scope.allCriterionIds(),
       grade:            $scope.gradeParams(),
-  }
+    }
 
   $scope.submitGrade = (returnURL)->
-    self = this
     if !$scope.grade.status
       return alert "You must select a grade status before you can submit this grade"
     if confirm "Are you sure you want to submit the grade for this assignment?"
-      RubricService.putRubricGradeSubmission(self.assignment, self.gradedRubricParams(), returnURL)
+      RubricService.putRubricGradeSubmission($scope.assignment, $scope.gradedRubricParams(), returnURL)
 
   $scope.froalaOptions = {
     inlineMode: false,

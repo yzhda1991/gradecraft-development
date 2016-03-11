@@ -75,6 +75,37 @@ describe Grade do
     end
   end
 
+  describe "calculation of final_score" do
+    it "is nil when raw_score is nil" do
+      subject.update(raw_score: nil)
+      expect(subject.final_score).to eq(nil)
+    end
+
+    it "is the sum of raw_score and adjustment_points" do
+      subject.update(raw_score: "1234", adjustment_points: -234)
+      expect(subject.final_score).to eq(1000)
+    end
+  end
+
+  describe "calculating score" do
+    it "is nil when raw_score is nil" do
+      subject.update(raw_score: nil)
+      expect(subject.score).to eq(nil)
+    end
+
+    it "is the same as final score when assignment isn't weighted" do
+      subject.update(raw_score: "1234", adjustment_points: -234)
+      expect(subject.score).to eq(1000)
+    end
+
+    it "is the final score weighted by the students weight for the assignment" do
+      subject.assignment.assignment_type.update(student_weightable: true)
+      create(:assignment_weight, student: subject.student, assignment: subject.assignment, weight: 3 )
+      subject.update(raw_score: "1,234", adjustment_points: -234)
+      expect(subject.score).to eq(3000)
+    end
+  end
+
   describe "when assignment is pass-fail" do
     before do
       subject.assignment.update(pass_fail: true)

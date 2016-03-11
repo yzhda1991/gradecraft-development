@@ -24,7 +24,7 @@ describe Services::Actions::VerifiesAssignmentStudent do
   end
 
   it "halts with error if assignment is not found" do
-    raw_params["assignment_id"] = 1000
+    raw_params["assignment_id"] = nil
     expect { described_class.execute raw_params: raw_params }.to \
       raise_error LightService::FailWithRollbackError
   end
@@ -35,7 +35,7 @@ describe Services::Actions::VerifiesAssignmentStudent do
   end
 
   it "halts with error if student is not found" do
-    raw_params["student_id"] = 1000
+    raw_params["student_id"] = nil
     expect { described_class.execute raw_params: raw_params }.to \
       raise_error LightService::FailWithRollbackError
   end

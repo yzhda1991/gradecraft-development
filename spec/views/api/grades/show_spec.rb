@@ -4,6 +4,8 @@ require "rails_spec_helper"
 describe "api/grades/show" do
   before(:all) do
     world = World.create.with(:course, :assignment, :student, :grade)
+
+    # Expected instance variables on render:
     @grade = world.grade
     @grade_status_options = ["In Progress","Graded", "Released"]
   end
@@ -22,6 +24,8 @@ describe "api/grades/show" do
     expect(json["data"]["attributes"]["student_id"]).to eq(@grade.student_id)
     expect(json["data"]["attributes"]["feedback"]).to eq(@grade.feedback)
     expect(json["data"]["attributes"]["status"]).to eq(@grade.status)
+    expect(json["data"]["attributes"]["adjustment_points"]).to eq(@grade.adjustment_points)
+    expect(json["data"]["attributes"]["adjustment_points_feedback"]).to eq(@grade.adjustment_points_feedback)
   end
 
   it "adds grading status options to meta data" do

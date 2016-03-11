@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160207122312) do
+ActiveRecord::Schema.define(version: 20160302203209) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -418,8 +418,8 @@ ActiveRecord::Schema.define(version: 20160207122312) do
     t.boolean  "complete"
     t.boolean  "semis"
     t.boolean  "finals"
-    t.string   "type",                 limit: 255
-    t.string   "status",               limit: 255
+    t.string   "type",                       limit: 255
+    t.string   "status",                     limit: 255
     t.boolean  "attempted"
     t.boolean  "substantial"
     t.integer  "final_score"
@@ -429,22 +429,24 @@ ActiveRecord::Schema.define(version: 20160207122312) do
     t.integer  "student_id"
     t.integer  "task_id"
     t.integer  "group_id"
-    t.string   "group_type",           limit: 255
+    t.string   "group_type",                 limit: 255
     t.integer  "score"
     t.integer  "assignment_type_id"
     t.integer  "point_total"
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"
-    t.integer  "predicted_score",                  default: 0,     null: false
-    t.boolean  "instructor_modified",              default: false
+    t.integer  "predicted_score",                        default: 0,     null: false
+    t.boolean  "instructor_modified",                    default: false
     t.string   "pass_fail_status"
-    t.boolean  "is_custom_value",                  default: false
-    t.boolean  "feedback_read",                    default: false
+    t.boolean  "is_custom_value",                        default: false
+    t.boolean  "feedback_read",                          default: false
     t.datetime "feedback_read_at"
-    t.boolean  "feedback_reviewed",                default: false
+    t.boolean  "feedback_reviewed",                      default: false
     t.datetime "feedback_reviewed_at"
     t.datetime "graded_at"
+    t.integer  "adjustment_points",                      default: 0,     null: false
+    t.text     "adjustment_points_feedback"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree

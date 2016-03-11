@@ -3,11 +3,13 @@ json.data @grades do |grade|
   json.id   grade.id.to_s
 
   json.attributes do
-    json.id            grade.id
-    json.assignment_id grade.assignment_id
-    json.student_id    grade.student_id
-    json.feedback      grade.feedback
-    json.status        grade.status
+    json.id                         grade.id
+    json.assignment_id              grade.assignment_id
+    json.student_id                 grade.student_id
+    json.feedback                   grade.feedback
+    json.status                     grade.status
+    json.adjustment_points          grade.adjustment_points
+    json.adjustment_points_feedback grade.adjustment_points_feedback
   end
 end
 
