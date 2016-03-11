@@ -1,79 +1,91 @@
 require "active_record_spec_helper"
 require "resque_spec/scheduler"
-
 require_relative "../toolkits/event_loggers/shared_examples"
-require_relative "../toolkits/event_loggers/attributes"
-require_relative "../toolkits/event_loggers/event_session"
 
-# PredictorEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe PredictorEventLogger, type: :event_logger do
-  include InQueueHelper # get help from ResqueSpec
-  include Toolkits::EventLoggers::SharedExamples
-  include Toolkits::EventLoggers::Attributes
-  extend Toolkits::EventLoggers::EventSession
+  subject { described_class.new }
+  let(:application_attrs) { { waffles: "son" } }
 
-  # pulls in #event_session attributes from EventLoggers::EventSession
-  # creates course, user, student objects, and a request double
-  define_event_session_with_request
+  before(:each) do
+    allow(subject).to receive(:application_attrs) { application_attrs }
+  end
 
-  include InQueueHelper # get help from ResqueSpec
+  it "has an #event_type" do
+    expect(subject.event_type).to eq "predictor"
+  end
 
-  let(:new_logger) { PredictorEventLogger.new(event_session) }
-  let(:logger_attrs) { predictor_logger_attrs } # pulled in from Toolkits::EventLoggers::Attributes
+  it "includes EventLogger::Enqueue" do
+    expect(subject).to respond_to(:enqueue_in_with_fallback)
+  end
 
-  # shared examples for EventLogger subclasses
-  it_behaves_like "an EventLogger subclass", PredictorEventLogger, "predictor"
-  it_behaves_like "EventLogger::Enqueue is included", PredictorEventLogger, "predictor"
+  it "extends EventLogger::Params" do
+    expect(described_class).to respond_to(:define_filtered_numerical_param)
+  end
 
-  let(:params) {{ assignment: "40", score: "50", possible: "60" }}
-  let(:param_attrs) {{ assignment_id: 40, score: 50, possible: 60 }}
+  it "uses the :predictor_event_logger queue" do
+    expect(described_class.queue).to eq :predictor_event_logger
+  end
 
   describe "#event_attrs" do
-    subject { new_logger.event_attrs }
+    let(:result) { subject.event_attrs }
 
-    before(:each) do
-      new_logger.instance_variable_set(:@event_attrs, nil)
-      allow(new_logger).to receive(:params) { params }
-    end
+    context "a params hash exists" do
+      let(:params) { { great: "seriously" } }
+      let(:param_attrs) { { these: "are-great" } }
 
-    context "params exists" do
-      it "merges the param_attrs from the original request with the base_attrs" do
-        expect(subject).to eq new_logger.base_attrs.merge(param_attrs)
+      it "merges the param_attrs with the with the application_attrs" do
+        allow(subject).to receive_messages({ params: params, \
+          param_attrs: param_attrs })
+
+        expect(result).to eq subject.application_attrs.merge(param_attrs)
       end
     end
 
     context "params does not exist" do
       let(:params) { nil }
-      it "simply returns the base_attrs" do
-        expect(subject).to eq new_logger.base_attrs
+      it "just returns the application_attrs" do
+        expect(result).to eq subject.application_attrs
       end
     end
-
-    it_behaves_like "#event_attrs that are cached in @event_attrs"
   end
 
   describe "#param_attrs" do
-    before { allow(new_logger).to receive_messages(param_attrs) }
-    it "builds a hash from the filtered param attribute values" do
-      expect(new_logger.param_attrs).to eq(param_attrs)
+    let(:params_values) do
+      { assignment_id: 40, score: 50, possible: 60 }
+    end
+
+    it "builds a hash from the various params methods" do
+      allow(subject).to receive_messages params_values
+      expect(subject.param_attrs).to eq params_values
     end
   end
 
-  describe "params attributes" do
-    before(:each) { allow(new_logger).to receive(:params) { params }}
+  describe "filtering params attributes" do
+    before(:each) { allow(subject).to receive(:params) { params } }
 
-    # shared examples here are defining the input :param_name, and then the :output_name
-    # in this instance the :assignment param is being output as :assignment_id
-    describe "#assignment_id" do
-      it_behaves_like "a numerical param attribute", :assignment, :assignment_id
+    context "the params exist" do
+      # note that the :assignment key is being translated to an :assignment_id
+      # method as defined in the .numerical_params method on PredictorEventLogger
+      #
+      let(:params) do
+        { "assignment" => "40", "score" => "50", "possible" => "60" }
+      end
+
+      it "returns integers for each of the params methods" do
+        expect(subject.assignment_id).to eq 40
+        expect(subject.score).to eq 50
+        expect(subject.possible).to eq 60
+      end
     end
 
-    describe "#score" do
-      it_behaves_like "a numerical param attribute", :score, :score
-    end
+    context "params values don't exist" do
+      let!(:params) { { waffles: "70" } }
 
-    describe "#possible" do
-      it_behaves_like "a numerical param attribute", :possible, :possible
+      it "returns nil for each of the defined param methods" do
+        expect(subject.assignment_id).to be_nil
+        expect(subject.score).to be_nil
+        expect(subject.possible).to be_nil
+      end
     end
   end
 end
