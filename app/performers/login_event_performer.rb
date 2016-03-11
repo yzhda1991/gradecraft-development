@@ -13,7 +13,7 @@ class LoginEventPerformer < ResqueJob::Performer
   def perform
     require_success(messages) do
       # create a new analytics event with the data and check if it's valid
-      return false unless data[:user_role]
+      next false unless data[:user_role]
       Analytics::LoginEvent.create(data).valid?
     end
   end

@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-RSpec.describe LoginEventPerformer, type: :performer do
+describe LoginEventPerformer do
   subject { described_class.new }
 
   it "should inherit from ResqueJob::Performer" do
@@ -83,6 +83,24 @@ RSpec.describe LoginEventPerformer, type: :performer do
         end
       end
     end
+  end
 
+  describe ".perform" do
+    it "requires success" do
+      expect(subject).to receive(:require_success).with(subject.messages)
+      subject.perform
+    end
+
+    context "data[:user_role] is present" do
+      subject { described_class.new data: { user_role: "great-role" } }
+    end
+
+    context "data[:user_role] is not present" do
+      subject { described_class.new data: { waffle_id: 20 } }
+
+      it "returns a false outcome" do
+        expect(subject.perform.result).to eq false
+      end
+    end
   end
 end
