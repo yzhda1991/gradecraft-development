@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302203209) do
+ActiveRecord::Schema.define(version: 20160312160436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -214,9 +214,7 @@ ActiveRecord::Schema.define(version: 20160302203209) do
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
     t.datetime "open_at"
-    t.boolean  "mass_grade"
     t.string   "mass_grade_type",          limit: 255
-    t.boolean  "levels"
     t.string   "media",                    limit: 255
     t.string   "thumbnail",                limit: 255
     t.string   "media_credit",             limit: 255
@@ -447,6 +445,9 @@ ActiveRecord::Schema.define(version: 20160302203209) do
     t.datetime "graded_at"
     t.integer  "adjustment_points",                      default: 0,     null: false
     t.text     "adjustment_points_feedback"
+    t.boolean  "excluded_from_course_score",             default: false
+    t.datetime "excluded_date"
+    t.integer  "excluded_by"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree

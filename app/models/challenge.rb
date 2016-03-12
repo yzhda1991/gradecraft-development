@@ -40,10 +40,6 @@ class Challenge < ActiveRecord::Base
     challenge_score_levels.present?
   end
 
-  def mass_grade?
-    mass_grade = true
-  end
-
   def challenge_grade_for_team(team)
     challenge_grades.where(team_id: team.id).first
   end
