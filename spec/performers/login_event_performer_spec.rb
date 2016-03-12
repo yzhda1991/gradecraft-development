@@ -1,4 +1,10 @@
-require "rails_spec_helper"
+require 'rails_spec_helper'
+# require 'active_record_spec_helper'
+# require_relative '../../lib/is_configurable'
+# require_relative '../../lib/loggly_resque'
+# require_relative '../../lib/inheritable_ivars'
+# require_relative '../../lib/resque_job'
+# require_relative '../../app/performers/login_event_performer'
 
 describe LoginEventPerformer do
   subject { described_class.new }
@@ -91,8 +97,51 @@ describe LoginEventPerformer do
       subject.perform
     end
 
+    it "returns an outcome" do
+      expect(subject.perform.class).to eq ResqueJob::Outcome
+    end
+
     context "data[:user_role] is present" do
-      subject { described_class.new data: { user_role: "great-role" } }
+      subject { described_class.new data: data }
+
+      let(:data) do
+        { user_role: "some_role", created_at: Time.now, event_type: "foo" }
+      end
+      let(:login_event) { double(Analytics::LoginEvent).as_null_object }
+
+      it "adds a login event record to mongo" do
+        expect { subject.perform }
+          .to change { Analytics::LoginEvent.count }.by 1
+      end
+
+      it "creates a new login event" do
+        expect(Analytics::LoginEvent).to receive(:create) { login_event }
+        subject.perform
+      end
+
+      it "returns an outcome" do
+        expect(subject.perform.class).to eq ResqueJob::Outcome
+      end
+
+      describe "login event outcomes" do
+        before do
+          allow(Analytics::LoginEvent).to receive(:create) { login_event }
+        end
+
+        context "the login event is not valid" do
+          it "returns an outcome with a false result" do
+            allow(login_event).to receive(:valid?) { false }
+            expect(subject.perform.result).to eq false
+          end
+        end
+
+        context "the login event is valid" do
+          it "returns an outcome with a true result" do
+            allow(login_event).to receive(:valid?) { true }
+            expect(subject.perform.result).to eq true
+          end
+        end
+      end
     end
 
     context "data[:user_role] is not present" do
