@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160312160436) do
+ActiveRecord::Schema.define(version: 20160312161642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -225,7 +225,6 @@ ActiveRecord::Schema.define(version: 20160312160436) do
     t.integer  "course_id"
     t.integer  "user_id"
     t.integer  "score",                            default: 0,         null: false
-    t.boolean  "shared_badges"
     t.text     "character_profile"
     t.datetime "last_login_at"
     t.boolean  "auditing",                         default: false,     null: false
@@ -242,7 +241,6 @@ ActiveRecord::Schema.define(version: 20160312160436) do
     t.string   "courseno",                          limit: 255
     t.string   "year",                              limit: 255
     t.string   "semester",                          limit: 255
-    t.integer  "grade_scheme_id"
     t.datetime "created_at",                                                                                                   null: false
     t.datetime "updated_at",                                                                                                   null: false
     t.boolean  "badge_setting",                                                         default: true
@@ -252,7 +250,6 @@ ActiveRecord::Schema.define(version: 20160312160436) do
     t.string   "homepage_message",                  limit: 255
     t.boolean  "status",                                                                default: true
     t.boolean  "group_setting"
-    t.integer  "badge_set_id"
     t.datetime "assignment_weight_close_at"
     t.boolean  "team_roles"
     t.string   "team_leader_term",                  limit: 255
@@ -260,14 +257,10 @@ ActiveRecord::Schema.define(version: 20160312160436) do
     t.string   "assignment_weight_type",            limit: 255
     t.boolean  "accepts_submissions"
     t.boolean  "teams_visible"
-    t.string   "badge_use_scope",                   limit: 255
     t.string   "weight_term",                       limit: 255
     t.boolean  "predictor_setting"
-    t.boolean  "badges_value"
     t.integer  "max_group_size"
     t.integer  "min_group_size"
-    t.boolean  "shared_badges"
-    t.boolean  "graph_display"
     t.decimal  "default_assignment_weight",                     precision: 4, scale: 1, default: 1.0
     t.string   "tagline",                           limit: 255
     t.boolean  "academic_history_visible"
@@ -289,7 +282,6 @@ ActiveRecord::Schema.define(version: 20160312160436) do
     t.text     "grading_philosophy"
     t.integer  "total_assignment_weight"
     t.integer  "max_assignment_weight"
-    t.boolean  "check_final_grade"
     t.boolean  "character_profiles"
     t.string   "lti_uid",                           limit: 255
     t.boolean  "team_score_average"
