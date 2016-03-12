@@ -10,10 +10,10 @@ require 'rails_spec_helper'
 describe LoginEventPerformer do
   subject { described_class.new }
 
-  # let's build a new logger here but skip #setup so we can test it
+  # these are the attributes needed to skip #setup so we can test methods
   # explicitly: LoginEventPerformer#initialize(data_hash, logger, options)
-  let(:new_performer_skip_setup) do
-    described_class.new({}, nil, skip_setup: true)
+  let(:skip_setup_attrs) do
+    [{}, nil, skip_setup: true]
   end
 
   it "should inherit from ResqueJob::Performer" do
@@ -62,7 +62,7 @@ describe LoginEventPerformer do
     describe "finding the course membership" do
       # let's build a new logger here but skip #setup so we can test it
       # explicitly: LoginEventPerformer#initialize(data_hash, logger, options)
-      subject { new_performer_skip_setup }
+      subject { described_class.new *skip_setup_attrs }
 
       let(:course_membership) { double(CourseMembership).as_null_object }
       let(:stub_valid_course_membership) do
@@ -163,31 +163,51 @@ describe LoginEventPerformer do
     end
   end
 
-  describe "#cache_last_login_at" do
-    # skip the setup here so we can be sure that the outcome isn't being
-    # produced prematurely
-    subject { new_performer_skip_setup }
+  describe "managing :last_login_at" do
+    subject { described_class.new *skip_setup_attrs }
 
-    let(:course_membership) do
-      double(CourseMembership, last_login_at: login_time).as_null_object
-    end
     let(:login_time) { Time.parse("Oct 20 2020") }
 
     before do
       allow(subject).to receive(:course_membership) { course_membership }
     end
 
-    it "adds the :last_login_at value to :data from the CourseMembership" do
-      subject.cache_last_login_at
-      expect(subject.data[:last_login_at])
-        .to eq course_membership.last_login_at.to_i
+    describe "#cache_last_login_at" do
+      let(:course_membership) do
+        double(CourseMembership, last_login_at: login_time).as_null_object
+      end
+
+      it "adds the :last_login_at value to :data from the CourseMembership" do
+        subject.cache_last_login_at
+        expect(subject.data[:last_login_at])
+          .to eq course_membership.last_login_at.to_i
+      end
+
+      context "CourseMembership#last_login_at doesn't exist" do
+        let(:login_time) { nil }
+        it "returns nil" do
+          subject.cache_last_login_at
+          expect(subject.data[:last_login_at]).to be_nil
+        end
+      end
     end
 
-    context "CourseMembership#last_login_at doesn't exist" do
-      let(:login_time) { nil }
-      it "returns nil" do
-        subject.cache_last_login_at
-        expect(subject.data[:last_login_at]).to be_nil
+    describe "#update_course_membership_login" do
+      context "data[:created_at] doesn't exist" do
+        it "returns false" do
+          subject.data[:created_at] = nil
+          expect(subject.update_course_membership_login).to eq false
+        end
+      end
+
+      context "data[:created_at] exists" do
+        let(:course_membership) { create(:course_membership) }
+
+        it "updates the course membership :last_login_at time" do
+          subject.data[:created_at] = login_time
+          subject.update_course_membership_login
+          expect(course_membership.last_login_at).to eq login_time
+        end
       end
     end
   end
