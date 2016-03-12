@@ -51,18 +51,6 @@ describe Challenge do
     end
   end
 
-  describe "#mass_grade?" do
-    it "returns true if mass grade is turned on" do
-      subject.mass_grade = true
-      expect(subject.mass_grade?).to be(true)
-    end
-
-    it "returns false if the mass grade is off" do
-      subject.mass_grade = false
-      expect(subject.mass_grade?).to be(true)
-    end
-  end
-
   describe "#challenge_grade_for_team(team)" do
     it "returns the grade for team if present" do
       team = create(:team)
