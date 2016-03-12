@@ -1,10 +1,7 @@
-%p{:align => "center"}
-  %a{:href => "http://gradecraft.com", :target => "_blank"}
-    %img{:alt => "", :border => "0", :src => "https://www.gradecraft.com/images/gradecraft_logo.png", :width => "207"}/
 %h2{:align => "center"}
   %strong You've got a new grade!
 %h3{:align => "center"}
-  You can now view the grade for your
+  You can now view your grade for
   #{ @course.assignment_term.downcase } "#{ @assignment.name }"
   in #{ @course.name }.
 %p

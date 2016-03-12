@@ -24,17 +24,19 @@ end
 
 # specs for submission notifications that are sent to students
 describe NotificationMailer do
-  let(:deliver_email) { NotificationMailer.earned_badge_awarded(earned_badge.id).deliver_now }
-  let(:email) { ActionMailer::Base.deliveries.last }
-  let(:sender) { NotificationMailer::SENDER_EMAIL }
-  let(:text_part) { email.body.parts.detect {|part| part.content_type.match "text/plain" }}
-  let(:html_part) { email.body.parts.detect {|part| part.content_type.match "text/html" }}
+
+  extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
+  define_email_context # taken from the definitions toolkit
+
+  include Toolkits::Mailers::EmailToolkit::SharedExamples # brings in shared examples for emails and parts
 
   let(:student) { create(:user) }
   let(:course) { create(:course, assignment_term: "whifflebox") }
   let(:badge) { create(:badge, icon: "snake.jpg") }
   let(:earned_badge) { create(:earned_badge, earned_badge_attrs.merge(feedback: "You did a really great job.")) }
   let(:earned_badge_attrs) {{ student: student, course: course, badge: badge }}
+
+  let(:deliver_email) { NotificationMailer.earned_badge_awarded(earned_badge.id).deliver_now }
 
   describe "#earned_badge_awarded" do
     before(:each) { deliver_email }

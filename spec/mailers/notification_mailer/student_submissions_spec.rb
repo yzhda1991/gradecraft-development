@@ -24,11 +24,10 @@ end
 
 # specs for submission notifications that are sent to students
 describe NotificationMailer do
-  let(:email) { ActionMailer::Base.deliveries.last }
-  let(:sender) { NotificationMailer::SENDER_EMAIL }
-  let(:admin_email) { NotificationMailer::ADMIN_EMAIL }
-  let(:text_part) { email.body.parts.detect {|part| part.content_type.match "text/plain" }}
-  let(:html_part) { email.body.parts.detect {|part| part.content_type.match "text/html" }}
+  extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
+  define_email_context # taken from the definitions toolkit
+
+  include Toolkits::Mailers::EmailToolkit::SharedExamples # brings in shared examples for emails and parts
 
   let(:submission) { create(:submission, course: course, student: student, assignment: assignment) }
   let(:student) { create(:user) }

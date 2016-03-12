@@ -1,0 +1,27 @@
+%h2{:align => "center"}
+  %strong Hey-o GradeCraft Admin!
+
+%h3{:align => "center"}
+  I had a problem authenticating this user/course via LTI:
+
+%p{:align => "center"}
+  User: #{ @user_data[:name] }
+%p{:align => "center"}
+  Email: #{ @user_data[:email] }
+
+%p{:align => "center"}
+  LTI UID: #{ @user_data[:lti_uid] }
+
+%p{:align => "center"}
+  Course: #{ @course_data[:name] }
+
+%p{:align => "center"}
+  LTI UID: #{ @course_data[:lti_uid] }
+
+%br
+
+%p{:align => "center"}
+  It is the end of days. Woe is me,
+
+%p{:align => "center"}
+  The GradeCraft Server

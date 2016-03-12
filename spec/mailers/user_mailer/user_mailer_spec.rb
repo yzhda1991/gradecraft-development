@@ -1,7 +1,10 @@
 require "rails_spec_helper"
 
 describe UserMailer do
-  let(:email) { ActionMailer::Base.deliveries.last }
+  extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
+  define_email_context # taken from the definitions toolkit
+
+  include Toolkits::Mailers::EmailToolkit::SharedExamples # brings in shared examples for emails and parts
   let(:user) { create :user, reset_password_token: "blah" }
 
   describe "#reset_password_email" do

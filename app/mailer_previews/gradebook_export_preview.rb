@@ -1,5 +1,5 @@
 class GradebookExportPreview
   def gradebook_export
-    NotificationMailer.gradebook_export
+    ExportsMailer.gradebook_export
   end
 end

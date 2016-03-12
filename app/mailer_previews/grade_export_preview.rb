@@ -3,6 +3,6 @@ class GradeExportPreview
     course = Course.first
     user = User.first
     csv_data = course.assignments.to_csv
-    NotificationMailer.grade_export course, user, csv_data
+    ExportsMailer.grade_export course, user, csv_data
   end
 end

@@ -1,18 +1,12 @@
-%p{:align => "center"}
-  %a{:href => "http://gradecraft.com", :target => "_blank"}
-    =image_tag "gradecraft_logo.png", width: "207", alt: "", border: "0"
 %h2{:align => "center"}
   %strong #{@announcement.course.name} Announcement
-%p
-  Hello, #{@student.first_name}
-%p
-  %em #{@announcement.author.public_name} has the following announcement:
-============================================================
-%p
+
+%p{:align => "center"}
   = @announcement.abstract.html_safe
-  = precede "..." do
-    = link_to "more", announcement_url(@announcement)
-============================================================
+
+%p{:align => "center"}
+  %em – #{@announcement.author.public_name}
+
 %p{:align => "center"}
   To read more, please visit
   = link_to announcement_url(@announcement), announcement_url(@announcement)

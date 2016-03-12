@@ -32,7 +32,7 @@ class GradeExportPerformer < ResqueJob::Performer
   end
 
   def notify_grade_export
-    NotificationMailer.grade_export(@course, @user, @csv_data).deliver_now
+    ExportsMailer.grade_export(@course, @user, @csv_data).deliver_now
   end
 
   def fetch_csv_messages

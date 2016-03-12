@@ -1,4 +1,5 @@
 class UserMailer < ApplicationMailer
+  layout "mailers/notification_layout"
 
   def activation_needed_email(user)
     @user = user
