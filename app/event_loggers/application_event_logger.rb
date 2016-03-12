@@ -27,7 +27,7 @@ class ApplicationEventLogger < EventLogger::Base
       user_id: event_session[:user].try(:id),
       student_id: event_session[:student].try(:id),
       user_role: event_session_user_role(event_session)
-    }.merge(base_attrs).freeze
+    }.merge(base_attrs)
   end
 
   def event_session_user_role(event_session)

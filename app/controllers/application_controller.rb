@@ -118,16 +118,15 @@ class ApplicationController < ActionController::Base
 
   # Tracking page view counts
   def increment_page_views
-    if current_user && request.format.html?
-      PageviewEventLogger.new(event_session).enqueue_in_with_fallback(Lull.time_until_next_lull)
-    end
+    return unless current_user && request.format.html?
+    PageviewEventLogger.new(event_session).enqueue_in_with_fallback(Lull.time_until_next_lull)
   end
 
   # Tracking course logins
   def record_course_login_event
-    if current_user && (request.format.html? || request.format.xml?)
-      LoginEventLogger.new(event_session).enqueue_with_fallback
-    end
+    return unless request.format.html? || request.format.xml?
+    return unless current_user || @user
+    LoginEventLogger.new(event_session).enqueue_with_fallback
   end
 
   # Session data used for building attributes hashes in EventLogger classes

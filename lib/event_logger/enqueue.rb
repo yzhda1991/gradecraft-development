@@ -35,16 +35,20 @@ module EventLogger
     def enqueue_with_fallback
       # schedule the event in the background if Resque is available
       enqueue
-    rescue
+    rescue Redis::BaseError
       # otherwise insert directly into Mongo
-      self.class.perform(event_type, event_attrs)
+      fallback
     end
 
     def enqueue_in_with_fallback(time_until_start)
       # schedule the event for later if Resque is available
       enqueue_in(time_until_start)
-    rescue
+    rescue Redis::BaseError
       # otherwise insert directly into Mongo
+      fallback
+    end
+
+    def fallback
       self.class.perform(event_type, event_attrs)
     end
   end
