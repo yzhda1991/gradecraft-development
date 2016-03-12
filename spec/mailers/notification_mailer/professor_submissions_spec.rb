@@ -32,7 +32,7 @@ RSpec.shared_examples "a submission email to a professor" do
 end
 
 # specs for submission notifications that are sent to students
-describe NotificationMailer, focus: true do
+describe NotificationMailer do
   extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
   define_email_context # taken from the definitions toolkit
 

@@ -35,6 +35,32 @@ class NotificationMailer < ApplicationMailer
     send_student_email "#{@course.courseno} - You've earned a new #{@course.badge_term}!"
   end
 
+  def group_status_updated(group_id)
+    @group = Group.find group_id
+    @course = @group.course
+    @group_members = @group.students
+    @group_members.each do |gm|
+      mail(to: gm.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
+        @student = gm
+        format.text
+        format.html
+      end
+    end
+  end
+
+  def group_notify(group_id)
+    @group = Group.find group_id
+    @course = @group.course
+    @group_members = @group.students
+    @group_members.each do |gm|
+      mail(to: gm.email, subject: "#{@course.courseno} - New Group") do |format|
+        @student = gm
+        format.text
+        format.html
+      end
+    end
+  end
+
   private
 
   def send_assignment_email_to_professor(professor, submission_id, subject)
