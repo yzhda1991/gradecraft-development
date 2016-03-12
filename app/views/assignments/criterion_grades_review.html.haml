@@ -25,4 +25,7 @@
         %br
         %br
         .rubric-container= render partial: "grades/criterion_grade_results", locals: { presenter: presenter, current_student: student }
+        %br
+        %b= "Feedback from #{ grade_for_assignment.graded_by.name }:" if grade_for_assignment.graded_by.present?
+        %p.summary-comments= raw grade_for_assignment.try(:feedback)
         %hr
