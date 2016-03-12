@@ -239,4 +239,25 @@ describe LoginEventPerformer do
       end
     end
   end
+
+  describe "#course_membership_attrs" do
+    it "returns a hash with :user_id and :course_id taken from #data" do
+      subject.data[:user_id] = 20
+      subject.data[:course_id] = 30
+      expect(subject.course_membership_attrs)
+        .to eq({ user_id: 20, course_id: 30 })
+    end
+  end
+
+  describe "#messages" do
+    it "builds a success message including #data" do
+      expect(subject.messages[:success]).to eq \
+        "Successfully logged login event with data #{subject.data}"
+    end
+
+    it "builds a failure message including #data" do
+      expect(subject.messages[:failure]).to eq \
+        "Failed to log login event with data #{subject.data}"
+    end
+  end
 end
