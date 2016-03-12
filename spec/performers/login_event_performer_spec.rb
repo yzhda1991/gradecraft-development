@@ -211,4 +211,32 @@ describe LoginEventPerformer do
       end
     end
   end
+
+  describe "#find_course_membership" do
+    subject { described_class.new *skip_setup_attrs }
+
+    before(:each) do
+      allow(subject).to receive(:course_membership_attrs)
+        .and_return course_membership_attrs
+    end
+
+    context "not all necessary course membership attributes are present" do
+      let(:course_membership_attrs) { { user_id: nil, course_id: nil } }
+      it "returns nil" do
+        expect(subject.find_course_membership).to be_nil
+      end
+    end
+
+    context "all course membership attributes are present" do
+      let(:course_membership) { create(:course_membership) }
+      let(:course_membership_attrs) do
+        { user_id: course_membership.user_id,
+          course_id: course_membership.course_id }
+      end
+
+      it "finds the course membership by the correct attributes" do
+        expect(subject.find_course_membership).to eq course_membership
+      end
+    end
+  end
 end
