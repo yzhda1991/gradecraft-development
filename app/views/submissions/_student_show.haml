@@ -45,7 +45,7 @@
   .clear
   %p
     %span.smallcaps Submitted:
-    = presenter.group_submission_for(current_student).created_at
+    = presenter.group_submission_for(current_student).submitted_at
 
     // Late alert if submitted after due date
     - if presenter.group_submission_for(current_student).late?
