@@ -9,7 +9,7 @@ RSpec.describe ApplicationController do
 
   # let's run the tests on a subclass of ApplicationController that has mock
   # actions built out so that we can just test filters
-  describe ApplicationControllerEventLoggingTest do
+  describe ApplicationControllerTest do
     subject { get :html_page }
 
     let(:course) { build(:course) }
@@ -25,8 +25,7 @@ RSpec.describe ApplicationController do
 
     before do
       allow(user).to receive_messages(current_course: course)
-      # from Toolkits::Controllers::ApplicationControllerToolkit::Routes
-      define_event_logging_test_routes
+      define_test_routes # define dummy :html_page and :json_page routes
       allow(controller).to \
         receive_messages(current_user: user, event_session: event_session)
     end
@@ -74,7 +73,7 @@ RSpec.describe ApplicationController do
     end
 
     describe "#record_course_login_event" do
-      let(:result) { controller.instance_eval { record_course_login_event }}
+      let(:result) { controller.record_course_login_event }
       let(:logger_class) { LoginEventLogger }
 
       before do
@@ -102,17 +101,28 @@ RSpec.describe ApplicationController do
 
       context "a user is logged in and the request is for either html or xml" do
         let(:event_logger) { logger_class.new }
-        let(:enqueue_response) { double(:enqueue_response) }
+        let(:enqueue_response) { double(:enqueue_response).as_null_object }
 
-        before(:each) do
-          allow(event_logger).to receive_messages(enqueue: enqueue_response)
+        before do
           allow(logger_class).to receive_messages(new: event_logger)
+          allow(event_logger).to receive_messages(enqueue: enqueue_response)
         end
 
-        it "should create a new login event" do
-          expect(logger_class).to receive(:new).with(event_session)
-            .and_return event_logger
-          result
+        context "no login_course is expressly given" do
+          it "should creates a new login event with the event session data" do
+            expect(logger_class).to receive(:new).with(event_session)
+            result
+          end
+        end
+
+        context "a login_course is given" do
+          let(:login_course) { build(:course) }
+
+          it "should merge the login_course into the event_session as :course" do
+            event_attrs = event_session.merge course: login_course
+            expect(logger_class).to receive(:new).with event_attrs
+            controller.record_course_login_event login_course
+          end
         end
 
         it "should enqueue the new login event" do

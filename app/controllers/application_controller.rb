@@ -64,6 +64,25 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Tracking course logins
+  def record_course_login_event(login_course = nil)
+    return unless request.format.html? || request.format.xml?
+    return unless current_user || @user
+    event_attrs = event_session
+    event_attrs.merge!(course: login_course) if login_course
+    LoginEventLogger.new(event_attrs).enqueue_with_fallback
+  end
+
+  # Session data used for building attributes hashes in EventLogger classes
+  def event_session
+    {
+      course: current_course,
+      user: current_user,
+      student: current_student,
+      request: request
+    }
+  end
+
   protected
 
   # Core role authentication
@@ -120,22 +139,5 @@ class ApplicationController < ActionController::Base
   def increment_page_views
     return unless current_user && request.format.html?
     PageviewEventLogger.new(event_session).enqueue_in_with_fallback Lull.time_until_next_lull
-  end
-
-  # Tracking course logins
-  def record_course_login_event
-    return unless request.format.html? || request.format.xml?
-    return unless current_user || @user
-    LoginEventLogger.new(event_session).enqueue_with_fallback
-  end
-
-  # Session data used for building attributes hashes in EventLogger classes
-  def event_session
-    {
-      course: current_course,
-      user: current_user,
-      student: current_student,
-      request: request
-    }
   end
 end
