@@ -133,6 +133,22 @@ RSpec.describe ApplicationController do
       end
     end
 
+    describe "#event_session" do
+      let(:request) { double(:some_request) }
+      before do
+        allow(controller).to receive_messages(
+          current_course: course,
+          current_user: user,
+          current_student: student,
+          request: request
+        )
+      end
+
+      it "returns a hash with current course, user, student and request" do
+        expect(controller.event_session).to eq(event_session)
+      end
+    end
+
     after do
       # reload the proper routes to clear out custom /html_page
       # and /json_page routes
