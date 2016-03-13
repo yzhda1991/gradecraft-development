@@ -23,7 +23,7 @@ module EventLogger
     @queue = :event_logger
 
     def base_attrs
-      { event_type: event_type, created_at: Time.now }
+      { event_type: event_type, created_at: Time.now }.freeze
     end
 
     def event_type

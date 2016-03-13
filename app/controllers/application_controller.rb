@@ -119,7 +119,7 @@ class ApplicationController < ActionController::Base
   # Tracking page view counts
   def increment_page_views
     return unless current_user && request.format.html?
-    PageviewEventLogger.new(event_session).enqueue_in_with_fallback(Lull.time_until_next_lull)
+    PageviewEventLogger.new(event_session).enqueue_in_with_fallback Lull.time_until_next_lull
   end
 
   # Tracking course logins

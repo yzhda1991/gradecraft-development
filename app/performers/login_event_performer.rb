@@ -3,7 +3,9 @@ class LoginEventPerformer < ResqueJob::Performer
 
   # this is called on #initialize
   def setup
-    @data = attrs[:data].is_a?(Hash) ? attrs[:data] : {}
+    # it's important to symbolize the keys in #data coming in here because
+    # they'll be passed from the controller as strings
+    @data = attrs[:data].is_a?(Hash) ? attrs[:data].symbolize_keys : {}
     @course_membership = find_course_membership
     return unless course_membership # these methods require a course_membership
     cache_last_login_at
