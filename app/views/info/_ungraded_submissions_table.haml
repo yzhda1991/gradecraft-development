@@ -33,7 +33,7 @@
                 = link_to team.name, team
           - elsif assignment.has_groups?
             %td= link_to group.try(:name), group_path(group)
-          %td= submission.updated_at
+          %td= submission.submitted_at
           %td
             .right
               %ul.button-bar
