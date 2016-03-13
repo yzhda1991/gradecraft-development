@@ -81,10 +81,6 @@ class Submission < ActiveRecord::Base
     graded? && graded_at < submitted_at
   end
 
-  def resubmissions
-    @resubmissions ||= Resubmission.find_for_submission(self)
-  end
-
   # Getting the name of the student who submitted the work
   def name
     student.name
