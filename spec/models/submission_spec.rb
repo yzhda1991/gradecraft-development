@@ -350,19 +350,26 @@ describe Submission do
     end
   end
 
-  describe "#resubmitted?", versioning: true do
-    it "returns false if there are no resubmissions" do
+  describe "#resubmitted?", focus: true do
+    it "returns false if it has no grade" do
+      subject.save
       expect(subject).to_not be_resubmitted
     end
 
-    it "returns true if there are resubmissions" do
+    it "returns true if grade was graded before it was submitted" do
       subject.save
-      grade = create :grade, status: "Graded", submission: subject,
-        assignment: subject.assignment
-      subject.update_attributes link: "http://example.com"
-      grade.update_attributes raw_score: 1234
-
+      create :grade, status: "Graded", submission: subject,
+        assignment: subject.assignment, graded_at: DateTime.now
+      subject.update_attributes submitted_at: DateTime.now
       expect(subject).to be_resubmitted
+    end
+
+    it "returns false if the grade was graded after it was submitted" do
+      subject.submitted_at = DateTime.now
+      subject.save
+      create :grade, status: "Graded", submission: subject,
+        assignment: subject.assignment, graded_at: DateTime.now
+      expect(subject).to_not be_resubmitted
     end
   end
 

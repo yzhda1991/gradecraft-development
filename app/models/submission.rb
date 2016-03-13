@@ -78,7 +78,7 @@ class Submission < ActiveRecord::Base
   end
 
   def resubmitted?
-    !resubmissions.empty?
+    graded? && graded_at < submitted_at
   end
 
   def resubmissions
