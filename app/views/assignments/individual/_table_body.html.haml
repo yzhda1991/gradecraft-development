@@ -49,6 +49,11 @@
       %td
         - unless submissions_for_assignment.empty?
           = presenter.submission_submitted_date_for(submissions_for_assignment)
+      %td
+        - unless submissions_for_assignment.empty?
+          - if presenter.submission_resubmitted?(submissions_for_assignment)
+            %a
+              %i.fa.fa-check
     %td
       .right
         %ul.button-bar

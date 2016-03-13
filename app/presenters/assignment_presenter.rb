@@ -90,6 +90,11 @@ class AssignmentPresenter < Showtime::Presenter
     submission.submitted_at if submission
   end
 
+  def submission_resubmitted?(submissions)
+    submission = submissions.first
+    submission.nil? ? false : submission.resubmitted?
+  end
+
   def criteria
     rubric.criteria.ordered.includes(levels: :level_badges)
   end
