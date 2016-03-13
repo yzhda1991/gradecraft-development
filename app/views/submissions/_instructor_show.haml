@@ -9,7 +9,7 @@
       %span.label.alert Late!
 
     - if presenter.student.submission_for_assignment(presenter.assignment).resubmitted?
-      %span.label.alert Resubmission!
+      %span.label.alert Resubmitted!
 
   // Displaying the link to the submission if there is one
   - if presenter.student.submission_for_assignment(presenter.assignment).link?
@@ -42,7 +42,7 @@
       %span.label.alert Late!
 
     - if presenter.student.submission_for_assignment(presenter.assignment).resubmitted?
-      %span.label.alert Resubmission!
+      %span.label.alert Resubmitted!
 
   // Displaying the link to the submission if there is one
   - if presenter.group.submission_for_assignment(presenter.assignment).link?
