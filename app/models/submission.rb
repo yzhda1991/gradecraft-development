@@ -73,10 +73,12 @@ class Submission < ActiveRecord::Base
     !grade || grade.status == nil
   end
 
-  def will_be_resubmission?
+  def will_be_resubmitted?
     graded?
   end
 
+  # this is transitive so that once it is graded again, then
+  # it will no longer be resubmitted
   def resubmitted?
     graded? && graded_at < submitted_at
   end
