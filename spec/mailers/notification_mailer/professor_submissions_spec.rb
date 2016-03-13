@@ -62,7 +62,7 @@ describe NotificationMailer do
     end
 
     describe "text email body" do
-      subject { email.body }
+      subject { text_part.body }
       it_behaves_like "a submission email to a professor"
     end
   end
@@ -85,7 +85,7 @@ describe NotificationMailer do
     end
 
     describe "text email body" do
-      subject { email.body }
+      subject { text_part.body }
       it_behaves_like "a submission email to a professor"
     end
   end

@@ -51,5 +51,35 @@ describe ExportsMailer do
         expect(subject.filename).to eq("gradebook_export_#{course.id}.csv")
       end
     end
+
+    describe "text part body" do
+      subject { email.text_part.body }
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "doesn't include a template" do
+        should_not include "Regents of The University of Michigan"
+      end
+    end
+
+    describe "html part body" do
+      subject { email.html_part.body }
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "does include a template" do
+        should include "Regents of The University of Michigan"
+      end
+    end
   end
 end

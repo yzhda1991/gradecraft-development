@@ -23,7 +23,7 @@ describe UserMailer do
     end
 
     it "has the password reset link" do
-      expect(email.body).to include edit_password_url("blah")
+      expect(text_part.body).to include edit_password_url("blah")
     end
   end
 
@@ -48,7 +48,7 @@ describe UserMailer do
     end
 
     it "has the activation link" do
-      expect(email.body).to include activate_user_url("blah")
+      expect(text_part.body).to include activate_user_url("blah")
     end
   end
 
@@ -72,7 +72,7 @@ describe UserMailer do
     end
 
     it "has a link to the dashboard" do
-      expect(email.body).to include dashboard_url
+      expect(text_part.body).to include dashboard_url
     end
   end
 end
