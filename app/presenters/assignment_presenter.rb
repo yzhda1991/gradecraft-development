@@ -85,12 +85,7 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.is_individual?
   end
 
-  def submission_created_date_for(submissions)
-    submission = submissions.first
-    submission.created_at if submission
-  end
-
-  def submission_updated_date_for(submissions)
+  def submission_submitted_date_for(submissions)
     submission = submissions.first
     submission.submitted_at if submission
   end
@@ -156,10 +151,6 @@ class AssignmentPresenter < Showtime::Presenter
 
   def students_being_graded
     for_team? ? course.students_being_graded_by_team(team) : course.students_being_graded
-  end
-
-  def submission_date_for(student)
-    submission_updated_date_for(submissions_for(student))
   end
 
   def submission_for_assignment(student)

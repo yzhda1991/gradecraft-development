@@ -48,9 +48,7 @@
       - submissions_for_assignment = presenter.submissions_for(student)
       %td
         - unless submissions_for_assignment.empty?
-          = "Created: #{presenter.submission_created_date_for(submissions_for_assignment)}"
-          - unless presenter.submission_updated_date_for(submissions_for_assignment).nil?
-            = "Last Updated: #{presenter.submission_updated_date_for(submissions_for_assignment)}"
+          = presenter.submission_submitted_date_for(submissions_for_assignment)
     %td
       .right
         %ul.button-bar
