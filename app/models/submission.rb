@@ -80,7 +80,7 @@ class Submission < ActiveRecord::Base
   # this is transitive so that once it is graded again, then
   # it will no longer be resubmitted
   def resubmitted?
-    graded? && graded_at < submitted_at
+    graded? && !graded_at.nil? && !submitted_at.nil? && graded_at < submitted_at
   end
 
   # Getting the name of the student who submitted the work

@@ -371,6 +371,13 @@ describe Submission do
         assignment: subject.assignment, graded_at: DateTime.now
       expect(subject).to_not be_resubmitted
     end
+
+    it "returns false if it was not graded" do
+      subject.save
+      create :grade, status: "Graded", submission: subject,
+        assignment: subject.assignment
+      expect(subject).to_not be_resubmitted
+    end
   end
 
   describe "#name" do
