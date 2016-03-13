@@ -75,20 +75,23 @@ describe EventLogger::Enqueue, type: :vendor_library do
 
           context "Resque reaches Redis correctly and no error is thrown" do
             it "doesn't call TestEventLogger#perform directly" do
-              expect(described_class).not_to receive(:perform).with("test", event_attrs)
+              expect(subject).not_to receive(:fallback)
               result
             end
           end
 
-          context "Resque can't reach Redis and throws an error" do
-            before do
-              allow(subject).to receive(:enqueue_in)
-                .and_raise("FAKE RSPEC ERROR: Could not connect to Redis: " \
-                  "getaddrinfo socket error.")
+          context "any exception is thrown" do
+            it "doesn't fallback" do
+              allow(subject).to receive(:enqueue_in).and_raise "FAKE ERROR"
+              expect(subject).not_to receive(:fallback)
+              expect { result }.to raise_error "FAKE ERROR"
             end
+          end
 
-            it "calls #{described_class}#perform directly" do
-              expect(described_class).to receive(:perform).with("test", event_attrs)
+          context "a Redis::BaseError is thrown" do
+            it "falls back" do
+              allow(subject).to receive(:enqueue_in).and_raise Redis::BaseError
+              expect(subject).to receive(:fallback)
               result
             end
           end
@@ -110,21 +113,32 @@ describe EventLogger::Enqueue, type: :vendor_library do
             end
 
             it "doesn't call TestEventLogger.perform directly" do
-              expect(described_class).not_to receive(:perform).with("test", event_attrs)
+              expect(subject).not_to receive(:fallback)
               result
             end
           end
 
-          context "Resque can't reach Redis and throws an error" do
-            before do
-              allow(subject).to receive(:enqueue).and_raise("FAKE RSPEC ERROR:" \
-                "Could not connect to Redis: getaddrinfo socket error.")
+          context "any exception is thrown" do
+            it "doesn't fallback" do
+              allow(subject).to receive(:enqueue).and_raise "FAKE ERROR"
+              expect(subject).not_to receive(:fallback)
+              expect { result }.to raise_error "FAKE ERROR"
             end
+          end
 
-            it "calls TestEventLogger#perform directly" do
-              expect(described_class).to receive(:perform).with("test", event_attrs)
+          context "a Redis::BaseError is thrown" do
+            it "falls back" do
+              allow(subject).to receive(:enqueue).and_raise Redis::BaseError
+              expect(subject).to receive(:fallback)
               result
             end
+          end
+        end
+
+        describe "#fallback" do
+          it "calls perform on the included class with the event_attrs" do
+            expect(described_class).to receive(:perform).with("test", event_attrs)
+            subject.fallback
           end
         end
       end

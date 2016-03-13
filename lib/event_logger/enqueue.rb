@@ -36,7 +36,7 @@ module EventLogger
       # schedule the event in the background if Resque is available
       enqueue
     rescue Redis::BaseError
-      # otherwise insert directly into Mongo
+      # otherwise perform the job directly
       fallback
     end
 
@@ -44,7 +44,7 @@ module EventLogger
       # schedule the event for later if Resque is available
       enqueue_in(time_until_start)
     rescue Redis::BaseError
-      # otherwise insert directly into Mongo
+      # otherwise perform the job directly
       fallback
     end
 

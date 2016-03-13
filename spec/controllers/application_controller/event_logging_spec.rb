@@ -91,9 +91,10 @@ RSpec.describe ApplicationController do
         end
       end
 
-      context "no user is logged in" do
+      context "neither a current_user nor a @user ivar is present" do
         it "should not build a LoginEventLogger" do
           allow(controller).to receive_messages(current_user: nil)
+          controller.instance_variable_set(:@user, nil) # set a nil @user
           expect(logger_class).not_to receive(:new).with event_session
           result
         end
