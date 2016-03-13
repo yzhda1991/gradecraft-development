@@ -61,11 +61,6 @@ class AssignmentPresenter < Showtime::Presenter
     group_for(student).submission_for_assignment(assignment)
   end
 
-  def group_submission_updated?(student)
-    submission = group_submission_for(student)
-    submission.updated_at != submission.created_at
-  end
-
   def has_grades?
     grades.present?
   end
@@ -177,11 +172,6 @@ class AssignmentPresenter < Showtime::Presenter
 
   def submission_rate
     assignment.submission_rate(course)
-  end
-
-  def submission_updated?(student)
-    submission = submission_for_assignment(student)
-    submission.updated_at != submission.created_at
   end
 
   def submission_grade_history(student)
