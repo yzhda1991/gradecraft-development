@@ -73,6 +73,8 @@ class Submission < ActiveRecord::Base
     !grade || grade.status == nil
   end
 
+  # Used to report to the user that a change will be a resubmission because this
+  # submission is already graded.
   def will_be_resubmitted?
     graded?
   end
