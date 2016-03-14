@@ -80,6 +80,12 @@ RSpec.describe ApplicationController do
         create :professor_course_membership, course: course, user: user
       end
 
+      it "merges the event_options into the event_session" do
+        some_course = build(:course)
+        expect(event_session).to receive(:merge).with({ course: some_course })
+        controller.record_course_login_event course: some_course
+      end
+
       context "the request is not html or xml" do
         let(:format) {{ html?: false, xml?: false, json?: true }}
 
@@ -90,16 +96,25 @@ RSpec.describe ApplicationController do
         end
       end
 
-      context "neither a current_user nor a @user ivar is present" do
-        it "should not build a LoginEventLogger" do
-          allow(controller).to receive_messages(current_user: nil)
-          controller.instance_variable_set(:@user, nil) # set a nil @user
-          expect(logger_class).not_to receive(:new).with event_session
-          result
+      context "the request has insufficient event_attrs" do
+        before(:each) do
+          expect(logger_class).not_to receive :new
+        end
+
+        context "event_attrs does not have a :user" do
+          it "should not build a LoginEventLogger" do
+            controller.record_course_login_event user: nil
+          end
+        end
+
+        context "event_attrs does not have a :course" do
+          it "should not build a LoginEventLogger" do
+            controller.record_course_login_event course: nil
+          end
         end
       end
 
-      context "a user is logged in and the request is for either html or xml" do
+      context "required event_attrs are present and request has a valid format" do
         let(:event_logger) { logger_class.new }
         let(:enqueue_response) { double(:enqueue_response).as_null_object }
 
@@ -112,16 +127,6 @@ RSpec.describe ApplicationController do
           it "should creates a new login event with the event session data" do
             expect(logger_class).to receive(:new).with(event_session)
             result
-          end
-        end
-
-        context "a login_course is given" do
-          let(:login_course) { build(:course) }
-
-          it "should merge the login_course into the event_session as :course" do
-            event_attrs = event_session.merge course: login_course
-            expect(logger_class).to receive(:new).with event_attrs
-            controller.record_course_login_event login_course
           end
         end
 

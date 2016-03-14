@@ -23,8 +23,8 @@ describe ResqueJob::Outcome,  type: :vendor_library do
     end
 
     it "should have accessible options" do
-      subject.options = { great: "options" }
-      expect(subject.options).to eq({ great: "options" })
+      subject.options = "these are options"
+      expect(subject.options).to eq "these are options"
     end
   end
 

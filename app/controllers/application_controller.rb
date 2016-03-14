@@ -65,11 +65,10 @@ class ApplicationController < ActionController::Base
   end
 
   # Tracking course logins
-  def record_course_login_event(login_course = nil)
+  def record_course_login_event(event_options = {})
     return unless request.format.html? || request.format.xml?
-    return unless current_user || @user
-    event_attrs = event_session
-    event_attrs.merge!(course: login_course) if login_course
+    event_attrs = event_session.merge event_options
+    return unless [:course, :user].all? { |attr| event_attrs[attr].present? }
     LoginEventLogger.new(event_attrs).enqueue_with_fallback
   end
 
