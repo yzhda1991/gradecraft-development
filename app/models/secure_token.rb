@@ -54,10 +54,6 @@ class SecureToken < ActiveRecord::Base
     SCrypt::Password.new(encrypted_key) == secret_key
   end
 
-  def has_target_of_class?(required_class)
-    target && target.class.to_s == required_class.to_s
-  end
-
   def expired?
     expires_at <= Time.now
   end
@@ -71,16 +67,16 @@ class SecureToken < ActiveRecord::Base
 
   # let's expire the token in a week
   def set_expires_at
-    self[:expires_at] = Time.now + 7.days
+    self.expires_at = Time.now + 7.days
   end
 
   def cache_encrypted_key
-    self[:encrypted_key] = SCrypt::Password
+    self.encrypted_key = SCrypt::Password
       .create(random_secret_key, scrypt_options)
   end
 
   def cache_uuid
-    self[:uuid] = SecureRandom.uuid
+    self.uuid = SecureRandom.uuid
   end
 
   def scrypt_options

@@ -6,7 +6,6 @@ class SubmissionFile < ActiveRecord::Base
     :last_confirmed_at
 
   belongs_to :submission
-  has_many :secure_tokens, as: :tokenable
 
   mount_uploader :file, AttachmentUploader
   process_in_background :file
