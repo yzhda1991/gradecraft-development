@@ -80,12 +80,6 @@ RSpec.describe ApplicationController do
         create :professor_course_membership, course: course, user: user
       end
 
-      it "merges the event_options into the event_session" do
-        some_course = build(:course)
-        expect(event_session).to receive(:merge).with({ course: some_course })
-        controller.record_course_login_event course: some_course
-      end
-
       context "the request is not html or xml" do
         let(:format) {{ html?: false, xml?: false, json?: true }}
 
@@ -127,6 +121,14 @@ RSpec.describe ApplicationController do
           it "should creates a new login event with the event session data" do
             expect(logger_class).to receive(:new).with(event_session)
             result
+          end
+        end
+
+        context "custom event_options are given" do
+          it "merges the event_options into the event_session" do
+            expect(logger_class).to receive(:new)
+              .with event_session.merge(mock_attr: "some-value")
+            controller.record_course_login_event mock_attr: "some-value"
           end
         end
 
