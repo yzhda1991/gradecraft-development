@@ -3,7 +3,7 @@ module SecureTokenHelper
     # we've enforced presence of SecureToken[:target_type] so this shouldn't be
     # able to be a nil value. Let's presume that this will work rather than
     # assume that it might not.
-    target_type = secure_token.target_type.underscore
+    target_type = secure_token.target_type.demodulize.underscore
 
     # we're basically just going to call the appropriate url helper method for
     # the custom routes using the uuid and the secret key, but by inferring the
