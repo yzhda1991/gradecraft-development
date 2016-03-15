@@ -26,7 +26,7 @@ RSpec.describe ResqueJob::Performer, type: :vendor_library do
 
     describe "logger" do
       let(:performer_with_logger) { ResqueJob::Performer.new(attrs, logger) }
-      let(:logger) { Logger.new(STDOUT) }
+      let(:logger) { Logger.new Tempfile.new("logger") }
 
       context "a logger is passed in on instantiation" do
         subject { performer_with_logger }

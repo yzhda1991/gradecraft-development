@@ -4,109 +4,162 @@ require "resque_spec/scheduler"
 
 # define routes for mapping #html_page and #json_page to the test controller
 include Toolkits::Controllers::ApplicationControllerToolkit::Routes
-include Toolkits::Controllers::ApplicationControllerToolkit::SharedExamples
 
-RSpec.describe ApplicationControllerEventLoggingTest do
-  extend Toolkits::EventLoggers::EventSession
+RSpec.describe ApplicationController do
 
-  # pulls in #event_session attributes from EventLoggers::EventSession
-  # creates course, user, student objects, uses native controller request variable
-  define_event_session
-
-  before do
-    allow(user).to receive_messages(current_course: course)
-    define_event_logging_test_routes # pulled in from Toolkits::Controllers::ApplicationControllerToolkit::Routes
-    allow(controller).to receive_messages(current_user: user, event_session: event_session)
-  end
-
-  describe "triggering pageview logger events" do
+  # let's run the tests on a subclass of ApplicationController that has mock
+  # actions built out so that we can just test filters
+  describe ApplicationControllerTest do
     subject { get :html_page }
 
-    let(:logger_class) { PageviewEventLogger }
+    let(:course) { build(:course) }
+    let(:user) { build(:user) }
+    let(:student) { build(:user) }
 
-    it_behaves_like "no EventLogger is built unless a user is logged in", PageviewEventLogger
-
-    # if current_user
-    context "no user is logged in" do
-      it "should not call #{described_class}" do
-        allow(controller).to receive_messages(current_user: nil)
-        expect(logger_class).not_to receive(:new).with event_session
-        subject
-      end
-    end
-
-    context "a user is logged in and the request is for html" do
-      let(:event_logger) { logger_class.new }
-      let(:enqueue_response) { double(:enqueue_response) }
-
-      before(:each) do
-        allow(Lull).to receive_messages(time_until_next_lull: 2.hours)
-        allow(event_logger).to receive_messages(enqueue_in: enqueue_response)
-        allow(logger_class).to receive_messages(new: event_logger)
-      end
-
-      it "should create a new PageviewEventLogger" do
-        expect(logger_class).to receive(:new).with(event_session) { event_logger }
-      end
-
-      it "should enqueue the new pageview event in 2 hours" do
-        expect(event_logger).to receive(:enqueue_in_with_fallback).with(2.hours) { enqueue_response }
-      end
-
-      after(:each) { subject }
-    end
-
-    context "the request is not html" do
-      it "should not call #{described_class}" do
-        expect(PageviewEventLogger).not_to receive(:new).with event_session
-        get :json_page, format: "json"
-      end
-    end
-  end
-
-  describe "#record_course_login_event" do
-    subject { controller.instance_eval { record_course_login_event }}
-
-    let(:logger_class) { LoginEventLogger }
+    let(:event_session) {{
+      course: course,
+      user: user,
+      student: student,
+      request: request
+    }}
 
     before do
-      create :professor_course_membership, course: course, user: user
+      allow(user).to receive_messages(current_course: course)
+      define_test_routes # define dummy :html_page and :json_page routes
+      allow(controller).to \
+        receive_messages(current_user: user, event_session: event_session)
     end
 
-    it_behaves_like "no EventLogger is built unless a user is logged in", LoginEventLogger
-    context "a user is logged in and the request is for either html or xml" do
-      let(:event_logger) { logger_class.new }
-      let(:enqueue_response) { double(:enqueue_response) }
+    describe "triggering pageview logger events" do
+      let(:logger_class) { PageviewEventLogger }
 
-      before(:each) do
-        allow(event_logger).to receive_messages(enqueue: enqueue_response)
-        allow(logger_class).to receive_messages(new: event_logger)
+      context "no user is logged in" do
+        it "should not call PageviewEventLogger" do
+          allow(controller).to receive_messages(current_user: nil)
+          expect(logger_class).not_to receive(:new).with event_session
+          subject
+        end
       end
 
-      it "should create a new login event" do
-        expect(logger_class).to receive(:new).with(event_session) { event_logger }
+      context "a user is logged in and the request is for html" do
+        let(:event_logger) { logger_class.new }
+        let(:enqueue_response) { double(:enqueue_response) }
+
+        before(:each) do
+          allow(Lull).to receive_messages(time_until_next_lull: 2.hours)
+          allow(event_logger).to receive_messages(enqueue_in: enqueue_response)
+          allow(logger_class).to receive_messages(new: event_logger)
+        end
+
+        it "should create a new PageviewEventLogger" do
+          expect(logger_class).to receive(:new).with(event_session)
+            .and_return event_logger
+          subject
+        end
+
+        it "should enqueue the new pageview event in 2 hours" do
+          expect(event_logger).to receive(:enqueue_in_with_fallback)
+            .with(2.hours) { enqueue_response }
+          subject
+        end
       end
 
-      it "should enqueue the new login event" do
-        expect(event_logger).to receive(:enqueue_with_fallback) { enqueue_response }
+      context "the request is not html" do
+        it "should not call #{described_class}" do
+          expect(PageviewEventLogger).not_to receive(:new).with event_session
+          get :json_page, format: "json"
+        end
       end
-
-      after(:each) { subject }
     end
 
-    context "the request is not html or xml" do
-      let(:format) {{ html?: false, xml?: false, json?: true }}
+    describe "#record_course_login_event" do
+      let(:result) { controller.record_course_login_event }
+      let(:logger_class) { LoginEventLogger }
 
-      it "should not call #{described_class}" do
-        allow(controller.request.format).to receive_messages(format)
-        expect(PageviewEventLogger).not_to receive(:new).with event_session
-        subject
+      before do
+        create :professor_course_membership, course: course, user: user
+      end
+
+      context "the request is not html or xml" do
+        let(:format) {{ html?: false, xml?: false, json?: true }}
+
+        it "should not build a LoginEventLogger" do
+          allow(controller.request.format).to receive_messages(format)
+          expect(logger_class).not_to receive(:new).with event_session
+          result
+        end
+      end
+
+      context "the request has insufficient event_attrs" do
+        before(:each) do
+          expect(logger_class).not_to receive :new
+        end
+
+        context "event_attrs does not have a :user" do
+          it "should not build a LoginEventLogger" do
+            controller.record_course_login_event user: nil
+          end
+        end
+
+        context "event_attrs does not have a :course" do
+          it "should not build a LoginEventLogger" do
+            controller.record_course_login_event course: nil
+          end
+        end
+      end
+
+      context "required event_attrs are present and request has a valid format" do
+        let(:event_logger) { logger_class.new }
+        let(:enqueue_response) { double(:enqueue_response).as_null_object }
+
+        before do
+          allow(logger_class).to receive_messages(new: event_logger)
+          allow(event_logger).to receive_messages(enqueue: enqueue_response)
+        end
+
+        context "no login_course is expressly given" do
+          it "should creates a new login event with the event session data" do
+            expect(logger_class).to receive(:new).with(event_session)
+            result
+          end
+        end
+
+        context "custom event_options are given" do
+          it "merges the event_options into the event_session" do
+            expect(logger_class).to receive(:new)
+              .with event_session.merge(mock_attr: "some-value")
+            controller.record_course_login_event mock_attr: "some-value"
+          end
+        end
+
+        it "should enqueue the new login event" do
+          expect(event_logger).to receive(:enqueue_with_fallback)
+            .and_return enqueue_response
+          result
+        end
       end
     end
-  end
 
-  after do
-    # reload the proper routes to clear out custom /html_page and /json_page routes
-    Rails.application.reload_routes!
+    describe "#event_session" do
+      let(:request) { double(:some_request) }
+      before do
+        allow(controller).to receive_messages(
+          current_course: course,
+          current_user: user,
+          current_student: student,
+          request: request
+        )
+      end
+
+      it "returns a hash with current course, user, student and request" do
+        expect(controller.event_session).to eq(event_session)
+      end
+    end
+
+    after do
+      # reload the proper routes to clear out custom /html_page
+      # and /json_page routes
+      Rails.application.reload_routes!
+    end
   end
 end

@@ -15,75 +15,63 @@ module EventLogger
     extend Resque::Plugins::ExponentialBackoff
     extend LogglyResque # pulls in logger class method for logging to Loggly
 
-    # pass designated ivars from #inheritable_ivars
-    # down to descendent subclasses
+    # pass designated ivars from #inheritable_ivars down to subclasses
     extend InheritableIvars
-
-    # class-level instance variables for Resque interaction
 
     # this is the Resque queue in which jobs created from this class will
     # be enqueued to
     @queue = :event_logger
 
-    # what to call the event when we're logging about it
-    @event_name = "Event"
+    def base_attrs
+      { event_type: event_type, created_at: Time.now }.freeze
+    end
 
-    # name of the target analytics class to use for logging the attrs
-    # that are generated through the perform block
-    @analytics_class = Analytics::Event
-
-    @start_message = "Starting #{@queue.to_s.camelize}"
-    @success_message = "#{@event_name} analytics record was" \
-      "successfully created."
-    @failure_message = "#{@event_name} analytics record failed to create."
-
-    # instance methods
     def event_type
-      "event"
+      self.class.to_s.underscore
     end
 
-    # perform block that is ultimately called by Resque
-    def self.perform(event_type, data = {})
-      logger.info @start_message
-      event = @analytics_class.create analytics_attrs(event_type, data)
-      outcome = notify_event_outcome(event, data)
-      logger.info outcome
-    end
+    class << self
+      attr_reader :queue
 
-    # override the backoff strategy from Resque::ExponentialBackoff
-    def self.backoff_strategy
-      @backoff_strategy ||= EventLogger.configuration.backoff_strategy
-    end
-
-    def self.notify_event_outcome(event, data)
-      if event.valid?
-        success_message_with_data(data)
-      else
-        failure_message_with_data(data)
+      def event_name
+        queue.to_s.camelize
       end
-    end
 
-    def self.success_message_with_data(data)
-      "#{@success_message} with data #{data}"
-    end
+      # perform block that is ultimately called by Resque
+      def perform(event_type, data = {})
+        logger.info "Starting #{event_name} with data #{data}"
+        event = analytics_class.create data.merge(event_type: event_type)
+        logger.info event_outcome_message(event, data)
+      end
 
-    def self.failure_message_with_data(data)
-      "#{@failure_message} with data #{data}"
-    end
+      # override the backoff strategy from Resque::ExponentialBackoff
+      def backoff_strategy
+        @backoff_strategy ||= EventLogger.configuration.backoff_strategy
+      end
 
-    def self.analytics_attrs(event_type, data = {})
-      { event_type: event_type, created_at: Time.zone.now }.merge data
-    end
+      def event_outcome_message(event, data)
+        message = event.valid? ? success_message : failure_message
+        "#{message} with data #{data}"
+      end
 
-    def self.inheritable_ivars
-      [
-        :queue,
-        :event_name,
-        :analytics_class,
-        :start_message,
-        :success_message,
-        :failure_message
-      ]
+      def analytics_class
+        # name of the target analytics class to use for logging the attrs
+        # that are generated through the perform block
+        #
+        Analytics::Event
+      end
+
+      def success_message
+        "#{event_name} analytics record was successfully created"
+      end
+
+      def failure_message
+        "#{event_name} analytics record failed to create"
+      end
+
+      def inheritable_ivars
+        [ :queue ].freeze
+      end
     end
   end
 end

@@ -3,11 +3,17 @@ require "resque-scheduler"
 require "resque_spec/scheduler"
 
 describe AnalyticsEventsController, type: :controller do
-  extend Toolkits::EventLoggers::EventSession
 
-  # pulls in #event_session attributes from EventLoggers::EventSession
-  # creates course, user, student objects, uses native controller request variable
-  define_event_session
+  let(:course) { build(:course) }
+  let(:user) { build(:user) }
+  let(:student) { build(:user) }
+
+  let(:event_session) {{
+    course: course,
+    user: user,
+    student: student,
+    request: request
+  }}
 
   let(:event_session_with_params) { event_session.merge(params) }
   let(:params) {{ assignment: "40", score: "50", possible: "60" }}

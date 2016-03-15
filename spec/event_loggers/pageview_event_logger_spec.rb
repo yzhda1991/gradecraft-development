@@ -1,44 +1,47 @@
 require "active_record_spec_helper"
-require "resque_spec/scheduler"
 
-require_relative "../toolkits/event_loggers/shared_examples"
-require_relative "../toolkits/event_loggers/attributes"
-require_relative "../toolkits/event_loggers/event_session"
-require_relative "../toolkits/event_loggers/application_event_logger_toolkit"
-
-# PageviewEventLogger.new(attrs).enqueue_in(ResqueManager.time_until_next_lull)
 RSpec.describe PageviewEventLogger, type: :event_logger do
-  include InQueueHelper # get help from ResqueSpec
-  include Toolkits::EventLoggers::SharedExamples
-  include Toolkits::EventLoggers::Attributes
-  include Toolkits::EventLoggers::ApplicationEventLoggerToolkit
-  extend Toolkits::EventLoggers::EventSession
+  subject { described_class.new(request: request) }
+  let(:request) { double(:request).as_null_object }
 
-  # pulls in #event_session attributes from EventLoggers::EventSession
-  # creates course, user, student objects, and a request double
-  define_event_session_with_request
+  before do
+    allow(Time).to receive(:now) { Date.parse("Oct 20 1999").to_time }
+  end
 
-  let(:new_logger) { PageviewEventLogger.new(event_session) }
-  let(:expected_base_attrs) { application_logger_base_attrs } # pulled in from Toolkits::EventLoggers::ApplicationEventLoggerToolkit
+  it "has a queue" do
+    expect(described_class.queue).to eq :pageview_event_logger
+  end
 
-  # shared examples for EventLogger subclasses
-  it_behaves_like "an EventLogger subclass", PageviewEventLogger, "pageview"
-  it_behaves_like "EventLogger::Enqueue is included", PageviewEventLogger, "pageview"
+  it "has an accessible :page attribute" do
+    subject.page = "waffles"
+    expect(subject.page).to eq "waffles"
+  end
+
+  it "includes EventLogger::Enqueue" do
+    expect(subject).to respond_to(:enqueue_in_with_fallback)
+  end
+
+  it "has an #event_type" do
+    expect(subject.event_type).to eq "pageview"
+  end
+
+  it "inherits from the ApplicationEventLogger" do
+    expect(described_class.superclass).to eq ApplicationEventLogger
+  end
 
   describe "#event_attrs" do
-    subject { new_logger.event_attrs }
-
-    before { allow(new_logger).to receive(:page) { "some great page" } }
-
-    it "merges the page from the original request with the base_attrs" do
-      expect(subject).to eq new_logger.base_attrs.merge(page: "some great page")
+    before do
+      allow(subject).to receive(:page) { "some great page" }
     end
 
-    it_behaves_like "#event_attrs that are cached in @event_attrs"
+    it "merges the page from the original request with the application_attrs" do
+      expect(subject.event_attrs).to eq \
+        subject.application_attrs.merge(page: "some great page")
+    end
   end
 
   describe "#page" do
-    subject { new_logger.page }
+    let(:result) { subject.page }
     let(:request_path) { "/path/to/chaos" }
 
     before do
@@ -46,42 +49,43 @@ RSpec.describe PageviewEventLogger, type: :event_logger do
     end
 
     it "gets the original fullpath from the request" do
-      expect(subject).to eq request_path
+      expect(result).to eq request_path
     end
 
     it "caches the #page" do
-      subject
+      result
       expect(request).not_to receive(:try).with(:original_fullpath)
-      subject
+      result
     end
 
     it "sets the page to @page" do
-      subject
-      expect(new_logger.instance_variable_get(:@page)).to eq(request_path)
+      result
+      expect(subject.instance_variable_get(:@page)).to eq(request_path)
     end
   end
 
   describe "#build_page_from_params" do
-    subject { new_logger.build_page_from_params }
-    before(:each) { allow(new_logger).to receive(:params) { params }}
+    let(:result) { subject.build_page_from_params }
+    before(:each) { allow(subject).to receive(:params) { params } }
 
     context "params exists" do
-      context "params[:url] and params[:tab] don't exists" do
-        let(:params) {{ stuff: "dude" }}
+      context "neither params[:url] nor params[:tab] exist" do
+        let(:params) { { stuff: "dude" } }
         it "returns nil" do
-          expect(subject).to be_nil
+          expect(result).to be_nil
         end
       end
 
       context "params[:url] and params[:tab] both exist" do
-        let(:params) {{ url: "http://some.url", tab: "#greatness" }}
+        let(:params) { { url: "http://some.url", tab: "#greatness" } }
+
         it "builds a string from the params :url and :tab values" do
-          expect(subject).to eq("http://some.url#greatness")
+          expect(result).to eq "http://some.url#greatness"
         end
 
         it "sets @page to the string built from \#{url}\#{tab}" do
-          subject
-          expect(new_logger.instance_variable_get(:@page)).to eq("http://some.url#greatness")
+          result
+          expect(subject.page).to eq "http://some.url#greatness"
         end
       end
     end
@@ -89,7 +93,7 @@ RSpec.describe PageviewEventLogger, type: :event_logger do
     context "params does not exist" do
       let(:params) { nil }
       it "returns nil" do
-        expect(subject).to be_nil
+        expect(result).to be_nil
       end
     end
   end

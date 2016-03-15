@@ -535,6 +535,22 @@ ActiveRecord::Schema.define(version: 20160312161642) do
     t.datetime "updated_at"
   end
 
+  create_table "secure_tokens", force: :cascade do |t|
+    t.string   "uuid"
+    t.text     "encrypted_key"
+    t.integer  "user_id"
+    t.integer  "course_id"
+    t.integer  "target_id"
+    t.string   "target_type"
+    t.datetime "expires_at"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "secure_tokens", ["course_id"], name: "index_secure_tokens_on_course_id", using: :btree
+  add_index "secure_tokens", ["target_type", "target_id"], name: "index_secure_tokens_on_target_type_and_target_id", using: :btree
+  add_index "secure_tokens", ["user_id"], name: "index_secure_tokens_on_user_id", using: :btree
+
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", limit: 255, null: false
     t.text     "data"

@@ -35,33 +35,21 @@ module EventLogger
     def enqueue_with_fallback
       # schedule the event in the background if Resque is available
       enqueue
-    rescue
-      # otherwise insert directly into Mongo
-      self.class.perform(event_type, event_attrs)
+    rescue Redis::BaseError
+      # otherwise perform the job directly
+      fallback
     end
 
     def enqueue_in_with_fallback(time_until_start)
       # schedule the event for later if Resque is available
       enqueue_in(time_until_start)
-    rescue
-      # otherwise insert directly into Mongo
+    rescue Redis::BaseError
+      # otherwise perform the job directly
+      fallback
+    end
+
+    def fallback
       self.class.perform(event_type, event_attrs)
-    end
-
-    # this is the default attribute set for EventLogger classes
-    # should be extended in #event_attrs inside of child classes for better
-    # granularity when more specific attributes are needed.
-    #
-    # Ideally this will be reorganized data from #event_session into a hash
-    # that's persistable in Mongo or whatever the back-end event store is
-    def base_attrs
-      @base_attrs ||= { created_at: Time.zone.now }
-    end
-
-    # this is set in the event that the base attributes are all that's
-    # needed by the target class
-    def event_attrs
-      base_attrs
     end
   end
 end

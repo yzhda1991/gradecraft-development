@@ -6,7 +6,7 @@ class CurrentCoursesController < ApplicationController
     if course = current_user.courses.where(id: params[:course_id]).first
       unless session[:course_id] == course.id
         session[:course_id] = CourseRouter.change!(current_user, course).id
-        record_course_login_event
+        record_course_login_event course: course
       end
     end
     redirect_to root_url

@@ -1,72 +1,74 @@
-require "rails_spec_helper"
+require_relative "../../../lib/resque_job/outcome"
 
 describe ResqueJob::Outcome,  type: :vendor_library do
+  subject { described_class.new result }
+  # note that this is the result of the outcome block, not the conventional
+  # #result method that we've established in other specs
+  let(:result) { "some outcome" }
+
   describe "initialize" do
     it "should set the result" do
-      outcome = ResqueJob::Outcome.new true
-      expect(outcome.instance_variable_get(:@result)).to eq(true)
+      expect(subject.result).to eq result
+    end
+
+    it "should have a nil messages value by default" do
+      expect(subject.message).to be_nil
     end
   end
 
-  describe "truthy?" do
-    context "@result is neither false nor nil" do
-      it "should be true" do
-        outcome = ResqueJob::Outcome.new true
-        expect(outcome.truthy?).to eq(true)
-      end
+  describe "attributes" do
+    it "should have an accessible message" do
+      subject.message = "some message"
+      expect(subject.message).to eq "some message"
     end
 
-    context "@result is false" do
-      it "should be false" do
-        outcome = ResqueJob::Outcome.new false
-        expect(outcome.truthy?).to eq(false)
-      end
-    end
-
-    context "@result is nil" do
-      it "should be false" do
-        outcome = ResqueJob::Outcome.new nil
-        expect(outcome.truthy?).to eq(false)
-      end
-    end
-  end
-
-  describe "falsey?" do
-    context "@result is neither false nor nil" do
-      it "should be false" do
-        outcome = ResqueJob::Outcome.new true
-        expect(outcome.falsey?).to eq(false)
-      end
-    end
-
-    context "@result is false" do
-      it "should be true" do
-        outcome = ResqueJob::Outcome.new false
-        expect(outcome.falsey?).to eq(true)
-      end
-    end
-
-    context "@result is nil" do
-      it "should be true" do
-        outcome = ResqueJob::Outcome.new nil
-        expect(outcome.falsey?).to eq(true)
-      end
+    it "should have accessible options" do
+      subject.options = "these are options"
+      expect(subject.options).to eq "these are options"
     end
   end
 
   describe "success?" do
-    it "should be an alias for truthy?" do
-      expect(ResqueJob::Outcome.new(true).success?).to eq(true)
-      expect(ResqueJob::Outcome.new(false).success?).to eq(false)
-      expect(ResqueJob::Outcome.new(nil).success?).to eq(false)
+    context "@result is neither false nor nil" do
+      it "should be true" do
+        expect(subject.success?).to eq true
+      end
+    end
+
+    context "@result is false" do
+      it "should be false" do
+        subject.result = false
+        expect(subject.success?).to eq false
+      end
+    end
+
+    context "@result is nil" do
+      it "should be false" do
+        subject.result = nil
+        expect(subject.success?).to eq false
+      end
     end
   end
 
   describe "failure?" do
-    it "should be an alias for falsey?" do
-      expect(ResqueJob::Outcome.new(true).failure?).to eq(false)
-      expect(ResqueJob::Outcome.new(false).failure?).to eq(true)
-      expect(ResqueJob::Outcome.new(nil).failure?).to eq(true)
+    context "@result is neither false nor nil" do
+      it "should be false" do
+        expect(subject.failure?).to eq false
+      end
+    end
+
+    context "@result is false" do
+      it "should be true" do
+        subject.result = false
+        expect(subject.failure?).to eq true
+      end
+    end
+
+    context "@result is nil" do
+      it "should be true" do
+        subject.result = nil
+        expect(subject.failure?).to eq true
+      end
     end
   end
 end

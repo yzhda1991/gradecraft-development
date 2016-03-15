@@ -1,148 +1,163 @@
-require "logglier"
 require_relative "../../../lib/event_logger/base"
 require_relative "../../../lib/analytics/event"
 require_relative "../../../lib/inheritable_ivars"
 require_relative "../../../lib/loggly_resque"
-require_relative "../../toolkits/lib/inheritable_ivars/shared_examples"
-require_relative "../../toolkits/lib/loggly_resque/shared_examples"
-require_relative "../../toolkits/lib/resque_retry/shared_examples"
+require_relative "../../support/test_classes/lib/event_logger/" \
+  "logger_base_test_class"
 
 describe EventLogger::Base, type: :vendor_library do
-  include Toolkits::Lib::InheritableIvarsToolkit::SharedExamples
-  include Toolkits::Lib::LogglyResqueToolkit::SharedExamples
-  include Toolkits::Lib::ResqueRetryToolkit::SharedExamples
+  subject { described_class.new }
 
-  let(:event_type) { "waffle" }
-  let(:some_data) { { some: "new weird data" } }
-  let(:time_now) { Time.parse "Jun 20 1942" }
-  let(:mongoid_event) { double(:mongoid_event) }
-  let(:analytics_attrs) do
-    { event_type: event_type, created_at: time_now }.merge(some_data)
-  end
-  let(:logger) { Logger.new(STDOUT) }
+  let(:logger) { Logger.new Tempfile.new('logfile') }
+  let(:time_now) { Date.parse("Jun 20 1942").to_time }
 
-  describe "the logger implementation" do
-    it_behaves_like "the #logger is implemented through Logglier with " \
-      "LogglyResque", described_class
+  before do
+    allow(described_class).to receive(:logger) { logger }
   end
 
-  describe ".perform" do
-    subject { described_class.perform(event_type, some_data) }
+  it "defaults to the :event_logger queue" do
+    expect(described_class.queue).to eq :event_logger
+  end
 
-    before do
-      allow(Time.zone).to receive(:now) { time_now }
-      allow(described_class).to receive(:notify_event_outcome)
-        .and_return "another message"
-      allow(described_class).to receive(:logger) { logger }
+  describe "inclusions" do
+    it "includes Resque::Retry" do
+      expect(described_class).to respond_to :retry_delay
     end
 
-    it "should send a start message an event outcome message to the logger" do
-      described_class.instance_variable_set(:@start_message, "mario was here")
-      expect(described_class.logger).to receive(:info).with "mario was here"
-      expect(described_class.logger).to receive(:info).with "another message"
-      subject
+    it "includes Resque::ExponentialBackoff" do
+      expect(described_class).to respond_to :retry_delay_multiplicand_max
     end
 
-    it "should create a new analytics object with the analytics attributes" do
-      analytics_class = described_class.instance_variable_get(:@analytics_class)
-      expect(analytics_class).to receive(:create).with analytics_attrs
-      subject
+    it "includes LogglyResque" do
+      expect(described_class).to respond_to :logger_base_url
+    end
+
+    it "includes InheritableIvars" do
+      expect(described_class).to respond_to :inheritable_instance_variable_names
     end
   end
 
-  describe ".notify_event_outcome(event, data)" do
-    let!(:valid_event) { Analytics::Event.new }
-    let!(:invalid_event) { Analytics::Event.new }
+  describe "a class instance" do
+    it "has base attributes" do
+      allow(Time).to receive(:now) { time_now }
 
-    before(:each) do
-      allow(valid_event).to receive(:valid?).and_return true
-      allow(invalid_event).to receive(:valid?).and_return false
-      allow(described_class).to receive(:logger) { logger }
-      described_class
-        .instance_variable_set(:@success_message, "great stuff happened")
-      described_class
-        .instance_variable_set(:@failure_message, "bad stuff happened")
+      expect(subject.base_attrs).to eq({
+        event_type: subject.event_type,
+        created_at: time_now
+      })
     end
 
-    context "the event is valid" do
-      let(:notify_success) { "great stuff happened with data {:heads=>5}" }
+    it "has an event type" do
+      allow(subject).to receive(:class) { LoggerBaseTestClass }
+      expect(subject.event_type).to eq "logger_base_test_class"
+    end
+  end
 
-      it "should output the @success_message" do
-        allow(Analytics::Event).to receive(:create) { valid_event }
-        expect(described_class).to receive(:notify_event_outcome)
-          .with(valid_event, {heads: 5}) { notify_success }
-        described_class.perform "event", {heads: 5}
+  describe "class-level behaviors" do
+    subject { described_class }
+
+    it "has a readable queue" do
+      expect(subject.queue).to eq :event_logger
+    end
+
+    it "has an EventName" do
+      expect(subject.event_name).to eq subject.queue.to_s.camelize
+    end
+
+    describe ".perform" do
+      let(:result) { subject.perform(event_type, data) }
+      let(:event_type) { "waffle" }
+      let(:data) { { some: "new weird data" } }
+
+      before do
+        allow(subject).to receive(:event_outcome_message) { "some outcome" }
+      end
+
+      it "logs messages on start and complete" do
+        expect(logger).to receive(:info).with \
+          "Starting #{subject.event_name} with data #{data}"
+        expect(logger).to receive(:info).with "some outcome"
+        result
+      end
+
+      it "creates an analytics event with the .analytics_class" do
+        allow(subject).to receive(:analytics_class) { Analytics::LoginEvent }
+        expect(Analytics::LoginEvent).to receive(:create)
+          .with data.merge(event_type: "waffle")
+        result
       end
     end
 
-    context "the event is not valid" do
-      let(:notify_failure) { "bad stuff happened with data {:heads=>10}" }
+    describe ".backoff_strategy" do
+      let(:result) { subject.backoff_strategy }
+      let(:backoff_strategy) { [5,10,20] }
 
-      it "should output the @failure_message" do
-        allow(Analytics::Event).to receive(:create) { invalid_event }
-        expect(described_class).to receive(:notify_event_outcome)
-          .with(invalid_event, {heads: 10}) { notify_failure }
-        described_class.perform "event", {heads: 10}
+      before(:each) do
+        allow(EventLogger).to receive_message_chain(:configuration, \
+          :backoff_strategy) { backoff_strategy }
+      end
+
+      it "uses the backoff strategy from the EventLogger configuration" do
+        expect(result).to eq(backoff_strategy)
+      end
+
+      it "caches the backoff strategy" do
+        result
+        expect(EventLogger).not_to receive(:configuration)
+        result
+      end
+
+      it "sets the result to @backoff_strategy" do
+        result
+        expect(subject.instance_variable_get(:@backoff_strategy))
+          .to eq backoff_strategy
       end
     end
-  end
 
-  describe ".analytics_attrs(event_type, data)" do
-    subject { described_class.analytics_attrs(event_type, some_data) }
+    describe ".event_outcome_message" do
+      let(:result) { subject.event_outcome_message(event, "!!some-data") }
+      let!(:event) { double(Analytics::Event).as_null_object }
 
-    before { allow(Time.zone).to receive(:now) { time_now } }
+      context "the event is valid" do
+        it "logs the success message" do
+          allow(event).to receive(:valid?) { true }
+          allow(subject).to receive(:success_message) { "great!" }
+          expect(result).to eq "great! with data !!some-data"
+        end
+      end
 
-    it "should return an array of required attributes by default" do
-      expect(subject).to eq(analytics_attrs)
-    end
-  end
-
-  describe "extensions" do
-    it "should use resque-retry" do
-      expect(described_class).to respond_to(:retry_delay)
-    end
-  end
-
-  # shared examples for testing that the #backoff_strategy is overridden and
-  # included from the target IsConfigurable class. Takes block arguments
-  # |target_class, config_class|
-  it_behaves_like "it uses a configurable backoff strategy", \
-    EventLogger::Base, EventLogger
-
-  describe "class-level instance variable defaults" do
-    it "should have a default @queue" do
-      described_class.instance_variable_set(:@queue, :herman)
-      expect(described_class.instance_variable_get(:@queue)).to eq(:herman)
+      context "the event is not valid" do
+        it "logs the failure message" do
+          allow(event).to receive(:valid?) { false }
+          allow(subject).to receive(:failure_message) { "bad!" }
+          expect(result).to eq "bad! with data !!some-data"
+        end
+      end
     end
 
-    it "should not have a default @retry_limit for resque-retry" do
-      expect(described_class.instance_variable_get(:@retry_limit)).to eq(nil)
+    it "has an .analytics_class" do
+      expect(subject.analytics_class).to eq Analytics::Event
     end
 
-    it "should not have a default @retry_delay for resque-retry" do
-      expect(described_class.instance_variable_get(:@retry_delay)).to eq(nil)
+    it "has a list of inheritable attributes" do
+      expect(subject.inheritable_ivars).to eq [:queue]
+      expect(subject.inheritable_ivars.frozen?).to be_truthy
     end
-  end
 
-  # test whether @ivars are properly inheritable after extending the
-  # InheritableIvars module, pulled in from shared examples in the
-  # InheritableIvarsToolit. Defined in:
-  # /spec/toolkits/lib/inheritable_ivars/shared_examples
-  it_behaves_like "some @ivars are inheritable by subclasses", EventLogger::Base
+    describe "messages" do
+      before do
+        allow(subject).to receive(:event_name) { "wombat" }
+      end
 
-  describe ".inheritable_ivars" do
-    let(:expected_attrs) {[
-      :queue,
-      :event_name,
-      :analytics_class,
-      :start_message,
-      :success_message,
-      :failure_message
-    ]
-  }
+      it "has a .success_message" do
+        expect(subject.success_message).to eq \
+        "wombat analytics record was successfully created"
+      end
 
-    it "should have a list of inheritable attributes" do
-      expect(described_class.inheritable_ivars).to eq(expected_attrs)
+      it "has a .failure_message" do
+        expect(subject.failure_message).to eq \
+          "wombat analytics record failed to create"
+      end
     end
   end
 end

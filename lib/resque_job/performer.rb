@@ -9,7 +9,7 @@ class ResqueJob::Performer
     setup unless @options[:skip_setup]
   end
 
-  attr_reader :outcomes, :outcome_messages, :logger
+  attr_reader :outcomes, :outcome_messages, :logger, :attrs
 
   # this is where the heavy lifting is done
   def do_the_work
