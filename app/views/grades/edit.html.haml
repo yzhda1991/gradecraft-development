@@ -3,9 +3,17 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts", locals: { model: @grade, display_flash: false }
 
   = render partial: "submissions/assignment_guidelines", locals: { assignment: @assignment }
+
+  - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
+    %section
+
+      %h4.uppercase= "#{@student.first_name}'s Submission"
+      = render partial: "submissions/instructor_show",
+          locals: { presenter: ShowSubmissionPresenter.new(id: @submission.id,
+            assignment_id: @assignment.id, course: current_course) }
 
   - if @rubric && @rubric.designed? and @assignment.use_rubric
     = render "rubric_edit"
