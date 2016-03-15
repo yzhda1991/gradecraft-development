@@ -20,7 +20,7 @@ class SecureTokenAuthenticator
   end
 
   def valid_token_expired?
-    return unless secure_token
+    return false unless secure_token
     secure_token.expired?
   end
 

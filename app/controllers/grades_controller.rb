@@ -406,6 +406,7 @@ class GradesController < ApplicationController
 
     @grade_saved = @grade.nil? ? nil : @grade.save
 
+    # TODO:
     # this should be implemented with a PredictorEventLogger instead of a
     # PredictorEventJob since the PredictorEventLogger has logic for cleaning up
     # request params data, but for now this is better than what we had

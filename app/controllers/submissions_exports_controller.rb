@@ -39,10 +39,10 @@ class SubmissionsExportsController < ApplicationController
       else
         flash[:alert] = "The link you attempted to access does not exist."
       end
-
       flash[:alert] += " Please login to download the desired file."
-      redirect_to root_url
     end
+
+    redirect_to root_url
   end
 
   protected
