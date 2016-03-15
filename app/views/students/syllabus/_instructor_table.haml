@@ -68,9 +68,9 @@
             - elsif assignment.has_groups?
               %li= link_to glyph(:edit) + "Edit Grade", group_grade_assignment_path(assignment, group_id: group), class: "button"
 
-            %li= link_to glyph("hand-scissors-o") + "Exclude", exclude_grades_assignment_path(id: grade.id), class: "button danger #{ "hidden" if ! grade.excluded_from_course_score? }", data: { behavior: "toggle-exclude-grade-setting", confirm: "Are you sure you want to remove #{ grade.score } from #{ current_student.first_name }'s total points?" }, :method => :post
+            %li= link_to glyph("hand-scissors-o") + "Exclude", exclude_grades_assignment_path(id: grade.id), class: "button danger #{ "hidden" if grade.excluded_from_course_score? }", data: { confirm: "Are you sure you want to remove #{ grade.score } from #{ current_student.first_name }'s total points?" }, :method => :post
 
-            %li= link_to glyph(:plus) + "Include", exclude_grades_assignment_path(id: grade.id), class: "button secondary #{ "hidden" if grade.excluded_from_course_score? }", data: { behavior: "toggle-exclude-grade-setting", confirm: "Are you sure you want to re-add #{ grade.score } to #{ current_student.first_name }'s total points?" }, :method => :post
+            %li= link_to glyph(:plus) + "Include", include_grades_assignment_path(id: grade.id), class: "button secondary #{ "hidden" if ! grade.excluded_from_course_score? }", data: { confirm: "Are you sure you want to re-add #{ grade.score } to #{ current_student.first_name }'s total points?" }, :method => :post
 
           - else
             - if assignment.is_individual?

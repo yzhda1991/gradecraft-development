@@ -172,6 +172,21 @@ class GradesController < ApplicationController
     end
   end
 
+  # POST /assignments/:id/grades/include
+  def include
+    grade = Grade.find(params[:id])
+    grade.excluded_from_course_score = false
+    grade.excluded_by = nil
+    grade.excluded_date = nil
+    if grade.save
+      ScoreRecalculatorJob.new(user_id: grade.student_id,
+                             course_id: current_course.id).enqueue
+
+      redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
+      #{ grade.assignment.name } grade was successfully re-added to their total score."
+    end
+  end
+
   # DELETE /assignments/:assignment_id/grade
   def destroy
     redirect_to @assignment and return unless current_student.present?
