@@ -7,7 +7,7 @@ class MultipliedGradebookExportPerformer < GradebookExportPerformer
   end
 
   def notify_gradebook_export
-    NotificationMailer
+    ExportsMailer
       .gradebook_export(@course, @user, "multiplied gradebook export", @csv_data)
       .deliver_now
   end

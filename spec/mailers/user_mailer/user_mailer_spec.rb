@@ -1,7 +1,10 @@
 require "rails_spec_helper"
 
 describe UserMailer do
-  let(:email) { ActionMailer::Base.deliveries.last }
+  extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
+  define_email_context # taken from the definitions toolkit
+
+  include Toolkits::Mailers::EmailToolkit::SharedExamples # brings in shared examples for emails and parts
   let(:user) { create :user, reset_password_token: "blah" }
 
   describe "#reset_password_email" do
@@ -20,7 +23,7 @@ describe UserMailer do
     end
 
     it "has the password reset link" do
-      expect(email.body).to include edit_password_url("blah")
+      expect(text_part.body).to include edit_password_url("blah")
     end
   end
 
@@ -45,7 +48,7 @@ describe UserMailer do
     end
 
     it "has the activation link" do
-      expect(email.body).to include activate_user_url("blah")
+      expect(text_part.body).to include activate_user_url("blah")
     end
   end
 
@@ -69,7 +72,7 @@ describe UserMailer do
     end
 
     it "has a link to the dashboard" do
-      expect(email.body).to include dashboard_url
+      expect(text_part.body).to include dashboard_url
     end
   end
 end

@@ -4,6 +4,8 @@ describe NotificationMailer do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:sender) { NotificationMailer::SENDER_EMAIL }
   let(:admin_email) { NotificationMailer::ADMIN_EMAIL }
+  let(:text_part) { email.body.parts.detect {|part| part.content_type.match "text/plain" }}
+  let(:html_part) { email.body.parts.detect {|part| part.content_type.match "text/html" }}
 
   describe "#lti_error" do
     let(:user_data) { FactoryGirl.attributes_for(:user).merge(lti_uid: rand(100)) }
@@ -26,25 +28,52 @@ describe NotificationMailer do
     end
 
     describe "email body" do
-      subject { email.body }
-      it "includes the user's name" do
-        should include user_data[:name]
+      describe "text part body" do
+        subject { text_part.body }
+
+        it "includes the user's name" do
+          should include user_data[:name]
+        end
+
+        it "includes the user's email" do
+          should include user_data[:email]
+        end
+
+        it "includes the user's lti_uid" do
+          should include user_data[:lti_uid]
+        end
+
+        it "includes the course name" do
+          should include course_data[:name]
+        end
+
+        it "includes the course lti_uid" do
+          should include course_data[:lti_uid]
+        end
       end
 
-      it "includes the user's email" do
-        should include user_data[:email]
-      end
+      describe "html part body" do
+        subject { html_part.body }
 
-      it "includes the user's lti_uid" do
-        should include user_data[:lti_uid]
-      end
+        it "includes the user's name" do
+          should include user_data[:name]
+        end
 
-      it "includes the course name" do
-        should include course_data[:name]
-      end
+        it "includes the user's email" do
+          should include user_data[:email]
+        end
 
-      it "includes the course lti_uid" do
-        should include course_data[:lti_uid]
+        it "includes the user's lti_uid" do
+          should include user_data[:lti_uid]
+        end
+
+        it "includes the course name" do
+          should include course_data[:name]
+        end
+
+        it "includes the course lti_uid" do
+          should include course_data[:lti_uid]
+        end
       end
     end
   end

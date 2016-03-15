@@ -1,0 +1,10 @@
+%h2{:align => "center"}
+  %strong Hi Professor #{ @professor.last_name },
+
+%p{:align => "center"}
+  #{ @student.first_name } #{ @student.last_name } has submitted their #{ @course.assignment_term.downcase } "#{ @assignment.name }" for course #{ @course.name }.
+
+%p{:align => "center"}
+  Please visit
+  = link_to "GradeCraft", "https://www.gradecraft.com/"
+  to view the submission.

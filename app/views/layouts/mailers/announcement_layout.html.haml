@@ -4,8 +4,8 @@
     %meta{:content => "width=device-width", name: "viewport"}/
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %title= @email_title
-    :css
-      = GradeCraft::Application.assets["mailer.css"].to_s.html_safe
+    = render "layouts/mailers/stylesheet"
+    
   %body{:bgcolor => "#f6f6f6"}
     / body
     %table.body-wrap
@@ -15,35 +15,9 @@
           / content
           .content
             %table
+              %tr= render "layouts/mailers/logo"
               %tr
                 %td= yield
-              %tr
-                %td
-                  %p{:align => "center"}
-                    %a{:alt => "GradeCraft on Facebook", :href => "http://facebook.com/gradecraft"}
-                      =image_tag "facebook500.png", alt: "", width: "40"
-                    %a{:alt => "GradeCraft on Twitter", :href => "http://twitter.com/gradecraft"}
-                      =image_tag "twitter.png", alt: "", width: "40"
-                    %a{:alt => "GradeCraft on YouTube", :href => "http://www.youtube.com/playlist?list=PL8pE6w-B6iSUjSjK5cR0yaC1xxvQmLe5m"}
-                      =image_tag "youtube.png", alt: "", width: "40"
-                  %p{:style => "text-transform:uppercase; font-size: 10px; text-align: center;"}
-                    ©2012-#{Date.today.year} Regents of The University of Michigan
-                  %p{:align => "center"}
-                    %strong
-                      %a{:href => "mailto:help@gradecraft.com", :style => "color:#00BD39; text-decoration:none"} help@gradecraft.com
-          / /content
-        %td
-    / /body
+              = render "layouts/mailers/social_media"
     / footer
-    %table.footer-wrap
-      %tr
-        %td
-        %td.container
-          / content
-          .content
-            %table
-              %tr{:align => "center"}
-                %td{:align => "center"}
-          / /content
-        %td
-    / /footer
+    = render "layouts/mailers/footer"

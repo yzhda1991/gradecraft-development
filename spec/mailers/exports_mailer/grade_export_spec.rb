@@ -1,19 +1,18 @@
 require "rails_spec_helper"
 
-describe NotificationMailer do
-  let(:email) { ActionMailer::Base.deliveries.last }
-  let(:sender) { NotificationMailer::SENDER_EMAIL }
-  let(:admin_email) { NotificationMailer::ADMIN_EMAIL }
-  let(:text_part) { email.body.parts.detect {|part| part.content_type.match "text/plain" }}
+describe ExportsMailer do
+  extend Toolkits::Mailers::EmailToolkit::Definitions # brings in helpers for default emails and parts
+  define_email_context # taken from the definitions toolkit
+
+  include Toolkits::Mailers::EmailToolkit::SharedExamples # brings in shared examples for emails and parts
 
   describe "#grade_export" do
     let(:professor) { create(:user) }
     let(:course) { create(:course) }
     let(:csv_data) { "stuff,that,is,separated" }
-    let(:export_type) { "gradebook export" }
 
     before(:each) do
-      NotificationMailer.gradebook_export(course, professor, export_type, csv_data).deliver_now
+      ExportsMailer.grade_export(course, professor, csv_data).deliver_now
     end
 
     it "is sent from gradecraft's default mailer email" do
@@ -25,7 +24,7 @@ describe NotificationMailer do
     end
 
     it "has an appropriate subject" do
-      expect(email.subject).to eq "Gradebook export for #{course.name} #{export_type} is attached"
+      expect(email.subject).to eq "Grade export for #{course.name} is attached"
     end
 
     it "BCC's the email to the gradecraft admin" do
@@ -48,12 +47,13 @@ describe NotificationMailer do
       end
 
       it "should use the correct filename" do
-        expect(subject.filename).to eq("gradebook_export_#{course.id}.csv")
+        expect(subject.filename).to eq("grade_export_#{course.id}.csv")
       end
     end
 
     describe "text part body" do
-      subject { text_part.body }
+      subject { email.text_part.body }
+
       it "includes the professor's first name" do
         should include professor.first_name
       end
@@ -64,6 +64,22 @@ describe NotificationMailer do
 
       it "doesn't include a template" do
         should_not include "Regents of The University of Michigan"
+      end
+    end
+
+    describe "html part body" do
+      subject { email.html_part.body }
+
+      it "includes the professor's first name" do
+        should include professor.first_name
+      end
+
+      it "includes the course name" do
+        should include course.name
+      end
+
+      it "doesn't include a template" do
+        should include "Regents of The University of Michigan"
       end
     end
   end

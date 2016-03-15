@@ -7,24 +7,6 @@ class NotificationMailer < ApplicationMailer
     send_admin_email "Unknown LTI user/course"
   end
 
-  def kerberos_error(kerberos_uid)
-    @kerberos_uid = kerberos_uid
-    send_admin_email "Unknown Kerberos user"
-  end
-
-  def grade_export(course, user, csv_data)
-    set_export_ivars(course, user)
-    attachments["grade_export_#{course.id}.csv"] = { mime_type: "text/csv", content: csv_data }
-    send_export_email "Grade export for #{course.name} is attached"
-  end
-
-  def gradebook_export(course, user, export_type, csv_data)
-    set_export_ivars(course, user)
-    attachments["gradebook_export_#{course.id}.csv"] = { mime_type: "text/csv", content: csv_data }
-    @export_type = export_type
-    send_export_email "Gradebook export for #{@course.name} #{@export_type} is attached"
-  end
-
   def successful_submission(submission_id)
     send_assignment_email_to_user submission_id, "Submitted"
   end
@@ -53,6 +35,31 @@ class NotificationMailer < ApplicationMailer
     send_student_email "#{@course.courseno} - You've earned a new #{@course.badge_term}!"
   end
 
+  def group_status_updated(group_id)
+    @group = Group.find group_id
+    @course = @group.course
+    @group.students.each do |group_member|
+      mail(to: group_member.email, subject: "#{@course.courseno} - Group #{@group.approved}") do |format|
+        @student = group_member
+        format.text
+        format.html
+      end
+    end
+  end
+
+  def group_notify(group_id)
+    @group = Group.find group_id
+    @course = @group.course
+    @group_members = @group.students
+    @group_members.each do |gm|
+      mail(to: gm.email, subject: "#{@course.courseno} - New Group") do |format|
+        @student = gm
+        format.text
+        format.html
+      end
+    end
+  end
+
   private
 
   def send_assignment_email_to_professor(professor, submission_id, subject)
@@ -60,6 +67,7 @@ class NotificationMailer < ApplicationMailer
     @professor = professor
     mail(to: @professor.email, subject: "#{@course[:courseno]} - #{@assignment.name} - #{subject}") do |format|
       format.text
+      format.html
     end
   end
 
@@ -71,10 +79,6 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
-  def send_export_email(subject)
-    mail(to: @user.email, bcc: ADMIN_EMAIL, subject: subject) {|format| format.text }
-  end
-
   def send_student_email(subject)
     mail(to: @student.email, subject: subject) do |format|
       format.text
@@ -82,13 +86,11 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
-  def set_export_ivars(course, user)
-    @course = course
-    @user = user
-  end
-
   def send_admin_email(subject)
-    mail(to: ADMIN_EMAIL, subject: subject) {|format| format.text }
+    mail(to: ADMIN_EMAIL, subject: subject) do |format|
+      format.text
+      format.html
+    end
   end
 
   def set_grade_ivars(grade_id)

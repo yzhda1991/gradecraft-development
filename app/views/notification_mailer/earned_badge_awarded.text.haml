@@ -1,8 +1,10 @@
 Congratulations #{ @student.first_name }!
 You've earned the #{ @earned_badge.badge.name } #{ @course.badge_term }.
 
-Check out what other #{ @course.badge_term.pluralize } you can earn in #{ @course.name.html_safe } here:
-https://www.gradecraft.com/my_badges
+- if @earned_badge.feedback.present?
+  Your instructor said:
+  = @earned_badge.feedback.html_safe
 
-Fondly,
-GradeCraft
+Check out what other #{ @course.badge_term.pluralize } you can earn in #{ @course.name.html_safe } here:
+
+https://www.gradecraft.com/my_badges

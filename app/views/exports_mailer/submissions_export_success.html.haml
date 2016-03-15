@@ -1,6 +1,3 @@
-%p{:align => "center"}
-  %a{:href => "http://gradecraft.com", :target => "_blank"}
-    %img{:alt => "", :border => "0", :src => "https://www.gradecraft.com/images/gradecraft_logo.png", :width => "207"}/
 %h2{:align => "center"}
   %strong Dear #{ @professor.first_name },
 
@@ -16,6 +13,3 @@
   = succeed "." do
     %a{:href => "#{ exports_url }"} here
 %hr/
-
-%p Sincerely,
-%p GradeCraft
