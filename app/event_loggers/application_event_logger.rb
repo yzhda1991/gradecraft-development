@@ -31,7 +31,7 @@ class ApplicationEventLogger < EventLogger::Base
   end
 
   def event_session_user_role
-    return unless event_session[:user] and event_session[:course]
+    return unless event_session[:user] && event_session[:course]
     event_session[:user].role event_session[:course]
   end
 
