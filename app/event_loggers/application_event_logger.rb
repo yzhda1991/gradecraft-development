@@ -26,11 +26,11 @@ class ApplicationEventLogger < EventLogger::Base
       course_id: event_session[:course].try(:id),
       user_id: event_session[:user].try(:id),
       student_id: event_session[:student].try(:id),
-      user_role: event_session_user_role(event_session)
+      user_role: event_session_user_role
     }.merge(base_attrs)
   end
 
-  def event_session_user_role(event_session)
+  def event_session_user_role
     return unless event_session[:user] and event_session[:course]
     event_session[:user].role event_session[:course]
   end

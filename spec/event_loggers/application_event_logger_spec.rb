@@ -33,23 +33,26 @@ RSpec.describe ApplicationEventLogger, type: :event_logger do
   end
 
   describe "#event_session_user_role" do
-    let(:result) { subject.event_session_user_role(event_session) }
+    let(:result) { subject.event_session_user_role }
 
-    before(:each) do
-      allow(subject).to receive(:event_session) { event_session }
-    end
-
-    context "event session has a user" do
-      let(:event_session) { { user: user, course: course } }
+    context "event session has a user and a course" do
       it "returns the role of the user for the given course" do
         allow(user).to receive(:role).with(course) { course_membership.role }
+        subject.event_session = { user: user, course: course }
         expect(result).to eq(course_membership.role)
       end
     end
 
     context "event session has no user" do
-      let(:event_session) { { user: nil } }
       it "returns nil" do
+        subject.event_session = { user: nil, course: "something" }
+        expect(result).to be_nil
+      end
+    end
+
+    context "event session has no course" do
+      it "returns nil" do
+        subject.event_session = { user: "somebody", course: nil }
         expect(result).to be_nil
       end
     end
