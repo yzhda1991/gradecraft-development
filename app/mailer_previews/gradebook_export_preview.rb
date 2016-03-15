@@ -1,9 +1,11 @@
 class GradebookExportPreview
   def gradebook_export
     course = Course.first
-    user = User.first
-    export_type = "gradebook export"
-    csv_data = course.assignments.to_csv
-    ExportsMailer.gradebook_export course, user, export_type, csv_data
+    ExportsMailer.gradebook_export(
+      course,
+      User.first,
+      "gradebook export", # export type
+      course.assignments.to_csv
+    )
   end
 end
