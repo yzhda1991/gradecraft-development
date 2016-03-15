@@ -17,10 +17,7 @@ class SecureToken < ActiveRecord::Base
     set_expires_at
   end
 
-  validates :uuid, uniqueness: true, format: { with: REGEX["UUID"] }
-  validates :encrypted_key, uniqueness: true, format: {
-    with: REGEX["512_BIT_ENCRYPTED_KEY"]
-  }
+  validates_with SecureTokenValidator
   validates :target, presence: true
 
   # double-check to make sure that the authentication process is correct here
