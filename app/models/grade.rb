@@ -193,6 +193,10 @@ class Grade < ActiveRecord::Base
     end
   end
 
+  def excluded_by
+    User.find(excluded_by_id)
+  end
+
   private
 
   # full points (with student's weighting)
