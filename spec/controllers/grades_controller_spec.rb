@@ -333,9 +333,8 @@ describe GradesController do
 
       it "marks the Grade as excluded, but preserves the data" do
         @grade.update(
-          predicted_score: 400,
           raw_score: 500,
-          status: "In Progress",
+          status: "Released",
           feedback: "should be nil",
           feedback_read: true,
           feedback_read_at: Time.now,
@@ -344,21 +343,41 @@ describe GradesController do
           instructor_modified: true,
           graded_at: DateTime.now
         )
-        post :remove, {id: @grade.id}
+        post :exclude, {id: @grade.id}
 
         @grade.reload
-        expect(@grade.predicted_score).to eq(400)
-        expect(@grade.feedback).to eq("")
-        [ :raw_score,:status,:feedback_read_at,:feedback_reviewed_at,
-          :feedback_read,:feedback_reviewed,:instructor_modified,:graded_at].each do |attr|
-          expect(@grade[attr]).to be_falsey
-        end
+        expect(@grade.excluded_from_course_score).to eq(true)
+        expect(@grade.raw_score).to eq(500)
       end
 
       it "returns an error message on failure" do
         allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :remove, {id: @grade.id}
-        expect(response.status).to eq(400)
+        post :exclude, {id: @grade.id}
+        expect(flash[:alert]).to include("grade was not successfully excluded")
+      end
+    end
+
+    describe "POST inlude" do
+      before do
+        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+      end
+
+      it "marks the Grade as included, and clears the excluded details" do
+        @grade.update(
+          raw_score: 500,
+          status: "Graded",
+        )
+        post :include, {id: @grade.id}
+
+        @grade.reload
+        expect(@grade.excluded_from_course_score).to eq(false)
+        expect(@grade.raw_score).to eq(500)
+      end
+
+      it "returns an error message on failure" do
+        allow_any_instance_of(Grade).to receive(:save).and_return false
+        post :include, {id: @grade.id}
+        expect(flash[:alert]).to include("grade was not successfully re-added")
       end
     end
 

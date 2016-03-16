@@ -166,7 +166,12 @@ class GradesController < ApplicationController
     if grade.save
       score_recalculator(grade.student)
       redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
-      #{ grade.assignment.name } grade was successfully excluded from their total score."
+      #{ grade.assignment.name } grade was successfully excluded from their
+      total score."
+    else
+      redirect_to student_path(grade.student), alert: "#{ grade.student.name }'s
+      #{ grade.assignment.name } grade was not successfully excluded from their
+      total score - please try again."
     end
   end
 
@@ -179,7 +184,12 @@ class GradesController < ApplicationController
     if grade.save
       score_recalculator(grade.student)
       redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
-      #{ grade.assignment.name } grade was successfully re-added to their total score."
+      #{ grade.assignment.name } grade was successfully re-added to their total
+      score."
+    else
+      redirect_to student_path(grade.student), alert: "#{ grade.student.name }'s
+      #{ grade.assignment.name } grade was not successfully re-added to their
+      total score - please try again."
     end
   end
 
