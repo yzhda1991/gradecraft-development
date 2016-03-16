@@ -1,7 +1,8 @@
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
-  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update] # TODO: probably need to add submit_rubric here
+  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
+  # TODO: probably need to add submit_rubric here
   before_filter :ensure_student?, only: [:feedback_read, :predict_score, :self_log]
   before_filter :save_referer, only: [:edit, :edit_status]
 
@@ -27,7 +28,8 @@ class GradesController < ApplicationController
       @title = "#{current_student.name}'s Grade for #{ @assignment.name }"
     end
 
-    render :show, AssignmentPresenter.build({ assignment: @assignment, course: current_course,
+    render :show, AssignmentPresenter.build({ assignment: @assignment,
+                                              course: current_course,
                                               view_context: view_context })
   end
 
@@ -64,8 +66,8 @@ class GradesController < ApplicationController
 
       # @mz TODO: ADD SPECS
       if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
-        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        @grade_updater_job.enqueue
+        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        grade_updater_job.enqueue
       end
 
       if session[:return_to].present?
@@ -111,9 +113,9 @@ class GradesController < ApplicationController
   def delete_all_earned_badges
     if EarnedBadge.exists?(grade_id: params[:grade_id])
       EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
-      render json: {message: "Earned badges successfully deleted", success: true}, status: 200
+      render json: { message: "Earned badges successfully deleted", success: true }, status: 200
     else
-      render json: {message: "Earned badges failed to delete", success: false}, status: 400
+      render json: { message: "Earned badges failed to delete", success: false }, status: 400
     end
   end
 
@@ -122,9 +124,9 @@ class GradesController < ApplicationController
     grade_params = params.slice(:grade_id, :student_id, :badge_id)
     if EarnedBadge.exists?(grade_params)
       EarnedBadge.where(grade_params).destroy_all
-      render json: {message: "Earned badge successfully deleted", success: true}, status: 200
+      render json: { message: "Earned badge successfully deleted", success: true }, status: 200
     else
-      render json: {message: "Earned badge failed to delete", success: false}, status: 400
+      render json: { message: "Earned badge failed to delete", success: false }, status: 400
     end
   end
 
@@ -146,10 +148,46 @@ class GradesController < ApplicationController
     @grade.update_attributes(params[:grade])
 
     if @grade.save
-      ScoreRecalculatorJob.new(user_id: @grade.student_id, course_id: current_course.id).enqueue
-      redirect_to @grade.assignment, notice: "#{ @grade.student.name}'s #{@grade.assignment.name} grade was successfully deleted."
+      score_recalculator(@grade.student)
+      redirect_to @grade.assignment, notice: "#{ @grade.student.name }'s #{ @grade.assignment.name } grade was successfully deleted."
     else
       redirect_to @grade.assignment, notice:  @grade.errors.full_messages, status: 400
+    end
+  end
+
+  # POST /assignments/:id/grades/exclude
+  def exclude
+    grade = Grade.find(params[:id])
+    grade.excluded_from_course_score = true
+    grade.excluded_by_id = current_user.id
+    grade.excluded_at = Time.now
+    if grade.save
+      score_recalculator(grade.student)
+      redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
+      #{ grade.assignment.name } grade was successfully excluded from their
+      total score."
+    else
+      redirect_to student_path(grade.student), alert: "#{ grade.student.name }'s
+      #{ grade.assignment.name } grade was not successfully excluded from their
+      total score - please try again."
+    end
+  end
+
+  # POST /assignments/:id/grades/include
+  def include
+    grade = Grade.find(params[:id])
+    grade.excluded_from_course_score = false
+    grade.excluded_by_id = nil
+    grade.excluded_at = nil
+    if grade.save
+      score_recalculator(grade.student)
+      redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
+      #{ grade.assignment.name } grade was successfully re-added to their total
+      score."
+    else
+      redirect_to student_path(grade.student), alert: "#{ grade.student.name }'s
+      #{ grade.assignment.name } grade was not successfully re-added to their
+      total score - please try again."
     end
   end
 
@@ -158,8 +196,10 @@ class GradesController < ApplicationController
     redirect_to @assignment and return unless current_student.present?
     @grade = current_student.grade_for_assignment(@assignment)
     @grade.destroy
+    score_recalculator(@grade.student)
 
-    redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name}'s #{@assignment.name} grade was successfully deleted."
+    redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name }'s
+      #{ @assignment.name } grade was successfully deleted."
   end
 
   # Quickly grading a single assignment for all students
@@ -190,8 +230,7 @@ class GradesController < ApplicationController
     if @assignment.update_attributes(params[:assignment])
 
       # @mz TODO: add specs
-      @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: mass_update_grade_ids)
-      @multiple_grade_updater_job.enqueue
+      enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
 
       if !params[:team_id].blank?
         redirect_to assignment_path(@assignment, team_id: params[:team_id])
@@ -209,13 +248,13 @@ class GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:id])
     @group = @assignment.groups.find(params[:group_id])
     @submission_id = @assignment.submissions.where(group_id: @group.id).first.try(:id)
-    @title = "Grading #{@group.name}'s #{@assignment.name}"
+    @title = "Grading #{ @group.name }'s #{@assignment.name}"
     @assignment_score_levels = @assignment.assignment_score_levels
 
     if @assignment.grade_with_rubric?
       @rubric = @assignment.rubric
       # This is sent to the Angular controlled submit button
-      @return_path = URI(request.referer).path + "?group_id=#{@group.id}"
+      @return_path = URI(request.referer).path + "?group_id=#{ @group.id }"
     end
   end
 
@@ -233,7 +272,7 @@ class GradesController < ApplicationController
     end
 
     # @mz TODO: add specs
-    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
+    enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
 
     respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
   end
@@ -259,7 +298,7 @@ class GradesController < ApplicationController
     end
 
     # @mz TODO: add specs
-    MultipleGradeUpdaterJob.new(grade_ids: grade_ids).enqueue
+    enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
 
     if session[:return_to].present?
       redirect_to session[:return_to]
@@ -289,8 +328,9 @@ class GradesController < ApplicationController
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
 
       # @mz TODO: add specs
-      @multiple_grade_updater_job = MultipleGradeUpdaterJob.new(grade_ids: @result.successful.map(&:id))
-      @multiple_grade_updater_job.enqueue
+      grade_ids = @result.successful.map(&:id)
+
+      enqueue_multiple_grade_update_jobs(grade_ids)
 
       render :import_results
     end
@@ -323,8 +363,8 @@ class GradesController < ApplicationController
 
       if @grade.save
         # @mz TODO: add specs
-        @grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        @grade_updater_job.enqueue
+        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        grade_updater_job.enqueue
 
         redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!'
       else
@@ -436,6 +476,18 @@ class GradesController < ApplicationController
         memo << grade.id
       end
       memo
+    end
+  end
+
+  def score_recalculator(student)
+    ScoreRecalculatorJob.new(user_id: student.id,
+                           course_id: current_course.id).enqueue
+  end
+
+  def enqueue_multiple_grade_update_jobs(grade_ids)
+    grade_ids.each do |grade_id|
+      grade_updater_job = GradeUpdaterJob.new(grade_id: grade_id)
+      grade_updater_job.enqueue
     end
   end
 

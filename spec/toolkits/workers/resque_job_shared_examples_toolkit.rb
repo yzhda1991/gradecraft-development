@@ -51,10 +51,5 @@ module ResqueJobSharedExamplesToolkit
       expect(job_klass).to receive(:new).exactly(batch_size).times
       subject
     end
-
-    it "adds the #{job_klass} instances to an array" do
-      subject
-      expect(assigns(job_klass.to_s.underscore.pluralize.to_sym).size).to eq(batch_size)
-    end
   end
 end

@@ -326,6 +326,78 @@ describe GradesController do
       end
     end
 
+    describe "POST exclude" do
+      before do
+        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+      end
+
+      it "marks the Grade as excluded, but preserves the data" do
+        @grade.update(
+          raw_score: 500,
+          status: "Released",
+          feedback: "should be nil",
+          feedback_read: true,
+          feedback_read_at: Time.now,
+          feedback_reviewed: true,
+          feedback_reviewed_at: Time.now,
+          instructor_modified: true,
+          graded_at: DateTime.now,
+          status: "Graded"
+        )
+        post :exclude, {id: @grade.id}
+
+        @grade.reload
+        expect(@grade.excluded_from_course_score).to eq(true)
+        expect(@grade.raw_score).to eq(500)
+        expect(@grade.score).to eq(500)
+      end
+
+      it "adds exclusion metadata" do
+        current_time = DateTime.now
+        post :exclude, {id: @grade.id}
+
+        @grade.reload
+        expect(@grade.excluded_at).to be > current_time
+        expect(@grade.excluded_by_id).to eq(@professor.id)
+      end
+
+      it "returns an error message on failure" do
+        allow_any_instance_of(Grade).to receive(:save).and_return false
+        post :exclude, {id: @grade.id}
+        expect(flash[:alert]).to include("grade was not successfully excluded")
+      end
+    end
+
+    describe "POST inlude" do
+      before do
+        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+      end
+
+      it "marks the Grade as included, and clears the excluded details" do
+        @grade.update(
+          raw_score: 500,
+          status: "Graded",
+          excluded_from_course_score: true,
+          excluded_by_id: 2,
+          excluded_at: Time.now
+        )
+        post :include, {id: @grade.id}
+
+        @grade.reload
+        expect(@grade.excluded_from_course_score).to eq(false)
+        expect(@grade.raw_score).to eq(500)
+        expect(@grade.score).to eq(500)
+        expect(@grade.excluded_by_id).to be nil
+        expect(@grade.excluded_at).to be nil
+      end
+
+      it "returns an error message on failure" do
+        allow_any_instance_of(Grade).to receive(:save).and_return false
+        post :include, {id: @grade.id}
+        expect(flash[:alert]).to include("grade was not successfully re-added")
+      end
+    end
+
     describe "DELETE destroy" do
       it "removes the grade entirely" do
         allow(controller).to receive(:current_student).and_return(@student)

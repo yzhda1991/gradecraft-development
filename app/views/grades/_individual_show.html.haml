@@ -44,6 +44,8 @@
         - grade.grade_files.each do |gf|
           %li
             = link_to gf.filename, gf.url, :target => "_blank"
+  - if grade.excluded_from_course_score?
+    = render "grades/components/excluded", grade: grade
 
   - if presenter.rubric_designed?
     .rubric-container= render partial: "grades/criterion_grade_results", locals: { presenter: presenter }
