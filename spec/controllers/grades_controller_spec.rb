@@ -342,10 +342,7 @@ describe GradesController do
           feedback_reviewed_at: Time.now,
           instructor_modified: true,
           graded_at: DateTime.now,
-          status: "Graded",
-          excluded_from_course_score: true,
-          excluded_by_id: 2,
-          excluded_at: Time.now
+          status: "Graded"
         )
         post :exclude, {id: @grade.id}
 
@@ -353,7 +350,15 @@ describe GradesController do
         expect(@grade.excluded_from_course_score).to eq(true)
         expect(@grade.raw_score).to eq(500)
         expect(@grade.score).to eq(500)
-        expect(@grade.excluded_by_id).to be 2
+      end
+
+      it "adds exclusion metadata" do
+        current_time = DateTime.now
+        post :exclude, {id: @grade.id}
+
+        @grade.reload
+        expect(@grade.excluded_at).to be > current_time
+        expect(@grade.excluded_by_id).to eq(@professor.id)
       end
 
       it "returns an error message on failure" do
@@ -372,6 +377,9 @@ describe GradesController do
         @grade.update(
           raw_score: 500,
           status: "Graded",
+          excluded_from_course_score: true,
+          excluded_by_id: 2,
+          excluded_at: Time.now
         )
         post :include, {id: @grade.id}
 
