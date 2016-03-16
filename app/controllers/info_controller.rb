@@ -47,14 +47,14 @@ class InfoController < ApplicationController
   # Displaying all resubmisisons
   def resubmissions
     @title = "Resubmitted Assignments"
-    @resubmissions = current_course.submissions.resubmitted
 
-    @teams = current_course.teams
-    if @team
+    @resubmissions = current_course.submissions.resubmitted
+    if @team # populated with the find_team before filter
       @resubmissions = @resubmissions.where(student_id: @team.students.pluck(:id))
     end
-
     @resubmission_count = @resubmissions.count
+
+    @teams = current_course.teams # needed to display the team selection filter
   end
 
   def ungraded_submissions

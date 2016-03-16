@@ -7,7 +7,7 @@ feature "viewing submissions" do
   end
   let(:student) { create :user }
 
-  context "as a student", versioning: true do
+  context "as a student" do
     let(:membership) { create :student_course_membership, user: student }
 
     before { login_as student }
@@ -19,32 +19,36 @@ feature "viewing submissions" do
     end
 
     scenario "displays a resubmitted alert for a resubmitted submission" do
-      create :grade, submission: submission, assignment: assignment, student: student,
-        raw_score: 10000, status: "Released"
-      submission.update_attributes link: "http://example.org"
+      create :grade, submission: submission, assignment: assignment,
+        student: student, raw_score: 10000, status: "Released",
+        graded_at: DateTime.now
+      submission.update_attributes link: "http://example.org",
+        submitted_at: DateTime.now
       visit assignment_path assignment
 
       within ".pageContent" do
-        expect(page).to have_content "Resubmission!"
+        expect(page).to have_content "Resubmitted!"
       end
     end
   end
 
-  context "as a professor", versioning: true do
+  context "as a professor" do
     let(:membership) { create :professor_course_membership, user: professor }
     let(:professor) { create :user }
 
     before do
       login_as professor
-      grade = create :grade, submission: submission, assignment: assignment, student: student, raw_score: 10000, status: "Released"
-      submission.update_attributes link: "http://example.org"
-      grade.update_attributes raw_score: 1234
+      grade = create :grade, submission: submission, assignment: assignment,
+        student: student, raw_score: 10000, status: "Released",
+        graded_at: DateTime.now
+      submission.update_attributes link: "http://example.org",
+        submitted_at: DateTime.now
       visit assignment_submission_path assignment, submission
     end
 
     scenario "displays a resubmitted alert for a resubmitted submission" do
       within ".pageContent" do
-        expect(page).to have_content "Resubmission!"
+        expect(page).to have_content "Resubmitted!"
       end
     end
 

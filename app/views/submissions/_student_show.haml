@@ -8,20 +8,14 @@
 
   %p
     %span.smallcaps Submitted:
-    = presenter.submission_for_assignment(current_student).created_at
+    = presenter.submission_for_assignment(current_student).submitted_at
 
     // Late alert if submitted after due date
     - if presenter.submission_for_assignment(current_student).late?
       %span.label.alert Late!
 
     - if presenter.submission_for_assignment(current_student).resubmitted?
-      %span.label.alert Resubmission!
-
-    // Checking to see if the submission was updated - if the update date is different from the creation date, displaying it
-  - if presenter.submission_updated?(current_student)
-    %p
-      %span.smallcaps Updated:
-      %span= presenter.submission_for_assignment(current_student).updated_at
+      %span.label.alert Resubmitted!
 
   // Displaying the link to the submission if there is one
   - if presenter.submission_for_assignment(current_student).link?
@@ -51,16 +45,14 @@
   .clear
   %p
     %span.smallcaps Submitted:
-    = presenter.group_submission_for(current_student).created_at
+    = presenter.group_submission_for(current_student).submitted_at
 
     // Late alert if submitted after due date
     - if presenter.group_submission_for(current_student).late?
       %span.label.alert Late!
-    // Checking to see if the submission was updated - if the update date is different from the creation date, displaying it
-  - if presenter.group_submission_updated?(current_student)
-    %p
-      %span.smallcaps Updated:
-      %span= presenter.group_submission_for(current_student).updated_at
+
+    - if presenter.submission_for_assignment(current_student).resubmitted?
+      %span.label.alert Resubmitted!
 
   // Displaying the link to the submission if there is one
   - if presenter.group_submission_for(current_student).link?

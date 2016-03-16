@@ -61,11 +61,6 @@ class AssignmentPresenter < Showtime::Presenter
     group_for(student).submission_for_assignment(assignment)
   end
 
-  def group_submission_updated?(student)
-    submission = group_submission_for(student)
-    submission.updated_at != submission.created_at
-  end
-
   def has_grades?
     grades.present?
   end
@@ -90,14 +85,14 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.is_individual?
   end
 
-  def submission_created_date_for(submissions)
-    submission = submissions.first
-    submission.created_at if submission
-  end
-
-  def submission_updated_date_for(submissions)
+  def submission_submitted_date_for(submissions)
     submission = submissions.first
     submission.submitted_at if submission
+  end
+
+  def submission_resubmitted?(submissions)
+    submission = submissions.first
+    submission.nil? ? false : submission.resubmitted?
   end
 
   def criteria
@@ -163,10 +158,6 @@ class AssignmentPresenter < Showtime::Presenter
     for_team? ? course.students_being_graded_by_team(team) : course.students_being_graded
   end
 
-  def submission_date_for(student)
-    submission_updated_date_for(submissions_for(student))
-  end
-
   def submission_for_assignment(student)
     student.submission_for_assignment(assignment)
   end
@@ -177,11 +168,6 @@ class AssignmentPresenter < Showtime::Presenter
 
   def submission_rate
     assignment.submission_rate(course)
-  end
-
-  def submission_updated?(student)
-    submission = submission_for_assignment(student)
-    submission.updated_at != submission.created_at
   end
 
   def submission_grade_history(student)

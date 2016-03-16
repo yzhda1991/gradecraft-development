@@ -336,65 +336,47 @@ describe Submission do
     end
   end
 
-  describe "#will_be_resubmission?", versioning: true do
+  describe "#will_be_resubmitted?", versioning: true do
     before { subject.save }
 
     it "returns false if there is no grade" do
-      expect(subject).to_not be_will_be_resubmission
+      expect(subject).to_not be_will_be_resubmitted
     end
 
     it "returns true if there is a grade" do
       create :grade, status: "Graded", submission: subject, assignment: subject.assignment
 
-      expect(subject).to be_will_be_resubmission
+      expect(subject).to be_will_be_resubmitted
     end
   end
 
-  describe "#resubmitted?", versioning: true do
-    it "returns false if there are no resubmissions" do
+  describe "#resubmitted?" do
+    it "returns false if it has no grade" do
+      subject.save
       expect(subject).to_not be_resubmitted
     end
 
-    it "returns true if there are resubmissions" do
+    it "returns true if grade was graded before it was submitted" do
       subject.save
-      grade = create :grade, status: "Graded", submission: subject,
-        assignment: subject.assignment
-      subject.update_attributes link: "http://example.com"
-      grade.update_attributes raw_score: 1234
-
+      create :grade, status: "Graded", submission: subject,
+        assignment: subject.assignment, graded_at: DateTime.now
+      subject.update_attributes submitted_at: DateTime.now
       expect(subject).to be_resubmitted
     end
-  end
 
-  describe "#resubmissions", versioning: true do
-    it "caches the resubmissions" do
-      expect(Resubmission).to receive(:find_for_submission).with(subject).once.and_call_original
-      2.times { subject.resubmissions }
+    it "returns false if the grade was graded after it was submitted" do
+      subject.submitted_at = DateTime.now
+      subject.save
+      create :grade, status: "Graded", submission: subject,
+        assignment: subject.assignment, graded_at: DateTime.now
+      expect(subject).to_not be_resubmitted
     end
 
-    context "with no resubmissions" do
-      it "returns an empty array" do
-        expect(subject.resubmissions).to be_empty
-      end
-    end
-
-    context "with a single resubmission" do
-      let(:grade) do
-        create :grade, status: "Graded", submission: subject, assignment: subject.assignment
-      end
-
-      before do
-        subject.save
-        grade.update_attributes raw_score: 1234
-        subject.update_attributes link: "http://example.com"
-      end
-
-      it "returns an array of resubmissions" do
-        results = subject.resubmissions
-
-        expect(results.length).to eq 1
-        expect(results.first.submission).to eq subject
-      end
+    it "returns false if it was not graded" do
+      subject.save
+      create :grade, status: "Graded", submission: subject,
+        assignment: subject.assignment
+      expect(subject).to_not be_resubmitted
     end
   end
 

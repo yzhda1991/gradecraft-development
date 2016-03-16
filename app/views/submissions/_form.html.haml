@@ -10,7 +10,7 @@
   - elsif presenter.assignment.is_individual?
     = f.input :student_id, :input_html => { :value => presenter.student.id }, as: :hidden
 
-  - if presenter.submission.graded?
+  - if presenter.submission.will_be_resubmitted?
     %section
       .italic.not_bold= "Graded: #{presenter.submission.graded_at}"
       %span.label.alert Resubmission!
