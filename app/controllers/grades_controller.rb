@@ -150,7 +150,7 @@ class GradesController < ApplicationController
     @grade.update_attributes(params[:grade])
 
     if @grade.save
-      ScoreRecalculatorJob.new(user_id: @grade.student_id, course_id: current_course.id).enqueue
+      score_recalculator(@grade.student)
       redirect_to @grade.assignment, notice: "#{ @grade.student.name }'s #{ @grade.assignment.name } grade was successfully deleted."
     else
       redirect_to @grade.assignment, notice:  @grade.errors.full_messages, status: 400
@@ -164,9 +164,7 @@ class GradesController < ApplicationController
     grade.excluded_by = current_user.id
     grade.excluded_date = Time.now
     if grade.save
-      ScoreRecalculatorJob.new(user_id: grade.student_id,
-                             course_id: current_course.id).enqueue
-
+      score_recalculator(grade.student)
       redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
       #{ grade.assignment.name } grade was successfully excluded from their total score."
     end
@@ -179,9 +177,7 @@ class GradesController < ApplicationController
     grade.excluded_by = nil
     grade.excluded_date = nil
     if grade.save
-      ScoreRecalculatorJob.new(user_id: grade.student_id,
-                             course_id: current_course.id).enqueue
-
+      score_recalculator(grade.student)
       redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
       #{ grade.assignment.name } grade was successfully re-added to their total score."
     end
@@ -192,6 +188,7 @@ class GradesController < ApplicationController
     redirect_to @assignment and return unless current_student.present?
     @grade = current_student.grade_for_assignment(@assignment)
     @grade.destroy
+    score_recalculator(@grade.student)
 
     redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name }'s
       #{ @assignment.name } grade was successfully deleted."
@@ -472,6 +469,11 @@ class GradesController < ApplicationController
       end
       memo
     end
+  end
+
+  def score_recalculator(student)
+    ScoreRecalculatorJob.new(user_id: student.id,
+                           course_id: current_course.id).enqueue
   end
 
   def enqueue_multiple_grade_update_jobs(grade_ids)
