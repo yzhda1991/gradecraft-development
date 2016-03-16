@@ -28,7 +28,7 @@ module SubmissionGradeHistory
       .include { |history|
         if (history.changeset["object"] == "Grade" && only_student_visible_grades)
           grade = history.version.reify
-          !grade.nil? && grade.is_student_visible?
+          GradeProctor.new(grade).viewable?
         else
           true
         end
