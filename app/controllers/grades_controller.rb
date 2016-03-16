@@ -1,11 +1,9 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment, only: [:show, :edit, :update, :destroy,
-    :submit_rubric]
-  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show,
-    :predict_score, :async_update] # TODO: probably need to add submit_rubric here
-  before_filter :ensure_student?, only: [:feedback_read, :predict_score,
-    :self_log]
+  before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
+  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
+  # TODO: probably need to add submit_rubric here
+  before_filter :ensure_student?, only: [:feedback_read, :predict_score, :self_log]
   before_filter :save_referer, only: [:edit, :edit_status]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
@@ -161,8 +159,8 @@ class GradesController < ApplicationController
   def exclude
     grade = Grade.find(params[:id])
     grade.excluded_from_course_score = true
-    grade.excluded_by = current_user.id
-    grade.excluded_date = Time.now
+    grade.excluded_by_id = current_user.id
+    grade.excluded_at = Time.now
     if grade.save
       score_recalculator(grade.student)
       redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
@@ -179,8 +177,8 @@ class GradesController < ApplicationController
   def include
     grade = Grade.find(params[:id])
     grade.excluded_from_course_score = false
-    grade.excluded_by = nil
-    grade.excluded_date = nil
+    grade.excluded_by_id = nil
+    grade.excluded_at = nil
     if grade.save
       score_recalculator(grade.student)
       redirect_to student_path(grade.student), notice: "#{ grade.student.name }'s
