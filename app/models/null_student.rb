@@ -22,6 +22,10 @@ class NullStudent
     false
   end
 
+  def is_staff?(course)
+    false
+  end
+
   def team_for_course(*)
     NullTeam.new
   end
