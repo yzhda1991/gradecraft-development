@@ -804,4 +804,6 @@ ActiveRecord::Schema.define(version: 20160312161642) do
   add_foreign_key "flagged_users", "courses"
   add_foreign_key "flagged_users", "users", column: "flagged_id"
   add_foreign_key "flagged_users", "users", column: "flagger_id"
+  add_foreign_key "secure_tokens", "courses"
+  add_foreign_key "secure_tokens", "users"
 end

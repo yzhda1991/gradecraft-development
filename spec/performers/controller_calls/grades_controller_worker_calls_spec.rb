@@ -95,6 +95,10 @@ RSpec.describe GradesController, type: :controller, background_job: true do
             id: assignment.id, assignment: {name: "Some Great Name"}}}
           before { allow(assignment).to receive_messages(update_attributes: true) }
 
+          let(:batch_attributes) do
+            [{ grade_id: grades.first.id }, { grade_id: grades.last.id }]
+          end
+
           it_behaves_like "a batch of successful resque jobs", 2, GradeUpdaterJob
         end
 
@@ -134,6 +138,10 @@ RSpec.describe GradesController, type: :controller, background_job: true do
             allow(controller).to receive_message_chain(:current_course, :students) { students }
             allow(GradeImporter).to receive_message_chain(:new, :import) { result_double }
             allow(result_double).to receive(:successful).and_return(grades)
+          end
+
+          let(:batch_attributes) do
+            [{ grade_id: grades.first.id }, { grade_id: grades.last.id }]
           end
 
           it_behaves_like "a batch of successful resque jobs", 2, GradeUpdaterJob
