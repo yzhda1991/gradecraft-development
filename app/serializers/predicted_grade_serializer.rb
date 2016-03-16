@@ -13,7 +13,7 @@ class PredictedGradeSerializer
   end
 
   def pass_fail_status
-    grade.pass_fail_status if grade.is_student_visible?
+    grade.pass_fail_status if GradeProctor.new(grade).viewable?
   end
 
   def predicted_score
@@ -22,12 +22,12 @@ class PredictedGradeSerializer
 
   def final_points
     return 0 if show_zero_in_predictor grade.final_points
-    grade.final_points if grade.is_student_visible?
+    grade.final_points if GradeProctor.new(grade).viewable?
   end
 
   def score
     return 0 if show_zero_in_predictor grade.score
-    grade.score if grade.is_student_visible?
+    grade.score if GradeProctor.new(grade).viewable?
   end
 
   def initialize(assignment, grade, current_user)
