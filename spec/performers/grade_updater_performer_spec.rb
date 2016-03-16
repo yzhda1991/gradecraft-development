@@ -171,7 +171,8 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
 
       context "@grade assignment is not set to notify on release and grade is not student visible" do
         before(:each) do
-          allow(performer_grade).to receive(:is_student_visible?) { false }
+          allow_any_instance_of(GradeProctor).to \
+            receive(:viewable?).and_return false
           allow(performer_grade).to receive_message_chain(:assignment, :notify_released?) { false }
         end
 
