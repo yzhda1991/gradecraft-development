@@ -1,7 +1,8 @@
 class ChallengeGrade < ActiveRecord::Base
+  include GradeStatus
 
-  attr_accessible :name, :score, :challenge_id, :text_feedback, :status,
-    :team_id, :final_score, :status, :team, :challenge
+  attr_accessible :name, :score, :challenge_id, :text_feedback, :team_id,
+    :final_score, :team, :challenge
 
   belongs_to :course
   belongs_to :challenge
@@ -35,14 +36,6 @@ class ChallengeGrade < ActiveRecord::Base
 
   def cache_team_score
     team.save!
-  end
-
-  def is_graded?
-    status == "Graded"
-  end
-
-  def is_released?
-    status == "Released"
   end
 
   def is_student_visible?

@@ -1,5 +1,6 @@
 class Grade < ActiveRecord::Base
   include Canable::Ables
+  include GradeStatus
   include Historical
   include MultipleFileAttributes
   include Sanitizable
@@ -11,7 +12,7 @@ class Grade < ActiveRecord::Base
     :grade_file_ids, :grade_files_attributes, :graded_by_id, :group, :group_id,
     :group_type, :instructor_modified, :pass_fail_status, :point_total,
     :adjustment_points, :adjustment_points_feedback, :predicted_score,
-    :raw_score, :status, :student, :student_id, :submission,
+    :raw_score, :student, :student_id, :submission,
     :_destroy, :submission_id, :task, :task_id, :team_id, :earned_badges,
     :earned_badges_attributes, :feedback_read, :feedback_read_at,
     :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at,
@@ -55,23 +56,16 @@ class Grade < ActiveRecord::Base
   after_destroy :save_student_and_team_scores
 
   scope :completion, -> { where(order: "assignments.due_at ASC", joins: :assignment) }
-  scope :graded, -> { where status: "Graded" }
-  scope :in_progress, -> { where status: "In Progress" }
-  scope :released, -> { joins(:assignment).where("status = 'Released' OR (status = 'Graded' AND NOT assignments.release_necessary)") }
-  scope :no_status, -> { instructor_modified.where(status: ["", nil])}
-  scope :graded_or_released, -> { where(status: ["Graded", "Released"])}
-  scope :not_released, -> { joins(:assignment).where(assignments: { release_necessary: true }).where(status: "Graded") }
+
   scope :excluded_from_course_score, -> { where excluded_from_course_score: true }
   scope :included_in_course_score, -> { where excluded_from_course_score: false }
+  scope :no_status, -> { instructor_modified.where(status: ["", nil])}
   scope :instructor_modified, -> { where instructor_modified: true }
   scope :positive, -> { where("score > 0")}
   scope :predicted_to_be_done, -> { where("predicted_score > 0")}
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :not_nil, -> { where.not(score: nil)}
-
-  # @mz TODO: add specs
-  scope :student_visible, -> { joins(:assignment).where(student_visible_sql) }
 
   def self.find_or_create(assignment_id,student_id)
     Grade.find_or_create_by(student_id: student_id, assignment_id: assignment_id)
@@ -100,14 +94,6 @@ class Grade < ActiveRecord::Base
 
   def predicted?
     self.predicted_score != 0 && !self.predicted_score.nil?
-  end
-
-  def is_graded?
-    self.status == "Graded"
-  end
-
-  def in_progress?
-    self.status == "In Progress"
   end
 
   # Handle raw score attributes with commas (ex "300,000")
@@ -150,20 +136,13 @@ class Grade < ActiveRecord::Base
     feedback.present?
   end
 
-  def is_released?
-    status == "Released"
-  end
-
   def is_student_visible?
     is_released? || (is_graded? && !assignment.release_necessary)
   end
 
-  def status_is_graded_or_released?
-    is_graded? || is_released?
-  end
-  alias graded_or_released? status_is_graded_or_released?
-
-  # TODO: add specs
+  # @mz todo: port this over to cache_team_and_student_scores once
+  # related methods have tests
+  # want to make sure that nothing depends on the output of this method
   def save_student_and_team_scores
     self.student.cache_course_score(self.course.id)
     if self.course.has_teams? && self.student.team_for_course(self.course).present?
