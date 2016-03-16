@@ -63,21 +63,19 @@
 %li= link_to_unless_current glyph("bar-chart") + "System Analytics", analytics_students_path
 %li= link_to_unless_current glyph("heartbeat") + "#{term_for :assignment} Analytics", per_assign_path
 
-- if current_user_is_professor? || current_user_is_admin?
-  .hide-for-small
-    %hr
+%hr
 
-    %h5 Downloads
-    %li= link_to_unless_current glyph("list-ul") + "Final Grades", final_grades_path(format: "csv")
-    %li= link_to glyph(:table) + "Full Gradebook", gradebook_path(format: "csv")
-    - if current_course.student_weighted?
-      %li= link_to glyph(:table) + "Multiplied Gradebook",  multiplied_gradebook_path(format: "csv")
-    %li= link_to glyph("th-large") + "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(format: "csv")
+%h5 Downloads
+%li= link_to_unless_current glyph("list-ul") + "Final Grades", final_grades_path(format: "csv")
+%li= link_to glyph(:table) + "Full Gradebook", gradebook_path(format: "csv")
+- if current_course.student_weighted?
+  %li= link_to glyph(:table) + "Multiplied Gradebook",  multiplied_gradebook_path(format: "csv")
+%li= link_to glyph("th-large") + "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(format: "csv")
 
-    - if current_course.has_badges?
-      %li= link_to glyph(:certificate) + "Awarded #{current_course.badge_term.pluralize}",  export_earned_badges_path(format: "csv")
+- if current_course.has_badges?
+  %li= link_to glyph(:certificate) + "Awarded #{current_course.badge_term.pluralize}",  export_earned_badges_path(format: "csv")
 
-    %li= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(format: "csv")
+%li= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(format: "csv")
 
 %hr
 
