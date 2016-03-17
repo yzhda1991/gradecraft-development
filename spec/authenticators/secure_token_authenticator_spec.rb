@@ -1,8 +1,6 @@
 require "active_record_spec_helper"
 require_relative "../../lib/keyword_arguments/define_as_ivars"
 require_relative "../../app/authenticators/secure_token_authenticator"
-require_relative "../../app/validators/secure_token_validator"
-require_relative "../../app/models/secure_token"
 
 describe SecureTokenAuthenticator do
   subject { described_class.new authenticator_options }
@@ -20,7 +18,6 @@ describe SecureTokenAuthenticator do
 
   describe "#initialize" do
     it "defines ivars for all keyword arguments" do
-      expect(subject).to receive(:set_keywords_as_ivars)
     end
   end
 
@@ -225,7 +222,7 @@ describe SecureTokenAuthenticator do
         end
 
         it "sleeps" do
-          expect(subject).to receive(:sleep).with(slowdown_duration)
+          expect(subject).to receive(:sleep).with slowdown_duration
           result
         end
       end

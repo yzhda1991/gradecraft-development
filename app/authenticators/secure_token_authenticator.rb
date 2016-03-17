@@ -1,11 +1,12 @@
 class SecureTokenAuthenticator
-  include KeywordArguments::Initialize
 
   def initialize(secure_token_uuid:, target_class:, target_id:, secret_key:,
                  slowdown_duration: 1)
 
-    # set each keyword argument value as an instance variable
-    set_keywords_as_ivars
+    # set attribute values for each keyword in the :initialize definition
+    method(:initialize).parameters.each do |type, keyword|
+      send "#{keyword}=", eval(keyword.to_s)
+    end
   end
 
   attr_accessor :secure_token_uuid, :target_class, :target_id, :secret_key,
