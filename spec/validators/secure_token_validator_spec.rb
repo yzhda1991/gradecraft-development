@@ -34,8 +34,53 @@ describe SecureTokenValidator do
   end
 
   describe "#validate_uuid_format" do
+    let(:result) { subject.validate_uuid_format }
+
+    before(:each) do
+      subject.record = record
+    end
+
+    context "the record's :uuid matches the validator regex" do
+      before(:each) do
+        allow(subject.record).to receive(:uuid) { SecureRandom.uuid }
+      end
+
+      it "returns nil" do
+        expect(result).to be_nil
+      end
+
+      it "doesn't add an error message for the uuid" do
+        result
+        expect(record.errors[:uuid]).to be_empty
+      end
+    end
+
+    context "the record's :uuid does not match the validator regex" do
+      before(:each) do
+        allow(subject.record).to receive(:uuid) { "not-the-uuid-format" }
+      end
+
+      it "returns the uuid errors array" do
+        expect(result).to eq record.errors[:uuid]
+      end
+
+      it "inserts an error message into errors[:uuid]" do
+        result
+        expect(record.errors[:uuid].last).to match "is not valid"
+      end
+
+    end
   end
 
   describe "#validate_encrypted_key_format" do
+    context "the record's :encrypted_key matches the validator regex" do
+      it "returns nil" do
+      end
+    end
+
+    context "the record's :encrypted_key does not match the validator regex" do
+      it "inserts an error message into errors[:encrypted_key]" do
+      end
+    end
   end
 end
