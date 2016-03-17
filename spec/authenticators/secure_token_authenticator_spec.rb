@@ -1,9 +1,13 @@
-require 'rails_spec_helper'
+require "active_record_spec_helper"
+require_relative "../../lib/keyword_arguments/define_as_ivars"
+require_relative "../../app/authenticators/secure_token_authenticator"
+require_relative "../../app/validators/secure_token_validator"
+require_relative "../../app/models/secure_token"
 
 describe SecureTokenAuthenticator do
-  subject { described_class.new given_options }
+  subject { described_class.new authenticator_options }
 
-  let(:given_options) do
+  let(:authenticator_options) do
     {
       secure_token_uuid: "some_uuid",
       secret_key: "skeletonkeysrsly",
@@ -15,19 +19,8 @@ describe SecureTokenAuthenticator do
   let(:secure_token) { SecureToken.new }
 
   describe "#initialize" do
-    it "merges the default options into the options" do
-      expect(subject.options).to eq subject.default_options.merge(given_options)
-    end
-
-    it "sets the slowdown duration" do
-      subject = described_class.new given_options.merge(slowdown_duration: 20)
-      expect(subject.slowdown_duration).to eq(20)
-    end
-
-    it "sets the required options" do
-      subject.required_options.each do |option|
-        expect(subject.send option).to eq given_options[option]
-      end
+    it "defines ivars for all keyword arguments" do
+      expect(subject).to receive(:set_keywords_as_ivars)
     end
   end
 
@@ -64,14 +57,13 @@ describe SecureTokenAuthenticator do
 
     before(:each) do
       allow(subject).to receive_messages(
-        required_options_present?: true,
         uuid_format_valid?: true,
         secure_key_format_valid?: true,
         secure_token: secure_token,
         secret_key: "the-secret-key"
       )
 
-      allow(secure_token).to receive(:authenticates_with?)
+      allow(secure_token).to receive(:unlocked_by?)
         .with("the-secret-key").and_return true
       allow(secure_token).to receive(:expired?) { false }
     end
@@ -79,13 +71,6 @@ describe SecureTokenAuthenticator do
     context "all steps return true" do
       it "authenticates" do
         expect(result).to be_truthy
-      end
-    end
-
-    context "all required options are not present" do
-      it "does not authenticate" do
-        allow(subject).to receive(:required_options_present?) { false }
-        expect(result).to be_falsey
       end
     end
 
@@ -117,9 +102,9 @@ describe SecureTokenAuthenticator do
       end
     end
 
-    context "the secure token doesn't authenticate with the given secret key" do
+    context "the secure token isn't unlocked by the given secret key" do
       before(:each) do
-        allow(secure_token).to receive(:authenticates_with?)
+        allow(secure_token).to receive(:unlocked_by?)
           .with("the-secret-key").and_return false
       end
 
@@ -140,7 +125,7 @@ describe SecureTokenAuthenticator do
       let(:secure_token) { nil }
 
       it "returns nil" do
-        expect(result).to be_nil
+        expect(result).to eq false
       end
     end
 
@@ -163,16 +148,18 @@ describe SecureTokenAuthenticator do
 
   describe "#secure_token" do
     let(:result) { subject.secure_token }
-    let!(:secure_token) { create(:secure_token) }
 
     context "a secure token exists with the uuid and target class" do
-      let(:given_options) do
+      let(:authenticator_options) do
         {
           secure_token_uuid: secure_token.uuid,
           target_class: secure_token.target_type,
-          target_id: secure_token.target_id
+          target_id: secure_token.target_id,
+          secret_key: secure_token.random_secret_key # this is important
         }
       end
+
+      let!(:secure_token) { create(:secure_token) }
 
       it "returns the first secure token matching this pair" do
         expect(result).to eq(secure_token)
@@ -192,54 +179,20 @@ describe SecureTokenAuthenticator do
     end
 
     context "no secure tokens exist for the uuid and target class" do
-      let(:given_options) do
+      let(:authenticator_options) do
         {
           secure_token_uuid: "doesnt-exist",
           target_class: "NotAClass",
-          target_id: nil
+          target_id: nil,
+          secret_key: "probably-won't-work"
         }
       end
+
+      let!(:secure_token) { create(:secure_token) }
 
       it "doesn't find anything and returns nil" do
         expect(result).to be_nil
       end
-    end
-  end
-
-  describe "#required_options" do
-    it "should be an array of required options" do
-      expect(subject.required_options).to eq \
-        [ :secure_token_uuid, :secret_key, :target_class, :target_id ]
-    end
-
-    it "should be frozen" do
-      expect(subject.required_options.frozen?).to be_truthy
-    end
-  end
-
-  describe "#required_options_present?" do
-    context "all required options are present, non-nil values" do
-      it "returns true" do
-        expect(subject.required_options_present?).to be_truthy
-      end
-    end
-
-    context "some required options are nil or not present" do
-      let(:given_options) { { secret_key: "", target_class: nil } }
-
-      it "returns false" do
-        expect(subject.required_options_present?).to be_falsey
-      end
-    end
-  end
-
-  describe "#default_options" do
-    it "should set a default slowdown duration" do
-      expect(subject.default_options).to eq({ slowdown_duration: 1 })
-    end
-
-    it "should be frozen" do
-      expect(subject.default_options.frozen?).to be_truthy
     end
   end
 
@@ -253,10 +206,9 @@ describe SecureTokenAuthenticator do
 
     describe "#uuid_format_valid?" do
       let(:result) { subject.uuid_format_valid? }
-      let!(:cached_uuid_regex) { REGEX["UUID"] }
 
       before do
-        REGEX["UUID"] = /VALID-UUID/
+        allow(SecureTokenValidator::Regex).to receive(:uuid) { /VALID-UUID/ }
       end
 
       context "secure_token_uuid format matches the regex" do
@@ -277,18 +229,17 @@ describe SecureTokenAuthenticator do
           result
         end
       end
-
-      after do
-        REGEX["UUID"] = cached_uuid_regex
-      end
     end
 
     describe "#secure_key_format_valid?" do
       let(:result) { subject.secure_key_format_valid? }
-      let!(:cached_secret_key_regex) { REGEX["190_BIT_SECRET_KEY"] }
 
       before do
-        REGEX["190_BIT_SECRET_KEY"] = /VALID-SECRET-KEY/
+        allow(SecureTokenValidator::Regex).to receive(:secret_key)
+          .and_return /VALID-SECRET-KEY/
+      end
+
+      before do
         allow(subject).to receive(:sleep) { 0.000000001 } # don't sleep for long
       end
 
@@ -306,13 +257,9 @@ describe SecureTokenAuthenticator do
         end
 
         it "sleeps" do
-          expect(subject).to receive(:sleep).with(slowdown_duration)
+          expect(subject).to receive(:sleep).with slowdown_duration
           result
         end
-      end
-
-      after do
-        REGEX["190_BIT_SECRET_KEY"] = cached_secret_key_regex
       end
     end
   end

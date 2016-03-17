@@ -1,8 +1,11 @@
 class SecureTokenAuthenticator
+  include KeywordArguments::Initialize
+
   def initialize(secure_token_uuid:, target_class:, target_id:, secret_key:,
                  slowdown_duration: 1)
+
     # set each keyword argument value as an instance variable
-    include KeywordArguments::DefineAsIvars
+    set_keywords_as_ivars
   end
 
   attr_accessor :secure_token_uuid, :target_class, :target_id, :secret_key,
@@ -34,7 +37,7 @@ class SecureTokenAuthenticator
   end
 
   def uuid_format_valid?
-    if secure_token_uuid.match REGEX["UUID"]
+    if secure_token_uuid.match SecureTokenValidator::Regex.uuid
       true
     else
       # This should only occur if somebody is attempting to crack a key by
@@ -47,7 +50,7 @@ class SecureTokenAuthenticator
   end
 
   def secure_key_format_valid?
-    if secret_key.match REGEX["190_BIT_SECRET_KEY"]
+    if secret_key.match SecureTokenValidator::Regex.secret_key
       true
     else
       # This should only occur if somebody is attempting to crack a key by

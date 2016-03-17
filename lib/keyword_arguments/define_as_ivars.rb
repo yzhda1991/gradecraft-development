@@ -4,11 +4,13 @@ module KeywordArguments
   # to change without having to worry about explicitly changing which attributes
   # are being defined.
   #
-  module DefineAsIvars
-    method(__method__).parameters.each do |type, key|
-      next unless type == :key
-      value = eval(key.to_s)
-      instance_variable_set("@#{key}", value) unless value.nil?
+  module Initialize
+    def set_keywords_as_ivars
+      method(__method__).parameters.each do |type, key|
+        next unless type == :key
+        value = eval(key.to_s)
+        instance_variable_set("@#{key}", value) unless value.nil?
+      end
     end
   end
 end
