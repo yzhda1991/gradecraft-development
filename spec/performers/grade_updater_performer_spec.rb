@@ -236,7 +236,6 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
     end
   end
 
-  # NOTE: DONE
   describe "save_scores_messages" do
     subject { performer.instance_eval{ save_scores_messages } }
     let(:performer_grade) { performer.instance_variable_get(:@grade) }
@@ -258,7 +257,6 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
     end
   end
 
-  # NOTE: DONE
   describe "notify_released_messages" do
     subject { performer.instance_eval{ notify_released_messages } }
 

@@ -41,12 +41,12 @@ class Team < ActiveRecord::Base
       .where("LOWER(name) = :name", name: name.downcase).first
   end
 
-  # @mz todo: add specs
+  # @mz TODO: add specs
   def recalculate_student_scores
     student_score_recalculator_jobs.each(&:enqueue)
   end
 
-  # @mz todo: add specs
+  # @mz TODO: add specs
   def student_score_recalculator_jobs
     @student_score_recalculator_jobs ||= students.collect do |student|
       ScoreRecalculatorJob.new(user_id: student.id, course_id: course_id)

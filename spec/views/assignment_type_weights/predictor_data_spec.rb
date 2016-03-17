@@ -25,7 +25,7 @@ describe "assignment_type_weights/predictor_data" do
     expect(@json["weights"]["assignment_types_weightable"]).to eq([37,38,39])
   end
 
-  it "includes course attributes related to assigment weights" do
+  it "includes course attributes related to assignment weights" do
     expect(@json["weights"]["total_weights"]).to eq(6)
     expect(@json["weights"]["close_at"]).to eq("1234")
     expect(@json["weights"]["max_weights"]).to eq(4)

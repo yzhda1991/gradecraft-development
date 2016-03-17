@@ -69,10 +69,8 @@ class Grade < ActiveRecord::Base
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :not_nil, -> { where.not(score: nil)}
 
-  # @mz todo: add specs
+  # @mz TODO: add specs
   scope :student_visible, -> { joins(:assignment).where(student_visible_sql) }
-
-  # validates_numericality_of :raw_score, integer_only: true
 
   def self.find_or_create(assignment_id,student_id)
     Grade.find_or_create_by(student_id: student_id, assignment_id: assignment_id)
@@ -160,9 +158,7 @@ class Grade < ActiveRecord::Base
   end
   alias graded_or_released? status_is_graded_or_released?
 
-  # @mz todo: port this over to cache_team_and_student_scores once
-  # related methods have tests
-  # want to make sure that nothing depends on the output of this method
+  # TODO: add specs
   def save_student_and_team_scores
     self.student.cache_course_score(self.course.id)
     if self.course.has_teams? && self.student.team_for_course(self.course).present?
@@ -170,7 +166,7 @@ class Grade < ActiveRecord::Base
     end
   end
 
-  # @mz todo: add specs
+  # @mz TODO: add specs
   def cache_student_and_team_scores
     { cached_student_score: cache_student_score,
       cached_team_score: cache_team_score,
@@ -269,13 +265,13 @@ class Grade < ActiveRecord::Base
     @team ||= student.team_for_course(course)
   end
 
-  # @mz todo: add specs
+  # @mz TODO: add specs
   def cache_student_score
     @student = self.student
     @student_update_successful = @student.cache_course_score(self.course.id)
   end
 
-  # @mz todo: add specs, improve the syntax here
+  # @mz TODO: add specs, improve the syntax here
   def cache_team_score
     if course.has_teams? && student.team_for_course(course).present?
       @team = cached_student_team

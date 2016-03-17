@@ -104,7 +104,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
 
         context "grade attributes fail to update" do
           # pass an invalid assignment name to fail the update
-          # todo: FIX this, I have no idea why it won't stub
+          # TODO: FIX this, I have no idea why it won't stub
           let(:request_attrs) {{ id: assignment.id, assignment: { name: nil }}}
           before { allow(assignment).to receive_messages(update_attributes: false) }
 

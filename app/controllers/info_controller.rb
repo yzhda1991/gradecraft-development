@@ -124,7 +124,7 @@ class InfoController < ApplicationController
 
   # downloadable grades for course with  export
   def research_gradebook
-    # @mz todo: add specs
+    # @mz TODO: add specs
     @grade_export_job = GradeExportJob.new(user_id: current_user.id, course_id: current_course.id)
     @grade_export_job.enqueue
 

@@ -91,7 +91,6 @@ class EarnedBadgesController < ApplicationController
     end
   end
 
-  # ATTN
   def mass_earn
     @badge = current_course.badges.find(params[:id])
     @valid_earned_badges ||= parse_valid_earned_badges

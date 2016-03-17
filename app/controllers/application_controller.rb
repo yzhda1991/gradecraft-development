@@ -42,8 +42,8 @@ class ApplicationController < ActionController::Base
         redirect_to dashboard_path
       else
         redirect_to root_url, alert: "Please login first."
-        # We ultimately need to handle Cosign approved users who don't have
-        # GradeCraft accounts
+        # TODO: We ultimately need to handle Cosign approved users who don't
+        # have GradeCraft accounts
       end
     else
       redirect_to root_path, alert: "Please login first."
