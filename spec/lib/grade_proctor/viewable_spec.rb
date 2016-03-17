@@ -43,14 +43,15 @@ describe GradeProctor::Viewable do
     end
 
     context "as part of the course staff" do
+      let(:staff) { double(:user, id: 456, is_staff?: true) }
+
       it "can view the grade if they are the instructor for the course" do
-        allow(user).to receive(:is_staff?).with(course).and_return true
-        expect(subject).to be_viewable user, course
+        expect(subject).to be_viewable staff, course
       end
 
       it "cannot view the grade if they are not the instructor for the course" do
-        allow(user).to receive(:is_staff?).with(course).and_return false
-        expect(subject).to_not be_viewable user, course
+        allow(staff).to receive(:is_staff?).with(course).and_return false
+        expect(subject).to_not be_viewable staff, course
       end
     end
   end

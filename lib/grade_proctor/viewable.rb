@@ -10,8 +10,9 @@ class GradeProctor
       user ||= grade.student
       course ||= grade.course
 
-      grade_for_context?(user, course) &&
-        (user.is_staff?(course) || grade_visible_by_student?)
+      grade_for_course?(course) &&
+        (user.is_staff?(course) ||
+          (grade_for_user?(user) && grade_visible_by_student?))
     end
 
     private

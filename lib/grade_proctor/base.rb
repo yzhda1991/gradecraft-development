@@ -4,8 +4,12 @@ class GradeProctor
 
     private
 
-    def grade_for_context?(user, course)
-      grade.course_id == course.id && grade.student_id == user.id
+    def grade_for_course?(course)
+      grade.course_id == course.id
+    end
+
+    def grade_for_user?(user)
+      grade.student_id == user.id
     end
   end
 end
