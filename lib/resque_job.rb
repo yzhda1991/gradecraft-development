@@ -8,7 +8,6 @@ module ResqueJob
   extend IsConfigurable
 end
 
-
 require_dependency 'is_configurable'
 require_dependency 'resque_job/base'
 require_dependency 'resque_job/configuration'
