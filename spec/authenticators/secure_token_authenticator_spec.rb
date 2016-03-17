@@ -1,5 +1,4 @@
 require "active_record_spec_helper"
-require_relative "../../lib/keyword_arguments/define_as_ivars"
 require_relative "../../app/authenticators/secure_token_authenticator"
 
 describe SecureTokenAuthenticator do
@@ -17,7 +16,15 @@ describe SecureTokenAuthenticator do
   let(:secure_token) { SecureToken.new }
 
   describe "#initialize" do
-    it "defines ivars for all keyword arguments" do
+    it "sets attribute values for all required keyword arguments" do
+      expect(subject.secure_token_uuid).to eq "some_uuid"
+      expect(subject.secret_key).to eq "skeletonkeysrsly"
+      expect(subject.target_class).to eq "WaffleClass"
+      expect(subject.target_id).to eq "8"
+    end
+
+    it "sets an attribute value for keyword arguments" do
+      expect(subject.slowdown_duration).to eq 1
     end
   end
 

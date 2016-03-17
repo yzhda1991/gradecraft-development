@@ -4,7 +4,7 @@ class SecureTokenAuthenticator
                  slowdown_duration: 1)
 
     # set attribute values for each keyword in the :initialize definition
-    method(:initialize).parameters.each do |type, keyword|
+    method(:initialize).parameters.each do |param_type, keyword|
       send "#{keyword}=", eval(keyword.to_s)
     end
   end
