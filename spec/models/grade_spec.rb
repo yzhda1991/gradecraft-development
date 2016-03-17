@@ -1,8 +1,13 @@
 require "active_record_spec_helper"
 require "toolkits/historical_toolkit"
 require "toolkits/sanitization_toolkit"
+require_relative "../support/uni_mock/rails"
 
 describe Grade do
+  include UniMock::StubRails
+
+  before { stub_env "development" }
+
   subject { build(:grade) }
 
   describe "constants" do
@@ -89,6 +94,43 @@ describe Grade do
     it "converts raw_score from human readable strings" do
       subject.update(raw_score: "1,234")
       expect(subject.raw_score).to eq(1234)
+    end
+  end
+
+  describe ".not_released" do
+    it "returns all grades that are graded but require a release" do
+      assignment = create :assignment, release_necessary: true
+      not_released_grade = create :grade, assignment: assignment, status: "Graded"
+      create :grade, assignment: assignment, status: "Released"
+      create :grade, status: "Graded"
+
+      expect(described_class.not_released).to eq [not_released_grade]
+    end
+  end
+
+  describe ".released" do
+    it "returns all the grades that are released" do
+      released_grade = create :grade, status: "Released"
+      create :grade, status: "In Progress"
+
+      expect(described_class.released).to eq [released_grade]
+    end
+  end
+
+  describe ".student_visible" do
+    it "returns all grades that were released or were graded but no release was necessary" do
+      graded_grade = create :grade, status: "Graded"
+      released_grade = create :grade, status: "Released"
+      assignment = create :assignment, release_necessary: true
+      create :grade, assignment: assignment, status: "Graded"
+
+      expect(described_class.student_visible).to eq [graded_grade, released_grade]
+    end
+  end
+
+  describe ".releasable_through" do
+    it "returns assignment" do
+      expect(described_class.releasable_relationship).to eq :assignment
     end
   end
 

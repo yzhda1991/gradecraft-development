@@ -42,8 +42,9 @@ class Grade < ActiveRecord::Base
   before_save :zero_points_for_pass_fail
   after_save :check_unlockables
 
-  multiple_files :grade_files
   clean_html :feedback
+  multiple_files :grade_files
+  releasable_through :assignment
 
   has_many :grade_files, dependent: :destroy
   accepts_nested_attributes_for :grade_files
@@ -136,10 +137,6 @@ class Grade < ActiveRecord::Base
     feedback.present?
   end
 
-  def is_student_visible?
-    is_released? || (is_graded? && !assignment.release_necessary)
-  end
-
   # @mz todo: port this over to cache_team_and_student_scores once
   # related methods have tests
   # want to make sure that nothing depends on the output of this method
@@ -202,10 +199,6 @@ class Grade < ActiveRecord::Base
     self.point_total = calculate_point_total
     self.final_score = calculate_final_score
     self.score = calculate_score
-  end
-
-  def self.student_visible_sql
-    ["status = 'Released' OR (status = 'Graded' AND assignments.release_necessary = ?)", false]
   end
 
   def save_student
