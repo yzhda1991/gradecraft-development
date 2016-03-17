@@ -3,14 +3,14 @@ class GradeProctor
     include Base
 
     def updatable?(user=nil, course=nil)
-      return false if resource.nil?
+      return false if grade.nil?
 
-      user ||= resource.student
-      course ||= resource.course
+      user ||= grade.student
+      course ||= grade.course
 
       grade_for_context?(user, course) &&
-        (user.is_staff?(course) || resource.assignment.student_logged? ||
-         resource.predicted?)
+        (user.is_staff?(course) || grade.assignment.student_logged? ||
+         grade.predicted?)
     end
   end
 end

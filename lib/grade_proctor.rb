@@ -6,9 +6,9 @@ class GradeProctor
   include Updatable
   include Viewable
 
-  attr_reader :resource
+  attr_reader :grade
 
-  def initialize(resource)
-    @resource = resource
+  def initialize(grade)
+    @grade = grade
   end
 end
