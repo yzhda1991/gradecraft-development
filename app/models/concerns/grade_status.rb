@@ -54,8 +54,4 @@ module GradeStatus
   def graded_or_released?
     is_graded? || is_released?
   end
-
-  def is_student_visible?
-    is_released? || (is_graded? && !send(self.class.releasable_relationship).release_necessary)
-  end
 end

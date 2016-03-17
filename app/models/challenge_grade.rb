@@ -36,4 +36,9 @@ class ChallengeGrade < ActiveRecord::Base
   def cache_team_score
     team.save!
   end
+
+  # TODO: jw this will be replaced with a ChallengeGradeProctor
+  def is_student_visible?
+    is_released? || (is_graded? && !challenge.release_necessary)
+  end
 end
