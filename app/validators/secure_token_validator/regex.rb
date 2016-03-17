@@ -1,4 +1,4 @@
-class SecureTokenValidator
+class SecureTokenValidator < ActiveModel::Validator
   # define the regex formatting for the various secure_token parameters
   module Regex
     class << self

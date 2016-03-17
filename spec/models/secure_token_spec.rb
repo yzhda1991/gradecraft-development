@@ -8,7 +8,7 @@ RSpec.describe SecureToken do
     let(:result) { subject.instance_eval { random_secret_key } }
 
     it "creates a 190-bit url-safe base64 hex key" do
-      expect(result).to match REGEX["190_BIT_SECRET_KEY"]
+      expect(result).to match SecureTokenValidator::Regex.secret_key
     end
 
     it "caches the @random_secret_key" do
@@ -23,22 +23,26 @@ RSpec.describe SecureToken do
     end
   end
 
-  describe "#authenticates_with?" do
+  describe "#unlocked_by?" do
+    let(:result) { subject.unlocked_by? secret_key }
+
     before(:each) do
       subject.instance_variable_set(:@random_secret_key, "some-secret-key")
       subject.save
     end
 
     context "the secret key matches the encrypted key" do
-      it "authenticates (returns true)" do
-        result = subject.authenticates_with?("some-secret-key")
+      let(:secret_key) { "some-secret-key" }
+
+      it "unlocks the secure token (returns true)" do
         expect(result).to be_truthy
       end
     end
 
     context "the secret key does not match the encrypted key" do
-      it "does not authenticate (returns false)" do
-        result = subject.authenticates_with?("not-the-secret-key")
+      let(:secret_key) { "not-the-secret-key" }
+
+      it "does not unlock the secure token (returns false)" do
         expect(result).to be_falsey
       end
     end

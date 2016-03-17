@@ -21,7 +21,7 @@ class SecureToken < ActiveRecord::Base
   validates :target, presence: true
 
   # double-check to make sure that the authentication process is correct here
-  def authenticates_with?(secret_key)
+  def unlocked_by?(secret_key)
     # In order to check the secret key against the encrypted key the encrypted
     # key check has to be on the left of the equivalency operand since == has
     # been overwritten in SCrypt::Password and will perform the authentication

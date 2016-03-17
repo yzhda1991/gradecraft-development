@@ -1,7 +1,7 @@
 class SecureTokenAuthenticator
   def initialize(secure_token_uuid:, target_class:, target_id:, secret_key:,
                  slowdown_duration: 1)
-    # set each keyword argument as an instance variable
+    # set each keyword argument value as an instance variable
     include KeywordArguments::DefineAsIvars
   end
 
@@ -16,7 +16,7 @@ class SecureTokenAuthenticator
     secure_key_format_valid? &&
     secure_token &&
     !secure_token.expired? &&
-    secure_token.authenticates_with?(secret_key)
+    secure_token.unlocked_by? secret_key
   end
 
   def valid_token_expired?
