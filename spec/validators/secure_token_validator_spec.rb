@@ -6,8 +6,7 @@ describe SecureTokenValidator do
 
   let(:record) do
     # let's start with uuid and encrypted key formats that match the regexes
-    double(:record, uuid: SecureRandom.uuid,
-            encrypted_key: SecureRandom.hex(525), # returns a 1050-char hex
+    double(:record, uuid: "some-uuid", encrypted_key: "some-hex-key",
             errors: { uuid: [], encrypted_key: [] } )
   end
 
@@ -41,7 +40,13 @@ describe SecureTokenValidator do
     describe "#validate_uuid_format" do
       let(:result) { subject.validate_uuid_format }
 
+      before(:each) do
+        allow(SecureTokenValidator::Regex).to receive(:uuid) { regex }
+      end
+
       context "the record's :uuid matches the validator regex" do
+        let(:regex) { /some-uuid/ }
+
         it "returns nil" do
           expect(result).to be_nil
         end
@@ -53,6 +58,8 @@ describe SecureTokenValidator do
       end
 
       context "the record's :uuid does not match the validator regex" do
+        let(:regex) { /invalid-uuid-format/ }
+
         before(:each) do
           allow(subject.record).to receive(:uuid) { "not-the-uuid-format" }
         end
@@ -72,7 +79,13 @@ describe SecureTokenValidator do
     describe "#validate_encrypted_key_format" do
       let(:result) { subject.validate_encrypted_key_format }
 
+      before(:each) do
+        allow(SecureTokenValidator::Regex).to receive(:encrypted_key) { regex }
+      end
+
       context "the record's :encrypted_key matches the validator regex" do
+        let(:regex) { /some-hex-key/ }
+
         it "returns nil" do
           expect(result).to be_nil
         end
@@ -84,6 +97,8 @@ describe SecureTokenValidator do
       end
 
       context "the record's :encrypted_key does not match the validator regex" do
+        let(:regex) { /invalid-encrypted-key-format/ }
+
         before(:each) do
           allow(subject.record).to receive(:encrypted_key) { "not-the-encrypted_key-format" }
         end
