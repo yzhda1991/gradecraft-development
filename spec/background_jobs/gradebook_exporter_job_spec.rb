@@ -1,4 +1,15 @@
-require "rails_spec_helper"
+require "resque_spec"
+require "resque-scheduler"
+require "resque_spec/scheduler"
+require "active_record_spec_helper"
+
+require_relative "../../lib/is_configurable"
+require_relative "../../lib/loggly_resque"
+require_relative "../../lib/inheritable_ivars"
+require_relative "../../lib/resque_job/performer"
+require_relative "../../lib/resque_job"
+require_relative "../../app/performers/gradebook_export_performer"
+require_relative "../../app/background_jobs/gradebook_exporter_job"
 
 RSpec.describe GradebookExporterJob do
   include InQueueHelper # pulled from ResqueSpec
