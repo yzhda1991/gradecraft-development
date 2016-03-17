@@ -16,5 +16,13 @@ describe LinkHelper do
           "#{secure_token.uuid}/secret_key/#{secure_token.random_secret_key}"
       )
     end
+
+    context "secure_token.target_type has a module namespace" do
+      it "demodularizes the namespace" do
+        allow(secure_token).to receive(:target_type) { "Great::Folks" }
+        expect(helper).to receive(:secure_download_folks_url)
+        result
+      end
+    end
   end
 end
