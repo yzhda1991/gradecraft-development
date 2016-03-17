@@ -36,7 +36,8 @@ class CoursePredictorExport
   end
 
   def assignment_name(event, index)
-    @assignment_names[event.assignment_id] || "[assignment id: #{event.assignment_id}]"
+    @assignment_names[event.assignment_id] ||
+      "[assignment id: #{event.assignment_id}]"
   end
 
   def student_profile(event, index)

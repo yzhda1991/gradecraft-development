@@ -18,7 +18,8 @@ class PredictedEarnedBadge < ActiveRecord::Base
     self.badge.earned_badge_count_for_student(self.student)
   end
 
-  # Returns the higher number: predicted times earned or actually earned and visible to student
+  # Returns the higher number: predicted times earned or actually earned and
+  # visible to student
   def times_earned_including_actual
     if times_earned < actual_times_earned
       actual_times_earned

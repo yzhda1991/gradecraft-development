@@ -27,7 +27,8 @@ class AnnouncementsController < ApplicationController
     enforce_create_permission(@announcement)
     if @announcement.save
       @announcement.deliver!
-      redirect_to announcements_path, notice: "Announcement created and sent." and return
+      redirect_to announcements_path,
+        notice: "Announcement created and sent." and return
     end
 
     @title = "Create a New Announcement"

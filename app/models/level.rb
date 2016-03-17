@@ -11,7 +11,8 @@ class Level < ActiveRecord::Base
 
   scope :ordered, -> { order("points ASC") }
 
-  attr_accessible :name, :description, :points, :criterion_id, :durable, :full_credit, :no_credit, :sort_order
+  attr_accessible :name, :description, :points, :criterion_id, :durable,
+    :full_credit, :no_credit, :sort_order
 
   include DisplayHelpers
 
