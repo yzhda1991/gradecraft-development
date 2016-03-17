@@ -17,10 +17,6 @@ class NullGrade
     0
   end
 
-  def is_student_visible?
-    true
-  end
-
   def is_released?
     false
   end
