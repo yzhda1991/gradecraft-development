@@ -5,9 +5,11 @@ describe SecureTokenValidator do
   subject { described_class.new }
 
   let(:record) do
-    double(:record, uuid: nil, encrypted_key: nil, errors: errors)
+    # let's start with uuid and encrypted key formats that match the regexes
+    double(:record, uuid: SecureRandom.uuid,
+            encrypted_key: SecureRandom.hex(525), # returns a 1050-char hex
+            errors: { uuid: [], encrypted_key: [] } )
   end
-  let(:errors) { { uuid: [], encrypted_key: [] } }
 
   it "has an accessible record" do
     subject.record = record
@@ -33,53 +35,68 @@ describe SecureTokenValidator do
     end
   end
 
-  describe "#validate_uuid_format" do
-    let(:result) { subject.validate_uuid_format }
+  describe "validating attributes" do
+    before(:each) { subject.record = record }
 
-    before(:each) do
-      subject.record = record
-    end
+    describe "#validate_uuid_format" do
+      let(:result) { subject.validate_uuid_format }
 
-    context "the record's :uuid matches the validator regex" do
-      before(:each) do
-        allow(subject.record).to receive(:uuid) { SecureRandom.uuid }
+      context "the record's :uuid matches the validator regex" do
+        it "returns nil" do
+          expect(result).to be_nil
+        end
+
+        it "doesn't add an error message for the uuid" do
+          result
+          expect(record.errors[:uuid]).to be_empty
+        end
       end
 
-      it "returns nil" do
-        expect(result).to be_nil
-      end
+      context "the record's :uuid does not match the validator regex" do
+        before(:each) do
+          allow(subject.record).to receive(:uuid) { "not-the-uuid-format" }
+        end
 
-      it "doesn't add an error message for the uuid" do
-        result
-        expect(record.errors[:uuid]).to be_empty
-      end
-    end
+        it "returns the uuid errors array" do
+          expect(result).to eq record.errors[:uuid]
+        end
 
-    context "the record's :uuid does not match the validator regex" do
-      before(:each) do
-        allow(subject.record).to receive(:uuid) { "not-the-uuid-format" }
-      end
+        it "inserts an error message into errors[:uuid]" do
+          result
+          expect(record.errors[:uuid].last).to match "is not valid"
+        end
 
-      it "returns the uuid errors array" do
-        expect(result).to eq record.errors[:uuid]
-      end
-
-      it "inserts an error message into errors[:uuid]" do
-        result
-        expect(record.errors[:uuid].last).to match "is not valid"
-      end
-
-    end
-  end
-
-  describe "#validate_encrypted_key_format" do
-    context "the record's :encrypted_key matches the validator regex" do
-      it "returns nil" do
       end
     end
 
-    context "the record's :encrypted_key does not match the validator regex" do
-      it "inserts an error message into errors[:encrypted_key]" do
+    describe "#validate_encrypted_key_format" do
+      let(:result) { subject.validate_encrypted_key_format }
+
+      context "the record's :encrypted_key matches the validator regex" do
+        it "returns nil" do
+          expect(result).to be_nil
+        end
+
+        it "doesn't add an error message for the encrypted_key" do
+          result
+          expect(record.errors[:encrypted_key]).to be_empty
+        end
+      end
+
+      context "the record's :encrypted_key does not match the validator regex" do
+        before(:each) do
+          allow(subject.record).to receive(:encrypted_key) { "not-the-encrypted_key-format" }
+        end
+
+        it "returns the encrypted_key errors array" do
+          expect(result).to eq record.errors[:encrypted_key]
+        end
+
+        it "inserts an error message into errors[:encrypted_key]" do
+          result
+          expect(record.errors[:encrypted_key].last).to match "is not valid"
+        end
+
       end
     end
   end
