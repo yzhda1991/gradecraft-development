@@ -7,12 +7,14 @@ module GradeStatus
     attr_accessible :status
 
     scope :graded, -> { where status: "Graded" }
-    scope :graded_or_released, -> { where(status: ["Graded", "Released"])}
+    scope :graded_or_released, -> { where(status: ["Graded", "Released"]) }
     scope :in_progress, -> { where status: "In Progress" }
-    scope :not_released, -> { joins(releasable_relationship)
-      .where("#{releasable_relationship.to_s.tableize}" => { release_necessary: true }).where(status: "Graded") }
-    scope :released, -> { joins(releasable_relationship)
-      .where("status = 'Released' OR (status = 'Graded' AND NOT #{releasable_relationship.to_s.tableize}.release_necessary)") }
+    scope :not_released, -> { joins(releasable_relationship).
+                              where("#{releasable_relationship.to_s.tableize}" => { release_necessary: true }).
+                              where(status: "Graded") }
+    scope :released, -> { joins(releasable_relationship).
+                          where("status = 'Released' OR "\
+                                "(status = 'Graded' AND NOT #{releasable_relationship.to_s.tableize}.release_necessary)") }
     scope :student_visible, -> { joins(releasable_relationship).where(student_visible_sql) }
   end
 
