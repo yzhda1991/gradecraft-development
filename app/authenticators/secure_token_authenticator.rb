@@ -16,7 +16,7 @@ class SecureTokenAuthenticator
     secure_key_format_valid? &&
     secure_token &&
     !secure_token.expired? &&
-    secure_token.unlocked_by? secret_key
+    secure_token.unlocked_by?(secret_key)
   end
 
   def valid_token_expired?
