@@ -15,13 +15,13 @@ class ChallengeGrade < ActiveRecord::Base
 
   delegate :name, :description, :due_at, :point_total, to: :challenge
 
-  # @mz todo: add specs
+  # @mz TODO: add specs
   scope :student_visible, -> { joins(:challenge).where(student_visible_sql) }
 
   # TODO: Need to bring this in and resolve dup challenge grades in production
   # validates :challenge_id, uniqueness: {scope: :team_id}
 
-  # @mz todo: add specs
+  # @mz TODO: add specs
   def recalculate_student_and_team_scores
     team.update_revised_team_score
     if team.course.add_team_score_to_student?

@@ -337,7 +337,7 @@ class GradesController < ApplicationController
       flash[:notice] = "File missing"
       redirect_to assignment_path(@assignment)
     else
-      # @mz todo: check into what this calls is doing. is this being used?
+      # @mz TODO: check into what this calls is doing. is this being used?
       @students = current_course.students
 
       @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
@@ -391,7 +391,7 @@ class GradesController < ApplicationController
     end
   end
 
-  # Students predicting the score they'll get on an assignent using the grade
+  # Students predicting the score they'll get on an assignment using the grade
   # predictor
   # TODO: Change to predict_points when 'score' changes to 'points_earned and
   # PredictedEarnedAssignment model added

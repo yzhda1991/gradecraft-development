@@ -1,6 +1,9 @@
-class UnlockConditionsController < ApplicationController
+# Unlock Conditions are used to declare a sequence of assignments or badges
+# that must be completed at different levels before something else can be
+# done. Unlock States store whether or not a student has met the necessary
+# conditions
 
-  # Unlock Conditions are used to ...
+class UnlockConditionsController < ApplicationController
 
   before_filter :ensure_staff?
 

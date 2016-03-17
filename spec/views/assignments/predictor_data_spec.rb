@@ -155,7 +155,7 @@ describe "assignments/predictor_data" do
     expect(json["assignments"][0]["unlock_conditions"]).to eq(["#{badge.name} must be #{unlock_condition.condition_state}"])
   end
 
-  it "includes the assigment score levels" do
+  it "includes the assignment score levels" do
     asl = create(:assignment_score_level, assignment: @assignment)
     render
     json = JSON.parse(response.body)

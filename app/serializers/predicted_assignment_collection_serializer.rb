@@ -1,5 +1,5 @@
 # Called from the assignments Controller, this assembles the assignments
-# for a student with the student's grades nested within each assigment.
+# for a student with the student's grades nested within each assignment.
 # Permission to update predictions is only granted if the user is the student.
 
 class PredictedAssignmentCollectionSerializer
