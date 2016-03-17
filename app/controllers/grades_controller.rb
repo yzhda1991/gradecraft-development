@@ -1,9 +1,12 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment, only: [:show, :edit, :update, :destroy, :submit_rubric]
-  before_filter :ensure_staff?, except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
+  before_filter :set_assignment,
+    only: [:show, :edit, :update, :destroy, :submit_rubric]
+  before_filter :ensure_staff?,
+    except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
   # TODO: probably need to add submit_rubric here
-  before_filter :ensure_student?, only: [:feedback_read, :predict_score, :self_log]
+  before_filter :ensure_student?,
+    only: [:feedback_read, :predict_score, :self_log]
   before_filter :save_referer, only: [:edit, :edit_status]
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
@@ -43,13 +46,15 @@ class GradesController < ApplicationController
     @submission = @student.submission_for_assignment(@assignment)
 
     @badges = @student.earnable_course_badges_for_grade(@grade)
-    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
+    @assignment_score_levels =
+      @assignment.assignment_score_levels.order_by_value
 
     if @assignment.grade_with_rubric?
       @rubric = @assignment.rubric
       @criterion_grades = serialized_criterion_grades
       # This is sent to the Angular controlled submit button
-      @return_path = URI(request.referer).path + "?student_id=#{current_student.id}"
+      @return_path =
+        URI(request.referer).path + "?student_id=#{current_student.id}"
     end
 
     @serialized_init_data = serialized_init_data
@@ -113,9 +118,17 @@ class GradesController < ApplicationController
   def delete_all_earned_badges
     if EarnedBadge.exists?(grade_id: params[:grade_id])
       EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
-      render json: { message: "Earned badges successfully deleted", success: true }, status: 200
+      render json: {
+        message: "Earned badges successfully deleted",
+        success: true
+        },
+        status: 200
     else
-      render json: { message: "Earned badges failed to delete", success: false }, status: 400
+      render json: {
+        message: "Earned badges failed to delete",
+        success: false
+        },
+        status: 400
     end
   end
 
@@ -149,7 +162,8 @@ class GradesController < ApplicationController
 
     if @grade.save
       score_recalculator(@grade.student)
-      redirect_to @grade.assignment, notice: "#{ @grade.student.name }'s #{ @grade.assignment.name } grade was successfully deleted."
+      redirect_to @grade.assignment,
+        notice: "#{ @grade.student.name }'s #{ @grade.assignment.name } grade was successfully deleted."
     else
       redirect_to @grade.assignment, notice:  @grade.errors.full_messages, status: 400
     end
@@ -277,7 +291,8 @@ class GradesController < ApplicationController
     respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
   end
 
-  # For changing the status of a group of grades passed in grade_ids ("In Progress" => "Graded", or "Graded" => "Released")
+  # For changing the status of a group of grades passed in grade_ids
+  #  ("In Progress" => "Graded", or "Graded" => "Released")
   # GET  /assignments/:id/grades/edit_status
   def edit_status
     @assignment = current_course.assignments.find(params[:id])
@@ -376,8 +391,10 @@ class GradesController < ApplicationController
     end
   end
 
-  # Students predicting the score they'll get on an assignent using the grade predictor
-  # TODO: Change to predict_points when 'score' changes to 'points_earned and PredictedEarnedAssignment model added
+  # Students predicting the score they'll get on an assignent using the grade
+  # predictor
+  # TODO: Change to predict_points when 'score' changes to 'points_earned and
+  # PredictedEarnedAssignment model added
   def predict_score
     @assignment = current_course.assignments.find(params[:id])
     if current_student.grade_released_for_assignment?(@assignment)
@@ -443,13 +460,15 @@ class GradesController < ApplicationController
 
   def enqueue_predictor_event_job
     begin
-      # if Resque can reach Redis without a socket error, then enqueue the job like a normal person
+      # if Resque can reach Redis without a socket error, then enqueue the job
+      # like a normal person
       # create a predictor event in mongo to keep track of what happened
       PredictorEventJob.new(data: predictor_event_attrs).enqueue
     rescue
-      # if Resque can't reach Redis because the getaddrinfo method is freaking out because of threads,
-      # or because of some worker stayalive anomaly, then just use the PredictorEventJob.perform method
-      # to persist the record directly to mongo with all of the logging it entails
+      # if Resque can't reach Redis because the getaddrinfo method is freaking
+      # out because of threads, or because of some worker stayalive anomaly,
+      # then just use the PredictorEventJob.perform method to persist the
+      # record directly to mongo with all of the logging it entails
       PredictorEventJob.perform(data: predictor_event_attrs)
     end
   end

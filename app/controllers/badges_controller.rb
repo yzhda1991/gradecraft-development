@@ -65,7 +65,8 @@ class BadgesController < ApplicationController
 
   def predict_times_earned
     @badge = current_course.badges.find(params[:badge_id])
-    @badgePrediction = PredictedEarnedBadge.where(student: current_student, badge: @badge).first
+    @badgePrediction =
+      PredictedEarnedBadge.where(student: current_student, badge: @badge).first
     @badgePrediction.times_earned = params[:times_earned]
 
     # save the prediction and cache the outcome
@@ -77,9 +78,15 @@ class BadgesController < ApplicationController
     respond_to do |format|
       format.json do
         if @prediction_saved
-          render json: {id: @badge.id, times_earned: @badgePrediction.times_earned}
+          render json: {
+            id: @badge.id,
+            times_earned: @badgePrediction.times_earned
+          }
         else
-          render json: { errors:  @badgePrediction.errors.full_messages }, status: 400
+          render json: {
+            errors:  @badgePrediction.errors.full_messages
+            },
+            status: 400
         end
       end
     end
@@ -137,9 +144,15 @@ class BadgesController < ApplicationController
     badges.each do |badge|
       prediction = badge.find_or_create_predicted_earned_badge(@student.id)
       if current_user.is_student?(current_course)
-        badge.prediction = {id: prediction.id, times_earned: prediction.times_earned_including_actual}
+        badge.prediction = {
+          id: prediction.id,
+          times_earned: prediction.times_earned_including_actual
+        }
       else
-        badge.prediction = {id: prediction.id, times_earned: prediction.actual_times_earned}
+        badge.prediction = {
+          id: prediction.id,
+          times_earned: prediction.actual_times_earned
+        }
       end
     end
     return badges

@@ -7,7 +7,9 @@ json.data @badges do |badge|
     json.icon badge.icon.url
     json.is_a_condition badge.is_a_condition?
     if badge.is_a_condition?
-      json.unlock_keys badge.unlock_keys.map { |key| "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}" }
+      json.unlock_keys badge.unlock_keys.map {
+        |key| "#{key.unlockable.name} is unlocked by #{key.condition_state} #{key.condition.name}"
+      }
     end
   end
 end

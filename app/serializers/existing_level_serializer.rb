@@ -1,5 +1,6 @@
 class ExistingLevelSerializer < ActiveModel::Serializer
-  attributes :id, :name, :description, :points, :full_credit, :no_credit, :durable
+  attributes :id, :name, :description, :points, :full_credit, :no_credit,
+    :durable
   has_many :level_badges, serializer: ExistingLevelBadgeSerializer
 
   def level_badges

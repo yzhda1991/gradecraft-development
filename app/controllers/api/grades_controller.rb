@@ -13,11 +13,15 @@ class API::GradesController < ApplicationController
   def group_index
     assignment = Assignment.find(params[:assignment_id])
     if !assignment.has_groups?
-      render json: { message: "not a group assignment", success: false }, status: 400
+      render json: {
+        message: "not a group assignment", success: false
+        },
+        status: 400
     else
       students = Group.find(params[:group_id]).students
       @student_ids = students.pluck(:id)
-      @grades = Grade.find_or_create_grades(params[:assignment_id], @student_ids)
+      @grades =
+        Grade.find_or_create_grades(params[:assignment_id], @student_ids)
       @grade_status_options = assignment.release_necessary? ?
         Grade::STATUSES : Grade::UNRELEASED_STATUSES
     end

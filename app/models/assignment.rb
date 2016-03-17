@@ -17,7 +17,9 @@ class Assignment < ActiveRecord::Base
     :mass_grade_type, :include_in_timeline, :include_in_predictor,
     :include_in_to_do, :assignment_file_ids,
     :assignment_files_attributes, :assignment_file,
-    :assignment_score_levels_attributes, :assignment_score_level, :course, :course_id, :show_name_when_locked, :show_points_when_locked, :show_description_when_locked
+    :assignment_score_levels_attributes, :assignment_score_level, :course,
+    :course_id, :show_name_when_locked, :show_points_when_locked,
+    :show_description_when_locked
 
   attr_accessor :current_student_grade
 
@@ -33,10 +35,12 @@ class Assignment < ActiveRecord::Base
   # For instances where the assignment needs its own unique score levels
   score_levels :assignment_score_levels, -> { order "value" }, dependent: :destroy
 
-  # This is the assignment weighting system (students decide how much assignments will be worth for them)
+  # This is the assignment weighting system (students decide how much
+  # assignments will be worth for them)
   has_many :weights, class_name: "AssignmentWeight", dependent: :destroy
 
-  # Student created groups, can connect to multiple assignments and receive group level or individualized feedback
+  # Student created groups, can connect to multiple assignments and receive
+  # group level or individualized feedback
   has_many :assignment_groups, dependent: :destroy
   has_many :groups, through: :assignment_groups
 
@@ -121,17 +125,20 @@ class Assignment < ActiveRecord::Base
   # Custom point total if the class has weighted assignments
   def point_total_for_student(student, weight = nil)
     (point_total * weight_for_student(student, weight)).round rescue 0
-    # rescue methods with a '0' for pass/fail assignments that are also student weightable for some untold reason
+    # rescue methods with a '0' for pass/fail assignments that are also student
+    # weightable for some untold reason
   end
 
-  # Grabbing a student's set weight for the assignment - returns one if the course doesn't have weights
+  # Grabbing a student's set weight for the assignment - returns one if the
+  # course doesn't have weights
   def weight_for_student(student, weight = nil)
     return 1 unless student_weightable?
     weight ||= (weights.where(student: student).pluck("weight").first || 0)
     weight > 0 ? weight : default_weight
   end
 
-  # Allows instructors to set a value (presumably less than 1) that would be multiplied by *not* weighted assignments
+  # Allows instructors to set a value (presumably less than 1) that would be
+  # multiplied by *not* weighted assignments
   def default_weight
     course.default_assignment_weight
   end
@@ -243,7 +250,8 @@ class Assignment < ActiveRecord::Base
       .where("submission_id in (select id from submissions where student_id in (select distinct(student_id) from team_memberships where team_id = ?))", team.id)
   end
 
-  # The below four are the Quick Grading Types, can be set at either the assignment or assignment type level
+  # The below four are the Quick Grading Types, can be set at either the
+  # assignment or assignment type level
   def grade_checkboxes?
     mass_grade_type == "Checkbox"
   end
@@ -311,7 +319,7 @@ class Assignment < ActiveRecord::Base
   end
 
   # Calculating attendance rate, which tallies number of people who have
-  # positive grades for attendance divided by the total number of students in the class
+  # positive grades for attendance divided by total number of students in class
   def completion_rate(course)
     return 0 if course.graded_student_count.zero?
     ((grade_count / course.graded_student_count.to_f) * 100).round(2)
@@ -327,7 +335,7 @@ class Assignment < ActiveRecord::Base
     GradeExporter.new.export_grades(self, students, options)
   end
 
-  # Creating an array with the set of scores earned on the assignment, and
+  # Creating an array with the set of scores earned on the assignment
   def percentage_score_earned
     { scores: earned_score_count.collect { |s| { data: s[1], name: s[0] }}}
   end

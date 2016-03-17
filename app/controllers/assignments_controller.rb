@@ -10,7 +10,8 @@ class AssignmentsController < ApplicationController
     @assignment_types = current_course.assignment_types.includes(:assignments)
   end
 
-  # Gives the instructor the chance to quickly check all assignment settings for the whole course
+  # Gives the instructor the chance to quickly check all assignment settings
+  # for the whole course
   def settings
     @title = "Review #{term_for :assignment} Settings"
     @assignment_types = current_course.assignment_types.includes(:assignments)
@@ -22,25 +23,34 @@ class AssignmentsController < ApplicationController
       alert: "The #{(term_for :assignment)} could not be found." and return unless assignment.present?
 
     mark_assignment_reviewed! assignment, current_user
-    render :show, AssignmentPresenter.build({ assignment: assignment, course: current_course,
-                                                team_id: params[:team_id], view_context: view_context })
+    render :show, AssignmentPresenter.build({
+      assignment: assignment,
+      course: current_course,
+      team_id: params[:team_id],
+      view_context: view_context
+      })
   end
 
   def new
-    render :new, AssignmentPresenter.build({ assignment: current_course.assignments.new,
-                                             course: current_course,
-                                             view_context: view_context })
+    render :new, AssignmentPresenter.build({
+      assignment: current_course.assignments.new,
+      course: current_course,
+      view_context: view_context
+      })
   end
 
   def edit
     assignment = current_course.assignments.find(params[:id])
     @title = "Editing #{assignment.name}"
-    render :edit, AssignmentPresenter.build({ assignment: assignment,
-                                              course: current_course,
-                                              view_context: view_context })
+    render :edit, AssignmentPresenter.build({
+      assignment: assignment,
+      course: current_course,
+      view_context: view_context
+      })
   end
 
-  # Duplicate an assignment - important for super repetitive items like attendance and reading reactions
+  # Duplicate an assignment - important for super repetitive items like
+  # attendance and reading reactions
   def copy
     assignment = current_course.assignments.find(params[:id])
     duplicated = assignment.copy
@@ -55,7 +65,11 @@ class AssignmentsController < ApplicationController
     end
 
     @title = "Create a New #{term_for :assignment}"
-    render :new, AssignmentPresenter.build({assignment: assignment, course: current_course, view_context: view_context })
+    render :new, AssignmentPresenter.build({
+      assignment: assignment,
+      course: current_course,
+      view_context: view_context
+      })
   end
 
   def update
@@ -66,7 +80,11 @@ class AssignmentsController < ApplicationController
     end
 
     @title = "Edit #{term_for :assignment}"
-    render :edit, AssignmentPresenter.build({assignment: assignment, course: current_course, view_context: view_context })
+    render :edit, AssignmentPresenter.build({
+      assignment: assignment,
+      course: current_course,
+      view_context: view_context
+      })
   end
 
   def sort
@@ -81,8 +99,12 @@ class AssignmentsController < ApplicationController
 
   def criterion_grades_review
     assignment = current_course.assignments.find(params[:id])
-    render :criterion_grades_review, AssignmentPresenter.build({ assignment: assignment, course: current_course,
-                                                              team_id: params[:team_id], view_context: view_context })
+    render :criterion_grades_review, AssignmentPresenter.build({
+      assignment: assignment,
+      course: current_course,
+      team_id: params[:team_id],
+      view_context: view_context
+      })
   end
 
   # current student visible assignment
@@ -128,8 +150,11 @@ class AssignmentsController < ApplicationController
   def set_assignment_weights(assignment)
     return unless assignment.student_weightable?
     assignment.weights = current_course.students.map do |student|
-      assignment_weight = assignment.weights.where(student: student).first || assignment.weights.new(student: student)
-      assignment_weight.weight = assignment.assignment_type.weight_for_student(student)
+      assignment_weight =
+        assignment.weights.where(student: student).first ||
+          assignment.weights.new(student: student)
+      assignment_weight.weight =
+        assignment.assignment_type.weight_for_student(student)
       assignment_weight
     end
     assignment.save

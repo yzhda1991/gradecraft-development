@@ -52,14 +52,18 @@ class User < ActiveRecord::Base
     end
   end
 
-  attr_accessor :password, :password_confirmation, :cached_last_login_at, :score, :team
-  attr_accessible :username, :email, :password, :password_confirmation, :activation_state,
-    :avatar_file_name, :first_name, :last_name, :user_id, :kerberos_uid, :display_name,
-    :current_course_id, :last_activity_at, :last_login_at, :last_logout_at, :team_ids,
-    :courses, :course_ids, :earned_badges, :earned_badges_attributes, :student_academic_history_attributes,
-    :team_role, :course_memberships_attributes, :team_id, :lti_uid, :course_team_ids, :internal
+  attr_accessor :password, :password_confirmation, :cached_last_login_at,
+    :score, :team
+  attr_accessible :username, :email, :password, :password_confirmation,
+    :activation_state, :avatar_file_name, :first_name, :last_name, :user_id,
+    :kerberos_uid, :display_name, :current_course_id, :last_activity_at,
+    :last_login_at, :last_logout_at, :team_ids, :courses, :course_ids,
+    :earned_badges, :earned_badges_attributes, :course_memberships_attributes,
+    :student_academic_history_attributes, :team_role, :team_id, :lti_uid,
+    :course_team_ids, :internal
 
-  # all student display pages are ordered by last name except for the leaderboard, and top 10/bottom 10
+  # all student display pages are ordered by last name except for the
+  # leaderboard, and top 10/bottom 10
   default_scope { order("last_name ASC, first_name ASC") }
 
   scope :order_by_high_score, -> { includes(:course_memberships).order "course_memberships.score DESC" }
@@ -118,10 +122,6 @@ class User < ActiveRecord::Base
   end
 
   email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-
-  # Users are automatically logged into this course if they have access to multiple.
-  # Longterm, we'd like to build a way for students enrolled in multiple gameful coursres to see
-  # a unified dashboard.
 
   validates :username, presence: true,
                     length: { maximum: 50 }
@@ -380,7 +380,8 @@ class User < ActiveRecord::Base
     earned_badges.where(badge: badge).count
   end
 
-  # Unique badges associated with all of the earned badges for a given student/course combo
+  # Unique badges associated with all of the earned badges for a given
+  # student/course combo
   def unique_student_earned_badges(course)
     @unique_student_earned_badges ||= Badge
       .includes(:earned_badges)
@@ -392,7 +393,8 @@ class User < ActiveRecord::Base
 
   # this should be all earned badges that either:
   # 1) have no associated grade and have been awarded to the student, or...
-  # 2) have an associated grade that has been marked graded_or_released? (indicated through the student_visible boolean)
+  # 2) have an associated grade that has been marked graded_or_released?
+  # (indicated through the student_visible boolean)
   def student_visible_earned_badges(course)
     @student_visible_earned_badges ||= EarnedBadge
       .includes(:badge)
@@ -405,7 +407,8 @@ class User < ActiveRecord::Base
   # 1) exist in the current course, in which the student is enrolled, AND:
   # 2) the student has either not earned at all for any grade, or:
   # 3) the student has earned the badge, but multiple are allowed, or:
-  # 3) the student has earned the badge, multiple are not allowed, but the earned badge is for the current grade
+  # 3) the student has earned the badge, multiple are not allowed, but the
+  # earned badge is for the current grade
   def earnable_course_badges_for_grade(grade)
     Badge
       .where(course_id: grade[:course_id])
@@ -422,8 +425,9 @@ class User < ActiveRecord::Base
 
   # this should be all badges that:
   # 1) exist in the current course, in which the student is enrolled
-  # 2) the student has either not earned at all, but is visible and available, or...
-  # 3) the student has earned_badge for, but that earned_badge is set to student_visible 'false'
+  # 2) the student has not earned, but is visible & available, or...
+  # 3) the student has earned_badge for, but that earned_badge is set to
+  # student_visible 'false' <- I think this is incorrect? @ch
   def student_visible_unearned_badges(course)
     Badge
       .where(course_id: course[:id])
@@ -432,7 +436,8 @@ class User < ActiveRecord::Base
   end
 
   # badges that have not been marked 'visible' by the instructor, and for which
-  # the student has earned a badge, but the earned badge has yet to be marked 'student_visible'
+  # the student has earned a badge, but the earned badge has yet to be marked
+  # 'student_visible'
   def student_invisible_badges(course)
     Badge
       .where(visible: false)
@@ -494,14 +499,16 @@ class User < ActiveRecord::Base
     assignment_weights.where(course: course).count > 0
   end
 
-  # Counts how many assignments are weighted for this student - note that this is an ASSIGNMENT count,
-  # and not the assignment type count. Because students make the choice at the AT level rather than the A level,
+  # Counts how many assignments are weighted for this student - note that this
+  # is an ASSIGNMENT count, and not the assignment type count. Because
+  # students make the choice at the AT level rather than the A level,
   # this can be confusing.
   def weight_count(course)
     assignment_weights.where(course: course).pluck("weight").count
   end
 
-  # Used to allow students to self-log a grade, currently only a boolean (complete or not)
+  # Used to allow students to self-log a grade, currently only a boolean
+  # (complete or not)
   def self_reported_done?(assignment)
     grade = grade_for_assignment(assignment)
     grade.present? && grade.is_student_visible?

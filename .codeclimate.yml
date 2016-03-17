@@ -41,6 +41,5 @@ exclude_paths:
 - db/**/*
 - script/**/*
 - spec/**/*
-- test/**/*
 - vendor/**/*
 - assets/**/*

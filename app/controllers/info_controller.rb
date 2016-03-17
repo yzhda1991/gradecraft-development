@@ -2,8 +2,10 @@ class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
   before_filter :ensure_staff?, except: [ :dashboard, :timeline_events ]
-  before_action :find_team, only: [ :awarded_badges, :choices, :resubmissions, :ungraded_submissions ]
-  before_action :find_students, only: [ :awarded_badges, :choices, :final_grades_for_course  ]
+  before_action :find_team,
+    only: [ :awarded_badges, :choices, :resubmissions, :ungraded_submissions ]
+  before_action :find_students,
+    only: [ :awarded_badges, :choices, :final_grades_for_course  ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
@@ -30,7 +32,8 @@ class InfoController < ApplicationController
     @teams = current_course.teams
   end
 
-  # Displaying all ungraded, graded but unreleased, and in progress assignment submissions in the system
+  # Displaying all ungraded, graded but unreleased, and in progress assignment
+  # submissions in the system
   def grading_status
     @title = "Grading Status"
     grades = current_course.grades.instructor_modified

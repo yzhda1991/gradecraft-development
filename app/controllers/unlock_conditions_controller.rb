@@ -5,7 +5,8 @@ class UnlockConditionsController < ApplicationController
   before_filter :ensure_staff?
 
   def create
-    @unlock_condition = current_course.unlock_condition.new(params[:unlock_condition])
+    @unlock_condition =
+      current_course.unlock_condition.new(params[:unlock_condition])
     @unlock_condition.save
   end
 

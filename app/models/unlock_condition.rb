@@ -1,7 +1,7 @@
 class UnlockCondition < ActiveRecord::Base
 
-  attr_accessible :unlockable_id, :unlockable_type, :condition_id, :condition_type,
-  :condition_state, :condition_value, :condition_date
+  attr_accessible :unlockable_id, :unlockable_type, :condition_id,
+    :condition_type, :condition_state, :condition_value, :condition_date
 
   belongs_to :unlockable, polymorphic: true
   belongs_to :condition, polymorphic: true
@@ -9,7 +9,8 @@ class UnlockCondition < ActiveRecord::Base
   validates_presence_of :condition_id, :condition_type, :condition_state
   validates_associated :unlockable
 
-  # Returning the name of whatever badge or assignment has been identified as the condition
+  # Returning the name of whatever badge or assignment has been identified as
+  # the condition
   def name
     condition.name
   end
@@ -30,7 +31,7 @@ class UnlockCondition < ActiveRecord::Base
     check_condition_for_each_student(group)
   end
 
-  # Human readable sentence to describe what students need to do to unlock this thing
+  # Human readable sentence to describe what students need to do to unlock this
   def requirements_description_sentence
     "#{condition_state_do} the #{condition.name} #{condition_type}"
   end
@@ -44,7 +45,8 @@ class UnlockCondition < ActiveRecord::Base
     "#{condition_state_doing} it unlocks the #{unlockable.name} #{unlockable_type}"
   end
 
-  # Counting how many students in a group have done the work to unlock an assignment
+  # Counting how many students in a group have done the work to unlock an
+  # assignment
   def count_unlocked_in_group(group)
     unlocked_count = 0
     if group.present?
@@ -213,7 +215,8 @@ class UnlockCondition < ActiveRecord::Base
     end
   end
 
-  # Checking if the number of students who have completed the condition match the size of the group, returning true if so.
+  # Checking if the number of students who have completed the condition match
+  # the size of the group, returning true if so.
   def check_condition_for_each_student(group)
     unlocked_count = count_unlocked_in_group(group)
     if unlocked_count == group.students.count

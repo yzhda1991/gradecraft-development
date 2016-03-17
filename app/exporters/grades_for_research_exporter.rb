@@ -14,7 +14,12 @@ class GradesForResearchExporter
   private
 
   def baseline_headers
-    ["Course ID", "Uniqname", "First Name", "Last Name", "GradeCraft ID", "Assignment Name", "Assignment ID", "Assignment Type", "Assignment Type Id", "Score", "Assignment Point Total", "Multiplied Score", "Predicted Score", "Text Feedback", "Submission ID", "Submission Creation Date", "Submission Updated Date", "Graded By", "Created At", "Updated At"]
+    ["Course ID", "Uniqname", "First Name", "Last Name", "GradeCraft ID",
+      "Assignment Name", "Assignment ID", "Assignment Type",
+      "Assignment Type Id", "Score", "Assignment Point Total",
+      "Multiplied Score", "Predicted Score", "Text Feedback",
+      "Submission ID", "Submission Creation Date", "Submission Updated Date",
+      "Graded By", "Created At", "Updated At"]
   end
 
   def grade_data(course, grade)
@@ -25,7 +30,8 @@ class GradesForResearchExporter
       grade.student_id,
       grade.assignment.name,
       grade.assignment.id,
-      grade.assignment.assignment_type.name, grade.assignment.assignment_type_id,
+      grade.assignment.assignment_type.name,
+      grade.assignment.assignment_type_id,
       grade.raw_score,
       grade.point_total,
       grade.score,
@@ -38,5 +44,4 @@ class GradesForResearchExporter
       grade.created_at,
       grade.graded_at || ""]
   end
-
 end
