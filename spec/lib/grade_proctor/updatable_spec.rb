@@ -5,8 +5,8 @@ describe GradeProctor::Updatable do
                             release_necessary?: true) }
   let(:course) { double(:course, id: 456) }
   let(:grade) { double(:grade, assignment: assignment, course_id: course.id,
-                       student_id: 123, is_graded?: true, is_released?: false,
-                       predicted?: false) }
+                       student_id: 123, student: user, is_graded?: true,
+                       is_released?: false, predicted?: false) }
   let(:user) { double(:user, id: 123, is_staff?: false) }
 
   describe "#updatable?" do
@@ -50,14 +50,15 @@ describe GradeProctor::Updatable do
     end
 
     context "as part of the course staff" do
+      let(:staff) { double(:user, id: 456, is_staff?: true) }
+
       it "can update if they are the instructor for the course" do
-        allow(user).to receive(:is_staff?).with(course).and_return true
-        expect(subject).to be_updatable user, course
+        expect(subject).to be_updatable staff, course
       end
 
       it "cannot update if they are not the instructor for the course" do
-        allow(user).to receive(:is_staff?).with(course).and_return false
-        expect(subject).to_not be_updatable user, course
+        allow(staff).to receive(:is_staff?).with(course).and_return false
+        expect(subject).to_not be_updatable staff, course
       end
     end
   end

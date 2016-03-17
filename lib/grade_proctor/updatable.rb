@@ -10,9 +10,9 @@ class GradeProctor
       user ||= grade.student
       course ||= grade.course
 
-      grade_for_context?(user, course) &&
-        (user.is_staff?(course) || grade.assignment.student_logged? ||
-         grade.predicted?)
+      user.is_staff?(course) ||
+        (grade_for_context?(grade.student, course) &&
+         (grade.assignment.student_logged? || grade.predicted?))
     end
   end
 end
