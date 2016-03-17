@@ -1,3 +1,5 @@
+# determines if a `Grade` resource can be viewed within a specific
+# user and course context
 class GradeProctor
   module Viewable
     include Base

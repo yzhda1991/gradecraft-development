@@ -1,3 +1,5 @@
+# determines if a `Grade` resource can be updated within a specific
+# user and course context
 class GradeProctor
   module Updatable
     include Base

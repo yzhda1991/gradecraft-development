@@ -1,3 +1,4 @@
+# common methods for CRUD operations on a `Grade`
 class GradeProctor
   module Base
 
