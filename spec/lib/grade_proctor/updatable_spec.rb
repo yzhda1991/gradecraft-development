@@ -6,7 +6,7 @@ describe GradeProctor::Updatable do
   let(:course) { double(:course, id: 456) }
   let(:grade) { double(:grade, assignment: assignment, course_id: course.id,
                        student_id: 123, student: user, is_graded?: true,
-                       is_released?: false, predicted?: false) }
+                       is_released?: false) }
   let(:user) { double(:user, id: 123, is_staff?: false) }
 
   describe "#updatable?" do
@@ -33,19 +33,6 @@ describe GradeProctor::Updatable do
 
       it "cannot update a grade that is updated by an instructor" do
         expect(subject).to_not be_updatable user, course
-      end
-
-      context "with a predicted grade" do
-        it "can update a grade" do
-          allow(grade).to receive(:predicted?).and_return true
-          expect(subject).to be_updatable user, course
-        end
-
-        it "cannot update a grade that does not belong to them" do
-          allow(grade).to receive(:predicted?).and_return true
-          allow(grade).to receive(:student_id).and_return 456
-          expect(subject).to_not be_updatable user, course
-        end
       end
     end
 

@@ -12,7 +12,7 @@ class GradeProctor
 
       grade_for_course?(course) &&
         (user.is_staff?(course) ||
-          (grade_for_user?(user) && (grade.assignment.student_logged? || grade.predicted?)))
+          (grade_for_user?(user) && grade.assignment.student_logged?))
     end
   end
 end

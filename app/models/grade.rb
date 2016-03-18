@@ -90,10 +90,6 @@ class Grade < ActiveRecord::Base
     update_attributes feedback_reviewed: true, feedback_reviewed_at: DateTime.now
   end
 
-  def predicted?
-    self.predicted_score != 0 && !self.predicted_score.nil?
-  end
-
   # Handle raw score attributes with commas (ex "300,000")
   def raw_score=(rs)
     if rs.class == String
