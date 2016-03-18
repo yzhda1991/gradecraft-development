@@ -39,7 +39,7 @@
         %p.bold Instructor Feedback:
         %p= raw grade.feedback
 
-      = render partial: "grades/request_feedback", locals: { grade: grade, assignment: presenter.assignment }
+      = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment }
 
   - else
     - presenter.group_for(current_student).students.each do |student|

@@ -21,29 +21,20 @@
         %span=" out of #{points presenter.assignment.point_total } possible points."
 
   - if grade.adjustment_points != 0
-    %div.grade-points-adjustment
-      %p
-        %span Points Adjustment:
-        %span= grade.adjustment_points
-      - if grade.adjustment_points_feedback.present?
-        %p= raw grade.adjustment_points_feedback
+    = render "grades/components/points_adjustment", grade: grade
 
-    - if presenter.assignment.release_necessary? && current_user_is_staff?
-      %p
-        %span.small_uppercase Status:
-        %span.bold= grade.status
+  - if presenter.assignment.release_necessary? && current_user_is_staff?
+    %p
+      %span.small_uppercase Status:
+      %span.bold= grade.status
 
-    - if grade.feedback.present?
-      %span.small_uppercase Your Feedback:
-      %p= raw grade.feedback
+  - if grade.grade_files.present?
+    %hr
+    = render "grades/components/attachments", grade: grade
 
-    - if grade.grade_files.present?
-      %hr
-      %h4.uppercase Attachments from Grader
-      %ul#uploaded_files
-        - grade.grade_files.each do |gf|
-          %li
-            = link_to gf.filename, gf.url, :target => "_blank"
+  - if grade.feedback.present?
+    = render "grades/components/feedback", grade: grade
+
   - if grade.excluded_from_course_score?
     = render "grades/components/excluded", grade: grade
 
@@ -52,4 +43,4 @@
 
   .right
     %br
-    = render partial: "grades/request_feedback", locals: { grade: grade, assignment: presenter.assignment }
+    = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment }
