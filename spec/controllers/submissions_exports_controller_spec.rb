@@ -100,8 +100,6 @@ RSpec.describe SubmissionsExportsController, type: :controller do
   end
 
   describe "secure downloads" do
-    let(:authenticator) { SecureTokenAuthenticator.new }
-    let(:secure_token) { create(:secure_token, target: submissions_export) }
     let(:secure_download_params) do
       {
         secure_token_uuid: secure_token.uuid,
@@ -109,6 +107,13 @@ RSpec.describe SubmissionsExportsController, type: :controller do
         id: submissions_export.id
       }
     end
+    let(:authenticator) { SecureTokenAuthenticator.new authenticator_params }
+    let(:authenticator_params) do
+      secure_download_params.except(:id).merge(
+        target_class: secure_token.target_type,
+        target_id: secure_token.target_id)
+    end
+    let(:secure_token) { create(:secure_token, target: submissions_export) }
 
     describe "GET #secure_download" do
       let(:result) { get :secure_download, secure_download_params }
