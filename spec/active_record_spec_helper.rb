@@ -1,3 +1,13 @@
+RSpec.configure do |config|
+  # if we're loading more than one spec file just load the rails spec helper to
+  # save us from eternal suffering.
+  focused = config.filter_manager.inclusions.rules.keys == [:focus]
+  exclusions = config.filter_manager.exclusions
+  if config.files_to_run.size > 1 && exclusions.empty? && !focused
+    require "rails_spec_helper"
+  end
+end
+
 require "spec_helper"
 require "active_record"
 require "active_support/core_ext"
@@ -84,6 +94,7 @@ end
 FactoryGirl::SyntaxRunner.send(:include, FileHelpers)
 
 RSpec.configure do |config|
+
   config.include FileHelpers
   config.include FactoryGirl::Syntax::Methods
 

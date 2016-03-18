@@ -334,7 +334,6 @@ describe GradesController do
       it "marks the Grade as excluded, but preserves the data" do
         @grade.update(
           raw_score: 500,
-          status: "Released",
           feedback: "should be nil",
           feedback_read: true,
           feedback_read_at: Time.now,
