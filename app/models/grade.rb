@@ -18,9 +18,6 @@ class Grade < ActiveRecord::Base
     :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at,
     :excluded_from_course_score, :excluded_date, :excluded_by
 
-  STATUSES = ["In Progress", "Graded", "Released"]
-  UNRELEASED_STATUSES = ["In Progress", "Graded"]
-
   belongs_to :course, touch: true
   belongs_to :assignment, touch: true
   belongs_to :assignment_type, touch: true

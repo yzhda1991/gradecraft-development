@@ -41,6 +41,9 @@ module GradeStatus
     end
   end
 
+  STATUSES = ["In Progress", "Graded", "Released"]
+  UNRELEASED_STATUSES = ["In Progress", "Graded"]
+
   def is_graded?
     status == "Graded"
   end
