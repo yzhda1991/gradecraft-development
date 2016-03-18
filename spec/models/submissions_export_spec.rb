@@ -1,7 +1,11 @@
-require "rails_spec_helper"
+require "active_record_spec_helper"
+require_relative "../toolkits/exports/submissions_export_toolkit"
+require_relative "../support/uni_mock/rails"
 
 RSpec.describe SubmissionsExport do
   subject { SubmissionsExport.new }
+
+  include UniMock::StubRails
 
   let(:s3_manager) { double(S3Manager::Manager) }
   let(:s3_object_key) { double(:s3_object_key) }
@@ -160,9 +164,7 @@ RSpec.describe SubmissionsExport do
     end
 
     context "env is development" do
-      before do
-        allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("development") }
-      end
+      before { stub_env "development" }
 
       it "prepends the developer tag to the store dirs and joins them" do
         expect(result).to eq ["jeff-moses", expected_base_s3_key].join("/")
@@ -170,6 +172,8 @@ RSpec.describe SubmissionsExport do
     end
 
     context "env is anything but development" do
+      before { stub_env "sumpin-else" }
+
       it "joins the store dirs and doesn't use the developer tag" do
         expect(result).to eq expected_base_s3_key
       end
