@@ -1,5 +1,4 @@
 require "active_record_spec_helper"
-require_relative "../toolkits/exports/submissions_export_toolkit"
 require_relative "../support/uni_mock/rails"
 
 RSpec.describe SubmissionsExport do
@@ -10,10 +9,19 @@ RSpec.describe SubmissionsExport do
   let(:s3_manager) { double(S3Manager::Manager) }
   let(:s3_object_key) { double(:s3_object_key) }
 
-  describe "associations" do
-    extend Toolkits::Exports::SubmissionsExportToolkit::Context
-    define_association_context
+  let(:course) { create(:course) }
+  let(:professor) { create(:user) }
+  let(:team) { create(:team) }
+  let(:assignment) { create(:assignment) }
 
+  let(:submissions_export_associations) {{
+    course: course,
+    professor: professor,
+    team: team,
+    assignment: assignment
+  }}
+
+  describe "associations" do
     subject { create(:submissions_export, submissions_export_associations) }
 
     it "belongs to a course" do
