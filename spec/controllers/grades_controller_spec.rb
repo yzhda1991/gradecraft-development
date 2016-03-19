@@ -334,7 +334,6 @@ describe GradesController do
       it "marks the Grade as excluded, but preserves the data" do
         @grade.update(
           raw_score: 500,
-          status: "Released",
           feedback: "should be nil",
           feedback_read: true,
           feedback_read_at: Time.now,
@@ -670,9 +669,29 @@ describe GradesController do
         expect(JSON.parse(response.body)).to eq({"id" => @assignment.id, "points_earned" => predicted_points})
       end
 
-      it "enqueues_the_predictor_event_job" do
-        expect(controller).to receive(:enqueue_predictor_event_job)
-        get :predict_score, { id: @assignment.id, predicted_score: predicted_points, format: :json }
+      describe "enqueuing the PredictorEventJob" do
+        let(:result) do
+          get :predict_score, id: @assignment.id,
+            predicted_score: predicted_points, format: :json
+        end
+
+        let(:event_attrs) { { created_at: Time.now } }
+        let(:event_job) { double(PredictorEventJob).as_null_object }
+
+        before do
+          allow(controller).to receive(:predictor_event_attrs) { event_attrs }
+          allow(PredictorEventJob).to receive(:new) { event_job }
+        end
+
+        it "builds a new PredictorEventJob" do
+          expect(PredictorEventJob).to receive(:new).with data: event_attrs
+          result
+        end
+
+        it "enqueues the new PredictorEventJob with fallback" do
+          expect(event_job).to receive(:enqueue_with_fallback)
+          result
+        end
       end
 
       it "errors if grade is already released" do
@@ -686,49 +705,6 @@ describe GradesController do
         allow_any_instance_of(Grade).to receive(:save).and_return false
         post :predict_score, { id: @assignment.id, predicted_score: predicted_points, format: :json }
         expect(response.status).to eq(400)
-      end
-    end
-
-    describe "enqueue_predictor_event_job" do
-      context "Resque connects to redis and enqueues the damn job" do
-        before(:each) do
-          @predictor_event_job = double(:predictor_event_job)
-          @enqueue_response = double(:enqueue_response)
-          allow(@predictor_event_job).to receive(:enqueue)
-          allow(PredictorEventJob).to receive_messages(new: @predictor_event_job)
-          allow(controller).to receive(:predictor_event_attrs) { predictor_event_attrs_expectation }
-        end
-
-        it "should create a new pageview logger" do
-          expect(PredictorEventJob).to receive(:new).with(data: predictor_event_attrs_expectation)
-        end
-
-        it "should enqueue the new pageview logger in 2 hours" do
-          expect(@predictor_event_job).to receive(:enqueue) { @enqueue_response }
-        end
-
-        after(:each) do
-          controller.instance_eval { enqueue_predictor_event_job }
-        end
-      end
-
-      context "Resque fails to reach Redis and returns a getaddrinfo socket error" do
-        before do
-          allow(PredictorEventJob).to receive_message_chain(:new, :enqueue).and_raise("MOCK FAUX LAME NONERROR: Could not connect to Redis: getaddrinfo socket error.")
-          allow(controller).to receive(:predictor_event_attrs) { predictor_event_attrs_expectation }
-        end
-
-        it "performs the pageview event log directly from the controller" do
-          expect(PredictorEventJob).to receive(:perform).with(data: predictor_event_attrs_expectation)
-          controller.instance_eval { enqueue_predictor_event_job }
-        end
-
-        # intermittent failure?
-        it "adds an additional pageview record to mongo" do
-          expect {
-            controller.instance_eval { enqueue_predictor_event_job }
-          }.to change{ Analytics::Event.count }.by(1)
-        end
       end
     end
 
