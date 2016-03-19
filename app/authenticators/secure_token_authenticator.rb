@@ -5,7 +5,7 @@ class SecureTokenAuthenticator
 
     # set attribute values for each keyword in the :initialize definition
     method(__method__).parameters.each do |param_type, keyword|
-      send "#{keyword}=", eval(keyword.to_s)
+      send "#{keyword}=", binding.local_variable_get(keyword)
     end
   end
 
