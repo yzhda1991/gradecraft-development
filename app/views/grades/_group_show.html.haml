@@ -1,11 +1,9 @@
-- if presenter.group_for(current_student).present?
+- if presenter.grades_available_for?(current_student) || current_user_is_staff?
   %p
     %span.bold= "#{(term_for :group).titleize}:"
     - if presenter.group_for(current_student).present?
       = link_to presenter.group_for(current_student).name, group_path(presenter.group_for(current_student))
       = link_to "Edit", edit_group_path(presenter.group_for(current_student)), class: "button"
-
-    .clear
 
     %span.bold= "#{term_for :students}:"
     %ul
@@ -19,47 +17,16 @@
         - if presenter.group_for(current_student).grades.graded_or_released.present?
           = link_to "Edit Grade", group_grade_assignment_path(presenter.assignment, group_id: presenter.group_for(current_student)), class: "button"
 
-  - if current_user_is_student?
-    - if presenter.grade_for(current_student).present?
-      %p.bold Your Results
-      - grade = presenter.grade_for(current_student)
-      %p
-        %span.bold= "#{points grade.final_points }"
-        %span=" / #{points presenter.assignment.point_total } possible points"
+  = render "grades/components/excluded", grade: grade if grade.excluded_from_course_score?
 
-      - if grade.adjustment_points != 0
-        %div.grade-adjustment-points
-          %p
-            %span Points Adjustment:
-            %span= grade.adjustment_points
-          - if grade.adjustment_points_feedback.present?
-            %p= raw grade.adjustment_points_feedback
+  = render "grades/components/score", grade: grade
 
-      - if grade.feedback.present?
-        %p.bold Instructor Feedback:
-        %p= raw grade.feedback
+  = render "grades/components/points_adjustment", grade: grade if grade.adjustment_points != 0
 
-      = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment }
+  = render "grades/components/attachments", grade: grade if grade.grade_files.present?
 
-  - else
-    - presenter.group_for(current_student).students.each do |student|
-      .panel
-        - if presenter.grade_for(student).present?
-          %p.bold
-            #{student.first_name}'s Grade
-            = link_to "Edit #{student.first_name}'s Grade", edit_assignment_grade_path(presenter.assignment, student_id: student.id), class: "button"
+  = render "grades/components/feedback", grade: grade if grade.feedback.present?
 
-          - grade = presenter.grade_for(student)
-          %p
-            %span.bold= "#{points grade.final_points }"
-            %span=" / #{points presenter.assignment.point_total } possible points"
-          - if presenter.grade_for(student).assignment.release_necessary?
-            %p
-              Status:
-              %span.bold= presenter.grade_for(student).status
-          - if presenter.grade_for(student).feedback.present?
-            %p.bold Instructor Feedback:
-            %p= raw presenter.grade_for(student).feedback
+  = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment }
 
-  - if presenter.rubric_designed?
-    .rubric-container= render partial: 'grades/criterion_grade_results', locals: { presenter: presenter }
+  .rubric-container= render partial: 'grades/components/criterion_grade_results', locals: { presenter: presenter } if presenter.rubric_designed?

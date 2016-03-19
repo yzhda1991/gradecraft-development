@@ -9,37 +9,18 @@
           %span.sr-only #{current_student.first_name}'s Grade
 
   - grade = presenter.grade_for(current_student)
-  - if grade
-    %p
-      - if grade.pass_fail_status
-        %span You
-        %span.bold= "#{term_for(grade.pass_fail_status)}"
-        %span= "the #{term_for :assignment}."
-      - elsif grade.score.present?
-        %span You earned
-        %span.bold= "#{points grade.final_points }"
-        %span=" out of #{points presenter.assignment.point_total } possible points."
 
-  - if grade.adjustment_points != 0
-    = render "grades/components/points_adjustment", grade: grade
+  = render "grades/components/excluded", grade: grade if grade.excluded_from_course_score?
 
-  - if presenter.assignment.release_necessary? && current_user_is_staff?
-    %p
-      %span.small_uppercase Status:
-      %span.bold= grade.status
+  = render "grades/components/score", grade: grade
 
-  - if grade.grade_files.present?
-    %hr
-    = render "grades/components/attachments", grade: grade
+  = render "grades/components/points_adjustment", grade: grade if grade.adjustment_points != 0
 
-  - if grade.feedback.present?
-    = render "grades/components/feedback", grade: grade
+  = render "grades/components/attachments", grade: grade if grade.grade_files.present?
 
-  - if grade.excluded_from_course_score?
-    = render "grades/components/excluded", grade: grade
+  = render "grades/components/feedback", grade: grade if grade.feedback.present?
 
-  - if presenter.rubric_designed?
-    .rubric-container= render partial: "grades/criterion_grade_results", locals: { presenter: presenter }
+  .rubric-container= render "grades/components/criterion_grade_results", locals: { presenter: presenter } if presenter.rubric_designed?
 
   .right
     %br
