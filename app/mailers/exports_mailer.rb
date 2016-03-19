@@ -9,7 +9,8 @@ class ExportsMailer < ApplicationMailer
     mail_submissions_export("is being created", professor, assignment)
   end
 
-  def submissions_export_success(professor, assignment, submissions_export, secure_token)
+  def submissions_export_success(professor, assignment, submissions_export,
+                                 secure_token)
     cache_success_mailer_attrs(submissions_export, secure_token)
     mail_submissions_export("is ready", professor, assignment)
   end
@@ -22,7 +23,8 @@ class ExportsMailer < ApplicationMailer
     mail_team_submissions_export("is being created", professor, assignment, team)
   end
 
-  def team_submissions_export_success(professor, assignment, team, submissions_export, secure_token)
+  def team_submissions_export_success(professor, assignment, team,
+                                      submissions_export, secure_token)
     cache_success_mailer_attrs(submissions_export, secure_token)
     mail_team_submissions_export("is ready", professor, assignment, team)
   end
