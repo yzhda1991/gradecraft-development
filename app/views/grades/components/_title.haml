@@ -1,0 +1,17 @@
+- if grade.assignment.is_individual?
+  %h4.sr-only #{current_student.first_name}'s Grade
+  %p.bold
+    #{current_student.first_name}'s Grade
+    %span
+      %a{:href => "#{edit_assignment_grade_path(grade.assignment)}?student_id=#{current_student.id}", class: "button"  }
+        Edit
+        %span.sr-only #{current_student.first_name}'s Grade
+- elsif grade.assignment.has_groups?
+  %p
+    %span.bold= "#{(term_for :group).titleize}:"
+    - if presenter.group_for(current_student).present?
+      = link_to presenter.group_for(current_student).name, group_path(presenter.group_for(current_student))
+      = link_to "Edit", edit_group_path(presenter.group_for(current_student)), class: "button"
+
+  - if presenter.group_for(current_student).grades.graded_or_released.present?
+    = link_to "Edit Grade", group_grade_assignment_path(presenter.assignment, group_id: presenter.group_for(current_student)), class: "button"

@@ -1,23 +1,8 @@
 - if presenter.grades_available_for?(current_student) || current_user_is_staff?
-  %p
-    %span.bold= "#{(term_for :group).titleize}:"
-    - if presenter.group_for(current_student).present?
-      = link_to presenter.group_for(current_student).name, group_path(presenter.group_for(current_student))
-      = link_to "Edit", edit_group_path(presenter.group_for(current_student)), class: "button"
 
-    %span.bold= "#{term_for :students}:"
-    %ul
-      - presenter.group_for(current_student).students.each do |student|
-        - if current_user_is_student?
-          %li= student.name
-        - else
-          %li= link_to student.name, student_path(student)
+  = render "grades/components/title", grade: grade if current_user_is_staff?
 
-      - if current_user_is_staff?
-        - if presenter.group_for(current_student).grades.graded_or_released.present?
-          = link_to "Edit Grade", group_grade_assignment_path(presenter.assignment, group_id: presenter.group_for(current_student)), class: "button"
-
-  = render "grades/components/excluded", grade: grade if grade.excluded_from_course_score?
+  = render "grades/components/students_in_group", grade: grade
 
   = render "grades/components/score", grade: grade
 
@@ -27,6 +12,9 @@
 
   = render "grades/components/feedback", grade: grade if grade.feedback.present?
 
-  = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment }
+  = render "grades/components/badges", grade: grade if grade.earned_badges.present?
 
   .rubric-container= render partial: 'grades/components/criterion_grade_results', locals: { presenter: presenter } if presenter.rubric_designed?
+
+  = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment } if current_user_is_student?
+
