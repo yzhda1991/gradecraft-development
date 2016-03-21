@@ -1,7 +1,8 @@
-%span.bold= "#{term_for :students}:"
-%ul
-  - presenter.group_for(current_student).students.each do |student|
-    - if current_user_is_student?
-      %li= student.name
-    - else
-      %li= link_to student.name, student_path(student)
+%p
+  .bold= "#{ term_for :students } in #{ term_for :group } #{ presenter.group_for(current_student).name }:"
+  %ul
+    - presenter.group_for(current_student).students.each do |student|
+      - if current_user_is_student?
+        %li= student.name
+      - else
+        %li= link_to student.name, student_path(student)
