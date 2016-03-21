@@ -41,8 +41,7 @@
         .display_on_hover.hover-style
           This feedback has been <strong>marked as read</strong> by the #{term_for :student}.
 
-    - if presenter.assignment.release_necessary?
-      %td= grade.status
+    %td= grade.status
 
     - if presenter.assignment.accepts_submissions?
       - submissions_for_assignment = presenter.submissions_for(student)
