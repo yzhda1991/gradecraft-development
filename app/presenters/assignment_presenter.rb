@@ -42,7 +42,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def grades_available_for?(user)
-    user.is_staff?(course) || (user.is_student?(course) && user.grade_released_for_assignment?(assignment))
+    user.grade_released_for_assignment?(assignment)
   end
 
   def groups
@@ -135,8 +135,9 @@ class AssignmentPresenter < Showtime::Presenter
 
   def scores_for(user)
     scores = self.scores
-    unless user.is_staff?(course)
-      scores[:user_score] = grades.where(student_id: user.id).first.try(:raw_score)
+    grade = grades.where(student_id: user.id).first
+    if GradeProctor.new(grade).viewable? user, course
+      scores[:user_score] = grade.raw_score
     end
     scores
   end

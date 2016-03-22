@@ -1,13 +1,18 @@
 require "spec_helper"
 require "./app/serializers/predicted_grade_serializer"
+require "./app/models/null_grade"
+require "./app/models/null_student"
+require "./lib/grade_proctor"
 
 describe PredictedGradeSerializer do
   let(:course) { double(:course) }
   let(:assignment) { double(:assignment, accepts_submissions?: true, submissions_have_closed?: true )}
-  let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, final_points: 84, student: user, course: course, assignment: assignment, is_student_visible?: true) }
+  let(:grade) { double(:grade, id: 123, pass_fail_status: :pass, predicted_score: 88, score: 78, final_points: 84, student: user, course: course, assignment: assignment) }
   let(:user) { double(:user, submission_for_assignment: "sumbission") }
   let(:other_user) { double(:other_user) }
   subject { described_class.new assignment, grade, user }
+
+  before { allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return true }
 
   describe "#id" do
     it "returns the grade's id" do
@@ -21,7 +26,7 @@ describe PredictedGradeSerializer do
     end
 
     it "returns nil if it's not visible" do
-      allow(grade).to receive(:is_student_visible?).and_return false
+      allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return false
       expect(subject.pass_fail_status).to be_nil
     end
   end
@@ -32,7 +37,7 @@ describe PredictedGradeSerializer do
     end
 
     it "returns nil if it's not visible" do
-      allow(grade).to receive(:is_student_visible?).and_return false
+      allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return false
       expect(subject.score).to be_nil
     end
 
@@ -58,7 +63,7 @@ describe PredictedGradeSerializer do
     end
 
     it "returns nil if it's not visible" do
-      allow(grade).to receive(:is_student_visible?).and_return false
+      allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return false
       expect(subject.final_points).to be_nil
     end
 
@@ -90,7 +95,7 @@ describe PredictedGradeSerializer do
     end
 
     it "returns predicted score for student even if it's not visible" do
-      allow(grade).to receive(:is_student_visible?).and_return false
+      allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return false
       expect(subject.predicted_score).to eq grade.predicted_score
     end
   end

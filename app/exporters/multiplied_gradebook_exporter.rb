@@ -24,7 +24,7 @@ class MultipliedGradebookExporter < GradebookExporter
     # TODO: improve the performance here
     course.assignments.inject(student_data) do |memo, assignment|
       grade = assignment.grade_for_student(student)
-      if grade && grade.is_student_visible?
+      if GradeProctor.new(grade).viewable? student, course
         memo << grade.raw_score
         memo << grade.score
       else

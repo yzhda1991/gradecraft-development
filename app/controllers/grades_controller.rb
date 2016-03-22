@@ -69,8 +69,7 @@ class GradesController < ApplicationController
     if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
         instructor_modified: true)
 
-      # @mz TODO: ADD SPECS
-      if @grade.is_released? || (@grade.is_graded? && ! @assignment.release_necessary)
+      if GradeProctor.new(@grade).viewable?
         grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
         grade_updater_job.enqueue
       end

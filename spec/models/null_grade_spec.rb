@@ -1,4 +1,6 @@
 require "./app/models/null_grade"
+require "./app/models/null_student"
+require "./lib/grade_proctor"
 
 describe NullGrade do
   subject { NullGrade.new }
@@ -43,8 +45,24 @@ describe NullGrade do
     expect(subject.team_id).to eq(0)
   end
 
+  it "has a course id of zero" do
+    expect(subject.course_id).to eq(0)
+  end
+
+  it "has a student id of zero" do
+    expect(subject.student_id).to eq(0)
+  end
+
   it "is student visible" do
     expect(subject).to be_is_student_visible
+  end
+
+  it "is not released" do
+    expect(subject).to_not be_is_released
+  end
+
+  it "is graded" do
+    expect(subject).to be_is_graded
   end
 
   it "can have an assigned predicted score" do
@@ -71,5 +89,13 @@ describe NullGrade do
 
   it "returns a null student for student" do
     expect(subject.student.class).to eq(NullStudent)
+  end
+
+  it "returns a null course for course" do
+    expect(subject.course.class).to eq(NullCourse)
+  end
+
+  it "is viewable with a GradeProctor" do
+    expect(GradeProctor.new(subject)).to be_viewable
   end
 end
