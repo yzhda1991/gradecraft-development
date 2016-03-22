@@ -53,7 +53,7 @@
 
                   = f.input :status, as: :select, :collection => Grade::STATUSES, :selected => @grade.status, :include_blank => false
                 - else
-                  = f.input :status, as: :select, :collection => Grade::UNRELEASED_STATUSES, :selected => @grade.status, :include_blank => false
+                  = f.input :status, as: :select, :collection => Grade::UNRELEASED_STATUSES, :selected => @grade.status || "Graded", :include_blank => false
                 .align-right.form_label Can the student see this grade?
           .clear
           %br
