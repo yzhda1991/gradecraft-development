@@ -133,6 +133,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def current_ability
+    @current_ability ||= Ability.new(current_user, current_course)
+  end
+
   # Canable checks on permission
   def enforce_view_permission(resource)
     raise Canable::Transgression unless can_view?(resource)
