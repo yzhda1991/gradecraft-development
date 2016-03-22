@@ -52,3 +52,8 @@
                 %td.right
                   - if grade && grade.is_graded?
                     = check_box_tag "grade_ids[]", grade.id
+              %td
+                .right
+                  %ul.button-bar
+                    - if group_presenter.assignment_graded?
+                      %li= link_to glyph(:edit) + "Override Grade", edit_assignment_grade_path(presenter.assignment, student_id: student.id), class: "button"

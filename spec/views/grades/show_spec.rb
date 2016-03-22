@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "rails_spec_helper"
 
-describe "grades/_individual_show" do
+describe "grades/show" do
 
   let(:presenter) { AssignmentPresenter.new({ assignment: @assignment, course: @course }) }
 

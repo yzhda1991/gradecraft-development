@@ -1,0 +1,25 @@
+- if presenter.grades_available_for?(current_student) || current_user_is_staff?
+
+  - grade = presenter.grade_for(current_student)
+
+  = render "grades/components/edit_button", grade: grade if current_user_is_staff?
+
+  = render "grades/components/excluded", grade: grade if grade.excluded_from_course_score?
+
+  = render "grades/components/students_in_group", grade: grade, presenter: presenter if grade.assignment.has_groups?
+
+  = render "grades/components/score", grade: grade
+
+  = render "grades/components/status", grade: grade if current_user_is_staff?
+
+  = render "grades/components/points_adjustment", grade: grade if grade.adjustment_points != 0
+
+  = render "grades/components/attachments", grade: grade if grade.grade_files.present?
+
+  = render "grades/components/feedback", grade: grade if grade.feedback.present?
+
+  = render "grades/components/badges", grade: grade if grade.earned_badges.present?
+
+  .rubric-container= render "grades/components/criterion_grade_results", presenter: presenter if presenter.rubric_designed?
+
+  = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment } if current_user_is_student?
