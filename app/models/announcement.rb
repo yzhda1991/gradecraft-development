@@ -1,6 +1,4 @@
 class Announcement < ActiveRecord::Base
-  include Canable::Ables
-
   belongs_to :author, class_name: "User"
   belongs_to :course
   has_many :states, class_name: "AnnouncementState", dependent: :destroy
@@ -23,24 +21,6 @@ class Announcement < ActiveRecord::Base
 
   def self.unread_count_for(student, course)
     Announcement.where(course_id: course.id).count - read_count_for(student, course)
-  end
-
-  def creatable_by?(user)
-    return true if !course.present?
-    user.is_staff?(course)
-  end
-
-  def destroyable_by?(user)
-    updatable_by? user
-  end
-
-  def updatable_by?(user)
-    author_id == user.id
-  end
-
-  def viewable_by?(user)
-    return true if !course.present?
-    course.users.include? user
   end
 
   def abstract(words=25)

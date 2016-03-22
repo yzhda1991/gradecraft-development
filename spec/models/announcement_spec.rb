@@ -1,5 +1,6 @@
 require "active_record_spec_helper"
 require "action_mailer"
+require "./app/mailers/application_mailer"
 require "./app/mailers/announcement_mailer"
 
 describe Announcement do
@@ -8,47 +9,6 @@ describe Announcement do
       announcement1 = create :announcement
       announcement2 = create :announcement
       expect(Announcement.all).to eq [announcement2, announcement1]
-    end
-  end
-
-  describe "authorization" do
-    let(:course) { create :course }
-    let(:user) { create :user }
-    subject { build :announcement, course: course }
-
-    it "is viewable by any user associated the course" do
-      expect(user.can_view?(subject)).to be_falsey
-      CourseMembership.create user_id: user.id, course_id: course.id, role: "student"
-      expect(user.can_view?(subject)).to be_truthy
-    end
-
-    it "is creatable by any staff for the course" do
-      expect(user.can_create?(subject)).to be_falsey
-      CourseMembership.create user_id: user.id, course_id: course.id, role: "professor"
-      expect(user.can_create?(subject)).to be_truthy
-    end
-
-    it "is not creatable by a student" do
-      CourseMembership.create user_id: user.id, course_id: course.id, role: "student"
-      expect(user.can_create?(subject)).to be_falsey
-    end
-
-    it "is not creatable by staff in another course" do
-      new_course = create :course
-      CourseMembership.create user_id: user.id, course_id: new_course.id, role: "professor"
-      expect(user.can_create?(subject)).to be_falsey
-    end
-
-    it "is updatable by the author" do
-      expect(user.can_update?(subject)).to be_falsey
-      subject.update_attribute(:author_id, user.id)
-      expect(user.can_update?(subject)).to be_truthy
-    end
-
-    it "is destroyable by the author" do
-      expect(user.can_destroy?(subject)).to be_falsey
-      subject.update_attribute(:author_id, user.id)
-      expect(user.can_destroy?(subject)).to be_truthy
     end
   end
 
