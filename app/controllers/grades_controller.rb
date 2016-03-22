@@ -13,7 +13,6 @@ class GradesController < ApplicationController
 
   # GET /assignments/:assignment_id/grade?student_id=:id
   def show
-    @assignment = current_course.assignments.find(params[:assignment_id])
     if current_user_is_student?
       redirect_to @assignment and return
     end

@@ -38,10 +38,7 @@
           = history_timeline presenter.submission_grade_history(current_student)
       - if presenter.grades_available_for?(current_student)
         #tab4
-          - if presenter.assignment.has_groups?
-            = render partial: "grades/group_show", locals: { presenter: presenter }
-          - else
-            = render partial: "grades/individual_show", locals: { presenter: presenter }
+          = render partial: "grades/grade_content", locals: { presenter: presenter }
         - if !presenter.hide_analytics?
           #tab5
             - if presenter.assignment.has_groups?
