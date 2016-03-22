@@ -48,6 +48,8 @@
       %td
         - unless submissions_for_assignment.empty?
           = presenter.submission_submitted_date_for(submissions_for_assignment)
+      %td{:style => "display: none"}
+        = presenter.submission_submitted_date_for(submissions_for_assignment).to_formatted_s(:db)
 
     %td
       .right
