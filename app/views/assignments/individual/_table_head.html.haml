@@ -20,7 +20,8 @@
   %th{scope: "col"} Status
 
   - if presenter.assignment.accepts_submissions?
-    %th{scope: "col"} Submitted
+    %th{"data-dynatable-sorts" => "submittedAt"} Submitted
+    %th{:style => "display: none"} Submitted At
 
   %th{:style => "min-width: 180px"}
 

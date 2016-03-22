@@ -298,6 +298,10 @@ $('table.default_assignments_dynatable').bind('dynatable:init', function(e, dyna
   readers: {
       pointsPossible: function(el, record) {
         return Number(el.innerHTML.replace(/,/g,"")) || 0;
+      },
+      submitted: function(el, record) {
+        record.parsedDate = Date.parse(el.innerHTML);
+        return el.innerHTML;
       }
     },
     writers: {
