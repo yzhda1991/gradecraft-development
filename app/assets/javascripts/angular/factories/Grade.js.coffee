@@ -37,7 +37,7 @@
     timeSinceUpdate: ()->
       self = this
       Math.abs(new Date() - self.updated_at)
- 
+
     modelOptions: ()->
       {
         updateOn: 'default blur',
@@ -49,14 +49,15 @@
 
     # updating grade properties
     update: ()->
-      if this.releaseNecessary
-        self = this
-        @http.put("/grades/#{self.id}/async_update", self).success(
-          (data,status)->
-            self.updated_at = new Date()
-        )
-        .error((err)->
-        )
+      self = this
+      @http.put("/api/grades/#{self.id}", grade: self).success(
+        (data,status)->
+          console.log(data);
+          self.updated_at = new Date()
+      )
+      .error((err)->
+        console.log(err);
+      )
 
     params: ()->
       {

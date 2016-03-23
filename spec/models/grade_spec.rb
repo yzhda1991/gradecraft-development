@@ -78,6 +78,11 @@ describe Grade do
       subject.update(raw_score: "1,234")
       expect(subject.raw_score).to eq(1234)
     end
+
+    it "is converts blank string to nil" do
+      subject.update(raw_score: "")
+      expect(subject.raw_score).to eq(nil)
+    end
   end
 
   describe ".not_released" do

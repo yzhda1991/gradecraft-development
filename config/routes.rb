@@ -112,7 +112,6 @@ GradeCraft::Application.routes.draw do
   resources :unlock_conditions
 
   # earned badges grade routes
-  put "grades/:id/async_update", to: "grades#async_update"
   post "grades/earn_student_badge", to: "grades#earn_student_badge"
   post "grade/:grade_id/earn_student_badges", to: "grades#earn_student_badges"
   delete "grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id", to: "grades#delete_earned_badge"
@@ -357,6 +356,7 @@ GradeCraft::Application.routes.draw do
     get 'assignments/:assignment_id/groups/:group_id/criterion_grades', to: 'criterion_grades#group_index', defaults: { format: :json }
 
     #grades
+    resources :grades, only: :update, defaults: { format: :json }
     get 'assignments/:assignment_id/students/:student_id/grade', to: 'grades#show', defaults: { format: :json }
     get 'assignments/:assignment_id/groups/:group_id/grades', to: 'grades#group_index', defaults: { format: :json }
   end

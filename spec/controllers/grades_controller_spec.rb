@@ -197,49 +197,6 @@ describe GradesController do
       end
     end
 
-    describe "async_update" do
-
-      it "updates feedback, status and raw score from params" do
-        post :async_update, { id: @grade.id, raw_score: 20000, feedback: "good jorb!", status: "Graded" }
-        @grade.reload
-        expect(@grade.feedback).to eq("good jorb!")
-        expect(@grade.status).to eq("Graded")
-        expect(@grade.raw_score).to eq(20000)
-      end
-
-      it "updates instructor modified to true" do
-        post :async_update, { id: @grade.id, raw_score: 20000, feedback: "good jorb!" }
-        @grade.reload
-        expect(@grade.instructor_modified).to be_truthy
-      end
-
-      it "timestamps the grade" do
-          current_time = DateTime.now
-          post :async_update, { id: @grade.id, raw_score: 20000, feedback: "good jorb!" }
-          expect(@grade.reload.graded_at).to be > current_time
-        end
-
-      describe "manages update with model validations" do
-        it "handles commas in raw score params" do
-          post :async_update, { id: @grade.id, raw_score: "12,345", feedback: "good jorb!" }
-          @grade.reload
-          expect(@grade.score).to eq(12345)
-        end
-
-        it "handles reverting nil raw score" do
-          post :async_update, { id: @grade.id, raw_score: nil, feedback: "good jorb!" }
-          @grade.reload
-          expect(@grade.score).to eq(nil)
-        end
-
-        it "reverts empty raw score to nil, not zero" do
-          post :async_update, { id: @grade.id, raw_score: "", feedback: "good jorb!" }
-          @grade.reload
-          expect(@grade.score).to eq(nil)
-        end
-      end
-    end
-
     describe "earn_student_badge" do
       it "creates a new student badge from params" do
         badge = create(:badge)
