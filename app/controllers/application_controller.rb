@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
   # Canable details
   include Omniauth::Lti::Context
-  include Canable::Enforcers
+  #include Canable::Enforcers
   include CustomNamedRoutes
   include CurrentScopes
   include CourseTerms
