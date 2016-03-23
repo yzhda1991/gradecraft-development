@@ -64,7 +64,7 @@
 
             / Results /
             - if grade_visible_for_assignment
-              %li= link_to glyph(:eye) + "See Results", assignment_path(assignment, anchor: "tab4"), class: "button"
+              %li= link_to glyph(:eye) + "See Grade", assignment_path(assignment, anchor: "tab4"), class: "button"
 
             / Groups /
             - if assignment.has_groups?
