@@ -1,8 +1,8 @@
 require "rails_spec_helper"
 
 RSpec.describe ApplicationController do
-  let(:course) { double(:course) }
-  let(:user) { double(:user) }
+  let(:course) { double(:course, id: 123) }
+  let(:user) { double(:user, id: 456) }
 
   before do
     allow(subject).to receive_messages(current_user: user, current_course: course)
