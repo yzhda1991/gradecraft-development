@@ -1,8 +1,12 @@
 require "active_record_spec_helper"
 require "toolkits/historical_toolkit"
 require "toolkits/sanitization_toolkit"
+require "support/uni_mock/rails"
 
 describe Submission do
+  include UniMock::StubRails
+
+  before { stub_env "development" }
   subject { build(:submission) }
 
   describe "validations" do
@@ -103,144 +107,6 @@ describe Submission do
       expect(subject.submission_files.length).to eq 2
       expect(subject.submission_files[0].filename).to eq "test_file.txt"
       expect(subject.submission_files[1].filename).to eq "test_image.jpg"
-    end
-  end
-
-  describe "#updatable_by?(user)" do
-    it "returns true for the student whose submission it is" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Individual")
-      submission = create(:submission, assignment: assignment, student: student)
-      expect(submission.updatable_by?(student)).to eq(true)
-    end
-
-    it "returns false for any student whose submission it is not" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Individual")
-      submission = create(:submission, assignment: assignment)
-      expect(submission.updatable_by?(student)).to eq(false)
-    end
-
-    it "returns true for any student in a group whose submission it is" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Group")
-      group = create(:group)
-      group.students << student
-      assignment.groups << group
-
-      submission = create(:submission, assignment: assignment, group: group)
-      expect(submission.updatable_by?(student)).to eq(true)
-    end
-
-    it "returns false for any student in other groups whose submission it is not" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Group")
-      group = create(:group)
-      group.students << student
-      assignment.groups << group
-
-      submission = create(:submission, assignment: assignment)
-      expect(submission.updatable_by?(student)).to eq(false)
-    end
-
-    it "returns true for any staff user" do
-      professor = create(:user)
-      course = create(:course)
-      create :professor_course_membership, user: professor, course: course
-      submission = create(:submission, course: course)
-      expect(submission).to be_updatable_by professor
-    end
-  end
-
-  describe "#destroyable_by?(user)" do
-    it "returns true for the student whose submission it is" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Individual")
-      submission = create(:submission, assignment: assignment, student: student)
-      expect(submission.destroyable_by?(student)).to eq(true)
-    end
-
-    it "returns false for any student whose submission it is not" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Individual")
-      submission = create(:submission, assignment: assignment)
-      expect(submission.destroyable_by?(student)).to eq(false)
-    end
-
-    it "returns true for any student in a group whose submission it is" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Group")
-      group = create(:group)
-      group.students << student
-      assignment.groups << group
-
-      submission = create(:submission, assignment: assignment, group: group)
-      expect(submission.destroyable_by?(student)).to eq(true)
-    end
-
-    it "returns false for any student in other groups whose submission it is not" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Group")
-      group = create(:group)
-      group.students << student
-      assignment.groups << group
-
-      submission = create(:submission, assignment: assignment)
-      expect(submission.destroyable_by?(student)).to eq(false)
-    end
-
-    it "returns true for any staff user" do
-      professor = create(:user)
-      course = create(:course)
-      create :professor_course_membership, user: professor, course: course
-      submission = create(:submission, course: course)
-      expect(submission).to be_destroyable_by professor
-    end
-  end
-
-  describe "#viewable_by?(user)" do
-    it "returns true for the student whose submission it is" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Individual")
-      submission = create(:submission, assignment: assignment, student: student)
-      expect(submission.viewable_by?(student)).to eq(true)
-    end
-
-    it "returns false for any student whose submission it is not" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Individual")
-      submission = create(:submission, assignment: assignment)
-      expect(submission.viewable_by?(student)).to eq(false)
-    end
-
-    it "returns true for any student in a group whose submission it is" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Group")
-      group = create(:group)
-      group.students << student
-      assignment.groups << group
-
-      submission = create(:submission, assignment: assignment, group: group)
-      expect(submission.viewable_by?(student)).to eq(true)
-    end
-
-    it "returns false for any student in other groups whose submission it is not" do
-      student = create(:user)
-      assignment = create(:assignment, grade_scope: "Group")
-      group = create(:group)
-      group.students << student
-      assignment.groups << group
-
-      submission = create(:submission, assignment: assignment)
-      expect(submission.viewable_by?(student)).to eq(false)
-    end
-
-    it "returns true for any staff user" do
-      professor = create(:user)
-      course = create(:course)
-      create :professor_course_membership, user: professor, course: course
-      submission = create(:submission, course: course)
-      expect(submission).to be_viewable_by professor
     end
   end
 
