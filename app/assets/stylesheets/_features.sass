@@ -57,12 +57,10 @@
     padding: 2rem
 
     .image-container
-      width: 100%
-      padding-top: 2%
-
     img
       position: relative
-      height: 90%
+      width: 90%
+      max-width: 350px
 
       &.center-image
         height: 40%
@@ -76,6 +74,8 @@
     .text
       line-height: 1.75rem
       font-size: 1.1rem
+    
+    .image-container, .text 
       top: 50%
       transform: translateY(-50%)
 
