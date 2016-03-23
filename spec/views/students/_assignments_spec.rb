@@ -115,7 +115,7 @@ describe "students/syllabus/_assignments" do
     it "shows a button to see more results if the grade is released" do
       create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: "Released")
       render
-      assert_select "a", text: "See Results", count: 1
+      assert_select "a", text: "See Grade", count: 1
     end
 
     it "shows a button to see the group if a group exists" do
