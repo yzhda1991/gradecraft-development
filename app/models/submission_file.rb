@@ -47,6 +47,10 @@ class SubmissionFile < ActiveRecord::Base
     submission.assignment
   end
 
+  def submission_binary_filename(student, submission_file, index)
+    [ formatted_student_name(student), formatted_assignment_name, "Submission File #{index + 1}"].join(" - ") + submission_file.extension
+  end
+
   def owner_name
     if submission.assignment.grade_scope == "Group"
       submission.group.name.gsub(/\s/, "-")
