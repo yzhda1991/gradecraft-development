@@ -25,4 +25,9 @@ describe "submissions/show" do
     render
     assert_select "h3", text: "#{@student.first_name}'s #{@assignment.name} Submission (12,000 points)", count: 1
   end
+
+  it "renders the submitted at date" do
+    render
+    assert_select "span.submission-date", text: "#{ @submission.submitted_at }", count: 1
+  end
 end

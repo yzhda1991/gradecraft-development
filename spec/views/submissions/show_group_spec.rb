@@ -1,7 +1,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "submissions/show", focus: true do
+describe "submissions/show" do
 
   let(:presenter) { ShowSubmissionPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id, view_context: view_context }) }
   let(:view_context) { double(:view_context, points: "12,000") }
@@ -24,5 +24,10 @@ describe "submissions/show", focus: true do
   it "renders successfully for a group submission" do
     render
     assert_select "h3", text: "#{@group.name}'s #{@assignment.name} Submission (12,000 points)", count: 1
+  end
+
+  it "renders the submitted at date" do
+    render
+    assert_select "span.submission-date", text: "#{ @submission.submitted_at }", count: 1
   end
 end
