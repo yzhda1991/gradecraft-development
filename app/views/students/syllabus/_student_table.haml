@@ -18,10 +18,10 @@
     %tr
       %td= render "students/syllabus/assignment_icons", assignment: assignment
       %td
-        - if assignment.name_visible_for_student?(@student)
+        - if assignment.name_visible_for_student?(@student) || grade_visible_for_assignment
           = link_to assignment.name, assignment_path(assignment)
       %td
-        - if assignment.points_visible_for_student?(@student)
+        - if assignment.points_visible_for_student?(@student) || grade_visible_for_assignment
           - if assignment.pass_fail?
             - if grade_visible_for_assignment
               .bold
