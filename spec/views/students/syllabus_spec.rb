@@ -14,9 +14,34 @@ describe "students/syllabus" do
     allow(view).to receive(:current_student).and_return(@student)
   end
 
-  it "renders the points possible for the assignment" do
+  it "renders pagetitle" do
     render
     assert_select ".pagetitle", count: 1
+  end
+
+  it "shows the assignment type div" do
+    render
+    assert_select ".assignment_type", contains: "#{ @assignment_types[0].name }",  count: 1
+  end
+
+  it "shows the challenge div" do
+    @challenge = create(:challenge, course: @course)
+    @course.team_challenges = true
+    @course.add_team_score_to_student = true
+    @team = create(:team, course: @course)
+    @team.students << @student
+    render
+    assert_select ".challenge", count: 1
+  end
+
+  it "does not show the challenge div if they're not added to student scores" do
+    @challenge = create(:challenge, course: @course)
+    @course.team_challenges = true
+    @course.add_team_score_to_student = false
+    @team = create(:team, course: @course)
+    @team.students << @student
+    render
+    assert_select ".challenge", count: 0
   end
 
 end

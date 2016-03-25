@@ -85,3 +85,6 @@
                   %li= link_to glyph("file-o") + "See Submission", assignment_path(assignment, anchor: "tab3"), class: "button"
                 - elsif group.approved? && assignment.open?
                   %li= link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, group_id: group), class: "button"
+
+            / Manual Unlock /
+            = render partial: "students/syllabus/manual_unlock", locals: { assignment: assignment } if current_user_is_staff?

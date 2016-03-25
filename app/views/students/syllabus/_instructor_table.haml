@@ -99,6 +99,4 @@
                 - if group.approved?
                   %li= link_to glyph(:upload) + "Submit", new_assignment_submission_path(assignment, group_id: group), class: "button"
 
-          / Manual Unlock /
-          - if assignment.is_unlockable? && ! assignment.is_unlocked_for_student?(@student)
-            %li= link_to glyph("unlock-alt") + "Unlock", manually_unlock_unlock_state_path(student_id: @student.id, assignment_id: assignment.id), :method => :post, class: "button"
+          = render "students/syllabus/manual_unlock", assignment: assignment, if current_user_is_staff
