@@ -38,6 +38,11 @@ class ShowSubmissionPresenter < SubmissionPresenter
     submission.group.id
   end
 
+  def open_for_editing?
+    (assignment.open? && !grade.present?) ||
+      (assignment.open? && assignment.resubmissions_allowed?)
+  end
+
   def title
     if assignment.is_individual?
       name = student.first_name
