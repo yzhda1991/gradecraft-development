@@ -8,10 +8,10 @@ describe "submissions/show" do
 
   before(:all) do
     @course = create(:course)
-    @assignment = create(:assignment, course: @course)
-    @student = create(:user)
-    @course.users << @student
-    @submission = create(:submission, course: @course, assignment: @assignment, student: @student)
+    @assignment = create(:group_assignment, course: @course)
+    @group = create(:group)
+    @group.assignments << @assignment
+    @submission = create(:submission, course: @course, assignment: @assignment, group: @group)
   end
 
   before(:each) do
@@ -21,16 +21,13 @@ describe "submissions/show" do
     allow(view).to receive(:presenter).and_return presenter
   end
 
-  it "renders successfully" do
+  it "renders successfully for a group submission" do
     render
-    assert_select "h3", text: "#{@student.first_name}'s #{@assignment.name} Submission (12,000 points)", count: 1
+    assert_select "h3", text: "#{@group.name}'s #{@assignment.name} Submission (12,000 points)", count: 1
   end
 
-  it "renders the breadcrumbs" do
+  it "renders the submitted at date" do
     render
-    assert_select ".content-nav", count: 1
-    assert_select ".breadcrumbs" do
-      assert_select "a", count: 4
-    end
+    assert_select "span.submission-date", text: "#{ @submission.submitted_at }", count: 1
   end
 end
