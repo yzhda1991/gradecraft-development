@@ -2,17 +2,12 @@ require 'application_responder'
 
 class ApplicationController < ActionController::Base
   self.responder = ApplicationResponder
-  # Canable details
+
   include Omniauth::Lti::Context
-  include Canable::Enforcers
   include CustomNamedRoutes
   include CurrentScopes
   include CourseTerms
   include ZipUtils
-
-  delegate :can_view?, to: :current_user
-  helper_method :can_view?
-  hide_action :can_view?
 
   respond_to :html
 
@@ -133,9 +128,8 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # Canable checks on permission
-  def enforce_view_permission(resource)
-    raise Canable::Transgression unless can_view?(resource)
+  def current_ability
+    @current_ability ||= Ability.new(current_user, current_course)
   end
 
   # Tracking page view counts

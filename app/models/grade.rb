@@ -1,5 +1,4 @@
 class Grade < ActiveRecord::Base
-  include Canable::Ables
   include GradeStatus
   include Historical
   include MultipleFileAttributes

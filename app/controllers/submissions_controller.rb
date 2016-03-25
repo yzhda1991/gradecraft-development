@@ -7,7 +7,7 @@ class SubmissionsController < ApplicationController
                                               assignment_id: params[:assignment_id],
                                               course: current_course,
                                               view_context: view_context })
-    enforce_view_permission(presenter.submission)
+    authorize! :read, presenter.submission
     render :show, locals: { presenter: presenter }
   end
 
@@ -41,7 +41,7 @@ class SubmissionsController < ApplicationController
     presenter = EditSubmissionPresenter.new(id: params[:id], assignment_id: params[:assignment_id],
                                             course: current_course, group_id: params[:group_id],
                                             view_context: view_context)
-    enforce_view_permission(presenter.submission)
+    authorize! :update, presenter.submission
     render :edit, locals: { presenter: presenter }
   end
 

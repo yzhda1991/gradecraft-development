@@ -1,8 +1,6 @@
 class User < ActiveRecord::Base
   authenticates_with_sorcery!
 
-  include Canable::Cans
-
   class << self
     def with_role_in_course(role, course)
       if role == "staff"

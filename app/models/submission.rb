@@ -5,7 +5,6 @@ class Submission < ActiveRecord::Base
     :submission_files_attributes, :submission_files, :course_id, :updated_at,
     :submission_file_ids
 
-  include Canable::Ables
   include Historical
   include MultipleFileAttributes
   include Sanitizable
@@ -44,20 +43,6 @@ class Submission < ActiveRecord::Base
 
   clean_html :text_comment
   multiple_files :submission_files
-
-  # Canable permissions
-  def updatable_by?(user)
-    permissions_check(user)
-  end
-
-  def destroyable_by?(user)
-    permissions_check(user)
-  end
-
-  # Permissions regarding who can see a grade
-  def viewable_by?(user)
-    permissions_check(user)
-  end
 
   def graded_at
     grade.graded_at if graded?
@@ -137,15 +122,6 @@ class Submission < ActiveRecord::Base
   end
 
   private
-
-  def permissions_check(user)
-    return true if user.is_staff?(course)
-    if assignment.is_individual?
-      student_id == user.id
-    elsif assignment.has_groups?
-      group_id == user.group_for_assignment(assignment).id
-    end
-  end
 
   def cache_associations
     if task
