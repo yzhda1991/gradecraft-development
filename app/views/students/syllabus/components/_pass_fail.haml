@@ -1,0 +1,6 @@
+- if presenter.grade_visible?(assignment)
+  .bold
+    - if presenter.grade_for(assignment).pass_fail_status
+      = term_for(presenter.grade_for(assignment).pass_fail_status)
+- else
+  = "#{term_for :pass}/#{term_for :fail}"

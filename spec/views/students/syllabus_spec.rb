@@ -3,6 +3,11 @@ require "rails_spec_helper"
 
 describe "students/syllabus" do
 
+  let(:user) { double(:user, is_student?: true) }
+  let(:view_context) { double(:view_context, current_user: user) }
+  let(:presenter) { SyllabusPresenter.new({ course: @course, assignment_types:
+    @assignment_types, student: @student, view_context: view_context }) }
+
   before(:each) do
     @course = create(:course)
     @assignment_types = [create(:assignment_type, course: @course, max_points: 1000)]
@@ -12,6 +17,7 @@ describe "students/syllabus" do
     @student.courses << @course
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:current_student).and_return(@student)
+    allow(view).to receive(:presenter).and_return presenter
   end
 
   it "renders pagetitle" do

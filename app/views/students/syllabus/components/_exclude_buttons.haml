@@ -1,0 +1,4 @@
+- if current_user_is_staff? && presenter.grade_visible?(assignment)
+  %li= link_to glyph("hand-scissors-o") + "Exclude", exclude_grades_assignment_path(id: presenter.grade_for(assignment).id), class: "button danger #{ "hidden" if presenter.grade_for(assignment).excluded_from_course_score? }", data: { confirm: "Are you sure you want to remove #{ presenter.grade_for(assignment).score } from #{ presenter.student.first_name }'s total points?" }, :method => :post
+
+  %li= link_to glyph(:plus) + "Include", include_grades_assignment_path(id: presenter.grade_for(assignment).id), class: "button secondary #{ "hidden" if ! presenter.grade_for(assignment).excluded_from_course_score? }", data: { confirm: "Are you sure you want to re-add #{ presenter.grade_for(assignment).score } to #{ presenter.student.first_name }'s total points?" }, :method => :post

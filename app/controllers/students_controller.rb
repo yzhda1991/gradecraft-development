@@ -35,8 +35,12 @@ class StudentsController < ApplicationController
   # team challenges in course
   def syllabus
     @assignment_types = current_course.assignment_types.includes(:assignments)
-    @assignments = current_course.assignments
     @student = current_student
+    presenter = SyllabusPresenter.new({ student: @student,
+                                        assignment_types: @assignment_types,
+                                        course: current_course,
+                                        view_context: view_context })
+    render :syllabus, locals: { presenter: presenter }
   end
 
   # Course timeline, displays all assignments that are determined by the
@@ -53,9 +57,13 @@ class StudentsController < ApplicationController
     self.current_student = current_course.students.where(id: params[:id]).first
     @student = current_student
     @student.team_for_course(current_course) if current_course.has_teams?
-    @assignments = current_course.assignments
     @assignment_types = current_course.assignment_types
     @display_sidebar = true
+    presenter = SyllabusPresenter.new({ student: current_student,
+                                        assignment_types: @assignment_types,
+                                        course: current_course,
+                                        view_context: view_context })
+    render :show, locals: { presenter: presenter }
   end
 
   # AJAX endpoint for student name search
