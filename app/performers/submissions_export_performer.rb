@@ -191,16 +191,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
       .titleize
   end
 
-  def sanitize_filename(filename)
-    filename
-      .downcase
-      .gsub(/[^\w\s_\:-]+/, "") # strip out characters besides letters and digits
-      .gsub(/(^|\b\s)\s+($|\s?\b)/, "\\1\\2") # remove extra spaces
-      .gsub(/\s+/, "_") # replace spaces with underscores
-      .gsub(/^_+/, "") # remove leading underscores
-      .gsub(/_+$/, "") # remove trailing underscores
-  end
-
   def fetch_course
     @course = @assignment.course
   end

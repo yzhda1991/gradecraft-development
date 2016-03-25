@@ -174,28 +174,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  describe "sanitize_filename" do
-    it "downcases everything" do
-      expect(performer.instance_eval { sanitize_filename("THISISSUPERCAPPY") }).to \
-        eq("thisissupercappy")
-    end
-
-    it "substitutes consecutive non-word characters with underscores" do
-      expect(performer.instance_eval { sanitize_filename("whoa\\ gEORG  !!! IS ...dead") }).to \
-        eq("whoa_georg_is_dead")
-    end
-
-    it "removes leading underscores" do
-      expect(performer.instance_eval { sanitize_filename("____________garrett_rules") }).to \
-        eq("garrett_rules")
-    end
-
-    it "removes trailing underscores" do
-      expect(performer.instance_eval { sanitize_filename("garrett_sucks__________") }).to \
-        eq("garrett_sucks")
-    end
-  end
-
   describe "#archive_root_dir" do
     let(:archive_root_dir_path) { Dir.mktmpdir }
     subject { performer.instance_eval { archive_root_dir }}
