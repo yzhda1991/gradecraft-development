@@ -70,4 +70,13 @@ describe Formatter::Filename do
       expect(subject.filename).to eq "the-real-filename"
     end
   end
+
+  describe ".inflector_methods" do
+    it "returns a list of methods to be included from ActiveSupport::Inflector" do
+      expect(Formatter::Filename.inflector_methods).to eq \
+        [:camelize, :classify, :constantize, :dasherize, :deconstantize,
+         :humanize, :ordinalize, :parameterize, :pluralize, :singularize,
+         :tableize, :titleize, :underscore]
+    end
+  end
 end
