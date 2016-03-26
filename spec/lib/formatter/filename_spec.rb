@@ -79,4 +79,11 @@ describe Formatter::Filename do
          :tableize, :titleize, :underscore]
     end
   end
+
+  it "includes ActiveSupport::Inflector" do
+    expect(subject).to respond_to :camelize
+    expect(subject).to respond_to :constantize
+    expect(subject).to respond_to :titleize
+    expect(subject).to respond_to :tableize
+  end
 end
