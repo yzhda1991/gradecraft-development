@@ -12,11 +12,9 @@ module Formatter
       self.filename = filename
         .downcase
         .gsub(/[^\w\s_\:-]+/, " ") # strip out characters besides letters and digits
-        .gsub(/(^|\b\s)\s+($|\s?\b)/, "\\1\\2") # remove extra spaces
-        .gsub(/_+/, " ") # replace underscores with spaces
-        .gsub(/ +/, " ") # replace underscores with spaces
-        .gsub(/^ +/, "") # remove leading spaces
-        .gsub(/ +$/, "") # remove trailing spaces
+        .gsub(/[_\ ]+/, "_") # replace multiple spaces or underscores with single underscores
+        .gsub(/\A[_\ -]+/, "") # remove leading characters \A signifies leading
+        .gsub(/[_\ -]+\z/, "") # remove trailing characters, \z signifies trailing
       self
     end
 
