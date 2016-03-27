@@ -284,7 +284,7 @@ class GradesController < ApplicationController
     end
 
     # @mz TODO: add specs
-    enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
+    enqueue_multiple_grade_update_jobs(grade_ids)
 
     respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
   end
@@ -311,7 +311,7 @@ class GradesController < ApplicationController
     end
 
     # @mz TODO: add specs
-    enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
+    enqueue_multiple_grade_update_jobs(grade_ids)
 
     if session[:return_to].present?
       redirect_to session[:return_to]
