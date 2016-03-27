@@ -520,7 +520,7 @@ GEM
       rufus-scheduler (~> 3.0)
     resque-throttler (0.1.5)
       resque (~> 1.25)
-    rollbar (2.8.0)
+    rollbar (2.8.3)
       multi_json
     rspec (3.4.0)
       rspec-core (~> 3.4.0)
