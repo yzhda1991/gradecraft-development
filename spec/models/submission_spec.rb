@@ -168,7 +168,7 @@ describe Submission do
     end
   end
 
-  describe ".resubmitted", focus: true do
+  describe ".resubmitted" do
     it "returns the submissions that have been submitted after they were graded" do
       grade = create(:grade, submission: subject, status: "Graded", graded_at: 1.day.ago)
       subject.submitted_at = DateTime.now
