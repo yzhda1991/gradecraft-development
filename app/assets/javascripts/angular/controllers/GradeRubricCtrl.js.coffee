@@ -23,6 +23,10 @@
   $scope.pointsPossible = ()->
     RubricService.pointsPossible()
 
+  $scope.thresholdPoints = ()->
+    RubricService.thresholdPoints()
+
+
   # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->
     points = 0
@@ -38,7 +42,7 @@
     $scope.adjustmentPoints() != 0
 
   $scope.pointsDifference = ()->
-    $scope.pointsPossible() - $scope.pointsGiven()
+    $scope.pointsPossible() - $scope.pointsAllocated()
 
   $scope.pointsRemaining = ()->
     pointsRemaining = $scope.pointsDifference()
@@ -46,10 +50,10 @@
 
   # Methods for identifying point deficit/overage
   $scope.pointsMissing = ()->
-    $scope.pointsDifference() > 0 and $scope.pointsGiven() > 0
+    $scope.pointsDifference() > 0 and $scope.pointsAllocated() > 0
 
   $scope.pointsSatisfied = ()->
-    $scope.pointsDifference() == 0 and $scope.pointsGiven() > 0
+    $scope.pointsDifference() == 0 and $scope.pointsAllocated() > 0
 
   $scope.pointsOverage = ()->
     $scope.pointsDifference() < 0
@@ -82,7 +86,7 @@
     criterionIds
 
   # count how many points have been given from those levels
-  $scope.pointsGiven = ()->
+  $scope.pointsAllocated = ()->
     points = 0
     angular.forEach($scope.criteria, (criterion, index)->
       if criterion.selectedLevel
@@ -91,7 +95,11 @@
     points
 
   $scope.finalPoints = ()->
-    $scope.pointsGiven() + $scope.adjustmentPoints()
+    finalPoints = $scope.pointsAllocated() + $scope.adjustmentPoints()
+    if $scope.pointsBelowThreshold() then 0 else finalPoints
+
+  $scope.pointsBelowThreshold = ()->
+    $scope.thresholdPoints() > $scope.pointsAllocated() + $scope.adjustmentPoints()
 
   $scope.gradedCriteria = ()->
     criteria = []
@@ -185,7 +193,7 @@
 
   $scope.gradeParams = ()->
     {
-      raw_score: $scope.pointsGiven(),
+      raw_score: $scope.pointsAllocated(),
       feedback: $scope.grade.feedback,
       status:   $scope.grade.status,
       adjustment_points: $scope.grade.adjustment_points,
