@@ -9,12 +9,12 @@
 
       #points-overview-floating(ng-cloak ng-hide="angular.element('#points-overview').isOnscreen()")
         %h4#points-legend
-          %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{ finalPoints() }} Points
-        %h4.notice(ng-hide="!pointsSatisfied() && !pointsMissing()") {{ pointsAllocated() | number:0}} / {{pointsPossible() | number:0}} Points Allocated
+          %span.points-assigned(ng-class="{'points-missing': pointsMissing(), 'points-satisfied': pointsSatisfied(), 'points-overage': pointsOverage()}") {{ finalPoints() | number:0 }} Points
+        %h4.notice(ng-hide="!pointsSatisfied() && !pointsMissing()") {{ pointsAllocated() | number:0 }} / {{ pointsPossible() | number:0 }} Points Allocated
         %h4.notice(ng-hide="pointsSatisfied() || pointsMissing()") You have not yet allocated any points
-        %h4.notice(ng-show="pointsMissing()") {{pointsRemaining() | number:0}} point{{pointsRemaining() > 1 ? "s" : ""}} have not been assigned
+        %h4.notice(ng-show="pointsMissing()") {{ pointsRemaining() | number:0 }} point{{ pointsRemaining() > 1 ? "s" : "" }} have not been assigned
         %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
-        %h4.notice(ng-show="pointsBelowThreshold()") You have not allocated enough points to meet the threshold
+        %h4.notice(ng-show="isBelowThreshold()") {{ pointsBelowThreshold() | number:0 }} points below the threshold
         %h4.notice.adjustment(ng-class="{'positive-adjustment' : adjustmentPoints() > 0}" ng-show="pointsAdjusted()") You have adjusted the total by {{adjustmentPoints()}} points
 
       .clear
@@ -77,7 +77,7 @@
           %h4.notice(ng-hide="pointsSatisfied() || pointsMissing()") You have not yet allocated any points
           %h4.notice(ng-show="pointsMissing()") {{pointsRemaining() | number:0}} point{{pointsRemaining() > 1 ? "s" : ""}} have not been assigned
           %h4.notice(ng-show="pointsSatisfied()") You have allocated all possible points
-          %h4.notice(ng-show="pointsBelowThreshold()") You have not allocated enough points to meet the threshold
+          %h4.notice(ng-show="isBelowThreshold()") {{ pointsBelowThreshold() | number:0 }} points below the threshold
       %br
       .points-adjustment(ng-cloak)
         %h4 Points Adjustment

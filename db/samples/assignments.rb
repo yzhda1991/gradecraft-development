@@ -38,6 +38,7 @@
     points_predictor_display: nil,
     release_necessary: false,
     student_logged: false,
+    threshold_points: 0,
     visible: true,
     pass_fail: false,
   },
@@ -213,6 +214,27 @@
   }
 }
 
+@assignments[:standard_with_threshold__and_insufficient_grades] = {
+  quotes: {
+    assignment_created: nil
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "Assignment with Points Threshold [Grades Below Threshold]",
+    description: "Graded Assignment has a points threshold that no student met. Grades have a raw_score of 15000",
+    open_at: 1.weeks.from_now,
+    due_at: 1.weeks.from_now + 0.05,
+    point_total: 20000,
+    threshold_points: 18000
+  },
+  grades: true,
+  grade_attributes: {
+    status: "Graded",
+    instructor_modified: true,
+    raw_score: -> { 15000 },
+  }
+}
+
 @assignments[:self_log_score_level_assignment] = {
   quotes: {
     assignment_created: "I didn't give it much thought back then. I just wanted to get all the words straight and collect my A. ― Gayle Forman, Just One Day",
@@ -253,7 +275,7 @@
     name: "Rubric Graded Assignment [No Grades]",
     open_at: 4.weeks.ago,
     due_at: 3.weeks.ago,
-    point_total: 80000,
+    point_total: 400000,
     accepts_submissions: true,
     accepts_attachments: true,
     accepts_links: true,
@@ -262,6 +284,20 @@
   },
   rubric: true,
   student_submissions: true
+}
+
+@assignments[:rubric_assignment_with_threshold] = {
+  quotes: {
+  },
+  assignment_type: :grading,
+  attributes: {
+    name: "Rubric Graded Assignment With Threshold [No Grades]",
+    open_at: 4.weeks.ago,
+    due_at: 3.weeks.ago,
+    point_total: 400000,
+    threshold_points: 200000
+  },
+  rubric: true
 }
 
 @assignments[:rubric_assignment_graded] = {
@@ -276,7 +312,7 @@
     name: "Rubric Graded Assignment [Grades]",
     open_at: 4.weeks.ago,
     due_at: 3.weeks.ago,
-    point_total: 80000,
+    point_total: 400000,
     accepts_submissions: true,
     accepts_attachments: true,
     accepts_links: true,

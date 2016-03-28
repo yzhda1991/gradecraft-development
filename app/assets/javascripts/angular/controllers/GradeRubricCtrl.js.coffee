@@ -41,6 +41,25 @@
   $scope.pointsAdjusted = ()->
     $scope.adjustmentPoints() != 0
 
+  # sum of points from selected levels
+  $scope.pointsAllocated = ()->
+    points = 0
+    angular.forEach($scope.criteria, (criterion, index)->
+      if criterion.selectedLevel
+        points += criterion.selectedLevel.points
+    )
+    points
+
+  $scope.finalPoints = ()->
+    finalPoints = $scope.pointsAllocated() + $scope.adjustmentPoints()
+    if $scope.isBelowThreshold() then 0 else finalPoints
+
+  $scope.isBelowThreshold = ()->
+    $scope.thresholdPoints() > $scope.pointsAllocated() + $scope.adjustmentPoints()
+
+  $scope.pointsBelowThreshold = ()->
+    $scope.thresholdPoints() - $scope.pointsAllocated() - $scope.adjustmentPoints()
+
   $scope.pointsDifference = ()->
     $scope.pointsPossible() - $scope.pointsAllocated()
 
@@ -67,7 +86,6 @@
     )
     levels
 
-
   # count how many levels have been selected in the UI
   $scope.selectedLevelIds = ()->
     levelIds = []
@@ -84,22 +102,6 @@
       criterionIds.push criterion.id
     )
     criterionIds
-
-  # count how many points have been given from those levels
-  $scope.pointsAllocated = ()->
-    points = 0
-    angular.forEach($scope.criteria, (criterion, index)->
-      if criterion.selectedLevel
-        points += criterion.selectedLevel.points
-    )
-    points
-
-  $scope.finalPoints = ()->
-    finalPoints = $scope.pointsAllocated() + $scope.adjustmentPoints()
-    if $scope.pointsBelowThreshold() then 0 else finalPoints
-
-  $scope.pointsBelowThreshold = ()->
-    $scope.thresholdPoints() > $scope.pointsAllocated() + $scope.adjustmentPoints()
 
   $scope.gradedCriteria = ()->
     criteria = []
