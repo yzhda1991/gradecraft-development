@@ -168,7 +168,7 @@ describe Submission do
     end
   end
 
-  describe ".resubmitted" do
+  describe ".resubmitted", focus: true do
     it "returns the submissions that have been submitted after they were graded" do
       grade = create(:grade, submission: subject, status: "Graded", graded_at: 1.day.ago)
       subject.submitted_at = DateTime.now
@@ -188,6 +188,21 @@ describe Submission do
       subject.submitted_at = 2.days.ago
       subject.save
       expect(Submission.resubmitted).to be_empty
+    end
+
+    it "returns one submission for a group resubmissions" do
+      student1 = create(:user)
+      student2 = create(:user)
+      group = create(:group, assignments: [subject.assignment])
+      group.students << [student1, student2]
+      grade1 = create(:grade, submission: subject, student: student1,
+                      status: "Graded", graded_at: 1.day.ago)
+      grade2 = create(:grade, submission: subject, student: student2,
+                      status: "Graded", graded_at: 1.day.ago)
+      subject.submitted_at = DateTime.now
+      subject.group_id = group.id
+      subject.save
+      expect(Submission.resubmitted).to eq [subject]
     end
   end
 
