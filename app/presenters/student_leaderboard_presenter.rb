@@ -13,6 +13,7 @@ class StudentLeaderboardPresenter < Showtime::Presenter
     @earned_badges ||=
       EarnedBadge.for_course(course)
         .where(student_id: student_ids)
+        .order_by_created_at
         .includes(:badge)
   end
 
