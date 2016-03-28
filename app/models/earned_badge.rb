@@ -30,6 +30,7 @@ class EarnedBadge < ActiveRecord::Base
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :student_visible, -> { where(student_visible: true) }
+  scope :order_by_created_at, -> { order("created_at ASC") }
 
   def check_unlockables
     if self.badge.is_a_condition?
