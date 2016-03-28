@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160309131512) do
+ActiveRecord::Schema.define(version: 20160328133327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -564,17 +564,6 @@ ActiveRecord::Schema.define(version: 20160309131512) do
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
-  create_table "shared_earned_badges", force: :cascade do |t|
-    t.integer  "course_id"
-    t.text     "student_name"
-    t.integer  "user_id"
-    t.string   "icon",         limit: 255
-    t.string   "name",         limit: 255
-    t.integer  "badge_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "student_academic_histories", force: :cascade do |t|
     t.integer "student_id"
     t.string  "major",                limit: 255
@@ -603,6 +592,8 @@ ActiveRecord::Schema.define(version: 20160309131512) do
     t.string   "store_dir"
   end
 
+  add_index "submission_files", ["submission_id"], name: "index_submission_files_on_submission_id", using: :btree
+
   create_table "submissions", force: :cascade do |t|
     t.integer  "assignment_id"
     t.integer  "student_id"
@@ -622,7 +613,11 @@ ActiveRecord::Schema.define(version: 20160309131512) do
     t.datetime "submitted_at"
   end
 
+  add_index "submissions", ["assignment_id", "group_id"], name: "index_submissions_on_assignment_id_and_group_id", using: :btree
+  add_index "submissions", ["assignment_id", "student_id"], name: "index_submissions_on_assignment_id_and_student_id", using: :btree
+  add_index "submissions", ["assignment_id"], name: "index_submissions_on_assignment_id", using: :btree
   add_index "submissions", ["assignment_type"], name: "index_submissions_on_assignment_type", using: :btree
+  add_index "submissions", ["assignment_type_id"], name: "index_submissions_on_assignment_type_id", using: :btree
   add_index "submissions", ["course_id"], name: "index_submissions_on_course_id", using: :btree
 
   create_table "submissions_exports", force: :cascade do |t|
@@ -727,6 +722,9 @@ ActiveRecord::Schema.define(version: 20160309131512) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "unlock_states", ["student_id"], name: "index_unlock_states_on_student_id", using: :btree
+  add_index "unlock_states", ["unlockable_id", "unlockable_type"], name: "index_unlock_states_on_unlockable_id_and_unlockable_type", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",                        limit: 255,                                        null: false
