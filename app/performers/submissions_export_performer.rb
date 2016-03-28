@@ -161,34 +161,14 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def archive_basename
+    assignment_name = Formatter::Filename.titleize @assignment.name
+
     if team_present?
-      "#{formatted_assignment_name} - #{formatted_team_name}"
+      team_name = Formatter::Filename.titleize @team.name
+      "#{assignment_name} - #{team_name}"
     else
-      formatted_assignment_name
+      assignment_name
     end
-  end
-
-  def formatted_assignment_name
-    formatted_filename_fragment(@assignment.name)
-  end
-
-  def formatted_team_name
-    formatted_filename_fragment(@team.name)
-  end
-
-  def formatted_filename_fragment(fragment)
-    titleize_filename(fragment)
-  end
-
-  def titleize_filename(filename)
-    filename
-      .downcase
-      .gsub(/[^\w\s_\:-]+/, " ") # strip out characters besides letters and digits
-      .gsub(/_+/, " ") # replace underscores with spaces
-      .gsub(/ +/, " ") # replace underscores with spaces
-      .gsub(/^ +/, "") # remove leading spaces
-      .gsub(/ +$/, "") # remove trailing spaces
-      .titleize
   end
 
   def fetch_course
@@ -425,7 +405,11 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def submission_binary_filename(student, submission_file, index)
-    [ formatted_student_name(student), formatted_assignment_name, "Submission File #{index + 1}"].join(" - ") + submission_file.extension
+    base_filename = "#{student.full_name} - #{@assignment.name}"
+    [
+      Formatter::Filename.titleize base_filename
+      "Submission File #{index + 1}"
+    ].join(" - ") + submission_file.extension
   end
 
   def write_submission_binary_file(student, submission_file, index)
