@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160328133327) do
+ActiveRecord::Schema.define(version: 20160328172823) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20160328133327) do
     t.boolean  "show_name_when_locked",                    default: true
     t.boolean  "show_points_when_locked",                  default: true
     t.boolean  "show_description_when_locked",             default: true
+    t.integer  "threshold_points",                         default: 0
   end
 
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree

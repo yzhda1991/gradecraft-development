@@ -8,18 +8,17 @@ class Assignment < ActiveRecord::Base
   include UploadsThumbnails
   include UnlockableCondition
 
-  attr_accessible :name, :assignment_type_id, :assignment_type, :description,
-    :point_total, :open_at, :due_at, :accepts_submissions_until,
-    :release_necessary, :student_logged, :accepts_submissions, :accepts_links,
-    :accepts_text, :accepts_attachments, :resubmissions_allowed, :grade_scope,
-    :visible, :visible_when_locked, :required, :pass_fail, :use_rubric,
-    :hide_analytics, :points_predictor_display, :notify_released,
-    :mass_grade_type, :include_in_timeline, :include_in_predictor,
-    :include_in_to_do, :assignment_file_ids,
-    :assignment_files_attributes, :assignment_file,
-    :assignment_score_levels_attributes, :assignment_score_level, :course,
-    :course_id, :show_name_when_locked, :show_points_when_locked,
-    :show_description_when_locked
+  attr_accessible :accepts_attachments, :accepts_links, :accepts_submissions,
+    :accepts_submissions_until, :accepts_text, :assignment_file,
+    :assignment_file_ids, :assignment_files_attributes, :assignment_score_level,
+    :assignment_score_levels_attributes, :assignment_type, :assignment_type_id,
+    :course, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
+    :include_in_predictor, :include_in_timeline, :include_in_to_do,
+    :mass_grade_type, :name, :notify_released, :open_at, :pass_fail,
+    :point_total, :points_predictor_display, :release_necessary, :required,
+    :resubmissions_allowed, :show_description_when_locked,
+    :show_name_when_locked, :show_points_when_locked, :student_logged,
+    :threshold_points, :use_rubric, :visible, :visible_when_locked
 
   attr_accessor :current_student_grade
 

@@ -1,0 +1,9 @@
+%p
+  - if grade.raw_score < grade.assignment.threshold_points
+    %span Your raw score was
+    %span.bold= " #{ points grade.raw_score } "
+    %span but the threshold for this assigment is
+    %span.bold= " #{ points grade.assignment.threshold_points }"
+
+
+

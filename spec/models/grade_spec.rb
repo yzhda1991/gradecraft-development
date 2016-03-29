@@ -127,6 +127,12 @@ describe Grade do
       subject.update(raw_score: "1234", adjustment_points: -234)
       expect(subject.final_score).to eq(1000)
     end
+
+    it "is 0 if the score is below the threshold" do
+      subject.assignment.update(threshold_points: 1001)
+      subject.update(raw_score: 1000)
+      expect(subject.final_score).to eq(0)
+    end
   end
 
   describe "calculating score" do

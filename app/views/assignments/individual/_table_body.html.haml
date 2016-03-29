@@ -9,6 +9,9 @@
           %i.fa.fa-lock
     %td= link_to student.first_name, student_path(student)
     %td= link_to student.last_name, student_path(student)
+    - if presenter.assignment.threshold_points?
+      %td.raw-score
+        = points grade.raw_score if grade.instructor_modified?
     %td.status-or-score
       - if presenter.assignment.pass_fail?
         - if grade.pass_fail_status

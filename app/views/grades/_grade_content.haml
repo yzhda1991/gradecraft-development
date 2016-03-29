@@ -8,6 +8,8 @@
 
   = render "grades/components/students_in_group", grade: grade, presenter: presenter if grade.assignment.has_groups?
 
+  = render "grades/components/threshold", grade: grade if grade.assignment.threshold_points
+
   = render "grades/components/score", grade: grade
 
   = render "grades/components/status", grade: grade if current_user_is_staff?
