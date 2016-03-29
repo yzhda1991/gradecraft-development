@@ -1,9 +1,9 @@
 %p
   - if grade.pass_fail_status
     %span You
-    %span.bold= "#{term_for(grade.pass_fail_status)}"
-    %span= "the #{term_for :assignment}."
+    %span.bold= "#{ term_for(grade.pass_fail_status) }"
+    %span= "the #{ term_for :assignment }."
   - elsif grade.score.present?
     %span You earned
-    %span.bold= "#{points grade.final_points }"
-    %span=" out of #{points grade.assignment.point_total } possible points."
+    %span.bold= "#{ points grade.final_points }"
+    %span=" out of #{ points grade.assignment.point_total } possible points."

@@ -161,7 +161,8 @@ $('table.nofeatures_default_last_name_dynatable').dynatable({
       return el.innerHTML;
     },
     rawScore: function(el, record) {
-      return Number(el.innerHTML.replace(/,/g,""));
+      record.numericScore = Number(el.innerHTML.replace(/,/g,""));
+      return el.innerHTML;
     },
     multipliedScore: function(el, record) {
       return Number(el.innerHTML.replace(/,/g,"")) || 0;
