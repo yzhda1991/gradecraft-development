@@ -23,7 +23,7 @@ a.site-title
   z-index: 0
   top: 0
   transition: visibility 0 linear .2s
-  background-color: $color-blue-2
+  background-color: $color-blue-1
   transition: visibility 0 linear .2s
   -webkit-perspective: 1000
   -webkit-backface-visibility: hidden
@@ -61,6 +61,7 @@ a.site-title
 
 .cbFlyNavLeft-wrap
   display: block
+  box-sizing: border-box
   position: relative
   height: 100%
   overflow: hidden
@@ -183,7 +184,7 @@ ul.subnav.logged-out
 .isCbFlyNavLeftActive .offscreen-sidebar
   margin-right: 0
   display: block
-  padding-right: 1rem
+  // padding-right: 1rem
 
 /* Large Screen Styles*/
 @media (min-width: $media-medium-max)
@@ -318,17 +319,19 @@ ul.subnav.logged-out
     padding: 5px 10px
 
   .layout-left-flyout
-    padding: .25rem
-    width: 15.25rem
+    width: 250px
 
     li, li a
       color: $color-white
       height: 1.5rem
       text-transform: capitalize
-      padding: .15rem
       font-size: 1rem
-      &:hover, &.active
+      &.active
+        background-color: $color-yellow-1
+        color: $color-blue-1
+      &:hover
         color: $color-yellow-1
+        text-decoration: none
 
     h5
       color: $color-yellow-1
