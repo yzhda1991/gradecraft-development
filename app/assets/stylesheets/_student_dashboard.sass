@@ -18,13 +18,15 @@ img.unearned
 img.earned
   opacity: 1
 
+/* Styling grading scheme level bars*/
 .bar_magic
   background-color:$color-grey-6
   border-collapse: true
   border-radius: 16px
+  box-sizing: border-box
   margin: 2px
   margin: 3px auto
-  padding: .5rem 0
+  padding: .5rem
   width: 95%
 
 .bar_magic.success
@@ -34,9 +36,9 @@ img.earned
   .has-tip
     color: $color-white
 
+/* Styling current grading scheme level bar*/
 .bar_magic.current
   background-color: transparentize($color-green-2, .8)
-  padding: .5rem 0
 
 p.predictor-description
   margin: 0.25rem 0 .5rem
@@ -61,3 +63,8 @@ p.predictor-description
 
 .right.radius.label
   margin-left: 1rem
+
+@media (max-width: $media-small-max)
+  .bar_magic
+    width: 100%
+    border-radius: 8px
