@@ -1,4 +1,4 @@
-- if presenter.grade_visible?(assignment)
+- if GradeProctor.new(presenter.grade_for(assignment)).viewable?
   %li= link_to glyph(:eye) + "See Grade", assignment_grade_path(assignment, student_id: presenter.student.id, anchor: "tab4"), class: "button"
   / Grade Management /
   - if current_user_is_staff?

@@ -16,28 +16,22 @@ class SyllabusPresenter < Showtime::Presenter
   end
 
   def assignment_visible?(assignment)
-    assignment.visible_for_student?(student) || grade_visible?(assignment)
+    assignment.visible_for_student?(student) ||
+      GradeProctor.new(grade_for(assignment)).viewable?
   end
 
   def name_visible?(assignment)
-    assignment.name_visible_for_student?(student) || grade_visible?(assignment)
+    assignment.name_visible_for_student?(student) ||
+      GradeProctor.new(grade_for(assignment)).viewable?
   end
 
   def points_visible?(assignment)
     assignment.points_visible_for_student?(student) ||
-      grade_visible?(assignment)
+      GradeProctor.new(grade_for(assignment)).viewable?
   end
 
   def grade_for(assignment)
     student.grade_for_assignment(assignment)
-  end
-
-  def grade_visible?(assignment)
-    if view_context.current_user.is_student?(course)
-      student.grade_released_for_assignment?(assignment)
-    else
-      grade_for(assignment).instructor_modified
-    end
   end
 
   def group_for(assignment)
