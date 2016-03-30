@@ -20,6 +20,10 @@
     float: left
     margin-left: rem-calc(16)
     margin: 0
+    
+    i
+      display: none
+      
 
   /* Individual Tabs */
   .navbar-nav
@@ -59,16 +63,6 @@ li .announcement-notification-badge
 li a.notification-right
   padding: 1rem 0 1rem 1rem !important
 
-/* Reducing padding and font size for small screens */
-@media (max-width: $media-medium-max)
-  .student .offscreen-sidebar
-    text-transform: capitalize
-    li
-      border-bottom: 1px solid #ddd
-      color: $color-grey-2
-      background-color: $color-grey-6
-      font-weight: 300
-      padding: .65rem
-      display: block
-    li a
-      color: $color-grey-2
+@media (min-width: $media-small-max)
+  i
+    display: inline
