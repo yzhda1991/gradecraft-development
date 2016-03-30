@@ -59,10 +59,15 @@
     else
       return true
 
+  $scope.predictionBelowThreshold = (article)->
+    article.has_threshold && article.grade.predicted_score < article.threshold_points
+
   $scope.articleNoPoints = (assignment)->
     if assignment.pass_fail && assignment.grade.pass_fail_status != "Pass"
       return true
     else if assignment.grade.score == null || assignment.grade.score == 0
+      return true
+    else if $scope.predictionBelowThreshold(assignment)
       return true
     else
       return false
@@ -285,7 +290,10 @@
         article_id = ui.handle.parentElement.dataset.id
         value = ui.value
 
-        if articleType == 'assignment'
+        if articleType == 'assignment' and $scope.predictionBelowThreshold(article)
+          article.grade.predicted_score = 0
+          PredictorService.postPredictedGrade(article_id,0)
+        else if articleType == 'assignment'
           article.grade.predicted_score = value
           PredictorService.postPredictedGrade(article_id,value)
         else

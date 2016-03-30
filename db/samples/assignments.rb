@@ -214,13 +214,13 @@
   }
 }
 
-@assignments[:standard_with_threshold__and_insufficient_grades] = {
+@assignments[:threshold_and_insufficient_grades] = {
   quotes: {
     assignment_created: nil
   },
   assignment_type: :grading,
   attributes: {
-    name: "Assignment with Points Threshold [Grades Below Threshold]",
+    name: "Points Threshold and Insufficent Grades",
     description: "Graded Assignment has a points threshold that no student met. Grades have a raw_score of 15000",
     open_at: 1.weeks.from_now,
     due_at: 1.weeks.from_now + 0.05,
@@ -774,6 +774,22 @@
     status: nil,
     predicted_score: -> { rand(25000) }
   }
+}
+
+@assignments[:predictor_slider_with_thresholds_and_levels] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :predictor,
+  attributes: {
+    name: "Level Slider and Threshold",
+    description: "Should have a slider with both Level and a Threshold Behavior",
+    due_at: 1.week.from_now,
+    point_total: 25000,
+    threshold_points: 15000,
+    points_predictor_display: "Slider",
+  },
+  assignment_score_levels: true,
 }
 
 #------------------------------------------------------------------------------#
