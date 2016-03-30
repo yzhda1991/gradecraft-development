@@ -35,6 +35,9 @@
         else
           return ""
 
+      scope.thresholdPoints = ()->
+        @target.threshold_points
+
       scope.conditions = ()->
         @target.unlock_conditions
 
@@ -69,6 +72,10 @@
         has_submission: {
           tooltip: 'You have submitted this ' + scope.targetTerm()
           icon: "fa-file"
+        }
+        has_threshold: {
+          tooltip: 'You must earn ' + scope.thresholdPoints() + ' points or above for this ' + scope.targetTerm()
+          icon: "fa-balance-scale"
         }
         is_locked: {
           tooltip: scope.conditions()

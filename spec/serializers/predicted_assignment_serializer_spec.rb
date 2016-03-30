@@ -73,7 +73,8 @@ describe PredictedAssignmentSerializer do
           name
           pass_fail
           point_total
-          position )
+          position
+          threshold_points )
       expect(exposed_attributes & subject.attributes.keys).to eq(exposed_attributes)
     end
 
@@ -169,6 +170,18 @@ describe PredictedAssignmentSerializer do
           allow(assignment).to receive(:accepts_submissions?).and_return true
           allow(user).to receive(:submission_for_assignment).and_return nil
           expect(subject[:has_submission]).to eq(false)
+        end
+      end
+
+      describe "has_threshold" do
+        it "is true when the assignment has a threshold" do
+          allow(assignment).to receive(:threshold_points).and_return 100
+          expect(subject[:has_threshold]).to eq(true)
+        end
+
+        it "is false when the assignment threshold is zero" do
+          allow(assignment).to receive(:threshold_points).and_return 0
+          expect(subject[:has_threshold]).to eq(false)
         end
       end
 

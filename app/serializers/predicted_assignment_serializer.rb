@@ -47,9 +47,12 @@ class PredictedAssignmentSerializer < SimpleDelegator
   end
 
   private
-  
+
   attr_reader :assignment
 
+  # Selected attributes necessary for all method calls are declared in
+  # predicted_assignment_collection_serializer. Here we further refine down to
+  # only the attributes that will be passed to the front end.
   def select_attributes
     assignment.attributes.select do |attr,v|
       %w( accepts_submissions_until
@@ -61,6 +64,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
           pass_fail
           point_total
           position
+          threshold_points
         ).include?(attr)
     end
   end
@@ -68,17 +72,18 @@ class PredictedAssignmentSerializer < SimpleDelegator
   # boolean states for icons in predictor
   def boolean_flags
     {
-      is_required: is_required?,
+      accepting_submissions: accepting_submissions?,
+      closed_without_submission: closed_without_sumbission?,
+      has_been_unlocked: has_been_unlocked?,
       has_info: has_info?,
       has_rubric: has_rubric?,
-      accepting_submissions: accepting_submissions?,
       has_submission: has_submission?,
+      has_threshold: has_threshold?,
       is_a_condition: is_a_condition?,
       is_earned_by_group: is_earned_by_group?,
       is_late: is_late?,
-      closed_without_submission: closed_without_sumbission?,
       is_locked: is_locked?,
-      has_been_unlocked: has_been_unlocked?,
+      is_required: is_required?,
     }
   end
 
@@ -112,6 +117,10 @@ class PredictedAssignmentSerializer < SimpleDelegator
   def has_submission?
     !!assignment.accepts_submissions? && \
       student.submission_for_assignment(assignment).present?
+  end
+
+  def has_threshold?
+    assignment.threshold_points > 0
   end
 
   def closed_without_sumbission?

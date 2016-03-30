@@ -42,6 +42,7 @@ class PredictedAssignmentCollectionSerializer
       :point_total,
       :points_predictor_display,
       :position,
+      :threshold_points,
       :required,
       :use_rubric,
       :visible,
