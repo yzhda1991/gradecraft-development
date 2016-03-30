@@ -69,14 +69,19 @@
       display: block
       padding: 2.4px
 
-    .staff-notification-badge
-      background-color: $color-red-1
-      color: $color-white
-      padding: .15rem .5rem
-      position: relative
-      top: -27px
-      margin: 0
-      left: 0px
+/* Positioning and styling of notification badges in staff-sidenav */
+.staff-sidenav li
+  position: relative
+  
+.staff-sidenav
+  .staff-notification-badge
+    background-color: $color-red-1
+    border-radius: 50%
+    color: $color-white
+    padding: .1rem .25rem
+    position: absolute
+    right: 0
+    top: 3
 
   /* Spacing the list divider */
   hr
