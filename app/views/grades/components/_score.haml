@@ -1,9 +1,19 @@
-%p
-  - if grade.pass_fail_status
-    %span You
-    %span.bold= "#{ term_for(grade.pass_fail_status) }"
-    %span= "the #{ term_for :assignment }."
-  - elsif grade.score.present?
-    %span You earned
-    %span.bold= "#{ points grade.final_points }"
-    %span=" out of #{ points grade.assignment.point_total } possible points."
+- if assignment_type.student_weightable?
+  // Checking to see if this student has weighted this assignment anything other than 1
+  - if (grade.student.weight_for_assignment_type(assignment_type) == 0 && current_course.default_assignment_weight != 1) || grade.student.weight_for_assignment_type(assignment_type) > 1
+    - if GradeProctor.new(grade).viewable?
+      = "#{points grade.final_points} / #{ points assignment.point_total } points (Raw)"
+      .bold= "#{ points grade.score } / #{points grade.point_total} points (Multiplied)"
+    - else
+      .italic= "#{points grade.point_total} points possible"
+  - else
+    - if GradeProctor.new(grade).viewable?
+      .bold= "#{points grade.final_points} / #{ points grade.point_total } points"
+    - else
+      .italic= "#{points assignment.point_total} points possible"
+- else
+  - if GradeProctor.new(grade).viewable?
+    .bold
+      = "#{points grade.final_points} / #{points grade.point_total} points earned"
+  - else
+    .italic= "#{points assignment.point_total} points possible"

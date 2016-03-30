@@ -15,12 +15,12 @@
       %td
         - if presenter.points_visible?(assignment)
           - if assignment.pass_fail?
-            = render "students/syllabus/components/pass_fail", presenter: presenter, assignment: assignment
+            = render "grades/components/pass_fail", presenter: presenter, assignment: assignment
           - else
             // Checking to see if this assignment type is student weightable
-            = render "students/syllabus/components/score", presenter: presenter, assignment_type: assignment_type, assignment: assignment
+            = render "grades/components/score", grade: presenter.grade_for(assignment), assignment_type: assignment_type, assignment: assignment
           - if current_user_is_student?
-            = render "students/syllabus/components/prediction", presenter: presenter, assignment: assignment
+            = render "grades/components/prediction", grade: presenter.grade_for(assignment)
       %td= render "students/syllabus/components/due_at", assignment: assignment
       %td
         %span
