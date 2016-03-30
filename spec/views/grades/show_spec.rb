@@ -27,10 +27,7 @@ describe "grades/show" do
       it "renders the points out of possible" do
         @grade.update(status: "Graded", raw_score: @assignment.point_total)
         render
-        assert_select "p" do
-          assert_select "span", text: "You earned", count: 1
-          assert_select "span", text: "#{points @assignment.point_total}", count: 1
-        end
+        assert_select ".bold", text: "#{ points @grade.final_score } / #{ points @assignment.point_total } points earned", count: 1
       end
     end
   end

@@ -10,7 +10,7 @@
 
   = render "grades/components/threshold", grade: grade if grade.assignment.threshold_points
 
-  = render "grades/components/score", grade: grade
+  = render "grades/components/score", grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment
 
   = render "grades/components/status", grade: grade if current_user_is_staff?
 
