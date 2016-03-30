@@ -23,7 +23,7 @@ a.site-title
   z-index: 0
   top: 0
   transition: visibility 0 linear .2s
-  background-color: $color-blue-1
+  background-color: $color-grey-6
   transition: visibility 0 linear .2s
   -webkit-perspective: 1000
   -webkit-backface-visibility: hidden
@@ -111,9 +111,8 @@ a.site-title
 .navbar ul
   list-style-type: none
 
-.btn-navbar-right
+.btn-navbar-right, .btn-navbar-left
   position: absolute
-  right: 0
   top: 7px
   font-size: 1.1rem
   width: 35px
@@ -122,18 +121,15 @@ a.site-title
   display: block
   z-index: 1
   color: $color-green-2
+  &:hover
+    color: $color-green-2
+    text-decoration: none
+
+.btn-navbar-right
+  right: 0
 
 .btn-navbar-left
-  position: absolute
   left: 0
-  top: 7px
-  font-size: 1.1rem
-  width: 35px
-  height: 40px
-  padding: 4px 0 0 10px
-  display: block
-  z-index: 1
-  color: $color-green-2
 
 /* Navbar Styles */
 .navbar
@@ -327,10 +323,10 @@ ul.subnav.logged-out
       text-transform: capitalize
       font-size: 1rem
       &.active
-        background-color: $color-yellow-1
-        color: $color-blue-1
+        background-color: $color-blue-3
+        color: $color-white
       &:hover
-        color: $color-yellow-1
+        color: $color-blue-3
         text-decoration: none
 
     h5
@@ -350,8 +346,8 @@ ul.subnav.logged-out
     background-color: darken($color-blue-1, 20%)
     width: 16rem
     padding: .5rem .75rem
-    height: 2.75rem
-    font-size: 2rem
+    // height: 2.75rem
+    font-size: 1rem
 
     a
       color: $color-green-2

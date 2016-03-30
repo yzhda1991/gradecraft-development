@@ -19,8 +19,6 @@
                 %span.course= "#{current_course.courseno} "
                 %span.course_name= "#{current_course.name} "
                 %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
-                - if current_course.tagline?
-                  %span.tagline= current_course.try(:tagline)
           %ul.nav.nav-pill.right
             = render "layouts/navigation/authenticated_nav"
         %nav.mobile-nav.hide-for-large
