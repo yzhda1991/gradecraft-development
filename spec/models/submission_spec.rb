@@ -168,6 +168,28 @@ describe Submission do
     end
   end
 
+  describe ".ungraded", focus: true do
+    before { subject.save }
+
+    it "returns the submissions that do not have any grades" do
+      graded_submission = create(:submission)
+      create :grade, submission: graded_submission, status: "Released"
+      expect(Submission.ungraded2).to eq [subject]
+    end
+
+    it "returns the submissions that have a grade but it's in progress" do
+      create :grade, submission: subject, status: "In Progress"
+      expect(Submission.ungraded2).to eq [subject]
+    end
+
+    it "returns the submissions that have been graded but not released" do
+      subject.save
+      subject.assignment.update_attributes(release_necessary: true)
+      create :grade, submission: subject, status: "Graded"
+      expect(Submission.ungraded2).to eq [subject]
+    end
+  end
+
   describe ".resubmitted" do
     it "returns the submissions that have been submitted after they were graded" do
       grade = create(:grade, submission: subject, status: "Graded", graded_at: 1.day.ago)

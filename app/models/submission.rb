@@ -25,8 +25,20 @@ class Submission < ActiveRecord::Base
   has_many :submission_files, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :submission_files
 
+  scope :ungraded2, -> do
+    # TODO: Add index on grades.submission_id
+
+    includes(:grade, :assignment)
+      .where("(assignments.release_necessary = true AND "\
+              "grades.status != :released) OR "\
+             "(assignments.release_necessary = false AND "\
+              "grades.status NOT IN (:graded, :released)) OR "\
+             "grades.id IS NULL", graded: "Graded",
+             released: "Released")
+      .references(:grade, :assignment)
+  end
+
   scope :ungraded, -> { where("NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))", "Graded", "Released") }
-  scope :graded, -> { where(:grade) }
   scope :resubmitted, -> { includes(:grade).where(grades: { status: ["Graded", "Released"] })
                                            .where("grades.graded_at < submitted_at") }
   scope :order_by_submitted, -> { order("submitted_at ASC") }
