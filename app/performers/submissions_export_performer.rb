@@ -343,9 +343,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     [ formatted_student_name(student), formatted_assignment_name, "Submission Text.txt" ].join(" - ")
   end
 
-  # @mz todo: update specs
   def formatted_student_name(student)
-    titleize_filename student.full_name
+    Formatter::Filename.titleize student.full_name
   end
 
   def create_submission_binary_files
