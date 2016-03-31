@@ -7,6 +7,7 @@ module SubmissionGradeHistory
       .remove("name" => "feedback_read_at")
       .remove("name" => "feedback_reviewed")
       .remove("name" => "feedback_reviewed_at")
+      .remove("name" => "final_score")
       .remove("name" => "graded_at")
       .remove("name" => "graded_by_id")
       .remove("name" => "instructor_modified")
