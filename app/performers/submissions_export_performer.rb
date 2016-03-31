@@ -161,14 +161,21 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def archive_basename
-    assignment_name = Formatter::Filename.titleize @assignment.name
-
     if team_present?
-      team_name = Formatter::Filename.titleize @team.name
-      "#{assignment_name} - #{team_name}"
+      "#{titlized_assignment_name} - #{titlized_team_name}"
     else
-      assignment_name
+      titlized_assignment_name
     end
+  end
+
+  def titleized_assignment_name
+    @titleized_assignment_name ||= \
+      Formatter::Filename.titleize @assignment.name
+  end
+
+  def titleized_team_name
+    @titleized_team_name || = \
+      Formatter::Filename.titleize @team.name
   end
 
   def fetch_course
@@ -405,11 +412,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def submission_binary_filename(student, submission_file, index)
-    base_filename = "#{student.full_name} - #{@assignment.name}"
-    [
-      Formatter::Filename.titleize base_filename
-      "Submission File #{index + 1}"
-    ].join(" - ") + submission_file.extension
+    [ submission_base_filename(student), "Submission File #{index + 1}" ]
+      .join(" - ") + submission_file.extension
+  end
+
+  def submission_base_filename(student)
+    Formatter::Filename.titleize "#{student.full_name} - #{@assignment.name}"
   end
 
   def write_submission_binary_file(student, submission_file, index)
