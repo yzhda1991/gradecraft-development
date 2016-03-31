@@ -161,21 +161,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def archive_basename
-    if team_present?
-      "#{titlized_assignment_name} - #{titlized_team_name}"
-    else
-      titlized_assignment_name
-    end
-  end
-
-  def titleized_assignment_name
-    @titleized_assignment_name ||= \
-      Formatter::Filename.titleize @assignment.name
-  end
-
-  def titleized_team_name
-    @titleized_team_name || = \
-      Formatter::Filename.titleize @team.name
+    basename = assignment_name
+    basename += " - #{@team.name}" if team_present?
+    Formatter::Filename.titleize basename
   end
 
   def fetch_course
