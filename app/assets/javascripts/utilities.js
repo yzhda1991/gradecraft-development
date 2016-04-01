@@ -23,7 +23,7 @@ $( "#tabs" ).tabs({
   }
 });
 
- $('.froala').editable({
+ $('.froala').froalaEditor({
   inlineMode: false,
   minHeight: 280,
   buttons: [
