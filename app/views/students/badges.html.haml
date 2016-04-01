@@ -35,7 +35,6 @@
 
 
     - if @unearned_badges.present?
-      .clear
       %h4= "Possible #{term_for :badges}"
       - @unearned_badges.each do |badge|
         .badge-card.available
@@ -56,3 +55,4 @@
                 .points= "#{points badge.point_total} points possible"
               - if badge.description_visible_for_student?(current_student)
                 .feedback= raw badge.try(:description)
+      .clear
