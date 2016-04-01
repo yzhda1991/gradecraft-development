@@ -1,0 +1,32 @@
+- if presenter.individual_assignment?
+
+  %p
+    %span.smallcaps Submitted:
+    = presenter.submission.submitted_at
+
+    // Late alert if submitted after due date
+    - if presenter.submission.late?
+      %span.label.alert Late!
+
+    - if presenter.submission.resubmitted?
+      %span.label.alert Resubmitted!
+
+  // Displaying the link to the submission if there is one
+  - if presenter.submission.link?
+    %p
+      %span.smallcaps Link:
+      = external_link_to presenter.submission.link, presenter.submission.link
+
+  - if presenter.submission.submission_files.present?
+    %p
+      %span.smallcaps Attachments:
+      %ul
+        - presenter.submission.submission_files.each do |sf|
+          %li
+            = link_to sf.filename, sf.url, :target => "_blank"
+            = link_to "(Remove)", remove_uploads_path({ :model => "SubmissionFile", assignment_id: presenter.assignment.id, :upload_id => sf.id } )
+
+  - if presenter.submission.text_comment?
+    %p
+      %span.smallcaps Statement:
+      = raw sanitize_external_links presenter.submission.text_comment

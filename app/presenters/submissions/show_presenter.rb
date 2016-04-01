@@ -9,33 +9,33 @@ class Submissions::ShowPresenter < Submissions::Presenter
     properties[:id]
   end
 
+  def individual_assignment?
+    assignment.is_individual?
+  end
+
+  def owner
+    individual_assignment? ? submission.student : submission.group
+  end
+
+  def owner_name
+    individual_assignment? ? student.first_name : group.name
+  end
+
   def grade
-    if assignment.is_individual?
-      assignment.grades.where(student_id: student.id).first
-    else
-      assignment.grades.where(group_id: group.id).first
-    end
+    owner_id_attr = individual_assignment? ? :student_id : :group_id
+    @grade ||= assignment.grades.where("#{owner_id_attr}": owner.id).first
   end
 
   def submission
-    assignment.submissions.find(id)
+    @submission ||= owner.submission_for_assignment assignment
   end
 
   def submission_grade_history
     submission_grade_filtered_history(submission, grade, false)
   end
 
-  def student
-    submission.student
-  end
-
-  # override: params[:group_id] not available on show
-  def group
-    submission.group
-  end
-
-  def group_id
-    submission.group.id
+  def submitted_at
+    submission.submitted_at
   end
 
   def open_for_editing?
@@ -44,11 +44,8 @@ class Submissions::ShowPresenter < Submissions::Presenter
   end
 
   def title
-    if assignment.is_individual?
-      name = student.first_name
-    else
-      name = group.name
-    end
-    "#{name}'s #{assignment.name} Submission (#{view_context.points assignment.point_total} #{"point".pluralize(assignment.point_total)})"
+    "#{owner_name}'s #{assignment.name} Submission " \
+      "(#{view_context.points assignment.point_total} " \
+      "#{"point".pluralize(assignment.point_total)})"
   end
 end
