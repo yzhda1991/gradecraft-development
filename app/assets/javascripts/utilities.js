@@ -24,6 +24,7 @@ $( "#tabs" ).tabs({
 });
 
  $('.froala').froalaEditor({
+  key: '6Ud1QBRVCDLPAZMBQ==',
   inlineMode: false,
   minHeight: 280,
   buttons: [
