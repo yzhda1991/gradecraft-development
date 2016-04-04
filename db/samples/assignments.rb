@@ -64,7 +64,7 @@
 
 #------------------------------------------------------------------------------#
 
-#                        Grading Assignment Types
+#                        Grading Assignment Type
 
 #------------------------------------------------------------------------------#
 
@@ -378,7 +378,7 @@
 
 #------------------------------------------------------------------------------#
 
-#                        Submission Assignment Types
+#                        Submission Assignment Type
 
 #------------------------------------------------------------------------------#
 
@@ -476,7 +476,7 @@
 
 #------------------------------------------------------------------------------#
 
-#                        Predictor Assignment Types
+#                        Predictor Assignment Type
 
 #------------------------------------------------------------------------------#
 
@@ -794,7 +794,7 @@
 
 #------------------------------------------------------------------------------#
 
-#                        Visibility Assignment Types
+#                        Visibility Assignment Type
 
 #------------------------------------------------------------------------------#
 
@@ -935,6 +935,14 @@
   }
 }
 
+
+#------------------------------------------------------------------------------#
+
+#                        Unlock Assignment Type
+
+#------------------------------------------------------------------------------#
+
+
 @assignments[:badge_is_an_unlock] = {
   quotes: {
     assignment_created: "Badges, to g**-d***** h*** with badges! We have no badges. In fact, we don’t need badges. I don't have to show you any stinking badges, you g**-d***** cabron and c****’ tu madre! – B. Traven",
@@ -942,13 +950,13 @@
   assignment_type: :unlocks,
   attributes: {
     name: "Unlocked-By-Badge-Example",
-    description: "Earning a Badge unlocks this assignment.",
+    description: "Earning the Badge Assignment-Unlock-Key unlocks this assignment.",
     due_at: 4.weeks.from_now,
     point_total: 180000,
   },
   unlock_condition: true,
   unlock_attributes: {
-    condition: :unlock_submission_condition,
+    condition: :badge_unlock_assignment_condition,
     condition_type: "Badge",
     condition_state: "Earned"
   }
@@ -1040,7 +1048,7 @@
   },
   assignment_type: :unlocks,
   attributes: {
-    name: "Unlocked-By-Grade-Earned",
+    name: "Unlocked-By-Grade-Earned-By-Date",
     description: "Earning a Grade for 'Unlock-Grade-Earned-By-Date-Key' unlocks this",
     due_at: 2.weeks.ago + 0.05,
   },
@@ -1131,6 +1139,23 @@
   }
 }
 
+@assignments[:group_unlock_submission_condition] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :unlocks,
+  attributes: {
+    name: "Group-Submission-Key",
+    description: "I'm the thing you need to submit to unlock 'Group-Assignment-Unlocked-By-Submission'",
+    due_at: 4.weeks.from_now,
+    point_total: 180000,
+    accepts_submissions: true,
+    accepts_attachments: true,
+    accepts_links: true,
+    accepts_text: true,
+  }
+}
+
 @assignments[:group_assignment_submission_is_an_unlock] = {
   quotes: {
     assignment_created: "My contention is that creativity now is as important in education as literacy, and we should treat it with the same status. – Sir Ken Robinson",
@@ -1138,7 +1163,7 @@
   assignment_type: :unlocks,
   attributes: {
     name: "Group-Assignment-Unlocked-By-Submission",
-    description: "All members of a Group Submitting 'Submission-Key' unlocks this assignment",
+    description: "All members of a Group Submitting 'Group-Submission-Key' unlocks this assignment",
     due_at: 3.weeks.from_now,
     point_total: 180000,
     grade_scope: "Group",
@@ -1149,7 +1174,7 @@
   },
   unlock_condition: true,
   unlock_attributes: {
-    condition: :unlock_submission_condition,
+    condition: :group_unlock_submission_condition,
     condition_type: "Assignment",
     condition_state: "Submitted"
   }
@@ -1192,7 +1217,11 @@
   }
 }
 
+#------------------------------------------------------------------------------#
 
+#                        Sorting Assignment Type
+
+#------------------------------------------------------------------------------#
 
 @assignments[:alphanum_1_condition] = {
   quotes: {

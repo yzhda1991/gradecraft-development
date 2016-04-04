@@ -30,10 +30,10 @@
             .level-description= level.description
 
             .row.badge-row
-              - level.level_badges.each_with_index do |badge, index|
-                - if index < 2
+              - level.level_badges.each_with_index do |level_badge, index|
+                - if BadgeProctor.new(level_badge.badge).viewable?(current_user, level: level) && index < 2
                   %span.level-badge-image
-                    %img{:src => badge.badge.icon, width: "30px", height: "30px" }
+                    %img{:src => level_badge.badge.icon, width: "30px", height: "30px" }
               .clear
 
             - if current_user_is_staff? && presenter.viewable_rubric_level_earned?(current_student.id, level.id)
