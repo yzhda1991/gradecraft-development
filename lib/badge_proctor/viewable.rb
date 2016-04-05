@@ -1,8 +1,8 @@
-# determines if a `Badge` resource can be viewed for a specific user
+# Determines if a `Badge` resource can be viewed for a specific user
 #
-# options include:
-#   course:  will verify the badge is for the course
-#   level:   will only show students invisible badges earned for the specific
+# Options include:
+#   course:  Will verify the badge is for the course.
+#   level:   Will only show students invisible badges earned for the specific
 #            level. This is used for Rubric views to hide all invisible level
 #            badges on unearned levels, even if the student earned the badge in
 #            another context.

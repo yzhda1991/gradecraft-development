@@ -14,7 +14,7 @@ describe GradeProctor::Updatable do
 
     it "cannot be updatable if the grade is nil" do
       subject = GradeProctor.new(nil)
-      expect(subject).to_not be_updatable user, course
+      expect(subject).to_not be_updatable user: user, course: course
     end
 
     context "as a student" do
@@ -22,17 +22,17 @@ describe GradeProctor::Updatable do
         before { allow(assignment).to receive(:student_logged?).and_return true }
 
         it "can update a grade" do
-          expect(subject).to be_updatable user, course
+          expect(subject).to be_updatable user: user, course: course
         end
 
         it "cannot update a grade that does not belong to them" do
           allow(grade).to receive(:student_id).and_return 456
-          expect(subject).to_not be_updatable user, course
+          expect(subject).to_not be_updatable user: user, course: course
         end
       end
 
       it "cannot update a grade that is updated by an instructor" do
-        expect(subject).to_not be_updatable user, course
+        expect(subject).to_not be_updatable user: user, course: course
       end
     end
 
@@ -40,12 +40,12 @@ describe GradeProctor::Updatable do
       let(:staff) { double(:user, id: 456, is_staff?: true) }
 
       it "can update if they are the instructor for the course" do
-        expect(subject).to be_updatable staff, course
+        expect(subject).to be_updatable user: staff, course: course
       end
 
       it "cannot update if they are not the instructor for the course" do
         allow(staff).to receive(:is_staff?).with(course).and_return false
-        expect(subject).to_not be_updatable staff, course
+        expect(subject).to_not be_updatable user: staff, course: course
       end
     end
   end

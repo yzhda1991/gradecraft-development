@@ -49,7 +49,7 @@
                   - elsif @assignment.grade_checkboxes?
                     = gf.check_box :raw_score, {}, @assignment.point_total, nil
                   - else
-                    - if grade.persisted? && GradeProctor.new(grade).updatable?(current_user, current_course)
+                    - if grade.persisted? && GradeProctor.new(grade).updatable?(user: current_user, course: current_course)
                       = gf.text_field :raw_score, data: {autonumeric: true, "m-dec" => "0"}
 
                     - else
