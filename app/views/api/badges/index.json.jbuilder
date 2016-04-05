@@ -1,5 +1,5 @@
 json.data @badges do |badge|
-  next unless badge.visible_for_student?(@student)
+  next unless BadgeProctor.new(badge).viewable?(current_user)
   json.type "badges"
   json.id   badge.id.to_s
   json.attributes do

@@ -179,7 +179,7 @@ class UnlockCondition < ActiveRecord::Base
       check_if_grade_earned_meets_condition_value(grade)
     elsif condition_date?
       check_if_grade_earned_met_condition_date(grade)
-    elsif GradeProctor.new(grade).viewable?(student)
+    elsif GradeProctor.new(grade).viewable?(user: student)
       return true
     else
       return false

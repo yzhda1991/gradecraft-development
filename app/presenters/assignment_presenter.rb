@@ -136,7 +136,7 @@ class AssignmentPresenter < Showtime::Presenter
   def scores_for(user)
     scores = self.scores
     grade = grades.where(student_id: user.id).first
-    if GradeProctor.new(grade).viewable? user, course
+    if GradeProctor.new(grade).viewable? user: user, course: course
       scores[:user_score] = grade.raw_score
     end
     scores
