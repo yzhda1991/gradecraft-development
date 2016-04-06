@@ -198,7 +198,7 @@
       raw_score: $scope.pointsAllocated(),
       feedback: $scope.grade.feedback,
       status:   $scope.grade.status,
-      adjustment_points: $scope.grade.adjustment_points,
+      adjustment_points: $scope.grade.adjustment_points || 0,
       adjustment_points_feedback: $scope.grade.adjustment_points_feedback
     }
 
