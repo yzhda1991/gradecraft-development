@@ -170,7 +170,10 @@ describe Submission do
 
   describe ".ungraded" do
     let(:course) { subject.course }
-    before { subject.save }
+    before do
+      Submission.destroy_all
+      subject.save
+    end
 
     it "returns the submissions that do not have any grades" do
       expect(Submission.ungraded).to eq [subject]
