@@ -16,11 +16,11 @@
       margin-right: -4px
       text-transform: capitalize
       display: inline-block
-      border-left: 1px solid darken($color-blue-3, 20%)
+      border-right: 1px solid darken($color-blue-3, 20%)
       color: $color-blue-4
       border-radius: 0 !important
-      &:last-child
-        border-right: 1px solid darken($color-blue-3, 20%)
+      &:first-child
+        border-left: 1px solid darken($color-blue-3, 20%)
 
       &:hover
         background-color: $color-blue-1
@@ -36,3 +36,11 @@
     font-size: .6rem
     padding: .5rem .35rem
 
+@media (max-width: $media-small-max)
+  .context_menu ul 
+    margin: 0
+    li:first-child
+      border-left: none
+    .hide-for-small
+      display: none
+    

@@ -17,17 +17,17 @@
       - if presenter.team
         %li= link_to glyph("file-zip-o") + "Download Team Submissions", submissions_exports_path(assignment_id: presenter.assignment.id, team_id: presenter.team.id), method: :post
       - else
-        %li= link_to glyph("file-zip-o") + "Download All Submissions", submissions_exports_path(assignment_id: presenter.assignment.id), method: :post
+        %li.hide-for-small= link_to glyph("file-zip-o") + "Download All Submissions", submissions_exports_path(assignment_id: presenter.assignment.id), method: :post
 
-      %li
+      %li.hide-for-small
         %a{:href => import_grades_assignment_path(presenter.assignment) }
           = glyph(:upload)
           Import Grades
-      %li
+      %li.hide-for-small
         %a{:href => export_grades_assignment_path(presenter.assignment, format: "csv") }
           = glyph(:download)
           Download Grades
-      %li
+      %li.hide-for-small
         %a{:href => design_assignment_rubric_path(presenter.assignment) }
           = glyph(:sliders)
           - if presenter.rubric_designed?
