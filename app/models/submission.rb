@@ -25,8 +25,18 @@ class Submission < ActiveRecord::Base
   has_many :submission_files, dependent: :destroy, autosave: true
   accepts_nested_attributes_for :submission_files
 
-  scope :ungraded, -> { where("NOT EXISTS(SELECT 1 FROM grades WHERE submission_id = submissions.id OR (assignment_id = submissions.assignment_id AND student_id = submissions.student_id) AND (status = ? OR status = ?))", "Graded", "Released") }
-  scope :graded, -> { where(:grade) }
+  scope :with_grade, -> do
+    joins("INNER JOIN grades ON "\
+      "grades.group_id = submissions.group_id OR "\
+      "(grades.assignment_id = submissions.assignment_id AND "\
+      "grades.student_id = submissions.student_id)")
+  end
+
+  scope :ungraded, -> do
+    includes(:assignment, :group, :student)
+      .where.not(id: with_grade.where(grades: { status: ["Graded", "Released"] }))
+  end
+
   scope :resubmitted, -> { includes(:grade).where(grades: { status: ["Graded", "Released"] })
                                            .where("grades.graded_at < submitted_at") }
   scope :order_by_submitted, -> { order("submitted_at ASC") }
