@@ -1,31 +1,26 @@
 - if current_course.instructors_of_record.present?
   %li
-    %a{:href => "#"}
-      %i.fa.fa-flash.fa-fw
-      = "Professor".pluralize(current_course.instructors_of_record.count)
-      = current_course.instructors_of_record.map(&:name).join(", ")
+    %i.fa.fa-flash.fa-fw
+    = "Professor".pluralize(current_course.instructors_of_record.count)
+    = current_course.instructors_of_record.map(&:name).join(", ")
 - if current_course.office.present?
   %li
-    %a{:href => "#"}
-      %i.fa.fa-book.fa-fw
-      ="Office: #{current_course.office}"
+    %i.fa.fa-book.fa-fw
+    ="Office: #{current_course.office}"
 - if current_course.office_hours.present?
   %li
-    %a{:href => "#"}
-      %i.fa.fa-clock-o.fa-fw
-      Office Hours:
-      = auto_link(current_course.office_hours)
+    %i.fa.fa-clock-o.fa-fw
+    Office Hours:
+    = auto_link(current_course.office_hours)
 - if current_user_is_student? && current_student.team_leaders(current_course).present?
   - current_student.team_leaders(current_course).each do |team_leader|
     %li
-      %a{:href => "#"}
-        %i.fa.fa-flag.fa-fw
-        = "#{current_course.team_leader_term} #{team_leader.first_name}"
+      %i.fa.fa-flag.fa-fw
+      = "#{current_course.team_leader_term} #{team_leader.first_name}"
 - if current_user_is_student? && current_user.team_for_course(current_course).present?
   %li
-    %a{:href => "#"}
-      %i.fa.fa-trophy.fa-fw
-      = "#{(term_for :team).titleize} #{current_user.team_for_course(current_course).name}"
+    %i.fa.fa-trophy.fa-fw
+    = "#{(term_for :team).titleize} #{current_user.team_for_course(current_course).name}"
 - if current_course.syllabus.present?
   %li
     %a{:href => current_course.syllabus_url }
@@ -53,7 +48,6 @@
       ="#{current_course.twitter_hashtag}"
 - if current_course.meeting_times.present?
   %li
-    %a{:href => "#"}
-      %i.fa.fa-bank.fa-fw
-      = current_course.meeting_times
-      = current_course.location
+    %i.fa.fa-bank.fa-fw
+    = current_course.meeting_times
+    = current_course.location
