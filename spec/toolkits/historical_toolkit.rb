@@ -136,4 +136,41 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       expect(history.length).to eq 3
     end
   end
+
+  describe "#squish_history!", versioning: true, focus: true do
+    let(:updated_at) { 2.days.from_now }
+
+    before do
+      model.save
+      model.update_attributes updated_attributes
+      model.update_attribute :updated_at, updated_at
+    end
+
+    it "deletes the previous version" do
+      expect(model.versions.count).to eq 3
+      model.squish_history!
+      expect(model.versions.count).to eq 2
+    end
+
+    it "merges with the previous object changes" do
+      model.squish_history!
+      changes = model.reload.versions.last.changeset
+      expect(changes["updated_at"].last).to eq updated_at
+    end
+
+    it "merges with the previous object" do
+      model.squish_history!
+      object = PaperTrail.serializer.load(model.reload.versions.last.object)
+      expect(object["updated_at"]).to eq updated_at
+      expect(object.keys).to include *updated_attributes.stringify_keys.keys
+    end
+
+    xit "stores the new transaction id"
+    xit "merges all the previous transactions"
+    xit "does not merge if the previous timestamp is greater than the limit"
+    xit "does not merge if the item id is not the same"
+    xit "does not merge if the item type is not the same"
+    xit "does not merge if the item event is not the same"
+    xit "does not merge if the responsible party is not the same"
+  end
 end
