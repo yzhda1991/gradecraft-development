@@ -84,10 +84,12 @@ describe HistoryFilter do
   describe "#merge" do
     it "merges the changeset from one object to another" do
       history = [OpenStruct.new(version: OpenStruct.new(item_type: "FromObjectType"),
+                                transaction_id: 123,
                                 changeset: { "event" => "create",
                                              "object" => "FromObject",
                                              "attribute1" => [nil, "blah"]}),
                  OpenStruct.new(version: OpenStruct.new(item_type: "ToObjectType"),
+                                transaction_id: 123,
                                 changeset: { "event" => "create",
                                              "object" => "ToObject",
                                              "attribute2" => [nil, "http://example.org"]})
@@ -102,12 +104,25 @@ describe HistoryFilter do
 
     it "does not merge if the destination does not exist" do
       history = [OpenStruct.new(version: OpenStruct.new(item_type: "FromObjectType"),
+                                transaction_id: 123,
                                 changeset: { "event" => "create",
                                              "object" => "FromObject",
                                              "attribute1" => [nil, "blah"]})
       ]
       result = described_class.new(history).merge("FromObjectType" => "ToObjectType")
         .changesets
+      expect(result).to be_empty
+    end
+
+    it "does not merge if the transaction ids do not match" do
+      history = [OpenStruct.new(version: OpenStruct.new(item_type: "From"),
+                                transaction_id: 123,
+                                changeset: {}),
+                 OpenStruct.new(version: OpenStruct.new(item_type: "To"),
+                                transaction_id: 456,
+                                changeset: {})
+      ]
+      result = described_class.new(history).merge("From" => "To").changesets
       expect(result).to be_empty
     end
   end

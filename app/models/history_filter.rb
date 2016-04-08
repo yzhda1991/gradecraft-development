@@ -46,12 +46,13 @@ class HistoryFilter
       (to_versions << history.select { |h| h.version.item_type == to }).flatten!
     end
 
-    from_versions.each_with_index do |history_item, index|
+    from_versions.each do |history_item|
       history_item.changeset.each_pair do |key, value|
-        if !["created_at", "updated_at"].include?(key) &&
-            value.is_a?(Array) &&
-            to_versions.size > index
-          to_versions[index].changeset.merge!({ "#{key}" => value })
+        if !["created_at", "updated_at"].include?(key) && value.is_a?(Array)
+          to_version = to_versions.find do |version|
+            version.transaction_id == history_item.transaction_id
+          end
+          to_version.changeset.merge!({ "#{key}" => value }) if to_version
         end
       end
       exclude("object" => history_item.changeset["object"])
