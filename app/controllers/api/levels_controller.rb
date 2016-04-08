@@ -25,8 +25,8 @@ class API::LevelsController < ApplicationController
   end
 
   def level_params
-     params.require(:level).permit(:meets_expectations)
-   end
+    params.require(:level).permit(:meets_expectations)
+  end
 end
 
 

@@ -313,6 +313,9 @@ PaperTrail.whodunnit = nil
                 level = criterion.levels.create! do |level|
                   level.name = "Level ##{m}"
                   level.points = criterion.max_points - (m * 1000)
+                  if m == 2
+                    level.meets_expectations = true
+                  end
                 end
                 if m == 1 && course.badge_setting
                   LevelBadge.create!(level_id: level.id, badge_id: course_config[:badges][:invisible_level_badge].id)
