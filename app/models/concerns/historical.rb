@@ -48,23 +48,8 @@ module Historical
     self
   end
 
-  def squish_history!
-    current_version = self.versions.last
-    previous_version = self.versions[-2]
-
-    if previous_version
-      current = PaperTrail.serializer.load(current_version.object)
-      current_version.changeset.each do |attribute, changes|
-        current[attribute] = changes.last
-      end
-      current_version.object = PaperTrail.serializer.dump(current)
-
-      changeset = previous_version.changeset.merge current_version.changeset
-      current_version.instance_variable_set "@changeset", changeset
-      current_version.save
-
-      previous_version.destroy!
-    end
+  def squish_history!(timeout_in_milliseconds=36_000) # 10 minutes
+    PaperTrailVersionSquisher.new(self).squish!(timeout_in_milliseconds)
   end
 
   private
