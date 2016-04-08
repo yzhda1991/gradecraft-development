@@ -22,6 +22,7 @@ class API::GradesController < ApplicationController
     end
     changes = grade.changes
     if grade.save
+      grade.squish_history!
       render json: { message: {changes: changes}, success: true }
     else
       render json: {
