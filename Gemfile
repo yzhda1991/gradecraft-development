@@ -130,6 +130,7 @@ group :development, :test do
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
   gem 'zeus'
+  gem 'better_errors'
 end
 
 group :test do

@@ -28,6 +28,12 @@ class Criterion < ActiveRecord::Base
 
   include DisplayHelpers
 
+  def remove_expectations
+    levels.each do |level|
+      level.update_attributes(meets_expectations: false)
+    end
+  end
+
   protected
 
   def add_default_levels?
@@ -56,10 +62,10 @@ class Criterion < ActiveRecord::Base
   end
 
   def create_full_credit_level
-    levels.create name: "Full Credit", points: max_points, full_credit: true, durable: true, sort_order: 0
+    levels.create name: "Full Credit", points: max_points, full_credit: true, sort_order: 0
   end
 
   def create_no_credit_level
-    levels.create name: "No Credit", points: 0, no_credit: true, durable: true, sort_order: 1000
+    levels.create name: "No Credit", points: 0, no_credit: true, sort_order: 1000
   end
 end

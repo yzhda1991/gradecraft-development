@@ -26,7 +26,7 @@
       %br
       %br
 
-    %table#grade-rubric-table.edit(ng-cloak)
+    %table#rubric-table.edit(ng-cloak)
       %thead
         %tr
           %td.criterion.heading
@@ -50,12 +50,12 @@
                 {{(criterion.max_points || 0) | number:0}}&nbsp;Points
             .criterion-description {{criterion.description}}
 
-          %td.level.level-level(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level)}")
+          %td.level.level-level(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level), 'meets-expectations': level.meetsExpectations}")
             .level-heading
               .level-name {{level.name.replace(" ","&nbsp;")}}
+              .level-meets-expectations(ng-show="level.meetsExpectations") Meets Expectations
               .level-points
                 {{level.points | number:0}}&nbsp;Points
-                %input(class="level-select" type="radio" name="criterion_level_{{criterion.id}}" ng-checked="criterion.isUsingLevel(level)")
             .clear
             .level-description
               {{level.description}}

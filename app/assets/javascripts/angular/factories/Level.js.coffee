@@ -16,7 +16,8 @@
       @points = attrs.points || 0
       @fullCredit = attrs.full_credit or false
       @noCredit = attrs.no_credit or false
-      @durable = attrs.durable or false
+      @meetsExpectations = attrs.meets_expectations || false
+      @required = (attrs.full_credit || attrs.no_credit) || false
       @description = attrs.description or ""
       @resetChanges()
 
@@ -40,14 +41,11 @@
       alert @criterion.name
     removeFromCriterion: (index)->
       @criterion.levels.splice(index,1)
-
-    ##grade rubric ctrl
-    # loadLevelBadge: (levelBadge)->
-    #   self = this
-    #   courseBadge = self.availableBadges[levelBadge.badge_id]
-    #   loadedBadge = new LevelBadge(self, angular.copy(courseBadge))
-    #   self.badges[courseBadge.id] = loadedBadge # add level badge to level
-    #   delete self.availableBadges[courseBadge.id] # remove badge from available badges on level
+    setCriterionExpectation: (index)->
+      angular.forEach(@criterion.levels,(level,i)=>
+        level.meetsExpectations = false
+      )
+      @meetsExpectations = true
 
     ##rubric ctrl
     loadLevelBadge: (levelBadge)->
@@ -120,13 +118,44 @@
         @resetChanges()
     criterionName: ()->
       alert @criterion.name
+    label: ()->
+      if @noCredit
+        "Zero Credit Level"
+      else if @fullCredit
+        "Full Credit Level"
+      else if @meetsExpectations
+        "Meets Expectations"
+      else
+        "" #used to say: "Score Level"
+
+    # TODO: move all API calls to a service
+    setAsMeetsExpectations: (index)->
+      $http.put("/api/levels/#{@id}", { level: { meets_expectations: true }})
+        .success((data,status)=>
+          @setCriterionExpectation(index)
+          return true
+        )
+        .error((err)->
+          console.log("Marking level as meets expectations failed")
+          return false
+        )
+    removeMeetsExpectations: ()->
+      $http.put("/api/levels/#{@id}", { level: { meets_expectations: false }})
+        .success((data,status)=>
+          @meetsExpectations = false
+          return true
+        )
+        .error((err)->
+          console.log("Removing level meets expectations failed")
+          return false
+        )
     delete: (index)->
       if @isSaved()
         if confirm("Are you sure you want to delete this level?")
-          $http.delete("/levels/#{@id}").success(
-            (data,status)=>
-              @removeFromCriterion(index)
-              return true
+          $http.delete("/levels/#{@id}")
+          .success((data,status)=>
+            @removeFromCriterion(index)
+            return true
           )
           .error((err)->
             alert("delete failed!")

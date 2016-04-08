@@ -19,6 +19,15 @@ describe Criterion do
     end
   end
 
+  describe "#remove_expectations" do
+    it "sets all levels to meets_expectations false" do
+      subject.save
+      subject.levels.first.update_attributes(meets_expectations: true)
+      subject.remove_expectations
+      expect(subject.levels.first.reload.meets_expectations).to eq(false)
+    end
+  end
+
   describe "#copy" do
     let(:criterion) { build :criterion }
     subject { criterion.copy }
