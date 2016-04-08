@@ -363,10 +363,10 @@ $('table.nofeatures_default_due_date_dynatable').dynatable({
     sort: true
   },
   dataset: {
-    sorts: { 'dueDate': 1 }
+    sorts: { 'submittedAt': 1 }
   },
   readers: {
-    dueDate: function(el, record) {
+    submittedAt: function(el, record) {
       record.parsedDate = Date.parse(el.innerHTML);
       return el.innerHTML;
     },
