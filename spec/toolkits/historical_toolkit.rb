@@ -137,7 +137,7 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
     end
   end
 
-  describe "#squish_history!", versioning: true, focus: true do
+  describe "#squish_history!", versioning: true do
     let(:updated_at) { 2.days.from_now }
 
     before do
@@ -164,8 +164,6 @@ RSpec.shared_examples "a historical model" do |fixture, updated_attributes|
       expect(object["updated_at"]).to eq updated_at
       expect(object.keys).to include *updated_attributes.stringify_keys.keys
     end
-
-    xit "merges all the previous transactions"
 
     it "does not merge if the previous timestamp is greater than the limit" do
       expect { model.reload.squish_history!(1) }.to_not \
