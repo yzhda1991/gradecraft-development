@@ -19,14 +19,16 @@
             %span has already been achieved!
             %span=points element.low_range
       - else
-        .progress.bar_magic.current.center
+        .progress.bar_magic.current.center.clear
           %span Your rank:
           %span= element.name
-          %span with
-          %span.underline=points current_student.cached_score_for_course(current_course)
-          %span points.
-          %span.hide-for-small= points element.points_to_next_level(current_student, current_course)
-          %span.hide-for-small= " points to the next level!"
-          .striped{:style => "width: #{element.progress_percent(current_student)}%;"}
+          .striped-bar-container
+            .striped{:style => "width: #{element.progress_percent(current_student)}%;"}
+          .left.left-points
+            %span Your Points:
+            %span=points current_student.cached_score_for_course(current_course)
+          .right.right-points
+            %span Points to the next level:
+            %span.hide-for-small= points element.points_to_next_level(current_student, current_course)
 
     = render partial: "courses/grading_philosophy", locals: { course: current_course }

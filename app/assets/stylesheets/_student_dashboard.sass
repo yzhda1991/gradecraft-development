@@ -21,10 +21,8 @@ img.earned
 /* Styling grading scheme level bars*/
 .bar_magic
   background-color:$color-grey-6
-  border-collapse: true
   border-radius: 16px
   box-sizing: border-box
-  margin: 2px
   margin: 3px auto
   padding: .5rem
   width: 95%
@@ -39,17 +37,28 @@ img.earned
 /* Styling current grading scheme level bar*/
 .bar_magic.current
   background-color: transparentize($color-green-2, .8)
+  padding: 1.5rem 1rem
+
+  .left-points
+    margin-left: 3em
+  
+  .right-points
+    margin-right: 3em
 
 p.predictor-description
   margin: 0.25rem 0 .5rem
 
 /*striping on course progress display*/
+.striped-bar-container
+  background-color: $color-grey-5
+  border-radius: 25px
+  height: .75rem
+
 .striped
   background-image: repeating-linear-gradient(45deg, $color-green-2, $color-green-2 35px, $color-blue-2 35px, $color-blue-2 70px)
   border-radius: 25px
   height: .75rem
-  margin-left: 0.5rem
-  margin-top: .25rem
+  margin: 1rem 0rem
 
 #levels_per_assignment
   min-height: 200px
