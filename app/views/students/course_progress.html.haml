@@ -28,7 +28,7 @@
             %span Your Points:
             %span.bold=points current_student.cached_score_for_course(current_course)
           .right.right-points
-            %span Points to the next level:
-            %span.bold.hide-for-small= points element.points_to_next_level(current_student, current_course)
+            %span Points to next level:
+            %span.bold= points element.points_to_next_level(current_student, current_course)
 
     = render partial: "courses/grading_philosophy", locals: { course: current_course }

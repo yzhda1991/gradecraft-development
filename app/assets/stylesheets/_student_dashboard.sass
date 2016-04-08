@@ -53,7 +53,7 @@ img.earned
 p.predictor-description
   margin: 0.25rem 0 .5rem
 
-/*striping on course progress display*/
+/*progress bar on course progress display*/
 .striped-bar-container
   background-color: $color-grey-5
   border-radius: 25px
@@ -78,6 +78,18 @@ p.predictor-description
 .right.radius.label
   margin-left: 1rem
 
-@media (max-width: $media-small-max)
+@media (max-width: $media-medium-max)
+  .bar_magic.current
+    .left-points
+      margin-left: 0
+
+    .right-points
+      margin-right: 0
+
+@media (max-width: 760px)
   .bar_magic
     width: 100%
+
+    .left-points, .right-points
+      float: none
+      text-align: center
