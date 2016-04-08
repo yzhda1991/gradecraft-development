@@ -20,15 +20,15 @@
             %span=points element.low_range
       - else
         .progress.bar_magic.current.center
-          %span Your rank:
-          %span= element.name
+          %span.your-rank Your rank:
+          %span.your-rank= element.name
           .striped-bar-container
             .striped{:style => "width: #{element.progress_percent(current_student)}%;"}
           .left.left-points
             %span Your Points:
-            %span=points current_student.cached_score_for_course(current_course)
+            %span.bold=points current_student.cached_score_for_course(current_course)
           .right.right-points
             %span Points to the next level:
-            %span.hide-for-small= points element.points_to_next_level(current_student, current_course)
+            %span.bold.hide-for-small= points element.points_to_next_level(current_student, current_course)
 
     = render partial: "courses/grading_philosophy", locals: { course: current_course }

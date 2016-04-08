@@ -21,7 +21,7 @@ img.earned
 /* Styling grading scheme level bars*/
 .bar_magic
   background-color:$color-grey-6
-  border-radius: 16px
+  border-radius: 8px
   box-sizing: border-box
   margin: 3px auto
   padding: .5rem
@@ -37,14 +37,18 @@ img.earned
 /* Styling current grading scheme level bar*/
 .bar_magic.current
   background-color: transparentize($color-green-2, .8)
-  padding: 1.5rem 1rem
+  padding: 1rem
   overflow: auto
 
+  .your-rank
+    font-size: 1rem
+    font-weight: bold
+
   .left-points
-    margin-left: 3em
+    margin-left: 4em
   
   .right-points
-    margin-right: 3em
+    margin-right: 4em
 
 p.predictor-description
   margin: 0.25rem 0 .5rem
@@ -77,4 +81,3 @@ p.predictor-description
 @media (max-width: $media-small-max)
   .bar_magic
     width: 100%
-    border-radius: 8px
