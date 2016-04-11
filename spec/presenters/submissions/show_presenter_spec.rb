@@ -15,16 +15,19 @@ describe ShowSubmissionPresenter do
     }
   end
 
-  let(:submission) { double(:submission, student: student, group: group, assignment: assignment, id: 200) }
+  let(:submission) { double(:submission, student: student, group: group, assignment: assignment, id: 200, submitted_at: Time.now) }
   let(:assignment) { double(:assignment, point_total: 12000, course: course, threshold_points: 13200, grade_scope: "Group", id: 300).as_null_object }
   let(:course) { double(:course, name: "Some Course").as_null_object }
   let(:student) { double(:user, first_name: "Jimmy", id: 500)}
   let(:group) { double(:group, name: "My group", course: course, id: 400) }
+  let(:grade) { double(:grade).as_null_object }
 
-  before do
+  before(:each) do
     allow(subject).to receive_messages(
       student: student,
-      group: group
+      group: group,
+      assignment: assignment,
+      grade: grade
     )
   end
 
@@ -80,7 +83,6 @@ describe ShowSubmissionPresenter do
     let(:grades) { double(:grades).as_null_object }
 
     before(:each) do
-      subject.assignment = assignment
       allow(assignment).to receive(:grades) { grades }
     end
 
@@ -111,7 +113,6 @@ describe ShowSubmissionPresenter do
     let(:submissions) { double(:submissions) }
 
     it "finds the submission by id" do
-      subject.assignment = assignment
       allow(assignment).to receive(:submissions) { submissions }
       expect(submissions).to receive(:find).with submission.id
       subject.submission
@@ -119,15 +120,60 @@ describe ShowSubmissionPresenter do
   end
 
   describe "#student" do
+    it "returns the student from the submission" do
+      expect(subject.student).to eq submission.student
+    end
   end
 
   describe "#submission_grade_history" do
+    it "returns the submission grade history" do
+      allow(subject).to receive(:submission) { submission }
+      expect(subject).to receive(:submission_grade_filtered_history)
+        .with(submission, grade, false)
+      subject.submission_grade_history
+    end
   end
 
   describe "#submitted_at" do
+    it "returns the submitted_at date from the submission" do
+      expect(subject.submitted_at).to eq submission.submitted_at
+    end
   end
 
   describe "#open_for_editing?" do
+    let(:result) { subject.open_for_editing? }
+
+    context "assignment is not open" do
+      it "returns false" do
+        allow(assignment).to receive(:open?) { false }
+        expect(result).to eq false
+      end
+    end
+
+    context "assignment is open" do
+      context "grade is not present" do
+        it "returns true" do
+          allow(grade).to receive(:present?) { false }
+          expect(result).to eq true
+        end
+      end
+
+      context "grade is present but re-submissions are allowed" do
+        it "returns true" do
+          allow(grade).to receive(:present?) { true }
+          allow(assignment).to receive(:resubmissions_allowed?) { true }
+          expect(result).to eq true
+        end
+      end
+
+      context "grades is not present and re-submissions are not allowed" do
+        it "returns false" do
+          allow(grade).to receive(:present?) { false }
+          allow(assignment).to receive(:resubmissions_allowed?) { false }
+          expect(result).to eq false
+        end
+      end
+    end
   end
 
   describe "#title" do

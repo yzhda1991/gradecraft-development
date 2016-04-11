@@ -35,7 +35,7 @@ class Submissions::ShowPresenter < Submissions::Presenter
   end
 
   def submission_grade_history
-    submission_grade_filtered_history(submission, grade, false)
+    submission_grade_filtered_history submission, grade, false
   end
 
   def submitted_at
@@ -43,8 +43,8 @@ class Submissions::ShowPresenter < Submissions::Presenter
   end
 
   def open_for_editing?
-    (assignment.open? && !grade.present?) ||
-      (assignment.open? && assignment.resubmissions_allowed?)
+    assignment.open? &&
+      (!grade.present? || assignment.resubmissions_allowed?)
   end
 
   def title
