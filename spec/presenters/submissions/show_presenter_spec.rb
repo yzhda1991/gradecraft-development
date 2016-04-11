@@ -16,7 +16,7 @@ describe ShowSubmissionPresenter do
   end
 
   let(:submission) { double(:submission, student: student, group: group, assignment: assignment, id: 200) }
-  let(:assignment) { double(:assignment, point_total: 12000, course: course, threshold_points: 13200, grade_scope: "Group", id: 300) }
+  let(:assignment) { double(:assignment, point_total: 12000, course: course, threshold_points: 13200, grade_scope: "Group", id: 300).as_null_object }
   let(:course) { double(:course, name: "Some Course").as_null_object }
   let(:student) { double(:user, first_name: "Jimmy", id: 500)}
   let(:group) { double(:group, name: "My group", course: course, id: 400) }
@@ -77,24 +77,23 @@ describe ShowSubmissionPresenter do
 
   describe "#grade" do
     let(:result) { subject.grade }
-
-    let(:grades_double) { double(:grades) }
+    let(:grades) { double(:grades).as_null_object }
 
     before(:each) do
-      allow(assignment).to receive(:grades) { grades_double }
-      subject.instance_variable_set(:@grade, nil)
+      subject.assignment = assignment
+      allow(assignment).to receive(:grades) { grades }
     end
 
     it "caches the grade" do
       result
-      expect(grades_double).not_to receive(:find_by)
+      expect(grades).not_to receive(:find_by)
       result
     end
 
     context "the submission is for an individual student assignment" do
       it "finds the grade by student_id" do
         allow(subject).to receive(:individual_assignment?) { true }
-        expect(grades_double).to receive(:find_by).with(student_id: student.id)
+        expect(grades).to receive(:find_by).with(student_id: student.id)
         result
       end
     end
@@ -102,9 +101,35 @@ describe ShowSubmissionPresenter do
     context "the submission is for a group assignment" do
       it "finds the grade by group_id" do
         allow(subject).to receive(:individual_assignment?) { false }
-        expect(grades_double).to receive(:find_by).with(group_id: group.id)
+        expect(grades).to receive(:find_by).with(group_id: group.id)
         result
       end
     end
+  end
+
+  describe "#submission" do
+    let(:submissions) { double(:submissions) }
+
+    it "finds the submission by id" do
+      subject.assignment = assignment
+      allow(assignment).to receive(:submissions) { submissions }
+      expect(submissions).to receive(:find).with submission.id
+      subject.submission
+    end
+  end
+
+  describe "#student" do
+  end
+
+  describe "#submission_grade_history" do
+  end
+
+  describe "#submitted_at" do
+  end
+
+  describe "#open_for_editing?" do
+  end
+
+  describe "#title" do
   end
 end

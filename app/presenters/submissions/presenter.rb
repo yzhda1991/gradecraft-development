@@ -2,6 +2,7 @@ require "./lib/showtime"
 
 class Submissions::Presenter < Showtime::Presenter
   include Showtime::ViewContext
+  attr_writer :assignment
 
   def assignment
     @assignment ||= course.assignments.find assignment_id
