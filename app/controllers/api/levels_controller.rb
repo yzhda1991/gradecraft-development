@@ -2,11 +2,10 @@
 class API::LevelsController < ApplicationController
   before_filter :ensure_staff?
 
-
   # PUT api/level/:id
   def update
     level = Level.find(params[:id])
-    level.criterion.remove_expectations if updating_meets_expectations?
+    level.criterion.remove_expectations! if updating_meets_expectations?
 
     if level.update_attributes(level_params)
       render json: { message: "level successfully updated", success: true }

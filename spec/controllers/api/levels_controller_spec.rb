@@ -16,16 +16,14 @@ describe API::LevelsController do
 
       it "updates the level attributes" do
         put :update, params, format: :json
-        level.reload
-        expect(level.meets_expectations).to be_truthy
+        expect(level.reload.meets_expectations).to be_truthy
       end
 
       it "insures only one level per criterion meets expectations" do
         l_1 = world.criterion.levels.first
         l_1.update_attributes(meets_expectations: true)
         put :update, params, format: :json
-        l_1.reload
-        expect(l_1.meets_expectations).to be_falsy
+        expect(l_1.reload.meets_expectations).to be_falsey
       end
 
       it "renders success message when request format is JSON" do

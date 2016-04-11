@@ -28,7 +28,7 @@ class Criterion < ActiveRecord::Base
 
   include DisplayHelpers
 
-  def remove_expectations
+  def remove_expectations!
     levels.each do |level|
       level.update_attributes(meets_expectations: false)
     end

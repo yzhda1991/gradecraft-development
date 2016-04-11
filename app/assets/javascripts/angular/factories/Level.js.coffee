@@ -41,7 +41,7 @@
       alert @criterion.name
     removeFromCriterion: (index)->
       @criterion.levels.splice(index,1)
-    setCriterionExpectation: (index)->
+    setCriterionExpectation: ()->
       angular.forEach(@criterion.levels,(level,i)=>
         level.meetsExpectations = false
       )
@@ -129,10 +129,10 @@
         "" #used to say: "Score Level"
 
     # TODO: move all API calls to a service
-    setAsMeetsExpectations: (index)->
+    setAsMeetsExpectations: ()->
       $http.put("/api/levels/#{@id}", { level: { meets_expectations: true }})
         .success((data,status)=>
-          @setCriterionExpectation(index)
+          @setCriterionExpectation()
           return true
         )
         .error((err)->
