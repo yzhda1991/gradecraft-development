@@ -161,9 +161,11 @@ describe Assignment do
   describe "pass-fail assignments" do
     it "sets point total to zero on save" do
       subject.point_total = 3000
+      subject.threshold_points = 2000
       subject.pass_fail = true
       subject.save
       expect(subject.point_total).to eq(0)
+      expect(subject.threshold_points).to eq(0)
     end
   end
 
