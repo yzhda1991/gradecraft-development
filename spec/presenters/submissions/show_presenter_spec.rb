@@ -1,5 +1,6 @@
 require "active_support/inflector"
-require "./app/presenters/submissions/show_presenter"
+require "active_record_spec_helper"
+require "./app/presenters/show_submission_presenter"
 require_relative "showing_a_submission_spec"
 
 describe ShowSubmissionPresenter do
@@ -8,17 +9,17 @@ describe ShowSubmissionPresenter do
 
   let(:properties) do
     {
-      assignment: assignment,
-      student: student,
-      group: group,
-      submission: submission
+      id: submission.id,
+      assignment_id: assignment.id,
+      course: course
     }
   end
 
-  let(:assignment) { double(:assignment, point_total: 12000) }
-  let(:student) { double(:user, first_name: "Jimmy") }
-  let(:group) { double(:group, name: "My group") }
-  let(:submission) { double(:submission, student: student, group: group) }
+  let(:submission) { create(:submission, student: student, group: group, assignment: assignment) }
+  let(:assignment) { create(:assignment, point_total: 12000, course: course) }
+  let(:course) { create(:course, name: "Some Course") }
+  let(:student) { create(:user, first_name: "Jimmy") }
+  let(:group) { create(:group, name: "My group") }
 
   it "inherits from the Submission Presenter" do
     expect(described_class.superclass).to eq SubmissionPresenter
@@ -66,5 +67,4 @@ describe ShowSubmissionPresenter do
       end
     end
   end
-
 end

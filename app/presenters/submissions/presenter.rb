@@ -4,7 +4,7 @@ class Submissions::Presenter < Showtime::Presenter
   include Showtime::ViewContext
 
   def assignment
-    course.assignments.find assignment_id
+    @assignment ||= course.assignments.find assignment_id
   end
 
   def assignment_id
@@ -16,7 +16,8 @@ class Submissions::Presenter < Showtime::Presenter
   end
 
   def group
-    course.groups.find(group_id) if assignment.has_groups?
+    return nil unless assignment.has_groups?
+    @group ||= course.groups.find group_id
   end
 
   def group_id

@@ -27,7 +27,7 @@ class Submissions::ShowPresenter < Submissions::Presenter
   end
 
   def submission
-    @submission ||= Submission.find id
+    @submission ||= assignment.submissions.find id
   end
 
   def submission_grade_history
