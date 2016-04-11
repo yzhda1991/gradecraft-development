@@ -18,7 +18,7 @@ describe ShowSubmissionPresenter do
   let(:submission) { double(:submission, student: student, group: group, assignment: assignment, id: 200) }
   let(:assignment) { double(:assignment, point_total: 12000, course: course, threshold_points: 13200, grade_scope: "Group", id: 300) }
   let(:course) { double(:course, name: "Some Course").as_null_object }
-  let(:student) { double(:user, first_name: "Jimmy") }
+  let(:student) { double(:user, first_name: "Jimmy", id: 500)}
   let(:group) { double(:group, name: "My group", course: course, id: 400) }
 
   before do
@@ -71,6 +71,39 @@ describe ShowSubmissionPresenter do
       it "returns the group name" do
         allow(subject).to receive(:individual_assignment?) { false }
         expect(subject.owner_name).to eq group.name
+      end
+    end
+  end
+
+  describe "#grade" do
+    let(:result) { subject.grade }
+
+    let(:grades_double) { double(:grades) }
+
+    before(:each) do
+      allow(assignment).to receive(:grades) { grades_double }
+      subject.instance_variable_set(:@grade, nil)
+    end
+
+    it "caches the grade" do
+      result
+      expect(grades_double).not_to receive(:find_by)
+      result
+    end
+
+    context "the submission is for an individual student assignment" do
+      it "finds the grade by student_id" do
+        allow(subject).to receive(:individual_assignment?) { true }
+        expect(grades_double).to receive(:find_by).with(student_id: student.id)
+        result
+      end
+    end
+
+    context "the submission is for a group assignment" do
+      it "finds the grade by group_id" do
+        allow(subject).to receive(:individual_assignment?) { false }
+        expect(grades_double).to receive(:find_by).with(group_id: group.id)
+        result
       end
     end
   end

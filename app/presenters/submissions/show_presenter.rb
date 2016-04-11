@@ -23,7 +23,7 @@ class Submissions::ShowPresenter < Submissions::Presenter
 
   def grade
     owner_id_attr = individual_assignment? ? :student_id : :group_id
-    @grade ||= assignment.grades.where("#{owner_id_attr}": owner.id).first
+    @grade ||= assignment.grades.find_by "#{owner_id_attr}": owner.id
   end
 
   def submission
