@@ -27,9 +27,16 @@
           = f.text_field :point_total
 
     .form-item
-      = f.label :threshold_points, "Points Threshold"
-      = f.text_field :threshold_points
-      .form_label If you set a points threshold, any student earning fewer points will receive no points for the assignment.
+      - if f.object.pass_fail?
+        .pass-fail-contingent.hidden
+          = f.label :threshold_points, "Points Threshold"
+          = f.text_field :threshold_points
+          .form_label If you set a points threshold above zero, any student earning fewer points will receive no points for the assignment.
+      - else
+        .pass-fail-contingent
+          = f.label :threshold_points, "Points Threshold"
+          = f.text_field :threshold_points
+          .form_label If you set a points threshold above zero, any student earning fewer points will receive no points for the assignment.
 
     .form-item
       = f.input :open_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker" }

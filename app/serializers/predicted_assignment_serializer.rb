@@ -120,7 +120,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
   end
 
   def has_threshold?
-    assignment.threshold_points > 0
+    assignment.threshold_points && assignment.threshold_points > 0
   end
 
   def closed_without_sumbission?

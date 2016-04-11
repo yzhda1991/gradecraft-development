@@ -58,6 +58,8 @@ class Assignment < ActiveRecord::Base
   # Strip points from pass/fail assignments
   before_save :zero_points_for_pass_fail
 
+  before_save :reset_default_for_nil_values
+
   # Check to make sure the assignment has a name before saving
   validates :course_id, presence: true
   validates_presence_of :name
@@ -366,5 +368,10 @@ class Assignment < ActiveRecord::Base
 
   def zero_points_for_pass_fail
     self.point_total = 0 if self.pass_fail?
+    self.threshold_points = 0 if self.pass_fail?
+  end
+
+  def reset_default_for_nil_values
+    self.threshold_points = 0 if self.threshold_points.nil?
   end
 end
