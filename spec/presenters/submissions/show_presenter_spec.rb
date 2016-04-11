@@ -1,5 +1,4 @@
 require "active_support/inflector"
-require "active_record_spec_helper"
 require "./app/presenters/show_submission_presenter"
 require_relative "showing_a_submission_spec"
 
@@ -16,11 +15,19 @@ describe ShowSubmissionPresenter do
     }
   end
 
-  let(:submission) { create(:submission, student: student, group: group, assignment: assignment) }
-  let(:assignment) { create(:assignment, point_total: 12000, course: course, threshold_points: 13200, grade_scope: "Group") }
-  let(:course) { create(:course, name: "Some Course") }
-  let(:student) { create(:user, first_name: "Jimmy") }
-  let(:group) { create(:group, name: "My group", course: course) }
+  let(:submission) { double(:submission, student: student, group: group, assignment: assignment, id: 200) }
+  let(:assignment) { double(:assignment, point_total: 12000, course: course, threshold_points: 13200, grade_scope: "Group", id: 300) }
+  let(:course) { double(:course, name: "Some Course").as_null_object }
+  let(:student) { double(:user, first_name: "Jimmy") }
+  let(:group) { double(:group, name: "My group", course: course, id: 400) }
+
+  before do
+    allow(subject).to receive_messages(
+      student: student,
+      group: group
+    )
+  end
+
   it "inherits from the Submission Presenter" do
     expect(described_class.superclass).to eq SubmissionPresenter
   end
