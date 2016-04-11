@@ -11,16 +11,16 @@ describe ShowSubmissionPresenter do
     {
       id: submission.id,
       assignment_id: assignment.id,
+      group_id: group.id,
       course: course
     }
   end
 
   let(:submission) { create(:submission, student: student, group: group, assignment: assignment) }
-  let(:assignment) { create(:assignment, point_total: 12000, course: course) }
+  let(:assignment) { create(:assignment, point_total: 12000, course: course, threshold_points: 13200, grade_scope: "Group") }
   let(:course) { create(:course, name: "Some Course") }
   let(:student) { create(:user, first_name: "Jimmy") }
-  let(:group) { create(:group, name: "My group") }
-
+  let(:group) { create(:group, name: "My group", course: course) }
   it "inherits from the Submission Presenter" do
     expect(described_class.superclass).to eq SubmissionPresenter
   end

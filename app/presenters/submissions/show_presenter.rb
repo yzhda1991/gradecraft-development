@@ -14,7 +14,7 @@ class Submissions::ShowPresenter < Submissions::Presenter
   end
 
   def owner
-    individual_assignment? ? submission.student : submission.group
+    individual_assignment? ? student : group
   end
 
   def owner_name
@@ -28,6 +28,10 @@ class Submissions::ShowPresenter < Submissions::Presenter
 
   def submission
     @submission ||= assignment.submissions.find id
+  end
+
+  def student
+    submission.student
   end
 
   def submission_grade_history

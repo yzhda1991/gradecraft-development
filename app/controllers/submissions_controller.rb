@@ -6,6 +6,7 @@ class SubmissionsController < ApplicationController
     presenter = Submissions::ShowPresenter.new({ id: params[:id],
                                               assignment_id: params[:assignment_id],
                                               course: current_course,
+                                              group_id: params[:group_id],
                                               view_context: view_context })
     authorize! :read, presenter.submission
     render :show, locals: { presenter: presenter }
