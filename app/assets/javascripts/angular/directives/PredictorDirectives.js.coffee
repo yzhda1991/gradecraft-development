@@ -61,7 +61,7 @@
           tooltip: scope.description()
           icon: "fa-info-circle"
         }
-        has_rubric: {
+        is_rubric_graded: {
           tooltip: 'This ' + scope.targetTerm() + ' is rubric graded'
           icon: "fa-th"
         }

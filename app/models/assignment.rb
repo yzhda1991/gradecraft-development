@@ -100,10 +100,6 @@ class Assignment < ActiveRecord::Base
     super.presence || 0
   end
 
-  def has_rubric?
-    !!rubric
-  end
-
   def grade_with_rubric?
     use_rubric && rubric.present? && rubric.designed?
   end
