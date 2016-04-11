@@ -1,20 +1,16 @@
 -# Requires: grade, assignment, assignment_type
-- if assignment_type.student_weightable?
-  -# Checking to see if this student has weighted this assignment anything other than 1
-  - if (grade.student.weight_for_assignment_type(assignment_type) == 0 && current_course.default_assignment_weight != 1) || grade.student.weight_for_assignment_type(assignment_type) > 1
-    - if GradeProctor.new(grade).viewable?
+- if GradeProctor.new(grade).viewable? && grade.final_points
+  - if assignment_type.student_weightable?
+    -# Checking to see if this student has weighted this assignment anything other than 1
+    - if (grade.student.weight_for_assignment_type(assignment_type) == 0 && current_course.default_assignment_weight != 1) || grade.student.weight_for_assignment_type(assignment_type) > 1
       = "#{points grade.final_points} / #{ points assignment.point_total } points (Raw)"
       .bold= "#{ points grade.score } / #{points grade.point_total} points (Multiplied)"
     - else
-      .italic= "#{points grade.point_total} points possible"
-  - else
-    - if GradeProctor.new(grade).viewable?
       .bold= "#{points grade.final_points} / #{ points grade.point_total } points"
-    - else
-      .italic= "#{points assignment.point_total} points possible"
-- else
-  - if GradeProctor.new(grade).viewable?
+  - else
     .bold
       = "#{points grade.final_points} / #{points grade.point_total} points earned"
-  - else
-    .italic= "#{points assignment.point_total} points possible"
+- else
+  .italic= "#{points assignment.point_total} points possible"
+
+
