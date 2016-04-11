@@ -14,7 +14,7 @@
         %a{ "href" => "#tab"} Grades
       %li
         %a{ "href" => "#tabt2"} Description & Downloads
-      - if presenter.rubric_designed?
+      - if presenter.grade_with_rubric?
         %li
           %a{ "href" => "#tabt3"} Grading Rubric
       - if presenter.has_grades?
@@ -30,7 +30,7 @@
       .ui-tabs-panel#tabt2{role: "tabpanel", "aria-hidden" => false }
         = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
 
-      - if presenter.rubric_designed?
+      - if presenter.grade_with_rubric?
         .content#tabt3{role: "tabpanel", "aria-hidden" => false }
           %br
           = render partial: "assignments/rubric_preview", locals: { presenter: presenter }

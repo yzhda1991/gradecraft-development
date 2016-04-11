@@ -22,6 +22,6 @@
 
   = render "grades/components/badges", grade: grade if grade.earned_badges.present?
 
-  .rubric-container= render "grades/components/criterion_grade_results", presenter: presenter if presenter.rubric_designed?
+  .rubric-container= render "grades/components/criterion_grade_results", presenter: presenter if presenter.grade_with_rubric?
 
   = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment } if current_user_is_student?
