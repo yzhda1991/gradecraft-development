@@ -33,27 +33,27 @@ describe Formatter::Filename do
 
     it "downcases the filename" do
       subject.filename = "SERIOUSLY_THIS_IS_CAPPY"
-      expect(result.filename).to eq "seriously_this_is_cappy"
+      expect(result.filename).to eq "seriously this is cappy"
     end
 
     it "replaces multiple spaces or underscores with single underscores" do
       subject.filename = "roger___   ___went____to    the   mall"
-      expect(result.filename).to eq "roger_went_to_the_mall"
+      expect(result.filename).to eq "roger went to the mall"
     end
 
     it "gets rid of url-unfriendly characters" do
       subject.filename = "####TURTLES&&BRO####"
-      expect(result.filename).to eq "turtles_bro"
+      expect(result.filename).to eq "turtles bro"
     end
 
     it "removes leading spaces, hyphens and underscores" do
-      subject.filename = "steve_is_a_jerk__---   ---"
-      expect(result.filename).to eq "steve_is_a_jerk"
+      subject.filename = "murdoc_is_a_jerk__---   ---"
+      expect(result.filename).to eq "murdoc is a jerk"
     end
 
     it "removes trailing spaces, hyphens and underscores" do
       subject.filename = "jeff_is_nice__---   ---"
-      expect(result.filename).to eq "jeff_is_nice"
+      expect(result.filename).to eq "jeff is nice"
     end
 
     it "returns the object" do
@@ -71,9 +71,9 @@ describe Formatter::Filename do
     end
   end
 
-  describe ".inflector_methods" do
+  describe "INFLECTOR_METHODS" do
     it "returns a list of methods to be included from ActiveSupport::Inflector" do
-      expect(Formatter::Filename.inflector_methods).to eq \
+      expect(Formatter::Filename::INFLECTOR_METHODS).to eq \
         [:camelize, :classify, :constantize, :dasherize, :deconstantize,
          :humanize, :ordinalize, :parameterize, :pluralize, :singularize,
          :tableize, :titleize, :underscore]
