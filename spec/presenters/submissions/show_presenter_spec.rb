@@ -26,8 +26,7 @@ describe ShowSubmissionPresenter do
     allow(subject).to receive_messages(
       student: student,
       group: group,
-      assignment: assignment,
-      grade: grade
+      assignment: assignment
     )
   end
 
@@ -117,6 +116,9 @@ describe ShowSubmissionPresenter do
       expect(submissions).to receive(:find).with submission.id
       subject.submission
     end
+
+    it "caches the submission" do
+    end
   end
 
   describe "#student" do
@@ -126,8 +128,14 @@ describe ShowSubmissionPresenter do
   end
 
   describe "#submission_grade_history" do
+    before do
+      allow(subject).to receive_messages(
+        submission: submission,
+        grade: grade
+      )
+    end
+
     it "returns the submission grade history" do
-      allow(subject).to receive(:submission) { submission }
       expect(subject).to receive(:submission_grade_filtered_history)
         .with(submission, grade, false)
       subject.submission_grade_history
@@ -136,12 +144,17 @@ describe ShowSubmissionPresenter do
 
   describe "#submitted_at" do
     it "returns the submitted_at date from the submission" do
+      allow(subject).to receive(:submission) { submission }
       expect(subject.submitted_at).to eq submission.submitted_at
     end
   end
 
   describe "#open_for_editing?" do
     let(:result) { subject.open_for_editing? }
+
+    before do
+      allow(subject).to receive(:grade) { grade }
+    end
 
     context "assignment is not open" do
       it "returns false" do
@@ -168,7 +181,7 @@ describe ShowSubmissionPresenter do
 
       context "grades is not present and re-submissions are not allowed" do
         it "returns false" do
-          allow(grade).to receive(:present?) { false }
+          allow(grade).to receive(:present?) { true }
           allow(assignment).to receive(:resubmissions_allowed?) { false }
           expect(result).to eq false
         end
