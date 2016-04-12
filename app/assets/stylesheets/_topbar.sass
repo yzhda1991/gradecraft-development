@@ -41,12 +41,12 @@ a.site-title
 .layout-left-flyout
   left: 0
 
-.layout-right-flyout.isCbFlyNavRightActive, .layout-left-flyout.isCbFlyNavLeftActive
+.layout-left-flyout.isCbFlyNavLeftActive
   visibility: visible
   transition: z-index 0 linear .2s
   z-index: 1000
 
-.cbFlyNavRight-wrap, .cbFlyNavLeft-wrap
+.cbFlyNavLeft-wrap
   display: block
   box-sizing: border-box
   position: relative
@@ -60,9 +60,6 @@ a.site-title
     transform: translateY(0)
     transition: transform 0 ease-in-out
 
-.cbFlyNavRight-wrap
-  width: 270px
-
 .nav-collapse
   -webkit-transform: translate3d(0,0,0)
   -webkit-transform-style: preserve-3d
@@ -71,11 +68,6 @@ a.site-title
   z-index: 100
   transition: transform .2s ease-in-out
   -webkit-backface-visibility: hidden
-
-.layout-right-content.isCbFlyNavRightActive
-  top: -2rem !important
-  transform: translate3d(-270px,0,0)
-  position: relative
 
 .layout-right-content.isCbFlyNavLeftActive
   top: -2rem !important
