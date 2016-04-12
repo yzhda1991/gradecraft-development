@@ -62,6 +62,17 @@ GradeCraft::Application.routes.draw do
       get "export_structure"
       get "weights" => "assignment_weights#mass_edit", as: :mass_edit_weights
     end
+
+    # TODO:
+    # GET /assignments/:assignment_id/mass_grade => ../grades
+    # GET /assignments/:assignment_id/group_grade => ../groups/:group_id/grade
+    # GET /assignments/:assignment_id/export_grades => ../grades/export
+    # GET /assignments/:assignment_id/export_submissions => ../submissions/export
+    # GET /assignments/:assignment_id/download_current_grades => ../grades/download
+
+    resources :grades, only: [:index] do
+    end
+
     member do
       get "mass_grade" => "grades#mass_edit", as: :mass_grade
       put "mass_grade" => "grades#mass_update"
@@ -104,6 +115,10 @@ GradeCraft::Application.routes.draw do
       get :design, on: :collection
     end
   end
+
+  resources :grades, only: [] do
+  end
+
   resources :unlock_states do
     member do
       post :manually_unlock
