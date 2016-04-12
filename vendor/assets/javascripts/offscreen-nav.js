@@ -238,7 +238,7 @@
       
       self.$trigger.on('click.cbFlyNavLeft', function(e) {
         e.stopPropagation();
-        
+        $("body").toggleClass("noscroll");
         if ( !self.open ) {
           if ( !self.copied ) {
             self._copyNav();
@@ -264,6 +264,7 @@
       //Hide menu when body clicked. Usign an a tag to mask content.
       self.$contentMask.on('click.cbFlyNavLeft', function( e ) {
         e.preventDefault();
+        $("body").toggleClass("noscroll");
         self._closeNav();
       });
       
