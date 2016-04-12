@@ -7,12 +7,7 @@ describe ShowSubmissionPresenter do
   subject { described_class.new properties }
 
   let(:properties) do
-    {
-      id: submission.id,
-      assignment_id: assignment.id,
-      group_id: group.id,
-      course: course
-    }
+    { course: course }
   end
 
   let(:submission) { double(:submission, student: student, group: group, assignment: assignment, id: 200, submitted_at: Time.now) }
@@ -109,15 +104,29 @@ describe ShowSubmissionPresenter do
   end
 
   describe "#submission" do
-    let(:submissions) { double(:submissions) }
+    let(:result) { subject.submission }
+    let(:submissions) { double(:submissions).as_null_object }
+
+    before do
+      allow(assignment).to receive(:submissions) { submissions }
+      allow(subject).to receive(:id) { 900 }
+      allow(submissions).to receive(:find) { submission }
+    end
 
     it "finds the submission by id" do
-      allow(assignment).to receive(:submissions) { submissions }
-      expect(submissions).to receive(:find).with submission.id
-      subject.submission
+      expect(submissions).to receive(:find).with 900
+      result
     end
 
     it "caches the submission" do
+      result
+      expect(submissions).not_to receive(:find).with(900)
+      result
+    end
+
+    it "sets the submission to an ivar" do
+      result
+      expect(subject.instance_variable_get(:@submission)).to eq submission
     end
   end
 
