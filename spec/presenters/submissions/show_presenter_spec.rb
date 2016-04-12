@@ -11,7 +11,7 @@ describe ShowSubmissionPresenter do
   end
 
   let(:submission) { double(:submission, student: student, group: group, assignment: assignment, id: 200, submitted_at: Time.now) }
-  let(:assignment) { double(:assignment, point_total: 12000, course: course, threshold_points: 13200, grade_scope: "Group", id: 300).as_null_object }
+  let(:assignment) { double(:assignment, course: course, threshold_points: 13200, grade_scope: "Group", id: 300).as_null_object }
   let(:course) { double(:course, name: "Some Course").as_null_object }
   let(:student) { double(:user, first_name: "Jimmy", id: 500)}
   let(:group) { double(:group, name: "My group", course: course, id: 400) }
@@ -199,5 +199,18 @@ describe ShowSubmissionPresenter do
   end
 
   describe "#title" do
+    let(:assignment) { double(:assignment, name: "Greatness", point_total: 40) }
+    let(:view_context) { double(:view_context).as_null_object }
+
+    before do
+      allow(subject).to receive(:owner_name) { "Gary" }
+      allow(subject).to receive(:view_context) { view_context }
+      allow(subject.view_context).to receive(:points).with(40) { 800 }
+    end
+
+    it "builds a title for the show submission page" do
+      expect(subject.title)
+        .to eq "Gary's Greatness Submission (800 points)"
+    end
   end
 end
