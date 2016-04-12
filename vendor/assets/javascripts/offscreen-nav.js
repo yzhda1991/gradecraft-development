@@ -148,9 +148,8 @@
       var self = this;
         
       $(self.options.cbNavWrapper).addClass('iscbFlyNavLeftActive');
-      $(self.options.cbContentWrapper)
-                        .addClass('iscbFlyNavLeftActive')
-                        .append(self.$contentMask);
+      $(self.options.cbContentWrapper).addClass('iscbFlyNavLeftActive')
+      $("body").append(self.$contentMask);
 
       self.open = true;
     },
