@@ -80,6 +80,8 @@ a.site-title
 
 .nav-flyout-contentmask, .nav-flyout-contentmask-left
   z-index: 1
+  height: 100vh
+  background-color: rgba(0,0,0, .7)
 
 .nav-flyout-navmask, .nav-flyout-navmask-left
   right: 180px
@@ -90,7 +92,7 @@ a.site-title
 .navbar ul
   list-style-type: none
 
-.btn-navbar-right, .btn-navbar-left
+.btn-navbar-left
   position: absolute
   top: 7px
   font-size: 1.1rem
@@ -354,3 +356,6 @@ ul.subnav.logged-out
 
     .right
       margin-right: 1rem
+
+.noscroll
+  overflow: hidden
