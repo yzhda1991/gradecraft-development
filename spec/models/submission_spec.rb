@@ -367,9 +367,14 @@ describe Submission do
   end
 
   describe "#base_filename" do
+    before do
+      allow(subject).to receive_message_chain(:student, :full_name) { "Dan Ho" }
+      allow(subject).to receive_message_chain(:assignment, :name) { "Great" }
+    end
+
     it "titleizes the student's full name and assignment name" do
-      expect(Formatter::Filename).to receive(:titleize)
-        .with("#{student.full_name} - #{assignment.name}")
+      expect(Formatter::Filename).to receive(:titleize).with "Dan Ho - Great"
+      subject.base_filename
     end
   end
 end
