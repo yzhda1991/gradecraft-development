@@ -48,7 +48,7 @@ a.site-title
   box-sizing: border-box
   position: relative
   height: 100%
-  overflow: hidden
+  overflow: scroll
   width: 250px
   -webkit-perspective: 1000
   -webkit-backface-visibility: hidden
@@ -242,13 +242,17 @@ ul.subnav.logged-out
       min-width: 260px
   .nav > li > .subnav > li
     margin-bottom: 0
+    padding: 6px 10px
   .nav > li > .subnav > li a
     color: $color-black
-    padding: 6px 10px
-    transition: all .2s
-  .nav > li > .subnav > li:hover a
+    padding: 0
+    // transition: all .2s
+  .nav > li > .subnav > li:hover
     background: $color-blue-2
     color: $color-white
+
+    a:hover
+      color: $color-white
   .nav > li > .subnav > li:last-of-type a:hover
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
