@@ -1,14 +1,19 @@
 @import layout
 @import color
 
+// mixin for all level form fields
+@mixin rubric-level-input
+  background-color: $color-grey-6
+  &:hover
+    background-color: $color-white
 
 #rubric
   textarea
+    @include rubric-level-input
     width: 11.75rem
     border: 0
     height: 65px
     resize: none
-    background-color: $color-blue-5
     color: $color-black
 
   input
@@ -164,19 +169,24 @@ button.delete
   width: 24px
   height: 24px
 
-button.meets-expectations, button.remove-meets-expectations
+button.meets-expectations-status, button.meets-expectations-toggle
   font-weight: bold
-  background: $color-green-1
+  background: $color-grey-5
   position: absolute
-  left: 0
-  top: 0
-  border-radius: 0
-
-button.remove-meets-expectations
-  background: $color-green-2
-
+  left: 4%
+  bottom: 2.5%
+  border-radius: 12px
+  width: 92%
+  opacity: 0
   &:hover
-    background: $color-red-1
+    opacity: 1
+
+button.meets-expectations-status.show
+  opacity: 1
+  &:hover
+    opacity: 0
+  &.meets-expectations
+    //background-color: $color-green-1
 
 .level
   background: $color-grey-5
@@ -185,28 +195,24 @@ button.remove-meets-expectations
     width: 180px
 
   &.saved
-    background: $color-green-1
+    background: $color-grey-8
     &.level-meets-expectations
-      background-color: $color-green-2
+      background-color: $color-grey-5
 
   .badge-messages
-    clear: right
-    margin-top: 10px
-    font-size: 11px
-    color: $color-grey-2
+    text-align: center
+    font-size: .7rem;
+    font-weight: bold;
 
   .badge-row
     overflow: hidden
-    padding: 5px
-    &:hover
-      background: $color-blue-3
-
-      .badge-messages
-        color: $color-white
-
+    height: 60px
+    margin-top: 7px
+    width: 11.75rem
+    border-radius: 0 0 12px 12px
+    @include rubric-level-input
       .edit-badges
         display: block
-        background: $color-green-2
         color: $color-white
 
   select
@@ -224,7 +230,7 @@ button.remove-meets-expectations
     color: $color-green-2
 
   input.ng-valid-required
-    background: $color-blue-4
+    @include rubric-level-input
 
     &:disabled
       background: $color-grey-8
@@ -269,7 +275,6 @@ button.remove-meets-expectations
   border-left: 2px solid $color-grey-8
   width: 100%
   overflow-y: scroll
-  s
   height: 280px !important
 
   .order-label
@@ -383,7 +388,7 @@ button.remove-meets-expectations
       width: 100%
       height: 105%
       resize: none
-      background: $color-red-1
+      background: $color-white
 
   h4.notice
     color: $color-green-2

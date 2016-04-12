@@ -23,7 +23,7 @@
     %button.close-modal(ng-click="level.closeBadges()") Update Badges
 
 
-%button.meets-expectations(type="button" ng-click="level.setAsMeetsExpectations()" ng-hide="level.meetsExpectations") Mark as Meets Expectations
-%button.remove-meets-expectations(type="button" ng-click="level.removeMeetsExpectations()" ng-show="level.meetsExpectations") Remove Meets Expectations
+%button.meets-expectations-status(type="button" ng-class="{'show': level.showExpectationStatus()}") {{level.label()[0]}}
+%button.meets-expectations-toggle(type="button" ng-click="level.toggleMeetsExpectations()") {{level.label()[1]}}
 %button.delete(type="button" ng-click="level.delete($index)" ng-hide="level.required") X
-.messages {{level.label()}}
+

@@ -16,10 +16,10 @@
       @points = attrs.points || 0
       @fullCredit = attrs.full_credit or false
       @noCredit = attrs.no_credit or false
-      @meetsExpectations = attrs.meets_expectations || false
       @required = (attrs.full_credit || attrs.no_credit) || false
       @description = attrs.description or ""
       @resetChanges()
+      @_initalizeExpectations(attrs.meets_expectations)
 
     isNew: ()->
       @id is null
@@ -28,10 +28,74 @@
     change: ()->
       if @isSaved()
         @hasChanges = true
-    alert: ()->
-      alert("snakes!")
+
     resetChanges: ()->
       @hasChanges = false
+
+    # first pass contstructor only
+    _initalizeExpectations: (attr)->
+      if attr == true
+        @setAsCriterionExpectation()
+      else
+        @meetsExpectations = false
+
+    # inidcated on the Criterion level that there is an expectation set
+    setAsCriterionExpectation: ()->
+      @meetsExpectations = true
+      @criterion.meetExpectationPoints = @points
+      @criterion.meetsExpectationsSet = true
+
+    # set all levels to false for meets expectations
+    resetCriterionExpectation: ()->
+      angular.forEach(@criterion.levels,(level,i)=>
+        level.meetsExpectations = false
+      )
+      @criterion.meetExpectationPoints = 0
+      @criterion.meetsExpectationsSet = false
+
+    # this level meets or is above expectations
+    pointsMeetExpectations: ()->
+      @points >= @criterion.meetExpectationPoints
+
+    # boolean -- if expectation is set on a level for this criteria
+    meetExpectationSet: ()->
+      @criterion.meetsExpectationsSet == true
+
+    # UI show status button
+    showExpectationStatus: ()->
+      return true if @meetsExpectations
+      return true if ! @criterion.meetsExpectationsSet
+      false
+
+    toggleMeetsExpectations: ()->
+      if @meetsExpectations == true
+        @removeMeetsExpectations()
+      else
+        @putMeetsExpectations()
+
+    # AJAX calls, should be in a service
+    putMeetsExpectations: ()->
+      $http.put("/api/levels/#{@id}", { level: { meets_expectations: true }})
+        .success((data,status)=>
+          @resetCriterionExpectation()
+          @setAsCriterionExpectation()
+          return true
+        )
+        .error((err)->
+          console.log("Marking level as meets expectations failed")
+          return false
+        )
+    removeMeetsExpectations: ()->
+      $http.put("/api/levels/#{@id}", { level: { meets_expectations: false }})
+        .success((data,status)=>
+          @resetCriterionExpectation()
+          return true
+        )
+        .error((err)->
+          console.log("Removing level meets expectations failed")
+          return false
+        )
+
     params: ()->
       criterion_id: @criterion_id,
       name: @name,
@@ -41,11 +105,6 @@
       alert @criterion.name
     removeFromCriterion: (index)->
       @criterion.levels.splice(index,1)
-    setCriterionExpectation: ()->
-      angular.forEach(@criterion.levels,(level,i)=>
-        level.meetsExpectations = false
-      )
-      @meetsExpectations = true
 
     ##rubric ctrl
     loadLevelBadge: (levelBadge)->
@@ -119,36 +178,13 @@
     criterionName: ()->
       alert @criterion.name
     label: ()->
-      if @noCredit
-        "Zero Credit Level"
-      else if @fullCredit
-        "Full Credit Level"
+      if @fullCredit
+        ["Full Credit Level", "Set As 'Meets Expectations'"]
       else if @meetsExpectations
-        "Meets Expectations"
+        ["Meets Expectations","Remove 'Meets Expectations'"]
       else
-        "" #used to say: "Score Level"
+        ["Set As 'Meets Expectations'", "Set As 'Meets Expectations'"]
 
-    # TODO: move all API calls to a service
-    setAsMeetsExpectations: ()->
-      $http.put("/api/levels/#{@id}", { level: { meets_expectations: true }})
-        .success((data,status)=>
-          @setCriterionExpectation()
-          return true
-        )
-        .error((err)->
-          console.log("Marking level as meets expectations failed")
-          return false
-        )
-    removeMeetsExpectations: ()->
-      $http.put("/api/levels/#{@id}", { level: { meets_expectations: false }})
-        .success((data,status)=>
-          @meetsExpectations = false
-          return true
-        )
-        .error((err)->
-          console.log("Removing level meets expectations failed")
-          return false
-        )
     delete: (index)->
       if @isSaved()
         if confirm("Are you sure you want to delete this level?")
