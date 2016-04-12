@@ -422,40 +422,7 @@ describe GradesController do
       end
     end
 
-    describe "GET mass_edit" do
-      it "assigns params" do
-        get :mass_edit, id: @assignment.id
-        expect(assigns(:title)).to eq("Quick Grade #{@assignment.name}")
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:assignment_type)).to eq(@assignment.assignment_type)
-        expect(assigns(:assignment_score_levels)).to eq(@assignment.assignment_score_levels)
-        expect(assigns(:grades)).to eq([@grade])
-        expect(assigns(:students)).to eq([@student])
-        expect(response).to render_template(:mass_edit)
-      end
-
-      it "creates missing grades and orders grades by student name" do
-        student_2 = create(:user, last_name: "zzimmer", first_name: "aaron")
-        student_3 = create(:user, last_name: "zzimmer", first_name: "zoron")
-        [student_2,student_3].each {|s| s.courses << @course }
-        expect{ get :mass_edit, id: @assignment.id }.to change{Grade.count}.by(2)
-        expect(assigns(:grades)[1].student).to eq(student_2)
-        expect(assigns(:grades)[2].student).to eq(student_3)
-      end
-
-      context "with teams" do
-        it "assigns params" do
-          team = create(:team, course: @course)
-          team.students << @student
-          get :mass_edit, id: @assignment.id, team_id: team.id
-          expect(assigns(:students)).to eq([@student])
-          expect(assigns(:team)).to eq(team)
-        end
-      end
-    end
-
     describe "PUT mass_update" do
-
       let(:grades_attributes) do
         { "#{@assignment.reload.grades.index(@grade)}" =>
           { graded_by_id: @professor.id, instructor_modified: true,
@@ -721,7 +688,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { get :mass_edit, { id: @assignment.id  }},
           Proc.new { post :mass_update, { id: @assignment.id }},
           Proc.new { get :group_edit, { id: @assignment.id, group_id: @group.id }},
           Proc.new { post :group_update, { id: @assignment.id, group_id: @group.id }},
