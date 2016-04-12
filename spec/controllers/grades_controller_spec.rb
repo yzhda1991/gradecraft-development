@@ -422,56 +422,6 @@ describe GradesController do
       end
     end
 
-    describe "PUT mass_update" do
-      let(:grades_attributes) do
-        { "#{@assignment.reload.grades.index(@grade)}" =>
-          { graded_by_id: @professor.id, instructor_modified: true,
-            student_id: @grade.student_id, raw_score: 1000, status: "Graded",
-            id: @grade.id
-          }
-        }
-      end
-
-      it "updates the grades for the specific assignment" do
-        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
-        expect(@grade.reload.raw_score).to eq 1000
-      end
-
-      it "timestamps the grades" do
-        current_time = DateTime.now
-        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
-        expect(@grade.reload.graded_at).to be > current_time
-      end
-
-      it "sends a notification to the student to inform them of a new grade" do
-        pending "fix this later, needs to account for the job sending the mailer"
-        run_resque_inline do
-          expect { put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes } }.to \
-            change { ActionMailer::Base.deliveries.count }.by 1
-        end
-      end
-
-      it "only sends notifications to the students if the grade changed" do
-        @grade.update_attributes({ raw_score: 1000 })
-        run_background_jobs_immediately do
-          expect { put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes } }.to_not \
-            change { ActionMailer::Base.deliveries.count }
-        end
-      end
-
-      it "redirects to assignment path with a team" do
-        team = create(:team, course: @course)
-        put :mass_update, id: @assignment.id, team_id: team.id, assignment: { grades_attributes: grades_attributes }
-        expect(response).to redirect_to(assignment_path(id: @assignment.id, team_id: team.id))
-      end
-
-      it "redirects on failure" do
-        allow_any_instance_of(Assignment).to receive(:update_attributes).and_return false
-        put :mass_update, id: @assignment.id, assignment: { grades_attributes: grades_attributes }
-        expect(response).to redirect_to(mass_grade_assignment_path(id: @assignment.id))
-      end
-    end
-
     describe "GET group_edit" do
       it "assigns params" do
         group = create(:group)
@@ -688,7 +638,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { post :mass_update, { id: @assignment.id }},
           Proc.new { get :group_edit, { id: @assignment.id, group_id: @group.id }},
           Proc.new { post :group_update, { id: @assignment.id, group_id: @group.id }},
           Proc.new { get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }},

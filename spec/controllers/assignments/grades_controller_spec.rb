@@ -6,6 +6,8 @@ describe Assignments::GradesController do
     @assignment = create(:assignment, course: @course)
     @student = create(:user)
     @student.courses << @course
+  end
+  before(:each) do
     @grade = create :grade, student: @student, assignment: @assignment,
       course: @course
   end
@@ -51,6 +53,56 @@ describe Assignments::GradesController do
         end
       end
     end
+
+    describe "PUT mass_update" do
+      let(:grades_attributes) do
+        { "#{@assignment.reload.grades.index(@grade)}" =>
+          { graded_by_id: @professor.id, instructor_modified: true,
+            student_id: @grade.student_id, raw_score: 1000, status: "Graded",
+            id: @grade.id
+          }
+        }
+      end
+
+      it "updates the grades for the specific assignment" do
+        put :mass_update, assignment_id: @assignment.id,
+          assignment: { grades_attributes: grades_attributes }
+        expect(@grade.reload.raw_score).to eq 1000
+      end
+
+      it "timestamps the grades" do
+        current_time = DateTime.now
+        put :mass_update, assignment_id: @assignment.id,
+          assignment: { grades_attributes: grades_attributes }
+        expect(@grade.reload.graded_at).to be > current_time
+      end
+
+      it "only sends notifications to the students if the grade changed" do
+        @grade.update_attributes({ raw_score: 1000 })
+        run_background_jobs_immediately do
+          expect { put :mass_update, assignment_id: @assignment.id,
+                   assignment: { grades_attributes: grades_attributes } }.to_not \
+            change { ActionMailer::Base.deliveries.count }
+        end
+      end
+
+      it "redirects to assignment path with a team" do
+        team = create(:team, course: @course)
+        put :mass_update, assignment_id: @assignment.id, team_id: team.id,
+          assignment: { grades_attributes: grades_attributes }
+        expect(response).to \
+          redirect_to(assignment_path(@assignment, team_id: team.id))
+      end
+
+      it "redirects on failure" do
+        allow_any_instance_of(Assignment).to \
+          receive(:update_attributes).and_return false
+        put :mass_update, assignment_id: @assignment.id,
+          assignment: { grades_attributes: grades_attributes }
+        expect(response).to \
+          redirect_to(mass_edit_assignment_grades_path(@assignment))
+      end
+    end
   end
 
   context "as student" do
@@ -59,9 +111,18 @@ describe Assignments::GradesController do
       allow(controller).to receive(:current_student).and_return(@student)
     end
 
-    it "redirects back to the root" do
-      expect(get :mass_edit, { assignment_id: @assignment.id  }).to \
-        redirect_to(:root)
+    describe "GET mass_edit" do
+      it "redirects back to the root" do
+        expect(get :mass_edit, { assignment_id: @assignment.id  }).to \
+          redirect_to(:root)
+      end
+    end
+
+    describe "PUT mass_update" do
+      it "redirects back to the root" do
+        expect(get :mass_update, { assignment_id: @assignment.id  }).to \
+          redirect_to(:root)
+      end
     end
   end
 end
