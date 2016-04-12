@@ -18,7 +18,6 @@ describe Assignments::GradesController do
       @professor = create(:user)
       CourseMembership.create user: @professor, course: @course, role: "professor"
     end
-
     before (:each) { login_user(@professor) }
 
     describe "GET mass_edit" do

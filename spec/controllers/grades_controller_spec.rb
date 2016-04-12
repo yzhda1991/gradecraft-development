@@ -422,20 +422,6 @@ describe GradesController do
       end
     end
 
-    describe "GET group_edit" do
-      it "assigns params" do
-        group = create(:group)
-        @assignment.groups << group
-        group.students << @student
-        get :group_edit, { id: @assignment.id, group_id: group.id}
-        expect(assigns(:title)).to eq("Grading #{group.name}'s #{@assignment.name}")
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:assignment_score_levels)).to eq(@assignment.assignment_score_levels)
-        expect(assigns(:group)).to eq(group)
-        expect(response).to render_template(:group_edit)
-      end
-    end
-
     describe "group_update" do
       it "updates the group grades for the specific assignment" do
         group = create(:group)
@@ -638,7 +624,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { get :group_edit, { id: @assignment.id, group_id: @group.id }},
           Proc.new { post :group_update, { id: @assignment.id, group_id: @group.id }},
           Proc.new { get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }},
           Proc.new { post :update_status, {grade_ids: @grade.id, id: @assignment.id }},

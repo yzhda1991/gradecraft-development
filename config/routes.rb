@@ -68,10 +68,14 @@ GradeCraft::Application.routes.draw do
       put :mass_update, on: :collection
     end
 
+    resources :groups, only: [], module: :assignments do
+      get :grade, on: :member
+    end
+
     member do
       #get "mass_grade" => "grades#mass_edit", as: :mass_grade
       #put "mass_grade" => "grades#mass_update"
-      get "group_grade" => "grades#group_edit", as: :group_grade
+      #get "group_grade" => "grades#group_edit", as: :group_grade
       put "group_grade" => "grades#group_update"
       get "export_grades"
       get "export_submissions"
