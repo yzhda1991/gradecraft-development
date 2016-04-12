@@ -63,7 +63,9 @@ GradeCraft::Application.routes.draw do
       get "weights" => "assignment_weights#mass_edit", as: :mass_edit_weights
     end
 
-    resources :grades, only: [:index], module: :assignments
+    resources :grades, only: [], module: :assignments do
+      get :mass_edit, on: :collection
+    end
 
     member do
       #get "mass_grade" => "grades#mass_edit", as: :mass_grade

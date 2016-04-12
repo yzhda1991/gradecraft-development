@@ -2,7 +2,7 @@ class Assignments::GradesController < ApplicationController
   before_filter :ensure_staff?
 
   # Quickly grading a single assignment for all students
-  def index
+  def mass_edit
     @assignment = current_course.assignments.find(params[:assignment_id])
     @title = "Quick Grade #{@assignment.name}"
     @assignment_type = @assignment.assignment_type
