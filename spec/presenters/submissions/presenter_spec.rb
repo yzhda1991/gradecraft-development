@@ -2,11 +2,17 @@ require "spec_helper"
 require "./app/presenters/submissions/presenter"
 
 describe SubmissionPresenter do
-  let(:assignment) { double(:assignment, id: 123) }
-  let(:course) { double(:course, assignments: assignments) }
-  let(:assignments) { double(:active_record_relation).as_null_object }
+  subject do
+    described_class.new assignment_id: assignment.id,
+                        group_id: group.id,
+                        course: course
+  end
 
-  subject { described_class.new assignment_id: assignment.id, course: course }
+  let(:course) { double(:course, assignments: assignments, groups: groups) }
+  let(:assignment) { double(:assignment, id: 123) }
+  let(:group) { double(:group, id: 765) }
+  let(:assignments) { double(:active_record_relation).as_null_object }
+  let(:groups) { double(:active_record_relation).as_null_object }
 
   describe "#assignment" do
     let(:result) { subject.assignment }
@@ -38,29 +44,31 @@ describe SubmissionPresenter do
   end
 
   describe "#group" do
-    let(:assignment) { double(:assignment, has_groups?: true) }
-    let(:group_id) { 765 }
-    subject { described_class.new group_id: group_id, course: course }
+    let(:result) { subject.group }
 
-    before { allow(subject).to receive(:assignment).and_return assignment }
+    before do
+      allow(groups).to receive(:find).with(group.id) { group }
+    end
 
     it "is nil if the assignment does not allow groups" do
-      allow(assignment).to receive(:has_groups?).and_return false
-      expect(subject.group).to eq nil
+      allow(subject).to receive(:assignment) { assignment }
+      allow(assignment).to receive(:has_groups?) { false }
+      expect(result).to eq nil
     end
 
-    it "returns the group from the group id that was passed in as a property" do
-      group = double(:group)
-      groups = double(:active_record_relation)
-      allow(groups).to receive(:find).with(group_id).and_return group
-      allow(course).to receive(:groups).and_return groups
-      expect(subject.group).to eq group
+    it "returns the group" do
+      expect(result).to eq group
     end
 
-    it "caches the assignment" do
+    it "caches the group" do
+      result
+      expect(assignments).not_to receive(:find).with assignment.id
+      result
     end
 
-    it "sets the assignment to @assignment" do
+    it "sets the group to @group" do
+      result
+      expect(subject.instance_variable_get(:@group)).to eq group
     end
   end
 end
