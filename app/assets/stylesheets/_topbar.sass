@@ -46,20 +46,7 @@ a.site-title
   transition: z-index 0 linear .2s
   z-index: 1000
 
-.cbFlyNavRight-wrap
-  display: block
-  position: relative
-  height: 100%
-  overflow: hidden
-  width: 270px
-  -webkit-perspective: 1000
-  -webkit-backface-visibility: hidden
-  -webkit-transform-style: preserve-3d
-  > nav
-    transform: translateY(0)
-    transition: transform 0 ease-in-out
-
-.cbFlyNavLeft-wrap
+.cbFlyNavRight-wrap, .cbFlyNavLeft-wrap
   display: block
   box-sizing: border-box
   position: relative
@@ -72,6 +59,9 @@ a.site-title
   > nav
     transform: translateY(0)
     transition: transform 0 ease-in-out
+
+.cbFlyNavRight-wrap
+  width: 270px
 
 .nav-collapse
   -webkit-transform: translate3d(0,0,0)
@@ -342,13 +332,14 @@ ul.subnav.logged-out
       margin: .5rem 0
       width: 100%
 
-  li.course-site
-    background-color: $color-blue-1
-    padding: .5rem .75rem
-    font-size: 1rem
-
     a
       color: $color-blue-4
+    
+    .course-site
+      background-color: $color-blue-1
+      color: $color-white
+      padding: .5rem .75rem
+      font-size: 1rem
 
   .navbar .mobile-nav
     padding-top: .5rem

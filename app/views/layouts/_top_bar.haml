@@ -6,13 +6,22 @@
   .offscreen-sidebar
     - if current_user_is_student?
       .sidebar
-        %ul.subnav#account-info
-          = render "layouts/navigation/account_info"
-        %hr
+        .course-site
+          %span.course= "#{current_course.courseno} "
+          %span.course_name= "#{current_course.name} "
+          %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
         = render "students/student_profile_tabs"
         %hr
-        %ul.subnav#course-list
+        %h5 Course Info
+        %ul.course-info
+          = render "layouts/navigation/class_info"
+        %hr
+        %h5 My Courses
+        %ul.course-list
           = render "layouts/navigation/course_list"
+        %hr
+        %ul.account-info
+          = render "layouts/navigation/account_info"
         %hr
     - elsif current_user_is_staff?
       = render "layouts/navigation/staff_subnav"
@@ -31,7 +40,7 @@
             = render "layouts/navigation/authenticated_nav"
         %nav.mobile-nav.hide-for-large
           %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
-            %i.fa.fa-dashboard.fa-fw
+            %i.fa.fa-bars.fa-fw
           %a.btn-navbar-right.btn-navbar-navtoggle.btn-flyout-right-trigger
             %i.fa.fa-user.fa-fw
   #right-flyout-nav.layout-right-flyout
