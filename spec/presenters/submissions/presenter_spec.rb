@@ -1,18 +1,33 @@
 require "spec_helper"
 require "./app/presenters/submissions/presenter"
 
-describe Submissions::Presenter do
-  let(:assignment_id) { 123 }
-  let(:course) { double(:course) }
-  subject { described_class.new assignment_id: assignment_id, course: course }
+describe SubmissionPresenter do
+  let(:assignment) { double(:assignment, id: 123) }
+  let(:course) { double(:course, assignments: assignments) }
+  let(:assignments) { double(:active_record_relation).as_null_object }
+
+  subject { described_class.new assignment_id: assignment.id, course: course }
 
   describe "#assignment" do
-    it "returns the assignment from the id passed in as a property" do
-      assignment = double(:assignment)
-      assignments = double(:active_record_relation)
-      allow(assignments).to receive(:find).with(123).and_return assignment
-      allow(course).to receive(:assignments).and_return assignments
+    let(:result) { subject.assignment }
+
+    before do
+      allow(assignments).to receive(:find).with(assignment.id) { assignment }
+    end
+
+    it "returns the assignment with the given id" do
       expect(subject.assignment).to eq assignment
+    end
+
+    it "caches the assignment" do
+      result
+      expect(assignments).not_to receive(:find).with assignment.id
+      result
+    end
+
+    it "sets the assignment to @assignment" do
+      result
+      expect(subject.instance_variable_get(:@assignment)).to eq assignment
     end
   end
 
@@ -40,6 +55,12 @@ describe Submissions::Presenter do
       allow(groups).to receive(:find).with(group_id).and_return group
       allow(course).to receive(:groups).and_return groups
       expect(subject.group).to eq group
+    end
+
+    it "caches the assignment" do
+    end
+
+    it "sets the assignment to @assignment" do
     end
   end
 end

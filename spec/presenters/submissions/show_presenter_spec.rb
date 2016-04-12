@@ -105,7 +105,7 @@ describe ShowSubmissionPresenter do
 
   describe "#submission" do
     let(:result) { subject.submission }
-    let(:submissions) { double(:submissions).as_null_object }
+    let(:submissions) { double(:active_record_relation).as_null_object }
 
     before do
       allow(assignment).to receive(:submissions) { submissions }
