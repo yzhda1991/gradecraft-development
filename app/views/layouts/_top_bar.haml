@@ -4,27 +4,27 @@
   #left-flyout-nav.layout-left-flyout
 
   .offscreen-sidebar
+    .sidebar
+      .course-site
+        %span.course= "#{current_course.courseno} "
+        %span.course_name= "#{current_course.name} "
+        %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
     - if current_user_is_student?
-      .sidebar
-        .course-site
-          %span.course= "#{current_course.courseno} "
-          %span.course_name= "#{current_course.name} "
-          %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
-        = render "students/student_profile_tabs"
-        %hr
-        %h5 Course Info
-        %ul.course-info
-          = render "layouts/navigation/class_info"
-        %hr
-        %h5 My Courses
-        %ul.course-list
-          = render "layouts/navigation/course_list"
-        %hr
-        %ul.account-info
-          = render "layouts/navigation/account_info"
-        %hr
+      = render "students/student_profile_tabs"
+      %hr
     - elsif current_user_is_staff?
       = render "layouts/navigation/staff_subnav"
+    %h5 Course Info
+    %ul.course-info
+      = render "layouts/navigation/class_info"
+    %hr
+    %h5 My Courses
+    %ul.course-list
+      = render "layouts/navigation/course_list"
+    %hr
+    %ul.account-info
+      = render "layouts/navigation/account_info"
+    %hr
 
   .layout-right-content
     %header
