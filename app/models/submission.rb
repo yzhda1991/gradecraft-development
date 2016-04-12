@@ -92,6 +92,10 @@ class Submission < ActiveRecord::Base
     created_at > self.assignment.due_at if self.assignment.due_at.present?
   end
 
+  def base_filename
+    Formatter::Filename.titleize "#{student.full_name} - #{assignment.name}"
+  end
+
   def has_multiple_components?
     count = 0
     count += submission_files.count

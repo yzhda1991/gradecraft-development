@@ -56,7 +56,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def submissions_export_attributes
     if @submissions_export.last_export_started_at
-      base_export_attributes.merge(clear_progress_attributes)
+      base_export_attributes.merge clear_progress_attributes
     else
       base_export_attributes
     end
@@ -399,12 +399,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def submission_binary_filename(student, submission_file, index)
-    [ submission_base_filename(student), "Submission File #{index + 1}" ]
+    [ submission.base_filename, "Submission File #{index + 1}" ]
       .join(" - ") + submission_file.extension
-  end
-
-  def submission_base_filename(student)
-    Formatter::Filename.titleize "#{student.full_name} - #{@assignment.name}"
   end
 
   def write_submission_binary_file(student, submission_file, index)

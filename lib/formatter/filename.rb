@@ -1,3 +1,5 @@
+require "active_support"
+
 module Formatter
   class Filename
     include ActiveSupport::Inflector
@@ -22,16 +24,15 @@ module Formatter
       self.filename = original_filename
     end
 
-    class << self
-      # available ActiveSupport::Inflector behaviors
-      def inflector_methods
-        [:camelize, :classify, :constantize, :dasherize, :deconstantize,
-         :humanize, :ordinalize, :parameterize, :pluralize, :singularize,
-         :tableize, :titleize, :underscore]
-      end
+    # available ActiveSupport::Inflector behaviors
+    INFLECTOR_METHODS = [
+      :camelize, :classify, :constantize, :dasherize, :deconstantize,
+      :humanize, :ordinalize, :parameterize, :pluralize, :singularize,
+      :tableize, :titleize, :underscore
+    ]
 
-      # add chaining behaviors for inflector methods
-      inflector_methods.each do |inflector_method|
+    class << self
+      INFLECTOR_METHODS.each do |inflector_method|
         define_method inflector_method do |filename|
           self.new(filename).sanitize.send(inflector_method).filename
         end
@@ -39,16 +40,16 @@ module Formatter
     end
 
     # add chaining behaviors for inflector methods
-    inflector_methods.each do |inflector_method|
+    INFLECTOR_METHODS.each do |inflector_method|
       # if there's no exclamation return the object
       define_method inflector_method do
-        self.filename = filename.send(inflector_method)
+        self.filename = filename.send inflector_method
         self
       end
 
       # if there's an exclamation return the filename
       define_method "#{inflector_method}!" do
-        self.filename = filename.send(inflector_method)
+        self.filename = filename.send inflector_method
         filename
       end
     end
