@@ -9,7 +9,7 @@ class PaperTrailVersionSquisher
     if current_version && previous_version &&
         within_timeout?(timeout_in_milliseconds) && versions_match?
       squish_object
-      squish_changeset
+      squish_object_changes
 
       current_version.save
 
@@ -27,9 +27,9 @@ class PaperTrailVersionSquisher
     @previous_version ||= model.versions.order(:id)[-2]
   end
 
-  def squish_changeset
+  def squish_object_changes
     changeset = previous_version.changeset.merge current_version.changeset
-    current_version.instance_variable_set "@changeset", changeset
+    current_version.object_changes = PaperTrail.serializer.dump(changeset)
   end
 
   def squish_object

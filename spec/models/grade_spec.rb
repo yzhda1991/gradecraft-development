@@ -64,6 +64,19 @@ describe Grade do
   it_behaves_like "a historical model", :grade, raw_score: 1234
   it_behaves_like "a model that needs sanitization", :feedback
 
+  describe "#squish_history!", versioning: true do
+    it "squishes two previous changes into one" do
+      subject.save!
+      subject.update_attributes raw_score: 13_000
+      subject.squish_history!
+      subject.update_attributes feedback: "This is a change"
+      subject.squish_history!
+      expect(subject.versions.count).to eq 2
+      expect(subject.versions.last.changeset).to have_key :feedback
+      expect(subject.versions.last.changeset).to have_key :raw_score
+    end
+  end
+
   describe "versioning", versioning: true do
     it "ignores changes to predicted_score" do
       subject.save!
