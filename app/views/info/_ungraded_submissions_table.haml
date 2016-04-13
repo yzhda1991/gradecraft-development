@@ -42,5 +42,5 @@
                   %li= link_to glyph(:check) + "Grade", edit_assignment_grade_path(assignment_id: assignment.id, student_id: student.id), class: "button"
                 - elsif assignment.has_groups?
                   %li= link_to glyph(:eye) + "See Submission", assignment_submission_path(assignment.id, id: submission.id), class: "button"
-                  %li= link_to glyph(:check) + "Grade", group_grade_assignment_path(assignment, group_id: group), class: "button"
+                  %li= link_to glyph(:check) + "Grade", grade_assignment_group_path(assignment, group), class: "button"
   %hr.dotted

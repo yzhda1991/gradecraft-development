@@ -62,4 +62,4 @@
                   %ul.button-bar
                     %li= link_to re.group.name, group_path(re.group)
                     %li= link_to glyph(:eye) + "See Submission", assignment_submission_path(re.assignment.id, id: re.id), class: "button"
-              %td= link_to glyph(:check) + "Grade", group_grade_assignment_path(re.assignment, group_id: re.group), class: "button"
+              %td= link_to glyph(:check) + "Grade", grade_assignment_group_path(re.assignment, re.group), class: "button"
