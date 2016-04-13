@@ -7,6 +7,7 @@ RSpec.describe Assignments::GradesController, type: :controller, background_job:
   include InQueueHelper
   let(:course) { create(:course_accepting_groups) }
   let(:assignment) { create(:assignment, course_id: course.id) }
+  let(:job_attributes) {{ grade_id: grade.id }} # for GradeUpdaterJob calls
   let(:grade_attributes) {{ course_id: course.id, student_id: student.id, assignment_id: assignment.id }}
   let(:grade) { create(:grade, grade_attributes) }
 
