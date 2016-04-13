@@ -35,21 +35,44 @@ describe Assignments::GroupsController do
         expect(response).to render_template(:grade)
       end
     end
+
+    describe "PUT graded" do
+      it "updates the group grades for the specific assignment" do
+        group = create(:group)
+        @assignment.groups << group
+        group.students << @student
+        current_time = DateTime.now
+        put :graded, assignment_id: @assignment.id, id: group.id,
+          grade: { graded_by_id: @professor.id, instructor_modified: true,
+                   raw_score: 1000, status: "Graded" }
+        expect(@grade.reload.raw_score).to eq 1000
+        expect(@grade.group_id).to eq(group.id)
+        expect(@grade.graded_at).to be > current_time
+      end
+    end
   end
 
   context "as student" do
+    let(:group) { create :group }
+
     before do
+      @assignment.groups << group
+      group.students << @student
       login_user(@student)
       allow(controller).to receive(:current_student).and_return(@student)
     end
 
     describe "GET grade" do
       it "redirects back to the root" do
-        group = create(:group)
-        @assignment.groups << group
-        group.students << @student
         expect(get :grade, { assignment_id: @assignment.id, id: group.id }).to \
           redirect_to(:root)
+      end
+    end
+
+    describe "PUT graded" do
+      it "redirects back to the root" do
+        expect(put :graded, assignment_id: @assignment.id, id: group.id,
+               grade: {}).to redirect_to(:root)
       end
     end
   end

@@ -15,4 +15,29 @@ class Assignments::GroupsController < ApplicationController
       @return_path = URI(request.referer).path
     end
   end
+
+  # PUT /assignments/:assignment_id/groups/:id/graded
+  def graded
+    @assignment = current_course.assignments.find(params[:assignment_id])
+    @group = @assignment.groups.find(params[:id])
+
+    @grades = Grade.find_or_create_grades(@assignment.id, @group.students.pluck(:id))
+
+    grade_ids = []
+    @grades = @grades.each do |grade|
+      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now, group_id: @group.id))
+      grade_ids << grade.id
+    end
+
+    # @mz TODO: add specs
+    enqueue_multiple_grade_update_jobs(grade_ids)
+
+    respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
+  end
+
+  private
+
+  def enqueue_multiple_grade_update_jobs(grade_ids)
+    grade_ids.each { |id| GradeUpdaterJob.new(grade_id: id).enqueue }
+  end
 end

@@ -214,26 +214,6 @@ class GradesController < ApplicationController
       #{ @assignment.name } grade was successfully deleted."
   end
 
-  # PUT /assignments/:id/group_grade
-  def group_update
-    @assignment = current_course.assignments.find(params[:id])
-    @group = @assignment.groups.find(params[:group_id])
-
-    @grades = Grade.find_or_create_grades(@assignment.id, @group.students.pluck(:id))
-
-    grade_ids = []
-    @grades = @grades.each do |grade|
-      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now,
-        group_type: "Group", group_id: @group.id))
-      grade_ids << grade.id
-    end
-
-    # @mz TODO: add specs
-    enqueue_multiple_grade_update_jobs(grade_ids)
-
-    respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
-  end
-
   # For changing the status of a group of grades passed in grade_ids
   #  ("In Progress" => "Graded", or "Graded" => "Released")
   # GET  /assignments/:id/grades/edit_status

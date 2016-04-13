@@ -422,19 +422,6 @@ describe GradesController do
       end
     end
 
-    describe "group_update" do
-      it "updates the group grades for the specific assignment" do
-        group = create(:group)
-        @assignment.groups << group
-        group.students << @student
-        current_time = DateTime.now
-        put :group_update, id: @assignment.id, group_id: group.id, grade: { graded_by_id: @professor.id, instructor_modified: true, raw_score: 1000, status: "Graded" }
-        expect(@grade.reload.raw_score).to eq 1000
-        expect(@grade.group_id).to eq(group.id)
-        expect(@grade.graded_at).to be > current_time
-      end
-    end
-
     describe "GET edit_status" do
       it "assigns params" do
         get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }
@@ -624,7 +611,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { post :group_update, { id: @assignment.id, group_id: @group.id }},
           Proc.new { get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }},
           Proc.new { post :update_status, {grade_ids: @grade.id, id: @assignment.id }},
           Proc.new { get :import, { id: @assignment.id }},
