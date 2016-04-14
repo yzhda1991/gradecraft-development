@@ -30,12 +30,12 @@
       %li.hide-for-small
         %a{:href => design_assignment_rubric_path(presenter.assignment) }
           = glyph(:sliders)
-          - if presenter.rubric_designed?
+          - if presenter.grade_with_rubric?
             Edit Rubric
           - else
             Create Rubric
 
-      - if presenter.rubric_designed?
+      - if presenter.grade_with_rubric?
         - if presenter.has_reviewable_grades?
           %li
             %a{:href => criterion_grades_review_assignment_path(presenter.assignment) }

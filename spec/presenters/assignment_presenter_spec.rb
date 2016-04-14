@@ -96,25 +96,44 @@ describe AssignmentPresenter do
     end
   end
 
-  describe "#rubric_designed?" do
-    let(:rubric) { double(:rubric, designed?: true) }
-
-    it "is not designed if there is no rubric attached to the assignment" do
-      allow(assignment).to receive(:rubric).and_return nil
-      expect(subject.rubric_designed?).to eq false
-    end
-
-    it "is not designed if the rubric was not designed" do
-      allow(assignment).to receive(:rubric).and_return rubric
-      allow(rubric).to receive(:designed?).and_return false
-      expect(subject.rubric_designed?).to eq false
+  describe "#grade_with_rubric?" do
+    it "is not to be used if the assignment doesn't grade with a rubric" do
+      allow(assignment).to receive(:grade_with_rubric?).and_return false
+      expect(subject.grade_with_rubric?).to eq false
     end
   end
 
-  describe "#use_rubric?" do
-    it "is not to be used if the assignment should not use a rubric" do
-      allow(assignment).to receive(:use_rubric?).and_return false
-      expect(subject.use_rubric?).to eq false
+  describe "#show_rubric_preview?" do
+    before do
+      allow(subject).to receive(:grade_with_rubric?).and_return true
+      allow(subject).to receive(:grades_available_for?).and_return false
+      allow(assignment).to receive(:description_visible_for_student?).and_return true
+    end
+
+    let(:user) { double(:user) }
+
+    it "is true when all criteria are met" do
+      expect(subject.show_rubric_preview?(user)).to eq(true)
+    end
+
+    it "is false if not grading with a rubric" do
+      allow(subject).to receive(:grade_with_rubric?).and_return false
+      expect(subject.show_rubric_preview?(user)).to eq(false)
+    end
+
+    it "is false if user has available grades" do
+      allow(subject).to receive(:grades_available_for?).and_return true
+      expect(subject.show_rubric_preview?(user)).to eq(false)
+    end
+
+    it "is true if there is no user" do
+      allow(assignment).to receive(:description_visible_for_student?).and_return false
+      expect(subject.show_rubric_preview?(nil)).to eq(true)
+    end
+
+    it "is false if the description_visible_for_student is false" do
+      allow(assignment).to receive(:description_visible_for_student?).and_return false
+      expect(subject.show_rubric_preview?(user)).to eq(false)
     end
   end
 

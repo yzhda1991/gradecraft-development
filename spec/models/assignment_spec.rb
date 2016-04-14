@@ -598,13 +598,6 @@ describe Assignment do
     end
   end
 
-  describe "#has_rubric?" do
-    it "has a rubric if one is defined" do
-      subject.build_rubric
-      expect(subject).to have_rubric
-    end
-  end
-
   describe "#grade_with_rubric?" do
     it "is true if all required conditions are met" do
       subject.create_rubric

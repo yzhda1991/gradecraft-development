@@ -104,15 +104,15 @@ describe PredictedAssignmentSerializer do
         end
       end
 
-      describe "has_rubric" do
-        it "is true when assignment has a rubric" do
-          allow(assignment).to receive(:has_rubric?).and_return true
-          expect(subject[:has_rubric]).to eq(true)
+      describe "is_rubric_graded" do
+        it "is true when assignment#grade_with_rubric? is true" do
+          allow(assignment).to receive(:grade_with_rubric?).and_return true
+          expect(subject[:is_rubric_graded]).to eq(true)
         end
 
-        it "is false if assignment has no rubric" do
-          allow(assignment).to receive(:has_rubric?).and_return false
-          expect(subject[:has_rubric]).to eq(false)
+        it "is false if assignment#grade_with_rubric? is false" do
+          allow(assignment).to receive(:grade_with_rubric?).and_return false
+          expect(subject[:is_rubric_graded]).to eq(false)
         end
       end
 

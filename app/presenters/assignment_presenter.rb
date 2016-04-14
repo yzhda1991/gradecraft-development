@@ -107,8 +107,13 @@ class AssignmentPresenter < Showtime::Presenter
     assignment.fetch_or_create_rubric
   end
 
-  def rubric_designed?
-    !assignment.rubric.nil? && assignment.rubric.designed?
+  def grade_with_rubric?
+    assignment.grade_with_rubric?
+  end
+
+  # show the rubric preview tab on student's view
+  def show_rubric_preview?(user)
+    grade_with_rubric? && !grades_available_for?(user) && ( !user || assignment.description_visible_for_student?(user) )
   end
 
   def criterion_grades(user_id)
@@ -123,10 +128,6 @@ class AssignmentPresenter < Showtime::Presenter
 
   def rubric_level_earned?(user_id, level_id)
     criterion_grades(user_id).any? { |criterion_grade| criterion_grade.level_id == level_id }
-  end
-
-  def use_rubric?
-    assignment.use_rubric?
   end
 
   def scores

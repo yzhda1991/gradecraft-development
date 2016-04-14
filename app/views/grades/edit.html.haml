@@ -15,7 +15,7 @@
           locals: { presenter: ShowSubmissionPresenter.new(id: @submission.id,
             assignment_id: @assignment.id, course: current_course) }
 
-  - if @rubric && @rubric.designed? and @assignment.use_rubric
+  - if @assignment.grade_with_rubric?
     = render "rubric_edit"
   - else
     = render "standard_edit"

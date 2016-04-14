@@ -76,7 +76,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
       closed_without_submission: closed_without_sumbission?,
       has_been_unlocked: has_been_unlocked?,
       has_info: has_info?,
-      has_rubric: has_rubric?,
+      is_rubric_graded: is_rubric_graded?,
       has_submission: has_submission?,
       has_threshold: has_threshold?,
       is_a_condition: is_a_condition?,
@@ -95,8 +95,8 @@ class PredictedAssignmentSerializer < SimpleDelegator
     !assignment.description.blank?
   end
 
-  def has_rubric?
-    !!assignment.has_rubric?
+  def is_rubric_graded?
+    assignment.grade_with_rubric?
   end
 
   def is_earned_by_group?
