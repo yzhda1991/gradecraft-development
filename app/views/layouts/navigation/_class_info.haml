@@ -1,5 +1,5 @@
 - if current_course.instructors_of_record.present?
-  %li.not-a-link= glyph(:flash) + "Professor".pluralize(current_course.instructors_of_record.count) + current_course.instructors_of_record.map(&:name).join(", ")
+  %li.not-a-link= glyph(:flash) + "Professor ".pluralize(current_course.instructors_of_record.count) + current_course.instructors_of_record.map(&:name).join(", ")
 - if current_course.office.present?
   %li.not-a-link= glyph(:book) + "Office: #{current_course.office}"
 - if current_course.office_hours.present?
@@ -21,4 +21,4 @@
   %li= external_link_to glyph(:slack) + "#{current_course.twitter_hashtag}" ,
   "http://www.twitter.com/##{current_course.twitter_hashtag}"
 - if current_course.meeting_times.present?
-  %li.not-a-link= glyph(:bank) + current_course.meeting_times + current_course.location
+  %li.not-a-link= glyph(:bank) + current_course.meeting_times + ' ' + current_course.location
