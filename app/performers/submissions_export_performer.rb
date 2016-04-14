@@ -356,7 +356,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @students_with_missing_binaries ||= @assignment.students_with_missing_binaries
   end
 
-  # @mz todo: update specs
   def write_note_for_missing_binary_files
     unless students_with_missing_binaries.empty?
       open(missing_binaries_file_path, "wt") do |file|
@@ -394,13 +393,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def submission_binary_file_path(student, submission_file, index)
-    filename = submission_binary_filename(student, submission_file, index)
-    student_directory_file_path(student, filename)
-  end
-
-  def submission_binary_filename(student, submission_file, index)
-    [ submission.base_filename, "Submission File #{index + 1}" ]
-      .join(" - ") + submission_file.extension
+    # get the filename from the submission file with an index
+    filename = submission_file.instructor_filename index
+    student_directory_file_path student, filename
   end
 
   def write_submission_binary_file(student, submission_file, index)

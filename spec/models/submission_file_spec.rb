@@ -3,6 +3,8 @@ require "toolkits/models/shared/files"
 require "toolkits/historical_toolkit"
 
 describe SubmissionFile do
+  subject { new_submission_file }
+
   let(:course) { build(:course) }
   let(:assignment) { build(:assignment) }
   let(:student) { build(:user, last_name: "de Kooning", first_name: "Willem") }
@@ -12,8 +14,6 @@ describe SubmissionFile do
 
   extend Toolkits::Models::Shared::Files
   define_context # pull in attrs for image and text files
-
-  subject { new_submission_file }
 
   describe "validations" do
     it { is_expected.to be_valid }
@@ -101,6 +101,29 @@ describe SubmissionFile do
   describe "#assignment" do
     it "returns the assignment associated with the submission" do
       expect(subject.assignment).to eq(assignment)
+    end
+  end
+
+  describe "#instructor_filename" do
+    before do
+      allow(subject).to receive(:extension) { ".xyz" }
+      allow(submission).to receive(:base_filename) { "This Filename" }
+    end
+
+    context "an index is given" do
+      let(:result) { subject.instructor_filename 5 }
+
+      it "returns a full filename with an incremented index" do
+        expect(result).to eq "This Filename - Submission File 6.xyz"
+      end
+    end
+
+    context "no index is given" do
+      let(:result) { subject.instructor_filename }
+
+      it "retuns a full filename with no index" do
+        expect(result).to eq "This Filename - Submission File.xyz"
+      end
     end
   end
 

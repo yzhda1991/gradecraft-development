@@ -92,6 +92,7 @@ class Submission < ActiveRecord::Base
     created_at > self.assignment.due_at if self.assignment.due_at.present?
   end
 
+  # build a sensible base filename for all files that are attached to this submission
   def base_filename
     Formatter::Filename.titleize "#{student.full_name} - #{assignment.name}"
   end
