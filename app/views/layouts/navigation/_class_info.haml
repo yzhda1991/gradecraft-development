@@ -10,15 +10,15 @@
 - if current_user_is_student? && current_user.team_for_course(current_course).present?
   %li= glyph(:trophy) + "#{(term_for :team).titleize} + #{current_user.team_for_course(current_course).name}"
 - if current_course.syllabus.present?
-  %li= link_to glyph(:file-text) + "Course Syllabus" , current_course.syllabus_url
+  %li= link_to glyph('file-text') + "Course Syllabus" , current_course.syllabus_url
 - if current_course.phone.present?
-  %li= glyph('phone') + current_course.phone
+  %li= glyph(:phone) + current_course.phone
 - if current_course.class_email.present?
-  %li= glyph('envelope') mail_to current_course.class_email, current_course.class_email
+  %li= mail_to current_course.class_email, glyph(:envelope) + current_course.class_email
 - if current_course.twitter_handle.present?
   %li= external_link_to glyph(:twitter) +  "@#{current_course.twitter_handle}", "http://www.twitter.com/#{current_course.twitter_handle}"
 - if current_course.twitter_hashtag.present?
-  %li= external_link_to glyph(:slack) + "#{current_course.twitter_hashtag}" , 
+  %li= external_link_to glyph(:slack) + "#{current_course.twitter_hashtag}" ,
   "http://www.twitter.com/##{current_course.twitter_hashtag}"
 - if current_course.meeting_times.present?
   %li= glyph(:bank) + current_course.meeting_times + current_course.location
