@@ -2,17 +2,6 @@
   
   $body = $( 'body' );
   
-  $.cbFlyNavRight = function( options, element ) {
-		this.$el = $( element );
-		this._init( options );
-	};
-
-  $.cbFlyNavRight.defaults = {
-    trigger: '.btn-flyout-right-trigger'
-    ,cbNavWrapper: '#right-flyout-nav'
-    ,cbContentWrapper: '.layout-right-content'
-    ,minWidth: 768
-  };
 
   $.cbFlyNavLeft = function( options, element ) {
     this.$el = $( element );
@@ -207,20 +196,6 @@
     }
   };
   
-  
-  $.fn.cbFlyoutRight = function ( options ) {
-    this.each(function() {	
-      var instance = $.data( this, 'cbFlyoutRight' );
-      if ( instance ) {
-        instance._init();
-      }
-      else {
-        instance = $.data( this, 'cbFlyoutRight', new $.cbFlyNavRight( options, this ) );
-      }
-    });
-    
-    return this;
-  }
 
   $.fn.cbFlyoutLeft = function ( options ) {
     this.each(function() {  
@@ -240,5 +215,4 @@
 
 $(document).ready(function(){
   $('.offscreen-sidebar').cbFlyoutLeft();
-  $('.the-nav').cbFlyoutRight();
 });
