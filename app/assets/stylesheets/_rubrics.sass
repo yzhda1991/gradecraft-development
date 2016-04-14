@@ -3,9 +3,14 @@
 
 // mixin for all level form fields
 @mixin rubric-level-input
-  background-color: $color-grey-6
+  background-color: $color-white
   &:hover
     background-color: $color-white
+
+$below-expectations-color: $color-grey-5
+$below-expectations-selected-color: $color-grey-4
+$meets-expectations-color: $color-green-2
+$meets-expectations-selected-color: $color-green-1
 
 #rubric
   textarea
@@ -168,10 +173,12 @@ button.delete
   border-radius: 12px
   width: 24px
   height: 24px
+  &:hover
+    background-color: $color-orange-1 !important
 
 button.meets-expectations-status, button.meets-expectations-toggle
   font-weight: bold
-  background: $color-grey-5
+  background: $color-green-1
   position: absolute
   left: 4%
   bottom: 2.5%
@@ -180,13 +187,15 @@ button.meets-expectations-status, button.meets-expectations-toggle
   opacity: 0
   &:hover
     opacity: 1
+    //background-color
 
 button.meets-expectations-status.show
   opacity: 1
   &:hover
     opacity: 0
-  &.meets-expectations
-    //background-color: $color-green-1
+
+button.meets-expectations-toggle.remove
+  background-color: $color-grey-8
 
 .level
   background: $color-grey-5
@@ -195,9 +204,9 @@ button.meets-expectations-status.show
     width: 180px
 
   &.saved
-    background: $color-grey-8
+    background-color: $below-expectations-color
     &.level-meets-expectations
-      background-color: $color-grey-5
+      background-color: $meets-expectations-color
 
   .badge-messages
     text-align: center
@@ -208,12 +217,9 @@ button.meets-expectations-status.show
     overflow: hidden
     height: 60px
     margin-top: 7px
-    width: 11.75rem
-    border-radius: 0 0 12px 12px
-    @include rubric-level-input
-      .edit-badges
-        display: block
-        color: $color-white
+    &.clickable
+      @include rubric-level-input
+      width: 11.75rem
 
   select
     color: $color-grey-2
@@ -346,17 +352,18 @@ button.meets-expectations-status.show
     font-style: italic
 
   td.level-level
-    border: 1px solid $color-grey-6
+    border: 1px solid $color-grey-7
+    background-color: $color-grey-6
 
   .level.meets-expectations
-    background-color: $color-grey-6
+    background-color: $meets-expectations-color
     border: 1px solid $color-grey-7
 
   .level.selected
-    background-color: $color-green-1
+    background-color: $below-expectations-selected-color
 
   .level.selected.meets-expectations
-    background-color: $color-green-2
+    background-color: $meets-expectations-selected-color
 
   .level-badge-image img
     height: 35px

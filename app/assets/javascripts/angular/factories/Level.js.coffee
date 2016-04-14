@@ -145,6 +145,11 @@
     resetChanges: ()->
       @hasChanges = false
     editBadges: ()->
+      angular.forEach(@$scope.criteria, (criterion,index)=>
+        angular.forEach(criterion.levels, (level,index)=>
+          level.editingBadges = false
+        )
+      )
       @editingBadges = true
     closeBadges: ()->
       @editingBadges = false

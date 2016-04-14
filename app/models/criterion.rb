@@ -28,6 +28,10 @@ class Criterion < ActiveRecord::Base
 
   include DisplayHelpers
 
+  def meet_expectations_points
+    levels.where(meets_expectations: true).first && levels.where(meets_expectations: true).first.points || 1000000
+  end
+
   def remove_expectations!
     levels.each do |level|
       level.update_attributes(meets_expectations: false)

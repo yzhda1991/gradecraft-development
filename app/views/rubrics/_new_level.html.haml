@@ -24,6 +24,6 @@
 
 
 %button.meets-expectations-status(type="button" ng-class="{'show': level.showExpectationStatus()}") {{level.label()[0]}}
-%button.meets-expectations-toggle(type="button" ng-click="level.toggleMeetsExpectations()") {{level.label()[1]}}
+%button.meets-expectations-toggle(type="button" ng-class="{'remove': level.meetsExpectations}" ng-click="level.toggleMeetsExpectations()") {{level.label()[1]}}
 %button.delete(type="button" ng-click="level.delete($index)" ng-hide="level.required") X
 

@@ -50,7 +50,7 @@
                 {{(criterion.max_points || 0) | number:0}}&nbsp;Points
             .criterion-description {{criterion.description}}
 
-          %td.level.level-level(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level), 'meets-expectations': level.meetsExpectations}")
+          %td.level.level-level(ng-repeat="level in criterion.levels" ng-click="criterion.gradeWithLevel(level)" ng-class="{selected: criterion.isUsingLevel(level), 'meets-expectations': level.pointsMeetExpectations()}")
             .level-heading
               .level-name {{level.name.replace(" ","&nbsp;")}}
               .level-meets-expectations(ng-show="level.meetsExpectations") Meets Expectations
@@ -59,7 +59,7 @@
             .clear
             .level-description
               {{level.description}}
-            .row.badge-row
+            .row.badge-row.design-view
               .level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
                 %img(ng-src="{{levelBadge.badge.icon}}" height="50px")
               .clear

@@ -16,6 +16,10 @@ class Level < ActiveRecord::Base
 
   include DisplayHelpers
 
+  def above_expectations?
+    points > criterion.meet_expectations_points
+  end
+
   def copy(attributes={})
     ModelCopier.new(self).copy(attributes: attributes, associations: [:badges])
   end
