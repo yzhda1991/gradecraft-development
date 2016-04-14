@@ -99,42 +99,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         after(:each) { subject }
       end
 
-      describe "submission_binary_filename" do
-        subject do
-          performer.instance_eval do
-            submission_binary_filename( @some_student, @some_submission_file, 5 )
-          end
-        end
-
-        before do
-          allow(performer).to receive(:formatted_student_name) { "jeff_mills" }
-          allow(performer).to receive(:formatted_assignment_name) { "the_wizard" }
-        end
-
-        it "gets the formatted student name from the student" do
-          expect(performer).to receive(:formatted_student_name).with(student)
-          subject
-        end
-
-        it "gets the formatted assignment name" do
-          expect(performer).to receive(:formatted_assignment_name)
-          subject
-        end
-
-        it "appends the index to 'submission_file'" do
-          expect(subject).to include("Submission File 6")
-        end
-
-        it "gets the extension from the submission_file" do
-          expect(submission_file1).to receive(:extension) { ".ralph" }
-          subject
-        end
-
-        it "puts them all together and returns a filename" do
-          expect(subject).to eq("jeff_mills - the_wizard - Submission File 6.ralph")
-        end
-      end
-
       describe "#write_submission_binary_file" do
         subject do
           performer.instance_eval do
