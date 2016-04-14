@@ -120,60 +120,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
   end
 
-  describe "formatted_assignment_name" do
-    subject { performer.instance_eval { formatted_assignment_name }}
-
-    it "passes the assignment name into the formatter" do
-      expect(performer).to receive(:formatted_filename_fragment).with(assignment.name)
-      subject
-    end
-  end
-
-  describe "formatted_team_name" do
-    subject { performer_with_team.instance_eval { formatted_team_name }}
-
-    it "passes the team name into the formatter" do
-      expect(performer_with_team).to receive(:formatted_filename_fragment).with(team.name)
-      subject
-    end
-  end
-
-  describe "formatted_filename_fragment" do
-    subject { performer.instance_eval { formatted_filename_fragment("ABCDEFGHIJKLMNOPQRSTUVWXYZ") }}
-
-    it "sanitizes the fragment" do
-      allow(performer).to receive(:titleize_filename) { "this is a jocular output" }
-      expect(performer).to receive(:titleize_filename).with("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-      subject
-    end
-
-    it "doesn't truncate the final string" do
-      expect(subject).to eq("Abcdefghijklmnopqrstuvwxyz")
-    end
-  end
-
-  describe "titleize_filename" do
-    it "titleizes everything" do
-      expect(performer.instance_eval { titleize_filename("THISISSUPERCAPPY") }).to \
-        eq("Thisissupercappy")
-    end
-
-    it "substitutes consecutive non-word characters with spaces" do
-      expect(performer.instance_eval { titleize_filename("whoa\\ gEORG  !!! IS ...dead") }).to \
-        eq("Whoa Georg Is Dead")
-    end
-
-    it "removes leading spaces" do
-      expect(performer.instance_eval { titleize_filename("          garrett_rules") }).to \
-        eq("Garrett Rules")
-    end
-
-    it "removes trailing spaces" do
-      expect(performer.instance_eval { titleize_filename("garrett_sucks        ") }).to \
-        eq("Garrett Sucks")
-    end
-  end
-
   describe "#archive_root_dir" do
     let(:archive_root_dir_path) { Dir.mktmpdir }
     subject { performer.instance_eval { archive_root_dir }}
