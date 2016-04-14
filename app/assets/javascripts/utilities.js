@@ -97,3 +97,8 @@ $(document).find("[data-behavior~=multi-select]").select2({
 
 // Initializing highcharts table data, currently used to display team charts
 $('table.highchart').highchartTable();
+
+// $(".btn-flyout-left-trigger").click(function(e){
+//   e.preventDefault();
+//   $("body").toggleClass("noscroll");
+// });

@@ -39,4 +39,3 @@
     - if current_course.has_teams? && current_course.teams_visible?
       %li{class: ("active" if current_page?(my_team_path)) }
         = link_to_unless_current glyph(:users) + "#{term_for :teams}", my_team_path
-    %hr
