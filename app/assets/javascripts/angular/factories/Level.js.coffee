@@ -55,6 +55,7 @@
 
     # this level meets or is above expectations
     pointsMeetExpectations: ()->
+      return false if ! @criterion.meetsExpectationsSet
       @points >= @criterion.meetExpectationPoints
 
     # boolean -- if expectation is set on a level for this criteria
