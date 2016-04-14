@@ -161,7 +161,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def archive_basename
-    basename = assignment_name
+    basename = @assignment.name
     basename += " - #{@team.name}" if team_present?
     Formatter::Filename.titleize basename
   end
