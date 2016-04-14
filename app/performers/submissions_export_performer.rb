@@ -3,7 +3,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   require "open-uri" # need this for getting the S3 file over http
   include ModelAddons::ImprovedLogging # log errors with attributes
 
-  attr_reader :submissions_export, :professor, :course, :errors
+  attr_reader :submissions_export, :professor, :course, :errors, :assignment, :team
 
   def setup
     ensure_s3fs_tmp_dir if use_s3fs?
@@ -82,6 +82,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
+  def archive_basename
+    assignment_name = Formatter::Filename.titleize assignment.name
+    team_name = Formatter::Filename.titleize(team.name) if team_present?
+    [assignment_name, team_name].compact.join " - "
+  end
+
   protected
 
   def work_resources_present?
@@ -158,12 +164,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def filename_time
     Time.zone = @course.time_zone
     @filename_time ||= Time.zone.now
-  end
-
-  def archive_basename
-    basename = @assignment.name
-    basename += " - #{@team.name}" if team_present?
-    Formatter::Filename.titleize basename
   end
 
   def fetch_course

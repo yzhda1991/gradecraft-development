@@ -99,23 +99,44 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   end
 
   describe "archive_basename" do
-    subject { performer.instance_eval { archive_basename }}
-    before(:each) do
-      allow(performer).to receive(:formatted_assignment_name) { "blog_entry_5" }
-      allow(performer).to receive(:formatted_team_name) { "the_walloping_wildebeest" }
+    let(:result) { performer.archive_basename }
+
+    before do
+      allow(performer)
+        .to receive_message_chain(:assignment, :name) { "Great Scott" }
     end
 
     context "team_present? is true" do
-      before { allow(performer).to receive(:team_present?) { true }}
+      before do
+        allow(performer).to receive(:team_present?) { true }
+        allow(performer).to receive_message_chain(:team, :name) { "Super Team" }
+      end
+
+      it "titleizes the team name" do
+        [ "Great Scott", "Super Team" ].each do |title|
+          expect(Formatter::Filename).to receive(:titleize).with title
+        end
+
+        result
+      end
+
       it "combines the formatted assignment and team names" do
-        expect(subject).to eq("blog_entry_5 - the_walloping_wildebeest")
+        expect(result).to eq "Great Scott - Super Team"
       end
     end
 
     context "team_present? is false" do
-      before { allow(performer).to receive(:team_present?) { false }}
+      before do
+        allow(performer).to receive(:team_present?) { false }
+      end
+
       it "returns only the formatted assignment name" do
-        expect(subject).to eq("blog_entry_5")
+        expect(result).to eq "Great Scott"
+      end
+
+      it "titleizes only the assignment name" do
+        expect(Formatter::Filename).to receive(:titleize).with "Great Scott"
+        result
       end
     end
   end
