@@ -23,11 +23,13 @@ class Submissions::ShowPresenter < Submissions::Presenter
   end
 
   def grade
+    return nil unless owner
     owner_id_attr = individual_assignment? ? :student_id : :group_id
     @grade ||= assignment.grades.find_by "#{owner_id_attr}": owner.id
   end
 
   def submission
+    return nil unless id
     @submission ||= assignment.submissions.find id
   end
 
