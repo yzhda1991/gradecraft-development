@@ -45,30 +45,29 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     describe "create binary files for submission" do
-      subject do
-        performer.create_binary_files_for_submission submission
+      let(:result) do
+        subject.create_binary_files_for_submission submission
       end
+      let(:submission) { double(:submission).as_null_object }
 
-      before(:each) do
+      before do
         allow(submission).to receive_message_chain(:submission_files, :present)
           .and_return submission_files
       end
 
       describe "submission with files" do
-        let(:submission) { submission_with_files }
-
         it "calls write_submission_binary_file for both submission files" do
           expect(performer).to receive(:write_submission_binary_file).twice
-          subject
+          result
         end
       end
 
       describe "submission without files" do
-        let(:submission) { submission_without_files }
+        let(:submission_files) { [] }
 
         it "doesn't write any binary files" do
           expect(performer).not_to receive(:write_submission_binary_file)
-          subject
+          result
         end
       end
     end
