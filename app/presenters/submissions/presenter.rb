@@ -4,7 +4,7 @@ class Submissions::Presenter < Showtime::Presenter
   include Showtime::ViewContext
 
   def assignment
-    @assignment = nil && return unless assignment_id
+    return nil unless assignment_id
     @assignment ||= course.assignments.find assignment_id
   end
 
