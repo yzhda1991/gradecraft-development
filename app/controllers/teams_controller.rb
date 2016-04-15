@@ -4,7 +4,7 @@ class TeamsController < ApplicationController
   before_filter :ensure_staff?
 
   def index
-    @teams = current_course.teams.includes(:earned_badges)
+    @teams = current_course.teams.order_by_high_score.includes(:earned_badges)
     @title = "#{term_for :teams}"
   end
 
