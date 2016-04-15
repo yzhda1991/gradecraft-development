@@ -445,6 +445,7 @@ ActiveRecord::Schema.define(version: 20160527024024) do
     t.datetime "excluded_date"
     t.integer  "excluded_by"
     t.integer  "excluded_by_id"
+    t.datetime "excluded_at"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
