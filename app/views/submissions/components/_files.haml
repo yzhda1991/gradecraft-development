@@ -1,6 +1,7 @@
 %p
   %span.smallcaps Attachments:
   %ul
-    - presenter.submission.submission_files.each do |sf|
+    - presenter.submission.submission_files.each_with_index do |submission_file, index|
       %li
-        = external_link_to sf.filename, sf.url
+        = external_link_to submission_file.instructor_filename(index),
+          submission_file.url
