@@ -19,6 +19,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     let(:student) { create(:user, first_name: "Edwina", last_name: "Georgebot") }
 
+    let(:tmp_dir) { Dir.mktmpdir }
+
     describe "create_submission_binary_files" do
       subject { performer.instance_eval { create_submission_binary_files } }
       before(:each) do
@@ -69,37 +71,26 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     describe "submission binary file name stuff" do
-      before(:each) do
-        performer.instance_variable_set(:@some_submission_file, submission_file1)
-        performer.instance_variable_set(:@some_student, student)
-      end
-
-      let(:tmp_dir) { Dir.mktmpdir }
-
-      describe "submission_binary_file_path" do
-        subject do
-          performer.instance_eval do
-            submission_binary_file_path( @some_student, @some_submission_file, 5 )
-          end
+      describe "#submission_binary_file_path" do
+        let(:result) do
+          submission_binary_file_path(student, submission_file1, 5)
         end
 
-        before do
-          allow(performer).to receive(:submission_binary_filename) { "sweet_keith.potr" } # sweet keith pooped on the rug
-          allow(performer).to receive(:student_directory_file_path)
+        it "builds the instructor filename for the submission file" do
+          expect(submission_file).to receive(:instructor_filename).with 5
+          result
         end
 
-        it "builds a binary filename based on the arguments" do
-          expect(performer).to receive(:submission_binary_filename).with( student, submission_file1, 5 )
+        it "returns the student directory path for the student and filename" do
+          allow(submission_file).to receive(:instructor_filename)  { "ick.txt" }
+          allow(subject).to receive(:student_directory_file_path)
+            .with(student, "ick.txt").and_return "the/path"
+          expect(result).to eq "the/path"
         end
-
-        it "returns a full path for the file relative to the student directory" do
-          expect(performer).to receive(:student_directory_file_path).with( student, "sweet_keith.potr" )
-        end
-
-        after(:each) { subject }
       end
 
       describe "#write_submission_binary_file" do
+
         subject do
           performer.instance_eval do
             write_submission_binary_file( @some_student, @some_submission_file, 5 )

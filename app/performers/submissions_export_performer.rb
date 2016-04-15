@@ -88,6 +88,12 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     [assignment_name, team_name].compact.join " - "
   end
 
+  def submission_binary_file_path(student, submission_file, index)
+    # get the filename from the submission file with an index
+    filename = submission_file.instructor_filename index
+    student_directory_file_path student, filename
+  end
+
   protected
 
   def work_resources_present?
@@ -390,12 +396,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def student_directory_file_path(student, filename)
     File.expand_path(filename, student_directory_path(student))
-  end
-
-  def submission_binary_file_path(student, submission_file, index)
-    # get the filename from the submission file with an index
-    filename = submission_file.instructor_filename index
-    student_directory_file_path student, filename
   end
 
   def write_submission_binary_file(student, submission_file, index)
