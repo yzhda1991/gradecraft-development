@@ -1,18 +1,18 @@
 - if current_course.instructors_of_record.present?
-  %li= glyph(:flash) + "Professor".pluralize(current_course.instructors_of_record.count) + current_course.instructors_of_record.map(&:name).join(", ")
+  %li.not-a-link= glyph(:flash) + "Professor ".pluralize(current_course.instructors_of_record.count) + current_course.instructors_of_record.map(&:name).join(", ")
 - if current_course.office.present?
-  %li= glyph(:book) + "Office: #{current_course.office}"
+  %li.not-a-link= glyph(:book) + "Office: #{current_course.office}"
 - if current_course.office_hours.present?
-  %li= glyph('clock-o') + "Office Hours: " + auto_link(current_course.office_hours)
+  %li.not-a-link= glyph('clock-o') + "Office Hours: " + auto_link(current_course.office_hours)
 - if current_user_is_student? && current_student.team_leaders(current_course).present?
   - current_student.team_leaders(current_course).each do |team_leader|
     %li= glyph(:flag) + "#{current_course.team_leader_term} #{team_leader.first_name}"
 - if current_user_is_student? && current_user.team_for_course(current_course).present?
-  %li= glyph(:trophy) + "#{(term_for :team).titleize} + #{current_user.team_for_course(current_course).name}"
+  %li.not-a-link= glyph(:trophy) + "#{(term_for :team).titleize} + #{current_user.team_for_course(current_course).name}"
 - if current_course.syllabus.present?
   %li= link_to glyph('file-text') + "Course Syllabus" , current_course.syllabus_url
 - if current_course.phone.present?
-  %li= glyph(:phone) + current_course.phone
+  %li.not-a-link= glyph(:phone) + current_course.phone
 - if current_course.class_email.present?
   %li= mail_to current_course.class_email, glyph(:envelope) + current_course.class_email
 - if current_course.twitter_handle.present?
@@ -21,4 +21,4 @@
   %li= external_link_to glyph(:slack) + "#{current_course.twitter_hashtag}" ,
   "http://www.twitter.com/##{current_course.twitter_hashtag}"
 - if current_course.meeting_times.present?
-  %li= glyph(:bank) + current_course.meeting_times + current_course.location
+  %li.not-a-link= glyph(:bank) + current_course.meeting_times + ' ' + current_course.location

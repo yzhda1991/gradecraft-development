@@ -244,17 +244,17 @@ ul.subnav.logged-out
       min-width: 260px
   .nav > li > .subnav > li
     margin-bottom: 0
+    padding: 0
+  .nav > li > .subnav > li.not-a-link
     padding: 6px 10px
   .nav > li > .subnav > li a
     color: $color-black
-    padding: 0
-    // transition: all .2s
-  .nav > li > .subnav > li:hover
+    padding: 6px 10px
+    transition: all .2s
+  .nav > li > .subnav > li a:hover
     background: $color-blue-2
     color: $color-white
 
-    a:hover
-      color: $color-white
   .nav > li > .subnav > li:last-of-type a:hover
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
