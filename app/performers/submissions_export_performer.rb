@@ -415,13 +415,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     File.delete file_path if File.exist? file_path
   end
 
-  def binary_file_error_message(message, student, submission_file, error_io)
-    "#{message}. "\
-    "Student ##{student.id}: #{student.last_name}, #{student.first_name}, " \
-    "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, " \
-    "error: #{error_io}"
-  end
-
   def generate_error_log
     return if errors.empty?
     open(error_log_path, "w") {|file| file.puts errors }

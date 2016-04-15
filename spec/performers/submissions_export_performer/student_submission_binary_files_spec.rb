@@ -187,38 +187,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
           end
         end
       end
-
-      describe "binary_file_error_message" do
-        let(:message) { "the end of days is upon us" }
-        let(:error_io) { "error dun blowed stuff up" }
-
-        before(:each) do
-          performer.instance_variable_set(:@some_message, message)
-          performer.instance_variable_set(:@some_error_io, error_io)
-        end
-
-        subject do
-          performer.instance_eval do
-            binary_file_error_message( @some_message, @some_student, @some_submission_file, @some_error_io )
-          end
-        end
-
-        it "includes the custom message from the particular type of error" do
-          expect(subject).to include(message)
-        end
-
-        it "includes the student data" do
-          expect(subject).to include("Student ##{student.id}: #{student.last_name}, #{student.first_name},")
-        end
-
-        it "includes the submission_file data" do
-          expect(subject).to include("SubmissionFile ##{submission_file1.id}: #{submission_file1.filename},")
-        end
-
-        it "includes the io result from the rescued error block" do
-          expect(subject).to include("error: #{error_io}")
-        end
-      end
     end
   end
 end
