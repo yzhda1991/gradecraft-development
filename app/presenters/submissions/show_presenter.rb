@@ -18,6 +18,7 @@ class Submissions::ShowPresenter < Submissions::Presenter
   end
 
   def owner_name
+    return nil unless owner
     individual_assignment? ? student.first_name : group.name
   end
 
