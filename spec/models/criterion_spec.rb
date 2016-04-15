@@ -19,12 +19,29 @@ describe Criterion do
     end
   end
 
-  describe "#remove_expectations!" do
-    it "sets all levels to meets_expectations false" do
+  describe "#update_meets_expectations!" do
+    before do
       subject.save
       subject.levels.first.update_attributes(meets_expectations: true)
-      subject.remove_expectations!
+    end
+
+    it "manages setting a new level as 'meets expectations'" do
+      subject.update_meets_expectations!(subject.levels.last, true)
       expect(subject.levels.first.reload.meets_expectations).to eq(false)
+      expect(subject.levels.last.reload.meets_expectations).to eq(true)
+      expect(subject.reload.meets_expectations_level_id).to eq(
+        subject.levels.last.id
+      )
+      expect(subject.meets_expectations_points).to eq(
+        subject.levels.last.points
+      )
+    end
+
+    it "manages removing all 'meets expectations'" do
+      subject.update_meets_expectations!(subject.levels.first, false)
+      expect(subject.levels.first.reload.meets_expectations).to eq(false)
+      expect(subject.reload.meets_expectations_level_id).to eq(nil)
+      expect(subject.meets_expectations_points).to eq(0)
     end
   end
 

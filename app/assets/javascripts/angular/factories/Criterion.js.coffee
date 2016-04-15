@@ -6,7 +6,7 @@
       @badges = {}
       @id = if attrs.id then attrs.id else null
       @fullCreditLevel = null
-      @meetExpectationPoints = 0
+      @meetsExpectationPoints = 0
       @meetsExpectationsSet = false
       @name = if attrs.name then attrs.name else ""
       @rubricId = if attrs.rubric_id then attrs.rubric_id else @$scope.rubricId

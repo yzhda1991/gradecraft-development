@@ -42,7 +42,7 @@
     # inidcated on the Criterion level that there is an expectation set
     setAsCriterionExpectation: ()->
       @meetsExpectations = true
-      @criterion.meetExpectationPoints = @points
+      @criterion.meetsExpectationPoints = @points
       @criterion.meetsExpectationsSet = true
 
     # set all levels to false for meets expectations
@@ -56,7 +56,7 @@
     # this level meets or is above expectations
     pointsMeetExpectations: ()->
       return false if ! @criterion.meetsExpectationsSet
-      @points >= @criterion.meetExpectationPoints
+      @points >= @criterion.meetsExpectationPoints
 
     # boolean -- if expectation is set on a level for this criteria
     meetExpectationSet: ()->
@@ -134,14 +134,13 @@
       newBadge = new LevelBadge(@, angular.copy(@selectedBadge), {create: true})
 
     deleteLevelBadge: (levelBadge)->
-      if confirm("Are you sure you want to delete this badge from the level?")
-        $http.delete("/level_badges/#{levelBadge.id}").success(
-          (data,status)=>
-            @availableBadges[levelBadge.badge.id] = angular.copy(@$scope.courseBadges[levelBadge.badge.id])
-            delete @badges[levelBadge.badge.id]
-        ).error((err)->
-          alert("delete failed!")
-        )
+      $http.delete("/level_badges/#{levelBadge.id}").success(
+        (data,status)=>
+          @availableBadges[levelBadge.badge.id] = angular.copy(@$scope.courseBadges[levelBadge.badge.id])
+          delete @badges[levelBadge.badge.id]
+      ).error((err)->
+        alert("delete failed!")
+      )
 
     resetChanges: ()->
       @hasChanges = false

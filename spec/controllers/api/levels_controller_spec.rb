@@ -11,12 +11,13 @@ describe API::LevelsController do
       let(:world) { World.create.with(:course, :student, :assignment, :rubric, :criterion) }
       let(:level) { world.criterion.levels.last }
       let(:params) do
-        { id: level.id, level: { meets_expectations: true }}
+        { id: level.id, level: { description: "You have reached a new level", meets_expectations: true }}
       end
 
       it "updates the level attributes" do
         put :update, params, format: :json
         expect(level.reload.meets_expectations).to be_truthy
+        expect(level.description).to eq("You have reached a new level")
       end
 
       it "insures only one level per criterion meets expectations" do

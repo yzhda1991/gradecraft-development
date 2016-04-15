@@ -314,6 +314,8 @@ ActiveRecord::Schema.define(version: 20160405191418) do
     t.datetime "updated_at"
     t.integer  "full_credit_level_id"
     t.integer  "level_count",                      default: 0
+    t.integer  "meets_expectations_level_id"
+    t.integer  "meets_expectations_points",               default: 0
   end
 
   create_table "criterion_grades", force: :cascade do |t|

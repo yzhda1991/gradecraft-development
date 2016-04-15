@@ -5,7 +5,12 @@ class API::LevelsController < ApplicationController
   # PUT api/level/:id
   def update
     level = Level.find(params[:id])
-    level.criterion.remove_expectations! if updating_meets_expectations?
+
+    if params[:level].key? :meets_expectations
+      level.criterion.update_meets_expectations!(
+        level, params[:level][:meets_expectations]
+      )
+    end
 
     if level.update_attributes(level_params)
       render json: { message: "level successfully updated", success: true }
@@ -24,7 +29,7 @@ class API::LevelsController < ApplicationController
   end
 
   def level_params
-    params.require(:level).permit(:meets_expectations)
+    params.require(:level).permit(:name, :description)
   end
 end
 
