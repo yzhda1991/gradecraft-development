@@ -94,6 +94,17 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     student_directory_file_path student, filename
   end
 
+  def write_submission_binary_file(student, submission_file, index)
+    file_path = submission_binary_file_path(student, submission_file, index)
+    stream_s3_file_to_disk(submission_file, file_path)
+  end
+
+  def create_binary_files_for_submission(submission)
+    submission.submission_files.present.each_with_index do |submission_file, index|
+      write_submission_binary_file(submission.student, submission_file, index)
+    end
+  end
+
   protected
 
   def work_resources_present?
@@ -388,19 +399,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  def create_binary_files_for_submission(submission)
-    submission.submission_files.present.each_with_index do |submission_file, index|
-      write_submission_binary_file(submission.student, submission_file, index)
-    end
-  end
-
   def student_directory_file_path(student, filename)
-    File.expand_path(filename, student_directory_path(student))
-  end
-
-  def write_submission_binary_file(student, submission_file, index)
-    file_path = submission_binary_file_path(student, submission_file, index)
-    stream_s3_file_to_disk(submission_file, file_path)
+    File.expand_path filename, student_directory_path(student)
   end
 
   def stream_s3_file_to_disk(submission_file, target_file_path)
