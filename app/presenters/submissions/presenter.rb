@@ -4,6 +4,7 @@ class Submissions::Presenter < Showtime::Presenter
   include Showtime::ViewContext
 
   def assignment
+    @assignment = nil && return unless assignment_id
     @assignment ||= course.assignments.find assignment_id
   end
 
@@ -16,7 +17,7 @@ class Submissions::Presenter < Showtime::Presenter
   end
 
   def group
-    return nil unless assignment.has_groups?
+    return nil unless assignment.has_groups? and group_id
     @group ||= course.groups.find group_id
   end
 
