@@ -279,7 +279,8 @@ class GradesController < ApplicationController
 
     grade_ids = []
     @grades = @grades.each do |grade|
-      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now, group_id: @group.id))
+      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now,
+        group_type: "Group", group_id: @group.id))
       grade_ids << grade.id
     end
 
