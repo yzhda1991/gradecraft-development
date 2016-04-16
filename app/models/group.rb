@@ -98,7 +98,6 @@ class Group < ActiveRecord::Base
   end
 
   def cache_associations
-    # TODO: no method assignment for group!
-    self.course_id ||= assignment.try(:course_id)
+    self.course_id ||= assignments.first.try(:course_id)
   end
 end
