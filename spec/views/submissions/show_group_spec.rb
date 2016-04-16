@@ -3,13 +3,13 @@ include CourseTerms
 
 describe "submissions/show" do
 
-  let(:presenter) { Submissions::ShowPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id, view_context: view_context }) }
+  let(:presenter) { ShowSubmissionPresenter.new({ course: @course, id: @submission.id, assignment_id: @assignment.id, group_id: @group.id, view_context: view_context }) }
   let(:view_context) { double(:view_context, points: "12,000") }
 
   before(:all) do
     @course = create(:course)
     @assignment = create(:group_assignment, course: @course)
-    @group = create(:group)
+    @group = create(:group, course: @course)
     @group.assignments << @assignment
     @submission = create(:submission, course: @course, assignment: @assignment, group: @group)
   end
