@@ -99,6 +99,6 @@ $(document).find("[data-behavior~=multi-select]").select2({
 $('table.highchart').highchartTable();
 
 //Hide and show course-info-card in header
-$("#course-info-btn").click(function(){
+$(".course-info-btn").click(function(){
     $(".course-info-card").toggle();
 });
