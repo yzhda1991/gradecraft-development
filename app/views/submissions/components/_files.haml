@@ -5,6 +5,7 @@
       %li
         - if submission_file.file_missing
           -# if the file is missing don't print a link
+          %i.fa.fa-chain-broken.fa-fw
           = "(missing) #{submission_file.instructor_filename(index)}"
         - else
           -# otherwise give us a link to download the file through the server
