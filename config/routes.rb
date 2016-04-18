@@ -378,7 +378,7 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  17b. Predictor, Student View
+  # 17b. Predictor, Student View
   get "predictor" => "students#predictor"
   get "predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
   get "predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }

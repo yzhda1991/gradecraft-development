@@ -27,7 +27,9 @@ module S3Manager
     end
 
     def stream_s3_object
-      s3_object.body.read
+      streamable_object = get_object(s3_object_file_key)
+      return nil unless streamable_object
+      streamable_object.body.read
     end
 
     def delete_from_s3
