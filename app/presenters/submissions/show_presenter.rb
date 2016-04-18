@@ -30,7 +30,7 @@ class Submissions::ShowPresenter < Submissions::Presenter
 
   def submission
     return nil unless id
-    @submission ||= assignment.submissions.find id
+    @submission ||= ::Submission.find id
   end
 
   def student

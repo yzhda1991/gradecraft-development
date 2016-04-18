@@ -3,7 +3,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   require "open-uri" # need this for getting the S3 file over http
   include ModelAddons::ImprovedLogging # log errors with attributes
 
-  attr_reader :submissions_export, :professor, :course, :errors, :assignment, :team
+  attr_reader :submissions_export, :professor, :course, :errors, :assignment, :team, :submissions
 
   def setup
     ensure_s3fs_tmp_dir if use_s3fs?
@@ -319,8 +319,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def create_submission_text_files
-    @submissions.each do |submission|
-      if submission.text_comment.present? || submission.link.present? # write the text file for the submission into the student export directory
+    submissions.each do |submission|
+      # write the text file for the submission into the student export directory
+      if submission.text_comment.present? || submission.link.present?
         create_submission_text_file(submission)
       end
     end

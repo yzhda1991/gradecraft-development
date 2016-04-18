@@ -1,5 +1,5 @@
-require_relative "abilities/announcement_ability"
 require_relative "abilities/assignment_weight_ability"
+require_relative "abilities/announcement_ability"
 require_relative "abilities/grade_ability"
 require_relative "abilities/challenge_grade_ability"
 require_relative "abilities/submission_ability"

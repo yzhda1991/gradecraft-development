@@ -108,6 +108,8 @@ GradeCraft::Application.routes.draw do
     end
   end
 
+  get "submission_files/:id/download", to: "submission_files#download", as: "download_submission_file"
+
   resources :unlock_states do
     member do
       post :manually_unlock
@@ -375,6 +377,15 @@ GradeCraft::Application.routes.draw do
       get "predicted_earned_grades", to: "predicted_earned_grades#index"
     end
   end
+
+  17b. Predictor, Student View
+  get "predictor" => "students#predictor"
+  get "predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
+  get "predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
+
+  #17c. Predictor, Instructor View
+  get "students/:id/predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
+  get "students/:id/predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
   #18. Exports
   resources :exports

@@ -94,7 +94,9 @@ class Submission < ActiveRecord::Base
 
   # build a sensible base filename for all files that are attached to this submission
   def base_filename
-    Formatter::Filename.titleize "#{student.full_name} - #{assignment.name}"
+    [student.full_name, assignment.name].collect do |part|
+      Formatter::Filename.titleize part
+    end.compact.join " - "
   end
 
   def has_multiple_components?
