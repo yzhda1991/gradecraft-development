@@ -26,6 +26,10 @@ module S3Manager
       bucket.object(s3_object_file_key)
     end
 
+    def stream_s3_object
+      s3_object.body.read
+    end
+
     def delete_from_s3
       s3_object.delete
     end
