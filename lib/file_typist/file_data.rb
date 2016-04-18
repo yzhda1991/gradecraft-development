@@ -1,4 +1,4 @@
-module FileDetective
+module FileTypist
   class FileData
     def initialize(filepath)
     end

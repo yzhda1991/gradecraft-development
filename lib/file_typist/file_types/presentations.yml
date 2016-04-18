@@ -1,0 +1,110 @@
+- name: GSLIDES
+  extensions:
+    - gslides
+  description: Google Drive Presentation
+
+- name: KEY, KEYNOTE
+  extensions:
+    - key
+    - keynote
+  description: Apple Keynote Presentation
+
+- name: NB
+  extensions:
+    - nb
+  description: Mathematica Slideshow
+
+- name: NBP
+  extensions:
+    - nbp
+  description: Mathematica Player slideshow
+
+- name: ODP
+  extensions:
+    - odp
+  description: OpenDocument Presentation
+
+- name: OTP
+  extensions:
+    - otp
+  description: OpenDocument Presentation template
+
+- name: PEZ
+  extensions:
+    - pez
+  description: Prezi Desktop Presentation
+
+- name: POT
+  extensions:
+    - pot
+  description: Microsoft PowerPoint template
+
+- name: PPS
+  extensions:
+    - pps
+  description: Microsoft PowerPoint Show
+
+- name: PPT
+  extensions:
+    - ppt
+  description: Microsoft PowerPoint Presentation
+
+- name: PPTX
+  extensions:
+    - pptx
+  description: Office Open XML Presentation
+
+- name: PRZ
+  extensions:
+    - prz
+  description: Lotus Freelance Graphics
+
+- name: SDD
+  extensions:
+    - sdd
+  description: StarOffice's StarImpress
+
+- name: SHF
+  extensions:
+    - shf
+  description: ThinkFree Show
+
+- name: SHOW
+  extensions:
+    - show
+  description: Haansoft(Hancom) Presentation software document
+
+- name: SHW
+  extensions:
+    - shw
+  description: Corel Presentations slide show creation
+
+- name: SLP
+  extensions:
+    - slp
+  description: Logix-4D Manager Show Control Project
+
+- name: SSPSS
+  extensions:
+    - sspss
+  description: SongShow Plus Slide Show
+
+- name: STI
+  extensions:
+    - sti
+  description: OpenOffice.org XML (obsolete) Presentation template
+
+- name: SXI
+  extensions:
+    - sxi
+  description: OpenOffice.org XML (obsolete) Presentation
+
+- name: THMX
+  extensions:
+    - thmx
+  description: Microsoft PowerPoint theme template
+
+- name: WATCH
+  extensions:
+    - watch
+  description: Dataton Watchout Presentation
