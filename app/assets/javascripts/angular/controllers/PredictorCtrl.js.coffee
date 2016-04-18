@@ -65,7 +65,7 @@
   $scope.articleNoPoints = (assignment)->
     if assignment.pass_fail && assignment.grade.pass_fail_status != "Pass"
       return true
-    else if assignment.grade.score == null || assignment.grade.score == 0
+    else if assignment.grade.score == null || assignment.grade.score == 0 || assignment.grade.is_excluded
       return true
     else if $scope.predictionBelowThreshold(assignment)
       return true
@@ -124,7 +124,8 @@
     _.each(assignments, (assignment)->
       # use raw score to keep weighting calculation on assignment type level
       if assignment.grade.final_points != null
-        total += assignment.grade.final_points
+        if ! assignment.grade.is_excluded
+          total += assignment.grade.final_points
       else if ! assignment.pass_fail && ! assignment.closed_without_sumbission && includePredicted
         total += assignment.grade.predicted_score
     )

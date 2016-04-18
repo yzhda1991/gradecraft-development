@@ -49,7 +49,8 @@
     instructor_modified: false,
     status: nil,
     predicted_score: -> { 0 },
-    feedback: nil
+    feedback: nil,
+    excluded_from_course_score: false
   },
   assignment_score_levels: false,
   rubric: false,
@@ -502,6 +503,29 @@
   }
 }
 
+@assignments[:predictor_with_excluded_grade_assignment] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :predictor,
+  attributes: {
+    name: "Excluded Grade Assignment",
+    description: "Points displayed with exclusion message and stying, points not added to total",
+    due_at: 1.week.ago,
+    point_total: 15000,
+    points_predictor_display: "Slider",
+  },
+  grades: true,
+  grade_attributes: {
+    instructor_modified: true,
+    predicted_score: -> { rand(15000) },
+    status: "Graded",
+    excluded_from_course_score: true,
+    instructor_modified: true
+  }
+}
+
+
 @assignments[:predictor_past_assignment] = {
   quotes: {
     assignment_created: nil,
@@ -935,13 +959,11 @@
   }
 }
 
-
 #------------------------------------------------------------------------------#
 
 #                        Unlock Assignment Type
 
 #------------------------------------------------------------------------------#
-
 
 @assignments[:badge_is_an_unlock] = {
   quotes: {
