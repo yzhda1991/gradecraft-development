@@ -1,0 +1,349 @@
+- name: 3DM
+  extensions:
+    - 3dm
+  description: penNURBS Initiative 3D Model (used by Rhinoceros 3D) (.3dm)
+
+- name: 3MF
+  extensions:
+    - 3mf
+  description: Microsoft 3D Manufacturing Format (.3mf)
+
+- name: 3DS
+  extensions:
+    - 3ds
+  description: Legacy 3D Studio Model (.3ds)
+
+- name: ABC
+  extensions:
+    - abc
+  description: Alembic (computer graphics)
+
+- name: AC
+  extensions:
+    - ac
+  description: AC3D Model (.ac)
+
+- name: AMF
+  extensions:
+    - amf
+  description: Additive Manufacturing File Format
+
+- name: AN8
+  extensions:
+    - an8
+  description: Anim8or Model (.an8)
+
+- name: AOI
+  extensions:
+    - aoi
+  description: Art of Illusion Model (.aoi)
+
+- name: ASM
+  extensions:
+    - asm
+  description: PTC Creo assembly (.asm)
+
+- name: B3D
+  extensions:
+    - b3d
+  description: Blitz3D Model (.b3d)
+
+- name: BLEND
+  extensions:
+    - blend
+  description: Blender (.blend)
+
+- name: BLOCK
+  extensions:
+    - block
+  description: Blender encrypted blend files (.block)
+
+- name: C4D
+  extensions:
+    - c4d
+  description: Cinema 4D (.c4d)
+
+- name: Cal3D
+  extensions:
+    - cal3d
+  description: Cal3D (.cal3d)
+
+- name: CCP4
+  extensions:
+    - ccp4
+  description: X-ray crystallography voxels (electron density)
+
+- name: CFL
+  extensions:
+    - cfl
+  description: Compressed File Library (.cfl)
+
+- name: COB
+  extensions:
+    - cob
+  description: Caligari Object (.cob)
+
+- name: CORE3D
+  extensions:
+    - core3d
+  description: Coreona 3D Coreona 3D Virtual File(.core3d)
+
+- name: CTM
+  extensions:
+    - ctm
+  description: OpenCTM (.ctm)
+
+- name: DAE
+  extensions:
+    - dae
+  description: COLLADA (.dae)
+
+- name: DFF
+  extensions:
+    - dff
+  description: RenderWare binary stream, commonly used by Grand Theft Auto III-era games as well as other RenderWare titles
+
+- name: DPM
+  extensions:
+    - dpm
+  description: deepMesh (.dpm)
+
+- name: DTS
+  extensions:
+    - dts
+  description: Torque Game Engine (.dts)
+
+- name: EGG
+  extensions:
+    - egg
+  description: Panda3D Engine
+
+- name: FACT
+  extensions:
+    - fact
+  description: Electric Image (.fac)
+
+- name: FBX
+  extensions:
+    - fbx
+  description: Autodesk FBX (.fbx)
+
+- name: G
+  extensions:
+    - x
+  description: BRL-CAD geometry (.g)
+
+- name: GLM
+  extensions:
+    - glm
+  description: Ghoul Mesh (.glm)
+
+- name: IOB
+  extensions:
+    - iob
+  description: Imagine (3D modeling software) (.iob)
+
+- name: JAS
+  extensions:
+    - jas
+  description: Cheetah 3D file (.jas)
+
+- name: LWO
+  extensions:
+    - lwo
+  description: Lightwave Object (.lwo)
+
+- name: LWS
+  extensions:
+    - lws
+  description: Lightwave Scene (.lws)
+
+- name: LXO
+  extensions:
+    - lxo
+  description: Luxology Modo (software) file (.lxo)
+
+- name: MA
+  extensions:
+    - ma
+  description: Autodesk Maya ASCII File (.ma)
+
+- name: MAX
+  extensions:
+    - max
+  description: Autodesk 3D Studio Max file (.max)
+
+- name: MB
+  extensions:
+    - mb
+  description: Autodesk Maya Binary File (.mb)
+
+- name: MD2
+  extensions:
+    - md2
+  description: Quake 2 model format (.md2)
+
+- name: MD3
+  extensions:
+    - md3
+  description: Quake 3 model format (.md3)
+
+- name: MDX
+  extensions:
+    - mdx
+  description: Blizzard Entertainment's own model format (.mdx)
+
+- name: MESH
+  extensions:
+    - m
+  description: New York University(.m)
+
+- name: MESH
+  extensions:
+    - mesh
+  description: Meshwork Model (.mesh)
+
+- name: MM3D
+  extensions:
+    - mm3d
+  description: Misfit Model 3d (.mm3d)
+
+- name: MPO
+  extensions:
+    - mpo
+  description: Multi-Picture Object — This JPEG standard is used for 3d images, as with the Nintendo 3DS
+
+- name: MRC
+  extensions:
+    - mrc
+  description: voxels in cryo-electron microscopy
+
+- name: NIF
+  extensions:
+    - nif
+  description: Gamebryo NetImmerse File (.nif)
+
+- name: OBJ
+  extensions:
+    - obj
+  description: Wavefront .obj file (.obj)
+
+- name: OFF
+  extensions:
+    - off
+  description: OFF Object file format (.off)
+
+- name: OGEX
+  extensions:
+    - ogex
+  description: Open Game Engine Exchange (OpenGEX) format (.ogex)
+
+- name: PLY
+  extensions:
+    - ply
+  description: Polygon File Format / Stanford Triangle Format (.ply)
+
+- name: PRC
+  extensions:
+    - prc
+  description: Adobe PRC (embedded in PDF files)
+
+- name: PRT
+  extensions:
+    - prt
+  description: PTC Creo part (.prt)
+
+- name: POV
+  extensions:
+    - pov
+  description: POV-Ray document (.pov)
+
+- name: R3D
+  extensions:
+    - r3d
+  description: Realsoft 3D (Real-3D) (.r3d)
+
+- name: RWX
+  extensions:
+    - rwx
+  description: RenderWare Object (.rwx)
+
+- name: SIA
+  extensions:
+    - sia
+  description: Nevercenter Silo Object (.sia)
+
+- name: SIB
+  extensions:
+    - sib
+  description: Nevercenter Silo Object (.sib)
+
+- name: SKP
+  extensions:
+    - skp
+  description: Google Sketchup file (.skp)
+
+- name: SLDASM
+  extensions:
+    - sldasm
+  description: SolidWorks Assembly Document (.sldasm)
+
+- name: SLDPRT
+  extensions:
+    - sldprt
+  description: SolidWorks Part Document (.sldprt)
+
+- name: SMD
+  extensions:
+    - smd
+  description: Valve Studiomdl Data format. (.smd)
+
+- name: U3D
+  extensions:
+    - u3d
+  description: Universal 3D file format (.u3d)
+
+- name: VIM
+  extensions:
+    - vimproj
+  description: Revizto visual information model format (.vimproj)
+
+- name: VRML97
+  extensions:
+    - wrl
+  description: VRML Virtual reality modeling language (.wrl)
+
+- name: VUE
+  extensions:
+    - vue
+  description: Vue scene file (.vue)
+
+- name: VWX
+  extensions:
+    - vwx
+  description: Vectorworks (.vwx)
+
+- name: WING
+  extensions:
+    - wings
+  description: Wings3D (.wings)
+
+- name: W3D
+  extensions:
+    - w3d
+  description: Westwood 3D Model (.w3d)
+
+- name: X
+  extensions:
+    - x
+  description: DirectX 3D Model (.x)
+
+- name: X3D
+  extensions:
+    - x3d
+  description: Extensible 3D (.x3d)
+
+- name: Z3D
+  extensions:
+    - z3d
+  description: Zmodeler (.z3d)

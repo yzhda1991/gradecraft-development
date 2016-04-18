@@ -1,0 +1,337 @@
+
+- name: ASE
+  extensions:
+    - ase
+  description: Adobe Swatch
+
+- name: ART
+  extensions:
+    - art
+  description: America Online proprietary format
+
+- name: BLP
+  extensions:
+    - blp
+  description: Blizzard Entertainment proprietary texture format
+
+- name: BMP
+  extensions:
+    - bmp
+  description: Microsoft Windows Bitmap formatted image
+
+- name: CD5
+  extensions:
+    - cd5
+  description: Chasys Draw IES image
+
+- name: CIT
+  extensions:
+    - cit
+  description: Intergraph is a monochrome bitmap format
+
+- name: CPT
+  extensions:
+    - cpt
+  description: Corel PHOTO-PAINT image
+
+- name: CR2
+  extensions:
+    - cr2
+  description: Canon camera raw format. Photos will have this format on some Canon cameras if the quality "RAW" is selected in camera settings.
+
+- name: CUT
+  extensions:
+    - cut
+  description: Dr. Halo image file
+
+- name: DDS
+  extensions:
+    - dds
+  description: DirectX texture file
+
+- name: DIB
+  extensions:
+    - dib
+  description: Device-Independent Bitmap graphic
+
+- name: DjVu
+  extensions:
+    - djvu
+  description: DjVu for scanned documents
+
+- name: EGT
+  extensions:
+    - egt
+  description: EGT Universal Document, used in EGT SmartSense to compress PNG files to yet a smaller file
+
+- name: Exif
+  extensions:
+    - exif
+  description: Exchangeable image file format (Exif) is a specification for the image file format used by digital cameras
+
+- name: GIF
+  extensions:
+    - gif
+  description: CompuServe's Graphics Interchange Format
+
+- name: GPL
+  extensions:
+    - gpl
+  description: GIMP Palette, using a textual representation of color names and RGB values
+
+- name: GRF
+  extensions:
+    - grf
+  description: Zebra Technologies proprietary format
+
+- name: ICNS
+  extensions:
+    - icns
+  description: file format use for icons in Mac OS X. Contains bitmap images at multiple resolutions and bitdepths with alpha channel.
+
+- name: ICO
+  extensions:
+    - ico
+  description: a file format used for icons in Microsoft Windows. Contains small bitmap images at multiple resolutions and sizes.
+
+- name: IFF
+  extensions:
+    - iff
+    - ilbm
+    - lbm
+  description: ILBM
+
+- name: JNG
+  extensions:
+    - jng
+  description: a single-frame MNG using JPEG compression and possibly an alpha channel.
+
+- name: JPEG, JFIF
+  extensions:
+    - jpg
+    - jpeg
+  description: Joint Photographic Experts Group — a lossy image format widely used to display photographic images.
+
+- name: JP2
+  extensions:
+    - jp2
+  description: JPEG2000
+
+- name: JPS
+  extensions:
+    - jps
+  description: JPEG Stereo
+
+- name: LBM
+  extensions:
+    - lbm
+  description: Deluxe Paint image file
+
+- name: MAX
+  extensions:
+    - max
+  description: ScanSoft PaperPort document
+
+- name: MIFF
+  extensions:
+    - miff
+  description: ImageMagick's native file format
+
+- name: MNG
+  extensions:
+    - mng
+  description: Multiple Network Graphics, the animated version of PNG
+
+- name: MSP
+  extensions:
+    - msp
+  description: a file format used by old versions of Microsoft Paint. Replaced with BMP in Microsoft Windows 3.0
+
+- name: NITF
+  extensions:
+    - nitf
+  description: A U.S. Government standard commonly used in Intelligence systems
+
+- name: OTB
+  description: Over The Air bitmap, a specification designed by Nokia for black and white images for mobile phones
+  extensions:
+    - otb
+
+- name: PBM
+  extensions:
+    - pbm
+  description: Portable bitmap
+
+- name: PC1
+  extensions:
+    - pc1
+  description: Low resolution, compressed Degas picture file
+
+- name: PC2
+  extensions:
+    - pc2
+  description: Medium resolution, compressed Degas picture file
+
+- name: PC3
+  extensions:
+    - pc3
+  description: High resolution, compressed Degas picture file
+
+- name: PCF
+  extensions:
+    - pcf
+  description: Pixel Coordination Format
+
+- name: PCX
+  extensions:
+    - pcx
+  description: a lossless format used by ZSoft's PC Paint, popular at one time on DOS systems.
+
+- name: PDN
+  extensions:
+    - pdn
+  description: Paint.NET image file
+
+- name: PGM
+  extensions:
+    - pgm
+  description: Portable graymap
+
+- name: PI1
+  extensions:
+    - pi1
+  description: Low resolution, uncompressed Degas picture file
+
+- name: PI2
+  extensions:
+    - pi2
+  description: Medium resolution, uncompressed Degas picture file. Also Portrait Innovations encrypted image format.
+
+- name: PI3
+  extensions:
+    - pi3
+  description: High resolution, uncompressed Degas picture file
+
+- name: PICT, PCT
+  extensions:
+    - pict
+    - pct
+  description: Apple Macintosh PICT image
+
+- name: PNG
+  extensions:
+    - png
+  description: Portable Network Graphic (lossless, recommended for display and edition of graphic images)
+
+- name: PNM
+  extensions:
+    - pnm
+  description: Portable anymap graphic bitmap image
+
+- name: PNS
+  extensions:
+    - pns
+  description: PNG Stereo
+
+- name: PPM
+  extensions:
+    - ppm
+  description: Portable Pixmap (Pixel Map) image
+
+- name: PSB
+  extensions:
+    - psb
+  description: Adobe Photoshop Big image file (for large files)
+
+- name: PSD, PDD
+  extensions:
+    - psd
+    - pdd
+  description: Adobe Photoshop Drawing
+
+- name: PSP
+  extensions:
+    - psp
+  description: Paint Shop Pro image
+
+- name: PX
+  extensions:
+    - px
+  description: Pixel image editor image file
+
+- name: PXM
+  extensions:
+    - pxm
+  description: Pixelmator image file
+
+- name: PXR
+  extensions:
+    - pxr
+  description: Pixar Image Computer image file
+
+- name: QFX
+  extensions:
+    - qfx
+  description: QuickLink Fax image
+
+- name: RAW
+  extensions:
+    - raw
+  description: General term for minimally processed image data (acquired by a digital camera)
+
+- name: RLE
+  extensions:
+    - rle
+  description: a run-length encoded image
+
+- name: SCT
+  extensions:
+    - sct
+  description: Scitex Continuous Tone image file
+
+- name: SGI
+  extensions:
+    - sgi, RGB, INT, BW
+  description: Silicon Graphics Image
+
+- name: TGA
+  extensions:
+    - tga
+    - targa
+    - icb
+    - vda
+    - vst
+    - pix
+  description: Truevision TGA (Targa) image
+
+- name: TIFF
+  extensions:
+    - tif
+    - tiff
+  description: Tagged Image File Format (usually lossless, but many variants exist, including lossy ones)
+
+- name: TIFF/EP
+  extensions:
+    - tif
+    - tiff
+  description: ISO 12234-2; tends to be used as a basis for other formats rather than in its own right.
+
+- name: VTF
+  extensions:
+    - vtf
+  description: Valve Texture Format
+
+- name: XBM
+  extensions:
+    - xbm
+  description: X Window System Bitmap
+
+- name: XCF
+  extensions:
+    - xcf
+  description: GIMP image (from Gimp's origin at the eXperimental Computing Facility of the University of California)
+
+- name: XPM
+  extensions:
+    - xpm
+  description: X Window System Pixmap
