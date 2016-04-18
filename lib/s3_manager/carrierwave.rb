@@ -17,9 +17,8 @@ module S3Manager
     include S3Manager::Basics
 
     def url
-      if s3_object
-        s3_object.presigned_url(:get, expires_in: 900).to_s
-      end
+      return nil unless s3_object
+      s3_object.presigned_url(:get, expires_in: 900).to_s
     end
 
     def s3_object
@@ -27,9 +26,13 @@ module S3Manager
     end
 
     def stream_s3_object
-      streamable_object = get_object(s3_object_file_key)
-      return nil unless streamable_object
-      streamable_object.body.read
+      object = get_object(s3_object_file_key)
+      mark_missing and return nil unless object && object.body
+      object.body.read
+    end
+
+    def mark_missing
+      update_attributes file_missing: true
     end
 
     def delete_from_s3
