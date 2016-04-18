@@ -359,3 +359,47 @@ ul.subnav.logged-out
 
 .noscroll
   overflow: hidden
+
+#course-info-btn
+  text-decoration: none
+  position: relative
+  color: $color-blue-4
+  &:hover
+    text-decoration: none
+.course-info-card
+  display: none
+  position: absolute
+  top: 3.1em
+  right: -12em
+  font-weight: 300
+  background-color: $color-white
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)
+  width: 400px
+  padding: 1em
+  & > li
+    list-style: none
+    padding: .25em 0em
+    & > a
+      padding: 0em
+
+.course-info-card:after, 
+.course-info-card:before
+  bottom: 100%
+  left: 50%
+  border: solid transparent
+  content: " "
+  height: 0
+  width: 0
+  position: absolute
+  pointer-events: none
+
+.course-info-card:after
+  border-color: rgba(255, 255, 255, 0)
+  border-bottom-color: $color-white
+  border-width: 12px
+  margin-left: -12px
+
+.course-info-card:before 
+  border-color: rgba(238, 238, 238, 0)
+  border-width: 20px
+  margin-left: -20px
