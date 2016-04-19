@@ -138,13 +138,6 @@ class AssignmentsController < ApplicationController
     end
   end
 
-  def export_grades
-    assignment = current_course.assignments.find(params[:id])
-    respond_to do |format|
-      format.csv { send_data GradeExporter.new.export_grades_with_detail assignment, assignment.course.students }
-    end
-  end
-
   private
 
   def set_assignment_weights(assignment)

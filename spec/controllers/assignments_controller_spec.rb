@@ -233,17 +233,6 @@ describe AssignmentsController do
         end
       end
     end
-
-    describe "GET export_grades" do
-      context "with CSV format" do
-        it "returns sample csv data" do
-          grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
-          submission = create(:submission, grade: grade, student: @student, assignment: @assignment)
-          get :export_grades, id: @assignment, format: :csv
-          expect(response.body).to include("First Name,Last Name,Email,Score,Feedback,Raw Score,Statement")
-        end
-      end
-    end
   end
 
   context "as a student" do
@@ -381,7 +370,6 @@ describe AssignmentsController do
         :edit,
         :update,
         :destroy,
-        :export_grades,
         :download_current_grades,
         :update_rubrics,
         :criterion_grades_review

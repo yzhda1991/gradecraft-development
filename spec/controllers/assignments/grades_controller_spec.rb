@@ -20,6 +20,16 @@ describe Assignments::GradesController do
     end
     before (:each) { login_user(@professor) }
 
+    describe "GET export" do
+      it "returns sample csv data" do
+        submission = create(:submission, grade: @grade, student: @student,
+                            assignment: @assignment)
+        get :export, assignment_id: @assignment, format: :csv
+        expect(response.body).to \
+          include("First Name,Last Name,Email,Score,Feedback,Raw Score,Statement")
+      end
+    end
+
     describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, assignment_id: @assignment.id
@@ -108,6 +118,12 @@ describe Assignments::GradesController do
     before do
       login_user(@student)
       allow(controller).to receive(:current_student).and_return(@student)
+    end
+
+    describe "GET export" do
+      it "redirects back to the root" do
+        get :export, assignment_id: @assignment, format: :csv
+      end
     end
 
     describe "GET mass_edit" do

@@ -24,7 +24,7 @@
           = glyph(:upload)
           Import Grades
       %li.hide-for-small
-        %a{:href => export_grades_assignment_path(presenter.assignment, format: "csv") }
+        %a{href: export_assignment_grades_path(presenter.assignment, format: :csv) }
           = glyph(:download)
           Download Grades
       %li.hide-for-small

@@ -1,6 +1,16 @@
 class Assignments::GradesController < ApplicationController
   before_filter :ensure_staff?
 
+  def export
+    assignment = current_course.assignments.find(params[:assignment_id])
+    respond_to do |format|
+      format.csv do
+        send_data GradeExporter.new.export_grades_with_detail assignment,
+          assignment.course.students
+      end
+    end
+  end
+
   # Quickly grading a single assignment for all students
   def mass_edit
     @assignment = current_course.assignments.find(params[:assignment_id])
