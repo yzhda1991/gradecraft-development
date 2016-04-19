@@ -37,6 +37,9 @@
                 %span.course_name= "#{current_course.name} "
                 %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
           %ul.nav.nav-pill.right
+            %li.course-info-btn
+              = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title"
+              %ul.course-info-card= render "layouts/navigation/class_info"
             = render "layouts/navigation/authenticated_nav"
         %nav.mobile-nav.hide-for-large
           %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
