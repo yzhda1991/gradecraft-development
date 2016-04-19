@@ -27,8 +27,8 @@ class Submission < ActiveRecord::Base
 
   scope :with_grade, -> do
     joins("INNER JOIN grades ON "\
-      "grades.group_id = submissions.group_id OR "\
-      "(grades.assignment_id = submissions.assignment_id AND "\
+      "grades.assignment_id = submissions.assignment_id AND "\
+      "(grades.group_id = submissions.group_id OR "\
       "grades.student_id = submissions.student_id)")
   end
 
