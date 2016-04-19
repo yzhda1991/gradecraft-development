@@ -76,25 +76,31 @@ class AssignmentsController < ApplicationController
     assignment = current_course.assignments.find(params[:id])
     if assignment.update_attributes(params[:assignment])
       set_assignment_weights(assignment)
-      redirect_to assignments_path, notice: "#{(term_for :assignment).titleize} #{assignment.name } successfully updated" and return
+      respond_to do |format|
+        format.html {
+          redirect_to assignments_path,
+            notice: "#{(term_for :assignment).titleize} #{assignment.name } "\
+            "successfully updated" and return
+        }
+        format.json { render json: assignment and return }
+      end
     end
 
-    @title = "Edit #{term_for :assignment}"
-    render :edit, AssignmentPresenter.build({
-      assignment: assignment,
-      course: current_course,
-      view_context: view_context
-      })
+    respond_to do |format|
+      format.html {
+        @title = "Edit #{term_for :assignment}"
+        render :edit, AssignmentPresenter.build({
+          assignment: assignment,
+          course: current_course,
+          view_context: view_context
+          })
+      }
+      format.json { render json: { errors: assignment.errors }, status: 400 }
+    end
   end
 
   def sort
     sort_position_for :assignment
-  end
-
-  def update_rubrics
-    assignment = current_course.assignments.find params[:id]
-    assignment.update_attributes use_rubric: params[:use_rubric]
-    redirect_to assignment_path(assignment)
   end
 
   # current student visible assignment

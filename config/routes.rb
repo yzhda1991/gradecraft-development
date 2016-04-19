@@ -75,20 +75,7 @@ GradeCraft::Application.routes.draw do
     end
 
     member do
-      #get "mass_grade" => "grades#mass_edit", as: :mass_grade
-      #put "mass_grade" => "grades#mass_update"
-      #get "group_grade" => "grades#group_edit", as: :group_grade
-      #put "group_grade" => "grades#group_update"
-      #get "export_grades"
-      #get "export_submissions"
       get "download_current_grades" => "assignments#download_current_grades"
-      #get "criterion_grades_review"
-      get "export_team_submissions"
-      get "submissions_export", defaults: {format: :json}
-      get "export_team_submissions"
-      get "grade_import" => "assignments#grade_import"
-      get "rubric_grades_review"
-      put :update_rubrics
       scope "grades", as: :grades, controller: :grades do
         get :edit_status
         put :update_status
