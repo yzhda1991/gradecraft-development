@@ -11,6 +11,19 @@ class Assignments::GradesController < ApplicationController
     end
   end
 
+  def index
+    assignment = current_course.assignments.find(params[:assignment_id])
+    redirect_to assignment_path(assignment) and return unless assignment.grade_with_rubric?
+
+    # TODO: This should not use an AssignmentPresenter
+    render :index, AssignmentPresenter.build({
+      assignment: assignment,
+      course: current_course,
+      team_id: params[:team_id],
+      view_context: view_context
+      })
+  end
+
   # Quickly grading a single assignment for all students
   def mass_edit
     @assignment = current_course.assignments.find(params[:assignment_id])

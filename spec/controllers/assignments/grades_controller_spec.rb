@@ -30,6 +30,14 @@ describe Assignments::GradesController do
       end
     end
 
+    describe "GET index" do
+      it "redirects to the assignments show view if the assigment is not a rubric" do
+        allow(@assignment).to receive(:grade_with_rubric?).and_return false
+        get :index, assignment_id: @assignment.id
+        expect(response).to redirect_to assignment_path(@assignment)
+      end
+    end
+
     describe "GET mass_edit" do
       it "assigns params" do
         get :mass_edit, assignment_id: @assignment.id
@@ -122,7 +130,15 @@ describe Assignments::GradesController do
 
     describe "GET export" do
       it "redirects back to the root" do
-        get :export, assignment_id: @assignment, format: :csv
+        expect(get :export, assignment_id: @assignment, format: :csv).to \
+          redirect_to(:root)
+      end
+    end
+
+    describe "GET index" do
+      it "redirects back to the root" do
+        expect(get :index, { assignment_id: @assignment }).to \
+          redirect_to(:root)
       end
     end
 

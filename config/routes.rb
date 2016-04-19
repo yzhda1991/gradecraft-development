@@ -63,8 +63,8 @@ GradeCraft::Application.routes.draw do
       get "weights" => "assignment_weights#mass_edit", as: :mass_edit_weights
     end
 
-    resources :grades, only: [], module: :assignments do
-      get :export, on: :collection # export_assignment_grades
+    resources :grades, only: [:index], module: :assignments do
+      get :export, on: :collection
       get :mass_edit, on: :collection
       put :mass_update, on: :collection
     end
@@ -80,9 +80,9 @@ GradeCraft::Application.routes.draw do
       #get "group_grade" => "grades#group_edit", as: :group_grade
       #put "group_grade" => "grades#group_update"
       #get "export_grades"
-      get "export_submissions"
+      #get "export_submissions"
       get "download_current_grades" => "assignments#download_current_grades"
-      get "criterion_grades_review"
+      #get "criterion_grades_review"
       get "export_team_submissions"
       get "submissions_export", defaults: {format: :json}
       get "export_team_submissions"

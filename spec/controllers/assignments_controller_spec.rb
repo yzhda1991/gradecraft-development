@@ -154,13 +154,6 @@ describe AssignmentsController do
       end
     end
 
-    describe "GET criterion_grades_review" do
-      it "renders the correct template" do
-        get :criterion_grades_review, id: @assignment
-        expect(response).to render_template(:criterion_grades_review)
-      end
-    end
-
     describe "GET predictor_data" do
       context "with a student id" do
         it "assigns the assignments with no call to update" do
@@ -371,9 +364,7 @@ describe AssignmentsController do
         :update,
         :destroy,
         :download_current_grades,
-        :update_rubrics,
-        :criterion_grades_review
-
+        :update_rubrics
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, {id: "1"}).to redirect_to(:root)
