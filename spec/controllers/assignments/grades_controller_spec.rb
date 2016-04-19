@@ -136,6 +136,13 @@ describe Assignments::GradesController do
       allow(controller).to receive(:current_student).and_return(@student)
     end
 
+    describe "GET download" do
+      it "redirects back to the root" do
+        expect(get :download, assignment_id: @assignment, format: :csv).to \
+          redirect_to(:root)
+      end
+    end
+
     describe "GET export" do
       it "redirects back to the root" do
         expect(get :export, assignment_id: @assignment, format: :csv).to \

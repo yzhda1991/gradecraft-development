@@ -352,8 +352,7 @@ describe AssignmentsController do
       [
         :edit,
         :update,
-        :destroy,
-        :download_current_grades
+        :destroy
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, {id: "1"}).to redirect_to(:root)
