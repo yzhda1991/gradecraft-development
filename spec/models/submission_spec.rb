@@ -194,6 +194,14 @@ describe Submission do
     it "handles additional parameters" do
       expect(subject.course.submissions.ungraded).to eq [subject]
     end
+
+    it "returns the group submissions that do not have a grade" do
+      group = create :group
+      create :grade, course: course, group: group, submission: subject,
+        status: "Graded"
+      subject.update_attributes group_id: group.id, student_id: nil
+      expect(Submission.ungraded).to eq [subject]
+    end
   end
 
   describe ".resubmitted" do
