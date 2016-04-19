@@ -1,0 +1,452 @@
+- name: 3dmlw
+  extensions:
+    - 3dmlw
+  description: (3D Markup Language for Web) files
+
+- name: 3dxml
+  extensions:
+    - 3dxml
+  description: Dassault Systemes graphic representation
+
+- name: 3MF
+  extensions:
+    - 3mf
+  description: Microsoft 3D Manufacturing Format[2]
+
+- name: ACP
+  extensions:
+    - acp
+  description: VA Software VA — Virtual Architecture CAD file
+
+- name: AMF
+  extensions:
+    - amf
+  description: Additive Manufacturing File Format
+
+- name: AEC
+  extensions:
+    - aec
+  description: DataCAD drawing format[3]
+
+- name: AR
+  extensions:
+    - ar
+  description: Ashlar-Vellum Argon — 3D Modeling
+
+- name: ART
+  extensions:
+    - art
+  description: ArtCAM model
+
+- name: ASC
+  extensions:
+    - asc
+  description: BRL-CAD Geometry File (old ASCII format)
+
+- name: ASM
+  extensions:
+    - asm
+  description: Solidedge Assembly, Pro/ENGINEER Assembly
+
+- name: BIN
+  extensions:
+    - bin, BIM
+  description: Data Design System DDS-CAD
+
+- name: BREP
+  extensions:
+    - brep
+  description: Open CASCADE 3D model (shape)
+
+- name: CCC
+  extensions:
+    - ccc
+  description: CopyCAD Curves
+
+- name: CCM
+  extensions:
+    - ccm
+  description: CopyCAD Model
+
+- name: CCS
+  extensions:
+    - ccs
+  description: CopyCAD Session
+
+- name: CAD
+  extensions:
+    - cad
+  description: CadStd
+
+- name: CATDrawing
+  extensions:
+    - catdrawing
+  description: CATIA V5 Drawing document
+
+- name: CATPart
+  extensions:
+    - catpart
+  description: CATIA V5 Part document
+
+- name: CATProduct
+  extensions:
+    - catproduct
+  description: CATIA V5 Assembly document
+
+- name: CATProcess
+  extensions:
+    - catprocess
+  description: CATIA V5 Manufacturing document
+
+- name: cgr
+  extensions:
+    - cgr
+  description: CATIA V5 graphic representation file
+
+- name: co
+  extensions:
+    - co
+  description: Ashlar-Vellum Cobalt — parametric drafting and 3D modeling
+
+- name: DRW
+  extensions:
+    - drw
+  description: Caddie Early version of Caddie drawing — Prior to Caddie changing to DWG
+
+- name: DFT
+  extensions:
+    - dft
+  description: Solidedge Draft
+
+- name: DGN
+  extensions:
+    - dgn
+  description: MicroStation design file
+
+- name: DGK
+  extensions:
+    - dgk
+  description: Delcam Geometry
+
+- name: DMT
+  extensions:
+    - dmt
+  description: Delcam Machining Triangles
+
+- name: DXF
+  extensions:
+    - dxf
+  description: ASCII Drawing Interchange file format — AutoCAD
+
+- name: DWB
+  extensions:
+    - dwb
+  description: VariCAD drawing file
+
+- name: DWF
+  extensions:
+    - dwf
+  description: Autodesk's Web Design Format; AutoCAD & Revit can publish to this format; similar in concept to PDF files; Autodesk Design Review is the reader
+
+- name: DWG
+  extensions:
+    - dwg
+  description: AutoCAD and Open Design Alliance applications, Autodesk Inventor Drawing file
+
+- name: EASM
+  extensions:
+    - easm
+  description: SolidWorks eDrawings assembly file
+
+- name: EDRW
+  extensions:
+    - edrw
+  description: eDrawings drawing file
+
+- name: EMB
+  extensions:
+    - emb
+  description: Wilcom ES Designer Embroidery CAD file
+
+- name: EPRT
+  extensions:
+    - eprt
+  description: eDrawings part file
+
+- name: EscPcb
+  extensions:
+    - escpcb
+  description: "esCAD pcb" EsCAD.pngEsCAD pcb.png data file by Electro-System Japan.pngElectro-System (Japan)
+
+- name: EscSch
+  extensions:
+    - escsch
+  description: "esCAD sch" EsCAD.pngEsCAD sch.png data file by Electro-System Japan.pngElectro-System (Japan)
+
+- name: ESW
+  extensions:
+    - esw
+  description: AGTEK format
+
+- name: EXCELLON
+  extensions:
+    - excellon
+  description: Excellon file
+
+- name: EXP
+  extensions:
+    - exp
+  description: Drawing Express file format
+
+- name: fm
+  extensions:
+    - FM
+  description: FeatureCAM Part File
+
+- name: FMZ
+  extensions:
+    - fmz
+  description: FormZ Project file
+
+- name: G
+  extensions:
+    - g
+  description: BRL-CAD Geometry File
+
+- name: GBR
+  extensions:
+    - gbr
+  description: Gerber file
+
+- name: GLM
+  extensions:
+    - glm
+  description: KernelCAD model
+
+- name: GRB
+  extensions:
+    - grb
+  description: T-FLEX CAD File
+
+- name: GTC
+  extensions:
+    - gtc
+  description: GRAITEC Advance file format
+
+- name: IAM
+  extensions:
+    - iam
+  description: Autodesk Inventor Assembly file
+
+- name: ICD
+  extensions:
+    - icd
+  description: IronCAD 2D CAD file
+
+- name: IDW
+  extensions:
+    - idw
+  description: Autodesk Inventor Drawing file
+
+- name: IFC
+  extensions:
+    - ifc
+  description: buildingSMART for sharing AEC and FM data
+
+- name: IGES
+  extensions:
+    - iges
+  description: Initial Graphics Exchange Specification
+
+- name: Intergraph
+  extensions:
+    - intergraph's Intergraph Standard File Formats
+
+- name: IPN
+  extensions:
+    - ipn
+  description: Autodesk Inventor Presentation file
+
+- name: IPT
+  extensions:
+    - ipt
+  description: Autodesk Inventor Part file
+
+- name: JT
+  extensions:
+    - jt
+  description: Jupiter Tesselation
+
+- name: MCD
+  extensions:
+    - mcd
+  description: Monu-CAD (Monument/Headstone Drawing file)
+
+- name: model
+  extensions:
+    - model
+  description: CATIA V4 part document
+
+- name: OCD
+  extensions:
+    - ocd
+  description: Orienteering Computer Aided Design (OCAD) file
+
+- name: PAR
+  extensions:
+    - par
+  description: Solidedge Part
+
+- name: PIPE
+  extensions:
+    - pipe
+  description: PIPE-FLO Professional Piping system design file
+
+- name: PLN
+  extensions:
+    - pln
+  description: ArchiCad project
+
+- name: PRT
+  extensions:
+    - prt
+  description: NX (recently known as Unigraphics), Pro/ENGINEER Part, CADKEY Part
+
+- name: PSM
+  extensions:
+    - psm
+  description: Solidedge Sheet
+
+- name: PSMODEL
+  extensions:
+    - psmodel
+  description: PowerSHAPE Model
+
+- name: PWI
+  extensions:
+    - pwi
+  description: PowerINSPECT File
+
+- name: PYT
+  extensions:
+    - pyt
+  description: Pythagoras File
+
+- name: SKP
+  extensions:
+    - skp
+  description: SketchUp Model
+
+- name: RLF
+  extensions:
+    - rlf
+  description: ArtCAM Relief
+
+- name: RVM
+  extensions:
+    - rvm
+  description: AVEVA PDMS 3D Review model
+
+- name: RVT
+  extensions:
+    - rvt
+  description: Autodesk Revit project files
+
+- name: RFA
+  extensions:
+    - rfa
+  description: Autodesk Revit family files
+
+- name: S12
+  extensions:
+    - s12
+  description: Spirit file, by Softtech
+
+- name: SCAD
+  extensions:
+    - scad
+  description: OpenSCAD 3D part model
+
+- name: SCDOC
+  extensions:
+    - scdoc
+  description: SpaceClaim 3D Part/Assembly
+
+- name: SLDASM
+  extensions:
+    - sldasm
+  description: SolidWorks Assembly drawing
+
+- name: SLDDRW
+  extensions:
+    - slddrw
+  description: SolidWorks 2D drawing
+
+- name: SLDPRT
+  extensions:
+    - sldprt
+  description: SolidWorks 3D part model
+
+- name: Softimage
+  extensions:
+    - softimage's dotXSI
+
+- name: STEP
+  extensions:
+    - step
+  description: Standard for the Exchange of Product model data
+
+- name: STL
+  extensions:
+    - stl
+  description: Stereo Lithographic data format used by various CAD systems and stereo lithographic printing machines.
+
+- name: TCT
+  extensions:
+    - tct
+  description: TurboCAD drawing template
+
+- name: TCW
+  extensions:
+    - tcw
+  description: TurboCAD for Windows 2D and 3D drawing
+
+- name: UNV
+  extensions:
+    - unv
+  description: I-DEAS I-DEAS (Integrated Design and Engineering Analysis Software)
+
+- name: VC6
+  extensions:
+    - vc6
+  description: Ashlar-Vellum Graphite — 2D and 3D drafting
+
+- name: VLM
+  extensions:
+    - vlm
+  description: Ashlar-Vellum Vellum, Vellum 2D, Vellum Draft, Vellum 3D, DrawingBoard
+
+- name: VS
+  extensions:
+    - vs
+  description: Ashlar-Vellum Vellum Solids
+
+- name: WRL
+  extensions:
+    - wrl
+  description: Similar to STL, but includes color. Used by various CAD systems and 3D printing rapid prototyping machines. Also used for VRML models on the web.
+
+- name: X_B
+  extensions:
+    - x_b
+  description: Parasolids binary format.
+
+- name: X_T
+  extensions:
+    - x_t
+  description: Parasolids
+
+- name: xe
+  extensions:
+    - xe
+  description: Ashlar-Vellum Xenon — for Associative 3D Modeling
