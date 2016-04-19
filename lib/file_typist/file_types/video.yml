@@ -1,0 +1,170 @@
+- name: AAF
+  extensions:
+    - aaf
+  description: mostly intended to hold edit decisions and rendering information, but can also contain compressed media essence
+
+- name: 3GP
+  extensions:
+    - 3gp
+  description: the most common video format for cell phones
+
+- name: GIF
+  extensions:
+    - gif
+  description: Animated GIF (simple animation; until recently often avoided because of patent problems)
+
+- name: ASF
+  extensions:
+    - asf
+  description: container (enables any form of compression to be used; MPEG-4 is common; video in ASF-containers is also called Windows Media Video (WMV))
+
+- name: AVCHD
+  extensions:
+    - avchd
+  description: Advanced Video Codec High Definition
+
+- name: AVI
+  extensions:
+    - avi
+  description: container (a shell, which enables any form of compression to be used)
+
+- name: CAM
+  extensions:
+    - cam
+  description: aMSN webcam log file
+
+- name: DAT
+  extensions:
+    - dat
+  description: video standard data file (automatically created when we attempted to burn as video file on the CD)
+
+- name: DSH
+  extensions:
+    - dsh
+
+- name: DVR-MS
+  extensions:
+    - dvr-ms
+  description: Windows XP Media Center Edition's Windows Media Center recorded television format
+
+- name: FLV
+  extensions:
+    - flv
+  description: Flash video (encoded to run in a flash animation)
+
+- name: M1V (MPEG-1)
+  extensions:
+    - m1v 
+  description: MPEG-1 Video
+
+- name: M2V (MPEG-2)
+  extensions:
+    - m2v
+  description: MPEG-2 Video
+
+- name: FLA
+  extensions:
+    - fla
+  description: Macromedia Flash (for producing)
+
+- name: FLR
+  extensions:
+    - flr
+  description: (text file which contains scripts extracted from SWF by a free ActionScript decompiler named FLARE)
+
+- name: SOL
+  extensions:
+    - sol
+  description: Adobe Flash shared object ("Flash cookie")
+
+- name: M4V
+  extensions:
+    - m4v
+  description: (file format for videos for iPods and PlayStation Portables developed by Apple)
+
+- name: Matroska
+  extensions:
+    - matroska
+    - mkv
+  description: Matroska is a container format, which enables any video format such as MPEG-4 ASP or AVC to be used along with other content such as subtitles and detailed meta information
+
+- name: WRAP
+  extensions:
+    - wrap
+  description: MediaForge
+
+- name: MNG
+  extensions:
+    - mng
+  description: mainly simple animation containing PNG and JPEG objects, often somewhat more complex than animated GIF
+
+- name: QuickTime
+  extensions:
+    - quicktime
+    - mov
+  description: container which enables any form of compression to be used; Sorenson codec is the most common; QTCH is the filetype for cached video and audio streams
+
+- name: MPEG
+  extensions:
+    - mpeg
+    - mpg
+    - mpe
+
+- name: MPEG-4
+  extensions:
+    - mp4
+  description: multimedia container (most often used for Sony's PlayStation Portable and Apple's iPod)
+
+- name: MXF
+  extensions:
+    - mxf
+  description: Material Exchange Format (standardized wrapper format for audio/visual material developed by SMPTE)
+
+- name: ROQ
+  extensions:
+    - roq
+  description: used by Quake 3
+
+- name: NSV
+  extensions:
+    - nsv
+  description: Nullsoft Streaming Video (media container designed for streaming video content over the Internet)
+
+- name: Ogg
+  extensions:
+    - ogg
+  description: container, multimedia
+
+- name: RM
+  extensions:
+    - rm
+  description: RealMedia
+
+- name: SVI
+  extensions:
+    - svi
+  description: Samsung video format for portable players
+
+- name: SMI
+  extensions:
+    - smi
+  description: SAMI Caption file (HTML like subtitle for movie files)
+
+- name: SWF
+  extensions:
+    - swf
+  description: Macromedia Flash (for viewing)
+
+- name: WMV
+  extensions:
+    - wmv
+  description: Windows Media Video (See ASF)
+
+- name: WTV
+  extensions:
+    - wtv
+  description: Windows Vista's and up Windows Media Center recorded television format
+- name: YUV
+  extensions:
+    - yuv
+  description: Raw video format - Resolution (horizontal x vertical)and Sample structure 4:2:2 or 4:2:0 need to be known explicitly
