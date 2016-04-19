@@ -64,9 +64,12 @@ GradeCraft::Application.routes.draw do
     end
 
     resources :grades, only: [:index], module: :assignments do
-      get :export, on: :collection
-      get :mass_edit, on: :collection
-      put :mass_update, on: :collection
+      collection do
+        get :download
+        get :export
+        get :mass_edit
+        put :mass_update
+      end
     end
 
     resources :groups, only: [], module: :assignments do
@@ -75,7 +78,6 @@ GradeCraft::Application.routes.draw do
     end
 
     member do
-      get "download_current_grades" => "assignments#download_current_grades"
       scope "grades", as: :grades, controller: :grades do
         get :edit_status
         put :update_status

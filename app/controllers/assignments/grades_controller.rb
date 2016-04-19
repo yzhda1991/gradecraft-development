@@ -1,6 +1,16 @@
 class Assignments::GradesController < ApplicationController
   before_filter :ensure_staff?
 
+  def download
+    assignment = current_course.assignments.find(params[:assignment_id])
+    respond_to do |format|
+      format.csv {
+        send_data GradeExporter.new
+          .export_grades(assignment, current_course.students)
+      }
+    end
+  end
+
   def export
     assignment = current_course.assignments.find(params[:assignment_id])
     respond_to do |format|

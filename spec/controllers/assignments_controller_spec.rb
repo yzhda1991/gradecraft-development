@@ -216,15 +216,6 @@ describe AssignmentsController do
         expect{ get :destroy, id: @assignment }.to change(Assignment,:count).by(-1)
       end
     end
-
-    describe "GET download_current_grades" do
-      context "with CSV format" do
-        it "returns sample csv data" do
-          get :download_current_grades, id: @assignment, format: :csv
-          expect(response.body).to include("First Name,Last Name,Email,Score,Feedback")
-        end
-      end
-    end
   end
 
   context "as a student" do

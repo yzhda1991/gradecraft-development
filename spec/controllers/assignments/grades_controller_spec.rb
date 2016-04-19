@@ -20,6 +20,14 @@ describe Assignments::GradesController do
     end
     before (:each) { login_user(@professor) }
 
+    describe "GET download" do
+      it "returns sample csv data" do
+        get :download, assignment_id: @assignment, format: :csv
+        expect(response.body).to \
+          include("First Name,Last Name,Email,Score,Feedback")
+      end
+    end
+
     describe "GET export" do
       it "returns sample csv data" do
         submission = create(:submission, grade: @grade, student: @student,
