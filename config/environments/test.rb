@@ -16,6 +16,7 @@ end
 CarrierWave.configure do |config|
   config.storage = :file
   config.enable_processing = false
+  config.directory_permissions = 0777
 end
 
 # List tested uploaders here to make sure they are auto-loaded
