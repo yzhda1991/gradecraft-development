@@ -180,11 +180,11 @@ describe AssignmentsController do
           get :predictor_data, format: :json, id: @student.id
           expect(assigns(:assignments).current_user).to eq(@professor)
           expect(assigns(:assignments).student).to eq(@student)
-          assigns(:assignments)[0].grade.tap do |assigned_grade|
-            expect(assigned_grade.id).to eq(grade.id)
-            expect(assigned_grade.final_points).to eq(nil)
-            expect(assigned_grade.score).to eq(nil)
-            expect(assigned_grade.predicted_score).to eq(0)
+          assigns(:assignments)[0].grade.attributes.tap do |assigned_grade|
+            expect(assigned_grade[:id]).to eq(grade.id)
+            expect(assigned_grade[:final_points]).to eq(nil)
+            expect(assigned_grade[:score]).to eq(nil)
+            expect(assigned_grade[:predicted_score]).to eq(0)
           end
         end
 
@@ -193,11 +193,11 @@ describe AssignmentsController do
           get :predictor_data, format: :json, id: @student.id
           expect(assigns(:assignments).current_user).to eq(@professor)
           expect(assigns(:assignments).student).to eq(@student)
-          assigns(:assignments)[0].grade.tap do |assigned_grade|
-            expect(assigned_grade.id).to eq(grade.id)
-            expect(assigned_grade.final_points).to eq(grade.raw_score)
-            expect(assigned_grade.score).to eq(grade.score)
-            expect(assigned_grade.predicted_score).to eq(0)
+          assigns(:assignments)[0].grade.attributes.tap do |assigned_grade|
+            expect(assigned_grade[:id]).to eq(grade.id)
+            expect(assigned_grade[:final_points]).to eq(grade.raw_score)
+            expect(assigned_grade[:score]).to eq(grade.score)
+            expect(assigned_grade[:predicted_score]).to eq(0)
           end
         end
       end
@@ -298,8 +298,8 @@ describe AssignmentsController do
       it "includes student grade with no score if not released" do
         grade = create(:unreleased_grade, student: @student, assignment: @assignment, course_id: @course.id)
         get :predictor_data, format: :json, id: @student.id
-        expect(assigns(:assignments)[0].grade.score).to eq(nil)
-        expect(assigns(:assignments)[0].grade.final_points).to eq(nil)
+        expect(assigns(:assignments)[0].grade.attributes[:score]).to eq(nil)
+        expect(assigns(:assignments)[0].grade.attributes[:final_points]).to eq(nil)
       end
 
       it "assigns a unreleased grade for the assignment with only predicted score data" do
@@ -307,11 +307,11 @@ describe AssignmentsController do
         get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignments).current_user).to eq(@student)
         expect(assigns(:assignments).student).to eq(@student)
-        assigns(:assignments)[0].grade.tap do |assigned_grade|
-          expect(assigned_grade.id).to eq(grade.id)
-          expect(assigned_grade.final_points).to eq(nil)
-          expect(assigned_grade.score).to eq(nil)
-          expect(assigned_grade.predicted_score).to eq(500)
+        assigns(:assignments)[0].grade.attributes.tap do |assigned_grade|
+          expect(assigned_grade[:id]).to eq(grade.id)
+          expect(assigned_grade[:final_points]).to eq(nil)
+          expect(assigned_grade[:score]).to eq(nil)
+          expect(assigned_grade[:predicted_score]).to eq(500)
         end
       end
 
@@ -320,11 +320,11 @@ describe AssignmentsController do
         get :predictor_data, format: :json, id: @student.id
         expect(assigns(:assignments).current_user).to eq(@student)
         expect(assigns(:assignments).student).to eq(@student)
-        assigns(:assignments)[0].grade.tap do |assigned_grade|
-          expect(assigned_grade.id).to eq(grade.id)
-          expect(assigned_grade.final_points).to eq(grade.raw_score)
-          expect(assigned_grade.score).to eq(grade.score)
-          expect(assigned_grade.predicted_score).to eq(500)
+        assigns(:assignments)[0].grade.attributes.tap do |assigned_grade|
+          expect(assigned_grade[:id]).to eq(grade.id)
+          expect(assigned_grade[:final_points]).to eq(grade.raw_score)
+          expect(assigned_grade[:score]).to eq(grade.score)
+          expect(assigned_grade[:predicted_score]).to eq(500)
         end
       end
 

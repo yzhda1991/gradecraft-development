@@ -12,7 +12,7 @@
 
   .predictor-article-main
 
-    .article-graded{'ng-if' => 'articleGraded(assignment)'}
+    .article-graded{'ng-if' => 'articleGraded(assignment)', 'ng-class'=>'{"excluded" : assignment.grade.is_excluded}'}
       .grade{'ng-if' => 'assignment.pass_fail == false'}
         {{assignment.grade.final_points | number}} / {{assignment.point_total | number}}
       .grade{'ng-if' => 'assignment.pass_fail == true'}
@@ -20,6 +20,8 @@
           {{termFor["pass"]}} / {{termFor["fail"]}}
         .status{{'ng-if'=>'assignment.grade.pass_fail_status'}}
           {{termFor[assignment.grade.pass_fail_status]}}
+      .excluded{{'ng-if'=>'assignment.grade.is_excluded'}}
+        This grade has been excluded
 
     .article-predicted{'ng-if' => '! articleGraded(assignment)'}
       %div{'ng-if' => 'assignment.predictor_display_type == "slider"'}

@@ -8,12 +8,30 @@
 class PredictedGradeSerializer
   attr_reader :current_user
 
-  def id
-    grade.id
+  def initialize(assignment, grade, current_user)
+    @assignment = assignment
+    @grade = grade
+    @current_user = current_user
+  end
+
+  def attributes
+    {
+      id: id,
+      predicted_score: predicted_score,
+      score: score,
+      final_points: final_points,
+      is_excluded: excluded?
+    }
   end
 
   def pass_fail_status
     grade.pass_fail_status if GradeProctor.new(grade).viewable?
+  end
+
+  private
+
+  def id
+    grade.id
   end
 
   def predicted_score
@@ -30,22 +48,9 @@ class PredictedGradeSerializer
     grade.score if GradeProctor.new(grade).viewable?
   end
 
-  def initialize(assignment, grade, current_user)
-    @assignment = assignment
-    @grade = grade
-    @current_user = current_user
+  def excluded?
+    grade.excluded_from_course_score?
   end
-
-  def attributes
-    {
-      id: id,
-      predicted_score: predicted_score,
-      score: score,
-      final_points: final_points,
-    }
- end
-
-  private
 
   def show_zero_in_predictor(score)
     score.nil? &&

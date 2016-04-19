@@ -61,6 +61,10 @@ describe NullGrade do
     expect(subject).to_not be_is_released
   end
 
+  it "is not excluded" do
+    expect(subject).to_not be_excluded_from_course_score
+  end
+
   it "is graded" do
     expect(subject).to be_is_graded
   end

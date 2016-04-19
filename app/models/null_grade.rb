@@ -50,6 +50,10 @@ class NullGrade
     nil
   end
 
+  def excluded_from_course_score?
+    false
+  end
+
   def student_id
     0
   end

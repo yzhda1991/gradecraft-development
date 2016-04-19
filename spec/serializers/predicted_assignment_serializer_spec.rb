@@ -14,12 +14,12 @@ describe PredictedAssignmentSerializer do
     it "creates a grade if it does not have one for the assignment" do
       current_time = DateTime.now
       grade = subject.grade
-      expect(Grade.find(grade.id).created_at).to be > current_time
+      expect(Grade.find(grade.attributes[:id]).created_at).to be > current_time
     end
 
     it "returns the grade if one already exists for the user and assignment" do
       existing_grade = Grade.create(assignment: assignment, student: user)
-      expect(subject.grade.id).to eq existing_grade.id
+      expect(subject.grade.attributes[:id]).to eq existing_grade.id
     end
 
     it "returns an instance of a predicted grade" do
@@ -28,7 +28,7 @@ describe PredictedAssignmentSerializer do
 
     it "returns a nil predicted grade if the user cannot create grades" do
       subject = described_class.new assignment, user, NullStudent.new
-      expect(subject.grade.id).to eq 0
+      expect(subject.grade.attributes[:id]).to eq 0
     end
   end
 
