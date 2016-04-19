@@ -1,0 +1,100 @@
+- name: AI
+  extensions:
+    - ai
+  description: Adobe Illustrator
+
+- name: AVE
+  extensions:
+    - ave / ZAVE
+  description: Aquafadas
+
+- name: CDR
+  extensions:
+    - cdr
+  description: CorelDRAW
+
+- name: CHP
+  extensions:
+    - chp
+    - pub
+    - sty
+    - cap
+    - cif
+    - vgr
+    - frm
+  description: Ventura Publisher — Xerox (DOS / GEM)
+
+- name: CPT
+  extensions:
+    - cpt
+  description: Corel Photo-Paint
+
+- name: DTP
+  extensions:
+    - dtp
+  description: Greenstreet Publisher, GST PressWorks
+
+- name: GDRAW
+  extensions:
+    - gdraw
+  description: Google Drive Drawing
+
+- name: ILDOC
+  extensions:
+    - ildoc
+  description: Broadvision Quicksilver document
+
+- name: INDD
+  extensions:
+    - indd
+  description: Adobe InDesign
+
+- name: PSD
+  extensions:
+    - psd
+  description: Adobe Photoshop
+
+- name: MCF
+  extensions:
+    - mcf
+  description: FotoInsight Designer
+
+- name: PDF
+  extensions:
+    - pdf
+  description: Adobe Acrobat or Adobe Reader
+
+- name: PMD
+  extensions:
+    - pmd
+  description: Adobe PageMaker
+
+- name: PPP
+  extensions:
+    - ppp
+  description: Serif PagePlus
+
+- name: PUB
+  extensions:
+    - pub
+  description: Microsoft Publisher
+
+- name: QXD
+  extensions:
+    - qxd
+  description: QuarkXPress
+
+- name: FM
+  extensions:
+    - fm
+  description: Adobe FrameMaker
+
+- name: SLA
+  extensions:
+    - sla / SCD
+  description: Scribus
+
+- name: WLMP
+  extensions:
+    - wlmp
+  description: Windows Live Movie Maker project file
