@@ -1,0 +1,141 @@
+
+- name: BRD
+  extensions:
+    - brd
+  description: Board file for EAGLE Layout Editor, a commercial PCB design tool
+
+- name: BSDL
+  extensions:
+    - bsdl
+  description: Description language for testing through JTAG
+
+- name: CDL
+  extensions:
+    - cdl
+  description: Transistor-level netlist format for IC design
+
+- name: CPF
+  extensions:
+    - cpf
+  description: Power-domain specification in SoC implementation (see also UPF)
+
+- name: DEF
+  extensions:
+    - def
+  description: Gate-level layout
+
+- name: DSPF
+  extensions:
+    - dspf
+  description: Detailed Standard Parasitic Format, Analog-level parasitics of interconnections in IC design
+
+- name: EDIF
+  extensions:
+    - edif
+  description: Vendor neutral gate-level netlist format
+
+- name: FSDB
+  extensions:
+    - fsdb
+  description: Analog waveform format (see also Waveform viewer)
+
+- name: GDSII
+  extensions:
+    - gdsii
+  description: Format for PCB and layout of integrated circuits
+
+- name: HEX
+  extensions:
+    - hex
+  description: ASCII-coded binary format for memory dumps
+
+- name: LEF
+  extensions:
+    - lef
+  description: Library Exchange Format, physical abstract of cells for IC design
+
+- name: LIB
+  extensions:
+    - lib
+  description: Library modeling (function, timing) format
+
+- name: MS12
+  extensions:
+    - ms12
+  description: NI Multisim file
+
+- name: OASIS
+  extensions:
+    - oasis
+  description: Open Artwork System Interchange Standard
+
+- name: OpenAccess
+  extensions:
+    - openaccess
+  description: Design database format with APIs
+
+- name: SDC
+  extensions:
+    - sdc
+  description: Synopsys Design Constraints, format for synthesis constraints
+
+- name: SDF
+  extensions:
+    - sdf
+  description: Standard for gate-level timings
+
+- name: SPEF
+  extensions:
+    - spef
+  description: Standard format for parasitics of interconnections in IC design
+
+- name: SPI
+  extensions:
+    - spi
+    - cir
+  description: SPICE Netlist, device-level netlist and commands for simulation
+
+- name: SREC
+  extensions:
+    - srec
+    - s19
+  description: S-record, ASCII-coded format for memory dumps
+
+- name: STIL
+  extensions:
+    - stil
+  description: Standard Test Interface Language, IEEE1450-1999 standard for Test Patterns for IC
+
+- name: SV
+  extensions:
+    - sv
+  description: SystemVerilog source file
+
+# S*P
+  description: Touchstone/EEsof Scattering parameter data file — multi-port blackbox performance, measurement or simulated
+
+- name: UPF
+  extensions:
+    - upf
+  description: Standard for Power-domain specification in SoC implementation
+
+- name: V
+  extensions:
+    - v
+  description: Verilog source file
+
+- name: VCD
+  extensions:
+    - vcd
+  description: Standard format for digital simulation waveform
+
+- name: VHD
+  extensions:
+    - vhd
+    - vhdl
+  description: VHDL source file
+
+- name: WGL
+  extensions:
+    - wgl
+  description: Waveform Generation Language, format for Test Patterns for IC
