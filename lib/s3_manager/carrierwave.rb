@@ -25,12 +25,6 @@ module S3Manager
       bucket.object(s3_object_file_key)
     end
 
-    def stream_s3_object
-      object = get_object(s3_object_file_key)
-      mark_missing and return nil unless object && object.body
-      object.body.read
-    end
-
     def mark_missing
       update_attributes file_missing: true
     end

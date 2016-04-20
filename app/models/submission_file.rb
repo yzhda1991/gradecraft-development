@@ -1,5 +1,6 @@
 class SubmissionFile < ActiveRecord::Base
   include S3Manager::Carrierwave
+  include S3Manager::Streaming
   include Historical
 
   attr_accessible :file, :filename, :filepath, :submission_id, :file_missing,
