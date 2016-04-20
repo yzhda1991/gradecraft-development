@@ -4,6 +4,5 @@ module S3Manager
       @object_stream ||= S3Manager::ObjectStream.new \
         object_key: s3_object_file_key
     end
-
   end
 end

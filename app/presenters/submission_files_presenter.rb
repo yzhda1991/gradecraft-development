@@ -17,7 +17,6 @@ class SubmissionFilesPresenter < Showtime::Presenter
   end
 
   def stream_object
-    return nil unless submission_file
     submission_file.object_stream.stream!
   end
 
