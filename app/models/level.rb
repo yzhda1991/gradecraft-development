@@ -9,8 +9,6 @@ class Level < ActiveRecord::Base
   validates :points, presence: true, numericality: {greater_than_or_equal_to: 0}
   validates :name, presence: true, length: { maximum: 30 }
 
-  before_save :update_criterion_meets_expectations_points
-
   scope :ordered, -> { order("points ASC") }
 
   attr_accessible :name, :description, :points, :criterion_id,
@@ -29,9 +27,8 @@ class Level < ActiveRecord::Base
     ModelCopier.new(self).copy(attributes: attributes, associations: [:badges])
   end
 
-  private
-
-  def update_criterion_meets_expectations_points
+  def points=(points)
+    write_attribute(:points, points)
     if points_changed? && meets_expectations?
       criterion.update(meets_expectations_points: points)
     end

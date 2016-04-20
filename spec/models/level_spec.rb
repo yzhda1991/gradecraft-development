@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 describe Level do
   describe "#copy" do
-    let(:level) { build :level }
+    let(:level) { create :level }
     subject { level }
 
     describe "#above_expectations?" do
@@ -10,6 +10,7 @@ describe Level do
         subject.criterion.update(meets_expectations_points: subject.points)
         expect(subject.above_expectations?).to be_falsey
       end
+
       it "is true if points are above expectations" do
         allow(subject.criterion).to \
           receive(:meets_expectations_level_id).and_return("not nil")
@@ -31,7 +32,7 @@ describe Level do
       end
     end
 
-    describe "before save" do
+    describe "updating points" do
       it "updates the meets exectations points on criterion" do
         level.save
         level.criterion.update_meets_expectations!(level, true)
