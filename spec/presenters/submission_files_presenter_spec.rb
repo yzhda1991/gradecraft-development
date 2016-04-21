@@ -91,22 +91,33 @@ describe SubmissionFilesPresenter do
 
   describe "#stream_object" do
     it "streams the object from the submission file" do
+      expect(submission_file.object_stream).to receive(:stream!)
+      subject.stream_object
     end
   end
 
   describe "#filename" do
+    let(:params) { { id: submission_file.id, index: "10" } }
     it "returns the instructor_filename for the submission file" do
+      expect(submission_file).to receive(:instructor_filename).with(10)
+      subject.filename
     end
   end
 
   describe "#mark_submission_file_missing" do
+    let(:result) { subject.mark_submission_file_missing }
+
     context "submission_file does not exist" do
       it "returns false" do
+        allow(subject).to receive(:submission_file) { nil }
+        expect(result).to eq false
       end
     end
 
     context "submission_file exists" do
       it "marks the submission_file missing" do
+        expect(submission_file).to receive(:mark_file_missing)
+        result
       end
     end
   end
