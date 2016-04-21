@@ -64,6 +64,21 @@ describe SubmissionFilesPresenter do
 
   describe "#object_streamable?" do
     context "submission_file does not exist" do
+      it "returns false" do
+        allow(subject).to receive(:submission_file) { nil }
+        expect(subject.submission).to eq false
+      end
+    end
+
+    context "submission_file exists" do
+      before do
+        allow(submission_file)
+          .to receive_message_chain(:object_stream, :exists?) { "some-value" }
+      end
+
+      it "returns the outcome of ObjectStream#exists?" do
+        expect(subject.object_streamable?).to eq "some-value"
+      end
     end
   end
 
