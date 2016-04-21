@@ -80,9 +80,9 @@ RSpec.describe S3Manager::Manager do
 
   describe "object management" do
     let(:s3_manager) { S3Manager::Manager.new }
-    let(:object_key) { "jerrys-unencrypted-hat" }
     let(:client) { s3_manager.client }
     let(:filename) { "unencrypted-jerry-was-here.doc" }
+    let(:object_key) { "jerrys-unencrypted-hat" }
     let(:object_body) { File.new(filename, "w+b") }
     let(:put_object) { s3_manager.put_object(object_key, object_body) }
     let(:delete_jerry) { FileUtils.rm(filename) if File.exist?(filename) }

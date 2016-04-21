@@ -4,14 +4,22 @@ require_relative "../../app/presenters/submission_files_presenter"
 describe SubmissionFilesPresenter do
   subject { described_class.new }
 
-  let(:submission_file) { SubmissionFile.last }
+  let(:submission_file) do
+    double(:submission_file,
+      submission: double(Submission),
+      object_stream: double(S3Manager::ObjectStream),
+      id: rand(1000)
+    )
+  end
+
   let(:params) do
     { id: submission_file.id }
   end
 
   before do
-    create(:submission_file)
     allow(subject).to receive(:params) { params }
+    allow(SubmissionFile).to receive(:find).with(submission_file.id)
+      .and_return submission_file
   end
 
   describe "#submission_file" do
@@ -63,21 +71,20 @@ describe SubmissionFilesPresenter do
   end
 
   describe "#object_streamable?" do
+    let(:result) { subject.object_streamable? }
+
     context "submission_file does not exist" do
       it "returns false" do
         allow(subject).to receive(:submission_file) { nil }
-        expect(subject.submission).to eq false
+        expect(result).to eq false
       end
     end
 
     context "submission_file exists" do
-      before do
-        allow(submission_file)
-          .to receive_message_chain(:object_stream, :exists?) { "some-value" }
-      end
-
       it "returns the outcome of ObjectStream#exists?" do
-        expect(subject.object_streamable?).to eq "some-value"
+        allow(submission_file).to receive_message_chain(
+          :object_stream, :exists?) { "some-value" }
+        expect(result).to eq "some-value"
       end
     end
   end
