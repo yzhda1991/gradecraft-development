@@ -4,18 +4,20 @@ require_relative "../../app/presenters/submission_files_presenter"
 describe SubmissionFilesPresenter do
   subject { described_class.new }
 
+  let(:submission_file) { SubmissionFile.last }
+  let(:params) do
+    { id: submission_file.id }
+  end
+
+  before do
+    create(:submission_file)
+    allow(subject).to receive(:params) { params }
+  end
+
   describe "#submission_file" do
     let(:result) { subject.submission_file }
 
-    before do
-      allow(subject).to receive(:params) { params }
-      create(:submission_file)
-    end
-
     context "params[:id] exists" do
-      let(:params) { { id: submission_file.id } }
-      let(:submission_file) { SubmissionFile.last }
-
       it "finds the submission file by id" do
         expect(SubmissionFile).to receive(:find).with submission_file.id
         result
@@ -35,9 +37,12 @@ describe SubmissionFilesPresenter do
     end
 
     context "params[:id] does not exist" do
-      let(:params) { { id: nil } }
+      let(:params) do
+        { id: nil }
+      end
 
       it "returns nil" do
+        expect(result).to be_nil
       end
     end
   end
@@ -45,11 +50,14 @@ describe SubmissionFilesPresenter do
   describe "#submission" do
     context "submission_file does not exist" do
       it "returns nil" do
+        allow(subject).to receive(:submission_file) { nil }
+        expect(subject.submission).to be_nil
       end
     end
 
     context "submission_file exists" do
       it "returns the submission from the submission_file" do
+        expect(subject.submission).to eq submission_file.submission
       end
     end
   end
