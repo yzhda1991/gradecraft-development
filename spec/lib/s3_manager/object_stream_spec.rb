@@ -4,6 +4,10 @@ require "s3_manager/object_stream"
 describe S3Manager::ObjectStream do
   subject { described_class.new object_key: "some-key" }
 
+  it "includes S3Manager::Basics" do
+    expect(subject).to respond_to(:write_s3_object_to_disk)
+  end
+
   describe "#initialize" do
     it "sets the given object_key to @object_key" do
       expect(subject.object_key).to eq "some-key"
