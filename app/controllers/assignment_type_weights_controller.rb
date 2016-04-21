@@ -4,8 +4,10 @@ class AssignmentTypeWeightsController < ApplicationController
 
   # Students set their assignment type weights all at once
   def mass_edit
-    @title =  "Editing My #{term_for :weight} Choices" if current_user_is_student?
-    @title =  "Editing #{current_student.name}'s #{term_for :weight} Choices" if current_user_is_staff?
+    @title =
+      "Editing My #{term_for :weight} Choices" if current_user_is_student?
+    @title =
+      "Editing #{current_student.name}'s #{term_for :weight} Choices" if current_user_is_staff?
     @assignment_types = current_course.assignment_types
     respond_with @form =
       AssignmentTypeWeightForm.new(current_student, current_course)

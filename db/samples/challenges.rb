@@ -78,8 +78,8 @@
 
 @challenges[:invisible] = {
   quotes: {
-    challenge_created: "Please don't ask me what the score is, I'm not even sure
-      what the game is. - Ashleigh Brilliant"
+    challenge_created: "Please don't ask me what the score is, I'm not even \
+sure what the game is. - Ashleigh Brilliant"
   },
   attributes: {
     name: "Invisible Challenge",

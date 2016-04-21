@@ -49,15 +49,18 @@ class ChallengeGradesController < ApplicationController
 
   # @mz TODO: refactor this whole thing, move into models and presenters
   def create
-    @challenge_grade = @challenge.challenge_grades.create(params[:challenge_grade])
+    @challenge_grade =
+      @challenge.challenge_grades.create(params[:challenge_grade])
     @team = @challenge_grade.team
     respond_to do |format|
       if @challenge_grade.save
-        if current_course.add_team_score_to_student? && @challenge_grade.is_student_visible?
+        if current_course.add_team_score_to_student? &&
+          @challenge_grade.is_student_visible?
           # @mz TODO: substitute with ChallengeGrade#recalculate_team_scores
           # method, revise specs
           @score_recalculator_jobs = @team.students.collect do |student|
-            ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
+            ScoreRecalculatorJob.new(user_id: student.id,
+              course_id: current_course.id)
           end
           @score_recalculator_jobs.each(&:enqueue)
         end
@@ -84,7 +87,8 @@ class ChallengeGradesController < ApplicationController
             # @mz TODO: figure out how @team.students is supposed to be sorted
             # in the controller
             @score_recalculator_jobs = @team.students.collect do |student|
-              ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id)
+              ScoreRecalculatorJob.new(user_id: student.id,
+                course_id: current_course.id)
             end
             @score_recalculator_jobs.each(&:enqueue)
           end

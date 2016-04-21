@@ -99,12 +99,12 @@
 
 @courses[:teams_badges_points] = {
   quotes: {
-    course_created: "Education is the most powerful weapon which you can use to
-    change the world. - Nelson Mandela",
-    grade_sceme_elements_created: "Real learning comes about when the
-    competitive spirit has ceased. ― Jiddu Krishnamurti",
-    teams_created: "The early bird gets the worm, but the second mouse gets the
-    cheese. ― Willie Nelson",
+    course_created: "Education is the most powerful weapon which you can use \
+to change the world. - Nelson Mandela",
+    grade_sceme_elements_created: "Real learning comes about when the \
+competitive spirit has ceased. ― Jiddu Krishnamurti",
+    teams_created: "The early bird gets the worm, but the second mouse gets \
+the cheese. ― Willie Nelson",
   },
   attributes: {
     academic_history_visible: true,
@@ -150,15 +150,16 @@
 
 @courses[:power_ups_locks_weighting_config] = {
   quotes: {
-    course_created: "Live as if you were to die tomorrow. Learn as if you were
-      to live forever. ― Mahatma Gandhi",
-    grade_sceme_elements_created: "Education is the ability to listen to almost
-      anything without losing your temper or your self-confidence―Robert Frost",
-    teams_created: "The best thing for being sad, replied Merlin, beginning to
-      puff and blow, is to learn something. That's the only thing that never
-      fails. - Merlin via T.H. White",
-    badges_created: "Self-education is, I firmly believe, the only kind of
-      education there is. ― Isaac Asimov",
+    course_created: "Live as if you were to die tomorrow. Learn as if you were \
+to live forever. ― Mahatma Gandhi",
+    grade_sceme_elements_created: "Education is the ability to listen to \
+almost anything without losing your temper or your self-confidence―Robert \
+Frost",
+    teams_created: "The best thing for being sad, replied Merlin, beginning to \
+puff and blow, is to learn something. That's the only thing that never \
+fails. - Merlin via T.H. White",
+    badges_created: "Self-education is, I firmly believe, the only kind of \
+education there is. ― Isaac Asimov",
     weights_created: nil
   },
   grade_levels: ["Hammurabi", "Confucius", "Socrates", "Cicero",
@@ -224,10 +225,10 @@
   quotes: {
     course_created:
       "I have never let my schooling interfere with my education. ― Mark Twain",
-    grade_sceme_elements_created: "The world is a book and those who do not
-      travel read only one page. ― Augustine of Hippo",
-    teams_created: "Spoon feeding in the long run teaches us nothing but the
-      shape of the spoon. ― E.M. Forster",
+    grade_sceme_elements_created: "The world is a book and those who do not \
+travel read only one page. ― Augustine of Hippo",
+    teams_created: "Spoon feeding in the long run teaches us nothing but the \
+shape of the spoon. ― E.M. Forster",
   },
   grade_levels: ["Shannon", "Weaver", "Vannevar Bush", "Turing", "Boole",
     "Gardner", "Shestakov", "Blackman", "Bode", "John Pierce", "Thorpe",
@@ -282,11 +283,11 @@
 @courses[:assignment_type_caps_config] = {
   quotes: {
     course_created: "You can never be overdressed or overeducated― Oscar Wilde",
-    grade_sceme_elements_created: "To emphasize only the beautiful seems to me
-      to be like a mathematical system that only concerns itself with positive
-      numbers. ― Paul Klee",
-    teams_created: "We learn from failure, not from success! ― Bram Stoker,
-      Dracula",
+    grade_sceme_elements_created: "To emphasize only the beautiful seems to \
+me to be like a mathematical system that only concerns itself with positive \
+numbers. ― Paul Klee",
+    teams_created: "We learn from failure, not from success! ― Bram Stoker, \
+Dracula",
   },
   grade_levels: ["Arp", "Breton", "Dali", "Duchamp", "Earnst", "Giacometti",
     "Magritte", "Masson", "Miro", "Oppenheim", "Ray", "Tanguy"].shuffle,

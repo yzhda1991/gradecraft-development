@@ -64,7 +64,7 @@ User.create! do |u|
   u.admin = true
   u.save!
 end.activate!
-puts "Children must be taught how to think, not what to think.― Margaret Mead"
+puts "Children must be taught how to think, not what to think. ― Margaret Mead"
 
 # Itereate through course names and create courses
 @courses.each do |course_name, config|
