@@ -4,8 +4,10 @@ AllCops:
   DisabledByDefault: true
   TargetRubyVersion: 2.2
   Exclude:
-    - "db/**/*"
+    - "db/migrate/*"
+    - "db/schema.rb"
     - "config/**/*"
+    - "spec/**/*"
     - "script/**/*"
     - "Vagrantfile"
     - "spec/**/*"
