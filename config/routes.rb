@@ -63,6 +63,8 @@ GradeCraft::Application.routes.draw do
       get "weights" => "assignment_weights#mass_edit", as: :mass_edit_weights
     end
 
+    # routes for all grades that are associated with an assignment
+    # single resources should go directly on the grades controller
     resources :grades, only: [:index], module: :assignments do
       collection do
         get :download
