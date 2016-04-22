@@ -1,6 +1,7 @@
 class Assignments::GroupsController < ApplicationController
   before_filter :ensure_staff?
 
+  # GET /assignments/:assignment_id/groups/:id/grade
   # Grading an assignment for a whole group
   def grade
     @assignment = current_course.assignments.find(params[:assignment_id])
@@ -17,6 +18,7 @@ class Assignments::GroupsController < ApplicationController
   end
 
   # PUT /assignments/:assignment_id/groups/:id/graded
+  # Updates the grades for a whole group for an assignment
   def graded
     @assignment = current_course.assignments.find(params[:assignment_id])
     @group = @assignment.groups.find(params[:id])
@@ -37,6 +39,7 @@ class Assignments::GroupsController < ApplicationController
 
   private
 
+  # Schedule the `GradeUpdater` for all grades provided
   def enqueue_multiple_grade_update_jobs(grade_ids)
     grade_ids.each { |id| GradeUpdaterJob.new(grade_id: id).enqueue }
   end
