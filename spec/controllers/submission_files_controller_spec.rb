@@ -41,9 +41,17 @@ describe SubmissionFilesController do
       end
 
       context "user is authorized to read the submission" do
+        context "the submission file is streamable" do
+          it "streams the submission file with the filename" do
+          end
+        end
+
+        context "the submission file is not streamable" do
+        end
       end
 
       context "user is not authorized to read the submission" do
+        context "
       end
     end
   end
