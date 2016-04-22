@@ -106,9 +106,6 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  resources :grades, only: [] do
-  end
-
   resources :unlock_states do
     member do
       post :manually_unlock
