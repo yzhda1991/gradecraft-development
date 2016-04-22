@@ -7,7 +7,7 @@ describe SubmissionFilesPresenter do
   let(:submission_file) do
     double(:submission_file,
       submission: double(Submission),
-      object_stream: double(S3Manager::ObjectStream),
+      object_stream: double(S3Manager::ObjectStream).as_null_object,
       id: rand(1000)
     )
   end
@@ -70,8 +70,8 @@ describe SubmissionFilesPresenter do
     end
   end
 
-  describe "#object_streamable?" do
-    let(:result) { subject.object_streamable? }
+  describe "#submission_file_streamable?" do
+    let(:result) { subject.submission_file_streamable? }
 
     context "submission_file does not exist" do
       it "returns false" do
@@ -89,10 +89,21 @@ describe SubmissionFilesPresenter do
     end
   end
 
-  describe "#stream_object" do
-    it "streams the object from the submission file" do
-      expect(submission_file.object_stream).to receive(:stream!)
-      subject.stream_object
+  describe "#stream_submission_file" do
+    let(:result) { subject.stream_submission_file }
+
+    context "the submission file is streamable" do
+      it "streams the object from the submission file" do
+        expect(submission_file.object_stream).to receive(:stream!)
+        result
+      end
+    end
+
+    context "the submission file is not streamable" do
+      it "returns false" do
+        allow(subject).to receive(:submission_file_streamable?) { false }
+        expect(result).to eq false
+      end
     end
   end
 
