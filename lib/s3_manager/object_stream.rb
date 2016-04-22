@@ -13,7 +13,7 @@ module S3Manager
     end
 
     def exists?
-      object and object.body
+      !!(object && object.body)
     end
 
     def stream!
