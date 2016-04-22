@@ -19,11 +19,45 @@ describe S3Manager::ObjectStream do
   end
 
   describe "#object" do
+    it "gets the object with the object_key" do
+    end
+
+    it "caches the object" do
+    end
+
+    it "sets the object to @object" do
+    end
   end
 
   describe "#exists?" do
+    context "the object doesn't exist" do
+      it "returns false" do
+      end
+    end
+
+    context "the object exists" do
+      context "the object has no body" do
+        it "returns false" do
+        end
+      end
+
+      context "the object has a body" do
+        it "returns true" do
+        end
+      end
+    end
+
   end
 
   describe "#stream!" do
+    context "the target object exists on S3" do
+      it "reads the body from the object" do
+      end
+    end
+
+    context "the object does not exist on S3" do
+      it "returns false" do
+      end
+    end
   end
 end

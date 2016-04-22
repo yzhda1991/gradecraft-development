@@ -17,6 +17,7 @@ module S3Manager
     end
 
     def stream!
+      return false unless exists?
       object.body.read
     end
   end
