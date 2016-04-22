@@ -76,41 +76,6 @@ RSpec.describe GradesController, type: :controller, background_job: true do
       let(:grade2) { create(:grade, grade_attributes.merge(student_id: student2.id)) }
       let(:grades) { [grade, grade2] }
       let(:grade_ids) { [grade.id, grade2.id] }
-      let(:job_attributes) {{ grade_ids: grade_ids }} # for GradeUpdaterJob calls
-
-      # duplicate this
-
-      describe "PUT #mass_update" do
-        before { enroll_and_login_professor }
-        let(:request_attrs) {{ id: assignment.id, assignment: {} }}
-        subject { put :mass_update, request_attrs }
-
-        before do
-          allow(course).to receive_message_chain(:assignments, :find) { assignment }
-          allow(controller).to receive(:mass_update_grade_ids) { grade_ids }
-        end
-
-        context "grade attributes are successfully updated" do
-          let(:request_attrs) {{ assignment_id: assignment.id,
-            id: assignment.id, assignment: {name: "Some Great Name"}}}
-          before { allow(assignment).to receive_messages(update_attributes: true) }
-
-          let(:batch_attributes) do
-            [{ grade_id: grades.first.id }, { grade_id: grades.last.id }]
-          end
-
-          it_behaves_like "a batch of successful resque jobs", 2, GradeUpdaterJob
-        end
-
-        context "grade attributes fail to update" do
-          # pass an invalid assignment name to fail the update
-          # TODO: FIX this, I have no idea why it won't stub
-          let(:request_attrs) {{ id: assignment.id, assignment: { name: nil }}}
-          before { allow(assignment).to receive_messages(update_attributes: false) }
-
-          it_behaves_like "a failed resque job", GradeUpdaterJob
-        end
-      end
 
       describe "POST #upload" do
         subject { post :upload, request_attrs }

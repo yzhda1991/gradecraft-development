@@ -122,6 +122,13 @@ describe AssignmentsController do
         expect(@assignment.reload.name).to eq("new name")
       end
 
+      it "updates the usage of rubrics" do
+        @assignment.update(use_rubric: false)
+        post :update, id: @assignment.id, assignment: { use_rubric: true },
+          format: :json
+        expect(@assignment.reload.use_rubric).to eq true
+      end
+
       it "renders the template again if there are validation errors" do
         post :update, id: @assignment.id, assignment: { name: "" }
         expect(response).to render_template(:edit)
@@ -143,21 +150,6 @@ describe AssignmentsController do
 
         expect(@assignment.reload.position).to eq(2)
         expect(second_assignment.reload.position).to eq(1)
-      end
-    end
-
-    describe "PUT update_rubrics" do
-      it "assigns true or false to assignment use_rubric" do
-        @assignment.update(use_rubric: false)
-        put :update_rubrics, id: @assignment, use_rubric: true
-        expect(@assignment.reload.use_rubric).to eq true
-      end
-    end
-
-    describe "GET criterion_grades_review" do
-      it "renders the correct template" do
-        get :criterion_grades_review, id: @assignment
-        expect(response).to render_template(:criterion_grades_review)
       end
     end
 
@@ -222,26 +214,6 @@ describe AssignmentsController do
     describe "GET destroy" do
       it "destroys the assignment" do
         expect{ get :destroy, id: @assignment }.to change(Assignment,:count).by(-1)
-      end
-    end
-
-    describe "GET download_current_grades" do
-      context "with CSV format" do
-        it "returns sample csv data" do
-          get :download_current_grades, id: @assignment, format: :csv
-          expect(response.body).to include("First Name,Last Name,Email,Score,Feedback")
-        end
-      end
-    end
-
-    describe "GET export_grades" do
-      context "with CSV format" do
-        it "returns sample csv data" do
-          grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
-          submission = create(:submission, grade: grade, student: @student, assignment: @assignment)
-          get :export_grades, id: @assignment, format: :csv
-          expect(response.body).to include("First Name,Last Name,Email,Score,Feedback,Raw Score,Statement")
-        end
       end
     end
   end
@@ -380,12 +352,7 @@ describe AssignmentsController do
       [
         :edit,
         :update,
-        :destroy,
-        :export_grades,
-        :download_current_grades,
-        :update_rubrics,
-        :criterion_grades_review
-
+        :destroy
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, {id: "1"}).to redirect_to(:root)

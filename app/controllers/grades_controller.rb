@@ -214,82 +214,6 @@ class GradesController < ApplicationController
       #{ @assignment.name } grade was successfully deleted."
   end
 
-  # Quickly grading a single assignment for all students
-  # GET /assignments/:id/mass_grade
-  def mass_edit
-    @assignment = current_course.assignments.find(params[:id])
-    @title = "Quick Grade #{@assignment.name}"
-    @assignment_type = @assignment.assignment_type
-    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
-
-    if params[:team_id].present?
-      @team = current_course.teams.find_by(id: params[:team_id])
-      @students = current_course.students_by_team(@team)
-    else
-      @students = current_course.students
-    end
-
-    @grades = Grade.find_or_create_grades(@assignment.id, @students.pluck(:id))
-    @grades = @grades.sort_by { |grade| [ grade.student.last_name, grade.student.first_name ] }
-  end
-
-  # PUT /assignments/:id/mass_grade
-  def mass_update
-    params[:assignment][:grades_attributes].each do |index, grade_params|
-      grade_params.merge!(graded_at: DateTime.now)
-    end if params[:assignment][:grades_attributes].present?
-    @assignment = current_course.assignments.find(params[:id])
-    if @assignment.update_attributes(params[:assignment])
-
-      # @mz TODO: add specs
-      enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
-
-      if !params[:team_id].blank?
-        redirect_to assignment_path(@assignment, team_id: params[:team_id])
-      else
-        respond_with @assignment
-      end
-    else
-      redirect_to mass_grade_assignment_path(id: @assignment.id, team_id: params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
-    end
-  end
-
-  # Grading an assignment for a whole group
-  # GET /assignments/:id/group_grade
-  def group_edit
-    @assignment = current_course.assignments.find(params[:id])
-    @group = @assignment.groups.find(params[:group_id])
-    @submission_id = @assignment.submissions.where(group_id: @group.id).first.try(:id)
-    @title = "Grading #{ @group.name }'s #{@assignment.name}"
-    @assignment_score_levels = @assignment.assignment_score_levels
-
-    if @assignment.grade_with_rubric?
-      @rubric = @assignment.rubric
-      # This is sent to the Angular controlled submit button
-      @return_path = URI(request.referer).path + "?group_id=#{ @group.id }"
-    end
-  end
-
-  # PUT /assignments/:id/group_grade
-  def group_update
-    @assignment = current_course.assignments.find(params[:id])
-    @group = @assignment.groups.find(params[:group_id])
-
-    @grades = Grade.find_or_create_grades(@assignment.id, @group.students.pluck(:id))
-
-    grade_ids = []
-    @grades = @grades.each do |grade|
-      grade.update_attributes(params[:grade].merge(graded_at: DateTime.now,
-        group_type: "Group", group_id: @group.id))
-      grade_ids << grade.id
-    end
-
-    # @mz TODO: add specs
-    enqueue_multiple_grade_update_jobs(grade_ids)
-
-    respond_with @assignment, notice: "#{@group.name}'s #{@assignment.name} was successfully updated"
-  end
-
   # For changing the status of a group of grades passed in grade_ids
   #  ("In Progress" => "Graded", or "Graded" => "Released")
   # GET  /assignments/:id/grades/edit_status
@@ -474,16 +398,6 @@ class GradesController < ApplicationController
       created_at: Time.now,
       prediction_saved_successfully: @grade_saved
     }
-  end
-
-  def mass_update_grade_ids
-    @assignment.grades.inject([]) do |memo, grade|
-      scored_changed = grade.previous_changes[:raw_score].present?
-      if scored_changed && grade.graded_or_released?
-        memo << grade.id
-      end
-      memo
-    end
   end
 
   def score_recalculator(student)

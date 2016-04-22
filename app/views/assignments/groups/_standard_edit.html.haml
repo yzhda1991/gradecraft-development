@@ -1,4 +1,4 @@
-= simple_form_for :grade, :url => group_grade_assignment_path(@assignment), :html => { :method => :put} do |f|
+= simple_form_for :grade, :url => graded_assignment_group_path(@assignment, @group), :html => { :method => :put} do |f|
   = hidden_field_tag "group_id", @group.id
   = f.hidden_field :graded_by_id, :value => current_user.id
   = f.hidden_field :instructor_modified, :value => true

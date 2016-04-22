@@ -76,35 +76,31 @@ class AssignmentsController < ApplicationController
     assignment = current_course.assignments.find(params[:id])
     if assignment.update_attributes(params[:assignment])
       set_assignment_weights(assignment)
-      redirect_to assignments_path, notice: "#{(term_for :assignment).titleize} #{assignment.name } successfully updated" and return
+      respond_to do |format|
+        format.html {
+          redirect_to assignments_path,
+            notice: "#{(term_for :assignment).titleize} #{assignment.name } "\
+            "successfully updated" and return
+        }
+        format.json { render json: assignment and return }
+      end
     end
 
-    @title = "Edit #{term_for :assignment}"
-    render :edit, AssignmentPresenter.build({
-      assignment: assignment,
-      course: current_course,
-      view_context: view_context
-      })
+    respond_to do |format|
+      format.html {
+        @title = "Edit #{term_for :assignment}"
+        render :edit, AssignmentPresenter.build({
+          assignment: assignment,
+          course: current_course,
+          view_context: view_context
+          })
+      }
+      format.json { render json: { errors: assignment.errors }, status: 400 }
+    end
   end
 
   def sort
     sort_position_for :assignment
-  end
-
-  def update_rubrics
-    assignment = current_course.assignments.find params[:id]
-    assignment.update_attributes use_rubric: params[:use_rubric]
-    redirect_to assignment_path(assignment)
-  end
-
-  def criterion_grades_review
-    assignment = current_course.assignments.find(params[:id])
-    render :criterion_grades_review, AssignmentPresenter.build({
-      assignment: assignment,
-      course: current_course,
-      team_id: params[:team_id],
-      view_context: view_context
-      })
   end
 
   # current student visible assignment
@@ -125,23 +121,9 @@ class AssignmentsController < ApplicationController
     redirect_to assignments_url, notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully deleted"
   end
 
-  def download_current_grades
-    assignment = current_course.assignments.find(params[:id])
-    respond_to do |format|
-      format.csv { send_data GradeExporter.new.export_grades(assignment, current_course.students) }
-    end
-  end
-
   def export_structure
     respond_to do |format|
       format.csv { send_data AssignmentExporter.new.export current_course }
-    end
-  end
-
-  def export_grades
-    assignment = current_course.assignments.find(params[:id])
-    respond_to do |format|
-      format.csv { send_data GradeExporter.new.export_grades_with_detail assignment, assignment.course.students }
     end
   end
 
