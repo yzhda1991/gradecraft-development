@@ -162,9 +162,6 @@
       'sep', 'formatBlock', 'align', 'insertOrderedList', 'insertUnorderedList',
       'outdent', 'indent', 'insertHorizontalRule', 'createLink', 'undo', 'redo',
       'removeFormat', 'selectAll'
-    ],
-    saveURL: '/grades/' + $scope.gradeId + '/async_update',
-    saveRequestType: 'PUT',
-    saveParams: {"save_type": "feedback"}
+    ]
   }
 ]

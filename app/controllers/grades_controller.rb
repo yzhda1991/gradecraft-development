@@ -84,21 +84,6 @@ class GradesController < ApplicationController
     end
   end
 
-  # PUT /grades/:id/async_update
-  def async_update
-    Grade.find(params[:id]).update_attributes(
-      {
-         feedback: params[:feedback],
-         instructor_modified: true,
-         status: params[:status],
-         updated_at: Time.now,
-         graded_at: DateTime.now,
-         raw_score: params[:raw_score]
-      }
-    )
-    render nothing: true
-  end
-
   # POST /grades/earn_student_badge
   def earn_student_badge
     @earned_badge = EarnedBadge.create params[:earned_badge]
