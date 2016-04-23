@@ -40,10 +40,8 @@ describe Submission do
     end
 
     it "creates a version when the attachment is updated" do
-      subject.submission_files.create(filename: "test",
-                                      filepath: "polsci101/submissionfile/",
-                                      file: fixture_file("test_image.jpg", "img/jpg"))
-      expect(subject.submission_files[0].versions.count).to eq 1
+      subject.submission_files << create(:submission_file)
+      expect(subject.submission_files[0].versions.count).to eq 2
     end
 
     it "creates a version when the comment is updated" do
@@ -66,7 +64,7 @@ describe Submission do
   end
 
   it "can be saved with only an attached file" do
-    subject.submission_files.new(filename: "test", filepath: "polsci101/submissionfile/", file: fixture_file("test_image.jpg", "img/jpg"))
+    subject.submission_files << build(:submission_file)
     subject.save!
     expect expect(subject.errors.size).to eq(0)
   end
@@ -74,7 +72,7 @@ describe Submission do
   it "can have an an attached file, comment, and link" do
     subject.text_comment = "I volunteer! I volunteer! I volunteer as tribute!"
     subject.link = "http://www.amazon.com/dp/0439023521"
-    subject.submission_files.new(filename: "test", filepath: "polsci101/submissionfile/", file: fixture_file("test_image.jpg", "img/jpg"))
+    subject.submission_files << build(:submission_file)
     subject.save!
     expect expect(subject.errors.size).to eq(0)
   end
