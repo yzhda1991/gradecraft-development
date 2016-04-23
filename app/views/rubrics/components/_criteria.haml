@@ -1,0 +1,19 @@
+- presenter.criteria.ordered.each do |criterion|
+  %tr
+    %td.criterion
+      .criterion-heading
+        .criterion-name= criterion.wrapped_name(28).html_safe
+        .criterion-points= "#{points criterion.max_points} Points"
+      .criterion-description= criterion.wrapped_description(40).html_safe
+
+    - criterion.levels.ordered.each do |level|
+      = render "rubrics/components/level", presenter: presenter, level: level, include_grade_info: include_grade_info
+
+    - if criterion.levels.size < presenter.rubric_max_level_count
+      %td.filler(colspan="#{presenter.rubric_max_level_count - criterion.levels.size}")
+      - if include_grade_info
+        %td.level.level-comments.comments-box
+        - unless comments_by_criterion_id.empty?
+          = raw comments_by_criterion_id[criterion.id]
+
+

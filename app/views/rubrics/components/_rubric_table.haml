@@ -1,0 +1,15 @@
+%table#rubric-table
+  %thead
+    %tr
+      %td.criterion.heading
+        Criterion:&nbsp;Max&nbsp;points
+
+      %td.level.heading(colspan="#{presenter.rubric.max_level_count}")
+        Level: Points Awarded
+
+      - if include_grade_info
+        %td.comments.heading
+          Comments
+
+  %tbody
+    = render "rubrics/components/criteria", presenter: presenter, include_grade_info: include_grade_info

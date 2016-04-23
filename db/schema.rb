@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160328172823) do
+ActiveRecord::Schema.define(version: 20160405191418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -314,6 +314,8 @@ ActiveRecord::Schema.define(version: 20160328172823) do
     t.datetime "updated_at"
     t.integer  "full_credit_level_id"
     t.integer  "level_count",                      default: 0
+    t.integer  "meets_expectations_level_id"
+    t.integer  "meets_expectations_points",               default: 0
   end
 
   create_table "criterion_grades", force: :cascade do |t|
@@ -484,16 +486,16 @@ ActiveRecord::Schema.define(version: 20160328172823) do
   end
 
   create_table "levels", force: :cascade do |t|
-    t.string   "name",         limit: 255
+    t.string   "name",               limit: 255
     t.text     "description"
     t.integer  "points"
     t.integer  "criterion_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "full_credit"
-    t.boolean  "no_credit"
-    t.boolean  "durable"
+    t.boolean  "full_credit",                    default: false
+    t.boolean  "no_credit",                      default: false
     t.integer  "sort_order"
+    t.boolean  "meets_expectations",             default: false
   end
 
   create_table "lti_providers", force: :cascade do |t|

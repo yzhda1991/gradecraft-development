@@ -1,0 +1,6 @@
+%td.level.level-level{:class => ("meets-expectations" if level.meets_expectations || level.above_expectations?)}
+  = render "rubrics/components/level_heading", level: level
+  = render "rubrics/components/level_badges", level: level
+
+  - if include_grade_info
+    = render "rubrics/components/level_grade_analysis", presenter: presenter, level: level

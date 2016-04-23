@@ -317,6 +317,9 @@ PaperTrail.whodunnit = nil
                 if m == 1 && course.badge_setting
                   LevelBadge.create!(level_id: level.id, badge_id: course_config[:badges][:invisible_level_badge].id)
                 end
+                if m == 2
+                  criterion.update_meets_expectations!(level, true)
+                end
               end
             end
           end

@@ -193,7 +193,6 @@ GradeCraft::Application.routes.draw do
       put "timeline_settings" => "courses#timeline_settings_update"
       get "predictor_settings" => "courses#predictor_settings", as: :predictor_settings
       put "predictor_settings" => "courses#predictor_settings_update"
-#      get "predictor_preview" => "courses#predictor_preview"
     end
   end
   resources :course_memberships
@@ -363,6 +362,9 @@ GradeCraft::Application.routes.draw do
     resources :grades, only: :update, defaults: { format: :json }
     get 'assignments/:assignment_id/students/:student_id/grade', to: 'grades#show', defaults: { format: :json }
     get 'assignments/:assignment_id/groups/:group_id/grades', to: 'grades#group_index', defaults: { format: :json }
+
+    # levels
+    resources :levels, only: :update, defaults: { format: :json }
   end
 
   #17b. Predictor, Student View
