@@ -373,8 +373,13 @@ describe Submission do
     end
 
     it "titleizes the student's full name and assignment name" do
-      expect(Formatter::Filename).to receive(:titleize).with "Dan Ho - Great"
+      expect(Formatter::Filename).to receive(:titleize).with "Dan Ho"
+      expect(Formatter::Filename).to receive(:titleize).with "Great"
       subject.base_filename
+    end
+
+    it "returns the combination of the titleized student and assignment names" do
+      expect(subject.base_filename).to eq "Dan Ho - Great"
     end
   end
 end
