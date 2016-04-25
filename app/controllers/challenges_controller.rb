@@ -127,7 +127,9 @@ class ChallengesController < ApplicationController
 
   def predictor_challenge_data
     challenges = []
-    if current_course.challenges.present? && @student.team_for_course(current_course).present? && current_course.add_team_score_to_student
+    if current_course.challenges.present? &&
+        @student.team_for_course(current_course).present? &&
+        current_course.add_team_score_to_student
       challenges = current_course.challenges.select(
         :id,
         :name,
@@ -139,7 +141,8 @@ class ChallengesController < ApplicationController
       @grades = team.challenge_grades
 
       challenges.each do |challenge|
-        prediction = challenge.find_or_create_predicted_earned_challenge(@student.id)
+        prediction =
+          challenge.find_or_create_predicted_earned_challenge(@student.id)
         if current_user.is_student?(current_course)
           challenge.prediction = {
             id: prediction.id, points_earned: prediction.points_earned
