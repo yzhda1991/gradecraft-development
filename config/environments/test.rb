@@ -20,13 +20,6 @@ CarrierWave.configure do |config|
   config.permissions = 0777
 end
 
-CarrierWave::Uploader.configure do |config|
-  config.storage = :fog
-  config.enable_processing = false
-  config.directory_permissions = 0777
-  config.permissions = 0777
-end
-
 # List tested uploaders here to make sure they are auto-loaded
 # This assures files are created in spec/support/uploads and can be deleted after tests
 AttachmentUploader
