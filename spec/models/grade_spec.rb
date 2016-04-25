@@ -252,15 +252,4 @@ describe Grade  do
         change{ Grade.count }.by(ids.length)
     end
   end
-
-  describe "#add_grade_files" do
-    it "adds a file from upload" do
-      student = create(:user)
-      assignment = create(:assignment)
-      grade = create(:grade, student: student, assignment: assignment)
-      grade_file = fixture_file("Too long, strange characters, and Spaces (In) Name.jpg", "img/jpg")
-      grade.add_grade_files(grade_file)
-      expect(grade.grade_files.count).to eq(1)
-    end
-  end
 end

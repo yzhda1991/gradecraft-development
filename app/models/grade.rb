@@ -75,12 +75,6 @@ class Grade < ActiveRecord::Base
     Grade.where(student_id: student_ids, assignment_id: assignment_id)
   end
 
-  def add_grade_files(*files)
-    files.each do |f|
-      grade_files << GradeFile.create(file: f, filename: f.original_filename[0..49], grade_id: self.id)
-    end
-  end
-
   def feedback_read!
     update_attributes feedback_read: true, feedback_read_at: DateTime.now
   end
