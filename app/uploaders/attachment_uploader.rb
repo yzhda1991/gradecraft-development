@@ -10,8 +10,10 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   # challenge_file: uploads/<course-name_id>/challenge_files/<timestamp_file-name.ext>
 
   def store_dir
-    if Rails.env.development?
-      [ ENV["AWS_S3_DEVELOPER_TAG"] ].concat(store_dir_pieces).join("/")
+    if Rails.env == "development"
+      [ENV["AWS_S3_DEVELOPER_TAG"]].concat(store_dir_pieces).join("/")
+    elsif Rails.env == "test"
+      ["public"].concat(store_dir_pieces).join("/")
     else
       store_dir_pieces.join("/")
     end

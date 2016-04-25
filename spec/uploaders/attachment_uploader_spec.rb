@@ -27,7 +27,7 @@ RSpec.describe AttachmentUploader do
 
     context "env is development" do
       before do
-        allow(Rails).to receive(:env) { ActiveSupport::StringInquirer.new("development") }
+        stub_env "development"
         ENV["AWS_S3_DEVELOPER_TAG"] = "jeff-moses"
       end
 
@@ -37,8 +37,16 @@ RSpec.describe AttachmentUploader do
       end
     end
 
-    context "env is anything but development" do
+    context "env is test" do
+      it "joins the store dirs with the public dir" do
+        stub_env "test"
+        expect(subject).to eq "public/uploads/some-course/some-assignment/devious_files/dave-eversby"
+      end
+    end
+
+    context "env is anything but development or test" do
       it "joins the store dirs and doesn't use the developer tag" do
+        stub_env "some-env"
         expect(subject).to eq "uploads/some-course/some-assignment/devious_files/dave-eversby"
       end
     end
