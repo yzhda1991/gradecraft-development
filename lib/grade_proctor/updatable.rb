@@ -15,10 +15,13 @@ class GradeProctor
 
       user = options[:user] || grade.student
       course = options[:course] || grade.course
+      student_logged = options[:student_logged].nil? ? true :
+        options[:student_logged]
 
       grade_for_course?(course) &&
         (user.is_staff?(course) ||
-          (grade_for_user?(user) && grade.assignment.student_logged?))
+          (grade_for_user?(user) && (!student_logged ||
+                                     grade.assignment.student_logged?)))
     end
   end
 end

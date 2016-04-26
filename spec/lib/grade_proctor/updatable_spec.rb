@@ -31,6 +31,19 @@ describe GradeProctor::Updatable do
         end
       end
 
+      context "without needing to be student logged" do
+        it "can update a grade" do
+          expect(subject).to be_updatable user: user, course: course,
+            student_logged: false
+        end
+
+        it "cannot update a grade that does not belong to them" do
+          allow(grade).to receive(:student_id).and_return 456
+          expect(subject).to_not be_updatable user: user, course: course,
+            student_logged: false
+        end
+      end
+
       it "cannot update a grade that is updated by an instructor" do
         expect(subject).to_not be_updatable user: user, course: course
       end
