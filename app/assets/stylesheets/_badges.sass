@@ -9,6 +9,18 @@
   width: 80%
   max-width: 100px
 
+.student-badge-display
+  text-align: center
+  h4
+    text-align: left
+
+.badge-container
+  .badge-icon
+    float: left
+  .badge-description
+    .badge-title
+      font-size: 1.25rem
+
 /* used on the badge show page for both instructors and students, and grade
 /* standard edit form */
 .badge-card
@@ -189,6 +201,23 @@ button#remove-badges, button#add-badges
 
   .badges-earned
     @include ribbon
+
+.badge-index-table
+  .sort-column, .lock-icon-column
+    width: 20px
+  .icon-column
+    width: 15%
+    text-align: center
+  .button-column
+    min-width: 300px
+  .earned-column
+    width: 100px
+  .description-column
+  &.student-index
+    .button-column
+      min-width: 0px
+      width: 10px
+
 
 .badge-table
   float: left

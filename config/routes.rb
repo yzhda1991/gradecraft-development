@@ -162,6 +162,8 @@ GradeCraft::Application.routes.draw do
     end
   end
 
+  get "(/students/:student_id)/badges", to: "badges#index"
+
   #7. Challenges
   resources :challenges do
     post :predict_points
@@ -310,7 +312,6 @@ GradeCraft::Application.routes.draw do
   get "timeline" => "students#timeline"
   get "syllabus" => "students#syllabus"
   get "course_progress" => "students#course_progress"
-  get "my_badges" => "students#badges"
   get "my_team" => "students#teams"
 
   #14. User Auth

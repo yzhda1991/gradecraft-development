@@ -26,8 +26,8 @@
     %li{class: ("active" if current_page?(predictor_path)) }
       = link_to_unless_current glyph(:tasks) + "Grade Predictor", predictor_path
     - if current_course.has_badges?
-      %li{class: ("active" if current_page?(my_badges_path)) }
-        = link_to_unless_current glyph(:shield) + "#{term_for :badges}", my_badges_path
+      %li{class: ("active" if current_page?(badges_path)) }
+        = link_to_unless_current glyph(:shield) + "#{term_for :badges}", badges_path
     - if current_course.announcements.present?
       %li{class: ("active" if current_page?(announcements_path)) }
         - unread_count = unread_count_for current_student, current_course
@@ -39,3 +39,4 @@
     - if current_course.has_teams? && current_course.teams_visible?
       %li{class: ("active" if current_page?(my_team_path)) }
         = link_to_unless_current glyph(:users) + "#{term_for :teams}", my_team_path
+

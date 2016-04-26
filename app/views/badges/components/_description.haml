@@ -1,0 +1,6 @@
+-if link_to_badge
+  .badge-title= link_to badge.name, badge_path(badge)
+-else
+  .badge-title= badge.name
+
+= raw badge.description

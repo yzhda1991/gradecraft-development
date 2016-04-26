@@ -33,39 +33,7 @@ describe BadgesController do
     describe "GET show" do
       it "displays the badge page" do
         get :show, id: @badge.id
-        expect(assigns(:title)).to eq(@badge.name)
-        expect(assigns(:badge)).to eq(@badge)
         expect(response).to render_template(:show)
-      end
-
-      describe "with team id in params" do
-        it "assigns team and students for team" do
-          # we verify only students on team assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-
-          get :show, { id: @badge.id, team_id: team.id }
-          expect(assigns(:team)).to eq(team)
-          expect(assigns(:students)).to eq([@student])
-        end
-      end
-
-      describe "with no team id in params" do
-        it "assigns all students if no team supplied" do
-          # we verify non-team members also assigned as @students
-          other_student = create(:user)
-          other_student.courses << @course
-
-          team = create(:team, course: @course)
-          team.students << @student
-
-          get :show, id: @badge.id
-          expect(assigns(:students)).to include(@student)
-          expect(assigns(:students)).to include(other_student)
-        end
       end
     end
 
@@ -188,6 +156,24 @@ describe BadgesController do
   context "as student" do
     before(:each) { login_user(@student) }
 
+    describe "GET index" do
+      it "shows the student facing badge page" do
+        allow(controller).to receive(:current_student).and_return(@student)
+        get :index
+        expect(assigns(:title)).to eq("badges")
+        expect(assigns(:badges)).to eq([@badge])
+        expect(response).to render_template(:index)
+      end
+    end
+
+    describe "GET show" do
+      it "shows the student facing badge page" do
+        allow(controller).to receive(:current_student).and_return(@student)
+        get :show, id: @badge.id
+        expect(response).to render_template(:show)
+      end
+    end
+
     describe "GET student_predictor_data" do
       describe "POST predict_times_earned" do
         it "updates the predicted times earned for a badge" do
@@ -225,7 +211,6 @@ describe BadgesController do
 
     describe "protected routes" do
       [
-        :index,
         :new,
         :create,
         :sort
@@ -239,7 +224,6 @@ describe BadgesController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :show,
         :update,
         :destroy
       ].each do |route|
