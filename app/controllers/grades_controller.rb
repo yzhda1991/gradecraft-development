@@ -199,12 +199,6 @@ class GradesController < ApplicationController
       #{ @assignment.name } grade was successfully deleted."
   end
 
-  # upload grades for an assignment
-  def import
-    @assignment = current_course.assignments.find(params[:id])
-    @title = "Import Grades for #{@assignment.name}"
-  end
-
   def upload
     @assignment = current_course.assignments.find(params[:id])
 

@@ -61,6 +61,15 @@ describe Assignments::GradesController do
       end
     end
 
+    describe "GET import" do
+      it "displays the import page" do
+        get :import, { assignment_id: @assignment.id}
+        expect(assigns(:title)).to eq("Import Grades for #{@assignment.name}")
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(response).to render_template(:import)
+      end
+    end
+
     describe "GET index" do
       it "redirects to the assignments show view if the assigment is not a rubric" do
         allow(@assignment).to receive(:grade_with_rubric?).and_return false
@@ -183,6 +192,13 @@ describe Assignments::GradesController do
     describe "GET export" do
       it "redirects back to the root" do
         expect(get :export, assignment_id: @assignment, format: :csv).to \
+          redirect_to(:root)
+      end
+    end
+
+    describe "GET import" do
+      it "redirects back to the root" do
+        expect(get :import, { assignment_id: @assignment }).to \
           redirect_to(:root)
       end
     end

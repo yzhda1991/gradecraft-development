@@ -69,6 +69,7 @@ GradeCraft::Application.routes.draw do
       collection do
         get :download
         get :export
+        get :import
         get :mass_edit
         put :mass_update
         get :edit_status
@@ -85,7 +86,7 @@ GradeCraft::Application.routes.draw do
       scope "grades", as: :grades, controller: :grades do
         #get :edit_status
         #put :update_status
-        get :import
+        #get :import
         post :upload
         post :self_log
         post :predict_score

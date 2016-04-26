@@ -58,6 +58,12 @@ class Assignments::GradesController < ApplicationController
     end
   end
 
+  # GET /assignments/:assignment_id/grades/import
+  def import
+    @assignment = current_course.assignments.find(params[:assignment_id])
+    @title = "Import Grades for #{@assignment.name}"
+  end
+
   # GET /assignments/:assignment_id/grades
   # View criterion grades for all students in the course for the assignment
   def index

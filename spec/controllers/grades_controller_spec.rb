@@ -379,15 +379,6 @@ describe GradesController do
       end
     end
 
-    describe "GET import" do
-      it "displays the import page" do
-        get :import, { id: @assignment.id}
-        expect(assigns(:title)).to eq("Import Grades for #{@assignment.name}")
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(response).to render_template(:import)
-      end
-    end
-
     describe "POST upload" do
       render_views
 
@@ -545,7 +536,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { get :import, { id: @assignment.id }},
           Proc.new { post :upload, { id: @assignment.id }},
         ].each do |protected_route|
           expect(protected_route.call).to redirect_to(:root)
