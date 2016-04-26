@@ -38,6 +38,19 @@ describe Assignments::GradesController do
       end
     end
 
+    describe "PUT update_status" do
+      it "updates the grade status for grades" do
+        put :update_status, { assignment_id: @assignment.id, grade_ids: [@grade.id], grade: { status: "Graded" }}
+        expect(@grade.reload.status).to eq("Graded")
+      end
+
+      it "redirects to session if present"  do
+        session[:return_to] = login_path
+        put :update_status, { assignment_id: @assignment.id, grade_ids: [@grade.id], grade: { status: "Graded" }}
+        expect(response).to redirect_to(login_path)
+      end
+    end
+
     describe "GET export" do
       it "returns sample csv data" do
         submission = create(:submission, grade: @grade, student: @student,
@@ -156,6 +169,13 @@ describe Assignments::GradesController do
     describe "GET edit_status" do
       it "redirects back to the root" do
         expect(get :edit_status, assignment_id: @assignment).to \
+          redirect_to(:root)
+      end
+    end
+
+    describe "GET update_status" do
+      it "redirects back to the root" do
+        expect(put :update_status, assignment_id: @assignment).to \
           redirect_to(:root)
       end
     end

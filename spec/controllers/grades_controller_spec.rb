@@ -379,19 +379,6 @@ describe GradesController do
       end
     end
 
-    describe "PUT update_status" do
-      it "updates the grade status for grades" do
-        put :update_status, { grade_ids: [@grade.id], id: @assignment.id, grade: { status: "Graded" }}
-        expect(@grade.reload.status).to eq("Graded")
-      end
-
-      it "redirects to session if present"  do
-        session[:return_to] = login_path
-        put :update_status, { grade_ids: [@grade.id], id: @assignment.id, grade: { status: "Graded" }}
-        expect(response).to redirect_to(login_path)
-      end
-    end
-
     describe "GET import" do
       it "displays the import page" do
         get :import, { id: @assignment.id}
@@ -558,7 +545,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { post :update_status, {grade_ids: @grade.id, id: @assignment.id }},
           Proc.new { get :import, { id: @assignment.id }},
           Proc.new { post :upload, { id: @assignment.id }},
         ].each do |protected_route|

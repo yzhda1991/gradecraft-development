@@ -24,6 +24,27 @@ class Assignments::GradesController < ApplicationController
     @grades = @assignment.grades.find(params[:grade_ids])
   end
 
+  # PUT /assignments/:assignment_id/grades/update_status
+  def update_status
+    assignment = current_course.assignments.find(params[:assignment_id])
+    grades = assignment.grades.find(params[:grade_ids])
+    status = params[:grade][:status]
+
+    grade_ids = grades.collect do |grade|
+      grade.update(status: status)
+      grade.id
+    end
+
+    # @mz TODO: add specs
+    enqueue_multiple_grade_update_jobs(grade_ids)
+
+    if session[:return_to].present?
+      redirect_to session[:return_to], notice: "Grades were successfully updated!"
+    else
+      redirect_to assignment, notice: "Grades were successfully updated!"
+    end
+  end
+
   # GET /assignments/:assignment_id/grades/export
   # Sends a CSV file to the user with the current grades for all students
   # in the course for the asisgnment. This has more detail about the student.
