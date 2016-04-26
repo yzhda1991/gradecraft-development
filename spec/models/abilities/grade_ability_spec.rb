@@ -29,5 +29,13 @@ describe Ability do
 
       expect(subject).to be_able_to(:update, Grade.new)
     end
+
+    it "passes on the options to the GradeProctor" do
+      expect_any_instance_of(GradeProctor).to  \
+        receive(:updatable?).with(user: student, course: course,
+                                  student_logged: false).and_return true
+
+      expect(subject).to be_able_to(:update, Grade.new, student_logged: false)
+    end
   end
 end
