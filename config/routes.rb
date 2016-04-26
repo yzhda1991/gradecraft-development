@@ -89,12 +89,12 @@ GradeCraft::Application.routes.draw do
         #put :update_status
         #get :import
         #post :upload
-        post :self_log
-        post :predict_score
-        post :feedback_read
-        post :remove
-        post :exclude
-        post :include
+        post :self_log # should be on the grades controller (works with single grade)
+        post :predict_score # should be on grades controller (works with single grade)
+        #post :feedback_read
+        post :remove # should be on grades controller (works with single grade)
+        post :exclude # should be on the grades controller (works with a single grade)
+        post :include # should be on the grades controller (works with a single grade)
       end
     end
 
@@ -114,6 +114,10 @@ GradeCraft::Application.routes.draw do
       resources :criteria
       get :design, on: :collection
     end
+  end
+
+  resources :grades, only: [] do
+    post :feedback_read, on: :member
   end
 
   resources :unlock_states do

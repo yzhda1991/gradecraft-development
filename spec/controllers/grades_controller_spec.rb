@@ -363,7 +363,7 @@ describe GradesController do
 
     describe "POST feedback_read" do
       it "should be protected and redirect to root" do
-        expect( post :feedback_read, id: @assignment.id, grade_id: @grade.id ).to redirect_to(:root)
+        expect(post :feedback_read, id: @grade.id).to redirect_to(:root)
       end
     end
 
@@ -386,10 +386,7 @@ describe GradesController do
       login_user(@student)
       allow(controller).to receive(:current_student).and_return(@student)
     end
-
-    after(:each) do
-      @grade.delete
-    end
+    after(:each) { @grade.delete }
 
     describe "GET show" do
       it "redirects to the assignment" do
@@ -400,7 +397,7 @@ describe GradesController do
 
     describe "POST feedback_read" do
       it "marks the grade as read by the student" do
-        post :feedback_read, id: @assignment.id, grade_id: @grade.id
+        post :feedback_read, id: @grade.id
         expect(@grade.reload.feedback_read).to be_truthy
         expect(@grade.feedback_read_at).to be_within(1.second).of(Time.now)
         expect(response).to redirect_to assignment_path(@assignment)

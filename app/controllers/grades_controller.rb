@@ -199,11 +199,13 @@ class GradesController < ApplicationController
       #{ @assignment.name } grade was successfully deleted."
   end
 
+  # POST /grades/:id/feedback_read
   def feedback_read
-    @assignment = current_course.assignments.find params[:id]
-    @grade = @assignment.grades.find params[:grade_id]
-    @grade.feedback_read!
-    redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
+    grade = Grade.find params[:id]
+    authorize! :update, grade, student_logged: false
+    grade.feedback_read!
+    redirect_to assignment_path(grade.assignment),
+      notice: "Thank you for letting us know!"
   end
 
   # Allows students to log grades for student logged assignments
