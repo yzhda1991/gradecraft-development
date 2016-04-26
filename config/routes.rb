@@ -92,7 +92,7 @@ GradeCraft::Application.routes.draw do
         post :self_log # should be on the grades controller (works with single grade)
         post :predict_score # should be on grades controller (works with single grade)
         #post :feedback_read
-        post :remove # should be on grades controller (works with single grade)
+        #post :remove
         post :exclude # should be on the grades controller (works with a single grade)
         post :include # should be on the grades controller (works with a single grade)
       end
@@ -118,6 +118,7 @@ GradeCraft::Application.routes.draw do
 
   resources :grades, only: [] do
     post :feedback_read, on: :member
+    post :remove, on: :member
   end
 
   resources :unlock_states do

@@ -249,10 +249,11 @@ describe GradesController do
 
     describe "POST remove" do
       before do
-        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+        allow_any_instance_of(ScoreRecalculatorJob).to \
+          receive(:enqueue).and_return true
       end
 
-      it "resets the Grade paramters, while preserving the predicted score" do
+      it "resets the Grade parameters, while preserving the predicted score" do
         @grade.update(
           predicted_score: 400,
           raw_score: 500,
@@ -265,20 +266,26 @@ describe GradesController do
           instructor_modified: true,
           graded_at: DateTime.now
         )
-        post :remove, {id: @grade.id}
+        post :remove, { id: @grade.id }
 
         @grade.reload
         expect(@grade.predicted_score).to eq(400)
         expect(@grade.feedback).to eq("")
-        [ :raw_score,:status,:feedback_read_at,:feedback_reviewed_at,
-          :feedback_read,:feedback_reviewed,:instructor_modified,:graded_at].each do |attr|
+        [:raw_score,
+         :status,
+         :feedback_read_at,
+         :feedback_reviewed_at,
+         :feedback_read,
+         :feedback_reviewed,
+         :instructor_modified,
+         :graded_at].each do |attr|
           expect(@grade[attr]).to be_falsey
         end
       end
 
       it "returns an error message on failure" do
         allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :remove, {id: @grade.id}
+        post :remove, { id: @grade.id }
         expect(response.status).to eq(400)
       end
     end

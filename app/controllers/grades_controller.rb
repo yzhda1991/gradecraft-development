@@ -126,9 +126,9 @@ class GradesController < ApplicationController
     end
   end
 
+  # POST /grades/:id/remove
   # This is the method used when faculty delete a grade
   # it preserves the predicted grade
-  # POST /assignments/:id/grades/remove
   def remove
     @grade = Grade.find(params[:id])
     @grade.raw_score = nil
