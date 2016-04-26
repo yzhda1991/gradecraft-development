@@ -1,5 +1,6 @@
 class Assignments::GradesController < ApplicationController
   before_filter :ensure_staff?
+  before_filter :save_referer, only: :edit_status
 
   # GET /assignments/:assignment_id/grades/download
   # Sends a CSV file to the user with the current grades for all students
@@ -12,6 +13,15 @@ class Assignments::GradesController < ApplicationController
           .export_grades(assignment, current_course.students)
       }
     end
+  end
+
+  # GET /assignments/:assignment_id/grades/edit_status
+  # For changing the status of a group of grades passed in grade_ids
+  # ("In Progress" => "Graded", or "Graded" => "Released")
+  def edit_status
+    @assignment = current_course.assignments.find(params[:assignment_id])
+    @title = "#{@assignment.name} Grade Statuses"
+    @grades = @assignment.grades.find(params[:grade_ids])
   end
 
   # GET /assignments/:assignment_id/grades/export

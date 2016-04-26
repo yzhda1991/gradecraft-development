@@ -71,6 +71,7 @@ GradeCraft::Application.routes.draw do
         get :export
         get :mass_edit
         put :mass_update
+        get :edit_status
       end
     end
 
@@ -81,7 +82,7 @@ GradeCraft::Application.routes.draw do
 
     member do
       scope "grades", as: :grades, controller: :grades do
-        get :edit_status
+        #get :edit_status
         put :update_status
         get :import
         post :upload
@@ -93,14 +94,18 @@ GradeCraft::Application.routes.draw do
         post :include
       end
     end
+
     resources :submissions, except: :index do
       post :upload
     end
+
     resources :tasks
+
     resource :grade, only: [:show, :edit, :update, :destroy] do
       put :submit_rubric, on: :collection
       resources :earned_badges
     end
+
     resource :rubric do
       get :existing_criteria
       resources :criteria

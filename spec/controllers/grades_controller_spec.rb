@@ -379,16 +379,6 @@ describe GradesController do
       end
     end
 
-    describe "GET edit_status" do
-      it "assigns params" do
-        get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }
-        expect(assigns(:title)).to eq("#{@assignment.name} Grade Statuses")
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:grades)).to eq([@grade])
-        expect(response).to render_template(:edit_status)
-      end
-    end
-
     describe "PUT update_status" do
       it "updates the grade status for grades" do
         put :update_status, { grade_ids: [@grade.id], id: @assignment.id, grade: { status: "Graded" }}
@@ -568,7 +558,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }},
           Proc.new { post :update_status, {grade_ids: @grade.id, id: @assignment.id }},
           Proc.new { get :import, { id: @assignment.id }},
           Proc.new { post :upload, { id: @assignment.id }},

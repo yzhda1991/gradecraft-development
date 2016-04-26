@@ -28,6 +28,16 @@ describe Assignments::GradesController do
       end
     end
 
+    describe "GET edit_status" do
+      it "assigns params" do
+        get :edit_status, { assignment_id: @assignment.id, grade_ids: [@grade.id] }
+        expect(assigns(:title)).to eq("#{@assignment.name} Grade Statuses")
+        expect(assigns(:assignment)).to eq(@assignment)
+        expect(assigns(:grades)).to eq([@grade])
+        expect(response).to render_template(:edit_status)
+      end
+    end
+
     describe "GET export" do
       it "returns sample csv data" do
         submission = create(:submission, grade: @grade, student: @student,
@@ -139,6 +149,13 @@ describe Assignments::GradesController do
     describe "GET download" do
       it "redirects back to the root" do
         expect(get :download, assignment_id: @assignment, format: :csv).to \
+          redirect_to(:root)
+      end
+    end
+
+    describe "GET edit_status" do
+      it "redirects back to the root" do
+        expect(get :edit_status, assignment_id: @assignment).to \
           redirect_to(:root)
       end
     end

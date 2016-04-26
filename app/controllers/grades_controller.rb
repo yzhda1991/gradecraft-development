@@ -7,7 +7,7 @@ class GradesController < ApplicationController
   # TODO: probably need to add submit_rubric here
   before_filter :ensure_student?,
     only: [:feedback_read, :predict_score, :self_log]
-  before_filter :save_referer, only: [:edit, :edit_status]
+  before_filter :save_referer, only: :edit
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
 
@@ -197,15 +197,6 @@ class GradesController < ApplicationController
 
     redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name }'s
       #{ @assignment.name } grade was successfully deleted."
-  end
-
-  # For changing the status of a group of grades passed in grade_ids
-  #  ("In Progress" => "Graded", or "Graded" => "Released")
-  # GET  /assignments/:id/grades/edit_status
-  def edit_status
-    @assignment = current_course.assignments.find(params[:id])
-    @title = "#{@assignment.name} Grade Statuses"
-    @grades = @assignment.grades.find(params[:grade_ids])
   end
 
   # PUT /assignments/:id/grades/update_status
