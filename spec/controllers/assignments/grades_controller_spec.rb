@@ -70,6 +70,33 @@ describe Assignments::GradesController do
       end
     end
 
+    describe "POST upload" do
+      render_views
+
+      let(:file) { fixture_file "grades.csv", "text/csv" }
+
+      it "renders the results from the import" do
+        @student.reload.update_attribute :email, "robert@example.com"
+        second_student = create(:user, username: "jimmy")
+        second_student.courses << @course
+        post :upload, assignment_id: @assignment.id, file: file
+        expect(response).to render_template :import_results
+        expect(response.body).to include "2 Grades Imported Successfully"
+      end
+
+      it "renders any errors that have occured" do
+        post :upload, assignment_id: @assignment.id, file: file
+        expect(response.body).to include "3 Grades Not Imported"
+        expect(response.body).to include "Student not found in course"
+      end
+
+      it "adds error and redirects without a file" do
+        post :upload, assignment_id: @assignment.id
+        expect(flash[:notice]).to eq("File is missing")
+        expect(response).to redirect_to(assignment_path(@assignment))
+      end
+    end
+
     describe "GET index" do
       it "redirects to the assignments show view if the assigment is not a rubric" do
         allow(@assignment).to receive(:grade_with_rubric?).and_return false
@@ -199,6 +226,13 @@ describe Assignments::GradesController do
     describe "GET import" do
       it "redirects back to the root" do
         expect(get :import, { assignment_id: @assignment }).to \
+          redirect_to(:root)
+      end
+    end
+
+    describe "POST upload" do
+      it "redirects back to the root" do
+        expect(post :upload, { assignment_id: @assignment }).to \
           redirect_to(:root)
       end
     end

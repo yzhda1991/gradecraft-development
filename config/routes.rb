@@ -70,6 +70,7 @@ GradeCraft::Application.routes.draw do
         get :download
         get :export
         get :import
+        post :upload
         get :mass_edit
         put :mass_update
         get :edit_status
@@ -87,7 +88,7 @@ GradeCraft::Application.routes.draw do
         #get :edit_status
         #put :update_status
         #get :import
-        post :upload
+        #post :upload
         post :self_log
         post :predict_score
         post :feedback_read

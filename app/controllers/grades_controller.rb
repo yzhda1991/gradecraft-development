@@ -199,27 +199,6 @@ class GradesController < ApplicationController
       #{ @assignment.name } grade was successfully deleted."
   end
 
-  def upload
-    @assignment = current_course.assignments.find(params[:id])
-
-    if params[:file].blank?
-      flash[:notice] = "File missing"
-      redirect_to assignment_path(@assignment)
-    else
-      # @mz TODO: check into what this calls is doing. is this being used?
-      @students = current_course.students
-
-      @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
-
-      # @mz TODO: add specs
-      grade_ids = @result.successful.map(&:id)
-
-      enqueue_multiple_grade_update_jobs(grade_ids)
-
-      render :import_results
-    end
-  end
-
   def feedback_read
     @assignment = current_course.assignments.find params[:id]
     @grade = @assignment.grades.find params[:grade_id]
@@ -349,13 +328,6 @@ class GradesController < ApplicationController
   def score_recalculator(student)
     ScoreRecalculatorJob.new(user_id: student.id,
                            course_id: current_course.id).enqueue
-  end
-
-  def enqueue_multiple_grade_update_jobs(grade_ids)
-    grade_ids.each do |grade_id|
-      grade_updater_job = GradeUpdaterJob.new(grade_id: grade_id)
-      grade_updater_job.enqueue
-    end
   end
 
   def rubric_criteria_with_levels

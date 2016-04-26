@@ -64,6 +64,24 @@ class Assignments::GradesController < ApplicationController
     @title = "Import Grades for #{@assignment.name}"
   end
 
+  # POST /assignments/:assignment_id/grades/upload
+  def upload
+    @assignment = current_course.assignments.find(params[:assignment_id])
+
+    if params[:file].blank?
+      redirect_to assignment_path(@assignment), notice: "File is missing"
+    else
+      @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
+
+      # @mz TODO: add specs
+      grade_ids = @result.successful.map(&:id)
+
+      enqueue_multiple_grade_update_jobs(grade_ids)
+
+      render :import_results
+    end
+  end
+
   # GET /assignments/:assignment_id/grades
   # View criterion grades for all students in the course for the assignment
   def index

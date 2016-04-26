@@ -378,33 +378,6 @@ describe GradesController do
         expect( post :predict_score, { id: @assignment.id, predicted_score: 0, format: :json } ).to redirect_to(:root)
       end
     end
-
-    describe "POST upload" do
-      render_views
-
-      let(:file) { fixture_file "grades.csv", "text/csv" }
-
-      it "renders the results from the import" do
-        @student.reload.update_attribute :email, "robert@example.com"
-        second_student = create(:user, username: "jimmy")
-        second_student.courses << @course
-        post :upload, id: @assignment.id, file: file
-        expect(response).to render_template :import_results
-        expect(response.body).to include "2 Grades Imported Successfully"
-      end
-
-      it "renders any errors that have occured" do
-        post :upload, id: @assignment.id, file: file
-        expect(response.body).to include "3 Grades Not Imported"
-        expect(response.body).to include "Student not found in course"
-      end
-
-      it "adds error and redirects without a file" do
-        post :upload, id: @assignment.id
-        expect(flash[:notice]).to eq("File missing")
-        expect(response).to redirect_to(assignment_path(@assignment))
-      end
-    end
   end
 
   context "as student" do
@@ -536,7 +509,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { post :upload, { id: @assignment.id }},
         ].each do |protected_route|
           expect(protected_route.call).to redirect_to(:root)
         end
