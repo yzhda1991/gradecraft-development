@@ -376,12 +376,6 @@ describe GradesController do
       end
     end
 
-    describe "POST self_log" do
-      it "should be protected and redirect to root" do
-        expect( post :self_log, id: @assignment.id ).to redirect_to(:root)
-      end
-    end
-
     describe "POST predict_score" do
       it "should be protected and redirect to root" do
         expect( post :predict_score, { id: @assignment.id, predicted_score: 0, format: :json } ).to redirect_to(:root)
@@ -410,47 +404,6 @@ describe GradesController do
         expect(@grade.reload.feedback_read).to be_truthy
         expect(@grade.feedback_read_at).to be_within(1.second).of(Time.now)
         expect(response).to redirect_to assignment_path(@assignment)
-      end
-    end
-
-    describe "POST self_log" do
-      context "with a student loggable grade" do
-        before(:all) do
-          @assignment.update(student_logged: true)
-        end
-
-        it "creates a maximum score by the student if present" do
-          post :self_log, id: @assignment.id
-          grade = @student.grade_for_assignment(@assignment)
-          expect(grade.raw_score).to eq @assignment.point_total
-        end
-
-        it "reports errors on failure to save" do
-          allow_any_instance_of(Grade).to receive(:save).and_return false
-          post :self_log, id: @assignment.id
-          grade = @student.grade_for_assignment(@assignment)
-          expect(flash[:notice]).to eq("We're sorry, there was an error saving your grade.")
-        end
-
-        context "with assignment levels" do
-          it "creates a score for the student at the specified level" do
-            post :self_log, id: @assignment.id, grade: { raw_score: "10000" }
-            grade = @student.grade_for_assignment(@assignment)
-            expect(grade.raw_score).to eq 10000
-          end
-        end
-      end
-
-      context "with an assignment not student loggable" do
-        before(:all) do
-          @assignment.update(student_logged: false)
-        end
-
-        it "creates should not change the student score" do
-          post :self_log, id: @assignment.id
-          grade = @student.grade_for_assignment(@assignment)
-          expect(grade.raw_score).to eq nil
-        end
       end
     end
 

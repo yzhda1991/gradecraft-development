@@ -3,10 +3,10 @@ class GradesController < ApplicationController
   before_filter :set_assignment,
     only: [:show, :edit, :update, :destroy, :submit_rubric]
   before_filter :ensure_staff?,
-    except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
+    except: [:feedback_read, :show, :predict_score, :async_update]
   # TODO: probably need to add submit_rubric here
   before_filter :ensure_student?,
-    only: [:feedback_read, :predict_score, :self_log]
+    only: [:feedback_read, :predict_score]
   before_filter :save_referer, only: :edit
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
@@ -206,39 +206,6 @@ class GradesController < ApplicationController
     grade.feedback_read!
     redirect_to assignment_path(grade.assignment),
       notice: "Thank you for letting us know!"
-  end
-
-  # Allows students to log grades for student logged assignments
-  # either sets raw score to params[:grade][:raw_score]
-  # or defaults to point total for assignment
-  def self_log
-    @assignment = current_course.assignments.find(params[:id])
-    if @assignment.open? && @assignment.student_logged?
-
-      @grade = Grade.find_or_create(@assignment.id, current_student.id)
-
-      if params[:grade].present? && params[:grade][:raw_score].present?
-        @grade.raw_score = params[:grade][:raw_score]
-      else
-        @grade.raw_score = @assignment.point_total
-      end
-
-      @grade.instructor_modified = true
-      @grade.status = "Graded"
-
-      if @grade.save
-        # @mz TODO: add specs
-        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        grade_updater_job.enqueue
-
-        redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!'
-      else
-        redirect_to syllabus_path, notice: "We're sorry, there was an error saving your grade."
-      end
-
-    else
-      redirect_to dashboard_path, notice: "This assignment is not open for self grading."
-    end
   end
 
   # Students predicting the score they'll get on an assignment using the grade

@@ -1,5 +1,6 @@
 class Assignments::GradesController < ApplicationController
-  before_filter :ensure_staff?
+  before_filter :ensure_staff?, except: :self_log
+  before_filter :ensure_student?, only: :self_log
   before_filter :save_referer, only: :edit_status
 
   # GET /assignments/:assignment_id/grades/download
@@ -135,6 +136,42 @@ class Assignments::GradesController < ApplicationController
       end
     else
       redirect_to mass_edit_assignment_grades_path(@assignment, team_id: params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
+    end
+  end
+
+  # PUT /assignments/:assignment_id/grades/self_log
+  # Allows students to log grades for student logged assignments
+  # either sets raw score to params[:grade][:raw_score]
+  # or defaults to point total for assignment
+  def self_log
+    @assignment = current_course.assignments.find(params[:assignment_id])
+    if @assignment.open? && @assignment.student_logged?
+      @grade = Grade.find_or_create(@assignment.id, current_student.id)
+
+      if params[:grade].present? && params[:grade][:raw_score].present?
+        @grade.raw_score = params[:grade][:raw_score]
+      else
+        @grade.raw_score = @assignment.point_total
+      end
+
+      @grade.instructor_modified = true
+      @grade.status = "Graded"
+
+      if @grade.save
+        # @mz TODO: add specs
+        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
+        grade_updater_job.enqueue
+
+        redirect_to syllabus_path,
+          notice: "Nice job! Thanks for logging your grade!"
+      else
+        redirect_to syllabus_path,
+          notice: "We're sorry, there was an error saving your grade."
+      end
+
+    else
+      redirect_to dashboard_path,
+        notice: "This assignment is not open for self grading."
     end
   end
 

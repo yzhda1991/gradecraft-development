@@ -75,6 +75,7 @@ GradeCraft::Application.routes.draw do
         put :mass_update
         get :edit_status
         put :update_status
+        post :self_log
       end
     end
 
@@ -89,7 +90,7 @@ GradeCraft::Application.routes.draw do
         #put :update_status
         #get :import
         #post :upload
-        post :self_log # should be on the grades controller (works with single grade)
+        #post :self_log
         post :predict_score # should be on grades controller (works with single grade)
         #post :feedback_read
         #post :remove

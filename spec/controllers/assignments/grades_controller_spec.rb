@@ -187,12 +187,58 @@ describe Assignments::GradesController do
           redirect_to(mass_edit_assignment_grades_path(@assignment))
       end
     end
+
+    describe "POST self_log" do
+      it "redirects back to the root" do
+        expect(post :self_log, assignment_id: @assignment.id ).to \
+          redirect_to(:root)
+      end
+    end
   end
 
   context "as student" do
     before do
       login_user(@student)
       allow(controller).to receive(:current_student).and_return(@student)
+    end
+
+    describe "POST self_log" do
+      context "with a student loggable grade" do
+        before(:all) { @assignment.update(student_logged: true) }
+
+        it "creates a maximum score by the student if present" do
+          post :self_log, assignment_id: @assignment.id
+          grade = @student.grade_for_assignment(@assignment)
+          expect(grade.raw_score).to eq @assignment.point_total
+        end
+
+        it "reports errors on failure to save" do
+          allow_any_instance_of(Grade).to receive(:save).and_return false
+          post :self_log, assignment_id: @assignment.id
+          grade = @student.grade_for_assignment(@assignment)
+          expect(flash[:notice]).to \
+            eq("We're sorry, there was an error saving your grade.")
+        end
+
+        context "with assignment levels" do
+          it "creates a score for the student at the specified level" do
+            post :self_log, assignment_id: @assignment.id,
+              grade: { raw_score: "10000" }
+            grade = @student.grade_for_assignment(@assignment)
+            expect(grade.raw_score).to eq 10000
+          end
+        end
+      end
+
+      context "with an assignment not student loggable" do
+        before(:all) { @assignment.update(student_logged: false) }
+
+        it "creates should not change the student score" do
+          post :self_log, assignment_id: @assignment.id
+          grade = @student.grade_for_assignment(@assignment)
+          expect(grade.raw_score).to eq nil
+        end
+      end
     end
 
     describe "GET download" do
