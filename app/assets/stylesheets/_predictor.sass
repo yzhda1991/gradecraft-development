@@ -436,7 +436,9 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
     background-color: transparent
   .time-earned-prediction
     font-size: $predictor-font-size-2
-    padding: 10px 0 0 4px
+    line-height: 1.5rem
+    text-align: center
+    padding: 10px 12px 0 20px
   .badge-total-prediction
     font-size: $predictor-font-size-1
     clear: both
@@ -522,7 +524,7 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
     width: 100%
 
 // medium
-@media (min-width: $media-small-max) and (max-width: $media-medium-max)
+@media (min-width: $media-small-max) and (max-width: $media-medium-max + 5rem)
   article.predictor-article
     width: 48%
   .predictor-section-title-predicted-points
@@ -538,7 +540,7 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
     width: 100%
 
 // large
-@media (min-width: $media-medium-max) and (max-width: $media-large-max)
+@media (min-width: $media-medium-max + 5rem) and (max-width: $media-large-max)
   article.predictor-article
     width: 19%
   #predictor-main-content.with-sidebar

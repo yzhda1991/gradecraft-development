@@ -180,6 +180,10 @@
       )
     total
 
+  $scope.badgePointsDisplay = (badge)->
+   return "earned" if badge.total_earned_points == 0
+   badge.total_earned_points
+
   # Total points possible to earn from challenges
   $scope.maxChallengePoints = ()->
     total = 0
@@ -237,10 +241,7 @@
       return ""
 
   $scope.badgeCompleted = (badge)->
-    if (badge.point_total == badge.total_earned_points && ! badge.can_earn_multiple_times)
-      return true
-    else
-      return false
+    ! badge.can_earn_multiple_times && badge.earned_badge_count > 0
 
   # We keep the predictor open on closed assignments IF the student has a
   # a submission

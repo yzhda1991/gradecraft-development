@@ -15,7 +15,7 @@
   },
   attributes: {
     name: "Generic badge",
-    point_total: 100 * rand(10),
+    point_total: (100 * rand(1..10) + 100),
     description: nil,
     visible: false,
     can_earn_multiple_times: false
@@ -87,6 +87,83 @@
   assign_samples: false,
 }
 
+@badges[:long_description] = {
+  quotes: {
+    badge_created: nil,
+  },
+  attributes: {
+    name: "Verbose Descriptor",
+    description: "A badge with a long description. Earned badges assigned to
+      all students. A badge is a device or accessory, often containing the
+      insignia of an organization, which is presented or displayed to indicate
+      some feat of service, a special accomplishment, a symbol of authority
+      granted by taking an oath (e.g., police and fire), a sign of legitimate
+      employment or student status, or as a simple means of identification.
+      They are also used in advertising, publicity, and for branding purposes.
+      Police badges date back to medieval times when knights wore a coat of arms
+      representing their allegiances and loyalty.[Wikipedia]",
+    visible: true,
+    can_earn_multiple_times: true
+  },
+  assign_samples: false,
+}
+
+@badges[:zero_points_single_earn_badge] = {
+  quotes: {
+    badge_created: nil,
+  },
+  attributes: {
+    name: "Zephirum Singularis",
+    description: "A zero points badge that can be earned once.",
+    visible: true,
+    point_total: 0,
+    can_earn_multiple_times: false
+  },
+  assign_samples: false,
+}
+
+@badges[:zero_points_single_earn_badge_earned] = {
+  quotes: {
+    badge_created: nil,
+  },
+  attributes: {
+    name: "Zephirum Earned",
+    description: "A zero points badge already earned by all students.",
+    visible: true,
+    point_total: 0,
+    can_earn_multiple_times: false
+  },
+  assign_samples: true,
+}
+
+@badges[:zero_points_multiple_earn_badge] = {
+  quotes: {
+    badge_created: nil,
+  },
+  attributes: {
+    name: "Zephira Multiplus",
+    visible: true,
+    description: "A zero points badge that can be earned multiple times.",
+    point_total: 0,
+    can_earn_multiple_times: true
+  },
+  assign_samples: false,
+}
+
+@badges[:zero_points_multiple_earn_badge_earned] = {
+  quotes: {
+    badge_created: nil,
+  },
+  attributes: {
+    name: "Zephira Earned",
+    visible: true,
+    description: "A zero points badge that can be earned multiple times.",
+    point_total: 0,
+    can_earn_multiple_times: true
+  },
+  assign_samples: true,
+}
+
 @badges[:invisible_badge_earned] = {
   quotes: {
     badge_created: nil,
@@ -109,27 +186,6 @@
     name: "Secretus Unearned",
     description: "An invisible badge that can be earned multiple times. Should
       only be visible to students once they earn it.",
-    can_earn_multiple_times: true
-  },
-  assign_samples: false,
-}
-
-@badges[:long_description] = {
-  quotes: {
-    badge_created: nil,
-  },
-  attributes: {
-    name: "Verbose Descriptor",
-    description: "A badge with a long description. Earned badges assigned to
-      all students. A badge is a device or accessory, often containing the
-      insignia of an organization, which is presented or displayed to indicate
-      some feat of service, a special accomplishment, a symbol of authority
-      granted by taking an oath (e.g., police and fire), a sign of legitimate
-      employment or student status, or as a simple means of identification.
-      They are also used in advertising, publicity, and for branding purposes.
-      Police badges date back to medieval times when knights wore a coat of arms
-      representing their allegiances and loyalty.[Wikipedia]",
-    visible: true,
     can_earn_multiple_times: true
   },
   assign_samples: false,
