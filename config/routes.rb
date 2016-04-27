@@ -84,9 +84,7 @@ GradeCraft::Application.routes.draw do
       put :graded, on: :member
     end
 
-    resources :submissions, except: :index do
-      post :upload
-    end
+    resources :submissions, except: :index
 
     resource :grade, only: [:show, :edit, :update, :destroy] do
       put :submit_rubric, on: :collection
