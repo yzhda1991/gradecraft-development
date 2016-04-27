@@ -334,7 +334,8 @@ describe GradesController do
 
     describe "POST inlude" do
       before do
-        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+        allow_any_instance_of(ScoreRecalculatorJob).to \
+          receive(:enqueue).and_return true
       end
 
       it "marks the Grade as included, and clears the excluded details" do
@@ -345,7 +346,7 @@ describe GradesController do
           excluded_by_id: 2,
           excluded_at: Time.now
         )
-        post :include, {id: @grade.id}
+        post :include, { id: @grade }
 
         @grade.reload
         expect(@grade.excluded_from_course_score).to eq(false)
@@ -357,7 +358,7 @@ describe GradesController do
 
       it "returns an error message on failure" do
         allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :include, {id: @grade.id}
+        post :include, { id: @grade }
         expect(flash[:alert]).to include("grade was not successfully re-added")
       end
     end

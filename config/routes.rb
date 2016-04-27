@@ -94,7 +94,7 @@ GradeCraft::Application.routes.draw do
         #post :feedback_read
         #post :remove
         #post :exclude
-        post :include # should be on the grades controller (works with a single grade)
+        #post :include
       end
     end
 
@@ -117,9 +117,12 @@ GradeCraft::Application.routes.draw do
   end
 
   resources :grades, only: [] do
-    post :exclude, on: :member
-    post :feedback_read, on: :member
-    post :remove, on: :member
+    member do
+      post :exclude
+      post :feedback_read
+      post :include
+      post :remove
+    end
   end
 
   resources :unlock_states do
