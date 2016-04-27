@@ -5,8 +5,8 @@ module GradeAbility
     end
 
     can :update, Grade do |grade, options|
-      GradeProctor.new(grade).updatable? (options || {}).merge({ user: user,
-                                                                 course: course })
+      GradeProctor.new(grade).updatable? (options || {})
+        .merge({ user: user, course: course })
     end
   end
 end
