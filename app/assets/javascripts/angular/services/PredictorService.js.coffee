@@ -79,9 +79,9 @@
           update.challenges = data.update_challenges
         )
 
-    postPredictedGrade = (assignment_id,value)->
+    postPredictedGrade = (grade_id, value)->
       if update.assignments
-        $http.post('/assignments/' + assignment_id + '/grades/predict_score', predicted_score: value).success(
+        $http.post('/grades/' + grade_id + '/predict_score', predicted_score: value).success(
             (data)->
               console.log(data);
           ).error(

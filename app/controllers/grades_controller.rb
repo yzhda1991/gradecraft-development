@@ -5,8 +5,7 @@ class GradesController < ApplicationController
   before_filter :ensure_staff?,
     except: [:feedback_read, :show, :predict_score, :async_update]
   # TODO: probably need to add submit_rubric here
-  before_filter :ensure_student?,
-    only: [:feedback_read, :predict_score]
+  before_filter :ensure_student?, only: [:feedback_read, :predict_score]
   before_filter :save_referer, only: :edit
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
@@ -208,35 +207,35 @@ class GradesController < ApplicationController
       notice: "Thank you for letting us know!"
   end
 
+  # POST /grades/:id/predict_score
   # Students predicting the score they'll get on an assignment using the grade
   # predictor
   # TODO: Change to predict_points when 'score' changes to 'points_earned and
   # PredictedEarnedAssignment model added
   def predict_score
-    @assignment = current_course.assignments.find(params[:id])
-    if current_student.grade_released_for_assignment?(@assignment)
-      @grade = nil
+    grade = Grade.find params[:id]
+    if GradeProctor.new(grade).viewable? # was it released already?
+      grade = nil
     else
-      @grade = current_student.grade_for_assignment(@assignment)
-      @grade.predicted_score = params[:predicted_score]
+      grade.predicted_score = params[:predicted_score]
+      grade.save
     end
-
-    @grade_saved = @grade.nil? ? nil : @grade.save
 
     # TODO: this should be implemented with a PredictorEventLogger instead of a
     # PredictorEventJob since the PredictorEventLogger has logic for cleaning up
     # request params data, but for now this is better than what we had
-    #
-    PredictorEventJob.new(data: predictor_event_attrs).enqueue_with_fallback
+    PredictorEventJob.new(data: predictor_event_attrs(grade))
+      .enqueue_with_fallback
 
     respond_to do |format|
       format.json do
-        if @grade.nil?
-          render json: {errors: "You cannot predict this assignment!"}, status: 400
-        elsif @grade_saved
-          render json: {id: @assignment.id, points_earned: @grade.predicted_score}
+        if grade.nil?
+          render json: { errors: "You cannot predict this assignment!" },
+            status: 400
+        elsif grade.valid?
+          render json: { id: grade.id, points_earned: grade.predicted_score }
         else
-          render json: { errors:  @grade.errors.full_messages }, status: 400
+          render json: { errors:  grade.errors.full_messages }, status: 400
         end
       end
     end
@@ -275,11 +274,11 @@ class GradesController < ApplicationController
                         .select(:id, :criterion_id, :level_id, :comments).to_json
   end
 
-  def safe_grade_possible_points
-    @grade.point_total rescue nil
+  def safe_grade_possible_points(grade)
+    grade.point_total rescue nil
   end
 
-  def predictor_event_attrs
+  def predictor_event_attrs(grade)
     {
       prediction_type: "grade",
       course_id: current_course.id,
@@ -288,9 +287,9 @@ class GradesController < ApplicationController
       user_role: current_user.role(current_course),
       assignment_id: params[:id],
       predicted_points: params[:predicted_score],
-      possible_points: safe_grade_possible_points,
+      possible_points: safe_grade_possible_points(grade),
       created_at: Time.now,
-      prediction_saved_successfully: @grade_saved
+      prediction_saved_successfully: grade
     }
   end
 

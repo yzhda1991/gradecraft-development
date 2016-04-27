@@ -84,21 +84,6 @@ GradeCraft::Application.routes.draw do
       put :graded, on: :member
     end
 
-    member do
-      scope "grades", as: :grades, controller: :grades do
-        #get :edit_status
-        #put :update_status
-        #get :import
-        #post :upload
-        #post :self_log
-        post :predict_score # should be on grades controller (works with single grade)
-        #post :feedback_read
-        #post :remove
-        #post :exclude
-        #post :include
-      end
-    end
-
     resources :submissions, except: :index do
       post :upload
     end
@@ -122,6 +107,7 @@ GradeCraft::Application.routes.draw do
       post :exclude
       post :feedback_read
       post :include
+      post :predict_score
       post :remove
     end
   end

@@ -378,7 +378,8 @@ describe GradesController do
 
     describe "POST predict_score" do
       it "should be protected and redirect to root" do
-        expect( post :predict_score, { id: @assignment.id, predicted_score: 0, format: :json } ).to redirect_to(:root)
+        expect(post :predict_score, { id: @grade.id, predicted_score: 0,
+                                      format: :json }).to redirect_to(:root)
       end
     end
   end
@@ -411,17 +412,18 @@ describe GradesController do
       let(:predicted_points) { (@assignment.point_total * 0.75).to_i }
 
       it "updates the predicted score for an assignment" do
-        post :predict_score, { id: @assignment.id, predicted_score: predicted_points, format: :json }
+        post :predict_score, { id: @grade.id, predicted_score: predicted_points,
+                               format: :json }
         expect(@grade.reload.predicted_score).to eq(predicted_points)
-        expect(JSON.parse(response.body)).to eq({"id" => @assignment.id, "points_earned" => predicted_points})
+        expect(JSON.parse(response.body)).to eq({"id" => @grade.id,
+                                                 "points_earned" => predicted_points})
       end
 
       describe "enqueuing the PredictorEventJob" do
         let(:result) do
-          get :predict_score, id: @assignment.id,
-            predicted_score: predicted_points, format: :json
+          post :predict_score, id: @grade.id, predicted_score: predicted_points,
+            format: :json
         end
-
         let(:event_attrs) { { created_at: Time.now } }
         let(:event_job) { double(PredictorEventJob).as_null_object }
 
@@ -442,15 +444,19 @@ describe GradesController do
       end
 
       it "errors if grade is already released" do
-        allow(@student).to receive(:grade_released_for_assignment?).and_return true
-        post :predict_score, { id: @assignment.id, predicted_score: predicted_points, format: :json }
-        expect(JSON.parse(response.body)).to eq({"errors" => "You cannot predict this assignment!"})
+        allow_any_instance_of(GradeProctor).to \
+          receive(:viewable?).and_return true
+        post :predict_score, { id: @grade.id, predicted_score: predicted_points,
+                               format: :json }
+        expect(JSON.parse(response.body)).to \
+          eq({"errors" => "You cannot predict this assignment!"})
         expect(response.status).to eq(400)
       end
 
       it "errors if prediction can't be saved" do
-        allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :predict_score, { id: @assignment.id, predicted_score: predicted_points, format: :json }
+        allow_any_instance_of(Grade).to receive(:valid?).and_return false
+        post :predict_score, { id: @grade.id, predicted_score: predicted_points,
+                               format: :json }
         expect(response.status).to eq(400)
       end
     end
