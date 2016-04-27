@@ -122,7 +122,10 @@
           else
             if @target.grade.predicted_score == @offValue then @offValue else @onValue
         else if @targetType == 'badge'
-          if @target.prediction.times_earned == 0 then @offValue else @onValue
+          if @target.point_total == 0
+            if @target.prediction.times_earned == 0 then "won't earn" else "will earn"
+          else
+            if @target.prediction.times_earned == 0 then @offValue else @onValue
 
       scope.toggleSwitch = ()->
         if @targetType == 'assignment'
@@ -145,6 +148,25 @@
     link: (scope, el, attr)->
       scope.atMin = ()->
         @target.prediction.times_earned <= @target.earned_badge_count
+      scope.textForTotal = ()->
+        if @target.point_total == 0
+          ""
+        else
+          @target.prediction.times_earned * @target.point_total
+      scope.textForSwitch = ()->
+        if @target.point_total == 0
+          if scope.atMin()
+            switch @target.prediction.times_earned
+              when 0 then "won't earn"
+              when 1 then "earned 1 time"
+              else "earned " + @target.prediction.times_earned + " times"
+          else
+            if @target.prediction.times_earned == 1
+              "will earn 1 time"
+            else
+              "will earn " + @target.prediction.times_earned + " times"
+        else
+          @target.prediction.times_earned + " x " + @target.point_total
       scope.increment = ()->
         @target.prediction.times_earned += 1
         PredictorService.postPredictedBadge(@target.id,@target.prediction.times_earned)
