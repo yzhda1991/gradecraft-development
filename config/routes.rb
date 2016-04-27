@@ -87,7 +87,6 @@ GradeCraft::Application.routes.draw do
     resources :submissions, except: :index
 
     resource :grade, only: [:show, :edit, :update, :destroy] do
-      put :submit_rubric, on: :collection
       resources :earned_badges
     end
 

@@ -1,10 +1,8 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment,
-    only: [:show, :edit, :update, :destroy, :submit_rubric]
+  before_filter :set_assignment, only: [:show, :edit, :update, :destroy]
   before_filter :ensure_staff?,
     except: [:feedback_read, :show, :predict_score, :async_update]
-  # TODO: probably need to add submit_rubric here
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
   before_filter :save_referer, only: :edit
 
