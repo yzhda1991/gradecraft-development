@@ -292,7 +292,8 @@ describe GradesController do
 
     describe "POST exclude" do
       before do
-        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+        allow_any_instance_of(ScoreRecalculatorJob).to \
+          receive(:enqueue).and_return true
       end
 
       it "marks the Grade as excluded, but preserves the data" do
@@ -307,7 +308,7 @@ describe GradesController do
           graded_at: DateTime.now,
           status: "Graded"
         )
-        post :exclude, {id: @grade.id}
+        post :exclude, { id: @grade }
 
         @grade.reload
         expect(@grade.excluded_from_course_score).to eq(true)
@@ -317,7 +318,7 @@ describe GradesController do
 
       it "adds exclusion metadata" do
         current_time = DateTime.now
-        post :exclude, {id: @grade.id}
+        post :exclude, { id: @grade }
 
         @grade.reload
         expect(@grade.excluded_at).to be > current_time
@@ -326,7 +327,7 @@ describe GradesController do
 
       it "returns an error message on failure" do
         allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :exclude, {id: @grade.id}
+        post :exclude, { id: @grade }
         expect(flash[:alert]).to include("grade was not successfully excluded")
       end
     end

@@ -93,7 +93,7 @@ GradeCraft::Application.routes.draw do
         post :predict_score # should be on grades controller (works with single grade)
         #post :feedback_read
         #post :remove
-        post :exclude # should be on the grades controller (works with a single grade)
+        #post :exclude
         post :include # should be on the grades controller (works with a single grade)
       end
     end
@@ -117,6 +117,7 @@ GradeCraft::Application.routes.draw do
   end
 
   resources :grades, only: [] do
+    post :exclude, on: :member
     post :feedback_read, on: :member
     post :remove, on: :member
   end

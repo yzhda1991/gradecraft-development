@@ -152,7 +152,7 @@ class GradesController < ApplicationController
     end
   end
 
-  # POST /assignments/:id/grades/exclude
+  # POST /grades/:id/exclude
   def exclude
     grade = Grade.find(params[:id])
     grade.excluded_from_course_score = true
