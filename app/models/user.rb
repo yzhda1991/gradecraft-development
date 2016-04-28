@@ -391,7 +391,7 @@ class User < ActiveRecord::Base
   def student_visible_earned_badges_for_badge(badge)
     @student_visible_earned_badges_for_badge ||= EarnedBadge
       .where(badge: badge)
-      .where(student_id: self[:id])
+      .where(student_id: self.id)
       .where(student_visible: true)
   end
 

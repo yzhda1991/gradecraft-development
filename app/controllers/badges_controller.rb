@@ -5,29 +5,31 @@ class BadgesController < ApplicationController
     except: [:index, :show, :predictor_data, :predict_times_earned]
   before_filter :ensure_student?, only: [:predict_times_earned]
   before_action :find_badge, only: [:show, :edit, :update, :destroy]
-  before_action :find_student, only: [:index, :show]
 
+  # GET /badges => student and faculty badge index views
+  # GET /students/:id/badges => faculty view of student's badge index view
   def index
     @title = "#{term_for :badges}"
     @badges = current_course.badges
-    if @student
+    if current_student
       @earned_badge_count =
-        @student.student_visible_earned_badges(
+        current_student.student_visible_earned_badges(
           current_course).each_with_object(Hash.new(0)) do |eb,count|
         count[eb.badge_id] += 1
       end
     end
   end
 
+  # GET /badges/:id => student and faculty badge show page
+  # GET /students/:id/badges/:id => faculty view of student's badge show page
   def show
-    presenter = ShowBadgePresenter.new({
+    render :show, ShowBadgePresenter.build({
       course: current_course,
       badge: @badge,
-      student: @student,
+      student: current_student,
       teams: current_course.teams,
       params: params
     })
-    render :show, locals: { presenter: presenter }
   end
 
   def new
@@ -172,13 +174,5 @@ class BadgesController < ApplicationController
 
   def find_badge
     @badge = current_course.badges.find(params[:id])
-  end
-
-  def find_student
-    if current_student || params[:student_id]
-      @student = current_student || User.find(params[:student_id])
-    else
-      @student = nil
-    end
   end
 end
