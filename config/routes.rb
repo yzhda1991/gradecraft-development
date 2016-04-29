@@ -163,6 +163,7 @@ GradeCraft::Application.routes.draw do
   end
 
   get "(/students/:student_id)/badges", to: "badges#index"
+  get "(/students/:student_id)/badges/:id", to: "badges#show"
 
   #7. Challenges
   resources :challenges do

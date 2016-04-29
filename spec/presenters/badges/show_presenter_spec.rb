@@ -1,7 +1,7 @@
 require "spec_helper"
-require "./app/presenters/show_badge_presenter"
+require "./app/presenters/badges/show_presenter"
 
-describe ShowBadgePresenter do
+describe Badges::ShowPresenter do
   let(:badge) do
     double(:badge,
       name: "Badgerino",
@@ -23,7 +23,7 @@ describe ShowBadgePresenter do
   let(:params) {{ team_id: 123 }}
 
   subject do
-    ShowBadgePresenter.new(
+    Badges::ShowPresenter.new(
       { badge: badge,
         course: course,
         student: student,
@@ -75,7 +75,7 @@ describe ShowBadgePresenter do
     end
 
     it "returns nil if team_id is nil" do
-      subject = ShowBadgePresenter.new({ teams: teams, params: {} })
+      subject = Badges::ShowPresenter.new({ teams: teams, params: {} })
       expect(subject.team).to eq nil
     end
   end
@@ -86,7 +86,7 @@ describe ShowBadgePresenter do
     end
 
     it "returns all students being graded if no team in params" do
-      subject = ShowBadgePresenter.new(
+      subject = Badges::ShowPresenter.new(
         { course: course, teams: teams, params: {} }
       )
       expect(subject.students).to eq "all students being graded"
@@ -99,8 +99,19 @@ describe ShowBadgePresenter do
     end
 
     it "returns all earned badges for badge when student is absent" do
-      subject = ShowBadgePresenter.new(badge: badge)
+      subject = Badges::ShowPresenter.new(badge: badge)
       expect(subject.earned_badges).to eq("all earned badges")
+    end
+  end
+
+  describe "#view_student_context?" do
+    it "is true when the student is in the context" do
+      expect(subject.view_student_context?).to be_truthy
+    end
+
+    it "is false when there is no student in context" do
+      subject = Badges::ShowPresenter.new()
+      expect(subject.view_student_context?).to be_falsey
     end
   end
 end

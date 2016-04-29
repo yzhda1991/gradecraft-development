@@ -9,21 +9,17 @@ class BadgesController < ApplicationController
   # GET /badges => student and faculty badge index views
   # GET /students/:id/badges => faculty view of student's badge index view
   def index
-    @title = "#{term_for :badges}"
-    @badges = current_course.badges
-    if current_student
-      @earned_badge_count =
-        current_student.student_visible_earned_badges(
-          current_course).each_with_object(Hash.new(0)) do |eb,count|
-        count[eb.badge_id] += 1
-      end
-    end
+    render Badges::IndexPresenter.build({
+      title: term_for(:badges),
+      badges: current_course.badges,
+      student: current_student
+    })
   end
 
   # GET /badges/:id => student and faculty badge show page
   # GET /students/:id/badges/:id => faculty view of student's badge show page
   def show
-    render :show, ShowBadgePresenter.build({
+    render Badges::ShowPresenter.build({
       course: current_course,
       badge: @badge,
       student: current_student,

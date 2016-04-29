@@ -388,11 +388,20 @@ class User < ActiveRecord::Base
       .references(:earned_badges)
   end
 
-  def student_visible_earned_badges_for_badge(badge)
-    @student_visible_earned_badges_for_badge ||= EarnedBadge
+  # Student visible earned badges for a particular badge
+  def visible_earned_badges_for_badge(badge)
+    EarnedBadge
       .where(badge: badge)
       .where(student_id: self.id)
       .where(student_visible: true)
+  end
+
+  # Number of times a student has earned a particular badge
+  def visible_earned_badges_for_badge_count(badge)
+    EarnedBadge
+      .where(badge: badge)
+      .where(student_id: self.id)
+      .where(student_visible: true).count
   end
 
   # this should be all earned badges that either:

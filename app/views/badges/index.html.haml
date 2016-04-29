@@ -1,13 +1,13 @@
 = content_nav_for Badge if !current_student
 
-%h3.pagetitle= @title
+%h3.pagetitle= presenter.title
 
-= render partial: "badges/context_menu", locals: {actions: [:new]} if current_user_is_staff? && !current_student
+= render partial: "badges/context_menu", locals: {actions: [:new]} if current_user_is_staff? && !presenter.view_student_context?
 
 .pageContent
   = render "layouts/alerts"
 
-  %table.badge-index-table{:class => ("student-index" if current_student)}
+  %table.badge-index-table{:class => ("student-index" if presenter.view_student_context?)}
     %thead
       %tr
         %th.sort-column
@@ -17,11 +17,11 @@
         %th.description-column Description
         %th.button-column
 
-    %tbody{:class => ("sort-badges" if !current_student)}
-      - @badges.each do |badge|
+    %tbody{:class => ("sort-badges" if !presenter.view_student_context?)}
+      - presenter.badges.each do |badge|
         - if BadgeProctor.new(badge).viewable?(current_student || current_user)
           %tr{id: "badge-#{badge.id}"}
-            - if !current_student
+            - if !presenter.view_student_context?
               %td.center
                 %i.fa.fa-arrows-v.draggable
             - else
@@ -36,10 +36,7 @@
               = render partial: "badges/components/icon", locals: { badge: badge }
 
             %td
-              - if current_student
-                = render partial: "badges/components/count", locals: { badge: badge, count: @earned_badge_count[badge.id] }
-              - else
-                = render partial: "badges/components/count", locals: { badge: badge, count: badge.awarded_count }
+              = render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
 
             // Description
             %td
@@ -47,5 +44,5 @@
 
             // Buttons
             %td
-              - if !current_student
+              - if !presenter.view_student_context?
                 = render partial: "badges/buttons", locals: { badge: badge }
