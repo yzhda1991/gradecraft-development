@@ -4,4 +4,10 @@
 
 .pageContent
   = render "layouts/alerts"
+
   / render "grade_content", presenter: presenter
+  = render partial: "grades/components/edit_button", locals: { grade: @grade }
+  - if @grade.excluded_from_course_score?
+    = render partial: "grades/components/excluded", locals: { grade: @grade }
+  - if @grade.assignment.has_groups?
+    = render partial: "grades/components/students_in_group", locals: { grade: grade }

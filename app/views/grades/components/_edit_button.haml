@@ -1,4 +1,0 @@
-- if grade.assignment.has_groups?
-  = link_to "Edit Grade", grade_assignment_group_path(grade.assignment, grade.group_id), class: "button"
-- else
-  = link_to "Edit Grade", edit_assignment_grade_path(grade.assignment, :student_id => grade.student_id), class: "button"

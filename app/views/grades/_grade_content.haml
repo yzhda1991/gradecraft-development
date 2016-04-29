@@ -6,7 +6,7 @@
 
   = render "grades/components/excluded", grade: grade if grade.excluded_from_course_score?
 
-  = render "grades/components/students_in_group", grade: grade, presenter: presenter if grade.assignment.has_groups?
+  = render "grades/components/students_in_group", grade: grade if grade.assignment.has_groups?
 
   = render "grades/components/threshold", grade: grade if grade.assignment.threshold_points
 
