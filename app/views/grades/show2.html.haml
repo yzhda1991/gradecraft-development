@@ -11,3 +11,5 @@
     = render partial: "grades/components/excluded", locals: { grade: @grade }
   - unless @grade.group.nil?
     = render partial: "grades/components/students_in_group", locals: { grade: @grade }
+  - if @grade.assignment.threshold_points
+    = render partial: "grades/components/threshold", locals: { grade: @grade }
