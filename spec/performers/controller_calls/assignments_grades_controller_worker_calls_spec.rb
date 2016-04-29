@@ -20,7 +20,7 @@ RSpec.describe Assignments::GradesController, type: :controller, background_job:
   before(:each) { ResqueSpec.reset! }
 
   context "triggering jobs as a student" do
-    describe "#self_log", focus: true do
+    describe "#self_log" do
       before { allow_any_instance_of(Assignment).to receive(:student_logged?) { true }}
       let(:request_attrs) {{ assignment_id: assignment.id }}
       subject { post :self_log, request_attrs }
