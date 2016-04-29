@@ -9,5 +9,5 @@
   = render partial: "grades/components/edit_button", locals: { grade: @grade }
   - if @grade.excluded_from_course_score?
     = render partial: "grades/components/excluded", locals: { grade: @grade }
-  - if @grade.assignment.has_groups?
-    = render partial: "grades/components/students_in_group", locals: { grade: grade }
+  - unless @grade.group.nil?
+    = render partial: "grades/components/students_in_group", locals: { grade: @grade }

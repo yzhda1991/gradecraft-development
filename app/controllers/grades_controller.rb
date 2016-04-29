@@ -14,7 +14,7 @@ class GradesController < ApplicationController
 
     redirect_to @grade.assignment and return if current_user_is_student?
 
-    name = @grade.assignment.has_groups? ? @grade.group.name : @grade.student.name
+    name = @grade.group.nil? ? @grade.student.name : @grade.group.name
     @title = "#{name}'s Grade for #{@grade.assignment.name}"
   end
 
