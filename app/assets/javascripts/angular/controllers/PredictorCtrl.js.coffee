@@ -294,10 +294,10 @@
 
         if articleType == 'assignment' and $scope.predictionBelowThreshold(article)
           article.grade.predicted_score = 0
-          PredictorService.postPredictedGrade(article_id,0)
+          PredictorService.postPredictedGrade(article.grade.id, 0)
         else if articleType == 'assignment'
           article.grade.predicted_score = value
-          PredictorService.postPredictedGrade(article_id,value)
+          PredictorService.postPredictedGrade(article.grade.id, value)
         else
           article.prediction.points_earned = value
           PredictorService.postPredictedChallenge(article_id,value)

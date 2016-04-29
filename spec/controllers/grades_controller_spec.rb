@@ -249,10 +249,11 @@ describe GradesController do
 
     describe "POST remove" do
       before do
-        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+        allow_any_instance_of(ScoreRecalculatorJob).to \
+          receive(:enqueue).and_return true
       end
 
-      it "resets the Grade paramters, while preserving the predicted score" do
+      it "resets the Grade parameters, while preserving the predicted score" do
         @grade.update(
           predicted_score: 400,
           raw_score: 500,
@@ -265,27 +266,34 @@ describe GradesController do
           instructor_modified: true,
           graded_at: DateTime.now
         )
-        post :remove, {id: @grade.id}
+        post :remove, { id: @grade.id }
 
         @grade.reload
         expect(@grade.predicted_score).to eq(400)
         expect(@grade.feedback).to eq("")
-        [ :raw_score,:status,:feedback_read_at,:feedback_reviewed_at,
-          :feedback_read,:feedback_reviewed,:instructor_modified,:graded_at].each do |attr|
+        [:raw_score,
+         :status,
+         :feedback_read_at,
+         :feedback_reviewed_at,
+         :feedback_read,
+         :feedback_reviewed,
+         :instructor_modified,
+         :graded_at].each do |attr|
           expect(@grade[attr]).to be_falsey
         end
       end
 
       it "returns an error message on failure" do
         allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :remove, {id: @grade.id}
+        post :remove, { id: @grade.id }
         expect(response.status).to eq(400)
       end
     end
 
     describe "POST exclude" do
       before do
-        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+        allow_any_instance_of(ScoreRecalculatorJob).to \
+          receive(:enqueue).and_return true
       end
 
       it "marks the Grade as excluded, but preserves the data" do
@@ -300,7 +308,7 @@ describe GradesController do
           graded_at: DateTime.now,
           status: "Graded"
         )
-        post :exclude, {id: @grade.id}
+        post :exclude, { id: @grade }
 
         @grade.reload
         expect(@grade.excluded_from_course_score).to eq(true)
@@ -310,7 +318,7 @@ describe GradesController do
 
       it "adds exclusion metadata" do
         current_time = DateTime.now
-        post :exclude, {id: @grade.id}
+        post :exclude, { id: @grade }
 
         @grade.reload
         expect(@grade.excluded_at).to be > current_time
@@ -319,14 +327,15 @@ describe GradesController do
 
       it "returns an error message on failure" do
         allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :exclude, {id: @grade.id}
+        post :exclude, { id: @grade }
         expect(flash[:alert]).to include("grade was not successfully excluded")
       end
     end
 
     describe "POST inlude" do
       before do
-        allow_any_instance_of(ScoreRecalculatorJob).to receive(:enqueue).and_return true
+        allow_any_instance_of(ScoreRecalculatorJob).to \
+          receive(:enqueue).and_return true
       end
 
       it "marks the Grade as included, and clears the excluded details" do
@@ -337,7 +346,7 @@ describe GradesController do
           excluded_by_id: 2,
           excluded_at: Time.now
         )
-        post :include, {id: @grade.id}
+        post :include, { id: @grade }
 
         @grade.reload
         expect(@grade.excluded_from_course_score).to eq(false)
@@ -349,7 +358,7 @@ describe GradesController do
 
       it "returns an error message on failure" do
         allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :include, {id: @grade.id}
+        post :include, { id: @grade }
         expect(flash[:alert]).to include("grade was not successfully re-added")
       end
     end
@@ -363,78 +372,14 @@ describe GradesController do
 
     describe "POST feedback_read" do
       it "should be protected and redirect to root" do
-        expect( post :feedback_read, id: @assignment.id, grade_id: @grade.id ).to redirect_to(:root)
-      end
-    end
-
-    describe "POST self_log" do
-      it "should be protected and redirect to root" do
-        expect( post :self_log, id: @assignment.id ).to redirect_to(:root)
+        expect(post :feedback_read, id: @grade.id).to redirect_to(:root)
       end
     end
 
     describe "POST predict_score" do
       it "should be protected and redirect to root" do
-        expect( post :predict_score, { id: @assignment.id, predicted_score: 0, format: :json } ).to redirect_to(:root)
-      end
-    end
-
-    describe "GET edit_status" do
-      it "assigns params" do
-        get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }
-        expect(assigns(:title)).to eq("#{@assignment.name} Grade Statuses")
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:grades)).to eq([@grade])
-        expect(response).to render_template(:edit_status)
-      end
-    end
-
-    describe "PUT update_status" do
-      it "updates the grade status for grades" do
-        put :update_status, { grade_ids: [@grade.id], id: @assignment.id, grade: { status: "Graded" }}
-        expect(@grade.reload.status).to eq("Graded")
-      end
-
-      it "redirects to session if present"  do
-        session[:return_to] = login_path
-        put :update_status, { grade_ids: [@grade.id], id: @assignment.id, grade: { status: "Graded" }}
-        expect(response).to redirect_to(login_path)
-      end
-    end
-
-    describe "GET import" do
-      it "displays the import page" do
-        get :import, { id: @assignment.id}
-        expect(assigns(:title)).to eq("Import Grades for #{@assignment.name}")
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(response).to render_template(:import)
-      end
-    end
-
-    describe "POST upload" do
-      render_views
-
-      let(:file) { fixture_file "grades.csv", "text/csv" }
-
-      it "renders the results from the import" do
-        @student.reload.update_attribute :email, "robert@example.com"
-        second_student = create(:user, username: "jimmy")
-        second_student.courses << @course
-        post :upload, id: @assignment.id, file: file
-        expect(response).to render_template :import_results
-        expect(response.body).to include "2 Grades Imported Successfully"
-      end
-
-      it "renders any errors that have occured" do
-        post :upload, id: @assignment.id, file: file
-        expect(response.body).to include "3 Grades Not Imported"
-        expect(response.body).to include "Student not found in course"
-      end
-
-      it "adds error and redirects without a file" do
-        post :upload, id: @assignment.id
-        expect(flash[:notice]).to eq("File missing")
-        expect(response).to redirect_to(assignment_path(@assignment))
+        expect(post :predict_score, { id: @grade.id, predicted_score: 0,
+                                      format: :json }).to redirect_to(:root)
       end
     end
   end
@@ -445,10 +390,7 @@ describe GradesController do
       login_user(@student)
       allow(controller).to receive(:current_student).and_return(@student)
     end
-
-    after(:each) do
-      @grade.delete
-    end
+    after(:each) { @grade.delete }
 
     describe "GET show" do
       it "redirects to the assignment" do
@@ -459,51 +401,10 @@ describe GradesController do
 
     describe "POST feedback_read" do
       it "marks the grade as read by the student" do
-        post :feedback_read, id: @assignment.id, grade_id: @grade.id
+        post :feedback_read, id: @grade.id
         expect(@grade.reload.feedback_read).to be_truthy
         expect(@grade.feedback_read_at).to be_within(1.second).of(Time.now)
         expect(response).to redirect_to assignment_path(@assignment)
-      end
-    end
-
-    describe "POST self_log" do
-      context "with a student loggable grade" do
-        before(:all) do
-          @assignment.update(student_logged: true)
-        end
-
-        it "creates a maximum score by the student if present" do
-          post :self_log, id: @assignment.id
-          grade = @student.grade_for_assignment(@assignment)
-          expect(grade.raw_score).to eq @assignment.point_total
-        end
-
-        it "reports errors on failure to save" do
-          allow_any_instance_of(Grade).to receive(:save).and_return false
-          post :self_log, id: @assignment.id
-          grade = @student.grade_for_assignment(@assignment)
-          expect(flash[:notice]).to eq("We're sorry, there was an error saving your grade.")
-        end
-
-        context "with assignment levels" do
-          it "creates a score for the student at the specified level" do
-            post :self_log, id: @assignment.id, grade: { raw_score: "10000" }
-            grade = @student.grade_for_assignment(@assignment)
-            expect(grade.raw_score).to eq 10000
-          end
-        end
-      end
-
-      context "with an assignment not student loggable" do
-        before(:all) do
-          @assignment.update(student_logged: false)
-        end
-
-        it "creates should not change the student score" do
-          post :self_log, id: @assignment.id
-          grade = @student.grade_for_assignment(@assignment)
-          expect(grade.raw_score).to eq nil
-        end
       end
     end
 
@@ -511,17 +412,18 @@ describe GradesController do
       let(:predicted_points) { (@assignment.point_total * 0.75).to_i }
 
       it "updates the predicted score for an assignment" do
-        post :predict_score, { id: @assignment.id, predicted_score: predicted_points, format: :json }
+        post :predict_score, { id: @grade.id, predicted_score: predicted_points,
+                               format: :json }
         expect(@grade.reload.predicted_score).to eq(predicted_points)
-        expect(JSON.parse(response.body)).to eq({"id" => @assignment.id, "points_earned" => predicted_points})
+        expect(JSON.parse(response.body)).to eq({"id" => @grade.id,
+                                                 "points_earned" => predicted_points})
       end
 
       describe "enqueuing the PredictorEventJob" do
         let(:result) do
-          get :predict_score, id: @assignment.id,
-            predicted_score: predicted_points, format: :json
+          post :predict_score, id: @grade.id, predicted_score: predicted_points,
+            format: :json
         end
-
         let(:event_attrs) { { created_at: Time.now } }
         let(:event_job) { double(PredictorEventJob).as_null_object }
 
@@ -542,15 +444,19 @@ describe GradesController do
       end
 
       it "errors if grade is already released" do
-        allow(@student).to receive(:grade_released_for_assignment?).and_return true
-        post :predict_score, { id: @assignment.id, predicted_score: predicted_points, format: :json }
-        expect(JSON.parse(response.body)).to eq({"errors" => "You cannot predict this assignment!"})
+        allow_any_instance_of(GradeProctor).to \
+          receive(:viewable?).and_return true
+        post :predict_score, { id: @grade.id, predicted_score: predicted_points,
+                               format: :json }
+        expect(JSON.parse(response.body)).to \
+          eq({"errors" => "You cannot predict this assignment!"})
         expect(response.status).to eq(400)
       end
 
       it "errors if prediction can't be saved" do
-        allow_any_instance_of(Grade).to receive(:save).and_return false
-        post :predict_score, { id: @assignment.id, predicted_score: predicted_points, format: :json }
+        allow_any_instance_of(Grade).to receive(:valid?).and_return false
+        post :predict_score, { id: @grade.id, predicted_score: predicted_points,
+                               format: :json }
         expect(response.status).to eq(400)
       end
     end
@@ -568,10 +474,6 @@ describe GradesController do
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { get :edit_status, {grade_ids: [@grade.id], id: @assignment.id }},
-          Proc.new { post :update_status, {grade_ids: @grade.id, id: @assignment.id }},
-          Proc.new { get :import, { id: @assignment.id }},
-          Proc.new { post :upload, { id: @assignment.id }},
         ].each do |protected_route|
           expect(protected_route.call).to redirect_to(:root)
         end

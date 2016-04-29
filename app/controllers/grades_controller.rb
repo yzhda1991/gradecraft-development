@@ -1,13 +1,10 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment,
-    only: [:show, :edit, :update, :destroy, :submit_rubric]
+  before_filter :set_assignment, only: [:show, :edit, :update, :destroy]
   before_filter :ensure_staff?,
-    except: [:feedback_read, :self_log, :show, :predict_score, :async_update]
-  # TODO: probably need to add submit_rubric here
-  before_filter :ensure_student?,
-    only: [:feedback_read, :predict_score, :self_log]
-  before_filter :save_referer, only: [:edit, :edit_status]
+    except: [:feedback_read, :show, :predict_score, :async_update]
+  before_filter :ensure_student?, only: [:feedback_read, :predict_score]
+  before_filter :save_referer, only: :edit
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
 
@@ -126,9 +123,9 @@ class GradesController < ApplicationController
     end
   end
 
+  # POST /grades/:id/remove
   # This is the method used when faculty delete a grade
   # it preserves the predicted grade
-  # POST /assignments/:id/grades/remove
   def remove
     @grade = Grade.find(params[:id])
     @grade.raw_score = nil
@@ -152,7 +149,7 @@ class GradesController < ApplicationController
     end
   end
 
-  # POST /assignments/:id/grades/exclude
+  # POST /grades/:id/exclude
   def exclude
     grade = Grade.find(params[:id])
     grade.excluded_from_course_score = true
@@ -170,7 +167,7 @@ class GradesController < ApplicationController
     end
   end
 
-  # POST /assignments/:id/grades/include
+  # POST /grades/:id/include
   def include
     grade = Grade.find(params[:id])
     grade.excluded_from_course_score = false
@@ -199,135 +196,44 @@ class GradesController < ApplicationController
       #{ @assignment.name } grade was successfully deleted."
   end
 
-  # For changing the status of a group of grades passed in grade_ids
-  #  ("In Progress" => "Graded", or "Graded" => "Released")
-  # GET  /assignments/:id/grades/edit_status
-  def edit_status
-    @assignment = current_course.assignments.find(params[:id])
-    @title = "#{@assignment.name} Grade Statuses"
-    @grades = @assignment.grades.find(params[:grade_ids])
-  end
-
-  # PUT /assignments/:id/grades/update_status
-  def update_status
-    @assignment = current_course.assignments.find(params[:id])
-    @grades = @assignment.grades.find(params[:grade_ids])
-    status = params[:grade][:status]
-
-    grade_ids = []
-    @grades = @grades.each do |grade|
-      grade.update(status: status)
-      grade_ids << grade.id
-    end
-
-    # @mz TODO: add specs
-    enqueue_multiple_grade_update_jobs(grade_ids)
-
-    if session[:return_to].present?
-      redirect_to session[:return_to]
-    else
-      redirect_to @assignment
-    end
-
-    flash[:notice] = "Updated Grades!"
-  end
-
-  # upload grades for an assignment
-  def import
-    @assignment = current_course.assignments.find(params[:id])
-    @title = "Import Grades for #{@assignment.name}"
-  end
-
-  def upload
-    @assignment = current_course.assignments.find(params[:id])
-
-    if params[:file].blank?
-      flash[:notice] = "File missing"
-      redirect_to assignment_path(@assignment)
-    else
-      # @mz TODO: check into what this calls is doing. is this being used?
-      @students = current_course.students
-
-      @result = GradeImporter.new(params[:file].tempfile).import(current_course, @assignment)
-
-      # @mz TODO: add specs
-      grade_ids = @result.successful.map(&:id)
-
-      enqueue_multiple_grade_update_jobs(grade_ids)
-
-      render :import_results
-    end
-  end
-
+  # POST /grades/:id/feedback_read
   def feedback_read
-    @assignment = current_course.assignments.find params[:id]
-    @grade = @assignment.grades.find params[:grade_id]
-    @grade.feedback_read!
-    redirect_to assignment_path(@assignment), notice: "Thank you for letting us know!"
+    grade = Grade.find params[:id]
+    authorize! :update, grade, student_logged: false
+    grade.feedback_read!
+    redirect_to assignment_path(grade.assignment),
+      notice: "Thank you for letting us know!"
   end
 
-  # Allows students to log grades for student logged assignments
-  # either sets raw score to params[:grade][:raw_score]
-  # or defaults to point total for assignment
-  def self_log
-    @assignment = current_course.assignments.find(params[:id])
-    if @assignment.open? && @assignment.student_logged?
-
-      @grade = Grade.find_or_create(@assignment.id, current_student.id)
-
-      if params[:grade].present? && params[:grade][:raw_score].present?
-        @grade.raw_score = params[:grade][:raw_score]
-      else
-        @grade.raw_score = @assignment.point_total
-      end
-
-      @grade.instructor_modified = true
-      @grade.status = "Graded"
-
-      if @grade.save
-        # @mz TODO: add specs
-        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        grade_updater_job.enqueue
-
-        redirect_to syllabus_path, notice: 'Nice job! Thanks for logging your grade!'
-      else
-        redirect_to syllabus_path, notice: "We're sorry, there was an error saving your grade."
-      end
-
-    else
-      redirect_to dashboard_path, notice: "This assignment is not open for self grading."
-    end
-  end
-
+  # POST /grades/:id/predict_score
   # Students predicting the score they'll get on an assignment using the grade
   # predictor
   # TODO: Change to predict_points when 'score' changes to 'points_earned and
   # PredictedEarnedAssignment model added
   def predict_score
-    @assignment = current_course.assignments.find(params[:id])
-    if current_student.grade_released_for_assignment?(@assignment)
-      @grade = nil
+    grade = Grade.find params[:id]
+    if GradeProctor.new(grade).viewable? # was it released already?
+      grade = nil
     else
-      @grade = current_student.grade_for_assignment(@assignment)
-      @grade.predicted_score = params[:predicted_score]
+      grade.predicted_score = params[:predicted_score]
+      grade.save
     end
-
-    @grade_saved = @grade.nil? ? nil : @grade.save
 
     # TODO: this should be implemented with a PredictorEventLogger instead of a
     # PredictorEventJob since the PredictorEventLogger has logic for cleaning up
     # request params data, but for now this is better than what we had
-    #
-    PredictorEventJob.new(data: predictor_event_attrs).enqueue_with_fallback
+    PredictorEventJob.new(data: predictor_event_attrs(grade))
+      .enqueue_with_fallback
 
     respond_to do |format|
       format.json do
-        if @grade.nil?
-          render json: {errors: "You cannot predict this assignment!"}, status: 400
-        elsif @grade_saved
-          render json: {id: @assignment.id, points_earned: @grade.predicted_score}
+        if grade.nil?
+          render json: { errors: "You cannot predict this assignment!" },
+            status: 400
+        elsif grade.valid?
+          render json: { id: grade.id, points_earned: grade.predicted_score }
         else
-          render json: { errors:  @grade.errors.full_messages }, status: 400
+          render json: { errors:  grade.errors.full_messages }, status: 400
         end
       end
     end
@@ -366,11 +272,11 @@ class GradesController < ApplicationController
                         .select(:id, :criterion_id, :level_id, :comments).to_json
   end
 
-  def safe_grade_possible_points
-    @grade.point_total rescue nil
+  def safe_grade_possible_points(grade)
+    grade.point_total rescue nil
   end
 
-  def predictor_event_attrs
+  def predictor_event_attrs(grade)
     {
       prediction_type: "grade",
       course_id: current_course.id,
@@ -379,22 +285,15 @@ class GradesController < ApplicationController
       user_role: current_user.role(current_course),
       assignment_id: params[:id],
       predicted_points: params[:predicted_score],
-      possible_points: safe_grade_possible_points,
+      possible_points: safe_grade_possible_points(grade),
       created_at: Time.now,
-      prediction_saved_successfully: @grade_saved
+      prediction_saved_successfully: grade
     }
   end
 
   def score_recalculator(student)
     ScoreRecalculatorJob.new(user_id: student.id,
                            course_id: current_course.id).enqueue
-  end
-
-  def enqueue_multiple_grade_update_jobs(grade_ids)
-    grade_ids.each do |grade_id|
-      grade_updater_job = GradeUpdaterJob.new(grade_id: grade_id)
-      grade_updater_job.enqueue
-    end
   end
 
   def rubric_criteria_with_levels

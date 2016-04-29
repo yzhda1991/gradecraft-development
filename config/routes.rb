@@ -69,8 +69,13 @@ GradeCraft::Application.routes.draw do
       collection do
         get :download
         get :export
+        get :import
+        post :upload
         get :mass_edit
         put :mass_update
+        get :edit_status
+        put :update_status
+        post :self_log
       end
     end
 
@@ -79,32 +84,26 @@ GradeCraft::Application.routes.draw do
       put :graded, on: :member
     end
 
-    member do
-      scope "grades", as: :grades, controller: :grades do
-        get :edit_status
-        put :update_status
-        get :import
-        post :upload
-        post :self_log
-        post :predict_score
-        post :feedback_read
-        post :remove
-        post :exclude
-        post :include
-      end
-    end
-    resources :submissions, except: :index do
-      post :upload
-    end
-    resources :tasks
+    resources :submissions, except: :index
+
     resource :grade, only: [:show, :edit, :update, :destroy] do
-      put :submit_rubric, on: :collection
       resources :earned_badges
     end
+
     resource :rubric do
       get :existing_criteria
       resources :criteria
       get :design, on: :collection
+    end
+  end
+
+  resources :grades, only: [] do
+    member do
+      post :exclude
+      post :feedback_read
+      post :include
+      post :predict_score
+      post :remove
     end
   end
 
