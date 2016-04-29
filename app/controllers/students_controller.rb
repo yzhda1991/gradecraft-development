@@ -28,7 +28,7 @@ class StudentsController < ApplicationController
 
   # Course wide leaderboard - excludes auditors from view
   def leaderboard
-    render :leaderboard, StudentLeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
+    render :leaderboard, Students::LeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
   # Students' primary page: displays all assignments and
