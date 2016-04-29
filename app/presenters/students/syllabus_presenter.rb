@@ -1,6 +1,6 @@
 require "./lib/showtime"
 
-class SyllabusPresenter < Showtime::Presenter
+class Students::SyllabusPresenter < Showtime::Presenter
   include Showtime::ViewContext
 
   def course
@@ -9,6 +9,10 @@ class SyllabusPresenter < Showtime::Presenter
 
   def student
     properties[:student]
+  end
+
+  def assignment_types
+    properties[:assignment_types]
   end
 
   def assignments_for(assignment_type)
