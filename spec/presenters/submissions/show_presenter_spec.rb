@@ -1,8 +1,8 @@
 require "active_support/inflector"
-require "./app/presenters/show_submission_presenter"
+require "./app/presenters/submissions/show_presenter"
 require_relative "showing_a_submission_spec"
 
-describe ShowSubmissionPresenter do
+describe Submissions::ShowPresenter do
   let(:assignment) { double(:assignment, point_total: 12000) }
   let(:student) { double(:user, first_name: "Jimmy") }
   let(:group) { double(:group, name: "My group") }

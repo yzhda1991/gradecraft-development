@@ -1,11 +1,11 @@
 require "active_support/inflector"
 require "./lib/showtime"
-require_relative "submission_grade_history"
+require_relative "submissions/grade_history"
 require_relative "../models/history_filter"
 
 class AssignmentPresenter < Showtime::Presenter
   include Showtime::ViewContext
-  include SubmissionGradeHistory
+  include Submissions::GradeHistory
 
   def assignment
     properties[:assignment]

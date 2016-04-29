@@ -12,7 +12,7 @@
 
       %h4.uppercase= "#{@student.first_name}'s Submission"
       = render partial: "submissions/submission_content",
-          locals: { presenter: ShowSubmissionPresenter.new(id: @submission.id,
+          locals: { presenter: Submissions::ShowPresenter.new(id: @submission.id,
             assignment_id: @assignment.id, course: current_course) }
 
   - if @assignment.grade_with_rubric?

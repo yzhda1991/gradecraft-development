@@ -1,8 +1,8 @@
 require "active_support/inflector"
 require "spec_helper"
-require "./app/presenters/new_submission_presenter"
+require "./app/presenters/submissions/new_presenter"
 
-describe NewSubmissionPresenter do
+describe Submissions::NewPresenter do
   let(:assignment) { double(:assignment) }
 
   before { allow(subject).to receive(:assignment).and_return assignment }

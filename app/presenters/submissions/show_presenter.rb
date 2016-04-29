@@ -1,9 +1,9 @@
-require_relative "../models/history_filter"
-require_relative "submission_presenter"
-require_relative "submission_grade_history"
+require_relative "../../models/history_filter"
+require_relative "base_presenter"
+require_relative "grade_history"
 
-class ShowSubmissionPresenter < SubmissionPresenter
-  include SubmissionGradeHistory
+class Submissions::ShowPresenter < Submissions::BasePresenter
+  include Submissions::GradeHistory
 
   def id
     properties[:id]

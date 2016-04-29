@@ -4,7 +4,7 @@ include CourseTerms
 
 describe "submissions/new" do
 
-  let(:presenter) { NewSubmissionPresenter.new({ course: @course, assignment_id: @assignment.id,
+  let(:presenter) { Submissions::NewPresenter.new({ course: @course, assignment_id: @assignment.id,
                                                  view_context: ActionController::Base.new.view_context })
                                                }
 
