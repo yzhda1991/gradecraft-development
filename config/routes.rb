@@ -95,6 +95,7 @@ GradeCraft::Application.routes.draw do
       get :existing_criteria
       resources :criteria
       get :design, on: :collection
+      get :export
     end
   end
 
@@ -398,4 +399,3 @@ GradeCraft::Application.routes.draw do
     end
   end
 end
-

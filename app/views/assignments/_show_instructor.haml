@@ -32,9 +32,8 @@
 
       - if presenter.grade_with_rubric?
         .content#tabt3{role: "tabpanel", "aria-hidden" => false }
-          %br
-            .tab-container
-              = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, student: nil, include_grade_info: false }
+          .tab-container
+            = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: nil, include_grade_info: false }
       - if presenter.has_grades?
         .ui-tabs-panel#tabt4{role: "tabpanel", "aria-hidden" => false }
           - if presenter.group_assignment?
