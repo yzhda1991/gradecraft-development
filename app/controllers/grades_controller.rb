@@ -2,11 +2,21 @@ class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:show, :edit, :update, :destroy]
   before_filter :ensure_staff?,
-    except: [:feedback_read, :show, :predict_score, :async_update]
+    except: [:feedback_read, :show, :show2, :predict_score, :async_update]
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
   before_filter :save_referer, only: :edit
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
+
+  # GET /grades/:id
+  def show2
+    @grade = Grade.find params[:id]
+
+    redirect_to @grade.assignment and return if current_user_is_student?
+
+    name = @grade.assignment.has_groups? ? @grade.group.name : @grade.student.name
+    @title = "#{name}'s Grade for #{@grade.assignment.name}"
+  end
 
   # GET /assignments/:assignment_id/grade?student_id=:id
   def show
