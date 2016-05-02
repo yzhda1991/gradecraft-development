@@ -14,10 +14,8 @@ GradeCraft::Application.configure do
 end
 
 CarrierWave.configure do |config|
-  config.storage = :fog
+  config.storage = :file
   config.enable_processing = false
-  config.directory_permissions = 0777
-  config.permissions = 0777
 end
 
 # List tested uploaders here to make sure they are auto-loaded
