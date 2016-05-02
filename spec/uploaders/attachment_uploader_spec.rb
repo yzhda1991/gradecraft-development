@@ -72,6 +72,7 @@ RSpec.describe AttachmentUploader do
 
     before(:each) do
       allow(subject).to receive_messages(
+        store_dir_prefix: "some-prefix",
         course: "some-course",
         assignment: "some-assignment",
         file_klass: "devious_files",
@@ -80,12 +81,17 @@ RSpec.describe AttachmentUploader do
     end
 
     it "returns an array with those components" do
-      expect(result).to eq([ "uploads", "some-course", "some-assignment", "devious_files", "dave-eversby" ])
+      expect(result).to eq(
+        [
+          "some-prefix", "uploads", "some-course", "some-assignment",
+          "devious_files", "dave-eversby"
+        ]
+      )
     end
 
     it "compacts nils from the array" do
       allow(subject).to receive_messages(course: nil, file_klass: nil)
-      expect(result).to eq([ "uploads", "some-assignment", "dave-eversby" ])
+      expect(result).to eq([ "some-prefix", "uploads", "some-assignment", "dave-eversby" ])
     end
   end
 
