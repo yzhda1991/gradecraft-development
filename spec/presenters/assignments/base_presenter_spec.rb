@@ -1,13 +1,13 @@
 require "spec_helper"
-require "./app/presenters/assignment_presenter"
-require "./app/presenters/assignment_group_presenter"
+require "./app/presenters/assignments/base_presenter"
+require "./app/presenters/assignments/group_presenter"
 
-describe AssignmentPresenter do
+describe Assignments::BasePresenter do
   let(:assignment) { double(:assignment, name: "Crazy Wizardry", pass_fail?: false, point_total: 5000)}
   let(:course) { double(:course) }
   let(:view_context) { double(:view_context) }
   let(:team) { double(:team) }
-  subject { AssignmentPresenter.new({ assignment: assignment, course: course, view_context: view_context }) }
+  subject { Assignments::BasePresenter.new({ assignment: assignment, course: course, view_context: view_context }) }
 
   describe "#assignment" do
     it "is the assignment that is passed in as a property" do
@@ -40,10 +40,10 @@ describe AssignmentPresenter do
   end
 
   describe "#groups" do
-    it "wraps the assignment groups in an AssignmentGroupPresenter" do
+    it "wraps the assignment groups in an Assignment::GroupPresenter" do
       groups = [double(:group), double(:group)]
       allow(assignment).to receive(:groups).and_return groups
-      expect(subject.groups.map(&:class).uniq).to eq [AssignmentGroupPresenter]
+      expect(subject.groups.map(&:class).uniq).to eq [Assignments::GroupPresenter]
       expect(subject.groups.first.group).to eq groups.first
     end
   end

@@ -27,7 +27,7 @@ class GradesController < ApplicationController
       @title = "#{current_student.name}'s Grade for #{ @assignment.name }"
     end
 
-    render :show, AssignmentPresenter.build({ assignment: @assignment,
+    render :show, Assignments::BasePresenter.build({ assignment: @assignment,
                                               course: current_course,
                                               view_context: view_context })
   end

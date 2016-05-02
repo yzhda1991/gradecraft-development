@@ -90,7 +90,7 @@ class Assignments::GradesController < ApplicationController
     redirect_to assignment_path(assignment) and return unless assignment.grade_with_rubric?
 
     # TODO: This should not use an AssignmentPresenter
-    render :index, AssignmentPresenter.build({
+    render :index, Assignments::BasePresenter.build({
       assignment: assignment,
       course: current_course,
       team_id: params[:team_id],

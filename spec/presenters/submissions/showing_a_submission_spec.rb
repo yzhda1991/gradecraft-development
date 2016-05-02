@@ -7,7 +7,7 @@ shared_examples_for "showing a submission" do
 
   before { allow(subject).to receive(:assignment).and_return assignment }
 
-  describe "#submission" , focus: true do
+  describe "#submission" do
     it "returns the submission from the assignment based on the id" do
       submission = double(:submission)
       submissions = double(:active_record_relation)
