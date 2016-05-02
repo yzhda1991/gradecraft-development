@@ -22,7 +22,7 @@ gem 'autonumeric-rails'
 gem 'aws-sdk', '~> 2'
 gem 's3_direct_upload'
 gem 'cancancan'
-gem 'carrierwave'
+gem 'carrierwave', '~> 0.11.0'
 gem 'carrierwave_backgrounder', '0.4.2'
 gem 'coffee-rails'
 gem "compass-rails"
