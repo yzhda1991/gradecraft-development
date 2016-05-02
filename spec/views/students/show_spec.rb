@@ -4,8 +4,14 @@ include CourseTerms
 
 describe "students/show" do
 
-  let(:presenter) { SyllabusPresenter.new({ course: @course, assignment_types:
-    @assignment_types, view_context: view_context }) }
+  let(:presenter) do
+    Students::SyllabusPresenter.new({
+      student: @student,
+      course: @course,
+      assignment_types: @assignment_types,
+      view_context: view_context
+    })
+  end
   let(:view_context) { double(:view_context) }
 
   before(:all) do
@@ -34,5 +40,4 @@ describe "students/show" do
     render
     assert_select "h3", text: "assignments", count: 1
   end
-
 end

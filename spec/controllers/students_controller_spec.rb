@@ -42,7 +42,6 @@ describe StudentsController do
     describe "GET show" do
       it "shows the student page" do
         get :show, {id: @student.id}
-        expect(assigns(:student)).to eq(@student)
         expect(response).to render_template(:show)
       end
     end

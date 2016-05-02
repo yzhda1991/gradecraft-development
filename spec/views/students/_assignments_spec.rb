@@ -5,7 +5,7 @@ describe "students/syllabus/_assignments" do
 
   let(:user) { double(:user, is_student?: true) }
   let(:view_context) { double(:view_context, current_user: user) }
-  let(:presenter) { SyllabusPresenter.new({ student: @student,
+  let(:presenter) { Students::SyllabusPresenter.new({ student: @student,
     course: @course, assignment_types: @assignment_types,
     view_context: view_context }) }
 
