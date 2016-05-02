@@ -12,12 +12,6 @@ RSpec.describe AttachmentUploader do
   include UniMock::StubRails
 
   let(:model) { MockClass::FullUpFileKlass.new }
-  let(:relation_defaults) {{
-    course: "some-course",
-    assignment: "some-assignment",
-    file_klass: "devious_files",
-    owner_name: "dave-eversby"
-  }}
 
   describe "#store_dir" do
     it "joins the store_dir_pieces" do
@@ -73,7 +67,15 @@ RSpec.describe AttachmentUploader do
 
   describe "#store_dir_pieces" do
     let(:result) { subject.store_dir_pieces }
-    before(:each) { allow(subject).to receive_messages(relation_defaults) }
+
+    before(:each) do
+      allow(subject).to receive_messages(
+        course: "some-course",
+        assignment: "some-assignment",
+        file_klass: "devious_files",
+        owner_name: "dave-eversby"
+      )
+    end
 
     it "returns an array with those components" do
       expect(result).to eq([ "uploads", "some-course", "some-assignment", "devious_files", "dave-eversby" ])
