@@ -119,9 +119,4 @@ RSpec.configure do |config|
       raise ActiveRecord::Rollback
     end
   end
-
-  # Remove uploader files, see config/environments/test.rb
-  config.after(:all) do
-    FileUtils.rm_rf(Dir["#{Rails.root}/uploads"])
-  end
 end

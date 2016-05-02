@@ -214,4 +214,8 @@ RSpec.describe AttachmentUploader do
       expect(result).to eq :"@stuff_srsly_secure_token"
     end
   end
+
+  after(:all) do
+    FileUtils.rm_rf(Dir["#{Rails.root}/uploads"])
+  end
 end
