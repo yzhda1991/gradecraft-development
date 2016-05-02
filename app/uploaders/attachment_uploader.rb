@@ -11,11 +11,11 @@ class AttachmentUploader < CarrierWave::Uploader::Base
 
   def store_dir
     if Rails.env == "development"
-      [ENV["AWS_S3_DEVELOPER_TAG"]].concat(store_dir_pieces).join("/")
+      [ENV["AWS_S3_DEVELOPER_TAG"]].concat(store_dir_pieces).join "/"
     elsif Rails.env == "test"
-      ["support"].concat(store_dir_pieces).join("/")
+      spec_helper_store_dir
     else
-      store_dir_pieces.join("/")
+      store_dir_pieces.join "/"
     end
   end
 

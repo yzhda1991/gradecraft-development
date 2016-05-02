@@ -1,3 +1,0 @@
-This directory may be used when generating fixture and temp files in RSpec,
-and should only be used for generating files for tests as it has world-writable
-permissions.

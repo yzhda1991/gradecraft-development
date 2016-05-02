@@ -38,9 +38,9 @@ RSpec.describe AttachmentUploader do
     end
 
     context "env is test" do
-      it "joins the store dirs with the public dir" do
+      it "uses the spec_helper_store_dir" do
         stub_env "test"
-        expect(subject).to eq "public/uploads/some-course/some-assignment/devious_files/dave-eversby"
+        expect(subject).to eq uploader.spec_helper_store_dir
       end
     end
 

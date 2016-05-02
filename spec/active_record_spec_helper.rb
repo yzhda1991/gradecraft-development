@@ -88,9 +88,11 @@ CarrierWave::Uploader::Base.descendants.each do |klass|
       File.join(File.dirname(__FILE__), "support/uploads/tmp")
     end
 
-  #     def store_dir
-  #       File.join(File.dirname(__FILE__), "support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}")
-  #     end
+    # this will be conditionally used in the uploader to sidestep issues with
+    # testing the output of SomeUploader#store_dir directly
+    def spec_helper_store_dir
+      File.join(File.dirname(__FILE__), "support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}")
+    end
   end
 end
 
