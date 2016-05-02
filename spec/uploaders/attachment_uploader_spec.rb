@@ -15,6 +15,8 @@ RSpec.describe AttachmentUploader do
 
   describe "#store_dir" do
     it "joins the store_dir_pieces" do
+      allow(subject).to receive(:store_dir_pieces) { ["some","dir","items"] }
+      expect(subject.store_dir).to eq "some/dir/items"
     end
   end
 
