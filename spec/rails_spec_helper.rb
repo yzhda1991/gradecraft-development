@@ -64,7 +64,6 @@ RSpec.configure do |config|
       DatabaseCleaner.clean_with(:truncation)
       FactoryGirl.factories.clear
       FactoryGirl.find_definitions
-      FileUtils.mkdir_p "#{Rails.root}/uploads"
     end
   end
 
@@ -102,6 +101,5 @@ RSpec.configure do |config|
   # Remove uploader files, see config/environments/test.rb
   config.after(:all) do
     FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
-    FileUtils.rm_rf(Dir["#{Rails.root}/uploads"])
   end
 end
