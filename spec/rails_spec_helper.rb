@@ -64,6 +64,7 @@ RSpec.configure do |config|
       DatabaseCleaner.clean_with(:truncation)
       FactoryGirl.factories.clear
       FactoryGirl.find_definitions
+      FileUtils.mkdir_p "#{Rails.root}/spec/support/uploads"
     end
   end
 
