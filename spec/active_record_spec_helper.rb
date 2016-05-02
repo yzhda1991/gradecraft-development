@@ -88,7 +88,6 @@ CarrierWave::Uploader::Base.descendants.each do |klass|
       File.join(File.dirname(__FILE__), "support/uploads/tmp")
     end
 
-    next if klass == AttachmentUploader
     def store_dir
       File.join(File.dirname(__FILE__), "support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}")
     end
