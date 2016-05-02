@@ -3,7 +3,7 @@ require "toolkits/historical_toolkit"
 require "toolkits/sanitization_toolkit"
 require "support/uni_mock/rails"
 
-describe Submission, focus: true do
+describe Submission do
   include UniMock::StubRails
 
   before { stub_env "development" }
