@@ -90,8 +90,13 @@ CarrierWave::Uploader::Base.descendants.each do |klass|
 
     # this will be conditionally used in the uploader to sidestep issues with
     # testing the output of SomeUploader#store_dir directly
-    def store_dir_pieces
-      [ File.dirname(__FILE__), "support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}" ].compact
+    def store_dir_prefix
+      case Rails.env
+      when "development"
+        ENV["AWS_S3_DEVELOPER_TAG"]
+      when "test"
+        "#{File.dirname(__FILE__)}/support"
+      end
     end
   end
 end
