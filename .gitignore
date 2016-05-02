@@ -7,7 +7,7 @@ config/database.yml
 config/mongoid.yml
 db/backups/*
 log/*.log
-public/uploads/**/*
+public/uploads/*
 /spec/support/uploads/*
 tmp/*
 .ruby-gemset
