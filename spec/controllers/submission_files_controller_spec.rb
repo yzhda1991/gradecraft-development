@@ -73,7 +73,7 @@ describe SubmissionFilesController do
         context "the submission file is streamable" do
           it "streams the submission file with the filename" do
             expect(controller).to receive(:send_data)
-              .with("file-data", filename: "filename.xyz")-
+              .with("file-data", filename: "filename.xyz")
             result
           end
         end
@@ -96,8 +96,8 @@ describe SubmissionFilesController do
           end
 
           it "redirects to the referrer" do
-            expect(response).to redirect_to(request.referrer)
             result
+            expect(response).to redirect_to "http://some-referrer.com"
           end
         end
       end
