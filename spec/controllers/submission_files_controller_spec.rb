@@ -47,14 +47,24 @@ describe SubmissionFilesController do
           submission_file_streamable?: true,
           stream_submission_file: "file-data",
           filename: "filename.xyz",
-          submission: submission
+          submission: submission,
+          submission_file: submission_file
         )
+
+        ability.can :download, submission_file
       end
 
-      it "builds a new SubmissionFilesPresenter with the params" do
-        allow(controller).to receive(:params) { params }
-        expect(SubmissionFilesPresenter).to receive(:new).with params: params
-        result
+      describe "#presenter" do
+        let(:result) { controller.presenter }
+
+        before do
+          allow(controller).to receive(:params) { params }
+        end
+
+        it "builds a new SubmissionFilesPresenter with the params" do
+          expect(SubmissionFilesPresenter).to receive(:new)
+          result
+        end
       end
 
       context "user is authorized to read the submission" do
@@ -71,7 +81,9 @@ describe SubmissionFilesController do
         context "the submission file is not streamable" do
           before do
             allow(presenter).to receive(:submission_file_streamable?) { false }
+            allow(request).to receive(:referrer) { "http://some-referrer.com" }
           end
+
           it "marks the submission_file_missing" do
             expect(presenter).to receive(:mark_submission_file_missing)
             result
