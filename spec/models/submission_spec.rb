@@ -39,11 +39,14 @@ describe Submission do
       expect(subject).to have_a_version_with link: previous_link
     end
 
-    it "creates a version when the attachment is updated" do
-      subject.submission_files.create(filename: "test",
-                                      filepath: "polsci101/submissionfile/",
-                                      file: fixture_file("test_image.jpg", "img/jpg"))
-      expect(subject.submission_files[0].versions.count).to eq 1
+    it "creates a version when the attachment is updated", focus: true do
+      # directly create the submission file with the submission_id to avoid an
+      # update action. Creating the submission_file, then updating it with the
+      # submission_id requires a create, then an update, which creates two
+      # versions instead of one.
+      #
+      subject.submission_files.create attributes_for(:submission_file)
+      expect(subject.submission_files.first.versions.count).to eq 1
     end
 
     it "creates a version when the comment is updated" do
@@ -66,7 +69,7 @@ describe Submission do
   end
 
   it "can be saved with only an attached file" do
-    subject.submission_files.new(filename: "test", filepath: "polsci101/submissionfile/", file: fixture_file("test_image.jpg", "img/jpg"))
+    subject.submission_files << build(:submission_file)
     subject.save!
     expect expect(subject.errors.size).to eq(0)
   end
@@ -74,7 +77,7 @@ describe Submission do
   it "can have an an attached file, comment, and link" do
     subject.text_comment = "I volunteer! I volunteer! I volunteer as tribute!"
     subject.link = "http://www.amazon.com/dp/0439023521"
-    subject.submission_files.new(filename: "test", filepath: "polsci101/submissionfile/", file: fixture_file("test_image.jpg", "img/jpg"))
+    subject.submission_files << build(:submission_file)
     subject.save!
     expect expect(subject.errors.size).to eq(0)
   end
@@ -357,14 +360,5 @@ describe Submission do
 
       expect(submission.has_multiple_components?).to eq(false)
     end
-  end
-
-  describe "#check_unlockables" do
-    # if self.assignment.is_a_condition?
-    #   unlock_conditions = UnlockCondition.where(condition_id: self.assignment.id, condition_type: "Assignment").each do |condition|
-    #     unlockable = condition.unlockable
-    #     unlockable.check_unlock_status(student)
-    #   end
-    # end
   end
 end

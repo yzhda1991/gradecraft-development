@@ -10,11 +10,7 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   # challenge_file: uploads/<course-name_id>/challenge_files/<timestamp_file-name.ext>
 
   def store_dir
-    if Rails.env.development?
-      [ ENV["AWS_S3_DEVELOPER_TAG"] ].concat(store_dir_pieces).join("/")
-    else
-      store_dir_pieces.join("/")
-    end
+    store_dir_pieces.join "/"
   end
 
   # Override the filename of the uploaded files:
@@ -28,10 +24,22 @@ class AttachmentUploader < CarrierWave::Uploader::Base
     end
   end
 
-  private
-
+  # these are the components of the path where resources that have mounted this
+  # uploader will be stored
   def store_dir_pieces
-    [ "uploads", course, assignment, file_klass, owner_name ].compact
+    [
+      store_dir_prefix,
+      "uploads",
+      course,
+      assignment,
+      file_klass,
+      owner_name
+    ].compact
+  end
+
+  def store_dir_prefix
+    return unless Rails.env == "development"
+    ENV["AWS_S3_DEVELOPER_TAG"]
   end
 
   def course
