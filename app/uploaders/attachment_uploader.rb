@@ -24,8 +24,17 @@ class AttachmentUploader < CarrierWave::Uploader::Base
     end
   end
 
+  # these are the components of the path where resources that have mounted this
+  # uploader will be stored
   def store_dir_pieces
-    [ store_dir_prefix, "uploads", course, assignment, file_klass, owner_name ].compact
+    [
+      store_dir_prefix,
+      "uploads",
+      course,
+      assignment,
+      file_klass,
+      owner_name
+    ].compact
   end
 
   def store_dir_prefix
