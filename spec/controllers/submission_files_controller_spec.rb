@@ -68,8 +68,6 @@ describe SubmissionFilesController do
       end
 
       context "user is authorized to read the submission" do
-        before { ability.can :download, submission_file }
-
         context "the submission file is streamable" do
           it "streams the submission file with the filename" do
             expect(controller).to receive(:send_data)
