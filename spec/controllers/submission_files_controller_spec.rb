@@ -5,7 +5,7 @@ describe SubmissionFilesController do
   let(:student) { User.last }
   let(:submission_file) { create(:submission_file) }
   let(:submission) { submission_file.submission }
-  let(:ability) { Ability.new(student, course) }
+  let(:ability) { Object.new.extend(CanCan::Ability) }
 
   before do
     create(:course)
