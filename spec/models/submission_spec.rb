@@ -39,7 +39,7 @@ describe Submission do
       expect(subject).to have_a_version_with link: previous_link
     end
 
-    it "creates a version when the attachment is updated", focus: true do
+    it "creates a version when the attachment is updated" do
       # directly create the submission file with the submission_id to avoid an
       # update action. Creating the submission_file, then updating it with the
       # submission_id requires a create, then an update, which creates two
