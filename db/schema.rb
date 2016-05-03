@@ -138,6 +138,8 @@ ActiveRecord::Schema.define(version: 20160510182947) do
     t.boolean  "show_points_when_locked",                  default: true
     t.boolean  "show_description_when_locked",             default: true
     t.integer  "threshold_points",                         default: 0
+    t.text     "purpose"
+    t.boolean  "show_purpose_when_locked",                 default: true
   end
 
   add_index "assignments", ["course_id"], name: "index_assignments_on_course_id", using: :btree

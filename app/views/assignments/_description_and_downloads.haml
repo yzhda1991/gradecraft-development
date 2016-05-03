@@ -76,6 +76,11 @@
     %h4.uppercase Guidelines:
     %p= raw presenter.assignment.description
 
+  - if presenter.assignment.purpose.present? && ( !current_student || presenter.assignment.purpose_visible_for_student?(current_student))
+    %hr.dotted
+    %h4.uppercase Purpose:
+    %p= raw presenter.assignment.purpose
+
   - if presenter.assignment.assignment_type.description.present?
     %hr.dotted
     %h4.uppercase #{ presenter.assignment.assignment_type.name} Guidelines:

@@ -15,10 +15,11 @@ class Assignment < ActiveRecord::Base
     :course, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
     :include_in_predictor, :include_in_timeline, :include_in_to_do,
     :mass_grade_type, :name, :notify_released, :open_at, :pass_fail,
-    :point_total, :points_predictor_display, :release_necessary, :required,
-    :resubmissions_allowed, :show_description_when_locked,
-    :show_name_when_locked, :show_points_when_locked, :student_logged,
-    :threshold_points, :use_rubric, :visible, :visible_when_locked
+    :point_total, :points_predictor_display, :purpose, :release_necessary,
+    :required, :resubmissions_allowed, :show_description_when_locked,
+    :show_purpose_when_locked, :show_name_when_locked,
+    :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
+    :visible, :visible_when_locked
 
   attr_accessor :current_student_grade
 
@@ -30,6 +31,7 @@ class Assignment < ActiveRecord::Base
   multiple_files :assignment_files
   # Preventing malicious content from being submitted
   clean_html :description
+  clean_html :purpose
 
   # For instances where the assignment needs its own unique score levels
   score_levels :assignment_score_levels, -> { order "value" }, dependent: :destroy
