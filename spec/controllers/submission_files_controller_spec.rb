@@ -18,6 +18,7 @@ describe SubmissionFilesController do
 
   context "user is authorized" do
     let(:course_membership) { CourseMembership.last }
+    let(:params) { { id: submission_file.id, index: 20 } }
 
     before do
       create(:course_membership,
@@ -31,10 +32,32 @@ describe SubmissionFilesController do
       login_user student
     end
 
+    describe "#presenter" do
+      let(:result) { controller.presenter }
+
+      it "builds a new SubmissionFilesPresenter with the params" do
+        allow(controller).to receive(:params) { params }
+        expect(SubmissionFilesPresenter).to receive(:new).with params: params
+        result
+      end
+
+      it "caches the presenter" do
+        result
+        expect(SubmissionFilesPresenter).not_to receive :new
+        result
+      end
+
+      it "sets the presenter to @presenter" do
+        presenter_double = double(SubmissionFilesPresenter)
+        allow(SubmissionFilesPresenter).to receive(:new) { presenter_double }
+        result
+        expect(controller.instance_variable_get(:@presenter))
+          .to eq presenter_double
+      end
+    end
 
     describe "GET download" do
       let(:result) { get :download, params }
-      let(:params) { { id: submission_file.id, index: 20 } }
       let(:presenter) { SubmissionFilesPresenter.new params: params }
 
       before do
@@ -50,24 +73,11 @@ describe SubmissionFilesController do
           submission: submission,
           submission_file: submission_file
         )
-
-        ability.can :download, submission_file
       end
 
-      describe "#presenter" do
-        let(:result) { controller.presenter }
+      context "user is authorized to download the submission" do
+        before { ability.can :download, submission_file }
 
-        before do
-          allow(controller).to receive(:params) { params }
-        end
-
-        it "builds a new SubmissionFilesPresenter with the params" do
-          expect(SubmissionFilesPresenter).to receive(:new)
-          result
-        end
-      end
-
-      context "user is authorized to read the submission" do
         context "the submission file is streamable" do
           it "streams the submission file with the filename" do
             expect(controller).to receive(:send_data)
