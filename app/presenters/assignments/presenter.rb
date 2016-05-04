@@ -89,10 +89,6 @@ class Assignments::Presenter < Showtime::Presenter
     submission.nil? ? false : submission.resubmitted?
   end
 
-  def criteria
-    rubric.criteria.ordered.includes(levels: :level_badges)
-  end
-
   def new_assignment?
     !assignment.persisted?
   end
@@ -108,10 +104,6 @@ class Assignments::Presenter < Showtime::Presenter
   # show the rubric preview tab on student's view
   def show_rubric_preview?(user)
     grade_with_rubric? && !grades_available_for?(user) && ( !user || assignment.description_visible_for_student?(user) )
-  end
-
-  def rubric_max_level_count
-    rubric.max_level_count
   end
 
   def scores

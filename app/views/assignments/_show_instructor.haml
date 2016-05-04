@@ -34,7 +34,7 @@
         .content#tabt3{role: "tabpanel", "aria-hidden" => false }
           %br
             .tab-container
-              = render "rubrics/components/rubric_table", presenter: presenter, include_grade_info: false
+              = render "rubrics/components/rubric_table", rubric: presenter.rubric, include_grade_info: false
       - if presenter.has_grades?
         .ui-tabs-panel#tabt4{role: "tabpanel", "aria-hidden" => false }
           - if presenter.group_assignment?
