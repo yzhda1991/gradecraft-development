@@ -6,8 +6,7 @@ class BadgesController < ApplicationController
   before_filter :ensure_student?, only: [:predict_times_earned]
   before_action :find_badge, only: [:show, :edit, :update, :destroy]
 
-  # GET /badges => student and faculty badge index views
-  # GET /students/:id/badges => faculty view of student's badge index view
+  # GET /badges
   def index
     render Badges::IndexPresenter.build({
       title: term_for(:badges),
@@ -16,8 +15,7 @@ class BadgesController < ApplicationController
     })
   end
 
-  # GET /badges/:id => student and faculty badge show page
-  # GET /students/:id/badges/:id => faculty view of student's badge show page
+  # GET /badges/:id
   def show
     render Badges::ShowPresenter.build({
       course: current_course,
@@ -64,13 +62,8 @@ class BadgesController < ApplicationController
   def destroy
     @name = @badge.name
     @badge.destroy
-
-    respond_to do |format|
-      format.html {
-        redirect_to badges_path,
-        notice: "#{@name} #{term_for :badge} successfully deleted"
-      }
-    end
+    redirect_to badges_path,
+      notice: "#{@name} #{term_for :badge} successfully deleted"
   end
 
   def predict_times_earned

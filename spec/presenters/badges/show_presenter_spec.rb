@@ -16,7 +16,7 @@ describe Badges::ShowPresenter do
 
   let(:student) do
     double(:student,
-      student_visible_earned_badges_for_badge: "my earned badges")
+      visible_earned_badges_for_badge: "my earned badges")
   end
 
   let(:teams) { double(:teams, find_by: "Team A") }

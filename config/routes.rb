@@ -162,9 +162,6 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  get "(/students/:student_id)/badges", to: "badges#index"
-  get "(/students/:student_id)/badges/:id", to: "badges#show"
-
   #7. Challenges
   resources :challenges do
     post :predict_points
@@ -287,11 +284,12 @@ GradeCraft::Application.routes.draw do
     get :grade_index
     get :timeline
     get :syllabus
-    get :badges
     get :predictor
     get :course_progress
     get :teams
     get :recalculate
+    get "badges", to: "students/badges#index"
+    get "badges/:id", to: "students/badges#show", as: :badge_show
     resources :student_academic_histories
     collection do
       get :leaderboard

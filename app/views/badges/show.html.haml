@@ -18,7 +18,7 @@
     .badge-icon
       = render partial: "badges/components/icon", locals: { badge: presenter.badge }
     .badge-description
-      = render partial: "badges/components/description", locals: { badge: presenter.badge, link_to_badge: false }
+      = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
       .count
         Times Earned:
         %span

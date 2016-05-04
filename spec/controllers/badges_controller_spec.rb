@@ -24,8 +24,6 @@ describe BadgesController do
     describe "GET index" do
       it "returns badges for the current course" do
         get :index
-        expect(assigns(:title)).to eq("badges")
-        expect(assigns(:badges)).to eq([@badge])
         expect(response).to render_template(:index)
       end
     end
@@ -160,8 +158,6 @@ describe BadgesController do
       it "shows the student facing badge page" do
         allow(controller).to receive(:current_student).and_return(@student)
         get :index
-        expect(assigns(:title)).to eq("badges")
-        expect(assigns(:badges)).to eq([@badge])
         expect(response).to render_template(:index)
       end
     end

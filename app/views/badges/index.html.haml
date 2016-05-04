@@ -40,7 +40,12 @@
 
             // Description
             %td
-              = render partial: "badges/components/description", locals: { badge: badge, link_to_badge: true }
+              - if current_user_is_staff? && presenter.view_student_context?
+                = render partial: "badges/components/description",
+                  locals: { badge: badge, title: link_to(badge.name, student_badge_show_path(presenter.student, badge)) }
+              - else
+                = render partial: "badges/components/description",
+                  locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
 
             // Buttons
             %td
