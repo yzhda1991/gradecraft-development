@@ -6,12 +6,13 @@
   = render "layouts/alerts"
 
   / render partial: "grade_content", locals: { grade: @grade }
-  = render partial: "grades/components/edit_button", locals: { grade: @grade }
+  - if current_user_is_staff?
+    = render partial: "grades/components/edit_button", locals: { grade: @grade }
   - if @grade.excluded_from_course_score?
     = render partial: "grades/components/excluded", locals: { grade: @grade }
   - unless @grade.group.nil?
     = render partial: "grades/components/students_in_group", locals: { grade: @grade }
-  - if @grade.assignment.threshold_points
+  - unless @grade.assignment.threshold_points.nil?
     = render partial: "grades/components/threshold", locals: { grade: @grade }
 
   = render partial: "grades/components/score", locals: { grade: @grade, assignment_type: @grade.assignment_type, assignment: @grade.assignment }
@@ -36,4 +37,4 @@
       = render partial: "rubrics/components/rubric_table", locals: { rubric: @grade.assignment.rubric, include_grade_info: true }
 
   - if current_user_is_student?
-    = render partial: "grades/components/request_feedback", locals: { grade: @grade, assignment: @grade.assignment }
+    = render partial: "grades/components/request_feedback", locals: { grade: @grade }

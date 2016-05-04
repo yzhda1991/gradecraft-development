@@ -24,4 +24,4 @@
 
   .rubric-container= render "rubrics/components/rubric_table", rubric: presenter.rubric, include_grade_info: true if presenter.grade_with_rubric?
 
-  = render partial: "grades/components/request_feedback", locals: { grade: grade, assignment: presenter.assignment } if current_user_is_student?
+  = render partial: "grades/components/request_feedback", locals: { grade: grade } if current_user_is_student?
