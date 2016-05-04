@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405191418) do
+ActiveRecord::Schema.define(version: 20160504201710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -305,7 +305,7 @@ ActiveRecord::Schema.define(version: 20160405191418) do
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
 
   create_table "criteria", force: :cascade do |t|
-    t.string   "name",                 limit: 255
+    t.string   "name",                        limit: 255
     t.text     "description"
     t.integer  "max_points"
     t.integer  "rubric_id"
@@ -313,7 +313,7 @@ ActiveRecord::Schema.define(version: 20160405191418) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "full_credit_level_id"
-    t.integer  "level_count",                      default: 0
+    t.integer  "level_count",                             default: 0
     t.integer  "meets_expectations_level_id"
     t.integer  "meets_expectations_points",               default: 0
   end
