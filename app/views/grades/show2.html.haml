@@ -34,7 +34,7 @@
 
   - if @grade.assignment.grade_with_rubric?
     .rubric-container
-      = render partial: "rubrics/components/rubric_table", locals: { rubric: @grade.assignment.rubric, include_grade_info: true }
+      = render partial: "rubrics/components/rubric_table", locals: { rubric: @grade.assignment.rubric, student: @grade.student, include_grade_info: true }
 
   - if current_user_is_student?
     = render partial: "grades/components/request_feedback", locals: { grade: @grade }

@@ -3,4 +3,4 @@
   = render partial: "rubrics/components/level_badges", locals: { level: level }
 
   - if include_grade_info
-    = render partial: "rubrics/components/level_grade_analysis", locals: { level: level }
+    = render partial: "rubrics/components/level_grade_analysis", locals: { level: level, student: student }
