@@ -64,7 +64,7 @@
               %li= link_to glyph(:paperclip) + "See Submission", assignment_submission_path(presenter.assignment, submission.id), class: "button"
 
           - if grade.instructor_modified?
-            %li= link_to glyph(:eye) + "See Grade", assignment_grade_path(presenter.assignment, student_id: student.id), class: "button"
+            %li= link_to glyph(:eye) + "See Grade", grade_path(grade), class: "button"
             - if presenter.assignment.accepts_submissions? && presenter.submission_resubmitted?(submissions_for_assignment)
               %li= link_to glyph(:edit) + "Re-grade", edit_assignment_grade_path(presenter.assignment, student_id: student.id), class: "button danger"
             - else
