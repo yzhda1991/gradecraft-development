@@ -3,5 +3,5 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render "layouts/alerts"
-  = render "grade_content", presenter: presenter
+  = render partial: "layouts/alerts"
+  = render partial: "grade_content", locals: { grade: @grade }

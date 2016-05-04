@@ -1,45 +1,21 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment, only: [:show, :edit, :update, :destroy]
+  before_filter :set_assignment, only: [:edit, :update, :destroy]
   before_filter :ensure_staff?,
-    except: [:feedback_read, :show, :show2, :predict_score, :async_update]
+    except: [:feedback_read, :show, :predict_score, :async_update]
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
   before_filter :save_referer, only: :edit
 
   protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == "application/json" }
 
   # GET /grades/:id
-  def show2
+  def show
     @grade = Grade.find params[:id]
 
     redirect_to @grade.assignment and return if current_user_is_student?
 
     name = @grade.group.nil? ? @grade.student.name : @grade.group.name
     @title = "#{name}'s Grade for #{@grade.assignment.name}"
-  end
-
-  # GET /assignments/:assignment_id/grade?student_id=:id
-  def show
-    if current_user_is_student?
-      redirect_to @assignment and return
-    end
-
-    if @assignment.grade_with_rubric?
-      @rubric = @assignment.rubric
-      @criteria = @rubric.criteria
-      @criterion_grades = serialized_criterion_grades
-    end
-
-    if @assignment.has_groups?
-      group = current_student.group_for_assignment(@assignment)
-      @title = "#{group.name}'s Grade for #{ @assignment.name }"
-    else
-      @title = "#{current_student.name}'s Grade for #{ @assignment.name }"
-    end
-
-    render :show, Assignments::Presenter.build({ assignment: @assignment,
-                                              course: current_course,
-                                              view_context: view_context })
   end
 
   # GET /assignments/:assignment_id/grade/edit?student_id=:id

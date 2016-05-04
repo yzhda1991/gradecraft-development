@@ -1,27 +1,35 @@
-- if presenter.grades_available_for?(current_student) || current_user_is_staff?
+- if current_user_is_staff?
+  = render partial: "grades/components/edit_button", locals: { grade: @grade }
 
-  - grade = presenter.grade_for(current_student)
+- if @grade.excluded_from_course_score?
+  = render partial: "grades/components/excluded", locals: { grade: @grade }
 
-  = render "grades/components/edit_button", grade: grade if current_user_is_staff?
+- unless @grade.group.nil?
+  = render partial: "grades/components/students_in_group", locals: { grade: @grade }
 
-  = render "grades/components/excluded", grade: grade if grade.excluded_from_course_score?
+- unless @grade.assignment.threshold_points.nil?
+  = render partial: "grades/components/threshold", locals: { grade: @grade }
 
-  = render "grades/components/students_in_group", grade: grade if grade.assignment.has_groups?
+= render partial: "grades/components/score", locals: { grade: @grade, assignment_type: @grade.assignment_type, assignment: @grade.assignment }
 
-  = render "grades/components/threshold", grade: grade if grade.assignment.threshold_points
+- if current_user_is_staff?
+  = render partial: "grades/components/status", locals: { grade: @grade }
 
-  = render "grades/components/score", grade: grade, assignment_type: grade.assignment_type, assignment: grade.assignment
+- if @grade.adjustment_points != 0
+  = render partial: "grades/components/points_adjustment", locals: { grade: @grade }
 
-  = render "grades/components/status", grade: grade if current_user_is_staff?
+- if @grade.grade_files.present?
+  = render partial: "grades/components/attachments", locals: { grade: @grade }
 
-  = render "grades/components/points_adjustment", grade: grade if grade.adjustment_points != 0
+- if @grade.feedback.present?
+  = render partial: "grades/components/feedback", locals: { grade: @grade }
 
-  = render "grades/components/attachments", grade: grade if grade.grade_files.present?
+- if @grade.earned_badges.present?
+  = render partial: "grades/components/badges", locals: { grade: @grade }
 
-  = render "grades/components/feedback", grade: grade if grade.feedback.present?
+- if @grade.assignment.grade_with_rubric?
+  .rubric-container
+    = render partial: "rubrics/components/rubric_table", locals: { rubric: @grade.assignment.rubric, student: @grade.student, include_grade_info: true }
 
-  = render "grades/components/badges", grade: grade if grade.earned_badges.present?
-
-  .rubric-container= render "rubrics/components/rubric_table", rubric: presenter.rubric, student: grade.student, include_grade_info: true if presenter.grade_with_rubric?
-
-  = render partial: "grades/components/request_feedback", locals: { grade: grade } if current_user_is_student?
+- if current_user_is_student?
+  = render partial: "grades/components/request_feedback", locals: { grade: @grade }

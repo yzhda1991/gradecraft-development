@@ -29,7 +29,7 @@ describe GradesController do
       @grade.delete
     end
 
-    describe "GET show2" do
+    describe "GET show" do
       context "for a group grade" do
         let(:grade) { create :grade, group: group, assignment: assignment,
                         course: @course, student_id: @student.id }
@@ -42,61 +42,23 @@ describe GradesController do
         end
 
         it "includes the group's name in the title" do
-          get :show2, id: grade.id
+          get :show, id: grade.id
           expect(assigns(:title)).to \
             eq("#{group.name}'s Grade for #{assignment.name}")
         end
 
         it "renders the template" do
-          get :show2, id: grade.id
-          expect(response).to render_template(:show2)
+          get :show, id: grade.id
+          expect(response).to render_template(:show)
         end
       end
 
       context "for an individual grade" do
         it "includes the student's name in the title" do
-          get :show2, id: @grade.id
+          get :show, id: @grade.id
           expect(assigns(:title)).to \
             eq("#{@student.name}'s Grade for #{@assignment.name}")
         end
-      end
-    end
-
-    describe "GET show" do
-      context "for a group grade" do
-        it "assigns group, title, and grades for assignment when assignment has groups" do
-          group = create(:group, course: @course)
-          assignment = create(:group_assignment, course: @course)
-          group.assignments << assignment
-          group.students << @student
-          grade = create(:grade, group_id: group.id, assignment: assignment, course: @course, student_id: @student.id)
-
-          get :show, { id: grade.id, assignment_id: assignment.id, student_id: @student.id }
-
-          expect(assigns(:title)).to eq("#{group.name}'s Grade for #{assignment.name}")
-          expect(response).to render_template(:show)
-        end
-      end
-
-      it "assigns the assignment, title and grades for assignment" do
-        get :show, { id: @grade.id, assignment_id: @assignment.id, student_id: @student.id }
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:title)).to eq("#{@student.name}'s Grade for #{@assignment.name}")
-        expect(response).to render_template(:show)
-      end
-
-      it "assigns the rubric and criteria for individual assignments" do
-        assignment = create(:assignment, course: @course)
-        rubric = create(:rubric_with_criteria, assignment: assignment)
-        criterion = rubric.criteria.first
-        level = rubric.criteria.first.levels.first
-        # can't get this to work with factory-girl... criterion_grade = create(:criterion_grade, criterion: criterion, level: level)...
-        criterion_grade = CriterionGrade.create( assignment_id: assignment.id, student_id: @student.id, criterion_id: criterion.id, level_id: level.id)
-        get :show, { id: @grade.id, assignment_id: assignment.id, student_id: @student.id }
-        expect(assigns(:rubric)).to eq(rubric)
-        expect(assigns(:criteria)).to eq(rubric.criteria)
-        expect(JSON.parse(assigns(:criterion_grades))).to eq(
-          [{ "id" => criterion_grade.id, "criterion_id" => criterion.id, "level_id" => level.id, "comments" => nil }])
       end
     end
 
@@ -424,15 +386,8 @@ describe GradesController do
     after(:each) { @grade.delete }
 
     describe "GET show" do
-      it "redirects to the assignment" do
-        get :show, {grade_id: @grade.id, assignment_id: @assignment.id}
-        expect(response).to redirect_to(assignment_path(@assignment))
-      end
-    end
-
-    describe "GET show2" do
       it "redirects to the assignment show page" do
-        get :show2, id: @grade.id
+        get :show, id: @grade.id
         expect(response).to redirect_to(assignment_path(@assignment))
       end
     end
