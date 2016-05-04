@@ -27,6 +27,11 @@ class Level < ActiveRecord::Base
     ModelCopier.new(self).copy(attributes: attributes, associations: [:badges])
   end
 
+  def hide_analytics?
+    assignment = self.criterion.rubric.assignment
+    assignment.hide_analytics? && assignment.course.hide_analytics?
+  end
+
   def points=(points)
     write_attribute(:points, points)
     if points_changed? && meets_expectations?
