@@ -4,7 +4,7 @@ include CourseTerms
 
 describe "assignments/individual/_table_body" do
 
-  let(:presenter) { Assignments::BasePresenter.new({ assignment: @assignment, course: @course }) }
+  let(:presenter) { Assignments::Presenter.new({ assignment: @assignment, course: @course }) }
 
   before(:each) do
     @course = create(:course)

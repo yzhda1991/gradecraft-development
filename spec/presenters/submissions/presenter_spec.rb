@@ -1,7 +1,7 @@
 require "spec_helper"
-require "./app/presenters/submissions/base_presenter"
+require "./app/presenters/submissions/presenter"
 
-describe Submissions::BasePresenter do
+describe Submissions::Presenter do
   let(:assignment_id) { 123 }
   let(:course) { double(:course) }
   subject { described_class.new assignment_id: assignment_id, course: course }

@@ -1,8 +1,8 @@
 require_relative "../../models/history_filter"
-require_relative "base_presenter"
+require_relative "presenter"
 require_relative "grade_history"
 
-class Submissions::ShowPresenter < Submissions::BasePresenter
+class Submissions::ShowPresenter < Submissions::Presenter
   include Submissions::GradeHistory
 
   def id

@@ -1,6 +1,6 @@
 require "./lib/showtime"
 
-class Submissions::BasePresenter < Showtime::Presenter
+class Submissions::Presenter < Showtime::Presenter
   include Showtime::ViewContext
 
   def assignment

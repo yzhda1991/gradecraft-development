@@ -1,13 +1,13 @@
 require "spec_helper"
-require "./app/presenters/assignments/base_presenter"
+require "./app/presenters/assignments/presenter"
 require "./app/presenters/assignments/group_presenter"
 
-describe Assignments::BasePresenter do
+describe Assignments::Presenter do
   let(:assignment) { double(:assignment, name: "Crazy Wizardry", pass_fail?: false, point_total: 5000)}
   let(:course) { double(:course) }
   let(:view_context) { double(:view_context) }
   let(:team) { double(:team) }
-  subject { Assignments::BasePresenter.new({ assignment: assignment, course: course, view_context: view_context }) }
+  subject { Assignments::Presenter.new({ assignment: assignment, course: course, view_context: view_context }) }
 
   describe "#assignment" do
     it "is the assignment that is passed in as a property" do

@@ -3,7 +3,7 @@ require "./lib/showtime"
 require_relative "../submissions/grade_history"
 require_relative "../../models/history_filter"
 
-class Assignments::BasePresenter < Showtime::Presenter
+class Assignments::Presenter < Showtime::Presenter
   include Showtime::ViewContext
   include Submissions::GradeHistory
 
