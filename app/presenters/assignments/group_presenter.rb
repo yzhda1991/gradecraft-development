@@ -1,6 +1,6 @@
 require "./lib/showtime"
 
-class AssignmentGroupPresenter < Showtime::Presenter
+class Assignments::GroupPresenter < Showtime::Presenter
   def assignment
     properties[:assignment]
   end

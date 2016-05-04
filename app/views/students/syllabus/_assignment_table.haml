@@ -25,7 +25,7 @@
       %td
         %span
           - if presenter.open?(assignment)
-            = render partial: "assignments/self_log_form", locals: { student: @student, assignment: assignment }
+            = render partial: "assignments/self_log_form", locals: { student: presenter.student, assignment: assignment }
       %td
         .right
           %ul.button-bar

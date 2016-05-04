@@ -1,7 +1,7 @@
-require "./app/presenters/edit_submission_presenter"
+require "./app/presenters/submissions/edit_presenter"
 require_relative "showing_a_submission_spec"
 
-describe EditSubmissionPresenter do
+describe Submissions::EditPresenter do
   let(:assignment) { double(:assignment) }
   before { allow(subject).to receive(:assignment).and_return assignment }
 

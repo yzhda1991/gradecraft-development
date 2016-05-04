@@ -1,11 +1,11 @@
 require "active_support/inflector"
 require "./lib/showtime"
-require_relative "submission_grade_history"
-require_relative "../models/history_filter"
+require_relative "../submissions/grade_history"
+require_relative "../../models/history_filter"
 
-class AssignmentPresenter < Showtime::Presenter
+class Assignments::Presenter < Showtime::Presenter
   include Showtime::ViewContext
-  include SubmissionGradeHistory
+  include Submissions::GradeHistory
 
   def assignment
     properties[:assignment]
@@ -46,7 +46,7 @@ class AssignmentPresenter < Showtime::Presenter
   end
 
   def groups
-    AssignmentGroupPresenter.wrap(assignment.groups, :group, { assignment: assignment })
+    Assignments::GroupPresenter.wrap(assignment.groups, :group, { assignment: assignment })
   end
 
   def group_assignment?

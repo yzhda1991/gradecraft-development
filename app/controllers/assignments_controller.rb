@@ -23,7 +23,7 @@ class AssignmentsController < ApplicationController
       alert: "The #{(term_for :assignment)} could not be found." and return unless assignment.present?
 
     mark_assignment_reviewed! assignment, current_user
-    render :show, AssignmentPresenter.build({
+    render :show, Assignments::Presenter.build({
       assignment: assignment,
       course: current_course,
       team_id: params[:team_id],
@@ -32,7 +32,7 @@ class AssignmentsController < ApplicationController
   end
 
   def new
-    render :new, AssignmentPresenter.build({
+    render :new, Assignments::Presenter.build({
       assignment: current_course.assignments.new,
       course: current_course,
       view_context: view_context
@@ -42,7 +42,7 @@ class AssignmentsController < ApplicationController
   def edit
     assignment = current_course.assignments.find(params[:id])
     @title = "Editing #{assignment.name}"
-    render :edit, AssignmentPresenter.build({
+    render :edit, Assignments::Presenter.build({
       assignment: assignment,
       course: current_course,
       view_context: view_context
@@ -65,7 +65,7 @@ class AssignmentsController < ApplicationController
     end
 
     @title = "Create a New #{term_for :assignment}"
-    render :new, AssignmentPresenter.build({
+    render :new, Assignments::Presenter.build({
       assignment: assignment,
       course: current_course,
       view_context: view_context
@@ -89,7 +89,7 @@ class AssignmentsController < ApplicationController
     respond_to do |format|
       format.html {
         @title = "Edit #{term_for :assignment}"
-        render :edit, AssignmentPresenter.build({
+        render :edit, Assignments::Presenter.build({
           assignment: assignment,
           course: current_course,
           view_context: view_context

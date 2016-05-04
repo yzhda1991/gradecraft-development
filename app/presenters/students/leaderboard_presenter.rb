@@ -1,6 +1,6 @@
 require "./lib/showtime"
 
-class StudentLeaderboardPresenter < Showtime::Presenter
+class Students::LeaderboardPresenter < Showtime::Presenter
   def course
     properties[:course]
   end

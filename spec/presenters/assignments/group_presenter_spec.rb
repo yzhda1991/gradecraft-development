@@ -1,11 +1,11 @@
 require "rspec/core"
-require "./app/presenters/assignment_group_presenter"
+require "./app/presenters/assignments/group_presenter"
 
-describe AssignmentGroupPresenter do
+describe Assignments::GroupPresenter do
   let(:assignment) { double(:assignment) }
   let(:group) { double(:group, name: "My Group") }
   let(:submission) { double(:submission) }
-  subject { AssignmentGroupPresenter.new({ assignment: assignment, group: group })}
+  subject { Assignments::GroupPresenter.new({ assignment: assignment, group: group })}
 
   describe "#assignment_graded?" do
     it "has been graded if it has been graded for any user in the group" do

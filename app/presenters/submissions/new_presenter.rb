@@ -1,6 +1,6 @@
-require_relative "submission_presenter"
+require_relative "presenter"
 
-class NewSubmissionPresenter < SubmissionPresenter
+class Submissions::NewPresenter < Submissions::Presenter
   def submission
     @submission ||= properties[:submission] || assignment.submissions.new
   end

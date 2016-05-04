@@ -3,7 +3,7 @@ require "rails_spec_helper"
 
 describe "grades/show" do
 
-  let(:presenter) { AssignmentPresenter.new({ assignment: @assignment, course: @course }) }
+  let(:presenter) { Assignments::Presenter.new({ assignment: @assignment, course: @course }) }
 
   before(:each) do
     @course = create(:course)

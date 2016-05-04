@@ -28,19 +28,18 @@ class StudentsController < ApplicationController
 
   # Course wide leaderboard - excludes auditors from view
   def leaderboard
-    render :leaderboard, StudentLeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
+    render :leaderboard, Students::LeaderboardPresenter.build(course: current_course, team_id: params[:team_id])
   end
 
   # Students' primary page: displays all assignments and
   # team challenges in course
   def syllabus
-    @assignment_types = current_course.assignment_types.includes(:assignments)
-    @student = current_student
-    presenter = SyllabusPresenter.new({ student: @student,
-                                        assignment_types: @assignment_types,
-                                        course: current_course,
-                                        view_context: view_context })
-    render :syllabus, locals: { presenter: presenter }
+    render :syllabus, Students::SyllabusPresenter.build({
+      student: current_student,
+      assignment_types: current_course.assignment_types.includes(:assignments),
+      course: current_course,
+      view_context: view_context
+    })
   end
 
   # Course timeline, displays all assignments that are determined by the
@@ -55,15 +54,13 @@ class StudentsController < ApplicationController
   # Displaying student profile to instructors
   def show
     self.current_student = current_course.students.where(id: params[:id]).first
-    @student = current_student
-    @student.team_for_course(current_course) if current_course.has_teams?
-    @assignment_types = current_course.assignment_types
     @display_sidebar = true
-    presenter = SyllabusPresenter.new({ student: current_student,
-                                        assignment_types: @assignment_types,
-                                        course: current_course,
-                                        view_context: view_context })
-    render :show, locals: { presenter: presenter }
+    render :show, Students::SyllabusPresenter.build({
+      student: self.current_student,
+      assignment_types: current_course.assignment_types.includes(:assignments),
+      course: current_course,
+      view_context: view_context
+    })
   end
 
   # AJAX endpoint for student name search

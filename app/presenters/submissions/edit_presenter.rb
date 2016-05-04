@@ -1,6 +1,6 @@
-require_relative "show_submission_presenter"
+require_relative "show_presenter"
 
-class EditSubmissionPresenter < ShowSubmissionPresenter
+class Submissions::EditPresenter < Submissions::ShowPresenter
   def submission
     properties[:submission] || super
   end
