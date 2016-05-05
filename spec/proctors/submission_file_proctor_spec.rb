@@ -8,6 +8,7 @@ describe SubmissionFileProctor do
   let(:submission) { create(:submission, course: course) }
   let(:submission_file) { create(:submission_file, submission: submission) }
   let(:assignment) { create(:assignment) }
+  let(:group) { create(:group) }
 
   it "should have a readable submission_file" do
     expect(subject.submission_file).to eq submission_file
@@ -71,12 +72,11 @@ describe SubmissionFileProctor do
 
     context "assignment is not individual but has groups" do
       before do
-        allow(assignment).to receive(:is_individual?) { false }
-      end
-
-      context "user is in the group that owns the submission" do
-        it "returns true" do
-        end
+        allow(subject).to receive(:assignment) { assignment }
+        allow(assignment).to receive_messages(
+          is_individual?: false,
+          has_groups?: true
+        )
       end
 
       context "there is no group for the user for the given assignment" do
@@ -86,7 +86,24 @@ describe SubmissionFileProctor do
         end
       end
 
-      context "there's a group but it isn't the same one on the submission" do
+      context "user has a group for the assignment" do
+        before(:each) do
+          allow(user).to receive(:group_for_assignment).with(assignment) { group }
+        end
+
+        context "user is in the group that owns the submission" do
+          it "returns true" do
+            allow(submission).to receive(:group_id) { group.id }
+            expect(result).to eq true
+          end
+        end
+
+        context "there's a group but it isn't the same one on the submission" do
+          it "returns false" do
+            allow(submission).to receive(:group_id) { 885_000 }
+            expect(result).to eq false
+          end
+        end
       end
     end
 

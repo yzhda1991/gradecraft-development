@@ -19,9 +19,11 @@ class SubmissionFileProctor
       # downloadable if the user is the student who owns this submission
       return submission.student_id == user.id
     elsif assignment.has_groups?
-      group = user.group_for_assignment assignment
+      # there needs to be a group
+      return false unless group = user.group_for_assignment(assignment)
+
       # downloadable if the user is in the group that owns the submission
-      return (group && group.id == submission.group_id)
+      return group.id == submission.group_id
     end
 
     # otherwise not manageable
