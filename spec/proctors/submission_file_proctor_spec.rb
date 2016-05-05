@@ -3,19 +3,11 @@ require 'active_record_spec_helper'
 describe SubmissionFileProctor do
   subject { described_class.new(submission_file) }
 
-  let(:user) { User.last }
-  let(:course) { Course.last }
-  let(:submission_file) { SubmissionFile.last }
-  let(:submission) { Submission.last }
-  let(:assignment) { Assignment.last }
-
-  before do
-    create(:user)
-    create(:course)
-    create(:submission, course: course)
-    create(:submission_file, submission: submission)
-    create(:assignment)
-  end
+  let(:user) { create(:user) }
+  let(:course) { create(:course) }
+  let(:submission) { create(:submission, course: course) }
+  let(:submission_file) { create(:submission_file, submission: submission) }
+  let(:assignment) { create(:assignment) }
 
   it "should have a readable submission_file" do
     expect(subject.submission_file).to eq submission_file
@@ -45,28 +37,53 @@ describe SubmissionFileProctor do
 
     context "user is staff for the given course" do
       it "returns true" do
+        allow(user).to receive(:is_staff?).with(course) { true }
+        expect(result).to eq true
+      end
+    end
+
+    context "no assignment exists" do
+      it "returns false" do
+        allow(subject).to receive(:assignment) { nil }
+        expect(result).to eq false
       end
     end
 
     context "assignment is individual" do
+      before do
+        allow(assignment).to receive(:is_individual?) { true }
+      end
+
       context "the submission's student_id matches the given user's id" do
         it "returns true" do
+          allow(submission).to receive(:student_id) { user.id }
+          expect(result).to eq true
         end
       end
 
       context "the submission's student_id doesn't match the given user's id" do
         it "returns false" do
+          allow(submission).to receive(:student_id) { 900_000 }
+          expect(result).to eq false
         end
       end
     end
 
     context "assignment is not individual but has groups" do
+      before do
+        allow(assignment).to receive(:is_individual?) { false }
+      end
+
       context "user is in the group that owns the submission" do
         it "returns true" do
         end
       end
 
       context "there is no group for the user for the given assignment" do
+        it "returns false" do
+          allow(user).to receive(:group_for_assignment).with(assignment) { nil }
+          expect(result).to eq false
+        end
       end
 
       context "there's a group but it isn't the same one on the submission" do
