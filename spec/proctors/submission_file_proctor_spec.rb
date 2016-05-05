@@ -1,22 +1,45 @@
 require 'active_record_spec_helper'
 
-require '../../app/proctors/submission_file_proctor'
-
 describe SubmissionFileProctor do
+  subject { described_class.new(submission_file) }
+
+  let(:user) { User.last }
+  let(:course) { Course.last }
+  let(:submission_file) { SubmissionFile.last }
+  let(:submission) { Submission.last }
+  let(:assignment) { Assignment.last }
+
+  before do
+    create(:user)
+    create(:course)
+    create(:submission, course: course)
+    create(:submission_file, submission: submission)
+    create(:assignment)
+  end
+
   it "should have a readable submission_file" do
+    expect(subject.submission_file).to eq submission_file
   end
 
   describe "#initialize" do
     it "accepts a submission file and set it to @submission_file" do
+      expect(subject.instance_variable_get(:@submission_file))
+        .to eq submission_file
     end
   end
 
   describe "#downloadable?" do
-    it "returns an error if :user and :course aren't given" do
+    let(:result) { subject.downloadable? user: user }
+
+    it "returns an error if :user isn't given" do
+      expect { subject.downloadable? }.to raise_error(ArgumentError)
     end
 
     context "submission course id doesn't match the course id" do
       it "returns false" do
+        allow(subject).to receive_message_chain(:course, :id) { 7 }
+        allow(submission).to receive(:course_id) { 20_000 }
+        expect(result).to eq false
       end
     end
 

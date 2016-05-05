@@ -5,7 +5,7 @@ class SubmissionFileProctor
     @submission_file = submission_file
   end
 
-  def downloadable?(user:, course:)
+  def downloadable?(user:)
     # not downloadable if the user doesn't match the course
     return false unless submission.course_id == course.id
 
@@ -26,6 +26,10 @@ class SubmissionFileProctor
 
     # otherwise not manageable
     false
+  end
+
+  def course
+    submission.course
   end
 
   def submission
