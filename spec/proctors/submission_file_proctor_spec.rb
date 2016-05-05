@@ -108,6 +108,12 @@ describe SubmissionFileProctor do
     end
 
     it "returns false if no other cases are true" do
+      allow(subject).to receive(:assignment) { assignment }
+      allow(assignment).to receive_messages(
+        is_individual?: false,
+        has_groups?: false
+      )
+      expect(result).to eq false
     end
   end
 

@@ -26,7 +26,7 @@ class SubmissionFileProctor
       return group.id == submission.group_id
     end
 
-    # otherwise not manageable
+    # otherwise not downloadable
     false
   end
 
