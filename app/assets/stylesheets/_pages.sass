@@ -4,7 +4,7 @@
 .page
   .hero-section
     margin: 0
-    background:rgba(46,112,190,.3)
+    background:rgba(46,112,190,.5)
     background-position: top center
     background-repeat: no-repeat
     position: relative
@@ -17,13 +17,20 @@
 
     .public-subnav 
       position: absolute
-      bottom: 0
+      bottom: 9
       li
         display: inline
-        a
+        text-transform: uppercase
+        span
+          background-color: rgba(255,255,255,.4)
+          color: $color-white
           padding: 0.75em 1em
-          background-color: white
-
+        a
+          color: $color-white
+          padding: 0.75em 1em
+          text-decoration: none
+          &:hover
+            background-color: rgba(255,255,255,.4)
     ul
       list-style: none
       padding-left: 0
