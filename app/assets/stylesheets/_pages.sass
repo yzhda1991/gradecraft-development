@@ -7,19 +7,34 @@
     background:rgba(46,112,190,.3)
     background-position: top center
     background-repeat: no-repeat
-    height: 100px
-    padding: 40px 0 0
+    position: relative
 
     h1
       color: $color-white
       text-align: center
       font-size: 2.5rem
-      width: 50%
+      padding: 2em
+
+    .public-subnav 
+      position: absolute
+      bottom: 0
+      li
+        display: inline
+        a
+          padding: 0.75em 1em
+          background-color: white
+
+    ul
+      list-style: none
+      padding-left: 0
+      text-align: center
       margin: 0 auto
+      width: 100%
+
 
   .main-section
     background-color: $color-white
-    padding: 1rem
+    padding: 1rem 6rem
 
     ul
       padding-left: 0
@@ -29,17 +44,6 @@
 
     li
       margin-bottom: 1rem
-
-    .one-third
-      width: 20%
-      text-align: right
-      float: left
-
-    .two-thirds
-      border-left: 1px solid $color-grey-6
-      padding-left: 1rem
-      width: 75%
-      margin-left: 22%
 
     .date
       text-transform: uppercase
