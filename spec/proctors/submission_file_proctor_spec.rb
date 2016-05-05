@@ -3,12 +3,12 @@ require 'active_record_spec_helper'
 describe SubmissionFileProctor do
   subject { described_class.new(submission_file) }
 
-  let(:user) { create(:user) }
-  let(:course) { create(:course) }
-  let(:submission) { create(:submission, course: course) }
-  let(:submission_file) { create(:submission_file, submission: submission) }
-  let(:assignment) { create(:assignment) }
-  let(:group) { create(:group) }
+  let(:user) { build(:user) }
+  let(:course) { build(:course) }
+  let(:submission) { build(:submission, course: course) }
+  let(:submission_file) { build(:submission_file, submission: submission) }
+  let(:assignment) { build(:assignment) }
+  let(:group) { build(:group) }
 
   it "should have a readable submission_file" do
     expect(subject.submission_file).to eq submission_file
@@ -117,25 +117,56 @@ describe SubmissionFileProctor do
     end
   end
 
+  describe "#course" do
+    it "returns the course from the submission" do
+      allow(submission).to receive(:course) { course }
+      expect(subject.course).to eq course
+    end
+  end
+
   describe "#submission" do
+    let(:result) { subject.submission }
+
+    before do
+      allow(submission_file).to receive(:submission) { submission }
+    end
+
     it "gets the submission from the submission_file" do
+      expect(result).to eq submission
     end
 
     it "caches the submission" do
+      result
+      expect(submission_file).not_to receive(:submission)
+      result
     end
 
     it "sets the submission to @submission" do
+      result
+      expect(subject.instance_variable_get(:@submission)).to eq submission
     end
   end
 
   describe "#assignment" do
+    let(:result) { subject.assignment }
+
+    before do
+      allow(submission).to receive(:assignment) { assignment }
+    end
+
     it "gets the assignment from the submission" do
+      expect(result).to eq assignment
     end
 
     it "caches the assignment" do
+      result
+      expect(submission).not_to receive(:assignment)
+      result
     end
 
     it "sets the assignment to @assignment" do
+      result
+      expect(subject.instance_variable_get(:@assignment)).to eq assignment
     end
   end
 end
