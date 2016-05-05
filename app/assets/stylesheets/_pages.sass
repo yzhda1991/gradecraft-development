@@ -75,11 +75,24 @@
   margin: 2.5rem 0 0
 
 @media (max-width: $media-small-max)
-  .page .hero-section
-    padding: 50px 0 0
-    height: auto !important
+  .page 
+    .hero-section 
+      h1
+        padding: .5em 0
+        font-size: 1.75rem
 
-    h1
-      width: 100%
-      border-radius: 0 !important
-      background-color: $color-grey-6
+      .public-subnav
+        position: relative 
+        li
+          margin: .25em 0
+          span, a
+            display: block
+            padding: 0.5em 0
+            &:hover
+              background-color: transparent
+          span
+            background-color: rgba(255,255,255,.4)
+    .main-section
+      padding: 1.25rem
+      .main-section-content
+        width: 100%
