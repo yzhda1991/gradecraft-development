@@ -2,7 +2,7 @@ require "active_support/inflector"
 require "./app/presenters/submissions/show_presenter"
 require_relative "showing_a_submission_spec"
 
-describe ShowSubmissionPresenter do
+describe Submissions::ShowPresenter do
   # build a new presenter with some default properties
   subject { described_class.new properties }
 
@@ -21,7 +21,7 @@ describe ShowSubmissionPresenter do
   let(:submission) { double(:submission, student: student, group: group) }
 
   it "inherits from the Submission Presenter" do
-    expect(described_class.superclass).to eq SubmissionPresenter
+    expect(described_class.superclass).to eq Submissions::Presenter
   end
 
   it "includes SubmissionGradeHistory" do
