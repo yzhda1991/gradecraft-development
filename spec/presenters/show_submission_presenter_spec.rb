@@ -106,7 +106,6 @@ describe ShowSubmissionPresenter do
 
   describe "#submission" do
     let(:result) { subject.submission }
-    let(:submissions) { double(:active_record_relation).as_null_object }
 
     context "id exists and Submission.find returns a valid record" do
       before do
