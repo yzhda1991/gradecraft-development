@@ -1,7 +1,6 @@
 require 'active_record_spec_helper'
 require "active_support/inflector"
 require "./app/presenters/show_submission_presenter"
-require_relative "showing_a_submission_spec"
 
 describe ShowSubmissionPresenter do
   # build a new presenter with some default properties
