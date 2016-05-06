@@ -11,9 +11,8 @@
 
     - if criterion.levels.size < rubric.max_level_count
       %td.filler(colspan="#{rubric.max_level_count - criterion.levels.size}")
-      - if include_grade_info
-        %td.level.level-comments.comments-box
-        - unless comments_by_criterion_id.empty?
-          = raw comments_by_criterion_id[criterion.id]
+    - if include_grade_info
+      %td.level.level-comments.comments-box
+        = raw criterion.comments_for(student.id)
 
 

@@ -65,6 +65,19 @@ describe Criterion do
     end
   end
 
+  describe "#comments_for" do
+
+    it "returns comments for student" do
+      subject.save
+      grade = create :criterion_grade, criterion: subject, comments: "xo"
+      expect(subject.comments_for(grade.student.id)).to eq("xo")
+    end
+
+    it "returns nil when no associated grade" do
+      expect(subject.comments_for(0)).to eq(nil)
+    end
+  end
+
   context "creation" do
     context "criterion is flagged as duplicated" do
       it "should not create levels" do
