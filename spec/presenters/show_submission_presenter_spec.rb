@@ -108,26 +108,48 @@ describe ShowSubmissionPresenter do
     let(:result) { subject.submission }
     let(:submissions) { double(:active_record_relation).as_null_object }
 
-    before do
-      allow(assignment).to receive(:submissions) { submissions }
-      allow(subject).to receive(:id) { 900 }
-      allow(Submission).to receive(:find) { submission }
+    context "id exists and Submission.find returns a valid record" do
+      before do
+        allow(subject).to receive(:id) { 900 }
+        allow(Submission).to receive(:find) { submission }
+      end
+
+      it "finds the submission by id" do
+        expect(Submission).to receive(:find).with 900
+        result
+      end
+
+      it "caches the submission" do
+        result
+        expect(Submission).not_to receive(:find).with(900)
+        result
+      end
+
+      it "sets the submission to an ivar" do
+        result
+        expect(subject.instance_variable_get(:@submission)).to eq submission
+      end
     end
 
-    it "finds the submission by id" do
-      expect(Submission).to receive(:find).with 900
-      result
+    context "a non-existent id is passed to Submission.find" do
+      it "rescues to nil" do
+        allow(subject).to receive(:id) { 980_000 }
+        expect(result).to eq nil
+      end
     end
 
-    it "caches the submission" do
-      result
-      expect(Submission).not_to receive(:find).with(900)
-      result
+    context "a nil id is passed to Submission.find" do
+      it "rescues to nil" do
+        allow(subject).to receive(:id) { nil }
+        expect(result).to eq nil
+      end
     end
 
-    it "sets the submission to an ivar" do
-      result
-      expect(subject.instance_variable_get(:@submission)).to eq submission
+    context "an ActiveRecord::RecordNotFound error is raised" do
+      it "rescues to nil" do
+        allow(Submission).to receive(:find).and_raise ActiveRecord::RecordNotFound
+        expect(result).to eq nil
+      end
     end
   end
 
