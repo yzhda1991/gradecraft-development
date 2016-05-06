@@ -29,8 +29,11 @@ class Submissions::ShowPresenter < Submissions::Presenter
   end
 
   def submission
-    return nil unless id
-    @submission ||= ::Submission.find id
+    begin
+      @submission ||= ::Submission.find(id)
+    rescue ::ActiveRecord::RecordNotFound
+      nil
+    end
   end
 
   def student
