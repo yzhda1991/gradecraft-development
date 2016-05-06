@@ -1,24 +1,74 @@
 require "./app/presenters/submissions/edit_presenter"
 require_relative "showing_a_submission_spec"
+require 'active_record_spec_helper'
+require_relative '../../app/models/submission'
+require "./app/presenters/edit_submission_presenter"
 
 describe Submissions::EditPresenter do
   let(:assignment) { double(:assignment) }
   before { allow(subject).to receive(:assignment).and_return assignment }
 
   describe "ported from shared examples" do
-    let(:assignment) { double(:assignment) }
-    let(:submission_id) { 123 }
-    subject { described_class.new id: submission_id }
+    subject { described_class.new id: 1234 }
 
     before { allow(subject).to receive(:assignment).and_return assignment }
 
     describe "#submission" do
-      it "returns the submission from the assignment based on the id" do
-        submission = double(:submission)
-        submissions = double(:active_record_relation)
-        allow(submissions).to receive(:find).with(submission_id).and_return submission
-        allow(assignment).to receive(:submissions).and_return submissions
-        expect(subject.submission).to eq submission
+      context "properties[:submission] exists" do
+        subject { described_class.new id: 1234, submission: "some-entity" }
+
+        it "returns properties[:submission]" do
+          expect(subject.submission).to eq "some-entity"
+        end
+      end
+
+      context "properties[:submission] does not exist" do
+        let(:submission) { create(:submission) }
+        let(:result) { subject.submission }
+
+        context "id exists and Submission.find returns a valid record" do
+          before do
+            allow(subject).to receive(:id) { submission.id }
+            allow(Submission).to receive(:find) { submission }
+          end
+
+          it "finds the submission by id" do
+            expect(Submission).to receive(:find).with submission.id
+            result
+          end
+
+          it "caches the submission" do
+            result
+            expect(Submission).not_to receive(:find).with submission.id
+            result
+          end
+
+          it "sets the submission to an ivar" do
+            result
+            expect(subject.instance_variable_get(:@submission)).to eq submission
+          end
+        end
+
+        context "a non-existent id is passed to Submission.find" do
+          it "rescues to nil" do
+            allow(subject).to receive(:id) { 980_000 }
+            expect(result).to eq nil
+          end
+        end
+
+        context "a nil id is passed to Submission.find" do
+          it "rescues to nil" do
+            allow(subject).to receive(:id) { nil }
+            expect(result).to eq nil
+          end
+        end
+
+        context "an ActiveRecord::RecordNotFound error is raised" do
+          it "rescues to nil" do
+            allow(Submission).to receive(:find).and_raise ActiveRecord::RecordNotFound
+            expect(result).to eq nil
+          end
+        end
       end
     end
 
