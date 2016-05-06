@@ -111,17 +111,17 @@ describe ShowSubmissionPresenter do
     before do
       allow(assignment).to receive(:submissions) { submissions }
       allow(subject).to receive(:id) { 900 }
-      allow(submissions).to receive(:find) { submission }
+      allow(Submission).to receive(:find) { submission }
     end
 
     it "finds the submission by id" do
-      expect(submissions).to receive(:find).with 900
+      expect(Submission).to receive(:find).with 900
       result
     end
 
     it "caches the submission" do
       result
-      expect(submissions).not_to receive(:find).with(900)
+      expect(Submission).not_to receive(:find).with(900)
       result
     end
 
