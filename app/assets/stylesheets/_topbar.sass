@@ -265,7 +265,6 @@ ul.subnav.logged-out
     display: none
 
   .mobile-nav
-    padding-left: .25rem
     margin: 0 auto
     text-align: center
 
@@ -338,7 +337,6 @@ ul.subnav.logged-out
 
   .navbar .mobile-nav
     padding-top: .5rem
-    padding-left: .5rem
     margin: 0 auto
     text-align: center
 
@@ -356,6 +354,19 @@ ul.subnav.logged-out
 
     .right
       margin-right: 1rem
+
+    .left
+      margin-left: 1rem
+
+@media (max-width: $media-small-max)
+  .navbar > .mobile-nav > .right
+    width: 100%
+    margin-right: 0
+  
+  .login-buttons
+    margin: 0 auto
+    width: 100%
+    float: none
 
 .noscroll
   overflow: hidden
