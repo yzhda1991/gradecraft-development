@@ -1,7 +1,3 @@
-require_relative "../../models/history_filter"
-require_relative "presenter"
-require_relative "grade_history"
-
 module Submissions
   class ShowPresenter < Submissions::Presenter
     include Submissions::GradeHistory
