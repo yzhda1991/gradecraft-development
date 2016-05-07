@@ -1,7 +1,7 @@
 require "spec_helper"
 require "./app/presenters/submissions/presenter"
 
-describe SubmissionPresenter do
+describe Submissions::Presenter do
   subject do
     described_class.new assignment_id: assignment.id,
                         group_id: group.id,

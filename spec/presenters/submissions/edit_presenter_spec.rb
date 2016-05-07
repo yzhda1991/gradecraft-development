@@ -1,8 +1,6 @@
 require "./app/presenters/submissions/edit_presenter"
-require_relative "showing_a_submission_spec"
 require 'active_record_spec_helper'
-require_relative '../../app/models/submission'
-require "./app/presenters/edit_submission_presenter"
+require './app/models/submission'
 
 describe Submissions::EditPresenter do
   let(:assignment) { double(:assignment) }
