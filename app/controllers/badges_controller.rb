@@ -1,26 +1,29 @@
 class BadgesController < ApplicationController
   include SortsPosition
 
-  before_filter :ensure_staff?, except: [:predictor_data, :predict_times_earned]
+  before_filter :ensure_staff?,
+    except: [:index, :show, :predictor_data, :predict_times_earned]
   before_filter :ensure_student?, only: [:predict_times_earned]
   before_action :find_badge, only: [:show, :edit, :update, :destroy]
 
+  # GET /badges
   def index
-    @title = "#{term_for :badges}"
-    @badges = current_course.badges
+    render Badges::IndexPresenter.build({
+      title: term_for(:badges),
+      badges: current_course.badges,
+      student: current_student
+    })
   end
 
+  # GET /badges/:id
   def show
-    @title = @badge.name
-    @earned_badges = @badge.earned_badges
-    @teams = current_course.teams
-    if params[:team_id].present?
-      @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
-      students = current_course.students_being_graded_by_team(@team)
-    else
-      students = current_course.students_being_graded
-    end
-    @students = students
+    render Badges::ShowPresenter.build({
+      course: current_course,
+      badge: @badge,
+      student: current_student,
+      teams: current_course.teams,
+      params: params
+    })
   end
 
   def new
@@ -36,7 +39,8 @@ class BadgesController < ApplicationController
     @badge = current_course.badges.new(params[:badge])
 
     if @badge.save
-      redirect_to @badge, notice: "#{@badge.name} #{term_for :badge} successfully created"
+      redirect_to @badge,
+        notice: "#{@badge.name} #{term_for :badge} successfully created"
     else
       render action: "new"
     end
@@ -44,7 +48,8 @@ class BadgesController < ApplicationController
 
   def update
     if @badge.update_attributes(params[:badge])
-      redirect_to badges_path, notice: "#{@badge.name} #{term_for :badge} successfully updated"
+      redirect_to badges_path,
+        notice: "#{@badge.name} #{term_for :badge} successfully updated"
     else
       render action: "edit"
     end
@@ -57,20 +62,18 @@ class BadgesController < ApplicationController
   def destroy
     @name = @badge.name
     @badge.destroy
-
-    respond_to do |format|
-      format.html { redirect_to badges_path, notice: "#{@name} #{term_for :badge} successfully deleted" }
-    end
+    redirect_to badges_path,
+      notice: "#{@name} #{term_for :badge} successfully deleted"
   end
 
   def predict_times_earned
     @badge = current_course.badges.find(params[:badge_id])
-    @badgePrediction =
+    badge_prediction =
       PredictedEarnedBadge.where(student: current_student, badge: @badge).first
-    @badgePrediction.times_earned = params[:times_earned]
+    badge_prediction.times_earned = params[:times_earned]
 
     # save the prediction and cache the outcome
-    @prediction_saved = @badgePrediction.save
+    @prediction_saved = badge_prediction.save
 
     # create a predictor event in mongo to keep track of what happened
     PredictorEventJob.new(data: badge_predictor_event_attrs).enqueue
@@ -80,11 +83,11 @@ class BadgesController < ApplicationController
         if @prediction_saved
           render json: {
             id: @badge.id,
-            times_earned: @badgePrediction.times_earned
+            times_earned: badge_prediction.times_earned
           }
         else
           render json: {
-            errors:  @badgePrediction.errors.full_messages
+            errors:  badge_prediction.errors.full_messages
             },
             status: 400
         end

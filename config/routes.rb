@@ -284,11 +284,12 @@ GradeCraft::Application.routes.draw do
     get :grade_index
     get :timeline
     get :syllabus
-    get :badges
     get :predictor
     get :course_progress
     get :teams
     get :recalculate
+    get "badges", to: "students/badges#index"
+    get "badges/:id", to: "students/badges#show", as: :badge_show
     resources :student_academic_histories
     collection do
       get :leaderboard
@@ -310,7 +311,6 @@ GradeCraft::Application.routes.draw do
   get "timeline" => "students#timeline"
   get "syllabus" => "students#syllabus"
   get "course_progress" => "students#course_progress"
-  get "my_badges" => "students#badges"
   get "my_team" => "students#teams"
 
   #14. User Auth

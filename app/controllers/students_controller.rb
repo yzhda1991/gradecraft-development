@@ -84,17 +84,6 @@ class StudentsController < ApplicationController
     @team = current_student.team_for_course(current_course)
   end
 
-  def badges
-    @title = "#{term_for :badges}"
-    @earned_badges = current_student.student_visible_earned_badges(current_course).includes(:badge_files)
-    @unearned_badges = current_student.student_visible_unearned_badges(current_course).includes(:badge_files, :unlock_conditions, :unlock_keys)
-    @badges = [] << @earned_badges.collect(&:badge) << @unearned_badges
-
-    @badges = @badges.flatten.uniq.sort_by(&:position)
-    @earned_badges_by_badge_id ||= earned_badges_by_badge_id
-    @display_sidebar = true
-  end
-
   # Display the grade predictor
   #   students - style blocks to fill entire page, render layout with no sidebar
   #   staff - render standard laout with sidebar
@@ -119,18 +108,5 @@ class StudentsController < ApplicationController
 
     flash[:notice]="Your request to recalculate #{@student.name}'s grade is being processed. Check back shortly!"
     redirect_to session[:return_to] || student_path(@student)
-  end
-
-  private
-
-  def earned_badges_by_badge_id
-    @earned_badges.inject({}) do |memo, earned_badge|
-      if memo[earned_badge.badge.id]
-        memo[earned_badge.badge.id] << earned_badge
-      else
-        memo[earned_badge.badge.id] = [earned_badge]
-      end
-      memo
-    end
   end
 end

@@ -388,6 +388,19 @@ class User < ActiveRecord::Base
       .references(:earned_badges)
   end
 
+  # Student visible earned badges for a particular badge
+  def visible_earned_badges_for_badge(badge)
+    EarnedBadge
+      .where(badge: badge)
+      .where(student_id: self.id)
+      .where(student_visible: true)
+  end
+
+  # Number of times a student has earned a particular badge
+  def visible_earned_badges_for_badge_count(badge)
+    self.visible_earned_badges_for_badge(badge).count
+  end
+
   # this should be all earned badges that either:
   # 1) have no associated grade and have been awarded to the student, or...
   # 2) have an associated grade that has been marked graded_or_released?
