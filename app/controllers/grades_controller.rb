@@ -18,6 +18,15 @@ class GradesController < ApplicationController
     @title = "#{name}'s Grade for #{@grade.assignment.name}"
   end
 
+  def edit2
+    @grade = Grade.find params[:id]
+    @title = "Editing #{@grade.student.name}'s Grade "\
+      "for #{@grade.assignment.name}"
+    @badges = @grade.student.earnable_course_badges_for_grade(@grade)
+    @submission = @grade.student.submission_for_assignment(@grade.assignment)
+    render :edit
+  end
+
   # GET /assignments/:assignment_id/grade/edit?student_id=:id
   def edit
     @student = current_student

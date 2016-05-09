@@ -62,6 +62,16 @@ describe GradesController do
       end
     end
 
+    describe "GET edit2" do
+      it "assigns grade parameters and renders edit" do
+        get :edit2, { id: @grade.id }
+        expect(assigns(:grade)).to eq(@grade)
+        expect(assigns(:title)).to \
+          eq("Editing #{@grade.student.name}'s Grade for #{@grade.assignment.name}")
+        expect(response).to render_template(:edit)
+      end
+    end
+
     describe "GET edit" do
       it "creates a grade if none present" do
         assignment = create(:assignment, course: @course)

@@ -12,8 +12,6 @@ class Assignments::GroupsController < ApplicationController
 
     if @assignment.grade_with_rubric?
       @rubric = @assignment.rubric
-      # This is sent to the Angular controlled submit button
-      @return_path = URI(request.referer).path
     end
   end
 

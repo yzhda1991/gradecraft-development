@@ -102,6 +102,7 @@ GradeCraft::Application.routes.draw do
 
   resources :grades, only: [:show, :destroy] do
     member do
+      get :edit2
       post :exclude
       post :feedback_read
       post :include
