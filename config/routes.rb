@@ -88,9 +88,7 @@ GradeCraft::Application.routes.draw do
     resources :submissions, except: :index
 
     # TODO: Use plural resource and move to assignments/grades where appropriate
-    resource :grade, only: [:edit, :update] do
-      resources :earned_badges
-    end
+    resource :grade, only: [:edit, :update]
 
     resource :rubric do
       get :existing_criteria
