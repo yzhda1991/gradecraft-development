@@ -33,7 +33,7 @@
             %label.larger
               <strong>Criterion</strong>:&nbsp;Max&nbsp;points
 
-          %td.level.heading(colspan="#{@rubric.max_level_count}")
+          %td.level.heading(colspan="#{rubric.max_level_count}")
             %label.larger
               %strong Level:
               Points Awarded
@@ -63,7 +63,7 @@
               .level-badge-image(ng-repeat="(levelBadgeId, levelBadge) in level.badges")
                 %img(ng-src="{{levelBadge.badge.icon}}" height="50px")
               .clear
-          %td.filler(ng-show="criterion.levels.length < #{@rubric.max_level_count}" colspan="{{#{@rubric.max_level_count} - criterion.levels.length}}")
+          %td.filler(ng-show="criterion.levels.length < #{rubric.max_level_count}" colspan="{{#{rubric.max_level_count} - criterion.levels.length}}")
           %td.comments-box
             %textarea(ng-model="criterion.comments" froala="froalaOptions")
 
@@ -109,4 +109,4 @@
     %br
 
     .right
-      %button#submit-grade(ng-click="submitGrade('#{@return_path}')" ng-class='{"disabled" : !grade.status}') Submit Grade
+      %button#submit-grade(ng-click="submitGrade('#{return_path}')" ng-class='{"disabled" : !grade.status}') Submit Grade

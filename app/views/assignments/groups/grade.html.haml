@@ -15,6 +15,6 @@
         = prop.title
 
   - if @rubric
-    = render "/grades/rubric_edit"
+    = render partial: "/grades/rubric_edit", locals: { rubric: @rubric, return_path: URI(request.referer).path }
   - else
-    = render "standard_edit"
+    = render partial: "standard_edit"
