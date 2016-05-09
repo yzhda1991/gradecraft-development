@@ -15,12 +15,6 @@ class Assignments::Presenter < Showtime::Presenter
     assignment.assignment_type
   end
 
-  def comments_by_criterion_id(user)
-    criterion_grades(user).inject({}) do |comments, criterion_grade|
-      comments.merge criterion_grade.criterion_id => criterion_grade.comments
-    end
-  end
-
   def completion_rate
     assignment.completion_rate(course)
   end
@@ -34,7 +28,8 @@ class Assignments::Presenter < Showtime::Presenter
   end
 
   def grade_for(student)
-    grades.where(student_id: student.id).first || Grade.new(assignment_id: assignment.id)
+    grades.where(student_id: student.id).first ||
+      Grade.new(assignment_id: assignment.id)
   end
 
   def grades
@@ -95,10 +90,6 @@ class Assignments::Presenter < Showtime::Presenter
     submission.nil? ? false : submission.resubmitted?
   end
 
-  def criteria
-    rubric.criteria.ordered.includes(levels: :level_badges)
-  end
-
   def new_assignment?
     !assignment.persisted?
   end
@@ -114,20 +105,6 @@ class Assignments::Presenter < Showtime::Presenter
   # show the rubric preview tab on student's view
   def show_rubric_preview?(user)
     grade_with_rubric? && !grades_available_for?(user) && ( !user || assignment.description_visible_for_student?(user) )
-  end
-
-  def criterion_grades(user_id)
-    CriterionGrade
-      .where(student_id: user_id)
-      .where(assignment_id: assignment.id)
-  end
-
-  def rubric_max_level_count
-    rubric.max_level_count
-  end
-
-  def rubric_level_earned?(user_id, level_id)
-    criterion_grades(user_id).any? { |criterion_grade| criterion_grade.level_id == level_id }
   end
 
   def scores
@@ -188,15 +165,5 @@ class Assignments::Presenter < Showtime::Presenter
 
   def teams
     course.teams
-  end
-
-  def viewable_criterion_grades(student_id=nil)
-    query = assignment.criterion_grades
-    query = query.where(student_id: student_id) if student_id.present?
-    query
-  end
-
-  def viewable_rubric_level_earned?(student_id, level_id)
-    viewable_criterion_grades(student_id).any? { |criterion_grade| criterion_grade.level_id == level_id }
   end
 end

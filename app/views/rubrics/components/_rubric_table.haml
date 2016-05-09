@@ -4,7 +4,7 @@
       %td.criterion.heading
         Criterion:&nbsp;Max&nbsp;points
 
-      %td.level.heading(colspan="#{presenter.rubric.max_level_count}")
+      %td.level.heading(colspan="#{rubric.max_level_count}")
         Level: Points Awarded
 
       - if include_grade_info
@@ -12,4 +12,4 @@
           Comments
 
   %tbody
-    = render "rubrics/components/criteria", presenter: presenter, include_grade_info: include_grade_info
+    = render partial: "rubrics/components/criteria", locals: { rubric: rubric, student: student, include_grade_info: include_grade_info }

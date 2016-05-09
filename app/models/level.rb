@@ -27,6 +27,18 @@ class Level < ActiveRecord::Base
     ModelCopier.new(self).copy(attributes: attributes, associations: [:badges])
   end
 
+  # Determines if the specified student has earned this level.
+  # Returns `true` if a `CriterionGrade` exists for this student;
+  # otherwise `false`.
+  def earned_for?(student_id)
+    self.criterion_grades.where(student_id: student_id).exists?
+  end
+
+  def hide_analytics?
+    assignment = self.criterion.rubric.assignment
+    assignment.hide_analytics? && assignment.course.hide_analytics?
+  end
+
   def points=(points)
     write_attribute(:points, points)
     if points_changed? && meets_expectations?

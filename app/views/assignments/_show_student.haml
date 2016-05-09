@@ -30,7 +30,7 @@
         = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
       - if presenter.show_rubric_preview? current_student
         #tab2
-          = render partial: "rubrics/components/rubric_table", locals: { presenter: presenter, include_grade_info: false }
+          = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, student: current_student, include_grade_info: false }
       - if presenter.has_submission_for?(current_student)
         #tab3
           = render "submissions/submission_content",
@@ -40,7 +40,7 @@
           = history_timeline presenter.submission_grade_history(current_student)
       - if presenter.grades_available_for? current_student
         #tab4
-          = render "grades/grade_content", presenter: presenter
+          = render partial: "grades/grade_content", locals: { grade: presenter.grade_for(current_student) }
         - if !presenter.hide_analytics?
           #tab5
             - if presenter.assignment.has_groups?

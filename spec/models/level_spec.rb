@@ -41,4 +41,43 @@ describe Level do
       end
     end
   end
+
+  describe "#earned_by?" do
+    let!(:criterion_grade) { create :criterion_grade, level: subject,
+                             student: student }
+    let(:student) { create :user }
+    subject { create :level }
+
+    it "is earned if a criterion grade exists for the student" do
+      expect(subject).to be_earned_for student.id
+    end
+
+    it "is not earned if a criterion grade does not exist for the student" do
+      expect(subject).to_not be_earned_for 12345
+    end
+  end
+
+  describe "#hide_analytics?" do
+    let(:criterion) { build :criterion, rubric: rubric }
+    let(:rubric) { build :rubric }
+    subject { build :level, criterion: criterion }
+
+    it "is hidden if the course and assignment are set to hide analytics" do
+      rubric.assignment.hide_analytics = true
+      rubric.assignment.course.hide_analytics = true
+      expect(subject.hide_analytics?).to eq true
+    end
+
+    it "is not hidden if the course is not set to hide analytics" do
+      rubric.assignment.hide_analytics = true
+      rubric.assignment.course.hide_analytics = false
+      expect(subject.hide_analytics?).to eq false
+    end
+
+    it "is not hidden if the assignment is not set to hide analytics" do
+      rubric.assignment.hide_analytics = false
+      rubric.assignment.course.hide_analytics = true
+      expect(subject.hide_analytics?).to eq false
+    end
+  end
 end

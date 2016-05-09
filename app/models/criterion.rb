@@ -59,6 +59,10 @@ class Criterion < ActiveRecord::Base
     end
   end
 
+  def comments_for(student_id)
+    self.criterion_grades.where(student_id: student_id).first.try(:comments)
+  end
+
   protected
 
   def add_default_levels?

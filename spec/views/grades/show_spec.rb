@@ -16,6 +16,7 @@ describe "grades/show" do
     allow(view).to receive(:current_student).and_return(student)
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:presenter).and_return presenter
+    allow(view).to receive(:term_for).and_return("Assignments")
   end
 
   describe "viewed by staff" do
