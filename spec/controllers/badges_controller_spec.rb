@@ -116,94 +116,10 @@ describe BadgesController do
         expect{ get :destroy, id: another_badge }.to change(Badge,:count).by -1
       end
     end
-
-    describe "GET predictor_data" do
-      before do
-        allow(controller).to receive(:current_course).and_return(@course)
-        allow(controller).to receive(:current_user).and_return(@professor)
-      end
-
-      it "adds the prediction data to the badge model with prediction no less than earned" do
-        prediction = create(:predicted_earned_badge, badge: @badge, student: @student, times_earned: 4)
-        get :predictor_data, format: :json, id: @student.id
-        expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, times_earned: 0 })
-      end
-
-      context "with a student id" do
-        it "assigns the badges with no call to update" do
-          get :predictor_data, format: :json, id: @student.id
-          expect(assigns(:student)).to eq(@student)
-          predictor_badge_attributes do |attr|
-            expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
-          end
-          expect(assigns(:update_badges)).to be_falsey
-          expect(response).to render_template(:predictor_data)
-        end
-      end
-
-      context "with no student" do
-        it "assigns student as null student and no call to update" do
-          get :predictor_data, format: :json
-          expect(assigns(:student).class).to eq(NullStudent)
-          expect(assigns(:update_badges)).to be_falsey
-        end
-      end
-    end
   end
 
   context "as student" do
     before(:each) { login_user(@student) }
-
-    describe "GET index" do
-      it "shows the student facing badge page" do
-        allow(controller).to receive(:current_student).and_return(@student)
-        get :index
-        expect(response).to render_template(:index)
-      end
-    end
-
-    describe "GET show" do
-      it "shows the student facing badge page" do
-        allow(controller).to receive(:current_student).and_return(@student)
-        get :show, id: @badge.id
-        expect(response).to render_template(:show)
-      end
-    end
-
-    describe "GET student_predictor_data" do
-      describe "POST predict_times_earned" do
-        it "updates the predicted times earned for a badge" do
-          create(:predicted_earned_badge, badge: @badge, student: @student)
-          predicted_times_earned = 4
-          post :predict_times_earned, badge_id: @badge.id, times_earned: predicted_times_earned, format: :json
-          expect(PredictedEarnedBadge.where(student: @student, badge: @badge).first.times_earned).to eq(4)
-          expect(JSON.parse(response.body)).to eq({"id" => @badge.id, "times_earned" => predicted_times_earned})
-        end
-
-        it "doesn't update with invalid attributes" do
-          skip "implement"
-        end
-      end
-
-      describe "GET predictor_data" do
-        it "assigns the student and badges with the call to update" do
-          get :predictor_data, format: :json, id: @student.id
-          expect(assigns(:student)).to eq(@student)
-          @badge.reload
-          predictor_badge_attributes.each do |attr|
-            expect(assigns(:badges)[0][attr]).to eq(@badge[attr])
-          end
-          expect(assigns(:update_badges)).to be_truthy
-          expect(response).to render_template(:predictor_data)
-        end
-
-        it "adds the prediction data to the badge model" do
-          prediction = create(:predicted_earned_badge, badge: @badge, student: @student)
-          get :predictor_data, format: :json, id: @student.id
-          expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, times_earned: prediction.times_earned })
-        end
-      end
-    end
 
     describe "protected routes" do
       [
@@ -228,20 +144,5 @@ describe BadgesController do
         end
       end
     end
-  end
-
-  # helper methods:
-  def predictor_badge_attributes
-    [
-      :id,
-      :name,
-      :description,
-      :point_total,
-      :visible,
-      :visible_when_locked,
-      :can_earn_multiple_times,
-      :position,
-      :icon
-    ]
   end
 end

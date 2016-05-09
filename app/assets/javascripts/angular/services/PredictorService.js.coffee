@@ -21,6 +21,13 @@
     icons = ["has_info", "is_required", "is_rubric_graded", "accepting_submissions", "has_submission", "has_threshold", "is_late", "closed_without_submission", "is_locked", "has_been_unlocked", "is_a_condition", "is_earned_by_group"]
     unusedWeights = null
 
+    uri_prefix = (student_id)->
+      if student_id
+        '/api/students/' + student_id + '/'
+      else
+        'api/'
+
+
     getGradeLevels = ()->
       $http.get("predictor_grade_levels").success((data)->
         angular.copy(data,gradeLevels)
@@ -64,12 +71,14 @@
         update.assignments = data.update_assignments
       )
 
-    getBadges = ()->
-      $http.get('predictor_badges').success( (data)->
-          angular.copy(data.badges,badges)
-          termFor.badges = data.term_for_badges
-          termFor.badge = data.term_for_badge
-          update.badges = data.update_badges
+    getBadges = (id)->
+      $http.get(uri_prefix(id) + 'predicted_earned_badges').success( (res)->
+          _.each(res.data, (badge)->
+            badges.push(badge.attributes)
+          )
+          termFor.badges = res.meta.term_for_badges
+          termFor.badge = res.meta.term_for_badge
+          update.badges = res.meta.update_badges
         )
 
     getChallenges = ()->
@@ -99,9 +108,9 @@
               console.log(data);
           )
 
-    postPredictedBadge = (badge_id,value)->
+    postPredictedBadge = (id, value)->
       if update.badges
-        $http.post('/badges/' + badge_id + '/predict_times_earned', times_earned: value).success(
+        $http.put('/api/predicted_earned_badges/' + id, times_earned: value).success(
             (data)->
               console.log(data);
           ).error(

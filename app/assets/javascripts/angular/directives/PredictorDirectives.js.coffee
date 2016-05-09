@@ -130,10 +130,10 @@
       scope.toggleSwitch = ()->
         if @targetType == 'assignment'
           @target.grade.predicted_score = if @target.grade.predicted_score == @offValue then @onValue else @offValue
-          PredictorService.postPredictedGrade(@target.grade.id,@target.grade.predicted_score)
+          PredictorService.postPredictedGrade(@target.grade.id, @target.grade.predicted_score)
         else if @targetType == 'badge'
           @target.prediction.times_earned = if @target.prediction.times_earned == 0 then 1 else 0
-          PredictorService.postPredictedBadge(@target.id,@target.prediction.times_earned)
+          PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.times_earned)
   }
 ]
 
@@ -169,13 +169,13 @@
           @target.prediction.times_earned + " x " + @target.point_total
       scope.increment = ()->
         @target.prediction.times_earned += 1
-        PredictorService.postPredictedBadge(@target.id,@target.prediction.times_earned)
+        PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.times_earned)
       scope.decrement = ()->
         if scope.atMin()
           return false
         else
           @target.prediction.times_earned -= 1
-          PredictorService.postPredictedBadge(@target.id,@target.prediction.times_earned)
+          PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.times_earned)
   }
 ]
 

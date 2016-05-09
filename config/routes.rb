@@ -150,7 +150,7 @@ GradeCraft::Application.routes.draw do
 
   #6. Badges
   resources :badges do
-    post :predict_times_earned
+
     resources :tasks
     resources :earned_badges
     member do
@@ -339,31 +339,42 @@ GradeCraft::Application.routes.draw do
   #16. Events
   resources :events
 
-  #17. API Calls
 
   get "gse_mass_edit" => "grade_scheme_elements#mass_edit", defaults: { format: :json }
 
-  #17.a Rubric Calls
-  namespace :api do
+  #17. API Calls
+
+  namespace :api, defaults: { format: :json } do
+
     # badges
-    resources :badges, only: :index, defaults: { format: :json }
+    resources :badges, only: :index
+
+    #17a. API Rubric Calls
 
     #criteria
-    get 'assignments/:assignment_id/criteria', to: 'criteria#index', defaults: { format: :json }
+    get 'assignments/:assignment_id/criteria', to: 'criteria#index'
 
     #criterion_grades
-    get 'assignments/:assignment_id/students/:student_id/criterion_grades', to: 'criterion_grades#index', defaults: { format: :json }
-    put "assignments/:assignment_id/students/:student_id/criterion_grades", to: "criterion_grades#update", defaults: { format: :json }
-    put "assignments/:assignment_id/groups/:group_id/criterion_grades", to: "criterion_grades#group_update", defaults: { format: :json }
-    get 'assignments/:assignment_id/groups/:group_id/criterion_grades', to: 'criterion_grades#group_index', defaults: { format: :json }
+    get 'assignments/:assignment_id/students/:student_id/criterion_grades', to: 'criterion_grades#index'
+    put "assignments/:assignment_id/students/:student_id/criterion_grades", to: "criterion_grades#update"
+    put "assignments/:assignment_id/groups/:group_id/criterion_grades", to: "criterion_grades#group_update"
+    get 'assignments/:assignment_id/groups/:group_id/criterion_grades', to: 'criterion_grades#group_index'
 
     #grades
-    resources :grades, only: :update, defaults: { format: :json }
-    get 'assignments/:assignment_id/students/:student_id/grade', to: 'grades#show', defaults: { format: :json }
-    get 'assignments/:assignment_id/groups/:group_id/grades', to: 'grades#group_index', defaults: { format: :json }
+    resources :grades, only: :update
+    get 'assignments/:assignment_id/students/:student_id/grade', to: 'grades#show'
+    get 'assignments/:assignment_id/groups/:group_id/grades', to: 'grades#group_index'
 
     # levels
-    resources :levels, only: :update, defaults: { format: :json }
+    resources :levels, only: :update
+
+    #17b. Predictor, Student View
+    resources :predicted_earned_badges, only: [:index, :update]
+
+    #17c. Predictor, Instructor View
+    resources :students, only: [] do
+     get "predicted_earned_badges", to: "students/predicted_earned_badges#index"
+    end
   end
 
   #17b. Predictor, Student View
@@ -371,7 +382,6 @@ GradeCraft::Application.routes.draw do
   get "predictor_grade_levels" => "grade_scheme_elements#predictor_data", defaults: { format: :json }
   get "predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
   get "predictor_assignments" => "assignments#predictor_data", defaults: { format: :json }
-  get "predictor_badges" => "badges#predictor_data", defaults: { format: :json }
   get "predictor_challenges" => "challenges#predictor_data", defaults: { format: :json }
   get "predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
@@ -379,7 +389,6 @@ GradeCraft::Application.routes.draw do
   get "students/:id/predictor_grade_levels" => "grade_scheme_elements#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_assignments" => "assignments#predictor_data", defaults: { format: :json }
-  get "students/:id/predictor_badges" => "badges#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_challenges" => "challenges#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
