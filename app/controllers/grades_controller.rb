@@ -1,6 +1,6 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment, only: [:edit, :update, :destroy]
+  before_filter :set_assignment, only: [:edit, :update]
   before_filter :ensure_staff?,
     except: [:feedback_read, :show, :predict_score, :async_update]
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
@@ -171,15 +171,19 @@ class GradesController < ApplicationController
     end
   end
 
-  # DELETE /assignments/:assignment_id/grade
+  # DELETE /grades/:id
   def destroy
-    redirect_to @assignment and return unless current_student.present?
-    @grade = current_student.grade_for_assignment(@assignment)
-    @grade.destroy
-    score_recalculator(@grade.student)
+    grade = Grade.find(params[:id])
+    authorize! :destroy, grade
+    grade.destroy
+    score_recalculator(grade.student)
 
-    redirect_to assignment_path(@assignment), notice: "#{ @grade.student.name }'s
-      #{ @assignment.name } grade was successfully deleted."
+    redirect_to assignment_path(grade.assignment),
+      notice: "#{grade.student.name}'s #{grade.assignment.name} grade was "\
+              "successfully deleted."
+  rescue CanCan::AccessDenied
+    # This is handled here so that a different redirect path can be specified
+    redirect_to assignment_path(grade.assignment)
   end
 
   # POST /grades/:id/feedback_read

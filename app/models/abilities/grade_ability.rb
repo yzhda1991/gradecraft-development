@@ -8,5 +8,10 @@ module GradeAbility
       GradeProctor.new(grade).updatable? (options || {})
         .merge({ user: user, course: course })
     end
+
+    can :destroy, Grade do |grade, options|
+      GradeProctor.new(grade).destroyable? (options || {})
+        .merge({ user: user, course: course })
+    end
   end
 end

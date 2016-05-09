@@ -30,12 +30,19 @@ describe Ability do
       expect(subject).to be_able_to(:update, Grade.new)
     end
 
-    it "passes on the options to the GradeProctor" do
+    it "passes on the options to the GradeProctor on update" do
       expect_any_instance_of(GradeProctor).to  \
         receive(:updatable?).with(user: student, course: course,
                                   student_logged: false).and_return true
 
       expect(subject).to be_able_to(:update, Grade.new, student_logged: false)
+    end
+
+    it "can destroy a grade if the GradeProctor says it can" do
+      allow_any_instance_of(GradeProctor).to  \
+        receive(:destroyable?).with(user: student, course: course).and_return true
+
+      expect(subject).to be_able_to(:destroy, Grade.new)
     end
   end
 end

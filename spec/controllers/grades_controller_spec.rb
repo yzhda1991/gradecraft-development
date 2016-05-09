@@ -357,8 +357,17 @@ describe GradesController do
 
     describe "DELETE destroy" do
       it "removes the grade entirely" do
-        allow(controller).to receive(:current_student).and_return(@student)
-        expect{ delete :destroy, { assignment_id: @assignment.id, student_id: @student.id }}.to change{Grade.count}.by(-1)
+        expect{ delete :destroy, { id: @grade.id }}.to \
+          change{Grade.count}.by(-1)
+      end
+
+      it "redirects to the assignments if the professor does not have access" do
+        # destroyable is aliased as updatable and alias_method does not allow
+        # mocking
+        allow_any_instance_of(GradeProctor).to \
+          receive(:updatable?).and_return false
+        expect(delete :destroy, { id: @grade.id }).to \
+          redirect_to(assignment_path(@grade.assignment))
       end
     end
 
@@ -466,7 +475,7 @@ describe GradesController do
           Proc.new { get :edit, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
-          Proc.new { delete :destroy, {grade_id: @grade.id, assignment_id: @assignment.id }},
+          Proc.new { delete :destroy, { id: @grade.id }},
         ].each do |protected_route|
           expect(protected_route.call).to redirect_to(:root)
         end
