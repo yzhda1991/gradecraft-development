@@ -83,9 +83,15 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def archive_basename
-    assignment_name = Formatter::Filename.titleize assignment.name
-    team_name = Formatter::Filename.titleize(team.name) if team_present?
-    [assignment_name, team_name].compact.join " - "
+    [formatted_assignment_name, formatted_team_name].compact.join " - "
+  end
+
+  def formatted_assignment_name
+    @formatted_assignment_name ||= Formatter::Filename.titleize assignment.name
+  end
+
+  def formatted_team_name
+    @team_name ||= Formatter::Filename.titleize(team.name) if team_present?
   end
 
   def submission_binary_file_path(student, submission_file, index)
