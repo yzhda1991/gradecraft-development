@@ -13,4 +13,6 @@ class GradeProctor
   def initialize(grade)
     @grade = grade
   end
+
+  alias_method :destroyable?, :updatable?
 end
