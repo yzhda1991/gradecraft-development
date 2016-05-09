@@ -41,7 +41,7 @@ gem 'font-awesome-rails'
 gem 'haml'
 gem 'ims-lti', git: 'https://github.com/venturit/ims-lti.git', branch: 'master'
 gem 'jbuilder'
-gem 'jquery-rails', '~> 2.0'
+gem 'jquery-rails'
 
 gem 'light-service'
 
