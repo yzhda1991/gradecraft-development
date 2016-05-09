@@ -174,15 +174,16 @@ class GradesController < ApplicationController
   # DELETE /grades/:id
   def destroy
     grade = Grade.find(params[:id])
-    redirect_to assignment_path(grade.assignment) and return \
-      unless GradeProctor.new(grade).destroyable?(course: current_course,
-        user: current_user)
+    authorize! :destroy, grade
     grade.destroy
     score_recalculator(grade.student)
 
     redirect_to assignment_path(grade.assignment),
       notice: "#{grade.student.name}'s #{grade.assignment.name} grade was "\
               "successfully deleted."
+  rescue CanCan::AccessDenied
+    # This is handled here so that a different redirect path can be specified
+    redirect_to assignment_path(grade.assignment)
   end
 
   # POST /grades/:id/feedback_read
