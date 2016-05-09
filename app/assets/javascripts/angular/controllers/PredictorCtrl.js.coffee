@@ -16,7 +16,7 @@
                 PredictorService.getAssignmentTypes(),
                 PredictorService.getAssignmentTypeWeights(),
                 PredictorService.getBadges($scope.student_id),
-                PredictorService.getChallenges()]
+                PredictorService.getChallenges($scope.student_id)]
     return $q.all(promises)
 
   $scope.assignments = PredictorService.assignments
@@ -290,7 +290,6 @@
 
       stop: (event, ui)->
         articleType = ui.handle.parentElement.dataset.articleType
-        article_id = ui.handle.parentElement.dataset.id
         value = ui.value
 
         if articleType == 'assignment' and $scope.predictionBelowThreshold(article)
@@ -301,7 +300,7 @@
           PredictorService.postPredictedGrade(article.grade.id, value)
         else
           article.prediction.points_earned = value
-          PredictorService.postPredictedChallenge(article_id,value)
+          PredictorService.postPredictedChallenge(article.prediction.id,value)
     }
 
 # WEIGHTS
