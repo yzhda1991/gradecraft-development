@@ -80,7 +80,7 @@ describe AnnouncementsController do
             user_id: student.id, role: "student"
           expect {
             post :create, announcement: { title: "New Tour", body: body }
-          }.to change  { ActionMailer::Base.deliveries.count }.by 1
+          }.to change  { ActionMailer::Base.deliveries.count }.by 2
         end
       end
 
