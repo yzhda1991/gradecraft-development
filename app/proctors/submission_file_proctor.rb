@@ -5,12 +5,14 @@ class SubmissionFileProctor
     @submission_file = submission_file
   end
 
-  def downloadable?(user:)
+  def downloadable?(user:, course: nil)
+    @course = course || submission.course
+
     # not downloadable if the user doesn't match the course
-    return false unless submission.course_id == course.id
+    return false unless submission.course_id == @course.id
 
     # downloadable if user is staff for the current course
-    return true if user.is_staff?(course)
+    return true if user.is_staff? @course
 
     # not downloadable if there's not assignment for the submission
     return false unless !assignment.nil?
@@ -28,10 +30,6 @@ class SubmissionFileProctor
 
     # otherwise not downloadable
     false
-  end
-
-  def course
-    submission.course
   end
 
   def submission

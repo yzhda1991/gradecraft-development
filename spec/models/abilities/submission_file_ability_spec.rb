@@ -11,7 +11,7 @@ describe Ability do
   describe "for SubmissionFiles" do
     before(:each) do
       allow_any_instance_of(SubmissionFileProctor).to receive(:downloadable?)
-        .with(user: student, course: course) { downloadable? }
+        .with(user: student) { downloadable? }
     end
 
     context "proctor says submission file is downloadable" do

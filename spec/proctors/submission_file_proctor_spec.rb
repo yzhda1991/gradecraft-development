@@ -28,9 +28,20 @@ describe SubmissionFileProctor do
       expect { subject.downloadable? }.to raise_error(ArgumentError)
     end
 
+    context "a course is explicitly passed in" do
+      let(:result) { subject.downloadable? user: user, course: another_course }
+      let(:another_course) { double(Course).as_null_object }
+
+      it "sets the given course as the course for the proctor" do
+        result
+        expect(subject.instance_variable_get(:@course)).to eq another_course
+      end
+    end
+
     context "submission course id doesn't match the course id" do
+      let(:some_course) { double(Course, id: 7) }
       it "returns false" do
-        allow(subject).to receive_message_chain(:course, :id) { 7 }
+        subject.instance_variable_set(:@course, some_course)
         allow(submission).to receive(:course_id) { 20_000 }
         expect(result).to eq false
       end
@@ -114,13 +125,6 @@ describe SubmissionFileProctor do
         has_groups?: false
       )
       expect(result).to eq false
-    end
-  end
-
-  describe "#course" do
-    it "returns the course from the submission" do
-      allow(submission).to receive(:course) { course }
-      expect(subject.course).to eq course
     end
   end
 
