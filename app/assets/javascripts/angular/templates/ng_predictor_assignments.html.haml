@@ -28,7 +28,8 @@
         .slider{'ui-slider'=>'slider(assignment)','min'=>'0', 'max'=>'{{assignment.point_total}}', 'ng-model'=>'assignment.grade.predicted_score', 'data'=>{'id'=>'{{assignment.id}}','article-type'=>'assignment', 'ng-class'=>'{"below-threshold" : predictionBelowThreshold(assignment)}'}}
 
         .grade{'ng-if' => '! hasLevels(assignment)'}
-          {{assignment.grade.predicted_score | number}} / {{assignment.point_total | number}}
+          .value
+            {{assignment.grade.predicted_score | number}} / {{assignment.point_total | number}}
 
         .grade{'id'=>'assignment-{{assignment.id}}-level',  'ng-if' => 'hasLevels(assignment)'}
           .value

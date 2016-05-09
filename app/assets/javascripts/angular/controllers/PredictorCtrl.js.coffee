@@ -3,20 +3,21 @@
   $scope.assignmentMode = true
   $scope.loading = true
 
+  $scope.init = (student_id)->
+    $scope.student_id = student_id
+    $scope.services().then(()->
+      $scope.renderGradeLevelGraphics()
+      $scope.loading = false
+    )
+
   $scope.services = ()->
     promises = [PredictorService.getGradeLevels(),
                 PredictorService.getAssignments(),
                 PredictorService.getAssignmentTypes(),
                 PredictorService.getAssignmentTypeWeights(),
-                PredictorService.getBadges(),
+                PredictorService.getBadges($scope.student_id),
                 PredictorService.getChallenges()]
     return $q.all(promises)
-
-
-  $scope.services().then(()->
-    $scope.renderGradeLevelGraphics()
-    $scope.loading = false
-  )
 
   $scope.assignments = PredictorService.assignments
   $scope.assignmentTypes = PredictorService.assignmentTypes

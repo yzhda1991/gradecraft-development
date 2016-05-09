@@ -1,6 +1,6 @@
 class API::BadgesController < ApplicationController
 
-  # GET api/assignments/:assignment_id/badges
+  # GET api/badges
   def index
     @badges = current_course.badges.select(
       :can_earn_multiple_times,
