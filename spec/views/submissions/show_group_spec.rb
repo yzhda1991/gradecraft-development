@@ -4,7 +4,7 @@ include CourseTerms
 describe "submissions/show" do
 
   let(:presenter) do
-    ShowSubmissionPresenter.new(
+    Submissions::ShowPresenter.new(
       course: course,
       id: submission.id,
       assignment_id: assignment.id,
