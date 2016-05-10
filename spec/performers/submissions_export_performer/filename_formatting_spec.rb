@@ -128,9 +128,12 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
   describe "#formatted_team_name" do
     let(:result) { subject.formatted_team_name }
 
-    context "team_present? is false" do
+    # make sure that stale instance variables don't interfere with caching
+    before(:each) { subject.instance_variable_set(:@team_name, nil) }
+
+    context "team_present? is false and @team_name is nil" do
       before do
-        allow(performer).to receive(:team_present?) { false }
+        allow(subject).to receive(:team_present?) { false }
       end
 
       it "returns nil" do
@@ -145,8 +148,8 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
     context "team_present? is true" do
       before do
-        allow(performer).to receive(:team_present?) { true }
-        allow(performer).to receive_message_chain(:team, :name) { "Super Team" }
+        allow(subject).to receive(:team_present?) { true }
+        allow(subject).to receive_message_chain(:team, :name) { "Super Team" }
       end
 
       it "titleizes the team name" do
