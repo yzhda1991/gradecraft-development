@@ -88,5 +88,14 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
         expect(subject).not_to receive(:generate_export_csv)
       end
     end
+
+    describe "#run_performer_steps" do
+      it "runs all of the performer steps" do
+        subject.performer_steps.each do |step|
+          expect(subject).to receive(step)
+        end
+        subject.run_performer_steps
+      end
+    end
   end
 end
