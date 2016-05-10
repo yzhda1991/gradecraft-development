@@ -844,7 +844,7 @@ Metrics/LineLength:
   AllowHeredoc: true
   AllowURI: true
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#80-character-limits'
-  Enabled: true
+  Enabled: false
 
 Metrics/MethodLength:
   Description: 'Avoid methods longer than 10 lines of code.'
