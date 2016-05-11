@@ -1,5 +1,5 @@
 class SubmissionFileProctor
-  attr_reader :submission_file
+  attr_reader :submission_file, :user, :course, :group
 
   def initialize(submission_file)
     @submission_file = submission_file
@@ -7,29 +7,44 @@ class SubmissionFileProctor
 
   def downloadable?(user:, course: nil)
     @course = course || submission.course
+    @user = user
 
-    # not downloadable if the user doesn't match the course
-    return false unless submission.course_id == @course.id
-
-    # downloadable if user is staff for the current course
-    return true if user.is_staff? @course
-
-    # not downloadable if there's not assignment for the submission
-    return false unless !assignment.nil?
+    return false unless submission_matches_course?
+    return true if user_is_staff?
+    return false unless no_assignment_present?
 
     if assignment.is_individual?
-      # downloadable if the user is the student who owns this submission
-      return submission.student_id == user.id
+      return user_owns_submission?
     elsif assignment.has_groups?
-      # there needs to be a group
-      return false unless group = user.group_for_assignment(assignment)
-
-      # downloadable if the user is in the group that owns the submission
-      return group.id == submission.group_id
+      return false unless user_has_group_for_assignment?
+      return user_group_owns_submission?
     end
 
-    # otherwise not downloadable
     false
+  end
+
+  def submission_matches_course?
+    submission.course_id == course.id
+  end
+
+  def user_is_staff?
+    user.is_staff? course
+  end
+
+  def no_assignment_present?
+    !assignment.nil?
+  end
+
+  def user_owns_submission?
+    submission.student_id == user.id
+  end
+
+  def user_has_group_for_assignment?
+    @group = user.group_for_assignment(assignment)
+  end
+
+  def user_group_owns_submission?
+    group.id == submission.group_id
   end
 
   def submission
