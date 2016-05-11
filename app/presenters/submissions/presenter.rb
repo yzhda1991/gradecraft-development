@@ -18,7 +18,7 @@ module Submissions
     end
 
     def group
-      return nil unless assignment.has_groups? and group_id
+      return nil unless assignment.has_groups? && group_id
       @group ||= course.groups.find group_id
     end
 
