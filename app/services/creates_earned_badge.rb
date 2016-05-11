@@ -7,8 +7,8 @@ module Services
   class CreatesEarnedBadge
     extend LightService::Organizer
 
-    def self.award(params)
-      with(params: params).reduce(
+    def self.award(attributes)
+      with(attributes: attributes).reduce(
         Actions::CreatesEarnedBadge,
         Actions::RecalculatesStudentScore,
         Actions::NotifiesOfEarnedBadge
