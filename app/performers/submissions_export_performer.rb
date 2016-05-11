@@ -56,7 +56,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def submissions_export_attributes
     if @submissions_export.last_export_started_at
-      base_export_attributes.merge clear_progress_attributes
+      base_export_attributes.merge last_completed_step: nil
     else
       base_export_attributes
     end
@@ -73,13 +73,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def attributes
     base_export_attributes
-  end
-
-  def clear_progress_attributes
-    performer_steps.inject({}) do |memo, step|
-      memo[step] = nil
-      memo
-    end
   end
 
   def archive_basename
