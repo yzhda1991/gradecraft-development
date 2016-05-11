@@ -1,4 +1,5 @@
 require "rails_spec_helper"
+require "grade_proctor"
 
 describe GradesController do
   include PredictorEventJobsToolkit
