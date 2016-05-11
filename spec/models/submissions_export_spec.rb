@@ -168,7 +168,7 @@ RSpec.describe SubmissionsExport do
 
     before do
       allow(subject).to receive_messages(course_id: 40, assignment_id: 50)
-      ENV["AWS_S3_DEVELOPER_TAG"] = "jeff-moses"
+      stub_const "ENV", { "AWS_S3_DEVELOPER_TAG" => "jeff-moses" }
     end
 
     context "env is development" do
@@ -185,10 +185,6 @@ RSpec.describe SubmissionsExport do
       it "joins the store dirs and doesn't use the developer tag" do
         expect(result).to eq expected_base_s3_key
       end
-    end
-
-    after do
-      ENV["AWS_S3_DEVELOPER_TAG"] = nil
     end
   end
 
