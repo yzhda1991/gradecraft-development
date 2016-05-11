@@ -50,7 +50,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def run_step(step_name)
     require_success(send("#{step_name}_messages"), max_result_size: 250) do
       send(step_name)
-      @submissions_export.update_attributes step_name => true
+      @submissions_export.update_attributes last_completed_step: step_name
     end
   end
 

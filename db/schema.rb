@@ -655,29 +655,18 @@ ActiveRecord::Schema.define(version: 20160527024024) do
     t.integer  "assignment_id"
     t.integer  "course_id"
     t.integer  "professor_id"
-    t.integer  "student_ids",                              default: [],    null: false, array: true
+    t.integer  "student_ids",              default: [], null: false, array: true
     t.integer  "team_id"
     t.text     "export_filename"
     t.text     "s3_object_key"
     t.text     "s3_bucket_name"
-    t.text     "performer_error_log",                      default: [],    null: false, array: true
-    t.hstore   "submissions_snapshot",                     default: {},    null: false
-    t.datetime "created_at",                                               null: false
-    t.datetime "updated_at",                                               null: false
+    t.text     "performer_error_log",      default: [], null: false, array: true
+    t.hstore   "submissions_snapshot",     default: {}, null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.datetime "last_export_started_at"
     t.datetime "last_export_completed_at"
-    t.boolean  "generate_export_csv"
-    t.boolean  "confirm_export_csv_integrity"
-    t.boolean  "create_student_directories"
-    t.boolean  "student_directories_created_successfully"
-    t.boolean  "create_submission_text_files"
-    t.boolean  "create_submission_binary_files"
-    t.boolean  "generate_error_log"
-    t.boolean  "archive_exported_files"
-    t.boolean  "upload_archive_to_s3"
-    t.boolean  "check_s3_upload_success"
-    t.boolean  "remove_empty_student_directories"
-    t.boolean  "write_note_for_missing_binary_files",      default: false
+    t.string   "last_completed_step"
   end
 
   create_table "tasks", force: :cascade do |t|
