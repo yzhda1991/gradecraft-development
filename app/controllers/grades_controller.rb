@@ -1,3 +1,5 @@
+require_relative "../services/creates_earned_badge"
+
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:edit, :update]
@@ -69,9 +71,9 @@ class GradesController < ApplicationController
 
   # POST /grades/earn_student_badge
   def earn_student_badge
-    @earned_badge = EarnedBadge.create params[:earned_badge]
-    logger.info @earned_badge.errors.full_messages
-    render json: @earned_badge
+    result = Services::CreatesEarnedBadge.award params[:earned_badge]
+    logger.info result.earned_badge.errors.full_messages
+    render json: result.earned_badge
   end
 
   # POST /grades/earn_student_badges
