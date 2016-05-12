@@ -9,11 +9,11 @@ class SubmissionFileProctor
     @course = course || submission.course
     @user = user
 
-    conditions.downloadable?.satisfied?
+    proctor_conditions.for(:downloadable).satisfied?
   end
 
-  def conditions
-    @conditions ||= SubmissionFileConditions.new(
+  def proctor_conditions
+    @proctor_conditions ||= ProctorConditions::SubmissionFile.new(
       submission_file: submission_file,
       user: user,
       course: course

@@ -6,6 +6,15 @@ module Proctor
       reset_conditions
     end
 
+    def for(condition_set)
+      reset_conditions
+      send "use_#{condition_set}_conditions"
+    end
+
+    def satisfied?(condition_set)
+      requirements_passed? || valid_overrides_present?
+    end
+
     def reset_conditions
       @requirements = []
       @overrides = []
@@ -27,8 +36,5 @@ module Proctor
       overrides.any? {|override| override.valid? }
     end
 
-    def satisfied?
-      requirements_passed? || valid_overrides_present?
-    end
   end
 end

@@ -1,24 +1,16 @@
-class SubmissionFileConditions
+class ProctorConditions::SubmissionFile
   include Proctor::Conditions
 
   def initialize(submission_file)
     @submission_file = submission_file
   end
 
-  def downloadable?
-    define_conditions do
-      add_requirements :submission_matches_course?, :assignment_present?
-      add_overrides :user_is_staff?
-      add_requirement :user_owns_submission? if assignment.is_individual?
-      add_requirements(:user_has_group_for_assignment?,
-        :user_group_owns_submission?) if assignment.has_groups?
-    end
-  end
-
-  def define_conditions
-    reset_conditions
-    yield
-    self
+  def use_downloadable_conditions
+    add_requirements :submission_matches_course?, :assignment_present?
+    add_overrides :user_is_staff?
+    add_requirement :user_owns_submission? if assignment.is_individual?
+    add_requirements(:user_has_group_for_assignment?,
+      :user_group_owns_submission?) if assignment.has_groups?
   end
 
   def assignment
