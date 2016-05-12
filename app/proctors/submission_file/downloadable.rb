@@ -5,7 +5,7 @@ class ProctorConditions::SubmissionFile
     @submission_file = submission_file
   end
 
-  def use_downloadable_conditions
+  def downloadable_conditions
     add_requirements :submission_matches_course?, :assignment_present?
     add_overrides :user_is_staff?
     add_requirement :user_owns_submission? if assignment.is_individual?

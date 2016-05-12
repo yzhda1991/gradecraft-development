@@ -8,7 +8,7 @@ module Proctor
 
     def for(condition_set)
       reset_conditions
-      send "use_#{condition_set}_conditions"
+      send "#{condition_set}_conditions"
     end
 
     def satisfied?(condition_set)
