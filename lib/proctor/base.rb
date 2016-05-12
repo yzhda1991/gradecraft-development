@@ -1,11 +1,12 @@
 module Proctor
   module Conditions
     attr_accessor :requirements, :overrides
-    attr_reader :proctor_conditions_included
 
     def self.included(base)
-      return if proctor_conditions_included
-      @proctor_conditions_included = true
+      reset_conditions
+    end
+
+    def reset_conditions
       @requirements = []
       @overrides = []
     end
@@ -24,6 +25,10 @@ module Proctor
 
     def valid_overrides_present?
       overrides.any? {|override| override.valid? }
+    end
+
+    def satisfied?
+      requirements_passed? || valid_overrides_present?
     end
   end
 end
