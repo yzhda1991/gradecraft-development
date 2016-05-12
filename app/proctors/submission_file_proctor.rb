@@ -1,13 +1,19 @@
 class SubmissionFileProctor
+  include Proctor::Conditions
+
   attr_reader :submission_file, :user, :course, :group
 
   def initialize(submission_file)
     @submission_file = submission_file
+    super
   end
 
   def downloadable?(user:, course: nil)
     @course = course || submission.course
     @user = user
+
+    return false unless requirements_passed?
+    return true if override_present?
 
     return false unless submission_matches_course?
     return true if user_is_staff?
@@ -24,7 +30,7 @@ class SubmissionFileProctor
   end
 
   def submission_matches_course?
-    submission.course_id == course.id
+    add_condition require: { submission.course_id == course.id }
   end
 
   def user_is_staff?
