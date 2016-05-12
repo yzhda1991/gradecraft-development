@@ -1,56 +1,19 @@
 class SubmissionFileProctor
-  include Proctor::Conditions
+  include Proctors::SubmissionFile::Downloadable
 
   attr_reader :submission_file, :user, :course, :group
 
   def initialize(submission_file)
     @submission_file = submission_file
-    super
   end
 
   def downloadable?(user:, course: nil)
     @course = course || submission.course
     @user = user
 
-    return false unless requirements_passed?
-    return true if override_present?
-
-    return false unless submission_matches_course?
-    return true if user_is_staff?
-    return false unless no_assignment_present?
-
-    if assignment.is_individual?
-      return user_owns_submission?
-    elsif assignment.has_groups?
-      return false unless user_has_group_for_assignment?
-      return user_group_owns_submission?
-    end
-
-    false
-  end
-
-  def submission_matches_course?
-    add_condition require: { submission.course_id == course.id }
-  end
-
-  def user_is_staff?
-    user.is_staff? course
-  end
-
-  def no_assignment_present?
-    !assignment.nil?
-  end
-
-  def user_owns_submission?
-    submission.student_id == user.id
-  end
-
-  def user_has_group_for_assignment?
-    @group = user.group_for_assignment(assignment)
-  end
-
-  def user_group_owns_submission?
-    group.id == submission.group_id
+    Proctors::SubmissionFile::Downloadable.
+    define_conditions
+    conditions_satisfied?
   end
 
   def submission
