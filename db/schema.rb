@@ -11,15 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160504201710) do
+ActiveRecord::Schema.define(version: 20160510182947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "announcement_states", force: :cascade do |t|
-    t.integer  "announcement_id"
-    t.integer  "user_id"
+    t.integer  "announcement_id",                null: false
+    t.integer  "user_id",                        null: false
     t.boolean  "read",            default: true
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
@@ -29,10 +29,10 @@ ActiveRecord::Schema.define(version: 20160504201710) do
   add_index "announcement_states", ["user_id"], name: "index_announcement_states_on_user_id", using: :btree
 
   create_table "announcements", force: :cascade do |t|
-    t.string   "title"
-    t.text     "body"
-    t.integer  "author_id"
-    t.integer  "course_id"
+    t.string   "title",      null: false
+    t.text     "body",       null: false
+    t.integer  "author_id",  null: false
+    t.integer  "course_id",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
