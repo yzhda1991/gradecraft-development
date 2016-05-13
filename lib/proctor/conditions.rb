@@ -11,7 +11,7 @@ module Proctor
       send "#{condition_set}_conditions"
     end
 
-    def satisfied?(condition_set)
+    def conditions_satisfied?
       requirements_passed? || valid_overrides_present?
     end
 
@@ -20,12 +20,20 @@ module Proctor
       @overrides = []
     end
 
-    def add_requirement
-      @requirements << Proctor::Requirement.new yield
+    def add_requirements(*requirement_names)
+      requirement_names.each {|name| add_requirement name }
     end
 
-    def add_override
-      @overrides << Proctor::Override.new yield
+    def add_overrides(*override_names)
+      override_names.each {|name| add_override name }
+    end
+
+    def add_requirement(requirement_name)
+      @requirements << Proctor::Requirement.new send(requirement_name)
+    end
+
+    def add_override(override_name)
+      @overrides << Proctor::Override.new send(override_name)
     end
 
     def requirements_passed?
