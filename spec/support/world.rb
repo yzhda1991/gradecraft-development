@@ -4,7 +4,7 @@ class World
   end
 
   class Instance
-    attr_reader :assignments, :badges, :courses, :course_memberships, :criteria,
+    attr_reader :assignments, :badges, :challenges, :courses, :course_memberships, :criteria,
                 :criterion_grades, :grades, :groups, :rubrics, :students, :teams, :users
 
     def assignment
@@ -13,6 +13,10 @@ class World
 
     def badge
       badges.first
+    end
+
+    def challenge
+      challenges.first
     end
 
     def course
@@ -72,6 +76,11 @@ class World
       course = attributes.delete(:course) || self.course || FactoryGirl.build(:course)
       badges << FactoryGirl.create(:badge, attributes.merge(course: course))
       self
+    end
+
+    def create_challenge(attributes={})
+      course = attributes.delete(:course) || self.course || FactoryGirl.build(:course)
+      challenges << FactoryGirl.create(:challenge, course: course)
     end
 
     def create_course(attributes={})
@@ -135,6 +144,7 @@ class World
     def initialize
       @assignments = []
       @badges = []
+      @challenges = []
       @courses = []
       @criteria = []
       @criterion_grades = []

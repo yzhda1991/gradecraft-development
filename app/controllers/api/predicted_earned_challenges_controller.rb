@@ -1,39 +1,39 @@
-class API::PredictedEarnedBadgesController < ApplicationController
+class API::PredictedEarnedChallengesController < ApplicationController
   include PredictorData
 
   before_filter :ensure_student?, only: [:update]
 
-  # GET api/predicted_earned_badges
+  # GET api/predicted_earned_challenges
   def index
     if current_user.is_student?(current_course)
       @student = current_student
-      @update_badges = true
+      @update_challenges = true
     else
       @student = NullStudent.new
-      @update_badges = false
+      @update_challenges = false
     end
-    @badges = predictor_badges(@student)
+    @challenges = predictor_challenges(@student)
   end
 
-  # POST api/predicted_earned_badges/:id
+  # POST api/predicted_earned_challenges/:id
   def update
-    prediction = PredictedEarnedBadge.where(
+    prediction = PredictedEarnedChallenge.where(
       student: current_student,
       id: params[:id]
     ).first
 
-    prediction.times_earned = params[:times_earned]
+    prediction.points_earned = params[:points_earned]
     prediction.save
 
     # This should be extracted with the rest of the event_loggers
     PredictorEventJob.new(
-      data: badge_predictor_event_attrs(prediction.badge, prediction.valid?)
+      data: predictor_event_attrs(prediction.challenge, prediction.valid?)
     ).enqueue
 
     if prediction.valid?
       render json: {
         id: prediction.id,
-        times_earned: prediction.times_earned
+        points_earned: prediction.points_earned
       }
     else
       render json: {
@@ -46,24 +46,18 @@ class API::PredictedEarnedBadgesController < ApplicationController
   private
 
   # This should be extracted with the rest of the event_loggers
-  def badge_predictor_event_attrs(badge, prediction_saved)
+  def predictor_event_attrs(challenge, prediction_saved)
     {
-      prediction_type: "badge",
+      prediction_type: "challenge",
       course_id: current_course.id,
       user_id: current_user.id,
       student_id: current_student.try(:id),
       user_role: current_user.role(current_course),
-      badge_id: badge.id,
-      predicted_earns: params[:times_earned],
-      multiple_earns_possible: badge.can_earn_multiple_times,
-      predicted_points: badge_predicted_points,
-      point_value_per_badge: badge.point_total,
+      challenge_id: params[:challenge_id],
+      predicted_points: params[:predicted_score],
+      possible_points: challenge.point_total,
       created_at: Time.now,
       prediction_saved_successfully: prediction_saved
     }
-  end
-
-  def badge_predicted_points
-    @badge.point_total * params[:times_earned] rescue nil
   end
 end

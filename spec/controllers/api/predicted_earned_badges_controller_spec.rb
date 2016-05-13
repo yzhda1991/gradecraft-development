@@ -51,7 +51,7 @@ describe API::PredictedEarnedBadgesController do
       end
     end
 
-    describe "POST update_prediction" do
+    describe "PUT update_prediction" do
       it "updates the predicted times earned for a badge" do
         peb = create(:predicted_earned_badge, badge: world.badge, student: world.student)
         predicted_times_earned = 4

@@ -165,13 +165,11 @@ GradeCraft::Application.routes.draw do
 
   #7. Challenges
   resources :challenges do
-    post :predict_points
     resources :challenge_grades do
       collection do
         post :edit_status
         put :update_status
         get :mass_edit
-
       end
     end
     member do
@@ -371,10 +369,12 @@ GradeCraft::Application.routes.draw do
 
     #17b. Predictor, Student View
     resources :predicted_earned_badges, only: [:index, :update]
+    resources :predicted_earned_challenges, only: [:index, :update]
 
     #17c. Predictor, Instructor View
     resources :students, only: [] do
      get "predicted_earned_badges", to: "students/predicted_earned_badges#index"
+     get "predicted_earned_challenges", to: "students/predicted_earned_challenges#index"
     end
   end
 
@@ -383,14 +383,12 @@ GradeCraft::Application.routes.draw do
   get "predictor_grade_levels" => "grade_scheme_elements#predictor_data", defaults: { format: :json }
   get "predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
   get "predictor_assignments" => "assignments#predictor_data", defaults: { format: :json }
-  get "predictor_challenges" => "challenges#predictor_data", defaults: { format: :json }
   get "predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
   #17c. Predictor, Instructor View
   get "students/:id/predictor_grade_levels" => "grade_scheme_elements#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_assignments" => "assignments#predictor_data", defaults: { format: :json }
-  get "students/:id/predictor_challenges" => "challenges#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
   #18. Exports

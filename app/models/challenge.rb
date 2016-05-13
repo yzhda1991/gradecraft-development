@@ -63,7 +63,7 @@ class Challenge < ActiveRecord::Base
     if student_id == 0
       NullPredictedEarnedChallenge.new
     else
-      PredictedEarnedChallenge.find_or_create_by(student: student_id, challenge_id: self.id)
+      PredictedEarnedChallenge.find_or_create_by(student_id: student_id, challenge_id: self.id)
     end
   end
 
