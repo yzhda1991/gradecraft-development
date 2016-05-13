@@ -1,11 +1,11 @@
-class EarnedBadgesController < ApplicationController
+require_relative "../services/creates_earned_badge"
 
+class EarnedBadgesController < ApplicationController
   # Earned badges are to badges what grades are to assignments - the record of
   # how what and how a student performed
 
   before_filter :ensure_staff?
-  before_action :find_badge,
-    only: [:index, :show, :new, :edit, :create, :update, :destroy ]
+  before_action :find_badge, except: [:mass_edit, :mass_earn]
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
 
   def index
@@ -29,22 +29,15 @@ class EarnedBadgesController < ApplicationController
   end
 
   def create
-    @earned_badge = current_course.earned_badges.new(params[:earned_badge])
-    @earned_badge.badge =  current_course.badges.find_by_id(params[:badge_id])
-    @earned_badge.student =
-      current_course.students.find_by_id(params[:student_id])
-    @earned_badge.student_visible = true
+    result = Services::CreatesEarnedBadge.award params[:earned_badge]
 
-    if @earned_badge.save
-      if @badge.point_total?
-        # @mz TODO: add specs
-        ScoreRecalculatorJob.new(user_id: @earned_badge.student_id,
-          course_id: current_course.id).enqueue
-      end
-      NotificationMailer.earned_badge_awarded(@earned_badge.id).deliver_now
-      redirect_to badge_path(@badge),
-        notice: "The #{@badge.name} #{term_for :badge} was successfully awarded to #{@earned_badge.student.name}"
+    if result.success?
+      redirect_to badge_path(result.earned_badge.badge),
+        notice: "The #{result.earned_badge.badge.name} #{term_for :badge} was successfully awarded to #{result.earned_badge.student.name}"
     else
+      @title = "Award #{@badge.name}"
+      @earned_badge = result.earned_badge
+      @students = current_course.students
       render action: "new"
     end
   end
@@ -52,9 +45,8 @@ class EarnedBadgesController < ApplicationController
   def update
     if @earned_badge.update_attributes(params[:earned_badge])
       if @badge.point_total?
-        # @mz TODO: add specs
         ScoreRecalculatorJob.new(user_id: @earned_badge.student_id,
-          course_id: current_course.id).enqueue
+                                 course_id: current_course.id).enqueue
       end
       expire_fragment "earned_badges"
       redirect_to badge_path(@badge),
