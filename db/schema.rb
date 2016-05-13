@@ -77,14 +77,14 @@ ActiveRecord::Schema.define(version: 20160609215010) do
   add_index "assignment_type_weights", ["student_id", "assignment_type_id"], name: "index_weights_on_student_and_assignment_type", using: :btree
 
   create_table "assignment_types", force: :cascade do |t|
-    t.string   "name",               limit: 255
-    t.integer  "max_points"
+    t.string   "name",             null: false
+    t.integer  "max_points",        default: 0, null: false
     t.text     "description"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
-    t.integer  "course_id"
-    t.boolean  "student_weightable"
-    t.integer  "position"
+    t.integer  "course_id",                    null: false
+    t.boolean  "student_weightable",       default: false, null: false
+    t.integer  "position", null: false
   end
 
   create_table "assignments", force: :cascade do |t|
