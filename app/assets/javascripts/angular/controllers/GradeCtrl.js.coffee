@@ -156,12 +156,12 @@
   $scope.froalaOptions = {
     inlineMode: false,
     minHeight: 100,
-    buttons: [
-      'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript',
-      'superscript', 'fontFamily', 'fontSize', 'sep', 'inlineStyle', 'blockStyle',
-      'sep', 'formatBlock', 'align', 'insertOrderedList', 'insertUnorderedList',
+    toolbarButtons: [
+      'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
+      'fontFamily', 'fontSize', 'color', 'sep', 'blockStyle', 'emoticons',
+      'insertTable', 'sep', 'formatBlock', 'align', 'insertOrderedList',
       'outdent', 'indent', 'insertHorizontalRule', 'createLink', 'undo', 'redo',
-      'removeFormat', 'selectAll'
+      'clearFormatting', 'selectAll', 'html'
     ]
   }
 ]
