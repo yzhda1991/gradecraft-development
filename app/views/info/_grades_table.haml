@@ -13,7 +13,7 @@
 
     = form_tag edit_status_assignment_grades_path(assignment), method: :get do
 
-      %table.nofeatures_default_last_name_dynatable
+      %table.dynatable
         %thead
           %tr
             - if assignment.is_individual?

@@ -6,7 +6,7 @@
   %h4.assignment_name
     = link_to assignment.name, assignment
     = link_to glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
-  %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "ungradedTableCaption"}
+  %table.dynatable{"aria-describedby" => "ungradedTableCaption"}
     %thead
       %tr
         - if assignment.is_individual?
