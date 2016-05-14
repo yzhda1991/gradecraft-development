@@ -164,21 +164,20 @@ GradeCraft::Application.routes.draw do
 
   #7. Challenges
   resources :challenges do
-    resources :challenge_grades do
+    resources :challenge_grades, only: [:index], module: :challenges do
       collection do
         post :edit_status
         put :update_status
         get :mass_edit
+        put :mass_update
       end
-    end
-    member do
-      get "mass_edit" => "challenge_grades#mass_edit", as: :mass_edit
-      put "mass_edit" => "challenge_grades#mass_update"
     end
     resources :challenge_files do
       get :remove
     end
   end
+
+  resources :challenge_grades
 
   #8. Courses
   resources :courses do

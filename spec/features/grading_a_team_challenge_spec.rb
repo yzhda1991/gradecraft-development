@@ -30,7 +30,7 @@ feature "grading a team challenge" do
         click_link "Grade"
       end
 
-      expect(current_path).to eq new_challenge_challenge_grade_path(challenge_id: challenge.id)
+      expect(current_path).to eq new_challenge_grade_path(challenge_id: challenge.id)
 
       within(".pageContent") do
         fill_in("challenge_grade_score", with: 100)

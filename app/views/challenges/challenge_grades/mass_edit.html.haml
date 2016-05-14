@@ -6,13 +6,13 @@
   = render "layouts/alerts"
 
   #massGrade
-    = simple_form_for @challenge, method: :put, :url => mass_edit_challenge_path(@challenge) do |f|
+    = simple_form_for @challenge, method: :put, :url => mass_update_challenge_challenge_grades_path(:id => @challenge.id) do |f|
       %table.dynatable
         - @challenge_grades.each_with_index do |cg, i|
           %tr
-            %td{:style => "text-align: right"}
+            %td
               = link_to cg.team.name, team_path(cg.team)
-            %td.right{:width => "20%"}
+            %td
               = f.simple_fields_for :challenge_grades, cg do |cgf|
                 = cgf.hidden_field :team_id
                 = cgf.input :status, as: :hidden, :input_html => { :value => "Graded" }
@@ -23,7 +23,6 @@
                     = cgf.text_field :score, data: {autonumeric: true, "m-dec" => "0"}
                   - else
                     = cgf.text_field :score, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
-            %td.right{:style => "text-align: right", :width => "15%"}= " / #{points  @challenge.point_total} points"
 
       .submit-buttons
         %ul
