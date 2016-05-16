@@ -5,6 +5,7 @@ class PredictedEarnedGrade < ActiveRecord::Base
   belongs_to :assignment
   belongs_to :student, class_name: "User"
 
+  scope :predicted_to_be_done, -> { where("predicted_points > 0")}
   scope :for_course, ->(course) do
     joins(:assignments).where(assignments: {course_id: course.id})
   end

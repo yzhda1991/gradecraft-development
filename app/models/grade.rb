@@ -4,18 +4,15 @@ class Grade < ActiveRecord::Base
   include MultipleFileAttributes
   include Sanitizable
 
-  has_paper_trail ignore: [:predicted_score]
-
-  attr_accessible :assignment, :assignments_attributes, :assignment_id,
-    :assignment_type_id, :course_id, :feedback, :final_score, :grade_file,
-    :grade_file_ids, :grade_files_attributes, :graded_by_id, :group, :group_id,
-    :group_type, :instructor_modified, :pass_fail_status, :point_total,
-    :adjustment_points, :adjustment_points_feedback, :predicted_score,
-    :raw_score, :student, :student_id, :submission,
-    :_destroy, :submission_id, :task, :task_id, :team_id, :earned_badges,
-    :earned_badges_attributes, :feedback_read, :feedback_read_at,
-    :feedback_reviewed, :feedback_reviewed_at, :is_custom_value, :graded_at,
-    :excluded_from_course_score, :excluded_date, :excluded_by
+  attr_accessible :_destroy, :adjustment_points, :adjustment_points_feedback,
+    :assignment, :assignment_id, :assignment_type_id, :assignments_attributes,
+    :course_id, :earned_badges, :earned_badges_attributes, :excluded_by,
+    :excluded_date, :excluded_from_course_score, :feedback, :feedback_read,
+    :feedback_read_at, :feedback_reviewed, :feedback_reviewed_at, :final_score,
+    :grade_file, :grade_file_ids, :grade_files_attributes, :graded_at,
+    :graded_by_id, :group, :group_id, :group_type, :instructor_modified,
+    :is_custom_value, :pass_fail_status, :point_total, :raw_score, :student,
+    :student_id, :submission, :submission_id, :task, :task_id, :team_id
 
   belongs_to :course, touch: true
   belongs_to :assignment, touch: true
@@ -59,7 +56,6 @@ class Grade < ActiveRecord::Base
   scope :no_status, -> { instructor_modified.where(status: ["", nil])}
   scope :instructor_modified, -> { where instructor_modified: true }
   scope :positive, -> { where("score > 0")}
-  scope :predicted_to_be_done, -> { where("predicted_score > 0")}
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }
   scope :not_nil, -> { where.not(score: nil)}
@@ -111,8 +107,10 @@ class Grade < ActiveRecord::Base
     final_score || raw_score
   end
 
-  def predicted_score
-    self[:predicted_score] || 0
+  def predicted_points
+    PredictedEarnedGrade.where(
+      student_id: self.student.id,
+      assignment_id: self.assignment.id).first.try(:predicted_points) || 0
   end
 
   def assignment_weight
@@ -213,9 +211,6 @@ class Grade < ActiveRecord::Base
       self.raw_score = 0
       self.final_score = 0
       self.point_total = 0
-
-      # use 1 for pass, 0 for fail
-      self.predicted_score = 1 if self.predicted_score > 1
     end
   end
 

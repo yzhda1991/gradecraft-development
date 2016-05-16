@@ -94,6 +94,7 @@ class User < ActiveRecord::Base
   has_many :created_submissions, as: :creator
 
   has_many :grades, foreign_key: :student_id, dependent: :destroy
+  has_many :predicted_earned_grades, foreign_key: :student_id, dependent: :destroy
   has_many :graded_grades, foreign_key: :graded_by_id, class_name: "Grade"
 
   has_many :earned_badges, foreign_key: :student_id, dependent: :destroy

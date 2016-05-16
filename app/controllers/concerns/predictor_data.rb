@@ -1,8 +1,6 @@
 module PredictorData
   extend ActiveSupport::Concern
 
-  private
-
   def predictor_badges(student)
     current_course.badges.select(
       :id,

@@ -15,17 +15,12 @@ class API::PredictedEarnedGradesController < ApplicationController
     )
   end
 
-  def update
-
-  end
-
   # POST api/predicted_earned_grades/:id
   def update
     prediction = PredictedEarnedGrade.where(
       student: current_student,
       id: params[:id]
     ).first
-
 
     if prediction.present?
       prediction.predicted_points = params[:predicted_points]
@@ -68,7 +63,7 @@ class API::PredictedEarnedGradesController < ApplicationController
       student_id: current_student.try(:id),
       user_role: current_user.role(current_course),
       assignment_id: params[:id],
-      predicted_points: params[:predicted_score],
+      predicted_points: params[:predicted_points],
       possible_points: prediction.assignment.try(:point_total),
       created_at: Time.now,
       prediction_saved_successfully: prediction.valid?

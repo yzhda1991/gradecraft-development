@@ -424,13 +424,10 @@ PaperTrail.whodunnit = nil
               #   :raw_score => Proc.new { rand(20000) }
               # Defaults to a random number between 0 and assignment point total
 
-              if (attr == :raw_score ||
-                  attr == :predicted_score) && grade_attributes[attr]
+              if attr == :raw_score && grade_attributes[attr]
                 g[attr] = grade_attributes[attr].call
               elsif attr == :raw_score
                 g[attr] = rand(assignment_points_total)
-              elsif attr == :predicted_score
-                g[attr] == 0
               else
                 g[attr] = grade_attributes[attr] ||
                   @assignment_default_config[:grade_attributes][attr]
@@ -446,6 +443,22 @@ PaperTrail.whodunnit = nil
         print "\n"
         puts_success :assignment, assignment_name,
           :grades_created if course_name == @courses.keys[-1]
+      end
+
+      if config[:prediction]
+        attributes = config[:prediction_attributes] || {}
+
+        @students.each do |student|
+          student.predicted_earned_grades.create! do |peg|
+            if attributes[:predicted_points]
+              peg.predicted_points = attributes[:predicted_points].call
+            else
+              peg.predicted_points = 0
+            end
+            peg.assignment = assignment
+          end
+        end
+        puts_success :assignment, assignment_name, :prediction_created
       end
 
       if config[:unlock_condition]

@@ -37,9 +37,6 @@
   $scope.offset = (val)->
     $scope.yOffset > val
 
-  # $scope.passFailPrediction = (grade)->
-  #   prediction = if prediction.predicted_points > 0 then PredictorService.termFor.pass else PredictorService.termFor.fail
-
   $scope.assignmentTypeAtMax = (assignmentType)->
     if $scope.assignmentTypePointExcess(assignmentType) > 0
       return true

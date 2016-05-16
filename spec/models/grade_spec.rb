@@ -77,15 +77,6 @@ describe Grade do
     end
   end
 
-  describe "versioning", versioning: true do
-    it "ignores changes to predicted_score" do
-      subject.save!
-      subject.update_attributes predicted_score: 12000
-      expect(subject.versions.count).to eq 1
-      expect(subject.versions.first.event).to eq "create"
-    end
-  end
-
   describe "#raw_score" do
     it "converts raw_score from human readable strings" do
       subject.update(raw_score: "1,234")

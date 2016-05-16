@@ -69,12 +69,6 @@ describe NullGrade do
     expect(subject).to be_is_graded
   end
 
-  it "can have an assigned predicted score" do
-    expect(subject.predicted_score).to eq(0)
-    subject.predicted_score = 100
-    expect(subject.predicted_score).to eq 100
-  end
-
   it "has a zero id" do
     expect(subject.id).to eq(0)
   end

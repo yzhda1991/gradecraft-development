@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-describe API::Students::PredictedEarnedGradesController do
+describe API::Students::PredictedEarnedGradesController  do
   let(:world) { World.create.with(:course, :student, :assignment) }
   let(:professor) { create(:professor_course_membership, course: world.course).user }
 
@@ -26,7 +26,7 @@ describe API::Students::PredictedEarnedGradesController do
       end
 
       it "assigns a unreleased grade for the assignment with no score data" do
-        grade = create(:unreleased_grade, student: world.student, assignment: world.assignment, predicted_score: 500)
+        grade = create(:unreleased_grade, student: world.student, assignment: world.assignment)
         get :index, format: :json, student_id: world.student.id
         expect(assigns(:assignments).current_user).to eq(professor)
         expect(assigns(:assignments).student).to eq(world.student)
@@ -39,7 +39,8 @@ describe API::Students::PredictedEarnedGradesController do
       end
 
       it "assigns a released grade for the assignment with no predicted score" do
-        grade = create(:released_grade, student: world.student, assignment: world.assignment, predicted_score: 500)
+        grade = create(:released_grade, student: world.student, assignment: world.assignment)
+        predicted_earned_grade = create(:predicted_earned_grade, assignment: world.assignment, student: world.student)
         get :index, format: :json, student_id: world.student.id
         expect(assigns(:assignments).current_user).to eq(professor)
         expect(assigns(:assignments).student).to eq(world.student)
