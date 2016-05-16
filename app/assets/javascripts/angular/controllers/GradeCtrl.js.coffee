@@ -155,7 +155,7 @@
 
   $scope.froalaOptions = {
     inlineMode: false,
-    minHeight: 100,
+    heightMin: 200,
     toolbarButtons: [
       'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
       'fontFamily', 'fontSize', 'color', 'sep', 'blockStyle', 'emoticons',
