@@ -75,7 +75,7 @@ angular.module('froala', []).
 				};
 
 				ngModel.$render = function(){
-					element.froalaEditor('setHTML', ngModel.$viewValue || '', true);
+					element.froalaEditor('html.set', ngModel.$viewValue || '', true);
 				};
 
 				var froala = element.froalaEditor(options).data('fa.froalaEditor');
