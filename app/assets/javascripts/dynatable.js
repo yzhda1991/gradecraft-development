@@ -1,45 +1,44 @@
 // Leaderboard Page
-$('table.dynatable').dynatable({
+$('table.dynatable').bind('dynatable:init', function(e, dynatable) {
+      dynatable.sorts.functions["numeric"] = numeric;
+      dynatable.sorts.functions["date"] = date;
+      dynatable.sorts.functions["alphanum"] = alphanum;
+    }).dynatable({
   features: {
       paginate: false,
       search: false,
       recordCount: false
     },
-    readers: {
-      score: numericScore,
-      maxPoints: numericScore,
-      min: numericScore,
-      median: numericScore,
-      max: numericScore,
-      ave: numericScore,
-      points: numericScore,
-      rank: numericScore,
-      openDate: convertedDate,
-      dueDate: convertedDate,
-      blog: alphaNumeric
+    dataset: {
+      sortTypes: {
+        score: 'numeric',
+        rank: 'numeric',
+        date: 'date',
+        blog: 'alphanum'
+      }
     }
 });
 
-function alphaNumeric(cell, record) {
-  record['alphaNumeric'] = cell.textContent.replace(/\d+/g,function(match){return pad(match,4)});
-  return cell.innerHTML;
+function numeric(a, b, attr, direction) {
+  var aa = a[attr].replace(/[^0-9]/g, "");
+  var bb = b[attr].replace(/[^0-9]/g, "");
+  return aa === bb ? 0 : (direction > 0 ? aa - bb : bb - aa);
 }
 
-function numericScore(cell, record) {
-  record['numericScore'] = parseInt(cell.textContent.replace(/[^0-9]/g, ""));
-  return cell.innerHTML;
+function date(a, b, attr, direction) {
+  var aa = moment(a[attr], "MMMM D, YYYY").valueOf();
+  var bb = moment(b[attr], "MMMM D, YYYY").valueOf();
+  return aa === bb ? 0 : (direction > 0 ? aa - bb : bb - aa);
 }
 
-function randomScore(cell, record) {
-  record['numericScore'] = Math.random();
-  cell.textContent += " " + record['numericScore'];
-  return cell.innerHTML;
-}
-
-function convertedDate(cell, record) {
-  var parsedDate = moment(cell.textContent, "MMMM D, YYYY").valueOf();
-  record['convertedDate'] = parsedDate;
-  return cell.innerHTML;
+function alphanum(a, b, attr, direction) {
+  var aa = a[attr].replace(/\d+/g, function(match) {
+    return pad(match, 4)
+  });
+  var bb = b[attr].replace(/\d+/g, function(match) {
+    return pad(match, 4)
+  });
+  return aa === bb ? 0 : (direction > 0 ? aa > bb : !(aa > bb));
 }
 
 function pad(n, width, z) {
