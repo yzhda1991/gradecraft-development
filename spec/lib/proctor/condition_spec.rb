@@ -1,7 +1,12 @@
 require 'proctor'
 
 describe Proctor::Condition do
-  subject { described_class.new name: "Some Name" }
+  subject do
+    described_class.new(name: "Some Name") do
+      # this is the condition
+      "some-value" == "some-different-thing"
+    end
+  end
 
   describe "#initialize" do
     it "takes a name as a required keyword argument" do
@@ -9,11 +14,8 @@ describe Proctor::Condition do
     end
 
     it "takes a condition as a block but doesn't call it" do
-      override = described_class.new name: "Some Name" do
-        "some-value" == "some-different-thing"
-      end
-      expect(override.condition.class).to eq Proc
-      expect(override.condition.call).to eq false
+      expect(subject.condition.class).to eq Proc
+      expect(subject.condition.call).to eq false
     end
   end
 
@@ -29,9 +31,42 @@ describe Proctor::Condition do
     end
   end
 
+  describe "#outcome" do
+    it "calls the condition block" do
+      expect(subject.outcome).to eq false
+      expect(subject.outcome).to eq subject.condition.call
+    end
+  end
+
   describe "#failed?" do
+    context "the condition returns a falsey value" do
+      it "returns true" do
+        allow(subject).to receive(:condition) { Proc.new { false } }
+        expect(subject.failed?).to eq true
+      end
+    end
+
+    context "the condition returns a truthy value" do
+      it "returns false" do
+        allow(subject).to receive(:condition) { Proc.new { true } }
+        expect(subject.failed?).to eq false
+      end
+    end
   end
 
   describe "#passed?" do
+    context "the condition returns a truthy value" do
+      it "returns true" do
+        allow(subject).to receive(:condition) { Proc.new { true } }
+        expect(subject.passed?).to eq true
+      end
+    end
+
+    context "the condition returns a truthy value" do
+      it "returns false" do
+        allow(subject).to receive(:condition) { Proc.new { false } }
+        expect(subject.passed?).to eq false
+      end
+    end
   end
 end
