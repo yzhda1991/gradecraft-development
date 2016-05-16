@@ -29,11 +29,15 @@ module Proctor
     end
 
     def add_requirement(requirement_name)
-      @requirements << Proctor::Requirement.new send(requirement_name)
+      @requirements << Proctor::Requirement.new(name: requirement_name) do
+        send(requirement_name)
+      end
     end
 
     def add_override(override_name)
-      @overrides << Proctor::Override.new send(override_name)
+      @overrides << Proctor::Override.new name: override_name do
+        send(override_name)
+      end
     end
 
     def requirements_passed?
