@@ -35,7 +35,7 @@ module Proctor
     end
 
     def add_override(override_name)
-      @overrides << Proctor::Override.new name: override_name do
+      @overrides << Proctor::Override.new(name: override_name) do
         send(override_name)
       end
     end

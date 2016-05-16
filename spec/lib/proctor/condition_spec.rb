@@ -1,4 +1,4 @@
-require 'proctor/override'
+require 'proctor'
 
 describe Proctor::Condition do
   subject { described_class.new name: "Some Name" }
@@ -18,6 +18,15 @@ describe Proctor::Condition do
   end
 
   describe "readable attributes" do
+    it "should have a readable condition" do
+      subject.instance_variable_set(:@condition, "condition stuff")
+      expect(subject.condition).to eq "condition stuff"
+    end
+
+    it "should have a readable name" do
+      subject.instance_variable_set(:@name, "name stuff")
+      expect(subject.name).to eq "name stuff"
+    end
   end
 
   describe "#failed?" do
