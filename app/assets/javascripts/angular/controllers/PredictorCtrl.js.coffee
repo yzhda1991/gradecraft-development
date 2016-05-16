@@ -12,7 +12,7 @@
 
   $scope.services = ()->
     promises = [PredictorService.getGradeLevels(),
-                PredictorService.getAssignments(),
+                PredictorService.getAssignments($scope.student_id),
                 PredictorService.getAssignmentTypes(),
                 PredictorService.getAssignmentTypeWeights(),
                 PredictorService.getBadges($scope.student_id),
@@ -37,8 +37,8 @@
   $scope.offset = (val)->
     $scope.yOffset > val
 
-  $scope.passFailPrediction = (grade)->
-    prediction = if grade.predicted_score > 0 then PredictorService.termFor.pass else PredictorService.termFor.fail
+  # $scope.passFailPrediction = (grade)->
+  #   prediction = if prediction.predicted_points > 0 then PredictorService.termFor.pass else PredictorService.termFor.fail
 
   $scope.assignmentTypeAtMax = (assignmentType)->
     if $scope.assignmentTypePointExcess(assignmentType) > 0
@@ -46,8 +46,6 @@
     else
       return false
 
-# TODO: score will be changed to points_earned, this should be changed on the JSON data
-# and all queries to grade.score and challenge_grade.score in the predictor
   $scope.articleGraded = (assignment)->
     if assignment.grade.score == null
       return false
@@ -61,7 +59,7 @@
       return true
 
   $scope.predictionBelowThreshold = (article)->
-    article.has_threshold && article.grade.predicted_score < article.threshold_points
+    article.has_threshold && article.prediction.predicted_points < article.threshold_points
 
   $scope.articleNoPoints = (assignment)->
     if assignment.pass_fail && assignment.grade.pass_fail_status != "Pass"
@@ -80,16 +78,16 @@
   # Assignments with Score Levels: Returns the Level Name if predicted score in range
   $scope.levelNameForAssignmentScore = (assignment)->
     if $scope.hasLevels(assignment)
-      closest = $scope.closestScoreLevel(assignment.score_levels,assignment.grade.predicted_score)
-      if $scope.inSnapRange(assignment,closest,assignment.grade.predicted_score)
+      closest = $scope.closestScoreLevel(assignment.score_levels,assignment.prediction.predicted_points)
+      if $scope.inSnapRange(assignment,closest,assignment.prediction.predicted_points)
         return closest.name
     return ""
 
   # Assignments with Score Levels: Returns the Level Name if predicted score in range
   $scope.levelNameForChallengeScore = (challenge)->
     if $scope.hasLevels(challenge)
-      closest = $scope.closestScoreLevel(challenge.score_levels,challenge.prediction.points_earned)
-      if $scope.inSnapRange(challenge,closest,challenge.prediction.points_earned)
+      closest = $scope.closestScoreLevel(challenge.score_levels,challenge.prediction.predicted_points)
+      if $scope.inSnapRange(challenge,closest,challenge.prediction.predicted_points)
         return closest.name
     return ""
 
@@ -128,7 +126,7 @@
         if ! assignment.grade.is_excluded
           total += assignment.grade.final_points
       else if ! assignment.pass_fail && ! assignment.closed_without_sumbission && includePredicted
-        total += assignment.grade.predicted_score
+        total += assignment.prediction.predicted_points
     )
     total
 
@@ -177,7 +175,7 @@
   $scope.badgesPointTotal = ()->
     total = 0
     _.each($scope.badges,(badge)->
-        total += badge.prediction.times_earned * badge.point_total
+        total += badge.prediction.predicted_times_earned * badge.point_total
       )
     total
 
@@ -200,7 +198,7 @@
         if challenge.grade.score > 0
           total += challenge.grade.score
         else
-          total += challenge.prediction.points_earned
+          total += challenge.prediction.predicted_points
       )
     total
 
@@ -293,13 +291,13 @@
         value = ui.value
 
         if articleType == 'assignment' and $scope.predictionBelowThreshold(article)
-          article.grade.predicted_score = 0
-          PredictorService.postPredictedGrade(article.grade.id, 0)
+          article.prediction.predicted_points = 0
+          PredictorService.postPredictedGrade(article.prediction.id, 0)
         else if articleType == 'assignment'
-          article.grade.predicted_score = value
-          PredictorService.postPredictedGrade(article.grade.id, value)
+          article.prediction.predicted_points = value
+          PredictorService.postPredictedGrade(article.prediction.id, value)
         else
-          article.prediction.points_earned = value
+          article.prediction.predicted_points = value
           PredictorService.postPredictedChallenge(article.prediction.id,value)
     }
 

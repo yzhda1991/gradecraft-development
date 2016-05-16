@@ -35,7 +35,7 @@ class GradesForResearchExporter
       grade.raw_score,
       grade.point_total,
       grade.score,
-      grade.predicted_score,
+      predicted_points(grade),
       grade.feedback,
       (grade.submission_id || ""),
       (grade.submission.try(:created_at) || ""),
@@ -43,5 +43,11 @@ class GradesForResearchExporter
       (grade.graded_by_id || ""),
       grade.created_at,
       grade.graded_at || ""]
+  end
+
+  def predicted_points(grade)
+    prediction = PredictedEarnedGrade.where(
+      student_id: grade.student.id, assignment_id: grade.assignment.id
+    ).first.try(:predicted_points)
   end
 end

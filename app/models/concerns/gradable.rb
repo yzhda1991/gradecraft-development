@@ -47,6 +47,7 @@ module Gradable
     grades.graded_or_released.minimum(:raw_score)
   end
 
+  # TODO: remove all predicted_score and update to use predicted earned grade before merge!
   def is_predicted_by_student?(student)
     grade = grades.where(student_id: student.id).first
     !grade.nil? && grade.predicted_score > 0

@@ -62,13 +62,15 @@
           weights.max_types_weighted - types
         )
 
-    getAssignments = ()->
-      $http.get("predictor_assignments").success( (data)->
-        angular.copy(data.assignments,assignments)
-        termFor.assignment = data.term_for_assignment
-        termFor.pass = data.term_for_pass
-        termFor.fail = data.term_for_fail
-        update.assignments = data.update_assignments
+    getAssignments = (id)->
+      $http.get(uri_prefix(id) + 'predicted_earned_grades').success( (res)->
+        _.each(res.data, (assignment)->
+          assignments.push(assignment.attributes)
+        )
+        termFor.assignment = res.meta.term_for_assignment
+        termFor.pass = res.meta.term_for_pass
+        termFor.fail = res.meta.term_for_fail
+        update.assignments = res.meta.update_assignments
       )
 
     getBadges = (id)->
@@ -90,9 +92,9 @@
         update.challenges = res.meta.update_challenges
       )
 
-    postPredictedGrade = (grade_id, value)->
+    postPredictedGrade = (id, value)->
       if update.assignments
-        $http.post('/grades/' + grade_id + '/predict_score', predicted_score: value).success(
+        $http.put('/api/predicted_earned_grades/' + id, predicted_points: value).success(
             (data)->
               console.log(data);
           ).error(
@@ -102,7 +104,7 @@
 
     postPredictedChallenge = (id,value)->
       if update.challenges
-        $http.put('/api/predicted_earned_challenges/' + id, points_earned: value).success(
+        $http.put('/api/predicted_earned_challenges/' + id, predicted_points: value).success(
             (data)->
               console.log(data);
           ).error(
@@ -112,7 +114,7 @@
 
     postPredictedBadge = (id, value)->
       if update.badges
-        $http.put('/api/predicted_earned_badges/' + id, times_earned: value).success(
+        $http.put('/api/predicted_earned_badges/' + id, predicted_times_earned: value).success(
             (data)->
               console.log(data);
           ).error(

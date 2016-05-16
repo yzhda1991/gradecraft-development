@@ -14,10 +14,31 @@ class PredictedAssignmentSerializer < SimpleDelegator
 
   def grade
     if @grade.nil?
-      grade = student.present? ? Grade.find_or_create(assignment.id, student.id) : NullGrade.new
+      if student.present?
+        grade = Grade.find_or_create(assignment.id, student.id)
+      else
+        grade = NullGrade.new
+      end
       @grade = PredictedGradeSerializer.new(assignment, grade, current_user)
     end
     @grade
+  end
+
+  def prediction
+    if @prediction.nil?
+      if student.present?
+        @prediction = PredictedEarnedGrade.find_or_create_by(
+          assignment_id: assignment.id,
+          student_id: student.id
+        )
+      else
+        @prediction = NullPredictedEarnedGrade.new
+      end
+    end
+    {
+      id: @prediction.id,
+      predicted_points: visible_predicted_points(@prediction.predicted_points)
+    }
   end
 
   def attributes
@@ -49,6 +70,10 @@ class PredictedAssignmentSerializer < SimpleDelegator
   private
 
   attr_reader :assignment
+
+  def visible_predicted_points(points)
+    @student == @current_user ? points : 0
+  end
 
   # Selected attributes necessary for all method calls are declared in
   # predicted_assignment_collection_serializer. Here we further refine down to

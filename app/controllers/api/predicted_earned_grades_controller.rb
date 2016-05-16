@@ -1,34 +1,42 @@
-class API::PredictedEarnedChallengesController < ApplicationController
+class API::PredictedEarnedGradesController < ApplicationController
   include PredictorData
 
   before_filter :ensure_student?, only: [:update]
 
-  # GET api/predicted_earned_challenges
+  # GET api/predicted_earned_grades
   def index
     if current_user_is_student?
-      @student = current_student
-      @update_challenges = true
+      student = current_student
     else
-      @student = NullStudent.new
-      @update_challenges = false
+      student = NullStudent.new(current_course)
     end
-    @challenges = predictor_challenges(@student)
+    @assignments = PredictedAssignmentCollectionSerializer.new(
+      current_course.assignments, current_user, student
+    )
   end
 
-  # POST api/predicted_earned_challenges/:id
   def update
-    prediction = PredictedEarnedChallenge.where(
+
+  end
+
+  # POST api/predicted_earned_grades/:id
+  def update
+    prediction = PredictedEarnedGrade.where(
       student: current_student,
       id: params[:id]
     ).first
+
 
     if prediction.present?
       prediction.predicted_points = params[:predicted_points]
       prediction.save
 
       # This should be extracted with the rest of the event_loggers
+      # TODO: this should be implemented with a PredictorEventLogger instead of a
+      # PredictorEventJob since the PredictorEventLogger has logic for cleaning up
+      # request params data, but for now this is better than what we had
       PredictorEventJob.new(
-        data: predictor_event_attrs(prediction.challenge, prediction.valid?)
+        data: predictor_event_attrs(prediction)
       ).enqueue
 
       if prediction.valid?
@@ -52,19 +60,18 @@ class API::PredictedEarnedChallengesController < ApplicationController
 
   private
 
-  # This should be extracted with the rest of the event_loggers
-  def predictor_event_attrs(challenge, prediction_saved)
+  def predictor_event_attrs(prediction)
     {
-      prediction_type: "challenge",
+      prediction_type: "grade",
       course_id: current_course.id,
       user_id: current_user.id,
       student_id: current_student.try(:id),
       user_role: current_user.role(current_course),
-      challenge_id: params[:challenge_id],
+      assignment_id: params[:id],
       predicted_points: params[:predicted_score],
-      possible_points: challenge.point_total,
+      possible_points: prediction.assignment.try(:point_total),
       created_at: Time.now,
-      prediction_saved_successfully: prediction_saved
+      prediction_saved_successfully: prediction.valid?
     }
   end
 end

@@ -47,10 +47,10 @@ describe "api/predicted_earned_badges/index" do
   end
 
   it "adds the student predicted earned badge info to the badge" do
-    allow(@badge).to receive(:prediction).and_return({ id: 5, times_earned: 3 })
+    allow(@badge).to receive(:prediction).and_return({ id: 5, predicted_times_earned: 3 })
     render
     json = JSON.parse(response.body)
-    expect(json["data"][0]["attributes"]["prediction"]).to eq({ "id" => 5, "times_earned" => 3 })
+    expect(json["data"][0]["attributes"]["prediction"]).to eq({ "id" => 5, "predicted_times_earned" => 3 })
   end
 
   describe "passes boolean states for icons" do

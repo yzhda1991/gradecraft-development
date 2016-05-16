@@ -75,7 +75,17 @@ class NullPredictedEarnedChallenge
     0
   end
 
-  def points_earned
+  def predicted_points
+    0
+  end
+end
+
+class NullPredictedEarnedGrade
+  def id
+    0
+  end
+
+  def predicted_points
     0
   end
 end

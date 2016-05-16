@@ -36,25 +36,24 @@ describe "assignments/predictor_data" do
 
   it "includes the current student grade with the assignment" do
     create :student_course_membership, user: @student, course: @assignment.course
-    grade = create :grade, assignment: @assignment, student: @student, course: @assignment.course,
-      pass_fail_status: "should not persist", raw_score: 1000, score: 1000, predicted_score: 999,
-      status: "Released"
+    grade = create :grade, assignment: @assignment, student: @student,
+      course: @assignment.course, pass_fail_status: "should not persist",
+      raw_score: 1000, score: 1000, status: "Released"
     render
     json = JSON.parse(response.body)
     expect(json["assignments"][0]["grade"]).to eq(
       { "id" => grade.id,
         "final_points" => 1000,
         "score" => 1000,
-        "predicted_score" => 999,
         "is_excluded" => false
       })
   end
 
   it "includes the pass fail status with the grade when the assignment is pass fail" do
     create :student_course_membership, user: @student, course: @assignment.course
-    grade = create :grade, assignment: @assignment, student: @student, course: @assignment.course,
-      pass_fail_status: "passed", raw_score: 1000, score: 1000, predicted_score: 999,
-      status: "Released"
+    grade = create :grade, assignment: @assignment, student: @student,
+      course: @assignment.course, pass_fail_status: "passed", raw_score: 1000,
+      score: 1000, status: "Released"
     @assignment.update(pass_fail: true)
     render
     json = JSON.parse(response.body)
@@ -63,7 +62,6 @@ describe "assignments/predictor_data" do
         "pass_fail_status" => "passed",
         "final_points" => 1000,
         "score" => 1000,
-        "predicted_score" => 999,
         "is_excluded" => false
       })
   end

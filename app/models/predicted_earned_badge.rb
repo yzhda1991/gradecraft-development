@@ -1,6 +1,6 @@
 class PredictedEarnedBadge < ActiveRecord::Base
 
-  attr_accessible :student_id, :badge_id, :times_earned
+  attr_accessible :student_id, :badge_id, :predicted_times_earned
 
   belongs_to :badge
   belongs_to :student, class_name: "User"
@@ -10,8 +10,10 @@ class PredictedEarnedBadge < ActiveRecord::Base
   end
   scope :for_student, ->(student) { where(student_id: student.id) }
 
+  validates :badge_id, uniqueness: { scope: :student_id }
+
   def total_predicted_points
-    self.badge.point_total * times_earned
+    self.badge.point_total * predicted_times_earned
   end
 
   def actual_times_earned
@@ -21,10 +23,10 @@ class PredictedEarnedBadge < ActiveRecord::Base
   # Returns the higher number: predicted times earned or actually earned and
   # visible to student
   def times_earned_including_actual
-    if times_earned < actual_times_earned
+    if predicted_times_earned < actual_times_earned
       actual_times_earned
     else
-      times_earned
+      predicted_times_earned
     end
   end
 end

@@ -5,7 +5,7 @@ class API::PredictedEarnedBadgesController < ApplicationController
 
   # GET api/predicted_earned_badges
   def index
-    if current_user.is_student?(current_course)
+    if current_user_is_student?
       @student = current_student
       @update_badges = true
     else
@@ -22,7 +22,7 @@ class API::PredictedEarnedBadgesController < ApplicationController
       id: params[:id]
     ).first
 
-    prediction.times_earned = params[:times_earned]
+    prediction.predicted_times_earned = params[:predicted_times_earned]
     prediction.save
 
     # This should be extracted with the rest of the event_loggers
@@ -33,7 +33,7 @@ class API::PredictedEarnedBadgesController < ApplicationController
     if prediction.valid?
       render json: {
         id: prediction.id,
-        times_earned: prediction.times_earned
+        predicted_times_earned: prediction.predicted_times_earned
       }
     else
       render json: {
@@ -54,7 +54,7 @@ class API::PredictedEarnedBadgesController < ApplicationController
       student_id: current_student.try(:id),
       user_role: current_user.role(current_course),
       badge_id: badge.id,
-      predicted_earns: params[:times_earned],
+      predicted_earns: params[:predicted_times_earned],
       multiple_earns_possible: badge.can_earn_multiple_times,
       predicted_points: badge_predicted_points,
       point_value_per_badge: badge.point_total,
@@ -64,6 +64,6 @@ class API::PredictedEarnedBadgesController < ApplicationController
   end
 
   def badge_predicted_points
-    @badge.point_total * params[:times_earned] rescue nil
+    @badge.point_total * params[:predicted_times_earned] rescue nil
   end
 end

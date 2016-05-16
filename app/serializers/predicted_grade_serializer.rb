@@ -17,7 +17,6 @@ class PredictedGradeSerializer
   def attributes
     {
       id: id,
-      predicted_score: predicted_score,
       score: score,
       final_points: final_points,
       is_excluded: excluded?
@@ -32,10 +31,6 @@ class PredictedGradeSerializer
 
   def id
     grade.id
-  end
-
-  def predicted_score
-    grade.student == current_user ? grade.predicted_score : 0
   end
 
   def final_points
