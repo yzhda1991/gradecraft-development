@@ -13,6 +13,11 @@ describe Proctor::Condition do
       expect(subject.name).to eq "Some Name"
     end
 
+    it "converts the name into a string" do
+      this_condition = described_class.new(name: :another_thing)
+      expect(this_condition.name).to eq "another_thing"
+    end
+
     it "takes a condition as a block but doesn't call it" do
       expect(subject.condition.class).to eq Proc
       expect(subject.condition.call).to eq false

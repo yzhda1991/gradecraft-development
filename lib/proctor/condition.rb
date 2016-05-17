@@ -3,7 +3,7 @@ module Proctor
     attr_reader :condition, :name
 
     def initialize(name:, &condition)
-      @name = name
+      @name = name.to_s
       @condition = condition
     end
 

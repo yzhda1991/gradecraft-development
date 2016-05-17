@@ -127,5 +127,27 @@ describe Proctor::Conditions do
         expect(subject.overrides).to eq []
       end
     end
+
+    describe "#add_requirements" do
+      it "adds requirements" do
+        subject.add_requirements :foo_equals_bar, :foo_equals_foo
+        expect(subject.requirements.first.name).to eq "foo_equals_bar"
+      end
+    end
+
+    describe "#add_overrides" do
+    end
+
+    describe "#add_requirement" do
+    end
+
+    describe "#add_override" do
+    end
+
+    describe "#requirements_passed?" do
+    end
+
+    describe "#valid_overrides_present?" do
+    end
   end
 end
