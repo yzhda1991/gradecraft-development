@@ -51,7 +51,7 @@ angular.module('froala', []).
         }
 
 				var updateView = function () {
-					var returnedHtml = element.froalaEditor('getHTML');
+					var returnedHtml = element.froalaEditor('html.get');
 					var theHTML;
 					if(angular.isArray(returnedHtml) && angular.isString(returnedHtml[0])){
 						theHTML = returnedHtml[0];
@@ -78,9 +78,9 @@ angular.module('froala', []).
 					element.froalaEditor('html.set', ngModel.$viewValue || '', true);
 				};
 
-				var froala = element.froalaEditor(options).data('fa.froalaEditor');
+				var froala = element.froalaEditor(options).data('froala.editor');
 
-				froala.$element.on('blur keyup change', function(e){
+				froala.$el.on('blur keyup change', function(e){
 					updateView();
 				});
 
