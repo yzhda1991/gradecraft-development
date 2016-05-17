@@ -117,5 +117,15 @@ describe Proctor::Conditions do
         subject.satisfied?
       end
     end
+
+    describe "#reset_conditions" do
+      it "resets requirements and overrides" do
+        subject.requirements = "old hat"
+        subject.overrides = "new hat"
+        subject.reset_conditions
+        expect(subject.requirements).to eq []
+        expect(subject.overrides).to eq []
+      end
+    end
   end
 end
