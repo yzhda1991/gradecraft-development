@@ -3,9 +3,8 @@ module Proctors
     class SubmissionFile
       include Proctor::Conditions
 
-      def initialize(submission_file)
-        @submission_file = submission_file
-      end
+      # this uses the resources on the proctor rather than defining them here
+      defer_to_proctor :submission, :assignment, :user, :submission_file
 
       def downloadable_conditions
         add_requirements :submission_matches_course?, :assignment_present?
@@ -13,14 +12,6 @@ module Proctors
         add_requirement :user_owns_submission? if assignment.is_individual?
         add_requirements(:user_has_group_for_assignment?,
           :user_group_owns_submission?) if assignment.has_groups?
-      end
-
-      def assignment
-        @assignment ||= submission.assignment
-      end
-
-      def submission
-        @submission ||= submission_file.submission
       end
 
       def submission_matches_course?

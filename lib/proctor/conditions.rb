@@ -1,9 +1,22 @@
 module Proctor
   module Conditions
     attr_accessor :requirements, :overrides
+    attr_reader :proctor
 
     def self.included(base)
       reset_conditions
+    end
+
+    def initialize(proctor:)
+      @proctor = proctor
+    end
+
+    def defer_to_proctor(*deferred_methods)
+      deferred_methods.each do |method_name|
+        define_method method_name do
+          self[method_name] || proctor.send(method_name)
+        end
+      end
     end
 
     def for(condition_set)

@@ -13,14 +13,14 @@ class SubmissionFileProctor
   end
 
   def proctor_conditions
-    @proctor_conditions ||= Proctors::Conditions::SubmissionFile.new(
-      submission_file: submission_file,
-      user: user,
-      course: course
-    )
+    @proctor_conditions ||= Proctors::Conditions::SubmissionFile.new(proctor: self)
   end
 
   def submission
     @submission ||= submission_file.submission
+  end
+
+  def assignment
+    @assignment ||= submission.assignment
   end
 end
