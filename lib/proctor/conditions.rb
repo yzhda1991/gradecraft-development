@@ -3,12 +3,9 @@ module Proctor
     attr_accessor :requirements, :overrides
     attr_reader :proctor
 
-    def self.included(base)
-      reset_conditions
-    end
-
     def initialize(proctor:)
       @proctor = proctor
+      reset_conditions
     end
 
     def defer_to_proctor(*deferred_methods)
