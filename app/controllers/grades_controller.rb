@@ -210,7 +210,7 @@ class GradesController < ApplicationController
       end
 
       json.badges do
-        json.partial! "grades/badges", badges: @badges, student_id: @student[:id]
+        json.partial! "grades/badges", badges: @badges, student_id: @student.id
       end
 
       json.assignment do
