@@ -37,5 +37,10 @@ describe Proctor::Conditions do
   end
 
   describe "deferring to the proctor" do
+    # this is referencing defer_to_proctor :test_method in the test class
+    it "should defer deferred methods to the proctor" do
+      allow(test_proctor).to receive(:test_method) { "proctor output" }
+      expect(subject.test_method).to eq "proctor output"
+    end
   end
 end

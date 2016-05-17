@@ -8,12 +8,8 @@ module Proctor
       reset_conditions
     end
 
-    def defer_to_proctor(*deferred_methods)
-      deferred_methods.each do |method_name|
-        define_method method_name do
-          self[method_name] || proctor.send(method_name)
-        end
-      end
+    def self.included(base)
+      base.extend(Proctor::Conditions::ClassMethods)
     end
 
     def for(condition_set)
@@ -57,6 +53,5 @@ module Proctor
     def valid_overrides_present?
       overrides.any? {|override| override.valid? }
     end
-
   end
 end
