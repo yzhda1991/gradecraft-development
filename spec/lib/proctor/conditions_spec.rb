@@ -132,13 +132,31 @@ describe Proctor::Conditions do
       it "adds requirements" do
         subject.add_requirements :foo_equals_bar, :foo_equals_foo
         expect(subject.requirements.first.name).to eq "foo_equals_bar"
+        expect(subject.requirements.last.name).to eq "foo_equals_foo"
       end
     end
 
     describe "#add_overrides" do
+      it "adds overrides" do
+        subject.add_overrides :foo_equals_bar, :foo_equals_foo
+        expect(subject.overrides.first.name).to eq "foo_equals_bar"
+        expect(subject.overrides.last.name).to eq "foo_equals_foo"
+      end
     end
 
     describe "#add_requirement" do
+      let(:result) { subject.add_requirement :foo_equals_bar }
+      it "builds a new requirement with the requirement name" do
+        expect(Proctor::Requirement)
+          .to receive(:new).with(name: :foo_equals_bar)
+        result
+      end
+
+      it "calls the named #requirement_name method in a block" do
+        result
+        expect(subject.requirements.first.condition.call)
+          .to eq(Proc.new { subject.foo_equals_bar }.call)
+      end
     end
 
     describe "#add_override" do
