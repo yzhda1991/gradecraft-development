@@ -20,6 +20,7 @@ module Proctor
     def conditions_satisfied?
       requirements_passed? || valid_overrides_present?
     end
+    alias_method :satisfied?, :conditions_satisfied?
 
     def reset_conditions
       @requirements = []

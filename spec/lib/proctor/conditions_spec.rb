@@ -66,5 +66,39 @@ describe Proctor::Conditions do
         result
       end
     end
+
+    describe "#conditions_satisfied?" do
+      let(:result) { subject.conditions_satisfied? }
+
+      context "requirements have all passed" do
+        it "returns true" do
+          allow(subject).to receive_messages \
+            requirements_passed?: true,
+            valid_overrides_present?: false
+
+          expect(result).to eq true
+        end
+      end
+
+      context "overrides are present" do
+        it "returns true" do
+          allow(subject).to receive_messages \
+            requirements_passed?: false,
+            valid_overrides_present?: true
+
+          expect(result).to eq true
+        end
+      end
+
+      context "requirements have not  passed and overrides are not present" do
+        it "returns false" do
+          allow(subject).to receive_messages \
+            requirements_passed?: false,
+            valid_overrides_present?: false
+
+          expect(result).to eq false
+        end
+      end
+    end
   end
 end
