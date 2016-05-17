@@ -32,14 +32,13 @@
 
   / Gradebook Pattern Table
   #gradebook
-    %table.responsive
+    %table
       %thead
         %tr
-          %th First Name
-          %th Last Name
+          %th Student
           - chronological_assignments = @assignment_type.assignments.chronological
           - for assignment in chronological_assignments.alphabetical
-            %th.sortable{"data-sort" => "int"}= assignment.due_at.strftime("%b %d") if assignment.due_at.present?
+            %th.sortable{"data-sort" => "int"}= assignment.name
       %tbody
         - @students.each do |student|
           %tr

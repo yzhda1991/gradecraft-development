@@ -12,6 +12,7 @@
 //= require jquery.omniselect
 //= require autonumeric
 //= require jquery.sparkline.min
+//= require moment.min
 //= require s3_direct_upload
 //= require underscore
 //= require jquery.dynatable
@@ -25,7 +26,6 @@
 //= require_tree ./angular/templates
 //= require angular-dragdrop
 //= require ngDraggable
-//= require moment.min
 //= require TweenMax.min
 //= require ngFx.min
 //= require angular-ui-router.min

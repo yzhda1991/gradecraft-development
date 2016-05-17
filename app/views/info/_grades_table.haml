@@ -13,7 +13,7 @@
 
     = form_tag edit_status_assignment_grades_path(assignment), method: :get do
 
-      %table.nofeatures_default_last_name_dynatable
+      %table.dynatable
         %thead
           %tr
             - if assignment.is_individual?
@@ -23,7 +23,7 @@
                 %th{scope: "col", :width => "15%"}= "#{term_for :team}"
             - elsif assignment.has_groups?
               %th{scope: "col"} Group
-            %th{scope: "col", :width => "8%", "data-dynatable-sorts" => "numericScore"} Score
+            %th{scope: "col", :width => "8%"} Score
             %th{scope: "col"} Feedback
             %th{scope: "col", "data-dynatable-no-sort" => "true", :width => "20%" }
               %span.sr-only Actions

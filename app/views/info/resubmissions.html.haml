@@ -18,7 +18,7 @@
     %h5.section-title
       = link_to assignment.name, assignment
 
-    %table.nofeatures_default_last_name_dynatable{"aria-describedby" => "ungradedTableCaption"}
+    %table.dynatable{"aria-describedby" => "ungradedTableCaption"}
       %thead
         %tr
           - if assignment.is_individual?
@@ -28,7 +28,7 @@
               %th{scope: "col", :width => "15%"}= "#{term_for :team}"
           - elsif assignment.has_groups?
             %th{scope: "col"} Group
-          %th{scope: "col", :width => "7%", "data-dynatable-sorts" => "numericScore"} Current Score
+          %th{scope: "col", :width => "7%"} Current Score
           %th{scope: "col", :width => "7%"} Graded
           %th{scope: "col", :width => "7%"} Resubmitted
           %th{scope: "col", :style => "min-width: 300px" }

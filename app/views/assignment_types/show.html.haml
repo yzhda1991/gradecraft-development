@@ -8,23 +8,21 @@
 
   = render "layouts/alerts"
 
-  %table.nofeatures_dynatable{"aria-describedby" => "tableCaption"}
+  %table.dynatable{"aria-describedby" => "tableCaption"}
     %thead
       %tr
         %th{scope: "col"} Name
-        %th{scope: "col", "data-dynatable-sorts" => "dueDate"}  Open - Due
-        %th{:style => "display: none"} Due Date
-        %th{scope: "col"} Points
+        %th{scope: "col", "data-dynatable-sorts" => "convertedDate"}  Open Date
+        %th{scope: "col", "data-dynatable-sorts" => "convertedDate"} Due Date
+        %th{scope: "col", "data-dynatable-sorts" => "numericScore"} Points
         %th{scope: "col"}
           %span.sr-only Actions
     %tbody
       - @assignment_type.assignments.includes(:assignment_type).alphabetical.chronological.each do |assignment|
         %tr
           %td= link_to assignment.name, assignment
-          %td
-            = "#{assignment.open_at } -" if assignment.open_at.present?
-            = assignment.try(:due_at) || "Ongoing"
-          %td= assignment.try(:due_at).to_formatted_s(:db) if assignment.due_at.present?
+          %td= assignment.try(:open_at)
+          %td= assignment.try(:due_at)
           %td= points assignment.point_total
           %td
             .right
