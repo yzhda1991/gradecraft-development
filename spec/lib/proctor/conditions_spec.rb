@@ -53,5 +53,18 @@ describe Proctor::Conditions do
         expect(subject.test_method).to eq "proctor output"
       end
     end
+
+    describe "#for" do
+      let(:result) { subject.for(:test) }
+      it "resets the conditions" do
+        expect(subject).to receive(:reset_conditions)
+        result
+      end
+
+      it "triggers the method for setting the target conditions" do
+        expect(subject).to receive(:test_conditions)
+        result
+      end
+    end
   end
 end
