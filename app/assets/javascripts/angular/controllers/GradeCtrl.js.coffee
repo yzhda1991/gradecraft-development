@@ -152,6 +152,7 @@
     grade_id: $scope.grade.id,
     assignment_id: $scope.grade.assignment_id
     score: badge.point_total
+    student_visible: $scope.grade.student_visible
 
   $scope.froalaOptions = {
     inlineMode: false,
