@@ -71,8 +71,9 @@ describe Proctor::Conditions do
       end
     end
 
-    describe "#conditions_satisfied?" do
-      let(:result) { subject.conditions_satisfied? }
+    describe "#satisfied_by?" do
+      let(:result) { subject.satisfied_by? user }
+      let(:user) { double(:user) }
 
       context "requirements have all passed" do
         it "returns true" do
@@ -102,19 +103,6 @@ describe Proctor::Conditions do
 
           expect(result).to eq false
         end
-      end
-    end
-
-    describe "#satisfied?" do
-      it "calls #conditions_satisfied?" do
-        allow(subject).to receive_messages \
-          requirements_passed?: false,
-          valid_overrides_present?: false
-
-        expect(subject.satisfied?).to eq subject.conditions_satisfied?
-        expect(subject).to receive(:requirements_passed?)
-        expect(subject).to receive(:valid_overrides_present?)
-        subject.satisfied?
       end
     end
 

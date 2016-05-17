@@ -4,7 +4,7 @@ module Proctors
       include Proctor::Conditions
 
       # this uses the resources on the proctor rather than defining them here
-      defer_to_proctor :submission, :assignment, :user, :submission_file
+      defer_to_proctor :submission, :assignment, :course, :submission_file
 
       def downloadable_conditions
         add_requirements :submission_matches_course?, :assignment_present?

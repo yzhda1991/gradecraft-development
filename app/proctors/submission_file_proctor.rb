@@ -1,19 +1,20 @@
 class SubmissionFileProctor
-  attr_reader :submission_file, :user, :course
+  attr_reader :submission_file, :course
 
   def initialize(submission_file)
     @submission_file = submission_file
   end
 
-  def downloadable?(user:, course: nil)
-    @course = course || submission.course
-    @user = user
-
-    proctor_conditions.for(:downloadable).satisfied?
+  def downloadable?(user:)
+    proctor_conditions.for(:downloadable).satisfied_by?(user)
   end
 
   def proctor_conditions
     @proctor_conditions ||= Proctors::Conditions::SubmissionFile.new(proctor: self)
+  end
+
+  def course
+    @course ||= submission.course
   end
 
   def submission

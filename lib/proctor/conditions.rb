@@ -18,10 +18,10 @@ module Proctor
       self
     end
 
-    def conditions_satisfied?
+    def satisfied_by?(user)
+      @user = user
       requirements_passed? || valid_overrides_present?
     end
-    alias_method :satisfied?, :conditions_satisfied?
 
     def reset_conditions
       @requirements = []
