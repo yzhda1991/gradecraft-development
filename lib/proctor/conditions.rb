@@ -15,6 +15,7 @@ module Proctor
     def for(condition_set)
       reset_conditions
       send "#{condition_set}_conditions"
+      self
     end
 
     def conditions_satisfied?
