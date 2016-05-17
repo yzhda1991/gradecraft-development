@@ -157,6 +157,13 @@ describe Proctor::Conditions do
         expect(subject.requirements.first.condition.call)
           .to eq(Proc.new { subject.foo_equals_bar }.call)
       end
+
+      it "adds the new requirement to the requirements" do
+        requirement = double(:requirement)
+        allow(Proctor::Requirement).to receive(:new) { requirement }
+        result
+        expect(subject.requirements.first).to eq requirement
+      end
     end
 
     describe "#add_override" do
