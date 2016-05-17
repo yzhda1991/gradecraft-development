@@ -26,11 +26,6 @@ describe Proctor::Conditions do
       end
     end
 
-    describe "inclusion behaviors" do
-      it "resets the conditions" do
-      end
-    end
-
     describe "#initialize" do
       it "sets a proctor to @proctor" do
         expect(subject.proctor).to eq test_proctor
