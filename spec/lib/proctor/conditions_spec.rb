@@ -19,6 +19,10 @@ describe Proctor::Conditions do
   end
 
   describe "readable attributes" do
+    it "has a readable proctor" do
+      subject.instance_variable_set :@proctor, "this is a proctor"
+      expect(subject.proctor).to eq "this is a proctor"
+    end
   end
 
   describe "inclusion behaviors" do
@@ -27,6 +31,9 @@ describe Proctor::Conditions do
   end
 
   describe "#initialize" do
+    it "sets a proctor to @proctor" do
+      expect(subject.proctor).to eq test_proctor
+    end
   end
 
   describe "deferring to the proctor" do
