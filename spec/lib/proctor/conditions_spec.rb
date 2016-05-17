@@ -26,6 +26,12 @@ describe Proctor::Conditions do
       end
     end
 
+    describe "inclusion behaviors" do
+      it "extends the Proctor::Conditions class methods" do
+        expect(described_class).to respond_to :defer_to_proctor
+      end
+    end
+
     describe "#initialize" do
       it "sets a proctor to @proctor" do
         expect(subject.proctor).to eq test_proctor
