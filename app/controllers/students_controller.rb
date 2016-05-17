@@ -106,7 +106,11 @@ class StudentsController < ApplicationController
     @student = current_course.students.find_by(id: params[:student_id])
 
     # @mz TODO: add specs
-    ScoreRecalculatorJob.new(user_id: @student.id, course_id: current_course.id).enqueue
+    @score_recalculator_jobs = @team.students.collect do |student|
+      ScoreRecalculatorJob.new(user_id: student.id,
+        course_id: current_course.id)
+    end
+    @score_recalculator_jobs.each(&:enqueue)
 
     flash[:notice]="Your request to recalculate #{@student.name}'s grade is being processed. Check back shortly!"
     redirect_to session[:return_to] || student_path(@student)

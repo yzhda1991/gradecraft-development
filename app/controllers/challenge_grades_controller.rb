@@ -31,14 +31,13 @@ class ChallengeGradesController < ApplicationController
     @team = @challenge_grade.team
     respond_to do |format|
       if @challenge_grade.save
-        if current_course.add_team_score_to_student? &&
-          @challenge_grade.is_student_visible?
-          @score_recalculator_jobs = @team.students.collect do |student|
-            ScoreRecalculatorJob.new(user_id: student.id,
-              course_id: current_course.id)
-          end
-          @score_recalculator_jobs.each(&:enqueue)
+
+        if ChallengeGradeProctor.new(@challenge_grade).viewable?
+          challenge_grade_updater_job =
+            ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id)
+          challenge_grade_updater_job.enqueue
         end
+
         format.html {
           redirect_to @challenge,
           notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully graded"
@@ -56,14 +55,10 @@ class ChallengeGradesController < ApplicationController
     respond_to do |format|
       if @challenge_grade.update_attributes(params[:challenge_grade])
 
-        if current_course.add_team_score_to_student?
-          if student_grades_require_update?
-            @score_recalculator_jobs = @team.students.collect do |student|
-              ScoreRecalculatorJob.new(user_id: student.id,
-                course_id: current_course.id)
-            end
-            @score_recalculator_jobs.each(&:enqueue)
-          end
+        if ChallengeGradeProctor.new(@challenge_grade).viewable?
+          challenge_grade_updater_job =
+            ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id)
+          challenge_grade_updater_job.enqueue
         end
 
         format.html {
@@ -81,33 +76,19 @@ class ChallengeGradesController < ApplicationController
     @team = @challenge_grade.team
 
     @challenge_grade.destroy
-    @challenge_grade.recalculate_student_and_team_scores
+    @team.cache_score
+    @team.students.each do |student|
+      score_recalculator_jobs = @team.students.collect do |student|
+        ScoreRecalculatorJob.new(user_id: student.id,
+          course_id: current_course.id)
+    end
+    score_recalculator_jobs.each(&:enqueue)
 
     redirect_to challenge_path(@challenge),
       notice: "#{@team.name}'s grade for #{@challenge.name} has been successfully deleted."
   end
 
   private
-
-  def student_grades_require_update?
-    score_update_required? || visibility_update_required?
-  end
-
-  def score_update_required?
-    score_changed? && @challenge_grade.is_student_visible?
-  end
-
-  def visibility_update_required?
-    visibility_changed? && @challenge_grade.is_student_visible?
-  end
-
-  def visibility_changed?
-    @challenge_grade.previous_changes[:status].present?
-  end
-
-  def score_changed?
-    @challenge_grade.previous_changes[:score].present?
-  end
 
   def find_challenge_grade
     @challenge_grade = current_course.challenge_grades.find(params[:id])

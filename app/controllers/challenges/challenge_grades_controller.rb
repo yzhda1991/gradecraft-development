@@ -18,9 +18,8 @@ class Challenges::ChallengeGradesController < ApplicationController
   def mass_update
     @challenge = current_course.challenges.find(params[:id])
     if @challenge.update_attributes(params[:challenge])
-      @multiple_challenge_grade_updater_job =
-        MultipleChallengeGradeUpdaterJob.new(challenge_grade_ids: mass_update_challenge_grade_ids)
-      @multiple_challenge_grade_updater_job.enqueue
+
+      enqueue_multiple_challenge_grade_update_jobs(mass_update_challenge_grade_ids)
 
       redirect_to challenge_path(@challenge),
         notice: "#{@challenge.name} #{term_for :challenge} successfully graded"
@@ -51,10 +50,16 @@ class Challenges::ChallengeGradesController < ApplicationController
 
   private
 
+  # Schedule the `GradeUpdater` for all grades provided
+  def enqueue_multiple_challenge_grade_update_jobs(challenge_grade_ids)
+    challenge_grade_ids.each { |id| ChallengeGradeUpdaterJob.new(challenge_grade_id: id).enqueue }
+  end
+
+  # Retrieve all grades for an assignment if it has a score
   def mass_update_challenge_grade_ids
     @challenge.challenge_grades.inject([]) do |memo, challenge_grade|
       scored_changed = challenge_grade.previous_changes[:score].present?
-      if scored_changed && challenge_grade.is_student_visible?
+      if scored_changed && challenge_grade.graded_or_released?
         memo << challenge_grade.id
       end
       memo
