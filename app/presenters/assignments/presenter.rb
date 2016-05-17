@@ -72,6 +72,20 @@ class Assignments::Presenter < Showtime::Presenter
     course.has_teams?
   end
 
+  def assignment_has_viewible_description?(user)
+    assignment.description.present? &&
+    ( user.is_staff?(course) ||
+      assignment.description_visible_for_student?(user)
+    )
+  end
+
+  def assignment_has_viewible_purpose?(user)
+    assignment.purpose.present? &&
+    ( user.is_staff?(course) ||
+      assignment.purpose_visible_for_student?(user)
+    )
+  end
+
   def hide_analytics?
     course.hide_analytics? && assignment.hide_analytics?
   end
