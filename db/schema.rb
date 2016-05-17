@@ -701,15 +701,16 @@ ActiveRecord::Schema.define(version: 20160527024024) do
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string   "name",                limit: 255
+    t.string   "name",                  limit: 255
     t.integer  "course_id"
     t.integer  "rank"
-    t.integer  "score"
+    t.integer  "challenge_grade_score"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "teams_leaderboard",               default: false
-    t.boolean  "in_team_leaderboard",             default: false
-    t.string   "banner",              limit: 255
+    t.boolean  "teams_leaderboard",                 default: false
+    t.boolean  "in_team_leaderboard",               default: false
+    t.string   "banner",                limit: 255
+    t.integer  "average_score",                     default: 0,     null: false
   end
 
   create_table "themes", force: :cascade do |t|

@@ -31,8 +31,8 @@ class Team < ActiveRecord::Base
   accepts_nested_attributes_for :team_memberships
 
   # Various ways to sort the display of teams
-  scope :order_by_high_score, -> { order "teams.score DESC" }
-  scope :order_by_low_score, -> { order "teams.score ASC" }
+  scope :order_by_high_score, -> { order "teams.challenge_grade_score DESC" }
+  scope :order_by_low_score, -> { order "teams.challenge_grade_score ASC" }
   scope :order_by_average_high_score, -> { order "average_points DESC"}
   scope :alpha, -> { order "teams.name ASC"}
 
@@ -104,11 +104,8 @@ class Team < ActiveRecord::Base
   # the team points. At the end of the semester these usually get added back
   # into students' scores - this has not yet been built into GC.
   def cache_score
-    if course.team_score_average
-      self.score = average_points
-    else
-      self.score = challenge_grade_score
-    end
+    self.average_score = average_points
+    self.challenge_grade_score = challenge_grade_score
   end
 
   def update_revised_team_score
