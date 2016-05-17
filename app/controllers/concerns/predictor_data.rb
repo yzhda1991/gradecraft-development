@@ -45,7 +45,7 @@ module PredictorData
     ).map do |challenge|
       prediction =
         challenge.find_or_create_predicted_earned_challenge(@student.id)
-      if current_user.is_student?(current_course)
+      if current_user_is_student?
         challenge.prediction = {
           id: prediction.id, predicted_points: prediction.predicted_points
         }
