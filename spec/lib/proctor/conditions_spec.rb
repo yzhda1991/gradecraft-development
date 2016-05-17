@@ -189,9 +189,43 @@ describe Proctor::Conditions do
     end
 
     describe "#requirements_passed?" do
+      let(:result) { subject.requirements_passed? }
+
+      context "all of the given requirements pass" do
+        it "returns true" do
+          # these are both requirements that return true
+          subject.add_requirements :foo_equals_foo, :hasselhoff_is_hasselhoff
+          expect(result).to eq true
+        end
+      end
+
+      context "any of the given requirements do not pass" do
+        it "returns false" do
+          # :foo_equals_bar is a requirement that returns false
+          subject.add_requirements :foo_equals_bar, :hasselhoff_is_hasselhoff
+          expect(result).to eq false
+        end
+      end
     end
 
     describe "#valid_overrides_present?" do
+      let(:result) { subject.valid_overrides_present? }
+
+      context "any valid overrides exist" do
+        it "returns true" do
+          # :foo_equals_bar is a requirement that returns false
+          subject.add_overrides :foo_equals_bar, :hasselhoff_is_hasselhoff
+          expect(result).to eq true
+        end
+      end
+
+      context "no valid overrides exist" do
+        it "returns false" do
+          # :neither of these comparisons are true
+          subject.add_overrides :foo_equals_bar, :bar_equals_david_hasselhoff
+          expect(result).to eq false
+        end
+      end
     end
   end
 end

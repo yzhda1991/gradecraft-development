@@ -53,7 +53,7 @@ module Proctor
     end
 
     def valid_overrides_present?
-      overrides.any? {|override| override.valid? }
+      overrides.any? {|override| override.passed? }
     end
   end
 end

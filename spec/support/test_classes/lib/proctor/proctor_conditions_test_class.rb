@@ -21,13 +21,7 @@ class ProctorConditionsTestClass
     "bar" == "David Hasselhoff"
   end
 
-  def hasselhoff_is_awesome
-    Awesomeness.new == "David Hasselhoff"
-  end
-
-  class Awesomeness
-    def ==(hasselhoff)
-      hasselhoff.equal? "David Hasselhoff"
-    end
+  def hasselhoff_is_hasselhoff
+    "David Hasselhoff" == "David Hasselhoff"
   end
 end
