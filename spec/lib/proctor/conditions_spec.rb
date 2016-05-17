@@ -167,6 +167,25 @@ describe Proctor::Conditions do
     end
 
     describe "#add_override" do
+      let(:result) { subject.add_override :foo_equals_bar }
+      it "builds a new override with the override name" do
+        expect(Proctor::Override)
+          .to receive(:new).with(name: :foo_equals_bar)
+        result
+      end
+
+      it "calls the named #override_name method in a block" do
+        result
+        expect(subject.overrides.first.condition.call)
+          .to eq(Proc.new { subject.foo_equals_bar }.call)
+      end
+
+      it "adds the new override to the overrides" do
+        override = double(:override)
+        allow(Proctor::Override).to receive(:new) { override }
+        result
+        expect(subject.overrides.first).to eq override
+      end
     end
 
     describe "#requirements_passed?" do
