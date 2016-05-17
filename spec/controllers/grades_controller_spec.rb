@@ -189,14 +189,6 @@ describe GradesController do
       end
     end
 
-    describe "earn_student_badge" do
-      it "creates a new student badge from params" do
-        badge = create(:badge)
-        params = { earned_badge: { badge_id: badge.id, student_id: @student } }
-        expect{post :earn_student_badge, params}.to change {EarnedBadge.count}.by(1)
-      end
-    end
-
     describe "earn_student_badges" do
       it "creates new student badges from params" do
         badge_1 = create(:badge)

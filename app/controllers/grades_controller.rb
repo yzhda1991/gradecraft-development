@@ -1,5 +1,3 @@
-require_relative "../services/creates_earned_badge"
-
 class GradesController < ApplicationController
   respond_to :html, :json
   before_filter :set_assignment, only: [:edit, :update]
@@ -67,13 +65,6 @@ class GradesController < ApplicationController
     else # failure
       redirect_to edit_assignment_grade_path(@assignment, student_id: @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
     end
-  end
-
-  # POST /grades/earn_student_badge
-  def earn_student_badge
-    result = Services::CreatesEarnedBadge.award params[:earned_badge]
-    logger.info result.earned_badge.errors.full_messages
-    render json: result.earned_badge
   end
 
   # POST /grades/earn_student_badges
