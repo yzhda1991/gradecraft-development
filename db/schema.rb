@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160510182947) do
+ActiveRecord::Schema.define(version: 20160511163640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -513,18 +513,32 @@ ActiveRecord::Schema.define(version: 20160510182947) do
   create_table "predicted_earned_badges", force: :cascade do |t|
     t.integer  "badge_id"
     t.integer  "student_id"
-    t.integer  "times_earned", default: 0
+    t.integer  "predicted_times_earned", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "predicted_earned_badges", ["badge_id", "student_id"], name: "index_predidcted_badge_on_student_badge", unique: true, using: :btree
+
   create_table "predicted_earned_challenges", force: :cascade do |t|
     t.integer  "challenge_id"
     t.integer  "student_id"
-    t.integer  "points_earned", default: 0
+    t.integer  "predicted_points", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "predicted_earned_challenges", ["challenge_id", "student_id"], name: "index_predidcted_challenge_on_student_challenge", unique: true, using: :btree
+
+  create_table "predicted_earned_grades", force: :cascade do |t|
+    t.integer  "assignment_id"
+    t.integer  "student_id"
+    t.integer  "predicted_points", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "predicted_earned_grades", ["assignment_id", "student_id"], name: "index_predidcted_grade_on_student_assignment", unique: true, using: :btree
 
   create_table "proposals", force: :cascade do |t|
     t.string   "title",        limit: 255

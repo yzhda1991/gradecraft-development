@@ -18,20 +18,20 @@ describe API::Students::PredictedEarnedChallengesController do
       it "adds the prediction data to the challenge model with a zero points prediction" do
         prediction = create(:predicted_earned_challenge, challenge: world.challenge, student: world.student)
         get :index, format: :json, student_id: world.student.id
-        expect(assigns(:challenges).last.prediction).to eq({ id: prediction.id, points_earned: 0 })
+        expect(assigns(:challenges).last.prediction).to eq({ id: prediction.id, predicted_points: 0 })
       end
 
       it "adds visible grades to the challenge data" do
         grade = create(:graded_challenge_grade, challenge: world.challenge, team: world.team)
         get :index, format: :json, student_id: world.student.id
-        expect(assigns(:challenges).last.grade).to eq({ point_total: grade.point_total, score: grade.score, points_earned: grade.score })
+        expect(assigns(:challenges).last.grade).to eq({score: grade.score })
       end
 
       it "adds grades as nil when not visible to student" do
         world.challenge.update(release_necessary: true)
         grade = create(:grades_not_released_challenge_grade, challenge: world.challenge, team: world.team)
         get :index, format: :json, student_id: world.student.id
-        expect(assigns(:challenges).last.grade).to eq({ point_total: grade.point_total, score: nil, points_earned: nil })
+        expect(assigns(:challenges).last.grade).to eq({ score: nil })
       end
 
       it "assigns the challenges with no call to update" do

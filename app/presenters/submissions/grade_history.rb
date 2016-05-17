@@ -12,7 +12,6 @@ module Submissions::GradeHistory
       .remove("name" => "graded_at")
       .remove("name" => "graded_by_id")
       .remove("name" => "instructor_modified")
-      .remove("name" => "predicted_score")
       .remove("name" => "score")
       .remove("name" => "status")
       .remove("name" => "submission_id")

@@ -9,13 +9,13 @@ describe PredictedGradeSerializer do
   let(:assignment) { double(:assignment, accepts_submissions?: true, submissions_have_closed?: true )}
   let(:grade) do
     double(
-      :grade, id: 123, pass_fail_status: :pass, predicted_score: 88,
+      :grade, id: 123, pass_fail_status: :pass,
       score: 78, final_points: 84, excluded_from_course_score?: false,
       student: user, course: course, assignment: assignment
     )
   end
   let(:user) { double(:user, submission_for_assignment: "sumbission") }
-  let(:other_user) { double(:other_user) }
+
   subject { described_class.new assignment, grade, user }
 
   before { allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return true }
@@ -35,28 +35,10 @@ describe PredictedGradeSerializer do
     it "returns a hash of grade attributes overriden by Class methods" do
       expect(subject.attributes).to eq({
         id: grade.id,
-        predicted_score: 88,
         score: 78,
         final_points: 84,
         is_excluded: grade.excluded_from_course_score?
       })
-    end
-
-    describe "predicted_score" do
-      it "returns the grade's predicted score if the user is a student" do
-        allow(grade.student).to \
-          receive(:is_student?).with(grade.course).and_return true
-        expect(subject.attributes[:predicted_score]).to eq grade.predicted_score
-      end
-
-      it "returns 0 predicted_score if user is not same as student for grade" do
-        expect((described_class.new assignment, grade, other_user).attributes[:predicted_score]).to eq 0
-      end
-
-      it "returns predicted score for student even if it's not visible" do
-        allow_any_instance_of(GradeProctor).to receive(:viewable?).and_return false
-        expect(subject.attributes[:predicted_score]).to eq grade.predicted_score
-      end
     end
 
     describe "final_points" do

@@ -27,10 +27,10 @@ describe "api/predicted_earned_challenges/index" do
   end
 
   it "adds the student predicted earned challenge info to the challenge" do
-    allow(@challenge).to receive(:prediction).and_return({ id: 5, points_earned: 3 })
+    allow(@challenge).to receive(:prediction).and_return({ id: 5, predicted_points: 3 })
     render
     @json = JSON.parse(response.body)
-    expect(@json["data"][0]["attributes"]["prediction"]).to eq({ "id" => 5, "points_earned" => 3 })
+    expect(@json["data"][0]["attributes"]["prediction"]).to eq({ "id" => 5, "predicted_points" => 3 })
   end
 
   it "adds the score levels if present into the challenge" do
@@ -41,10 +41,10 @@ describe "api/predicted_earned_challenges/index" do
   end
 
   it "adds the student grade into to the challenge" do
-    allow(@challenge).to receive(:grade).and_return({ total_points: 555, score: 444, points_earned: 444 })
+    allow(@challenge).to receive(:grade).and_return({ total_points: 555, score: 444, predicted_points: 444 })
     render
     @json = JSON.parse(response.body)
-    expect(@json["data"][0]["attributes"]["grade"]).to eq({ "total_points" => 555, "score" => 444, "points_earned" => 444 })
+    expect(@json["data"][0]["attributes"]["grade"]).to eq({ "total_points" => 555, "score" => 444, "predicted_points" => 444 })
   end
 
   describe "passes boolean states for icons" do

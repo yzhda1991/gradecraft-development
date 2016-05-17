@@ -2,7 +2,7 @@ class AssignmentsController < ApplicationController
   include AssignmentsHelper
   include SortsPosition
 
-  before_filter :ensure_staff?, except: [:show, :index, :predictor_data]
+  before_filter :ensure_staff?, except: [:show, :index]
 
   def index
     redirect_to syllabus_path and return if current_user_is_student?
@@ -101,18 +101,6 @@ class AssignmentsController < ApplicationController
 
   def sort
     sort_position_for :assignment
-  end
-
-  # current student visible assignment
-  def predictor_data
-    if current_user_is_student?
-      student = current_student
-    elsif params[:id]
-      student = User.find(params[:id])
-    else
-      student = NullStudent.new(current_course)
-    end
-    @assignments = PredictedAssignmentCollectionSerializer.new current_course.assignments, current_user, student
   end
 
   def destroy

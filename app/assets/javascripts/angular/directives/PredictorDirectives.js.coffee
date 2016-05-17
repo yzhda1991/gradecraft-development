@@ -111,29 +111,29 @@
     link: (scope, el, attr)->
       scope.switchState = ()->
         if @targetType == 'assignment'
-          if @target.grade.predicted_score == @offValue then 'off' else 'on'
+          if @target.prediction.predicted_points == @offValue then 'off' else 'on'
         else if @targetType == 'badge'
-          if @target.prediction.times_earned == 0 then 'off' else 'on'
+          if @target.prediction.predicted_times_earned == 0 then 'off' else 'on'
 
       scope.textForSwitch = ()->
         if @targetType == 'assignment'
           if @target.pass_fail
-            if @target.grade.predicted_score == @offValue then PredictorService.termFor["fail"] else PredictorService.termFor["pass"]
+            if @target.prediction.predicted_points == @offValue then PredictorService.termFor["fail"] else PredictorService.termFor["pass"]
           else
-            if @target.grade.predicted_score == @offValue then @offValue else @onValue
+            if @target.prediction.predicted_points == @offValue then @offValue else @onValue
         else if @targetType == 'badge'
           if @target.point_total == 0
-            if @target.prediction.times_earned == 0 then "won't earn" else "will earn"
+            if @target.prediction.predicted_times_earned == 0 then "won't earn" else "will earn"
           else
-            if @target.prediction.times_earned == 0 then @offValue else @onValue
+            if @target.prediction.predicted_times_earned == 0 then @offValue else @onValue
 
       scope.toggleSwitch = ()->
         if @targetType == 'assignment'
-          @target.grade.predicted_score = if @target.grade.predicted_score == @offValue then @onValue else @offValue
-          PredictorService.postPredictedGrade(@target.grade.id, @target.grade.predicted_score)
+          @target.prediction.predicted_points = if @target.prediction.predicted_points == @offValue then @onValue else @offValue
+          PredictorService.postPredictedGrade(@target.prediction.id, @target.prediction.predicted_points)
         else if @targetType == 'badge'
-          @target.prediction.times_earned = if @target.prediction.times_earned == 0 then 1 else 0
-          PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.times_earned)
+          @target.prediction.predicted_times_earned = if @target.prediction.predicted_times_earned == 0 then 1 else 0
+          PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.predicted_times_earned)
   }
 ]
 
@@ -147,35 +147,35 @@
     templateUrl: 'ng_predictor_counter.html'
     link: (scope, el, attr)->
       scope.atMin = ()->
-        @target.prediction.times_earned <= @target.earned_badge_count
+        @target.prediction.predicted_times_earned <= @target.earned_badge_count
       scope.textForTotal = ()->
         if @target.point_total == 0
           ""
         else
-          @target.prediction.times_earned * @target.point_total
+          @target.prediction.predicted_times_earned * @target.point_total
       scope.textForSwitch = ()->
         if @target.point_total == 0
           if scope.atMin()
-            switch @target.prediction.times_earned
+            switch @target.prediction.predicted_times_earned
               when 0 then "won't earn"
               when 1 then "earned 1 time"
-              else "earned " + @target.prediction.times_earned + " times"
+              else "earned " + @target.prediction.predicted_times_earned + " times"
           else
-            if @target.prediction.times_earned == 1
+            if @target.prediction.predicted_times_earned == 1
               "will earn 1 time"
             else
-              "will earn " + @target.prediction.times_earned + " times"
+              "will earn " + @target.prediction.predicted_times_earned + " times"
         else
-          @target.prediction.times_earned + " x " + @target.point_total
+          @target.prediction.predicted_times_earned + " x " + @target.point_total
       scope.increment = ()->
-        @target.prediction.times_earned += 1
-        PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.times_earned)
+        @target.prediction.predicted_times_earned += 1
+        PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.predicted_times_earned)
       scope.decrement = ()->
         if scope.atMin()
           return false
         else
-          @target.prediction.times_earned -= 1
-          PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.times_earned)
+          @target.prediction.predicted_times_earned -= 1
+          PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.predicted_times_earned)
   }
 ]
 

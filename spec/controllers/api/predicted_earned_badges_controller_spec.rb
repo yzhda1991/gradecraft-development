@@ -41,23 +41,23 @@ describe API::PredictedEarnedBadgesController do
       it "adds the prediction data to the badge model" do
         prediction = create(:predicted_earned_badge, badge: world.badge, student: world.student)
         get :index, format: :json, id: world.student.id
-        expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, times_earned: prediction.times_earned })
+        expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, predicted_times_earned: prediction.predicted_times_earned })
       end
 
       it "adds the prediction data to the badge model with prediction no less than earned" do
-        prediction = create(:predicted_earned_badge, badge: world.badge, student: world.student, times_earned: 4)
+        prediction = create(:predicted_earned_badge, badge: world.badge, student: world.student, predicted_times_earned: 4)
         get :index, format: :json, id: world.student.id
-        expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, times_earned: 4 })
+        expect(assigns(:badges)[0].prediction).to eq({ id: prediction.id, predicted_times_earned: 4 })
       end
     end
 
-    describe "PUT update_prediction" do
+    describe "PUT update" do
       it "updates the predicted times earned for a badge" do
         peb = create(:predicted_earned_badge, badge: world.badge, student: world.student)
         predicted_times_earned = 4
-        put :update, id: peb.id, times_earned: predicted_times_earned, format: :json
-        expect(PredictedEarnedBadge.where(student: world.student, badge: world.badge).first.times_earned).to eq(4)
-        expect(JSON.parse(response.body)).to eq({"id" => peb.id, "times_earned" => predicted_times_earned})
+        put :update, id: peb.id, predicted_times_earned: predicted_times_earned, format: :json
+        expect(PredictedEarnedBadge.where(student: world.student, badge: world.badge).first.predicted_times_earned).to eq(4)
+        expect(JSON.parse(response.body)).to eq({"id" => peb.id, "predicted_times_earned" => predicted_times_earned})
       end
     end
   end

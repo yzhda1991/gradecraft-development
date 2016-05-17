@@ -12,6 +12,7 @@
   quotes: {
     assignment_created: "A new assignment for each course has been created",
     grades_created: "Grades were created for the assignment",
+    prediction_created: "Predictions were created for the assignment",
     submissions_created: "Submissions were created for the assignment",
     rubric_created: "A Rubric was created for the assignment",
     score_levels_created: "Score levels were created for the assignment"
@@ -48,9 +49,12 @@
     raw_score: -> { rand(5000) },
     instructor_modified: false,
     status: nil,
-    predicted_score: -> { 0 },
     feedback: nil,
     excluded_from_course_score: false
+  },
+  prediction: false,
+  prediction_attributes: {
+    predicted_points: -> { 0 }
   },
   assignment_score_levels: false,
   rubric: false,
@@ -546,9 +550,12 @@ positive, because they allow you to work off something.–Charles Gwathmey",
   grades: true,
   grade_attributes: {
     instructor_modified: true,
-    predicted_score: -> { rand(15000) },
     status: "Graded",
     instructor_modified: true
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
@@ -568,10 +575,13 @@ not added to total",
   grades: true,
   grade_attributes: {
     instructor_modified: true,
-    predicted_score: -> { rand(15000) },
     status: "Graded",
     excluded_from_course_score: true,
     instructor_modified: true
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
@@ -607,10 +617,13 @@ should not have a visible grade",
   grades: true,
   grade_attributes: {
     instructor_modified: true,
-    predicted_score: -> { rand(15000) },
     raw_score: -> { rand(15000) },
     status: "Graded",
     instructor_modified: true
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
@@ -679,7 +692,10 @@ accepts predictions.",
     instructor_modified: false,
     raw_score: -> { nil },
     status: nil,
-    predicted_score: -> { rand(15000) },
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
@@ -762,7 +778,10 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
     instructor_modified: false,
     raw_score: -> { nil },
     status: nil,
-    predicted_score: -> { 15000 }
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
@@ -786,8 +805,11 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
   grade_attributes: {
     instructor_modified: true,
     raw_score: -> { 15000 },
-    predicted_score: -> { rand(15000) },
     status: "Graded"
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
@@ -825,7 +847,10 @@ Ralph Waldo Emerson",
     instructor_modified: false,
     raw_score: -> { nil },
     status: nil,
-    predicted_score: -> { rand(15000) }
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { rand(15000) }
   }
 }
 
@@ -864,7 +889,10 @@ to proceed with growing up. ― John Taylor Gatto",
     instructor_modified: false,
     raw_score: -> { nil },
     status: nil,
-    predicted_score: -> { rand(25000) }
+  },
+  prediction: true,
+  prediction_attributes: {
+    predicted_points: -> { 25000 }
   }
 }
 

@@ -46,30 +46,35 @@ describe API::PredictedEarnedChallengesController do
       it "adds the prediction data to the challenge data" do
         prediction = create(:predicted_earned_challenge, challenge: world.challenge, student: world.student)
         get :index, format: :json, id: world.student.id
-        expect(assigns(:challenges)[0].prediction).to eq({ id: prediction.id, points_earned: prediction.points_earned })
+        expect(assigns(:challenges)[0].prediction).to eq({ id: prediction.id, predicted_points: prediction.predicted_points })
       end
 
       it "adds visible grades to the challenge data" do
         grade = create(:graded_challenge_grade, challenge: world.challenge, team: world.team)
         get :index, format: :json, id: world.student.id
-        expect(assigns(:challenges)[0].grade).to eq({ point_total: grade.point_total, score: grade.score, points_earned: grade.score })
+        expect(assigns(:challenges)[0].grade).to eq({ score: grade.score })
       end
 
       it "adds grades as nil when not visible to student" do
         world.challenge.update(release_necessary: true)
         grade = create(:grades_not_released_challenge_grade, challenge: world.challenge, team: world.team)
         get :index, format: :json, id: world.student.id
-        expect(assigns(:challenges)[0].grade).to eq({ point_total: grade.point_total, score: nil, points_earned: nil })
+        expect(assigns(:challenges)[0].grade).to eq({ score: nil })
       end
     end
 
-    describe "PUT predict_points" do
+    describe "PUT update" do
       it "updates the predicted points for a challenge" do
         predicted_earned_challenge = create(:predicted_earned_challenge, challenge: world.challenge, student: world.student)
         predicted_points = (world.challenge.point_total * 0.75).to_i
-        put :update, id: predicted_earned_challenge, points_earned: predicted_points, format: :json
-        expect(PredictedEarnedChallenge.where(student: world.student, challenge: world.challenge).first.points_earned).to eq(predicted_points)
-        expect(JSON.parse(response.body)).to eq({"id" => predicted_earned_challenge.id, "points_earned" => predicted_points})
+        put :update, id: predicted_earned_challenge, predicted_points: predicted_points, format: :json
+        expect(PredictedEarnedChallenge.where(student: world.student, challenge: world.challenge).first.predicted_points).to eq(predicted_points)
+        expect(JSON.parse(response.body)).to eq({"id" => predicted_earned_challenge.id, "predicted_points" => predicted_points})
+      end
+
+      it "renders a 404 if prediction not found" do
+        put :update, id: 0, predicted_points: 0, format: :json
+        expect(response.status).to eq(404)
       end
     end
   end

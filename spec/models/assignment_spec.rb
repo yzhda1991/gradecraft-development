@@ -625,8 +625,8 @@ describe Assignment do
     let(:student) { create :user }
     before { subject.save }
 
-    it "returns true if the first grade for the student has a predicted score" do
-      subject.grades.create student_id: student.id, raw_score: 85, status: "Graded", predicted_score: 83
+    it "returns true if the student has a predicted earned grade" do
+      subject.predicted_earned_grades.create student_id: student.id, predicted_points: 83
       expect(subject.is_predicted_by_student?(student)).to eq true
     end
 
@@ -647,8 +647,8 @@ describe Assignment do
 
   describe "#predicted_count" do
     it "returns the number of grades that are predicted to have a score greater than zero" do
-      grades = double(:grades, predicted_to_be_done: 43.times.to_a)
-      allow(subject).to receive(:grades).and_return grades
+      predicted_earned_grades = double(:predicted_earned_grades, predicted_to_be_done: 43.times.to_a)
+      allow(subject).to receive(:predicted_earned_grades).and_return predicted_earned_grades
       expect(subject.predicted_count).to eq 43
     end
   end

@@ -195,40 +195,6 @@ class GradesController < ApplicationController
       notice: "Thank you for letting us know!"
   end
 
-  # POST /grades/:id/predict_score
-  # Students predicting the score they'll get on an assignment using the grade
-  # predictor
-  # TODO: Change to predict_points when 'score' changes to 'points_earned and
-  # PredictedEarnedAssignment model added
-  def predict_score
-    grade = Grade.find params[:id]
-    if GradeProctor.new(grade).viewable? # was it released already?
-      grade = nil
-    else
-      grade.predicted_score = params[:predicted_score]
-      grade.save
-    end
-
-    # TODO: this should be implemented with a PredictorEventLogger instead of a
-    # PredictorEventJob since the PredictorEventLogger has logic for cleaning up
-    # request params data, but for now this is better than what we had
-    PredictorEventJob.new(data: predictor_event_attrs(grade))
-      .enqueue_with_fallback
-
-    respond_to do |format|
-      format.json do
-        if grade.nil?
-          render json: { errors: "You cannot predict this assignment!" },
-            status: 400
-        elsif grade.valid?
-          render json: { id: grade.id, points_earned: grade.predicted_score }
-        else
-          render json: { errors:  grade.errors.full_messages }, status: 400
-        end
-      end
-    end
-  end
-
   private
 
   def temp_view_context
@@ -264,21 +230,6 @@ class GradesController < ApplicationController
 
   def safe_grade_possible_points(grade)
     grade.point_total rescue nil
-  end
-
-  def predictor_event_attrs(grade)
-    {
-      prediction_type: "grade",
-      course_id: current_course.id,
-      user_id: current_user.id,
-      student_id: current_student.try(:id),
-      user_role: current_user.role(current_course),
-      assignment_id: params[:id],
-      predicted_points: params[:predicted_score],
-      possible_points: safe_grade_possible_points(grade),
-      created_at: Time.now,
-      prediction_saved_successfully: grade
-    }
   end
 
   def score_recalculator(student)

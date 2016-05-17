@@ -1,9 +1,4 @@
 class NullGrade
-  attr_accessor :predicted_score
-
-  def initialize
-    @predicted_score = 0
-  end
 
   def assignment
     NullAssignment.new
