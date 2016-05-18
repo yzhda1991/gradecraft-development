@@ -91,7 +91,7 @@ describe SubmissionFileProctor do
 
     it "sets the course to @course" do
       result
-      expect(subject.instance_variable_get(:@course)).to eq course
+      expect(subject.instance_variable_get :@course).to eq course
     end
   end
 
@@ -114,7 +114,7 @@ describe SubmissionFileProctor do
 
     it "sets the submission to @submission" do
       result
-      expect(subject.instance_variable_get(:@submission)).to eq submission
+      expect(subject.instance_variable_get :@submission).to eq submission
     end
   end
 
@@ -137,7 +137,7 @@ describe SubmissionFileProctor do
 
     it "sets the assignment to @assignment" do
       result
-      expect(subject.instance_variable_get(:@assignment)).to eq assignment
+      expect(subject.instance_variable_get :@assignment).to eq assignment
     end
   end
 end
