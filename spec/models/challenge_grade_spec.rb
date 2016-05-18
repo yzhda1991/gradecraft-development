@@ -55,11 +55,11 @@ describe ChallengeGrade do
   end
 
   describe "#cache_team_score" do
-    it "triggers the resave of a team" do
-      team = create(:team, score: 0)
+    it "saves the team scores" do
+      team = create(:team, challenge_grade_score: 0, average_score: 0)
       challenge_grade = create(:challenge_grade, team: team, score: 100, status: "Released")
-      challenge_grade.cache_team_score
-      expect(team.score).to eq(100)
+      challenge_grade.cache_team_scores
+      expect(team.challenge_grade_score).to eq(100)
     end
   end
 
