@@ -32,7 +32,7 @@
       _totalPoints
 
     getGradeSchemeElements = ()->
-      $http.get("predictor_grade_levels").success((res)->
+      $http.get("api/grade_scheme_elements").success((res)->
         _.each(res.data, (gse)->
           gradeSchemeElements.push(gse.attributes)
         )

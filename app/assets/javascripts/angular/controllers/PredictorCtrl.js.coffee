@@ -309,7 +309,8 @@
 # GRAPHICS RENDERING
 
   $scope.GraphicsStats = ()->
-    totalPoints = PredictorService.totalPoints()
+    # add 10% to the graph above the highest grade
+    totalPoints = PredictorService.totalPoints() * 1.1
     width = parseInt(d3.select("#predictor-graphic").style("width")) - 20
     height = parseInt(d3.select("#predictor-graphic").style("height"))
     stats = {

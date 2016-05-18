@@ -368,6 +368,10 @@ GradeCraft::Application.routes.draw do
     # earned badges
     resources :earned_badges, only: :create
 
+    #17 Predictor
+
+    resources :grade_scheme_elements, only: [:index]
+
     #17b. Predictor, Student View
     resources :predicted_earned_badges, only: [:index, :update]
     resources :predicted_earned_challenges, only: [:index, :update]
@@ -383,12 +387,10 @@ GradeCraft::Application.routes.draw do
 
   #17b. Predictor, Student View
   get "predictor" => "students#predictor"
-  get "predictor_grade_levels" => "grade_scheme_elements#predictor_data", defaults: { format: :json }
   get "predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
   get "predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
   #17c. Predictor, Instructor View
-  get "students/:id/predictor_grade_levels" => "grade_scheme_elements#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
   get "students/:id/predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 

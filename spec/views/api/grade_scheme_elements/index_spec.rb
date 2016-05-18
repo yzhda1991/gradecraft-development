@@ -2,7 +2,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "grade_scheme_elements/predictor_data" do
+describe "api/grade_scheme_elements/index" do
   before(:all) do
     @grade_scheme_element = create(:grade_scheme_element_high)
     @grade_scheme_elements = [@grade_scheme_element]
@@ -14,11 +14,11 @@ describe "grade_scheme_elements/predictor_data" do
   end
 
   it "responds with total_points" do
-    expect(@json["total_points"]).to eq(10000)
+    expect(@json["meta"]["total_points"]).to eq(10000)
   end
 
   it "responds with an array of grade_scheme_elements including name" do
-    expect(@json["grade_scheme_elements"].length).to eq(1)
-    expect(@json["grade_scheme_elements"][0]["name"]).to eq(@grade_scheme_element.name)
+    expect(@json["data"].length).to eq(1)
+    expect(@json["data"][0]["attributes"]["name"]).to eq(@grade_scheme_element.name)
   end
 end
