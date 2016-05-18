@@ -50,11 +50,25 @@ describe SubmissionFileProctor do
   end
 
   describe "#proctor_conditions" do
+    let(:result) { subject.proctor_conditions }
+
     # @proctor_conditions ||= Proctors::SubmissionFileConditions.new(proctor: self)
+    it "builds a new set of conditions for the submission file proctor" do
+      expect(Proctors::SubmissionFileConditions).to receive(:new)
+        .with(proctor: subject)
+      result
+    end
+
     it "caches the proctor_conditions" do
+      result
+      expect(Proctors::SubmissionFileConditions).not_to receive(:new)
+      result
     end
 
     it "sets the proctor conditions to @proctor_conditions" do
+      allow(Proctors::SubmissionFileConditions).to receive(:new) { "stuff" }
+      result
+      expect(subject.instance_variable_get :@proctor_conditions).to eq "stuff"
     end
   end
 
