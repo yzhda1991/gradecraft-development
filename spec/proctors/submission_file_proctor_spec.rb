@@ -1,176 +1,81 @@
-require 'active_record_spec_helper'
+require "proctor"
+require_relative "../../app/proctors/conditions/submission_file_conditions.rb"
+require_relative "../../app/proctors/submission_file_proctor.rb"
 
 describe SubmissionFileProctor do
-  subject { described_class.new(submission_file) }
+  subject { described_class.new submission_file }
+  let(:submission_file) { double(:submission_file) }
+  let(:proctor_conditions) do
+    Proctors::SubmissionFileConditions.new proctor: subject
+  end
 
-  let(:user) { build(:user) }
-  let(:course) { build(:course) }
-  let(:submission) { build(:submission, course: course) }
-  let(:submission_file) { build(:submission_file, submission: submission) }
-  let(:assignment) { build(:assignment) }
-  let(:group) { build(:group) }
-
-  it "should have a readable submission_file" do
-    expect(subject.submission_file).to eq submission_file
+  describe "readable attributes" do
+    it "has a readable submission file" do
+      expect(subject.submission_file).to eq submission_file
+    end
   end
 
   describe "#initialize" do
-    it "accepts a submission file and set it to @submission_file" do
-      expect(subject.instance_variable_get(:@submission_file))
+    it "sets the given submission_file to @submission_file" do
+      expect(subject.instance_variable_get :@submission_file)
         .to eq submission_file
     end
   end
 
   describe "#downloadable?" do
     let(:result) { subject.downloadable? user: user }
+    let(:user) { double(:user) }
+    let(:downloadable_conditions) { double(:downloadable).as_null_object }
 
-    it "returns an error if :user isn't given" do
-      expect { subject.downloadable? }.to raise_error(ArgumentError)
+    before do
+      allow(subject).to receive(:proctor_conditions) { proctor_conditions }
+      allow(proctor_conditions).to receive(:for) { downloadable_conditions }
     end
 
-    context "a course is explicitly passed in" do
-      let(:result) { subject.downloadable? user: user, course: another_course }
-      let(:another_course) { double(Course).as_null_object }
-
-      it "sets the given course as the course for the proctor" do
-        result
-        expect(subject.instance_variable_get(:@course)).to eq another_course
-      end
+    it "gets the proctor conditions for downloadable" do
+      expect(proctor_conditions).to receive(:for).with(:downloadable)
+      result
     end
 
-    context "submission course id doesn't match the course id" do
-      let(:some_course) { double(Course, id: 7) }
-      it "returns false" do
-        subject.instance_variable_set(:@course, some_course)
-        allow(submission).to receive(:course_id) { 20_000 }
-        expect(result).to eq false
-      end
+    it "checks whether the downloadable conditions are satisfied by the user" do
+      expect(downloadable_conditions).to receive(:satisfied_by?).with user
+      result
+    end
+  end
+
+  describe "#proctor_conditions" do
+    # @proctor_conditions ||= Proctors::SubmissionFileConditions.new(proctor: self)
+    it "caches the proctor_conditions" do
     end
 
-    context "user is staff for the given course" do
-      it "returns true" do
-        allow(user).to receive(:is_staff?).with(course) { true }
-        expect(result).to eq true
-      end
+    it "sets the proctor conditions to @proctor_conditions" do
+    end
+  end
+
+  describe "#course" do
+    # @course ||= submission.course
+    it "caches the course" do
     end
 
-    context "no assignment exists" do
-      it "returns false" do
-        allow(subject).to receive(:assignment) { nil }
-        expect(result).to eq false
-      end
-    end
-
-    context "assignment is individual" do
-      before do
-        allow(assignment).to receive(:is_individual?) { true }
-      end
-
-      context "the submission's student_id matches the given user's id" do
-        it "returns true" do
-          allow(submission).to receive(:student_id) { user.id }
-          expect(result).to eq true
-        end
-      end
-
-      context "the submission's student_id doesn't match the given user's id" do
-        it "returns false" do
-          allow(submission).to receive(:student_id) { 900_000 }
-          expect(result).to eq false
-        end
-      end
-    end
-
-    context "assignment is not individual but has groups" do
-      before do
-        allow(subject).to receive(:assignment) { assignment }
-        allow(assignment).to receive_messages(
-          is_individual?: false,
-          has_groups?: true
-        )
-      end
-
-      context "there is no group for the user for the given assignment" do
-        it "returns false" do
-          allow(user).to receive(:group_for_assignment).with(assignment) { nil }
-          expect(result).to eq false
-        end
-      end
-
-      context "user has a group for the assignment" do
-        before(:each) do
-          allow(user).to receive(:group_for_assignment).with(assignment) { group }
-        end
-
-        context "user is in the group that owns the submission" do
-          it "returns true" do
-            allow(submission).to receive(:group_id) { group.id }
-            expect(result).to eq true
-          end
-        end
-
-        context "there's a group but it isn't the same one on the submission" do
-          it "returns false" do
-            allow(submission).to receive(:group_id) { 885_000 }
-            expect(result).to eq false
-          end
-        end
-      end
-    end
-
-    it "returns false if no other cases are true" do
-      allow(subject).to receive(:assignment) { assignment }
-      allow(assignment).to receive_messages(
-        is_individual?: false,
-        has_groups?: false
-      )
-      expect(result).to eq false
+    it "sets the course to @course" do
     end
   end
 
   describe "#submission" do
-    let(:result) { subject.submission }
-
-    before do
-      allow(submission_file).to receive(:submission) { submission }
-    end
-
-    it "gets the submission from the submission_file" do
-      expect(result).to eq submission
-    end
-
+    # @submission ||= submission_file.submission
     it "caches the submission" do
-      result
-      expect(submission_file).not_to receive(:submission)
-      result
     end
 
     it "sets the submission to @submission" do
-      result
-      expect(subject.instance_variable_get(:@submission)).to eq submission
     end
   end
 
   describe "#assignment" do
-    let(:result) { subject.assignment }
-
-    before do
-      allow(submission).to receive(:assignment) { assignment }
-    end
-
-    it "gets the assignment from the submission" do
-      expect(result).to eq assignment
-    end
-
+    # @assignment ||= submission.assignment
     it "caches the assignment" do
-      result
-      expect(submission).not_to receive(:assignment)
-      result
     end
 
     it "sets the assignment to @assignment" do
-      result
-      expect(subject.instance_variable_get(:@assignment)).to eq assignment
     end
   end
 end
