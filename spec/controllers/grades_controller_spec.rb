@@ -332,10 +332,8 @@ describe GradesController do
       end
 
       it "redirects to the assignments if the professor does not have access" do
-        # destroyable is aliased as updatable and alias_method does not allow
-        # mocking
         allow_any_instance_of(GradeProctor).to \
-          receive(:updatable?).and_return false
+          receive(:destroyable?).and_return false
         expect(delete :destroy, { id: @grade.id }).to \
           redirect_to(assignment_path(@grade.assignment))
       end

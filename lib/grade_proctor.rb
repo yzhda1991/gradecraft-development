@@ -14,5 +14,7 @@ class GradeProctor
     @grade = grade
   end
 
-  alias_method :destroyable?, :updatable?
+  def destroyable?(options={})
+    updatable? options
+  end
 end
