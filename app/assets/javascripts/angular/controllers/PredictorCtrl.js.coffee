@@ -11,7 +11,7 @@
     )
 
   $scope.services = ()->
-    promises = [PredictorService.getGradeLevels(),
+    promises = [PredictorService.getGradeSchemeElements(),
                 PredictorService.getAssignments($scope.student_id),
                 PredictorService.getAssignmentTypes(),
                 PredictorService.getAssignmentTypeWeights(),
@@ -21,7 +21,7 @@
 
   $scope.assignments = PredictorService.assignments
   $scope.assignmentTypes = PredictorService.assignmentTypes
-  $scope.gradeLevels = PredictorService.gradeLevels
+  $scope.gradeSchemeElements = PredictorService.gradeSchemeElements
   $scope.badges = PredictorService.badges
   $scope.weights = PredictorService.weights
   $scope.challenges = PredictorService.challenges
@@ -226,7 +226,7 @@
   $scope.predictedGradeLevel = ()->
     allPointsPredicted = $scope.allPointsPredicted()
     predictedGrade = null
-    _.each($scope.gradeLevels.grade_scheme_elements,(gse)->
+    _.each($scope.gradeSchemeElements,(gse)->
       if allPointsPredicted > gse.low_range
         if ! predictedGrade || predictedGrade.low_range < gse.low_range
           predictedGrade = gse
@@ -309,7 +309,7 @@
 # GRAPHICS RENDERING
 
   $scope.GraphicsStats = ()->
-    totalPoints = $scope.gradeLevels.total_points
+    totalPoints = PredictorService.totalPoints()
     width = parseInt(d3.select("#predictor-graphic").style("width")) - 20
     height = parseInt(d3.select("#predictor-graphic").style("height"))
     stats = {
@@ -335,14 +335,16 @@
 
   # Loads the grade points values and corresponding grade levels name/letter-grade into the predictor graphic
   $scope.renderGradeLevelGraphics = ()->
-    grade_scheme_elements = $scope.gradeLevels.grade_scheme_elements
+    gradeSchemeElements = $scope.gradeSchemeElements
     svg = d3.select("#svg-grade-levels")
     stats = $scope.GraphicsStats()
     padding = stats.padding
     scale = stats.scale
     axis = d3.svg.axis().scale(scale).orient("bottom")
-    g = svg.selectAll('g').data(grade_scheme_elements).enter().append('g')
+    g = svg.selectAll('g').data(gradeSchemeElements).enter().append('g')
             .attr("transform", (gse)->
+              console.log(scale(gse.low_range));
+              console.log(scale(gse.low_range));
               "translate(" + (scale(gse.low_range) + padding) + "," + 25 + " )")
             .on("mouseover", (gse)->
               d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "visible")
@@ -360,7 +362,7 @@
       .attr("d", "M3,2.492c0,1.392-1.5,4.48-1.5,4.48S0,3.884,0,2.492c0-1.392,0.671-2.52,1.5-2.52S3,1.101,3,2.492z")
       .attr("class",(gse)-> "grade_scheme-pointer-" + gse.low_range)
       .attr("transform","scale(2)")
-    txt = d3.select("#svg-grade-level-text").selectAll('g').data(grade_scheme_elements).enter()
+    txt = d3.select("#svg-grade-level-text").selectAll('g').data(gradeSchemeElements).enter()
             .append('g')
             .attr("class", (gse)->
               "grade_scheme-label-" + gse.low_range)
