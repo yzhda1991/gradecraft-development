@@ -21,7 +21,8 @@ class ChallengeGrade < ActiveRecord::Base
   end
 
   def cache_team_scores
-    team.cache_score
+    team.set_challenge_grade_score
+    team.set_average_score
   end
 
   # TODO: jw this will be replaced with a ChallengeGradeProctor

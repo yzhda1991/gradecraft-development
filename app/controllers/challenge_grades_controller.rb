@@ -71,18 +71,20 @@ class ChallengeGradesController < ApplicationController
     end
   end
 
-  # DELETE /challenges/:challenge_id/challenge_grades/:id
+  # DELETE /challenge_grades/:id
   def destroy
     @team = @challenge_grade.team
 
     @challenge_grade.destroy
-    @team.cache_score
+    @team.set_challenge_grade_score
     @team.students.each do |student|
       score_recalculator_jobs = @team.students.collect do |student|
         ScoreRecalculatorJob.new(user_id: student.id,
           course_id: current_course.id)
+      end
     end
     score_recalculator_jobs.each(&:enqueue)
+    @team.set_average_score
 
     redirect_to challenge_path(@challenge),
       notice: "#{@team.name}'s grade for #{@challenge.name} has been successfully deleted."

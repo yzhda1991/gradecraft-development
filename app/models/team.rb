@@ -68,10 +68,18 @@ class Team < ActiveRecord::Base
 
   def update_ranks
     @teams = self.course.teams
-    rank_index = @teams.pluck(:score).uniq.sort.reverse
+    if self.course.team_score_average?
+      rank_index = @teams.pluck(:average_score).uniq.sort.reverse
+    elsif self.course.challenges.present?
+      rank_index = @teams.pluck(:challenge_grade_score).uniq.sort.reverse
+    end
 
     @teams.each do |team|
-      rank = rank_index.index(team.score) + 1
+      if self.course.team_score_average?
+        rank = rank_index.index(team.average_score) + 1
+      elsif self.course.challenges.present?
+        rank = (rank_index.index(team.challenge_grade_score) || 0) + 1
+      end
       team.update_attributes rank: rank
     end
   end
@@ -88,9 +96,12 @@ class Team < ActiveRecord::Base
   # scores, and challenge grades are added directly into students' scores.
   # The second way is that the teams compete in team challenges that earn
   # the team points.
-  def cache_score
-    self.average_score = average_points
+  def set_challenge_grade_score
     self.challenge_grade_score = challenge_grade_score
+  end
+
+  def set_average_score
+    self.average_score = average_points
   end
 
 end
