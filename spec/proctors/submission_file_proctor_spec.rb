@@ -73,11 +73,25 @@ describe SubmissionFileProctor do
   end
 
   describe "#course" do
-    # @course ||= submission.course
+    let(:result) { subject.course }
+
+    before do
+      allow(submission).to receive(:course) { course }
+    end
+
+    it "gets the course from the submission" do
+      expect(result).to eq course
+    end
+
     it "caches the course" do
+      result
+      expect(submission).not_to receive(:course)
+      result
     end
 
     it "sets the course to @course" do
+      result
+      expect(subject.instance_variable_get(:@course)).to eq course
     end
   end
 
