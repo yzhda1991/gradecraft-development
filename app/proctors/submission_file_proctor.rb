@@ -10,7 +10,7 @@ class SubmissionFileProctor
   end
 
   def proctor_conditions
-    @proctor_conditions ||= Proctors::Conditions::SubmissionFile.new(proctor: self)
+    @proctor_conditions ||= Proctors::SubmissionFileConditions.new(proctor: self)
   end
 
   def course
