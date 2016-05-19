@@ -1,3 +1,5 @@
+require_relative "conditions/submission_file_conditions"
+
 class SubmissionFileProctor
   attr_reader :submission_file
 
@@ -11,7 +13,7 @@ class SubmissionFileProctor
   end
 
   def proctor_conditions
-    @proctor_conditions ||= ::Proctors::SubmissionFileConditions.new(proctor: self)
+    @proctor_conditions ||= Proctors::SubmissionFileConditions.new(proctor: self)
   end
 
   def course
