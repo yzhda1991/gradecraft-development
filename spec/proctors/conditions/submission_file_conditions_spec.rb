@@ -89,14 +89,14 @@ describe Proctors::SubmissionFileConditions do
       allow(submission).to receive(:course_id) { 5 }
     end
 
-    context "the submission's course_id matches the submission's id" do
+    context "the submission's course_id matches the course's id" do
       it "returns true" do
         allow(course).to receive(:id) { 5 }
         expect(result).to eq true
       end
     end
 
-    context "the submission's course_id does not match the submission's id" do
+    context "the submission's course_id does not match the course's id" do
       it "returns false" do
         allow(course).to receive(:id) { 10 }
         expect(result).to eq false
@@ -122,4 +122,42 @@ describe Proctors::SubmissionFileConditions do
     end
   end
 
+  describe "#assignment_present?" do
+    let(:result) { subject.assignment_present? }
+
+    context "assignment is not present" do
+      it "returns false" do
+        allow(subject).to receive(:assignment) { nil }
+        expect(result).to eq false
+      end
+    end
+
+    context "assignment is present" do
+      it "returns true" do
+        allow(subject).to receive(:assignment) { assignment }
+        expect(result).to eq true
+      end
+    end
+  end
+
+  describe "#user_owns_submission?" do
+    let(:result) { subject.user_owns_submission? }
+    before do
+      allow(submission).to receive(:student_id) { 25 }
+    end
+
+    context "the submission's student_id matches the user's id" do
+      it "returns true" do
+        allow(user).to receive(:id) { 25 }
+        expect(result).to eq true
+      end
+    end
+
+    context "the submission's student_id does not match the user's id" do
+      it "returns false" do
+        allow(user).to receive(:id) { 44 }
+        expect(result).to eq false
+      end
+    end
+  end
 end
