@@ -2,6 +2,8 @@ module Proctors
   class SubmissionFileConditions
     include Proctor::Conditions
 
+    attr_accessor :group
+
     # this uses the resources on the proctor rather than defining them here
     defer_to_proctor :submission, :assignment, :course, :submission_file
 

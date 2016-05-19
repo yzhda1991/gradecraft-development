@@ -10,7 +10,7 @@ describe Proctors::SubmissionFileConditions do
   let(:course) { double(:course).as_null_object }
   let(:assignment) { double(:assignment).as_null_object }
   let(:submission) do
-    double :submission, assignment: assignment, course: course
+    double(:submission, assignment: assignment, course: course).as_null_object
   end
   let(:user) { double(:user) }
 
@@ -158,6 +158,40 @@ describe Proctors::SubmissionFileConditions do
         allow(user).to receive(:id) { 44 }
         expect(result).to eq false
       end
+    end
+  end
+
+  describe "#user_has_group_for_assignment?" do
+    let(:result) { subject.user_has_group_for_assignment? }
+    let(:group) { double(:group) }
+
+    before do
+      allow(user).to receive(:group_for_assignment).with(assignment) { group }
+    end
+
+    it "finds the user's group for the assignment" do
+      expect(user).to receive(:group_for_assignment).with assignment
+      result
+    end
+
+    it "sets the group to @group" do
+      result
+      expect(subject.instance_variable_get :@group).to eq group
+    end
+
+    it "returns the user's group for the assignment" do
+      expect(result).to eq group
+    end
+  end
+
+  describe "#user_group_owns_submission?" do
+    let(:group) { double(:group) }
+
+    it "compares the group's id to the submissions group_id" do
+      subject.group = group
+      allow(submission).to receive(:group_id) { 5 }
+      allow(group).to receive(:id) { 5 }
+      expect(subject.user_group_owns_submission?).to eq true
     end
   end
 end
