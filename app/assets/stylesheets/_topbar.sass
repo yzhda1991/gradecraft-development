@@ -152,6 +152,10 @@ ul.subnav.logged-out
   .button:hover
     background-color: $color-blue-1
 
+.the-nav .nav-pill.right.public-nav
+  margin-top: .4em
+  display: none
+
 .offscreen-sidebar
   display: none
 
@@ -179,9 +183,6 @@ ul.subnav.logged-out
     overflow: hidden
   .the-nav .nav-pill.right
     z-index: 100
-  .the-nav .nav-pill.right.public-nav
-    margin-top: .4em
-    display: none
   .the-nav > .nav
     margin: 0
     padding-left: 0
@@ -264,7 +265,7 @@ ul.subnav.logged-out
 
 /* Mobile Styles */
 @media (max-width: $media-medium-max)
-  .navbar .nav-collapse
+  .logged-in .navbar .nav-collapse
     display: none
 
   .mobile-nav
@@ -371,6 +372,13 @@ ul.subnav.logged-out
     width: 100%
     float: none
 
+  .the-nav .nav-pill.right.public-nav
+    display: inline
+    background-color: $color-blue-4
+    position: fixed
+    top: 0
+    li
+      display: block
 .noscroll
   overflow: hidden
 
