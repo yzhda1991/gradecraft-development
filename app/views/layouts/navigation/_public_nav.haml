@@ -2,6 +2,6 @@
   = link_to_unless_current "Features", features_path do |name|
     - "<span class='active'>#{name}</span>"
 
-= render "subnav"
+= render :partial => "pages/subnav"
 
 %li= link_to "Blog", "http://blog.gradecraft.com", :target => "_blank"

@@ -7,6 +7,7 @@
             %a.no-hover.site-title{:href => root_url }
               = image_tag "gradecraft_logo.png", :width => "150"
         %ul.nav.nav-pill.right
+          = render "layouts/navigation/public_nav"
           = render "layouts/navigation/login_nav"
       %nav.mobile-nav.hide-for-large
         .left
