@@ -185,12 +185,10 @@ describe Proctors::SubmissionFileConditions do
   end
 
   describe "#user_group_owns_submission?" do
-    let(:group) { double(:group) }
-
     it "compares the group's id to the submissions group_id" do
-      subject.group = group
+      subject.group = double(:group)
       allow(submission).to receive(:group_id) { 5 }
-      allow(group).to receive(:id) { 5 }
+      allow(subject.group).to receive(:id) { 5 }
       expect(subject.user_group_owns_submission?).to eq true
     end
   end
