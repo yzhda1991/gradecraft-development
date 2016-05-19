@@ -33,6 +33,16 @@ module Submissions
       end
     end
 
+    def present_submission_files
+      return [] unless submission
+      @present_submission_files ||= submission.submission_files.present
+    end
+
+    def missing_submission_files
+      return [] unless submission
+      @missing_submission_files ||= submission.submission_files.missing
+    end
+
     def student
       submission.student
     end

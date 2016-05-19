@@ -1,7 +1,7 @@
 %p
   %span.smallcaps Attachments:
   %ul
-    - presenter.submission.submission_files.each_with_index do |submission_file, index|
+    - presenter.submission.submission_files.present.each_with_index do |submission_file, index|
       %li
         - if submission_file.file_missing
           -# if the file is missing don't print a link

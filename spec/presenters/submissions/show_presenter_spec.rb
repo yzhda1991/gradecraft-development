@@ -221,6 +221,86 @@ describe Submissions::ShowPresenter do
     end
   end
 
+  describe "#present_submission_files" do
+    # @present_submission_files ||= submission.submission_files.present
+    let(:result) { subject.present_submission_files }
+
+    context "presenter has a submission" do
+      before do
+        allow(subject).to receive(:submission) { submission }
+      end
+
+      it "gets the present submission files from the submission" do
+        expect(submission).to receive_message_chain(:submission_files, :present)
+        result
+      end
+
+      it "sets the submission files to an ivar" do
+        allow(submission).to receive_message_chain(:submission_files, :present)
+          .and_return %w[these are files]
+        result
+        expect(subject.instance_variable_get :@present_submission_files)
+          .to eq %w[these are files]
+      end
+
+      it "doesn't query the files again if the ivar was set" do
+        subject.instance_variable_set(:@present_submission_files, %w[files])
+        expect(submission).not_to receive(:submission_files)
+        result
+      end
+    end
+
+    context "presenter has no submission" do
+      before do
+        allow(subject).to receive(:submission) { nil }
+      end
+
+      it "returns an empty array" do
+        expect(result).to eq []
+      end
+    end
+  end
+
+  describe "#missing_submission_files" do
+    # @missing_submission_files ||= submission.submission_files.missing
+    let(:result) { subject.missing_submission_files }
+
+    context "missinger has a submission" do
+      before do
+        allow(subject).to receive(:submission) { submission }
+      end
+
+      it "gets the missing submission files from the submission" do
+        expect(submission).to receive_message_chain(:submission_files, :missing)
+        result
+      end
+
+      it "sets the submission files to an ivar" do
+        allow(submission).to receive_message_chain(:submission_files, :missing)
+          .and_return %w[these are files]
+        result
+        expect(subject.instance_variable_get :@missing_submission_files)
+          .to eq %w[these are files]
+      end
+
+      it "doesn't query the files again if the ivar was set" do
+        subject.instance_variable_set(:@missing_submission_files, %w[files])
+        expect(submission).not_to receive(:submission_files)
+        result
+      end
+    end
+
+    context "missinger has no submission" do
+      before do
+        allow(subject).to receive(:submission) { nil }
+      end
+
+      it "returns an empty array" do
+        expect(result).to eq []
+      end
+    end
+  end
+
   describe "#title" do
     let(:assignment) { double(:assignment, name: "Greatness", point_total: 40) }
     let(:view_context) { double(:view_context).as_null_object }
