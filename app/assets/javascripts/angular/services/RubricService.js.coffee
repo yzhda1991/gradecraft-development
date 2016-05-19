@@ -21,10 +21,10 @@
         id: parseInt(window.location.search.match(/student_id=(\d+)/)[1])
       }
     # GRADING A GROUP FOR AN ASSIGNMENT
-    else if window.location.search.match(/group_id=/)
+    else if location.pathname.split('/')[3] == "groups"
       assignment.scope = {
         type: "GROUP",
-        id: parseInt(window.location.search.match(/group_id=(\d+)/)[1])
+        id: parseInt(location.pathname.split('/')[4])
       }
     # DESIGNING A RUBRIC
     else
