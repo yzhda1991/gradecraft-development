@@ -6,7 +6,7 @@
   = render "layouts/alerts"
 
   #massGrade
-    = simple_form_for @challenge, method: :put, :url => mass_update_challenge_challenge_grades_path(:id => @challenge.id) do |f|
+    = simple_form_for @challenge, method: :put, :url => mass_update_challenge_challenge_grades_path(@challenge) do |f|
       %table.dynatable
         - @challenge_grades.each_with_index do |cg, i|
           %tr
@@ -17,7 +17,7 @@
                 = cgf.hidden_field :team_id
                 = cgf.input :status, as: :hidden, :input_html => { :value => "Graded" }
                 - if @challenge.challenge_score_levels.present?
-                  = cgf.select :score, options_from_collection_for_select(@challenge_score_levels, :value, :name, cg.try(:score)), include_blank: true
+                  = cgf.select :score, options_from_collection_for_select(@challenge.challenge_score_levels, :value, :name, cg.try(:score)), include_blank: true
                 - else
                   - if cg.persisted?
                     = cgf.text_field :score, data: {autonumeric: true, "m-dec" => "0"}

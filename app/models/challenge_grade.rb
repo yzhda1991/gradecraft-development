@@ -24,9 +24,4 @@ class ChallengeGrade < ActiveRecord::Base
     team.set_challenge_grade_score
     team.set_average_score
   end
-
-  # TODO: jw this will be replaced with a ChallengeGradeProctor
-  def is_student_visible?
-    is_released? || (is_graded? && !challenge.release_necessary)
-  end
 end

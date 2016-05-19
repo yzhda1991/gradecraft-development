@@ -1,22 +1,42 @@
 class Challenges::ChallengeGradesController < ApplicationController
   before_filter :ensure_staff?
 
+  # GET /challenge/:id/challenge_grades/new?team_id=:team_id
+  def new
+    @team = current_course.teams.find(params[:team_id])
+    @challenge = current_course.challenges.find(params[:challenge_id])
+    @challenge_grade = @team.challenge_grades.new
+    @title = "Grading #{@team.name}'s #{@challenge.name}"
+  end
+
+  # POST /challenge_grades
+  def create
+    @challenge_grade = current_course.challenge_grades.new(params[:challenge_grade])
+    @challenge = @challenge_grade.challenge
+    @team = @challenge_grade.team
+    if @challenge_grade.save
+
+      ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
+
+      redirect_to @challenge,
+        notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully graded"
+    else
+      render action: "new"
+    end
+  end
+
   # Grade many teams on a particular challenge at once
   # GET /challenges/:challenge_id/challenge_grades/mass_edit
   def mass_edit
     @challenge = current_course.challenges.find(params[:challenge_id])
-    @teams = current_course.teams
     @title = "Quick Grade #{@challenge.name}"
-    @challenge_score_levels = @challenge.challenge_score_levels
-    @challenge_grades = @teams.map do |t|
-      @challenge.challenge_grades.where(team_id: t).first ||
-        @challenge.challenge_grades.new(team: t, challenge: @challenge)
-    end
+    @teams = current_course.teams
+    @challenge_grades = @teams.map { |t| @challenge.challenge_grades.for_team(t) }
   end
 
-  # PUT /challenges/:challenge_id/challenge_grades/mass_update
+  # PUT /challenges/:id/challenge_grades/mass_update
   def mass_update
-    @challenge = current_course.challenges.find(params[:id])
+    @challenge = current_course.challenges.find(params[:challenge_id])
     if @challenge.update_attributes(params[:challenge])
 
       enqueue_multiple_challenge_grade_update_jobs(mass_update_challenge_grade_ids)
@@ -30,7 +50,7 @@ class Challenges::ChallengeGradesController < ApplicationController
 
   # Changing the status of a grade - allows instructors to review "Graded"
   # grades, before they are "Released" to students
-  # POST /challenges/:challenge_id/challenge_grades/edit_status
+  # GET /challenges/:challenge_id/challenge_grades/edit_status
   def edit_status
     @title = "#{@challenge.name} Grade Statuses"
     @challenge_grades =

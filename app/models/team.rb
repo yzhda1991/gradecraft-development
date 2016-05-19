@@ -66,7 +66,7 @@ class Team < ActiveRecord::Base
     end
   end
 
-  def update_ranks
+  def update_ranks!
     @teams = self.course.teams
     if self.course.team_score_average?
       rank_index = @teams.pluck(:average_score).uniq.sort.reverse
