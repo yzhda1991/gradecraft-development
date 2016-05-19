@@ -77,4 +77,25 @@ describe Proctors::SubmissionFileConditions do
     end
   end
 
+  describe "#submission_matches_course?" do
+    let(:result) { subject.submission_matches_course? }
+    before do
+      allow(submission).to receive(:course_id) { 5 }
+    end
+
+    context "the submission's course_id matches the submission's id" do
+      it "returns true" do
+        allow(course).to receive(:id) { 5 }
+        expect(result).to eq true
+      end
+    end
+
+    context "the submission's course_id does not match the submission's id" do
+      it "returns false" do
+        allow(course).to receive(:id) { 10 }
+        expect(result).to eq false
+      end
+    end
+  end
+
 end
