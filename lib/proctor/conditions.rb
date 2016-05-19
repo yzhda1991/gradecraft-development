@@ -1,6 +1,6 @@
 module Proctor
   module Conditions
-    attr_accessor :requirements, :overrides
+    attr_accessor :requirements, :overrides, :user
     attr_reader :proctor
 
     def initialize(proctor:)

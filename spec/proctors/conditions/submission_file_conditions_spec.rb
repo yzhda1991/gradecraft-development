@@ -12,6 +12,12 @@ describe Proctors::SubmissionFileConditions do
   let(:submission) do
     double :submission, assignment: assignment, course: course
   end
+  let(:user) { double(:user) }
+
+  before(:each) do
+    # let's presume that we've got a user
+    subject.user = user
+  end
 
   it "includes Proctor::Conditions" do
     expect(subject).to respond_to :valid_overrides_present?
@@ -93,6 +99,24 @@ describe Proctors::SubmissionFileConditions do
     context "the submission's course_id does not match the submission's id" do
       it "returns false" do
         allow(course).to receive(:id) { 10 }
+        expect(result).to eq false
+      end
+    end
+  end
+
+  describe "#user_is_staff?" do
+    let(:result) { subject.user_is_staff? }
+
+    context "user is staff for the given course" do
+      it "returns true" do
+        allow(user).to receive(:is_staff?).with(course) { true }
+        expect(result).to eq true
+      end
+    end
+
+    context "user is not staff for the given course" do
+      it "returns false" do
+        allow(user).to receive(:is_staff?).with(course) { false }
         expect(result).to eq false
       end
     end
