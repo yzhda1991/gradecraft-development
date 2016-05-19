@@ -9,8 +9,12 @@ module Proctors
       add_requirements :submission_matches_course?, :assignment_present?
       add_overrides :user_is_staff?
       add_requirement :user_owns_submission? if assignment.is_individual?
-      add_requirements(:user_has_group_for_assignment?,
-        :user_group_owns_submission?) if assignment.has_groups?
+      add_group_requirements if assignment.has_groups?
+    end
+
+    def add_group_requirements
+      add_requirements :user_has_group_for_assignment?,
+        :user_group_owns_submission?
     end
 
     def submission_matches_course?

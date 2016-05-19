@@ -1,0 +1,80 @@
+require "proctor"
+require_relative "../../../app/proctors/submission_file_proctor"
+require_relative "../../../app/proctors/conditions/submission_file_conditions"
+
+describe Proctors::SubmissionFileConditions do
+  subject { described_class.new proctor: proctor }
+  let(:proctor) { SubmissionFileProctor.new submission_file }
+
+  let(:submission_file) { double(:submission_file, submission: submission) }
+  let(:course) { double(:course).as_null_object }
+  let(:assignment) { double(:assignment).as_null_object }
+  let(:submission) do
+    double :submission, assignment: assignment, course: course
+  end
+
+  it "includes Proctor::Conditions" do
+    expect(subject).to respond_to :valid_overrides_present?
+    expect(subject).to respond_to :satisfied_by?
+  end
+
+  describe "#downloadable_conditions" do
+    let(:result) { subject.downloadable_conditions }
+
+    it "adds requirements" do
+      # only add the requirements we're testing for here
+      allow(assignment).to receive(:has_groups?) { false }
+      expect(subject).to receive(:add_requirements)
+        .with(:submission_matches_course?, :assignment_present?)
+      result
+    end
+
+    it "adds some overrides" do
+      expect(subject).to receive(:add_overrides).with(:user_is_staff?)
+      result
+    end
+
+    context "assignment is for individuals" do
+      it "requires that the user owns the submission" do
+        allow(assignment).to receive(:is_individual?) { true }
+        allow(subject).to receive(:add_requirements) { "ignore this for rspec" }
+        expect(subject).to receive(:add_requirement).with :user_owns_submission?
+        result
+      end
+    end
+
+    context "assignment is for groups" do
+      it "does not require that the user owns the submission" do
+        allow(assignment).to receive(:is_individual?) { false }
+        expect(subject).not_to receive(:add_requirement)
+          .with :user_owns_submission?
+        result
+      end
+    end
+
+    context "assignment has groups" do
+      it "adds the group requirements" do
+        allow(assignment).to receive(:has_groups?) { true }
+        expect(subject).to receive(:add_group_requirements)
+        result
+      end
+    end
+
+    context "assignment does not have groups" do
+      it "does not add the group requirements" do
+        allow(assignment).to receive(:has_groups?) { false }
+        expect(subject).not_to receive(:add_group_requirements)
+        result
+      end
+    end
+  end
+
+  describe "#add_group_requirements" do
+    it "adds the group requirements" do
+      expect(subject).to receive(:add_requirements)
+        .with(:user_has_group_for_assignment?, :user_group_owns_submission?)
+      subject.add_group_requirements
+    end
+  end
+
+end
