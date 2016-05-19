@@ -3,19 +3,14 @@ require "active_record_spec_helper"
 require "./app/services/creates_earned_badge/creates_earned_badge"
 
 describe Services::Actions::CreatesEarnedBadge do
-  let(:assignment) { create :assignment, course: course }
-  let(:badge) { create :badge, course: course }
-  let(:course) { create :course }
-  let(:course_membership) { create :student_course_membership, course: course }
-  let(:grade) { create :grade, course: course, student: student }
-  let(:student) { course_membership.user }
+  let(:world) { World.create.with(:course, :assignment, :student, :badge, :grade) }
 
   let(:attributes) do
     {
-      student_id: student.id,
-      badge_id: badge.id,
-      assignment_id: assignment.id,
-      grade_id: grade.id,
+      student_id: world.student.id,
+      badge_id: world.badge.id,
+      assignment_id: world.assignment.id,
+      grade_id: world.grade.id,
       score: 800,
       student_visible: true,
       feedback: "You are so awesome!"
