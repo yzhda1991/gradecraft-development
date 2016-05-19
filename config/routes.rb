@@ -115,7 +115,6 @@ GradeCraft::Application.routes.draw do
   resources :unlock_conditions
 
   # earned badges grade routes
-  post "grades/earn_student_badge", to: "grades#earn_student_badge"
   post "grade/:grade_id/earn_student_badges", to: "grades#earn_student_badges"
   delete "grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id", to: "grades#delete_earned_badge"
   delete "grade/:grade_id/earned_badges", to: "grades#delete_all_earned_badges"
@@ -365,6 +364,9 @@ GradeCraft::Application.routes.draw do
 
     # levels
     resources :levels, only: :update
+
+    # earned badges
+    resources :earned_badges, only: :create
 
     #17b. Predictor, Student View
     resources :predicted_earned_badges, only: [:index, :update]

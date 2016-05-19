@@ -9,7 +9,7 @@
       @student_id = attrs.student_id
       @assignment_id = attrs.assignment_id
       @releaseNecessary = attrs.assignment.release_necessary
-      console.log("Release Necessary: #{@releaseNecessary}")
+      @student_visible = attrs.student_visible
       @http = http
       @updated_at = null
 

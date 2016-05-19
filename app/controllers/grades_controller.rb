@@ -67,13 +67,6 @@ class GradesController < ApplicationController
     end
   end
 
-  # POST /grades/earn_student_badge
-  def earn_student_badge
-    @earned_badge = EarnedBadge.create params[:earned_badge]
-    logger.info @earned_badge.errors.full_messages
-    render json: @earned_badge
-  end
-
   # POST /grades/earn_student_badges
   def earn_student_badges
     @earned_badges = EarnedBadge.create params[:earned_badges]
@@ -208,7 +201,7 @@ class GradesController < ApplicationController
       end
 
       json.badges do
-        json.partial! "grades/badges", badges: @badges, student_id: @student[:id]
+        json.partial! "grades/badges", badges: @badges, student_id: @student.id
       end
 
       json.assignment do
