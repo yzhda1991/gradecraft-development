@@ -5,7 +5,7 @@ class SubmissionFileProctor
     @submission_file = submission_file
   end
 
-  def downloadable?(user:)
+  def downloadable_by?(user)
     conditions = proctor_conditions.for(:downloadable)
     conditions.satisfied_by?(user)
   end

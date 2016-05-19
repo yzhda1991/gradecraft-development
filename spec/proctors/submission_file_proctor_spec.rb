@@ -28,8 +28,8 @@ describe SubmissionFileProctor do
     end
   end
 
-  describe "#downloadable?" do
-    let(:result) { subject.downloadable? user: user }
+  describe "#downloadable_by?" do
+    let(:result) { subject.downloadable_by? user }
     let(:user) { double(:user) }
     let(:downloadable_conditions) { double(:downloadable).as_null_object }
 
