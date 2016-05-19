@@ -1,13 +1,17 @@
 %p
   %span.smallcaps Attachments:
   %ul
-    - presenter.submission.submission_files.present.each_with_index do |submission_file, index|
+    -# give us a link to download existing files from the file dump
+    - presenter.present_submission_files.each_with_index do |submission_file, index|
       %li
-        - if submission_file.file_missing
-          -# if the file is missing don't print a link
-          %i.fa.fa-chain-broken.fa-fw
-          = "(missing) #{submission_file.instructor_filename(index)}"
-        - else
-          -# otherwise give us a link to download the file through the server
-          = external_link_to submission_file.instructor_filename(index),
-            download_submission_file_path(submission_file, index: index)
+        = external_link_to submission_file.instructor_filename(index),
+          download_submission_file_path(submission_file, index: index)
+
+
+  %span.smallcaps Missing Attachments:
+  %ul
+    -# otherwise don't render a link
+    - presenter.missing_submission_files.each_with_index do |submission_file, index|
+      %li
+        %i.fa.fa-chain-broken.fa-fw
+        = "#{submission_file.instructor_filename index + presenter.present_submission_files.count}"

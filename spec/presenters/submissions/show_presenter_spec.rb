@@ -265,7 +265,7 @@ describe Submissions::ShowPresenter do
     # @missing_submission_files ||= submission.submission_files.missing
     let(:result) { subject.missing_submission_files }
 
-    context "missinger has a submission" do
+    context "presenter has a submission" do
       before do
         allow(subject).to receive(:submission) { submission }
       end
@@ -290,7 +290,7 @@ describe Submissions::ShowPresenter do
       end
     end
 
-    context "missinger has no submission" do
+    context "presenter has no submission" do
       before do
         allow(subject).to receive(:submission) { nil }
       end
