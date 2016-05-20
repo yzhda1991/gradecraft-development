@@ -14,7 +14,6 @@
 
     $scope.rawScoreUpdating = false
     $scope.hasChanges = false
-    $scope.gradeStatuses = ["In Progress", "Graded", "Released"]
 
     # establish and populate all necessary collections for UI
     $scope.populateCollections(initData.badges, initData.assignment_score_levels)
