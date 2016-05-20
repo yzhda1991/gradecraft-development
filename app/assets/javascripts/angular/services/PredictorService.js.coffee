@@ -8,7 +8,8 @@
         challenges: ""
         weights: ""
     }
-    gradeLevels = {}
+    gradeSchemeElements = []
+    _totalPoints  = 0
     assignments = []
     assignmentTypes = []
     update = {}
@@ -27,9 +28,15 @@
       else
         'api/'
 
-    getGradeLevels = ()->
-      $http.get("predictor_grade_levels").success((data)->
-        angular.copy(data,gradeLevels)
+    totalPoints = ()->
+      _totalPoints
+
+    getGradeSchemeElements = ()->
+      $http.get("api/grade_scheme_elements").success((res)->
+        _.each(res.data, (gse)->
+          gradeSchemeElements.push(gse.attributes)
+        )
+        _totalPoints = res.meta.total_points
       )
 
     getAssignmentTypes = ()->
@@ -131,7 +138,7 @@
           )
 
     return {
-        getGradeLevels: getGradeLevels
+        getGradeSchemeElements: getGradeSchemeElements
         getAssignmentTypes: getAssignmentTypes
         getAssignmentTypeWeights: getAssignmentTypeWeights
         getAssignments: getAssignments
@@ -144,7 +151,8 @@
         assignments: assignments
         assignmentTypes: assignmentTypes
         weights: weights
-        gradeLevels: gradeLevels
+        gradeSchemeElements: gradeSchemeElements
+        totalPoints: totalPoints
         badges: badges
         challenges: challenges
         termFor: termFor
