@@ -344,8 +344,6 @@
     axis = d3.svg.axis().scale(scale).orient("bottom")
     g = svg.selectAll('g').data(gradeSchemeElements).enter().append('g')
             .attr("transform", (gse)->
-              console.log(scale(gse.low_range));
-              console.log(scale(gse.low_range));
               "translate(" + (scale(gse.low_range) + padding) + "," + 25 + " )")
             .on("mouseover", (gse)->
               d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "visible")

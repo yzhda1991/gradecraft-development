@@ -343,34 +343,25 @@ GradeCraft::Application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
 
-    # badges
+    resources :assignments, only: [] do
+      resources :criteria, only: :index
+      resources :students, only: [] do
+        resources :criterion_grades, only: :index
+        get "grade", to: 'grades#show'
+        put "criterion_grades", to: "criterion_grades#update"
+      end
+      resources :groups, only: [] do
+        get 'grades', to: 'grades#group_index'
+        put "criterion_grades", to: "criterion_grades#group_update"
+        get 'criterion_grades', to: 'criterion_grades#group_index'
+      end
+    end
+
     resources :badges, only: :index
-
-    #17a. API Rubric Calls
-
-    #criteria
-    get 'assignments/:assignment_id/criteria', to: 'criteria#index'
-
-    #criterion_grades
-    get 'assignments/:assignment_id/students/:student_id/criterion_grades', to: 'criterion_grades#index'
-    put "assignments/:assignment_id/students/:student_id/criterion_grades", to: "criterion_grades#update"
-    put "assignments/:assignment_id/groups/:group_id/criterion_grades", to: "criterion_grades#group_update"
-    get 'assignments/:assignment_id/groups/:group_id/criterion_grades', to: 'criterion_grades#group_index'
-
-    #grades
-    resources :grades, only: :update
-    get 'assignments/:assignment_id/students/:student_id/grade', to: 'grades#show'
-    get 'assignments/:assignment_id/groups/:group_id/grades', to: 'grades#group_index'
-
-    # levels
-    resources :levels, only: :update
-
-    # earned badges
     resources :earned_badges, only: :create
-
-    #17 Predictor
-
-    resources :grade_scheme_elements, only: [:index]
+    resources :grades, only: :update
+    resources :grade_scheme_elements, only: :index
+    resources :levels, only: :update
 
     #17b. Predictor, Student View
     resources :predicted_earned_badges, only: [:index, :update]
