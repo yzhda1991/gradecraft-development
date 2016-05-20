@@ -5,3 +5,9 @@
 = render :partial => "pages/subnav"
 
 %li= link_to "Blog", "http://blog.gradecraft.com", :target => "_blank"
+
+%li
+  = link_to "U-M Login", saml_init_path 
+
+%li
+  = link_to "GradeCraft Login", new_user_session_path
