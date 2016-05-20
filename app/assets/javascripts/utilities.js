@@ -106,5 +106,5 @@ $(".course-info-btn").click(function(){
 
 //Toggle public page mobile menu
 $(".btn-public-nav").click(function(){
-    $(".public-nav").toggle();
+    $(".public-nav").slideToggle();
 });
