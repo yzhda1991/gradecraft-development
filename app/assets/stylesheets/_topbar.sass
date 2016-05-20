@@ -15,6 +15,7 @@ a.site-title
   &.navbar
     width: 100%
 
+/* In app mobile left flyout menu styles */
 .layout-left-flyout
   height: 100%
   position: fixed
@@ -363,11 +364,15 @@ ul.subnav.logged-out
     padding: 1em 0
     margin: 0
     li
+      margin: .25em 0
       display: block
-      padding: .5em
-      font-size: 1.2em
-      a
+      span, a
+        padding: .5em
+        display: block
+        font-size: 1.1em
         color: $color-grey-2
+      span
+        background-color: rgba(255,255,255,.7)
 
   .gc-mark
     display: inline-block
