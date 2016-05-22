@@ -63,20 +63,20 @@ class Group < ActiveRecord::Base
   # Checking to make sure any constraints the instructor has set up around
   # min/max group members are honored
   def min_group_number_met
-    if self.students.to_a.count < course.min_group_size
+    if self.students.to_a.size < course.min_group_size
       errors.add :base, "You don't have enough group members."
     end
   end
 
   def max_group_number_not_exceeded
-    if self.students.to_a.count > course.max_group_size
+    if self.students.to_a.size > course.max_group_size
       errors.add :base, "You have too many group members."
     end
   end
 
   # Checking to make sure the group is actually working on an assignment
   def assignment_group_present
-    if self.assignment_groups.to_a.count == 0
+    if self.assignment_groups.to_a.size == 0
       errors.add :base, "You need to check off which #{(course.assignment_term).downcase} your #{(course.group_term).downcase} will work on."
     end
   end

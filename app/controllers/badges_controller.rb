@@ -62,7 +62,6 @@ class BadgesController < ApplicationController
     @badge.destroy
     redirect_to badges_path,
       notice: "#{@name} #{term_for :badge} successfully deleted"
-
   end
 
   private

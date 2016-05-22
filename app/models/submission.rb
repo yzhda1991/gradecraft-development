@@ -37,8 +37,10 @@ class Submission < ActiveRecord::Base
       .where.not(id: with_grade.where(grades: { status: ["Graded", "Released"] }))
   end
 
-  scope :resubmitted, -> { includes(:grade).where(grades: { status: ["Graded", "Released"] })
-                                           .where("grades.graded_at < submitted_at") }
+  scope :resubmitted, -> { includes(:grade)
+    .where(grades: { status: ["Graded", "Released"] })
+    .where("grades.graded_at < submitted_at")
+  }
   scope :order_by_submitted, -> { order("submitted_at ASC") }
   scope :for_course, ->(course) { where(course_id: course.id) }
   scope :for_student, ->(student) { where(student_id: student.id) }

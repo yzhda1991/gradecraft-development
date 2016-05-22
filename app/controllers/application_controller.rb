@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
 
   def not_authenticated
-    if request.env["REMOTE_USER"] != nil
+    if !request.env["REMOTE_USER"].nil?
       @user = User.find_by_username(request.env["REMOTE_USER"])
       if @user
         auto_login(@user)

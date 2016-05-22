@@ -126,7 +126,7 @@ class UnlockCondition < ActiveRecord::Base
   def check_if_badge_earned_enough_times_by_date(student)
     badge_count = student.earned_badges_for_badge_count(condition_id)
     if badge_count >= condition_value &&
-      (student.earned_badges.where(badge_id: condition_id).last.created_at < condition_date)
+      student.earned_badges.where(badge_id: condition_id).last.created_at < condition_date
       return true
     else
       return false
@@ -204,7 +204,7 @@ class UnlockCondition < ActiveRecord::Base
     grade = student.grade_for_assignment_id(condition_id).first
     if grade.present? && grade.feedback_read?
       if condition_date?
-        if (grade.feedback_read_at < condition_date)
+        if grade.feedback_read_at < condition_date
           return true
         else
           return false

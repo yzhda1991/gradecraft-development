@@ -47,7 +47,8 @@ class StudentAcademicHistoriesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to student_path(@student),
-          notice: "#{@student.name}'s Academic History Profile was successfully deleted" }
+          notice: "#{@student.name}'s Academic History Profile was successfully deleted"
+        }
     end
   end
 
