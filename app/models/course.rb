@@ -65,7 +65,6 @@ class Course < ActiveRecord::Base
     :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
     :assignments_attributes, :start_date, :end_date
 
-
   with_options dependent: :destroy do |c|
     c.has_many :student_academic_histories
     c.has_many :assignment_types

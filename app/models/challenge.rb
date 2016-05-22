@@ -45,7 +45,7 @@ class Challenge < ActiveRecord::Base
   end
 
   def future?
-    due_at != nil && due_at >= Date.today
+    !due_at.nil? && due_at >= Date.today
   end
 
   # TODO: should be removed

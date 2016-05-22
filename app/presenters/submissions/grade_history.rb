@@ -27,7 +27,7 @@ module Submissions::GradeHistory
       }
       .rename("SubmissionFile" => "Attachment")
       .include { |history|
-        if (history.changeset["object"] == "Grade" && only_student_visible_grades)
+        if history.changeset["object"] == "Grade" && only_student_visible_grades
           grade = history.version.reify
           GradeProctor.new(grade).viewable?
         else
