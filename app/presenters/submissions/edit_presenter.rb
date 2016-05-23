@@ -10,11 +10,8 @@ module Submissions
       if view_context.current_user.is_student?(course)
         "Editing My Submission for #{assignment.name}"
       else
-        if assignment.has_groups?
-          "Editing #{group.name}'s Submission"
-        else
-          "Editing #{student.name}'s Submission"
-        end
+        name = assignment.has_groups? ? group.name : student.name
+        "Editing #{name}'s Submission"
       end
     end
   end

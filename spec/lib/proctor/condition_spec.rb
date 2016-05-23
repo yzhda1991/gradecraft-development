@@ -1,4 +1,4 @@
-require 'proctor'
+require "proctor"
 
 describe Proctor::Condition do
   subject do

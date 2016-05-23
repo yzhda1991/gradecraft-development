@@ -14,4 +14,4 @@
     - presenter.missing_submission_files.each_with_index do |submission_file, index|
       %li
         %i.fa.fa-chain-broken.fa-fw
-        = "#{submission_file.instructor_filename index + presenter.present_submission_files.count}"
+        = submission_file.instructor_filename index + presenter.present_submission_files.count

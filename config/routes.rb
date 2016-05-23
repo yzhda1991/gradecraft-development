@@ -108,7 +108,9 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  get "submission_files/:id/download", to: "submission_files#download", as: "download_submission_file"
+  resources :submission_files, only: [] do
+    get :download
+  end
 
   resources :unlock_states do
     member do

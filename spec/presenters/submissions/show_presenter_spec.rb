@@ -1,4 +1,4 @@
-require 'active_record_spec_helper'
+require "active_record_spec_helper"
 require "active_support/inflector"
 require "./app/presenters/submissions/presenter"
 require "./app/presenters/submissions/grade_history"
