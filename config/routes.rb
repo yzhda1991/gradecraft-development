@@ -69,6 +69,7 @@ GradeCraft::Application.routes.draw do
       collection do
         get :download
         get :export
+        get :export_earned_levels
         get :import
         post :upload
         get :mass_edit
