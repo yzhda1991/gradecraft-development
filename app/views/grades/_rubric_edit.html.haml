@@ -1,5 +1,5 @@
 .pageContent
-  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl")
+  #rubric-grader(ng-app="gradecraft" ng-controller="GradeRubricCtrl" ng-init="init(#{rubric.assignment_id}, '#{scope_type}', #{scoped_id})")
     .row
       #rubric-heading.columns
         %h3.text-right

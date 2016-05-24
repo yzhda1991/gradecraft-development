@@ -1,24 +1,29 @@
 @gradecraft.controller 'GradeRubricCtrl', ['$scope', 'Restangular', 'RubricService', '$q', ($scope, Restangular, RubricService, $q) ->
 
-  $scope.assignment = RubricService.assignment
   $scope.courseBadges = RubricService.badges
   $scope.criteria = RubricService.criteria
   $scope.criterionGrades = RubricService.criterionGrades
   $scope.grade = RubricService.grade
   $scope.gradeStatusOptions = RubricService.gradeStatusOptions
 
-  RubricService.getAssignment(window.location)
-
   # Criterion factory is dependent on CriterionGrades existing in scope
-  $scope.init = ()->
-    $q.all([RubricService.getCriterionGrades($scope.assignment)])
+  $scope.init = (assignment_id, scope_type, scoped_id)->
+    $scope.assignment = {
+      id: assignment_id,
+      scope: {
+        type: scope_type,
+        id: scoped_id
+      }
+    }
+    $scope.services()
 
-  $scope.init().then(()->
-    RubricService.getCriteria($scope.assignment, $scope)
-  )
-
-  RubricService.getBadges()
-  RubricService.getGrade($scope.assignment)
+  $scope.services = () ->
+    promises = [
+      RubricService.getCriterionGrades($scope.assignment),
+      RubricService.getCriteria($scope.assignment, $scope),
+      RubricService.getBadges(),
+      RubricService.getGrade($scope.assignment)]
+    $q.all(promises)
 
   $scope.pointsPossible = ()->
     RubricService.pointsPossible()
