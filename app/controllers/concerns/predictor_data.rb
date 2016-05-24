@@ -69,6 +69,20 @@ module PredictorData
     end
   end
 
+  def predictor_assignment_types
+    current_course.assignment_types
+      .select(
+        :course_id,
+        :id,
+        :name,
+        :max_points,
+        :description,
+        :student_weightable,
+        :position,
+        :updated_at
+      )
+  end
+
   private
 
   def challenge_conditions_met?(student)

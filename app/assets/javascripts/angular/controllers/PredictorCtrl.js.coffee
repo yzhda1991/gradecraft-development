@@ -13,8 +13,7 @@
   $scope.services = ()->
     promises = [PredictorService.getGradeSchemeElements(),
                 PredictorService.getAssignments($scope.student_id),
-                PredictorService.getAssignmentTypes(),
-                PredictorService.getAssignmentTypeWeights(),
+                PredictorService.getAssignmentTypes($scope.student_id),
                 PredictorService.getBadges($scope.student_id),
                 PredictorService.getChallenges($scope.student_id)]
     return $q.all(promises)
@@ -134,7 +133,7 @@
       if assignmentType.student_weight > 0
         points = points * assignmentType.student_weight
       else
-        points = points * $scope.weights.default_weight
+        points = points * $scope.weights.default_assignment_weight
     points
 
   # FIX THIS ONE
