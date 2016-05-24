@@ -85,10 +85,14 @@ GradeCraft::Application.routes.draw do
       put :graded, on: :member
     end
 
+    resources :students, only: [], module: :assignments do
+      post :grade
+    end
+
     resources :submissions, except: :index
 
     # TODO: Use plural resource and move to assignments/grades where appropriate
-    resource :grade, only: [:edit, :update]
+    resource :grade, only: [:update]
 
     resource :rubric do
       get :existing_criteria
@@ -98,9 +102,8 @@ GradeCraft::Application.routes.draw do
     end
   end
 
-  resources :grades, only: [:show, :destroy] do
+  resources :grades, only: [:show, :destroy, :edit] do
     member do
-      get :edit2
       post :exclude
       post :feedback_read
       post :include

@@ -62,65 +62,24 @@ describe GradesController do
       end
     end
 
-    describe "GET edit2" do
+    describe "GET edit" do
       it "assigns grade parameters and renders edit" do
-        get :edit2, { id: @grade.id }
+        get :edit, { id: @grade.id }
         expect(assigns(:grade)).to eq(@grade)
         expect(assigns(:title)).to \
           eq("Editing #{@grade.student.name}'s Grade for #{@grade.assignment.name}")
         expect(response).to render_template(:edit)
       end
-    end
-
-    describe "GET edit" do
-      it "creates a grade if none present" do
-        assignment = create(:assignment, course: @course)
-        expect{get :edit, { assignment_id: assignment.id, student_id: @student.id }}.to change{Grade.count}.by(1)
-      end
-
-      it "assigns grade parameters and renders edit" do
-        get :edit, { assignment_id: @assignment.id, student_id: @student.id }
-        expect(assigns(:assignment)).to eq(@assignment)
-        expect(assigns(:student)).to eq(@student)
-        expect(assigns(:grade)).to eq(@grade)
-        expect(assigns(:title)).to eq("Editing #{@student.name}'s Grade for #{@assignment.name}")
-        expect(response).to render_template(:edit)
-      end
 
       context "with additional grade items" do
         it "assigns existing submissions, badges and score levels" do
-          assignment = create(:assignment, course: @course)
-          submission = create(:submission, student: @student, assignment: assignment)
+          submission = create(:submission, student: @student, assignment: @assignment)
           badge = create(:badge, course: @course)
-          score_level = create(:assignment_score_level, assignment: assignment)
 
-          get :edit, { assignment_id: assignment.id, student_id: @student.id }
+          get :edit, { id: @grade.id }
           expect(assigns(:submission)).to eq(submission)
           expect(assigns(:badges)).to eq([badge])
-          expect(assigns(:assignment_score_levels)).to eq([score_level])
         end
-      end
-
-      it "assigns json values for angular use" do
-        get :edit, { assignment_id: @assignment.id, student_id: @student.id }
-        json = JSON.parse(assigns(:serialized_init_data))
-        expect(json).to have_key("grade")
-        expect(json).to have_key("badges")
-        expect(json).to have_key("assignment")
-        expect(json).to have_key("assignment_score_levels")
-      end
-
-      it "if rubric present, assigns the rubric and rubric grades" do
-        allow(request).to receive(:referer).and_return("http://gradecraft.com/assignments/123")
-        assignment = create(:assignment, course: @course)
-        rubric = create(:rubric_with_criteria, assignment: assignment)
-        criterion = rubric.criteria.first
-        level = rubric.criteria.first.levels.first
-        criterion_grade = CriterionGrade.create( assignment_id: assignment.id, student_id: @student.id, criterion_id: criterion.id, level_id: level.id)
-        get :edit, { id: @grade.id, assignment_id: assignment.id, student_id: @student.id }
-        expect(assigns(:rubric)).to eq(rubric)
-        expect(JSON.parse(assigns(:criterion_grades))).to eq([{ "id" => criterion_grade.id, "criterion_id" => criterion.id, "level_id" => level.id, "comments" => nil }])
-        expect(assigns(:return_path)).to eq("/assignments/123?student_id=#{@student.id}")
       end
     end
 
@@ -195,7 +154,7 @@ describe GradesController do
       it "redirects on failure" do
         allow_any_instance_of(Grade).to receive(:update_attributes).and_return false
         put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: {}}
-        expect(response).to redirect_to(edit_assignment_grade_path(@assignment.id, student_id: @student.id))
+        expect(response).to redirect_to(edit_grade_path(@grade))
       end
     end
 
@@ -380,9 +339,7 @@ describe GradesController do
       end
 
       it "all redirect to root" do
-        [ Proc.new { get :edit, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
-          Proc.new { get :edit, {grade_id: @grade.id, assignment_id: @assignment.id }},
+        [ Proc.new { get :edit, {id: @grade.id }},
           Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, { id: @grade.id }},

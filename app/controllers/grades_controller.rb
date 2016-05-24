@@ -1,6 +1,6 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment, only: [:edit, :update]
+  before_filter :set_assignment, only: [:update]
   before_filter :ensure_staff?,
     except: [:feedback_read, :show, :predict_score, :async_update]
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
@@ -18,37 +18,13 @@ class GradesController < ApplicationController
     @title = "#{name}'s Grade for #{@grade.assignment.name}"
   end
 
-  def edit2
+  # GET /grades/:id/edit
+  def edit
     @grade = Grade.find params[:id]
     @title = "Editing #{@grade.student.name}'s Grade "\
       "for #{@grade.assignment.name}"
     @badges = @grade.student.earnable_course_badges_for_grade(@grade)
     @submission = @grade.student.submission_for_assignment(@grade.assignment)
-    render :edit
-  end
-
-  # GET /assignments/:assignment_id/grade/edit?student_id=:id
-  def edit
-    @student = current_student
-
-    @grade = Grade.find_or_create(@assignment.id, @student.id)
-    @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
-
-    @submission = @student.submission_for_assignment(@assignment)
-
-    @badges = @student.earnable_course_badges_for_grade(@grade)
-    @assignment_score_levels =
-      @assignment.assignment_score_levels.order_by_value
-
-    if @assignment.grade_with_rubric?
-      @rubric = @assignment.rubric
-      @criterion_grades = serialized_criterion_grades
-      # This is sent to the Angular controlled submit button
-      @return_path =
-        URI(request.referer).path + "?student_id=#{current_student.id}"
-    end
-
-    @serialized_init_data = serialized_init_data
   end
 
   # To avoid duplicate grades, we don't supply a create method. Update will
@@ -72,7 +48,7 @@ class GradesController < ApplicationController
       end
 
     else # failure
-      redirect_to edit_assignment_grade_path(@assignment, student_id: @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
+      redirect_to edit_grade_path(@grade), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
     end
   end
 
