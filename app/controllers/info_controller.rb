@@ -20,6 +20,7 @@ class InfoController < ApplicationController
   def earned_badges
     @title = "Awarded #{term_for :badges}"
     @teams = current_course.teams
+    @badges = current_course.badges
   end
 
   # Displaying all ungraded, graded but unreleased, and in progress assignment
