@@ -15,7 +15,34 @@
 #
 # This module should be included in a Conditions class that corresponds to the
 # Proctor that is using the set of conditions. For example a FooProctor class
-# might use a FooConditions class to handle its logical concerns.
+# might use a FooConditions class to handle its logical concerns:
+#
+# class FooProctor < Proctor
+#   def initialize(foo)
+#     @foo = foo
+#   end
+#
+#   def viewable_by?(user)
+#     FooConditions.new(foo).for(:show).satisfied_by? user
+#   end
+# end
+#
+# class FooConditions
+#   include Proctor::Conditions
+#
+#   def show_conditions
+#     add_requirement :foo_equals_bar
+#     add_override :bar_equals_bar
+#   end
+#
+#   def foo_equals_bar
+#     "foo" == "bar"
+#   end
+#
+#   def bar_equals_bar
+#     "bar" == "bar"
+#   end
+# end
 #
 module Proctor
   module Conditions
