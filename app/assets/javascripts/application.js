@@ -17,6 +17,7 @@
 //= require underscore
 //= require jquery.dynatable
 //= require dynatable
+//= require stacktable.min
 //= require lodash.min
 
 //= require angular/angular
