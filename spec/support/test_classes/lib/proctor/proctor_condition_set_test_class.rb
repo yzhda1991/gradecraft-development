@@ -1,5 +1,5 @@
-class ProctorConditionsTestClass
-  include Proctor::Conditions
+class ProctorConditionSetTestClass
+  include Proctor::ConditionSet
 
   defer_to_proctor :test_method
 

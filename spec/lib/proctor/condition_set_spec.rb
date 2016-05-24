@@ -1,9 +1,9 @@
 require "proctor"
-require_relative "../../support/test_classes/lib/proctor/proctor_conditions_test_class"
+require_relative "../../support/test_classes/lib/proctor/proctor_condition_set_test_class"
 
-describe Proctor::Conditions do
+describe Proctor::ConditionSet do
   # Proctor::Conditions is included in the test class
-  describe ProctorConditionsTestClass do
+  describe ProctorConditionSetTestClass do
     subject { described_class.new proctor: test_proctor}
     let(:test_proctor) { double(:test_proctor).as_null_object }
 
