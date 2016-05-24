@@ -63,4 +63,33 @@
         = link_to "See More Features", features_path, class: "outline-button"
         .clear
 
+  .feature-section.white.gameful
+    %h2.center Learn More About Gameful Pedagogy
+    .section-container
+      .quarter
+        .circle
+          = image_tag "book.png", :width => "100"
+        %br
+        %h4 What is Gameful?
+        %p Learn more about the core elements of gameful learning
+        = link_to "Read More", "http://gamefulpedagogy.com/what-is-gameful", :target => "_blank"
+      .quarter
+        = image_tag "getting-started.png", :width => "100"
+        %br
+        %h4 Getting Started
+        %p Learn how to implement gameful design in your course
+        = link_to "Get Started", "http://gamefulpedagogy.com/getting-started", :target => "_blank"
+      .quarter
+        = image_tag "FAQs.png", :width => "100"
+        %br
+        %h4 FAQs
+        %p Frequently asked questions about gameful pedagogy
+        = link_to "Find your question", "http://gamefulpedagogy.com/faqs", :target => "_blank"
+      .quarter
+        = image_tag "example-syllabi.png", :width => "100"
+        %br
+        %h4 Example Syllabi
+        %p Example syllabi from courses using gameful pedagogy
+        = link_to "View examples", "http://gamefulpedagogy.com/example-syllabi", :target => "_blank"
+
 = render "newsletter_signup"
