@@ -41,13 +41,22 @@ module Proctor
     end
 
     # call the method on the conditions set to build out the requirements
-    # used for the given method
+    # used for the given method. Example: using the condition set for bar on
+    # an instance of FooConditions should look like:
+    #
+    # FooConditions.new.for(:bar)
+    #
     def for(condition_set)
       reset_conditions
       send "#{condition_set}_conditions"
       self
     end
 
+    # Runs the checks for requirements and overrides to determine the final
+    # outcome of the result set. The condition set should be considered as being
+    # passed if all requirements are true or there are overrides that have
+    # succeeded, which preclude the need for checking requirements.
+    #
     def satisfied_by?(user)
       @user = user
       requirements_passed? || valid_overrides_present?
@@ -58,30 +67,46 @@ module Proctor
       @overrides = []
     end
 
+    # add a requirement for each method that has been listed in the
+    # add_requirements call
+    #
     def add_requirements(*requirement_names)
       requirement_names.each {|name| add_requirement name }
     end
 
+    # add a override for each method that has been listed in the
+    # add_overrides call
+    #
     def add_overrides(*override_names)
       override_names.each {|name| add_override name }
     end
 
+    # add a new requirement to the @requirements array on the given conditions
+    # set. The Proc created by the block won't be called until the requirements
+    # are checked later
+    #
     def add_requirement(requirement_name)
       @requirements << Proctor::Requirement.new(name: requirement_name) do
         send(requirement_name)
       end
     end
 
+    # add a new override to the @overrides array on the given conditions
+    # set. The Proc created by the block won't be called until the overrides
+    # are checked later
+    #
     def add_override(override_name)
       @overrides << Proctor::Override.new(name: override_name) do
         send(override_name)
       end
     end
 
+    # check whether all of the requirements in @requirements have passed
     def requirements_passed?
       requirements.all? {|requirement| requirement.passed? }
     end
 
+    # check whether all of the overrides in @overrides have passed
     def valid_overrides_present?
       overrides.any? {|override| override.passed? }
     end
