@@ -1,31 +1,55 @@
 require "rails_spec_helper"
 
 describe SubmissionsController do
+  subject { described_class.new }
+
   before(:all) do
     @course = create(:course)
     @student = create(:user)
     @student.courses << @course
     @assignment = create(:assignment, course: @course)
   end
+
   before(:each) do
     session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
   end
+
+  let(:ability) { Object.new.extend(CanCan::Ability) }
 
   context "as a professor" do
     before(:all) do
       @professor = create(:user)
       CourseMembership.create user: @professor, course: @course, role: "professor"
     end
+
     before(:each) do
       @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
       login_user(@professor)
     end
 
     describe "GET show" do
+      let(:submission) { double(Submission) }
+
+      before do
+        allow_any_instance_of(Submissions::ShowPresenter).to receive(:submission)
+          .and_return submission
+      end
+
+      before(:each) do
+        ability.can :read, submission
+        allow(subject).to receive(:current_ability) { ability }
+      end
+
       it "returns the submission show page" do
         get :show, {id: @submission.id, assignment_id: @assignment.id}
         expect(response).to render_template(:show)
+      end
+
+      it "builds a show presenter with the presenter attrs" do
+        allow(subject).to receive(:presenter_attrs_with_id) { { some: "attrs" } }
+        expect(Submissions::ShowPresenter).to receive(:new).with({ some: "attrs" })
+        subject.show
       end
     end
 
