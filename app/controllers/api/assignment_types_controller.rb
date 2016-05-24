@@ -1,4 +1,5 @@
 class API::AssignmentTypesController < ApplicationController
+<<<<<<< HEAD
   include PredictorData
 
   # GET api/assignment_types
