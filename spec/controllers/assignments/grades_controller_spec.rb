@@ -61,9 +61,15 @@ describe Assignments::GradesController do
       end
     end
 
-    describe "GET export_earned_levels", focus: true do
-      it "returns sample csv data" do
+    describe "GET export_earned_levels" do
+      it "returns example earned levels data" do
+        rubric = create(:rubric_with_criteria, assignment: @assignment)
+        rubric.criteria.each do |criterion|
+          level = Level.create(criterion_id: criterion.id, name: "Sushi Success", points: 2000)
+          CriterionGrade.create(criterion: criterion, level_id: level.id, student: @student, points: 2000, assignment: @assignment)
+        end
         get :export_earned_levels, assignment_id: @assignment, format: :csv
+
         expect(response.body).to \
           include("First Name,Last Name,Email,Username,Team")
       end

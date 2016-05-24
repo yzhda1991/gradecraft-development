@@ -1,4 +1,4 @@
-class RubricGradesExporter
+class CriterionGradesExporter
   def export(course, rubric)
     CSV.generate do |csv|
       csv << gradebook_columns(rubric)

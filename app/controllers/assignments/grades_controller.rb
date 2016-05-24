@@ -64,7 +64,7 @@ class Assignments::GradesController < ApplicationController
     assignment = current_course.assignments.find(params[:assignment_id])
     respond_to do |format|
       format.csv do
-        send_data RubricGradesExporter.new.export assignment.course,
+        send_data CriterionGradesExporter.new.export assignment.course,
           assignment.rubric
       end
     end

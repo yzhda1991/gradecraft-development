@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-describe GradesController, focus: true do
+describe GradesController do
   include PredictorEventJobsToolkit
 
   before(:all) do
