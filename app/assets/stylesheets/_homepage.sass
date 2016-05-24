@@ -36,6 +36,15 @@
   .feature-overview
     height: auto
 
+    i
+      float: left
+      margin-top: -.25rem
+      display: inline
+      font-size: 2.5rem
+      padding-right: .25rem
+
+      color: $color-blue-3
+
   .feature-section
     padding: 2rem 2rem 4rem
 
@@ -76,15 +85,6 @@
     h4
       margin-bottom: .5rem
 
-    i
-      float: left
-      margin-top: -.25rem
-      display: inline
-      font-size: 2.5rem
-      padding-right: .25rem
-
-      color: $color-blue-3
-
     .half
       width: 50%
 
@@ -100,18 +100,26 @@
         height: 150px
         border-radius: 50%
         margin: 0 auto
+        position: relative
         
         &.what-is-gameful
           background-color: $color-blue-3
         
         &.getting-started
-          background-color: $color-green-2
+          background-color: #B8E986
           
         &.faq
           background-color: $color-blue-4
           
         &.example-syllabi
-          background-color: $color-orange-1
+          background-color: #feb130
+        
+        img
+          position: absolute
+          top: 50%
+          left: 50%
+          margin-right: -50%;
+          transform: translate(-50%, -50%)
 
       h4
         margin-top: .75rem
@@ -119,9 +127,12 @@
         font-size: 120%
 
       p
-        margin: 0
+        margin: 0 0 1em 0
         line-height: 150%
         font-size: .8rem
+
+    &.pedagogy p
+      padding: 0 1em
 
 a.outline-button
   border-radius: .2rem
