@@ -74,27 +74,33 @@
         %p Learn more about the core elements of gameful learning
         = link_to "http://gamefulpedagogy.com/what-is-gameful", :target => "_blank" do
           Read more
-          glyph("long-arrow-right")
+          = glyph("long-arrow-right")
       .quarter
         .circle.getting-started
           = image_tag "getting-started.png", :width => "100"
         %br
         %h4 Getting Started
         %p Learn how to implement gameful design in your course
-        = link_to glyph("long-arrow-right") + "Get Started", "http://gamefulpedagogy.com/getting-started", :target => "_blank"
+        = link_to "http://gamefulpedagogy.com/getting-started", :target => "_blank" do
+          Get Started
+          = glyph("long-arrow-right")
       .quarter
         .circle.faq
           = image_tag "faq.png", :width => "100"
         %br
         %h4 FAQs
         %p Frequently asked questions about gameful pedagogy
-        = link_to glyph("long-arrow-right") + "Find your question", "http://gamefulpedagogy.com/faqs", :target => "_blank"
+        = link_to "http://gamefulpedagogy.com/faqs", :target => "_blank" do
+          Find your question
+          = glyph("long-arrow-right")
       .quarter
         .circle.example-syllabi
           = image_tag "example-syllabi.png", :width => "100"
         %br
         %h4 Example Syllabi
         %p Example syllabi from courses using gameful pedagogy
-        = link_to glyph("long-arrow-right") + "View examples", "http://gamefulpedagogy.com/example-syllabi", :target => "_blank"
+        = link_to "http://gamefulpedagogy.com/example-syllabi", :target => "_blank" do
+          View examples
+          = glyph("long-arrow-right")
 
 = render "newsletter_signup"
