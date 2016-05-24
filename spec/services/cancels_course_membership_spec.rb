@@ -23,7 +23,7 @@ describe Services::CancelsCourseMembership do
     end
 
     it "destroys the assignment weights for the student and course" do
-      expect(Services::Actions::DestroysAssignmentWeights).to \
+      expect(Services::Actions::DestroysAssignmentTypeWeights).to \
         receive(:execute).and_call_original
       described_class.for_student membership
     end

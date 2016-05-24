@@ -45,7 +45,7 @@ class AssignmentTypeWeightsController < ApplicationController
     assignment_type = current_course.assignment_types.find(params[:id])
     weight = params[:weight]
     if assignment_type && weight && assignment_type.student_weightable?
-      assignment_type_weight = AssignmentTypeWeight.new(current_student,
+      assignment_type_weight = AssignmentTypeWeightStruct.new(current_student,
         assignment_type)
       assignment_type_weight.weight = weight
     end

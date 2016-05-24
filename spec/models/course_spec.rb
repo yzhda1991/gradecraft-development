@@ -597,8 +597,8 @@ describe Course do
     it "sums the assignment weights the student has spent" do
       student = create(:user)
       student.courses << subject
-      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
-      assignment_weight_2 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
+      assignment_weight_2 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       expect(subject.assignment_weight_for_student(student)).to eq(4)
     end
   end
@@ -608,7 +608,7 @@ describe Course do
       subject.total_assignment_weight = 4
       student = create(:user)
       student.courses << subject
-      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       expect(subject.assignment_weight_spent_for_student(student)).to eq(false)
     end
 
@@ -616,8 +616,8 @@ describe Course do
       subject.total_assignment_weight = 4
       student = create(:user)
       student.courses << subject
-      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
-      assignment_weight_2 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
+      assignment_weight_2 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       expect(subject.assignment_weight_spent_for_student(student)).to eq(true)
     end
   end

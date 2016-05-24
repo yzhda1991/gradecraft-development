@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160527024024) do
+ActiveRecord::Schema.define(version: 20160530000000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,18 @@ ActiveRecord::Schema.define(version: 20160527024024) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
+
+  create_table "assignment_type_weights", force: :cascade do |t|
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "student_id",         null: false
+    t.integer  "assignment_type_id", null: false
+    t.integer  "weight",             null: false
+    t.integer  "course_id"
+  end
+
+  add_index "assignment_type_weights", ["course_id"], name: "index_assignment_type_weights_on_course_id", using: :btree
+  add_index "assignment_type_weights", ["student_id", "assignment_type_id"], name: "index_weights_on_student_and_assignment_type", using: :btree
 
   create_table "assignment_types", force: :cascade do |t|
     t.string   "name",               limit: 255

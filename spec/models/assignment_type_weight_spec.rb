@@ -2,38 +2,44 @@ require "active_record_spec_helper"
 
 describe AssignmentTypeWeight do
 
-  describe "#weight" do 
+  let(:student) { create(:user) }
 
-    it "returns the value of the first assignment weight in the type for the student if present" do 
+  let(:subject) { create(:assignment_type_weight, student: student) }
+
+  context "validations" do
+
+    it "is valid with a student, assignment, assignment_type, a weight, and course" do
+      expect(subject).to be_valid
+    end
+
+    it "is invalid without a student" do
+      subject.student = nil
+      expect(subject).to be_invalid
+    end
+
+    it "is invalid without a weight" do
+      subject.weight = nil
+      expect(subject).to be_invalid
+    end
+  end
+
+  describe ".for_course" do
+    it "returns all assignment weights for a specific course" do
       course = create(:course)
-      assignment_type = create(:assignment_type, course: course)
+      course_assignment_type_weight = create(:assignment_type_weight, course: course)
+      another_assignment_type_weight = create(:assignment_type_weight)
+      results = AssignmentTypeWeight.for_course(course)
+      expect(results).to eq [course_assignment_type_weight]
+    end
+  end
+
+  describe ".for_student" do
+    it "returns all assignment weights for a specific student" do
       student = create(:user)
-      assignment_weight = create(:assignment_weight, student: student, assignment_type: assignment_type, course: course, weight: 3)
-      subject = AssignmentTypeWeight.new(student, assignment_type)
-
-      expect(subject.weight).to eq(3)
-    end 
+      student_assignment_type_weight = create(:assignment_type_weight, student: student)
+      another_assignment_type_weight = create(:assignment_type_weight)
+      results = AssignmentTypeWeight.for_student(student)
+      expect(results).to eq [student_assignment_type_weight]
+    end
   end
-
-  describe "#assignment_type_id" do
-    it "returns the value of the first assignment weight in the type for the student if present" do 
-      course = create(:course)
-      assignment_type = create(:assignment_type, course: course)
-      student = create(:user)
-      assignment_weight = create(:assignment_weight, student: student, assignment_type: assignment_type, course: course, weight: 3)
-      subject = AssignmentTypeWeight.new(student, assignment_type)
-
-      expect(subject.assignment_type_id).to eq(assignment_type.id)
-    end 
-  end
-
-  describe "#save" do
-    # if valid?
-    #   save_assignment_weights
-    #   true
-    # else
-    #   false
-    # end
-  end
-
 end

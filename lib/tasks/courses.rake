@@ -37,9 +37,9 @@ namespace :courses do
     end
     remove_orphans criterion_grades, CriterionGrade, dry_run
 
-    # AssignmentWeights
-    remove_orphans collect_orphans(memberships, AssignmentWeight.all),
-      AssignmentWeight, dry_run
+    # AssignmentTypeWeights
+    remove_orphans collect_orphans(memberships, AssignmentTypeWeight.all),
+      AssignmentTypeWeight, dry_run
 
     # EarnedBadges
     remove_orphans collect_orphans(memberships, EarnedBadge.all),

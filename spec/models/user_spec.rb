@@ -550,21 +550,6 @@ describe User do
     #   end
   end
 
-  describe "#weight_for_assignment(assignment)" do
-    let(:student) { create :user }
-
-    before do
-      create(:course_membership, user: student, course: course)
-    end
-
-    it "should return a student's assigned weight for an assignment" do
-      assignment_type = create(:assignment_type, course: course)
-      assignment = create(:assignment, assignment_type: assignment_type, course: course)
-      create(:assignment_weight, student: student, course: course, assignment: assignment, weight: 3)
-      expect(student.weight_for_assignment(assignment)).to eq(3)
-    end
-  end
-
   describe "#weight_for_assignment_type(assignment_type)" do
     let(:student) { create :user }
 
@@ -575,7 +560,7 @@ describe User do
     it "should return a student's assigned weight for an assignment type" do
       assignment_type = create(:assignment_type, course: course)
       assignment = create(:assignment, assignment_type: assignment_type, course: course)
-      create(:assignment_weight, student: student, course: course, assignment: assignment, weight: 3)
+      create(:assignment_type_weight, student: student, course: course, assignment_type: assignment_type, weight: 3)
       expect(student.weight_for_assignment_type(assignment_type)).to eq(3)
     end
   end
@@ -595,8 +580,8 @@ describe User do
       assignment_type_2 = create(:assignment_type, course: course, student_weightable: true)
       assignment = create(:assignment, course: course, assignment_type: assignment_type)
       assignment_2 = create(:assignment, course: course, assignment_type: assignment_type_2)
-      create(:assignment_weight, student: student, course: course, assignment: assignment, weight: 4)
-      create(:assignment_weight, student: student, course: course, assignment: assignment_2, weight: 2)
+      create(:assignment_type_weight, student: student, course: course, assignment_type: assignment_type, weight: 4)
+      create(:assignment_type_weight, student: student, course: course, assignment_type: assignment_type_2, weight: 2)
       expect(student.weight_spent?(course)).to eq(true)
     end
   end
@@ -618,9 +603,9 @@ describe User do
       assignment = create(:assignment, course: course, assignment_type: assignment_type)
       assignment_2 = create(:assignment, course: course, assignment_type: assignment_type_2)
       assignment_3 = create(:assignment, course: course, assignment_type: assignment_type_3)
-      assignment_weight_1 = create(:assignment_weight, student: student, assignment: assignment, weight: 2)
-      assignment_weight_2 = create(:assignment_weight, student: student, assignment: assignment_2, weight: 2)
-      assignment_weight_3 = create(:assignment_weight, student: student, assignment: assignment_3, weight: 2)
+      assignment_weight_1 = create(:assignment_type_weight, student: student, assignment_type: assignment_type, weight: 2)
+      assignment_weight_2 = create(:assignment_type_weight, student: student, assignment_type: assignment_type_2, weight: 2)
+      assignment_weight_3 = create(:assignment_type_weight, student: student, assignment_type: assignment_type_3, weight: 2)
       expect(student.total_weight_spent(course)).to eq(6)
     end
   end
@@ -633,7 +618,7 @@ describe User do
     end
 
     it "should return true if the student has weighted assignments" do
-      create(:assignment_weight, student: student, course: course)
+      create(:assignment_type_weight, student: student, course: course)
       expect(student.weighted_assignments?(course)).to eq(true)
     end
 
@@ -647,9 +632,9 @@ describe User do
 
     before do
       create(:course_membership, user: student, course: course)
-      create(:assignment_weight, student: student, course: course)
-      create(:assignment_weight, student: student, course: course)
-      create(:assignment_weight, student: student, course: course)
+      create(:assignment_type_weight, student: student, course: course)
+      create(:assignment_type_weight, student: student, course: course)
+      create(:assignment_type_weight, student: student, course: course)
     end
 
     it "should return the summed weight count for a course, for a student" do

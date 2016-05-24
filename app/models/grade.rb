@@ -114,7 +114,7 @@ class Grade < ActiveRecord::Base
   end
 
   def assignment_weight
-    assignment.weight_for_student(student)
+    assignment_type.weight_for_student(student)
   end
 
   def has_feedback?

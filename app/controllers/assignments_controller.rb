@@ -61,7 +61,6 @@ class AssignmentsController < ApplicationController
   def create
     assignment = current_course.assignments.new(params[:assignment])
     if assignment.save
-      set_assignment_weights(assignment)
       redirect_to assignment_path(assignment), notice: "#{(term_for :assignment).titleize} #{assignment.name} successfully created" and return
     end
 
@@ -76,7 +75,6 @@ class AssignmentsController < ApplicationController
   def update
     assignment = current_course.assignments.find(params[:id])
     if assignment.update_attributes(params[:assignment])
-      set_assignment_weights(assignment)
       respond_to do |format|
         format.html {
           redirect_to assignments_path,
@@ -114,20 +112,5 @@ class AssignmentsController < ApplicationController
     respond_to do |format|
       format.csv { send_data AssignmentExporter.new.export current_course }
     end
-  end
-
-  private
-
-  def set_assignment_weights(assignment)
-    return unless assignment.student_weightable?
-    assignment.weights = current_course.students.map do |student|
-      assignment_weight =
-        assignment.weights.where(student: student).first ||
-          assignment.weights.new(student: student)
-      assignment_weight.weight =
-        assignment.assignment_type.weight_for_student(student)
-      assignment_weight
-    end
-    assignment.save
   end
 end

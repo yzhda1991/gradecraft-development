@@ -36,10 +36,6 @@ class Assignment < ActiveRecord::Base
   # For instances where the assignment needs its own unique score levels
   score_levels :assignment_score_levels, -> { order "value" }, dependent: :destroy
 
-  # This is the assignment weighting system (students decide how much
-  # assignments will be worth for them)
-  has_many :weights, class_name: "AssignmentWeight", dependent: :destroy
-
   # Student created groups, can connect to multiple assignments and receive
   # group level or individualized feedback
   has_many :assignment_groups, dependent: :destroy
@@ -132,7 +128,7 @@ class Assignment < ActiveRecord::Base
   # course doesn't have weights
   def weight_for_student(student, weight = nil)
     return 1 unless student_weightable?
-    weight ||= (weights.where(student: student).pluck("weight").first || 0)
+    weight ||= (assignment_type.weights.where(student: student).pluck("weight").first || 0)
     weight > 0 ? weight : course.default_assignment_weight
   end
 

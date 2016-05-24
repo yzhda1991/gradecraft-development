@@ -150,7 +150,7 @@ GradeCraft::Application.routes.draw do
   put "assignment_type_weights" => "assignment_type_weights#mass_update"
   post "assignment_type_weight" => "assignment_type_weights#update"
 
-  resources :assignment_weights
+  resources :assignment_type_weights
 
   #6. Badges
   resources :badges do

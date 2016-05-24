@@ -267,7 +267,7 @@ class Course < ActiveRecord::Base
   end
 
   def assignment_weight_for_student(student)
-    student.assignment_weights.where(course_id: self.id).pluck("weight").sum
+    student.assignment_type_weights.where(course_id: self.id).pluck("weight").sum
   end
 
   def assignment_weight_spent_for_student(student)

@@ -1,39 +1,20 @@
-class AssignmentTypeWeight < Struct.new(:student, :assignment_type)
-  extend ActiveModel::Naming
-  include ActiveModel::Conversion
-  include ActiveModel::Validations
+class AssignmentTypeWeight < ActiveRecord::Base
+  attr_accessible :assignment_type_id, :course_id, :student_id,:weight
 
-  attr_accessor :weight
+  belongs_to :student, class_name: "User", touch: true
+  belongs_to :assignment_type
+  belongs_to :course
 
-  def weight
-    @weight ||= assignment_type.assignment_weights.where(student: student).first.try(:weight) || 0
-  end
+  before_validation :cache_associations
 
-  def assignment_type_id
-    assignment_type.id
-  end
+  validates_presence_of :student, :assignment_type, :course, :weight
 
-  def save
-    if valid?
-      save_assignment_weights
-      true
-    else
-      false
-    end
-  end
-
-  def persisted?
-    false
-  end
+  scope :for_course, ->(course) { where(course_id: course.id) }
+  scope :for_student, ->(student) { where(student_id: student.id) }
 
   private
 
-  def save_assignment_weights
-    assignment_type.assignments.each do |assignment|
-      assignment_weight = assignment.weights.where(student: student).first_or_initialize
-      assignment_weight.weight = weight
-      assignment_weight.save!
-      assignment.grades.where(student: student).each {|grade| grade.save!}
-    end
+  def cache_associations
+    self.course_id ||= assignment_type.try(:course_id)
   end
 end
