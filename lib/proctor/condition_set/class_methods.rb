@@ -1,6 +1,6 @@
 module Proctor
-  module Conditions
-    module ClassMethods
+  module ConditionSet
+    module Defer
       # this will help our conditions set defer specific methods to the included
       # Proctor class so we don't have to re-define all of these relationships
       # in the conditions set in order to make the comparison

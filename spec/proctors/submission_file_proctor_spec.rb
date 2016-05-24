@@ -1,5 +1,5 @@
 require "proctor"
-require_relative "../../app/proctors/conditions/submission_file_conditions.rb"
+require_relative "../../app/proctors/condition_set/submission_file_condition_set.rb"
 require_relative "../../app/proctors/submission_file_proctor.rb"
 
 describe SubmissionFileProctor do
@@ -12,7 +12,7 @@ describe SubmissionFileProctor do
   end
 
   let(:proctor_conditions) do
-    Proctors::SubmissionFileConditions.new proctor: subject
+    Proctors::SubmissionFileConditionSet.new proctor: subject
   end
 
   describe "readable attributes" do
@@ -52,21 +52,21 @@ describe SubmissionFileProctor do
   describe "#proctor_conditions" do
     let(:result) { subject.proctor_conditions }
 
-    # @proctor_conditions ||= Proctors::SubmissionFileConditions.new(proctor: self)
+    # @proctor_conditions ||= Proctors::SubmissionFileConditionSet.new(proctor: self)
     it "builds a new set of conditions for the submission file proctor" do
-      expect(Proctors::SubmissionFileConditions).to receive(:new)
+      expect(Proctors::SubmissionFileConditionSet).to receive(:new)
         .with(proctor: subject)
       result
     end
 
     it "caches the proctor_conditions" do
       result
-      expect(Proctors::SubmissionFileConditions).not_to receive(:new)
+      expect(Proctors::SubmissionFileConditionSet).not_to receive(:new)
       result
     end
 
     it "sets the proctor conditions to @proctor_conditions" do
-      allow(Proctors::SubmissionFileConditions).to receive(:new) { "stuff" }
+      allow(Proctors::SubmissionFileConditionSet).to receive(:new) { "stuff" }
       result
       expect(subject.instance_variable_get :@proctor_conditions).to eq "stuff"
     end

@@ -27,8 +27,8 @@
 #   end
 # end
 #
-# class FooConditions
-#   include Proctor::Conditions
+# class FooConditionSet
+#   include Proctor::ConditionSet
 #
 #   def show_conditions
 #     add_requirement :foo_equals_bar
@@ -45,7 +45,7 @@
 # end
 #
 module Proctor
-  module Conditions
+  module ConditionSet
     # requirements and overrides will be arrays of Requirement and Override
     # objects respectively. user will be the user against which we're testing
     # the requirements and overrides.
@@ -64,7 +64,7 @@ module Proctor
 
     def self.included(base)
       # include additional class methods that can be used in the included class
-      base.extend(Proctor::Conditions::ClassMethods)
+      base.extend(Proctor::ConditionSet::Defer)
     end
 
     # call the method on the conditions set to build out the requirements

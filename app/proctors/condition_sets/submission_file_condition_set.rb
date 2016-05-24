@@ -1,6 +1,6 @@
 module Proctors
-  class SubmissionFileConditions
-    include Proctor::Conditions
+  class SubmissionFileConditionSet
+    include Proctor::ConditionSet
 
     attr_accessor :group
 
