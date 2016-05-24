@@ -6,7 +6,8 @@ class World
   class Instance
     attr_reader :assignments, :badges, :challenges, :courses,
       :course_memberships, :criteria, :criterion_grades, :grades,
-      :grade_scheme_elements, :groups, :rubrics, :students, :teams, :users
+      :grade_scheme_elements, :groups, :rubrics, :students, :professors,
+      :teams, :users
 
     def assignment
       assignments.first
@@ -42,6 +43,14 @@ class World
 
     def group
       groups.first
+    end
+
+    def professors
+      course_memberships.select{ |cm| cm.role == "professor" }.map(&:user)
+    end
+
+    def professor
+      professors.first
     end
 
     def rubric
@@ -132,6 +141,15 @@ class World
     def create_group(attributes={})
       course = attributes.delete(:course) || self.course
       groups << FactoryGirl.create(:group, attributes.merge(course: course, approved: "Approved"))
+    end
+
+    def create_professor(attributes={})
+      course = attributes.delete(:course) || self.course
+      user = FactoryGirl.create(:user, attributes)
+      course_memberships << FactoryGirl.create(:course_membership, course: course,
+                                               user: user, role: "professor") if course
+      users << user
+      self
     end
 
     def create_rubric(attributes={})
