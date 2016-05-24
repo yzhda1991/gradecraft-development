@@ -14,24 +14,11 @@
 
   getAssignment = (location)->
     assignment.id = parseInt(location.pathname.split('/')[2])
-    # GRADING A STUDENT FOR AN ASSIGNMENT
-    if location.search.match(/student_id=/)
-      assignment.scope = {
-        type: "STUDENT",
-        id: parseInt(window.location.search.match(/student_id=(\d+)/)[1])
-      }
-    # GRADING A GROUP FOR AN ASSIGNMENT
-    else if location.pathname.split('/')[3] == "groups"
-      assignment.scope = {
-        type: "GROUP",
-        id: parseInt(location.pathname.split('/')[4])
-      }
     # DESIGNING A RUBRIC
-    else
-      assignment.scope = {
-        type: "DESIGN_MODE",
-        id: null
-      }
+    assignment.scope = {
+      type: "DESIGN_MODE",
+      id: null
+    }
 
   # TODO: $scope should not be passed around if we want to avoid tight coupling
   getCriteria = (assignment, $scope)->
