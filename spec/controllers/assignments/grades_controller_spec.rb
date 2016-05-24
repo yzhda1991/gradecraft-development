@@ -61,6 +61,14 @@ describe Assignments::GradesController do
       end
     end
 
+    describe "GET export_earned_levels", focus: true do
+      it "returns sample csv data" do
+        get :export_earned_levels, assignment_id: @assignment, format: :csv
+        expect(response.body).to \
+          include("First Name,Last Name,Email,Username,Team")
+      end
+    end
+
     describe "GET import" do
       it "displays the import page" do
         get :import, { assignment_id: @assignment.id}

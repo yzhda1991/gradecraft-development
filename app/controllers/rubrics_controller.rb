@@ -31,9 +31,7 @@ class RubricsController < ApplicationController
   def export
     assignment = current_course.assignments.find params[:assignment_id]
     rubric = assignment.rubric
-    respond_to do |format|
-      format.csv { send_data RubricExporter.new.export rubric }
-    end
+    send_data csv, RubricExporter.new.export rubric
   end
 
   private
