@@ -20,6 +20,6 @@ class Ability
     define_challenge_grade_abilities user, course
     define_grade_abilities user, course
     define_submission_abilities user, course
-    define_submission_file_abilities user, course
+    define_submission_file_abilities user
   end
 end
