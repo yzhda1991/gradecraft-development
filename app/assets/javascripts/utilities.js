@@ -108,3 +108,6 @@ $(".course-info-btn").click(function(){
 $(".btn-public-nav").click(function(){
     $(".public-nav").slideToggle();
 });
+
+//stacktable
+$(".dynatable").stacktable();
