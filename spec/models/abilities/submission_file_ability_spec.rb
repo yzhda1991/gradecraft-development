@@ -2,9 +2,8 @@ require "active_record_spec_helper"
 require "cancan/matchers"
 
 describe Ability do
-  subject { described_class.new(student, course) }
+  subject { described_class.new(student) }
 
-  let(:course) { student_course_membership.course }
   let(:student_course_membership) { create :student_course_membership }
   let(:student) { student_course_membership.user }
 
