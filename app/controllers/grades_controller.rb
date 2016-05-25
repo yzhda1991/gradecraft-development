@@ -38,8 +38,7 @@ class GradesController < ApplicationController
         GradeUpdaterJob.new(grade_id: grade.id).enqueue
       end
 
-      path = session[:return_to].present? ? session[:return_to] :
-        assignment_path(grade.assignment)
+      path = session[:return_to] || assignment_path(grade.assignment)
       redirect_to path,
         notice: "#{grade.student.name}'s #{grade.assignment.name} was successfully updated"
     else # failure
