@@ -5,7 +5,7 @@
     - presenter.present_submission_files.each_with_index do |submission_file, index|
       %li
         = external_link_to submission_file.instructor_filename(index),
-          download_submission_file_path(submission_file, index: index)
+          submission_file_download_path(submission_file, index: index)
 
 
   %span.smallcaps Missing Attachments:

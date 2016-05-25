@@ -18,7 +18,7 @@ describe SubmissionFilesController do
 
   context "user is authorized" do
     let(:course_membership) { CourseMembership.last }
-    let(:params) { { id: submission_file.id, index: 20 } }
+    let(:params) { { submission_file_id: submission_file.id, index: 20 } }
 
     before do
       create(:course_membership,
