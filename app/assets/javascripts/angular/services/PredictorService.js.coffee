@@ -19,7 +19,11 @@
     }
     badges = []
     challenges = []
-    icons = ["has_info", "is_required", "is_rubric_graded", "accepting_submissions", "has_submission", "has_threshold", "is_late", "closed_without_submission", "is_locked", "has_been_unlocked", "is_a_condition", "is_earned_by_group"]
+    icons = [
+      "has_info", "is_required", "is_rubric_graded","accepting_submissions",
+      "has_submission", "has_threshold", "is_late", "closed_without_submission",
+      "is_locked", "has_been_unlocked", "is_a_condition", "is_earned_by_group"
+    ]
     unusedWeights = null
 
     uri_prefix = (student_id)->
@@ -39,32 +43,36 @@
         _totalPoints = res.meta.total_points
       )
 
-    getAssignmentTypes = ()->
-      $http.get("predictor_assignment_types").success((data)->
-        angular.copy(data.assignment_types, assignmentTypes)
-        termFor.assignmentType = data.term_for_assignment_type
-      )
+    getAssignmentTypes = (student_id)->
+      $http.get(uri_prefix(student_id) + "assignment_types").success((res)->
+        _.each(res.data, (assignment_type)->
+          assignmentTypes.push(assignment_type.attributes)
+        )
+        termFor.assignmentType = res.meta.term_for_assignment_type
+        termFor.weights = res.meta.term_for_weights
+        update.weights = res.meta.update_weights
+        weights.open = !res.meta.assignment_weight_close_at ||
+          Date.parse(res.meta.assignment_weight_close_at) >= Date.now()
+        weights.total_assignment_weight = res.meta.total_assignment_weight
+        weights.assignment_weight_close_at = res.meta.assignment_weight_close_at
+        weights.max_assignment_weight = res.meta.max_assignment_weight
+        weights.max_assignment_types_weighted = res.meta.max_assignment_types_weighted
+        weights.default_assignment_weight = res.meta.default_assignment_weight
 
-    getAssignmentTypeWeights = ()->
-      $http.get("predictor_weights").success( (data)->
-        angular.copy(data.weights, weights)
-        termFor.weights = data.term_for_weights
-        weights.open = !weights.close_at || Date.parse(weights.close_at) >= Date.now()
-        update.weights = data.update_weights
         weights.unusedWeights = ()->
           used = 0
           _.each(assignmentTypes,(at)->
             if at.student_weightable
               used += at.student_weight
           )
-          weights.total_weights - used
+          weights.total_assignment_weight - used
         weights.unusedTypes = ()->
           types = 0
           _.each(assignmentTypes, (at)->
             if at.student_weight > 0
               types += 1
           )
-          weights.max_types_weighted - types
+          weights.max_assignment_types_weighted - types
         )
 
     getAssignments = (student_id)->
@@ -140,7 +148,6 @@
     return {
         getGradeSchemeElements: getGradeSchemeElements
         getAssignmentTypes: getAssignmentTypes
-        getAssignmentTypeWeights: getAssignmentTypeWeights
         getAssignments: getAssignments
         getBadges: getBadges
         getChallenges: getChallenges

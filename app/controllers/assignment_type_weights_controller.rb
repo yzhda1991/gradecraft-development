@@ -64,32 +64,6 @@ class AssignmentTypeWeightsController < ApplicationController
     end
   end
 
-  # Faculty have access to student weights, so we send the same information to
-  # the student and faculty predictor views
-  # Individual Student weighting is sent in on the assignment types
-  def predictor_data
-    if current_user.is_student?(current_course)
-      @student = current_student
-      @update_weights = true
-    elsif params[:id]
-      @student = User.find(params[:id])
-      @update_weights = false
-    else
-      @student = NullStudent.new
-      @update_weights = false
-    end
-    assignment_types =
-      current_course.assignment_types.select(:id, :student_weightable)
-    @assignment_types_weightable = assignment_types.each_with_object([]) {
-      |at, ary| ary << at.id if at.student_weightable?
-    }
-    @total_weights =  current_course.try(:total_assignment_weight)
-    @close_at =  current_course.try(:assignment_weight_close_at)
-    @max_weights =  current_course.max_assignment_weight
-    @max_types_weighted =  current_course.max_assignment_types_weighted
-    @default_weight =  current_course.default_assignment_weight
-  end
-
   private
 
   def student_params

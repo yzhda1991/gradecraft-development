@@ -117,27 +117,6 @@ class AssignmentTypesController < ApplicationController
     }
   end
 
-  def predictor_data
-    if current_user.is_student?(current_course)
-      @student = current_student
-    elsif params[:id]
-      @student = User.find(params[:id])
-    else
-      @student = NullStudent.new
-    end
-    @assignment_types = current_course.assignment_types
-    .select(
-      :course_id,
-      :id,
-      :name,
-      :max_points,
-      :description,
-      :student_weightable,
-      :position,
-      :updated_at
-    )
-  end
-
   private
 
   def find_assignment_type

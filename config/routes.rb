@@ -307,6 +307,7 @@ GradeCraft::Application.routes.draw do
   resources :user_sessions
   resources :passwords, path_names: { new: "reset" }, except: [:destroy, :index]
 
+  get "predictor" => "students#predictor"
   get "timeline" => "students#timeline"
   get "syllabus" => "students#syllabus"
   get "course_progress" => "students#course_progress"
@@ -359,33 +360,26 @@ GradeCraft::Application.routes.draw do
       end
     end
 
+    resources :assignment_types, only: :index
     resources :badges, only: :index
     resources :earned_badges, only: :create
     resources :grades, only: :update
     resources :grade_scheme_elements, only: :index
     resources :levels, only: :update
 
-    #17b. Predictor, Student View
+    # Student Predictor View, Predictor Preview
     resources :predicted_earned_badges, only: [:index, :update]
     resources :predicted_earned_challenges, only: [:index, :update]
     resources :predicted_earned_grades, only: [:index, :update]
 
-    #17c. Predictor, Instructor View
-    resources :students, only: [] do
-      get "predicted_earned_badges", to: "students/predicted_earned_badges#index"
-      get "predicted_earned_challenges", to: "students/predicted_earned_challenges#index"
-      get "predicted_earned_grades", to: "students/predicted_earned_grades#index"
+    # Instructor View of Student's Predictor
+    resources :students, only: [], module: :students do
+      get "assignment_types", to: "assignment_types#index"
+      get "predicted_earned_badges", to: "predicted_earned_badges#index"
+      get "predicted_earned_challenges", to: "predicted_earned_challenges#index"
+      get "predicted_earned_grades", to: "predicted_earned_grades#index"
     end
   end
-
-  #17b. Predictor, Student View
-  get "predictor" => "students#predictor"
-  get "predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
-  get "predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
-
-  #17c. Predictor, Instructor View
-  get "students/:id/predictor_assignment_types" => "assignment_types#predictor_data", defaults: { format: :json }
-  get "students/:id/predictor_weights" => "assignment_type_weights#predictor_data", defaults: { format: :json }
 
   #18. Exports
   resources :exports

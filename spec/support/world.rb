@@ -73,7 +73,11 @@ class World
 
     def create_assignment(attributes={})
       course = attributes.delete(:course) || self.course || FactoryGirl.build(:course)
-      assignments << FactoryGirl.create(:assignment, attributes.merge(course: course))
+      assignment_type = FactoryGirl.create(:assignment_type, course: course)
+      assignments << FactoryGirl.create(:assignment, attributes.merge(
+        course: course,
+        assignment_type: assignment_type
+      ))
       self
     end
 
