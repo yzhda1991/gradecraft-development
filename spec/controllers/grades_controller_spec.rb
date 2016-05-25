@@ -84,76 +84,59 @@ describe GradesController do
     end
 
     describe "PUT update" do
-      it "creates a grade if none present" do
-        assignment = create(:assignment, course: @course)
-        grade_params = { raw_score: 12345, assignment_id: assignment.id }
-        expect{put :update, { assignment_id: assignment.id, student_id: @student.id, grade: grade_params}}.to change{Grade.count}.by(1)
-      end
-
       it "updates the grade" do
-        grade_params = { raw_score: 12345, assignment_id: @assignment.id }
-        put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: grade_params}
-        expect(response).to redirect_to(assignment_path(@grade.reload.assignment))
-        expect(@grade.score).to eq(12345)
+        put :update, { id: @grade.id, grade: { raw_score: 12345 }}
+        expect(@grade.reload.score).to eq(12345)
+        expect(response).to redirect_to(assignment_path(@grade.assignment))
       end
 
       it "timestamps the grade" do
-        grade_params = { raw_score: 12345, assignment_id: @assignment.id }
         current_time = DateTime.now
-        put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: grade_params}
+        put :update, { id: @grade.id, grade: { raw_score: 12345 }}
         expect(@grade.reload.graded_at).to be > current_time
       end
 
       it "attaches the student submission" do
         submission = create :submission, assignment: @assignment, student: @student
-        grade_params = { raw_score: 12345,
-                         assignment_id: @assignment.id,
-                         submission_id: submission.id }
-        put :update, { assignment_id: @assignment.id,
-                       student_id: @student.id, grade: grade_params }
+        grade_params = { raw_score: 12345, submission_id: submission.id }
+        put :update, { id: @grade.id, grade: grade_params }
         grade = Grade.last
         expect(grade.submission).to eq submission
       end
 
       it "handles a grade file upload" do
-        grade_params = { raw_score: 12345, assignment_id: @assignment.id, "grade_files_attributes"=> {"0"=>{"file"=>[fixture_file("test_file.txt", "txt")]}}}
+        grade_params = { raw_score: 12345, "grade_files_attributes" => {"0" => {
+          "file" => [fixture_file("test_file.txt", "txt")] }}}
 
-        put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: grade_params}
+        put :update, { id: @grade.id, grade: grade_params}
         expect expect(GradeFile.count).to eq(1)
         expect expect(GradeFile.last.filename).to eq("test_file.txt")
       end
 
       it "handles commas in raw score params" do
-        grade_params = { raw_score: "12,345", assignment_id: @assignment.id }
-        put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: grade_params}
-        expect(response).to redirect_to(assignment_path(@grade.reload.assignment))
-        expect(@grade.score).to eq(12345)
+        put :update, { id: @grade.id, grade: { raw_score: "12,345" }}
+        expect(@grade.reload.score).to eq(12345)
       end
 
       it "handles reverting nil raw score" do
-        grade_params = { raw_score: nil, assignment_id: @assignment.id }
-        put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: grade_params}
-        expect(response).to redirect_to(assignment_path(@grade.reload.assignment))
-        expect(@grade.score).to eq(nil)
+        put :update, { id: @grade.id, grade: { raw_score: nil }}
+        expect(@grade.reload.score).to eq(nil)
       end
 
       it "reverts empty raw score to nil, not zero" do
-        grade_params = { raw_score: "", assignment_id: @assignment.id }
-        put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: grade_params}
-        expect(response).to redirect_to(assignment_path(@grade.reload.assignment))
-        expect(@grade.score).to eq(nil)
+        put :update, { id: @grade.id, grade: { raw_score: "" }}
+        expect(@grade.reload.score).to eq(nil)
       end
 
       it "returns to session if present" do
         session[:return_to] = login_path
-        grade_params = { raw_score: 12345, assignment_id: @assignment.id }
-        put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: grade_params}
+        put :update, { id: @grade.id, grade: { raw_score: 12345 }}
         expect(response).to redirect_to(login_path)
       end
 
       it "redirects on failure" do
         allow_any_instance_of(Grade).to receive(:update_attributes).and_return false
-        put :update, { assignment_id: @assignment.id, student_id: @student.id, grade: {}}
+        put :update, { id: @grade.id, grade: {}}
         expect(response).to redirect_to(edit_grade_path(@grade))
       end
     end

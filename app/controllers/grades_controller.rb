@@ -31,24 +31,22 @@ class GradesController < ApplicationController
   # create a new grade if none exists, and otherwise update the existing grade
   # PUT /assignments/:assignment_id/grade
   def update
-    @grade = Grade.find_or_create(@assignment.id, current_student.id)
+    grade = Grade.find params[:id]
 
-    if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
-        instructor_modified: true)
-
-      if GradeProctor.new(@grade).viewable?
-        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        grade_updater_job.enqueue
+    grade_params = params[:grade].merge(graded_at: DateTime.now, instructor_modified: true)
+    if grade.update_attributes grade_params
+      if GradeProctor.new(grade).viewable?
+        GradeUpdaterJob.new(grade_id: grade.id).enqueue
       end
 
-      if session[:return_to].present?
-        redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-      else
-        redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-      end
-
+      path = session[:return_to].present? ? session[:return_to] :
+        assignment_path(grade.assignment)
+      redirect_to path,
+        notice: "#{grade.student.name}'s #{grade.assignment.name} was successfully updated"
     else # failure
-      redirect_to edit_grade_path(@grade), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
+      redirect_to edit_grade_path(grade),
+        alert: "#{grade.student.name}'s #{grade.assignment.name} was not successfully "\
+          "submitted! Please try again."
     end
   end
 

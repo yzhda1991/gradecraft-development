@@ -3,8 +3,7 @@
 
   %section
     %hr.dotted
-    = simple_form_for grade, url: assignment_grade_path(grade.assignment), method: :patch do |f|
-      = hidden_field_tag :student_id, grade.student_id
+    = simple_form_for grade do |f|
       = f.hidden_field :submission_id, value: submission.try(:id)
 
       #grade(ng-controller="GradeCtrl" ng-init="init(#{initial_grade_json(grade)})")
