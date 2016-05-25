@@ -3,7 +3,7 @@ class API::AssignmentTypesController < ApplicationController
 
   # GET api/assignment_types
   def index
-    if current_user.is_student?(current_course)
+    if current_user_is_student?
       @student = current_student
       @update_weights = true
     else

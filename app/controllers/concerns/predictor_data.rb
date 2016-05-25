@@ -15,7 +15,7 @@ module PredictorData
       :icon
     ).map do |badge|
       prediction = badge.find_or_create_predicted_earned_badge(student.id)
-      if current_user.is_student?(current_course)
+      if current_user_is_student?
         badge.prediction = {
           id: prediction.id,
           predicted_times_earned: prediction.times_earned_including_actual
