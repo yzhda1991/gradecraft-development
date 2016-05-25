@@ -1,6 +1,5 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment, only: [:update]
   before_filter :ensure_staff?,
     except: [:feedback_read, :show, :predict_score, :async_update]
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
@@ -215,9 +214,5 @@ class GradesController < ApplicationController
 
   def rubric_criteria_with_levels
     @rubric_criteria_with_levels ||= @rubric.criteria.ordered.includes(:levels)
-  end
-
-  def set_assignment
-    @assignment = Assignment.find(params[:assignment_id]) if params[:assignment_id]
   end
 end
