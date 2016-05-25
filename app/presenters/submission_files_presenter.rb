@@ -2,8 +2,8 @@ require "showtime"
 
 class SubmissionFilesPresenter < Showtime::Presenter
   def submission_file
-    return nil unless params[:id]
-    @submission_file ||= ::SubmissionFile.find params[:id]
+    return nil unless params[:submission_file_id]
+    @submission_file ||= ::SubmissionFile.find params[:submission_file_id]
   end
 
   def submission

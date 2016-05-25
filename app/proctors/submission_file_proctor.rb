@@ -8,12 +8,11 @@ class SubmissionFileProctor
   end
 
   def downloadable_by?(user)
-    conditions = proctor_conditions.for(:downloadable)
-    conditions.satisfied_by?(user)
+    proctor_conditions.for(:downloadable).satisfied_by? user
   end
 
   def proctor_conditions
-    @proctor_conditions ||= Proctors::SubmissionFileConditionSet.new(proctor: self)
+    @proctor_conditions ||= Proctors::SubmissionFileConditionSet.new proctor: self
   end
 
   def course
