@@ -323,7 +323,7 @@ describe GradesController do
 
       it "all redirect to root" do
         [ Proc.new { get :edit, {id: @grade.id }},
-          Proc.new { get :update, {grade_id: @grade.id, assignment_id: @assignment.id }},
+          Proc.new { get :update, { id: @grade.id }},
           Proc.new { get :remove, { id: @assignment.id, grade_id: @grade.id }},
           Proc.new { delete :destroy, { id: @grade.id }},
         ].each do |protected_route|
