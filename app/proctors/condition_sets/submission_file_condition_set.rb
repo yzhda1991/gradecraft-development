@@ -1,3 +1,5 @@
+require "proctor"
+
 module Proctors
   class SubmissionFileConditionSet
     include Proctor::ConditionSet

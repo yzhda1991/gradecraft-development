@@ -1,13 +1,14 @@
 require "active_record_spec_helper"
 require "cancan/matchers"
+require_relative "../../support/test_classes/models/abilities/submission_file_ability_test"
 
-describe Ability do
-  subject { described_class.new(student) }
+describe SubmissionFileAbility do
+  describe SubmissionFileAbilityTest do
+    subject { described_class.new(student) }
 
-  let(:student_course_membership) { create :student_course_membership }
-  let(:student) { student_course_membership.user }
+    let(:student_course_membership) { create :student_course_membership }
+    let(:student) { student_course_membership.user }
 
-  describe "for SubmissionFiles" do
     before(:each) do
       allow_any_instance_of(SubmissionFileProctor).to receive(:downloadable_by?)
         .with(student) { downloadable? }
