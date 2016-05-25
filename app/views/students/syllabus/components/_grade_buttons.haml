@@ -9,6 +9,6 @@
 - else
   - if current_user_is_staff?
     - if assignment.is_individual?
-      %li= link_to glyph(:check) + "Grade", edit_grade_path(presenter.grade_for(assignment)), class: "button"
+      %li= link_to glyph(:check) + "Grade", assignment_student_grade_path(assignment, presenter.student), method: :post, class: "button"
     - elsif assignment.has_groups? && presenter.group_for(assignment).present?
       %li= link_to glyph(:check) + "Grade", grade_assignment_group_path(assignment, presenter.group_for(assignment)), class: "button"
