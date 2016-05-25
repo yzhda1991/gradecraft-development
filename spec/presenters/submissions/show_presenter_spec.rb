@@ -108,20 +108,20 @@ describe Submissions::ShowPresenter do
   describe "#submission" do
     let(:result) { subject.submission }
 
-    context "id exists and Submission.find returns a valid record" do
+    context "id exists and Submission.where returns a valid record" do
       before do
         allow(subject).to receive(:id) { 900 }
-        allow(Submission).to receive(:find) { submission }
+        allow(Submission).to receive(:where) { [submission] }
       end
 
       it "finds the submission by id" do
-        expect(Submission).to receive(:find).with 900
+        expect(Submission).to receive(:where).with(id: 900)
         result
       end
 
       it "caches the submission" do
         result
-        expect(Submission).not_to receive(:find).with(900)
+        expect(Submission).not_to receive(:where).with(id: 900)
         result
       end
 

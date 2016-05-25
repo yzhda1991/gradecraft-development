@@ -26,11 +26,7 @@ module Submissions
     end
 
     def submission
-      begin
-        @submission ||= ::Submission.find(id)
-      rescue ::ActiveRecord::RecordNotFound
-        nil
-      end
+      @submission ||= ::Submission.where(id: id).first
     end
 
     def present_submission_files
