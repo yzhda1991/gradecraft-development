@@ -1,3 +1,5 @@
+require_relative "condition_set/defer"
+
 # Conditions are an optional layer on top of the Proctor class that adds
 # flexibility for how and where various behaviors for any given Proctor
 # subclass are defined. The problem that this attempts to solve is the
