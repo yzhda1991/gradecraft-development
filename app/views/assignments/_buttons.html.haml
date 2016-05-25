@@ -36,6 +36,10 @@
             Create Rubric
 
       - if presenter.grade_with_rubric?
+        - if presenter.grades.present?
+          %li
+            %a{href: export_earned_levels_assignment_grades_path(presenter.assignment, format: :csv) }
+              Download Rubric Grades
         - if presenter.has_reviewable_grades?
           %li
             %a{href: assignment_grades_path(presenter.assignment) }

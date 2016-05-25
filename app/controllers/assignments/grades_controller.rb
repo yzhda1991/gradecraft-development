@@ -59,6 +59,17 @@ class Assignments::GradesController < ApplicationController
     end
   end
 
+  # GET /assignments/:assignment_id/grades/export_earned_levels
+  def export_earned_levels
+    assignment = current_course.assignments.find(params[:assignment_id])
+    respond_to do |format|
+      format.csv do
+        send_data CriterionGradesExporter.new.export assignment.course,
+          assignment.rubric
+      end
+    end
+  end
+
   # GET /assignments/:assignment_id/grades/import
   def import
     @assignment = current_course.assignments.find(params[:assignment_id])

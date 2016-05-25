@@ -69,6 +69,7 @@ GradeCraft::Application.routes.draw do
       collection do
         get :download
         get :export
+        get :export_earned_levels
         get :import
         post :upload
         get :mass_edit
@@ -95,6 +96,7 @@ GradeCraft::Application.routes.draw do
       get :existing_criteria
       resources :criteria
       get :design, on: :collection
+      get :export
     end
   end
 
@@ -398,4 +400,3 @@ GradeCraft::Application.routes.draw do
     end
   end
 end
-
