@@ -13,7 +13,7 @@ describe SubmissionFilesPresenter do
   end
 
   let(:params) do
-    { id: submission_file.id }
+    { submission_file_id: submission_file.id }
   end
 
   before do
@@ -46,7 +46,7 @@ describe SubmissionFilesPresenter do
 
     context "params[:id] does not exist" do
       let(:params) do
-        { id: nil }
+        { submission_file_id: nil }
       end
 
       it "returns nil" do
@@ -108,7 +108,7 @@ describe SubmissionFilesPresenter do
   end
 
   describe "#filename" do
-    let(:params) { { id: submission_file.id, index: "10" } }
+    let(:params) { { submission_file_id: submission_file.id, index: "10" } }
     it "returns the instructor_filename for the submission file" do
       expect(submission_file).to receive(:instructor_filename).with(10)
       subject.filename
