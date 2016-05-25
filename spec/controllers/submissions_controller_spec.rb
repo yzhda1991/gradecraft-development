@@ -16,6 +16,8 @@ describe SubmissionsController do
   end
 
   let(:ability) { Object.new.extend(CanCan::Ability) }
+  let(:submission) { create(:submission) }
+  let(:presenter) { double(presenter_class, submission: submission).as_null_object }
 
   context "as a professor" do
     before(:all) do
@@ -29,7 +31,8 @@ describe SubmissionsController do
     end
 
     describe "GET show" do
-      let(:submission) { double(Submission) }
+      let(:result) { get :show, id: submission.id, assignment_id: submission.assignment_id }
+      let(:presenter_class) { Submissions::ShowPresenter }
 
       before do
         allow_any_instance_of(Submissions::ShowPresenter).to receive(:submission)
@@ -38,24 +41,32 @@ describe SubmissionsController do
 
       before(:each) do
         ability.can :read, submission
-        allow(subject).to receive(:current_ability) { ability }
+        allow_any_instance_of(described_class)
+          .to receive_messages(
+            current_ability: ability,
+            presenter: presenter,
+            presenter_attrs_with_id: { some: "attrs", id: 5 }
+          )
+        allow(presenter_class).to receive(:new) { presenter }
       end
 
       it "returns the submission show page" do
-        get :show, {id: @submission.id, assignment_id: @assignment.id}
+        result
         expect(response).to render_template(:show)
       end
 
       it "builds a show presenter with the presenter attrs" do
-        allow(subject).to receive(:presenter_attrs_with_id) { { some: "attrs" } }
-        expect(Submissions::ShowPresenter).to receive(:new).with({ some: "attrs" })
-        subject.show
+        expect(presenter_class).to receive(:new).with({ some: "attrs", id: 5 })
+        result
       end
     end
 
     describe "GET new" do
+      let(:make_request) { get :new, assignment_id: submission.assignment_id }
+      let(:presenter_class) { Submissions::NewPresenter }
+
       it "returns the submission new page" do
-        get :new, {id: @submission.id, assignment_id: @assignment.id}
+        make_request
         expect(response).to render_template(:new)
       end
     end
