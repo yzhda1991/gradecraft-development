@@ -131,23 +131,16 @@ describe Submissions::ShowPresenter do
       end
     end
 
-    context "a non-existent id is passed to Submission.find" do
+    context "a non-existent id is passed to Submission.where" do
       it "rescues to nil" do
         allow(subject).to receive(:id) { 980_000 }
         expect(result).to eq nil
       end
     end
 
-    context "a nil id is passed to Submission.find" do
+    context "a nil id is passed to Submission.where" do
       it "rescues to nil" do
         allow(subject).to receive(:id) { nil }
-        expect(result).to eq nil
-      end
-    end
-
-    context "an ActiveRecord::RecordNotFound error is raised" do
-      it "rescues to nil" do
-        allow(Submission).to receive(:find).and_raise ActiveRecord::RecordNotFound
         expect(result).to eq nil
       end
     end

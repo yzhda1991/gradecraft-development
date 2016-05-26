@@ -1,5 +1,6 @@
-require "./app/presenters/submissions/edit_presenter"
 require "active_record_spec_helper"
+require "./app/presenters/submissions/edit_presenter"
+require_relative "../../../app/presenters/submissions/grade_history"
 require "./app/models/submission"
 
 describe Submissions::EditPresenter do
@@ -24,20 +25,20 @@ describe Submissions::EditPresenter do
         let(:submission) { create(:submission) }
         let(:result) { subject.submission }
 
-        context "id exists and Submission.find returns a valid record" do
+        context "id exists and Submission.where returns a valid record" do
           before do
             allow(subject).to receive(:id) { submission.id }
-            allow(Submission).to receive(:find) { submission }
+            allow(Submission).to receive(:where) { [submission] }
           end
 
           it "finds the submission by id" do
-            expect(Submission).to receive(:find).with submission.id
+            expect(Submission).to receive(:where).with id: submission.id
             result
           end
 
           it "caches the submission" do
             result
-            expect(Submission).not_to receive(:find).with submission.id
+            expect(Submission).not_to receive(:where).with id: submission.id
             result
           end
 
@@ -47,23 +48,16 @@ describe Submissions::EditPresenter do
           end
         end
 
-        context "a non-existent id is passed to Submission.find" do
+        context "a non-existent id is passed to Submission.where" do
           it "rescues to nil" do
             allow(subject).to receive(:id) { 980_000 }
             expect(result).to eq nil
           end
         end
 
-        context "a nil id is passed to Submission.find" do
+        context "a nil id is passed to Submission.where" do
           it "rescues to nil" do
             allow(subject).to receive(:id) { nil }
-            expect(result).to eq nil
-          end
-        end
-
-        context "an ActiveRecord::RecordNotFound error is raised" do
-          it "rescues to nil" do
-            allow(Submission).to receive(:find).and_raise ActiveRecord::RecordNotFound
             expect(result).to eq nil
           end
         end
