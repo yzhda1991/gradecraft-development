@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-describe Challenges::ChallengeGradesController, focus: true do
+describe Challenges::ChallengeGradesController do
 
   before(:all) do
     @course = create(:course)
@@ -42,7 +42,8 @@ describe Challenges::ChallengeGradesController, focus: true do
             id: @challenge_grade.id
           }
         }
-        put :mass_update, id: @challenge.id, challenge: { challenge_grades_attributes: challenge_grades_attributes }
+        put :mass_update, challenge_id: @challenge.id,
+          challenge: { challenge_grades_attributes: challenge_grades_attributes }
         expect(@challenge_grade.reload.score).to eq 1000
       end
 
@@ -52,14 +53,15 @@ describe Challenges::ChallengeGradesController, focus: true do
             id: @challenge_grade.id
           }
         }
-        put :mass_update, id: @challenge.id, challenge: { challenge_grades_attributes: challenge_grades_attributes }
+        put :mass_update, challenge_id: @challenge.id,
+          challenge: { challenge_grades_attributes: challenge_grades_attributes }
         expect(response).to render_template(:mass_edit)
       end
     end
 
     describe "GET edit_status" do
       it "displays the edit_status page" do
-        get :edit_status, {challenge_id: @challenge.id, challenge_grade_ids: [ @challenge_grade.id ]}
+        get :edit_status, { challenge_id: @challenge.id, challenge_grade_ids: [ @challenge_grade.id ] }
         expect(assigns(:title)).to eq("#{@challenge.name} Grade Statuses")
         expect(response).to render_template(:edit_status)
       end
@@ -67,7 +69,7 @@ describe Challenges::ChallengeGradesController, focus: true do
 
     describe "POST update_status" do
       it "updates the status of multiple challenge grades" do
-        post :update_status, {challenge_id: @challenge.id, challenge_grade_ids: [ @challenge_grade.id ], challenge_grade: {"status"=> "Released"}}
+        post :update_status, { challenge_id: @challenge.id, challenge_grade_ids: [ @challenge_grade.id ], challenge_grade: {"status"=> "Released"}}
         expect(response).to redirect_to challenge_path(@challenge)
       end
     end

@@ -13,19 +13,20 @@ class ChallengeGradeProctor
     def viewable?(options={})
       return false if challenge_grade.nil?
 
-      user = options[:user] || challenge_grade.student
+      user = options[:user]
       course = options[:course] || challenge_grade.course
 
       challenge_grade_for_course?(course) &&
-        (user.is_staff?(course) ||
-          (grade_for_user?(user) && grade_visible_by_student?))
+        user.is_staff?(course) || challenge_grade_visible_by_students?
     end
 
     private
 
-    def grade_visible_by_student?
-      grade.is_released? ||
-        (grade.is_graded? && !grade.assignment.release_necessary?)
+    # Challenge grades for the course are visible to all students, as long as
+    # they're released
+    def challenge_grade_visible_by_students?
+      challenge_grade.is_released? ||
+        (challenge_grade.is_graded? && !challenge_grade.challenge.release_necessary?)
     end
   end
 end

@@ -56,7 +56,7 @@ module PredictorData
       end
 
       grade = grades.where(challenge_id: challenge.id).first
-      if grade.present? && grade.is_student_visible?
+      if grade.present? && ChallengeGradeProctor.new(grade).viewable?
         challenge.grade = {
           score: grade.score,
         }

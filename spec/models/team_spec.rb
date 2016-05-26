@@ -133,7 +133,7 @@ describe Team do
       student_2 = create(:user)
       course_membership = create(:course_membership, user: student_2, course: course, score: 300)
       team.students << [student, student_2]
-      team.set_average_score
+      team.update_average_score!
       expect( team.instance_eval { average_score } ).to eq(200)
     end
 
@@ -141,7 +141,7 @@ describe Team do
       team.challenge_grade_score = nil
       challenge_grade = create(:challenge_grade, score: 100, team: team, status: "Released")
       challenge_grade_2 = create(:challenge_grade, score: 2000, team: team, status: "Released")
-      team.set_challenge_grade_score
+      team.update_challenge_grade_score!
       expect( team.instance_eval { challenge_grade_score } ).to eq(2100)
     end
   end

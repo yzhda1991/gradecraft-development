@@ -23,6 +23,19 @@ class NotificationMailer < ApplicationMailer
     send_assignment_email_to_professor professor, submission_id, "Updated Submission to Grade"
   end
 
+  def challenge_grade_released(challenge_grade)
+    team = challenge_grade.team
+    @challenge = challenge_grade.challenge
+    @course = challenge_grade.course
+    team.students.each do |s|
+      mail(to: s.email, subject: "#{@course.courseno} - #{@challenge.name} Graded") do |format|
+        @student = s
+        format.text
+        format.html
+      end
+    end
+  end
+
   def grade_released(grade_id)
     set_grade_ivars(grade_id)
     send_student_email "#{@course.courseno} - #{@assignment.name} Graded"

@@ -1,7 +1,7 @@
 class Team < ActiveRecord::Base
-  attr_accessible :name, :course, :course_id, :student_ids, :score, :students,
-    :leaders, :teams_leaderboard, :in_team_leaderboard, :banner, :rank,
-    :leader_ids
+  attr_accessible :name, :course, :course_id, :student_ids, :average_score,
+    :students, :leaders, :teams_leaderboard, :in_team_leaderboard, :banner,
+    :rank, :leader_ids, :challenge_grade_score
 
   validates_presence_of :course, :name
   validates :name, uniqueness: { case_sensitive: false, scope: :course_id }
@@ -30,7 +30,7 @@ class Team < ActiveRecord::Base
   # Various ways to sort the display of teams
   scope :order_by_high_score, -> { order "teams.challenge_grade_score DESC" }
   scope :order_by_low_score, -> { order "teams.challenge_grade_score ASC" }
-  scope :order_by_average_high_score, -> { order "average_points DESC"}
+  scope :order_by_average_high_score, -> { order "average_score DESC"}
   scope :alpha, -> { order "teams.name ASC"}
 
   def self.find_by_course_and_name(course_id, name)
@@ -58,23 +58,26 @@ class Team < ActiveRecord::Base
   end
 
   # The average points amongst all students on the team
-  def average_points
+  def calculate_average_score
     if member_count > 0
-      average_points = total_earned_points / member_count
+      average_score = total_earned_points / member_count
     else
       return 0
     end
   end
 
-  def update_ranks!
-    @teams = self.course.teams
+  def sorted_teams
+    teams = self.course.teams
     if self.course.team_score_average?
-      rank_index = @teams.pluck(:average_score).uniq.sort.reverse
+      rank_index = teams.pluck(:average_score).uniq.sort.reverse
     elsif self.course.challenges.present?
-      rank_index = @teams.pluck(:challenge_grade_score).uniq.sort.reverse
+      rank_index = teams.pluck(:challenge_grade_score).uniq.sort.reverse
     end
+    return teams
+  end
 
-    @teams.each do |team|
+  def update_ranks!
+    sorted_teams.each do |team|
       if self.course.team_score_average?
         rank = rank_index.index(team.average_score) + 1
       elsif self.course.challenges.present?
@@ -96,12 +99,12 @@ class Team < ActiveRecord::Base
   # scores, and challenge grades are added directly into students' scores.
   # The second way is that the teams compete in team challenges that earn
   # the team points.
-  def set_challenge_grade_score
-    self.challenge_grade_score = challenge_grade_score
+  def update_challenge_grade_score!
+    self.update_attributes challenge_grade_score: challenge_grade_score
   end
 
-  def set_average_score
-    self.average_score = average_points
+  def update_average_score!
+    self.update_attributes average_score: calculate_average_score
   end
 
 end

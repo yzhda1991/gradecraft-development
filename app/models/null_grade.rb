@@ -12,11 +12,6 @@ class NullGrade
     0
   end
 
-  # TODO: jw remove when challenge_grade#is_student_visible is removed
-  def is_student_visible?
-    true
-  end
-
   def is_released?
     false
   end

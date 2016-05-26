@@ -1,30 +1,6 @@
 class Challenges::ChallengeGradesController < ApplicationController
   before_filter :ensure_staff?
 
-  # GET /challenge/:id/challenge_grades/new?team_id=:team_id
-  def new
-    @team = current_course.teams.find(params[:team_id])
-    @challenge = current_course.challenges.find(params[:challenge_id])
-    @challenge_grade = @team.challenge_grades.new
-    @title = "Grading #{@team.name}'s #{@challenge.name}"
-  end
-
-  # POST /challenge_grades
-  def create
-    @challenge_grade = current_course.challenge_grades.new(params[:challenge_grade])
-    @challenge = @challenge_grade.challenge
-    @team = @challenge_grade.team
-    if @challenge_grade.save
-
-      ChallengeGradeUpdaterJob.new(challenge_grade_id: @challenge_grade.id).enqueue
-
-      redirect_to @challenge,
-        notice: "#{@team.name}'s Grade for #{@challenge.name} #{(term_for :challenge).titleize} successfully graded"
-    else
-      render action: "new"
-    end
-  end
-
   # Grade many teams on a particular challenge at once
   # GET /challenges/:challenge_id/challenge_grades/mass_edit
   def mass_edit
@@ -52,6 +28,7 @@ class Challenges::ChallengeGradesController < ApplicationController
   # grades, before they are "Released" to students
   # GET /challenges/:challenge_id/challenge_grades/edit_status
   def edit_status
+    @challenge = current_course.challenges.find(params[:challenge_id])
     @title = "#{@challenge.name} Grade Statuses"
     @challenge_grades =
       @challenge.challenge_grades.find(params[:challenge_grade_ids])
@@ -59,6 +36,7 @@ class Challenges::ChallengeGradesController < ApplicationController
 
   # PUT /challenges/:challenge_id/challenge_grades/update_status
   def update_status
+    @challenge = current_course.challenges.find(params[:challenge_id])
     @challenge_grades =
       @challenge.challenge_grades.find(params[:challenge_grade_ids])
     @challenge_grades.each do |challenge_grade|
@@ -79,7 +57,7 @@ class Challenges::ChallengeGradesController < ApplicationController
   def mass_update_challenge_grade_ids
     @challenge.challenge_grades.inject([]) do |memo, challenge_grade|
       scored_changed = challenge_grade.previous_changes[:score].present?
-      if scored_changed && challenge_grade.graded_or_released?
+      if scored_changed
         memo << challenge_grade.id
       end
       memo

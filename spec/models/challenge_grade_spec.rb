@@ -19,13 +19,6 @@ describe ChallengeGrade do
     end
   end
 
-  describe "#recalculate_student_and_team_scores" do
-    # team.update_revised_team_score
-    # if team.course.add_team_score_to_student?
-    #   team.recalculate_student_scores
-    # end
-  end
-
   describe ".releasable_through" do
     it "returns challenge" do
       expect(described_class.releasable_relationship).to eq :challenge
@@ -88,29 +81,6 @@ describe ChallengeGrade do
     it "returns false if the challenge grade is graded but not released" do
       challenge_grade = create(:challenge_grade, status: "Graded")
       expect(challenge_grade.is_released?).to eq(false)
-    end
-  end
-
-  describe "#is_student_visible?" do
-    it "returns true if the challenge requires release and the grade has been released" do
-      challenge_grade = create(:challenge_grade, status: "Released")
-      expect(challenge_grade.is_student_visible?).to eq(true)
-    end
-
-    it "returns false if the challenge requires release and the grade has not been released" do
-      challenge = create(:challenge, release_necessary: true)
-      challenge_grade = create(:challenge_grade, challenge: challenge, status: "Graded")
-      expect(challenge_grade.is_student_visible?).to eq(false)
-    end
-
-    it "returns true if the challenge does not require release and the grade is graded" do
-      challenge_grade = create(:challenge_grade, status: "Graded")
-      expect(challenge_grade.is_student_visible?).to eq(true)
-    end
-
-    it "returns false if the challenge does not require release and the grade has not been graded" do
-      challenge_grade = create(:challenge_grade, status: nil)
-      expect(challenge_grade.is_student_visible?).to eq(false)
     end
   end
 end

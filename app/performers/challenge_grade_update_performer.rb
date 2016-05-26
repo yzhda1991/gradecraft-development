@@ -1,6 +1,6 @@
 class ChallengeGradeUpdatePerformer < ResqueJob::Performer
   def setup
-    @challenge_grade = fetch_grade_with_challenge
+    @challenge_grade = fetch_challenge_grade_with_challenge
   end
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
@@ -13,7 +13,7 @@ class ChallengeGradeUpdatePerformer < ResqueJob::Performer
 
   def require_save_scores_success
     require_success(save_scores_messages) do
-      @challenge_grade.cache_team_and_student_scores
+      @challenge_grade.cache_team_scores
     end
   end
 
@@ -41,7 +41,7 @@ class ChallengeGradeUpdatePerformer < ResqueJob::Performer
     ChallengeGrade.where(id: @attrs[:challenge_grade_id]).includes(:challenge).load.first
   end
 
-  def notify_grade_released
-    #NotificationMailer.challenge_grade_released(@challenge_grade.id).deliver_now
+  def notify_challenge_grade_released
+    NotificationMailer.challenge_grade_released(@challenge_grade).deliver_now
   end
 end

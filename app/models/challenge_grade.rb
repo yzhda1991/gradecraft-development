@@ -21,7 +21,7 @@ class ChallengeGrade < ActiveRecord::Base
   end
 
   def cache_team_scores
-    team.set_challenge_grade_score
-    team.set_average_score
+    team.update_challenge_grade_score!
+    team.update_average_score!
   end
 end

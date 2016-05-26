@@ -2,8 +2,8 @@
   %thead
     %tr
       %th= course.team_term
-      - if ! current_course.team_score_average && current_course.challenges.present?
-        %th Score
+      - if current_course.challenges.present?
+        %th #{ term_for :challenge } Score
       %th Average Grade
       - if current_course.badges.present?
         %th Badges
@@ -12,10 +12,10 @@
     - teams.order_by_high_score.each do |team|
       %tr
         %td= link_to team.name, team_path(team)
-        - if ! current_course.team_score_average && current_course.challenges.present?
-          %td= points team.try(:score)
+        - if current_course.challenges.present?
+          %td= points team.try(:challenge_grade_score)
 
-        %td= points team.try(:average_points)
+        %td= points team.try(:average_score)
         - if current_course.badges.present?
           %td= team.badge_count
         %td

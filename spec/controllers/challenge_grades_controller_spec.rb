@@ -1,6 +1,6 @@
 require "rails_spec_helper"
 
-describe ChallengeGradesController, focus: true do
+describe ChallengeGradesController do
 
   before(:all) do
     @course = create(:course)
@@ -27,6 +27,32 @@ describe ChallengeGradesController, focus: true do
       login_user(@professor)
     end
 
+    describe "GET new" do
+      it "shows the new challenge grade form" do
+        get :new, {challenge_id: @challenge, team_id: @team}
+        expect(assigns(:challenge)).to eq(@challenge)
+        expect(assigns(:team)).to eq(@team)
+        expect(response).to render_template(:new)
+      end
+    end
+
+    describe "POST create" do
+      it "creates the challenge grade with valid attributes and redirects to the challenge show page" do
+        params = attributes_for(:challenge_grade)
+        params[:score] = "101"
+        params[:challenge_id] = @challenge.id
+        params[:team_id] = @team.id
+        params[:status] = "Released"
+        post :create, challenge_grade: params
+        expect(@challenge.challenge_grades.where(:team_id => @team.id).first.score).to eq(101)
+        expect(response).to redirect_to(@challenge)
+      end
+
+      it "redirects to new form with invalid attributes" do
+        expect{ post :create, challenge_id: @challenge.id, challenge_grade: attributes_for(:challenge_grade, team_id: nil) }.to_not change(ChallengeGrade,:count)
+      end
+    end
+
     describe "GET show" do
       it "shows the challenge grade" do
         get :show, {id: @challenge_grade, challenge_id: @challenge}
@@ -34,15 +60,6 @@ describe ChallengeGradesController, focus: true do
         expect(assigns(:challenge_grade)).to eq(@challenge_grade)
         expect(assigns(:team)).to eq(@team)
         expect(response).to render_template(:show)
-      end
-    end
-
-    describe "GET new" do
-      it "shows the new challenge grade form" do
-        get :new, {challenge_id: @challenge, team_id: @team}
-        expect(assigns(:challenge)).to eq(@challenge)
-        expect(assigns(:team)).to eq(@team)
-        expect(response).to render_template(:new)
       end
     end
 
@@ -56,23 +73,6 @@ describe ChallengeGradesController, focus: true do
       end
     end
 
-    describe "POST create" do
-      it "creates the challenge grade with valid attributes and redirects to the challenge show page" do
-        params = attributes_for(:challenge_grade)
-        params[:score] = "100"
-        params[:challenge_id] = @challenge.id
-        params[:team_id] = @team.id
-        params[:status] = "Released"
-        expect{ post :create, challenge_id: @challenge.id, challenge_grade: params }.to change(ChallengeGrade,:count).by(1)
-        expect(@team.reload.challenge_grade_score).to eq(100)
-        expect(response).to redirect_to(@challenge)
-      end
-
-      it "redirects to new form with invalid attributes" do
-        expect{ post :create, challenge_id: @challenge.id, challenge_grade: attributes_for(:challenge_grade, team_id: nil) }.to_not change(ChallengeGrade,:count)
-      end
-    end
-
     describe "POST update" do
       it "updates the challenge grade" do
         params = attributes_for(:challenge_grade)
@@ -80,10 +80,10 @@ describe ChallengeGradesController, focus: true do
         params[:challenge_id] = @challenge.id
         params[:team_id] = @team.id
         params[:status] = "Released"
-        post :update, challenge_id: @challenge.id, id: @challenge_grade.id, challenge_grade: params
+        post :update, id: @challenge_grade.id, challenge_grade: params
         expect(response).to redirect_to(challenge_path(@challenge))
-        expect(@challenge_grade.reload.challenge_grade_score).to eq(100000)
-        expect(@team.reload.score).to eq(100000)
+        expect(@challenge_grade.reload.score).to eq(100000)
+        expect(@team.reload.challenge_grade_score).to eq(100000)
       end
 
       it "redirects to edit form with invalid attributes" do
