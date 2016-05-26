@@ -100,7 +100,6 @@ i.missing_grade
       border-radius: $global-radius
       padding: 2px 5px
       white-space: nowrap
-      line-height: 1.2rem
       margin-bottom: .2rem !important
 
 @media (max-width: 1200px)
@@ -114,5 +113,15 @@ i.missing_grade
     border-radius: $global-radius
     padding: 2px 5px
     white-space: nowrap
-    line-height: 1.2rem
     margin-bottom: .2rem !important
+
+@media (max-width: $media-medium-max)
+  tbody ul.button-bar li a.button
+    font-size: .6rem
+    display: inline-block
+    padding: 1px 2px
+    margin: .25rem !important
+
+@media (max-width: 800px)
+  .dynatable-sort-header
+    pointer-events: none
