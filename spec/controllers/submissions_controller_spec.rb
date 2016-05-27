@@ -31,7 +31,7 @@ describe SubmissionsController do
     end
 
     describe "GET show" do
-      let(:result) { get :show, id: submission.id, assignment_id: submission.assignment_id }
+      let(:make_request) { get :show, id: submission.id, assignment_id: submission.assignment_id }
       let(:presenter_class) { Submissions::ShowPresenter }
 
       before do
@@ -51,13 +51,13 @@ describe SubmissionsController do
       end
 
       it "returns the submission show page" do
-        result
+        make_request
         expect(response).to render_template(:show)
       end
 
       it "builds a show presenter with the presenter attrs" do
         expect(presenter_class).to receive(:new).with({ some: "attrs", id: 5 })
-        result
+        make_request
       end
     end
 
