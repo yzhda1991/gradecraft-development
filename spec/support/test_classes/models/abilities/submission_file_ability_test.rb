@@ -1,5 +1,5 @@
 require "cancan"
-require_relative "../../../../../app/models/abilities/submission_file_ability"
+require "./app/models/abilities/submission_file_ability"
 
 class SubmissionFileAbilityTest
   include CanCan::Ability
