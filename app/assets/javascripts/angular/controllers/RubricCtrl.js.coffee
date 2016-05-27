@@ -11,8 +11,8 @@
   RubricService.getBadges()
   RubricService.getCriteria($scope.assignment, $scope)
 
-  $scope.init = (rubricId, pointTotal)->
-    $scope.rubricId = rubricId
+  $scope.init = (assignmentId, pointTotal)->
+    $scope.assignmentId = assignmentId
     $scope.pointTotal = parseInt(pointTotal)
 
   # distill key/value pairs for criterion ids and relative order
