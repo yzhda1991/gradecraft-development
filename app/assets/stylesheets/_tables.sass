@@ -109,7 +109,6 @@ i.missing_grade
       font-size: .7rem
 
   tbody ul.button-bar li a.button
-    display: block
     border-radius: $global-radius
     padding: 2px 5px
     white-space: nowrap
@@ -120,8 +119,10 @@ i.missing_grade
     font-size: .6rem
     display: inline-block
     padding: 1px 2px
-    margin: .25rem !important
 
 @media (max-width: 800px)
   .dynatable-sort-header
     pointer-events: none
+
+  th a:hover
+    color: $color-blue-3
