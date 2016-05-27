@@ -146,9 +146,23 @@ i.missing_grade
 
       .st-val
         padding: .5em
-        font-size: .85em
+        font-size: .85rem
 
 table.instructor-assignments 
   tr:nth-child(2)
     .st-key
       display: none
+
+table.no-button-bar 
+  tr:last-child
+    .st-key
+      display: block
+
+table.no-table-header
+  tr:first-child
+    text-align: left
+    .st-key
+      display: block
+      padding: .25rem
+    .st-key, .st-val
+      font-size: .7rem
