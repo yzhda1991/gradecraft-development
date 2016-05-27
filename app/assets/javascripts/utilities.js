@@ -109,5 +109,8 @@ $(".btn-public-nav").click(function(){
     $(".public-nav").slideToggle();
 });
 
-//stacktable
+//Initialize stacktable on all dynatables
 $(".dynatable").cardtable();
+
+//Add colspan attribute to last row of each table with buttons
+$(".stacktable tr:last-child .st-val").attr("colspan","2");
