@@ -10,7 +10,8 @@ class PredictedEarnedBadge < ActiveRecord::Base
   end
   scope :for_student, ->(student) { where(student_id: student.id) }
 
-  validates :badge_id, uniqueness: { scope: :student_id }
+  validates :student, presence: true
+  validates :badge, presence: true, uniqueness: { scope: :student_id }
 
   def total_predicted_points
     self.badge.point_total * predicted_times_earned
