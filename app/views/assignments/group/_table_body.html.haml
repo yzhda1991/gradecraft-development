@@ -56,4 +56,4 @@
                 .right
                   %ul.button-bar
                     - if group_presenter.assignment_graded?
-                      %li= link_to glyph(:edit) + "Override Grade", edit_grade_path(grade), class: "button"
+                      %li= link_to glyph(:edit) + "Override Grade", assignment_student_grade_path(group_presenter.assignment, student), method: :post, class: "button"
