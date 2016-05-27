@@ -110,7 +110,10 @@ $(".btn-public-nav").click(function(){
 });
 
 //Initialize stacktable on all dynatables
-$(".dynatable").cardtable();
+$(".dynatable, .instructor-assignments").cardtable();
 
-//Add colspan attribute to last row of each table with buttons
-$(".stacktable tr:last-child .st-val, .stacktable tr:first-child .st-val").attr("colspan","2");
+//Add colspan attribute to last row of each table with buttons and to headers on stacktable and instrictor-assignment tables
+$(".stacktable tr:last-child .st-val, .stacktable:not(.instructor-assignments) tr:first-child .st-val, .instructor-assignments tr:nth-child(2) .st-val").attr("colspan","2");
+
+//Add class to headers on stacktable and instrictor-assignment tables
+$(".stacktable:not(.instructor-assignments) tr:first-child .st-val, .instructor-assignments tr:nth-child(2) .st-val").addClass("table-header-row");

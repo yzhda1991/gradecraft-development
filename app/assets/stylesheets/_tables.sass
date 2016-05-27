@@ -127,11 +127,11 @@ i.missing_grade
   th a:hover
     color: $color-blue-3
 
-  table
+  table.stacktable
     border: 1px solid $color-grey-5
     margin-bottom: 1em
 
-    tr:first-child
+    .table-header-row
       background-color: $color-blue-2 !important
       color: $color-white
       a
@@ -147,3 +147,8 @@ i.missing_grade
       .st-val
         padding: .5em
         font-size: .85em
+
+table.instructor-assignments 
+  tr:nth-child(2)
+    .st-key
+      display: none
