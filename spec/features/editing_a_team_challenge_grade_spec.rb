@@ -31,7 +31,7 @@ feature "editing a team challenge grade" do
         click_link "Edit Grade"
       end
 
-      expect(current_path).to eq edit_challenge_grade_path(challenge, challenge_grade)
+      expect(current_path).to eq edit_challenge_grade_path(challenge_grade)
 
       within(".pageContent") do
         fill_in("challenge_grade_score", with: 101)
