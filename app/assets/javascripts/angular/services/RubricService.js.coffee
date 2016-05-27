@@ -12,14 +12,6 @@
   badges = {}
   criterionGrades = {}
 
-  getAssignment = (location)->
-    assignment.id = parseInt(location.pathname.split('/')[2])
-    # DESIGNING A RUBRIC
-    assignment.scope = {
-      type: "DESIGN_MODE",
-      id: null
-    }
-
   # TODO: $scope should not be passed around if we want to avoid tight coupling
   getCriteria = (assignmentId, $scope)->
     _scope = $scope
