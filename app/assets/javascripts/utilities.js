@@ -110,4 +110,4 @@ $(".btn-public-nav").click(function(){
 });
 
 //stacktable
-$(".dynatable").stacktable();
+$(".dynatable").cardtable();
