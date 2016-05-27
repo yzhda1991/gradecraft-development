@@ -29,7 +29,7 @@
     )
 
   getCriterionGrades = (assignment)->
-    if assignment.scope.type == "STUDENT"
+    if assignment.scope.type == "student"
       $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/criterion_grades/').success((res)->
         addCriterionGrades(res.data)
       )
@@ -50,7 +50,7 @@
     )
 
   getGrade = (assignment)->
-    if assignment.scope.type == "STUDENT"
+    if assignment.scope.type == "student"
       $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/grade/').success((res)->
         angular.copy(res.data.attributes, grade)
         angular.copy(res.meta.grade_status_options, gradeStatusOptions)
@@ -67,7 +67,7 @@
       )
 
   putRubricGradeSubmission = (assignment, params, returnURL)->
-    scopeRoute = if assignment.scope.type == "STUDENT" then "students" else "groups"
+    scopeRoute = if assignment.scope.type == "student" then "students" else "groups"
     $http.put("/api/assignments/#{assignment.id}/#{scopeRoute}/#{assignment.scope.id}/criterion_grades", params).success(
       (data)->
         console.log(data)
