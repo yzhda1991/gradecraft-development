@@ -91,6 +91,9 @@ module Proctor
       requirements_passed? || valid_overrides_present?
     end
 
+    # This is used to establish the arrays for the requirements and overrides
+    # against which the conditions are being checked.
+    #
     def reset_conditions
       @requirements = []
       @overrides = []
