@@ -1,7 +1,7 @@
 %thead
   %tr
-    %th
     %th= "#{term_for :assignment}"
+    %th
     %th Points
     %th Due
     %th
@@ -10,8 +10,8 @@
 - presenter.assignments_for(assignment_type).each do |assignment|
   - if presenter.assignment_visible?(assignment)
     %tr
-      %td= render "students/syllabus/components/assignment_icons", presenter: presenter, assignment: assignment
       %td= link_to assignment.name, assignment_path(assignment) if presenter.name_visible?(assignment)
+      %td= render "students/syllabus/components/assignment_icons", presenter: presenter, assignment: assignment
       %td
         - if presenter.points_visible?(assignment)
           - if assignment.pass_fail?
