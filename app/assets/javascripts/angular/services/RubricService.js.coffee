@@ -33,7 +33,7 @@
       $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/criterion_grades/').success((res)->
         addCriterionGrades(res.data)
       )
-    else if assignment.scope.type == "GROUP"
+    else if assignment.scope.type == "group"
       $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/criterion_grades/').success((res)->
 
         # The API sends all student information so we can add the ability to custom grade group members
@@ -56,7 +56,7 @@
         angular.copy(res.meta.grade_status_options, gradeStatusOptions)
         thresholdPoints = res.meta.threshold_points
       )
-    else if assignment.scope.type == "GROUP"
+    else if assignment.scope.type == "group"
       $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/grades/').success((res)->
 
         # The API sends all student information so we can add the ability to custom grade group members
