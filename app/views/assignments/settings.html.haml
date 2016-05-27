@@ -170,7 +170,7 @@
                     = assignment.try(:due_at) || "No Due Date"
                   %li
                     Accepted Until:
-                    = assignment.try(:accept_until) || "Always Accepted"
+                    = assignment.try(:accepts_submissions_until) || "Always Accepted"
               %td
                 .right
                   %ul.button-bar
