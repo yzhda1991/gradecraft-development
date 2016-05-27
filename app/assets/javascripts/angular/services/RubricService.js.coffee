@@ -21,9 +21,9 @@
     }
 
   # TODO: $scope should not be passed around if we want to avoid tight coupling
-  getCriteria = (assignment, $scope)->
+  getCriteria = (assignmentId, $scope)->
     _scope = $scope
-    $http.get('/api/assignments/' + assignment.id + '/criteria').success((res)->
+    $http.get('/api/assignments/' + assignmentId + '/criteria').success((res)->
       angular.forEach(res.data, (criterion, index)->
         criterionObject = new Criterion(criterion.attributes, _scope)
         criteria.push criterionObject

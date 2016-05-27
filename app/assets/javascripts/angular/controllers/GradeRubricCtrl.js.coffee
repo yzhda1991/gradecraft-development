@@ -20,7 +20,7 @@
   $scope.services = () ->
     promises = [
       RubricService.getCriterionGrades($scope.assignment),
-      RubricService.getCriteria($scope.assignment, $scope),
+      RubricService.getCriteria($scope.assignment.id, $scope),
       RubricService.getBadges(),
       RubricService.getGrade($scope.assignment)]
     $q.all(promises)
