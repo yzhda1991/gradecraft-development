@@ -113,4 +113,4 @@ $(".btn-public-nav").click(function(){
 $(".dynatable").cardtable();
 
 //Add colspan attribute to last row of each table with buttons
-$(".stacktable tr:last-child .st-val").attr("colspan","2");
+$(".stacktable tr:last-child .st-val, .stacktable tr:first-child .st-val").attr("colspan","2");
