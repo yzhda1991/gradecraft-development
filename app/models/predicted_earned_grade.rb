@@ -11,5 +11,6 @@ class PredictedEarnedGrade < ActiveRecord::Base
   end
   scope :for_student, ->(student) { where(student_id: student.id) }
 
-  validates :assignment_id, uniqueness: { scope: :student_id }
+  validates :student, presence: true
+  validates :assignment, presence: true, uniqueness: { scope: :student_id }
 end
