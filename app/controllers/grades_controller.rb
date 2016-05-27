@@ -28,7 +28,7 @@ class GradesController < ApplicationController
 
   # To avoid duplicate grades, we don't supply a create method. Update will
   # create a new grade if none exists, and otherwise update the existing grade
-  # PUT /assignments/:assignment_id/grade
+  # PUT /grades/:id
   def update
     grade = Grade.find params[:id]
 
