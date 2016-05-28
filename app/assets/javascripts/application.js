@@ -18,6 +18,7 @@
 //= require jquery.dynatable
 //= require dynatable
 //= require stacktable.min
+//= require mobile_tables
 //= require lodash.min
 
 //= require angular/angular
