@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511163640) do
+ActiveRecord::Schema.define(version: 20160527024024) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,7 +121,6 @@ ActiveRecord::Schema.define(version: 20160511163640) do
     t.string   "media_credit",                 limit: 255
     t.string   "media_caption",                limit: 255
     t.string   "points_predictor_display",     limit: 255
-    t.boolean  "notify_released",                          default: true
     t.string   "mass_grade_type",              limit: 255
     t.boolean  "include_in_timeline",                      default: true
     t.boolean  "include_in_predictor",                     default: true

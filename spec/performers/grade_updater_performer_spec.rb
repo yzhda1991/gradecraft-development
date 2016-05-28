@@ -102,7 +102,6 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
       context "@grade is student visible and grade assignment is set to notify on release" do
         before(:each) do
           allow_any_instance_of(GradeProctor).to receive(:viewable?) { true }
-          allow(performer_grade).to receive_message_chain(:assignment, :notify_released?) { true }
         end
 
         it "should require success with notify released messages" do
@@ -136,56 +135,6 @@ RSpec.describe GradeUpdatePerformer, type: :background_job do
           expect(performer.outcome_messages.first).to match(/Successfully sent notification/)
         end
       end
-
-      context "@grade assignment is not set to notify on release but grade is student visible" do
-        before(:each) do
-          allow_any_instance_of(GradeProctor).to receive(:viewable?) { true }
-          allow(performer_grade).to receive_message_chain(:assignment, :notify_released?) { false }
-        end
-
-        it "should not trigger the require success" do
-          expect(performer).not_to receive(:require_success)
-          subject
-        end
-
-        it "should return nil" do
-          expect(subject).to eq(nil)
-        end
-      end
-
-      context "@grade assignment is set to notify on release but grade is not student visible" do
-        before(:each) do
-          allow_any_instance_of(GradeProctor).to receive(:viewable?) { false }
-          allow(performer_grade).to receive_message_chain(:assignment, :notify_released?) { true }
-        end
-
-        it "should not trigger the require success" do
-          expect(performer).not_to receive(:require_success)
-          subject
-        end
-
-        it "should return nil" do
-          expect(subject).to eq(nil)
-        end
-      end
-
-      context "@grade assignment is not set to notify on release and grade is not student visible" do
-        before(:each) do
-          allow_any_instance_of(GradeProctor).to \
-            receive(:viewable?).and_return false
-          allow(performer_grade).to receive_message_chain(:assignment, :notify_released?) { false }
-        end
-
-        it "should not trigger the require success" do
-          expect(performer).not_to receive(:require_success)
-          subject
-        end
-
-        it "should return nil" do
-          expect(subject).to eq(nil)
-        end
-      end
-
     end
   end
 

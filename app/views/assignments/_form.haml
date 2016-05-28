@@ -122,11 +122,6 @@
       .form_label Do you want to release all grades at once? This is particularly useful for situations where extensive feedback is important.
 
     .form-item
-      = f.label :notify_released, "Notify by email?"
-      = f.check_box :notify_released
-      .form_label Do you want to notify students by email when a grade is awarded? If grade release is necessary, this email will not be sent out until the grade is officially released.
-
-    .form-item
       = f.label :include_in_timeline, "Timeline"
       = f.check_box :include_in_timeline, {"aria-describedby" => "txtIncludeInTimeline"}
       .form_label{id: "txtIncludeInTimeline"} Can #{term_for :students} see this #{term_for :assignment} in the course timeline? Note that #{term_for :assignments} without open or due dates will be excluded automatically.
