@@ -13,7 +13,7 @@ table
   tr:nth-child(even)
     background-color: $color-grey-6 !important
 
-  td:not:last-child
+  td
     border-bottom: 1px solid $color-grey-5
     padding: .5rem
 
@@ -148,23 +148,23 @@ i.missing_grade
         padding: .5em
         font-size: .85rem
 
-table.second-row-header
-  tr:first-child
-    display: none
-  tr:nth-child(2)
-    .st-key
+  table.second-row-header
+    tr:first-child
       display: none
+    tr:nth-child(2)
+      .st-key
+        display: none
 
-table.no-button-bar 
-  tr:last-child
-    .st-key
-      display: block
+  table.no-button-bar 
+    tr:last-child
+      .st-key
+        display: block
 
-table.no-table-header
-  tr:first-child
-    text-align: left
-    .st-key
-      display: block
-      padding: .25rem
-    .st-key, .st-val
-      font-size: .7rem
+  table.no-table-header
+    tr:first-child
+      text-align: left
+      .st-key
+        display: block
+        padding: .25rem
+      .st-key, .st-val
+        font-size: .7rem
