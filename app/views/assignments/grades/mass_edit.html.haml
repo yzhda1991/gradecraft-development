@@ -5,13 +5,7 @@
 .pageContent
   = render "layouts/alerts"
 
-  - if current_course.has_teams? && @assignment.is_individual?
-    .team-filter
-      = form_tag mass_edit_assignment_grades_path, name: "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        = hidden_field_tag :assignment_id, @assignment.id
-        %label.sr-only{:for => "team_id"}
-          Select Team
-        = select_tag :team_id, options_for_select(current_course.teams.alpha.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{current_course.team_term} –"
+  = team_filter if current_course.has_teams? && @assignment.is_individual?
 
   #massGrade
     = simple_form_for @assignment, method: :put, :url => mass_update_assignment_grades_path(@assignment) do |f|
