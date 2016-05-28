@@ -89,6 +89,7 @@ class Assignments::Presenter < Showtime::Presenter
   def assignment_accepting_submissions?(student)
     student.present? &&
     assignment.accepts_submissions? &&
+    !assignment.submissions_have_closed? &&
     ( assignment.is_unlocked_for_student?(student) ||
       ( assignment.has_groups? &&
         assignment.is_unlocked_for_group?(
