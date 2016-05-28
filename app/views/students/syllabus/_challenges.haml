@@ -4,7 +4,7 @@
     %h3.collapse
       %a
         %i.fa.fa-angle-double-right.fa-fw
-      #{term_for :challenges} #{ points @student.team_for_course(current_course).challenge_grade_score }/#{points current_course.point_total_for_challenges}
+      #{term_for :challenges} • #{ points current_student.team_for_course(current_course).challenge_grade_score }/#{points current_course.point_total_for_challenges}
 
     .collapse-hidden
       %table
