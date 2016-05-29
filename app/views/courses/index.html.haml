@@ -20,6 +20,8 @@
         %th{scope: "col"} Year
         %th{scope: "col"} Semester
         %th{scope: "col"} Badges
+        %th{scope: "col"} Teams
+        %th{scope: "col"} # of Students
         %th{scope: "col"} Total Points
         %th
         %th{scope: "col", :style => "min-width: 250px" }
@@ -31,7 +33,9 @@
           %td= course.courseno
           %td= course.year
           %td= course.semester
-          %td
+          %td= course.badges ? "Yes" : "No"
+          %td= course.teams ? "Yes" : "No"
+          %td= course.student_count
           %td= points course.total_points
           %td
             - if course == current_course
