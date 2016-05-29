@@ -9,12 +9,15 @@ table
   text-align: left
   width: 100%
   background-color: $color-white
+  border-collapse: collapse
 
   tr:nth-child(even)
     background-color: $color-grey-6 !important
 
-  td
+  tr
     border-bottom: 1px solid $color-grey-5
+
+  td
     padding: .5rem
 
   td .center
@@ -158,13 +161,13 @@ i.missing_grade
   table.no-button-bar 
     tr:last-child
       .st-key
-        display: block
+        display: table-cell
 
   table.no-table-header
     tr:first-child
       text-align: left
       .st-key
-        display: block
+        display: table-cell
         padding: .25rem
       .st-key, .st-val
         font-size: .7rem
