@@ -58,7 +58,7 @@ class SubmissionsExport < ActiveRecord::Base
 
   def created_at_in_microseconds
     return unless created_at
-    created_at.to_f.to_s.gsub(".","")
+    created_at.to_f.to_s.tr(".","")
   end
 
   def created_at_date
