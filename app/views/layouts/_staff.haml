@@ -12,5 +12,5 @@
   .mainContent{ class: (@display_sidebar ? "student" : "") }= render "layouts/content"
 
   - if @display_sidebar == true
-    .student-sidebar
+    .student-sidebar.hide-for-medium.hide-for-small
       = render "students/student_sidebar"

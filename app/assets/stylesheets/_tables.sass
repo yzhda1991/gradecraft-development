@@ -9,12 +9,15 @@ table
   text-align: left
   width: 100%
   background-color: $color-white
+  border-collapse: collapse
 
   tr:nth-child(even)
     background-color: $color-grey-6 !important
 
-  td
+  tr
     border-bottom: 1px solid $color-grey-5
+
+  td
     padding: .5rem
 
   td .center
@@ -100,8 +103,8 @@ i.missing_grade
       border-radius: $global-radius
       padding: 2px 5px
       white-space: nowrap
-      line-height: 1.2rem
       margin-bottom: .2rem !important
+      margin-right: 0
 
 @media (max-width: 1200px)
   table
@@ -110,9 +113,79 @@ i.missing_grade
       font-size: .7rem
 
   tbody ul.button-bar li a.button
-    display: block
     border-radius: $global-radius
     padding: 2px 5px
+    display: block
     white-space: nowrap
-    line-height: 1.2rem
     margin-bottom: .2rem !important
+
+@media (max-width: $media-medium-max)
+  tbody ul.button-bar li a.button
+    font-size: .6rem
+    display: inline-block
+    padding: 1px 2px
+
+  tbody ul.button-bar li:not(:last-of-type) a.button
+    margin-right: .5rem
+
+@media (max-width: 800px)
+  .dynatable-sort-header
+    pointer-events: none
+
+  th a:hover
+    color: $color-blue-3
+
+  table.stacktable
+    border: 1px solid $color-grey-5
+    margin-bottom: 1em
+
+    .table-header-row
+      background-color: $color-blue-2 !important
+      color: $color-white
+      text-align: center
+      a
+        color: $color-white
+
+    .st-key
+      text-transform: capitalize
+
+    tr:last-child, tr:first-child
+      .st-key
+        display: none
+
+    tr:first-child
+      .st-val
+        padding: .5em
+        font-size: .85rem
+
+  .badge-index-table
+    .st-key
+      width: 25%
+    .st-val
+      width: 75%
+    .button-bar
+      text-align: right
+
+  table.second-row-header
+    tr:first-child
+      display: none
+    tr:nth-child(2)
+      .st-key
+        display: none
+      .st-val
+        padding: .5em
+        font-size: .85rem
+
+  table.no-button-bar 
+    tr:last-child
+      .st-key
+        display: table-cell
+
+  table.no-table-header
+    tr:first-child
+      text-align: left
+      .st-key
+        display: table-cell
+        padding: .25rem
+      .st-key, .st-val
+        font-size: .7rem

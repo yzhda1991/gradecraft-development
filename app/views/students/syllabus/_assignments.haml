@@ -15,5 +15,5 @@
         %p.description= raw assignment_type.description
 
       // Display the assignments for each assignment type in a responsive table, below header.
-      %table.dynatable
+      %table.default_assignments_dynatable.dynatable
         = render "students/syllabus/assignment_table", presenter: presenter, assignment_type: assignment_type
