@@ -11,6 +11,7 @@
     %thead
       %tr
         %th.sort-column
+        %th.badge-name-column
         %th.lock-icon-column
         %th.icon-column
         %th.earned_column Earned
@@ -22,10 +23,19 @@
         - if BadgeProctor.new(badge).viewable?(current_student || current_user)
           %tr{id: "badge-#{badge.id}"}
             - if !presenter.view_student_context?
-              %td.center
-                %i.fa.fa-arrows-v.draggable
+              %td.center.draggable
+                %i.fa.fa-arrows-v
             - else
               %td
+
+            // Badge Name
+            %td
+              - if current_user_is_staff? && presenter.view_student_context?
+                = render partial: "badges/components/name",
+                  locals: { badge: badge, title: link_to(badge.name, student_badge_show_path(presenter.student, badge)) }
+              - else
+                = render partial: "badges/components/name",
+                  locals: { badge: badge, title: link_to(badge.name, badge_path(badge)) }
 
             // Lock Condition Icons
             %td
