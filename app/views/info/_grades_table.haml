@@ -13,7 +13,7 @@
 
     = form_tag edit_status_assignment_grades_path(assignment), method: :get do
 
-      %table.dynatable
+      %table.dynatable.no-table-header
         %thead
           %tr
             - if assignment.is_individual?
