@@ -7,6 +7,7 @@ require "./db/samples/challenges.rb"
 # ---------------------------- Shared Methods --------------------------------#
 
 # Output quotes for each successful step passed
+# rubocop:disable Eval
 def puts_success(type, name, event)
   puts eval("@#{type}s")[name][:quotes][event] ||
     eval("@#{type}_default_config")[:quotes][event] + ": #{name}"
@@ -319,6 +320,7 @@ PaperTrail.whodunnit = nil
       assignment = Assignment.create! do |a|
         @assignment_default_config[:attributes].keys.each do |attr|
           # ternary allows override for visible ('true' by default)
+          # rubocop:disable MultilineTernaryOperator
           a[attr] =
             config[:attributes].key?(attr) ? config[:attributes][attr] :
               @assignment_default_config[:attributes][attr]

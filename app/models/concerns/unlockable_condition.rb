@@ -74,9 +74,7 @@ module UnlockableCondition
   end
 
   def unlock_condition_count_met_for(student)
-    self.unlock_conditions
-      .select { |condition| condition.is_complete?(student) }
-      .size
+    unlock_conditions.select { |c| c.is_complete?(student) }.size
   end
 
   def visible_for_student?(student)
