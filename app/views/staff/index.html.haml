@@ -10,9 +10,9 @@
   %table.dynatable.no-table-header
     %thead
       %tr
-        %th
         %th First Name
         %th Last Name
+        %th Avatar
         %th Role
         %th #{term_for :team}
         %th{:style => "min-width: 200px"}
@@ -20,11 +20,11 @@
       - @staff.each do |user|
         %tr
           %td
-            - if user.avatar_file_name.present?
-              %img.img-rounded{:src => user.avatar_file_name, :width => 30}
-          %td
             = link_to user.first_name, staff_path(user)
           %td= link_to user.last_name, staff_path(user)
+          %td
+            - if user.avatar_file_name.present?
+              %img.img-rounded{:src => user.avatar_file_name, :width => 30}
           %td= user.role(current_course).capitalize
           %td
             - user.team_leaderships_for_course(current_course).each do |leadership|
