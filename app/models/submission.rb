@@ -67,7 +67,7 @@ class Submission < ActiveRecord::Base
   # student has predicted the grade, it'll exist, but we still don't want to
   # catch those here)
   def ungraded?
-    !grade || grade.status == nil
+    !grade || grade.status.nil?
   end
 
   # Used to report to the user that a change will be a resubmission because this

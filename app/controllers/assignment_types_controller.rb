@@ -69,7 +69,7 @@ class AssignmentTypesController < ApplicationController
   def export_scores
     respond_to do |format|
       format.csv {
-        send_data AssignmentTypeExporter.new.export_scores @assignment_type,
+          send_data AssignmentTypeExporter.new.export_scores @assignment_type,
           current_course, current_course.students
         }
     end

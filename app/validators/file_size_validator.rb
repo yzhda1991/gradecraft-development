@@ -17,7 +17,7 @@ class FileSizeValidator < ActiveModel::EachValidator
 
   def validate_each(record, attribute, value)
     raise(ArgumentError, "A CarrierWave::Uploader::Base object was expected") \
-      unless value.kind_of? CarrierWave::Uploader::Base
+      unless value.is_a? CarrierWave::Uploader::Base
 
     CHECKS.each do |key, validity_check|
       next unless check_value = options[key]
