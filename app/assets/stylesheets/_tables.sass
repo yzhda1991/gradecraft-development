@@ -96,6 +96,16 @@ i.missing_grade
     th.draggable, td.draggable
       display: none
 
+@media (max-width: 2400px)
+  table.default_assignments_dynatable
+    tbody ul.button-bar li a.button
+      display: block
+      border-radius: $global-radius
+      padding: 2px 5px
+      white-space: nowrap
+      margin-bottom: .2rem !important
+      margin-right: 0
+
 @media (max-width: 1200px)
   table
     th, td
@@ -117,16 +127,6 @@ i.missing_grade
 
   tbody ul.button-bar li:not(:last-of-type) a.button
     margin-right: .5rem
-
-@media (max-width: 2400px)
-  table.default_assignments_dynatable
-    tbody ul.button-bar li a.button
-      display: block
-      border-radius: $global-radius
-      padding: 2px 5px
-      white-space: nowrap
-      margin-bottom: .2rem !important
-      margin-right: 0
 
 @media (max-width: 800px)
   .dynatable-sort-header
