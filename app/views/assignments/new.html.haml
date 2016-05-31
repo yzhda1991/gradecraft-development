@@ -2,7 +2,7 @@
 
 %h3.pagetitle= "New #{term_for :assignment}"
 
-= render partial: "buttons", locals: { presenter: presenter }
+= render partial: "assignments/buttons", locals: { presenter: presenter }
 
 .pageContent
-  = render partial: "form", locals: { presenter: presenter }
+  = render partial: "assignments/form", locals: { presenter: presenter }

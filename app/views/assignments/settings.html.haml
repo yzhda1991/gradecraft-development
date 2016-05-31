@@ -10,7 +10,7 @@
         New #{(term_for :assignment).titleize}
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   .assignments
     - @assignment_types.each do |assignment_type|

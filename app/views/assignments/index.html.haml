@@ -14,7 +14,7 @@
         Review #{(term_for :assignment).titleize} Settings
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   .assignments
     - @assignment_types.each do |assignment_type|
@@ -42,7 +42,7 @@
                   %td.draggable
                     %i.fa.fa-arrows-v
                   %td= link_to assignment.name, assignment
-                  %td= render "index_icons", assignment: assignment
+                  %td= render partial: "index_icons", locals: { assignment: assignment }
                   %td= assignment.try(:due_at) || "Ongoing"
                   %td{:style => "display: none"}
                     - if assignment.due_at.present?
