@@ -34,7 +34,7 @@ describe AssignmentTypeWeightsController do
       end
     end
 
-    describe "POST mass_update" do
+    describe "PUT mass_update" do
 
       before do
         @assignment_type_weightable_2 = create :assignment_type, course: @course,
@@ -126,7 +126,7 @@ describe AssignmentTypeWeightsController do
       end
     end
 
-    describe "POST mass_update" do
+    describe "PUT mass_update" do
 
       before do
         @assignment_type_weightable_2 = create :assignment_type, course: @course,

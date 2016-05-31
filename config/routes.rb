@@ -126,19 +126,17 @@ GradeCraft::Application.routes.draw do
 
   #4. Assignment Types
   resources :assignment_types do
-    member do
-      get "all_grades"
-      get "export_scores"
-    end
-    collection do
-      post :sort
-      get "export_all_scores"
-    end
+    get :all_grades, on: :member
+    get :export_scores, on: :member
+    get :export_all_scores, on: :collection
+    post :sort, on: :collection
   end
 
   #5. Assignment Type Weights
-  get "assignment_type_weights" => "assignment_type_weights#mass_edit", as: :assignment_type_weights
-  put "assignment_type_weights" => "assignment_type_weights#mass_update"
+  resources :assignment_type_weights, only: [] do
+    get :mass_edit, on: :collection
+    put :mass_update, on: :collection
+  end
 
   #6. Badges
   resources :badges do
