@@ -7,13 +7,8 @@
 
     %img(ng-src="{{badge.icon}}" alt="You've earned the {{badge.name}} badge" class="unearned")
 
-    .ribbon
-      .ribbon-stitches-top
-      .ribbon-content
-        .badge-name {{badge.name}}
-      .ribbon-stitches-bottom
-    .ribbon-ends
+    .badge-name {{badge.name}}
+
     .gold-stars
       %i.fa.fa-star.fa-fw
         .earned-count {{badge.earnedBadgesForGrade.length + badge.otherEarnedBadges.length}}
-      .badges-earned.blue
