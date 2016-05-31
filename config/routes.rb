@@ -119,7 +119,6 @@ GradeCraft::Application.routes.draw do
   resources :unlock_conditions, only: [:create, :destroy, :update]
 
   # earned badges grade routes
-  delete "grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id", to: "grades#delete_earned_badge"
   delete "grade/:grade_id/earned_badges", to: "grades#delete_all_earned_badges"
 
   resources :criteria, only: [:create, :destroy, :update] do
@@ -358,7 +357,7 @@ GradeCraft::Application.routes.draw do
       resources :assignment_type_weights, only: :create
     end
     resources :badges, only: :index
-    resources :earned_badges, only: :create
+    resources :earned_badges, only: [:create, :destroy]
     resources :grades, only: :update
     resources :grade_scheme_elements, only: :index
     resources :levels, only: :update

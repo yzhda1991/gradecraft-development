@@ -23,10 +23,5 @@
         $q.reject response.data
 
     deletePath: ()->
-      "/grade/" + this.grade_id + "/student/" + this.student_id + "/badge/" + this.badge_id + "/earned_badge/" + this.id
-
-    deleteParams: ()->
-      student_id: this.student_id,
-      badge_id: this.badge_id,
-      grade_id: this.grade_id
+      "/api/earned_badges/" + this.id
 ]
