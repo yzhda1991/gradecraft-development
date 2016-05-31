@@ -9,7 +9,7 @@
       %li= link_to_unless_current glyph(:plus) + 'New Announcement', new_announcement_path
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   %p
     %strong Course:
