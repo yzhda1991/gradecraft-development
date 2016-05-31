@@ -118,9 +118,6 @@ GradeCraft::Application.routes.draw do
   end
   resources :unlock_conditions, only: [:create, :destroy, :update]
 
-  # earned badges grade routes
-  delete "grade/:grade_id/earned_badges", to: "grades#delete_all_earned_badges"
-
   resources :criteria, only: [:create, :destroy, :update] do
     put :update_order, on: :collection
   end
@@ -358,7 +355,11 @@ GradeCraft::Application.routes.draw do
     end
     resources :badges, only: :index
     resources :earned_badges, only: [:create, :destroy]
-    resources :grades, only: :update
+    resources :grades, only: :update do
+      resources :earned_badges, only: [] do
+        delete :delete_all, on: :collection
+      end
+    end
     resources :grade_scheme_elements, only: :index
     resources :levels, only: :update
 

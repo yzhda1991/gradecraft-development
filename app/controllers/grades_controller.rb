@@ -54,24 +54,6 @@ class GradesController < ApplicationController
     render json: @earned_badges
   end
 
-  # DELETE grade/:grade_id/earned_badges
-  def delete_all_earned_badges
-    if EarnedBadge.exists?(grade_id: params[:grade_id])
-      EarnedBadge.where(grade_id: params[:grade_id]).destroy_all
-      render json: {
-        message: "Earned badges successfully deleted",
-        success: true
-        },
-        status: 200
-    else
-      render json: {
-        message: "Earned badges failed to delete",
-        success: false
-        },
-        status: 400
-    end
-  end
-
   # POST /grades/:id/remove
   # This is the method used when faculty delete a grade
   # it preserves the predicted grade

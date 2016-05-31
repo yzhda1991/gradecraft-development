@@ -154,20 +154,6 @@ describe GradesController do
       end
     end
 
-    describe "delete_all_earned_badges"  do
-      it "destroys all earned badges for grade" do
-        earned_badge_1 = create(:earned_badge, grade: @grade)
-        earned_badge_2 = create(:earned_badge, grade: @grade)
-        expect{ delete :delete_all_earned_badges, grade_id: @grade.id }.to change {EarnedBadge.count}.by(-2)
-        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badges successfully deleted", "success"=>true})
-      end
-
-      it "renders error if no badges found to delete" do
-        delete :delete_all_earned_badges, {grade_id: @grade.id}
-        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badges failed to delete", "success"=>false})
-      end
-    end
-
     describe "POST remove" do
       before do
         allow_any_instance_of(ScoreRecalculatorJob).to \

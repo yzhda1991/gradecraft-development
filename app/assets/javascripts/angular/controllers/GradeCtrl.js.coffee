@@ -99,7 +99,7 @@
         badge.setDeleting()
     )
 
-    $http.delete("/grade/#{$scope.grade.id}/earned_badges").success(
+    $http.delete("/api/grades/#{$scope.grade.id}/earned_badges/delete_all").success(
       (data, status)->
         angular.forEach($scope.badges, (badge) ->
           badge.handleDestroyAll()
