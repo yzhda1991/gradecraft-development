@@ -115,7 +115,7 @@ GradeCraft::Application.routes.draw do
       post :manually_unlock
     end
   end
-  resources :unlock_conditions
+  resources :unlock_conditions, only: [:create, :destroy, :update]
 
   # earned badges grade routes
   post "grade/:grade_id/earn_student_badges", to: "grades#earn_student_badges"
