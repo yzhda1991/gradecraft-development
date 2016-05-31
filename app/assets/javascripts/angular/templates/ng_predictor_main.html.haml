@@ -10,20 +10,14 @@
   .collapse-all-toggler
     .collapse-arrow.outdent
     .predictor-section-title
-      .predictor-section-title-name
-        %span.desktop-only
-          Predicted Final Grade:
-        {{predictedGradeLevel()}}
       .predictor-section-title-predicted-points{{'ng-if'=>'weightsAvailable()'}}
         .predictor-title-right-span
           Unused {{termFor.weights}} :
         .predictor-section-title-weights
           .coin{{'ng-repeat' => 'coin in unusedWeightsRange()'}}
 
-
 #assignment-types{'ng-include' => true, 'src' => "'ng_predictor_assignment_types.html'"}
 
 #badges{'ng-include'=> true, 'src' => "'ng_predictor_badges.html'"}
 
 #challenges{'ng-include'=> true, 'src' => "'ng_predictor_challenges.html'"}
-
