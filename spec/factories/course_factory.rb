@@ -12,10 +12,10 @@ FactoryGirl.define do
     end
 
     factory :course_with_weighting do
-      total_assignment_weight 6
-      max_assignment_weight 4
+      total_weights 6
+      max_weights_per_assignment_type 4
       max_assignment_types_weighted 2
-      default_assignment_weight 3
+      default_weight 3
     end
 
     factory :course_without_timeline do

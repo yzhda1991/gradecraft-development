@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160530000000) do
+ActiveRecord::Schema.define(version: 20160531193326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,18 +264,17 @@ ActiveRecord::Schema.define(version: 20160530000000) do
     t.string   "homepage_message",                  limit: 255
     t.boolean  "status",                                                                default: true
     t.boolean  "group_setting"
-    t.datetime "assignment_weight_close_at"
+    t.datetime "weights_close_at"
     t.boolean  "team_roles"
     t.string   "team_leader_term",                  limit: 255
     t.string   "group_term",                        limit: 255
-    t.string   "assignment_weight_type",            limit: 255
     t.boolean  "accepts_submissions"
     t.boolean  "teams_visible"
     t.string   "weight_term",                       limit: 255
     t.boolean  "predictor_setting"
     t.integer  "max_group_size"
     t.integer  "min_group_size"
-    t.decimal  "default_assignment_weight",                     precision: 4, scale: 1, default: 1.0
+    t.decimal  "default_weight",                                precision: 4, scale: 1, default: 1.0
     t.string   "tagline",                           limit: 255
     t.boolean  "academic_history_visible"
     t.string   "office",                            limit: 255
@@ -294,8 +293,8 @@ ActiveRecord::Schema.define(version: 20160530000000) do
     t.string   "challenge_term",                    limit: 255
     t.boolean  "use_timeline"
     t.text     "grading_philosophy"
-    t.integer  "total_assignment_weight"
-    t.integer  "max_assignment_weight"
+    t.integer  "total_weights"
+    t.integer  "max_weights_per_assignment_type"
     t.boolean  "character_profiles"
     t.string   "lti_uid",                           limit: 255
     t.boolean  "team_score_average"

@@ -16,9 +16,9 @@ json.meta do
   json.term_for_weights term_for :weights
   json.update_weights @update_weights
 
-  json.total_assignment_weight current_course.try(:total_assignment_weight)
-  json.assignment_weight_close_at current_course.try(:assignment_weight_close_at)
-  json.max_assignment_weight current_course.max_assignment_weight
+  json.total_weights current_course.try(:total_weights)
+  json.weights_close_at current_course.try(:weights_close_at)
+  json.max_weights_per_assignment_type current_course.max_weights_per_assignment_type
   json.max_assignment_types_weighted current_course.max_assignment_types_weighted
-  json.default_assignment_weight current_course.default_assignment_weight
+  json.default_weight current_course.default_weight
 end

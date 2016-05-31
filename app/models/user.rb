@@ -487,7 +487,7 @@ class User < ActiveRecord::Base
   end
 
   def weight_spent?(course)
-    if self.total_weight_spent(course) == course.total_assignment_weight
+    if self.total_weight_spent(course) == course.total_weights
       return true
     else
       false

@@ -137,7 +137,7 @@ describe AssignmentType do
     end
 
     it "returns the weighted total if the student has *not* assigned weight to it (point total * default weight)" do
-      world.course.default_assignment_weight = 0.5
+      world.course.default_weight = 0.5
       assignment_type.student_weightable = true
       assignment = create(:assignment, assignment_type: assignment_type, course: world.course, point_total: 100)
 

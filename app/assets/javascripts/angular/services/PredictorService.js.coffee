@@ -51,13 +51,13 @@
         termFor.assignmentType = res.meta.term_for_assignment_type
         termFor.weights = res.meta.term_for_weights
         update.weights = res.meta.update_weights
-        weights.open = !res.meta.assignment_weight_close_at ||
-          Date.parse(res.meta.assignment_weight_close_at) >= Date.now()
-        weights.total_assignment_weight = res.meta.total_assignment_weight
-        weights.assignment_weight_close_at = res.meta.assignment_weight_close_at
-        weights.max_assignment_weight = res.meta.max_assignment_weight
+        weights.open = !res.meta.weights_close_at ||
+          Date.parse(res.meta.weights_close_at) >= Date.now()
+        weights.total_weights = res.meta.total_weights
+        weights.weights_close_at = res.meta.weights_close_at
+        weights.max_weights_per_assignment_type = res.meta.max_weights_per_assignment_type
         weights.max_assignment_types_weighted = res.meta.max_assignment_types_weighted
-        weights.default_assignment_weight = res.meta.default_assignment_weight
+        weights.default_weight = res.meta.default_weight
 
         weights.unusedWeights = ()->
           used = 0
@@ -65,7 +65,7 @@
             if at.student_weightable
               used += at.student_weight
           )
-          weights.total_assignment_weight - used
+          weights.total_weights - used
         weights.unusedTypes = ()->
           types = 0
           _.each(assignmentTypes, (at)->

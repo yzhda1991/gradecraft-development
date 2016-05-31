@@ -68,7 +68,7 @@ class AssignmentType < ActiveRecord::Base
     if weight_for_student(student) >= 1
       (total_points * weight_for_student(student)).to_i
     else
-      (total_points * course.default_assignment_weight).to_i
+      (total_points * course.default_weight).to_i
     end
   end
 

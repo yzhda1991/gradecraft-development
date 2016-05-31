@@ -66,7 +66,7 @@
     team_setting: false,
     team_term: nil,
     teams_visible: false,
-    total_assignment_weight: 0,
+    total_weights: 0,
     twitter_handle: nil,
     twitter_hashtag: nil,
     use_timeline: true,
@@ -210,13 +210,13 @@ education there is. ― Isaac Asimov",
     team_score_average: true,
     team_setting: true,
     team_term: "Section",
-    total_assignment_weight: 6,
+    total_weights: 6,
     twitter_handle: "polsci101",
     twitter_hashtag: "polsci101",
     weight_attributes: {
       max_assignment_types_weighted: 2,
-      max_assignment_weight: 4,
-      default_assignment_weight: 0.5,
+      max_weights_per_assignment_type: 4,
+      default_weight: 0.5,
     }
   }
 }

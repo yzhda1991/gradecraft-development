@@ -573,8 +573,8 @@ describe User do
     end
 
     it "should return the summed weight count for a course, for a student" do
-      course.total_assignment_weight = 6
-      course.max_assignment_weight = 4
+      course.total_weights = 6
+      course.max_weights_per_assignment_type = 4
       course.max_assignment_types_weighted = 3
       assignment_type = create(:assignment_type, course: course, student_weightable: true)
       assignment_type_2 = create(:assignment_type, course: course, student_weightable: true)
@@ -594,8 +594,8 @@ describe User do
     end
 
     it "should return the summed weight count for a course, for a student" do
-      course.total_assignment_weight = 6
-      course.max_assignment_weight = 4
+      course.total_weights = 6
+      course.max_weights_per_assignment_type = 4
       course.max_assignment_types_weighted = 3
       assignment_type = create(:assignment_type, course: course, student_weightable: true)
       assignment_type_2 = create(:assignment_type, course: course, student_weightable: true)

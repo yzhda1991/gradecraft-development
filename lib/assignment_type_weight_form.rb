@@ -5,7 +5,7 @@ class AssignmentTypeWeightForm < Struct.new(:student, :course)
 
   attr_reader :assignment_type_weights
 
-  validate :validate_course_total_assignment_weight
+  validate :validate_course_total_weights
   validate :validate_assignment_type_weights
   validate :validate_course_max_assignment_types_weighted
   validate :validate_max_per_assignment_type_weight
@@ -39,7 +39,7 @@ class AssignmentTypeWeightForm < Struct.new(:student, :course)
   end
 
   # Counting how many total weights have been assigned to make sure it's at/below the cap
-  def course_total_assignment_weight
+  def course_total_weights
     assignment_type_weights.sum(&:weight)
   end
 
@@ -50,11 +50,11 @@ class AssignmentTypeWeightForm < Struct.new(:student, :course)
 
   private
 
-  def validate_course_total_assignment_weight
-    if course.total_assignment_weight.present?
-      if course_total_assignment_weight > course.total_assignment_weight
+  def validate_course_total_weights
+    if course.total_weights.present?
+      if course_total_weights > course.total_weights
         errors.add(:base, "You have allocated more than the course total")
-      elsif course_total_assignment_weight < course.total_assignment_weight
+      elsif course_total_weights < course.total_weights
         errors.add(:base, "You must allocate the entire course total")
       end
     end
@@ -62,7 +62,7 @@ class AssignmentTypeWeightForm < Struct.new(:student, :course)
 
   def validate_max_per_assignment_type_weight
     assignment_type_weights.each do |assignment_type_weight|
-      if assignment_type_weight.weight > course.max_assignment_weight
+      if assignment_type_weight.weight > course.max_weights_per_assignment_type
         errors.add(:base, "You have allocated more to #{assignment_type_weight.assignment_type.name} than permitted")
       end
     end

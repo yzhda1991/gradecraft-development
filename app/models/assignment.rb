@@ -129,7 +129,7 @@ class Assignment < ActiveRecord::Base
   def weight_for_student(student, weight = nil)
     return 1 unless student_weightable?
     weight ||= (assignment_type.weights.where(student: student).pluck("weight").first || 0)
-    weight > 0 ? weight : course.default_assignment_weight
+    weight > 0 ? weight : course.default_weight
   end
 
   # Checking to see if an assignment is due soon

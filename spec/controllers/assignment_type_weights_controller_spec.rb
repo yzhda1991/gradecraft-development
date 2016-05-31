@@ -3,11 +3,11 @@ require "rails_spec_helper"
 describe AssignmentTypeWeightsController do
   before(:all) do
     @course = create :course,
-                   total_assignment_weight: 6,
-                   assignment_weight_close_at: Time.now,
-                   max_assignment_weight: 2,
+                   total_weights: 6,
+                   weights_close_at: Time.now,
+                   max_weights_per_assignment_type: 2,
                    max_assignment_types_weighted: 4,
-                   default_assignment_weight: 1
+                   default_weight: 1
     @student = create(:user)
     @student.courses << @course
     @assignment_type_weightable = create :assignment_type, course: @course,
