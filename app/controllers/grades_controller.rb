@@ -48,7 +48,7 @@ class GradesController < ApplicationController
     end
   end
 
-  # POST /grades/earn_student_badges
+  # POST /grades/:grade_id/earn_student_badges
   def earn_student_badges
     @earned_badges = EarnedBadge.create params[:earned_badges]
     render json: @earned_badges

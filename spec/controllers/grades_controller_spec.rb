@@ -147,7 +147,7 @@ describe GradesController do
         badge_1 = create(:badge)
         badge_2 = create(:badge)
         badge_3 = create(:badge)
-        params = {grade_id: @grade.id, earned_badges: [{ badge_id: badge_1.id, student_id: @student },
+        params = {id: @grade.id, earned_badges: [{ badge_id: badge_1.id, student_id: @student },
                                   { badge_id: badge_2.id, student_id: @student },
                                   { badge_id: badge_3.id, student_id: @student }]}
         expect{post :earn_student_badges, params}.to change {EarnedBadge.count}.by(3)
