@@ -9,29 +9,32 @@
 
   = team_filter(presenter.teams) if current_course.has_teams? && current_user_is_staff?
 
-  .badge-container
-    .badge-icon
-      = render partial: "badges/components/icon", locals: { badge: presenter.badge }
-    .badge-description
-      = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
+  .badge-show-page
+    .badge-container
+      %h1
+        = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
+      .badge-icon
+        = render partial: "badges/components/icon", locals: { badge: presenter.badge }
       .count
         Times Earned:
         %span
           = render partial: "badges/components/count", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
-      = render partial: "badges/components/hover_icons", locals: { badge: presenter.badge }
+        = render partial: "badges/components/hover_icons", locals: { badge: presenter.badge }
+    .badge-description
+      %h2 Description
+      = render partial: "badges/components/description", locals: { badge: presenter.badge, title: presenter.badge.name }
 
-  - if presenter.badge.badge_files.present?
-    %p
-      %b Attachments:
-      %ul
-        - presenter.badge.badge_files.each do |bf|
-          %li
-            = link_to bf.filename, bf.url
-            - if current_user_is_staff?
-              = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :upload_id => bf.id } )
-  .clear
+    - if presenter.badge.badge_files.present?
+      %p
+        %b Attachments:
+        %ul
+          - presenter.badge.badge_files.each do |bf|
+            %li
+              = link_to bf.filename, bf.url
+              - if current_user_is_staff?
+                = link_to "(Remove)", remove_uploads_path({ :model => "BadgeFile", :upload_id => bf.id } )
 
-  - if current_user_is_staff? && ! presenter.view_student_context?
-    = render partial: "badges/all_students_earned_badges_table", locals: { presenter: presenter }
-  - else
-    = render partial: "badges/student_earned_badges", locals: { presenter: presenter }
+    - if current_user_is_staff? && ! presenter.view_student_context?
+      = render partial: "badges/all_students_earned_badges_table", locals: { presenter: presenter }
+    - else
+      = render partial: "badges/student_earned_badges", locals: { presenter: presenter }
