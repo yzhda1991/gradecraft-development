@@ -35,7 +35,6 @@
     grade_scope: "Individual",
     hide_analytics: nil,
     mass_grade_type: nil,
-    notify_released: false,
     points_predictor_display: nil,
     release_necessary: false,
     student_logged: false,
@@ -973,39 +972,6 @@ Hockney",
     due_at: 4.weeks.from_now,
     point_total: 150000,
     release_necessary: true,
-    notify_released: true,
-  }
-}
-
-@assignments[:sends_email_notes_immediately] = {
-  quotes: {
-    assignment_created: "Do not keep children to their studies by compulsion \
-but by play. – Plato",
-  },
-  assignment_type: :notifications,
-  attributes: {
-    name: "Grades Released Triggers Email",
-    description: "I send out emails when grades are released",
-    due_at: 4.weeks.from_now,
-    point_total: 150000,
-    release_necessary: false,
-    notify_released: true,
-  }
-}
-
-@assignments[:does_not_send_emails] = {
-  quotes: {
-    assignment_created: "You're always you, and that don't change, and you're \
-always changing, and there's nothing you can do about it. ― Neil Gaiman",
-  },
-  assignment_type: :notifications,
-  attributes: {
-    name: "No Emails Assignment",
-    description: "I do not send out email notifications to students",
-    due_at: 4.weeks.from_now,
-    point_total: 150000,
-    release_necessary: false,
-    notify_released: false,
   }
 }
 

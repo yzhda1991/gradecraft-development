@@ -18,7 +18,7 @@ class GradeUpdatePerformer < ResqueJob::Performer
   end
 
   def require_notify_released_success
-    if @grade.assignment.notify_released? && GradeProctor.new(@grade).viewable?
+    if GradeProctor.new(@grade).viewable?
       require_success(notify_released_messages, max_result_size: 200) { notify_grade_released }
     end
   end

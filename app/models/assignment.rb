@@ -14,7 +14,7 @@ class Assignment < ActiveRecord::Base
     :assignment_score_levels_attributes, :assignment_type, :assignment_type_id,
     :course, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
     :include_in_predictor, :include_in_timeline, :include_in_to_do,
-    :mass_grade_type, :name, :notify_released, :open_at, :pass_fail,
+    :mass_grade_type, :name, :open_at, :pass_fail,
     :point_total, :points_predictor_display, :purpose, :release_necessary,
     :required, :resubmissions_allowed, :show_description_when_locked,
     :show_purpose_when_locked, :show_name_when_locked,
