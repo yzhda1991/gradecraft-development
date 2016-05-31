@@ -5,7 +5,7 @@
 .pageContent
   = render "layouts/alerts"
 
-  = team_filter if current_course.has_teams?
+  = team_filter(@teams) if current_course.has_teams?
 
   #massGrade
     = simple_form_for @badge, method: :post, :html => {class: "mass-edit-earned-badges" }, :url => mass_earn_badge_path(@badge) do |f|

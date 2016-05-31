@@ -1,4 +1,4 @@
-= team_filter if presenter.has_teams? && presenter.individual_assignment?
+= team_filter(presenter.teams) if presenter.has_teams? && presenter.individual_assignment?
 
 = form_tag edit_status_assignment_grades_path(presenter.assignment), method: :get do
   %table.dynatable.no-table-header

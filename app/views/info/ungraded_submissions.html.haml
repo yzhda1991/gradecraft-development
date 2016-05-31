@@ -7,12 +7,7 @@
 
   %span.label.alert= "You have #{@ungraded_submissions_count} ungraded #{term_for :assignments}"
 
-  - if current_course.has_teams?
-    .team-filter
-      = form_tag ungraded_submissions_path, name: "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        %label
-          .sr-only Select #{term_for :team}
-        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+  = team_filter(@teams) if current_course.has_teams?
 
   %br
 

@@ -5,7 +5,7 @@
 .pageContent
   = render "layouts/alerts"
 
-  = team_filter if current_course.has_teams? && @assignment.is_individual?
+  = team_filter(current_course.teams) if current_course.has_teams? && @assignment.is_individual?
 
   #massGrade
     = simple_form_for @assignment, method: :put, :url => mass_update_assignment_grades_path(@assignment) do |f|
