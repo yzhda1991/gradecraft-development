@@ -356,7 +356,7 @@ GradeCraft::Application.routes.draw do
     resources :badges, only: :index
     resources :earned_badges, only: [:create, :destroy]
     resources :grades, only: :update do
-      resources :earned_badges, only: [] do
+      resources :earned_badges, only: [], module: :grades do
         delete :delete_all, on: :collection
       end
     end
