@@ -110,7 +110,7 @@ GradeCraft::Application.routes.draw do
     get :download
   end
 
-  resources :unlock_states do
+  resources :unlock_states, only: [:create, :destroy, :update] do
     member do
       post :manually_unlock
     end
