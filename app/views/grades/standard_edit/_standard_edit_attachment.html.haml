@@ -1,11 +1,11 @@
 .grade-attachments
   .bold Attachments
-  = f.simple_fields_for :grade_files, @grade.grade_files.new do |gf|
+  = f.simple_fields_for :grade_files, grade.grade_files.new do |gf|
     = gf.file_field :file, :multiple => true
-  - if @grade.grade_files.exists?
+  - if grade.grade_files.exists?
     %h5.bold Uploaded files
     %ul.uploaded-files
-      - @grade.grade_files.each do |gf|
+      - grade.grade_files.each do |gf|
         - next if gf.new_record?
         %li
           - if ! gf.file_processing
@@ -16,6 +16,6 @@
               Refresh page to confirm upload has completed
           - else
             = link_to gf.filename, gf.url, :target => "_blank"
-            = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", grade_id: @grade.id, :upload_id => gf.id } )
+            = link_to "(Remove)", remove_uploads_path({ :model => "GradeFile", grade_id: grade.id, :upload_id => gf.id } )
   %br
   %br

@@ -15,6 +15,8 @@ describe "grades/_standard_edit" do
     allow(view).to receive(:current_student).and_return(@student)
     current_user = double
     allow(current_user).to receive(:id) {0}
+    allow(view).to receive(:grade).and_return(@grade)
+    allow(view).to receive(:submission).and_return(nil)
     allow(view).to receive(:current_user).and_return(current_user)
     allow(view).to receive(:current_course).and_return(@course)
   end

@@ -1,19 +1,21 @@
-@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'RubricService', '$http', ($scope, Restangular, Criterion, CourseBadge, RubricService, $http) ->
+@gradecraft.controller 'RubricCtrl', ['$scope', 'Restangular', 'Criterion', 'CourseBadge', 'RubricService', '$http', '$q', ($scope, Restangular, Criterion, CourseBadge, RubricService, $http, $q) ->
   Restangular.setRequestSuffix('.json')
 
-  $scope.assignment = RubricService.assignment
   $scope.courseBadges = RubricService.badges
   $scope.criteria = RubricService.criteria
 
   $scope.savedCriterionCount = 0
 
-  RubricService.getAssignment(window.location)
-  RubricService.getBadges()
-  RubricService.getCriteria($scope.assignment, $scope)
-
-  $scope.init = (rubricId, pointTotal)->
-    $scope.rubricId = rubricId
+  $scope.init = (assignmentId, pointTotal)->
+    $scope.assignmentId = assignmentId
     $scope.pointTotal = parseInt(pointTotal)
+    $scope.services()
+
+  $scope.services = () ->
+    promises = [
+      RubricService.getBadges()
+      RubricService.getCriteria($scope.assignmentId, $scope)]
+    $q.all(promises)
 
   # distill key/value pairs for criterion ids and relative order
   $scope.pointsAssigned = ()->

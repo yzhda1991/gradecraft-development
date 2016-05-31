@@ -2,7 +2,7 @@
 
   -# dynamic label for select box
   %label(for="grade_raw_score" ng-click="grade.disableCustomValue()" ng-class="{'inactive': grade.is_custom_value}")
-    Raw Score (#{@assignment.point_total} Points Possible)
+    Raw Score (#{assignment.point_total} Points Possible)
 
   %select#grade_raw_score(name="grade[raw_score]" ng-model="grade.raw_score" ng-disabled="grade.is_custom_value" ng-click="grade.enableScoreLevels($event)" ng-change="grade.update()" ng-class="{'disabled': grade.is_custom_value}")
     %option(value="{{scoreLevel.value}}" ng-repeat="scoreLevel in assignmentScoreLevels" ng-selected="grade.raw_score == scoreLevel.value") {{scoreLevel.name}} ({{scoreLevel.formatted_value}} points)
@@ -12,9 +12,9 @@
   %label#custom-value-label(for="grade_raw_score" ng-click="grade.enableCustomValue()" ng-class="{'disabled': ! grade.is_custom_value}")
     Custom Value
   = f.text_field :raw_score,
-    default: @assignment.point_total,
+    default: assignment.point_total,
     label: "Score",
-    hint: "Total Assignment Points: #{ points @assignment.point_total }",
+    hint: "Total Assignment Points: #{ points assignment.point_total }",
     "ng-model" => "grade.raw_score",
     "ng-change" => "grade.update()",
     "ng-click" => "grade.enableCustomValue()",

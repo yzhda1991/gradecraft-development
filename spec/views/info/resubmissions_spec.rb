@@ -22,6 +22,8 @@ describe "info/resubmissions" do
     @submission_2 = create(:submission, assignment: @assignment_2, course: @course, student: @user_2)
     @course.submissions << [ @submission_1, @submission_2 ]
     @resubmissions = @course.submissions
+    create(:grade, assignment: @assignment_1, student: @user_1)
+    create(:grade, assignment: @assignment_2, student: @user_2)
   end
 
   before(:each) do

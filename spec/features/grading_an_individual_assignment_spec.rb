@@ -9,6 +9,7 @@ feature "grading an individual assignment" do
     let!(:assignment) { create :assignment, name: "Assignment Name", course: course, assignment_type: assignment_type }
     let(:student) { create :user, first_name: "Hermione", last_name: "Granger" }
     let!(:course_membership_2) { create :student_course_membership, user: student, course: course }
+    let!(:grade) { create :grade, assignment: assignment, student: student }
 
     before(:each) do
       login_as professor
@@ -33,7 +34,7 @@ feature "grading an individual assignment" do
         click_link "Grade"
       end
 
-      expect(current_path).to eq edit_assignment_grade_path(assignment)
+      expect(current_path).to eq edit_grade_path(grade)
 
       within(".pageContent") do
         fill_in("grade_raw_score", with: 100)

@@ -9,12 +9,7 @@ class Assignments::GroupsController < ApplicationController
     @submission_id = @assignment.submissions.where(group_id: @group.id).first.try(:id)
     @title = "Grading #{ @group.name }'s #{@assignment.name}"
     @assignment_score_levels = @assignment.assignment_score_levels
-
-    if @assignment.grade_with_rubric?
-      @rubric = @assignment.rubric
-      # This is sent to the Angular controlled submit button
-      @return_path = URI(request.referer).path
-    end
+    @rubric = @assignment.rubric if @assignment.grade_with_rubric?
   end
 
   # PUT /assignments/:assignment_id/groups/:id/graded

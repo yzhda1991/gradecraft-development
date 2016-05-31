@@ -1,6 +1,5 @@
 class GradesController < ApplicationController
   respond_to :html, :json
-  before_filter :set_assignment, only: [:edit, :update]
   before_filter :ensure_staff?,
     except: [:feedback_read, :show, :predict_score, :async_update]
   before_filter :ensure_student?, only: [:feedback_read, :predict_score]
@@ -18,52 +17,34 @@ class GradesController < ApplicationController
     @title = "#{name}'s Grade for #{@grade.assignment.name}"
   end
 
-  # GET /assignments/:assignment_id/grade/edit?student_id=:id
+  # GET /grades/:id/edit
   def edit
-    @student = current_student
-
-    @grade = Grade.find_or_create(@assignment.id, @student.id)
-    @title = "Editing #{@student.name}'s Grade for #{@assignment.name}"
-
-    @submission = @student.submission_for_assignment(@assignment)
-
-    @badges = @student.earnable_course_badges_for_grade(@grade)
-    @assignment_score_levels =
-      @assignment.assignment_score_levels.order_by_value
-
-    if @assignment.grade_with_rubric?
-      @rubric = @assignment.rubric
-      @criterion_grades = serialized_criterion_grades
-      # This is sent to the Angular controlled submit button
-      @return_path =
-        URI(request.referer).path + "?student_id=#{current_student.id}"
-    end
-
-    @serialized_init_data = serialized_init_data
+    @grade = Grade.find params[:id]
+    @title = "Editing #{@grade.student.name}'s Grade "\
+      "for #{@grade.assignment.name}"
+    @badges = @grade.student.earnable_course_badges_for_grade(@grade)
+    @submission = @grade.student.submission_for_assignment(@grade.assignment)
   end
 
   # To avoid duplicate grades, we don't supply a create method. Update will
   # create a new grade if none exists, and otherwise update the existing grade
-  # PUT /assignments/:assignment_id/grade
+  # PUT /grades/:id
   def update
-    @grade = Grade.find_or_create(@assignment.id, current_student.id)
+    grade = Grade.find params[:id]
 
-    if @grade.update_attributes params[:grade].merge(graded_at: DateTime.now,
-        instructor_modified: true)
-
-      if GradeProctor.new(@grade).viewable?
-        grade_updater_job = GradeUpdaterJob.new(grade_id: @grade.id)
-        grade_updater_job.enqueue
+    grade_params = params[:grade].merge(graded_at: DateTime.now, instructor_modified: true)
+    if grade.update_attributes grade_params
+      if GradeProctor.new(grade).viewable?
+        GradeUpdaterJob.new(grade_id: grade.id).enqueue
       end
 
-      if session[:return_to].present?
-        redirect_to session[:return_to], notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-      else
-        redirect_to assignment_path(@assignment), notice: "#{@grade.student.name}'s #{@assignment.name} was successfully updated"
-      end
-
+      path = session[:return_to] || assignment_path(grade.assignment)
+      redirect_to path,
+        notice: "#{grade.student.name}'s #{grade.assignment.name} was successfully updated"
     else # failure
-      redirect_to edit_assignment_grade_path(@assignment, student_id: @grade.student.id), alert: "#{@grade.student.name}'s #{@assignment.name} was not successfully submitted! Please try again."
+      redirect_to edit_grade_path(grade),
+        alert: "#{grade.student.name}'s #{grade.assignment.name} was not successfully "\
+          "submitted! Please try again."
     end
   end
 
@@ -232,9 +213,5 @@ class GradesController < ApplicationController
 
   def rubric_criteria_with_levels
     @rubric_criteria_with_levels ||= @rubric.criteria.ordered.includes(:levels)
-  end
-
-  def set_assignment
-    @assignment = Assignment.find(params[:assignment_id]) if params[:assignment_id]
   end
 end

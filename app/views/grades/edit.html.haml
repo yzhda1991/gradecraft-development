@@ -1,21 +1,21 @@
-= content_nav_for @assignment, "Edit Grade"
+= content_nav_for @grade.assignment, "Edit Grade"
 
 %h3.pagetitle= @title
 
 .pageContent
   = render partial: "layouts/alerts", locals: { model: @grade, display_flash: false }
 
-  = render partial: "submissions/assignment_guidelines", locals: { assignment: @assignment }
+  = render partial: "submissions/assignment_guidelines", locals: { assignment: @grade.assignment }
 
-  - if @assignment.accepts_submissions? && @student.submission_for_assignment(@assignment).present?
+  - if @grade.assignment.accepts_submissions? && @submission.present?
     %section
 
-      %h4.uppercase= "#{@student.first_name}'s Submission"
+      %h4.uppercase= "#{@grade.student.first_name}'s Submission"
       = render partial: "submissions/submission_content",
-          locals: { presenter: Submissions::ShowPresenter.new(id: @submission.id,
-            assignment_id: @assignment.id, course: current_course) }
+        locals: { presenter: Submissions::ShowPresenter.new(id: @submission.id,
+            assignment_id: @grade.assignment.id, course: current_course) }
 
-  - if @assignment.grade_with_rubric?
-    = render "rubric_edit"
+  - if @grade.assignment.grade_with_rubric?
+    = render partial: "rubric_edit", locals: { rubric: @grade.assignment.rubric, scope_type: "student", scoped_id: @grade.student_id, return_path: URI(request.referer || "").path }
   - else
-    = render "standard_edit"
+    = render partial: "standard_edit", locals: { grade: @grade, badges: @badges, submission: @submission }

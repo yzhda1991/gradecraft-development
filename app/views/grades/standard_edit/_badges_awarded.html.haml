@@ -2,7 +2,7 @@
   #{term_for :badges} Awarded for this #{term_for :assignment}
   %button#remove-badges(ng-click="removeAllEarnedBadges($event)" ng-show="badgesAwarded()") Remove All
 
-- if @badges.present?
+- if badges.present?
 
   .grade-badge.hexagon.awarded(title="{{badge.point_total}} Points: {{badge.description}}" ng-repeat="badge in badges" ng-class="{unearned: badge.unearned(), earned: badge.earned()}" ng-click="badge.deleteEarnedStudentBadge()" hide-after-fade)
 

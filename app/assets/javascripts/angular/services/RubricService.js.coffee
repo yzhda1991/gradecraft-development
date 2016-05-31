@@ -12,31 +12,10 @@
   badges = {}
   criterionGrades = {}
 
-  getAssignment = (location)->
-    assignment.id = parseInt(location.pathname.split('/')[2])
-    # GRADING A STUDENT FOR AN ASSIGNMENT
-    if location.search.match(/student_id=/)
-      assignment.scope = {
-        type: "STUDENT",
-        id: parseInt(window.location.search.match(/student_id=(\d+)/)[1])
-      }
-    # GRADING A GROUP FOR AN ASSIGNMENT
-    else if location.pathname.split('/')[3] == "groups"
-      assignment.scope = {
-        type: "GROUP",
-        id: parseInt(location.pathname.split('/')[4])
-      }
-    # DESIGNING A RUBRIC
-    else
-      assignment.scope = {
-        type: "DESIGN_MODE",
-        id: null
-      }
-
   # TODO: $scope should not be passed around if we want to avoid tight coupling
-  getCriteria = (assignment, $scope)->
+  getCriteria = (assignmentId, $scope)->
     _scope = $scope
-    $http.get('/api/assignments/' + assignment.id + '/criteria').success((res)->
+    $http.get('/api/assignments/' + assignmentId + '/criteria').success((res)->
       angular.forEach(res.data, (criterion, index)->
         criterionObject = new Criterion(criterion.attributes, _scope)
         criteria.push criterionObject
@@ -50,11 +29,11 @@
     )
 
   getCriterionGrades = (assignment)->
-    if assignment.scope.type == "STUDENT"
+    if assignment.scope.type == "student"
       $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/criterion_grades/').success((res)->
         addCriterionGrades(res.data)
       )
-    else if assignment.scope.type == "GROUP"
+    else if assignment.scope.type == "group"
       $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/criterion_grades/').success((res)->
 
         # The API sends all student information so we can add the ability to custom grade group members
@@ -71,13 +50,13 @@
     )
 
   getGrade = (assignment)->
-    if assignment.scope.type == "STUDENT"
+    if assignment.scope.type == "student"
       $http.get('/api/assignments/' + assignment.id + '/students/' + assignment.scope.id + '/grade/').success((res)->
         angular.copy(res.data.attributes, grade)
         angular.copy(res.meta.grade_status_options, gradeStatusOptions)
         thresholdPoints = res.meta.threshold_points
       )
-    else if assignment.scope.type == "GROUP"
+    else if assignment.scope.type == "group"
       $http.get('/api/assignments/' + assignment.id + '/groups/' + assignment.scope.id + '/grades/').success((res)->
 
         # The API sends all student information so we can add the ability to custom grade group members
@@ -88,7 +67,7 @@
       )
 
   putRubricGradeSubmission = (assignment, params, returnURL)->
-    scopeRoute = if assignment.scope.type == "STUDENT" then "students" else "groups"
+    scopeRoute = if assignment.scope.type == "student" then "students" else "groups"
     $http.put("/api/assignments/#{assignment.id}/#{scopeRoute}/#{assignment.scope.id}/criterion_grades", params).success(
       (data)->
         console.log(data)

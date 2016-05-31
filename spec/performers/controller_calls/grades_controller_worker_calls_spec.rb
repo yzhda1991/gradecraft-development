@@ -22,7 +22,7 @@ RSpec.describe GradesController, type: :controller, background_job: true do
     before(:each) { enroll_and_login_professor }
 
     describe "#update" do
-      let(:request_attrs) {{ assignment_id: assignment.id, grade: { raw_score: 50 } }}
+      let(:request_attrs) {{ id: grade.id, grade: { raw_score: 50 } }}
       subject { put :update, request_attrs }
 
       before do
