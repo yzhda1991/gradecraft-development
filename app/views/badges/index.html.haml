@@ -5,7 +5,7 @@
 = render partial: "badges/context_menu", locals: {actions: [:new]} if current_user_is_staff? && !presenter.view_student_context?
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   %table.badge-index-table.second-row-header{:class => ("student-index" if presenter.view_student_context?)}
     %thead
