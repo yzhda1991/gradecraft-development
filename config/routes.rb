@@ -121,10 +121,8 @@ GradeCraft::Application.routes.draw do
     put :update_order, on: :collection
   end
 
-  resources :levels
-  resources :graded_criteria
-
-  resources :level_badges
+  resources :levels, only: [:create, :destroy, :update]
+  resources :level_badges, only: [:create, :destroy]
 
   #4. Assignment Types
   resources :assignment_types do
