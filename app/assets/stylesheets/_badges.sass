@@ -8,6 +8,8 @@
 .badge-icon
   width: 80%
   max-width: 100px
+  display: block
+  margin: 0 auto
 
 .student-badge-display
   text-align: center
@@ -23,38 +25,6 @@
 
 /* used on the badge show page for both instructors and students, and grade
 /* standard edit form */
-.badge-card
-  position: relative
-  min-height: 8%
-  max-height: 7.85rem
-  max-width: 280px
-  min-width: 17.5rem
-  background-color: $color-blue-3
-  border-radius: $global-radius
-  padding: .5rem
-  display: inline-block
-  margin: 0 .25rem .25rem 0
-
-  &.available
-    background-color: $color-blue-2
-
-  .card-ribbon
-    position: relative
-    border: 1px dashed $color-white
-    border-radius: $global-radius
-    min-height: 5%
-    max-height: 6.7rem
-    padding: .5rem .15rem .5rem .5rem
-    overflow: hidden
-    color: $color-white
-    font-size: .65rem
-
-    .points
-      text-transform: uppercase
-      font-weight: bold
-
-    .date
-      font-style: italic
 
 .earned-count
   font-size: .7rem
@@ -75,12 +45,13 @@ button#remove-badges, button#add-badges
 
 .grade-badge
   float: left
+  margin: 1rem
   position: relative
-  width: 5rem
-  margin: 0 3rem 3rem 2rem
 
   img
     width: 80px
+    display: block
+    margin: 0 auto
 
   &.unearned:hover, &.unearned:before:hover, &.unearned:after:hover
     background-color: $color-blue-3
@@ -125,7 +96,7 @@ button#remove-badges, button#add-badges
   .gold-stars
     position: absolute
     top: 10px
-    right: -20px
+    right: 0px
     font-size: 2rem
     color: $color-yellow-1
     z-index: 100 !important
@@ -194,5 +165,4 @@ button#remove-badges, button#add-badges
   margin: 0px
   width: 120px
   text-align: center
-  font-weight: bold
   line-height: .9rem
