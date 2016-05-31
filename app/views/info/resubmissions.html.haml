@@ -7,12 +7,7 @@
 
   %span.label.alert= "You have #{@resubmission_count} resubmissions to grade"
 
-  - if current_course.has_teams?
-    .team-filter
-      = form_tag resubmissions_path, name: "see_team", :onchange => ("javascript: document.see_team.submit();"), :method => :get do
-        %label
-          .sr-only Select #{term_for :team}
-        = select_tag :team_id, options_for_select(@teams.map { |t| [t.name, t.id] }, @team.try(:id)), :prompt => "– Select #{(term_for :team).titleize} –"
+  = team_filter(@teams) if current_course.has_teams?
 
   - @resubmissions.group_by(&:assignment).each do |assignment, resubmissions|
     %h5.section-title
