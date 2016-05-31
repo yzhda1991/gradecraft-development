@@ -99,7 +99,6 @@ GradeCraft::Application.routes.draw do
 
   resources :grades, only: [:show, :destroy, :edit, :update] do
     member do
-      post :earn_student_badges
       post :exclude
       post :feedback_read
       post :include
@@ -356,7 +355,7 @@ GradeCraft::Application.routes.draw do
     resources :badges, only: :index
     resources :earned_badges, only: [:create, :destroy]
     resources :grades, only: :update do
-      resources :earned_badges, only: [], module: :grades do
+      resources :earned_badges, only: :create, module: :grades do
         delete :delete_all, on: :collection
       end
     end

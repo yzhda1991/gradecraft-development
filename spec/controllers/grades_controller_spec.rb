@@ -142,18 +142,6 @@ describe GradesController do
       end
     end
 
-    describe "earn_student_badges" do
-      it "creates new student badges from params" do
-        badge_1 = create(:badge)
-        badge_2 = create(:badge)
-        badge_3 = create(:badge)
-        params = {id: @grade.id, earned_badges: [{ badge_id: badge_1.id, student_id: @student },
-                                  { badge_id: badge_2.id, student_id: @student },
-                                  { badge_id: badge_3.id, student_id: @student }]}
-        expect{post :earn_student_badges, params}.to change {EarnedBadge.count}.by(3)
-      end
-    end
-
     describe "POST remove" do
       before do
         allow_any_instance_of(ScoreRecalculatorJob).to \

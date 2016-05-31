@@ -1,4 +1,9 @@
 class API::Grades::EarnedBadgesController < ApplicationController
+  # POST /api/grades/:grade_id/earned_badges
+  def create
+    render json: EarnedBadge.create(params[:earned_badges])
+  end
+
   # DELETE /api/grades/:grade_id/earned_badges/delete_all
   def delete_all
     if !EarnedBadge.where(grade_id: params[:grade_id]).destroy_all.empty?

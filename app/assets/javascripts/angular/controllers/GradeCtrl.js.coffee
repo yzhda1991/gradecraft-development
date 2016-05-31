@@ -75,7 +75,7 @@
         unearnedBadgesPostParams.push $scope.earnedBadgePostParams(badge)
     )
 
-    $http.post("/grades/#{$scope.grade.id}/earn_student_badges", {earned_badges: unearnedBadgesPostParams}).success(
+    $http.post("/api/grades/#{$scope.grade.id}/earned_badges", {earned_badges: unearnedBadgesPostParams}).success(
       (data, status)->
         angular.forEach(data["grades"], (earnedBadge)->
           badge = unearnedBadges[earnedBadge.badge_id]

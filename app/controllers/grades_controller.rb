@@ -48,12 +48,6 @@ class GradesController < ApplicationController
     end
   end
 
-  # POST /grades/:grade_id/earn_student_badges
-  def earn_student_badges
-    @earned_badges = EarnedBadge.create params[:earned_badges]
-    render json: @earned_badges
-  end
-
   # POST /grades/:id/remove
   # This is the method used when faculty delete a grade
   # it preserves the predicted grade
