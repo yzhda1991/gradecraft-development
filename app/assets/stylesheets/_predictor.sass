@@ -473,6 +473,7 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
 // small
 @media (max-width: $media-small-max)
   #predictor-graphic
+    height: 175px
     .grade-point-axis text
       font-size: $predictor-font-size-5
     #svg-keys
@@ -480,6 +481,9 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
     #svg-predicted-key
       transform: translate(10px,120px)
       -webkit-transform: translate(10px,120px)
+    #svg-predicted-grade
+      transform: translate(10px, 160px)
+      -webkit-transform: translate(10px, 160px)
   .collapse-arrow.doubled
     margin: 35px 0 0 0
   article.predictor-article
@@ -513,9 +517,9 @@ article.predictor-article .ui-slider.below-threshold .ui-slider-range
       margin: 0
       font-size: $predictor-font-size-1
   #predictor-main-header
-    height: 60px
+    height: 66px
     margin-top: 0px
-    padding-top: 10px
+    padding-top: 30px
   .predictor-section
     height: 70px
     .collapse-arrow
