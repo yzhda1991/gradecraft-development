@@ -19,7 +19,7 @@
           Quick Grade
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   - if @challenge.challenge_files.present?
     %p
@@ -31,6 +31,6 @@
           = link_to "(Remove)", remove_uploads_path({ :model => "ChallengeFile", :upload_id => cf.id })
 
   - if current_user_is_staff?
-    = render "show_instructor"
+    = render partial: "challenges/show_instructor"
   - else
-    = render "show_student"
+    = render partial: "challenges/show_student"
