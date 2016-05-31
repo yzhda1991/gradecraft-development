@@ -47,8 +47,28 @@ module S3Manager
       end
     end
 
-    def cached_file_path
-      @cached_file_path ||= [ store_dir, mounted_filename ].join("/")
+    def write_s3_object_to_disk(object_key, target_file_path)
+      client.get_object({
+        response_target: target_file_path,
+        bucket: bucket_name,
+        key: object_key
+      })
+    end
+
+    def fetch_object_to_tempdir(temp_filename: nil)
+      temp_filename ||= mounted_filename
+      tmp_dir = Dir.mktmpdir
+      temp_filepath = [tmp_dir, temp_filename].join "/"
+
+      File.open(temp_filepath, "w") {|f| f << "stuff\nwhateverz\n" }
+      temp_filepath
+      # write_s3_object_to_disk(s3_object_file_key, temp_filename).on_success do
+      #  return temp_filepath
+      # end
+    end
+
+    def cached_file_patch
+      @cached_file_path ||= [store_dir, mounted_filename].join("/")
     end
 
     def mounted_filename

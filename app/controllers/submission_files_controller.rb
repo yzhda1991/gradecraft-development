@@ -5,8 +5,8 @@ class SubmissionFilesController < ApplicationController
     authorize! :download, presenter.submission_file
 
     # let's use the object_stream here because there's no reason to hit S3 twice
-    if presenter.submission_file_streamable?
-      send_file presenter.write_submission_file_to_tempfile
+    if presenter.submission_file_object_exists?
+      send_file presenter.get_renamed_submission_file_object
     else
       presenter.mark_submission_file_missing
       flash[:alert] = "The requested file was not found on the server."
