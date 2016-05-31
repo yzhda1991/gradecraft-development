@@ -27,6 +27,7 @@ class SubmissionsController < ApplicationController
         NotificationMailer.successful_submission(submission.id).deliver_now if assignment.is_individual?
         redirect_to = assignment_path(assignment, anchor: "tab3")
       end
+      # rubocop:disable AndOr
       redirect_to redirect_to, notice: "#{assignment.name} was successfully submitted." and return
     end
     render :new, Submissions::NewPresenter.build(assignment_id: params[:assignment_id],

@@ -43,6 +43,7 @@ class AttachmentUploader < CarrierWave::Uploader::Base
   end
 
   def course
+    # rubocop:disable AndOr
     "#{model.course.courseno}-#{model.course.id}" if model and model.class.method_defined? :course
   end
 

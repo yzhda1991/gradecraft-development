@@ -47,6 +47,7 @@ class UsersController < ApplicationController
     if result.success?
       if @user.is_student?(current_course)
         redirect_to students_path,
+          # rubocop:disable AndOr
           notice: "#{term_for :student} #{@user.name} was successfully created!" and return
       elsif @user.is_staff?(current_course)
         redirect_to staff_index_path,

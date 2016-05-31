@@ -4,6 +4,7 @@ class AssignmentsController < ApplicationController
 
   before_filter :ensure_staff?, except: [:show, :index]
 
+  # rubocop:disable AndOr
   def index
     redirect_to syllabus_path and return if current_user_is_student?
     @title = "#{term_for :assignments}"
