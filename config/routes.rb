@@ -91,11 +91,9 @@ GradeCraft::Application.routes.draw do
 
     resources :submissions, except: :index
 
-    resource :rubric do
-      get :existing_criteria
-      resources :criteria
+    resource :rubric, except: [:edit, :index, :new] do
       get :design, on: :collection
-      get :export
+      get :export, on: :collection
     end
   end
 
@@ -124,7 +122,7 @@ GradeCraft::Application.routes.draw do
   delete "grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id", to: "grades#delete_earned_badge"
   delete "grade/:grade_id/earned_badges", to: "grades#delete_all_earned_badges"
 
-  resources :criteria do
+  resources :criteria, only: [:create, :destroy, :update] do
     put :update_order, on: :collection
   end
 
