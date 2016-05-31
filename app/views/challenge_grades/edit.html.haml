@@ -3,6 +3,6 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
-  = render partial: "form", locals: { form_path: challenge_grade_path(@challenge_grade) }
+  = render partial: "challenge_grades/form", locals: { form_path: challenge_grade_path(@challenge_grade) }

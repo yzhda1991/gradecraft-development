@@ -3,7 +3,7 @@
 %h3.pagetitle= @title
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   %p
     %b #{(term_for :team).titleize}:
