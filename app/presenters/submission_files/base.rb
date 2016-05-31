@@ -2,7 +2,7 @@ require "showtime"
 
 module Presenters
   module SubmissionFiles
-    class Base
+    class Base < Showtime::Presenter
 
       def submission_file
         return nil unless params[:submission_file_id]
@@ -15,13 +15,11 @@ module Presenters
       end
 
       def submission_file_streamable?
-        return false unless submission_file
-        submission_file.object_stream.exists?
+        submission_file && submission_file.streamable?
       end
 
-      def stream_submission_file
-        return false unless submission_file_streamable?
-        submission_file.object_stream.stream!
+      def write_submission_file_to_tempfile
+        submission_file.write_tempfile_from_stream temp_filename: filename
       end
 
       def filename

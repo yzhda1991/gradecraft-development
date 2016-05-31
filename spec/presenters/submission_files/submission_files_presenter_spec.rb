@@ -1,7 +1,7 @@
 require "active_record_spec_helper"
-require_relative "../../app/presenters/submission_files_presenter"
+require "./app/presenters/submission_files/base"
 
-describe SubmissionFilesPresenter do
+describe Presenters::SubmissionFiles::Base do
   subject { described_class.new }
 
   let(:submission_file) do
