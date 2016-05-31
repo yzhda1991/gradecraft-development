@@ -1,8 +1,8 @@
-= simple_form_for(@challenge_grade) do |f|
+= simple_form_for(@challenge_grade, url: form_path) do |f|
   %section
     %h4 Score
 
-    = f.hidden_field :team_id, team_id: @team.id
+    = f.hidden_field :team_id, value: @team.id
     = f.hidden_field :challenge_id, value: @challenge.id
 
     .form-item

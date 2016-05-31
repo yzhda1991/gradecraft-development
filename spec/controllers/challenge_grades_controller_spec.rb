@@ -13,33 +13,6 @@ describe ChallengeGradesController do
       login_user(professor)
     end
 
-    describe "GET new" do
-      it "shows the new challenge grade form" do
-        get :new, {challenge_id: challenge, team_id: team}
-        expect(assigns(:challenge)).to eq(challenge)
-        expect(assigns(:team)).to eq(team)
-        expect(response).to render_template(:new)
-      end
-    end
-
-    describe "POST create" do
-      it "creates the challenge grade with valid attributes and redirects to the challenge show page" do
-        team2 = create(:team, course: world.course )
-        params = attributes_for(:challenge_grade)
-        params[:score] = "101"
-        params[:challenge_id] = challenge.id
-        params[:team_id] = team2.id
-        params[:status] = "Released"
-        post :create, challenge_grade: params
-        expect(challenge.challenge_grades.where(:team_id => team2.id).first.score).to eq(101)
-        expect(response).to redirect_to(challenge)
-      end
-
-      it "redirects to new form with invalid attributes" do
-        expect{ post :create, challenge_id: challenge.id, challenge_grade: attributes_for(:challenge_grade, team_id: nil) }.to_not change(ChallengeGrade,:count)
-      end
-    end
-
     describe "GET show" do
       it "shows the challenge grade" do
         get :show, {id: @challenge_grade, challenge_id: challenge}
@@ -110,17 +83,6 @@ describe ChallengeGradesController do
         expect(assigns(:team)).to eq(team)
         expect(response).to render_template(:show)
       end
-    end
-
-    describe "protected routes" do
-      [
-        :new,
-        :create
-      ].each do |route|
-          it "#{route} redirects to root" do
-            expect(get route, {challenge_id: 2 }).to redirect_to(:root)
-          end
-        end
     end
 
     describe "protected routes requiring id in params" do

@@ -30,6 +30,7 @@ class Team < ActiveRecord::Base
   # Various ways to sort the display of teams
   scope :order_by_average_score, -> { order("average_score DESC") }
   scope :order_by_challenge_grade_score, -> { order("challenge_grade_score DESC")}
+  scope :order_by_rank, -> { order("rank ASC")}
   scope :alpha, -> { order("name ASC") }
 
   def self.find_by_course_and_name(course_id, name)
@@ -65,22 +66,22 @@ class Team < ActiveRecord::Base
     end
   end
 
-  def sorted_teams
-    teams = self.course.teams
-    if self.course.team_score_average?
-      rank_index = teams.order_by_average_score
-    elsif self.course.challenges.present?
-      rank_index = teams.order_by_challenge_grade_score
+  def sorted_team_scores
+    teams = course.teams
+    if course.team_score_average?
+      rank_index = teams.order_by_average_score.pluck('average_score')
+    elsif course.challenges.present?
+      rank_index = teams.order_by_challenge_grade_score.pluck('challenge_grade_score')
     end
-    return teams
+    return rank_index
   end
 
   def update_ranks!
     course.teams.each do |team|
-      if self.course.team_score_average?
-        rank = sorted_teams.index(team.average_score) + 1
-      elsif self.course.challenges.present?
-        rank = (sorted_teams.index(team.challenge_grade_score) || 0) + 1
+      if course.team_score_average?
+        rank = sorted_team_scores.index(team.average_score) + 1
+      elsif course.challenges.present?
+        rank = (sorted_team_scores.index(team.challenge_grade_score) || 0) + 1
       end
       team.update_attributes rank: rank
     end

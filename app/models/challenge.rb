@@ -17,8 +17,8 @@ class Challenge < ActiveRecord::Base
   belongs_to :course, touch: true
   has_many :submissions
   has_many :challenge_grades, dependent: :destroy do
-    def for_team(team)
-      where(team_id: team.id).first || new(team: team, challenge_id: self)
+    def find_or_initialize_for_team(team)
+      where(team_id: team.id).first || new(team: team, challenge_id: self.id)
     end
   end
 

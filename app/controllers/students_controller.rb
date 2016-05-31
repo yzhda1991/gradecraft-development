@@ -82,6 +82,7 @@ class StudentsController < ApplicationController
     @title = "#{term_for :teams}"
     @display_sidebar = true
     @team = current_student.team_for_course(current_course)
+    @teams = current_course.teams.order_by_rank.includes(:earned_badges)
   end
 
   # Display the grade predictor

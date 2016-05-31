@@ -36,5 +36,5 @@
                       %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(current_student.team_for_course(current_course)), team: current_student.team_for_course(current_course)), class: "button"
                     - else
                       %li
-                        %a{:href => new_challenge_grade_path(challenge, team_id: current_student.team_for_course(current_course).id), class: "button"}
+                        %a{:href => new_challenge_challenge_grade_path(challenge, team_id: current_student.team_for_course(current_course).id), class: "button"}
                           Grade

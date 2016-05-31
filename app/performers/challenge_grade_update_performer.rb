@@ -18,9 +18,7 @@ class ChallengeGradeUpdatePerformer < ResqueJob::Performer
   end
 
   def require_notify_released_success
-    if ChallengeGradeProctor.new(@challenge_grade).viewable?
-      require_success(notify_released_messages, max_result_size: 200) { notify_challenge_grade_released }
-    end
+    require_success(notify_released_messages, max_result_size: 200) { notify_challenge_grade_released }
   end
 
   def save_scores_messages

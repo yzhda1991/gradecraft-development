@@ -5,4 +5,4 @@
 .pageContent
   = render "layouts/alerts"
 
-  = render "form"
+  = render partial: "form", locals: { form_path: challenge_grade_path(@challenge_grade) }

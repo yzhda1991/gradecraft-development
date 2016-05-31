@@ -74,6 +74,6 @@
               %ul.button-bar
                 - if challenge.challenge_grade_for_team(@team).present?
                   %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id), class: "button"
-                  %li= link_to glyph(:trash) + "Delete Grade", challenge_grade_path(challenge , challenge.challenge_grade_for_team(@team).id, team_id: @team.id), class: "button", data: { confirm: "Are you sure?", method: :delete }
+                  %li= link_to glyph(:trash) + "Delete Grade", challenge_grade_path(challenge, challenge.challenge_grade_for_team(@team).id, team_id: @team.id), class: "button", data: { confirm: "Are you sure?", method: :delete }
                 - else
-                  %li= link_to glyph(:check) + "Grade", new_challenge_grade_path(challenge_id: challenge, team_id: @team.id), class: "button"
+                  %li= link_to glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: challenge, team_id: @team.id), class: "button"

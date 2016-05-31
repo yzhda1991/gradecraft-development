@@ -52,7 +52,7 @@ describe API::PredictedEarnedChallengesController do
       it "adds visible grades to the challenge data" do
         challenge_grade = create(:released_challenge_grade, challenge: world.challenge, team: world.team)
         get :index, format: :json
-        expect(assigns(:challenges)[0].challenge_grade).to eq({ score: challenge_grade.score })
+        expect(assigns(:challenges)[0].grade).to eq({ score: challenge_grade.score })
       end
 
       it "adds grades as nil when not visible to student" do

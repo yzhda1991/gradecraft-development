@@ -47,8 +47,6 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
         context "challenge grade has not been released" do
           let(:challenge_grade) { create(:grades_not_released_challenge_grade, challenge_grade_attributes) }
 
-          before { allow(challenge_grade).to receive(:is_released?) { false } }
-
           it_behaves_like "a failed resque job", ChallengeGradeUpdaterJob
         end
       end
