@@ -3,6 +3,7 @@ class Assignments::GradesController < ApplicationController
   before_filter :ensure_student?, only: :self_log
   before_filter :save_referer, only: :edit_status
 
+  # rubocop:disable AndOr
   # GET /assignments/:assignment_id/grades/download
   # Sends a CSV file to the user with the current grades for all students
   # in the course for the asisgnment

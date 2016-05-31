@@ -28,6 +28,7 @@ class AnnouncementsController < ApplicationController
     if @announcement.save
       @announcement.deliver!
       redirect_to announcements_path,
+        # rubocop:disable AndOr
         notice: "Announcement created and sent." and return
     end
 
