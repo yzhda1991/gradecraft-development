@@ -3,7 +3,7 @@
     #{term_for :badges} available
     %button#add-badges(ng-click="addRemainingEarnedBadges($event)" ng-show="badgesAvailable()") Add All
 
-  .grade-badge.hexagon.available(title="{{badge.full_points}} Points: {{badge.description}}" ng-repeat="badge in badges" ng-class="{unearned: badge.unearned(), earned: badge.earned()}" ng-click="earnBadgeForStudent(badge)" hide-after-fade)
+  .grade-badge.available(title="{{badge.point_total}} Points: {{badge.description}}" ng-repeat="badge in badges" ng-class="{unearned: badge.unearned(), earned: badge.earned()}" ng-click="earnBadgeForStudent(badge)" hide-after-fade)
 
     %img(ng-src="{{badge.icon}}" alt="You've earned the {{badge.name}} badge" class="unearned")
 
