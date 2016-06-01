@@ -27,7 +27,7 @@
       .form-item= f.association :students, :collection => current_course.students, as: :select, :label => "#{term_for :students}"
     .form_label{id: "txtStudentName"} Enter a fellow student's name to add them to this #{term_for :group}. Only one student needs to create the #{term_for :group}, after which all #{term_for :group} members will be able to submit work, see submitted materials, and see instructor grades and feedback.
 
-  = render "proposal_section", f: f
+  = render partial: "groups/proposal_section", locals: { f: f }
 
   .submit-buttons
     %ul

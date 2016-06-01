@@ -6,12 +6,12 @@
 %h3.pagetitle= @title
 
 - if current_user_is_staff?
-  = render "buttons"
+  = render partial: "groups/buttons"
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
-  = render "status_display", group: @group
+  = render partial: "status_display", locals: { group: @group }
 
   %h4
     Members:
