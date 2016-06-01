@@ -26,9 +26,9 @@
     ]
     unusedWeights = null
 
-    uri_prefix = (student_id)->
-      if student_id
-        '/api/students/' + student_id + '/'
+    uri_prefix = (studentId)->
+      if studentId
+        '/api/students/' + studentId + '/'
       else
         'api/'
 
@@ -43,8 +43,8 @@
         _totalPoints = res.meta.total_points
       )
 
-    getAssignmentTypes = (student_id)->
-      $http.get(uri_prefix(student_id) + "assignment_types").success((res)->
+    getAssignmentTypes = (studentId)->
+      $http.get(uri_prefix(studentId) + "assignment_types").success((res)->
         _.each(res.data, (assignment_type)->
           assignmentTypes.push(assignment_type.attributes)
         )
@@ -75,8 +75,8 @@
           weights.max_assignment_types_weighted - types
         )
 
-    getAssignments = (student_id)->
-      $http.get(uri_prefix(student_id) + 'predicted_earned_grades').success( (res)->
+    getAssignments = (studentId)->
+      $http.get(uri_prefix(studentId) + 'predicted_earned_grades').success( (res)->
         _.each(res.data, (assignment)->
           assignments.push(assignment.attributes)
         )
@@ -86,8 +86,8 @@
         update.assignments = res.meta.update_assignments
       )
 
-    getBadges = (student_id)->
-      $http.get(uri_prefix(student_id) + 'predicted_earned_badges').success( (res)->
+    getBadges = (studentId)->
+      $http.get(uri_prefix(studentId) + 'predicted_earned_badges').success( (res)->
         _.each(res.data, (badge)->
           badges.push(badge.attributes)
         )
@@ -96,8 +96,8 @@
         update.badges = res.meta.update_badges
       )
 
-    getChallenges = (student_id)->
-      $http.get(uri_prefix(student_id) + 'predicted_earned_challenges').success( (res)->
+    getChallenges = (studentId)->
+      $http.get(uri_prefix(studentId) + 'predicted_earned_challenges').success( (res)->
         _.each(res.data, (challenge)->
           challenges.push(challenge.attributes)
         )
@@ -105,9 +105,9 @@
         update.challenges = res.meta.update_challenges
       )
 
-    postPredictedGrade = (student_id, value)->
+    postPredictedGrade = (studentId, value)->
       if update.assignments
-        $http.put('/api/predicted_earned_grades/' + student_id, predicted_points: value).success(
+        $http.put('/api/predicted_earned_grades/' + studentId, predicted_points: value).success(
             (data)->
               console.log(data);
           ).error(
@@ -115,9 +115,9 @@
               console.log(data);
           )
 
-    postPredictedChallenge = (student_id, value)->
+    postPredictedChallenge = (studentId, value)->
       if update.challenges
-        $http.put('/api/predicted_earned_challenges/' + student_id, predicted_points: value).success(
+        $http.put('/api/predicted_earned_challenges/' + studentId, predicted_points: value).success(
             (data)->
               console.log(data);
           ).error(
@@ -125,9 +125,9 @@
               console.log(data);
           )
 
-    postPredictedBadge = (student_id, value)->
+    postPredictedBadge = (studentId, value)->
       if update.badges
-        $http.put('/api/predicted_earned_badges/' + student_id, predicted_times_earned: value).success(
+        $http.put('/api/predicted_earned_badges/' + studentId, predicted_times_earned: value).success(
             (data)->
               console.log(data);
           ).error(
@@ -135,9 +135,9 @@
               console.log(data);
           )
 
-    postAssignmentTypeWeight = (assignmentType_id,value)->
+    postAssignmentTypeWeight = (assignmentTypeId,value)->
       if update.weights
-        $http.post('/assignment_type_weight', id: assignmentType_id, weight: value).success(
+        $http.post('/api/assignment_types/' + assignmentTypeId + '/assignment_type_weights', weight: value).success(
             (data)->
               console.log(data);
           ).error(
