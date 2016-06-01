@@ -11,23 +11,36 @@
   display: block
   margin: 0 auto
 
-.badge-show-page
-  max-width: 960px
-  margin: 0 auto
+.student
+  .badge-show-page, .earned-badge
+    max-width: 960px
+    margin: 0 auto 1em
+    font-weight: 300
 
-  h1
-    text-align: center
+    h1, .count
+      text-align: center
 
-  .badge-description, .earned-badge
-    margin-bottom: 1rem
+    .badge-description, .earned-badge
+      margin-bottom: 1rem
 
-  .badge-icon
-    width: 150px
-    max-width: none
+    .badge-icon
+      max-width: 150px
 
-.earned-badge
-  max-width: 960px
-  margin: 0 auto
+.staff
+  .badge-show-page
+    font-weight: 300
+
+    .badge-icon
+      max-width: 150px
+      float: left
+      margin: 0 2em
+
+    .badge-description
+      float: left
+      width: 70%
+
+    .badge-title, .count
+      display: none
 
 .badge-container
   .badge-description
