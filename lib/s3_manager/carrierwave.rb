@@ -60,11 +60,9 @@ module S3Manager
       tmp_dir = Dir.mktmpdir
       temp_filepath = [tmp_dir, temp_filename].join "/"
 
-      File.open(temp_filepath, "w") {|f| f << "stuff\nwhateverz\n" }
-      temp_filepath
-      # write_s3_object_to_disk(s3_object_file_key, temp_filename).on_success do
-      #  return temp_filepath
-      # end
+      if write_s3_object_to_disk(s3_object_file_key, temp_filepath).successful?
+        temp_filepath
+      end
     end
 
     def cached_file_patch

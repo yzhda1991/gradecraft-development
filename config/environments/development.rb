@@ -11,6 +11,7 @@ GradeCraft::Application.configure do
   }
   config.action_mailer.perform_deliveries = true
 
+
   config.action_mailer.raise_delivery_errors = true
   config.active_support.deprecation = :log
   config.assets.compress = false
@@ -27,6 +28,8 @@ GradeCraft::Application.configure do
     Bullet.bullet_logger = true
     Bullet.console = true
   end
+
+  config.autoload_paths += %W(#{config.root}/app)
 end
 
 CarrierWave.configure do |config|

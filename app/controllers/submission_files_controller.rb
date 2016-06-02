@@ -1,6 +1,8 @@
 require_relative "../presenters/submission_files/base"
 
 class SubmissionFilesController < ApplicationController
+  after_action :remove_tempfiles, only: :download
+
   def download
     authorize! :download, presenter.submission_file
 
@@ -16,5 +18,11 @@ class SubmissionFilesController < ApplicationController
 
   def presenter
     @presenter ||= Presenters::SubmissionFiles::Base.new params: params
+  end
+
+  private
+
+  def remove_tempfiles
+    presenter.remove_tempfiles if presenter.tempfiles_exist?
   end
 end

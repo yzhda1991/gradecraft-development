@@ -4,6 +4,13 @@ module Presenters
   module SubmissionFiles
     class Base < Showtime::Presenter
 
+      attr_accessor :downloaded_files
+
+      def initialize(args={})
+        super
+        @downloaded_files = []
+      end
+
       def submission_file
         return nil unless params[:submission_file_id]
         @submission_file ||= ::SubmissionFile.find params[:submission_file_id]
@@ -19,7 +26,12 @@ module Presenters
       end
 
       def get_renamed_submission_file_object
-        submission_file.fetch_object_to_tempdir temp_filename: filename
+        result = submission_file.fetch_object_to_tempdir temp_filename: filename
+        @downloaded_files << result if result
+      end
+
+      def tempfiles_exist?
+        !tempfile_paths.empty?
       end
 
       def filename
