@@ -9,7 +9,7 @@
 
   .badge-show-page
     .badge-container
-      %h1
+      %h1.badge-title
         = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
       .badge-icon-container
         = render partial: "badges/components/icon", locals: { badge: presenter.badge }

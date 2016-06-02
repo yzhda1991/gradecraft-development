@@ -1,0 +1,13 @@
+.badge-index-container
+  - presenter.badges.each do |badge|
+    .badge-icon-container
+      = render partial: "badges/components/icon", locals: { badge: badge }
+
+      %p.badge-name 
+        = render partial: "badges/components/name",
+          locals: { badge: badge, title: badge.name }
+
+      .gold-stars
+        %i.fa.fa-star.fa-fw
+          .earned-count
+            = render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }

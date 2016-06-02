@@ -3,14 +3,8 @@
 @import ribbon_mixins
 @import animation
 
-/* Student sidebar */
 
-.badge-icon
-  width: 80%
-  max-width: 100px
-  display: block
-  margin: 0 auto
-
+/* Badge Show Page */
 .student
   .badge-show-page, .earned-badge
     max-width: 960px
@@ -24,14 +18,16 @@
       margin-bottom: 1rem
 
     .badge-icon
-      max-width: 150px
+      width: 150px
+      display: block
+      margin: 0 auto
 
 .staff
   .badge-show-page
     font-weight: 300
 
     .badge-icon
-      max-width: 150px
+      width: 150px
       float: left
       margin: 0 2em
 
@@ -68,7 +64,8 @@ button#remove-badges, button#add-badges
   @include transition-duration(0.3s)
   @include transition-timing-function(ease)
 
-.grade-badge
+.grade-badge,
+.badge-index-container .badge-icon-container
   float: left
   margin: 1rem
   position: relative
@@ -151,7 +148,11 @@ button#remove-badges, button#add-badges
     .button-column
       min-width: 0px
       width: 10px
-
+  .badge-icon
+    width: 80%
+    max-width: 100px
+    display: block
+    margin: 0 auto
 
 .badge-table
   float: left
