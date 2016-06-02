@@ -61,31 +61,31 @@ describe Grade do
     end
   end
 
-  it_behaves_like "a historical model", :grade, raw_score: 1234
+  it_behaves_like "a historical model", :grade, raw_points: 1234
   it_behaves_like "a model that needs sanitization", :feedback
 
   describe "#squish_history!", versioning: true do
     it "squishes two previous changes into one" do
       subject.save!
-      subject.update_attributes raw_score: 13_000
+      subject.update_attributes raw_points: 13_000
       subject.squish_history!
       subject.update_attributes feedback: "This is a change"
       subject.squish_history!
       expect(subject.versions.count).to eq 2
       expect(subject.versions.last.changeset).to have_key :feedback
-      expect(subject.versions.last.changeset).to have_key :raw_score
+      expect(subject.versions.last.changeset).to have_key :raw_points
     end
   end
 
-  describe "#raw_score" do
-    it "converts raw_score from human readable strings" do
-      subject.update(raw_score: "1,234")
-      expect(subject.raw_score).to eq(1234)
+  describe "#raw_points" do
+    it "converts raw_points from human readable strings" do
+      subject.update(raw_points: "1,234")
+      expect(subject.raw_points).to eq(1234)
     end
 
     it "is converts blank string to nil" do
-      subject.update(raw_score: "")
-      expect(subject.raw_score).to eq(nil)
+      subject.update(raw_points: "")
+      expect(subject.raw_points).to eq(nil)
     end
   end
 
@@ -126,39 +126,39 @@ describe Grade do
     end
   end
 
-  describe "calculation of final_score" do
-    it "is nil when raw_score is nil" do
-      subject.update(raw_score: nil)
-      expect(subject.final_score).to eq(nil)
+  describe "calculation of final_points" do
+    it "is nil when raw_points is nil" do
+      subject.update(raw_points: nil)
+      expect(subject.final_points).to eq(nil)
     end
 
-    it "is the sum of raw_score and adjustment_points" do
-      subject.update(raw_score: "1234", adjustment_points: -234)
-      expect(subject.final_score).to eq(1000)
+    it "is the sum of raw_points and adjustment_points" do
+      subject.update(raw_points: "1234", adjustment_points: -234)
+      expect(subject.final_points).to eq(1000)
     end
 
     it "is 0 if the score is below the threshold" do
       subject.assignment.update(threshold_points: 1001)
-      subject.update(raw_score: 1000)
-      expect(subject.final_score).to eq(0)
+      subject.update(raw_points: 1000)
+      expect(subject.final_points).to eq(0)
     end
   end
 
   describe "calculating score" do
-    it "is nil when raw_score is nil" do
-      subject.update(raw_score: nil)
+    it "is nil when raw_points is nil" do
+      subject.update(raw_points: nil)
       expect(subject.score).to eq(nil)
     end
 
     it "is the same as final score when assignment isn't weighted" do
-      subject.update(raw_score: "1234", adjustment_points: -234)
+      subject.update(raw_points: "1234", adjustment_points: -234)
       expect(subject.score).to eq(1000)
     end
 
     it "is the final score weighted by the students weight for the assignment" do
       subject.assignment.assignment_type.update(student_weightable: true)
-      create(:assignment_type_weight, student: subject.student, assignment_type: subject.assignment_type, weight: 3 )
-      subject.update(raw_score: "1,234", adjustment_points: -234)
+      create(:assignment_weight, student: subject.student, assignment_type: subject.assignment_type, weight: 3 )
+      subject.update(raw_points: "1,234", adjustment_points: -234)
       expect(subject.score).to eq(3000)
     end
   end
@@ -170,10 +170,10 @@ describe Grade do
 
     it "saves the grades as zero" do
       subject.save!
-      expect(subject.raw_score).to be 0
+      expect(subject.raw_points).to be 0
       expect(subject.predicted_score).to be <= 1
-      expect(subject.final_score).to be 0
-      expect(subject.point_total).to be 0
+      expect(subject.final_points).to be 0
+      expect(subject.full_points).to be 0
     end
   end
 

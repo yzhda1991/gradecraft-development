@@ -235,7 +235,7 @@ def predictor_assignment_attributes
     :include_in_predictor,
     :name,
     :pass_fail,
-    :point_total,
+    :full_points,
     :points_predictor_display,
     :position,
     :required,

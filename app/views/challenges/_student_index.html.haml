@@ -33,7 +33,7 @@
           %td
             %span= points challenge.challenge_grade_for_team(@team).try(:score) if challenge.graded?
             %span= "/" if challenge.graded?
-            %span= points challenge.point_total
+            %span= points challenge.full_points
 
         - else
-          %td= points challenge.point_total
+          %td= points challenge.full_points

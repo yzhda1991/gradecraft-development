@@ -307,7 +307,7 @@ class User < ActiveRecord::Base
   end
 
   def get_element_level(course, direction)
-    course_elements = course.grade_scheme_elements.order_by_low_range
+    course_elements = course.grade_scheme_elements.order_by_low_points
 
     current_element = self.grade_for_course(course)
     current_element_index = course_elements.index{ |item| item[:level] == current_element[:level] }
@@ -324,7 +324,7 @@ class User < ActiveRecord::Base
   end
 
   def points_to_next_level(course)
-    get_element_level(course, :next).low_range - cached_score_for_course(course)
+    get_element_level(course, :next).low_points - cached_score_for_course(course)
   end
 
   ### GRADES
@@ -365,7 +365,7 @@ class User < ActiveRecord::Base
   ### BADGES
 
   def earned_badge_score_for_course(course)
-    earned_badges.where(course_id: course).student_visible.sum(:score)
+    earned_badges.where(course_id: course).student_visible.sum(:points)
   end
 
   def earned_badges_for_course(course)
@@ -526,5 +526,4 @@ class User < ActiveRecord::Base
   def cache_last_login
     self.cached_last_login_at = self.last_login_at
   end
-
 end

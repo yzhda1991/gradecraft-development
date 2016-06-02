@@ -38,7 +38,7 @@ describe "assignments/predictor_data" do
     create :student_course_membership, user: @student, course: @assignment.course
     grade = create :grade, assignment: @assignment, student: @student,
       course: @assignment.course, pass_fail_status: "should not persist",
-      raw_score: 1000, score: 1000, status: "Released"
+      raw_points: 1000, score: 1000, status: "Released"
     render
     json = JSON.parse(response.body)
     expect(json["assignments"][0]["grade"]).to eq(
@@ -52,7 +52,7 @@ describe "assignments/predictor_data" do
   it "includes the pass fail status with the grade when the assignment is pass fail" do
     create :student_course_membership, user: @student, course: @assignment.course
     grade = create :grade, assignment: @assignment, student: @student,
-      course: @assignment.course, pass_fail_status: "passed", raw_score: 1000,
+      course: @assignment.course, pass_fail_status: "passed", raw_points: 1000,
       score: 1000, status: "Released"
     @assignment.update(pass_fail: true)
     render
@@ -67,14 +67,14 @@ describe "assignments/predictor_data" do
   end
 
   it "does not include assignments with no points" do
-    @assignment.update(point_total: 0)
+    @assignment.update(full_points: 0)
     render
     json = JSON.parse(response.body)
     expect(json["assignments"].length).to eq(0)
   end
 
   it "does include pass/fail assignments with no points" do
-    @assignment.update(point_total: 0, pass_fail: true)
+    @assignment.update(full_points: 0, pass_fail: true)
     render
     json = JSON.parse(response.body)
     expect(json["assignments"].length).to eq(1)

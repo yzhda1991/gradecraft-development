@@ -3,7 +3,7 @@
     - if presenter.assignment.pass_fail?
       .italic= "#{term_for :pass}/#{term_for :fail} Assignment"
     - else
-      .italic= "#{points presenter.assignment.point_total} points possible"
+      .italic= "#{points presenter.assignment.full_points} points possible"
 
     - if presenter.assignment.threshold_points?
       .italic= "#{points presenter.assignment.threshold_points} points threshold"

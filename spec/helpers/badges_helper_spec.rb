@@ -4,7 +4,7 @@ describe BadgesHelper do
   include RSpecHtmlMatchers
 
   describe "#sidebar_earned_badge" do
-    let(:badge) { double(:badge, name: "badgy", icon: "badge.png", is_unlockable?: false, point_total: nil) }
+    let(:badge) { double(:badge, name: "badgy", icon: "badge.png", is_unlockable?: false, full_points: nil) }
     let(:student) { double(:user) }
 
     it "renders an empty anchor" do
@@ -40,7 +40,7 @@ describe BadgesHelper do
     end
 
     it "renders the points earned if it has points" do
-      allow(badge).to receive(:point_total).and_return 10_000
+      allow(badge).to receive(:full_points).and_return 10_000
       html = helper.sidebar_earned_badge(badge, student)
       expect(html).to have_tag "div", with: { class: "display_on_hover" } do
         with_text "badgy, 10,000 points"

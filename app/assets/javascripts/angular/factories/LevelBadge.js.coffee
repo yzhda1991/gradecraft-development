@@ -8,7 +8,7 @@
       @level_id = level.id
       @badge_id = badge.id
       @description = badge.description
-      @point_total = badge.point_total
+      @full_points = badge.full_points
       @icon = badge.icon
       @multiple = badge.multiple
       @id = null

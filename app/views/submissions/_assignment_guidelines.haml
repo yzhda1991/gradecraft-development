@@ -1,7 +1,7 @@
 - if assignment.pass_fail?
   .italic.not_bold= "#{term_for :pass}/#{term_for :fail} Assignment"
 - else
-  .italic.not_bold= "#{points assignment.point_total} points possible"
+  .italic.not_bold= "#{points assignment.full_points} points possible"
 - if assignment.threshold_points?
   .italic.not_bold= "#{points assignment.threshold_points} points threshold"
 %br

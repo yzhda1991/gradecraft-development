@@ -17,11 +17,11 @@ describe "submissions/new" do
   before(:each) do
     allow(view).to receive(:current_course).and_return(@course)
     allow(view).to receive(:presenter).and_return presenter
-    allow(presenter.view_context).to receive(:points).and_return @assignment.point_total
+    allow(presenter.view_context).to receive(:points).and_return @assignment.full_points
   end
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "Submit #{@assignment.name} (#{@assignment.point_total} points)", count: 1
+    assert_select "h3", text: "Submit #{@assignment.name} (#{@assignment.full_points} points)", count: 1
   end
 end

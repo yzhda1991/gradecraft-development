@@ -19,12 +19,12 @@
     .form-item
       - if f.object.pass_fail?
         .pass-fail-contingent.hidden
-          = f.label :point_total, "Total Points Possible"
-          = f.text_field :point_total
+          = f.label :full_points, "Total Points Possible"
+          = f.text_field :full_points
       - else
         .pass-fail-contingent
-          = f.label :point_total, "Total Points Possible"
-          = f.text_field :point_total
+          = f.label :full_points, "Total Points Possible"
+          = f.text_field :full_points
 
     .form-item
       - if f.object.pass_fail?

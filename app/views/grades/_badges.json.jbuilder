@@ -1,5 +1,5 @@
 json.array! badges do |badge|
-  json.(badge, :id, :name, :description, :point_total)
+  json.(badge, :id, :name, :description, :full_points)
 
   if student_id
     json.student_earned_badges badge.earned_badges.where(student_id: student_id)

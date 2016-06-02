@@ -10,11 +10,11 @@ describe NullGrade do
   end
 
   it "has a nil raw score" do
-    expect(subject.raw_score).to be_nil
+    expect(subject.raw_points).to be_nil
   end
 
   it "has a nil final score" do
-    expect(subject.final_score).to eq(nil)
+    expect(subject.final_points).to eq(nil)
   end
 
   it "has a nil final points" do
@@ -70,7 +70,7 @@ describe NullGrade do
   end
 
   it "returns 555 for the point total" do
-    expect(subject.point_total).to eq(555)
+    expect(subject.full_points).to eq(555)
   end
 
   it "handles queries for assignments with closed submissions" do

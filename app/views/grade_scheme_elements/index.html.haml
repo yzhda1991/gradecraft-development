@@ -18,14 +18,14 @@
       %tr
         %th{scope: "col"} Grade
         %th{scope: "col"} Level
-        %th{scope: "col"} Low Range
+        %th{scope: "col"} Low points
         %th{scope: "col"} High Range
     %tbody
       - @grade_scheme_elements.each do |element|
         %tr
           %td= element.letter
           %td= element.level
-          %td{data: { :"sort-value" => "#{element.low_range }" }}= points element.low_range
-          %td{data: { :"sort-value" => "#{element.high_range }" }}= points element.high_range
+          %td{data: { :"sort-value" => "#{element.low_points }" }}= points element.low_points
+          %td{data: { :"sort-value" => "#{element.high_points }" }}= points element.high_points
 
   = render partial: "courses/grading_philosophy", locals: { course: current_course }

@@ -32,31 +32,31 @@ describe "assignments/individual/_table_body" do
     describe "with a score" do
       context "and the grade is present and instructor modified" do
         it "renders the final score" do
-          @grade.update(raw_score: @assignment.point_total)
+          @grade.update(raw_points: @assignment.full_points)
           allow(@grade).to receive(:present?) {true}
           allow(@grade).to receive(:instructor_modified) {true}
           render
-          assert_select "td.status-or-score", text: "#{points @grade.final_score}"
+          assert_select "td.status-or-score", text: "#{points @grade.final_points}"
         end
       end
 
       context "and the grade is not present" do
         it "doesn't render the raw score" do
-          @grade.update(raw_score: @assignment.point_total)
+          @grade.update(raw_points: @assignment.full_points)
           allow(@grade).to receive(:present?) {false}
           allow(@grade).to receive(:instructor_modified) {true}
           render
-          assert_select "td.status-or-score", text: "#{points @grade.final_score}"
+          assert_select "td.status-or-score", text: "#{points @grade.final_points}"
         end
       end
 
       context "and the grade is not instructor modified" do
         it "doesn't render the raw score" do
-          @grade.update(raw_score: @assignment.point_total)
+          @grade.update(raw_points: @assignment.full_points)
           allow(@grade).to receive(:present?) {true}
           allow(@grade).to receive(:instructor_modified) {false}
           render
-          assert_select "td.status-or-score", text: "#{points @grade.final_score}"
+          assert_select "td.status-or-score", text: "#{points @grade.final_points}"
         end
       end
     end

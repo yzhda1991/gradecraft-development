@@ -17,15 +17,15 @@ module UsersHelper
                   name: assignment_type.name }
     end
 
-    # TODO: Earned badges pre 2016 have nil scores cached on the model, must convert to integer
-    earned_badge_score = user.earned_badges.where(course: course).pluck("score").sum {|s| s.to_i}
-    if earned_badge_score > 0
-      scores << { data: [earned_badge_score], name: "#{course.badge_term.pluralize}" }
+    # TODO: Earned badges pre 2016 have nil points cached on the model, must convert to integer
+    earned_badge_points = user.earned_badges.where(course: course).pluck("points").sum {|s| s.to_i}
+    if earned_badge_points > 0
+      scores << { data: [earned_badge_points], name: "#{course.badge_term.pluralize}" }
     end
 
     return {
       scores: scores,
-      course_total: course.total_points + earned_badge_score
+      course_total: course.total_points + earned_badge_points
       }
   end
 end

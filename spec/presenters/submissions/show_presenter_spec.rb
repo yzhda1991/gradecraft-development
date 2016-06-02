@@ -5,6 +5,7 @@ require "./app/presenters/submissions/grade_history"
 require "./app/presenters/submissions/show_presenter"
 
 describe Submissions::ShowPresenter do
+
   # build a new presenter with some default properties
   subject { described_class.new properties }
 

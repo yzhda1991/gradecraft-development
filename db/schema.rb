@@ -90,7 +90,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
   create_table "assignments", force: :cascade do |t|
     t.string   "name",                         limit: 255
     t.text     "description"
-    t.integer  "point_total"
+    t.integer  "full_points"
     t.datetime "due_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
   create_table "badges", force: :cascade do |t|
     t.string   "name",                         limit: 255
     t.text     "description"
-    t.integer  "point_total"
+    t.integer  "full_points"
     t.integer  "course_id"
     t.integer  "assignment_id"
     t.string   "icon",                         limit: 255
@@ -185,7 +185,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
     t.string   "feedback",      limit: 255
     t.string   "status",        limit: 255
     t.integer  "team_id"
-    t.integer  "final_score"
+    t.integer  "final_points"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.text     "text_feedback"
@@ -202,7 +202,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
   create_table "challenges", force: :cascade do |t|
     t.string   "name",                     limit: 255
     t.text     "description"
-    t.integer  "point_total"
+    t.integer  "full_points"
     t.datetime "due_at"
     t.integer  "course_id"
     t.string   "points_predictor_display", limit: 255
@@ -283,7 +283,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
     t.boolean  "team_score_average"
     t.boolean  "team_challenges"
     t.integer  "max_assignment_types_weighted"
-    t.integer  "point_total"
+    t.integer  "full_points"
     t.boolean  "in_team_leaderboard"
     t.boolean  "add_team_score_to_student",                                             default: false
     t.datetime "start_date"
@@ -334,7 +334,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
     t.integer  "grade_id"
     t.integer  "group_id"
     t.string   "group_type",         limit: 255
-    t.integer  "score"
+    t.integer  "points"
     t.text     "feedback"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -386,18 +386,18 @@ ActiveRecord::Schema.define(version: 20160609215010) do
 
   create_table "grade_scheme_elements", force: :cascade do |t|
     t.string   "level",           limit: 255
-    t.integer  "low_range"
+    t.integer  "low_points"
     t.string   "letter",          limit: 255
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.integer  "grade_scheme_id"
     t.string   "description",     limit: 255
-    t.integer  "high_range"
+    t.integer  "high_points"
     t.integer  "course_id"
   end
 
   create_table "grades", force: :cascade do |t|
-    t.integer  "raw_score"
+    t.integer  "raw_points"
     t.integer  "assignment_id"
     t.text     "feedback"
     t.datetime "created_at"
@@ -409,7 +409,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
     t.string   "status",                     limit: 255
     t.boolean  "attempted"
     t.boolean  "substantial"
-    t.integer  "final_score"
+    t.integer  "final_points"
     t.integer  "submission_id"
     t.integer  "course_id"
     t.boolean  "shared"
@@ -419,7 +419,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
     t.string   "group_type",                 limit: 255
     t.integer  "score"
     t.integer  "assignment_type_id"
-    t.integer  "point_total"
+    t.integer  "full_points"
     t.text     "admin_notes"
     t.integer  "graded_by_id"
     t.integer  "team_id"

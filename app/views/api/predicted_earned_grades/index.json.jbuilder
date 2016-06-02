@@ -1,5 +1,5 @@
 json.data @assignments do |assignment|
-  next unless assignment.point_total > 0 || assignment.pass_fail?
+  next unless assignment.full_points > 0 || assignment.pass_fail?
   next unless assignment.visible_for_student?(assignment.student)
   next unless assignment.include_in_predictor?
   json.type "assignments"

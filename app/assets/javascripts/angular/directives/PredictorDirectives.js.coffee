@@ -122,7 +122,7 @@
           else
             if @target.prediction.predicted_points == @offValue then @offValue else @onValue
         else if @targetType == 'badge'
-          if @target.point_total == 0
+          if @target.full_points == 0
             if @target.prediction.predicted_times_earned == 0 then "won't earn" else "will earn"
           else
             if @target.prediction.predicted_times_earned == 0 then @offValue else @onValue
@@ -149,12 +149,12 @@
       scope.atMin = ()->
         @target.prediction.predicted_times_earned <= @target.earned_badge_count
       scope.textForTotal = ()->
-        if @target.point_total == 0
+        if @target.full_points == 0
           ""
         else
-          @target.prediction.predicted_times_earned * @target.point_total
+          @target.prediction.predicted_times_earned * @target.full_points
       scope.textForSwitch = ()->
-        if @target.point_total == 0
+        if @target.full_points == 0
           if scope.atMin()
             switch @target.prediction.predicted_times_earned
               when 0 then "won't earn"
@@ -166,7 +166,7 @@
             else
               "will earn " + @target.prediction.predicted_times_earned + " times"
         else
-          @target.prediction.predicted_times_earned + " x " + @target.point_total
+          @target.prediction.predicted_times_earned + " x " + @target.full_points
       scope.increment = ()->
         @target.prediction.predicted_times_earned += 1
         PredictorService.postPredictedBadge(@target.prediction.id, @target.prediction.predicted_times_earned)

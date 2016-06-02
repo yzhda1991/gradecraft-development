@@ -10,24 +10,24 @@
       elements.splice(index+1, 0, {
         letter: ''
         level: ''
-        low_range: ''
-        high_range: elements[index].low_range-1
+        low_points: ''
+        high_points: elements[index].low_points-1
       })
 
     addFirst = () ->
       elements.push({
         letter: ''
         level: ''
-        low_range: ''
-        high_range: ''
+        low_points: ''
+        high_points: ''
       })
 
     checkLowRange = (value, index) ->
-      (value < elements[parseInt(index)].high_range)
+      (value < elements[parseInt(index)].high_points)
 
     update_scheme = (index, newValue) ->
       if(index != elements.length-1)
-        elements[index+1].high_range = newValue-1
+        elements[index+1].high_points = newValue-1
 
     getGradeSchemeElements = ()->
       $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->

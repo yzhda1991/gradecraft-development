@@ -12,7 +12,7 @@ describe "submissions/_assignment_guidelines" do
   describe "with a graded assignment" do
     it "renders Pass/Fail and not the points total" do
       render
-      assert_select "div.italic.not_bold", text: "#{points @assignment.point_total} points possible", count: 1
+      assert_select "div.italic.not_bold", text: "#{points @assignment.full_points} points possible", count: 1
     end
   end
 
@@ -22,7 +22,7 @@ describe "submissions/_assignment_guidelines" do
       allow(view).to receive(:term_for).with(:fail).and_return "Fail"
       @assignment.update(pass_fail: true)
       render
-      assert_select "div.italic.not_bold", text: "#{points @assignment.point_total} points possible", count: 0
+      assert_select "div.italic.not_bold", text: "#{points @assignment.full_points} points possible", count: 0
       assert_select "div.italic.not_bold", text: "Pass/Fail Assignment", count: 1
     end
   end

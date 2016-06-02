@@ -58,9 +58,9 @@ describe AssignmentTypeWeightsController do
       end
 
       it "updates points for corresponding grades" do
-        grade = create :released_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
-        grade_2 = create :released_grade, assignment: @assignment_type_weightable_2.assignments.first, student: @student, course: @course, raw_score: 1000
-        grade_3 = create :released_grade, assignment: @assignment_type_weightable_3.assignments.first, student: @student, course: @course, raw_score: 1000
+        grade = create :released_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_points: 1000
+        grade_2 = create :released_grade, assignment: @assignment_type_weightable_2.assignments.first, student: @student, course: @course, raw_points: 1000
+        grade_3 = create :released_grade, assignment: @assignment_type_weightable_3.assignments.first, student: @student, course: @course, raw_points: 1000
         params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"},
         "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }
@@ -150,9 +150,9 @@ describe AssignmentTypeWeightsController do
       end
 
       it "updates points for corresponding grades" do
-        grade = create :released_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_score: 1000
-        grade_2 = create :released_grade, assignment: @assignment_type_weightable_2.assignments.first, student: @student, course: @course, raw_score: 1000
-        grade_3 = create :released_grade, assignment: @assignment_type_weightable_3.assignments.first, student: @student, course: @course, raw_score: 1000
+        grade = create :released_grade, assignment: @assignment_type_weightable.assignments.first, student: @student, course: @course, raw_points: 1000
+        grade_2 = create :released_grade, assignment: @assignment_type_weightable_2.assignments.first, student: @student, course: @course, raw_points: 1000
+        grade_3 = create :released_grade, assignment: @assignment_type_weightable_3.assignments.first, student: @student, course: @course, raw_points: 1000
         params = { "student" => { "assignment_type_weights_attributes" => { "0" => { "assignment_type_id" => @assignment_type_weightable.id, "weight" => "2"},
         "1" => { "assignment_type_id" => @assignment_type_weightable_2.id, "weight" => "2"},
         "2" => { "assignment_type_id" => @assignment_type_weightable_3.id, "weight" => "2" } } }, student_id: @student.id }

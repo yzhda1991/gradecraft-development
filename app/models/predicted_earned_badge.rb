@@ -14,7 +14,7 @@ class PredictedEarnedBadge < ActiveRecord::Base
   validates :badge, presence: true, uniqueness: { scope: :student_id }
 
   def total_predicted_points
-    self.badge.point_total * predicted_times_earned
+    self.badge.full_points * predicted_times_earned
   end
 
   def actual_times_earned

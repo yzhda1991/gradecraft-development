@@ -19,7 +19,7 @@ describe CourseGradeExporter do
       @students = course.students
       create(:course_membership, course: course, user: @student_2, score: 120000)
       create(:grade_scheme_element, course: course, level: "Amazing", letter: "B-")
-      create(:grade_scheme_element, course: course, low_range: 100001, high_range: 200000, level: "Phenomenal", letter: "B")
+      create(:grade_scheme_element, course: course, low_points: 100001, high_points: 200000, level: "Phenomenal", letter: "B")
       @students = course.students
 
       csv = CSV.new(subject.final_grades_for_course(course)).read

@@ -92,12 +92,12 @@ puts "Children must be taught how to think, not what to think. ― Margaret Mead
   grade_scheme_hash =
     config[:grade_scheme_hash] || @course_default_config[:grade_scheme_hash]
   levels = config[:grade_levels] || @course_default_config[:grade_levels]
-  grade_scheme_hash.each_with_index do |(range,letter),i|
+  grade_scheme_hash.each_with_index do |(points, letter), i|
     course.grade_scheme_elements.create do |e|
       e.letter = letter
       e.level = levels[i]
-      e.low_range = range.first
-      e.high_range = range.last
+      e.low_points = points.first
+      e.high_points = points.last
     end
   end
   puts_success :course, course_name, :grade_sceme_elements_created
@@ -314,8 +314,8 @@ PaperTrail.whodunnit = nil
     course_config[:course].tap do |course|
 
       # used to generate grades and score levels
-      assignment_points_total = config[:attributes][:point_total] ||
-        @assignment_default_config[:attributes][:point_total]
+      assignment_full_points = config[:attributes][:full_points] ||
+        @assignment_default_config[:attributes][:full_points]
 
       assignment = Assignment.create! do |a|
         @assignment_default_config[:attributes].keys.each do |attr|
@@ -372,7 +372,7 @@ PaperTrail.whodunnit = nil
         1.upto(5).each do |n|
           assignment.assignment_score_levels.create! do |asl|
             asl.name = "Assignment Score Level ##{n}"
-            asl.value = assignment_points_total/(6-n)
+            asl.value = assignment_full_points/(6-n)
           end
         end
         puts_success :assignment, assignment_name,
@@ -423,13 +423,13 @@ PaperTrail.whodunnit = nil
             @assignment_default_config[:grade_attributes].keys.each do |attr|
 
               # You can set a custom raw score in :grade_attributes like this:
-              #   :raw_score => Proc.new { rand(20000) }
+              #   :raw_points => Proc.new { rand(20000) }
               # Defaults to a random number between 0 and assignment point total
 
-              if attr == :raw_score && grade_attributes[attr]
+              if attr == :raw_points && grade_attributes[attr]
                 g[attr] = grade_attributes[attr].call
-              elsif attr == :raw_score
-                g[attr] = rand(assignment_points_total)
+              elsif attr == :raw_points
+                g[attr] = rand(assignment_full_points)
               else
                 g[attr] = grade_attributes[attr] ||
                   @assignment_default_config[:grade_attributes][attr]
@@ -491,10 +491,10 @@ end
       if config[:grades]
         # Used to set point total
         # You can also set a custom point total in the grade attributes:
-        # point_total: Proc.new { rand(20000) }
+        # full_points: Proc.new { rand(20000) }
         grade_attributes = config[:grade_attributes] || {}
-        assignment_points_total = config[:attributes][:point_total] ||
-          @challenge_default_config[:attributes][:point_total]
+        assignment_full_points = config[:attributes][:full_points] ||
+          @challenge_default_config[:attributes][:full_points]
 
         course_config[:teams].each do |team|
           challenge.challenge_grades.create! do |cg|
@@ -502,7 +502,7 @@ end
               if attr == :score && grade_attributes[attr]
                 cg[attr] = grade_attributes[attr].call
               elsif attr == :score
-                cg[attr] = rand(assignment_points_total)
+                cg[attr] = rand(assignment_full_points)
               else
                 cg[attr] = grade_attributes[attr] ||
                   @challenge_default_config[:grade_attributes][attr]

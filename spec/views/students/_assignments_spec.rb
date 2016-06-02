@@ -51,18 +51,18 @@ describe "students/syllabus/_assignments" do
 
       it "renders the points possible when grade is not released" do
         render
-        assert_select "td", text: "#{points @assignment.point_total} points possible", count: 1
+        assert_select "td", text: "#{points @assignment.full_points} points possible", count: 1
       end
 
       it "renders the points out of points possible when the grade is released for assignment" do
         @assignment.update(release_necessary: false)
-        @grade = create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: @assignment.point_total, status: "Graded")
+        @grade = create(:grade, course: @course, assignment: @assignment, student: @student, raw_points: @assignment.full_points, status: "Graded")
 
         # To verify we have satisfied the released condition:
         expect(@student.grade_released_for_assignment?(@assignment)).to be_truthy
         render
         assert_select "td" do
-          assert_select "div", text: "#{ points @grade.score } / #{points @grade.point_total} points earned", count: 1
+          assert_select "div", text: "#{ points @grade.score } / #{points @grade.full_points} points earned", count: 1
         end
       end
     end
@@ -120,7 +120,7 @@ describe "students/syllabus/_assignments" do
     end
 
     it "shows a button to see more results if the grade is released" do
-      create(:grade, course: @course, assignment: @assignment, student: @student, raw_score: 2000, status: "Released")
+      create(:grade, course: @course, assignment: @assignment, student: @student, raw_points: 2000, status: "Released")
       render
       assert_select "a", text: "See Grade", count: 1
     end
@@ -169,7 +169,7 @@ describe "students/syllabus/_assignments" do
       allow(view).to receive(:current_user_is_staff?).and_return(true)
       allow(view).to receive(:term_for).and_return("custom_term")
       assign(:students, [@student])
-      create(:grade, course: @course, instructor_modified: true, assignment: @assignment, student: @student, raw_score: 2000, status: "Released")
+      create(:grade, course: @course, instructor_modified: true, assignment: @assignment, student: @student, raw_points: 2000, status: "Released")
       render
       assert_select "a", text: "Edit Grade", count: 1
     end

@@ -11,7 +11,7 @@ module Submissions
     end
 
     def title
-      "Submit #{assignment.name} (#{view_context.points assignment.point_total} #{"point".pluralize(assignment.point_total)})"
+      "Submit #{assignment.name} (#{view_context.points assignment.full_points} #{"point".pluralize(assignment.full_points)})"
     end
   end
 end

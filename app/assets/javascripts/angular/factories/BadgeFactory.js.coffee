@@ -5,7 +5,7 @@
       @id = attrs.id
       @name = attrs.name
       @description = attrs.name
-      @point_total = attrs.point_total
+      @full_points = attrs.full_points
       @multiple = attrs.multiple
       @icon = attrs.icon
       @value = attrs.value

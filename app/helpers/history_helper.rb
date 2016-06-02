@@ -90,6 +90,6 @@ module HistoryHelper
   end
 
   def change_description_formatters
-    [HumanHistory::RawScoreChangeDescriptionFormatter, HumanHistory::DefaultChangeDescriptionFormatter]
+    [HumanHistory::RawPointsChangeDescriptionFormatter, HumanHistory::DefaultChangeDescriptionFormatter]
   end
 end

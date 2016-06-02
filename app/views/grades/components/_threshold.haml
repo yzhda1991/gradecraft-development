@@ -1,9 +1,9 @@
 %p
-  - if !grade.raw_score.present?
+  - if !grade.raw_points.present?
     = "The threshold for this #{term_for("assignment")} is #{grade.assignment.threshold_points} points"
-  - elsif grade.raw_score < grade.assignment.threshold_points
+  - elsif grade.raw_points < grade.assignment.threshold_points
     %span Your raw score was
-    %span.bold= " #{points grade.raw_score} "
+    %span.bold= " #{points grade.raw_points} "
     %span= "but the threshold for this #{term_for("assignment")} is"
     %span.bold= " #{points grade.assignment.threshold_points}"
 

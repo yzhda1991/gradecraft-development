@@ -106,7 +106,7 @@ describe PredictedAssignmentSerializer do
           id
           name
           pass_fail
-          point_total
+          full_points
           position
           threshold_points )
       expect(exposed_attributes & subject.attributes.keys).to eq(exposed_attributes)

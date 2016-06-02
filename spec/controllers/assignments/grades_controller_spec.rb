@@ -156,7 +156,7 @@ describe Assignments::GradesController do
       let(:grades_attributes) do
         { "#{@assignment.reload.grades.index(@grade)}" =>
           { graded_by_id: @professor.id, instructor_modified: true,
-            student_id: @grade.student_id, raw_score: 1000, status: "Graded",
+            student_id: @grade.student_id, raw_points: 1000, status: "Graded",
             id: @grade.id
           }
         }
@@ -165,7 +165,7 @@ describe Assignments::GradesController do
       it "updates the grades for the specific assignment" do
         put :mass_update, assignment_id: @assignment.id,
           assignment: { grades_attributes: grades_attributes }
-        expect(@grade.reload.raw_score).to eq 1000
+        expect(@grade.reload.raw_points).to eq 1000
       end
 
       it "timestamps the grades" do
@@ -176,7 +176,7 @@ describe Assignments::GradesController do
       end
 
       it "only sends notifications to the students if the grade changed" do
-        @grade.update_attributes({ raw_score: 1000 })
+        @grade.update_attributes({ raw_points: 1000 })
         run_background_jobs_immediately do
           expect { put :mass_update, assignment_id: @assignment.id,
                    assignment: { grades_attributes: grades_attributes } }.to_not \
@@ -223,7 +223,7 @@ describe Assignments::GradesController do
         it "creates a maximum score by the student if present" do
           post :self_log, assignment_id: @assignment.id
           grade = @student.grade_for_assignment(@assignment)
-          expect(grade.raw_score).to eq @assignment.point_total
+          expect(grade.raw_points).to eq @assignment.full_points
         end
 
         it "reports errors on failure to save" do
@@ -237,9 +237,9 @@ describe Assignments::GradesController do
         context "with assignment levels" do
           it "creates a score for the student at the specified level" do
             post :self_log, assignment_id: @assignment.id,
-              grade: { raw_score: "10000" }
+              grade: { raw_points: "10000" }
             grade = @student.grade_for_assignment(@assignment)
-            expect(grade.raw_score).to eq 10000
+            expect(grade.raw_points).to eq 10000
           end
         end
       end
@@ -250,7 +250,7 @@ describe Assignments::GradesController do
         it "creates should not change the student score" do
           post :self_log, assignment_id: @assignment.id
           grade = @student.grade_for_assignment(@assignment)
-          expect(grade.raw_score).to eq nil
+          expect(grade.raw_points).to eq nil
         end
       end
     end

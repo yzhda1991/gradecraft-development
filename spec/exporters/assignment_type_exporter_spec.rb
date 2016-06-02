@@ -25,9 +25,9 @@ describe AssignmentTypeExporter do
     end
 
     it "generates a CSV with scores if students and grades are present" do
-      create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Released" )
-      create(:grade, assignment: assignment_2, student: student, raw_score: 200, status: "Released")
-      create(:grade, assignment: assignment_3, student: student, raw_score: 200, status: "Released")
+      create(:grade, assignment: assignment, student: student, raw_points: 100, status: "Released" )
+      create(:grade, assignment: assignment_2, student: student, raw_points: 200, status: "Released")
+      create(:grade, assignment: assignment_3, student: student, raw_points: 200, status: "Released")
 
       csv = CSV.new(subject.export_summary_scores(@assignment_types, course, course.students)).read
       expect(csv.length).to eq 2
@@ -49,9 +49,9 @@ describe AssignmentTypeExporter do
     end
 
     it "generates a CSV with scores if students and grades are present" do
-      create(:grade, assignment: assignment, student: student, raw_score: 100, status: "Released" )
-      create(:grade, assignment: assignment_2, student: student, raw_score: 200, status: "Released")
-      create(:grade, assignment: assignment_3, student: student, raw_score: 200, status: "Released")
+      create(:grade, assignment: assignment, student: student, raw_points: 100, status: "Released" )
+      create(:grade, assignment: assignment_2, student: student, raw_points: 200, status: "Released")
+      create(:grade, assignment: assignment_3, student: student, raw_points: 200, status: "Released")
 
       csv = CSV.new(subject.export_scores(assignment_type_1, course, course.students)).read
       expect(csv.length).to eq 2

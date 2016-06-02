@@ -32,7 +32,7 @@ class NullGrade
     0
   end
 
-  def point_total
+  def full_points
     555
   end
 
@@ -48,11 +48,7 @@ class NullGrade
     0
   end
 
-  def raw_score
-    nil
-  end
-
-  def final_score
+  def raw_points
     nil
   end
 

@@ -6,7 +6,7 @@ class GradeSchemeElementsController < ApplicationController
   def index
     @title = "Grade Scheme"
     @grade_scheme_elements = current_course
-                             .grade_scheme_elements.order_by_high_range
+                             .grade_scheme_elements.order_by_high_points
   end
 
   # Edit all the grade scheme items for a course
@@ -15,12 +15,12 @@ class GradeSchemeElementsController < ApplicationController
     @course = current_course
     @total_points = current_course.total_points
     @grade_scheme_elements =  current_course
-                              .grade_scheme_elements.order_by_high_range.select(
+                              .grade_scheme_elements.order_by_high_points.select(
                                 :id,
                                 :level,
-                                :low_range,
+                                :low_points,
                                 :letter,
-                                :high_range,
+                                :high_points,
                                 :course_id)
   end
 
@@ -43,9 +43,9 @@ class GradeSchemeElementsController < ApplicationController
           render json: current_course.grade_scheme_elements.select(
             :id,
             :level,
-            :low_range,
+            :low_points,
             :letter,
-            :high_range,
+            :high_points,
             :course_id)
         end
       else

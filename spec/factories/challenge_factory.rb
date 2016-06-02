@@ -3,6 +3,6 @@ FactoryGirl.define do
     association :course
     name { Faker::Lorem.word }
     release_necessary false
-    point_total { rand(200) + 100 }
+    full_points { rand(200) + 100 }
   end
 end

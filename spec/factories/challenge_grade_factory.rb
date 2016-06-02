@@ -13,14 +13,14 @@ FactoryGirl.define do
     factory :graded_challenge_grade do
       association :challenge
       association :team
-      score { rand(challenge.point_total) }
+      score { rand(challenge.full_points) }
       status "Graded"
     end
 
     factory :grades_not_released_challenge_grade do
       association :challenge, release_necessary: true
       association :team
-      score { rand(challenge.point_total) }
+      score { rand(challenge.full_points) }
       status "Graded"
     end
   end

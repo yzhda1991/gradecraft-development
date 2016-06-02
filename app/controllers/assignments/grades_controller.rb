@@ -152,17 +152,17 @@ class Assignments::GradesController < ApplicationController
 
   # PUT /assignments/:assignment_id/grades/self_log
   # Allows students to log grades for student logged assignments
-  # either sets raw score to params[:grade][:raw_score]
+  # either sets raw points to params[:grade][:raw_points]
   # or defaults to point total for assignment
   def self_log
     @assignment = current_course.assignments.find(params[:assignment_id])
     if @assignment.open? && @assignment.student_logged?
       @grade = Grade.find_or_create(@assignment.id, current_student.id)
 
-      if params[:grade].present? && params[:grade][:raw_score].present?
-        @grade.raw_score = params[:grade][:raw_score]
+      if params[:grade].present? && params[:grade][:raw_points].present?
+        @grade.raw_points = params[:grade][:raw_points]
       else
-        @grade.raw_score = @assignment.point_total
+        @grade.raw_points = @assignment.full_points
       end
 
       @grade.instructor_modified = true
@@ -196,7 +196,7 @@ class Assignments::GradesController < ApplicationController
   # Retrieve all grades for an assignment if it has a score
   def mass_update_grade_ids
     @assignment.grades.inject([]) do |memo, grade|
-      scored_changed = grade.previous_changes[:raw_score].present?
+      scored_changed = grade.previous_changes[:raw_points].present?
       if scored_changed && grade.graded_or_released?
         memo << grade.id
       end

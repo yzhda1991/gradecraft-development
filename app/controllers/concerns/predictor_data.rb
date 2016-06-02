@@ -6,7 +6,7 @@ module PredictorData
       :id,
       :name,
       :description,
-      :point_total,
+      :full_points,
       :visible,
       :visible_when_locked,
       :can_earn_multiple_times,
@@ -41,7 +41,7 @@ module PredictorData
       :name,
       :visible,
       :description,
-      :point_total
+      :full_points
     ).map do |challenge|
       prediction =
         challenge.find_or_create_predicted_earned_challenge(@student.id)

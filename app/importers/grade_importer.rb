@@ -52,7 +52,7 @@ class GradeImporter
   end
 
   def assign_grade(row, grade)
-    grade.raw_score = row.grade
+    grade.raw_points = row.grade
     grade.feedback = row.feedback
     grade.status = "Graded" if grade.status.nil?
     grade.instructor_modified = true
@@ -110,7 +110,7 @@ class GradeImporter
 
     def update_grade?(grade)
       grade.present? &&
-        (grade.raw_score != self.grade || grade.feedback != feedback)
+        (grade.raw_points != self.grade || grade.feedback != feedback)
     end
 
     def initialize(data)

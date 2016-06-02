@@ -53,7 +53,7 @@ describe API::Students::PredictedEarnedChallengesController do
       :id,
       :name,
       :description,
-      :point_total,
+      :full_points,
       :visible
     ]
   end

@@ -5,14 +5,14 @@
     element: '=ngModel'
   }
   controller: ($scope) ->
-    this.low_range = (modelValue, viewValue) ->
-      if (modelValue < $scope.element.high_range || $scope.element.high_range == '')
+    this.low_points = (modelValue, viewValue) ->
+      if (modelValue < $scope.element.high_points || $scope.element.high_points == '')
         GradeSchemeElementsService.update_scheme($scope.index, modelValue)
         true
       else
         false
-    this.high_range = (modelValue, viewValue) ->
-      if (modelValue > $scope.element.low_range && modelValue < GradeSchemeElementsService.getTotalPoints())
+    this.high_points = (modelValue, viewValue) ->
+      if (modelValue > $scope.element.low_points && modelValue < GradeSchemeElementsService.getTotalPoints())
         true
       else
         false
@@ -24,11 +24,11 @@
   require: ['^gradeSchemeRanges', '^ngModel']
   restrict: 'C'
   link: (scope, elm, attrs, ctrls) ->
-    ctrls[1].$validators.range = ctrls[0].low_range
+    ctrls[1].$validators.range = ctrls[0].low_points
 
 @gradecraft.directive 'highRange', ()->
   require: ['^gradeSchemeRanges', '^ngModel']
   restrict: 'C'
   link: (scope, elm, attrs, ctrls) ->
-   ctrls[1].$validators.range = ctrls[0].high_range
+   ctrls[1].$validators.range = ctrls[0].high_points
     # create an on change binding

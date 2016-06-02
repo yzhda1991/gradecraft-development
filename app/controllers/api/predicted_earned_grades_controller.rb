@@ -64,7 +64,7 @@ class API::PredictedEarnedGradesController < ApplicationController
       user_role: current_user.role(current_course),
       assignment_id: params[:id],
       predicted_points: params[:predicted_points],
-      possible_points: prediction.assignment.try(:point_total),
+      possible_points: prediction.assignment.try(:full_points),
       created_at: Time.now,
       prediction_saved_successfully: prediction.valid?
     }

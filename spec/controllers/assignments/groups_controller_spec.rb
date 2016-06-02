@@ -44,8 +44,8 @@ describe Assignments::GroupsController do
         current_time = DateTime.now
         put :graded, assignment_id: @assignment.id, id: group.id,
           grade: { graded_by_id: @professor.id, instructor_modified: true,
-                   raw_score: 1000, status: "Graded" }
-        expect(@grade.reload.raw_score).to eq 1000
+                   raw_points: 1000, status: "Graded" }
+        expect(@grade.reload.raw_points).to eq 1000
         expect(@grade.group_id).to eq(group.id)
         expect(@grade.graded_at).to be > current_time
       end

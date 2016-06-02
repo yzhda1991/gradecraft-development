@@ -15,7 +15,7 @@
   },
   attributes: {
     name: "Generic badge",
-    point_total: (100 * rand(1..10) + 100),
+    full_points: (100 * rand(1..10) + 100),
     description: nil,
     visible: false,
     can_earn_multiple_times: false
@@ -116,7 +116,7 @@
     name: "Zephirum Singularis",
     description: "A zero points badge that can be earned once.",
     visible: true,
-    point_total: 0,
+    full_points: 0,
     can_earn_multiple_times: false
   },
   assign_samples: false,
@@ -130,7 +130,7 @@
     name: "Zephirum Earned",
     description: "A zero points badge already earned by all students.",
     visible: true,
-    point_total: 0,
+    full_points: 0,
     can_earn_multiple_times: false
   },
   assign_samples: true,
@@ -144,7 +144,7 @@
     name: "Zephira Multiplus",
     visible: true,
     description: "A zero points badge that can be earned multiple times.",
-    point_total: 0,
+    full_points: 0,
     can_earn_multiple_times: true
   },
   assign_samples: false,
@@ -158,7 +158,7 @@
     name: "Zephira Earned",
     visible: true,
     description: "A zero points badge that can be earned multiple times.",
-    point_total: 0,
+    full_points: 0,
     can_earn_multiple_times: true
   },
   assign_samples: true,

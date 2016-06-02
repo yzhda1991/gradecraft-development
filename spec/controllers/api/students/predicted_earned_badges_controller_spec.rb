@@ -31,7 +31,7 @@ describe API::Students::PredictedEarnedBadgesController do
       :id,
       :name,
       :description,
-      :point_total,
+      :full_points,
       :visible,
       :visible_when_locked,
       :can_earn_multiple_times,

@@ -66,7 +66,7 @@ describe API::PredictedEarnedChallengesController do
     describe "PUT update" do
       it "updates the predicted points for a challenge" do
         predicted_earned_challenge = create(:predicted_earned_challenge, challenge: world.challenge, student: world.student)
-        predicted_points = (world.challenge.point_total * 0.75).to_i
+        predicted_points = (world.challenge.full_points * 0.75).to_i
         put :update, id: predicted_earned_challenge, predicted_points: predicted_points, format: :json
         expect(PredictedEarnedChallenge.where(student: world.student, challenge: world.challenge).first.predicted_points).to eq(predicted_points)
         expect(JSON.parse(response.body)).to eq({"id" => predicted_earned_challenge.id, "predicted_points" => predicted_points})
@@ -85,7 +85,7 @@ describe API::PredictedEarnedChallengesController do
       :id,
       :name,
       :description,
-      :point_total,
+      :full_points,
       :visible
     ]
   end

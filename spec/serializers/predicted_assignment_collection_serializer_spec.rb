@@ -28,7 +28,7 @@ describe PredictedAssignmentCollectionSerializer do
        :include_in_predictor,
        :name,
        :pass_fail,
-       :point_total,
+       :full_points,
        :position,
        :required,
        :threshold_points,

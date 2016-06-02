@@ -145,7 +145,7 @@
                   = check_box_tag "score", "", false, :disabled => true
                 - else
                   = text_field_tag "score", "", :disabled => true
-              %td= points assignment.point_total
+              %td= points assignment.full_points
               %td
                 %ul
                   %li

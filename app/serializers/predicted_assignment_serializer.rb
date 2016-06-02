@@ -87,7 +87,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
           id
           name
           pass_fail
-          point_total
+          full_points
           position
           threshold_points
         ).include?(attr)

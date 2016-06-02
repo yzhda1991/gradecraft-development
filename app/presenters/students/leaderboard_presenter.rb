@@ -19,7 +19,7 @@ class Students::LeaderboardPresenter < Showtime::Presenter
 
   def grade_scheme_elements
     @grade_scheme_elements ||=
-      GradeSchemeElement.unscoped.for_course(course).order_by_low_range
+      GradeSchemeElement.unscoped.for_course(course).order_by_low_points
   end
 
   def has_badges?

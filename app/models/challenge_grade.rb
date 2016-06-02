@@ -2,7 +2,7 @@ class ChallengeGrade < ActiveRecord::Base
   include GradeStatus
 
   attr_accessible :name, :score, :challenge_id, :text_feedback, :team_id,
-    :final_score, :team, :challenge
+    :final_points, :team, :challenge
 
   belongs_to :course
   belongs_to :challenge
@@ -10,7 +10,7 @@ class ChallengeGrade < ActiveRecord::Base
 
   validates_presence_of :team, :challenge
 
-  delegate :name, :description, :due_at, :point_total, to: :challenge
+  delegate :name, :description, :due_at, :full_points, to: :challenge
 
   releasable_through :challenge
 

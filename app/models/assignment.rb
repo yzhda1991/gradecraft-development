@@ -15,7 +15,7 @@ class Assignment < ActiveRecord::Base
     :course, :course_id, :description, :due_at, :grade_scope, :hide_analytics,
     :include_in_predictor, :include_in_timeline, :include_in_to_do,
     :mass_grade_type, :name, :open_at, :pass_fail,
-    :point_total, :points_predictor_display, :purpose, :release_necessary,
+    :full_points, :points_predictor_display, :purpose, :release_necessary,
     :required, :resubmissions_allowed, :show_description_when_locked,
     :show_purpose_when_locked, :show_name_when_locked,
     :show_points_when_locked, :student_logged, :threshold_points, :use_rubric,
@@ -94,7 +94,7 @@ class Assignment < ActiveRecord::Base
     super(options.merge(only: [:id]))
   end
 
-  def point_total
+  def full_points
     super.presence || 0
   end
 
@@ -119,8 +119,8 @@ class Assignment < ActiveRecord::Base
 
   # Custom point total if the class has weighted assignments
   def point_total_for_student(student)
-    return 0 unless point_total
-    (point_total * assignment_type.weight_for_student(student)).round
+    return 0 unless full_points
+    (full_points * assignment_type.weight_for_student(student)).round
   end
 
   # Checking to see if an assignment is due soon
@@ -266,7 +266,7 @@ class Assignment < ActiveRecord::Base
 
   # Finding what grade level was earned for a particular assignment
   def grade_level(grade)
-    assignment_score_levels.find { |asl| grade.raw_score == asl.value }.try(:name)
+    assignment_score_levels.find { |asl| grade.raw_points == asl.value }.try(:name)
   end
 
   def future?
@@ -346,7 +346,7 @@ class Assignment < ActiveRecord::Base
   end
 
   def zero_points_for_pass_fail
-    self.point_total = 0 if self.pass_fail?
+    self.full_points = 0 if self.pass_fail?
     self.threshold_points = 0 if self.pass_fail?
   end
 

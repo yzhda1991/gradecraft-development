@@ -20,9 +20,9 @@
             %td{:width => "25%"}= link_to challenge.name, challenge
             %td{:width => "25%"}
               - if current_student.team_for_course(current_course).present? && challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).present?
-                .bold= "#{points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score)} / #{points challenge.point_total} points earned"
+                .bold= "#{points challenge.challenge_grade_for_team(current_student.team_for_course(current_course)).try(:score)} / #{points challenge.full_points} points earned"
               - else
-                %span.italic= "#{points challenge.point_total} points possible"
+                %span.italic= "#{points challenge.full_points} points possible"
             %td{:width => "25%"}
               - if challenge.future?
                 = "#{challenge.due_at.strftime("%A, %B %d, %l:%M%p")}"

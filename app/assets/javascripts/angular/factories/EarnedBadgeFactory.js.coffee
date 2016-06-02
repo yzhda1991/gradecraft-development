@@ -4,7 +4,7 @@
       @id = attrs.id
       @student_id = attrs.student_id
       @badge_id = attrs.badge_id
-      @score = attrs.score
+      @points = attrs.points
       @student_visible = attrs.student_visible
       @grade_id = attrs.grade_id
 

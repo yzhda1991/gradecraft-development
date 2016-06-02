@@ -24,8 +24,8 @@
       = f.select :year, (Date.today.year - 3)..(Date.today.year + 2), :selected => "#{@course.year || Date.today.year}"
 
     .form-item
-      = f.label :point_total, "Max Number of Points"
-      = f.number_field :point_total, {"aria-describedby" => "txtMaxPoints"}
+      = f.label :full_points, "Max Number of Points"
+      = f.number_field :full_points, {"aria-describedby" => "txtMaxPoints"}
       .form_label{id: "txtMaxPoints"} If you leave this blank, GradeCraft will calculate the total number of points based on the assignments you create.
 
     .form-item

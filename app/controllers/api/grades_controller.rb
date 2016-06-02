@@ -17,7 +17,7 @@ class API::GradesController < ApplicationController
     grade = Grade.find(params[:id])
     grade.assign_attributes(grade_params)
     grade.instructor_modified = true
-    if grade.raw_score_changed?
+    if grade.raw_points_changed?
       grade.graded_at = DateTime.now
     end
     changes = grade.changes
@@ -56,6 +56,6 @@ class API::GradesController < ApplicationController
   private
 
   def grade_params
-    params.require(:grade).permit(:raw_score, :feedback, :status)
+    params.require(:grade).permit(:raw_points, :feedback, :status)
   end
 end

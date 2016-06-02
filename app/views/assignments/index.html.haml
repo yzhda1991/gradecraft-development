@@ -50,7 +50,7 @@
                   - if assignment.pass_fail?
                     %td.foobers= "#{term_for :pass}/#{term_for :fail}"
                   - else
-                    %td.doobers= points assignment.point_total
+                    %td.doobers= points assignment.full_points
                   %td= "Yes" if assignment.grade_with_rubric?
                   %td
                     .right
