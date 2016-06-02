@@ -12,7 +12,7 @@
       %h1.badge-title
         = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
       .badge-icon-container
-        = render partial: "badges/components/icon", locals: { badge: presenter.badge }
+        = render partial: "badges/components/icon", locals: { badge: presenter.badge, count: presenter.earned_badges.count }
       .count
         Times Earned:
         %span
