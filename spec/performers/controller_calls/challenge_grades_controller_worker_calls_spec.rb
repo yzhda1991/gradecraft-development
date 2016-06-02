@@ -46,8 +46,12 @@ RSpec.describe ChallengeGradesController, type: :controller, background_job: tru
 
         context "challenge grade has not been released" do
           let(:challenge_grade) { create(:grades_not_released_challenge_grade, challenge_grade_attributes) }
+          let(:job_class) { ChallengeGradeUpdaterJob }
 
-          it_behaves_like "a failed resque job", ChallengeGradeUpdaterJob
+          it "shouldn't build a new job" do
+            subject
+            expect(assigns(job_class.to_s.underscore.to_sym)).to eq(nil)
+          end
         end
       end
 

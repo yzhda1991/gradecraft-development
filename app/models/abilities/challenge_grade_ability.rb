@@ -4,8 +4,13 @@ module ChallengeGradeAbility
       ChallengeGradeProctor.new(challenge_grade).viewable? user: user, course: course
     end
 
-    can :destroy, Grade do |grade, options|
-      GradeProctor.new(grade).destroyable? (options || {})
+    can :update, ChallengeGrade do |challenge_grade, options|
+      ChallengeGradeProctor.new(challenge_grade).updatable? (options || {})
+        .merge({ user: user, course: course })
+    end
+
+    can :destroy, ChallengeGrade do |challenge_grade, options|
+      ChallengeGradeProctor.new(challenge_grade).destroyable? (options || {})
         .merge({ user: user, course: course })
     end
   end
