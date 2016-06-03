@@ -152,10 +152,8 @@ button#remove-badges, button#add-badges
   .sort-column, .lock-icon-column
     width: 20px
   .icon-column
-    width: 15%
+    width: 10%
     text-align: center
-  .button-column
-    min-width: 300px
   .earned-column
     width: 100px
   .description-column
@@ -163,10 +161,24 @@ button#remove-badges, button#add-badges
     .button-column
       min-width: 0px
       width: 10px
+  .button-bar li a.button
+    display: block
+    margin: .25em
+    border-radius: 0.1875rem
   .badge-icon
     width: 80%
     max-width: 100px
     display: block
     margin: 0 auto
 
+@media (max-width: $media-medium-max)
+  .badge-index-table
+    .button-bar li:not(:last-of-type) a.button
+      margin-right: 0
 
+@media (max-width: 800px)
+    .badge-index-table
+      .button-bar li a.button
+        display: inline-block
+      .button-bar li:not(:last-of-type) a.button
+        margin-right: .5rem
