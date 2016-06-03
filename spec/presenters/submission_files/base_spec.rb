@@ -18,8 +18,7 @@ describe Presenters::SubmissionFiles::Base do
 
   before do
     allow(subject).to receive(:params) { params }
-    allow(SubmissionFile).to receive(:find).with(submission_file.id)
-      .and_return submission_file
+    allow(subject).to receive(:submission_file) { submission_file }
   end
 
   describe "#submission_file" do
@@ -108,7 +107,7 @@ describe Presenters::SubmissionFiles::Base do
   end
 
   describe "#filename" do
-    let(:params) { { submission_file_id: submission_file.id, index: "10" } }
+    let(:params) { { index: "10" } }
     it "returns the instructor_filename for the submission file" do
       expect(submission_file).to receive(:instructor_filename).with(10)
       subject.filename
