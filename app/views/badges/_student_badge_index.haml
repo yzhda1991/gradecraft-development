@@ -1,4 +1,4 @@
-.badge-index-container
+.badge-index-container.clearfix
   - presenter.badges.each do |badge|
     .badge-icon-container
       = render partial: "badges/components/icon", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
@@ -11,3 +11,6 @@
         %i.fa.fa-star.fa-fw
           .earned-count
             = render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
+
+.info-side-panel.clearfix.hide-for-medium.hide-for-small
+  %h1 Badge Details

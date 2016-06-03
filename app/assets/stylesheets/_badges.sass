@@ -43,8 +43,24 @@
     .badge-title
       font-size: 1.25rem
 
+/* Student Badge Index Page */
+.badge-index-container
+  float: left
+  width: 75%
+
+.info-side-panel
+  float: left
+  width: 25%
+
 /* used on the badge show page for both instructors and students, and grade
 /* standard edit form */
+
+.badge-name
+  font-size: .7rem
+  margin: 0px
+  width: 120px
+  text-align: center
+  line-height: .9rem
 
 .earned-count
   font-size: .7rem
@@ -130,9 +146,8 @@ button#remove-badges, button#add-badges
     .gold-stars
       @include opacity(0.6)
 
-  .badges-earned
-    @include ribbon
 
+/* badge index table on instructor side */
 .badge-index-table
   .sort-column, .lock-icon-column
     width: 20px
@@ -154,41 +169,4 @@ button#remove-badges, button#add-badges
     display: block
     margin: 0 auto
 
-.badge-table
-  float: left
-  position: relative
 
-  img
-    width: 100%
-    margin: 0 auto
-    z-index: 80
-    position: absolute
-    margin: -14px 0 0 2px
-
-  .available
-    opacity: .5
-
-  .gold-stars
-    position: absolute
-    top: -10px
-    right: -20px
-    font-size: 2rem
-    color: $color-yellow-1
-    z-index: 100 !important
-
-    i.fa-fw
-      z-index: 600 !important
-
-  &.unearned
-    .gold-stars
-      @include opacity(0.6)
-
-  .badges-earned
-    @include ribbon
-
-.badge-name
-  font-size: .7rem
-  margin: 0px
-  width: 120px
-  text-align: center
-  line-height: .9rem
