@@ -55,17 +55,7 @@ module S3Manager
       })
     end
 
-    def fetch_object_to_tempdir(temp_filename: nil)
-      temp_filename ||= mounted_filename
-      tmp_dir = Dir.mktmpdir
-      temp_filepath = [tmp_dir, temp_filename].join "/"
-
-      if write_s3_object_to_disk(s3_object_file_key, temp_filepath).successful?
-        temp_filepath
-      end
-    end
-
-    def cached_file_patch
+    def cached_file_path
       @cached_file_path ||= [store_dir, mounted_filename].join("/")
     end
 
