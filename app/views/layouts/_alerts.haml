@@ -3,7 +3,7 @@
   - flash.each do |name, message|
     %div{ class: "alert-box #{name}" }
       = message.html_safe
-      %a{ href: "#", class: "close" }
+      %a{ href: "#", class: "close", "aria-label" => "close" }
         = "&times;".html_safe
 
 - if !request.get? && local_assigns.key?(:model) && !model.valid?
