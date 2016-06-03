@@ -89,7 +89,6 @@
     points
 
   return {
-      getAssignment: getAssignment,
       getCriteria: getCriteria,
       getCriterionGrades: getCriterionGrades,
       getBadges: getBadges,
