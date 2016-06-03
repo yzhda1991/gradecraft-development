@@ -5,6 +5,10 @@ $(".make-lizards").dblclick(function() {
   $(".fa").toggleClass("fa-hand-lizard-o");
 });
 
+$('.close').click(function() {
+    $(".alert-box").slideUp();
+});
+
 $( "#tabs" ).tabs({
   event: "click",
   create: function(event, ui) {
@@ -108,4 +112,3 @@ $(".course-info-btn").click(function(){
 $(".btn-public-nav").click(function(){
     $(".public-nav").slideToggle();
 });
-
