@@ -12,26 +12,22 @@ module Presenters
       end
 
       def submission_file
-        return nil unless params[:submission_file_id]
-        @submission_file ||= ::SubmissionFile.find params[:submission_file_id]
+        @submission_file ||= ::SubmissionFile.where(
+          id: params[:submission_file_id]
+        ).first
       end
 
       def submission
-        return nil unless submission_file
-        submission_file.submission
+        submission_file.try(:submission)
       end
 
-      def submission_file_object_exists?
-        submission_file && submission_file.exists_on_s3?
+      def submission_file_streamable?
+        submission_file && submission_file.object_stream.exists?
       end
 
-      def get_renamed_submission_file_object
-        result = submission_file.fetch_object_to_tempdir temp_filename: filename
-        @downloaded_files << result if result
-      end
-
-      def tempfiles_exist?
-        !tempfile_paths.empty?
+      def stream_submission_file
+        return false unless submission_file_streamable?
+        submission_file.object_stream.stream!
       end
 
       def filename

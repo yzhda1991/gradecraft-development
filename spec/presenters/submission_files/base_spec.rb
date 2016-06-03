@@ -16,11 +16,10 @@ describe Presenters::SubmissionFiles::Base do
     { submission_file_id: submission_file.id }
   end
 
-  before(:each) do
-    allow(subject).to receive_messages(
-      params: params,
-      submission_file: submission_file
-    )
+  before do
+    allow(subject).to receive(:params) { params }
+    allow(SubmissionFile).to receive(:find).with(submission_file.id)
+      .and_return submission_file
   end
 
   describe "#submission_file" do
@@ -28,7 +27,7 @@ describe Presenters::SubmissionFiles::Base do
 
     context "params[:id] exists" do
       it "finds the submission file by id" do
-        expect(SubmissionFile).to receive(:where).with id: submission_file.id
+        expect(SubmissionFile).to receive(:find).with submission_file.id
         result
       end
 
@@ -90,8 +89,8 @@ describe Presenters::SubmissionFiles::Base do
     end
   end
 
-  describe "#stream_submission_file" do
-    let(:result) { subject.stream_submission_file }
+  describe "#submission_file_stream" do
+    let(:result) { subject.submission_file_stream }
 
     context "the submission file is streamable" do
       it "streams the object from the submission file" do
