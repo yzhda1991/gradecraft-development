@@ -4,13 +4,6 @@ module Presenters
   module SubmissionFiles
     class Base < Showtime::Presenter
 
-      attr_accessor :downloaded_files
-
-      def initialize(args={})
-        super
-        @downloaded_files = []
-      end
-
       def submission_file
         @submission_file ||= ::SubmissionFile.where(
           id: params[:submission_file_id]
@@ -38,6 +31,7 @@ module Presenters
         return false unless submission_file
         submission_file.mark_file_missing
       end
+
     end
   end
 end
