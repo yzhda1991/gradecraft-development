@@ -60,6 +60,10 @@ class Assignments::Presenter < Showtime::Presenter
     grades.present?
   end
 
+  def has_persisted_grades?
+    grades { |grade| grade if grade.persisted? }
+  end
+
   def has_reviewable_grades?
     grades.instructor_modified.present?
   end
