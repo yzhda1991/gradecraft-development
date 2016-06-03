@@ -74,6 +74,8 @@ class SubmissionsController < ApplicationController
     redirect_to assignment_path(assignment, notice: "Submission deleted")
   end
 
+  private
+
   def presenter_attrs_with_id
     base_presenter_attrs.merge id: params[:id]
   end

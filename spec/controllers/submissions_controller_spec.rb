@@ -182,5 +182,37 @@ describe SubmissionsController do
         end
       end
     end
+
+    describe "#presenter_attrs_with_id" do
+      before do
+        allow(subject).to receive(:base_presenter_attrs) { { base: "attrs" } }
+        allow(subject).to receive(:params) { { id: 20 } }
+      end
+
+      it "merges the id from params with the base presenter attrs" do
+        expect(subject.instance_eval { presenter_attrs_with_id })
+          .to eq({ base: "attrs", id: 20 })
+      end
+    end
+
+    describe "#base_presenter_attrs" do
+      before do
+        allow(subject).to receive_messages \
+          current_course: "some_course",
+          view_context: "the view context"
+
+        allow(subject).to receive(:params)
+          .and_return({ assignment_id: 40, group_id: 50 })
+      end
+
+      it "returns a hash of required params to the presenter" do
+        expect(subject.instance_eval { base_presenter_attrs }).to eq({
+          assignment_id: 40,
+          course: "some_course",
+          group_id: 50,
+          view_context: "the view context"
+        })
+      end
+    end
   end
 end
