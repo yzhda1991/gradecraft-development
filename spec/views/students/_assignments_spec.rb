@@ -108,6 +108,7 @@ describe "students/syllabus/_assignments" do
     it "shows the assignment submission if present" do
       @assignment.update(accepts_submissions: true)
       @submission = create(:submission, course: @course, assignment: @assignment, student: @student)
+      allow(view).to receive(:current_user_is_student?).and_return(true)
       render
       assert_select "a", text: "See Submission", count: 1
     end

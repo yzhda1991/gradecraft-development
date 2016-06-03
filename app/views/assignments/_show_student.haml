@@ -30,7 +30,7 @@
         = render partial: "assignments/description_and_downloads", locals: { presenter: presenter }
       - if presenter.show_rubric_preview? current_student
         #tab2
-          = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, student: current_student, include_grade_info: false }
+          = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: current_student, include_grade_info: false }
       - if presenter.has_submission_for?(current_student)
         #tab3
           = render "submissions/submission_content",
