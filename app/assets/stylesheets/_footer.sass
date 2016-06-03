@@ -4,11 +4,10 @@
 .footer
   position: relative
   clear: both
-  width: calc(100% - 4rem)
   padding: 4rem 2rem
   background-color: $color-grey-2
   opacity: .9
-  height: 60px
+  box-sizing: border-box
   color: $color-grey-5
   font-size: 1rem
 
@@ -20,7 +19,6 @@
       display: inline
       list-style-type: none
       text-transform: uppercase
-      margin-right: 1rem
       a
         color: $color-grey-5
 
@@ -30,11 +28,26 @@
     &.social
       font-size: 1.25rem
 
+    li:not(:last-of-type)
+      margin-right: 1rem
+
+  .footer-logo
+    display: none
+
   .michigan
     color: $color-grey-4
+    margin-top: 1rem
 
 .logged-in .footer
-  padding: 1rem 2rem
+  padding: 2rem 2rem
+  max-width: 1500px
+  margin: 0 auto
+
+  .footer-links
+    display: none
+
+  .footer-logo
+    display: block
 
 @media (max-width: $media-small-max)
   .footer
