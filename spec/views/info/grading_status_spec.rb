@@ -23,6 +23,7 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = []
       @in_progress_grades_by_assignment = []
       @no_status_grades_by_assignment = []
+      @resubmissions_by_assignment = []
     end
     it "renders successfully" do
       render
@@ -36,6 +37,7 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = @grades.group_by(&:assignment)
       @in_progress_grades_by_assignment = []
       @no_status_grades_by_assignment = []
+      @resubmissions_by_assignment = []
     end
     it "renders successfully" do
       render
@@ -49,19 +51,21 @@ describe "info/grading_status" do
       @unreleased_grades_by_assignment = []
       @no_status_grades_by_assignment = []
       @in_progress_grades_by_assignment = @grades.group_by(&:assignment)
+      @resubmissions_by_assignment = []
     end
     it "renders successfully" do
       render
     end
   end
 
-  describe "with in limbo grades"  do
+  describe "with resubmissions"  do
     before(:each) do
-      @grades = [create(:no_status_grade, course: @course, assignment: @assignment, student: @student)]
+      resubmission = create(:submission, student: @student, assignment: @assignment)
       @ungraded_submissions_by_assignment = []
       @unreleased_grades_by_assignment = []
+      @no_status_grades_by_assignment = []
       @in_progress_grades_by_assignment = []
-      @no_status_grades_by_assignment = @grades.group_by(&:assignment)
+      @resubmissions_by_assignment = [resubmission].group_by(&:assignment)
     end
     it "renders successfully" do
       render

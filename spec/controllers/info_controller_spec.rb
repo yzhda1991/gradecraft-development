@@ -51,24 +51,6 @@ describe InfoController do
       end
     end
 
-    describe "GET resubmissions" do
-      it "retrieves the resubmissions page" do
-        get :resubmissions
-        expect(response).to render_template(:resubmissions)
-      end
-
-      it "shows only the resubmissions for the relevant team" do
-        skip "implement"
-      end
-    end
-
-    describe "GET ungraded_submissions" do
-      it "retrieves the ungraded submissions page" do
-        get :ungraded_submissions
-        expect(response).to render_template(:ungraded_submissions)
-      end
-    end
-
     describe "GET top_10" do
       it "returns the Top 10/Bottom 10 page for the current course" do
         get :top_10
@@ -208,8 +190,6 @@ describe InfoController do
       [
         :awarded_badges,
         :grading_status,
-        :resubmissions,
-        :ungraded_submissions,
         :top_10,
         :per_assign,
         :gradebook,

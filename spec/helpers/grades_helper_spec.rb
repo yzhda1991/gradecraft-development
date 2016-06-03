@@ -48,7 +48,8 @@ describe GradesHelper do
       allow(helper).to receive(:ungraded_submissions_count_for).with(course).and_return 10
       allow(helper).to receive(:unreleased_grades_count_for).with(course).and_return 20
       allow(helper).to receive(:in_progress_grades_count_for).with(course).and_return 30
-      expect(helper.grading_status_count_for(course)).to eq 60
+      allow(helper).to receive(:resubmission_count_for).with(course).and_return 2
+      expect(helper.grading_status_count_for(course)).to eq 62
     end
   end
 end
