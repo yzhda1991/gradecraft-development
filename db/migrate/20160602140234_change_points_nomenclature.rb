@@ -11,5 +11,7 @@ class ChangePointsNomenclature < ActiveRecord::Migration
     rename_column :assignments, :point_total, :full_points
     rename_column :badges, :point_total, :full_points
     rename_column :challenge_grades, :final_score, :final_points
+    rename_column :assignment_score_levels, :value, :points
+    rename_column :challenge_score_levels, :value, :points
   end
 end

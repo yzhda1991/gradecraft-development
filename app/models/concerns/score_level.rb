@@ -3,16 +3,16 @@ module ScoreLevel
   include Copyable
 
   included do
-    attr_accessible :name, :value
+    attr_accessible :name, :points
 
-    scope :order_by_value, -> { order "value DESC" }
+    scope :order_by_points, -> { order "points DESC" }
 
     validates :name, presence: true
-    validates :value, presence: true
+    validates :points, presence: true
   end
 
-  # Displaying the name and the point value together in grading lists
+  # Displaying the name and the points together in grading lists
   def formatted_name
-    "#{name} (#{value} points)"
+    "#{name} (#{points} points)"
   end
 end

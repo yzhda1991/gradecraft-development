@@ -51,7 +51,7 @@ class PredictedAssignmentSerializer < SimpleDelegator
 
   def score_levels
     assignment.assignment_score_levels.map do |asl|
-      {name: asl.name, value: asl.value}
+      {name: asl.name, points: asl.points}
     end
   end
 

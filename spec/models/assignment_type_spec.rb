@@ -219,14 +219,14 @@ describe AssignmentType do
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
       create(:assignment_type_weight, student: student, course: world.course, assignment_type: assignment_type, weight: 3)
       grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Released")
-      expect(assignment_type.raw_score_for_student(student)).to eq(100)
+      expect(assignment_type.raw_points_for_student(student)).to eq(100)
     end
 
     it "does not include unreleased grades" do
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
       create(:assignment_type_weight, student: student, course: world.course, assignment_type: assignment_type, weight: 3)
       grade = create(:grade, student: student, raw_points: 100, assignment: assignment, status: "Graded")
-      expect(assignment_type.raw_score_for_student(student)).to eq(0)
+      expect(assignment_type.raw_points_for_student(student)).to eq(0)
     end
   end
 

@@ -9,7 +9,7 @@ json.data @challenges do |challenge|
     json.has_info !challenge.description.blank?
 
     json.score_levels challenge.challenge_score_levels.map {
-      |csl| {name: csl.name, value: csl.value}
+      |csl| {name: csl.name, points: csl.points}
     }
 
     json.prediction challenge.prediction

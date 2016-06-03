@@ -34,7 +34,7 @@ class Assignment < ActiveRecord::Base
   clean_html :purpose
 
   # For instances where the assignment needs its own unique score levels
-  score_levels :assignment_score_levels, -> { order "value" }, dependent: :destroy
+  score_levels :assignment_score_levels, -> { order "points" }, dependent: :destroy
 
   # Student created groups, can connect to multiple assignments and receive
   # group level or individualized feedback
@@ -118,7 +118,7 @@ class Assignment < ActiveRecord::Base
   end
 
   # Custom point total if the class has weighted assignments
-  def point_total_for_student(student)
+  def full_points_for_student(student)
     return 0 unless full_points
     (full_points * assignment_type.weight_for_student(student)).round
   end
@@ -266,7 +266,7 @@ class Assignment < ActiveRecord::Base
 
   # Finding what grade level was earned for a particular assignment
   def grade_level(grade)
-    assignment_score_levels.find { |asl| grade.raw_points == asl.value }.try(:name)
+    assignment_score_levels.find { |asl| grade.raw_points == asl.points }.try(:name)
   end
 
   def future?

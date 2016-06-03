@@ -74,8 +74,8 @@ describe PredictedAssignmentSerializer do
 
   describe "#score_levels" do
     it "returns a hash of score levels" do
-      subject.assignment_score_levels.build name: "First level", value: 456
-      expect(subject.score_levels).to eq([{name: "First level",value: 456}])
+      subject.assignment_score_levels.build name: "First level", points: 456
+      expect(subject.score_levels).to eq([{name: "First level", points: 456}])
     end
   end
 

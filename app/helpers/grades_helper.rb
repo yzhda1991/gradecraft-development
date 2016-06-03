@@ -57,7 +57,7 @@ module GradesHelper
       end
 
       json.assignment_score_levels do
-        json.partial! "grades/assignment_score_levels", assignment_score_levels: grade.assignment.assignment_score_levels.order_by_value
+        json.partial! "grades/assignment_score_levels", assignment_score_levels: grade.assignment.assignment_score_levels.order_by_points
       end
     end.to_json
   end

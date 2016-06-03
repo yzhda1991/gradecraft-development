@@ -157,7 +157,7 @@ describe Grade do
 
     it "is the final score weighted by the students weight for the assignment" do
       subject.assignment.assignment_type.update(student_weightable: true)
-      create(:assignment_weight, student: subject.student, assignment_type: subject.assignment_type, weight: 3 )
+      create(:assignment_type_weight, student: subject.student, assignment_type: subject.assignment_type, weight: 3 )
       subject.update(raw_points: "1,234", adjustment_points: -234)
       expect(subject.score).to eq(3000)
     end

@@ -2,8 +2,8 @@
   %span.columns
     = f.input :name, :label => "Level Name"
   %span.columns
-    = f.label :value, "Points Awarded"
-    = f.text_field :value, data: {autonumeric: true, "m-dec" => "0"}
+    = f.label :points, "Points Awarded"
+    = f.text_field :points, data: {autonumeric: true, "m-dec" => "0"}
   %span.columns
     = f.hidden_field :_destroy, class: "destroy"
     = link_to "Remove Level", '#', class: "remove-challenge-score-level button radius right"

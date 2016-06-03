@@ -372,7 +372,7 @@ PaperTrail.whodunnit = nil
         1.upto(5).each do |n|
           assignment.assignment_score_levels.create! do |asl|
             asl.name = "Assignment Score Level ##{n}"
-            asl.value = assignment_full_points/(6-n)
+            asl.points = assignment_full_points/(6-n)
           end
         end
         puts_success :assignment, assignment_name,

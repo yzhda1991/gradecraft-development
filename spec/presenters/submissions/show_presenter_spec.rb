@@ -296,7 +296,7 @@ describe Submissions::ShowPresenter do
   end
 
   describe "#title" do
-    let(:assignment) { double(:assignment, name: "Greatness", point_total: 40) }
+    let(:assignment) { double(:assignment, name: "Greatness", full_points: 40) }
     let(:view_context) { double(:view_context).as_null_object }
 
     before do

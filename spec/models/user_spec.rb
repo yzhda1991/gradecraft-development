@@ -394,7 +394,7 @@ describe User do
       gse = create(:grade_scheme_element, course: course, low_points: 80000, high_points: 120000, letter: "Q")
       gse_1 = create(:grade_scheme_element, course: course, low_points: 120001, high_points: 150000, letter: "R")
       gse_2 = create(:grade_scheme_element, course: course, low_points: 150001, high_points: 180000, letter: "S")
-      expect(student.next_element_level(course, :next)).to eq(gse_1)
+      expect(student.get_element_level(course, :next)).to eq(gse_1)
     end
   end
 

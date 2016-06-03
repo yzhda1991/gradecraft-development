@@ -198,7 +198,7 @@
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, AssignmentScoreLevel.new, class: "form-inline", child_index: "child_index" do |slf|
             = render partial: "assignment_score_level_fields", locals: { f: slf }
-      - presenter.assignment.assignment_score_levels.order_by_value.each do |assignment_score_level|
+      - presenter.assignment.assignment_score_levels.order_by_points.each do |assignment_score_level|
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: "form-inline" do |slf|
             = render partial: "assignment_score_level_fields", locals: { f: slf }

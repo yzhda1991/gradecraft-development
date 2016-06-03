@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
   create_table "assignment_score_levels", force: :cascade do |t|
     t.integer  "assignment_id",             null: false
     t.string   "name",          limit: 255, null: false
-    t.integer  "value",                     null: false
+    t.integer  "points",                    null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
   end
@@ -194,7 +194,7 @@ ActiveRecord::Schema.define(version: 20160609215010) do
   create_table "challenge_score_levels", force: :cascade do |t|
     t.integer  "challenge_id"
     t.string   "name",         limit: 255
-    t.integer  "value"
+    t.integer  "points"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

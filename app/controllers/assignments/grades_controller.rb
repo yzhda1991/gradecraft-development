@@ -116,7 +116,7 @@ class Assignments::GradesController < ApplicationController
     @assignment = current_course.assignments.find(params[:assignment_id])
     @title = "Quick Grade #{@assignment.name}"
     @assignment_type = @assignment.assignment_type
-    @assignment_score_levels = @assignment.assignment_score_levels.order_by_value
+    @assignment_score_levels = @assignment.assignment_score_levels.order_by_points
 
     if params[:team_id].present?
       @team = current_course.teams.find_by(id: params[:team_id])

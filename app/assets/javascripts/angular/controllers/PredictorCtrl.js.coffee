@@ -90,7 +90,7 @@
   # Assignments with Score Levels: Defines a snap tolerance and returns true if value is within range
   $scope.inSnapRange = (assignment,scoreLevel,value)->
     tolerance = assignment.full_points * 0.05
-    if Math.abs(scoreLevel.value - value) <= tolerance
+    if Math.abs(scoreLevel.points - value) <= tolerance
       return true
     else
       return false
@@ -99,7 +99,7 @@
   $scope.closestScoreLevel = (scoreLevels,value)->
     closest = null
     _.each(scoreLevels, (lvl,i)->
-      if (closest == null || Math.abs(lvl.value - value) < Math.abs(scoreLevels[closest].value - value))
+      if (closest == null || Math.abs(lvl.points - value) < Math.abs(scoreLevels[closest].points - value))
         closest = i
     )
     return scoreLevels[closest]
@@ -269,12 +269,12 @@
           if $scope.inSnapRange(article,closest,ui.value)
             event.preventDefault()
             event.stopPropagation()
-            angular.element(ui.handle.parentElement).slider("value", closest.value)
+            angular.element(ui.handle.parentElement).slider("value", closest.points)
 
             if articleType == 'assignment'
-              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.full_points))
+              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.points) + " / " + $filter('number')(article.full_points))
             else
-              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.full_points))
+              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.points) + " / " + $filter('number')(article.full_points))
           else
 
             if articleType == 'assignment'
