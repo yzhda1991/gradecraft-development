@@ -14,7 +14,7 @@
   %body(class="#{body_class}")
     = render "layouts/top_bar"
     - if current_user
-      .inner-wrap
+      .inner-wrap.clearfix
         - if current_user_is_staff?
           = render "layouts/staff"
         - else
