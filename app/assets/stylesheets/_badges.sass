@@ -25,15 +25,20 @@
 .staff
   .badge-show-page
     font-weight: 300
+    display: flex
+    align-items: center
+
+    .badge-icon-container
+      float: left
 
     .badge-icon
-      width: 150px
-      float: left
-      margin: 0 2em
+      width: 100%
+      max-width: 120px
 
     .badge-description
+      width: 75%
       float: left
-      width: 70%
+      margin: 0 0 1rem 1rem
 
     .badge-title, .count
       display: none
@@ -182,3 +187,19 @@ button#remove-badges, button#add-badges
         display: inline-block
       .button-bar li:not(:last-of-type) a.button
         margin-right: .5rem
+
+@media (max-width: $media-small-max)
+  .staff
+    .badge-show-page
+      display: block
+      margin-bottom: 1rem
+      .badge-icon-container, .badge-description
+        width: 100%
+        float: none
+
+      .badge-description
+        margin: 0
+
+      .badge-icon
+        margin: 0 auto
+        display: block

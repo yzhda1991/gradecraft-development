@@ -7,7 +7,7 @@
 .pageContent
   = render partial: "layouts/alerts"
 
-  .badge-show-page
+  .badge-show-page.clearfix
     .badge-container
       %h1.badge-title
         = render partial: "badges/components/name", locals: { badge: presenter.badge, title: presenter.badge.name }
