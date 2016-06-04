@@ -23,9 +23,15 @@ describe Presenters::SubmissionFiles::Base do
 
   describe "#submission_file" do
     let(:result) { subject.submission_file }
-    before { allow(subject).to receive(:submission_file).and_call_original }
+    before do
+      allow(subject).to receive(:submission_file).and_call_original
+    end
 
-    context "params[:id] exists" do
+    context "params[:submission_file_id] exists" do
+      before do
+        allow(SubmissionFile).to receive(:where) { [submission_file] }
+      end
+
       it "finds the submission file by id" do
         expect(SubmissionFile).to receive(:where).with id: submission_file.id
         result
@@ -44,7 +50,7 @@ describe Presenters::SubmissionFiles::Base do
       end
     end
 
-    context "params[:id] does not exist" do
+    context "params[:submission_file_id] does not exist" do
       let(:presenter_params) do
         { submission_file_id: nil }
       end
