@@ -6,6 +6,7 @@ describe SubmissionFilesController do
   let(:submission_file) { create(:submission_file) }
   let(:submission) { submission_file.submission }
   let(:ability) { Object.new.extend(CanCan::Ability) }
+  let(:presenter_class) { Presenters::SubmissionFiles::Base }
 
   before do
     create(:course)
@@ -35,21 +36,21 @@ describe SubmissionFilesController do
     describe "#presenter" do
       let(:result) { controller.presenter }
 
-      it "builds a new SubmissionFilesPresenter with the params" do
+      it "builds a new presenter_class with the params" do
         allow(controller).to receive(:params) { params }
-        expect(SubmissionFilesPresenter).to receive(:new).with params: params
+        expect(presenter_class).to receive(:new).with params: params
         result
       end
 
       it "caches the presenter" do
         result
-        expect(SubmissionFilesPresenter).not_to receive :new
+        expect(presenter_class).not_to receive :new
         result
       end
 
       it "sets the presenter to @presenter" do
-        presenter_double = double(SubmissionFilesPresenter)
-        allow(SubmissionFilesPresenter).to receive(:new) { presenter_double }
+        presenter_double = double(presenter_class)
+        allow(presenter_class).to receive(:new) { presenter_double }
         result
         expect(controller.instance_variable_get(:@presenter))
           .to eq presenter_double
@@ -58,7 +59,7 @@ describe SubmissionFilesController do
 
     describe "GET download" do
       let(:result) { get :download, params }
-      let(:presenter) { SubmissionFilesPresenter.new params: params }
+      let(:presenter) { presenter_class.new params: params }
 
       before do
         allow(controller).to receive_messages(
