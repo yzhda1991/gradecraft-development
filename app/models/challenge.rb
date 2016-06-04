@@ -16,7 +16,12 @@ class Challenge < ActiveRecord::Base
 
   belongs_to :course, touch: true
   has_many :submissions
-  has_many :challenge_grades, dependent: :destroy
+  has_many :challenge_grades, dependent: :destroy do
+    def find_or_initialize_for_team(team)
+      where(team_id: team.id).first || new(team: team, challenge_id: self.id)
+    end
+  end
+
   accepts_nested_attributes_for :challenge_grades
 
   has_many :predicted_earned_challenges, dependent: :destroy

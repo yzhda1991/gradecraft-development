@@ -1,8 +1,9 @@
 require "active_record_spec_helper"
 
 describe Team do
+
   describe "validations" do
-    let(:course) { create :course }
+    let(:course) { create(:course) }
 
     it "requires that the team name be unique per course" do
       create :team, course_id: course.id, name: "Zeppelin"
@@ -32,9 +33,8 @@ describe Team do
       team = create(:team)
       student = create(:user)
       student_2 = create(:user)
-      student_3 = create(:user)
-      team.students << [student, student_2, student_3]
-      expect(team.member_count).to eq(3)
+      team.students << [student, student_2]
+      expect(team.member_count).to eq(2)
     end
   end
 
@@ -44,15 +44,13 @@ describe Team do
       team = create(:team, course: course)
       student = create(:user)
       student_2 = create(:user)
-      student_3 = create(:user)
       badge = create(:badge)
-      team.students << [student, student_2, student_3]
+      team.students << [student, student_2]
       earned_badge = create(:earned_badge, student: student, course: course, student_visible: true)
       earned_badge_1 = create(:earned_badge, student: student, student_visible: true, course: course )
       earned_badge_2 = create(:earned_badge, student: student_2, student_visible: true, course: course )
       earned_badge_3 = create(:earned_badge, student: student_2, student_visible: true, course: course )
-      earned_badge_4 = create(:earned_badge, student: student_3, student_visible: true, course: course)
-      expect(team.badge_count).to eq(5)
+      expect(team.badge_count).to eq(4)
     end
   end
 
@@ -71,10 +69,10 @@ describe Team do
     end
   end
 
-  describe "#average_points" do
+  describe "#average_score" do
     it "returns 0 if there's no one on the team" do
       team = create(:team)
-      expect(team.average_points).to eq(0)
+      expect(team.average_score).to eq(0)
     end
 
     it "returns the average score if team members are present" do
@@ -85,23 +83,23 @@ describe Team do
       student_2 = create(:user)
       course_membership = create(:course_membership, user: student_2, course: course, score: 100)
       team.students << [student, student_2]
-      expect(team.average_points).to eq(100)
+      team.update_average_score!
+      expect(team.reload.average_score).to eq(100)
     end
   end
 
   describe "challenge_grade_score" do
     it "sums all earned challenge grades together" do
-      course = create(:course)
-      team = create(:team, course: course)
+      team = create(:team)
       challenge_grade = create(:challenge_grade, score: 100, team: team, status: "Released")
       challenge_grade_2 = create(:challenge_grade, score: 100, team: team, status: "Released")
       challenge_grade_3 = create(:challenge_grade, score: 100, team: team, status: "Released")
+      team.update_challenge_grade_score!
       expect(team.challenge_grade_score).to eq(300)
     end
 
     it "should not include grades that are not student visible" do
-      course = create(:course)
-      team = create(:team, course: course)
+      team = create(:team)
       challenge_grade = create(:challenge_grade, score: 100, team: team, status: "Released")
       challenge_grade_2 = create(:challenge_grade, score: 100, team: team, status: nil)
       expect(team.challenge_grade_score).to eq(100)
@@ -110,7 +108,7 @@ describe Team do
 
   describe "#update_team_rank" do
 
-    it "Reassigns rank based on challenge grade scores" do
+    it "Reassigns rank based on scores" do
       course = create(:course, team_score_average: false)
       team_1 = create(:team, course: course)
       team_2 = create(:team, course: course)
@@ -119,31 +117,34 @@ describe Team do
       challenge_grade = create(:challenge_grade, challenge: challenge, team: team_1, score: 100, status: "Released")
       challenge_grade_2 = create(:challenge_grade, challenge: challenge, team: team_2, score: 10000, status: "Released")
 
-      team_2.update_ranks
+      team_2.update_ranks!
       team_2.reload
       expect(team_2.rank).to eq(1)
     end
 
   end
 
-  describe "revised_team_score" do
+  describe "setting the two team scores" do
     let(:course) { create :course }
     let(:team) { create(:team, course: course) }
 
-    context "course is using team average for team score" do
-      it "returns the average points for the team" do
-        allow(course).to receive(:team_score_average) { true }
-        allow(team).to receive(:average_points) { 500 }
-        expect( team.instance_eval { revised_team_score } ).to eq(500)
-      end
+    it "returns the average points for the team" do
+      team.average_score = nil
+      student = create(:user)
+      course_membership = create(:course_membership, user: student, course: course, score: 100)
+      student_2 = create(:user)
+      course_membership = create(:course_membership, user: student_2, course: course, score: 300)
+      team.students << [student, student_2]
+      team.update_average_score!
+      expect( team.instance_eval { average_score } ).to eq(200)
     end
 
-    context "course is using challenge grade total for team score" do
-      it "returns the challenge grade score for the team" do
-        allow(course).to receive(:team_score_average) { false }
-        allow(team).to receive(:challenge_grade_score) { 3000 }
-        expect( team.instance_eval { revised_team_score } ).to eq(3000)
-      end
+    it "sets the challenge grade score for the team" do
+      team.challenge_grade_score = nil
+      challenge_grade = create(:challenge_grade, score: 100, team: team, status: "Released")
+      challenge_grade_2 = create(:challenge_grade, score: 2000, team: team, status: "Released")
+      team.update_challenge_grade_score!
+      expect( team.instance_eval { challenge_grade_score } ).to eq(2100)
     end
   end
 end

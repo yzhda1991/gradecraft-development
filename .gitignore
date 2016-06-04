@@ -16,3 +16,5 @@ dump.rdb
 coverage/*
 node_modules/*
 /.vagrant
+authorized_keys
+line-count.txt

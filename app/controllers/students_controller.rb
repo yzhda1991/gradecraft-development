@@ -82,6 +82,7 @@ class StudentsController < ApplicationController
     @title = "#{term_for :teams}"
     @display_sidebar = true
     @team = current_student.team_for_course(current_course)
+    @teams = current_course.teams.order_by_rank.includes(:earned_badges)
   end
 
   # Display the grade predictor
@@ -106,7 +107,8 @@ class StudentsController < ApplicationController
     @student = current_course.students.find_by(id: params[:student_id])
 
     # @mz TODO: add specs
-    ScoreRecalculatorJob.new(user_id: @student.id, course_id: current_course.id).enqueue
+    ScoreRecalculatorJob.new(user_id: @student.id,
+      course_id: current_course.id).enqueue
 
     flash[:notice]="Your request to recalculate #{@student.name}'s grade is being processed. Check back shortly!"
     redirect_to session[:return_to] || student_path(@student)

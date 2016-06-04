@@ -99,6 +99,7 @@ class World
     def create_challenge(attributes={})
       course = attributes.delete(:course) || self.course || FactoryGirl.build(:course)
       challenges << FactoryGirl.create(:challenge, course: course)
+      self
     end
 
     def create_course(attributes={})

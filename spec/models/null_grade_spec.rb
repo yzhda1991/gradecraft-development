@@ -53,10 +53,6 @@ describe NullGrade do
     expect(subject.student_id).to eq(0)
   end
 
-  it "is student visible" do
-    expect(subject).to be_is_student_visible
-  end
-
   it "is not released" do
     expect(subject).to_not be_is_released
   end

@@ -3,8 +3,8 @@ require "rails_spec_helper"
 feature "grading a team challenge" do
   context "as a professor" do
     let(:course) { create :course, team_challenges: true }
-    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let(:professor) { create :user }
+    let!(:course_membership) { create :professor_course_membership, user: professor, course: course }
     let!(:challenge) { create :challenge, name: "Team Challenge Name", course: course }
     let!(:team) { create :team, name: "Team Name", course: course }
 
@@ -30,7 +30,7 @@ feature "grading a team challenge" do
         click_link "Grade"
       end
 
-      expect(current_path).to eq new_challenge_challenge_grade_path(challenge_id: challenge.id)
+      expect(current_path).to eq new_challenge_challenge_grade_path(challenge.id)
 
       within(".pageContent") do
         fill_in("challenge_grade_score", with: 100)

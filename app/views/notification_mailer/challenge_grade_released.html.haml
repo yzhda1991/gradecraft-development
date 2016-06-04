@@ -1,0 +1,13 @@
+%h2{:align => "center"}
+  %strong You've got a new #{ @course.challenge_term } Grade!
+%h3{:align => "center"}
+  You can now view your grade for
+  #{ @course.challenge_term.downcase } "#{ @challenge.name }"
+  in #{ @course.name }.
+%p
+%hr/
+%p{:align => "center"}
+  Don't forget to update your plan for the semester by checking your
+  = succeed "." do
+    %a{:href => "https://www.gradecraft.com/predictor"} grade predictor
+%hr/

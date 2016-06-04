@@ -7,8 +7,10 @@ describe "students/teams" do
   before(:all) do
     @course = create(:course)
     @student = create(:user)
+    @team = create(:team, course: @course)
     @student.courses << @course
     @membership = CourseMembership.where(user: @student, course: @course).first.update(score: "100000")
+    @teams = @course.teams
   end
 
   before(:each) do

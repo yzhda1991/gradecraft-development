@@ -29,15 +29,15 @@
             .right
               - if challenge_grade
                 %ul.button-bar
-                  %li= link_to glyph(:eye) + "See Grade", challenge_challenge_grade_path(@challenge.id, challenge_grade.id, team_id: team.id), class: 'button'
-                  %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_challenge_grade_path(@challenge.id, challenge_grade.id, team_id: team.id), class: 'button'
-                  %li= link_to glyph(:trash) + "Delete Grade", challenge_challenge_grade_path(@challenge.id, challenge_grade.id, team_id: team.id), class: 'button', data: { confirm: 'Are you sure?', method: :delete }
+                  %li= link_to glyph(:eye) + "See Grade", challenge_grade_path(challenge_grade.id), class: 'button'
+                  %li= link_to glyph(:edit) + "Edit Grade", edit_challenge_grade_path(challenge_grade.id), class: 'button'
+                  %li= link_to glyph(:trash) + "Delete Grade", challenge_grade_path(challenge_grade.id), class: 'button', data: { confirm: 'Are you sure?', method: :delete }
               - else
                 %ul.button-bar
-                  %li= link_to glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: @challenge.id, team_id: team.id), class: 'button'
+                  %li= link_to glyph(:check) + "Grade", new_challenge_challenge_grade_path(challenge_id: @challenge, team_id: team.id), class: 'button'
           - if @challenge.release_necessary?
             %td
-              - if challenge_grade && challenge_grade.is_graded?
+              - if challenge_grade && !challenge_grade.is_released?
                 .center= check_box_tag "challenge_grade_ids[]", challenge_grade.id
 
   %br
