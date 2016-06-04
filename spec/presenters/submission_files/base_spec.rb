@@ -88,8 +88,8 @@ describe Presenters::SubmissionFiles::Base do
     end
   end
 
-  describe "#submission_file_stream" do
-    let(:result) { subject.submission_file_stream }
+  describe "#stream_submission_file" do
+    let(:result) { subject.stream_submission_file }
 
     context "the submission file is streamable" do
       it "streams the object from the submission file" do
