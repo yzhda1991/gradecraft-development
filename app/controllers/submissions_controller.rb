@@ -9,8 +9,8 @@ class SubmissionsController < ApplicationController
   end
 
   def new
-    stuff = Submissions::NewPresenter.new(base_presenter_attrs)
-    render :new, stuff.render_options
+    presenter = Submissions::NewPresenter.new(base_presenter_attrs)
+    render :new, presenter.render_options
   end
 
   def create
