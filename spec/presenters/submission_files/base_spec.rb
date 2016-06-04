@@ -12,27 +12,28 @@ describe Presenters::SubmissionFiles::Base do
     )
   end
 
-  let(:params) do
+  let(:presenter_params) do
     { submission_file_id: submission_file.id }
   end
 
   before do
-    allow(subject).to receive(:params) { params }
+    allow(subject).to receive(:params) { presenter_params }
     allow(subject).to receive(:submission_file) { submission_file }
   end
 
   describe "#submission_file" do
     let(:result) { subject.submission_file }
+    before { allow(subject).to receive(:submission_file).and_call_original }
 
     context "params[:id] exists" do
       it "finds the submission file by id" do
-        expect(SubmissionFile).to receive(:find).with submission_file.id
+        expect(SubmissionFile).to receive(:where).with id: submission_file.id
         result
       end
 
       it "caches the submission_file" do
         result
-        expect(SubmissionFile).not_to receive(:find)
+        expect(SubmissionFile).not_to receive(:where)
         result
       end
 
@@ -44,7 +45,7 @@ describe Presenters::SubmissionFiles::Base do
     end
 
     context "params[:id] does not exist" do
-      let(:params) do
+      let(:presenter_params) do
         { submission_file_id: nil }
       end
 
@@ -107,7 +108,7 @@ describe Presenters::SubmissionFiles::Base do
   end
 
   describe "#filename" do
-    let(:params) { { index: "10" } }
+    let(:presenter_params) { { index: "10" } }
     it "returns the instructor_filename for the submission file" do
       expect(submission_file).to receive(:instructor_filename).with(10)
       subject.filename
