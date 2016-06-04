@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :require_login, except: [:not_authenticated]
   before_filter :increment_page_views
-  before_filter :get_course_scores
+  before_filter :course_scores
 
   include ApplicationHelper
 
@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Getting the course scores to display the box plot results
-  def get_course_scores
+  def course_scores
     if current_user.present? && current_student.present?
       @scores_for_current_course =
         current_student.scores_for_course(current_course)

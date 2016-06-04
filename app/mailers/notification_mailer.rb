@@ -37,7 +37,7 @@ class NotificationMailer < ApplicationMailer
   end
 
   def grade_released(grade_id)
-    set_grade_ivars(grade_id)
+    grade_ivars(grade_id)
     send_student_email "#{@course.courseno} - #{@assignment.name} Graded"
   end
 
@@ -76,7 +76,7 @@ class NotificationMailer < ApplicationMailer
   private
 
   def send_assignment_email_to_professor(professor, submission_id, subject)
-    set_submission_ivars_with_student(submission_id)
+    submission_ivars_with_student(submission_id)
     @professor = professor
     mail(to: @professor.email, subject: "#{@course[:courseno]} - #{@assignment.name} - #{subject}") do |format|
       format.text
@@ -85,7 +85,7 @@ class NotificationMailer < ApplicationMailer
   end
 
   def send_assignment_email_to_user(submission_id, subject)
-    set_submission_ivars_with_user(submission_id)
+    submission_ivars_with_user(submission_id)
     mail(to: @user.email, subject: "#{@course.courseno} - #{@assignment.name} #{subject}") do |format|
       format.text
       format.html
@@ -106,24 +106,24 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
-  def set_grade_ivars(grade_id)
+  def grade_ivars(grade_id)
     @grade = Grade.find grade_id
     @student = @grade.student
     @course = @grade.course
     @assignment = @grade.assignment
   end
 
-  def set_submission_ivars_with_student(submission_id)
-    set_submission_ivars(submission_id)
+  def submission_ivars_with_student(submission_id)
+    submission_ivars(submission_id)
     @student = @submission.student
   end
 
-  def set_submission_ivars_with_user(submission_id)
-    set_submission_ivars(submission_id)
+  def submission_ivars_with_user(submission_id)
+    submission_ivars(submission_id)
     @user = @submission.student
   end
 
-  def set_submission_ivars(submission_id)
+  def submission_ivars(submission_id)
     @submission = Submission.find submission_id
     @course = @submission.course
     @assignment = @submission.assignment

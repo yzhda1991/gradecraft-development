@@ -59,11 +59,8 @@ class Team < ActiveRecord::Base
 
   # The average points amongst all students on the team
   def calculate_average_score
-    if member_count > 0
-      average_score = total_earned_points / member_count
-    else
-      return 0
-    end
+    return 0 unless member_count > 0
+    average_score = total_earned_points / member_count
   end
 
   def sorted_team_scores

@@ -59,9 +59,7 @@ class Challenge < ActiveRecord::Base
   end
 
   def visible_for_student?(student)
-    if visible?
-      return true
-    end
+    return true if visible?
   end
 
   def find_or_create_predicted_earned_challenge(student_id)
