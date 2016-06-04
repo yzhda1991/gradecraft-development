@@ -15,7 +15,8 @@ module Presenters
       end
 
       def submission_file_streamable?
-        submission_file && submission_file.object_stream.exists?
+        return false unless submission_file
+        submission_file.object_stream.exists?
       end
 
       def stream_submission_file
