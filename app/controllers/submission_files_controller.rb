@@ -7,7 +7,7 @@ class SubmissionFilesController < ApplicationController
     # let's use the object_stream here because there's no reason to hit S3 twice
     if presenter.submission_file_streamable?
       send_data presenter.stream_submission_file,
-        filename: presenter.browser_filename
+        filename: presenter.filename
     else
       presenter.mark_submission_file_missing
       flash[:alert] = "The requested file was not found on the server."

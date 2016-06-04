@@ -28,8 +28,6 @@ GradeCraft::Application.configure do
     Bullet.bullet_logger = true
     Bullet.console = true
   end
-
-  config.autoload_paths += %W(#{config.root}/app)
 end
 
 CarrierWave.configure do |config|
