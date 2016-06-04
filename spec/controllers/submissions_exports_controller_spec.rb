@@ -190,7 +190,7 @@ RSpec.describe SubmissionsExportsController, type: :controller do
         end
 
         it "doesn't get course scores" do
-          expect(controller).not_to receive(:get_course_scores)
+          expect(controller).not_to receive(:course_scores)
         end
       end
     end
