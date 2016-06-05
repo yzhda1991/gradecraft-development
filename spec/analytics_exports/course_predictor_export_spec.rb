@@ -47,5 +47,9 @@ describe CoursePredictorExport do
         end
       end
     end
+
+
+  it "includes Analytics::Export" do
+    expect(subject).to respond_to :schema_records
   end
 end
