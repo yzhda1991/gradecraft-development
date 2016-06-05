@@ -761,7 +761,7 @@ DEPENDENCIES
   resque-scheduler
   resque-throttler
   resque_spec!
-  rollbar
+  rollbar (~> 2.11.0)
   rspec-html-matchers
   rspec-rails (~> 3.4.0)
   ruby-saml (~> 1.0.0)
