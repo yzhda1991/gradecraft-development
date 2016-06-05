@@ -1,12 +1,11 @@
 module Analytics
   module Export
     class SchemaRecords
-      attr_reader :export, :records, :verbose
+      attr_reader :export, :records
 
-      def initialize(export:, records:, verbose: true)
+      def initialize(export:, records:)
         @export = export
         @records = records
-        @verbose = verbose
       end
 
       # {
@@ -14,21 +13,22 @@ module Analytics
       #   role: ["admin", "owner", "owner"], ...
       # }
       def build_hash!
-        puts " => Generating schema records..." if verbose
+        puts " => Generating schema records..."
 
-        Hash.new { |hash, key| hash[key] = [] }.tap do |h|
-          export.class.schema.each do |column, value|
-            puts "    => column #{column.inspect}, value #{value.inspect}" if verbose
+        # construct a hash that builds an empty array for the default value
+        Hash.new {|hash, key| hash[key] = [] }.tap do |final_hash|
+          export.class.schema.each do |column, row|
+            puts "    => column #{column.inspect}, row #{row.inspect}"
 
-            h[column] = records.each_with_index.map do |record, i|
-              print record_progress_message(index: i) if every_fifth_record?(i)
+            final_hash[column] = records.each_with_index.map do |record, index|
+              print progress_message(index: i) if fifth_record?(index: index)
 
-              if value.respond_to? :call
-                value.call(record)
-              elsif record.respond_to? value
-                record.send(value)
+              if row.respond_to? :call
+                row.call record
+              elsif record.respond_to? row
+                record.send row
               else
-                export.send(value, record, i)
+                export.send row, record, index
               end
             end
           end
@@ -36,19 +36,18 @@ module Analytics
         end
       end
 
-      def record_progress_message(index:)
-        "\r       record #{i} of #{total_records} " \
-          "(#{(i*100.0/total_records).round}%)"
+      def progress_message(index:)
+        percent_complete = (index * 100.0 / total_records).round
+        "\r       record #{index} of #{total_records} (#{percent_complete}%)"
       end
 
-      def every_fifth_record?(index:)
-        i % 5 == 0 || i == (total_records - 1)
+      def fifth_record?(index:)
+        index % 5 == 0 || index == (total_records - 1)
       end
 
       def total_records
-        records.size
+        @total_records ||= records.size
       end
-
     end
   end
 end
