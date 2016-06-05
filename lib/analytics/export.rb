@@ -26,12 +26,12 @@ module Analytics
       @records ||= self.filter data[self.class.rows]
     end
 
-    def schema_records(records_set=nil)
-      Analytics::Export::SchemaRecords.new(
-        export: self,
-        records_set: records_set || records
-      ).build_hash!
-    end
+  def schema_records(records_set=nil)
+    Analytics::Export::SchemaRecords.new(
+      export: self,
+      records: records_set || records
+    ).map_records!
+  end
 
     def filter_schema_records(&filter)
       record_set = filter.call(self.records)
