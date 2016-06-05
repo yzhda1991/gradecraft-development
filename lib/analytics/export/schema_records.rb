@@ -5,7 +5,7 @@ module Analytics
 
       def initialize(export:, records:, verbose: true)
         @export = export
-        @records_set = records_set
+        @records = records
         @verbose = verbose
       end
 
@@ -17,30 +17,32 @@ module Analytics
         puts " => Generating schema records..." if verbose
 
         Hash.new { |hash, key| hash[key] = [] }.tap do |h|
-          all_elapsed = Benchmark.realtime do
+          export.class.schema.each do |column, value|
+            puts "    => column #{column.inspect}, value #{value.inspect}" if verbose
 
-            export.class.schema.each do |column, value|
-              elapsed = Benchmark.realtime do
-                puts "    => column #{column.inspect}, value #{value.inspect}"
+            h[column] = records.each_with_index.map do |record, i|
+              print record_progress_message(index: i) if every_fifth_record?(i)
 
-                h[column] = recs.each_with_index.map do |record, i|
-                  print "\r       record #{i} of #{total_records} (#{(i*100.0/total_records).round}%)" if i % 5 == 0 || i == (total_records - 1)
-                  if value.respond_to? :call
-                    value.call(record)
-                  elsif record.respond_to? value
-                    record.send(value)
-                  else
-                    export.send(value, record, i)
-                  end
-                end
-
+              if value.respond_to? :call
+                value.call(record)
+              elsif record.respond_to? value
+                record.send(value)
+              else
+                export.send(value, record, i)
               end
-              puts "\n       Done. Elapsed time: #{elapsed} seconds"
             end
-
           end
-          puts "     Done. Elapsed time: #{all_elapsed} seconds"
+
         end
+      end
+
+      def record_progress_message(index:)
+        "\r       record #{i} of #{total_records} " \
+          "(#{(i*100.0/total_records).round}%)"
+      end
+
+      def every_fifth_record?(index:)
+        i % 5 == 0 || i == (total_records - 1)
       end
 
       def total_records
