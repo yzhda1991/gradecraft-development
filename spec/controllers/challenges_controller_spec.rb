@@ -27,7 +27,7 @@ describe ChallengesController do
     describe "GET index" do
       it "returns challenges for the current course" do
         get :index
-        expect(assigns(:title)).to eq("team Challenges")
+        expect(assigns(:title)).to eq("Team Challenges")
         expect(assigns(:challenges)).to eq(@course.reload.challenges)
         expect(response).to render_template(:index)
       end
@@ -45,7 +45,7 @@ describe ChallengesController do
     describe "GET new" do
       it "assigns title and challenge" do
         get :new
-        expect(assigns(:title)).to eq("Create a New team Challenge")
+        expect(assigns(:title)).to eq("Create a New Team Challenge")
         expect(assigns(:challenge)).to be_a_new(Challenge)
         expect(response).to render_template(:new)
       end

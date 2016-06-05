@@ -20,7 +20,7 @@ feature "grading a group assignment" do
 
     scenario "successfully from the group page" do
       within(".sidebar-container") do
-        click_link "groups"
+        click_link "Groups"
       end
 
       expect(current_path).to eq groups_path

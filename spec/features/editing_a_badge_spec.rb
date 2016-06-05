@@ -14,7 +14,7 @@ feature "editing a badge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "badges"
+        click_link "Badges"
       end
 
       expect(current_path).to eq badges_path
@@ -31,9 +31,9 @@ feature "editing a badge" do
 
       within(".pageContent") do
         fill_in "Name", with: "Edited Badge Name"
-        click_button "Update badge"
+        click_button "Update Badge"
       end
-      expect(page).to have_notification_message("notice", "Edited Badge Name badge successfully updated")
+      expect(page).to have_notification_message("notice", "Edited Badge Name Badge successfully updated")
     end
   end
 end

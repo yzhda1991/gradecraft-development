@@ -18,7 +18,7 @@ feature "awarding many earned badges at once" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "badges"
+        click_link "Badges"
       end
 
       expect(current_path).to eq badges_path
@@ -34,7 +34,7 @@ feature "awarding many earned badges at once" do
         find(:css, "#student-id-#{student_2.id}").set(true)
         click_button "Award"
       end
-      expect(page).to have_notification_message("notice", "The Fancy Badge badge was successfully awarded 2 times")
+      expect(page).to have_notification_message("notice", "The Fancy Badge Badge was successfully awarded 2 times")
     end
   end
 end

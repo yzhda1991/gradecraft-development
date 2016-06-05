@@ -34,7 +34,7 @@ describe AnalyticsController do
     describe "GET staff" do
       it "returns the staff analytics page for the current course" do
         get :staff
-        expect(assigns(:title)).to eq("team leader Analytics")
+        expect(assigns(:title)).to eq("Team Leader Analytics")
         expect(response).to render_template(:staff)
       end
     end

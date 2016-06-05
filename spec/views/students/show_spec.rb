@@ -38,6 +38,6 @@ describe "students/show" do
 
   it "renders successfully" do
     render
-    assert_select "h3", text: "assignments", count: 1
+    assert_select "h3", text: "Assignments", count: 1
   end
 end

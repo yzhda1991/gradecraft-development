@@ -25,7 +25,7 @@ feature "editing an awarded a badge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "badges"
+        click_link "Badges"
       end
 
       expect(current_path).to eq badges_path
@@ -44,14 +44,14 @@ feature "editing an awarded a badge" do
         edit_badge_earned_badge_path(badge, earned_badge)
 
       within(".pageContent") do
-        click_button "Update badge"
+        click_button "Update Badge"
       end
 
       expect(current_path).to eq badge_path(badge.id)
 
       expect(page).to have_notification_message(
         "notice",
-        "Hermione Granger's Fancy Badge badge was successfully updated"
+        "Hermione Granger's Fancy Badge Badge was successfully updated"
       )
     end
   end

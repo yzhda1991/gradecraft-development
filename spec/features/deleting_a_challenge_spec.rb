@@ -14,7 +14,7 @@ feature "deleting a challenge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "team Challenges"
+        click_link "Team Challenges"
       end
 
       expect(current_path).to eq challenges_path

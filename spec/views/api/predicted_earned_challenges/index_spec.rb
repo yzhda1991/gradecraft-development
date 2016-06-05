@@ -59,7 +59,7 @@ describe "api/predicted_earned_challenges/index" do
   it "renders term for challenges" do
     render
     @json = JSON.parse(response.body)
-    expect(@json["meta"]["term_for_challenges"]).to eq("team tsallenzes")
+    expect(@json["meta"]["term_for_challenges"]).to eq("Team tsallenzes")
   end
 
   it "includes update_challenges" do
