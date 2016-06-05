@@ -14,10 +14,7 @@
         = points grade.raw_score if grade.instructor_modified?
     %td.status-or-score
       - if presenter.assignment.pass_fail?
-        - if grade.pass_fail_status
-          = term_for(grade.pass_fail_status) if grade.instructor_modified?
-        - else
-          No Grade
+        = grade.try(:pass_fail_status) if grade.instructor_modified?
       - else
         = points grade.final_points if grade.instructor_modified?
 

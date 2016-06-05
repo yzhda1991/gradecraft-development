@@ -137,7 +137,6 @@ class Assignments::GradesController < ApplicationController
     end if params[:assignment][:grades_attributes].present?
     @assignment = current_course.assignments.find(params[:assignment_id])
     if @assignment.update_attributes(params[:assignment])
-
       # @mz TODO: add specs
       enqueue_multiple_grade_update_jobs(mass_update_grade_ids)
 

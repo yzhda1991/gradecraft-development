@@ -14,7 +14,7 @@ feature "deleting a team" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "teams"
+        click_link "Teams"
       end
 
       expect(current_path).to eq teams_path

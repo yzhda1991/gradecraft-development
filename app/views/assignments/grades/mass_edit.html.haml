@@ -42,13 +42,15 @@
                       = gf.radio_button :raw_score, assignment_score_level.value, class: "radio_inline"
                   - elsif @assignment.grade_checkboxes?
                     = gf.check_box :raw_score, {}, @assignment.point_total, nil
+                  - elsif @assignment.pass_fail?
+                    = gf.select :pass_fail_status, [[], ["#{term_for :pass}", "Pass"], ["#{term_for :fail}", "Fail"]]
                   - else
                     - if grade.persisted? && GradeProctor.new(grade).updatable?(user: current_user, course: current_course)
                       = gf.text_field :raw_score, data: {autonumeric: true, "m-dec" => "0"}
 
                     - else
                       = gf.text_field :raw_score, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
-            %td{:style => "text-align: left"}= "/ #{points @assignment.point_total}"
+            %td{:style => "text-align: left"}= @assignment.pass_fail? ? "" : "/ #{points @assignment.point_total}"
 
       .submit-buttons
         %ul

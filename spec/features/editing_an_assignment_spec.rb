@@ -15,7 +15,7 @@ feature "editing an assignment" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "assignments"
+        click_link "Assignments"
       end
 
       expect(current_path).to eq assignments_path
@@ -33,7 +33,7 @@ feature "editing an assignment" do
 
       within(".pageContent") do
         fill_in "Name", with: "Edited Assignment Name"
-        click_button "Update assignment"
+        click_button "Update Assignment"
       end
 
       expect(page).to have_notification_message("notice", "Assignment Edited Assignment Name successfully updated")

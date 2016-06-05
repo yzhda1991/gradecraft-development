@@ -13,7 +13,7 @@ feature "creating a new challenge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "team Challenges"
+        click_link "Team Challenges"
       end
 
       within(".context_menu") do
@@ -24,7 +24,7 @@ feature "creating a new challenge" do
 
       within(".pageContent") do
         fill_in "Name", with: "New Team Challenge Name"
-        click_button "Create team Challenge"
+        click_button "Create Team Challenge"
       end
 
       expect(page).to have_notification_message("notice", "Challenge New Team Challenge Name successfully created")

@@ -7,8 +7,15 @@ module Gradable
     has_many :grades, dependent: :destroy
     has_many :predicted_earned_grades, dependent: :destroy
 
-    accepts_nested_attributes_for :grades,
-      reject_if: proc { |attrs| attrs[:raw_score].blank? }
+    accepts_nested_attributes_for :grades, reject_if: :no_grade
+  end
+
+  def no_grade(attrs)
+    if pass_fail
+      attrs[:pass_fail_status].blank?
+    else
+      attrs[:raw_score].blank?
+    end
   end
 
   def graded_or_released_scores

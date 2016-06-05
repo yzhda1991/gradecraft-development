@@ -14,7 +14,7 @@ feature "deleting a group" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "groups"
+        click_link "Groups"
       end
 
       expect(current_path).to eq groups_path
@@ -23,7 +23,7 @@ feature "deleting a group" do
         click_link "Delete"
       end
 
-      expect(page).to have_notification_message("success", "Group Name group successfully deleted")
+      expect(page).to have_notification_message("success", "Group Name Group successfully deleted")
     end
   end
 end

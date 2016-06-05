@@ -16,7 +16,7 @@ feature "awarding a badge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "badges"
+        click_link "Badges"
       end
 
       expect(current_path).to eq badges_path
@@ -29,9 +29,9 @@ feature "awarding a badge" do
 
       within(".pageContent") do
         select "Hermione Granger", from: "earned_badge_student_id"
-        click_button "Award badge"
+        click_button "Award Badge"
       end
-      expect(page).to have_notification_message("notice", "The Fancy Badge badge was successfully awarded to Hermione Granger")
+      expect(page).to have_notification_message("notice", "The Fancy Badge Badge was successfully awarded to Hermione Granger")
     end
   end
 end

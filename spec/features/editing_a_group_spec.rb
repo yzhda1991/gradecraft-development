@@ -25,20 +25,20 @@ feature "editing a group" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "groups"
+        click_link "Groups"
       end
 
       expect(current_path).to eq groups_path
 
       within(".pageContent") do
-        click_link "Edit group"
+        click_link "Edit Group"
       end
 
       expect(current_path).to eq edit_group_path(group)
 
       within(".pageContent") do
         fill_in "Name", with: "Less Excited Group Name"
-        click_button "Update group"
+        click_button "Update Group"
       end
 
       expect(page).to have_notification_message("notice", "Your group was successfully updated.")

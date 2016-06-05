@@ -92,7 +92,7 @@ describe InfoController do
     describe "GET per_assign" do
       it "returns the Assignment Analytics page for the current course" do
         get :per_assign
-        expect(assigns(:title)).to eq("assignment Analytics")
+        expect(assigns(:title)).to eq("Assignment Analytics")
         expect(response).to render_template(:per_assign)
       end
     end

@@ -18,7 +18,7 @@ feature "grading an individual assignment" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "assignments"
+        click_link "Assignments"
       end
 
       expect(current_path).to eq assignments_path

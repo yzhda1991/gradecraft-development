@@ -13,7 +13,7 @@ feature "creating a new badge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "badges"
+        click_link "Badges"
       end
 
       within(".context_menu") do
@@ -24,10 +24,10 @@ feature "creating a new badge" do
 
       within(".pageContent") do
         fill_in "Name", with: "New Badge Name"
-        click_button "Create badge"
+        click_button "Create Badge"
       end
 
-      expect(page).to have_notification_message("notice", "New Badge Name badge successfully created")
+      expect(page).to have_notification_message("notice", "New Badge Name Badge successfully created")
     end
   end
 end
