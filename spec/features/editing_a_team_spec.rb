@@ -14,7 +14,7 @@ feature "editing a team" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "teams"
+        click_link "Teams"
       end
 
       expect(current_path).to eq teams_path
@@ -31,7 +31,7 @@ feature "editing a team" do
 
       within(".pageContent") do
         fill_in "Name", with: "Edited Team Name"
-        click_button "Update team"
+        click_button "Update Team"
       end
 
       expect(page).to have_notification_message("notice", "Team Edited Team Name successfully updated")

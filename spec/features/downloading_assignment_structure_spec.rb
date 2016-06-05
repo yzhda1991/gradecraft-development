@@ -14,7 +14,7 @@ feature "downloading assignment structure file" do
     scenario "successfully" do
 
       within(".sidebar-container") do
-        click_link "assignment Structure"
+        click_link "Assignment Structure"
       end
 
       expect(page.response_headers["Content-Type"]).to eq("application/octet-stream")

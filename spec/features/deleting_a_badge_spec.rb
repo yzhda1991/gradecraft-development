@@ -14,7 +14,7 @@ feature "deleting a badge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "badges"
+        click_link "Badges"
       end
 
       expect(current_path).to eq badges_path
@@ -23,7 +23,7 @@ feature "deleting a badge" do
         click_link "Delete"
       end
 
-      expect(page).to have_notification_message("notice", "Fancy Badge badge successfully deleted")
+      expect(page).to have_notification_message("notice", "Fancy Badge Badge successfully deleted")
     end
   end
 end

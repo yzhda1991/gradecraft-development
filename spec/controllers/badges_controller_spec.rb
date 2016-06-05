@@ -38,7 +38,7 @@ describe BadgesController do
     describe "GET new" do
       it "renders the new badge form" do
         get :new
-        expect(assigns(:title)).to eq("Create a New badge")
+        expect(assigns(:title)).to eq("Create a New Badge")
         expect(assigns(:badge)).to be_a_new(Badge)
         expect(response).to render_template(:new)
       end

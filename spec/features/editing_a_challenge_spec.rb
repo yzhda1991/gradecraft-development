@@ -14,7 +14,7 @@ feature "editing a challenge" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "team Challenges"
+        click_link "Team Challenges"
       end
 
       expect(current_path).to eq challenges_path
@@ -31,7 +31,7 @@ feature "editing a challenge" do
 
       within(".pageContent") do
         fill_in "Name", with: "Edited Team Challenge Name"
-        click_button "Update team Challenge"
+        click_button "Update Team Challenge"
       end
 
       expect(page).to have_notification_message("notice", "Challenge Edited Team Challenge Name successfully updated")

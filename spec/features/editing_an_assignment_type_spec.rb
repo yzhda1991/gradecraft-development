@@ -14,7 +14,7 @@ feature "editing an assignment type" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "assignment types"
+        click_link "Assignment types"
       end
 
       expect(current_path).to eq assignment_types_path
@@ -31,7 +31,7 @@ feature "editing an assignment type" do
 
       within(".pageContent") do
         fill_in "Name", with: "Edited Assignment Type Name"
-        click_button "Update assignment type"
+        click_button "Update Assignment type"
       end
 
       expect(page).to have_notification_message("success", "Assignment Type Edited Assignment Type Name successfully updated")

@@ -26,7 +26,7 @@ describe AssignmentsController do
     describe "GET index" do
       it "returns assignments for the current course" do
         get :index
-        expect(assigns(:title)).to eq("assignments")
+        expect(assigns(:title)).to eq("Assignments")
         expect(assigns(:assignment_types)).to eq([@assignment_type])
         expect(response).to render_template(:index)
       end
@@ -35,8 +35,7 @@ describe AssignmentsController do
     describe "GET settings" do
       it "returns title and assignments" do
         get :settings
-        # TODO: notice, lib/course_terms.rb downcases the term_for assignments
-        expect(assigns(:title)).to eq("Review assignment Settings")
+        expect(assigns(:title)).to eq("Review Assignment Settings")
         # TODO: confirm multiple assignments are chronological and alphabetical
         expect(assigns(:assignment_types)).to eq([@assignment_type])
         expect(response).to render_template(:settings)

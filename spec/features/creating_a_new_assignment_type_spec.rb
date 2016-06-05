@@ -13,18 +13,18 @@ feature "creating a new assignment type" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "assignment types"
+        click_link "Assignment types"
       end
 
       within(".context_menu") do
-        click_link "New assignment type"
+        click_link "New Assignment type"
       end
 
       expect(current_path).to eq new_assignment_type_path
 
       within(".pageContent") do
         fill_in "Name", with: "New Assignment Type Name"
-        click_button "Create assignment type"
+        click_button "Create Assignment type"
       end
 
       expect(page).to have_notification_message("success", "Assignment Type New Assignment Type Name successfully created")

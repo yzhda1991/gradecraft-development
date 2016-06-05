@@ -24,7 +24,7 @@ describe AssignmentTypesController do
     describe "GET index" do
       it "returns assignment types for the current course" do
         get :index
-        expect(assigns(:title)).to eq("assignment types")
+        expect(assigns(:title)).to eq("Assignment types")
         expect(assigns(:assignment_types)).to eq([@assignment_type])
         expect(response).to render_template(:index)
       end
@@ -42,7 +42,7 @@ describe AssignmentTypesController do
     describe "GET new" do
       it "assigns title and assignment types" do
         get :new
-        expect(assigns(:title)).to eq("Create a New assignment type")
+        expect(assigns(:title)).to eq("Create a New Assignment type")
         expect(assigns(:assignment_type)).to be_a_new(AssignmentType)
         expect(response).to render_template(:new)
       end

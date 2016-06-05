@@ -7,8 +7,7 @@ module CourseTerms
     case key.downcase.to_sym
     when :student then current_course.user_term.to_s.singularize
     when :weight, :assignment, :badge, :team, :team_leader, :group
-      # TODO: downcase in forms, not in titles
-      current_course.send("#{key}_term").to_s.singularize.downcase
+      current_course.send("#{key}_term").to_s.singularize
     when :pass, :fail
       current_course.send("#{key.downcase}_term").to_s
     when :challenge then "#{term_for(:team)} #{current_course.challenge_term}"

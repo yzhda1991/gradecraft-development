@@ -14,7 +14,7 @@ feature "creating a new assignment" do
 
     scenario "successfully" do
       within(".sidebar-container") do
-        click_link "assignments"
+        click_link "Assignments"
       end
 
       within(".context_menu") do
@@ -26,7 +26,7 @@ feature "creating a new assignment" do
       within(".pageContent") do
         select "Assignment Type Name", from: "assignment_assignment_type_id"
         fill_in "Name", with: "New Assignment Name"
-        click_button "Create assignment"
+        click_button "Create Assignment"
       end
 
       expect(page).to have_notification_message("notice", "Assignment New Assignment Name successfully created")

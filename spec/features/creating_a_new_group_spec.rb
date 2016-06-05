@@ -18,13 +18,13 @@ feature "creating a new group" do
 
     scenario "unsuccessfully without group members" do
       within(".sidebar-container") do
-        click_link "groups"
+        click_link "Groups"
       end
 
       expect(current_path).to eq groups_path
 
       within(".context_menu") do
-        click_link "New group"
+        click_link "New Group"
       end
 
       expect(current_path).to eq new_group_path
@@ -32,7 +32,7 @@ feature "creating a new group" do
       within(".pageContent") do
         fill_in "Name", with: "New Group Name"
         find(:css, "#group_assignment_ids_#{assignment.id}").set(true)
-        click_button "Create group"
+        click_button "Create Group"
       end
 
       expect(page).to have_notification_message("alert", "You don't have enough group members.")
@@ -40,13 +40,13 @@ feature "creating a new group" do
 
     scenario "unsuccessfully without an assignment" do
       within(".sidebar-container") do
-        click_link "groups"
+        click_link "Groups"
       end
 
       expect(current_path).to eq groups_path
 
       within(".context_menu") do
-        click_link "New group"
+        click_link "New Group"
       end
 
       expect(current_path).to eq new_group_path
@@ -54,7 +54,7 @@ feature "creating a new group" do
       within(".pageContent") do
         fill_in "Name", with: "New Group Name"
         find(:css, "#group_assignment_ids_#{assignment.id}").set(false)
-        click_button "Create group"
+        click_button "Create Group"
       end
 
       expect(page).to have_notification_message("alert", "You need to check off which assignment your group will work on.")
