@@ -1,6 +1,9 @@
 class CoursePredictorExport
   include Analytics::Export::Model
 
+  attr_accessor :usernames, :assignment_names
+  attr_reader :loaded_data
+
   rows_by :events
 
   set_schema username: :username,
@@ -12,29 +15,39 @@ class CoursePredictorExport
              possible: :possible_points,
              date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
+  def initialize(loaded_data)
+    @loaded_data = loaded_data
+    get_and_cache_usernames
+    get_and_cache_assignment_names
+    super
+  end
+
   def schema_records_for_role(role)
     self.schema_records records.select {|event| event.user_role == role }
   end
 
-  def initialize(loaded_data)
-    @usernames = loaded_data[:users].inject({}) do |hash, user|
+  def get_and_cache_usernames
+    @usernames ||= loaded_data[:users].inject({}) do |hash, user|
       hash[user.id] = user.username
       hash
     end
-    @assignment_names =
-      loaded_data[:assignments].inject({}) do |hash, assignment|
+  end
+
+  def get_and_cache_assignment_names
+    assignments = loaded_data[:assignments]
+    @assignment_names ||= assignments.inject({}) do |hash, assignment|
         hash[assignment.id] = assignment.name
         hash
       end
-    super
+    end
   end
 
   def filter(events)
-    events.select{ |event| event.event_type == "predictor" }
+    events.select {|event| event.event_type == "predictor" }
   end
 
   def username(event, index)
-    @usernames[event.user_id] || "[user id: #{event.user_id}]"
+    usernames[event.user_id] || "[user id: #{event.user_id}]"
   end
 
   def assignment_name(event, index)
