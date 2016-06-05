@@ -1,7 +1,7 @@
 class BadgesController < ApplicationController
   include SortsPosition
 
-  before_filter :ensure_staff?
+  before_filter :ensure_staff?, except: [:index, :show]
   before_action :find_badge, only: [:show, :edit, :update, :destroy]
 
   # GET /badges

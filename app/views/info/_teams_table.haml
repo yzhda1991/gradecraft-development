@@ -9,7 +9,7 @@
         %th Badges
       %th= course.team_leader_term
   %tbody
-    - teams.order_by_high_score.each do |team|
+    - teams.order_by_rank.each do |team|
       %tr
         %td= link_to team.name, team_path(team)
         - if current_course.challenges.present?
