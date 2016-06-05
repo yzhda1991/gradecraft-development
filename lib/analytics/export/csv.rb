@@ -6,25 +6,25 @@ module Analytics
       def initialize(export:, path:, filename: nil, schema_record_set: nil)
         @export = export
         @path = path
-        @filename = filename
-        @schema_record_set = schema_record_set
+        @filename = filename || "#{export.class.name.underscore}.csv"
+        @schema_records  = schema_record_set || export.schema_records
+
+        FileUtils.mkdir_p(path) unless Dir.exists?(path)
       end
-    end
 
-    schema_recs = schema_record_set || export.schema_records
-    unless File.exists?(path) && File.directory?(path)
-      FileUtils.mkdir_p(path)
-    end
-    file_name ||= "#{export.class.name.underscore}.csv"
+      def generate!
+        CSV.open(csv_filepath, "wb") do |csv|
+          # Write header row
+          csv << export.class.schema.keys
 
-    CSV.open(File.join(path, file_name), "wb") do |csv|
-      # Write header row
-      csv << export.class.schema.keys
+          # Zip schema_records values from each key
+          schema_records.values.transpose.each {|record| csv << record }
+        end
+      end
 
-      # Zip schema_records values from each key
-      schema_recs.values.transpose.each{ |record| csv << record }
-    end
-
+      def csv_filepath
+        File.join path, filename
+      end
     end
   end
 end
