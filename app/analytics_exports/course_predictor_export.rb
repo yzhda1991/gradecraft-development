@@ -36,9 +36,8 @@ class CoursePredictorExport
   def get_and_cache_assignment_names
     assignments = loaded_data[:assignments]
     @assignment_names ||= assignments.inject({}) do |hash, assignment|
-        hash[assignment.id] = assignment.name
-        hash
-      end
+      hash[assignment.id] = assignment.name
+      hash
     end
   end
 
