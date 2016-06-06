@@ -147,8 +147,29 @@ describe CoursePredictorExport do
 
     it "caches the value" do
       result
-      expect(subject.loaded_data[:assignments]).not_to receive(:inject)
+      expect(subject.loaded_data[:users]).not_to receive(:inject)
       result
     end
   end
+
+  describe "#get_and_cache_usernames" do
+    let(:result) { subject.get_and_cache_assignment_names }
+
+    it "builds a hash of format { assignment_id: assignment name }" do
+      expect(result).to eq({ 3 => "writing", 4 => "rithmatic" })
+    end
+
+    it "sets the result to @usernames" do
+      result
+      expect(subject.instance_variable_get(:@assignment_names))
+        .to eq({ 3 => "writing", 4 => "rithmatic" })
+    end
+
+    it "caches the value" do
+      result
+      expect(subject.loaded_data[:users]).not_to receive(:inject)
+      result
+    end
+  end
+
 end
