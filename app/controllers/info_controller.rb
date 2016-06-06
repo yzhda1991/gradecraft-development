@@ -3,7 +3,7 @@ class InfoController < ApplicationController
 
   before_filter :ensure_staff?, except: [ :dashboard, :timeline_events ]
   before_action :find_team,
-    only: [ :awarded_badges, :choices, :resubmissions, :ungraded_submissions ]
+    only: [ :awarded_badges, :choices ]
   before_action :find_students,
     only: [ :awarded_badges, :choices, :final_grades_for_course  ]
 
@@ -37,40 +37,12 @@ class InfoController < ApplicationController
   def grading_status
     @title = "Grading Status"
     grades = current_course.grades.instructor_modified
-    unreleased_grades = grades.not_released
-    in_progress_grades = grades.in_progress
-    no_status_grades = grades.no_status
-    @ungraded_submissions = current_course.submissions.ungraded.includes(:assignment, :grade, :student, :group, :submission_files)
-    @ungraded_submissions_by_assignment = @ungraded_submissions.group_by(&:assignment)
-    @unreleased_grades_by_assignment = unreleased_grades.group_by(&:assignment)
-    @in_progress_grades_by_assignment = in_progress_grades.group_by(&:assignment)
-    @no_status_grades_by_assignment = no_status_grades.group_by(&:assignment)
-  end
-
-  # Displaying all resubmisisons
-  def resubmissions
-    @title = "Resubmitted Assignments"
-
-    @resubmissions = current_course.submissions.resubmitted
-    if @team # populated with the find_team before filter
-      @resubmissions = @resubmissions.where(student_id: @team.students.pluck(:id))
-    end
-    @resubmission_count = @resubmissions.count
-
-    @teams = current_course.teams # needed to display the team selection filter
-  end
-
-  def ungraded_submissions
-    @title = "Ungraded #{term_for :assignment} Submissions"
-    @ungraded_submissions = current_course.submissions.ungraded
-
-    @teams = current_course.teams
-
-    if @team
-      @ungraded_submissions = @ungraded_submissions.where(student_id: @team.students.pluck(:id))
-    end
-
-    @ungraded_submissions_count = @ungraded_submissions.count
+    submissions = current_course.submissions.includes(:assignment, :grade, :student, :group, :submission_files)
+    @ungraded_submissions_by_assignment = submissions.ungraded.group_by(&:assignment)
+    @resubmissions_by_assignment = submissions.resubmitted.group_by(&:assignment)
+    @unreleased_grades_by_assignment = grades.not_released.group_by(&:assignment)
+    @in_progress_grades_by_assignment = grades.in_progress.group_by(&:assignment)
+    @no_status_grades_by_assignment = grades.no_status.group_by(&:assignment)
   end
 
   # Displaying the top 10 and bottom 10 students for quick overview

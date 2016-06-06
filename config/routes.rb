@@ -200,8 +200,6 @@ GradeCraft::Application.routes.draw do
   get "multiplier_choices" => "info#choices"
   get "earned_badges" => "info#awarded_badges"
   get "grading_status" => "info#grading_status"
-  get "resubmissions" => "info#resubmissions"
-  get "ungraded_submissions" => "info#ungraded_submissions"
   get "top_10" => "info#top_10"
   get "per_assign" => "info#per_assign"
   get "gradebook" => "info#gradebook"
@@ -223,7 +221,6 @@ GradeCraft::Application.routes.draw do
     get :dashboard
     get :grading_status
     get :timeline_events
-    get :resubmissions
     get :top_10
     get :per_assign
   end

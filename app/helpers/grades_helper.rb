@@ -5,7 +5,8 @@ module GradesHelper
     unreleased_grades_count_for(course) +
       in_progress_grades_count_for(course) +
       no_status_grades_count_for(course) +
-      ungraded_submissions_count_for(course)
+      ungraded_submissions_count_for(course) +
+      resubmission_count_for(course)
   end
 
   def in_progress_grades_count_for(course)
