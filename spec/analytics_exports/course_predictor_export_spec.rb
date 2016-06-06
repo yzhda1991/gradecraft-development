@@ -2,9 +2,11 @@ require "analytics"
 require "./app/analytics_exports/course_predictor_export"
 
 describe CoursePredictorExport do
-  subject { described_class.new export_data }
-  let(:export_data) do
-    { users: [], assignments: [] }
+  subject { described_class.new users: users, assignments: assignments }
+
+  let(:users) do
+    [double(:user, id: 1, username: "anna"),
+     double(:user, id: 2, username: "barry")]
   end
 
   it "includes Analytics::Export::Model" do
@@ -51,5 +53,24 @@ describe CoursePredictorExport do
 
   it "includes Analytics::Export" do
     expect(subject).to respond_to :schema_records
+  end
+
+  describe "accessible attributes" do
+    it "has accessible usernames" do
+      subject.usernames = %w[user names]
+      expect(subject.usernames).to eq %w[user names]
+    end
+
+    it "has accessible assignment names" do
+      subject.assignment_names = %w[user names]
+      expect(subject.assignment_names).to eq %w[user names]
+    end
+  end
+
+  describe "readable attributes" do
+    it "has a readable loaded_data attribute" do
+      subject.instance_variable_set(:@loaded_data, "data!!")
+      expect(subject.loaded_data).to eq "data!!"
+    end
   end
 end
