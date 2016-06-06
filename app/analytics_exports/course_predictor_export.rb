@@ -25,6 +25,8 @@ class CoursePredictorExport
     schema_records records.select {|event| event.user_role == role }
   end
 
+  # build an array or the given records in the format of
+  # { user_id => "some_username" }
   def get_and_cache_usernames
     @usernames ||= loaded_data[:users].inject({}) do |hash, user|
       hash[user.id] = user.username
@@ -32,6 +34,8 @@ class CoursePredictorExport
     end
   end
 
+  # build an array or the given records in the format of
+  # { assignment_id => "some_assignment_name" }
   def get_and_cache_assignment_names
     assignments = loaded_data[:assignments]
     @assignment_names ||= assignments.inject({}) do |hash, assignment|
@@ -40,11 +44,12 @@ class CoursePredictorExport
     end
   end
 
+  # filter the given events so that only predictor events are exported
   def filter(events)
     events.select {|event| event.event_type == "predictor" }
   end
 
-  def username(event, index)
+  def username(event)
     usernames[event.user_id] || "[user id: #{event.user_id}]"
   end
 

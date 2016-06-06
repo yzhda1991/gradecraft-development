@@ -172,4 +172,35 @@ describe CoursePredictorExport do
     end
   end
 
+  describe "#filter" do
+    let(:events) do
+      [double(:event, event_type: "predictor"),
+       double(:event, event_type: "something else")]
+    end
+
+    it "selects the events that have a predictor event type" do
+      expect(subject.filter events).to eq [events.first]
+    end
+  end
+
+  describe "#username" do
+    let(:event) { double :event, user_id: 5 }
+    before { allow(subject).to receive(:usernames) { usernames } }
+
+    context "usernames hash has a key matching the event's user_id" do
+      let(:usernames) { { 5 => "josiah" } }
+
+      it "selects the events that have a predictor event type" do
+        expect(subject.username event).to eq "josiah"
+      end
+    end
+
+    context "usernames hash has no key matching the event's user_id" do
+      let(:usernames) { { 10 => "annabelle" } }
+
+      it "selects the events that have a predictor event type" do
+        expect(subject.username event).to eq "[user id: 5]"
+      end
+    end
+  end
 end
