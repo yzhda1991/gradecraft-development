@@ -14,7 +14,7 @@ GradeCraft::Application.routes.draw do
   #8. Courses
   #9. Groups
   #10. Informational Pages
-  #11. Rubrics & Grade Schemes
+  #11. Grade Schemes
   #12. Teams
   #13. Users
   #14. User Auth
@@ -203,15 +203,11 @@ GradeCraft::Application.routes.draw do
     get :um_pilot
   end
 
-  #11. Rubrics & Grade Schemes
-  resources :rubrics
-
-  #11. Rubrics & Grade Schemes
-  resources :grade_scheme_elements do
+  #11. Grade Schemes
+  resources :grade_scheme_elements, only: :index do
     collection do
-      post :destroy_multiple
-      get "mass_edit" => "grade_scheme_elements#mass_edit", as: :mass_edit
-      put "mass_edit" => "grade_scheme_elements#mass_update"
+      get :mass_edit
+      put :mass_update
     end
   end
 

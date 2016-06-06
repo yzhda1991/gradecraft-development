@@ -43,7 +43,7 @@
         grade_scheme_elements_attributes: elements
         deleted_ids: deletedIds
       }
-      $http.put('/grade_scheme_elements/mass_edit', data).success(
+      $http.put('/grade_scheme_elements/mass_update', data).success(
         (data) ->
           angular.copy(data.grade_scheme_elements, elements)
           window.location.href = '/grade_scheme_elements/'
