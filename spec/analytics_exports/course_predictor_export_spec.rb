@@ -202,5 +202,19 @@ describe CoursePredictorExport do
         expect(subject.username event).to eq "[user id: 5]"
       end
     end
+
+    context "event has a nil user_id" do
+      it "returns nil" do
+        event = double :event, user_id: nil
+        expect(subject.username event).to be_nil
+      end
+    end
+
+    context "event has no user_id attribute" do
+      it "returns nil" do
+        event = double :event, no_user_id_here: "seriously"
+        expect(subject.username event).to be_nil
+      end
+    end
   end
 end

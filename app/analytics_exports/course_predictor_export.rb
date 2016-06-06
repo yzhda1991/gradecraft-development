@@ -50,6 +50,7 @@ class CoursePredictorExport
   end
 
   def username(event)
+    return nil unless user_id = event.try(:user_id)
     usernames[event.user_id] || "[user id: #{event.user_id}]"
   end
 
