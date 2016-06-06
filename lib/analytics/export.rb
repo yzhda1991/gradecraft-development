@@ -25,7 +25,7 @@ module Analytics
     end
 
     def schema_records(records_set=nil)
-      Analytics::Export::SchemaRecords.new(
+      @schema_records ||= Analytics::Export::SchemaRecords.new(
         export: self,
         records: records_set || records
       ).map_records!
