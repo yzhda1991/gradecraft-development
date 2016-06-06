@@ -195,11 +195,13 @@ GradeCraft::Application.routes.draw do
     get :ungraded_submissions
   end
 
-  get "um_pilot" => "pages#um_pilot"
-  get "features" => "pages#features"
-  get "press" => "pages#press"
-  get "research" => "pages#research"
-  get "our_team" => "pages#team"
+  controller :pages do
+    get :features
+    get :our_team, to: "pages#team"
+    get :press
+    get :research
+    get :um_pilot
+  end
 
   #11. Rubrics & Grade Schemes
   resources :rubrics
