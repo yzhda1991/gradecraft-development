@@ -93,4 +93,23 @@ describe CoursePredictorExport do
       })
     end
   end
+
+  describe "#initialize" do
+    it "sets the loaded data" do
+      expect(subject.loaded_data)
+        .to eq({ users: users, assignments: assignments })
+    end
+
+    it "gets and caches the usernames" do
+      expect_any_instance_of(described_class)
+        .to receive(:get_and_cache_usernames)
+      subject
+    end
+
+    it "gets and caches assignment names" do
+      expect_any_instance_of(described_class)
+        .to receive(:get_and_cache_assignment_names)
+      subject
+    end
+  end
 end

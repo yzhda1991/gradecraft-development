@@ -19,7 +19,6 @@ class CoursePredictorExport
     @loaded_data = loaded_data
     get_and_cache_usernames
     get_and_cache_assignment_names
-    super
   end
 
   def schema_records_for_role(role)
