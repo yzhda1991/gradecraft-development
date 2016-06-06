@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160531193326) do
+ActiveRecord::Schema.define(version: 20160602140234) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,22 +86,6 @@ ActiveRecord::Schema.define(version: 20160531193326) do
     t.boolean  "student_weightable"
     t.integer  "position"
   end
-
-  create_table "assignment_weights", force: :cascade do |t|
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "student_id",                     null: false
-    t.integer  "assignment_type_id",             null: false
-    t.integer  "weight",                         null: false
-    t.integer  "assignment_id",                  null: false
-    t.integer  "course_id"
-    t.integer  "point_total",        default: 0, null: false
-  end
-
-  add_index "assignment_weights", ["assignment_id"], name: "index_assignment_weights_on_assignment_id", using: :btree
-  add_index "assignment_weights", ["course_id"], name: "index_assignment_weights_on_course_id", using: :btree
-  add_index "assignment_weights", ["student_id", "assignment_id"], name: "index_weights_on_student_id_and_assignment_id", unique: true, using: :btree
-  add_index "assignment_weights", ["student_id", "assignment_type_id"], name: "index_assignment_weights_on_student_id_and_assignment_type_id", using: :btree
 
   create_table "assignments", force: :cascade do |t|
     t.string   "name",                         limit: 255
