@@ -112,4 +112,7 @@ describe CoursePredictorExport do
       subject
     end
   end
+
+  describe "#schema_records_for_role" do
+  end
 end

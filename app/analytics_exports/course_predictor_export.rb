@@ -22,7 +22,7 @@ class CoursePredictorExport
   end
 
   def schema_records_for_role(role)
-    self.schema_records records.select {|event| event.user_role == role }
+    schema_records records.select {|event| event.user_role == role }
   end
 
   def get_and_cache_usernames

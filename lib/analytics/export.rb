@@ -10,6 +10,7 @@ module Analytics
   module Export
     def self.included(base)
       base.extend(ClassMethods)
+
       base.class_eval do
         attr_accessor :data
       end
@@ -19,12 +20,8 @@ module Analytics
       self.data = loaded_data
     end
 
-    def filter(rows)
-      rows
-    end
-
     def records
-      @records ||= self.filter data[self.class.rows]
+      @records ||= data[self.class.rows]
     end
 
     def schema_records(records_set=nil)
@@ -32,11 +29,6 @@ module Analytics
         export: self,
         records: records_set || records
       ).map_records!
-    end
-
-    def filter_schema_records(&filter)
-      record_set = filter.call(self.records)
-      self.schema_records record_set
     end
 
     def generate_csv(path, file_name=nil, schema_record_set=nil)
