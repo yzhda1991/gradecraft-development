@@ -140,15 +140,10 @@ GradeCraft::Application.routes.draw do
 
   #6. Badges
   resources :badges do
-
-    resources :tasks
-    resources :earned_badges
-    member do
-      get "mass_award" => "earned_badges#mass_edit", as: :mass_award
-      post "mass_earn" => "earned_badges#mass_earn"
-    end
-    collection do
-      post :sort
+    post :sort, on: :collection
+    resources :earned_badges do
+      get :mass_edit, on: :collection
+      post :mass_earn, on: :collection
     end
   end
 

@@ -27,7 +27,7 @@ feature "awarding many earned badges at once" do
         click_link "Quick Award"
       end
 
-      expect(current_path).to eq mass_award_badge_path(badge)
+      expect(current_path).to eq mass_edit_badge_earned_badges_path(badge)
 
       within(".pageContent") do
         find(:css, "#student-id-#{student.id}").set(true)
