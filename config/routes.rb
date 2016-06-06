@@ -219,13 +219,16 @@ GradeCraft::Application.routes.draw do
 
   #13. Users
   %w{students gsis professors admins}.each do |role|
-    get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}", role: role.singularize
+    get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}",
+      role: role.singularize
   end
 
-  resources :users do
-    get :activate, on: :member
-    post :activate, on: :member, action: :activated
-    post :flag, on: :member
+  resources :users, except: :show do
+    member do
+      get :activate
+      post :activate, action: :activated
+      post :flag
+    end
     collection do
       get :edit_profile
       put :update_profile
@@ -233,31 +236,25 @@ GradeCraft::Application.routes.draw do
       post :upload
     end
   end
-  resources :students do
-    get :grade_index
-    get :timeline
-    get :syllabus
-    get :predictor
-    get :course_progress
-    get :teams
-    get :recalculate
-    get "badges", to: "students/badges#index"
-    get "badges/:id", to: "students/badges#show", as: :badge_show
-    get "leaderboard" => "students#leaderboard"
-    resources :student_academic_histories
+
+  get :leaderboard, to: "students#leaderboard"
+  resources :students, only: [:index, :show] do
+    resources :badges, only: [:index, :show], module: :students
+    member do
+      get :grade_index
+      get :timeline
+      get :syllabus
+      get :predictor
+      get :course_progress
+      get :teams
+      get :recalculate
+    end
     collection do
-      get :leaderboard
-      get :choices
       get :autocomplete_student_name
-      get :scores_for_current_course
-      get :scores_by_assignment
-      get :scores_by_team
-      get :scores_for_single_assignment
-      get :final_grades
-      get :class_badges
       get :flagged
     end
   end
+
   resources :staff, only: [:index, :show]
   resources :user_sessions
   resources :passwords, path_names: { new: "reset" }, except: [:destroy, :index]
