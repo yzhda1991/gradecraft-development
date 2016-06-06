@@ -196,6 +196,7 @@ GradeCraft::Application.routes.draw do
   end
 
   controller :pages do
+    get :brand_and_style_guidelines
     get :features
     get :our_team, to: "pages#team"
     get :press
@@ -214,8 +215,6 @@ GradeCraft::Application.routes.draw do
   #12. Teams
   resources :teams
 
-  get "home" => "pages#home"
-  get "brand_and_style" => "pages#brand_and_style_guidelines"
   root to: "pages#home"
 
   #13. Users
