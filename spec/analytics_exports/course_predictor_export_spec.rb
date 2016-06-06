@@ -13,6 +13,11 @@ describe CoursePredictorExport do
     expect(subject).to respond_to(:schema_records)
   end
 
+  let(:assignments) do
+    [double(:assignment, id: 3, name: "writing"),
+     double(:assignment, id: 4, name: "rithmatic")]
+  end
+
   describe "#assignment_name" do
     let(:result) { subject.assignment_name event, 20 }
     let(:event) { double(:event) }
@@ -114,5 +119,16 @@ describe CoursePredictorExport do
   end
 
   describe "#schema_records_for_role" do
+    let(:result) { subject.schema_records_for_role "some role" }
+    let(:records) do
+      [double(:event, user_role: "some role"),
+       double(:event, user_role: "another role")]
+    end
+
+    it "builds the schema records for records with the given role" do
+      allow(subject).to receive(:records) { records }
+      expect(subject).to receive(:schema_records).with [records.first]
+      result
+    end
   end
 end
