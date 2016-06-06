@@ -30,7 +30,7 @@ class AssignmentType < ActiveRecord::Base
   # 0 if weightable but not weighted by the student
   def weight_for_student(student)
     return 1 unless student_weightable?
-    weights.where(student: student).first.try(:weight) || 0
+    weights.where(student: student).first.try(:weight) || course.default_weight
   end
 
   def is_capped?

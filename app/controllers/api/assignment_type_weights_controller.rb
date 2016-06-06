@@ -1,6 +1,6 @@
 class API::AssignmentTypeWeightsController < ApplicationController
 
-  before_filter :ensure_student?, only: [:create]
+  before_filter :ensure_student?
 
   # POST /api/assignment_types/:assignment_type_id/assignment_type_weights
   def create
@@ -8,7 +8,7 @@ class API::AssignmentTypeWeightsController < ApplicationController
     weight = params[:weight]
 
     if assignment_type && weight && assignment_type.student_weightable?
-      assignment_type_weight = assignment_type.weights.where(student: current_student).first_or_initialize
+      assignment_type_weight = assignment_type.weights.where(student: current_user).first_or_initialize
       assignment_type_weight.weight = weight
       assignment_type_weight.save
 

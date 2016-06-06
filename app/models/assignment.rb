@@ -118,18 +118,9 @@ class Assignment < ActiveRecord::Base
   end
 
   # Custom point total if the class has weighted assignments
-  def point_total_for_student(student, weight = nil)
-    (point_total * weight_for_student(student, weight)).round rescue 0
-    # rescue methods with a '0' for pass/fail assignments that are also student
-    # weightable for some untold reason
-  end
-
-  # Grabbing a student's set weight for the assignment - returns one if the
-  # course doesn't have weights
-  def weight_for_student(student, weight = nil)
-    return 1 unless student_weightable?
-    weight ||= (assignment_type.weights.where(student: student).pluck("weight").first || 0)
-    weight > 0 ? weight : course.default_weight
+  def point_total_for_student(student)
+    return 0 unless point_total
+    (point_total * assignment_type.weight_for_student(student)).round
   end
 
   # Checking to see if an assignment is due soon
