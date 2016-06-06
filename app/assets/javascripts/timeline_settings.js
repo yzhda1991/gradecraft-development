@@ -3,7 +3,7 @@ $(document).ready(function(){
   if($("#dashboard-timeline").length) {
     $.ajax({
         type: 'GET',
-        url: '/info/timeline_events',
+        url: '/timeline_events',
         dataType: 'json',
         contentType: 'application/json',
         success: function (json) {

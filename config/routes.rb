@@ -174,18 +174,6 @@ GradeCraft::Application.routes.draw do
   resources :course_memberships, only: [:create, :destroy]
   get "/current_course/change" => "current_courses#change", as: :change_current_course
 
-  get "leaderboard" => "students#leaderboard"
-  get "multiplier_choices" => "info#choices"
-  get "earned_badges" => "info#awarded_badges"
-  get "grading_status" => "info#grading_status"
-  get "top_10" => "info#top_10"
-  get "per_assign" => "info#per_assign"
-  get "gradebook" => "info#gradebook"
-  get "multiplied_gradebook" => "info#multiplied_gradebook"
-  get "final_grades" => "info#final_grades"
-  get "research_gradebook" => "info#research_gradebook"
-  get "export_earned_badges" => "courses#export_earned_badges"
-
   #9. Groups
   resources :groups do
     resources :proposals
@@ -193,15 +181,20 @@ GradeCraft::Application.routes.draw do
   resources :group_memberships
 
   #10. Informational Pages
-  namespace :info do
-    get :choices
-    get :awarded_badges
-    get :dashboard
-    get :grading_status
-    get :timeline_events
-    get :top_10
-    get :per_assign
-  end
+  get :dashboard, to: "info#dashboard"
+  get :earned_badges, to: "info#awarded_badges"
+  get :export_earned_badges, to: "info#export_earned_badges"
+  get :final_grades, to: "info#final_grades"
+  get :gradebook, to: "info#gradebook"
+  get :grading_status, to: "info#grading_status"
+  get :multiplied_gradebook, to: "info#multiplied_gradebook"
+  get :multiplier_choices, to: "info#multiplier_choices"
+  get :per_assign, to: "info#per_assign"
+  get :research_gradebook, to: "info#research_gradebook"
+  get :resubmissions, to: "info#resubmissions"
+  get :timeline_events, to: "info#timeline_events"
+  get :top_10, to: "info#top_10"
+  get :ungraded_submissions, to: "info#ungraded_submissions"
 
   resources :home
 
@@ -232,7 +225,6 @@ GradeCraft::Application.routes.draw do
   end
 
   get "home" => "pages#home"
-  get "dashboard" => "info#dashboard"
   get "brand_and_style" => "pages#brand_and_style_guidelines"
   root to: "pages#home"
 
@@ -262,6 +254,7 @@ GradeCraft::Application.routes.draw do
     get :recalculate
     get "badges", to: "students/badges#index"
     get "badges/:id", to: "students/badges#show", as: :badge_show
+    get "leaderboard" => "students#leaderboard"
     resources :student_academic_histories
     collection do
       get :leaderboard

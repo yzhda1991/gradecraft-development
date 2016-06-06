@@ -150,6 +150,13 @@ describe InfoController do
       end
     end
 
+    describe "GET export_earned_badges" do
+      it "retrieves the export_earned_badges download" do
+        get :export_earned_badges, format: :csv
+        expect(response.body).to include("First Name,Last Name,Uniqname,Email,Badge ID,Badge Name,Feedback,Awarded Date")
+      end
+    end
+
     describe "GET final_grades" do
       it "retrieves the final_grades download" do
         get :final_grades, format: :csv
@@ -178,11 +185,11 @@ describe InfoController do
       end
     end
 
-    describe "GET choices" do
+    describe "GET multiplier_choices" do
       it "retrieves the choices" do
-        get :choices
+        get :multiplier_choices
         expect(assigns(:title)).to eq("Multiplier Choices")
-        expect(response).to render_template(:choices)
+        expect(response).to render_template(:multiplier_choices)
       end
 
       it "only shows the students for the team" do
@@ -192,8 +199,8 @@ describe InfoController do
         @student.teams << @team
         @student_2 = create(:user)
         @student_2.courses << @course
-        get :choices, team_id: @team.id
-        expect(response).to render_template(:choices)
+        get :multiplier_choices, team_id: @team.id
+        expect(response).to render_template(:multiplier_choices)
         expect(assigns(:students)).to eq([@student])
       end
     end
@@ -238,7 +245,7 @@ describe InfoController do
         :multiplied_gradebook,
         :final_grades,
         :research_gradebook,
-        :choices
+        :multiplier_choices
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route).to redirect_to(:root)
