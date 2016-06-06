@@ -58,8 +58,8 @@ describe SubmissionFilesController do
     end
 
     describe "GET download" do
-      let(:result) { get :download, params }
-      let(:presenter) { presenter_class.new params: params }
+      let(:result) { get :download, params.merge(format: "html") }
+      let(:presenter) { presenter_class.new params }
 
       before do
         allow(controller).to receive_messages(
@@ -69,8 +69,6 @@ describe SubmissionFilesController do
 
         allow(presenter).to receive_messages(
           submission_file_streamable?: true,
-          stream_submission_file: "file-data",
-          filename: "filename.xyz",
           submission: submission,
           submission_file: submission_file
         )
@@ -78,11 +76,16 @@ describe SubmissionFilesController do
 
       context "user is authorized to download the submission" do
         before { ability.can :download, submission_file }
+        let(:send_data_options) { ["some_data", { filename: "stuff.xyz" }] }
 
         context "the submission file is streamable" do
           it "streams the submission file with the filename" do
-            expect(controller).to receive(:send_data)
-              .with("file-data", filename: "filename.xyz")
+            allow(presenter).to receive(:send_data_options) { send_data_options }
+            expect(controller).to receive(:send_data).with(*send_data_options) do
+              # expressly render nothing so that the controller doesn't attempt
+              # to render the template
+              controller.render nothing: true
+            end
             result
           end
         end

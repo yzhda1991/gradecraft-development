@@ -3,7 +3,6 @@ require "showtime"
 module Presenters
   module SubmissionFiles
     class Base < Showtime::Presenter
-
       def submission_file
         @submission_file ||= ::SubmissionFile.where(
           id: params[:submission_file_id]
