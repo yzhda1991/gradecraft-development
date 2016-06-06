@@ -73,4 +73,24 @@ describe CoursePredictorExport do
       expect(subject.loaded_data).to eq "data!!"
     end
   end
+
+  describe "rows_by definition" do
+    it "filters the rows by events" do
+      expect(described_class.rows).to eq :events
+    end
+  end
+
+  describe "export schema" do
+    it "uses a schema for exporting the records" do
+      sanitized_schema = described_class.schema.tap {|h| h.delete :date_time }
+      expect(sanitized_schema).to eq({
+        username: :username,
+        role: :user_role,
+        student_profile: :student_profile,
+        assignment: :assignment_name,
+        prediction: :score,
+        possible: :possible
+      })
+    end
+  end
 end
