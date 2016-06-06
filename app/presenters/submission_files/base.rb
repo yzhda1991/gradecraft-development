@@ -33,6 +33,9 @@ module Presenters
         submission_file.mark_file_missing
       end
 
+      def send_data_options
+        [stream_submission_file, { filename: filename }]
+      end
     end
   end
 end
