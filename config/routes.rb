@@ -256,8 +256,8 @@ GradeCraft::Application.routes.draw do
   end
 
   resources :staff, only: [:index, :show]
-  resources :user_sessions
-  resources :passwords, path_names: { new: "reset" }, except: [:destroy, :index]
+  resources :user_sessions, only: [:new, :create, :destroy]
+  resources :passwords, path_names: { new: "reset" }, except: [:destroy, :index, :show]
 
   get "predictor" => "students#predictor"
   get "timeline" => "students#timeline"
