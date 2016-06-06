@@ -10,14 +10,16 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
 
   describe "creating submission binary files" do
     let(:submissions) { [ submission_with_files, submission_without_files ] }
-    let(:submission_with_files) { create(:submission, submission_files: submission_files, student: student) }
-    let(:submission_without_files) { create(:submission, submission_files: []) }
+    let(:submission_with_files) { build(:submission, submission_files: submission_files, student: student) }
+    let(:submission_without_files) { build(:submission, submission_files: []) }
 
     let(:submission_files) { [ submission_file1, submission_file2 ] }
-    let(:submission_file1) { create(:submission_file, filename: "gary_ate_ants.ralph", file_missing: false) }
-    let(:submission_file2) { create(:submission_file, file_missing: false) }
+    let(:submission_file1) { build(:submission_file, filename: "gary_ate_ants.ralph", file_missing: false) }
+    let(:submission_file2) { build(:submission_file, file_missing: false) }
 
-    let(:student) { create(:user, first_name: "Edwina", last_name: "Georgebot") }
+    let(:student) { build(:user, first_name: "Edwina", last_name: "Georgebot") }
+
+    let(:tmp_dir) { Dir.mktmpdir }
 
     describe "create_submission_binary_files" do
       subject { performer.instance_eval { create_submission_binary_files } }
@@ -43,121 +45,71 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
     end
 
     describe "create binary files for submission" do
-      subject do
-        performer.instance_eval { create_binary_files_for_submission( @some_submission ) }
+      let(:result) do
+        subject.create_binary_files_for_submission submission
+      end
+      let(:submission) { double(:submission).as_null_object }
+
+      before do
+        allow(submission).to receive_message_chain(:submission_files, :present)
+          .and_return submission_files
       end
 
       describe "submission with files" do
-        before do
-          performer.instance_variable_set(:@some_submission, submission_with_files)
-        end
-
         it "calls write_submission_binary_file for both submission files" do
           expect(performer).to receive(:write_submission_binary_file).twice
-          subject
+          result
         end
       end
 
       describe "submission without files" do
-        before { performer.instance_variable_set(:@some_submission, submission_without_files) }
+        let(:submission_files) { [] }
 
         it "doesn't write any binary files" do
           expect(performer).not_to receive(:write_submission_binary_file)
-          subject
+          result
         end
       end
     end
 
     describe "submission binary file name stuff" do
-      before(:each) do
-        performer.instance_variable_set(:@some_submission_file, submission_file1)
-        performer.instance_variable_set(:@some_student, student)
-      end
-
-      let(:tmp_dir) { Dir.mktmpdir }
-
-      describe "submission_binary_file_path" do
-        subject do
-          performer.instance_eval do
-            submission_binary_file_path( @some_student, @some_submission_file, 5 )
-          end
+      describe "#submission_binary_file_path" do
+        let(:result) do
+          subject.submission_binary_file_path(student, submission_file1, 5)
         end
 
         before do
-          allow(performer).to receive(:submission_binary_filename) { "sweet_keith.potr" } # sweet keith pooped on the rug
-          allow(performer).to receive(:student_directory_file_path)
+          allow(submission_file1).to receive(:instructor_filename)  { "ick.txt" }
+          allow(subject).to receive(:student_directory_file_path)
+            .with(student, "ick.txt").and_return "the/path"
         end
 
-        it "builds a binary filename based on the arguments" do
-          expect(performer).to receive(:submission_binary_filename).with( student, submission_file1, 5 )
+        it "builds the instructor filename for the submission file" do
+          expect(submission_file1).to receive(:instructor_filename).with 5
+          result
         end
 
-        it "returns a full path for the file relative to the student directory" do
-          expect(performer).to receive(:student_directory_file_path).with( student, "sweet_keith.potr" )
-        end
-
-        after(:each) { subject }
-      end
-
-      describe "submission_binary_filename" do
-        subject do
-          performer.instance_eval do
-            submission_binary_filename( @some_student, @some_submission_file, 5 )
-          end
-        end
-
-        before do
-          allow(performer).to receive(:formatted_student_name) { "jeff_mills" }
-          allow(performer).to receive(:formatted_assignment_name) { "the_wizard" }
-        end
-
-        it "gets the formatted student name from the student" do
-          expect(performer).to receive(:formatted_student_name).with(student)
-          subject
-        end
-
-        it "gets the formatted assignment name" do
-          expect(performer).to receive(:formatted_assignment_name)
-          subject
-        end
-
-        it "appends the index to 'submission_file'" do
-          expect(subject).to include("Submission File 6")
-        end
-
-        it "gets the extension from the submission_file" do
-          expect(submission_file1).to receive(:extension) { ".ralph" }
-          subject
-        end
-
-        it "puts them all together and returns a filename" do
-          expect(subject).to eq("jeff_mills - the_wizard - Submission File 6.ralph")
+        it "returns the student directory path for the student and filename" do
+          expect(result).to eq "the/path"
         end
       end
 
       describe "#write_submission_binary_file" do
-        subject do
-          performer.instance_eval do
-            write_submission_binary_file( @some_student, @some_submission_file, 5 )
-          end
-        end
-
-        let(:horses_path) { File.expand_path("horses.png", "spec/support/binary_files") }
-        let(:mikos_bases_file_path) { "#{tmp_dir}/allyoarbases_r_belong_2_miko.snk" }
-
-        before do
-          allow(performer).to receive(:submission_binary_file_path) { mikos_bases_file_path }
-          allow(submission_file1).to receive(:url) { horses_path }
+        let(:result) do
+          subject.write_submission_binary_file(student, submission_file1, 5)
         end
 
         it "gets the binary submission file path" do
-          expect(performer).to receive(:submission_binary_file_path).with(student, submission_file1, 5)
-          subject
+          expect(performer).to receive(:submission_binary_file_path)
+            .with(student, submission_file1, 5)
+          result
         end
 
         it "streams the s3 file to the disk via the submission file" do
-          expect(performer).to receive(:stream_s3_file_to_disk).with(submission_file1, mikos_bases_file_path)
-          subject
+          allow(performer).to receive(:submission_binary_file_path) { "/xyz" }
+          expect(performer).to receive(:stream_s3_file_to_disk)
+            .with(submission_file1, "/xyz")
+          result
         end
       end
 
@@ -230,38 +182,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
             subject
             expect(File.exist?(final_horses_path)).to be_falsey
           end
-        end
-      end
-
-      describe "binary_file_error_message" do
-        let(:message) { "the end of days is upon us" }
-        let(:error_io) { "error dun blowed stuff up" }
-
-        before(:each) do
-          performer.instance_variable_set(:@some_message, message)
-          performer.instance_variable_set(:@some_error_io, error_io)
-        end
-
-        subject do
-          performer.instance_eval do
-            binary_file_error_message( @some_message, @some_student, @some_submission_file, @some_error_io )
-          end
-        end
-
-        it "includes the custom message from the particular type of error" do
-          expect(subject).to include(message)
-        end
-
-        it "includes the student data" do
-          expect(subject).to include("Student ##{student.id}: #{student.last_name}, #{student.first_name},")
-        end
-
-        it "includes the submission_file data" do
-          expect(subject).to include("SubmissionFile ##{submission_file1.id}: #{submission_file1.filename},")
-        end
-
-        it "includes the io result from the rescued error block" do
-          expect(subject).to include("error: #{error_io}")
         end
       end
     end

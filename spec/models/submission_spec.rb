@@ -2,6 +2,7 @@ require "active_record_spec_helper"
 require "toolkits/historical_toolkit"
 require "toolkits/sanitization_toolkit"
 require "support/uni_mock/rails"
+require "formatter"
 
 describe Submission do
   include UniMock::StubRails
@@ -359,6 +360,26 @@ describe Submission do
       submission = create(:submission, assignment: assignment, link: "http://www.gradecraft.com", text_comment: nil)
 
       expect(submission.has_multiple_components?).to eq(false)
+    end
+  end
+
+  describe "#check_unlockables" do
+  end
+
+  describe "#base_filename" do
+    before do
+      allow(subject).to receive_message_chain(:student, :full_name) { "Dan Ho" }
+      allow(subject).to receive_message_chain(:assignment, :name) { "Great" }
+    end
+
+    it "titleizes the student's full name and assignment name" do
+      expect(Formatter::Filename).to receive(:titleize).with "Dan Ho"
+      expect(Formatter::Filename).to receive(:titleize).with "Great"
+      subject.base_filename
+    end
+
+    it "returns the combination of the titleized student and assignment names" do
+      expect(subject.base_filename).to eq "Dan Ho - Great"
     end
   end
 end

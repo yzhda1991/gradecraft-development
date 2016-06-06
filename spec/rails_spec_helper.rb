@@ -102,5 +102,7 @@ RSpec.configure do |config|
   # Remove uploader files, see config/environments/test.rb
   config.after(:all) do
     FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
+    FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads/*"])
+    FileUtils.rm_rf(Dir["#{Rails.root}/public/#{ENV["AWS_S3_DEVELOPER_TAG"]}/*"])
   end
 end

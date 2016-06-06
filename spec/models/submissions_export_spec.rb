@@ -166,9 +166,9 @@ RSpec.describe SubmissionsExport do
       "/#{subject.created_at_in_microseconds}/stuff.zip"
     end
 
-    before(:each) do
+    before do
       allow(subject).to receive_messages(course_id: 40, assignment_id: 50)
-      ENV["AWS_S3_DEVELOPER_TAG"] = "jeff-moses"
+      stub_const "ENV", { "AWS_S3_DEVELOPER_TAG" => "jeff-moses" }
     end
 
     context "env is development" do

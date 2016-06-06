@@ -1,37 +1,72 @@
 require "rails_spec_helper"
 
 describe SubmissionsController do
+  subject { described_class.new }
+
   before(:all) do
     @course = create(:course)
     @student = create(:user)
     @student.courses << @course
     @assignment = create(:assignment, course: @course)
   end
+
   before(:each) do
     session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
   end
+
+  let(:ability) { Object.new.extend(CanCan::Ability) }
+  let(:submission) { create(:submission) }
+  let(:presenter) { double(presenter_class, submission: submission).as_null_object }
 
   context "as a professor" do
     before(:all) do
       @professor = create(:user)
       CourseMembership.create user: @professor, course: @course, role: "professor"
     end
+
     before(:each) do
       @submission = create(:submission, assignment_id: @assignment.id, assignment_type: "Assignment", student_id: @student.id, course_id: @course.id)
       login_user(@professor)
     end
 
     describe "GET show" do
+      let(:make_request) { get :show, id: submission.id, assignment_id: submission.assignment_id }
+      let(:presenter_class) { Submissions::ShowPresenter }
+
+      before do
+        allow_any_instance_of(Submissions::ShowPresenter).to receive(:submission)
+          .and_return submission
+      end
+
+      before(:each) do
+        ability.can :read, submission
+        allow_any_instance_of(described_class)
+          .to receive_messages(
+            current_ability: ability,
+            presenter: presenter,
+            presenter_attrs_with_id: { some: "attrs", id: 5 }
+          )
+        allow(presenter_class).to receive(:new) { presenter }
+      end
+
       it "returns the submission show page" do
-        get :show, {id: @submission.id, assignment_id: @assignment.id}
+        make_request
         expect(response).to render_template(:show)
+      end
+
+      it "builds a show presenter with the presenter attrs" do
+        expect(presenter_class).to receive(:new).with({ some: "attrs", id: 5 })
+        make_request
       end
     end
 
     describe "GET new" do
+      let(:make_request) { get :new, assignment_id: submission.assignment_id }
+      let(:presenter_class) { Submissions::NewPresenter }
+
       it "returns the submission new page" do
-        get :new, {id: @submission.id, assignment_id: @assignment.id}
+        make_request
         expect(response).to render_template(:new)
       end
     end
@@ -145,6 +180,38 @@ describe SubmissionsController do
         it "#{route} redirects to root" do
           expect(get route, {assignment_id: 1, id: "1"}).to redirect_to(:root)
         end
+      end
+    end
+
+    describe "#presenter_attrs_with_id" do
+      before do
+        allow(subject).to receive(:base_presenter_attrs) { { base: "attrs" } }
+        allow(subject).to receive(:params) { { id: 20 } }
+      end
+
+      it "merges the id from params with the base presenter attrs" do
+        expect(subject.instance_eval { presenter_attrs_with_id })
+          .to eq({ base: "attrs", id: 20 })
+      end
+    end
+
+    describe "#base_presenter_attrs" do
+      before do
+        allow(subject).to receive_messages \
+          current_course: "some_course",
+          view_context: "the view context"
+
+        allow(subject).to receive(:params)
+          .and_return({ assignment_id: 40, group_id: 50 })
+      end
+
+      it "returns a hash of required params to the presenter" do
+        expect(subject.instance_eval { base_presenter_attrs }).to eq({
+          assignment_id: 40,
+          course: "some_course",
+          group_id: 50,
+          view_context: "the view context"
+        })
       end
     end
   end

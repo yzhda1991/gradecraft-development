@@ -1,5 +1,6 @@
 class SubmissionFile < ActiveRecord::Base
   include S3Manager::Carrierwave
+  include S3Manager::Streaming
   include Historical
 
   attr_accessible :file, :filename, :filepath, :submission_id, :file_missing,
@@ -45,6 +46,11 @@ class SubmissionFile < ActiveRecord::Base
 
   def assignment
     submission.assignment
+  end
+
+  def instructor_filename(index=nil)
+    file_number = index.class == Fixnum ? " #{index + 1}" : ""
+    "#{submission.base_filename} - Submission File#{file_number}#{extension}"
   end
 
   def owner_name

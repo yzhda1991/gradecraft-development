@@ -129,15 +129,6 @@ RSpec.describe SubmissionsExportPerformer, type: :background_job do
       end
     end
 
-    describe "formatted student name" do
-      subject { performer.instance_eval { formatted_student_name(@some_student) }}
-
-      it "calls sanitize_filename with the correct student name" do
-        expect(performer).to receive(:titleize_filename).with("edwina herman")
-        subject
-      end
-    end
-
     describe "submission_text_filename", inspect: true do
       before do
         allow(performer).to receive(:formatted_assignment_name) { "the_day_the_earth_stood_still" }

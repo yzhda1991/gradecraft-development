@@ -108,6 +108,10 @@ GradeCraft::Application.routes.draw do
     end
   end
 
+  resources :submission_files, only: [] do
+    get :download
+  end
+
   resources :unlock_states do
     member do
       post :manually_unlock

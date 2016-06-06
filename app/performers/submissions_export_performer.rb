@@ -3,7 +3,7 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   require "open-uri" # need this for getting the S3 file over http
   include ModelAddons::ImprovedLogging # log errors with attributes
 
-  attr_reader :submissions_export, :professor, :course, :errors
+  attr_reader :submissions_export, :professor, :course, :errors, :assignment, :team, :submissions
 
   def setup
     ensure_s3fs_tmp_dir if use_s3fs?
@@ -50,13 +50,13 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def run_step(step_name)
     require_success(send("#{step_name}_messages"), max_result_size: 250) do
       send(step_name)
-      @submissions_export.update_attributes step_name => true
+      @submissions_export.update_attributes last_completed_step: step_name
     end
   end
 
   def submissions_export_attributes
     if @submissions_export.last_export_started_at
-      base_export_attributes.merge(clear_progress_attributes)
+      base_export_attributes.merge last_completed_step: nil
     else
       base_export_attributes
     end
@@ -75,10 +75,32 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     base_export_attributes
   end
 
-  def clear_progress_attributes
-    performer_steps.inject({}) do |memo, step|
-      memo[step] = nil
-      memo
+  def archive_basename
+    [formatted_assignment_name, formatted_team_name].compact.join " - "
+  end
+
+  def formatted_assignment_name
+    @formatted_assignment_name ||= Formatter::Filename.titleize assignment.name
+  end
+
+  def formatted_team_name
+    @team_name ||= Formatter::Filename.titleize(team.name) if team_present?
+  end
+
+  def submission_binary_file_path(student, submission_file, index)
+    # get the filename from the submission file with an index
+    filename = submission_file.instructor_filename index
+    student_directory_file_path student, filename
+  end
+
+  def write_submission_binary_file(student, submission_file, index)
+    file_path = submission_binary_file_path(student, submission_file, index)
+    stream_s3_file_to_disk(submission_file, file_path)
+  end
+
+  def create_binary_files_for_submission(submission)
+    submission.submission_files.present.each_with_index do |submission_file, index|
+      write_submission_binary_file(submission.student, submission_file, index)
     end
   end
 
@@ -158,47 +180,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   def filename_time
     Time.zone = @course.time_zone
     @filename_time ||= Time.zone.now
-  end
-
-  def archive_basename
-    if team_present?
-      "#{formatted_assignment_name} - #{formatted_team_name}"
-    else
-      formatted_assignment_name
-    end
-  end
-
-  def formatted_assignment_name
-    formatted_filename_fragment(@assignment.name)
-  end
-
-  def formatted_team_name
-    formatted_filename_fragment(@team.name)
-  end
-
-  def formatted_filename_fragment(fragment)
-    titleize_filename(fragment)
-  end
-
-  def titleize_filename(filename)
-    filename
-      .downcase
-      .gsub(/[^\w\s_\:-]+/, " ") # strip out characters besides letters and digits
-      .gsub(/_+/, " ") # replace underscores with spaces
-      .gsub(/ +/, " ") # replace underscores with spaces
-      .gsub(/^ +/, "") # remove leading spaces
-      .gsub(/ +$/, "") # remove trailing spaces
-      .titleize
-  end
-
-  def sanitize_filename(filename)
-    filename
-      .downcase
-      .gsub(/[^\w\s_\:-]+/, "") # strip out characters besides letters and digits
-      .gsub(/(^|\b\s)\s+($|\s?\b)/, "\\1\\2") # remove extra spaces
-      .gsub(/\s+/, "_") # replace spaces with underscores
-      .gsub(/^_+/, "") # remove leading underscores
-      .gsub(/_+$/, "") # remove trailing underscores
   end
 
   def fetch_course
@@ -337,8 +318,9 @@ class SubmissionsExportPerformer < ResqueJob::Performer
   end
 
   def create_submission_text_files
-    @submissions.each do |submission|
-      if submission.text_comment.present? || submission.link.present? # write the text file for the submission into the student export directory
+    submissions.each do |submission|
+      # write the text file for the submission into the student export directory
+      if submission.text_comment.present? || submission.link.present?
         create_submission_text_file(submission)
       end
     end
@@ -366,9 +348,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     [ formatted_student_name(student), formatted_assignment_name, "Submission Text.txt" ].join(" - ")
   end
 
-  # @mz todo: update specs
   def formatted_student_name(student)
-    titleize_filename student.full_name
+    Formatter::Filename.titleize student.full_name
   end
 
   def create_submission_binary_files
@@ -392,7 +373,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     @students_with_missing_binaries ||= @assignment.students_with_missing_binaries
   end
 
-  # @mz todo: update specs
   def write_note_for_missing_binary_files
     unless students_with_missing_binaries.empty?
       open(missing_binaries_file_path, "wt") do |file|
@@ -419,28 +399,8 @@ class SubmissionsExportPerformer < ResqueJob::Performer
     end
   end
 
-  def create_binary_files_for_submission(submission)
-    submission.submission_files.present.each_with_index do |submission_file, index|
-      write_submission_binary_file(submission.student, submission_file, index)
-    end
-  end
-
   def student_directory_file_path(student, filename)
-    File.expand_path(filename, student_directory_path(student))
-  end
-
-  def submission_binary_file_path(student, submission_file, index)
-    filename = submission_binary_filename(student, submission_file, index)
-    student_directory_file_path(student, filename)
-  end
-
-  def submission_binary_filename(student, submission_file, index)
-    [ formatted_student_name(student), formatted_assignment_name, "Submission File #{index + 1}"].join(" - ") + submission_file.extension
-  end
-
-  def write_submission_binary_file(student, submission_file, index)
-    file_path = submission_binary_file_path(student, submission_file, index)
-    stream_s3_file_to_disk(submission_file, file_path)
+    File.expand_path filename, student_directory_path(student)
   end
 
   def stream_s3_file_to_disk(submission_file, target_file_path)
@@ -453,13 +413,6 @@ class SubmissionsExportPerformer < ResqueJob::Performer
 
   def remove_if_exists(file_path)
     File.delete file_path if File.exist? file_path
-  end
-
-  def binary_file_error_message(message, student, submission_file, error_io)
-    "#{message}. "\
-    "Student ##{student.id}: #{student.last_name}, #{student.first_name}, " \
-    "SubmissionFile ##{submission_file.id}: #{submission_file.filename}, " \
-    "error: #{error_io}"
   end
 
   def generate_error_log

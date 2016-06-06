@@ -3,19 +3,14 @@ class SubmissionsController < ApplicationController
   before_filter :save_referer, only: [:new, :edit]
 
   def show
-    presenter = Submissions::ShowPresenter.new({ id: params[:id],
-                                              assignment_id: params[:assignment_id],
-                                              course: current_course,
-                                              view_context: view_context })
+    presenter = Submissions::ShowPresenter.new(presenter_attrs_with_id)
     authorize! :read, presenter.submission
     render :show, locals: { presenter: presenter }
   end
 
   def new
-    render :new, Submissions::NewPresenter.build(assignment_id: params[:assignment_id],
-                                              course: current_course,
-                                              group_id: params[:group_id],
-                                              view_context: view_context)
+    presenter = Submissions::NewPresenter.new(base_presenter_attrs)
+    render :new, presenter.render_options
   end
 
   def create
@@ -39,9 +34,7 @@ class SubmissionsController < ApplicationController
   end
 
   def edit
-    presenter = Submissions::EditPresenter.new(id: params[:id], assignment_id: params[:assignment_id],
-                                            course: current_course, group_id: params[:group_id],
-                                            view_context: view_context)
+    presenter = Submissions::EditPresenter.new(presenter_attrs_with_id)
     authorize! :update, presenter.submission
     render :edit, locals: { presenter: presenter }
   end
@@ -79,5 +72,20 @@ class SubmissionsController < ApplicationController
     assignment = current_course.assignments.find(params[:assignment_id])
     assignment.submissions.find(params[:id]).destroy
     redirect_to assignment_path(assignment, notice: "Submission deleted")
+  end
+
+  private
+
+  def presenter_attrs_with_id
+    base_presenter_attrs.merge id: params[:id]
+  end
+
+  def base_presenter_attrs
+    {
+      assignment_id: params[:assignment_id],
+      course: current_course,
+      group_id: params[:group_id],
+      view_context: view_context
+    }
   end
 end

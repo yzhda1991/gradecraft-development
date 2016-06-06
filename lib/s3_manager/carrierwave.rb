@@ -17,13 +17,16 @@ module S3Manager
     include S3Manager::Basics
 
     def url
-      if s3_object
-        s3_object.presigned_url(:get, expires_in: 900).to_s
-      end
+      return nil unless s3_object
+      s3_object.presigned_url(:get, expires_in: 900).to_s
     end
 
     def s3_object
       bucket.object(s3_object_file_key)
+    end
+
+    def mark_missing
+      update_attributes file_missing: true
     end
 
     def delete_from_s3
@@ -44,8 +47,16 @@ module S3Manager
       end
     end
 
+    def write_s3_object_to_disk(object_key, target_file_path)
+      client.get_object({
+        response_target: target_file_path,
+        bucket: bucket_name,
+        key: object_key
+      })
+    end
+
     def cached_file_path
-      @cached_file_path ||= [ store_dir, mounted_filename ].join("/")
+      @cached_file_path ||= [store_dir, mounted_filename].join("/")
     end
 
     def mounted_filename

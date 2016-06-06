@@ -70,6 +70,7 @@ end
 
 Dir["./app/uploaders/*.rb"].each { |f| require f }
 Dir["./app/validators/*.rb"].each { |f| require f }
+Dir["./app/proctors/*.rb"].each { |f| require f }
 Dir["./app/models/concerns/*.rb"].each { |f| require f }
 Dir["./app/models/*.rb"].each { |f| require f }
 

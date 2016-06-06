@@ -12,6 +12,10 @@ module Showtime
       @properties ||= {}
     end
 
+    def params
+      properties[:params]
+    end
+
     def render_options
       { locals: { presenter: self } }
     end

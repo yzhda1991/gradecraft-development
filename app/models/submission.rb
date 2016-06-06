@@ -92,6 +92,13 @@ class Submission < ActiveRecord::Base
     created_at > self.assignment.due_at if self.assignment.due_at.present?
   end
 
+  # build a sensible base filename for all files that are attached to this submission
+  def base_filename
+    [student.full_name, assignment.name].collect do |part|
+      Formatter::Filename.titleize part
+    end.compact.join " - "
+  end
+
   def has_multiple_components?
     count = 0
     count += submission_files.count

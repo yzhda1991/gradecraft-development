@@ -22,9 +22,7 @@ module S3Manager
     end
 
     def object_attrs
-      {
-        bucket: bucket_name
-      }
+      { bucket: bucket_name }
     end
 
     def delete_object(object_key)
