@@ -195,8 +195,6 @@ GradeCraft::Application.routes.draw do
     get :ungraded_submissions
   end
 
-  resources :home
-
   get "um_pilot" => "pages#um_pilot"
   get "features" => "pages#features"
   get "press" => "pages#press"
