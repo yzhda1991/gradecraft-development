@@ -6,6 +6,7 @@ class SubmissionFilesController < ApplicationController
 
     # let's use the object_stream here because there's no reason to hit S3 twice
     if presenter.submission_file_streamable?
+      # rubocop:disable AndOr
       send_data(*presenter.send_data_options) and return
     else
       presenter.mark_submission_file_missing
