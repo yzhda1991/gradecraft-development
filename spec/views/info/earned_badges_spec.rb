@@ -2,7 +2,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "info/awarded_badges" do
+describe "info/earned_badges" do
 
   before(:all) do
     @course = create(:course)

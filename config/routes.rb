@@ -181,20 +181,22 @@ GradeCraft::Application.routes.draw do
   resources :group_memberships
 
   #10. Informational Pages
-  get :dashboard, to: "info#dashboard"
-  get :earned_badges, to: "info#awarded_badges"
-  get :export_earned_badges, to: "info#export_earned_badges"
-  get :final_grades, to: "info#final_grades"
-  get :gradebook, to: "info#gradebook"
-  get :grading_status, to: "info#grading_status"
-  get :multiplied_gradebook, to: "info#multiplied_gradebook"
-  get :multiplier_choices, to: "info#multiplier_choices"
-  get :per_assign, to: "info#per_assign"
-  get :research_gradebook, to: "info#research_gradebook"
-  get :resubmissions, to: "info#resubmissions"
-  get :timeline_events, to: "info#timeline_events"
-  get :top_10, to: "info#top_10"
-  get :ungraded_submissions, to: "info#ungraded_submissions"
+  controller :info do
+    get :dashboard
+    get :earned_badges
+    get :export_earned_badges
+    get :final_grades
+    get :gradebook
+    get :grading_status
+    get :multiplied_gradebook
+    get :multiplier_choices
+    get :per_assign
+    get :research_gradebook
+    get :resubmissions
+    get :timeline_events
+    get :top_10
+    get :ungraded_submissions
+  end
 
   resources :home
 

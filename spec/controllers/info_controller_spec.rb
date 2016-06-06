@@ -37,10 +37,10 @@ describe InfoController do
       end
     end
 
-    describe "GET awarded_badges" do
+    describe "GET earned_badges" do
       it "retrieves the awarded badges page" do
-        get :awarded_badges
-        expect(response).to render_template(:awarded_badges)
+        get :earned_badges
+        expect(response).to render_template(:earned_badges)
       end
     end
 
@@ -237,7 +237,7 @@ describe InfoController do
 
     describe "protected routes" do
       [
-        :awarded_badges,
+        :earned_badges,
         :grading_status,
         :top_10,
         :per_assign,

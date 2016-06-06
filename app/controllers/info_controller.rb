@@ -3,9 +3,9 @@ class InfoController < ApplicationController
 
   before_filter :ensure_staff?, except: [:dashboard, :timeline_events]
   before_action :find_team,
-    only: [:awarded_badges, :multiplier_choices, :resubmissions, :ungraded_submissions]
+    only: [:earned_badges, :multiplier_choices, :resubmissions, :ungraded_submissions]
   before_action :find_students,
-    only: [:awarded_badges, :multiplier_choices, :final_grades_for_course ]
+    only: [:earned_badges, :multiplier_choices, :final_grades_for_course ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
@@ -27,7 +27,7 @@ class InfoController < ApplicationController
     render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])
   end
 
-  def awarded_badges
+  def earned_badges
     @title = "Awarded #{term_for :badges}"
     @teams = current_course.teams
   end
