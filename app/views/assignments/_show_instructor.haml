@@ -35,4 +35,7 @@
             = render partial: "rubrics/components/rubric_table", locals: { rubric: presenter.rubric, presenter: presenter, student: nil, include_grade_info: false }
       - if presenter.has_persisted_grades?
         .ui-tabs-panel#tabt4{role: "tabpanel", "aria-hidden" => false }
-          = render "grades/analytics/instructor_analytics", presenter: presenter
+          - if presenter.group_assignment?
+            = render "grades/analytics/group_analytics", presenter: presenter
+          - else
+            = render "grades/analytics/instructor_analytics", presenter: presenter
