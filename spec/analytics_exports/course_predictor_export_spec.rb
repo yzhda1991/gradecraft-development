@@ -217,4 +217,39 @@ describe CoursePredictorExport do
       end
     end
   end
+
+  describe "#assignment_name" do
+    let(:event) { double :event, assignment_id: 5 }
+    before { allow(subject).to receive(:assignment_names) { assignment_names } }
+
+    context "assignment_names hash has a key matching the event's assignment_id" do
+      let(:assignment_names) { { 5 => "josiah" } }
+
+      it "selects the events that have a predictor event type" do
+        expect(subject.assignment_name event).to eq "josiah"
+      end
+    end
+
+    context "assignment_names hash has no key matching the event's assignment_id" do
+      let(:assignment_names) { { 10 => "annabelle" } }
+
+      it "selects the events that have a predictor event type" do
+        expect(subject.assignment_name event).to eq "[assignment id: 5]"
+      end
+    end
+
+    context "event has a nil assignment_id" do
+      it "returns nil" do
+        event = double :event, assignment_id: nil
+        expect(subject.assignment_name event).to be_nil
+      end
+    end
+
+    context "event has no assignment_id attribute" do
+      it "returns nil" do
+        event = double :event, no_assignment_id_here: "seriously"
+        expect(subject.assignment_name event).to be_nil
+      end
+    end
+  end
 end
