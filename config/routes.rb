@@ -212,12 +212,7 @@ GradeCraft::Application.routes.draw do
   end
 
   #12. Teams
-  resources :teams do
-    collection do
-      get :activity
-    end
-    resources :earned_badges
-  end
+  resources :teams
 
   get "home" => "pages#home"
   get "brand_and_style" => "pages#brand_and_style_guidelines"
