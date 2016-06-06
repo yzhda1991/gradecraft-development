@@ -1,8 +1,8 @@
 class ChallengeGradesController < ApplicationController
 
   before_filter :ensure_staff?, except: [:show]
-  before_action :find_challenge_grade, only: [:show, :edit, :update, :destroy]
-  before_action :find_challenge, only: [:show, :edit, :challenge, :destroy, :update ]
+  before_action :find_challenge_grade
+  before_action :find_challenge
 
   # GET /challenge_grades/:id
   def show
@@ -52,10 +52,10 @@ class ChallengeGradesController < ApplicationController
 
   def find_challenge
     find_challenge_grade
-    @challenge = @challenge_grade.challenge
+    @challenge ||= @challenge_grade.challenge
   end
 
   def find_challenge_grade
-    @challenge_grade = current_course.challenge_grades.find(params[:id])
+    @challenge_grade ||= current_course.challenge_grades.find(params[:id])
   end
 end

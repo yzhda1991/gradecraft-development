@@ -149,16 +149,13 @@ GradeCraft::Application.routes.draw do
 
   #7. Challenges
   resources :challenges do
-    resources :challenge_grades, only: [:index, :new, :create], module: :challenges do
+    resources :challenge_grades, only: [:new, :create], module: :challenges do
       collection do
         post :edit_status
         put :update_status
         get :mass_edit
         put :mass_update
       end
-    end
-    resources :challenge_files do
-      get :remove
     end
   end
 
