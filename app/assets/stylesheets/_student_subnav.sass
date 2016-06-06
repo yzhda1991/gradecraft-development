@@ -3,12 +3,14 @@
 
 /* Tabs on the student dashboard */
 .sub-nav
-  margin: 1.5rem 0 0 1rem
-  padding: 0.5
+  margin: 10px 0 0 0
+  padding: 0.75rem 0rem
   display: block
   position: relative
   overflow: hidden
   width: auto
+  background-color: $color-blue-2
+  opacity: .9
 
   ul
     margin: 0
@@ -17,8 +19,6 @@
   li
     display: inline
     list-style-type: none
-    float: left
-    margin-left: rem-calc(16)
     margin: 0
     
     i
@@ -32,30 +32,24 @@
     padding: 0
 
     li
-      font-size: .75rem
-      height: 1rem
+      font-size: .8rem
       background-color: $color-blue-2
-      border-top-left-radius: $global-radius
-      border-top-right-radius: $global-radius
-      margin: 0 0.5rem 0 0
-      padding: 0.5rem 0
-      text-transform: capitalize
+      margin: 0 0.25rem 0 0
+      padding: 0.8rem 0
+      text-transform: uppercase
       a
-        padding: 1em
+        padding: 0.8rem 0.5rem
         color: $color-white
     li.active
-      padding: .5rem .75rem !important
-
-    li a:hover, li:hover a
-      color: $color-black
+      padding: .8rem .5rem !important
     
     h5, hr
       display: none
 
 /* Setting the active tab and hover color */
 .navbar-nav li.active, .sub-nav .navbar-nav li:hover
-  background-color: $color-yellow-1
-  color: $color-black!important
+  background-color: $color-blue-3
+  color: $color-white
 
 li .announcement-notification-badge
   position: relative

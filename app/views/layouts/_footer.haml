@@ -4,12 +4,12 @@
     %li= link_to glyph(:twitter), "https://twitter.com/gradecraft", :target => "_blank"
     %li= link_to glyph(:facebook), "https://facebook.com/gradecraft", :target => "_blank"
 .left
-  %ul
+  = image_tag "gradecraft_logo.png", :width => "150", :class => "footer-logo"
+  %ul.footer-links
     %li= link_to_unless_current "Features", features_path
     %li= link_to_unless_current "Research", research_path
     %li= link_to_unless_current "Press", press_path
     %li= link_to_unless_current "Team", our_team_path
     %li= link_to "Blog", "http://blog.gradecraft.com", :target => "_blank"
-  %br
   .uppercase.small.michigan= "© 2012-#{Date.today.year} Regents of the University of Michigan"
 .clear

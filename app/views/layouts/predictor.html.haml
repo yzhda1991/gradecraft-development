@@ -10,28 +10,25 @@
     = yield(:head)
 
   %body(class="#{body_class}")
+    = render "layouts/top_bar"
     .off-canvas-wrap{:"data-offcanvas" => true}
-      .inner-wrap
-        .fixed
-          = render "layouts/top_bar"
+      .outer-wrap{role: "main"}
 
-        - if current_user
-          .outer-wrap{role: "main"}
-            = render "layouts/alerts"
-            .show-for-medium-up
-              = content_nav do
-                = render "students/student_profile_tabs"
-            = render "layouts/content"
+    - if current_user
 
-          = render "layouts/help/uservoice"
+      .inner-wrap.clearfix.predictor-inner
+        = render "layouts/alerts"
+        .show-for-medium-up
+          = content_nav do
+            = render "students/student_profile_tabs"
+        = render "layouts/content"
 
-          .footer
-            = render "layouts/footer"
-        - else
-          = render "layouts/public"
-          .row.panel.footer
-            .columns
-              = render "layouts/footer"
-        = render "layouts/background"
-        = render "layouts/google_analytics"
-        = javascript_include_tag "application", "data-turbolinks-track" => true
+      = render "layouts/help/uservoice"
+
+    - else
+      = render "layouts/public"
+    .footer
+      = render "layouts/footer"
+    = render "layouts/background"
+    = render "layouts/google_analytics"
+    = javascript_include_tag "application", "data-turbolinks-track" => true

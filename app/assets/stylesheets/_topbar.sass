@@ -9,11 +9,12 @@ img.profile-pic
 a.site-title
   color: $color-blue-1
 
+.logo-home
+  border: none
+
 .container
-  width: 95%
+  width: 100%
   margin: 0 auto
-  &.navbar
-    width: 100%
 
 /* In app mobile left flyout menu styles */
 .layout-left-flyout
@@ -116,7 +117,14 @@ a.site-title
   top: 0 !important
   z-index: 1000
   height: 45px !important
+
+.logged-out
+  .navbar
+    background-color: $color-blue-1
+
+.the-nav
   background-color: $color-blue-1
+  height: 45px
 
 ul.subnav.logged-out
   left: -6.25rem
@@ -184,22 +192,17 @@ ul.subnav.logged-out
 @media (min-width: $media-medium-max)
   .navbar
     height: auto
-  .container
-    width: 95%
-    margin: 0 auto
+
   .the-nav
     display: block
-  .the-nav .nav
-    display: block
-  .the-nav .nav-pill:after
-    content: ""
-    display: table
-    clear: both
+    max-width: 1500px
+    margin: 0 auto
+
+  .the-nav .nav-pill.right
+    z-index: 100
   .the-nav .nav-pill.left
     height: 45px
     overflow: hidden
-  .the-nav .nav-pill.right
-    z-index: 100
   .the-nav > .nav
     margin: 0
     padding-left: 0
@@ -280,6 +283,9 @@ ul.subnav.logged-out
 @media (max-width: $media-medium-max)
   .logged-in .navbar .nav-collapse
     display: none
+
+  .navbar
+    background-color: $color-blue-1
 
   .nav.nav-pill
     padding: 0
