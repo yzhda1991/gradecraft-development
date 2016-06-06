@@ -175,10 +175,7 @@ GradeCraft::Application.routes.draw do
   get "/current_course/change" => "current_courses#change", as: :change_current_course
 
   #9. Groups
-  resources :groups do
-    resources :proposals
-  end
-  resources :group_memberships
+  resources :groups
 
   #10. Informational Pages
   controller :info do
