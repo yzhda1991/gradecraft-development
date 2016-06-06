@@ -163,20 +163,16 @@ GradeCraft::Application.routes.draw do
 
   #8. Courses
   resources :courses do
-    collection do
-      post "copy" => "courses#copy"
-    end
+    post :copy, on: :collection
     member do
-      get "timeline_settings" => "courses#timeline_settings"
-      put "timeline_settings" => "courses#timeline_settings_update"
-      get "predictor_settings" => "courses#predictor_settings", as: :predictor_settings
-      put "predictor_settings" => "courses#predictor_settings_update"
+      get :timeline_settings
+      put :timeline_settings, to: :timeline_settings_update
+      get :predictor_settings
+      put :predictor_settings, to: :predictor_settings_update
     end
   end
-  resources :course_memberships
-
+  resources :course_memberships, only: [:create, :destroy]
   get "/current_course/change" => "current_courses#change", as: :change_current_course
-  get "current_course" => "current_courses#show"
 
   get "leaderboard" => "students#leaderboard"
   get "multiplier_choices" => "info#choices"
