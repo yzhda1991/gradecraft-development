@@ -254,22 +254,26 @@ GradeCraft::Application.routes.draw do
   end
 
   resources :staff, only: [:index, :show]
-  resources :user_sessions, only: [:new, :create, :destroy]
-  resources :passwords, path_names: { new: "reset" }, except: [:destroy, :index, :show]
 
   #14. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
-  get "auth/failure" => "pages#auth_failure", as: :auth_failure
+  get "auth/failure", to: "pages#auth_failure", as: :auth_failure
 
-  get "login" => "user_sessions#new", as: :login
-  get "logout" => "user_sessions#destroy", as: :logout
-  get "reset" => "user_sessions#new"
+  get :login, to: "user_sessions#new", as: :login
+  get :logout, to: "user_sessions#destroy", as: :logout
+  get :reset, to: "user_sessions#new"
+  resources :user_sessions, only: [:new, :create, :destroy]
+  resources :passwords, path_names: { new: "reset" },
+    except: [:destroy, :index, :show]
 
-  #SAML
-  get "saml/init"
-  post "saml/consume"
-  get "saml/metadata"
-  get "saml/logout"
+  resource :saml, only: [] do
+    collection do
+      post :consume
+      get :init
+      get :logout
+      get :metadata
+    end
+  end
 
   get "lti/:provider/launch", to: "lti#launch", as: :launch_lti_provider
 
