@@ -6,10 +6,10 @@
   %div{ class: "assignment-#{grade_type}"}
     %h4.assignment_name
       = link_to assignment.name, assignment
-      - if assignment.is_individual?
-        = link_to glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button"
-      - else
-        = link_to glyph(:check) + "Grade", assignment, class: "button"
+    - if assignment.is_individual?
+      = link_to glyph(:check) + "Quick Grade", mass_edit_assignment_grades_path(assignment), class: "button quick-grade-button"
+    - else
+      = link_to glyph(:check) + "Grade", assignment, class: "button quick-grade-button"
 
     = form_tag edit_status_assignment_grades_path(assignment), method: :get do
 
