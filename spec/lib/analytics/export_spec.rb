@@ -36,6 +36,12 @@ describe Analytics::Export do
     end
 
     describe "#schema_records" do
+      let(:schema_record_hash) { double(:schema_records).as_null_object }
+      before do
+        allow(Analytics::Export::SchemaRecords).to receive(:new)
+          .and_return schema_record_hash
+      end
+
       context "a records_set is given" do
         let(:result) { subject.schema_records ["the-records-set"] }
 
