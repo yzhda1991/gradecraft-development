@@ -334,7 +334,7 @@ GradeCraft::Application.routes.draw do
   resources :exports, only: :index
 
   #19. SubmissionsExports
-  resources :submissions_exports do
+  resources :submissions_exports, only: [:create, :destroy] do
     member do
       get :download
       get '/secure_download/:secure_token_uuid/secret_key/:secret_key',
