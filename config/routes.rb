@@ -285,8 +285,6 @@ GradeCraft::Application.routes.draw do
   #16. Events
   resources :events
 
-  get "gse_mass_edit" => "grade_scheme_elements#mass_edit", defaults: { format: :json }
-
   #17. API Calls
 
   namespace :api, defaults: { format: :json } do

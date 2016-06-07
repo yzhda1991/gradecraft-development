@@ -30,7 +30,7 @@
         elements[index+1].high_range = newValue-1
 
     getGradeSchemeElements = ()->
-      $http.get('/gse_mass_edit/').success((response) ->
+      $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->
         angular.copy(response.grade_scheme_elements, elements)
         totalPoints = response.total_points
       )
