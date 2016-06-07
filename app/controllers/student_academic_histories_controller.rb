@@ -2,8 +2,7 @@ class StudentAcademicHistoriesController < ApplicationController
 
   before_filter :ensure_staff?
 
-  before_action :find_student,
-    only: [:show, :new, :create, :edit, :update, :destroy]
+  before_action :find_student
 
   def show
     @academic_history =

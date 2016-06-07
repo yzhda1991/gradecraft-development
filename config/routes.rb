@@ -166,9 +166,9 @@ GradeCraft::Application.routes.draw do
     post :copy, on: :collection
     member do
       get :timeline_settings
-      put :timeline_settings, to: :timeline_settings_update
+      put :timeline_settings, to: { action: :timeline_settings_update }
       get :predictor_settings
-      put :predictor_settings, to: :predictor_settings_update
+      put :predictor_settings, to: { action: :predictor_settings_update }
     end
   end
   resources :course_memberships, only: [:create, :destroy]
@@ -241,6 +241,7 @@ GradeCraft::Application.routes.draw do
 
   resources :students, only: [:index, :show] do
     resources :badges, only: [:index, :show], module: :students
+    resources :student_academic_histories, except: :index
     member do
       get :grade_index
       get :recalculate
