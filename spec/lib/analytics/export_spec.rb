@@ -76,5 +76,28 @@ describe Analytics::Export do
         end
       end
     end
+
+    describe "#generate_csv" do
+      let(:result) { subject.generate_csv "/path/bro", "file.txt", ["set"] }
+      let(:csv_double) { double(:csv_object).as_null_object }
+
+      before do
+        allow(Analytics::Export::CSV).to receive(:new) { csv_double }
+      end
+
+      it "builds a new export CSV object" do
+        expect(Analytics::Export::CSV).to receive(:new).with \
+          export: subject,
+          path: "/path/bro",
+          filename: "file.txt",
+          schema_record_set: ["set"]
+        result
+      end
+
+      it "generates the new CSV" do
+        expect(csv_double).to receive(:generate!)
+        result
+      end
+    end
   end
 end
