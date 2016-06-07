@@ -63,7 +63,7 @@ i.missing_grade
   color: $color-grey-5
 
 .collapse-hidden
-  padding: .5rem 1.5rem
+  padding: .5rem
 
 .assignment-type-container
   padding: 0 1.5rem 1rem
@@ -130,9 +130,12 @@ i.missing_grade
     padding: 1px 2px
 
   tbody ul.button-bar li:not(:last-of-type) a.button
-    margin-right: .5rem
+    margin-right: .2rem
 
 @media (max-width: 800px)
+  tbody ul.button-bar li
+    margin-left: 0px
+
   .dynatable-sort-header
     pointer-events: none
 
@@ -180,7 +183,7 @@ i.missing_grade
         padding: .5em
         font-size: .85rem
 
-  table.no-button-bar 
+  table.no-button-bar
     tr:last-child
       .st-key
         display: table-cell
