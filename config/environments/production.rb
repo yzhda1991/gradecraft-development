@@ -6,14 +6,7 @@ GradeCraft::Application.configure do
   config.asset_host = "https://www.gradecraft.com"
   config.action_mailer.default_url_options = { :host => "www.gradecraft.com" }
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: "smtp.sparkpostmail.com",
-    authentication: :plain,
-    enable_starttls_auto: true,
-    password: ENV.fetch("SPARKPOST_SMTP_PASSWORD"),
-    port: 587,
-    user_name: ENV.fetch("SPARKPOST_SMTP_USERNAME")
-  }
+  config.action_mailer.delivery_method = :sparkpost
   config.active_support.deprecation = :notify
   config.assets.compile = false
   config.assets.compress = true
