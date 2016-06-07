@@ -4,13 +4,17 @@ class World
   end
 
   class Instance
-    attr_reader :assignments, :badges, :challenges, :courses,
-      :course_memberships, :criteria, :criterion_grades, :grades,
+    attr_reader :assignments, :assignment_types, :badges, :challenges,
+      :courses, :course_memberships, :criteria, :criterion_grades, :grades,
       :grade_scheme_elements, :groups, :rubrics, :students, :professors,
       :teams, :users
 
     def assignment
       assignments.first
+    end
+
+    def assignment_type
+      assignment_types.first
     end
 
     def badge
@@ -83,10 +87,18 @@ class World
     def create_assignment(attributes={})
       course = attributes.delete(:course) || self.course || FactoryGirl.build(:course)
       assignment_type = FactoryGirl.create(:assignment_type, course: course)
+      assignment_types << assignment_type
       assignments << FactoryGirl.create(:assignment, attributes.merge(
         course: course,
         assignment_type: assignment_type
       ))
+      self
+    end
+
+    def create_assignment_type(attributes={})
+      course = attributes.delete(:course) || self.course || FactoryGirl.build(:course)
+      assignment_type = FactoryGirl.create(:assignment_type, course: course)
+      assignment_types << assignment_type
       self
     end
 
@@ -177,6 +189,7 @@ class World
 
     def initialize
       @assignments = []
+      @assignment_types = []
       @badges = []
       @challenges = []
       @courses = []

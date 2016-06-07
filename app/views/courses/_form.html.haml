@@ -186,17 +186,17 @@
     %span Multipliers allow students to 'boost' their grades on specific assignment types. You decide how many multipliers students can allocate, then the students select which assignment types will get a boost (through their dashboard) and those assignment type's points are multiplied by the number of multipliers that the student allocates.
 
     .form-item
-      = f.label :total_assignment_weight, "Multiplier Count"
-      = f.number_field :total_assignment_weight, {"aria-describedby" => "txtMultiplierCount"}
+      = f.label :total_weights, "Multiplier Count"
+      = f.number_field :total_weights, {"aria-describedby" => "txtMultiplierCount"}
       .form_label{id: "txtMultiplierCount"}= "How many multipliers do #{term_for :students} have to allocate?"
 
     .form-item
-      = f.input :assignment_weight_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "Decision By"
+      = f.input :weights_close_at, as: :string, :include_blank => true, :input_html => { class: "datetimepicker", :value => @assignment.try(:open_at) }, :label => "Decision By"
       .form_label What date must they make this decision by?
 
     .form-item
-      = f.label :max_assignment_weight, "Maximum Per #{term_for :assignment_type}"
-      = f.number_field :max_assignment_weight, {"aria-describedby" => "txtMaxPerAssignment"}
+      = f.label :max_weights_per_assignment_type, "Maximum Per #{term_for :assignment_type}"
+      = f.number_field :max_weights_per_assignment_type, {"aria-describedby" => "txtMaxPerAssignment"}
       .form_label{id: "txtMaxPerAssignment"} Is there a maximum weight they may place on a single assignment type?
 
     .form-item
@@ -205,8 +205,8 @@
       .form_label{id: "txtMaxWeighted"} Is there a maximum number of assignment types they can weight?
 
     .form-item
-      = f.label :default_assignment_weight, "Default Weight"
-      = f.text_field :default_assignment_weight, {"aria-describedby" => "txtDefaultWeight"}
+      = f.label :default_weight, "Default Weight"
+      = f.text_field :default_weight, {"aria-describedby" => "txtDefaultWeight"}
       .form_label{id: "txtDefaultWeight"} What amount should the assignment types that the student doesn't select to boost be multiplied by?
 
     .form-item

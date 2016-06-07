@@ -513,19 +513,19 @@ describe Course do
 
   describe "#student_weighted?" do
     it "returns false if no weights are set" do
-      subject.total_assignment_weight = nil
+      subject.total_weights = nil
       expect(subject.student_weighted?).to eq(false)
     end
 
     it "returns true if weights have been set by the instructor" do
-      subject.total_assignment_weight = 5
+      subject.total_weights = 5
       expect(subject.student_weighted?).to eq(true)
     end
   end
 
   describe "#assignment_weight_open?" do
-    it "returns false if the assignment_weight_close_at_date is past" do
-      subject.assignment_weight_close_at = Date.today - 1
+    it "returns false if the weights_close_at date is past" do
+      subject.weights_close_at = Date.today - 1
       expect(subject.assignment_weight_open?).to eq(false)
     end
 
@@ -534,7 +534,7 @@ describe Course do
     end
 
     it "returns true if the close date is in the future" do
-      subject.assignment_weight_close_at = Date.today + 1
+      subject.weights_close_at = Date.today + 1
       expect(subject.assignment_weight_open?).to eq(true)
     end
   end
@@ -597,27 +597,27 @@ describe Course do
     it "sums the assignment weights the student has spent" do
       student = create(:user)
       student.courses << subject
-      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
-      assignment_weight_2 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
+      assignment_weight_2 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       expect(subject.assignment_weight_for_student(student)).to eq(4)
     end
   end
 
   describe "#assignment_weight_spent_for_student(student)" do
     it "returns false if the student has not yet spent enough weights" do
-      subject.total_assignment_weight = 4
+      subject.total_weights = 4
       student = create(:user)
       student.courses << subject
-      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       expect(subject.assignment_weight_spent_for_student(student)).to eq(false)
     end
 
     it "returns true if the student has spent enough weights" do
-      subject.total_assignment_weight = 4
+      subject.total_weights = 4
       student = create(:user)
       student.courses << subject
-      assignment_weight_1 = create(:assignment_weight, student: student, course: subject, weight: 2)
-      assignment_weight_2 = create(:assignment_weight, student: student, course: subject, weight: 2)
+      assignment_weight_1 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
+      assignment_weight_2 = create(:assignment_type_weight, student: student, course: subject, weight: 2)
       expect(subject.assignment_weight_spent_for_student(student)).to eq(true)
     end
   end

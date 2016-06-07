@@ -76,8 +76,8 @@ puts "Children must be taught how to think, not what to think. ― Margaret Mead
     end
 
     # Add weight attributes if course has weights
-    if config[:attributes][:total_assignment_weight] &&
-        (config[:attributes][:total_assignment_weight] > 1)
+    if config[:attributes][:total_weights] &&
+        (config[:attributes][:total_weights] > 1)
       config[:attributes][:weight_attributes].keys.each do |weight_attr|
         c[weight_attr] = config[:attributes][:weight_attributes][weight_attr]
       end
@@ -284,7 +284,7 @@ end
 @assignment_types.each do |assignment_type_name, config|
   @courses.each do |course_name, course_config|
     next if (config[:attributes][:student_weightable] == true) &&
-      (!course_config[:attributes].key?(:total_assignment_weight))
+      (!course_config[:attributes].key?(:total_weights))
     course_config[:course].tap do |course|
       assignment_type = AssignmentType.create! do |at|
         @assignment_type_default_config[:attributes].keys.each do |attr|

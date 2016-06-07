@@ -57,7 +57,7 @@ describe AssignmentType do
     it "returns a weight if a student has assigned it" do
       assignment_type.student_weightable = true
       assignment = create(:assignment, assignment_type: assignment_type, course: world.course)
-      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      create(:assignment_type_weight, student: student, course: world.course, assignment_type: assignment_type, weight: 3)
 
       expect(assignment_type.weight_for_student(student)).to eq(3)
     end
@@ -102,7 +102,7 @@ describe AssignmentType do
     it "returns the weighted total for the student" do
       assignment_type.student_weightable = true
       assignment = create(:assignment, assignment_type: assignment_type, course: world.course, point_total: 100)
-      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      create(:assignment_type_weight, student: student, course: world.course, assignment_type: assignment_type, weight: 3)
 
       expect(assignment_type.total_points_for_student(student)).to eq(300)
     end
@@ -131,13 +131,13 @@ describe AssignmentType do
     it "returns the weighted total if the student has assigned weight to it" do
       assignment_type.student_weightable = true
       assignment = create(:assignment, assignment_type: assignment_type, course: world.course, point_total: 100)
-      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      create(:assignment_type_weight, student: student, course: world.course, assignment_type: assignment_type, weight: 3)
 
       expect(assignment_type.weighted_total_for_student(student)).to eq(300)
     end
 
     it "returns the weighted total if the student has *not* assigned weight to it (point total * default weight)" do
-      world.course.default_assignment_weight = 0.5
+      world.course.default_weight = 0.5
       assignment_type.student_weightable = true
       assignment = create(:assignment, assignment_type: assignment_type, course: world.course, point_total: 100)
 
@@ -204,7 +204,7 @@ describe AssignmentType do
     it "does return a weighted score if present"   do
       assignment_type.student_weightable = true
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
-      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      create(:assignment_type_weight, student: student, course: world.course, assignment_type: assignment_type, weight: 3)
       grade = create(:grade, student: student, raw_score: 100, assignment: assignment, status: "Released")
 
       expect(assignment_type.score_for_student(student)).to eq(300)
@@ -218,14 +218,14 @@ describe AssignmentType do
     it "returns the raw score if present"  do
       assignment_type.student_weightable = true
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
-      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      create(:assignment_type_weight, student: student, course: world.course, assignment_type: assignment_type, weight: 3)
       grade = create(:grade, student: student, raw_score: 100, assignment: assignment, status: "Released")
       expect(assignment_type.raw_score_for_student(student)).to eq(100)
     end
 
     it "does not include unreleased grades" do
       assignment = create(:assignment, course: world.course, assignment_type: assignment_type, release_necessary: true)
-      create(:assignment_weight, student: student, course: world.course, assignment: assignment, weight: 3)
+      create(:assignment_type_weight, student: student, course: world.course, assignment_type: assignment_type, weight: 3)
       grade = create(:grade, student: student, raw_score: 100, assignment: assignment, status: "Graded")
       expect(assignment_type.raw_score_for_student(student)).to eq(0)
     end

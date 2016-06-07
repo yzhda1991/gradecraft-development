@@ -201,8 +201,8 @@
       scope.weightsAvailable = ()->
         if @target.student_weight < 1
           return false if PredictorService.weights.unusedTypes() < 1
-        if PredictorService.weights.max_assignment_weight
-          @target.student_weight < PredictorService.weights.max_assignment_weight && PredictorService.weights.unusedWeights() > 0
+        if PredictorService.weights.max_weights_per_assignment_type
+          @target.student_weight < PredictorService.weights.max_weights_per_assignment_type && PredictorService.weights.unusedWeights() > 0
         else
           PredictorService.weights.unusedWeights() > 0
       scope.hasWeights = ()->
@@ -210,6 +210,6 @@
       scope.weightsOpen = ()->
         PredictorService.weights.open
       scope.defaultMultiplier = ()->
-        PredictorService.weights.default_assignment_weight
+        PredictorService.weights.default_weight
   }
 ]

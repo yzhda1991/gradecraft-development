@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160527024024) do
+ActiveRecord::Schema.define(version: 20160602140234) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,18 @@ ActiveRecord::Schema.define(version: 20160527024024) do
     t.datetime "updated_at",                null: false
   end
 
+  create_table "assignment_type_weights", force: :cascade do |t|
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "student_id",         null: false
+    t.integer  "assignment_type_id", null: false
+    t.integer  "weight",             null: false
+    t.integer  "course_id"
+  end
+
+  add_index "assignment_type_weights", ["course_id"], name: "index_assignment_type_weights_on_course_id", using: :btree
+  add_index "assignment_type_weights", ["student_id", "assignment_type_id"], name: "index_weights_on_student_and_assignment_type", using: :btree
+
   create_table "assignment_types", force: :cascade do |t|
     t.string   "name",               limit: 255
     t.integer  "max_points"
@@ -74,22 +86,6 @@ ActiveRecord::Schema.define(version: 20160527024024) do
     t.boolean  "student_weightable"
     t.integer  "position"
   end
-
-  create_table "assignment_weights", force: :cascade do |t|
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "student_id",                     null: false
-    t.integer  "assignment_type_id",             null: false
-    t.integer  "weight",                         null: false
-    t.integer  "assignment_id",                  null: false
-    t.integer  "course_id"
-    t.integer  "point_total",        default: 0, null: false
-  end
-
-  add_index "assignment_weights", ["assignment_id"], name: "index_assignment_weights_on_assignment_id", using: :btree
-  add_index "assignment_weights", ["course_id"], name: "index_assignment_weights_on_course_id", using: :btree
-  add_index "assignment_weights", ["student_id", "assignment_id"], name: "index_weights_on_student_id_and_assignment_id", unique: true, using: :btree
-  add_index "assignment_weights", ["student_id", "assignment_type_id"], name: "index_assignment_weights_on_student_id_and_assignment_type_id", using: :btree
 
   create_table "assignments", force: :cascade do |t|
     t.string   "name",                         limit: 255
@@ -252,18 +248,17 @@ ActiveRecord::Schema.define(version: 20160527024024) do
     t.string   "homepage_message",                  limit: 255
     t.boolean  "status",                                                                default: true
     t.boolean  "group_setting"
-    t.datetime "assignment_weight_close_at"
+    t.datetime "weights_close_at"
     t.boolean  "team_roles"
     t.string   "team_leader_term",                  limit: 255
     t.string   "group_term",                        limit: 255
-    t.string   "assignment_weight_type",            limit: 255
     t.boolean  "accepts_submissions"
     t.boolean  "teams_visible"
     t.string   "weight_term",                       limit: 255
     t.boolean  "predictor_setting"
     t.integer  "max_group_size"
     t.integer  "min_group_size"
-    t.decimal  "default_assignment_weight",                     precision: 4, scale: 1, default: 1.0
+    t.decimal  "default_weight",                                precision: 4, scale: 1, default: 1.0
     t.string   "tagline",                           limit: 255
     t.boolean  "academic_history_visible"
     t.string   "office",                            limit: 255
@@ -282,8 +277,8 @@ ActiveRecord::Schema.define(version: 20160527024024) do
     t.string   "challenge_term",                    limit: 255
     t.boolean  "use_timeline"
     t.text     "grading_philosophy"
-    t.integer  "total_assignment_weight"
-    t.integer  "max_assignment_weight"
+    t.integer  "total_weights"
+    t.integer  "max_weights_per_assignment_type"
     t.boolean  "character_profiles"
     t.string   "lti_uid",                           limit: 255
     t.boolean  "team_score_average"

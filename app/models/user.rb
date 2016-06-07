@@ -88,7 +88,7 @@ class User < ActiveRecord::Base
 
   has_many :unlock_states, foreign_key: :student_id, dependent: :destroy
 
-  has_many :assignment_weights, foreign_key: :student_id
+  has_many :assignment_type_weights, foreign_key: :student_id
 
   has_many :submissions, foreign_key: :student_id, dependent: :destroy
   has_many :created_submissions, as: :creator
@@ -481,22 +481,14 @@ class User < ActiveRecord::Base
     end
   end
 
-  # Returns the student's assigned weight for a specific assignment
-  def weight_for_assignment(assignment)
-    assignment_weights.where(assignment: assignment).first.weight
-  end
-
   # Returns the student's assigned weight for an assignment type category
   def weight_for_assignment_type(assignment_type)
-    assignment_weights.where(assignment_type: assignment_type).first.try(:weight) || 0
+    assignment_type_weights.where(assignment_type: assignment_type).first.try(:weight) || 0
   end
 
   def weight_spent?(course)
-    if self.total_weight_spent(course) == course.total_assignment_weight
-      return true
-    else
-      false
-    end
+    return true if self.total_weight_spent(course) == course.total_weights
+    return false
   end
 
   def total_weight_spent(course)
@@ -508,7 +500,7 @@ class User < ActiveRecord::Base
   end
 
   def weighted_assignments?(course)
-    assignment_weights.where(course: course).count > 0
+    assignment_type_weights.where(course: course).count > 0
   end
 
   # Counts how many assignments are weighted for this student - note that this
@@ -516,7 +508,7 @@ class User < ActiveRecord::Base
   # students make the choice at the AT level rather than the A level,
   # this can be confusing.
   def weight_count(course)
-    assignment_weights.where(course: course).pluck("weight").count
+    assignment_type_weights.where(course: course).pluck("weight").count
   end
 
   # Used to allow students to self-log a grade, currently only a boolean

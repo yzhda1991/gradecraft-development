@@ -1,6 +1,6 @@
 require "light-service"
 require_relative "cancels_course_membership/destroys_announcement_states"
-require_relative "cancels_course_membership/destroys_assignment_weights"
+require_relative "cancels_course_membership/destroys_assignment_type_weights"
 require_relative "cancels_course_membership/destroys_earned_badges"
 require_relative "cancels_course_membership/destroys_earned_challenges"
 require_relative "cancels_course_membership/destroys_flagged_users"
@@ -19,7 +19,7 @@ module Services
         Actions::DestroysMembership,
         Actions::DestroysSubmissions,
         Actions::DestroysGrades,
-        Actions::DestroysAssignmentWeights,
+        Actions::DestroysAssignmentTypeWeights,
         Actions::DestroysEarnedBadges,
         Actions::DestroysEarnedChallenges,
         Actions::DestroysGroupMemberships,

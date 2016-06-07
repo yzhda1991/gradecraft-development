@@ -9,14 +9,16 @@ class AssignmentType < ActiveRecord::Base
   belongs_to :course, touch: true
   has_many :assignments, -> { order("position ASC") }, dependent: :destroy
   has_many :submissions, through: :assignments
-  has_many :assignment_weights
   has_many :grades
+
+  # This is the assignment weighting system (students decide how much
+  # assignments will be worth for them)
+  has_many :weights, class_name: "AssignmentTypeWeight", dependent: :destroy
 
   validates_presence_of :name
   validate :positive_max_points
 
   scope :student_weightable, -> { where(student_weightable: true) }
-  scope :weighted_for_student, ->(student) { joins("LEFT OUTER JOIN assignment_weights ON assignment_types.id = assignment_weights.assignment_type_id AND assignment_weights.student_id = '#{sanitize student.id}'") }
 
   default_scope { order "position" }
 
@@ -24,13 +26,11 @@ class AssignmentType < ActiveRecord::Base
     ModelCopier.new(self).copy(attributes: attributes, associations: [:assignments])
   end
 
+  # weights default to 1 if not weightable, and
+  # 0 if weightable but not weighted by the student
   def weight_for_student(student)
-    # return a standard multiplier of 1 if the assignment type is not student
-    # weightable
     return 1 unless student_weightable?
-
-    # find the assignment weight for the student if it's present
-    assignment_weights.where(student: student).first.try(:weight) || 0
+    weights.where(student: student).first.try(:weight) || course.default_weight
   end
 
   def is_capped?
@@ -68,7 +68,7 @@ class AssignmentType < ActiveRecord::Base
     if weight_for_student(student) >= 1
       (total_points * weight_for_student(student)).to_i
     else
-      (total_points * course.default_assignment_weight).to_i
+      (total_points * course.default_weight).to_i
     end
   end
 

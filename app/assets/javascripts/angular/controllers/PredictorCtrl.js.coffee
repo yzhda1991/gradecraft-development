@@ -133,7 +133,7 @@
       if assignmentType.student_weight > 0
         points = points * assignmentType.student_weight
       else
-        points = points * $scope.weights.default_assignment_weight
+        points = points * $scope.weights.default_weight
     points
 
   # FIX THIS ONE

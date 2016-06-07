@@ -52,10 +52,10 @@ class Course < ActiveRecord::Base
     :team_term, :user_term, :section_leader_term, :group_term, :lti_uid,
     :user_id, :course_id, :homepage_message, :group_setting, :syllabus,
     :character_names, :team_roles, :character_profiles, :hide_analytics,
-    :total_assignment_weight, :assignment_weight_close_at,
+    :total_weights, :weights_close_at,
     :assignment_weight_type, :has_submissions, :teams_visible,
     :weight_term, :max_group_size, :min_group_size, :fail_term, :pass_term,
-    :max_assignment_weight, :assignments, :default_assignment_weight,
+    :max_weights_per_assignment_type, :assignments, :default_weight,
     :accepts_submissions, :tagline, :academic_history_visible, :office, :phone,
     :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
     :meeting_times, :use_timeline, :show_see_details_link_in_timeline,
@@ -97,10 +97,10 @@ class Course < ActiveRecord::Base
   validates_numericality_of :max_group_size, allow_nil: true, greater_than_or_equal_to: 1
   validates_numericality_of :min_group_size, allow_nil: true, greater_than_or_equal_to: 1
 
-  validates_numericality_of :total_assignment_weight, allow_blank: true
-  validates_numericality_of :max_assignment_weight, allow_blank: true
+  validates_numericality_of :total_weights, allow_blank: true
+  validates_numericality_of :max_weights_per_assignment_type, allow_blank: true
   validates_numericality_of :max_assignment_types_weighted, allow_blank: true
-  validates_numericality_of :default_assignment_weight, allow_blank: true
+  validates_numericality_of :default_weight, allow_blank: true
   validates_numericality_of :point_total, allow_blank: true
 
   validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
@@ -235,11 +235,11 @@ class Course < ActiveRecord::Base
   end
 
   def student_weighted?
-    total_assignment_weight.to_i > 0
+    total_weights.to_i > 0
   end
 
   def assignment_weight_open?
-    assignment_weight_close_at.nil? || assignment_weight_close_at > Time.now
+    weights_close_at.nil? || weights_close_at > Time.now
   end
 
   def team_roles?
@@ -267,11 +267,11 @@ class Course < ActiveRecord::Base
   end
 
   def assignment_weight_for_student(student)
-    student.assignment_weights.where(course_id: self.id).pluck("weight").sum
+    student.assignment_type_weights.where(course_id: self.id).pluck("weight").sum
   end
 
   def assignment_weight_spent_for_student(student)
-    assignment_weight_for_student(student) >= total_assignment_weight.to_i
+    assignment_weight_for_student(student) >= total_weights.to_i
   end
 
   def score_for_student(student)

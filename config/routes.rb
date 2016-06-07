@@ -148,9 +148,6 @@ GradeCraft::Application.routes.draw do
   #5. Assignment Type Weights
   get "assignment_type_weights" => "assignment_type_weights#mass_edit", as: :assignment_type_weights
   put "assignment_type_weights" => "assignment_type_weights#mass_update"
-  post "assignment_type_weight" => "assignment_type_weights#update"
-
-  resources :assignment_weights
 
   #6. Badges
   resources :badges do
@@ -359,7 +356,9 @@ GradeCraft::Application.routes.draw do
       end
     end
 
-    resources :assignment_types, only: :index
+    resources :assignment_types, only: :index do
+      resources :assignment_type_weights, only: :create
+    end
     resources :badges, only: :index
     resources :earned_badges, only: :create
     resources :grades, only: :update
