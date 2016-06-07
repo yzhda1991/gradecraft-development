@@ -11,7 +11,7 @@
         %th Point total
 
   %tbody
-    - current_course.challenges.visible.includes(:challenge_files, :challenge_grades).each do |challenge|
+    - current_course.challenges.visible.chronological.includes(:challenge_files, :challenge_grades).each do |challenge|
       %tr
         %td
           - if challenge.graded?
@@ -19,7 +19,7 @@
           - else
             = challenge.name
         %td
-          %span= raw challenge.description
+          = link_to "See Description", challenge
 
           - if challenge.challenge_files.present?
             %b Attachments:
