@@ -5,10 +5,10 @@
 .pageContent
   = render "layouts/alerts"
 
-  = render "submissions_table", submission_type: "ungraded", subtitle: "Ungraded Submissions", submissions_by_assignment: @ungraded_submissions_by_assignment, count: ungraded_submissions_count_for(current_course), course: current_course
+  = render partial: "submissions_table", locals: { submission_type: "ungraded", subtitle: "Ungraded Submissions", submissions_by_assignment: @ungraded_submissions_by_assignment, count: ungraded_submissions_count_for(current_course), course: current_course }
 
-  = render "grades_table", grade_type: "unreleased", subtitle: "Unreleased Grades", grades_by_assignment: @unreleased_grades_by_assignment, count: unreleased_grades_count_for(current_course), course: current_course
+  = render partial: "grades_table", locals: { grade_type: "unreleased", subtitle: "Unreleased Grades", grades_by_assignment: @unreleased_grades_by_assignment, count: unreleased_grades_count_for(current_course), course: current_course }
 
-  = render "grades_table", grade_type: "in_progress", subtitle: "In Progress Grades", grades_by_assignment: @in_progress_grades_by_assignment, count: in_progress_grades_count_for(current_course), course: current_course
+  = render partial: "grades_table", locals: { grade_type: "in_progress", subtitle: "In Progress Grades", grades_by_assignment: @in_progress_grades_by_assignment, count: in_progress_grades_count_for(current_course), course: current_course }
 
-  = render "submissions_table", submission_type: "resubmissions", subtitle: "Resubmitted Submissions", submissions_by_assignment: @resubmissions_by_assignment, count: resubmission_count_for(current_course), course: current_course
+  = render partial: "submissions_table", locals: { submission_type: "resubmissions", subtitle: "Resubmitted Submissions", submissions_by_assignment: @resubmissions_by_assignment, count: resubmission_count_for(current_course), course: current_course }
