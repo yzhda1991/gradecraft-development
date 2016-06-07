@@ -12,7 +12,7 @@
       %th{ :style => "min-width: 220px" }
 
   %tbody
-    - @challenges.each do |challenge|
+    - @challenges.chronological.alphabetical.each do |challenge|
       %tr
         %td= link_to challenge.name, challenge
         %td= link_to "See Description", challenge
