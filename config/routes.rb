@@ -278,10 +278,8 @@ GradeCraft::Application.routes.draw do
   get "lti/:provider/launch", to: "lti#launch", as: :launch_lti_provider
 
   #15. Uploads
-  resource :uploads do
+  resource :uploads, only: [] do
     get :remove
-    get :stuff
-    get :remove_submission_file
   end
 
   #16. Events
