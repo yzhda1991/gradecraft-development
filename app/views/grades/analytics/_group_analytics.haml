@@ -1,6 +1,6 @@
 .tab-container
   %h4.bold Basic Stats
-  - if presenter.grades_available_for?(current_user)
+  - if presenter.has_grades?
     %ul
       %li
         %span.small_uppercase Average Score:
@@ -12,8 +12,6 @@
         %span.small_uppercase High Score:
         = points presenter.assignment.high_score
 
-
-  - if presenter.grades_available_for?(current_user)
     %h4.bold Grade Distribution
     .grades_per_assign{ "data-scores" => presenter.scores_for(current_user).to_json }
 
