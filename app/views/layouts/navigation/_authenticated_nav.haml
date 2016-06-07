@@ -3,7 +3,7 @@
     My Courses
     %i.fa.fa-caret-down.hidden-sm
   %ul.subnav#course-list
-    = render "layouts/navigation/course_list"
+    = render partial: "layouts/navigation/course_list"
 %li.dropdown.my-account       
   %a.section-title{:href => "#", :title => "My account management"} 
     - if current_user.avatar_file_name.present?
@@ -11,4 +11,4 @@
     = current_user.public_name
     %i.fa.fa-caret-down.hidden-2m
   %ul.subnav#account-info
-    = render "layouts/navigation/account_info"
+    = render partial: "layouts/navigation/account_info"
