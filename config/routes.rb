@@ -331,8 +331,7 @@ GradeCraft::Application.routes.draw do
   end
 
   #18. Exports
-  resources :exports
-  get "exports_controller/index"
+  resources :exports, only: :index
 
   #19. SubmissionsExports
   resources :submissions_exports do
