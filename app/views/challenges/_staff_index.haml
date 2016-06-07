@@ -15,7 +15,7 @@
     - @challenges.each do |challenge|
       %tr
         %td= link_to challenge.name, challenge
-        %td= raw challenge.description
+        %td= link_to "See Description", challenge
         %td= points challenge.point_total
         %td= challenge.due_at
         %td{:style => "display: none"}
