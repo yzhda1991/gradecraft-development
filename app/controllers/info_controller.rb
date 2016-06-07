@@ -3,7 +3,7 @@ class InfoController < ApplicationController
 
   before_filter :ensure_staff?, except: [:dashboard, :timeline_events]
   before_action :find_team,
-    only: [:earned_badges, :multiplier_choices, :resubmissions, :ungraded_submissions]
+    only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
     only: [:earned_badges, :multiplier_choices, :final_grades_for_course ]
 

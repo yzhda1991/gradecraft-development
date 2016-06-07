@@ -189,10 +189,8 @@ GradeCraft::Application.routes.draw do
     get :multiplier_choices
     get :per_assign
     get :research_gradebook
-    get :resubmissions
     get :timeline_events
     get :top_10
-    get :ungraded_submissions
   end
 
   controller :pages do
