@@ -26,13 +26,4 @@ describe AssignmentTypeWeightStruct do
       expect(subject.assignment_type_id).to eq(assignment_type.id)
     end
   end
-
-  describe "#save" do
-    # if valid?
-    #   save_assignment_type_weights
-    #   true
-    # else
-    #   false
-    # end
-  end
 end

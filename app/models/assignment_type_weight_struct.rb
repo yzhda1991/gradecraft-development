@@ -29,9 +29,9 @@ class AssignmentTypeWeightStruct < Struct.new(:student, :assignment_type)
   private
 
   def save_assignment_type_weights
-      assignment_weight = assignment_type.weights.where(student: student).first_or_initialize
-      assignment_weight.weight = weight
-      assignment_weight.save!
-      student.grades.where(assignment_type: assignment_type).each {|grade| grade.save!}
+    assignment_weight = assignment_type.weights.where(student: student).first_or_initialize
+    assignment_weight.weight = weight
+    assignment_weight.save!
+    student.grades.where(assignment_type: assignment_type).each {|grade| grade.save!}
   end
 end
