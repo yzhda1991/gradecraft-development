@@ -14,6 +14,11 @@ namespace :grades do
     Grade.where("(predicted_score > 0 OR predicted_score IS NULL) AND graded_at IS NULL").update_all("graded_at=updated_at")
   end
 
+  desc "Update grades without a final score to use raw score"
+  task update_final_score: :environment do
+    Grade.where("final_score is NULL and raw_score is not NULL").update_all("final_score=raw_score")
+  end
+
   desc "Transfer the predictions off existing grades"
   task transfer_predictions: :environment do
     Grade.where("predicted_score > 0").find_each(batch_size: 500) do |grade|
