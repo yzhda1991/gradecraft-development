@@ -36,19 +36,32 @@ describe Analytics::Export do
     end
 
     describe "#schema_records" do
-      let(:schema_record_hash) { double(:schema_records).as_null_object }
+      let(:schema_records_class) { Analytics::Export::SchemaRecords }
+      let(:schema_records_hash) { double(:schema_records).as_null_object }
+
       before do
-        allow(Analytics::Export::SchemaRecords).to receive(:new)
-          .and_return schema_record_hash
+        allow(schema_records_class).to receive(:new) { schema_records_hash }
       end
 
       context "a records_set is given" do
         let(:result) { subject.schema_records ["the-records-set"] }
 
         it "builds a hash of schema records for records set" do
-          expect(Analytics::Export::SchemaRecords).to receive(:new).with \
+          expect(schema_records_class).to receive(:new).with \
             export: subject, records: ["the-records-set"]
           result
+        end
+
+        it "caches the schema records" do
+          result
+          expect(schema_records_class).not_to receive(:new)
+          result
+        end
+
+        it "sets the schema records to @schema_records" do
+          result
+          expect(subject.instance_variable_get(:@schema_records))
+            .to eq schema_records_hash
         end
       end
 
@@ -57,7 +70,7 @@ describe Analytics::Export do
 
         it "builds a hash of schema records using the export records" do
           allow(subject).to receive(:records) { ["some-records"] }
-          expect(Analytics::Export::SchemaRecords).to receive(:new).with \
+          expect(schema_records_class).to receive(:new).with \
             export: subject, records: ["some-records"]
           result
         end
