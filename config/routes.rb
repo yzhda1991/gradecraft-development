@@ -215,8 +215,6 @@ GradeCraft::Application.routes.draw do
   #12. Teams
   resources :teams
 
-  root to: "pages#home"
-
   #13. Users
   %w{students gsis professors admins}.each do |role|
     get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}",
@@ -238,15 +236,15 @@ GradeCraft::Application.routes.draw do
   end
 
   get :leaderboard, to: "students#leaderboard"
+  get :predictor, to: "students#predictor"
+  get :syllabus, to: "students#syllabus"
+  get :course_progress, to: "students#course_progress"
+  get :my_team, to: "students#teams"
+
   resources :students, only: [:index, :show] do
     resources :badges, only: [:index, :show], module: :students
     member do
       get :grade_index
-      get :timeline
-      get :syllabus
-      get :predictor
-      get :course_progress
-      get :teams
       get :recalculate
     end
     collection do
@@ -258,12 +256,6 @@ GradeCraft::Application.routes.draw do
   resources :staff, only: [:index, :show]
   resources :user_sessions, only: [:new, :create, :destroy]
   resources :passwords, path_names: { new: "reset" }, except: [:destroy, :index, :show]
-
-  get "predictor" => "students#predictor"
-  get "timeline" => "students#timeline"
-  get "syllabus" => "students#syllabus"
-  get "course_progress" => "students#course_progress"
-  get "my_team" => "students#teams"
 
   #14. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
@@ -290,7 +282,6 @@ GradeCraft::Application.routes.draw do
 
   #16. Events
   resources :events
-
 
   get "gse_mass_edit" => "grade_scheme_elements#mass_edit", defaults: { format: :json }
 
@@ -351,4 +342,6 @@ GradeCraft::Application.routes.draw do
         action: "secure_download", as: "secure_download"
     end
   end
+
+  root to: "pages#home"
 end

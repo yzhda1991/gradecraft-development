@@ -84,13 +84,6 @@ describe StudentsController do
       end
     end
 
-    describe "GET timeline" do
-      it "shows the course timeline" do
-        get :timeline, id: 10
-        expect(response).to render_template(:timeline)
-      end
-    end
-
     describe "GET autocomplete_student_name" do
       it "provides a list of all students and their ids" do
         get :autocomplete_student_name, id: 10
@@ -144,13 +137,6 @@ describe StudentsController do
       it "shows the class syllabus" do
         get :syllabus
         expect(response).to render_template(:syllabus)
-      end
-    end
-
-    describe "GET timeline" do
-      it "shows the course timeline" do
-        get :timeline, id: 10
-        expect(response).to redirect_to(dashboard_path)
       end
     end
 
