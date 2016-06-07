@@ -1,13 +1,13 @@
 module Analytics
   module Export
     class CSV
-      attr_reader :export, :path, :filename, :schema_record_set
+      attr_reader :export, :path, :filename, :schema_records
 
       def initialize(export:, path:, filename: nil, schema_record_set: nil)
         @export = export
         @path = path
         @filename = filename || "#{export.class.name.underscore}.csv"
-        @schema_records  = schema_record_set || export.schema_records
+        @schema_records = schema_record_set || export.schema_records
 
         FileUtils.mkdir_p(path) unless Dir.exists?(path)
       end
