@@ -166,9 +166,9 @@ GradeCraft::Application.routes.draw do
     post :copy, on: :collection
     member do
       get :timeline_settings
-      put :timeline_settings, to: { action: :timeline_settings_update }
+      put :timeline_settings, to: "courses#timeline_settings_update"
       get :predictor_settings
-      put :predictor_settings, to: { action: :predictor_settings_update }
+      put :predictor_settings, to: "courses#predictor_settings_update"
     end
   end
   resources :course_memberships, only: [:create, :destroy]
