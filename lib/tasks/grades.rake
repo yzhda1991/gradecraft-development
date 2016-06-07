@@ -11,12 +11,12 @@ namespace :grades do
 
   desc "Update all of the graded_at dates to the updated_at for the grades"
   task update_graded_at: :environment do
-    Grade.find_each(batch_size: 500) { |g| g.update_column(:graded_at, g.graded_at) }
+    Grade.where("(predicted_score > 0 OR predicted_score IS NULL) AND graded_at IS NULL").update_all("graded_at=updated_at")
   end
 
   desc "Transfer the predictions off existing grades"
   task transfer_predictions: :environment do
-    Grade.where("predicted_score > 0").each do |grade|
+    Grade.where("predicted_score > 0").find_each(batch_size: 500) do |grade|
       prediction = PredictedEarnedGrade.find_or_create_by(
         assignment_id: grade.assignment.id,
         student_id: grade.student.id
