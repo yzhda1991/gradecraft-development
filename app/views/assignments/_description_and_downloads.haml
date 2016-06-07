@@ -74,7 +74,7 @@
   - if presenter.assignment_has_viewible_description?(current_user)
     %hr.dotted
     %h4.uppercase Guidelines:
-    %p= raw presenter.assignment.description
+    %p= raw sanitize_external_links presenter.assignment.description
 
   - if presenter.assignment_has_viewible_purpose?(current_user)
     %hr.dotted

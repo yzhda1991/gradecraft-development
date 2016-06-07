@@ -65,12 +65,6 @@
               .display_on_hover.hover-style
                 Release Required
 
-            %th{scope: "col"}
-              %a
-                %i.fa.fa-envelope.fa-fw
-              .display_on_hover.hover-style
-                Email Students on Release
-
             %th{scope: "col"} Grade Form Preview
             %th{scope: "col"} Points
 
@@ -136,14 +130,6 @@
                     %i.fa.fa-unlock-alt.fa-fw
                   .display_on_hover.hover-style
                     Release Required
-
-              %td
-                - if assignment.notify_released?
-                  %a
-                    %i.fa.fa-envelope.fa-fw
-                  .display_on_hover.hover-style
-                    Email Students on Release
-
 
               %td
                 - if assignment.grade_select?

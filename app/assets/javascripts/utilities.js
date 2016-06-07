@@ -35,7 +35,7 @@ $( "#tabs" ).tabs({
     'fullscreen', 'bold', 'italic', 'underline', 'strikeThrough',
     'fontFamily', 'fontSize', 'color', 'sep', 'blockStyle', 'emoticons',
     'insertTable', 'sep', 'formatBlock', 'align', 'insertOrderedList',
-    'outdent', 'indent', 'insertHorizontalRule', 'createLink', 'undo', 'redo',
+    'outdent', 'indent', 'insertHorizontalRule', 'insertLink', 'undo', 'redo',
     'clearFormatting', 'selectAll', 'html'
   ]
 })
