@@ -2,20 +2,21 @@
 .challenge-description
   = raw @challenge.description
 
-%h4.subtitle Scores
-%table.dynatable
-  %thead
-    %tr
-      %th= current_course.team_term
-      %th{ "data-dynatable-sorts" => "numericScore" } Score
-      - if @challenge.has_levels?
-        %th Level
-  %tbody
-    - @teams.alpha.each do |team|
-      - challenge_grade = @challenge.challenge_grades.find_by team: team
+- if @challenge.graded?
+  %h4.subtitle Scores
+  %table.dynatable
+    %thead
       %tr
-        %td= team.name
-        %td= points challenge_grade.score if challenge_grade
+        %th= current_course.team_term
+        %th{ "data-dynatable-sorts" => "numericScore" } Score
         - if @challenge.has_levels?
-          %td
-            = @challenge.grade_level(grade) if challenge_grade
+          %th Level
+    %tbody
+      - @teams.alpha.each do |team|
+        - challenge_grade = @challenge.challenge_grades.find_by team: team
+        %tr
+          %td= team.name
+          %td= points challenge_grade.score if challenge_grade
+          - if @challenge.has_levels?
+            %td
+              = @challenge.grade_level(grade) if challenge_grade
