@@ -123,10 +123,11 @@ describe UsersController do
 
     describe "POST update_profile" do
       it "successfully updates the users profile" do
-        params = { display_name: "gandalf" }
+        params = { display_name: "gandalf", time_zone: "Chihuahua" }
         post :update_profile, id: @professor.id, user: params
         expect(response).to redirect_to(dashboard_path)
         expect(@professor.reload.display_name).to eq("gandalf")
+        expect(@student.reload.time_zone).to eq("Chihuahua")
       end
     end
 
@@ -284,10 +285,11 @@ describe UsersController do
 
     describe "POST update_profile" do
       it "successfully updates the users profile" do
-        params = { display_name: "frodo", password: "", password_confirmation: "" }
+        params = { display_name: "frodo", password: "", password_confirmation: "", time_zone: "Chihuahua" }
         post :update_profile, id: @student.id, user: params
         expect(response).to redirect_to(dashboard_path)
         expect(@student.reload.display_name).to eq("frodo")
+        expect(@student.reload.time_zone).to eq("Chihuahua")
       end
 
       it "successfully updates the user's password" do
