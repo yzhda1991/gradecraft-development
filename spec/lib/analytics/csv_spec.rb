@@ -18,7 +18,7 @@ describe Analytics::Export::CSV do
     expect(subject.export).to eq export
     expect(subject.path).to eq path
     expect(subject.filename).to eq filename
-    expect(subject.schema_record_set).to eq schema_record_set
+    expect(subject.schema_records).to eq schema_record_set
   end
 
   describe "#initialize" do
