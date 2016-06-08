@@ -29,7 +29,7 @@ module Analytics
             final_hash[column] = records.each_with_index.map do |record, index|
               # print a message for the record if it fits into our
               # messaging schema
-              message = Analytics::Export::RecordMessage.new \
+              message = Analytics::Export::Message.new \
                 record_index: index,
                 total_records: records.size
               print message.formatted_message if message.printable?

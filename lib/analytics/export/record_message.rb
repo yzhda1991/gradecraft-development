@@ -1,4 +1,4 @@
-class Analytics::Export::RecordMessage
+class Analytics::Export::Message
   attr_reader :record_number, :total_records
 
   def initialize(record_index:, total_records:)
