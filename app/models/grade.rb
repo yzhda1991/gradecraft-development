@@ -127,7 +127,7 @@ class Grade < ActiveRecord::Base
   def save_student_and_team_scores
     self.student.cache_course_score(self.course.id)
     if self.course.has_teams? && self.student.team_for_course(self.course).present?
-      self.student.team_for_course(self.course).cache_score
+      self.student.team_for_course(self.course).average_score
     end
   end
 
