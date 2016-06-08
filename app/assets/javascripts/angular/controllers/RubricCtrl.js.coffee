@@ -6,7 +6,8 @@
 
   $scope.savedCriterionCount = 0
 
-  $scope.init = (assignmentId, pointTotal)->
+  $scope.init = (rubricId, assignmentId, pointTotal)->
+    $scope.rubricId = rubricId
     $scope.assignmentId = assignmentId
     $scope.pointTotal = parseInt(pointTotal)
     $scope.services()
