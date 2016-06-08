@@ -54,7 +54,6 @@ class StudentsController < ApplicationController
   # Displaying student profile to instructors
   def show
     self.current_student = current_course.students.where(id: params[:id]).first
-    @display_sidebar = true
     render :show, Students::SyllabusPresenter.build({
       student: self.current_student,
       assignment_types: current_course.assignment_types.includes(:assignments),
@@ -75,18 +74,15 @@ class StudentsController < ApplicationController
   def course_progress
     @grade_scheme_elements = current_course.grade_scheme_elements.order_by_high_range
     @title = "Your Course Progress"
-    @display_sidebar = true
   end
 
   def teams
     @title = "#{term_for :teams}"
-    @display_sidebar = true
     @team = current_student.team_for_course(current_course)
     @teams = current_course.teams.order_by_rank.includes(:earned_badges)
   end
 
   # Display the grade predictor
-  #   students & staff: render standard layout with sidebar
   def predictor
     # id is used for api routes
     @student_id = current_student.id if current_student && current_user_is_staff?
@@ -95,7 +91,6 @@ class StudentsController < ApplicationController
   # All Admins to see all of one student's grades at once, proof for duplicates
   def grade_index
     @grades = current_student.grades.where(course_id: current_course)
-    @display_sidebar = true
   end
 
   def recalculate
