@@ -86,15 +86,10 @@ class StudentsController < ApplicationController
   end
 
   # Display the grade predictor
-  #   students - style blocks to fill entire page, render layout with no sidebar
-  #   staff - render standard layout with sidebar
+  #   students & staff: render standard layout with sidebar
   def predictor
     # id is used for api routes
     @student_id = current_student.id if current_student && current_user_is_staff?
-    if current_user_is_student?
-      @fullpage = true
-      render layout: "predictor"
-    end
   end
 
   # All Admins to see all of one student's grades at once, proof for duplicates
