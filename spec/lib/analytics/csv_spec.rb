@@ -12,7 +12,7 @@ describe Analytics::Export::CSV do
   let(:export) { double("FooExport").as_null_object }
   let(:path) { Dir.mktmpdir }
   let(:filename) { "bro.txt" }
-  let(:schema_record_set) { ["the-set"] }
+  let(:schema_record_set) { { this: "is-the-set" } }
 
   describe "readable attributes" do
     it "has a readable export" do
@@ -66,6 +66,59 @@ describe Analytics::Export::CSV do
         expect(FileUtils).to receive(:mkdir_p).with path
         subject
       end
+    end
+  end
+
+  describe "#csv_filepath" do
+    it "joins the path and the filename" do
+      allow(subject).to receive_messages \
+        path: "/some/path",
+        filename: "the-filename.txt"
+
+      expect(subject.csv_filepath).to eq "/some/path/the-filename.txt"
+    end
+  end
+
+  describe "#generate!" do
+    let(:result) { subject.generate! }
+    let(:csv_filepath) { Tempfile.new "csv-filepath" }
+
+    before do
+      allow(subject).to receive_messages \
+        csv_filepath: csv_filepath,
+        export_column_names: ["some", "columns"],
+        export_rows: [["row1"], ["row2"]]
+    end
+
+    it "writes a new csv to the CSV filepath" do
+      expect(CSV).to receive(:open).with csv_filepath, "wb"
+      result
+    end
+
+    it "adds a row of column names from the export schema" do
+      result
+      expect(CSV.read csv_filepath).to include ["some", "columns"]
+    end
+
+    it "adds each of the export rows to the CSV" do
+      result
+      csv_lines = CSV.read csv_filepath
+      expect(csv_lines).to include ["row1"]
+      expect(csv_lines).to include ["row2"]
+    end
+  end
+
+  describe "#export_column_names" do
+    it "returns the column names as keys from the export schema hash" do
+      expect(subject.export).to receive_message_chain(:class, :schema, :keys)
+      subject.export_column_names
+    end
+  end
+
+  describe "#export_rows" do
+    it "returns the transposed rows from the schema records" do
+      expect(subject.schema_records).to receive_message_chain(:values, :transpose)
+      subject.export_rows
     end
   end
 end

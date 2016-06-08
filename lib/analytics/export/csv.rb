@@ -1,3 +1,5 @@
+require "csv"
+
 module Analytics
   module Export
     class CSV
@@ -13,13 +15,21 @@ module Analytics
       end
 
       def generate!
-        CSV.open(csv_filepath, "wb") do |csv|
+        ::CSV.open(csv_filepath, "wb") do |csv|
           # Write header row
-          csv << export.class.schema.keys
+          csv << export_column_names
 
           # Zip schema_records values from each key
-          schema_records.values.transpose.each {|record| csv << record }
+          export_rows.each {|record| csv << record }
         end
+      end
+
+      def export_column_names
+        export.class.schema.keys
+      end
+
+      def export_rows
+        schema_records.values.transpose
       end
 
       def csv_filepath
