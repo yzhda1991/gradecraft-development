@@ -245,7 +245,12 @@ describe Badge do
 
   describe "#earned_badges_by_student_id" do
     it "should return all of the earned badges for a badge, grouped by their unique student ids" do
-      skip "implement"
+      student = create(:user)
+      student_2 = create(:user)
+      badge = create(:badge)
+      earned_badge = create(:earned_badge, badge: badge, student: student)
+      earned_badge_1 = create(:earned_badge, badge: badge, student: student_2)
+      expect(badge.earned_badges_by_student_id).to eq({ [student.id] => [earned_badge], [student_2.id] => [earned_badge_1] })
     end
   end
 
