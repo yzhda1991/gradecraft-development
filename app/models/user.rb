@@ -462,18 +462,6 @@ class User < ActiveRecord::Base
     earned_badges.create badge: badge, course: badge.course
   end
 
-  def earn_badge_for_grade(badge, grade)
-    raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
-    earned_badges.create badge: badge, course: badge.course, grade: grade
-  end
-
-  def earn_badges_for_grade(badges, grade)
-    raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
-    badges.collect do |badge|
-      earned_badges.create badge: badge, course: badge.course, grade: grade
-    end
-  end
-
   def earn_badges(badges)
     raise TypeError, "Argument must be an array of Badge objects" unless badges.class == Array
     badges.each do |badge|

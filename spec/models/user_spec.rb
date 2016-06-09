@@ -534,20 +534,12 @@ describe User do
   end
 
   describe "#earnable_course_badges_sql_conditions(grade)" do
+    # Badge
+    #   .unscoped
+    #   .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
+    #   .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
+    #   .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
     skip "implement"
-    #   Badge
-    #     .unscoped
-    #     .where("(id not in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?))", self[:id], grade[:course_id])
-    #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], true)
-    #     .where("(id in (select distinct(badge_id) from earned_badges where earned_badges.student_id = ? and earned_badges.course_id = ? and earned_badges.grade_id = ?) and can_earn_multiple_times = ?)", self[:id], grade[:course_id], grade[:id], false)
-  end
-
-  describe "#earn_badges_for_grade(badges, grade)" do
-    skip "implement"
-    #   raise TypeError, "First argument must be a Badge object" unless badge.class == Badge
-    #   badges.collect do |badge|
-    #     earned_badges.create badge: badge, course: badge.course, grade: grade
-    #   end
   end
 
   describe "#weight_for_assignment_type(assignment_type)" do
@@ -756,21 +748,6 @@ describe User do
     it "should show course badges that the student has yet to earn", broken: true do
       EarnedBadge.destroy_all course_id: course[:id]
       expect(student.earnable_course_badges_for_grade(world.grade)).to include(@single_badge, @multi_badge)
-    end
-
-    it "should not show badges that the student has earned for other grades, and can't be earned multiple times" do
-      student.earn_badge_for_grade(@single_badge, @another_grade) # earn the badge on another grade
-      expect(student.earnable_course_badges_for_grade(world.grade)).not_to include(@single_badge)
-    end
-
-    it "should show badges that the student has earned but CAN be earned multiple times", broken: true do
-      student.earn_badge_for_grade(@multi_badge, world.grade)
-      expect(student.earnable_course_badges_for_grade(world.grade)).to include(@multi_badge)
-    end
-
-    it "should show badges that the student has earned for the current grade, even if it can't be earned multiple times" do
-      student.earn_badge_for_grade(@single_badge, world.grade)
-      expect(student.earnable_course_badges_for_grade(world.grade)).to include(@single_badge)
     end
   end
 
