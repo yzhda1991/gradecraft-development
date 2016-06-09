@@ -82,8 +82,9 @@ describe Assignment do
     end
 
     it "creates a rubric if one does not exist" do
-      skip "pending"
-      # expect(subject.fetch_or_create_rubric).to eq(Rubric.new)
+      assignment = create(:assignment)
+      new_rubric = assignment.fetch_or_create_rubric
+      expect(new_rubric).to eq assignment.reload.rubric
     end
   end
 
