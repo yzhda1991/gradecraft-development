@@ -534,10 +534,10 @@ class User < ActiveRecord::Base
 
   ### TEST
 
-  def get_element_test(course, current_student, direction)
+  def get_element_test(course, direction)
     course_elements = course.grade_scheme_elements.order_by_low_range
 
-    current_element = current_student.grade_for_course(course)
+    current_element = self.grade_for_course(course)
     current_element_index = course_elements.index{ |item| item[:level] == current_element[:level] }
 
     element = send("#{direction}_element_level_test", course_elements, current_element_index)
