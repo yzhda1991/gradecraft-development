@@ -1,0 +1,4 @@
+.card-header
+  %h3 Upcoming Events
+.card-body
+  #time_line{"data-timeline" => render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])}
