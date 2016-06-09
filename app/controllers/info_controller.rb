@@ -96,12 +96,11 @@ class InfoController < ApplicationController
 
   # downloadable grades for course with  export
   def research_gradebook
-    # @mz TODO: add specs
     @grade_export_job = GradeExportJob.new(user_id: current_user.id, course_id: current_course.id)
     @grade_export_job.enqueue
 
     flash[:notice]="Your request to export grade data from course \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
-    redirect_to courses_path
+    redirect_back_or_default
   end
 
   # Chart displaying all of the student weighting choices thus far
