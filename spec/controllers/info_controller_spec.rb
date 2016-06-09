@@ -2,7 +2,7 @@ require "rails_spec_helper"
 
 describe InfoController do
   before(:all) { @course = create(:course) }
-  before(:all) { @course_2 = create(:course_without_timeline) }
+  before(:all) { @course_2 = create(:course) }
   before(:each) do
     session[:course_id] = @course.id
     allow(Resque).to receive(:enqueue).and_return(true)
@@ -17,16 +17,10 @@ describe InfoController do
     before { login_user(@professor) }
 
     describe "GET dashboard" do
-      it "retrieves the timeline if turned on" do
+      it "retrieves the dashboard" do
         @assignment = create(:assignment, course: @course)
         get :dashboard
         expect(response).to render_template(:dashboard)
-      end
-
-      it "retrieves the Top 10 if timeline is turned off" do
-        session[:course_id] = @course_2.id
-        get :dashboard
-        expect(response).to redirect_to top_10_path
       end
     end
 
@@ -208,16 +202,9 @@ describe InfoController do
     before(:each) { login_user(@student) }
 
     describe "GET dashboard" do
-      it "retrieves the timeline if turned on" do
+      it "retrieves the dashboard if turned on" do
         get :dashboard
         expect(response).to render_template(:dashboard)
-      end
-
-      it "retrieves the Syllabus if timeline is turned off" do
-        session[:course_id] = @course_2.id
-
-        get :dashboard
-        expect(response).to redirect_to syllabus_path
       end
     end
 
