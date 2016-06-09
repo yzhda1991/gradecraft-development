@@ -5,6 +5,7 @@ require_relative "export/buildable"
 require_relative "export/class_methods"
 require_relative "export/csv"
 require_relative "export/schema_records"
+require_relative "export/message"
 
 module Analytics
   module Export
