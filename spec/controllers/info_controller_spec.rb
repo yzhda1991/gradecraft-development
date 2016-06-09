@@ -51,7 +51,7 @@ describe InfoController do
       end
     end
 
-    describe "GET top_10", focus: true do
+    describe "GET top_10" do
       before(:all) do
         student = create(:user)
         student_2 = create(:user)
@@ -82,8 +82,9 @@ describe InfoController do
 
       it "shows the top 10 if there are less than ten students" do
         get :top_10
-        expect(@top_ten_students.count).to eq 9
-        expect(@bottom_ten_students).to be nil
+        expect(response).to render_template(:top_10)
+        expect(assigns(:top_ten_students).present?).to be true
+        expect(assigns(:bottom_ten_students)).to be nil
       end
 
       it "shows the top and bottom students if less than 20 students" do
@@ -94,12 +95,8 @@ describe InfoController do
         student_11.courses << @course
         student_12.courses << @course
         get :top_10
-        expect(@course.students.count).to eq(12)
-        expect(@bottom_ten_students.count).to eq 1
-      end
-
-      it "shows only the top 10 and bottom 10 if more than 20 students" do
-        skip "implement"
+        expect(assigns(:top_ten_students).present?).to be true
+        expect(assigns(:bottom_ten_students).present?).to be true
       end
     end
 
@@ -161,10 +158,23 @@ describe InfoController do
     end
 
     describe "GET research_gradebook" do
-      it "retrieves the research_gradebook" do
-        skip "implement"
+      it "retrieves the research gradebook" do
+        expect(GradeExportJob).to \
+          receive(:new).with(user_id: @professor.id, course_id: @course.id)
+            .and_call_original
+        expect_any_instance_of(GradeExportJob).to receive(:enqueue)
         get :research_gradebook
-        expect(response).to render_template(:research_gradebook)
+      end
+
+      it "redirects to the root path if there is no referer" do
+        get :research_gradebook
+        expect(response).to redirect_to root_path
+      end
+
+      it "redirects to the referer if there is one" do
+        request.env["HTTP_REFERER"] = dashboard_path
+        get :research_gradebook
+        expect(response).to redirect_to dashboard_path
       end
     end
 
