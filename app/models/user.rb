@@ -532,6 +532,25 @@ class User < ActiveRecord::Base
     assignment.has_groups? && group_for_assignment(assignment).present?
   end
 
+  ### TEST
+
+  def get_element_test(course, current_student, direction)
+    course_elements = course.grade_scheme_elements.order_by_low_range
+
+    current_element = current_student.grade_for_course(course)
+    current_element_index = course_elements.index{ |item| item[:level] == current_element[:level] }
+
+    element = send("#{direction}_element_level_test", course_elements, current_element_index)
+  end
+
+  def next_element_level_test(course_elements, current_element_index)
+    next_element = course_elements[current_element_index + 1] unless current_element_index == (course_elements.size - 1)
+  end
+
+  def previous_element_level_test(course_elements, current_element_index)
+    previous_element = levels[current_element_index - 1] unless current_element_index == 0
+  end
+
   private
 
   def final_earnable_course_badges_sql(grade)
