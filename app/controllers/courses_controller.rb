@@ -1,7 +1,7 @@
 class CoursesController < ApplicationController
   include CoursesHelper
 
-  before_filter :ensure_staff?, except: [:timeline]
+  before_filter :ensure_staff?
 
   def index
     @title = "Course Index"

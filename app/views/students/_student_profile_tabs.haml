@@ -15,8 +15,7 @@
       %li{class: ("active" if current_page?(student_teams_path(current_student))) }
         = link_to_unless_current glyph(:users) + "#{term_for :teams}", student_teams_path(current_student)
   - else
-    - if current_course.use_timeline?
-      %li{class: ("active" if current_page?(dashboard_path)) }
+    %li{class: ("active" if current_page?(dashboard_path)) }
         = link_to_unless_current glyph(:home) + "Timeline", dashboard_path
     %li{class: ("active" if current_page?(syllabus_path)) }
       = link_to_unless_current glyph('file-text') + "#{term_for :assignments}", syllabus_path
@@ -39,4 +38,3 @@
     - if current_course.has_teams? && current_course.teams_visible?
       %li{class: ("active" if current_page?(my_team_path)) }
         = link_to_unless_current glyph(:users) + "#{term_for :teams}", my_team_path
-

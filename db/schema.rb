@@ -275,7 +275,6 @@ ActiveRecord::Schema.define(version: 20160531193326) do
     t.string   "badge_term",                        limit: 255
     t.string   "assignment_term",                   limit: 255
     t.string   "challenge_term",                    limit: 255
-    t.boolean  "use_timeline"
     t.text     "grading_philosophy"
     t.integer  "total_weights"
     t.integer  "max_weights_per_assignment_type"
@@ -294,7 +293,6 @@ ActiveRecord::Schema.define(version: 20160531193326) do
     t.string   "syllabus"
     t.boolean  "hide_analytics"
     t.string   "character_names"
-    t.boolean  "show_see_details_link_in_timeline",                                     default: true
     t.string   "time_zone",                                                             default: "Eastern Time (US & Canada)"
   end
 

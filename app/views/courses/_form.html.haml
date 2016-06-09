@@ -15,7 +15,6 @@
       = f.label :tagline, "Tagline"
       = f.text_field :tagline
 
-
     .form-item
       = f.label :semester
       = f.select :semester, [["Winter", "winter"], ["Spring", "spring"], ["Summer", "summer"], ["Fall", "fall"]]
@@ -98,11 +97,6 @@
   %section
     %h4.uppercase GradeCraft Settings
     .form-item
-      = f.label :use_timeline, "Timeline"
-      = f.check_box :use_timeline, {"aria-describedby" => "txtUseTimeline"}
-      .form_label{id: "txtUseTimeline"} Would you like to use the interactive timeline to display your syllabus?
-
-    .form-item
       = f.label :accepts_submissions, "Submissions"
       = f.check_box :accepts_submissions, {"aria-describedby" => "txtAcceptSubmission"}
       .form_label{id: "txtAcceptSubmission"} Will you be using GradeCraft to accept assignment submissions?
@@ -156,11 +150,6 @@
       = f.label :add_team_score_to_student, "Student Score = Grades + Team Assignments"
       = f.check_box :add_team_score_to_student, {"aria-describedby" => "txtScoreToStudent"}
       .form_label{id: "txtScoreToStudent"}  Do you want team assignment scores to be added directly into student scores?
-
-    .form-item
-      = f.label :show_see_details_link_in_timeline, "'See the details' Link"
-      = f.check_box :show_see_details_link_in_timeline, {"aria-describedby" => "seeDetails"}
-      .form_label{id: "seeDetails"}  Would you like to add a link from each event in the timeline to its own individual page?
 
     .form-item
       = f.label :hide_analytics, "Hide Analytics?"

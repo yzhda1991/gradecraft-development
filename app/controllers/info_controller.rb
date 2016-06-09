@@ -9,17 +9,7 @@ class InfoController < ApplicationController
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
-    # checking to see if the course uses the interactive timeline -
-    # if not sending students to their syllabus, and the staff to top 10
-    if current_course.use_timeline?
-      render :dashboard
-    else
-      if current_user_is_student?
-        redirect_to syllabus_path
-      else
-        redirect_to top_10_path
-      end
-    end
+    render :dashboard
   end
 
   def timeline_events
