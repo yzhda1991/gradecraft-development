@@ -89,3 +89,16 @@ $(document).ready(function() {
       chart = new Highcharts.Chart(options);
     };
 });
+
+// Filter my planner items
+$('#my-planner').click(function() {
+  $('#course-planner, #my-planner').toggleClass("selected");
+  $('.todo-list-assignments li').filter(function() {
+   return $(this).find('a.starred').length !== 1;
+  }).css('display', 'none');
+});
+
+$('#course-planner').click(function() {
+  $('#course-planner, #my-planner').toggleClass("selected");
+  $('.todo-list-assignments li').css('display', '');
+});

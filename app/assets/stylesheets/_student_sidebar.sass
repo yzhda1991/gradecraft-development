@@ -5,17 +5,16 @@
   display: flex
   flex-direction: row
 
-  .col-30
-    width: 30%
+  .col-30, .col-40
     display: flex
     flex-direction: column
     margin-right: 1rem
 
+  .col-30
+    width: 30%
+
   .col-40
     width: 40%
-    display: flex
-    flex-direction: column
-    margin-right: 1rem
 
   .column-row
     display: flex
@@ -37,13 +36,17 @@
   .todo .card-body
     padding: 0
 
-  .todo li
-    list-style-type: none
+  .todo-list-assignments
+    margin: 0
+    padding-left: 0
+
+    li
+      list-style-type: none
 
   .assignment-item
     padding: 0.5em
 
-    &:nth-child(even)
+    &:nth-child(odd)
       background-color: $color-grey-6
 
   .planner-filter
@@ -77,8 +80,6 @@
 
   a
     font-weight: 300
-    &:hover
-      color: $color-green-2
 
   h3
     margin: 0
