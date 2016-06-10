@@ -39,23 +39,28 @@
   .todo-list-assignments
     margin: 0
     padding-left: 0
+    font-size: .8rem
 
     li
       list-style-type: none
 
   .assignment-item
     padding: 0.5em
+    border-bottom: 1px solid $color-grey-6
 
-    &:nth-child(odd)
-      background-color: $color-grey-6
+    &:last-child
+      border-bottom: none
+
+    &.starred
+      background-color: transparentize($color-green-2, .8)
 
   .planner-filter
     white-space: nowrap
+    border-bottom: 1px solid $color-grey-6
 
   .bar_magic
     border-radius: 5px
     padding: .25rem
-    width: 80%
     font-size: 0.8rem
 
   .bar_magic.current
