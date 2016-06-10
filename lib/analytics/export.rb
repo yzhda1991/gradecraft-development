@@ -4,7 +4,8 @@ require_relative "export/buildable"
 
 require_relative "export/class_methods"
 require_relative "export/csv"
-require_relative "export/schema_records"
+require_relative "export/record_parser"
+require_relative "export/schema_record"
 require_relative "export/message"
 
 module Analytics
@@ -25,11 +26,11 @@ module Analytics
       @records ||= data[self.class.rows]
     end
 
-    def schema_records(records_set=nil)
-      @schema_records ||= Analytics::Export::SchemaRecords.new(
+    def parsed_schema_records(records_set=nil)
+      @parsed_schema_records ||= Analytics::Export::RecordParser.new(
         export: self,
         records: records_set || records
-      ).map_records!
+      ).parse_records!
     end
 
     def generate_csv(path, file_name=nil, schema_record_set=nil)

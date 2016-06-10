@@ -9,7 +9,7 @@ module Analytics
     #   role: ["admin", "owner", "owner"], ...
     # }
     #
-    class SchemaRecords
+    class RecordParser
       attr_reader :export, :records
 
       def initialize(export:, records:)
@@ -18,7 +18,7 @@ module Analytics
       end
 
       # construct a hash that builds an empty array for the default value
-      def map_records!
+      def parse_records!
         puts " => Generating schema records..."
 
         Hash.new {|hash, key| hash[key] = [] }.tap do |final_hash|
@@ -29,15 +29,20 @@ module Analytics
             final_hash[column] = records.each_with_index.map do |record, index|
               # print a message for the record if it fits into our
               # messaging schema
-              message = Analytics::Export::Message.new \
+
+              message = ::Message.new \
                 record_index: index,
                 total_records: records.size
               print message.formatted_message if message.printable?
 
-              # get the value from the row however we can
-              next row.call(record) if row.respond_to? :call # try call first
-              next record.send(row) if record.respond_to? row # then try the record
-              export.send row, record, index # then perform the method on the export
+
+              schema_record = ::SchemaRecord.new \
+                target: row,
+                record: record,
+                export: export,
+                index: index
+              schema_record.get_value
+
             end
           end
         end

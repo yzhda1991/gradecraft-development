@@ -1,6 +1,6 @@
-require "analytics/export/schema_records"
+require "analytics/export/RecordParser"
 
-describe Analytics::Export::SchemaRecords do
+describe Analytics::Export::RecordParser do
   subject { described_class.new export: export, records: records }
   let(:export) { double(:export).as_null_object }
   let(:records) { [{ id: 1 }, { id: 2 }] }
@@ -22,6 +22,13 @@ describe Analytics::Export::SchemaRecords do
 
     it "sets the records" do
       expect(subject.instance_variable_get(:@records)).to eq records
+    end
+  end
+
+  describe "#map_records!" do
+    it "prints a note on start" do
+      expect(subject).to receive(:puts).with " => Generating schema records..."
+      subject.map_records!
     end
   end
 
