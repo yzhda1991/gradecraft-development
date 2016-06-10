@@ -9,7 +9,7 @@
 module Analytics
   module Export
     class SchemaRecord
-      attr_reader :target, :record, :export
+      attr_reader :target, :record, :export, :index
       def initialize(target:, record:, export:, index:)
         @target = target
         @record = record
