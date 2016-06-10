@@ -386,7 +386,7 @@ describe User do
     end
   end
 
-  describe "#next_element_level(course)" do
+  describe "#get_element_level(course, :next)" do
     let(:student) { create :user }
 
     it "returns the next level above a student's current score for the course" do
@@ -394,7 +394,7 @@ describe User do
       gse = create(:grade_scheme_element, course: course, low_range: 80000, high_range: 120000, letter: "Q")
       gse_1 = create(:grade_scheme_element, course: course, low_range: 120001, high_range: 150000, letter: "R")
       gse_2 = create(:grade_scheme_element, course: course, low_range: 150001, high_range: 180000, letter: "S")
-      expect(student.next_element_level(course)).to eq(gse_1)
+      expect(student.get_element_level(course, :next)).to eq(gse_1)
     end
   end
 

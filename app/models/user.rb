@@ -306,40 +306,25 @@ class User < ActiveRecord::Base
     @grade_letter_for_course ||= course.grade_letter_for_score(cached_score_for_course(course))
   end
 
-  def next_element_level(course)
-    next_element = nil
-    grade_scheme_elements = course.grade_scheme_elements.unscoped.order_by_low_range
-    grade_scheme_elements.each_with_index do |element, index|
-      if (element.high_range >= cached_score_for_course(course)) && (cached_score_for_course(course) >= element.low_range)
-        next_element = grade_scheme_elements[index + 1]
-      end
-      if next_element.nil?
-        if element.low_range > cached_score_for_course(course)
-          next_element = grade_scheme_elements.last
-        end
-      end
-    end
-    return next_element
+  def get_element(course, direction)
+    course_elements = course.grade_scheme_elements.order_by_low_range
+
+    current_element = self.grade_for_course(course)
+    current_element_index = course_elements.index{ |item| item[:level] == current_element[:level] }
+
+    element = send("#{direction}_element_level", course_elements, current_element_index)
   end
 
-  def previous_element_level(course)
-    previous_element = nil
-    grade_scheme_elements = course.grade_scheme_elements.unscoped.order_by_low_range
-    grade_scheme_elements.each_with_index do |element, index|
-      if (element.high_range >= cached_score_for_course(course)) && (cached_score_for_course(course) >= element.low_range)
-        previous_element = grade_scheme_elements[index - 1]
-      end
-      if previous_element.nil?
-        if element.low_range > cached_score_for_course(course)
-          previous_element = grade_scheme_elements.last
-        end
-      end
-    end
-    return previous_element
+  def next_element_level(course_elements, current_element_index)
+    next_element = course_elements[current_element_index + 1] unless current_element_index == (course_elements.size - 1)
+  end
+
+  def previous_element_level(course_elements, current_element_index)
+    previous_element = levels[current_element_index - 1] unless current_element_index == 0
   end
 
   def points_to_next_level(course)
-    next_element_level(course).low_range - cached_score_for_course(course)
+    get_element_level(course, :next).low_range - cached_score_for_course(course)
   end
 
   ### GRADES
@@ -532,24 +517,6 @@ class User < ActiveRecord::Base
     assignment.has_groups? && group_for_assignment(assignment).present?
   end
 
-  ### TEST
-
-  def get_element_test(course, direction)
-    course_elements = course.grade_scheme_elements.order_by_low_range
-
-    current_element = self.grade_for_course(course)
-    current_element_index = course_elements.index{ |item| item[:level] == current_element[:level] }
-
-    element = send("#{direction}_element_level_test", course_elements, current_element_index)
-  end
-
-  def next_element_level_test(course_elements, current_element_index)
-    next_element = course_elements[current_element_index + 1] unless current_element_index == (course_elements.size - 1)
-  end
-
-  def previous_element_level_test(course_elements, current_element_index)
-    previous_element = levels[current_element_index - 1] unless current_element_index == 0
-  end
 
   private
 

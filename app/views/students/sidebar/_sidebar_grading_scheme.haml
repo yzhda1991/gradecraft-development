@@ -2,7 +2,7 @@
   %h3 Course Progress
 .card-body
 
-  - next_element = current_student.get_element_test(current_course, :next)
+  - next_element = current_student.get_element(current_course, :next)
   - if !next_element.nil?
     .progress.bar_magic.transparent.center
       .meter
@@ -23,7 +23,7 @@
       %span Points to next level:
       %span.bold= points current_element.points_to_next_level(current_student, current_course)
 
-  - previous_element = current_student.get_element_test(current_course, :previous)
+  - previous_element = current_student.get_element(current_course, :previous)
   - if !previous_element.nil?
     .progress.bar_magic.success.center
       .meter
