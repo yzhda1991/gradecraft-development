@@ -11,11 +11,7 @@ module Gradable
   end
 
   def no_grade(attrs)
-    if pass_fail
-      attrs[:pass_fail_status].blank?
-    else
-      attrs[:raw_score].blank?
-    end
+    pass_fail ? attrs[:pass_fail_status].blank? : attrs[:raw_score].blank?
   end
 
   def graded_or_released_scores

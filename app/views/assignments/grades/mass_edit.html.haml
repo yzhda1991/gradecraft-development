@@ -50,7 +50,7 @@
 
                     - else
                       = gf.text_field :raw_score, :value => nil, data: {autonumeric: true, "m-dec" => "0"}
-            %td{:style => "text-align: left"}= @assignment.pass_fail? ? "" : "/ #{points @assignment.point_total}"
+            %td{:style => "text-align: left"}= "/ #{points @assignment.point_total}" if !@assignment.pass_fail?
 
       .submit-buttons
         %ul
