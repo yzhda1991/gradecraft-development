@@ -517,7 +517,6 @@ class User < ActiveRecord::Base
     assignment.has_groups? && group_for_assignment(assignment).present?
   end
 
-
   private
 
   def final_earnable_course_badges_sql(grade)
