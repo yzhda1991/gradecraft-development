@@ -84,13 +84,6 @@ describe StudentsController do
       end
     end
 
-    describe "GET timeline" do
-      it "shows the course timeline" do
-        get :timeline, id: 10
-        expect(response).to render_template(:timeline)
-      end
-    end
-
     describe "GET autocomplete_student_name" do
       it "provides a list of all students and their ids" do
         get :autocomplete_student_name, id: 10
@@ -115,7 +108,7 @@ describe StudentsController do
 
     describe "GET grade_index" do
       it "shows the grade index page" do
-        get :grade_index, student_id: @student.id
+        get :grade_index, id: @student.id
         allow(StudentsController).to \
           receive(:current_student).and_return(@student)
         expect(response).to render_template(:grade_index)
@@ -124,7 +117,7 @@ describe StudentsController do
 
     describe "GET recalculate" do
       it "triggers the recalculation of a student's grade" do
-        get :recalculate, { student_id: @student.id }
+        get :recalculate, { id: @student.id }
         expect(response).to redirect_to(student_path(@student))
       end
     end
@@ -144,13 +137,6 @@ describe StudentsController do
       it "shows the class syllabus" do
         get :syllabus
         expect(response).to render_template(:syllabus)
-      end
-    end
-
-    describe "GET timeline" do
-      it "shows the course timeline" do
-        get :timeline, id: 10
-        expect(response).to redirect_to(dashboard_path)
       end
     end
 
@@ -194,7 +180,7 @@ describe StudentsController do
         :recalculate
       ].each do |route|
         it "#{route} redirects to root" do
-          expect(get route, {student_id: "10"}).to redirect_to(:root)
+          expect(get route, {id: "10"}).to redirect_to(:root)
         end
       end
     end

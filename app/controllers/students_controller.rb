@@ -2,7 +2,7 @@ class StudentsController < ApplicationController
   respond_to :html, :json
 
   before_filter :ensure_staff?,
-    except: [:timeline, :predictor, :course_progress, :badges, :teams, :syllabus ]
+    except: [:predictor, :course_progress, :badges, :teams, :syllabus ]
   before_filter :save_referer, only: [:recalculate]
 
   # Lists all students in the course,
@@ -40,15 +40,6 @@ class StudentsController < ApplicationController
       course: current_course,
       view_context: view_context
     })
-  end
-
-  # Course timeline, displays all assignments that are determined by the
-  # instructor to belong on the timeline + team challenges if present
-  def timeline
-    if current_user_is_student?
-      redirect_to dashboard_path
-    end
-    @events = Timeline.new(current_course).events
   end
 
   # Displaying student profile to instructors
@@ -90,11 +81,12 @@ class StudentsController < ApplicationController
 
   # All Admins to see all of one student's grades at once, proof for duplicates
   def grade_index
-    @grades = current_student.grades.where(course_id: current_course)
+    student = current_course.students.find_by(id: params[:id])
+    @grades = student.grades.where(course_id: current_course)
   end
 
   def recalculate
-    @student = current_course.students.find_by(id: params[:student_id])
+    @student = current_course.students.find_by(id: params[:id])
 
     # @mz TODO: add specs
     ScoreRecalculatorJob.new(user_id: @student.id,

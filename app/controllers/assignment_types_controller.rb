@@ -1,7 +1,7 @@
 class AssignmentTypesController < ApplicationController
   include SortsPosition
 
-  before_filter :ensure_staff?, except: [:predictor_data]
+  before_filter :ensure_staff?
   before_action :find_assignment_type,
     only: [:show, :edit, :update, :export_scores, :all_grades, :destroy]
 

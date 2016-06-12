@@ -7,9 +7,9 @@
         %span.bold= at.name
         = "- #{current_student.weight_for_assignment_type(at)} #{(term_for :weight).capitalize}"
   - if current_course.assignment_weight_open? && current_user_is_student?
-    %p= link_to "Edit My Choices", assignment_type_weights_path, class: "button"
+    %p= link_to "Edit My Choices", mass_edit_assignment_type_weights_path, class: "button"
   - else
-    %p= link_to "Edit #{(term_for :weight).capitalize} Choices", assignment_type_weights_path(student_id: current_student.id), class: "button"
+    %p= link_to "Edit #{(term_for :weight).capitalize} Choices", mass_edit_assignment_type_weights_path(student_id: current_student.id), class: "button"
 
   %h5 Rules of The Game
   %ul.small

@@ -14,7 +14,7 @@ GradeCraft::Application.routes.draw do
   #8. Courses
   #9. Groups
   #10. Informational Pages
-  #11. Rubrics & Grade Schemes
+  #11. Grade Schemes
   #12. Teams
   #13. Users
   #14. User Auth
@@ -91,11 +91,9 @@ GradeCraft::Application.routes.draw do
 
     resources :submissions, except: :index
 
-    resource :rubric do
-      get :existing_criteria
-      resources :criteria
+    resource :rubric, except: [:edit, :index, :new] do
       get :design, on: :collection
-      get :export
+      get :export, on: :collection
     end
   end
 
@@ -112,60 +110,46 @@ GradeCraft::Application.routes.draw do
     get :download
   end
 
-  resources :unlock_states do
+  resources :unlock_states, only: [:create, :destroy, :update] do
     member do
       post :manually_unlock
     end
   end
-  resources :unlock_conditions
+  resources :unlock_conditions, only: [:create, :destroy, :update]
 
-  # earned badges grade routes
-  post "grade/:grade_id/earn_student_badges", to: "grades#earn_student_badges"
-  delete "grade/:grade_id/student/:student_id/badge/:badge_id/earned_badge/:id", to: "grades#delete_earned_badge"
-  delete "grade/:grade_id/earned_badges", to: "grades#delete_all_earned_badges"
-
-  resources :criteria do
+  resources :criteria, only: [:create, :destroy, :update] do
     put :update_order, on: :collection
   end
 
-  resources :levels
-  resources :graded_criteria
-
-  resources :level_badges
+  resources :levels, only: [:create, :destroy, :update]
+  resources :level_badges, only: [:create, :destroy]
 
   #4. Assignment Types
   resources :assignment_types do
-    member do
-      get "all_grades"
-      get "export_scores"
-    end
-    collection do
-      post :sort
-      get "export_all_scores"
-    end
+    get :all_grades, on: :member
+    get :export_scores, on: :member
+    get :export_all_scores, on: :collection
+    post :sort, on: :collection
   end
 
   #5. Assignment Type Weights
-  get "assignment_type_weights" => "assignment_type_weights#mass_edit", as: :assignment_type_weights
-  put "assignment_type_weights" => "assignment_type_weights#mass_update"
+  resources :assignment_type_weights, only: [] do
+    get :mass_edit, on: :collection
+    put :mass_update, on: :collection
+  end
 
   #6. Badges
   resources :badges do
-
-    resources :tasks
-    resources :earned_badges
-    member do
-      get "mass_award" => "earned_badges#mass_edit", as: :mass_award
-      post "mass_earn" => "earned_badges#mass_earn"
-    end
-    collection do
-      post :sort
+    post :sort, on: :collection
+    resources :earned_badges do
+      get :mass_edit, on: :collection
+      post :mass_earn, on: :collection
     end
   end
 
   #7. Challenges
   resources :challenges do
-    resources :challenge_grades, only: [:index, :new, :create], module: :challenges do
+    resources :challenge_grades, only: [:new, :create], module: :challenges do
       collection do
         post :edit_status
         put :update_status
@@ -173,101 +157,74 @@ GradeCraft::Application.routes.draw do
         put :mass_update
       end
     end
-    resources :challenge_files do
-      get :remove
-    end
   end
 
   resources :challenge_grades, except: [:index, :new, :create]
 
   #8. Courses
   resources :courses do
-    collection do
-      post "copy" => "courses#copy"
-    end
+    post :copy, on: :collection
     member do
-      get "timeline_settings" => "courses#timeline_settings"
-      put "timeline_settings" => "courses#timeline_settings_update"
-      get "predictor_settings" => "courses#predictor_settings", as: :predictor_settings
-      put "predictor_settings" => "courses#predictor_settings_update"
+      get :timeline_settings
+      put :timeline_settings, to: "courses#timeline_settings_update"
+      get :predictor_settings
+      put :predictor_settings, to: "courses#predictor_settings_update"
     end
   end
-  resources :course_memberships
-
+  resources :course_memberships, only: [:create, :destroy]
   get "/current_course/change" => "current_courses#change", as: :change_current_course
-  get "current_course" => "current_courses#show"
-
-  get "leaderboard" => "students#leaderboard"
-  get "multiplier_choices" => "info#choices"
-  get "earned_badges" => "info#awarded_badges"
-  get "grading_status" => "info#grading_status"
-  get "top_10" => "info#top_10"
-  get "per_assign" => "info#per_assign"
-  get "gradebook" => "info#gradebook"
-  get "multiplied_gradebook" => "info#multiplied_gradebook"
-  get "final_grades" => "info#final_grades"
-  get "research_gradebook" => "info#research_gradebook"
-  get "export_earned_badges" => "courses#export_earned_badges"
 
   #9. Groups
-  resources :groups do
-    resources :proposals
-  end
-  resources :group_memberships
+  resources :groups
 
   #10. Informational Pages
-  namespace :info do
-    get :choices
-    get :awarded_badges
+  controller :info do
     get :dashboard
+    get :earned_badges
+    get :export_earned_badges
+    get :final_grades
+    get :gradebook
     get :grading_status
+    get :multiplied_gradebook
+    get :multiplier_choices
+    get :per_assign
+    get :research_gradebook
     get :timeline_events
     get :top_10
-    get :per_assign
   end
 
-  resources :home
+  controller :pages do
+    get :brand_and_style_guidelines
+    get :features
+    get :our_team, to: "pages#team"
+    get :press
+    get :research
+    get :um_pilot
+  end
 
-  get "um_pilot" => "pages#um_pilot"
-  get "features" => "pages#features"
-  get "press" => "pages#press"
-  get "research" => "pages#research"
-  get "our_team" => "pages#team"
-
-  #11. Rubrics & Grade Schemes
-  resources :rubrics
-
-  #11. Rubrics & Grade Schemes
-  resources :grade_scheme_elements do
+  #11. Grade Schemes
+  resources :grade_scheme_elements, only: :index do
     collection do
-      post :destroy_multiple
-      get "mass_edit" => "grade_scheme_elements#mass_edit", as: :mass_edit
-      put "mass_edit" => "grade_scheme_elements#mass_update"
+      get :mass_edit
+      put :mass_update
     end
   end
 
   #12. Teams
-  resources :teams do
-    collection do
-      get :activity
-    end
-    resources :earned_badges
-  end
-
-  get "home" => "pages#home"
-  get "dashboard" => "info#dashboard"
-  get "brand_and_style" => "pages#brand_and_style_guidelines"
-  root to: "pages#home"
+  resources :teams
 
   #13. Users
   %w{students gsis professors admins}.each do |role|
-    get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}", role: role.singularize
+    get "users/#{role}/new" => "users#new", as: "new_#{role.singularize}",
+      role: role.singularize
   end
 
-  resources :users do
-    get :activate, on: :member
-    post :activate, on: :member, action: :activated
-    post :flag, on: :member
+  resources :users, except: :show do
+    member do
+      get :activate
+      post :activate, action: :activated
+      post :flag
+    end
     collection do
       get :edit_profile
       put :update_profile
@@ -275,68 +232,57 @@ GradeCraft::Application.routes.draw do
       post :upload
     end
   end
-  resources :students do
-    get :grade_index
-    get :timeline
-    get :syllabus
-    get :predictor
-    get :course_progress
-    get :teams
-    get :recalculate
-    get "badges", to: "students/badges#index"
-    get "badges/:id", to: "students/badges#show", as: :badge_show
-    resources :student_academic_histories
+
+  get :leaderboard, to: "students#leaderboard"
+  get :predictor, to: "students#predictor"
+  get :syllabus, to: "students#syllabus"
+  get :course_progress, to: "students#course_progress"
+  get :my_team, to: "students#teams"
+
+  resources :students, only: [:index, :show] do
+    resources :badges, only: [:index, :show], module: :students
+    resources :student_academic_histories, except: :index
+    member do
+      get :grade_index
+      get :recalculate
+    end
     collection do
-      get :leaderboard
-      get :choices
       get :autocomplete_student_name
-      get :scores_for_current_course
-      get :scores_by_assignment
-      get :scores_by_team
-      get :scores_for_single_assignment
-      get :final_grades
-      get :class_badges
       get :flagged
     end
   end
-  resources :staff, only: [:index, :show]
-  resources :user_sessions
-  resources :passwords, path_names: { new: "reset" }, except: [:destroy, :index]
 
-  get "predictor" => "students#predictor"
-  get "timeline" => "students#timeline"
-  get "syllabus" => "students#syllabus"
-  get "course_progress" => "students#course_progress"
-  get "my_team" => "students#teams"
+  resources :staff, only: [:index, :show]
 
   #14. User Auth
   post "auth/lti/callback", to: "user_sessions#lti_create"
-  get "auth/failure" => "pages#auth_failure", as: :auth_failure
+  get "auth/failure", to: "pages#auth_failure", as: :auth_failure
 
-  get "login" => "user_sessions#new", as: :login
-  get "logout" => "user_sessions#destroy", as: :logout
-  get "reset" => "user_sessions#new"
+  get :login, to: "user_sessions#new", as: :login
+  get :logout, to: "user_sessions#destroy", as: :logout
+  get :reset, to: "user_sessions#new"
+  resources :user_sessions, only: [:new, :create, :destroy]
+  resources :passwords, path_names: { new: "reset" },
+    except: [:destroy, :index, :show]
 
-  #SAML
-  get "saml/init"
-  post "saml/consume"
-  get "saml/metadata"
-  get "saml/logout"
+  resource :saml, only: [] do
+    collection do
+      post :consume
+      get :init
+      get :logout
+      get :metadata
+    end
+  end
 
   get "lti/:provider/launch", to: "lti#launch", as: :launch_lti_provider
 
   #15. Uploads
-  resource :uploads do
+  resource :uploads, only: [] do
     get :remove
-    get :stuff
-    get :remove_submission_file
   end
 
   #16. Events
   resources :events
-
-
-  get "gse_mass_edit" => "grade_scheme_elements#mass_edit", defaults: { format: :json }
 
   #17. API Calls
 
@@ -360,8 +306,12 @@ GradeCraft::Application.routes.draw do
       resources :assignment_type_weights, only: :create
     end
     resources :badges, only: :index
-    resources :earned_badges, only: :create
-    resources :grades, only: :update
+    resources :earned_badges, only: [:create, :destroy]
+    resources :grades, only: :update do
+      resources :earned_badges, only: :create, module: :grades do
+        delete :delete_all, on: :collection
+      end
+    end
     resources :grade_scheme_elements, only: :index
     resources :levels, only: :update
 
@@ -380,15 +330,16 @@ GradeCraft::Application.routes.draw do
   end
 
   #18. Exports
-  resources :exports
-  get "exports_controller/index"
+  resources :exports, only: :index
 
   #19. SubmissionsExports
-  resources :submissions_exports do
+  resources :submissions_exports, only: [:create, :destroy] do
     member do
       get :download
       get '/secure_download/:secure_token_uuid/secret_key/:secret_key',
         action: "secure_download", as: "secure_download"
     end
   end
+
+  root to: "pages#home"
 end

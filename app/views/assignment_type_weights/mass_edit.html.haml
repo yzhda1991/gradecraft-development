@@ -5,7 +5,7 @@
 .pageContent
 
   - if current_course.assignment_weight_open? || current_user_is_staff?
-    = simple_form_for @form, as: :student, url: assignment_type_weights_path, method: :put do |f|
+    = simple_form_for @form, as: :student, url: mass_update_assignment_type_weights_path, method: :put do |f|
       .assignment_weights
         %h4 RULES OF THE GAME
         %ul
@@ -35,7 +35,7 @@
       .submit-buttons
         %ul
           %li= f.button :submit, "Update #{term_for :weights}"
-          %li= link_to glyph("times-circle") + "Cancel", current_user_is_student? ? dashboard_path : choices_students_path, class: "button"
+          %li= link_to glyph("times-circle") + "Cancel", dashboard_path, class: "button"
 
   - else
     %h3 Your #{term_for :weight} choices:

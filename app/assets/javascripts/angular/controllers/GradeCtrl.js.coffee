@@ -75,7 +75,7 @@
         unearnedBadgesPostParams.push $scope.earnedBadgePostParams(badge)
     )
 
-    $http.post("/grade/#{$scope.grade.id}/earn_student_badges", {earned_badges: unearnedBadgesPostParams}).success(
+    $http.post("/api/grades/#{$scope.grade.id}/earned_badges", {earned_badges: unearnedBadgesPostParams}).success(
       (data, status)->
         angular.forEach(data["grades"], (earnedBadge)->
           badge = unearnedBadges[earnedBadge.badge_id]
@@ -99,7 +99,7 @@
         badge.setDeleting()
     )
 
-    $http.delete("/grade/#{$scope.grade.id}/earned_badges").success(
+    $http.delete("/api/grades/#{$scope.grade.id}/earned_badges/delete_all").success(
       (data, status)->
         angular.forEach($scope.badges, (badge) ->
           badge.handleDestroyAll()

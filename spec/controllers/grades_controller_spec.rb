@@ -142,48 +142,6 @@ describe GradesController do
       end
     end
 
-    describe "earn_student_badges" do
-      it "creates new student badges from params" do
-        badge_1 = create(:badge)
-        badge_2 = create(:badge)
-        badge_3 = create(:badge)
-        params = {grade_id: @grade.id, earned_badges: [{ badge_id: badge_1.id, student_id: @student },
-                                  { badge_id: badge_2.id, student_id: @student },
-                                  { badge_id: badge_3.id, student_id: @student }]}
-        expect{post :earn_student_badges, params}.to change {EarnedBadge.count}.by(3)
-      end
-    end
-
-    describe "delete_all_earned_badges"  do
-      it "destroys all earned badges for grade" do
-        earned_badge_1 = create(:earned_badge, grade: @grade)
-        earned_badge_2 = create(:earned_badge, grade: @grade)
-        expect{ delete :delete_all_earned_badges, grade_id: @grade.id }.to change {EarnedBadge.count}.by(-2)
-        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badges successfully deleted", "success"=>true})
-      end
-
-      it "renders error if no badges found to delete" do
-        delete :delete_all_earned_badges, {grade_id: @grade.id}
-        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badges failed to delete", "success"=>false})
-      end
-    end
-
-    describe "delete_earned_badge" do
-
-      it "deletes a badge when parameters include id, student id, badge id, and grade id" do
-        earned_badge = create(:earned_badge, grade: @grade, student: @student)
-        params = {grade_id: @grade.id, student_id: @student.id, badge_id: earned_badge.badge.id, id: earned_badge.id }
-        expect{ delete :delete_earned_badge, params }.to change {EarnedBadge.count}.by(-1)
-        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badge successfully deleted", "success"=>true})
-      end
-
-      it "renders error if no badge found to delete" do
-        params = {grade_id: @grade.id, student_id: @student.id, badge_id: 1, id: 1234 }
-        delete :delete_earned_badge, params
-        expect(JSON.parse(response.body)).to eq({"message"=>"Earned badge failed to delete", "success"=>false})
-      end
-    end
-
     describe "POST remove" do
       before do
         allow_any_instance_of(ScoreRecalculatorJob).to \

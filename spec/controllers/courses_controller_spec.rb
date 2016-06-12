@@ -212,13 +212,6 @@ describe CoursesController do
       end
     end
 
-    describe "GET export_earned_badges" do
-      it "retrieves the export_earned_badges download" do
-        get :export_earned_badges, format: :csv
-        expect(response.body).to include("First Name,Last Name,Uniqname,Email,Badge ID,Badge Name,Feedback,Awarded Date")
-      end
-    end
-
     describe "POST predictor settings update" do
       it "changes the predictor settings for all assignments for the course" do
         @assignment = create(:assignment, course: @course)

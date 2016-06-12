@@ -1,7 +1,4 @@
 class AssignmentTypeWeightsController < ApplicationController
-
-  before_filter :ensure_student?, only: [:update]
-
   # Students set their assignment type weights all at once
   def mass_edit
     @title =

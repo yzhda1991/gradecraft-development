@@ -1,11 +1,11 @@
 class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
-  before_filter :ensure_staff?, except: [ :dashboard, :timeline_events ]
+  before_filter :ensure_staff?, except: [:dashboard, :timeline_events]
   before_action :find_team,
-    only: [ :awarded_badges, :choices ]
+    only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
-    only: [ :awarded_badges, :choices, :final_grades_for_course  ]
+    only: [:earned_badges, :multiplier_choices, :final_grades_for_course ]
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
@@ -17,7 +17,7 @@ class InfoController < ApplicationController
     render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])
   end
 
-  def awarded_badges
+  def earned_badges
     @title = "Awarded #{term_for :badges}"
     @teams = current_course.teams
   end
@@ -62,6 +62,15 @@ class InfoController < ApplicationController
     @title = "#{term_for :assignment} Analytics"
   end
 
+  def export_earned_badges
+    course = current_course
+    respond_to do |format|
+      format.csv {
+        send_data EarnedBadgeExporter.new.earned_badges_for_course course.earned_badges
+      }
+    end
+  end
+
   def final_grades
     respond_to do |format|
       format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
@@ -94,7 +103,7 @@ class InfoController < ApplicationController
   end
 
   # Chart displaying all of the student weighting choices thus far
-  def choices
+  def multiplier_choices
     @title = "#{current_course.weight_term} Choices"
     @assignment_types = current_course.assignment_types
     @teams = current_course.teams

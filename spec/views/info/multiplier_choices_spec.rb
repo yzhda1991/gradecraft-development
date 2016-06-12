@@ -2,7 +2,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "info/choices" do
+describe "info/multiplier_choices" do
 
   before(:all) do
     @course = create(:course)

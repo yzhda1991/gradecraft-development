@@ -1,8 +1,7 @@
 class Challenges::ChallengeGradesController < ApplicationController
   before_filter :ensure_staff?
 
-  before_action :find_challenge, only: [:new, :create, :mass_edit, :mass_update,
-    :edit_status, :update_status ]
+  before_action :find_challenge
 
   # GET /challenges/:challenge_id/challenge_grade?team_id=:team_id
   def new

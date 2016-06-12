@@ -1,7 +1,7 @@
 class RubricsController < ApplicationController
   before_filter :ensure_staff?
 
-  before_action :find_rubric, except: [:design, :create, :export]
+  before_action :find_rubric, only: [:destroy, :update]
 
   respond_to :html, :json
 

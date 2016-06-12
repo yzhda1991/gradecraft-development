@@ -80,7 +80,7 @@ describe EarnedBadgesController do
         @student_ids = @students.collect(&:id)
       end
 
-      subject { post :mass_earn, {id: @badge[:id], student_ids: @student_ids} }
+      subject { post :mass_earn, badge_id: @badge[:id], student_ids: @student_ids }
 
       context "earned badges are created" do
         before do
@@ -96,7 +96,7 @@ describe EarnedBadgesController do
 
         it "redirects back to the edit page" do
           allow(controller).to receive(:parse_valid_earned_badges) { [] }
-          expect(subject).to redirect_to(mass_award_badge_url(id: @badge))
+          expect(subject).to redirect_to(mass_edit_badge_earned_badges_path(@badge))
         end
       end
     end
@@ -163,7 +163,7 @@ describe EarnedBadgesController do
 
     describe "GET mass_edit" do
       it "assigns params" do
-        get :mass_edit, id: @badge.id
+        get :mass_edit, badge_id: @badge.id
         expect(assigns(:badge)).to eq(@badge)
         expect(assigns(:title)).to eq("Quick Award #{@badge.name}")
         expect(assigns(:students)).to eq([@student])
@@ -179,7 +179,7 @@ describe EarnedBadgesController do
           team = create(:team, course: @course)
           team.students << @student
 
-          get :mass_edit, {id: @badge.id, team_id: team.id}
+          get :mass_edit, badge_id: @badge.id, team_id: team.id
           expect(assigns(:team)).to eq(team)
           expect(assigns(:students)).to eq([@student])
         end
@@ -191,7 +191,7 @@ describe EarnedBadgesController do
           other_student = create(:user)
           other_student.courses << @course
 
-          get :mass_edit, id: @badge.id
+          get :mass_edit, badge_id: @badge.id
           expect(assigns(:students)).to include(@student)
           expect(assigns(:students)).to include(other_student)
         end
@@ -203,7 +203,7 @@ describe EarnedBadgesController do
           student2 = create(:user, last_name: "Alpha")
           student2.courses << @course
 
-          get :mass_edit, id: @badge.id
+          get :mass_edit, badge_id: @badge.id
           expect(assigns(:earned_badges).count).to eq(2)
           expect(assigns(:earned_badges)[0].student_id).to eq(student2.id)
           expect(assigns(:earned_badges)[1].student_id).to eq(@student.id)
@@ -216,7 +216,7 @@ describe EarnedBadgesController do
           @badge.can_earn_multiple_times = false
           @badge.save
 
-          get :mass_edit, id: @badge.id
+          get :mass_edit, badge_id: @badge.id
           expect(assigns(:earned_badges)).to eq([@earned_badge])
           expect(response).to render_template(:mass_edit)
         end

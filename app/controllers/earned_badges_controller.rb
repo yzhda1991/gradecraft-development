@@ -5,7 +5,7 @@ class EarnedBadgesController < ApplicationController
   # how what and how a student performed
 
   before_filter :ensure_staff?
-  before_action :find_badge, except: [:mass_edit, :mass_earn]
+  before_action :find_badge
   before_action :find_earned_badge, only: [:show, :edit, :update, :destroy ]
 
   def index
@@ -58,7 +58,6 @@ class EarnedBadgesController < ApplicationController
 
   # Quickly award a badge to multiple students
   def mass_edit
-    @badge = current_course.badges.find(params[:id])
     @title = "Quick Award #{@badge.name}"
     @teams = current_course.teams
 
@@ -84,7 +83,6 @@ class EarnedBadgesController < ApplicationController
   end
 
   def mass_earn
-    @badge = current_course.badges.find(params[:id])
     @valid_earned_badges ||= parse_valid_earned_badges
     make_badges_student_visible
     send_earned_badge_notifications
@@ -152,7 +150,7 @@ class EarnedBadgesController < ApplicationController
       redirect_to badge_path(@badge),
         notice: "The #{@badge.name} #{term_for :badge} was successfully awarded #{@valid_earned_badges.count} times"
     else
-      redirect_to mass_award_badge_path(id: @badge),
+      redirect_to mass_edit_badge_earned_badges_path(@badge),
         notice: "No earned badges were sucessfully created."
     end
   end
