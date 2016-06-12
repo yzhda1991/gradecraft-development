@@ -4,11 +4,10 @@
 .col-40
   .panel.dashboard-module= render "students/sidebar/sidebar_course_events"
 
-  .column-row
-    .panel.dashboard-module= render "students/sidebar/sidebar_since_last_login"
+  .panel.dashboard-module= render "students/sidebar/sidebar_since_last_login"
 
-    - if ! current_course.hide_analytics?
-      .panel.dashboard-module= render "students/sidebar/sidebar_grade_distribution"
+  - if current_course.student_weighted?
+    .panel.dashboard-module= render "students/sidebar/sidebar_assignment_weights"
 
   - if current_user_is_staff?
     .panel= render "students/sidebar/sidebar_avatar"
@@ -21,5 +20,5 @@
   - if current_course.has_badges?
     .panel.dashboard-module= render "students/sidebar/sidebar_badges"
 
-  - if current_course.student_weighted?
-    .panel.dashboard-module= render "students/sidebar/sidebar_assignment_weights"
+  - if ! current_course.hide_analytics?
+    .panel.dashboard-module= render "students/sidebar/sidebar_grade_distribution"
