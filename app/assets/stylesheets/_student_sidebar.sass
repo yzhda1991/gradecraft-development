@@ -44,6 +44,7 @@
       list-style-type: none
 
   .assignment-item
+    position: relative
     padding: 0.5em
     border-bottom: 1px solid $color-grey-6
 
@@ -52,6 +53,12 @@
 
     &.starred
       background-color: transparentize($color-blue-4, .8)
+
+    .button
+      position: absolute
+      top: 50%
+      transform: translateY(-50%)
+      right: 8px
 
   .planner-filter
     white-space: nowrap
