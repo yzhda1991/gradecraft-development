@@ -35,18 +35,11 @@ describe TimelineHelper do
   describe "#assignment_timeline_content" do
     let(:assignment) { build(:assignment, id: 123) }
 
-    it "displays a link for the details if the course calls for it" do
+    it "displays a link for the details" do
       html = helper.assignment_timeline_content(assignment)
       expect(html).to have_tag "a", with: { href: assignment_path(assignment) } do
         with_text "See the details"
       end
-    end
-
-    it "does not display a link for the details if the course does not allow it" do
-      allow(assignment.course).to receive(:show_see_details_link_in_timeline?).and_return false
-      allow(assignment).to receive(:description).and_return ""
-      html = helper.assignment_timeline_content(assignment)
-      expect(html).to be_empty
     end
 
     it "displays any attachments" do
@@ -70,18 +63,11 @@ describe TimelineHelper do
   describe "#challenge_timeline_content" do
     let(:challenge) { build(:challenge, id: 123) }
 
-    it "displays a link for the details if the course calls for it" do
+    it "displays a link for the details" do
       html = helper.challenge_timeline_content(challenge)
       expect(html).to have_tag "a", with: { href: challenge_path(challenge) } do
         with_text "See the details"
       end
-    end
-
-    it "does not display a link for the details if the course does not allow it" do
-      allow(challenge.course).to receive(:show_see_details_link_in_timeline?).and_return false
-      allow(challenge).to receive(:description).and_return ""
-      html = helper.challenge_timeline_content(challenge)
-      expect(html).to be_empty
     end
 
     it "displays any attachments" do

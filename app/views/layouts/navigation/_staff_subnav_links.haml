@@ -12,9 +12,7 @@
     %a.alert.button{ :href => "#" } Go
 
 %h5 Overview
-- if current_course.use_timeline?
-  %li
-    = link_to_unless_current glyph(:home) + "Timeline", dashboard_path
+%li= link_to_unless_current glyph(:home) + "Dashboard", dashboard_path
 
 %li
   = link_to_unless_current glyph("list-ol") + "Leaderboard", leaderboard_path
