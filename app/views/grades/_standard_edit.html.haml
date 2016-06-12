@@ -11,18 +11,12 @@
 
         .panel(ng-cloak)
           - if grade.assignment.pass_fail?
-            .switch-label
-              = "#{term_for :pass} / #{term_for :fail} Status"
-            .pass-fail-grade-toggle
-              .switch.pass-fail-contingent{data: {:on => "#{term_for :pass}", :off => "#{term_for :fail}"}}
-                = f.check_box :pass_fail_status, { :checked=> grade.pass_fail_status == "Pass" }, checked_value = "Pass", unchecked_value = "Fail"
-                - label_text = grade.pass_fail_status ? (term_for grade.pass_fail_status) : (term_for :fail)
-                = f.label :pass_fail_status, label_text
+            = render partial: "grades/standard_edit/pass_fail_grading_fields", locals: { f: f, grade: grade }
           - else
             - if grade.assignment.assignment_score_levels.count > 0 # use this longhand method to save a request
-              = render partial: "grades/standard_edit/score_level_grading_fields", locals: { f:f, assignment: grade.assignment }
+              = render partial: "grades/standard_edit/score_level_grading_fields", locals: { f: f, assignment: grade.assignment }
             - else
-              = render partial: "grades/standard_edit/raw_score_grading_fields", locals: { f:f, assignment: grade.assignment }
+              = render partial: "grades/standard_edit/raw_score_grading_fields", locals: { f: f, assignment: grade.assignment }
 
           .attachments(ng-cloak)
             .clear
