@@ -28,6 +28,13 @@ describe StudentImporter do
           expect(user.course_memberships.first.role).to eq "student"
         end
 
+        it "does not create the student membership if it already exists" do
+          user = User.create first_name: "Jimmy", last_name: "Page",
+              email: "jimmy@example.com", username: "jimmy", password: "blah"
+          user.course_memberships.create course_id: course.id, role: "student"
+          expect { subject.import course }.to_not raise_error
+        end
+
         it "adds the students to the team if the team exists" do
           subject.import course
           expect(team.name).to eq "Zeppelin"
@@ -47,6 +54,7 @@ describe StudentImporter do
           expect(team.name).to eq "Zeppelin"
           expect(team.students.first.email).to eq "jimmy@example.com"
         end
+
         it "does not add the student to the team if a team is not specified" do
           subject.import course
           user = User.unscoped.first
