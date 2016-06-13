@@ -324,7 +324,7 @@ class User < ActiveRecord::Base
   end
 
   def points_to_next_level(course)
-    get_element_level(course, :next).low_range - cached_score_for_course(course)
+    get_element(course, :next).low_range - cached_score_for_course(course)
   end
 
   ### GRADES
