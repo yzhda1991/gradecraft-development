@@ -3,8 +3,8 @@
     %h3 Due This Week
   .card-body#todo-list
     .planner-filter.clearfix
-      = link_to "My Planner", "#", class: "filter-button button", id: "my-planner"
       = link_to "Course Planner", "#", class: "filter-button button selected", id: "course-planner"
+      = link_to "My Planner", "#", class: "filter-button button", id: "my-planner"
     %ul.todo-list-assignments
       - cache multi_cache_key :student_sidebar_todo_list, current_student, current_course do
         - current_course.assignments.chronological.includes(:assignment_type, :unlock_conditions).each do |assignment|
