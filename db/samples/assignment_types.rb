@@ -18,7 +18,7 @@
   attributes: {
     name: "Genric Assignment Type",
     description: nil,
-    max_points: nil,
+    max_points: 0,
     position: nil,
     student_weightable: false,
   }
