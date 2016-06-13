@@ -306,7 +306,7 @@ class User < ActiveRecord::Base
     @grade_letter_for_course ||= course.grade_letter_for_score(cached_score_for_course(course))
   end
 
-  def get_element(course, direction)
+  def get_element_level(course, direction)
     course_elements = course.grade_scheme_elements.order_by_low_range
 
     current_element = self.grade_for_course(course)
@@ -324,7 +324,7 @@ class User < ActiveRecord::Base
   end
 
   def points_to_next_level(course)
-    get_element(course, :next).low_range - cached_score_for_course(course)
+    get_element_level(course, :next).low_range - cached_score_for_course(course)
   end
 
   ### GRADES
