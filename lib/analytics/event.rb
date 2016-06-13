@@ -1,3 +1,5 @@
+require "mongoid"
+
 class Analytics::Event
   include Mongoid::Document
   include Mongoid::Attributes::Dynamic

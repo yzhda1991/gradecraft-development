@@ -77,14 +77,14 @@ ActiveRecord::Schema.define(version: 20160609215010) do
   add_index "assignment_type_weights", ["student_id", "assignment_type_id"], name: "index_weights_on_student_and_assignment_type", using: :btree
 
   create_table "assignment_types", force: :cascade do |t|
-    t.string   "name",             null: false
-    t.integer  "max_points",        default: 0, null: false
+    t.string   "name",                               null: false
+    t.integer  "max_points",         default: 0,     null: false
     t.text     "description"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.integer  "course_id",                    null: false
-    t.boolean  "student_weightable",       default: false, null: false
-    t.integer  "position", null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.integer  "course_id",                          null: false
+    t.boolean  "student_weightable", default: false, null: false
+    t.integer  "position",                           null: false
   end
 
   create_table "assignments", force: :cascade do |t|
@@ -235,65 +235,65 @@ ActiveRecord::Schema.define(version: 20160609215010) do
   add_index "course_memberships", ["user_id", "course_id"], name: "index_courses_users_on_user_id_and_course_id", using: :btree
 
   create_table "courses", force: :cascade do |t|
-    t.string   "name",                              limit: 255
-    t.string   "courseno",                          limit: 255
-    t.string   "year",                              limit: 255
-    t.string   "semester",                          limit: 255
-    t.datetime "created_at",                                                                                                   null: false
-    t.datetime "updated_at",                                                                                                   null: false
-    t.boolean  "badge_setting",                                                         default: true
-    t.boolean  "team_setting",                                                          default: false
-    t.string   "user_term",                         limit: 255
-    t.string   "team_term",                         limit: 255
-    t.string   "homepage_message",                  limit: 255
-    t.boolean  "status",                                                                default: true
+    t.string   "name",                            limit: 255
+    t.string   "courseno",                        limit: 255
+    t.string   "year",                            limit: 255
+    t.string   "semester",                        limit: 255
+    t.datetime "created_at",                                                                                                 null: false
+    t.datetime "updated_at",                                                                                                 null: false
+    t.boolean  "badge_setting",                                                       default: true
+    t.boolean  "team_setting",                                                        default: false
+    t.string   "user_term",                       limit: 255
+    t.string   "team_term",                       limit: 255
+    t.string   "homepage_message",                limit: 255
+    t.boolean  "status",                                                              default: true
     t.boolean  "group_setting"
     t.datetime "weights_close_at"
     t.boolean  "team_roles"
-    t.string   "team_leader_term",                  limit: 255
-    t.string   "group_term",                        limit: 255
+    t.string   "team_leader_term",                limit: 255
+    t.string   "group_term",                      limit: 255
     t.boolean  "accepts_submissions"
     t.boolean  "teams_visible"
-    t.string   "weight_term",                       limit: 255
+    t.string   "weight_term",                     limit: 255
     t.boolean  "predictor_setting"
     t.integer  "max_group_size"
     t.integer  "min_group_size"
-    t.decimal  "default_weight",                                precision: 4, scale: 1, default: 1.0
-    t.string   "tagline",                           limit: 255
+    t.decimal  "default_weight",                              precision: 4, scale: 1, default: 1.0
+    t.string   "tagline",                         limit: 255
     t.boolean  "academic_history_visible"
-    t.string   "office",                            limit: 255
-    t.string   "phone",                             limit: 255
-    t.string   "class_email",                       limit: 255
-    t.string   "twitter_handle",                    limit: 255
-    t.string   "twitter_hashtag",                   limit: 255
-    t.string   "location",                          limit: 255
-    t.string   "office_hours",                      limit: 255
+    t.string   "office",                          limit: 255
+    t.string   "phone",                           limit: 255
+    t.string   "class_email",                     limit: 255
+    t.string   "twitter_handle",                  limit: 255
+    t.string   "twitter_hashtag",                 limit: 255
+    t.string   "location",                        limit: 255
+    t.string   "office_hours",                    limit: 255
     t.text     "meeting_times"
-    t.string   "media",                             limit: 255
-    t.string   "media_credit",                      limit: 255
-    t.string   "media_caption",                     limit: 255
-    t.string   "badge_term",                        limit: 255
-    t.string   "assignment_term",                   limit: 255
-    t.string   "challenge_term",                    limit: 255
+    t.string   "media",                           limit: 255
+    t.string   "media_credit",                    limit: 255
+    t.string   "media_caption",                   limit: 255
+    t.string   "badge_term",                      limit: 255
+    t.string   "assignment_term",                 limit: 255
+    t.string   "challenge_term",                  limit: 255
     t.text     "grading_philosophy"
     t.integer  "total_weights"
     t.integer  "max_weights_per_assignment_type"
     t.boolean  "character_profiles"
-    t.string   "lti_uid",                           limit: 255
+    t.string   "lti_uid",                         limit: 255
     t.boolean  "team_score_average"
     t.boolean  "team_challenges"
     t.integer  "max_assignment_types_weighted"
     t.integer  "point_total"
     t.boolean  "in_team_leaderboard"
-    t.boolean  "add_team_score_to_student",                                             default: false
+    t.boolean  "add_team_score_to_student",                                           default: false
     t.datetime "start_date"
     t.datetime "end_date"
-    t.string   "pass_term",                         limit: 255
-    t.string   "fail_term",                         limit: 255
+    t.string   "pass_term",                       limit: 255
+    t.string   "fail_term",                       limit: 255
     t.string   "syllabus"
     t.boolean  "hide_analytics"
     t.string   "character_names"
-    t.string   "time_zone",                                                             default: "Eastern Time (US & Canada)"
+    t.string   "time_zone",                                                           default: "Eastern Time (US & Canada)"
   end
 
   add_index "courses", ["lti_uid"], name: "index_courses_on_lti_uid", using: :btree
@@ -435,8 +435,10 @@ ActiveRecord::Schema.define(version: 20160609215010) do
     t.integer  "adjustment_points",                      default: 0,     null: false
     t.text     "adjustment_points_feedback"
     t.boolean  "excluded_from_course_score",             default: false
-    t.datetime "excluded_at"
+    t.datetime "excluded_date"
+    t.integer  "excluded_by"
     t.integer  "excluded_by_id"
+    t.datetime "excluded_at"
   end
 
   add_index "grades", ["assignment_id", "student_id"], name: "index_grades_on_assignment_id_and_student_id", unique: true, using: :btree
@@ -574,6 +576,17 @@ ActiveRecord::Schema.define(version: 20160609215010) do
 
   add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", unique: true, using: :btree
   add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
+
+  create_table "shared_earned_badges", force: :cascade do |t|
+    t.integer  "course_id"
+    t.text     "student_name"
+    t.integer  "user_id"
+    t.string   "icon",         limit: 255
+    t.string   "name",         limit: 255
+    t.integer  "badge_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "student_academic_histories", force: :cascade do |t|
     t.integer "student_id"
