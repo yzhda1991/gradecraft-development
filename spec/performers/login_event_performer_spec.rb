@@ -1,13 +1,8 @@
-# require 'active_record_spec_helper'
-# require_relative '../../lib/is_configurable'
-# require_relative '../../lib/loggly_resque'
-# require_relative '../../lib/inheritable_ivars'
-# require_relative '../../lib/resque_job'
-# require_relative '../../app/performers/login_event_performer'
-
 require 'rails_spec_helper'
+require "mongoid"
+require "mongoid_spec_helper"
 
-describe LoginEventPerformer do
+describe LoginEventPerformer, focus: true do
   subject { described_class.new }
 
   # these are the attributes needed to skip #setup so we can test methods
