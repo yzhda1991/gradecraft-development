@@ -103,8 +103,7 @@ class StudentImporter
         last_name: last_name,
         email: email,
         username: username,
-        password: password,
-        team_name: team_name
+        password: password
       }
     end
   end
