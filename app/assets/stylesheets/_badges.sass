@@ -43,19 +43,26 @@
     .badge-title, .count
       display: none
 
+/* Student Badge Index Page */
 .badge-container
   .badge-description
     .badge-title
       font-size: 1.25rem
 
-/* Student Badge Index Page */
 .badge-index-container
   float: left
   width: 75%
 
+  .badge-icon-container
+    width: 110px
+
 .info-side-panel
+  height: 100%
   float: left
   width: 25%
+  border-left: 1px solid $color-grey-5
+  box-sizing: border-box
+  padding: 0 1rem
 
 /* used on the badge show page for both instructors and students, and grade
 /* standard edit form */
@@ -63,7 +70,7 @@
 .badge-name
   font-size: .7rem
   margin: 0px
-  width: 120px
+  width: 110px
   text-align: center
   line-height: .9rem
 
@@ -142,7 +149,6 @@ button#remove-badges, button#add-badges
     right: 0px
     font-size: 2rem
     color: $color-yellow-1
-    z-index: 100 !important
 
     i.fa-fw
       z-index: 600 !important
@@ -181,6 +187,9 @@ button#remove-badges, button#add-badges
     .button-bar li:not(:last-of-type) a.button
       margin-right: 0
 
+  .badge-index-container
+    width: 100%
+
 @media (max-width: 800px)
     .badge-index-table
       .button-bar li a.button
@@ -193,6 +202,7 @@ button#remove-badges, button#add-badges
     .badge-show-page
       display: block
       margin-bottom: 1rem
+
       .badge-icon-container, .badge-description
         width: 100%
         float: none
