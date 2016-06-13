@@ -15,7 +15,8 @@
 .col-30
   .panel.dashboard-module.earned_points= render "students/sidebar/sidebar_earned_points_and_level"
 
-  .panel.dashboard-module= render "students/sidebar/sidebar_grading_scheme"
+  - if current_course.grade_scheme_elements.present?
+    .panel.dashboard-module= render "students/sidebar/sidebar_grading_scheme"
 
   - if current_course.has_badges?
     .panel.dashboard-module= render "students/sidebar/sidebar_badges"
