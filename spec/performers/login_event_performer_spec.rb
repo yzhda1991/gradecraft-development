@@ -2,7 +2,7 @@ require 'rails_spec_helper'
 require "mongoid"
 require "mongoid_spec_helper"
 
-describe LoginEventPerformer, focus: true do
+describe LoginEventPerformer do
   subject { described_class.new }
 
   # these are the attributes needed to skip #setup so we can test methods
