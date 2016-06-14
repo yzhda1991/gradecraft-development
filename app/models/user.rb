@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
 
   attr_accessor :password, :password_confirmation, :cached_last_login_at,
     :score, :team
-  attr_accessible :username, :email, :password, :password_confirmation,
+  attr_accessible :username, :email, :password, :time_zone, :password_confirmation,
     :activation_state, :avatar_file_name, :first_name, :last_name, :user_id,
     :kerberos_uid, :display_name, :current_course_id, :last_activity_at,
     :last_login_at, :last_logout_at, :team_ids, :courses, :course_ids,
