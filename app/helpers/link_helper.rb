@@ -57,8 +57,10 @@ module LinkHelper
     def external?
       return false if self.uri.blank?
       uri = URI(self.uri)
-      !uri.relative? && !uri.host.end_with?("gradecraft.com") &&
-        !uri.host.end_with?("localhost")
+      uri.scheme == "mailto" ||
+        (!uri.relative? &&
+         !uri.host.end_with?("gradecraft.com") &&
+         !uri.host.end_with?("localhost"))
     rescue URI::InvalidURIError
       false
     end
