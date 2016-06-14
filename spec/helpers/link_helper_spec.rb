@@ -87,6 +87,11 @@ describe LinkHelper do
       link = "gradecraft.com"
       expect(helper.external_link?(link)).to eq false
     end
+
+    it "is external if it's a mailto link" do
+      link = "mailto:test@example.com"
+      expect(helper.external_link?(link)).to eq true
+    end
   end
 
   describe "#omission_link_to" do
