@@ -1,9 +1,11 @@
+require "is_configurable"
+require_relative "analytics/configuration"
+require_relative "analytics/event"
+require_relative "analytics/aggregate"
+require_relative "analytics/data"
+require_relative "analytics/export"
+require_relative "analytics/login_event"
+
 module Analytics
   extend IsConfigurable
 end
-
-require_dependency "is_configurable"
-require_dependency "analytics/configuration"
-require_dependency "analytics/event"
-require_dependency "analytics/aggregate"
-require_dependency "analytics/data"

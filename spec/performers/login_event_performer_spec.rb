@@ -1,11 +1,5 @@
-# require 'active_record_spec_helper'
-# require_relative '../../lib/is_configurable'
-# require_relative '../../lib/loggly_resque'
-# require_relative '../../lib/inheritable_ivars'
-# require_relative '../../lib/resque_job'
-# require_relative '../../app/performers/login_event_performer'
-
 require 'rails_spec_helper'
+require "mongoid_spec_helper"
 
 describe LoginEventPerformer do
   subject { described_class.new }
