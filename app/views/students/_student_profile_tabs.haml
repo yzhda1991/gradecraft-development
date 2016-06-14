@@ -4,8 +4,8 @@
     %li{class: ("active" if current_page?(student_path(current_student))) }
       = link_to_unless_current "#{term_for :assignments}", student_path(current_student)
     - if current_course.grade_scheme_elements.present?
-      %li{class: ("active" if current_page?(student_grading_scheme_path(current_student))) }
-        = link_to_unless_current "Grading Scheme", student_grading_scheme_path(current_student)
+      %li{class: ("active" if current_page?(student_course_progress_path(current_student))) }
+        = link_to_unless_current "Grading Scheme", student_course_progress_path(current_student)
     %li{class: ("active" if current_page?(student_predictor_path(current_student))) }
       = link_to_unless_current glyph("tasks") + "Grade Predictor", student_predictor_path(current_student)
     - if current_course.has_badges?
