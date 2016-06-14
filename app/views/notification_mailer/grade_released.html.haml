@@ -5,6 +5,10 @@
   #{ @course.assignment_term.downcase } "#{ @assignment.name }"
   in #{ @course.name }.
 %p
+%h4{:align => "center"}
+  Click
+  =link_to "here", assignments_path(id: @assignment.id)
+  to view feedback for the assignment.
 %hr/
 %p{:align => "center"}
   Don't forget to update your plan for the semester by checking your
