@@ -9,6 +9,7 @@ class InfoController < ApplicationController
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
+    @events = current_course.events.order("due_at ASC")
     render :dashboard
   end
 

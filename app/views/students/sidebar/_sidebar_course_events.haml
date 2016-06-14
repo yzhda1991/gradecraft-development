@@ -2,9 +2,14 @@
   %h3 Upcoming Events
 .card-body
   .slide-container
-    .slide1
-      %p slide 1
-    .slide2
-      %p slide 2
-    .slide3
-      %p slide 3
+    - @events.each do |event|
+      .event-slide
+        .slide-header
+          %h3= link_to event.name, event
+          %p= event.open_at
+          %p= event.due_at
+        .slide-body
+          .event-image
+            %img{:src => event.media }
+          .event-description
+            %p= raw event.description
