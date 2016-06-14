@@ -10,4 +10,4 @@
   = team_filter(@teams) if current_course.has_teams?
 
   / Display the table of course students, their leaderboard display, their team affiation, their score and their grade
-  = render "students_table", course: current_course, :students => @students
+  = render partial: "students/students_table", locals: { course: current_course, :students => @students }

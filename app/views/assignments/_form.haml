@@ -183,11 +183,11 @@
       %script(id="unlock-condition-template" type="text/x-template")
         %fieldset.unlock-condition
           = f.simple_fields_for :unlock_conditions, UnlockCondition.new, class: "form-inline", child_index: "child_index" do |ucf|
-            = render "layouts/unlock_condition_fields", f: ucf
+            = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
       - presenter.assignment.unlock_conditions.each do |condition|
         %fieldset.unlock-condition
           = f.simple_fields_for :unlock_conditions, condition, class: "form-inline" do |ucf|
-            = render "layouts/unlock_condition_fields", f: ucf
+            = render partial: "layouts/unlock_condition_fields", locals: { f: ucf }
     = link_to "Add a Condition", "#", class: "add-unlock-condition button"
 
   %section
@@ -197,11 +197,11 @@
       %script(id="assignment-score-level-template" type="text/x-template")
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, AssignmentScoreLevel.new, class: "form-inline", child_index: "child_index" do |slf|
-            = render "assignment_score_level_fields", f: slf
+            = render partial: "assignment_score_level_fields", locals: { f: slf }
       - presenter.assignment.assignment_score_levels.order_by_value.each do |assignment_score_level|
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: "form-inline" do |slf|
-            = render "assignment_score_level_fields", f: slf
+            = render partial: "assignment_score_level_fields", locals: { f: slf }
     = link_to "Add a Level", "#", class: "add-assignment-score-level button"
 
   %section

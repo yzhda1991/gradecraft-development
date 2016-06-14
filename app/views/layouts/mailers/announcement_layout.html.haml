@@ -4,8 +4,8 @@
     %meta{:content => "width=device-width", name: "viewport"}/
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %title= @email_title
-    = render "layouts/mailers/stylesheet"
-    
+    = render partial: "layouts/mailers/stylesheet"
+
   %body{:bgcolor => "#f6f6f6"}
     / body
     %table.body-wrap
@@ -15,9 +15,9 @@
           / content
           .content
             %table
-              %tr= render "layouts/mailers/logo"
+              %tr= render partial: "layouts/mailers/logo"
               %tr
                 %td= yield
-              = render "layouts/mailers/social_media"
+              = render partial: "layouts/mailers/social_media"
     / footer
-    = render "layouts/mailers/footer"
+    = render partial: "layouts/mailers/footer"

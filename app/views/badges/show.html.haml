@@ -5,7 +5,7 @@
 = render partial: "badges/context_menu", locals: { badge: presenter.badge, actions: [:new, :edit, :award, :quick_award] } if current_user_is_staff?
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   = team_filter(presenter.teams) if current_course.has_teams? && current_user_is_staff?
 

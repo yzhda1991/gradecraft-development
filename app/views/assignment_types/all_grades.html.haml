@@ -2,10 +2,10 @@
 
 %h3.pagetitle= @title
 
-= render "buttons"
+= render partial: "assignment_types/buttons"
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   = team_filter(@teams) if @teams.present?
 

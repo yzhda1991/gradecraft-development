@@ -49,11 +49,11 @@
       %script(id="challenge-score-level-template" type="text/x-template")
         %fieldset.challenge-score-level
           = f.simple_fields_for :challenge_score_levels, ChallengeScoreLevel.new, class: "form-inline", child_index: "child_index" do |slf|
-            = render "challenge_score_level_fields", f: slf
+            = render partial: "challenge_score_level_fields", locals: { f: slf }
       - @challenge.challenge_score_levels.each do |challenge_score_level|
         %fieldset.challenge-score-level
           = f.simple_fields_for :challenge_score_levels, challenge_score_level, class: "form-inline" do |slf|
-            = render "challenge_score_level_fields", f: slf
+            = render partial: "challenge_score_level_fields", locals: { f: slf }
     = link_to "Add a Level", "#", class: "add-challenge-score-level button radius"
 
   %section

@@ -35,11 +35,11 @@
       .rubric-container.divider(ng-repeat="criterion in criteria")
         .order-label {{$index + 1}}
         .criterion(name="criterionForm" ng-form ng-submit="criterion.create()" ng-class="{saved: criterion.isSaved()}" ng-animate="{enter: 'animate-enter', leave: 'animate-leave'}")
-          = render "rubrics/new_criterion"
+          = render partial: "rubrics/new_criterion"
         .level-container
           .level-wrapper
             .level(name="levelForm" ng-repeat="level in criterion.levels" ng-form ng-submit="level.create()" ng-class="{saved: level.isSaved(), nocredit: level.noCredit, 'level-meets-expectations': level.pointsMeetExpectations()}")
-              = render "rubrics/new_level"
+              = render partial: "rubrics/new_level"
         %button.add-level(name="newLevel" ng-click="criterion.insertLevel()" ng-show="criterion.isSaved()")
           + Level
 

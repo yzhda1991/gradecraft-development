@@ -2,10 +2,10 @@
 
 %h3.pagetitle= @title
 
-= render "buttons"
+= render partial: "analytics/buttons"
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   %h4.subtitle Interactions
   / Event counts

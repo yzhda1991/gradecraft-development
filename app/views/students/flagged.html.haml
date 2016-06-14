@@ -4,4 +4,4 @@
 
 .pageContent
   = render "layouts/alerts"
-  = render "students_table", course: current_course, :students => @students
+  = render partial: "students/students_table", locals: { course: current_course, :students => @students }

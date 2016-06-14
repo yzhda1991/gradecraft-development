@@ -1,5 +1,5 @@
 - if ! current_user
-  = render "layouts/navigation/top_bar_logged_out"
+  = render partial: "layouts/navigation/top_bar_logged_out"
 - else
   #left-flyout-nav.layout-left-flyout
 
@@ -10,20 +10,20 @@
         %span.course_name= "#{current_course.name} "
         %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
     - if current_user_is_student?
-      = render "students/student_profile_tabs"
+      = render partial: "students/student_profile_tabs"
       %hr
     - elsif current_user_is_staff?
-      = render "layouts/navigation/staff_subnav"
+      = render partial: "layouts/navigation/staff_subnav"
     %h5 Course Info
     %ul.course-info
-      = render "layouts/navigation/class_info"
+      = render partial: "layouts/navigation/class_info"
     %hr
     %h5 My Courses
     %ul.course-list
-      = render "layouts/navigation/course_list"
+      = render partial: "layouts/navigation/course_list"
     %hr
     %ul.account-info
-      = render "layouts/navigation/account_info"
+      = render partial: "layouts/navigation/account_info"
     %hr
 
   .layout-right-content
@@ -39,8 +39,8 @@
           %ul.nav.nav-pill.right
             %li.course-info-btn
               = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title"
-              %ul.course-info-card= render "layouts/navigation/class_info"
-            = render "layouts/navigation/authenticated_nav"
+              %ul.course-info-card= render partial: "layouts/navigation/class_info"
+            = render partial: "layouts/navigation/authenticated_nav"
         %nav.mobile-nav.hide-for-large
           %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
             %i.fa.fa-bars.fa-fw

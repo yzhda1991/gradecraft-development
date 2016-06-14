@@ -2,10 +2,10 @@
 
 %h3.pagetitle#tableCaption= @title
 
-= render "buttons"
+= render partial: "assignment_types/buttons"
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   %table.dynatable{"aria-describedby" => "tableCaption"}
     %thead

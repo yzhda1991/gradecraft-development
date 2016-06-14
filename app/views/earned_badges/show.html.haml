@@ -10,7 +10,7 @@
         Edit
 
 .pageContent
-  = render "layouts/alerts"
+  = render partial: "layouts/alerts"
 
   %img{:src => @earned_badge.badge.try(:icon), :alt => @earned_badge.badge.try(:name), :width => "25", :height => "25"}
   %p

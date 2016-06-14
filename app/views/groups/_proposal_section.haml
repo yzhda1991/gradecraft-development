@@ -4,7 +4,7 @@
       %script(id="proposal-template" type="text/x-template")
         %fieldset.proposal.callout.panel
           = f.simple_fields_for :proposals, Proposal.new, class: "form-inline", child_index: "child_index" do |pf|
-            = render "proposal_fields", f: pf
+            = render partial: "proposal_fields", locals: { f: pf }
       - i = 1
       - @group.proposals.order_by_creation_date.each do |proposal|
         %fieldset.proposal.panel

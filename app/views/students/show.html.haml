@@ -3,5 +3,5 @@
 .pageContent
   = render "layouts/alerts"
 
-  = render "students/syllabus/assignments", presenter: presenter
-  = render "students/syllabus/challenges"
+  = render partial: "students/syllabus/assignments", locals: { presenter: presenter }
+  = render partial: "students/syllabus/challenges"

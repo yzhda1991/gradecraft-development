@@ -12,7 +12,7 @@
   .italic= "Due: #{presenter.assignment.due_at}" if presenter.assignment.due_at?
 
   - if presenter.assignment_accepting_submissions?(current_student)
-    .no-bullet= render "students/submissions", assignment: presenter.assignment
+    .no-bullet= render partial: "students/submissions", locals: { assignment: presenter.assignment }
 
   - if presenter.student_logged?(current_user)
     = render partial: "assignments/self_log_form", locals: { student: current_student, assignment: presenter.assignment }
@@ -29,7 +29,7 @@
     - if presenter.group_assignment?
       %hr.dotted
       - if @group.present?
-        = render "groups/status_display", group: @group
+        = render partial: "groups/status_display", locals: { group: @group }
         Your #{term_for :group} for this #{term_for :assignment}:
         %ul
           - @group.students.each do |student|
