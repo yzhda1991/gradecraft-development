@@ -127,7 +127,7 @@ describe UsersController do
         post :update_profile, id: @professor.id, user: params
         expect(response).to redirect_to(dashboard_path)
         expect(@professor.reload.display_name).to eq("gandalf")
-        expect(@student.reload.time_zone).to eq("Chihuahua")
+        expect(@professor.reload.time_zone).to eq("Chihuahua")
       end
     end
 
