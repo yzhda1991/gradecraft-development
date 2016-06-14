@@ -102,3 +102,9 @@ $('#course-planner').click(function() {
   $('#course-planner, #my-planner').toggleClass("selected");
   $('.todo-list-assignments li').css('display', '');
 });
+
+//Initialize slick slider for course events
+$('.slide-container').slick({
+  prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button"></a>',
+  nextArrow: '<a class="fa fa-chevron-right next slider-direction-button"></a>'
+});
