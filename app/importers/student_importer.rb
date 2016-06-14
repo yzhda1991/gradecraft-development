@@ -50,7 +50,9 @@ class StudentImporter
     user ||= Services::CreatesNewUser
       .create(row.to_h.merge(internal: internal_students), send_welcome)[:user]
 
-    user.course_memberships.create(course_id: course.id, role: "student") if course && user.valid?
+    if course && user.valid? && !user.is_student?(course)
+      user.course_memberships.create(course_id: course.id, role: "student")
+    end
     user
   end
 
@@ -101,8 +103,7 @@ class StudentImporter
         last_name: last_name,
         email: email,
         username: username,
-        password: password,
-        team_name: team_name
+        password: password
       }
     end
   end
