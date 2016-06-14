@@ -1,0 +1,33 @@
+.card-header
+  %h3 Course Progress
+.card-body
+
+  - next_element = current_student.get_element_level(current_course, :next)
+  - if !next_element.nil?
+    .progress.bar_magic.transparent.center
+      .meter
+        %i.fa.fa-lock
+        %span= next_element.name
+        %span=points next_element.low_range
+
+  - current_element = current_student.grade_for_course(current_course)
+  .progress.bar_magic.current.center
+    %span.your-rank Your rank:
+    %span.your-rank= current_element.name
+    .striped-bar-container
+      .striped{:style => "width: #{current_element.progress_percent(current_student)}%;"}
+    .left-points
+      %span Your Points:
+      %span.bold=points current_student.cached_score_for_course(current_course)
+    .right-points
+      %span Points to next level:
+      %span.bold= points current_element.points_to_next_level(current_student, current_course)
+
+  - previous_element = current_student.get_element_level(current_course, :previous)
+  - if !previous_element.nil?
+    .progress.bar_magic.success.center
+      .meter
+        %i.fa.fa-star
+        %span= previous_element.name
+        %span has already been achieved!
+        %span=points previous_element.low_range

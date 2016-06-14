@@ -28,26 +28,26 @@ $(document).ready(function() {
     },
     xAxis: {
       gridLineWidth: 0,
-      lineColor: '#FFFFFF',
+      lineColor: '#000',
       title: {
         text: ' '
       },
       labels: {
         style: {
-          color: "#FFF"
+          color: "#000"
         }
       }
     },
     yAxis: {
       gridLineWidth: 1,
-      lineColor: '#FFFFFF',
+      lineColor: '#000',
       min: 0,
       title: {
         text: ' '
       },
       labels: {
         style: {
-          color: "#FFF"
+          color: "#000"
         }
       }
     },
@@ -64,7 +64,7 @@ $(document).ready(function() {
         pointWidth: 40,
         events: {
           legendItemClick: function () {
-              return false; 
+              return false;
           }
         }
       }
@@ -88,4 +88,17 @@ $(document).ready(function() {
       options.series = data.scores;
       chart = new Highcharts.Chart(options);
     };
+});
+
+// Filter my planner items in "due this week" module
+$('#my-planner').click(function() {
+  $('#course-planner, #my-planner').toggleClass("selected");
+  $('.todo-list-assignments li').filter(function() {
+   return $(this).find('a.starred').length !== 1;
+  }).css('display', 'none');
+});
+
+$('#course-planner').click(function() {
+  $('#course-planner, #my-planner').toggleClass("selected");
+  $('.todo-list-assignments li').css('display', '');
 });
