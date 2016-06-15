@@ -18,26 +18,26 @@
   = render "layouts/alerts"
 
   %p
-    %b Name:
+    Name:
     = @event.name
   %p
-    %b Descripton:
+    Descripton:
     = raw @event.description
   %p
-    %b Open date:
+    Open date:
     = @event.open_at
   %p
-    %b Close date:
+    Close date:
     = @event.due_at
   %p
-    %b Media:
+    Media:
     %img{:src => @event.media }
   %p
-    %b Thumbnail:
+    Thumbnail:
     %img{:src =>  @event.thumbnail }
   %p
-    %b Media credit:
+    Media credit:
     = @event.media_credit
   %p
-    %b Media caption:
+    Media caption:
     = @event.media_caption
