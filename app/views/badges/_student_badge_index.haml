@@ -13,6 +13,4 @@
             = render partial: "badges/components/count", locals: { badge: badge, count: presenter.earned_badges_count(badge) }
 
 .info-side-panel.clearfix.hide-for-medium.hide-for-small
-  .badge-icon(badge icon)
-  %h4 {{badge title}}
-  %p {{badge description}}
+  #badge-info-panel{"ng-app" => "gradecraft", "ng-init" => "init()", "ng-controller" => "BadgeCtrl", "ng-include" => true, "src" => "'ng_badge_main.html'"}
