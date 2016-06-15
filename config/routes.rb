@@ -77,6 +77,7 @@ GradeCraft::Application.routes.draw do
         get :edit_status
         put :update_status
         post :self_log
+        delete :delete_all
       end
     end
 

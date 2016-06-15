@@ -137,7 +137,28 @@ class Assignments::GradesController < ApplicationController
         respond_with @assignment
       end
     else
-      redirect_to mass_edit_assignment_grades_path(@assignment, team_id: params[:team_id]),  notice: "Oops! There was an error while saving the grades!"
+      redirect_to mass_edit_assignment_grades_path(@assignment, team_id: params[:team_id]), notice: "Oops! There was an error while saving the grades!"
+    end
+  end
+
+  # DELETE /assignments/:assignment_id/grades/delete_all
+  # Delete all grades for a given assignment id
+  def delete_all
+    assignment = Assignment.find(params[:assignment_id])
+    assignment.grades.each do |grade|
+      student = grade.student
+      grade.destroy
+      ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id).enqueue
+    end
+
+    if assignment.grades.all? { |grade| grade.destroyed? }
+      redirect_to assignment_path(assignment), flash: {
+        success: "Successfully deleted all grades for #{ assignment.name }"
+      }
+    else
+      redirect_to assignment_path(assignment), flash: {
+        error: "An error occurred while deleting grades for #{ assignment.name }"
+      }
     end
   end
 
