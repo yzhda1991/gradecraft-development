@@ -1,6 +1,7 @@
 .card-header
   %h3 Upcoming Events
 .card-body
+  %i#events-loading-spinner.fa.fa-spinner.fa-spin.fa-fw
   .slide-container
     - @events.each do |event|
       .event-slide

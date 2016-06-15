@@ -181,6 +181,7 @@ GradeCraft::Application.routes.draw do
   controller :info do
     get :dashboard
     get :earned_badges
+    get :event_dates
     get :export_earned_badges
     get :final_grades
     get :gradebook

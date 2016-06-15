@@ -1,7 +1,7 @@
 class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
-  before_filter :ensure_staff?, except: [:dashboard, :timeline_events]
+  before_filter :ensure_staff?, except: [:dashboard, :timeline_events, :event_dates]
   before_action :find_team,
     only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
@@ -11,6 +11,11 @@ class InfoController < ApplicationController
   def dashboard
     @events = current_course.events.order("due_at ASC")
     render :dashboard
+  end
+
+  def event_dates
+    @events = current_course.events.order("due_at ASC")
+    render(partial: "info/event_dates", handlers: [:jbuilder], formats: [:js])
   end
 
   def timeline_events

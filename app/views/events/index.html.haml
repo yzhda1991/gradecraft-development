@@ -2,12 +2,13 @@
 
 %h3.pagetitle= @title
 
-.context_menu
-  %ul
-    %li
-      %a{:href => new_event_path }
-        = glyph(:plus)
-        New Event
+- if current_user_is_staff?
+  .context_menu
+    %ul
+      %li
+        %a{:href => new_event_path }
+          = glyph(:plus)
+          New Event
 
 .pageContent
   = render "layouts/alerts"
@@ -29,7 +30,8 @@
           %td= event.open_at
           %td= event.due_at
           %td
-            .right
-              %ul.button-bar
-                %li= link_to glyph(:edit) + "Edit", edit_event_path(event), class: "button"
-                %li= link_to glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }, class: "button"
+            - if current_user_is_staff?
+              .right
+                %ul.button-bar
+                  %li= link_to glyph(:edit) + "Edit", edit_event_path(event), class: "button"
+                  %li= link_to glyph(:trash) + "Delete", event, :method => :delete, data: { :confirm => "Are you sure?" }, class: "button"
