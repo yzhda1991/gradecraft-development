@@ -6,8 +6,7 @@
       .event-slide
         .slide-header
           %h3= link_to event.name, event
-          %p= event.open_at
-          %p= event.due_at
+          %p.event-date= "#{event.open_at} - #{event.due_at}"
         .slide-body
           .event-image
             %img{:src => event.media }
