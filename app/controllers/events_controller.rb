@@ -1,6 +1,5 @@
 class EventsController < ApplicationController
 
-  before_filter :ensure_staff?
 
   respond_to :html, :json
 
