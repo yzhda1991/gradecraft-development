@@ -68,8 +68,9 @@ class StudentsController < ApplicationController
   end
 
   def teams
+    student = params[:id].present? ? User.find(params[:id]) : current_student
     @title = "#{term_for :teams}"
-    @team = current_student.team_for_course(current_course)
+    @team = student.team_for_course(current_course)
     @teams = current_course.teams.order_by_rank.includes(:earned_badges)
   end
 

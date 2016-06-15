@@ -246,6 +246,7 @@ GradeCraft::Application.routes.draw do
       get :grade_index
       get :predictor
       get :recalculate
+      get :teams
     end
     collection do
       get :autocomplete_student_name
