@@ -79,7 +79,6 @@
 //= require student_dashboard
 //= require levels_per_assign
 //= require timelineJS/embed
-//= require timeline_settings
 //= require earned_badges
 //= require file_upload
 //= require highcharts
