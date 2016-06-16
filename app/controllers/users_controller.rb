@@ -16,14 +16,10 @@ class UsersController < ApplicationController
     @teams = current_course.teams
     @team = @teams.find_by(id: params[:team_id]) if params[:team_id]
     if params[:team_id].present?
-      # TODO: should show TAs as well
       @users = @team.students
+      @users << @team.leaders
     else
       @users = current_course.users.includes(:courses, :teams)
-    end
-    respond_to do |format|
-      format.html
-      format.csv { send_data @users.to_csv }
     end
   end
 

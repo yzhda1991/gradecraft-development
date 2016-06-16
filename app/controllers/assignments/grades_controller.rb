@@ -12,7 +12,8 @@ class Assignments::GradesController < ApplicationController
     respond_to do |format|
       format.csv {
         send_data GradeExporter.new
-          .export_grades(assignment, current_course.students)
+          .export_grades(assignment, current_course.students),
+        filename: "#{ assignment.name } Import Grades - #{ Date.today }.csv"
       }
     end
   end
@@ -53,10 +54,10 @@ class Assignments::GradesController < ApplicationController
   def export
     assignment = current_course.assignments.find(params[:assignment_id])
     respond_to do |format|
-      format.csv do
-        send_data GradeExporter.new.export_grades_with_detail assignment,
-          assignment.course.students
-      end
+      format.csv {
+        send_data GradeExporter.new.export_grades_with_detail(assignment, assignment.course.students),
+        filename: "#{ assignment.name } Grades - #{ Date.today }.csv"
+      }
     end
   end
 
@@ -64,10 +65,10 @@ class Assignments::GradesController < ApplicationController
   def export_earned_levels
     assignment = current_course.assignments.find(params[:assignment_id])
     respond_to do |format|
-      format.csv do
-        send_data CriterionGradesExporter.new.export assignment.course,
-          assignment.rubric
-      end
+      format.csv {
+        send_data CriterionGradesExporter.new.export(assignment.course, assignment.rubric),
+        filename: "#{ assignment.name } Rubric Grades - #{ Date.today }.csv"
+      }
     end
   end
 

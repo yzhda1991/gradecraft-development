@@ -146,14 +146,14 @@ describe InfoController do
 
     describe "GET export_earned_badges" do
       it "retrieves the export_earned_badges download" do
-        get :export_earned_badges, format: :csv
+        get :export_earned_badges, id: @course.id, format: :csv
         expect(response.body).to include("First Name,Last Name,Uniqname,Email,Badge ID,Badge Name,Feedback,Awarded Date")
       end
     end
 
     describe "GET final_grades" do
       it "retrieves the final_grades download" do
-        get :final_grades, format: :csv
+        get :final_grades, id: @course.id, format: :csv
         expect(response.body).to include("First Name,Last Name,Email,Username,Score,Grade")
       end
     end

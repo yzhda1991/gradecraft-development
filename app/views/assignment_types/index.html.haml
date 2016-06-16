@@ -33,7 +33,7 @@
                   Edit
                   %span.sr-only= assignment_type.name
               %li
-                %a{:href => export_scores_assignment_type_path(assignment_type.id, format: "csv"), class: "button"}
+                %a{:href => export_scores_assignment_type_path(assignment_type.id, course_id: current_course.id, format: "csv"), class: "button"}
                   %i.fa.fa-cloud-download.fa-fw
                   Download Scores
               %li

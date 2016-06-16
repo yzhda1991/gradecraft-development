@@ -64,17 +64,22 @@ class InfoController < ApplicationController
   end
 
   def export_earned_badges
-    course = current_course
+    course = Course.find_by(id: params[:id])
     respond_to do |format|
       format.csv {
-        send_data EarnedBadgeExporter.new.earned_badges_for_course course.earned_badges
+        send_data EarnedBadgeExporter.new.earned_badges_for_course(course.earned_badges),
+        filename: "#{course.name} Awarded #{term_for :badges} - #{Date.today}.csv"
       }
     end
   end
 
   def final_grades
+    course = current_user.courses.find_by(id: params[:id])
     respond_to do |format|
-      format.csv { send_data CourseGradeExporter.new.final_grades_for_course current_course }
+      format.csv {
+        send_data CourseGradeExporter.new.final_grades_for_course(course),
+        filename: "#{course.name} Final Grades - #{Date.today}.csv"
+      }
     end
   end
 

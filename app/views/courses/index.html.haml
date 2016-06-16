@@ -15,35 +15,41 @@
   %table.dynatable{"aria-describedby" => "tableCaption"}
     %thead
       %tr
-        %th{scope: "col"} Name
         %th{scope: "col"} Course No
+        %th{scope: "col"} Name
         %th{scope: "col"} Year
         %th{scope: "col"} Semester
-        %th{scope: "col"} Badges
-        %th{scope: "col"} Teams
         %th{scope: "col"} # of Students
+        %th{scope: "col"} Teams
         %th{scope: "col"} Total Points
+        %th{scope: "col"} Badges
         %th
-        %th{scope: "col", :style => "min-width: 250px" }
+        %th
+        %th
+        %th
+        %th
+        %th{scope: "col" }
           %span.sr-only Actions
     %tbody
       - @courses.each do |course|
         %tr
-          %td= link_to course.name, change_current_course_path(course_id: course.id)
           %td= course.courseno
+          %td= link_to course.name, change_current_course_path(course_id: course.id)
           %td= course.year
           %td= course.semester
-          %td= course.badges ? "Yes" : "No"
-          %td= course.teams ? "Yes" : "No"
           %td= course.student_count
+          %td= course.teams ? "Yes" : "No"
           %td= points course.total_points
-          %td
-            - if course == current_course
-              = link_to_unless_current "Export Grades for Research", research_gradebook_path, :class=>"data-clearing"
+          %td= link_to "Awarded Badges", export_earned_badges_path(id: course.id, format: "csv") if course.badges.present?
+          %td= link_to_unless_current "Research Grades", research_gradebook_path(id: course.id, format: "csv"), :class=>"data-clearing"
+          %td= link_to_unless_current "Final Grades", final_grades_path(id: course.id, format: "csv"), :class=>"data-clearing"
+          %td= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(id: course.id, format: "csv")
+          %td= link_to "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(id: course.id, format: "csv")
+          %td= link_to  "Full Gradebook", gradebook_path(format: "csv")
+          %td= link_to  "Multiplied Gradebook", multiplied_gradebook_path(id: course.id, format: "csv") if course.student_weighted?
           %td
             .right
               %ul.button-bar
-                %li= link_to glyph(:eye) + "See", course_path(course), class: "button"
                 %li= link_to glyph(:edit) + "Edit", edit_course_path(course), class: "button"
                 %li= link_to glyph(:trash) + "Delete", course, class: "button", id: "course-id-#{course.id}", data: { confirm: "This will delete #{course.name} - are you sure?" }, :method => :delete
                 %li= link_to glyph(:copy) + "Copy", copy_courses_path(id: course.id), class: "button", :method => :copy

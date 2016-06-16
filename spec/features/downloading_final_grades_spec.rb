@@ -17,7 +17,7 @@ feature "downloading final grades file" do
         click_link "Final Grades"
       end
 
-      expect(page.response_headers["Content-Type"]).to eq("application/octet-stream")
+      expect(page.response_headers["Content-Type"]).to eq("text/csv")
 
       expect(page).to have_content "First Name,Last Name,Email,Username,Score,Grade,Level,Earned Badge #,GradeCraft ID"
     end
