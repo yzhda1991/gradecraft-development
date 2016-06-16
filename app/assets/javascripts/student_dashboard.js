@@ -108,7 +108,7 @@ $('#course-planner').click(function() {
 if($("#dashboard-timeline").length) {
   $.ajax({
     type: 'GET',
-    url: '/event_dates',
+    url: '/timeline_events',
     dataType: 'json',
     contentType: 'application/json',
     success: function (json) {
@@ -118,13 +118,13 @@ if($("#dashboard-timeline").length) {
 }
 
 function setInitialEventSlide(eventJson){
-  var events = eventJson.timeline.events;
+  var events = eventJson.timeline.date;
   var todaysDate = new Date();
   var startIndex = 0;
 
   for (var i = 0; i < events.length; i++) {
-    var eventStartDate = new Date(events[i].startDate);
-    if (eventStartDate >= todaysDate) {
+    var eventEndDate = new Date(events[i].endDate);
+    if (eventEndDate >= todaysDate) {
       startIndex = i;
       break;
     }

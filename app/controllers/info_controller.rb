@@ -1,7 +1,7 @@
 class InfoController < ApplicationController
   helper_method :sort_column, :sort_direction, :predictions
 
-  before_filter :ensure_staff?, except: [:dashboard, :timeline_events, :event_dates]
+  before_filter :ensure_staff?, except: [:dashboard, :timeline_events]
   before_action :find_team,
     only: [:earned_badges, :multiplier_choices]
   before_action :find_students,
@@ -9,17 +9,16 @@ class InfoController < ApplicationController
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
-    @events = current_course.events.order("due_at ASC")
+    @events = Timeline.new(current_course).events_by_due_date
     render :dashboard
   end
 
-  def event_dates
-    @events = current_course.events.order("due_at ASC")
-    render(partial: "info/event_dates", handlers: [:jbuilder], formats: [:js])
+  def events_by_due_date
+    self.events.select { |event| !event.due_at.nil? }.sort_by { |event| event.due_at }
   end
 
   def timeline_events
-    @events = Timeline.new(current_course).events
+    @events = Timeline.new(current_course).events_by_due_date
     render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])
   end
 

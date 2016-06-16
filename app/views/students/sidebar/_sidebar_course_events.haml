@@ -7,12 +7,14 @@
       .event-slide
         .slide-header
           %h4.event-name= link_to event.name, event
-        - if event.open_at || event.due_at?
+        - if event.open_at && event.due_at?
           %p.event-date= glyph(:calendar) + "#{event.open_at} - #{event.due_at}"
+        -if !event.open_at && event.due_at?
+          %p.event-date= glyph(:calendar) + "Due: #{event.due_at}"
         .slide-body
           .event-image
             %img{:src => event.media }
           .event-description
             %p
               = (truncate event.description, :length => 200, :omission => "...", :escape => false)
-              = link_to "Read More", event_path(event)
+              = link_to "Read More", event
