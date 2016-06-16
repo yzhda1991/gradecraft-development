@@ -98,9 +98,9 @@ describe Course do
   end
 
   describe "#grade_scheme_elements" do
-    let!(:high) { create(:grade_scheme_element, low_points: 2001, high_points: 3000, course: subject) }
-    let!(:low) { create(:grade_scheme_element, low_points: 100, high_points: 1000, course: subject) }
-    let!(:middle) { create(:grade_scheme_element, low_points: 1001, high_points: 2000, course: subject) }
+    let!(:high) { create(:grade_scheme_element, lowest_points: 2001, highest_points: 3000, course: subject) }
+    let!(:low) { create(:grade_scheme_element, lowest_points: 100, highest_points: 1000, course: subject) }
+    let!(:middle) { create(:grade_scheme_element, lowest_points: 1001, highest_points: 2000, course: subject) }
 
     describe "#for_score" do
       it "returns the grade scheme element that falls within that points range" do
@@ -131,7 +131,7 @@ describe Course do
 
       it "does not include other courses" do
         another_course = create :course
-        create :grade_scheme_element, low_points: 0, high_points: 100, course: another_course
+        create :grade_scheme_element, lowest_points: 0, highest_points: 100, course: another_course
 
         result = subject.grade_scheme_elements.for_score(99)
 

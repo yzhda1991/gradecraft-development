@@ -250,7 +250,7 @@ class Course < ActiveRecord::Base
   end
 
   def element_for_score(score)
-    grade_scheme_elements.where("low_points <= ? AND high_points >= ?", score, score).first
+    grade_scheme_elements.where("lowest_points <= ? AND highest_points >= ?", score, score).first
   end
 
   def grade_level_for_score(score)

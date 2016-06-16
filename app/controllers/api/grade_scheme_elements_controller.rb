@@ -5,13 +5,13 @@ class API::GradeSchemeElementsController < ApplicationController
   def index
     @grade_scheme_elements = current_course
                              .grade_scheme_elements
-                             .order_by_high_points.select(
+                             .order_by_highest_points.select(
                                :id,
-                               :low_points,
+                               :lowest_points,
                                :letter,
                                :level)
     if @grade_scheme_elements.present?
-      @total_points = (@grade_scheme_elements.first.low_points).to_i
+      @total_points = (@grade_scheme_elements.first.lowest_points).to_i
     else
       @total_points = current_course.total_points
     end

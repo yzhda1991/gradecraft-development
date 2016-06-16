@@ -5,19 +5,19 @@
     = render "layouts/alerts"
 
     - @grade_scheme_elements.each do |element|
-      - if current_student.cached_score_for_course(current_course) < element.low_points
+      - if current_student.cached_score_for_course(current_course) < element.lowest_points
         .progress.bar_magic.transparent.center
           .meter
             %i.fa.fa-lock
             %span= element.name
-            %span=points element.low_points
-      - elsif current_student.cached_score_for_course(current_course) >= element.high_points
+            %span=points element.lowest_points
+      - elsif current_student.cached_score_for_course(current_course) >= element.highest_points
         .progress.bar_magic.success.center
           .meter
             %i.fa.fa-star
             %span= element.name
             %span has already been achieved!
-            %span=points element.low_points
+            %span=points element.lowest_points
       - else
         .progress.bar_magic.current.center
           %span.your-rank Your rank:

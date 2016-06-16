@@ -96,8 +96,8 @@ puts "Children must be taught how to think, not what to think. ― Margaret Mead
     course.grade_scheme_elements.create do |e|
       e.letter = letter
       e.level = levels[i]
-      e.low_points = points.first
-      e.high_points = points.last
+      e.lowest_points = points.first
+      e.highest_points = points.last
     end
   end
   puts_success :course, course_name, :grade_sceme_elements_created

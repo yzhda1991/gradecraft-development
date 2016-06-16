@@ -25,7 +25,7 @@
         %tr
           %td= element.letter
           %td= element.level
-          %td{data: { :"sort-value" => "#{element.low_points }" }}= points element.low_points
-          %td{data: { :"sort-value" => "#{element.high_points }" }}= points element.high_points
+          %td{data: { :"sort-value" => "#{element.lowest_points }" }}= points element.lowest_points
+          %td{data: { :"sort-value" => "#{element.highest_points }" }}= points element.highest_points
 
   = render partial: "courses/grading_philosophy", locals: { course: current_course }

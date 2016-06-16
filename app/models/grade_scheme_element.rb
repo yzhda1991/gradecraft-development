@@ -1,18 +1,18 @@
 # Provides the mapping between student's progress and the overall course grade
 class GradeSchemeElement < ActiveRecord::Base
   include Copyable
-  attr_accessible :letter, :low_points, :high_points, :level, :description,
+  attr_accessible :letter, :lowest_points, :highest_points, :level, :description,
                   :course_id, :course, :updated_at
 
   belongs_to :course, touch: true
 
-  validates_presence_of :low_points, :high_points, :course
-  validates_numericality_of :high_points,
-                            greater_than: proc { |e| e.low_points.to_i }
+  validates_presence_of :lowest_points, :highest_points, :course
+  validates_numericality_of :highest_points,
+                            greater_than: proc { |e| e.lowest_points.to_i }
 
   scope :for_course, -> (course_id) { where(course_id: course_id) }
-  scope :order_by_low_points, -> { order "low_points ASC" }
-  scope :order_by_high_points, -> { order "high_points DESC" }
+  scope :order_by_lowest_points, -> { order "lowest_points ASC" }
+  scope :order_by_highest_points, -> { order "highest_points DESC" }
 
   def self.default
     GradeSchemeElement.new(level: "Not yet on board")
@@ -34,21 +34,21 @@ class GradeSchemeElement < ActiveRecord::Base
 
   # Calculating the points that covers this element
   def range
-    high_points.to_f - low_points.to_f
+    highest_points.to_f - lowest_points.to_f
   end
 
   # Figuring out how many points a student has to earn the next level
   def points_to_next_level(student, course)
     # if high points, +1
-    high_points - student.cached_score_for_course(course) + 1
+    highest_points - student.cached_score_for_course(course) + 1
   end
 
   # Calculating how far a student is through this level
   def progress_percent(student)
-    ((student.cached_score_for_course(course) - low_points) / range) * 100
+    ((student.cached_score_for_course(course) - lowest_points) / range) * 100
   end
 
   def within_range?(score)
-    score >= low_points && score <= high_points
+    score >= lowest_points && score <= highest_points
   end
 end

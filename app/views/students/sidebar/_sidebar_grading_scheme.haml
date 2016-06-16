@@ -8,7 +8,7 @@
       .meter
         %i.fa.fa-lock
         %span= next_element.name
-        %span=points next_element.low_points
+        %span=points next_element.lowest_points
 
   - current_element = current_student.grade_for_course(current_course)
   .progress.bar_magic.current.center
@@ -30,4 +30,4 @@
         %i.fa.fa-star
         %span= previous_element.name
         %span has already been achieved!
-        %span=points previous_element.low_points
+        %span=points previous_element.lowest_points

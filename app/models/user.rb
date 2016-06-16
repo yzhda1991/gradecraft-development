@@ -307,7 +307,7 @@ class User < ActiveRecord::Base
   end
 
   def get_element_level(course, direction)
-    course_elements = course.grade_scheme_elements.order_by_low_points
+    course_elements = course.grade_scheme_elements.order_by_lowest_points
 
     current_element = self.grade_for_course(course)
     current_element_index = course_elements.index{ |item| item[:level] == current_element[:level] }
@@ -324,7 +324,7 @@ class User < ActiveRecord::Base
   end
 
   def points_to_next_level(course)
-    get_element_level(course, :next).low_points - cached_score_for_course(course)
+    get_element_level(course, :next).lowest_points - cached_score_for_course(course)
   end
 
   ### GRADES

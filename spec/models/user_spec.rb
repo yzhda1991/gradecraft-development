@@ -361,7 +361,7 @@ describe User do
 
     it "returns the grade scheme element that matches the students score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_points: 80000, high_points: 120000)
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000)
       expect(student.grade_for_course(course)).to eq(gse)
     end
   end
@@ -371,7 +371,7 @@ describe User do
 
     it "returns the grade scheme level name that matches the student's score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_points: 80000, high_points: 120000, level: "Meh")
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000, level: "Meh")
       expect(student.grade_level_for_course(course)).to eq("Meh")
     end
   end
@@ -381,7 +381,7 @@ describe User do
 
     it "returns the grade scheme letter name that matches the student's score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_points: 80000, high_points: 120000, letter: "Q")
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000, letter: "Q")
       expect(student.grade_letter_for_course(course)).to eq("Q")
     end
   end
@@ -391,9 +391,9 @@ describe User do
 
     it "returns the next level above a student's current score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_points: 80000, high_points: 120000, letter: "Q")
-      gse_1 = create(:grade_scheme_element, course: course, low_points: 120001, high_points: 150000, letter: "R")
-      gse_2 = create(:grade_scheme_element, course: course, low_points: 150001, high_points: 180000, letter: "S")
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000, letter: "Q")
+      gse_1 = create(:grade_scheme_element, course: course, lowest_points: 120001, highest_points: 150000, letter: "R")
+      gse_2 = create(:grade_scheme_element, course: course, lowest_points: 150001, highest_points: 180000, letter: "S")
       expect(student.get_element_level(course, :next)).to eq(gse_1)
     end
   end
@@ -403,8 +403,8 @@ describe User do
 
     it "returns the next level above a student's current score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_points: 80000, high_points: 120000, letter: "Q")
-      gse_1 = create(:grade_scheme_element, course: course, low_points: 120001, high_points: 150000, letter: "R")
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000, letter: "Q")
+      gse_1 = create(:grade_scheme_element, course: course, lowest_points: 120001, highest_points: 150000, letter: "R")
       expect(student.points_to_next_level(course)).to eq(20001)
     end
   end
