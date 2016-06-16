@@ -20,7 +20,7 @@ describe Challenge do
     end
 
     it "is valid only with positive_points" do
-      subject.point_total = -100
+      subject.full_points = -100
       expect(subject).to be_invalid
     end
 
@@ -108,21 +108,21 @@ describe Challenge do
   describe "#find_or_create_predicted_earned_challenge" do
     it "creates a predicted earned challenge for a student" do
       student = create(:user)
-      challenge = create(:challenge, point_total: 1000)
+      challenge = create(:challenge, full_points: 1000)
       expect { challenge.find_or_create_predicted_earned_challenge(student.id) }.to \
         change(PredictedEarnedChallenge,:count).by 1
     end
 
     it "finds an existing predicted earned challenge for a student" do
       student = create(:user)
-      challenge = create(:challenge, point_total: 1000)
+      challenge = create(:challenge, full_points: 1000)
       pec = create(:predicted_earned_challenge, student: student, challenge: challenge)
       expect(challenge.find_or_create_predicted_earned_challenge(student.id)).to \
         eq(pec)
     end
 
     it "returns a null object for a student id of 0" do
-      challenge = create(:challenge, point_total: 1000)
+      challenge = create(:challenge, full_points: 1000)
       expect(challenge.find_or_create_predicted_earned_challenge(0).class).to \
         eq(NullPredictedEarnedChallenge)
     end

@@ -4,7 +4,7 @@ FactoryGirl.define do
     association :assignment_type
     association :course
     description { Faker::Lorem.sentence }
-    point_total { Faker::Number.number(5) }
+    full_points { Faker::Number.number(5) }
     visible true
     points_predictor_display "Fixed"
 

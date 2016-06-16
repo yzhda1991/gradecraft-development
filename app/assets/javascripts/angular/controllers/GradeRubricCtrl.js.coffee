@@ -190,7 +190,7 @@
           criterion_id: level.criterion_id,
           badge_id:     badge.badge.id,
           description:  badge.description,
-          point_total:  badge.point_total,
+          full_points:  badge.full_points,
           icon:         badge.icon,
           multiple:     badge.multiple
         }
@@ -200,7 +200,7 @@
 
   $scope.gradeParams = ()->
     {
-      raw_score: $scope.pointsAllocated(),
+      raw_points: $scope.pointsAllocated(),
       feedback: $scope.grade.feedback,
       status:   $scope.grade.status,
       adjustment_points: $scope.grade.adjustment_points || 0,

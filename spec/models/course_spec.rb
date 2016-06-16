@@ -98,12 +98,12 @@ describe Course do
   end
 
   describe "#grade_scheme_elements" do
-    let!(:high) { create(:grade_scheme_element, low_range: 2001, high_range: 3000, course: subject) }
-    let!(:low) { create(:grade_scheme_element, low_range: 100, high_range: 1000, course: subject) }
-    let!(:middle) { create(:grade_scheme_element, low_range: 1001, high_range: 2000, course: subject) }
+    let!(:high) { create(:grade_scheme_element, lowest_points: 2001, highest_points: 3000, course: subject) }
+    let!(:low) { create(:grade_scheme_element, lowest_points: 100, highest_points: 1000, course: subject) }
+    let!(:middle) { create(:grade_scheme_element, lowest_points: 1001, highest_points: 2000, course: subject) }
 
     describe "#for_score" do
-      it "returns the grade scheme element that falls within that range" do
+      it "returns the grade scheme element that falls within that points range" do
         result = subject.grade_scheme_elements.for_score(1100)
 
         expect(result).to eq middle
@@ -131,7 +131,7 @@ describe Course do
 
       it "does not include other courses" do
         another_course = create :course
-        create :grade_scheme_element, low_range: 0, high_range: 100, course: another_course
+        create :grade_scheme_element, lowest_points: 0, highest_points: 100, course: another_course
 
         result = subject.grade_scheme_elements.for_score(99)
 
@@ -423,7 +423,7 @@ describe Course do
     end
 
     it "registers as having valuable has badges with points if they exist" do
-      badge = create(:badge, point_total: 1000, course: subject)
+      badge = create(:badge, full_points: 1000, course: subject)
       expect(subject.valuable_badges?).to eq(true)
     end
   end
@@ -498,15 +498,15 @@ describe Course do
 
   describe "#total_points" do
     it "returns the total points available if they're set by the instructor" do
-      subject.point_total = 100000
-      expect(subject.total_points).to eq(subject.point_total)
+      subject.full_points = 100000
+      expect(subject.total_points).to eq(subject.full_points)
     end
 
     it "sums up the available points in the assignments if there's no point total set" do
       course = create(:course)
-      course.point_total = nil
-      assignment = create(:assignment, course_id: course.id, point_total: 101)
-      assignment_2 = create(:assignment, course_id: course.id, point_total: 1000)
+      course.full_points = nil
+      assignment = create(:assignment, course_id: course.id, full_points: 101)
+      assignment_2 = create(:assignment, course_id: course.id, full_points: 1000)
       expect(course.total_points).to eq(1101)
     end
   end
@@ -693,8 +693,8 @@ describe Course do
 
   describe "#point_total_for_challenges" do
     it "sums up the total number of points in the challenges" do
-      challenge = create(:challenge, course: subject, point_total: 101)
-      challenge_2 = create(:challenge, course: subject, point_total: 1000)
+      challenge = create(:challenge, course: subject, full_points: 101)
+      challenge_2 = create(:challenge, course: subject, full_points: 1000)
       expect(subject.point_total_for_challenges).to eq(1101)
     end
   end

@@ -3,7 +3,7 @@
     constructor: (attrs={}, http)->
       @id = attrs.id
       @status = attrs.status
-      @raw_score = attrs.raw_score
+      @raw_points = attrs.raw_points
       @feedback = attrs.feedback
       @is_custom_value = attrs.is_custom_value || false
       @student_id = attrs.student_id
@@ -62,7 +62,7 @@
     params: ()->
       {
         id: self.id,
-        raw_score: this.raw_score,
+        raw_points: this.raw_points,
         feedback: this.feedback,
         is_custom_value: this.is_custom_value
       }

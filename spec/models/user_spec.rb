@@ -361,7 +361,7 @@ describe User do
 
     it "returns the grade scheme element that matches the students score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_range: 80000, high_range: 120000)
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000)
       expect(student.grade_for_course(course)).to eq(gse)
     end
   end
@@ -371,7 +371,7 @@ describe User do
 
     it "returns the grade scheme level name that matches the student's score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_range: 80000, high_range: 120000, level: "Meh")
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000, level: "Meh")
       expect(student.grade_level_for_course(course)).to eq("Meh")
     end
   end
@@ -381,7 +381,7 @@ describe User do
 
     it "returns the grade scheme letter name that matches the student's score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_range: 80000, high_range: 120000, letter: "Q")
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000, letter: "Q")
       expect(student.grade_letter_for_course(course)).to eq("Q")
     end
   end
@@ -391,9 +391,9 @@ describe User do
 
     it "returns the next level above a student's current score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_range: 80000, high_range: 120000, letter: "Q")
-      gse_1 = create(:grade_scheme_element, course: course, low_range: 120001, high_range: 150000, letter: "R")
-      gse_2 = create(:grade_scheme_element, course: course, low_range: 150001, high_range: 180000, letter: "S")
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000, letter: "Q")
+      gse_1 = create(:grade_scheme_element, course: course, lowest_points: 120001, highest_points: 150000, letter: "R")
+      gse_2 = create(:grade_scheme_element, course: course, lowest_points: 150001, highest_points: 180000, letter: "S")
       expect(student.get_element_level(course, :next)).to eq(gse_1)
     end
   end
@@ -403,8 +403,8 @@ describe User do
 
     it "returns the next level above a student's current score for the course" do
       create(:course_membership, course: course, user: student, score: 100000)
-      gse = create(:grade_scheme_element, course: course, low_range: 80000, high_range: 120000, letter: "Q")
-      gse_1 = create(:grade_scheme_element, course: course, low_range: 120001, high_range: 150000, letter: "R")
+      gse = create(:grade_scheme_element, course: course, lowest_points: 80000, highest_points: 120000, letter: "Q")
+      gse_1 = create(:grade_scheme_element, course: course, lowest_points: 120001, highest_points: 150000, letter: "R")
       expect(student.points_to_next_level(course)).to eq(20001)
     end
   end
@@ -476,8 +476,8 @@ describe User do
 
     before do
       create(:course_membership, user: student, course: course)
-      create(:earned_badge, score: 100, student: student, course: course, student_visible: true)
-      create(:earned_badge, score: 300, student: student, course: course, student_visible: true)
+      create(:earned_badge, points: 100, student: student, course: course, student_visible: true)
+      create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
     end
 
     it "returns the sum of the badge score for a student" do
@@ -485,7 +485,7 @@ describe User do
     end
 
     it "does not include earned badges that have not yet been made student visible" do
-      create(:earned_badge, score: 155, student: student, course: course, student_visible: false)
+      create(:earned_badge, points: 155, student: student, course: course, student_visible: false)
       expect(student.earned_badge_score_for_course(course)).to eq(400)
     end
   end
@@ -498,8 +498,8 @@ describe User do
     end
 
     it "returns the students' earned_badges for a course" do
-      earned_badge_1 = create(:earned_badge, score: 100, student: student, course: course, student_visible: true)
-      earned_badge_2 = create(:earned_badge, score: 300, student: student, course: course, student_visible: true)
+      earned_badge_1 = create(:earned_badge, points: 100, student: student, course: course, student_visible: true)
+      earned_badge_2 = create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
       expect(student.earned_badges_for_course(course)).to eq([earned_badge_1, earned_badge_2])
     end
   end

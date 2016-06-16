@@ -11,7 +11,7 @@
     %td= link_to student.last_name, student_path(student)
     - if presenter.assignment.threshold_points?
       %td.raw-score
-        = points grade.raw_score if grade.instructor_modified?
+        = points grade.raw_points if grade.instructor_modified?
     %td.status-or-score
       - if presenter.assignment.pass_fail?
         = grade.try(:pass_fail_status) if grade.instructor_modified?

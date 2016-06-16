@@ -47,7 +47,7 @@ describe API::Students::PredictedEarnedGradesController  do
         expect(assigns(:assignments)[0].prediction[:predicted_points]).to eq(0)
         assigns(:assignments)[0].grade.attributes.tap do |assigned_grade|
           expect(assigned_grade[:id]).to eq(grade.id)
-          expect(assigned_grade[:final_points]).to eq(grade.raw_score)
+          expect(assigned_grade[:final_points]).to eq(grade.raw_points)
           expect(assigned_grade[:score]).to eq(grade.score)
         end
       end
@@ -60,7 +60,7 @@ describe API::Students::PredictedEarnedGradesController  do
       :id,
       :name,
       :description,
-      :point_total,
+      :full_points,
       :visible
     ]
   end

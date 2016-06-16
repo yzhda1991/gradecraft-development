@@ -59,7 +59,7 @@ describe Assignment do
     before { subject.save }
 
     it "returns an array raw graded scores" do
-      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
       expect(subject.graded_or_released_scores).to eq([85])
     end
   end
@@ -92,8 +92,8 @@ describe Assignment do
     before { subject.save }
 
     it "returns the average raw score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_score: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 5, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
       expect(subject.average).to eq 6
     end
 
@@ -106,8 +106,8 @@ describe Assignment do
     before { subject.save }
 
     it "returns the average score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_score: 8, score: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 5, score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 8, score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 5, score: 8, status: "Graded"
       expect(subject.earned_average).to eq 6
     end
 
@@ -125,9 +125,9 @@ describe Assignment do
     end
 
     it "returns the number of unique scores for each grade" do
-      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 105, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 105, status: "Graded"
       expect(subject.earned_score_count).to eq({ 85 => 2, 105 => 1 })
     end
   end
@@ -136,8 +136,8 @@ describe Assignment do
     before { subject.save }
 
     it "returns the median score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_score: 8, score: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 5, score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 8, score: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 5, score: 8, status: "Graded"
       expect(subject.median).to eq 6
     end
 
@@ -150,9 +150,9 @@ describe Assignment do
     before { subject.save }
 
     it "returns the earned scores with a scores key" do
-      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 105, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 105, status: "Graded"
       scores = subject.percentage_score_earned[:scores]
       expect(scores).to include({ data: 1, name: 105 })
       expect(scores).to include({ data: 2, name: 85 })
@@ -161,11 +161,11 @@ describe Assignment do
 
   describe "pass-fail assignments" do
     it "sets point total to zero on save" do
-      subject.point_total = 3000
+      subject.full_points = 3000
       subject.threshold_points = 2000
       subject.pass_fail = true
       subject.save
-      expect(subject.point_total).to eq(0)
+      expect(subject.full_points).to eq(0)
       expect(subject.threshold_points).to eq(0)
     end
   end
@@ -528,9 +528,9 @@ describe Assignment do
     before { subject.save }
 
     it "counts the number of grades that were graded or released" do
-      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 85, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 105
+      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 85, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 105
       expect(subject.grade_count).to eq 2
     end
   end
@@ -540,21 +540,21 @@ describe Assignment do
     before { subject.save }
 
     it "returns the first visible grade for the student" do
-      grade = subject.grades.create student_id: student.id, raw_score: 85, status: "Graded"
+      grade = subject.grades.create student_id: student.id, raw_points: 85, status: "Graded"
       expect(subject.grade_for_student(student)).to eq grade
     end
   end
 
   describe "#grade_level" do
     it "returns the assignment score level for the grade's score" do
-      grade = build(:grade, raw_score: 123)
-      subject.assignment_score_levels.build name: "First level", value: 123
+      grade = build(:grade, raw_points: 123)
+      subject.assignment_score_levels.build name: "First level", points: 123
       expect(subject.grade_level(grade)).to eq "First level"
     end
 
     it "returns nil if there is no assignment score level found" do
-      grade = build(:grade, raw_score: 123)
-      subject.assignment_score_levels.build name: "First level", value: 456
+      grade = build(:grade, raw_points: 123)
+      subject.assignment_score_levels.build name: "First level", points: 456
       expect(subject.grade_level(grade)).to be_nil
     end
   end
@@ -616,8 +616,8 @@ describe Assignment do
     before { subject.save }
 
     it "returns the maximum raw score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_score: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 5, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
       expect(subject.high_score).to eq 8
     end
   end
@@ -640,8 +640,8 @@ describe Assignment do
     before { subject.save }
 
     it "returns the minimum raw score for a graded grade" do
-      subject.grades.create student_id: create(:user).id, raw_score: 8, status: "Graded"
-      subject.grades.create student_id: create(:user).id, raw_score: 5, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 8, status: "Graded"
+      subject.grades.create student_id: create(:user).id, raw_points: 5, status: "Graded"
       expect(subject.low_score).to eq 5
     end
   end

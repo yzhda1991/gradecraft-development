@@ -150,7 +150,7 @@ describe ChallengesController do
       :id,
       :name,
       :description,
-      :point_total,
+      :full_points,
       :visible
     ]
   end

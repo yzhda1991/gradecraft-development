@@ -52,7 +52,7 @@ namespace :analytics do
                   when :predictor
                     assignment = current_course.assignments.sample
                     if assignment
-                      possible = assignment.point_total_for_student(user)
+                      possible = assignment.full_points_for_student(user)
                       # Our normal distribution should center its mean around
                       # half of the possible score.
                       # To make sure we get 99.7% of our scores within the range,

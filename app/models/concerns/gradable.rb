@@ -11,11 +11,11 @@ module Gradable
   end
 
   def no_grade(attrs)
-    pass_fail ? attrs[:pass_fail_status].blank? : attrs[:raw_score].blank?
+    pass_fail ? attrs[:pass_fail_status].blank? : attrs[:raw_points].blank?
   end
 
   def graded_or_released_scores
-    grades.graded_or_released.pluck(:raw_score)
+    grades.graded_or_released.pluck(:raw_points)
   end
 
   def grade_count
@@ -28,7 +28,7 @@ module Gradable
   end
 
   def average
-    grades.graded_or_released.average(:raw_score).to_i \
+    grades.graded_or_released.average(:raw_points).to_i \
       if grades.graded_or_released.present?
   end
 
@@ -40,16 +40,16 @@ module Gradable
   # Calculating how many of each score exists
   def earned_score_count
     grades.graded_or_released
-      .group_by { |g| g.raw_score }
+      .group_by { |g| g.raw_points }
       .map { |score, grade| [score, grade.size ] }.to_h
   end
 
   def high_score
-    grades.graded_or_released.maximum(:raw_score)
+    grades.graded_or_released.maximum(:raw_points)
   end
 
   def low_score
-    grades.graded_or_released.minimum(:raw_score)
+    grades.graded_or_released.minimum(:raw_points)
   end
 
   def is_predicted_by_student?(student)

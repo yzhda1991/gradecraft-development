@@ -39,7 +39,7 @@ describe API::PredictedEarnedGradesController do
     describe "PUT update" do
       it "updates the predicted points for a grade" do
         predicted_earned_grade = create(:predicted_earned_grade, assignment: world.assignment, student: world.student)
-        predicted_points = (world.assignment.point_total * 0.75).to_i
+        predicted_points = (world.assignment.full_points * 0.75).to_i
         put :update, id: predicted_earned_grade.id, predicted_points: predicted_points, format: :json
         expect(PredictedEarnedGrade.where(student: world.student, assignment: world.assignment).first.predicted_points).to eq(predicted_points)
         expect(JSON.parse(response.body)).to eq({"id" => predicted_earned_grade.id, "predicted_points" => predicted_points})
@@ -58,7 +58,7 @@ describe API::PredictedEarnedGradesController do
       :id,
       :name,
       :description,
-      :point_total,
+      :full_points,
       :visible
     ]
   end

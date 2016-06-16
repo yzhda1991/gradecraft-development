@@ -23,7 +23,7 @@
     name: "Generic Assignment",
     open_at: nil,
     due_at: nil,
-    point_total: 5000,
+    full_points: 5000,
     # additional attributes:
     accepts_attachments: false,
     accepts_links: false,
@@ -45,7 +45,7 @@
   grades: false,
   # only used if :grades is true:
   grade_attributes: {
-    raw_score: -> { rand(5000) },
+    raw_points: -> { rand(5000) },
     instructor_modified: false,
     status: nil,
     feedback: nil,
@@ -172,7 +172,7 @@ of what it feels about education.― Harold Howe",
     open_at: 2.weeks.ago,
     due_at: 2.weeks.ago + 0.05,
     mass_grade_type: "Select List",
-    point_total: 20000,
+    full_points: 20000,
   },
   assignment_score_levels: true,
 }
@@ -188,7 +188,7 @@ of what it feels about education.― Harold Howe",
     open_at: 2.weeks.ago,
     due_at: 2.weeks.ago + 0.05,
     mass_grade_type: "Select List",
-    point_total: 20000,
+    full_points: 20000,
   },
   assignment_score_levels: true,
   grades: true,
@@ -240,17 +240,17 @@ life.― John Holt",
   attributes: {
     name: "Points Threshold and Insufficent Grades",
     description: "Graded Assignment has a points threshold that no student \
-met. Grades have a raw_score of 15000",
+met. Grades have a raw_points of 15000",
     open_at: 1.weeks.from_now,
     due_at: 1.weeks.from_now + 0.05,
-    point_total: 20000,
+    full_points: 20000,
     threshold_points: 18000
   },
   grades: true,
   grade_attributes: {
     status: "Graded",
     instructor_modified: true,
-    raw_score: -> { 15000 },
+    raw_points: -> { 15000 },
   }
 }
 
@@ -265,7 +265,7 @@ One Day",
     name: "Multi-level Self-Logged Assignment",
     open_at: DateTime.now,
     due_at: DateTime.now + 0.05,
-    point_total: 200000,
+    full_points: 200000,
     student_logged: true,
   },
   assignment_score_levels: true,
@@ -307,7 +307,7 @@ for. Did you learn nothing from my chemistry class? - Walter H. White",
     name: "Rubric Graded Assignment [No Grades]",
     open_at: 4.weeks.ago,
     due_at: 3.weeks.ago,
-    point_total: 400000,
+    full_points: 400000,
     accepts_submissions: true,
     accepts_attachments: true,
     accepts_links: true,
@@ -326,7 +326,7 @@ for. Did you learn nothing from my chemistry class? - Walter H. White",
     name: "Rubric Graded Assignment With Threshold [No Grades]",
     open_at: 4.weeks.ago,
     due_at: 3.weeks.ago,
-    point_total: 400000,
+    full_points: 400000,
     threshold_points: 200000
   },
   rubric: true
@@ -352,7 +352,7 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
     name: "Rubric Graded Assignment [Grades]",
     open_at: 4.weeks.ago,
     due_at: 3.weeks.ago,
-    point_total: 400000,
+    full_points: 400000,
     accepts_submissions: true,
     accepts_attachments: true,
     accepts_links: true,
@@ -363,7 +363,7 @@ is for. Did you learn nothing from my chemistry class? - Walter H. White",
   grade_attributes: {
     status: "Graded",
     instructor_modified: true,
-    raw_score: -> { 80000 },
+    raw_points: -> { 80000 },
     feedback: 'As Aristotle said, <strong>"The whole is greater than the sum \
 of its parts."</strong>'
   },
@@ -381,7 +381,7 @@ Robin Williams",
     name: "Group Assignment + Standard Edit",
     open_at: 3.weeks.ago,
     due_at: 3.weeks.ago + 0.05,
-    point_total: 10000,
+    full_points: 10000,
     grade_scope: "Group"
   }
 }
@@ -396,7 +396,7 @@ valued, or was actually stigmatized. - Sir Ken Robinson",
   attributes: {
     name: "Group Assignment + Submissions",
     due_at: 2.weeks.ago + 0.05,
-    point_total: 15000,
+    full_points: 15000,
     grade_scope: "Group",
     accepts_submissions: true,
     accepts_attachments: true,
@@ -417,7 +417,7 @@ Tzu"
   attributes: {
     name: "Group Assignment + Rubric Edit",
     due_at: 1.weeks.ago,
-    point_total: 15000,
+    full_points: 15000,
     grade_scope: "Group"
   },
   rubric: true
@@ -440,7 +440,7 @@ is no alternative. There never was. –Ken Robinson",
     name: "Does Not Accept Submissions",
     open_at: 2.weeks.ago,
     due_at: DateTime.now + 0.05,
-    point_total: 200000,
+    full_points: 200000,
     accepts_submissions: false,
   }
 }
@@ -455,7 +455,7 @@ rules, and feedback, 3) Playtest and iterate –Sebastian Deterding",
   attributes: {
     name: "Accepts All Types of Submissions",
     due_at: DateTime.now + 0.25,
-    point_total: 200000,
+    full_points: 200000,
     accepts_submissions: true,
     accepts_attachments: true,
     accepts_text: true,
@@ -470,7 +470,7 @@ rules, and feedback, 3) Playtest and iterate –Sebastian Deterding",
   attributes: {
     name: "Accepts Resubmissions of All Types",
     due_at: DateTime.now + 0.25,
-    point_total: 200000,
+    full_points: 200000,
     accepts_submissions: true,
     resubmissions_allowed: true,
     accepts_attachments: true,
@@ -488,7 +488,7 @@ rules, and feedback, 3) Playtest and iterate –Sebastian Deterding",
   attributes: {
     name: "Accepts Link Submissions",
     due_at: DateTime.now + 0.25,
-    point_total: 15000,
+    full_points: 15000,
     accepts_links: true,
     accepts_submissions: true,
   }
@@ -503,7 +503,7 @@ rules, and feedback, 3) Playtest and iterate –Sebastian Deterding",
   attributes: {
     name: "Accepts Attachment Submissions",
     due_at: DateTime.now + 0.25,
-    point_total: 15000,
+    full_points: 15000,
     accepts_attachments: true,
     accepts_links: false,
     accepts_submissions: true,
@@ -520,7 +520,7 @@ positive, because they allow you to work off something.–Charles Gwathmey",
   attributes: {
     name: "Accepts Text Submissions",
     due_at: DateTime.now + 0.25,
-    point_total: 15000,
+    full_points: 15000,
     accepts_attachments: false,
     accepts_links: false,
     accepts_submissions: true,
@@ -543,7 +543,7 @@ positive, because they allow you to work off something.–Charles Gwathmey",
     name: "Past Assignment with Grade",
     description: "Points displayed and info icon",
     due_at: 1.week.ago,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
   },
   grades: true,
@@ -568,7 +568,7 @@ positive, because they allow you to work off something.–Charles Gwathmey",
     description: "Points displayed with exclusion message and stying, points \
 not added to total",
     due_at: 1.week.ago,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
   },
   grades: true,
@@ -594,7 +594,7 @@ not added to total",
     description: "Displays a Slider. Displays the info icon with this text \
 on hover",
     due_at: 1.week.ago,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
   }
 }
@@ -609,14 +609,14 @@ on hover",
     description: "Should have a prediction slider, should have a prediction, \
 should not have a visible grade",
     due_at: 1.week.ago,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
     release_necessary: true,
   },
   grades: true,
   grade_attributes: {
     instructor_modified: true,
-    raw_score: -> { rand(15000) },
+    raw_points: -> { rand(15000) },
     status: "Graded",
     instructor_modified: true
   },
@@ -637,7 +637,7 @@ should not have a visible grade",
 predictions.",
     due_at: 3.week.from_now,
     accepts_submissions_until: 3.week.from_now,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
     accepts_submissions: true,
     resubmissions_allowed: true,
@@ -658,7 +658,7 @@ predictions.",
 accepts predictions.",
     due_at: 1.week.ago,
     accepts_submissions_until: 3.week.from_now,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
     accepts_submissions: true,
     resubmissions_allowed: true,
@@ -678,7 +678,7 @@ accepts predictions.",
     description: "Fixed at 0 points, displays 'Closed' and 'Late' icons.",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
     accepts_submissions: true,
     resubmissions_allowed: true,
@@ -689,7 +689,7 @@ accepts predictions.",
   grades: true,
   grade_attributes: {
     instructor_modified: false,
-    raw_score: -> { nil },
+    raw_points: -> { nil },
     status: nil,
   },
   prediction: true,
@@ -709,7 +709,7 @@ accepts predictions.",
 prediction. Faculty generic predictor is closed",
     due_at: 1.week.ago,
     accepts_submissions_until: 1.week.ago,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
     accepts_submissions: true,
     resubmissions_allowed: true,
@@ -731,7 +731,7 @@ prediction. Faculty generic predictor is closed",
       prediction.",
     due_at: 5.weeks.from_now,
     accepts_submissions_until: 5.weeks.from_now,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
     accepts_submissions: true,
     resubmissions_allowed: true,
@@ -751,7 +751,7 @@ prediction. Faculty generic predictor is closed",
     name: "Fixed no Prediction",
     description: "Should have a binary predictor switch with zero prediction",
     due_at: 1.week.from_now,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Fixed",
   }
 }
@@ -769,13 +769,13 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
     name: "Fixed with Prediction",
     description: "Should have a binary predictor switch with zero prediction",
     due_at: 1.week.from_now,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Fixed",
   },
   grades: true,
   grade_attributes: {
     instructor_modified: false,
-    raw_score: -> { nil },
+    raw_points: -> { nil },
     status: nil,
   },
   prediction: true,
@@ -797,13 +797,13 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
     name: "Graded Fixed Assignment",
     description: "Should have full points",
     due_at: 1.week.from_now,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Fixed",
   },
   grades: true,
   grade_attributes: {
     instructor_modified: true,
-    raw_score: -> { 15000 },
+    raw_points: -> { 15000 },
     status: "Graded"
   },
   prediction: true,
@@ -821,7 +821,7 @@ submissive, and so on -- because they're dysfunctional to the institutions. \
     name: "Slider No Prediction",
     description: "Should have a continuous slider with zero prediction",
     due_at: 1.week.from_now,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider"
   }
 }
@@ -838,13 +838,13 @@ Ralph Waldo Emerson",
     name: "Slider with Prediction",
     description: "Should have a continuous slider with random prediction",
     due_at: 1.week.from_now,
-    point_total: 15000,
+    full_points: 15000,
     points_predictor_display: "Slider",
   },
   grades: true,
   grade_attributes: {
     instructor_modified: false,
-    raw_score: -> { nil },
+    raw_points: -> { nil },
     status: nil,
   },
   prediction: true,
@@ -862,7 +862,7 @@ Ralph Waldo Emerson",
     name: "Level Slider no Prediction",
     description: "Should have a slider with levels with zero prediction",
     due_at: 1.week.from_now,
-    point_total: 25000,
+    full_points: 25000,
     points_predictor_display: "Slider",
   },
   assignment_score_levels: true
@@ -879,14 +879,14 @@ to proceed with growing up. ― John Taylor Gatto",
     name: "Level Slider with Prediction",
     description: "Should have a slider with levels with random prediction",
     due_at: 1.week.from_now,
-    point_total: 25000,
+    full_points: 25000,
     points_predictor_display: "Slider",
   },
   assignment_score_levels: true,
   grades: true,
   grade_attributes: {
     instructor_modified: false,
-    raw_score: -> { nil },
+    raw_points: -> { nil },
     status: nil,
   },
   prediction: true,
@@ -905,7 +905,7 @@ to proceed with growing up. ― John Taylor Gatto",
     description:
       "Should have a slider with both Level and a Threshold Behavior",
     due_at: 1.week.from_now,
-    point_total: 25000,
+    full_points: 25000,
     threshold_points: 15000,
     points_predictor_display: "Slider",
   },
@@ -929,7 +929,7 @@ John Moravec",
   attributes: {
     name: "I'm an Invisible Assignment",
     due_at: 2.weeks.from_now,
-    point_total: 15000,
+    full_points: 15000,
     visible: false,
   }
 }
@@ -943,7 +943,7 @@ obvious mistake. Two hundred people can read two hundred books. ― John Cage",
   attributes: {
     name: "Hey, I'm a Visible Assignment!",
     due_at: 2.weeks.from_now,
-    point_total: 15000,
+    full_points: 15000,
     visible: true,
   }
 }
@@ -956,7 +956,7 @@ obvious mistake. Two hundred people can read two hundred books. ― John Cage",
   attributes: {
     name: "Assignment with More Points than the Max Value for Assignment Type",
     due_at: 3.weeks.from_now,
-    point_total: 150000,
+    full_points: 150000,
   }
 }
 
@@ -970,7 +970,7 @@ Hockney",
     name: "Grade Triggers Email",
     description: "I send out emails when student receives a grade",
     due_at: 4.weeks.from_now,
-    point_total: 150000,
+    full_points: 150000,
     release_necessary: true,
   }
 }
@@ -984,7 +984,7 @@ gathers knowledge faster than society gathers wisdom. ― Isaac Asimov",
   attributes: {
     name: "Indvidual Assignment + Analytics",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
     hide_analytics: false,
   }
 }
@@ -998,7 +998,7 @@ these, 'It might have been.' ― John Greenleaf Whittier",
   attributes: {
     name: "Group Assignment + Analytics",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
     hide_analytics: false,
     grade_scope: "Group",
   }
@@ -1014,7 +1014,7 @@ a vinaigrette of confusion and conflict. ― Lemony Snicket",
   attributes: {
     name: "Indvidual Assignment + Hidden Analytics",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
     hide_analytics: true,
   }
 }
@@ -1028,7 +1028,7 @@ be lived forwards. ― Soren Kierkegaard",
   attributes: {
     name: "Group Assignment + Hidden Analytics",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
     hide_analytics: true,
     grade_scope: "Group",
   }
@@ -1052,7 +1052,7 @@ stinking badges, you g**-d***** cabron and c****’ tu madre! – B. Traven",
     description: "Earning the Badge Assignment-Unlock-Key unlocks this \
 assignment.",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
   },
   unlock_condition: true,
   unlock_attributes: {
@@ -1074,7 +1074,7 @@ examination, which, after all, is what school is all about.―J.K. Rowling",
     description:
       "I'm the thing you need to submit to unlock 'Unlocked-By-Submission'",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
     accepts_submissions: true,
     accepts_attachments: true,
     accepts_links: true,
@@ -1093,7 +1093,7 @@ technological age. ― Ivan Illich",
     name: "Unlocked-By-Submission",
     description: "Submitting 'Submission-Key' unlocks this assignment",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
   },
   unlock_condition: true,
   unlock_attributes: {
@@ -1117,7 +1117,7 @@ Sanders Peirce",
     description: "I'm the thing you need to earn a grade on to unlock
       'Unlocked-By-Grade-Earned'",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
   }
 }
 
@@ -1157,7 +1157,7 @@ The consequence is that today everyone is a mere technician, even the artist...\
     description: "I'm the thing you need to earn a grade on by a date to unlock
       'Unlocked-By-Grade-Earned-By-Date'",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
   }
 }
 
@@ -1197,13 +1197,13 @@ treated like money, to be put away in a bank for the future. ― Seymour Papert"
     description: "I'm the thing you need to read the feedback on to unlock
       'Unlocked-By-Feedback-Read'",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
   },
   grades: true,
   grade_attributes: {
     status: "Graded",
     instructor_modified: true,
-    raw_score: -> { 180000 },
+    raw_points: -> { 180000 },
     feedback: 'As George Washington Carver said, <strong>"Education is the key
       to unlock the golden door of freedom."</strong>'
   }
@@ -1243,13 +1243,13 @@ in the end you’ll fall right into my trap. ― Sophia Nikolaidou",
     description: "I'm the thing you need to read the feedback on by a date to
       unlock 'Unlocked-By-Feedback-Read-By-Date'",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
   },
   grades: true,
   grade_attributes: {
     status: "Graded",
     instructor_modified: true,
-    raw_score: -> { 180000 },
+    raw_points: -> { 180000 },
     feedback: 'As Winston Churchill said, <strong>"Continuous effort - not
       strength or intelligence - is the key to unlocking our potential.
       "</strong>'
@@ -1268,7 +1268,7 @@ to injustice ― Oakes Jeannie",
     description: "Reading the Feedback on 'Unlock-Feedback-Read-By-Date-Key'
       Unlocks this",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
   },
   unlock_condition: true,
   unlock_attributes: {
@@ -1289,7 +1289,7 @@ to injustice ― Oakes Jeannie",
     description: "I'm the thing you need to submit to unlock
       'Group-Assignment-Unlocked-By-Submission'",
     due_at: 4.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
     accepts_submissions: true,
     accepts_attachments: true,
     accepts_links: true,
@@ -1309,7 +1309,7 @@ Sir Ken Robinson",
     description: "All members of a Group Submitting 'Group-Submission-Key'
       unlocks this assignment",
     due_at: 3.weeks.from_now,
-    point_total: 180000,
+    full_points: 180000,
     grade_scope: "Group",
     accepts_submissions: true,
     accepts_attachments: true,
@@ -1336,7 +1336,7 @@ that teaches you a lesson. – Tom Bodett",
     description: "All members of a Group Submitting 'Submission-Key' unlocks
       this assignment",
     due_at: 5.weeks.from_now,
-    point_total: 120000,
+    full_points: 120000,
     grade_scope: "Group",
     accepts_submissions: true,
     accepts_attachments: true,
@@ -1357,7 +1357,7 @@ test that teaches you a lesson. – Tom Bodett",
     description: "All members of a Group Submitting 'Submission-Key' unlocks
       this assignment",
     due_at: 5.weeks.from_now,
-    point_total: 120000
+    full_points: 120000
   },
   unlock_condition: true,
   unlock_attributes: {
@@ -1457,7 +1457,7 @@ the speed, and the route.― Jay Cross",
   assignment_type: :weighting_one,
   attributes: {
     name: "Weighted Assignment Type 1",
-    point_total: 50000,
+    full_points: 50000,
     due_at: 4.weeks.from_now,
   }
 }
@@ -1469,7 +1469,7 @@ the speed, and the route.― Jay Cross",
   assignment_type: :weighting_two,
   attributes: {
     name: "Weighted Assignment Type 2",
-    point_total: 50000,
+    full_points: 50000,
     due_at: 4.weeks.from_now,
   }
 }
@@ -1481,7 +1481,7 @@ the speed, and the route.― Jay Cross",
   assignment_type: :weighting_three,
   attributes: {
     name: "Weighted Assignment Type 3",
-    point_total: 50000,
+    full_points: 50000,
     due_at: 4.weeks.from_now,
   }
 }
@@ -1493,7 +1493,7 @@ the speed, and the route.― Jay Cross",
   assignment_type: :weighting_four,
   attributes: {
     name: "Weighted Assignment Type 4",
-    point_total: 50000,
+    full_points: 50000,
     due_at: 4.weeks.from_now,
   }
 }

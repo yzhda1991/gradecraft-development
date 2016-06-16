@@ -19,12 +19,12 @@
     .form-item
       - if f.object.pass_fail?
         .pass-fail-contingent.hidden
-          = f.label :point_total, "Total Points Possible"
-          = f.text_field :point_total
+          = f.label :full_points, "Total Points Possible"
+          = f.text_field :full_points
       - else
         .pass-fail-contingent
-          = f.label :point_total, "Total Points Possible"
-          = f.text_field :point_total
+          = f.label :full_points, "Total Points Possible"
+          = f.text_field :full_points
 
     .form-item
       - if f.object.pass_fail?
@@ -198,7 +198,7 @@
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, AssignmentScoreLevel.new, class: "form-inline", child_index: "child_index" do |slf|
             = render partial: "assignment_score_level_fields", locals: { f: slf }
-      - presenter.assignment.assignment_score_levels.order_by_value.each do |assignment_score_level|
+      - presenter.assignment.assignment_score_levels.order_by_points.each do |assignment_score_level|
         %fieldset.assignment-score-level
           = f.simple_fields_for :assignment_score_levels, assignment_score_level, class: "form-inline" do |slf|
             = render partial: "assignment_score_level_fields", locals: { f: slf }

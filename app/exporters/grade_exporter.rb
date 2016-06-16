@@ -24,7 +24,7 @@ class GradeExporter
                 student.email,
                 grade.score || "",
                 grade.feedback || "",
-                grade.raw_score || "",
+                grade.raw_points || "",
                 submission.try(:text_comment) || "",
                 grade.graded_at || ""]
       end

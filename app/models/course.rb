@@ -60,7 +60,7 @@ class Course < ActiveRecord::Base
     :class_email, :twitter_handle, :twitter_hashtag, :location, :office_hours,
     :meeting_times, :assignment_term, :challenge_term, :badge_term, :grading_philosophy,
     :team_score_average, :team_challenges, :team_leader_term,
-    :max_assignment_types_weighted, :point_total, :in_team_leaderboard,
+    :max_assignment_types_weighted, :full_points, :in_team_leaderboard,
     :grade_scheme_elements_attributes, :add_team_score_to_student, :status,
     :assignments_attributes, :start_date, :end_date
 
@@ -100,7 +100,7 @@ class Course < ActiveRecord::Base
   validates_numericality_of :max_weights_per_assignment_type, allow_blank: true
   validates_numericality_of :max_assignment_types_weighted, allow_blank: true
   validates_numericality_of :default_weight, allow_blank: true
-  validates_numericality_of :point_total, allow_blank: true
+  validates_numericality_of :full_points, allow_blank: true
 
   validates_format_of :twitter_hashtag, with: /\A[A-Za-z][A-Za-z0-9]*(?:_[A-Za-z0-9]+)*\z/, allow_blank: true, length: { within: 3..20 }
 
@@ -192,7 +192,7 @@ class Course < ActiveRecord::Base
   end
 
   def valuable_badges?
-    badges.any? { |badge| badge.point_total.present? && badge.point_total > 0 }
+    badges.any? { |badge| badge.full_points.present? && badge.full_points > 0 }
   end
 
   def has_groups?
@@ -226,7 +226,7 @@ class Course < ActiveRecord::Base
   # total number of points 'available' in the course - sometimes set by an
   # instructor as a cap, sometimes just the sum of all assignments
   def total_points
-    point_total || assignments.sum("point_total")
+    full_points || assignments.sum("full_points")
   end
 
   def active?
@@ -250,7 +250,7 @@ class Course < ActiveRecord::Base
   end
 
   def element_for_score(score)
-    grade_scheme_elements.where("low_range <= ? AND high_range >= ?", score, score).first
+    grade_scheme_elements.where("lowest_points <= ? AND highest_points >= ?", score, score).first
   end
 
   def grade_level_for_score(score)
@@ -306,7 +306,7 @@ class Course < ActiveRecord::Base
   end
 
   def point_total_for_challenges
-    challenges.pluck("point_total").sum
+    challenges.pluck("full_points").sum
   end
 
   def recalculate_student_scores
@@ -347,5 +347,4 @@ class Course < ActiveRecord::Base
       CourseMembership.create course_id: self.id, user_id: admin.id, role: "admin"
     end
   end
-
 end

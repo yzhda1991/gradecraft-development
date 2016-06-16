@@ -3,7 +3,7 @@ class Badge < ActiveRecord::Base
   include UnlockableCondition
   include MultipleFileAttributes
 
-  attr_accessible :name, :description, :icon, :visible, :point_total,
+  attr_accessible :name, :description, :icon, :visible, :full_points,
     :can_earn_multiple_times, :earned_badges, :earned_badges_attributes,
     :badge_file_ids, :badge_files_attributes, :badge_file, :position,
     :visible_when_locked, :course_id, :course, :show_name_when_locked,
@@ -21,14 +21,14 @@ class Badge < ActiveRecord::Base
 
   belongs_to :course, touch: true
 
-  accepts_nested_attributes_for :earned_badges, allow_destroy: true, reject_if: proc { |a| a["score"].blank? }
+  accepts_nested_attributes_for :earned_badges, allow_destroy: true, reject_if: proc { |a| a.points.blank? }
 
   multiple_files :badge_files
   has_many :badge_files, dependent: :destroy
   accepts_nested_attributes_for :badge_files
 
   validates_presence_of :course, :name
-  validates_numericality_of :point_total, allow_blank: true
+  validates_numericality_of :full_points, allow_blank: true
 
   scope :visible, -> { where(visible: true) }
 
@@ -69,6 +69,6 @@ class Badge < ActiveRecord::Base
     earned_badges.where(
       student_id: student,
       student_visible: true
-    ).pluck("score").map(&:to_i).sum
+    ).pluck("points").map(&:to_i).sum
   end
 end

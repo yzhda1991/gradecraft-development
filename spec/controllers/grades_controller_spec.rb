@@ -86,27 +86,27 @@ describe GradesController do
 
     describe "PUT update" do
       it "updates the grade" do
-        put :update, { id: @grade.id, grade: { raw_score: 12345 }}
+        put :update, { id: @grade.id, grade: { raw_points: 12345 }}
         expect(@grade.reload.score).to eq(12345)
         expect(response).to redirect_to(assignment_path(@grade.assignment))
       end
 
       it "timestamps the grade" do
         current_time = DateTime.now
-        put :update, { id: @grade.id, grade: { raw_score: 12345 }}
+        put :update, { id: @grade.id, grade: { raw_points: 12345 }}
         expect(@grade.reload.graded_at).to be > current_time
       end
 
       it "attaches the student submission" do
         submission = create :submission, assignment: @assignment, student: @student
-        grade_params = { raw_score: 12345, submission_id: submission.id }
+        grade_params = { raw_points: 12345, submission_id: submission.id }
         put :update, { id: @grade.id, grade: grade_params }
         grade = Grade.last
         expect(grade.submission).to eq submission
       end
 
       it "handles a grade file upload" do
-        grade_params = { raw_score: 12345, "grade_files_attributes" => {"0" => {
+        grade_params = { raw_points: 12345, "grade_files_attributes" => {"0" => {
           "file" => [fixture_file("test_file.txt", "txt")] }}}
 
         put :update, { id: @grade.id, grade: grade_params}
@@ -115,23 +115,23 @@ describe GradesController do
       end
 
       it "handles commas in raw score params" do
-        put :update, { id: @grade.id, grade: { raw_score: "12,345" }}
+        put :update, { id: @grade.id, grade: { raw_points: "12,345" }}
         expect(@grade.reload.score).to eq(12345)
       end
 
       it "handles reverting nil raw score" do
-        put :update, { id: @grade.id, grade: { raw_score: nil }}
+        put :update, { id: @grade.id, grade: { raw_points: nil }}
         expect(@grade.reload.score).to eq(nil)
       end
 
       it "reverts empty raw score to nil, not zero" do
-        put :update, { id: @grade.id, grade: { raw_score: "" }}
+        put :update, { id: @grade.id, grade: { raw_points: "" }}
         expect(@grade.reload.score).to eq(nil)
       end
 
       it "returns to session if present" do
         session[:return_to] = login_path
-        put :update, { id: @grade.id, grade: { raw_score: 12345 }}
+        put :update, { id: @grade.id, grade: { raw_points: 12345 }}
         expect(response).to redirect_to(login_path)
       end
 
@@ -163,7 +163,7 @@ describe GradesController do
 
       it "marks the Grade as excluded, but preserves the data" do
         @grade.update(
-          raw_score: 500,
+          raw_points: 500,
           feedback: "should be nil",
           feedback_read: true,
           feedback_read_at: Time.now,
@@ -177,7 +177,7 @@ describe GradesController do
 
         @grade.reload
         expect(@grade.excluded_from_course_score).to eq(true)
-        expect(@grade.raw_score).to eq(500)
+        expect(@grade.raw_points).to eq(500)
         expect(@grade.score).to eq(500)
       end
 
@@ -205,7 +205,7 @@ describe GradesController do
 
       it "marks the Grade as included, and clears the excluded details" do
         @grade.update(
-          raw_score: 500,
+          raw_points: 500,
           status: "Graded",
           excluded_from_course_score: true,
           excluded_by_id: 2,
@@ -215,7 +215,7 @@ describe GradesController do
 
         @grade.reload
         expect(@grade.excluded_from_course_score).to eq(false)
-        expect(@grade.raw_score).to eq(500)
+        expect(@grade.raw_points).to eq(500)
         expect(@grade.score).to eq(500)
         expect(@grade.excluded_by_id).to be nil
         expect(@grade.excluded_at).to be nil

@@ -27,18 +27,18 @@
 
         .article-graded{'ng-if' => 'articleGraded(challenge)'}
           .grade
-            {{challenge.grade.score | number}} / {{challenge.point_total | number}}
+            {{challenge.grade.score | number}} / {{challenge.full_points | number}}
 
 
         .article-predicted{'ng-if' => '! challengeGraded(challenge)'}
           %div
-            .slider{'ui-slider'=>'slider(challenge)','min'=>'0', 'max'=>'{{challenge.point_total}}', 'ng-model'=>'challenge.prediction.predicted_points', 'data'=>{'id'=>'{{challenge.id}}','article-type'=>'challenge'}}
+            .slider{'ui-slider'=>'slider(challenge)','min'=>'0', 'max'=>'{{challenge.full_points}}', 'ng-model'=>'challenge.prediction.predicted_points', 'data'=>{'id'=>'{{challenge.id}}','article-type'=>'challenge'}}
 
             .grade{'ng-if' => '! hasLevels(challenge)'}
-              {{challenge.prediction.predicted_points | number}} / {{challenge.point_total | number}}
+              {{challenge.prediction.predicted_points | number}} / {{challenge.full_points | number}}
 
             .grade{'id'=>'challenge-{{challenge.id}}-level',  'ng-if' => 'hasLevels(challenge)'}
               .value
-                {{challenge.prediction.predicted_points | number}} / {{challenge.point_total | number}}
+                {{challenge.prediction.predicted_points | number}} / {{challenge.full_points | number}}
               .name
                 {{levelNameForChallengeScore(challenge)}}

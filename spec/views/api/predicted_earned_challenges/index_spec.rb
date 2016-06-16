@@ -37,7 +37,7 @@ describe "api/predicted_earned_challenges/index" do
     csl = create(:challenge_score_level, challenge: @challenge)
     render
     @json = JSON.parse(response.body)
-    expect(@json["data"][0]["attributes"]["score_levels"]).to eq([{"name" => csl.name, "value" => csl.value}])
+    expect(@json["data"][0]["attributes"]["score_levels"]).to eq([{"name" => csl.name, "points" => csl.points}])
   end
 
   it "adds the student grade into to the challenge" do

@@ -150,7 +150,7 @@
     badge_id: badge.id,
     grade_id: $scope.grade.id,
     assignment_id: $scope.grade.assignment_id
-    score: badge.point_total
+    points: badge.full_points
     student_visible: $scope.grade.student_visible
 
   $scope.froalaOptions = {

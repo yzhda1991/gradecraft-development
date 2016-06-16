@@ -11,7 +11,7 @@ describe API::GradeSchemeElementsController do
       it "returns grade scheme elements with total points as json" do
         get :index, format: :json
         expect(assigns(:grade_scheme_elements)).to eq([world.grade_scheme_element])
-        expect(assigns(:total_points)).to eq(world.grade_scheme_element.low_range)
+        expect(assigns(:total_points)).to eq(world.grade_scheme_element.lowest_points)
         expect(response).to render_template(:index)
       end
     end
@@ -23,7 +23,7 @@ describe API::GradeSchemeElementsController do
 
       it "returns the total points in the course if no grade scheme elements are present" do
         get :index, format: :json
-        expect(assigns(:total_points)).to eq(world.assignment.point_total)
+        expect(assigns(:total_points)).to eq(world.assignment.full_points)
       end
     end
 

@@ -1,0 +1,13 @@
+.raw-score
+  = f.label :raw_points, "Raw Points (#{assignment.full_points} Points Possible)"
+  = f.text_field :raw_points,
+    default: assignment.full_points,
+    label: "Score",
+    hint: "Total Assignment Points: #{ points assignment.full_points }",
+    "ng-model" => "grade.raw_points",
+    "ng-change" => "grade.update()",
+    "ng-click" => "grade.enableCustomValue()",
+    "ng-model-options" => "grade.modelOptions()",
+    "placeholder" => "Enter raw points for grade",
+    "smart-number" => "",
+    "smart-number-options" => "{ maxDigits: 9, preventInvalidInput: true }"

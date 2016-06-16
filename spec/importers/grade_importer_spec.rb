@@ -42,7 +42,7 @@ describe GradeImporter do
         it "creates the grade if it is not there" do
           result = subject.import(course, assignment)
           grade = Grade.unscoped.last
-          expect(grade.raw_score).to eq 4000
+          expect(grade.raw_points).to eq 4000
           expect(grade.feedback).to eq "You did great!"
           expect(grade.status).to eq "Graded"
           expect(grade.instructor_modified).to eq true
@@ -58,16 +58,16 @@ describe GradeImporter do
         end
 
         it "updates the grade if it is already there" do
-          create :grade, assignment: assignment, student: student, raw_score: 1000
+          create :grade, assignment: assignment, student: student, raw_points: 1000
           subject.import(course, assignment)
           grade = Grade.last
-          expect(grade.raw_score).to eq 4000
+          expect(grade.raw_points).to eq 4000
           expect(grade.feedback).to eq "You did great!"
           expect(grade.graded_at).to_not be_nil
         end
 
         it "does not update the grade if the grade and the feedback are the same as the one being imported" do
-          grade = create :grade, assignment: assignment, student: student, raw_score: 4000, feedback: "You did great!"
+          grade = create :grade, assignment: assignment, student: student, raw_points: 4000, feedback: "You did great!"
           expect {
             result = subject.import(course, assignment)
             expect(result.successful).to be_empty
@@ -78,16 +78,16 @@ describe GradeImporter do
 
         it "does not update the grade if it is already there and the score is null" do
           student = create(:user, email: "john@example.com")
-          grade = create :grade, assignment: assignment, student: student, raw_score: 4000
+          grade = create :grade, assignment: assignment, student: student, raw_points: 4000
           create(:student_course_membership, course: course, user: student)
           result = subject.import(course, assignment)
-          expect(grade.reload.raw_score).to eq 4000
+          expect(grade.reload.raw_points).to eq 4000
           expect(grade.graded_at).to be_nil
           expect(result.unsuccessful.last[:errors]).to eq "Grade not specified"
         end
 
         it "updates the grade if the grade is the same but the feedback is different" do
-          grade = create :grade, assignment: assignment, student: student, raw_score: 4000, feedback: "You need some work"
+          grade = create :grade, assignment: assignment, student: student, raw_points: 4000, feedback: "You need some work"
           result = subject.import(course, assignment)
           expect(result.successful.count).to eq 1
           expect(result.successful.first).to eq grade

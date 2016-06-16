@@ -38,7 +38,7 @@ feature "grading a group assignment" do
       expect(current_path).to eq grade_assignment_group_path(assignment, group)
 
       within(".pageContent") do
-        fill_in("grade_raw_score", with: 100)
+        fill_in("grade_raw_points", with: 100)
         click_button "Submit Grades"
       end
       expect(page).to have_notification_message("notice", "Group Name's Group Assignment was successfully updated")

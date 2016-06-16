@@ -209,7 +209,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_score: 100, status: "Released"
+                  raw_points: 100, status: "Released"
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -222,7 +222,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_score: 100, status: nil
+                  raw_points: 100, status: nil
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -235,7 +235,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_score: 100, status: "Released")
+                  raw_points: 100, status: "Released")
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned", condition_value: 100
@@ -247,7 +247,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_score: 99, status: "Released")
+                  raw_points: 99, status: "Released")
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
           condition_state: "Grade Earned", condition_value: 100)
@@ -258,7 +258,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_score: 100, status: nil, instructor_modified: false,
+                  raw_points: 100, status: nil, instructor_modified: false,
                   graded_at: DateTime.now
         )
         unlock_condition = UnlockCondition.new(
@@ -271,7 +271,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_score: 100, status: "Graded", instructor_modified:
+                  raw_points: 100, status: "Graded", instructor_modified:
                   true, graded_at: DateTime.now
         )
         unlock_condition = UnlockCondition.new(
@@ -285,7 +285,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_score: 100, status: "Graded", instructor_modified: true,
+                  raw_points: 100, status: "Graded", instructor_modified: true,
                   graded_at: DateTime.now
         )
         unlock_condition = UnlockCondition.new(
@@ -298,7 +298,7 @@ describe UnlockCondition do
       it "returns true if the grade earned meets condition value and date" do
         student = create(:user)
         create(
-          :grade, assignment: assignment, student: student, raw_score: 100,
+          :grade, assignment: assignment, student: student, raw_points: 100,
                   status: "Graded", instructor_modified: true,
                   graded_at: DateTime.now
         )
@@ -314,7 +314,7 @@ describe UnlockCondition do
         student = create(:user)
         create(
           :grade, assignment: assignment, student: student,
-                  raw_score: 90, status: "Graded", instructor_modified: true
+                  raw_points: 90, status: "Graded", instructor_modified: true
         )
         unlock_condition = UnlockCondition.new(
           condition_id: assignment.id, condition_type: "Assignment",
@@ -327,7 +327,7 @@ describe UnlockCondition do
       it "returns false if grade earned meets condition value but not date" do
         student = create(:user)
         create(
-          :grade, assignment: assignment, student: student, raw_score: 100,
+          :grade, assignment: assignment, student: student, raw_points: 100,
                   status: "Graded", instructor_modified: true,
                   graded_at: DateTime.now
         )

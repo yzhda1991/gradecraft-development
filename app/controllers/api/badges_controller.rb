@@ -9,7 +9,7 @@ class API::BadgesController < ApplicationController
       :icon,
       :id,
       :name,
-      :point_total,
+      :full_points,
       :position,
       :visible,
       :visible_when_locked)

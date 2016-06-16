@@ -18,7 +18,7 @@
     name: "Generic Challenge",
     open_at: nil,
     due_at: nil,
-    point_total: 1000000,
+    full_points: 1000000,
     accepts_submissions: false,
     release_necessary: false,
     visible: true,

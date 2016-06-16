@@ -61,8 +61,8 @@ module Submissions
 
     def title
       "#{owner_name}'s #{assignment.name} Submission " \
-        "(#{view_context.points assignment.point_total} " \
-        "#{"point".pluralize(assignment.point_total)})"
+        "(#{view_context.points assignment.full_points} " \
+        "#{"point".pluralize(assignment.full_points)})"
     end
   end
 end

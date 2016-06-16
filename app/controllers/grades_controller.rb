@@ -53,7 +53,7 @@ class GradesController < ApplicationController
   # it preserves the predicted grade
   def remove
     @grade = Grade.find(params[:id])
-    @grade.raw_score = nil
+    @grade.raw_points = nil
     @grade.status = nil
     @grade.feedback = nil
     @grade.feedback_read = false
@@ -165,10 +165,6 @@ class GradesController < ApplicationController
                         assignment_id: params[:assignment_id],
                         criterion_id: rubric_criteria_with_levels.collect {|criterion| criterion[:id] } })
                         .select(:id, :criterion_id, :level_id, :comments).to_json
-  end
-
-  def safe_grade_possible_points(grade)
-    grade.point_total rescue nil
   end
 
   def score_recalculator(student)

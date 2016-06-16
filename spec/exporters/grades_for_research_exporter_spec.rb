@@ -16,7 +16,7 @@ describe GradesForResearchExporter do
       @student.courses << course
       @assignment_type = create(:assignment_type, course: course)
       @assignment = create(:assignment, course: course, assignment_type: @assignment_type, name: "Quiz")
-      @grade = create(:grade, raw_score: 100, course: course, student: @student, assignment: @assignment)
+      @grade = create(:grade, raw_points: 100, course: course, student: @student, assignment: @assignment)
       @predicted_earned_grade = create(:predicted_earned_grade, assignment: @assignment, student: @student)
       graded_at = DateTime.now
       allow_any_instance_of(Grade).to receive(:graded_at).and_return graded_at
@@ -32,8 +32,8 @@ describe GradesForResearchExporter do
       expect(csv[1][6]).to eq "#{@assignment.id}"
       expect(csv[1][7]).to eq @assignment_type.name
       expect(csv[1][8]).to eq "#{@assignment_type.id}"
-      expect(csv[1][9]).to eq "#{@grade.raw_score}"
-      expect(csv[1][10]).to eq "#{@grade.point_total}"
+      expect(csv[1][9]).to eq "#{@grade.raw_points}"
+      expect(csv[1][10]).to eq "#{@grade.full_points}"
       expect(csv[1][11]).to eq "#{@grade.score}"
       expect(csv[1][12]).to eq "#{@predicted_earned_grade.predicted_points}"
       expect(csv[1][13]).to eq "#{@grade.feedback}"

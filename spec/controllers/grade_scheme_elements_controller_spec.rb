@@ -34,8 +34,8 @@ describe GradeSchemeElementsController do
 
     describe "PUT mass_update" do
       it "updates the grade scheme elements all at once" do
-        params = { "grade_scheme_elements_attributes" => [{ id: @grade_scheme_element.id, letter: "C", level: "Sea Slug", low_range: 0, high_range: 100000, course_id: @course.id }, { id: GradeSchemeElement.new.id, letter: "B", level: "Snail",
-          low_range: 100001, high_range: 200000, course_id: @course.id }],
+        params = { "grade_scheme_elements_attributes" => [{ id: @grade_scheme_element.id, letter: "C", level: "Sea Slug", lowest_points: 0, highest_points: 100000, course_id: @course.id }, { id: GradeSchemeElement.new.id, letter: "B", level: "Snail",
+          lowest_points: 100001, highest_points: 200000, course_id: @course.id }],
         "deleted_ids"=>nil, "grade_scheme_element"=>{} }
         put :mass_update, params.merge(format: :json)
         expect(@course.reload.grade_scheme_elements.count).to eq(2)
@@ -44,11 +44,11 @@ describe GradeSchemeElementsController do
 
       it "does not save the changes if invalid" do
         @grade_scheme_element_2 = create(:grade_scheme_element, course: @course)
-        params = { "grade_scheme_elements_attributes" => [{ id: @grade_scheme_element.id, letter: "C", level: "Sea Slugs Galore", low_range: 0, high_range: 100010, course_id: @course.id }, { id: GradeSchemeElement.new.id, letter: "B", level: "Snail",
-          low_range: 100011, high_range: nil, course_id: @course.id}],
+        params = { "grade_scheme_elements_attributes" => [{ id: @grade_scheme_element.id, letter: "C", level: "Sea Slugs Galore", lowest_points: 0, highest_points: 100010, course_id: @course.id }, { id: GradeSchemeElement.new.id, letter: "B", level: "Snail",
+          lowest_points: 100011, highest_points: nil, course_id: @course.id}],
         "deleted_ids"=>nil, "grade_scheme_element"=>{} }
         put :mass_update, params.merge(format: :json)
-        expect(@grade_scheme_element.reload.high_range).to eq(100000)
+        expect(@grade_scheme_element.reload.highest_points).to eq(100000)
         expect(response.status).to eq(500)
       end
     end

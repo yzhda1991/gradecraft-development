@@ -5,7 +5,7 @@ class Challenge < ActiveRecord::Base
   include UploadsThumbnails
   include MultipleFileAttributes
 
-  attr_accessible :name, :description, :visible, :point_total,
+  attr_accessible :name, :description, :visible, :full_points,
     :due_at, :open_at, :accepts_submissions, :release_necessary,
     :course, :team, :challenge, :challenge_file_ids,
     :challenge_files_attributes, :challenge_file, :challenge_grades_attributes,
@@ -79,7 +79,7 @@ class Challenge < ActiveRecord::Base
   end
 
   def positive_points
-    if point_total? && point_total < 1
+    if full_points? && full_points < 1
       errors.add :base, "Point total must be a positive number"
     end
   end

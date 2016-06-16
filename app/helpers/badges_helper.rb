@@ -4,7 +4,7 @@ module BadgesHelper
       concat image_tag(badge.icon, alt: "You have earned the #{badge.name} badge", class: "earned")
     end.concat(
       content_tag(:div, nil, class: "display_on_hover hover-style right") do
-        hover_content = "#{badge.name}#{", #{points badge.point_total} points" if badge.point_total.present? && badge.point_total > 0}"
+        hover_content = "#{badge.name}#{", #{points badge.full_points} points" if badge.full_points.present? && badge.full_points > 0}"
         if badge.is_unlockable?
           lock_icon_class = badge.is_unlocked_for_student?(student) ? "fa-unlock-alt" : "fa-lock"
           concat content_tag(:i, hover_content, class: "fa #{lock_icon_class}")

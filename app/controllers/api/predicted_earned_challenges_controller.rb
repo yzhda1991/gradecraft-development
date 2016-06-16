@@ -62,7 +62,7 @@ class API::PredictedEarnedChallengesController < ApplicationController
       user_role: current_user.role(current_course),
       challenge_id: params[:challenge_id],
       predicted_points: params[:predicted_points],
-      possible_points: challenge.point_total,
+      possible_points: challenge.full_points,
       created_at: Time.now,
       prediction_saved_successfully: prediction_saved
     }

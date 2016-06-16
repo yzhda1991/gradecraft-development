@@ -89,8 +89,8 @@
 
   # Assignments with Score Levels: Defines a snap tolerance and returns true if value is within range
   $scope.inSnapRange = (assignment,scoreLevel,value)->
-    tolerance = assignment.point_total * 0.05
-    if Math.abs(scoreLevel.value - value) <= tolerance
+    tolerance = assignment.full_points * 0.05
+    if Math.abs(scoreLevel.points - value) <= tolerance
       return true
     else
       return false
@@ -99,7 +99,7 @@
   $scope.closestScoreLevel = (scoreLevels,value)->
     closest = null
     _.each(scoreLevels, (lvl,i)->
-      if (closest == null || Math.abs(lvl.value - value) < Math.abs(scoreLevels[closest].value - value))
+      if (closest == null || Math.abs(lvl.points - value) < Math.abs(scoreLevels[closest].points - value))
         closest = i
     )
     return scoreLevels[closest]
@@ -171,7 +171,7 @@
   $scope.badgesPointTotal = ()->
     total = 0
     _.each($scope.badges,(badge)->
-        total += badge.prediction.predicted_times_earned * badge.point_total
+        total += badge.prediction.predicted_times_earned * badge.full_points
       )
     total
 
@@ -183,7 +183,7 @@
   $scope.maxChallengePoints = ()->
     total = 0
     _.each($scope.challenges, (challenge)->
-      total += challenge.point_total
+      total += challenge.full_points
       )
     total
 
@@ -226,8 +226,8 @@
     allPointsPredicted = $scope.allPointsPredicted()
     predictedGrade = null
     _.each($scope.gradeSchemeElements,(gse)->
-      if allPointsPredicted > gse.low_range
-        if ! predictedGrade || predictedGrade.low_range < gse.low_range
+      if allPointsPredicted > gse.lowest_points
+        if ! predictedGrade || predictedGrade.lowest_points < gse.lowest_points
           predictedGrade = gse
     )
     if predictedGrade
@@ -269,18 +269,18 @@
           if $scope.inSnapRange(article,closest,ui.value)
             event.preventDefault()
             event.stopPropagation()
-            angular.element(ui.handle.parentElement).slider("value", closest.value)
+            angular.element(ui.handle.parentElement).slider("value", closest.points)
 
             if articleType == 'assignment'
-              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
+              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(closest.points) + " / " + $filter('number')(article.full_points))
             else
-              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.value) + " / " + $filter('number')(article.point_total))
+              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(closest.points) + " / " + $filter('number')(article.full_points))
           else
 
             if articleType == 'assignment'
-              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
+              angular.element("#assignment-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.full_points))
             else
-              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.point_total))
+              angular.element("#challenge-" + article.id + "-level .value").text($filter('number')(ui.value) + " / " + $filter('number')(article.full_points))
 
       stop: (event, ui)->
         articleType = ui.handle.parentElement.dataset.articleType
@@ -343,27 +343,27 @@
     axis = d3.svg.axis().scale(scale).orient("bottom")
     g = svg.selectAll('g').data(gradeSchemeElements).enter().append('g')
             .attr("transform", (gse)->
-              "translate(" + (scale(gse.low_range) + padding) + "," + 25 + " )")
+              "translate(" + (scale(gse.lowest_points) + padding) + "," + 25 + " )")
             .on("mouseover", (gse)->
-              d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "visible")
-              d3.select(".grade_scheme-pointer-" + gse.low_range)
+              d3.select(".grade_scheme-label-" + gse.lowest_points).style("visibility", "visible")
+              d3.select(".grade_scheme-pointer-" + gse.lowest_points)
                 .attr("transform","scale(4) translate(-.5,-3)")
                 .attr("fill", "#68A127")
             )
             .on("mouseout", (gse)->
-              d3.select(".grade_scheme-label-" + gse.low_range).style("visibility", "hidden")
-              d3.select(".grade_scheme-pointer-" + gse.low_range)
+              d3.select(".grade_scheme-label-" + gse.lowest_points).style("visibility", "hidden")
+              d3.select(".grade_scheme-pointer-" + gse.lowest_points)
                 .attr("transform","scale(2) translate(0,0)")
                 .attr("fill", "black")
             )
     g.append("path")
       .attr("d", "M3,2.492c0,1.392-1.5,4.48-1.5,4.48S0,3.884,0,2.492c0-1.392,0.671-2.52,1.5-2.52S3,1.101,3,2.492z")
-      .attr("class",(gse)-> "grade_scheme-pointer-" + gse.low_range)
+      .attr("class",(gse)-> "grade_scheme-pointer-" + gse.lowest_points)
       .attr("transform","scale(2)")
     txt = d3.select("#svg-grade-level-text").selectAll('g').data(gradeSchemeElements).enter()
             .append('g')
             .attr("class", (gse)->
-              "grade_scheme-label-" + gse.low_range)
+              "grade_scheme-label-" + gse.lowest_points)
             .style("visibility", "hidden")
     txt.append('text')
       .text( (gse)-> gse.name)
@@ -373,12 +373,12 @@
       .attr("fill", "#FFFFFF")
     txt.insert("rect",":first-child")
       .attr("width", (gse)->
-          angular.element(".grade_scheme-label-" + gse.low_range)[0].getBBox().width + (padding * 2)
+          angular.element(".grade_scheme-label-" + gse.lowest_points)[0].getBBox().width + (padding * 2)
         )
       .attr("height", 22)
       .attr("fill","#68A127")
     txt.attr("transform", (gse)->
-      "translate(" + $scope.gradeLevelPosition(scale,gse.low_range,stats.width,padding) + "," + 0 + ")")
+      "translate(" + $scope.gradeLevelPosition(scale,gse.lowest_points,stats.width,padding) + "," + 0 + ")")
     d3.select("svg").append("g")
       .attr("class": "grade-point-axis")
       .attr("transform": "translate(" + padding + "," + (65) + ")")

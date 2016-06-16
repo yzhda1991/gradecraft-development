@@ -49,7 +49,7 @@ class AssignmentType < ActiveRecord::Base
 
   # Calculating the total number of assignment points in the type
   def summed_assignment_points
-    assignments.map{ |a| a.point_total || 0 }.sum
+    assignments.map{ |a| a.full_points || 0 }.sum
   end
 
   def total_points_for_student(student)
@@ -88,8 +88,8 @@ class AssignmentType < ActiveRecord::Base
                   .where(assignment_type: self).pluck("score").sum || 0
   end
 
-  def raw_score_for_student(student)
-    student.grades.student_visible.where(assignment_type: self).pluck("raw_score").compact.sum || 0
+  def raw_points_for_student(student)
+    student.grades.student_visible.where(assignment_type: self).pluck("raw_points").compact.sum || 0
   end
 
   private

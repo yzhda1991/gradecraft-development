@@ -26,7 +26,7 @@
 
         .badge-predicted{'ng-if'=>'!badgeCompleted(badge)'}
 
-          .predictor-binary-switch.badge{'ng-if'=>'!badge.can_earn_multiple_times','target'=>'badge','target-type'=>'badge','off-value'=>'0','on-value'=>'badge.point_total'}
+          .predictor-binary-switch.badge{'ng-if'=>'!badge.can_earn_multiple_times','target'=>'badge','target-type'=>'badge','off-value'=>'0','on-value'=>'badge.full_points'}
 
           .predictor-counter-switch{'ng-if'=>'badge.can_earn_multiple_times', 'target'=>'badge'}
 

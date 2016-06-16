@@ -229,14 +229,14 @@ describe Badge do
   describe "#find_or_create_unlock_state" do
     it "creates an unlock state for a student" do
       student = create(:user)
-      badge = create(:badge, point_total: 1000)
+      badge = create(:badge, full_points: 1000)
       expect { badge.find_or_create_unlock_state(student.id) }.to \
         change(UnlockState,:count).by 1
     end
 
     it "finds an existing unlock state for a student" do
       student = create(:user)
-      badge = create(:badge, point_total: 1000)
+      badge = create(:badge, full_points: 1000)
       unlock_state = create(:unlock_state, student: student, unlockable: badge)
       expect(badge.find_or_create_unlock_state(student.id)).to \
         eq(unlock_state)
@@ -257,7 +257,7 @@ describe Badge do
   describe "#earned_badge_for_student(student)" do
     it "returns the first earned badge for a student for a particular badge" do
       student = create(:user)
-      badge = create(:badge, point_total: 1000)
+      badge = create(:badge, full_points: 1000)
       earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
       expect(badge.earned_badge_for_student(student)).to eq(earned_badge)
     end
@@ -266,21 +266,21 @@ describe Badge do
   describe "#find_or_create_predicted_earned_badge" do
     it "creates a predicted earned badge for a student" do
       student = create(:user)
-      badge = create(:badge, point_total: 1000)
+      badge = create(:badge, full_points: 1000)
       expect { badge.find_or_create_predicted_earned_badge(student.id) }.to \
         change(PredictedEarnedBadge,:count).by 1
     end
 
     it "finds an existing predicted earned badge for a student" do
       student = create(:user)
-      badge = create(:badge, point_total: 1000)
+      badge = create(:badge, full_points: 1000)
       peb = create(:predicted_earned_badge, student: student, badge: badge)
       expect(badge.find_or_create_predicted_earned_badge(student.id)).to \
         eq(peb)
     end
 
     it "returns a null object for a student id of 0" do
-      badge = create(:badge, point_total: 1000)
+      badge = create(:badge, full_points: 1000)
       expect(badge.find_or_create_predicted_earned_badge(0).class).to \
         eq(NullPredictedEarnedBadge)
     end
@@ -289,8 +289,8 @@ describe Badge do
   describe "#earned_badge_count_for_student(student)" do
     it "sums up the number of times a student has earned a specific badge" do
       student = create(:user)
-      badge = create(:badge, point_total: 1000)
-      second_badge = create(:badge, point_total: 200)
+      badge = create(:badge, full_points: 1000)
+      second_badge = create(:badge, full_points: 200)
       earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
       second_earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
       third_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
@@ -301,8 +301,8 @@ describe Badge do
   describe "#earned_badge_total_points(student)" do
     it "sums up the total points earned for a specific badge" do
       student = create(:user)
-      badge = create(:badge, point_total: 1000)
-      second_badge = create(:badge, point_total: 200)
+      badge = create(:badge, full_points: 1000)
+      second_badge = create(:badge, full_points: 200)
       earned_badge = create(:earned_badge, badge: badge, student: student, student_visible: true)
       second_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)
       third_earned_badge = create(:earned_badge, badge: second_badge, student: student, student_visible: true)

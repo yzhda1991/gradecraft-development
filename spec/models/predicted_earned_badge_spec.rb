@@ -15,7 +15,7 @@ describe PredictedEarnedBadge do
   it { is_expected.to be_valid }
 
   it "caluculates the total points predicted" do
-    expect(@predicted_earned_badge.total_predicted_points).to eq(@predicted_earned_badge.predicted_times_earned * @predicted_earned_badge.badge.point_total)
+    expect(@predicted_earned_badge.total_predicted_points).to eq(@predicted_earned_badge.predicted_times_earned * @predicted_earned_badge.badge.full_points)
   end
 
   context "when the badge has been earned by student" do

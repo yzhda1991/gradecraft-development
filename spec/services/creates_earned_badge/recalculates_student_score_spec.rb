@@ -25,7 +25,7 @@ describe Services::Actions::RecalculatesStudentScore do
   end
 
   it "does not recalculate the score if there is no point total" do
-    earned_badge.badge.update_attributes(point_total: nil)
+    earned_badge.badge.update_attributes(full_points: nil)
     expect_any_instance_of(ScoreRecalculatorJob).to_not receive(:enqueue)
     described_class.execute earned_badge: earned_badge
   end

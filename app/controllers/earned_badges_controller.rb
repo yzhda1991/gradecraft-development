@@ -44,7 +44,7 @@ class EarnedBadgesController < ApplicationController
 
   def update
     if @earned_badge.update_attributes(params[:earned_badge])
-      if @badge.point_total?
+      if @badge.full_points?
         ScoreRecalculatorJob.new(user_id: @earned_badge.student_id,
                                  course_id: current_course.id).enqueue
       end
@@ -86,7 +86,7 @@ class EarnedBadgesController < ApplicationController
     @valid_earned_badges ||= parse_valid_earned_badges
     make_badges_student_visible
     send_earned_badge_notifications
-    if @badge.point_total?
+    if @badge.full_points?
       update_student_point_totals
     end
     handle_mass_update_redirect

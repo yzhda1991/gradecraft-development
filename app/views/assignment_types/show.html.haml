@@ -23,7 +23,7 @@
           %td= link_to assignment.name, assignment
           %td= assignment.try(:open_at)
           %td= assignment.try(:due_at)
-          %td= points assignment.point_total
+          %td= points assignment.full_points
           %td
             .right
               %ul.button-bar

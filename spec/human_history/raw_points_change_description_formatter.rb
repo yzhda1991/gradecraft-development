@@ -1,9 +1,9 @@
 require "spec_helper"
 require "active_model"
-require "./lib/human_history/raw_score_change_description_formatter"
+require "./lib/human_history/raw_points_change_description_formatter"
 
-describe HumanHistory::RawScoreChangeDescriptionFormatter do
-  let(:attribute) { "raw_score" }
+describe HumanHistory::RawPointsChangeDescriptionFormatter do
+  let(:attribute) { "raw_points" }
   let(:changes) { ["previous", "current"] }
   let(:type) { "Grade" }
 
@@ -31,7 +31,7 @@ describe HumanHistory::RawScoreChangeDescriptionFormatter do
 
   describe "#change_description" do
     it "returns the attribute name and changes" do
-      expect(subject.change_description).to eq "the raw score to current"
+      expect(subject.change_description).to eq "the raw points to current"
     end
   end
 end

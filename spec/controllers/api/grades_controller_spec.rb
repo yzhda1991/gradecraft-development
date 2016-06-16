@@ -28,22 +28,22 @@ describe API::GradesController do
 
     describe "update" do
       it "updates feedback, status and raw score from params" do
-        post :update, { id: world.grade.id, grade: { raw_score: 20000, feedback: "good jorb!", status: "Graded" }}
+        post :update, { id: world.grade.id, grade: { raw_points: 20000, feedback: "good jorb!", status: "Graded" }}
         world.grade.reload
         expect(world.grade.feedback).to eq("good jorb!")
         expect(world.grade.status).to eq("Graded")
-        expect(world.grade.raw_score).to eq(20000)
+        expect(world.grade.raw_points).to eq(20000)
       end
 
       it "updates instructor modified to true" do
-        post :update, { id: world.grade.id, grade: { raw_score: 20000, feedback: "good jorb!" }}
+        post :update, { id: world.grade.id, grade: { raw_points: 20000, feedback: "good jorb!" }}
         world.grade.reload
         expect(world.grade.instructor_modified).to be_truthy
       end
 
       it "timestamps the grade" do
         current_time = DateTime.now
-        post :update, { id: world.grade.id, grade: { raw_score: 20000, feedback: "good jorb!" }}
+        post :update, { id: world.grade.id, grade: { raw_points: 20000, feedback: "good jorb!" }}
         expect(world.grade.reload.graded_at).to be > current_time
       end
     end
@@ -84,7 +84,7 @@ describe API::GradesController do
 
     describe "PUT update" do
       it "is a protected route" do
-        expect(post :update, id: world.grade.id, raw_score: 20000, format: :json).to redirect_to(:root)
+        expect(post :update, id: world.grade.id, raw_points: 20000, format: :json).to redirect_to(:root)
       end
     end
 

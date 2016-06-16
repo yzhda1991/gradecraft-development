@@ -8,7 +8,7 @@
     .form-item
       = f.label :score
       = f.text_field :score, data: {autonumeric: true, "m-dec" => "0"}
-      .form_label out of #{points @challenge.point_total} points
+      .form_label out of #{points @challenge.full_points} points
 
     .form-item
       - if @challenge.release_necessary?

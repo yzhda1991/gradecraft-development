@@ -35,7 +35,7 @@ class AssignmentTypeExporter
   end
 
   def score_data(student, assignment_type)
-    [ assignment_type.raw_score_for_student(student), assignment_type.score_for_student(student) ]
+    [ assignment_type.raw_points_for_student(student), assignment_type.score_for_student(student) ]
   end
 
   def baseline_student_data(student, course)

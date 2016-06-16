@@ -10,12 +10,12 @@ describe GradeSchemeElement do
     end
 
     it "is invalid without a low range" do
-      subject.low_range = nil
+      subject.lowest_points = nil
       expect(subject).to be_invalid
     end
 
     it "is invalid without a high range" do
-      subject.high_range = nil
+      subject.highest_points = nil
       expect(subject).to be_invalid
     end
 
@@ -69,8 +69,8 @@ describe GradeSchemeElement do
 
   describe "#range" do
     it "returns the difference between the high range and the low range" do
-      subject.high_range = 100
-      subject.low_range = 0
+      subject.highest_points = 100
+      subject.lowest_points = 0
       expect(subject.range).to eq(100)
     end
   end
@@ -85,7 +85,7 @@ describe GradeSchemeElement do
 
     it "returns the difference between the current level high range and the student's
     total score + 1 point - the value to achieve the next level" do
-      subject.high_range = 100
+      subject.highest_points = 100
       subject.course = course
       expect(subject.points_to_next_level(student, course)).to eq(19)
     end
@@ -100,15 +100,15 @@ describe GradeSchemeElement do
     end
 
     it "returns the level's percent complete value for the student" do
-      subject.high_range = 100
-      subject.low_range = 0
+      subject.highest_points = 100
+      subject.lowest_points = 0
       subject.course = course
       expect(subject.progress_percent(student)).to eq(82)
     end
   end
 
   describe "#within_range?" do
-    subject { build(:grade_scheme_element, low_range: 1000, high_range: 1999) }
+    subject { build(:grade_scheme_element, lowest_points: 1000, highest_points: 1999) }
 
     it "returns true if the score is between the low and high ranges" do
       expect(subject).to be_within_range 1500

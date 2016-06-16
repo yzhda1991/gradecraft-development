@@ -60,7 +60,7 @@
             - @assignment_types.each do |at|
               %td= points at.visible_score_for_student(student)
               - if at.student_weightable?
-                %td= points at.raw_score_for_student(student)
+                %td= points at.raw_points_for_student(student)
                 %span.sr-only= at.name
 
   %h4.subtitle= "#{term_for :student} Grade Counts"

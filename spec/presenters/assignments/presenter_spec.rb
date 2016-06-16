@@ -3,7 +3,7 @@ require "./app/presenters/assignments/presenter"
 require "./app/presenters/assignments/group_presenter"
 
 describe Assignments::Presenter do
-  let(:assignment) { double(:assignment, name: "Crazy Wizardry", pass_fail?: false, point_total: 5000)}
+  let(:assignment) { double(:assignment, name: "Crazy Wizardry", pass_fail?: false, full_points: 5000)}
   let(:course) { double(:course) }
   let(:view_context) { double(:view_context) }
   let(:team) { double(:team) }

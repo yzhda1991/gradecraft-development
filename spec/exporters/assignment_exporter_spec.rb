@@ -19,7 +19,7 @@ describe AssignmentExporter do
       expect(csv.length).to eq 2
       expect(csv[1][0]).to eq "#{assignment.id}"
       expect(csv[1][1]).to eq assignment.name
-      expect(csv[1][2]).to eq "#{assignment.point_total}"
+      expect(csv[1][2]).to eq "#{assignment.full_points}"
       expect(csv[1][3]).to eq assignment.description
       expect(csv[1][4]).to eq assignment.open_at
       expect(csv[1][5]).to eq assignment.due_at

@@ -107,11 +107,11 @@ describe API::CriterionGradesController do
       end
 
       it "updates the grade for all students in group" do
-        target = params["grade"]["raw_score"]
+        target = params["grade"]["raw_points"]
         put :group_update, params
         expect(Grade.where(
           student_id: world.group.students.pluck(:id), assignment_id: world.assignment.id
-        ).pluck(:raw_score)).to eq([target, target, target, target])
+        ).pluck(:raw_points)).to eq([target, target, target, target])
       end
 
       it "adds the group id to all grades" do

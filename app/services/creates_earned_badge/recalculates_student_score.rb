@@ -6,7 +6,7 @@ module Services
       expects :earned_badge
 
       executed do |context|
-        if context.earned_badge.badge.point_total?
+        if context.earned_badge.badge.full_points?
           ScoreRecalculatorJob.new(user_id: context.earned_badge.student_id,
                                    course_id: context.earned_badge.course_id)
             .enqueue

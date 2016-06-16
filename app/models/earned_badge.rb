@@ -1,5 +1,5 @@
 class EarnedBadge < ActiveRecord::Base
-  attr_accessible :score, :feedback, :student, :badge, :student_id, :badge_id,
+  attr_accessible :points, :feedback, :student, :badge, :student_id, :badge_id,
     :submission_id, :course_id, :assignment_id, :level_id, :criterion_id,
     :student_visible, :grade, :_destroy, :course, :grade_id, :feedback
 
@@ -45,7 +45,7 @@ class EarnedBadge < ActiveRecord::Base
 
   def cache_associations
     self.course_id ||= badge.try(:course_id)
-    self.score ||= badge.try(:point_total) || 0
+    self.points ||= badge.try(:full_points) || 0
     self.student_visible = GradeProctor.new(grade).viewable? if grade.present?
     true
   end

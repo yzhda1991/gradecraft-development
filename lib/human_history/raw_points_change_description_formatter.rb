@@ -1,9 +1,9 @@
 require_relative "default_change_description_formatter"
 
 module HumanHistory
-  class RawScoreChangeDescriptionFormatter < DefaultChangeDescriptionFormatter
+  class RawPointsChangeDescriptionFormatter < DefaultChangeDescriptionFormatter
     def formattable?
-      attribute == "raw_score" && type.classify == "Grade"
+      attribute == "raw_points" && type.classify == "Grade"
     end
 
     def change_description

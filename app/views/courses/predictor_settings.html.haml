@@ -29,9 +29,9 @@
                   %td{:width => "25%"}
                     - if assignment.include_in_predictor?
                       - if assignment.assignment_score_levels.present?
-                        .slider{:max => assignment.point_total, :"data-scorelevelvals" => "#{assignment.assignment_score_levels.map(&:value)}", :"data-scorelevelnames" => "#{assignment.assignment_score_levels.map(&:name)}", :"data-highlight" => "true"}
+                        .slider{:max => assignment.full_points, :"data-scorelevelvals" => "#{assignment.assignment_score_levels.map(&:value)}", :"data-scorelevelnames" => "#{assignment.assignment_score_levels.map(&:name)}", :"data-highlight" => "true"}
                       - else
-                        .slider{:max => assignment.point_total, :"data-highlight" => "true"}
+                        .slider{:max => assignment.full_points, :"data-highlight" => "true"}
                     - else
                       %input{:type => "checkbox" }
       .right.form_buttons

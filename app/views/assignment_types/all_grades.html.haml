@@ -41,10 +41,10 @@
             - i = 0
             - chronological_assignments = @assignment_type.assignments.chronological
             - for assignment in chronological_assignments.alphabetical
-              - if assignment.point_total > 0
+              - if assignment.full_points > 0
                 - assignment.grade_for_student(student).tap do |grade|
 
-                  - if grade && grade.score == assignment.point_total
+                  - if grade && grade.score == assignment.full_points
                     - i += 1
                     // Displaying td's colored green if the student earned all
                     // points possible on the assignment
@@ -57,7 +57,7 @@
                     - i = 0
                     %td
                       %i.fa.fa-times.absent
-                  - elsif grade && grade.score < assignment.point_total
+                  - elsif grade && grade.score < assignment.full_points
                     // Displaying td's colored yellow if the student earned
                     // some points on the assignment
                     - i = 0

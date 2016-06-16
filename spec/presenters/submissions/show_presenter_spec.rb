@@ -5,6 +5,7 @@ require "./app/presenters/submissions/grade_history"
 require "./app/presenters/submissions/show_presenter"
 
 describe Submissions::ShowPresenter do
+
   # build a new presenter with some default properties
   subject { described_class.new properties }
 
@@ -295,7 +296,7 @@ describe Submissions::ShowPresenter do
   end
 
   describe "#title" do
-    let(:assignment) { double(:assignment, name: "Greatness", point_total: 40) }
+    let(:assignment) { double(:assignment, name: "Greatness", full_points: 40) }
     let(:view_context) { double(:view_context).as_null_object }
 
     before do

@@ -57,13 +57,13 @@ class API::PredictedEarnedBadgesController < ApplicationController
       predicted_earns: params[:predicted_times_earned],
       multiple_earns_possible: badge.can_earn_multiple_times,
       predicted_points: badge_predicted_points,
-      point_value_per_badge: badge.point_total,
+      point_value_per_badge: badge.full_points,
       created_at: Time.now,
       prediction_saved_successfully: prediction_saved
     }
   end
 
   def badge_predicted_points
-    @badge.point_total * params[:predicted_times_earned] rescue nil
+    @badge.full_points * params[:predicted_times_earned] rescue nil
   end
 end

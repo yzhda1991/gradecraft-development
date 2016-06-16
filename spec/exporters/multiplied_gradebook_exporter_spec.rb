@@ -24,8 +24,8 @@ describe MultipliedGradebookExporter do
       @assignment_3 = create(:assignment, course: course, assignment_type: @assignment_type_1)
       @student = create(:user)
       @student.courses << course
-      create(:grade, assignment: @assignment, student: @student, raw_score: 100, status: "Released" )
-      create(:grade, assignment: @assignment_3, student: @student, raw_score: 200, status: "Released")
+      create(:grade, assignment: @assignment, student: @student, raw_points: 100, status: "Released" )
+      create(:grade, assignment: @assignment_3, student: @student, raw_points: 200, status: "Released")
 
       csv = CSV.new(subject.gradebook(course)).read
       expect(csv.length).to eq 2
