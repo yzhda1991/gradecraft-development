@@ -17,27 +17,21 @@
 .pageContent
   = render "layouts/alerts"
 
-  %p
-    Name:
-    = @event.name
-  %p
-    Descripton:
-    = raw @event.description
-  %p
-    Open date:
-    = @event.open_at
-  %p
-    Close date:
-    = @event.due_at
-  %p
-    Media:
+  .show-page-wrapper.badge-show-page
     %img{:src => @event.media }
-  %p
-    Thumbnail:
-    %img{:src =>  @event.thumbnail }
-  %p
-    Media credit:
-    = @event.media_credit
-  %p
-    Media caption:
-    = @event.media_caption
+
+    %h4 Event Date
+    %p= "#{@event.open_at} - #{@event.due_at}"
+
+    %h4 Description
+    %p= raw @event.description
+
+    -if current_user_is_staff?
+      %h4 Thumbnail
+      %img{:src =>  @event.thumbnail }
+
+      %h4 Media credit
+      %p= @event.media_credit
+
+      %h4 Media caption
+      %p= @event.media_caption
