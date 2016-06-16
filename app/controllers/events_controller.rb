@@ -1,6 +1,5 @@
 class EventsController < ApplicationController
 
-
   respond_to :html, :json
 
   def index
