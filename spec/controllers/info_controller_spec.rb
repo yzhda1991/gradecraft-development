@@ -105,7 +105,7 @@ describe InfoController do
     describe "GET gradebook" do
       it "retrieves the gradebook" do
         expect(GradebookExporterJob).to \
-          receive(:new).with(user_id: @professor.id, course_id: @course.id)
+          receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(GradebookExporterJob).to receive(:enqueue)
         get :gradebook
@@ -126,7 +126,7 @@ describe InfoController do
     describe "GET multipled_gradebook" do
       it "retrieves the multiplied gradebook" do
         expect(MultipliedGradebookExporterJob).to \
-          receive(:new).with(user_id: @professor.id, course_id: @course.id)
+          receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Multiplied Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(MultipliedGradebookExporterJob).to receive(:enqueue)
         get :multiplied_gradebook
@@ -161,7 +161,7 @@ describe InfoController do
     describe "GET research_gradebook" do
       it "retrieves the research gradebook" do
         expect(GradeExportJob).to \
-          receive(:new).with(user_id: @professor.id, course_id: @course.id)
+          receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Research Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(GradeExportJob).to receive(:enqueue)
         get :research_gradebook

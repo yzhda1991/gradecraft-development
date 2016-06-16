@@ -25,7 +25,7 @@ describe ExportsMailer do
     end
 
     it "has an appropriate subject" do
-      expect(email.subject).to eq "Gradebook export for #{course.name} #{export_type} is attached"
+      expect(email.subject).to eq "Gradebook export for #{course.name} is attached"
     end
 
     it "BCC's the email to the gradecraft admin" do
@@ -48,7 +48,7 @@ describe ExportsMailer do
       end
 
       it "should use the correct filename" do
-        expect(subject.filename).to eq("gradebook_export_#{course.id}.csv")
+        expect(subject.filename).to eq("#{ course.name } Grades - #{ Date.today }.csv")
       end
     end
 
