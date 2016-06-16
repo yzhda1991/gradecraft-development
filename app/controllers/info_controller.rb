@@ -13,10 +13,6 @@ class InfoController < ApplicationController
     render :dashboard
   end
 
-  def events_by_due_date
-    self.events.select { |event| !event.due_at.nil? }.sort_by { |event| event.due_at }
-  end
-
   def timeline_events
     @events = Timeline.new(current_course).events_by_due_date
     render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])
