@@ -43,7 +43,7 @@ describe "info/dashboard" do
     it "shows the dashboard" do
       allow(view).to receive(:current_user).and_return(@professor)
       render
-      assert_select "#time_line", count: 1
+      assert_select "%h3.pagetitle Dashboard", count: 1
     end
 
   end
@@ -64,7 +64,7 @@ describe "info/dashboard" do
     it "shows the dashboard" do
       allow(view).to receive(:current_user).and_return(@gsi)
       render
-      assert_select "#time_line", count: 1
+      assert_select "%h3.pagetitle Dashboard", count: 1
     end
 
   end
