@@ -17,7 +17,6 @@ module UsersHelper
                   name: assignment_type.name }
     end
 
-    # TODO: Earned badges pre 2016 have nil points cached on the model, must convert to integer
     earned_badge_points = user.earned_badges.where(course: course).pluck("points").sum {|s| s.to_i}
     if earned_badge_points > 0
       scores << { data: [earned_badge_points], name: "#{course.badge_term.pluralize}" }
