@@ -22,7 +22,8 @@ class CoursePredictorExport
   end
 
   def schema_records_for_role(role)
-    schema_records records.select {|event| event.user_role == role }
+    # this is defined in Analytics::Export::Model
+    parsed_schema_records records.select {|event| event.user_role == role }
   end
 
   # build an array or the given records in the format of

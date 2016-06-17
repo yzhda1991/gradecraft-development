@@ -4,7 +4,7 @@ module Analytics
   module Export
     module Model
       def self.included(base)
-        base.extend(ClassMethods)
+        base.extend Analytics::Export::ClassMethods
 
         base.class_eval do
           attr_accessor :data
@@ -16,7 +16,7 @@ module Analytics
       end
 
       def records
-        @records ||= data[self.class.rows]
+        @records ||= loaded_data[self.class.rows]
       end
 
       def parsed_schema_records(records_set=nil)
