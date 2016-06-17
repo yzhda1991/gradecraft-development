@@ -15,6 +15,9 @@ module Analytics
       end
 
       def generate!
+        # we're not calling this class, we're calling the standard ruby CSV
+        # library from the global namespace, so use ::
+        #
         ::CSV.open(csv_filepath, "wb") do |csv|
           # Write header row
           csv << export_column_names
