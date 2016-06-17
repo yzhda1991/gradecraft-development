@@ -69,6 +69,8 @@ class StudentsController < ApplicationController
 
   def teams
     student = params[:id].present? ? User.find(params[:id]) : current_student
+    # make current_student a scope so the student profile tabs partial is displayed
+    params[:student_id] = params[:id]
     @title = "#{term_for :teams}"
     @team = student.team_for_course(current_course)
     @teams = current_course.teams.order_by_rank.includes(:earned_badges)
