@@ -2,7 +2,7 @@
 require "rails_spec_helper"
 include CourseTerms
 
-describe "students/course_progress" do
+describe "students/grading_scheme" do
 
   before(:all) do
     @course = create(:course)

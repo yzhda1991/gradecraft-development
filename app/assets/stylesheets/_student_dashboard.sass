@@ -1,6 +1,141 @@
 @import color
 @import layout
 
+#student-dashboard
+  display: -webkit-box
+  display: -webkit-flex
+  display: -ms-flexbox
+  display: flex
+  -webkit-box-orient: horizontal
+  -webkit-box-direction: normal
+  -webkit-flex-direction: row
+  -ms-flex-direction: row
+  flex-direction: row
+
+  .col-30, .col-40
+    display: -webkit-box
+    display: -webkit-flex
+    display: -ms-flexbox
+    display: flex
+    -webkit-box-orient: vertical
+    -webkit-box-direction: normal
+    -webkit-flex-direction: column
+    -ms-flex-direction: column
+    flex-direction: column
+    margin-right: 1rem
+
+    &:last-child
+      margin-right: 0
+
+  .col-30
+    width: 30%
+
+  .col-40
+    width: 40%
+
+  .dashboard-module
+    margin-bottom: 1.25rem
+    width: 100%
+    border: 1px solid #eee
+
+  .card-header
+    background-color: $color-blue-2
+    color: $color-white
+    padding: 0.25rem 0.5rem
+
+  .card-body
+    padding: 0.5em
+
+  .todo .card-body
+    padding: 0
+
+  .todo-list-assignments
+    margin: 0
+    padding-left: 0
+    font-size: .8rem
+    max-height: 800px
+    overflow-y: auto
+
+    li
+      list-style-type: none
+
+  .assignment-item
+    position: relative
+    padding: 0.5em
+    border-bottom: 1px solid $color-grey-6
+
+    &:last-child
+      border-bottom: none
+
+    &.starred
+      background-color: transparentize($color-blue-4, .8)
+
+    .button
+      position: absolute
+      top: 50%
+      transform: translateY(-50%)
+      right: 8px
+
+    a
+      font-weight: 400
+
+  .planner-filter
+    white-space: nowrap
+    border-bottom: 1px solid $color-grey-6
+
+    a
+      font-weight: 400
+
+  /* Styles the small version of the grading scheme */
+  .bar_magic
+    border-radius: 5px
+    padding: .25rem
+    font-size: 0.8rem
+
+  .bar_magic.current
+    padding: 0.5rem 1rem
+
+    .your-rank
+      font-size: 0.9rem
+
+    .left-points, .right-points
+      margin: 0
+
+  .avatar
+    text-align: center
+    position: relative
+    img
+      margin: .5rem auto
+    ul li
+      display: inline
+      a:hover
+        background-color: $color-green-2
+
+
+  h3
+    margin: 0
+    padding: 0
+    font-size: .9rem
+
+  .form_label
+    color: $color-grey-2
+    font-style: normal
+    font-weight: 300
+
+  ul.block-grid
+    margin: 0.5rem auto !important
+    width: 100%
+    padding: 0
+    li
+      width: 10%
+      display: inline-block
+      list-style-type: none
+      margin-bottom: .5rem
+      img
+        width: 100%
+      img:hover
+        opacity: 1 !important
+
 /* Styling the bar charts on the syllabus page */
 #userBarTotal
   clear: both
@@ -11,85 +146,79 @@
   .highcharts-grid
     margin-left: -1rem
 
-/* Styling badge images depending on whether or not the student has earned them */
-img.unearned
-  opacity: .2 !important
+/* Styles the hover state on the box plot on the student dashboard */
+.jqstooltip
+  box-sizing: content-box
+  height: auto !important
+  width: auto !important
 
-img.earned
-  opacity: 1
+/* Makes the box plot responsive */
+#student_grade_distro canvas
+  width: 100% !important
+  margin: 1rem 0
 
-/* Styling grading scheme level bars*/
-.bar_magic
-  background-color:$color-grey-6
-  border-radius: 8px
-  box-sizing: border-box
-  margin: 3px auto
-  padding: .5rem
-  width: 95%
+  .button
+    border-radius: $global-radius
 
-.bar_magic.success
-  background-color: $color-green-2
-  color: $color-white
+/* Styles course events slider */
+#events-loading-spinner
+  margin: 0 auto
+  display: block
 
-  .has-tip
+.slide-container
+  display: none
+
+.slick-slider
+  display: block
+
+.slick-slide
+  height: auto
+  padding: 0.25rem 1.5rem
+
+.event-name
+  font-size: 1rem
+  text-align: center
+  font-weight: 400
+
+.event-image
+  float: left
+  padding-right: 1rem
+  max-width: 128px
+
+.event-date
+  font-size: 0.8rem
+  color: $color-grey-3
+  margin-top: 0.2rem
+  text-align: center
+
+.slider-direction-button
+  position: absolute
+  top: 8%
+  display: block
+  font-size: 0.8rem
+  width: 1.2rem
+  text-align: center
+  line-height: 1.2rem
+  padding: .1rem
+  cursor: pointer
+  z-index: 10
+  color: $color-blue-3
+  border-radius: 50%
+  border: 1px solid $color-blue-3
+  &:hover
+    text-decoration: none
+    background-color: $color-blue-3
     color: $color-white
 
-/* Styling current grading scheme level bar*/
-.bar_magic.current
-  background-color: transparentize($color-green-2, .8)
-  padding: 1rem
-  overflow: auto
+  &.next
+    right: 5px
 
-  .your-rank
-    font-size: 1rem
-    font-weight: bold
+  &.previous
+    left: 5px
 
-  .left-points
-    margin-left: 4em
+@media (max-width: $media-small-max)
+  #student-dashboard
+    flex-direction: column
 
-  .right-points
-    margin-right: 4em
-
-p.predictor-description
-  margin: 0.25rem 0 .5rem
-
-/*progress bar on course progress display*/
-.striped-bar-container
-  background-color: $color-grey-5
-  border-radius: 25px
-  height: .75rem
-  margin: 1rem 0rem
-
-.striped
-  background-image: repeating-linear-gradient(45deg, $color-green-2, $color-green-2 35px, $color-blue-2 35px, $color-blue-2 70px)
-  border-radius: 25px
-  height: .75rem
-
-#levels_per_assignment
-  min-height: 200px
-  width: 300px
-  padding: 0
-  margin: 0
-  .chart
-    height: 100px
-    padding: 0
-    margin: 0
-
-.right.radius.label
-  margin-left: 1rem
-
-@media (max-width: $media-medium-max)
-  .bar_magic.current
-    .left-points
-      margin-left: 0
-
-    .right-points
-      margin-right: 0
-
-@media (max-width: 760px)
-  .bar_magic
-    width: 100%
-
-    .left-points, .right-points
-      float: none
-      text-align: center
+    .col-30, .col-40
+      width: 100%

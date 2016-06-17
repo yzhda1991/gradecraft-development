@@ -2,7 +2,7 @@ class StudentsController < ApplicationController
   respond_to :html, :json
 
   before_filter :ensure_staff?,
-    except: [:predictor, :course_progress, :badges, :teams, :syllabus ]
+    except: [:predictor, :grading_scheme, :badges, :teams, :syllabus ]
   before_filter :save_referer, only: [:recalculate]
 
   # Lists all students in the course,
@@ -62,7 +62,7 @@ class StudentsController < ApplicationController
   end
 
   # Displaying the course grading scheme and professor's grading philosophy
-  def course_progress
+  def grading_scheme
     @grade_scheme_elements = current_course.grade_scheme_elements.order_by_highest_points
     @title = "Your Course Progress"
   end

@@ -1,0 +1,26 @@
+.col-30
+  .panel.todo.dashboard-module= render "students/dashboard/dashboard_to_do_list"
+
+.col-40
+  - if @events.present?
+    .panel.dashboard-module= render "students/dashboard/dashboard_course_events"
+
+  .panel.dashboard-module= render "students/dashboard/dashboard_since_last_login"
+
+  - if current_course.student_weighted?
+    .panel.dashboard-module= render "students/dashboard/dashboard_assignment_weights"
+
+  - if current_user_is_staff?
+    .panel= render "students/dashboard/dashboard_avatar"
+
+.col-30
+  .panel.dashboard-module.earned_points= render "students/dashboard/dashboard_earned_points_and_level"
+
+  - if current_course.grade_scheme_elements.present?
+    .panel.dashboard-module= render "students/dashboard/dashboard_grading_scheme"
+
+  - if current_course.has_badges?
+    .panel.dashboard-module= render "students/dashboard/dashboard_badges"
+
+  - if ! current_course.hide_analytics?
+    .panel.dashboard-module= render "students/dashboard/dashboard_grade_distribution"

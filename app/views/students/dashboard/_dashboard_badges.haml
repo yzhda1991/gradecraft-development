@@ -3,7 +3,7 @@
     %h3= term_for :badges
   .card-body
     %ul.block-grid
-      - cache multi_cache_key :student_sidebar_badges, current_student, current_course do
+      - cache multi_cache_key :student_dashboard_badges, current_student, current_course do
         - current_student.unique_student_earned_badges(current_course).includes(:unlock_conditions).each do |badge|
           %li= sidebar_earned_badge badge, current_student
 

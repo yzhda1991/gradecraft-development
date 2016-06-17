@@ -91,11 +91,11 @@ describe StudentsController do
       end
     end
 
-    describe "GET course_progress" do
+    describe "GET grading_scheme" do
       it "shows the course progress" do
-        get :course_progress, id: 10
+        get :grading_scheme, id: 10
         expect(assigns(:title)).to eq("Your Course Progress")
-        expect(response).to render_template(:course_progress)
+        expect(response).to render_template(:grading_scheme)
       end
     end
 
@@ -140,11 +140,11 @@ describe StudentsController do
       end
     end
 
-    describe "GET course_progress" do
+    describe "GET grading_scheme" do
       it "shows the course progress" do
-        get :course_progress, id: 10
+        get :grading_scheme, id: 10
         expect(assigns(:title)).to eq("Your Course Progress")
-        expect(response).to render_template(:course_progress)
+        expect(response).to render_template(:grading_scheme)
       end
     end
 
