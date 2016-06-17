@@ -78,7 +78,6 @@
 //= require pass_fail
 //= require student_dashboard
 //= require levels_per_assign
-//= require timelineJS/embed
 //= require earned_badges
 //= require file_upload
 //= require highcharts
