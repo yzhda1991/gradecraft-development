@@ -77,7 +77,7 @@ class StudentsController < ApplicationController
   # Display the grade predictor
   def predictor
     # id is used for api routes
-    @student_id = current_student.id if current_student && current_user_is_staff?
+    @student_id = params[:id] if current_user_is_staff?
   end
 
   # All Admins to see all of one student's grades at once, proof for duplicates
