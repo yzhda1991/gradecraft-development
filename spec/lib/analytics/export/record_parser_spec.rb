@@ -1,4 +1,4 @@
-require "analytics/export/RecordParser"
+require "analytics/export/record_parser"
 
 describe Analytics::Export::RecordParser do
   subject { described_class.new export: export, records: records }
