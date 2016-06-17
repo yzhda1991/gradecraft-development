@@ -1,8 +1,8 @@
 class EventsController < ApplicationController
 
-  before_filter :ensure_staff?
-
   respond_to :html, :json
+
+  before_filter :ensure_staff?, except: [:show, :index]
 
   def index
     @events = current_course.events.order("due_at ASC")

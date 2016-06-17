@@ -9,11 +9,12 @@ class InfoController < ApplicationController
 
   # Displays instructor dashboard, with or without Team Challenge dates
   def dashboard
+    @events = Timeline.new(current_course).events_by_due_date
     render :dashboard
   end
 
   def timeline_events
-    @events = Timeline.new(current_course).events
+    @events = Timeline.new(current_course).events_by_due_date
     render(partial: "info/timeline", handlers: [:jbuilder], formats: [:js])
   end
 

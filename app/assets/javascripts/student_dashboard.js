@@ -102,3 +102,43 @@ $('#course-planner').click(function() {
   $('#course-planner, #my-planner').toggleClass("selected");
   $('.todo-list-assignments li').css('display', '');
 });
+
+
+//Find event with closest date
+if($("#dashboard-timeline").length) {
+  $.ajax({
+    type: 'GET',
+    url: '/timeline_events',
+    dataType: 'json',
+    contentType: 'application/json',
+    success: function (json) {
+      setInitialEventSlide(json);
+    }
+ });
+}
+
+function setInitialEventSlide(eventJson){
+  var events = eventJson.timeline.date;
+  var todaysDate = new Date();
+  var startIndex = 0;
+
+  for (var i = 0; i < events.length; i++) {
+    var eventEndDate = new Date(events[i].endDate);
+    if (eventEndDate >= todaysDate) {
+      startIndex = i;
+      break;
+    }
+  }
+
+  $('#events-loading-spinner').hide();
+  initSlickSlider(startIndex);
+}
+
+// Initialize slick slider for course events
+function initSlickSlider(startIndex) {
+  $('.slide-container').slick({
+    prevArrow: '<a class="fa fa-chevron-left previous slider-direction-button"></a>',
+    nextArrow: '<a class="fa fa-chevron-right next slider-direction-button"></a>',
+    initialSlide: startIndex
+  });
+}

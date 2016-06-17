@@ -2,41 +2,36 @@
 
 %h3.pagetitle= @title
 
-.context_menu
-  %ul
-    %li
-      %a{:href => new_event_path }
-        = glyph(:plus)
-        New Calendar Event
-    %li
-      %a{:href => edit_event_path(@event) }
-        = glyph(:edit)
-        Edit
+-if current_user_is_staff?
+  .context_menu
+    %ul
+      %li
+        %a{:href => new_event_path }
+          = glyph(:plus)
+          New Calendar Event
+      %li
+        %a{:href => edit_event_path(@event) }
+          = glyph(:edit)
+          Edit
 
 .pageContent
   = render partial: "layouts/alerts"
 
-  %p
-    %b Name:
-    = @event.name
-  %p
-    %b Descripton:
-    = raw @event.description
-  %p
-    %b Open date:
-    = @event.open_at
-  %p
-    %b Close date:
-    = @event.due_at
-  %p
-    %b Media:
+  .show-page-wrapper.badge-show-page
     %img{:src => @event.media }
-  %p
-    %b Thumbnail:
-    %img{:src =>  @event.thumbnail }
-  %p
-    %b Media credit:
-    = @event.media_credit
-  %p
-    %b Media caption:
-    = @event.media_caption
+
+    %h4 Event Date
+    %p= "#{@event.open_at} - #{@event.due_at}"
+
+    %h4 Description
+    %p= raw @event.description
+
+    -if current_user_is_staff?
+      %h4 Thumbnail
+      %img{:src =>  @event.thumbnail }
+
+      %h4 Media credit
+      %p= @event.media_credit
+
+      %h4 Media caption
+      %p= @event.media_caption

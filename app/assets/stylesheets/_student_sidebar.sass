@@ -53,6 +53,8 @@
     margin: 0
     padding-left: 0
     font-size: .8rem
+    max-height: 800px
+    overflow-y: auto
 
     li
       list-style-type: none
@@ -109,9 +111,6 @@
         background-color: $color-green-2
 
 
-  a
-    font-weight: 300
-
   h3
     margin: 0
     padding: 0
@@ -150,6 +149,61 @@
   .button
     border-radius: $global-radius
 
+/* Styles course events slider */
+#events-loading-spinner
+  margin: 0 auto
+  display: block
+
+.slide-container
+  display: none
+
+.slick-slider
+  display: block
+
+.slick-slide
+  height: auto
+  padding: 0.25rem 1.5rem
+
+.event-name
+  font-size: 1rem
+  text-align: center
+  font-weight: 400
+
+.event-image
+  float: left
+  padding-right: 1rem
+  max-width: 128px
+
+.event-date
+  font-size: 0.8rem
+  color: $color-grey-3
+  margin-top: 0.2rem
+  text-align: center
+
+.slider-direction-button
+  position: absolute
+  top: 8%
+  display: block
+  font-size: 0.8rem
+  width: 1.2rem
+  text-align: center
+  line-height: 1.2rem
+  padding: .1rem
+  cursor: pointer
+  z-index: 10
+  color: $color-blue-3
+  border-radius: 50%
+  border: 1px solid $color-blue-3
+  &:hover
+    text-decoration: none
+    background-color: $color-blue-3
+    color: $color-white
+
+  &.next
+    right: 5px
+
+  &.previous
+    left: 5px
 
 @media (max-width: $media-small-max)
   #student-dashboard

@@ -17,6 +17,10 @@ class Timeline
     course.challenges.with_dates if course.has_team_challenges?
   end
 
+  def events_by_due_date
+    self.events.select { |event| !event.due_at.nil? }.sort_by { |event| event.due_at }
+  end
+
   def events
     @events ||= [
       assignment_events.to_a,

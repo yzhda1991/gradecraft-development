@@ -113,7 +113,6 @@ describe EventsController do
 
     describe "protected routes" do
       [
-        :index,
         :new,
         :create
       ].each do |route|
@@ -126,7 +125,6 @@ describe EventsController do
     describe "protected routes requiring id in params" do
       [
         :edit,
-        :show,
         :update,
         :destroy
       ].each do |route|
