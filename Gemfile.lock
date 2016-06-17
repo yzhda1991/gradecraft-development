@@ -9,14 +9,6 @@ GIT
       rspec-mocks (>= 3.0.0)
 
 GIT
-  remote: https://github.com/chcholman/timelineJS-rails.git
-  revision: 9948df90f2b345823aa03e8c8ac59b709d274229
-  branch: master
-  specs:
-    timelineJS-rails (1.1.5)
-      jquery-rails
-
-GIT
   remote: https://github.com/venturit/ims-lti.git
   revision: d801b95b0010e4cc64c1dbcf10fb6c12b3d27c23
   branch: master
@@ -773,7 +765,6 @@ DEPENDENCIES
   sinatra (>= 1.3.0)
   sorcery
   sparkpost_rails
-  timelineJS-rails!
   uglifier
   underscore-rails
   valid_attribute
