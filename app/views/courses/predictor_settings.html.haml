@@ -15,7 +15,6 @@
             %tr
               %th= "#{term_for :assignment}"
               %th Include in Predictor
-              %th Display Type
               %th Preview
 
           %tbody
@@ -25,7 +24,6 @@
                   = link_to assignment.name, assignment
                 = f.simple_fields_for :assignments, assignment do |af|
                   %td{:width => "10%"}= af.check_box :include_in_predictor
-                  %td= af.select :points_predictor_display, [[], ["Checkbox", "Fixed"], ["Select List"], ["Slider"], ]
                   %td{:width => "25%"}
                     - if assignment.include_in_predictor?
                       - if assignment.assignment_score_levels.present?

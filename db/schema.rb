@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160616171020) do
+ActiveRecord::Schema.define(version: 20160617095018) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,21 +102,16 @@ ActiveRecord::Schema.define(version: 20160616171020) do
     t.boolean  "student_logged"
     t.boolean  "release_necessary",                        default: false,        null: false
     t.datetime "open_at"
-    t.string   "icon",                         limit: 255
-    t.boolean  "can_earn_multiple_times"
     t.boolean  "visible",                                  default: true
-    t.integer  "category_id"
     t.boolean  "resubmissions_allowed"
     t.integer  "max_submissions"
     t.datetime "accepts_submissions_until"
     t.datetime "accepts_resubmissions_until"
     t.datetime "grading_due_at"
-    t.string   "role_necessary_for_release",   limit: 255
     t.string   "media",                        limit: 255
     t.string   "thumbnail",                    limit: 255
     t.string   "media_credit",                 limit: 255
     t.string   "media_caption",                limit: 255
-    t.string   "points_predictor_display",     limit: 255
     t.string   "mass_grade_type",              limit: 255
     t.boolean  "include_in_timeline",                      default: true
     t.boolean  "include_in_predictor",                     default: true

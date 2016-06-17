@@ -500,30 +500,6 @@ describe Assignment do
     end
   end
 
-  describe "#predictor_display_type" do
-    it "is set to checkbox for 'Fixed' display type" do
-      subject.points_predictor_display = "Fixed"
-      subject.pass_fail = false
-      expect(subject.predictor_display_type).to eq "checkbox"
-    end
-
-    it "is set to checkbox for pass fail assignments" do
-      subject.points_predictor_display = "Fixed"
-      subject.pass_fail = true
-      expect(subject.predictor_display_type).to eq "checkbox"
-    end
-
-    it "is set to slider for 'Slider' display type" do
-      subject.points_predictor_display = "Slider"
-      expect(subject.predictor_display_type).to eq "slider"
-    end
-
-    it "is set to slider by default" do
-      subject.points_predictor_display = nil
-      expect(subject.predictor_display_type).to eq "slider"
-    end
-  end
-
   describe "#grade_count" do
     before { subject.save }
 

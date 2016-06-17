@@ -6,7 +6,6 @@ FactoryGirl.define do
     description { Faker::Lorem.sentence }
     full_points { Faker::Number.number(5) }
     visible true
-    points_predictor_display "Fixed"
 
     factory :individual_assignment do
       grade_scope "Individual"

@@ -213,17 +213,10 @@ describe CoursesController do
     end
 
     describe "POST predictor settings update" do
-      it "changes the predictor settings for all assignments for the course" do
-        @assignment = create(:assignment, course: @course)
-        params = { "course" => { "assignments_attributes" => { "0" => {"include_in_predictor"=>"1", "points_predictor_display"=>"Fixed", "id"=> @assignment.id } } }, id: @course.id}
-        post :predictor_settings_update, params
-        expect(@assignment.reload.points_predictor_display).to eq("Fixed")
-        expect(response).to redirect_to @course
-      end
-
       it "redirects to the edit predictor settings page if it fails" do
         @assignment = create(:assignment, course: @course)
-        params = { "course" => { "assignments_attributes" => { "0" => {"include_in_predictor"=>"1", "points_predictor_display"=>"Fixed", "id"=> nil } } }, id: @course.id}
+        params = { "course" => { "assignments_attributes" => { "0" => {"include_in_predictor"=>"1",
+          "id"=> nil } } }, id: @course.id}
         post :predictor_settings_update, params
         expect(response).to render_template(:predictor_settings)
       end

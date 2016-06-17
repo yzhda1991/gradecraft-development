@@ -21,19 +21,6 @@ describe "assignments/predictor_data" do
     expect(json["assignments"].length).to eq(1)
   end
 
-  it "adds the predictor_display_type 'checkbox' to assignments" do
-    allow_any_instance_of(Assignment).to receive(:points_predictor_display).and_return("Slider")
-    render
-    json = JSON.parse(response.body)
-    expect(json["assignments"][0]["predictor_display_type"]).to eq("slider")
-  end
-
-  it "adds the predictor_display_type 'checkbox' to assignments" do
-    render
-    json = JSON.parse(response.body)
-    expect(json["assignments"][0]["predictor_display_type"]).to eq("checkbox")
-  end
-
   it "includes the current student grade with the assignment" do
     create :student_course_membership, user: @student, course: @assignment.course
     grade = create :grade, assignment: @assignment, student: @student,
