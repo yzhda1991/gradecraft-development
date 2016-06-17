@@ -51,16 +51,16 @@
 %hr
 
 %h5 Downloads
-%li= link_to_unless_current glyph("list-ul") + "Final Grades", final_grades_path(format: "csv")
-%li= link_to glyph(:table) + "Full Gradebook", gradebook_path(format: "csv")
+%li= link_to_unless_current glyph("list-ul") + "Final Grades", final_grades_path(id: current_course.id, format: "csv")
+%li= link_to glyph(:table) + "Full Gradebook", gradebook_path(id: current_course.id, format: "csv")
 - if current_course.student_weighted?
-  %li= link_to glyph(:table) + "Multiplied Gradebook",  multiplied_gradebook_path(format: "csv")
-%li= link_to glyph("th-large") + "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(format: "csv")
+  %li= link_to glyph(:table) + "Multiplied Gradebook",  multiplied_gradebook_path(id: current_course.id, format: "csv")
+%li= link_to glyph("th-large") + "#{term_for :assignment_type } Summaries", export_all_scores_assignment_types_path(id: current_course.id, format: "csv")
 
 - if current_course.has_badges?
-  %li= link_to glyph(:certificate) + "Awarded #{current_course.badge_term.pluralize}",  export_earned_badges_path(format: "csv")
+  %li= link_to glyph(:certificate) + "Awarded #{current_course.badge_term.pluralize}",  export_earned_badges_path(id: current_course.id, format: "csv")
 
-%li= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(format: "csv")
+%li= link_to_unless_current glyph("") + "#{term_for :assignment} Structure", export_structure_assignments_path(id: current_course.id, format: "csv")
 
 %hr
 
@@ -95,13 +95,12 @@
     - LTIProvider.all.each do |tool|
       %li= link_to_unless_current glyph("external-link-square") + "#{tool.name}", launch_lti_provider_path(tool)
 
-.hide-for-small
+- if current_user_is_admin?
+  .hide-for-small
   %hr
 
   %h5{ class: "make-lizards" } Admin
   %li= link_to_unless_current glyph(:university) + "My Courses", courses_path
-
-  - if current_user_is_admin?
-    %li= link_to_unless_current glyph("user-times") + "All Users", users_path
-    %li= link_to_unless_current glyph("check-square-o") + "Predictor Settings", predictor_settings_course_path(current_course)
-    %li= link_to_unless_current glyph(:photo) + "Timeline Settings", timeline_settings_course_path(current_course)
+  %li= link_to_unless_current glyph("user-times") + "All Users", users_path
+  %li= link_to_unless_current glyph("check-square-o") + "Predictor Settings", predictor_settings_course_path(current_course)
+  %li= link_to_unless_current glyph(:photo) + "Timeline Settings", timeline_settings_course_path(current_course)

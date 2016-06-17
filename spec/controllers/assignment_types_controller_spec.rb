@@ -103,7 +103,7 @@ describe AssignmentTypesController do
       context "with CSV format" do
         it "returns scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
-          get :export_scores, id: @assignment_type, format: :csv
+          get :export_scores, course_id: @course.id, id: @assignment_type, format: :csv
           expect(response.body).to include("First Name,Last Name,Email,Username,Team,Raw Score,Score")
         end
       end
@@ -113,13 +113,13 @@ describe AssignmentTypesController do
       context "with CSV format" do
         it "returns all scores in csv form" do
           grade = create(:grade, assignment: @assignment, student: @student, feedback: "good jorb!")
-          get :export_all_scores, format: :csv
+          get :export_all_scores, id: @course.id, format: :csv
           expect(response.body).to include("First Name,Last Name,Email,Username,Team")
         end
 
         it "redirects to the dashboard if no assignment types exist" do
           @assignment_type.destroy
-          get :export_all_scores, format: :csv
+          get :export_all_scores, id: @course.id, format: :csv
           expect(response).to redirect_to dashboard_path
         end
       end

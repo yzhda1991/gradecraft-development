@@ -47,7 +47,7 @@ describe ExportsMailer do
       end
 
       it "should use the correct filename" do
-        expect(subject.filename).to eq("grade_export_#{course.id}.csv")
+        expect(subject.filename).to eq("#{course.name} Grades - #{ Date.today }.csv")
       end
     end
 

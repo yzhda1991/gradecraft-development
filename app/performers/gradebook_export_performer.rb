@@ -2,6 +2,7 @@ class GradebookExportPerformer < ResqueJob::Performer
   def setup
     @user = fetch_user
     @course = fetch_course
+    @filename = @attrs[:filename]
   end
 
   # perform() attributes assigned to @attrs in the ResqueJob::Base class
@@ -34,7 +35,7 @@ class GradebookExportPerformer < ResqueJob::Performer
 
   def notify_gradebook_export
     ExportsMailer
-      .gradebook_export(@course, @user, "gradebook export", @csv_data)
+      .gradebook_export(@course, @user, @filename, @csv_data)
       .deliver_now
   end
 

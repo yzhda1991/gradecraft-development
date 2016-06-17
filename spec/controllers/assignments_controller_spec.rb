@@ -154,7 +154,7 @@ describe AssignmentsController do
 
     describe "GET export_structure" do
       it "retrieves the export_structure download" do
-        get :export_structure, format: :csv
+        get :export_structure, id: @course.id, format: :csv
         expect(response.body).to include("Assignment ID,Name,Point Total,Description,Open At,Due At,Accept Until")
       end
     end

@@ -67,24 +67,25 @@ class AssignmentTypesController < ApplicationController
   end
 
   def export_scores
+    course = current_user.courses.find_by(id: params[:course_id])
     respond_to do |format|
       format.csv {
-          send_data AssignmentTypeExporter.new.export_scores @assignment_type,
-          current_course, current_course.students
+          send_data AssignmentTypeExporter.new.export_scores(@assignment_type,
+          course, course.students),
+          filename: "#{ course.name } #{ (term_for :assignment_type).titleize } Scores - #{ Date.today }.csv"
         }
     end
   end
 
   def export_all_scores
-    if current_course.assignment_types.present?
+    course = current_user.courses.find_by(id: params[:id])
+    if course.assignment_types.present?
       respond_to do |format|
         format.csv {
-          send_data AssignmentTypeExporter.new.export_summary_scores current_course.assignment_types,
-            current_course, current_course.students
+          send_data AssignmentTypeExporter.new.export_summary_scores(course.assignment_types,
+            course, course.students),
+          filename: "#{ course.name } #{ (term_for :assignment_type).titleize } Summary - #{ Date.today }.csv"
         }
-
-        flash[:success]=
-          "Your assignment type summary file has been successfully downloaded"
       end
     else
       redirect_to dashboard_path, flash: {

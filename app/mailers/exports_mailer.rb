@@ -35,15 +35,14 @@ class ExportsMailer < ApplicationMailer
 
   def grade_export(course, user, csv_data)
     set_export_ivars(course, user)
-    attachments["grade_export_#{course.id}.csv"] = csv_attachment(csv_data)
+    attachments["#{ course.name } Grades - #{ Date.today }.csv"] = csv_attachment(csv_data)
     send_export_email "Grade export for #{course.name} is attached"
   end
 
-  def gradebook_export(course, user, export_type, csv_data)
+  def gradebook_export(course, user, filename, csv_data)
     set_export_ivars(course, user)
-    attachments["gradebook_export_#{course.id}.csv"] = csv_attachment(csv_data)
-    @export_type = export_type
-    send_export_email "Gradebook export for #{@course.name} #{@export_type} is attached"
+    attachments["#{ course.name } Grades - #{ Date.today }.csv"] = csv_attachment(csv_data)
+    send_export_email "Gradebook export for #{ course.name } is attached"
   end
 
   private

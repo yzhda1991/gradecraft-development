@@ -19,7 +19,7 @@ feature "downloading assignment type summary file" do
         click_link "Assignment type Summaries"
       end
 
-      expect(page.response_headers["Content-Type"]).to eq("application/octet-stream")
+      expect(page.response_headers["Content-Type"]).to eq("text/csv")
 
       expect(page).to have_content "First Name,Last Name,Email,Username,Team"
     end
