@@ -54,7 +54,7 @@ class CoursePredictorExport
     usernames[user_id] || "[user id: #{event.user_id}]"
   end
 
-  def assignment_name(event, index)
+  def assignment_name(event)
     return "[assignment id: nil]" unless event.respond_to? :assignment_id
     assignment_id = event.assignment_id.to_i
     @assignment_names[assignment_id] || "[assignment id: #{assignment_id}]"

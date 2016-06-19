@@ -19,7 +19,7 @@ describe CoursePredictorExport do
   end
 
   describe "#assignment_name" do
-    let(:result) { subject.assignment_name event, 20 }
+    let(:result) { subject.assignment_name event }
     let(:event) { double(:event) }
 
     context "event has no assignment_id" do
@@ -56,8 +56,8 @@ describe CoursePredictorExport do
     end
   end
 
-  it "includes Analytics::Export" do
-    expect(subject).to respond_to :schema_records
+  it "includes Analytics::Export::Model" do
+    expect(subject).to respond_to :parsed_schema_records
   end
 
   describe "accessible attributes" do
@@ -127,7 +127,7 @@ describe CoursePredictorExport do
 
     it "builds the schema records for records with the given role" do
       allow(subject).to receive(:records) { records }
-      expect(subject).to receive(:schema_records).with [records.first]
+      expect(subject).to receive(:parsed_schema_records).with [records.first]
       result
     end
   end
@@ -214,41 +214,6 @@ describe CoursePredictorExport do
       it "returns nil" do
         event = double :event, no_user_id_here: "seriously"
         expect(subject.username event).to be_nil
-      end
-    end
-  end
-
-  describe "#assignment_name" do
-    let(:event) { double :event, assignment_id: 5 }
-    before { allow(subject).to receive(:assignment_names) { assignment_names } }
-
-    context "assignment_names hash has a key matching the event's assignment_id" do
-      let(:assignment_names) { { 5 => "josiah" } }
-
-      it "selects the events that have a predictor event type" do
-        expect(subject.assignment_name event).to eq "josiah"
-      end
-    end
-
-    context "assignment_names hash has no key matching the event's assignment_id" do
-      let(:assignment_names) { { 10 => "annabelle" } }
-
-      it "selects the events that have a predictor event type" do
-        expect(subject.assignment_name event).to eq "[assignment id: 5]"
-      end
-    end
-
-    context "event has a nil assignment_id" do
-      it "returns nil" do
-        event = double :event, assignment_id: nil
-        expect(subject.assignment_name event).to be_nil
-      end
-    end
-
-    context "event has no assignment_id attribute" do
-      it "returns nil" do
-        event = double :event, no_assignment_id_here: "seriously"
-        expect(subject.assignment_name event).to be_nil
       end
     end
   end
