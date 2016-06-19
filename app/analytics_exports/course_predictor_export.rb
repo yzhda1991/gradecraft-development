@@ -2,7 +2,6 @@ class CoursePredictorExport
   include ::Analytics::Export::Model
 
   attr_accessor :usernames, :assignment_names
-  attr_reader :loaded_data
 
   rows_by :events
 

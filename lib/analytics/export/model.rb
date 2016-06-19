@@ -4,6 +4,7 @@ module Analytics
   module Export
     module Model
       def self.included(base)
+        attr_accessor :loaded_data
         base.extend Analytics::Export::ClassMethods
 
         base.class_eval do
@@ -13,6 +14,10 @@ module Analytics
 
       def initialize(loaded_data)
         self.data = loaded_data
+      end
+
+      def initialize(loaded_data)
+        @loaded_data = loaded_data
       end
 
       def records

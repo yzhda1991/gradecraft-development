@@ -1,9 +1,9 @@
-require "./spec/support/test_classes/lib/analytics/analytics_export_test"
+require "./spec/support/test_classes/lib/analytics/analytics_export_model_test"
 
-describe Analytics::Export do
+describe Analytics::Export::Model do
 
   # test modular behaviors in the context of a test class
-  describe AnalyticsExportTest do
+  describe AnalyticsExportModelTest do
     subject { described_class.new loaded_data }
     let(:loaded_data) { { some: "data" } }
 
@@ -13,12 +13,12 @@ describe Analytics::Export do
     end
 
     it "has an accessible data attribute" do
-      subject.data = "some data"
-      expect(subject.data).to eq "some data"
+      subject.loaded_data = "some data"
+      expect(subject.loaded_data).to eq "some data"
     end
 
     it "sets the loaded data to data on #initialize" do
-      expect(subject.data).to eq loaded_data
+      expect(subject.loaded_data).to eq loaded_data
     end
 
     describe "#records" do
@@ -30,12 +30,12 @@ describe Analytics::Export do
 
       it "caches the records" do
         subject.records
-        expect(subject.data).not_to receive(:[]).with :fossils
+        expect(subject.loaded_data).not_to receive(:[]).with :fossils
         subject.records
       end
     end
 
-    describe "#schema_records" do
+    describe "#parsed_schema_records" do
       let(:record_parser_class) { Analytics::Export::RecordParser }
       let(:schema_records_hash) { double(:schema_records).as_null_object }
 
@@ -44,31 +44,31 @@ describe Analytics::Export do
       end
 
       context "a records_set is given" do
-        let(:result) { subject.schema_records ["the-records-set"] }
+        let(:result) { subject.parsed_schema_records ["the-records-set"] }
 
-        it "builds a hash of schema records for records set" do
+        it "builds a hash of parsed schema records for records set" do
           expect(record_parser_class).to receive(:new).with \
             export: subject, records: ["the-records-set"]
           result
         end
 
-        it "caches the schema records" do
+        it "caches the parsed schema records" do
           result
           expect(record_parser_class).not_to receive(:new)
           result
         end
 
-        it "sets the schema records to @schema_records" do
+        it "sets the parsed schema records to @schema_records" do
           result
-          expect(subject.instance_variable_get(:@schema_records))
+          expect(subject.instance_variable_get(:@parsed_schema_records))
             .to eq schema_records_hash
         end
       end
 
       context "no records_set is given" do
-        let(:result) { subject.schema_records }
+        let(:result) { subject.parsed_schema_records }
 
-        it "builds a hash of schema records using the export records" do
+        it "builds a hash of parsed schema records using the export records" do
           allow(subject).to receive(:records) { ["some-records"] }
           expect(record_parser_class).to receive(:new).with \
             export: subject, records: ["some-records"]
