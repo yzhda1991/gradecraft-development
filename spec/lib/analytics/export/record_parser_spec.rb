@@ -25,10 +25,10 @@ describe Analytics::Export::RecordParser do
     end
   end
 
-  describe "#map_records!" do
+  describe "#parse_records!" do
     it "prints a note on start" do
       expect(subject).to receive(:puts).with " => Generating schema records..."
-      subject.map_records!
+      subject.parse_records!
     end
   end
 
