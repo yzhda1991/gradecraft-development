@@ -9,8 +9,8 @@ module Analytics
         @schema
       end
 
-      def rows_by(collection)
-        @rows = collection
+      def rows_by(collection_name)
+        @rows = collection_name
       end
 
       def rows

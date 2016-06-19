@@ -20,7 +20,6 @@ class CourseEventExport
       hash[user.id] = user.username
       hash
     end
-    super
   end
 
   def username(event, index)

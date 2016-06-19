@@ -12,7 +12,7 @@ class CourseUserAggregateExport
              total_predictor_sessions: :predictor_sessions
 
   def schema_records_for_role(role)
-    self.schema_records records.select {|user| @roles[user.id] == role }
+    parsed_schema_records records.select {|user| @roles[user.id] == role }
   end
 
   def initialize(loaded_data)

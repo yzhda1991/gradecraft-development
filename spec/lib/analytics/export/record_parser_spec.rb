@@ -1,8 +1,9 @@
 require "analytics/export/record_parser"
+require "./spec/support/test_classes/lib/analytics/analytics_export_model_test"
 
 describe Analytics::Export::RecordParser do
   subject { described_class.new export: export, records: records }
-  let(:export) { double(:export).as_null_object }
+  let(:export) { AnalyticsExportModelTest.new loaded: "data" }
   let(:records) { [{ id: 1 }, { id: 2 }] }
 
   describe "readable attributes" do
@@ -26,8 +27,10 @@ describe Analytics::Export::RecordParser do
   end
 
   describe "#parse_records!" do
-    it "prints a note on start" do
+    it "prints some notes about the progress" do
       expect(subject).to receive(:puts).with " => Generating schema records..."
+      expect(subject).to receive(:puts).with "    => column :dinosaurs, row :waffles"
+
       subject.parse_records!
     end
   end

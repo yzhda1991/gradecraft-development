@@ -30,13 +30,13 @@ module Analytics
               # print a message for the record if it fits into our
               # messaging schema
 
-              message = ::Message.new \
+              message = Message.new \
                 record_index: index,
                 total_records: records.size
               print message.formatted_message if message.printable?
 
 
-              schema_record = ::SchemaRecord.new \
+              schema_record = SchemaRecord.new \
                 target: row,
                 record: record,
                 export: export,
@@ -48,7 +48,7 @@ module Analytics
         end
       end
 
-      # this is the schema for the target Mongo class
+      # this is the schema for the target Export class
       def schema
         export.class.schema
       end

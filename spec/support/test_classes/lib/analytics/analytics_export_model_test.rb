@@ -9,4 +9,8 @@ class AnalyticsExportModelTest
   def initialize(loaded_data)
     @loaded_data = loaded_data
   end
+
+  def waffles(record, index)
+    { some: "waffles" }
+  end
 end
