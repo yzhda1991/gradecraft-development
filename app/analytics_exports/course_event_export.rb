@@ -16,6 +16,7 @@ class CourseEventExport
   end
 
   def initialize(loaded_data)
+    @loaded_data = loaded_data
     @usernames = loaded_data[:users].inject({}) do |hash, user|
       hash[user.id] = user.username
       hash
