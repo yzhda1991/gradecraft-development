@@ -20,7 +20,8 @@ module Analytics
       def get_value
         return call_target_method if target_is_a_method?
         return record_attribute if record_has_attribute?
-        send_export_method # if all else fails
+        return send_export_method if export_has_method?
+        ""
       end
 
       def target_is_a_method?
@@ -40,10 +41,14 @@ module Analytics
         record.send target
       end
 
+      def export_has_method?
+        export.respond_to? target
+      end
+
       # if all else has failed the target must be a method on the export itself,
       # so let's send it the record and the index as arguments
       def send_export_method
-        export.send target, record, index
+        export.send target, record
       end
     end
   end

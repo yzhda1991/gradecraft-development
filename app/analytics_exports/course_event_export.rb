@@ -23,11 +23,11 @@ class CourseEventExport
     end
   end
 
-  def username(event, index)
+  def username(event)
     @usernames[event.user_id] || "[user id: #{event.user_id}]"
   end
 
-  def page(event, index)
+  def page(event)
     event.try(:page) || "[n/a]"
   end
 end

@@ -27,8 +27,8 @@ describe Analytics::Export::CSV do
       expect(subject.filename).to eq filename
     end
 
-    it "has readable schema_records" do
-      expect(subject.schema_records).to eq schema_record_set
+    it "has readable parsed_schema_records" do
+      expect(subject.parsed_schema_records).to eq schema_record_set
     end
   end
 
@@ -45,9 +45,9 @@ describe Analytics::Export::CSV do
     context "schema_record_set doesn't exist" do
       let(:schema_record_set) { nil }
 
-      it "uses the schema_records from the export" do
-        allow(export).to receive(:schema_records) { ["the-records"] }
-        expect(subject.schema_records).to eq ["the-records"]
+      it "uses the parsed_schema_records from the export" do
+        allow(export).to receive(:parsed_schema_records) { ["the-records"] }
+        expect(subject.parsed_schema_records).to eq ["the-records"]
       end
     end
 
@@ -117,7 +117,7 @@ describe Analytics::Export::CSV do
 
   describe "#export_rows" do
     it "returns the transposed rows from the schema records" do
-      expect(subject.schema_records).to receive_message_chain(:values, :transpose)
+      expect(subject.parsed_schema_records).to receive_message_chain(:values, :transpose)
       subject.export_rows
     end
   end

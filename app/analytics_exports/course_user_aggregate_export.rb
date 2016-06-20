@@ -40,23 +40,23 @@ class CourseUserAggregateExport
     super
   end
 
-  def user_role(user, i)
+  def user_role(user)
     @roles[user.id]
   end
 
-  def pageviews(user, i)
+  def pageviews(user)
     @user_pageviews[user.id]
   end
 
-  def logins(user, i)
+  def logins(user)
     @user_logins[user.id]
   end
 
-  def predictor_events(user, i)
+  def predictor_events(user)
     @user_predictor_event_counts[user.id]
   end
 
-  def predictor_sessions(user, i)
+  def predictor_sessions(user)
     @user_predictor_sessions[user.id]
   end
 

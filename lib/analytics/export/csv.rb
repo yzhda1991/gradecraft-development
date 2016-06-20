@@ -3,13 +3,13 @@ require "csv"
 module Analytics
   module Export
     class CSV
-      attr_reader :export, :path, :filename, :schema_records
+      attr_reader :export, :path, :filename, :parsed_schema_records
 
       def initialize(export:, path:, filename: nil, schema_record_set: nil)
         @export = export
         @path = path
         @filename = filename || "#{export.class.name.underscore}.csv"
-        @schema_records = schema_record_set || export.schema_records
+        @parsed_schema_records = schema_record_set || export.parsed_schema_records
 
         FileUtils.mkdir_p(path) unless Dir.exists?(path)
       end
@@ -32,7 +32,7 @@ module Analytics
       end
 
       def export_rows
-        schema_records.values.transpose
+        parsed_schema_records.values.transpose
       end
 
       def csv_filepath
