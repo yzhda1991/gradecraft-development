@@ -40,7 +40,6 @@ class PredictedAssignmentCollectionSerializer
       :name,
       :pass_fail,
       :full_points,
-      :points_predictor_display,
       :position,
       :threshold_points,
       :required,
@@ -50,4 +49,3 @@ class PredictedAssignmentCollectionSerializer
     )
   end
 end
-

@@ -57,12 +57,7 @@
       = f.label :mass_grade_type, "Quick Grade Style"
       = f.select :mass_grade_type, [[],["Checkbox"], ["Select List"], ["Radio Buttons"], ["Text"]]
       .form_label How should this assignment appear in Quick Grade?
-
-    .form-item
-      = f.label :points_predictor_display, "Grade Predictor Style"
-      = f.select :points_predictor_display, [[], ["Checkbox", "Fixed"], ["Slider"], ]
-      .form_label How should this assignment appear in the Grade Predictor?
-
+      
   %section
     %h4 Assignment Description
     .textarea
