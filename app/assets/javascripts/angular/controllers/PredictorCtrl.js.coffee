@@ -1,4 +1,4 @@
-@gradecraft.controller 'PredictorCtrl', ['$scope', '$http', '$q', '$filter', 'PredictorService', ($scope, $http, $q, $filter, PredictorService) ->
+@gradecraft.controller 'PredictorCtrl', ['$scope', '$q', '$filter', 'PredictorService', 'AssignmentTypeService', ($scope, $q, $filter, PredictorService, AssignmentTypeService) ->
 
   $scope.assignmentMode = true
   $scope.loading = true
@@ -13,16 +13,16 @@
   $scope.services = ()->
     promises = [PredictorService.getGradeSchemeElements(),
                 PredictorService.getAssignments($scope.student_id),
-                PredictorService.getAssignmentTypes($scope.student_id),
+                AssignmentTypeService.getAssignmentTypes($scope.student_id),
                 PredictorService.getBadges($scope.student_id),
                 PredictorService.getChallenges($scope.student_id)]
     return $q.all(promises)
 
   $scope.assignments = PredictorService.assignments
-  $scope.assignmentTypes = PredictorService.assignmentTypes
+  $scope.assignmentTypes = AssignmentTypeService.assignmentTypes
   $scope.gradeSchemeElements = PredictorService.gradeSchemeElements
   $scope.badges = PredictorService.badges
-  $scope.weights = PredictorService.weights
+  $scope.weights = AssignmentTypeService.weights
   $scope.challenges = PredictorService.challenges
   $scope.icons = PredictorService.icons
   $scope.termFor = PredictorService.termFor
@@ -126,36 +126,20 @@
     )
     total
 
-  # multiply points by the student's assignment type weight
-  # passes points through for unweighted assignment types
-  $scope.weightedPoints = (points,assignmentType)->
-    if assignmentType.student_weightable
-      if assignmentType.student_weight > 0
-        points = points * assignmentType.student_weight
-      else
-        points = points * $scope.weights.default_weight
-    points
-
-  # FIX THIS ONE
-  $scope.assignmentTypeMaxPossiblePoints = (assignmentType)->
-    total = $scope.weightedPoints(assignmentType.total_points,assignmentType)
-    if assignmentType.is_capped
-      total = if total > assignmentType.total_points then assignmentType.total_points else total
-    total
-
   # Total points predicted for all assignments by assignments type
   # caps the total points at the assignment type max points
   # only calculates the weighted total if weighted is passed in as true
   # only calcuates earned points if includePredicted is passed in as false
   $scope.assignmentTypePointTotal = (assignmentType, includeWeights=true, includeCaps=true, includePredicted=true)->
-    assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
+
     if includePredicted
+      assignments = $scope.assignmentsForAssignmentType($scope.assignments,assignmentType.id)
       total = $scope.assignmentsPointTotal(assignments)
     else
-      total = $scope.assignmentsPointTotal(assignments, false)
+      total = AssignmentTypeService.weightedEarnedPoints(assignmentType)
 
     if includeWeights
-      total = $scope.weightedPoints(total,assignmentType)
+      total = AssignmentTypeService.weightedPoints(assignmentType, total)
     if assignmentType.is_capped and includeCaps
       total = if total > assignmentType.total_points then assignmentType.total_points else total
     total
@@ -297,14 +281,6 @@
           PredictorService.postPredictedChallenge(article.prediction.id,value)
     }
 
-# WEIGHTS
-
-  $scope.unusedWeightsRange = ()->
-    _.range($scope.weights.unusedWeights())
-
-  $scope.weightsAvailable = ()->
-    $scope.weights.unusedWeights() && $scope.weights.open
-
 # GRAPHICS RENDERING
 
   $scope.GraphicsStats = ()->
@@ -392,5 +368,4 @@
     width = $scope.GraphicsStats().scale($scope.allPointsPredicted())
     width = width || 0
 
-  return
 ]

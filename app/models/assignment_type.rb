@@ -92,6 +92,10 @@ class AssignmentType < ActiveRecord::Base
     student.grades.student_visible.where(assignment_type: self).pluck("raw_points").compact.sum || 0
   end
 
+  def final_points_for_student(student)
+    student.grades.student_visible.where(assignment_type: self).pluck("raw_points").compact.sum || 0
+  end
+
   private
 
   def positive_max_points

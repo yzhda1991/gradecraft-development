@@ -20,6 +20,7 @@ describe "api/assignment_types/index" do
 
   before(:each) do
     allow(@student).to receive(:weight_for_assignment_type).and_return(777)
+    allow(@assignment_types.first).to receive(:final_points_for_student).and_return(888)
     allow(view).to receive(:current_course).and_return(@course)
     render
     @json = JSON.parse(response.body)
@@ -31,6 +32,10 @@ describe "api/assignment_types/index" do
 
   it "includes the assignment_type total points" do
     expect(@json["data"].first["attributes"]["total_points"]).to eq(1234)
+  end
+
+  it "includes the assignment_type final points summed for student" do
+    expect(@json["data"].first["attributes"]["final_points_for_student"]).to eq(888)
   end
 
   it "renders the student weight" do
