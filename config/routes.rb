@@ -267,14 +267,11 @@ GradeCraft::Application.routes.draw do
   resources :passwords, path_names: { new: "reset" },
     except: [:destroy, :index, :show]
 
-  resource :saml, only: [] do
-    collection do
-      post :consume
-      get :init
-      get :logout
-      get :metadata
-    end
-  end
+  #SAML
+  get "saml/init"
+  post "saml/consume"
+  get "saml/metadata"
+  get "saml/logout"
 
   get "lti/:provider/launch", to: "lti#launch", as: :launch_lti_provider
 
