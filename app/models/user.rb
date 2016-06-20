@@ -320,7 +320,7 @@ class User < ActiveRecord::Base
   end
 
   def previous_element_level(course_elements, current_element_index)
-    previous_element = levels[current_element_index - 1] unless current_element_index == 0
+    previous_element = course_elements[current_element_index - 1] unless current_element_index == 0
   end
 
   def points_to_next_level(course)
