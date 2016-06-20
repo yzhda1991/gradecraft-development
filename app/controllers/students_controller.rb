@@ -68,15 +68,18 @@ class StudentsController < ApplicationController
   end
 
   def teams
+    student = params[:id].present? ? User.find(params[:id]) : current_student
+    # make current_student a scope so the student profile tabs partial is displayed
+    params[:student_id] = params[:id]
     @title = "#{term_for :teams}"
-    @team = current_student.team_for_course(current_course)
+    @team = student.team_for_course(current_course)
     @teams = current_course.teams.order_by_rank.includes(:earned_badges)
   end
 
   # Display the grade predictor
   def predictor
     # id is used for api routes
-    @student_id = current_student.id if current_student && current_user_is_staff?
+    params[:student_id] = params[:id] if current_user_is_staff?
   end
 
   # All Admins to see all of one student's grades at once, proof for duplicates

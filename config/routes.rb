@@ -244,7 +244,9 @@ GradeCraft::Application.routes.draw do
     resources :student_academic_histories, except: :index
     member do
       get :grade_index
+      get :predictor
       get :recalculate
+      get :teams
     end
     collection do
       get :autocomplete_student_name
