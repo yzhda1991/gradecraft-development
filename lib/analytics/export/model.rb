@@ -20,8 +20,12 @@ module Analytics
         @loaded_data = loaded_data
       end
 
+      def filter(rows)
+        rows
+      end
+
       def records
-        @records ||= loaded_data[self.class.rows]
+        @records ||= filter loaded_data[self.class.rows]
       end
 
       def parsed_schema_records(records_set=nil)
