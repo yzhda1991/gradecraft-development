@@ -208,6 +208,18 @@ describe Assignments::GradesController do
           redirect_to(:root)
       end
     end
+
+    describe "DELETE delete_all" do
+      it "deletes all the grades for the assignment" do
+        delete :delete_all, assignment_id: @assignment.id
+        expect(@assignment.reload.grades).to be_empty
+      end
+
+      it "redirects to assignments page on success" do
+        delete :delete_all, assignment_id: @assignment.id
+        expect(response).to redirect_to(assignment_path(@assignment))
+      end
+    end
   end
 
   context "as student" do
