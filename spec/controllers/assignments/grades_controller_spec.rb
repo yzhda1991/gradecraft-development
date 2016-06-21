@@ -216,8 +216,8 @@ describe Assignments::GradesController do
       end
 
       it "redirects to assignments page on success" do
-        expect(delete :delete_all, assignment_id: @assignment.id).to \
-          redirect_to(assignments_path)
+        delete :delete_all, assignment_id: @assignment.id
+        expect(response).to redirect_to(assignment_path(@assignment))
       end
     end
   end

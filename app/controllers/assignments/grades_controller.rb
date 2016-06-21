@@ -146,20 +146,13 @@ class Assignments::GradesController < ApplicationController
   def delete_all
     assignment = Assignment.find(params[:assignment_id])
     assignment.grades.each do |grade|
-      student = grade.student
       grade.destroy
-      ScoreRecalculatorJob.new(user_id: student.id, course_id: current_course.id).enqueue
+      ScoreRecalculatorJob.new(user_id: grade.student_id, course_id: current_course.id).enqueue
     end
 
-    if assignment.grades.all? { |grade| grade.destroyed? }
-      redirect_to assignment_path(assignment), flash: {
-        success: "Successfully deleted all grades for #{ assignment.name }"
-      }
-    else
-      redirect_to assignment_path(assignment), flash: {
-        error: "An error occurred while deleting grades for #{ assignment.name }"
-      }
-    end
+    redirect_to assignment_path(assignment), flash: {
+      success: "Successfully deleted all grades for #{ assignment.name }"
+    }
   end
 
   # PUT /assignments/:assignment_id/grades/self_log
