@@ -1,0 +1,15 @@
+= content_nav_for Assignment
+
+%h3.pagetitle= @title
+
+.pageContent
+  = render partial: "layouts/alerts"
+
+
+  %p
+    Import all assignments from Canvas course
+    %b= "#{@course['name']}"
+    ?
+    %ul
+      - @assignments.each do |assignment|
+        %li= assignment['name']

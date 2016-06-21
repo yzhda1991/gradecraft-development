@@ -58,6 +58,8 @@ GradeCraft::Application.routes.draw do
       post :sort
       get :feed
       get :settings
+      get :import
+      get 'import/canvas/:id', to: 'assignments#import_canvas'
       post "copy" => "assignments#copy"
       get "export_structure"
     end
