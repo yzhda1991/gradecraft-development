@@ -116,7 +116,7 @@ describe Grade do
       assignment = create :assignment, release_necessary: true
       create :grade, assignment: assignment, status: "Graded"
 
-      expect(described_class.student_visible).to eq [graded_grade, released_grade]
+      expect(described_class.student_visible).to include(released_grade, graded_grade)
     end
   end
 
