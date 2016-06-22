@@ -243,6 +243,7 @@ class AnalyticsController < ApplicationController
           export_filepath = File.join(output_dir, export_filename)
           Archive::Zip.archive(export_filepath, export_dir)
           send_file export_filepath
+
         ensure
           FileUtils.remove_entry_secure export_dir
         end
