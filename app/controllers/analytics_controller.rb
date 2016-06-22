@@ -185,55 +185,95 @@ class AnalyticsController < ApplicationController
   # TODO: fix this
   def export
     respond_to do |format|
+      # please note that this is all going to be refactored in the subsequent
+      # pull request, so I'm doing my best to just get this into working condition
+      # for use on @cait's dissertation.
+      #
+      # All of this will be moved into a dedicated CourseAnalyticsExport class which
+      # will handle this entire process in order to move all of the export logic
+      # out of the controller.
+      #
       format.zip do
-        export_dir = Dir.mktmpdir
-        export_zip "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }", export_dir do
+        # check whether we need to use S3fs
+        use_s3fs = %w[staging production].include? Rails.env
 
-          (Role.all + ["total"]).each do |role|
-            role_subdir = File.join(export_dir,role.pluralize)
-            id = current_course.id
-            events = Analytics::Event.where(course_id: id)
-            predictor_events =
-              Analytics::Event.where(course_id: id, event_type: "predictor")
-            user_pageviews = CourseUserPageview.data(:all_time, nil, {
-              course_id: id
-              },
-              { page: "_all" })
-            user_predictor_pageviews =
-              CourseUserPagePageview.data(:all_time, nil, {
-              course_id: id, page: "/dashboard#predictor"
-              })
-            user_logins = CourseUserLogin.data(:all_time, nil, {
-              course_id: id
-              })
+        # if we do use the prefix for the s3fs tempfiles
+        s3fs_prefix = use_s3fs ? "/s3mnt/tmp/#{Rails.env}" : nil
 
-            user_ids = events.collect(&:user_id).compact.uniq
-            assignment_ids = events.select {
-              |event| event.respond_to? :assignment_id
-            }.collect(&:assignment_id).compact.uniq
-            users = User.where(id: user_ids).select(:id, :username)
-            assignments =
-              Assignment.where(id: assignment_ids).select(:id, :name)
+        # create a working tmpdir for the export
+        export_tmpdir = Dir.mktmpdir nil, s3fs_prefix
 
-            data = {
-              events: events,
-              predictor_events: predictor_events,
-              user_pageviews: user_pageviews[:results],
-              user_predictor_pageviews: user_predictor_pageviews[:results],
-              user_logins: user_logins[:results],
-              users: users,
-              assignments: assignments
-            }
-            Analytics.configuration.exports[:course].each do |export|
-              exp = export.new(data)
-              if role == "total"
-                exp.generate_csv(role_subdir)
-              else
-                exp.generate_csv(role_subdir,
-                nil, exp.schema_records_for_role(role))
-              end
-            end
-          end # each role
+        # create a named directory to generate the files in
+        export_dir = FileUtils.mkdir File.join(export_tmpdir, current_course.courseno)
+
+        id = current_course.id
+
+        begin
+          events = Analytics::Event.where(course_id: id)
+
+          predictor_events =
+            Analytics::Event.where(course_id: id, event_type: "predictor")
+
+          user_pageviews = CourseUserPageview.data(:all_time, nil, {
+            course_id: id
+            },
+            { page: "_all" })
+
+          user_predictor_pageviews =
+            CourseUserPagePageview.data(:all_time, nil, {
+            course_id: id, page: /predictor/
+            })
+
+          user_logins = CourseUserLogin.data(:all_time, nil, {
+            course_id: id
+            })
+
+          user_ids = events.collect(&:user_id).compact.uniq
+
+          assignment_ids = events.select {
+            |event| event.respond_to? :assignment_id
+          }.collect(&:assignment_id).compact.uniq
+
+          users = User.where(id: user_ids).select(:id, :username)
+
+          assignments =
+            Assignment.where(id: assignment_ids).select(:id, :name)
+
+          data = {
+            events: events,
+            predictor_events: predictor_events,
+            user_pageviews: user_pageviews[:results],
+            user_predictor_pageviews: user_predictor_pageviews[:results],
+            user_logins: user_logins[:results],
+            users: users,
+            assignments: assignments
+          }
+
+          [
+            CourseEventExport,
+            CoursePredictorExport,
+            CourseUserAggregateExport
+          ].each do |export|
+            export.new(data).generate_csv export_dir
+          end
+
+          # this is going to be the downloaded filename of the final archive
+          export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
+
+          # create a place to store our final archive, for now
+          output_dir = Dir.mktmpdir nil, s3fs_prefix
+
+          # expand the export filename against our temporary directory path
+          export_filepath = File.join(output_dir, export_filename)
+
+          # generate the actual zip file here
+          Archive::Zip.archive(export_filepath, export_dir)
+
+          # and render it for the user
+          send_file export_filepath
+        ensure
+          # get rid of any tempfiles we were using as well
+          FileUtils.remove_entry_secure export_dir, output_dir
         end
       end
     end

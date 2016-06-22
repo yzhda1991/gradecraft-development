@@ -5,10 +5,11 @@ class CoursePredictorExport
 
   set_schema username: :username,
              role: :user_role,
-             student_profile: :student_profile,
+             user_id: :user_id,
              assignment: :assignment_name,
-             prediction: :score,
-             possible: :possible,
+             assignment_id: :assignment_id,
+             prediction: :predicted_points,
+             possible: :possible_points,
              date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
   def schema_records_for_role(role)
@@ -38,11 +39,7 @@ class CoursePredictorExport
 
   def assignment_name(event, index)
     return "[assignment id: nil]" unless event.respond_to? :assignment_id
-    assignment_id = event.assignment_id
+    assignment_id = event.assignment_id.to_i
     @assignment_names[assignment_id] || "[assignment id: #{assignment_id}]"
-  end
-
-  def student_profile(event, index)
-    nil
   end
 end

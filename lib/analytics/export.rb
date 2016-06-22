@@ -34,13 +34,15 @@ module Analytics::Export
             puts "    => column #{column.inspect}, value #{value.inspect}"
             h[column] = recs.each_with_index.map do |record, i|
               print "\r       record #{i} of #{total_records} (#{(i*100.0/total_records).round}%)" if i % 5 == 0 || i == (total_records - 1)
+
               if value.respond_to? :call
                 value.call(record)
               elsif record.respond_to? value
                 record.send(value)
               else
-                self.send(value, record, i)
+                self.send(value, record, i) if self.respond_to? value
               end
+
             end
           end
           puts "\n       Done. Elapsed time: #{elapsed} seconds"
@@ -57,12 +59,10 @@ module Analytics::Export
 
   def generate_csv(path, file_name=nil, schema_record_set=nil)
     schema_recs = schema_record_set || self.schema_records
-    unless File.exists?(path) && File.directory?(path)
-      FileUtils.mkdir_p(path)
-    end
+
     file_name ||= "#{self.class.name.underscore}.csv"
 
-    CSV.open(File.join(path, file_name), "wb") do |csv|
+    CSV.open(File.join(path, file_name), "w") do |csv|
       # Write header row
       csv << self.class.schema.keys
 

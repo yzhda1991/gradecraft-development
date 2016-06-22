@@ -5,8 +5,8 @@ class CourseEventExport
 
   set_schema  username: :username,
               role: :user_role,
+              user_id: :user_id,
               page: :page,
-              action: :page_name,
               date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
   def schema_records_for_role(role)
@@ -27,9 +27,5 @@ class CourseEventExport
 
   def page(event, index)
     event.try(:page) || "[n/a]"
-  end
-
-  def page_name(event, index)
-    nil
   end
 end
