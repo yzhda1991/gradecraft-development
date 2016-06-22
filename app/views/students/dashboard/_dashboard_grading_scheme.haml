@@ -26,8 +26,8 @@
     .progress.bar_magic.transparent.center
       .meter
         %i.fa.fa-lock
-        %span= presenter.grade_scheme_elements[0].name
-        %span=points presenter.grade_scheme_elements[0].lowest_points
+        %span= presenter.first_element.name
+        %span=points presenter.first_element.lowest_points
 
     .progress.bar_magic.current.center.no-level
       %span.your-rank Your rank: Not on the board yet!

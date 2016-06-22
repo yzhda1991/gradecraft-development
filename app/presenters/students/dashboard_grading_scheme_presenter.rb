@@ -15,8 +15,13 @@ class Students::DashboardGradingSchemePresenter < Showtime::Presenter
     student.cached_score_for_course(course)
   end
 
-  def grade_scheme_elements
+  def course_elements
     GradeSchemeElement.unscoped.for_course(course).order_by_lowest_points
+  end
+
+#showing first element of grading scheme if current score does not reflect a level
+  def first_element
+    GradeSchemeElement.unscoped.for_course(course).order_by_lowest_points.first
   end
 
   def current_element
