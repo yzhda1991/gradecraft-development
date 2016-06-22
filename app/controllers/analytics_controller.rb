@@ -185,11 +185,18 @@ class AnalyticsController < ApplicationController
   # TODO: fix this
   def export
     respond_to do |format|
+      # please note that this is all going to be refactored in the subsequent
+      # pull request, so I'm doing my best to just get this into working condition
+      # for use on @cait's dissertation.
+      #
+      # All of this will be moved into a dedicated CourseAnalyticsExport class which
+      # will handle this entire process in order to move all of the export logic
+      # out of the controller.
+      #
       format.zip do
-        # let's create a directory to save our exported files to
+        # let's create a place to keep our newly-generated CSV files
         export_dir = FileUtils.mkdir File.join(Dir.mktmpdir, current_course.courseno)
 
-        export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
         id = current_course.id
 
         begin
@@ -241,12 +248,22 @@ class AnalyticsController < ApplicationController
             export.new(data).generate_csv export_dir
           end
 
-          output_dir = Dir.mktmpdir(current_course.courseno)
-          export_filepath = File.join(output_dir, export_filename)
-          Archive::Zip.archive(export_filepath, export_dir)
-          send_file export_filepath
+          # this is going to be the downloaded filename of the final archive
+          export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
 
+          # create a place to store our final archive, for now
+          output_dir = Dir.mktmpdir
+
+          # expand the export filename against our temporary directory path
+          export_filepath = File.join(output_dir, export_filename)
+
+          # generate the actual zip file here
+          Archive::Zip.archive(export_filepath, export_dir)
+
+          # and render it for the user
+          send_file export_filepath
         ensure
+          # get rid of any tempfiles we were using as well
           FileUtils.remove_entry_secure export_dir, output_dir
         end
       end
