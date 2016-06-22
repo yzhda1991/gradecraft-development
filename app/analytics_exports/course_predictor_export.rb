@@ -5,7 +5,6 @@ class CoursePredictorExport
 
   set_schema username: :username,
              role: :user_role,
-             student_profile: :student_profile,
              assignment: :assignment_name,
              prediction: :predicted_points,
              possible: :possible_points,
@@ -40,9 +39,5 @@ class CoursePredictorExport
     return "[assignment id: nil]" unless event.respond_to? :assignment_id
     assignment_id = event.assignment_id.to_i
     @assignment_names[assignment_id] || "[assignment id: #{assignment_id}]"
-  end
-
-  def student_profile(event, index)
-    nil
   end
 end
