@@ -34,13 +34,15 @@ module Analytics::Export
             puts "    => column #{column.inspect}, value #{value.inspect}"
             h[column] = recs.each_with_index.map do |record, i|
               print "\r       record #{i} of #{total_records} (#{(i*100.0/total_records).round}%)" if i % 5 == 0 || i == (total_records - 1)
+
               if value.respond_to? :call
                 value.call(record)
               elsif record.respond_to? value
                 record.send(value)
               else
-                self.send(value, record, i)
+                self.send(value, record, i) if self.respond_to? value
               end
+
             end
           end
           puts "\n       Done. Elapsed time: #{elapsed} seconds"
