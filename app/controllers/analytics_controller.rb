@@ -186,7 +186,9 @@ class AnalyticsController < ApplicationController
   def export
     respond_to do |format|
       format.zip do
-        export_dir = Dir.mktmpdir
+        # let's create a directory to save our exported files to
+        export_dir = FileUtils.mkdir File.join(Dir.mktmpdir, current_course.courseno)
+
         export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
         id = current_course.id
 
