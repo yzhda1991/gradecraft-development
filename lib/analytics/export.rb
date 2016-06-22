@@ -57,9 +57,7 @@ module Analytics::Export
 
   def generate_csv(path, file_name=nil, schema_record_set=nil)
     schema_recs = schema_record_set || self.schema_records
-    unless File.exists?(path) && File.directory?(path)
-      FileUtils.mkdir_p(path)
-    end
+
     file_name ||= "#{self.class.name.underscore}.csv"
 
     CSV.open(File.join(path, file_name), "wb") do |csv|

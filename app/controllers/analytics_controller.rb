@@ -189,51 +189,51 @@ class AnalyticsController < ApplicationController
         export_dir = Dir.mktmpdir
         export_zip "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }", export_dir do
 
-          (Role.all + ["total"]).each do |role|
-            role_subdir = File.join(export_dir,role.pluralize)
-            id = current_course.id
-            events = Analytics::Event.where(course_id: id)
-            predictor_events =
-              Analytics::Event.where(course_id: id, event_type: "predictor")
-            user_pageviews = CourseUserPageview.data(:all_time, nil, {
-              course_id: id
-              },
-              { page: "_all" })
-            user_predictor_pageviews =
-              CourseUserPagePageview.data(:all_time, nil, {
-              course_id: id, page: "/dashboard#predictor"
-              })
-            user_logins = CourseUserLogin.data(:all_time, nil, {
-              course_id: id
-              })
+          id = current_course.id
 
-            user_ids = events.collect(&:user_id).compact.uniq
-            assignment_ids = events.select {
-              |event| event.respond_to? :assignment_id
-            }.collect(&:assignment_id).compact.uniq
-            users = User.where(id: user_ids).select(:id, :username)
-            assignments =
-              Assignment.where(id: assignment_ids).select(:id, :name)
+          events = Analytics::Event.where(course_id: id)
 
-            data = {
-              events: events,
-              predictor_events: predictor_events,
-              user_pageviews: user_pageviews[:results],
-              user_predictor_pageviews: user_predictor_pageviews[:results],
-              user_logins: user_logins[:results],
-              users: users,
-              assignments: assignments
-            }
-            Analytics.configuration.exports[:course].each do |export|
-              exp = export.new(data)
-              if role == "total"
-                exp.generate_csv(role_subdir)
-              else
-                exp.generate_csv(role_subdir,
-                nil, exp.schema_records_for_role(role))
-              end
-            end
-          end # each role
+          predictor_events =
+            Analytics::Event.where(course_id: id, event_type: "predictor")
+
+          user_pageviews = CourseUserPageview.data(:all_time, nil, {
+            course_id: id
+            },
+            { page: "_all" })
+
+          user_predictor_pageviews =
+            CourseUserPagePageview.data(:all_time, nil, {
+            course_id: id, page: "/dashboard#predictor"
+            })
+
+          user_logins = CourseUserLogin.data(:all_time, nil, {
+            course_id: id
+            })
+
+          user_ids = events.collect(&:user_id).compact.uniq
+
+          assignment_ids = events.select {
+            |event| event.respond_to? :assignment_id
+          }.collect(&:assignment_id).compact.uniq
+
+          users = User.where(id: user_ids).select(:id, :username)
+
+          assignments =
+            Assignment.where(id: assignment_ids).select(:id, :name)
+
+          data = {
+            events: events,
+            predictor_events: predictor_events,
+            user_pageviews: user_pageviews[:results],
+            user_predictor_pageviews: user_predictor_pageviews[:results],
+            user_logins: user_logins[:results],
+            users: users,
+            assignments: assignments
+          }
+
+          Analytics.configuration.exports[:course].each do |export|
+            export.new(data).generate_csv Dir.mktmpdir
+          end
         end
       end
     end
