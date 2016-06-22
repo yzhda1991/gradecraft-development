@@ -19,8 +19,7 @@ class Students::DashboardGradingSchemePresenter < Showtime::Presenter
     GradeSchemeElement.unscoped.for_course(course).order_by_lowest_points
   end
 
-  #showing first element of grading scheme if current score does not reflect a level
-
+  # showing first element of grading scheme if current score does not reflect a level
   def first_element
     GradeSchemeElement.unscoped.for_course(course).order_by_lowest_points.first
   end
