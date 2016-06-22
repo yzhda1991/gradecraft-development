@@ -17,7 +17,7 @@
   .panel.dashboard-module.earned_points= render partial: "students/dashboard/dashboard_earned_points_and_level"
 
   - if current_course.grade_scheme_elements.present?
-    .panel.dashboard-module= render partial: "students/dashboard/dashboard_grading_scheme", locals: { presenter: Students::DashboardPresenter.new(course: current_course, student: current_student) }
+    .panel.dashboard-module= render partial: "students/dashboard/dashboard_grading_scheme", locals: { presenter: Students::DashboardGradingSchemePresenter.new(course: current_course, student: current_student) }
 
   - if current_course.has_badges?
     .panel.dashboard-module= render partial: "students/dashboard/dashboard_badges"
