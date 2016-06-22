@@ -187,7 +187,7 @@ class AnalyticsController < ApplicationController
     respond_to do |format|
       format.zip do
         export_dir = Dir.mktmpdir
-        export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }"
+        export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
         id = current_course.id
 
         begin
@@ -245,7 +245,7 @@ class AnalyticsController < ApplicationController
           send_file export_filepath
 
         ensure
-          FileUtils.remove_entry_secure export_dir
+          FileUtils.remove_entry_secure export_dir, output_dir
         end
       end
     end
