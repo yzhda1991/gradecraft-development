@@ -59,4 +59,8 @@ class CourseUserAggregateExport
   def predictor_sessions(user, i)
     @user_predictor_sessions[user.id]
   end
+
+  def user_id(user, i)
+    user.id
+  end
 end
