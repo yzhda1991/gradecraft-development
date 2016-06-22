@@ -187,9 +187,10 @@ class AnalyticsController < ApplicationController
     respond_to do |format|
       format.zip do
         export_dir = Dir.mktmpdir
-        export_zip "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }", export_dir do
-          id = current_course.id
+        export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }"
+        id = current_course.id
 
+        begin
           events = Analytics::Event.where(course_id: id)
 
           predictor_events =
@@ -237,6 +238,13 @@ class AnalyticsController < ApplicationController
           ].each do |export|
             export.new(data).generate_csv export_dir
           end
+
+          output_dir = Dir.mktmpdir
+          export_filepath = File.join(output_dir, export_filename)
+          Archive::Zip.archive(export_filepath, export_dir)
+          send_file export_filepath
+        ensure
+          FileUtils.remove_entry_secure export_dir
         end
       end
     end

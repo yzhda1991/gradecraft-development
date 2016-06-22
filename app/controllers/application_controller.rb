@@ -115,7 +115,7 @@ class ApplicationController < ActionController::Base
     begin
       file_creation.call
       zip_data = ZipUtils::Zip.new(temp_dir)
-      send_data(zip_data.zipstring, type: "application/zip",
+      send_data(zip_data, type: "application/zip",
         filename: "#{export_name}.zip")
     ensure
       FileUtils.remove_entry_secure temp_dir

@@ -62,7 +62,7 @@ module Analytics::Export
 
     file_name ||= "#{self.class.name.underscore}.csv"
 
-    CSV.open(File.join(path, file_name), "wb") do |csv|
+    CSV.open(File.join(path, file_name), "w") do |csv|
       # Write header row
       csv << self.class.schema.keys
 
