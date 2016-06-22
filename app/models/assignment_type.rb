@@ -15,7 +15,7 @@ class AssignmentType < ActiveRecord::Base
   # assignments will be worth for them)
   has_many :weights, class_name: "AssignmentTypeWeight", dependent: :destroy
 
-  validates_presence_of :name
+  validates_presence_of :name, :max_points
   validate :positive_max_points
 
   scope :student_weightable, -> { where(student_weightable: true) }
