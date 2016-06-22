@@ -5,6 +5,7 @@ class CourseEventExport
 
   set_schema  username: :username,
               role: :user_role,
+              user_id: :user_id,
               page: :page,
               date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
