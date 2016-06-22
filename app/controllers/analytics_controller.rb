@@ -194,8 +194,17 @@ class AnalyticsController < ApplicationController
       # out of the controller.
       #
       format.zip do
-        # let's create a place to keep our newly-generated CSV files
-        export_dir = FileUtils.mkdir File.join(Dir.mktmpdir, current_course.courseno)
+        # check whether we need to use S3fs
+        use_s3fs = %w[staging production].include? Rails.env
+
+        # if we do use the prefix for the s3fs tempfiles
+        s3fs_prefix = use_s3fs ? "/s3mnt/tmp/#{Rails.env}" : nil
+
+        # create a working tmpdir for the export
+        export_tmpdir = Dir.mktmpdir nil, s3fs_prefix
+
+        # create a named directory to generate the files in
+        export_dir = FileUtils.mkdir File.join(export_tmpdir, current_course.courseno)
 
         id = current_course.id
 
@@ -252,7 +261,7 @@ class AnalyticsController < ApplicationController
           export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
 
           # create a place to store our final archive, for now
-          output_dir = Dir.mktmpdir
+          output_dir = Dir.mktmpdir nil, s3fs_prefix
 
           # expand the export filename against our temporary directory path
           export_filepath = File.join(output_dir, export_filename)
