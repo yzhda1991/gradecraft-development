@@ -2,14 +2,15 @@
   %h3 Course Progress
 .card-body
 
-  - if presenter.current_element.present?
-    - if presenter.next_element.present?
-      .progress.bar_magic.transparent.center
-        .meter
-          %i.fa.fa-lock
-          %span= presenter.next_element.name
-          %span=points presenter.next_element.lowest_points
 
+  - if presenter.current_element && presenter.next_element.present?
+    .progress.bar_magic.transparent.center
+      .meter
+        %i.fa.fa-lock
+        %span= presenter.next_element.name
+        %span=points presenter.next_element.lowest_points
+
+  - if presenter.current_element.present?
     .progress.bar_magic.current.center
       %span.your-rank Your rank:
       %span.your-rank= presenter.current_element.name
@@ -21,14 +22,6 @@
       .right-points
         %span Points to next level:
         %span.bold= points presenter.points_to_next_level
-
-    - if presenter.previous_element.present?
-      .progress.bar_magic.success.center
-        .meter
-          %i.fa.fa-star
-          %span= presenter.previous_element.name
-          %span has already been achieved!
-          %span=points presenter.previous_element.lowest_points
   - else
     .progress.bar_magic.transparent.center
       .meter
@@ -38,3 +31,12 @@
 
     .progress.bar_magic.current.center.no-level
       %span.your-rank Your rank: Not on the board yet!
+
+
+  - if presenter.current_element && presenter.previous_element.present?
+    .progress.bar_magic.success.center
+      .meter
+        %i.fa.fa-star
+        %span= presenter.previous_element.name
+        %span has already been achieved!
+        %span=points presenter.previous_element.lowest_points
