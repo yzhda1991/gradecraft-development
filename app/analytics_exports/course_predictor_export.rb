@@ -5,7 +5,9 @@ class CoursePredictorExport
 
   set_schema username: :username,
              role: :user_role,
+             user_id: :user_id,
              assignment: :assignment_name,
+             assignment_id: :assignment_id,
              prediction: :predicted_points,
              possible: :possible_points,
              date_time: lambda { |event| event.created_at.to_formatted_s(:db) }

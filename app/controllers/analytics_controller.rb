@@ -203,7 +203,7 @@ class AnalyticsController < ApplicationController
 
           user_predictor_pageviews =
             CourseUserPagePageview.data(:all_time, nil, {
-            course_id: id, page: "/dashboard#predictor"
+            course_id: id, page: /predictor/
             })
 
           user_logins = CourseUserLogin.data(:all_time, nil, {
@@ -239,7 +239,7 @@ class AnalyticsController < ApplicationController
             export.new(data).generate_csv export_dir
           end
 
-          output_dir = Dir.mktmpdir
+          output_dir = Dir.mktmpdir(current_course.courseno)
           export_filepath = File.join(output_dir, export_filename)
           Archive::Zip.archive(export_filepath, export_dir)
           send_file export_filepath
