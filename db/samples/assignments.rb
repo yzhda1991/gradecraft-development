@@ -1432,6 +1432,13 @@ the speed, and the route.― Jay Cross",
   }
 }
 
+#------------------------------------------------------------------------------#
+
+#                        Weighting Assignment Types
+
+#------------------------------------------------------------------------------#
+
+
 @assignments[:weighting_one_sample_assignment] = {
   quotes: {
     assignment_created: nil,
@@ -1441,6 +1448,23 @@ the speed, and the route.― Jay Cross",
     name: "Weighted Assignment Type 1",
     full_points: 50000,
     due_at: 4.weeks.from_now,
+  }
+}
+
+@assignments[:weighting_one_sample_graded_assignment] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :weighting_one,
+  attributes: {
+    name: "Weighted and Graded Type 1",
+    point_total: 50000,
+    due_at: 4.weeks.from_now,
+  },
+  grades: true,
+  grade_attributes: {
+    status: "Graded",
+    instructor_modified: true
   }
 }
 
@@ -1456,6 +1480,23 @@ the speed, and the route.― Jay Cross",
   }
 }
 
+@assignments[:weighting_two_sample_graded_assignment] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :weighting_two,
+  attributes: {
+    name: "Weighted and Graded Type 2",
+    point_total: 50000,
+    due_at: 4.weeks.from_now,
+  },
+  grades: true,
+  grade_attributes: {
+    status: "Graded",
+    instructor_modified: true
+  }
+}
+
 @assignments[:weighting_three_sample_assignment] = {
   quotes: {
     assignment_created: nil,
@@ -1468,6 +1509,23 @@ the speed, and the route.― Jay Cross",
   }
 }
 
+@assignments[:weighting_three_sample_graded_assignment] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :weighting_three,
+  attributes: {
+    name: "Weighted and Graded Type 3",
+    point_total: 50000,
+    due_at: 4.weeks.from_now,
+  },
+  grades: true,
+  grade_attributes: {
+    status: "Graded",
+    instructor_modified: true
+  }
+}
+
 @assignments[:weighting_four_sample_assignment] = {
   quotes: {
     assignment_created: nil,
@@ -1477,5 +1535,22 @@ the speed, and the route.― Jay Cross",
     name: "Weighted Assignment Type 4",
     full_points: 50000,
     due_at: 4.weeks.from_now,
+  }
+}
+
+@assignments[:weighting_four_sample_graded_assignment] = {
+  quotes: {
+    assignment_created: nil,
+  },
+  assignment_type: :weighting_four,
+  attributes: {
+    name: "Weighted and Graded Type 4",
+    point_total: 50000,
+    due_at: 4.weeks.from_now,
+  },
+  grades: true,
+  grade_attributes: {
+    status: "Graded",
+    instructor_modified: true
   }
 }

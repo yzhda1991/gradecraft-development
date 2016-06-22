@@ -4,6 +4,7 @@ json.data @assignment_types do |assignment_type|
   json.attributes do
     json.merge! assignment_type.attributes
     json.total_points assignment_type.total_points
+    json.final_points_for_student assignment_type.final_points_for_student(@student)
     if assignment_type.student_weightable?
       json.student_weight @student.weight_for_assignment_type(assignment_type)
     end

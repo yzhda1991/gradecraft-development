@@ -135,95 +135,96 @@ $predictor-font-size-5 : .55rem
   margin-bottom: 0.5rem
   padding: 0 .5rem
 
-  .predictor-section-title-name
-    float: left
-    text-transform: capitalize
+.predictor-section-title-name
+  float: left
+  text-transform: capitalize
 
-  .predictor-section-title-max-points
+.predictor-section-title-max-points
+  font-size: $predictor-font-size-3
+  background-color: $color-blue-2
+  color: $color-grey-5
+  padding: 4px 5px 0 5px
+  margin: 2px 0 0 10px
+  border-radius: 6px
+  float: left
+
+.predictor-section-title-predicted-points
+  float: right
+  text-align: right
+  position: relative
+  // don't interfere with collapsable section heads onClick()
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+
+.predictor-unweighted-point-total, .predictor-weighted-point-total, .predictor-title-right-span, .weighted-earned-points
+  float: left
+  &.padded
+    padding: 0 0 0 10px
+  &.left-padded
+    padding: 0 10px 0 0
+  &.predictor-default-weight
     font-size: $predictor-font-size-3
-    background-color: $color-blue-2
-    color: $color-grey-5
-    padding: 4px 5px 0 5px
-    margin: 2px 0 0 10px
+    background-color: $color-blue-3
+    padding: 2px 5px
+    margin: 4px 0 0 10px
     border-radius: 6px
+    line-height: normal
+
+.predictor-excess-points
+  float: right
+  .icon
+    display: inline
+    float: none
+    margin: 0 -7px
+    .icon-tooltip
+      position: absolute
+      top: 0
+      left: -10rem
+      font-size: $predictor-font-size-3
+      width: 10rem
+
+.predictor-section-title-weights
+  padding: 0 0 0 15px
+  float: left
+  .weights-coin-widget
     float: left
+  .predictor-add-weight
+    float: left
+  .coins
+    float: left
+    padding: 0 10px 0 10px
+  .coin, .coin-non-interactive, .coin-slot
+    float: left
+    width: 25px
+    height: 25px
+    @include rounded-corners(14px)
+    margin: 2px 0 0 2px
+  .coin, .coin-non-interactive
+    background-color: $color-yellow-1
+    border: 2px solid $color-orange-1
+    @include transition(all, .5s, ease-out)
+  .coin-remove-icon
+    color: $color-yellow-1
+    margin: 1px 0 0 -3px
+  .coin:hover
+    background-color: $color-orange-1
+  .coin:hover .coin-remove-icon
+    visibility: visible
+  .coin-slot
+    background-color: $color-blue-2
+    border: 2px solid $color-blue-4
+    @include transition(all, .5s, ease-out)
+  .coin-add-icon
+    color: $color-blue-2
+    margin: 1px 0 0 -3px
+    visibility: hidden
+  .coin-slot:hover .coin-add-icon
+    visibility: visible
+  .coin-slot:hover
+    background-color: $color-blue-3
 
-  .predictor-section-title-predicted-points
-    float: right
-    text-align: right
-    position: relative
-    // don't interfere with collapsable section heads onClick()
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
-
-    .predictor-unweighted-point-total, .predictor-weighted-point-total, .predictor-title-right-span
-      float: left
-      &.padded
-        padding: 0 0 0 10px
-      &.left-padded
-        padding: 0 10px 0 0
-      &.predictor-default-weight
-        font-size: $predictor-font-size-3
-        background-color: $color-blue-3
-        padding: 2px 5px
-        margin: 4px 0 0 10px
-        border-radius: 6px
-        line-height: normal
-
-    .predictor-section-title-weights
-      padding: 0 0 0 15px
-      float: left
-      .predictor-assignment-type-weights
-        float: left
-      .predictor-add-weight
-        float: left
-      .coins
-        float: left
-        padding: 0 10px 0 10px
-      .coin, .coin-non-interactive, .coin-slot
-        float: left
-        width: 25px
-        height: 25px
-        @include rounded-corners(14px)
-        margin: 2px 0 0 2px
-      .coin, .coin-non-interactive
-        background-color: $color-yellow-1
-        border: 2px solid $color-orange-1
-        @include transition(all, .5s, ease-out)
-      .coin-remove-icon
-        color: $color-yellow-1
-        margin: 1px 0 0 -3px
-      .coin:hover
-        background-color: $color-orange-1
-      .coin:hover .coin-remove-icon
-        visibility: visible
-      .coin-slot
-        background-color: $color-blue-2
-        border: 2px solid $color-blue-4
-        @include transition(all, .5s, ease-out)
-      .coin-add-icon
-        color: $color-blue-2
-        margin: 1px 0 0 -3px
-        visibility: hidden
-      .coin-slot:hover .coin-add-icon
-        visibility: visible
-      .coin-slot:hover
-        background-color: $color-blue-3
-
-    .predictor-excess-points
-      float: right
-      .icon
-        display: inline
-        float: none
-        margin: 0 -7px
-        .icon-tooltip
-          position: absolute
-          top: 0
-          left: -10rem
-          font-size: $predictor-font-size-3
-          width: 10rem
 
 // ARTICLES
 

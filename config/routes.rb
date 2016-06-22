@@ -60,7 +60,6 @@ GradeCraft::Application.routes.draw do
       get :settings
       post "copy" => "assignments#copy"
       get "export_structure"
-      get "weights" => "assignment_weights#mass_edit", as: :mass_edit_weights
     end
 
     # routes for all grades that are associated with an assignment
@@ -134,10 +133,7 @@ GradeCraft::Application.routes.draw do
   end
 
   #5. Assignment Type Weights
-  resources :assignment_type_weights, only: [] do
-    get :mass_edit, on: :collection
-    put :mass_update, on: :collection
-  end
+  resources :assignment_type_weights, only: [:index]
 
   #6. Badges
   resources :badges do
@@ -242,6 +238,7 @@ GradeCraft::Application.routes.draw do
 
   resources :students, only: [:index, :show] do
     resources :badges, only: [:index, :show], module: :students
+    resources :assignment_type_weights, only: [:index], module: :students
     resources :student_academic_histories, except: :index
     member do
       get :grade_index

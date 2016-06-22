@@ -5,13 +5,14 @@
       .predictor-section-title{'ng-class'=>'{"status-max-points": assignmentTypeAtMax(assignmentType)}'}
         .predictor-section-title-name
           {{assignmentType.name}}
-        .predictor-section-title-max-points=" {{assignmentTypeMaxPossiblePoints(assignmentType) | number}} Possible Points"
+        .weighted-max-possible-points{{'target'=>'assignmentType'}}
         .predictor-section-title-predicted-points{{'ng-class'=>'{"weightable":assignmentType.student_weightable}'}}
           .predictor-unweighted-point-total
             {{assignmentTypePointTotal(assignmentType,false) | number}}
 
           .predictor-section-title-weights{{'ng-if'=>'assignmentType.student_weightable'}}
-            .predictor-assignment-type-weights{{'target'=>'assignmentType'}}
+            .predictor-title-right-span x
+            .weights-coin-widget{{'target'=>'assignmentType'}}
             .predictor-title-right-span.left-padded =
             .predictor-weighted-point-total
               {{assignmentTypePointTotal(assignmentType,true) | number}}
