@@ -108,17 +108,17 @@ describe InfoController do
           receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(GradebookExporterJob).to receive(:enqueue)
-        get :gradebook
+        get :gradebook, id: @course.id
       end
 
       it "redirects to the root path if there is no referer" do
-        get :gradebook
+        get :gradebook, id: @course.id
         expect(response).to redirect_to root_path
       end
 
       it "redirects to the referer if there is one" do
         request.env["HTTP_REFERER"] = dashboard_path
-        get :gradebook
+        get :gradebook, id: @course.id
         expect(response).to redirect_to dashboard_path
       end
     end
@@ -129,17 +129,17 @@ describe InfoController do
           receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Multiplied Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(MultipliedGradebookExporterJob).to receive(:enqueue)
-        get :multiplied_gradebook
+        get :multiplied_gradebook, id: @course.id
       end
 
       it "redirects to the root path if there is no referer" do
-        get :multiplied_gradebook
+        get :multiplied_gradebook, id: @course.id
         expect(response).to redirect_to root_path
       end
 
       it "redirects to the referer if there is one" do
         request.env["HTTP_REFERER"] = dashboard_path
-        get :multiplied_gradebook
+        get :multiplied_gradebook, id: @course.id
         expect(response).to redirect_to dashboard_path
       end
     end
@@ -164,17 +164,17 @@ describe InfoController do
           receive(:new).with(user_id: @professor.id, course_id: @course.id, filename: "#{ @course.name } Research Gradebook - #{ Date.today }.csv")
             .and_call_original
         expect_any_instance_of(GradeExportJob).to receive(:enqueue)
-        get :research_gradebook
+        get :research_gradebook, id: @course.id
       end
 
       it "redirects to the root path if there is no referer" do
-        get :research_gradebook
+        get :research_gradebook, id: @course.id
         expect(response).to redirect_to root_path
       end
 
       it "redirects to the referer if there is one" do
         request.env["HTTP_REFERER"] = dashboard_path
-        get :research_gradebook
+        get :research_gradebook, id: @course.id
         expect(response).to redirect_to dashboard_path
       end
     end

@@ -19,7 +19,7 @@ RSpec.describe InfoController, type: :controller, background_job: true do
   before(:each) { ResqueSpec.reset! }
 
   describe "#research_gradebook" do
-    subject { get :research_gradebook }
+    subject { get :research_gradebook, id: course.id }
 
     it_behaves_like "a successful resque job", GradeExportJob
   end
