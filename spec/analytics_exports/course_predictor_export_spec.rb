@@ -91,10 +91,11 @@ describe CoursePredictorExport do
       expect(sanitized_schema).to eq({
         username: :username,
         role: :user_role,
-        student_profile: :student_profile,
+        user_id: :user_id,
         assignment: :assignment_name,
-        prediction: :score,
-        possible: :possible
+        assignment_id: :assignment_id,
+        prediction: :predicted_points,
+        possible: :possible_points,
       })
     end
   end
