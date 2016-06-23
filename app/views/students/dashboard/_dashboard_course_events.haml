@@ -16,5 +16,5 @@
             %img{:src => event.media }
           .event-description
             %p
-              = (truncate event.description, :length => 200, :omission => "...", :escape => false)
+              = truncate(sanitize(event.description, :tags => %w(br a)), :length => 200, :omission => "...")
               = link_to "Read More", event
