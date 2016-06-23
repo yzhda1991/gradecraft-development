@@ -40,6 +40,8 @@
       a
         padding: 0.8rem 0.5rem
         color: $color-white
+        text-decoration: none
+
     li.active
       padding: .8rem .5rem !important
 
@@ -52,14 +54,16 @@
   color: $color-white
 
 
-li.announcement-nav
+.sub-nav .navbar-nav li.announcement-nav
   position: relative
+  a
+    padding-right: 1.8rem
 
 li .announcement-notification-badge
   position: absolute
-  top: 10px
+  top: 12px
   margin: 0
-  right: -20px
+  right: 2px
 
 
 @media (min-width: $media-small-max)
