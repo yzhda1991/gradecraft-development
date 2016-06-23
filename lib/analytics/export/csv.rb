@@ -10,8 +10,6 @@ module Analytics
         @path = path
         @filename = filename || "#{export.class.name.underscore}.csv"
         @parsed_schema_records = schema_record_set || export.parsed_schema_records
-
-        FileUtils.mkdir_p(path) unless Dir.exists?(path)
       end
 
       def generate!

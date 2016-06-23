@@ -50,23 +50,6 @@ describe Analytics::Export::CSV do
         expect(subject.parsed_schema_records).to eq ["the-records"]
       end
     end
-
-    context "a directory already exists at the 'path'" do
-      it "doesn't create the path" do
-        path # cache the path to make the tmpdir
-        expect(FileUtils).not_to receive(:mkdir_p).with path
-        subject
-      end
-    end
-
-    context "no directory exists at the designated 'path'" do
-      it "creates a directory at the path" do
-        path # cache the path to make the tempdir
-        FileUtils.rmdir path # get rid of the directory
-        expect(FileUtils).to receive(:mkdir_p).with path
-        subject
-      end
-    end
   end
 
   describe "#csv_filepath" do
