@@ -25,10 +25,23 @@ module Analytics
         end
       end
 
+      # generate a 'header' row for the CSV file by pulling the column names
+      # from the schema that we defined with set_schema
       def export_column_names
         export.class.schema.keys
       end
 
+      # if each item is the parsed_schema_records array is an ordered array of
+      # attributes for the event records that we queried, calling #transpose on
+      # the parsed_schema_records array will give us one array for each
+      # individual event record that we queried.
+      #
+      # The reason that we don't just pass in the event itself as an array is
+      # that the records that include Analytics::Export::Model records (such as
+      # in /app/analytics_exports) define a set of behaviors for how to filter
+      # and interpret this data so that the output is more functional for the
+      # end-user.
+      #
       def export_rows
         parsed_schema_records.values.transpose
       end
