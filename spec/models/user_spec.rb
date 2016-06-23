@@ -441,6 +441,50 @@ describe User do
     end
   end
 
+  describe "#grades_for_course(course)" do
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: course)
+    end
+
+    it "returns the student's grades for a course" do
+      grade_1 = create(:grade, raw_points: 100, student: student, course: course, status: "Released")
+      grade_2 = create(:grade, raw_points: 300, student: student, course: course, status: "Released")
+      expect(student.grades_for_course(course)).to include(grade_1, grade_2)
+    end
+  end
+
+  describe "#grades_released_for_course_this_week(course)" do
+    let(:student) { create :user }
+    let(:assignment_2) { create :assignment, course: course }
+
+    before do
+      create(:course_membership, user: student, course: course)
+    end
+
+    it "returns the student's earned grades for a course this week" do
+      grade_1 = create(:grade, assignment: assignment, raw_points: 100, student: student, course: course, status: "Released", updated_at: Date.today - 10)
+      grade_2 = create(:grade, assignment: assignment_2, raw_points: 300, student: student, course: course, status: "Released")
+      expect(student.grades_released_for_course_this_week(course)).to eq([grade_2])
+    end
+  end
+
+  describe "#points_earned_for_course_this_week(course)" do
+    let(:student) { create :user }
+    let(:assignment_2) { create :assignment, course: course }
+
+    before do
+      create(:course_membership, user: student, course: course)
+    end
+
+    it "returns the student's earned points for the course this week" do
+      grade_1 = create(:grade, assignment: assignment, raw_points: 100, student: student, course: course, status: "Released", updated_at: Date.today - 10)
+      grade_2 = create(:grade, assignment: assignment_2, raw_points: 300, student: student, course: course, status: "Released")
+      expect(student.points_earned_for_course_this_week(course)).to eq(300)
+    end
+  end
+
   describe "#grade_for_assignment(assignment)" do
     let(:student) { create :user }
     let(:assignment) { create :assignment}
@@ -501,6 +545,20 @@ describe User do
       earned_badge_1 = create(:earned_badge, points: 100, student: student, course: course, student_visible: true)
       earned_badge_2 = create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
       expect(student.earned_badges_for_course(course)).to eq([earned_badge_1, earned_badge_2])
+    end
+  end
+
+  describe "#earned_badges_for_course_this_week(course)" do
+    let(:student) { create :user }
+
+    before do
+      create(:course_membership, user: student, course: course)
+    end
+
+    it "returns the students' earned_badges for a course" do
+      earned_badge_1 = create(:earned_badge, points: 100, student: student, course: course, student_visible: true, created_at: Date.today - 10)
+      earned_badge_2 = create(:earned_badge, points: 300, student: student, course: course, student_visible: true)
+      expect(student.earned_badges_for_course_this_week(course)).to eq([earned_badge_2])
     end
   end
 
