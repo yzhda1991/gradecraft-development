@@ -20,11 +20,6 @@ class CoursePredictorExport
     get_and_cache_assignment_names
   end
 
-  def schema_records_for_role(role)
-    # this is defined in Analytics::Export::Model
-    parsed_schema_records records.select {|event| event.user_role == role }
-  end
-
   # build an array or the given records in the format of
   # { user_id => "some_username" }
   def get_and_cache_usernames

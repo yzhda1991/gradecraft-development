@@ -9,12 +9,6 @@ class CourseEventExport
               page: :page,
               date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
-  def schema_records_for_role(role)
-    parsed_schema_records records.select do |event|
-      event.user_role == role
-    end
-  end
-
   def initialize(loaded_data)
     @loaded_data = loaded_data
     @usernames = loaded_data[:users].inject({}) do |hash, user|
