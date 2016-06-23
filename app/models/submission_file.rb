@@ -12,7 +12,7 @@ class SubmissionFile < ActiveRecord::Base
   process_in_background :file
   has_paper_trail ignore: [:file_missing, :file_processing, :last_confirmed_at]
 
-  validates :filename, presence: true, length: { maximum: 60 }
+  validates :filename, presence: true, length: { maximum: 50 }
   validates :file, file_size: { maximum: 40.megabytes.to_i }
 
   scope :unconfirmed, -> { where("last_confirmed_at is null") }
