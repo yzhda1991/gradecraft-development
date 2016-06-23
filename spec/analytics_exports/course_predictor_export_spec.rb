@@ -119,20 +119,6 @@ describe CoursePredictorExport do
     end
   end
 
-  describe "#schema_records_for_role" do
-    let(:result) { subject.schema_records_for_role "some role" }
-    let(:records) do
-      [double(:event, user_role: "some role"),
-       double(:event, user_role: "another role")]
-    end
-
-    it "builds the schema records for records with the given role" do
-      allow(subject).to receive(:records) { records }
-      expect(subject).to receive(:parsed_schema_records).with [records.first]
-      result
-    end
-  end
-
   describe "#get_and_cache_usernames" do
     let(:result) { subject.get_and_cache_usernames }
 
