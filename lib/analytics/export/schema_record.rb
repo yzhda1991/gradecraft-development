@@ -21,7 +21,6 @@ module Analytics
         return call_target_method if target_is_a_method?
         return record_attribute if record_has_attribute?
         return send_export_method if export_has_method?
-        ""
       end
 
       def target_is_a_method?
