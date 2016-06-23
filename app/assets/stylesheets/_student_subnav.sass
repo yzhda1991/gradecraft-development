@@ -20,10 +20,10 @@
     display: inline
     list-style-type: none
     margin: 0
-    
+
     i
       display: none
-      
+
 
   /* Individual Tabs */
   .navbar-nav
@@ -40,9 +40,11 @@
       a
         padding: 0.8rem 0.5rem
         color: $color-white
+        text-decoration: none
+
     li.active
       padding: .8rem .5rem !important
-    
+
     h5, hr
       display: none
 
@@ -51,14 +53,21 @@
   background-color: $color-blue-3
   color: $color-white
 
-li .announcement-notification-badge
-  position: relative
-  top: -2px
-  margin: 0
-  left: 5px
 
-li a.notification-right
-  padding: 1rem 0 1rem 1rem !important
+.sub-nav .navbar-nav li.announcement-nav
+  position: relative
+  a
+    padding-right: 1.8rem
+
+li .announcement-notification-badge
+  position: absolute
+  top: 12px
+  margin: 0
+  right: 2px
+
+@media (max-width: $media-medium-max)
+  .sub-nav
+    display: none
 
 @media (min-width: $media-small-max)
   i
