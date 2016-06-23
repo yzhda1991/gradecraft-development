@@ -10,7 +10,7 @@ class AnalyticsExportModelTest
     @loaded_data = loaded_data
   end
 
-  def waffles(record, index)
+  def waffles(record)
     { some: "waffles" }
   end
 end
