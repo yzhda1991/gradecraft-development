@@ -16,48 +16,74 @@ class CourseUserAggregateExport
   end
 
   def initialize(context:)
-    @roles = loaded_data[:events].inject(Hash.new("")) do |hash, event|
-      hash[event.user_id] = event.user_role
-      hash
+    @context = context
+    @events = context[:mongoid][:events]
+    @predictor_events = context[:mongoid][:predictor_events]
+
+    @user_pageviews = context[:data_aggregates][:user_pageviews]
+    @user_logins = context[:data_aggregates][:user_logins]
+    @user_logins = context[:data_aggregates][:user_predictor_pageviews]
+  end
+
+  # let's double-check whether all of these defaulted hash instantiations have
+  # any impact on the final export. It seems like these could all just be hash
+  # literals
+  #
+  def roles
+    @roles ||= events.inject(Hash.new("")) do |memo, event|
+      memo[event.user_id] = event.user_role
+      memo
     end
-    @user_predictor_event_counts = loaded_data[:predictor_events].inject(Hash.new(0)) do |hash, predictor_event|
-      hash[predictor_event.user_id] += 1
-      hash
+  end
+
+  def user_predictor_event_counts
+    @user_predictor_event_counts ||= predictor_events
+      .inject(Hash.new(0)) do |memo, predictor_event|
+        memo[predictor_event.user_id] += 1
+        memo
     end
-    @user_pageviews = loaded_data[:user_pageviews].inject(Hash.new(0)) do |hash, pageview|
+  end
+
+  def parsed_user_pageviews
+    @parsed_user_pageviews ||= user_pageviews.inject(Hash.new(0)) do |memo, pageview|
       # pageview.pages raises an error w/ mongoid > 4.0.0
-      hash[pageview.user_id] = pageview.raw_attributes["pages"]["_all"]["all_time"]
-      hash
+      memo[pageview.user_id] = pageview.raw_attributes["pages"]["_all"]["all_time"]
+      memo
     end
-    @user_logins = loaded_data[:user_logins].inject(Hash.new(0)) do |hash, login|
-      hash[login.user_id] = login["all_time"]["count"]
-      hash
+  end
+
+  def parsed_user_logins
+    @parsed_user_logins ||= user_logins.inject(Hash.new(0)) do |memo, login|
+      memo[login.user_id] = login["all_time"]["count"]
+      memo
     end
-    @user_predictor_sessions = loaded_data[:user_predictor_pageviews].inject(Hash.new(0)) do |hash, predictor_pageview|
+  end
+
+  def user_predictor_sessions
+    @user_predictor_sessions ||= user_predictor_pageviews.inject(Hash.new(0)) do |hash, predictor_pageview|
       hash[predictor_pageview.user_id] = predictor_pageview["all_time"]
       hash
     end
-    super
   end
 
   def user_role(user)
-    @roles[user.id]
+    roles[user.id]
   end
 
   def pageviews(user)
-    @user_pageviews[user.id]
+    parsed_user_pageviews[user.id]
   end
 
   def logins(user)
-    @user_logins[user.id]
+    user_logins[user.id]
   end
 
   def predictor_events(user)
-    @user_predictor_event_counts[user.id]
+    user_predictor_event_counts[user.id]
   end
 
   def predictor_sessions(user)
-    @user_predictor_sessions[user.id]
+    user_predictor_sessions[user.id]
   end
 
   def user_id(user)
