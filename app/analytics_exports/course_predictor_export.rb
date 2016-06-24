@@ -15,7 +15,11 @@ class CoursePredictorExport
              date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
   def initialize(context:)
+    # this is all of the export data that we've queried for already
     @context = context
+
+    # these are the records that we're going to include in the export
+    @export_records = context[:mongoid][:events]
     @users = context[:active_record][:users]
     @assignments = context[:active_record][:assignments]
   end

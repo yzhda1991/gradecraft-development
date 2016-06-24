@@ -60,9 +60,9 @@ class CourseUserAggregateExport
   end
 
   def user_predictor_sessions
-    @user_predictor_sessions ||= user_predictor_pageviews.inject(Hash.new(0)) do |hash, predictor_pageview|
-      hash[predictor_pageview.user_id] = predictor_pageview["all_time"]
-      hash
+    @user_predictor_sessions ||= user_predictor_pageviews.inject(Hash.new(0)) do |memo, predictor_pageview|
+      memo[predictor_pageview.user_id] = predictor_pageview["all_time"]
+      memo
     end
   end
 

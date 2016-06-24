@@ -4,7 +4,7 @@ module Analytics
   module Export
     module Model
       def self.included(base)
-        attr_accessor :loaded_data
+        attr_accessor :context
         base.extend Analytics::Export::ClassMethods
 
         base.class_eval do
@@ -16,8 +16,8 @@ module Analytics
         self.data = loaded_data
       end
 
-      def initialize(loaded_data)
-        @loaded_data = loaded_data
+      def initialize(context:)
+        @context = context
       end
 
       def filter(rows)
@@ -25,7 +25,7 @@ module Analytics
       end
 
       def records
-        @records ||= filter loaded_data[self.class.rows]
+        @records ||= filter context[self.class.rows]
       end
 
       def parsed_schema_records(records_set=nil)
