@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160617095018) do
+ActiveRecord::Schema.define(version: 20160624165722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20160617095018) do
     t.integer  "course_id",                          null: false
     t.boolean  "student_weightable", default: false, null: false
     t.integer  "position",                           null: false
+    t.integer  "top_grades_counted",    default: 0,  null: false
   end
 
   create_table "assignments", force: :cascade do |t|

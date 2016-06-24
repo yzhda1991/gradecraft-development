@@ -50,6 +50,7 @@ class Grade < ActiveRecord::Base
   after_destroy :save_student_and_team_scores
 
   scope :completion, -> { where(order: "assignments.due_at ASC", joins: :assignment) }
+  scope :order_by_highest_score, -> { order("score DESC") }
 
   scope :excluded_from_course_score, -> { where excluded_from_course_score: true }
   scope :included_in_course_score, -> { where excluded_from_course_score: false }
