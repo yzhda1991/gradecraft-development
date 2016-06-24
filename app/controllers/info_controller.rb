@@ -85,32 +85,35 @@ class InfoController < ApplicationController
   end
 
   def gradebook
+    course = current_user.courses.find_by(id: params[:id])
     GradebookExporterJob
       .new(
         user_id: current_user.id,
-        course_id: current_course.id,
-        filename: "#{ current_course.name } Gradebook - #{ Date.today }.csv"
+        course_id: course.id,
+        filename: "#{ course.name } Gradebook - #{ Date.today }.csv"
       ).enqueue
 
-    flash[:notice]="Your request to export the gradebook for \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
+    flash[:notice]="Your request to export the gradebook for \"#{ course.name }\" is currently being processed. We will email you the data shortly."
     redirect_back_or_default
   end
 
   def multiplied_gradebook
+    course = current_user.courses.find_by(id: params[:id])
     MultipliedGradebookExporterJob
-      .new(user_id: current_user.id, course_id: current_course.id, filename: "#{ current_course.name } Multiplied Gradebook - #{ Date.today }.csv").enqueue
+      .new(user_id: current_user.id, course_id: course.id, filename: "#{ course.name } Multiplied Gradebook - #{ Date.today }.csv").enqueue
 
-    flash[:notice]="Your request to export the multiplied gradebook for \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
+    flash[:notice]="Your request to export the multiplied gradebook for \"#{ course.name }\" is currently being processed. We will email you the data shortly."
     redirect_back_or_default
   end
 
   # downloadable grades for course with  export
   def research_gradebook
-    @grade_export_job = GradeExportJob.new(user_id: current_user.id, course_id: current_course.id,
-    filename: "#{ current_course.name } Research Gradebook - #{ Date.today }.csv")
+    course = current_user.courses.find_by(id: params[:id])
+    @grade_export_job = GradeExportJob.new(user_id: current_user.id, course_id: course.id,
+    filename: "#{ course.name } Research Gradebook - #{ Date.today }.csv")
     @grade_export_job.enqueue
 
-    flash[:notice]="Your request to export grade data from course \"#{current_course.name}\" is currently being processed. We will email you the data shortly."
+    flash[:notice]="Your request to export grade data from course \"#{ course.name }\" is currently being processed. We will email you the data shortly."
     redirect_back_or_default
   end
 
