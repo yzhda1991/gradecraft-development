@@ -66,6 +66,16 @@ class CourseUserAggregateExport
     end
   end
 
+  # these are helper methods to help filter values per-user. In reality there's
+  # probably a disconnect here in how this 'schema' is being defined and how the
+  # data is ultimately being assembled.
+  #
+  # Instead of generating a hash of records for every column that we need to
+  # display, then filtering all of them, I wonder if it makes more sense to
+  # just construct a single hash, or to use a hash of procs that can be run
+  # against all of these records one time so we don't need to generate a bunch
+  # of different hashes and then put them back together.
+  #
   def user_role(user)
     roles[user.id]
   end
