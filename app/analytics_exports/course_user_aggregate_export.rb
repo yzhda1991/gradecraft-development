@@ -15,7 +15,7 @@ class CourseUserAggregateExport
     parsed_schema_records records.select {|user| @roles[user.id] == role }
   end
 
-  def initialize(loaded_data)
+  def initialize(context:)
     @roles = loaded_data[:events].inject(Hash.new("")) do |hash, event|
       hash[event.user_id] = event.user_role
       hash
