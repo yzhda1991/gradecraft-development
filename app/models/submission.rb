@@ -49,6 +49,7 @@ class Submission < ActiveRecord::Base
 
   validates_uniqueness_of :task, scope: :student, allow_nil: true
   validates :link, format: URI::regexp(%w(http https)), allow_blank: true
+  validates_length_of :link, maximum: 255
   validates :assignment, presence: true
   validates_with SubmissionValidator
 
