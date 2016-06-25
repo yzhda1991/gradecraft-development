@@ -202,26 +202,6 @@ describe CoursesController do
         expect(response).to render_template(:timeline_settings)
       end
     end
-
-    describe "GET predictor settings" do
-      it "displays a list of all assignments for the course and their predictor info " do
-        get :predictor_settings, id: @course.id
-        expect(assigns(:title)).to eq("Grade Predictor Settings")
-        expect(assigns(:course)).to eq(@course)
-        expect(response).to render_template(:predictor_settings)
-      end
-    end
-
-    describe "POST predictor settings update" do
-      it "redirects to the edit predictor settings page if it fails" do
-        @assignment = create(:assignment, course: @course)
-        params = { "course" => { "assignments_attributes" => { "0" => {"include_in_predictor"=>"1",
-          "id"=> nil } } }, id: @course.id}
-        post :predictor_settings_update, params
-        expect(response).to render_template(:predictor_settings)
-      end
-    end
-
   end
 
   context "as student" do
@@ -252,8 +232,6 @@ describe CoursesController do
         :destroy,
         :timeline_settings,
         :timeline_settings_update,
-        :predictor_settings,
-        :predictor_settings_update
       ].each do |route|
         it "#{route} redirects to root" do
           expect(get route, {id: "1"}).to redirect_to(:root)

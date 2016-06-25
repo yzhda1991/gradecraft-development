@@ -164,8 +164,6 @@ GradeCraft::Application.routes.draw do
     member do
       get :timeline_settings
       put :timeline_settings, to: "courses#timeline_settings_update"
-      get :predictor_settings
-      put :predictor_settings, to: "courses#predictor_settings_update"
     end
   end
   resources :course_memberships, only: [:create, :destroy]
