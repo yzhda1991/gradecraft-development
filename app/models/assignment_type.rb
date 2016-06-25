@@ -95,6 +95,10 @@ class AssignmentType < ActiveRecord::Base
                   .where(assignment_type: self)
   end
 
+  def count_grades_for(student)
+    grades_for(student).count
+  end
+
   def score_for_student(student)
     grades_for(student).pluck("score").sum || 0
   end
