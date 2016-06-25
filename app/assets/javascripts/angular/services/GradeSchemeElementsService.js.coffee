@@ -25,9 +25,13 @@
     checkLowRange = (value, index) ->
       (value < elements[parseInt(index)].highest_points)
 
-    update_scheme = (index, newValue) ->
+    update_high_range = (index, newValue) ->
       if(index != elements.length-1)
         elements[index+1].highest_points = newValue-1
+
+    update_low_range = (index, newValue) ->
+      if(index != elements.length+1)
+        elements[index-1].lowest_points = newValue+1
 
     getGradeSchemeElements = ()->
       $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->
@@ -56,7 +60,8 @@
         getGradeSchemeElements: getGradeSchemeElements
         postGradeSchemeElements: postGradeSchemeElements
         checkLowRange: checkLowRange
-        update_scheme: update_scheme
+        update_high_range: update_high_range
+        update_low_range: update_low_range
         getTotalPoints: getTotalPoints
         elements: elements
         remove: remove
