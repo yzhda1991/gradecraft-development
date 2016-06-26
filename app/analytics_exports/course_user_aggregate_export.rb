@@ -1,6 +1,6 @@
 class CourseUserAggregateExport < Analytics::Export::Model
 
-  attr_reader :events, :predictor_events, :users, :export_records,
+  attr_reader :events, :predictor_events, :users,
               :user_pageviews, :user_logins, :user_predictor_pageviews
 
   set_schema username: :username,
