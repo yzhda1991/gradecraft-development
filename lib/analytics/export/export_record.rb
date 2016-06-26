@@ -41,7 +41,10 @@ module Analytics
         # let's raise an error to alert our developers that we've made a mistake
         # somewhere along the way.
         #
-        raise Analytics::Errors::InvalidParsingMethod, [export, parsing_method]
+        raise Analytics::Errors::InvalidParsingMethod.new \
+          parsing_method: parsing_method,
+          record: record,
+          export: export
       end
 
       def parsing_method_is_proc?
