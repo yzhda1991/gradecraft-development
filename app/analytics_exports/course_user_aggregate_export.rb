@@ -1,7 +1,8 @@
 class CourseUserAggregateExport
   include Analytics::Export::Model
 
-  rows_by :users
+  attr_reader :events, :predictor_events, :users, :export_records,
+              :user_pageviews, :user_logins, :user_predictor_pageviews
 
   set_schema username: :username,
              role: :user_role,
@@ -11,18 +12,33 @@ class CourseUserAggregateExport
              total_predictor_events: :predictor_events,
              total_predictor_sessions: :predictor_sessions
 
-  def schema_records_for_role(role)
-    parsed_schema_records records.select {|user| @roles[user.id] == role }
-  end
-
   def initialize(context:)
     @context = context
     @events = context[:mongoid][:events]
     @predictor_events = context[:mongoid][:predictor_events]
 
+    # these are the additional records we queried from ActiveRecord to use for
+    # adding context and data to our export columns related to assignments
+    # and users
+    #
+    @users = context[:active_record][:users]
+
+    # in this case we're using ActiveRecord User objects for the basis of our
+    # export instead of Analytics::Event records out of Mongoid. We're still
+    # using the mongoid data, but it's being referenced in each row from by the
+    # id from the corresponding user.
+    #
+    @export_records = users
+
+    # this is the data from the data aggregates that we queried in the original
+    # context when the export was triggered. The entire data aggregate suite
+    # really needs to be picked apart and improved due to its current density,
+    # but for now that won't stop us from using the data that it helps to
+    # assemble across various metrics.
+    #
     @user_pageviews = context[:data_aggregates][:user_pageviews]
     @user_logins = context[:data_aggregates][:user_logins]
-    @user_logins = context[:data_aggregates][:user_predictor_pageviews]
+    @user_predictor_pageviews = context[:data_aggregates][:user_predictor_pageviews]
   end
 
   # let's double-check whether all of these defaulted hash instantiations have
