@@ -8,13 +8,13 @@
 #
 module Analytics
   module Export
-    class SchemaRecord
-      attr_reader :target, :record, :export, :index
-      def initialize(target:, record:, export:, index:)
+    class ExportRecord
+      attr_reader :target, :record, :export
+
+      def initialize(target:, record:, export:)
         @target = target
         @record = record
         @export = export
-        @index = index
       end
 
       def get_value
@@ -45,7 +45,7 @@ module Analytics
       end
 
       # if all else has failed the target must be a method on the export itself,
-      # so let's send it the record and the index as arguments
+      # so let's send it the record as an argument
       def send_export_method
         export.send target, record
       end
