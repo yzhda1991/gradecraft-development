@@ -35,7 +35,7 @@ class CourseEventExport
   #
   def initialize(context:)
     @context = context
-    @records = context[:mongoid][:events]
+    @export_records = context[:mongoid][:events]
 
     # we're not actually exporting any users here, but we're going to use the
     # user data we queried through ActiveRecord to populate usernames for each

@@ -3,32 +3,42 @@ class CoursePredictorExport
 
   attr_accessor :users, :assignments
 
-  rows_by :events
-
-  set_schema username: :username,
-             role: :user_role,
-             user_id: :user_id,
-             assignment: :assignment_name,
-             assignment_id: :assignment_id,
-             prediction: :predicted_points,
-             possible: :possible_points,
-             date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
+  export_mapping username: :username,
+                 role: :user_role,
+                 user_id: :user_id,
+                 assignment: :assignment_name,
+                 assignment_id: :assignment_id,
+                 prediction: :predicted_points,
+                 possible: :possible_points,
+                 date_time: lambda { |event| event.created_at.to_formatted_s(:db) }
 
   def initialize(context:)
     # this is all of the export data that we've queried for already
     @context = context
 
-    # these are the records that we're going to include in the export
-    @export_records = context[:mongoid][:events]
+    # these are the records that we're going to include in the export, which
+    # in this case is all of the mongo events with an event_type of "predictor"
+    # that also match the course_id that we used to fetch the various
+    # collections in context.
+    #
+    @export_records = context[:mongoid][:predictor_events]
+
+    # these are the additional records we queried from ActiveRecord to use for
+    # adding context and data to our export columns related to assignments
+    # and users
+    #
     @users = context[:active_record][:users]
     @assignments = context[:active_record][:assignments]
   end
 
-  # filter the given events so that only predictor events are exported
-  def filter(events)
-    events.select {|event| event.event_type == "predictor" }
-  end
 
+  # these are the methods being used to filter the 'row' values for the final
+  # export CSV. There's probably a better way to organize them, but for now
+  # let's at least keep them together and keep them commented.
+  #
+  # These correspond to the values in the export_mapping hash defined on the
+  # class at the top of this file
+  #
   def username(event)
     return nil unless user_id = event.try(:user_id)
     usernames[user_id] || "[user id: #{event.user_id}]"
