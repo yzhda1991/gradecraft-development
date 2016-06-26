@@ -1,5 +1,4 @@
-class CourseUserAggregateExport
-  include Analytics::Export::Model
+class CourseUserAggregateExport < Analytics::Export::Model
 
   attr_reader :events, :predictor_events, :users, :export_records,
               :user_pageviews, :user_logins, :user_predictor_pageviews

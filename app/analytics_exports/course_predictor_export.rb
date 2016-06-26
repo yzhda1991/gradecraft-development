@@ -1,5 +1,4 @@
-class CoursePredictorExport
-  include ::Analytics::Export::Model
+class CoursePredictorExport < Analytics::Export::Model
 
   attr_accessor :users, :assignments
 

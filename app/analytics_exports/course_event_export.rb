@@ -1,5 +1,4 @@
-class CourseEventExport
-  include Analytics::Export::Model
+class CourseEventExport < Analytics::Export::Model
 
   attr_reader :users
 

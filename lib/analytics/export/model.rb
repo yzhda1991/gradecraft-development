@@ -2,6 +2,14 @@ require_relative "model/class_methods"
 
 module Analytics
   module Export
+    # let's make this a class instead of a module because it's more straight-
+    # forward to define the class behaviors that we're using here than it is
+    # to include them through the module. Additionally if we need any more
+    # common #initialize behaviors here beyond just setting the context on
+    # create it's cleaner to use the 'super' keyword to include these
+    # behaviors than it is to define them in the #initialize method on
+    # each subclass.
+    #
     class Model
       # this will be defined in the format of { column_name: :export_method }.
       # export_method in this case could be either a method on the record that
