@@ -12,7 +12,8 @@ class CourseEventExport
   # final export called "role", and we should use the "user_role" method to get
   # the data that we want for the records in that column. Because we have no
   # "user_role" method on the export itself, we can presume that user_role is
-  # being delegated to the #user_role method on the target record for export.
+  # being delegated to the #user_role method on the target record for export,
+  # which in this case is a mongo event coming from context[:mongoid][:events]
   #
   export_mapping username: :username,
                  role: :user_role,
