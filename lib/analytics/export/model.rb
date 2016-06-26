@@ -2,45 +2,53 @@ require_relative "model/class_methods"
 
 module Analytics
   module Export
-    module Model
-      def self.included(base)
-        attr_accessor :context
-        base.extend Analytics::Export::ClassMethods
+    class Model
+      # this will be defined in the format of { column_name: :export_method }.
+      # export_method in this case could be either a method on the record that
+      # we're exporting, or a method on the export class itself that's being
+      # tasked with filtering the data that's coming out of the export.
+      #
+      # Using cattr_accessor lets us add setters and getters on the class
+      # so this data can be shared between multiple objects.
+      #
+      cattr_accessor :export_mapping
 
-        base.class_eval do
-          attr_accessor :data
-        end
-      end
-
-      def initialize(loaded_data)
-        self.data = loaded_data
-      end
+      # every Analytics::Export class will have both a context and a set of
+      # export_records. The context is the larger set of records that have
+      # been queried for to perform the overall export so that individual
+      # queries for the same data don't have to be made if multiple exports
+      # are performed. Currently context will just be a hash but this is
+      # slated to be changed to a dedicated class in an upcoming pull request.
+      #
+      # export_records are the set of records that will act as the basis for
+      # the data rendered in the CSV by the export itself. Each export_record
+      # will represent a row in the final CSV, but that data will be filtered
+      # by the export process for a more specific presentation beyond simply
+      # rendering the collection of events in its raw form.
+      #
+      attr_accessor :context, :export_records
 
       def initialize(context:)
         @context = context
       end
 
-      def filter(rows)
-        rows
-      end
-
-      def records
-        @records ||= filter context[self.class.rows]
-      end
-
-      def parsed_schema_records(records_set=nil)
-        @parsed_schema_records ||= Analytics::Export::RecordParser.new(
+      def parsed_export_records
+        @parsed_export_records ||= Analytics::Export::RecordParser.new(
           export: self,
-          records: records_set || records
+          records: export_records
         ).parse_records!
       end
 
-      def generate_csv(path, file_name=nil, schema_record_set=nil)
+      # let's update the arguments here so that they're at least keyword
+      # arguments so we don't have to use nil as a placeholder in the event that
+      # we want to use a set of parsed records but not a file_name
+      #
+      def generate_csv(path, file_name=nil, parsed_export_records=nil)
         Analytics::Export::CSV.new(
           export: self,
           path: path,
           filename: file_name,
-          schema_record_set: schema_record_set
+          parsed_export_records: parsed_export_records
         ).generate!
       end
     end
