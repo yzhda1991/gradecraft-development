@@ -26,14 +26,26 @@ class CourseEventExport
   # in since we're performing the queries for these records before the object
   # is constructed anyway.
   #
+  # Also consider that for the time being we're pulling all of this data from
+  # the context hash so we can query for all of the data one time and use it
+  # in multiple exports. In future pull requests this should be converted into
+  # an Analytics::Export::Context class that can make traversing this data
+  # more straightforward than calling nested hash keys.
+  #
   def initialize(context:)
     @context = context
     @records = context[:mongoid][:events]
+
+    # we're not actually exporting any users here, but we're going to use the
+    # user data we queried through ActiveRecord to populate usernames for each
+    # record. This saves us from having to have stored these in mongo which
+    # would be redundant and painful
+    #
     @users = context[:active_record][:users]
   end
 
   def usernames
-    @usernames = users.inject({}) do |memo, user|
+    @usernames ||= users.inject({}) do |memo, user|
       memo[user.id] = user.username
       memo
     end
