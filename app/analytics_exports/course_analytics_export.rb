@@ -1,42 +1,25 @@
-# this is a temporary wrapper class for pulling the analytics export process out
-# of AnalyticsController#export so we can perform the process through a Resque
-# job to avoid the Timeout issue we're experiencing with running huge exports
-# through the controller in Production.
+# This class serves expressly to assemble the various components that we need
+# in our export at all.
 #
-# The goal here is just to get this modular enough that we can call with one or
-# two lines of code in the job without having to copy the entire 80-line method
-# into the job wholesale.
+# Because we've already defined the data filtering mechanisms in each export
+# class, we really just need the names of the classes to run the data against.
 #
-#
-# **** Now that I look at this it's clear that this should really just be an
-# Analytics::Export::Builder class that accepts an array of export classes
-# and a context. This allows us to keep the archive generation process
-# separate from the organization of the export data fetching, and the
-# export organization itself ****
+# And because we might want to use different sets of data to run against the
+# export classes, we also have an export context that encapsulates all of the
+# data that we're going to use in the export process.
 #
 class CourseAnalyticsExport
-  attr_accessor :complete
-
   attr_reader :course, :output_dir, :export_filepath
 
   def initialize(course:)
     @course = course
   end
 
-  def included_export_classes
-    [
-      CourseEventExport,
-      CoursePredictorExport,
-      CourseUserAggregateExport
-    ]
+  def export_classes
+    [CourseEventExport, CoursePredictorExport, CourseUserAggregateExport]
   end
 
-  def generate!
-    generate_csvs
-    build_zip_archive
-  end
-
-  def export_context
+  def context
     # this is literally just the entire data-fetching process as pulled from
     # AnalyticsController#export. This is pretty messy, but let's deal with
     # it later so we don't have to refactor everything right now.
@@ -44,57 +27,13 @@ class CourseAnalyticsExport
     @export_context ||= CourseExportContext.new course: course
   end
 
-  def export_dir
-    # return the export dir if we've already built it
-    return @export_dir if @export_dir
-
-    # create a working tmpdir for the export
-    export_tmpdir = Dir.mktmpdir nil, s3fs_prefix
-
-    # create a named directory to generate the files in
-    @export_dir = FileUtils.mkdir File.join(export_tmpdir, current_course.courseno)
+  # this is the name of the directory in the root of the final archive
+  def directory_name
+    course.courseno
   end
 
-  def generate_csvs
-    included_export_classes.each do |export_class|
-      export_class.new(export_context.export_data).generate_csv export_dir
-    end
-  end
-
-  def build_zip_archive
-    # this is going to be the downloaded filename of the final archive
-    export_filename = "#{ current_course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
-
-    # create a place to store our final archive, for now. Let's set the value as
-    # an attribute so we can delete it later.
-    #
-    @output_dir = Dir.mktmpdir nil, s3fs_prefix
-
-    # expand the export filename against our temporary directory path
-    @export_filepath = File.join(output_dir, export_filename)
-
-    begin
-      # generate the actual zip file here
-      Archive::Zip.archive(@export_filepath, export_dir)
-    ensure
-      @complete = true
-
-      # return the filepath once we're done generating the archive
-      @export_filepath
-    end
-  end
-
-  def use_s3fs?
-    # check whether we need to use S3fs
-    %w[staging production].include? Rails.env
-  end
-
-  def s3fs_prefix
-    # if we do use the prefix for the s3fs tempfiles
-    use_s3fs? ? "/s3mnt/tmp/#{Rails.env}" : nil
-  end
-
-  def remove_tempdirs
-    FileUtils.remove_entry_secure export_dir, output_dir
+  # this is the filename of the final exported file that we're going to produce
+  def filename
+    "#{ course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
   end
 end
