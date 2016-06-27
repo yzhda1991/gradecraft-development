@@ -115,6 +115,27 @@ $(".btn-public-nav").click(function(){
 
 //Toggle in-app mobile menu
 $(".btn-navbar-left").click(function(){
-    $(".offscreen-sidebar").toggle();
-    $("body").toggleClass("noscroll");
+  var $offscreenSidebar = $( '.offscreen-sidebar' ),
+      $contentMask = $( '.nav-flyout-contentmask' ),
+      $body = $( 'body' ),
+
+      transitionEnd = 'transitionend webkitTransitionEnd otransitionend MSTransitionEnd';
+
+    $offscreenSidebar.addClass('animating');
+    if ($offscreenSidebar.hasClass('menu-visible')) {
+      $offscreenSidebar.addClass('closing');
+    } else {
+      $offscreenSidebar.addClass('opening');
+    }
+
+    $body.on( transitionEnd, function() {
+       $offscreenSidebar
+        .removeClass( 'animating closing opening' )
+        .toggleClass( 'menu-visible' );
+     
+       $body.off( transitionEnd );
+      } );
+
+    $contentMask.toggle();
+    $body.toggleClass("noscroll");
 });
