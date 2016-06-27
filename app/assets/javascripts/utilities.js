@@ -112,3 +112,9 @@ $(".course-info-btn").click(function(){
 $(".btn-public-nav").click(function(){
     $(".public-nav").slideToggle();
 });
+
+//Toggle in-app mobile menu
+$(".btn-navbar-left").click(function(){
+    $(".offscreen-sidebar").toggle();
+    $("body").toggleClass("noscroll");
+});

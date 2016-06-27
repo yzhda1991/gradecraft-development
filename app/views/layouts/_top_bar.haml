@@ -1,7 +1,6 @@
 - if ! current_user
   = render partial: "layouts/navigation/top_bar_logged_out"
 - else
-  #left-flyout-nav.layout-left-flyout
 
   .offscreen-sidebar
     .sidebar
@@ -41,6 +40,5 @@
               = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title"
               %ul.course-info-card= render partial: "layouts/navigation/class_info"
             = render partial: "layouts/navigation/authenticated_nav"
-        %nav.mobile-nav.hide-for-large
-          %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
-            %i.fa.fa-bars.fa-fw
+        %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger.hide-for-large
+          %i.fa.fa-bars.fa-fw

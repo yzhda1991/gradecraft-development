@@ -94,6 +94,5 @@
 //= require course_switch
 //= require background
 //= require d3
-//= require offscreen-nav
 //= require_tree ./behaviors
 //= require utilities
