@@ -186,7 +186,8 @@ class AnalyticsController < ApplicationController
     respond_to do |format|
       format.zip do
         export = CourseAnalyticsExport.new course: current_course
-        export.generate!
+        builder = Analytics::ExportBuilder.new export: export
+        builder.generate!
       end
     end
   end

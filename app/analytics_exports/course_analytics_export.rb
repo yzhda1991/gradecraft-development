@@ -8,7 +8,7 @@
 # export classes, we also have an export context that encapsulates all of the
 # data that we're going to use in the export process.
 #
-class CourseAnalyticsExport
+class CourseAnalyticsExport < Analytics::Export::Organizer
   attr_reader :course, :output_dir, :export_filepath
 
   def initialize(course:)
@@ -24,7 +24,7 @@ class CourseAnalyticsExport
     # AnalyticsController#export. This is pretty messy, but let's deal with
     # it later so we don't have to refactor everything right now.
     #
-    @export_context ||= CourseExportContext.new course: course
+    @context ||= CourseExportContext.new course: course
   end
 
   # this is the name of the directory in the root of the final archive
