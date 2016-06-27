@@ -7,6 +7,13 @@
 # two lines of code in the job without having to copy the entire 80-line method
 # into the job wholesale.
 #
+#
+# **** Now that I look at this it's clear that this should really just be an
+# Analytics::Export::Builder class that accepts an array of export classes
+# and a context. This allows us to keep the archive generation process
+# separate from the organization of the export data fetching, and the
+# export organization itself ****
+#
 class CourseAnalyticsExport
   attr_accessor :complete
 
