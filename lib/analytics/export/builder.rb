@@ -9,10 +9,10 @@ module Analytics
       #
       attr_accessor :complete
 
-      attr_reader :export, :output_dir, :export_filepath
+      attr_reader :organizer, :output_dir, :export_filepath
 
-      def initialize(export:)
-        @export = export
+      def initialize(organizer:)
+        @organizer = organizer
       end
 
       def generate!
@@ -29,12 +29,12 @@ module Analytics
 
         # create a named directory to generate the files in
         @export_dir = FileUtils.mkdir \
-          File.join(export_tmpdir, export.directory_name)
+          File.join(export_tmpdir, organizer.directory_name)
       end
 
       def generate_csvs
-        export.export_classes.each do |export_class|
-          export_class.new(export.context.export_data).generate_csv export_dir
+        organizer.export_classes.each do |export_class|
+          export_class.new(organizer.context.export_data).generate_csv export_dir
         end
       end
 
@@ -45,7 +45,7 @@ module Analytics
         @output_dir = Dir.mktmpdir nil, s3fs_prefix
 
         # expand the export filename against our temporary directory path
-        @export_filepath = File.join(output_dir, export.filename)
+        @export_filepath = File.join(output_dir, organizer.filename)
 
         begin
           # generate the actual zip file here
