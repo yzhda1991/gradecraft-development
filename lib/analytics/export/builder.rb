@@ -24,19 +24,26 @@ module Analytics
         build_zip_archive
       end
 
+      # make all of the directories that we're going to use for the export
+      #
       def make_directories
         @export_tmpdir = S3fs.mktmpdir
         @export_root_dir = FileUtils.mkdir File.join(export_tmpdir, directory_name)
         @final_archive_tmpdir = S3fs.mktmpdir
       end
 
+      # iterate over the classes that we've been given and generate them in the
+      # root directory of our export. This method is called #generate_csv right
+      # now but should be renamed to #generate_file later to give us a more
+      # filetype-agnostic approach.
+      #
       def generate_csvs
-        # iterate over the classes that we've been given and
         export_classes.each do |export_class|
           export_class.new(export_data).generate_csv export_root_dir
         end
       end
 
+      # assemble all of the generated files
       def build_zip_archive
         begin
           # generate the actual zip file here
