@@ -8,8 +8,8 @@
 # export classes, we also have an export context that encapsulates all of the
 # data that we're going to use in the export process.
 #
-class CourseAnalyticsExport < Analytics::Export::Organizer
-  attr_reader :course, :output_dir, :export_filepath
+class CourseExportOrganizer < Analytics::Export::Organizer
+  attr_reader :course
 
   def initialize(course:)
     @course = course
@@ -28,11 +28,13 @@ class CourseAnalyticsExport < Analytics::Export::Organizer
   end
 
   # this is the name of the directory in the root of the final archive
+  #
   def directory_name
     course.courseno
   end
 
   # this is the filename of the final exported file that we're going to produce
+  #
   def filename
     "#{ course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
   end

@@ -7,10 +7,9 @@
 module Analytics
   module Export
     class Builder
-      attr_accessor :complete
-
       attr_reader :export_data, :export_classes, :filename, :directory_name,
-                  :output_dir, :export_filepath
+                  :export_tmpdir, :export_root_dir, :final_archive_tmpdir,
+                  :final_export_filepath, :complete
 
       def initialize(export_data:, export_classes:, filename: nil, directory_name: nil)
         @export_data = export_data
@@ -20,60 +19,42 @@ module Analytics
       end
 
       def generate!
+        make_directories
         generate_csvs
         build_zip_archive
+      end
+
+      def make_directories
+        @export_tmpdir = S3fs.mktmpdir
+        @export_root_dir = FileUtils.mkdir File.join(export_tmpdir, directory_name)
+        @final_archive_tmpdir = S3fs.mktmpdir
       end
 
       def generate_csvs
         # iterate over the classes that we've been given and
         export_classes.each do |export_class|
-          export_class.new(export_data).generate_csv export_dir
+          export_class.new(export_data).generate_csv export_root_dir
         end
       end
 
       def build_zip_archive
         begin
           # generate the actual zip file here
-          Archive::Zip.archive(export_filepath, export_dir)
+          Archive::Zip.archive final_export_filepath, export_root_dir
         ensure
           @complete = true
 
           # return the filepath once we're done generating the archive
-          export_filepath
+          final_export_filepath
         end
       end
 
-      # We need to build and name a few directories during the course of our
-      # export process. These methods handle all of that.
-      #
-      def export_root_dir
-        # create a named directory where we're going to generate the files
-        # inside of the tmpdir that we've already generated
-        #
-        @export_dir ||= FileUtils.mkdir File.join(export_tmpdir, directory_name)
-      end
-
-      def final_archive_tmpdir
-        # create a place to store our final archive, for now. Let's set the value as
-        # an attribute so we can delete it later.
-        #
-        @final_archive_tmpdir ||= S3fs.mktmpdir
-      end
-
-      def export_tmpdir
-        # create a working tmpdir for the export
-        #
-        @export_tmpdir ||= S3fs.mktmpdir
-      end
-
       def final_export_filepath
-        # expand the export filename against our temporary directory path
-        #
-        @final_export_filepath ||= File.join(final_export_tmpdir, filename)
+        @final_export_filepath ||= File.join final_export_tmpdir, filename
       end
 
       def remove_tempdirs
-        FileUtils.remove_entry_secure export_dir, final_archive_tmpdir
+        FileUtils.remove_entry_secure export_root_dir, final_archive_tmpdir
       end
     end
   end
