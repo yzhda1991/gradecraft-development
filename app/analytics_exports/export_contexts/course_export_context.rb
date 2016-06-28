@@ -29,7 +29,7 @@ class CourseExportContext
   end
 
   def events
-    @events ||= Analytics::Event.where(course_id: course.id)
+    @events ||= Analytics::Event.where course_id: course.id
   end
 
   def predictor_events
@@ -39,31 +39,28 @@ class CourseExportContext
   end
 
   def user_pageviews
-    @user_pageviews ||= CourseUserPageview.data(:all_time, nil, {
-      course_id: course.id
-      },
-      { page: "_all" })
+    @user_pageviews ||= CourseUserPageview.data :all_time, nil,
+      { course_id: course.id },
+      { page: "_all" }
   end
 
   def user_predictor_pageivews
     @user_predictor_pageviews ||=
-      CourseUserPagePageview.data(:all_time, nil, {
-      course_id: course.id, page: /predictor/
-      })
+      CourseUserPagePageview.data :all_time, nil,
+        { course_id: course.id, page: /predictor/ }
   end
 
   def user_logins
-    @user_logins ||= CourseUserLogin.data(:all_time, nil, {
-      course_id: course.id
-      })
+    @user_logins ||= CourseUserLogin.data :all_time, nil,
+      { course_id: course.id }
   end
 
   def users
-    @users ||= User.where(id: user_ids).select(:id, :username)
+    @users ||= User.where(id: user_ids).select :id, :username
   end
 
   def assignments
-    @assignments ||= Assignment.where(id: assignment_ids).select(:id, :name)
+    @assignments ||= Assignment.where(id: assignment_ids).select :id, :name
   end
 
   def user_ids
@@ -71,8 +68,9 @@ class CourseExportContext
   end
 
   def assignment_ids
-    @assignment_ids ||= events.select {
-      |event| event.respond_to? :assignment_id
-    }.collect(&:assignment_id).compact.uniq
+    @assignment_ids ||= events.inject([]) do |memo, event|
+      memo << event.assignment_id if event.respond_to? :assignment_id
+      memo
+    end.compact.uniq
   end
 end
