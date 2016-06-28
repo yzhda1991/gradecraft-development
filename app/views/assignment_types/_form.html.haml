@@ -20,6 +20,12 @@
       .form_label{id: "txtMaxPoints"} Is there a cap on how many points students can earn through this category (Set to 0 if not)? If you fill this in, students will not be able to earn more than this amount.
 
     .form-item
+      / Do only X number of highest grades count?
+      = f.label :top_grades_counted, :label => "Count Highest Grades"
+      = f.text_field :top_grades_counted, data: { autonumeric: true, "m-dec" => "0" }
+      .form_label{id: "assignment_type_top_grades_counted"} Do you want to only count the highest grades from this category towards a student's grade? Specify the number of grades to count here.
+
+    .form-item
       = f.label :student_weightable, "Student Weighted"
       = f.check_box :student_weightable, {"aria-describedby" => "txtStudentWeighted"}
       .form_label{id: "txtStudentWeighted"} Do students decide how much this #{term_for :assignment} type will count towards their grade?
