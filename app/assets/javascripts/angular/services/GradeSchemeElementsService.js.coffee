@@ -7,11 +7,11 @@
       deletedIds.push(elements.splice(index, 1)[0].id)
 
     addNew = (index) ->
-      elements.splice(index+1, 0, {
+      elements.splice(index + 1, 0, {
         letter: ''
         level: ''
         lowest_points: ''
-        highest_points: elements[index].lowest_points-1
+        highest_points: elements[index].lowest_points - 1
       })
 
     addFirst = () ->
@@ -26,12 +26,12 @@
       (value < elements[parseInt(index)].highest_points)
 
     update_high_range = (index, newValue) ->
-      if(index != elements.length-1)
-        elements[index+1].highest_points = newValue-1
+      if(index != elements.length - 1)
+        elements[index + 1].highest_points = newValue-1
 
     update_low_range = (index, newValue) ->
-      if(index != elements.length+1)
-        elements[index-1].lowest_points = newValue+1
+      if(index != elements.length + 1)
+        elements[index - 1].lowest_points = newValue+1
 
     getGradeSchemeElements = ()->
       $http.get('/grade_scheme_elements/mass_edit.json').success((response) ->

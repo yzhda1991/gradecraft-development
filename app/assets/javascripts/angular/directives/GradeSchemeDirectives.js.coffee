@@ -5,13 +5,13 @@
     element: '=ngModel'
   }
   controller: ($scope) ->
-    this.lowest_points = (modelValue, viewValue) ->
+    this.lowest_points = (modelValue) ->
       if (modelValue < $scope.element.highest_points || $scope.element.highest_points == '')
         GradeSchemeElementsService.update_high_range($scope.index, modelValue)
         true
       else
         false
-    this.highest_points = (modelValue, viewValue) ->
+    this.highest_points = (modelValue) ->
       if (modelValue > $scope.element.lowest_points || $scope.element.lowest_points == '' )
         GradeSchemeElementsService.update_low_range($scope.index, modelValue)
         true
