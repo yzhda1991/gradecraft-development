@@ -6,17 +6,11 @@
   }
   controller: ($scope) ->
     this.lowest_points = (modelValue) ->
-      if (modelValue < $scope.element.highest_points || $scope.element.highest_points == '')
-        GradeSchemeElementsService.update_high_range($scope.index, modelValue)
-        true
-      else
-        false
+      GradeSchemeElementsService.isLowestPointValue($scope.element, $scope.index, modelValue)
+
     this.highest_points = (modelValue) ->
-      if (modelValue > $scope.element.lowest_points || $scope.element.lowest_points == '' )
-        GradeSchemeElementsService.update_low_range($scope.index, modelValue)
-        true
-      else
-        false
+      GradeSchemeElementsService.isHighestPointValue($scope.element, $scope.index, modelValue)
+
   templateUrl: 'ng_gradeSchemeRanges.html'
   link: (scope, elm, attrs, ctrl) ->
 ]

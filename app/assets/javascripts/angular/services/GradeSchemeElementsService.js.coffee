@@ -29,6 +29,20 @@
       if(index != elements.length - 1)
         elements[index + 1].highest_points = newValue-1
 
+    isLowestPointValue = (element, index, modelValue) ->
+      if (modelValue < element.highest_points || element.highest_points == '')
+        update_high_range(index, modelValue)
+        true
+      else
+        false
+
+    isHighestPointValue = (element, index, modelValue) ->
+      if (modelValue > element.lowest_points || element.lowest_points == '' )
+        update_low_range(index, modelValue)
+        true
+      else
+        false
+
     update_low_range = (index, newValue) ->
       if(index != elements.length + 1)
         elements[index - 1].lowest_points = newValue+1
