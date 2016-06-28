@@ -6,10 +6,18 @@
   }
   controller: ($scope) ->
     this.lowest_points = (modelValue) ->
-      GradeSchemeElementsService.updatePreviousElementIfLower($scope.element, $scope.index, modelValue)
+      # update the previous grade scheme element if our lowest_points value has
+      # dropped below its highest_points value
+      #
+      GradeSchemeElementsService
+        .updatePreviousElementIfLower($scope.element, $scope.index, modelValue)
 
     this.highest_points = (modelValue) ->
-      GradeSchemeElementsService.updateNextElementIfHigher($scope.element, $scope.index, modelValue)
+      # update the next grade scheme element if our highest_points value has
+      # become greater than its lowest_points value
+      #
+      GradeSchemeElementsService
+        .updateNextElementIfHigher($scope.element, $scope.index, modelValue)
 
   templateUrl: 'ng_gradeSchemeRanges.html'
   link: (scope, elm, attrs, ctrl) ->

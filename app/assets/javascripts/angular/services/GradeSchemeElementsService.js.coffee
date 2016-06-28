@@ -33,6 +33,10 @@
       if(index != elements.length + 1)
         elements[index - 1].lowest_points = newValue+1
 
+    # this method will update the previous grade scheme element in the
+    # collection if its lowest_points value is lower than the highest points
+    # value for the previous element
+    #
     updatePreviousElementIfLower = (element, index, modelValue) ->
       if (modelValue < element.highest_points || element.highest_points == '')
         update_high_range(index, modelValue)
@@ -40,6 +44,10 @@
       else
         false
 
+    # this method will update the subsequent grade scheme element in the
+    # collection if its highest_points value is greater than the lowest points
+    # value for the subsequent element
+    #
     updateNextElementIfHigher = (element, index, modelValue) ->
       if (modelValue > element.lowest_points || element.lowest_points == '' )
         update_low_range(index, modelValue)
