@@ -28,6 +28,8 @@ class CourseExportContext
     }
   end
 
+  # Mongoid queries
+  #
   def events
     @events ||= Analytics::Event.where course_id: course.id
   end
@@ -38,6 +40,8 @@ class CourseExportContext
       event_type: "predictor"
   end
 
+  # Queries using our Analytics::Aggregate classes
+  #
   def user_pageviews
     @user_pageviews ||= CourseUserPageview.data :all_time, nil,
       { course_id: course.id },
@@ -55,6 +59,8 @@ class CourseExportContext
       { course_id: course.id }
   end
 
+  # ActiveRecord queries
+  #
   def users
     @users ||= User.where(id: user_ids).select :id, :username
   end
@@ -63,6 +69,8 @@ class CourseExportContext
     @assignments ||= Assignment.where(id: assignment_ids).select :id, :name
   end
 
+  # Methods parsing the ids from the ActiveRecord queries
+  #
   def user_ids
     @user_ids ||= events.collect(&:user_id).compact.uniq
   end
