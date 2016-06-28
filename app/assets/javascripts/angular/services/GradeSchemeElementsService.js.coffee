@@ -33,14 +33,14 @@
       if(index != elements.length + 1)
         elements[index - 1].lowest_points = newValue+1
 
-    isLowestPointValue = (element, index, modelValue) ->
+    updatePreviousElementIfLower = (element, index, modelValue) ->
       if (modelValue < element.highest_points || element.highest_points == '')
         update_high_range(index, modelValue)
         true
       else
         false
 
-    isHighestPointValue = (element, index, modelValue) ->
+    updateNextElementIfHigher = (element, index, modelValue) ->
       if (modelValue > element.lowest_points || element.lowest_points == '' )
         update_low_range(index, modelValue)
         true
@@ -76,8 +76,8 @@
         checkLowRange: checkLowRange
         update_high_range: update_high_range
         update_low_range: update_low_range
-        isLowestPointValue: isLowestPointValue
-        isHighestPointValue: isHighestPointValue
+        updatePreviousElementIfLower: updatePreviousElementIfLower
+        updateNextElementIfHigher: updateNextElementIfHigher
         getTotalPoints: getTotalPoints
         elements: elements
         remove: remove
