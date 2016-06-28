@@ -1,5 +1,14 @@
 module Analytics
   module Export
+
+    # This hasn't been changed at all, it's just been moved from
+    # Analytics::Export to Analtyics::Export::Model so that we can use the
+    # ::Export module to house adjacent helper classes.
+    #
+    # This entire process is the subject of the 2132 branch/issue, and has been
+    # completely refactored into multiple classes on that branch for
+    # significantly better readability and clarity of process.
+    #
     module Model
       def self.included(base)
         base.extend(ClassMethods)
