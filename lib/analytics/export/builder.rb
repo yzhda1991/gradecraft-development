@@ -46,7 +46,7 @@ module Analytics
       # We need to build and name a few directories during the course of our
       # export process. These methods handle all of that.
       #
-      def working_dir
+      def export_root_dir
         # create a named directory where we're going to generate the files
         # inside of the tmpdir that we've already generated
         #
@@ -57,41 +57,23 @@ module Analytics
         # create a place to store our final archive, for now. Let's set the value as
         # an attribute so we can delete it later.
         #
-        @output_dir ||= S3FS.mktmpdir
+        @final_archive_tmpdir ||= S3fs.mktmpdir
       end
 
       def export_tmpdir
         # create a working tmpdir for the export
         #
-        @export_tmpdir ||= S3FS.mktmpdir
+        @export_tmpdir ||= S3fs.mktmpdir
       end
 
-      def export_filepath
+      def final_export_filepath
         # expand the export filename against our temporary directory path
         #
-        @export_filepath ||= File.join(output_dir, organizer.filename)
+        @final_export_filepath ||= File.join(final_export_tmpdir, filename)
       end
 
       def remove_tempdirs
         FileUtils.remove_entry_secure export_dir, final_archive_tmpdir
-      end
-
-
-      #  Logic for determining whether we should use s3fs and what we should
-      #  prepend to our tmpdirs if so
-      #
-      def use_s3fs?
-        # check whether we need to use S3fs
-        %w[staging production].include? Rails.env
-      end
-
-      def s3fs_prefix
-        # if we do use the prefix for the s3fs tempfiles
-        use_s3fs? ? "/s3mnt/tmp/#{Rails.env}" : nil
-      end
-
-      def create_tmpdir
-        Dir.mktmpdir nil, s3fs_prefix
       end
     end
   end
