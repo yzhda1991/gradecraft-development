@@ -18,6 +18,7 @@
 //= require jquery.dynatable
 //= require dynatable
 //= require stacktable.min
+//= require mobile_menu
 //= require mobile_tables
 //= require slick.min
 //= require lodash.min

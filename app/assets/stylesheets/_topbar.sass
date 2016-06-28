@@ -262,15 +262,14 @@ ul.subnav.logged-out
     color: $color-blue-3
 
   .offscreen-sidebar
-    display: none
     position: fixed
     background-color: $color-grey-6
     width: 300px
     height: 100%
     z-index: 1000
     overflow: auto
-    transform: translate3d(10px, 0, 0)
-    -webkit-transform: translate3d(10px, 0, 0)
+    left: -300px
+
     ul
       list-style-type: none
       margin: 0
@@ -312,17 +311,19 @@ ul.subnav.logged-out
       font-size: 1rem
 
   .offscreen-sidebar.animating
-    display: block
-    transition: transform .25s ease-in-out
-    -webkit-transition: -webkit-transform .25s ease-in-out
+    transition: transform 0.25s ease-in-out
+    -webkit-transition: -webkit-transform 0.25s ease-in-out
 
   .offscreen-sidebar.animating.opening
-    transform: translate3d( 0, 0, 0 )
-    -webkit-transform: translate3d( 0, 0, 0 )
+    transform: translate3d(300px, 0, 0)
+    -webkit-transform: translate3d(300px, 0, 0)
 
   .offscreen-sidebar.animating.closing
-    transform: translate3d( 0, 0, 0 )
-    -webkit-transform: translate3d( 0, 0, 0 )
+    transform: translate3d(-300px, 0, 0)
+    -webkit-transform: translate3d(-300px, 0, 0)
+  
+  .offscreen-sidebar.menu-visible
+    left: 0
 
 @media (max-width: $media-small-max)
   .navbar > .mobile-nav > .right
