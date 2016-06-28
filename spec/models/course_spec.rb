@@ -49,7 +49,7 @@ describe Course do
   end
 
   describe "#copy" do
-    let(:course) { build :course }
+    let(:course) { create :course }
     subject { course.copy }
 
     it "makes a duplicated copy of itself" do
@@ -62,19 +62,16 @@ describe Course do
     end
 
     it "saves the copy if the course is saved" do
-      course.save
       expect(subject).to_not be_new_record
     end
 
     it "copies the badges" do
-      course.save
       create :badge, course: course
       expect(subject.badges.size).to eq 1
       expect(subject.badges.map(&:course_id)).to eq [subject.id]
     end
 
     it "copies the assignment types" do
-      course.save
       assignment_type = create :assignment_type, course: course
       create :assignment, assignment_type: assignment_type
       expect(subject.assignment_types.size).to eq 1
@@ -83,17 +80,35 @@ describe Course do
     end
 
     it "copies the challenges" do
-      course.save
       create :challenge, course: course
       expect(subject.challenges.size).to eq 1
       expect(subject.challenges.map(&:course_id)).to eq [subject.id]
     end
 
     it "copies the grade scheme elements" do
-      course.save
       create :grade_scheme_element, course: course
       expect(subject.grade_scheme_elements.size).to eq 1
       expect(subject.grade_scheme_elements.map(&:course_id)).to eq [subject.id]
+    end
+  end
+
+  describe "#copy_with_students" do
+    let!(:student) { create(:student_course_membership, course: subject).user }
+    subject { create :course }
+
+    it "turns off the create_admin_memberships callback" do
+      expect_any_instance_of(Course).to_not receive(:create_admin_memberships)
+      subject.copy_with_students
+    end
+
+    it "turns back on the create_admin_memberships callback" do
+      subject.copy_with_students
+      expect(Course._create_callbacks.map(&:filter)).to include :create_admin_memberships
+    end
+
+    it "copies the students" do
+      duplicated = subject.copy_with_students
+      expect(duplicated.reload.users).to include student
     end
   end
 

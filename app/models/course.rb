@@ -161,14 +161,14 @@ class Course < ActiveRecord::Base
   end
 
   def copy(attributes={})
-    ModelCopier.new(self).copy(attributes: attributes,
-                               associations: [
-                                 :badges,
-                                 { assignment_types: { course_id: :id }},
-                                 :challenges,
-                                 :grade_scheme_elements
-                               ],
-                               options: { prepend: { name: "Copy of " }})
+    copy_with_associations(attributes, [])
+  end
+
+  def copy_with_students(attributes={})
+    Course.skip_callback(:create, :after, :create_admin_memberships)
+    copy_with_associations(attributes, [:course_memberships])
+  ensure
+    Course.set_callback(:create, :after, :create_admin_memberships)
   end
 
   def has_teams?
@@ -346,5 +346,16 @@ class Course < ActiveRecord::Base
     User.where(admin: true).each do |admin|
       CourseMembership.create course_id: self.id, user_id: admin.id, role: "admin"
     end
+  end
+
+  def copy_with_associations(attributes, associations)
+    ModelCopier.new(self).copy(attributes: attributes,
+                               associations: [
+                                 :badges,
+                                 { assignment_types: { course_id: :id }},
+                                 :challenges,
+                                 :grade_scheme_elements
+                               ] + associations,
+                               options: { prepend: { name: "Copy of " }})
   end
 end

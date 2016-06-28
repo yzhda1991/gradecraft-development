@@ -160,7 +160,10 @@ GradeCraft::Application.routes.draw do
 
   #8. Courses
   resources :courses do
-    post :copy, on: :collection
+    collection do
+      post :copy
+      post :copy_with_students
+    end
     member do
       get :timeline_settings
       put :timeline_settings, to: "courses#timeline_settings_update"
