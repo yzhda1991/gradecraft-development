@@ -108,7 +108,3 @@ $(".course-info-btn").click(function(){
     $(".course-info-card").toggle();
 });
 
-//Toggle public page mobile menu
-$(".btn-public-nav").click(function(){
-    $(".public-nav").slideToggle();
-});

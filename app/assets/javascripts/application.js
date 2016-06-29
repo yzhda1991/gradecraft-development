@@ -18,6 +18,7 @@
 //= require jquery.dynatable
 //= require dynatable
 //= require stacktable.min
+//= require mobile_menu
 //= require mobile_tables
 //= require slick.min
 //= require lodash.min
@@ -94,6 +95,5 @@
 //= require course_switch
 //= require background
 //= require d3
-//= require offscreen-nav
 //= require_tree ./behaviors
 //= require utilities

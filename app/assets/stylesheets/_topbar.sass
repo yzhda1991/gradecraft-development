@@ -16,106 +16,14 @@ a.site-title
   width: 100%
   margin: 0 auto
 
-/* In app mobile left flyout menu styles */
-.layout-left-flyout
-  height: 100%
-  position: fixed
-  visibility: hidden
-  padding: 0
-  z-index: 0
-  top: 0
-  transition: visibility 0 linear .2s
-  background-color: $color-grey-6
-  transition: visibility 0 linear .2s
-  -webkit-perspective: 1000
-  -webkit-backface-visibility: hidden
-  -webkit-transform-style: preserve-3d
-  ul
-    list-style-type: none
-    margin: 0
-    padding: 0
-  a
-    display: block
-
-.layout-left-flyout
-  left: 0
-
-.layout-left-flyout.isCbFlyNavLeftActive
-  visibility: visible
-  transition: z-index 0 linear .2s
-  z-index: 1000
-
-.cbFlyNavLeft-wrap
-  display: block
-  box-sizing: border-box
-  position: relative
-  height: 100%
-  overflow: scroll
-  width: 250px
-  -webkit-perspective: 1000
-  -webkit-backface-visibility: hidden
-  -webkit-transform-style: preserve-3d
-  > nav
-    transform: translateY(0)
-    transition: transform 0 ease-in-out
-
-.nav-collapse
-  -webkit-transform: translate3d(0,0,0)
-  -webkit-transform-style: preserve-3d
-
-.layout-right-content, .offscreen-sidebar
-  z-index: 100
-  transition: transform .2s ease-in-out
-  -webkit-backface-visibility: hidden
-
-.layout-right-content.isCbFlyNavLeftActive
-  top: -2rem !important
-  transform: translate3d(250px,0,0)
-  position: relative
-
-.nav-flyout-navmask, .nav-flyout-contentmask, .nav-flyout-navmask-left, .nav-flyout-contentmask-left
-  position: fixed
-  top: 0
-  bottom: 0
-  left: 0
-  right: 0
-
-.nav-flyout-contentmask, .nav-flyout-contentmask-left
-  z-index: 1
-  height: 100vh
-  background-color: rgba(0,0,0, .7)
-
-.nav-flyout-navmask, .nav-flyout-navmask-left
-  right: 180px
-  z-index: 1
-
-/* Menu Toggle */
-
+/* Navbar Styles */
 .navbar ul
   list-style-type: none
 
-.btn-navbar-left
-  position: absolute
-  top: 7px
-  font-size: 1.1rem
-  width: 35px
-  height: 40px
-  padding: 4px 0
-  display: block
-  z-index: 1
-  color: $color-green-2
-  &:hover
-    color: $color-green-2
-    text-decoration: none
-
-.btn-navbar-left
-  left: 0
-
-/* Navbar Styles */
 .navbar
   position: fixed
   top: 0 !important
-  z-index: 1000
+  z-index: 99
   height: 45px !important
 
 .logged-out
@@ -181,15 +89,16 @@ ul.subnav.logged-out
 .btn-public-nav
   display: none
 
-.offscreen-sidebar
-  display: none
-
-.isCbFlyNavLeftActive .offscreen-sidebar
-  margin-right: 0
-  display: block
+/* Med Screen Styles*/
+@media (min-width: $media-small-max)
+  .the-nav .nav-pill.right.public-nav
+    display: none !important
 
 /* Large Screen Styles*/
-@media (min-width: $media-medium-max)
+@media (min-width: $media-large-min)
+  .offscreen-sidebar, .nav-flyout-contentmask
+    display: none !important
+
   .navbar
     height: auto
 
@@ -279,6 +188,7 @@ ul.subnav.logged-out
     border-bottom-left-radius: $global-radius
     border-bottom-right-radius: $global-radius
 
+
 /* Mobile Styles */
 @media (max-width: $media-medium-max)
   .logged-in .navbar .nav-collapse
@@ -313,10 +223,22 @@ ul.subnav.logged-out
   li.dropdown a.section-title
     color: $color-blue-3
 
-  .layout-left-flyout
-    width: 250px
+  /* In app mobile left flyout menu styles */
+  .offscreen-sidebar
+    position: fixed
+    background-color: $color-grey-6
+    width: 280px
+    height: 100%
+    z-index: 100
+    overflow: auto
+    left: -280px
+
+    ul
+      list-style-type: none
+      margin: 0
+      padding: 0
     li
-      padding: .2em
+      padding: .4em
     li, li a
       color: $color-grey-2
       text-transform: capitalize
@@ -326,6 +248,7 @@ ul.subnav.logged-out
         background-color: $color-blue-3
         color: $color-white
     a
+      display: block
       &:hover
         color: $color-blue-3
         text-decoration: none
@@ -344,14 +267,86 @@ ul.subnav.logged-out
       margin: .5rem 0
       width: 100%
 
-    a
-      color: $color-blue-4
-    
+    input[type=text]
+      width: 220px
+
+    a.button
+      color: $color-white
+      font-size: 0.8rem
+
     .course-site
       background-color: $color-blue-1
       color: $color-white
       padding: .5rem .75rem
       font-size: 1rem
+
+    .course-info-btn-mobile
+      position: relative
+      cursor: pointer
+
+      i
+        position: absolute
+        top: 8px
+        right: 8px
+        -webkit-transition: all 0.2s ease-in-out
+        -moz-transition: all 0.2s ease-in-out
+        -o-transition: all 0.2s ease-in-out
+        -ms-transition: all 0.2s ease-in-out
+        transition: all 0.2s ease-in-out
+
+    .course-info-btn-mobile.open i
+      transform: rotate(180deg)
+
+    ul.course-info
+      max-height: 0px
+      overflow: hidden
+      -webkit-transition: all 0.5s ease-in-out
+      -moz-transition: all 0.5s ease-in-out
+      -o-transition: all 0.5s ease-in-out
+      -ms-transition: all 0.5s ease-in-out
+      transition: all 0.5s ease-in-out
+
+    ul.course-info.open
+      max-height: 500px
+
+  .offscreen-sidebar.animating
+    transition: transform 0.25s ease-in-out
+    -webkit-transition: -webkit-transform 0.25s ease-in-out
+
+  .offscreen-sidebar.animating.opening
+    transform: translate3d(280px, 0, 0)
+    -webkit-transform: translate3d(280px, 0, 0)
+
+  .offscreen-sidebar.animating.closing
+    transform: translate3d(-280px, 0, 0)
+    -webkit-transform: translate3d(-280px, 0, 0)
+  
+  .offscreen-sidebar.menu-visible
+    left: 0
+
+  .nav-flyout-contentmask
+    display: none
+    position: fixed
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    z-index: 99
+    overflow: hidden
+    height: 100vh
+    background-color: rgba(0,0,0, .7)
+
+  .btn-navbar-left
+    position: absolute
+    top: 14px
+    left: 8px
+    font-size: 1.1rem
+    display: block
+    z-index: 1
+    color: $color-green-2
+    &:hover
+      color: $color-green-2
+      text-decoration: none
 
 @media (max-width: $media-small-max)
   .navbar > .mobile-nav > .right

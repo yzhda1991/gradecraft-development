@@ -1,7 +1,6 @@
 - if ! current_user
   = render partial: "layouts/navigation/top_bar_logged_out"
 - else
-  #left-flyout-nav.layout-left-flyout
 
   .offscreen-sidebar
     .sidebar
@@ -14,7 +13,9 @@
       %hr
     - elsif current_user_is_staff?
       = render partial: "layouts/navigation/staff_subnav"
-    %h5 Course Info
+    %a.course-info-btn-mobile
+      %h5 Course Info
+      = glyph("chevron-down")
     %ul.course-info
       = render partial: "layouts/navigation/class_info"
     %hr
@@ -41,6 +42,5 @@
               = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title"
               %ul.course-info-card= render partial: "layouts/navigation/class_info"
             = render partial: "layouts/navigation/authenticated_nav"
-        %nav.mobile-nav.hide-for-large
-          %a.btn-navbar-left.btn-navbar-navtoggle.btn-flyout-left-trigger
-            %i.fa.fa-bars.fa-fw
+        %a.btn-navbar-left.hide-for-large
+          %i.fa.fa-bars.fa-fw
