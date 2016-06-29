@@ -33,6 +33,138 @@ describe Assignment do
       expect(subject.errors[:course_id]).to include "can't be blank"
     end
 
+    it "is invalid without a grade scope" do
+      subject.grade_scope = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:grade_scope]).to include "can't be blank"
+    end
+
+    it "is invalid without required status" do
+      subject.required = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:required]).to include "is not included in the list"
+    end
+
+    it "is invalid without accepts_submissions" do
+      subject.accepts_submissions = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:accepts_submissions]).to include "is not included in the list"
+    end
+
+    it "is invalid without student_logged" do
+      subject.student_logged = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:student_logged]).to include "is not included in the list"
+    end
+
+    it "is invalid without release_necessary" do
+      subject.release_necessary = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:release_necessary]).to include "is not included in the list"
+    end
+
+    it "is invalid without visible" do
+      subject.visible = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:visible]).to include "is not included in the list"
+    end
+
+    it "is invalid without resubmissions_allowed" do
+      subject.resubmissions_allowed = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:resubmissions_allowed]).to include "is not included in the list"
+    end
+
+    it "is invalid without include_in_timeline" do
+      subject.include_in_timeline = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:include_in_timeline]).to include "is not included in the list"
+    end
+
+    it "is invalid without include_in_predictor" do
+      subject.include_in_predictor = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:include_in_predictor]).to include "is not included in the list"
+    end
+
+    it "is invalid without include_in_to_do" do
+      subject.include_in_to_do = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:include_in_to_do]).to include "is not included in the list"
+    end
+
+    it "is invalid without use_rubric" do
+      subject.use_rubric = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:use_rubric]).to include "is not included in the list"
+    end
+
+    it "is invalid without accepts_attachments" do
+      subject.accepts_attachments = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:accepts_attachments]).to include "is not included in the list"
+    end
+
+    it "is invalid without accepts_text" do
+      subject.accepts_text = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:accepts_text]).to include "is not included in the list"
+    end
+
+    it "is invalid without accepts_links" do
+      subject.accepts_links = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:accepts_links]).to include "is not included in the list"
+    end
+
+    it "is invalid without pass_fail" do
+      subject.pass_fail = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:pass_fail]).to include "is not included in the list"
+    end
+
+    it "is invalid without hide_analytics" do
+      subject.hide_analytics = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:hide_analytics]).to include "is not included in the list"
+    end
+
+    it "is invalid without visible_when_locked" do
+      subject.visible_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:visible_when_locked]).to include "is not included in the list"
+    end
+
+    it "is invalid without show_name_when_locked" do
+      subject.show_name_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:show_name_when_locked]).to include "is not included in the list"
+    end
+
+    it "is invalid without show_points_when_locked" do
+      subject.show_points_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:show_points_when_locked]).to include "is not included in the list"
+    end
+
+    it "is invalid without show_description_when_locked" do
+      subject.show_description_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:show_description_when_locked]).to include "is not included in the list"
+    end
+
+    it "is invalid without threshold_points" do
+      subject.threshold_points = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:threshold_points]).to include "can't be blank"
+    end
+
+    it "is invalid without show_purpose_when_locked" do
+      subject.show_purpose_when_locked = nil
+      expect(subject).to_not be_valid
+      expect(subject.errors[:show_purpose_when_locked]).to include "is not included in the list"
+    end
+
     it "is invalid if it is due before it is open" do
       subject.due_at = 2.days.from_now
       subject.open_at = 3.days.from_now
