@@ -32,3 +32,8 @@ function animateMobileMenu() {
 $(".btn-navbar-left, .nav-flyout-contentmask").click(function() {
   animateMobileMenu();
 });
+
+// course info accordion in mobile nav
+$(".course-info-btn-mobile").click(function(){
+    $(".course-info").toggleClass("open");
+});
