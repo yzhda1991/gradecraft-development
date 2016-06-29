@@ -35,5 +35,5 @@ $(".btn-navbar-left, .nav-flyout-contentmask").click(function() {
 
 // course info accordion in mobile nav
 $(".course-info-btn-mobile").click(function(){
-    $(".course-info").toggleClass("open");
+    $(".course-info, .course-info-btn-mobile").toggleClass("open");
 });
