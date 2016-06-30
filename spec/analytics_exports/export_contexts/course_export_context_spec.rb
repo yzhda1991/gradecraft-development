@@ -116,26 +116,31 @@ describe CourseExportContext do
 
   describe "#user_predictor_pageviews" do
     it "fetches data from the CourseUserPagePageview aggregate and caches it" do
+      pending
     end
   end
 
   describe "#user_logins" do
     it "fetches data from the CourseUserLogin aggregate and caches it" do
+      pending
     end
   end
 
   describe "#users" do
     it "fetches all users with ids matching the user_ids array" do
+      pending
     end
   end
 
   describe "#user_ids" do
     it "builds an array of user_ids from the fetched events and caches it" do
+      pending
     end
   end
 
   describe "#assignment_ids" do
     it "builds an array of all unique event assignment_ids and caches it" do
+      pending
     end
   end
 end
