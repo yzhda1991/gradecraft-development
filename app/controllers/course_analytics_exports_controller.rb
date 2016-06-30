@@ -45,4 +45,10 @@ class CourseAnalyticsExportsController < ApplicationController
       redirect_to root_url
     end
   end
+
+  private
+
+  def presenter
+    @presenter ||= Presenters::CourseAnalyticsExports::Base.new params: params
+  end
 end
