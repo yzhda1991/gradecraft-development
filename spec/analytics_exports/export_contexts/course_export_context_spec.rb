@@ -1,8 +1,9 @@
+require "analytics"
 require "./app/analytics_exports/export_contexts/course_export_context"
 
 describe CourseExportContext do
   subject { described_class.new course: course }
-  let(:course) { double(:course) }
+  let(:course) { double(:course, id: 5) }
 
   it "has a readable course" do
     subject.instance_variable_set :@course, "some_course"
@@ -58,6 +59,18 @@ describe CourseExportContext do
 
   describe "#events" do
     it "queries and caches events for the course" do
+      allow(Analytics::Event).to receive(:where).with(course_id: 5)
+        .and_return ["event"]
+
+      # it returns the event for the course
+      expect(subject.events).to eq ["event"]
+
+      # it sets the events array to @events
+      expect(subject.instance_variable_get :@events).to eq ["event"]
+
+      # and doesn't need to fetch it anymore
+      expect(Analytics::Event).not_to receive(:where)
+      subject.events
     end
   end
 
