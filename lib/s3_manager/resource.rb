@@ -40,5 +40,15 @@ module S3Manager
       s3_manager.bucket.object(s3_object_key)
         .presigned_url(:get, expires_in: 604800).to_s
     end
+
+    def rebuild_s3_object_key
+      self[:s3_object_key] = build_s3_object_key export_filename
+    end
+
+    def build_s3_object_key(object_filename)
+      key_pieces = [ s3_object_key_prefix, object_filename ]
+      key_pieces.unshift ENV["AWS_S3_DEVELOPER_TAG"] if Rails.env.development?
+      key_pieces.join "/"
+    end
   end
 end
