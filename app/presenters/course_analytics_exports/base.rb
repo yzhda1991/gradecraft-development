@@ -38,6 +38,25 @@ module Presenters
       def export_filename
         export.export_filename
       end
+
+      def secure_download_authenticates?
+        authenticator.authenticates?
+      end
+
+      def secure_download_expired?
+        authenticator.valid_token_expired?
+      end
+
+      private
+
+      def authenticator
+        @authenticator ||= SecureTokenAuthenticator.new(
+          secure_token_uuid: params[:secure_token_uuid],
+          secret_key: params[:secret_key],
+          target_id: params[:id],
+          target_class: "CourseAnalyticsExport"
+        )
+      end
     end
   end
 end

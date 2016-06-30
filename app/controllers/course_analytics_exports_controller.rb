@@ -5,8 +5,6 @@ class CourseAnalyticsExportsController < ApplicationController
   skip_before_filter :increment_page_views, only: :secure_download
   skip_before_filter :course_scores, only: :secure_download
 
-  authenticate_secure_downloads :course_analytics_export
-
   def create
     if presenter.create_and_enqueue_export
       flash[:success] = "Your course analytics export is being prepared. " \
@@ -34,10 +32,10 @@ class CourseAnalyticsExportsController < ApplicationController
   end
 
   def secure_download
-    if secure_download_authenticator.authenticates?
+    if presenter.secure_download_authenticates?
       send_data presenter.stream_export, filename: presenter.export_filename
     else
-      if secure_download_authenticator.valid_token_expired?
+      if authenticator.secure_download_expired?
         flash[:alert] = "The email link you used has expired."
       else
         flash[:alert] = "The link you attempted to access does not exist."
@@ -46,23 +44,5 @@ class CourseAnalyticsExportsController < ApplicationController
 
       redirect_to root_url
     end
-  end
-
-  protected
-
-  def secure_download_authenticator
-    # it's possible that this could be cleaned up by simply passing params into
-    # the authenticator, but the target_id on the SecureToken doesn't match the
-    # id being passed in conventionally via the member route for
-    # SubmissionsExports#secure_download. This might be worth looking into in
-    # future refactoring but it seems like a fine pattern for now since we're
-    # only passing request parameters into the authenticator.
-
-    @secure_download_authenticator ||= SecureTokenAuthenticator.new(
-      secure_token_uuid: params[:secure_token_uuid],
-      secret_key: params[:secret_key],
-      target_id: params[:id],
-      target_class: "CourseAnalyticsExport"
-    )
   end
 end
