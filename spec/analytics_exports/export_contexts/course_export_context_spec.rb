@@ -1,4 +1,7 @@
 require "analytics"
+require "./app/analytics_aggregates/course_user_pageview"
+require "./app/analytics_aggregates/course_user_page_pageview"
+require "./app/analytics_aggregates/course_user_login"
 require "./app/analytics_exports/export_contexts/course_export_context"
 
 describe CourseExportContext do
@@ -76,11 +79,38 @@ describe CourseExportContext do
 
   describe "#predictor_events" do
     it "queries and caches predictor events for the course" do
+      allow(Analytics::Event).to receive(:where)
+        .with(course_id: 5, event_type: "predictor") { ["predictor_event"] }
+
+      # it returns the predictor event for the course
+      expect(subject.predictor_events).to eq ["predictor_event"]
+
+      # it sets the predictor events array to @preditor_events
+      expect(subject.instance_variable_get :@predictor_events)
+        .to eq ["predictor_event"]
+
+      # and doesn't need to fetch it anymore
+      expect(Analytics::Event).not_to receive(:where)
+      subject.predictor_events
     end
   end
 
   describe "#user_pageviews" do
     it "fetches data for a CourseUserPageview aggregate and caches it" do
+      allow(CourseUserPageview).to receive(:data)
+        .with(:all_time, nil, { course_id: 5 }, { page: "_all" })
+        .and_return ["user_pageview"]
+
+      # it returns a list of user pageview events for the course
+      expect(subject.user_pageviews).to eq ["user_pageview"]
+
+      # it sets them to @pageview_events
+      expect(subject.instance_variable_get :@user_pageviews)
+        .to eq ["user_pageview"]
+
+      # and considers them cached
+      expect(CourseUserPageview).not_to receive(:data)
+      subject.user_pageviews
     end
   end
 
