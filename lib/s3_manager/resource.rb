@@ -1,5 +1,9 @@
 module S3Manager
   module Resource
+    def self.included(base)
+      before_save :rebuild_s3_object_key, if: :export_filename_changed?
+    end
+
     def s3_manager
       @s3_manager ||= S3Manager::Manager.new
     end

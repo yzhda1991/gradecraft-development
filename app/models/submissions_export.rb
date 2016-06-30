@@ -1,13 +1,7 @@
 class SubmissionsExport < ActiveRecord::Base
   # treat this resource as if it's responsible for managing an object on s3
   include S3Manager::Resource
-
-  belongs_to :course
-  belongs_to :professor, class_name: "User", foreign_key: "professor_id"
-  belongs_to :team
-  belongs_to :assignment
-
-  has_many :secure_tokens, as: :target, dependent: :destroy
+  include Export::Model::ActiveRecord
 
   attr_accessible :course_id, :professor_id, :team_id, :assignment_id, :submissions_snapshot,
     :s3_object_key, :export_filename, :s3_bucket, :last_export_started_at, :last_export_completed_at,
@@ -25,21 +19,18 @@ class SubmissionsExport < ActiveRecord::Base
     :confirm_export_csv_integrity,
     :write_note_for_missing_binary_files
 
+  belongs_to :course
+  belongs_to :professor, class_name: "User", foreign_key: "professor_id"
+  belongs_to :team
+  belongs_to :assignment
+
+  # secure tokens allow for one-click downloads of the file from an email
+  has_many :secure_tokens, as: :target, dependent: :destroy
+
   validates :course_id, presence: true
   validates :assignment_id, presence: true
 
-  before_save :rebuild_s3_object_key, if: :export_filename_changed?
-
-  def rebuild_s3_object_key
-    self[:s3_object_key] = build_s3_object_key(export_filename)
-  end
-
-  def build_s3_object_key(object_filename)
-    key_pieces = [ s3_object_key_prefix, object_filename ]
-    key_pieces.unshift ENV["AWS_S3_DEVELOPER_TAG"] if Rails.env.development?
-    key_pieces.join "/"
-  end
-
+  # tell s3 which directory structure to use for exports
   def s3_object_key_prefix
     [
       "exports",

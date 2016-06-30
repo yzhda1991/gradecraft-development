@@ -3,17 +3,18 @@ class CourseAnalyticsExport < ActiveRecord::Base
   include S3Manager::Resource
   include Export::Model::ActiveRecord
 
+  attr_accessible :course_id, :professor_id, :last_export_started_at,
+                  :last_export_completed_at, :last_completed_step
+
   belongs_to :course
   belongs_to :professor, class_name: "User", foreign_key: "professor_id"
 
+  # secure tokens allow for one-click downloads of the file from an email
   has_many :secure_tokens, as: :target, dependent: :destroy
-
-  attr_accessible :course_id, :professor_id,
-    :last_export_started_at, :last_export_completed_at, :last_completed_step
 
   validates :course_id, presence: true
 
-  # tell s3 where to put this
+  # tell s3 which directory structure to use for exports
   def s3_object_key_prefix
     [
       "exports",
