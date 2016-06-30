@@ -78,7 +78,7 @@ class CourseExportContext
       { page: "_all" }
   end
 
-  def user_predictor_pageivews
+  def user_predictor_pageviews
     @user_predictor_pageviews ||=
       CourseUserPagePageview.data :all_time, nil,
         { course_id: course.id, page: /predictor/ }
