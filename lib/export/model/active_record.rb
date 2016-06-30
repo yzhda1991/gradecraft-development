@@ -1,6 +1,11 @@
 module Export
   module Model
     module ActiveRecord
+      def update_export_started_time
+        update_attributes last_export_started_at: Time.now,
+          last_completed_step: nil
+      end
+
       def update_export_completed_time
         update_attributes last_export_completed_at: Time.now
       end
