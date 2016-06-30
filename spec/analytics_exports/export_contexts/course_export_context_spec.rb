@@ -104,7 +104,7 @@ describe CourseExportContext do
       # it returns a list of user pageview events for the course
       expect(subject.user_pageviews).to eq ["user_pageview"]
 
-      # it sets them to @pageview_events
+      # it sets them to @user_pageviews
       expect(subject.instance_variable_get :@user_pageviews)
         .to eq ["user_pageview"]
 
@@ -116,7 +116,20 @@ describe CourseExportContext do
 
   describe "#user_predictor_pageviews" do
     it "fetches data from the CourseUserPagePageview aggregate and caches it" do
-      pending
+      allow(CourseUserPagePageview).to receive(:data)
+        .with(:all_time, nil, { course_id: 5 , page: /predictor/ })
+        .and_return ["user_predictor_pageview"]
+
+      # it returns a list of user predictor pageview events for the course
+      expect(subject.user_predictor_pageviews).to eq ["user_predictor_pageview"]
+
+      # it sets them to @user_predictor_pageviews
+      expect(subject.instance_variable_get :@user_predictor_pageviews)
+        .to eq ["user_predictor_pageview"]
+
+      # and considers them cached
+      expect(CourseUserPagePageview).not_to receive(:data)
+      subject.user_predictor_pageviews
     end
   end
 
