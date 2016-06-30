@@ -12,14 +12,14 @@ module S3Manager
       s3_manager.get_encrypted_object(s3_object_key)
     end
 
+    def write_s3_object_to_file(target_file_path)
+      s3_manager.write_encrypted_object_to_file(s3_object_key, target_file_path)
+    end
+
     def stream_s3_object_body
       s3_object = fetch_object_from_s3
       return unless s3_object && s3_object.body
       s3_object.body.read
-    end
-
-    def write_s3_object_to_file(target_file_path)
-      s3_manager.write_encrypted_object_to_file(s3_object_key, target_file_path)
     end
 
     def delete_object_from_s3

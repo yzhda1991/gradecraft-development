@@ -1,6 +1,7 @@
 class CourseAnalyticsExport < ActiveRecord::Base
   # treat this resource as if it's responsible for managing an object on s3
   include S3Manager::Resource
+  include Export::Model::ActiveRecord
 
   belongs_to :course
   belongs_to :professor, class_name: "User", foreign_key: "professor_id"
@@ -12,16 +13,13 @@ class CourseAnalyticsExport < ActiveRecord::Base
 
   validates :course_id, presence: true
 
-  before_save :rebuild_s3_object_key, if: :export_filename_changed?
-
-
+  # tell s3 where to put this
   def s3_object_key_prefix
     [
       "exports",
       "courses",
       course_id,
-      "assignments",
-      assignment_id,
+      "course_analytics_exports",
       created_at_date,
       created_at_in_microseconds
     ].join "/"
