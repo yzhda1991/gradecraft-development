@@ -105,19 +105,6 @@ class AssignmentsController < ApplicationController
   end
 
   # GET /assignments/import
-  def import
-    @title = "Import Assignments"
-    @lms_courses = []
-    canvas = Canvas::API.new ENV['CANVAS_ACCESS_TOKEN']
-
-    canvas.get_data('/courses', enrollment_type: 'teacher') do |courses|
-      courses.each do |course|
-        @lms_courses << course
-      end
-    end
-  end
-
-  # GET /assignments/import
   def import_canvas
     @title = "Import Assignments"
     canvas = Canvas::API.new ENV['CANVAS_ACCESS_TOKEN']

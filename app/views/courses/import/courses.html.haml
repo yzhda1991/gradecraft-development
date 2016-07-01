@@ -1,0 +1,21 @@
+= content_nav_for Course, ["Import", providers_import_path], @provider.capitalize
+
+%h3.pagetitle= "Course Import from #{@provider.capitalize}"
+
+.pageContent
+  = render partial: "layouts/alerts"
+
+  %table
+    %thead
+      %tr
+        %th{scope: "col"} Name
+        %th{scope: "col"} Description
+        %th.button-column
+    %tbody
+      - @courses.each do |course|
+        %td=course["name"]
+        %td= course["syllabus_body"]
+        %td
+          .right
+            %ul.button-bar
+              %li= link_to glyph("file-text") + "Select Assignments to Import", "#", class: "button"

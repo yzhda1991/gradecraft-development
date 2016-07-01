@@ -58,7 +58,6 @@ GradeCraft::Application.routes.draw do
       post :sort
       get :feed
       get :settings
-      get :import
       get 'import/canvas/:id', to: 'assignments#import_canvas'
       post "copy" => "assignments#copy"
       get "export_structure"
@@ -167,6 +166,7 @@ GradeCraft::Application.routes.draw do
       resource :import, only: [], controller: :import, module: :courses do
         get :providers
       end
+      get "/:provider/import" => "courses/import#courses", as: :provider_import
     end
     member do
       get :timeline_settings
