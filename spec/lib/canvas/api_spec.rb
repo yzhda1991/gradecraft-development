@@ -34,6 +34,16 @@ describe Canvas::API do
       expect(stub).to have_been_requested
     end
 
+    it "raises an exception when a request fails" do
+      body = { errors: [{ message: "Invalid access token." }] }
+      stub = stub_request(:get, "https://canvas.instructure.com/api/v1/courses")
+        .with(query: { "access_token" => access_token })
+        .to_return(status: 401, body: body.to_json, headers: {})
+
+      expect { subject.get_data("/courses") }.to \
+        raise_error Canvas::ResponseError, "Invalid access token."
+    end
+
     it "returns the data in a block" do
       body = { name: "This is a course" }
 
