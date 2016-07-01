@@ -164,6 +164,9 @@ GradeCraft::Application.routes.draw do
   resources :courses do
     collection do
       post :copy
+      resource :import, only: [], controller: :import, module: :courses do
+        get :providers
+      end
     end
     member do
       get :timeline_settings
