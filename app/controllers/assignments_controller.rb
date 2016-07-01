@@ -1,3 +1,5 @@
+require "canvas"
+
 class AssignmentsController < ApplicationController
   include AssignmentsHelper
   include SortsPosition
@@ -106,9 +108,9 @@ class AssignmentsController < ApplicationController
   def import
     @title = "Import Assignments"
     @lms_courses = []
-    canvas = CanvasApi.new
+    canvas = Canvas::API.new ENV['CANVAS_ACCESS_TOKEN']
 
-    canvas.get_data('courses', enrollment_type: 'teacher') do |courses|
+    canvas.get_data('/courses', enrollment_type: 'teacher') do |courses|
       courses.each do |course|
         @lms_courses << course
       end
@@ -118,13 +120,13 @@ class AssignmentsController < ApplicationController
   # GET /assignments/import
   def import_canvas
     @title = "Import Assignments"
-    canvas = CanvasApi.new
-    canvas.get_data("courses/#{params[:id]}") do |course|
+    canvas = Canvas::API.new ENV['CANVAS_ACCESS_TOKEN']
+    canvas.get_data("/courses/#{params[:id]}") do |course|
       @course = course
     end
 
     @assignments = []
-    canvas.get_data("courses/#{params[:id]}/assignments") do |assignments|
+    canvas.get_data("/courses/#{params[:id]}/assignments") do |assignments|
       @assignments += assignments
     end
   end
@@ -140,46 +142,5 @@ class AssignmentsController < ApplicationController
     respond_to do |format|
       format.csv { send_data AssignmentExporter.new.export(course), filename: "#{ course.name } #{ (term_for :assignment).titleize } Structure - #{ Date.today }.csv" }
     end
-  end
-end
-
-class CanvasApi
-  def initialize
-    @url_base = 'https://canvas.instructure.com/api/v1'
-    @access_token = ENV['CANVAS_ACCESS_TOKEN']
-  end
-
-  def get_data(path = '/', params = {})
-    params['access_token'] = @access_token
-    next_url = "#{@url_base}/#{path}"
-    while next_url
-      uri = get_uri(next_url, params)
-      resp = Net::HTTP.get_response(uri)
-      fail "An error occured #{resp}" unless resp.is_a? Net::HTTPOK
-      yield JSON.parse(resp.body)
-      next_url = get_next_url resp
-    end
-  end
-
-  private
-
-  def get_next_url(resp)
-    return nil unless resp['Link']
-    resp['Link'].split(',').each do |rel|
-      url, rel = rel.match(/^<(.*)>; rel="(.*)"$/).captures
-      return url if rel == 'next'
-    end
-    nil
-  end
-
-  def get_uri(url, params = {})
-    uri = URI(url)
-
-    uri.query = if uri.query.is_a? String
-                  "#{uri.query}&#{URI.encode_www_form(params)}"
-                else
-                  URI.encode_www_form(params)
-                end
-    uri
   end
 end

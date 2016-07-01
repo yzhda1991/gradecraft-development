@@ -1,3 +1,5 @@
+require "net/http"
+
 module Canvas
   class API
     attr_reader :access_token
