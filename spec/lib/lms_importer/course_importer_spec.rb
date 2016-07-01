@@ -14,4 +14,13 @@ describe LMSImporter::CourseImporter do
         raise_error LMSImporter::InvalidProviderError, "blah is not a supported provider"
     end
   end
+
+  describe "#courses" do
+    subject { described_class.new :canvas, access_token }
+
+    it "delegates to the provider" do
+      expect(subject.provider).to receive(:courses)
+      subject.courses
+    end
+  end
 end

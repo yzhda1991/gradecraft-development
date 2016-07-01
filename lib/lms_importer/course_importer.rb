@@ -13,5 +13,9 @@ module LMSImporter
     rescue NameError
       raise InvalidProviderError.new(provider)
     end
+
+    def courses
+      provider.courses
+    end
   end
 end
