@@ -203,13 +203,13 @@ class AnalyticsController < ApplicationController
         # create a working tmpdir for the export
         export_tmpdir = Dir.mktmpdir nil, s3fs_prefix
 
-        # format a name for the root directory of the export
-        formatted_course_number = current_course.courseno
-                                    .gsub(/ +/, "_").gsub(/\//, "-")
+        # create a url-safe course number for the export's root directory
+        course_number = Formatter::Filename.new(current_course.courseno)
+                          .url_safe.filename
 
         # create a named directory to generate the files in
         export_dir = FileUtils.mkdir \
-                       File.join(export_tmpdir, formatted_course_number)
+                       File.join(export_tmpdir, course_number)
 
         id = current_course.id
 
@@ -263,7 +263,7 @@ class AnalyticsController < ApplicationController
           end
 
           # this is going to be the downloaded filename of the final archive
-          export_filename = "#{ formatted_course_number }_anayltics_export_" \
+          export_filename = "#{ course_number }_anayltics_export_" \
                             "#{ Time.now.strftime('%Y-%m-%d') }.zip"
 
           # create a place to store our final archive, for now
