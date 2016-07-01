@@ -204,8 +204,10 @@ class AnalyticsController < ApplicationController
         export_tmpdir = Dir.mktmpdir nil, s3fs_prefix
 
         # create a url-safe course number for the export's root directory
-        course_number = Formatter::Filename.new(current_course.courseno)
-                          .url_safe.filename
+        # be sure to replace forward-slashes with hyphens
+        course_number = Formatter::Filename.new(
+                          current_course.courseno.gsub(/\/+/,"-")
+                        ).url_safe.filename
 
         # create a named directory to generate the files in
         export_dir = FileUtils.mkdir \
