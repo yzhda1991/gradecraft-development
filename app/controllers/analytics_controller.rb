@@ -206,7 +206,7 @@ class AnalyticsController < ApplicationController
         # create a url-safe course number for the export's root directory
         # be sure to replace forward-slashes with hyphens
         course_number = Formatter::Filename.new(
-          current_course.courseno.gsub(/\/+/,"-")
+          current_course.courseno.gsub(/\/+/,"-").gsub("&", "and")
         ).url_safe.filename
 
         # create a named directory to generate the files in
