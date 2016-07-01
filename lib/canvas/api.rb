@@ -4,6 +4,7 @@ module Canvas
   class API
     include HTTParty
     base_uri "https://canvas.instructure.com/api/v1"
+    format :json
 
     attr_reader :access_token
 
@@ -15,10 +16,10 @@ module Canvas
       params.merge! access_token: access_token
       next_url = "#{self.class.base_uri}#{path}"
       while next_url
-        resp = self.class.get(next_url, query: params)
-        raise ResponseError.new(resp) unless resp.success?
-        yield JSON.parse(resp.body) if block_given?
-        next_url = get_next_url resp
+        response = self.class.get(next_url, query: params)
+        raise ResponseError.new(response) unless response.success?
+        yield response.parsed_response if block_given?
+        next_url = get_next_url response
       end
     end
 

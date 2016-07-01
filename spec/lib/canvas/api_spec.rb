@@ -1,4 +1,3 @@
-require "json"
 require "webmock/rspec"
 require "./lib/canvas"
 

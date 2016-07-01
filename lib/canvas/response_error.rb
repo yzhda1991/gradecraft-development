@@ -1,7 +1,7 @@
 module Canvas
   class ResponseError < StandardError
     def initialize(response)
-      body = JSON.parse(response.body)
+      body = response.parsed_response
       errors = body["errors"]
       super errors.first["message"] unless errors.nil?
     end
