@@ -25,9 +25,9 @@ module Formatter
     #
     def url_safe
       self.filename = filename
-        .strip
-        .gsub(/[^\w_-]+/, "_") # strip out characters besides letters and digits
+        .gsub(/[^\w_-]+/, "_") # replace non alphanum characters with underscores
         .gsub(/[ _]+/, "_") # condense redundant underscores
+        .gsub(/^_+|_+$/, "") # remove leading or trailing underscores
       self
     end
 
