@@ -108,7 +108,6 @@ gem 'underscore-rails'
 gem 'whenever'
 gem 'newrelic_rpm'
 gem 'sinatra', '>= 1.3.0', require: nil
-gem 'webmock'
 gem 'wysiwyg-rails'
 gem 'ruby-saml', '~> 1.0.0'
 
@@ -148,6 +147,7 @@ group :test do
   gem 'rspec-html-matchers'
   gem 'selenium-webdriver'
   gem 'simplecov'
+  gem 'webmock'
 end
 
 group :tasks do
