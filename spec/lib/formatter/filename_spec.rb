@@ -84,6 +84,10 @@ describe Formatter::Filename do
       expect(result.filename).to eq "TURTLES_BRO"
     end
 
+    # be sure to return the instance of Formatter::Filename so we can chain
+    # additional behaviors without having to continue invoking the instance
+    # itself as a variable
+    #
     it "returns the Formatter::Filename instance" do
       expect(result.class).to eq described_class
     end
