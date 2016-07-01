@@ -22,10 +22,14 @@ module Canvas
     private
 
     def get_next_url(resp)
-      return nil unless resp["Link"]
-      resp["Link"].split(",").each do |rel|
-        url, rel = rel.match(/^<(.*)>; rel="(.*)"$/).captures
-        return url if rel == "next"
+      if resp["Link"]
+        resp["Link"].split(",").each do |link|
+          matches = link.match(/^<(.*)>; rel="(.*)"/)
+          unless matches.nil?
+            url, rel = matches.captures
+            return url if rel == "next"
+          end
+        end
       end
       nil
     end
