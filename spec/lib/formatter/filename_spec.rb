@@ -69,8 +69,8 @@ describe Formatter::Filename do
     # because Formatter::Filename#sanitize returns the object rather than the
     # resulting filename attribute
 
-    it "trims leading and trailing spaces" do
-      subject.filename = "     look-at-all-this-whitespace     "
+    it "trims leading and trailing spaces and underscores" do
+      subject.filename = "     look-at-all-this-whitespace____________"
       expect(result.filename).to eq "look-at-all-this-whitespace"
     end
 
