@@ -20,6 +20,17 @@ module Formatter
       self
     end
 
+    # just remove erroneous characters, strip out whitespace, and replace
+    # any other consecutive non-alphanum characters with a single underscore
+    #
+    def url_safe
+      self.filename = filename
+        .gsub(/[^\w_-]+/, "_") # replace non alphanum characters with underscores
+        .gsub(/[ _]+/, "_") # condense redundant underscores
+        .gsub(/^_+|_+$/, "") # remove leading or trailing underscores
+      self
+    end
+
     def reset!
       self.filename = original_filename
     end

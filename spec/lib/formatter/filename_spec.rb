@@ -62,6 +62,37 @@ describe Formatter::Filename do
     end
   end
 
+  describe "#url_safe" do
+    let(:result) { subject.url_safe }
+
+    # note that we can't access the filename directly from the #sanitize call
+    # because Formatter::Filename#sanitize returns the object rather than the
+    # resulting filename attribute
+
+    it "trims leading and trailing spaces and underscores" do
+      subject.filename = "     look-at-all-this-whitespace____________"
+      expect(result.filename).to eq "look-at-all-this-whitespace"
+    end
+
+    it "replaces multiple spaces or underscores with single underscores" do
+      subject.filename = "roger___   ___went____to    the   mall"
+      expect(result.filename).to eq "roger_went_to_the_mall"
+    end
+
+    it "gets rid of url-unfriendly characters" do
+      subject.filename = "####TURTLES&&BRO####@$@$#@$@$#@$@$#@#"
+      expect(result.filename).to eq "TURTLES_BRO"
+    end
+
+    # be sure to return the instance of Formatter::Filename so we can chain
+    # additional behaviors without having to continue invoking the instance
+    # itself as a variable
+    #
+    it "returns the Formatter::Filename instance" do
+      expect(result.class).to eq described_class
+    end
+  end
+
   describe "#reset!" do
     it "resets the @filename to the @original filename" do
       subject.original_filename = "the-real-filename"
