@@ -30,12 +30,23 @@ class CourseExportOrganizer < Analytics::Export::Organizer
   # this is the name of the directory in the root of the final archive
   #
   def directory_name
-    course.courseno
+    formatted_course_number
   end
 
   # this is the filename of the final exported file that we're going to produce
   #
   def filename
-    "#{ course.courseno }_anayltics_export_#{ Time.now.strftime('%Y-%m-%d') }.zip"
+    "#{ formatted_course_number }_anayltics_export_" \
+    "#{ Time.now.strftime('%Y-%m-%d') }.zip"
+  end
+
+  def formatted_course_number
+    # create a url-safe course number for the export's root directory
+    # be sure to replace forward-slashes with hyphens and ampersands
+    # with the word 'and'
+    #
+    @formatted_course_number ||= Formatter::Filename.new(
+      course.courseno.gsub(/\/+/,"-").gsub("&", "and")
+    ).url_safe.filename
   end
 end
