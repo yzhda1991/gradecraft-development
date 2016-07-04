@@ -1,5 +1,9 @@
 require "resque-retry"
 require "resque/errors"
+require "loggly_resque"
+require "inheritable_ivars"
+
+require_relative "performer"
 
 module ResqueJob
   class Base
