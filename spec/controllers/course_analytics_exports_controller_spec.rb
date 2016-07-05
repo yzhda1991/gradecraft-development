@@ -95,25 +95,28 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
           stream_export: "some data", filename: "some_filename.txt"
       end
 
-      context "the SecureDownloadAuthenticator authenticates" do
+      context "the secure download authenticates" do
         before do
-          allow(authenticator).to receive(:authenticates?) { true }
+          allow(controller.presenter)
+            .to receive(:secure_download_authenticates?) { true }
         end
 
         it "streams the s3 object to the client" do
-          expect(controller).to receive(:stream_file_from_s3)
+          expect(controller).to receive(:send_data)
+            .with "some_data", filename: "some_filename.txt"
           result
         end
       end
 
-      context "the SecureDownloadAuthenticator doesn't authenticate" do
+      context "the secure download doesn't authenticate" do
         before do
-          allow(authenticator).to receive(:authenticates?) { false }
+          allow(controller.presenter)
+            .to receive(:secure_download_authenticates?) { false }
         end
 
         context "the request was for a valid token that has expired" do
           it "alerts the user that their token has expired" do
-            allow(authenticator).to receive(:valid_token_expired?) { true }
+            allow(controller.presenter).to receive(:secure_token_expired?) { true }
             result
             expect(flash[:alert]).to match /email link.*expired/
           end
@@ -121,7 +124,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
         context "the request completely failed to authenticate" do
           it "alerts the user that their request was invalid" do
-            allow(authenticator).to receive(:valid_token_expired?) { false }
+            allow(controller.presenter).to receive(:secure_token_expired?) { false }
             result
             expect(flash[:alert]).to match /does not exist/
           end
@@ -136,6 +139,16 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
       describe "skipped filters" do
         let(:result) { get :secure_download, secure_download_params }
+
+        let(:secure_token) { create(:secure_token, target: course_analytics_export) }
+
+        let(:secure_download_params) do
+          {
+            secure_token_uuid: secure_token.uuid,
+            secret_key: secure_token.random_secret_key,
+            id: course_analytics_export.id
+          }
+        end
 
         it "doesn't require login" do
           expect(controller).not_to receive(:require_login)
