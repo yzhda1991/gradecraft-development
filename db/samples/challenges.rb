@@ -6,7 +6,7 @@
 
 # Add all attributes that will be passed on any challenge creation here, with a
 # default value
-# All assignment types will use defaults when individual attributes aren't
+# All challenges will use defaults when individual attributes aren't
 # supplied
 
 @challenge_default_config = {

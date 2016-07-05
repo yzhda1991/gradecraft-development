@@ -3,6 +3,7 @@ require "./db/samples/badges.rb"
 require "./db/samples/assignment_types.rb"
 require "./db/samples/assignments.rb"
 require "./db/samples/challenges.rb"
+require "./db/samples/events.rb"
 
 # ---------------------------- Shared Methods --------------------------------#
 
@@ -121,6 +122,7 @@ end
   config[:assignment_types] = {}
   config[:assignments] = {}
   config[:challenges] = {}
+  config[:events] = {}
 end
 
 # ---------------------------- Create Students! ------------------------------#
@@ -204,23 +206,32 @@ User.create! do |u|
       cm.course = config[:course]
       cm.role = "gsi"
     end
-    u.student_academic_histories.create! do |ah|
-      ah.course = config[:course]
-      ah.major = majors.sample
-      ah.gpa =
-        [1.5, 2.0, 2.25, 2.5, 2.75, 3.0, 3.33, 3.5, 3.75, 4.0, 4.1].sample
-      ah.current_term_credits = rand(12)
-      ah.accumulated_credits = rand(40)
-      ah.year_in_school = [1, 2, 3, 4, 5, 6, 7].sample
-      ah.state_of_residence = "Michigan"
-      ah.high_school = "Farwell Timberland Alternative High School"
-      ah.athlete = [false, true].sample
-      ah.act_score = (1..32).to_a.sample
-      ah.sat_score = 100 * rand(10)
+    u.team_leaderships.create! do |tm|
+      tm.team_id = config[:course].teams.sample.id
     end
   end
 end.activate!
 puts "In learning you will teach, and in teaching you will learn. ―Phil Collins"
+
+# Generate sample GSI
+User.create! do |u|
+  u.username = "cedric.diggory"
+  u.first_name = "Cedric"
+  u.last_name = "Diggory"
+  u.email = "cedric.diggory@hogwarts.edu"
+  u.password = "pleasantlyspringy"
+  u.save!
+  @courses.each do |name,config|
+    u.course_memberships.create! do |cm|
+      cm.course = config[:course]
+      cm.role = "gsi"
+    end
+    u.team_leaderships.create! do |tm|
+      tm.team_id = config[:course].teams.sample.id
+    end
+  end
+end.activate!
+puts "Hey, listen... About the badges. I've asked them not to wear them. ―Cedric Diggory"
 
 # Create demo academic history content
 @students.each do |s|
@@ -516,6 +527,27 @@ end
     end
   end
   puts_success :challenge, challenge_name, :challenge_created
+end
+
+# ---------------------------- Create Events! ----------------------------#
+
+@events.each do |event_name,config|
+  @courses.each do |course_name,course_config|
+    course_config[:course].tap do |course|
+      event = Event.create! do |e|
+        @event_default_config[:attributes].keys.each do |attr|
+          e[attr] =
+            config[:attributes].key?(attr) ? config[:attributes][attr] :
+              @event_default_config[:attributes][attr]
+        end
+        e.course = course
+      end
+      # Store models on each course in the @courses hash
+      @courses[course_name][:events][event_name] = event
+      puts_success :event, event_name, :event_created
+    end
+  end
+  puts_success :event, event_name, :event_created
 end
 
 @students.each do |s|
