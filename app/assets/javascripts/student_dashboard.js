@@ -94,13 +94,19 @@ $(document).ready(function() {
 $('#my-planner').click(function() {
   $('#course-planner, #my-planner').toggleClass("selected");
   $('.todo-list-assignments li').filter(function() {
-   return $(this).find('a.starred').length !== 1;
+   return $(this).find('a.starred').length === 0;
   }).css('display', 'none');
+  if ($('.todo-list-assignments a.starred').length === 0) {
+    $('.my-planner-alert').toggleClass('hidden');
+  }
 });
 
 $('#course-planner').click(function() {
   $('#course-planner, #my-planner').toggleClass("selected");
   $('.todo-list-assignments li').css('display', '');
+  if ($('.todo-list-assignments a.starred').length === 0) {
+    $('.my-planner-alert').toggleClass('hidden');
+  }
 });
 
 

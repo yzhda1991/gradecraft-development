@@ -31,3 +31,8 @@
                   %span.italic= "You must unlock this #{term_for :assignment } to learn more about it"
                 .small.uppercase= "#{assignment.assignment_type.name}"
                 .form_label= "Due: #{assignment.try(:due_at).strftime("%A, %B %d, %Y, at %l:%M%p")}"
+    .my-planner-alert.hidden
+      %p
+        You have not predicted any #{(term_for :assignments).downcase}! Check out the
+        = link_to 'grade predictor', predictor_path 
+        to add #{(term_for :assignments).downcase} to this planner.
