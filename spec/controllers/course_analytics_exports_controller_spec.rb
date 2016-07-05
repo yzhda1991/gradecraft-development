@@ -3,20 +3,20 @@ require "rails_spec_helper"
 RSpec.describe CourseAnalyticsExportsController, type: :controller do
 
   let(:course) { create(:course) }
-  let(:professor) { create(:professor_course_membership, course: course).user }
-
-  let(:course_analytics_exports) do
-    create_list(:course_analytics_export, 2, course: course, s3_object_key: "some thing")
-  end
+  let(:professor) { create(:professor, course: course) }
 
   let(:course_analytics_export) do
-    create(:course_analytics_export, course: course, s3_object_key: "some thing")
+    create(:course_analytics_export, course: course)
+  end
+
+  let(:course_analytics_exports) do
+    create_list(:course_analytics_export, 2, course: course)
   end
 
   let(:presenter_class) { Presenters::CourseAnalyticsExports::Base }
 
   before do
-    login_user(professor)
+    login_user professor
     allow(controller).to receive_messages \
       current_course: course,
       current_user: professor,
@@ -24,7 +24,7 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
   end
 
   describe "POST #create" do
-    subject { post :create, assignment_id: assignment.id, team_id: team.id }
+    subject { post :create, course_id: course.id }
 
     context "the presenter successfully creates and enqueues the export" do
       it "sets the job success flash message" do

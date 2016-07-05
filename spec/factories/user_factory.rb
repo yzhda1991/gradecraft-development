@@ -6,6 +6,19 @@ FactoryGirl.define do
     email { Faker::Internet.email }
     password { "secret" }
 
-    after(:create) { |user| user.activate! }
+    after :create, &:activate!
+
+    factory :professor do
+      transient do
+        course nil
+      end
+
+      course_membership do
+        CourseMembership.find_or_create_by \
+          user: self,
+          course: course,
+          role: "professor"
+      end
+    end
   end
 end
