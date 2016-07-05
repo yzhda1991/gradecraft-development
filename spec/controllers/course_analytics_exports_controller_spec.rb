@@ -49,27 +49,20 @@ RSpec.describe CourseAnalyticsExportsController, type: :controller do
   describe "DELETE #destroy" do
     subject { delete :destroy, id: course_analytics_export.id }
 
-    before(:each) do
-      # create a course analytics export on each run so we can destroy it
-      allow(controller).to receive(:course_analytics_export)
-        .and_return course_analytics_export
-    end
-
     context "the export is successfully destroyed" do
-      before do
-        allow_any_instance_of(presenter_class)
-          .to receive(:destroy_export).and_return true
-      end
-
       it "notifies the user of success" do
+        allow_any_instance_of(presenter_class).to receive(:destroy_export) { true }
         subject
         expect(flash[:success]).to match(/Assignment export successfully deleted/)
       end
     end
 
-    it "notifies the user of the failure" do
-      subject
-      expect(flash[:alert]).to match(/Unable to delete the course analytics export/)
+    context "the export is not destroyed" do
+      it "notifies the user of the failure" do
+        allow_any_instance_of(presenter_class).to receive(:destroy_export) { false }
+        subject
+        expect(flash[:alert]).to match(/Unable to delete the course analytics export/)
+      end
     end
 
     it "redirects to the exports path" do
