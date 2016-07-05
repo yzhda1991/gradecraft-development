@@ -58,10 +58,10 @@ class CoursesController < ApplicationController
         end
         session[:course_id] = @course.id
         bust_course_list_cache current_user
-        format.html {
+        format.html do
           redirect_to course_path(@course),
           notice: "Course #{@course.name} successfully created"
-        }
+        end
       else
         format.html { render action: "new" }
       end
@@ -75,10 +75,10 @@ class CoursesController < ApplicationController
     respond_to do |format|
       if @course.update_attributes(params[:course])
         bust_course_list_cache current_user
-        format.html {
+        format.html do
           redirect_to @course,
           notice: "Course #{@course.name} successfully updated"
-        }
+        end
       else
         format.html { render action: "edit" }
       end
@@ -106,10 +106,10 @@ class CoursesController < ApplicationController
     @course.destroy
 
     respond_to do |format|
-      format.html {
+      format.html do
         redirect_to courses_url,
         notice: "Course #{@name} successfully deleted"
-      }
+      end
     end
   end
 end

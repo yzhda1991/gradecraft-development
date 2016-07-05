@@ -76,24 +76,24 @@ class AssignmentsController < ApplicationController
     assignment = current_course.assignments.find(params[:id])
     if assignment.update_attributes(params[:assignment])
       respond_to do |format|
-        format.html {
+        format.html do
           redirect_to assignments_path,
             notice: "#{(term_for :assignment).titleize} #{assignment.name } "\
             "successfully updated" and return
-        }
+        end
         format.json { render json: assignment and return }
       end
     end
 
     respond_to do |format|
-      format.html {
+      format.html do
         @title = "Edit #{term_for :assignment}"
         render :edit, Assignments::Presenter.build({
           assignment: assignment,
           course: current_course,
           view_context: view_context
           })
-      }
+      end
       format.json { render json: { errors: assignment.errors }, status: 400 }
     end
   end

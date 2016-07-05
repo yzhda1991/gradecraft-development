@@ -29,10 +29,10 @@ class ChallengesController < ApplicationController
 
     respond_to do |format|
       if @challenge.save
-        format.html {
+        format.html do
           redirect_to @challenge,
           notice: "Challenge #{@challenge.name} successfully created"
-        }
+        end
       else
         format.html { render action: "new" }
       end
@@ -42,10 +42,10 @@ class ChallengesController < ApplicationController
   def update
     respond_to do |format|
       if @challenge.update_attributes(params[:challenge])
-        format.html {
+        format.html do
           redirect_to challenges_path,
           notice: "Challenge #{@challenge.name} successfully updated"
-        }
+        end
       else
         format.html { render action: "edit" }
       end
@@ -57,10 +57,10 @@ class ChallengesController < ApplicationController
     @challenge.destroy
 
     respond_to do |format|
-      format.html {
+      format.html do
         redirect_to challenges_path,
         notice: "Challenge #{@name} successfully deleted"
-      }
+      end
     end
   end
 

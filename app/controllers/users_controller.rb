@@ -77,10 +77,10 @@ class UsersController < ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.html {
+      format.html do
         redirect_to users_url,
         notice: "#{@name} was successfully deleted"
-      }
+      end
     end
   end
 

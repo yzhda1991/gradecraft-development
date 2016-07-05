@@ -60,9 +60,9 @@ module ApplicationHelper
   end
 
   def multi_cache_key(category, *args)
-    arguments = args.map {
+    arguments = args.map do
       |arg| arg.respond_to?(:cache_key) ? arg.cache_key : arg
-    }
+    end
     "#{category}/#{arguments.join("/")}"
   end
 end

@@ -37,9 +37,9 @@ class AssignmentTypesController < ApplicationController
 
     respond_to do |format|
       if @assignment_type.save
-        format.html { redirect_to @assignment_type, flash: {
+        format.html do redirect_to @assignment_type, flash: {
           success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully created" }
-        }
+        end
       else
         format.html { render action: "new" }
       end
@@ -53,9 +53,9 @@ class AssignmentTypesController < ApplicationController
 
     respond_to do |format|
       if @assignment_type.save
-        format.html { redirect_to assignment_types_path, flash: {
+        format.html do redirect_to assignment_types_path, flash: {
           success: "#{(term_for :assignment_type).titleize} #{@assignment_type.name} successfully updated" }
-        }
+        end
       else
         format.html { render action: "edit" }
       end
@@ -69,11 +69,10 @@ class AssignmentTypesController < ApplicationController
   def export_scores
     course = current_user.courses.find_by(id: params[:course_id])
     respond_to do |format|
-      format.csv {
-          send_data AssignmentTypeExporter.new.export_scores(@assignment_type,
-          course, course.students),
-          filename: "#{ course.name } #{ (term_for :assignment_type).titleize } Scores - #{ Date.today }.csv"
-        }
+      format.csv do
+        send_data AssignmentTypeExporter.new.export_scores(@assignment_type, course, course.students),
+        filename: "#{ course.name } #{ (term_for :assignment_type).titleize } Scores - #{ Date.today }.csv"
+      end
     end
   end
 
@@ -81,11 +80,11 @@ class AssignmentTypesController < ApplicationController
     course = current_user.courses.find_by(id: params[:id])
     if course.assignment_types.present?
       respond_to do |format|
-        format.csv {
+        format.csv do
           send_data AssignmentTypeExporter.new.export_summary_scores(course.assignment_types,
             course, course.students),
           filename: "#{ course.name } #{ (term_for :assignment_type).titleize } Summary - #{ Date.today }.csv"
-        }
+        end
       end
     else
       redirect_to dashboard_path, flash: {
