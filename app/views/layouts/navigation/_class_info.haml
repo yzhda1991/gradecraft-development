@@ -8,7 +8,7 @@
   - current_student.team_leaders(current_course).each do |team_leader|
     %li= glyph(:flag) + "#{current_course.team_leader_term} #{team_leader.first_name}"
 - if current_user_is_student? && current_user.team_for_course(current_course).present?
-  %li.not-a-link= glyph(:trophy) + "#{(term_for :team).titleize} + #{current_user.team_for_course(current_course).name}"
+  %li.not-a-link= glyph(:trophy) + "#{(term_for :team).titleize}: " + "#{current_user.team_for_course(current_course).name}"
 - if current_course.syllabus.present?
   %li= link_to glyph('file-text') + "Course Syllabus" , current_course.syllabus_url
 - if current_course.phone.present?

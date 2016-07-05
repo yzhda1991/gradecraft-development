@@ -38,9 +38,11 @@
                 %span.course_name= "#{current_course.name} "
                 %span.course_semester= "#{current_course.try(:semester)} #{current_course.try(:year)}"
           %ul.nav.nav-pill.right
-            %li.course-info-btn
-              = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title"
-              %ul.course-info-card= render partial: "layouts/navigation/class_info"
+            - if presenter.has_info?
+              %li.course-info-btn
+                = link_to glyph('info-circle hidden-sm') + "Class Info", "#", title: "Quick information about #{current_course.name}", class: "section-title"
+                %ul.course-info-card
+                  = render partial: "layouts/navigation/class_info", locals: { presenter: presenter }
             = render partial: "layouts/navigation/authenticated_nav"
         %a.btn-navbar-left.hide-for-large
           %i.fa.fa-bars.fa-fw

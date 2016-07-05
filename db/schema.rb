@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 20160624165722) do
     t.integer  "course_id",                          null: false
     t.boolean  "student_weightable", default: false, null: false
     t.integer  "position",                           null: false
-    t.integer  "top_grades_counted",    default: 0,  null: false
+    t.integer  "top_grades_counted", default: 0,     null: false
   end
 
   create_table "assignments", force: :cascade do |t|
